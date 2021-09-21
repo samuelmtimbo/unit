@@ -1,0 +1,32 @@
+{
+  "name": "svg",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "viewBox": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG container",
+    "complexity": 3.6442098596009713,
+    "tags": [
+      "platform",
+      "component",
+      "svg"
+    ]
+  },
+  "id": "98c279fc-7f5e-11ea-b9e4-f772f9f0bed1",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "number to string",
+  "inputs": {
+    "n": {
+      "type": "number"
+    },
+    "radix": {
+      "type": "number",
+      "metadata": {
+        "description": "integer in the range 2 through 36 specifying the base to represent the number"
+      },
+      "optional": true
+    }
+  },
+  "outputs": {
+    "str": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "convert a number into a string",
+    "complexity": 1.33577536155389,
+    "tags": [
+      "f",
+      "number"
+    ]
+  },
+  "id": "f712793d-8ee9-4805-9d4a-8c210cae667a",
+  "base": true,
+  "type": "`U`"
+}

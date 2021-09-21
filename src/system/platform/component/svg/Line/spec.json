@@ -1,0 +1,48 @@
+{
+  "name": "line",
+  "inputs": {
+    "class": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "x1": {
+      "type": "number",
+      "optional": true
+    },
+    "y1": {
+      "type": "number",
+      "optional": true
+    },
+    "x2": {
+      "type": "number",
+      "optional": true
+    },
+    "y2": {
+      "type": "number",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG line",
+    "complexity": 3.5954185580069673,
+    "tags": [
+      "platform",
+      "component",
+      "svg"
+    ]
+  },
+  "id": "38d26d76-2559-11eb-ae02-dfda9b9b137e",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`"
+}

@@ -1,0 +1,19 @@
+{
+  "name": "get accounts",
+  "id": "1d434776-6c8e-4be3-ab03-cc78776d2067",
+  "inputs": {
+    "init": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "accs": {
+      "type": "string[]"
+    }
+  },
+  "metadata": {
+    "icon": "ethereum",
+    "description": "start an Ethereum transaction"
+  },
+  "base": true
+}

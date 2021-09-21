@@ -1,0 +1,94 @@
+{
+  "name": "merge ab",
+  "units": {
+    "deepmerge": {
+      "path": "2af12780-698c-40ca-baa9-5f3260377e0f"
+    },
+    "tag0": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'b'"
+        }
+      }
+    },
+    "tag1": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'a'"
+        }
+      }
+    }
+  },
+  "merges": {
+    "mpiooer": {
+      "deepmerge": {
+        "input": {
+          "b": true
+        }
+      },
+      "tag0": {
+        "output": {
+          "kv": true
+        }
+      }
+    },
+    "wysaetky": {
+      "deepmerge": {
+        "input": {
+          "a": true
+        }
+      },
+      "tag1": {
+        "output": {
+          "kv": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "no description",
+    "complexity": 7.319051428684307,
+    "tags": [
+      "core",
+      "util"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "tag1",
+          "pinId": "v"
+        }
+      },
+      "type": "any"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "tag0",
+          "pinId": "v"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "ab": {
+      "pin": {
+        "0": {
+          "unitId": "deepmerge",
+          "pinId": "ab"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "4e54703e-08bc-4537-ba5d-5e697a02be1f",
+  "type": "`U`&`G`"
+}

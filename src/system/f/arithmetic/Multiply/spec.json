@@ -1,0 +1,28 @@
+{
+  "name": "multiply",
+  "inputs": {
+    "a": {
+      "type": "number"
+    },
+    "b": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a × b": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "x",
+    "description": "multiplication arithmetic operator",
+    "complexity": 1.3306449910271296,
+    "tags": [
+      "f",
+      "arithmetic"
+    ]
+  },
+  "id": "872be100-f4dc-4246-8eea-6e3da31137b7",
+  "base": true,
+  "type": "`U`"
+}

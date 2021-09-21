@@ -1,0 +1,35 @@
+{
+  "name": "media recorder",
+  "inputs": {
+    "opt": {
+      "type": "{mimeType?:string,bitsPerSecond?:number,audioBitsPerSecond?:number,videoBitsPerSecond?:number}"
+    },
+    "start": {
+      "type": "number"
+    },
+    "stop": {
+      "type": "any"
+    },
+    "stream": {
+      "type": "`ST`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "data": {
+      "type": "string"
+    }
+  },
+  "id": "7e1b3a4c-be6b-11eb-b098-1b6b9db93f1e",
+  "base": true,
+  "metadata": {
+    "icon": "film",
+    "complexity": 1.2657658608677294,
+    "tags": [
+      "platform",
+      "api",
+      "media"
+    ]
+  },
+  "type": "`U`"
+}

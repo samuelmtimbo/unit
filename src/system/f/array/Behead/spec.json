@@ -1,0 +1,28 @@
+{
+  "name": "behead",
+  "inputs": {
+    "a": {
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "head": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "axe",
+    "description": "remove the first element `head` of `a`",
+    "complexity": 1.3310039058376437,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "e9831075-2e62-43a4-84af-0653f7e707a9",
+  "base": true,
+  "type": "`U`"
+}

@@ -1,0 +1,93 @@
+{
+  "name": "stroke fill style",
+  "units": {
+    "strokestyle": {
+      "path": "83d22558-2c6f-4dd4-a231-baba798d1d97",
+      "input": {
+        "d": {},
+        "strokeStyle": {}
+      },
+      "output": {
+        "d": {}
+      }
+    },
+    "fillstyle": {
+      "path": "f5b2faf1-3a8b-489f-9d99-62d3c749ced6",
+      "input": {
+        "d": {},
+        "fillStyle": {}
+      },
+      "output": {
+        "d": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "fillstyle": {
+        "output": {
+          "d": true
+        }
+      },
+      "strokestyle": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "1": {
+      "fillstyle": {
+        "input": {
+          "fillStyle": true
+        }
+      },
+      "strokestyle": {
+        "input": {
+          "strokeStyle": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "string"
+    },
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "fillstyle",
+          "pinId": "d"
+        }
+      },
+      "type": "(number|string)[][]"
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "strokestyle",
+          "pinId": "d"
+        }
+      },
+      "type": "(number|string)[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "set the color, gradient, or pattern to use for stroke and fill",
+    "complexity": 4.311120329491244,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "id": "f1456a8d-7f4f-41b4-9487-166a67a6cbd4",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,53 @@
+{
+  "name": "prop key",
+  "units": {
+    "prop": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'key'"
+        }
+      },
+      "output": {
+        "value": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "event": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "key": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "value"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "extract key from `obj`",
+    "complexity": 3.1556589331041907,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "8e48bf34-a3b3-11eb-af21-9fff67fa4349",
+  "type": "`U`&`G`"
+}

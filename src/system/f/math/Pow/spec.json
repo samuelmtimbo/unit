@@ -1,0 +1,28 @@
+{
+  "name": "pow",
+  "inputs": {
+    "a": {
+      "type": "number"
+    },
+    "b": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a ** b": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "exponential",
+    "description": "`a` to the power of `b`",
+    "complexity": 1.3300749498574898,
+    "tags": [
+      "f",
+      "math"
+    ]
+  },
+  "id": "ef4c1d0a-bda1-484e-8fcb-0fdbde195778",
+  "base": true,
+  "type": "`U`"
+}

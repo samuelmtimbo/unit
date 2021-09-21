@@ -1,0 +1,29 @@
+{
+  "name": "fill style",
+  "inputs": {
+    "d": {
+      "type": "(number|string)[][]"
+    },
+    "fillStyle": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "(number|string)[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "set current fillStyle",
+    "complexity": 1.3318061860023225,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "f5b2faf1-3a8b-489f-9d99-62d3c749ced6",
+  "base": true,
+  "type": "`U`"
+}

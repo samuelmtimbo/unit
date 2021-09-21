@@ -1,0 +1,28 @@
+{
+  "name": "match",
+  "inputs": {
+    "str": {
+      "type": "string"
+    },
+    "regex": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "match": {
+      "type": "string[] & object"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "match a string against a regular expression",
+    "complexity": 1.3305394278475668,
+    "tags": [
+      "f",
+      "string"
+    ]
+  },
+  "id": "b16cccf7-fe33-43a6-b208-48db494376e8",
+  "base": true,
+  "type": "`U`"
+}

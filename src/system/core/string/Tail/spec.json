@@ -1,0 +1,47 @@
+{
+  "name": "tail",
+  "units": {
+    "gfcxzqyjq": {
+      "path": "3e20a18c-60a3-40cd-bbee-f2f9e289b14d",
+      "output": {
+        "head": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "axe",
+    "description": "no description",
+    "complexity": 3.155135460803777,
+    "tags": [
+      "core",
+      "string"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "gfcxzqyjq",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "tail": {
+      "pin": {
+        "0": {
+          "unitId": "gfcxzqyjq",
+          "pinId": "tail"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "5c9f4a0a-e675-48db-b6c0-5ac6914cdae0",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,34 @@
+{
+  "name": "image",
+  "inputs": {
+    "src": {
+      "type": "string",
+      "metadata": {
+        "description": "url pointing to a image data"
+      },
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "image",
+    "description": "TODO",
+    "complexity": 3.6112319223054996,
+    "tags": [
+      "platform",
+      "component",
+      "media"
+    ]
+  },
+  "id": "059579bb-184f-435b-ace0-64ec95c9f125",
+  "base": true,
+  "component": {
+    "defaultWidth": 180,
+    "defaultHeight": 240
+  },
+  "type": "`U`&`C`"
+}

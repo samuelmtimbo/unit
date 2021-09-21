@@ -1,0 +1,139 @@
+{
+  "name": "search delete visits",
+  "units": {
+    "searchvisits": {
+      "path": "ef550ed4-5608-11eb-8ee3-0be8f1fce185",
+      "input": {
+        "query": {}
+      },
+      "output": {
+        "items": {}
+      }
+    },
+    "foreach": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "a": {
+          "ignored": true
+        },
+        "i": {
+          "ignored": true
+        },
+        "test": {
+          "ignored": true
+        }
+      }
+    },
+    "propurl": {
+      "path": "19f08be0-560a-11eb-a3a2-e7395ef5830a",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "url": {}
+      }
+    },
+    "deletevisit": {
+      "path": "002af312-560a-11eb-807c-8769b90eb8e6",
+      "input": {
+        "url": {}
+      },
+      "output": {}
+    },
+    "assoc": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {
+          "constant": true,
+          "data": "{startTime:0}"
+        },
+        "key": {
+          "constant": true,
+          "data": "'text'"
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "propurl": {
+        "input": {
+          "obj": true
+        }
+      },
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    },
+    "1": {
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      },
+      "searchvisits": {
+        "output": {
+          "items": true
+        }
+      }
+    },
+    "2": {
+      "deletevisit": {
+        "input": {
+          "url": true
+        }
+      },
+      "propurl": {
+        "output": {
+          "url": true
+        }
+      }
+    },
+    "3": {
+      "assoc": {
+        "output": {
+          "obj": true
+        }
+      },
+      "searchvisits": {
+        "input": {
+          "query": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "text": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "history",
+    "description": "delete all history visits matching `text`",
+    "tags": [
+      "platform",
+      "chrome",
+      "history"
+    ],
+    "complexity": 28.584451884994124
+  },
+  "id": "dd22949e-ad44-4571-9af4-322a1e194ebe",
+  "type": "`U`&`G`"
+}

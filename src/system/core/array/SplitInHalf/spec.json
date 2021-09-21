@@ -1,0 +1,112 @@
+{
+  "name": "split in half",
+  "units": {
+    "splitat": {
+      "path": "de2d5ba8-ac0f-461e-849b-f4aa84d2736a",
+      "metadata": {
+        "position": {
+          "x": 84,
+          "y": -13
+        }
+      }
+    },
+    "inthalf": {
+      "path": "86e310b3-4b84-4be2-a87a-e4ebcc5d3a0c",
+      "metadata": {
+        "position": {
+          "x": -25,
+          "y": -39
+        }
+      }
+    },
+    "length": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8",
+      "metadata": {
+        "position": {
+          "x": -25,
+          "y": 12
+        }
+      }
+    }
+  },
+  "merges": {
+    "xsdjz": {
+      "splitat": {
+        "input": {
+          "i": true
+        }
+      },
+      "inthalf": {
+        "output": {
+          "a ÷ 2": true
+        }
+      }
+    },
+    "lqzpx": {
+      "length": {
+        "output": {
+          "length": true
+        }
+      },
+      "inthalf": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "nhyud": {
+      "splitat": {
+        "input": {
+          "a": true
+        }
+      },
+      "length": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "nhyud"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "first": {
+      "pin": {
+        "0": {
+          "unitId": "splitat",
+          "pinId": "first"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "second": {
+      "pin": {
+        "0": {
+          "unitId": "splitat",
+          "pinId": "second"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "split-half",
+    "description": "...",
+    "complexity": 14.778294665520953,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "8babf4fa-e95e-449e-80b9-62e03ba0aae4",
+  "type": "`U`&`G`"
+}

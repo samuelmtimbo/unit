@@ -1,0 +1,26 @@
+import * as assert from 'assert'
+import { Graph } from '../../../Class/Graph'
+import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
+import { fromSpec } from '../../../spec/fromSpec'
+import { GraphSpec } from '../../../types'
+
+const spec = require('../../../system/core/common/SumN/spec.json') as GraphSpec
+const SumN = fromSpec<{ a: number; n: number }, { sum: number }>(
+  spec,
+  globalThis.__specs
+)
+
+const sumN = new SumN()
+
+false && watchUnitAndLog(sumN)
+false && watchGraphAndLog(sumN)
+false && watchGraphAndLog(sumN.refUnit('sumnfrom') as Graph)
+
+// do not forget to play
+sumN.play()
+
+sumN.push('n', 2)
+sumN.push('a', 5)
+sumN.push('a', 6)
+assert.equal(sumN.take('sum'), 11)
+assert.equal(sumN.take('sum'), undefined)

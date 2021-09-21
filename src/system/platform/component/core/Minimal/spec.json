@@ -1,0 +1,29 @@
+{
+  "name": "unit minimal",
+  "inputs": {
+    "id": {
+      "type": "string"
+    },
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "unit class component",
+    "complexity": 4.465765860867729,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "0e1d716e-a13f-11ea-ac6a-8fd610c86910",
+  "base": true,
+  "component": {
+    "defaultWidth": 45,
+    "defaultHeight": 81
+  },
+  "type": "`U`&`C`"
+}

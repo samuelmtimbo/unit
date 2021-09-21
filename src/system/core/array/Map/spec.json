@@ -1,0 +1,124 @@
+{
+  "name": "map",
+  "units": {
+    "foreach": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "test": {
+          "ignored": false
+        }
+      }
+    },
+    "uynyimudy": {
+      "path": "6db1905f-2343-4c63-97d3-07f4d946ef58",
+      "output": {
+        "acc": {
+          "ignored": true
+        },
+        "local": {
+          "ignored": true
+        }
+      }
+    },
+    "rftbyaqdn": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "b": {
+          "constant": false
+        },
+        "a": {
+          "constant": true,
+          "data": "[]"
+        }
+      }
+    }
+  },
+  "merges": {
+    "hyjndoefw": {
+      "foreach": {
+        "output": {
+          "test": true
+        }
+      },
+      "uynyimudy": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "wxnykfsg": {
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      },
+      "rftbyaqdn": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "ejosje": {
+      "uynyimudy": {
+        "input": {
+          "init": true
+        }
+      },
+      "rftbyaqdn": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "b[i]": {
+      "pin": {
+        "0": {
+          "unitId": "uynyimudy",
+          "pinId": "a"
+        }
+      },
+      "type": "<B>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "wxnykfsg"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a[i]": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "uynyimudy",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<B>[]"
+    }
+  },
+  "metadata": {
+    "icon": "map",
+    "description": "...",
+    "complexity": 27.24326646715458,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "1c68d1e5-9170-417d-bfc8-fb7f7f12e714",
+  "type": "`U`&`G`"
+}

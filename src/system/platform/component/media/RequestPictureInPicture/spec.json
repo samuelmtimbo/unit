@@ -1,0 +1,29 @@
+{
+  "name": "request picture in picture",
+  "inputs": {
+    "media": {
+      "type": "`PS`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{}"
+    },
+    "stop": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "complexity": 1.3171117914071573,
+    "icon": "arrow-up-right",
+    "description": "...",
+    "tags": [
+      "platform",
+      "component",
+      "media"
+    ]
+  },
+  "base": true,
+  "id": "3889d2f1-a0ed-4e8c-8e75-7a6683224275",
+  "type": "`U`&`PP`"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "not equal",
+  "inputs": {
+    "a": {
+      "type": "<A>"
+    },
+    "b": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a ≠ b": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "equal-not",
+    "description": "inequality",
+    "complexity": 1.3311728069249447,
+    "tags": [
+      "f",
+      "comparisson"
+    ]
+  },
+  "id": "bda175a9-a9d2-4282-9b50-1b008ae8a807",
+  "base": true,
+  "type": "`U`"
+}

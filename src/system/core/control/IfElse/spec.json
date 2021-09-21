@@ -1,0 +1,88 @@
+{
+  "name": "if else",
+  "type": "`U`&`G`",
+  "units": {
+    "if": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "ifnot": {
+      "path": "439c6b56-a0b6-4b76-9131-c6dc23375fda"
+    }
+  },
+  "merges": {
+    "merge0": {
+      "if": {
+        "input": {
+          "a": true
+        }
+      },
+      "ifnot": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "merge1": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifnot": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "merge0"
+        }
+      },
+      "type": "<A>"
+    },
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "merge1"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "if": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<A>"
+    },
+    "else": {
+      "pin": {
+        "0": {
+          "unitId": "ifnot",
+          "pinId": "a if not b"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "map-signs",
+    "description": "send `a` to `if` if `b` is false or `else` otherwise",
+    "complexity": 7.309480774739004,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
+}

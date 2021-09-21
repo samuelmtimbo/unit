@@ -1,0 +1,78 @@
+{
+  "name": "split ab",
+  "units": {
+    "puuzwlxil": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'a'"
+        }
+      }
+    },
+    "vomxk": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'b'"
+        }
+      }
+    }
+  },
+  "merges": {
+    "wygllzbvi": {
+      "vomxk": {
+        "input": {
+          "obj": true
+        }
+      },
+      "puuzwlxil": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "no description",
+    "complexity": 4.15565893310419,
+    "tags": [
+      "core",
+      "util"
+    ]
+  },
+  "inputs": {
+    "ab": {
+      "pin": {
+        "0": {
+          "mergeId": "wygllzbvi"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "puuzwlxil",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "vomxk",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "40555189-33ef-48b6-af8a-5ab4805b9a1f",
+  "type": "`U`&`G`"
+}

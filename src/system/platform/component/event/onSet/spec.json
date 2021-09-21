@@ -1,0 +1,52 @@
+{
+  "name": "on set",
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'set'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "any",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` \"set\" event",
+    "complexity": 3.1339595247266585,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "9256571c-db04-4559-a0a6-b8b0d107861f",
+  "type": "`U`&`G`"
+}

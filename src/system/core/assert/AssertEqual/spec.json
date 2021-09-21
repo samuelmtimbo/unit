@@ -1,0 +1,79 @@
+{
+  "name": "assert equal",
+  "units": {
+    "adder": {
+      "path": "99657eb7-fb94-474e-b03d-4b08c537c0a2"
+    },
+    "zffqk": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "edxbv": {
+      "path": "bda175a9-a9d2-4282-9b50-1b008ae8a807"
+    }
+  },
+  "inputs": {
+    "kngey": {
+      "pin": {
+        "0": {
+          "unitId": "zffqk",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    },
+    "zdgqj": {
+      "pin": {
+        "0": {
+          "unitId": "edxbv",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>"
+    },
+    "tpvgv": {
+      "pin": {
+        "0": {
+          "unitId": "edxbv",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "complexity": 5.464833525931632,
+    "tags": [
+      "core",
+      "assert"
+    ]
+  },
+  "merges": {
+    "khfhw": {
+      "adder": {
+        "input": {
+          "message": true
+        }
+      },
+      "zffqk": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "mgayk": {
+      "zffqk": {
+        "input": {
+          "b": true
+        }
+      },
+      "edxbv": {
+        "output": {
+          "a ≠ b": true
+        }
+      }
+    }
+  },
+  "id": "0047d386-e392-4230-adde-0d71a0bc2de4",
+  "type": "`U`&`G`"
+}

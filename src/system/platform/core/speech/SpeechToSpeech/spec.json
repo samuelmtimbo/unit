@@ -1,0 +1,45 @@
+{
+  "name": "speech to speech",
+  "units": {
+    "gyaum": {
+      "path": "6db29a62-2035-4cfc-a9d3-03444a8bc2b8"
+    },
+    "eooib": {
+      "path": "416550cc-6e02-4ff2-aafa-2f0edbf121c6",
+      "input": {
+        "lang": {
+          "constant": true,
+          "data": "'en-US'"
+        }
+      }
+    }
+  },
+  "merges": {
+    "uvzif": {
+      "eooib": {
+        "output": {
+          "message": true
+        }
+      },
+      "gyaum": {
+        "input": {
+          "message": true
+        }
+      }
+    }
+  },
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "message-circle",
+    "description": "say what I say",
+    "complexity": 4.336701334360525,
+    "tags": [
+      "platform",
+      "core",
+      "speech"
+    ]
+  },
+  "id": "b7028cdd-41c2-42ab-99d9-7122d372aee2",
+  "type": "`U`&`G`"
+}

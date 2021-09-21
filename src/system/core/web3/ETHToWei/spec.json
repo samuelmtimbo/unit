@@ -1,0 +1,53 @@
+{
+  "name": "eth to wei",
+  "inputs": {
+    "eth": {
+      "type": "number",
+      "pin": {
+        "0": {
+          "unitId": "multiply",
+          "pinId": "a"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "wei": {
+      "type": "number",
+      "pin": {
+        "0": {
+          "unitId": "multiply",
+          "pinId": "a × b"
+        }
+      }
+    }
+  },
+  "units": {
+    "multiply": {
+      "path": "872be100-f4dc-4246-8eea-6e3da31137b7",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "1000000000000000000"
+        }
+      },
+      "output": {
+        "a × b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {},
+  "component": {},
+  "metadata": {
+    "icon": "ethereum",
+    "complexity": 7
+  },
+  "id": "3619e3c5-db2b-4c6c-a13d-127f5e322fda"
+}

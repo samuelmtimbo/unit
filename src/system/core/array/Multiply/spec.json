@@ -1,0 +1,93 @@
+{
+  "name": "array multiply",
+  "units": {
+    "map2": {
+      "path": "57880ebc-bf8a-42da-b2b1-01ae188aa1fa"
+    },
+    "multiply": {
+      "path": "872be100-f4dc-4246-8eea-6e3da31137b7"
+    }
+  },
+  "merges": {
+    "lxbvanzk": {
+      "map2": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "multiply": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "dkllawfhv": {
+      "map2": {
+        "output": {
+          "b[i]": true
+        }
+      },
+      "multiply": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "kynujs": {
+      "multiply": {
+        "output": {
+          "a × b": true
+        }
+      },
+      "map2": {
+        "input": {
+          "c[i]": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "x",
+    "description": "no description",
+    "complexity": 34.39819451440537,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "map2",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "map2",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "ab": {
+      "pin": {
+        "0": {
+          "unitId": "map2",
+          "pinId": "b"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "id": "2dbdf0a4-09c1-49af-b9f8-d51b5cbab5a2",
+  "type": "`U`&`G`"
+}

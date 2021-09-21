@@ -1,0 +1,87 @@
+{
+  "name": "iterate sum from",
+  "units": {
+    "add": {
+      "path": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf"
+    },
+    "iterate": {
+      "path": "8a2b756a-25e4-11eb-860d-1f34c850b992",
+      "input": {
+        "next": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {}
+      }
+    }
+  },
+  "merges": {
+    "1": {
+      "iterate": {
+        "input": {
+          "next": true
+        }
+      },
+      "add": {
+        "output": {
+          "a + b": true
+        }
+      }
+    },
+    "2": {
+      "iterate": {
+        "output": {
+          "local": true
+        }
+      },
+      "add": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "",
+    "description": "no description",
+    "complexity": 4.287880134720041,
+    "tags": [
+      "core",
+      "iterate"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "add",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "from": {
+      "pin": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "init"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "sum": {
+      "pin": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "current"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "72513267-174e-4ea4-9561-b11dea518af5",
+  "type": "`U`&`G`"
+}

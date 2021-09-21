@@ -1,0 +1,41 @@
+{
+  "name": "slider",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "value": {
+      "type": "number",
+      "optional": true
+    },
+    "min": {
+      "type": "number",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "max": {
+      "type": "number",
+      "optional": true,
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "sliders",
+    "description": "slide",
+    "complexity": 3.628058693127837,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
+  },
+  "id": "e06518cf-9edf-430b-8751-74c486e407aa",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 30
+  },
+  "type": "`U`&`C`"
+}

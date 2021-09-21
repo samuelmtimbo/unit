@@ -1,0 +1,25 @@
+{
+  "name": "memory",
+  "inputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "triangle",
+    "description": "data holder",
+    "complexity": 1.2712551462050037,
+    "tags": [
+      "f",
+      "control"
+    ]
+  },
+  "id": "49e11645-c25d-4bf7-923d-56817f67b686",
+  "base": true,
+  "type": "`U`"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "timer",
+  "inputs": {
+    "ms": {
+      "type": "number",
+      "metadata": {
+        "description": "number of milliseconds to wait before output"
+      }
+    }
+  },
+  "outputs": {
+    "ms": {
+      "type": "number",
+      "metadata": {
+        "description": "same as the inputed `ms`"
+      }
+    }
+  },
+  "metadata": {
+    "icon": "timer",
+    "description": "output `ms` after `ms` milliseconds",
+    "complexity": 1.336408740631268,
+    "tags": [
+      "f",
+      "time"
+    ]
+  },
+  "id": "95076599-0f2f-46b6-a9e0-b4cbfdb8dcc9",
+  "base": true,
+  "type": "`U`"
+}

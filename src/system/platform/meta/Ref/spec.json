@@ -1,0 +1,29 @@
+{
+  "name": "ref",
+  "state": "<T>['R',N,'S']",
+  "refs": "<T>['R',N,'R']",
+  "methods": "<T>['R',N,'M']",
+  "inputs": {
+    "name": {
+      "type": "string",
+      "init": "N"
+    },
+    "unit": {
+      "type": "<T>",
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "reference a unit inside `unit`",
+    "complexity": 1.2661881135859812,
+    "tags": [
+      "platform",
+      "meta"
+    ]
+  },
+  "id": "985b99a0-3c2b-11eb-b3de-6b03e92e4ef4",
+  "base": true,
+  "type": "`U`"
+}

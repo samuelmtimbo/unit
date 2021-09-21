@@ -1,0 +1,138 @@
+{
+  "name": "dissoc all",
+  "units": {
+    "loop": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {},
+        "test": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true
+        },
+        "final": {
+          "ignored": false
+        }
+      }
+    },
+    "foreach": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "test": {
+          "ignored": false
+        }
+      }
+    },
+    "sxeydotg": {
+      "path": "664b5d3c-e4cf-11ea-ab74-eb6d2f3bd6f1",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "foreach": {
+        "output": {
+          "test": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "epigpfm": {
+      "sxeydotg": {
+        "input": {
+          "key": true
+        }
+      },
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    },
+    "hbfwyh": {
+      "sxeydotg": {
+        "output": {
+          "obj": true
+        }
+      },
+      "loop": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "ylvhumm": {
+      "loop": {
+        "output": {
+          "current": true
+        }
+      },
+      "sxeydotg": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "init"
+        }
+      },
+      "functional": true,
+      "type": "object"
+    },
+    "keys": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "(number|string)[]"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "...",
+    "complexity": 24.090540954299883,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "id": "474d900a-fd28-11ea-b59c-670afe58a912",
+  "type": "`U`&`G`"
+}

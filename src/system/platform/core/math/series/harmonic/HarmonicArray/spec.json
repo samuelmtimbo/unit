@@ -1,0 +1,79 @@
+{
+  "name": "harmonic array",
+  "units": {
+    "aqjnp": {
+      "path": "38033fcc-aa28-4df3-abc8-d4ece231028b",
+      "input": {
+        "n": {},
+        "a": {}
+      },
+      "output": {
+        "a[]": {}
+      }
+    },
+    "jcmrhfs": {
+      "path": "4cbd976a-89c9-4398-a5ce-35504b00d112"
+    }
+  },
+  "merges": {
+    "xfwk": {
+      "jcmrhfs": {
+        "output": {
+          "usdsajlo": true
+        }
+      },
+      "aqjnp": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "lgklpe": {
+      "jcmrhfs": {
+        "input": {
+          "rgeok": true
+        }
+      },
+      "aqjnp": {
+        "input": {
+          "n": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "vuriiywtg": {
+      "pin": {
+        "0": {
+          "mergeId": "lgklpe"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "ghyqr": {
+      "pin": {
+        "0": {
+          "unitId": "aqjnp",
+          "pinId": "a[]"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "metadata": {
+    "icon": "array",
+    "description": "1 + 1/2 + 1/3 + ...",
+    "complexity": 59.87483085918595,
+    "tags": [
+      "platform",
+      "core",
+      "math",
+      "series",
+      "harmonic"
+    ]
+  },
+  "id": "12f24bde-12cf-412e-8df3-b5af2e31fa86",
+  "type": "`U`&`G`"
+}

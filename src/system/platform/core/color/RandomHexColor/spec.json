@@ -1,0 +1,118 @@
+{
+  "name": "random hex color",
+  "units": {
+    "pbjnqvo": {
+      "path": "9d2b69b2-c468-4fca-a7d5-d158033c0201",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "16"
+        },
+        "a": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "dduhlpdy": {
+      "path": "9cab124a-b40d-4614-b032-20b0209e90e3",
+      "input": {
+        "n": {
+          "constant": true,
+          "data": "7"
+        }
+      }
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'#'"
+        }
+      }
+    },
+    "hqyihyi": {
+      "path": "1a7665a2-2af0-11eb-9fdb-4bdf5feec91c",
+      "input": {
+        "n": {}
+      },
+      "output": {
+        "hex": {}
+      }
+    }
+  },
+  "merges": {
+    "fjnehgyen": {
+      "dduhlpdy": {
+        "input": {
+          "from": true
+        }
+      },
+      "wait": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "uoovdaxhq": {
+      "hqyihyi": {
+        "input": {
+          "n": true
+        }
+      },
+      "pbjnqvo": {
+        "output": {
+          "n": true
+        }
+      }
+    },
+    "fnswcenmt": {
+      "hqyihyi": {
+        "output": {
+          "hex": true
+        }
+      },
+      "dduhlpdy": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "palette",
+    "description": "random HEX color string",
+    "complexity": 26.86470710243266,
+    "tags": [
+      "platform",
+      "core",
+      "color"
+    ]
+  },
+  "inputs": {
+    "any": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "hex": {
+      "pin": {
+        "0": {
+          "unitId": "dduhlpdy",
+          "pinId": "str"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "2f48e431-9338-44dd-9f20-b8b14e710a1f",
+  "type": "`U`&`G`"
+}

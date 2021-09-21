@@ -1,0 +1,88 @@
+{
+  "name": "horizontal scroll",
+  "units": {
+    "div": {
+      "path": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "className": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "component": {
+          "width": 210,
+          "height": 120
+        }
+      }
+    },
+    "mergedefault": {
+      "path": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{display:'inline-block',overflow:'auto',whiteSpace:'nowrap'}"
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "div": {
+        "input": {
+          "style": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "row flexbox",
+    "complexity": 8.487392219028711,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "component": {
+    "slots": [
+      [
+        "div",
+        "default"
+      ]
+    ],
+    "defaultWidth": 210,
+    "defaultHeight": 120,
+    "subComponents": {
+      "div": {
+        "children": []
+      }
+    },
+    "children": [
+      "div"
+    ]
+  },
+  "id": "2e6fb745-36f7-4cee-8929-b3792344c3c6",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,48 @@
+{
+  "name": "duplicate",
+  "units": {
+    "multiply": {
+      "path": "872be100-f4dc-4246-8eea-6e3da31137b7",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "2"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "x",
+    "description": "duplicate `a`",
+    "complexity": 3.154928047250783,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "multiply",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "2a": {
+      "pin": {
+        "0": {
+          "unitId": "multiply",
+          "pinId": "a × b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "51630f7a-fffb-42d7-8cf6-5a5924ec4774",
+  "type": "`U`&`G`"
+}

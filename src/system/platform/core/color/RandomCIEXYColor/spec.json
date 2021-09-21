@@ -1,0 +1,64 @@
+{
+  "name": "random CIE xy color",
+  "units": {
+    "fvtftajg": {
+      "path": "f2043fd6-04d4-4523-939b-f631af07f70e"
+    },
+    "zhnwkxx": {
+      "path": "2f48e431-9338-44dd-9f20-b8b14e710a1f",
+      "input": {
+        "any": {
+          "constant": false
+        }
+      }
+    }
+  },
+  "merges": {
+    "dhwuxecob": {
+      "fvtftajg": {
+        "input": {
+          "hex": true
+        }
+      },
+      "zhnwkxx": {
+        "output": {
+          "hex": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "palette",
+    "description": "generate a random CIE xy color string",
+    "complexity": 135.8834138295456,
+    "tags": [
+      "platform",
+      "core",
+      "color"
+    ]
+  },
+  "inputs": {
+    "yxoeodrn": {
+      "pin": {
+        "0": {
+          "unitId": "zhnwkxx",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "equlg": {
+      "pin": {
+        "0": {
+          "unitId": "fvtftajg",
+          "pinId": "xy"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "id": "09856cbd-2676-4930-8241-08c5bbde0474",
+  "type": "`U`&`G`"
+}

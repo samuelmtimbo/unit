@@ -1,0 +1,49 @@
+{
+  "name": "has child",
+  "inputs": {
+    "parent": {
+      "type": "`C`",
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -116,
+            "y": 30
+          }
+        }
+      }
+    },
+    "child": {
+      "type": "`C`",
+      "metadata": {
+        "examples": [
+          "f27cae4e-fea8-11ea-b91e-db41e114c426"
+        ],
+        "position": {
+          "0": {
+            "x": 128,
+            "y": 30
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "i": {
+      "type": "number",
+      "defaultIgnored": true
+    }
+  },
+  "base": true,
+  "metadata": {
+    "icon": "square",
+    "description": "check whether `parent` has a child `at`",
+    "complexity": 1.3332207326084662,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "c475117a-02b9-11eb-b7c8-579fe4f6c669",
+  "type": "`U`"
+}

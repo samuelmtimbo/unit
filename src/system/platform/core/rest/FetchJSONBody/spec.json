@@ -1,0 +1,72 @@
+{
+  "name": "fetch JSON body",
+  "units": {
+    "vryyfsgqw": {
+      "path": "7ba3db14-6f80-434b-b9dc-bd38462b20fc",
+      "input": {
+        "avbejlrtg": {},
+        "qumzdhh": {}
+      }
+    },
+    "fygewemc": {
+      "path": "563e92be-ad5e-4a61-a718-9249c3eac51d"
+    }
+  },
+  "merges": {
+    "xeqgpphp": {
+      "vryyfsgqw": {
+        "output": {
+          "scaqz": true
+        }
+      },
+      "fygewemc": {
+        "input": {
+          "string": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "no description",
+    "complexity": 7.469070688514228,
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
+  },
+  "inputs": {
+    "url": {
+      "pin": {
+        "0": {
+          "unitId": "vryyfsgqw",
+          "pinId": "avbejlrtg"
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "pin": {
+        "0": {
+          "unitId": "vryyfsgqw",
+          "pinId": "qumzdhh"
+        }
+      },
+      "type": "{body?:string|null,headers?:object,method?:string}"
+    }
+  },
+  "outputs": {
+    "json": {
+      "pin": {
+        "0": {
+          "unitId": "fygewemc",
+          "pinId": "json"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "00a8a078-91bf-4676-aa32-c9cfacdfd527",
+  "type": "`U`&`G`"
+}

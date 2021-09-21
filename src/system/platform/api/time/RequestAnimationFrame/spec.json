@@ -1,0 +1,26 @@
+{
+  "name": "request animation frame",
+  "inputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "timer",
+    "description": "output `a` in the next animation frame",
+    "complexity": 1.34196136387628,
+    "tags": [
+      "platform",
+      "api",
+      "time"
+    ]
+  },
+  "id": "b949221c-8227-4178-bde4-5e8754a7ed39",
+  "base": true,
+  "type": "`U`"
+}

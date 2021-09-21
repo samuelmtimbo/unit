@@ -1,0 +1,20 @@
+{
+  "name": "transaction",
+  "id": "aea9fd23-8116-4c25-8f2e-059a43c974f5",
+  "inputs": {
+    "init": {
+      "type": "{from:string,to:string,value:number}"
+    }
+  },
+  "outputs": {
+    "receipt": {
+      "type": "{}",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "ethereum",
+    "description": "start an Ethereum transaction"
+  },
+  "base": true
+}

@@ -1,0 +1,121 @@
+{
+  "name": "find last index from",
+  "units": {
+    "findlastindexfromordefault": {
+      "path": "08d39098-c38f-4a88-9d8c-cc323730b36c",
+      "input": {
+        "a": {},
+        "test": {},
+        "from": {},
+        "default": {
+          "constant": true,
+          "data": "-1"
+        }
+      },
+      "output": {
+        "a": {
+          "ignored": false
+        },
+        "i": {
+          "ignored": false
+        },
+        "a[i]": {},
+        "result": {},
+        "test": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfromordefault",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    },
+    "from": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfromordefault",
+          "pinId": "from"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfromordefault",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a[i]": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfromordefault",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    },
+    "result": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfromordefault",
+          "pinId": "result"
+        }
+      },
+      "type": "number"
+    },
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfromordefault",
+          "pinId": "i"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfromordefault",
+          "pinId": "a"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "<A>[]"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfromordefault",
+          "pinId": "test"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "...",
+    "complexity": 30.243780062619138,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "58e5ab50-dcc9-435a-8d17-87bc96b9b31c",
+  "type": "`U`&`G`"
+}

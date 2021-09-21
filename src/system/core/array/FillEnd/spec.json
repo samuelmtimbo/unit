@@ -1,0 +1,117 @@
+{
+  "name": "fill end",
+  "units": {
+    "length": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    },
+    "subtract": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f"
+    },
+    "init": {
+      "path": "5a7912c7-9c67-45b6-ae2b-e352405e6c16"
+    },
+    "concat": {
+      "path": "f57f5318-f26f-4b9f-b9e2-dcc022ad7728"
+    }
+  },
+  "merges": {
+    "0": {
+      "length": {
+        "output": {
+          "length": true
+        }
+      },
+      "subtract": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "nqijmihi": {
+      "length": {
+        "input": {
+          "a": true
+        }
+      },
+      "concat": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "atejrzzx": {
+      "subtract": {
+        "output": {
+          "a - b": true
+        }
+      },
+      "init": {
+        "input": {
+          "n": true
+        }
+      }
+    },
+    "mtjhxp": {
+      "concat": {
+        "input": {
+          "b": true
+        }
+      },
+      "init": {
+        "output": {
+          "a[]": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "fill `from` array with `a` until size `n`",
+    "complexity": 36.24456033265183,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "a[]": {
+      "pin": {
+        "0": {
+          "mergeId": "nqijmihi"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "n": {
+      "pin": {
+        "0": {
+          "unitId": "subtract",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "init",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a[]": {
+      "pin": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "ab"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "b0995ebb-08d5-4740-9bf3-272d44f09595",
+  "type": "`U`&`G`"
+}

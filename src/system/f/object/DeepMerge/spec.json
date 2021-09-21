@@ -1,0 +1,28 @@
+{
+  "name": "deep merge",
+  "inputs": {
+    "a": {
+      "type": "object"
+    },
+    "b": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "ab": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "merge two objects `a` and `b` into `ab`",
+    "complexity": 1.347619550300855,
+    "tags": [
+      "f",
+      "object"
+    ]
+  },
+  "id": "2af12780-698c-40ca-baa9-5f3260377e0f",
+  "base": true,
+  "type": "`U`"
+}

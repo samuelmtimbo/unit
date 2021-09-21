@@ -1,0 +1,86 @@
+{
+  "name": "get spec",
+  "units": {
+    "call": {
+      "path": "f46af75e-af68-11ea-aa0e-37bf85a86c5e",
+      "input": {
+        "method": {
+          "data": "'getSpec'",
+          "constant": true
+        }
+      }
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "{}"
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "rhrmmi": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "call": {
+        "input": {
+          "data": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "graph": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "call",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    },
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "spec": {
+      "type": "object",
+      "pin": {
+        "0": {
+          "unitId": "call",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "metadata": "get current visible graph spec",
+    "complexity": 4.3109227927741065,
+    "tags": [
+      "platform",
+      "component",
+      "core",
+      "graph"
+    ]
+  },
+  "id": "5b226e2e-5bbe-4a20-8328-080f63260f56",
+  "type": "`U`&`G`"
+}

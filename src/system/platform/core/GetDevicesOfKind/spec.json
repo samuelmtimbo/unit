@@ -1,0 +1,77 @@
+{
+  "name": "get devices of kind",
+  "units": {
+    "enumeratedevices": {
+      "path": "3511f756-2a02-4346-b417-8c34502f79d4"
+    },
+    "filterpropequals": {
+      "path": "f0386b2f-de73-49a3-be8f-1a2ca10600c5",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'kind'"
+        }
+      }
+    }
+  },
+  "merges": {
+    "mrqxnpvx": {
+      "enumeratedevices": {
+        "output": {
+          "devices": true
+        }
+      },
+      "filterpropequals": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "eqmeg": {
+      "enumeratedevices": {
+        "input": {
+          "a": true
+        }
+      },
+      "filterpropequals": {
+        "input": {
+          "value": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "no description",
+    "complexity": 59.334429662113436,
+    "tags": [
+      "platform",
+      "core"
+    ]
+  },
+  "inputs": {
+    "kind": {
+      "name": "kind",
+      "pin": {
+        "0": {
+          "mergeId": "eqmeg"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "devices": {
+      "name": "devices",
+      "pin": {
+        "0": {
+          "unitId": "filterpropequals",
+          "pinId": "b"
+        }
+      },
+      "type": "object[]"
+    }
+  },
+  "id": "e98f03fc-0987-4d21-9642-9078b23183ed",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["es2015", "es2016", "es2017", "dom"],
+    "outDir": "lib",
+    "allowJs": false,
+    "sourceRoot": "src",
+    "sourceMap": true,
+    "target": "es2015",
+    "module": "commonjs",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "declaration": true,
+    "typeRoots": ["node_modules/@types"],
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  "typeAcquisition": {
+    "enable": false
+  },
+  "include": ["./src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "build"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "object",
+  "inputs": {
+    "init": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "_type": "<T>['S',N]",
+      "type": "`V`&`J`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "object reference",
+    "complexity": 1.3476406629367677,
+    "tags": [
+      "platform"
+    ]
+  },
+  "id": "c899b675-c3c4-428e-b548-b228305c0302",
+  "base": true,
+  "type": "`U`"
+}

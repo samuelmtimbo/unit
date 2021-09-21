@@ -1,0 +1,186 @@
+{
+  "name": "child set",
+  "inputs": {
+    "parent": {
+      "pin": {
+        "0": {
+          "unitId": "child",
+          "pinId": "parent"
+        }
+      },
+      "ref": "_self",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -97,
+            "y": 39
+          }
+        }
+      },
+      "type": "<A>"
+    },
+    "at": {
+      "pin": {
+        "0": {
+          "unitId": "child",
+          "pinId": "at"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -102,
+            "y": -31
+          }
+        }
+      },
+      "type": "number"
+    },
+    "name": {
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "name"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 96,
+            "y": 39
+          }
+        }
+      },
+      "type": "string"
+    },
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "data"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 101,
+            "y": -31
+          }
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "set": {
+      "path": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+      "input": {
+        "unit": {},
+        "name": {
+          "metadata": {
+            "position": {
+              "x": 77,
+              "y": 19
+            }
+          }
+        },
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 78,
+              "y": -16
+            }
+          }
+        }
+      },
+      "output": {
+        "data": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 32,
+          "y": 0
+        }
+      }
+    },
+    "child": {
+      "path": "59afce80-30e7-4322-84e6-955767bb5106",
+      "input": {
+        "parent": {
+          "metadata": {
+            "position": {
+              "x": -77,
+              "y": 19
+            }
+          }
+        },
+        "at": {
+          "metadata": {
+            "position": {
+              "x": -79,
+              "y": -16
+            }
+          }
+        },
+        "release": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -33,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "set": {
+        "output": {
+          "data": true
+        }
+      },
+      "child": {
+        "input": {
+          "release": true
+        }
+      }
+    },
+    "1": {
+      "set": {
+        "input": {
+          "unit": true
+        }
+      },
+      "child": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "triangle",
+    "description": "set `element` child `at` `name` to `data`",
+    "complexity": 4.297727340069335,
+    "position": {
+      "merge": {
+        "0": {
+          "x": -1,
+          "y": -26
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "2633ed12-309e-40fe-910d-44106d917e96",
+  "type": "`U`&`G`"
+}

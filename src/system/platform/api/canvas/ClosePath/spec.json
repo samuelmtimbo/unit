@@ -1,0 +1,27 @@
+{
+  "name": "close path",
+  "inputs": {
+    "d": {
+      "type": "(number|string)[][]"
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "(number|string)[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "add a straight line from the current point to the start of the current sub-path",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/closePath",
+    "complexity": 1.3310672437453817,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "288aede9-59ea-4cb4-baf9-fef9109cc2b9",
+  "base": true,
+  "type": "`U`"
+}

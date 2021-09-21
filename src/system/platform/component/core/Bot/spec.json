@@ -1,0 +1,40 @@
+{
+  "name": "bot",
+  "inputs": {
+    "style": {
+      "type": "object"
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "r": {
+      "type": "number"
+    },
+    "x": {
+      "type": "number",
+      "defaultIgnored": true
+    },
+    "y": {
+      "type": "number",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "bot",
+    "description": "your fellow robot",
+    "complexity": 4.033442415285548,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "0e9e6cd4-67eb-11ea-995b-4b0721193361",
+  "base": true,
+  "component": {
+    "defaultHeight": 200,
+    "defaultWidth": 200
+  },
+  "type": "`U`&`C`"
+}

@@ -1,0 +1,33 @@
+{
+  "name": "icon",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "description": ""
+      }
+    },
+    "icon": {
+      "type": "string",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "click me!",
+    "complexity": 5.0602343502586296,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "63a417e5-d354-4b39-9ebd-05f55e70de7b",
+  "base": true,
+  "component": {
+    "defaultWidth": 45,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`"
+}

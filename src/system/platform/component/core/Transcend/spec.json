@@ -1,0 +1,26 @@
+{
+  "name": "transcend",
+  "inputs": {
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "atom-alt",
+    "description": "\"get out\"",
+    "complexity": 5.253119391956086,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "e39a2a34-c71a-11ea-9835-07964acf6760",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "type": "`U`&`C`"
+}

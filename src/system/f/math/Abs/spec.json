@@ -1,0 +1,25 @@
+{
+  "name": "abs",
+  "inputs": {
+    "a": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "|a|": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "value-absolute",
+    "description": "absolute value of `a`",
+    "complexity": 1.3297160350469757,
+    "tags": [
+      "f",
+      "math"
+    ]
+  },
+  "id": "fafc23ce-a259-11eb-b14e-af9d1f579af4",
+  "base": true,
+  "type": "`U`"
+}

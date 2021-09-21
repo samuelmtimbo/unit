@@ -1,0 +1,102 @@
+{
+  "name": "stroke circle",
+  "units": {
+    "addcircle": {
+      "path": "50d23b21-1513-42c0-9722-4a01a32dc161",
+      "input": {
+        "d": {},
+        "circle": {}
+      },
+      "output": {
+        "d": {}
+      }
+    },
+    "beginpath": {
+      "path": "81c0f469-ab88-4bc8-89d5-98d291b1d8b2",
+      "input": {
+        "d": {}
+      },
+      "output": {
+        "d": {}
+      }
+    },
+    "stroke": {
+      "path": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99",
+      "input": {
+        "d": {}
+      },
+      "output": {
+        "d": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "beginpath": {
+        "output": {
+          "d": true
+        }
+      },
+      "addcircle": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "1": {
+      "stroke": {
+        "input": {
+          "d": true
+        }
+      },
+      "addcircle": {
+        "output": {
+          "d": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "circle": {
+      "pin": {
+        "0": {
+          "unitId": "addcircle",
+          "pinId": "circle"
+        }
+      },
+      "type": "object"
+    },
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "beginpath",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "stroke",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "stroke a circle path",
+    "complexity": 11.621657925666934,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "id": "89051065-ef45-48b2-ab7f-77ae173e1b4d",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "length greater than",
+  "units": {
+    "length": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    },
+    "greaterthan": {
+      "path": "1651ce6b-4db0-4787-9edf-f770b72d253c"
+    }
+  },
+  "merges": {
+    "merge0": {
+      "length": {
+        "output": {
+          "length": true
+        }
+      },
+      "greaterthan": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "length",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "greaterthan",
+          "pinId": "b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "true": {
+      "pin": {
+        "0": {
+          "unitId": "greaterthan",
+          "pinId": "a > b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "is the size of `a` greater than `b`?",
+    "complexity": 4.3105672266832595,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "603ebe2e-5329-446d-b422-78f3201ddd7a",
+  "type": "`U`&`G`"
+}

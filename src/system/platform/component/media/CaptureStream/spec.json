@@ -1,0 +1,35 @@
+{
+  "name": "capture stream",
+  "inputs": {
+    "source": {
+      "type": "`CS`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{frameRate?:number}",
+      "metadata": {
+        "examples": [
+          "{}",
+          "{frameRate:60}"
+        ]
+      }
+    },
+    "stop": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "request a stream containing a real-time video capture of the `media` element",
+    "complexity": 1.2917977409479573,
+    "tags": [
+      "platform",
+      "component",
+      "media"
+    ]
+  },
+  "base": true,
+  "id": "30e125ba-af81-11ea-ba6b-e70218ca7afe",
+  "type": "`U`&`ST`"
+}

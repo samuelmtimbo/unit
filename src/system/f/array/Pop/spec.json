@@ -1,0 +1,28 @@
+{
+  "name": "pop",
+  "inputs": {
+    "a": {
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "last": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "axe",
+    "description": "remove the `last` element from `a`",
+    "complexity": 1.3327984798902144,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "81006022-e4d0-11ea-902a-fbf9fc5c9246",
+  "base": true,
+  "type": "`U`"
+}
