@@ -12,7 +12,7 @@ export interface O<T> {
   a: T[]
 }
 
-export default class Set<T> extends Functional<I<T>, O<T>> {
+export default class Put<T> extends Functional<I<T>, O<T>> {
   constructor(config?: Config) {
     super(
       {

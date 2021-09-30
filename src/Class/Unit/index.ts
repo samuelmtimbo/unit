@@ -49,6 +49,8 @@ export const DEFAULT_PIN_OPT: PinOpt = {
   ref: false,
 }
 
+export type PinOf<T> = Pin<T[keyof T]>
+
 export class Unit<I = any, O = any> extends $ implements U {
   _: string[] = ['U']
 
@@ -140,6 +142,74 @@ export class Unit<I = any, O = any> extends $ implements U {
     }
   }
 
+  private _memSetPinOptData(type: 'input' | 'output', name: string): void {
+    if (type === 'input') {
+      this._memSetInputData(name)
+    } else {
+      this._memSetOutputData(name)
+    }
+  }
+
+  private _memSetInputData(name: string): void {
+    const input = this._input[name]
+
+    this._memRemoveRefInput(name)
+    this._memAddDataInput(name, input)
+  }
+
+  private _memSetOutputData(name: string): void {
+    const output = this._output[name]
+
+    this._memRemoveRefOutput(name)
+    this._memAddDataOutput(name, output)
+  }
+
+  private _memSetPinRef(type: 'input' | 'output', name: string): void {
+    if (type === 'input') {
+      this._memSetInputRef(name)
+    } else {
+      this._memSetOutputRef(name)
+    }
+  }
+
+  private _memSetInputRef(name: string): void {
+    const input = this._input[name]
+
+    this._memRemoveDataInput(name)
+    this._memAddRefInput(name, input)
+  }
+
+  private _memSetOutputRef(name: string): void {
+    const output = this._output[name]
+
+    this._memRemoveDataOutput(name)
+    this._memAddRefOutput(name, output)
+  }
+
+  public setPinRef(type: 'input' | 'output', name: string, ref: boolean): void {
+    if (ref) {
+      if (this.hasRefPinNamed(type, name)) {
+        return
+      } else {
+        this._memSetPinRef(type, name)
+      }
+    } else {
+      if (this.hasPinNamed(type, name)) {
+        return
+      } else {
+        this._memSetPinOptData(type, name)
+      }
+    }
+  }
+
+  public setInputRef(name: string, ref: boolean): void {
+    this.setPinRef('input', name, ref)
+  }
+
+  public setOutputRef(name: string, ref: boolean): void {
+    this.setPinRef('output', name, ref)
+  }
+
   public setInputIgnored(name: string, ignore: boolean): boolean {
     const input = this.getInput(name)
     if (this.hasRefInputNamed(name)) {
@@ -190,7 +260,7 @@ export class Unit<I = any, O = any> extends $ implements U {
 
   public _setInput(
     name: string,
-    input: Pin<I[keyof I]>,
+    input: PinOf<I>,
     opt: PinOpt = DEFAULT_PIN_OPT
   ) {
     if (this.hasInputNamed(name)) {
@@ -206,14 +276,22 @@ export class Unit<I = any, O = any> extends $ implements U {
     const { ref } = opt
 
     if (ref) {
-      this._r_i_count++
-      this._r_i_name.add(name)
-      this._ref_input[name] = input
+      this._memAddRefInput(name, input)
     } else {
-      this._d_i_count++
-      this._d_i_name.add(name)
-      this._data_input[name] = input
+      this._memAddDataInput(name, input)
     }
+  }
+
+  private _memAddDataInput(name: string, input: PinOf<I>): void {
+    this._d_i_count++
+    this._d_i_name.add(name)
+    this._data_input[name] = input
+  }
+
+  private _memAddRefInput(name: string, input: PinOf<I>): void {
+    this._r_i_count++
+    this._r_i_name.add(name)
+    this._ref_input[name] = input
   }
 
   private _validateInputName(name: any): void {
@@ -263,16 +341,24 @@ export class Unit<I = any, O = any> extends $ implements U {
     const { ref } = opt
 
     if (ref) {
-      this._r_i_count--
-      this._r_i_name.delete(name)
-      delete this._ref_input[name]
+      this._memRemoveRefInput(name)
     } else {
-      this._d_i_count--
-      this._d_i_name.delete(name)
-      delete this._data_input[name]
+      this._memRemoveDataInput(name)
     }
 
     this.emit('remove_input', name, input)
+  }
+
+  private _memRemoveDataInput = (name: string): void => {
+    this._d_i_count--
+    this._d_i_name.delete(name)
+    delete this._data_input[name]
+  }
+
+  private _memRemoveRefInput = (name: string): void => {
+    this._r_i_count--
+    this._r_i_name.delete(name)
+    delete this._ref_input[name]
   }
 
   public setOutputs(outputs: Pins<O>, opts: PinOpts = {}): void {
@@ -315,16 +401,24 @@ export class Unit<I = any, O = any> extends $ implements U {
     const { ref } = opt
 
     if (ref) {
-      this._r_o_count++
-      this._r_o_name.add(name)
-      this._ref_output[name] = output
+      this._memAddRefOutput(name, output)
     } else {
-      this._d_o_count++
-      this._d_o_name.add(name)
-      this._data_output[name] = output
+      this._memAddDataOutput(name, output)
     }
 
     this._output[name] = output
+  }
+
+  private _memAddRefOutput = (name: string, output: Pin<O[keyof O]>): void => {
+    this._r_o_count++
+    this._r_o_name.add(name)
+    this._ref_output[name] = output
+  }
+
+  private _memAddDataOutput = (name: string, output: Pin<O[keyof O]>): void => {
+    this._d_o_count++
+    this._d_o_name.add(name)
+    this._data_output[name] = output
   }
 
   public addOutput(
@@ -336,6 +430,26 @@ export class Unit<I = any, O = any> extends $ implements U {
       throw new DuplicatedOutputFoundError(name)
     }
     this.setOutput(name, output, opt)
+  }
+
+  private _memRemoveRefPin = (type: 'input' | 'output', name: string): void => {
+    if (type === 'input') {
+      this._memRemoveRefInput(name)
+    } else {
+      this._memRemoveRefOutput(name)
+    }
+  }
+
+  private _memRemoveRefOutput = (name: string): void => {
+    this._r_o_count--
+    this._r_o_name.delete(name)
+    delete this._ref_output[name]
+  }
+
+  private _memRemoveDataOutput = (name: string): void => {
+    this._d_o_count--
+    this._d_o_name.delete(name)
+    delete this._data_output[name]
   }
 
   public removeOutput(name: string): void {
@@ -351,13 +465,9 @@ export class Unit<I = any, O = any> extends $ implements U {
     const { ref } = opt
 
     if (ref) {
-      this._r_o_count--
-      this._r_o_name.delete(name)
-      delete this._ref_output[name]
+      this._memRemoveRefOutput(name)
     } else {
-      this._d_o_count--
-      this._d_o_name.delete(name)
-      delete this._data_output[name]
+      this._memRemoveDataOutput(name)
     }
 
     const output = this._output[name]

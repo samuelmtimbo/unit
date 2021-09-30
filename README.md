@@ -12,7 +12,7 @@ unit's Philosophy is similar to the Unix Operating System's; for a seasoned prog
 
 The broader Design Principles behind unit are discussed in [Concept](src/concept/README.md).
 
-To jump right into the official unit Programming Environment, visit [ioun.it](https://ioun.it).
+To jump right into the official unit Programming Environment (Beta), visit [ioun.it](https://ioun.it).
 
 The following is a manual on how to run a local version of the unit Programming Environment.
 

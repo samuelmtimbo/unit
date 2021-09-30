@@ -1,5 +1,5 @@
 {
-  "name": "set",
+  "name": "put",
   "inputs": {
     "a": {
       "type": "<A>[]"

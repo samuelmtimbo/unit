@@ -1,6 +1,9 @@
 import { fromId } from '../spec/fromId'
 import Identity from '../system/f/control/Identity'
+import _specs from '../system/_specs'
 const now = require('performance-now')
+
+globalThis.__specs = _specs
 
 function log(...args) {
   console.log(...args)
@@ -16,7 +19,8 @@ log('new Identity()', (t1 - t0).toFixed(3))
 
 t0 = now()
 const Range = fromId<{ a: number; b: number }, { i: number }>(
-  '29e43ad7-be5e-437f-8f0f-2df996c8b89c'
+  '29e43ad7-be5e-437f-8f0f-2df996c8b89c',
+  globalThis.__specs
 )
 t1 = now()
 log(

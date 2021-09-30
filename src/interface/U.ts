@@ -10,15 +10,21 @@ import { $_ } from './$_'
 export interface U<I = any, O = any> extends $_ {
   setParent(parent: U | null)
 
+  setInputs(inputs: Pins<I>, opts: PinOpts): void
+
+  setPin(name: string, type: 'input' | 'output', pin: Pin<any>, opt: PinOpt)
+
   setPinIgnored(type: 'input' | 'output', name: string, ignored: boolean): void
 
   setInputIgnored(name: string, ignore?: boolean): boolean
 
   setOutputIgnored(name: string, ignore?: boolean): boolean
 
-  setInputs(inputs: Pins<I>, opts: PinOpts): void
+  setPinRef(type: 'input' | 'output', name: string, ref: boolean): void
 
-  setPin(name: string, type: 'input' | 'output', pin: Pin<any>, opt: PinOpt)
+  setInputRef(name: string, ref: boolean): void
+
+  setOutputRef(name: string, ref: boolean): void
 
   setInput(name: string, input: Pin<I[keyof I]>, opt: PinOpt)
 

@@ -1204,29 +1204,6 @@ export default class GraphComponent extends Element<HTMLElement, Props> {
       inputId: 'pod',
     })
 
-    // const Parent = parentClass()
-    // const component = new Parent({})
-    // this._component = component
-
-    // if (fullwindow) {
-    //   this._graph.leaveFullwindow(false)
-    // }
-
-    // this._graph.setProp('component', this._component)
-
-    // this._graph.setProp('pod', this._pod)
-
-    // this._graph.enterFullwindow(false)
-
-    // this._graph.leaveFullwindow(true)
-
-    // this._graph.select_node('graph')
-
-    // this._graph.unlock_sub_component('graph')
-
-    // setTimeout(() => {
-    // }, 0)
-
     const spec = emptySpec()
 
     const GRAPH_WIDTH = 300
@@ -1299,6 +1276,8 @@ export default class GraphComponent extends Element<HTMLElement, Props> {
       background_slot_element.removeChild(background_slot_element.lastChild)
     }
 
+    this._graph._prevent_next_reset = true
+
     const unit_graph = new GraphComponent({
       graph: this._graph,
       fallback: this._fallback_frame,
@@ -1308,6 +1287,8 @@ export default class GraphComponent extends Element<HTMLElement, Props> {
       component: this._component,
       // pod: this._pod,
     })
+
+    // AD HOC
 
     const transcend = new Transcend()
     this._transcend = transcend
@@ -1333,8 +1314,11 @@ export default class GraphComponent extends Element<HTMLElement, Props> {
       frame: this._fallback_frame,
       // fullwindow: true,
     })
+    
     graph.enter()
+    
     this._graph = graph
+    
     this._listen_graph()
 
     this._reset_frame()
@@ -1401,15 +1385,13 @@ export default class GraphComponent extends Element<HTMLElement, Props> {
 
     this._graph.enterFullwindow(false)
 
-    this._graph.leaveFullwindow(true)
+    this._graph.leaveFullwindow(true, () => {
+      this._graph.select_node('graph')
+
+      this._graph.unlock_sub_component('graph')
+    })
 
     this._graph.temp_fixate_node(unit_graph_id, 100)
-
-    this._graph.select_node('graph')
-
-    this._graph.unlock_sub_component('graph')
-
-    unit_graph.focus()
   }
 
   private _on_enter_fullwindow = () => {
@@ -1916,6 +1898,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   > = {}
 
+  public _prevent_next_reset: boolean = false
+
   private _refresh_theme = (): void => {
     const { $theme, $color } = this.$context
     // const { $color } = this.$context
@@ -2094,11 +2078,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._simulation.addListener('tick', this._on_simulation_tick)
     this._simulation.addListener('end', this._on_simulation_end)
 
-    // const layout_root_simulation = this._create_layout_simulation(
-    //   this._layout_root_node
-    // )
-    // this._layout_root_simulation = layout_root_simulation
-
     const subgraph = new Div({
       className: 'graph-subgraph',
       style: {
@@ -2179,7 +2158,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
       this.paste_spec(spec, { x: position.x - $x, y: position.y - $y })
 
-      this.focus()
+      // this.focus()
     })
     // @ts-ignore
     main.$element.__DROP__TARGET__ = true
@@ -2240,8 +2219,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     graph.addEventListener(makeWheelListener(this._on_wheel))
     graph.addEventListener(makeFocusListener(this._on_focus))
     graph.addEventListener(makeBlurListener(this._on_blur))
-    graph.registerParentRoot(subgraph)
     graph.registerParentRoot(main)
+    graph.registerParentRoot(subgraph)
     this._graph = graph
 
     const $element = parentElement()
@@ -2315,10 +2294,10 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
               this._enable_input()
             }
           }
+        }
 
-          if (!this._subgraph_unit_id) {
-            this._enable_transcend()
-          }
+        if (!this._subgraph_unit_id) {
+          this._enable_transcend()
         }
       }
     }
@@ -2985,6 +2964,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _reset() {
+    if (this._prevent_next_reset) {
+      this._prevent_next_reset = false
+      return
+    }
+
     const spec = this._spec
 
     // console.log('Graph', 'reset', spec)
@@ -5712,7 +5696,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       style: {
         position: 'absolute',
         overflowY: 'hidden',
-        overflowX: 'unset',
+        overflowX: 'hidden',
       },
     })
     layer.appendChild(children)
@@ -7272,17 +7256,17 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
             }
           } else if (this._is_unit_node_id(node_id)) {
             if (this._is_unit_component(node_id)) {
-              if (this._core_component_unlocked_count > 0) {
-                const unlocked_component_id = getObjSingleKey(
-                  this._core_component_unlocked
-                )
-                if (node_id !== unlocked_component_id) {
-                  this._lock_sub_component(unlocked_component_id, true)
-                  this.deselect_node(unlocked_component_id)
-                  this._unlock_sub_component(node_id)
-                  this.select_node(node_id)
-                }
-              }
+              // if (this._core_component_unlocked_count > 0) {
+              //   const unlocked_component_id = getObjSingleKey(
+              //     this._core_component_unlocked
+              //   )
+              //   if (node_id !== unlocked_component_id) {
+              //     this._lock_sub_component(unlocked_component_id, true)
+              //     this.deselect_node(unlocked_component_id)
+              //     this._unlock_sub_component(node_id)
+              //     this.select_node(node_id)
+              //   }
+              // }
             }
           }
 
@@ -8427,7 +8411,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._animate_all_current_layout_layer_node()
   }
 
-  private __scale_layout_core = (unit_id: string, k: number): void => {
+  private _scale_layout_core = (unit_id: string, k: number): void => {
     // console.log('Graph', '_resize_layout_core', width, height)
     const layout_node = this._layout_node[unit_id]
 
@@ -8458,10 +8442,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   ): void => {
     const layout_core = this._layout_core[sub_component_id]
 
-    // mergeStyle(layout_core, {
-    //   width: `${width}px`,
-    //   height: `${height}px`,
-    // })
     layout_core.$element.style.width = `${width}px`
     layout_core.$element.style.height = `${height}px`
 
@@ -9172,6 +9152,12 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     const { x, y } = this._world_to_screen(_x - width / 2, _y - height / 2)
 
     return { x, y }
+  }
+
+  private _get_node_size = (node_id: string): Size => {
+    const node = this._get_node(node_id)
+    const { width, height } = node
+    return { width, height }
   }
 
   private _get_node_shape = (node_id: string): Shape => {
@@ -10678,7 +10664,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._lock_all_component()
     } else {
       if (this._is_fullwindow) {
-        this._leave_all_fullwindow(true)
+        this._leave_all_fullwindow(true, NOOP)
       } else {
         this._enter_default_fullwindow()
       }
@@ -10770,9 +10756,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _leave_all_fullwindow = (animate: boolean) => {
+  private _leave_all_fullwindow = (animate: boolean, callback: () => void) => {
     // console.log('Graph', '_leave_all_fullwindow')
-    this._leave_fullwindow(animate)
+    this._leave_fullwindow(animate, callback)
 
     this._fullwindow_component_set = new Set()
     this._fullwindow_component_ids = []
@@ -10885,7 +10871,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _leave_fullwindow = (animate: boolean = true) => {
+  private _leave_fullwindow = (animate: boolean = true, callback: () => void) => {
     // console.log('Graph', '_leave_fullwindow')
     const { frameOut } = this.$props
 
@@ -10993,16 +10979,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
                 const x1 = _x0 + k + (_w0 * k_1) / 2
                 const y1 = _y0 + k + (_h0 * k_1) / 2
 
-                // const { x: x1, y: y1 } = this._world_to_screen(
-                //   _x0 + k - _w0 * k_1 / 2,
-                //   _y0 + k - _h0 * k_1 / 2
-                // )
-
-                // const { x: x1, y: y1 } = this._world_to_screen(
-                //   _x0 - _w0 * (k - 1) / 2 - w0 /2,
-                //   _y0 - _h0 * (k - 1) / 2
-                // )
-
                 const k1 = k
 
                 return { x1, y1, w1, h1, k1 }
@@ -11023,6 +10999,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
               frame.$element.style.transform = ''
 
               this._animating_leave_fullwindow[sub_component_id] = false
+
+              callback()
             }
           )
 
@@ -11471,15 +11449,15 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
             onClick: this._on_transcend_click,
           })
         )
-
-        if (this._is_fullwindow) {
-          this._transcend.down(false)
-        } else {
-          this._transcend.up(false)
-        }
-
-        this._transcend.show(true)
       }
+
+      if (this._is_fullwindow) {
+        this._transcend.down(false)
+      } else {
+        this._transcend.up(false)
+      }
+
+      this._transcend.show(true)
     }
   }
 
@@ -11542,7 +11520,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     this._set_layout_core_position(sub_component_id, x0, y0)
     this.__resize_layout_core(sub_component_id, w0, h0)
-    this.__scale_layout_core(sub_component_id, k0)
+    this._scale_layout_core(sub_component_id, k0)
 
     const animate = () => {
       const {
@@ -11588,7 +11566,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
         const _k = k + dk * c
 
-        this.__scale_layout_core(sub_component_id, _k)
+        this._scale_layout_core(sub_component_id, _k)
       }
 
       if (ended) {
@@ -11596,7 +11574,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
         this.__resize_layout_core(sub_component_id, w1, h1)
 
-        this.__scale_layout_core(sub_component_id, k1)
+        this._scale_layout_core(sub_component_id, k1)
 
         delete this._layout_animation[sub_component_id]
 
@@ -11674,12 +11652,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._tree_layout = true
 
     const opacity = '0.25'
-    // mergeStyle(this._zoom_comp, { opacity })
+
     this._zoom_comp._root.$element.style.opacity = opacity
-
-    // mergeStyle(this._layout_comp, { display: 'flex' })
-
-    // this._layout_root_comp.$element.style.display = 'flex'
 
     this._layout_comp.$element.style.pointerEvents = 'inherit'
 
@@ -11829,33 +11803,39 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       sub_component_id,
       layout_node,
       () => {
-        const { $width, $height } = this.$context
+        const { x, y } = this._get_layout_node_screen_position(sub_component_id)
 
-        const graph_node = this._node[sub_component_id]
-
-        const { x: _x, y: _y, width: _width, height: _height } = graph_node
-
-        const position = this._world_to_screen(_x, _y)
-
-        const { x: __x, y: __y } = position
-
-        const parent_layout_layer =
-          this._get_parent_layout_layer(sub_component_id)
-
-        const { scrollTop = 0 } = parent_layout_layer.layer.$element
-
-        const x = __x - $width / 2
-        const y = __y - $height / 2 + scrollTop
+        const { width, height } = this._get_node_size(sub_component_id)
 
         const { k } = this._zoom
-
-        const width = _width
-        const height = _height
 
         return { x, y, width, height, k }
       },
       callback
     )
+  }
+
+  private _get_layout_node_screen_position = (
+    sub_component_id: string
+  ): Position => {
+    const { $width, $height } = this.$context
+
+    const graph_node = this._node[sub_component_id]
+
+    const { x: _x, y: _y, width: _width, height: _height } = graph_node
+
+    const position = this._world_to_screen(_x, _y)
+
+    const { x: __x, y: __y } = position
+
+    const parent_layout_layer = this._get_parent_layout_layer(sub_component_id)
+
+    const { scrollTop = 0 } = parent_layout_layer.layer.$element
+
+    const x = __x - $width / 2
+    const y = __y - $height / 2 + scrollTop
+
+    return { x, y }
   }
 
   private _leave_tree_layout = (): void => {
@@ -12570,7 +12550,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       pin_node_id,
       NEAR,
       this._is_pin_node_match,
-      {...this._node, ...this._exposed_int_node },
+      { ...this._node, ...this._exposed_int_node }
     )
     if (nearest_compatible_node_id) {
       if (this._is_pin_node_id(nearest_compatible_node_id)) {
@@ -12594,7 +12574,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
         this._merge_pin_unit(pin_node_id, nearest_compatible_node_id)
       } else if (this._is_internal_pin_node_id(nearest_compatible_node_id)) {
         if (this._is_ext_pin_match(pin_node_id, nearest_compatible_node_id)) {
-          const { id, type, subPinId } = segmentExposedNodeId(nearest_compatible_node_id)
+          const { id, type, subPinId } = segmentExposedNodeId(
+            nearest_compatible_node_id
+          )
           if (is_link_pin) {
             const { unitId, pinId } = segmentLinkPinNodeId(pin_node_id)
             this.plug_exposed_pin(type, id, subPinId, { unitId, pinId })
@@ -12702,8 +12684,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     return this._is_fullwindow
   }
 
-  public leaveFullwindow(animate: boolean): void {
-    this._leave_all_fullwindow(animate)
+  public leaveFullwindow(animate: boolean, callback: () => void): void {
+    this._leave_all_fullwindow(animate, callback)
   }
 
   public enterFullwindow(animate: boolean): void {
@@ -12843,14 +12825,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
         this._focus_sub_component(unit_id)
 
         const core_area = this._core_area[unit_id]
-        // mergeStyle(core_area, {
-        //   display: 'none',
-        // })
-        core_area.$element.style.display = 'none'
 
-        // setTimeout(() => {
-        //   this._hide_core_overlay(unit_id)
-        // }, 0)
+        core_area.$element.style.display = 'none'
       }
     }
   }
@@ -12916,7 +12892,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     unit_id: string,
     unlocking: boolean = false
   ) => {
-    // console.log('Graph', '_lock_sub_component')
+    console.log('Graph', '_lock_sub_component', unit_id, unlocking)
     delete this._core_component_unlocked[unit_id]
 
     this._core_component_unlocked_count--
@@ -12933,9 +12909,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
 
     const core_area = this._core_area[unit_id]
-    // mergeStyle(core_area, {
-    //   display: 'block',
-    // })
+
     core_area.$element.style.display = 'block'
 
     this._show_core_overlay(unit_id)
@@ -13241,7 +13215,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   public deselect_node = (node_id: string): void => {
-    // console.log('Graph', 'deselect_node', node_id)
+    console.log('Graph', 'deselect_node', node_id)
 
     if (!this._selected_node_id[node_id]) {
       return
@@ -14139,10 +14113,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     return false
   }
 
-  private _is_ext_pin_match = (
-    pin_node_id: string,
-    ext_node_id: string
-  ) => {
+  private _is_ext_pin_match = (pin_node_id: string, ext_node_id: string) => {
     const { type } = segmentExposedNodeId(ext_node_id)
     return getTypeFromLinkPinNodeId(pin_node_id) === type
   }
@@ -14392,7 +14363,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._refresh_node_selection(node_id)
     }
 
-    console.log(this._compatible_node_id)
     for (let node_id in this._compatible_node_id) {
       this._refresh_node_fixed(node_id)
       this._refresh_node_selection(node_id)
@@ -15940,6 +15910,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     const { path: id } = unit
 
+    let opt: LayoutNode = undefined
+
     if (!isBaseSpecId(id)) {
       const color = this._get_color()
 
@@ -15952,9 +15924,24 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       let fullwindow = false
 
       if (is_component) {
+        const { $width, $height } = this.$context
+
         if (this._is_sub_component_fullwindow(unit_id)) {
           fullwindow = true
         }
+
+        const node = this._get_node(unit_id)
+
+        const { x, y, width, height } = node
+
+        const { x: screen_x, y: screen_y } = this._world_to_screen(x, y)
+
+        const layout_screen_x = screen_x - $width / 2
+        const layout_screen_y = screen_y - $height / 2
+
+        const { k } = this._zoom
+
+        opt = { x: layout_screen_x, y: layout_screen_y, width, height, k }
       }
 
       let sub_component = this._get_sub_component(unit_id)
@@ -15963,7 +15950,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
         this._subgraph_return_fullwindow = true
         this._subgraph_return_fullwindow_component_ids =
           this._fullwindow_component_ids
-        this._leave_all_fullwindow(true)
+
+        this._leave_all_fullwindow(true, NOOP)
       }
 
       if (is_component) {
@@ -16013,22 +16001,14 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._subgraph_unit_id = unit_id
       this._subgraph_depth = 1 + graph.get_subraph_depth()
 
-      // mergeStyle(this._subgraph, {
-      //   display: 'block',
-      // })
       this._subgraph.$element.style.display = 'block'
 
-      // mergeStyle(this._main, {
-      //   pointerEvents: 'none',
-      //   opacity: '0.25',
-      // })
       this._main.$element.style.pointerEvents = 'none'
       this._main.$element.style.opacity = '0.25'
 
-      // this._disable_input()
       this._disable_transcend()
 
-      graph.enter()
+      graph.enter(opt)
 
       graph.setProp('disabled', false)
 
@@ -16075,29 +16055,70 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  public enter = () => {
+  public enter = (opt?: LayoutNode): void => {
     // console.log('Graph', 'enter')
     this._take_component_control()
+
+    if (opt) {
+      const { x, y, width, height, k } = opt
+
+      // all core content goes to layout core
+      for (const sub_component_id in this._component.$subComponent) {
+        this._move_core_content_graph_to_layout(sub_component_id)
+
+        this._show_layout_core(sub_component_id)
+
+        this._set_layout_core_position(sub_component_id, x, y)
+        this.__resize_layout_core(sub_component_id, width, height)
+        this._scale_layout_core(sub_component_id, k)
+
+        this._animate_layout_core_down(sub_component_id, () => {
+          this._move_core_content_layout_to_graph(sub_component_id)
+
+          const { width, height } =
+            this._get_unit_component_graph_size(sub_component_id)
+
+          this._resize_core_area(sub_component_id, width, height)
+          this._resize_core_selection(sub_component_id, width, height)
+
+          this._hide_layout_core(sub_component_id)
+        })
+      }
+
+      // move all layout core to the given position, with position and size and scale given
+
+      // animate then back to core
+    }
+
+    this._setup_pod(this._pod)
   }
 
   public leave = (): void => {
-    const { parent } = this.$props
     // console.log('Graph', 'leave')
+    const { parent } = this.$props
 
     if (parent) {
       this._plunk_pod(this._pod)
 
       this._lose_component_control()
 
-      // this._disable_input()
       this._disable_transcend()
 
       const { units, links, merges, data, inputs, outputs } =
         this._segregate_node_id(this._pressed_node_id_pointer_id)
 
+      const component_position = {}
+      for (const sub_component_id in this._component.$subComponent) {
+        const position = this._get_layout_node_screen_position(sub_component_id)
+        component_position[sub_component_id] = position
+      }
+
       this.dispatchEvent(
         'leave',
-        { units, links, merges, data, inputs, outputs },
+        {
+          clipboard: { units, links, merges, data, inputs, outputs },
+          component: { position: component_position },
+        },
         false
       )
     } else {
@@ -16110,7 +16131,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
           this._plunk_pod(this._pod)
 
           this._disable_transcend()
-          // this._disable_input()
 
           if (this._multiselect_area_ing) {
             this._on_multiselect_area_end()
@@ -16146,14 +16166,19 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_subgraph_leave = ({
-    units,
-    data,
+    clipboard: { units, data },
+    component: { position }
   }: {
-    units: string[]
-    data: string[]
+    clipboard: {
+      units: string[]
+      data: string[]
+    },
+    component: {
+      position: Dict<Position>
+    }
   }) => {
     // log(data)
-    this._leave_subgraph()
+    this._leave_subgraph(position)
   }
 
   private _on_subgraph_enter_unit = (): void => {
@@ -16179,8 +16204,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._main.$element.style.opacity = `${opacity}`
   }
 
-  public _leave_subgraph = (): void => {
-    // console.log('Graph', '_leave_subgraph')
+  public _leave_subgraph = (child_component_position: Dict<Position> = {}): void => {
+    console.log('Graph', '_leave_subgraph', child_component_position)
     if (this._subgraph_graph && this._subgraph_unit_id) {
       // recursively leave unit
       this._subgraph_graph._leave_subgraph()
@@ -16191,21 +16216,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
       this._subgraph_graph.setProp('disabled', true)
 
-      // mergeStyle(this._subgraph, {
-      //   display: 'none',
-      // })
       this._subgraph.$element.style.display = 'none'
 
-      // mergeStyle(this._main, {
-      //   opacity: '1',
-      //   pointerEvents: 'all',
-      // })
       this._main.$element.style.opacity = '1'
       this._main.$element.style.pointerEvents = 'all'
 
-      // mergeStyle(this._subgraph_graph, {
-      //   display: 'none',
-      // })
       this._subgraph_graph.$element.style.display = 'none'
 
       this._subgraph_graph = null
@@ -17200,7 +17215,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
               this._set_node_layer(node_id, LAYER_COLLAPSE)
 
-              this._start_long_press_collapse(pointerId, node_id, this._long_press_screen_position)
+              this._start_long_press_collapse(
+                pointerId,
+                node_id,
+                this._long_press_screen_position
+              )
             }
           }
         }
@@ -18714,7 +18733,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     //   merge_node_id,
     //   pin_node_id
     // )
-
     position = position || this._get_merge_position(merge_node_id)
 
     const { id: merge_id } = segmentMergeNodeId(merge_node_id)
@@ -18761,27 +18779,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._dec_merge_pin_count(merge_id)
 
     if (!pin_ouptut_self && !output_ref) {
-      // const merge_anchor_node_id = this._get_merge_anchor_node_id(merge_node_id)
-
-      // const unit_node = this._get_node(unitId)
-      // const merge_anchor_node = this._get_node(merge_anchor_node_id)
-
-      // const { l, u } = surfaceDistance(unit_node, {
-      //   ...merge_anchor_node,
-      //   x: position.x,
-      //   y: position.y,
-      // })
-
-      // const nu = oppositeVector(u)
-
-      // const anchor_position = pointInNode(unit_node, nu)
-
-      // const pin_position = addVector(anchor_position, {
-      //   x: u.x * l,
-      //   y: u.y * l,
-      // })
-
-      // this._sim_add_link_pin_node(unitId, type, pinId, pin_position)
       this._sim_add_link_pin_node(unitId, type, pinId, position)
 
       const source_id = is_input ? pin_node_id : unitId
@@ -18805,16 +18802,10 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     if (is_input) {
       if (this._merge_input_count[merge_id] === 0) {
         if (!merge_ref) {
-          // mergeStyle(merge_input, {
-          //   visibility: 'hidden',
-          // })
-          merge_input.$element.style.visibility = 'hidden'
           const merge_output_width = 2 * PIN_RADIUS
-          // mergeStyle(merge_output, {
-          //   width: `${merge_output_width}px`,
-          //   height: `${merge_output_width}px`,
-          //   transform: '',
-          // })
+
+          merge_input.$element.style.visibility = 'hidden'
+
           merge_output.$element.style.width = `${merge_output_width}px`
           merge_output.$element.style.height = `${merge_output_width}px`
           merge_output.$element.style.transform = ''
@@ -23902,7 +23893,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     })
   }
 
-  private _set_long_press_pointer = (pointerId: number, x: number, y: number): void => {
+  private _set_long_press_pointer = (
+    pointerId: number,
+    x: number,
+    y: number
+  ): void => {
     this._long_press_screen_position = { x, y } // TODO should be a dict
     this._long_press_pointer.add(pointerId)
     this._long_press_count++
@@ -24345,10 +24340,14 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       const text = await navigator.clipboard.readText()
       this._paste_text(text, position)
     } else {
-      showNotification('Clipboard API not supported', {
-        color: RED,
-        borderColor: RED,
-      })
+      showNotification(
+        'Clipboard API not supported',
+        {
+          color: RED,
+          borderColor: RED,
+        },
+        3000
+      )
     }
   }
 
@@ -24883,7 +24882,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
   private _on_t_keydown = (key: string): void => {
     if (this._is_fullwindow) {
-      this._leave_all_fullwindow(true)
+      this._leave_all_fullwindow(true, NOOP)
     } else {
       this._enter_default_fullwindow()
     }
@@ -26928,10 +26927,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._refresh_enabled()
     } else if (prop === 'fullwindow') {
       if (current === true && !this._is_fullwindow) {
-        // this._enter_all_fullwindow(true)
         this._enter_all_fullwindow(false)
       } else if (current === false && this._is_fullwindow) {
-        this._leave_all_fullwindow(true)
+        this._leave_all_fullwindow(true, NOOP)
       }
     } else if (prop === 'frame') {
       const { frame } = this.$props
