@@ -232,7 +232,7 @@ contract Mothership {
         units[name] = ufac;
     }
 
-    function get(string memory name) public view returns (Unit) {
+    function get(string memory name) public returns (Unit) {
         return units[name].create();
     }
 }
