@@ -13,7 +13,7 @@
     "watch:worker-solc": "ts-node src/script/watch/worker-solc.ts",
     "watch": "run-p watch:server watch:client",
     "start": "node lib/server/index.js",
-    "setup": "yarn; run-s build lib",
+    "setup": "yarn",
     "prepare": "run-s build lib",
     "tcheck": "tsc --noEmit",
     "lib": "rm -rf lib; tsc",
