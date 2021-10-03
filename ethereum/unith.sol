@@ -12,12 +12,18 @@ library U {
     // this struct is insanely expensive
     struct Data {
         DataType type_;
-        string str;
-        uint128 number; // numbers are shifted <<64
-        // Data[] array; // recursive type error
-        // object:
-        string[] keys;
-        // Data[] values;
+        // location is polymorphic depending on type above:
+        // - string: single-length array pointing to `strings` array in heap
+        // - number: same, pointing to `numbers` array in heap
+        // - array: list of indexes pointing to the `objects` array in heap
+        // - object: list of alternating indexes to `strings` and `objects` arrays in heap
+        uint32[] location;
+    }
+
+    struct Heap {
+        string[] strings;
+        uint128[] numbers; // numbers are shifted <<64
+        Data[] objects;
     }
 }
 
