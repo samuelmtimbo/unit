@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { Config } from '../../../../Class/Unit/Config'
 
 export interface I {
@@ -21,7 +22,7 @@ export default class Add extends Functional<I, O> {
     )
   }
 
-  f({ a, b }: I, done): void {
+  f({ a, b }: I, done: Done<O>): void {
     done({ 'a + b': a + b })
   }
 }
