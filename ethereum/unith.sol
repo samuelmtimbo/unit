@@ -189,7 +189,28 @@ interface Unit {
 }
 
 interface UnitFactory {
-    function create() external view returns (Unit);
+    function create() external returns (Unit);
+}
+
+contract Add is Unit {
+    function take(
+        U.Heap memory heap,
+        U.Data memory input,
+        OutputHandler done
+    ) external {
+        U.Data[] memory inputs = U.getArray(heap, input);
+        int128 a = U.getNumber(heap, inputs[0]);
+        int128 b = U.getNumber(heap, inputs[1]);
+
+        U.Data memory result = U.nitNumber(heap, a + b);
+        done.take(heap, result);
+    }
+}
+
+contract AddFactory is UnitFactory {
+    function create() external returns (Unit) {
+        return new Add();
+    }
 }
 
 contract Mothership {
