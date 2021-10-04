@@ -325,6 +325,8 @@ contract Mothership {
 }
 
 contract Graph420 is Heap {
+    address constant motherAddress = address(0); // replace with mother address
+
     Mothership mother;
 
     Unit add1;
@@ -333,9 +335,8 @@ contract Graph420 is Heap {
     U.Datum output;
 
     constructor() {
-        mother = new Mothership(); // this should actually come from dereferencing a well-known deployed mothership.
-        mother.init(); // and this should actually be a constructor. but we have to make it a function for testing, because solidity
-        init();
+        require(motherAddress != address(0), 'Lost from mother');
+        mother = Mothership(motherAddress);
     }
 
     // this actually needs to be separate in order to access/send `this`
