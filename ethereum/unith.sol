@@ -325,8 +325,6 @@ contract Mothership {
 }
 
 contract Graph420 is Heap {
-    address constant motherAddress = address(0); // replace with mother address
-
     Mothership mother;
 
     Unit add1;
@@ -334,9 +332,9 @@ contract Graph420 is Heap {
 
     U.Datum output;
 
-    constructor() {
-        require(motherAddress != address(0), 'Lost from mother');
-        mother = Mothership(motherAddress);
+    constructor(address motherAddr) {
+        require(motherAddr != address(0), 'Lost from mother');
+        mother = Mothership(motherAddr);
     }
 
     // this actually needs to be separate in order to access/send `this`
