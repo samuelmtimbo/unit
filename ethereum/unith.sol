@@ -162,7 +162,6 @@ interface DataHandler {
 
 abstract contract Unit is DataHandler {
     Heap private heap;
-    DataHandler private outputHandler;
 
     U.Data[] private inputs;
 
@@ -170,14 +169,14 @@ abstract contract Unit is DataHandler {
         inputs = new U.Data[](_inputCount);
     }
 
-    function init(Heap _heap, DataHandler _outputHandler)
+    function init(Heap _heap, function(uint32, U.Data memory) external _outH)
         external
         virtual
         returns (Unit self)
     {
         assert(address(heap) == address(0));
         heap = _heap;
-        outputHandler = _outputHandler;
+        out = _outH;
         return this;
     }
 
@@ -194,9 +193,7 @@ abstract contract Unit is DataHandler {
 
     function run(U.Data[] storage inputs) internal virtual;
 
-    function out(uint32 idx, U.Data memory value) internal {
-        outputHandler.take(idx, value);
-    }
+    function(uint32, U.Data memory) external out;
 
     function asString(U.Data memory value)
         internal
@@ -247,7 +244,9 @@ abstract contract Unit is DataHandler {
 }
 
 interface UnitFactory {
-    function create(Heap heap, DataHandler handler) external returns (Unit);
+    function create(Heap heap, function(uint32, U.Data memory) external outH)
+        external
+        returns (Unit);
 }
 
 contract Add is Unit(2) {
@@ -261,8 +260,11 @@ contract Add is Unit(2) {
 }
 
 contract AddFactory is UnitFactory {
-    function create(Heap heap, DataHandler handler) external returns (Unit) {
-        return new Add().init(heap, handler);
+    function create(Heap heap, function(uint32, U.Data memory) external outH)
+        external
+        returns (Unit)
+    {
+        return new Add().init(heap, outH);
     }
 }
 
@@ -277,16 +279,21 @@ contract Multiply is Unit(2) {
 }
 
 contract MultiplyFactory is UnitFactory {
-    function create(Heap heap, DataHandler handler) external returns (Unit) {
-        return new Multiply().init(heap, handler);
+    function create(Heap heap, function(uint32, U.Data memory) external outH)
+        external
+        returns (Unit)
+    {
+        return new Multiply().init(heap, outH);
     }
 }
 
 contract Mothership {
     address public owner;
 
-    constructor() {
+    function init() public {
         owner = msg.sender;
+        register('add', new AddFactory());
+        register('multiply', new MultiplyFactory());
     }
 
     mapping(string => UnitFactory) public units;
@@ -304,8 +311,57 @@ contract Mothership {
     function get(
         string memory name,
         Heap heap,
-        DataHandler handler
+        function(uint32, U.Data memory) external handler
     ) public returns (Unit) {
         return units[name].create(heap, handler);
+    }
+}
+
+contract Graph420 is Heap {
+    Unit add1;
+    Unit multiply1;
+
+    U.Data output;
+
+    constructor() {
+        Mothership mother = new Mothership(); // this should actually come from dereferencing a well-known deployed mothership.
+        mother.init(); // and this should actually be a constructor. but we have to make it a function for testing, because solidity
+
+        add1 = mother.get('add', this, this.pin1);
+        multiply1 = mother.get('multiply', this, this.pin2);
+
+        init();
+    }
+
+    // this could/should be only in the constructor, but created the init helper to restart/debug easily
+    function init() public {
+        add1.take(1, U.nitNumber(this, 1));
+    }
+
+    // aka pin0
+    function feed(int128 value) public returns (bool, int128) {
+        U.Data memory data = U.nitNumber(this, value);
+        add1.take(0, data);
+        multiply1.take(0, data);
+
+        if (output.type_ == U.DataType.Null) {
+            return (false, -1);
+        }
+
+        int128 result = U.asNumber(this, output);
+        output = U.Data(U.DataType.Null, new uint32[](0));
+        return (true, result);
+    }
+
+    function pin1(uint32 idx, U.Data memory value) external {
+        if (idx == 0) {
+            multiply1.take(1, value);
+        }
+    }
+
+    function pin2(uint32 idx, U.Data memory value) external {
+        if (idx == 0) {
+            output = value;
+        }
     }
 }
