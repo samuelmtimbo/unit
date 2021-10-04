@@ -156,11 +156,7 @@ library U {
     }
 }
 
-interface DatumHandler {
-    function take(uint32 idx, U.Datum memory value) external;
-}
-
-abstract contract Unit is DatumHandler {
+abstract contract Unit {
     Heap private heap;
 
     U.Datum[] private inputs;
