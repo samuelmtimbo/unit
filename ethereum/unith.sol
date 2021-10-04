@@ -6,38 +6,38 @@ contract Heap {
     int128[] numbers; // numbers are shifted <<63
     U.Data[] objects;
 
-    function newString(string memory value) internal returns (uint32 addr) {
+    function newString(string memory value) public returns (uint32 addr) {
         strings.push(value);
         addr = uint32(strings.length - 1);
     }
 
-    function getString(uint32 addr) internal view returns (string storage) {
+    function getString(uint32 addr) public view returns (string memory) {
         return strings[addr];
     }
 
-    function setString(uint32 addr, string memory value) internal {
+    function setString(uint32 addr, string memory value) public {
         strings[addr] = value;
     }
 
-    function newNumber(int128 value) internal returns (uint32 addr) {
+    function newNumber(int128 value) public returns (uint32 addr) {
         numbers.push(value);
         addr = uint32(numbers.length - 1);
     }
 
-    function getNumber(uint32 addr) internal view returns (int128) {
+    function getNumber(uint32 addr) public view returns (int128) {
         return numbers[addr];
     }
 
-    function setNumber(uint32 addr, int128 value) internal {
+    function setNumber(uint32 addr, int128 value) public {
         numbers[addr] = value;
     }
 
-    function newObject(U.Data memory value) internal returns (uint32 addr) {
+    function newObject(U.Data memory value) public returns (uint32 addr) {
         objects.push(value);
         addr = uint32(objects.length - 1);
     }
 
-    function getObject(uint32 addr) internal view returns (U.Data storage) {
+    function getObject(uint32 addr) public view returns (U.Data memory) {
         return objects[addr];
     }
 }
@@ -61,10 +61,10 @@ library U {
         uint32[] location;
     }
 
-    function asString(Heap heap, U.Data memory value)
-        internal
+    function asString(Heap heap, Data memory value)
+        public
         pure
-        returns (string storage)
+        returns (string memory)
     {
         require(value.type_ == DataType.String, 'Type must be string');
         return heap.getString(value.location[0]);
@@ -125,7 +125,7 @@ library U {
     }
 
     // same as above.
-    function getObject(Heap heap, U.Data memory value)
+    function asObject(Heap heap, U.Data memory value)
         internal
         pure
         returns (string[] memory keys, Data[] memory values)
@@ -162,8 +162,72 @@ interface OutputHandler {
     function take(U.Data memory result) external;
 }
 
-interface Unit {
-    function take(U.Data memory input, OutputHandler output) external;
+abstract contract Unit {
+    Heap heap;
+
+    function take(U.Data memory input, OutputHandler output) external virtual;
+
+    function init(Heap _heap) public virtual returns (Unit self) {
+        assert(address(heap) == address(0));
+        heap = _heap;
+        return this;
+    }
+
+    function asString(U.Data memory value)
+        internal
+        pure
+        returns (string memory)
+    {
+        return U.asString(heap, value);
+    }
+
+    function nitString(string memory value)
+        internal
+        pure
+        returns (U.Data memory)
+    {
+        return U.nitString(heap, value);
+    }
+
+    function asNumber(U.Data memory value) internal pure returns (int128) {
+        return U.asNumber(heap, value);
+    }
+
+    function nitNumber(int128 value) internal pure returns (U.Data memory) {
+        return U.nitNumber(heap, value);
+    }
+
+    function asArray(U.Data memory value)
+        internal
+        pure
+        returns (U.Data[] memory)
+    {
+        return U.asArray(heap, value);
+    }
+
+    function nitArray(U.Data[] memory array)
+        internal
+        pure
+        returns (U.Data memory)
+    {
+        return U.nitArray(heap, array);
+    }
+
+    function asObject(U.Data memory value)
+        internal
+        pure
+        returns (string[] memory keys, U.Data[] memory values)
+    {
+        return U.asObject(heap, value);
+    }
+
+    function nitObject(string[] memory keys, U.Data[] memory values)
+        internal
+        pure
+        returns (U.Data memory)
+    {
+        return U.nitObject(heap, keys, values);
+    }
 }
 
 interface UnitFactory {
@@ -171,23 +235,19 @@ interface UnitFactory {
 }
 
 contract Add is Unit {
-    Heap heap;
+    function take(U.Data memory input, OutputHandler done) external override {
+        U.Data[] memory inputs = asArray(input);
+        int128 a = asNumber(inputs[0]);
+        int128 b = asNumber(inputs[1]);
 
-    function take(U.Data memory input, OutputHandler done) external {
-        U.Data[] memory inputs = U.getArray(heap, input);
-        int128 a = U.getNumber(heap, inputs[0]);
-        int128 b = U.getNumber(heap, inputs[1]);
-
-        U.Data memory result = U.nitNumber(heap, a + b);
-        done.take(heap, result);
+        U.Data memory result = nitNumber(a + b);
+        done.take(result);
     }
 }
 
 contract AddFactory is UnitFactory {
     function create(Heap heap) external returns (Unit) {
-        Add add = new Add();
-        add.heap = heap;
-        return add;
+        return new Add().init(heap);
     }
 }
 
@@ -210,7 +270,7 @@ contract Mothership {
         units[name] = ufac;
     }
 
-    function get(string memory name) public returns (Unit) {
-        return units[name].create();
+    function get(string memory name, Heap heap) public returns (Unit) {
+        return units[name].create(heap);
     }
 }
