@@ -44,6 +44,7 @@ contract Heap {
 
 library U {
     enum DataType {
+        Null,
         String,
         Number,
         Array,
@@ -155,19 +156,46 @@ library U {
     }
 }
 
-interface OutputHandler {
-    function take(U.Data memory result) external;
+interface DataHandler {
+    function take(uint32 idx, U.Data memory value) external;
 }
 
-abstract contract Unit {
-    Heap heap;
+abstract contract Unit is DataHandler {
+    Heap private heap;
+    DataHandler private outputHandler;
 
-    function take(U.Data memory input, OutputHandler output) external virtual;
+    U.Data[] private inputs;
 
-    function init(Heap _heap) public virtual returns (Unit self) {
+    constructor(uint32 _inputCount) {
+        inputs = new U.Data[](_inputCount);
+    }
+
+    function init(Heap _heap, DataHandler _outputHandler)
+        external
+        virtual
+        returns (Unit self)
+    {
         assert(address(heap) == address(0));
         heap = _heap;
+        outputHandler = _outputHandler;
         return this;
+    }
+
+    function take(uint32 idx, U.Data memory input) external {
+        inputs[idx] = input;
+        for (uint32 i = 0; i < inputs.length; i++) {
+            if (inputs[idx].type_ == U.DataType.Null) {
+                return;
+            }
+        }
+        run(inputs);
+        inputs = new U.Data[](inputs.length);
+    }
+
+    function run(U.Data[] storage inputs) internal virtual;
+
+    function out(uint32 idx, U.Data memory value) internal {
+        outputHandler.take(idx, value);
     }
 
     function asString(U.Data memory value)
@@ -219,23 +247,22 @@ abstract contract Unit {
 }
 
 interface UnitFactory {
-    function create(Heap heap) external returns (Unit);
+    function create(Heap heap, DataHandler handler) external returns (Unit);
 }
 
-contract Add is Unit {
-    function take(U.Data memory input, OutputHandler done) external override {
-        U.Data[] memory inputs = asArray(input);
+contract Add is Unit(2) {
+    function run(U.Data[] storage inputs) internal override {
         int128 a = asNumber(inputs[0]);
         int128 b = asNumber(inputs[1]);
 
         U.Data memory result = nitNumber(a + b);
-        done.take(result);
+        out(0, result);
     }
 }
 
 contract AddFactory is UnitFactory {
-    function create(Heap heap) external returns (Unit) {
-        return new Add().init(heap);
+    function create(Heap heap, DataHandler handler) external returns (Unit) {
+        return new Add().init(heap, handler);
     }
 }
 
@@ -258,7 +285,11 @@ contract Mothership {
         units[name] = ufac;
     }
 
-    function get(string memory name, Heap heap) public returns (Unit) {
-        return units[name].create(heap);
+    function get(
+        string memory name,
+        Heap heap,
+        DataHandler handler
+    ) public returns (Unit) {
+        return units[name].create(heap, handler);
     }
 }
