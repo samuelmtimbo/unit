@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.4.20;
+pragma solidity >=0.4.20 >=0.8.9;
 
 contract Heap {
     string[] strings;
@@ -292,6 +292,10 @@ contract MultiplyFactory is UnitFactory {
 
 contract Mothership {
     address public owner;
+
+    constructor() {
+        init();
+    }
 
     function init() public {
         owner = msg.sender;
