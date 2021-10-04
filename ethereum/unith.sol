@@ -324,21 +324,28 @@ contract Mothership {
     }
 }
 
-contract Graph420 is Heap {
-    Mothership mother;
+contract Graph420Entry {
+    Graph420 graph;
 
+    constructor(address motherAddr) {
+        require(motherAddr != address(0), 'Lost from mother');
+        Mothership mother = Mothership(motherAddr);
+        graph = new Graph420();
+        graph.init(mother);
+    }
+
+    function feed(int128 value) public returns (bool, int128) {
+        return graph.feed(value);
+    }
+}
+
+contract Graph420 is Heap {
     Unit add1;
     Unit multiply1;
 
     U.Datum output;
 
-    constructor(address motherAddr) {
-        require(motherAddr != address(0), 'Lost from mother');
-        mother = Mothership(motherAddr);
-    }
-
-    // this actually needs to be separate in order to access/send `this`
-    function init() public {
+    function init(Mothership mother) public {
         add1 = mother.get('add', this, this.pin1);
         multiply1 = mother.get('multiply', this, this.pin2);
         add1.take(1, U.nitNumber(this, 1));
