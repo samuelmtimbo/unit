@@ -255,14 +255,30 @@ contract Add is Unit(2) {
         int128 a = asNumber(inputs[0]);
         int128 b = asNumber(inputs[1]);
 
-        U.Data memory result = nitNumber(a + b);
-        out(0, result);
+        U.Data memory aplusb = nitNumber(a + b);
+        out(0, aplusb);
     }
 }
 
 contract AddFactory is UnitFactory {
     function create(Heap heap, DataHandler handler) external returns (Unit) {
         return new Add().init(heap, handler);
+    }
+}
+
+contract Multiply is Unit(2) {
+    function run(U.Data[] storage inputs) internal override {
+        int128 a = asNumber(inputs[0]);
+        int128 b = asNumber(inputs[1]);
+
+        U.Data memory axb = nitNumber(a * b);
+        out(0, axb);
+    }
+}
+
+contract MultiplyFactory is UnitFactory {
+    function create(Heap heap, DataHandler handler) external returns (Unit) {
+        return new Multiply().init(heap, handler);
     }
 }
 
