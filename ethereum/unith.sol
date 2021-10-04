@@ -162,7 +162,9 @@ abstract contract Unit {
     U.Datum[] private inputs;
 
     constructor(uint32 _inputCount) {
-        inputs = new U.Datum[](_inputCount);
+        for (uint32 i = 0; i < _inputCount; i++) {
+            inputs.push(U.Datum(U.DType.Null, new uint32[](0)));
+        }
     }
 
     function init(Heap _heap, function(uint32, U.Datum memory) external _outH)
@@ -184,7 +186,9 @@ abstract contract Unit {
             }
         }
         run(inputs);
-        inputs = new U.Datum[](inputs.length);
+        for (uint32 i = 0; i < inputs.length; i++) {
+            inputs[i] = U.Datum(U.DType.Null, new uint32[](0));
+        }
     }
 
     function run(U.Datum[] storage inputs) internal virtual;
@@ -317,23 +321,23 @@ contract Mothership {
 }
 
 contract Graph420 is Heap {
+    Mothership mother;
+
     Unit add1;
     Unit multiply1;
 
     U.Datum output;
 
     constructor() {
-        Mothership mother = new Mothership(); // this should actually come from dereferencing a well-known deployed mothership.
+        mother = new Mothership(); // this should actually come from dereferencing a well-known deployed mothership.
         mother.init(); // and this should actually be a constructor. but we have to make it a function for testing, because solidity
-
-        add1 = mother.get('add', this, this.pin1);
-        multiply1 = mother.get('multiply', this, this.pin2);
-
         init();
     }
 
-    // this could/should be only in the constructor, but created the init helper to restart/debug easily
+    // this actually needs to be separate in order to access/send `this`
     function init() public {
+        add1 = mother.get('add', this, this.pin1);
+        multiply1 = mother.get('multiply', this, this.pin2);
         add1.take(1, U.nitNumber(this, 1));
     }
 
