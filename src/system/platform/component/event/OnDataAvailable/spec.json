@@ -1,0 +1,52 @@
+{
+  "name": "on data available",
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'dataavailable'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` message event",
+    "complexity": 3.1339595247266585,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "f7c43966-be6b-11eb-ac82-2f0415b064df",
+  "type": "`U`&`G`"
+}

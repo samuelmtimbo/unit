@@ -1,0 +1,38 @@
+{
+  "name": "loop",
+  "inputs": {
+    "next": {
+      "type": "<A>"
+    },
+    "test": {
+      "type": "boolean"
+    },
+    "init": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "current": {
+      "type": "<A>"
+    },
+    "local": {
+      "type": "<A>"
+    },
+    "final": {
+      "type": "<A>",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "undo",
+    "description": "for loop",
+    "complexity": 1.3402090150955346,
+    "tags": [
+      "f",
+      "control"
+    ]
+  },
+  "id": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+  "base": true,
+  "type": "`U`"
+}

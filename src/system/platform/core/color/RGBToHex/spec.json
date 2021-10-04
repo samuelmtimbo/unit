@@ -1,0 +1,226 @@
+{
+  "name": "RGB to HEX",
+  "units": {
+    "multiply": {
+      "path": "872be100-f4dc-4246-8eea-6e3da31137b7",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "256"
+        }
+      },
+      "output": {
+        "a × b": {}
+      }
+    },
+    "multiply0": {
+      "path": "872be100-f4dc-4246-8eea-6e3da31137b7",
+      "input": {
+        "a": {
+          "constant": false
+        },
+        "b": {
+          "constant": true,
+          "data": "65536"
+        }
+      },
+      "output": {
+        "a × b": {}
+      }
+    },
+    "add3": {
+      "path": "51de3251-1bb6-454d-b9d6-6b8bcb1f56aa",
+      "input": {
+        "pptatjy": {},
+        "jcrietnk": {},
+        "mxdtxxyal": {}
+      },
+      "output": {
+        "avdpbucao": {}
+      }
+    },
+    "numbertostring": {
+      "path": "f712793d-8ee9-4805-9d4a-8c210cae667a",
+      "input": {
+        "n": {},
+        "radix": {
+          "constant": true,
+          "data": "16"
+        }
+      },
+      "output": {
+        "str": {}
+      }
+    },
+    "add": {
+      "path": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "16777216"
+        }
+      },
+      "output": {
+        "a + b": {}
+      }
+    },
+    "slice": {
+      "path": "c8a4cd44-a554-4901-8a33-a8adbff63d03",
+      "input": {
+        "a": {},
+        "begin": {
+          "constant": true,
+          "data": "1"
+        },
+        "end": {
+          "constant": true,
+          "data": "7"
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "concat": {
+      "path": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'#'"
+        },
+        "b": {}
+      },
+      "output": {
+        "ab": {}
+      }
+    }
+  },
+  "merges": {
+    "svutlpqbl": {
+      "multiply": {
+        "output": {
+          "a × b": true
+        }
+      },
+      "add3": {
+        "input": {
+          "jcrietnk": true
+        }
+      }
+    },
+    "msvfci": {
+      "multiply0": {
+        "output": {
+          "a × b": true
+        }
+      },
+      "add3": {
+        "input": {
+          "pptatjy": true
+        }
+      }
+    },
+    "jyhuslhbo": {
+      "add": {
+        "input": {
+          "a": true
+        }
+      },
+      "add3": {
+        "output": {
+          "avdpbucao": true
+        }
+      }
+    },
+    "lopnspk": {
+      "numbertostring": {
+        "input": {
+          "n": true
+        }
+      },
+      "add": {
+        "output": {
+          "a + b": true
+        }
+      }
+    },
+    "vyidgdzoz": {
+      "slice": {
+        "input": {
+          "a": true
+        }
+      },
+      "numbertostring": {
+        "output": {
+          "str": true
+        }
+      }
+    },
+    "owwusxrx": {
+      "concat": {
+        "input": {
+          "b": true
+        }
+      },
+      "slice": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "add3",
+          "pinId": "mxdtxxyal"
+        }
+      },
+      "type": "any"
+    },
+    "g": {
+      "pin": {
+        "0": {
+          "unitId": "multiply",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "r": {
+      "pin": {
+        "0": {
+          "unitId": "multiply0",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "hex": {
+      "pin": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "ab"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "palette",
+    "description": "RGB color to hexadecimal",
+    "complexity": 12.777326735606984,
+    "tags": [
+      "platform",
+      "core",
+      "color"
+    ]
+  },
+  "id": "d7bf7bad-3b64-4190-9bae-878e88d119e7",
+  "type": "`U`&`G`"
+}

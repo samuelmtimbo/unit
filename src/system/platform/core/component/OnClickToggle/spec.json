@@ -1,0 +1,82 @@
+{
+  "name": "on click toggle",
+  "units": {
+    "onclick": {
+      "path": "97c94516-add1-11ea-ba72-8f55299b735c",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      }
+    },
+    "toggle": {
+      "path": "58c50bb2-569f-4b7a-aba3-176d9ac91d5c",
+      "input": {
+        "init": {},
+        "toggle": {}
+      },
+      "output": {
+        "value": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "toggle": {
+        "input": {
+          "toggle": true
+        }
+      },
+      "onclick": {
+        "output": {
+          "event": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "init": {
+      "pin": {
+        "0": {
+          "unitId": "toggle",
+          "pinId": "init"
+        }
+      },
+      "type": "boolean"
+    },
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "onclick",
+          "pinId": "element"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "toggle",
+          "pinId": "value"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "toggle true/false on click",
+    "complexity": 10.575947929321362,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "9b2bdc7c-eb5d-11ea-bdb1-1760294f446b",
+  "type": "`U`&`G`"
+}

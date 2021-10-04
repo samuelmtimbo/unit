@@ -1,0 +1,93 @@
+{
+  "name": "hasn't length",
+  "units": {
+    "length": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    },
+    "equals": {
+      "path": "85204bf6-6692-4686-a785-23127c0594b5"
+    },
+    "ifnot": {
+      "path": "439c6b56-a0b6-4b76-9131-c6dc23375fda"
+    }
+  },
+  "merges": {
+    "0": {
+      "length": {
+        "output": {
+          "length": true
+        }
+      },
+      "equals": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "equals": {
+        "output": {
+          "a = b": true
+        }
+      },
+      "ifnot": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "2": {
+      "length": {
+        "input": {
+          "a": true
+        }
+      },
+      "ifnot": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "equals",
+          "pinId": "b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "ifnot",
+          "pinId": "a if not b"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "output list if size is equal to `n`?",
+    "complexity": 8.619949233063695,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "5abe471c-c615-46ce-8a8c-158fcc8c1e5e",
+  "type": "`U`&`G`"
+}

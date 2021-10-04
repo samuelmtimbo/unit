@@ -1,0 +1,40 @@
+{
+  "name": "constant true false",
+  "inputs": {},
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "truefalse",
+          "pinId": "a"
+        }
+      }
+    }
+  },
+  "units": {
+    "truefalse": {
+      "path": "e24d1987-e3e7-4f1a-bf4a-191c79b2eae6",
+      "input": {
+        "any": {
+          "constant": true,
+          "data": "null"
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {},
+  "component": {},
+  "metadata": {
+    "complexity": 4
+  },
+  "id": "8df44351-9177-4c4c-abde-7576bc1c8d41"
+}

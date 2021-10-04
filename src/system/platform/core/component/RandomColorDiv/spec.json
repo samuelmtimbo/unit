@@ -1,0 +1,155 @@
+{
+  "name": "random color div",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a"
+        }
+      },
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -2,
+            "y": 55
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "randombgcolortag": {
+      "path": "051d4600-42e5-403b-b12e-eb58ae78ef0b",
+      "input": {
+        "any": {
+          "constant": true,
+          "data": "null",
+          "metadata": {
+            "position": {
+              "x": -112,
+              "y": -26
+            }
+          }
+        }
+      },
+      "output": {
+        "{bc}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -61,
+          "y": -24
+        }
+      }
+    },
+    "mergedefault": {
+      "path": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 5,
+              "y": 28
+            }
+          }
+        },
+        "default": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 42,
+          "y": 1
+        }
+      }
+    },
+    "div": {
+      "path": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 190,
+          "y": 3
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "randombgcolortag": {
+        "output": {
+          "{bc}": true
+        }
+      },
+      "mergedefault": {
+        "input": {
+          "default": true
+        }
+      }
+    },
+    "1": {
+      "div": {
+        "input": {
+          "style": true
+        }
+      },
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "component": {
+    "slots": [
+      [
+        "div",
+        "default"
+      ]
+    ],
+    "subComponents": {
+      "div": {
+        "width": 120,
+        "height": 120,
+        "children": []
+      }
+    },
+    "children": [
+      "div"
+    ],
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "div with a random background color",
+    "complexity": 42.50838049522455,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": -9,
+          "y": -15
+        },
+        "1": {
+          "x": 94,
+          "y": 2
+        }
+      }
+    }
+  },
+  "id": "f27cae4e-fea8-11ea-b91e-db41e114c426",
+  "type": "`U`&`C`"
+}

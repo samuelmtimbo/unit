@@ -1,0 +1,101 @@
+{
+  "name": "iterate wait",
+  "units": {
+    "iterate": {
+      "path": "8a2b756a-25e4-11eb-860d-1f34c850b992",
+      "input": {
+        "next": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {}
+      }
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "iterate": {
+        "input": {
+          "next": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "init": {
+      "pin": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "init"
+        }
+      },
+      "type": "<A>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "current": {
+      "pin": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "current"
+        }
+      },
+      "type": "<A>"
+    },
+    "local": {
+      "pin": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "local"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "undo",
+    "description": "...",
+    "complexity": 4.287682598002903,
+    "tags": [
+      "core",
+      "iterate"
+    ]
+  },
+  "id": "ed5e826a-163c-42cd-8522-e47187decae7",
+  "type": "`U`&`G`"
+}

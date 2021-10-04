@@ -1,0 +1,25 @@
+{
+  "name": "sign",
+  "inputs": {
+    "a": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "sign(a)": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "plus-minus",
+    "description": "sign of a",
+    "complexity": 1.3299904993138394,
+    "tags": [
+      "f",
+      "math"
+    ]
+  },
+  "id": "1a59348c-a25a-11eb-8afe-8bedb0732a89",
+  "base": true,
+  "type": "`U`"
+}

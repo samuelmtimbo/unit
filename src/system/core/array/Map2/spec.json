@@ -1,0 +1,160 @@
+{
+  "name": "map 2",
+  "units": {
+    "foreach": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "test": {
+          "ignored": false
+        }
+      }
+    },
+    "foreach1": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "test": {
+          "ignored": true
+        }
+      }
+    },
+    "arraybuilderfrom": {
+      "path": "6db1905f-2343-4c63-97d3-07f4d946ef58",
+      "output": {
+        "local": {
+          "ignored": true
+        },
+        "acc": {
+          "ignored": true
+        }
+      }
+    },
+    "wait2": {
+      "path": "67cca9ec-1976-47bc-b0d7-5b32e059f6f1",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "[]"
+        }
+      }
+    }
+  },
+  "merges": {
+    "hyjndoefw": {
+      "foreach": {
+        "output": {
+          "test": true
+        }
+      },
+      "arraybuilderfrom": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "kllyjc": {
+      "wait2": {
+        "input": {
+          "c": true
+        }
+      },
+      "foreach1": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "yknwpbete": {
+      "arraybuilderfrom": {
+        "input": {
+          "init": true
+        }
+      },
+      "wait2": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "vlntyntal": {
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      },
+      "wait2": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "kllyjc"
+        }
+      },
+      "type": "any"
+    },
+    "c[i]": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "a"
+        }
+      },
+      "type": "<B>"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "vlntyntal"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "b[i]": {
+      "pin": {
+        "0": {
+          "unitId": "foreach1",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<B>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<B>[]"
+    },
+    "a[i]": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "map",
+    "description": "...",
+    "complexity": 31.243266467154584,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "57880ebc-bf8a-42da-b2b1-01ae188aa1fa",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "wait",
+  "inputs": {
+    "a": {
+      "type": "<A>"
+    },
+    "b": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "git-merge",
+    "description": "wait for `b` before output `a`",
+    "complexity": 1.3296315845033253,
+    "tags": [
+      "f",
+      "control"
+    ]
+  },
+  "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+  "base": true,
+  "type": "`U`"
+}

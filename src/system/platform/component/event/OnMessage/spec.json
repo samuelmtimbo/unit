@@ -1,0 +1,52 @@
+{
+  "name": "on message",
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'message'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "unit": {
+      "type": "any",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "message": {
+      "type": "string",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` message event",
+    "complexity": 3.1339595247266585,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "23c3952a-ef19-11ea-b80e-3f693508091e",
+  "type": "`U`&`G`"
+}

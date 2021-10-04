@@ -1,0 +1,28 @@
+{
+  "name": "greater than equal",
+  "inputs": {
+    "a": {
+      "type": "number"
+    },
+    "b": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a ≥ b": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "greater-than-equal",
+    "description": "greater than equal operator",
+    "complexity": 1.3314683838277208,
+    "tags": [
+      "f",
+      "comparisson"
+    ]
+  },
+  "id": "c9e06816-0d2b-43ec-b7c8-d07563e19b6b",
+  "base": true,
+  "type": "`U`"
+}

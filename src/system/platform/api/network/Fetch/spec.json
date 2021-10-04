@@ -1,0 +1,30 @@
+{
+  "name": "fetch",
+  "inputs": {
+    "url": {
+      "type": "string"
+    },
+    "options": {
+      "type": "{body?:string|null,headers?:object,method?:string}"
+    }
+  },
+  "outputs": {
+    "response": {
+      "type": "{status:number,body:string}"
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "interface for fetching resources across the network",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+    "complexity": 1.3367254301699567,
+    "tags": [
+      "platform",
+      "api",
+      "network"
+    ]
+  },
+  "id": "c5856fdc-5154-46ab-a414-47f37af39da1",
+  "base": true,
+  "type": "`U`"
+}

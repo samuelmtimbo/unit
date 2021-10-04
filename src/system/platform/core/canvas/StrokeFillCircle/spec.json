@@ -1,0 +1,105 @@
+{
+  "name": "stroke fill circle",
+  "units": {
+    "addcircle": {
+      "path": "50d23b21-1513-42c0-9722-4a01a32dc161"
+    },
+    "beginpath": {
+      "path": "81c0f469-ab88-4bc8-89d5-98d291b1d8b2"
+    },
+    "stroke": {
+      "path": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99"
+    },
+    "fill": {
+      "path": "87a11e2c-278c-11eb-9209-2f30aebffb25",
+      "input": {
+        "d": {}
+      },
+      "output": {
+        "d": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "addcircle": {
+        "input": {
+          "d": true
+        }
+      },
+      "beginpath": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "1": {
+      "stroke": {
+        "input": {
+          "d": true
+        }
+      },
+      "fill": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "2": {
+      "fill": {
+        "input": {
+          "d": true
+        }
+      },
+      "addcircle": {
+        "output": {
+          "d": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "draw a circle to the canvas",
+    "complexity": 12.776477327723292,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "d": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "beginpath",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    },
+    "circle": {
+      "pin": {
+        "0": {
+          "unitId": "addcircle",
+          "pinId": "circle"
+        }
+      },
+      "type": "{x:number,y:number,r:number}"
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "stroke",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    }
+  },
+  "id": "0eb3579e-4645-4e45-a3b1-f3fb1a62ab4d",
+  "type": "`U`&`G`"
+}

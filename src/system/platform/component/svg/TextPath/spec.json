@@ -1,0 +1,32 @@
+{
+  "name": "svg text path",
+  "inputs": {
+    "className": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG text path",
+    "complexity": 3.599451071466272,
+    "tags": [
+      "platform",
+      "component",
+      "svg"
+    ]
+  },
+  "id": "00c828fc-9243-11ea-b897-5b0fc55820c5",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "type": "`U`&`C`"
+}

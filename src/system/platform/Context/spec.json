@@ -1,0 +1,21 @@
+{
+  "name": "context",
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "context of the connected `element`",
+    "complexity": 1.7893803441359655,
+    "tags": [
+      "platform"
+    ]
+  },
+  "id": "62e46cdc-e1ec-11ea-957a-3f9e932ddd48",
+  "base": true,
+  "type": "`U`"
+}

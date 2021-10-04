@@ -1,0 +1,154 @@
+{
+  "name": "array bitwise and",
+  "units": {
+    "level": {
+      "path": "358fa592-55e4-49f5-be28-b66e5114b266",
+      "input": {
+        "with": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "foreach": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "test": {
+          "ignored": true
+        }
+      }
+    },
+    "foreach0": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "test": {
+          "ignored": true
+        }
+      }
+    },
+    "narraybuilder": {
+      "path": "38033fcc-aa28-4df3-abc8-d4ece231028b"
+    },
+    "and": {
+      "path": "be6801c0-02e2-4f76-bcad-b68c80991fad"
+    }
+  },
+  "merges": {
+    "0": {
+      "level": {
+        "output": {
+          "a[]": true
+        }
+      },
+      "foreach0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "level": {
+        "output": {
+          "b[]": true
+        }
+      },
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "level": {
+        "output": {
+          "length": true
+        }
+      },
+      "narraybuilder": {
+        "input": {
+          "n": true
+        }
+      }
+    },
+    "3": {
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "and": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "4": {
+      "foreach0": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "and": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "5": {
+      "and": {
+        "output": {
+          "a & b": true
+        }
+      },
+      "narraybuilder": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "b[]": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "level",
+          "pinId": "b[]"
+        }
+      },
+      "type": "number[]"
+    },
+    "a[]": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "level",
+          "pinId": "a[]"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "a & b": {
+      "pin": {
+        "0": {
+          "unitId": "narraybuilder",
+          "pinId": "a[]"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "...",
+    "complexity": 67.86350212845812,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "36cca4eb-1d14-43bc-88da-5dbbd033e1aa",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Alan Kay picture src",
+  "units": {
+    "gsonrwg": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "hasnext": {
+          "ignored": true
+        }
+      },
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "['https://live.staticflickr.com/3259/3098599318_d241255f3f_b.jpg','https://live.staticflickr.com/3248/3097571505_964e08b183_b.jpg','https://live.staticflickr.com/3103/3097570547_ca2931f50f_b.jpg']"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "image",
+    "description": "no description",
+    "complexity": 21.934299287880133,
+    "tags": [
+      "platform",
+      "core",
+      "computer"
+    ]
+  },
+  "inputs": {},
+  "outputs": {
+    "vmkiln": {
+      "pin": {
+        "0": {
+          "unitId": "gsonrwg",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "9e979e09-2986-4888-a80f-24a6e5cf0e58",
+  "type": "`U`&`G`"
+}

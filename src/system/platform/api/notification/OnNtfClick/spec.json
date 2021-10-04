@@ -1,0 +1,52 @@
+{
+  "name": "on ntf click",
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'ntf_click'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "string",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` \"ntf_click\" event",
+    "complexity": 3.1339595247266585,
+    "tags": [
+      "platform",
+      "api",
+      "notification"
+    ]
+  },
+  "id": "4316e976-081f-11eb-a918-f369cbb55ac3",
+  "type": "`U`&`G`"
+}

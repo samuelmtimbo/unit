@@ -1,0 +1,58 @@
+{
+  "name": "random natural lte",
+  "units": {
+    "randomnaturallt": {
+      "path": "9569f78e-18d3-40a3-9373-c56afa0214f6"
+    },
+    "increment": {
+      "path": "fafeadd7-06a8-4bb0-9fa5-2149d1b5208e"
+    }
+  },
+  "merges": {
+    "mosa": {
+      "randomnaturallt": {
+        "input": {
+          "max": true
+        }
+      },
+      "increment": {
+        "output": {
+          "a + 1": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "max": {
+      "pin": {
+        "0": {
+          "unitId": "increment",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "randomnaturallt",
+          "pinId": "i"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "random",
+    "description": "output random natural `i` less than or equal to `max`",
+    "complexity": 10.618882534791155,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "587f9a76-de5f-4dc0-b395-6e5b0091d12e",
+  "type": "`U`&`G`"
+}

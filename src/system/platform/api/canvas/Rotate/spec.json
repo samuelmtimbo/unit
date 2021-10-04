@@ -1,0 +1,30 @@
+{
+  "name": "rotate",
+  "inputs": {
+    "d": {
+      "type": "(number|string)[][]"
+    },
+    "rad": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "(number|string)[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "add a rotation to the transformation matrix",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rotate",
+    "complexity": 1.3311094690172067,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "8f7ce559-a046-45bc-8e98-c39934ed0ae6",
+  "base": true,
+  "type": "`U`"
+}

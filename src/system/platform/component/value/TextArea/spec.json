@@ -1,0 +1,34 @@
+{
+  "name": "text area",
+  "inputs": {
+    "value": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "description": "input text here"
+      }
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "align-left",
+    "description": "input text through keyboard",
+    "complexity": 3.649614694394595,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
+  },
+  "id": "83ec6688-b80b-4ef2-861f-14245ef392c0",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 150
+  },
+  "type": "`U`&`C`"
+}

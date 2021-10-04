@@ -1,0 +1,106 @@
+{
+  "name": "slider 360 rad value",
+  "inputs": {},
+  "outputs": {
+    "rad": {
+      "pin": {
+        "0": {
+          "unitId": "degtorad",
+          "pinId": "rad"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 73,
+            "y": -1
+          }
+        }
+      },
+      "type": "number"
+    }
+  },
+  "units": {
+    "slider360value": {
+      "path": "6bdd7a40-e465-42ae-8219-b428d7d57aea",
+      "input": {},
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -147,
+          "y": 0
+        }
+      }
+    },
+    "degtorad": {
+      "path": "3a138358-cc25-45e3-a0ce-bbe54445736f",
+      "input": {
+        "angle": {}
+      },
+      "output": {
+        "rad": {
+          "metadata": {
+            "position": {
+              "x": 47,
+              "y": 0
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -2,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "hgtjcyd": {
+      "degtorad": {
+        "input": {
+          "angle": true
+        }
+      },
+      "slider360value": {
+        "output": {
+          "value": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "sliders",
+    "description": "360 rad slider current value",
+    "complexity": 24.26051142256067,
+    "position": {
+      "merge": {
+        "hgtjcyd": {
+          "x": -52,
+          "y": 0
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "063ee2df-eeb6-4cd9-8516-9201e6e282ca",
+  "component": {
+    "subComponents": {
+      "slider360value": {
+        "children": []
+      }
+    },
+    "children": [
+      "slider360value"
+    ],
+    "defaultWidth": 120,
+    "defaultHeight": 30
+  },
+  "type": "`U`&`G`"
+}

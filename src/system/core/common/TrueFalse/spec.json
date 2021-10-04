@@ -1,0 +1,91 @@
+{
+  "name": "true false",
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "units": {
+    "foreach": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "a": {
+          "ignored": true
+        },
+        "i": {
+          "ignored": true
+        },
+        "test": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 51,
+          "y": -1
+        }
+      }
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "[true,false]"
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "map-signs",
+    "description": "outputs true and then false",
+    "complexity": 12
+  },
+  "id": "e24d1987-e3e7-4f1a-bf4a-191c79b2eae6"
+}

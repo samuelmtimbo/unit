@@ -1,0 +1,103 @@
+{
+  "name": "default video",
+  "units": {
+    "defaultvideomedia": {
+      "path": "c03c7ef3-0649-4a99-9e9a-858bcaba1307",
+      "input": {},
+      "output": {}
+    },
+    "video": {
+      "path": "7a8921eb-c1ad-400b-94fc-6c6cead8163d",
+      "input": {
+        "src": {
+          "ignored": true
+        },
+        "style": {},
+        "stream": {
+          "ignored": false
+        },
+        "controls": {
+          "ignored": false
+        }
+      },
+      "output": {}
+    }
+  },
+  "merges": {
+    "0": {
+      "video": {
+        "input": {
+          "stream": true
+        }
+      },
+      "defaultvideomedia": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "video",
+          "pinId": "style"
+        }
+      },
+      "type": "object"
+    },
+    "controls": {
+      "pin": {
+        "0": {
+          "unitId": "video",
+          "pinId": "controls"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "video": {
+      "pin": {
+        "0": {
+          "unitId": "video",
+          "pinId": "_self"
+        }
+      },
+      "ref": true,
+      "type": "`V`&`C`&`M`"
+    }
+  },
+  "metadata": {
+    "icon": "video",
+    "description": "",
+    "complexity": 7.361748990093534,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "component": {
+    "slots": [
+      [
+        "video",
+        "default"
+      ]
+    ],
+    "subComponents": {
+      "video": {
+        "children": []
+      }
+    },
+    "children": [
+      "video"
+    ],
+    "defaultWidth": 240,
+    "defaultHeight": 240
+  },
+  "id": "68ee3bf2-7d57-4828-92ac-1070e988ffe7",
+  "type": "`U`&`G`"
+}

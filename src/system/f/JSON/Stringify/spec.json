@@ -1,0 +1,25 @@
+{
+  "name": "stringify",
+  "inputs": {
+    "json": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "string": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "string",
+    "description": "converts a JSON value to a string",
+    "complexity": 1.3306238783912172,
+    "tags": [
+      "f",
+      "JSON"
+    ]
+  },
+  "id": "ee184ea6-3c80-4119-919e-290620aafab0",
+  "base": true,
+  "type": "`U`"
+}

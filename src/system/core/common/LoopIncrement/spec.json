@@ -1,0 +1,102 @@
+{
+  "name": "loop increment",
+  "units": {
+    "increment": {
+      "path": "fafeadd7-06a8-4bb0-9fa5-2149d1b5208e"
+    },
+    "loop": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "output": {
+        "final": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {
+    "uqrhbkeci": {
+      "loop": {
+        "input": {
+          "next": true
+        }
+      },
+      "increment": {
+        "output": {
+          "a + 1": true
+        }
+      }
+    },
+    "bauiallzd": {
+      "loop": {
+        "output": {
+          "current": true
+        }
+      },
+      "increment": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    },
+    "init": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "init"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "current": {
+      "pin": {
+        "0": {
+          "mergeId": "bauiallzd"
+        }
+      },
+      "type": "number"
+    },
+    "local": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "local"
+        }
+      },
+      "type": "number"
+    },
+    "final": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "undo",
+    "description": "increment value until `test` is false",
+    "complexity": 6.313974735053878,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "4e2c89b2-e9cb-42f6-bb8d-e9d665c21fa7",
+  "type": "`U`&`G`"
+}

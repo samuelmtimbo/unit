@@ -1,0 +1,75 @@
+{
+  "name": "CEP to address",
+  "units": {
+    "fgdqyjjwh": {
+      "path": "bb28c9d9-0afd-4ef2-8c5b-41815ea65bf1",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'https://viacep.com.br/ws/'"
+        },
+        "c": {
+          "constant": true,
+          "data": "'/json/'"
+        }
+      }
+    },
+    "spsc": {
+      "path": "00a8a078-91bf-4676-aa32-c9cfacdfd527",
+      "input": {
+        "options": {
+          "constant": true,
+          "data": "{}"
+        }
+      }
+    }
+  },
+  "merges": {
+    "orvdmbqxs": {
+      "fgdqyjjwh": {
+        "output": {
+          "abc": true
+        }
+      },
+      "spsc": {
+        "input": {
+          "url": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "no description",
+    "complexity": 13.623662923345877,
+    "tags": [
+      "platform",
+      "core",
+      "cep"
+    ]
+  },
+  "inputs": {
+    "pjcmihkdo": {
+      "pin": {
+        "0": {
+          "unitId": "fgdqyjjwh",
+          "pinId": "b"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "styzcesm": {
+      "pin": {
+        "0": {
+          "unitId": "spsc",
+          "pinId": "json"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "85178ba0-adc8-46b2-beda-3723f82cd177",
+  "type": "`U`&`G`"
+}

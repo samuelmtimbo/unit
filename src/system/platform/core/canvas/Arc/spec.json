@@ -1,0 +1,93 @@
+{
+  "name": "arc",
+  "units": {
+    "stroke": {
+      "path": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99",
+      "output": {
+        "d": {
+          "ignored": false
+        }
+      }
+    },
+    "addarc": {
+      "path": "6796cd2d-2bd2-4dd3-9396-49d6bc1d2652",
+      "input": {
+        "arc": {
+          "constant": false
+        }
+      }
+    },
+    "beginpath": {
+      "path": "81c0f469-ab88-4bc8-89d5-98d291b1d8b2"
+    }
+  },
+  "merges": {
+    "0": {
+      "addarc": {
+        "input": {
+          "d": true
+        }
+      },
+      "beginpath": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "1": {
+      "addarc": {
+        "output": {
+          "d": true
+        }
+      },
+      "stroke": {
+        "input": {
+          "d": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "draw a circle to the canvas",
+    "complexity": 5.465998992562742,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "arc": {
+      "pin": {
+        "0": {
+          "unitId": "addarc",
+          "pinId": "arc"
+        }
+      },
+      "type": "{x:number,y:number,r:number,start:number,end:number,anticlockwise?:boolean}"
+    },
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "beginpath",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "stroke",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    }
+  },
+  "id": "790d5128-7fd6-48f9-b5cf-9edecedb1043",
+  "type": "`U`&`G`"
+}

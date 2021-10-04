@@ -1,0 +1,90 @@
+{
+  "name": "prepend if",
+  "units": {
+    "prepend": {
+      "path": "d9cf4224-39df-434a-85a6-2b143330cbab"
+    },
+    "pick": {
+      "path": "396497e4-f8e7-4573-95c9-a4f186a5cd05"
+    }
+  },
+  "merges": {
+    "kajgjbzz": {
+      "prepend": {
+        "input": {
+          "a": true
+        }
+      },
+      "pick": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "jlayrqhpi": {
+      "prepend": {
+        "output": {
+          "a": true
+        }
+      },
+      "pick": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "chevrons-left",
+    "description": "prepend element `b` to `a` if `test`",
+    "complexity": 10.464132270585795,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "test": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "c"
+        }
+      },
+      "type": "boolean"
+    },
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "prepend",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "kajgjbzz"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "5a8e4250-ad00-40a8-ae32-9f4aeeb8ab2e",
+  "type": "`U`&`G`"
+}

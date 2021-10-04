@@ -1,0 +1,34 @@
+{
+  "name": "set unit pin data",
+  "inputs": {
+    "graph": {
+      "type": "`U`",
+      "ref": true
+    },
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "'input'|'output'"
+    },
+    "name": {
+      "type": "string"
+    },
+    "data": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "set `graph` `id` unit `type` `name` pin `data`",
+    "complexity": 1.3356486857384144,
+    "tags": [
+      "f",
+      "graph"
+    ]
+  },
+  "id": "76e99304-aa0c-11eb-9bfa-07725a1b4287",
+  "base": true,
+  "type": "`U`"
+}

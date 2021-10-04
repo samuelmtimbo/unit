@@ -1,0 +1,49 @@
+{
+  "name": "tag data",
+  "units": {
+    "tag": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'data'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{data: `data`}",
+    "complexity": 5.1562811737631735,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "inputs": {
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "{data}": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "7a602db8-2618-11eb-b9c6-4bb45b6d8833",
+  "type": "`U`&`G`"
+}

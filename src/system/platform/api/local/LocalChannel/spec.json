@@ -1,0 +1,36 @@
+{
+  "name": "local channel",
+  "inputs": {
+    "channel": {
+      "type": "string",
+      "metadata": {
+        "description": "name of the channel"
+      }
+    },
+    "close": {
+      "type": "any",
+      "metadata": {
+        "description": "signal to close channel"
+      }
+    }
+  },
+  "outputs": {
+    "port": {
+      "type": "`P`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "broadcast-tower",
+    "description": "channel for local communication",
+    "complexity": 1.2737042119708646,
+    "tags": [
+      "platform",
+      "api",
+      "broadcast"
+    ]
+  },
+  "id": "817c76ba-a71c-4136-af86-bd6b69106c45",
+  "base": true,
+  "type": "`U`"
+}

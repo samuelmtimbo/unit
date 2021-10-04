@@ -1,0 +1,26 @@
+{
+  "name": "unit class",
+  "inputs": {
+    "id": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "unit class component",
+    "complexity": 6.1471128470389536,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "c18d7dcc-939b-11ea-90cb-77846d7504a9",
+  "base": true,
+  "component": {
+    "defaultWidth": 100,
+    "defaultHeight": 100
+  },
+  "type": "`U`&`C`"
+}

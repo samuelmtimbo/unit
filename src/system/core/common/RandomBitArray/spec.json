@@ -1,0 +1,107 @@
+{
+  "name": "random bit array",
+  "units": {
+    "randombit": {
+      "path": "8a5043d9-e6ac-4628-9fde-a11cbd240e10",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "bit": {}
+      }
+    },
+    "range": {
+      "path": "29e43ad7-be5e-437f-8f0f-2df996c8b89c",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0"
+        },
+        "b": {}
+      },
+      "output": {
+        "i": {}
+      }
+    },
+    "narraybuilder": {
+      "path": "38033fcc-aa28-4df3-abc8-d4ece231028b",
+      "input": {
+        "a": {},
+        "n": {}
+      },
+      "output": {
+        "a[]": {}
+      }
+    }
+  },
+  "merges": {
+    "etjbu": {
+      "randombit": {
+        "input": {
+          "any": true
+        }
+      },
+      "range": {
+        "output": {
+          "i": true
+        }
+      }
+    },
+    "mxzbr": {
+      "narraybuilder": {
+        "input": {
+          "a": true
+        }
+      },
+      "randombit": {
+        "output": {
+          "bit": true
+        }
+      }
+    },
+    "fulew": {
+      "range": {
+        "input": {
+          "b": true
+        }
+      },
+      "narraybuilder": {
+        "input": {
+          "n": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "n": {
+      "type": "number",
+      "pin": {
+        "0": {
+          "mergeId": "fulew"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "narraybuilder",
+          "pinId": "a[]"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "random array of bits of size `n`",
+    "complexity": 42.39765128843324,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "33ec13e7-5a30-4029-af21-07ee422a8a2d",
+  "type": "`U`&`G`"
+}

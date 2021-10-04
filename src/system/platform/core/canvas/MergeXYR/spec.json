@@ -1,0 +1,112 @@
+{
+  "name": "merge x y r",
+  "units": {
+    "mergexy": {
+      "path": "2737cd82-d80b-4d3f-b33d-f00f68361e24",
+      "input": {
+        "y": {},
+        "x": {}
+      },
+      "output": {
+        "{x,y}": {}
+      }
+    },
+    "tagr": {
+      "path": "5611a149-95bf-406e-b227-f583f71f5f3f",
+      "input": {
+        "r": {}
+      },
+      "output": {
+        "{r}": {}
+      }
+    },
+    "merge": {
+      "path": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "ab": {}
+      }
+    }
+  },
+  "merges": {
+    "merge0": {
+      "merge": {
+        "input": {
+          "b": true
+        }
+      },
+      "mergexy": {
+        "output": {
+          "{x,y}": true
+        }
+      }
+    },
+    "merge1": {
+      "merge": {
+        "input": {
+          "a": true
+        }
+      },
+      "tagr": {
+        "output": {
+          "{r}": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "y": {
+      "pin": {
+        "0": {
+          "unitId": "mergexy",
+          "pinId": "y"
+        }
+      },
+      "type": "number"
+    },
+    "x": {
+      "pin": {
+        "0": {
+          "unitId": "mergexy",
+          "pinId": "x"
+        }
+      },
+      "type": "number"
+    },
+    "r": {
+      "pin": {
+        "0": {
+          "unitId": "tagr",
+          "pinId": "r"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "{x,y,r}": {
+      "pin": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "ab"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "...",
+    "complexity": 17.4747103617885,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "id": "4617df3b-4ca5-42c1-bcda-4a3833c645da",
+  "type": "`U`&`G`"
+}

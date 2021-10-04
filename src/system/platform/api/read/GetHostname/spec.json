@@ -1,0 +1,86 @@
+{
+  "name": "get hostname",
+  "units": {
+    "get": {
+      "path": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": {
+        "unit": {},
+        "name": {}
+      },
+      "output": {
+        "value": {}
+      }
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'hostname'"
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "get": {
+        "input": {
+          "name": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "unit": {
+      "pin": {
+        "0": {
+          "unitId": "get",
+          "pinId": "unit"
+        }
+      },
+      "ref": true,
+      "type": "`U`"
+    }
+  },
+  "outputs": {
+    "hostname": {
+      "pin": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "...",
+    "complexity": 4.310764763400397,
+    "tags": [
+      "platform",
+      "api",
+      "read"
+    ]
+  },
+  "id": "9a695a17-a448-457f-90c2-02aed4b392af",
+  "type": "`U`&`G`"
+}

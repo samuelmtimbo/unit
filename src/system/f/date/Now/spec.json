@@ -1,0 +1,25 @@
+{
+  "name": "now",
+  "inputs": {
+    "any": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "now": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "identity operator",
+    "complexity": 1.329948274042014,
+    "tags": [
+      "f",
+      "date"
+    ]
+  },
+  "id": "939ed573-82b8-4385-ac62-88934e5b76c9",
+  "base": true,
+  "type": "`U`"
+}

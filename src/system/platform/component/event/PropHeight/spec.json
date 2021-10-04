@@ -1,0 +1,53 @@
+{
+  "name": "prop height",
+  "units": {
+    "prop": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'height'"
+        }
+      },
+      "output": {
+        "value": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "event": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "height": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "value"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "extract height from `obj`",
+    "complexity": 3.1556589331041907,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "f7a26f8c-98ac-11eb-9b81-e79fad66a6ce",
+  "type": "`U`&`G`"
+}

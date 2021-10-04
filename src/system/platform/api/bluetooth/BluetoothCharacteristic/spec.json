@@ -1,0 +1,35 @@
+{
+  "name": "bluetooth characteristic",
+  "type": "`U`&`V`&`BC`",
+  "subtype": {
+    "V": "string"
+  },
+  "inputs": {
+    "service": {
+      "type": "`BSE`",
+      "ref": true
+    },
+    "uuid": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "events": {
+    "characteristicvaluechanged": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "bluetooth",
+    "description": "remote GATT charact",
+    "complexity": 1.3300960624934024,
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTCharacteristic",
+    "tags": [
+      "platform",
+      "api",
+      "bluetooth"
+    ]
+  },
+  "id": "c7f6f43e-e8ed-11ea-92b2-0bd612272247",
+  "base": true
+}

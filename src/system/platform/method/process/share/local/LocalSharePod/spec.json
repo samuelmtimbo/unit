@@ -1,0 +1,30 @@
+{
+  "name": "local share pod",
+  "inputs": {
+    "graph": {
+      "type": "`G`",
+      "metadata": {},
+      "ref": true
+    }
+  },
+  "outputs": {
+    "id": {
+      "type": "string",
+      "init": true
+    }
+  },
+  "metadata": {
+    "icon": "server",
+    "description": "share a graph localy",
+    "complexity": 9.240726274675394,
+    "tags": [
+      "platform",
+      "component",
+      "core",
+      "process"
+    ]
+  },
+  "id": "259ba71c-6315-4324-a32c-fc2277200a40",
+  "base": true,
+  "type": "`U`"
+}

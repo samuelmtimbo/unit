@@ -1,0 +1,26 @@
+{
+  "name": "get visits",
+  "inputs": {
+    "url": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "visits": {
+      "type": "object[]"
+    }
+  },
+  "metadata": {
+    "icon": "history",
+    "metadata": "retrieve information about visits to a URL",
+    "complexity": 1.3617439037263803,
+    "tags": [
+      "platform",
+      "chrome",
+      "history"
+    ]
+  },
+  "id": "f1ed986a-55df-11eb-89e3-9f7cc8490b16",
+  "base": true,
+  "type": "`U`"
+}

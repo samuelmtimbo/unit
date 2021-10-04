@@ -1,0 +1,41 @@
+{
+  "name": "constant one",
+  "units": {
+    "identity": {
+      "path": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "1"
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {},
+  "outputs": {
+    "1": {
+      "pin": {
+        "0": {
+          "unitId": "identity",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "dot-circle",
+    "description": "one forever",
+    "complexity": 3.1545626043240786,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "c6d4d8b4-b9cc-401a-98fe-37eaf71426b0",
+  "type": "`U`&`G`"
+}

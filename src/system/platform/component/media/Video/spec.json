@@ -1,0 +1,47 @@
+{
+  "name": "video",
+  "inputs": {
+    "src": {
+      "type": "string",
+      "metadata": {
+        "description": "url pointing to a video data"
+      },
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "stream": {
+      "type": "`ST`",
+      "ref": true,
+      "metadata": {
+        "description": "stream object"
+      },
+      "defaultIgnored": false,
+      "optional": true
+    },
+    "controls": {
+      "type": "boolean",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "video",
+    "description": "TODO",
+    "complexity": 3.712720363137338,
+    "tags": [
+      "platform",
+      "component",
+      "media"
+    ]
+  },
+  "id": "7a8921eb-c1ad-400b-94fc-6c6cead8163d",
+  "base": true,
+  "component": {
+    "defaultWidth": 240,
+    "defaultHeight": 180
+  },
+  "type": "`U`&`C`&`V`&`PS`&`CS`"
+}

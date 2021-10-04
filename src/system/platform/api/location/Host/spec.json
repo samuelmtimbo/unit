@@ -1,0 +1,68 @@
+{
+  "name": "host",
+  "units": {
+    "gethost": {
+      "path": "38b257d7-fa9d-483f-b858-4a0e6cbf7f66",
+      "input": {
+        "any": {},
+        "unit": {}
+      },
+      "output": {
+        "host": {}
+      }
+    },
+    "location": {
+      "path": "e1c7e72c-2eb8-11eb-8d11-1b9bca1dec4a",
+      "input": {},
+      "output": {}
+    }
+  },
+  "merges": {
+    "0": {
+      "gethost": {
+        "input": {
+          "unit": true
+        }
+      },
+      "location": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "type": "any",
+      "pin": {
+        "0": {
+          "unitId": "gethost",
+          "pinId": "any"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "host": {
+      "type": "string",
+      "pin": {
+        "0": {
+          "unitId": "gethost",
+          "pinId": "host"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "navigation",
+    "description": "...",
+    "complexity": 7.433938783371359,
+    "tags": [
+      "platform",
+      "api",
+      "location"
+    ]
+  },
+  "id": "7a1eea1d-da69-4fde-8ecf-b6b03a011ef",
+  "type": "`U`&`G`"
+}

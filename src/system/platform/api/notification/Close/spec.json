@@ -1,0 +1,77 @@
+{
+  "name": "close",
+  "units": {
+    "call": {
+      "path": "f46af75e-af68-11ea-aa0e-37bf85a86c5e",
+      "input": {
+        "method": {
+          "data": "'close'",
+          "constant": true
+        }
+      },
+      "output": {
+        "data": {
+          "ignored": true
+        }
+      }
+    },
+    "emptyobject": {
+      "path": "dc6e6bc0-081b-11eb-baf7-b7383b70c236",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "{}": {}
+      }
+    }
+  },
+  "merges": {
+    "kfzvcgiho": {
+      "emptyobject": {
+        "output": {
+          "{}": true
+        }
+      },
+      "call": {
+        "input": {
+          "data": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "ntf": {
+      "short": "ntf",
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "call",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    },
+    "any": {
+      "type": "any",
+      "pin": {
+        "0": {
+          "unitId": "emptyobject",
+          "pinId": "any"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "bell",
+    "description": "remove `notification` from system tray",
+    "complexity": 6.310922792774107,
+    "tags": [
+      "platform",
+      "api",
+      "notification"
+    ]
+  },
+  "id": "29e974cc-081b-11eb-a607-1fd4ec67a52f",
+  "type": "`U`&`G`"
+}

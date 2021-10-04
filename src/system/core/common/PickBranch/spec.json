@@ -1,0 +1,107 @@
+{
+  "name": "pick branch",
+  "units": {
+    "tpuphtn": {
+      "path": "396497e4-f8e7-4573-95c9-a4f186a5cd05",
+      "input": {
+        "a": {
+          "data": "1"
+        },
+        "b": {
+          "data": "2"
+        },
+        "c": {
+          "data": "true"
+        }
+      }
+    },
+    "wtfrczwm": {
+      "path": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
+    }
+  },
+  "merges": {
+    "yeejayjv": {
+      "tpuphtn": {
+        "input": {
+          "c": true
+        }
+      },
+      "wtfrczwm": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "croouzwck": {
+      "tpuphtn": {
+        "output": {
+          "a": true
+        }
+      },
+      "wtfrczwm": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 13.309480774739004,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "wirvgg": {
+      "pin": {
+        "0": {
+          "mergeId": "yeejayjv"
+        }
+      },
+      "type": "boolean"
+    },
+    "qthlrbq": {
+      "pin": {
+        "0": {
+          "unitId": "tpuphtn",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "euuic": {
+      "pin": {
+        "0": {
+          "unitId": "tpuphtn",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "uxzqwkgaj": {
+      "pin": {
+        "0": {
+          "unitId": "wtfrczwm",
+          "pinId": "if"
+        }
+      },
+      "type": "<A>"
+    },
+    "iuhms": {
+      "pin": {
+        "0": {
+          "unitId": "wtfrczwm",
+          "pinId": "else"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "id": "ea1389f2-3a83-44e5-ad8c-b29e03ab77d1",
+  "type": "`U`&`G`"
+}

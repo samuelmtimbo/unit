@@ -1,0 +1,260 @@
+{
+  "name": "on drag delta",
+  "inputs": {
+    "element": {
+      "pin": {
+        "0": {
+          "unitId": "ondrag",
+          "pinId": "element"
+        }
+      },
+      "ref": true,
+      "type": "`U`"
+    }
+  },
+  "outputs": {
+    "x": {
+      "pin": {
+        "0": {
+          "unitId": "subtract",
+          "pinId": "a - b"
+        }
+      },
+      "type": "number"
+    },
+    "y": {
+      "pin": {
+        "0": {
+          "unitId": "subgtract",
+          "pinId": "a - b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "units": {
+    "ondrag": {
+      "path": "d4de180e-f1e8-4575-ab64-eaef413bcfc4",
+      "input": {
+        "element": {
+          "metadata": {
+            "position": {
+              "x": -174,
+              "y": -1
+            }
+          }
+        }
+      },
+      "output": {
+        "move": {},
+        "down": {},
+        "up": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -166,
+              "y": 24
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -121,
+          "y": -1
+        }
+      }
+    },
+    "subtract": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a - b": {
+          "metadata": {
+            "position": {
+              "x": 126,
+              "y": -63
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 77,
+          "y": -49
+        }
+      }
+    },
+    "propclientxclienty": {
+      "path": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "clientY": {},
+        "clientX": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -14,
+          "y": -25
+        }
+      }
+    },
+    "propclientxclienty0": {
+      "path": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "clientY": {},
+        "clientX": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -14,
+          "y": 23
+        }
+      }
+    },
+    "subgtract": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a - b": {
+          "metadata": {
+            "position": {
+              "x": 126,
+              "y": 61
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 77,
+          "y": 47
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "ondrag": {
+        "output": {
+          "down": true
+        }
+      },
+      "propclientxclienty": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "1": {
+      "propclientxclienty0": {
+        "input": {
+          "obj": true
+        }
+      },
+      "ondrag": {
+        "output": {
+          "move": true
+        }
+      }
+    },
+    "2": {
+      "subtract": {
+        "input": {
+          "a": true
+        }
+      },
+      "propclientxclienty0": {
+        "output": {
+          "clientX": true
+        }
+      }
+    },
+    "3": {
+      "subtract": {
+        "input": {
+          "b": true
+        }
+      },
+      "propclientxclienty": {
+        "output": {
+          "clientX": true
+        }
+      }
+    },
+    "4": {
+      "subgtract": {
+        "input": {
+          "a": true
+        }
+      },
+      "propclientxclienty0": {
+        "output": {
+          "clientY": true
+        }
+      }
+    },
+    "5": {
+      "subgtract": {
+        "input": {
+          "b": true
+        }
+      },
+      "propclientxclienty": {
+        "output": {
+          "clientY": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "grab",
+    "complexity": 25.734352622793764,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": -72,
+          "y": -22
+        },
+        "1": {
+          "x": -72,
+          "y": 20
+        },
+        "2": {
+          "x": 33,
+          "y": -15
+        },
+        "3": {
+          "x": 28,
+          "y": -55
+        },
+        "4": {
+          "x": 28,
+          "y": 52
+        },
+        "5": {
+          "x": 33,
+          "y": 13
+        }
+      }
+    }
+  },
+  "id": "ae5c6f18-9ff9-11eb-986e-6fd93ceb151c",
+  "type": "`U`&`G`"
+}

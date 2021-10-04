@@ -1,0 +1,58 @@
+{
+  "name": "last index",
+  "units": {
+    "drfyx": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    },
+    "tbztf": {
+      "path": "4d67d2e4-8b06-4e15-8243-99be8e4be5d3"
+    }
+  },
+  "merges": {
+    "oebcn": {
+      "drfyx": {
+        "output": {
+          "length": true
+        }
+      },
+      "tbztf": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "drfyx",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "last": {
+      "pin": {
+        "0": {
+          "unitId": "tbztf",
+          "pinId": "a - 1"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "last position of `a`",
+    "complexity": 6.31141663456695,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "f9588979-74e1-477a-8085-594043362fdf",
+  "type": "`U`&`G`"
+}

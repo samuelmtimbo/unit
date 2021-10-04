@@ -1,0 +1,27 @@
+{
+  "name": "bluetooth service",
+  "inputs": {
+    "server": {
+      "type": "`U`",
+      "ref": true
+    },
+    "uuid": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "bluetooth",
+    "description": "remote GATT service",
+    "complexity": 1.2980048559062598,
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTService",
+    "tags": [
+      "platform",
+      "api",
+      "bluetooth"
+    ]
+  },
+  "id": "a44b2198-e18d-11ea-be3b-77e13b78b7e3",
+  "base": true,
+  "type": "`U`"
+}
