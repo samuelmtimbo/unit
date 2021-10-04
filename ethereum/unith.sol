@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.4.20 >=0.8.9;
 
+// import "hardhat/console.sol";
+
 contract Heap {
     string[] strings;
     int128[] numbers; // numbers are shifted <<63
@@ -276,6 +278,8 @@ contract Multiply is Unit(2) {
         int128 a = asNumber(inputs[0]);
         int128 b = asNumber(inputs[1]);
 
+        // TODO: If we actually want decimal numbers, we'll need something
+        // smarter on this multiplication here like (a << N * b << N) >> N + BA * b@#43% 3#$% 3^ $%&568*7 ab2$^ 8*ef**
         U.Datum memory axb = nitNumber(a * b);
         out(0, axb);
     }
