@@ -183,7 +183,7 @@ abstract contract Unit {
     function take(uint32 idx, U.Datum memory input) external {
         inputs[idx] = input;
         for (uint32 i = 0; i < inputs.length; i++) {
-            if (inputs[idx].type_ == U.DType.Null) {
+            if (inputs[i].type_ == U.DType.Null) {
                 return;
             }
         }
