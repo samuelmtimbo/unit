@@ -63,7 +63,7 @@ library U {
 
     function asString(Heap heap, Data memory value)
         public
-        pure
+        view
         returns (string memory)
     {
         require(value.type_ == DataType.String, 'Type must be string');
@@ -72,7 +72,6 @@ library U {
 
     function nitString(Heap heap, string memory value)
         internal
-        pure
         returns (U.Data memory)
     {
         uint32[] memory location = new uint32[](1);
@@ -82,7 +81,7 @@ library U {
 
     function asNumber(Heap heap, U.Data memory value)
         internal
-        pure
+        view
         returns (int128)
     {
         require(value.type_ == DataType.Number, 'Type must be number');
@@ -91,7 +90,6 @@ library U {
 
     function nitNumber(Heap heap, int128 value)
         internal
-        pure
         returns (U.Data memory)
     {
         uint32[] memory location = new uint32[](1);
@@ -102,7 +100,7 @@ library U {
     // now this one might be (expensive). consider implementing one that calls a function for each element instead.
     function asArray(Heap heap, U.Data memory value)
         internal
-        pure
+        view
         returns (Data[] memory array)
     {
         require(value.type_ == DataType.Array, 'Type must be array');
@@ -114,7 +112,6 @@ library U {
 
     function nitArray(Heap heap, U.Data[] memory array)
         internal
-        pure
         returns (U.Data memory)
     {
         uint32[] memory location = new uint32[](array.length);
@@ -127,7 +124,7 @@ library U {
     // same as above.
     function asObject(Heap heap, U.Data memory value)
         internal
-        pure
+        view
         returns (string[] memory keys, Data[] memory values)
     {
         require(value.type_ == DataType.Object, 'Type must be object');
@@ -144,7 +141,7 @@ library U {
         Heap heap,
         string[] memory keys,
         U.Data[] memory values
-    ) internal pure returns (U.Data memory) {
+    ) internal returns (U.Data memory) {
         require(
             keys.length == values.length,
             'Object must have same number of keys and values'
@@ -175,47 +172,39 @@ abstract contract Unit {
 
     function asString(U.Data memory value)
         internal
-        pure
+        view
         returns (string memory)
     {
         return U.asString(heap, value);
     }
 
-    function nitString(string memory value)
-        internal
-        pure
-        returns (U.Data memory)
-    {
+    function nitString(string memory value) internal returns (U.Data memory) {
         return U.nitString(heap, value);
     }
 
-    function asNumber(U.Data memory value) internal pure returns (int128) {
+    function asNumber(U.Data memory value) internal view returns (int128) {
         return U.asNumber(heap, value);
     }
 
-    function nitNumber(int128 value) internal pure returns (U.Data memory) {
+    function nitNumber(int128 value) internal returns (U.Data memory) {
         return U.nitNumber(heap, value);
     }
 
     function asArray(U.Data memory value)
         internal
-        pure
+        view
         returns (U.Data[] memory)
     {
         return U.asArray(heap, value);
     }
 
-    function nitArray(U.Data[] memory array)
-        internal
-        pure
-        returns (U.Data memory)
-    {
+    function nitArray(U.Data[] memory array) internal returns (U.Data memory) {
         return U.nitArray(heap, array);
     }
 
     function asObject(U.Data memory value)
         internal
-        pure
+        view
         returns (string[] memory keys, U.Data[] memory values)
     {
         return U.asObject(heap, value);
@@ -223,7 +212,6 @@ abstract contract Unit {
 
     function nitObject(string[] memory keys, U.Data[] memory values)
         internal
-        pure
         returns (U.Data memory)
     {
         return U.nitObject(heap, keys, values);
