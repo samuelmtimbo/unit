@@ -4,7 +4,7 @@ pragma solidity >=0.4.20;
 contract Heap {
     string[] strings;
     int128[] numbers; // numbers are shifted <<63
-    U.Data[] objects;
+    U.Datum[] objects;
 
     function newString(string memory value) public returns (uint32 addr) {
         strings.push(value);
@@ -32,18 +32,18 @@ contract Heap {
         numbers[addr] = value;
     }
 
-    function newObject(U.Data memory value) public returns (uint32 addr) {
+    function newObject(U.Datum memory value) public returns (uint32 addr) {
         objects.push(value);
         addr = uint32(objects.length - 1);
     }
 
-    function getObject(uint32 addr) public view returns (U.Data memory) {
+    function getObject(uint32 addr) public view returns (U.Datum memory) {
         return objects[addr];
     }
 }
 
 library U {
-    enum DataType {
+    enum DType {
         Null,
         String,
         Number,
@@ -52,8 +52,8 @@ library U {
     }
 
     // this struct is NOT ANYMORE insanely expensive
-    struct Data {
-        DataType type_;
+    struct Datum {
+        DType type_;
         // location is polymorphic depending on type above:
         // - string: single-length array pointing to `strings` array in heap
         // - number: same, pointing to `numbers` array in heap
@@ -62,75 +62,75 @@ library U {
         uint32[] location;
     }
 
-    function asString(Heap heap, Data memory value)
+    function asString(Heap heap, Datum memory value)
         public
         view
         returns (string memory)
     {
-        require(value.type_ == DataType.String, 'Type must be string');
+        require(value.type_ == DType.String, 'Type must be string');
         return heap.getString(value.location[0]);
     }
 
     function nitString(Heap heap, string memory value)
         internal
-        returns (U.Data memory)
+        returns (U.Datum memory)
     {
         uint32[] memory location = new uint32[](1);
         location[0] = heap.newString(value);
-        return U.Data(DataType.String, location);
+        return U.Datum(DType.String, location);
     }
 
-    function asNumber(Heap heap, U.Data memory value)
+    function asNumber(Heap heap, U.Datum memory value)
         internal
         view
         returns (int128)
     {
-        require(value.type_ == DataType.Number, 'Type must be number');
+        require(value.type_ == DType.Number, 'Type must be number');
         return heap.getNumber(value.location[0]);
     }
 
     function nitNumber(Heap heap, int128 value)
         internal
-        returns (U.Data memory)
+        returns (U.Datum memory)
     {
         uint32[] memory location = new uint32[](1);
         location[0] = heap.newNumber(value);
-        return U.Data(DataType.Number, location);
+        return U.Datum(DType.Number, location);
     }
 
     // now this one might be (expensive). consider implementing one that calls a function for each element instead.
-    function asArray(Heap heap, U.Data memory value)
+    function asArray(Heap heap, U.Datum memory value)
         internal
         view
-        returns (Data[] memory array)
+        returns (Datum[] memory array)
     {
-        require(value.type_ == DataType.Array, 'Type must be array');
-        array = new Data[](value.location.length);
+        require(value.type_ == DType.Array, 'Type must be array');
+        array = new Datum[](value.location.length);
         for (uint32 i = 0; i < array.length; i++) {
             array[i] = heap.getObject(value.location[i]);
         }
     }
 
-    function nitArray(Heap heap, U.Data[] memory array)
+    function nitArray(Heap heap, U.Datum[] memory array)
         internal
-        returns (U.Data memory)
+        returns (U.Datum memory)
     {
         uint32[] memory location = new uint32[](array.length);
         for (uint32 i = 0; i < array.length; i++) {
             location[i] = heap.newObject(array[i]);
         }
-        return U.Data(DataType.Array, location);
+        return U.Datum(DType.Array, location);
     }
 
     // same as above.
-    function asObject(Heap heap, U.Data memory value)
+    function asObject(Heap heap, U.Datum memory value)
         internal
         view
-        returns (string[] memory keys, Data[] memory values)
+        returns (string[] memory keys, Datum[] memory values)
     {
-        require(value.type_ == DataType.Object, 'Type must be object');
+        require(value.type_ == DType.Object, 'Type must be object');
         keys = new string[](value.location.length / 2);
-        values = new Data[](value.location.length / 2);
+        values = new Datum[](value.location.length / 2);
         for (uint32 i = 0; i < keys.length; i++) {
             keys[i] = heap.getString(value.location[2 * i]);
             values[i] = heap.getObject(value.location[2 * i + 1]);
@@ -141,8 +141,8 @@ library U {
     function nitObject(
         Heap heap,
         string[] memory keys,
-        U.Data[] memory values
-    ) internal returns (U.Data memory) {
+        U.Datum[] memory values
+    ) internal returns (U.Datum memory) {
         require(
             keys.length == values.length,
             'Object must have same number of keys and values'
@@ -152,24 +152,24 @@ library U {
             location[2 * i] = heap.newString(keys[i]);
             location[2 * i + 1] = heap.newObject(values[i]);
         }
-        return U.Data(DataType.Object, location);
+        return U.Datum(DType.Object, location);
     }
 }
 
-interface DataHandler {
-    function take(uint32 idx, U.Data memory value) external;
+interface DatumHandler {
+    function take(uint32 idx, U.Datum memory value) external;
 }
 
-abstract contract Unit is DataHandler {
+abstract contract Unit is DatumHandler {
     Heap private heap;
 
-    U.Data[] private inputs;
+    U.Datum[] private inputs;
 
     constructor(uint32 _inputCount) {
-        inputs = new U.Data[](_inputCount);
+        inputs = new U.Datum[](_inputCount);
     }
 
-    function init(Heap _heap, function(uint32, U.Data memory) external _outH)
+    function init(Heap _heap, function(uint32, U.Datum memory) external _outH)
         external
         virtual
         returns (Unit self)
@@ -180,22 +180,22 @@ abstract contract Unit is DataHandler {
         return this;
     }
 
-    function take(uint32 idx, U.Data memory input) external {
+    function take(uint32 idx, U.Datum memory input) external {
         inputs[idx] = input;
         for (uint32 i = 0; i < inputs.length; i++) {
-            if (inputs[idx].type_ == U.DataType.Null) {
+            if (inputs[idx].type_ == U.DType.Null) {
                 return;
             }
         }
         run(inputs);
-        inputs = new U.Data[](inputs.length);
+        inputs = new U.Datum[](inputs.length);
     }
 
-    function run(U.Data[] storage inputs) internal virtual;
+    function run(U.Datum[] storage inputs) internal virtual;
 
-    function(uint32, U.Data memory) external out;
+    function(uint32, U.Datum memory) external out;
 
-    function asString(U.Data memory value)
+    function asString(U.Datum memory value)
         internal
         view
         returns (string memory)
@@ -203,64 +203,67 @@ abstract contract Unit is DataHandler {
         return U.asString(heap, value);
     }
 
-    function nitString(string memory value) internal returns (U.Data memory) {
+    function nitString(string memory value) internal returns (U.Datum memory) {
         return U.nitString(heap, value);
     }
 
-    function asNumber(U.Data memory value) internal view returns (int128) {
+    function asNumber(U.Datum memory value) internal view returns (int128) {
         return U.asNumber(heap, value);
     }
 
-    function nitNumber(int128 value) internal returns (U.Data memory) {
+    function nitNumber(int128 value) internal returns (U.Datum memory) {
         return U.nitNumber(heap, value);
     }
 
-    function asArray(U.Data memory value)
+    function asArray(U.Datum memory value)
         internal
         view
-        returns (U.Data[] memory)
+        returns (U.Datum[] memory)
     {
         return U.asArray(heap, value);
     }
 
-    function nitArray(U.Data[] memory array) internal returns (U.Data memory) {
+    function nitArray(U.Datum[] memory array)
+        internal
+        returns (U.Datum memory)
+    {
         return U.nitArray(heap, array);
     }
 
-    function asObject(U.Data memory value)
+    function asObject(U.Datum memory value)
         internal
         view
-        returns (string[] memory keys, U.Data[] memory values)
+        returns (string[] memory keys, U.Datum[] memory values)
     {
         return U.asObject(heap, value);
     }
 
-    function nitObject(string[] memory keys, U.Data[] memory values)
+    function nitObject(string[] memory keys, U.Datum[] memory values)
         internal
-        returns (U.Data memory)
+        returns (U.Datum memory)
     {
         return U.nitObject(heap, keys, values);
     }
 }
 
 interface UnitFactory {
-    function create(Heap heap, function(uint32, U.Data memory) external outH)
+    function create(Heap heap, function(uint32, U.Datum memory) external outH)
         external
         returns (Unit);
 }
 
 contract Add is Unit(2) {
-    function run(U.Data[] storage inputs) internal override {
+    function run(U.Datum[] storage inputs) internal override {
         int128 a = asNumber(inputs[0]);
         int128 b = asNumber(inputs[1]);
 
-        U.Data memory aplusb = nitNumber(a + b);
+        U.Datum memory aplusb = nitNumber(a + b);
         out(0, aplusb);
     }
 }
 
 contract AddFactory is UnitFactory {
-    function create(Heap heap, function(uint32, U.Data memory) external outH)
+    function create(Heap heap, function(uint32, U.Datum memory) external outH)
         external
         returns (Unit)
     {
@@ -269,17 +272,17 @@ contract AddFactory is UnitFactory {
 }
 
 contract Multiply is Unit(2) {
-    function run(U.Data[] storage inputs) internal override {
+    function run(U.Datum[] storage inputs) internal override {
         int128 a = asNumber(inputs[0]);
         int128 b = asNumber(inputs[1]);
 
-        U.Data memory axb = nitNumber(a * b);
+        U.Datum memory axb = nitNumber(a * b);
         out(0, axb);
     }
 }
 
 contract MultiplyFactory is UnitFactory {
-    function create(Heap heap, function(uint32, U.Data memory) external outH)
+    function create(Heap heap, function(uint32, U.Datum memory) external outH)
         external
         returns (Unit)
     {
@@ -311,7 +314,7 @@ contract Mothership {
     function get(
         string memory name,
         Heap heap,
-        function(uint32, U.Data memory) external handler
+        function(uint32, U.Datum memory) external handler
     ) public returns (Unit) {
         return units[name].create(heap, handler);
     }
@@ -321,7 +324,7 @@ contract Graph420 is Heap {
     Unit add1;
     Unit multiply1;
 
-    U.Data output;
+    U.Datum output;
 
     constructor() {
         Mothership mother = new Mothership(); // this should actually come from dereferencing a well-known deployed mothership.
@@ -340,26 +343,26 @@ contract Graph420 is Heap {
 
     // aka pin0
     function feed(int128 value) public returns (bool, int128) {
-        U.Data memory data = U.nitNumber(this, value);
-        add1.take(0, data);
-        multiply1.take(0, data);
+        U.Datum memory Datum = U.nitNumber(this, value);
+        add1.take(0, Datum);
+        multiply1.take(0, Datum);
 
-        if (output.type_ == U.DataType.Null) {
+        if (output.type_ == U.DType.Null) {
             return (false, -1);
         }
 
         int128 result = U.asNumber(this, output);
-        output = U.Data(U.DataType.Null, new uint32[](0));
+        output = U.Datum(U.DType.Null, new uint32[](0));
         return (true, result);
     }
 
-    function pin1(uint32 idx, U.Data memory value) external {
+    function pin1(uint32 idx, U.Datum memory value) external {
         if (idx == 0) {
             multiply1.take(1, value);
         }
     }
 
-    function pin2(uint32 idx, U.Data memory value) external {
+    function pin2(uint32 idx, U.Datum memory value) external {
         if (idx == 0) {
             output = value;
         }
