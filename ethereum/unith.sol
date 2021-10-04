@@ -160,24 +160,18 @@ library U {
 
 abstract contract Unit {
     Heap private heap;
-
     U.Datum[] private inputs;
 
-    constructor(uint32 _inputCount) {
+    constructor(
+        uint32 _inputCount,
+        Heap _heap,
+        function(uint32, U.Datum memory) external _out
+    ) {
+        heap = _heap;
+        out = _out;
         for (uint32 i = 0; i < _inputCount; i++) {
             inputs.push(U.Datum(U.DType.Null, new uint32[](0)));
         }
-    }
-
-    function init(Heap _heap, function(uint32, U.Datum memory) external _outH)
-        external
-        virtual
-        returns (Unit self)
-    {
-        assert(address(heap) == address(0));
-        heap = _heap;
-        out = _outH;
-        return this;
     }
 
     function take(uint32 idx, U.Datum memory input) external {
@@ -254,7 +248,11 @@ interface UnitFactory {
         returns (Unit);
 }
 
-contract Add is Unit(2) {
+contract Add is Unit {
+    constructor(Heap heap, function(uint32, U.Datum memory) external out)
+        Unit(2, heap, out)
+    {}
+
     function run(U.Datum[] storage inputs) internal override {
         int128 a = asNumber(inputs[0]);
         int128 b = asNumber(inputs[1]);
@@ -269,11 +267,15 @@ contract AddFactory is UnitFactory {
         external
         returns (Unit)
     {
-        return new Add().init(heap, outH);
+        return new Add(heap, outH);
     }
 }
 
-contract Multiply is Unit(2) {
+contract Multiply is Unit {
+    constructor(Heap heap, function(uint32, U.Datum memory) external out)
+        Unit(2, heap, out)
+    {}
+
     function run(U.Datum[] storage inputs) internal override {
         int128 a = asNumber(inputs[0]);
         int128 b = asNumber(inputs[1]);
@@ -290,7 +292,7 @@ contract MultiplyFactory is UnitFactory {
         external
         returns (Unit)
     {
-        return new Multiply().init(heap, outH);
+        return new Multiply(heap, outH);
     }
 }
 
@@ -298,11 +300,11 @@ contract Mothership {
     address public owner;
 
     constructor() {
+        owner = msg.sender;
         init();
     }
 
-    function init() public {
-        owner = msg.sender;
+    function init() private {
         register('add', new AddFactory());
         register('multiply', new MultiplyFactory());
     }
