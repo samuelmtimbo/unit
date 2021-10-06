@@ -1,5 +1,8 @@
 # Getting Start
 
+
+![Toggle Views](/public/gif/toggle.gif)
+
 add unit
 
 <kbd>control</kbd> + <kbd>:</kbd>
