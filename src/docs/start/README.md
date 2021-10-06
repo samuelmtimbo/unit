@@ -10,3 +10,5 @@ connect datum to input of add
 <kbd>left click</kbd> + <kbd>drag</kbd>
 
 ![Add Unit](/public/gif/add.gif)
+
+what else should we add?
