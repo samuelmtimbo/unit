@@ -1,5 +1,5 @@
 import { System } from '../../../boot'
-import isEqual from '../../../system/f/comparisson/Equals/f'
+import isEqual from '../../../system/f/comparison/Equals/f'
 import { Dict } from '../../../types/Dict'
 import { randomIdNotIn } from '../../../util/id'
 import Listenable from '../../Listenable'

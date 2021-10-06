@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import Equals from '../../../../system/f/comparisson/Equals'
+import Equals from '../../../../system/f/comparison/Equals'
 
 const equals = new Equals()
 

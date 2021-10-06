@@ -15,7 +15,7 @@ import {
   _removeNodeAt,
   _updateNodeAt,
 } from '../../../spec/parser'
-import isEqual from '../../../system/f/comparisson/Equals/f'
+import isEqual from '../../../system/f/comparison/Equals/f'
 import { Dict } from '../../../types/Dict'
 import { Element } from '../../element'
 import { makeCustomListener } from '../../event/custom'

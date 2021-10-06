@@ -24,7 +24,7 @@ import {
   TreeNodeType,
   updateNodeAt,
 } from '../../spec/parser'
-import isEqual from '../../system/f/comparisson/Equals/f'
+import isEqual from '../../system/f/comparison/Equals/f'
 import { IDENTITY } from './id'
 
 // getTree

@@ -1,4 +1,4 @@
-import isEqual from '../system/f/comparisson/Equals/f'
+import isEqual from '../system/f/comparison/Equals/f'
 
 export function assert(test: boolean, message: string = ''): void {
   if (!test) {

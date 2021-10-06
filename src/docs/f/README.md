@@ -1,5 +1,7 @@
 # f
 
+![Core](/public/excalidraw/f.svg)
+
 
 ## arithmetic
 
