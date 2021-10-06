@@ -1,6 +1,10 @@
 # Getting Started
 
-![Toggle Views](/public/gif/toggle.gif)
+toggle views
+
+<kbd>click</kbd> + <kbd>center.top</kbd>
+
+![Toggle](/public/gif/toggle.gif)
 
 add unit
 
@@ -14,5 +18,12 @@ connect datum to input
 
 <kbd>click</kbd> + <kbd>drag</kbd>
 
-![Add Unit](/public/gif/add.gif)
+![Add](/public/gif/add.gif)
 
+delete mode
+
+<kbd>d</kbd> + <kbd>click</kbd>
+
+have fun shooting lasers
+
+![Delete](/public/gif/del.gif)
