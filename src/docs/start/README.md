@@ -1,39 +1,49 @@
 # Getting Started
 
-## toggle views
+# toggle
 
-<kbd>click</kbd> <kbd>center.top</kbd>
+<kbd>click</kbd>
 
-![Toggle](/public/gif/toggle.gif)
+![toggle](/public/gif/toggle.gif)
 
-## add unit
+# del
 
-<kbd>control</kbd> <kbd>:</kbd> <kbd>unitName</kbd>
+<kbd>d</kbd>
 
-## create datum
+![toggleDel](/public/gif/toggleDel.gif)
 
-<kbd>double.click</kbd>
+![del](/public/gif/dDel.gif)
 
-## connect datum to input
+![delVal](/public/gif/dDelVal.gif)
 
-<kbd>click</kbd> <kbd>drag</kbd>
+# unit
 
-![Add](/public/gif/add.gif)
+<kbd>cntrl</kbd><kbd>:</kbd>
 
-## delete mode
+![unit](/public/gif/add.gif)
 
-<kbd>d</kbd> <kbd>click</kbd>
+# connect
 
-## expose mode
+<kbd>drag</kbd>
 
-<kbd>e</kbd> <kbd>click</kbd>
+![addVal](/public/gif/addVal.gif)
 
-![Expose](/public/gif/exp.gif)
+![addValue](/public/gif/addValue.gif)
 
-## alan kay
+# coppy
 
-![Kay](/public/gif/kay.gif)
+<kbd>s</kbd>
 
-## ui components
+![sCoppy](/public/gif/sCoppy.gif)
 
-![Expose](/public/gif/ui.gif)
+# info
+
+<kbd>q</kbd>
+
+![qInfo](/public/gif/qInfo.gif)
+
+# morf
+
+<kbd>f</kbd>
+
+![fMorph](/public/gif/fMorph.gif)
