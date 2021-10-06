@@ -27,3 +27,7 @@
 have fun shooting lasers
 
 ![Delete](/public/gif/del.gif)
+
+## alan kay
+
+![Kay](/public/gif/kay.gif)
