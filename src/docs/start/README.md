@@ -36,4 +36,4 @@
 
 ## ui components
 
-![Expose](/public/gif/slide.gif)
+![Expose](/public/gif/ui.gif)
