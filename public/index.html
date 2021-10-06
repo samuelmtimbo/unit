@@ -234,7 +234,7 @@
               const { tagName, isContentEditable } = target
               if (isContentEditable) {
                 doPrevent = false
-              } else if (tagName === 'TEXT_AREA') {
+              } else if (tagName === 'TEXTAREA') {
                 doPrevent = false
               } else if (tagName === 'INPUT') {
                 let { type } = target
