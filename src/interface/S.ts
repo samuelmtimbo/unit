@@ -2,6 +2,8 @@ import { GraphSpec } from './../types/index'
 import { Unlisten } from './../Unlisten'
 import { PO } from './PO'
 
+// Stream
+
 export interface S extends PO {
   pod(): PO
 

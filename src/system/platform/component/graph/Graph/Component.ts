@@ -12225,7 +12225,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _start_static = (): void => {
-    console.log('Graph', '_start_static')
+    // console.log('Graph', '_start_static')
     this._static = true
     // for (const node_id in this._node) {
     for (const node_id in this._unit_node) {
@@ -14971,6 +14971,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     const datum_node_id = this._pin_to_datum[pin_node_id]
 
+    const pin_datum_tree = this._pin_datum_tree[pin_node_id]
+
     this._link_pin_ignored[pin_node_id] = ignored
 
     const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
@@ -14981,7 +14983,8 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._set_link_pin_d(pin_node_id, LINK_DISTANCE_IGNORED)
       this._set_link_pin_opacity(pin_node_id, '0')
       this._set_link_pin_pointer_events(pin_node_id, 'none')
-      if (datum_node_id) {
+      
+      if (pin_datum_tree) {
         this._dec_unit_pin_active(unitId)
       }
     } else {
@@ -14991,9 +14994,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._set_link_pin_opacity(pin_node_id, '1')
       this._set_link_pin_pointer_events(pin_node_id, 'inherit')
 
-      if (datum_node_id) {
+      if (pin_datum_tree) {
         this._inc_unit_pin_active(unitId)
-
+      }
+      
+      if (pin_node_id) {
         this._refresh_datum_visible(datum_node_id)
       }
     }
@@ -16217,7 +16222,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   public _leave_subgraph = (
     child_component_position: Dict<Position> = {}
   ): void => {
-    console.log('Graph', '_leave_subgraph', child_component_position)
+    // console.log('Graph', '_leave_subgraph', child_component_position)
     if (this._subgraph_graph && this._subgraph_unit_id) {
       // recursively leave unit
       this._subgraph_graph._leave_subgraph()
@@ -17716,12 +17721,12 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     pin_node_id: string,
     merge_node_id: string
   ) {
-    console.log(
-      'Graph',
-      '_sim_merge_link_pin_merge_pin',
-      pin_node_id,
-      merge_node_id
-    )
+    // console.log(
+    //   'Graph',
+    //   '_sim_merge_link_pin_merge_pin',
+    //   pin_node_id,
+    //   merge_node_id
+    // )
     const { id: merge_id } = segmentMergeNodeId(merge_node_id)
 
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
@@ -18630,6 +18635,12 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     this._refresh_compatible()
 
+    this._remove_pin_datum_tree(pin_node_id)
+
+    this._start_graph_simulation(LAYER_DATA_LINKED)
+  }
+
+  private _remove_pin_datum_tree = (pin_node_id: string): void => {
     delete this._pin_datum_tree[pin_node_id]
 
     if (this._is_link_pin_node_id(pin_node_id)) {
@@ -18656,8 +18667,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     if (this._is_link_pin_node_id(pin_node_id)) {
       this._refresh_link_pin_color(pin_node_id)
     }
-
-    this._start_graph_simulation(LAYER_DATA_LINKED)
   }
 
   private _pod_remove_pin_datum = (pin_node_id: string) => {
@@ -19147,7 +19156,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private __spec_remove_merge = (merge_id: string): void => {
-    console.log('Graph', '__spec_remove_merge', merge_id)
+    // console.log('Graph', '__spec_remove_merge', merge_id)
     this._spec = specReducer.removeMerge({ id: merge_id }, this._spec)
   }
 
@@ -19159,7 +19168,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _sim_remove_merge = (merge_node_id: string): void => {
-    console.log('Graph', '_sim_remove_merge', merge_node_id)
+    // console.log('Graph', '_sim_remove_merge', merge_node_id)
     const { id: merge_id } = segmentMergeNodeId(merge_node_id)
 
     const anchor_node_id = this._get_merge_anchor_node_id(merge_node_id)
@@ -26792,6 +26801,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     const datum_node_id = this._pin_to_datum[pin_node_id]
     if (datum_node_id) {
       this._sim_remove_datum(datum_node_id)
+    }
+
+    const pin_datum_tree = this._pin_datum_tree[pin_node_id]
+    if (pin_datum_tree) {
+      this._remove_pin_datum_tree(pin_node_id)
     }
   }
 

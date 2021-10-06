@@ -12,6 +12,11 @@ export function watchPinEvent(
 ): () => void {
   // console.log(event, type, pin)
   const listener = (data) => {
+    // AD HOC
+    if (data instanceof Blob) {
+      data = null
+    }
+
     if (data !== undefined) {
       data = stringify(data)
     }

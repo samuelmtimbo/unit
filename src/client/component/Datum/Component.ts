@@ -188,7 +188,7 @@ export default class Datum extends Element<HTMLDivElement, Props> {
     path: number[]
     text: string
   }): void => {
-    console.log('Datum', '_onLeafPaste', value, path, text, text.length)
+    // console.log('Datum', '_onLeafPaste', value, path, text)
     const leaf = this._data_tree.getChildAtPath(path)!
 
     const { start: selectionStart, end: selectionEnd } =
@@ -199,15 +199,9 @@ export default class Datum extends Element<HTMLDivElement, Props> {
       text +
       value.slice(selectionEnd, value.length)
 
-    console.log('nextValue', nextValue, nextValue.length)
-
     const nextLeaf = getTree(nextValue)
 
-    console.log('nextLeaf.value', nextLeaf.value, nextLeaf.value.length)
-
     const nextRoot = _updateNodeAt(this._root, path, nextLeaf)
-
-    console.log('nextRoot.value', nextRoot.value, nextRoot.value.length)
 
     const nextSelectionStart = selectionStart + text.length
 

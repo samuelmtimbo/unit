@@ -15,7 +15,7 @@ export default class Stringify extends Functional<I, O> {
   constructor(config?: Config) {
     super(
       {
-        i: ['a'],
+        i: ['obj'],
         o: ['str'],
       },
       config

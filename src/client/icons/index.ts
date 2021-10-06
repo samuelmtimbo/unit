@@ -5,7 +5,7 @@
  * same folder as this file.
  */
 
-export default JSON.parse(`{
+ export default JSON.parse(`{
   "activity": "M22 12 L18 12 L15 21 L9 3 L6 12 L2 12",
   "airplay": "M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1 M12 15 L17 21 L7 21 L12 15 Z",
   "alarm-check": "M12 21a8 8 0 100-16 8 8 0 000 16z M5 3L2 6 M22 6l-3-3 M6 19l-2 2 M18 19l2 2 M9 13l2 2 4-4",
@@ -462,6 +462,7 @@ export default JSON.parse(`{
   "star-half": "M12 17.8L5.8 21 7 14.1 2 9.3l7-1L12 2",
   "star": "M12 2 L15.09 8.26 L22 9.27 L17 14.14 L18.18 21.02 L12 17.77 L5.82 21.02 L7 14.14 L2 9.27 L8.91 8.26 L12 2 Z",
   "stop-circle": "M22 12 A10 10 0 0 1 12 22 A10 10 0 0 1 2 12 A10 10 0 0 1 22 12 z M9 9 H15 V15 H9 V9 z",
+  "stream": "M14 12 A2 2 0 0 1 12 14 A2 2 0 0 1 10 12 A2 2 0 0 1 14 12 z M 8 9 A 4 4 0 0 0 8 15 M 5 7 A 8 8 0 0 0 5 17 M 16 9 A 4 4 0 0 1 16 15 M 19 7 A 8 8 0 0 1 19 17",
   "strikethrough": "M16 4H9a3 3 0 00-2.83 4 M14 12a4 4 0 010 8H6 M4 12 L20 12",
   "string": "M4 4 L4 7 M7 4 L7 7 M17 4 L17 7 M20 4 L20 7",
   "sun": "M16 12 A4 4 0 0 1 12 16 A4 4 0 0 1 8 12 A4 4 0 0 1 16 12 z M12 2v2 M12 20v2 M5 5l1.5 1.5 M17.5 17.5L19 19 M2 12h2 M20 12h2 M5 19l1.5-1.5 M17.5 6.5L19 5",

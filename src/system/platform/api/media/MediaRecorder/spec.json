@@ -2,10 +2,20 @@
   "name": "media recorder",
   "inputs": {
     "opt": {
-      "type": "{mimeType?:string,bitsPerSecond?:number,audioBitsPerSecond?:number,videoBitsPerSecond?:number}"
+      "type": "{mimeType?:string,bitsPerSecond?:number,audioBitsPerSecond?:number,videoBitsPerSecond?:number}",
+      "metadata": {
+        "examples": [
+          "{mimeType:\"video/webm;codecs=h264\",audioBitsPerSecond:128000,videoBitsPerSecond:3145728}"
+        ]
+      }
     },
     "start": {
-      "type": "number"
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "2000"
+        ]
+      }
     },
     "stop": {
       "type": "any"

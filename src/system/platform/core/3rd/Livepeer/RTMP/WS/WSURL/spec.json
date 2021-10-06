@@ -1,0 +1,158 @@
+{
+  "name": "rtmp ws url",
+  "inputs": {
+    "mimeType": {
+      "pin": {
+        "0": {
+          "unitId": "set0",
+          "pinId": "value"
+        }
+      },
+      "type": "string"
+    },
+    "streamKey": {
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "value"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "url": {
+      "pin": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "ab"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "units": {
+    "stringify": {
+      "path": "f97f2a74-d9a9-411d-afd3-fda46ba86c3b",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "str": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 53,
+          "y": -2
+        }
+      }
+    },
+    "concat": {
+      "path": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "\"wss://origin.livepeer.com/webrtmp/ws?\""
+        },
+        "b": {}
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 156,
+          "y": 1
+        }
+      }
+    },
+    "set": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {
+          "constant": true,
+          "data": "{}"
+        },
+        "key": {
+          "constant": true,
+          "data": "\"streamKey\""
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -159,
+          "y": 19
+        }
+      }
+    },
+    "set0": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {
+          "constant": false
+        },
+        "key": {
+          "constant": true,
+          "data": "'mimeType'"
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": -20
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "stringify": {
+        "output": {
+          "str": true
+        }
+      },
+      "concat": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "set0": {
+        "input": {
+          "obj": true
+        }
+      },
+      "set": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "2": {
+      "set0": {
+        "output": {
+          "obj": true
+        }
+      },
+      "stringify": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "stream",
+    "complexity": 15
+  },
+  "id": "4a68fe7a-ebfa-44ee-a120-3a045280e0a2"
+}
