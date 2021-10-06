@@ -2,11 +2,9 @@
 
 ![Core](/public/excalidraw/core.svg)
 
-
 ## arithmetic
 
 ### Add
-[Add](src/system/core/arithmetic/Add3/spec.json)
 
 ## array
 
