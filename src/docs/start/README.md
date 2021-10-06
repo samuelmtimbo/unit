@@ -4,46 +4,46 @@
 
 <kbd>click</kbd>
 
-![toggle](/public/gif/toggle.gif)
+![toggle](/public/gif/start/toggle.gif)
 
 # del
 
 <kbd>d</kbd>
 
-![toggleDel](/public/gif/toggleDel.gif)
+![toggleDel](/public/gif/start/toggleDel.gif)
 
-![del](/public/gif/dDel.gif)
+![del](/public/gif/start/dDel.gif)
 
-![delVal](/public/gif/dDelVal.gif)
+![delVal](/public/gif/start/dDelVal.gif)
 
 # unit
 
 <kbd>cntrl</kbd><kbd>:</kbd>
 
-![unit](/public/gif/add.gif)
+![unit](/public/gif/start/add.gif)
 
 # connect
 
 <kbd>drag</kbd>
 
-![addVal](/public/gif/addVal.gif)
+![addVal](/public/gif/start/addVal.gif)
 
-![addValue](/public/gif/addValue.gif)
+![addValue](/public/gif/start/addValue.gif)
 
 # coppy
 
 <kbd>s</kbd>
 
-![sCoppy](/public/gif/sCoppy.gif)
+![sCoppy](/public/gif/start/sCoppy.gif)
 
 # info
 
 <kbd>q</kbd>
 
-![qInfo](/public/gif/qInfo.gif)
+![qInfo](/public/gif/start/qInfo.gif)
 
 # morf
 
 <kbd>f</kbd>
 
-![fMorph](/public/gif/fMorph.gif)
+![fMorph](/public/gif/start/fMorph.gif)
