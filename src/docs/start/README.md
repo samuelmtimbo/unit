@@ -1,5 +1,4 @@
-# Getting Start
-
+# Getting Started
 
 ![Toggle Views](/public/gif/toggle.gif)
 
