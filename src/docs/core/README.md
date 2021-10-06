@@ -1,5 +1,8 @@
 # Core
 
+![Core](/public/excalidraw/core.svg)
+
+
 ## arithmetic
 
 ### Add
