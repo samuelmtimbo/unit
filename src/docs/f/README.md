@@ -2,8 +2,9 @@
 
 ![Core](/public/excalidraw/f.svg)
 
-
 ## arithmetic
+
+![Core](/public/excalidraw/fArithmetic.svg)
 
 ### Add
 
