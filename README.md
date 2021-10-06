@@ -10,7 +10,7 @@ The unit Programming Language was developed in close junction to the unit Progra
 
 unit's Philosophy is similar to the Unix Operating System's; for a seasoned programmer, unit should feel like the 2D evolution of the Command Line Interface (CLI) where units' (commands) inputs (stdin) and outputs (stdout) can be piped together into a graph (script); moreover, the unit system is set to grow into a modern and approachable Web Operating System which is sandboxed by default, enabling a new era of Software Sharing and Collaboration.
 
-The broader Design Principles behind unit are discussed in [Concept](src/concept/README.md).
+The broader Design Principles behind unit are discussed in [Concept](src/docs/concept/README.md).
 
 To jump right into the official unit Programming Environment (Beta), visit [ioun.it](https://ioun.it).
 
@@ -42,7 +42,7 @@ yarn watch
 ```
 ## Documentation
 
-As an application, the unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform. For a step-by-step introduction to unit Programming, visit [Getting Started](https://start.ioun.it).
+As an application, the unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform. For a step-by-step introduction to unit Programming, visit [Getting Started](src/docs/start/README.md).
 
 This codebase is a TypeScript implementation of the unit Programming Language Spec with an accompanying Web based Programming Environment. We tried to make it as clean and organized as we could while still maintaining a space for experimentation. Some folders contain a ```README.md``` file with information about that piece of the architecture.
 
