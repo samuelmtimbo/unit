@@ -28,6 +28,33 @@ The revolutions have merged
 
 # Dao of Open Source
 
+open source
+distributing
+parallel
+universes
+
+filled with
+beautiful dreams
+thanking souls for
+sharing
+
+through discovery of
+embracing transcriptions of
+freedom from
+time grid concerns
+
+streaming from
+your heart
+reflecting its
+beaming fire on
+
+everything that
+ever
+was and
+will be
+
+# Dao of Unit
+
 ## Built-in
 
 One interesting thing about Open Source unit is that there's no enforced tie with any centralized service
