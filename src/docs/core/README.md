@@ -265,42 +265,208 @@
 
 ## control
 
+### If3
+
+### If4
+
+### IfElse
+
+### IfNot
+
+### Invert
+
+### IsFalse
+
+### IsTrue
+
+### Pick
+
+### PickLesser
+
+### Plan3
+
+### SwitchAB
+
+### Wait2
+
+### WaitAll2
+
 
 ## Empty
 
 
 ## graph
 
+### SetUnitInputData
+
+### SetUnitOuputData
+
 
 ## iterate
+
+### IterateCount
+
+### IterateCountFrom
+
+### IterateSumFrom
+
+### IterateToggle
+
+### IterateWait
 
 
 ## logic
 
+### 2BitCondition
+
+### 50Chance
+
+### AndNot
+
 
 ## loop
+
+### Count
+
+### CountFrom
+
+### IsFirst
+
+### Loop2
+
+### Range
+
+### Range0
+
+### RangeBounce
+
+### RangeBounceTowards
+
+### RangeGrid
+
+### RangeRec
+
+### RangeReverse
+
+### RangeTowards
 
 
 ## math
 
+### Negate
+
 
 ## meta
+
+### NameToClass
+
+### RandomClass
+
+### RandomSpecId
+
+### SpecIds
 
 
 ## method
 
+### Array
+
+#### Includes
+
 
 ## number
+
+### StringToDecimal
 
 
 ## object
 
+### AssocPath
+
+### DissocAll
+
+### DissocPath
+
+### EmptyObject
+
+### ForEachKeyValue
+
+### HasKeys
+
+### KeyCount
+
+### Merge3
+
+### Merge4
+
+### MergeDefault
+
+### Partition
+
+### PropOrDefault
+
+### PropPath
+
+### SetIfOrDefault
+
+### Tag
+
 
 ## relation
+
+### Clamp
+
+### PropEqual
+
+### PropEqualOrDefault
 
 
 ## string
 
+### Concat3
+
+### Cut
+
+### DropLast
+
+### IsEmpty
+
+### IsNotEmpty
+
+### NStringBuilderFrom
+
+### NumberToDecimal
+
+### NumberToHex
+
+### RemoveWhitespace
+
+### Tail
+
 
 ## time
 
+### Debounce
+
+### Delay
+
+### DelayPush
+
+### Interval
+
+### PushDelay
+
+### Throttle
+
+
+## util
+
+### MergeAB
+
+### SplitAB
+
+## value
+
+### False
+
+### True
