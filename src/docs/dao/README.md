@@ -1,4 +1,4 @@
-# Manifesto
+# Bathroom Manifesto
 
 Can we go with the factory model head on?
 
