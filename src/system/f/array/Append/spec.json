@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "chevrons-left",
     "description": "append an element to an array",
-    "complexity": 1.330011611949752,
+    "complexity": 1.3353072517231337,
     "tags": [
       "f",
       "array"

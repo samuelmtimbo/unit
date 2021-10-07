@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "sine of angle `a` in rad",
-    "complexity": 1.329842710862451,
+    "complexity": 1.3351519269973788,
     "tags": [
       "f",
       "math"

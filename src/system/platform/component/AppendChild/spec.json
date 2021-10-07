@@ -38,7 +38,7 @@
   "metadata": {
     "icon": "square",
     "description": "append `child` instance to `parent`",
-    "complexity": 1.333600760054893,
+    "complexity": 1.3386079021454227,
     "tags": [
       "platform",
       "component"

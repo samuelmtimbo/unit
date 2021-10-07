@@ -45,19 +45,19 @@ export class Functional<I = {}, O = {}> extends Primitive<I, O> {
     }
   }
 
-  onRefInputData(name: string) {
+  onRefInputData(name: string): void {
     this._on_input_data(name)
   }
 
-  onDataInputData(name: string) {
+  onDataInputData(name: string): void {
     this._on_input_data(name)
   }
 
-  onDataInputDrop() {
+  onDataInputDrop(name: string): void {
     this._on_input_drop()
   }
 
-  onRefInputDrop() {
+  onRefInputDrop(): void {
     this._on_input_drop()
   }
 

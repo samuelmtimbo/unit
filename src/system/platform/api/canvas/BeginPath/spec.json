@@ -14,7 +14,7 @@
     "icon": "edit-3",
     "description": "starts a new path by emptying the list of sub-paths",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/beginPath",
-    "complexity": 1.3310672437453817,
+    "complexity": 1.3362780312591012,
     "tags": [
       "platform",
       "api",

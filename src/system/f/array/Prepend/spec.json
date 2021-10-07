@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "chevrons-left",
     "description": "prepend element `b` to `a`",
-    "complexity": 1.3300960624934024,
+    "complexity": 1.335384914086011,
     "tags": [
       "f",
       "array"

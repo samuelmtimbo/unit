@@ -5,14 +5,17 @@
   "metadata": {
     "icon": "table",
     "description": "persist data on current session storage",
-    "complexity": 1.3025229599915549,
+    "complexity": 10.308766139209785,
     "tags": [
       "platform",
       "api",
       "storage"
+    ],
+    "globals": [
+      "SessionStorage"
     ]
   },
   "id": "dc513ed0-09f4-11eb-a54a-7f4d4e253ef5",
   "base": true,
-  "type": "`U`"
+  "type": "`U`&`V`&`J`"
 }

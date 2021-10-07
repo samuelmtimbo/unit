@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "link",
     "description": "Peer to Peer (P2P) Receiver",
-    "complexity": 9.240895175762693,
+    "complexity": 8.452325016988642,
     "tags": [
       "ioun.it",
       "peer"

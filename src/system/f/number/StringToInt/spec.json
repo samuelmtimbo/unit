@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "convert a number into an integer",
-    "complexity": 1.3378866251451493,
+    "complexity": 1.3425492670614503,
     "tags": [
       "f",
       "number"

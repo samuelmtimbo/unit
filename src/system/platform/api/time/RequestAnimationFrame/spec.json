@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "timer",
     "description": "output `a` in the next animation frame",
-    "complexity": 1.34196136387628,
+    "complexity": 1.3462964760702845,
     "tags": [
       "platform",
       "api",

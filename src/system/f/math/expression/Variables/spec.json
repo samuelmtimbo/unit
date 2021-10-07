@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "omega",
     "description": "list expression's unknown variable names",
-    "complexity": 1.9607938351103136,
+    "complexity": 1.9353460829045723,
     "tags": [
       "f",
       "math",

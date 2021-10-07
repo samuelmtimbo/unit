@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "info",
     "description": "output a random uuid",
-    "complexity": 1.3339174495935817,
+    "complexity": 1.338899136006213,
     "tags": [
       "f",
       "id"

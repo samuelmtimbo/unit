@@ -74,17 +74,4 @@ export default class SessionStorage extends Primitive<I, O> implements V, J {
   deletePath(path: string[], name: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
-
-  subscribe(
-    path: string[],
-    name: any,
-    listener: (
-      type: ObjectUpdateType,
-      path: string[],
-      key: string,
-      data: any
-    ) => void
-  ): Unlisten {
-    throw new Error('Method not implemented.')
-  }
 }

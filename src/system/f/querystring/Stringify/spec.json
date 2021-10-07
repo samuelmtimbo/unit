@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "string",
     "description": "produces a URL query string from a given obj",
-    "complexity": 1.3319750870896232,
+    "complexity": 1.3371517328414717,
     "tags": [
       "f",
       "querystring"

@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "circle",
     "description": "reference a unit inside `unit`",
-    "complexity": 1.2661881135859812,
+    "complexity": 1.2770604795650908,
     "tags": [
       "platform",
       "meta"

@@ -9,7 +9,7 @@
   "metadata": {
     "icon": "wave-square",
     "description": "vibrate following period `pattern`",
-    "complexity": 1.332186213448749,
+    "complexity": 1.3373070575672266,
     "tags": [
       "platform",
       "api",

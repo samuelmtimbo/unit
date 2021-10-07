@@ -23,7 +23,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "set value at given key",
-    "complexity": 1.3339385622294944,
+    "complexity": 1.3386855645083002,
     "tags": [
       "f",
       "object"

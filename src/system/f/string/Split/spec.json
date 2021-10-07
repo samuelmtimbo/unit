@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "split-text",
     "description": "output an array of strings by separating the string into substrings, using the specified separator",
-    "complexity": 1.3329251557056898,
+    "complexity": 1.3379866032424037,
     "tags": [
       "f",
       "string"

@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "circle",
     "description": "remote call `unit` `method` with `data`",
-    "complexity": 1.3342763644040958,
+    "complexity": 1.339229201048442,
     "tags": [
       "f",
       "meta"

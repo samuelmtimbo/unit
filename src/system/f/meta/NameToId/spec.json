@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "circle",
     "description": "unit system `id` from `name`",
-    "complexity": 1.3329251557056898,
+    "complexity": 1.3379866032424037,
     "tags": [
       "f",
       "meta"

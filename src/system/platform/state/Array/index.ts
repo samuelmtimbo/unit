@@ -1,17 +1,17 @@
-import { Unit } from '../../../../Class/Unit'
+import { $ } from '../../../../Class/$'
+import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { Config } from '../../../../Class/Unit/Config'
-import { J } from '../../../../interface/J'
+import { A } from '../../../../interface/A'
 import { V } from '../../../../interface/V'
-import { ObjectUpdateType } from '../../../../Object'
-import { Unlisten } from '../../../../Unlisten'
 
 export interface I<T> {
-  init: object
+  init: any[]
 }
 
 export interface O<T> {}
 
-export default class Array<T> extends Unit<I<T>, O<T>> implements V, J {
+export default class Array<T> extends Functional<I<T>, O<T>> {
   constructor(config?: Config) {
     super(
       {
@@ -21,7 +21,7 @@ export default class Array<T> extends Unit<I<T>, O<T>> implements V, J {
       config,
       {
         output: {
-          obj: {
+          arr: {
             ref: true,
           },
         },
@@ -29,48 +29,45 @@ export default class Array<T> extends Unit<I<T>, O<T>> implements V, J {
     )
   }
 
-  get(name: string): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
+  f({ init }: I<T>, done: Done<O<T>>): void {
+    const arr = new (class __Object extends $ implements V, A {
+      _: string[] = ['J']
 
-  set(name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
+      private _arr = init
 
-  delete(name: string): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
+      async append(a: any): Promise<void> {
+        this._arr.push(a)
+        return
+      }
 
-  setPath(path: string[], name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
+      async put(i: number, data: any): Promise<void> {
+        this._arr[i] = data
+        return
+      }
 
-  getPath(path: string[], name: string): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
+      async at(i: number): Promise<any> {
+        return this._arr[i]
+      }
 
-  deletePath(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
+      async length(): Promise<number> {
+        return this._arr.length
+      }
 
-  subscribe(
-    path: string[],
-    name: any,
-    listener: (
-      type: ObjectUpdateType,
-      path: string[],
-      key: string,
-      data: any
-    ) => void
-  ): Unlisten {
-    throw new Error('Method not implemented.')
-  }
+      async indexOf(a: any): Promise<number> {
+        return this._arr.indexOf(a)
+      }
 
-  read(): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
+      async read(): Promise<any> {
+        return this._arr
+      }
 
-  write(data: any): Promise<void> {
-    throw new Error('Method not implemented.')
+      async write(data: any): Promise<void> {
+        this._arr = data
+      }
+    })()
+
+    done({
+      arr,
+    })
   }
 }

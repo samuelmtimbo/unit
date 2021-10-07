@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "circle",
     "description": "identity operator",
-    "complexity": 1.3303494141243535,
+    "complexity": 1.3356179011746432,
     "tags": [
       "f",
       "math"

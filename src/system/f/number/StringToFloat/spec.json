@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "convert a string into a float",
-    "complexity": 1.3374854850628102,
+    "complexity": 1.3421803708377826,
     "tags": [
       "f",
       "number"

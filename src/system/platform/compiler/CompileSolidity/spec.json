@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "ethereum",
     "description": "compile solidity code to binary",
-    "complexity": 1.338161089412013,
+    "complexity": 1.3619260265993594,
     "tags": [
       "platform",
       "api",

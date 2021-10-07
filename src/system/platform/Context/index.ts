@@ -43,19 +43,6 @@ export default class _Context extends Primitive<I, J> implements J {
     )
   }
 
-  subscribe(
-    path: string[],
-    name: any,
-    listener: (
-      type: ObjectUpdateType,
-      path: string[],
-      key: string,
-      data: any
-    ) => void
-  ): Unlisten {
-    throw new Error('Method not implemented.')
-  }
-
   public onRefInputData(name: string, data: U) {
     // if (name === 'element') {
     this._setup()

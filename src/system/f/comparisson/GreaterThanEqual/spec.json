@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "greater-than-equal",
     "description": "greater than equal operator",
-    "complexity": 1.3314683838277208,
+    "complexity": 1.3366469274827686,
     "tags": [
       "f",
       "comparisson"

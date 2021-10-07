@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "regex",
     "description": "check if `regex` match `str`",
-    "complexity": 1.3304972025757416,
+    "complexity": 1.3357538103096787,
     "tags": [
       "f",
       "string"

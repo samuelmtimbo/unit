@@ -20,7 +20,7 @@
     "icon": "edit-3",
     "description": "add a translation to the current transformation matrix",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/translate",
-    "complexity": 1.3315317217354588,
+    "complexity": 1.3367051742549267,
     "tags": [
       "platform",
       "api",

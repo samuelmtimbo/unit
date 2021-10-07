@@ -14,7 +14,7 @@
     "icon": "ruler",
     "description": "convert string to upper case",
     "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase",
-    "complexity": 1.3304338646680038,
+    "complexity": 1.3356955635375207,
     "tags": [
       "f",
       "string"

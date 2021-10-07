@@ -1,4 +1,6 @@
-import { Unit } from '../../../../Class/Unit'
+import { $ } from '../../../../Class/$'
+import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { Config } from '../../../../Class/Unit/Config'
 import { J } from '../../../../interface/J'
 import { V } from '../../../../interface/V'
@@ -11,7 +13,7 @@ export interface I<T> {
 
 export interface O<T> {}
 
-export default class _Object<T> extends Unit<I<T>, O<T>> implements V, J {
+export default class _Object<T> extends Functional<I<T>, O<T>> {
   constructor(config?: Config) {
     super(
       {
@@ -29,48 +31,51 @@ export default class _Object<T> extends Unit<I<T>, O<T>> implements V, J {
     )
   }
 
-  get(name: string): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
+  f({ init }: I<T>, done: Done<O<T>>): void {
+    const obj = new (class __Object extends $ implements J, V {
+      _: string[] = ['J']
 
-  set(name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
+      private _obj = init
 
-  delete(name: string): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
+      async get(name: string): Promise<any> {
+        if (this._obj.hasOwnProperty(name)) {
+          return this._obj[name]
+        }
+      }
 
-  setPath(path: string[], name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
+      async set(name: string, data: any): Promise<void> {
+        this._obj[name] = data
+        return
+      }
 
-  getPath(path: string[], name: string): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
+      async delete(name: string): Promise<any> {
+        delete this._obj[name]
+        return
+      }
 
-  deletePath(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
+      async setPath(path: string[], name: string, data: any): Promise<void> {
+        throw new Error('Method not implemented.')
+      }
 
-  subscribe(
-    path: string[],
-    name: any,
-    listener: (
-      type: ObjectUpdateType,
-      path: string[],
-      key: string,
-      data: any
-    ) => void
-  ): Unlisten {
-    throw new Error('Method not implemented.')
-  }
+      async getPath(path: string[], name: string): Promise<any> {
+        throw new Error('Method not implemented.')
+      }
 
-  read(): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
+      async deletePath(path: string[], name: string): Promise<void> {
+        throw new Error('Method not implemented.')
+      }
 
-  write(data: any): Promise<void> {
-    throw new Error('Method not implemented.')
+      async read(): Promise<any> {
+        return this._obj
+      }
+
+      async write(data: any): Promise<void> {
+        this._obj = data
+      }
+    })()
+
+    done({
+      obj,
+    })
   }
 }

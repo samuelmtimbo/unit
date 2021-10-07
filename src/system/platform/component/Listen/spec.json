@@ -21,7 +21,7 @@
   "metadata": {
     "icon": "circle",
     "description": "listen to `unit` `event`",
-    "complexity": 1.2856539638973925,
+    "complexity": 1.2950393165712066,
     "tags": [
       "platform",
       "component"

@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "minus",
     "description": "subtraction arithmetic operator",
-    "complexity": 1.332714029346564,
+    "complexity": 1.33779244733521,
     "tags": [
       "f",
       "arithmetic"

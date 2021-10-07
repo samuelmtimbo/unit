@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "file-output",
     "description": "streams audio from a source url",
-    "complexity": 1.264330201625673,
+    "complexity": 1.275351907581788,
     "tags": [
       "platform",
       "api",

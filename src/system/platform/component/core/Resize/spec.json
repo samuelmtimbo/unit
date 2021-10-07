@@ -9,7 +9,7 @@
   "metadata": {
     "icon": "expand",
     "description": "all corner resize handlers",
-    "complexity": 3.7144727119180834,
+    "complexity": 3.2201727987574023,
     "tags": [
       "platform",
       "component",

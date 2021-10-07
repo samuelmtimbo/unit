@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "plus",
     "description": "add `a` and `b`",
-    "complexity": 1.3300960624934024,
+    "complexity": 1.335384914086011,
     "tags": [
       "f",
       "arithmetic"

@@ -14,7 +14,7 @@
   "metadata": {
     "icon": "square",
     "description": "remove `parent` child element `at` index",
-    "complexity": 1.3346141665786972,
+    "complexity": 1.3395398504999514,
     "tags": [
       "platform",
       "component"

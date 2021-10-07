@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "list-ordered",
     "description": "output `a` on `0`, then `1`",
-    "complexity": 1.2891586614588832,
+    "complexity": 1.2956411998835065,
     "tags": [
       "f",
       "control"

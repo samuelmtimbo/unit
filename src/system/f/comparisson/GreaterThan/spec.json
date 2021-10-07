@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "greater-than",
     "description": "greater than operator",
-    "complexity": 1.3308138921144306,
+    "complexity": 1.336045044170469,
     "tags": [
       "f",
       "comparisson"

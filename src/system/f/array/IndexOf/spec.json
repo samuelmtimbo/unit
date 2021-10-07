@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "info-square",
     "description": "find index `i` of the element `a` on array `a[]` or -1 if not found",
-    "complexity": 1.3306027657553046,
+    "complexity": 1.3358508882632754,
     "tags": [
       "f",
       "array"

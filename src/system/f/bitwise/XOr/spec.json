@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "binary",
     "description": "bitwise XOR operator",
-    "complexity": 1.3299693866779267,
+    "complexity": 1.335268420541695,
     "tags": [
       "f",
       "bitwise"

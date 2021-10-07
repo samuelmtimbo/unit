@@ -2,7 +2,7 @@
   "name": "delete",
   "inputs": {
     "unit": {
-      "type": "<T>",
+      "type": "`J`",
       "ref": true
     },
     "name": {
@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "delete `obj` property `name`",
-    "complexity": 1.3478940145677187,
+    "complexity": 1.3517522570624212,
     "tags": [
       "platform"
     ]

@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "set current fillStyle",
-    "complexity": 1.3318061860023225,
+    "complexity": 1.3369575769342783,
     "tags": [
       "platform",
       "api",

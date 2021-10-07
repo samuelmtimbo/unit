@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "info-square",
     "description": "fill array `a` from `start` to `end` with `value`",
-    "complexity": 1.330940567929906,
+    "complexity": 1.336161537714785,
     "tags": [
       "f",
       "array"

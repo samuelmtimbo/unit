@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "chevrons-left",
     "description": "set element of `a` at position `i` to `v`",
-    "complexity": 1.332545128259263,
+    "complexity": 1.3375982914280167,
     "tags": [
       "f",
       "array"

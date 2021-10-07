@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "converts a string into a JSON",
-    "complexity": 1.3323762271719624,
+    "complexity": 1.3374817978837006,
     "tags": [
       "f",
       "JSON"

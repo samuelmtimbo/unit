@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "link",
     "description": "remote peer pod",
-    "complexity": 9.240325134593053,
+    "complexity": 8.4517813804485,
     "tags": [
       "ioun.it",
       "peer"

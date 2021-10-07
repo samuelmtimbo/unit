@@ -5,7 +5,7 @@
   "metadata": {
     "icon": "square",
     "description": "context of the connected `element`",
-    "complexity": 3.9330940567929904,
+    "complexity": 3.7851859042811373,
     "tags": [
       "platform",
       "component"

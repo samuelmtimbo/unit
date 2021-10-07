@@ -11,7 +11,7 @@ export type I = {}
 
 export type O = {}
 
-export default class LocalStorage
+export default class _LocalStorage
   extends Unit<I, O>
   implements J, V<Dict<string>>
 {
@@ -74,19 +74,6 @@ export default class LocalStorage
   }
 
   deletePath(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-
-  subscribe(
-    path: string[],
-    name: any,
-    listener: (
-      type: ObjectUpdateType,
-      path: string[],
-      key: string,
-      data: any
-    ) => void
-  ): Unlisten {
     throw new Error('Method not implemented.')
   }
 }

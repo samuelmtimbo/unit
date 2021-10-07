@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "server",
     "description": "asynchronously control a graph",
-    "complexity": 9.240557373588093,
+    "complexity": 8.451412484224832,
     "tags": [
       "platform",
       "component",

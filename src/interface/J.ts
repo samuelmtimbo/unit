@@ -13,15 +13,4 @@ export interface J {
   getPath(path: string[], name: string): Promise<any>
 
   deletePath(path: string[], name: string): Promise<void>
-
-  subscribe(
-    path: string[],
-    name,
-    listener: (
-      type: ObjectUpdateType,
-      path: string[],
-      key: string,
-      data: any
-    ) => void
-  ): Unlisten
 }

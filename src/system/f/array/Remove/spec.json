@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "scissors",
     "description": "remove `count` elements from array `a` starting at `start`",
-    "complexity": 1.334107463316795,
+    "complexity": 1.339073876322687,
     "tags": [
       "f",
       "array"

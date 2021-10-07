@@ -2,7 +2,7 @@
   "name": "get",
   "inputs": {
     "unit": {
-      "type": "<T>",
+      "type": "`J`",
       "ref": true
     },
     "name": {
@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "object-get",
     "description": "get `unit` property `name`",
-    "complexity": 1.3476406629367677,
+    "complexity": 1.351519269973789,
     "tags": [
       "platform"
     ]

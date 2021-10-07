@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "match a string against a regular expression",
-    "complexity": 1.3305394278475668,
+    "complexity": 1.3357926414911174,
     "tags": [
       "f",
       "string"

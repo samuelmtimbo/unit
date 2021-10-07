@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "square",
     "description": "visualize a pod",
-    "complexity": 6.465090256518526,
+    "complexity": 3.840384428696243,
     "tags": [
       "platform",
       "component"

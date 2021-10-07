@@ -194,6 +194,7 @@ export type NodeMetadataSpec = {
   tags?: string[]
   description?: string | None
   link?: string | None
+  globals?: string[]
   editor?: {
     on?: boolean
     lit?: boolean

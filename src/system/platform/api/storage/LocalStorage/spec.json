@@ -5,14 +5,17 @@
   "metadata": {
     "icon": "table",
     "description": "persist data on local storage",
-    "complexity": 1.0467856011823076,
+    "complexity": 10.041355208232211,
     "tags": [
       "platform",
       "api",
       "storage"
+    ],
+    "globals": [
+      "LocalStorage"
     ]
   },
   "id": "c8f3faa8-09f4-11eb-a3b1-477aa3ec4193",
   "base": true,
-  "type": "`U`"
+  "type": "`U`&`V`&`J`"
 }

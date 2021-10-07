@@ -18,7 +18,7 @@
   "metadata": {
     "icon": "history",
     "metadata": "retrieve information about visits to a URL",
-    "complexity": 1.3617861289982054,
+    "complexity": 1.3645277157557518,
     "tags": [
       "platform",
       "chrome",
