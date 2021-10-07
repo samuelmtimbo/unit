@@ -111,32 +111,196 @@
 
 ## assert
 
+### Assert
+
+### AssertEqual
+
+### Validate
+
+
 ## common
+
+### Alphabet
+
+### ArrayBitwiseAnd
+
+### ArrayInteresction
+
+### CompareLT
+
+### CompateLTE
+
+### ConstantOne
+
+### ConstantTrueFalse
+
+### Decrement
+
+### Duplicate
+
+### FizzBuzz
+
+### ForEachElementReverse
+
+### GreaterThan0
+
+### Half
+
+### HasLength
+
+### HasLengthThan
+
+### HasntLength
+
+### If50Chance
+
+### IfElselsFirst
+
+### IfElseLessThanEqual
+
+### IfFalse
+
+### IfTrue
+
+### Increment
+
+### IntegerHalf
+
+### IsEmpty
+
+### KeysEqual
+
+### LastIndex
+
+### LengthEquals
+
+### LengthGreaterThan
+
+### LengthLessThan
+
+### LengthLessThanOr
+
+### LessThanLength
+
+### LessThanOr
+
+### LoopAdd
+
+### LoopDecrement
+
+### LoopForever
+
+### LoopIncrement
+
+### LoopIndexDesc
+
+### LoopRepeat
+
+### LoopSubtract
+
+### LoremIpsum
+
+### MaxLength
+
+### MergeSort
+
+### MultipleOf
+
+### NArrayBuilder
+
+### NArrayBuilderFrom
+
+### Nor
+
+### NotAnd
+
+### One
+
+### Pick50Chance
+
+### PickAssoc
+
+### PickBranch
+
+### PickForEach
+
+### PriorityHead
+
+### PriorityMerge
+
+### PriorityMergeFrom
+
+### RandomBit
+
+### RandomBitArray
+
+### RandomInArray
+
+### RandomNeutral
+
+### RandomNeutralBetween
+
+### RandomNEutralLTE
+
+### RangeArray6
+
+### RecPriorityMerge
+
+### RecPriorityMergeFrom
+
+### RepeatN
+
+### SumN
+
+### SumNFrom
+
+### Switch
+
+### TrueFalse
+
+### TrueOrFalse
+
+### Zero
+
 
 ## control
 
+
 ## Empty
+
 
 ## graph
 
+
 ## iterate
+
 
 ## logic
 
+
 ## loop
+
 
 ## math
 
+
 ## meta
+
 
 ## method
 
+
 ## number
+
 
 ## object
 
+
 ## relation
+
 
 ## string
 
+
 ## time
+
