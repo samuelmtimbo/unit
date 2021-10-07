@@ -1,4 +1,32 @@
-# Dao of Open Source Incubation
+# Manifesto
+
+Can we go with the factory model head on?
+
+I had an insight on the bathroom
+
+I think that could be expanded into a "Sub Chain"
+
+Where they can build a gigantic "graph" collaboratively
+
+With perfect reusability
+
+Governance, Isolated Finantial System
+
+So one can join into one of those contracts
+
+Such "nations" would also be able to transact with other nations and with the exterior world, programmatically
+
+All through the Shared Graph
+
+The more graphs are defined in the global world system, more powerful it will become, like a "more advanced society" with more complex machines...
+
+Which all nations have access to
+
+Constitution
+
+The revolutions have merged
+
+# Dao of Open Source
 
 ## Built-in
 
@@ -44,4 +72,4 @@ That could be one Victor's entrepreneurial pursuit, some badass Open Distributed
 
 ## Movement
 
-We will continuously grow just by following a series of "first mover" moves
+We will continuously grow just by following a series 
