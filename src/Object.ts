@@ -11,7 +11,20 @@ export type ObjectEmitterNode = {
   children: Dict<ObjectEmitterNode>
 }
 
-export function $Object<T extends object>(obj: T): J {
+export function $Object<T extends object>(
+  obj: T
+): J & {
+  subscribe: (
+    path: string[],
+    key: string,
+    listener: (
+      type: ObjectUpdateType,
+      path: string[],
+      key: string,
+      data: any
+    ) => void
+  ) => Unlisten
+} {
   const _node: ObjectEmitterNode = {
     emitter: new EventEmitter2(),
     children: {},
