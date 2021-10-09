@@ -10555,7 +10555,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
             this._hide_search()
           } else if (mode === 'change') {
             // this._commit_search_unit()
-            this._blue_click_unit(search_unit_id)
+            this._on_unit_blue_click(search_unit_id)
           } else if (mode === 'remove') {
             // TODO
           } else if (mode === 'add') {
@@ -14303,13 +14303,13 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
               this._compatible_node_id[pin_node_id] = true
             }
           }
-          
+
           for (const datum_node_id in this._data_node) {
             if (this._is_datum_all_pin_match(datum_node_id, display_node_id)) {
               this._compatible_node_id[datum_node_id] = true
             }
           }
-          
+
           if (display_node_id.length === 1) {
             const pin_node_id = display_node_id[0]
             for (const internal_node_id in this._exposed_int_unplugged) {
@@ -14507,138 +14507,195 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     selection.setProp('strokeDasharray', dasharray)
   }
 
-  private _on_node_click = (node_id: string, event: IOPointerEvent) => {
-    // log('Graph', '_on_node_click')
-    if (this._resize_node_id_pointer_id[node_id]) {
-      return
-    }
+  private _on_node_none_click = (
+    node_id: string,
+    event: IOPointerEvent
+  ): void => {
+    console.log('Graph', '_on_none_mode_click')
+    if (this._compatible_node_id[node_id]) {
+      const display_node_id = this._get_display_node_id()
 
-    if (this._mode === 'none') {
-      if (this._compatible_node_id[node_id]) {
-        const display_node_id = this._get_display_node_id()
+      const display_node_count = display_node_id.length
 
-        const display_node_count = display_node_id.length
+      if (display_node_count > 0) {
+        const {
+          all_pin,
+          all_pin_ref,
+          all_pin_ref_unit,
+          all_data,
+          all_unit,
+          all_ext_pin,
+        } = this._is_all_node(display_node_id)
 
-        if (display_node_count > 0) {
-          const {
-            all_pin,
-            all_pin_ref,
-            all_pin_ref_unit,
-            all_data,
-            all_unit,
-            all_ext_pin,
-          } = this._is_all_node(display_node_id)
-
-          if (all_pin) {
-            if (this._is_pin_node_id(node_id)) {
-              const merge_node_id = this._merge_pin_pin(
-                display_node_id[0],
-                node_id
-              )
-              for (let i = 1; i < display_node_count; i++) {
-                this._merge_link_pin_merge_pin(
-                  display_node_id[i],
-                  merge_node_id
-                )
-              }
-              const merge_anchor_node_id =
-                this._get_merge_anchor_node_id(merge_node_id)
-              this.select_node(merge_anchor_node_id)
-              this._cancel_click = true
-            } else if (this._is_datum_node_id(node_id)) {
-              for (let i = 1; i < display_node_count; i++) {
-                const clone_datum_node_id = this._duplicate_datum(node_id)
-                this._move_datum_to_pin(clone_datum_node_id, display_node_id[i])
-              }
-              this._move_datum_to_pin(node_id, display_node_id[0])
-            } else if (this._is_unit_node_id(node_id)) {
-              for (let i = 0; i < display_node_count; i++) {
-                this._merge_pin_unit(display_node_id[i], node_id)
-              }
-              this.select_node(node_id)
-            } else if (this._is_internal_pin_node_id(node_id)) {
-              const { type, id, subPinId } = segmentInternalNodeId(node_id)
-              const pin_node_id = display_node_id[0]
-              this.__plug_exposed_pin_to(type, id, subPinId, pin_node_id)
+        if (all_pin) {
+          if (this._is_pin_node_id(node_id)) {
+            const merge_node_id = this._merge_pin_pin(
+              display_node_id[0],
+              node_id
+            )
+            for (let i = 1; i < display_node_count; i++) {
+              this._merge_link_pin_merge_pin(display_node_id[i], merge_node_id)
             }
-          } else if (all_data) {
+            const merge_anchor_node_id =
+              this._get_merge_anchor_node_id(merge_node_id)
+            this.select_node(merge_anchor_node_id)
+            this._cancel_click = true
+          } else if (this._is_datum_node_id(node_id)) {
+            for (let i = 1; i < display_node_count; i++) {
+              const clone_datum_node_id = this._duplicate_datum(node_id)
+              this._move_datum_to_pin(clone_datum_node_id, display_node_id[i])
+            }
+            this._move_datum_to_pin(node_id, display_node_id[0])
+          } else if (this._is_unit_node_id(node_id)) {
             for (let i = 0; i < display_node_count; i++) {
-              this._move_datum_to_pin(display_node_id[i], node_id)
+              this._merge_pin_unit(display_node_id[i], node_id)
             }
-            return
-          } else if (all_unit) {
-            const unit_id = display_node_id[0]
-            if (this._is_pin_node_id(node_id)) {
-              this._merge_pin_unit(node_id, unit_id)
-              this.select_node(unit_id)
-              this._cancel_click = true
-            }
-          } else if (all_ext_pin) {
-            if (this._is_pin_node_id(node_id)) {
-              const internal_node_id = display_node_id[0]
-              const { type, id, subPinId } =
-                segmentInternalNodeId(internal_node_id)
-              this.__plug_exposed_pin_to(type, id, subPinId, node_id)
-            }
+            this.select_node(node_id)
+          } else if (this._is_internal_pin_node_id(node_id)) {
+            const { type, id, subPinId } = segmentInternalNodeId(node_id)
+            const pin_node_id = display_node_id[0]
+            this.__plug_exposed_pin_to(type, id, subPinId, pin_node_id)
+          }
+        } else if (all_data) {
+          for (let i = 0; i < display_node_count; i++) {
+            this._move_datum_to_pin(display_node_id[i], node_id)
+          }
+          return
+        } else if (all_unit) {
+          const unit_id = display_node_id[0]
+          if (this._is_pin_node_id(node_id)) {
+            this._merge_pin_unit(node_id, unit_id)
+            this.select_node(unit_id)
+            this._cancel_click = true
+          }
+        } else if (all_ext_pin) {
+          if (this._is_pin_node_id(node_id)) {
+            const internal_node_id = display_node_id[0]
+            const { type, id, subPinId } =
+              segmentInternalNodeId(internal_node_id)
+            this.__plug_exposed_pin_to(type, id, subPinId, node_id)
           }
         }
-      } else {
-        if (this._core_component_unlocked_count > 0) {
-          if (this._is_unit_node_id(node_id)) {
-            if (this._is_unit_component(node_id)) {
-              this._lock_all_component_but(node_id)
-              this.select_node(node_id)
-              this._unlock_sub_component(node_id)
-            } else {
-              this.select_node(node_id)
-              this._deselect_all_but(node_id)
-              this._lock_all_component_but(node_id)
-            }
+      }
+    } else {
+      if (this._core_component_unlocked_count > 0) {
+        if (this._is_unit_node_id(node_id)) {
+          if (this._is_unit_component(node_id)) {
+            this._lock_all_component_but(node_id)
+            this.select_node(node_id)
+            this._unlock_sub_component(node_id)
           } else {
             this.select_node(node_id)
             this._deselect_all_but(node_id)
             this._lock_all_component_but(node_id)
           }
         } else {
-          if (this._selected_node_count === 1) {
-            this.select_node(node_id)
-            this._deselect_all_but(node_id)
-          } else {
-            this.select_node(node_id)
-          }
+          this.select_node(node_id)
+          this._deselect_all_but(node_id)
+          this._lock_all_component_but(node_id)
         }
-      }
-    } else if (this._mode === 'multiselect') {
-      if (this._is_node_selectable(node_id)) {
-        if (this._selected_node_id[node_id]) {
-          this.deselect_node(node_id)
+      } else {
+        if (this._selected_node_count === 1) {
+          this.select_node(node_id)
+          this._deselect_all_but(node_id)
         } else {
           this.select_node(node_id)
         }
       }
-    } else if (this._mode === 'info') {
-      this._info_node(node_id)
-      this._deselect_all()
-      this.select_node(node_id)
-    } else if (this._mode === 'add') {
-      if (this._is_node_duplicatable(node_id)) {
-        this._green_click_node(node_id)
+    }
+  }
+
+  private _on_node_multiselect_click = (
+    node_id: string,
+    event: IOPointerEvent
+  ): void => {
+    // console.log('Graph', '_on_node_multiselect_click', node_id)
+    if (this._is_node_selectable(node_id)) {
+      if (this._selected_node_id[node_id]) {
+        this.deselect_node(node_id)
+      } else {
+        this.select_node(node_id)
       }
+    }
+  }
+
+  private _on_node_info_click = (
+    node_id: string,
+    event: IOPointerEvent
+  ): void => {
+    // console.log('Graph', '_on_node_info_click', node_id)
+    this._info_node(node_id)
+    this._deselect_all()
+    this.select_node(node_id)
+  }
+
+  private _on_node_green_click = (
+    node_id: string,
+    event: IOPointerEvent
+  ): void => {
+    // console.log('Graph', '_on_node_green_click', node_id)
+    if (this._is_node_duplicatable(node_id)) {
+      this._green_click_node(node_id)
+    }
+  }
+
+  private _on_node_blue_click = (
+    node_id: string,
+    event: IOPointerEvent
+  ): void => {
+    // console.log('Graph', '_on_node_blue_click', node_id)
+    if (this._is_node_changeable(node_id)) {
+      if (this._is_unit_node_id(node_id)) {
+        this._on_unit_blue_click(node_id)
+      } else if (this._is_link_pin_node_id(node_id)) {
+        this._on_link_pin_blue_click(node_id)
+      } else if (this._is_datum_node_id(node_id)) {
+        this._on_datum_blue_click(node_id)
+      } else if (this._is_exposed_pin_node_id(node_id)) {
+        this._on_exposed_blue_click(node_id)
+      }
+    }
+  }
+
+  private _on_link_pin_blue_click = (pin_node_id: string): void => {
+    this._toggle_link_pin_constant(pin_node_id)
+  }
+
+  private _on_datum_blue_click = (datum_node_id: string): void => {
+    this._change_datum(datum_node_id)
+  }
+
+  private _on_exposed_blue_click = (exp_node_id: string): void => {
+    this._toggle_exposed_pin_functional(exp_node_id)
+  }
+
+  private _on_node_click = (node_id: string, event: IOPointerEvent): void => {
+    // log('Graph', '_on_node_click')
+    if (this._resize_node_id_pointer_id[node_id]) {
+      return
+    }
+
+    if (this._mode === 'none') {
+      this._on_node_none_click(node_id, event)
+    } else if (this._mode === 'multiselect') {
+      this._on_node_multiselect_click(node_id, event)
+    } else if (this._mode === 'info') {
+      this._on_node_info_click(node_id, event)
+    } else if (this._mode === 'add') {
+      this._on_node_green_click(node_id, event)
     } else if (this._mode === 'remove') {
       this._on_node_red_click(node_id, event)
     } else if (this._mode === 'change') {
-      if (this._is_node_changeable(node_id)) {
-        this._change_node(node_id)
-      }
+      this._on_node_blue_click(node_id, event)
     } else if (this._mode === 'data') {
-      this._yellow_click_node(node_id)
+      this._on_node_yellow_click(node_id)
     }
   }
 
   private _on_node_red_click = (node_id: string, event: IOPointerEvent) => {
     // console.log('Graph', '_on_node_red_click', node_id)
-    this._cancel_click = true
     if (this._is_node_removable(node_id)) {
+      this._cancel_click = true
       // AD HOC let system finish pointer event cycle (Bot on Mobile)
       setTimeout(() => {
         const anchor_node_id = this._get_node_anchor_node_id(node_id)
@@ -14983,7 +15040,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._set_link_pin_d(pin_node_id, LINK_DISTANCE_IGNORED)
       this._set_link_pin_opacity(pin_node_id, '0')
       this._set_link_pin_pointer_events(pin_node_id, 'none')
-      
+
       if (pin_datum_tree) {
         this._dec_unit_pin_active(unitId)
       }
@@ -14997,7 +15054,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       if (pin_datum_tree) {
         this._inc_unit_pin_active(unitId)
       }
-      
+
       if (pin_node_id) {
         this._refresh_datum_visible(datum_node_id)
       }
@@ -15294,7 +15351,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }, CLICK_TIMEOUT)
   }
 
-  private _yellow_click_node = (node_id: string): void => {
+  private _on_node_yellow_click = (node_id: string): void => {
     if (this._is_pin_node_id(node_id)) {
       this._yellow_click_pin(node_id)
     } else if (this._is_unit_node_id(node_id)) {
@@ -15307,14 +15364,14 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _yellow_click_unit = (unit_id: string): void => {
-    this._yellow_click_unit_0(unit_id)
-
-    // this._temp_cancel_double_click()
-    // const spec_id = this._get_unit_spec_id(unit_id)
-    // const position = this._get_node_position(unit_id)
-    // this._remove_unit(unit_id)
-    // const datum_id = this._new_datum_id()
-    // this._add_datum(datum_id, spec_id, position)
+    this._for_each_unit_input(unit_id, (input_node_id: string) => {
+      if (!this._is_pin_ref(input_node_id)) {
+        const datum_node_id = this._pin_to_datum[input_node_id]
+        if (!datum_node_id) {
+          this._yellow_click_pin(input_node_id)
+        }
+      }
+    })
   }
 
   private _yellow_click_class_literal = (datum_node_id: string): void => {
@@ -15410,20 +15467,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _yellow_click_unit_0 = (unit_id: string): void => {
-    this._for_each_unit_input(unit_id, (input_node_id: string) => {
-      if (!this._is_pin_ref(input_node_id)) {
-        const datum_node_id = this._pin_to_datum[input_node_id]
-        if (!datum_node_id) {
-          this._yellow_click_pin(input_node_id)
-        }
-      }
-    })
-  }
-
   private _spec_type_interface_cache: Dict<any> = {}
 
-  private _blue_click_unit = (unit_id: string): void => {
+  private _on_unit_blue_click = (unit_id: string): void => {
     const spec_id = this._get_unit_spec_id(unit_id)
 
     this._search_unit_id = unit_id
@@ -15556,14 +15602,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     const tree = this._datum_tree[datum_id]
     const value = tree.value
     const type = _getValueType(tree)
+    
     const pin_node_id = this._datum_to_pin[datum_node_id]
+    
     if (pin_node_id) {
-      const pin_type = this._get_pin_type(pin_node_id)
-      let next_value: string
-      do {
-        next_value = randomValueOfType(pin_type)
-      } while (value === next_value && value !== 'null')
-      this._set_pin_data(pin_node_id, next_value)
+      this._yellow_click_pin(pin_node_id)
     } else {
       let next_value: string
       do {
@@ -15580,18 +15623,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
         const datum = this._datum[datum_node_id]
         datum.setProp('data', next_tree)
       }
-    }
-  }
-
-  private _change_node = (node_id: string): void => {
-    if (this._is_unit_node_id(node_id)) {
-      this._blue_click_unit(node_id)
-    } else if (this._is_link_pin_node_id(node_id)) {
-      this._toggle_link_pin_constant(node_id)
-    } else if (this._is_datum_node_id(node_id)) {
-      this._change_datum(node_id)
-    } else if (this._is_exposed_pin_node_id(node_id)) {
-      this._toggle_exposed_pin_functional(node_id)
     }
   }
 
