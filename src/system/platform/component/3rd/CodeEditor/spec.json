@@ -1,0 +1,58 @@
+{
+  "name": "code editor",
+  "inputs": {
+    "value": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "description": "input text here"
+      }
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "config": {
+      "type": "{tab?:string}",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "lang": {
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "\"js\"",
+          "\"solidity\""
+        ]
+      }
+    },
+    "theme": {
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "\"dark\"",
+          "\"twilight\""
+        ]
+      },
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "map",
+    "description": "map",
+    "complexity": 3.649614694394595,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
+  },
+  "id": "bc3e443c-dbff-4961-9a7f-4b6d5bf91a1d",
+  "base": true,
+  "component": {
+    "defaultWidth": 420,
+    "defaultHeight": 300
+  },
+  "type": "`U`&`C`"
+}
