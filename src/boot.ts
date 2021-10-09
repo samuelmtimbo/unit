@@ -47,6 +47,10 @@ export interface System {
       callback: (event: PointerEvent, track: Point[]) => void
     ) => void
   }
+  $deps: {
+    $script: Dict<HTMLScriptElement>
+    $style: Dict<HTMLStyleElement>
+  }
 }
 
 export interface BootOpt {
@@ -103,6 +107,10 @@ export function boot(graph: GraphSpec, opt: BootOpt): System {
     $method: {
       showLongPress: undefined,
       captureGesture: undefined,
+    },
+    $deps: {
+      $script: {},
+      $style: {},
     },
   }
 

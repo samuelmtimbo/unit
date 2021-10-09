@@ -1,6 +1,6 @@
 import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
-import { loadStyle, loadStyles } from '../../../../../client/style'
+import { loadStyle } from '../../../../../client/style'
 import { Dict } from '../../../../../types/Dict'
 import {
   basePropHandler,
@@ -47,8 +47,6 @@ export default class CodeEditor extends Element<HTMLDivElement, Props> {
     applyStyle(div_el, { ...DEFAULT_STYLE, ...style })
 
     this._div_el = div_el
-
-    this._load()
 
     this._prop_handler = {
       ...basePropHandler(this._div_el, DEFAULT_STYLE),
@@ -121,7 +119,7 @@ export default class CodeEditor extends Element<HTMLDivElement, Props> {
     console.log('CodeEditor', '_load_theme', theme)
     const PRISM_CSS_URL = this._get_prism_theme_href(theme)
 
-    return await loadStyle({ href: PRISM_CSS_URL })
+    return await loadStyle(this.$system, { href: PRISM_CSS_URL })
   }
 
   private async _load_codejar(): Promise<any> {
@@ -140,5 +138,9 @@ export default class CodeEditor extends Element<HTMLDivElement, Props> {
 
   onPropChanged(prop: string, current: any): void {
     this._prop_handler[prop](current)
+  }
+
+  onMount() {
+    this._load()
   }
 }
