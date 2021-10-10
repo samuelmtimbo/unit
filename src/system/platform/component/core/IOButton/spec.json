@@ -1,0 +1,23 @@
+{
+  "name": "io button",
+  "private": true,
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "IO styled button",
+    "complexity": 3.217745849917484,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "edcdcbfa-8b4b-11eb-b0c0-3fb6815cd541",
+  "base": true,
+  "component": {
+    "defaultWidth": 210,
+    "defaultHeight": 180
+  },
+  "type": "`U`&`C`"
+}

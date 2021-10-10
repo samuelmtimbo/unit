@@ -1,0 +1,136 @@
+{
+  "name": "show",
+  "units": {
+    "call": {
+      "path": "f46af75e-af68-11ea-aa0e-37bf85a86c5e",
+      "input": {
+        "method": {
+          "data": "'show'",
+          "constant": true
+        }
+      },
+      "output": {
+        "data": {
+          "ignored": true
+        }
+      }
+    },
+    "tag": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'title'"
+        },
+        "v": {}
+      },
+      "output": {
+        "kv": {}
+      }
+    },
+    "tag0": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'opt'"
+        },
+        "v": {}
+      },
+      "output": {
+        "kv": {}
+      }
+    },
+    "zcnyhygbk": {
+      "path": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "ab": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "tag0": {
+        "output": {
+          "kv": true
+        }
+      },
+      "zcnyhygbk": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "tag": {
+        "output": {
+          "kv": true
+        }
+      },
+      "zcnyhygbk": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "zcnyhygbk": {
+        "output": {
+          "ab": true
+        }
+      },
+      "call": {
+        "input": {
+          "data": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "ntf": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "call",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    },
+    "title": {
+      "type": "string",
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      }
+    },
+    "opt": {
+      "type": "{icon?:string,body?:string}",
+      "pin": {
+        "0": {
+          "unitId": "tag0",
+          "pinId": "v"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "bell",
+    "description": "push `notification` to system tray",
+    "complexity": 8.468487955198672,
+    "tags": [
+      "platform",
+      "api",
+      "notification"
+    ]
+  },
+  "id": "5aea0bf0-0815-11eb-9304-5f90b5542620",
+  "type": "`U`&`G`"
+}

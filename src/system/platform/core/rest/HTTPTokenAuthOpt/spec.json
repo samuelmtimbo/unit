@@ -1,0 +1,86 @@
+{
+  "name": "HTTP token auth opt",
+  "units": {
+    "auxqbkphv": {
+      "path": "522a9858-02c2-487a-ac04-27d2f5ebe7c3"
+    },
+    "uidsobs": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'headers'"
+        }
+      }
+    },
+    "dedghul": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'Authorization'"
+        }
+      }
+    }
+  },
+  "merges": {
+    "ojyxw": {
+      "auxqbkphv": {
+        "output": {
+          "shglvpnwm": true
+        }
+      },
+      "dedghul": {
+        "input": {
+          "v": true
+        }
+      }
+    },
+    "dyawjmnjp": {
+      "dedghul": {
+        "output": {
+          "kv": true
+        }
+      },
+      "uidsobs": {
+        "input": {
+          "v": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "no description",
+    "complexity": 9.310873408594823,
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
+  },
+  "inputs": {
+    "kqmydk": {
+      "pin": {
+        "0": {
+          "unitId": "auxqbkphv",
+          "pinId": "tpbfwhrq"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "nkxeiczlc": {
+      "pin": {
+        "0": {
+          "unitId": "uidsobs",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "ba70dd41-d533-4f8f-b476-c76274141468",
+  "type": "`U`&`G`"
+}

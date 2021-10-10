@@ -1,0 +1,21 @@
+{
+  "name": "throw",
+  "inputs": {
+    "message": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "alert-circle",
+    "description": "throw message",
+    "complexity": 1.3350548490437821,
+    "tags": [
+      "f",
+      "control"
+    ]
+  },
+  "id": "99657eb7-fb94-474e-b03d-4b08c537c0a2",
+  "base": true,
+  "type": "`U`"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "append",
+  "inputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "b": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "chevrons-left",
+    "description": "append an element to an array",
+    "complexity": 1.3353072517231337,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "fa7721eb-1dd6-482e-8c7a-6da35b5f88bc",
+  "base": true,
+  "type": "`U`"
+}

@@ -1,0 +1,30 @@
+{
+  "name": "audio source",
+  "inputs": {
+    "src": {
+      "type": "string",
+      "metadata": {
+        "description": "the address or URL of the a media resource"
+      }
+    }
+  },
+  "outputs": {
+    "stream": {
+      "type": "<T>"
+    }
+  },
+  "metadata": {
+    "icon": "file-output",
+    "description": "streams audio from a source url",
+    "complexity": 1.275351907581788,
+    "tags": [
+      "platform",
+      "api",
+      "media",
+      "audio"
+    ]
+  },
+  "id": "5c13db99-0923-4b27-85e3-7a18dbfdd309",
+  "base": true,
+  "type": "`U`"
+}

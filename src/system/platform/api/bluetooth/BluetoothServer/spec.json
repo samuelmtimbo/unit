@@ -1,0 +1,23 @@
+{
+  "name": "bluetooth server",
+  "inputs": {
+    "device": {
+      "type": "`U`",
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "bluetooth",
+    "description": "remote GATT server",
+    "complexity": 1.288243859819435,
+    "tags": [
+      "platform",
+      "api",
+      "bluetooth"
+    ]
+  },
+  "id": "dd520754-e138-11ea-879e-3bd947893124",
+  "base": true,
+  "type": "`U`"
+}

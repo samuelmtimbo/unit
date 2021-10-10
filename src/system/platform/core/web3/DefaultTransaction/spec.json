@@ -1,0 +1,169 @@
+{
+  "name": "default transaction",
+  "type": "`U`&`G`",
+  "inputs": {
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "mergetransaction",
+          "pinId": "data"
+        }
+      },
+      "type": "string"
+    },
+    "to": {
+      "pin": {
+        "0": {
+          "unitId": "mergetransaction",
+          "pinId": "to"
+        }
+      },
+      "type": "string"
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "ethtowei",
+          "pinId": "eth"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "receipt": {
+      "pin": {
+        "0": {
+          "unitId": "transaction",
+          "pinId": "receipt"
+        }
+      },
+      "defaultIgnored": false
+    }
+  },
+  "units": {
+    "mergetransaction": {
+      "path": "eac9df20-9e2e-484d-a8de-bcf2e773f55a",
+      "input": {
+        "obj": {
+          "constant": true,
+          "data": "{}"
+        },
+        "to": {},
+        "from": {},
+        "data": {},
+        "value": {}
+      },
+      "output": {
+        "init": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -19,
+          "y": -3
+        }
+      }
+    },
+    "requestfirstaccount": {
+      "path": "7166c423-01d5-460d-81aa-7ee1d3b3fe57",
+      "input": {
+        "init": {
+          "constant": true,
+          "data": "{}"
+        }
+      },
+      "output": {
+        "acc": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -132,
+          "y": 16
+        }
+      }
+    },
+    "transaction": {
+      "path": "aea9fd23-8116-4c25-8f2e-059a43c974f5",
+      "input": {
+        "init": {},
+        "abort": {
+          "ignored": true
+        }
+      },
+      "output": {
+        "receipt": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 79,
+          "y": 48
+        }
+      }
+    },
+    "ethtowei": {
+      "path": "3619e3c5-db2b-4c6c-a13d-127f5e322fda",
+      "input": {
+        "eth": {}
+      },
+      "output": {
+        "wei": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 70,
+          "y": -63
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "requestfirstaccount": {
+        "output": {
+          "acc": true
+        }
+      },
+      "mergetransaction": {
+        "input": {
+          "from": true
+        }
+      }
+    },
+    "1": {
+      "transaction": {
+        "input": {
+          "init": true
+        }
+      },
+      "mergetransaction": {
+        "output": {
+          "init": true
+        }
+      }
+    },
+    "2": {
+      "ethtowei": {
+        "output": {
+          "wei": true
+        }
+      },
+      "mergetransaction": {
+        "input": {
+          "value": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "ethereum",
+    "complexity": 25,
+    "tags": [
+      "core",
+      "web3"
+    ]
+  },
+  "id": "b59d9b5b-ca19-4d5f-bad0-87a66832b3d3"
+}

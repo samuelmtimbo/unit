@@ -1,0 +1,353 @@
+{
+  "name": "light sign",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault0",
+          "pinId": "a"
+        }
+      },
+      "type": "object"
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "randombgcolortag": {
+      "path": "051d4600-42e5-403b-b12e-eb58ae78ef0b",
+      "metadata": {
+        "position": {
+          "x": -242,
+          "y": 37
+        }
+      },
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "{bc}": {}
+      }
+    },
+    "randomcolortag": {
+      "path": "8a2d42bf-fc83-4696-9e0c-cf8c6c4641ae",
+      "metadata": {
+        "position": {
+          "x": -243,
+          "y": -10
+        }
+      },
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "{color}": {}
+      }
+    },
+    "text": {
+      "path": "9988a56e-6bee-46c8-864c-e351d84bc7e2",
+      "output": {},
+      "input": {
+        "value": {},
+        "style": {}
+      },
+      "metadata": {
+        "component": {
+          "width": 180,
+          "height": 120
+        },
+        "position": {
+          "x": 267,
+          "y": -15
+        }
+      }
+    },
+    "mergedefault": {
+      "path": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{transition:'color 0.5s linear, background-color 0.5s linear',display:'flex',fontSize:'30px',fontFamily:'system-ui',alignItems:'center',justifyContent:'center'}",
+          "metadata": {
+            "position": {
+              "x": -51,
+              "y": -41
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -25,
+          "y": -5
+        }
+      }
+    },
+    "merge": {
+      "path": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -139,
+          "y": 10
+        }
+      }
+    },
+    "mergedefault0": {
+      "path": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 126,
+              "y": 26
+            }
+          }
+        },
+        "default": {
+          "constant": false
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 87,
+          "y": 0
+        }
+      }
+    },
+    "default": {
+      "path": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 488,
+              "y": 3
+            }
+          }
+        },
+        "d": {
+          "data": "'OPEN'",
+          "metadata": {
+            "position": {
+              "x": 488,
+              "y": -33
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 443,
+          "y": -15
+        }
+      }
+    },
+    "delaypush": {
+      "path": "8cd6c706-d1d4-11ea-92e1-47577abb9ccf",
+      "input": {
+        "ms": {
+          "constant": true,
+          "data": "1000",
+          "metadata": {
+            "position": {
+              "x": -395,
+              "y": 32
+            }
+          }
+        },
+        "a": {
+          "constant": true,
+          "data": "1",
+          "metadata": {
+            "position": {
+              "x": -395,
+              "y": -2
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -348,
+          "y": 15
+        }
+      }
+    }
+  },
+  "merges": {
+    "1": {
+      "randombgcolortag": {
+        "input": {
+          "any": true
+        }
+      },
+      "randomcolortag": {
+        "input": {
+          "any": true
+        }
+      },
+      "delaypush": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "merge": {
+        "input": {
+          "b": true
+        }
+      },
+      "randomcolortag": {
+        "output": {
+          "{color}": true
+        }
+      }
+    },
+    "3": {
+      "merge": {
+        "input": {
+          "a": true
+        }
+      },
+      "randombgcolortag": {
+        "output": {
+          "{bc}": true
+        }
+      }
+    },
+    "4": {
+      "mergedefault": {
+        "input": {
+          "a": true
+        }
+      },
+      "merge": {
+        "output": {
+          "ab": true
+        }
+      }
+    },
+    "5": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "mergedefault0": {
+        "input": {
+          "default": true
+        }
+      }
+    },
+    "6": {
+      "mergedefault0": {
+        "output": {
+          "a": true
+        }
+      },
+      "text": {
+        "input": {
+          "style": true
+        }
+      }
+    },
+    "7": {
+      "default": {
+        "output": {
+          "a": true
+        }
+      },
+      "text": {
+        "input": {
+          "value": true
+        }
+      }
+    }
+  },
+  "component": {
+    "defaultWidth": 180,
+    "defaultHeight": 120,
+    "subComponents": {
+      "text": {
+        "width": 180,
+        "height": 120,
+        "children": []
+      }
+    },
+    "children": [
+      "text"
+    ]
+  },
+  "metadata": {
+    "complexity": 62.96991515797999,
+    "icon": "sign",
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ],
+    "position": {
+      "merge": {
+        "1": {
+          "x": -291,
+          "y": 14
+        },
+        "2": {
+          "x": -188,
+          "y": -8
+        },
+        "3": {
+          "x": -187,
+          "y": 32
+        },
+        "4": {
+          "x": -82,
+          "y": 5
+        },
+        "5": {
+          "x": 31,
+          "y": -2
+        },
+        "6": {
+          "x": 140,
+          "y": -11
+        },
+        "7": {
+          "x": 393,
+          "y": -15
+        }
+      }
+    }
+  },
+  "id": "cab9a6ef-c973-4150-bf0c-cd324d3744f5",
+  "type": "`U`&`G`&`C`"
+}

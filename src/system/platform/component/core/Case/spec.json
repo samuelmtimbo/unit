@@ -1,0 +1,29 @@
+{
+  "name": "case",
+  "inputs": {
+    "style": {
+      "type": "object"
+    },
+    "id": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "network",
+    "description": "unit class showcase",
+    "complexity": 5.024172410445588,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "b49ae0a6-09f1-11eb-8aec-47d22262ab00",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 180
+  },
+  "type": "`U`&`C`"
+}

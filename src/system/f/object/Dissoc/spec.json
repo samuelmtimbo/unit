@@ -1,0 +1,34 @@
+{
+  "name": "dissoc",
+  "inputs": {
+    "obj": {
+      "type": "object",
+      "_type": "{...O,[K]:V}"
+    },
+    "key": {
+      "type": "number|string",
+      "_type": "K:string"
+    },
+    "value": {
+      "type": "any",
+      "_type": "V"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "remove `obj` key-value pair for given `key`",
+    "complexity": 1.3386661489175808,
+    "tags": [
+      "f",
+      "object"
+    ]
+  },
+  "id": "664b5d3c-e4cf-11ea-ab74-eb6d2f3bd6f1",
+  "base": true,
+  "type": "`U`"
+}

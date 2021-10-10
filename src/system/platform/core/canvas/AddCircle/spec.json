@@ -1,0 +1,78 @@
+{
+  "name": "add circle",
+  "units": {
+    "addarc": {
+      "path": "6796cd2d-2bd2-4dd3-9396-49d6bc1d2652"
+    },
+    "merge3": {
+      "path": "23b844e3-1cef-4ff7-9e2a-bb3ffb613055",
+      "input": {
+        "c": {
+          "constant": true,
+          "data": "{start:0}"
+        },
+        "b": {
+          "constant": true,
+          "data": "{end:6.283185307179586}"
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "addarc": {
+        "input": {
+          "arc": true
+        }
+      },
+      "merge3": {
+        "output": {
+          "abc": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "add a circular arc to the current sub-path",
+    "complexity": 7.311535156597232,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "addarc",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    },
+    "circle": {
+      "pin": {
+        "0": {
+          "unitId": "merge3",
+          "pinId": "a"
+        }
+      },
+      "type": "{x:number,y:number,r:number}"
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "addarc",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    }
+  },
+  "id": "50d23b21-1513-42c0-9722-4a01a32dc161",
+  "type": "`U`&`G`"
+}

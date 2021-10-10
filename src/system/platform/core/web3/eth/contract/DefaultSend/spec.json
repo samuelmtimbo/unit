@@ -1,0 +1,106 @@
+{
+  "name": "default send",
+  "inputs": {
+    "addr": {
+      "pin": {
+        "0": {
+          "unitId": "send",
+          "pinId": "addr"
+        }
+      }
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "send",
+          "pinId": "value"
+        }
+      }
+    },
+    "method": {
+      "pin": {
+        "0": {
+          "unitId": "send",
+          "pinId": "method"
+        }
+      }
+    },
+    "args": {
+      "pin": {
+        "0": {
+          "unitId": "send",
+          "pinId": "args"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "receipt": {
+      "pin": {
+        "0": {
+          "unitId": "send",
+          "pinId": "receipt"
+        }
+      }
+    }
+  },
+  "units": {
+    "send": {
+      "path": "2438cc2e-8d22-4a2b-860a-97c52e293aea",
+      "input": {
+        "from": {},
+        "addr": {},
+        "value": {},
+        "method": {},
+        "args": {}
+      },
+      "output": {
+        "receipt": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 56,
+          "y": -1
+        }
+      }
+    },
+    "requestfirstaccount": {
+      "path": "7166c423-01d5-460d-81aa-7ee1d3b3fe57",
+      "input": {
+        "init": {
+          "constant": true,
+          "data": "{}"
+        }
+      },
+      "output": {
+        "acc": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -57,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "requestfirstaccount": {
+        "output": {
+          "acc": true
+        }
+      },
+      "send": {
+        "input": {
+          "from": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "ethereum",
+    "complexity": 11
+  },
+  "id": "cb88f4e3-0b87-473a-ade3-9bc1bb2de9e0"
+}

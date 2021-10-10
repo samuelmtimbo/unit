@@ -1,0 +1,20 @@
+{
+  "name": "request accounts",
+  "id": "368d61bc-89d8-4445-a5fe-b67f925a09d7",
+  "inputs": {
+    "init": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "accs": {
+      "type": "string[]"
+    }
+  },
+  "metadata": {
+    "icon": "ethereum",
+    "description": "start an Ethereum transaction",
+    "complexity": 1.366042131831861
+  },
+  "base": true
+}

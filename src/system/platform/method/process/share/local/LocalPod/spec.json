@@ -1,0 +1,29 @@
+{
+  "name": "local pod",
+  "inputs": {
+    "id": {
+      "type": "string",
+      "metadata": {}
+    }
+  },
+  "outputs": {
+    "pod": {
+      "type": "`U`&`G`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "server",
+    "description": "connect to a locally shared process",
+    "complexity": 2.8449276769245704,
+    "tags": [
+      "platform",
+      "component",
+      "core",
+      "process"
+    ]
+  },
+  "id": "5ec9d37d-f9f4-49d0-a139-55af26fab05c",
+  "base": true,
+  "type": "`U`"
+}

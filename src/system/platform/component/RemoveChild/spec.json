@@ -1,0 +1,25 @@
+{
+  "name": "remove child",
+  "inputs": {
+    "parent": {
+      "type": "`C`",
+      "ref": true
+    },
+    "at": {
+      "type": "number"
+    }
+  },
+  "outputs": {},
+  "base": true,
+  "metadata": {
+    "icon": "square",
+    "description": "remove `parent` child element `at` index",
+    "complexity": 1.3395398504999514,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "6dbff818-02b9-11eb-9ee7-93b57419f741",
+  "type": "`U`"
+}

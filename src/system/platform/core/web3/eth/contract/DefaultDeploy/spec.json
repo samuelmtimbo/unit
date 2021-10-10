@@ -1,0 +1,96 @@
+{
+  "name": "default deploy",
+  "inputs": {
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "deploy",
+          "pinId": "data"
+        }
+      }
+    },
+    "args": {
+      "pin": {
+        "0": {
+          "unitId": "deploy",
+          "pinId": "args"
+        }
+      }
+    },
+    "abi": {
+      "pin": {
+        "0": {
+          "unitId": "deploy",
+          "pinId": "abi"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "receipt": {
+      "pin": {
+        "0": {
+          "unitId": "deploy",
+          "pinId": "receipt"
+        }
+      }
+    }
+  },
+  "units": {
+    "deploy": {
+      "path": "6aa9a2ad-4348-47c1-9202-f113e99c4a34",
+      "input": {
+        "from": {},
+        "data": {},
+        "args": {}
+      },
+      "output": {
+        "receipt": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": -10
+        }
+      }
+    },
+    "requestfirstaccount": {
+      "path": "7166c423-01d5-460d-81aa-7ee1d3b3fe57",
+      "input": {
+        "init": {
+          "constant": true,
+          "data": "{}"
+        }
+      },
+      "output": {
+        "acc": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -53,
+          "y": 9
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "requestfirstaccount": {
+        "output": {
+          "acc": true
+        }
+      },
+      "deploy": {
+        "input": {
+          "from": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "ethereum",
+    "complexity": 10
+  },
+  "id": "f242adf5-2688-458e-88bd-62695a699304"
+}

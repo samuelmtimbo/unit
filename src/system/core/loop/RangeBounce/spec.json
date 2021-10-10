@@ -1,0 +1,104 @@
+{
+  "name": "range bounce",
+  "units": {
+    "rangereverse": {
+      "path": "7a09c38d-3866-46e3-a03e-112c4cf6d889"
+    },
+    "range": {
+      "path": "29e43ad7-be5e-437f-8f0f-2df996c8b89c"
+    },
+    "plan": {
+      "path": "36329d25-218d-48a5-a06c-1e0525da504f"
+    }
+  },
+  "merges": {
+    "ixnwjcyy": {
+      "range": {
+        "input": {
+          "a": true
+        }
+      },
+      "plan": {
+        "output": {
+          "first": true
+        }
+      }
+    },
+    "dpqjcxzt": {
+      "plan": {
+        "output": {
+          "second": true
+        }
+      },
+      "rangereverse": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "bjpzdvv": {
+      "range": {
+        "input": {
+          "b": true
+        }
+      },
+      "rangereverse": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "ymwlenzvu": {
+      "range": {
+        "output": {
+          "i": true
+        }
+      },
+      "rangereverse": {
+        "output": {
+          "i": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "exchange",
+    "description": "count from `a` to `b - 1`, then regressive count from `b - 1` to `a`",
+    "complexity": 36.0699279978666,
+    "tags": [
+      "core",
+      "loop"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "plan",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "mergeId": "bjpzdvv"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "mergeId": "ymwlenzvu"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "343f1382-4d2d-4022-b4b3-139e40ab6627",
+  "type": "`U`&`G`"
+}

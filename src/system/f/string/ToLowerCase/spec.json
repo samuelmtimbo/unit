@@ -1,0 +1,26 @@
+{
+  "name": "to lower case",
+  "inputs": {
+    "A": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "conver string to lower case",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase",
+    "complexity": 1.3356955635375207,
+    "tags": [
+      "f",
+      "string"
+    ]
+  },
+  "id": "adde2d16-e1e6-4599-9a64-dd0968797041",
+  "base": true,
+  "type": "`U`"
+}

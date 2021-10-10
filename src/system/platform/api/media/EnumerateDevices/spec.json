@@ -1,0 +1,26 @@
+{
+  "name": "enumerate devices",
+  "inputs": {
+    "a": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "devices": {
+      "type": "{deviceId:string,groupId:string,kind:string,label:string}[]"
+    }
+  },
+  "metadata": {
+    "icon": "list",
+    "description": "output a list of the available media input and output devices, such as microphones, cameras, headsets, and so forth",
+    "complexity": 1.3456557615765459,
+    "tags": [
+      "platform",
+      "api",
+      "media"
+    ]
+  },
+  "id": "3511f756-2a02-4346-b417-8c34502f79d4",
+  "base": true,
+  "type": "`U`"
+}

@@ -1,0 +1,30 @@
+{
+  "name": "delete",
+  "inputs": {
+    "unit": {
+      "type": "<T>",
+      "ref": true
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "data": {
+      "_type": "<T>['S',N]",
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "object-set",
+    "description": "delete `obj` property `name`",
+    "complexity": 1.3517522570624212,
+    "tags": [
+      "platform"
+    ]
+  },
+  "id": "275af55d-9fcf-4b53-9087-d97455cbe528",
+  "base": true,
+  "type": "`U`"
+}

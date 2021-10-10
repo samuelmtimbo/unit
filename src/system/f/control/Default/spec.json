@@ -1,0 +1,28 @@
+{
+  "name": "default",
+  "inputs": {
+    "a": {
+      "type": "<A>"
+    },
+    "d": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "grip-lines-vertical",
+    "description": "output `a` if present, `default` if present, otherwise",
+    "complexity": 1.300417435200466,
+    "tags": [
+      "f",
+      "control"
+    ]
+  },
+  "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
+  "base": true,
+  "type": "`U`"
+}

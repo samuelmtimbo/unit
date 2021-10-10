@@ -1,0 +1,31 @@
+{
+  "name": "checkbox",
+  "inputs": {
+    "value": {
+      "type": "boolean",
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "checkbox",
+    "complexity": 3.1573439471895934,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
+  },
+  "id": "096fc4ca-edd2-11ea-8266-37b634a3ee0b",
+  "base": true,
+  "component": {
+    "defaultWidth": 30,
+    "defaultHeight": 30
+  },
+  "type": "`U`&`C`"
+}

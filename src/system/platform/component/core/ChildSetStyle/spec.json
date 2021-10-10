@@ -1,0 +1,138 @@
+{
+  "name": "child set style",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "childset",
+          "pinId": "data"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 69,
+            "y": -43
+          }
+        }
+      },
+      "type": "any"
+    },
+    "at": {
+      "pin": {
+        "0": {
+          "unitId": "childset",
+          "pinId": "at"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -66,
+            "y": 28
+          }
+        }
+      },
+      "type": "number"
+    },
+    "parent": {
+      "pin": {
+        "0": {
+          "unitId": "childset",
+          "pinId": "parent"
+        }
+      },
+      "ref": "_self",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 69,
+            "y": 28
+          }
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "childset": {
+      "path": "2633ed12-309e-40fe-910d-44106d917e96",
+      "input": {
+        "parent": {
+          "metadata": {
+            "position": {
+              "x": 47,
+              "y": 11
+            }
+          }
+        },
+        "at": {
+          "metadata": {
+            "position": {
+              "x": -44,
+              "y": 11
+            }
+          }
+        },
+        "name": {
+          "constant": true,
+          "data": "'style'",
+          "metadata": {
+            "position": {
+              "x": -44,
+              "y": -26
+            }
+          }
+        },
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 47,
+              "y": -26
+            }
+          }
+        },
+        "b": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 29,
+              "y": 31
+            }
+          }
+        },
+        "a": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -26,
+              "y": 31
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 2,
+          "y": -8
+        }
+      }
+    }
+  },
+  "merges": {},
+  "component": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "set `element` child `at` style to `style`",
+    "complexity": 6.297727340069335,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "d7d77ad6-91db-4da7-a3c6-c37157574b17",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "peer share pod",
+  "inputs": {
+    "pod": {
+      "type": "`G`",
+      "ref": true
+    },
+    "answer": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "offer": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "description": "remote peer pod",
+    "complexity": 9.262751189204932,
+    "tags": [
+      "ioun.it",
+      "peer"
+    ]
+  },
+  "id": "16fa715f-fc94-43f7-831e-335037c8daea",
+  "base": true,
+  "type": "`U`"
+}

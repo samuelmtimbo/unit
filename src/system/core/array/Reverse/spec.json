@@ -1,0 +1,84 @@
+{
+  "name": "reverse",
+  "units": {
+    "dcalg": {
+      "path": "dd7ae700-3016-4aba-a45f-5fa2c21cb00f"
+    },
+    "annsr": {
+      "path": "38033fcc-aa28-4df3-abc8-d4ece231028b"
+    },
+    "hwhbb": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    }
+  },
+  "merges": {
+    "pfkne": {
+      "dcalg": {
+        "input": {
+          "a": true
+        }
+      },
+      "hwhbb": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "ohjjo": {
+      "annsr": {
+        "input": {
+          "n": true
+        }
+      },
+      "hwhbb": {
+        "output": {
+          "length": true
+        }
+      }
+    },
+    "fjroi": {
+      "annsr": {
+        "input": {
+          "a": true
+        }
+      },
+      "dcalg": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "abrkj": {
+      "pin": {
+        "0": {
+          "mergeId": "pfkne"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "pohhh": {
+      "pin": {
+        "0": {
+          "unitId": "annsr",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "revert `a`",
+    "complexity": 35.24570604561123,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "5e6d3a86-f73e-46ce-9443-0f53e5a41d1c",
+  "type": "`U`&`G`"
+}

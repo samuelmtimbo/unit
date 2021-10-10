@@ -1,0 +1,32 @@
+{
+  "name": "call",
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "ref": true
+    },
+    "method": {
+      "type": "string"
+    },
+    "data": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "data": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "remote call `unit` `method` with `data`",
+    "complexity": 1.339229201048442,
+    "tags": [
+      "f",
+      "meta"
+    ]
+  },
+  "id": "f46af75e-af68-11ea-aa0e-37bf85a86c5e",
+  "base": true,
+  "type": "`U`"
+}

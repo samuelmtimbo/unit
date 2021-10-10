@@ -1,0 +1,25 @@
+{
+  "name": "values",
+  "inputs": {
+    "obj": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "values": {
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "list values for this object",
+    "complexity": 1.3356373167653626,
+    "tags": [
+      "f",
+      "object"
+    ]
+  },
+  "id": "964d3314-75fe-4a09-8ba8-c49145f29d49",
+  "base": true,
+  "type": "`U`"
+}

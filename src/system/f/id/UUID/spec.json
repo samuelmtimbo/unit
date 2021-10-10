@@ -1,0 +1,25 @@
+{
+  "name": "uuid",
+  "inputs": {
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "uuid": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "info",
+    "description": "output a random uuid",
+    "complexity": 1.338899136006213,
+    "tags": [
+      "f",
+      "id"
+    ]
+  },
+  "id": "3e5c5856-c721-11ea-b7af-07a978a65cdc",
+  "base": true,
+  "type": "`U`"
+}

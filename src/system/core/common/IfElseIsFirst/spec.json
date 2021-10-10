@@ -1,0 +1,104 @@
+{
+  "name": "if else first",
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "first": {
+      "pin": {
+        "0": {
+          "unitId": "bpdlaymdf",
+          "pinId": "if"
+        }
+      },
+      "type": "<A>"
+    },
+    "!first": {
+      "pin": {
+        "0": {
+          "unitId": "bpdlaymdf",
+          "pinId": "else"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "units": {
+    "xptoptcoq": {
+      "path": "fb311fff-521b-4066-b830-81d3a50f0f01",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "first": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -48,
+          "y": -1
+        }
+      }
+    },
+    "bpdlaymdf": {
+      "path": "92760dd2-ecd9-46db-851f-70950a5b6bc3",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "if": {},
+        "else": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 47,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "bpdlaymdf": {
+        "input": {
+          "b": true
+        }
+      },
+      "xptoptcoq": {
+        "output": {
+          "first": true
+        }
+      }
+    },
+    "1": {
+      "bpdlaymdf": {
+        "input": {
+          "a": true
+        }
+      },
+      "xptoptcoq": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "map-signs",
+    "description": "",
+    "complexity": 18.623257973075745,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "5fdf4aca-9bc3-11eb-9ae0-137ed72149df",
+  "type": "`U`&`G`"
+}

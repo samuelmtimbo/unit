@@ -1,0 +1,28 @@
+{
+  "name": "or",
+  "inputs": {
+    "a": {
+      "type": "number"
+    },
+    "b": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a | b": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "binary",
+    "description": "bitwise OR operator",
+    "complexity": 1.3352490049509755,
+    "tags": [
+      "f",
+      "bitwise"
+    ]
+  },
+  "id": "0d656c2e-eb10-45f0-b236-f8916492ca86",
+  "base": true,
+  "type": "`U`"
+}

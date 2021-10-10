@@ -1,0 +1,30 @@
+{
+  "name": "unit to solidity",
+  "inputs": {
+    "spec": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "sol": {
+      "type": "string"
+    },
+    "entry": {
+      "type": "string",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "ethereum",
+    "description": "current gps latitude and latitude",
+    "complexity": 2.442228909814581,
+    "tags": [
+      "platform",
+      "api",
+      "geolocation"
+    ]
+  },
+  "id": "e6ccc9ba-c3dd-4340-96fd-42175713a8e9",
+  "base": true,
+  "type": "`U`"
+}

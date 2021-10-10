@@ -1,0 +1,25 @@
+{
+  "name": "id to spec",
+  "inputs": {
+    "id": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "spec": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "get system `spec` with `id`",
+    "complexity": 1.3399281623143384,
+    "tags": [
+      "f",
+      "meta"
+    ]
+  },
+  "id": "b2626d61-b17d-4737-bea3-627c0322f9d6",
+  "base": true,
+  "type": "`U`"
+}

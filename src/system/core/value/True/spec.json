@@ -1,0 +1,48 @@
+{
+  "name": "true",
+  "units": {
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "true"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "check-circle",
+    "description": "no description",
+    "complexity": 3.1543749444427984,
+    "tags": [
+      "core",
+      "value"
+    ]
+  },
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "true": {
+      "type": "boolean",
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "a"
+        }
+      }
+    }
+  },
+  "id": "984c4a44-86c7-464c-ad48-4759598c3be3",
+  "type": "`U`&`G`"
+}

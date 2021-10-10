@@ -1,0 +1,26 @@
+{
+  "name": "phone keyboard",
+  "inputs": {
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "keyboard",
+    "description": "virtual keyboard",
+    "complexity": 4.939112707504126,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "fcccb9a4-1a30-11eb-93b0-e7d511d031f2",
+  "base": true,
+  "component": {
+    "defaultWidth": 302,
+    "defaultHeight": 212
+  },
+  "type": "`U`&`C`"
+}

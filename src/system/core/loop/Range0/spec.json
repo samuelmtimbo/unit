@@ -1,0 +1,121 @@
+{
+  "name": "range 0",
+  "inputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "range",
+          "pinId": "b"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 68,
+            "y": 34
+          }
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "range",
+          "pinId": "i"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 68,
+            "y": -37
+          }
+        }
+      },
+      "type": "number"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "range",
+          "pinId": "test"
+        }
+      },
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -67,
+            "y": 34
+          }
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "units": {
+    "range": {
+      "path": "29e43ad7-be5e-437f-8f0f-2df996c8b89c",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0",
+          "metadata": {
+            "position": {
+              "x": -46,
+              "y": -19
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": 46,
+              "y": 17
+            }
+          }
+        }
+      },
+      "output": {
+        "i": {
+          "metadata": {
+            "position": {
+              "x": 46,
+              "y": -19
+            }
+          }
+        },
+        "test": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -46,
+              "y": 17
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "list-ordered",
+    "description": "count from 0 to `b`, not inclusive",
+    "complexity": 15.623425879285312,
+    "tags": [
+      "core",
+      "loop"
+    ]
+  },
+  "id": "df6ec021-e90d-4342-84f1-3445fc2d656c",
+  "type": "`U`&`G`"
+}

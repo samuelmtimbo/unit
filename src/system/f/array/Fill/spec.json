@@ -1,0 +1,34 @@
+{
+  "name": "fill",
+  "inputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "value": {
+      "type": "<A>"
+    },
+    "start": {
+      "type": "number"
+    },
+    "end": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "fill array `a` from `start` to `end` with `value`",
+    "complexity": 1.336161537714785,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "609ec474-cd6b-4646-b9b9-5ef4bbb378a7",
+  "base": true,
+  "type": "`U`"
+}

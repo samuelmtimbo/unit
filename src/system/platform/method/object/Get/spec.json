@@ -1,0 +1,30 @@
+{
+  "name": "get",
+  "inputs": {
+    "unit": {
+      "type": "<T>",
+      "ref": true
+    },
+    "name": {
+      "type": "string",
+      "_init": "N"
+    }
+  },
+  "outputs": {
+    "value": {
+      "_type": "<T>['S',N]",
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "get `unit` property `name`",
+    "complexity": 1.351519269973789,
+    "tags": [
+      "platform"
+    ]
+  },
+  "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+  "base": true,
+  "type": "`U`"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "string to float",
+  "inputs": {
+    "str": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "n": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "convert a string into a float",
+    "complexity": 1.3421803708377826,
+    "tags": [
+      "f",
+      "number"
+    ]
+  },
+  "id": "f60adade-f14e-11ea-b51e-537032a90354",
+  "base": true,
+  "type": "`U`"
+}

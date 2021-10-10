@@ -1,0 +1,29 @@
+{
+  "name": "at",
+  "inputs": {
+    "a[]": {
+      "type": "`A`",
+      "ref": true
+    },
+    "i": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a[i]": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "`a` element at position `i`",
+    "complexity": 1.3526259586447917,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "c320b1b2-c130-4d69-b172-0c737b72c6b5",
+  "base": true,
+  "type": "`U`"
+}

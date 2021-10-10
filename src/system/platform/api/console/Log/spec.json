@@ -1,0 +1,21 @@
+{
+  "name": "log",
+  "inputs": {
+    "message": {
+      "type": "<T>"
+    }
+  },
+  "metadata": {
+    "icon": "terminal",
+    "description": "print on the console",
+    "complexity": 1.335831472672556,
+    "tags": [
+      "platform",
+      "api",
+      "console"
+    ]
+  },
+  "id": "e7232263-a2cf-4f2b-a862-4fc85933d09f",
+  "base": true,
+  "type": "`U`"
+}

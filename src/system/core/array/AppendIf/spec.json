@@ -1,0 +1,121 @@
+{
+  "name": "append if",
+  "units": {
+    "ifelse": {
+      "path": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
+    },
+    "if": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "input": {
+        "a": {
+          "constant": false
+        }
+      }
+    },
+    "append": {
+      "path": "fa7721eb-1dd6-482e-8c7a-6da35b5f88bc"
+    }
+  },
+  "merges": {
+    "0": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "ifelse": {
+        "output": {
+          "if": true
+        }
+      },
+      "append": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "if": {
+        "output": {
+          "a if b": true
+        }
+      },
+      "append": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "3": {
+      "ifelse": {
+        "output": {
+          "else": true
+        }
+      },
+      "append": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "chevrons-left",
+    "description": "prepend element `b` to `a` if `test`",
+    "complexity": 11.464073009570654,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "test": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "3"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "765114be-2c5e-4ac8-b04e-27dbcb60ac12",
+  "type": "`U`&`G`"
+}

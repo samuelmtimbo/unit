@@ -1,0 +1,95 @@
+{
+  "name": "rtmp ws",
+  "inputs": {
+    "close": {
+      "pin": {
+        "0": {
+          "unitId": "websocket",
+          "pinId": "close"
+        }
+      }
+    },
+    "mimeType": {
+      "pin": {
+        "0": {
+          "unitId": "rtmpwebsocketurl",
+          "pinId": "mimeType"
+        }
+      },
+      "type": "string",
+      "metadata": {
+        "examples": ["'video/webm;codecs=h264'"]
+      }
+    },
+    "streamKey": {
+      "pin": {
+        "0": {
+          "unitId": "rtmpwebsocketurl",
+          "pinId": "streamKey"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "ws": {
+      "pin": {
+        "0": {
+          "unitId": "websocket",
+          "pinId": "_self"
+        }
+      },
+      "ref": true
+    }
+  },
+  "units": {
+    "rtmpwebsocketurl": {
+      "path": "4a68fe7a-ebfa-44ee-a120-3a045280e0a2",
+      "input": {
+        "mimeType": {},
+        "streamKey": {}
+      },
+      "output": {
+        "url": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": -1
+        }
+      }
+    },
+    "websocket": {
+      "path": "b8fc168e-ee2f-11ea-a42a-730934861ff1",
+      "input": {
+        "url": {},
+        "close": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 51,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "websocket": {
+        "input": {
+          "url": true
+        }
+      },
+      "rtmpwebsocketurl": {
+        "output": {
+          "url": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "stream",
+    "complexity": 8
+  },
+  "id": "894bc785-297e-4bcb-8f27-72a128abfd85"
+}

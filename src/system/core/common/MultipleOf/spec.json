@@ -1,0 +1,73 @@
+{
+  "name": "multiple of",
+  "units": {
+    "rlhly": {
+      "path": "c5c05c85-f4c1-4b67-ab85-08b61fe67531"
+    },
+    "dhmjz": {
+      "path": "85204bf6-6692-4686-a785-23127c0594b5",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    }
+  },
+  "merges": {
+    "elcih": {
+      "rlhly": {
+        "output": {
+          "a % b": true
+        }
+      },
+      "dhmjz": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "qgvlc": {
+      "pin": {
+        "0": {
+          "unitId": "rlhly",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "xazqe": {
+      "pin": {
+        "0": {
+          "unitId": "rlhly",
+          "pinId": "b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "wpuqx": {
+      "pin": {
+        "0": {
+          "unitId": "dhmjz",
+          "pinId": "a = b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "...",
+    "complexity": 4.310705502385256,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "f409eb04-77b5-49ad-b3aa-aeedde9b547f",
+  "type": "`U`&`G`"
+}

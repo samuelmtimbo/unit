@@ -1,0 +1,39 @@
+import { getSpecComplexity } from './complexity'
+import { getSpec } from './spec'
+
+const NUMERAL = '0123456789'
+
+export function startsWithNumeral(str: string): boolean {
+  return NUMERAL.indexOf(str[0]) > -1
+}
+
+export function compareByComplexity(a: string, b: string): number {
+  const aC = getSpecComplexity(a, true)
+  const bC = getSpecComplexity(b, true)
+  if (aC < bC) {
+    return -1
+  } else if (aC > bC) {
+    return 1
+  } else {
+    return compareByName(a, b)
+  }
+}
+
+export function compareByName(a: string, b: string): number {
+  const aSpec = getSpec(a)
+  const bSpec = getSpec(b)
+  const aName = (aSpec.name || '').toLowerCase()
+  const bName = (bSpec.name || '').toLowerCase()
+  if (startsWithNumeral(aName) && !startsWithNumeral(bName)) {
+    return 1
+  } else if (!startsWithNumeral(aName) && startsWithNumeral(bName)) {
+    return -1
+  }
+  if (aName < bName) {
+    return -1
+  } else if (aName > bName) {
+    return 1
+  } else {
+    return 0
+  }
+}

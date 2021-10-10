@@ -1,0 +1,87 @@
+{
+  "name": "has length less than",
+  "units": {
+    "ifelse": {
+      "path": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
+    },
+    "lengthlessthan": {
+      "path": "0e211b43-0d8d-44cb-b63f-79a1a02de614"
+    }
+  },
+  "merges": {
+    "0": {
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      },
+      "lengthlessthan": {
+        "output": {
+          "true": true
+        }
+      }
+    },
+    "1": {
+      "ifelse": {
+        "input": {
+          "a": true
+        }
+      },
+      "lengthlessthan": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "lengthlessthan",
+          "pinId": "b"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "true": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "if"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "false": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "else"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "output based on whether `a` size is less than `b`",
+    "complexity": 13.619870218376839,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "8211f5ea-2884-4ae8-aaf4-e98dbbedc10d",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "compile solidity",
+  "inputs": {
+    "sol": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "binary": {
+      "type": "object"
+    },
+    "abi": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "ethereum",
+    "description": "compile solidity code to binary",
+    "complexity": 1.3627803125910105,
+    "tags": [
+      "platform",
+      "api",
+      "geolocation"
+    ]
+  },
+  "id": "cfc9e321-d54c-4cfb-a48c-1e004070b841",
+  "base": true,
+  "type": "`U`"
+}

@@ -1,0 +1,77 @@
+{
+  "name": "request first account",
+  "inputs": {
+    "init": {
+      "type": "{}",
+      "pin": {
+        "0": {
+          "unitId": "requestaccounts",
+          "pinId": "init"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "acc": {
+      "pin": {
+        "0": {
+          "unitId": "first",
+          "pinId": "a[0]"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "units": {
+    "requestaccounts": {
+      "path": "368d61bc-89d8-4445-a5fe-b67f925a09d7",
+      "input": {
+        "init": {}
+      },
+      "output": {
+        "accs": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": 0
+        }
+      }
+    },
+    "first": {
+      "path": "0f77eb13-5c48-4611-a9bf-fe10c903dc63",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[0]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 50,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "first": {
+        "input": {
+          "a": true
+        }
+      },
+      "requestaccounts": {
+        "output": {
+          "accs": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "ethereum",
+    "complexity": 9
+  },
+  "id": "7166c423-01d5-460d-81aa-7ee1d3b3fe57"
+}

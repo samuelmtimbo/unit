@@ -1,0 +1,32 @@
+{
+  "name": "phone keyboard key",
+  "inputs": {
+    "style": {
+      "type": "object"
+    },
+    "key": {
+      "type": "string"
+    },
+    "altKey": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "keyboard",
+    "description": "virtual keyboard single key",
+    "complexity": 4.774720900883409,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "bc34c618-1c77-11eb-9785-e39a2bf52e49",
+  "component": {
+    "defaultWidth": 48,
+    "defaultHeight": 60
+  },
+  "base": true,
+  "type": "`U`&`C`"
+}

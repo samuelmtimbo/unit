@@ -1,0 +1,460 @@
+{
+  "name": "crypto bank",
+  "inputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "greaterthan",
+          "pinId": "b"
+        },
+        "1": {
+          "unitId": "if3",
+          "pinId": "b"
+        }
+      }
+    },
+    "recipient": {
+      "pin": {
+        "0": {
+          "unitId": "if3",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "getsender0",
+          "pinId": "any"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "getsender": {
+      "path": "6a2e05c5-9753-4511-9e10-a8fba6491c29",
+      "input": {
+        "unit": {},
+        "any": {
+          "data": "null"
+        }
+      },
+      "output": {
+        "sender": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 213,
+          "y": 52
+        }
+      }
+    },
+    "message": {
+      "path": "b03adb20-1582-4273-abab-1ed22adb6fb3",
+      "input": {},
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 270,
+          "y": 69
+        }
+      }
+    },
+    "set": {
+      "path": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+      "input": {
+        "unit": {},
+        "name": {},
+        "data": {
+          "data": "100"
+        }
+      },
+      "output": {
+        "data": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 105,
+          "y": 49
+        }
+      }
+    },
+    "localstorage": {
+      "path": "c8f3faa8-09f4-11eb-a3b1-477aa3ec4193",
+      "input": {},
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 44,
+          "y": 29
+        }
+      }
+    },
+    "message0": {
+      "path": "b03adb20-1582-4273-abab-1ed22adb6fb3",
+      "input": {},
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 152,
+          "y": -95
+        }
+      }
+    },
+    "getsender0": {
+      "path": "6a2e05c5-9753-4511-9e10-a8fba6491c29",
+      "input": {
+        "unit": {},
+        "any": {}
+      },
+      "output": {
+        "sender": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 91,
+          "y": -95
+        }
+      }
+    },
+    "subtract": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a - b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -36,
+          "y": 23
+        }
+      }
+    },
+    "add": {
+      "path": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a + b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -90,
+          "y": 98
+        }
+      }
+    },
+    "greaterthan": {
+      "path": "1651ce6b-4db0-4787-9edf-f770b72d253c",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a > b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -107,
+          "y": -67
+        }
+      }
+    },
+    "ifnot": {
+      "path": "439c6b56-a0b6-4b76-9131-c6dc23375fda",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'insufficient funds'"
+        },
+        "b": {}
+      },
+      "output": {
+        "a if not b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -213,
+          "y": -60
+        }
+      }
+    },
+    "throw": {
+      "path": "99657eb7-fb94-474e-b03d-4b08c537c0a2",
+      "input": {
+        "message": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -317,
+          "y": -51
+        }
+      }
+    },
+    "if3": {
+      "path": "13a16a8a-5dc6-11ea-a3d4-9bda49772976",
+      "input": {
+        "a": {},
+        "b": {},
+        "c": {},
+        "test": {}
+      },
+      "output": {
+        "a": {},
+        "b": {},
+        "c": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -114,
+          "y": 2
+        }
+      }
+    },
+    "transform": {
+      "path": "47a78f03-7dd4-4207-aefa-02574661de6e",
+      "input": {
+        "obj": {},
+        "name": {},
+        "next": {}
+      },
+      "output": {
+        "current": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 4,
+          "y": -30
+        }
+      }
+    },
+    "transform0": {
+      "path": "47a78f03-7dd4-4207-aefa-02574661de6e",
+      "input": {
+        "obj": {},
+        "name": {},
+        "next": {}
+      },
+      "output": {
+        "current": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -10,
+          "y": 68
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "getsender": {
+        "input": {
+          "unit": true
+        }
+      },
+      "message": {
+        "output": {
+          "_self": true
+        }
+      }
+    },
+    "1": {
+      "set": {
+        "input": {
+          "unit": true
+        }
+      },
+      "localstorage": {
+        "output": {
+          "_self": true
+        }
+      },
+      "transform": {
+        "input": {
+          "obj": true
+        }
+      },
+      "transform0": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "2": {
+      "set": {
+        "input": {
+          "name": true
+        }
+      },
+      "getsender": {
+        "output": {
+          "sender": true
+        }
+      }
+    },
+    "3": {
+      "getsender0": {
+        "input": {
+          "unit": true
+        }
+      },
+      "message0": {
+        "output": {
+          "_self": true
+        }
+      }
+    },
+    "4": {
+      "getsender0": {
+        "output": {
+          "sender": true
+        }
+      },
+      "transform": {
+        "input": {
+          "name": true
+        }
+      }
+    },
+    "5": {
+      "greaterthan": {
+        "input": {
+          "a": true
+        }
+      },
+      "if3": {
+        "input": {
+          "c": true
+        }
+      },
+      "transform": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "6": {
+      "ifnot": {
+        "input": {
+          "b": true
+        }
+      },
+      "greaterthan": {
+        "output": {
+          "a > b": true
+        }
+      },
+      "if3": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "7": {
+      "subtract": {
+        "output": {
+          "a - b": true
+        }
+      },
+      "transform": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "8": {
+      "subtract": {
+        "input": {
+          "a": true
+        }
+      },
+      "if3": {
+        "output": {
+          "c": true
+        }
+      }
+    },
+    "9": {
+      "subtract": {
+        "input": {
+          "b": true
+        }
+      },
+      "add": {
+        "input": {
+          "b": true
+        }
+      },
+      "if3": {
+        "output": {
+          "b": true
+        }
+      }
+    },
+    "10": {
+      "throw": {
+        "input": {
+          "message": true
+        }
+      },
+      "ifnot": {
+        "output": {
+          "a if not b": true
+        }
+      }
+    },
+    "11": {
+      "if3": {
+        "output": {
+          "a": true
+        }
+      },
+      "transform0": {
+        "input": {
+          "name": true
+        }
+      }
+    },
+    "12": {
+      "add": {
+        "input": {
+          "a": true
+        }
+      },
+      "transform0": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "13": {
+      "add": {
+        "output": {
+          "a + b": true
+        }
+      },
+      "transform0": {
+        "input": {
+          "next": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "ethereum",
+    "complexity": 62,
+    "tags": [
+      "platform",
+      "core",
+      "web3"
+    ]
+  },
+  "id": "c82989ba-f741-41ef-a017-49a7f07f3a6f"
+}

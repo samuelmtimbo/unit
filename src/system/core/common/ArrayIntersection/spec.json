@@ -1,0 +1,185 @@
+{
+  "name": "intersection",
+  "units": {
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "[]"
+        }
+      }
+    },
+    "id0": {
+      "path": "260d774e-bc89-4027-aa92-cb1985fb312b"
+    },
+    "id1": {
+      "path": "260d774e-bc89-4027-aa92-cb1985fb312b"
+    },
+    "append": {
+      "path": "fa7721eb-1dd6-482e-8c7a-6da35b5f88bc"
+    },
+    "lengthequals": {
+      "path": "175c0cc6-1801-4b5d-9980-e780c10ea745"
+    },
+    "ifnot0": {
+      "path": "439c6b56-a0b6-4b76-9131-c6dc23375fda"
+    },
+    "ifnot1": {
+      "path": "439c6b56-a0b6-4b76-9131-c6dc23375fda"
+    },
+    "if": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    }
+  },
+  "merges": {
+    "merge0": {
+      "id0": {
+        "input": {
+          "a": true
+        }
+      },
+      "wait": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "merge1": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "append": {
+        "output": {
+          "a": true
+        }
+      },
+      "lengthequals": {
+        "input": {
+          "a": true
+        }
+      },
+      "if": {
+        "input": {
+          "a": true
+        }
+      },
+      "ifnot1": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "merge2": {
+      "id0": {
+        "output": {
+          "a": true
+        }
+      },
+      "id1": {
+        "output": {
+          "a": true
+        }
+      },
+      "ifnot0": {
+        "input": {
+          "a": true
+        }
+      },
+      "lengthequals": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "merge3": {
+      "lengthequals": {
+        "output": {
+          "equals": true
+        }
+      },
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifnot0": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifnot1": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "merge4": {
+      "ifnot1": {
+        "output": {
+          "a if not b": true
+        }
+      },
+      "append": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "merge5": {
+      "ifnot0": {
+        "output": {
+          "a if not b": true
+        }
+      },
+      "id1": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "n": {
+      "pin": {
+        "0": {
+          "mergeId": "merge0"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "append",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a[]": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "array",
+    "description": "build a list of size n",
+    "complexity": 17.08347901666222,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "625b208c-80e8-49bc-981c-dc69cfbc429d",
+  "type": "`U`&`G`"
+}

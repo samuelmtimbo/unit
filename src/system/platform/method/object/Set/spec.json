@@ -1,0 +1,34 @@
+{
+  "name": "set",
+  "inputs": {
+    "unit": {
+      "type": "<T>",
+      "ref": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "data": {
+      "_type": "<T>['S',N]",
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "data": {
+      "_type": "<T>['S',N]",
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "object-set",
+    "description": "set `unit` property `name` to `data`",
+    "complexity": 1.351635763518105,
+    "tags": [
+      "platform"
+    ]
+  },
+  "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+  "base": true,
+  "type": "`U`"
+}

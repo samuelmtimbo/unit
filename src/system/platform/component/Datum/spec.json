@@ -1,0 +1,34 @@
+{
+  "name": "datum",
+  "type": "`U`&`C`&`V`",
+  "inputs": {
+    "value": {
+      "type": "any"
+    },
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "unit datum representation",
+    "complexity": 4.701271721192118,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "dc549da9-f758-4709-8913-e265f5e458b2",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  }
+}

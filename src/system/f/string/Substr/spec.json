@@ -1,0 +1,31 @@
+{
+  "name": "substr",
+  "inputs": {
+    "a": {
+      "type": "string"
+    },
+    "from": {
+      "type": "number"
+    },
+    "length": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "scissors",
+    "description": "substring",
+    "complexity": 1.3360644597611882,
+    "tags": [
+      "f",
+      "string"
+    ]
+  },
+  "id": "141eaa06-bb12-42f1-a46f-32ceefb64ddc",
+  "base": true,
+  "type": "`U`"
+}

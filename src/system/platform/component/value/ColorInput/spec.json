@@ -1,0 +1,27 @@
+{
+  "name": "color input",
+  "inputs": {
+    "value": {
+      "type": "string",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "palette",
+    "description": "pick a color",
+    "complexity": 3.145034462673527,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
+  },
+  "id": "d8aa573f-129e-4587-9c64-674729d024e2",
+  "base": true,
+  "component": {
+    "defaultWidth": 45,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`"
+}

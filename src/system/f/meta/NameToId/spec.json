@@ -1,0 +1,25 @@
+{
+  "name": "name to id",
+  "inputs": {
+    "name": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "id": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "unit system `id` from `name`",
+    "complexity": 1.3379866032424037,
+    "tags": [
+      "f",
+      "meta"
+    ]
+  },
+  "id": "b88692ce-93c1-11ea-9ef8-afa908df8315",
+  "base": true,
+  "type": "`U`"
+}

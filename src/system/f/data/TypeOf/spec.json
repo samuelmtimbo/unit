@@ -1,0 +1,25 @@
+{
+  "name": "type of",
+  "inputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "type": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "identify data type",
+    "complexity": 1.3614406368313756,
+    "tags": [
+      "f",
+      "data"
+    ]
+  },
+  "id": "63605ea1-40e7-47db-9f8f-313dffa6e3c9",
+  "base": true,
+  "type": "`U`"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "string to int",
+  "inputs": {
+    "str": {
+      "type": "string"
+    },
+    "radix": {
+      "type": "number",
+      "metadata": {
+        "description": "integer in the range 2 through 36 specifying the base to represent the number"
+      },
+      "optional": true
+    }
+  },
+  "outputs": {
+    "n": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "convert a number into an integer",
+    "complexity": 1.3425492670614503,
+    "tags": [
+      "f",
+      "number"
+    ]
+  },
+  "id": "8cd29108-95cd-4217-9721-11f7c7c1131e",
+  "base": true,
+  "type": "`U`"
+}

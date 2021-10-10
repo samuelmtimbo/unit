@@ -1,0 +1,25 @@
+{
+  "name": "constant",
+  "inputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "identity operator",
+    "complexity": 1.2776623628773904,
+    "tags": [
+      "f",
+      "control"
+    ]
+  },
+  "id": "ff976ac8-c54f-4d37-8c7d-089c271cb433",
+  "base": true,
+  "type": "`U`"
+}

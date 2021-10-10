@@ -1,0 +1,33 @@
+{
+  "name": "listen",
+  "inputs": {
+    "unit": {
+      "type": "any",
+      "ref": true
+    },
+    "event": {
+      "type": "string"
+    },
+    "remove": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "data": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "listen to `unit` `event`",
+    "complexity": 1.2950393165712066,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+  "base": true,
+  "type": "`U`"
+}

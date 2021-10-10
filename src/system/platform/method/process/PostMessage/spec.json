@@ -1,0 +1,25 @@
+{
+  "name": "post message",
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "ref": true
+    },
+    "message": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "mail",
+    "description": "...",
+    "complexity": 1.2705174254926705,
+    "tags": [
+      "platform",
+      "api"
+    ]
+  },
+  "id": "eda32471-120b-434c-9208-75f79da20560",
+  "base": true,
+  "type": "`U`"
+}

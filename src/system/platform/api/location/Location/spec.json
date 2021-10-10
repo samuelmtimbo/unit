@@ -1,0 +1,18 @@
+{
+  "name": "location",
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "navigation",
+    "description": "location object",
+    "complexity": 1.2737986603242404,
+    "tags": [
+      "platform",
+      "api",
+      "location"
+    ]
+  },
+  "id": "e1c7e72c-2eb8-11eb-8d11-1b9bca1dec4a",
+  "base": true,
+  "type": "`U`"
+}

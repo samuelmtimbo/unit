@@ -1,0 +1,32 @@
+{
+  "name": "defs",
+  "inputs": {
+    "className": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG defs",
+    "complexity": 3.1089214639355403,
+    "tags": [
+      "platform",
+      "component",
+      "svg"
+    ]
+  },
+  "id": "3fcb8e64-923d-11ea-bab1-43fa3b273af8",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "type": "`U`&`C`"
+}

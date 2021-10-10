@@ -1,0 +1,11 @@
+chain*/
+console.log
+
+node_modules
+.env
+
+# Hardhat
+
+cache
+artifacts
+typechain

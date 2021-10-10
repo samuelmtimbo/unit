@@ -1,0 +1,106 @@
+{
+  "artifact": "spec",
+  "name": "set if",
+  "units": {
+    "set": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614"
+    },
+    "pick": {
+      "path": "396497e4-f8e7-4573-95c9-a4f186a5cd05"
+    }
+  },
+  "merges": {
+    "0": {
+      "set": {
+        "output": {
+          "obj": true
+        }
+      },
+      "pick": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "set": {
+        "input": {
+          "obj": true
+        }
+      },
+      "pick": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "test": {
+      "name": "test",
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "c"
+        }
+      },
+      "type": "boolean"
+    },
+    "obj": {
+      "name": "obj",
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "object"
+    },
+    "key": {
+      "name": "key",
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "key"
+        }
+      },
+      "type": "number|string"
+    },
+    "value": {
+      "name": "value",
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "name": "obj",
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "a"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "set value at `key` to `value` if `test` is true",
+    "complexity": 10.465761948502177,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "id": "946701f6-7dd4-11ea-a1aa-67938c0c6214",
+  "type": "`U`&`G`"
+}

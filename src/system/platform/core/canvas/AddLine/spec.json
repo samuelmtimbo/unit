@@ -1,0 +1,149 @@
+{
+  "name": "stroke line",
+  "units": {
+    "addlineto": {
+      "path": "2b0ef9e9-028b-4acc-9daf-6999e86cc2af"
+    },
+    "moveto": {
+      "path": "3c47d4bc-315d-4600-a9cd-6e388b345980"
+    },
+    "beginpath": {
+      "path": "81c0f469-ab88-4bc8-89d5-98d291b1d8b2"
+    },
+    "stroke": {
+      "path": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99"
+    },
+    "propx0y0x1y1": {
+      "path": "004058a4-3562-4427-a782-66f90bf336a3"
+    }
+  },
+  "merges": {
+    "0": {
+      "addlineto": {
+        "output": {
+          "d": true
+        }
+      },
+      "stroke": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "1": {
+      "beginpath": {
+        "output": {
+          "d": true
+        }
+      },
+      "moveto": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "2": {
+      "addlineto": {
+        "input": {
+          "d": true
+        }
+      },
+      "moveto": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "3": {
+      "propx0y0x1y1": {
+        "output": {
+          "ppmqen": true
+        }
+      },
+      "moveto": {
+        "input": {
+          "x": true
+        }
+      }
+    },
+    "4": {
+      "propx0y0x1y1": {
+        "output": {
+          "kzxphae": true
+        }
+      },
+      "moveto": {
+        "input": {
+          "y": true
+        }
+      }
+    },
+    "5": {
+      "propx0y0x1y1": {
+        "output": {
+          "htyb": true
+        }
+      },
+      "addlineto": {
+        "input": {
+          "x": true
+        }
+      }
+    },
+    "6": {
+      "propx0y0x1y1": {
+        "output": {
+          "mlhf": true
+        }
+      },
+      "addlineto": {
+        "input": {
+          "y": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "draw a circle to the canvas",
+    "complexity": 12.776309421513723,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "beginpath",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    },
+    "line": {
+      "pin": {
+        "0": {
+          "unitId": "propx0y0x1y1",
+          "pinId": "kiusigco"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "stroke",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]"
+    }
+  },
+  "id": "90dc2942-52fa-4e09-bcef-43fa97cc0b72",
+  "type": "`U`&`G`"
+}

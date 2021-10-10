@@ -1,0 +1,26 @@
+{
+  "name": "array",
+  "inputs": {
+    "init": {
+      "type": "<T>[]"
+    }
+  },
+  "outputs": {
+    "arr": {
+      "_type": "<T>['S',N]",
+      "type": "`V`&`A`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "array reference",
+    "complexity": 1.367828366178041,
+    "tags": [
+      "platform"
+    ]
+  },
+  "id": "f8008d69-55cf-4509-8cdd-6ae6713f4585",
+  "base": true,
+  "type": "`U`"
+}

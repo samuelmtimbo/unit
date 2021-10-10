@@ -1,0 +1,29 @@
+{
+  "name": "unit-sol",
+  "version": "1.0.0",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "2.0.0",
+    "@nomiclabs/hardhat-waffle": "2.0.0",
+    "@typechain/ethers-v5": "^7.1.2",
+    "@typechain/hardhat": "^2.3.0",
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.10.3",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "3.0.0",
+    "ethers": "^5.4.7",
+    "hardhat": "^2.6.5",
+    "hardhat-gas-reporter": "^1.0.4",
+    "typechain": "^5.1.2"
+  },
+  "scripts": {
+    "prepare": "npx hardhat accounts && npx hardhat compile",
+    "clean": "npx hardhat clean",
+    "eth-node": "npx hardhat node",
+    "help": "npx hardhat help",
+    "run": "node scripts/sample-script.js",
+    "test": "npx hardhat test",
+    "gas": "REPORT_GAS=true yarn test"
+  }
+}

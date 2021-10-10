@@ -1,0 +1,82 @@
+{
+  "name": "spec ids",
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "specs",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "keys",
+          "pinId": "keys"
+        }
+      },
+      "type": "string[]"
+    }
+  },
+  "units": {
+    "specs": {
+      "path": "b5ea15f4-9bbd-11eb-b623-37aff4a9ce60",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "specs": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": -1
+        }
+      }
+    },
+    "keys": {
+      "path": "45b9c329-64e9-4c4a-800b-790947c75754",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "keys": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 50,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "keys": {
+        "input": {
+          "obj": true
+        }
+      },
+      "specs": {
+        "output": {
+          "specs": true
+        }
+      }
+    }
+  },
+  "id": "4f8c249e-9bbf-11eb-b3ff-e3ecdde1acd1",
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 4.311159836834672,
+    "tags": [
+      "core",
+      "meta"
+    ]
+  },
+  "type": "`U`&`G`"
+}

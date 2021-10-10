@@ -1,0 +1,28 @@
+{
+  "name": "or",
+  "inputs": {
+    "a": {
+      "type": "boolean"
+    },
+    "b": {
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "a or b": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "grip-lines-vertical",
+    "description": "OR logical operator",
+    "complexity": 1.335210173769537,
+    "tags": [
+      "f",
+      "logic"
+    ]
+  },
+  "id": "62a19cd6-04bd-4e46-a72e-4fa3516ad3fa",
+  "base": true,
+  "type": "`U`"
+}

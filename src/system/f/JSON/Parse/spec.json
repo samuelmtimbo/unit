@@ -1,0 +1,25 @@
+{
+  "name": "parse",
+  "inputs": {
+    "string": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "json": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "converts a string into a JSON",
+    "complexity": 1.3374817978837006,
+    "tags": [
+      "f",
+      "JSON"
+    ]
+  },
+  "id": "563e92be-ad5e-4a61-a718-9249c3eac51d",
+  "base": true,
+  "type": "`U`"
+}

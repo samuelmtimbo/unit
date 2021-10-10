@@ -1,0 +1,21 @@
+{
+  "name": "get transaction receipt",
+  "id": "8f0b75ef-3a3c-43b1-9d47-b1e6da568951",
+  "inputs": {
+    "hash": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "receipt": {
+      "type": "object",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "ethereum",
+    "description": "start an Ethereum transaction",
+    "complexity": 1.3675759634986895
+  },
+  "base": true
+}

@@ -1,0 +1,230 @@
+{
+  "name": "deploy graph",
+  "inputs": {
+    "spec": {
+      "pin": {
+        "0": {
+          "unitId": "unittosolidity",
+          "pinId": "spec"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "receipt": {
+      "pin": {
+        "0": {
+          "unitId": "defaultdeploy",
+          "pinId": "receipt"
+        }
+      }
+    }
+  },
+  "units": {
+    "unittosolidity": {
+      "path": "e6ccc9ba-c3dd-4340-96fd-42175713a8e9",
+      "input": {
+        "spec": {}
+      },
+      "output": {
+        "sol": {},
+        "entry": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -123,
+          "y": -23
+        }
+      }
+    },
+    "compilesolidity": {
+      "path": "cfc9e321-d54c-4cfb-a48c-1e004070b841",
+      "input": {
+        "sol": {}
+      },
+      "output": {
+        "binary": {},
+        "abi": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -110,
+          "y": 16
+        }
+      }
+    },
+    "get": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -22,
+          "y": -28
+        }
+      }
+    },
+    "get0": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -19,
+          "y": 23
+        }
+      }
+    },
+    "defaultdeploy": {
+      "path": "f242adf5-2688-458e-88bd-62695a699304",
+      "input": {
+        "data": {},
+        "args": {},
+        "abi": {}
+      },
+      "output": {
+        "receipt": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 82,
+          "y": -5
+        }
+      }
+    },
+    "single": {
+      "path": "d2f8bb43-af44-4371-a32e-20b760695e13",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'0x2424bb600050842Fb374C38c181023B463828464'"
+        }
+      },
+      "output": {
+        "[a]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 189,
+          "y": 14
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "compilesolidity": {
+        "input": {
+          "sol": true
+        }
+      },
+      "unittosolidity": {
+        "output": {
+          "sol": true
+        }
+      }
+    },
+    "1": {
+      "get": {
+        "input": {
+          "key": true
+        }
+      },
+      "unittosolidity": {
+        "output": {
+          "entry": true
+        }
+      },
+      "get0": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "2": {
+      "compilesolidity": {
+        "output": {
+          "abi": true
+        }
+      },
+      "get0": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "3": {
+      "get": {
+        "input": {
+          "obj": true
+        }
+      },
+      "compilesolidity": {
+        "output": {
+          "binary": true
+        }
+      }
+    },
+    "4": {
+      "defaultdeploy": {
+        "input": {
+          "data": true
+        }
+      },
+      "get": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "5": {
+      "defaultdeploy": {
+        "input": {
+          "abi": true
+        }
+      },
+      "get0": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "6": {
+      "single": {
+        "output": {
+          "[a]": true
+        }
+      },
+      "defaultdeploy": {
+        "input": {
+          "args": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "ethereum",
+    "complexity": 31,
+    "tags": [
+      "platform",
+      "core",
+      "web3",
+      "eth",
+      "contract"
+    ]
+  },
+  "id": "3721654b-6d09-4d27-93e6-34dcf06e4d47"
+}

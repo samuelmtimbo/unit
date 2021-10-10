@@ -1,0 +1,28 @@
+{
+  "name": "split",
+  "inputs": {
+    "a": {
+      "type": "string"
+    },
+    "separator": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "parts": {
+      "type": "string[]"
+    }
+  },
+  "metadata": {
+    "icon": "split-text",
+    "description": "output an array of strings by separating the string into substrings, using the specified separator",
+    "complexity": 1.3379866032424037,
+    "tags": [
+      "f",
+      "string"
+    ]
+  },
+  "id": "e1e106ad-e15d-4044-82f6-27ddd476d7c8",
+  "base": true,
+  "type": "`U`"
+}

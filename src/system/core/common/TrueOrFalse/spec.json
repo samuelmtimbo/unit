@@ -1,0 +1,83 @@
+{
+  "name": "true or false",
+  "units": {
+    "if0": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "if1": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "not0": {
+      "path": "7d02d638-a311-4ea8-a0c0-d45baf739e0d"
+    }
+  },
+  "merges": {
+    "merge0": {
+      "if0": {
+        "input": {
+          "a": true,
+          "b": true
+        }
+      },
+      "not0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "merge1": {
+      "not0": {
+        "output": {
+          "!a": true
+        }
+      },
+      "if1": {
+        "input": {
+          "a": true,
+          "b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "type": "boolean",
+      "pin": {
+        "0": {
+          "mergeId": "merge0"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a = true": {
+      "type": "boolean",
+      "pin": {
+        "0": {
+          "unitId": "if0",
+          "pinId": "a if b"
+        }
+      }
+    },
+    "a = false": {
+      "type": "boolean",
+      "pin": {
+        "0": {
+          "unitId": "if1",
+          "pinId": "a if b"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "map-signs",
+    "description": "direct `a` boolean value",
+    "complexity": 5.309480774739004,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "d6d14fd8-4d8f-4d1c-94ac-f42b92f075e2",
+  "type": "`U`&`G`"
+}

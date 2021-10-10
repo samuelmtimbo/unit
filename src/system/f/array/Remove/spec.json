@@ -1,0 +1,34 @@
+{
+  "name": "remove",
+  "inputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "start": {
+      "type": "number"
+    },
+    "count": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "removed": {
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "scissors",
+    "description": "remove `count` elements from array `a` starting at `start`",
+    "complexity": 1.339073876322687,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "f69e88e3-b2c2-481b-b036-a5c0ed7ccccb",
+  "base": true,
+  "type": "`U`"
+}

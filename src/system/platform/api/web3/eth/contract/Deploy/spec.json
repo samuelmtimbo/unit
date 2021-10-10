@@ -1,0 +1,30 @@
+{
+  "name": "deploy",
+  "id": "6aa9a2ad-4348-47c1-9202-f113e99c4a34",
+  "inputs": {
+    "from": {
+      "type": "string"
+    },
+    "data": {
+      "type": "string"
+    },
+    "abi": {
+      "type": "any"
+    },
+    "args": {
+      "type": "any[]"
+    }
+  },
+  "outputs": {
+    "receipt": {
+      "type": "{}",
+      "defaultIgnored": false
+    }
+  },
+  "metadata": {
+    "icon": "ethereum",
+    "description": "start an Ethereum transaction",
+    "complexity": 1.3818658382681293
+  },
+  "base": true
+}

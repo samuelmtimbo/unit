@@ -1,0 +1,34 @@
+{
+  "name": "password input",
+  "inputs": {
+    "value": {
+      "type": "string",
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "metadata": {
+        "description": ""
+      },
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "form-input",
+    "description": "single line password text input",
+    "complexity": 3.1454616056693525,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
+  },
+  "id": "51c2c7b4-cb8a-42e8-95ab-14b8ac37700c",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`"
+}

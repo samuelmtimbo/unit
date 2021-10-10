@@ -1,0 +1,58 @@
+{
+  "name": "name to class",
+  "units": {
+    "nametoid": {
+      "path": "b88692ce-93c1-11ea-9ef8-afa908df8315"
+    },
+    "idtoclass": {
+      "path": "b0c25199-c284-4f90-817c-60dc89b15b1c"
+    }
+  },
+  "merges": {
+    "0": {
+      "nametoid": {
+        "output": {
+          "id": true
+        }
+      },
+      "idtoclass": {
+        "input": {
+          "id": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "`class` with `name`",
+    "complexity": 7.214366845437395,
+    "tags": [
+      "core",
+      "meta"
+    ]
+  },
+  "inputs": {
+    "name": {
+      "pin": {
+        "0": {
+          "unitId": "nametoid",
+          "pinId": "name"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "Class": {
+      "pin": {
+        "0": {
+          "unitId": "idtoclass",
+          "pinId": "Class"
+        }
+      },
+      "type": "`U`"
+    }
+  },
+  "id": "d4d151ca-93c7-11ea-beda-635e470592e6",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,42 @@
+import { treeComplexityById } from '../spec/complexity'
+import { getSpec } from './spec'
+
+export const UNIT_MIN_RADIUS: number = 14
+
+const _specComplexityCache: { [path: string]: number } = {}
+
+export const getSpecComplexity = (
+  path: string,
+  useCache: boolean = true
+): number => {
+  let c: number
+  if (useCache) {
+    if (!_specComplexityCache[path]) {
+      c = getSpecComplexity(path, false)
+    }
+    c = _specComplexityCache[path]
+  } else {
+    c = _treeComplexityByPath(path)
+  }
+  _specComplexityCache[path] = c
+  return c
+}
+
+export const getSpecRadius = (
+  path: string,
+  useCache: boolean = true
+): number => {
+  const c: number = getSpecComplexity(path, useCache)
+  const R = UNIT_MIN_RADIUS + Math.log2(c) / 3
+  const _R = Math.round(R) // important to return an integer
+  return _R
+}
+
+export const _treeComplexityByPath = (path: string): number => {
+  const spec = getSpec(path)
+  let c = spec.metadata && spec.metadata.complexity
+  if (c === undefined) {
+    c = treeComplexityById(path)
+  }
+  return c
+}

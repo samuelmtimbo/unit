@@ -1,0 +1,30 @@
+{
+  "name": "call",
+  "id": "9451aa60-d55c-457d-a046-9fee6750567c",
+  "inputs": {
+    "from": {
+      "type": "string"
+    },
+    "addr": {
+      "type": "string"
+    },
+    "method": {
+      "type": "string"
+    },
+    "args": {
+      "type": "any[]"
+    }
+  },
+  "outputs": {
+    "receipt": {
+      "type": "{}",
+      "defaultIgnored": false
+    }
+  },
+  "metadata": {
+    "icon": "ethereum",
+    "description": "start an Ethereum transaction",
+    "complexity": 1.3743325890690223
+  },
+  "base": true
+}

@@ -1,0 +1,33 @@
+{
+  "name": "send",
+  "id": "2438cc2e-8d22-4a2b-860a-97c52e293aea",
+  "inputs": {
+    "from": {
+      "type": "string"
+    },
+    "addr": {
+      "type": "string"
+    },
+    "value": {
+      "type": "number"
+    },
+    "method": {
+      "type": "string"
+    },
+    "args": {
+      "type": "any[]"
+    }
+  },
+  "outputs": {
+    "receipt": {
+      "type": "{}",
+      "defaultIgnored": false
+    }
+  },
+  "metadata": {
+    "icon": "ethereum",
+    "description": "deploy a contract to the blockchain",
+    "complexity": 1.3830890204834483
+  },
+  "base": true
+}

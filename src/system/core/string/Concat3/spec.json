@@ -1,0 +1,76 @@
+{
+  "name": "concat 3",
+  "units": {
+    "concat": {
+      "path": "779e538c-b0b9-477e-a986-30ee3abe6fe6"
+    },
+    "concat0": {
+      "path": "779e538c-b0b9-477e-a986-30ee3abe6fe6"
+    }
+  },
+  "merges": {
+    "0": {
+      "concat": {
+        "input": {
+          "b": true
+        }
+      },
+      "concat0": {
+        "output": {
+          "ab": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "plus",
+    "description": "concat `a`, `b` and `c`",
+    "complexity": 4.154592234831649,
+    "tags": [
+      "core",
+      "string"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "concat0",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    },
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "concat0",
+          "pinId": "b"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "abc": {
+      "pin": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "ab"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "bb28c9d9-0afd-4ef2-8c5b-41815ea65bf1",
+  "type": "`U`&`G`"
+}

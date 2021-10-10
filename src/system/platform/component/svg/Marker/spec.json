@@ -1,0 +1,32 @@
+{
+  "name": "marker",
+  "inputs": {
+    "className": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG marker",
+    "complexity": 3.1229589360256282,
+    "tags": [
+      "platform",
+      "component",
+      "svg"
+    ]
+  },
+  "id": "9932f3bc-9241-11ea-89fa-0b2fdace0f08",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "type": "`U`&`C`"
+}

@@ -1,0 +1,121 @@
+{
+  "name": "head or default",
+  "units": {
+    "behead": {
+      "path": "e9831075-2e62-43a4-84af-0653f7e707a9"
+    },
+    "ifelse": {
+      "path": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
+    },
+    "isempty": {
+      "path": "194683f4-5b90-4501-a8c9-b34f131d4f79"
+    },
+    "if": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    }
+  },
+  "merges": {
+    "0": {
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      },
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "isempty": {
+        "output": {
+          "unutqjyl": true
+        }
+      }
+    },
+    "1": {
+      "ifelse": {
+        "output": {
+          "else": true
+        }
+      },
+      "behead": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "no description",
+    "complexity": 17.775005679180616,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "isempty",
+          "pinId": "ftwnpzfjy"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "default": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "head": {
+      "pin": {
+        "0": {
+          "unitId": "behead",
+          "pinId": "head"
+        },
+        "1": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<A>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "behead",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "ifelse",
+          "pinId": "if"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "empty": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "id": "919d0a60-87cf-451b-a429-435aa70cde45",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,138 @@
+{
+  "name": "n array builder from",
+  "units": {
+    "loop2acc": {
+      "path": "eee90e0f-522d-4ac4-a0f1-abf5d69a4e26",
+      "output": {
+        "finala": {
+          "ignored": true
+        }
+      }
+    },
+    "identity": {
+      "path": "260d774e-bc89-4027-aa92-cb1985fb312b"
+    },
+    "lengthlessthan": {
+      "path": "0e211b43-0d8d-44cb-b63f-79a1a02de614"
+    },
+    "append": {
+      "path": "fa7721eb-1dd6-482e-8c7a-6da35b5f88bc"
+    }
+  },
+  "merges": {
+    "spjcxrffa": {
+      "loop2acc": {
+        "output": {
+          "localb": true
+        }
+      },
+      "lengthlessthan": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "miwnoju": {
+      "loop2acc": {
+        "output": {
+          "locala": true
+        }
+      },
+      "lengthlessthan": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "cbtwemu": {
+      "loop2acc": {
+        "input": {
+          "next a": true
+        }
+      },
+      "identity": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "rdzgdrc": {
+      "loop2acc": {
+        "input": {
+          "next b": true
+        }
+      },
+      "append": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "qiwxpftxe": {
+      "loop2acc": {
+        "input": {
+          "test": true
+        }
+      },
+      "lengthlessthan": {
+        "output": {
+          "true": true
+        }
+      }
+    },
+    "eljvof": {
+      "loop2acc": {
+        "output": {
+          "currentb": true
+        }
+      },
+      "append": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "mtdpfstnl": {
+      "loop2acc": {
+        "output": {
+          "currenta": true
+        }
+      },
+      "identity": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "array",
+    "description": "build a list of size n"
+  },
+  "inputs": {
+    "a": {
+      "name": "a",
+      "unitId": "append",
+      "pinId": "b"
+    },
+    "n": {
+      "name": "n",
+      "unitId": "loop2acc",
+      "pinId": "inita",
+      "functional": true
+    },
+    "from": {
+      "name": "from",
+      "unitId": "loop2acc",
+      "pinId": "initb",
+      "functional": true
+    }
+  },
+  "outputs": {
+    "a[]": {
+      "name": "a[]",
+      "unitId": "loop2acc",
+      "pinId": "finalb"
+    }
+  }
+}

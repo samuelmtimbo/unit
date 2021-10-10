@@ -1,0 +1,31 @@
+{
+  "add": {
+    "inputs": ["a", "b"],
+    "outputs": ["a + b"]
+  },
+  "subtract": {
+    "inputs": ["a", "b"],
+    "outputs": ["a - b"]
+  },
+  "multiply": {
+    "inputs": ["a", "b"],
+    "outputs": ["a × b"]
+  },
+  "get": {
+    "inputs": ["unit", "name"],
+    "outputs": ["value"]
+  },
+  "set": {
+    "inputs": ["unit", "name", "data"],
+    "outputs": []
+  },
+  "delete": {
+    "inputs": ["unit", "name"],
+    "outputs": ["data"]
+  },
+  "local storage": {
+    "name": "storage",
+    "inputs": [],
+    "outputs": []
+  }
+}

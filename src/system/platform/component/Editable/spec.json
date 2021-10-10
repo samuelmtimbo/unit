@@ -1,0 +1,26 @@
+{
+  "name": "editable",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML div element",
+    "complexity": 3.150626152800699,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "a37e0612-a2ea-11eb-bd22-9f5eadf67b78",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "type": "`U`&`C`"
+}

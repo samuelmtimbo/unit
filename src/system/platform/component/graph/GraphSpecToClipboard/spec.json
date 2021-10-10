@@ -1,0 +1,110 @@
+{
+  "name": "graph spec to clipboard",
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "getspec",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    },
+    "graph": {
+      "pin": {
+        "0": {
+          "unitId": "getspec",
+          "pinId": "graph"
+        }
+      },
+      "ref": true,
+      "type": "`U`"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "texttoclipboard": {
+      "path": "0b5a71c6-5c43-4e55-a29c-27d9ff7ed43a",
+      "input": {
+        "text": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 101,
+          "y": 0
+        }
+      }
+    },
+    "getspec": {
+      "path": "5b226e2e-5bbe-4a20-8328-080f63260f56",
+      "input": {
+        "graph": {},
+        "any": {}
+      },
+      "output": {
+        "spec": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -104,
+          "y": -1
+        }
+      }
+    },
+    "stringify": {
+      "path": "ee184ea6-3c80-4119-919e-290620aafab0",
+      "input": {
+        "json": {}
+      },
+      "output": {
+        "string": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 1,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "stringify": {
+        "input": {
+          "json": true
+        }
+      },
+      "getspec": {
+        "output": {
+          "spec": true
+        }
+      }
+    },
+    "1": {
+      "texttoclipboard": {
+        "input": {
+          "text": true
+        }
+      },
+      "stringify": {
+        "output": {
+          "string": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "send this graph spec to clipboard",
+    "complexity": 8.624838266812844,
+    "tags": [
+      "platform",
+      "component",
+      "core",
+      "graph"
+    ]
+  },
+  "id": "f752dcd6-ac2c-11eb-9a69-3fada4450230",
+  "type": "`U`&`G`"
+}

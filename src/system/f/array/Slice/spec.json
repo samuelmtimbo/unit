@@ -1,0 +1,31 @@
+{
+  "name": "slice",
+  "inputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "begin": {
+      "type": "number"
+    },
+    "end": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "scissors",
+    "description": "extracts a section of a string",
+    "complexity": 1.337559460246578,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "c6bf897a-4970-4284-bea2-b4a86186f828",
+  "base": true,
+  "type": "`U`"
+}

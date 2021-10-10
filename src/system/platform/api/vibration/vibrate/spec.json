@@ -1,0 +1,22 @@
+{
+  "name": "vibrate",
+  "inputs": {
+    "pattern": {
+      "type": "number[]"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "wave-square",
+    "description": "vibrate following period `pattern`",
+    "complexity": 1.3373070575672266,
+    "tags": [
+      "platform",
+      "api",
+      "vibration"
+    ]
+  },
+  "id": "68992d62-d5ca-11ea-888d-97179b32b7ab",
+  "base": true,
+  "type": "`U`"
+}

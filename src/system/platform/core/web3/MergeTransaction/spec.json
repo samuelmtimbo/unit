@@ -1,0 +1,179 @@
+{
+  "name": "merge transaction",
+  "inputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "assocto",
+          "pinId": "obj"
+        }
+      },
+      "metadata": {
+        "examples": ["{}"]
+      }
+    },
+    "to": {
+      "pin": {
+        "0": {
+          "unitId": "assocto",
+          "pinId": "value"
+        }
+      },
+      "type": "string"
+    },
+    "from": {
+      "pin": {
+        "0": {
+          "unitId": "assocfrom",
+          "pinId": "value"
+        }
+      },
+      "type": "string"
+    },
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "assocdata",
+          "pinId": "value"
+        }
+      },
+      "type": "string",
+      "metadata": {
+        "examples": ["''"]
+      }
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "assocvalue",
+          "pinId": "value"
+        }
+      },
+      "type": "number",
+      "metadata": {
+        "examples": ["1"]
+      }
+    }
+  },
+  "outputs": {
+    "init": {
+      "pin": {
+        "0": {
+          "unitId": "assocvalue",
+          "pinId": "obj"
+        }
+      },
+      "type": "{from:string,to:string,value:number,data:string}"
+    }
+  },
+  "units": {
+    "assocvalue": {
+      "path": "b63a7c25-918c-4783-80bd-828da0e5d08f",
+      "input": {
+        "obj": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 159,
+          "y": 21
+        }
+      }
+    },
+    "assocdata": {
+      "path": "8affb853-d25e-48bc-87d6-8ce949aa8ecb",
+      "input": {
+        "obj": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": 8
+        }
+      }
+    },
+    "assocfrom": {
+      "path": "53846253-2c16-4329-8e65-e6e8f37e6b086",
+      "input": {
+        "obj": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -53,
+          "y": -21
+        }
+      }
+    },
+    "assocto": {
+      "path": "aab4ce68-49a6-4c84-a7f8-87359c453be9",
+      "input": {
+        "obj": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -161,
+          "y": -10
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "assocfrom": {
+        "input": {
+          "obj": true
+        }
+      },
+      "assocto": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "1": {
+      "assocdata": {
+        "input": {
+          "obj": true
+        }
+      },
+      "assocfrom": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "2": {
+      "assocvalue": {
+        "input": {
+          "obj": true
+        }
+      },
+      "assocdata": {
+        "output": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "complexity": 17
+  },
+  "component": {},
+  "id": "eac9df20-9e2e-484d-a8de-bcf2e773f55a"
+}

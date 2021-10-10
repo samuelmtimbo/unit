@@ -1,0 +1,25 @@
+{
+  "name": "not",
+  "inputs": {
+    "a": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "~a": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "exclamation",
+    "description": "bitwise NOT operator",
+    "complexity": 1.334938355499466,
+    "tags": [
+      "f",
+      "bitwise"
+    ]
+  },
+  "id": "62d0c3e2-cf8b-4415-acfb-cf31739adce5",
+  "base": true,
+  "type": "`U`"
+}

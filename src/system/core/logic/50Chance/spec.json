@@ -1,0 +1,71 @@
+{
+  "name": "50% chance",
+  "units": {
+    "random": {
+      "path": "2b59f375-ef06-4ec7-80c2-71a53171ec67",
+      "input": {},
+      "output": {
+        "random": {}
+      }
+    },
+    "lessthan": {
+      "path": "82c3cf2a-0855-4c6d-a4c4-807b0ce1fd35",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "0.5"
+        }
+      },
+      "output": {
+        "a < b": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "random": {
+        "output": {
+          "random": true
+        }
+      },
+      "lessthan": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "random",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "pass": {
+      "pin": {
+        "0": {
+          "unitId": "lessthan",
+          "pinId": "a < b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "random",
+    "description": "50%/50% true/false",
+    "complexity": 4.309540035754146,
+    "tags": [
+      "core",
+      "logic"
+    ]
+  },
+  "id": "6c3c8c8f-e383-46bc-ac0c-a294e65040bb",
+  "type": "`U`&`G`"
+}

@@ -1,0 +1,75 @@
+{
+  "name": "delay push random tag color",
+  "units": {
+    "tagcolor": {
+      "path": "8a2d42bf-fc83-4696-9e0c-cf8c6c4641ae",
+      "input": {
+        "any": {
+          "data": "0",
+          "constant": true
+        }
+      },
+      "output": {
+        "{color}": {}
+      }
+    },
+    "delaypush": {
+      "path": "8cd6c706-d1d4-11ea-92e1-47577abb9ccf",
+      "input": {
+        "ms": {},
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "fajbgvoyh": {
+      "delaypush": {
+        "input": {
+          "a": true
+        }
+      },
+      "tagcolor": {
+        "output": {
+          "{color}": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "ms": {
+      "pin": {
+        "0": {
+          "unitId": "delaypush",
+          "pinId": "ms"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "tag": {
+      "pin": {
+        "0": {
+          "unitId": "delaypush",
+          "pinId": "a"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "tag",
+    "description": "delay push random {color}",
+    "complexity": 43.30571770027754,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "839af244-d1d3-11ea-89c0-073ae59ae4f1",
+  "type": "`U`&`G`"
+}

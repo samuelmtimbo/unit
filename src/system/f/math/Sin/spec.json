@@ -1,0 +1,25 @@
+{
+  "name": "sin",
+  "inputs": {
+    "a": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "sin(a)": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "sine of angle `a` in rad",
+    "complexity": 1.3351519269973788,
+    "tags": [
+      "f",
+      "math"
+    ]
+  },
+  "id": "b9f90a95-1bfc-4897-9068-2560743821a3",
+  "base": true,
+  "type": "`U`"
+}

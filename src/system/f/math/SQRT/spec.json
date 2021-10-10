@@ -1,0 +1,25 @@
+{
+  "name": "sqrt",
+  "inputs": {
+    "a": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "√a": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "square root of `a`",
+    "complexity": 1.3371517328414717,
+    "tags": [
+      "f",
+      "math"
+    ]
+  },
+  "id": "530e83d2-1d61-11eb-b472-53e545a06c92",
+  "base": true,
+  "type": "`U`"
+}
