@@ -1,12 +1,12 @@
 # Getting Started
 
-# toggle
+# Toggle
 
 <kbd>click</kbd>
 
 ![toggle](/public/gif/start/toggle.gif)
 
-# del
+# Delete
 
 <kbd>d</kbd>
 
@@ -16,13 +16,13 @@
 
 ![delVal](/public/gif/start/dDelVal.gif)
 
-# unit
+# Unite
 
 <kbd>cntrl</kbd><kbd>:</kbd>
 
 ![unit](/public/gif/start/add.gif)
 
-# connect
+# Connect
 
 <kbd>drag</kbd>
 
@@ -30,19 +30,19 @@
 
 ![addValue](/public/gif/start/addValue.gif)
 
-# coppy
+# Coppy
 
 <kbd>s</kbd>
 
 ![sCoppy](/public/gif/start/sCoppy.gif)
 
-# info
+# Info
 
 <kbd>q</kbd>
 
 ![qInfo](/public/gif/start/qInfo.gif)
 
-# morf
+# Morph
 
 <kbd>f</kbd>
 

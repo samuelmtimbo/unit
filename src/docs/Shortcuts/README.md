@@ -1,15 +1,21 @@
 # Shortcuts
 
+<!-- Add Icon -->
 <kbd>Q</kbd> = Lines White Information/Documentation
 
+<!-- Add Icon -->
 <kbd>A</kbd> = Triangle Yellow Data
 
+<!-- Add Icon -->
 <kbd>S</kbd> = Plus Green Add/Copy
 
+<!-- Add Icon -->
 <kbd>D</kbd> = Cross Red Remove/Delete/Cut
 
+<!-- Add Icon -->
 <kbd>F</kbd> = Arrows Blue Morph/Change
 
+<!-- Add Icon -->
 <kbd>L</kbd> = Toggle Layout/Graph View
 
 <kbd>Shift</kbd> = Multiselection Composition
