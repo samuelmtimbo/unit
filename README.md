@@ -42,7 +42,10 @@ yarn watch
 ```
 ## Documentation
 
-As an application, the unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform. For a step-by-step introduction to unit Programming, visit [Getting Started](https://start.ioun.it).
+As an application, the unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform. For a step-by-step introduction to unit Programming, visit [Unit Hello World!](https://start.ioun.it).
+
+For a GIF introduction to unit Programming, visit [Getting Started](src/docs/Start/README.md), and check out the [Shortcuts](src/docs/Shortcuts/README.md).
+
 
 This codebase is a TypeScript implementation of the unit Programming Language Spec with an accompanying Web based Programming Environment. We tried to make it as clean and organized as we could while still maintaining a space for experimentation. Some folders contain a ```README.md``` file with information about that piece of the architecture.
 
