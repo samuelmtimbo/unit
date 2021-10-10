@@ -6,7 +6,7 @@ import '../../../Functional.sol';
 import '../../../UnitFactory.sol';
 
 contract Get is Functional(1, 2, 1) {
-    function f(U.Datum[] storage inputs) internal override {
+    function f(U.Datum[] memory inputs) internal override {
         Object target = Object(U.asAddress(heap, inputs[0]));
         string memory key = U.asString(heap, inputs[1]);
         U.Datum memory value = target.get(key);

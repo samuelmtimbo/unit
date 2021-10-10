@@ -5,7 +5,7 @@ import '../../../Functional.sol';
 import '../../../UnitFactory.sol';
 
 contract Subtract is Functional(0, 2, 1) {
-    function f(U.Datum[] storage inputs) internal override {
+    function f(U.Datum[] memory inputs) internal override {
         int128 a = U.asNumber(heap, inputs[0]);
         int128 b = U.asNumber(heap, inputs[1]);
 

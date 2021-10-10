@@ -50,7 +50,7 @@ describe('Graph420Entry', function () {
     graph420 = await deployContract('Graph_graph_420_entry', mothership.address)
   })
 
-  const inputs = [1, 2, 3, 5, 8, 13, 21, 34, 55]
+  const inputs = [1, 2] //, 3, 5, 8, 13, 21, 34, 55]
   for (const idx in inputs) {
     const a = inputs[idx]
     const data = Math.floor(a / 2 + 1)

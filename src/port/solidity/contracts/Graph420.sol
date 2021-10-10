@@ -45,11 +45,15 @@ contract Graph_graph_420_entry {
         if (datum.type_ == U.DType.Null) {
             return (false, int128(0)); // TODO: make this work for non-number types
         }
+        console.log('output a x b is', uint128(U.asNumber(heap, datum)));
         return (true, U.asNumber(heap, datum));
     }
 
     function popOutput_a_$_b() external returns (bool ok, int128 value) {
         (ok, value) = peekOutput_a_$_b();
+        if (!ok) {
+            return (false, value);
+        }
         output.set(0, U.Datum(U.DType.Null, new uint32[](0)));
         graph.outputConsumed(0);
     }
@@ -109,18 +113,22 @@ contract Graph_graph_420 is Unit {
     function input(uint32 idx, U.Datum memory datum) external override {
         if (idx == 0) {
             // pin 0
+            console.log('input %s: %s', idx, uint128(U.asNumber(heap, datum)));
             merge_3(datum);
         } else if (idx == 1) {
             // pin 0
+            console.log('input %s: %s', idx, uint128(U.asNumber(heap, datum)));
             a_set.input(2, datum);
         } else if (idx == 2) {
             // pin 0
+            console.log('input %s: %s', idx, U.asString(heap, datum));
             merge_1(datum);
         }
     }
 
     function outputConsumed(uint32 idx) external override {
         if (idx == 0) {
+            console.log('output %s consumed', idx);
             multiply.outputConsumed(0);
         }
     }
@@ -140,6 +148,11 @@ contract Graph_graph_420 is Unit {
 
     function outHandler_add(uint32 idx, U.Datum memory datum) external {
         if (idx == 0) {
+            console.log(
+                'add output %s: %s',
+                idx,
+                uint128(U.asNumber(heap, datum))
+            );
             merge_4(datum);
         }
     }
@@ -175,11 +188,17 @@ contract Graph_graph_420 is Unit {
     function outHandler_multiply(uint32 idx, U.Datum memory datum) external {
         if (idx == 0) {
             // graph output pin 0
+            console.log(
+                'multiply output %s: %s',
+                idx,
+                uint128(U.asNumber(heap, datum))
+            );
             output(0, datum);
         }
     }
 
     function inConsumed_multiply(uint32 idx) external {
+        console.log('multiply input %s consumed', idx);
         if (idx == 0) {
             consumed_merge_3(1);
         } else if (idx == 1) {
@@ -191,6 +210,7 @@ contract Graph_graph_420 is Unit {
     bool[2] merge_0_consumed;
 
     function merge_0(U.Datum memory datum) internal {
+        console.log('merge 0 input %s', (U.asAddress(heap, datum)));
         merge_0_consumed = [false, false];
         a_set.input(0, datum);
         get.input(0, datum);
@@ -207,6 +227,7 @@ contract Graph_graph_420 is Unit {
     bool[2] merge_1_consumed;
 
     function merge_1(U.Datum memory datum) internal {
+        console.log('merge 1 input %s', U.asString(heap, datum));
         merge_1_consumed = [false, false];
         a_set.input(1, datum);
         get.input(1, datum);
@@ -223,6 +244,7 @@ contract Graph_graph_420 is Unit {
     bool[1] merge_2_consumed;
 
     function merge_2(U.Datum memory datum) internal {
+        console.log('merge 2 input %s', uint128(datum.type_));
         merge_2_consumed = [false];
         add.input(1, datum);
     }
@@ -238,6 +260,7 @@ contract Graph_graph_420 is Unit {
     bool[2] merge_3_consumed;
 
     function merge_3(U.Datum memory datum) internal {
+        console.log('merge 3 input %s', uint128(U.asNumber(heap, datum)));
         merge_3_consumed = [false, false];
         add.input(0, datum);
         multiply.input(0, datum);
@@ -254,6 +277,7 @@ contract Graph_graph_420 is Unit {
     bool[1] merge_4_consumed;
 
     function merge_4(U.Datum memory datum) internal {
+        console.log('merge 4 input %s', uint128(U.asNumber(heap, datum)));
         multiply.input(1, datum);
     }
 
