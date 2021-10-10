@@ -1,86 +1,31 @@
 # Shortcuts
 
+<kbd>Q</kbd> = Lines White Information/Documentation
 
-## Left Hand
+<kbd>A</kbd> = Triangle Yellow Data
 
-1:<kbd>Pinky</kbd>:
+<kbd>S</kbd> = Plus Green Add/Copy
 
-2:<kbd>Ring</kbd>:
+<kbd>D</kbd> = Cross Red Remove/Delete/Cut
 
-3:<kbd>Index</kbd>:
+<kbd>F</kbd> = Arrows Blue Morph/Change
 
-4:<kbd>Pointer</kbd>:
+<kbd>L</kbd> = Toggle Layout/Graph View
 
+<kbd>Shift</kbd> = Multiselection Composition
 
-### Number
+<kbd>Ctrl</kbd> <kbd>P</kbd> = Paste = Green + Background + Double Click
 
-1:<kbd>1</kbd>:
+<kbd>Ctrl</kbd> <kbd>A</kbd> = Toggle Select All
 
-2:<kbd>2</kbd>:
+<kbd>Ctrl</kbd> <kbd>;</kbd> = Toggle Search
 
-3:<kbd>3</kbd>:
+<kbd>Ctrl</kbd> <kbd>S</kbd> = Save to File
 
-4:<kbd>4</kbd>:
+<kbd>Ctrl</kbd> <kbd>C</kbd> = Copy
 
+<kbd>Ctrl</kbd> <kbd>V</kbd> = Paste
 
-### Top
+<kbd>Ctrl</kbd> <kbd>Z</kbd> = Undo
 
-1:<kbd>q</kbd>: lines white help
-
-2:<kbd>w</kbd>:
-
-3:<kbd>e</kbd>:
-
-4:<kbd>r</kbd>:
-
-
-### Modes
-
-1:<kbd>a</kbd>: triangle yellow data
-
-2:<kbd>s</kbd>: plus green add copy
-
-3:<kbd>d</kbd>: cross red remove delete cut
-
-4:<kbd>f</kbd>: arrows blue morph change
-
-### 
-
-<kbd>q</kbd>: lines information documentation
-
-<kbd>shift</kbd>: multiselection composition
-
-### Common
-
-Ctrl + P = Paste = Green + Background + Double Click
-Ctrl + A = Toggle Select All
-Ctrl + ; = Toggle Search
-Ctrl + S = Save to File
-Ctrl + C = Copy
-Ctrl + V = Paste
-Ctrl + Z = Undo
-Ctrl + Shift + Z = Redo
-
-L = Toggle Layout/Graph View
-
-### Bottom
-
-1:<kbd>z</kbd>:
-
-2:<kbd>x</kbd>:
-
-3:<kbd>c</kbd>:
-
-4:<kbd>v</kbd>:
-
-### Mod
-
-1:<kbd>Shift</kbd>: brackets white decompose
-
-2:<kbd>Control</kbd>:
-
-3:<kbd>Option</kbd>:
-
-4:<kbd>Command</kbd>:
-
-
+<kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Z</kbd> = Redo
