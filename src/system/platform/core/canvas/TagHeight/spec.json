@@ -1,0 +1,50 @@
+{
+  "name": "tag height",
+  "units": {
+    "tag": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'height'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{height: `height`}",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "height": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "{height}": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "cd3cc728-a253-11eb-92b7-876e93d80737",
+  "type": "`U`&`G`",
+  "system": true
+}

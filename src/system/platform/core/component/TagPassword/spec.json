@@ -1,0 +1,50 @@
+{
+  "name": "tag password",
+  "units": {
+    "hewiyie": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'password'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{password: `password`}",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "inputs": {
+    "password": {
+      "pin": {
+        "0": {
+          "unitId": "hewiyie",
+          "pinId": "v"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "{password}": {
+      "pin": {
+        "0": {
+          "unitId": "hewiyie",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "8b231876-26af-11eb-8e1d-6f057957054d",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,168 @@
+{
+  "name": "rotate around",
+  "units": {
+    "translate": {
+      "id": "6f79ee03-4b3f-439c-b955-5529f3bebcc9",
+      "input": {
+        "y": {
+          "constant": false
+        },
+        "x": {
+          "constant": false
+        }
+      }
+    },
+    "rotate": {
+      "id": "8f7ce559-a046-45bc-8e98-c39934ed0ae6",
+      "input": {
+        "rad": {
+          "constant": true,
+          "data": "0.1"
+        }
+      }
+    },
+    "translate0": {
+      "id": "6f79ee03-4b3f-439c-b955-5529f3bebcc9",
+      "input": {
+        "y": {
+          "constant": false
+        },
+        "x": {
+          "constant": false
+        }
+      }
+    },
+    "negate": {
+      "id": "13cbadb7-bbe5-4c6d-a81e-fc6fe5949e30"
+    },
+    "negate0": {
+      "id": "13cbadb7-bbe5-4c6d-a81e-fc6fe5949e30"
+    }
+  },
+  "merges": {
+    "0": {
+      "translate0": {
+        "output": {
+          "d": true
+        }
+      },
+      "rotate": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "1": {
+      "translate": {
+        "input": {
+          "d": true
+        }
+      },
+      "rotate": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "2": {
+      "translate0": {
+        "input": {
+          "x": true
+        }
+      },
+      "negate0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "translate0": {
+        "input": {
+          "y": true
+        }
+      },
+      "negate": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "4": {
+      "translate": {
+        "input": {
+          "y": true
+        }
+      },
+      "negate": {
+        "output": {
+          "-a": true
+        }
+      }
+    },
+    "5": {
+      "translate": {
+        "input": {
+          "x": true
+        }
+      },
+      "negate0": {
+        "output": {
+          "-a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "adds a rotation to the transformation matrix",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "d": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "translate0",
+          "pinId": "d"
+        }
+      },
+      "type": "(number|string)[][]"
+    },
+    "y": {
+      "pin": {
+        "0": {
+          "mergeId": "3"
+        }
+      },
+      "type": "number"
+    },
+    "x": {
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "translate",
+          "pinId": "d"
+        }
+      },
+      "type": "(number|string)[][]"
+    }
+  },
+  "id": "389f41b1-0a1d-4b02-ab30-53446c2e13e2",
+  "type": "`U`&`G`",
+  "system": true
+}

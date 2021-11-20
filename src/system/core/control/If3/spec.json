@@ -1,0 +1,111 @@
+{
+  "name": "if 3",
+  "units": {
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "if0": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "if1": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    }
+  },
+  "merges": {
+    "rsmsjsodm": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "if0": {
+        "input": {
+          "b": true
+        }
+      },
+      "if1": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "filter",
+    "description": "no description",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "if0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "if1",
+          "pinId": "a"
+        }
+      },
+      "type": "<B>"
+    },
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        }
+      },
+      "type": "<C>"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "mergeId": "rsmsjsodm"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "if0",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<A>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "if1",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<B>"
+    },
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<C>"
+    }
+  },
+  "id": "13a16a8a-5dc6-11ea-a3d4-9bda49772976",
+  "type": "`U`&`G`",
+  "system": true
+}

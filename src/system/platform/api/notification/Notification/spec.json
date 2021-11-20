@@ -1,0 +1,19 @@
+{
+  "name": "notification",
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "bell",
+    "description": "notification object",
+    "complexity": 2.56635101829031,
+    "tags": [
+      "platform",
+      "api",
+      "notification"
+    ]
+  },
+  "id": "bb029770-080e-11eb-9d38-f314d076f14b",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

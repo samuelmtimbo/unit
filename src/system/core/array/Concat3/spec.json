@@ -1,0 +1,77 @@
+{
+  "name": "concat 3",
+  "units": {
+    "concat": {
+      "id": "f57f5318-f26f-4b9f-b9e2-dcc022ad7728"
+    },
+    "concat0": {
+      "id": "f57f5318-f26f-4b9f-b9e2-dcc022ad7728"
+    }
+  },
+  "merges": {
+    "0": {
+      "concat": {
+        "input": {
+          "b": true
+        }
+      },
+      "concat0": {
+        "output": {
+          "ab": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "no description",
+    "complexity": 5.655893853195709,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "concat0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "concat0",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "abc": {
+      "pin": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "ab"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "abbbe3fa-8ee4-4446-8feb-e21a66fd8580",
+  "type": "`U`&`G`",
+  "system": true
+}

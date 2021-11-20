@@ -1,0 +1,103 @@
+{
+  "name": "iterate toggle",
+  "units": {
+    "not": {
+      "id": "7d02d638-a311-4ea8-a0c0-d45baf739e0d"
+    },
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    },
+    "iterate": {
+      "id": "8a2b756a-25e4-11eb-860d-1f34c850b992",
+      "input": {
+        "next": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "not": {
+        "output": {
+          "!a": true
+        }
+      },
+      "wait": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "iterate": {
+        "input": {
+          "next": true
+        }
+      },
+      "wait": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "not": {
+        "input": {
+          "a": true
+        }
+      },
+      "iterate": {
+        "output": {
+          "local": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "toggle-right",
+    "description": "iteratively toggle `current` value",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "iterate"
+    ]
+  },
+  "inputs": {
+    "init": {
+      "pin": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "init"
+        }
+      },
+      "type": "boolean"
+    },
+    "toggle": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "current"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "id": "58c50bb2-569f-4b7a-aba3-176d9ac91d5c",
+  "type": "`U`&`G`",
+  "system": true
+}

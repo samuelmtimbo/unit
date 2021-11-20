@@ -1,0 +1,77 @@
+{
+  "name": "length less than or",
+  "units": {
+    "length": {
+      "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    },
+    "lessthanor": {
+      "id": "568f2736-8734-464b-9bff-8e706e8d30ca"
+    }
+  },
+  "merges": {
+    "merge0": {
+      "length": {
+        "output": {
+          "length": true
+        }
+      },
+      "lessthanor": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "type": "<A>[]",
+      "pin": {
+        "0": {
+          "unitId": "length",
+          "pinId": "a"
+        }
+      }
+    },
+    "b": {
+      "type": "number",
+      "pin": {
+        "0": {
+          "unitId": "lessthanor",
+          "pinId": "b"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "true": {
+      "type": "<A>[]",
+      "pin": {
+        "0": {
+          "unitId": "lessthanor",
+          "pinId": "a < b"
+        }
+      }
+    },
+    "false": {
+      "type": "<A>[]",
+      "pin": {
+        "0": {
+          "unitId": "lessthanor",
+          "pinId": "a ≥ b"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "is the size of this `list` greater than or equal to `n`?",
+    "complexity": 7,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "b82e2039-4b1d-4290-aa16-11939c1563c5",
+  "type": "`U`&`G`",
+  "system": true
+}

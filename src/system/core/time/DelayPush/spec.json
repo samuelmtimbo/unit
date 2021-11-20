@@ -1,0 +1,91 @@
+{
+  "name": "delay push",
+  "units": {
+    "delay": {
+      "id": "586fb5b8-4129-4ca1-b0c4-1009485bed95",
+      "input": {
+        "ms": {
+          "constant": false
+        },
+        "a": {
+          "constant": false
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "push": {
+      "id": "49e11645-c25d-4bf7-923d-56817f67b686",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "push": {
+        "input": {
+          "a": true
+        }
+      },
+      "delay": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "ms": {
+      "pin": {
+        "0": {
+          "unitId": "delay",
+          "pinId": "ms"
+        }
+      },
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "1000",
+          "100"
+        ]
+      }
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "delay",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "push",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "alarm-clock",
+    "description": "delay + push",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "time"
+    ]
+  },
+  "id": "8cd6c706-d1d4-11ea-92e1-47577abb9ccf",
+  "type": "`U`&`G`",
+  "system": true
+}

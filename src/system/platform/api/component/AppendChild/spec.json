@@ -1,0 +1,51 @@
+{
+  "name": "append child",
+  "inputs": {
+    "parent": {
+      "type": "`C`",
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -116,
+            "y": 30
+          }
+        }
+      }
+    },
+    "child": {
+      "type": "`C`",
+      "metadata": {
+        "examples": [
+          "f27cae4e-fea8-11ea-b91e-db41e114c426"
+        ],
+        "position": {
+          "0": {
+            "x": 128,
+            "y": 30
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "i": {
+      "type": "number",
+      "defaultIgnored": true
+    }
+  },
+  "base": true,
+  "metadata": {
+    "icon": "square",
+    "description": "append `child` instance to `parent`",
+    "complexity": 2.662898652780609,
+    "tags": [
+      "platform",
+      "api",
+      "component"
+    ]
+  },
+  "id": "ee4715e6-f479-11ea-b231-bf95a7f38a99",
+  "type": "`U`",
+  "system": true
+}

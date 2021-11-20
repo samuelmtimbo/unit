@@ -1,0 +1,30 @@
+{
+  "name": "add rect",
+  "inputs": {
+    "d": {
+      "type": "any[][]"
+    },
+    "rect": {
+      "type": "{x:number,y:number,width:number,height:number}"
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "any[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "adds a rectangle to the current sub-path",
+    "complexity": 2.659451846635658,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "58385055-7f06-472a-be9e-26bb5bce276a",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

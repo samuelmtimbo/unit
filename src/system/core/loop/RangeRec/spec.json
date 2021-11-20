@@ -1,0 +1,166 @@
+{
+  "name": "range rec",
+  "units": {
+    "increment": {
+      "id": "fafeadd7-06a8-4bb0-9fa5-2149d1b5208e"
+    },
+    "lessthan": {
+      "id": "82c3cf2a-0855-4c6d-a4c4-807b0ce1fd35"
+    },
+    "range": {
+      "id": "cc816c77-3ee5-4a84-8f75-c319b53985c3"
+    },
+    "if0": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "if1": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "plan": {
+      "id": "36329d25-218d-48a5-a06c-1e0525da504f"
+    }
+  },
+  "merges": {
+    "0": {
+      "lessthan": {
+        "input": {
+          "a": true
+        }
+      },
+      "if0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "lessthan": {
+        "input": {
+          "b": true
+        }
+      },
+      "if1": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "increment": {
+        "output": {
+          "a + 1": true
+        }
+      },
+      "range": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "lessthan": {
+        "output": {
+          "a < b": true
+        }
+      },
+      "if1": {
+        "input": {
+          "b": true
+        }
+      },
+      "if0": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "4": {
+      "range": {
+        "output": {
+          "i": true
+        }
+      },
+      "plan": {
+        "output": {
+          "first": true
+        }
+      }
+    },
+    "5": {
+      "if1": {
+        "output": {
+          "a if b": true
+        }
+      },
+      "range": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "6": {
+      "increment": {
+        "input": {
+          "a": true
+        }
+      },
+      "plan": {
+        "output": {
+          "second": true
+        }
+      }
+    },
+    "7": {
+      "plan": {
+        "input": {
+          "a": true
+        }
+      },
+      "if0": {
+        "output": {
+          "a if b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "list-ordered",
+    "description": "count from `a` to `b`, not inclusive",
+    "complexity": 15,
+    "tags": [
+      "core",
+      "loop"
+    ]
+  },
+  "inputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "mergeId": "4"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "cc816c77-3ee5-4a84-8f75-c319b53985c3",
+  "type": "`U`&`G`",
+  "system": true
+}

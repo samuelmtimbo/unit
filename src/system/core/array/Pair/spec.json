@@ -1,0 +1,83 @@
+{
+  "name": "pair",
+  "units": {
+    "erpkaeoq": {
+      "id": "f57f5318-f26f-4b9f-b9e2-dcc022ad7728"
+    },
+    "ahajqv": {
+      "id": "d2f8bb43-af44-4371-a32e-20b760695e13"
+    },
+    "ijqwhhhmg": {
+      "id": "d2f8bb43-af44-4371-a32e-20b760695e13"
+    }
+  },
+  "merges": {
+    "jkmablfb": {
+      "erpkaeoq": {
+        "input": {
+          "b": true
+        }
+      },
+      "ahajqv": {
+        "output": {
+          "[a]": true
+        }
+      }
+    },
+    "ybnvmqnh": {
+      "erpkaeoq": {
+        "input": {
+          "a": true
+        }
+      },
+      "ijqwhhhmg": {
+        "output": {
+          "[a]": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "build array with elements `0` and `1`",
+    "complexity": 7,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "0": {
+      "pin": {
+        "0": {
+          "unitId": "ijqwhhhmg",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "1": {
+      "pin": {
+        "0": {
+          "unitId": "ahajqv",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "hbsxpnl": {
+      "pin": {
+        "0": {
+          "unitId": "erpkaeoq",
+          "pinId": "ab"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "a7d5c2f3-6134-4248-b9bc-33271c280267",
+  "type": "`U`&`G`",
+  "system": true
+}

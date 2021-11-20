@@ -1,0 +1,80 @@
+{
+  "name": "assert",
+  "inputs": {
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "b"
+        }
+      }
+    },
+    "message": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a if b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -50,
+          "y": -1
+        }
+      }
+    },
+    "throw": {
+      "id": "99657eb7-fb94-474e-b03d-4b08c537c0a2",
+      "input": {
+        "message": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 49,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "throw": {
+        "input": {
+          "message": true
+        }
+      },
+      "if": {
+        "output": {
+          "a if b": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "complexity": 5.655152604562385,
+    "icon": "alert-circle",
+    "description": "throw `message` if `test` is false",
+    "tags": [
+      "core",
+      "assert"
+    ]
+  },
+  "id": "cbb46967-8627-4546-add8-6426e3730560",
+  "system": true
+}

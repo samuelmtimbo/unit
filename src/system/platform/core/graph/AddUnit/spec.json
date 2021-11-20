@@ -1,0 +1,137 @@
+{
+  "name": "add unit",
+  "units": {
+    "call": {
+      "id": "f46af75e-af68-11ea-aa0e-37bf85a86c5e",
+      "input": {
+        "method": {
+          "data": "'addUnit'",
+          "constant": true
+        }
+      },
+      "output": {
+        "data": {
+          "ignored": true
+        }
+      }
+    },
+    "tag": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'Class'"
+        },
+        "v": {}
+      },
+      "output": {
+        "kv": {}
+      }
+    },
+    "tag1": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'id'"
+        },
+        "v": {}
+      },
+      "output": {
+        "kv": {}
+      }
+    },
+    "merge": {
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "ab": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "tag1": {
+        "output": {
+          "kv": true
+        }
+      },
+      "merge": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "tag": {
+        "output": {
+          "kv": true
+        }
+      },
+      "merge": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "merge": {
+        "output": {
+          "ab": true
+        }
+      },
+      "call": {
+        "input": {
+          "data": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "graph": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "call",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    },
+    "Class": {
+      "type": "any",
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      }
+    },
+    "id": {
+      "type": "number|string",
+      "pin": {
+        "0": {
+          "unitId": "tag1",
+          "pinId": "v"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "add unit with `id` of `Class` to `graph`",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "graph"
+    ]
+  },
+  "id": "fc1b784c-1413-4ee2-bce5-135342523156",
+  "type": "`U`&`G`",
+  "system": true
+}

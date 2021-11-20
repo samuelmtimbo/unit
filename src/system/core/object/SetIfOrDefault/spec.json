@@ -1,0 +1,124 @@
+{
+  "name": "set if or default",
+  "units": {
+    "setif": {
+      "id": "946701f6-7dd4-11ea-a1aa-67938c0c6214"
+    },
+    "default": {
+      "id": "329920ae-7e91-11ea-988e-1b12488c8b89"
+    },
+    "default0": {
+      "id": "329920ae-7e91-11ea-988e-1b12488c8b89"
+    }
+  },
+  "merges": {
+    "0": {
+      "setif": {
+        "input": {
+          "test": true
+        }
+      },
+      "default": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "setif": {
+        "input": {
+          "value": true
+        }
+      },
+      "default0": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "testdefault": {
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "d"
+        }
+      },
+      "type": "boolean"
+    },
+    "default": {
+      "pin": {
+        "0": {
+          "unitId": "default0",
+          "pinId": "d"
+        }
+      },
+      "type": "<A>"
+    },
+    "test": {
+      "name": "test",
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a"
+        }
+      },
+      "type": "boolean"
+    },
+    "value": {
+      "name": "value",
+      "pin": {
+        "0": {
+          "unitId": "default0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "key": {
+      "name": "key",
+      "pin": {
+        "0": {
+          "unitId": "setif",
+          "pinId": "key"
+        }
+      },
+      "type": "number|string"
+    },
+    "obj": {
+      "name": "obj",
+      "pin": {
+        "0": {
+          "unitId": "setif",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "name": "obj",
+      "pin": {
+        "0": {
+          "unitId": "setif",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "set value at `key` to `value` if `test` is defined and true or to `default` otherwise",
+    "complexity": 8,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "id": "c0b85780-7e99-11ea-9a99-879f3f411ebd",
+  "type": "`U`&`G`",
+  "system": true
+}

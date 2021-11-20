@@ -1,0 +1,256 @@
+{
+  "name": "root",
+  "inputs": {
+    "disabled": {
+      "pin": {
+        "0": {
+          "unitId": "io",
+          "pinId": "disabled"
+        }
+      },
+      "type": "boolean",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -208,
+            "y": 27
+          }
+        }
+      },
+      "defaultIgnored": true
+    },
+    "fullwindow": {
+      "pin": {
+        "0": {
+          "unitId": "io",
+          "pinId": "fullwindow"
+        }
+      },
+      "type": "boolean",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -234,
+            "y": -81
+          }
+        }
+      },
+      "defaultIgnored": true
+    },
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "io",
+          "pinId": "style"
+        }
+      },
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -250,
+            "y": -35
+          }
+        }
+      }
+    },
+    "spec": {
+      "pin": {
+        "0": {
+          "unitId": "pod",
+          "pinId": "spec"
+        }
+      },
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -310,
+            "y": 67
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "graph": {
+      "pin": {
+        "0": {
+          "unitId": "io",
+          "pinId": "graph"
+        }
+      },
+      "ref": true,
+      "type": "`U`&`G`",
+      "defaultIgnored": true
+    }
+  },
+  "units": {
+    "io": {
+      "id": "6f267de2-b02c-11ea-b55c-db553f4c6c45",
+      "input": {
+        "disabled": {
+          "data": "false",
+          "metadata": {
+            "position": {
+              "x": -221,
+              "y": 5
+            }
+          }
+        },
+        "style": {
+          "metadata": {
+            "position": {
+              "x": -223,
+              "y": -24
+            }
+          }
+        },
+        "pod": {},
+        "fullwindow": {
+          "metadata": {
+            "position": {
+              "x": -222,
+              "y": -55
+            }
+          }
+        },
+        "frame": {
+          "metadata": {
+            "position": {
+              "x": 317,
+              "y": -6
+            }
+          }
+        }
+      },
+      "output": {
+        "graph": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -10,
+          "y": -6
+        }
+      }
+    },
+    "pod": {
+      "id": "324b9c5e-5810-11eb-bf7c-634b3bb07f8c",
+      "input": {
+        "spec": {
+          "metadata": {
+            "position": {
+              "x": -286,
+              "y": 53
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -237,
+          "y": 42
+        }
+      }
+    },
+    "iounappkeyboard": {
+      "id": "96d5d60e-85eb-11eb-ba90-7fc42ab0a641",
+      "input": {},
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 583,
+          "y": -280
+        }
+      }
+    },
+    "iounappcloud": {
+      "id": "6f1111f0-82b3-11eb-9271-07ffc15d08c6",
+      "input": {},
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 681,
+          "y": -8
+        }
+      }
+    },
+    "iounappuser": {
+      "id": "5be27ad8-9a3c-11eb-8108-375092ceb015",
+      "metadata": {
+        "position": {
+          "x": 578,
+          "y": 292
+        }
+      },
+      "input": {},
+      "output": {}
+    }
+  },
+  "merges": {
+    "0": {
+      "io": {
+        "input": {
+          "pod": true
+        }
+      },
+      "pod": {
+        "output": {
+          "graph": true
+        }
+      }
+    }
+  },
+  "component": {
+    "slots": [
+      [
+        "io",
+        "default"
+      ]
+    ],
+    "subComponents": {
+      "io": {
+        "children": [
+          "iounappcloud",
+          "iounappuser",
+          "iounappkeyboard"
+        ],
+        "childSlot": {
+          "iounappcloud": "2",
+          "iounappuser": "2",
+          "iounappkeyboard": "2"
+        }
+      },
+      "iounappkeyboard": {
+        "children": []
+      },
+      "iounappcloud": {
+        "children": []
+      },
+      "iounappuser": {
+        "children": []
+      }
+    },
+    "children": [
+      "io"
+    ],
+    "defaultWidth": 420,
+    "defaultHeight": 420
+  },
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "app.ioun.it inside an iframe",
+    "complexity": 61.65570854103738,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "9aba266d-5200-4281-b477-749c9b3c5815",
+  "type": "`U`&`G`",
+  "system": true
+}

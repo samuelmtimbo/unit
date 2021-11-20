@@ -1,0 +1,29 @@
+{
+  "name": "cloud graph",
+  "private": true,
+  "inputs": {
+    "url": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "pod": {
+      "type": "`PO`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "table",
+    "description": "persist data on unit cloud storage",
+    "complexity": 2.6588588477289994,
+    "tags": [
+      "host",
+      "cloud",
+      "graph"
+    ]
+  },
+  "id": "1633773d-b1af-42e7-9c21-bffa1abb6066",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

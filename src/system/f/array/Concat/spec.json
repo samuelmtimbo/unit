@@ -1,0 +1,29 @@
+{
+  "name": "concat",
+  "inputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "b": {
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "ab": {
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "chevrons-left",
+    "description": "concatenate arrays `a` and `b` into a single one",
+    "complexity": 2.655893853195708,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "f57f5318-f26f-4b9f-b9e2-dcc022ad7728",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,229 @@
+{
+  "name": "remove all children",
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -168,
+            "y": -31
+          }
+        }
+      }
+    },
+    "parent": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 185,
+            "y": 8
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "haschild": {
+      "id": "c475117a-02b9-11eb-b7c8-579fe4f6c669",
+      "input": {
+        "parent": {},
+        "at": {}
+      },
+      "output": {
+        "has": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 113,
+          "y": -19
+        }
+      }
+    },
+    "removechild": {
+      "id": "6dbff818-02b9-11eb-9ee7-93b57419f741",
+      "input": {
+        "parent": {},
+        "at": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 115,
+          "y": 34
+        }
+      }
+    },
+    "loop": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {},
+        "test": {}
+      },
+      "output": {
+        "local": {},
+        "current": {},
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -21,
+              "y": -29
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 17,
+          "y": 0
+        }
+      }
+    },
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0",
+          "metadata": {
+            "position": {
+              "x": -143,
+              "y": 17
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -143,
+              "y": -17
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -97,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "haschild": {
+        "input": {
+          "parent": true
+        }
+      },
+      "removechild": {
+        "input": {
+          "parent": true
+        }
+      }
+    },
+    "1": {
+      "loop": {
+        "output": {
+          "local": true
+        }
+      },
+      "haschild": {
+        "input": {
+          "at": true
+        }
+      }
+    },
+    "2": {
+      "haschild": {
+        "output": {
+          "has": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "3": {
+      "loop": {
+        "output": {
+          "current": true
+        }
+      },
+      "removechild": {
+        "input": {
+          "at": true
+        }
+      }
+    },
+    "4": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "loop": {
+        "input": {
+          "init": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "remove all `parent` children",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": 156,
+          "y": 7
+        },
+        "1": {
+          "x": 66,
+          "y": -5
+        },
+        "2": {
+          "x": 61,
+          "y": -28
+        },
+        "3": {
+          "x": 62,
+          "y": 29
+        },
+        "4": {
+          "x": -42,
+          "y": 0
+        }
+      }
+    }
+  },
+  "id": "2c7507c4-02bc-11eb-88e5-8bc78086a76f",
+  "type": "`U`&`G`",
+  "system": true
+}

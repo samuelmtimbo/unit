@@ -1,0 +1,50 @@
+{
+  "name": "HTTP token auth",
+  "units": {
+    "xdcafywx": {
+      "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'Bearer '"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "send",
+    "description": "no description",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
+  },
+  "inputs": {
+    "tpbfwhrq": {
+      "pin": {
+        "0": {
+          "unitId": "xdcafywx",
+          "pinId": "b"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "shglvpnwm": {
+      "pin": {
+        "0": {
+          "unitId": "xdcafywx",
+          "pinId": "ab"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "522a9858-02c2-487a-ac04-27d2f5ebe7c3",
+  "type": "`U`&`G`",
+  "system": true
+}

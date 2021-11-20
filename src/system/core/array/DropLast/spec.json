@@ -1,0 +1,117 @@
+{
+  "name": "drop last",
+  "units": {
+    "split": {
+      "id": "de2d5ba8-ac0f-461e-849b-f4aa84d2736a",
+      "input": {
+        "a": {},
+        "i": {}
+      },
+      "output": {
+        "second": {
+          "ignored": true
+        },
+        "first": {}
+      }
+    },
+    "length": {
+      "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "length": {}
+      }
+    },
+    "subtract": {
+      "id": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a - b": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "length": {
+        "input": {
+          "a": true
+        }
+      },
+      "split": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "length": {
+        "output": {
+          "length": true
+        }
+      },
+      "subtract": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "subtract": {
+        "output": {
+          "a - b": true
+        }
+      },
+      "split": {
+        "input": {
+          "i": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "ab": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "n": {
+      "pin": {
+        "0": {
+          "unitId": "subtract",
+          "pinId": "b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "split",
+          "pinId": "first"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "output list `a` containing all but the last `n` elements of the given list `ab`",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "6c2a2d48-fd23-11ea-b8c5-27de11375b8a",
+  "type": "`U`&`G`",
+  "system": true
+}

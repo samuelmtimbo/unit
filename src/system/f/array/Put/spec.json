@@ -1,0 +1,32 @@
+{
+  "name": "put",
+  "inputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "v": {
+      "type": "<A>"
+    },
+    "i": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "chevrons-left",
+    "description": "set element of `a` at position `i` to `v`",
+    "complexity": 2.659785408520653,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "22622778-d64f-47e7-8ceb-d175edcc6562",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,53 @@
+{
+  "name": "remove whitespace",
+  "units": {
+    "ctvuqkf": {
+      "id": "af5469c4-a09e-4b22-8133-a21e721e7639",
+      "input": {
+        "regex": {
+          "constant": true,
+          "data": "' '"
+        },
+        "replacement": {
+          "constant": true,
+          "data": "''"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "question",
+    "description": "no description",
+    "complexity": 4.658784722865667,
+    "tags": [
+      "core",
+      "string"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "ctvuqkf",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "ctvuqkf",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "2006f85c-a05c-4c42-9270-591880969578",
+  "type": "`U`&`G`",
+  "system": true
+}

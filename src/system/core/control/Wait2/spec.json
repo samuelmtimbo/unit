@@ -1,0 +1,77 @@
+{
+  "name": "wait 2",
+  "units": {
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    },
+    "wait0": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    }
+  },
+  "merges": {
+    "gnurtgifi": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "wait0": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "git-merge",
+    "description": "wait for `b` and `c` before output `a`",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "inputs": {
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "wait0",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "wait0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "id": "67cca9ec-1976-47bc-b0d7-5b32e059f6f1",
+  "type": "`U`&`G`",
+  "system": true
+}

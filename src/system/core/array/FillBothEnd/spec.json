@@ -1,0 +1,107 @@
+{
+  "name": "fill both end",
+  "units": {
+    "fillend": {
+      "id": "b0995ebb-08d5-4740-9bf3-272d44f09595"
+    },
+    "fillend0": {
+      "id": "b0995ebb-08d5-4740-9bf3-272d44f09595"
+    }
+  },
+  "merges": {
+    "0": {
+      "fillend": {
+        "input": {
+          "a": true
+        }
+      },
+      "fillend0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "fillend": {
+        "input": {
+          "n": true
+        }
+      },
+      "fillend0": {
+        "input": {
+          "n": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "fill `a` and `b` with `a` until both have size `n`",
+    "complexity": 38.31264014231974,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "a[]": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "fillend",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "b[]": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "fillend0",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "with": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "<A>"
+    },
+    "n": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a[]": {
+      "pin": {
+        "0": {
+          "unitId": "fillend",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "b[]": {
+      "pin": {
+        "0": {
+          "unitId": "fillend0",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "b94fd858-9fa6-4487-bc2e-87801d3dfcc3",
+  "type": "`U`&`G`",
+  "system": true
+}

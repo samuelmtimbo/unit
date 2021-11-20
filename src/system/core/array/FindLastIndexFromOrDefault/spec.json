@@ -1,0 +1,205 @@
+{
+  "name": "find last index from or default",
+  "units": {
+    "loop": {
+      "id": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {},
+        "test": {},
+        "init": {
+          "constant": false
+        }
+      },
+      "output": {
+        "current": {
+          "ignored": false
+        },
+        "local": {
+          "ignored": true
+        },
+        "final": {
+          "ignored": false
+        }
+      }
+    },
+    "pick": {
+      "id": "396497e4-f8e7-4573-95c9-a4f186a5cd05",
+      "input": {
+        "a": {},
+        "b": {},
+        "c": {}
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "foreachfrom": {
+      "id": "f538e9b0-f172-4c9f-be23-86c715750b76",
+      "input": {
+        "from": {},
+        "a": {}
+      },
+      "output": {
+        "i": {
+          "ignored": false
+        },
+        "a": {
+          "ignored": false
+        },
+        "a[i]": {},
+        "test": {}
+      }
+    }
+  },
+  "merges": {
+    "5": {
+      "pick": {
+        "output": {
+          "a": true
+        }
+      },
+      "loop": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "6": {
+      "loop": {
+        "output": {
+          "current": true
+        }
+      },
+      "pick": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "7": {
+      "foreachfrom": {
+        "output": {
+          "test": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "8": {
+      "foreachfrom": {
+        "output": {
+          "i": true
+        }
+      },
+      "pick": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "foreachfrom",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "<A>[]"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "c"
+        }
+      },
+      "type": "boolean"
+    },
+    "from": {
+      "pin": {
+        "0": {
+          "unitId": "foreachfrom",
+          "pinId": "from"
+        }
+      },
+      "functional": true,
+      "type": "number"
+    },
+    "default": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "init"
+        }
+      },
+      "functional": true,
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "foreachfrom",
+          "pinId": "a"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "<A>[]"
+    },
+    "i": {
+      "pin": {
+        "0": {
+          "mergeId": "8"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "number"
+    },
+    "a[i]": {
+      "pin": {
+        "0": {
+          "unitId": "foreachfrom",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "mergeId": "7"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "boolean"
+    },
+    "result": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "...",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "08d39098-c38f-4a88-9d8c-cc323730b36c",
+  "type": "`U`&`G`",
+  "system": true
+}

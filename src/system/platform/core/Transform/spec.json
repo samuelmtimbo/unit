@@ -1,0 +1,112 @@
+{
+  "name": "transform",
+  "inputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "ref": true
+    },
+    "name": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      }
+    },
+    "next": {
+      "pin": {
+        "0": {
+          "unitId": "set0",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "current": {
+      "pin": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value"
+        }
+      }
+    }
+  },
+  "units": {
+    "get": {
+      "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": {
+        "unit": {},
+        "name": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 46,
+          "y": 0
+        }
+      }
+    },
+    "set0": {
+      "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+      "input": {
+        "unit": {},
+        "name": {},
+        "data": {}
+      },
+      "output": {
+        "data": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -47,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "get": {
+        "input": {
+          "unit": true
+        }
+      },
+      "set0": {
+        "input": {
+          "unit": true
+        }
+      }
+    },
+    "1": {
+      "get": {
+        "input": {
+          "name": true
+        }
+      },
+      "set0": {
+        "input": {
+          "name": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core"
+    ]
+  },
+  "type": "`U`&`G`",
+  "id": "47a78f03-7dd4-4207-aefa-02574661de6e",
+  "system": true
+}

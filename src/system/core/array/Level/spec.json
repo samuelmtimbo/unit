@@ -1,0 +1,119 @@
+{
+  "name": "level",
+  "units": {
+    "maxlength": {
+      "id": "85343b1d-93db-4fc0-8fcf-655739dbd494"
+    },
+    "tjrsgp": {
+      "id": "b94fd858-9fa6-4487-bc2e-87801d3dfcc3"
+    }
+  },
+  "merges": {
+    "cmywa": {
+      "maxlength": {
+        "output": {
+          "max": true
+        }
+      },
+      "tjrsgp": {
+        "input": {
+          "n": true
+        }
+      }
+    },
+    "oirwnkg": {
+      "maxlength": {
+        "input": {
+          "a": true
+        }
+      },
+      "tjrsgp": {
+        "input": {
+          "a[]": true
+        }
+      }
+    },
+    "wsguc": {
+      "maxlength": {
+        "input": {
+          "b": true
+        }
+      },
+      "tjrsgp": {
+        "input": {
+          "b[]": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "with": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "tjrsgp",
+          "pinId": "with"
+        }
+      },
+      "type": "<A>"
+    },
+    "a[]": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "oirwnkg"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "b[]": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "wsguc"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "length": {
+      "pin": {
+        "0": {
+          "mergeId": "cmywa"
+        }
+      },
+      "type": "number"
+    },
+    "b[]": {
+      "pin": {
+        "0": {
+          "unitId": "tjrsgp",
+          "pinId": "b[]"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "a[]": {
+      "pin": {
+        "0": {
+          "unitId": "tjrsgp",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "match arrays' length",
+    "complexity": 12.655226729425717,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "358fa592-55e4-49f5-be28-b66e5114b266",
+  "type": "`U`&`G`",
+  "system": true
+}

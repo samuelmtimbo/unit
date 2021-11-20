@@ -1,0 +1,26 @@
+{
+  "name": "not",
+  "inputs": {
+    "a": {
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "!a": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "exclamation",
+    "description": "NOT logic operator",
+    "complexity": 2.6545596056557272,
+    "tags": [
+      "f",
+      "logic"
+    ]
+  },
+  "id": "7d02d638-a311-4ea8-a0c0-d45baf739e0d",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

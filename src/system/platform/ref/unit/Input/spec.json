@@ -1,0 +1,36 @@
+{
+  "name": "input",
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "ref": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "pin": {
+      "type": "`V`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "unit",
+    "description": "reference `unit` input `name`",
+    "complexity": 2.775012508570687,
+    "tags": [
+      "platform",
+      "ref",
+      "unit"
+    ]
+  },
+  "id": "4ae69887-a087-4d37-8743-d83ca48184d1",
+  "type": "`U`",
+  "base": true,
+  "system": true
+}

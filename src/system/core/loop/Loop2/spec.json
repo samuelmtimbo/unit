@@ -1,0 +1,207 @@
+{
+  "name": "loop 2",
+  "units": {
+    "splitab0": {
+      "id": "40555189-33ef-48b6-af8a-5ab4805b9a1f"
+    },
+    "mergeab0": {
+      "id": "4e54703e-08bc-4537-ba5d-5e697a02be1f"
+    },
+    "splitab1": {
+      "id": "40555189-33ef-48b6-af8a-5ab4805b9a1f"
+    },
+    "mergeab1": {
+      "id": "4e54703e-08bc-4537-ba5d-5e697a02be1f"
+    },
+    "splitab2": {
+      "id": "40555189-33ef-48b6-af8a-5ab4805b9a1f"
+    },
+    "for": {
+      "id": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "output": {
+        "final": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "mergeab0": {
+        "output": {
+          "ab": true
+        }
+      },
+      "for": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "1": {
+      "splitab1": {
+        "input": {
+          "ab": true
+        }
+      },
+      "for": {
+        "output": {
+          "final": true
+        }
+      }
+    },
+    "2": {
+      "splitab0": {
+        "input": {
+          "ab": true
+        }
+      },
+      "for": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "3": {
+      "mergeab1": {
+        "output": {
+          "ab": true
+        }
+      },
+      "for": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "4": {
+      "splitab2": {
+        "input": {
+          "ab": true
+        }
+      },
+      "for": {
+        "output": {
+          "current": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "undo",
+    "description": "iterate over `a` and `b`",
+    "complexity": 8,
+    "tags": [
+      "core",
+      "loop"
+    ]
+  },
+  "inputs": {
+    "next a": {
+      "pin": {
+        "0": {
+          "unitId": "mergeab1",
+          "pinId": "a"
+        }
+      },
+      "type": "any"
+    },
+    "next b": {
+      "pin": {
+        "0": {
+          "unitId": "mergeab1",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "inita": {
+      "pin": {
+        "0": {
+          "unitId": "mergeab0",
+          "pinId": "a"
+        }
+      },
+      "type": "any"
+    },
+    "initb": {
+      "pin": {
+        "0": {
+          "unitId": "mergeab0",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "for",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "localb": {
+      "pin": {
+        "0": {
+          "unitId": "splitab0",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "locala": {
+      "pin": {
+        "0": {
+          "unitId": "splitab0",
+          "pinId": "a"
+        }
+      },
+      "type": "any"
+    },
+    "finalb": {
+      "defaultIgnored": true,
+      "pin": {
+        "0": {
+          "unitId": "splitab1",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "finala": {
+      "defaultIgnored": true,
+      "pin": {
+        "0": {
+          "unitId": "splitab1",
+          "pinId": "a"
+        }
+      },
+      "type": "any"
+    },
+    "currenta": {
+      "pin": {
+        "0": {
+          "unitId": "splitab2",
+          "pinId": "a"
+        }
+      },
+      "type": "any"
+    },
+    "currentb": {
+      "pin": {
+        "0": {
+          "unitId": "splitab2",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "eee90e0f-522d-4ac4-a0f1-abf5d69a4e26",
+  "type": "`U`&`G`",
+  "system": true
+}

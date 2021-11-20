@@ -1,0 +1,96 @@
+{
+  "name": "merge x y",
+  "units": {
+    "merge": {
+      "id": "2af12780-698c-40ca-baa9-5f3260377e0f"
+    },
+    "tagx": {
+      "id": "c03c6348-27ca-11eb-a1a3-c7af00092506",
+      "input": {
+        "x": {}
+      },
+      "output": {
+        "{x}": {}
+      }
+    },
+    "tagy": {
+      "id": "e3cfa57c-27ca-11eb-9aab-afd483aa07b0",
+      "input": {
+        "y": {}
+      },
+      "output": {
+        "{y}": {}
+      }
+    }
+  },
+  "merges": {
+    "merge0": {
+      "tagx": {
+        "output": {
+          "{x}": true
+        }
+      },
+      "merge": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "merge1": {
+      "tagy": {
+        "output": {
+          "{y}": true
+        }
+      },
+      "merge": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "{ x, y }",
+    "complexity": 5,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "y": {
+      "type": "number",
+      "pin": {
+        "0": {
+          "unitId": "tagy",
+          "pinId": "y"
+        }
+      }
+    },
+    "x": {
+      "type": "number",
+      "pin": {
+        "0": {
+          "unitId": "tagx",
+          "pinId": "x"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "{x,y}": {
+      "type": "{x:number,y:number}",
+      "pin": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "ab"
+        }
+      }
+    }
+  },
+  "id": "2737cd82-d80b-4d3f-b33d-f00f68361e24",
+  "type": "`U`&`G`",
+  "system": true
+}

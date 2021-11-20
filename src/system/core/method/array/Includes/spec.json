@@ -1,0 +1,113 @@
+{
+  "name": "includes",
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "indexof",
+          "pinId": "a"
+        }
+      }
+    },
+    "a[]": {
+      "pin": {
+        "0": {
+          "unitId": "indexof",
+          "pinId": "a[]"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "greaterthan",
+          "pinId": "a > b"
+        }
+      }
+    }
+  },
+  "units": {
+    "indexof": {
+      "id": "26b06e21-798c-4bc4-96e1-12a4351c083d",
+      "input": {
+        "a[]": {},
+        "a": {}
+      },
+      "output": {
+        "i": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": -57
+        }
+      }
+    },
+    "greaterthan": {
+      "id": "1651ce6b-4db0-4787-9edf-f770b72d253c",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "-1"
+        }
+      },
+      "output": {
+        "a > b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": -57
+        }
+      }
+    },
+    "includes": {
+      "id": "8783e7de-6cde-11eb-bd74-574fd9c8b6aa",
+      "input": {
+        "a[]": {},
+        "a": {}
+      },
+      "output": {
+        "found": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -2,
+          "y": 113
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "greaterthan": {
+        "input": {
+          "a": true
+        }
+      },
+      "indexof": {
+        "output": {
+          "i": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "complexity": 17.664307025183923,
+    "tags": [
+      "core",
+      "method",
+      "array"
+    ]
+  },
+  "component": {
+    "children": []
+  },
+  "id": "4d280c6a-3c33-42df-b0e3-ee643fad4c85",
+  "system": true
+}

@@ -1,0 +1,85 @@
+{
+  "name": "random natural",
+  "units": {
+    "random": {
+      "id": "2b59f375-ef06-4ec7-80c2-71a53171ec67"
+    },
+    "floor": {
+      "id": "3217edcf-2fa1-4dc4-af7c-d6fb607c888d"
+    },
+    "rfwdq": {
+      "id": "872be100-f4dc-4246-8eea-6e3da31137b7"
+    }
+  },
+  "merges": {
+    "awhhu": {
+      "random": {
+        "output": {
+          "random": true
+        }
+      },
+      "rfwdq": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "goagj": {
+      "rfwdq": {
+        "output": {
+          "a × b": true
+        }
+      },
+      "floor": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "nkfjk": {
+      "rfwdq": {
+        "input": {
+          "b": true
+        }
+      },
+      "random": {
+        "input": {
+          "any": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "max": {
+      "pin": {
+        "0": {
+          "mergeId": "nkfjk"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "floor",
+          "pinId": "⌊a⌋"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "random",
+    "description": "random natural `i` less than `max`",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "9569f78e-18d3-40a3-9373-c56afa0214f6",
+  "type": "`U`&`G`",
+  "system": true
+}

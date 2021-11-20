@@ -1,0 +1,22 @@
+{
+  "name": "GUI control keyboard",
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "unit class component",
+    "complexity": 10.577099123473491,
+    "tags": [
+      "host",
+      "component"
+    ]
+  },
+  "id": "96d5d60e-85eb-11eb-ba90-7fc42ab0a641",
+  "base": true,
+  "component": {
+    "defaultWidth": 210,
+    "defaultHeight": 180
+  },
+  "type": "`U`&`C`",
+  "system": true
+}

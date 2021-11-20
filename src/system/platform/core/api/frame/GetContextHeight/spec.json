@@ -1,0 +1,125 @@
+{
+  "name": "get context height",
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "getheight",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    },
+    "element": {
+      "pin": {
+        "0": {
+          "unitId": "context",
+          "pinId": "element"
+        }
+      },
+      "ref": true,
+      "type": "`U`"
+    }
+  },
+  "outputs": {
+    "height": {
+      "pin": {
+        "0": {
+          "unitId": "getheight",
+          "pinId": "height"
+        }
+      },
+      "type": "any"
+    },
+    "context": {
+      "pin": {
+        "0": {
+          "unitId": "context",
+          "pinId": "_self"
+        }
+      },
+      "ref": true,
+      "type": "`CO`",
+      "defaultIgnored": true
+    }
+  },
+  "units": {
+    "context": {
+      "id": "62e46cdc-e1ec-11ea-957a-3f9e932ddd48",
+      "input": {
+        "element": {
+          "metadata": {
+            "position": {
+              "x": -101,
+              "y": -1
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": -1
+        }
+      }
+    },
+    "getheight": {
+      "id": "f513667c-3e2f-11eb-8a96-4fbfb5c1b798",
+      "input": {
+        "unit": {},
+        "any": {
+          "metadata": {
+            "position": {
+              "x": 57,
+              "y": -19
+            }
+          }
+        }
+      },
+      "output": {
+        "height": {
+          "metadata": {
+            "position": {
+              "x": 57,
+              "y": 18
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 11,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "getheight": {
+        "input": {
+          "unit": true
+        }
+      },
+      "context": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "frame"
+    ]
+  },
+  "id": "9310c4f2-98a6-11eb-8761-677aacbdd0fe",
+  "type": "`U`&`G`",
+  "system": true
+}

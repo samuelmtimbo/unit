@@ -1,0 +1,105 @@
+{
+  "name": "random bit matrix",
+  "units": {
+    "narraybuilder": {
+      "id": "38033fcc-aa28-4df3-abc8-d4ece231028b"
+    },
+    "randombitarray": {
+      "id": "33ec13e7-5a30-4029-af21-07ee422a8a2d"
+    },
+    "repeatn": {
+      "id": "251ba609-a9c5-451b-8162-411c966bf919"
+    },
+    "identity": {
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b"
+    }
+  },
+  "merges": {
+    "0": {
+      "narraybuilder": {
+        "input": {
+          "a": true
+        }
+      },
+      "randombitarray": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "mrxes": {
+      "narraybuilder": {
+        "input": {
+          "n": true
+        }
+      },
+      "repeatn": {
+        "input": {
+          "n": true
+        }
+      },
+      "identity": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "teris": {
+      "randombitarray": {
+        "input": {
+          "n": true
+        }
+      },
+      "repeatn": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "nmfpg": {
+      "repeatn": {
+        "input": {
+          "a": true
+        }
+      },
+      "identity": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "n": {
+      "pin": {
+        "0": {
+          "mergeId": "mrxes"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "narraybuilder",
+          "pinId": "a[]"
+        }
+      },
+      "type": "number[][]"
+    }
+  },
+  "metadata": {
+    "icon": "binary",
+    "description": "output a random bit matrix",
+    "complexity": 10,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "be4600af-eb6b-417f-9bb6-88760afbbcba",
+  "type": "`U`&`G`",
+  "system": true
+}

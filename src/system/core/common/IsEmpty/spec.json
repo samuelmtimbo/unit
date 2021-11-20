@@ -1,0 +1,49 @@
+{
+  "name": "is empty",
+  "units": {
+    "gmkdufe": {
+      "id": "175c0cc6-1801-4b5d-9980-e780c10ea745",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "question",
+    "description": "no description",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "ftwnpzfjy": {
+      "pin": {
+        "0": {
+          "unitId": "gmkdufe",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "unutqjyl": {
+      "pin": {
+        "0": {
+          "unitId": "gmkdufe",
+          "pinId": "equals"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "id": "194683f4-5b90-4501-a8c9-b34f131d4f79",
+  "type": "`U`&`G`",
+  "system": true
+}

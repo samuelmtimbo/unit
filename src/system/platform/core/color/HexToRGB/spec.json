@@ -1,0 +1,241 @@
+{
+  "name": "hex to rgb",
+  "units": {
+    "narraybuilder": {
+      "id": "38033fcc-aa28-4df3-abc8-d4ece231028b"
+    },
+    "parseint": {
+      "id": "8cd29108-95cd-4217-9721-11f7c7c1131e",
+      "input": {
+        "radix": {
+          "constant": true,
+          "data": "16"
+        }
+      }
+    },
+    "tail": {
+      "id": "5c9f4a0a-e675-48db-b6c0-5ac6914cdae0"
+    },
+    "ifnotempty": {
+      "id": "5f5b12b5-c3b9-460e-a84b-3db4f5d9c483"
+    },
+    "split": {
+      "id": "306fe446-a495-4ae3-a835-34f1468e92fe",
+      "input": {
+        "at": {
+          "constant": true,
+          "data": "2"
+        }
+      }
+    },
+    "for": {
+      "id": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "output": {
+        "final": {
+          "ignored": true
+        }
+      }
+    },
+    "validate": {
+      "id": "ea515441-7284-49ab-9bac-a0978f25e2c3",
+      "input": {
+        "message": {
+          "constant": true,
+          "data": "'invalid hex color string'"
+        }
+      }
+    },
+    "gbpohztp": {
+      "id": "c2fec1e6-b370-4069-bb43-6dab5a78b9ab",
+      "input": {
+        "regex": {
+          "constant": true,
+          "data": "'^#[0-9a-zA-Z]{6}$'"
+        }
+      }
+    },
+    "kagcfh": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "3"
+        }
+      }
+    }
+  },
+  "merges": {
+    "kkrapewqc": {
+      "parseint": {
+        "input": {
+          "str": true
+        }
+      },
+      "split": {
+        "output": {
+          "first": true
+        }
+      }
+    },
+    "ccsgfnjcv": {
+      "narraybuilder": {
+        "input": {
+          "a": true
+        }
+      },
+      "parseint": {
+        "output": {
+          "n": true
+        }
+      }
+    },
+    "dvgrkqvur": {
+      "ifnotempty": {
+        "input": {
+          "a": true
+        }
+      },
+      "for": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "ufizmiyj": {
+      "ifnotempty": {
+        "output": {
+          "!empty": true
+        }
+      },
+      "for": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "nhiwiktr": {
+      "split": {
+        "output": {
+          "second": true
+        }
+      },
+      "for": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "oectjebow": {
+      "tail": {
+        "output": {
+          "tail": true
+        }
+      },
+      "for": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "glypwn": {
+      "split": {
+        "input": {
+          "a": true
+        }
+      },
+      "for": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "lefutojb": {
+      "validate": {
+        "input": {
+          "test": true
+        }
+      },
+      "gbpohztp": {
+        "output": {
+          "match": true
+        }
+      }
+    },
+    "dqsjpursq": {
+      "validate": {
+        "output": {
+          "a": true
+        }
+      },
+      "tail": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "jglyayecm": {
+      "validate": {
+        "input": {
+          "a": true
+        }
+      },
+      "gbpohztp": {
+        "input": {
+          "str": true
+        }
+      },
+      "kagcfh": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "ovirohhg": {
+      "kagcfh": {
+        "output": {
+          "a": true
+        }
+      },
+      "narraybuilder": {
+        "input": {
+          "n": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "palette",
+    "description": "hexadecimal color string to RGB array",
+    "complexity": 25.656375664807367,
+    "tags": [
+      "platform",
+      "core",
+      "color"
+    ]
+  },
+  "inputs": {
+    "hex": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "jglyayecm"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "RGB": {
+      "pin": {
+        "0": {
+          "unitId": "narraybuilder",
+          "pinId": "a[]"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "id": "653279dc-893d-4627-854e-d110aece0b72",
+  "type": "`U`&`G`",
+  "system": true
+}

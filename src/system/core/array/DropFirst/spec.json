@@ -1,0 +1,64 @@
+{
+  "name": "drop first",
+  "units": {
+    "split": {
+      "id": "de2d5ba8-ac0f-461e-849b-f4aa84d2736a",
+      "input": {
+        "a": {},
+        "i": {}
+      },
+      "output": {
+        "second": {
+          "ignored": false
+        },
+        "first": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "ab": {
+      "pin": {
+        "0": {
+          "unitId": "split",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "n": {
+      "pin": {
+        "0": {
+          "unitId": "split",
+          "pinId": "i"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "split",
+          "pinId": "second"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "output list `a` containing all but the first `n` elements of the given list `ab`",
+    "complexity": 10.32298056075459,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "cdffb1ec-0790-11eb-96fc-97a33d06261b",
+  "type": "`U`&`G`",
+  "system": true
+}

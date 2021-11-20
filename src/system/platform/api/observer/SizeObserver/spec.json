@@ -1,0 +1,31 @@
+{
+  "name": "size observer",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "width": {
+      "type": "number"
+    },
+    "height": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "watch the size of a component",
+    "complexity": 2.8226747956933456,
+    "tags": [
+      "platform",
+      "api",
+      "observer"
+    ]
+  },
+  "id": "2f2d5ea4-6dd2-406e-a095-5552ebc235e7",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,32 @@
+{
+  "name": "insert",
+  "inputs": {
+    "a": {
+      "type": "<A>[]"
+    },
+    "i": {
+      "type": "number"
+    },
+    "b": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "insert `b` element into `a` at index `i`",
+    "complexity": 2.6575246001890185,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "7014b684-ce58-4b6a-989d-bd6c047daab5",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

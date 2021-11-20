@@ -1,0 +1,49 @@
+{
+  "name": "audio",
+  "inputs": {
+    "src": {
+      "type": "string",
+      "metadata": {
+        "description": "url pointing to a audio data"
+      },
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "stream": {
+      "type": "`U`",
+      "ref": true,
+      "metadata": {
+        "description": "stream object"
+      },
+      "defaultIgnored": false,
+      "optional": true
+    },
+    "controls": {
+      "type": "boolean",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "volume-2",
+    "description": "platform audio component",
+    "complexity": 6.460315401293479,
+    "tags": [
+      "platform",
+      "component",
+      "media"
+    ]
+  },
+  "id": "06823924-b659-4a22-8ed4-b3243121b55d",
+  "base": true,
+  "component": {
+    "defaultWidth": 240,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`",
+  "system": true,
+  "render": true
+}

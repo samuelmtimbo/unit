@@ -1,0 +1,136 @@
+{
+  "name": "set unit input data",
+  "inputs": {
+    "name": {
+      "pin": {
+        "0": {
+          "unitId": "setunitpindata",
+          "pinId": "name"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -69,
+            "y": -40
+          }
+        }
+      },
+      "type": "string"
+    },
+    "id": {
+      "pin": {
+        "0": {
+          "unitId": "setunitpindata",
+          "pinId": "id"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -67,
+            "y": 39
+          }
+        }
+      },
+      "type": "string"
+    },
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "setunitpindata",
+          "pinId": "data"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -67,
+            "y": 39
+          }
+        }
+      },
+      "type": "any"
+    },
+    "graph": {
+      "pin": {
+        "0": {
+          "unitId": "setunitpindata",
+          "pinId": "graph"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 66,
+            "y": -34
+          }
+        }
+      },
+      "type": "`U`"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "setunitpindata": {
+      "id": "76e99304-aa0c-11eb-9bfa-07725a1b4287",
+      "input": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": 41,
+              "y": -19
+            }
+          }
+        },
+        "id": {
+          "metadata": {
+            "position": {
+              "x": -49,
+              "y": 17
+            }
+          }
+        },
+        "type": {
+          "constant": true,
+          "data": "'input'",
+          "metadata": {
+            "position": {
+              "x": 41,
+              "y": 17
+            }
+          }
+        },
+        "name": {
+          "metadata": {
+            "position": {
+              "x": -49,
+              "y": -19
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -4,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "set `graph` `id` unit `name` input pin `data`",
+    "complexity": 4.666530771083891,
+    "tags": [
+      "core",
+      "graph"
+    ]
+  },
+  "id": "8a1ca6c0-af60-48cc-86bb-01e4e59598db",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,126 @@
+{
+  "name": "prop x0 y0 x1 y1",
+  "units": {
+    "mufuusddm": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'x0'"
+        }
+      }
+    },
+    "hgrvjwb": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'x1'"
+        }
+      }
+    },
+    "hsgyjyuxa": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'y0'"
+        }
+      }
+    },
+    "xcvovdsn": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'y1'"
+        }
+      }
+    }
+  },
+  "merges": {
+    "zmaswjs": {
+      "mufuusddm": {
+        "input": {
+          "obj": true
+        }
+      },
+      "hsgyjyuxa": {
+        "input": {
+          "obj": true
+        }
+      },
+      "xcvovdsn": {
+        "input": {
+          "obj": true
+        }
+      },
+      "hgrvjwb": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "no description",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "kiusigco": {
+      "pin": {
+        "0": {
+          "mergeId": "zmaswjs"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "htyb": {
+      "pin": {
+        "0": {
+          "unitId": "hgrvjwb",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    },
+    "kzxphae": {
+      "pin": {
+        "0": {
+          "unitId": "hsgyjyuxa",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    },
+    "ppmqen": {
+      "pin": {
+        "0": {
+          "unitId": "mufuusddm",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    },
+    "mlhf": {
+      "pin": {
+        "0": {
+          "unitId": "xcvovdsn",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "004058a4-3562-4427-a782-66f90bf336a3",
+  "type": "`U`&`G`",
+  "system": true
+}

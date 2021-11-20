@@ -1,0 +1,29 @@
+{
+  "name": "get",
+  "inputs": {
+    "obj": {
+      "type": "object"
+    },
+    "key": {
+      "type": "number|string"
+    }
+  },
+  "outputs": {
+    "value": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "list keys for this object",
+    "complexity": 2.6594889090673237,
+    "tags": [
+      "f",
+      "object"
+    ]
+  },
+  "id": "9414421d-3376-4438-aa03-7afcd860972c",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

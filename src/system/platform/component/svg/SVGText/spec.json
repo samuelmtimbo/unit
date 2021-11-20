@@ -1,0 +1,29 @@
+{
+  "name": "svg text",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG text",
+    "complexity": 6.46261327205678,
+    "tags": [
+      "platform",
+      "component",
+      "svg"
+    ]
+  },
+  "id": "49ef122e-b4d1-11ea-b45e-b73d8ee2aae8",
+  "base": true,
+  "component": {
+    "defaultWidth": 150,
+    "defaultHeight": 60
+  },
+  "type": "`U`&`C`",
+  "system": true,
+  "render": true
+}

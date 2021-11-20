@@ -1,0 +1,152 @@
+{
+  "name": "merge width height",
+  "inputs": {
+    "height": {
+      "pin": {
+        "0": {
+          "unitId": "tagheight",
+          "pinId": "height"
+        }
+      },
+      "type": "any"
+    },
+    "width": {
+      "pin": {
+        "0": {
+          "unitId": "tagwidth",
+          "pinId": "width"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "{width,height}": {
+      "pin": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "ab"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "units": {
+    "tagwidth": {
+      "id": "c13fec8e-a253-11eb-bbe5-6bbcbf28b3ef",
+      "input": {
+        "width": {
+          "metadata": {
+            "position": {
+              "x": -70,
+              "y": 71
+            }
+          }
+        }
+      },
+      "output": {
+        "{width}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -22,
+          "y": 59
+        }
+      }
+    },
+    "tagheight": {
+      "id": "cd3cc728-a253-11eb-92b7-876e93d80737",
+      "input": {
+        "height": {
+          "metadata": {
+            "position": {
+              "x": -70,
+              "y": -72
+            }
+          }
+        }
+      },
+      "output": {
+        "{height}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -22,
+          "y": -60
+        }
+      }
+    },
+    "merge": {
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "ab": {
+          "metadata": {
+            "position": {
+              "x": 111,
+              "y": -1
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 61,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "merge": {
+        "input": {
+          "a": true
+        }
+      },
+      "tagheight": {
+        "output": {
+          "{height}": true
+        }
+      }
+    },
+    "1": {
+      "merge": {
+        "input": {
+          "b": true
+        }
+      },
+      "tagwidth": {
+        "output": {
+          "{width}": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "complexity": 5,
+    "position": {
+      "merge": {
+        "0": {
+          "x": 24,
+          "y": -36
+        },
+        "1": {
+          "x": 24,
+          "y": 35
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "core"
+    ]
+  },
+  "id": "450dac92-395b-4c7b-b8c0-219315c28035",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,103 @@
+{
+  "name": "repeat n",
+  "units": {
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "output": {
+        "local": {
+          "ignored": true
+        }
+      }
+    },
+    "loopdecrement": {
+      "id": "95862764-be74-4372-b734-c767ddd3e323",
+      "output": {
+        "final": {
+          "ignored": true
+        },
+        "current": {
+          "ignored": true
+        }
+      }
+    },
+    "greaterthan0": {
+      "id": "6f4ac2fa-e9bd-4c0e-8bda-75976f3e4e58"
+    }
+  },
+  "merges": {
+    "ncrfjsgik": {
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      },
+      "loopdecrement": {
+        "input": {
+          "test": true
+        }
+      },
+      "greaterthan0": {
+        "output": {
+          "a > 0": true
+        }
+      }
+    },
+    "yxlpxg": {
+      "loopdecrement": {
+        "output": {
+          "local": true
+        }
+      },
+      "greaterthan0": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "repeat-1",
+    "description": "output `a` `n` times",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "n": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "loopdecrement",
+          "pinId": "init"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "current"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "id": "251ba609-a9c5-451b-8162-411c966bf919",
+  "type": "`U`&`G`",
+  "system": true
+}

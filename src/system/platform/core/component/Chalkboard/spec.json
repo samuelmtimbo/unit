@@ -1,0 +1,624 @@
+{
+  "name": "chalkboard",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "canvas",
+          "pinId": "style"
+        }
+      },
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -148,
+            "y": 177
+          }
+        }
+      }
+    },
+    "width": {
+      "pin": {
+        "0": {
+          "unitId": "canvas",
+          "pinId": "width"
+        }
+      },
+      "metadata": {
+        "examples": [
+          "200"
+        ],
+        "position": {
+          "0": {
+            "x": -165,
+            "y": 128
+          }
+        }
+      },
+      "type": "number"
+    },
+    "height": {
+      "pin": {
+        "0": {
+          "unitId": "canvas",
+          "pinId": "height"
+        }
+      },
+      "metadata": {
+        "examples": [
+          "200"
+        ],
+        "position": {
+          "0": {
+            "x": -153,
+            "y": -22
+          }
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "canvas": {
+      "pin": {
+        "0": {
+          "unitId": "canvas",
+          "pinId": "ctx"
+        }
+      },
+      "ref": true,
+      "type": "`U`&`C`&`V`&`PS`&`CS`"
+    }
+  },
+  "units": {
+    "ondrag": {
+      "id": "d4de180e-f1e8-4575-ab64-eaef413bcfc4",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "move": {},
+        "down": {},
+        "up": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 163,
+              "y": -59
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 119,
+          "y": -34
+        }
+      }
+    },
+    "propclientxclienty": {
+      "id": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "clientY": {},
+        "clientX": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 224,
+          "y": 4
+        }
+      }
+    },
+    "beginpath": {
+      "id": "81c0f469-ab88-4bc8-89d5-98d291b1d8b2",
+      "input": {
+        "d": {
+          "constant": true,
+          "data": "[]",
+          "metadata": {
+            "position": {
+              "x": 420,
+              "y": 96
+            }
+          }
+        }
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 371,
+          "y": 94
+        }
+      }
+    },
+    "moveto": {
+      "id": "3c47d4bc-315d-4600-a9cd-6e388b345980",
+      "input": {
+        "d": {},
+        "x": {},
+        "y": {}
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 256,
+          "y": 73
+        }
+      }
+    },
+    "propclientxclienty0": {
+      "id": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "clientY": {},
+        "clientX": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 92,
+          "y": -140
+        }
+      }
+    },
+    "addlineto": {
+      "id": "2b0ef9e9-028b-4acc-9daf-6999e86cc2af",
+      "input": {
+        "d": {
+          "constant": true,
+          "data": "[]",
+          "metadata": {
+            "position": {
+              "x": -37,
+              "y": -207
+            }
+          }
+        },
+        "x": {},
+        "y": {}
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -2,
+          "y": -174
+        }
+      }
+    },
+    "canvas": {
+      "id": "94243ec4-8967-4907-8cdd-7223fe256cf6",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": -151,
+              "y": 147
+            }
+          }
+        },
+        "width": {
+          "metadata": {
+            "position": {
+              "x": -151,
+              "y": 106
+            }
+          }
+        },
+        "height": {
+          "metadata": {
+            "position": {
+              "x": -154,
+              "y": 4
+            }
+          }
+        },
+        "d": {
+          "metadata": {
+            "position": {
+              "x": -154,
+              "y": 54
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -29,
+          "y": 48
+        }
+      }
+    },
+    "stroke": {
+      "id": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99",
+      "input": {
+        "d": {}
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -111,
+          "y": -148
+        }
+      }
+    },
+    "drawd": {
+      "id": "62bd0895-8889-40b2-8147-1c690809f4eb",
+      "input": {
+        "d": {},
+        "canvas": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 130,
+          "y": 83
+        }
+      }
+    },
+    "drawd0": {
+      "id": "62bd0895-8889-40b2-8147-1c690809f4eb",
+      "input": {
+        "d": {},
+        "canvas": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -166,
+          "y": -73
+        }
+      }
+    },
+    "clear": {
+      "id": "f41d4f3a-0a08-4e9f-9aa0-182b2686bd0e",
+      "input": {
+        "d": {}
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -322,
+          "y": 34
+        }
+      }
+    },
+    "drawd1": {
+      "id": "62bd0895-8889-40b2-8147-1c690809f4eb",
+      "input": {
+        "d": {},
+        "canvas": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -205,
+          "y": 26
+        }
+      }
+    },
+    "emptyarray": {
+      "id": "b226083c-2797-11eb-a546-c350370e09cb",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "[]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -317,
+          "y": 91
+        }
+      }
+    },
+    "ondoubleclick": {
+      "id": "40f9a40a-b4f2-11eb-baf1-933bfa98253e",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -201,
+          "y": 90
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "propclientxclienty": {
+        "input": {
+          "obj": true
+        }
+      },
+      "ondrag": {
+        "output": {
+          "down": true
+        }
+      }
+    },
+    "1": {
+      "moveto": {
+        "input": {
+          "x": true
+        }
+      },
+      "propclientxclienty": {
+        "output": {
+          "clientX": true
+        }
+      }
+    },
+    "2": {
+      "moveto": {
+        "input": {
+          "y": true
+        }
+      },
+      "propclientxclienty": {
+        "output": {
+          "clientY": true
+        }
+      }
+    },
+    "3": {
+      "moveto": {
+        "input": {
+          "d": true
+        }
+      },
+      "beginpath": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "4": {
+      "propclientxclienty0": {
+        "input": {
+          "obj": true
+        }
+      },
+      "ondrag": {
+        "output": {
+          "move": true
+        }
+      }
+    },
+    "5": {
+      "canvas": {
+        "output": {
+          "_self": true
+        }
+      },
+      "ondrag": {
+        "input": {
+          "element": true
+        }
+      },
+      "ondoubleclick": {
+        "input": {
+          "element": true
+        }
+      }
+    },
+    "6": {
+      "addlineto": {
+        "input": {
+          "y": true
+        }
+      },
+      "propclientxclienty0": {
+        "output": {
+          "clientY": true
+        }
+      }
+    },
+    "7": {
+      "propclientxclienty0": {
+        "output": {
+          "clientX": true
+        }
+      },
+      "addlineto": {
+        "input": {
+          "x": true
+        }
+      }
+    },
+    "8": {
+      "stroke": {
+        "input": {
+          "d": true
+        }
+      },
+      "addlineto": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "9": {
+      "drawd": {
+        "input": {
+          "d": true
+        }
+      },
+      "moveto": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "10": {
+      "stroke": {
+        "output": {
+          "d": true
+        }
+      },
+      "drawd0": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "11": {
+      "clear": {
+        "output": {
+          "d": true
+        }
+      },
+      "drawd1": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "12": {
+      "emptyarray": {
+        "output": {
+          "[]": true
+        }
+      },
+      "clear": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "13": {
+      "emptyarray": {
+        "input": {
+          "any": true
+        }
+      },
+      "ondoubleclick": {
+        "output": {
+          "event": true
+        }
+      }
+    },
+    "14": {
+      "canvas": {
+        "output": {
+          "ctx": true
+        }
+      },
+      "drawd": {
+        "input": {
+          "canvas": true
+        }
+      },
+      "drawd0": {
+        "input": {
+          "canvas": true
+        }
+      },
+      "drawd1": {
+        "input": {
+          "canvas": true
+        }
+      }
+    }
+  },
+  "component": {
+    "subComponents": {
+      "canvas": {
+        "children": []
+      }
+    },
+    "children": [
+      "canvas"
+    ],
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "drawing board",
+    "complexity": 21,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": 174,
+          "y": -18
+        },
+        "1": {
+          "x": 217,
+          "y": 47
+        },
+        "2": {
+          "x": 271,
+          "y": 27
+        },
+        "3": {
+          "x": 316,
+          "y": 87
+        },
+        "4": {
+          "x": 117,
+          "y": -92
+        },
+        "6": {
+          "x": 54,
+          "y": -173
+        },
+        "7": {
+          "x": 42,
+          "y": -150
+        },
+        "8": {
+          "x": -60,
+          "y": -162
+        },
+        "9": {
+          "x": 190,
+          "y": 86
+        },
+        "10": {
+          "x": -153,
+          "y": -120
+        },
+        "11": {
+          "x": -267,
+          "y": 25
+        },
+        "12": {
+          "x": -361,
+          "y": 64
+        },
+        "13": {
+          "x": -261,
+          "y": 96
+        }
+      }
+    }
+  },
+  "id": "a24f049c-7bb0-11ea-bbdc-17b9984e1f06",
+  "type": "`U`&`G`",
+  "system": true
+}

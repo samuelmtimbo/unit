@@ -1,0 +1,160 @@
+{
+  "name": "merge x0 y0 x1 y1",
+  "units": {
+    "merge4": {
+      "id": "1f1b065a-937b-4630-be80-54edf795eb19"
+    },
+    "tag": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'x0'"
+        }
+      }
+    },
+    "tag0": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'x1'"
+        }
+      }
+    },
+    "tag1": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'y0'"
+        }
+      }
+    },
+    "tag2": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'y1'"
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "merge4": {
+        "input": {
+          "c": true
+        }
+      },
+      "tag": {
+        "output": {
+          "kv": true
+        }
+      }
+    },
+    "1": {
+      "merge4": {
+        "input": {
+          "d": true
+        }
+      },
+      "tag0": {
+        "output": {
+          "kv": true
+        }
+      }
+    },
+    "2": {
+      "merge4": {
+        "input": {
+          "b": true
+        }
+      },
+      "tag1": {
+        "output": {
+          "kv": true
+        }
+      }
+    },
+    "3": {
+      "merge4": {
+        "input": {
+          "a": true
+        }
+      },
+      "tag2": {
+        "output": {
+          "kv": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "{ x0, y0, x1, y1 }",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "x0": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      },
+      "type": "number"
+    },
+    "x1": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "tag0",
+          "pinId": "v"
+        }
+      },
+      "type": "number"
+    },
+    "y0": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "tag1",
+          "pinId": "v"
+        }
+      },
+      "type": "number"
+    },
+    "y1": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "tag2",
+          "pinId": "v"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "{x0,y0,x1,y1}": {
+      "pin": {
+        "0": {
+          "unitId": "merge4",
+          "pinId": "abcd"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "2bd0d83a-bd19-425b-aa75-84a47c73fc81",
+  "type": "`U`&`G`",
+  "system": true
+}

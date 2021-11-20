@@ -1,0 +1,100 @@
+{
+  "name": "pick lesser",
+  "units": {
+    "pick": {
+      "id": "396497e4-f8e7-4573-95c9-a4f186a5cd05"
+    },
+    "lessthan": {
+      "id": "82c3cf2a-0855-4c6d-a4c4-807b0ce1fd35"
+    }
+  },
+  "merges": {
+    "0": {
+      "pick": {
+        "input": {
+          "a": true
+        }
+      },
+      "lessthan": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "pick": {
+        "input": {
+          "b": true
+        }
+      },
+      "lessthan": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "2": {
+      "pick": {
+        "input": {
+          "c": true
+        }
+      },
+      "lessthan": {
+        "output": {
+          "a < b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "pointer",
+    "description": "pick the smalest from `a` and `b`",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "number"
+    },
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "lesser": {
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "a < b": {
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "id": "f805b3c6-6c0e-4215-b3d6-91b93dc8a938",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,94 @@
+{
+  "name": "validate",
+  "units": {
+    "throw": {
+      "id": "99657eb7-fb94-474e-b03d-4b08c537c0a2"
+    },
+    "ifnot": {
+      "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda"
+    },
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    }
+  },
+  "merges": {
+    "butqpzbvl": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifnot": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "vjwuigye": {
+      "ifnot": {
+        "output": {
+          "a if not b": true
+        }
+      },
+      "throw": {
+        "input": {
+          "message": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "alert-circle",
+    "description": "pass if `test`, error `message` otherwise",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "assert"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "message": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "ifnot",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    },
+    "test": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "butqpzbvl"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "id": "ea515441-7284-49ab-9bac-a0978f25e2c3",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,83 @@
+{
+  "name": "random class",
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "randomspecid",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "class": {
+      "pin": {
+        "0": {
+          "unitId": "idtoclass",
+          "pinId": "Class"
+        }
+      },
+      "type": "`U`"
+    }
+  },
+  "units": {
+    "randomspecid": {
+      "id": "95735a9e-9bc0-11eb-90ec-3bb9082e8fe9",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "id": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": 0
+        }
+      }
+    },
+    "idtoclass": {
+      "id": "b0c25199-c284-4f90-817c-60dc89b15b1c",
+      "input": {
+        "id": {}
+      },
+      "output": {
+        "Class": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 50,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "idtoclass": {
+        "input": {
+          "id": true
+        }
+      },
+      "randomspecid": {
+        "output": {
+          "id": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 21.19795044752886,
+    "tags": [
+      "core",
+      "meta"
+    ]
+  },
+  "id": "96c788b0-9bc1-11eb-931a-7312c12cb4c3",
+  "type": "`U`&`G`",
+  "system": true
+}

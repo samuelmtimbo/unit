@@ -1,0 +1,99 @@
+{
+  "name": "undo redo",
+  "units": {
+    "icon": {
+      "id": "63a417e5-d354-4b39-9ebd-05f55e70de7b",
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{cursor:'pointer'}"
+        },
+        "icon": {
+          "constant": true,
+          "data": "'undo'"
+        }
+      },
+      "output": {}
+    },
+    "icon0": {
+      "id": "63a417e5-d354-4b39-9ebd-05f55e70de7b",
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{cursor:'pointer'}"
+        },
+        "icon": {
+          "constant": true,
+          "data": "'redo'"
+        }
+      },
+      "output": {},
+      "metadata": {
+        "component": {
+          "width": 45,
+          "height": 45
+        }
+      }
+    },
+    "flexrowdiv": {
+      "id": "ad5a2fcc-fdee-11ea-a34f-77e9c48dbe57",
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{paddnig:'9px',gap:'9px'}"
+        }
+      },
+      "output": {}
+    },
+    "context": {
+      "id": "62e46cdc-e1ec-11ea-957a-3f9e932ddd48",
+      "input": {
+        "element": {}
+      },
+      "output": {}
+    }
+  },
+  "merges": {},
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "component": {
+    "subComponents": {
+      "icon": {
+        "children": []
+      },
+      "icon0": {
+        "children": [],
+        "width": 45,
+        "height": 45
+      },
+      "flexrowdiv": {
+        "children": [
+          "icon",
+          "icon0"
+        ]
+      },
+      "context": {
+        "children": []
+      }
+    },
+    "children": [
+      "flexrowdiv",
+      "context"
+    ],
+    "defaultWidth": 90,
+    "defaultHeight": 45
+  },
+  "id": "6b6684e8-a94c-4e31-a63c-5ef41e3f5d07",
+  "type": "`U`&`G`",
+  "system": true
+}

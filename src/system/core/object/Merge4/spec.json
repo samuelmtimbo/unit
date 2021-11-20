@@ -1,0 +1,90 @@
+{
+  "name": "merge 4",
+  "units": {
+    "merge3": {
+      "id": "23b844e3-1cef-4ff7-9e2a-bb3ffb613055"
+    },
+    "merge": {
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453"
+    }
+  },
+  "merges": {
+    "0": {
+      "merge3": {
+        "input": {
+          "c": true
+        }
+      },
+      "merge": {
+        "output": {
+          "ab": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "merge objects `a`, `b`, `c` and `d` into `abcd`",
+    "complexity": 7,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "inputs": {
+    "d": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "b"
+        }
+      },
+      "type": "object"
+    },
+    "c": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "a"
+        }
+      },
+      "type": "object"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "merge3",
+          "pinId": "a"
+        }
+      },
+      "type": "object"
+    },
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "merge3",
+          "pinId": "b"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "abcd": {
+      "pin": {
+        "0": {
+          "unitId": "merge3",
+          "pinId": "abc"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "1f1b065a-937b-4630-be80-54edf795eb19",
+  "type": "`U`&`G`",
+  "system": true
+}

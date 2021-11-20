@@ -1,0 +1,32 @@
+{
+  "name": "broadcast pod",
+  "inputs": {
+    "user": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "graph": {
+      "type": "`G`",
+      "ref": true,
+      "icon": "graph"
+    }
+  },
+  "metadata": {
+    "icon": "server",
+    "description": "control a graph coming from an ioun.it broadcast",
+    "complexity": 8.29768545114245,
+    "tags": [
+      "host",
+      "broadcast",
+      "pod"
+    ]
+  },
+  "id": "26d56ff7-9ada-4766-b406-d8ecadde760f",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

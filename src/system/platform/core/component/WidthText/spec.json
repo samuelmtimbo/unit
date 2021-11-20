@@ -1,0 +1,280 @@
+{
+  "name": "width text",
+  "type": "`U`&`C`&`G`",
+  "inputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "textbox",
+          "pinId": "value"
+        }
+      }
+    },
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault0",
+          "pinId": "a"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "textbox": {
+      "id": "9988a56e-6bee-46c8-864c-e351d84bc7e2",
+      "input": {
+        "value": {
+          "data": "'text'",
+          "metadata": {
+            "position": {
+              "x": 60,
+              "y": 5
+            }
+          }
+        },
+        "style": {}
+      },
+      "output": {
+        "div": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "component": {
+          "width": 219.87625122070312,
+          "height": 207.1648864746095
+        },
+        "position": {
+          "x": 213,
+          "y": 15
+        }
+      }
+    },
+    "divide": {
+      "id": "158d85eb-28b8-4355-b637-28a7ec751233",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "6",
+          "metadata": {
+            "position": {
+              "x": -131,
+              "y": 62
+            }
+          }
+        }
+      },
+      "output": {
+        "a ÷ b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -66,
+          "y": 82
+        }
+      }
+    },
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{textAlign:'center',fontFamily:'Inconsolata',display:'flex',justifyContent:'center',alignItems:'center'}",
+          "metadata": {
+            "position": {
+              "x": 36,
+              "y": -115
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -5,
+          "y": -56
+        }
+      }
+    },
+    "tagfontsizepx": {
+      "id": "06d91634-9aee-11eb-8e48-8bdcd8add0ff",
+      "input": {
+        "n": {}
+      },
+      "output": {
+        "{fontSize}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -91,
+          "y": 3
+        }
+      }
+    },
+    "mergedefault0": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{textAlign:'center',fontFamily:'Inconsolata',display:'flex',justifyContent:'center',alignItems:'center'}"
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -95,
+          "y": -115
+        }
+      }
+    },
+    "sizeobserver": {
+      "id": "2f2d5ea4-6dd2-406e-a095-5552ebc235e7",
+      "input": {
+        "component": {}
+      },
+      "output": {
+        "width": {},
+        "height": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {
+    "1": {
+      "mergedefault0": {
+        "output": {
+          "a": true
+        }
+      },
+      "mergedefault": {
+        "input": {
+          "default": true
+        }
+      }
+    },
+    "2": {
+      "divide": {
+        "input": {
+          "a": true
+        }
+      },
+      "sizeobserver": {
+        "output": {
+          "width": true
+        }
+      }
+    },
+    "3": {
+      "sizeobserver": {
+        "input": {
+          "component": true
+        }
+      },
+      "textbox": {
+        "output": {
+          "div": true
+        }
+      }
+    },
+    "4": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "textbox": {
+        "input": {
+          "style": true
+        }
+      }
+    },
+    "6": {
+      "tagfontsizepx": {
+        "input": {
+          "n": true
+        }
+      },
+      "divide": {
+        "output": {
+          "a ÷ b": true
+        }
+      }
+    },
+    "7": {
+      "tagfontsizepx": {
+        "output": {
+          "{fontSize}": true
+        }
+      },
+      "mergedefault": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "component": {
+    "subComponents": {
+      "textbox": {
+        "children": []
+      }
+    },
+    "children": [
+      "textbox"
+    ],
+    "defaultWidth": 258.1604309082031,
+    "defaultHeight": 224.31375122070324
+  },
+  "metadata": {
+    "description": "text box saying 'hello world'",
+    "icon": "sign",
+    "complexity": 8,
+    "position": {
+      "merge": {
+        "1": {
+          "x": -104,
+          "y": -28
+        },
+        "2": {
+          "x": -26,
+          "y": 58
+        },
+        "3": {
+          "x": -76,
+          "y": 62
+        },
+        "4": {
+          "x": 53,
+          "y": -54
+        },
+        "5": {
+          "x": -11,
+          "y": -78
+        },
+        "6": {
+          "x": -113,
+          "y": 5
+        },
+        "7": {
+          "x": -50,
+          "y": -68
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "731b92e2-6276-41db-a1e8-857afb07ca44"
+}

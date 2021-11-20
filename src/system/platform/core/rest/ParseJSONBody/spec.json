@@ -1,0 +1,66 @@
+{
+  "name": "parse JSON body",
+  "units": {
+    "ozxzzikb": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'body'"
+        }
+      }
+    },
+    "pxtvasocy": {
+      "id": "563e92be-ad5e-4a61-a718-9249c3eac51d"
+    }
+  },
+  "merges": {
+    "dbjrwzdhw": {
+      "ozxzzikb": {
+        "output": {
+          "value": true
+        }
+      },
+      "pxtvasocy": {
+        "input": {
+          "string": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "arrow-right",
+    "description": "no description",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
+  },
+  "inputs": {
+    "pswkoxwrp": {
+      "pin": {
+        "0": {
+          "unitId": "ozxzzikb",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "twxwsmopa": {
+      "pin": {
+        "0": {
+          "unitId": "pxtvasocy",
+          "pinId": "json"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "63ede222-07af-4b27-98bc-d8bc7cc5b14c",
+  "type": "`U`&`G`",
+  "system": true
+}

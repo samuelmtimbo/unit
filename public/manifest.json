@@ -1,0 +1,70 @@
+{
+  "short_name": "unit",
+  "name": "unit",
+  "icons": [
+    {
+      "src": "/favicon_16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon_32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon_64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/unit_favicon_128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon_256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon_1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ],
+  "prefer_related_applications": true,
+  "start_url": "/",
+  "display": "fullscreen",
+  "theme_color": "#7f7f7f",
+  "background_color": "#1f1f1f",
+  "url": "https://ioun.it",
+  "lang": "English",
+  "description": "unit is a Futuristic Programming Language and Environment designed for Personal and Professional usage.",
+  "screenshots": [
+    {
+      "src": "screenshot/unit_screenshot_1280_800.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "fileName": "screenshot/unit_screenshot_1280_800.png",
+      "generated": true
+    },
+    {
+      "src": "screenshot/unit_screenshot_750_1334.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "fileName": "screenshot/unit_screenshot_750_1334.png",
+      "generated": true
+    }
+  ]
+}

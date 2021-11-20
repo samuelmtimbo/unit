@@ -1,0 +1,138 @@
+{
+  "name": "graph | div",
+  "inputs": {},
+  "outputs": {
+    "graph": {
+      "pin": {
+        "0": {
+          "unitId": "graph",
+          "pinId": "_self"
+        }
+      },
+      "ref": true,
+      "type": "`U`&`G`",
+      "defaultIgnored": true
+    }
+  },
+  "units": {
+    "graph": {
+      "id": "e80c912e-7508-11ea-966b-436805345ff0",
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{borderRight:'1px solid currentColor'}"
+        },
+        "pod": {},
+        "disabled": {},
+        "fullwindow": {
+          "ignored": true
+        },
+        "frame": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 7,
+          "y": 127
+        },
+        "component": {
+          "width": 360.1918640136719,
+          "height": 441.29931640625
+        }
+      }
+    },
+    "div": {
+      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "style": {
+          "data": "{position:'relative',overflow:'auto',display:'flex',flexDirection:'row',overflow:'auto'}"
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -342,
+          "y": 67
+        },
+        "component": {
+          "width": 246.2730712890625,
+          "height": 329.615966796875
+        }
+      }
+    },
+    "row": {
+      "id": "ad5a2fcc-fdee-11ea-a34f-77e9c48dbe57",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 334,
+          "y": -196
+        },
+        "component": {
+          "width": 376.8758239746094,
+          "height": 223.14797973632812
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "graph": {
+        "input": {
+          "frame": true
+        }
+      },
+      "div": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "atom-alt",
+    "complexity": 5,
+    "tags": [
+      "platform",
+      "core",
+      "graph"
+    ]
+  },
+  "component": {
+    "slots": [
+      [
+        "graph",
+        "default"
+      ],
+      [
+        "div",
+        "default"
+      ]
+    ],
+    "children": [
+      "row"
+    ],
+    "subComponents": {
+      "graph": {
+        "children": []
+      },
+      "div": {
+        "children": []
+      },
+      "row": {
+        "children": [
+          "graph",
+          "div"
+        ]
+      }
+    },
+    "defaultWidth": 420,
+    "defaultHeight": 300
+  },
+  "id": "470428a2-b4b4-4866-a1e9-2f130772cd3b",
+  "type": "`U`&`G`",
+  "system": true
+}

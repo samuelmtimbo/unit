@@ -1,0 +1,50 @@
+{
+  "name": "media recorder",
+  "inputs": {
+    "opt": {
+      "type": "{mimeType?:string,bitsPerSecond?:number,audioBitsPerSecond?:number,videoBitsPerSecond?:number}",
+      "metadata": {
+        "examples": [
+          "{mimeType:\"video/webm;codecs=h264\",audioBitsPerSecond:128000,videoBitsPerSecond:3145728}"
+        ]
+      }
+    },
+    "start": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "2000"
+        ]
+      }
+    },
+    "stop": {
+      "type": "any"
+    },
+    "stream": {
+      "type": "`ST`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "blob": {
+      "type": "`B`",
+      "ref": true
+    }
+  },
+  "id": "7e1b3a4c-be6b-11eb-b098-1b6b9db93f1e",
+  "base": true,
+  "metadata": {
+    "icon": "film",
+    "complexity": 11.825973352111632,
+    "tags": [
+      "platform",
+      "api",
+      "media"
+    ],
+    "globals": [
+      "MediaRecorder"
+    ]
+  },
+  "type": "`U`",
+  "system": true
+}

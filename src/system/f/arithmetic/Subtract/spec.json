@@ -1,0 +1,29 @@
+{
+  "name": "subtract",
+  "inputs": {
+    "a": {
+      "type": "number"
+    },
+    "b": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a - b": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "minus",
+    "description": "subtraction arithmetic operator",
+    "complexity": 2.660378407427311,
+    "tags": [
+      "f",
+      "arithmetic"
+    ]
+  },
+  "id": "fa94b179-00e3-4ed1-814e-7938324a833f",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

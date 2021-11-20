@@ -1,0 +1,26 @@
+{
+  "name": "specs",
+  "inputs": {
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "specs": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "object mapping id to spec",
+    "complexity": 2.6565980393973647,
+    "tags": [
+      "f",
+      "meta"
+    ]
+  },
+  "id": "b5ea15f4-9bbd-11eb-b623-37aff4a9ce60",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

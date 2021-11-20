@@ -1,0 +1,284 @@
+{
+  "name": "icon button",
+  "units": {
+    "icon": {
+      "id": "63a417e5-d354-4b39-9ebd-05f55e70de7b",
+      "output": {}
+    },
+    "setifdefault": {
+      "id": "887e66b8-a08e-11ea-bfea-b3687d92658a",
+      "input": {
+        "default": {
+          "data": "'#C2C2C2'"
+        },
+        "obj": {
+          "data": "{fill:'#7E7E7E',cursor:'pointer'}"
+        }
+      }
+    },
+    "setifdefault0": {
+      "id": "887e66b8-a08e-11ea-bfea-b3687d92658a",
+      "input": {
+        "default": {
+          "data": "'#787878'"
+        }
+      }
+    },
+    "setifdefault1": {
+      "id": "887e66b8-a08e-11ea-bfea-b3687d92658a",
+      "input": {
+        "default": {
+          "data": "'#363636'"
+        }
+      }
+    },
+    "true": {
+      "id": "984c4a44-86c7-464c-ad48-4759598c3be3"
+    },
+    "false": {
+      "id": "b4d20f6f-32dc-4d04-97d6-69518976bdea"
+    },
+    "merge": {
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453"
+    },
+    "default": {
+      "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "d": {
+          "data": "{}"
+        }
+      }
+    },
+    "wdhqnfmvb": {
+      "id": "c0bb493a-af78-11ea-b6fa-3b893b757a39",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      }
+    },
+    "zvjhcgzny": {
+      "id": "c7dba94e-af78-11ea-b7d7-47e14ca215b5",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      }
+    }
+  },
+  "merges": {
+    "2": {
+      "false": {
+        "output": {
+          "false": true
+        }
+      },
+      "true": {
+        "output": {
+          "true": true
+        }
+      },
+      "setifdefault": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "3": {
+      "setifdefault1": {
+        "output": {
+          "obj": true
+        }
+      },
+      "merge": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "4": {
+      "setifdefault0": {
+        "output": {
+          "obj": true
+        }
+      },
+      "setifdefault1": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "5": {
+      "setifdefault": {
+        "output": {
+          "obj": true
+        }
+      },
+      "setifdefault0": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "6": {
+      "default": {
+        "output": {
+          "a": true
+        }
+      },
+      "merge": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "7": {
+      "merge": {
+        "output": {
+          "ab": true
+        }
+      },
+      "icon": {
+        "input": {
+          "style": true
+        }
+      }
+    },
+    "fagmcgtr": {
+      "wdhqnfmvb": {
+        "input": {
+          "element": true
+        }
+      },
+      "icon": {
+        "output": {
+          "_self": true
+        }
+      },
+      "zvjhcgzny": {
+        "input": {
+          "element": true
+        }
+      }
+    },
+    "uwisasxue": {
+      "zvjhcgzny": {
+        "output": {
+          "event": true
+        }
+      },
+      "false": {
+        "input": {
+          "any": true
+        }
+      }
+    },
+    "cuurfvll": {
+      "wdhqnfmvb": {
+        "output": {
+          "event": true
+        }
+      },
+      "true": {
+        "input": {
+          "any": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "icon": {
+      "pin": {
+        "0": {
+          "unitId": "icon",
+          "pinId": "icon"
+        }
+      },
+      "type": "string"
+    },
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a"
+        }
+      },
+      "type": "object"
+    },
+    "active": {
+      "pin": {
+        "0": {
+          "unitId": "setifdefault0",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    },
+    "activeColor": {
+      "pin": {
+        "0": {
+          "unitId": "setifdefault0",
+          "pinId": "value"
+        }
+      },
+      "type": "string"
+    },
+    "hoverColor": {
+      "pin": {
+        "0": {
+          "unitId": "setifdefault",
+          "pinId": "value"
+        }
+      },
+      "type": "string"
+    },
+    "disabled": {
+      "pin": {
+        "0": {
+          "unitId": "setifdefault1",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    },
+    "disabledColor": {
+      "pin": {
+        "0": {
+          "unitId": "setifdefault1",
+          "pinId": "value"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "component": {
+    "defaultWidth": 60,
+    "defaultHeight": 60,
+    "subComponents": {
+      "icon": {
+        "width": 60,
+        "height": 60
+      }
+    },
+    "children": [
+      "icon"
+    ]
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 29.988677427125992,
+    "tags": [
+      "platform",
+      "component",
+      "app"
+    ]
+  },
+  "id": "65759894-7d11-11ea-a838-93e14e650d65",
+  "type": "`U`&`C`&`G`",
+  "system": true,
+  "render": true
+}

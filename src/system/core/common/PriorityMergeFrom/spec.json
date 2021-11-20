@@ -1,0 +1,100 @@
+{
+  "name": "priority merge from",
+  "units": {
+    "arraybuilderfrom": {
+      "id": "6db1905f-2343-4c63-97d3-07f4d946ef58",
+      "output": {
+        "acc": {
+          "ignored": true
+        },
+        "local": {
+          "ignored": true
+        }
+      }
+    },
+    "priorityforeach": {
+      "id": "c4cf2732-907c-11ea-82fc-87f8cee9f066"
+    }
+  },
+  "merges": {
+    "0": {
+      "arraybuilderfrom": {
+        "input": {
+          "a": true
+        }
+      },
+      "priorityforeach": {
+        "output": {
+          "head": true
+        }
+      }
+    },
+    "1": {
+      "priorityforeach": {
+        "output": {
+          "next": true
+        }
+      },
+      "arraybuilderfrom": {
+        "input": {
+          "test": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "priorityforeach",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    },
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "priorityforeach",
+          "pinId": "b"
+        }
+      },
+      "type": "number[]"
+    },
+    "from": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "init"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "ab": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "a[]"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "cd9d76f0-8eee-11ea-96c8-e3ee1362938c",
+  "type": "`U`&`G`",
+  "system": true
+}

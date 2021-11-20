@@ -1,0 +1,141 @@
+{
+  "name": "Alan Kay picture",
+  "units": {
+    "image": {
+      "id": "059579bb-184f-435b-ace0-64ec95c9f125",
+      "input": {
+        "src": {},
+        "style": {}
+      },
+      "metadata": {
+        "component": {
+          "width": 360,
+          "height": 270
+        }
+      }
+    },
+    "alankaypicturesrc": {
+      "id": "9e979e09-2986-4888-a80f-24a6e5cf0e58"
+    },
+    "onclick": {
+      "id": "97c94516-add1-11ea-ba72-8f55299b735c",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      }
+    },
+    "iteratewait": {
+      "id": "ed5e826a-163c-42cd-8522-e47187decae7",
+      "input": {
+        "init": {
+          "constant": true,
+          "data": "'https://live.staticflickr.com/3103/3097570547_ca2931f50f_b.jpg'"
+        },
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "image": {
+        "output": {
+          "_self": true
+        }
+      },
+      "onclick": {
+        "input": {
+          "element": true
+        }
+      }
+    },
+    "1": {
+      "iteratewait": {
+        "output": {
+          "current": true
+        }
+      },
+      "image": {
+        "input": {
+          "src": true
+        }
+      }
+    },
+    "2": {
+      "alankaypicturesrc": {
+        "output": {
+          "vmkiln": true
+        }
+      },
+      "iteratewait": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "iteratewait": {
+        "input": {
+          "b": true
+        }
+      },
+      "onclick": {
+        "output": {
+          "event": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "image",
+          "pinId": "style"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "component": {
+    "slots": [
+      [
+        "image",
+        "default"
+      ]
+    ],
+    "defaultWidth": 360,
+    "defaultHeight": 270,
+    "subComponents": {
+      "image": {
+        "width": 360,
+        "height": 270
+      }
+    },
+    "children": [
+      "image"
+    ]
+  },
+  "metadata": {
+    "icon": "image",
+    "description": "...",
+    "complexity": 16.441265311417084,
+    "tags": [
+      "platform",
+      "core",
+      "computer"
+    ]
+  },
+  "id": "dcce5ef0-997a-11ea-b12e-efcfc46ddfa1",
+  "type": "`U`&`C`&`G`",
+  "system": true
+}

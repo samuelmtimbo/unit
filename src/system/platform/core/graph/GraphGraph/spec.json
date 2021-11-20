@@ -1,0 +1,313 @@
+{
+  "name": "graph | graph",
+  "inputs": {
+    "spec": {
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 59,
+            "y": -245
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "graph": {
+      "id": "e80c912e-7508-11ea-966b-436805345ff0",
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{position:'relative'}",
+          "metadata": {
+            "position": {
+              "x": 87,
+              "y": 55
+            }
+          }
+        },
+        "pod": {},
+        "disabled": {
+          "metadata": {
+            "position": {
+              "x": 86,
+              "y": 24
+            }
+          }
+        },
+        "fullwindow": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 92,
+              "y": -28
+            }
+          }
+        },
+        "frame": {
+          "metadata": {
+            "position": {
+              "x": 87,
+              "y": -6
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 238,
+          "y": 6
+        },
+        "component": {
+          "width": 242.77862548828125,
+          "height": 238.30770874023438
+        }
+      }
+    },
+    "pod": {
+      "id": "324b9c5e-5810-11eb-bf7c-634b3bb07f8c",
+      "input": {
+        "spec": {}
+      },
+      "output": {
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": 68,
+              "y": -53
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 70,
+          "y": -111
+        }
+      }
+    },
+    "default": {
+      "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 72,
+              "y": -221
+            }
+          }
+        },
+        "d": {
+          "constant": true,
+          "data": "{}",
+          "metadata": {
+            "position": {
+              "x": 162,
+              "y": -209
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 115,
+          "y": -200
+        }
+      }
+    },
+    "graph0": {
+      "id": "e80c912e-7508-11ea-966b-436805345ff0",
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{position:'relative'}",
+          "metadata": {
+            "position": {
+              "x": -249,
+              "y": -13
+            }
+          }
+        },
+        "pod": {},
+        "disabled": {
+          "metadata": {
+            "position": {
+              "x": -251,
+              "y": -46
+            }
+          }
+        },
+        "fullwindow": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -248,
+              "y": -103
+            }
+          }
+        },
+        "frame": {
+          "metadata": {
+            "position": {
+              "x": -249,
+              "y": -79
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "component": {
+          "width": 236.420654296875,
+          "height": 240.87225341796875
+        },
+        "position": {
+          "x": -100,
+          "y": -46
+        }
+      }
+    },
+    "div": {
+      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{width:'1px',position:'relative',background:'currentColor'}",
+          "metadata": {
+            "position": {
+              "x": 150,
+              "y": 234
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 244,
+          "y": 234
+        }
+      }
+    },
+    "row": {
+      "id": "ad5a2fcc-fdee-11ea-a34f-77e9c48dbe57",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": -285,
+              "y": 405
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -147,
+          "y": 405
+        },
+        "component": {
+          "width": 210,
+          "height": 120
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "default": {
+        "output": {
+          "a": true
+        }
+      },
+      "pod": {
+        "input": {
+          "spec": true
+        }
+      }
+    },
+    "1": {
+      "pod": {
+        "output": {
+          "graph": true
+        }
+      },
+      "graph0": {
+        "input": {
+          "pod": true
+        }
+      },
+      "graph": {
+        "input": {
+          "pod": true
+        }
+      }
+    }
+  },
+  "component": {
+    "slots": [
+      [
+        "graph",
+        "default"
+      ],
+      [
+        "graph0",
+        "default"
+      ]
+    ],
+    "subComponents": {
+      "graph": {
+        "children": []
+      },
+      "graph0": {
+        "children": []
+      },
+      "div": {
+        "children": []
+      },
+      "row": {
+        "children": [
+          "graph0",
+          "div",
+          "graph"
+        ]
+      }
+    },
+    "children": [
+      "row"
+    ],
+    "defaultWidth": 420,
+    "defaultHeight": 420
+  },
+  "metadata": {
+    "icon": "atom-alt",
+    "complexity": 8,
+    "tags": [
+      "platform",
+      "core",
+      "graph"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": 89,
+          "y": -158
+        }
+      }
+    }
+  },
+  "id": "fc9cd968-7e0d-4540-9f0e-d16afeb0d3b3",
+  "system": true
+}

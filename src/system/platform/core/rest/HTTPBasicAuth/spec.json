@@ -1,0 +1,111 @@
+{
+  "name": "HTTP basic auth",
+  "units": {
+    "huetekhp": {
+      "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "':'"
+        }
+      }
+    },
+    "mwxga": {
+      "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6"
+    },
+    "qthvyxad": {
+      "id": "ee7b692f-5fe5-43c3-b636-aacca92b0bc7"
+    },
+    "mouzpjs": {
+      "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'Basic '"
+        }
+      }
+    }
+  },
+  "merges": {
+    "swoxql": {
+      "huetekhp": {
+        "output": {
+          "ab": true
+        }
+      },
+      "mwxga": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "rgivlljdc": {
+      "mwxga": {
+        "output": {
+          "ab": true
+        }
+      },
+      "qthvyxad": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "hxhsbe": {
+      "qthvyxad": {
+        "output": {
+          "b": true
+        }
+      },
+      "mouzpjs": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "no description",
+    "complexity": 7.66067490688064,
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
+  },
+  "inputs": {
+    "zqodyann": {
+      "pin": {
+        "0": {
+          "unitId": "huetekhp",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    },
+    "pvtauibkq": {
+      "pin": {
+        "0": {
+          "unitId": "mwxga",
+          "pinId": "b"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "pcwkv": {
+      "pin": {
+        "0": {
+          "unitId": "mouzpjs",
+          "pinId": "ab"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "081b1edf-f66c-4e0a-9aaf-c20b4088d1ec",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,61 @@
+{
+  "name": "random background-color tag",
+  "units": {
+    "randomhexcolor": {
+      "id": "2f48e431-9338-44dd-9f20-b8b14e710a1f"
+    },
+    "tagbackgroundcolor": {
+      "id": "26dc94ea-347b-4dbb-a7d7-1dab60da8352"
+    }
+  },
+  "merges": {
+    "0": {
+      "randomhexcolor": {
+        "output": {
+          "hex": true
+        }
+      },
+      "tagbackgroundcolor": {
+        "input": {
+          "color": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "palette",
+    "description": "random HEX background color string tag",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "inputs": {
+    "any": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "randomhexcolor",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "{bc}": {
+      "pin": {
+        "0": {
+          "unitId": "tagbackgroundcolor",
+          "pinId": "{bc}"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "051d4600-42e5-403b-b12e-eb58ae78ef0b",
+  "type": "`U`&`G`",
+  "system": true
+}

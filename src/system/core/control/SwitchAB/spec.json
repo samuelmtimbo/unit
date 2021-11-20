@@ -1,0 +1,88 @@
+{
+  "name": "switch a b",
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "switch",
+          "pinId": "a"
+        }
+      }
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "switch",
+          "pinId": "b"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "switch",
+          "pinId": "a"
+        }
+      }
+    }
+  },
+  "units": {
+    "constanttruefalse": {
+      "id": "8df44351-9177-4c4c-abde-7576bc1c8d41",
+      "input": {},
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": 10
+        }
+      }
+    },
+    "switch": {
+      "id": "c37c7c14-293e-414c-8a9c-01a40186c1e5",
+      "input": {
+        "c": {},
+        "b": {},
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 50,
+          "y": -11
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "switch": {
+        "input": {
+          "c": true
+        }
+      },
+      "constanttruefalse": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "map-signs",
+    "complexity": 10,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "id": "9c10309b-6ce8-4b92-a0d4-a4b6b2a17a64",
+  "system": true
+}

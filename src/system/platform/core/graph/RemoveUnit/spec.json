@@ -1,0 +1,83 @@
+{
+  "name": "remove unit",
+  "units": {
+    "call": {
+      "id": "f46af75e-af68-11ea-aa0e-37bf85a86c5e",
+      "input": {
+        "unit": {},
+        "method": {
+          "constant": true,
+          "data": "'removeUnit'"
+        },
+        "data": {}
+      },
+      "output": {
+        "data": {
+          "ignored": true
+        }
+      }
+    },
+    "tag": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'id'"
+        },
+        "v": {}
+      },
+      "output": {
+        "kv": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "tag": {
+        "output": {
+          "kv": true
+        }
+      },
+      "call": {
+        "input": {
+          "data": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "graph": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "call",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    },
+    "id": {
+      "type": "number|string",
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "x",
+    "metadata": "remove unit from visible graph",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "graph"
+    ]
+  },
+  "id": "e0c51c0d-1969-4f88-bce9-d35f0fac56b2",
+  "type": "`U`&`G`",
+  "system": true
+}

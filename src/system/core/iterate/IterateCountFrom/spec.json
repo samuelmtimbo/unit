@@ -1,0 +1,116 @@
+{
+  "name": "iterate count from",
+  "units": {
+    "increment": {
+      "id": "fafeadd7-06a8-4bb0-9fa5-2149d1b5208e",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a + 1": {}
+      }
+    },
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "iterate": {
+      "id": "8a2b756a-25e4-11eb-860d-1f34c850b992",
+      "input": {
+        "next": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "increment": {
+        "output": {
+          "a + 1": true
+        }
+      },
+      "wait": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "iterate": {
+        "output": {
+          "local": true
+        }
+      },
+      "increment": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "iterate": {
+        "input": {
+          "next": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "sort-desc",
+    "description": "iteratively increment `count` starting from `init`",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "iterate"
+    ]
+  },
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "init": {
+      "pin": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "init"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "current": {
+      "pin": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "current"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "9fa0c25b-0675-48dc-80e7-eab1829656bd",
+  "type": "`U`&`G`",
+  "system": true
+}

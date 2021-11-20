@@ -1,0 +1,37 @@
+{
+  "name": "render",
+  "type": "`U`&`C`&`V`",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    },
+    "pod": {
+      "type": "`G`",
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "visualize a pod",
+    "complexity": 7.798454496599522,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "7772a2f5-40c8-482e-83f4-bed9bfb364e3",
+  "base": true,
+  "component": {
+    "defaultWidth": 300,
+    "defaultHeight": 300
+  },
+  "system": true,
+  "render": true
+}

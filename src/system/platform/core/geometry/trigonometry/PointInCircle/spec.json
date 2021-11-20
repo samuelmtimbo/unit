@@ -1,0 +1,207 @@
+{
+  "name": "point in circle",
+  "units": {
+    "mergexy": {
+      "id": "2737cd82-d80b-4d3f-b33d-f00f68361e24"
+    },
+    "sin": {
+      "id": "b9f90a95-1bfc-4897-9068-2560743821a3"
+    },
+    "cos": {
+      "id": "62af44dc-17d6-459a-b95f-3b8ce5b48856"
+    },
+    "multiply": {
+      "id": "872be100-f4dc-4246-8eea-6e3da31137b7",
+      "input": {
+        "b": {
+          "constant": false
+        }
+      }
+    },
+    "multiply0": {
+      "id": "872be100-f4dc-4246-8eea-6e3da31137b7",
+      "input": {
+        "b": {
+          "constant": false
+        }
+      }
+    },
+    "add": {
+      "id": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf",
+      "input": {
+        "b": {
+          "constant": false
+        }
+      }
+    },
+    "subtract": {
+      "id": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {
+          "constant": false
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "multiply0": {
+        "input": {
+          "a": true
+        }
+      },
+      "sin": {
+        "output": {
+          "sin(a)": true
+        }
+      }
+    },
+    "1": {
+      "cos": {
+        "output": {
+          "cos(a)": true
+        }
+      },
+      "multiply": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "add": {
+        "input": {
+          "a": true
+        }
+      },
+      "multiply": {
+        "output": {
+          "a × b": true
+        }
+      }
+    },
+    "3": {
+      "mergexy": {
+        "input": {
+          "x": true
+        }
+      },
+      "add": {
+        "output": {
+          "a + b": true
+        }
+      }
+    },
+    "4": {
+      "cos": {
+        "input": {
+          "a": true
+        }
+      },
+      "sin": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "5": {
+      "mergexy": {
+        "input": {
+          "y": true
+        }
+      },
+      "subtract": {
+        "output": {
+          "a - b": true
+        }
+      }
+    },
+    "6": {
+      "multiply0": {
+        "output": {
+          "a × b": true
+        }
+      },
+      "subtract": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "7": {
+      "multiply0": {
+        "input": {
+          "b": true
+        }
+      },
+      "multiply": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "no description",
+    "complexity": 9,
+    "tags": [
+      "platform",
+      "core",
+      "geometry",
+      "trigonometry"
+    ]
+  },
+  "inputs": {
+    "rad": {
+      "pin": {
+        "0": {
+          "mergeId": "4"
+        }
+      },
+      "type": "number"
+    },
+    "x": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "add",
+          "pinId": "b"
+        }
+      },
+      "type": "number"
+    },
+    "y": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "subtract",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "r": {
+      "pin": {
+        "0": {
+          "mergeId": "7"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "{x,y}": {
+      "pin": {
+        "0": {
+          "unitId": "mergexy",
+          "pinId": "{x,y}"
+        }
+      },
+      "type": "{x:number,y:number}"
+    }
+  },
+  "id": "af451707-9400-429f-bb3a-2670d4ce8821",
+  "type": "`U`&`G`",
+  "system": true
+}

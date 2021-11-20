@@ -1,0 +1,52 @@
+{
+  "name": "draw",
+  "inputs": {
+    "canvas": {
+      "type": "`CA`",
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -117,
+            "y": 28
+          }
+        }
+      }
+    },
+    "step": {
+      "_type": "(number|string)[]",
+      "type": "any[]",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 128,
+            "y": 32
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "draw on `canvas`",
+    "complexity": 2.6598965958156513,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ],
+    "position": {
+      "merge": {
+        "rgarjyrwq": {
+          "x": 5,
+          "y": -4
+        }
+      }
+    }
+  },
+  "id": "53018958-b686-11ea-bf53-175a3698c92d",
+  "type": "`U`",
+  "base": true,
+  "system": true
+}

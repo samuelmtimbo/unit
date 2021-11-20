@@ -1,0 +1,96 @@
+{
+  "name": "set color",
+  "inputs": {
+    "color": {
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "data"
+        }
+      },
+      "type": "string",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 46,
+            "y": 37
+          }
+        }
+      }
+    },
+    "context": {
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "unit"
+        }
+      },
+      "ref": true,
+      "type": "`U`",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -91,
+            "y": -1
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "set": {
+      "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+      "input": {
+        "unit": {
+          "metadata": {
+            "position": {
+              "x": -65,
+              "y": -1
+            }
+          }
+        },
+        "name": {
+          "constant": true,
+          "data": "'color'",
+          "metadata": {
+            "position": {
+              "x": 27,
+              "y": -19
+            }
+          }
+        },
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 27,
+              "y": 18
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -17,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "set context color",
+    "complexity": 4.666271334062228,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "set"
+    ]
+  },
+  "id": "7b067f38-e437-11ea-ad36-13112ed6b20b",
+  "type": "`U`&`G`",
+  "system": true
+}

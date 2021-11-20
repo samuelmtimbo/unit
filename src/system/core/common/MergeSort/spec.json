@@ -1,0 +1,186 @@
+{
+  "name": "merge sort",
+  "units": {
+    "lengthlessthan": {
+      "id": "0e211b43-0d8d-44cb-b63f-79a1a02de614",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "2"
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -237,
+          "y": -29
+        }
+      }
+    },
+    "ifelse": {
+      "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3",
+      "metadata": {
+        "position": {
+          "x": -105,
+          "y": -21
+        }
+      }
+    },
+    "splitinhalf": {
+      "id": "8babf4fa-e95e-449e-80b9-62e03ba0aae4",
+      "metadata": {
+        "position": {
+          "x": 35,
+          "y": -15
+        }
+      }
+    },
+    "mergesort0": {
+      "id": "16463281-92f1-48c6-a3ac-6612cffa8f0f",
+      "metadata": {
+        "position": {
+          "x": 152,
+          "y": -50
+        }
+      }
+    },
+    "mergesort1": {
+      "id": "16463281-92f1-48c6-a3ac-6612cffa8f0f",
+      "metadata": {
+        "position": {
+          "x": 151,
+          "y": 24
+        }
+      }
+    },
+    "prioritymerge": {
+      "id": "e2e634dc-8eeb-11ea-8a3c-93ebd81881bc",
+      "metadata": {
+        "position": {
+          "x": 261,
+          "y": -12
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "splitinhalf": {
+        "output": {
+          "first": true
+        }
+      },
+      "mergesort0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "splitinhalf": {
+        "output": {
+          "second": true
+        }
+      },
+      "mergesort1": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      },
+      "lengthlessthan": {
+        "output": {
+          "true": true
+        }
+      }
+    },
+    "3": {
+      "splitinhalf": {
+        "input": {
+          "a": true
+        }
+      },
+      "ifelse": {
+        "output": {
+          "else": true
+        }
+      }
+    },
+    "4": {
+      "prioritymerge": {
+        "input": {
+          "a": true
+        }
+      },
+      "mergesort1": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "5": {
+      "prioritymerge": {
+        "input": {
+          "b": true
+        }
+      },
+      "mergesort0": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "lengthlessthan",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "ifelse",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]",
+      "metadata": {
+        "examples": [
+          "[2,1,0]"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "if"
+        },
+        "1": {
+          "unitId": "prioritymerge",
+          "pinId": "ab"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "metadata": {
+    "icon": "list-ordered",
+    "description": "sort a number array using the Merge Sort Algorithm",
+    "complexity": 50,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "16463281-92f1-48c6-a3ac-6612cffa8f0f",
+  "type": "`U`&`G`",
+  "system": true
+}

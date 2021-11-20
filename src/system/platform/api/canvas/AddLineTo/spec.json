@@ -1,0 +1,33 @@
+{
+  "name": "add line to",
+  "inputs": {
+    "d": {
+      "type": "any[][]"
+    },
+    "x": {
+      "type": "number"
+    },
+    "y": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "any[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "adds a straight line to the current sub-path by connecting the sub-path's last point to the specified x, y coordinates",
+    "complexity": 2.6586364731390026,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "2b0ef9e9-028b-4acc-9daf-6999e86cc2af",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

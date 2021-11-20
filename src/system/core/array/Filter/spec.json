@@ -1,0 +1,198 @@
+{
+  "name": "filter",
+  "units": {
+    "foreach": {
+      "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "a": {
+          "ignored": false
+        },
+        "i": {
+          "ignored": false
+        },
+        "test": {
+          "ignored": false
+        }
+      }
+    },
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "[]"
+        }
+      }
+    },
+    "loop": {
+      "id": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "output": {
+        "local": {
+          "ignored": true
+        },
+        "current": {
+          "ignored": false
+        },
+        "final": {
+          "ignored": false
+        }
+      }
+    },
+    "appendif": {
+      "id": "765114be-2c5e-4ac8-b04e-27dbcb60ac12"
+    }
+  },
+  "merges": {
+    "0": {
+      "foreach": {
+        "output": {
+          "test": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "1": {
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "appendif": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "2": {
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      },
+      "wait": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "3": {
+      "loop": {
+        "input": {
+          "init": true
+        }
+      },
+      "wait": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "4": {
+      "loop": {
+        "input": {
+          "next": true
+        }
+      },
+      "appendif": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "5": {
+      "appendif": {
+        "input": {
+          "a": true
+        }
+      },
+      "loop": {
+        "output": {
+          "current": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "filter a list `a`",
+    "complexity": 25,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "appendif",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "a[i]": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "<A>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "boolean"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "<A>[]"
+    },
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "i"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "number"
+    }
+  },
+  "id": "ea426391-2104-41fd-8963-626d21415d09",
+  "type": "`U`&`G`",
+  "system": true
+}

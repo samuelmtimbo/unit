@@ -1,0 +1,96 @@
+{
+  "name": "random natural between",
+  "units": {
+    "randomnaturallt": {
+      "id": "9569f78e-18d3-40a3-9373-c56afa0214f6"
+    },
+    "add": {
+      "id": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf"
+    },
+    "subtract": {
+      "id": "fa94b179-00e3-4ed1-814e-7938324a833f"
+    }
+  },
+  "merges": {
+    "gttr": {
+      "add": {
+        "input": {
+          "a": true
+        }
+      },
+      "subtract": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "zlxzv": {
+      "add": {
+        "input": {
+          "b": true
+        }
+      },
+      "randomnaturallt": {
+        "output": {
+          "i": true
+        }
+      }
+    },
+    "qcklqt": {
+      "randomnaturallt": {
+        "input": {
+          "max": true
+        }
+      },
+      "subtract": {
+        "output": {
+          "a - b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "gttr"
+        }
+      },
+      "type": "number"
+    },
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "subtract",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "n": {
+      "pin": {
+        "0": {
+          "unitId": "add",
+          "pinId": "a + b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "random",
+    "description": "output random natural `n` between `a` and `b`, not inclusive",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "9d2b69b2-c468-4fca-a7d5-d158033c0201",
+  "type": "`U`&`G`",
+  "system": true
+}

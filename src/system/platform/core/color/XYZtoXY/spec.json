@@ -1,0 +1,154 @@
+{
+  "name": "XYZ to xy",
+  "units": {
+    "hrumitfn": {
+      "id": "bd1a9bbb-6129-4031-b7e9-aec351d847d9"
+    },
+    "xwqrjvgu": {
+      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "i": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "lqzfm": {
+      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "i": {
+          "constant": true,
+          "data": "1"
+        }
+      }
+    },
+    "pagbohz": {
+      "id": "158d85eb-28b8-4355-b637-28a7ec751233"
+    },
+    "eairyuf": {
+      "id": "158d85eb-28b8-4355-b637-28a7ec751233"
+    },
+    "siqmdt": {
+      "id": "a7d5c2f3-6134-4248-b9bc-33271c280267"
+    }
+  },
+  "merges": {
+    "afuuuv": {
+      "hrumitfn": {
+        "input": {
+          "a": true
+        }
+      },
+      "lqzfm": {
+        "input": {
+          "a": true
+        }
+      },
+      "xwqrjvgu": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "vysqrwk": {
+      "hrumitfn": {
+        "output": {
+          "sum": true
+        }
+      },
+      "pagbohz": {
+        "input": {
+          "b": true
+        }
+      },
+      "eairyuf": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "aoujwzh": {
+      "xwqrjvgu": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "eairyuf": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "gdtklvapl": {
+      "lqzfm": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "pagbohz": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "wjmvswrne": {
+      "eairyuf": {
+        "output": {
+          "a ÷ b": true
+        }
+      },
+      "siqmdt": {
+        "input": {
+          "1": true
+        }
+      }
+    },
+    "keblncyq": {
+      "pagbohz": {
+        "output": {
+          "a ÷ b": true
+        }
+      },
+      "siqmdt": {
+        "input": {
+          "0": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "palette",
+    "description": "no description",
+    "complexity": 8,
+    "tags": [
+      "platform",
+      "core",
+      "color"
+    ]
+  },
+  "inputs": {
+    "zpwdflzip": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "afuuuv"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "vxikpyf": {
+      "pin": {
+        "0": {
+          "unitId": "siqmdt",
+          "pinId": "hbsxpnl"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "id": "31c06a15-ca1a-4175-b60a-0cb5dfff3a6c",
+  "type": "`U`&`G`",
+  "system": true
+}

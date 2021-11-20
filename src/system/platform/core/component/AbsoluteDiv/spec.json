@@ -1,0 +1,93 @@
+{
+  "name": "absolute div",
+  "type": "`U`&`G`&`C`",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "div": {
+      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "style": {
+          "constant": false
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 73,
+          "y": -9
+        }
+      }
+    },
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{position:'absolute',top:'0',left:'0'}"
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -74,
+          "y": 8
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "div": {
+        "input": {
+          "style": true
+        }
+      }
+    }
+  },
+  "component": {
+    "slots": [
+      [
+        "div",
+        "default"
+      ]
+    ],
+    "subComponents": {
+      "div": {
+        "children": []
+      }
+    },
+    "children": [
+      "div"
+    ],
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "metadata": {
+    "icon": "square",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "dc546440-13ca-4ebf-8831-c28138c7efc6"
+}

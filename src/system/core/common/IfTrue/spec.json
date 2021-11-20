@@ -1,0 +1,85 @@
+{
+  "name": "if true",
+  "units": {
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "identity": {
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b"
+    },
+    "identity0": {
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b"
+    }
+  },
+  "merges": {
+    "0": {
+      "if": {
+        "input": {
+          "a": true
+        }
+      },
+      "identity": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "identity0": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "identity": {
+        "input": {
+          "a": true
+        }
+      },
+      "identity0": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "false": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "filter",
+    "description": "true if `a` is true",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "9ee34534-a1e8-478d-87ca-81a5325f5d5c",
+  "type": "`U`&`G`",
+  "system": true
+}

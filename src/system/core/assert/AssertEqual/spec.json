@@ -1,0 +1,82 @@
+{
+  "name": "assert equal",
+  "units": {
+    "throw": {
+      "id": "99657eb7-fb94-474e-b03d-4b08c537c0a2"
+    },
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "notequal": {
+      "id": "bda175a9-a9d2-4282-9b50-1b008ae8a807"
+    }
+  },
+  "inputs": {
+    "message": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "notequal",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "notequal",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "alert-circle",
+    "description": "throw `message` if `a` is not equal `b`",
+    "complexity": 6.658006411800678,
+    "tags": [
+      "core",
+      "assert"
+    ]
+  },
+  "merges": {
+    "0": {
+      "throw": {
+        "input": {
+          "message": true
+        }
+      },
+      "if": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "1": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "notequal": {
+        "output": {
+          "a ≠ b": true
+        }
+      }
+    }
+  },
+  "id": "0047d386-e392-4230-adde-0d71a0bc2de4",
+  "type": "`U`&`G`",
+  "system": true
+}

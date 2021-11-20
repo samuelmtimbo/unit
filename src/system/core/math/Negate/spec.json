@@ -1,0 +1,50 @@
+{
+  "name": "negate",
+  "units": {
+    "multiply": {
+      "id": "872be100-f4dc-4246-8eea-6e3da31137b7",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "-1"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "minus",
+    "description": "turn `a` into `-a`",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "math"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "multiply",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "-a": {
+      "pin": {
+        "0": {
+          "unitId": "multiply",
+          "pinId": "a × b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "13cbadb7-bbe5-4c6d-a81e-fc6fe5949e30",
+  "type": "`U`&`G`",
+  "system": true
+}

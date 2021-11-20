@@ -1,0 +1,29 @@
+{
+  "name": "has key",
+  "inputs": {
+    "obj": {
+      "type": "object"
+    },
+    "key": {
+      "type": "number|string"
+    }
+  },
+  "outputs": {
+    "has": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "check if key is in object",
+    "complexity": 2.6567833515556956,
+    "tags": [
+      "f",
+      "object"
+    ]
+  },
+  "id": "ad2ae8b9-9674-4b22-bed4-4458e0030b1a",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

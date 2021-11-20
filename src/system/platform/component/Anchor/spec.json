@@ -1,0 +1,36 @@
+{
+  "name": "anchor",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "href": {
+      "type": "string",
+      "optional": true
+    },
+    "target": {
+      "type": "string",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "link",
+    "description": "HTML anchor element",
+    "complexity": 6.507495876804477,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "ccf6d0e2-6b08-11eb-9fc3-3785374109d0",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`",
+  "system": true,
+  "render": true
+}

@@ -1,0 +1,59 @@
+{
+  "name": "n array builder",
+  "units": {
+    "buildarrayfrom": {
+      "id": "6c5543a6-d558-490d-8a94-20709375b10f",
+      "input": {
+        "from": {
+          "constant": true,
+          "data": "[]"
+        }
+      },
+      "output": {}
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "n": {
+      "type": "number",
+      "pin": {
+        "0": {
+          "unitId": "buildarrayfrom",
+          "pinId": "n"
+        }
+      }
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "buildarrayfrom",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a[]": {
+      "pin": {
+        "0": {
+          "unitId": "buildarrayfrom",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "array",
+    "description": "build a list of size n",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "38033fcc-aa28-4df3-abc8-d4ece231028b",
+  "type": "`U`&`G`",
+  "system": true
+}

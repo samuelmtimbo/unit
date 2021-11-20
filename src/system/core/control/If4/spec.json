@@ -1,0 +1,137 @@
+{
+  "name": "if 4",
+  "units": {
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "if0": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "if1": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "if2": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    }
+  },
+  "merges": {
+    "0": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "if2": {
+        "input": {
+          "b": true
+        }
+      },
+      "if0": {
+        "input": {
+          "b": true
+        }
+      },
+      "if1": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "filter",
+    "description": "no description",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "if0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "if1",
+          "pinId": "a"
+        }
+      },
+      "type": "<B>"
+    },
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        }
+      },
+      "type": "<C>"
+    },
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "if2",
+          "pinId": "a"
+        }
+      },
+      "type": "<D>"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "if2",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<D>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "if0",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<A>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "if1",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<B>"
+    },
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<C>"
+    }
+  },
+  "id": "1c59d8d8-5dc6-11ea-9bfb-9b22dd8d8cae",
+  "type": "`U`&`G`",
+  "system": true
+}

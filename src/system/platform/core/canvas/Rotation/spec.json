@@ -1,0 +1,140 @@
+{
+  "name": "rotation",
+  "units": {
+    "rotate": {
+      "id": "8f7ce559-a046-45bc-8e98-c39934ed0ae6"
+    },
+    "loopadd": {
+      "id": "93369291-7ce2-4b4c-a414-870b1f3c9b4c",
+      "output": {
+        "final": {
+          "ignored": true
+        },
+        "local": {
+          "ignored": true
+        }
+      },
+      "input": {
+        "test": {
+          "constant": true,
+          "data": "true"
+        },
+        "init": {
+          "constant": true,
+          "data": "0"
+        },
+        "plus": {
+          "constant": true
+        }
+      }
+    },
+    "jamqlimq": {
+      "id": "6f79ee03-4b3f-439c-b955-5529f3bebcc9",
+      "input": {
+        "x": {
+          "constant": true,
+          "data": "100"
+        },
+        "y": {
+          "constant": true,
+          "data": "100"
+        }
+      }
+    },
+    "hurwgmkut": {
+      "id": "6f79ee03-4b3f-439c-b955-5529f3bebcc9",
+      "input": {
+        "x": {
+          "constant": true,
+          "data": "-100"
+        },
+        "y": {
+          "constant": true,
+          "data": "-100"
+        }
+      }
+    }
+  },
+  "merges": {
+    "prkezfb": {
+      "rotate": {
+        "input": {
+          "rad": true
+        }
+      },
+      "loopadd": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "hrxmfjpur": {
+      "jamqlimq": {
+        "output": {
+          "d": true
+        }
+      },
+      "rotate": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "keaxsina": {
+      "hurwgmkut": {
+        "input": {
+          "d": true
+        }
+      },
+      "rotate": {
+        "output": {
+          "d": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "rotate `+` more every frame",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "qehmeuts": {
+      "pin": {
+        "0": {
+          "unitId": "loopadd",
+          "pinId": "plus"
+        }
+      },
+      "type": "number"
+    },
+    "xwshdccx": {
+      "pin": {
+        "0": {
+          "unitId": "jamqlimq",
+          "pinId": "d"
+        }
+      },
+      "type": "(number|string)[][]"
+    }
+  },
+  "outputs": {
+    "mdwuthc": {
+      "pin": {
+        "0": {
+          "unitId": "hurwgmkut",
+          "pinId": "d"
+        }
+      },
+      "type": "(number|string)[][]"
+    }
+  },
+  "id": "1b6923a6-b383-4909-af8f-85444aeb6aae",
+  "type": "`U`&`G`",
+  "system": true
+}

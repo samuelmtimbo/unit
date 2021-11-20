@@ -1,0 +1,252 @@
+{
+  "name": "rec priority merge from",
+  "units": {
+    "isempty0": {
+      "id": "194683f4-5b90-4501-a8c9-b34f131d4f79"
+    },
+    "isempty1": {
+      "id": "194683f4-5b90-4501-a8c9-b34f131d4f79"
+    },
+    "and": {
+      "id": "407640f7-f1c3-4297-a5ce-baff357a6d31"
+    },
+    "ifelse": {
+      "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
+    },
+    "ifnot0": {
+      "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda"
+    },
+    "ifnot1": {
+      "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda"
+    },
+    "priorityhead": {
+      "id": "71744c98-0364-49af-b350-a34f68182c96"
+    },
+    "append": {
+      "id": "fa7721eb-1dd6-482e-8c7a-6da35b5f88bc"
+    },
+    "prioritymergefrom": {
+      "id": "728bcf22-c31e-4c1d-a5db-1238bd2dcfbf"
+    }
+  },
+  "merges": {
+    "yowlvdyf": {
+      "isempty0": {
+        "output": {
+          "unutqjyl": true
+        }
+      },
+      "and": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "inluxhhu": {
+      "isempty1": {
+        "output": {
+          "unutqjyl": true
+        }
+      },
+      "and": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "rkvucee": {
+      "and": {
+        "output": {
+          "a and b": true
+        }
+      },
+      "ifnot0": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifnot1": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "mfthhowg": {
+      "isempty0": {
+        "input": {
+          "ftwnpzfjy": true
+        }
+      },
+      "ifnot0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "zytkzo": {
+      "isempty1": {
+        "input": {
+          "ftwnpzfjy": true
+        }
+      },
+      "ifnot1": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "uzyrz": {
+      "ifnot1": {
+        "output": {
+          "a if not b": true
+        }
+      },
+      "priorityhead": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "lqdvmfnjs": {
+      "ifnot0": {
+        "output": {
+          "a if not b": true
+        }
+      },
+      "priorityhead": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "pthiqwv": {
+      "ifelse": {
+        "output": {
+          "else": true
+        }
+      },
+      "append": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "ithqhaibr": {
+      "priorityhead": {
+        "output": {
+          "head": true
+        }
+      },
+      "append": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "oqhndcucr": {
+      "append": {
+        "output": {
+          "a": true
+        }
+      },
+      "prioritymergefrom": {
+        "input": {
+          "from": true
+        }
+      }
+    },
+    "chqpkqtr": {
+      "priorityhead": {
+        "output": {
+          "b": true
+        }
+      },
+      "prioritymergefrom": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "ufvufcm": {
+      "priorityhead": {
+        "output": {
+          "a": true
+        }
+      },
+      "prioritymergefrom": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "vfeusnqib": {
+      "prioritymergefrom": {
+        "output": {
+          "ab": true
+        }
+      },
+      "ifelse": {
+        "output": {
+          "if": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "no description",
+    "complexity": 11,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "from": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    },
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "mfthhowg"
+        }
+      },
+      "type": "number[]"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "zytkzo"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "ab": {
+      "pin": {
+        "0": {
+          "mergeId": "vfeusnqib"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "id": "728bcf22-c31e-4c1d-a5db-1238bd2dcfbf",
+  "type": "`U`&`G`",
+  "system": true
+}

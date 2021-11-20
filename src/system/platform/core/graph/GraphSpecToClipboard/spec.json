@@ -1,0 +1,114 @@
+{
+  "name": "graph spec to clipboard",
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "getspec",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    },
+    "graph": {
+      "pin": {
+        "0": {
+          "unitId": "getspec",
+          "pinId": "graph"
+        }
+      },
+      "ref": true,
+      "type": "`G`"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "texttoclipboard": {
+      "id": "0b5a71c6-5c43-4e55-a29c-27d9ff7ed43a",
+      "input": {
+        "text": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 99,
+          "y": -1
+        }
+      }
+    },
+    "stringify": {
+      "id": "ee184ea6-3c80-4119-919e-290620aafab0",
+      "input": {
+        "json": {
+          "ignored": false
+        }
+      },
+      "output": {
+        "string": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 1,
+          "y": -1
+        }
+      }
+    },
+    "getspec": {
+      "id": "6afeacad-a2bf-440a-a986-ce50be27d94d",
+      "input": {
+        "graph": {},
+        "any": {}
+      },
+      "output": {
+        "spec": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -101,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "stringify": {
+        "input": {
+          "json": true
+        }
+      },
+      "getspec": {
+        "output": {
+          "spec": true
+        }
+      }
+    },
+    "1": {
+      "texttoclipboard": {
+        "input": {
+          "text": true
+        }
+      },
+      "stringify": {
+        "output": {
+          "string": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "send this graph spec to clipboard",
+    "complexity": 9.990512017493467,
+    "tags": [
+      "platform",
+      "core",
+      "graph"
+    ]
+  },
+  "type": "`U`&`G`",
+  "id": "f752dcd6-ac2c-11eb-9a69-3fada4450230"
+}

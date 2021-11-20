@@ -1,0 +1,53 @@
+{
+  "name": "first",
+  "units": {
+    "at": {
+      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "a": {},
+        "i": {
+          "constant": true,
+          "data": "0"
+        }
+      },
+      "output": {
+        "a[i]": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "at",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a[0]": {
+      "pin": {
+        "0": {
+          "unitId": "at",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "`a` element at position 0",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "0f77eb13-5c48-4611-a9bf-fe10c903dc63",
+  "type": "`U`&`G`",
+  "system": true
+}

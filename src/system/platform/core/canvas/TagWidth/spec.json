@@ -1,0 +1,50 @@
+{
+  "name": "tag width",
+  "units": {
+    "tag": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'width'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{width: `width`}",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "width": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "{width}": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "c13fec8e-a253-11eb-bbe5-6bbcbf28b3ef",
+  "type": "`U`&`G`",
+  "system": true
+}

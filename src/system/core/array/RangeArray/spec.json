@@ -1,0 +1,87 @@
+{
+  "name": "range array",
+  "units": {
+    "narraybuilder": {
+      "id": "38033fcc-aa28-4df3-abc8-d4ece231028b",
+      "input": {
+        "n": {},
+        "a": {}
+      },
+      "output": {
+        "a[]": {}
+      }
+    },
+    "range": {
+      "id": "29e43ad7-be5e-437f-8f0f-2df996c8b89c",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    }
+  },
+  "merges": {
+    "lmuhl": {
+      "narraybuilder": {
+        "input": {
+          "a": true
+        }
+      },
+      "range": {
+        "output": {
+          "i": true
+        }
+      }
+    },
+    "uzlnv": {
+      "narraybuilder": {
+        "input": {
+          "n": true
+        }
+      },
+      "range": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "n": {
+      "metadata": {
+        "description": "number of elements"
+      },
+      "pin": {
+        "0": {
+          "mergeId": "uzlnv"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "metadata": "array",
+      "pin": {
+        "0": {
+          "unitId": "narraybuilder",
+          "pinId": "a[]"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "build an array from 0 to `n`",
+    "complexity": 8,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "a0b5c3d9-7ee8-4c41-a299-1d32e707c673",
+  "type": "`U`&`G`",
+  "system": true
+}

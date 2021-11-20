@@ -1,0 +1,55 @@
+{
+  "name": "prop width",
+  "units": {
+    "prop": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'width'"
+        }
+      },
+      "output": {
+        "value": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "event": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "width": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "value"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "extract width from `obj`",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "event"
+    ]
+  },
+  "id": "16249a80-98ac-11eb-95b7-1b64bf84f0d8",
+  "type": "`U`&`G`",
+  "system": true
+}

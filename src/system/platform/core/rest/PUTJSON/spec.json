@@ -1,0 +1,129 @@
+{
+  "name": "PUT JSON",
+  "units": {
+    "stringify": {
+      "id": "ee184ea6-3c80-4119-919e-290620aafab0",
+      "input": {
+        "json": {}
+      }
+    },
+    "fetch": {
+      "id": "c5856fdc-5154-46ab-a414-47f37af39da1",
+      "input": {
+        "url": {
+          "constant": false
+        }
+      }
+    },
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'body'"
+        }
+      }
+    },
+    "deepmerge": {
+      "id": "2af12780-698c-40ca-baa9-5f3260377e0f",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "{method:'PUT',headers:{\"Content-Type\":'application/json'}}"
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "set": {
+        "input": {
+          "value": true
+        }
+      },
+      "stringify": {
+        "output": {
+          "string": true
+        }
+      }
+    },
+    "1": {
+      "fetch": {
+        "input": {
+          "options": true
+        }
+      },
+      "set": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "2": {
+      "set": {
+        "input": {
+          "obj": true
+        }
+      },
+      "deepmerge": {
+        "output": {
+          "ab": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "json": {
+      "pin": {
+        "0": {
+          "unitId": "stringify",
+          "pinId": "json"
+        }
+      },
+      "type": "<A>"
+    },
+    "url": {
+      "pin": {
+        "0": {
+          "unitId": "fetch",
+          "pinId": "url"
+        }
+      },
+      "type": "string"
+    },
+    "opt": {
+      "pin": {
+        "0": {
+          "unitId": "deepmerge",
+          "pinId": "b"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "response": {
+      "pin": {
+        "0": {
+          "unitId": "fetch",
+          "pinId": "response"
+        }
+      },
+      "type": "{status:number,body:string}"
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "...",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
+  },
+  "id": "3698d7af-8d4c-40f6-bcfa-222d9efb0940",
+  "type": "`U`&`G`",
+  "system": true
+}

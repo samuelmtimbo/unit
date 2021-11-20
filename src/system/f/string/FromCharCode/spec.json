@@ -1,0 +1,26 @@
+{
+  "name": "from char code",
+  "inputs": {
+    "code": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "char": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "axe",
+    "description": "output string created from the specified sequence of UTF-16 code",
+    "complexity": 2.6587476604340012,
+    "tags": [
+      "f",
+      "string"
+    ]
+  },
+  "id": "25d0e003-f002-45ae-a50c-6fa3bffee4eb",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,60 @@
+{
+  "name": "RGB to xy",
+  "units": {
+    "uodzrsnbx": {
+      "id": "73193df9-d5f4-4689-92ce-d804cf30ee20"
+    },
+    "wbuuzxzwu": {
+      "id": "31c06a15-ca1a-4175-b60a-0cb5dfff3a6c"
+    }
+  },
+  "merges": {
+    "zkgtjavhp": {
+      "uodzrsnbx": {
+        "output": {
+          "rdpajk": true
+        }
+      },
+      "wbuuzxzwu": {
+        "input": {
+          "zpwdflzip": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "palette",
+    "description": "no description",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "color"
+    ]
+  },
+  "inputs": {
+    "ybuip": {
+      "pin": {
+        "0": {
+          "unitId": "uodzrsnbx",
+          "pinId": "RGB"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "ppnxndt": {
+      "pin": {
+        "0": {
+          "unitId": "wbuuzxzwu",
+          "pinId": "vxikpyf"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "id": "23cae4c7-b88c-4004-865f-e618bfb0c63f",
+  "type": "`U`&`G`",
+  "system": true
+}

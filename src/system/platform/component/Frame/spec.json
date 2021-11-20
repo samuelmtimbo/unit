@@ -1,0 +1,37 @@
+{
+  "name": "frame",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "board": {
+      "type": "`CA`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "context of the connected `element`",
+    "complexity": 7.7168430220706785,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "d7c86a2a-489f-11eb-b83e-d3767f6d49b7",
+  "base": true,
+  "component": {
+    "defaultWidth": 300,
+    "defaultHeight": 300
+  },
+  "type": "`U`&`C`",
+  "system": true,
+  "render": true
+}

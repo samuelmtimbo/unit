@@ -1,0 +1,32 @@
+{
+  "name": "has key",
+  "inputs": {
+    "obj": {
+      "type": "`J`",
+      "ref": true
+    },
+    "key": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "data": {
+      "_type": "<T>['S',N]",
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "check whether `obj` has `key`",
+    "complexity": 2.666530771083891,
+    "tags": [
+      "platform",
+      "method",
+      "object"
+    ]
+  },
+  "id": "b409ff98-1c9e-4990-b2c2-d7f32fda50eb",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

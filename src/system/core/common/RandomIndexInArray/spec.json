@@ -1,0 +1,59 @@
+{
+  "name": "random index in array",
+  "units": {
+    "length": {
+      "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    },
+    "randomnaturallte": {
+      "id": "9569f78e-18d3-40a3-9373-c56afa0214f6"
+    }
+  },
+  "merges": {
+    "0": {
+      "length": {
+        "output": {
+          "length": true
+        }
+      },
+      "randomnaturallte": {
+        "input": {
+          "max": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "length",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "randomnaturallte",
+          "pinId": "i"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "random",
+    "description": "random element of the array",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "e2325503-40a7-4c7e-b06c-d3833c8856e5",
+  "type": "`U`&`G`",
+  "system": true
+}

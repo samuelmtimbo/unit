@@ -1,0 +1,516 @@
+{
+  "name": "includes",
+  "inputs": {
+    "a[]": {
+      "type": "<A>[]",
+      "pin": {
+        "0": {
+          "unitId": "kktcqlhms",
+          "pinId": "init"
+        },
+        "1": {
+          "unitId": "yadfnprd",
+          "pinId": "any"
+        },
+        "2": {
+          "unitId": "foyauruqj",
+          "pinId": "any"
+        }
+      },
+      "functional": true
+    },
+    "a": {
+      "type": "<A>",
+      "pin": {
+        "0": {
+          "unitId": "rizvvu",
+          "pinId": "init"
+        }
+      },
+      "functional": true
+    }
+  },
+  "outputs": {
+    "found": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "units": {
+    "loop": {
+      "id": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {},
+        "test": {},
+        "init": {
+          "constant": false
+        }
+      },
+      "output": {
+        "current": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 137,
+              "y": 6
+            }
+          }
+        },
+        "local": {},
+        "final": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 134,
+              "y": -12
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 82,
+          "y": -18
+        }
+      }
+    },
+    "insarup": {
+      "id": "4e2c89b2-e9cb-42f6-bb8d-e9d665c21fa7",
+      "input": {
+        "test": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {},
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -138,
+              "y": -2
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -85,
+          "y": 4
+        }
+      }
+    },
+    "kktcqlhms": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": -50,
+              "y": -61
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "local": {},
+        "current": {},
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -71,
+              "y": -65
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -45,
+          "y": -16
+        }
+      }
+    },
+    "munwxyxy": {
+      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "a": {},
+        "i": {}
+      },
+      "output": {
+        "a[i]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -47,
+          "y": 85
+        }
+      }
+    },
+    "mrmioidmp": {
+      "id": "cc422ac4-f29c-419d-8628-f58315bd7660",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "true": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -103,
+          "y": -87
+        }
+      }
+    },
+    "gxmdzkpd": {
+      "id": "85204bf6-6692-4686-a785-23127c0594b5",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a = b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 61,
+          "y": 87
+        }
+      }
+    },
+    "rizvvu": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": 19,
+              "y": 71
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 2,
+              "y": 51
+            }
+          }
+        },
+        "current": {},
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 90,
+              "y": 84
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 48,
+          "y": 36
+        }
+      }
+    },
+    "andnot": {
+      "id": "c059a789-b57c-4c2e-976b-fdbbe8f9993a",
+      "input": {
+        "b": {},
+        "a": {}
+      },
+      "output": {
+        "a && !b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 5,
+          "y": -67
+        }
+      }
+    },
+    "yadfnprd": {
+      "id": "b4d20f6f-32dc-4d04-97d6-69518976bdea",
+      "input": {
+        "any": {
+          "metadata": {
+            "position": {
+              "x": 249,
+              "y": -60
+            }
+          }
+        }
+      },
+      "output": {
+        "false": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 198,
+          "y": -55
+        }
+      }
+    },
+    "foyauruqj": {
+      "id": "618898d6-1167-11eb-bef9-cb053e09c21b",
+      "input": {
+        "any": {
+          "metadata": {
+            "position": {
+              "x": -263,
+              "y": 20
+            }
+          }
+        }
+      },
+      "output": {
+        "0": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -211,
+          "y": 19
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "munwxyxy": {
+        "input": {
+          "i": true
+        }
+      },
+      "insarup": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "1": {
+      "mrmioidmp": {
+        "input": {
+          "b": true
+        }
+      },
+      "insarup": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "2": {
+      "kktcqlhms": {
+        "output": {
+          "local": true
+        }
+      },
+      "mrmioidmp": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "insarup": {
+        "input": {
+          "test": true
+        }
+      },
+      "kktcqlhms": {
+        "input": {
+          "test": true
+        }
+      },
+      "rizvvu": {
+        "input": {
+          "test": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      },
+      "andnot": {
+        "output": {
+          "a && !b": true
+        }
+      }
+    },
+    "4": {
+      "kktcqlhms": {
+        "output": {
+          "current": true
+        }
+      },
+      "munwxyxy": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "5": {
+      "gxmdzkpd": {
+        "input": {
+          "a": true
+        }
+      },
+      "munwxyxy": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    },
+    "6": {
+      "rizvvu": {
+        "output": {
+          "current": true
+        }
+      },
+      "gxmdzkpd": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "7": {
+      "andnot": {
+        "input": {
+          "b": true
+        }
+      },
+      "loop": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "8": {
+      "andnot": {
+        "input": {
+          "a": true
+        }
+      },
+      "mrmioidmp": {
+        "output": {
+          "true": true
+        }
+      }
+    },
+    "9": {
+      "gxmdzkpd": {
+        "output": {
+          "a = b": true
+        }
+      },
+      "loop": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "10": {
+      "yadfnprd": {
+        "output": {
+          "false": true
+        }
+      },
+      "loop": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "11": {
+      "foyauruqj": {
+        "output": {
+          "0": true
+        }
+      },
+      "insarup": {
+        "input": {
+          "init": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "find whether array `a[]` contains an element of value `a`",
+    "complexity": 14,
+    "tags": [
+      "core",
+      "array"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": -92,
+          "y": 58
+        },
+        "1": {
+          "x": -123,
+          "y": -40
+        },
+        "2": {
+          "x": -84,
+          "y": -49
+        },
+        "3": {
+          "x": 4,
+          "y": -10
+        },
+        "4": {
+          "x": -51,
+          "y": 37
+        },
+        "5": {
+          "x": 6,
+          "y": 105
+        },
+        "6": {
+          "x": 99,
+          "y": 67
+        },
+        "7": {
+          "x": 57,
+          "y": -61
+        },
+        "8": {
+          "x": -47,
+          "y": -97
+        },
+        "9": {
+          "x": 92,
+          "y": 37
+        },
+        "10": {
+          "x": 142,
+          "y": -43
+        },
+        "11": {
+          "x": -153,
+          "y": 13
+        }
+      }
+    }
+  },
+  "id": "8783e7de-6cde-11eb-bd74-574fd9c8b6aa",
+  "type": "`U`&`G`",
+  "system": true
+}

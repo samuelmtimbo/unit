@@ -1,0 +1,42 @@
+{
+  "name": "range array 6",
+  "units": {
+    "rangearray": {
+      "id": "a0b5c3d9-7ee8-4c41-a299-1d32e707c673",
+      "input": {
+        "n": {
+          "constant": true,
+          "data": "6"
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {},
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "rangearray",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "[0, 1, 2, 3, 4, 5]",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "1f0e1e35-c920-4a3f-b71b-0e58f5c88bd3",
+  "type": "`U`&`G`",
+  "system": true
+}

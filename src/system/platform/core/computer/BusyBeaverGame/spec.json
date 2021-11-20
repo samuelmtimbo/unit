@@ -1,0 +1,107 @@
+{
+  "name": "busy beaver game",
+  "units": {
+    "init": {
+      "id": "32b27ad8-51d9-4767-8b9a-09da5a34f39d",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "hsltiomqs": {
+      "id": "6833b503-4853-49a2-9780-ded053c2970b",
+      "input": {
+        "state": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "vcgtkbllv": {
+      "id": "86e310b3-4b84-4be2-a87a-e4ebcc5d3a0c"
+    }
+  },
+  "merges": {
+    "ufafzgs": {
+      "init": {
+        "output": {
+          "a[]": true
+        }
+      },
+      "hsltiomqs": {
+        "input": {
+          "states": true
+        }
+      }
+    },
+    "yaumic": {
+      "init": {
+        "input": {
+          "n": true
+        }
+      },
+      "vcgtkbllv": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "oauqhwuos": {
+      "hsltiomqs": {
+        "input": {
+          "i": true
+        }
+      },
+      "vcgtkbllv": {
+        "output": {
+          "a ÷ 2": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "alarm-minus",
+    "description": "no description",
+    "complexity": 29.65585679076404,
+    "tags": [
+      "platform",
+      "core",
+      "computer"
+    ]
+  },
+  "inputs": {
+    "table": {
+      "pin": {
+        "0": {
+          "unitId": "hsltiomqs",
+          "pinId": "table"
+        }
+      },
+      "type": "number[][][]"
+    },
+    "n": {
+      "pin": {
+        "0": {
+          "mergeId": "yaumic"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "tape": {
+      "pin": {
+        "0": {
+          "unitId": "hsltiomqs",
+          "pinId": "tape"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "id": "514480bf-8259-4716-8e94-4617c30810a4",
+  "type": "`U`&`G`",
+  "system": true
+}

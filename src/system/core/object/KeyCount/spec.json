@@ -1,0 +1,71 @@
+{
+  "name": "key count",
+  "units": {
+    "keys": {
+      "id": "45b9c329-64e9-4c4a-800b-790947c75754",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "keys": {}
+      }
+    },
+    "length": {
+      "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "length": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "length": {
+        "input": {
+          "a": true
+        }
+      },
+      "keys": {
+        "output": {
+          "keys": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "keys",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "count": {
+      "pin": {
+        "0": {
+          "unitId": "length",
+          "pinId": "length"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "`obj` total key count",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "id": "8ea084fc-cffb-4b4a-9314-122e3c72554e",
+  "type": "`U`&`G`",
+  "system": true
+}

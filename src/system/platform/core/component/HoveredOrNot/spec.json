@@ -1,0 +1,216 @@
+{
+  "name": "hovered or not",
+  "inputs": {},
+  "outputs": {},
+  "units": {
+    "textdiv": {
+      "id": "9988a56e-6bee-46c8-864c-e351d84bc7e2",
+      "input": {
+        "value": {
+          "constant": true,
+          "data": "'NOT HOVERED'"
+        },
+        "style": {
+          "constant": true,
+          "data": "{display:'flex',justifyContent:'center',alignItems:'center',fontSize:'30px',textAlign:'center'}",
+          "metadata": {
+            "position": {
+              "x": 251,
+              "y": 0
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 128,
+          "y": 0
+        }
+      }
+    },
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'HOVERED'",
+          "metadata": {
+            "position": {
+              "x": -109,
+              "y": 43
+            }
+          }
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -59,
+          "y": 31
+        }
+      }
+    },
+    "onpointerenter": {
+      "id": "c0bb493a-af78-11ea-b6fa-3b893b757a39",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 4,
+          "y": 62
+        }
+      }
+    },
+    "onpointerleave": {
+      "id": "c7dba94e-af78-11ea-b7d7-47e14ca215b5",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 4,
+          "y": -63
+        }
+      }
+    },
+    "wait0": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'NOT HOVERED'",
+          "metadata": {
+            "position": {
+              "x": -109,
+              "y": -44
+            }
+          }
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -59,
+          "y": -32
+        }
+      }
+    }
+  },
+  "merges": {
+    "amznbrs": {
+      "onpointerleave": {
+        "input": {
+          "element": true
+        }
+      },
+      "textdiv": {
+        "output": {
+          "_self": true
+        }
+      },
+      "onpointerenter": {
+        "input": {
+          "element": true
+        }
+      }
+    },
+    "qkzuxfdle": {
+      "wait0": {
+        "input": {
+          "b": true
+        }
+      },
+      "onpointerleave": {
+        "output": {
+          "event": true
+        }
+      }
+    },
+    "skqbcsu": {
+      "wait": {
+        "input": {
+          "b": true
+        }
+      },
+      "onpointerenter": {
+        "output": {
+          "event": true
+        }
+      }
+    },
+    "qldolfj": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "textdiv": {
+        "input": {
+          "value": true
+        }
+      },
+      "wait0": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "complexity": 7,
+    "position": {
+      "merge": {
+        "qkzuxfdle": {
+          "x": -41,
+          "y": -72
+        },
+        "skqbcsu": {
+          "x": -41,
+          "y": 71
+        },
+        "qldolfj": {
+          "x": -12,
+          "y": 0
+        },
+        "yqhxzi": {
+          "x": 257,
+          "y": 0
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "687384e5-8b9a-4ba8-b68a-e7972213d7bc",
+  "component": {
+    "subComponents": {
+      "textdiv": {
+        "children": []
+      }
+    },
+    "children": [
+      "textdiv"
+    ],
+    "defaultWidth": 180,
+    "defaultHeight": 90
+  },
+  "type": "`U`&`G`",
+  "system": true
+}

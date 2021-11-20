@@ -1,0 +1,31 @@
+{
+  "name": "keyboard key",
+  "inputs": {
+    "style": {
+      "type": "object"
+    },
+    "key": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "keyboard",
+    "description": "virtual keyboard single key",
+    "complexity": 9.585011952634213,
+    "tags": [
+      "platform",
+      "component",
+      "app"
+    ]
+  },
+  "id": "d0672722-b1a9-11ea-a247-d736e666990e",
+  "base": true,
+  "component": {
+    "defaultWidth": 45,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`",
+  "system": true,
+  "render": true
+}

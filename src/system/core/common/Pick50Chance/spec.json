@@ -1,0 +1,105 @@
+{
+  "name": "pick 50% chance",
+  "units": {
+    "kisvs": {
+      "id": "396497e4-f8e7-4573-95c9-a4f186a5cd05"
+    },
+    "iqtjs": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    },
+    "iubpagjjj": {
+      "id": "6c3c8c8f-e383-46bc-ac0c-a294e65040bb"
+    }
+  },
+  "merges": {
+    "dcdag": {
+      "kisvs": {
+        "input": {
+          "b": true
+        }
+      },
+      "iqtjs": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "yktkm": {
+      "kisvs": {
+        "input": {
+          "a": true
+        }
+      },
+      "iqtjs": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "rnnrejbbx": {
+      "kisvs": {
+        "input": {
+          "c": true
+        }
+      },
+      "iubpagjjj": {
+        "output": {
+          "pass": true
+        }
+      }
+    },
+    "lcdhaup": {
+      "iqtjs": {
+        "output": {
+          "a": true
+        }
+      },
+      "iubpagjjj": {
+        "input": {
+          "any": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "qszkn": {
+      "pin": {
+        "0": {
+          "mergeId": "dcdag"
+        }
+      },
+      "type": "boolean"
+    },
+    "vmhay": {
+      "pin": {
+        "0": {
+          "mergeId": "yktkm"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "emrwe": {
+      "pin": {
+        "0": {
+          "unitId": "kisvs",
+          "pinId": "a"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "scale",
+    "description": "pick a or b, 50% chance",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "04bd8d41-7352-4609-b5af-603e4208775b",
+  "type": "`U`&`G`",
+  "system": true
+}

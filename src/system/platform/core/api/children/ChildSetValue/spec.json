@@ -1,0 +1,140 @@
+{
+  "name": "child set value",
+  "inputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "childset",
+          "pinId": "data"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 69,
+            "y": -43
+          }
+        }
+      },
+      "type": "any"
+    },
+    "at": {
+      "pin": {
+        "0": {
+          "unitId": "childset",
+          "pinId": "at"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -66,
+            "y": 28
+          }
+        }
+      },
+      "type": "number"
+    },
+    "parent": {
+      "pin": {
+        "0": {
+          "unitId": "childset",
+          "pinId": "parent"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 69,
+            "y": 28
+          }
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "childset": {
+      "id": "2633ed12-309e-40fe-910d-44106d917e96",
+      "input": {
+        "parent": {
+          "metadata": {
+            "position": {
+              "x": 47,
+              "y": 11
+            }
+          }
+        },
+        "at": {
+          "metadata": {
+            "position": {
+              "x": -44,
+              "y": 11
+            }
+          }
+        },
+        "name": {
+          "constant": true,
+          "data": "'value'",
+          "metadata": {
+            "position": {
+              "x": -44,
+              "y": -26
+            }
+          }
+        },
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 47,
+              "y": -26
+            }
+          }
+        },
+        "b": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 29,
+              "y": 31
+            }
+          }
+        },
+        "a": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -26,
+              "y": 31
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 2,
+          "y": -8
+        }
+      }
+    }
+  },
+  "merges": {},
+  "component": {},
+  "metadata": {
+    "icon": "triangle",
+    "description": "set `element` child `at` value to `value`",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "children"
+    ]
+  },
+  "id": "9f9dff70-30e6-467b-9204-55fdf5b4ac4f",
+  "type": "`U`&`G`",
+  "system": true
+}

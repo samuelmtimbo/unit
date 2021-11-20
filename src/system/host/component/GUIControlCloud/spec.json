@@ -1,0 +1,22 @@
+{
+  "name": "GUI control cloud",
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "unit class component",
+    "complexity": 17.877990474955062,
+    "tags": [
+      "host",
+      "component"
+    ]
+  },
+  "id": "6f1111f0-82b3-11eb-9271-07ffc15d08c6",
+  "base": true,
+  "component": {
+    "defaultWidth": 210,
+    "defaultHeight": 180
+  },
+  "type": "`U`&`C`",
+  "system": true
+}

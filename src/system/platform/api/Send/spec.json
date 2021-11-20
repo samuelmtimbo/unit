@@ -1,0 +1,26 @@
+{
+  "name": "send",
+  "inputs": {
+    "unit": {
+      "type": "`P`",
+      "ref": true
+    },
+    "data": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "send",
+    "description": "send an arbitrary datum to `unit`",
+    "complexity": 2.6653818357022403,
+    "tags": [
+      "platform",
+      "api"
+    ]
+  },
+  "base": true,
+  "id": "b296242e-8b82-11eb-ac6c-0f8d3f9948d0",
+  "type": "`U`",
+  "system": true
+}

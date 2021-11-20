@@ -1,0 +1,153 @@
+{
+  "name": "sum next n",
+  "units": {
+    "add": {
+      "id": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf"
+    },
+    "decrement": {
+      "id": "4d67d2e4-8b06-4e15-8243-99be8e4be5d3"
+    },
+    "gt0": {
+      "id": "6f4ac2fa-e9bd-4c0e-8bda-75976f3e4e58"
+    },
+    "loop2": {
+      "id": "eee90e0f-522d-4ac4-a0f1-abf5d69a4e26",
+      "output": {
+        "finala": {
+          "ignored": true
+        },
+        "finalb": {
+          "ignored": true
+        },
+        "localb": {
+          "ignored": true
+        }
+      },
+      "input": {
+        "initb": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    }
+  },
+  "merges": {
+    "zaxdndbde": {
+      "add": {
+        "output": {
+          "a + b": true
+        }
+      },
+      "loop2": {
+        "input": {
+          "next b": true
+        }
+      }
+    },
+    "dukjacedz": {
+      "loop2": {
+        "output": {
+          "locala": true
+        }
+      },
+      "gt0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "twhvr": {
+      "loop2": {
+        "input": {
+          "test": true
+        }
+      },
+      "gt0": {
+        "output": {
+          "a > 0": true
+        }
+      }
+    },
+    "ttpmxiru": {
+      "loop2": {
+        "output": {
+          "currenta": true
+        }
+      },
+      "decrement": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "ojmyaavg": {
+      "loop2": {
+        "input": {
+          "next a": true
+        }
+      },
+      "decrement": {
+        "output": {
+          "a - 1": true
+        }
+      }
+    },
+    "gcudnlqk": {
+      "loop2": {
+        "output": {
+          "currentb": true
+        }
+      },
+      "add": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "plus",
+    "description": "no description",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "math",
+      "series",
+      "harmonic"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "add",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "n": {
+      "pin": {
+        "0": {
+          "unitId": "loop2",
+          "pinId": "inita"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "sum": {
+      "pin": {
+        "0": {
+          "mergeId": "zaxdndbde"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "17583c27-6d05-4325-aea0-17237243d7c2",
+  "type": "`U`&`G`",
+  "system": true
+}

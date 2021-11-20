@@ -1,0 +1,228 @@
+{
+  "name": "merge rect",
+  "inputs": {
+    "width": {
+      "pin": {
+        "0": {
+          "unitId": "mergewidthheight",
+          "pinId": "width"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -191,
+            "y": -36
+          }
+        }
+      },
+      "type": "number"
+    },
+    "height": {
+      "pin": {
+        "0": {
+          "unitId": "mergewidthheight",
+          "pinId": "height"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -190,
+            "y": 34
+          }
+        }
+      },
+      "type": "number"
+    },
+    "x": {
+      "pin": {
+        "0": {
+          "unitId": "mergexy",
+          "pinId": "x"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 177,
+            "y": 53
+          }
+        }
+      },
+      "type": "number"
+    },
+    "y": {
+      "pin": {
+        "0": {
+          "unitId": "mergexy",
+          "pinId": "y"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 184,
+            "y": -16
+          }
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "rect": {
+      "pin": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "ab"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 32,
+            "y": -59
+          }
+        }
+      },
+      "type": "object"
+    }
+  },
+  "units": {
+    "mergexy": {
+      "id": "2737cd82-d80b-4d3f-b33d-f00f68361e24",
+      "input": {
+        "y": {
+          "metadata": {
+            "position": {
+              "x": 158,
+              "y": -1
+            }
+          }
+        },
+        "x": {
+          "metadata": {
+            "position": {
+              "x": 155,
+              "y": 33
+            }
+          }
+        }
+      },
+      "output": {
+        "{x,y}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 109,
+          "y": 13
+        }
+      }
+    },
+    "mergewidthheight": {
+      "id": "450dac92-395b-4c7b-b8c0-219315c28035",
+      "input": {
+        "height": {
+          "metadata": {
+            "position": {
+              "x": -167,
+              "y": 16
+            }
+          }
+        },
+        "width": {
+          "metadata": {
+            "position": {
+              "x": -167,
+              "y": -18
+            }
+          }
+        }
+      },
+      "output": {
+        "{width,height}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -119,
+          "y": -1
+        }
+      }
+    },
+    "merge": {
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "ab": {
+          "metadata": {
+            "position": {
+              "x": 29,
+              "y": -31
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -6,
+          "y": -2
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "merge": {
+        "input": {
+          "a": true
+        }
+      },
+      "mergewidthheight": {
+        "output": {
+          "{width,height}": true
+        }
+      }
+    },
+    "1": {
+      "merge": {
+        "input": {
+          "b": true
+        }
+      },
+      "mergexy": {
+        "output": {
+          "{x,y}": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "{ x, y, width, height }",
+    "complexity": 5,
+    "position": {
+      "merge": {
+        "0": {
+          "x": -63,
+          "y": -1
+        },
+        "1": {
+          "x": 52,
+          "y": 9
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "id": "eb9740fb-1a02-4006-a618-7fc8ebc2af96",
+  "type": "`U`&`G`",
+  "system": true
+}

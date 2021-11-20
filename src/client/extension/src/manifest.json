@@ -1,0 +1,71 @@
+{
+  "name": "unit",
+  "version": "1.0",
+  "description": "Extend ioun.it functionality",
+  "manifest_version": 2,
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": ["content.js"]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "alarms",
+    "background",
+    "bookmarks",
+    "browsingData",
+    "clipboardRead",
+    "clipboardWrite",
+    "contextMenus",
+    "declarativeContent",
+    "desktopCapture",
+    "downloads",
+    "gcm",
+    "geolocation",
+    "history",
+    "idle",
+    "nativeMessaging",
+    "notifications",
+    "pageCapture",
+    "power",
+    "printerProvider",
+    "proxy",
+    "sessions",
+    "storage",
+    "system.cpu",
+    "system.display",
+    "system.memory",
+    "system.storage",
+    "tabCapture",
+    "topSites",
+    "tts",
+    "ttsEngine",
+    "unlimitedStorage"
+  ],
+  "options_page": "options.html",
+  "page_action": {
+    "default_title": "unit",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "favicon_16.png",
+      "32": "favicon_32.png",
+      "48": "favicon_48.png",
+      "128": "favicon_128.png"
+    }
+  },
+  "icons": {
+    "16": "favicon_16.png",
+    "32": "favicon_32.png",
+    "48": "favicon_48.png",
+    "128": "favicon_128.png"
+  }
+}

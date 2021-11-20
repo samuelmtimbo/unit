@@ -1,0 +1,49 @@
+{
+  "name": "greater than 0",
+  "units": {
+    "greaterthan": {
+      "id": "1651ce6b-4db0-4787-9edf-f770b72d253c",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "greater-than",
+    "description": "output whether `a` is greater than 0",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "greaterthan",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a > 0": {
+      "pin": {
+        "0": {
+          "unitId": "greaterthan",
+          "pinId": "a > b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "id": "6f4ac2fa-e9bd-4c0e-8bda-75976f3e4e58",
+  "type": "`U`&`G`",
+  "system": true
+}

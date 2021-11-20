@@ -1,0 +1,60 @@
+{
+  "name": "hex to xy",
+  "units": {
+    "umzakg": {
+      "id": "653279dc-893d-4627-854e-d110aece0b72"
+    },
+    "jrovawnjv": {
+      "id": "23cae4c7-b88c-4004-865f-e618bfb0c63f"
+    }
+  },
+  "merges": {
+    "uvlsnnmat": {
+      "umzakg": {
+        "output": {
+          "RGB": true
+        }
+      },
+      "jrovawnjv": {
+        "input": {
+          "ybuip": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "palette",
+    "description": "no description",
+    "complexity": 42,
+    "tags": [
+      "platform",
+      "core",
+      "color"
+    ]
+  },
+  "inputs": {
+    "hex": {
+      "pin": {
+        "0": {
+          "unitId": "umzakg",
+          "pinId": "hex"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "xy": {
+      "pin": {
+        "0": {
+          "unitId": "jrovawnjv",
+          "pinId": "ppnxndt"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "id": "f2043fd6-04d4-4523-939b-f631af07f70e",
+  "type": "`U`&`G`",
+  "system": true
+}

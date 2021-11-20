@@ -1,0 +1,146 @@
+{
+  "name": "has keys",
+  "units": {
+    "reduce": {
+      "id": "5cd76a8a-603b-49e1-bda3-09ad217eb108",
+      "output": {},
+      "input": {
+        "init": {
+          "constant": true,
+          "data": "true"
+        }
+      }
+    },
+    "haskey": {
+      "id": "ad2ae8b9-9674-4b22-bed4-4458e0030b1a"
+    },
+    "and": {
+      "id": "407640f7-f1c3-4297-a5ce-baff357a6d31"
+    },
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "output": {
+        "local": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "and": {
+        "input": {
+          "b": true
+        }
+      },
+      "haskey": {
+        "output": {
+          "has": true
+        }
+      }
+    },
+    "1": {
+      "reduce": {
+        "output": {
+          "local": true
+        }
+      },
+      "and": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "reduce": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "haskey": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "3": {
+      "reduce": {
+        "output": {
+          "test": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "4": {
+      "haskey": {
+        "input": {
+          "obj": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "5": {
+      "reduce": {
+        "input": {
+          "next": true
+        }
+      },
+      "and": {
+        "output": {
+          "a and b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "keys": {
+      "pin": {
+        "0": {
+          "unitId": "reduce",
+          "pinId": "a"
+        }
+      },
+      "type": "(number|string)[]"
+    },
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "has": {
+      "pin": {
+        "0": {
+          "unitId": "reduce",
+          "pinId": "result"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "does `obj` have all `keys`?",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "id": "5db358ae-5975-4a4f-8fa4-ec991624508a",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,64 @@
+{
+  "name": "assoc from",
+  "units": {
+    "assoc": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'from'"
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "...",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "style"
+    ]
+  },
+  "id": "53846253-2c16-4329-8e65-e6e8f37e6b086",
+  "type": "`U`&`G`",
+  "system": true
+}

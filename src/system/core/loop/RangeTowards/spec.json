@@ -1,0 +1,295 @@
+{
+  "name": "range towards",
+  "inputs": {
+    "end": {
+      "pin": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
+      "functional": true,
+      "type": "number"
+    },
+    "start": {
+      "pin": {
+        "0": {
+          "unitId": "loopadd",
+          "pinId": "init"
+        }
+      },
+      "functional": true,
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "final": {
+      "pin": {
+        "0": {
+          "unitId": "loopadd",
+          "pinId": "final"
+        }
+      },
+      "type": "number"
+    },
+    "current": {
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "units": {
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": -130,
+              "y": -35
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "local": {},
+        "current": {},
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -115,
+              "y": -57
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -78,
+          "y": -21
+        }
+      }
+    },
+    "subtract": {
+      "id": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a - b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 23,
+          "y": -59
+        }
+      }
+    },
+    "greaterthan0": {
+      "id": "1a59348c-a25a-11eb-8afe-8bedb0732a89",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "sign(a)": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 121,
+          "y": -35
+        }
+      }
+    },
+    "loopadd": {
+      "id": "93369291-7ce2-4b4c-a414-870b1f3c9b4c",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": 54,
+              "y": 70
+            }
+          }
+        },
+        "test": {},
+        "plus": {}
+      },
+      "output": {
+        "local": {},
+        "final": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 81,
+              "y": 45
+            }
+          }
+        },
+        "current": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 30,
+          "y": 26
+        }
+      }
+    },
+    "greaterthan": {
+      "id": "bda175a9-a9d2-4282-9b50-1b008ae8a807",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a ≠ b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -73,
+          "y": 34
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "subtract": {
+        "input": {
+          "a": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "1": {
+      "greaterthan0": {
+        "input": {
+          "a": true
+        }
+      },
+      "subtract": {
+        "output": {
+          "a - b": true
+        }
+      }
+    },
+    "2": {
+      "loopadd": {
+        "output": {
+          "current": true
+        }
+      },
+      "subtract": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "3": {
+      "greaterthan0": {
+        "output": {
+          "sign(a)": true
+        }
+      },
+      "loopadd": {
+        "input": {
+          "plus": true
+        }
+      }
+    },
+    "4": {
+      "greaterthan": {
+        "input": {
+          "b": true
+        }
+      },
+      "loopadd": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "5": {
+      "greaterthan": {
+        "input": {
+          "a": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "6": {
+      "greaterthan": {
+        "output": {
+          "a ≠ b": true
+        }
+      },
+      "loopadd": {
+        "input": {
+          "test": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "list-ordered",
+    "description": "go from `a` to `b` step by step, not inclusive",
+    "complexity": 7,
+    "position": {
+      "merge": {
+        "0": {
+          "x": -32,
+          "y": -51
+        },
+        "1": {
+          "x": 78,
+          "y": -62
+        },
+        "2": {
+          "x": 46,
+          "y": -19
+        },
+        "3": {
+          "x": 85,
+          "y": 1
+        },
+        "4": {
+          "x": -22,
+          "y": 44
+        },
+        "5": {
+          "x": -117,
+          "y": 12
+        },
+        "6": {
+          "x": -30,
+          "y": 11
+        }
+      }
+    },
+    "tags": [
+      "core",
+      "loop"
+    ]
+  },
+  "id": "06203a50-ace2-4c4e-9088-0951342c6b52",
+  "type": "`U`&`G`",
+  "system": true
+}

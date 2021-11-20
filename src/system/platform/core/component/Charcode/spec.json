@@ -1,0 +1,116 @@
+{
+  "name": "charcode",
+  "inputs": {
+    "code": {
+      "pin": {
+        "0": {
+          "unitId": "fromcharcode",
+          "pinId": "code"
+        }
+      },
+      "ref": false
+    },
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "units": {
+    "textspan": {
+      "id": "4ba86ad5-899b-4e8d-b5ce-3589dcfeaefd",
+      "input": {
+        "style": {},
+        "value": {}
+      },
+      "output": {},
+      "metadata": {
+        "component": {
+          "width": 137.0802001953125,
+          "height": 130.09799194335938
+        }
+      }
+    },
+    "fromcharcode": {
+      "id": "25d0e003-f002-45ae-a50c-6fa3bffee4eb",
+      "input": {
+        "code": {}
+      },
+      "output": {
+        "char": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -76,
+          "y": 0
+        }
+      }
+    },
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{display:'flex',justifyContent:'center',alignItems:'center',fontSize:'60px'}"
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "fromcharcode": {
+        "output": {
+          "char": true
+        }
+      },
+      "textspan": {
+        "input": {
+          "value": true
+        }
+      }
+    },
+    "1": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "textspan": {
+        "input": {
+          "style": true
+        }
+      }
+    }
+  },
+  "component": {
+    "subComponents": {
+      "textspan": {
+        "children": []
+      }
+    },
+    "children": [
+      "textspan"
+    ],
+    "defaultWidth": 90,
+    "defaultHeight": 90
+  },
+  "metadata": {
+    "complexity": 15.146452198728758,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "d0c59812-a8ec-4c53-81a9-c9725dda987e",
+  "type": "`U`&`G`&`C`"
+}

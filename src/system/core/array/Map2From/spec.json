@@ -1,0 +1,126 @@
+{
+  "name": "map 2 from",
+  "units": {
+    "foreach": {
+      "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "test": {
+          "ignored": false
+        }
+      }
+    },
+    "foreach1": {
+      "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "test": {
+          "ignored": true
+        }
+      }
+    },
+    "lgxnwnr": {
+      "id": "6db1905f-2343-4c63-97d3-07f4d946ef58",
+      "output": {
+        "local": {
+          "ignored": true
+        },
+        "acc": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {
+    "hyjndoefw": {
+      "foreach": {
+        "output": {
+          "test": true
+        }
+      },
+      "lgxnwnr": {
+        "input": {
+          "test": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "foreach1",
+          "pinId": "a"
+        }
+      },
+      "type": "<B>[]"
+    },
+    "c[i]": {
+      "pin": {
+        "0": {
+          "unitId": "lgxnwnr",
+          "pinId": "a"
+        }
+      },
+      "type": "<B>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "hqafziavx": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "lgxnwnr",
+          "pinId": "init"
+        }
+      },
+      "type": "<B>[]"
+    }
+  },
+  "outputs": {
+    "b[i]": {
+      "pin": {
+        "0": {
+          "unitId": "foreach1",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<B>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "lgxnwnr",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<B>[]"
+    },
+    "a[i]": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "map",
+    "description": "...",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "28ee1447-9e5d-4e18-8a9d-90fedfceb4ff",
+  "type": "`U`&`G`",
+  "system": true
+}

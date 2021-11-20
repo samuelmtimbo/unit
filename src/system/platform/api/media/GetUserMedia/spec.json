@@ -1,0 +1,30 @@
+{
+  "name": "get user media",
+  "inputs": {
+    "opt": {
+      "type": "{audio?:boolean,video?:boolean}"
+    }
+  },
+  "outputs": {
+    "stream": {
+      "type": "`ST`",
+      "ref": true
+    }
+  },
+  "id": "a6e30b43-9ab4-4206-bfba-3f2129faac30",
+  "base": true,
+  "metadata": {
+    "icon": "film",
+    "complexity": 11.707336508348313,
+    "tags": [
+      "platform",
+      "api",
+      "media"
+    ],
+    "globals": [
+      "MediaDevices"
+    ]
+  },
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,215 @@
+{
+  "name": "slider value",
+  "inputs": {
+    "min": {
+      "pin": {
+        "0": {
+          "unitId": "slider",
+          "pinId": "min"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "number",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -172,
+            "y": 1
+          }
+        }
+      }
+    },
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "slider",
+          "pinId": "style"
+        }
+      },
+      "type": "object",
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 124,
+            "y": -47
+          }
+        }
+      }
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "slider",
+          "pinId": "value"
+        }
+      },
+      "type": "number",
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -105,
+            "y": 52
+          }
+        }
+      }
+    },
+    "max": {
+      "pin": {
+        "0": {
+          "unitId": "slider",
+          "pinId": "max"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "number",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -105,
+            "y": -51
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "onvalue",
+          "pinId": "value"
+        }
+      },
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 222,
+            "y": 26
+          }
+        }
+      }
+    },
+    "slider": {
+      "pin": {
+        "0": {
+          "unitId": "slider",
+          "pinId": "_self"
+        }
+      },
+      "ref": true,
+      "type": "`C`&`V`"
+    }
+  },
+  "units": {
+    "slider": {
+      "id": "e06518cf-9edf-430b-8751-74c486e407aa",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": 116,
+              "y": -21
+            }
+          }
+        },
+        "value": {
+          "metadata": {
+            "position": {
+              "x": -100,
+              "y": 24
+            }
+          }
+        },
+        "min": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -142,
+              "y": 1
+            }
+          }
+        },
+        "max": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -100,
+              "y": -23
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -4,
+          "y": 1
+        }
+      }
+    },
+    "onvalue": {
+      "id": "f1e3b2aa-1215-49f0-a2cd-2ef7178a4374",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 194,
+              "y": 20
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 145,
+          "y": 17
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "onvalue": {
+        "input": {
+          "element": true
+        }
+      },
+      "slider": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 30,
+    "subComponents": {
+      "slider": {
+        "children": []
+      }
+    },
+    "children": [
+      "slider"
+    ]
+  },
+  "metadata": {
+    "icon": "sliders",
+    "description": "slider current value",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "f8b6b40c-3cbd-4de7-94cc-3a3b7f6391a3",
+  "type": "`U`&`C`&`G`",
+  "system": true
+}

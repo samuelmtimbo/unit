@@ -1,0 +1,34 @@
+{
+  "name": "microphone button",
+  "base": true,
+  "units": {},
+  "merges": {},
+  "inputs": {
+    "options": {
+      "type": "{grammar?:string,lang?:string,interim?:boolean}"
+    }
+  },
+  "outputs": {
+    "transcript": {
+      "type": "string"
+    }
+  },
+  "component": {
+    "defaultWidth": 60,
+    "defaultHeight": 60
+  },
+  "metadata": {
+    "icon": "mic",
+    "description": "speak a sentence",
+    "complexity": 9.47504771788077,
+    "tags": [
+      "platform",
+      "component",
+      "app"
+    ]
+  },
+  "id": "023c3762-c701-11ea-b590-57b51c2884a7",
+  "type": "`U`&`C`",
+  "system": true,
+  "render": true
+}

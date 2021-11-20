@@ -1,0 +1,159 @@
+{
+  "name": "get height",
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "get",
+          "pinId": "unit"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 123,
+            "y": 33
+          }
+        }
+      }
+    },
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait0",
+          "pinId": "b"
+        }
+      },
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -120,
+            "y": 33
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "height": {
+      "type": "any",
+      "pin": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 123,
+            "y": -34
+          }
+        }
+      }
+    }
+  },
+  "units": {
+    "get": {
+      "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": {
+        "unit": {
+          "metadata": {
+            "position": {
+              "x": 100,
+              "y": 17
+            }
+          }
+        },
+        "name": {}
+      },
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 100,
+              "y": -18
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 55,
+          "y": 0
+        }
+      }
+    },
+    "wait0": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'height'",
+          "metadata": {
+            "position": {
+              "x": -97,
+              "y": -18
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -97,
+              "y": 17
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "rhtb": {
+      "wait0": {
+        "output": {
+          "a": true
+        }
+      },
+      "get": {
+        "input": {
+          "name": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "get unit's current height",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "get"
+    ],
+    "position": {
+      "merge": {
+        "rhtb": {
+          "x": 2,
+          "y": 0
+        }
+      }
+    }
+  },
+  "id": "f513667c-3e2f-11eb-8a96-4fbfb5c1b798",
+  "type": "`U`&`G`",
+  "system": true
+}

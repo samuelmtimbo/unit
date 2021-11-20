@@ -1,0 +1,58 @@
+{
+  "name": "tag",
+  "units": {
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {
+          "constant": true,
+          "data": "{}"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "create a single entry object with key `k` and value `v`",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "inputs": {
+    "k": {
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "key"
+        }
+      },
+      "type": "number|string"
+    },
+    "v": {
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "kv": {
+      "pin": {
+        "0": {
+          "unitId": "set",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+  "type": "`U`&`G`",
+  "system": true
+}

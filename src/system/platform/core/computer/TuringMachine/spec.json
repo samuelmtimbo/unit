@@ -1,0 +1,392 @@
+{
+  "name": "turing machine",
+  "inputs": {
+    "state": {
+      "pin": {
+        "0": {
+          "unitId": "if4",
+          "pinId": "d"
+        },
+        "oupupman": {
+          "unitId": "lessthan",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "table": {
+      "pin": {
+        "0": {
+          "unitId": "if4",
+          "pinId": "c"
+        }
+      },
+      "type": "number[][][]"
+    },
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "if4",
+          "pinId": "a"
+        }
+      },
+      "type": "boolean"
+    },
+    "tape": {
+      "pin": {
+        "0": {
+          "unitId": "ifnot",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "if4",
+          "pinId": "b"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "tape": {
+      "pin": {
+        "0": {
+          "unitId": "ifnot",
+          "pinId": "a if not b"
+        },
+        "plsdbfui": {
+          "unitId": "turingmachine",
+          "pinId": "tape"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "units": {
+    "turingmachine": {
+      "id": "6833b503-4853-49a2-9780-ded053c2970b",
+      "input": {
+        "state": {},
+        "table": {},
+        "i": {},
+        "tape": {}
+      },
+      "output": {
+        "tape": {
+          "metadata": {
+            "position": {
+              "x": -272,
+              "y": -3
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -218,
+          "y": -3
+        }
+      }
+    },
+    "if4": {
+      "id": "1c59d8d8-5dc6-11ea-9bfb-9b22dd8d8cae",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 32,
+              "y": -25
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -4,
+              "y": 46
+            }
+          }
+        },
+        "c": {
+          "metadata": {
+            "position": {
+              "x": -2,
+              "y": -49
+            }
+          }
+        },
+        "d": {
+          "metadata": {
+            "position": {
+              "x": 32,
+              "y": 23
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "d": {},
+        "a": {},
+        "b": {},
+        "c": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -12,
+          "y": -1
+        }
+      }
+    },
+    "readtable": {
+      "id": "d954883c-85fe-48e2-b833-cb142eed6df2",
+      "input": {
+        "state": {},
+        "i": {},
+        "tape": {},
+        "table": {}
+      },
+      "output": {
+        "tape": {},
+        "i": {},
+        "table": {},
+        "state": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -119,
+          "y": -2
+        }
+      }
+    },
+    "lessthan": {
+      "id": "82c3cf2a-0855-4c6d-a4c4-807b0ce1fd35",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 158,
+              "y": -66
+            }
+          }
+        },
+        "b": {
+          "constant": true,
+          "data": "3",
+          "metadata": {
+            "position": {
+              "x": 174,
+              "y": -35
+            }
+          }
+        }
+      },
+      "output": {
+        "a < b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 122,
+          "y": -33
+        }
+      }
+    },
+    "ifnot": {
+      "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 156,
+              "y": 69
+            }
+          }
+        },
+        "b": {}
+      },
+      "output": {
+        "a if not b": {
+          "metadata": {
+            "position": {
+              "x": 173,
+              "y": 39
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 121,
+          "y": 35
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "readtable": {
+        "input": {
+          "i": true
+        }
+      },
+      "if4": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "readtable": {
+        "input": {
+          "tape": true
+        }
+      },
+      "if4": {
+        "output": {
+          "b": true
+        }
+      }
+    },
+    "2": {
+      "readtable": {
+        "input": {
+          "table": true
+        }
+      },
+      "if4": {
+        "output": {
+          "c": true
+        }
+      }
+    },
+    "3": {
+      "readtable": {
+        "input": {
+          "state": true
+        }
+      },
+      "if4": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "4": {
+      "if4": {
+        "input": {
+          "test": true
+        }
+      },
+      "lessthan": {
+        "output": {
+          "a < b": true
+        }
+      },
+      "ifnot": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "6": {
+      "turingmachine": {
+        "input": {
+          "state": true
+        }
+      },
+      "readtable": {
+        "output": {
+          "state": true
+        }
+      }
+    },
+    "7": {
+      "turingmachine": {
+        "input": {
+          "i": true
+        }
+      },
+      "readtable": {
+        "output": {
+          "i": true
+        }
+      }
+    },
+    "8": {
+      "turingmachine": {
+        "input": {
+          "tape": true
+        }
+      },
+      "readtable": {
+        "output": {
+          "tape": true
+        }
+      }
+    },
+    "9": {
+      "readtable": {
+        "output": {
+          "table": true
+        }
+      },
+      "turingmachine": {
+        "input": {
+          "table": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "cpu",
+    "description": "no description",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "core",
+      "computer"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": -69,
+          "y": 22
+        },
+        "1": {
+          "x": -64,
+          "y": -26
+        },
+        "2": {
+          "x": -61,
+          "y": 5
+        },
+        "3": {
+          "x": -71,
+          "y": -9
+        },
+        "4": {
+          "x": 69,
+          "y": 0
+        },
+        "6": {
+          "x": -171,
+          "y": -11
+        },
+        "7": {
+          "x": -172,
+          "y": 25
+        },
+        "8": {
+          "x": -170,
+          "y": 7
+        },
+        "9": {
+          "x": -171,
+          "y": -29
+        }
+      }
+    }
+  },
+  "id": "6833b503-4853-49a2-9780-ded053c2970b",
+  "type": "`U`&`G`",
+  "system": true
+}

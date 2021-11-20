@@ -1,0 +1,50 @@
+{
+  "name": "get body",
+  "units": {
+    "ghxyrljwi": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'body'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "send",
+    "description": "",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
+  },
+  "inputs": {
+    "vlirfp": {
+      "pin": {
+        "0": {
+          "unitId": "ghxyrljwi",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "hmadbdycv": {
+      "pin": {
+        "0": {
+          "unitId": "ghxyrljwi",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "6a529c4d-07af-4778-8086-8a578694ec3f",
+  "type": "`U`&`G`",
+  "system": true
+}

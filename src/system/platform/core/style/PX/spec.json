@@ -1,0 +1,80 @@
+{
+  "name": "px",
+  "units": {
+    "concat": {
+      "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "'px'"
+        }
+      },
+      "output": {
+        "ab": {}
+      }
+    },
+    "numbertostring": {
+      "id": "f712793d-8ee9-4805-9d4a-8c210cae667a",
+      "input": {
+        "n": {},
+        "radix": {
+          "constant": true,
+          "data": "10"
+        }
+      },
+      "output": {
+        "str": {}
+      }
+    }
+  },
+  "merges": {
+    "tavfhissj": {
+      "numbertostring": {
+        "output": {
+          "str": true
+        }
+      },
+      "concat": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "n": {
+      "pin": {
+        "0": {
+          "unitId": "numbertostring",
+          "pinId": "n"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "px": {
+      "pin": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "ab"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "dot-circle",
+    "description": "append \"px\" to `n`",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "style"
+    ]
+  },
+  "id": "87c7b2b8-c17e-11ea-ba3a-072aa030b89f",
+  "type": "`U`&`G`",
+  "system": true
+}

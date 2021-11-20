@@ -1,0 +1,26 @@
+{
+  "name": "stringify",
+  "inputs": {
+    "a": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "str": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "string",
+    "description": "produces a URL query string from a given obj",
+    "complexity": 2.6594147842039915,
+    "tags": [
+      "f",
+      "querystring"
+    ]
+  },
+  "id": "f97f2a74-d9a9-411d-afd3-fda46ba86c3b",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

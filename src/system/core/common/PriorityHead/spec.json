@@ -1,0 +1,226 @@
+{
+  "name": "priority head",
+  "units": {
+    "headordefault0": {
+      "id": "919d0a60-87cf-451b-a429-435aa70cde45",
+      "input": {
+        "default": {
+          "constant": true,
+          "data": "1000"
+        }
+      }
+    },
+    "headordefault1": {
+      "id": "919d0a60-87cf-451b-a429-435aa70cde45",
+      "input": {
+        "default": {
+          "constant": true,
+          "data": "1000"
+        }
+      }
+    },
+    "prependif": {
+      "id": "5a8e4250-ad00-40a8-ae32-9f4aeeb8ab2e"
+    },
+    "prependifnot": {
+      "id": "e75537f8-d35a-45c4-8193-e0c6e015b4c6"
+    },
+    "andnot": {
+      "id": "c059a789-b57c-4c2e-976b-fdbbe8f9993a"
+    },
+    "or": {
+      "id": "62a19cd6-04bd-4e46-a72e-4fa3516ad3fa"
+    },
+    "picklesser": {
+      "id": "f805b3c6-6c0e-4215-b3d6-91b93dc8a938"
+    }
+  },
+  "merges": {
+    "dbzympso": {
+      "headordefault0": {
+        "output": {
+          "head": true
+        }
+      },
+      "prependifnot": {
+        "input": {
+          "b": true
+        }
+      },
+      "picklesser": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "ebceymujj": {
+      "headordefault1": {
+        "output": {
+          "head": true
+        }
+      },
+      "prependif": {
+        "input": {
+          "b": true
+        }
+      },
+      "picklesser": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "lukazbvh": {
+      "prependif": {
+        "input": {
+          "a": true
+        }
+      },
+      "headordefault1": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "mrmeouhv": {
+      "headordefault0": {
+        "output": {
+          "a": true
+        }
+      },
+      "prependifnot": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "tnxcvs": {
+      "andnot": {
+        "input": {
+          "a": true
+        }
+      },
+      "or": {
+        "input": {
+          "a": true
+        }
+      },
+      "picklesser": {
+        "output": {
+          "a < b": true
+        }
+      }
+    },
+    "vtbmcrui": {
+      "headordefault1": {
+        "output": {
+          "empty": true
+        }
+      },
+      "andnot": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "juocmsuh": {
+      "headordefault0": {
+        "output": {
+          "empty": true
+        }
+      },
+      "or": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "akazebgd": {
+      "prependifnot": {
+        "input": {
+          "test": true
+        }
+      },
+      "or": {
+        "output": {
+          "a or b": true
+        }
+      }
+    },
+    "tmtfveogg": {
+      "prependif": {
+        "input": {
+          "test": true
+        }
+      },
+      "andnot": {
+        "output": {
+          "a && !b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "no description",
+    "complexity": 9,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "headordefault1",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "headordefault0",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "prependif",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "prependifnot",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    },
+    "head": {
+      "pin": {
+        "0": {
+          "unitId": "picklesser",
+          "pinId": "lesser"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "71744c98-0364-49af-b350-a34f68182c96",
+  "type": "`U`&`G`",
+  "system": true
+}

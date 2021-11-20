@@ -1,0 +1,26 @@
+{
+  "name": "class to id",
+  "inputs": {
+    "Class": {
+      "type": "`U`"
+    }
+  },
+  "outputs": {
+    "id": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "system `id` of the given unit `class`",
+    "complexity": 2.657116913440691,
+    "tags": [
+      "f",
+      "meta"
+    ]
+  },
+  "id": "1520b630-93aa-11ea-ac56-7718cb2ad75d",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

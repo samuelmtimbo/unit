@@ -1,0 +1,95 @@
+{
+  "name": "add random unit",
+  "inputs": {
+    "graph": {
+      "pin": {
+        "0": {
+          "unitId": "addunit",
+          "pinId": "graph"
+        }
+      },
+      "ref": true,
+      "type": "`U`"
+    },
+    "id": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "randomclass": {
+      "id": "96c788b0-9bc1-11eb-931a-7312c12cb4c3",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "class": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 46,
+          "y": 0
+        }
+      }
+    },
+    "addunit": {
+      "id": "b80d4b5a-40e9-11eb-a2bb-1777d47bf9ae",
+      "input": {
+        "Class": {},
+        "graph": {},
+        "id": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -47,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "randomclass": {
+        "output": {
+          "class": true
+        }
+      },
+      "addunit": {
+        "input": {
+          "Class": true
+        }
+      }
+    },
+    "1": {
+      "randomclass": {
+        "input": {
+          "any": true
+        }
+      },
+      "addunit": {
+        "input": {
+          "id": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 8.70514982488001,
+    "tags": [
+      "platform",
+      "core",
+      "graph"
+    ]
+  },
+  "id": "97907f46-9bc5-11eb-8353-1f208d12d9dc",
+  "type": "`U`&`G`",
+  "system": true
+}

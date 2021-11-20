@@ -1,0 +1,75 @@
+{
+  "name": "fetch body",
+  "units": {
+    "ncyrggjbc": {
+      "id": "c5856fdc-5154-46ab-a414-47f37af39da1"
+    },
+    "wasnbohto": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'body'"
+        }
+      }
+    }
+  },
+  "merges": {
+    "ihkxhh": {
+      "ncyrggjbc": {
+        "output": {
+          "response": true
+        }
+      },
+      "wasnbohto": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "no description",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
+  },
+  "inputs": {
+    "avbejlrtg": {
+      "pin": {
+        "0": {
+          "unitId": "ncyrggjbc",
+          "pinId": "url"
+        }
+      },
+      "type": "string"
+    },
+    "qumzdhh": {
+      "pin": {
+        "0": {
+          "unitId": "ncyrggjbc",
+          "pinId": "options"
+        }
+      },
+      "type": "{body?:string|null,headers?:object,method?:string}"
+    }
+  },
+  "outputs": {
+    "scaqz": {
+      "pin": {
+        "0": {
+          "unitId": "wasnbohto",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "7ba3db14-6f80-434b-b9dc-bd38462b20fc",
+  "type": "`U`&`G`",
+  "system": true
+}

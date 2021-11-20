@@ -1,0 +1,81 @@
+{
+  "name": "text span",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "pin": {
+        "0": {
+          "unitId": "span",
+          "pinId": "style"
+        }
+      }
+    },
+    "value": {
+      "type": "string",
+      "pin": {
+        "0": {
+          "unitId": "text",
+          "pinId": "value"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "span": {
+      "id": "c711d540-9de3-437e-854a-b59491af3cf8",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 44,
+          "y": -58
+        }
+      }
+    },
+    "text": {
+      "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
+      "input": {
+        "value": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -45,
+          "y": 57
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "component": {
+    "children": [
+      "span"
+    ],
+    "subComponents": {
+      "span": {
+        "children": [
+          "text"
+        ]
+      },
+      "text": {
+        "children": []
+      }
+    },
+    "defaultWidth": 60,
+    "defaultHeight": 60
+  },
+  "id": "4ba86ad5-899b-4e8d-b5ce-3589dcfeaefd",
+  "type": "`U`&`G`",
+  "system": true
+}

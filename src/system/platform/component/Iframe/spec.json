@@ -1,0 +1,36 @@
+{
+  "name": "iframe",
+  "inputs": {
+    "src": {
+      "type": "string",
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "srcdoc": {
+      "type": "string",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "website container container",
+    "complexity": 6.438745066063785,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "32ff22b0-8221-4584-9c78-d21102dcfa6a",
+  "base": true,
+  "component": {
+    "defaultWidth": 240,
+    "defaultHeight": 180
+  },
+  "type": "`U`&`C`",
+  "system": true,
+  "render": true
+}

@@ -1,0 +1,70 @@
+{
+  "name": "if 50% chance",
+  "units": {
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "50chance": {
+      "id": "6c3c8c8f-e383-46bc-ac0c-a294e65040bb"
+    }
+  },
+  "merges": {
+    "0": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "50chance": {
+        "output": {
+          "pass": true
+        }
+      }
+    },
+    "1": {
+      "50chance": {
+        "input": {
+          "any": true
+        }
+      },
+      "if": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "filter",
+    "description": "50% chance of passing",
+    "complexity": 7,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "bacfa026-d96f-4ea1-8430-86bb02d69a53",
+  "type": "`U`&`G`",
+  "system": true
+}

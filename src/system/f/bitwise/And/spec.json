@@ -1,0 +1,29 @@
+{
+  "name": "and",
+  "inputs": {
+    "a": {
+      "type": "number"
+    },
+    "b": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a & b": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "binary",
+    "description": "bitwise AND operator",
+    "complexity": 2.655337916720716,
+    "tags": [
+      "f",
+      "bitwise"
+    ]
+  },
+  "id": "be6801c0-02e2-4f76-bcad-b68c80991fad",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,269 @@
+{
+  "name": "text area to speech",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "textarea",
+          "pinId": "style"
+        }
+      },
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -331,
+            "y": -10
+          }
+        }
+      }
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "textarea",
+          "pinId": "value"
+        }
+      },
+      "type": "string",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -331,
+            "y": 74
+          }
+        }
+      }
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 249,
+            "y": -53
+          }
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "texttospeech": {
+      "id": "6db29a62-2035-4cfc-a9d3-03444a8bc2b8",
+      "input": {
+        "message": {},
+        "voice": {
+          "constant": false,
+          "data": "14",
+          "metadata": {
+            "position": {
+              "x": 200,
+              "y": -33
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 76,
+          "y": -10
+        }
+      }
+    },
+    "onenterkeydown": {
+      "id": "de45f6d0-7504-4061-b4ab-5d1ee902a0cb",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -44,
+          "y": 62
+        }
+      }
+    },
+    "textarea": {
+      "id": "83ec6688-b80b-4ef2-861f-14245ef392c0",
+      "input": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": -315,
+              "y": 51
+            }
+          }
+        },
+        "style": {
+          "metadata": {
+            "position": {
+              "x": -315,
+              "y": 13
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -182,
+          "y": 32
+        }
+      }
+    },
+    "getvalue": {
+      "id": "d74f12c2-1868-11eb-8136-238c1b1a727f",
+      "input": {
+        "unit": {},
+        "any": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -32,
+          "y": 13
+        }
+      }
+    },
+    "default": {
+      "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 228,
+              "y": -35
+            }
+          }
+        },
+        "d": {
+          "constant": true,
+          "data": "1",
+          "metadata": {
+            "position": {
+              "x": 228,
+              "y": 1
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 183,
+          "y": -16
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "onenterkeydown": {
+        "input": {
+          "element": true
+        }
+      },
+      "textarea": {
+        "output": {
+          "_self": true
+        }
+      },
+      "getvalue": {
+        "input": {
+          "unit": true
+        }
+      }
+    },
+    "1": {
+      "onenterkeydown": {
+        "output": {
+          "a": true
+        }
+      },
+      "getvalue": {
+        "input": {
+          "any": true
+        }
+      }
+    },
+    "2": {
+      "texttospeech": {
+        "input": {
+          "message": true
+        }
+      },
+      "getvalue": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "ntxmggphc": {
+      "default": {
+        "output": {
+          "a": true
+        }
+      },
+      "texttospeech": {
+        "input": {
+          "voice": true
+        }
+      }
+    }
+  },
+  "component": {
+    "subComponents": {
+      "textarea": {
+        "children": []
+      }
+    },
+    "children": [
+      "textarea"
+    ],
+    "defaultWidth": 200,
+    "defaultHeight": 150
+  },
+  "metadata": {
+    "complexity": 19.22287493282434,
+    "icon": "align-left",
+    "description": "speech text on enter",
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ],
+    "position": {
+      "merge": {
+        "1": {
+          "x": 0,
+          "y": 47
+        },
+        "2": {
+          "x": 22,
+          "y": -2
+        },
+        "ntxmggphc": {
+          "x": 130,
+          "y": -14
+        }
+      }
+    }
+  },
+  "id": "360c691a-ac2d-11eb-95ec-b3053bd928da",
+  "type": "`U`&`G`",
+  "system": true
+}

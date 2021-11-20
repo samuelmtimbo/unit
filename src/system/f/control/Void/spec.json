@@ -1,0 +1,22 @@
+{
+  "name": "void",
+  "inputs": {
+    "a": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "slash",
+    "description": "send data to the void",
+    "complexity": 2.653781294590738,
+    "tags": [
+      "f",
+      "control"
+    ]
+  },
+  "id": "9d853ef5-3fff-474d-a951-6af4237cf4c4",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

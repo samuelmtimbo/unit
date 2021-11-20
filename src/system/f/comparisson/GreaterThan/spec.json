@@ -1,0 +1,29 @@
+{
+  "name": "greater than",
+  "inputs": {
+    "a": {
+      "type": "number"
+    },
+    "b": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a > b": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "greater-than",
+    "description": "greater than operator",
+    "complexity": 2.6577099123473493,
+    "tags": [
+      "f",
+      "comparisson"
+    ]
+  },
+  "id": "1651ce6b-4db0-4787-9edf-f770b72d253c",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

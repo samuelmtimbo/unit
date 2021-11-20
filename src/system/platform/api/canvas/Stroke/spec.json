@@ -1,0 +1,27 @@
+{
+  "name": "stroke",
+  "inputs": {
+    "d": {
+      "type": "any[][]"
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "any[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "strokes (outlines) the current",
+    "complexity": 2.6570427885773586,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

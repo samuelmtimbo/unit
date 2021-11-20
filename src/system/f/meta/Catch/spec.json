@@ -1,0 +1,27 @@
+{
+  "name": "catch",
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "err": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "catch all `unit` error",
+    "complexity": 2.5505994848322,
+    "tags": [
+      "f",
+      "meta"
+    ]
+  },
+  "id": "2520668c-b279-11ea-ace3-5b84eb02bd7f",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

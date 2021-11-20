@@ -1,0 +1,34 @@
+{
+  "name": "foreign object",
+  "inputs": {
+    "class": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG G",
+    "complexity": 6.422993532605674,
+    "tags": [
+      "platform",
+      "component",
+      "svg"
+    ]
+  },
+  "id": "e049f16e-2559-11eb-bdc4-db5b8a11164b",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`",
+  "system": true,
+  "render": true
+}

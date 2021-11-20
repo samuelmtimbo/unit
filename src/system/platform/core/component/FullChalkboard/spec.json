@@ -1,0 +1,191 @@
+{
+  "name": "full chalkboard",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "chalkboard",
+          "pinId": "style"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 336,
+            "y": 0
+          }
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "canvas": {
+      "pin": {
+        "0": {
+          "unitId": "chalkboard",
+          "pinId": "canvas"
+        }
+      },
+      "ref": true,
+      "type": "`U`&`C`&`V`&`PS`&`CS`",
+      "defaultIgnored": true
+    }
+  },
+  "units": {
+    "chalkboard": {
+      "id": "a24f049c-7bb0-11ea-bbdc-17b9984e1f06",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": 311,
+              "y": -1
+            }
+          }
+        },
+        "width": {},
+        "height": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 105,
+          "y": -1
+        },
+        "component": {
+          "width": 346.2822265625,
+          "height": 384.0284118652344
+        }
+      }
+    },
+    "framewidthvalue": {
+      "id": "4cab1ce1-332d-4296-ad6b-d37a85e74a55",
+      "input": {
+        "any": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -168,
+              "y": 40
+            }
+          }
+        },
+        "element": {}
+      },
+      "output": {
+        "width": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -119,
+          "y": 22
+        }
+      }
+    },
+    "frameheightvalue": {
+      "id": "62d92432-9fc2-11eb-86f0-536bb7096e6d",
+      "input": {
+        "any": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -168,
+              "y": -41
+            }
+          }
+        },
+        "element": {}
+      },
+      "output": {
+        "height": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -119,
+          "y": -23
+        }
+      }
+    }
+  },
+  "merges": {
+    "gsbymzxcf": {
+      "framewidthvalue": {
+        "input": {
+          "element": true
+        }
+      },
+      "chalkboard": {
+        "output": {
+          "_self": true
+        }
+      },
+      "frameheightvalue": {
+        "input": {
+          "element": true
+        }
+      }
+    },
+    "dnnbflw": {
+      "framewidthvalue": {
+        "output": {
+          "width": true
+        }
+      },
+      "chalkboard": {
+        "input": {
+          "width": true
+        }
+      }
+    },
+    "cgpompnrt": {
+      "frameheightvalue": {
+        "output": {
+          "height": true
+        }
+      },
+      "chalkboard": {
+        "input": {
+          "height": true
+        }
+      }
+    }
+  },
+  "component": {
+    "children": [
+      "chalkboard"
+    ],
+    "subComponents": {
+      "chalkboard": {
+        "children": []
+      }
+    },
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "full frame chalkboard",
+    "complexity": 28,
+    "position": {
+      "merge": {
+        "dnnbflw": {
+          "x": -92,
+          "y": 50
+        },
+        "cgpompnrt": {
+          "x": -92,
+          "y": -51
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "120ff298-ff92-4b7c-b748-9a3c3bdbad2e",
+  "type": "`U`&`G`",
+  "system": true
+}

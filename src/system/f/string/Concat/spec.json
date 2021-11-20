@@ -1,0 +1,29 @@
+{
+  "name": "concat",
+  "inputs": {
+    "a": {
+      "type": "string"
+    },
+    "b": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "ab": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "plus",
+    "description": "concatenate two strings",
+    "complexity": 2.6557456034690436,
+    "tags": [
+      "f",
+      "string"
+    ]
+  },
+  "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,107 @@
+{
+  "name": "mirror",
+  "units": {
+    "defaultvideo": {
+      "id": "68ee3bf2-7d57-4828-92ac-1070e988ffe7",
+      "input": {
+        "style": {
+          "constant": true
+        },
+        "controls": {
+          "ignored": false,
+          "constant": true,
+          "data": "false"
+        }
+      },
+      "output": {},
+      "metadata": {
+        "component": {
+          "width": 260.117431640625,
+          "height": 194.74407958984375
+        }
+      }
+    },
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{transform:'scaleX(-1)'}"
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "defaultvideo": {
+        "input": {
+          "style": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "video": {
+      "pin": {
+        "0": {
+          "unitId": "defaultvideo",
+          "pinId": "video"
+        }
+      },
+      "ref": true,
+      "type": "`C`&`V`",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "video",
+    "description": "",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "component": {
+    "slots": [
+      [
+        "defaultvideo",
+        "default"
+      ]
+    ],
+    "subComponents": {
+      "defaultvideo": {
+        "children": []
+      }
+    },
+    "children": [
+      "defaultvideo"
+    ],
+    "defaultWidth": 260,
+    "defaultHeight": 195
+  },
+  "id": "3a56b714-36d3-4a0a-b641-001db6f774e8",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,30 @@
+{
+  "name": "set pointer capture",
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "ref": true
+    },
+    "pointerId": {
+      "type": "number"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "mouse-pointer",
+    "description": "hear me",
+    "complexity": 2.79246891388544,
+    "tags": [
+      "platform",
+      "api",
+      "pointer"
+    ]
+  },
+  "id": "d3fc887c-9fc5-11eb-8f63-ab42b0414469",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
