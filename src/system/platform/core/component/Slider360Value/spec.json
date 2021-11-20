@@ -1,0 +1,129 @@
+{
+  "name": "slider 360 value",
+  "inputs": {},
+  "outputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "slidervalue",
+          "pinId": "value"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 90,
+            "y": -19
+          }
+        }
+      },
+      "type": "any"
+    },
+    "slider": {
+      "pin": {
+        "0": {
+          "unitId": "slidervalue",
+          "pinId": "slider"
+        }
+      },
+      "ref": true,
+      "type": "`C`&`V`",
+      "defaultIgnored": true
+    }
+  },
+  "units": {
+    "slidervalue": {
+      "path": "f8b6b40c-3cbd-4de7-94cc-3a3b7f6391a3",
+      "input": {
+        "min": {
+          "ignored": false,
+          "constant": true,
+          "data": "0",
+          "metadata": {
+            "position": {
+              "x": -127,
+              "y": 7
+            }
+          }
+        },
+        "style": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 31,
+              "y": -20
+            }
+          }
+        },
+        "value": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -114,
+              "y": -18
+            }
+          }
+        },
+        "max": {
+          "ignored": false,
+          "constant": true,
+          "data": "359",
+          "metadata": {
+            "position": {
+              "x": 60,
+              "y": 26
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 60,
+              "y": -12
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -33,
+          "y": 7
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "sliders",
+    "description": "360 slider current value",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "6bdd7a40-e465-42ae-8219-b428d7d57aea",
+  "component": {
+    "slots": [
+      [
+        "slidervalue",
+        "default"
+      ]
+    ],
+    "defaultWidth": 120,
+    "defaultHeight": 30,
+    "subComponents": {
+      "slidervalue": {
+        "children": []
+      }
+    },
+    "children": [
+      "slidervalue"
+    ]
+  },
+  "type": "`U`&`G`",
+  "system": true
+}

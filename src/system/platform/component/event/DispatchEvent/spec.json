@@ -1,0 +1,87 @@
+{
+  "name": "dispatch event",
+  "units": {
+    "call": {
+      "path": "f46af75e-af68-11ea-aa0e-37bf85a86c5e",
+      "input": {
+        "method": {
+          "data": "'dispatchEvent'",
+          "constant": true
+        }
+      },
+      "output": {
+        "data": {
+          "ignored": true
+        }
+      }
+    },
+    "mergeeventdata": {
+      "path": "bbc52982-4a71-45b8-8521-c0c30260c022",
+      "input": {
+        "data": {},
+        "event": {}
+      },
+      "output": {
+        "{event,data}": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "mergeeventdata": {
+        "output": {
+          "{event,data}": true
+        }
+      },
+      "call": {
+        "input": {
+          "data": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "call",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    },
+    "data": {
+      "type": "any",
+      "pin": {
+        "0": {
+          "unitId": "mergeeventdata",
+          "pinId": "data"
+        }
+      }
+    },
+    "event": {
+      "type": "string",
+      "pin": {
+        "0": {
+          "unitId": "mergeeventdata",
+          "pinId": "event"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "emit an `event` from `element`",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "bce6667e-b508-11ea-9496-2bc3591261b4",
+  "type": "`U`&`G`",
+  "system": true
+}

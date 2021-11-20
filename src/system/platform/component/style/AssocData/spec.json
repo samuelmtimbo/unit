@@ -1,0 +1,64 @@
+{
+  "name": "assoc data",
+  "units": {
+    "assoc": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'data'"
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "...",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "style"
+    ]
+  },
+  "id": "8affb853-d25e-48bc-87d6-8ce949aa8ecb",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,135 @@
+{
+  "name": "prop if has key",
+  "units": {
+    "prop": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c"
+    },
+    "if": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "haskey": {
+      "path": "ad2ae8b9-9674-4b22-bed4-4458e0030b1a"
+    },
+    "if0": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    }
+  },
+  "merges": {
+    "0": {
+      "if": {
+        "output": {
+          "a if b": true
+        }
+      },
+      "prop": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "1": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "haskey": {
+        "output": {
+          "has": true
+        }
+      },
+      "if0": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "2": {
+      "if": {
+        "input": {
+          "a": true
+        }
+      },
+      "haskey": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "3": {
+      "if0": {
+        "input": {
+          "a": true
+        }
+      },
+      "haskey": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "4": {
+      "if0": {
+        "output": {
+          "a if b": true
+        }
+      },
+      "prop": {
+        "input": {
+          "key": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "output prop if key is present",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "inputs": {
+    "key": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "3"
+        }
+      },
+      "type": "number|string"
+    },
+    "obj": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    },
+    "has": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "id": "8c4f4d5e-2c98-4dfb-aeac-d1e6605a673e",
+  "type": "`U`&`G`",
+  "system": true
+}

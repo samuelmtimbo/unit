@@ -1,0 +1,42 @@
+{
+  "name": "wrap",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "f27cae4e-fea8-11ea-b91e-db41e114c426"
+        ]
+      }
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {
+    "parent": {
+      "type": "`C`",
+      "ref": true,
+      "component": true
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "wrap all children with `wrapper`",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "454aaff2-cd74-4f6e-baf2-631bb32e7a6b",
+  "base": true,
+  "component": {
+    "defaultWidth": 240,
+    "defaultHeight": 240
+  },
+  "type": "`U`&`C`",
+  "system": true
+}

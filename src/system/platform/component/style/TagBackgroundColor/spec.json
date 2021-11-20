@@ -1,0 +1,50 @@
+{
+  "name": "tag background-color",
+  "units": {
+    "tag": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'background-color'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{\"background-color\": `color`}",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "style"
+    ]
+  },
+  "inputs": {
+    "color": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "{bc}": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "26dc94ea-347b-4dbb-a7d7-1dab60da8352",
+  "type": "`U`&`G`",
+  "system": true
+}

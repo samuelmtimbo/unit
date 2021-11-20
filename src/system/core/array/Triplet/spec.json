@@ -1,0 +1,92 @@
+{
+  "name": "triplet",
+  "units": {
+    "giqoqhe": {
+      "path": "d2f8bb43-af44-4371-a32e-20b760695e13"
+    },
+    "rjybbinj": {
+      "path": "a7d5c2f3-6134-4248-b9bc-33271c280267"
+    },
+    "rhwfop": {
+      "path": "f57f5318-f26f-4b9f-b9e2-dcc022ad7728"
+    }
+  },
+  "merges": {
+    "gsreknt": {
+      "rhwfop": {
+        "input": {
+          "b": true
+        }
+      },
+      "giqoqhe": {
+        "output": {
+          "[a]": true
+        }
+      }
+    },
+    "eauak": {
+      "rhwfop": {
+        "input": {
+          "a": true
+        }
+      },
+      "rjybbinj": {
+        "output": {
+          "hbsxpnl": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "build array with elements `0` and `1` and `2`",
+    "complexity": 9,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "tfqgrevuj": {
+      "pin": {
+        "0": {
+          "unitId": "giqoqhe",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "hbqzi": {
+      "pin": {
+        "0": {
+          "unitId": "rjybbinj",
+          "pinId": "1"
+        }
+      },
+      "type": "<A>"
+    },
+    "aegky": {
+      "pin": {
+        "0": {
+          "unitId": "rjybbinj",
+          "pinId": "0"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "gylhlifcp": {
+      "pin": {
+        "0": {
+          "unitId": "rhwfop",
+          "pinId": "ab"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "91536c82-8e5f-4542-8138-a1a4eb2e5f4d",
+  "type": "`U`&`G`",
+  "system": true
+}

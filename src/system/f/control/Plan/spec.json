@@ -1,0 +1,29 @@
+{
+  "name": "plan",
+  "inputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "first": {
+      "type": "<A>"
+    },
+    "second": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "list-ordered",
+    "description": "output `a` on `0`, then `1`",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "control"
+    ]
+  },
+  "id": "36329d25-218d-48a5-a06c-1e0525da504f",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

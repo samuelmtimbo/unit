@@ -1,0 +1,27 @@
+{
+  "name": "zoom",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "parent container",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "3ffeaaf8-30dd-11eb-9dcc-836b075fc64d",
+  "component": {
+    "defaultWidth": 240,
+    "defaultHeight": 240
+  },
+  "base": true,
+  "type": "`U`&`C`",
+  "system": true
+}

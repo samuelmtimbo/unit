@@ -1,0 +1,69 @@
+{
+  "name": "origin",
+  "units": {
+    "getorigin": {
+      "path": "3a8a68cc-2ec7-11eb-a2b8-df0a171f0ba5",
+      "input": {
+        "any": {},
+        "unit": {}
+      },
+      "output": {
+        "origin": {}
+      }
+    },
+    "location": {
+      "path": "e1c7e72c-2eb8-11eb-8d11-1b9bca1dec4a",
+      "input": {},
+      "output": {}
+    }
+  },
+  "merges": {
+    "0": {
+      "getorigin": {
+        "input": {
+          "unit": true
+        }
+      },
+      "location": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "type": "any",
+      "pin": {
+        "0": {
+          "unitId": "getorigin",
+          "pinId": "any"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "origin": {
+      "type": "string",
+      "pin": {
+        "0": {
+          "unitId": "getorigin",
+          "pinId": "origin"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "navigation",
+    "description": "...",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "api",
+      "location"
+    ]
+  },
+  "id": "d3ca4c3c-2ec7-11eb-b275-df44baeafb1c",
+  "type": "`U`&`G`",
+  "system": true
+}

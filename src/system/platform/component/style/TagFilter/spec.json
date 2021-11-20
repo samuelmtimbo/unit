@@ -1,0 +1,50 @@
+{
+  "name": "tag filter",
+  "units": {
+    "hewiyie": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'filter'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{filter: `filter`}",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "style"
+    ]
+  },
+  "inputs": {
+    "filter": {
+      "pin": {
+        "0": {
+          "unitId": "hewiyie",
+          "pinId": "v"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "{filter}": {
+      "pin": {
+        "0": {
+          "unitId": "hewiyie",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "cb1f45ee-2137-11eb-9b9d-e7e8fc730ec7",
+  "type": "`U`&`G`",
+  "system": true
+}

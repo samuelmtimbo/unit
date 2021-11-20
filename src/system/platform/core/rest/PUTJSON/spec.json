@@ -1,0 +1,129 @@
+{
+  "name": "PUT JSON",
+  "units": {
+    "cpqoubsy": {
+      "path": "ee184ea6-3c80-4119-919e-290620aafab0",
+      "input": {
+        "json": {}
+      }
+    },
+    "elhvggatf": {
+      "path": "c5856fdc-5154-46ab-a414-47f37af39da1",
+      "input": {
+        "url": {
+          "constant": false
+        }
+      }
+    },
+    "plrdswoeo": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'body'"
+        }
+      }
+    },
+    "wjhhyzuj": {
+      "path": "2af12780-698c-40ca-baa9-5f3260377e0f",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "{method:'PUT',headers:{\"Content-Type\":'application/json'}}"
+        }
+      }
+    }
+  },
+  "merges": {
+    "dimeu": {
+      "plrdswoeo": {
+        "input": {
+          "value": true
+        }
+      },
+      "cpqoubsy": {
+        "output": {
+          "string": true
+        }
+      }
+    },
+    "krissnnyb": {
+      "elhvggatf": {
+        "input": {
+          "options": true
+        }
+      },
+      "plrdswoeo": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "lbngbtur": {
+      "plrdswoeo": {
+        "input": {
+          "obj": true
+        }
+      },
+      "wjhhyzuj": {
+        "output": {
+          "ab": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "mvrbmatr": {
+      "pin": {
+        "0": {
+          "unitId": "cpqoubsy",
+          "pinId": "json"
+        }
+      },
+      "type": "<A>"
+    },
+    "bccuxmrt": {
+      "pin": {
+        "0": {
+          "unitId": "elhvggatf",
+          "pinId": "url"
+        }
+      },
+      "type": "string"
+    },
+    "tipyvbtdn": {
+      "pin": {
+        "0": {
+          "unitId": "wjhhyzuj",
+          "pinId": "b"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "stpyrbnqj": {
+      "pin": {
+        "0": {
+          "unitId": "elhvggatf",
+          "pinId": "response"
+        }
+      },
+      "type": "{status:number,body:string}"
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "...",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
+  },
+  "id": "3698d7af-8d4c-40f6-bcfa-222d9efb0940",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,70 @@
+{
+  "name": "random in array",
+  "units": {
+    "randomindexinarray": {
+      "path": "e2325503-40a7-4c7e-b06c-d3833c8856e5"
+    },
+    "at": {
+      "path": "79f01345-4ed7-47e2-8882-fa3bd282c98a"
+    }
+  },
+  "merges": {
+    "0": {
+      "randomindexinarray": {
+        "input": {
+          "a": true
+        }
+      },
+      "at": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "randomindexinarray": {
+        "output": {
+          "i": true
+        }
+      },
+      "at": {
+        "input": {
+          "i": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a[i]": {
+      "pin": {
+        "0": {
+          "unitId": "at",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "random",
+    "description": "random element of the array",
+    "complexity": 7,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "5b99b930-92c9-4fbe-be37-8c72a8e1c70b",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,51 @@
+{
+  "name": "is valid email",
+  "units": {
+    "test": {
+      "path": "c2fec1e6-b370-4069-bb43-6dab5a78b9ab",
+      "input": {
+        "regex": {
+          "constant": true,
+          "data": "'^[a-zA-Z0-9.!#$%\\&amp;\\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "at-sign",
+    "description": "check if email is valid",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "inputs": {
+    "email": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "test",
+          "pinId": "str"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "valid": {
+      "pin": {
+        "0": {
+          "unitId": "test",
+          "pinId": "match"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "id": "83d43ed1-7515-48cc-b243-612e4aeb6fff",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,478 @@
+{
+  "name": "IO",
+  "inputs": {
+    "disabled": {
+      "pin": {
+        "0": {
+          "unitId": "app",
+          "pinId": "disabled"
+        },
+        "1": {
+          "unitId": "bot",
+          "pinId": "disabled"
+        }
+      },
+      "type": "boolean",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -435,
+            "y": -53
+          },
+          "1": {
+            "x": 250,
+            "y": -164
+          }
+        }
+      }
+    },
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "bot",
+          "pinId": "style"
+        },
+        "1": {
+          "unitId": "app",
+          "pinId": "style"
+        }
+      },
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 248,
+            "y": 77
+          },
+          "1": {
+            "x": -419,
+            "y": -9
+          }
+        }
+      }
+    },
+    "pod": {
+      "pin": {
+        "0": {
+          "unitId": "app",
+          "pinId": "pod"
+        }
+      },
+      "type": "`U`",
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -437,
+            "y": -89
+          }
+        }
+      }
+    },
+    "fullwindow": {
+      "type": "boolean",
+      "pin": {
+        "0": {
+          "unitId": "app",
+          "pinId": "fullwindow"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -389,
+            "y": -134
+          }
+        }
+      }
+    },
+    "frame": {
+      "pin": {
+        "0": {
+          "unitId": "app",
+          "pinId": "frame"
+        }
+      },
+      "ref": true,
+      "type": "`U`",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -419,
+            "y": -169
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "graph": {
+      "pin": {
+        "0": {
+          "unitId": "app",
+          "pinId": "graph"
+        }
+      },
+      "ref": true,
+      "type": "`U`&`G`",
+      "defaultIgnored": true
+    }
+  },
+  "units": {
+    "app": {
+      "path": "4181691b-4790-4191-9b03-86c6c968d1b8",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": -406,
+              "y": -35
+            }
+          }
+        },
+        "disabled": {
+          "metadata": {
+            "position": {
+              "x": -407,
+              "y": -63
+            }
+          }
+        },
+        "pod": {
+          "metadata": {
+            "position": {
+              "x": -407,
+              "y": -89
+            }
+          }
+        },
+        "fullwindow": {
+          "metadata": {
+            "position": {
+              "x": -407,
+              "y": -115
+            }
+          }
+        },
+        "frame": {
+          "metadata": {
+            "position": {
+              "x": -406,
+              "y": -144
+            }
+          }
+        }
+      },
+      "output": {
+        "graph": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -163,
+          "y": -89
+        }
+      }
+    },
+    "bot": {
+      "path": "0e9e6cd4-67eb-11ea-995b-4b0721193361",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": 244,
+              "y": 45
+            }
+          }
+        },
+        "disabled": {
+          "metadata": {
+            "position": {
+              "x": 244,
+              "y": -132
+            }
+          }
+        },
+        "r": {
+          "constant": true,
+          "data": "42",
+          "metadata": {
+            "position": {
+              "x": 240,
+              "y": -36
+            }
+          }
+        },
+        "x": {
+          "ignored": false
+        },
+        "y": {
+          "ignored": false
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 365,
+          "y": -43
+        }
+      }
+    },
+    "contextsize": {
+      "path": "356fc870-ae54-4ae5-9a9f-a8cf6a37abea",
+      "input": {
+        "any": {
+          "constant": true,
+          "data": "'foo'",
+          "metadata": {
+            "position": {
+              "x": 146,
+              "y": -47
+            }
+          }
+        },
+        "element": {}
+      },
+      "output": {
+        "width": {},
+        "height": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 201,
+          "y": -46
+        }
+      }
+    },
+    "divide": {
+      "path": "158d85eb-28b8-4355-b637-28a7ec751233",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "4",
+          "metadata": {
+            "position": {
+              "x": 134,
+              "y": 61
+            }
+          }
+        }
+      },
+      "output": {
+        "a ÷ b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 179,
+          "y": 36
+        }
+      }
+    },
+    "divide0": {
+      "path": "158d85eb-28b8-4355-b637-28a7ec751233",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "2",
+          "metadata": {
+            "position": {
+              "x": 138,
+              "y": -153
+            }
+          }
+        }
+      },
+      "output": {
+        "a ÷ b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 182,
+          "y": -127
+        }
+      }
+    },
+    "logo": {
+      "path": "8aee8e9f-a132-46de-a0c7-17f8035b1898",
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{opacity:'0.1',position:'absolute',width:'240px',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}",
+          "metadata": {
+            "position": {
+              "x": 88,
+              "y": 474
+            }
+          }
+        },
+        "pathStyle": {
+          "metadata": {
+            "position": {
+              "x": 88,
+              "y": 436
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 237,
+          "y": 455
+        },
+        "component": {
+          "width": 234.8277587890625,
+          "height": 239.0738525390625
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "divide": {
+        "input": {
+          "a": true
+        }
+      },
+      "contextsize": {
+        "output": {
+          "height": true
+        }
+      }
+    },
+    "1": {
+      "divide0": {
+        "input": {
+          "a": true
+        }
+      },
+      "contextsize": {
+        "output": {
+          "width": true
+        }
+      }
+    },
+    "2": {
+      "divide0": {
+        "output": {
+          "a ÷ b": true
+        }
+      },
+      "bot": {
+        "input": {
+          "x": true
+        }
+      }
+    },
+    "3": {
+      "divide": {
+        "output": {
+          "a ÷ b": true
+        }
+      },
+      "bot": {
+        "input": {
+          "y": true
+        }
+      }
+    },
+    "4": {
+      "contextsize": {
+        "input": {
+          "element": true
+        }
+      },
+      "bot": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "component": {
+    "slots": [
+      [
+        "app",
+        "default"
+      ],
+      [
+        "app",
+        "1"
+      ],
+      [
+        "app",
+        "2"
+      ],
+      [
+        "app",
+        "3"
+      ],
+      [
+        "bot",
+        "default"
+      ],
+      [
+        "logo",
+        "default"
+      ]
+    ],
+    "subComponents": {
+      "app": {
+        "children": [
+          "bot"
+        ],
+        "childSlot": {
+          "bot": "3"
+        }
+      },
+      "bot": {
+        "children": []
+      },
+      "logo": {
+        "children": []
+      }
+    },
+    "children": [
+      "logo",
+      "app"
+    ],
+    "defaultWidth": 360,
+    "defaultHeight": 360
+  },
+  "metadata": {
+    "icon": "atom-alt",
+    "description": "bot + app",
+    "complexity": 41,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": 165,
+          "y": -7
+        },
+        "1": {
+          "x": 165,
+          "y": -86
+        },
+        "2": {
+          "x": 230,
+          "y": -102
+        },
+        "3": {
+          "x": 229,
+          "y": 14
+        }
+      }
+    }
+  },
+  "id": "6f267de2-b02c-11ea-b55c-db553f4c6c45",
+  "type": "`U`&`G`",
+  "system": true
+}

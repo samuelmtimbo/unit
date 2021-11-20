@@ -1,0 +1,139 @@
+{
+  "name": "for each key value",
+  "units": {
+    "foreach": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "output": {
+        "test": {
+          "ignored": false
+        }
+      }
+    },
+    "keys": {
+      "path": "45b9c329-64e9-4c4a-800b-790947c75754"
+    },
+    "prop": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c"
+    },
+    "looprepeat": {
+      "path": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "output": {
+        "local": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      },
+      "keys": {
+        "output": {
+          "keys": true
+        }
+      }
+    },
+    "1": {
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      },
+      "foreach": {
+        "output": {
+          "test": true
+        }
+      }
+    },
+    "2": {
+      "keys": {
+        "input": {
+          "obj": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "3": {
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      },
+      "prop": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "4": {
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "prop": {
+        "input": {
+          "key": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "key": {
+      "pin": {
+        "0": {
+          "mergeId": "4"
+        }
+      },
+      "type": "number|string"
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "output every key value pair of `obj`",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "id": "47771360-640a-11ea-8393-d32f60372182",
+  "type": "`U`&`G`",
+  "system": true
+}

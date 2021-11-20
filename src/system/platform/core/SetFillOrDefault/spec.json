@@ -1,0 +1,81 @@
+{
+  "artifact": "spec",
+  "name": "set fill if or default",
+  "units": {
+    "setifordefault": {
+      "path": "c0b85780-7e99-11ea-9a99-879f3f411ebd",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'fill'"
+        },
+        "testdefault": {
+          "constant": true,
+          "data": "false"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "default": {
+      "pin": {
+        "0": {
+          "unitId": "setifordefault",
+          "pinId": "default"
+        }
+      },
+      "type": "<A>"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "setifordefault",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "setifordefault",
+          "pinId": "value"
+        }
+      },
+      "type": "<A>"
+    },
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "setifordefault",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "setifordefault",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "set `obj` \"fill\" to `value` if `test` true, `default` otherwise",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core"
+    ]
+  },
+  "id": "887e66b8-a08e-11ea-bfea-b3687d92658a",
+  "type": "`U`&`G`",
+  "system": true
+}

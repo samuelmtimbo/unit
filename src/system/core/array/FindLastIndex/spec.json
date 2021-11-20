@@ -1,0 +1,112 @@
+{
+  "name": "find last index",
+  "units": {
+    "findlastindexfrom": {
+      "path": "58e5ab50-dcc9-435a-8d17-87bc96b9b31c",
+      "input": {
+        "test": {},
+        "from": {
+          "constant": true,
+          "data": "0"
+        },
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "result": {},
+        "i": {
+          "ignored": false
+        },
+        "a": {
+          "ignored": false
+        },
+        "test": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfrom",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfrom",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfrom",
+          "pinId": "i"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "number"
+    },
+    "result": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfrom",
+          "pinId": "result"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfrom",
+          "pinId": "a"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "<A>[]"
+    },
+    "a[i]": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfrom",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "findlastindexfrom",
+          "pinId": "test"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "...",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "411fbf6c-d5e2-42ba-8827-251233fb5bef",
+  "type": "`U`&`G`",
+  "system": true
+}

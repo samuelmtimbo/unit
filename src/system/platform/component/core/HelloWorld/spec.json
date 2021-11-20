@@ -1,0 +1,89 @@
+{
+  "name": "hello world",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "widthtext",
+          "pinId": "style"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "widthtext": {
+      "path": "731b92e2-6276-41db-a1e8-857afb07ca44",
+      "input": {
+        "value": {
+          "constant": true,
+          "data": "'hello world'"
+        },
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {},
+  "component": {
+    "subComponents": {
+      "widthtext": {
+        "children": []
+      }
+    },
+    "children": [
+      "widthtext"
+    ],
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "metadata": {
+    "description": "text box saying 'hello world'",
+    "icon": "sign",
+    "complexity": 12,
+    "position": {
+      "merge": {
+        "1": {
+          "x": -104,
+          "y": -28
+        },
+        "2": {
+          "x": -26,
+          "y": 58
+        },
+        "3": {
+          "x": -76,
+          "y": 62
+        },
+        "4": {
+          "x": 53,
+          "y": -54
+        },
+        "5": {
+          "x": -11,
+          "y": -78
+        },
+        "6": {
+          "x": -113,
+          "y": 5
+        },
+        "7": {
+          "x": -50,
+          "y": -68
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "a9cbed12-9a53-11eb-8c2e-f3146b36128d"
+}

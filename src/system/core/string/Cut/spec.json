@@ -1,0 +1,113 @@
+{
+  "name": "cut",
+  "units": {
+    "slice": {
+      "path": "c8a4cd44-a554-4901-8a33-a8adbff63d03"
+    },
+    "slice0": {
+      "path": "c8a4cd44-a554-4901-8a33-a8adbff63d03",
+      "input": {
+        "begin": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "length": {
+      "path": "1b8ce255-0bc7-4656-bafa-3dc86af44126"
+    }
+  },
+  "merges": {
+    "0": {
+      "slice": {
+        "input": {
+          "a": true
+        }
+      },
+      "slice0": {
+        "input": {
+          "a": true
+        }
+      },
+      "length": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "slice": {
+        "input": {
+          "begin": true
+        }
+      },
+      "slice0": {
+        "input": {
+          "end": true
+        }
+      }
+    },
+    "2": {
+      "slice": {
+        "input": {
+          "end": true
+        }
+      },
+      "length": {
+        "output": {
+          "length": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "scissors",
+    "description": "no description",
+    "complexity": 9,
+    "tags": [
+      "core",
+      "string"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "string"
+    },
+    "at": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "second": {
+      "pin": {
+        "0": {
+          "unitId": "slice",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    },
+    "first": {
+      "pin": {
+        "0": {
+          "unitId": "slice0",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "306fe446-a495-4ae3-a835-34f1468e92fe",
+  "type": "`U`&`G`",
+  "system": true
+}

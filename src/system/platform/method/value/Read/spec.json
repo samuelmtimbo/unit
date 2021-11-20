@@ -1,0 +1,29 @@
+{
+  "name": "read",
+  "inputs": {
+    "value": {
+      "type": "`V`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "data": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "get `unit` property `name`",
+    "complexity": 3,
+    "tags": [
+      "platform"
+    ]
+  },
+  "id": "c6da6b9f-a783-4e58-a252-e543aef109fb",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

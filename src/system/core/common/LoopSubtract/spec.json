@@ -1,0 +1,121 @@
+{
+  "name": "loop subtract",
+  "units": {
+    "loop": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "output": {
+        "final": {
+          "ignored": false
+        },
+        "local": {
+          "ignored": false
+        }
+      },
+      "input": {}
+    },
+    "subtract": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "b": {
+          "constant": false
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "loop": {
+        "input": {
+          "next": true
+        }
+      },
+      "subtract": {
+        "output": {
+          "a - b": true
+        }
+      }
+    },
+    "1": {
+      "loop": {
+        "output": {
+          "current": true
+        }
+      },
+      "subtract": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "undo",
+    "description": "loop subtract the value of `-` from the current value",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    },
+    "init": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "init"
+        }
+      },
+      "type": "number"
+    },
+    "-": {
+      "pin": {
+        "0": {
+          "unitId": "subtract",
+          "pinId": "b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "final": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final"
+        }
+      },
+      "type": "number"
+    },
+    "local": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "local"
+        }
+      },
+      "type": "number"
+    },
+    "current": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "6a006c91-181c-48c4-826d-a6eaec21fea3",
+  "type": "`U`&`G`",
+  "system": true
+}

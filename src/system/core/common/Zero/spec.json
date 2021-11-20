@@ -1,0 +1,53 @@
+{
+  "name": "zero",
+  "units": {
+    "identity": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0"
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "identity",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "0": {
+      "pin": {
+        "0": {
+          "unitId": "identity",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "...",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "618898d6-1167-11eb-bef9-cb053e09c21b",
+  "type": "`U`&`G`",
+  "system": true
+}

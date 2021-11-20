@@ -1,0 +1,87 @@
+{
+  "name": "get origin",
+  "units": {
+    "get": {
+      "path": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": {
+        "unit": {},
+        "name": {}
+      },
+      "output": {
+        "value": {}
+      }
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'origin'"
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "get": {
+        "input": {
+          "name": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    },
+    "unit": {
+      "pin": {
+        "0": {
+          "unitId": "get",
+          "pinId": "unit"
+        }
+      },
+      "ref": true,
+      "type": "`U`"
+    }
+  },
+  "outputs": {
+    "origin": {
+      "pin": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "...",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "api",
+      "read"
+    ]
+  },
+  "id": "3a8a68cc-2ec7-11eb-a2b8-df0a171f0ba5",
+  "type": "`U`&`G`",
+  "system": true
+}

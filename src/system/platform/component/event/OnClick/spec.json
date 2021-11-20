@@ -1,0 +1,53 @@
+{
+  "name": "on click",
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'click'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "type": "`C`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` click event",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "97c94516-add1-11ea-ba72-8f55299b735c",
+  "type": "`U`&`G`",
+  "system": true
+}

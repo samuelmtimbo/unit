@@ -1,0 +1,171 @@
+{
+  "name": "range reverse",
+  "units": {
+    "range": {
+      "path": "29e43ad7-be5e-437f-8f0f-2df996c8b89c",
+      "input": {}
+    },
+    "subtract": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "b": {
+          "constant": false
+        },
+        "a": {
+          "constant": false
+        }
+      }
+    },
+    "decrement": {
+      "path": "4d67d2e4-8b06-4e15-8243-99be8e4be5d3"
+    },
+    "add": {
+      "path": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf"
+    },
+    "repeatn": {
+      "path": "251ba609-a9c5-451b-8162-411c966bf919"
+    },
+    "subtract0": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f"
+    }
+  },
+  "merges": {
+    "0": {
+      "range": {
+        "output": {
+          "i": true
+        }
+      },
+      "subtract": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "range": {
+        "input": {
+          "b": true
+        }
+      },
+      "add": {
+        "input": {
+          "b": true
+        }
+      },
+      "subtract0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "range": {
+        "input": {
+          "a": true
+        }
+      },
+      "add": {
+        "input": {
+          "a": true
+        }
+      },
+      "subtract0": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "3": {
+      "add": {
+        "output": {
+          "a + b": true
+        }
+      },
+      "decrement": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "4": {
+      "repeatn": {
+        "input": {
+          "n": true
+        }
+      },
+      "subtract0": {
+        "output": {
+          "a - b": true
+        }
+      }
+    },
+    "5": {
+      "repeatn": {
+        "input": {
+          "a": true
+        }
+      },
+      "decrement": {
+        "output": {
+          "a - 1": true
+        }
+      }
+    },
+    "6": {
+      "repeatn": {
+        "output": {
+          "a": true
+        }
+      },
+      "subtract": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "sort-asc",
+    "description": "regressive count from `b - 1` to `a`",
+    "complexity": 8,
+    "tags": [
+      "core",
+      "loop"
+    ]
+  },
+  "inputs": {
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "subtract",
+          "pinId": "a - b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "7a09c38d-3866-46e3-a03e-112c4cf6d889",
+  "type": "`U`&`G`",
+  "system": true
+}

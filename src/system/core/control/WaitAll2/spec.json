@@ -1,0 +1,87 @@
+{
+  "name": "wait all 2",
+  "units": {
+    "wait0": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    },
+    "wait1": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    }
+  },
+  "merges": {
+    "0": {
+      "wait0": {
+        "input": {
+          "a": true
+        }
+      },
+      "wait1": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "wait1": {
+        "input": {
+          "a": true
+        }
+      },
+      "wait0": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "git-merge",
+    "description": "wait for `b` and `c` before output `a`",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "<A>"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "<B>"
+    }
+  },
+  "outputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "wait1",
+          "pinId": "a"
+        }
+      },
+      "type": "<B>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "wait0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "id": "349eb1a9-85ae-4fec-93f2-19ba3370b6c3",
+  "type": "`U`&`G`",
+  "system": true
+}

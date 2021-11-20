@@ -1,0 +1,87 @@
+{
+  "name": "count from",
+  "units": {
+    "loopincrement": {
+      "path": "4e2c89b2-e9cb-42f6-bb8d-e9d665c21fa7",
+      "input": {
+        "test": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true
+        },
+        "final": {
+          "ignored": true
+        }
+      }
+    },
+    "true": {
+      "path": "984c4a44-86c7-464c-ad48-4759598c3be3",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "true": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "true": {
+        "output": {
+          "true": true
+        }
+      },
+      "loopincrement": {
+        "input": {
+          "test": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "sort-desc",
+    "description": "iteratively count `a`, starting from `init`",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "loop"
+    ]
+  },
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "true",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    },
+    "init": {
+      "pin": {
+        "0": {
+          "unitId": "loopincrement",
+          "pinId": "init"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "current": {
+      "pin": {
+        "0": {
+          "unitId": "loopincrement",
+          "pinId": "current"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "e087017d-a69a-4a02-ad00-c5263bf47365",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,95 @@
+{
+  "name": "sum all",
+  "units": {
+    "reduce": {
+      "path": "5cd76a8a-603b-49e1-bda3-09ad217eb108",
+      "output": {
+        "test": {
+          "ignored": true
+        }
+      },
+      "input": {
+        "init": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "add": {
+      "path": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf"
+    }
+  },
+  "merges": {
+    "sstwb": {
+      "reduce": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "add": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "yhgjl": {
+      "reduce": {
+        "output": {
+          "local": true
+        }
+      },
+      "add": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "wvhfr": {
+      "reduce": {
+        "input": {
+          "next": true
+        }
+      },
+      "add": {
+        "output": {
+          "a + b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "reduce",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "sum": {
+      "pin": {
+        "0": {
+          "unitId": "reduce",
+          "pinId": "result"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "plus",
+    "description": "sum all elements of array `a`",
+    "complexity": 7,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "bd1a9bbb-6129-4031-b7e9-aec351d847d9",
+  "type": "`U`&`G`",
+  "system": true
+}

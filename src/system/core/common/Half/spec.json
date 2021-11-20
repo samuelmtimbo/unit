@@ -1,0 +1,47 @@
+{
+  "name": "half",
+  "units": {
+    "divide": {
+      "path": "158d85eb-28b8-4355-b637-28a7ec751233",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "2"
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "divide",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a ÷ 2": {
+      "pin": {
+        "0": {
+          "unitId": "divide",
+          "pinId": "a ÷ b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "half",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "49d04556-34fd-4231-a478-0e106b564e1c",
+  "type": "`U`&`G`",
+  "system": true
+}

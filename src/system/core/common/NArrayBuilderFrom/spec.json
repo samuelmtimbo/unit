@@ -1,0 +1,121 @@
+{
+  "name": "n array builder from",
+  "units": {
+    "looprepeat": {
+      "path": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "output": {
+        "current": {
+          "ignored": true
+        }
+      }
+    },
+    "arraybuilderfrom": {
+      "path": "6db1905f-2343-4c63-97d3-07f4d946ef58",
+      "output": {
+        "acc": {
+          "ignored": true
+        }
+      }
+    },
+    "lengthlessthan": {
+      "path": "0e211b43-0d8d-44cb-b63f-79a1a02de614"
+    }
+  },
+  "merges": {
+    "yhqkcrmnq": {
+      "lengthlessthan": {
+        "input": {
+          "a": true
+        }
+      },
+      "arraybuilderfrom": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "jswlhsl": {
+      "looprepeat": {
+        "output": {
+          "local": true
+        }
+      },
+      "lengthlessthan": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "pauzdiil": {
+      "lengthlessthan": {
+        "output": {
+          "true": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      },
+      "arraybuilderfrom": {
+        "input": {
+          "test": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "array",
+    "description": "build a list of size n",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "from": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "init"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "n": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a[]": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "6c5543a6-d558-490d-8a94-20709375b10f",
+  "type": "`U`&`G`",
+  "system": true
+}

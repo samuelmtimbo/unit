@@ -1,0 +1,155 @@
+{
+  "name": "merge default",
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "b"
+        }
+      },
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -125,
+            "y": -7
+          }
+        }
+      }
+    },
+    "default": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 0,
+            "y": 37
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a"
+        }
+      },
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 124,
+            "y": -7
+          }
+        }
+      }
+    }
+  },
+  "units": {
+    "default": {
+      "path": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {},
+        "d": {}
+      },
+      "output": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 96,
+              "y": -5
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 47,
+          "y": -5
+        }
+      }
+    },
+    "merge": {
+      "path": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {},
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -97,
+              "y": -5
+            }
+          }
+        }
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -48,
+          "y": -5
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "default": {
+        "input": {
+          "d": true
+        }
+      },
+      "merge": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "merge": {
+        "output": {
+          "ab": true
+        }
+      },
+      "default": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "merge `a` and `default` if `a` is present, `default` otherwise",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "object"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": 0,
+          "y": 8
+        },
+        "1": {
+          "x": -1,
+          "y": -18
+        }
+      }
+    }
+  },
+  "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+  "type": "`U`&`G`",
+  "system": true
+}

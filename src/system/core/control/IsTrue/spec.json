@@ -1,0 +1,49 @@
+{
+  "name": "is true",
+  "units": {
+    "if": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "true"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "a = false": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "question",
+    "description": "true if `a` is true, false otherwise",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "id": "b6694fbe-4fc9-4779-92c6-4ba91c12718f",
+  "type": "`U`&`G`",
+  "system": true
+}

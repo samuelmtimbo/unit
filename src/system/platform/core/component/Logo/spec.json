@@ -1,0 +1,199 @@
+{
+  "name": "logo",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "svg",
+          "pinId": "style"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -143,
+            "y": 216
+          }
+        }
+      },
+      "type": "object"
+    },
+    "pathStyle": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 1,
+            "y": -26
+          }
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "units": {
+    "svgpath": {
+      "path": "60bc7930-8982-11ea-8b24-cf97a783bb32",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": 99,
+              "y": -107
+            }
+          }
+        },
+        "d": {
+          "constant": true,
+          "data": "'M2,36.00000000000001 A6,6,1,1,0,2,35.99900000000001z M2,36.00000000000001 A6,6,1,1,0,2,35.99900000000001zM14,36.00000000000001 L24,36.00000000000001M24,36 A24,24,1,1,0,24,35.999z M24,36 A24,24,1,1,0,24,35.999zM82,36 A6,6,1,1,0,82,35.999zM82,36 L72,36'",
+          "metadata": {
+            "position": {
+              "x": 124,
+              "y": -127
+            }
+          }
+        },
+        "fillRule": {
+          "ignored": false,
+          "constant": true,
+          "data": "'evenodd'",
+          "metadata": {
+            "position": {
+              "x": 125,
+              "y": -163
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 255,
+          "y": -121
+        }
+      }
+    },
+    "svg": {
+      "path": "98c279fc-7f5e-11ea-b9e4-f772f9f0bed1",
+      "input": {
+        "style": {
+          "data": "{userSelect:'none'}",
+          "metadata": {
+            "position": {
+              "x": -123,
+              "y": 198
+            }
+          }
+        },
+        "viewBox": {
+          "ignored": false,
+          "constant": true,
+          "data": "'0 0 96 72'",
+          "metadata": {
+            "position": {
+              "x": -123,
+              "y": 160
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 10,
+          "y": 179
+        }
+      }
+    },
+    "mergedefault": {
+      "path": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 20,
+              "y": -47
+            }
+          }
+        },
+        "default": {
+          "constant": true,
+          "data": "{fill:'currentColor'}",
+          "metadata": {
+            "position": {
+              "x": 14,
+              "y": -81
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 63,
+          "y": -70
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "svgpath": {
+        "input": {
+          "style": true
+        }
+      }
+    }
+  },
+  "component": {
+    "subComponents": {
+      "svgpath": {
+        "children": []
+      },
+      "svg": {
+        "children": [
+          "svgpath"
+        ],
+        "width": 285,
+        "height": 268
+      }
+    },
+    "children": [
+      "svg"
+    ],
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "metadata": {
+    "complexity": 5,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": 117,
+          "y": -84
+        }
+      }
+    }
+  },
+  "id": "8aee8e9f-a132-46de-a0c7-17f8035b1898",
+  "type": "`U`&`G`",
+  "system": true
+}

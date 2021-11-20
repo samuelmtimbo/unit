@@ -1,0 +1,114 @@
+{
+  "name": "split at",
+  "units": {
+    "yhkxh": {
+      "path": "f69e88e3-b2c2-481b-b036-a5c0ed7ccccb"
+    },
+    "vbuwm": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    },
+    "sftwh": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f"
+    }
+  },
+  "merges": {
+    "foqjm": {
+      "yhkxh": {
+        "input": {
+          "a": true
+        }
+      },
+      "vbuwm": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "iiynv": {
+      "vbuwm": {
+        "output": {
+          "length": true
+        }
+      },
+      "sftwh": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "udcto": {
+      "yhkxh": {
+        "input": {
+          "start": true
+        }
+      },
+      "sftwh": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "ondfq": {
+      "yhkxh": {
+        "input": {
+          "count": true
+        }
+      },
+      "sftwh": {
+        "output": {
+          "a - b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "foqjm"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "i": {
+      "pin": {
+        "0": {
+          "mergeId": "udcto"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "second": {
+      "pin": {
+        "0": {
+          "unitId": "yhkxh",
+          "pinId": "removed"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "first": {
+      "pin": {
+        "0": {
+          "unitId": "yhkxh",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "metadata": {
+    "icon": "split",
+    "description": "...",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "de2d5ba8-ac0f-461e-849b-f4aa84d2736a",
+  "type": "`U`&`G`",
+  "system": true
+}

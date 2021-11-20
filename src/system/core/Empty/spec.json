@@ -1,0 +1,18 @@
+{
+  "name": "empty",
+  "units": {},
+  "merges": {},
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": null,
+    "description": "empty graph",
+    "complexity": 2,
+    "tags": [
+      "core"
+    ]
+  },
+  "id": "e33e7dcd-9715-461c-a474-15ed2bda899e",
+  "type": "`U`&`G`",
+  "system": true
+}

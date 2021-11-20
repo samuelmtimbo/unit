@@ -1,0 +1,109 @@
+{
+  "name": "deg to rad",
+  "units": {
+    "PI": {
+      "path": "3256e26d-8495-4c9d-8998-5b026691231d",
+      "input": {
+        "any": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "multiply": {
+      "path": "872be100-f4dc-4246-8eea-6e3da31137b7"
+    },
+    "divide": {
+      "path": "158d85eb-28b8-4355-b637-28a7ec751233",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "180"
+        }
+      }
+    },
+    "remainder": {
+      "path": "c5c05c85-f4c1-4b67-ab85-08b61fe67531",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "360"
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "multiply": {
+        "input": {
+          "a": true
+        }
+      },
+      "divide": {
+        "output": {
+          "a ÷ b": true
+        }
+      }
+    },
+    "1": {
+      "multiply": {
+        "input": {
+          "b": true
+        }
+      },
+      "PI": {
+        "output": {
+          "PI": true
+        }
+      }
+    },
+    "2": {
+      "remainder": {
+        "output": {
+          "a % b": true
+        }
+      },
+      "divide": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "convert deg to rad",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "geometry",
+      "trigonometry"
+    ]
+  },
+  "inputs": {
+    "angle": {
+      "pin": {
+        "0": {
+          "unitId": "remainder",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "rad": {
+      "pin": {
+        "0": {
+          "unitId": "multiply",
+          "pinId": "a × b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "3a138358-cc25-45e3-a0ce-bbe54445736f",
+  "type": "`U`&`G`",
+  "system": true
+}

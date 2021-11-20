@@ -1,0 +1,95 @@
+{
+  "name": "remove index",
+  "units": {
+    "remove": {
+      "path": "f69e88e3-b2c2-481b-b036-a5c0ed7ccccb",
+      "input": {
+        "a": {},
+        "start": {},
+        "count": {
+          "constant": true,
+          "data": "1"
+        }
+      },
+      "output": {
+        "a": {},
+        "removed": {}
+      }
+    },
+    "first": {
+      "path": "0f77eb13-5c48-4611-a9bf-fe10c903dc63",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[0]": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "first": {
+        "input": {
+          "a": true
+        }
+      },
+      "remove": {
+        "output": {
+          "removed": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "i": {
+      "type": "number",
+      "pin": {
+        "0": {
+          "unitId": "remove",
+          "pinId": "start"
+        }
+      }
+    },
+    "a": {
+      "type": "<A>[]",
+      "pin": {
+        "0": {
+          "unitId": "remove",
+          "pinId": "a"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>[]",
+      "pin": {
+        "0": {
+          "unitId": "remove",
+          "pinId": "a"
+        }
+      }
+    },
+    "a[i]": {
+      "type": "<A>[]",
+      "pin": {
+        "0": {
+          "unitId": "first",
+          "pinId": "a[0]"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "scissors",
+    "description": "remove `a` element at position `i`",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "55d4bc9e-a4a2-44ed-8b35-c9ae64b5d0e3",
+  "type": "`U`&`G`",
+  "system": true
+}

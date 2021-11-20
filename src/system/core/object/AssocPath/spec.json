@@ -1,0 +1,245 @@
+{
+  "name": "assoc path",
+  "units": {
+    "propordefault": {
+      "path": "aeac1075-e01f-4d22-b01b-9a77cbba504b",
+      "input": {
+        "default": {
+          "constant": true,
+          "data": "{}"
+        }
+      }
+    },
+    "head": {
+      "path": "e9831075-2e62-43a4-84af-0653f7e707a9"
+    },
+    "assocpath": {
+      "path": "419e468e-e4d4-11ea-8efb-2b9d815b1798"
+    },
+    "if": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "lengthgt": {
+      "path": "603ebe2e-5329-446d-b422-78f3201ddd7a",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "assoc": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    },
+    "ifelse": {
+      "path": "92760dd2-ecd9-46db-851f-70950a5b6bc3",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "if": {},
+        "else": {}
+      }
+    },
+    "if0": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a if b": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "lengthgt": {
+        "output": {
+          "true": true
+        }
+      },
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      },
+      "if0": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "head": {
+        "input": {
+          "a": true
+        }
+      },
+      "if": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "2": {
+      "propordefault": {
+        "input": {
+          "key": true
+        }
+      },
+      "head": {
+        "output": {
+          "head": true
+        }
+      },
+      "assoc": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "3": {
+      "assocpath": {
+        "input": {
+          "obj": true
+        }
+      },
+      "propordefault": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "4": {
+      "head": {
+        "output": {
+          "a": true
+        }
+      },
+      "assocpath": {
+        "input": {
+          "path": true
+        }
+      }
+    },
+    "5": {
+      "propordefault": {
+        "input": {
+          "obj": true
+        }
+      },
+      "assoc": {
+        "input": {
+          "obj": true
+        }
+      },
+      "if0": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "ykrqmso": {
+      "assocpath": {
+        "input": {
+          "value": true
+        }
+      },
+      "ifelse": {
+        "output": {
+          "if": true
+        }
+      }
+    },
+    "oobtsi": {
+      "assocpath": {
+        "output": {
+          "result": true
+        }
+      },
+      "assoc": {
+        "input": {
+          "value": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-set",
+    "description": "get value of `obj` at `path`",
+    "complexity": 27,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "inputs": {
+    "path": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "lengthgt",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "(number|string)[]"
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "a"
+        }
+      },
+      "type": "any",
+      "functional": true
+    },
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "if0",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "result": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "else"
+        },
+        "1": {
+          "unitId": "assoc",
+          "pinId": "obj"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "419e468e-e4d4-11ea-8efb-2b9d815b1798",
+  "type": "`U`&`G`",
+  "system": true
+}

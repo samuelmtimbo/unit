@@ -1,0 +1,53 @@
+{
+  "name": "string to decimal",
+  "units": {
+    "stringtoint": {
+      "path": "8cd29108-95cd-4217-9721-11f7c7c1131e",
+      "input": {
+        "str": {},
+        "radix": {
+          "constant": true,
+          "data": "10"
+        }
+      },
+      "output": {
+        "n": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "str": {
+      "pin": {
+        "0": {
+          "unitId": "stringtoint",
+          "pinId": "str"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "n": {
+      "pin": {
+        "0": {
+          "unitId": "stringtoint",
+          "pinId": "n"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "convert a number into a decimal",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "number"
+    ]
+  },
+  "id": "fb8d58cc-f1a0-11ea-b163-9321d9d8dd29",
+  "type": "`U`&`G`",
+  "system": true
+}

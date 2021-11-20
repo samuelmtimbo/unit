@@ -1,0 +1,129 @@
+{
+  "name": "if else a ≤ b",
+  "units": {
+    "lessthanequal": {
+      "path": "e13f3090-62a6-4a3b-8401-c571cbf03526"
+    },
+    "greaterthan": {
+      "path": "1651ce6b-4db0-4787-9edf-f770b72d253c"
+    },
+    "if0": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "if1": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    }
+  },
+  "merges": {
+    "0": {
+      "greaterthan": {
+        "input": {
+          "b": true
+        }
+      },
+      "lessthanequal": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "greaterthan": {
+        "input": {
+          "a": true
+        }
+      },
+      "lessthanequal": {
+        "input": {
+          "a": true
+        }
+      },
+      "if1": {
+        "input": {
+          "a": true
+        }
+      },
+      "if0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "greaterthan": {
+        "output": {
+          "a > b": true
+        }
+      },
+      "if0": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "3": {
+      "lessthanequal": {
+        "output": {
+          "a ≤ b": true
+        }
+      },
+      "if1": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "functional": true,
+      "type": "number"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "functional": true,
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a ≤ b ? a": {
+      "pin": {
+        "0": {
+          "unitId": "if1",
+          "pinId": "a if b"
+        }
+      },
+      "type": "number"
+    },
+    "a > b ? a": {
+      "pin": {
+        "0": {
+          "unitId": "if0",
+          "pinId": "a if b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "filter",
+    "description": "forward `a` depending on `a ≤ b`",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "62de5773-43bc-416c-b604-8fb529d7b299",
+  "type": "`U`&`G`",
+  "system": true
+}

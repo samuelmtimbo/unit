@@ -1,0 +1,156 @@
+{
+  "name": "for each from",
+  "units": {
+    "at": {
+      "path": "79f01345-4ed7-47e2-8882-fa3bd282c98a"
+    },
+    "lessthanlength": {
+      "path": "cc422ac4-f29c-419d-8628-f58315bd7660"
+    },
+    "looprepeat": {
+      "path": "ba8d655b-6014-4eae-bce1-fb8fef9ee535"
+    },
+    "loopincrement": {
+      "path": "4e2c89b2-e9cb-42f6-bb8d-e9d665c21fa7",
+      "output": {}
+    }
+  },
+  "merges": {
+    "0": {
+      "lessthanlength": {
+        "output": {
+          "true": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      },
+      "loopincrement": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "1": {
+      "lessthanlength": {
+        "input": {
+          "a": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "2": {
+      "lessthanlength": {
+        "input": {
+          "b": true
+        }
+      },
+      "loopincrement": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "3": {
+      "at": {
+        "input": {
+          "a": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "4": {
+      "at": {
+        "input": {
+          "i": true
+        }
+      },
+      "loopincrement": {
+        "output": {
+          "current": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "from": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "loopincrement",
+          "pinId": "init"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "mergeId": "4"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "3"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "<A>[]"
+    },
+    "a[i]": {
+      "pin": {
+        "0": {
+          "unitId": "at",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "array",
+    "description": "...",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "f538e9b0-f172-4c9f-be23-86c715750b76",
+  "type": "`U`&`G`",
+  "system": true
+}

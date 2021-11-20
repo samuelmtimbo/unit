@@ -1,0 +1,101 @@
+{
+  "name": "write input",
+  "inputs": {
+    "name": {
+      "pin": {
+        "0": {
+          "unitId": "input",
+          "pinId": "name"
+        }
+      }
+    },
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "write",
+          "pinId": "data"
+        }
+      }
+    },
+    "unit": {
+      "pin": {
+        "0": {
+          "unitId": "input",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "write",
+          "pinId": "data"
+        }
+      },
+      "defaultIgnored": true
+    }
+  },
+  "units": {
+    "write": {
+      "path": "98ab5ee1-0997-4ad2-bc77-776208b6bb25",
+      "input": {
+        "value": {},
+        "data": {}
+      },
+      "output": {
+        "data": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 58,
+          "y": -1
+        }
+      }
+    },
+    "input": {
+      "path": "4ae69887-a087-4d37-8743-d83ca48184d1",
+      "input": {
+        "unit": {},
+        "name": {},
+        "done": {
+          "ignored": true
+        }
+      },
+      "output": {
+        "pin": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -59,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "write": {
+        "input": {
+          "value": true
+        }
+      },
+      "input": {
+        "output": {
+          "pin": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "set `unit` input `name` to `data`",
+    "complexity": 4
+  },
+  "id": "04953fed-157a-479d-91ac-005174b9b85e"
+}

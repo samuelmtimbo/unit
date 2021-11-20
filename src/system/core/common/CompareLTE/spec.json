@@ -1,0 +1,87 @@
+{
+  "name": "compare lte",
+  "units": {
+    "lessthanequal": {
+      "path": "e13f3090-62a6-4a3b-8401-c571cbf03526"
+    },
+    "greaterthan": {
+      "path": "1651ce6b-4db0-4787-9edf-f770b72d253c"
+    }
+  },
+  "merges": {
+    "merge0": {
+      "lessthanequal": {
+        "input": {
+          "a": true
+        }
+      },
+      "greaterthan": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "merge1": {
+      "lessthanequal": {
+        "input": {
+          "b": true
+        }
+      },
+      "greaterthan": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "merge0"
+        }
+      },
+      "type": "number"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "mergeId": "merge1"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a ≤ b": {
+      "pin": {
+        "0": {
+          "unitId": "lessthanequal",
+          "pinId": "a ≤ b"
+        }
+      },
+      "type": "boolean"
+    },
+    "a > b": {
+      "pin": {
+        "0": {
+          "unitId": "greaterthan",
+          "pinId": "a > b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "...",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "baa94d4a-90a4-4b3d-8f4f-d10780c64754",
+  "type": "`U`&`G`",
+  "system": true
+}

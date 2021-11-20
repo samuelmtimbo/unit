@@ -1,0 +1,31 @@
+{
+  "name": "http server",
+  "inputs": {
+    "opt": {
+      "type": "{timeout?:number}"
+    },
+    "res": {
+      "type": "{status?:number,body?:string}"
+    },
+    "port": {
+      "type": "number"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "req": {
+      "type": "{header:string{},method:'GET'|'POST'|'PUT'|'DELETE',path:string,body?:string,query:string{}}"
+    }
+  },
+  "metadata": {
+    "icon": "server",
+    "description": "start an HTTP Server listening on `port`",
+    "complexity": 3
+  },
+  "base": true,
+  "system": true,
+  "type": "`U`",
+  "id": "675e369c-4813-4d45-ab70-b1a03e43dffa"
+}

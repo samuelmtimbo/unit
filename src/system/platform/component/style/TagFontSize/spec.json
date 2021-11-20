@@ -1,0 +1,50 @@
+{
+  "name": "tag font size",
+  "units": {
+    "tag": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'fontSize'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{fontSize: `fontSize`}",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "style"
+    ]
+  },
+  "inputs": {
+    "fontSize": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "{fontSize}": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "119335e8-9a6f-11eb-bd5e-a7c983e2d4cd",
+  "type": "`U`&`G`",
+  "system": true
+}

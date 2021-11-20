@@ -1,0 +1,77 @@
+{
+  "name": "clamp",
+  "units": {
+    "max": {
+      "path": "e857c770-5a98-4f8d-a0e1-b6cb126071ed"
+    },
+    "min": {
+      "path": "4e63c320-f5a5-4f65-982e-632b5adafa29"
+    }
+  },
+  "merges": {
+    "0": {
+      "min": {
+        "output": {
+          "min": true
+        }
+      },
+      "max": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "restricts a number to be within a range",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "relation"
+    ]
+  },
+  "inputs": {
+    "max": {
+      "pin": {
+        "0": {
+          "unitId": "min",
+          "pinId": "b"
+        }
+      },
+      "type": "number"
+    },
+    "min": {
+      "pin": {
+        "0": {
+          "unitId": "max",
+          "pinId": "b"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "min",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "max",
+          "pinId": "max"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "9ef9ff5b-6a1c-444b-8fc0-bfebbec6f4fd",
+  "type": "`U`&`G`",
+  "system": true
+}

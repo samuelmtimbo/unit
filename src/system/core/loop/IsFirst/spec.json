@@ -1,0 +1,96 @@
+{
+  "name": "is first",
+  "units": {
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {}
+    },
+    "false": {
+      "path": "b4d20f6f-32dc-4d04-97d6-69518976bdea"
+    },
+    "loopforever": {
+      "path": "4b6e5535-e600-4f91-a5df-105f6a5ad3d7",
+      "input": {
+        "next": {},
+        "init": {
+          "constant": true,
+          "data": "true"
+        }
+      },
+      "output": {
+        "current": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "false": {
+        "input": {
+          "any": true
+        }
+      }
+    },
+    "1": {
+      "loopforever": {
+        "output": {
+          "current": true
+        }
+      },
+      "wait": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "false": {
+        "output": {
+          "false": true
+        }
+      },
+      "loopforever": {
+        "input": {
+          "next": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "no description",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "loop"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "first": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "id": "fb311fff-521b-4066-b830-81d3a50f0f01",
+  "type": "`U`&`G`",
+  "system": true
+}

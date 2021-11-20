@@ -1,0 +1,184 @@
+{
+  "name": "on enter keydown",
+  "inputs": {
+    "element": {
+      "pin": {
+        "0": {
+          "unitId": "onkeydown",
+          "pinId": "element"
+        }
+      },
+      "ref": true,
+      "type": "`U`"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "{key:string,keyCode:number,ctrlKey:boolean,shiftKey:boolean,altKey:boolean,metaKey:boolean,repeat:boolean}"
+    }
+  },
+  "units": {
+    "onkeydown": {
+      "path": "02dec0ae-a3b0-11eb-ab4e-afd7066a6476",
+      "input": {
+        "element": {
+          "metadata": {
+            "position": {
+              "x": -162,
+              "y": -10
+            }
+          }
+        }
+      },
+      "output": {
+        "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -111,
+          "y": -9
+        }
+      }
+    },
+    "equals": {
+      "path": "85204bf6-6692-4686-a785-23127c0594b5",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "'Enter'",
+          "metadata": {
+            "position": {
+              "x": 138,
+              "y": -21
+            }
+          }
+        }
+      },
+      "output": {
+        "a = b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 88,
+          "y": -18
+        }
+      }
+    },
+    "propkey": {
+      "path": "8e48bf34-a3b3-11eb-af21-9fff67fa4349",
+      "input": {
+        "event": {}
+      },
+      "output": {
+        "key": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -12,
+          "y": -35
+        }
+      }
+    },
+    "if": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a if b": {
+          "metadata": {
+            "position": {
+              "x": 15,
+              "y": 57
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -9,
+          "y": 18
+        }
+      }
+    }
+  },
+  "merges": {
+    "lwzzgu": {
+      "propkey": {
+        "input": {
+          "event": true
+        }
+      },
+      "onkeydown": {
+        "output": {
+          "event": true
+        }
+      },
+      "if": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "webletbkt": {
+      "equals": {
+        "input": {
+          "a": true
+        }
+      },
+      "propkey": {
+        "output": {
+          "key": true
+        }
+      }
+    },
+    "tswomu": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "equals": {
+        "output": {
+          "a = b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "complexity": 10,
+    "position": {
+      "merge": {
+        "lwzzgu": {
+          "x": -56,
+          "y": -8
+        },
+        "webletbkt": {
+          "x": 41,
+          "y": -37
+        },
+        "tswomu": {
+          "x": 43,
+          "y": 6
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "de45f6d0-7504-4061-b4ab-5d1ee902a0cb",
+  "type": "`U`&`G`",
+  "system": true
+}

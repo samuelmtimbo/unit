@@ -1,0 +1,37 @@
+{
+  "name": "path",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "d": {
+      "type": "string",
+      "optional": true
+    },
+    "fillRule": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG path",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "component",
+      "svg"
+    ]
+  },
+  "id": "60bc7930-8982-11ea-8b24-cf97a783bb32",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`",
+  "system": true
+}

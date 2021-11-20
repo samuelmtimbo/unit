@@ -1,0 +1,50 @@
+{
+  "name": "tag email",
+  "units": {
+    "hewiyie": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'email'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{email: `email`}",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "inputs": {
+    "email": {
+      "pin": {
+        "0": {
+          "unitId": "hewiyie",
+          "pinId": "v"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "{email}": {
+      "pin": {
+        "0": {
+          "unitId": "hewiyie",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "6e9e4202-26af-11eb-8d6e-eb6fbc70a0a9",
+  "type": "`U`&`G`",
+  "system": true
+}

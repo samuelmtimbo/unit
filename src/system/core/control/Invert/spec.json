@@ -1,0 +1,104 @@
+{
+  "name": "invert",
+  "units": {
+    "pick": {
+      "path": "396497e4-f8e7-4573-95c9-a4f186a5cd05",
+      "input": {
+        "a": {},
+        "b": {},
+        "c": {}
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "pick0": {
+      "path": "396497e4-f8e7-4573-95c9-a4f186a5cd05",
+      "input": {
+        "a": {},
+        "b": {},
+        "c": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "pick0",
+          "pinId": "b"
+        },
+        "1": {
+          "unitId": "pick",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "<A>"
+    },
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "pick0",
+          "pinId": "c"
+        },
+        "1": {
+          "unitId": "pick",
+          "pinId": "c"
+        }
+      },
+      "functional": true,
+      "type": "boolean"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "pick0",
+          "pinId": "a"
+        },
+        "mertv": {
+          "unitId": "pick",
+          "pinId": "b"
+        }
+      },
+      "functional": true,
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "pick0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "pointer",
+    "description": "if `c` output `a` as `b`",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "id": "f55ab180-3fd5-44c4-915f-f40e6bbcc481",
+  "type": "`U`&`G`",
+  "system": true
+}

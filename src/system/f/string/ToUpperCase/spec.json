@@ -1,0 +1,33 @@
+{
+  "name": "to upper case",
+  "inputs": {
+    "a": {
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "abc",
+          "unit"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "A": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "convert string to upper case",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "string"
+    ]
+  },
+  "id": "d4e4d4b2-80e0-4066-8d6f-5051e9a11a10",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

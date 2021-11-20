@@ -1,0 +1,34 @@
+{
+  "name": "translate",
+  "inputs": {
+    "d": {
+      "type": "(number|string)[][]"
+    },
+    "x": {
+      "type": "number"
+    },
+    "y": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "(number|string)[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "add a translation to the current transformation matrix",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/translate",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "6f79ee03-4b3f-439c-b955-5529f3bebcc9",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

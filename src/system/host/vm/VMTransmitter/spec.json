@@ -1,0 +1,27 @@
+{
+  "name": "vm transmitter",
+  "private": true,
+  "inputs": {
+    "id": {
+      "type": "string"
+    },
+    "stream": {
+      "type": "unit",
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "cloud",
+    "description": "expose a public URL",
+    "complexity": 3,
+    "tags": [
+      "ioun.it",
+      "vm"
+    ]
+  },
+  "id": "c0b00462-b97c-11eb-843e-2b2d36eb5fd0",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

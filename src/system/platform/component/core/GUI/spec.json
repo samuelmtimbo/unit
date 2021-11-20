@@ -1,0 +1,30 @@
+{
+  "name": "GUI",
+  "inputs": {
+    "style": {
+      "type": "object"
+    },
+    "disabled": {
+      "type": "boolean"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "atom-alt",
+    "description": "Futuristic Programming Environment",
+    "complexity": 33,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "0f043df2-46fc-11eb-ae20-6f1fedd527ba",
+  "component": {
+    "defaultWidth": 420,
+    "defaultHeight": 300
+  },
+  "base": true,
+  "type": "`U`&`C`",
+  "system": true
+}

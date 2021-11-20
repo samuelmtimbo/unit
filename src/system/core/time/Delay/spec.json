@@ -1,0 +1,70 @@
+{
+  "name": "delay",
+  "units": {
+    "timer": {
+      "path": "95076599-0f2f-46b6-a9e0-b4cbfdb8dcc9"
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    }
+  },
+  "merges": {
+    "0": {
+      "timer": {
+        "output": {
+          "ms": true
+        }
+      },
+      "wait": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "ms": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "timer",
+          "pinId": "ms"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "alarm-clock",
+    "description": "...",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "time"
+    ]
+  },
+  "id": "586fb5b8-4129-4ca1-b0c4-1009485bed95",
+  "type": "`U`&`G`",
+  "system": true
+}

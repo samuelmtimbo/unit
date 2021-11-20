@@ -1,0 +1,27 @@
+{
+  "name": "keyboard",
+  "inputs": {
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "keyboard",
+    "description": "virtual keyboard",
+    "complexity": 10,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "e6b88d1e-8755-11ea-916e-d3995fb8986e",
+  "base": true,
+  "component": {
+    "defaultWidth": 720,
+    "defaultHeight": 234
+  },
+  "type": "`U`&`C`",
+  "system": true
+}

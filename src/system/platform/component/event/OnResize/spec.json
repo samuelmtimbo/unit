@@ -1,0 +1,90 @@
+{
+  "name": "on resize",
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "{width:number,height:number}",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "unit": {
+          "metadata": {
+            "position": {
+              "x": -15,
+              "y": 26
+            }
+          }
+        },
+        "event": {
+          "data": "'_resize'",
+          "constant": true,
+          "metadata": {
+            "position": {
+              "x": -34,
+              "y": -7
+            }
+          }
+        },
+        "remove": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -15,
+              "y": -39
+            }
+          }
+        }
+      },
+      "output": {
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 66,
+              "y": -7
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 17,
+          "y": -7
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` 'resize' event",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "9fd9d2ea-98a7-11eb-8aa3-fbeb43cb1944",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,32 @@
+{
+  "name": "clear",
+  "inputs": {
+    "d": {
+      "type": "(number|string)[][]",
+      "metadata": {
+        "examples": [
+          "[]"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "(number|string)[][]"
+    }
+  },
+  "metadata": {
+    "icon": "eraser",
+    "description": "clear canvas",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "f41d4f3a-0a08-4e9f-9aa0-182b2686bd0e",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

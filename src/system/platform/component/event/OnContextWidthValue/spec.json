@@ -1,0 +1,209 @@
+{
+  "name": "on context width value",
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -42,
+            "y": -4
+          }
+        }
+      }
+    },
+    "element": {
+      "pin": {
+        "0": {
+          "unitId": "getcontextwidth",
+          "pinId": "element"
+        },
+        "1": {
+          "unitId": "onmount",
+          "pinId": "element"
+        }
+      },
+      "ref": true,
+      "type": "`U`",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 106,
+            "y": 29
+          },
+          "1": {
+            "x": -151,
+            "y": 20
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "width": {
+      "pin": {
+        "0": {
+          "unitId": "getcontextwidth",
+          "pinId": "width"
+        }
+      },
+      "type": "number",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 108,
+            "y": -37
+          }
+        }
+      }
+    },
+    "context": {
+      "pin": {
+        "0": {
+          "unitId": "getcontextwidth",
+          "pinId": "context"
+        }
+      },
+      "ref": true,
+      "type": "`CO`",
+      "defaultIgnored": true
+    }
+  },
+  "units": {
+    "getcontextwidth": {
+      "path": "91201117-902a-4e6d-bc32-14fa689ca1dd",
+      "input": {
+        "any": {
+          "ignored": false,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -112,
+              "y": -9
+            }
+          }
+        },
+        "element": {
+          "metadata": {
+            "position": {
+              "x": 84,
+              "y": 13
+            }
+          }
+        }
+      },
+      "output": {
+        "width": {
+          "metadata": {
+            "position": {
+              "x": 84,
+              "y": -22
+            }
+          }
+        },
+        "context": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 36,
+          "y": -5
+        }
+      }
+    },
+    "onresize": {
+      "path": "9fd9d2ea-98a7-11eb-8aa3-fbeb43cb1944",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -13,
+          "y": -33
+        }
+      }
+    },
+    "onmount": {
+      "path": "6ecc9c94-98bd-11eb-845c-dfd895d4184c",
+      "input": {
+        "element": {
+          "metadata": {
+            "position": {
+              "x": -124,
+              "y": 16
+            }
+          }
+        }
+      },
+      "output": {
+        "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -74,
+          "y": 13
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "onmount": {
+        "output": {
+          "event": true
+        }
+      },
+      "getcontextwidth": {
+        "input": {
+          "any": true
+        }
+      },
+      "onresize": {
+        "output": {
+          "event": true
+        }
+      }
+    },
+    "1": {
+      "onresize": {
+        "input": {
+          "element": true
+        }
+      },
+      "getcontextwidth": {
+        "output": {
+          "context": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "complexity": 5,
+    "position": {
+      "merge": {
+        "0": {
+          "x": -20,
+          "y": 6
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "4cab1ce1-332d-4296-ad6b-d37a85e74a55",
+  "type": "`U`&`G`",
+  "system": true
+}

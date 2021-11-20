@@ -1,0 +1,68 @@
+{
+  "name": "less than length",
+  "units": {
+    "length": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    },
+    "lessthan": {
+      "path": "82c3cf2a-0855-4c6d-a4c4-807b0ce1fd35"
+    }
+  },
+  "merges": {
+    "rehbd": {
+      "lessthan": {
+        "input": {
+          "b": true
+        }
+      },
+      "length": {
+        "output": {
+          "length": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "length",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "lessthan",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "true": {
+      "pin": {
+        "0": {
+          "unitId": "lessthan",
+          "pinId": "a < b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "is `a` lesser than the size of `b`?",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "cc422ac4-f29c-419d-8628-f58315bd7660",
+  "type": "`U`&`G`",
+  "system": true
+}

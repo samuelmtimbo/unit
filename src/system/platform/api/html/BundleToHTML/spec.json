@@ -1,0 +1,30 @@
+{
+  "name": "bundle to html",
+  "inputs": {
+    "bundle": {
+      "type": "{spec:object,specs:object}"
+    },
+    "opt": {
+      "type": "{}"
+    }
+  },
+  "outputs": {
+    "html": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "broadcast-tower",
+    "description": "channel for local communication",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "api",
+      "broadcast"
+    ]
+  },
+  "id": "89f4dae3-be45-40de-b738-84311d65eedd",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,42 @@
+{
+  "name": "default video user media",
+  "units": {
+    "getusermedia": {
+      "path": "a6e30b43-9ab4-4206-bfba-3f2129faac30",
+      "input": {
+        "opt": {
+          "constant": true,
+          "data": "{video:true,audio:{echoCancellation:true,noiseSuppression:true}}"
+        }
+      },
+      "output": {}
+    }
+  },
+  "merges": {},
+  "inputs": {},
+  "outputs": {
+    "stream": {
+      "pin": {
+        "0": {
+          "unitId": "getusermedia",
+          "pinId": "stream"
+        }
+      },
+      "ref": true,
+      "type": "`ST`"
+    }
+  },
+  "metadata": {
+    "icon": "video",
+    "description": "",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "media"
+    ]
+  },
+  "id": "c03c7ef3-0649-4a99-9e9a-858bcaba1307",
+  "type": "`U`&`G`",
+  "system": true
+}

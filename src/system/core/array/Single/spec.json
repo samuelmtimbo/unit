@@ -1,0 +1,49 @@
+{
+  "name": "single",
+  "units": {
+    "append": {
+      "path": "fa7721eb-1dd6-482e-8c7a-6da35b5f88bc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "[]"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "brackets",
+    "description": "output a list with a single element `a`",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "append",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "[a]": {
+      "pin": {
+        "0": {
+          "unitId": "append",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "d2f8bb43-af44-4371-a32e-20b760695e13",
+  "type": "`U`&`G`",
+  "system": true
+}

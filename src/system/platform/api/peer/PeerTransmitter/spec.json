@@ -1,0 +1,45 @@
+{
+  "name": "peer transmitter",
+  "inputs": {
+    "answer": {
+      "type": "string"
+    },
+    "stream": {
+      "type": "`ST`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{iceServers:{urls:string[]}[]}",
+      "metadata": {
+        "examples": [
+          "{iceServers:[{urls:['stun:ice.ioun.net']}]}"
+        ]
+      }
+    },
+    "close": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "offer": {
+      "type": "string"
+    },
+    "port": {
+      "type": "`P`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "description": "Peer to Peer (P2P) Transmitter",
+    "complexity": 4,
+    "tags": [
+      "ioun.it",
+      "peer"
+    ]
+  },
+  "id": "7375aad5-50fd-403c-80ae-471b95088f04",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

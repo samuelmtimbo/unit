@@ -1,0 +1,233 @@
+{
+  "name": "partition",
+  "units": {
+    "loop": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {},
+        "test": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true
+        },
+        "final": {
+          "ignored": false
+        }
+      }
+    },
+    "foreach": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "test": {
+          "ignored": false
+        }
+      }
+    },
+    "looprepeat": {
+      "path": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {},
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true
+        },
+        "current": {}
+      }
+    },
+    "prop": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "value": {}
+      }
+    },
+    "assoc": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "{}"
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "foreach": {
+        "output": {
+          "test": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "1": {
+      "prop": {
+        "input": {
+          "obj": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "2": {
+      "prop": {
+        "input": {
+          "key": true
+        }
+      },
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "assoc": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "3": {
+      "assoc": {
+        "output": {
+          "obj": true
+        }
+      },
+      "loop": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "4": {
+      "assoc": {
+        "input": {
+          "obj": true
+        }
+      },
+      "loop": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "5": {
+      "prop": {
+        "output": {
+          "value": true
+        }
+      },
+      "assoc": {
+        "input": {
+          "value": true
+        }
+      }
+    },
+    "6": {
+      "wait": {
+        "input": {
+          "b": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "7": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "loop": {
+        "input": {
+          "init": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "mergeId": "6"
+        }
+      },
+      "functional": true,
+      "type": "any"
+    },
+    "keys": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "(number|string)[]"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "...",
+    "complexity": 8,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "id": "9daf6128-fd26-11ea-8f82-7374faa69acf",
+  "type": "`U`&`G`",
+  "system": true
+}

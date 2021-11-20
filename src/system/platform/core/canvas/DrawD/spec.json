@@ -1,0 +1,80 @@
+{
+  "name": "draw d",
+  "units": {
+    "draw": {
+      "path": "53018958-b686-11ea-bf53-175a3698c92d",
+      "input": {
+        "canvas": {},
+        "step": {}
+      },
+      "output": {}
+    },
+    "foreach": {
+      "path": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "a": {
+          "ignored": true
+        },
+        "i": {
+          "ignored": true
+        },
+        "test": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {
+    "merge": {
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "draw": {
+        "input": {
+          "step": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a"
+        }
+      },
+      "type": "(number|string)[][]"
+    },
+    "canvas": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "draw",
+          "pinId": "canvas"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "draw step of `d` on `canvas`",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "id": "62bd0895-8889-40b2-8147-1c690809f4eb",
+  "type": "`U`&`G`",
+  "system": true
+}

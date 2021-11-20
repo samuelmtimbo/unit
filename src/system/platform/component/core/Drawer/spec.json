@@ -1,0 +1,34 @@
+{
+  "name": "drawer",
+  "units": {
+    "0": {
+      "path": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "component": {
+        "width": 200,
+        "height": 200
+      }
+    },
+    "1": {
+      "path": "66698a97-15c5-4602-9925-11a1aeb03710"
+    },
+    "2": {
+      "path": "65759894-7d11-11ea-a838-93e14e650d65"
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "inbox",
+    "description": "cabinet drawer",
+    "complexity": 34,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "inputs": {},
+  "outputs": {},
+  "id": "f765df28-7dfe-11ea-8381-072de180f82c",
+  "type": "`U`&`G`",
+  "system": true
+}

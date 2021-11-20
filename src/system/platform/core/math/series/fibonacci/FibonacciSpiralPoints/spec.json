@@ -1,0 +1,679 @@
+{
+  "name": "fibonacci spiral points",
+  "inputs": {
+    "n": {
+      "pin": {
+        "0": {
+          "unitId": "wait1",
+          "pinId": "b"
+        },
+        "elhrwucbm": {
+          "unitId": "wait0",
+          "pinId": "b"
+        },
+        "jtwmrx": {
+          "unitId": "wait",
+          "pinId": "b"
+        },
+        "utabtq": {
+          "unitId": "fibonacciseries",
+          "pinId": "n"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -184,
+            "y": -176
+          },
+          "elhrwucbm": {
+            "x": 272,
+            "y": -68
+          },
+          "jtwmrx": {
+            "x": -293,
+            "y": 67
+          },
+          "utabtq": {
+            "x": 122,
+            "y": 119
+          }
+        }
+      },
+      "type": "any"
+    },
+    "angle": {
+      "pin": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 158,
+            "y": 47
+          }
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "x": {
+      "pin": {
+        "0": {
+          "mergeId": "9"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -45,
+            "y": 109
+          }
+        }
+      },
+      "type": "number"
+    },
+    "y": {
+      "pin": {
+        "0": {
+          "mergeId": "8"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -32,
+            "y": -11
+          }
+        }
+      },
+      "type": "number"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 33,
+            "y": 3
+          }
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "units": {
+    "fibonacciseries": {
+      "path": "0002c278-8c41-4aea-92ca-985a58a32d57",
+      "input": {
+        "n": {
+          "metadata": {
+            "position": {
+              "x": 101,
+              "y": 94
+            }
+          }
+        }
+      },
+      "output": {
+        "current": {},
+        "test": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 55,
+          "y": 63
+        }
+      }
+    },
+    "loopadd": {
+      "path": "93369291-7ce2-4b4c-a414-870b1f3c9b4c",
+      "input": {
+        "init": {},
+        "test": {},
+        "plus": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 151,
+              "y": 3
+            }
+          }
+        }
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 114,
+              "y": -64
+            }
+          }
+        },
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 86,
+              "y": -86
+            }
+          }
+        },
+        "current": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 75,
+          "y": -31
+        }
+      }
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "100",
+          "metadata": {
+            "position": {
+              "x": -258,
+              "y": 102
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -265,
+              "y": 71
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -213,
+          "y": 80
+        }
+      }
+    },
+    "wait0": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0",
+          "metadata": {
+            "position": {
+              "x": 235,
+              "y": -104
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": 244,
+              "y": -72
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 193,
+          "y": -79
+        }
+      }
+    },
+    "wait1": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "100",
+          "metadata": {
+            "position": {
+              "x": -197,
+              "y": -119
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -175,
+              "y": -149
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -146,
+          "y": -112
+        }
+      }
+    },
+    "degtorad": {
+      "path": "3a138358-cc25-45e3-a0ce-bbe54445736f",
+      "input": {
+        "angle": {}
+      },
+      "output": {
+        "rad": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 14,
+          "y": -60
+        }
+      }
+    },
+    "pointincircle": {
+      "path": "af451707-9400-429f-bb3a-2670d4ce8821",
+      "input": {
+        "rad": {},
+        "x": {},
+        "y": {},
+        "r": {}
+      },
+      "output": {
+        "{x,y}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -10,
+          "y": 53
+        }
+      }
+    },
+    "propxy": {
+      "path": "5bf348b6-9776-4b23-9516-d802b6b3c846",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "y": {},
+        "x": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -104,
+          "y": 70
+        }
+      }
+    },
+    "loop": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {},
+        "test": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -111,
+              "y": -40
+            }
+          }
+        },
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -61,
+              "y": -72
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -60,
+          "y": -20
+        }
+      }
+    },
+    "loop0": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {},
+        "test": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -138,
+              "y": 20
+            }
+          }
+        },
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -91,
+              "y": 97
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -79,
+          "y": 39
+        }
+      }
+    },
+    "looprepeat": {
+      "path": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": 129,
+              "y": 32
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 141,
+              "y": 15
+            }
+          }
+        },
+        "current": {},
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 115,
+              "y": 57
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 76,
+          "y": 16
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "fibonacciseries": {
+        "output": {
+          "test": true
+        }
+      },
+      "loopadd": {
+        "input": {
+          "test": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      },
+      "loop0": {
+        "input": {
+          "test": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "1": {
+      "propxy": {
+        "input": {
+          "obj": true
+        }
+      },
+      "pointincircle": {
+        "output": {
+          "{x,y}": true
+        }
+      }
+    },
+    "2": {
+      "pointincircle": {
+        "input": {
+          "r": true
+        }
+      },
+      "fibonacciseries": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "3": {
+      "degtorad": {
+        "output": {
+          "rad": true
+        }
+      },
+      "pointincircle": {
+        "input": {
+          "rad": true
+        }
+      }
+    },
+    "4": {
+      "wait0": {
+        "output": {
+          "a": true
+        }
+      },
+      "loopadd": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "5": {
+      "degtorad": {
+        "input": {
+          "angle": true
+        }
+      },
+      "loopadd": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "6": {
+      "propxy": {
+        "output": {
+          "x": true
+        }
+      },
+      "loop0": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "7": {
+      "propxy": {
+        "output": {
+          "y": true
+        }
+      },
+      "loop": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "8": {
+      "loop": {
+        "output": {
+          "current": true
+        }
+      },
+      "pointincircle": {
+        "input": {
+          "y": true
+        }
+      }
+    },
+    "9": {
+      "loop0": {
+        "output": {
+          "current": true
+        }
+      },
+      "pointincircle": {
+        "input": {
+          "x": true
+        }
+      }
+    },
+    "10": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "loop0": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "11": {
+      "wait1": {
+        "output": {
+          "a": true
+        }
+      },
+      "loop": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "lrcaiyzp": {
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      },
+      "loopadd": {
+        "input": {
+          "plus": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "complexity": 30,
+    "tags": [
+      "platform",
+      "core",
+      "math",
+      "series",
+      "fibonacci"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": 8,
+          "y": 13
+        },
+        "1": {
+          "x": -56,
+          "y": 90
+        },
+        "2": {
+          "x": 21,
+          "y": 92
+        },
+        "3": {
+          "x": 1,
+          "y": -9
+        },
+        "4": {
+          "x": 136,
+          "y": -60
+        },
+        "5": {
+          "x": 59,
+          "y": -75
+        },
+        "6": {
+          "x": -135,
+          "y": 41
+        },
+        "7": {
+          "x": -104,
+          "y": 14
+        },
+        "8": {
+          "x": -38,
+          "y": 16
+        },
+        "9": {
+          "x": -50,
+          "y": 69
+        },
+        "10": {
+          "x": -152,
+          "y": 64
+        },
+        "11": {
+          "x": -103,
+          "y": -71
+        },
+        "lrcaiyzp": {
+          "x": 119,
+          "y": -10
+        }
+      }
+    }
+  },
+  "id": "be2b395f-12ad-4418-85c3-84e4d945df68",
+  "type": "`U`&`G`",
+  "system": true
+}

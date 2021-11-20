@@ -1,0 +1,30 @@
+{
+  "name": "evaluate",
+  "inputs": {
+    "exp": {
+      "type": "string"
+    },
+    "obj": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "value": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "omega",
+    "description": "evaluate mathematical expression",
+    "complexity": 4,
+    "tags": [
+      "f",
+      "math",
+      "expression"
+    ]
+  },
+  "id": "cca92e87-7605-4363-a20f-8dfb3537ba1c",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

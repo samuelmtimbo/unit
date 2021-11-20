@@ -1,0 +1,323 @@
+{
+  "name": "fibonacci series",
+  "inputs": {
+    "n": {
+      "pin": {
+        "0": {
+          "mergeId": "ragdaf"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -112,
+            "y": 2
+          }
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "current": {
+      "pin": {
+        "0": {
+          "mergeId": "jqwwaapt"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 130,
+            "y": -19
+          }
+        }
+      },
+      "type": "number"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "mergeId": "phsezeim"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 21,
+            "y": -24
+          }
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "units": {
+    "loop": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {},
+        "test": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 63,
+              "y": 74
+            }
+          }
+        },
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 108,
+              "y": 48
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 56,
+          "y": 24
+        }
+      }
+    },
+    "loopadd": {
+      "path": "93369291-7ce2-4b4c-a414-870b1f3c9b4c",
+      "input": {
+        "init": {},
+        "test": {},
+        "plus": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 62,
+              "y": -72
+            }
+          }
+        },
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 108,
+              "y": -46
+            }
+          }
+        },
+        "current": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 55,
+          "y": -22
+        }
+      }
+    },
+    "steps": {
+      "path": "85b8586a-0295-44fd-b3d2-24a048552700",
+      "input": {
+        "n": {}
+      },
+      "output": {
+        "test": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -33,
+          "y": 2
+        }
+      }
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0",
+          "metadata": {
+            "position": {
+              "x": -106,
+              "y": 68
+            }
+          }
+        },
+        "b": {
+          "constant": false
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -58,
+          "y": 49
+        }
+      }
+    },
+    "wait0": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "1",
+          "metadata": {
+            "position": {
+              "x": -108,
+              "y": -63
+            }
+          }
+        },
+        "b": {
+          "constant": false
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -60,
+          "y": -45
+        }
+      }
+    }
+  },
+  "merges": {
+    "phsezeim": {
+      "steps": {
+        "output": {
+          "test": true
+        }
+      },
+      "loopadd": {
+        "input": {
+          "test": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "plnjdre": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "loop": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "ragdaf": {
+      "wait": {
+        "input": {
+          "b": true
+        }
+      },
+      "steps": {
+        "input": {
+          "n": true
+        }
+      },
+      "wait0": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "crhjg": {
+      "wait0": {
+        "output": {
+          "a": true
+        }
+      },
+      "loopadd": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "jqwwaapt": {
+      "loop": {
+        "output": {
+          "current": true
+        }
+      },
+      "loopadd": {
+        "input": {
+          "plus": true
+        }
+      }
+    },
+    "exbmfq": {
+      "loop": {
+        "input": {
+          "next": true
+        }
+      },
+      "loopadd": {
+        "output": {
+          "current": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "complexity": 12,
+    "position": {
+      "merge": {
+        "phsezeim": {
+          "x": 16,
+          "y": 2
+        },
+        "plnjdre": {
+          "x": 1,
+          "y": 47
+        },
+        "ragdaf": {
+          "x": -81,
+          "y": 2
+        },
+        "crhjg": {
+          "x": -1,
+          "y": -44
+        },
+        "jqwwaapt": {
+          "x": 100,
+          "y": -9
+        },
+        "exbmfq": {
+          "x": 100,
+          "y": 12
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "core",
+      "math",
+      "series",
+      "fibonacci"
+    ]
+  },
+  "id": "0002c278-8c41-4aea-92ca-985a58a32d57",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "cloud vm",
+  "private": true,
+  "inputs": {
+    "src": {
+      "type": "unit",
+      "ref": true
+    },
+    "on": {
+      "type": "boolean"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "cloud",
+    "description": "expose a public URL",
+    "complexity": 3,
+    "tags": [
+      "ioun.it",
+      "cloud"
+    ]
+  },
+  "id": "bb857a24-e72e-4952-99f9-0a2b6ba8bfcf",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

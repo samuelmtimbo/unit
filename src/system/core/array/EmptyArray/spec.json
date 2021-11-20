@@ -1,0 +1,49 @@
+{
+  "name": "empty array",
+  "units": {
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "[]"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "brackets",
+    "description": "output an empty array",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "[]": {
+      "type": "[]",
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "a"
+        }
+      }
+    }
+  },
+  "id": "b226083c-2797-11eb-a546-c350370e09cb",
+  "type": "`U`&`G`",
+  "system": true
+}

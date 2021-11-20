@@ -1,0 +1,43 @@
+{
+  "name": "style center",
+  "units": {
+    "identity": {
+      "path": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',width:'auto',height:'auto'}"
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {},
+  "outputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "identity",
+          "pinId": "a"
+        }
+      },
+      "type": "{position:string,top:string,left:string,transform:string}"
+    }
+  },
+  "metadata": {
+    "icon": "repeat-1",
+    "description": "style to centralize element on container",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "style"
+    ]
+  },
+  "id": "de473a6a-a0f3-11ea-bc93-ff2e35342869",
+  "type": "`U`&`G`",
+  "system": true
+}

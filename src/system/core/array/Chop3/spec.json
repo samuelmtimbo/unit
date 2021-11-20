@@ -1,0 +1,107 @@
+{
+  "name": "chop 3",
+  "units": {
+    "at": {
+      "path": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "i": {
+          "constant": true,
+          "data": "2"
+        }
+      }
+    },
+    "at0": {
+      "path": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "i": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "at1": {
+      "path": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "i": {
+          "constant": true,
+          "data": "1"
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "at": {
+        "input": {
+          "a": true
+        }
+      },
+      "at0": {
+        "input": {
+          "a": true
+        }
+      },
+      "at1": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "split-three",
+    "description": "get array `a` first 3 values",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "<A>[]",
+      "metadata": {
+        "examples": [
+          "[1,2,3]"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "0": {
+      "pin": {
+        "0": {
+          "unitId": "at0",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    },
+    "1": {
+      "pin": {
+        "0": {
+          "unitId": "at1",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    },
+    "2": {
+      "pin": {
+        "0": {
+          "unitId": "at",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "id": "697871f5-6515-4426-a011-88d0d6aedcc3",
+  "type": "`U`&`G`",
+  "system": true
+}

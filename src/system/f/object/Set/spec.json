@@ -1,0 +1,36 @@
+{
+  "name": "set",
+  "inputs": {
+    "obj": {
+      "type": "object",
+      "_type": "O"
+    },
+    "key": {
+      "type": "number|string",
+      "_type": "K"
+    },
+    "value": {
+      "type": "any",
+      "_type": "V"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "type": "object",
+      "_type": "{...O,[K]:V}"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "set value at given key",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "object"
+    ]
+  },
+  "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

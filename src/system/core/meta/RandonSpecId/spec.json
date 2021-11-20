@@ -1,0 +1,83 @@
+{
+  "name": "random spec id",
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "specids",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "id": {
+      "pin": {
+        "0": {
+          "unitId": "randominarray",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "units": {
+    "specids": {
+      "path": "4f8c249e-9bbf-11eb-b3ff-e3ecdde1acd1",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": 0
+        }
+      }
+    },
+    "randominarray": {
+      "path": "5b99b930-92c9-4fbe-be37-8c72a8e1c70b",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[i]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 50,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "randominarray": {
+        "input": {
+          "a": true
+        }
+      },
+      "specids": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "meta"
+    ]
+  },
+  "id": "95735a9e-9bc0-11eb-90ec-3bb9082e8fe9",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,27 @@
+{
+  "name": "resize",
+  "inputs": {
+    "size": {
+      "type": "{width:number,height:number}"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "expand",
+    "description": "all corner resize handlers",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "6b18c608-7b5a-11ea-bb6e-2ff12a5cc3f3",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "type": "`U`&`C`",
+  "system": true
+}

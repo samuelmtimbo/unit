@@ -1,0 +1,26 @@
+{
+  "name": "identity",
+  "inputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "unit",
+    "description": "output `a`",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "control"
+    ]
+  },
+  "id": "260d774e-bc89-4027-aa92-cb1985fb312b",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,0 +1,59 @@
+{
+  "name": "shuffle range array",
+  "units": {
+    "rangearray": {
+      "path": "a0b5c3d9-7ee8-4c41-a299-1d32e707c673"
+    },
+    "shuffle": {
+      "path": "6d09436e-2af6-4861-b542-11601faa1e70"
+    }
+  },
+  "merges": {
+    "diqlm": {
+      "rangearray": {
+        "output": {
+          "a": true
+        }
+      },
+      "shuffle": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "rgvjp": {
+      "pin": {
+        "0": {
+          "unitId": "rangearray",
+          "pinId": "n"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "cbcol": {
+      "pin": {
+        "0": {
+          "unitId": "shuffle",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "generate a shuffled range array",
+    "complexity": 10,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "8f466fbb-e978-486e-8830-ec5ad9761c41",
+  "type": "`U`&`G`",
+  "system": true
+}

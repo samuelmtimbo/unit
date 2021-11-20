@@ -1,0 +1,98 @@
+{
+  "name": "throttle",
+  "units": {
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    },
+    "memory": {
+      "path": "49e11645-c25d-4bf7-923d-56817f67b686"
+    },
+    "memory0": {
+      "path": "49e11645-c25d-4bf7-923d-56817f67b686"
+    },
+    "cgzfvsivu": {
+      "path": "bf8dbe66-5dc6-11ea-8283-971f327da584"
+    }
+  },
+  "merges": {
+    "0": {
+      "wait": {
+        "input": {
+          "b": true
+        }
+      },
+      "cgzfvsivu": {
+        "output": {
+          "ms": true
+        }
+      }
+    },
+    "1": {
+      "memory": {
+        "output": {
+          "a": true
+        }
+      },
+      "wait": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "memory0": {
+        "input": {
+          "a": true
+        }
+      },
+      "wait": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "alarm-clock",
+    "description": "no description",
+    "complexity": 8,
+    "tags": [
+      "core",
+      "time"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "memory",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "ms": {
+      "pin": {
+        "0": {
+          "unitId": "cgzfvsivu",
+          "pinId": "ms"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "memory0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "id": "2c3c4a2c-7300-4050-a017-ba25e42497b5",
+  "type": "`U`&`G`",
+  "system": true
+}

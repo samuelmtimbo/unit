@@ -1,0 +1,29 @@
+{
+  "name": "and",
+  "inputs": {
+    "a": {
+      "type": "boolean"
+    },
+    "b": {
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "a and b": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "question",
+    "description": "AND logical operator",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "logic"
+    ]
+  },
+  "id": "407640f7-f1c3-4297-a5ce-baff357a6d31",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

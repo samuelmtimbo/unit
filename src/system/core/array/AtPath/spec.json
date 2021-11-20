@@ -1,0 +1,169 @@
+{
+  "name": "at path",
+  "units": {
+    "at": {
+      "path": "79f01345-4ed7-47e2-8882-fa3bd282c98a"
+    },
+    "loop0": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "output": {
+        "final": {
+          "ignored": true
+        }
+      }
+    },
+    "behead": {
+      "path": "e9831075-2e62-43a4-84af-0653f7e707a9"
+    },
+    "loop1": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "output": {
+        "local": {
+          "ignored": true
+        },
+        "final": {
+          "ignored": false
+        }
+      }
+    },
+    "isnotempty": {
+      "path": "b74c6c04-8fe8-4009-9f61-b22f7a404342"
+    }
+  },
+  "merges": {
+    "0": {
+      "loop0": {
+        "input": {
+          "test": true
+        }
+      },
+      "isnotempty": {
+        "output": {
+          "!empty": true
+        }
+      },
+      "loop1": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "1": {
+      "loop0": {
+        "output": {
+          "local": true
+        }
+      },
+      "isnotempty": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "loop0": {
+        "output": {
+          "current": true
+        }
+      },
+      "behead": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "phpjterjm": {
+      "loop0": {
+        "input": {
+          "next": true
+        }
+      },
+      "behead": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "mage": {
+      "behead": {
+        "output": {
+          "head": true
+        }
+      },
+      "at": {
+        "input": {
+          "i": true
+        }
+      }
+    },
+    "tursgjdqc": {
+      "at": {
+        "input": {
+          "a": true
+        }
+      },
+      "loop1": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "sdhxizrr": {
+      "at": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "loop1": {
+        "input": {
+          "next": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "get value of `a` at `path`",
+    "complexity": 19,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "loop1",
+          "pinId": "init"
+        }
+      },
+      "type": "<A>[][][]"
+    },
+    "path": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "loop0",
+          "pinId": "init"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "outputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "loop1",
+          "pinId": "final"
+        }
+      },
+      "type": "<A>[][][]"
+    }
+  },
+  "id": "c4de657d-0af7-45a0-b5a9-64127d78fb18",
+  "type": "`U`&`G`",
+  "system": true
+}

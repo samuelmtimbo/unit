@@ -1,0 +1,186 @@
+{
+  "name": "shuffle to rec",
+  "units": {
+    "greaterthan": {
+      "path": "1651ce6b-4db0-4787-9edf-f770b72d253c",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    },
+    "randomnaturallte": {
+      "path": "587f9a76-de5f-4dc0-b395-6e5b0091d12e"
+    },
+    "if": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "swap": {
+      "path": "706a0082-1dce-43d5-b629-9b6f8189e45d"
+    },
+    "decrement": {
+      "path": "4d67d2e4-8b06-4e15-8243-99be8e4be5d3"
+    },
+    "shuffletorec": {
+      "path": "19dc0a16-1d5c-4bbe-a3d1-c944728cdac5"
+    },
+    "ifelse": {
+      "path": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
+    }
+  },
+  "merges": {
+    "vebpsnht": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "greaterthan": {
+        "output": {
+          "a > b": true
+        }
+      },
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "ujkcwwwkw": {
+      "if": {
+        "input": {
+          "a": true
+        }
+      },
+      "greaterthan": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "gxoxrxtsd": {
+      "if": {
+        "output": {
+          "a if b": true
+        }
+      },
+      "randomnaturallte": {
+        "input": {
+          "max": true
+        }
+      },
+      "decrement": {
+        "input": {
+          "a": true
+        }
+      },
+      "swap": {
+        "input": {
+          "i": true
+        }
+      }
+    },
+    "yekldnxn": {
+      "randomnaturallte": {
+        "output": {
+          "i": true
+        }
+      },
+      "swap": {
+        "input": {
+          "j": true
+        }
+      }
+    },
+    "ecaqlrghp": {
+      "swap": {
+        "input": {
+          "a": true
+        }
+      },
+      "ifelse": {
+        "output": {
+          "if": true
+        }
+      }
+    },
+    "ujwipsfeu": {
+      "swap": {
+        "output": {
+          "a": true
+        }
+      },
+      "shuffletorec": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "zmgrkr": {
+      "decrement": {
+        "output": {
+          "a - 1": true
+        }
+      },
+      "shuffletorec": {
+        "input": {
+          "to": true
+        }
+      }
+    },
+    "mqe": {
+      "shuffletorec": {
+        "output": {
+          "a": true
+        }
+      },
+      "ifelse": {
+        "output": {
+          "else": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "randomly shuffle `a` up to index `i`",
+    "complexity": 9,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "to": {
+      "pin": {
+        "0": {
+          "mergeId": "ujkcwwwkw"
+        }
+      },
+      "type": "number"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "mqe"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "19dc0a16-1d5c-4bbe-a3d1-c944728cdac5",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,83 @@
+{
+  "name": "max length",
+  "units": {
+    "max": {
+      "path": "e857c770-5a98-4f8d-a0e1-b6cb126071ed"
+    },
+    "length": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    },
+    "length0": {
+      "path": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
+    }
+  },
+  "merges": {
+    "0": {
+      "max": {
+        "input": {
+          "a": true
+        }
+      },
+      "length": {
+        "output": {
+          "length": true
+        }
+      }
+    },
+    "1": {
+      "max": {
+        "input": {
+          "b": true
+        }
+      },
+      "length0": {
+        "output": {
+          "length": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "arrow-up",
+    "description": "the biggest between size of `a` and size of `b`",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "length0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "length",
+          "pinId": "a"
+        }
+      },
+      "type": "<B>[]"
+    }
+  },
+  "outputs": {
+    "max": {
+      "pin": {
+        "0": {
+          "unitId": "max",
+          "pinId": "max"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "85343b1d-93db-4fc0-8fcf-655739dbd494",
+  "type": "`U`&`G`",
+  "system": true
+}

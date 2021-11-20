@@ -1,0 +1,253 @@
+{
+  "name": "stroke pie",
+  "inputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "beginpath",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -196,
+            "y": -1
+          }
+        }
+      }
+    },
+    "rad": {
+      "pin": {
+        "0": {
+          "unitId": "addpie",
+          "pinId": "rad"
+        }
+      },
+      "type": "number",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -49,
+            "y": 60
+          }
+        }
+      }
+    },
+    "x": {
+      "pin": {
+        "0": {
+          "unitId": "addpie",
+          "pinId": "x"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -50,
+            "y": -61
+          }
+        }
+      },
+      "type": "number"
+    },
+    "y": {
+      "pin": {
+        "0": {
+          "unitId": "addpie",
+          "pinId": "y"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 50,
+            "y": -61
+          }
+        }
+      },
+      "type": "number"
+    },
+    "r": {
+      "pin": {
+        "0": {
+          "unitId": "addpie",
+          "pinId": "r"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 47,
+            "y": 61
+          }
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "stroke",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 195,
+            "y": 0
+          }
+        }
+      }
+    }
+  },
+  "units": {
+    "beginpath": {
+      "path": "81c0f469-ab88-4bc8-89d5-98d291b1d8b2",
+      "input": {
+        "d": {
+          "metadata": {
+            "position": {
+              "x": -168,
+              "y": -1
+            }
+          }
+        }
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -118,
+          "y": -1
+        }
+      }
+    },
+    "stroke": {
+      "path": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99",
+      "input": {
+        "d": {}
+      },
+      "output": {
+        "d": {
+          "metadata": {
+            "position": {
+              "x": 167,
+              "y": 0
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 117,
+          "y": 0
+        }
+      }
+    },
+    "addpie": {
+      "path": "22db6e29-8884-43ea-8561-5dc145c192d6",
+      "input": {
+        "d": {},
+        "rad": {
+          "metadata": {
+            "position": {
+              "x": -37,
+              "y": 31
+            }
+          }
+        },
+        "x": {
+          "metadata": {
+            "position": {
+              "x": -37,
+              "y": -33
+            }
+          }
+        },
+        "y": {
+          "metadata": {
+            "position": {
+              "x": 36,
+              "y": -33
+            }
+          }
+        },
+        "r": {
+          "metadata": {
+            "position": {
+              "x": 36,
+              "y": 32
+            }
+          }
+        }
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -1,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {
+    "jhebdjjq": {
+      "stroke": {
+        "input": {
+          "d": true
+        }
+      },
+      "addpie": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "rqwbtduz": {
+      "addpie": {
+        "input": {
+          "d": true
+        }
+      },
+      "beginpath": {
+        "output": {
+          "d": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "draw a pie",
+    "complexity": 5,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ],
+    "position": {
+      "merge": {
+        "jhebdjjq": {
+          "x": 62,
+          "y": 0
+        },
+        "rqwbtduz": {
+          "x": -63,
+          "y": -1
+        }
+      }
+    }
+  },
+  "id": "bdfa5341-1359-49a3-b391-cbec3bc73143",
+  "type": "`U`&`G`",
+  "system": true
+}

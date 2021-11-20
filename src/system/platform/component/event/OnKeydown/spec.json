@@ -1,0 +1,53 @@
+{
+  "name": "on keydown",
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'keydown'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "{key:string,keyCode:number,ctrlKey:boolean,shiftKey:boolean,altKey:boolean,metaKey:boolean,repeat:boolean}",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` keydown event",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "02dec0ae-a3b0-11eb-ab4e-afd7066a6476",
+  "type": "`U`&`G`",
+  "system": true
+}

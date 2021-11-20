@@ -1,0 +1,102 @@
+{
+  "name": "switch",
+  "units": {
+    "trueorfalse": {
+      "path": "d6d14fd8-4d8f-4d1c-94ac-f42b92f075e2"
+    },
+    "lfkoklajr": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    },
+    "tjjny": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc"
+    }
+  },
+  "merges": {
+    "merge0": {
+      "trueorfalse": {
+        "output": {
+          "a = true": true
+        }
+      },
+      "tjjny": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "merge1": {
+      "trueorfalse": {
+        "output": {
+          "a = false": true
+        }
+      },
+      "lfkoklajr": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "merge2": {
+      "lfkoklajr": {
+        "output": {
+          "a": true
+        }
+      },
+      "tjjny": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "trueorfalse",
+          "pinId": "a"
+        }
+      },
+      "type": "boolean"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "lfkoklajr",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "tjjny",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "merge2"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "map-signs",
+    "complexity": 9,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "c37c7c14-293e-414c-8a9c-01a40186c1e5",
+  "type": "`U`&`G`",
+  "system": true
+}

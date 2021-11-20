@@ -1,0 +1,27 @@
+{
+  "name": "mail service",
+  "inputs": {
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "network",
+    "description": "send arbitrary text to another user",
+    "complexity": 7,
+    "tags": [
+      "ioun.it",
+      "component",
+      "service"
+    ]
+  },
+  "id": "9b6cc23b-8aa8-4147-bb1a-b5b2158e5f7b",
+  "base": true,
+  "component": {
+    "defaultWidth": 300,
+    "defaultHeight": 360
+  },
+  "type": "`U`&`C`",
+  "system": true
+}

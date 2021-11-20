@@ -1,0 +1,167 @@
+{
+  "name": "n string builder from",
+  "units": {
+    "loop": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {},
+      "output": {
+        "final": {
+          "ignored": false
+        }
+      }
+    },
+    "concat": {
+      "path": "779e538c-b0b9-477e-a986-30ee3abe6fe6"
+    },
+    "length": {
+      "path": "1b8ce255-0bc7-4656-bafa-3dc86af44126"
+    },
+    "lessthan": {
+      "path": "82c3cf2a-0855-4c6d-a4c4-807b0ce1fd35"
+    },
+    "looprepeat": {
+      "path": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "output": {
+        "local": {
+          "ignored": false
+        },
+        "current": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {
+    "oseftkv": {
+      "loop": {
+        "output": {
+          "current": true
+        }
+      },
+      "concat": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "rdnhyxjs": {
+      "loop": {
+        "output": {
+          "local": true
+        }
+      },
+      "length": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "lknmsvbd": {
+      "loop": {
+        "input": {
+          "test": true
+        }
+      },
+      "lessthan": {
+        "output": {
+          "a < b": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "agdxevb": {
+      "loop": {
+        "input": {
+          "next": true
+        }
+      },
+      "concat": {
+        "output": {
+          "ab": true
+        }
+      }
+    },
+    "lgvnshoa": {
+      "lessthan": {
+        "input": {
+          "a": true
+        }
+      },
+      "length": {
+        "output": {
+          "length": true
+        }
+      }
+    },
+    "ocbpwfqdt": {
+      "lessthan": {
+        "input": {
+          "b": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "local": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "string",
+    "description": "build a list of size n",
+    "complexity": 7,
+    "tags": [
+      "core",
+      "string"
+    ]
+  },
+  "inputs": {
+    "from": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "init"
+        }
+      },
+      "type": "string"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "b"
+        }
+      },
+      "type": "string"
+    },
+    "n": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "str": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "9cab124a-b40d-4614-b032-20b0209e90e3",
+  "type": "`U`&`G`",
+  "system": true
+}

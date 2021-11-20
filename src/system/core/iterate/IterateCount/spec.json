@@ -1,0 +1,53 @@
+{
+  "name": "iterate count",
+  "units": {
+    "iteratecountfrom": {
+      "path": "9fa0c25b-0675-48dc-80e7-eab1829656bd",
+      "input": {
+        "any": {},
+        "init": {
+          "constant": true,
+          "data": "0"
+        }
+      },
+      "output": {
+        "current": {}
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "sort-desc",
+    "description": "iteratively increment `count` starting from 0",
+    "complexity": 9,
+    "tags": [
+      "core",
+      "iterate"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "iteratecountfrom",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "count": {
+      "pin": {
+        "0": {
+          "unitId": "iteratecountfrom",
+          "pinId": "current"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "fb5bb9ea-bf24-4150-b12d-bc4873a153a2",
+  "type": "`U`&`G`",
+  "system": true
+}

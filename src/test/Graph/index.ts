@@ -1,0 +1,7 @@
+import './add'
+import './catch'
+import './compose'
+import './decompose'
+import './identity'
+import './merge'
+import './throw'

@@ -1,0 +1,50 @@
+{
+  "name": "tag transform",
+  "units": {
+    "tag": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'transform'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{transform: `transform`}",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "transform": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "{transform}": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "e9758d91-5270-4e11-b1c4-969092abbfe7",
+  "type": "`U`&`G`",
+  "system": true
+}

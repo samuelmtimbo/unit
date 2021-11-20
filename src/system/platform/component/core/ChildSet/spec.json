@@ -1,0 +1,178 @@
+{
+  "name": "child set",
+  "type": "`U`&`G`",
+  "inputs": {
+    "parent": {
+      "pin": {
+        "0": {
+          "unitId": "child",
+          "pinId": "parent"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -97,
+            "y": 39
+          }
+        }
+      },
+      "type": "<A>"
+    },
+    "at": {
+      "pin": {
+        "0": {
+          "unitId": "child",
+          "pinId": "at"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -102,
+            "y": -31
+          }
+        }
+      },
+      "type": "number",
+      "ref": false
+    },
+    "name": {
+      "pin": {
+        "0": {
+          "unitId": "writeinput",
+          "pinId": "name"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 96,
+            "y": 39
+          }
+        }
+      },
+      "type": "string",
+      "ref": false
+    },
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "writeinput",
+          "pinId": "data"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 101,
+            "y": -31
+          }
+        }
+      },
+      "type": "any",
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "units": {
+    "child": {
+      "path": "59afce80-30e7-4322-84e6-955767bb5106",
+      "input": {
+        "parent": {
+          "metadata": {
+            "position": {
+              "x": -77,
+              "y": 19
+            }
+          }
+        },
+        "at": {
+          "metadata": {
+            "position": {
+              "x": -79,
+              "y": -16
+            }
+          }
+        },
+        "done": {}
+      },
+      "output": {
+        "child": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -53,
+          "y": -1
+        }
+      }
+    },
+    "writeinput": {
+      "path": "04953fed-157a-479d-91ac-005174b9b85e",
+      "input": {
+        "name": {},
+        "data": {},
+        "unit": {}
+      },
+      "output": {
+        "data": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "writeinput": {
+        "output": {
+          "data": true
+        }
+      },
+      "child": {
+        "input": {
+          "done": true
+        }
+      }
+    },
+    "1": {
+      "writeinput": {
+        "input": {
+          "unit": true
+        }
+      },
+      "child": {
+        "output": {
+          "child": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "triangle",
+    "description": "set `element` child `at` `name` to `data`",
+    "complexity": 13,
+    "position": {
+      "merge": {
+        "0": {
+          "x": -1,
+          "y": -26
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "2633ed12-309e-40fe-910d-44106d917e96",
+  "system": true
+}

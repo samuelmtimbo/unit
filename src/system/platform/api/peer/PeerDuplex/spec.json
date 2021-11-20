@@ -1,0 +1,332 @@
+{
+  "name": "peer duplex",
+  "inputs": {
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "send",
+          "pinId": "data"
+        }
+      },
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -188,
+            "y": -25
+          }
+        }
+      }
+    },
+    "offer": {
+      "pin": {
+        "0": {
+          "unitId": "receiver",
+          "pinId": "offer"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 84,
+            "y": -91
+          }
+        }
+      }
+    },
+    "answer": {
+      "pin": {
+        "0": {
+          "unitId": "transmitter",
+          "pinId": "answer"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -81,
+            "y": 87
+          }
+        }
+      }
+    },
+    "stream": {
+      "pin": {
+        "0": {
+          "unitId": "transmitter",
+          "pinId": "stream"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -126,
+            "y": 50
+          }
+        }
+      }
+    },
+    "close": {
+      "pin": {
+        "0": {
+          "mergeId": "hjpqrffi"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -17,
+            "y": -27
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "ondata",
+          "pinId": "data"
+        }
+      },
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 196,
+            "y": -39
+          }
+        }
+      }
+    },
+    "stream": {
+      "pin": {
+        "0": {
+          "unitId": "receiver",
+          "pinId": "stream"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 112,
+            "y": 45
+          }
+        }
+      }
+    },
+    "answer": {
+      "pin": {
+        "0": {
+          "unitId": "receiver",
+          "pinId": "answer"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 6,
+            "y": -83
+          }
+        }
+      }
+    },
+    "offer": {
+      "pin": {
+        "0": {
+          "unitId": "transmitter",
+          "pinId": "offer"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -8,
+            "y": 73
+          }
+        }
+      }
+    }
+  },
+  "units": {
+    "ondata": {
+      "path": "8809ad1e-91bf-11eb-a3ad-dbb373958321",
+      "input": {
+        "unit": {}
+      },
+      "output": {
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 169,
+              "y": -36
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 119,
+          "y": -34
+        }
+      }
+    },
+    "send": {
+      "path": "b296242e-8b82-11eb-ac6c-0f8d3f9948d0",
+      "input": {
+        "unit": {},
+        "data": {
+          "metadata": {
+            "position": {
+              "x": -163,
+              "y": -14
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -115,
+          "y": -6
+        }
+      }
+    },
+    "transmitter": {
+      "path": "7375aad5-50fd-403c-80ae-471b95088f04",
+      "input": {
+        "answer": {
+          "metadata": {
+            "position": {
+              "x": -78,
+              "y": 59
+            }
+          }
+        },
+        "stream": {
+          "metadata": {
+            "position": {
+              "x": -103,
+              "y": 32
+            }
+          }
+        },
+        "close": {}
+      },
+      "output": {
+        "offer": {
+          "metadata": {
+            "position": {
+              "x": -20,
+              "y": 47
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -56,
+          "y": 18
+        }
+      }
+    },
+    "receiver": {
+      "path": "f079a38e-fb4f-496e-8e5f-d5e03a590cda",
+      "input": {
+        "offer": {
+          "metadata": {
+            "position": {
+              "x": 81,
+              "y": -62
+            }
+          }
+        },
+        "close": {}
+      },
+      "output": {
+        "stream": {
+          "metadata": {
+            "position": {
+              "x": 97,
+              "y": 11
+            }
+          }
+        },
+        "answer": {
+          "metadata": {
+            "position": {
+              "x": 16,
+              "y": -56
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 53,
+          "y": -26
+        }
+      }
+    }
+  },
+  "merges": {
+    "nwplepif": {
+      "send": {
+        "input": {
+          "unit": true
+        }
+      },
+      "transmitter": {
+        "output": {
+          "_self": true
+        }
+      }
+    },
+    "ykrwbrg": {
+      "ondata": {
+        "input": {
+          "unit": true
+        }
+      },
+      "receiver": {
+        "output": {
+          "_self": true
+        }
+      }
+    },
+    "hjpqrffi": {
+      "transmitter": {
+        "input": {
+          "close": true
+        }
+      },
+      "receiver": {
+        "input": {
+          "close": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "link",
+    "complexity": 32,
+    "tags": [
+      "ioun.it",
+      "broadcast"
+    ],
+    "position": {
+      "merge": {
+        "hjpqrffi": {
+          "x": -3,
+          "y": -4
+        }
+      }
+    }
+  },
+  "id": "720febf0-cec3-4c21-8e98-be64246122c5",
+  "system": true
+}

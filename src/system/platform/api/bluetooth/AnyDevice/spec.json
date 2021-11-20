@@ -1,0 +1,64 @@
+{
+  "name": "any device",
+  "units": {
+    "device": {
+      "path": "4ad5bd0e-e11e-11ea-ad4c-83da30628333",
+      "input": {
+        "opt": {}
+      },
+      "output": {}
+    },
+    "wait": {
+      "path": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "{acceptAllDevices:true}"
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      }
+    }
+  },
+  "merges": {
+    "teucomiq": {
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "device": {
+        "input": {
+          "opt": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "bluetooth",
+    "description": "select one of all available bluetooth devices",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "api",
+      "bluetooth"
+    ]
+  },
+  "id": "a08ce854-e13b-11ea-b260-e76cc1643e97",
+  "type": "`U`&`G`",
+  "system": true
+}

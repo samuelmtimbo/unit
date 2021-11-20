@@ -1,0 +1,49 @@
+{
+  "name": "interval",
+  "units": {
+    "timer": {
+      "path": "95076599-0f2f-46b6-a9e0-b4cbfdb8dcc9",
+      "input": {
+        "ms": {
+          "constant": true
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "timer",
+    "description": "output `ms` every once `ms` milliseconds",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "time"
+    ]
+  },
+  "inputs": {
+    "ms": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "timer",
+          "pinId": "ms"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "ms": {
+      "pin": {
+        "0": {
+          "unitId": "timer",
+          "pinId": "ms"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "bf8dbe66-5dc6-11ea-8283-971f327da584",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,60 @@
+{
+  "name": "rec priority merge",
+  "units": {
+    "prioritymergefrom": {
+      "path": "728bcf22-c31e-4c1d-a5db-1238bd2dcfbf",
+      "input": {
+        "from": {
+          "constant": true,
+          "data": "[]"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "brackets",
+    "description": "no description",
+    "complexity": 13,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "prioritymergefrom",
+          "pinId": "a"
+        }
+      },
+      "type": "number[]"
+    },
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "prioritymergefrom",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "ab": {
+      "pin": {
+        "0": {
+          "unitId": "prioritymergefrom",
+          "pinId": "ab"
+        }
+      },
+      "type": "number[]"
+    }
+  },
+  "id": "0ae54ac0-d494-4c8d-91ec-52c0c7827287",
+  "type": "`U`&`G`",
+  "system": true
+}

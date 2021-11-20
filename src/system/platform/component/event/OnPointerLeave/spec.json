@@ -1,0 +1,53 @@
+{
+  "name": "on pointer leave",
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'pointerleave'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` pointerleave event",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "c7dba94e-af78-11ea-b7d7-47e14ca215b5",
+  "type": "`U`&`G`",
+  "system": true
+}

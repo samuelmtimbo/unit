@@ -1,0 +1,33 @@
+{
+  "name": "peer receiver",
+  "inputs": {
+    "offer": {
+      "type": "string"
+    },
+    "close": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "stream": {
+      "type": "`ST`",
+      "ref": true
+    },
+    "answer": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "description": "Peer to Peer (P2P) Receiver",
+    "complexity": 20,
+    "tags": [
+      "ioun.it",
+      "peer"
+    ]
+  },
+  "id": "f079a38e-fb4f-496e-8e5f-d5e03a590cda",
+  "base": true,
+  "type": "`U`&``",
+  "system": true
+}

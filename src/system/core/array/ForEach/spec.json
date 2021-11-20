@@ -1,0 +1,90 @@
+{
+  "name": "for each",
+  "units": {
+    "foreachfrom": {
+      "path": "f538e9b0-f172-4c9f-be23-86c715750b76",
+      "input": {
+        "from": {
+          "constant": true,
+          "data": "0"
+        }
+      },
+      "output": {
+        "a": {
+          "ignored": false
+        },
+        "i": {
+          "ignored": false
+        },
+        "test": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "foreachfrom",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a[i]": {
+      "pin": {
+        "0": {
+          "unitId": "foreachfrom",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "foreachfrom",
+          "pinId": "a"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "<A>[]"
+    },
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "foreachfrom",
+          "pinId": "i"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "number"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "foreachfrom",
+          "pinId": "test"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "array",
+    "description": "output every element of array `a`",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+  "type": "`U`&`G`",
+  "system": true
+}

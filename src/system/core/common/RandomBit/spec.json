@@ -1,0 +1,72 @@
+{
+  "name": "random bit",
+  "units": {
+    "pick": {
+      "path": "396497e4-f8e7-4573-95c9-a4f186a5cd05",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0"
+        },
+        "b": {
+          "constant": true,
+          "data": "1"
+        }
+      }
+    },
+    "50chance": {
+      "path": "6c3c8c8f-e383-46bc-ac0c-a294e65040bb",
+      "input": {
+        "any": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "pick": {
+        "input": {
+          "c": true
+        }
+      },
+      "50chance": {
+        "output": {
+          "pass": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "50chance",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "bit": {
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "random",
+    "description": "50% chance 0, 50% chance 1",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "8a5043d9-e6ac-4628-9fde-a11cbd240e10",
+  "type": "`U`&`G`",
+  "system": true
+}

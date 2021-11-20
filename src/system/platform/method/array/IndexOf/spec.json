@@ -1,0 +1,30 @@
+{
+  "name": "index of",
+  "inputs": {
+    "a[]": {
+      "type": "A",
+      "ref": true
+    },
+    "a": {
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "i": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "find index `i` of the element `a` on array `a[]` or -1 if not found",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "array"
+    ]
+  },
+  "id": "26b06e21-798c-4bc4-96e1-12a4351c083d",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

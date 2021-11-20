@@ -1,0 +1,27 @@
+{
+  "name": "vm circuit breaker",
+  "private": true,
+  "inputs": {
+    "src": {
+      "type": "unit",
+      "ref": true
+    },
+    "on": {
+      "type": "boolean"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "cloud",
+    "description": "expose a public URL",
+    "complexity": 3,
+    "tags": [
+      "ioun.it",
+      "vm"
+    ]
+  },
+  "id": "7680bea2-b98d-11eb-aa77-779ba98f1024",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

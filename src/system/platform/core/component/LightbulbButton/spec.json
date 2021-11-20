@@ -1,0 +1,161 @@
+{
+  "name": "lightbulb button",
+  "units": {
+    "icon": {
+      "path": "63a417e5-d354-4b39-9ebd-05f55e70de7b",
+      "input": {
+        "icon": {
+          "constant": true,
+          "data": "'lightbulb'"
+        },
+        "style": {
+          "constant": false
+        }
+      }
+    },
+    "pick": {
+      "path": "396497e4-f8e7-4573-95c9-a4f186a5cd05",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'gray'"
+        },
+        "b": {
+          "constant": true,
+          "data": "'#ffd400'"
+        }
+      }
+    },
+    "mergedefault": {
+      "path": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{fontSize:24,cursor:'pointer',transition:'color 0.2s linear',boxSizing:'border-box',padding:'6px'}"
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "onclicktoggle": {
+      "path": "9b2bdc7c-eb5d-11ea-bdb1-1760294f446b",
+      "input": {
+        "init": {
+          "constant": true,
+          "data": "false"
+        },
+        "element": {}
+      },
+      "output": {
+        "value": {}
+      }
+    },
+    "tagcolor": {
+      "path": "dfba14dd-bd14-4fd2-bbfa-c910eadd9f7d",
+      "input": {
+        "color": {}
+      },
+      "output": {
+        "{color}": {}
+      }
+    }
+  },
+  "merges": {
+    "gdsjlyidf": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "icon": {
+        "input": {
+          "style": true
+        }
+      }
+    },
+    "ayealdnyd": {
+      "onclicktoggle": {
+        "input": {
+          "element": true
+        }
+      },
+      "icon": {
+        "output": {
+          "_self": true
+        }
+      }
+    },
+    "gfknrliqz": {
+      "pick": {
+        "input": {
+          "c": true
+        }
+      },
+      "onclicktoggle": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "gvhtktptm": {
+      "tagcolor": {
+        "input": {
+          "color": true
+        }
+      },
+      "pick": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "yfljaca": {
+      "tagcolor": {
+        "output": {
+          "{color}": true
+        }
+      },
+      "mergedefault": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "lightbulb",
+    "description": "click to turn on/off",
+    "complexity": 14,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "inputs": {},
+  "outputs": {},
+  "component": {
+    "slots": [
+      [
+        "icon",
+        "default"
+      ]
+    ],
+    "defaultWidth": 60,
+    "defaultHeight": 60,
+    "subComponents": {
+      "icon": {
+        "width": 60,
+        "height": 60
+      }
+    },
+    "children": [
+      "icon"
+    ]
+  },
+  "id": "16c4c67d-e88c-43e0-acd4-18f5eb4561b1",
+  "type": "`U`&`G`",
+  "system": true
+}

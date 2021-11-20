@@ -1,0 +1,77 @@
+{
+  "name": "plan 3",
+  "units": {
+    "plan": {
+      "path": "36329d25-218d-48a5-a06c-1e0525da504f"
+    },
+    "plan0": {
+      "path": "36329d25-218d-48a5-a06c-1e0525da504f"
+    }
+  },
+  "merges": {
+    "0": {
+      "plan0": {
+        "output": {
+          "second": true
+        }
+      },
+      "plan": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "list-ordered",
+    "description": "output `a` on `0`, then `1`, then `2`",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "control"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "plan0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "0": {
+      "pin": {
+        "0": {
+          "unitId": "plan0",
+          "pinId": "first"
+        }
+      },
+      "type": "<A>"
+    },
+    "1": {
+      "pin": {
+        "0": {
+          "unitId": "plan",
+          "pinId": "first"
+        }
+      },
+      "type": "<A>"
+    },
+    "2": {
+      "pin": {
+        "0": {
+          "unitId": "plan",
+          "pinId": "second"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "id": "0c78466f-f682-4aca-9a15-d4d2eac5e26d",
+  "type": "`U`&`G`",
+  "system": true
+}

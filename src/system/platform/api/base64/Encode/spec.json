@@ -1,0 +1,27 @@
+{
+  "name": "encode",
+  "inputs": {
+    "a": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "b": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "identify data type",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "base64"
+    ]
+  },
+  "id": "ee7b692f-5fe5-43c3-b636-aacca92b0bc7",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

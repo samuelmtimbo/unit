@@ -1,0 +1,365 @@
+{
+  "name": "on drag delta",
+  "inputs": {
+    "element": {
+      "pin": {
+        "0": {
+          "unitId": "ondrag",
+          "pinId": "element"
+        }
+      },
+      "ref": true,
+      "type": "`U`"
+    }
+  },
+  "outputs": {
+    "x": {
+      "pin": {
+        "0": {
+          "unitId": "subtract",
+          "pinId": "a - b"
+        }
+      },
+      "type": "number"
+    },
+    "y": {
+      "pin": {
+        "0": {
+          "unitId": "subgtract",
+          "pinId": "a - b"
+        }
+      },
+      "type": "number"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "mergeId": "6"
+        }
+      }
+    }
+  },
+  "units": {
+    "ondrag": {
+      "path": "d4de180e-f1e8-4575-ab64-eaef413bcfc4",
+      "input": {
+        "element": {
+          "metadata": {
+            "position": {
+              "x": -174,
+              "y": -1
+            }
+          }
+        }
+      },
+      "output": {
+        "move": {},
+        "down": {},
+        "up": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -166,
+              "y": 24
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -74,
+          "y": 48
+        }
+      }
+    },
+    "subtract": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a - b": {
+          "metadata": {
+            "position": {
+              "x": 126,
+              "y": -63
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 135,
+          "y": -31
+        }
+      }
+    },
+    "propclientxclienty": {
+      "path": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "clientY": {},
+        "clientX": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 51,
+          "y": -51
+        }
+      }
+    },
+    "propclientxclienty0": {
+      "path": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "clientY": {},
+        "clientX": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 39,
+          "y": 36
+        }
+      }
+    },
+    "subgtract": {
+      "path": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a - b": {
+          "metadata": {
+            "position": {
+              "x": 126,
+              "y": 61
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 132,
+          "y": 28
+        }
+      }
+    },
+    "looprepeat": {
+      "path": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {},
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true
+        },
+        "current": {},
+        "final": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -57,
+          "y": -39
+        }
+      }
+    },
+    "true": {
+      "path": "984c4a44-86c7-464c-ad48-4759598c3be3",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "true": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -71,
+          "y": 7
+        }
+      }
+    },
+    "false": {
+      "path": "b4d20f6f-32dc-4d04-97d6-69518976bdea",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "false": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -159,
+          "y": -3
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "ondrag": {
+        "output": {
+          "down": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "1": {
+      "propclientxclienty0": {
+        "input": {
+          "obj": true
+        }
+      },
+      "ondrag": {
+        "output": {
+          "move": true
+        }
+      },
+      "true": {
+        "input": {
+          "any": true
+        }
+      }
+    },
+    "2": {
+      "subtract": {
+        "input": {
+          "a": true
+        }
+      },
+      "propclientxclienty0": {
+        "output": {
+          "clientX": true
+        }
+      }
+    },
+    "3": {
+      "subtract": {
+        "input": {
+          "b": true
+        }
+      },
+      "propclientxclienty": {
+        "output": {
+          "clientX": true
+        }
+      }
+    },
+    "4": {
+      "subgtract": {
+        "input": {
+          "a": true
+        }
+      },
+      "propclientxclienty0": {
+        "output": {
+          "clientY": true
+        }
+      }
+    },
+    "5": {
+      "subgtract": {
+        "input": {
+          "b": true
+        }
+      },
+      "propclientxclienty": {
+        "output": {
+          "clientY": true
+        }
+      }
+    },
+    "6": {
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      },
+      "true": {
+        "output": {
+          "true": true
+        }
+      },
+      "false": {
+        "output": {
+          "false": true
+        }
+      }
+    },
+    "7": {
+      "false": {
+        "input": {
+          "any": true
+        }
+      },
+      "ondrag": {
+        "output": {
+          "up": true
+        }
+      }
+    },
+    "8": {
+      "propclientxclienty": {
+        "input": {
+          "obj": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
+    }
+  },
+  "render": false,
+  "metadata": {
+    "icon": "grab",
+    "complexity": 10,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ],
+    "position": {
+      "merge": {
+        "0": {
+          "x": -72,
+          "y": -22
+        },
+        "1": {
+          "x": -72,
+          "y": 20
+        },
+        "2": {
+          "x": 33,
+          "y": -15
+        },
+        "3": {
+          "x": 28,
+          "y": -55
+        },
+        "4": {
+          "x": 28,
+          "y": 52
+        },
+        "5": {
+          "x": 33,
+          "y": 13
+        }
+      }
+    }
+  },
+  "id": "ae5c6f18-9ff9-11eb-986e-6fd93ceb151c"
+}

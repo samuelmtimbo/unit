@@ -1,0 +1,268 @@
+{
+  "name": "stroke unit logo",
+  "inputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "talvwpyq",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -293,
+            "y": 8
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "d": {
+      "pin": {
+        "0": {
+          "unitId": "addfillcircle1",
+          "pinId": "d"
+        }
+      },
+      "type": "any[][]",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 293,
+            "y": -55
+          }
+        }
+      }
+    }
+  },
+  "units": {
+    "addfillcircle1": {
+      "path": "0eb3579e-4645-4e45-a3b1-f3fb1a62ab4d",
+      "input": {
+        "d": {},
+        "circle": {
+          "constant": true,
+          "data": "{x:160,y:100,r:9,fill:'#d3d3d3'}",
+          "metadata": {
+            "position": {
+              "x": 270,
+              "y": -3
+            }
+          }
+        }
+      },
+      "output": {
+        "d": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 270,
+              "y": -39
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 224,
+          "y": -21
+        }
+      }
+    },
+    "addline": {
+      "path": "90dc2942-52fa-4e09-bcef-43fa97cc0b72",
+      "input": {
+        "d": {},
+        "line": {
+          "constant": true,
+          "data": "{x0:49,y0:100,x1:60,y1:100}",
+          "metadata": {
+            "position": {
+              "x": -146,
+              "y": -12
+            }
+          }
+        }
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -110,
+          "y": 18
+        }
+      }
+    },
+    "addline0": {
+      "path": "90dc2942-52fa-4e09-bcef-43fa97cc0b72",
+      "input": {
+        "d": {},
+        "line": {
+          "constant": true,
+          "data": "{x0:139,y0:100,x1:158,y1:100}",
+          "metadata": {
+            "position": {
+              "x": 77,
+              "y": -49
+            }
+          }
+        }
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 113,
+          "y": -19
+        }
+      }
+    },
+    "talvwpyq": {
+      "path": "89051065-ef45-48b2-ab7f-77ae173e1b4d",
+      "input": {
+        "circle": {
+          "constant": true,
+          "data": "{x:40,y:100,r:9}",
+          "metadata": {
+            "position": {
+              "x": -266,
+              "y": 56
+            }
+          }
+        },
+        "d": {
+          "metadata": {
+            "position": {
+              "x": -269,
+              "y": 21
+            }
+          }
+        }
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -221,
+          "y": 36
+        }
+      }
+    },
+    "jguhbof": {
+      "path": "89051065-ef45-48b2-ab7f-77ae173e1b4d",
+      "input": {
+        "circle": {
+          "constant": true,
+          "data": "{x:100,y:100,r:40}",
+          "metadata": {
+            "position": {
+              "x": 38,
+              "y": 48
+            }
+          }
+        },
+        "d": {
+          "constant": false
+        }
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 3,
+          "y": 17
+        }
+      }
+    }
+  },
+  "merges": {
+    "1": {
+      "addline0": {
+        "output": {
+          "d": true
+        }
+      },
+      "addfillcircle1": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "adglzd": {
+      "talvwpyq": {
+        "output": {
+          "d": true
+        }
+      },
+      "addline": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "vjuqfccyy": {
+      "jguhbof": {
+        "input": {
+          "d": true
+        }
+      },
+      "addline": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "sjkfreae": {
+      "jguhbof": {
+        "output": {
+          "d": true
+        }
+      },
+      "addline0": {
+        "input": {
+          "d": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "no description",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ],
+    "position": {
+      "merge": {
+        "1": {
+          "x": 169,
+          "y": -20
+        },
+        "adglzd": {
+          "x": -166,
+          "y": 30
+        },
+        "vjuqfccyy": {
+          "x": -54,
+          "y": 18
+        },
+        "sjkfreae": {
+          "x": 58,
+          "y": -1
+        }
+      }
+    }
+  },
+  "id": "193f078a-7a01-4026-a1d5-5ccfbfcb413a",
+  "type": "`U`&`G`",
+  "system": true
+}

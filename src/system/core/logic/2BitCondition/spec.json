@@ -1,0 +1,131 @@
+{
+  "name": "2 bit condition",
+  "units": {
+    "nor": {
+      "path": "561db4ce-1631-4d66-a047-140fb6e814a6"
+    },
+    "andnot": {
+      "path": "c059a789-b57c-4c2e-976b-fdbbe8f9993a"
+    },
+    "and": {
+      "path": "407640f7-f1c3-4297-a5ce-baff357a6d31"
+    },
+    "notand": {
+      "path": "a4515f52-889c-4409-b710-59e2ebea265c"
+    }
+  },
+  "merges": {
+    "0": {
+      "andnot": {
+        "input": {
+          "a": true
+        }
+      },
+      "nor": {
+        "input": {
+          "a": true
+        }
+      },
+      "and": {
+        "input": {
+          "a": true
+        }
+      },
+      "notand": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "andnot": {
+        "input": {
+          "b": true
+        }
+      },
+      "nor": {
+        "input": {
+          "b": true
+        }
+      },
+      "and": {
+        "input": {
+          "b": true
+        }
+      },
+      "notand": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "b": {
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "type": "boolean"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "a && b": {
+      "pin": {
+        "0": {
+          "unitId": "and",
+          "pinId": "a and b"
+        }
+      },
+      "type": "boolean"
+    },
+    "!a && !b": {
+      "pin": {
+        "0": {
+          "unitId": "nor",
+          "pinId": "!a && !b"
+        }
+      },
+      "type": "boolean"
+    },
+    "a && !b": {
+      "pin": {
+        "0": {
+          "unitId": "andnot",
+          "pinId": "a && !b"
+        }
+      },
+      "type": "boolean"
+    },
+    "!a && b": {
+      "pin": {
+        "0": {
+          "unitId": "notand",
+          "pinId": "hgllh"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "binary",
+    "description": "2 x 2 = 4",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "logic"
+    ]
+  },
+  "id": "4433f550-6b85-4827-9aac-18b2c816818c",
+  "type": "`U`&`G`",
+  "system": true
+}

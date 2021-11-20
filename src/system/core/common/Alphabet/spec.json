@@ -1,0 +1,39 @@
+{
+  "name": "alphabet",
+  "units": {
+    "identity": {
+      "path": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'abcdefghijklmnopqrstuvwxyz'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "type",
+    "description": "no description",
+    "complexity": 3,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "inputs": {},
+  "outputs": {
+    "alphabet": {
+      "pin": {
+        "0": {
+          "unitId": "identity",
+          "pinId": "a"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "id": "21cf3c3d-30c1-4030-8172-34e3a53c6ae3",
+  "type": "`U`&`G`",
+  "system": true
+}

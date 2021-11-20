@@ -1,0 +1,141 @@
+{
+  "name": "range bounce towards",
+  "inputs": {
+    "end": {
+      "pin": {
+        "0": {
+          "mergeId": "3"
+        }
+      },
+      "functional": true
+    },
+    "start": {
+      "pin": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "functional": true
+    }
+  },
+  "outputs": {
+    "current": {
+      "pin": {
+        "0": {
+          "unitId": "rangetowards",
+          "pinId": "current"
+        }
+      }
+    }
+  },
+  "units": {
+    "switchab": {
+      "path": "9c10309b-6ce8-4b92-a0d4-a4b6b2a17a64",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -34,
+          "y": -25
+        }
+      }
+    },
+    "rangetowards": {
+      "path": "06203a50-ace2-4c4e-9088-0951342c6b52",
+      "input": {
+        "end": {},
+        "start": {}
+      },
+      "output": {
+        "final": {
+          "ignored": true
+        },
+        "current": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 66,
+          "y": 0
+        }
+      }
+    },
+    "switchab0": {
+      "path": "9c10309b-6ce8-4b92-a0d4-a4b6b2a17a64",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -34,
+          "y": 24
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "switchab": {
+        "output": {
+          "a": true
+        }
+      },
+      "rangetowards": {
+        "input": {
+          "start": true
+        }
+      }
+    },
+    "1": {
+      "switchab0": {
+        "output": {
+          "a": true
+        }
+      },
+      "rangetowards": {
+        "input": {
+          "end": true
+        }
+      }
+    },
+    "2": {
+      "switchab0": {
+        "input": {
+          "b": true
+        }
+      },
+      "switchab": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "switchab": {
+        "input": {
+          "b": true
+        }
+      },
+      "switchab0": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "list-ordered",
+    "complexity": 19
+  },
+  "id": "d34a9900-e46d-4f23-98bf-485dde71d9a3",
+  "system": true
+}

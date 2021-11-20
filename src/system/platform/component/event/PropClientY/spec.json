@@ -1,0 +1,54 @@
+{
+  "name": "prop clientY",
+  "units": {
+    "prop": {
+      "path": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'clientY'"
+        }
+      },
+      "output": {
+        "value": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "event": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "clientY": {
+      "pin": {
+        "0": {
+          "unitId": "prop",
+          "pinId": "value"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "extract clientY from `obj`",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "97c4f4ec-2613-11eb-8c54-4b82dde232ca",
+  "type": "`U`&`G`",
+  "system": true
+}

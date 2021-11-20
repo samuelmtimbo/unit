@@ -1,0 +1,120 @@
+{
+  "artifact": "spec",
+  "name": "set if or default",
+  "units": {
+    "setif": {
+      "path": "946701f6-7dd4-11ea-a1aa-67938c0c6214"
+    },
+    "default": {
+      "path": "329920ae-7e91-11ea-988e-1b12488c8b89"
+    },
+    "default0": {
+      "path": "329920ae-7e91-11ea-988e-1b12488c8b89"
+    }
+  },
+  "merges": {
+    "0": {
+      "setif": {
+        "input": {
+          "test": true
+        }
+      },
+      "default": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "setif": {
+        "input": {
+          "value": true
+        }
+      },
+      "default0": {
+        "output": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "testdefault": {
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "d"
+        }
+      },
+      "type": "boolean"
+    },
+    "default": {
+      "pin": {
+        "0": {
+          "unitId": "default0",
+          "pinId": "d"
+        }
+      },
+      "type": "<A>"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a"
+        }
+      },
+      "type": "boolean"
+    },
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "default0",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "key": {
+      "pin": {
+        "0": {
+          "unitId": "setif",
+          "pinId": "key"
+        }
+      },
+      "type": "number|string"
+    },
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "setif",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "setif",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "set value at `key` to `value` if `test` is defined and true or to `default` otherwise",
+    "complexity": 5,
+    "tags": [
+      "platform",
+      "core"
+    ]
+  },
+  "id": "c0b85780-7e99-11ea-9a99-879f3f411ebd",
+  "type": "`U`&`G`",
+  "system": true
+}

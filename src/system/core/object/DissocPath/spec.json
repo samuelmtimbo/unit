@@ -1,0 +1,346 @@
+{
+  "name": "dissoc path",
+  "units": {
+    "propordefault": {
+      "path": "aeac1075-e01f-4d22-b01b-9a77cbba504b",
+      "input": {
+        "default": {
+          "constant": true,
+          "data": "{}"
+        }
+      }
+    },
+    "head": {
+      "path": "e9831075-2e62-43a4-84af-0653f7e707a9"
+    },
+    "dissocpath": {
+      "path": "7f348adc-e4f0-11ea-b8d1-0ba0ed3f34fe"
+    },
+    "lengthgt": {
+      "path": "603ebe2e-5329-446d-b422-78f3201ddd7a",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "1"
+        }
+      }
+    },
+    "ckeuamu": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    },
+    "viihootpu": {
+      "path": "664b5d3c-e4cf-11ea-ab74-eb6d2f3bd6f1",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    },
+    "ygsvhpv": {
+      "path": "175c0cc6-1801-4b5d-9980-e780c10ea745",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "1"
+        }
+      },
+      "output": {
+        "equals": {}
+      }
+    },
+    "cwcvottck": {
+      "path": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "a": {},
+        "i": {
+          "constant": true,
+          "data": "0"
+        }
+      },
+      "output": {
+        "a[i]": {}
+      }
+    },
+    "nalejg": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "fqdtbbhl": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "iihvdgbjf": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "hlqjkzg": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "njxnorns": {
+      "path": "175c0cc6-1801-4b5d-9980-e780c10ea745",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "0"
+        }
+      },
+      "output": {
+        "equals": {}
+      }
+    },
+    "dpyno": {
+      "path": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    }
+  },
+  "merges": {
+    "0": {
+      "lengthgt": {
+        "output": {
+          "true": true
+        }
+      },
+      "iihvdgbjf": {
+        "input": {
+          "b": true
+        }
+      },
+      "hlqjkzg": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "head": {
+        "input": {
+          "a": true
+        }
+      },
+      "iihvdgbjf": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "2": {
+      "propordefault": {
+        "input": {
+          "key": true
+        }
+      },
+      "head": {
+        "output": {
+          "head": true
+        }
+      },
+      "ckeuamu": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "3": {
+      "dissocpath": {
+        "input": {
+          "obj": true
+        }
+      },
+      "propordefault": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "mchoroggl": {
+      "propordefault": {
+        "input": {
+          "obj": true
+        }
+      },
+      "ckeuamu": {
+        "input": {
+          "obj": true
+        }
+      },
+      "hlqjkzg": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "ikungyvz": {
+      "ygsvhpv": {
+        "output": {
+          "equals": true
+        }
+      },
+      "nalejg": {
+        "input": {
+          "b": true
+        }
+      },
+      "fqdtbbhl": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "axtvhx": {
+      "cwcvottck": {
+        "input": {
+          "a": true
+        }
+      },
+      "nalejg": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "zigdwon": {
+      "viihootpu": {
+        "input": {
+          "key": true
+        }
+      },
+      "cwcvottck": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    },
+    "qwlgwfuqb": {
+      "viihootpu": {
+        "input": {
+          "obj": true
+        }
+      },
+      "fqdtbbhl": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "wyrvlnzoh": {
+      "dissocpath": {
+        "output": {
+          "result": true
+        }
+      },
+      "ckeuamu": {
+        "input": {
+          "value": true
+        }
+      }
+    },
+    "ejbegdofk": {
+      "dissocpath": {
+        "input": {
+          "path": true
+        }
+      },
+      "head": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "rocsslaa": {
+      "dpyno": {
+        "input": {
+          "b": true
+        }
+      },
+      "njxnorns": {
+        "output": {
+          "equals": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "get value of `obj` at `path`",
+    "complexity": 31,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "inputs": {
+    "path": {
+      "pin": {
+        "0": {
+          "unitId": "iihvdgbjf",
+          "pinId": "a"
+        },
+        "nlfaoop": {
+          "unitId": "lengthgt",
+          "pinId": "a"
+        },
+        "wavfunmop": {
+          "unitId": "ygsvhpv",
+          "pinId": "a"
+        },
+        "ylidxx": {
+          "unitId": "nalejg",
+          "pinId": "a"
+        },
+        "ldazigncc": {
+          "unitId": "njxnorns",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "(number|string)[]"
+    },
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "hlqjkzg",
+          "pinId": "a"
+        },
+        "fstg": {
+          "unitId": "fqdtbbhl",
+          "pinId": "a"
+        },
+        "kehglhzu": {
+          "unitId": "dpyno",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "number|string"
+    }
+  },
+  "outputs": {
+    "result": {
+      "pin": {
+        "1": {
+          "unitId": "ckeuamu",
+          "pinId": "obj"
+        },
+        "sckhdglks": {
+          "unitId": "viihootpu",
+          "pinId": "obj"
+        },
+        "okosmdza": {
+          "unitId": "dpyno",
+          "pinId": "a if b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "7f348adc-e4f0-11ea-b8d1-0ba0ed3f34fe",
+  "type": "`U`&`G`",
+  "system": true
+}

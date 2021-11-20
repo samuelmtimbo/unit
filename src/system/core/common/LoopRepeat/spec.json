@@ -1,0 +1,109 @@
+{
+  "name": "loop repeat",
+  "units": {
+    "identity": {
+      "path": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "loop": {
+      "path": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "output": {
+        "final": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {
+    "rphjsvj": {
+      "loop": {
+        "input": {
+          "next": true
+        }
+      },
+      "identity": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "wceujsyeq": {
+      "loop": {
+        "output": {
+          "current": true
+        }
+      },
+      "identity": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "init": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "init"
+        }
+      },
+      "type": "<A>"
+    },
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "outputs": {
+    "local": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "local"
+        }
+      },
+      "type": "<A>"
+    },
+    "current": {
+      "pin": {
+        "0": {
+          "mergeId": "wceujsyeq"
+        }
+      },
+      "type": "<A>"
+    },
+    "final": {
+      "pin": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "repeat",
+    "description": "repeats `a` while `next` is true",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+  "type": "`U`&`G`",
+  "system": true
+}

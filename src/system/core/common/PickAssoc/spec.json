@@ -1,0 +1,111 @@
+{
+  "name": "pick assoc",
+  "units": {
+    "pick": {
+      "path": "396497e4-f8e7-4573-95c9-a4f186a5cd05",
+      "input": {
+        "a": {},
+        "b": {},
+        "c": {}
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "assoc": {
+      "path": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "pick": {
+        "output": {
+          "a": true
+        }
+      },
+      "assoc": {
+        "input": {
+          "value": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "c"
+        }
+      },
+      "type": "boolean"
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "pick",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    },
+    "key": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "key"
+        }
+      },
+      "type": "number|string"
+    },
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "assoc",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "...",
+    "complexity": 6,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "9a85acf3-c40b-4e82-b04c-68c3dd1b0d4b",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,130 @@
+{
+  "name": "harmonic series",
+  "units": {
+    "sjrbu": {
+      "path": "29e43ad7-be5e-437f-8f0f-2df996c8b89c",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "0"
+        },
+        "b": {}
+      },
+      "output": {
+        "i": {}
+      }
+    },
+    "xeazo": {
+      "path": "158d85eb-28b8-4355-b637-28a7ec751233",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "1"
+        },
+        "b": {}
+      },
+      "output": {
+        "a ÷ b": {}
+      }
+    },
+    "utxsz": {
+      "path": "fafeadd7-06a8-4bb0-9fa5-2149d1b5208e",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a + 1": {}
+      }
+    },
+    "csyuenbue": {
+      "path": "17583c27-6d05-4325-aea0-17237243d7c2"
+    }
+  },
+  "merges": {
+    "dvglc": {
+      "sjrbu": {
+        "output": {
+          "i": true
+        }
+      },
+      "utxsz": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "yyasl": {
+      "utxsz": {
+        "output": {
+          "a + 1": true
+        }
+      },
+      "xeazo": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "lhdax": {
+      "xeazo": {
+        "output": {
+          "a ÷ b": true
+        }
+      },
+      "csyuenbue": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "tmell": {
+      "sjrbu": {
+        "input": {
+          "b": true
+        }
+      },
+      "csyuenbue": {
+        "input": {
+          "n": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "rgeok": {
+      "pin": {
+        "0": {
+          "mergeId": "tmell"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "usdsajlo": {
+      "pin": {
+        "0": {
+          "unitId": "csyuenbue",
+          "pinId": "sum"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "1 + 1/2 + 1/3 + ...",
+    "link": "https://en.wikipedia.org/wiki/Harmonic_series_(mathematics)",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "math",
+      "series",
+      "harmonic"
+    ]
+  },
+  "id": "4cbd976a-89c9-4398-a5ce-35504b00d112",
+  "type": "`U`&`G`",
+  "system": true
+}

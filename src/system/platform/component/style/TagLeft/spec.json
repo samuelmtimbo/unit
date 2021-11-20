@@ -1,0 +1,50 @@
+{
+  "name": "tag left",
+  "units": {
+    "tag": {
+      "path": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'left'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{left: `left`}",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "style"
+    ]
+  },
+  "inputs": {
+    "left": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "{left}": {
+      "pin": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "3cbca5b0-2616-11eb-a3d8-7b83ecaf1822",
+  "type": "`U`&`G`",
+  "system": true
+}

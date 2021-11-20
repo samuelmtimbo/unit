@@ -1,0 +1,136 @@
+{
+  "name": "range",
+  "units": {
+    "looprepeat": {
+      "path": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "output": {
+        "current": {
+          "ignored": true
+        }
+      }
+    },
+    "loopincrement": {
+      "path": "4e2c89b2-e9cb-42f6-bb8d-e9d665c21fa7",
+      "output": {
+        "final": {
+          "ignored": true
+        }
+      }
+    },
+    "lessthan": {
+      "path": "82c3cf2a-0855-4c6d-a4c4-807b0ce1fd35",
+      "input": {
+        "b": {
+          "constant": false
+        }
+      }
+    }
+  },
+  "merges": {
+    "merge0": {
+      "looprepeat": {
+        "output": {
+          "local": true
+        }
+      },
+      "lessthan": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "merge1": {
+      "loopincrement": {
+        "output": {
+          "local": true
+        }
+      },
+      "lessthan": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "merge2": {
+      "lessthan": {
+        "output": {
+          "a < b": true
+        }
+      },
+      "loopincrement": {
+        "input": {
+          "test": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "list-ordered",
+    "description": "count from `a` to `b`, not inclusive",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "loop"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "loopincrement",
+          "pinId": "init"
+        }
+      },
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "0"
+        ]
+      }
+    },
+    "b": {
+      "functional": true,
+      "pin": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "3"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "i": {
+      "pin": {
+        "0": {
+          "unitId": "loopincrement",
+          "pinId": "current"
+        }
+      },
+      "type": "number"
+    },
+    "test": {
+      "type": "boolean",
+      "pin": {
+        "0": {
+          "mergeId": "merge2"
+        }
+      },
+      "defaultIgnored": true
+    }
+  },
+  "id": "29e43ad7-be5e-437f-8f0f-2df996c8b89c",
+  "type": "`U`&`G`",
+  "system": true
+}

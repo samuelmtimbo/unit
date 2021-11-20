@@ -1,0 +1,27 @@
+{
+  "name": "vm auth",
+  "private": true,
+  "inputs": {
+    "src": {
+      "type": "unit",
+      "ref": true
+    },
+    "users": {
+      "type": "string[]"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "cloud",
+    "description": "expose a public URL",
+    "complexity": 2,
+    "tags": [
+      "ioun.it",
+      "vm"
+    ]
+  },
+  "id": "27e01226-b96e-11eb-ac15-c364860ba519",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

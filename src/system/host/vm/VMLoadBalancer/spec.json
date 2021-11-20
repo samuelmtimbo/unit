@@ -1,0 +1,30 @@
+{
+  "name": "vm load balancer",
+  "private": true,
+  "inputs": {
+    "src": {
+      "type": "unit",
+      "ref": true
+    },
+    "class": {
+      "type": "class"
+    },
+    "opt": {
+      "type": "{strategy?:\"roundrobin\"|\"cpu\"}"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "cloud",
+    "description": "expose a public URL",
+    "complexity": 3,
+    "tags": [
+      "ioun.it",
+      "vm"
+    ]
+  },
+  "id": "c221d6f8-b98c-11eb-93a2-bf603d08bfdf",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

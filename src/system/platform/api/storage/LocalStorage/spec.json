@@ -1,0 +1,22 @@
+{
+  "name": "local storage",
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "table",
+    "description": "persist data on local storage",
+    "complexity": 11,
+    "tags": [
+      "platform",
+      "api",
+      "storage"
+    ],
+    "globals": [
+      "LocalStorage"
+    ]
+  },
+  "id": "c8f3faa8-09f4-11eb-a3b1-477aa3ec4193",
+  "base": true,
+  "type": "`U`&`V`&`J`",
+  "system": true
+}

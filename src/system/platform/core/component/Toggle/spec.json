@@ -1,0 +1,551 @@
+{
+  "name": "toggle",
+  "inputs": {
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault0",
+          "pinId": "a"
+        }
+      },
+      "type": "object",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 271,
+            "y": -77
+          }
+        }
+      }
+    },
+    "onColor": {
+      "pin": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a"
+        }
+      },
+      "type": "string",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -15,
+            "y": -196
+          }
+        }
+      }
+    },
+    "offColor": {
+      "pin": {
+        "0": {
+          "unitId": "default0",
+          "pinId": "a"
+        }
+      },
+      "type": "string",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -215,
+            "y": -110
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "div": {
+      "path": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 360,
+          "y": -11
+        },
+        "component": {
+          "width": 100,
+          "height": 50
+        }
+      }
+    },
+    "div0": {
+      "path": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "component": {
+          "width": 100,
+          "height": 50
+        },
+        "position": {
+          "x": -233,
+          "y": 152
+        }
+      }
+    },
+    "mergedefault0": {
+      "path": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 259,
+              "y": -52
+            }
+          }
+        },
+        "default": {
+          "constant": false,
+          "data": "{position:'relative',display:'flex',flexDirection:'row',padding:'4px',gap:'4px',backgroundColor:'#1f1f1f',cursor:'pointer'}"
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 218,
+          "y": -28
+        }
+      }
+    },
+    "invert": {
+      "path": "f55ab180-3fd5-44c4-915f-f40e6bbcc481",
+      "input": {
+        "a": {},
+        "c": {},
+        "b": {}
+      },
+      "output": {
+        "b": {},
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -35,
+          "y": -22
+        }
+      }
+    },
+    "default": {
+      "path": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -13,
+              "y": -166
+            }
+          }
+        },
+        "d": {
+          "constant": true,
+          "data": "'#1f1f1f'",
+          "metadata": {
+            "position": {
+              "x": 55,
+              "y": -150
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 12,
+          "y": -128
+        }
+      }
+    },
+    "default0": {
+      "path": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -187,
+              "y": -102
+            }
+          }
+        },
+        "d": {
+          "constant": true,
+          "data": "'#d1d1d1'",
+          "metadata": {
+            "position": {
+              "x": -170,
+              "y": -132
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -135,
+          "y": -98
+        }
+      }
+    },
+    "assocbackgroundcolor0": {
+      "path": "0ca54c4f-148e-49e5-bedf-d24276200f66",
+      "input": {
+        "obj": {
+          "constant": true,
+          "data": "{position:'relative',display:'flex',flexDirection:'row',padding:'4px',gap:'4px',backgroundColor:'#1f1f1f',cursor:'pointer'}",
+          "metadata": {
+            "position": {
+              "x": 138,
+              "y": -59
+            }
+          }
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 98,
+          "y": -33
+        }
+      }
+    },
+    "assocbackgroundcolor": {
+      "path": "0ca54c4f-148e-49e5-bedf-d24276200f66",
+      "input": {
+        "obj": {
+          "constant": true,
+          "data": "{position:'absolute',top:'3px',left:'0',width:'calc(50% - 6px)',height:'calc(100% - 6px)',backgroundColor:'currentColor',cursor:'pointer'}",
+          "metadata": {
+            "position": {
+              "x": -203,
+              "y": 10
+            }
+          }
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -149,
+          "y": 15
+        }
+      }
+    },
+    "pickassoc": {
+      "path": "9a85acf3-c40b-4e82-b04c-68c3dd1b0d4b",
+      "input": {
+        "c": {},
+        "b": {
+          "constant": true,
+          "data": "'3px'",
+          "metadata": {
+            "position": {
+              "x": -48,
+              "y": 122
+            }
+          }
+        },
+        "a": {
+          "constant": true,
+          "data": "'calc(50% + 3px)'",
+          "metadata": {
+            "position": {
+              "x": -85,
+              "y": 146
+            }
+          }
+        },
+        "key": {
+          "constant": true,
+          "data": "'left'",
+          "metadata": {
+            "position": {
+              "x": -144,
+              "y": 104
+            }
+          }
+        },
+        "obj": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -93,
+          "y": 99
+        }
+      }
+    },
+    "checkbox": {
+      "path": "096fc4ca-edd2-11ea-8266-37b634a3ee0b",
+      "input": {
+        "value": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 122,
+              "y": 108
+            }
+          }
+        },
+        "attr": {
+          "ignored": false,
+          "data": "{\"tabIndex\":-1}"
+        },
+        "style": {
+          "constant": true,
+          "data": "{opacity:'0'}",
+          "metadata": {
+            "position": {
+              "x": 121,
+              "y": 133
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 72,
+          "y": 115
+        }
+      }
+    },
+    "onvalue": {
+      "path": "f1e3b2aa-1215-49f0-a2cd-2ef7178a4374",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 12,
+          "y": 83
+        }
+      }
+    }
+  },
+  "merges": {
+    "2": {
+      "pickassoc": {
+        "input": {
+          "c": true
+        }
+      },
+      "invert": {
+        "input": {
+          "c": true
+        }
+      },
+      "onvalue": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "3": {
+      "mergedefault0": {
+        "output": {
+          "a": true
+        }
+      },
+      "div": {
+        "input": {
+          "style": true
+        }
+      }
+    },
+    "4": {
+      "default": {
+        "output": {
+          "a": true
+        }
+      },
+      "invert": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "5": {
+      "default0": {
+        "output": {
+          "a": true
+        }
+      },
+      "invert": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "6": {
+      "assocbackgroundcolor": {
+        "input": {
+          "value": true
+        }
+      },
+      "invert": {
+        "output": {
+          "b": true
+        }
+      }
+    },
+    "7": {
+      "assocbackgroundcolor0": {
+        "input": {
+          "value": true
+        }
+      },
+      "invert": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "8": {
+      "mergedefault0": {
+        "input": {
+          "default": true
+        }
+      },
+      "assocbackgroundcolor0": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "9": {
+      "assocbackgroundcolor": {
+        "output": {
+          "obj": true
+        }
+      },
+      "pickassoc": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "10": {
+      "pickassoc": {
+        "output": {
+          "obj": true
+        }
+      },
+      "div0": {
+        "input": {
+          "style": true
+        }
+      }
+    },
+    "11": {
+      "onvalue": {
+        "input": {
+          "element": true
+        }
+      },
+      "checkbox": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "component": {
+    "defaultWidth": 100,
+    "defaultHeight": 50,
+    "subComponents": {
+      "div": {
+        "children": [
+          "div0",
+          "checkbox"
+        ],
+        "width": 100,
+        "height": 50
+      },
+      "div0": {
+        "children": []
+      },
+      "checkbox": {
+        "children": []
+      }
+    },
+    "children": [
+      "div"
+    ]
+  },
+  "metadata": {
+    "complexity": 27,
+    "icon": "toggle-right",
+    "description": "select between \"on\" or \"off\"",
+    "position": {
+      "merge": {
+        "2": {
+          "x": -41,
+          "y": 51
+        },
+        "3": {
+          "x": 272,
+          "y": -16
+        },
+        "4": {
+          "x": -11,
+          "y": -77
+        },
+        "5": {
+          "x": -85,
+          "y": -65
+        },
+        "6": {
+          "x": -94,
+          "y": -6
+        },
+        "7": {
+          "x": 33,
+          "y": -28
+        },
+        "8": {
+          "x": 160,
+          "y": -28
+        },
+        "9": {
+          "x": -129,
+          "y": 60
+        },
+        "10": {
+          "x": -144,
+          "y": 134
+        }
+      }
+    },
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "6253bf76-2e85-11eb-9f59-3703abfd39c7",
+  "type": "`U`&`C`&`G`",
+  "system": true
+}

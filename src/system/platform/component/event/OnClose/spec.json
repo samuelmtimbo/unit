@@ -1,0 +1,53 @@
+{
+  "name": "on close",
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'close'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "string",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` \"ntf_close\" event",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "notification"
+    ]
+  },
+  "id": "2ef3ebd3-6447-4871-ba2f-f539a3fa02ff",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,29 @@
+{
+  "name": "divide",
+  "inputs": {
+    "a": {
+      "type": "number"
+    },
+    "b": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a ÷ b": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "divide",
+    "description": "division arithmetic operator",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "arithmetic"
+    ]
+  },
+  "id": "158d85eb-28b8-4355-b637-28a7ec751233",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

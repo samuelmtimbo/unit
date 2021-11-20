@@ -1,0 +1,59 @@
+{
+  "name": "integer half",
+  "units": {
+    "half": {
+      "path": "49d04556-34fd-4231-a478-0e106b564e1c"
+    },
+    "floor": {
+      "path": "3217edcf-2fa1-4dc4-af7c-d6fb607c888d"
+    }
+  },
+  "merges": {
+    "merge0": {
+      "half": {
+        "output": {
+          "a ÷ 2": true
+        }
+      },
+      "floor": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "half",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "a ÷ 2": {
+      "pin": {
+        "0": {
+          "unitId": "floor",
+          "pinId": "⌊a⌋"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "half",
+    "description": "build a list of size n",
+    "complexity": 4,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "86e310b3-4b84-4be2-a87a-e4ebcc5d3a0c",
+  "type": "`U`&`G`",
+  "system": true
+}

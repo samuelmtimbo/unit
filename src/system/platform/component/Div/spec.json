@@ -1,0 +1,32 @@
+{
+  "name": "div",
+  "type": "`U`&`C`",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML div element",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "system": true
+}

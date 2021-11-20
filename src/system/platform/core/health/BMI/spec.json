@@ -1,0 +1,76 @@
+{
+  "name": "BMI",
+  "units": {
+    "tzeabjqyt": {
+      "path": "158d85eb-28b8-4355-b637-28a7ec751233"
+    },
+    "oedqjmoi": {
+      "path": "ef4c1d0a-bda1-484e-8fcb-0fdbde195778",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "2"
+        }
+      }
+    }
+  },
+  "merges": {
+    "woktqgw": {
+      "tzeabjqyt": {
+        "input": {
+          "b": true
+        }
+      },
+      "oedqjmoi": {
+        "output": {
+          "a ** b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "scale",
+    "description": "weight / height ^ 2",
+    "link": "https://en.wikipedia.org/wiki/Body_mass_index",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "health"
+    ]
+  },
+  "inputs": {
+    "yymo": {
+      "pin": {
+        "0": {
+          "unitId": "oedqjmoi",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    },
+    "ydijub": {
+      "pin": {
+        "0": {
+          "unitId": "tzeabjqyt",
+          "pinId": "a"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "mzrfxtidp": {
+      "pin": {
+        "0": {
+          "unitId": "tzeabjqyt",
+          "pinId": "a ÷ b"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "ba2363a8-c9b5-4596-b270-9db25ab8463b",
+  "type": "`U`&`G`",
+  "system": true
+}

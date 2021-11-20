@@ -1,0 +1,104 @@
+{
+  "name": "toggle value",
+  "units": {
+    "getvalue": {
+      "path": "d74f12c2-1868-11eb-8136-238c1b1a727f",
+      "input": {
+        "unit": {},
+        "any": {}
+      },
+      "output": {
+        "value": {}
+      }
+    },
+    "not": {
+      "path": "7d02d638-a311-4ea8-a0c0-d45baf739e0d",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "!a": {}
+      }
+    },
+    "setvalue": {
+      "path": "ad68ca8e-ff63-467d-a770-3e6a7490f7fb",
+      "input": {
+        "element": {},
+        "value": {}
+      },
+      "output": {}
+    }
+  },
+  "merges": {
+    "0": {
+      "not": {
+        "input": {
+          "a": true
+        }
+      },
+      "getvalue": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "1": {
+      "setvalue": {
+        "input": {
+          "element": true
+        }
+      },
+      "getvalue": {
+        "input": {
+          "unit": true
+        }
+      }
+    },
+    "fewowjo": {
+      "setvalue": {
+        "input": {
+          "value": true
+        }
+      },
+      "not": {
+        "output": {
+          "!a": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "state": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "mergeId": "1"
+        }
+      },
+      "ref": true
+    },
+    "any": {
+      "pin": {
+        "0": {
+          "unitId": "getvalue",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "toggle-left",
+    "description": "...",
+    "complexity": 10,
+    "tags": [
+      "platform",
+      "component",
+      "core"
+    ]
+  },
+  "id": "dae754da-d773-41b9-bbc8-f72b83b6f03d",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,33 @@
+{
+  "name": "g",
+  "inputs": {
+    "class": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "SVG G",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "component",
+      "svg"
+    ]
+  },
+  "id": "be11165e-489f-11eb-921f-87b924eb0725",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`",
+  "system": true
+}

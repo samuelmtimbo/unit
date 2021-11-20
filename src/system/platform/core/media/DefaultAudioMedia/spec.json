@@ -1,0 +1,42 @@
+{
+  "name": "default audio user media",
+  "units": {
+    "getusermedia": {
+      "path": "a6e30b43-9ab4-4206-bfba-3f2129faac30",
+      "input": {
+        "opt": {
+          "constant": true,
+          "data": "{video:false,audio:{echoCancellation:true,noiseSuppression:true}}"
+        }
+      },
+      "output": {}
+    }
+  },
+  "merges": {},
+  "inputs": {},
+  "outputs": {
+    "stream": {
+      "pin": {
+        "0": {
+          "unitId": "getusermedia",
+          "pinId": "stream"
+        }
+      },
+      "ref": true,
+      "type": "`ST`"
+    }
+  },
+  "metadata": {
+    "icon": "mic",
+    "description": "",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "core",
+      "media"
+    ]
+  },
+  "id": "1b164d72-2c14-4ec2-a1c8-253679a2bf13",
+  "type": "`U`&`G`",
+  "system": true
+}

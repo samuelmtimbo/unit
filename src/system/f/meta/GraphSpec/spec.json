@@ -1,0 +1,30 @@
+{
+  "name": "graph spec",
+  "inputs": {
+    "graph": {
+      "type": "`G`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "spec": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "get system `spec` with `id`",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "meta"
+    ]
+  },
+  "id": "6afeacad-a2bf-440a-a986-ce50be27d94d",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

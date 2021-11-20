@@ -1,0 +1,26 @@
+{
+  "name": "cos",
+  "inputs": {
+    "a": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "cos(a)": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "cosine of angle `a` in rad",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "math"
+    ]
+  },
+  "id": "62af44dc-17d6-459a-b95f-3b8ce5b48856",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

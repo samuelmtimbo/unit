@@ -1,0 +1,90 @@
+{
+  "name": "on mount",
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "units": {
+    "listen": {
+      "path": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "unit": {
+          "metadata": {
+            "position": {
+              "x": -15,
+              "y": 26
+            }
+          }
+        },
+        "event": {
+          "data": "'mount'",
+          "constant": true,
+          "metadata": {
+            "position": {
+              "x": -34,
+              "y": -7
+            }
+          }
+        },
+        "remove": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -15,
+              "y": -39
+            }
+          }
+        }
+      },
+      "output": {
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 66,
+              "y": -7
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 17,
+          "y": -7
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` 'mount' event",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "6ecc9c94-98bd-11eb-845c-dfd895d4184c",
+  "type": "`U`&`G`",
+  "system": true
+}

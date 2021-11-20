@@ -1,0 +1,30 @@
+{
+  "name": "broadcast receiver",
+  "inputs": {
+    "user": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "stream": {
+      "type": "`ST`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "description": "Peer Service Client Connection",
+    "complexity": 20,
+    "tags": [
+      "ioun.it",
+      "peer"
+    ]
+  },
+  "id": "41de82f2-3207-4142-892f-218593414cd7",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

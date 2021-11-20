@@ -1,0 +1,93 @@
+{
+  "name": "broadcast video transmitter",
+  "inputs": {
+    "id": {
+      "pin": {
+        "0": {
+          "unitId": "transmitter",
+          "pinId": "id"
+        }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 58,
+            "y": -1
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "stream": {
+      "pin": {
+        "0": {
+          "unitId": "defaultvideousermedia",
+          "pinId": "stream"
+        }
+      },
+      "ref": true,
+      "type": "`C`&`V`&`M`",
+      "defaultIgnored": true
+    }
+  },
+  "units": {
+    "transmitter": {
+      "path": "13234407-125d-4cb6-8b1c-70f53f0a6854",
+      "input": {
+        "stream": {},
+        "id": {
+          "metadata": {
+            "position": {
+              "x": 32,
+              "y": 0
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -17,
+          "y": 0
+        }
+      }
+    },
+    "defaultvideousermedia": {
+      "path": "c03c7ef3-0649-4a99-9e9a-858bcaba1307",
+      "input": {},
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -75,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "transmitter": {
+        "input": {
+          "stream": true
+        }
+      },
+      "defaultvideousermedia": {
+        "output": {
+          "stream": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "complexity": 11,
+    "tags": [
+      "ioun.it",
+      "peer"
+    ]
+  },
+  "id": "fc06c9ca-bc00-11eb-809d-5b40b1b784df",
+  "type": "`U`&`G`",
+  "system": true
+}

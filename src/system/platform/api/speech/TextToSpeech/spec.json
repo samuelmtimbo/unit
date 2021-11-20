@@ -1,0 +1,37 @@
+{
+  "name": "text to speech",
+  "inputs": {
+    "message": {
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "'hello world'",
+          "'welcome to unit!'"
+        ]
+      }
+    },
+    "voice": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "1"
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "message-circle",
+    "description": "speak the message",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "speech"
+    ]
+  },
+  "id": "6db29a62-2035-4cfc-a9d3-03444a8bc2b8",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

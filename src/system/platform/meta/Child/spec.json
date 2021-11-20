@@ -1,0 +1,35 @@
+{
+  "name": "child",
+  "inputs": {
+    "parent": {
+      "type": "`C`",
+      "ref": true
+    },
+    "at": {
+      "type": "number"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "child": {
+      "type": "`U`&`C`",
+      "ref": true,
+      "icon": "square"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "reference a child element inside `element`",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "meta"
+    ]
+  },
+  "id": "59afce80-30e7-4322-84e6-955767bb5106",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

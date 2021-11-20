@@ -1,0 +1,76 @@
+{
+  "name": "array builder",
+  "units": {
+    "arraybuilderfrom": {
+      "path": "6db1905f-2343-4c63-97d3-07f4d946ef58",
+      "input": {
+        "init": {
+          "data": "[]",
+          "constant": true
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "array",
+    "description": "build a list from empty list",
+    "complexity": 8,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean"
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "acc": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "acc"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "a[]": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "a[]"
+        }
+      },
+      "type": "<A>[]"
+    },
+    "local": {
+      "pin": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "local"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "4a065231-48e6-44ed-95bb-8f96c4643574",
+  "type": "`U`&`G`",
+  "system": true
+}

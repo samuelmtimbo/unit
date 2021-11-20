@@ -1,0 +1,103 @@
+{
+  "name": "merge event data",
+  "units": {
+    "tagevent": {
+      "path": "5fe94b90-2618-11eb-b06a-5fc0ce62fd27",
+      "input": {
+        "event": {}
+      },
+      "output": {
+        "{event}": {}
+      }
+    },
+    "tagdata": {
+      "path": "7a602db8-2618-11eb-b9c6-4bb45b6d8833",
+      "input": {
+        "data": {}
+      },
+      "output": {
+        "{data}": {}
+      }
+    },
+    "merge": {
+      "path": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "ab": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "merge": {
+        "input": {
+          "a": true
+        }
+      },
+      "tagdata": {
+        "output": {
+          "{data}": true
+        }
+      }
+    },
+    "1": {
+      "merge": {
+        "input": {
+          "b": true
+        }
+      },
+      "tagevent": {
+        "output": {
+          "{event}": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "data": {
+      "pin": {
+        "0": {
+          "unitId": "tagdata",
+          "pinId": "data"
+        }
+      },
+      "type": "any"
+    },
+    "event": {
+      "pin": {
+        "0": {
+          "unitId": "tagevent",
+          "pinId": "event"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "{event,data}": {
+      "pin": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "ab"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "...",
+    "complexity": 5,
+    "tags": [
+      "platform",
+      "component",
+      "event"
+    ]
+  },
+  "id": "bbc52982-4a71-45b8-8521-c0c30260c022",
+  "type": "`U`&`G`",
+  "system": true
+}

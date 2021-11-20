@@ -1,0 +1,70 @@
+{
+  "name": "shuffle",
+  "units": {
+    "pmlhjcn": {
+      "path": "19dc0a16-1d5c-4bbe-a3d1-c944728cdac5"
+    },
+    "cfnlkt": {
+      "path": "f9588979-74e1-477a-8085-594043362fdf"
+    }
+  },
+  "merges": {
+    "qriepmm": {
+      "pmlhjcn": {
+        "input": {
+          "a": true
+        }
+      },
+      "cfnlkt": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "wsglsfheo": {
+      "pmlhjcn": {
+        "input": {
+          "to": true
+        }
+      },
+      "cfnlkt": {
+        "output": {
+          "last": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "randomly shuffle `a`",
+    "complexity": 30,
+    "tags": [
+      "core",
+      "array"
+    ]
+  },
+  "inputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "mergeId": "qriepmm"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "pmlhjcn",
+          "pinId": "a"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "id": "6d09436e-2af6-4861-b542-11601faa1e70",
+  "type": "`U`&`G`",
+  "system": true
+}
