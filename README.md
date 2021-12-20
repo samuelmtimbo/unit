@@ -44,7 +44,7 @@ Install dependencies and build:
 yarn
 ```
 
-Buiild:
+Build:
 
 ```
 yarn setup
