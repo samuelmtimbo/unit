@@ -19,7 +19,7 @@
     "setup": "yarn run-s build lib",
     "prepare": "",
     "tcheck": "tsc --noEmit",
-    "lib": "rm -rf lib; tsc",
+    "lib": "(rm -rf lib || rd /s/q lib) && tsc",
     "test": "ts-node src/test/index.ts",
     "build": "run-s build:system build:client build:worker build:sw",
     "build:bundle": "ts-node src/script/build/client.ts",
