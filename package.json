@@ -19,7 +19,7 @@
     "setup": "yarn run-s build lib",
     "prepare": "",
     "tcheck": "tsc --noEmit",
-    "lib": "(rm -rf lib || rd /s/q lib) && tsc",
+    "lib": "shx rm -rf lib; tsc",
     "test": "ts-node src/test/index.ts",
     "build": "run-s build:system build:client build:worker build:sw",
     "build:bundle": "ts-node src/script/build/client.ts",
@@ -67,6 +67,7 @@
     "npm-run-all": "4.1.5",
     "npm-run-scripts": "2.1.2",
     "prettier": "2.3.1",
+    "shx": "^0.3.3",
     "ts-node": "10.4.0",
     "typescript": "4.5.4"
   }
