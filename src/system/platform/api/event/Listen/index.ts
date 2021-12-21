@@ -60,19 +60,12 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     this._remove()
   }
 
-  onIterInputData(name: string, data: any) {
+  onIterDataInputData(name: string, data: any) {
     // if (name === 'remove') {
     if (this._listener) {
       this._remove()
+      this._done()
     }
-    this._input.event.pull()
-    this._input.remove.pull()
-    // }s
-  }
-
-  // TODO
-  onDataInputInvalid(name: string): void {
-    this._remove()
-    this._invalidate()
+    // }
   }
 }
