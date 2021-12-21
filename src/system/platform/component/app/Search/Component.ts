@@ -61,7 +61,8 @@ export type ListItem = {
 
 const DEFAULT_STYLE = {
   position: 'relative',
-  width: 'fit-content',
+  width: 'calc(100% + 4px)',
+  maxWidth: '309px',
   height: 'initial',
   // overflowY: 'hidden',
   // overflowX: 'hidden',
