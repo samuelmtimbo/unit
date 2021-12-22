@@ -35,7 +35,7 @@ export const $U_METHOD = [
 export interface $U_C {
   $getGlobalId(data: {}, callback: Callback<string>): void
 
-  $getListeners(data: {}, callback: Callback<string[]>): void
+  $getEventNames(data: {}, callback: Callback<string[]>): void
 
   $emit(data: { type: string; data: any }): void
 

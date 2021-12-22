@@ -31,8 +31,6 @@ export class Pin<T = any> extends $ implements V {
   } = {}) {
     super()
 
-    this.setMaxListeners(16)
-
     if (data !== undefined) {
       this._idle = false
     }

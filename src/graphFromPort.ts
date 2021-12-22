@@ -33,8 +33,8 @@ export function graphFromPort(port: RemotePort): $Graph {
       return $graph.$getGlobalId(data, callback)
     }
 
-    $getListeners(data: {}, callback: Callback<string[]>): void {
-      return $graph.$getListeners(data, callback)
+    $getEventNames(data: {}, callback: Callback<string[]>): void {
+      return $graph.$getEventNames(data, callback)
     }
 
     $emit(data: { type: string; data: any }): void {

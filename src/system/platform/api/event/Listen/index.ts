@@ -36,7 +36,9 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     )
 
     this.addListener('destroy', () => {
-      this._remove()
+      if (this._listener) {
+        this._remove()
+      }
     })
   }
 
@@ -53,7 +55,7 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     }
     this._listener = listener
 
-    this._unlisten = unit.listen(event, this._listener)
+    this._unlisten = unit.addListener(event, this._listener)
   }
 
   d() {

@@ -1,12 +1,10 @@
-import { EventEmitter2 } from 'eventemitter2'
+import { EventEmitter_ } from '../../EventEmitter'
 import { UserSpec } from '../../server/model/UserSpec'
 import { Unlisten } from '../../Unlisten'
 
 let _user: UserSpec | null = null
 
-export const eventEmitter = new EventEmitter2()
-
-eventEmitter.setMaxListeners(100)
+export const eventEmitter = new EventEmitter_()
 
 export function isSignedIn(): boolean {
   return !!_user

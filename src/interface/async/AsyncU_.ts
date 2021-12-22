@@ -29,8 +29,8 @@ export const AsyncUCall = (unit: U): $U_C => {
       callback(__global_id)
     },
 
-    $getListeners(data: {}, callback: Callback<string[]>) {
-      const events = unit.getListeners()
+    $getEventNames(data: {}, callback: Callback<string[]>) {
+      const events = unit.eventNames()
       callback(events)
     },
 

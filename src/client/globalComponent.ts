@@ -1,10 +1,10 @@
-import { EventEmitter2 } from 'eventemitter2'
 import { Callback } from '../Callback'
+import { EventEmitter_ } from '../EventEmitter'
 import { System } from '../system'
 import { Unlisten } from '../Unlisten'
 import { Component } from './component'
 
-const __component__emitter = new EventEmitter2()
+const __component__emitter = new EventEmitter_()
 
 export function pushGlobalComponent(
   system: System,

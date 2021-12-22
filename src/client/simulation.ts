@@ -1,4 +1,4 @@
-import { EventEmitter2 } from 'eventemitter2'
+import { EventEmitter_ } from '../EventEmitter'
 import NOOP from '../NOOP'
 import { Dict } from '../types/Dict'
 import { Shape } from './util/geometry'
@@ -69,7 +69,7 @@ const RK = [
   [RK40, RK41],
 ]
 
-export class Simulation<N = {}, L = {}> extends EventEmitter2 {
+export class Simulation<N = {}, L = {}> extends EventEmitter_ {
   public _nodes: Dict<SimNode<N>>
   public _links: Dict<SimLink<L>>
 

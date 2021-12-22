@@ -154,22 +154,22 @@ export default class PeerReceiver<T> extends Primitive<I<T>, O<T>> {
       this._output.stream.pull()
     }
 
-    this._peer.on('signal', signal_listener)
-    this._peer.on('connect', connect_listener)
-    this._peer.on('error', error_listener)
-    this._peer.on('close', close_listener)
-    this._peer.on('message', message_listener)
-    this._peer.on('start', start_listener)
-    this._peer.on('stop', stop_listener)
+    this._peer.addListener('signal', signal_listener)
+    this._peer.addListener('connect', connect_listener)
+    this._peer.addListener('error', error_listener)
+    this._peer.addListener('close', close_listener)
+    this._peer.addListener('message', message_listener)
+    this._peer.addListener('start', start_listener)
+    this._peer.addListener('stop', stop_listener)
 
     return () => {
-      this._peer.off('signal', signal_listener)
-      this._peer.off('connect', connect_listener)
-      this._peer.off('error', error_listener)
-      this._peer.off('close', close_listener)
-      this._peer.off('message', message_listener)
-      this._peer.off('start', start_listener)
-      this._peer.off('stop', stop_listener)
+      this._peer.removeListener('signal', signal_listener)
+      this._peer.removeListener('connect', connect_listener)
+      this._peer.removeListener('error', error_listener)
+      this._peer.removeListener('close', close_listener)
+      this._peer.removeListener('message', message_listener)
+      this._peer.removeListener('start', start_listener)
+      this._peer.removeListener('stop', stop_listener)
     }
   }
 

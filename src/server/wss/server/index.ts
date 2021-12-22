@@ -1,7 +1,7 @@
-import { EventEmitter2 } from 'eventemitter2'
 import { emitter as _emitter } from '..'
+import { EventEmitter_ } from '../../../EventEmitter'
 
-export const emitter = new EventEmitter2()
+export const emitter = new EventEmitter_()
 
 export * from './peer'
 

@@ -80,7 +80,7 @@ export default class PeerPod extends Primitive<I, O> {
         },
       }
 
-      this._peer.on('message', (message: string) => {
+      this._peer.addListener('message', (message: string) => {
         // console.log('PeerPod', 'message', message)
         const data = evaluate(message)
 
@@ -108,12 +108,12 @@ export default class PeerPod extends Primitive<I, O> {
         }
       })
 
-      this._peer.on('connect', () => {
+      this._peer.addListener('connect', () => {
         // console.log('PeerPod', 'peer', 'connect')
         this._peer_connected = true
       })
 
-      this._peer.on('close', () => {
+      this._peer.addListener('close', () => {
         // console.log('PeerPod', 'peer', 'close')
         this._peer_connected = false
       })

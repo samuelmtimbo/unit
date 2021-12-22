@@ -1,6 +1,6 @@
-import { EventEmitter2 } from 'eventemitter2'
 import * as http from 'http'
 import * as WebSocket from 'ws'
+import { EventEmitter_ } from '../../EventEmitter'
 import NOOP from '../../NOOP'
 import { Dict } from '../../types/Dict'
 import { uuidNotIn } from '../../util/id'
@@ -94,7 +94,7 @@ function removeUserSessionSocket(
 //   user: new EventEmitter2(),
 // }
 
-export const emitter = new EventEmitter2()
+export const emitter = new EventEmitter_()
 
 export * from './server'
 

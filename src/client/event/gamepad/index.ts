@@ -1,4 +1,4 @@
-import { EventEmitter2 } from 'eventemitter2'
+import { EventEmitter_ } from '../../../EventEmitter'
 
 const DEFAULT_TRESHOLD = 0.2
 
@@ -55,7 +55,7 @@ const keys = {
   ],
 }
 
-export class Gamepads extends EventEmitter2 {
+export class Gamepads extends EventEmitter_ {
   // there can only be four gamepads connected at a time
   private _gamepads: GamepadInput[] = [
     new GamepadInput(0),
@@ -93,7 +93,7 @@ export class Gamepads extends EventEmitter2 {
 
 // every connected gamepad has it's own animation frame
 
-export class GamepadInput extends EventEmitter2 {
+export class GamepadInput extends EventEmitter_ {
   private _frame: number | null = null
   private _currentButtonsPressed: boolean[] = [
     false,

@@ -655,7 +655,7 @@ export class Component<
       pushGlobalComponent(this.$system, __global_id, this)
     })
 
-    $unit.$getListeners({}, (events) => {
+    $unit.$getEventNames({}, (events) => {
       for (const event of events) {
         listen(event)
       }

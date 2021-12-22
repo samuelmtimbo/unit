@@ -1,5 +1,6 @@
-import { EventEmitter2 } from 'eventemitter2'
 import callAll from '../../callAll'
+import { Callback } from '../../Callback'
+import { EventEmitter_ } from '../../EventEmitter'
 import { APINotImplementedError } from '../../exception/APINotImplementedError'
 import { EE } from '../../interface/EE'
 import { System } from '../../system'
@@ -11,9 +12,10 @@ export interface ISpeechGrammarList {
 
 export interface ISpeechGrammarListOpt {}
 
-export interface ISpeechRecognition extends EE {
+export interface ISpeechRecognition {
   start(): void
   stop(): void
+  addListener(event: string, listener: Callback): Unlisten
 }
 
 export interface ISpeechRecognitionOpt {
@@ -60,7 +62,7 @@ export const grammarsFrom = (
   return grammars
 }
 
-export class SpeechRecorder extends EventEmitter2 {
+export class SpeechRecorder extends EventEmitter_ {
   private _grammars: ISpeechGrammarList
   private _recognition: ISpeechRecognition
 
