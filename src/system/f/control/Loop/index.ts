@@ -51,10 +51,6 @@ export default class Loop<T> extends Primitive<I<T>, O<T>> {
         this._pull_next()
       }
     } else if (name === 'test') {
-      if (this._test === false && data === true) {
-        this._forward_empty('final')
-      }
-
       this._test = data as boolean
 
       if (this._current !== undefined) {
@@ -133,7 +129,7 @@ export default class Loop<T> extends Primitive<I<T>, O<T>> {
 
   private _loop(): void {
     this._looping = true
-    this._current = this._next as T
+    this._current = this._next
     this._next = undefined
     this._backward('test')
     if (this._looping && this._output.local.empty()) {
@@ -162,7 +158,6 @@ export default class Loop<T> extends Primitive<I<T>, O<T>> {
 
   private _done(): void {
     this._reset()
-
     this._backward('init')
   }
 
