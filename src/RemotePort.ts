@@ -1,6 +1,6 @@
-import { EventEmitter2 } from 'eventemitter2'
 import { Callback } from './Callback'
 import { CALL, REF, REF_EXEC, UNWATCH, WATCH } from './constant/STRING'
+import { EventEmitter_ } from './EventEmitter'
 import { Port } from './Port'
 import { Dict } from './types/Dict'
 import { Unlisten } from './Unlisten'
@@ -15,8 +15,8 @@ export class RemotePort {
 
   private _ref: Dict<RemotePort> = {}
 
-  private _watch_emitter: EventEmitter2 = new EventEmitter2()
-  private _call_emitter: EventEmitter2 = new EventEmitter2()
+  private _watch_emitter: EventEmitter_ = new EventEmitter_()
+  private _call_emitter: EventEmitter_ = new EventEmitter_()
 
   private _valid: boolean = true
 

@@ -5,12 +5,7 @@
       "id": "0eb3579e-4645-4e45-a3b1-f3fb1a62ab4d",
       "input": {
         "circle": {
-          "constant": false,
-          "metadata": {
-            "examples": [
-              "{x:100,y:100,r:50}"
-            ]
-          }
+          "constant": false
         },
         "d": {
           "constant": true,
@@ -64,7 +59,12 @@
           "pinId": "circle"
         }
       },
-      "type": "{x:number,y:number,r:number}"
+      "type": "{x:number,y:number,r:number}",
+      "metadata": {
+        "examples": [
+          "{x:100,y:100,r:50}"
+        ]
+      }
     },
     "style": {
       "pin": {

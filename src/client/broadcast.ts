@@ -1,11 +1,11 @@
-import { EventEmitter2 } from 'eventemitter2'
+import { EventEmitter_ } from '../EventEmitter'
 import { Action } from '../types'
 import { Dict } from '../types/Dict'
 
 const _transmitterChannel: Dict<BroadcastChannel> = {}
 const _receiverChannel: Dict<BroadcastChannel> = {}
 
-const _eventEmitter: EventEmitter2 = new EventEmitter2()
+const _eventEmitter: EventEmitter_ = new EventEmitter_()
 
 export function openReceiverChannel(channel: string): BroadcastChannel {
   let receiverChannel = _receiverChannel[channel]

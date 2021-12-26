@@ -1,16 +1,17 @@
+import { Callback } from '../../../../../Callback'
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { CH } from '../../../../../interface/CH'
-import { EE } from '../../../../../interface/EE'
 import { RE } from '../../../../../interface/RE'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../Unlisten'
 
-export interface IChannel extends EE {
+export interface IChannel {
   postMessage(message: any): void
+  addListener(event: string, listener: Callback): Unlisten
   close(): void
 }
 

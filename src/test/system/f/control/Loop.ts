@@ -124,7 +124,7 @@ assert.equal(loop.peak('final'), 1)
 loop.push('test', true)
 
 assert.equal(loop.peak('current'), 1)
-assert.equal(loop.peak('final'), undefined)
+assert.equal(loop.getOutput('final').invalid(), true)
 
 loop.push('init', 1)
 
@@ -274,4 +274,5 @@ loop0.getInput('test').invalidate()
 loop0.push('test', true)
 loop0.push('init', 1)
 
-assert.equal(loop0.peak('final'), undefined)
+assert.equal(loop0.peak('final'), 0)
+assert.equal(loop0.getOutput('final').invalid(), true)

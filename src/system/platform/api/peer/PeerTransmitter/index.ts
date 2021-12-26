@@ -254,16 +254,16 @@ export default class PeerTransmitter<T>
       this._disconnect()
     }
 
-    this._peer.on('signal', signal_listener)
-    this._peer.on('connect', connect_listener)
-    this._peer.on('error', error_listener)
-    this._peer.on('close', close_listener)
+    this._peer.addListener('signal', signal_listener)
+    this._peer.addListener('connect', connect_listener)
+    this._peer.addListener('error', error_listener)
+    this._peer.addListener('close', close_listener)
 
     return () => {
-      this._peer.off('signal', signal_listener)
-      this._peer.off('connect', connect_listener)
-      this._peer.off('error', error_listener)
-      this._peer.off('close', close_listener)
+      this._peer.removeListener('signal', signal_listener)
+      this._peer.removeListener('connect', connect_listener)
+      this._peer.removeListener('error', error_listener)
+      this._peer.removeListener('close', close_listener)
     }
   }
 

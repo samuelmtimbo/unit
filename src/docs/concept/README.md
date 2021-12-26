@@ -10,7 +10,7 @@ This forms the base of Flow-based Programming; as a Programming Language, unit i
 
 The unit paradigm was specially designed to enable easy visual creation of programs called units, which can be interacted with through their inputs and outputs. A new unit can be built by piping and collapsing together smaller units, in a process called Composition. unit's fundamentals are not new by themselves - in fact, unit represents a purposeful re-exploration of Computer Science principles in the context of modern Software Development.
 
-The simplicity of Programming in unit comes from the recursive application of a very small set of principles. One may start out with an initial set of units (Units), which can be tied together (Connection) forming a new graph unit (Composition). Symmetrically, a graph can be decomposed and disconnected into its set of smaller units. Moreover any software can be built by repeatedly taping into those.
+The simplicity of Programming in unit comes from the iterative application of a very small set of principles. One may start out with an initial set of units (Units), which can be tied together (Connection) forming a new graph unit (Composition). Symmetrically, a graph can be decomposed and disconnected into its set of smaller units. Moreover any software can be built by repeatedly taping into those.
 
 The concept of a unit is essentially an advancement of the fundamental concept of a function, common to many Textual Programming Languages, such as JavaScript; a function is supposed to be given an ordered list of arguments as input and can return a single datum as output. A unit, on the other hand, can receive and send data at any time, in any order and through multiple inputs and outputs. We believe that redefining the fundamental building block of Programming as a unit can exponentially reduce Software Complexity.
 
@@ -22,7 +22,7 @@ Systems built on top of traditional Textual Programming Languages became so comp
 
 The current state of the art of Programming imposes a tall barrier of entry for people interested in making Small Software. Reading written code is known to be error-prone and time-consuming. Such dread is further augmented by the diffculty of understanding the architecture of a program in the big picture; a reflex of the paradigm mismatch between how systems are encoded and how they are represented, which we believe is a strong reason why today people would avoid making sense of how software is built.
 
-By making conceptually simple programs simple to express visually in unit, the user can be quickly taught to build small useful machines that can, between many things, automate otherwise repetitive tasks all by himself, a practice we call Personal Programming in contrast with Professional Software Engineering, further blurring the line between User and Developer.
+By making conceptually simple programs simple to express visually in unit, the user can be quickly taught to build small useful machines that can, between many things, automate otherwise repetitive tasks, all by himself, a practice we call Personal Programming in contrast with Software Engineering, further blurring the line between User and Developer.
 
 That brings us to the world of User Interfaces (UI), which is inseparable from the world of Programming.
 

@@ -14,22 +14,22 @@ export function getPosition(
 
   const local_position = getLocalPosition(element)
   const scroll_position = getScrollPosition(element, relative)
-  const offset_position = getOffsetPosition(element, relative)
+  const offset_position = getParentPosition(element, relative)
 
   return addVector3(local_position, scroll_position, offset_position)
 }
 
-export function getOffsetPosition(element: HTMLElement, relative: HTMLElement) {
+export function getParentPosition(element: HTMLElement, relative: HTMLElement): Position {
   const { offsetParent } = element
 
   let x = 0
   let y = 0
 
   const pushParent = (p: HTMLElement) => {
-    const { offsetLeft, offsetTop } = p
+    const local_position = getLocalPosition(p)
 
-    x += offsetLeft
-    y += offsetTop
+    x += local_position.x
+    y += local_position.y
   }
 
   let p = offsetParent as HTMLElement

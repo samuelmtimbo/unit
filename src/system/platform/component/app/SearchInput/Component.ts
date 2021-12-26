@@ -18,7 +18,7 @@ const HEIGHT: number = 39
 
 const DEFAULT_STYLE = {
   height: `${HEIGHT}px`,
-  width: '309px',
+  width: '100%',
   color: 'currentColor',
   borderTopWidth: '0',
   borderTopStyle: 'solid',

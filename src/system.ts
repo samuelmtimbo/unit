@@ -27,7 +27,6 @@ import { Classes, GraphSpecs, Specs } from './types'
 import { Dict } from './types/Dict'
 import { Unlisten } from './Unlisten'
 import { randomId } from './util/id'
-import { EventEmitter2 } from 'eventemitter2'
 
 export type IOINIT<T, K> = (opt: K) => T
 

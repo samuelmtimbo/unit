@@ -1,4 +1,4 @@
-import { EventEmitter2 } from 'eventemitter2'
+import { EventEmitter_ } from './EventEmitter'
 import { J } from './interface/J'
 import { Dict } from './types/Dict'
 import { Unlisten } from './Unlisten'
@@ -7,7 +7,7 @@ import { pop } from './util/array'
 export type ObjectUpdateType = 'set' | 'delete'
 
 export type ObjectEmitterNode = {
-  emitter: EventEmitter2 | null
+  emitter: EventEmitter_ | null
   children: Dict<ObjectEmitterNode>
 }
 
@@ -26,7 +26,7 @@ export function $Object<T extends object>(
   ) => Unlisten
 } {
   const _node: ObjectEmitterNode = {
-    emitter: new EventEmitter2(),
+    emitter: new EventEmitter_(),
     children: {},
   }
 
@@ -86,11 +86,11 @@ export function $Object<T extends object>(
     }
   }
 
-  const _ensure_emitter = (path: string[]): EventEmitter2 => {
+  const _ensure_emitter = (path: string[]): EventEmitter_ => {
     let node = _node
     for (const p of path) {
       if (!node.children[p]) {
-        node.children[p] = { emitter: new EventEmitter2(), children: {} }
+        node.children[p] = { emitter: new EventEmitter_(), children: {} }
       }
       node = node.children[p]
     }

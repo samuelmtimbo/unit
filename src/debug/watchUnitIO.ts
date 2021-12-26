@@ -46,7 +46,7 @@ export function watchUnitIO(
 
   if (watch_data_input || watch_ref_input) {
     all.push(
-      unit._addListener('set_input', (pinId, pin, { ref }) => {
+      unit.addListener('set_input', (pinId, pin, { ref }) => {
         if (ref && watch_ref_input) {
           all.push(watchRefInput(pinId, pin, callback))
         } else if (!ref && watch_data_input) {
@@ -70,7 +70,7 @@ export function watchUnitIO(
 
   if (watch_data_output || watch_ref_output) {
     all.push(
-      unit._addListener('set_output', (pinId, pin, { ref }) => {
+      unit.addListener('set_output', (pinId, pin, { ref }) => {
         if (ref && watch_ref_output) {
           all.push(watchRefOutput(pinId, pin, callback))
         } else if (!ref && watch_data_output) {

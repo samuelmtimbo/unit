@@ -1,4 +1,4 @@
-import { EventEmitter2 } from 'eventemitter2'
+import { EventEmitter_ } from '../EventEmitter'
 import { emptyGraphSpec } from '../spec/emptySpec'
 import {
   ComponentSpec,
@@ -69,7 +69,7 @@ export function emptySpec(init: Partial<GraphSpec> = {}): GraphSpec {
   return newSpec
 }
 
-export const EMITTER = new EventEmitter2()
+export const EMITTER = new EventEmitter_()
 
 export function setSpec(specs: Specs, id: string, spec: GraphSpec): void {
   // console.log('setSpec', id, spec)

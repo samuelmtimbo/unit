@@ -23,5 +23,6 @@ yarn-error.log
 .env
 
 public/index.js
+public/sw.js
 
 src/client/static/js/index.js.ts

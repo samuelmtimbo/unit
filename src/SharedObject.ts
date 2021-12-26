@@ -1,8 +1,8 @@
-import { EventEmitter2 } from 'eventemitter2'
+import { EventEmitter_ } from './EventEmitter'
 
 export interface SharedObjectClient<T> {
   proxy: T
-  emitter: EventEmitter2
+  emitter: EventEmitter_
   disconnect: () => void
 }
 
@@ -32,7 +32,7 @@ export class SharedObject<T extends object> {
         return value
       },
     })
-    const emitter = new EventEmitter2()
+    const emitter = new EventEmitter_()
     const disconnect = () => {
       const i = this._clients.indexOf(client)
       this._clients.splice(i, 1)

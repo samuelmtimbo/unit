@@ -12,8 +12,8 @@ export const AsyncUCall = (unit: $U): $U_C => {
       return unit.$getGlobalId(data, callback)
     },
 
-    $getListeners(data: {}, callback: Callback<string[]>) {
-      return unit.$getListeners(data, callback)
+    $getEventNames(data: {}, callback: Callback<string[]>) {
+      return unit.$getEventNames(data, callback)
     },
 
     $emit(_data: { type: string; data: any }) {

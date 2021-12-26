@@ -1624,14 +1624,14 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
 
     forEach(inputs, set_unit_input)
 
-    all_unlisten.push(unit._addListener('set_input', set_unit_input))
-    all_unlisten.push(unit._addListener('remove_input', remove_unit_input))
+    all_unlisten.push(unit.addListener('set_input', set_unit_input))
+    all_unlisten.push(unit.addListener('remove_input', remove_unit_input))
 
     const outputs = unit.getOutputNames()
     forEach(outputs, set_unit_output)
 
-    all_unlisten.push(unit._addListener('set_output', set_unit_output))
-    all_unlisten.push(unit._addListener('remove_output', remove_unit_output))
+    all_unlisten.push(unit.addListener('set_output', set_unit_output))
+    all_unlisten.push(unit.addListener('remove_output', remove_unit_output))
 
     const selfPinNodeId = getOutputNodeId(unitId, SELF)
     const selfPin = unit.getSelfPin()
@@ -1651,7 +1651,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       }
     }
 
-    all_unlisten.push(unit._addListener('err', on_unit_err))
+    all_unlisten.push(unit.addListener('err', on_unit_err))
 
     const on_unit_err_removed = () => {
       const index = this._errUnitIds.indexOf(unitId)
@@ -1664,24 +1664,24 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       }
     }
 
-    all_unlisten.push(unit._prependListener('take_err', on_unit_err_removed))
-    all_unlisten.push(unit._prependListener('catch_err', on_unit_err_removed))
+    all_unlisten.push(unit.prependListener('take_err', on_unit_err_removed))
+    all_unlisten.push(unit.prependListener('catch_err', on_unit_err_removed))
 
     if (unit instanceof Graph) {
       all_unlisten.push(
-        unit._addListener('leaf_add_unit', (unit: Unit, path: string[]) => {
+        unit.addListener('leaf_add_unit', (unit: Unit, path: string[]) => {
           this.emit('leaf_add_unit', unit, [...path, unitId])
         })
       )
 
       all_unlisten.push(
-        unit._addListener('leaf_remove_unit', (unit: Unit, path: string[]) => {
+        unit.addListener('leaf_remove_unit', (unit: Unit, path: string[]) => {
           this.emit('leaf_remove_unit', unit, [...path, unitId])
         })
       )
 
       all_unlisten.push(
-        unit._addListener(
+        unit.addListener(
           'leaf_expose_pin_set',
           (
             path: string[],
@@ -1701,7 +1701,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       )
 
       all_unlisten.push(
-        unit._addListener(
+        unit.addListener(
           'leaf_cover_pin_set',
           (path: string[], type: IO, pinId: string) => {
             this.emit('leaf_cover_pin_set', [...path, unitId], type, pinId)
@@ -1712,7 +1712,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
 
     if (unit instanceof Stateful || (unit instanceof Graph && unit.stateful)) {
       all_unlisten.push(
-        unit._addListener('leaf_set', ({ name, data, path }) => {
+        unit.addListener('leaf_set', ({ name, data, path }) => {
           this.emit('leaf_set', { name, data, path: [unitId, ...path] })
         })
       )
@@ -1724,28 +1724,28 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       this.injectSubComponent(unitId, unitSpec, unit)
     }
 
-    all_unlisten.push(unit._addListener('stateful', this._on_unit_stateful))
-    all_unlisten.push(unit._addListener('stateless', this._on_unit_stateless))
+    all_unlisten.push(unit.addListener('stateful', this._on_unit_stateful))
+    all_unlisten.push(unit.addListener('stateless', this._on_unit_stateless))
 
     all_unlisten.push(
-      unit._addListener('element', () => {
+      unit.addListener('element', () => {
         this._on_unit_element(unitId, unitSpec, unit as any) // TODO
       })
     )
     all_unlisten.push(
-      unit._addListener('not_element', () => {
+      unit.addListener('not_element', () => {
         this._on_unit_not_element(unitId)
       })
     )
 
     all_unlisten.push(
-      unit._addListener('leaf_append_child', ({ id, path }) => {
+      unit.addListener('leaf_append_child', ({ id, path }) => {
         this.emit('leaf_append_child', { id, path: [unitId, ...path] })
       })
     )
 
     all_unlisten.push(
-      unit._addListener('leaf_remove_child_at', ({ at, path }) => {
+      unit.addListener('leaf_remove_child_at', ({ at, path }) => {
         this.emit('leaf_remove_child_at', { at, path: [unitId, ...path] })
       })
     )
