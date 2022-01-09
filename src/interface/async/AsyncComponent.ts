@@ -1,4 +1,4 @@
-import { Component_ } from '../../interface/component'
+import { Component_ } from '../../interface/Component'
 import { $Component } from './$Component'
 import { AsyncC } from './AsyncC_'
 import { AsyncU } from './AsyncU_'

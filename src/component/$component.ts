@@ -1,6 +1,6 @@
 import { $Component } from '../interface/async/$Component'
 import { Async } from '../interface/async/Async'
-import { Component_ } from '../interface/component'
+import { Component_ } from '../interface/Component'
 import { W } from '../interface/W'
 import { proxyWrap } from '../proxyWrap'
 import { Callback } from '../types/Callback'

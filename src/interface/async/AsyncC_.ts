@@ -8,7 +8,7 @@ import {
 } from '../../component/$component'
 import { $Child } from '../../component/Child'
 import { $Children } from '../../component/Children'
-import { Component_ } from '../../interface/component'
+import { Component_ } from '../../interface/Component'
 import { fromId } from '../../spec/fromId'
 import { Classes, Specs } from '../../types'
 import { Callback } from '../../types/Callback'

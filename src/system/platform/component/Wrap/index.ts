@@ -1,7 +1,7 @@
 import { Element } from '../../../../Class/Element'
 import { Unit } from '../../../../Class/Unit'
 import { C } from '../../../../interface/C'
-import { Component_ } from '../../../../interface/component'
+import { Component_ } from '../../../../interface/Component'
 import { W } from '../../../../interface/W'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
