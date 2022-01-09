@@ -5,7 +5,7 @@ import {
   getGlobalComponent,
   listenGlobalComponent,
 } from '../../../../../client/globalComponent'
-import { Component_ } from '../../../../../interface/component'
+import { Component_ } from '../../../../../interface/Component'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 

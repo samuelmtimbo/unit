@@ -14,7 +14,7 @@ import {
   unregisterRoot,
 } from '../../component/method'
 import { C_EE } from '../../interface/C'
-import { Component_ } from '../../interface/component'
+import { Component_ } from '../../interface/Component'
 import { E } from '../../interface/E'
 import { Pod } from '../../pod'
 import { System } from '../../system'

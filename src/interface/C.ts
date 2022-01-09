@@ -1,4 +1,4 @@
-import { Component_ } from '../interface/component'
+import { Component_ } from '../interface/Component'
 import { UnitBundleSpec } from '../system/platform/method/process/UnitBundleSpec'
 import { Dict } from '../types/Dict'
 import { UnitClass } from '../types/UnitClass'
