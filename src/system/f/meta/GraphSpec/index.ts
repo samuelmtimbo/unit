@@ -1,6 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { G } from '../../../../interface/G'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 import { GraphSpec } from '../../../../types'
 
 export interface I<T> {
@@ -12,7 +14,7 @@ export interface O<T> {
 }
 
 export default class _GraphSpec<T> extends Functional<I<T>, O<T>> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['graph', 'any'],
@@ -24,7 +26,9 @@ export default class _GraphSpec<T> extends Functional<I<T>, O<T>> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 

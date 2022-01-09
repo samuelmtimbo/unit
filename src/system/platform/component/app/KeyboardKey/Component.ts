@@ -10,7 +10,8 @@ import {
 } from '../../../../../client/event/keyboard/keyCode'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
-import { userSelect } from '../../../../../client/style/userSelect'
+import { userSelect } from '../../../../../client/util/style/userSelect'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import Div from '../../../component/Div/Component'
@@ -32,8 +33,8 @@ export const DEFAULT_STYLE = {
 export default class KeyboardKey extends Element<HTMLDivElement, Props> {
   private _key: Div
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { key = 'a', location = 0 } = this.$props
 
@@ -49,14 +50,14 @@ export default class KeyboardKey extends Element<HTMLDivElement, Props> {
         style,
         innerText: icon ? undefined : key,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     key_component.addEventListener(
       makePointerDownListener(() => {
         emitKeyboardEvent('keydown', {
           key,
-          // @ts-ignore
           keyCode,
           code,
           shiftKey: false,
@@ -67,7 +68,6 @@ export default class KeyboardKey extends Element<HTMLDivElement, Props> {
         // TODO 'keypress' should not be fired if key is a control key (e.g. ALT, CTRL, SHIFT, ESC)
         emitKeyboardEvent('keypress', {
           key,
-          // @ts-ignore
           keyCode,
           code,
           shiftKey: false,
@@ -82,7 +82,6 @@ export default class KeyboardKey extends Element<HTMLDivElement, Props> {
       makePointerUpListener(() => {
         emitKeyboardEvent('keyup', {
           key,
-          // @ts-ignore
           keyCode,
           code,
           shiftKey: false,
@@ -103,7 +102,8 @@ export default class KeyboardKey extends Element<HTMLDivElement, Props> {
             height: '18px',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       key_component.setChildren([icon_component])
     }

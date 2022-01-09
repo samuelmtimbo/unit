@@ -1,4 +1,5 @@
 import { addListeners } from '../../../../../client/addListener'
+import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Context } from '../../../../../client/context'
@@ -15,7 +16,6 @@ import { makeResizeListener } from '../../../../../client/event/resize'
 import { harmonicArray } from '../../../../../client/id'
 import { randomBetween } from '../../../../../client/math'
 import { Mode } from '../../../../../client/mode'
-import parentElement from '../../../../../client/parentElement'
 import { PositionObserver } from '../../../../../client/PositionObserver'
 import { getThemeModeColor } from '../../../../../client/theme'
 import {
@@ -26,11 +26,11 @@ import {
   Position,
   unitVector,
 } from '../../../../../client/util/geometry'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { Unlisten } from '../../../../../Unlisten'
+import { Unlisten } from '../../../../../types/Unlisten'
 import { clamp } from '../../../../core/relation/Clamp/f'
-import Frame from '../../../component/Frame/Component'
 
 const HARMONIC = harmonicArray(20)
 
@@ -58,37 +58,7 @@ export const DEFAULT_STYLE = {
   color: 'current-color',
 }
 
-export class Bot extends Element<HTMLDivElement, Props> {
-  private _bot: _Bot
-
-  constructor(props: Props, $system: System) {
-    super(props, $system)
-
-    const $element = parentElement()
-
-    const frame = new Frame({}, this.$system)
-
-    const bot = new _Bot(props, this.$system)
-    this._bot = bot
-
-    frame.registerParentRoot(bot)
-
-    this.$element = $element
-    this.$unbundled = false
-    this.$subComponent = {
-      frame,
-      bot,
-    }
-
-    this.registerRoot(frame)
-  }
-
-  onPropChanged(name, current) {
-    this._bot.setProp(name, current)
-  }
-}
-
-export default class _Bot extends Element<HTMLElement, Props> {
+export default class Bot extends Element<HTMLElement, Props> {
   private _r: number = 0
 
   private _x: number = 0
@@ -130,8 +100,11 @@ export default class _Bot extends Element<HTMLElement, Props> {
   private _container_sx: number = 1
   private _container_sy: number = 1
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  private _move_animation_frame: number | undefined = undefined
+  private _sync_animation_frame: number | undefined = undefined
+
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       className,
@@ -147,11 +120,11 @@ export default class _Bot extends Element<HTMLElement, Props> {
     this._x = x - r - 2
     this._y = y - r - 2
 
-    const container = document.createElement('div')
+    const container = this.$system.api.document.createElement('div')
     applyStyle(container, { ...DEFAULT_STYLE, ...style })
     this._container = container
 
-    const svg = document.createElementNS(namespaceURI, 'svg')
+    const svg = this.$system.api.document.createElementNS(namespaceURI, 'svg')
     svg.classList.add('bot-svg')
     if (className) {
       svg.classList.add(className)
@@ -161,11 +134,14 @@ export default class _Bot extends Element<HTMLElement, Props> {
     })
     this._svg = svg
 
-    this._bot = document.createElementNS(namespaceURI, 'g')
+    this._bot = this.$system.api.document.createElementNS(namespaceURI, 'g')
     this._bot.classList.add('eye')
 
     for (let i = 0; i < n; i++) {
-      const ellipse = document.createElementNS(namespaceURI, 'ellipse')
+      const ellipse = this.$system.api.document.createElementNS(
+        namespaceURI,
+        'ellipse'
+      )
       ellipse.classList.add('eye-ellipse')
       ellipse.style.fill = `none`
       ellipse.style.strokeWidth = `1px`
@@ -173,11 +149,17 @@ export default class _Bot extends Element<HTMLElement, Props> {
       this._bot.appendChild(ellipse)
     }
 
-    this._eye_ball = document.createElementNS(namespaceURI, 'ellipse')
+    this._eye_ball = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'ellipse'
+    )
     this._eye_ball.classList.add('eye-ball')
     this._bot.appendChild(this._eye_ball)
 
-    this._eye_brow = document.createElementNS(namespaceURI, 'path')
+    this._eye_brow = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'path'
+    )
     this._eye_brow.classList.add('eye-brow')
     this._eye_brow.setAttribute('fill', 'none')
     this._eye_brow.setAttribute('stroke-width', '3')
@@ -204,7 +186,7 @@ export default class _Bot extends Element<HTMLElement, Props> {
       }
     )
 
-    // this._tick_body(this.$context)
+    // this._tick_body()
 
     this._position_observer = position_observer
   }
@@ -239,7 +221,7 @@ export default class _Bot extends Element<HTMLElement, Props> {
       clearTimeout(this._move_timeout)
     }
     const moveTimeoutHandler = () => {
-      this.move()
+      this._start_move()
 
       this._reset_move_timeout()
     }
@@ -275,26 +257,16 @@ export default class _Bot extends Element<HTMLElement, Props> {
   private _pointing_self: Dict<boolean> = {}
   private _pointing_self_count: number = 0
 
-  private _tick_body($context: Context) {
-    const { r = DEFAULT_R, disabled } = this.$props
+  private _synced: boolean = true
 
-    const n = DEFAULT_N
-    const k = DEFAULT_K
-
-    const { $width, $height } = $context
-
-    const cX = r + 3 // BORDER
-    const cY = r + 3
+  private _get_pointer_xyz = (): [number, number, number] => {
+    const { $width, $height } = this.$context
 
     let x: number = 1
     let y: number = 1
     let z: number = 0
-    let angle: number = 0
 
     const center = this._center() as Point
-
-    x = center.x
-    y = center.y
 
     let pointer_center = center
     let pointer_sum_x = 0
@@ -310,6 +282,57 @@ export default class _Bot extends Element<HTMLElement, Props> {
 
       pointer_sum_x += x
       pointer_sum_y += y
+    }
+
+    if (pointer_count > 0 && !this._disabled) {
+      pointer_center = {
+        x: pointer_sum_x / pointer_count,
+        y: pointer_sum_y / pointer_count,
+      }
+      const center = this._center()
+      const d = pointDistance(center, pointer_center)
+      const D = norm($width, $height)
+      const u = unitVector(
+        center.x,
+        center.y,
+        pointer_center.x,
+        pointer_center.y
+      )
+      x = u.x
+      y = u.y
+      z = Math.min(d, D) / D
+    }
+
+    return [x, y, z]
+  }
+
+  private _get_target_xyz = (): [number, number, number] => {
+    if (this._synced) {
+      return this._get_pointer_xyz()
+    } else {
+      return [this._temp_x, this._temp_y, this._temp_z]
+    }
+  }
+
+  private _temp_x: number = 0
+  private _temp_y: number = 0
+  private _temp_z: number = 0
+
+  private _tick_body() {
+    const { r = DEFAULT_R } = this.$props
+
+    const n = DEFAULT_N
+    const k = DEFAULT_K
+
+    const cX = r + 3 // BORDER
+    const cY = r + 3
+
+    let angle: number = 0
+
+    const center = this._center() as Point
+
+    for (let pointerId in this._pointer_position) {
+      const p = this._pointer_position[pointerId]
 
       const d = pointDistance({ x: center.x + 3, y: center.y + 3 }, p)
 
@@ -324,23 +347,11 @@ export default class _Bot extends Element<HTMLElement, Props> {
       }
     }
 
-    if (pointer_count > 0 && !this._disabled) {
-      pointer_center = {
-        x: pointer_sum_x / pointer_count,
-        y: pointer_sum_y / pointer_count,
-      }
-      const d = pointDistance(center, pointer_center)
-      const D = norm($width, $height)
-      const u = unitVector(
-        center.x,
-        center.y,
-        pointer_center.x,
-        pointer_center.y
-      )
-      x = u.x
-      y = u.y
-      z = Math.min(d, D) / D
-    }
+    const [x, y, z] = this._get_target_xyz()
+
+    this._temp_x = x
+    this._temp_y = y
+    this._temp_z = z
 
     angle = (Math.atan2(y, x) * 180) / Math.PI + 90
 
@@ -424,11 +435,14 @@ export default class _Bot extends Element<HTMLElement, Props> {
       if (!laser) {
         const { mode_color } = this._get_color()
 
-        laser = document.createElementNS(namespaceURI, 'g')
+        laser = this.$system.api.document.createElementNS(namespaceURI, 'g')
 
         laser.classList.add('laser')
 
-        laser_ray = document.createElementNS(namespaceURI, 'line')
+        laser_ray = this.$system.api.document.createElementNS(
+          namespaceURI,
+          'line'
+        )
 
         laser_ray.classList.add('laser-ray')
 
@@ -438,7 +452,10 @@ export default class _Bot extends Element<HTMLElement, Props> {
 
         laser.appendChild(laser_ray)
 
-        laser_focus = document.createElementNS(namespaceURI, 'ellipse')
+        laser_focus = this.$system.api.document.createElementNS(
+          namespaceURI,
+          'ellipse'
+        )
 
         laser_focus.classList.add('laser-focus')
 
@@ -499,7 +516,7 @@ export default class _Bot extends Element<HTMLElement, Props> {
     }
   }
 
-  public move = (): void => {
+  private _start_move = (): void => {
     if (this._pointing_self_count > 0) {
       return
     }
@@ -512,21 +529,50 @@ export default class _Bot extends Element<HTMLElement, Props> {
     this._tx = randomBetween(3, $width - D)
     this._ty = randomBetween(3, $height - D)
 
-    this._move_tick_animation_frame = requestAnimationFrame(this._move_tick)
+    this._move_animation_frame = requestAnimationFrame(this._move_tick)
   }
-
-  private _move_tick_animation_frame: number | undefined = undefined
 
   public _move_tick = (): void => {
     if (Math.abs(this._x - this._tx) > 1 || Math.abs(this._y - this._ty) > 1) {
-      this._x += (this._tx - this._x) * 0.25
-      this._y += (this._ty - this._y) * 0.25
+      this._x += (this._tx - this._x) * ANIMATION_C
+      this._y += (this._ty - this._y) * ANIMATION_C
 
-      this._tick_body(this.$context)
+      this._tick_body()
 
-      requestAnimationFrame(this._move_tick)
+      this._move_animation_frame = requestAnimationFrame(this._move_tick)
     } else {
-      this._move_tick_animation_frame = undefined
+      this._move_animation_frame = undefined
+    }
+  }
+
+  private _start_sync = (): void => {
+    // console.log('Bot', '_start_sync')
+    this._sync_animation_frame = requestAnimationFrame(this._sync_tick)
+  }
+
+  private _sync_tick = (): void => {
+    if (this._synced) {
+      return
+    }
+
+    const [tx, ty, tz] = this._get_pointer_xyz()
+
+    const dx = tx - this._temp_x
+    const dy = ty - this._temp_y
+    const dz = tz - this._temp_z
+
+    const k = 1 / 100
+
+    if (Math.abs(dx) > k || Math.abs(dy) > k || Math.abs(dz) > k) {
+      this._temp_x += dx * ANIMATION_C
+      this._temp_y += dy * ANIMATION_C
+      this._temp_z += dz * ANIMATION_C
+
+      this._tick_body()
+
+      this._start_sync()
+    } else {
+      this._synced = true
     }
   }
 
@@ -565,7 +611,13 @@ export default class _Bot extends Element<HTMLElement, Props> {
       this._pointer_enter_count++
       this._pointer_position[pointerId] = { x, y }
       this._pointer_visible = this._pointer_enter_count > 0
-      this._tick_body(this.$context)
+
+      if (this._synced) {
+        this._synced = false
+        this._start_sync()
+      }
+
+      this._tick_body()
     }
   }
 
@@ -576,18 +628,30 @@ export default class _Bot extends Element<HTMLElement, Props> {
   }
 
   private __onContextPointerLeave = (event: IOPointerEvent) => {
+    const { $width, $height } = this.$context
     const { pointerId } = event
+
     if (this._pointer_inside[pointerId]) {
       // log('Bot', '__onContextPointerLeave', pointerId)
       this._pointer_enter_count--
       if (this._pointer_down[pointerId]) {
         this._remove_pointer_down(event)
       }
+      const position = this._pointer_position[pointerId]
+
       delete this._pointer_inside[pointerId]
       delete this._pointer_position[pointerId]
       this._removePointerLaser(pointerId)
       this._pointer_visible = this._pointer_enter_count > 0
-      this._tick_body(this.$context)
+
+      if (this._synced) {
+        if (!this._pointer_visible) {
+          this._synced = false
+          this._start_sync()
+        }
+      }
+
+      this._tick_body()
     }
   }
 
@@ -607,7 +671,7 @@ export default class _Bot extends Element<HTMLElement, Props> {
       this._laser_position[pointerId] = position
     }
     this._pointer_visible = this._pointer_enter_count > 0
-    this._tick_body(this.$context)
+    this._tick_body()
     // }
   }
 
@@ -639,7 +703,7 @@ export default class _Bot extends Element<HTMLElement, Props> {
 
       this._laser_position[pointerId] = position
 
-      this._tick_body(this.$context)
+      this._tick_body()
     }
   }
 
@@ -664,7 +728,7 @@ export default class _Bot extends Element<HTMLElement, Props> {
       if (!this._pointer_down[pointerId]) {
         this._removePointerLaser(pointerId)
 
-        this._tick_body(this.$context)
+        this._tick_body()
       }
     }
 
@@ -746,7 +810,7 @@ export default class _Bot extends Element<HTMLElement, Props> {
     this._x = clamp(this._x, P, $width - D)
     this._y = clamp(this._y, P, $height - D)
 
-    this._tick_body(this.$context)
+    this._tick_body()
   }
 
   private _onContextEnabled = (): void => {
@@ -902,7 +966,7 @@ export default class _Bot extends Element<HTMLElement, Props> {
     this._height = $height
 
     this._tick_color()
-    this._tick_body(this.$context)
+    this._tick_body()
 
     this._refresh_enabled()
 
@@ -943,9 +1007,9 @@ export default class _Bot extends Element<HTMLElement, Props> {
 
     this._context_unlisten()
 
-    if (this._move_tick_animation_frame !== undefined) {
-      cancelAnimationFrame(this._move_tick_animation_frame)
-      this._move_tick_animation_frame = undefined
+    if (this._move_animation_frame !== undefined) {
+      cancelAnimationFrame(this._move_animation_frame)
+      this._move_animation_frame = undefined
     }
 
     for (const pointerId in this._pointer_down) {
@@ -974,24 +1038,24 @@ export default class _Bot extends Element<HTMLElement, Props> {
     if (prop === 'disabled') {
       this._refresh_enabled()
     } else if (prop === 'mode') {
-      // this._tick_body(this.$context)
+      // this._tick_body()
       this._tick_color()
     } else if (prop === 'n') {
-      this._tick_body(this.$context)
+      this._tick_body()
     } else if (prop === 'r') {
       const prev = this._r || DEFAULT_R
       current = current || DEFAULT_R
       this._x += prev - current
       this._y += prev - current
-      this._tick_body(this.$context)
+      this._tick_body()
     } else if (prop === 'x') {
       const { r = DEFAULT_R } = this.$props
       this._x = current - r - 2
-      this._tick_body(this.$context)
+      this._tick_body()
     } else if (prop === 'y') {
       const { r = DEFAULT_R } = this.$props
       this._y = current - r - 2
-      this._tick_body(this.$context)
+      this._tick_body()
     }
   }
 }

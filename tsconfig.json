@@ -14,7 +14,8 @@
     "typeRoots": ["node_modules/@types"],
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": false
+    "forceConsistentCasingInFileNames": false,
+    "keyofStringsOnly": true
   },
   "typeAcquisition": {
     "enable": false

@@ -1,5 +1,5 @@
 import { storageHasKey } from '../../client/util/web/storage'
-import { APINotImplementedError } from '../../exception/APINotImplementedError'
+import { APINotSupportedError } from '../../exception/APINotImplementedError'
 import { System } from '../../system'
 
 export const LOCAL_STORAGE_PREFIX_PUBLIC_KEY =
@@ -54,7 +54,7 @@ export async function newPublicKey($system: System): Promise<string> {
   const localStorage = local(undefined)
 
   if (!localStorage) {
-    throw new APINotImplementedError('Local Storage')
+    throw new APINotSupportedError('Local Storage')
   }
 
   const keyPair = await crypto.subtle.generateKey(

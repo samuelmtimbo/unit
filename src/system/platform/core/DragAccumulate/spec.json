@@ -1,0 +1,233 @@
+{
+  "name": "drag accumulate",
+  "inputs": {
+    "test": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "b"
+        }
+      }
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "a"
+        }
+      }
+    },
+    "init": {
+      "pin": {
+        "0": {
+          "unitId": "iterate0",
+          "pinId": "init"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a + Δ": {
+      "pin": {
+        "0": {
+          "unitId": "add0",
+          "pinId": "a + b"
+        }
+      }
+    }
+  },
+  "units": {
+    "iterate": {
+      "id": "8a2b756a-25e4-11eb-860d-1f34c850b992",
+      "input": {
+        "next": {},
+        "init": {
+          "constant": true,
+          "data": "0"
+        }
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 51,
+          "y": 60
+        }
+      }
+    },
+    "iterate0": {
+      "id": "8a2b756a-25e4-11eb-860d-1f34c850b992",
+      "input": {
+        "next": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -110,
+          "y": -26
+        }
+      }
+    },
+    "ifelse": {
+      "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "if": {},
+        "else": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 94,
+          "y": -37
+        }
+      }
+    },
+    "zero": {
+      "id": "618898d6-1167-11eb-bef9-cb053e09c21b",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "0": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 37,
+          "y": -8
+        }
+      }
+    },
+    "add": {
+      "id": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a + b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -18,
+          "y": -57
+        }
+      }
+    },
+    "add0": {
+      "id": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a + b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -57,
+          "y": 64
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "ifelse": {
+        "output": {
+          "else": true
+        }
+      },
+      "add": {
+        "input": {
+          "b": true
+        }
+      },
+      "zero": {
+        "input": {
+          "any": true
+        }
+      }
+    },
+    "1": {
+      "add": {
+        "output": {
+          "a + b": true
+        }
+      },
+      "iterate0": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "2": {
+      "add": {
+        "input": {
+          "a": true
+        }
+      },
+      "iterate0": {
+        "output": {
+          "local": true
+        }
+      }
+    },
+    "3": {
+      "ifelse": {
+        "output": {
+          "if": true
+        }
+      },
+      "iterate": {
+        "input": {
+          "next": true
+        }
+      },
+      "zero": {
+        "output": {
+          "0": true
+        }
+      }
+    },
+    "4": {
+      "add0": {
+        "input": {
+          "a": true
+        }
+      },
+      "iterate": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "5": {
+      "add0": {
+        "input": {
+          "b": true
+        }
+      },
+      "iterate0": {
+        "output": {
+          "current": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "complexity": 27
+  },
+  "id": "69ee5ea3-660c-479e-9cff-da9dc33a2b0a"
+}

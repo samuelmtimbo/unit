@@ -54,11 +54,11 @@
         }
       }
     },
-    "spec": {
+    "bundle": {
       "pin": {
         "0": {
           "unitId": "pod",
-          "pinId": "spec"
+          "pinId": "bundle"
         }
       },
       "type": "any",
@@ -139,7 +139,7 @@
     "pod": {
       "id": "324b9c5e-5810-11eb-bf7c-634b3bb07f8c",
       "input": {
-        "spec": {
+        "bundle": {
           "metadata": {
             "position": {
               "x": -286,
@@ -242,7 +242,7 @@
   },
   "metadata": {
     "icon": "chalkboard",
-    "description": "app.ioun.it inside an iframe",
+    "description": "app with bot",
     "complexity": 61.65570854103738,
     "tags": [
       "platform",

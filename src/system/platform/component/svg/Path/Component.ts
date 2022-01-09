@@ -1,6 +1,7 @@
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -26,8 +27,8 @@ export const DEFAULT_STYLE = {
 export default class SVGPath extends Element<SVGPathElement, Props> {
   private _path_el: SVGPathElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       id,
@@ -39,7 +40,10 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
       fillRule,
     } = $props
 
-    const path_el = document.createElementNS(namespaceURI, 'path')
+    const path_el = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'path'
+    )
     if (id !== undefined) {
       path_el.id = id
     }

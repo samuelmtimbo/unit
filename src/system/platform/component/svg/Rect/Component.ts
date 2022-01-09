@@ -1,6 +1,7 @@
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -18,8 +19,8 @@ export interface Props {
 export default class SVGRect extends Element<SVGRectElement, Props> {
   private _rect_el: SVGRectElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       className,
@@ -32,7 +33,10 @@ export default class SVGRect extends Element<SVGRectElement, Props> {
       height = 0,
     } = $props
 
-    const rect_el = document.createElementNS(namespaceURI, 'rect')
+    const rect_el = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'rect'
+    )
     if (className !== undefined) {
       rect_el.classList.value = className
     }

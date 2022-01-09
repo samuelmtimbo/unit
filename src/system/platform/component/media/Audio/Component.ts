@@ -1,5 +1,6 @@
 import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -22,11 +23,11 @@ export const DEFAULT_STYLE = {
 export default class Audio extends Element<HTMLAudioElement, Props> {
   private _audio_el: HTMLAudioElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style = {}, src, controls = true } = this.$props
-    const audio_element = document.createElement('audio')
+    const audio_element = this.$system.api.document.createElement('audio')
     audio_element.controls = controls
     if (className) {
       audio_element.className = className

@@ -1,6 +1,8 @@
 import { Unit } from '../../../../Class/Unit'
+import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
-import { Unlisten } from '../../../../Unlisten'
+import { System } from '../../../../system'
+import { Unlisten } from '../../../../types/Unlisten'
 
 export interface I<T> {
   unit: string
@@ -11,7 +13,7 @@ export interface O<T> {
 }
 
 export default class Catch<T> extends Primitive<I<T>, O<T>> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['unit'],
@@ -23,7 +25,9 @@ export default class Catch<T> extends Primitive<I<T>, O<T>> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 

@@ -1,21 +1,22 @@
+import { Peer } from '../../../../api/peer/Peer'
 import { sendServerPeer } from '../../../../api/server/peer'
 import { buildIOTurnConfig } from '../../../../api/server/peer/config'
 import { newPeerReceiverId } from '../../../../api/server/peer/id'
-import { Callback } from '../../../../Callback'
 import { $ } from '../../../../Class/$'
-import { Functional } from '../../../../Class/Functional'
+import { Functional, FunctionalEvents } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import {
   isConnected,
   SOCKET_SERVER_PEER_EMITTER,
 } from '../../../../client/host/socket'
-import { $ST } from '../../../../interface/async/$ST'
 import { ST } from '../../../../interface/ST'
-import NOOP from '../../../../NOOP'
-import { Peer } from '../../../../Peer'
+import { NOOP } from '../../../../NOOP'
+import { Pod } from '../../../../pod'
 import { evaluate } from '../../../../spec/evaluate'
 import { stringify } from '../../../../spec/stringify'
-import { Unlisten } from '../../../../Unlisten'
+import { System } from '../../../../system'
+import { Callback } from '../../../../types/Callback'
+import { Unlisten } from '../../../../types/Unlisten'
 
 export interface I<T> {
   id: string
@@ -23,10 +24,19 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  stream: $ST
+  stream: ST
 }
 
-export default class BroadcastReceiver<T> extends Functional<I<T>, O<T>> {
+export type BroadcastReceiver_EE = { data: [any] }
+
+export type BroadcastReceiverEvents = FunctionalEvents<BroadcastReceiver_EE> &
+  BroadcastReceiver_EE
+
+export default class BroadcastReceiver<T> extends Functional<
+  I<T>,
+  O<T>,
+  BroadcastReceiverEvents
+> {
   private _id: string | null = null
   private _transmitter_id: string | null = null
 
@@ -36,7 +46,7 @@ export default class BroadcastReceiver<T> extends Functional<I<T>, O<T>> {
   private _peer_unlisten: Unlisten | undefined = undefined
   private _socket_unlisten: Unlisten | undefined = undefined
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['id', 'user'],
@@ -44,7 +54,9 @@ export default class BroadcastReceiver<T> extends Functional<I<T>, O<T>> {
       },
       {
         input: {},
-      }
+      },
+      system,
+      pod
     )
 
     this.addListener('destroy', () => {
@@ -118,7 +130,7 @@ export default class BroadcastReceiver<T> extends Functional<I<T>, O<T>> {
                   data
                 )
                 const config = buildIOTurnConfig(username, credential)
-                const peer = new Peer(false, config)
+                const peer = new Peer(this.__system, this.__pod, false, config)
                 this._peer_unlisten = this._setup_peer(id, transmitter_id, peer)
                 this._peer = peer
               }
@@ -226,7 +238,7 @@ export default class BroadcastReceiver<T> extends Functional<I<T>, O<T>> {
           callback(stream)
           return NOOP
         }
-      })()
+      })(this.__system, this.__pod)
       this._output.stream.push(_stream)
     }
     const stop_listener = () => {

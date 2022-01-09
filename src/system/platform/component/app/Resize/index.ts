@@ -1,14 +1,21 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I<T> {}
 
 export interface O<T> {}
 
 export default class Resize<T> extends Element<I<T>, O<T>> {
-  constructor() {
-    super({
-      i: ['size'],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['size'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
   }
 }

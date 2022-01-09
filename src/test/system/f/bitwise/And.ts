@@ -1,8 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import And from '../../../../system/f/bitwise/And'
+import { pod, system } from '../../../util/system'
 
-const and = new And()
+const and = new And(system, pod)
 
 and.play()
 

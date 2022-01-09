@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I {
   str: string
@@ -10,11 +12,16 @@ export interface O {
 }
 
 export default class Match extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['str', 'regex'],
-      o: ['match'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['str', 'regex'],
+        o: ['match'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ str, regex }: I, done): void {

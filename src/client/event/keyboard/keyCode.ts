@@ -358,7 +358,7 @@ export const keyToCode = JSON.parse(`{
 
 export const ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
 export const DIGIT = '0123456789'
-export const SYMBOL = `\`~|\\^{}+×÷=/_<>[]!@#$%&*()-'":;,.?`
+export const SYMBOL = `\`~|\\^{}+×÷=/_<>≤≥[]!@#$%&*()-'":;,.?`
 
 export const ALPHA_NUMERIC = ALPHABET + DIGIT
 
@@ -370,6 +370,14 @@ export function isAlphaNumeric(key: string): boolean {
 
 export function isAlphabetChar(key: string): boolean {
   return ALPHABET.includes(key.toLowerCase())
+}
+
+export function isSymbol(key: string): boolean {
+  return SYMBOL.includes(key)
+}
+
+export function isNotSymbol(key: string): boolean {
+  return !isSymbol(key)
 }
 
 export function isChar(key: string): boolean {

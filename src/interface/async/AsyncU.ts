@@ -1,8 +1,8 @@
-import { Callback } from '../../Callback'
 import { Moment } from '../../debug/Moment'
+import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
 import { GlobalRefSpec } from '../../types/GlobalRefSpec'
-import { Unlisten } from '../../Unlisten'
+import { Unlisten } from '../../types/Unlisten'
 import { $PO } from './$PO'
 import { $U, $U_C, $U_R, $U_W } from './$U'
 

@@ -1,6 +1,7 @@
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -20,8 +21,8 @@ export default class SVGForeignObject extends Element<
 > {
   private _foreign_el: SVGForeignObjectElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       className,
@@ -32,7 +33,10 @@ export default class SVGForeignObject extends Element<
       height = 100,
     } = this.$props
 
-    const foreign_el = document.createElementNS(namespaceURI, 'foreignObject')
+    const foreign_el = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'foreignObject'
+    )
     if (className !== undefined) {
       foreign_el.classList.value = className
     }

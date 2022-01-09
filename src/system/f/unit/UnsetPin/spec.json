@@ -1,0 +1,32 @@
+{
+  "name": "unset pin",
+  "inputs": {
+    "unit": {
+      "type": "`U`"
+    },
+    "type": {
+      "type": "'input'|'output"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "unit": {
+      "type": "`U`"
+    }
+  },
+  "metadata": {
+    "icon": "object-set",
+    "description": "remove data on input `name` of `unit`",
+    "complexity": 2.657932286937346,
+    "tags": [
+      "f",
+      "unit"
+    ]
+  },
+  "id": "33434271-3533-4a4e-adb9-306e35ab6afe",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

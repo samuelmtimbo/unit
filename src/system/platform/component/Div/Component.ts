@@ -1,6 +1,7 @@
 import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
-import { PropHandler, htmlPropHandler } from '../../../../client/propHandler'
+import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -27,8 +28,8 @@ export default class Div extends Element<HTMLDivElement, Props> {
 
   private _prop_handler: PropHandler
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       id,
@@ -41,7 +42,7 @@ export default class Div extends Element<HTMLDivElement, Props> {
       data = {},
     } = this.$props
 
-    const $element = document.createElement('div')
+    const $element = this.$system.api.document.createElement('div')
 
     if (id !== undefined) {
       $element.id = id

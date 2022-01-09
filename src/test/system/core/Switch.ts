@@ -3,6 +3,7 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
+import { pod, system } from '../../util/system'
 // import Switch from '../../../unit/system/core/common/Switch/Class'
 
 const spec =
@@ -13,13 +14,10 @@ const Switch = fromSpec<{ a: any; b: any; c: boolean }, { a: any }>(
   _specs
 )
 
-import { system } from '../../util/system'
-
-const sweet = new Switch(system)
+const sweet = new Switch(system, pod)
 
 false && watchUnitAndLog(sweet)
 false && watchGraphAndLog(sweet)
-
 
 sweet.play()
 

@@ -22,13 +22,33 @@ export function mapObjKV<A, B>(
   return result
 }
 
-export function mapObjKey<A>(
-  obj: Dict<A>,
-  callback: (value: A, key: string) => string
-): Dict<A> {
+export function mapObjKey<V>(
+  obj: Dict<V>,
+  callback: (value: V, key: string) => string
+): Dict<V> {
+  return mapObjKeyVK(obj, callback)
+}
+
+export function mapObjKeyVK<V>(
+  obj: Dict<V>,
+  callback: (value: V, key: string) => string
+): Dict<V> {
   const result = {}
   for (const key in obj) {
-    result[callback(obj[key], key)] = obj[key]
+    const value = obj[key]
+    result[callback(value, key)] = value
+  }
+  return result
+}
+
+export function mapObjKeyKV<V>(
+  obj: Dict<V>,
+  callback: (key: string, value: V) => string
+): Dict<V> {
+  const result = {}
+  for (const key in obj) {
+    const value = obj[key]
+    result[callback(key, value)] = value
   }
   return result
 }
@@ -80,11 +100,11 @@ export function findKeyObjIndexed<A>(
   }
 }
 
-export function filterObj<A>(
-  obj: Dict<A>,
-  callback: (value: A, key: string) => boolean
-): Dict<A> {
-  const result = {}
+export function filterObj<T>(
+  obj: T,
+  callback: <K extends keyof T>(value: T[K], key: K) => boolean
+): Partial<T> {
+  const result: Partial<T> = {}
   for (const key in obj) {
     if (callback(obj[key], key)) {
       result[key] = obj[key]

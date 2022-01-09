@@ -1,5 +1,6 @@
-import { Callback } from '../../Callback'
-import { GraphSpecs, Specs } from '../../types'
+import { BundleSpec } from '../../system/platform/method/process/BundleSpec'
+import { Specs } from '../../types'
+import { Callback } from '../../types/Callback'
 import { PO } from '../PO'
 import { $Graph } from './$Graph'
 import { $PO, $PO_C, $PO_R, $PO_W } from './$PO'
@@ -23,8 +24,8 @@ export const AsyncPORef: (pod: PO) => $PO_R = (pod) => {
   return {
     $refGlobalUnit(data: { id: string; _: string[] }): void {},
 
-    $graph({ id }: { id: string }): $Graph {
-      const graph = pod.refGraph(id)
+    $refGraph({ bundle }: { bundle: BundleSpec }): $Graph {
+      const [mapping, graph] = pod.refGraph(bundle)
 
       return AsyncGraph(graph)
     },

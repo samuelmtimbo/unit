@@ -1,8 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Wait from '../../../../system/f/control/Wait'
+import { pod, system } from '../../../util/system'
 
-const wait = new Wait()
+const wait = new Wait(system, pod)
 
 wait.play()
 

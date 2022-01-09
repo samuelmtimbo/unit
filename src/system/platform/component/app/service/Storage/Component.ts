@@ -1,12 +1,13 @@
 import { Component } from '../../../../../../client/component'
-import DataTree from '../../DataTree/Component'
 import parentElement from '../../../../../../client/parentElement'
-import { userSelect } from '../../../../../../client/style/userSelect'
+import { userSelect } from '../../../../../../client/util/style/userSelect'
+import { Pod } from '../../../../../../pod'
 import { getTree } from '../../../../../../spec/parser'
 import { stringify } from '../../../../../../spec/stringify'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
 import Div from '../../../../component/Div/Component'
+import DataTree from '../../DataTree/Component'
 
 export interface Props {
   style?: Dict<string>
@@ -37,8 +38,8 @@ export default class StorageService extends Component<HTMLDivElement, Props> {
   private _root: Div
   private _tree: DataTree
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style } = $props
 
@@ -49,7 +50,8 @@ export default class StorageService extends Component<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._root = root
 
@@ -63,7 +65,8 @@ export default class StorageService extends Component<HTMLDivElement, Props> {
           ...userSelect('none'),
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     root.registerParentRoot(tree)
     this._tree = tree

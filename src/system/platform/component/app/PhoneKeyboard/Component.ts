@@ -3,6 +3,7 @@ import { Element } from '../../../../../client/element'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import parentElement from '../../../../../client/parentElement'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import Div from '../../../component/Div/Component'
@@ -34,8 +35,8 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
   private _backspace_key: PhoneKeyboardKey
   private _backspace_interval: NodeJS.Timeout | null = null
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style } = this.$props
 
@@ -218,7 +219,8 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     keyboard.setChildren([line_0, line_1, line_2, line_3, line_4])
     this._keyboard = keyboard
@@ -285,7 +287,8 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
           justifyContent: 'center',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     line.setChildren(children)
     return line
@@ -311,7 +314,8 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
         },
         alt: altKey,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const key_component_container = new Div(
@@ -326,7 +330,8 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
           padding: '2px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     key_component_container.appendChild(key_component)
 
@@ -336,10 +341,17 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
   }
 
   private _on_backspace_long_press = (): void => {
+    const {
+      api: {
+        device: { vibrate },
+      },
+    } = this.$system
+
     // log('PhoneKeyboard', '_on_backspace_long_press')
     this._backspace_interval = setInterval(() => {
       // log('backspace')
       emitPhoneKey('Backspace', this._shift, this._alt)
+      vibrate([10])
     }, 30)
   }
 

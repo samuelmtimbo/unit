@@ -23,8 +23,6 @@ export function attachGesture($system: System): void {
   ): void => {
     const { pointerId, screenX, screenY } = event
 
-    // AD HOC
-
     // $root.setPointerCapture(pointerId)
 
     $system.cache.pointerCapture[pointerId] = $root

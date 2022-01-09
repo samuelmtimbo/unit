@@ -1,4 +1,4 @@
-import NOOP from '../NOOP'
+import { NOOP } from '../NOOP'
 
 export const DATABASE_NAME: string = 'unit'
 export const DATABASE_VERSION: number = 1

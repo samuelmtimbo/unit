@@ -2,6 +2,7 @@ import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import Div from '../../../component/Div/Component'
@@ -27,8 +28,8 @@ export default class Keyboard extends Element<HTMLDivElement, Props> {
 
   private _key_ShiftLeft: Div
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style = {} } = this.$props
 
@@ -212,7 +213,8 @@ export default class Keyboard extends Element<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     keyboard.setChildren([line_0, line_1, line_2, line_3, line_4])
     this._keyboard = keyboard
@@ -238,7 +240,8 @@ export default class Keyboard extends Element<HTMLDivElement, Props> {
           boxSizing: 'border-box',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     line.setChildren(children)
     return line
@@ -264,7 +267,8 @@ export default class Keyboard extends Element<HTMLDivElement, Props> {
           ..._style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const key_component_container = new Div(
@@ -279,7 +283,8 @@ export default class Keyboard extends Element<HTMLDivElement, Props> {
           padding: '2px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     key_component_container.appendChild(key_component)
 

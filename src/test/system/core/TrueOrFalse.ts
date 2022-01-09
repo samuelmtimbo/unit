@@ -3,6 +3,7 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
+import { pod, system } from '../../util/system'
 
 const spec =
   require('../../../system/core/common/TrueOrFalse/spec.json') as GraphSpec
@@ -11,13 +12,10 @@ const TrueOrFalse = fromSpec<
   { 'a = true': boolean; 'a = false': boolean }
 >(spec, _specs)
 
-import { system } from '../../util/system'
-
-const trueOrFalse = new TrueOrFalse(system)
+const trueOrFalse = new TrueOrFalse(system, pod)
 
 false && watchUnitAndLog(trueOrFalse)
 false && watchGraphAndLog(trueOrFalse)
-
 
 trueOrFalse.play()
 

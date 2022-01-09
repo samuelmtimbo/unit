@@ -1,10 +1,11 @@
 import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
 import {
-  PropHandler,
   htmlPropHandler,
   inputPropHandler,
+  PropHandler,
 } from '../../../../../client/propHandler'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -31,14 +32,14 @@ export default class Checkbox extends Element<HTMLInputElement, Props> {
 
   private _prop_handler: PropHandler
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     let { style = {}, value = false } = $props
 
     style = { ...DEFAULT_STYLE, ...style }
 
-    const input_el = document.createElement('input')
+    const input_el = this.$system.api.document.createElement('input')
     input_el.checked = value
     input_el.name = 'checkbox'
     input_el.value = 'checkbox'

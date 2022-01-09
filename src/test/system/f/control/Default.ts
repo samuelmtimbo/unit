@@ -1,8 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Default from '../../../../system/f/control/Default'
+import { pod, system } from '../../../util/system'
 
-const _default = new Default()
+const _default = new Default(system, pod)
 
 _default.play()
 

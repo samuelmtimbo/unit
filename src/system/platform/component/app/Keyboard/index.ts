@@ -1,4 +1,6 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
 export interface I {
@@ -8,10 +10,15 @@ export interface I {
 export interface O {}
 
 export default class Keyboard extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['style'],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['style'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
   }
 }

@@ -1,3 +1,4 @@
+import { Peer } from '../../../../api/peer/Peer'
 import { sendServerPeer } from '../../../../api/server/peer'
 import { buildIOTurnConfig } from '../../../../api/server/peer/config'
 import {
@@ -10,10 +11,11 @@ import {
   SOCKET_SERVER_PEER_EMITTER,
 } from '../../../../client/host/socket'
 import { ST } from '../../../../interface/ST'
-import { Peer } from '../../../../Peer'
+import { Pod } from '../../../../pod'
 import { stringify } from '../../../../spec/stringify'
+import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { Unlisten } from '../../../../Unlisten'
+import { Unlisten } from '../../../../types/Unlisten'
 
 export interface I<T> {
   id: string
@@ -39,7 +41,7 @@ export default class BroadcastTransmitter<T> extends Semifunctional<
 
   private _connected: boolean = false
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['id'],
@@ -53,7 +55,9 @@ export default class BroadcastTransmitter<T> extends Semifunctional<
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
 
     this.addListener('destroy', () => {
@@ -195,7 +199,7 @@ export default class BroadcastTransmitter<T> extends Semifunctional<
               data
             )
             const config = buildIOTurnConfig(username, credential)
-            const peer = new Peer(true, config)
+            const peer = new Peer(this.__system, this.__pod, true, config)
             this._peer_unlisten[receiver_id] = this._setup_peer(
               receiver_id,
               peer

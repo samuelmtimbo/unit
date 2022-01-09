@@ -66,11 +66,11 @@ assert.deepEqual(
   stringify(
     fromId('6fe452f2-2ec1-4ee2-887d-751c3697e6bf', _specs, _classes, {})
   ),
-  '6fe452f2-2ec1-4ee2-887d-751c3697e6bf'
+  "${unit:{id:'6fe452f2-2ec1-4ee2-887d-751c3697e6bf'}}"
 )
 assert.deepEqual(
   stringify(fromId('fa94b179-00e3-4ed1-814e-7938324a833f', _specs, _classes)),
-  'fa94b179-00e3-4ed1-814e-7938324a833f'
+  "${unit:{id:'fa94b179-00e3-4ed1-814e-7938324a833f'}}"
 )
 
 assert.deepEqual(JSON.parse(evaluate(stringify(JSON.stringify('\n')))), '\n')

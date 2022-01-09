@@ -1,17 +1,18 @@
 import { Done } from '../../../../../../../Class/Functional/Done'
+import { Graph } from '../../../../../../../Class/Graph'
 import { Semifunctional } from '../../../../../../../Class/Semifunctional'
 import { $$refGlobalObj } from '../../../../../../../interface/async/AsyncU_'
-import { G } from '../../../../../../../interface/G'
+import { Pod } from '../../../../../../../pod'
 import {
   shareLocalPod,
   stopBroadcastSource,
 } from '../../../../../../../process/share/local'
 import { System } from '../../../../../../../system'
-import { Unlisten } from '../../../../../../../Unlisten'
+import { Unlisten } from '../../../../../../../types/Unlisten'
 
 export interface I {
   opt: {}
-  graph: G
+  graph: Graph
 }
 
 export interface O {
@@ -27,7 +28,7 @@ export default class LocalSharePod extends Semifunctional<I, O> {
 
   private _terminate: Unlisten
 
-  constructor(system?: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['opt', 'graph'],
@@ -42,7 +43,8 @@ export default class LocalSharePod extends Semifunctional<I, O> {
           },
         },
       },
-      system
+      system,
+      pod
     )
 
     this.addListener('destroy', () => {

@@ -1,5 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I<T> {
   d: any[][]
@@ -11,11 +13,16 @@ export interface O<T> {
 }
 
 export default class Stroke<T> extends Functional<I<T>, O<T>> {
-  constructor() {
-    super({
-      i: ['strokeStyle', 'd'],
-      o: ['d'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['strokeStyle', 'd'],
+        o: ['d'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ d, strokeStyle }: I<T>, done: Done<O<T>>): void {

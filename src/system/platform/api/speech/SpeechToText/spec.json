@@ -1,0 +1,40 @@
+{
+  "name": "speech to text",
+  "inputs": {
+    "opt": {
+      "type": "{grammars?:string[],lang?:string,interimResults?:boolean,maxAlternatives?:number,continuous?:boolean}",
+      "metadata": {
+        "examples": [
+          "{grammars:[],lang:'en-us',maxAlternatives:1,interimResults:false,continuous:false}"
+        ]
+      }
+    },
+    "stop": {
+      "type": "any",
+      "metadata": {
+        "examples": [
+          "'en-us'"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "text": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "mic",
+    "description": "hear me",
+    "complexity": 2.7230139169430907,
+    "tags": [
+      "platform",
+      "api",
+      "speech"
+    ]
+  },
+  "id": "416550cc-6e02-4ff2-aafa-2f0edbf121c6",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

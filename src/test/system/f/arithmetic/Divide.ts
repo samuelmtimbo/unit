@@ -1,8 +1,8 @@
 import * as assert from 'assert'
 import Divide from '../../../../system/f/arithmetic/Divide'
-import { system } from '../../../util/system'
+import { pod, system } from '../../../util/system'
 
-const divide = new Divide(system)
+const divide = new Divide(system, pod)
 
 divide.play()
 

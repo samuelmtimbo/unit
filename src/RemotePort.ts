@@ -1,13 +1,15 @@
-import { Callback } from './Callback'
 import { CALL, REF, REF_EXEC, UNWATCH, WATCH } from './constant/STRING'
-import { EventEmitter_ } from './EventEmitter'
-import { Port } from './Port'
+import { EventEmitter, EventEmitter_EE } from './EventEmitter'
+import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
-import { Unlisten } from './Unlisten'
+import { IPort } from './types/global/IPort'
+import { Unlisten } from './types/Unlisten'
 import { randomIdNotInSet } from './util/id'
 
+export type AnyEmitterEvents = EventEmitter_EE<Dict<any[]>> & Dict<any[]>
+
 export class RemotePort {
-  private _port: Port
+  private _port: IPort
 
   private _call_id: Set<string> = new Set<string>()
   private _watch_id: Set<string> = new Set<string>()
@@ -15,12 +17,12 @@ export class RemotePort {
 
   private _ref: Dict<RemotePort> = {}
 
-  private _watch_emitter: EventEmitter_ = new EventEmitter_()
-  private _call_emitter: EventEmitter_ = new EventEmitter_()
+  private _watch_emitter: EventEmitter<AnyEmitterEvents> = new EventEmitter()
+  private _call_emitter: EventEmitter<AnyEmitterEvents> = new EventEmitter()
 
   private _valid: boolean = true
 
-  constructor(port: Port) {
+  constructor(port: IPort) {
     this._port = port
 
     this._port.onmessage = (event) => {
@@ -99,7 +101,7 @@ export class RemotePort {
     const id = randomIdNotInSet(this._ref_id)
     const _data = { type: REF, data: { id, method, data } }
     this._port.send(_data)
-    const port: Port = {
+    const port: IPort = {
       send: (data) => {
         const _data = { type: REF_EXEC, data: { id, data } }
         this._port.send(_data)

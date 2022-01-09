@@ -1,4 +1,4 @@
-import { Callback } from '../../Callback'
+import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
 import { uuid } from '../../util/id'
 

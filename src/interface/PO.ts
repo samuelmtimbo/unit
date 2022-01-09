@@ -1,14 +1,12 @@
+import { Graph } from '../Class/Graph'
+import { BundleSpec } from '../system/platform/method/process/BundleSpec'
 import { GraphSpecs } from '../types'
-import { C } from './C'
-import { G } from './G'
-import { U } from './U'
+import { Dict } from '../types/Dict'
 
 export interface PO {
   refUnit(id: string): void
 
-  refGraph(id: string): U & C & G
-
-  addGraph(): string
+  refGraph(bundle: BundleSpec): [Dict<string>, Graph]
 
   getSpecs(): GraphSpecs
 }

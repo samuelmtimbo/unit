@@ -1,8 +1,9 @@
-import { ANIMATION_T_S } from '../../../../client/animation'
+import { ANIMATION_T_S } from '../../../../client/animation/animation'
 import mergeStyle from '../../../../client/component/mergeStyle'
 import { Element } from '../../../../client/element'
 import { makeClickListener } from '../../../../client/event/pointer/click'
 import parentElement from '../../../../client/parentElement'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import IOAuthWall from '../../../platform/component/app/service/IOAuthWall/Component'
@@ -48,8 +49,8 @@ export default class CloudTabs extends Element<HTMLDivElement, Props> {
 
   public section: string
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style, tabs = TABS } = $props
 
@@ -62,7 +63,8 @@ export default class CloudTabs extends Element<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._root = root
 
@@ -79,7 +81,8 @@ export default class CloudTabs extends Element<HTMLDivElement, Props> {
           transition: `transform ${ANIMATION_T_S}s linear`,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._slider_comp = slider_comp
 
@@ -96,7 +99,8 @@ export default class CloudTabs extends Element<HTMLDivElement, Props> {
           borderColor: 'currentColor',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const lists_comp = new Div(
@@ -112,7 +116,8 @@ export default class CloudTabs extends Element<HTMLDivElement, Props> {
           // transform: 'translateX(0%)',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._lists_comp = lists_comp
 
@@ -124,7 +129,8 @@ export default class CloudTabs extends Element<HTMLDivElement, Props> {
           transition: `transform ${ANIMATION_T_S}s linear`,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._lists_inner = lists_inner
 
@@ -191,10 +197,10 @@ export default class CloudTabs extends Element<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
-    // @ts-ignore
-    tab_comp.$element.__DROP__TARGET__ = true
+    tab_comp.$element.setAttribute('dropTarget', 'true')
     tab_comp.addEventListener(
       makeClickListener({
         onClick: () => {
@@ -245,14 +251,16 @@ export default class CloudTabs extends Element<HTMLDivElement, Props> {
         {
           style,
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
     } else {
       list = new IOAuthWall(
         {
           style,
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
     }
     return list

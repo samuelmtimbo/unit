@@ -8,10 +8,10 @@
           "pinId": "value"
         },
         "vtjbjuvw": {
-          "mergeId": "zzmfgw"
+          "mergeId": "6"
         },
         "ckkotbhab": {
-          "mergeId": "soblkxus"
+          "mergeId": "7"
         }
       },
       "type": "number",
@@ -35,14 +35,14 @@
     "min": {
       "pin": {
         "0": {
-          "mergeId": "odaeytf"
+          "mergeId": "8"
         },
         "lmxgapmoa": {
           "unitId": "min",
           "pinId": "value"
         },
         "ehxxshptb": {
-          "mergeId": "kxsvjbukp"
+          "mergeId": "9"
         }
       },
       "type": "number",
@@ -388,7 +388,7 @@
         }
       }
     },
-    "gwmdyifn": {
+    "oninput3": {
       "id": "b345c410-b1ee-11ea-b725-0b9ed734d65f",
       "input": {
         "element": {}
@@ -403,7 +403,7 @@
         }
       }
     },
-    "tpavgk": {
+    "oninput4": {
       "id": "b345c410-b1ee-11ea-b725-0b9ed734d65f",
       "input": {
         "element": {}
@@ -420,7 +420,7 @@
     }
   },
   "merges": {
-    "zppynw": {
+    "0": {
       "oninput": {
         "input": {
           "element": true
@@ -437,7 +437,7 @@
         }
       }
     },
-    "zifdlhqi": {
+    "1": {
       "setvalue": {
         "input": {
           "element": true
@@ -454,7 +454,7 @@
         }
       }
     },
-    "bvubmjxo": {
+    "2": {
       "setvalue0": {
         "input": {
           "value": true
@@ -466,7 +466,7 @@
         }
       }
     },
-    "vaufopf": {
+    "3": {
       "max": {
         "output": {
           "_self": true
@@ -477,13 +477,13 @@
           "element": true
         }
       },
-      "gwmdyifn": {
+      "oninput3": {
         "input": {
           "element": true
         }
       }
     },
-    "iltnvkkw": {
+    "4": {
       "oninput2": {
         "input": {
           "element": true
@@ -494,13 +494,13 @@
           "_self": true
         }
       },
-      "tpavgk": {
+      "oninput4": {
         "input": {
           "element": true
         }
       }
     },
-    "ezwsb": {
+    "5": {
       "setvalue": {
         "input": {
           "value": true
@@ -512,19 +512,19 @@
         }
       }
     },
-    "zzmfgw": {
+    "6": {
       "numberinput": {
         "input": {
           "max": true
         }
       },
-      "gwmdyifn": {
+      "oninput3": {
         "output": {
           "event": true
         }
       }
     },
-    "soblkxus": {
+    "7": {
       "oninput1": {
         "output": {
           "event": true
@@ -536,8 +536,8 @@
         }
       }
     },
-    "odaeytf": {
-      "tpavgk": {
+    "8": {
+      "oninput4": {
         "output": {
           "event": true
         }
@@ -548,7 +548,7 @@
         }
       }
     },
-    "kxsvjbukp": {
+    "9": {
       "oninput2": {
         "output": {
           "event": true
@@ -609,27 +609,27 @@
     ],
     "position": {
       "merge": {
-        "bvubmjxo": {
+        "2": {
           "x": -73,
           "y": -44
         },
-        "ezwsb": {
+        "5": {
           "x": 114,
           "y": -36
         },
-        "zzmfgw": {
+        "6": {
           "x": -98,
           "y": 42
         },
-        "soblkxus": {
+        "7": {
           "x": -132,
           "y": -101
         },
-        "odaeytf": {
+        "8": {
           "x": 160,
           "y": -89
         },
-        "kxsvjbukp": {
+        "9": {
           "x": 111,
           "y": 56
         }
@@ -637,6 +637,6 @@
     }
   },
   "id": "0d9605e4-f4f2-4141-a7f0-1f090c88230f",
-  "type": "`U`&`G`",
+  "type": "`U`&`C`&`G`",
   "system": true
 }

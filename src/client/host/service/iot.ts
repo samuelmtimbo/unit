@@ -1,5 +1,5 @@
 import { None } from '../../../types/None'
-import { LocalStore } from '../../host'
+import { LocalStore } from '../../store'
 import { CloudStore } from '../CloudStore'
 
 export type ContainerTypeSpec = 'computer' | 'mobile' | 'cloud'

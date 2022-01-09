@@ -100,7 +100,8 @@
         }
       },
       "ref": true,
-      "type": "`C`&`V`"
+      "type": "`C`&`V`",
+      "defaultIgnored": true
     }
   },
   "units": {

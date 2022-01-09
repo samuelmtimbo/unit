@@ -16,7 +16,7 @@
   "merges": {},
   "inputs": {
     "element": {
-      "type": "`U`",
+      "type": "`C`",
       "pin": {
         "0": {
           "unitId": "listen",

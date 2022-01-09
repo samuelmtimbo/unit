@@ -1,5 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export type I = {
   url: string
@@ -18,11 +20,16 @@ export type O = {
 }
 
 export default class Fetch extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['url', 'options'],
-      o: ['response'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['url', 'options'],
+        o: ['response'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ url, options }: I, done: Done<O>) {

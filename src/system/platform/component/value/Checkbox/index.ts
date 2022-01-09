@@ -1,4 +1,6 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
 export interface I {
@@ -11,11 +13,16 @@ export interface I {
 export interface O {}
 
 export default class Checkbox extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['class', 'style', 'attr', 'value'],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['class', 'style', 'attr', 'value'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
 
     this._defaultState = {
       value: false,

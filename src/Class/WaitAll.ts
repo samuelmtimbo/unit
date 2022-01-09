@@ -1,16 +1,18 @@
+import { Pod } from '../pod'
 import { System } from '../system'
 import { Functional } from './Functional'
 import { Done } from './Functional/Done'
 
 export class WaitAll<T> extends Functional<T, T> {
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: [],
         o: [],
       },
       {},
-      system
+      system,
+      pod
     )
   }
 

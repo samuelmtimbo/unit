@@ -4,11 +4,12 @@ import { Element } from '../../../../../client/element'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { Mode, MODE_LIST } from '../../../../../client/mode'
 import parentElement from '../../../../../client/parentElement'
-import { getThemeModeColor, NONE } from '../../../../../client/theme'
-import ModeIconButton from '../ModeIconButton/Component'
-import Div from '../../../component/Div/Component'
-import { Dict } from '../../../../../types/Dict'
+import { getThemeModeColor, COLOR_NONE } from '../../../../../client/theme'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { Dict } from '../../../../../types/Dict'
+import Div from '../../../component/Div/Component'
+import ModeIconButton from '../ModeIconButton/Component'
 
 export interface Props {
   className?: string
@@ -66,8 +67,8 @@ export default class Modes extends Element<HTMLDivElement, Props> {
 
   private _mode: Mode = 'none'
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style = {} } = this.$props
 
@@ -86,10 +87,11 @@ export default class Modes extends Element<HTMLDivElement, Props> {
           pointerEvents: 'none',
           borderWidth: '1px',
           borderStyle: 'solid',
-          borderColor: NONE,
+          borderColor: COLOR_NONE,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._selector = selector
 
@@ -106,7 +108,8 @@ export default class Modes extends Element<HTMLDivElement, Props> {
             height: '21px',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       const mode_button = new ModeIconButton(
         {
@@ -117,7 +120,8 @@ export default class Modes extends Element<HTMLDivElement, Props> {
           title: mode,
           activeColor,
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       mode_button.addEventListener(
         makeClickListener({
@@ -145,7 +149,8 @@ export default class Modes extends Element<HTMLDivElement, Props> {
           gap: '12px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     crud.registerParentRoot(this._mode_button_container['change'])
     crud.registerParentRoot(this._mode_button_container['remove'])
@@ -161,7 +166,8 @@ export default class Modes extends Element<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._modes = list
     list.registerParentRoot(selector)
@@ -233,7 +239,7 @@ export default class Modes extends Element<HTMLDivElement, Props> {
 
     if (mode === 'none') {
       mergePropStyle(this._selector, {
-        borderColor: NONE,
+        borderColor: COLOR_NONE,
       })
     } else {
       const mode_top = MODE_TOP[mode]

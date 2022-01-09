@@ -1,5 +1,5 @@
-import callAll from '../callAll'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
+import callAll from '../util/call/callAll'
 import Listenable from './Listenable'
 import { Listener } from './Listener'
 
@@ -23,6 +23,8 @@ export function addListener(
       unlisten()
       $listener.splice(i, 1)
       $unlisten.splice(i, 1)
+    } else {
+      throw new Error('Should never happen')
     }
   }
 }

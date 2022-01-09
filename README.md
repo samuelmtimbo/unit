@@ -14,7 +14,7 @@ The unit Programming Language was developed in close junction to the unit Progra
 
 unit is similar in concept to the Unix shell; for a seasoned programmer, unit should feel like the 2D evolution of the Command Line Interface (CLI) where units' (commands) inputs and outputs (stdin/stdout/stderr) can be piped together into a graph (script). In fact, unit can be thought of as a re-exploration of the [Unix Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in the context of modern Software Engineering. 
 
-The unit system is set to grow into a modern and approachable Web Operating System, which is sandboxed by default, enabling a new era of Software Sharing and Collaboration.
+The unit system is set to grow into a simple and approachable Web Operating System, which is sandboxed by default, enabling a new era of Software Sharing and Collaboration.
 
 The broader Design Philosophy behind unit is discussed in [Concept](src/docs/concept/README.md).
 

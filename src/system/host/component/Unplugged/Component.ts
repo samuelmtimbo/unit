@@ -1,8 +1,9 @@
-import { ANIMATION_T_S } from '../../../../client/animation'
+import { ANIMATION_T_S } from '../../../../client/animation/animation'
 import { Component } from '../../../../client/component'
 import mergeStyle from '../../../../client/component/mergeStyle'
 import parentElement from '../../../../client/parentElement'
 import { polarToCartesian } from '../../../../client/util/geometry'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { rangeArray } from '../../../../util/array'
@@ -120,8 +121,8 @@ export default class Unplugged extends Component<HTMLDivElement, Props> {
 
   private _base: SVGCircle
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style = {} } = this.$props
 
@@ -137,7 +138,8 @@ export default class Unplugged extends Component<HTMLDivElement, Props> {
           },
           d: '',
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       this._paths.push(path)
       children.push(path)
@@ -153,7 +155,8 @@ export default class Unplugged extends Component<HTMLDivElement, Props> {
           transition: `fill ${ANIMATION_T_S}s linear`,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._base = base
     children.push(base)
@@ -166,7 +169,8 @@ export default class Unplugged extends Component<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     container.setChildren(children)
     this._container = container

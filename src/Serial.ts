@@ -1,4 +1,5 @@
 import { Pin } from './Pin'
+import { Pod } from './pod'
 import { Primitive } from './Primitive'
 import { System } from './system'
 import { forEach } from './util/array'
@@ -18,17 +19,17 @@ export default class Serial<T> extends Primitive<I<T>, O<T>> {
 
   private _o_name: string[] = ['a']
 
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['a'],
         o: [],
       },
       {},
-      system
+      system,
+      pod
     )
 
-    // adding the first output will forward the current data to it
     this.addListener('set_output', (name: string, output: Pin<T>) => {
       if (this._current !== undefined) {
         this._forwarding = true

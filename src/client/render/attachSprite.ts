@@ -2,8 +2,8 @@ import { System } from '../../system'
 import namespaceURI from '../component/namespaceURI'
 import { SPRITESHEET_ID } from '../ensureIcon'
 
-export function attachSprite($system: System): void {
-  const { root: $root } = $system
+export function attachSprite(system: System): void {
+  const { root: $root } = system
 
   const sprite = document.createElementNS(namespaceURI, 'svg')
 
@@ -13,5 +13,5 @@ export function attachSprite($system: System): void {
 
   $root.appendChild(sprite)
 
-  $system.foreground.sprite = sprite
+  system.foreground.sprite = sprite
 }

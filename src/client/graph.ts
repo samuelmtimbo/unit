@@ -303,7 +303,7 @@ const _build_subgraph = (
 
 // TODO optimize
 export const makeRelated = (graph: G): SG => {
-  const related = {}
+  const related: Dict<any> = {}
   forEachKeyValue(graph, (_, id) => {
     const relatedTo = new Set<string>([id])
     setConnectedTo(id, graph, relatedTo)

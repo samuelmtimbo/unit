@@ -1,5 +1,6 @@
 import { Component } from '../../../../../../client/component'
 import parentElement from '../../../../../../client/parentElement'
+import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
 import CloudTabs from '../../../../../host/component/IconTabs/Component'
@@ -13,8 +14,8 @@ export const DEFAULT_STYLE = {}
 export default class Peer extends Component<HTMLDivElement, Props> {
   private _tabs: CloudTabs
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style } = $props
 
@@ -23,7 +24,8 @@ export default class Peer extends Component<HTMLDivElement, Props> {
         // tabs: ['cloud', 'shared'],
         style,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._tabs = tabs
 

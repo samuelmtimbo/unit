@@ -4,22 +4,17 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
+import { pod, system } from '../../util/system'
 
 const spec = require('../../../system/core/common/SumN/spec.json') as GraphSpec
 
-const SumN = fromSpec<{ a: number; n: number }, { sum: number }>(
-  spec,
-  _specs
-)
+const SumN = fromSpec<{ a: number; n: number }, { sum: number }>(spec, _specs)
 
-import { system } from '../../util/system'
-
-const sumN = new SumN(system)
+const sumN = new SumN(system, pod)
 
 false && watchUnitAndLog(sumN)
 false && watchGraphAndLog(sumN)
 false && watchGraphAndLog(sumN.refUnit('sumnfrom') as Graph)
-
 
 sumN.play()
 

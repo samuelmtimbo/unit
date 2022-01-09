@@ -1,4 +1,4 @@
-import { U } from '../interface/U'
+import { Graph } from '../Class/Graph'
 import { Moment } from './Moment'
 
 export interface GraphSpecComponentRemoveMomentData {
@@ -11,7 +11,7 @@ export interface GraphSpecComponentRemoveMoment
 const event = 'component_remove'
 
 export function watchGraphUnitComponentRemoveEvent(
-  unit: U,
+  graph: Graph,
   callback: (moment: GraphSpecComponentRemoveMoment) => void
 ): () => void {
   const listener = (unitId: string) => {
@@ -23,8 +23,8 @@ export function watchGraphUnitComponentRemoveEvent(
       },
     })
   }
-  unit.prependListener(event, listener)
+  graph.prependListener(event, listener)
   return () => {
-    unit.removeListener(event, listener)
+    graph.removeListener(event, listener)
   }
 }

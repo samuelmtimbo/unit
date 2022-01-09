@@ -1,17 +1,14 @@
 import * as assert from 'assert'
-import { Graph } from '../../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
-import { rangeArray } from '../../../util/array'
 import { countEvent } from '../../util'
+import { pod, system } from '../../util/system'
 
 const spec = require('../../../system/core/common/MergeSort/spec.json')
 const MergeSort = fromSpec(spec, _specs)
 
-import { system } from '../../util/system'
-
-const mergeSort = new MergeSort(system)
+const mergeSort = new MergeSort(system, pod)
 
 const dataCounter = countEvent(mergeSort.getOutput('a'), 'data')
 const dropCounter = countEvent(mergeSort.getOutput('a'), 'drop')

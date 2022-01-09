@@ -1,10 +1,11 @@
 import mergePropStyle from '../../../../../client/component/mergeStyle'
-import parentElement from '../../../../../client/parentElement'
 import { Element } from '../../../../../client/element'
+import parentElement from '../../../../../client/parentElement'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import SVGCircle from '../../svg/Circle/Component'
-import SVGSVG from '../../svg/SVG/Component'
 import SVGRect from '../../svg/Rect/Component'
+import SVGSVG from '../../svg/SVG/Component'
 
 export interface Props {
   className?: string
@@ -24,8 +25,8 @@ export default class Selection extends Element<HTMLDivElement, Props> {
   private _selection: SVGSVG
   private _selection_shape: SVGCircle | SVGRect
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       width = 0,
@@ -54,7 +55,8 @@ export default class Selection extends Element<HTMLDivElement, Props> {
           stroke,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     selection.appendChild(selection_shape)
     this._selection = selection
@@ -95,7 +97,8 @@ export default class Selection extends Element<HTMLDivElement, Props> {
             strokeDashoffset: `${strokeDashOffset}`,
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
     } else {
       selection_shape = new SVGRect(
@@ -111,7 +114,8 @@ export default class Selection extends Element<HTMLDivElement, Props> {
             strokeDashoffset: `${strokeDashOffset}`,
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
     }
 

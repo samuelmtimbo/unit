@@ -1,1 +1,1 @@
-export interface B extends Blob {}
+export interface B {}

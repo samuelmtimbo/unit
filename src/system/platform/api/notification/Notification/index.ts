@@ -1,17 +1,34 @@
-import { Primitive } from '../../../../../Primitive'
+import { Pod } from '../../../../../pod'
+import { Primitive, PrimitiveEvents } from '../../../../../Primitive'
+import { System } from '../../../../../system'
 
 export interface I {}
 
 export interface O {}
 
-export default class _Notification extends Primitive<I, O> {
+export type Notification_EE = {
+  click: []
+  close: []
+  error: []
+  show: []
+}
+
+export type NotificationEvents = PrimitiveEvents<Notification_EE> &
+  Notification_EE
+
+export default class _Notification extends Primitive<I, O, NotificationEvents> {
   private _notification: Notification | null = null
 
-  constructor() {
-    super({
-      i: [],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: [],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
 
     this._setup()
   }
@@ -45,16 +62,16 @@ export default class _Notification extends Primitive<I, O> {
   ): void {
     this._notification = new Notification(title, opt)
     this._notification.onclick = () => {
-      this.emit('ntf_click', {})
+      this.emit('click')
     }
     this._notification.onclose = () => {
-      this.emit('ntf_close', {})
+      this.emit('close')
     }
     this._notification.onerror = () => {
-      this.emit('ntf_error', {})
+      this.emit('error')
     }
     this._notification.onshow = () => {
-      this.emit('ntf_show', {})
+      this.emit('show')
     }
     callback()
   }

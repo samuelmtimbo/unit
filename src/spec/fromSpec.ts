@@ -1,4 +1,5 @@
 import { Graph } from '../Class/Graph'
+import { Pod } from '../pod'
 import { System } from '../system'
 import {
   GraphSpec,
@@ -9,15 +10,30 @@ import {
 } from '../types'
 import { GraphClass } from '../types/GraphClass'
 import { clone, mapObjVK } from '../util/object'
+import { bundleClass } from './bundleClass'
 
 export function fromSpec<I = any, O = any>(
   spec: GraphSpec,
   specs: Specs,
   branch: { [path: string]: true } = {}
 ): GraphClass {
+  const Class = _fromSpec(spec, specs, branch)
+
+  const { id } = spec
+
+  bundleClass(Class, { unit: { id } })
+
+  return Class
+}
+
+export function _fromSpec<I = any, O = any>(
+  spec: GraphSpec,
+  specs: Specs,
+  branch: { [path: string]: true } = {}
+): GraphClass {
   spec = clone(spec)
 
-  const { id, name, units } = spec
+  const { name, units } = spec
 
   for (const unitId in units) {
     const unitSpec: GraphUnitSpec = units[unitId]
@@ -59,10 +75,8 @@ export function fromSpec<I = any, O = any>(
   }
 
   class Class<I, O> extends Graph<I, O> {
-    static __id: string = id
-
-    constructor(system: System) {
-      super(spec, branch, system)
+    constructor(system: System, pod: Pod) {
+      super(spec, branch, system, pod)
     }
   }
 

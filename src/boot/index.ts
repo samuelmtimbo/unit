@@ -1,25 +1,199 @@
-import { $tabStorage } from '../api/storage/tab'
 import { Gamepad } from '../client/gamepad'
 import { Keyboard } from '../client/keyboard'
-import { J } from '../interface/J'
-import {
-  BootOpt,
-  HTTPServer,
-  IOStorage,
-  LocalChannel,
-  LocalPod,
-  SpeechGrammarList,
-  SpeechRecognition,
-  System,
-} from '../system'
+import { APINotSupportedError } from '../exception/APINotImplementedError'
+import { DisplayMediaAPINotSupported } from '../exception/DisplayMediaAPINotSupported'
+import { API, BootOpt, System } from '../system'
+import { UserMediaAPINotSupported } from '../system/platform/api/media/UserMedia/MediaDeviceAPINotSupported'
 import { Storage_ } from '../system/platform/api/storage/Storage_'
 import _specs from '../system/_specs'
+import { IDownloadDataOpt } from '../types/global/IDownloadData'
+import {
+  ISpeechGrammarList,
+  ISpeechGrammarListOpt,
+} from '../types/global/ISpeechGrammarList'
+import {
+  ISpeechRecognition,
+  ISpeechRecognitionOpt,
+} from '../types/global/ISpeechRecognition'
+import {
+  ISpeechSynthesis,
+  ISpeechSynthesisOpt,
+} from '../types/global/ISpeechSynthesis'
+import {
+  ISpeechSynthesisUtterance,
+  ISpeechSynthesisUtteranceOpt,
+} from '../types/global/ISpeechSynthesisUtterance'
+import { IStorage } from '../types/global/IStorage'
+
+export function noStorage(name: string): IStorage {
+  return {
+    getItem(key: string): string | null {
+      throw new APINotSupportedError(name)
+    },
+    removeItem(key: string): void {
+      throw new APINotSupportedError(name)
+    },
+    setItem(key: string, value: string): void {
+      throw new APINotSupportedError(name)
+    },
+    clear(): void {
+      throw new APINotSupportedError(name)
+    },
+  }
+}
+
+export function noHost(): API {
+  const host: API = {
+    storage: {
+      tab: () => new Storage_(noStorage('Tab Storage')),
+      local: () => new Storage_(noStorage('Local Storage')),
+      session: () => new Storage_(noStorage('Session Storage')),
+      cloud: () => new Storage_(noStorage('Cloud Storage')),
+    },
+    selection: {
+      containsSelection: () => {
+        throw new APINotSupportedError('Selection')
+      },
+      removeSelection: () => {
+        throw new APINotSupportedError('Selection')
+      },
+    },
+    file: {
+      showOpenFilePicker: () => {
+        throw new APINotSupportedError('File System')
+      },
+      showSaveFilePicker: () => {
+        throw new APINotSupportedError('File System')
+      },
+      downloadData: (opt: IDownloadDataOpt): Promise<void> => {
+        throw new APINotSupportedError('Download')
+      },
+    },
+    device: {
+      vibrate: () => {
+        throw new APINotSupportedError('Vibrate')
+      },
+    },
+    geolocation: {
+      getCurrentPosition: () => {
+        throw new APINotSupportedError('Geolocation')
+      },
+    },
+    media: {
+      getUserMedia: () => {
+        throw new UserMediaAPINotSupported()
+      },
+      getDisplayMedia: () => {
+        throw new DisplayMediaAPINotSupported()
+      },
+      enumerateDevices: () => {
+        throw new APINotSupportedError('Enumerate Media Devices')
+      },
+    },
+    screen: {
+      requestWakeLock: () => {
+        throw new APINotSupportedError('Screen Wake Lock')
+      },
+    },
+    bluetooth: {
+      requestDevice: () => {
+        throw new APINotSupportedError('Bluetooth')
+      },
+    },
+    clipboard: {
+      readText: () => {
+        throw new APINotSupportedError('Clipboard')
+      },
+      writeText: () => {
+        throw new APINotSupportedError('Clipboard')
+      },
+    },
+    http: {
+      tab: function (opt): any {
+        throw new APINotSupportedError('Tab HTTP')
+      },
+      session: function (opt): any {
+        throw new APINotSupportedError('Session HTTP')
+      },
+      local: function (opt): any {
+        throw new APINotSupportedError('Local HTTP')
+      },
+      cloud: function (opt): any {
+        throw new APINotSupportedError('Cloud HTTP')
+      },
+    },
+    channel: {
+      tab: function (opt): any {
+        throw new APINotSupportedError('Tab Channel')
+      },
+      session: function (opt): any {
+        throw new APINotSupportedError('Session Channel')
+      },
+      local: function (opt): any {
+        throw new APINotSupportedError('Local Channel')
+      },
+      cloud: function (opt): any {
+        throw new APINotSupportedError('Cloud Channel')
+      },
+    },
+    pod: {
+      tab: function (opt): any {
+        throw new APINotSupportedError('Tab Pod')
+      },
+      session: function (opt): any {
+        throw new APINotSupportedError('Session Pod')
+      },
+      local: function (opt): any {
+        throw new APINotSupportedError('Local Pod')
+      },
+      cloud: function (opt): any {
+        throw new APINotSupportedError('Cloud Pod')
+      },
+    },
+    speech: {
+      SpeechGrammarList: function (
+        opt: ISpeechGrammarListOpt
+      ): ISpeechGrammarList {
+        throw new APINotSupportedError('Speech Recognition')
+      },
+      SpeechRecognition: function (
+        opt: ISpeechRecognitionOpt
+      ): ISpeechRecognition {
+        throw new APINotSupportedError('Speech Recognition')
+      },
+      SpeechSynthesis: function (opt: ISpeechSynthesisOpt): ISpeechSynthesis {
+        throw new APINotSupportedError('Speech Synthesis')
+      },
+      SpeechSynthesisUtterance: function (
+        opt: ISpeechSynthesisUtteranceOpt
+      ): ISpeechSynthesisUtterance {
+        throw new APINotSupportedError('Speech Synthesis')
+      },
+    },
+    document: {
+      createElement<K extends keyof HTMLElementTagNameMap>(
+        tagName: K,
+        options?: ElementCreationOptions
+      ): HTMLElementTagNameMap[K] {
+        throw new Error() // TODO
+      },
+      createElementNS<K extends keyof SVGElementTagNameMap>(
+        namespaceURI: 'http://www.w3.org/2000/svg',
+        qualifiedName: K
+      ): SVGElementTagNameMap[K] {
+        throw new Error()
+      },
+      createTextNode(text: string): Text {
+        throw new Error()
+      },
+    },
+  }
+
+  return host
+}
 
 export function boot(opt: BootOpt = {}): System {
-  let { specs, components, classes, host = {} } = opt
-
-  const { tabStorage, localStorage, sessionStorage, cloudStorage, location } =
-    host
+  let { specs, components, classes, host: api = noHost() } = opt
 
   specs = { ...specs, ..._specs }
 
@@ -45,89 +219,7 @@ export function boot(opt: BootOpt = {}): System {
 
   const feature = {}
 
-  const speech = {
-    SpeechRecognition,
-    SpeechGrammarList,
-  }
-
-  // setup storage
-  let tab_storage: J
-  let session_storage: J
-  let local_storage: J
-  let cloud_storage: J
-
-  const storage: IOStorage = {
-    tab: function (opt?: undefined): J | null {
-      if (tab_storage) {
-        return tab_storage
-      }
-
-      return $tabStorage
-    },
-    session: function (opt?: undefined): J {
-      if (session_storage) {
-        return session_storage
-      }
-      if (sessionStorage) {
-        session_storage = new Storage_(localStorage)
-        return session_storage
-      } else {
-        return null
-      }
-    },
-    local: function (opt?: undefined): J {
-      if (local_storage !== undefined) {
-        return local_storage
-      }
-      if (localStorage) {
-        session_storage = new Storage_(localStorage)
-        return session_storage
-      } else {
-        return null
-      }
-    },
-    cloud: function (opt?: undefined): J {
-      if (cloud_storage) {
-        return session_storage
-      }
-      if (localStorage) {
-        cloud_storage = new Storage_(cloudStorage)
-        return session_storage
-      } else {
-        return null
-      }
-    },
-  }
-
-  const http = {
-    tab: HTTPServer,
-    session: HTTPServer,
-    local: HTTPServer,
-    cloud: HTTPServer,
-  }
-
-  const channel = {
-    tab: LocalChannel,
-    session: LocalChannel,
-    local: LocalChannel,
-    cloud: LocalChannel,
-  }
-
-  const pod = {
-    tab: LocalPod,
-    session: LocalPod,
-    local: LocalPod,
-    cloud: LocalPod,
-  }
-
-  let hostname = ''
-
-  if (location) {
-    hostname = location.hostname
-  }
-
   const $system: System = {
-    hostname,
     mounted: false,
     root: null,
     customEvent,
@@ -136,6 +228,7 @@ export function boot(opt: BootOpt = {}): System {
     specs,
     classes,
     components,
+    pods: [],
     cache: flag,
     feature,
     foreground: {
@@ -159,13 +252,7 @@ export function boot(opt: BootOpt = {}): System {
         cloud: {},
       },
     },
-    api: {
-      storage,
-      http,
-      channel,
-      pod,
-      speech,
-    },
+    api,
   }
 
   return $system

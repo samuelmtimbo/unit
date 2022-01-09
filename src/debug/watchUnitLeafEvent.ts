@@ -1,4 +1,4 @@
-import { U } from '../interface/U'
+import { Graph } from '../Class/Graph'
 import { Moment } from './Moment'
 
 export interface UnitGraphSpecMomentData {
@@ -13,7 +13,7 @@ export interface UnitGraphSpecMoment extends Moment<UnitGraphSpecMomentData> {
 
 export function watchUnitLeafEvent(
   event: 'leaf_add_unit' | 'leaf_remove_unit',
-  unit: U,
+  unit: Graph,
   callback: (moment) => void
 ): () => void {
   const listener = (_unit: any, path: string[]) => {
@@ -22,7 +22,7 @@ export function watchUnitLeafEvent(
       event,
       data: {
         path,
-        specId: _unit.constructor.__id,
+        specId: _unit.constructor.__bundle.unit.id,
       },
     })
   }

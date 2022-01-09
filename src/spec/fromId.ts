@@ -1,7 +1,8 @@
-import _classes from '../system/_classes'
-import { Classes, GraphSpec, Specs } from '../types'
+import { _cloneUnitClass } from '../cloneUnitClass'
+import { Classes, GraphSpec, Spec, Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { UnitClass } from '../types/UnitClass'
+import { bundleClass } from './bundleClass'
 import { fromSpec } from './fromSpec'
 import { lazyFromSpec } from './Lazy'
 import { SpecNotFoundError } from './SpecNotFoundError'
@@ -12,15 +13,18 @@ export function fromId<I, O>(
   classes: Classes,
   branch: Dict<true> = {}
 ): UnitClass {
+  let spec: Spec = specs[id]
+
   let Class: UnitClass = classes[id]
 
   if (Class === undefined) {
-    const spec = specs[id] as GraphSpec
+    spec = spec as GraphSpec
 
     if (branch[id]) {
       Class = lazyFromSpec(spec, specs, branch)
     } else {
       if (!spec) {
+        console.log(id)
         throw new SpecNotFoundError()
       }
 
@@ -31,9 +35,9 @@ export function fromId<I, O>(
     }
   }
 
-  Object.defineProperty(Class, '__id', {
-    value: id,
-  })
+  Class = _cloneUnitClass(Class)
+
+  bundleClass(Class, { unit: { id } })
 
   return Class
 }

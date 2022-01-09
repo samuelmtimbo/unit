@@ -1,0 +1,88 @@
+{
+  "name": "watch change",
+  "units": {
+    "getvalue": {
+      "id": "d74f12c2-1868-11eb-8136-238c1b1a727f",
+      "input": {
+        "unit": {},
+        "any": {
+          "data": "1"
+        }
+      },
+      "output": {
+        "value": {}
+      }
+    },
+    "onchange": {
+      "id": "7f25303a-b1ee-11ea-bab2-5f81e27c8466",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "onchange": {
+        "input": {
+          "element": true
+        }
+      },
+      "getvalue": {
+        "input": {
+          "unit": true
+        }
+      }
+    },
+    "1": {
+      "onchange": {
+        "output": {
+          "event": true
+        }
+      },
+      "getvalue": {
+        "input": {
+          "any": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "element": {
+      "type": "`C`",
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "getvalue",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "output `element` value and listen \"input\" event",
+    "complexity": 9,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "event"
+    ]
+  },
+  "id": "9a652f1b-f65f-4f3b-888a-2d90ddb43713",
+  "type": "`U`&`G`",
+  "system": true
+}

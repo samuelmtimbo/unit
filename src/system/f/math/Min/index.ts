@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I<T> {
   a: number
@@ -10,11 +12,16 @@ export interface O<T> {
 }
 
 export default class Min<T> extends Functional<I<T>, O<T>> {
-  constructor() {
-    super({
-      i: ['a', 'b'],
-      o: ['min'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['a', 'b'],
+        o: ['min'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ a, b }: I<T>, done): void {

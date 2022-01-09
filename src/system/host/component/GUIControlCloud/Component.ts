@@ -3,13 +3,13 @@ import { Component } from '../../../../client/component'
 import { makeCustomListener } from '../../../../client/event/custom'
 import parentElement from '../../../../client/parentElement'
 import { setAlpha, themeBackgroundColor } from '../../../../client/theme'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { Unlisten } from '../../../../Unlisten'
-import Cloud from '../../../platform/component/app/service/Cloud/Component'
-import {
-  CLOUD_WIDTH,
+import { Unlisten } from '../../../../types/Unlisten'
+import Cloud, {
   CLOUD_HEIGHT,
+  CLOUD_WIDTH,
 } from '../../../platform/component/app/service/Cloud/Component'
 import IOUNAPPControl from '../GUIControl/Component'
 
@@ -30,8 +30,8 @@ export default class GUIControlCloud extends Component<HTMLDivElement, Props> {
   private _root: IOUNAPPControl
   private _content: Cloud
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const root = new IOUNAPPControl(
       {
@@ -43,7 +43,8 @@ export default class GUIControlCloud extends Component<HTMLDivElement, Props> {
         y: 96,
         collapsed: true,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._root = root
 
@@ -51,7 +52,8 @@ export default class GUIControlCloud extends Component<HTMLDivElement, Props> {
       {
         style: {},
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._content = cloud
 

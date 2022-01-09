@@ -1,4 +1,6 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I {
   style: object
@@ -8,12 +10,17 @@ export interface I {
 
 export interface O {}
 
-export default class InputUnit extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['value', 'style', 'maxLength'],
-      o: [],
-    })
+export default class TextInput extends Element<I, O> {
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['value', 'style', 'maxLength'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
 
     this._defaultState = {
       value: '',

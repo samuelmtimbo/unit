@@ -1,33 +1,34 @@
+import { Unit } from '../Class/Unit'
 import { ChildOutOfBound } from '../exception/ChildOutOfBoundError'
 import { C } from '../interface/C'
-import { C_U } from '../interface/C_U'
+import { Component_ } from '../interface/Component'
 import { Dict } from '../types/Dict'
 import { UnitClass } from '../types/UnitClass'
 
 export function appendChild(
-  component: C_U,
-  children: C_U[],
-  Class: UnitClass<C_U>
+  component: Component_,
+  children: Component_[],
+  Class: UnitClass<Unit & C>
 ): number {
   const i = pushChild(component, children, Class)
 
-  const id = Class.__id
+  const { __bundle: bundle } = Class
 
-  component.emit('append_child', { id })
-
-  component.emit('leaf_append_child', { id, path: [] })
+  component.emit('append_child', { bundle })
+  component.emit('leaf_append_child', { path: [], bundle })
 
   return i
 }
 
 export function pushChild(
-  component: C_U,
-  children: C_U[],
-  Class: UnitClass<C_U>
+  component: Component_,
+  children: Component_[],
+  Class: UnitClass<Unit & C>
 ): number {
   const system = component.refSystem()
+  const pod = component.refPod()
 
-  const unit = new Class(system)
+  const unit = new Class(system, pod)
 
   children.push(unit)
 
@@ -51,7 +52,7 @@ export function pullChild(
   element: C,
   children: C[],
   at: number
-): UnitClass<C_U> {
+): UnitClass<Unit & C> {
   const has = hasChild(element, children, at)
 
   if (!has) {
@@ -60,43 +61,52 @@ export function pullChild(
 
   const unit = children.splice(at, 1)
 
-  const Class = unit.constructor as UnitClass<C_U>
+  const Class = unit.constructor as UnitClass<Unit & C>
 
   return Class
 }
 
 export function removeChild(
-  element: C_U,
-  children: C_U[],
+  element: Component_,
+  children: Component_[],
   at: number
-): UnitClass<C_U> {
+): UnitClass<Unit & C> {
   const Class = pullChild(element, children, at)
 
   element.emit('remove_child_at', { at })
-
-  element.emit(`remove_child_at_${at}`)
-
+  element.emit(`remove_child_at_${at}`, { at })
   element.emit('leaf_remove_child_at', { at, path: [] })
 
   return Class
 }
 
-export function refChild(element: C_U, children: C_U[], at: number): C {
+export function refChild(
+  element: Component_,
+  children: Component_[],
+  at: number
+): Component_ {
   return children[at]
 }
 
-export function refChildren(element: C_U, children: C_U[]): C_U[] {
+export function refChildren(
+  element: Component_,
+  children: Component_[]
+): Component_[] {
   return children
 }
 
-export function refSlot(element: C_U, slotName: string, slot: Dict<C>): C {
+export function refSlot(
+  element: Component_,
+  slotName: string,
+  slot: Dict<Component_>
+): Component_ {
   return slot[slotName] || element
 }
 
 export function registerParentRoot(
-  component: C,
+  component: Component_,
   parentRoot: C[],
-  child: C,
+  child: Component_,
   slotName: string
 ): void {
   parentRoot.push(child)
@@ -109,9 +119,9 @@ export function registerParentRoot(
 }
 
 export function unregisterParentRoot(
-  component: C,
+  component: Component_,
   parentRoot: C[],
-  child: C
+  child: Component_
 ): void {
   const at = parentRoot.indexOf(child)
 
@@ -120,7 +130,11 @@ export function unregisterParentRoot(
   component.emit('unregister_parent_root', component)
 }
 
-export function unregisterRoot(component: C, root: C[], child: C): void {
+export function unregisterRoot(
+  component: Component_,
+  root: C[],
+  child: Component_
+): void {
   const at = root.indexOf(child)
 
   root.splice(at, 1)
@@ -128,18 +142,20 @@ export function unregisterRoot(component: C, root: C[], child: C): void {
   component.emit('unregister_root', component)
 }
 
-export function registerRoot(component: C, root: C[], child: C): number {
+export function registerRoot(
+  component: Component_,
+  root: C[],
+  child: Component_
+): void {
   root.push(child)
 
   component.emit('register_root', component)
-
-  return root.length - 1
 }
 
 export function appendParentChild(
-  component: C,
+  component: Component_,
   parentChild: C[],
-  child: C,
+  child: Component_,
   slotName: string
 ): void {
   const slot = component.refSlot(slotName)
@@ -147,16 +163,16 @@ export function appendParentChild(
   if (component === slot) {
     parentChild.push(child)
 
-    component.emit('append_parent_child', component)
+    component.emit('append_parent_child', component, slotName)
   } else {
     slot.appendParentChild(child, 'default')
   }
 }
 
 export function removeParentChild(
-  component: C,
+  component: Component_,
   parentRoot: C[],
-  child: C
+  child: Component_
 ): void {
   const at = parentRoot.indexOf(child)
 

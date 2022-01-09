@@ -1,10 +1,11 @@
 import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
 import {
-  PropHandler,
   htmlPropHandler,
   inputPropHandler,
+  PropHandler,
 } from '../../../../../client/propHandler'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -41,14 +42,14 @@ export default class TextArea extends Element<HTMLTextAreaElement, Props> {
 
   private _prop_handler: PropHandler
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     let { style = {}, value = '' } = $props
 
     style = { ...DEFAULT_STYLE, ...style }
 
-    const text_area_el = document.createElement('textarea')
+    const text_area_el = this.$system.api.document.createElement('textarea')
     text_area_el.spellcheck = false
     text_area_el.autocomplete = 'off'
     // text_area_el.autocorrect = 'off'

@@ -1,4 +1,4 @@
-import { Callback } from '../../Callback'
+import { Callback } from '../../types/Callback'
 import { $V, $V_C, $V_R, $V_W } from './$V'
 
 export const AsyncVCall: (value: $V) => $V_C = (value) => {

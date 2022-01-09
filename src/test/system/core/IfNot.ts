@@ -3,6 +3,7 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
+import { pod, system } from '../../util/system'
 
 const spec =
   require('../../../system/core/control/IfNot/spec.json') as GraphSpec
@@ -11,13 +12,10 @@ const IfNot = fromSpec<{ a: any; b: boolean }, { 'a if not b': any }>(
   _specs
 )
 
-import { system } from '../../util/system'
-
-const ifNot = new IfNot(system)
+const ifNot = new IfNot(system, pod)
 
 false && watchUnitAndLog(ifNot)
 false && watchGraphAndLog(ifNot)
-
 
 ifNot.play()
 

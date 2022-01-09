@@ -1,14 +1,15 @@
-import callAll from '../callAll'
-import { Callback } from '../Callback'
 import { $Children } from '../component/Children'
 import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
 import { $Component } from '../interface/async/$Component'
 import { $Graph } from '../interface/async/$Graph'
-import { System } from '../system'
+import { Pod } from '../pod'
+import { evaluate } from '../spec/evaluate'
+import { ComponentClass, System } from '../system'
 import { GraphSpec } from '../types'
+import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
 import {
   at,
   insert,
@@ -18,6 +19,7 @@ import {
   removeAt,
   unshift,
 } from '../util/array'
+import callAll from '../util/call/callAll'
 import { _if } from '../util/control'
 import {
   appendChild,
@@ -25,29 +27,34 @@ import {
   prepend,
   removeChild,
 } from '../util/element'
-import { get, set } from '../util/object'
+import { get, mapObjVK, set } from '../util/object'
 import { addListener, addListeners } from './addListener'
-import { attach } from './attach'
 import { componentClassFromSpecId } from './componentClassFromSpecId'
 import { componentFromSpecId } from './componentFromSpecId'
 import { component_ } from './component_'
 import { Context, dispatchContextEvent, dispatchCustomEvent } from './context'
-import { getPosition } from './getPosition'
-import { getSize } from './getSize'
+import {
+  DEFAULT_FONT_SIZE,
+  DEFAULT_OPACITY,
+  DEFAULT_TEXT_ALIGN,
+} from './DEFAULT_FONT_SIZE'
+import { getFontSize } from './util/style/getFontSize'
 import { pushGlobalComponent } from './globalComponent'
 import { IOElement } from './IOElement'
 import { Listener } from './Listener'
 import { makeEventListener } from './makeEventListener'
+import { mount } from './mount'
 import parentElement from './parentElement'
 import { unmount } from './unmount'
 import { addVector, NULL_VECTOR, Position } from './util/geometry'
+import { getTextAlign } from './test/getTextAlign'
+import { getPosition } from './util/style/getPosition'
+import { getSize } from './util/style/getSize'
+import { getOpacity } from './util/style/getOpacity'
 
 export type ComponentMap = Dict<Component>
 
-export function componentClassFromSpec(
-  $system: System,
-  spec: GraphSpec
-): typeof Component {
+export function componentClassFromSpec(spec: GraphSpec): ComponentClass {
   const {
     id,
     name,
@@ -60,8 +67,8 @@ export function componentClassFromSpec(
   class Parent extends Component<any, any, any> {
     static id = id
 
-    constructor($props: {}) {
-      super($props, $system)
+    constructor($props: {}, $system: System, $pod: Pod) {
+      super($props, $system, $pod)
 
       const $subComponent: Dict<Component> = {}
 
@@ -69,7 +76,7 @@ export function componentClassFromSpec(
         const unitSpec = units[unitId]
         const { id } = unitSpec
         const Class = componentClassFromSpecId($system, id)
-        const childComponent: Component = new Class({}, $system)
+        const childComponent: Component = new Class({}, $system, $pod)
         $subComponent[unitId] = childComponent
       }
 
@@ -115,7 +122,7 @@ export function componentClassFromSpec(
     value: name,
   })
 
-  return Parent
+  return Parent as ComponentClass
 }
 
 export function findRef(component: Component, name: string): Component | null {
@@ -141,8 +148,8 @@ export class Component<
   public $props: P
   public $changed: Set<string> = new Set()
 
-  public $attached: boolean = false
   public $system: System
+  public $pod: Pod
 
   public $globalId: string
 
@@ -184,9 +191,10 @@ export class Component<
 
   public $listenCount: Dict<number> = {}
 
-  constructor($props: P, $system: System) {
+  constructor($props: P, $system: System, $pod: Pod) {
     this.$props = $props
     this.$system = $system
+    this.$pod = $pod
   }
 
   getProp(name: string): any {
@@ -201,6 +209,10 @@ export class Component<
     } else {
       this.$changed.add(prop)
     }
+  }
+
+  getSlot(slotName: string): Component {
+    return this.$slot[slotName]
   }
 
   onPropChanged(prop: string, current: any) {}
@@ -259,6 +271,10 @@ export class Component<
   setPointerCapture(pointerId: number): void {
     // console.log(this.constructor.name, 'setPointerCapture', pointerId)
     try {
+      if (this.$element instanceof Text) {
+        return
+      }
+
       this.$element.setPointerCapture(pointerId)
     } catch (err) {
       return
@@ -270,6 +286,10 @@ export class Component<
     // console.log(this.constructor.name, 'releasePointerCapture', pointerId)
     // AD HOC
     try {
+      if (this.$element instanceof Text) {
+        return
+      }
+
       this.$element.releasePointerCapture(pointerId)
     } catch (err) {
       // swallow
@@ -356,6 +376,10 @@ export class Component<
 
   focus(options: FocusOptions | undefined = { preventScroll: true }) {
     if (this.$slot['default'] === this) {
+      if (this.$element instanceof Text) {
+        return
+      }
+
       this.$element.focus(options)
     } else {
       this.$slot['default'].focus(options)
@@ -364,18 +388,65 @@ export class Component<
 
   blur() {
     if (this.$slot['default'] === this) {
+      if (this.$element instanceof Text) {
+        return
+      }
+
       this.$element.blur()
     } else {
       this.$slot['default'].blur()
     }
   }
 
+  deselect(): void {
+    const {
+      api: {
+        selection: { removeSelection },
+      },
+    } = this.$system
+
+    if (this.containsSelection()) {
+      removeSelection()
+    }
+  }
+
+  containsSelection(): boolean {
+    const {
+      api: {
+        selection: { containsSelection },
+      },
+    } = this.$system
+
+    return containsSelection(this.$element)
+  }
+
   animate(keyframes, options): Animation {
     if (this.$slot['default'] === this) {
+      if (this.$element instanceof Text) {
+        // RETURN
+        return
+      }
+
       return this.$element.animate(keyframes, options)
     } else {
       return this.$slot['default'].animate(keyframes, options)
     }
+  }
+
+  getOffset(): Component {
+    let slot_offset: Component = this
+
+    while (
+      slot_offset &&
+      (!(slot_offset.$element instanceof HTMLElement) ||
+        slot_offset.$element.style.position === '' ||
+        slot_offset.$element.style.position === 'contents') &&
+      slot_offset.$element.style.display !== 'flex'
+    ) {
+      slot_offset = slot_offset.$parent
+    }
+
+    return slot_offset
   }
 
   getElementPosition() {
@@ -399,6 +470,48 @@ export class Component<
     return getSize(this.$element)
   }
 
+  getFontSize(): number {
+    const fontSize = getFontSize(this.$element)
+
+    if (fontSize) {
+      return fontSize
+    }
+
+    if (this.$parent) {
+      return this.$parent.getFontSize()
+    }
+
+    return DEFAULT_FONT_SIZE
+  }
+
+  getOpacity(): number {
+    const opacity = getOpacity(this.$element)
+
+    if (opacity) {
+      return opacity
+    }
+
+    if (this.$parent) {
+      return this.$parent.getOpacity()
+    }
+
+    return DEFAULT_OPACITY
+  }
+
+  getTextAlign(): string {
+    const fontSize = getTextAlign(this.$element)
+
+    if (fontSize) {
+      return fontSize
+    }
+
+    if (this.$parent) {
+      return this.$parent.getTextAlign()
+    }
+
+    return DEFAULT_TEXT_ALIGN
+  }
+
   getRootPosition(rootId: string): Position {
     // TODO
     return NULL_VECTOR
@@ -412,6 +525,27 @@ export class Component<
     return NULL_VECTOR
   }
 
+  getRootBase(path: string[] = []): [string[], Component][] {
+    if (this.$primitive && this.$root.length === 0) {
+      return [[path, this]]
+    }
+
+    let p = []
+
+    for (const subComponentId in this.$subComponent) {
+      const subComponent = this.$subComponent[subComponentId]
+      if (this.$root.indexOf(subComponent) > -1) {
+        const subComponentPrim = subComponent.getRootBase([
+          ...path,
+          subComponentId,
+        ])
+        p = [...p, ...subComponentPrim]
+      }
+    }
+
+    return p
+  }
+
   getBase(path: string[] = []): [string[], Component][] {
     if (this.$primitive && this.$root.length === 0) {
       return [[path, this]]
@@ -421,20 +555,23 @@ export class Component<
 
     for (const subComponentId in this.$subComponent) {
       const subComponent = this.$subComponent[subComponentId]
-      const subComponentPrim = subComponent.getBase([...path, subComponentId])
+      const subComponentPrim = subComponent.getRootBase([
+        ...path,
+        subComponentId,
+      ])
       p = [...p, ...subComponentPrim]
     }
 
     return p
   }
 
-  getPathSubComponent(path: string[]): Component {
+  pathGetSubComponent(path: string[]): Component {
     if (path.length == 0) {
       return this
     } else {
       const [head, ...tail] = path
       const subComponent = this.getSubComponent(head)
-      return subComponent.getPathSubComponent(tail)
+      return subComponent.pathGetSubComponent(tail)
     }
   }
 
@@ -445,6 +582,11 @@ export class Component<
     height: number
   } {
     if (this.$context) {
+      if (this.$element instanceof Text) {
+        // RETURN
+        return
+      }
+
       const { $x, $y, $sx, $sy } = this.$context
       const bcr: DOMRect = this.$element.getBoundingClientRect()
       const { x, y, width, height } = bcr
@@ -611,8 +753,13 @@ export class Component<
           const { event } = event_data
           unlisten(event)
         } else if (event_event === 'append_child') {
-          const { id } = event_data
-          const child = componentFromSpecId(this.$system, id, {})
+          const { bundle } = event_data
+          const { unit } = bundle
+          const { id, input = {} } = unit
+          const props = mapObjVK(input, ({ data }) => {
+            return evaluate(data, this.$system.specs, this.$system.classes)
+          })
+          const child = componentFromSpecId(this.$system, this.$pod, id, props)
           const _ = component_(child)
           const at = this.$children.length
           const child_unit = this.$unit.$refChild({ at, _ })
@@ -664,7 +811,7 @@ export class Component<
     $unit.$children({}, (children: $Children) => {
       if (children.length > 0) {
         const _children = children.map(({ id }, at) => {
-          const component = componentFromSpecId(this.$system, id, {})
+          const component = componentFromSpecId(this.$system, this.$pod, id, {})
           const _ = component_(component)
           const unit = $unit.$refChild({ at, _ })
           component.connect(unit)
@@ -825,9 +972,7 @@ export class Component<
   public prependRoot(component: Component): void {
     unshift(this.$root, component)
     prepend(this.$element, component.$element)
-    _if(this.$attached, attach, component, this.$system)
-    // _if(this.$mounted, mount, component, this.$context)
-    this.$mounted && this.mountDescendent(component)
+    _if(this.$mounted, mount, component, this.$context)
   }
 
   public registerRoot(component: Component): void {
@@ -852,9 +997,7 @@ export class Component<
 
   protected postAppendRoot(component: Component): void {
     set(component, '$parent', this)
-    _if(this.$attached, attach, component, this.$system)
-    // _if(this.$mounted, mount, component, this.$context)
-    this.$mounted && this.mountDescendent(component)
+    _if(this.$mounted, mount, component, this.$context)
   }
 
   protected domAppendRoot(component: Component, at: number): void {
@@ -1000,9 +1143,7 @@ export class Component<
     at: number
   ): void {
     set(component, '$parent', this)
-    _if(this.$attached, attach, component, this.$system)
-    // _if(this.$mounted, mount, component, this.$context)
-    this.$mounted && this.mountDescendent(component)
+    _if(this.$mounted, mount, component, this.$context)
   }
 
   public appendParentChild(
@@ -1146,9 +1287,7 @@ export class Component<
     slotName: string
   ): void {
     set(component, '$parent', this)
-    _if(this.$attached, attach, component, this.$system)
-    // _if(this.$mounted, mount, component, this.$context)
-    this.$mounted && this.mountDescendent(component)
+    _if(this.$mounted, mount, component, this.$context)
   }
 
   public prependParentRoot(component: Component, slotName: string): void {
@@ -1195,7 +1334,7 @@ export class Component<
     return component
   }
 
-  public getSubComponentParentId(id: string): string {
+  public getSubComponentParentId(id: string): string | null {
     const subComponent = this.getSubComponent(id)
     for (const parentSubComponentId in this.$subComponent) {
       const parentSubComponent = this.$subComponent[parentSubComponentId]
@@ -1203,6 +1342,28 @@ export class Component<
         return parentSubComponentId
       }
     }
+    return null
+  }
+
+  public getSlotSubComponentId(slotName: string): string {
+    const slot = this.$slot[slotName] || this
+
+    if (slot === this) {
+      return null
+    } else {
+      return this.getSubComponentId(slot)
+    }
+  }
+
+  public getSubComponentId(subComponent: Component): string | null {
+    for (const subComponentId in this.$subComponent) {
+      const _subComponent = this.$subComponent[subComponentId]
+
+      if (subComponent === _subComponent) {
+        return subComponentId
+      }
+    }
+
     return null
   }
 

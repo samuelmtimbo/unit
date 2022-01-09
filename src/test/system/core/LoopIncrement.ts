@@ -1,5 +1,3 @@
-
-import { Graph } from '../../../Class/Graph'
 import {
   watchGraphAndLog,
   watchTreeAndLog,
@@ -7,19 +5,17 @@ import {
 } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
+import { pod, system } from '../../util/system'
 
 const spec = require('../../../system/core/common/LoopIncrement/spec.json')
 
 const LoopIncrement = fromSpec(spec, _specs)
 
-import { system } from '../../util/system'
-
-const loopIncrement = new LoopIncrement(system)
+const loopIncrement = new LoopIncrement(system, pod)
 
 false && watchUnitAndLog(loopIncrement)
 false && watchGraphAndLog(loopIncrement)
 false && watchTreeAndLog(loopIncrement)
-
 
 loopIncrement.play()
 

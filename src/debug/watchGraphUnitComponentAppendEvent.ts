@@ -1,4 +1,4 @@
-import { U } from '../interface/U'
+import { Graph } from '../Class/Graph'
 import { GraphUnitSpec } from '../types'
 import { Moment } from './Moment'
 
@@ -13,10 +13,10 @@ export interface GraphSpecComponentAppendMoment
 const event = 'component_append'
 
 export function watchGraphUnitComponentAppendEvent(
-  unit: U,
+  graph: Graph,
   callback: (moment: GraphSpecComponentAppendMoment) => void
 ): () => void {
-  const listener = (unitId: string, unitSpec: any) => {
+  const listener = (unitId: string, unitSpec: GraphUnitSpec) => {
     callback({
       type: 'graph',
       event,
@@ -26,8 +26,8 @@ export function watchGraphUnitComponentAppendEvent(
       },
     })
   }
-  unit.prependListener(event, listener)
+  graph.prependListener(event, listener)
   return () => {
-    unit.removeListener(event, listener)
+    graph.removeListener(event, listener)
   }
 }

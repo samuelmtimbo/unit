@@ -10,11 +10,12 @@ import {
 } from '../../../../../client/event/keyboard/keyCode'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import parentElement from '../../../../../client/parentElement'
-import { userSelect } from '../../../../../client/style/userSelect'
+import { userSelect } from '../../../../../client/util/style/userSelect'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import Div from '../../../component/Div/Component'
 import Icon from '../../../component/Icon/Component'
-import { System } from '../../../../../system'
 import TextDiv from '../TextDiv/Component'
 
 export interface Props {
@@ -50,8 +51,8 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
   private _key_text: TextDiv
   private _key: Div
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { key = 'a', alt = '', shiftKey = false, style = {} } = this.$props
 
@@ -68,7 +69,8 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
           ...userSelect('none'),
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._key_text = key_text
 
@@ -85,14 +87,16 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
           ...userSelect('none'),
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const key_component = new Div(
       {
         style: { ...DEFAULT_STYLE, ...style },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     key_component.appendChild(key_text)
     key_component.appendChild(alt_key_text)
@@ -128,7 +132,8 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
             height: '18px',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
 
       key_component.setChildren([icon_component])
@@ -195,7 +200,6 @@ export function emitPhoneKey(
   const code = keyToCode[key]
   emitKeyboardEvent('keydown', {
     key,
-    // @ts-ignore
     keyCode,
     code,
     shiftKey,
@@ -207,7 +211,6 @@ export function emitPhoneKey(
   // TODO 'keypress' should not be fired if key is a control key (e.g. ALT, CTRL, SHIFT, ESC)
   emitKeyboardEvent('keypress', {
     key,
-    // @ts-ignore
     keyCode,
     code,
     shiftKey,
@@ -218,7 +221,6 @@ export function emitPhoneKey(
   })
   emitKeyboardEvent('keyup', {
     key,
-    // @ts-ignore
     keyCode,
     code,
     shiftKey,
@@ -227,7 +229,4 @@ export function emitPhoneKey(
     metaKey: false,
     bubbles: true,
   })
-  if (navigator && navigator.vibrate) {
-    navigator.vibrate([10])
-  }
 }

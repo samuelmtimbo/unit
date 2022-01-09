@@ -1,3 +1,3 @@
-import NOOP from '../NOOP'
+import { NOOP } from '../NOOP'
 
 NOOP()

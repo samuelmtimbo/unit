@@ -1,3 +1,4 @@
+import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
 import { System } from '../../../../system'
 
@@ -13,14 +14,15 @@ export type O = {
 export default class Range extends Primitive<I, O> {
   private _current: number
 
-  constructor(system?: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['a', 'b'],
         o: ['i'],
       },
       {},
-      system
+      system,
+      pod
     )
   }
 

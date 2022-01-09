@@ -1,7 +1,9 @@
-import { Element } from '../../../../Class/Element/Element'
+import { Element } from '../../../../Class/Element'
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
-import { Unlisten } from '../../../../Unlisten'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
+import { Unlisten } from '../../../../types/Unlisten'
 
 export interface I {
   parent: Element
@@ -12,7 +14,7 @@ export interface I {
 export interface O {}
 
 export default class Child extends Semifunctional<I, O> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['parent', 'at'],
@@ -30,7 +32,9 @@ export default class Child extends Semifunctional<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 
@@ -59,15 +63,10 @@ export default class Child extends Semifunctional<I, O> {
       this.err('no child at this position')
     }
 
-    const remove_child_at_event_name = `remove_child_at_${at}`
-
-    parent.addListener(remove_child_at_event_name, remove_child_at_listener)
+    parent.addListener(`remove_child_at_${at}`, remove_child_at_listener)
 
     this._unlisten = () => {
-      parent.removeListener(
-        remove_child_at_event_name,
-        remove_child_at_listener
-      )
+      parent.removeListener(`remove_child_at_${at}`, remove_child_at_listener)
     }
 
     done({

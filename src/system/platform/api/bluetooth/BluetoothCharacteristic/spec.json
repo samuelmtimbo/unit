@@ -1,6 +1,6 @@
 {
   "name": "bluetooth characteristic",
-  "type": "`U`&`V`&`BC`",
+  "type": "`U`",
   "subtype": {
     "V": "string"
   },
@@ -13,7 +13,12 @@
       "type": "string"
     }
   },
-  "outputs": {},
+  "outputs": {
+    "charac": {
+      "type": "`V`",
+      "ref": true
+    }
+  },
   "events": {
     "characteristicvaluechanged": {
       "type": "string"

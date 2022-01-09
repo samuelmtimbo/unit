@@ -1,5 +1,5 @@
-import callAll from '../callAll'
 import { Pin } from '../Pin'
+import callAll from '../util/call/callAll'
 import { PinDataMoment } from './PinDataMoment'
 import { PinType } from './PinType'
 import { watchPinEvent } from './watchPinEvent'
@@ -13,7 +13,6 @@ export function watchGraphMerge(
 ): () => void {
   const all = [
     watchPinEvent('data', type, pinId, pin, callback),
-    // watchPinEvent('pull', type, pinId, pin, callback),
     watchPinEvent('drop', type, pinId, pin, callback),
     // watchPinEvent('invalid', type, pinId, pin, callback),
     // watchPinEvent('start', type, pinId, pin, callback),

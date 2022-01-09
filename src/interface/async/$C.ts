@@ -1,8 +1,6 @@
-import { Callback } from '../../Callback'
-import { Component } from '../../client/component'
 import { $Child } from '../../component/Child'
 import { $Children } from '../../component/Children'
-import { Unlisten } from '../../Unlisten'
+import { Callback } from '../../types/Callback'
 import { $Component } from './$Component'
 
 export const $C_METHOD_CALL = [

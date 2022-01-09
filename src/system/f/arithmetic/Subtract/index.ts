@@ -1,5 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 import subtract from './f'
 
 export interface I {
@@ -12,11 +14,16 @@ export interface O {
 }
 
 export default class Subtract extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['a', 'b'],
-      o: ['a - b'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['a', 'b'],
+        o: ['a - b'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f(i: I, done: Done<O>): void {

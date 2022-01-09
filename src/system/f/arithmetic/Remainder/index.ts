@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 
 export interface I {
@@ -11,14 +12,15 @@ export interface O {
 }
 
 export default class Remainder extends Functional<I, O> {
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['a', 'b'],
         o: ['a % b'],
       },
       {},
-      system
+      system,
+      pod
     )
   }
 

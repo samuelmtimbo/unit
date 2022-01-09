@@ -1,4 +1,4 @@
-import { U } from '../interface/U'
+import { EventEmitter, EventEmitter_EE } from '../EventEmitter'
 import { Moment } from './Moment'
 
 export interface UnitPropMomentData {
@@ -12,7 +12,11 @@ export interface UnitPropMoment<T = any>
 
 export function watchUnitSetEvent(
   event: 'leaf_set',
-  unit: U,
+  unit: EventEmitter<
+    EventEmitter_EE<{
+      leaf_set: [{ path: string[]; name: string; data: any }]
+    }> & { leaf_set: [{ path: string[]; name: string; data: any }] }
+  >,
   callback: (moment: UnitPropMoment) => void
 ): () => void {
   const listener = (data) => {

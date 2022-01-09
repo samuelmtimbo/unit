@@ -6,21 +6,19 @@ import {
 } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
+import { pod, system } from '../../util/system'
 
 const spec = require('../../../system/core/loop/Range/spec.json')
 
 const Range = fromSpec<{ any: any }, { bit: number }>(spec, _specs)
 
-import { system } from '../../util/system'
-
-const range = new Range(system)
+const range = new Range(system, pod)
 
 range.setOutputIgnored('test', true)
 
 false && watchUnitAndLog(range)
 false && watchGraphAndLog(range)
 false && watchTreeAndLog(range)
-
 
 range.play()
 

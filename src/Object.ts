@@ -1,79 +1,70 @@
-import { EventEmitter_ } from './EventEmitter'
+import { EventEmitter } from './EventEmitter'
 import { J } from './interface/J'
+import { V } from './interface/V'
 import { Dict } from './types/Dict'
-import { Unlisten } from './Unlisten'
+import { Unlisten } from './types/Unlisten'
 import { pop } from './util/array'
 
 export type ObjectUpdateType = 'set' | 'delete'
 
-export type ObjectEmitterNode = {
-  emitter: EventEmitter_ | null
-  children: Dict<ObjectEmitterNode>
+export type ObjectNode = {
+  emitter: EventEmitter | null
+  children: Dict<ObjectNode>
 }
 
-export function $Object<T extends object>(
-  obj: T
-): J & {
-  subscribe: (
-    path: string[],
-    key: string,
-    listener: (
-      type: ObjectUpdateType,
-      path: string[],
-      key: string,
-      data: any
-    ) => void
-  ) => Unlisten
-} {
-  const _node: ObjectEmitterNode = {
-    emitter: new EventEmitter_(),
+export class Object_<T extends any> implements J<T>, V<T> {
+  private _obj: T
+  private _node: ObjectNode = {
+    emitter: new EventEmitter(),
     children: {},
   }
 
-  const _obj_at_path = (path: string[]): Dict<any> => {
-    let _obj: any = obj
+  constructor(obj: T) {
+    this._obj = obj
+  }
+
+  private _obj_at_path(path: string[]): Dict<any> {
+    let _obj: any = this._obj
     for (const p of path) {
       _obj = _obj[p]
     }
     return _obj
   }
 
-  const _node_at_path = (path: string[]): ObjectEmitterNode | null => {
-    let node = _node
-    for (const p of path) {
-      node = node.children[p]
-      if (!node) {
-        return null
-      }
-    }
-    return node
+  private _dispatch = (
+    type: ObjectUpdateType,
+    path: string[],
+    key: string,
+    value: any
+  ) => {
+    this._rec_dispatch(path, this._node, type, path, key, value)
   }
 
-  const _rec_dispatch = (
+  _rec_dispatch = (
     current: string[],
-    node: ObjectEmitterNode,
+    node: ObjectNode,
     type: ObjectUpdateType,
     path: string[],
     key: string,
     value: any
   ): void => {
     if (current.length === 0) {
-      _end_dispatch(node, type, path, key, value)
+      this._end_dispatch(node, type, path, key, value)
     } else {
       const [p, ...next] = current
       const key_node = node.children[p]
       if (key_node) {
-        _rec_dispatch(next, key_node, type, path, key, value)
+        this._rec_dispatch(next, key_node, type, path, key, value)
       }
       const all_node = node.children['*']
       if (all_node) {
-        _rec_dispatch(next, all_node, type, path, key, value)
+        this._rec_dispatch(next, all_node, type, path, key, value)
       }
     }
   }
 
-  const _end_dispatch = (
-    node: ObjectEmitterNode,
+  _end_dispatch = (
+    node: ObjectNode,
     type: ObjectUpdateType,
     path: string[],
     key: string,
@@ -86,26 +77,107 @@ export function $Object<T extends object>(
     }
   }
 
-  const _ensure_emitter = (path: string[]): EventEmitter_ => {
-    let node = _node
+  private _ensure_emitter = (path: string[]): EventEmitter => {
+    let node = this._node
     for (const p of path) {
       if (!node.children[p]) {
-        node.children[p] = { emitter: new EventEmitter_(), children: {} }
+        node.children[p] = { emitter: new EventEmitter(), children: {} }
       }
       node = node.children[p]
     }
     return node.emitter
   }
 
-  const _remove_node = (path: string[]): void => {
+  private _remove_node = (path: string[]): void => {
     if (path.length > 0) {
       const [last, rest] = pop(path)
-      const parent = _node_at_path(rest)
+      const parent = this._node_at_path(rest)
       delete parent.children[last]
     }
   }
 
-  const subscribe = (
+  private _node_at_path = (path: string[]): ObjectNode | null => {
+    let node = this._node
+    for (const p of path) {
+      node = node.children[p]
+      if (!node) {
+        return null
+      }
+    }
+    return node
+  }
+
+  private _set_path = (path: string[], key: string, data: any) => {
+    const obj = this._obj_at_path(path)
+    obj[key] = data
+    this._dispatch('set', path, key, data)
+  }
+
+  private _delete = async (name: string): Promise<void> => {
+    this._delete_path([], name)
+    return
+  }
+
+  private _delete_path = (path: string[], name: string) => {
+    const obj = this._obj_at_path(path)
+    const value = obj[name]
+    delete obj[name]
+    this._dispatch('delete', path, name, value)
+  }
+
+  public async read(): Promise<T> {
+    return this._obj
+  }
+
+  public write(data: T): Promise<void> {
+    this._obj = data
+    // TODO unlisten
+    return
+  }
+
+  public async get(name: string): Promise<any> {
+    const value = this._obj[name]
+
+    if (value === undefined) {
+      throw new Error('key value not found')
+    }
+
+    return this._obj[name]
+  }
+
+  public async set(name: string, data: any): Promise<void> {
+    this._obj[name] = data
+    this._set_path([], name, data)
+  }
+
+  public async hasKey(name: string): Promise<boolean> {
+    return this._obj[name] !== undefined
+  }
+
+  public async delete(name: string): Promise<void> {
+    return this._delete(name)
+  }
+
+  public async pathGet(path: string[], name: string): Promise<any> {
+    const obj = this._obj_at_path(path)
+    return obj[name]
+  }
+
+  public async pathSet(path: string[], name: string, data: any): Promise<void> {
+    this._set_path(path, name, data)
+    return
+  }
+
+  public async pathDelete(path: string[], name: string): Promise<void> {
+    this._delete_path(path, name)
+    return
+  }
+
+  public async keys(): Promise<string[]> {
+    return Object.keys(this._obj)
+  }
+
+  public subscribe(
     path: string[],
     key: string,
     listener: (
@@ -114,142 +186,16 @@ export function $Object<T extends object>(
       key: string,
       data: any
     ) => void
-  ): Unlisten => {
-    const emitter = _ensure_emitter(path)
+  ): Unlisten {
+    const emitter = this._ensure_emitter(path)
     emitter.addListener(key, listener)
     return () => {
       emitter.removeListener(key, listener)
 
       const eventNames = emitter.eventNames()
       if (eventNames.length === 0) {
-        _remove_node(path)
+        this._remove_node(path)
       }
     }
   }
-
-  const _dispatch = (
-    type: ObjectUpdateType,
-    path: string[],
-    key: string,
-    value: any
-  ) => {
-    _rec_dispatch(path, _node, type, path, key, value)
-  }
-
-  const _set_path = (path: string[], key: string, data: any) => {
-    const obj = _obj_at_path(path)
-    obj[key] = data
-    _dispatch('set', path, key, data)
-  }
-
-  const _delete_path = (path: string[], name: string) => {
-    const obj = _obj_at_path(path)
-    const value = obj[name]
-    delete obj[name]
-    _dispatch('delete', path, name, value)
-  }
-
-  const get = async (name: string): Promise<any> => {
-    return obj[name]
-  }
-
-  const set = async (name: string, data: any): Promise<void> => {
-    obj[name] = data
-    _set_path([], name, data)
-    return
-  }
-
-  const hasKey = async (name: string): Promise<boolean> => {
-    return obj[name] !== undefined
-  }
-
-  const _delete = async (name: string): Promise<void> => {
-    _delete_path([], name)
-    return
-  }
-
-  const getPath = async (path: string[], name: string): Promise<any> => {
-    const obj = _obj_at_path(path)
-    return obj[name]
-  }
-
-  const setPath = async (
-    path: string[],
-    name: string,
-    data: any
-  ): Promise<void> => {
-    _set_path(path, name, data)
-    return
-  }
-
-  const deletePath = async (path: string[], name: string): Promise<void> => {
-    _delete_path(path, name)
-    return
-  }
-
-  const keys = async (): Promise<string[]> => {
-    return Object.keys(obj)
-  }
-
-  return {
-    get,
-    set,
-    hasKey,
-    delete: _delete,
-    getPath,
-    setPath,
-    keys,
-    deletePath,
-    subscribe,
-  }
 }
-
-const _obj_emitter = $Object({ foo: {} })
-
-const unlisten = _obj_emitter.subscribe([], '*', (type, path, key, data) => {
-  console.log(`[], '*'`, type, path, key, data)
-})
-
-const unlisten0 = _obj_emitter.subscribe(
-  ['*'],
-  'name',
-  (type, path, key, data) => {
-    console.log(`['*'], 'name'`, type, path, key, data)
-  }
-)
-
-const unlisten1 = _obj_emitter.subscribe(
-  ['*'],
-  'name',
-  (type, path, key, data) => {
-    console.log(`['*'], 'name'`, type, path, key, data)
-  }
-)
-
-const unlisten2 = _obj_emitter.subscribe(
-  ['*'],
-  '*',
-  (type, path, key, data) => {
-    console.log(`['*'], '*'`, type, path, key, data)
-  }
-)
-
-_obj_emitter.setPath([], 'foo', {})
-
-_obj_emitter.setPath(['foo'], 'name', 'bar')
-
-_obj_emitter.setPath(['foo'], 'name', 'zaz')
-
-_obj_emitter.deletePath(['foo'], 'name')
-
-unlisten()
-
-unlisten0()
-
-unlisten1()
-
-unlisten2()
-
-console.log('...')
-
-_obj_emitter.setPath(['foo'], 'name', 'tar')

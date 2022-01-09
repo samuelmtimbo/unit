@@ -1,8 +1,10 @@
+import { Element } from '../../../../../Class/Element'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { Unit } from '../../../../../Class/Unit'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export type I = {
-  element: Unit
+  element: Element
   pointerId: number
   done: any
 }
@@ -10,7 +12,7 @@ export type I = {
 export type O = {}
 
 export default class SetPointerCapture extends Semifunctional<I, O> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['element', 'pointerId'],
@@ -24,7 +26,9 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 

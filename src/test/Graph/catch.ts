@@ -2,10 +2,10 @@ import * as assert from 'assert'
 import { Graph } from '../../Class/Graph'
 import { SELF } from '../../constant/SELF'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
-import { ID_CATCH, ID_THROW } from '../spec/id'
-import { system } from '../util/system'
+import { ID_CATCH, ID_THROW } from '../../system/_ids'
+import { pod, system } from '../util/system'
 
-const graph = new Graph({}, {}, system)
+const graph = new Graph({}, {}, system, pod)
 
 0 && watchUnitAndLog(graph)
 0 && watchGraphAndLog(graph)

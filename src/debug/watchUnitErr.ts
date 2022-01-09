@@ -1,11 +1,11 @@
-import callAll from '../callAll'
+import { Unit } from '../Class/Unit'
 import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
-import { U } from '../interface/U'
+import callAll from '../util/call/callAll'
 import { UnitErrMoment } from './UnitErrMoment'
 import { watchUnitErrEvent } from './watchUnitErrEvent'
 
 export function watchUnitErr(
-  unit: U,
+  unit: Unit,
   callback: (moment: UnitErrMoment) => void,
   events: string[] = DEFAULT_EVENTS
 ): () => void {

@@ -8,13 +8,13 @@ import {
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { countEvent } from '../../util'
-import { system } from '../../util/system'
+import { pod, system } from '../../util/system'
 
 const spec = require('../../../system/core/array/AppendIf/spec.json')
 
 const AppendIf = fromSpec(spec, _specs)
 
-const appendIf = new AppendIf(system)
+const appendIf = new AppendIf(system, pod)
 
 const dataCounter = countEvent(appendIf.getOutput('a'), 'data')
 const dropCounter = countEvent(appendIf.getOutput('a'), 'drop')

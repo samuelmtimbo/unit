@@ -1,8 +1,8 @@
 import classnames from '../../../../../client/classnames'
 import { getSpecRadius } from '../../../../../client/complexity'
 import { Element } from '../../../../../client/element'
-import { isComponent } from '../../../../../client/spec'
 import parentElement from '../../../../../client/parentElement'
+import { isComponent } from '../../../../../client/spec'
 import {
   pointInCircle,
   pointInRectangle,
@@ -11,17 +11,17 @@ import {
 import { getUnitPinPosition } from '../../../../../client/util/geometry/unit/getUnitPinPosition'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
-import { Spec } from '../../../../../types'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import assert from '../../../../../util/assert'
+import Icon from '../../../component/Icon/Component'
 import SVGCircle from '../../../component/svg/Circle/Component'
 import SVGG from '../../../component/svg/G/Component'
 import SVGLine from '../../../component/svg/Line/Component'
 import SVGRect from '../../../component/svg/Rect/Component'
 import SVGSVG from '../../../component/svg/SVG/Component'
 import SVGText from '../../../component/svg/SVGText/Component'
-import Icon from '../../../component/Icon/Component'
-import { System } from '../../../../../system'
 
 const OPENING: number = 120
 
@@ -70,12 +70,12 @@ assert.deepEqual(line_wrap('default video user media'), [
   'user media',
 ])
 
-export default class Class extends Element<HTMLDivElement, Props> {
+export default class ClassDatum extends Element<HTMLDivElement, Props> {
   private _svg: SVGSVG
   private _svg_g: SVGG
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { id, className, style } = $props
 
@@ -96,7 +96,8 @@ export default class Class extends Element<HTMLDivElement, Props> {
         },
         viewBox: `0 0 ${width} ${height}`,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._svg = svg
 
@@ -107,7 +108,8 @@ export default class Class extends Element<HTMLDivElement, Props> {
           pointerEvents: 'all',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._svg_g = svg_g
     this._svg.registerParentRoot(svg_g)
@@ -204,7 +206,8 @@ export default class Class extends Element<HTMLDivElement, Props> {
             fill: type === 'output' ? 'currentColor' : 'none',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       children.push(pin)
       const { x: x1, y: y1 } = pointInCircle(x, y, r, u)
@@ -226,7 +229,8 @@ export default class Class extends Element<HTMLDivElement, Props> {
             stroke: 'currentColor',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       children.push(pin_link)
     }
@@ -252,7 +256,8 @@ export default class Class extends Element<HTMLDivElement, Props> {
             strokeWidth: '1px',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
     } else {
       core_shape = new SVGCircle(
@@ -267,7 +272,8 @@ export default class Class extends Element<HTMLDivElement, Props> {
             strokeWidth: '1px',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
     }
 
@@ -283,14 +289,16 @@ export default class Class extends Element<HTMLDivElement, Props> {
           color: 'currentColor',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const core = new SVGG(
       {
         className: 'unit-class-core',
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     core.appendChild(core_shape)
     core.appendChild(core_icon)
@@ -300,7 +308,7 @@ export default class Class extends Element<HTMLDivElement, Props> {
       push_pin('output', index)
     })
 
-    const core_name_g = new SVGG({}, this.$system)
+    const core_name_g = new SVGG({}, this.$system, this.$pod)
     const lines = line_wrap(name)
     for (let i = 0; i < lines.length; i++) {
       const text = lines[i]
@@ -314,7 +322,8 @@ export default class Class extends Element<HTMLDivElement, Props> {
           },
           textAnchor: 'middle',
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       core_name_g.appendChild(core_name_line)
     }

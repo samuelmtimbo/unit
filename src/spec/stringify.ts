@@ -56,13 +56,12 @@ export function stringify(value: any): string {
         }
       }
     case 'function':
-      if (value.__id) {
-        return value.__id
+      if (value.__bundle) {
+        return `$${stringify(value.__bundle)}`
       } else {
-        // AD HOC
-        return `{}`
+        throw new Error('Invalid Unit Class.')
       }
     default:
-      throw new Error(`Cannot stringify value ${value}`)
+      throw new Error('Cannot stringify value.')
   }
 }

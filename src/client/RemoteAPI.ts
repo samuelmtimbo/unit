@@ -1,6 +1,6 @@
-import { Callback } from '../Callback'
+import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
 
 export interface RemoteAPI {
   call: Dict<(data: any, callback: Callback<any>) => void>

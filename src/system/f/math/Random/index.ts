@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I<T> {
   a: number
@@ -9,11 +11,16 @@ export interface O<T> {
 }
 
 export default class Random<T> extends Functional<I<T>, O<T>> {
-  constructor() {
-    super({
-      i: ['any'],
-      o: ['random'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['any'],
+        o: ['random'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ a }: I<T>, done): void {

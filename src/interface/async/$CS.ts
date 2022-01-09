@@ -1,5 +1,5 @@
-import { Callback } from '../../Callback'
-import { Unlisten } from '../../Unlisten'
+import { Callback } from '../../types/Callback'
+import { Unlisten } from '../../types/Unlisten'
 
 export type CSOpt = { frameRate: number }
 

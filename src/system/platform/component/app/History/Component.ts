@@ -1,12 +1,8 @@
-import SVGG from '../../../../../system/platform/component/svg/G/Component'
-import SVGPath from '../../../../../system/platform/component/svg/Path/Component'
-import SVGSVG from '../../../../../system/platform/component/svg/SVG/Component'
-import { Dict } from '../../../../../types/Dict'
-import { isEmptyObject } from '../../../../../util/object'
+import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { segmentLinkId } from '../../../../../client/id'
 import parentElement from '../../../../../client/parentElement'
-import { NONE } from '../../../../../client/theme'
+import { COLOR_NONE } from '../../../../../client/theme'
 import {
   describeCircle,
   describeRect,
@@ -16,8 +12,13 @@ import {
   Thing,
   unitVector,
 } from '../../../../../client/util/geometry'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
-import namespaceURI from '../../../../../client/component/namespaceURI'
+import SVGG from '../../../../../system/platform/component/svg/G/Component'
+import SVGPath from '../../../../../system/platform/component/svg/Path/Component'
+import SVGSVG from '../../../../../system/platform/component/svg/SVG/Component'
+import { Dict } from '../../../../../types/Dict'
+import { isEmptyObject } from '../../../../../util/object'
 
 const MINIMAP_AREA = 180 * 180
 
@@ -58,18 +59,23 @@ export default class History extends Element<HTMLDivElement, Props> {
   public _width: number
   public _height: number
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style, width, height } = $props
 
-    const map_graph = new SVGG({ className: 'minimap-graph' }, this.$system)
+    const map_graph = new SVGG(
+      { className: 'minimap-graph' },
+      this.$system,
+      this.$pod
+    )
     this._map_graph = map_graph
 
     // TODO bring "minimap screen" to minimap
     const map_children = new SVGG(
       { className: 'minimap-children' },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._map_children = map_children
 
@@ -85,7 +91,8 @@ export default class History extends Element<HTMLDivElement, Props> {
         viewBox: '0 0 0 0',
         tabIndex: -1,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     svg.preventDefault('mousedown')
     svg.preventDefault('touchdown')
@@ -167,12 +174,13 @@ export default class History extends Element<HTMLDivElement, Props> {
         node_component = new SVGPath(
           {
             style: {
-              fill: NONE,
+              fill: COLOR_NONE,
               pointerEvents: 'none',
               strokeWidth: 'inherit',
             },
           },
-          this.$system
+          this.$system,
+          this.$pod
         )
 
         this._node_component[node_id] = node_component
@@ -192,7 +200,10 @@ export default class History extends Element<HTMLDivElement, Props> {
       const { source, target } = segmentLinkId(link_id)
       let link_el = this._link_el[link_id]
       if (!link_el) {
-        link_el = document.createElementNS(namespaceURI, 'line')
+        link_el = this.$system.api.document.createElementNS(
+          namespaceURI,
+          'line'
+        )
         // link_el.setAttribute('stroke', 'currentColor')
         link_el.style.pointerEvents = 'none'
         this._link_el[link_id] = link_el

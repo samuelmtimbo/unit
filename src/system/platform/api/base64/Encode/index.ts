@@ -1,5 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export type I = {
   a: string
@@ -10,11 +12,16 @@ export type O = {
 }
 
 export default class Encode extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['a'],
-      o: ['b'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['a'],
+        o: ['b'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ a }: I, done: Done<O>): void {

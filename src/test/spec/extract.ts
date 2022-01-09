@@ -14,7 +14,13 @@ function test(
   parentSpec: GraphSpec,
   newSpec: GraphSpec
 ) {
-  const actual = extractSubSpec(specs, spec, selection, NEW_UNIT_ID, NEW_UNIT_SPEC_ID)
+  const actual = extractSubSpec(
+    specs,
+    spec,
+    selection,
+    NEW_UNIT_ID,
+    NEW_UNIT_SPEC_ID
+  )
   const expected = [parentSpec, newSpec]
   assert.deepEqual(actual, expected, JSON.stringify(actual, null, 2))
 }

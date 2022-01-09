@@ -1,4 +1,6 @@
+import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
+import { System } from '../../../../system'
 
 export interface I<T> {
   a: T
@@ -13,11 +15,16 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
   private _current: T | undefined = undefined
   private _looping: boolean = false
 
-  constructor() {
-    super({
-      i: ['a'],
-      o: ['first', 'second'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['a'],
+        o: ['first', 'second'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   onDataInputData(name: string, data: any) {

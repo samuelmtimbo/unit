@@ -1,4 +1,5 @@
-import { Element } from '../../../../Class/Element/Element'
+import { Element } from '../../../../Class/Element'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 
 export interface I {
@@ -8,14 +9,15 @@ export interface I {
 export interface O {}
 
 export default class Div extends Element<I, O> {
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['style'],
         o: [],
       },
       {},
-      system
+      system,
+      pod
     )
   }
 }

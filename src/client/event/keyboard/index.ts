@@ -3,6 +3,7 @@ import isEqual from '../../../system/f/comparisson/Equals/f'
 import { Dict } from '../../../types/Dict'
 import { randomIdNotIn } from '../../../util/id'
 import { addGlobalBlurListener } from '../../addGlobalBlurListener'
+import { IOElement } from '../../IOElement'
 import Listenable from '../../Listenable'
 import { Listener } from '../../Listener'
 import { isChar, keyCodeToKey, keyToCode, keyToKeyCode } from './keyCode'
@@ -70,7 +71,7 @@ export function getKey(keyCode: number): string {
   return keyCodeToKey[keyCode]
 }
 
-export function isSupportedEvent(event: KeyboardEvent): boolean {
+export function isSupportedKeyboardEvent(event: KeyboardEvent): boolean {
   const { key, metaKey } = event
 
   if (metaKey) {
@@ -107,10 +108,10 @@ export default class KeyboardController {
   private _pressed: number[] = []
   private _shortcuts: { [id: string]: Shortcut[] }
 
-  public $element: Element
+  public $element: IOElement
   public $system: System
 
-  constructor($system: System, $element: Element) {
+  constructor($system: System, $element: IOElement) {
     this.$system = $system
     this.$element = $element
 
@@ -313,7 +314,7 @@ export default class KeyboardController {
   }
 
   private _onKeydown = (event: KeyboardEvent): void => {
-    if (!isSupportedEvent(event)) {
+    if (!isSupportedKeyboardEvent(event)) {
       return
     }
 
@@ -341,7 +342,7 @@ export default class KeyboardController {
 
   private _onKeyup = (event: KeyboardEvent): void => {
     // console.log('KeyboardController', '_onKeyup')
-    if (!isSupportedEvent(event)) {
+    if (!isSupportedKeyboardEvent(event)) {
       return
     }
 

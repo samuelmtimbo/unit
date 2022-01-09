@@ -1,11 +1,13 @@
-import { Callback } from '../../../../../Callback'
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
 import { Unit } from '../../../../../Class/Unit'
 import { listenGlobalComponent } from '../../../../../client/globalComponent'
 import { CSOpt } from '../../../../../interface/async/$CS'
 import { CS } from '../../../../../interface/CS'
 import { PS } from '../../../../../interface/PS'
-import { Unlisten } from '../../../../../Unlisten'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
+import { Callback } from '../../../../../types/Callback'
+import { Unlisten } from '../../../../../types/Unlisten'
 import Video from './Component'
 
 export interface I {
@@ -18,7 +20,7 @@ export interface I {
 export interface O {}
 
 export default class _Video extends Element<I, O> implements CS, PS {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['src', 'stream', 'style', 'controls'],
@@ -30,7 +32,9 @@ export default class _Video extends Element<I, O> implements CS, PS {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
 
     this._defaultState = {}

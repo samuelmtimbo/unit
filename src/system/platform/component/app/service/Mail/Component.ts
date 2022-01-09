@@ -1,5 +1,6 @@
 import { Component } from '../../../../../../client/component'
 import parentElement from '../../../../../../client/parentElement'
+import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
 import Div from '../../../../component/Div/Component'
@@ -20,8 +21,8 @@ export const DEFAULT_STYLE = {
 export default class MailService extends Component<HTMLDivElement, Props> {
   private _root: Div
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style } = $props
 
@@ -32,7 +33,8 @@ export default class MailService extends Component<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._root = div
 

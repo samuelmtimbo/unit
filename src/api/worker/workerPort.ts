@@ -1,14 +1,14 @@
 import { DataEvent } from '../../events/DataEvent'
 import { _ErrorEvent } from '../../events/ErrorEvent'
-import { Port } from '../../Port'
+import { IPort } from '../../types/global/IPort'
 
-export const workerPort = (): Port => {
+export const workerPort = (): IPort => {
   const { href } = location
   const url = `${href}/_worker.js`
 
   const worker = new Worker(url)
 
-  const port: Port = {
+  const port: IPort = {
     send(message: any): any {
       worker.postMessage(message)
     },

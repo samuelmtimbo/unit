@@ -14,9 +14,10 @@ import {
 import { Element } from '../../../../client/element'
 import { makeCustomListener } from '../../../../client/event/custom'
 import { renderFrame } from '../../../../client/renderFrame'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { Unlisten } from '../../../../Unlisten'
+import { Unlisten } from '../../../../types/Unlisten'
 
 export interface Props {
   className?: string
@@ -40,12 +41,12 @@ export default class Frame extends Element<HTMLDivElement, Props> {
 
   private _sub_context_unlisten: Unlisten
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style = {}, color, tabIndex, theme, disabled } = $props
 
-    const $element = document.createElement('div')
+    const $element = this.$system.api.document.createElement('div')
 
     applyStyle($element, { ...DEFAULT_STYLE, ...style })
 

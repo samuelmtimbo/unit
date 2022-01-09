@@ -1,5 +1,5 @@
-import { Callback } from '../Callback'
-import { Unlisten } from '../Unlisten'
+import { Callback } from '../types/Callback'
+import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
 import { listenMovement } from './listenMovement'
 

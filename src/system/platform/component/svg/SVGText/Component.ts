@@ -1,6 +1,7 @@
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -22,8 +23,8 @@ export const DEFAULT_STYLE = {
 export default class SVGText extends Element<SVGTextElement, Props> {
   private _text_el: SVGTextElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       style = {},
@@ -36,7 +37,10 @@ export default class SVGText extends Element<SVGTextElement, Props> {
       textAnchor,
     } = this.$props
 
-    const text_el = document.createElementNS(namespaceURI, 'text')
+    const text_el = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'text'
+    )
     applyStyle(text_el, { ...DEFAULT_STYLE, ...style })
     if (className) {
       text_el.classList.add(className)

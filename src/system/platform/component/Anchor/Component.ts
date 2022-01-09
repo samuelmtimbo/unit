@@ -1,6 +1,7 @@
 import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
-import { PropHandler, htmlPropHandler } from '../../../../client/propHandler'
+import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -26,8 +27,8 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
 
   private _prop_handler: PropHandler
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       href,
@@ -42,7 +43,7 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
       draggable,
     } = this.$props
 
-    const anchor_el = document.createElement('a')
+    const anchor_el = this.$system.api.document.createElement('a')
 
     if (href !== undefined) {
       anchor_el.setAttribute('href', href)

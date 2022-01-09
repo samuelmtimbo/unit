@@ -1,10 +1,14 @@
-import { EventEmitter_ } from '../../EventEmitter'
+import { EventEmitter, EventEmitter_EE } from '../../EventEmitter'
 import { UserSpec } from '../../server/model/UserSpec'
-import { Unlisten } from '../../Unlisten'
+import { Unlisten } from '../../types/Unlisten'
 
 let _user: UserSpec | null = null
 
-export const eventEmitter = new EventEmitter_()
+export type User_EE = { signin: [UserSpec]; signout: [] }
+
+export type UserEmitter = EventEmitter_EE<User_EE> & User_EE
+
+export const eventEmitter = new EventEmitter<UserEmitter>()
 
 export function isSignedIn(): boolean {
   return !!_user
@@ -17,9 +21,7 @@ export function signOut() {
   eventEmitter.emit('signout')
 }
 
-export function addSignOutListener(
-  listener: (user: UserSpec) => void
-): Unlisten {
+export function addSignOutListener(listener: () => void): Unlisten {
   // console.log('addSignOutListener')
   eventEmitter.addListener('signout', listener)
   return () => {

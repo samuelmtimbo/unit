@@ -1,10 +1,19 @@
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
-import { Primitive } from '../../Primitive'
+import { Pod } from '../../pod'
+import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { System } from '../../system'
+import { Dict } from '../../types/Dict'
 import { Functional } from '../Functional'
 import { Done } from '../Functional/Done'
 import { Opt } from '../Unit'
+
+export type Semifunctional_EE = {}
+
+export type SemifunctionalEvents<_EE extends Dict<any[]>> = PrimitiveEvents<
+  _EE & Semifunctional_EE
+> &
+  Semifunctional_EE
 
 export interface SFIO {
   fi?: string[]
@@ -13,7 +22,12 @@ export interface SFIO {
   o?: string[]
 }
 
-export class Semifunctional<I = {}, O = {}> extends Primitive<I, O> {
+export class Semifunctional<
+  I = {},
+  O = {},
+  _EE extends SemifunctionalEvents<_EE> &
+    Dict<any[]> = SemifunctionalEvents<Semifunctional_EE>
+> extends Primitive<I, O, _EE> {
   private _f_i: Set<string>
   private _f_o: Set<string>
 
@@ -25,21 +39,23 @@ export class Semifunctional<I = {}, O = {}> extends Primitive<I, O> {
   constructor(
     { fi = [], fo = [], i = [], o = [] }: SFIO,
     opt: Opt = {},
-    system: System = null
+    system: System,
+    pod: Pod
   ) {
-    super({ i: [...fi, ...i], o: [...fo, ...o] }, opt, system)
+    super({ i: [...fi, ...i], o: [...fo, ...o] }, opt, system, pod)
 
     const self = this
 
     const functional = new (class _Functional extends Functional<I, O> {
-      constructor(system: System = null) {
+      constructor(system: System, pod: Pod) {
         super(
           {
             i: fi,
             o: fo,
           },
           {},
-          system
+          system,
+          pod
         )
       }
 
@@ -50,21 +66,22 @@ export class Semifunctional<I = {}, O = {}> extends Primitive<I, O> {
       d() {
         self.d()
       }
-    })(this.__system)
+    })(this.__system, this.__pod)
 
     this._functional = functional
 
     functional.play()
 
     const primitive = new (class _Primitive extends Primitive<I, O> {
-      constructor(system: System) {
+      constructor(system: System, pod: Pod) {
         super(
           {
             i,
             o,
           },
           {},
-          system
+          system,
+          pod
         )
       }
 
@@ -99,26 +116,42 @@ export class Semifunctional<I = {}, O = {}> extends Primitive<I, O> {
       onRefInputInvalid(name: string) {
         self.onIterRefInputInvalid(name)
       }
-    })(this.__system)
+    })(this.__system, this.__pod)
 
     primitive.play()
 
     this._primitive = primitive
 
     for (const name of fi) {
-      functional.setInput(name, this.getInput(name), this.getInputOpt(name))
+      functional.setInput(
+        name as keyof I,
+        this.getInput(name),
+        this.getInputOpt(name)
+      )
     }
 
     for (const name of fo) {
-      functional.setOutput(name, this.getOutput(name), this.getOutputOpt(name))
+      functional.setOutput(
+        name as keyof O,
+        this.getOutput(name),
+        this.getOutputOpt(name)
+      )
     }
 
     for (const name of i) {
-      primitive.setInput(name, this.getInput(name), this.getInputOpt(name))
+      primitive.setInput(
+        name as keyof I,
+        this.getInput(name),
+        this.getInputOpt(name)
+      )
     }
 
     for (const name of o) {
-      primitive.setOutput(name, this.getOutput(name), this.getOutputOpt(name))
+      primitive.setOutput(
+        name as keyof O,
+        this.getOutput(name),
+        this.getOutputOpt(name)
+      )
     }
 
     this.addListener('take_err', () => {

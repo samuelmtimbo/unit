@@ -4,12 +4,15 @@ import {
   storageHasKey,
 } from '../../../../client/util/web/storage'
 import { J } from '../../../../interface/J'
+import { ObjectUpdateType } from '../../../../Object'
 import { Dict } from '../../../../types/Dict'
+import { IStorage } from '../../../../types/global/IStorage'
+import { Unlisten } from '../../../../types/Unlisten'
 
 export class Storage_ implements J {
-  private _storage: Storage
+  private _storage: IStorage
 
-  constructor(storage: Storage) {
+  constructor(storage: IStorage) {
     this._storage = storage
   }
 
@@ -41,15 +44,15 @@ export class Storage_ implements J {
     this._storage.removeItem(name)
   }
 
-  setPath(path: string[], name: string, data: any): Promise<void> {
+  pathSet(path: string[], name: string, data: any): Promise<void> {
     throw new Error('Method not implemented.')
   }
 
-  getPath(path: string[], name: string): Promise<any> {
+  pathGet(path: string[], name: string): Promise<any> {
     throw new Error('Method not implemented.')
   }
 
-  deletePath(path: string[], name: string): Promise<void> {
+  pathDelete(path: string[], name: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
 
@@ -61,5 +64,18 @@ export class Storage_ implements J {
   async hasKey(name: string): Promise<boolean> {
     const has = storageHasKey(this._storage, name)
     return has
+  }
+
+  subscribe(
+    path: string[],
+    key: string,
+    listener: (
+      type: ObjectUpdateType,
+      path: string[],
+      key: string,
+      data: any
+    ) => void
+  ): Unlisten {
+    throw new Error('Method not implemented.')
   }
 }

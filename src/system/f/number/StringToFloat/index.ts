@@ -1,4 +1,6 @@
 import { MIMO } from '../../../../MIMO'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I {
   str: string
@@ -9,11 +11,16 @@ export interface O {
 }
 
 export default class StringToFloat extends MIMO<I, O> {
-  constructor() {
-    super({
-      i: ['str'],
-      o: ['n'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['str'],
+        o: ['n'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   m({ str }: I): Partial<O> | undefined {

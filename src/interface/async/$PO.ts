@@ -1,5 +1,6 @@
-import { Callback } from '../../Callback'
+import { BundleSpec } from '../../system/platform/method/process/BundleSpec'
 import { GraphSpec } from '../../types'
+import { Callback } from '../../types/Callback'
 import { $Graph } from './$Graph'
 
 export const $PO_METHOD_CALL = []
@@ -23,7 +24,7 @@ export interface $PO_W {}
 export interface $PO_R {
   $refGlobalUnit(data: { id: string; _: string[] }): any
 
-  $graph(data: {}): $Graph
+  $refGraph(data: { bundle: BundleSpec }): $Graph
 }
 
 export interface $PO extends $PO_C, $PO_W, $PO_R {}

@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import keys from './f'
 
@@ -11,11 +13,16 @@ export interface O<T> {
 }
 
 export default class Keys<T> extends Functional<I<T>, O<T>> {
-  constructor() {
-    super({
-      i: ['obj'],
-      o: ['keys'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['obj'],
+        o: ['keys'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f(i: I<T>, done): void {

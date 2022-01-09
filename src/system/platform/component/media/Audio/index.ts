@@ -1,5 +1,7 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
 import { Unit } from '../../../../../Class/Unit'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I {
   style: object
@@ -11,7 +13,7 @@ export interface I {
 export interface O {}
 
 export default class Audio extends Element<I, O> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['src', 'stream', 'style', 'controls'],
@@ -23,7 +25,9 @@ export default class Audio extends Element<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 }

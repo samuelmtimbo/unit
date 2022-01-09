@@ -8,7 +8,7 @@ import {
 } from '../../../../../../../constant/STRING'
 import { graphFromPort } from '../../../../../../../graphFromPort'
 import { $Graph } from '../../../../../../../interface/async/$Graph'
-import { G } from '../../../../../../../interface/G'
+import { Pod } from '../../../../../../../pod'
 import {
   hasLocalBroadcastSource,
   localBroadcastSourceName,
@@ -17,7 +17,8 @@ import {
   stopBroadcastTarget,
 } from '../../../../../../../process/share/local'
 import { RemotePort } from '../../../../../../../RemotePort'
-import { Port } from './../../../../../../../Port'
+import { System } from '../../../../../../../system'
+import { IPort } from '../../../../../../../types/global/IPort'
 
 export interface I {
   id: string
@@ -30,7 +31,7 @@ export interface O {
 export default class LocalPod extends Functional<I, O> {
   __ = ['U']
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['id'],
@@ -42,7 +43,9 @@ export default class LocalPod extends Functional<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 
@@ -76,7 +79,7 @@ export default class LocalPod extends Functional<I, O> {
 
     source_channel.postMessage({ type: CONNECT, data: name })
 
-    const port: Port = {
+    const port: IPort = {
       send: (data) => {
         channel.postMessage(data)
       },
@@ -111,7 +114,7 @@ export default class LocalPod extends Functional<I, O> {
     const remote_port = new RemotePort(port)
     this._remote_port = remote_port
 
-    const graph = graphFromPort(remote_port)
+    const graph = graphFromPort(this.__system, this.__pod, remote_port)
 
     done({ graph })
   }

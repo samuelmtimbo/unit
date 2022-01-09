@@ -1,13 +1,12 @@
-import { U } from '../interface/U'
-import { GraphExposedSubPinSpec } from '../types'
+import { Graph } from '../Class/Graph'
+import { GraphExposedPinSpec } from '../types'
 import { Moment } from './Moment'
 
 export interface UnitLeafExposedPinSetEventData {
   path: string[]
   type: 'input' | 'output'
   pinId: string
-  subPinId: string
-  subPinSpec: GraphExposedSubPinSpec
+  pinSpec: GraphExposedPinSpec
 }
 
 export interface UnitLeafExposedPinSetEvent
@@ -15,15 +14,14 @@ export interface UnitLeafExposedPinSetEvent
 
 export function watchUnitLeafExposedPinSetEvent(
   event: 'leaf_expose_pin_set' | 'leaf_cover_pin_set',
-  unit: U,
+  graph: Graph,
   callback: (moment: UnitLeafExposedPinSetEvent) => void
 ): () => void {
   const listener = (
     path: string[],
     type: 'input' | 'output',
     pinId: string,
-    subPinId: string,
-    subPinSpec: GraphExposedSubPinSpec
+    pinSpec: GraphExposedPinSpec
   ) => {
     callback({
       type: 'unit',
@@ -32,13 +30,12 @@ export function watchUnitLeafExposedPinSetEvent(
         path,
         type,
         pinId,
-        subPinId,
-        subPinSpec,
+        pinSpec,
       },
     })
   }
-  unit.prependListener(event, listener)
+  graph.prependListener(event, listener)
   return () => {
-    unit.removeListener(event, listener)
+    graph.removeListener(event, listener)
   }
 }

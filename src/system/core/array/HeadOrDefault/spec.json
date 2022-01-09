@@ -28,7 +28,7 @@
       },
       "isempty": {
         "output": {
-          "unutqjyl": true
+          "empty": true
         }
       }
     },
@@ -64,7 +64,7 @@
         },
         "1": {
           "unitId": "isempty",
-          "pinId": "ftwnpzfjy"
+          "pinId": "obj"
         }
       },
       "type": "<A>[]"

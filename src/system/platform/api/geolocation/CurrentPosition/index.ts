@@ -1,5 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export type I = {
   any: any
@@ -13,25 +15,33 @@ export type O = {
 }
 
 export default class CurrentPosition extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['any'],
-      o: ['position'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['any'],
+        o: ['position'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
-  f({ any }: I, done: Done<O>) {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        done({
-          position: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          },
-        })
-      })
-    } else {
-      done(undefined, 'Geolocation API not supported')
+  async f({ any }: I, done: Done<O>): Promise<void> {
+    const {
+      api: {
+        geolocation: { getCurrentPosition },
+      },
+    } = this.__system
+
+    let position
+    try {
+      position = await getCurrentPosition()
+    } catch (err) {
+      done(undefined, err.message)
+      return
     }
+
+    done({ position })
   }
 }

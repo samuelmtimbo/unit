@@ -1,20 +1,15 @@
+import { grammarsFrom, SpeechRecorder } from '../../../../../api/speech'
 import { Element } from '../../../../../client/element'
 import { IOPointerEvent } from '../../../../../client/event/pointer'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
-import {
-  JSGFStrFrom,
-  ISpeechGrammarList,
-  ISpeechRecognitionOpt,
-  SpeechOpt,
-  SpeechRecorder,
-  grammarsFrom,
-} from '../../../../../api/speech'
 import { Mode } from '../../../../../client/mode'
 import parentElement from '../../../../../client/parentElement'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
-import { Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
+import { ISpeechGrammarList } from '../../../../../types/global/ISpeechGrammarList'
+import { ISpeechRecognitionOpt } from '../../../../../types/global/ISpeechRecognition'
 import IconButton from '../../../component/app/IconButton/Component'
 
 export interface Props {
@@ -52,8 +47,8 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
 
   private _speech_recorder: SpeechRecorder
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { specs } = this.$system
 
@@ -61,7 +56,7 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
       className,
       style = {},
       opt = {
-        grammar: specNameGrammar($system),
+        grammars: undefined,
         lang: 'en-us',
         maxAlternatives: 1,
         continuous: false,
@@ -83,14 +78,29 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
         disabled,
         title: 'microphone',
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     icon_button.addEventListener(makePointerDownListener(this._on_pointer_down))
     this._icon_button = icon_button
 
-    this._speech_recorder = new SpeechRecorder(this.$system, opt)
-    this._speech_recorder.addListener('transcript', this._on_transcript)
-    this._speech_recorder.addListener('err', this._on_err)
+    let speech_recorder = null
+
+    try {
+      if (!opt.grammars) {
+        opt.grammars = specNameGrammar($system)
+      }
+      speech_recorder = new SpeechRecorder(this.$system, opt)
+    } catch (err) {
+      //
+    }
+
+    this._speech_recorder = speech_recorder
+
+    if (this._speech_recorder) {
+      this._speech_recorder.addListener('transcript', this._on_transcript)
+      this._speech_recorder.addListener('err', this._on_err)
+    }
 
     const $element = parentElement()
 
@@ -155,7 +165,7 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
     console.log('MicrophoneButton', 'start')
     this._icon_button.setProp('active', true)
     try {
-      this._speech_recorder.start()
+      this._speech_recorder && this._speech_recorder.start()
     } catch {
       // swallow
     }
@@ -164,6 +174,6 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
   public stop(): void {
     console.log('MicrophoneButton', 'stop')
     this._icon_button.setProp('active', false)
-    this._speech_recorder.stop()
+    this._speech_recorder && this._speech_recorder.stop()
   }
 }

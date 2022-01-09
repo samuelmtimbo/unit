@@ -1,32 +1,49 @@
-import { Callback } from './Callback'
+import { Graph } from './Class/Graph'
 import { Component } from './client/component'
 import { Context } from './client/context'
 import { IOPointerEvent } from './client/event/pointer'
+import { Gamepad } from './client/gamepad'
+import { IOElement } from './client/IOElement'
+import { Keyboard } from './client/keyboard'
+import { Point } from './client/util/geometry'
+import { J } from './interface/J'
+import { U } from './interface/U'
+import { NOOP } from './NOOP'
+import { Pod } from './pod'
+import { BundleSpec } from './system/platform/method/process/BundleSpec'
+import { IPod, IPodOpt } from './system/platform/method/process/PodGraph'
+import { Classes, GraphSpecs, Specs } from './types'
+import { Callback } from './types/Callback'
+import { Dict } from './types/Dict'
+import {
+  IBluetoothDevice,
+  IBluetoothDeviceOpt,
+} from './types/global/IBluetoothDevice'
+import { IChannel, IChannelOpt } from './types/global/IChannel'
+import { IDeviceInfo } from './types/global/IDeviceInfo'
+import { IDisplayMediaOpt } from './types/global/IDisplayMedia'
+import { IFileHandler } from './types/global/IFileHandler'
+import { IGeoPosition } from './types/global/IGeoPosition'
+import { IHTTPServer, IHTTPServerOpt } from './types/global/IHTTPServer'
 import {
   ISpeechGrammarList,
   ISpeechGrammarListOpt,
+} from './types/global/ISpeechGrammarList'
+import {
   ISpeechRecognition,
   ISpeechRecognitionOpt,
-} from './api/speech'
-import { Gamepad } from './client/gamepad'
-import { Keyboard } from './client/keyboard'
-import { Point } from './client/util/geometry'
-import { C } from './interface/C'
-import { G } from './interface/G'
-import { J } from './interface/J'
-import { PO } from './interface/PO'
-import { U } from './interface/U'
-import NOOP from './NOOP'
+} from './types/global/ISpeechRecognition'
 import {
-  IHTTPServer,
-  IHTTPServerOpt,
-} from './system/platform/api/http/HTTPServer'
-import { IChannel, IChannelOpt } from './system/platform/api/local/LocalChannel'
-import { IPod, IPodOpt } from './system/platform/method/process/Pod'
-import { Classes, GraphSpecs, Specs } from './types'
-import { Dict } from './types/Dict'
-import { Unlisten } from './Unlisten'
-import { randomId } from './util/id'
+  ISpeechSynthesis,
+  ISpeechSynthesisOpt,
+} from './types/global/ISpeechSynthesis'
+import {
+  ISpeechSynthesisUtterance,
+  ISpeechSynthesisUtteranceOpt,
+} from './types/global/ISpeechSynthesisUtterance'
+import { IUserMediaOpt } from './types/global/IUserMedia'
+import { IWakeLock, IWakeLockOpt } from './types/global/IWakeLock'
+import { Unlisten } from './types/Unlisten'
 
 export type IOINIT<T, K> = (opt: K) => T
 
@@ -49,8 +66,65 @@ export type IOHTTP = IOAPI<IHTTPServer, IHTTPServerOpt>
 export type IOChannel = IOAPI<IChannel, IChannelOpt>
 export type IOPod = IOAPI<IPod, IPodOpt>
 
+export type API = {
+  storage: IOStorage
+  http: IOHTTP
+  channel: IOChannel
+  pod: IOPod
+  speech: {
+    SpeechGrammarList: IOINIT<ISpeechGrammarList, ISpeechGrammarListOpt>
+    SpeechRecognition: IOINIT<ISpeechRecognition, ISpeechRecognitionOpt>
+    SpeechSynthesis: IOINIT<ISpeechSynthesis, ISpeechSynthesisOpt>
+    SpeechSynthesisUtterance: IOINIT<
+      ISpeechSynthesisUtterance,
+      ISpeechSynthesisUtteranceOpt
+    >
+  }
+  file: {
+    showSaveFilePicker?: (opt: IFilePickerOpt) => Promise<IFileHandler[]>
+    showOpenFilePicker?: (opt: IFilePickerOpt) => Promise<IFileHandler[]>
+    downloadData: (opt: {}) => Promise<void>
+  }
+  screen: {
+    devicePixelRatio?: number
+    requestWakeLock: (type: IWakeLockOpt) => Promise<IWakeLock>
+  }
+  bluetooth: {
+    requestDevice: (type: IBluetoothDeviceOpt) => Promise<IBluetoothDevice>
+  }
+  device: {
+    vibrate: (opt: VibratePattern) => Promise<void>
+  }
+  clipboard: {
+    readText: () => Promise<string>
+    writeText: (text: string) => Promise<void>
+  }
+  geolocation: {
+    getCurrentPosition: () => Promise<IGeoPosition>
+  }
+  media: {
+    getUserMedia: (opt: IUserMediaOpt) => Promise<MediaStream>
+    getDisplayMedia: (opt: IDisplayMediaOpt) => Promise<MediaStream>
+    enumerateDevices: () => Promise<IDeviceInfo[]>
+  }
+  selection: {
+    containsSelection: (element: IOElement) => boolean
+    removeSelection: () => void
+  }
+  document: {
+    createElement<K extends keyof HTMLElementTagNameMap>(
+      tagName: K,
+      options?: ElementCreationOptions
+    ): HTMLElementTagNameMap[K]
+    createElementNS<K extends keyof SVGElementTagNameMap>(
+      namespaceURI: 'http://www.w3.org/2000/svg',
+      qualifiedName: K
+    ): SVGElementTagNameMap[K]
+    createTextNode(text: string): Text
+  }
+}
+
 export interface System {
-  hostname: string
   mounted: boolean
   root: HTMLElement
   customEvent: Set<string>
@@ -82,20 +156,13 @@ export interface System {
   specs: Specs
   classes: Classes
   components: ComponentClasses
+  pods: Pod[]
   global: {
     ref: Dict<any>
     component: Dict<Component>
   }
-  api: {
-    storage: IOStorage
-    http: IOHTTP
-    channel: IOChannel
-    pod: IOPod
-    speech: {
-      SpeechGrammarList: IOINIT<ISpeechGrammarList, ISpeechGrammarListOpt>
-      SpeechRecognition: IOINIT<ISpeechRecognition, ISpeechRecognitionOpt>
-    }
-  }
+  api: API
+
   method: {
     encodeURI?: (str: string) => string
     showLongPress?: (
@@ -114,47 +181,30 @@ export interface System {
       },
       callback: (event: PointerEvent, track: Point[]) => void
     ) => void
-    showSaveFilePicker?: (opt: {
-      suggestedName?: string
-      startIn?: string
-      id?: string
-      excludeAcceptAllOption?: boolean
-      types?: {
-        description: string
-        accept: Dict<string[]>
-      }[]
-    }) => Promise<any> // TODO
-    showOpenFilePicker?: (opt: {
-      suggestedName?: string
-      startIn?: string
-      id?: string
-      excludeAcceptAllOption?: boolean
-      types?: {
-        description: string
-        accept: Dict<string[]>
-      }[]
-      multiple?: boolean
-    }) => Promise<any> // TODO
   }
 }
 
-export interface Host {
-  tabStorage?: Storage
-  localStorage?: Storage
-  sessionStorage?: Storage
-  cloudStorage?: Storage
-  location?: Location
+export type IFilePickerOpt = {
+  suggestedName?: string
+  startIn?: string
+  id?: string
+  excludeAcceptAllOption?: boolean
+  types?: {
+    description: string
+    accept: Dict<string[]>
+  }[]
+  multiple?: boolean
 }
 
 export type ComponentClass = {
   id: string
-  new ($props: any, $system: System): Component
+  new ($props: any, $system: System, $pod: Pod): Component
 }
 
 export type ComponentClasses = Dict<ComponentClass>
 
 export interface BootOpt {
-  host?: Host
+  host?: API
   specs?: Specs
   components?: ComponentClasses
   classes?: Classes
@@ -178,36 +228,14 @@ export const LocalChannel = (opt: IChannelOpt): IChannel => {
   }
 }
 
-export const SpeechRecognition = (
-  opt: ISpeechRecognitionOpt
-): ISpeechRecognition => {
-  return {
-    start() {},
-    stop() {},
-    addListener(event: string, callback: Callback): Unlisten {
-      return NOOP
-    },
-  }
-}
-
-export const SpeechGrammarList = (
-  opt: ISpeechGrammarListOpt
-): ISpeechGrammarList => {
-  return {
-    addFromString(str: string, weight: number): void {},
-  }
-}
-
 export const LocalPod = (opt: IPodOpt): IPod => {
   return {
-    refUnit(id: string): void {},
-
-    refGraph(id: string): U & C & G {
-      return
+    refUnit(id: string): U {
+      return // TODO
     },
 
-    addGraph(): string {
-      return randomId() //
+    refGraph(bundle: BundleSpec): [Dict<string>, Graph] {
+      return // TODO
     },
 
     getSpecs(): GraphSpecs {

@@ -1,23 +1,26 @@
 import { render } from '.'
-import { BootOpt, System } from '../../system'
 import { boot } from '../../boot'
-import { GraphSpec } from '../../types'
-import { spawn } from '../../spawn'
+import { AsyncGraph } from '../../interface/async/AsyncGraph'
+import { spawn, start } from '../../spawn'
+import { BootOpt, System } from '../../system'
+import { BundleSpec } from '../../system/platform/method/process/BundleSpec'
 
-export function renderSpec(
-  $root: HTMLElement,
-  spec: GraphSpec,
+export function renderBundle(
+  root: HTMLElement,
+  bundle: BundleSpec,
   opt: BootOpt
 ): System {
   // console.log('renderSpec')
 
-  const bundle = { spec, specs: {} }
+  const __system = boot(opt)
 
-  const system = boot(opt)
+  const __pod = spawn(__system)
 
-  const pod = spawn(system, bundle)
+  const [_mapping, _graph] = start(__system, __pod, bundle)
 
-  render(system, pod, $root)
+  const $graph = AsyncGraph(_graph)
 
-  return system
+  render(root, __system, __pod, $graph)
+
+  return __system
 }

@@ -1,8 +1,8 @@
+import { Pod } from '../pod'
 import { System } from '../system'
-import Pod from '../system/platform/method/process/Pod'
 import { EE } from './EE'
 
-export interface $_ extends EE {
+export interface _<_EE extends Record<string, any[]> = {}> extends EE<_EE> {
   getGlobalId(): string
 
   getInterface(): string[]
@@ -10,10 +10,6 @@ export interface $_ extends EE {
   refSystem(): System | null
 
   refPod(): Pod | null
-
-  attach(__system: System): void
-
-  dettach(): void
 
   destroy(): void
 }

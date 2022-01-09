@@ -1,6 +1,8 @@
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { B } from '../../../../../interface/B'
 import { ST } from '../../../../../interface/ST'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export type I = {
   stream: ST
@@ -16,7 +18,7 @@ export type O = {
 export default class _MediaRecorder extends Semifunctional<I, O> {
   private _media_recorder: MediaRecorder
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['opt', 'stream'],
@@ -35,10 +37,10 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
-
-    console.log(this._ref_input)
 
     this.addListener('destroy', () => {
       this._media_recorder.stop()

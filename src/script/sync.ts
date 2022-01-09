@@ -2,8 +2,9 @@ import { existsSync } from 'fs'
 import { readJSONSync, writeFile } from 'fs-extra'
 import * as glob from 'glob'
 import * as path from 'path'
-import { removeLastSegment } from '../removeLastSegment'
+import { isNotSymbol } from '../client/event/keyboard/keyCode'
 import { GraphSpec } from '../types'
+import { removeLastSegment } from '../util/removeLastSegment'
 
 export function sync(dir: string): void {
   let specs = ''
@@ -41,30 +42,33 @@ export function sync(dir: string): void {
 
       const id = spec.id
 
-      let name_init = segments[l - 1]
-
       if (!id) {
         console.log(`id not specified at ${spec_file_path}`)
       }
 
       const { base, name } = spec
 
-      if (base) {
-        let { name } = spec
-
-        let i = 0
-        while (ids_name_set.has(name)) {
-          name = name_init + ' ' + i
-          i++
-        }
-        ids_name_set.add(name)
-
-        const NAME = name.toUpperCase().split(' ').join('_')
-
-        ids += `export const ID_${NAME} = '${id}'\n`
+      let _name = name
+      let i = 0
+      while (ids_name_set.has(_name)) {
+        _name = name + ' ' + i
+        i++
       }
+      ids_name_set.add(_name)
+
+      const NAME = _name
+        .split('')
+        .filter(isNotSymbol)
+        .join('')
+        .toUpperCase()
+        .split(' ')
+        .join('_')
+
+      ids += `export const ID_${NAME} = '${id}'\n`
 
       _specs[id] = spec
+
+      let name_init = segments[l - 1]
 
       const class_file_path = `${dir}/${_}/index.ts`
       if (existsSync(class_file_path)) {

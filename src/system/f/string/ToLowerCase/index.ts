@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I {
   A: string
@@ -9,11 +11,16 @@ export interface O {
 }
 
 export default class ToLowerCase extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['A'],
-      o: ['a'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['A'],
+        o: ['a'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ A }: I, done): void {

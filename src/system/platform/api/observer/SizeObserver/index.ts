@@ -5,10 +5,12 @@ import {
   getGlobalComponent,
   listenGlobalComponent,
 } from '../../../../../client/globalComponent'
-import { C } from '../../../../../interface/C'
+import { Component_ } from '../../../../../interface/component'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export type I = {
-  component: C
+  component: Component_
 }
 
 export type O = {
@@ -17,7 +19,7 @@ export type O = {
 }
 
 export default class SizeObserver extends Semifunctional<I, O> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['component'],
@@ -31,7 +33,9 @@ export default class SizeObserver extends Semifunctional<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 

@@ -2,18 +2,16 @@ import * as assert from 'assert'
 import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
+import { pod, system } from '../../util/system'
 
 const spec = require('../../../system/core/array/SumAll/spec.json')
 
 const SumAll = fromSpec<{ any: any }, { bit: number }>(spec, _specs)
 
-import { system } from '../../util/system'
-
-const sumAll = new SumAll(system)
+const sumAll = new SumAll(system, pod)
 
 false && watchUnitAndLog(sumAll)
 false && watchGraphAndLog(sumAll)
-
 
 sumAll.play()
 

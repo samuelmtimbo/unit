@@ -343,6 +343,19 @@ export function unitVector(
   return { x: dx / d, y: dy / d }
 }
 
+export function pointUnitVector(
+  { x: x0, y: y0 }: Point,
+  { x: x1, y: y1 }: Point
+): Point {
+  const dx = x1 - x0
+  const dy = y1 - y0
+  const d = norm(dx, dy)
+  if (d === 0) {
+    return randomUnitVector()
+  }
+  return { x: dx / d, y: dy / d }
+}
+
 export function oppositeVector(vector: Point): Point {
   const { x, y } = vector
   return {

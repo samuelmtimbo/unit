@@ -1,4 +1,4 @@
-import { U } from '../interface/U'
+import { Graph } from '../Class/Graph'
 import { GraphExposedSubPinSpec } from '../types'
 import { Moment } from './Moment'
 
@@ -14,7 +14,7 @@ export interface GraphExposedPinEvent
 
 export function watchGraphExposedPinEvent(
   event: 'expose_pin' | 'cover_pin',
-  unit: U,
+  graph: Graph,
   callback: (moment: GraphExposedPinEvent) => void
 ): () => void {
   const listener = (
@@ -34,8 +34,8 @@ export function watchGraphExposedPinEvent(
       },
     })
   }
-  unit.prependListener(event, listener)
+  graph.prependListener(event, listener)
   return () => {
-    unit.removeListener(event, listener)
+    graph.removeListener(event, listener)
   }
 }

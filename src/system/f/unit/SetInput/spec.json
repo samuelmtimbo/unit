@@ -2,6 +2,7 @@
   "name": "set input",
   "inputs": {
     "unit": {
+      "_type": "<T:`U`>",
       "type": "`U`"
     },
     "name": {
@@ -13,12 +14,13 @@
   },
   "outputs": {
     "unit": {
-      "type": "`U`"
+      "_type": "<T>",
+      "type": "any"
     }
   },
   "metadata": {
     "icon": "object-set",
-    "description": "set the input `name` of `unit` to `data`",
+    "description": "set input `name` of `unit` to `data`",
     "complexity": 2.657932286937346,
     "tags": [
       "f",

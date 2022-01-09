@@ -2,6 +2,7 @@ import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
 import { makeShortcutListener } from '../../../../../client/event/keyboard'
 import { Mode } from '../../../../../client/mode'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import Div from '../../Div/Component'
@@ -37,8 +38,8 @@ export default class IconButtonList extends Element<HTMLDivElement, Props> {
 
   private _mode_button: Dict<ModeIconButton> = {}
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style, buttons = [] } = this.$props
 
@@ -50,7 +51,8 @@ export default class IconButtonList extends Element<HTMLDivElement, Props> {
           icon,
           activeColor: color,
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       icon_button_list_children.push(icon_button_list_item)
     })
@@ -60,7 +62,8 @@ export default class IconButtonList extends Element<HTMLDivElement, Props> {
         className: classnames('crud', className),
         style: { ...DEFAULT_STYLE, ...style },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     list.setChildren(icon_button_list_children)
     this._list = list

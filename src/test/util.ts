@@ -1,6 +1,6 @@
 import * as assert from 'assert'
 import { Unit } from '../Class/Unit'
-import { EventEmitter_ } from '../EventEmitter'
+import { EventEmitter } from '../EventEmitter'
 import { MIMO } from '../MIMO'
 import { Pin, PinEvent } from '../Pin'
 import { Dict } from '../types/Dict'
@@ -32,7 +32,7 @@ export type EventCounter = {
 }
 
 export function countEvent(
-  emitter: EventEmitter_,
+  emitter: EventEmitter,
   event: string,
   callback?: (count: number) => void
 ): EventCounter {

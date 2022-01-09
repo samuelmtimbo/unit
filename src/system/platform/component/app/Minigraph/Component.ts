@@ -1,23 +1,23 @@
 import { getSpecRadius } from '../../../../../client/complexity'
 import mergeProps from '../../../../../client/component/mergeProps'
-import Minimap from '../Minimap/Component'
 import { Element } from '../../../../../client/element'
 import { getLinkId, segmentLinkId } from '../../../../../client/id'
-import { isComponent } from '../../../../../client/spec'
 import parentElement from '../../../../../client/parentElement'
 import { SimNode, Simulation } from '../../../../../client/simulation'
-import { getSpec, injectSpecs } from '../../../../../client/spec'
+import { getSpec, injectSpecs, isComponent } from '../../../../../client/spec'
 import { Shape, surfaceDistance } from '../../../../../client/util/geometry'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
+import { Pod } from '../../../../../pod'
 import { emptyGraphSpec } from '../../../../../spec/emptySpec'
+import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { mapObjVK } from '../../../../../util/object'
-import { BundleSpec } from '../../../method/process/BundleSpec'
 import {
   NOT_SUBGRAPH_MAX_D,
   SUBGRAPH_MAX_D,
 } from '../../../component/app/graph/Graph/Component'
-import { System } from '../../../../../system'
+import { BundleSpec } from '../../../method/process/BundleSpec'
+import Minimap from '../Minimap/Component'
 
 export interface Props {
   width: number
@@ -40,8 +40,8 @@ export default class Mingraph extends Element<HTMLDivElement, Props> {
 
   private _simulation: Simulation
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { width, height } = this.$props
 
@@ -54,7 +54,8 @@ export default class Mingraph extends Element<HTMLDivElement, Props> {
         links: {},
         padding: LINK_DISTANCE,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._minimap = minimap
 

@@ -1,4 +1,4 @@
-import { Callback } from './Callback'
+import { Callback } from './types/Callback'
 
 export class ObjectWaiter<T> {
   private _data: T = null

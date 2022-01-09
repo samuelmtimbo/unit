@@ -1,14 +1,21 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I {}
 
 export interface O {}
 
 export default class ForeignObject extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['class', 'style'],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['class', 'style'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
   }
 }

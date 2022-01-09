@@ -1,4 +1,6 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I {
   value: number
@@ -10,11 +12,16 @@ export interface I {
 export interface O {}
 
 export default class Slider extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['value', 'style', 'min', 'max'],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['value', 'style', 'min', 'max'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
 
     this._defaultState = {
       value: 0,

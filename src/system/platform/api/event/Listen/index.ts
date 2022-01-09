@@ -1,12 +1,14 @@
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { Unit } from '../../../../../Class/Unit'
-import { Unlisten } from '../../../../../Unlisten'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I<T> {
   method: string
   data: any
   event: string
-  unit: Unit
+  unit: Unit<any, any, any>
 }
 
 export interface O<T> {
@@ -18,7 +20,7 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
 
   private _unlisten: Unlisten | undefined = undefined
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['unit', 'event'],
@@ -32,7 +34,9 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
 
     this.addListener('destroy', () => {

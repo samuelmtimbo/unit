@@ -1,15 +1,16 @@
-import { Callback } from '../Callback'
+import { Graph } from '../Class/Graph'
 import Merge from '../Class/Merge'
-import { Unit } from '../Class/Unit'
-import { Component } from '../client/component'
-import { GraphState } from '../GraphState'
+import { Unit, UnitEvents } from '../Class/Unit'
 import { C } from '../interface/C'
+import { Component_ } from '../interface/component'
 import { G } from '../interface/G'
 import { U } from '../interface/U'
 import { Pin } from '../Pin'
+import { Pod } from '../pod'
 import { State } from '../State'
 import { System } from '../system'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
+import { UnitBundleSpec } from '../system/platform/method/process/UnitBundleSpec'
 import {
   GraphExposedPinSpec,
   GraphExposedPinsSpec,
@@ -23,9 +24,8 @@ import {
 } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphClass } from '../types/GraphClass'
+import { GraphState } from '../types/GraphState'
 import { UnitClass } from '../types/UnitClass'
-import { Units } from '../Units'
-import { Unlisten } from '../Unlisten'
 import { fromSpec } from './fromSpec'
 
 export function lazyFromSpec(
@@ -35,35 +35,47 @@ export function lazyFromSpec(
 ): GraphClass {
   const { inputs, outputs, id } = spec
 
-  class Lazy<I, O> extends Unit implements G, C {
-    static __ = ['U', 'G']
-    static __id: string = id
-    static __unit = {}
-    static __spec: {}
+  class Lazy<
+      I extends Dict<any>,
+      O extends Dict<any>,
+      _EE extends UnitEvents<_EE> = UnitEvents<{}>
+    >
+    extends Unit<I, O, _EE>
+    implements G, C
+  {
+    static __bundle: UnitBundleSpec = {
+      unit: {
+        id,
+      },
+      specs: {},
+    }
+
+    public __ = ['U', 'G']
 
     public stateful: boolean = false // RETURN __stateful
     public element: boolean = false // RETURN __element
 
-    private __graph: U & C & G
+    private __graph: Graph
 
     private _merge: { input: Dict<Merge<any>>; output: Dict<Merge<any>> } = {
       input: {},
       output: {},
     }
 
-    constructor(system?: System) {
+    constructor(system: System, pod: Pod) {
       super(
         {
           i: Object.keys(inputs),
           o: Object.keys(outputs),
         },
         branch,
-        system
+        system,
+        pod
       )
 
       for (const name in this._input) {
         const i = this._input[name]
-        i.addListener('_data', (data) => {
+        i.addListener('data', (data) => {
           this._ensure()
         })
       }
@@ -94,7 +106,7 @@ export function lazyFromSpec(
     memAddMerge(
       mergeId: string,
       mergeSpec: GraphMergesSpec,
-      merge: U<any, any>
+      merge: Merge
     ): void {
       this._ensure()
       return this.__graph.memAddMerge(mergeId, mergeSpec, merge)
@@ -137,12 +149,12 @@ export function lazyFromSpec(
       )
     }
 
-    appendParentChild(component: C<any, any>, slotName: string): void {
+    appendParentChild(component: Component_, slotName: string): void {
       this._ensure()
       return this.__graph.appendParentChild(component, slotName)
     }
 
-    removeParentChild(component: C<any, any>): void {
+    removeParentChild(component: Component_): void {
       this._ensure()
       return this.__graph.removeParentChild(component)
     }
@@ -161,23 +173,28 @@ export function lazyFromSpec(
       graphId: string,
       nodeIds: {
         merge: string[]
-        linkPin: {
+        link: {
           unitId: string
           type: 'input' | 'output'
           pinId: string
-          mergeId: string
-          oppositePinId: string
         }[]
         unit: string[]
       },
       nextIdMap: {
         merge: Dict<string>
-        linkPin: Dict<string>
+        link: Dict<{
+          input: Dict<{ mergeId: string; oppositePinId: string }>
+          output: Dict<{ mergeId: string; oppositePinId: string }>
+        }>
         unit: Dict<string>
       },
       nextPinMap: Dict<{
         input: Dict<{ pinId: string; subPinId: string }>
         output: Dict<{ pinId: string; subPinId: string }>
+      }>,
+      nextMergePinId: Dict<{
+        nextInputMergePinId: string
+        nextOutputMergePinId: string
       }>,
       nextSubComponentParent: Dict<string | null>,
       nextSubComponentChildrenMap: Dict<string[]>
@@ -188,27 +205,28 @@ export function lazyFromSpec(
         nodeIds,
         nextIdMap,
         nextPinMap,
+        nextMergePinId,
         nextSubComponentParent,
         nextSubComponentChildrenMap
       )
     }
 
-    registerRoot(component: C<any, any>): void {
+    registerRoot(component: Component_): void {
       this._ensure()
       return this.__graph.registerRoot(component)
     }
 
-    unregisterRoot(component: C<any, any>): void {
+    unregisterRoot(component: Component_): void {
       this._ensure()
       return this.__graph.unregisterRoot(component)
     }
 
-    registerParentRoot(component: C<any, any>, slotName: string): void {
+    registerParentRoot(component: Component_, slotName: string): void {
       this._ensure()
       return this.__graph.registerParentRoot(component, slotName)
     }
 
-    unregisterParentRoot(component: C<any, any>): void {
+    unregisterParentRoot(component: Component_): void {
       this._ensure()
       return this.__graph.unregisterParentRoot(component)
     }
@@ -216,7 +234,7 @@ export function lazyFromSpec(
     private _load(): void {
       // console.log('Lazy', '_load')
       const Class = fromSpec(spec, specs, branch)
-      this.__graph = new Class(this.__system)
+      this.__graph = new Class(this.__system, this.__pod)
       this.__graph.addListener('err', (err) => {
         this.err(err)
       })
@@ -224,14 +242,14 @@ export function lazyFromSpec(
         this.takeErr()
       })
       forEachKeyValue(this.__graph.getOutputs(), (output, name) => {
-        const merge = new Merge(this.__system)
+        const merge = new Merge(this.__system, this.__pod)
         merge.play()
         this._merge.output[name] = merge
         merge.setInput(name, output)
         merge.setOutput(name, this._output[name])
       })
       forEachKeyValue(this.__graph.getInputs(), (input, name) => {
-        const merge = new Merge(this.__system)
+        const merge = new Merge(this.__system, this.__pod)
         merge.play()
         this._merge.input[name] = merge
         merge.setInput(name, this._input[name])
@@ -297,22 +315,22 @@ export function lazyFromSpec(
       return this.__graph.hasChild(at)
     }
 
-    public refChild(at: number): C<any, any> {
+    public refChild(at: number): Component_ {
       this._ensure()
       return this.__graph.refChild(at)
     }
 
-    public refChildren(): C[] {
+    public refChildren(): Component_[] {
       this._ensure()
       return this.__graph.refChildren()
     }
 
-    public refSlot(slotName: string): C<any, any> {
+    public refSlot(slotName: string): Component_ {
       this._ensure()
       return this.__graph.refSlot(slotName)
     }
 
-    public refUnits = (): Units => {
+    public refUnits = (): Dict<Unit> => {
       this._ensure()
       return this.__graph.refUnits()
     }
@@ -673,7 +691,7 @@ export function lazyFromSpec(
     memAddUnit(
       unitId: string,
       unitSpec: GraphUnitSpec,
-      unit: U<any, any>
+      unit: Unit<any, any>
     ): void {
       this._ensure()
       return this.__graph.memAddUnit(unitId, unitSpec, unit)
@@ -705,10 +723,21 @@ export function lazyFromSpec(
     public moveMergeInto(
       graphId: string,
       mergeId: string,
-      nextMergeId: string
+      nextInputMergeId: string | null,
+      nextOutputMergeId: string | null,
+      nextPinIdMap: Dict<{
+        input: Dict<{ pinId: string; subPinId: string }>
+        output: Dict<{ pinId: string; subPinId: string }>
+      }>
     ): void {
       this._ensure()
-      return this.__graph.moveMergeInto(graphId, mergeId, nextMergeId)
+      return this.__graph.moveMergeInto(
+        graphId,
+        mergeId,
+        nextInputMergeId,
+        nextOutputMergeId,
+        nextPinIdMap
+      )
     }
 
     public removeUnit(unitId: string) {

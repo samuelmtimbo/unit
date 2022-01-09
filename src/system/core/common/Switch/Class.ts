@@ -1,3 +1,4 @@
+import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
 import { System } from '../../../../system'
 
@@ -14,14 +15,15 @@ export type O<T> = {
 export default class Switch<T> extends Primitive<I<T>, O<T>> {
   private _current: string
 
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['a', 'b', 'c'],
         o: ['a'],
       },
       {},
-      system
+      system,
+      pod
     )
   }
 

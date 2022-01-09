@@ -1,5 +1,6 @@
-import { Element } from '../../../../Class/Element/Element'
+import { Element } from '../../../../Class/Element'
 import { PO } from '../../../../interface/PO'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 
 export interface I {
@@ -11,7 +12,7 @@ export interface I {
 export interface O {}
 
 export default class Render extends Element<I, O> {
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['style', 'pod'],
@@ -24,7 +25,8 @@ export default class Render extends Element<I, O> {
           },
         },
       },
-      system
+      system,
+      pod
     )
   }
 }

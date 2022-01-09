@@ -1,5 +1,5 @@
 import { Component } from '../../../../client/component'
-import { Unlisten } from '../../../../Unlisten'
+import { Unlisten } from '../../../../types/Unlisten'
 
 export function dragOverTimeListener(
   component: Component,

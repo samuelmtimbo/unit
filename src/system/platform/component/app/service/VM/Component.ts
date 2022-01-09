@@ -1,9 +1,11 @@
-import { ANIMATION_T_S } from '../../../../../../client/animation'
+import { ANIMATION_T_S } from '../../../../../../client/animation/animation'
 import { mergeStyle } from '../../../../../../client/applyStyle'
+import { Component } from '../../../../../../client/component'
 import { makeClickListener } from '../../../../../../client/event/pointer/click'
 import { VMSpec } from '../../../../../../client/host/service/vm'
 import parentElement from '../../../../../../client/parentElement'
 import { getActiveColor } from '../../../../../../client/theme'
+import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
 import CloudTabs from '../../../../../host/component/IconTabs/Component'
@@ -11,7 +13,6 @@ import { dragOverTimeListener } from '../../../../../host/component/IconTabs/dra
 import Div from '../../../Div/Component'
 import Icon from '../../../Icon/Component'
 import TextDiv from '../../TextDiv/Component'
-import { Component } from '../../../../../../client/component'
 
 export interface Props {
   style?: Dict<string>
@@ -32,8 +33,8 @@ export default class VMServiceComponent extends Component<
 > {
   private _tabs: CloudTabs
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style } = $props
 
@@ -42,7 +43,8 @@ export default class VMServiceComponent extends Component<
         // tabs: ['cloud', 'shared'],
         style,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._tabs = tabs
 
@@ -90,7 +92,8 @@ export default class VMServiceComponent extends Component<
           borderBottom: '1px solid currentColor',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._item[id] = item
 
@@ -102,7 +105,8 @@ export default class VMServiceComponent extends Component<
           alignItems: 'center',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     item.appendChild(title)
@@ -118,7 +122,8 @@ export default class VMServiceComponent extends Component<
           transition: `color ${ANIMATION_T_S}s linear`,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     power.addEventListener(
       makeClickListener({
@@ -148,7 +153,8 @@ export default class VMServiceComponent extends Component<
           paddingRight: '6px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     title.appendChild(main)
 
@@ -160,7 +166,8 @@ export default class VMServiceComponent extends Component<
           fontWeight: '600',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     main.appendChild(name_comp)
 
@@ -175,7 +182,8 @@ export default class VMServiceComponent extends Component<
           maxWidth: '100%',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     main.appendChild(id_comp)
 
@@ -190,7 +198,8 @@ export default class VMServiceComponent extends Component<
           transition: `transform ${ANIMATION_T_S}s linear`,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     dragOverTimeListener(chevron, 500, () => {
       this._toggle_detail(id)
@@ -217,7 +226,8 @@ export default class VMServiceComponent extends Component<
           alignItems: 'center',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._item_content[id] = content
     item.appendChild(content)
@@ -228,7 +238,8 @@ export default class VMServiceComponent extends Component<
         name: 'net',
         power: cpu,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     content.appendChild(content_cpu)
 
@@ -238,7 +249,8 @@ export default class VMServiceComponent extends Component<
         name: 'mem',
         power: memory,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     content.appendChild(content_memory)
 
@@ -248,7 +260,8 @@ export default class VMServiceComponent extends Component<
         name: 'net',
         power: network,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     content.appendChild(content_network)
 
@@ -278,8 +291,8 @@ export type VMConfigMeterProps = {
 }
 
 export class VMConfigMeter extends Component<HTMLElement, VMConfigMeterProps> {
-  constructor($props: VMConfigMeterProps, $system: System) {
-    super($props, $system)
+  constructor($props: VMConfigMeterProps, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { name, icon, power } = this.$props
 
@@ -293,7 +306,8 @@ export class VMConfigMeter extends Component<HTMLElement, VMConfigMeterProps> {
           height: 'fit-content',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const circle = new Div(
@@ -304,7 +318,8 @@ export class VMConfigMeter extends Component<HTMLElement, VMConfigMeterProps> {
           height: 'fit-content',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     container.registerParentRoot(circle)
 
@@ -317,7 +332,8 @@ export class VMConfigMeter extends Component<HTMLElement, VMConfigMeterProps> {
           border: '2px solid currentColor',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     circle.registerParentRoot(meter)
 
@@ -334,7 +350,8 @@ export class VMConfigMeter extends Component<HTMLElement, VMConfigMeterProps> {
           transform: 'translate(-50%, -50%)',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     circle.registerParentRoot(icon_comp)
 
@@ -347,7 +364,8 @@ export class VMConfigMeter extends Component<HTMLElement, VMConfigMeterProps> {
           fontWeight: '600',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     container.registerParentRoot(title)
 

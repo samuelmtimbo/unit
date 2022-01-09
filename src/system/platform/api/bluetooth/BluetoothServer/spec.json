@@ -6,7 +6,12 @@
       "ref": true
     }
   },
-  "outputs": {},
+  "outputs": {
+    "server": {
+      "type": "`BS`",
+      "ref": true
+    }
+  },
   "metadata": {
     "icon": "bluetooth",
     "description": "remote GATT server",
@@ -19,6 +24,6 @@
   },
   "id": "dd520754-e138-11ea-879e-3bd947893124",
   "base": true,
-  "type": "`U`&`BS`",
+  "type": "`U`",
   "system": true
 }

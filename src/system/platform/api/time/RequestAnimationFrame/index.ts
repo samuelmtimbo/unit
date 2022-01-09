@@ -1,5 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I {
   a: any
@@ -10,11 +12,16 @@ export interface O {
 }
 
 export default class RequestAnimationFrame extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['a'],
-      o: ['a'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['a'],
+        o: ['a'],
+      },
+      {},
+      system,
+      pod
+    )
 
     this.addListener('reset', () => {
       this._reset()

@@ -1,0 +1,159 @@
+{
+  "name": "deep get",
+  "units": {
+    "prop": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c"
+    },
+    "head": {
+      "id": "e9831075-2e62-43a4-84af-0653f7e707a9"
+    },
+    "proppath": {
+      "id": "2ff102a7-b469-461f-a3b1-a61b81c1b325"
+    },
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "ifelse": {
+      "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
+    },
+    "lengthgt": {
+      "id": "603ebe2e-5329-446d-b422-78f3201ddd7a",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      },
+      "lengthgt": {
+        "output": {
+          "true": true
+        }
+      }
+    },
+    "1": {
+      "head": {
+        "input": {
+          "a": true
+        }
+      },
+      "if": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "2": {
+      "prop": {
+        "input": {
+          "key": true
+        }
+      },
+      "head": {
+        "output": {
+          "head": true
+        }
+      }
+    },
+    "3": {
+      "proppath": {
+        "input": {
+          "obj": true
+        }
+      },
+      "prop": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "4": {
+      "head": {
+        "output": {
+          "a": true
+        }
+      },
+      "proppath": {
+        "input": {
+          "path": true
+        }
+      }
+    },
+    "5": {
+      "prop": {
+        "input": {
+          "obj": true
+        }
+      },
+      "ifelse": {
+        "output": {
+          "if": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "get value of `obj` at `path`",
+    "complexity": 15,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "inputs": {
+    "path": {
+      "pin": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "lengthgt",
+          "pinId": "a"
+        }
+      },
+      "type": "(number|string)[]"
+    },
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "a"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "result": {
+      "pin": {
+        "0": {
+          "unitId": "ifelse",
+          "pinId": "else"
+        },
+        "1": {
+          "unitId": "proppath",
+          "pinId": "result"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "2ff102a7-b469-461f-a3b1-a61b81c1b325",
+  "type": "`U`&`G`",
+  "system": true
+}

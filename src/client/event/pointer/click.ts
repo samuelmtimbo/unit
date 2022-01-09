@@ -1,6 +1,6 @@
 import { IOPointerEvent } from '.'
 import { Dict } from '../../../types/Dict'
-import { Unlisten } from '../../../Unlisten'
+import { Unlisten } from '../../../types/Unlisten'
 import { addListener } from '../../addListener'
 import Listenable from '../../Listenable'
 import { Listener } from '../../Listener'

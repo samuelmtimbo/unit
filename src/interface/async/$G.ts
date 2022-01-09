@@ -1,4 +1,3 @@
-import { Callback } from '../../Callback'
 import { State } from '../../State'
 import {
   GraphExposedPinSpec,
@@ -9,8 +8,10 @@ import {
   GraphUnitSpec,
   GraphUnitsSpec,
 } from '../../types'
+import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
-import { Unlisten } from '../../Unlisten'
+import { IO } from '../../types/IO'
+import { Unlisten } from '../../types/Unlisten'
 import { $Component } from './$Component'
 import { $Graph } from './$Graph'
 import { $U } from './$U'
@@ -91,15 +92,11 @@ export interface $G_C {
   $setUnitPinData(data: {
     unitId: string
     pinId: string
-    type: 'input' | 'output'
+    type: IO
     data: string
   }): void
 
-  $removeUnitPinData(data: {
-    unitId: string
-    type: 'input' | 'output'
-    pinId: string
-  }): void
+  $removeUnitPinData(data: { unitId: string; type: IO; pinId: string }): void
 
   $addUnit(data: { id: string; unit: GraphUnitSpec }): void
 
@@ -109,55 +106,39 @@ export interface $G_C {
 
   $moveUnit(data: { id: string; unitId: string; inputId: string }): void
 
-  $exposePinSet(data: {
-    type: 'input' | 'output'
-    id: string
-    pin: GraphExposedPinSpec
-  }): void
+  $exposePinSet(data: { type: IO; id: string; pin: GraphExposedPinSpec }): void
 
-  $coverPinSet(data: { type: 'input' | 'output'; id: string }): void
+  $coverPinSet(data: { type: IO; id: string }): void
 
   $exposePin(data: {
-    type: 'input' | 'output'
+    type: IO
     id: string
     subPinId: string
     subPin: GraphExposedSubPinSpec
   }): void
 
-  $coverPin(data: {
-    type: 'input' | 'output'
-    id: string
-    subPinId: string
-  }): void
+  $coverPin(data: { type: IO; id: string; subPinId: string }): void
 
   $plugPin(data: {
-    type: 'input' | 'output'
+    type: IO
     id: string
     subPinId: string
     subPin: GraphExposedSubPinSpec
   }): void
 
-  $unplugPin(data: {
-    type: 'input' | 'output'
-    id: string
-    subPinId: string
-  }): void
+  $unplugPin(data: { type: IO; id: string; subPinId: string }): void
 
   $exposeUnitPinSet(data: {
     unitId: string
-    type: 'input' | 'output'
+    type: IO
     id: string
     pin: GraphExposedPinSpec
   }): void
 
-  $coverUnitPinSet(data: {
-    unitId: string
-    type: 'input' | 'output'
-    id: string
-  }): void
+  $coverUnitPinSet(data: { unitId: string; type: IO; id: string }): void
 
   $setPinSetFunctional(data: {
-    type: 'input' | 'output'
+    type: IO
     id: string
     functional: boolean
   }): void
@@ -168,14 +149,14 @@ export interface $G_C {
 
   $setUnitPinConstant(data: {
     unitId: string
-    type: 'input' | 'output'
+    type: IO
     pinId: string
     constant: boolean
   }): void
 
   $setUnitPinIgnored(data: {
     unitId: string
-    type: 'input' | 'output'
+    type: IO
     pinId: string
     ignored: boolean
   }): void
@@ -189,14 +170,14 @@ export interface $G_C {
   $addPinToMerge(data: {
     mergeId: string
     unitId: string
-    type: 'input' | 'output'
+    type: IO
     pinId: string
   }): void
 
   $removePinFromMerge(data: {
     mergeId: string
     unitId: string
-    type: 'input' | 'output'
+    type: IO
     pinId: string
   }): void
 
@@ -261,22 +242,28 @@ export interface $G_C {
     graphId: string
     nodeIds: {
       merge: string[]
-      linkPin: {
+      link: {
         unitId: string
-        type: 'input' | 'output'
+        type: IO
         pinId: string
-        mergeId: string
-        oppositePinId: string
       }[]
       unit: string[]
     }
     nextIdMap: {
       merge: Dict<string>
+      link: Dict<{
+        input: Dict<{ mergeId: string; oppositePinId: string }>
+        output: Dict<{ mergeId: string; oppositePinId: string }>
+      }>
       unit: Dict<string>
     }
     nextPinIdMap: Dict<{
       input: Dict<{ pinId: string; subPinId: string }>
       output: Dict<{ pinId: string; subPinId: string }>
+    }>
+    nextMergePinId: Dict<{
+      nextInputMergePinId: string
+      nextOutputMergePinId: string
     }>
     nextSubComponentParentMap: Dict<string | null>
     nextSubComponentChildrenMap: Dict<string[]>
@@ -291,14 +278,19 @@ export interface $G_C {
   $moveLinkPinInto(data: {
     graphId: string
     unitId: string
-    type: 'input' | 'output'
+    type: IO
     pinId: string
   }): void
 
   $moveMergePinInto(data: {
     graphId: string
     mergeId: string
-    nextMergeId: string
+    nextInputMergeId: string | null
+    nextOutputMergeId: string | null
+    nextPinIdMap: Dict<{
+      input: Dict<{ pinId: string; subPinId: string }>
+      output: Dict<{ pinId: string; subPinId: string }>
+    }>
   }): void
 
   // $moveDatumInto(data: { graphId: string, datumId: string }): void

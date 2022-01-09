@@ -1,11 +1,10 @@
 import * as assert from 'assert'
 import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
-import _specs from '../../system/_specs'
-import { ID_FILTER, ID_IDENTITY, ID_TRUE } from '../spec/id'
-import { system } from '../util/system'
+import { ID_FILTER, ID_IDENTITY, ID_TRUE } from '../../system/_ids'
+import { pod, system } from '../util/system'
 
-const composition0 = new Graph<{}, {}>({}, {}, system)
+const composition0 = new Graph<{}, {}>({}, {}, system, pod)
 
 false && watchUnitAndLog(composition0)
 false && watchGraphAndLog(composition0)
@@ -73,7 +72,7 @@ assert.equal(composition0.refUnit(id1).peakInput('a'), 0)
 assert.equal(composition0.refUnit(id2).peakOutput('a'), 0)
 assert.equal(composition0.refUnit(id2).peakInput('a'), 0)
 
-const composition1 = new Graph<{}, {}>({}, {}, system)
+const composition1 = new Graph<{}, {}>({}, {}, system, pod)
 composition1.play()
 const id3 = 'id3'
 const id4 = 'id4'
@@ -116,7 +115,7 @@ composition1.addMerge(
   '0'
 )
 
-const composition2 = new Graph<{}, {}>({}, {}, system)
+const composition2 = new Graph<{}, {}>({}, {}, system, pod)
 composition2.play()
 composition2.addUnit({ id: ID_IDENTITY }, id0)
 composition2.addUnit({ id: ID_IDENTITY }, id1)
@@ -151,7 +150,8 @@ const UNIT_ID_TRUE = 'UNIT_ID_TRUE'
 const composition4 = new Graph<{ number: number }, { sum: number }>(
   {},
   {},
-  system
+  system,
+  pod
 )
 
 false && watchUnitAndLog(composition4)

@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I {
   a: number
@@ -9,11 +11,16 @@ export interface O {
 }
 
 export default class Not extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['a'],
-      o: ['~a'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['a'],
+        o: ['~a'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ a }: I, done): void {

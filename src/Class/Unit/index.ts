@@ -1,21 +1,22 @@
-import { $ } from '../$'
+import { $, $Events } from '../$'
 import { SELF } from '../../constant/SELF'
 import { DuplicatedInputFoundError } from '../../exception/DuplicatedInputFoundError'
 import { DuplicatedOutputFoundError } from '../../exception/DuplicatedOutputFoundError'
 import { InputNotFoundError } from '../../exception/InputNotFoundError'
 import { InvalidArgumentType } from '../../exception/InvalidArgumentType'
 import { OutputNotFoundError } from '../../exception/OutputNotFoundError'
-import { U } from '../../interface/U'
+import { U, U_EE } from '../../interface/U'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { PinOpts } from '../../PinOpts'
 import { Pins } from '../../Pins'
+import { Pod } from '../../pod'
 import { System } from '../../system'
 import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../../types/Dict'
 import { IO } from '../../types/IO'
 import { None } from '../../types/None'
-import { Unlisten } from '../../Unlisten'
+import { Unlisten } from '../../types/Unlisten'
 import { pull, push, removeAt } from '../../util/array'
 import { mapObjVK } from '../../util/object'
 
@@ -24,7 +25,7 @@ export type PinMap<T> = Dict<Pin<T[keyof T]>>
 const toPinMap = <T>(
   names: string[]
 ): {
-  [name: string]: Pin<T>
+  [K in keyof T]?: Pin<T[K]>
 } => {
   return names.reduce(
     (acc, name) => ({
@@ -51,15 +52,24 @@ export const DEFAULT_PIN_OPT: PinOpt = {
 
 export type PinOf<T> = Pin<T[keyof T]>
 
-export class Unit<I = any, O = any> extends $ implements U {
-  static __: string[] = ['U']
+export type UnitEvents<_EE extends Dict<any[]>> = $Events<_EE & U_EE> & U_EE
 
-  public $parent: U | null = null
+export class Unit<
+    I extends Dict<any> = any,
+    O extends Dict<any> = any,
+    _EE extends UnitEvents<_EE> & Dict<any[]> = UnitEvents<U_EE>
+  >
+  extends $<_EE>
+  implements U<I, O>
+{
+  public __: string[] = ['U']
+
+  public $parent: Unit | null = null
   public $path: string[] = []
   public $id: string | null = null
 
-  public _input: Pins<any> = {}
-  public _output: Pins<any> = {}
+  public _input: Pins<I> = {}
+  public _output: Pins<O> = {}
 
   public _data_input: Pins<any> = {}
   public _data_output: Pins<any> = {}
@@ -98,13 +108,18 @@ export class Unit<I = any, O = any> extends $ implements U {
 
   public _opt: Opt
 
-  constructor({ i = [], o = [] }: ION, opt: Opt = {}, system: System = null) {
-    super(system)
+  constructor(
+    { i = [], o = [] }: ION,
+    opt: Opt = {},
+    system: System,
+    pod: Pod
+  ) {
+    super(system, pod)
 
     const { input, output } = opt
 
-    const inputMap = toPinMap<I[keyof I]>(i)
-    const outputMap = toPinMap<O[keyof O]>(o)
+    const inputMap = toPinMap<I>(i)
+    const outputMap = toPinMap<O>(o)
 
     this.setInputs(inputMap, input)
     this.setOutputs(outputMap, output)
@@ -121,7 +136,7 @@ export class Unit<I = any, O = any> extends $ implements U {
     return ignored
   }
 
-  public setParent(parent: U | null) {
+  public setParent(parent: Unit | null) {
     this.$parent = parent
     this.emit('parent', this.$parent)
   }
@@ -240,17 +255,9 @@ export class Unit<I = any, O = any> extends $ implements U {
     }
   }
 
-  public swapPin(type: IO, name: string, pin: Pin<any>) {
-    if (type === 'input') {
-      this.swapInput(name, pin)
-    } else {
-      this.swapOutput(name, pin)
-    }
-  }
-
-  public setInput(
+  public setInput<K extends keyof I>(
     name: string,
-    input: Pin<I[keyof I]>,
+    input: Pin<I[K]>,
     opt: PinOpt = DEFAULT_PIN_OPT
   ) {
     this._setInput(name, input, opt)
@@ -258,39 +265,9 @@ export class Unit<I = any, O = any> extends $ implements U {
     this.emit('set_input', name, input, opt)
   }
 
-  public swapInput(name: string, input: Pin<I[keyof I]>) {
-    this._swapInput(name, input)
-
-    this.emit('set_input', name, input)
-  }
-
-  public _setInput(
-    name: string,
-    input: PinOf<I>,
-    opt: PinOpt = DEFAULT_PIN_OPT
-  ) {
-    if (this.hasInputNamed(name)) {
-      this.removeInput(name)
-    }
-
-    this._i_count++
-    this._i_name_set.add(name)
-    this._input[name] = input
-
-    this._i_opt[name] = opt
-
-    const { ref } = opt
-
-    if (ref) {
-      this._memAddRefInput(name, input)
-    } else {
-      this._memAddDataInput(name, input)
-    }
-  }
-
-  public _swapInput(
-    name: string,
-    input: PinOf<I>,
+  public _setInput<K extends keyof I>(
+    name: K,
+    input: Pin<I[K]>,
     opt: PinOpt = DEFAULT_PIN_OPT
   ) {
     if (this.hasInputNamed(name)) {
@@ -401,9 +378,9 @@ export class Unit<I = any, O = any> extends $ implements U {
     }
   }
 
-  public setOutput(
-    name: string,
-    output: Pin<any>,
+  public setOutput<K extends keyof O>(
+    name: K,
+    output: Pin<O[K]>,
     opt: PinOpt = DEFAULT_PIN_OPT
   ) {
     this._setOutput(name, output, opt)
@@ -411,15 +388,9 @@ export class Unit<I = any, O = any> extends $ implements U {
     this.emit('set_output', name, output, opt)
   }
 
-  public swapOutput(name: string, output: Pin<any>) {
-    this._swapOutput(name, output)
-
-    this.emit('swap_output', name, output)
-  }
-
-  public _setOutput(
-    name: string,
-    output: Pin<any>,
+  public _setOutput<K extends keyof O>(
+    name: K,
+    output: Pin<O[K]>,
     opt: PinOpt = DEFAULT_PIN_OPT
   ) {
     if (this.hasOutputNamed(name)) {
@@ -434,31 +405,6 @@ export class Unit<I = any, O = any> extends $ implements U {
     this._o_name_set.add(name)
 
     this._o_opt[name] = opt
-
-    const { ref } = opt
-
-    if (ref) {
-      this._memAddRefOutput(name, output)
-    } else {
-      this._memAddDataOutput(name, output)
-    }
-
-    this._output[name] = output
-  }
-
-  public _swapOutput(name: string, output: Pin<any>) {
-    if (this.hasOutputNamed(name)) {
-      this.removeOutput(name)
-    }
-
-    if (name === SELF) {
-      this._selfPin = output
-    }
-
-    this._o_count++
-    this._o_name_set.add(name)
-
-    const opt = this._o_opt[name]
 
     const { ref } = opt
 
@@ -565,7 +511,7 @@ export class Unit<I = any, O = any> extends $ implements U {
     }
   }
 
-  public getInputs(): Pins<Partial<I>> {
+  public getInputs(): Pins<I> {
     return this._input
   }
 
@@ -582,7 +528,7 @@ export class Unit<I = any, O = any> extends $ implements U {
     return this._input[name]
   }
 
-  public getOutputs(): Pins<Partial<O>> {
+  public getOutputs(): Pins<O> {
     return this._output
   }
 
@@ -701,7 +647,7 @@ export class Unit<I = any, O = any> extends $ implements U {
     }
   }
 
-  public renameInput(name: string, newName: string): void {
+  public renameInput(name: keyof I, newName: keyof I): void {
     if (!this.hasInputNamed(name)) {
       throw new InputNotFoundError(name)
     }
@@ -737,7 +683,7 @@ export class Unit<I = any, O = any> extends $ implements U {
     this.emit('rename_input', name, newName)
   }
 
-  public renameOutput(name: string, newName: string): void {
+  public renameOutput(name: keyof O, newName: keyof O): void {
     if (!this.hasOutputNamed(name)) {
       throw new InputNotFoundError(name)
     }
@@ -803,7 +749,12 @@ export class Unit<I = any, O = any> extends $ implements U {
 
   public setPinData(type: IO, pinId: string, data: any): void {
     const pin = this.getPin(type, pinId)
-    pin.push(data)
+    // AD HOC
+    try {
+      pin.push(data)
+    } catch (err) {
+      this.err(err.message.toLowerCase())
+    }
   }
 
   public removePinData(type: IO, pinId: string): void {
@@ -860,11 +811,13 @@ export class Unit<I = any, O = any> extends $ implements U {
     }
 
     const _all_done = () => {
+      const caughtErr = this._caughtErr
+
       this._caughtErr = null
       this._catcherDoneCount = 0
       this._catcherDone.fill(false)
 
-      this.emit('take_caught_err')
+      this.emit('take_caught_err', caughtErr)
     }
 
     const unlisten = () => {
@@ -883,7 +836,7 @@ export class Unit<I = any, O = any> extends $ implements U {
           if (err !== null) {
             this._caughtErr = null
             this.err(err)
-            this.emit('take_caught_err')
+            this.emit('take_caught_err', err)
           }
         }
 

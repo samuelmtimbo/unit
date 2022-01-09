@@ -1,4 +1,5 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -13,14 +14,15 @@ export interface I<T> {
 export interface O<T> {}
 
 export default class Bot<T> extends Element<I<T>, O<T>> {
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['style', 'disabled', 'r', 'x', 'y'],
         o: [],
       },
       {},
-      system
+      system,
+      pod
     )
   }
 }

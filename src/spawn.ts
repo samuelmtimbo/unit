@@ -1,42 +1,44 @@
-import { Graph } from './Class/Graph/index'
-import { getGlobalRef } from './global'
-import { C } from './interface/C'
-import { G } from './interface/G'
-import { PO } from './interface/PO'
-import { U } from './interface/U'
+import { Graph } from './Class/Graph'
+import { newSpecId } from './client/spec'
+import { Pod } from './pod'
 import { System } from './system'
 import { BundleSpec } from './system/platform/method/process/BundleSpec'
-import { GraphSpecs } from './types/index'
-import { randomId } from './util/id'
+import { Dict } from './types/Dict'
 
-export function spawn(system: System, bundle: BundleSpec): PO {
+export function spawn(system: System): Pod {
+  const { pods } = system
+
+  const pod: Pod = {
+    api: new Set(),
+    units: {},
+    specs: {},
+    graphs: {},
+  }
+
+  pods.push(pod)
+
+  return pod
+}
+
+export function start(
+  system: System,
+  pod: Pod,
+  bundle: BundleSpec
+): [Dict<string>, Graph] {
   const { spec, specs } = bundle
 
-  const graph = new Graph(spec, {}, system)
+  const spec_id_map = {}
+
+  for (const spec_id in specs) {
+    if (pod.specs[spec_id]) {
+      const new_spec_id = newSpecId(pod.specs)
+      spec_id_map[spec_id] = new_spec_id
+    }
+  }
+
+  const graph = new Graph(spec, {}, system, pod)
 
   graph.play()
 
-  const $pod: PO = {
-    refUnit(id: string): U {
-      const unit = getGlobalRef(system, id)
-
-      const _unit = unit.connect({}, new Set())
-
-      return _unit
-    },
-
-    refGraph(id: string): U & C & G {
-      return graph
-    },
-
-    getSpecs(): GraphSpecs {
-      return specs // TODO
-    },
-
-    addGraph(): string {
-      return randomId() // TODO
-    },
-  }
-
-  return $pod
+  return [spec_id_map, graph]
 }

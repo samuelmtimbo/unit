@@ -1,10 +1,10 @@
 import { Moment } from '../debug/Moment'
 import { PinDataMoment } from '../debug/PinDataMoment'
 import { $Element } from '../interface/async/$Element'
-import NOOP from '../NOOP'
-import { Unlisten } from '../Unlisten'
+import { NOOP } from '../NOOP'
+import { GlobalRefSpec } from '../types/GlobalRefSpec'
+import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
-import { IOElement } from './IOElement'
 import { makeChangeListener } from './event/change'
 import { makeCustomListener } from './event/custom'
 import { makeInputListener } from './event/input'
@@ -20,8 +20,8 @@ import { makePointerEnterListener } from './event/pointer/pointerenter'
 import { makePointerLeaveListener } from './event/pointer/pointerleave'
 import { makePointerMoveListener } from './event/pointer/pointermove'
 import { makePointerUpListener } from './event/pointer/pointerup'
+import { IOElement } from './IOElement'
 import { Listener } from './Listener'
-import { GlobalRefSpec } from '../types/GlobalRefSpec'
 
 export function findRef(component: Component, name: string): Component | null {
   let c: Component | null = component
@@ -102,7 +102,7 @@ export class Element<
   }
 
   onDisconnected() {
-    console.log('Element', 'onDisconnected')
+    // console.log('Element', 'onDisconnected')
     this._element_unlisten()
   }
 

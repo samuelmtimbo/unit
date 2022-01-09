@@ -2,7 +2,7 @@ import * as assert from 'assert'
 import { watchUnitAndLog } from '../../debug'
 import { lazyFromSpec } from '../../spec/Lazy'
 import _specs from '../../system/_specs'
-import { system } from '../util/system'
+import { pod, system } from '../util/system'
 
 const LazyRange = lazyFromSpec(
   _specs['29e43ad7-be5e-437f-8f0f-2df996c8b89c'],
@@ -10,7 +10,7 @@ const LazyRange = lazyFromSpec(
   {}
 )
 
-const lazyRange = new LazyRange(system)
+const lazyRange = new LazyRange(system, pod)
 
 lazyRange.play()
 
