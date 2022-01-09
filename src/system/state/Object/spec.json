@@ -10,16 +10,10 @@
       "defaultIgnored": true
     }
   },
-  "outputs": {
-    "obj": {
-      "_type": "<T>['S',N]",
-      "type": "`V`&`J`",
-      "ref": true
-    }
-  },
+  "outputs": {},
   "metadata": {
     "icon": "object-get",
-    "description": "object reference",
+    "description": "new object",
     "complexity": 2.8382410169931247,
     "tags": [
       "state"
@@ -27,6 +21,7 @@
   },
   "id": "c899b675-c3c4-428e-b548-b228305c0302",
   "base": true,
-  "type": "`U`",
+  "_type": "<T>['S',N]",
+  "type": "`U`&`V`&`J`",
   "system": true
 }

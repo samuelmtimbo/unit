@@ -1,27 +1,29 @@
-import { EventEmitter_ } from '../EventEmitter'
+import { EventEmitter, EventEmitter_EE } from '../EventEmitter'
 import { deleteGlobalRef, setGlobalRef } from '../global'
-import { $_ } from '../interface/$_'
-import { PO } from '../interface/PO'
+import { Pod } from '../pod'
 import { System } from '../system'
-import { Unlisten } from '../Unlisten'
-import { Dict } from './../types/Dict'
+import { Dict } from '../types/Dict'
 
-export class $ extends EventEmitter_ implements $_ {
+export type $_EE = { destroy: [] }
+
+export type $Events<_EE extends Dict<any[]>> = EventEmitter_EE<_EE & $_EE> &
+  $_EE
+
+export class $<
+  _EE extends $Events<_EE> & Dict<any[]> = $Events<$_EE>
+> extends EventEmitter<_EE> {
   public __: string[] = []
-  public __id: string
-
-  public __pod: PO | null = null
-  public __system: System | null = null
+  public __pod: Pod
+  public __system: System
   public __global_id: string
 
-  constructor(__system: System = null) {
+  constructor(system: System, pod: Pod) {
     super()
 
-    this.__system = __system
+    this.__system = system
+    this.__pod = pod
 
-    if (this.__system) {
-      this.__global_id = setGlobalRef(this.__system, this)
-    }
+    this.__global_id = setGlobalRef(this.__system, this)
   }
 
   getGlobalId(): string {
@@ -36,40 +38,12 @@ export class $ extends EventEmitter_ implements $_ {
     return this.__system
   }
 
-  refPod(): PO {
+  refPod(): Pod {
     return this.__pod
   }
 
-  attach(__system: System): void {
-    // console.log('$', 'attach', __system, $pod)
-
-    if (__system === this.__system) {
-      return
-    }
-
-    this.__system = __system
-
-    this.__global_id = setGlobalRef(this.__system, this)
-
-    this.emit('_attach', __system)
-  }
-
-  dettach(): void {
-    if (this.__system) {
-      deleteGlobalRef(this.__system, this.__global_id)
-      this.__global_id = undefined
-    }
-
-    this.__system = null
-    this.__pod = null
-
-    this.emit('_dettach')
-  }
-
   destroy() {
-    if (this.__system) {
-      deleteGlobalRef(this.__system, this.__global_id)
-    }
+    deleteGlobalRef(this.__system, this.__global_id)
 
     this.emit('destroy')
   }

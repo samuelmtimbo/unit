@@ -1,6 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { callMethod } from '../../../../../client/extension'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export type VisitItem = {
   id: string
@@ -30,11 +32,16 @@ export interface O {
 }
 
 export default class GetVisits extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['url'],
-      o: ['visits'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['url'],
+        o: ['visits'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ url }: I, done: Done<O>) {

@@ -1,7 +1,8 @@
 import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/parentElement'
-import { NONE } from '../../../../../client/theme'
+import { COLOR_NONE } from '../../../../../client/theme'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import TextInput from '../../value/TextInput/Component'
@@ -23,7 +24,7 @@ const DEFAULT_STYLE = {
   borderTopWidth: '0',
   borderTopStyle: 'solid',
   borderTopColor: 'currentColor',
-  backgroundColor: NONE,
+  backgroundColor: COLOR_NONE,
   borderRadius: '3px 3px 0 0',
   fontSize: '16px',
   textAlign: 'center',
@@ -32,8 +33,8 @@ const DEFAULT_STYLE = {
 export default class SearchInput extends Element<HTMLDivElement, Props> {
   public _input: TextInput
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style, disabled } = this.$props
 
@@ -48,7 +49,8 @@ export default class SearchInput extends Element<HTMLDivElement, Props> {
         disabled,
         tabIndex: -1,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._input = input
 

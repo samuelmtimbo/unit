@@ -1,4 +1,5 @@
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 
 export interface Props {
@@ -8,12 +9,12 @@ export interface Props {
 export default class _Text extends Element<any, Props> {
   private _text_el: Text
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     let { value = '' } = $props
 
-    const text_node = document.createTextNode(value)
+    const text_node = this.$system.api.document.createTextNode(value)
 
     this._text_el = text_node
 

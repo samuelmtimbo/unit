@@ -1,5 +1,5 @@
-import { CLASS_TYPE_BLUETOOTH_CHARACTERISTIC } from '../class'
 import { Pin } from '../Pin'
+import { Pod } from '../pod'
 import { Primitive } from '../Primitive'
 import { System } from '../system'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
@@ -16,8 +16,8 @@ export interface O<T> {
 export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   private _current: string | undefined = undefined
 
-  constructor(system: System = null) {
-    super({}, {}, system)
+  constructor(system: System, pod: Pod) {
+    super({}, {}, system, pod)
 
     this.addListener('reset', this._reset)
     this.addListener('play', this._play)

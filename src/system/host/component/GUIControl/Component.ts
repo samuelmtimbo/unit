@@ -1,10 +1,9 @@
-import callAll from '../../../../callAll'
 import { addListeners } from '../../../../client/addListener'
 import {
   ANIMATION_T_MS,
   ANIMATION_T_S,
   linearTransition,
-} from '../../../../client/animation'
+} from '../../../../client/animation/animation'
 import { Component } from '../../../../client/component'
 import mergeStyle from '../../../../client/component/mergeStyle'
 import { makeCustomListener } from '../../../../client/event/custom'
@@ -16,12 +15,18 @@ import { makePointerUpListener } from '../../../../client/event/pointer/pointeru
 import { makeResizeListener } from '../../../../client/event/resize'
 import { MAX_Z_INDEX } from '../../../../client/MAX_Z_INDEX'
 import parentElement from '../../../../client/parentElement'
-import { userSelect } from '../../../../client/style/userSelect'
-import { NONE, setAlpha, themeBackgroundColor } from '../../../../client/theme'
+import {
+  COLOR_NONE,
+  setAlpha,
+  themeBackgroundColor,
+} from '../../../../client/theme'
+import { userSelect } from '../../../../client/util/style/userSelect'
 import { DIM_OPACITY, whenInteracted } from '../../../../client/whenInteracted'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { Unlisten } from '../../../../Unlisten'
+import { Unlisten } from '../../../../types/Unlisten'
+import callAll from '../../../../util/call/callAll'
 import { uuid } from '../../../../util/id'
 import clamp from '../../../core/relation/Clamp/f'
 import Div from '../../../platform/component/Div/Component'
@@ -61,8 +66,8 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
   private _y: number
   private _collapsed: boolean
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { icon, width = 100, height = 100, style = {} } = this.$props
 
@@ -101,7 +106,7 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
           boxSizing: 'content-box',
           borderWidth: '1px',
           borderStyle: 'solid',
-          borderColor: this._collapsed ? 'currentColor' : NONE,
+          borderColor: this._collapsed ? 'currentColor' : COLOR_NONE,
           transition: `opacity ${ANIMATION_T_S}s linear`,
           zIndex: `${this._z_index}`,
           opacity: this._collapsed ? `${DIM_OPACITY}` : '0',
@@ -110,7 +115,8 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const collapse = () => {
@@ -200,9 +206,9 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
         top: `${this._y}px`,
         width: `${width}px`,
         height: `${height}px`,
-        borderColor: NONE,
+        borderColor: COLOR_NONE,
         // borderRadius: '3px',
-        backgroundColor: NONE,
+        backgroundColor: COLOR_NONE,
         transition: `opacity ${ANIMATION_T_S}s linear, left ${ANIMATION_T_S}s linear, top ${ANIMATION_T_S}s linear, width ${ANIMATION_T_S}s linear, height ${ANIMATION_T_S}s linear, border-color ${ANIMATION_T_S}s linear, border-radius ${ANIMATION_T_S}s linear, background-color ${ANIMATION_T_S}s linear`,
       })
 
@@ -371,14 +377,15 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
           transformOrigin: 'top left',
           borderWidth: '0px',
           borderStyle: 'solid',
-          borderColor: NONE,
+          borderColor: COLOR_NONE,
           width: `${width}px`,
           height: `${height}px`,
           opacity: this._collapsed ? '0' : '1',
           transition: `transform ${ANIMATION_T_S}s linear, opacity ${ANIMATION_T_S}s linear`,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     let _iounapp_control_in_count = 0
     container.addEventListeners([
@@ -409,16 +416,15 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
           pointerEvents: this._collapsed ? 'auto' : 'none',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
-
     _icon.addEventListener(
       makeClickListener({
         onClick: uncollapse,
       })
     )
-    // @ts-ignore
-    _icon.$element.__DROP__TARGET__ = true
+    _icon.$element.setAttribute('dropTarget', 'true')
 
     const button = new Div(
       {
@@ -429,7 +435,7 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
             : `-${BUTTON_HEIGHT}px`,
           left: '50%',
           height: `${BUTTON_HEIGHT}px`,
-          backgroundColor: NONE,
+          backgroundColor: COLOR_NONE,
           width: '48px',
           cursor: 'pointer',
           willChange: 'bottom',
@@ -439,12 +445,12 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
           touchAction: 'none',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     button.preventDefault('mousedown')
     button.preventDefault('touchdown')
-    // @ts-ignore
-    button.$element.__DROP__TARGET__ = true
+    button.$element.setAttribute('dropTarget', 'true')
 
     if (this._collapsed) {
       unlisten_pointer = listen_pointer(root)
@@ -467,7 +473,8 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
           ...userSelect('none'),
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const $element = parentElement()
@@ -507,7 +514,7 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
         // borderRadius: this._collapsed ? '50%' : '3px',
         borderWidth: '1px',
         borderStyle: 'solid',
-        borderColor: this._collapsed ? 'currentColor' : NONE,
+        borderColor: this._collapsed ? 'currentColor' : COLOR_NONE,
         transition: `opacity ${ANIMATION_T_S}s linear`,
         zIndex: `${this._z_index}`,
         opacity: this._collapsed ? `${DIM_OPACITY}` : '0',
@@ -532,7 +539,7 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
       })
     } else {
       mergeStyle(this._root, {
-        backgroundColor: NONE,
+        backgroundColor: COLOR_NONE,
       })
     }
   }

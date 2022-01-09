@@ -1,6 +1,7 @@
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -18,8 +19,8 @@ export interface Props {
 export default class SVGMarker extends Element<SVGMarkerElement, Props> {
   private _marker_el: SVGMarkerElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       id,
@@ -32,7 +33,10 @@ export default class SVGMarker extends Element<SVGMarkerElement, Props> {
       orient,
     } = this.$props
 
-    const marker_el = document.createElementNS(namespaceURI, 'marker')
+    const marker_el = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'marker'
+    )
     applyStyle(marker_el, style)
     if (id !== undefined) {
       marker_el.id = id

@@ -1,4 +1,4 @@
-import { Callback } from '../../Callback'
+import { Callback } from '../../types/Callback'
 import { J } from '../J'
 import { $J, $J_C, $J_R, $J_W } from './$J'
 

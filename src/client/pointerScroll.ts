@@ -1,4 +1,4 @@
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
 import { IOPointerEvent } from './event/pointer'
 import { makePointerDownListener } from './event/pointer/pointerdown'

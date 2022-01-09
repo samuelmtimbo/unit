@@ -1,4 +1,4 @@
-import { EventEmitter_ } from '../EventEmitter'
+import { EventEmitter } from '../EventEmitter'
 import { emptyGraphSpec } from '../spec/emptySpec'
 import {
   ComponentSpec,
@@ -10,9 +10,9 @@ import {
   Specs,
 } from '../types'
 import { Dict } from '../types/Dict'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
 import { uuidNotIn } from '../util/id'
-import { clone, isEmptyObject, isNotEmptyObject } from '../util/object'
+import { clone, isNotEmptyObject } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
 
 export function getSpec(specs: Specs, id: string): Spec {
@@ -69,7 +69,7 @@ export function emptySpec(init: Partial<GraphSpec> = {}): GraphSpec {
   return newSpec
 }
 
-export const EMITTER = new EventEmitter_()
+export const EMITTER = new EventEmitter()
 
 export function setSpec(specs: Specs, id: string, spec: GraphSpec): void {
   // console.log('setSpec', id, spec)

@@ -1,9 +1,10 @@
 import { J } from '../../../interface/J'
+import { ObjectUpdateType } from '../../../Object'
 import { Dict } from '../../../types/Dict'
+import { Unlisten } from '../../../types/Unlisten'
 
 const _storage: Dict<string> = {}
 
-// TODO
 export const $tabStorage: J = {
   get: function (name: string): Promise<any> {
     throw new Error('Function not implemented.')
@@ -25,15 +26,28 @@ export const $tabStorage: J = {
     throw new Error('Function not implemented.')
   },
 
-  setPath: function (path: string[], name: string, data: any): Promise<void> {
+  pathSet: function (path: string[], name: string, data: any): Promise<void> {
     throw new Error('Function not implemented.')
   },
 
-  getPath: function (path: string[], name: string): Promise<any> {
+  pathGet: function (path: string[], name: string): Promise<any> {
     throw new Error('Function not implemented.')
   },
 
-  deletePath: function (path: string[], name: string): Promise<void> {
+  pathDelete: function (path: string[], name: string): Promise<void> {
+    throw new Error('Function not implemented.')
+  },
+
+  subscribe: function (
+    path: string[],
+    key: string,
+    listener: (
+      type: ObjectUpdateType,
+      path: string[],
+      key: string,
+      data: any
+    ) => void
+  ): Unlisten {
     throw new Error('Function not implemented.')
   },
 }

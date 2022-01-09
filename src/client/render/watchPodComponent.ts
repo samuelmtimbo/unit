@@ -1,17 +1,19 @@
-import callAll from '../../callAll'
 import { Moment } from '../../debug/Moment'
 import { GraphSpecComponentAppendMomentData } from '../../debug/watchGraphUnitComponentAppendEvent'
 import { GraphSpecComponentRemoveMomentData } from '../../debug/watchGraphUnitComponentRemoveEvent'
 import { $Graph } from '../../interface/async/$Graph'
+import { Pod } from '../../pod'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
-import { Unlisten } from '../../Unlisten'
+import { Unlisten } from '../../types/Unlisten'
+import callAll from '../../util/call/callAll'
 import { Component } from '../component'
-import { component_ } from '../component_'
 import { componentFromUnitSpec } from '../componentFromUnitSpec'
+import { component_ } from '../component_'
 
 export function watchPodComponent(
   system: System,
+  pod: Pod,
   $graph: $Graph,
   component: Component
 ): Unlisten {
@@ -40,6 +42,7 @@ export function watchPodComponent(
     const sub_component_pod = $graph.$refSubComponent({ unitId, _ })
     const sub_component_unlisten = watchPodComponent(
       system,
+      pod,
       sub_component_pod as $Graph,
       sub_component
     )
@@ -61,7 +64,7 @@ export function watchPodComponent(
       const handler = {
         component_append: (data: GraphSpecComponentAppendMomentData) => {
           const { unitId, unitSpec } = data
-          const sub_component = componentFromUnitSpec(system, unitSpec)
+          const sub_component = componentFromUnitSpec(system, pod, unitSpec)
           component.setSubComponent(unitId, sub_component)
           component.appendRoot(sub_component)
           listen_sub_component(unitId, sub_component)

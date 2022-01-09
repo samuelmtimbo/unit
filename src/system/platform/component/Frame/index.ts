@@ -1,5 +1,7 @@
-import { Element } from '../../../../Class/Element/Element'
+import { Element } from '../../../../Class/Element'
 import { CA } from '../../../../interface/CA'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
 export interface I {
@@ -11,10 +13,15 @@ export interface O {
 }
 
 export default class FrameElement extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['style'],
-      o: ['board'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['style'],
+        o: ['board'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 }

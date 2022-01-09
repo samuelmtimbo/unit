@@ -1,23 +1,17 @@
-import { Callback } from '../../../../../Callback'
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import {
+  Semifunctional,
+  SemifunctionalEvents,
+} from '../../../../../Class/Semifunctional'
 import { CH } from '../../../../../interface/CH'
 import { RE } from '../../../../../interface/RE'
+import { Pod } from '../../../../../pod'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
-import { Unlisten } from '../../../../../Unlisten'
-
-export interface IChannel {
-  postMessage(message: any): void
-  addListener(event: string, listener: Callback): Unlisten
-  close(): void
-}
-
-export interface IChannelOpt {
-  channel: string
-}
+import { IChannel } from '../../../../../types/global/IChannel'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I<T> {
   channel: string
@@ -28,13 +22,18 @@ export interface O<T> {
   port: CH
 }
 
+export type LocalChannel_EE = { message: [any] }
+
+export type LocalChannelEvents = SemifunctionalEvents<LocalChannel_EE> &
+  LocalChannel_EE
+
 export default class LocalChannel<T>
   extends Semifunctional<I<T>, O<T>>
   implements RE
 {
   private _bc: IChannel | null = null
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['channel'],
@@ -48,7 +47,9 @@ export default class LocalChannel<T>
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 
@@ -62,11 +63,11 @@ export default class LocalChannel<T>
     this._bc = local({ channel })
     const bc = this._bc
 
-    const port = new (class Port extends $ implements CH {
+    const port = new (class Port extends $<LocalChannelEvents> implements CH {
       private _unlisten: Unlisten
 
-      constructor(system: System) {
-        super(system)
+      constructor(system: System, pod: Pod) {
+        super(system, pod)
 
         this._unlisten = bc.addListener('message', (event: MessageEvent) => {
           const { specs, classes } = this.__system
@@ -93,7 +94,7 @@ export default class LocalChannel<T>
 
         return
       }
-    })(this.__system)
+    })(this.__system, this.__pod)
 
     done({ port })
   }

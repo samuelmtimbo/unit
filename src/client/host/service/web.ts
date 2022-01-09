@@ -1,7 +1,7 @@
 import { SharedObject } from '../../../SharedObject'
 import { GraphUnitSpec } from '../../../types'
 import { Dict } from '../../../types/Dict'
-import { Store } from '../../host'
+import { Store } from '../../store'
 import { createServiceStore } from '../store'
 
 export type ContainerTypeSpec = 'computer' | 'mobile' | 'cloud'
@@ -20,7 +20,9 @@ export type WebSpec = {
 
 export type WebSpecState = 'idle' | 'deploying' | 'deployed'
 
-export let store: Dict<SharedObject<Store<any>>>
+export let store: Dict<
+  SharedObject<Store<any>, { [K in keyof Store<any>]: any[] }>
+>
 
 export const connect = () => {
   if (!store) {

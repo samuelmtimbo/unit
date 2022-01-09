@@ -1,15 +1,15 @@
 import { AsyncWorkerGraph } from './AsyncWorker'
-import { Callback } from './Callback'
 import { $ } from './Class/$'
-import { Component } from './client/component'
 import { $Child } from './component/Child'
 import { $Children } from './component/Children'
 import { $Component } from './interface/async/$Component'
 import { $Graph } from './interface/async/$Graph'
 import { $PO } from './interface/async/$PO'
 import { $U } from './interface/async/$U'
+import { Pod } from './pod'
 import { RemotePort } from './RemotePort'
 import { State } from './State'
+import { System } from './system'
 import {
   GraphExposedPinSpec,
   GraphExposedSubPinSpec,
@@ -19,11 +19,16 @@ import {
   GraphUnitSpec,
   GraphUnitsSpec,
 } from './types'
+import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { GlobalRefSpec } from './types/GlobalRefSpec'
-import { Unlisten } from './Unlisten'
+import { Unlisten } from './types/Unlisten'
 
-export function graphFromPort(port: RemotePort): $Graph {
+export function graphFromPort(
+  system: System,
+  pod: Pod,
+  port: RemotePort
+): $Graph {
   const $graph: $Graph = AsyncWorkerGraph(port)
 
   class AsyncGraph extends $ implements $Graph {
@@ -333,23 +338,28 @@ export function graphFromPort(port: RemotePort): $Graph {
       graphId: string
       nodeIds: {
         merge: string[]
-        linkPin: {
+        link: {
           unitId: string
           type: 'input' | 'output'
           pinId: string
-          mergeId: string
-          oppositePinId: string
         }[]
         unit: string[]
       }
       nextIdMap: {
         merge: Dict<string>
-        linkPin: Dict<string>
+        link: Dict<{
+          input: Dict<{ mergeId: string; oppositePinId: string }>
+          output: Dict<{ mergeId: string; oppositePinId: string }>
+        }>
         unit: Dict<string>
       }
       nextPinIdMap: Dict<{
         input: Dict<{ pinId: string; subPinId: string }>
         output: Dict<{ pinId: string; subPinId: string }>
+      }>
+      nextMergePinId: Dict<{
+        nextInputMergePinId: string
+        nextOutputMergePinId: string
       }>
       nextSubComponentParentMap: Dict<string | null>
       nextSubComponentChildrenMap: Dict<string[]>
@@ -378,7 +388,12 @@ export function graphFromPort(port: RemotePort): $Graph {
     $moveMergePinInto(data: {
       graphId: string
       mergeId: string
-      nextMergeId: string
+      nextInputMergeId: string | null
+      nextOutputMergeId: string | null
+      nextPinIdMap: Dict<{
+        input: Dict<{ pinId: string; subPinId: string }>
+        output: Dict<{ pinId: string; subPinId: string }>
+      }>
     }): void {
       return $graph.$moveMergePinInto(data)
     }
@@ -501,7 +516,7 @@ export function graphFromPort(port: RemotePort): $Graph {
     }
   }
 
-  const $$graph = new AsyncGraph()
+  const $$graph = new AsyncGraph(system, pod)
 
   return $$graph
 }

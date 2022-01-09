@@ -1,20 +1,21 @@
 import classnames from '../../../../../client/classnames'
 import {
-  CONTAINER_COLUMN_LEFT_MARGIN,
-  CONTAINER_ROW_MARGIN,
-  CONTAINER_COLUMN_RIGHT_MARGIN,
   childrenOverflow,
+  CONTAINER_COLUMN_LEFT_MARGIN,
+  CONTAINER_COLUMN_RIGHT_MARGIN,
+  CONTAINER_ROW_MARGIN,
 } from '../../../../../client/component/getDatumSize'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
-import parentElement from '../../../../../client/parentElement'
-import { NONE } from '../../../../../client/theme'
 import { Element } from '../../../../../client/element'
+import parentElement from '../../../../../client/parentElement'
+import { COLOR_NONE } from '../../../../../client/theme'
+import { Pod } from '../../../../../pod'
 import {
+  getTree,
+  isCompositeType,
   TreeNode,
   TreeNodeType,
   _isValidObjKey,
-  getTree,
-  isCompositeType,
 } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -98,8 +99,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
 
   private _leaf: DataTreeLeaf | null = null
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style } = $props
 
@@ -108,7 +109,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         className: classnames('root', className),
         style: { ...DEFAULT_STYLE, ...style },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._root = root
 
@@ -200,7 +202,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         parent: parent_data,
         appendChildren,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._child[index] = child
     return child
@@ -230,7 +233,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         className: 'object-literal-container',
         style: STYLE_CONTAINER(overflow),
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     for (let i = 0; i < data.children.length; i++) {
       const child = data.children[i]
@@ -281,7 +285,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         className: 'object-literal',
         style: { display: 'flex', width: 'fit-content' },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     object_literal_end.setChildren([
       object_literal_close_delimiter,
@@ -321,7 +326,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
           ...STYLE_CONTAINER(overflow),
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     for (let i = 0; i < data.children.length; i++) {
       const element = data.children[i]
@@ -348,7 +354,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
       {
         style: { display: 'flex', width: 'fit-content' },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     array_literal_end.setChildren([
       array_literal_close_delimiter,
@@ -383,7 +390,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
           ...STYLE_CONTAINER(overflow),
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     for (let i = 0; i < data.children.length; i++) {
       const element = data.children[i]
@@ -410,7 +418,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
       {
         style: { display: 'flex', width: 'fit-content' },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     expression_literal_end.setChildren([
       expression_close_delimiter,
@@ -440,7 +449,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         className: 'key-value-key',
         style: { display: 'flex', width: 'fit-content' },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     const key_value_key_tree = this._child_element(
       0,
@@ -476,7 +486,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         className: 'key-value-value',
         style: { display: 'flex', width: 'fit-content' },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     const key_value_value_tree = this._child_element(
       1,
@@ -515,14 +526,15 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
           fontWeight: 'inherit',
           wordWrap: 'normal',
           whiteSpace: 'nowrap',
-          background: NONE,
-          backgroundColor: NONE,
+          background: COLOR_NONE,
+          backgroundColor: COLOR_NONE,
         },
         value: data.value,
         path,
         parent,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const children: Element[] = [this._leaf, ...appendChildren]
@@ -546,7 +558,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
       {
         style: { display: 'flex', width: 'fit-content' },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     array_expression_open_close.setChildren([
       array_expression_open_delimiter,
@@ -581,7 +594,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
       {
         style: { display: 'flex', width: 'fit-content' },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     object_expression_open_close.setChildren([
       object_expression_open_delimiter,
@@ -649,7 +663,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         },
         innerText: ' ',
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
   }
 
@@ -661,7 +676,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         },
         innerText: ',',
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
   }
 
@@ -675,7 +691,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         },
         innerText,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
   }
 
@@ -689,7 +706,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         },
         innerText,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
   }
 

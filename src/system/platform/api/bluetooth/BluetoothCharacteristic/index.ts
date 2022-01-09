@@ -1,29 +1,40 @@
+import { $ } from '../../../../../Class/$'
+import { Functional, FunctionalEvents } from '../../../../../Class/Functional'
+import { Done } from '../../../../../Class/Functional/Done'
 import { BC } from '../../../../../interface/BC'
-import { V } from '../../../../../interface/V'
-import { ObjectWaiter } from '../../../../../ObjectWaiter'
-import { Primitive } from '../../../../../Primitive'
-import BluetoothService from '../BluetoothService'
+import { BSE } from '../../../../../interface/BSE'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
+import { IBluetoothCharacteristic } from '../../../../../types/global/IBluetoothCharacteristic'
 
 export interface I {
-  service: BluetoothService
+  service: BSE
   uuid: string
 }
 
-export interface O {}
+export interface O {
+  charac: BC
+}
 
-export default class BluetoothCharacteristic
-  extends Primitive<I, O>
-  implements V<string>, BC
-{
-  private _characteristic: any
+type BluetoothCharacteristic_EE = {
+  characteristicvaluechanged: [string, boolean]
+}
 
-  private _characteristic_waiter = new ObjectWaiter<any>()
+export type BluetoothCharacteristicEvents =
+  FunctionalEvents<BluetoothCharacteristic_EE> & BluetoothCharacteristic_EE
 
-  constructor() {
+export default class BluetoothCharacteristic extends Functional<
+  I,
+  O,
+  BluetoothCharacteristicEvents
+> {
+  private _charac: IBluetoothCharacteristic
+
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['service', 'uuid'],
-        o: [],
+        o: ['charac'],
       },
       {
         input: {
@@ -31,7 +42,14 @@ export default class BluetoothCharacteristic
             ref: true,
           },
         },
-      }
+        output: {
+          charac: {
+            ref: true,
+          },
+        },
+      },
+      system,
+      pod
     )
 
     this.addListener('listen', ({ event }: { event: string }) => {
@@ -47,37 +65,38 @@ export default class BluetoothCharacteristic
     })
   }
 
-  onRefInputData(name: string, data: any): void {
-    // if (name === 'service') {
-    if (this._input.service.active() && this._input.uuid.active()) {
-      this._setup()
-    }
-    this._setup()
-    // }
+  async f({ service, uuid }, done: Done<O>): Promise<void> {
+    const _charac = await service.getCharacteristic(uuid)
+
+    this._charac = _charac
+
+    const charac = new (class _BluetoothDevice extends $ implements BC {
+      async read(): Promise<any> {
+        const dataView = await _charac.readValue()
+        return dataView.getUint8(0).toString()
+      }
+
+      async write(data: any): Promise<void> {
+        const charCodeArray = data.split('').map((c) => c.charCodeAt(0))
+        const buffer = Uint8Array.from(charCodeArray)
+        await _charac.writeValue(buffer)
+        return
+      }
+    })(this.__system, this.__pod)
+
+    done({ charac })
   }
 
-  onRefInputDrop(name: string): void {
-    // if (name === 'service') {
-    this._characteristic_waiter.set(null)
-    // }
-  }
-
-  private _setup() {
-    const { service, uuid } = this._i
-
-    service.getCharacteristic(uuid, (characteristic) => {
-      this._characteristic_waiter.set(characteristic)
-    })
-  }
+  d() {}
 
   private _started: boolean = false
 
-  public async startNotifications() {
+  private async startNotifications() {
     if (this._started) {
       return
     }
 
-    const characteristic = await this._characteristic_waiter.once()
+    const characteristic = this._charac
 
     this._started = true
 
@@ -102,22 +121,6 @@ export default class BluetoothCharacteristic
 
     this._started = false
 
-    this._characteristic.stopNotifications()
-  }
-
-  public async write(data: string): Promise<void> {
-    if (this._characteristic) {
-      const charCodeArray = data.split('').map((c) => c.charCodeAt(0))
-      const buffer = Uint8Array.from(charCodeArray)
-      await this._characteristic.writeValue(buffer)
-      return
-    }
-  }
-
-  public async read(): Promise<string> {
-    if (this._characteristic) {
-      const dataView = await this._characteristic.readValue()
-      return dataView.getUint8(0).toString()
-    }
+    this._charac.stopNotifications()
   }
 }

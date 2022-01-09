@@ -3,7 +3,7 @@ import { UNTITLED } from '../../constant/STRING'
 import { watchGraphAndLog } from '../../debug'
 import { fromSpec } from '../../spec/fromSpec'
 import _specs from '../../system/_specs'
-import { system } from '../util/system'
+import { pod, system } from '../util/system'
 
 const Class = fromSpec(
   {
@@ -28,7 +28,7 @@ const Class = fromSpec(
   _specs
 )
 
-const composition = new Class(system)
+const composition = new Class(system, pod)
 
 composition.play()
 

@@ -11,32 +11,33 @@ import { makeClickListener } from '../../../../../../client/event/pointer/click'
 import { makePointerCancelListener } from '../../../../../../client/event/pointer/pointercancel'
 import { makePointerEnterListener } from '../../../../../../client/event/pointer/pointerenter'
 import { makePointerLeaveListener } from '../../../../../../client/event/pointer/pointerleave'
-import { Store } from '../../../../../../client/host'
 import { store as STORE } from '../../../../../../client/host/service/graph'
 import { SOCKET_CLOUD_EMITTER } from '../../../../../../client/host/socket'
 import { DEFAULT_SERVICE_STORE_TYPES } from '../../../../../../client/host/store'
 import { MAX_Z_INDEX } from '../../../../../../client/MAX_Z_INDEX'
 import { Mode } from '../../../../../../client/mode'
 import parentElement from '../../../../../../client/parentElement'
-import { userSelect } from '../../../../../../client/style/userSelect'
+import { Store } from '../../../../../../client/store'
 import { getThemeModeColor } from '../../../../../../client/theme'
+import { userSelect } from '../../../../../../client/util/style/userSelect'
+import { Pod } from '../../../../../../pod'
 import { SharedObjectClient } from '../../../../../../SharedObject'
 import { emptyBundleSpec } from '../../../../../../spec/emptyBundleSpec'
 import { emptyGraphSpec } from '../../../../../../spec/emptySpec'
+import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
-import { Unlisten } from '../../../../../../Unlisten'
+import { Unlisten } from '../../../../../../types/Unlisten'
 import { uuid } from '../../../../../../util/id'
 import { clone } from '../../../../../../util/object'
 import { getTextWidth } from '../../../../../../util/text/getPlainTextWidth'
 import forEachKeyValue from '../../../../../core/object/ForEachKeyValue/f'
 import CloudTabs from '../../../../../host/component/IconTabs/Component'
+import { enable_mode_keyboard } from '../../../../component/app/graph/Graph/Component'
 import Minigraph from '../../../../component/app/Minigraph/Component'
 import Modes from '../../../../component/app/Modes/Component'
 import Div from '../../../../component/Div/Component'
-import { enable_mode_keyboard } from '../../../../component/app/graph/Graph/Component'
 import TextInput from '../../../../component/value/TextInput/Component'
 import { BundleSpec } from '../../../../method/process/BundleSpec'
-import { System } from '../../../../../../system'
 
 export interface Props {
   style?: Dict<string>
@@ -104,8 +105,8 @@ export default class GraphService extends Component<HTMLDivElement, Props> {
 
   private _unlisten_mode_keyboard: Unlisten | undefined = undefined
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style } = $props
 
@@ -116,7 +117,8 @@ export default class GraphService extends Component<HTMLDivElement, Props> {
         },
         tabIndex: 0,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._root = root
 
@@ -124,14 +126,14 @@ export default class GraphService extends Component<HTMLDivElement, Props> {
       {
         style,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._tabs = tabs
 
     TABS.forEach((tab) => {
       const list = tabs._list[tab]
-      // @ts-ignore
-      list.$element.__DROP__TARGET__ = true
+      list.$element.setAttribute('dropTarget', 'true')
       list.$element.addEventListener(
         '_dragenter',
         ({ detail: { pointerId } }: CustomEvent<PointerEvent>) => {
@@ -233,7 +235,9 @@ export default class GraphService extends Component<HTMLDivElement, Props> {
     }
   }
 
-  private _client: Dict<SharedObjectClient<Store<BundleSpec>>> = {}
+  private _client: Dict<
+    SharedObjectClient<Store<BundleSpec>, { reset; add; put; delete }>
+  > = {}
 
   private _render_spec_item = (
     tab: string,
@@ -253,7 +257,8 @@ export default class GraphService extends Component<HTMLDivElement, Props> {
         height: SPEC_ITEM_HEIGHT,
         bundle: bundle,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._spec_item_minigraph[tab][id] = spec_item_screen_minigraph
 
@@ -266,7 +271,8 @@ export default class GraphService extends Component<HTMLDivElement, Props> {
           justifyContent: 'center',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     spec_item_screen.appendChild(spec_item_screen_minigraph)
 
@@ -291,7 +297,8 @@ export default class GraphService extends Component<HTMLDivElement, Props> {
           ...userSelect('none'),
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     spec_item_name.addEventListeners([
       makeInputListener((value) => {
@@ -337,7 +344,8 @@ export default class GraphService extends Component<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     spec_item.appendChild(spec_item_screen)
     spec_item.appendChild(spec_item_name)

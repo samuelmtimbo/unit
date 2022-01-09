@@ -1,1 +1,3 @@
-export interface BC {}
+import { V } from './V'
+
+export interface BC extends V {}

@@ -2,14 +2,17 @@
   "name": "get",
   "inputs": {
     "obj": {
+      "_type": "T object",
       "type": "object"
     },
     "key": {
+      "_type": "K keyof T",
       "type": "number|string"
     }
   },
   "outputs": {
     "value": {
+      "_type": "T[K]",
       "type": "any"
     }
   },

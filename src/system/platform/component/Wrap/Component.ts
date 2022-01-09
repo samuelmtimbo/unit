@@ -1,10 +1,11 @@
 import { Component } from '../../../../client/component'
-import { component_ } from '../../../../client/component_'
 import { componentClassFromSpecId } from '../../../../client/componentClassFromSpecId'
+import { component_ } from '../../../../client/component_'
 import { parentClass } from '../../../../client/createParent'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/parentElement'
 import { $Wrap } from '../../../../interface/async/$Wrap'
+import { Pod } from '../../../../pod'
 import { ComponentClass, System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { UnitClass } from '../../../../types/UnitClass'
@@ -27,8 +28,8 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
   private _parent_container: Component[] = []
   private _parent_child_container: Component[] = []
 
-  constructor(props: {}, $system: System) {
-    super(props, $system)
+  constructor(props: {}, $system: System, $pod: Pod) {
+    super(props, $system, $pod)
 
     const $element = parentElement()
 
@@ -121,7 +122,7 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
   }
 
   private _connected_container = (at: number, method: string): Component => {
-    const container = new this._Component({}, this.$system)
+    const container = new this._Component({}, this.$system, this.$pod)
 
     const _ = component_(container)
 
@@ -429,11 +430,13 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
       let componentClass: ComponentClass
 
       if (current) {
-        const unitClass = current as UnitClass
+        const Class = current as UnitClass
 
-        const { __id } = unitClass
+        const { __bundle } = Class
 
-        componentClass = componentClassFromSpecId(this.$system, __id)
+        const { id } = __bundle.unit
+
+        componentClass = componentClassFromSpecId(this.$system, id)
       } else {
         componentClass = parentClass()
       }

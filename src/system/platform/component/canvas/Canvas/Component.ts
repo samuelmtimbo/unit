@@ -1,11 +1,11 @@
 import applyStyle from '../../../../../client/applyStyle'
-import { _replaceChild } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
-import { userSelect } from '../../../../../client/style/userSelect'
-import NOOP from '../../../../../NOOP'
+import { replaceChild } from '../../../../../client/util/replaceChild'
+import { userSelect } from '../../../../../client/util/style/userSelect'
+import { NOOP } from '../../../../../NOOP'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import IMedia from '../../../../../client/IMedia'
 
 export function clearCanvas(context: CanvasRenderingContext2D) {
   const transform = context.getTransform()
@@ -27,8 +27,6 @@ export interface Props {
 
 export const DEFAULT_STYLE: Dict<string> = {
   background: 'none',
-  width: 'fit-content',
-  height: 'fit-content',
   touchAction: 'none',
   display: 'block',
   imageResizing: 'pixelated',
@@ -48,8 +46,8 @@ export default class Canvas extends Element<HTMLCanvasElement, Props> {
 
   private _d: any[][] = []
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {} = $props
 
@@ -77,14 +75,14 @@ export default class Canvas extends Element<HTMLCanvasElement, Props> {
     this._context = context
 
     if (old_canvas_el) {
-      _replaceChild(old_canvas_el, canvas_el)
+      replaceChild(old_canvas_el, canvas_el)
     }
   }
 
   private _create_canvas = () => {
     const { style, width = 200, height = 200 } = this.$props
 
-    const canvas_el = document.createElement('canvas')
+    const canvas_el = this.$system.api.document.createElement('canvas')
     canvas_el.classList.add('canvas')
     canvas_el.width = width
     canvas_el.height = height
@@ -142,9 +140,16 @@ export default class Canvas extends Element<HTMLCanvasElement, Props> {
   }
 
   private _setup_canvas = (): void => {
+    const {
+      api: {
+        screen: { devicePixelRatio },
+      },
+    } = this.$system
+
     const { width = 200, height = 200 } = this.$props
+
     this._context.setTransform(1, 0, 0, 1, 0, 0)
-    const dpr = window.devicePixelRatio || 1
+    const dpr = devicePixelRatio || 1
     this._canvas_el.width = width * dpr
     this._canvas_el.height = height * dpr
     this._context.scale(1 / dpr, 1 / dpr)

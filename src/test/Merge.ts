@@ -2,8 +2,9 @@ import * as assert from 'assert'
 import Merge from '../Class/Merge'
 import { watchUnitAndLog } from '../debug'
 import { Pin } from '../Pin'
+import { pod, system } from './util/system'
 
-const merge0 = new Merge()
+const merge0 = new Merge(system, pod)
 
 merge0.play()
 
@@ -73,7 +74,7 @@ assert.equal(merge0.peakOutput('a'), 20)
 merge0.removeInput('d')
 assert.equal(merge0.peakOutput('a'), 20)
 
-const merge1 = new Merge()
+const merge1 = new Merge(system, pod)
 
 merge1.play()
 

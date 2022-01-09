@@ -1,5 +1,8 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
+import { IWakeLock, IWakeLockOpt } from '../../../../../types/global/IWakeLock'
 
 export interface I {
   lock: any
@@ -9,19 +12,24 @@ export interface I {
 export interface O {}
 
 export default class WakeLock extends Semifunctional<I, O> {
-  private _wake_lock: any
+  private _wake_lock: IWakeLock
 
-  constructor() {
-    super({
-      fi: ['lock'],
-      fo: [],
-      i: ['done'],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        fi: ['lock'],
+        fo: [],
+        i: ['done'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ lock }: I, done: Done<O>) {
-    this._lock()
+    this._lock({ type: 'screen' })
   }
 
   d() {
@@ -34,29 +42,16 @@ export default class WakeLock extends Semifunctional<I, O> {
     // }
   }
 
-  private _lock = (): void => {
+  private _lock = async (opt: IWakeLockOpt): Promise<void> => {
+    const {
+      api: {
+        screen: { requestWakeLock },
+      },
+    } = this.__system
     // console.log('WakeLock', '_lock')
-    if ('wakeLock' in navigator) {
-      // @ts-ignore
-      navigator.wakeLock
-        .request('screen')
-        .then((wake_lock) => {
-          // console.log('WakeLock', '_on_acquire')
-          wake_lock.addEventListener('done', this._on_release)
-          this._wake_lock = wake_lock
-        })
-        .catch((err) => {
-          // The Wake Lock request has failed - usually system related, such as battery.
-          if (
-            err.message ===
-            "Failed to execute 'request' on 'WakeLock': The requesting page is not visible"
-          ) {
-            this.err('page is not visible')
-          }
-        })
-    } else {
-      this.err('Wake Lock API not supported on this browser')
-    }
+    const wake_lock = await requestWakeLock(opt)
+    wake_lock.addListener('done', this._on_release)
+    this._wake_lock = wake_lock
   }
 
   private _release = (): void => {

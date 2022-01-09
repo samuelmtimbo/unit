@@ -1,4 +1,6 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
 export interface I {
@@ -10,10 +12,15 @@ export interface I {
 export interface O {}
 
 export default class SVGUse extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['href', 'class', 'style'],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['href', 'class', 'style'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
   }
 }

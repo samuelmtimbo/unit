@@ -1,6 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { C } from '../../../../../interface/C'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I {
   parent: C
@@ -10,7 +12,7 @@ export interface I {
 export interface O {}
 
 export default class RemoveChild extends Functional<I, O> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['parent', 'at'],
@@ -22,7 +24,9 @@ export default class RemoveChild extends Functional<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 

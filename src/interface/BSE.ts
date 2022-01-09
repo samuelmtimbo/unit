@@ -1,6 +1,5 @@
-import { Callback } from '../Callback'
-import { BC } from './BC'
+import { IBluetoothCharacteristic } from '../types/global/IBluetoothCharacteristic'
 
 export interface BSE {
-  getCharacteristic(name: string, callback: Callback<BC>): void
+  getCharacteristic(name: string): Promise<IBluetoothCharacteristic>
 }

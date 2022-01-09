@@ -1,30 +1,35 @@
-import callAll from '../callAll'
+import { Element } from '../Class/Element'
+import { Graph } from '../Class/Graph'
+import { Stateful } from '../Class/Stateful'
+import { Unit } from '../Class/Unit'
 import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
-import { U } from '../interface/U'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
+import callAll from '../util/call/callAll'
 import { Moment } from './Moment'
+import { watchGraphLeafSetEvent } from './watchGraphLeafSetEvent'
 import { watchDataInput } from './watchInput'
 import { watchDataOutput } from './watchOutput'
 import { watchRefInput } from './watchRefInput'
 import { watchRefOutput } from './watchRefOutput'
 import { watchUnitErr } from './watchUnitErr'
-import { watchUnitEvent } from './watchUnitEvent'
+import {
+  watchComponentAppendEvent,
+  watchComponentLeafAppendEvent,
+  watchComponentLeafRemoveEvent,
+  watchComponentRemoveEvent,
+  watchStatefulLeafSetEvent,
+} from './watchUnitEvent'
 import { watchUnitIOSpec } from './watchUnitIOSpec'
 import { watchUnitLeafEvent } from './watchUnitLeafEvent'
 import { watchUnitLeafExposedPinSetEvent } from './watchUnitLeafExposedPinSetEvent'
-import { watchUnitSetEvent } from './watchUnitPropEvent'
 
-export function watchUnitIO(
-  unit: U,
+export function watchUnitIO<T extends Unit>(
+  unit: T,
   events: string[] = DEFAULT_EVENTS,
   callback: (moment: Moment) => void
 ): Unlisten {
   let all: Unlisten[] = []
-
-  if (events.includes('leaf_set')) {
-    all.push(watchUnitSetEvent('leaf_set', unit, callback))
-  }
 
   const watch_data_input = events.includes('input')
   const watch_ref_input = events.includes('ref_input')
@@ -80,44 +85,60 @@ export function watchUnitIO(
     )
   }
 
-  if (events.includes('append_child')) {
-    all.push(watchUnitEvent('append_child', unit, callback))
+  if (unit instanceof Stateful) {
+    if (events.includes('leaf_set')) {
+      all.push(watchStatefulLeafSetEvent('leaf_set', unit, callback))
+    }
   }
 
-  if (events.includes('remove_child_at')) {
-    all.push(watchUnitEvent('remove_child_at', unit, callback))
+  if (unit instanceof Graph) {
+    if (events.includes('leaf_set')) {
+      all.push(watchGraphLeafSetEvent('leaf_set', unit, callback))
+    }
   }
 
-  if (events.includes('leaf_add_unit')) {
-    all.push(watchUnitLeafEvent('leaf_add_unit', unit, callback))
+  if (unit instanceof Graph) {
+    if (events.includes('leaf_add_unit')) {
+      all.push(watchUnitLeafEvent('leaf_add_unit', unit, callback))
+    }
+
+    if (events.includes('leaf_remove_unit')) {
+      all.push(watchUnitLeafEvent('leaf_remove_unit', unit, callback))
+    }
+
+    if (events.includes('leaf_expose_pin_set')) {
+      all.push(
+        watchUnitLeafExposedPinSetEvent('leaf_expose_pin_set', unit, callback)
+      )
+    }
+
+    if (events.includes('leaf_cover_pin_set')) {
+      all.push(
+        watchUnitLeafExposedPinSetEvent('leaf_cover_pin_set', unit, callback)
+      )
+    }
   }
 
-  if (events.includes('leaf_remove_unit')) {
-    all.push(watchUnitLeafEvent('leaf_remove_unit', unit, callback))
-  }
+  if (unit instanceof Graph || unit instanceof Element) {
+    if (events.includes('append_child')) {
+      all.push(watchComponentAppendEvent('append_child', unit, callback))
+    }
 
-  if (events.includes('leaf_append_child')) {
-    all.push(watchUnitEvent('leaf_append_child', unit, callback))
-  }
+    if (events.includes('remove_child_at')) {
+      all.push(watchComponentRemoveEvent('remove_child_at', unit, callback))
+    }
 
-  if (events.includes('leaf_remove_child_at')) {
-    all.push(watchUnitEvent('leaf_remove_child_at', unit, callback))
-  }
+    if (events.includes('leaf_append_child')) {
+      all.push(
+        watchComponentLeafAppendEvent('leaf_append_child', unit, callback)
+      )
+    }
 
-  if (events.includes('leaf_append_child')) {
-    all.push(watchUnitEvent('leaf_append_child', unit, callback))
-  }
-
-  if (events.includes('leaf_expose_pin_set')) {
-    all.push(
-      watchUnitLeafExposedPinSetEvent('leaf_expose_pin_set', unit, callback)
-    )
-  }
-
-  if (events.includes('leaf_cover_pin_set')) {
-    all.push(
-      watchUnitLeafExposedPinSetEvent('leaf_cover_pin_set', unit, callback)
-    )
+    if (events.includes('leaf_remove_child_at')) {
+      all.push(
+        watchComponentLeafRemoveEvent('leaf_remove_child_at', unit, callback)
+      )
+    }
   }
 
   all.push(watchUnitErr(unit, callback, events))

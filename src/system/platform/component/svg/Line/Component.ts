@@ -1,6 +1,7 @@
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -16,12 +17,15 @@ export interface Props {
 export default class SVGLine extends Element<SVGLineElement, Props> {
   private _line_el: SVGLineElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style = {}, x1 = 0, y1 = 0, x2 = 0, y2 = 0 } = $props
 
-    const line_el = document.createElementNS(namespaceURI, 'line')
+    const line_el = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'line'
+    )
     if (className !== undefined) {
       line_el.classList.value = className
     }

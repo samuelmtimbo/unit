@@ -1,5 +1,6 @@
 import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -21,12 +22,12 @@ export const DEFAULT_STYLE = {
 export default class Iframe extends Element<HTMLIFrameElement, Props> {
   private _iframe_el: HTMLIFrameElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { id, className, style = {}, src = '', srcdoc } = this.$props
 
-    const iframe_el = document.createElement('iframe')
+    const iframe_el = this.$system.api.document.createElement('iframe')
     this._iframe_el = iframe_el
 
     if (id !== undefined) {
@@ -39,9 +40,6 @@ export default class Iframe extends Element<HTMLIFrameElement, Props> {
       iframe_el.srcdoc = srcdoc
     }
     iframe_el.src = src
-
-    // @ts-ignore
-    iframe_el.allowTransparency = 'true'
 
     applyStyle(iframe_el, { ...DEFAULT_STYLE, ...style })
 

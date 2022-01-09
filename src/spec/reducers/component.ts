@@ -1,7 +1,7 @@
 import removeIndex from '../../system/core/array/RemoveIndex/f'
 import assocPath from '../../system/core/object/AssocPath/f'
 import dissocPath from '../../system/core/object/DissocPath/f'
-import propPath from '../../system/core/object/PropPath/f'
+import pathGet from '../../system/core/object/PathGet/f'
 import $indexOf from '../../system/f/array/IndexOf/f'
 import merge from '../../system/f/object/Merge/f'
 import set from '../../system/f/object/Set/f'
@@ -86,7 +86,7 @@ export const removeSubComponentChild = (
   { id, childId }: { id: string; childId: string },
   state: State
 ): State => {
-  const children = propPath(state, ['subComponents', id, 'children'])
+  const children = pathGet(state, ['subComponents', id, 'children'])
   const { i } = $indexOf({ 'a[]': children, a: childId })
   const { a: _children } = removeIndex({ a: children, i })
   state = assocPath(state, ['subComponents', id, 'children'], _children)

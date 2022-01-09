@@ -1,6 +1,6 @@
 import { CALL, REF, REF_EXEC, UNWATCH, WATCH } from '../constant/STRING'
 import { Dict } from '../types/Dict'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
 import { RemoteAPI, RemoteAPIData } from './RemoteAPI'
 
 export class RemoteRef {

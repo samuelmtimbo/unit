@@ -1,45 +1,46 @@
 import * as fuzzy from 'fuzzy'
-import SearchInput from '../SearchInput/Component'
-import { System } from '../../../../../system'
-import Div from '../../Div/Component'
-import MicrophoneButton from '../../../component/app/MicrophoneButton/Component'
-import { Shape } from '../../../../../client/util/geometry'
-import { Element } from '../../../../../client/element'
-import IconButton from '../IconButton/Component'
-import { Dict } from '../../../../../types/Dict'
-import { compareByComplexity } from '../../../../../client/search'
-import {
-  IOScrollEvent,
-  makeScrollListener,
-} from '../../../../../client/event/scroll'
 import classnames from '../../../../../client/classnames'
+import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeFocusInListener } from '../../../../../client/event/focus/focusin'
 import { makeFocusOutListener } from '../../../../../client/event/focus/focusout'
 import { makeInputListener } from '../../../../../client/event/input'
 import {
+  IOKeyboardEvent,
   makeKeydownListener,
   makeShortcutListener,
-  IOKeyboardEvent,
 } from '../../../../../client/event/keyboard'
 import { IOPointerEvent } from '../../../../../client/event/pointer'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
-import parentElement from '../../../../../client/parentElement'
 import {
-  getSpec,
+  IOScrollEvent,
+  makeScrollListener,
+} from '../../../../../client/event/scroll'
+import parentElement from '../../../../../client/parentElement'
+import { compareByComplexity } from '../../../../../client/search'
+import {
   addAddSpecListener,
-  addSetSpecListener,
   addDeleteSpecListener,
+  addSetSpecListener,
+  getSpec,
   isComponent,
 } from '../../../../../client/spec'
-import { userSelect } from '../../../../../client/style/userSelect'
-import { NONE } from '../../../../../client/theme'
+import { COLOR_NONE } from '../../../../../client/theme'
 import { throttle } from '../../../../../client/throttle'
+import { Shape } from '../../../../../client/util/geometry'
+import { userSelect } from '../../../../../client/util/style/userSelect'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 import { GraphSpec, Spec, Specs } from '../../../../../types'
+import { Dict } from '../../../../../types/Dict'
 import { removeWhiteSpace } from '../../../../../util/string'
-import TextDiv from '../TextDiv/Component'
+import MicrophoneButton from '../../../component/app/MicrophoneButton/Component'
+import Div from '../../Div/Component'
 import Icon from '../../Icon/Component'
+import IconButton from '../IconButton/Component'
+import SearchInput from '../SearchInput/Component'
+import TextDiv from '../TextDiv/Component'
 
 export interface Props {
   className?: string
@@ -71,7 +72,7 @@ const DEFAULT_STYLE = {
   color: 'currentColor',
   borderColor: 'currentColor',
   padding: '0',
-  backgroundColor: NONE,
+  backgroundColor: COLOR_NONE,
   borderTopLeftRadius: '3px',
   borderTopRightRadius: '3px',
 }
@@ -122,10 +123,13 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
   private _scrollTop: number = 0
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
-    const { specs } = this.$system
+    // const { specs } = this.$system
+    // const { specs } = this.$pod
+
+    const specs = { ...this.$system.specs, ...this.$pod.specs }
 
     const { className, style = {}, selected } = this.$props
 
@@ -154,7 +158,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
           boxSizing: 'content-box',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     list.addEventListener(
       makeScrollListener((event: IOScrollEvent) => {
@@ -171,7 +176,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
       i++
     }
 
-    const input = new SearchInput({}, this.$system)
+    const input = new SearchInput({}, this.$system, this.$pod)
     input.addEventListener(makeKeydownListener(this._on_input_keydown))
     input.addEventListener(makeFocusInListener(this._on_input_focus_in))
     input.addEventListener(makeFocusOutListener(this._on_input_focus_out))
@@ -230,7 +235,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
           padding: '11px 9px 10px 11px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     microphone.addEventListener(
       makeCustomListener('transcript', this._on_microphone_transcript)
@@ -252,7 +258,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
         },
         title: 'layout',
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     shape_button.addEventListener(
       makeClickListener({
@@ -274,7 +281,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
         },
         title: 'search',
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     search.registerParentRoot(list)
     search.registerParentRoot(input)
@@ -388,7 +396,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
         style: { width: '18px', height: '18px', margin: '9px' },
         icon,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     const list_item_main_name = new TextDiv(
       {
@@ -400,7 +409,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
         },
         value: name,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     const list_item_main_tags = new TextDiv(
       {
@@ -412,7 +422,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
         },
         value: tagsStr,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const list_item_main = new Div(
@@ -424,7 +435,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
           marginBottom: '2px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     list_item_main.appendChild(list_item_main_name)
     list_item_main.appendChild(list_item_main_tags)
@@ -437,10 +449,11 @@ export default class Search extends Element<HTMLDivElement, Props> {
           width: '100%',
           alignItems: 'center',
           height: `${HEIGHT - 1}px`,
-          backgroundColor: NONE,
+          backgroundColor: COLOR_NONE,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     list_item_content.appendChild(list_item_icon)
     list_item_content.appendChild(list_item_main)
@@ -461,7 +474,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
           id,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     list_item_div.preventDefault('mousedown')
     list_item_div.preventDefault('touchdown')

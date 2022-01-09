@@ -1,8 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import ToUpperCase from '../../../../system/f/string/Length'
+import { pod, system } from '../../../util/system'
 
-const length = new ToUpperCase()
+const length = new ToUpperCase(system, pod)
 
 length.play()
 

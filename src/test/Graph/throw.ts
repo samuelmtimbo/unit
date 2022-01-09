@@ -2,10 +2,10 @@ import * as assert from 'assert'
 import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import Throw from '../../system/f/control/Throw'
-import { ID_THROW } from '../spec/id'
-import { system } from '../util/system'
+import { ID_THROW } from '../../system/_ids'
+import { pod, system } from '../util/system'
 
-const composition0 = new Graph<{ message: string }, {}>({}, {}, system)
+const composition0 = new Graph<{ message: string }, {}>({}, {}, system, pod)
 
 const throwId0 = 'throw0'
 const throwId1 = 'throw1'
@@ -51,7 +51,7 @@ assert.equal(composition0.peakInput('message'), 'kpop')
 assert.equal(composition0.takeErr(), 'kpop')
 assert.equal(composition0.takeErr(), null)
 
-const composition1 = new Graph<{ message: string }, {}>({}, {}, system)
+const composition1 = new Graph<{ message: string }, {}>({}, {}, system, pod)
 composition1.play()
 
 false && watchUnitAndLog(composition1)
@@ -70,7 +70,7 @@ assert.equal(composition1.takeErr(), 'honolulu')
 composition1.removeUnit(throwId0)
 assert.equal(composition1.takeErr(), null)
 
-const composition2 = new Graph<{ message: string }, {}>({}, {}, system)
+const composition2 = new Graph<{ message: string }, {}>({}, {}, system, pod)
 composition2.play()
 
 false && watchUnitAndLog(composition2)
@@ -98,7 +98,7 @@ assert.equal(composition2.getErr(), 'baboom')
 composition2.removeUnit(throwId1)
 assert.equal(composition2.getErr(), null)
 
-const composition3 = new Graph<{ message: string }, {}>({}, {}, system)
+const composition3 = new Graph<{ message: string }, {}>({}, {}, system, pod)
 composition3.play()
 
 false && watchUnitAndLog(composition3)
@@ -115,10 +115,10 @@ composition3.addUnit(
 
 assert.equal(composition3.getErr(), 'badumtz')
 
-const composition4 = new Graph<{ message: string }, {}>({}, {}, system)
+const composition4 = new Graph<{ message: string }, {}>({}, {}, system, pod)
 composition4.play()
 
-const throwUnit = new Throw()
+const throwUnit = new Throw(system, pod)
 throwUnit.pushInput('message', 'mameleco')
 
 composition4.addUnit({ id: ID_THROW }, 'throw', throwUnit)

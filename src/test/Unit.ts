@@ -1,8 +1,8 @@
 import * as assert from 'assert'
 import { Unit } from '../Class/Unit'
-import { system } from './util/system'
+import { pod, system } from './util/system'
 
-const unit = new Unit({}, {}, system)
+const unit = new Unit({}, {}, system, pod)
 
 unit.play()
 

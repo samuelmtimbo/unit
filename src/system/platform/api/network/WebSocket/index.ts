@@ -1,6 +1,10 @@
-import { Callback } from '../../../../../Callback'
+import {
+  Semifunctional,
+  SemifunctionalEvents,
+} from '../../../../../Class/Semifunctional'
 import { CH } from '../../../../../interface/CH'
-import { Primitive } from '../../../../../Primitive'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export type I = {
   url: string
@@ -9,60 +13,64 @@ export type I = {
 
 export type O = {}
 
-export default class Websocket extends Primitive<I, O> implements CH {
+export type Websocket_EE = { message: [any] }
+
+export type WebsocketEvents = SemifunctionalEvents<Websocket_EE> & Websocket_EE
+
+export default class Websocket
+  extends Semifunctional<I, O, WebsocketEvents>
+  implements CH
+{
   private _web_socket: WebSocket | null = null
 
-  constructor() {
-    super({
-      i: ['url', 'close'],
-      o: [],
-    })
-
-    this.addListener('take_err', () => {
-      this._backward_all()
-    })
-
-    this.addListener('take_caught_err', () => {
-      this._backward_all()
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        fi: ['url'],
+        fo: [],
+        i: ['close'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
-  onDataInputData(name: string, data: any) {
-    if (name === 'url') {
-      const url = data
-
-      if (this.hasErr()) {
-        this.takeErr()
-      }
-
-      if (this._web_socket) {
-        this._web_socket.close()
-      }
-
-      if (url !== undefined) {
-        this._web_socket = new WebSocket(url)
-
-        this._web_socket.onopen = () => {
-          console.log('WebSocket', 'onopen')
-        }
-        this._web_socket.onmessage = (message) => {
-          console.log('WebSocket', 'onmessage', message)
-          this.emit('message', message.data)
-        }
-        this._web_socket.onerror = (event: Event) => {
-          console.log('WebSocket', 'onerror')
-          this.err('error') // TODO
-        }
-        this._web_socket.onclose = (event: CloseEvent) => {
-          const { code, reason } = event
-          console.log('WebSocket', 'onclose', code, reason)
-
-          this._plunk()
-
-          // this._backward('url')
-        }
-      }
+  f({ url }: I) {
+    if (this._web_socket) {
+      this._web_socket.close()
     }
+
+    this._web_socket = new WebSocket(url)
+
+    this._web_socket.onopen = () => {
+      console.log('WebSocket', 'onopen')
+    }
+    this._web_socket.onmessage = (message) => {
+      console.log('WebSocket', 'onmessage', message)
+      this.emit('message', message.data)
+    }
+    this._web_socket.onerror = (event: Event) => {
+      console.log('WebSocket', 'onerror')
+      this.err('error') // TODO
+    }
+    this._web_socket.onclose = (event: CloseEvent) => {
+      const { code, reason } = event
+      console.log('WebSocket', 'onclose', code, reason)
+
+      this._plunk()
+    }
+  }
+
+  d() {
+    this._plunk()
+  }
+
+  public onIterDataInputData(name: string, data: any): void {
+    // if (name === 'close') {
+    this._close()
+    // }
   }
 
   private _plunk = (): void => {
@@ -74,11 +82,10 @@ export default class Websocket extends Primitive<I, O> implements CH {
     this._web_socket = null
   }
 
-  close({}: {}, callback: Callback): void {
+  private _close(): void {
     if (this._web_socket) {
       if (this._web_socket.readyState === WebSocket.OPEN) {
         this._web_socket.close()
-        callback()
       }
     }
   }

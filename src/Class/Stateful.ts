@@ -1,18 +1,34 @@
 import { J } from '../interface/J'
 import { V } from '../interface/V'
 import { ObjectUpdateType } from '../Object'
-import { Primitive } from '../Primitive'
+import { Pod } from '../pod'
+import { Primitive, PrimitiveEvents } from '../Primitive'
 import { State } from '../State'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
 import { ION, Opt } from './Unit'
 
-export class Stateful<I = any, O = any>
-  extends Primitive<I, O>
+export type Stateful_EE = {
+  set: [{ name: string; data: any }]
+  leaf_set: [{ path: string[]; name: string; data: any }]
+}
+
+export type StatefulEvents<_EE extends Dict<any[]>> = PrimitiveEvents<
+  _EE & Stateful_EE
+> &
+  Stateful_EE
+
+export class Stateful<
+    I = any,
+    O = any,
+    _J extends Dict<any> = {},
+    _EE extends StatefulEvents<_EE> & Dict<any[]> = StatefulEvents<Stateful_EE>
+  >
+  extends Primitive<I, O, _EE>
   implements J, V
 {
-  __ = ['U', 'V']
+  __ = ['U', 'J', 'V']
 
   public stateful = true
 
@@ -20,14 +36,15 @@ export class Stateful<I = any, O = any>
 
   protected _obj: Dict<any>
 
-  constructor({ i = [], o = [] }: ION, opt: Opt, system: System) {
+  constructor({ i = [], o = [] }: ION, opt: Opt, system: System, pod: Pod) {
     super(
       {
         i,
         o,
       },
       opt,
-      system
+      system,
+      pod
     )
 
     this._obj = {}
@@ -92,15 +109,15 @@ export class Stateful<I = any, O = any>
     return obj
   }
 
-  setPath(path: string[], name: string, data: any): Promise<void> {
+  pathSet(path: string[], name: string, data: any): Promise<void> {
     throw new Error('Method not implemented.')
   }
 
-  getPath(path: string[], name: string): Promise<any> {
+  pathGet(path: string[], name: string): Promise<any> {
     throw new Error('Method not implemented.')
   }
 
-  deletePath(path: string[], name: string): Promise<void> {
+  pathDelete(path: string[], name: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
 

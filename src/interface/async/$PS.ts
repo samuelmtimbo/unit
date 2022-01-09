@@ -1,5 +1,5 @@
-import { Callback } from '../../Callback'
 import '../../client/document'
+import { Callback } from '../../types/Callback'
 
 export interface $PS {
   $requestPictureInPicture(

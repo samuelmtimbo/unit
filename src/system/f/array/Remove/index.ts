@@ -1,4 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 import remove from './f'
 
 export interface I<T> {
@@ -13,11 +15,16 @@ export interface O<T> {
 }
 
 export default class Remove<T> extends Functional<I<T>, O<T>> {
-  constructor() {
-    super({
-      i: ['a', 'start', 'count'],
-      o: ['a', 'removed'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['a', 'start', 'count'],
+        o: ['a', 'removed'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f(i: I<T>, done): void {

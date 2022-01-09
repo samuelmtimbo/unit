@@ -1,5 +1,8 @@
+import { UnitBundleSpec } from '../system/platform/method/process/UnitBundleSpec'
+import _classes from '../system/_classes'
+import _specs from '../system/_specs'
 import { Classes, Specs } from '../types'
-import { fromId } from './fromId'
+import { fromBundle } from './fromBundle'
 import { getTree, TreeNode, TreeNodeType, _isValidObjKey } from './parser'
 
 export function _evaluate(
@@ -48,7 +51,9 @@ export function _evaluate(
       }
       return object
     case TreeNodeType.Unit:
-      return fromId(value, specs, classes)
+      const str = value.substring(1)
+      const bundle = evaluate(str) as UnitBundleSpec
+      return fromBundle(bundle, specs, classes)
     default:
       throw new Error('invalid data string')
   }
@@ -56,8 +61,8 @@ export function _evaluate(
 
 export function evaluate(
   value: string,
-  specs: Specs = {},
-  classes: Classes = {}
+  specs: Specs = _specs,
+  classes: Classes = _classes
 ): any {
   const tree = getTree(value, false, false)
   return _evaluate(tree, specs, classes)

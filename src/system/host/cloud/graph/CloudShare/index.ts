@@ -1,6 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Graph } from '../../../../../Class/Graph'
-import { Primitive } from '../../../../../Primitive'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 
 export type I = {
@@ -10,14 +10,15 @@ export type I = {
 export type O = {}
 
 export default class CloudShare extends Functional<I, O> {
-  constructor(system?: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['graph'],
         o: [],
       },
       {},
-      system
+      system,
+      pod
     )
   }
 }

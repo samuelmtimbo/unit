@@ -1,4 +1,5 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -11,14 +12,15 @@ export interface I {
 export interface O {}
 
 export default class SVGPath extends Element<I, O> {
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['style', 'd', 'fillRule'],
         o: [],
       },
       {},
-      system
+      system,
+      pod
     )
 
     this._defaultState = {

@@ -3,6 +3,7 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { countEvent } from '../../util'
+import { pod, system } from '../../util/system'
 
 const spec = require('../../../system/core/control/IfElse/spec.json')
 
@@ -11,9 +12,7 @@ const IfElse = fromSpec<{ a: any; b: boolean }, { if: any; else: any }>(
   _specs
 )
 
-import { system } from '../../util/system'
-
-const ifElse = new IfElse(system)
+const ifElse = new IfElse(system, pod)
 
 false && watchGraphAndLog(ifElse)
 false && watchUnitAndLog(ifElse)
@@ -22,7 +21,6 @@ const ifDataCounter = countEvent(ifElse.getOutput('if'), 'data')
 const ifDropCounter = countEvent(ifElse.getOutput('if'), 'drop')
 const elseDataCounter = countEvent(ifElse.getOutput('else'), 'data')
 const elseDropCounter = countEvent(ifElse.getOutput('else'), 'drop')
-
 
 ifElse.play()
 

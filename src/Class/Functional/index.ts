@@ -1,15 +1,28 @@
-import { Primitive } from '../../Primitive'
+import { Pod } from '../../pod'
+import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { System } from '../../system'
 import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
+import { Dict } from '../../types/Dict'
 import { filterObj } from '../../util/object'
 import { ION, Opt } from '../Unit'
 import { Done } from './Done'
 
-export class Functional<I = {}, O = {}> extends Primitive<I, O> {
+export type Functional_EE = {}
+
+export type FunctionalEvents<_EE extends Dict<any[]>> = PrimitiveEvents<
+  _EE & Functional_EE
+> &
+  Functional_EE
+
+export class Functional<
+  I = {},
+  O = {},
+  _EE extends FunctionalEvents<_EE> = FunctionalEvents<Functional_EE>
+> extends Primitive<I, O, _EE> {
   private _looping: boolean = false
 
-  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System = null) {
-    super({ i, o }, opt, system)
+  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System, pod: Pod) {
+    super({ i, o }, opt, system, pod)
 
     this.addListener('take_err', () => {
       if (this._looping) {

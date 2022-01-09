@@ -1,6 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Pod } from '../../../../pod'
 import { fromId } from '../../../../spec/fromId'
+import { System } from '../../../../system'
 import { UnitClass } from '../../../../types/UnitClass'
 
 export interface I<T> {
@@ -12,19 +14,19 @@ export interface O<T> {
 }
 
 export default class IdToClass<T> extends Functional<I<T>, O<T>> {
-  constructor() {
-    super({
-      i: ['id'],
-      o: ['Class'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['id'],
+        o: ['Class'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ id }: I<T>, done: Done<O<T>>): void {
-    if (!this.__system) {
-      done(undefined, 'unplugged')
-      return
-    }
-
     const { specs, classes } = this.__system
 
     const Class = fromId(id, specs, classes)

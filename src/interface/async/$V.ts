@@ -1,4 +1,4 @@
-import { Callback } from '../../Callback'
+import { Callback } from '../../types/Callback'
 
 export const $V_METHOD_CALL = ['read', 'write']
 

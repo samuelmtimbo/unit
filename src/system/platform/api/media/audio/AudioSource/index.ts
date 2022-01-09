@@ -1,10 +1,12 @@
-import { Callback } from '../../../../../../Callback'
 import { $ } from '../../../../../../Class/$'
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
 import { ST } from '../../../../../../interface/ST'
-import NOOP from '../../../../../../NOOP'
-import { Unlisten } from '../../../../../../Unlisten'
+import { NOOP } from '../../../../../../NOOP'
+import { Pod } from '../../../../../../pod'
+import { System } from '../../../../../../system'
+import { Callback } from '../../../../../../types/Callback'
+import { Unlisten } from '../../../../../../types/Unlisten'
 
 export type I = {
   src: string
@@ -17,11 +19,16 @@ export type O = {
 export default class AudioSource extends Functional<I, O> {
   private _audio: HTMLAudioElement
 
-  constructor() {
-    super({
-      i: ['src'],
-      o: ['stream'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['src'],
+        o: ['stream'],
+      },
+      {},
+      system,
+      pod
+    )
 
     this._audio = new Audio()
     this._audio.volume = 0
@@ -42,7 +49,7 @@ export default class AudioSource extends Functional<I, O> {
         callback(audio.srcObject)
         return NOOP
       }
-    })()
+    })(this.__system, this.__pod)
 
     done({
       stream,

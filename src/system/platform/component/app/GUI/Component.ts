@@ -1,5 +1,5 @@
 import { addListeners } from '../../../../../client/addListener'
-import { ANIMATION_T_MS } from '../../../../../client/animation'
+import { ANIMATION_T_MS } from '../../../../../client/animation/animation'
 import classnames from '../../../../../client/classnames'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Context, setColor, setTheme } from '../../../../../client/context'
@@ -11,21 +11,22 @@ import { MAX_Z_INDEX } from '../../../../../client/MAX_Z_INDEX'
 import parentElement from '../../../../../client/parentElement'
 import {
   defaultThemeColor,
-  NONE,
+  COLOR_NONE,
   setAlpha,
   themeBackgroundColor,
 } from '../../../../../client/theme'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { Unlisten } from '../../../../../Unlisten'
+import { Unlisten } from '../../../../../types/Unlisten'
+import Modes from '../../../component/app/Modes/Component'
 import Div from '../../Div/Component'
+import ColorInput from '../../value/ColorInput/Component'
 import Cabinet from '../Cabinet/Component'
 import { MINIMAP_HEIGHT, MINIMAP_WIDTH } from '../History/Component'
 import Minimap from '../Minimap/Component'
 import Search from '../Search/Component'
-import ColorInput from '../../value/ColorInput/Component'
-import Modes from '../../../component/app/Modes/Component'
 
 export interface Props {
   className?: string
@@ -61,8 +62,8 @@ export default class GUI extends Element<HTMLElement, Props> {
 
   private _manually_changed_color: boolean = false
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style = {} } = this.$props
 
@@ -78,7 +79,8 @@ export default class GUI extends Element<HTMLElement, Props> {
           zIndex: `${GUI_Z_INDEX}`, // AD HOC
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this.$ref['modes'] = modes
     this._modes = modes
@@ -94,7 +96,8 @@ export default class GUI extends Element<HTMLElement, Props> {
           zIndex: `${GUI_Z_INDEX}`, // AD HOC
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this.$ref['search'] = search
     this._search = search
@@ -113,7 +116,8 @@ export default class GUI extends Element<HTMLElement, Props> {
         },
         padding: 1 * LINK_DISTANCE,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this.$ref['minimap'] = minimap
     this._minimap = minimap
@@ -127,7 +131,8 @@ export default class GUI extends Element<HTMLElement, Props> {
           touchAction: 'none',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this.$ref['history'] = history_tree
     this._history = history_tree
@@ -135,6 +140,7 @@ export default class GUI extends Element<HTMLElement, Props> {
     const TOGGLE_SPEC_ID = '6253bf76-2e85-11eb-9f59-3703abfd39c7'
     const { component: color_theme } = graphComponentFromId(
       this.$system,
+      this.$pod,
       TOGGLE_SPEC_ID,
       {
         style: {
@@ -143,7 +149,7 @@ export default class GUI extends Element<HTMLElement, Props> {
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor: 'currentColor',
-          backgroundColor: NONE,
+          backgroundColor: COLOR_NONE,
         },
       }
     )
@@ -168,7 +174,8 @@ export default class GUI extends Element<HTMLElement, Props> {
           boxSizing: 'border-box',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     color_picker.addEventListener(
       makeInputListener((data) => {
@@ -188,7 +195,8 @@ export default class GUI extends Element<HTMLElement, Props> {
           flexDirection: 'column',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     color_pallete.appendChild(color_theme)
     color_pallete.appendChild(color_picker)
@@ -203,7 +211,8 @@ export default class GUI extends Element<HTMLElement, Props> {
         },
         // hidden: true,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     cabinet.addEventListener(
       makeCustomListener(
@@ -239,7 +248,8 @@ export default class GUI extends Element<HTMLElement, Props> {
           left: '0px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._background = background
 
@@ -252,7 +262,8 @@ export default class GUI extends Element<HTMLElement, Props> {
           left: '0px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const control = new Div(
@@ -260,7 +271,8 @@ export default class GUI extends Element<HTMLElement, Props> {
         className: classnames('gui-control', className),
         style: {},
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     control.registerParentRoot(modes)
     control.registerParentRoot(search)
@@ -274,7 +286,8 @@ export default class GUI extends Element<HTMLElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     gui.registerParentRoot(background)
     gui.registerParentRoot(foreground)

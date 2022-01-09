@@ -3,7 +3,7 @@ import { RemoteRef } from '../../../client/RemoteRef'
 import { CONNECT, DISCONNECT, EXEC, TERMINATE } from '../../../constant/STRING'
 import { $Graph } from '../../../interface/async/$Graph'
 import { Dict } from '../../../types/Dict'
-import { Unlisten } from '../../../Unlisten'
+import { Unlisten } from '../../../types/Unlisten'
 import { uuidNotInLocalStorage } from './uuidNotInLocalStorage'
 
 export const LOCAL_STORAGE_PREFIX_BROADCAST_SOURCE = '__BROADCAST__SOURCE__'

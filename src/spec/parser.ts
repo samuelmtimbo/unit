@@ -1,4 +1,5 @@
-import { getSpec } from '../client/spec' // RETURN
+import { idFromUnitValue } from '../client/idFromUnitValue'
+import { getSpec } from '../client/spec'
 import { PinsSpecBase, Specs } from '../types'
 import { matchAllExc } from '../util/array'
 import { clone } from '../util/object'
@@ -776,6 +777,16 @@ export function _getTypeTree(
     }
   }
 
+  const objectExpressionTest = /^([^\|]+)\{\}$/.exec(value)
+  if (objectExpressionTest) {
+    const children = [getTree(objectExpressionTest[1])]
+    return {
+      value,
+      type: TreeNodeType.ObjectExpression,
+      children,
+    }
+  }
+
   const orTest = /^.+(\|.+)+$/.exec(value)
   if (orTest) {
     const children = _getDelimiterSeparated(value, false, false, '|', getTree)
@@ -792,16 +803,6 @@ export function _getTypeTree(
     return {
       value,
       type: TreeNodeType.And,
-      children,
-    }
-  }
-
-  const objectExpressionTest = /^(.+)\{\}$/.exec(value)
-  if (objectExpressionTest) {
-    const children = [getTree(objectExpressionTest[1])]
-    return {
-      value,
-      type: TreeNodeType.ObjectExpression,
       children,
     }
   }
@@ -943,10 +944,11 @@ function _getValueTree(
     }
   }
 
-  const unitTest =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.exec(
-      value
-    )
+  // const unitTest =
+  //   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.exec(
+  //     value
+  //   )
+  const unitTest = /^\$\{(.*)\}$/i.exec(value)
   if (unitTest) {
     return {
       value,
@@ -1209,7 +1211,8 @@ export function _getValueType(specs: Specs, tree: TreeNode): TreeNode {
     }
     case TreeNodeType.Unit: {
       const { value } = tree
-      const spec = getSpec(specs, value)
+      const spec_id = idFromUnitValue(value)
+      const spec = getSpec(specs, spec_id)
       const { type } = spec
       return getTree(type)
     }

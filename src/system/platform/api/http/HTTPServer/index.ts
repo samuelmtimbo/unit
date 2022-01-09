@@ -1,22 +1,13 @@
-import { Callback } from '../../../../../Callback'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
+import { Callback } from '../../../../../types/Callback'
 import { Dict } from '../../../../../types/Dict'
-import { Unlisten } from '../../../../../Unlisten'
-
-export interface IHTTPServer {
-  listen: (
-    port: number,
-    listener: (
-      req: IHTTPClientRequest,
-      done: Callback<IHTTPServerResponse>
-    ) => void
-  ) => Unlisten
-}
-
-export interface IHTTPServerOpt {
-  timeout: number
-}
+import {
+  IHTTPServer,
+  IHTTPServerOpt,
+} from '../../../../../types/global/IHTTPServer'
 
 export interface IHTTPServerResponse {
   status: number
@@ -44,8 +35,13 @@ export type O = {
 export default class _HTTPServer extends Semifunctional {
   private _server: IHTTPServer
 
-  constructor() {
-    super({ fi: ['opt'], fo: [], i: ['port', 'res', 'done'], o: ['req'] })
+  constructor(system: System, pod: Pod) {
+    super(
+      { fi: ['opt'], fo: [], i: ['port', 'res', 'done'], o: ['req'] },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ opt }: I, done: Done<O>) {

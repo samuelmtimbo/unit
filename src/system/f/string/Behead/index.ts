@@ -1,5 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I<T> {
   a: string
@@ -11,11 +13,16 @@ export interface O<T> {
 }
 
 export default class Behead<T> extends Functional<I<T>, O<T>> {
-  constructor() {
-    super({
-      i: ['a'],
-      o: ['tail', 'head'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['a'],
+        o: ['tail', 'head'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ a }: I<T>, done: Done<O<T>>): void {

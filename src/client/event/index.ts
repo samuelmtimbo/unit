@@ -1,8 +1,9 @@
-import { Unlisten } from '../../Unlisten'
+import { Unlisten } from '../../types/Unlisten'
+import { IOElement } from '../IOElement'
 
 export function _addEventListener(
   type: string,
-  $element: Element,
+  $element: IOElement,
   listener: (event: Event) => void,
   _global: boolean = false
 ): Unlisten {

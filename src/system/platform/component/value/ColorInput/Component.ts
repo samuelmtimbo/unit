@@ -1,5 +1,6 @@
 import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -27,14 +28,14 @@ export const DEFAULT_STYLE = {
 export default class ColorInput extends Element<HTMLInputElement, Props> {
   private _input_el: HTMLInputElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     let { style = {}, value = '#000000', tabIndex = -1 } = $props
 
     style = { ...DEFAULT_STYLE, ...style }
 
-    const input_el = document.createElement('input')
+    const input_el = this.$system.api.document.createElement('input')
     input_el.value = value
     input_el.type = 'color'
     input_el.tabIndex = tabIndex

@@ -1,5 +1,5 @@
 import { Pin } from './Pin'
 
 export type Pins<T> = {
-  [name: string]: Pin<T[keyof T]>
+  [K in keyof T]?: Pin<T[K]>
 }

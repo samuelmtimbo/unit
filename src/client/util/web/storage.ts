@@ -1,17 +1,18 @@
 import { Dict } from '../../../types/Dict'
+import { IStorage } from '../../../types/global/IStorage'
 
-export function storageHasKey(storage: Storage, key: string): boolean {
+export function storageHasKey(storage: IStorage, key: string): boolean {
   const item = storage.getItem(key)
   const has = !!item
   return has
 }
 
-export function getStorageKeys(storage: Storage): string[] {
+export function getStorageKeys(storage: IStorage): string[] {
   const keys = Object.keys(storage)
   return keys
 }
 
-export function getAllStorage(storage: Storage): Dict<string> {
+export function getAllStorage(storage: IStorage): Dict<string> {
   const obj: Dict<string> = {}
   const keys = getStorageKeys(storage)
   for (const key of keys) {
@@ -28,7 +29,7 @@ export function getAllSessionStorage(): Dict<string> {
   return getAllStorage(sessionStorage)
 }
 
-export function deleteAllStorage(storage: Storage): void {
+export function deleteAllStorage(storage: IStorage): void {
   storage.clear()
 }
 

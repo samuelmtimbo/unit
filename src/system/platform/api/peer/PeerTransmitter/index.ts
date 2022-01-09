@@ -1,10 +1,12 @@
+import { Peer } from '../../../../../api/peer/Peer'
 import { $ } from '../../../../../Class/$'
 import { CH } from '../../../../../interface/CH'
 import { ST } from '../../../../../interface/ST'
-import { Peer } from '../../../../../Peer'
+import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
 import { stringify } from '../../../../../spec/stringify'
-import { Unlisten } from '../../../../../Unlisten'
+import { System } from '../../../../../system'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I<T> {
   opt: RTCConfiguration
@@ -14,6 +16,7 @@ export interface I<T> {
 }
 
 export interface O<T> {
+  offer: string
   port: CH
 }
 
@@ -35,7 +38,7 @@ export default class PeerTransmitter<T>
 
   private _stream: MediaStream | null = null
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['opt', 'answer', 'stream', 'close'],
@@ -52,7 +55,9 @@ export default class PeerTransmitter<T>
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
 
     this.addListener('destroy', () => {
@@ -105,7 +110,7 @@ export default class PeerTransmitter<T>
 
     if (name === 'opt') {
       try {
-        this._peer = new Peer(true, data)
+        this._peer = new Peer(this.__system, this.__pod, true, data)
       } catch (err) {
         const { message } = err
         const FAIL_TO_CONSTRUCT_MSG_START = `Failed to construct 'RTCPeerConnection': `
@@ -224,7 +229,7 @@ export default class PeerTransmitter<T>
         peer.send(_data)
         return
       }
-    })()
+    })(this.__system, this.__pod)
 
     this._output.port.push(port)
   }
@@ -254,13 +259,11 @@ export default class PeerTransmitter<T>
       this._disconnect()
     }
 
-    this._peer.addListener('signal', signal_listener)
     this._peer.addListener('connect', connect_listener)
     this._peer.addListener('error', error_listener)
     this._peer.addListener('close', close_listener)
 
     return () => {
-      this._peer.removeListener('signal', signal_listener)
       this._peer.removeListener('connect', connect_listener)
       this._peer.removeListener('error', error_listener)
       this._peer.removeListener('close', close_listener)

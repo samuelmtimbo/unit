@@ -1,15 +1,16 @@
 import { addListeners } from '../../../../../client/addListener'
 import classnames from '../../../../../client/classnames'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
+import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeResizeListener } from '../../../../../client/event/resize'
-import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/parentElement'
 import { SimNode, Simulation } from '../../../../../client/simulation'
-import { NONE } from '../../../../../client/theme'
+import { COLOR_NONE } from '../../../../../client/theme'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { Unlisten } from '../../../../../Unlisten'
+import { Unlisten } from '../../../../../types/Unlisten'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
 import Frame from '../../Frame/Component'
@@ -56,8 +57,8 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
 
   private _z_index: number = 1
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style = {} } = $props
 
@@ -69,7 +70,8 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._cabinet = cabinet
 
@@ -105,7 +107,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     } else if (prop === 'style') {
       this._cabinet.setProp('style', { ...DEFAULT_STYLE, ...current })
       const { style = {} } = this.$props
-      const { color = 'currentColor', backgroundColor = NONE } = style
+      const { color = 'currentColor', backgroundColor = COLOR_NONE } = style
 
       for (const drawerId in this._component_frame) {
         const drawer = this._drawer_component[drawerId]
@@ -276,7 +278,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     } = cabinetDrawer
     const { y = 0 } = state
 
-    const { color = 'currentColor', backgroundColor = NONE } = style
+    const { color = 'currentColor', backgroundColor = COLOR_NONE } = style
 
     this._drawer[drawerId] = cabinetDrawer
 
@@ -296,7 +298,8 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
           color,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     drawer_component.addEventListener(
       makeCustomListener('active', () => {

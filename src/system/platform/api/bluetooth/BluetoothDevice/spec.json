@@ -5,7 +5,12 @@
       "type": "{filters?:({name?:string}|{namePrefix?:string}|{services:(string|number)[]})[],optionalServices?:string[],acceptAllDevices?:boolean}"
     }
   },
-  "outputs": {},
+  "outputs": {
+    "device": {
+      "type": "`BD`",
+      "ref": true
+    }
+  },
   "metadata": {
     "icon": "bluetooth",
     "description": "remote GATT device",
@@ -18,6 +23,6 @@
   },
   "id": "4ad5bd0e-e11e-11ea-ad4c-83da30628333",
   "base": true,
-  "type": "`U`&`BD`",
+  "type": "`U`",
   "system": true
 }

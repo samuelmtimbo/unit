@@ -1,6 +1,7 @@
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -13,12 +14,15 @@ export interface Props {
 export default class SVGUse extends Element<SVGGElement, Props> {
   private _use_el: SVGGElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style = {}, href } = this.$props
 
-    const use_el = document.createElementNS(namespaceURI, 'use')
+    const use_el = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'use'
+    )
     if (className !== undefined) {
       use_el.classList.value = className
     }

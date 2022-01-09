@@ -1,9 +1,9 @@
-import { U } from '../interface/U'
+import { Unit } from '../Class/Unit'
 import { UnitErrMoment } from './UnitErrMoment'
 
 export function watchUnitErrEvent(
   event: 'err' | 'take_err' | 'catch_err',
-  unit: U,
+  unit: Unit,
   callback: (moment: UnitErrMoment) => void
 ): () => void {
   const listener = (err) => {

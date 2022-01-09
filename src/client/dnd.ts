@@ -1,8 +1,8 @@
-import NOOP from '../NOOP'
+import { NOOP } from '../NOOP'
 import { System } from '../system'
-import { Unlisten } from '../Unlisten'
-import { IOElement } from './IOElement'
+import { Unlisten } from '../types/Unlisten'
 import { _addEventListener } from './event'
+import { IOElement } from './IOElement'
 
 export function dragAndDrop(
   $system: System,
@@ -21,7 +21,10 @@ export function dragAndDrop(
   const w = width / 2
   const h = height / 2
 
+  // RETURN
+  // @ts-ignore
   element.style.left = `${x - w}px`
+  // @ts-ignore
   element.style.top = `${y - h}px`
 
   $root.appendChild(element)
@@ -43,12 +46,12 @@ export function dragAndDrop(
 
   const findDropTarget = (clientX, clientY): Element | null => {
     let dropTarget = document.elementFromPoint(clientX, clientY)
-    // @ts-ignore
-    while (dropTarget && !dropTarget.__DROP__TARGET__) {
+
+    while (dropTarget && !dropTarget.hasAttribute('dropTarget')) {
       dropTarget = dropTarget.parentElement
     }
-    // @ts-ignore
-    return dropTarget && dropTarget.__DROP__TARGET__ === true
+
+    return dropTarget && dropTarget.getAttribute('dropTarget') === 'true'
       ? dropTarget
       : null
   }
@@ -57,7 +60,9 @@ export function dragAndDrop(
     const { pointerId: _pointerId, clientX, clientY } = event
     // log('pointerMoveListener')
     if (_pointerId === pointerId) {
+      // @ts-ignore
       element.style.left = `${clientX - w}px`
+      // @ts-ignore
       element.style.top = `${clientY - h}px`
 
       const dropTarget = findDropTarget(clientX, clientY)

@@ -1,1 +1,1 @@
-export type IOElement = HTMLElement | SVGElement
+export type IOElement = HTMLElement | SVGElement | Text

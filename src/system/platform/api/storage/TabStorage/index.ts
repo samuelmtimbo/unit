@@ -4,10 +4,14 @@ import {
   getStorageKeys,
   storageHasKey,
 } from '../../../../../client/util/web/storage'
-import { APINotImplementedError } from '../../../../../exception/APINotImplementedError'
+import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { J } from '../../../../../interface/J'
 import { V } from '../../../../../interface/V'
+import { ObjectUpdateType } from '../../../../../Object'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export type I = {}
 
@@ -17,19 +21,33 @@ export default class _TabStorage
   extends Unit<I, O>
   implements J, V<Dict<string>>
 {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: [],
         o: [],
       },
-      {}
+      {},
+      system,
+      pod
     )
+  }
+  subscribe(
+    path: string[],
+    key: string,
+    listener: (
+      type: ObjectUpdateType,
+      path: string[],
+      key: string,
+      data: any
+    ) => void
+  ): Unlisten {
+    throw new Error('Method not implemented.')
   }
 
   private _checkAPI = () => {
     if (!localStorage) {
-      throw new APINotImplementedError('Local Storage')
+      throw new APINotSupportedError('Local Storage')
     }
   }
 
@@ -43,7 +61,7 @@ export default class _TabStorage
     return
   }
 
-  async get(name: string): Promise<string> {
+  async get(name: string): Promise<any> {
     this._checkAPI()
 
     const value = localStorage.getItem(name)
@@ -66,15 +84,15 @@ export default class _TabStorage
     localStorage.removeItem(name)
   }
 
-  setPath(path: string[], name: string, data: any): Promise<void> {
+  async pathSet(path: string[], name: string, data: any): Promise<void> {
     throw new Error('Method not implemented.')
   }
 
-  getPath(path: string[], name: string): Promise<any> {
+  async pathGet(path: string[], name: string): Promise<any> {
     throw new Error('Method not implemented.')
   }
 
-  deletePath(path: string[], name: string): Promise<void> {
+  async pathDelete(path: string[], name: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
 

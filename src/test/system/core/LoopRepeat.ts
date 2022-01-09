@@ -1,5 +1,4 @@
 import * as assert from 'assert'
-import { Graph } from '../../../Class/Graph'
 import {
   watchGraphAndLog,
   watchTreeAndLog,
@@ -7,19 +6,17 @@ import {
 } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
+import { pod, system } from '../../util/system'
 
 const spec = require('../../../system/core/common/LoopRepeat/spec.json')
 
 const LoopRepeat = fromSpec(spec, _specs)
 
-import { system } from '../../util/system'
-
-const loopRepeat = new LoopRepeat(system)
+const loopRepeat = new LoopRepeat(system, pod)
 
 false && watchUnitAndLog(loopRepeat)
 false && watchGraphAndLog(loopRepeat)
 false && watchTreeAndLog(loopRepeat)
-
 
 loopRepeat.play()
 

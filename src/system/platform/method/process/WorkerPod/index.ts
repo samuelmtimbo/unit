@@ -4,7 +4,9 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { graphFromPort } from '../../../../../graphFromPort'
 import { $Graph } from '../../../../../interface/async/$Graph'
+import { Pod } from '../../../../../pod'
 import { RemoteClient } from '../../../../../RemoteClient'
+import { System } from '../../../../../system'
 import { GraphSpec } from '../../../../../types'
 
 export interface I {
@@ -20,7 +22,7 @@ export default class WorkerPod extends Functional<I, O> {
 
   private _client: RemoteClient
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['spec'],
@@ -32,7 +34,9 @@ export default class WorkerPod extends Functional<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
 
     this.addListener('destroy', () => {
@@ -58,7 +62,7 @@ export default class WorkerPod extends Functional<I, O> {
 
     const port = this._client.port()
 
-    const graph = graphFromPort(port)
+    const graph = graphFromPort(this.__system, this.__pod, port)
 
     done({
       graph,

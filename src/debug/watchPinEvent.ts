@@ -3,7 +3,7 @@ import { stringify } from '../spec/stringify'
 import { PinDataMoment } from './PinDataMoment'
 import { PinType } from './PinType'
 
-export function watchPinEvent(
+export function watchPinEvent<T>(
   event: PinEvent,
   type: PinType,
   pinId: string,

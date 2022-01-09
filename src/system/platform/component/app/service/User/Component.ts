@@ -1,16 +1,20 @@
 import { getPublicKeyList } from '../../../../../../api/keys'
 import {
-  linearTransition,
   ANIMATION_T_S,
-} from '../../../../../../client/animation'
+  linearTransition,
+} from '../../../../../../client/animation/animation'
 import { Component } from '../../../../../../client/component'
 import mergeProps from '../../../../../../client/component/mergeProps'
 import mergePropStyle from '../../../../../../client/component/mergeStyle'
 import { makeClickListener } from '../../../../../../client/event/pointer/click'
 import { randomNaturalBetween } from '../../../../../../client/math'
 import parentElement from '../../../../../../client/parentElement'
-import { NONE, randomColorString, YELLOW } from '../../../../../../client/theme'
-import { textToClipboard } from '../../../../../../client/util/web/clipboard'
+import {
+  COLOR_NONE,
+  randomColorString,
+  COLOR_YELLOW,
+} from '../../../../../../client/theme'
+import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
 import { rangeArray } from '../../../../../../util/array'
@@ -47,7 +51,7 @@ export const BUTTON_STYLE = {
   borderRadius: '3px',
   borderWidth: '1px',
   borderStyle: 'solid',
-  borderColor: NONE,
+  borderColor: COLOR_NONE,
 }
 
 export default class User extends Component<HTMLDivElement, Props> {
@@ -69,8 +73,8 @@ export default class User extends Component<HTMLDivElement, Props> {
 
   private _selected: number = 0
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style } = $props
 
@@ -81,7 +85,8 @@ export default class User extends Component<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._root = root
 
@@ -96,18 +101,25 @@ export default class User extends Component<HTMLDivElement, Props> {
           cursor: 'pointer',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     unplugged.addEventListener(
       makeClickListener({
-        onClick: () => {
+        onClick: async () => {
+          const {
+            api: {
+              clipboard: { writeText },
+            },
+          } = this.$system
+
           const address = this._public_key_addr[this._selected]
-          textToClipboard(`'${address}'`, (data, err) => {
-            if (err) {
-              console.log('err', err)
-              return
-            }
-          })
+
+          try {
+            await writeText(`'${address}'`)
+          } catch (err) {
+            // swallow
+          }
         },
       })
     )
@@ -123,7 +135,8 @@ export default class User extends Component<HTMLDivElement, Props> {
           height: '20%',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._selector = selector
 
@@ -135,7 +148,8 @@ export default class User extends Component<HTMLDivElement, Props> {
           // whiteSpace: 'nowrap',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._selector_unplugged_list = unplugged_list
 
@@ -149,7 +163,8 @@ export default class User extends Component<HTMLDivElement, Props> {
           transition: linearTransition('transform'),
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._selector_unplugged_list_car = unplugged_list_car
     this._selector_unplugged_list.appendParentRoot(unplugged_list_car)
@@ -164,7 +179,8 @@ export default class User extends Component<HTMLDivElement, Props> {
           gap: '12px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._selector_bullet_list = selector_bullet_list
     this._selector.appendParentRoot(selector_bullet_list)
@@ -184,7 +200,8 @@ export default class User extends Component<HTMLDivElement, Props> {
           transition: linearTransition('transform', 'color'),
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._selector_handle = selector_handle
     this._selector.appendParentRoot(selector_handle)
@@ -204,7 +221,8 @@ export default class User extends Component<HTMLDivElement, Props> {
           cursor: 'pointer',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._hex_text = hex_text
 
@@ -221,7 +239,8 @@ export default class User extends Component<HTMLDivElement, Props> {
           transition: `height ${ANIMATION_T_S}s linear, opacity ${ANIMATION_T_S}s linear`,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const memory = this._create_button('memory', 'cpu')
@@ -270,7 +289,7 @@ export default class User extends Component<HTMLDivElement, Props> {
 
         const active = public_key_active[i]
 
-        const color = active ? YELLOW : 'currentColor'
+        const color = active ? COLOR_YELLOW : 'currentColor'
 
         const selector_item_unplugged = new Unplugged(
           {
@@ -281,7 +300,8 @@ export default class User extends Component<HTMLDivElement, Props> {
               color,
             },
           },
-          this.$system
+          this.$system,
+          this.$pod
         )
         this._selector_unplugged_list_car.appendChild(selector_item_unplugged)
 
@@ -298,7 +318,8 @@ export default class User extends Component<HTMLDivElement, Props> {
               cursor: 'pointer',
             },
           },
-          this.$system
+          this.$system,
+          this.$pod
         )
 
         selector_item_bullet.addEventListener(
@@ -308,7 +329,7 @@ export default class User extends Component<HTMLDivElement, Props> {
 
               const active = public_key_active[i]
 
-              const color = active ? YELLOW : 'currentColor'
+              const color = active ? COLOR_YELLOW : 'currentColor'
 
               mergePropStyle(this._unplugged, {
                 color,
@@ -351,7 +372,7 @@ export default class User extends Component<HTMLDivElement, Props> {
       if (l > 0) {
         const active = public_key_active[0]
 
-        const color = active ? YELLOW : 'currentColor'
+        const color = active ? COLOR_YELLOW : 'currentColor'
 
         mergeProps(this._unplugged, {
           id: this._public_key_code[0],
@@ -398,7 +419,8 @@ export default class User extends Component<HTMLDivElement, Props> {
           ...BUTTON_STYLE,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     button.addEventListener(
       makeClickListener({
@@ -416,7 +438,7 @@ export default class User extends Component<HTMLDivElement, Props> {
     if (this._selected_button) {
       const selected_button = this._button[this._selected_button]
       mergePropStyle(selected_button, {
-        borderColor: NONE,
+        borderColor: COLOR_NONE,
       })
     }
 

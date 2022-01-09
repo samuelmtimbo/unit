@@ -4,11 +4,10 @@ import { pathExistsSync, readJSONSync } from 'fs-extra'
 import * as glob from 'glob'
 import { join } from 'path'
 import { PATH_SRC, PATH_SRC_SYSTEM } from '../path'
-import { removeLastSegment } from '../removeLastSegment'
 import { treeComplexity } from '../spec/complexity'
 import __specs from '../system/_specs'
 import { Spec, Specs } from '../types'
-import { clone } from '../util/object'
+import { removeLastSegment } from '../util/removeLastSegment'
 
 function getBundleLength(path: string): number {
   const result = esbuild.buildSync({

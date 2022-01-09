@@ -1,6 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Unit } from '../../../../Class/Unit'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I<T> {
   unit: Unit
@@ -15,7 +17,7 @@ export interface O<T> {
 export interface R<T> {}
 
 export default class Call<T> extends Functional<I<T>, O<T>> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['unit', 'method', 'data'],
@@ -27,7 +29,9 @@ export default class Call<T> extends Functional<I<T>, O<T>> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 

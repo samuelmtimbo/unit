@@ -1,6 +1,7 @@
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -28,8 +29,8 @@ export const DEFAULT_STYLE = {
 export default class SVGSVG extends Element<SVGSVGElement, Props> {
   private _svg_el: SVGSVGElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       className,
@@ -44,7 +45,10 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
       tabIndex,
     } = $props
 
-    const svg_el = document.createElementNS(namespaceURI, 'svg')
+    const svg_el = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'svg'
+    )
 
     if (className !== undefined) {
       svg_el.classList.value = className
@@ -71,7 +75,10 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
       svg_el.setAttribute('stroke-width', `${strokeWidth}`)
     }
     if (title) {
-      const title_el = document.createElementNS(namespaceURI, 'title')
+      const title_el = this.$system.api.document.createElementNS(
+        namespaceURI,
+        'title'
+      )
       title_el.innerHTML = title
       svg_el.appendChild(title_el)
     }

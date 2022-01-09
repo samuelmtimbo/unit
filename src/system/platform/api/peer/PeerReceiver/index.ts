@@ -1,24 +1,37 @@
 import { DEFAULT_STUN_RTC_CONFIG } from '../../../../../api/peer/config'
-import { Callback } from '../../../../../Callback'
+import { Peer } from '../../../../../api/peer/Peer'
 import { $ } from '../../../../../Class/$'
-import { $ST } from '../../../../../interface/async/$ST'
+import { FunctionalEvents } from '../../../../../Class/Functional'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { ST } from '../../../../../interface/ST'
-import NOOP from '../../../../../NOOP'
-import { Peer } from '../../../../../Peer'
-import { Primitive } from '../../../../../Primitive'
+import { NOOP } from '../../../../../NOOP'
+import { Pod } from '../../../../../pod'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
-import { Unlisten } from '../../../../../Unlisten'
+import { System } from '../../../../../system'
+import { Callback } from '../../../../../types/Callback'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I<T> {
   offer: string
+  close: any
 }
 
 export interface O<T> {
-  stream: $ST
+  stream: ST
+  answer: string
 }
 
-export default class PeerReceiver<T> extends Primitive<I<T>, O<T>> {
+export type PeerReceiver_EE = { message: [any] }
+
+export type PeerReceiverEvents = FunctionalEvents<PeerReceiver_EE> &
+  PeerReceiver_EE
+
+export default class PeerReceiver<T> extends Semifunctional<
+  I<T>,
+  O<T>,
+  PeerReceiverEvents
+> {
   private _peer: Peer | null = null
 
   private _unlisten: Unlisten | undefined = undefined
@@ -27,7 +40,7 @@ export default class PeerReceiver<T> extends Primitive<I<T>, O<T>> {
 
   private _flag_err_invalid_offer: boolean = false
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['offer', 'close'],
@@ -35,7 +48,9 @@ export default class PeerReceiver<T> extends Primitive<I<T>, O<T>> {
       },
       {
         input: {},
-      }
+      },
+      system,
+      pod
     )
 
     this.addListener('destroy', () => {
@@ -51,7 +66,12 @@ export default class PeerReceiver<T> extends Primitive<I<T>, O<T>> {
       }
     })
 
-    this._peer = new Peer(false, DEFAULT_STUN_RTC_CONFIG)
+    this._peer = new Peer(
+      this.__system,
+      this.__pod,
+      false,
+      DEFAULT_STUN_RTC_CONFIG
+    )
 
     this._setup_peer()
   }
@@ -115,11 +135,6 @@ export default class PeerReceiver<T> extends Primitive<I<T>, O<T>> {
   }
 
   private _setup_peer = (): Unlisten => {
-    const signal_listener = (signal) => {
-      console.log('Receiver', 'signal', signal)
-      const { sdp } = signal
-      this._output.answer.push(sdp)
-    }
     const connect_listener = () => {
       console.log('Receiver', 'Peer', 'connect')
       this._connected = true
@@ -146,7 +161,7 @@ export default class PeerReceiver<T> extends Primitive<I<T>, O<T>> {
           callback(stream)
           return NOOP
         }
-      })()
+      })(this.__system, this.__pod)
       this._output.stream.push(_stream)
     }
     const stop_listener = () => {
@@ -154,7 +169,6 @@ export default class PeerReceiver<T> extends Primitive<I<T>, O<T>> {
       this._output.stream.pull()
     }
 
-    this._peer.addListener('signal', signal_listener)
     this._peer.addListener('connect', connect_listener)
     this._peer.addListener('error', error_listener)
     this._peer.addListener('close', close_listener)
@@ -163,7 +177,6 @@ export default class PeerReceiver<T> extends Primitive<I<T>, O<T>> {
     this._peer.addListener('stop', stop_listener)
 
     return () => {
-      this._peer.removeListener('signal', signal_listener)
       this._peer.removeListener('connect', connect_listener)
       this._peer.removeListener('error', error_listener)
       this._peer.removeListener('close', close_listener)

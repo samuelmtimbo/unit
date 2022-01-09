@@ -1,8 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Filter from '../../../../system/f/control/If'
+import { pod, system } from '../../../util/system'
 
-const filter = new Filter()
+const filter = new Filter(system, pod)
 
 filter.play()
 

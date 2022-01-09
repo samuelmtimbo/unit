@@ -1,15 +1,17 @@
 import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { renderPod } from '../../../../client/render/renderPod'
+import { renderGraph } from '../../../../client/render/renderPod'
+import { $Graph } from '../../../../interface/async/$Graph'
 import { $PO } from '../../../../interface/async/$PO'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { Unlisten } from '../../../../Unlisten'
+import { Unlisten } from '../../../../types/Unlisten'
 import { _removeChildren } from '../../../../util/element'
 
 export interface Props {
-  pod?: $PO
+  graph?: $Graph
   id?: string
   className?: string
   style?: Dict<string>
@@ -34,11 +36,11 @@ export default class Render extends Element<HTMLDivElement, Props> {
 
   private _unlisten: Unlisten
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
-      pod,
+      graph,
       id,
       className,
       style,
@@ -49,7 +51,7 @@ export default class Render extends Element<HTMLDivElement, Props> {
       data = {},
     } = this.$props
 
-    const $element = document.createElement('div')
+    const $element = this.$system.api.document.createElement('div')
 
     if (id !== undefined) {
       $element.id = id
@@ -83,7 +85,12 @@ export default class Render extends Element<HTMLDivElement, Props> {
       ...htmlPropHandler(this._div_el, DEFAULT_STYLE),
       pod: (pod: $PO) => {
         if (pod) {
-          this._unlisten = renderPod(this.$system, this._div_el, pod)
+          this._unlisten = renderGraph(
+            this._div_el,
+            this.$system,
+            this.$pod,
+            graph
+          )
         } else {
           if (this._unlisten) {
             this._unlisten()

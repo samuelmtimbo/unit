@@ -5,18 +5,27 @@ import {
 } from '../../../../../client/util/web/storage'
 import { J } from '../../../../../interface/J'
 import { V } from '../../../../../interface/V'
+import { ObjectUpdateType } from '../../../../../Object'
+import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
+import { System } from '../../../../../system'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export type I = {}
 
 export type O = {}
 
 export default class SessionStorage extends Primitive<I, O> implements V, J {
-  constructor() {
-    super({
-      i: [],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: [],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   private _checkAPI = () => {
@@ -61,15 +70,28 @@ export default class SessionStorage extends Primitive<I, O> implements V, J {
     sessionStorage.removeItem(name)
   }
 
-  setPath(path: string[], name: string, data: any): Promise<void> {
+  pathSet(path: string[], name: string, data: any): Promise<void> {
     throw new Error('Method not implemented.')
   }
 
-  getPath(path: string[], name: string): Promise<any> {
+  pathGet(path: string[], name: string): Promise<any> {
     throw new Error('Method not implemented.')
   }
 
-  deletePath(path: string[], name: string): Promise<void> {
+  pathDelete(path: string[], name: string): Promise<void> {
+    throw new Error('Method not implemented.')
+  }
+
+  subscribe(
+    path: string[],
+    key: string,
+    listener: (
+      type: ObjectUpdateType,
+      path: string[],
+      key: string,
+      data: any
+    ) => void
+  ): Unlisten {
     throw new Error('Method not implemented.')
   }
 

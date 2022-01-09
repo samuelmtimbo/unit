@@ -1,5 +1,7 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { ST } from '../../../../../../interface/ST'
+import { Pod } from '../../../../../../pod'
+import { System } from '../../../../../../system'
 
 export type I = {
   id: string
@@ -11,7 +13,7 @@ export type O = {}
 export default class AudioTarget extends Functional<I, O> {
   private _audio: HTMLAudioElement
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['id', 'stream'],
@@ -23,7 +25,9 @@ export default class AudioTarget extends Functional<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
 
     this._audio = new Audio()

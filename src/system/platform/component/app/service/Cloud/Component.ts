@@ -1,12 +1,10 @@
-import callAll from '../../../../../../callAll'
 import { addListener } from '../../../../../../client/addListener'
-import { ANIMATION_T_S } from '../../../../../../client/animation'
+import { ANIMATION_T_S } from '../../../../../../client/animation/animation'
 import { Component } from '../../../../../../client/component'
 import mergeStyle from '../../../../../../client/component/mergeStyle'
 import { makeCustomListener } from '../../../../../../client/event/custom'
 import { makeShortcutListener } from '../../../../../../client/event/keyboard'
 import { makeClickListener } from '../../../../../../client/event/pointer/click'
-import { Store } from '../../../../../../client/host'
 import { requestJSON } from '../../../../../../client/host/fetchJSON'
 import { connect as graph } from '../../../../../../client/host/service/graph'
 import { connect as vm } from '../../../../../../client/host/service/vm'
@@ -18,18 +16,22 @@ import {
 } from '../../../../../../client/host/user'
 import { MAX_Z_INDEX } from '../../../../../../client/MAX_Z_INDEX'
 import parentElement from '../../../../../../client/parentElement'
-import { userSelect } from '../../../../../../client/style/userSelect'
-import { NONE } from '../../../../../../client/theme'
+import { Store } from '../../../../../../client/store'
+import { COLOR_NONE } from '../../../../../../client/theme'
+import { userSelect } from '../../../../../../client/util/style/userSelect'
+import { Pod } from '../../../../../../pod'
 import {
   SharedObject,
   SharedObjectClient,
 } from '../../../../../../SharedObject'
+import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
-import { Unlisten } from '../../../../../../Unlisten'
+import { Unlisten } from '../../../../../../types/Unlisten'
+import callAll from '../../../../../../util/call/callAll'
 import { dragOverTimeListener } from '../../../../../host/component/IconTabs/dragOverTimeListener'
+import TextDiv from '../../../../component/app/TextDiv/Component'
 import Div from '../../../../component/Div/Component'
 import Icon from '../../../../component/Icon/Component'
-import TextDiv from '../../../../component/app/TextDiv/Component'
 import DataService from '../Data/Component'
 import DBService from '../DB/Component'
 import FileService from '../File/Component'
@@ -39,7 +41,6 @@ import Peer from '../Peer/Component'
 import StorageService from '../Storage/Component'
 import VMServiceComponent from '../VM/Component'
 import Web from '../Web/Component'
-import { System } from '../../../../../../system'
 
 export interface Props {
   style?: Dict<string>
@@ -60,7 +61,7 @@ export const DEFAULT_STYLE = {
   top: '0px',
   left: '0px',
   display: 'flex',
-  borderColor: NONE,
+  borderColor: COLOR_NONE,
   borderStyle: 'solid',
   borderWidth: '1px',
   borderRadius: '3px',
@@ -69,7 +70,7 @@ export const DEFAULT_STYLE = {
   zIndex: `${MAX_Z_INDEX}`,
 }
 
-const STORE: Dict<() => Dict<SharedObject<Store<any>>>> = {
+const STORE: Dict<() => Dict<SharedObject<Store<any>, {}>>> = {
   graph,
   web,
   vm,
@@ -195,8 +196,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
 
   private _selected_service: string | null = null
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style, keyStyle } = $props
 
@@ -208,7 +209,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     root.addEventListeners([
       makeShortcutListener([
@@ -232,7 +234,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
           transition: `opacity ${ANIMATION_T_S}s linear`,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     root.registerParentRoot(container)
     this._container = container
@@ -258,7 +261,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
         },
         tabIndex: 0,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     container.registerParentRoot(list)
     this._list = list
@@ -370,7 +374,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
               alignItems: 'center',
             },
           },
-          this.$system
+          this.$system,
+          this.$pod
         )
         l++
         this._row.push(row)
@@ -391,7 +396,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
             ...userSelect('none'),
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       this._service_item_icon[name] = service_icon
 
@@ -410,7 +416,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
             ...userSelect('none'),
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       this._service_item_name[name] = service_name
 
@@ -427,7 +434,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
             pointerEvents: 'none',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       this._service_item_comp[name] = service_comp
 
@@ -459,7 +467,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
           },
           tabIndex: i + 1,
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       service_item.appendChild(service_icon)
       service_item.appendChild(service_name)
@@ -471,8 +480,7 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
           },
         })
       )
-      // @ts-ignore
-      service_item.$element.__DROP__TARGET__ = true
+      service_item.$element.setAttribute('dropTarget', 'true')
       dragOverTimeListener(service_item, 500, () => {
         if (!this._selected_service) {
           this._show_service(name)
@@ -752,8 +760,8 @@ export default class Cloud extends Component<HTMLDivElement, Props> {
   }
 
   private _store_client: Dict<{
-    user: SharedObjectClient<Store<any>>
-    shared: SharedObjectClient<Store<any>>
+    user: SharedObjectClient<Store<any>, {}>
+    shared: SharedObjectClient<Store<any>, {}>
   }> = {}
 
   onMount() {

@@ -1,16 +1,16 @@
-import { Callback } from '../../Callback'
-import { getGlobalRef } from '../../global'
+import { Unit } from '../../Class/Unit'
 import { Moment } from '../../debug/Moment'
 import { watchUnit } from '../../debug/watchUnit'
+import { getGlobalRef } from '../../global'
 import { proxyWrap } from '../../proxyWrap'
 import { evaluate } from '../../spec/evaluate'
-import { stringifyPinData } from '../../stringifyPinData'
 import { System } from '../../system'
+import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
 import { GlobalRefSpec } from '../../types/GlobalRefSpec'
-import { Unlisten } from '../../Unlisten'
+import { stringifyPinData } from '../../types/stringifyPinData'
+import { Unlisten } from '../../types/Unlisten'
 import { mapObjVK } from '../../util/object'
-import { U } from '../U'
 import { $PO } from './$PO'
 import { $U, $U_C, $U_R, $U_W } from './$U'
 import { Async } from './Async'
@@ -21,11 +21,11 @@ export const $$refGlobalObj = (system: System, id: string, _: string[]) => {
   return $unit
 }
 
-export const AsyncUCall = (unit: U): $U_C => {
+export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
   return {
     $getGlobalId(data: {}, callback: Callback<string>) {
       const __global_id = unit.getGlobalId()
-      
+
       callback(__global_id)
     },
 
@@ -36,6 +36,7 @@ export const AsyncUCall = (unit: U): $U_C => {
 
     $emit(_data: { type: string; data: any }) {
       const { type, data } = _data
+
       unit.emit(type, data)
     },
 
@@ -104,7 +105,7 @@ export const AsyncUCall = (unit: U): $U_C => {
 
     $getRefInputData(data: {}, callback: Callback<Dict<GlobalRefSpec>>): void {
       const _data = unit.getRefInputData()
-      const __data = mapObjVK(_data, (unit: U) => {
+      const __data = mapObjVK(_data, (unit: Unit) => {
         const __ = unit.getInterface()
         const __global_id = unit.getGlobalId()
         return { __global_id, __ }
@@ -120,7 +121,7 @@ export const AsyncUCall = (unit: U): $U_C => {
   }
 }
 
-export const AsyncUWatch = (unit: U): $U_W => {
+export const AsyncUWatch = (unit: Unit): $U_W => {
   return {
     $watch(
       { events }: { events: string[] },
@@ -131,7 +132,7 @@ export const AsyncUWatch = (unit: U): $U_W => {
   }
 }
 
-export const AsyncURef = (unit: U): $U_R => {
+export const AsyncURef = (unit: Unit): $U_R => {
   return {
     $refGlobalObj(data: GlobalRefSpec): $U {
       const __system = unit.refSystem()
@@ -147,7 +148,7 @@ export const AsyncURef = (unit: U): $U_R => {
   }
 }
 
-export const AsyncU: (unit: U) => $U = (unit: U) => {
+export const AsyncU: (unit: Unit) => $U = (unit: Unit) => {
   return {
     ...AsyncUCall(unit),
     ...AsyncUWatch(unit),

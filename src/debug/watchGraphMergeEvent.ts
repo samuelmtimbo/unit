@@ -1,4 +1,4 @@
-import { U } from '../interface/U'
+import { Graph } from '../Class/Graph'
 import { GraphMergeSpec } from '../types'
 import { Moment } from './Moment'
 
@@ -11,7 +11,7 @@ export interface GraphMergeMoment extends Moment<GraphMergeMomentData> {}
 
 export function watchGraphMergeEvent(
   event: 'add_merge' | 'remove_merge',
-  unit: U,
+  graph: Graph,
   callback: (moment: GraphMergeMoment) => void
 ): () => void {
   const listener = (mergeId: string, mergeSpec: GraphMergeSpec) => {
@@ -24,8 +24,8 @@ export function watchGraphMergeEvent(
       },
     })
   }
-  unit.prependListener(event, listener)
+  graph.prependListener(event, listener)
   return () => {
-    unit.removeListener(event, listener)
+    graph.removeListener(event, listener)
   }
 }

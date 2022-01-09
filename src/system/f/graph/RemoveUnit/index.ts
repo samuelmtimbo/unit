@@ -1,28 +1,34 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Graph } from '../../../../Class/Graph'
+import { G } from '../../../../interface/G'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 import { UnitClass } from '../../../../types/UnitClass'
 
 export interface I<T> {
-  graph: Graph
+  graph: G
   id: string
 }
 
 export interface O<T> {}
 
 export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
-  constructor() {
-    super({
-      i: ['id', 'graph'],
-      o: [],
-    }),
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['id', 'graph'],
+        o: [],
+      },
       {
         input: {
           graph: {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
+    )
   }
 
   f(
@@ -31,7 +37,7 @@ export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
       graph,
     }: {
       class: UnitClass<any>
-      graph: Graph
+      graph: G
       id: string
     },
     done: Done<O<T>>

@@ -1,7 +1,7 @@
-import { Callback } from '../../Callback'
+import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
 import { GlobalRefSpec } from '../../types/GlobalRefSpec'
-import { Unlisten } from '../../Unlisten'
+import { Unlisten } from '../../types/Unlisten'
 import { $PO } from './$PO'
 
 export const $U_METHOD_CALL = [

@@ -1,5 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import merge from './f'
 
@@ -13,11 +15,16 @@ export interface O<T, K> {
 }
 
 export default class Merge<T, K> extends Functional<I<T, K>, O<T, K>> {
-  constructor() {
-    super({
-      i: ['a', 'b'],
-      o: ['ab'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['a', 'b'],
+        o: ['ab'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ a, b }: I<T, K>, done: Done<O<T, K>>): void {

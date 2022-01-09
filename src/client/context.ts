@@ -1,13 +1,12 @@
 import ResizeObserver from 'resize-observer-polyfill'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
-import { Unlisten } from '../Unlisten'
-import { pull } from '../util/array'
+import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
-import fullwindowElement from './createFullwindow'
+import createFullwindow from './platform/web/createFullwindow'
+import { IOElement } from './IOElement'
 import Listenable from './Listenable'
 import { PositionObserver } from './PositionObserver'
-import { stopByPropagation } from './stopPropagation'
 
 export interface FullwindowOpt {
   showExitButton?: boolean
@@ -48,26 +47,6 @@ export interface Context extends Listenable {
 
 export interface Ref extends Dict<any[]> {}
 
-// TODO
-// move
-function getChildIndex(child: ChildNode): number {
-  let i = 0
-  // @ts-ignore
-  for (i = 0; (child = child.previousSibling); i++) {}
-  return i
-}
-
-// TODO
-// move
-export function _replaceChild($element: Element, $nextElement: Element) {
-  const parent = $element.parentElement
-  if (parent) {
-    const index = getChildIndex($element)
-    parent.insertBefore($nextElement, parent.children[index])
-    parent.removeChild($element)
-  }
-}
-
 export function dispatchContextEvent(
   $context: Context,
   type: string,
@@ -78,7 +57,7 @@ export function dispatchContextEvent(
 }
 
 export function dispatchCustomEvent(
-  $element: Element,
+  $element: IOElement,
   type: string,
   detail: any = {},
   bubbles: boolean = true
@@ -186,7 +165,7 @@ export function enterFullwindow(
     component.unmount()
   }
 
-  const container = fullwindowElement()
+  const container = createFullwindow()
 
   container.appendChild($element)
   $$element.appendChild(container)

@@ -1,7 +1,8 @@
 import * as assert from 'assert'
 import Equals from '../../../../system/f/comparisson/Equals'
+import { pod, system } from '../../../util/system'
 
-const equals = new Equals()
+const equals = new Equals(system, pod)
 
 equals.play()
 

@@ -4,14 +4,13 @@ import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
 import { GraphClass } from '../../../types/GraphClass'
+import { pod, system } from '../../util/system'
 
 const spec =
   require('../../../system/core/common/CompareLTE/spec.json') as GraphSpec
 const CompareLessThanEqual = fromSpec(spec, _specs) as GraphClass
 
-import { system } from '../../util/system'
-
-const compareLTE = new CompareLessThanEqual(system)
+const compareLTE = new CompareLessThanEqual(system, pod)
 
 false && watchUnitAndLog(compareLTE)
 false && watchGraphAndLog(compareLTE)

@@ -1,8 +1,8 @@
 import { _addEventListener } from '..'
-import { Unlisten } from '../../../Unlisten'
+import { Unlisten } from '../../../types/Unlisten'
 import { Context } from '../../context'
 import Listenable from '../../Listenable'
-import { addVector, rotateVector, subtractVector } from '../../util/geometry'
+import { rotateVector } from '../../util/geometry'
 
 export const POINTER_EVENT_NAMES = [
   'pointerdown',

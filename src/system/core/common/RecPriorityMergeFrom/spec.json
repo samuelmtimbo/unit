@@ -33,7 +33,7 @@
     "yowlvdyf": {
       "isempty0": {
         "output": {
-          "unutqjyl": true
+          "empty": true
         }
       },
       "and": {
@@ -45,7 +45,7 @@
     "inluxhhu": {
       "isempty1": {
         "output": {
-          "unutqjyl": true
+          "empty": true
         }
       },
       "and": {
@@ -79,7 +79,7 @@
     "mfthhowg": {
       "isempty0": {
         "input": {
-          "ftwnpzfjy": true
+          "obj": true
         }
       },
       "ifnot0": {
@@ -91,7 +91,7 @@
     "zytkzo": {
       "isempty1": {
         "input": {
-          "ftwnpzfjy": true
+          "obj": true
         }
       },
       "ifnot1": {

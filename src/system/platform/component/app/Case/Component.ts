@@ -1,13 +1,16 @@
+import { Element } from '../../../../../client/element'
 import { SPEC_ID_EMPTY } from '../../../../../client/empty'
 import { getSpec } from '../../../../../client/spec'
-import { Element } from '../../../../../client/element'
-import { applyTheme, NONE } from '../../../../../client/theme'
+import { applyTheme, COLOR_NONE } from '../../../../../client/theme'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import Div from '../../Div/Component'
-import Class from '../Class/Component'
+import ClassDatum, {
+  CLASS_DEFAULT_HEIGHT,
+  CLASS_DEFAULT_WIDTH,
+} from '../Class/Component'
 import Selection from '../Selection/Component'
-import { CLASS_DEFAULT_WIDTH, CLASS_DEFAULT_HEIGHT } from '../Class/Component'
 
 export interface Props {
   id?: string
@@ -20,8 +23,8 @@ const CASE_HEIGHT = (CASE_WIDTH * 3) / 4
 export default class Case extends Element<HTMLDivElement, Props> {
   private _showcase: Div
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { specs } = this.$system
 
@@ -33,7 +36,7 @@ export default class Case extends Element<HTMLDivElement, Props> {
 
     const spec = getSpec(specs, id)
     const { name } = spec
-    const spec_class = new Class(
+    const spec_class = new ClassDatum(
       {
         className: 'explorer-spec-class',
         style: {
@@ -42,7 +45,8 @@ export default class Case extends Element<HTMLDivElement, Props> {
         },
         id,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const spec_name_comp = new Div(
@@ -55,7 +59,8 @@ export default class Case extends Element<HTMLDivElement, Props> {
         },
         innerText: name,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     const spec_path_comp = new Div(
@@ -69,15 +74,17 @@ export default class Case extends Element<HTMLDivElement, Props> {
         },
         innerText: '',
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     const spec_selection = new Selection(
       {
         width: CASE_WIDTH,
         height: CASE_HEIGHT,
-        stroke: NONE,
+        stroke: COLOR_NONE,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     const spec_overlay = new Div(
       {
@@ -87,7 +94,8 @@ export default class Case extends Element<HTMLDivElement, Props> {
           height: '100%',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     const showcase = new Div(
       {
@@ -98,7 +106,7 @@ export default class Case extends Element<HTMLDivElement, Props> {
           color: 'white',
           position: 'relative',
           border: '1px solid',
-          borderColor: NONE,
+          borderColor: COLOR_NONE,
           // borderColor: WHITE,
           display: 'flex',
           justifyContent: 'center',
@@ -109,7 +117,8 @@ export default class Case extends Element<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     showcase.setChildren([
       spec_selection,

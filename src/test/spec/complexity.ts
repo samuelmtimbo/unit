@@ -1,11 +1,9 @@
-import { treeComplexityById } from '../../spec/complexity'
-import _specs from '../../system/_specs'
 import {
   ID_INCREMENT,
   ID_ONE,
   ID_PRIORITY_MERGE,
   ID_RANGE_ARRAY,
-  ID_SINGLE
+  ID_SINGLE,
 } from './id'
 
 const paths = [

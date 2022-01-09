@@ -1,6 +1,6 @@
 {
   "name": "div",
-  "type": "`U`&`C`",
+  "type": "`U`&`C`&`V`&`J`",
   "inputs": {
     "style": {
       "type": "object",

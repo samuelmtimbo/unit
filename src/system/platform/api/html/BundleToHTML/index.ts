@@ -1,6 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { makeHTML } from '../../../../../client/html'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 import { BundleSpec } from '../../../method/process/BundleSpec'
 
 export type I = {
@@ -13,8 +15,8 @@ export type O = {
 }
 
 export default class BundleToHTML extends Functional<I, O> {
-  constructor() {
-    super({ i: ['bundle', 'opt'], o: ['html'] })
+  constructor(system: System, pod: Pod) {
+    super({ i: ['bundle', 'opt'], o: ['html'] }, {}, system, pod)
   }
 
   f({ bundle, opt }: I, done: Done<O>): void {

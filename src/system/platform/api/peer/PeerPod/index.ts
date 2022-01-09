@@ -1,20 +1,25 @@
 import { DEFAULT_STUN_RTC_CONFIG } from '../../../../../api/peer/config'
+import { Peer } from '../../../../../api/peer/Peer'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
 import { graphFromPort } from '../../../../../graphFromPort'
-import { G } from '../../../../../interface/G'
-import { Peer } from '../../../../../Peer'
+import { $Graph } from '../../../../../interface/async/$Graph'
+import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
 import { RemotePort } from '../../../../../RemotePort'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
-import { Port } from './../../../../../Port'
+import { System } from '../../../../../system'
+import { IPort } from '../../../../../types/global/IPort'
 
 export interface I {
-  id: string
+  offer: string
+  opt: { iceServers: { urls: string[] }[] }
+  close: any
 }
 
 export interface O {
-  pod: G
+  pod: $Graph
+  answer: string
 }
 
 export default class PeerPod extends Primitive<I, O> {
@@ -22,7 +27,7 @@ export default class PeerPod extends Primitive<I, O> {
 
   private _peer: Peer
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['opt', 'offer', 'close'],
@@ -34,7 +39,9 @@ export default class PeerPod extends Primitive<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
 
     this.addListener('destroy', () => {
@@ -42,11 +49,11 @@ export default class PeerPod extends Primitive<I, O> {
     })
 
     this.addListener('take_err', () => {
-      this._input.id.pull()
+      //
     })
 
     this.addListener('take_caught_err', () => {
-      this._input.id.pull()
+      //
     })
   }
 
@@ -63,9 +70,14 @@ export default class PeerPod extends Primitive<I, O> {
 
   async onDataInputData(name: string, data: any): Promise<void> {
     if (name === 'opt') {
-      this._peer = new Peer(false, DEFAULT_STUN_RTC_CONFIG)
+      this._peer = new Peer(
+        this.__system,
+        this.__pod,
+        false,
+        DEFAULT_STUN_RTC_CONFIG
+      )
 
-      const port: Port = {
+      const port: IPort = {
         send: (data) => {
           // console.log('PeerPod', 'postMessage', data)
           const message = stringify(data)
@@ -96,7 +108,7 @@ export default class PeerPod extends Primitive<I, O> {
             {
               const remote_port = new RemotePort(port)
               this._remote_port = remote_port
-              const pod = graphFromPort(remote_port)
+              const pod = graphFromPort(this.__system, this.__pod, remote_port)
               this._output.pod.push(pod)
             }
             break

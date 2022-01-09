@@ -1,16 +1,28 @@
-import { ListenerNotFoundError } from './Class/ListenerNotFoundError'
+import { ListenerNotFoundError } from './exception/ListenerNotFoundError'
 import { EE } from './interface/EE'
 import { Dict } from './types/Dict'
-import { Unlisten } from './Unlisten'
+import { Listener } from './types/Listener'
+import { Unlisten } from './types/Unlisten'
 
-export class EventEmitter_ implements EE {
-  private __listeners: Dict<Function[]> = {}
+export type EventEmitter_EE<_EE extends Dict<any[]>> = {
+  listen: [{ event: 'listen' | keyof _EE }]
+  unlisten: [{ event: 'unlisten' | keyof _EE }]
+}
 
-  constructor() {}
+export class EventEmitter<
+  _EE extends EventEmitter_EE<_EE> & Dict<any[]> = Dict<any> & {
+    listen: [{ event: 'listen' }]
+    unlisten: [{ event: 'unlisten' }]
+  }
+> implements EE<_EE>
+{
+  private __listeners: {
+    [K in keyof _EE]?: Listener<_EE[K]>[]
+  } = {}
 
-  private _removeListener = (
-    event: string,
-    listener: (...data: any[]) => void
+  private _removeListener = <K extends keyof _EE>(
+    event: K,
+    listener: Listener<_EE[K]>
   ) => {
     const listeners = this.__listeners[event]
 
@@ -33,7 +45,10 @@ export class EventEmitter_ implements EE {
     }
   }
 
-  prependListener(event: string, listener: (...data: any[]) => void): Unlisten {
+  prependListener<K extends keyof _EE>(
+    event: K,
+    listener: Listener<_EE[K]>
+  ): Unlisten {
     this.__listeners[event] = this.__listeners[event] || []
     this.__listeners[event].unshift(listener)
 
@@ -44,11 +59,17 @@ export class EventEmitter_ implements EE {
     }
   }
 
-  removeListener(event: string, listener: (...data: any) => void): void {
+  removeListener<K extends keyof _EE>(
+    event: K,
+    listener: Listener<_EE[K]>
+  ): void {
     this._removeListener(event, listener)
   }
 
-  addListener(event: string, listener: (...data: any[]) => void): Unlisten {
+  addListener<K extends keyof _EE>(
+    event: K,
+    listener: Listener<_EE[K]>
+  ): Unlisten {
     this.__listeners[event] = this.__listeners[event] || []
     this.__listeners[event].push(listener)
 
@@ -63,11 +84,11 @@ export class EventEmitter_ implements EE {
     return Object.keys(this.__listeners)
   }
 
-  listenerCount(name: string): number {
+  listenerCount<K extends keyof _EE>(name: K): number {
     return (this.__listeners[name] || []).length
   }
 
-  emit(event: string, ...args: any[]): void {
+  emit<K extends keyof _EE>(event: K, ...args: _EE[K]): void {
     const listeners = [...(this.__listeners[event] || [])]
 
     for (const listener of listeners) {

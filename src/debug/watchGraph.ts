@@ -1,18 +1,18 @@
-import { callAllDict } from '../callAll'
+import { Graph } from '../Class/Graph'
 import { Unit } from '../Class/Unit'
 import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
-import { G } from '../interface/G'
 import { U } from '../interface/U'
 import { getMergePinNodeId } from '../spec/util'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../types/Dict'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
+import { callAllDict } from '../util/call/callAllDict'
 import { GraphUnitPinMoment } from './GraphUnitPinMoment'
 import { Moment } from './Moment'
 import { watchPin } from './watchPin'
 import { watchUnitIO } from './watchUnitIO'
 
-export function watchGraph<T extends G>(
+export function watchGraph<T extends Graph>(
   graph: T,
   callback: (moment: any) => void,
   events: string[] = DEFAULT_EVENTS

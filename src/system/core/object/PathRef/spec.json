@@ -1,0 +1,223 @@
+{
+  "name": "path ref",
+  "inputs": {
+    "path": {
+      "pin": {
+        "0": {
+          "unitId": "ifnot",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "isempty",
+          "pinId": "obj"
+        }
+      },
+      "type": "(number|string)[]"
+    },
+    "obj": {
+      "pin": {
+        "0": {
+          "unitId": "ref",
+          "pinId": "obj"
+        },
+        "1": {
+          "unitId": "if",
+          "pinId": "a"
+        }
+      },
+      "type": "`J`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "pathref",
+          "pinId": "value"
+        },
+        "1": {
+          "unitId": "if",
+          "pinId": "a if b"
+        }
+      },
+      "type": "`V`",
+      "ref": true
+    }
+  },
+  "units": {
+    "ref": {
+      "id": "e1486d65-7d51-436b-949d-4e57d1f9e4a9",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 46,
+          "y": 105
+        }
+      }
+    },
+    "pathref": {
+      "id": "0696b256-5062-4bfd-b671-3c1ef475c8c7",
+      "input": {
+        "path": {},
+        "obj": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 150,
+          "y": 58
+        }
+      }
+    },
+    "behead": {
+      "id": "e9831075-2e62-43a4-84af-0653f7e707a9",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {},
+        "head": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 49,
+          "y": 25
+        }
+      }
+    },
+    "isempty": {
+      "id": "194683f4-5b90-4501-a8c9-b34f131d4f79",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "empty": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -142,
+          "y": -63
+        }
+      }
+    },
+    "if": {
+      "id": "8f89020d-7133-4822-8d77-56d0790af2e9",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a if b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -55,
+          "y": -106
+        }
+      }
+    },
+    "ifnot": {
+      "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a if not b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": -21
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "ref": {
+        "output": {
+          "value": true
+        }
+      },
+      "pathref": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "1": {
+      "behead": {
+        "output": {
+          "head": true
+        }
+      },
+      "ref": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "2": {
+      "behead": {
+        "output": {
+          "a": true
+        }
+      },
+      "pathref": {
+        "input": {
+          "path": true
+        }
+      }
+    },
+    "3": {
+      "ifnot": {
+        "input": {
+          "b": true
+        }
+      },
+      "isempty": {
+        "output": {
+          "empty": true
+        }
+      },
+      "if": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "4": {
+      "ifnot": {
+        "output": {
+          "a if not b": true
+        }
+      },
+      "behead": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "object-get",
+    "description": "get `value` of `obj` at `path`",
+    "complexity": 31,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "id": "0696b256-5062-4bfd-b671-3c1ef475c8c7"
+}

@@ -1,0 +1,53 @@
+{
+  "name": "on error",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'error'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "type": "`U`",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "type": "string",
+      "pin": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` \"error\" event",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "notification"
+    ]
+  },
+  "id": "15507368-081f-11eb-aee1-d3c00ce4dd9d",
+  "type": "`U`&`G`",
+  "system": true
+}

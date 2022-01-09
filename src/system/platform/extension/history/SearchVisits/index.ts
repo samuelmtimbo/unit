@@ -1,6 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { callMethod } from '../../../../../client/extension'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
 export interface I {
@@ -12,11 +14,16 @@ export interface O {
 }
 
 export default class GetVisits extends Functional<I, O> {
-  constructor() {
-    super({
-      i: ['query'],
-      o: ['items'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['query'],
+        o: ['items'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 
   f({ query }: I, done: Done<O>) {

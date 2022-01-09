@@ -1,7 +1,3 @@
-import callAll from '../../callAll'
-import { Callback } from '../../Callback'
-import { Component } from '../../client/component'
-import { listenGlobalComponent } from '../../client/globalComponent'
 import {
   appendChild,
   appendParentChild,
@@ -20,17 +16,17 @@ import {
 } from '../../component/method'
 import { SELF } from '../../constant/SELF'
 import { UNTITLED } from '../../constant/STRING'
-import { GraphState } from '../../GraphState'
-import { C } from '../../interface/C'
-import { C_U } from '../../interface/C_U'
-import { G } from '../../interface/G'
-import { PO } from '../../interface/PO'
+import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
+import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
+import { C, C_EE } from '../../interface/C'
+import { Component_ } from '../../interface/Component'
+import { G, G_EE } from '../../interface/G'
 import { U } from '../../interface/U'
 import { V } from '../../interface/V'
-import { ObjectSource } from '../../ObjectSource'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
-import { Primitive } from '../../Primitive'
+import { Pod } from '../../pod'
+import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { evaluate } from '../../spec/evaluate'
 import { fromId } from '../../spec/fromId'
 import {
@@ -46,7 +42,6 @@ import {
   forEachPinOnMerges,
   getExposedPinId,
   getMergePinNodeId,
-  getMergeUnitPinCount,
   getOutputNodeId,
   getPinNodeId,
   oppositePinKind,
@@ -68,30 +63,21 @@ import {
   GraphSubComponentSpec,
   GraphUnitSpec,
   GraphUnitsSpec,
-  Specs,
 } from '../../types'
 import { Dict } from '../../types/Dict'
+import { GraphState } from '../../types/GraphState'
 import { IO } from '../../types/IO'
 import { UnitClass } from '../../types/UnitClass'
-import { Units } from '../../Units'
-import { Unlisten } from '../../Unlisten'
+import { Unlisten } from '../../types/Unlisten'
 import { forEach } from '../../util/array'
-import {
-  clone,
-  filterObj,
-  getObjSingleKey,
-  mapObjVK,
-  someObj,
-  _keyCount,
-} from '../../util/object'
+import callAll from '../../util/call/callAll'
+import { clone, filterObj, mapObjVK, someObj } from '../../util/object'
 import { objPromise } from '../../util/promise'
-import { WaitAll } from '../WaitAll'
-import { Element } from '../Element/Element'
+import { Element } from '../Element'
 import Merge from '../Merge'
-import { Stateful } from '../Stateful'
+import { Stateful, Stateful_EE } from '../Stateful'
 import { Unit } from '../Unit'
-import { UnitNotFoundError } from './UnitNotFoundError'
-import { MergeNotFoundError } from './MergeNotFoundError'
+import { WaitAll } from '../WaitAll'
 
 export function isStateful(unit: U): boolean {
   return unit instanceof Stateful || (unit instanceof Graph && unit.stateful)
@@ -101,7 +87,14 @@ export function isElement(unit: U): boolean {
   return unit instanceof Element || (unit instanceof Graph && unit.element)
 }
 
-export class Graph<I = any, O = any> extends Primitive implements G, C, U {
+export type Graph_EE = G_EE & C_EE & Stateful_EE
+
+export type GraphEvents = PrimitiveEvents<Graph_EE> & Graph_EE
+
+export class Graph<I = any, O = any>
+  extends Primitive<I, O, GraphEvents>
+  implements G, C, U
+{
   __ = ['U', 'C', 'G']
 
   public stateful = false
@@ -110,9 +103,9 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
 
   private _spec: GraphSpec
 
-  private _unit: Units = {}
+  private _unit: Dict<Unit> = {}
 
-  private _merge: { [mergeId: string]: U } = {}
+  private _merge: { [mergeId: string]: Merge } = {}
 
   private _pipedFrom: {
     [output: string]: string
@@ -147,8 +140,6 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   private _statefulUnitCount: number = 0
   private _elementUnitCount: number = 0
 
-  protected _component_source: ObjectSource<Component> = new ObjectSource()
-
   private _mergePinCount: Dict<number> = {}
 
   private _unitToMerge: Dict<Set<string>> = {}
@@ -156,7 +147,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
 
   // E
 
-  public _children: (C & U)[] = []
+  public _children: Component_[] = []
 
   constructor(
     graph: GraphSpec = {
@@ -168,7 +159,8 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       component: {},
     },
     branch: Dict<true> = {},
-    system: System
+    system: System,
+    pod: Pod
   ) {
     super(
       {
@@ -176,7 +168,8 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
         o: [],
       },
       {},
-      system
+      system,
+      pod
     )
 
     const {
@@ -210,8 +203,6 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
 
     this.setupComponent(component)
 
-    this.addListener('_attach', this._attach)
-    this.addListener('_dettach', this._dettach)
     this.addListener('reset', this._reset)
     this.addListener('play', this._play)
     this.addListener('pause', this._pause)
@@ -222,7 +213,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     const f_inputs = filterObj(inputs, ({ functional }) => !!functional)
     const f_input_names = Object.keys(f_inputs)
 
-    const waitAll = new WaitAll(system)
+    const waitAll = new WaitAll<any>(this.__system, this.__pod)
 
     waitAll.play()
 
@@ -232,12 +223,6 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       const _pin = this.getExposedInputPin(name)
       waitAll.setOutput(name, _pin)
       this.setInput(name, pin, {})
-    })
-
-    const { __global_id } = this
-
-    listenGlobalComponent(this.__system, __global_id, (component) => {
-      this._component_source.set(component)
     })
   }
 
@@ -422,7 +407,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   ) {
     this._setExposedSubPin(type, name, subPinId, subPin, opt)
 
-    this.emit('set_exposed_sub_pin', type, name, subPinId, subPin)
+    this.emit('set_exposed_sub_pin', type, name, subPinId, subPin, opt)
   }
 
   private _setExposedSubPin(
@@ -485,24 +470,6 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
 
   private _reset = (): void => {
     // TODO
-  }
-
-  private _attach = ($system: System): void => {
-    // console.log('Graph', '_attach')
-
-    for (const unitId in this._unit) {
-      const unit = this._unit[unitId]
-      unit.attach($system)
-    }
-  }
-
-  private _dettach = (): void => {
-    // console.log('Graph', '_dettach')
-
-    for (const unitId in this._unit) {
-      const unit = this._unit[unitId]
-      unit.dettach()
-    }
   }
 
   private _play(): void {
@@ -568,7 +535,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
 
   public _setStateful(): void {
     this.stateful = true
-    this.emit('statefull')
+    this.emit('stateful')
   }
 
   public _setStateless(): void {
@@ -603,7 +570,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     return this._spec.units[id]
   }
 
-  public refUnits = (): Units => {
+  public refUnits = (): Dict<Unit> => {
     return this._unit
   }
 
@@ -717,7 +684,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     pinSpec: GraphExposedPinSpec,
     emit: boolean = true,
     exposedPin = new Pin(),
-    exposedMerge = new Merge(this.__system)
+    exposedMerge = new Merge(this.__system, this.__pod)
   ): void => {
     // console.log('Graph', 'exposePinSet', type, pinId, pinSpec)
 
@@ -734,7 +701,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     pinId: string,
     pinSpec: GraphExposedPinSpec,
     exposedPin = new Pin(),
-    exposedMerge = new Merge(this.__system)
+    exposedMerge = new Merge(this.__system, this.__pod)
   ): void => {
     exposedMerge.play()
 
@@ -887,11 +854,12 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   }
 
   public coverPinSet = (type: IO, id: string, emit: boolean = true): void => {
+    const pinSpec = this.getExposedPinSpec(type, id)
+
     this._coverPinSet(type, id)
 
-    emit && this.emit('cover_pin_set', type, id)
-
-    emit && this.emit('leaf_cover_pin_set', [], type, id)
+    emit && this.emit('cover_pin_set', type, id, pinSpec)
+    emit && this.emit('leaf_cover_pin_set', [], type, id, pinSpec)
   }
 
   public _coverPinSet = (type: IO, id: string): void => {
@@ -1034,13 +1002,15 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
 
   public coverPin = (
     type: IO,
-    id: string,
+    pinId: string,
     subPinId: string,
     emit: boolean = true
   ): void => {
-    this._coverPin(type, id, subPinId)
+    const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
-    emit && this.emit('cover_pin', type, id, subPinId)
+    this._coverPin(type, pinId, subPinId)
+
+    emit && this.emit('cover_pin', type, pinId, subPinId, subPinSpec)
   }
 
   private _coverPin = (type: IO, id: string, subPinId: string): void => {
@@ -1217,15 +1187,24 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     return !!this._unit[id]
   }
 
-  public refUnit(id: string): U<any, any> {
+  public hasMerge(id: string): boolean {
+    return !!this._merge[id]
+  }
+
+  public refUnit(id: string): Unit<any, any> {
     if (!this._unit[id]) {
       throw new Error('Cannot find unit')
     }
     return this._unit[id]
   }
 
-  public getUnitByPath(path: string[]): U<any, any> {
-    let unit: U<any, any> = this
+  public refGraph(id: string): G {
+    const graph = this.refUnit(id) as Graph
+    return graph
+  }
+
+  public getUnitByPath(path: string[]): Unit<any, any> {
+    let unit: Unit<any, any> = this
     for (const id of path) {
       unit = (unit as Graph).refUnit(id)
     }
@@ -1299,8 +1278,12 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     return this.refUnit(id).getPin(type, pinId)
   }
 
-  getUnitPinData(id: string, type: IO, pinId: string) {
-    throw new Error('Method not implemented.')
+  getUnitPinData(
+    id: string,
+    type: IO,
+    pinId: string
+  ): { input: Dict<any>; output: Dict<any> } {
+    return { input: {}, output: {} } // TODO
   }
 
   public getUnitInput(id: string, pinId: string): Pin {
@@ -1360,11 +1343,11 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     return data
   }
 
-  public refMerges(): { [id: string]: U } {
+  public refMerges(): { [id: string]: Merge } {
     return this._merge
   }
 
-  public refMerge(mergeId: string): U {
+  public refMerge(mergeId: string): Merge {
     return this._merge[mergeId]
   }
 
@@ -1471,8 +1454,6 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     // console.log('Graph', 'removeSubComponent', unitId)
 
     this._removeSubComponent(unitId)
-
-    this.emit('remove_sub_component', unitId)
   }
 
   private _removeSubComponent = (unitId: string): void => {
@@ -1516,8 +1497,8 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     childId: string,
     slotName: string
   ): void => {
-    const subComponentUnit = this.refUnit(subComponentId) as C_U
-    const childUnit = this.refUnit(childId) as C_U
+    const subComponentUnit = this.refUnit(subComponentId) as Element | Graph
+    const childUnit = this.refUnit(childId) as Element | Graph
 
     subComponentUnit.registerParentRoot(childUnit, slotName)
   }
@@ -1527,14 +1508,13 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   public addUnit(
     unitSpec: GraphUnitSpec,
     unitId: string,
-    unit: U | null = null,
+    unit: Unit | null = null,
     emit: boolean = true
-  ): U {
+  ): Unit {
     // console.log('Graph', 'addUnit', unitSpec, unitId)
     unit = this._addUnit(unitSpec, unitId, unit)
 
     emit && this.emit('add_unit', unitId, unit)
-
     emit && this.emit('leaf_add_unit', unit, [unitId])
 
     return unit
@@ -1543,11 +1523,15 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   public _addUnit(
     unitSpec: GraphUnitSpec,
     unitId: string,
-    unit: U | null = null
-  ): U {
+    unit: Unit | null = null
+  ): Unit {
     // console.log('Graph', 'addUnit', unitSpec, unitId)
+    if (this._unit[unitId]) {
+      throw new Error('duplicated unit id')
+    }
+
     if (!unit) {
-      unit = unitFromSpec(unitSpec, this._branch, this.__system)
+      unit = unitFromSpec(unitSpec, this._branch, this.__system, this.__pod)
     }
 
     this._memAddUnit(unitId, unitSpec, unit)
@@ -1556,26 +1540,22 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     return unit
   }
 
-  public memAddUnit(unitId: string, unitSpec: GraphUnitSpec, unit: U): void {
+  public memAddUnit(unitId: string, unitSpec: GraphUnitSpec, unit: Unit): void {
     this._memAddUnit(unitId, unitSpec, unit)
   }
 
-  private _memAddUnit(unitId: string, unitSpec: GraphUnitSpec, unit: U): void {
+  private _memAddUnit(
+    unitId: string,
+    unitSpec: GraphUnitSpec,
+    unit: Unit
+  ): void {
     this.emit('before_add_unit', unitId, unit)
-
-    if (this._unit[unitId]) {
-      throw new Error('duplicated unit id')
-    }
 
     const all_unlisten: Unlisten[] = []
 
     this._spec.units = this._spec.units || {}
 
     this._spec.units[unitId] = unitSpec
-
-    if (this.__system) {
-      unit.attach(this.__system)
-    }
 
     unit.setParent(this)
 
@@ -1704,7 +1684,15 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
         unit.addListener(
           'leaf_cover_pin_set',
           (path: string[], type: IO, pinId: string) => {
-            this.emit('leaf_cover_pin_set', [...path, unitId], type, pinId)
+            const pinSpec = unit.getExposedPinSpec(type, pinId)
+
+            this.emit(
+              'leaf_cover_pin_set',
+              [...path, unitId],
+              type,
+              pinId,
+              pinSpec
+            )
           }
         )
       )
@@ -1712,6 +1700,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
 
     if (unit instanceof Stateful || (unit instanceof Graph && unit.stateful)) {
       all_unlisten.push(
+        // @ts-ignore
         unit.addListener('leaf_set', ({ name, data, path }) => {
           this.emit('leaf_set', { name, data, path: [unitId, ...path] })
         })
@@ -1720,35 +1709,45 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       this._incStatefulCount()
     }
 
-    if (unit instanceof Element || (unit instanceof Graph && unit.element)) {
+    if (unit instanceof Element) {
       this.injectSubComponent(unitId, unitSpec, unit)
     }
 
-    all_unlisten.push(unit.addListener('stateful', this._on_unit_stateful))
-    all_unlisten.push(unit.addListener('stateless', this._on_unit_stateless))
+    if (unit instanceof Graph && unit.stateful) {
+      if (unit.element) {
+        this.injectSubComponent(unitId, unitSpec, unit)
 
-    all_unlisten.push(
-      unit.addListener('element', () => {
-        this._on_unit_element(unitId, unitSpec, unit as any) // TODO
-      })
-    )
-    all_unlisten.push(
-      unit.addListener('not_element', () => {
-        this._on_unit_not_element(unitId)
-      })
-    )
+        all_unlisten.push(
+          unit.addListener('element', () => {
+            this._on_unit_element(unitId, unitSpec, unit as any) // TODO
+          })
+        )
+        all_unlisten.push(
+          unit.addListener('not_element', () => {
+            this._on_unit_not_element(unitId)
+          })
+        )
 
-    all_unlisten.push(
-      unit.addListener('leaf_append_child', ({ id, path }) => {
-        this.emit('leaf_append_child', { id, path: [unitId, ...path] })
-      })
-    )
+        all_unlisten.push(
+          unit.addListener('leaf_append_child', ({ bundle, path }) => {
+            this.emit('leaf_append_child', { bundle, path: [unitId, ...path] })
+          })
+        )
 
-    all_unlisten.push(
-      unit.addListener('leaf_remove_child_at', ({ at, path }) => {
-        this.emit('leaf_remove_child_at', { at, path: [unitId, ...path] })
-      })
-    )
+        all_unlisten.push(
+          unit.addListener('leaf_remove_child_at', ({ at, path }) => {
+            this.emit('leaf_remove_child_at', { at, path: [unitId, ...path] })
+          })
+        )
+      }
+
+      if (unit.stateful) {
+        all_unlisten.push(unit.addListener('stateful', this._on_unit_stateful))
+        all_unlisten.push(
+          unit.addListener('stateless', this._on_unit_stateless)
+        )
+      }
+    }
 
     const unlisten = callAll(all_unlisten)
 
@@ -1874,7 +1873,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     })
   }
 
-  private _removeUnit(unitId: string): U {
+  private _removeUnit(unitId: string): Unit {
     const unit = this.refUnit(unitId)
 
     this._simRemoveUnit(unitId)
@@ -1971,18 +1970,22 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     forEachKeyValue(merges, this._addMerge)
   }
 
-  public addMerge = (mergeSpec: GraphMergeSpec, mergeId: string): void => {
+  public addMerge = (
+    mergeSpec: GraphMergeSpec,
+    mergeId: string,
+    emit: boolean = true
+  ): void => {
     // console.log('Graph', 'addMerge', mergeId)
 
     this._addMerge(mergeSpec, mergeId)
 
-    this.emit('add_merge', mergeId, mergeSpec)
+    emit && this.emit('add_merge', mergeId, mergeSpec)
   }
 
   public memAddMerge(
     mergeId: string,
     mergeSpec: GraphMergesSpec,
-    merge: U
+    merge: Merge
   ): void {
     this._memAddMerge(mergeId, mergeSpec, merge)
   }
@@ -2014,7 +2017,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       }
     }
 
-    const merge = new Merge(this.__system)
+    const merge = new Merge(this.__system, this.__pod)
 
     merge.play()
 
@@ -2031,7 +2034,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   private _memAddMerge = (
     mergeId: string,
     mergeSpec: GraphMergeSpec,
-    merge: U<any, any>
+    merge: Merge
   ): void => {
     this.emit('before_add_merge', mergeId, mergeSpec, merge)
 
@@ -2613,7 +2616,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   public appendRoot(subComponentId: string): void {
     this._componentAppend(subComponentId)
 
-    this.emit('append_sub_component', subComponentId)
+    this.emit('append_root', subComponentId)
   }
 
   public removeRoot(subComponentId: string): void {
@@ -2651,23 +2654,28 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     graphId: string,
     nodeIds: {
       merge: string[]
-      linkPin: {
+      link: {
         unitId: string
         type: IO
         pinId: string
-        mergeId: string
-        oppositePinId: string
       }[]
       unit: string[]
     },
     nextIdMap: {
       merge: Dict<string>
-      linkPin: Dict<string>
+      link: Dict<{
+        input: Dict<{ mergeId: string; oppositePinId: string }>
+        output: Dict<{ mergeId: string; oppositePinId: string }>
+      }>
       unit: Dict<string>
     },
     nextPinIdMap: Dict<{
       input: Dict<{ pinId: string; subPinId: string }>
       output: Dict<{ pinId: string; subPinId: string }>
+    }>,
+    nextMergePinId: Dict<{
+      nextInputMergePinId: string
+      nextOutputMergePinId: string
     }>,
     nextSubComponentParent: Dict<string | null>,
     nextSubComponentChildrenMap: Dict<string[]>
@@ -2677,45 +2685,80 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       nodeIds,
       nextIdMap,
       nextPinIdMap,
+      nextMergePinId,
       nextSubComponentParent,
       nextSubComponentChildrenMap
     )
 
-    this.emit('move_sugraph_into', graphId, nodeIds, nextIdMap)
+    this.emit(
+      'move_sugraph_into',
+      graphId,
+      nodeIds,
+      nextIdMap,
+      nextPinIdMap,
+      nextMergePinId,
+      nextSubComponentParent,
+      nextSubComponentChildrenMap
+    )
   }
 
   private _moveSubgraphInto(
     graphId: string,
     nodeIds: {
       merge: string[]
-      linkPin: {
+      link: {
         unitId: string
         type: IO
         pinId: string
-        mergeId: string
-        oppositePinId: string
       }[]
       unit: string[]
     },
     nextIdMap: {
       merge: Dict<string>
+      link: Dict<{
+        input: Dict<{ mergeId: string; oppositePinId: string }>
+        output: Dict<{ mergeId: string; oppositePinId: string }>
+      }>
       unit: Dict<string>
     },
     nextPinIdMap: Dict<{
       input: Dict<{ pinId: string; subPinId: string }>
       output: Dict<{ pinId: string; subPinId: string }>
     }>,
+    nextMergePinId: Dict<{
+      nextInputMergePinId: string
+      nextOutputMergePinId: string
+    }>,
     nextSubComponentParentMap: Dict<string | null>,
     nextSubComponentChildrenMap: Dict<string[]>
   ): void {
-    const { merge, linkPin, unit } = nodeIds
+    const { merge, link, unit } = nodeIds
 
-    const unitToLinkPin: Dict<{ input: Set<string>; output: Set<string> }> =
-      linkPin.reduce((acc, { unitId, type, pinId }) => {
-        acc[unitId] = acc[unitId] || { input: new Set(), output: new Set() }
-        acc[unitId][type].add(pinId)
-        return acc
-      }, {})
+    const unitIgnoredPin: Dict<{ input: Set<string>; output: Set<string> }> = {}
+
+    for (const { unitId, type, pinId } of link) {
+      unitIgnoredPin[unitId] = unitIgnoredPin[unitId] || {
+        input: new Set(),
+        output: new Set(),
+      }
+      unitIgnoredPin[unitId][type].add(pinId)
+    }
+
+    const merges: GraphMergesSpec = {}
+
+    for (const mergeId of merge) {
+      const merge = this.getMergeSpec(mergeId)
+
+      merges[mergeId] = merge
+
+      forEachPinOnMerge(merge, (unitId, type, pinId) => {
+        unitIgnoredPin[unitId] = unitIgnoredPin[unitId] || {
+          input: new Set(),
+          output: new Set(),
+        }
+        unitIgnoredPin[unitId][type].add(pinId)
+      })
+    }
 
     for (const unitId of unit) {
       const nextUnitId = nextIdMap.unit[unitId] || unitId
@@ -2723,25 +2766,29 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
         nextSubComponentParentMap[unitId] || null
       const nextSubComponentChildren = nextSubComponentChildrenMap[unitId] || []
 
-      const unitLinkPins = unitToLinkPin[unitId] || {
+      const ignoredPins = unitIgnoredPin[unitId] || {
         input: new Set(),
         output: new Set(),
       }
       const unitPinIdMap = nextPinIdMap[unitId] || { input: {}, output: {} }
 
+      const ignoredMerges = new Set<string>()
+
       this._moveUnitInto(
         graphId,
         unitId,
         nextUnitId,
-        unitLinkPins,
-        new Set(merge),
+        ignoredPins,
+        ignoredMerges,
         unitPinIdMap,
         nextUnitSubComponentParent,
         nextSubComponentChildren
       )
     }
 
-    for (const { unitId, type, pinId, mergeId, oppositePinId } of linkPin) {
+    for (const { unitId, type, pinId } of link) {
+      const { mergeId, oppositePinId } = nextIdMap.link[unitId][type][pinId]
+
       this._moveLinkPinInto(
         graphId,
         unitId,
@@ -2753,9 +2800,20 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     }
 
     for (const mergeId of merge) {
-      const nextMergeId = nextIdMap.merge[mergeId] || mergeId
+      const { nextInputMergePinId, nextOutputMergePinId } =
+        nextMergePinId[mergeId]
 
-      this._moveMergeInto(graphId, mergeId, nextMergeId)
+      const mergeSpec = merges[mergeId]
+
+      this._moveMergeInto(
+        graphId,
+        mergeId,
+        mergeSpec,
+        nextInputMergePinId,
+        nextOutputMergePinId,
+        nextPinIdMap,
+        unitIgnoredPin
+      )
     }
   }
 
@@ -2783,7 +2841,17 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       nextSubComponentChildren
     )
 
-    this.emit('move_unit_into', graphId, unitId)
+    this.emit(
+      'move_unit_into',
+      graphId,
+      unitId,
+      nextUnitId,
+      ignoredPin,
+      ignoredMerge,
+      nextPinMap,
+      nextUnitSubComponentParent,
+      nextSubComponentChildren
+    )
   }
 
   public getUnitMergesSpec(unitId: string): GraphMergesSpec {
@@ -2813,7 +2881,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   ): void {
     // console.log('Graph', '_moveUnitInto', graphId, unitId, linkPins)
 
-    const graph = this.refUnit(graphId) as G
+    const graph = this.refUnit(graphId) as Graph
 
     const unitSpec = this._spec.units[unitId]
 
@@ -2871,7 +2939,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
           const nextUnitPinNodeId = getPinNodeId(nextUnitId, type, pinId)
 
           const nextExposedPin = new Pin({ data: unitPinData })
-          const nextExposedMerge = new Merge(this.__system)
+          const nextExposedMerge = new Merge(this.__system, this.__pod)
 
           nextExposedMerge.play()
 
@@ -2921,12 +2989,23 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     unitId: string,
     type: IO,
     pinId: string,
+    mergeId: string | null = null,
+    oppositePinId: string | null = null,
     emit: boolean = true
   ): void {
     // console.log('Graph', 'moveLinkPinInto')
-    this._moveLinkPinInto(graphId, unitId, type, pinId, null, null)
+    this._moveLinkPinInto(graphId, unitId, type, pinId, mergeId, oppositePinId)
 
-    emit && this.emit('move_link_pin_into', graphId, unitId, type, pinId)
+    emit &&
+      this.emit(
+        'move_link_pin_into',
+        graphId,
+        unitId,
+        type,
+        pinId,
+        mergeId,
+        oppositePinId
+      )
   }
 
   private _moveLinkPinInto(
@@ -2939,7 +3018,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   ): void {
     // console.log('Graph', '_moveLinkPinInto')
 
-    const graph = this.refUnit(graphId) as G
+    const graph = this.refUnit(graphId) as Graph
 
     if (graphId === unitId) {
       graph.coverPinSet(type, pinId, false)
@@ -2947,27 +3026,31 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
       if (mergeId && oppositePinId) {
         const oppositeType = oppositePinKind(type)
 
-        graph.exposePinSet(
-          oppositeType,
-          oppositePinId,
-          { pin: { '0': {} } },
-          false
-        )
+        if (this.hasMerge(mergeId)) {
+          this._addPinToMerge(mergeId, unitId, type, pinId)
+        } else {
+          graph.exposePinSet(
+            oppositeType,
+            oppositePinId,
+            { pin: { '0': {} } },
+            false
+          )
 
-        const merge = {
-          [unitId]: {
-            [type]: {
-              [pinId]: true,
+          const merge = {
+            [unitId]: {
+              [type]: {
+                [pinId]: true,
+              },
             },
-          },
-          [graphId]: {
-            [oppositeType]: {
-              [oppositePinId]: true,
+            [graphId]: {
+              [oppositeType]: {
+                [oppositePinId]: true,
+              },
             },
-          },
+          }
+
+          this._addMerge(merge, mergeId)
         }
-
-        this._addMerge(merge, mergeId)
       }
     }
   }
@@ -2975,81 +3058,73 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   public moveMergeInto(
     graphId: string,
     mergeId: string,
-    nextMergeId: string
+    nextInputMergeId: string | null,
+    nextOutputMergeId: string | null,
+    nextPinIdMap: Dict<{
+      input: Dict<{ pinId: string; subPinId: string }>
+      output: Dict<{ pinId: string; subPinId: string }>
+    }>
   ): void {
-    this._moveMergeInto(graphId, mergeId, nextMergeId)
+    const mergeSpec = this.getMergeSpec(mergeId)
 
-    this.emit('move_merge_into', graphId, mergeId, nextMergeId)
+    this._moveMergeInto(
+      graphId,
+      mergeId,
+      mergeSpec,
+      nextInputMergeId,
+      nextOutputMergeId,
+      nextPinIdMap
+    )
+
+    this.emit(
+      'move_merge_into',
+      graphId,
+      mergeId,
+      nextInputMergeId,
+      nextOutputMergeId,
+      nextPinIdMap
+    )
   }
 
   private _moveMergeInto(
     graphId: string,
     mergeId: string,
-    nextMergeId: string
+    mergeSpec: GraphMergeSpec,
+    nextInputMergeId: string | null,
+    nextOutputMergeId: string | null,
+    nextPinIdMap: Dict<{
+      input: Dict<{ pinId: string; subPinId: string }>
+      output: Dict<{ pinId: string; subPinId: string }>
+    }>,
+    unitIgnoredPin: Dict<{ input: Set<string>; output: Set<string> }> = {}
   ): void {
-    const mergeSpec = this.getMergeSpec(mergeId)
-    const mergePinCount = this.getMergePinCount(mergeId)
+    const graph = this.refGraph(graphId)
+    const merge = this.refMerge(mergeId)
 
-    const mergeUnitCount = _keyCount(mergeSpec)
-
-    if (mergeUnitCount === 1) {
-      const mergeSingleUnitId = getObjSingleKey(mergeSpec)
-
-      if (mergeSingleUnitId === graphId) {
-        const mergeSingleUnit = mergeSpec[mergeSingleUnitId]
-
-        const mergeSingleUnitPinCount = getMergeUnitPinCount(mergeSingleUnit)
-
-        if (mergeSingleUnitPinCount === mergePinCount) {
-          const graph = this.refUnit(graphId) as G
-
-          const merge = this.refMerge(mergeId)
-          const mergeSpec = this.getMergeSpec(mergeId)
-
-          // this._removeMerge(mergeId)
-
-          // graph.memAddMerge(nextMergeId, mergeSpec, merge)
-
-          // const { input = {}, output = {} } = mergeSingleUnit
-
-          // const moveLinkPinInto = (
-          //   type: IO,
-          //   pinId: string
-          // ): void => {
-          //   const graphPinSpec = clone(graph.getExposedPinSpec(type, pinId))
-
-          //   const nextUnitId = mergeSingleUnitId
-
-          //   this.moveLinkPinInto(graphId, mergeSingleUnitId, type, pinId)
-
-          //   const { pin = {} } = graphPinSpec
-
-          //   for (const subPinId in pin) {
-          //     const subPin = pin[subPinId]
-
-          //     const { unitId, pinId, mergeId } = subPin
-
-          //     if (mergeId) {
-          //       graph.mergeMerges([nextMergeId, mergeId])
-          //     } else {
-          //       graph.addPinToMerge(nextMergeId, unitId, type, pinId)
-          //     }
-          //   }
-          // }
-
-          // for (const input_id in input) {
-          //   moveLinkPinInto('input', input_id)
-          // }
-
-          // for (const output_id in output) {
-          //   moveLinkPinInto('output', output_id)
-          // }
-        }
-      } else {
-        // TODO
-      }
-    } else {
+    if (this.hasMerge(mergeId)) {
+      this._removeMerge(mergeId)
     }
+
+    const moveLinkPinInto = (unitId: string, type: IO, pinId: string): void => {
+      if (unitIgnoredPin[unitId] && unitIgnoredPin[unitId][type].has(pinId)) {
+        return
+      }
+
+      const unitNextPinId = nextPinIdMap[unitId]
+
+      const { pinId: nextPinId, subPinId: nextSubPinId } =
+        unitNextPinId[type][pinId]
+
+      const isInput = type === 'input'
+
+      const mergeId = isInput ? nextInputMergeId : nextOutputMergeId
+
+      this._moveLinkPinInto(graphId, unitId, type, pinId, mergeId, nextPinId)
+    }
+
+    forEachPinOnMerge(mergeSpec, moveLinkPinInto)
+
+    graph.addMerge(mergeSpec, mergeId, false)
   }
 
   public explodeUnit(
@@ -3071,7 +3146,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
   ): void {
     // console.log('Graph', '_explodeUnit', graphId, mapUnitId, mapMergeId)
 
-    const graph = this.refUnit(graphId) as G
+    const graph = this.refUnit(graphId) as Graph
 
     const units = { ...graph.refUnits() }
 
@@ -3119,7 +3194,7 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     for (let i = 0; i < slots.length; i++) {
       const slot = slots[i]
       const [unitId, slotName] = slot
-      const slotUnit = this.refUnit(unitId) as C_U
+      const slotUnit = this.refUnit(unitId) as Element | Graph
       const _slotName = i === 0 ? 'default' : `${i}`
       this._slot[_slotName] = slotUnit
     }
@@ -3149,32 +3224,32 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     }
   }
 
-  private _root: C[] = []
-  private _parent_root: C[] = []
-  private _parent_children: C[] = []
-  private _slot: Dict<C> = {}
+  private _root: Component_[] = []
+  private _parent_root: Component_[] = []
+  private _parent_children: Component_[] = []
+  private _slot: Dict<Component_> = {}
 
-  appendParentChild(component: C<any, any>, slotName: string): void {
+  appendParentChild(component: Component_, slotName: string): void {
     return appendParentChild(this, this._parent_children, component, slotName)
   }
 
-  removeParentChild(component: C<any, any>): void {
+  removeParentChild(component: Component_): void {
     return removeParentChild(this, this._parent_children, component)
   }
 
-  registerRoot(component: C): number {
+  registerRoot(component: Component_): void {
     return registerRoot(this, this._root, component)
   }
 
-  unregisterRoot(component: C): void {
+  unregisterRoot(component: Component_): void {
     return unregisterRoot(this, this._root, component)
   }
 
-  registerParentRoot(component: C, slotName: string): void {
+  registerParentRoot(component: Component_, slotName: string): void {
     return registerParentRoot(this, this._parent_root, component, slotName)
   }
 
-  unregisterParentRoot(component: C): void {
+  unregisterParentRoot(component: Component_): void {
     return unregisterParentRoot(this, this._parent_root, component)
   }
 
@@ -3198,15 +3273,15 @@ export class Graph<I = any, O = any> extends Primitive implements G, C, U {
     return removeChild(this, this._children, at)
   }
 
-  refChild(at: number): C {
+  refChild(at: number): Component_ {
     return refChild(this, this._children, at)
   }
 
-  refChildren(): C[] {
+  refChildren(): Component_[] {
     return refChildren(this, this._children)
   }
 
-  refSlot(slotName: string): C<any, any> {
+  refSlot(slotName: string): Component_ {
     return refSlot(this, slotName, this._slot)
   }
 }

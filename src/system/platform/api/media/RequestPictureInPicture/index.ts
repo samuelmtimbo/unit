@@ -1,14 +1,16 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { listenGlobalComponent } from '../../../../../client/globalComponent'
-import { $_ } from '../../../../../interface/$_'
+import { _ } from '../../../../../interface/$_'
 import { $C } from '../../../../../interface/async/$C'
 import { $PS } from '../../../../../interface/async/$PS'
-import { Unlisten } from '../../../../../Unlisten'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
+import { Unlisten } from '../../../../../types/Unlisten'
 import Video from '../../../component/media/Video/Component'
 
 export interface I {
-  media: $C & $PS & $_
+  media: $C & $PS & _
   opt: {}
 }
 
@@ -19,7 +21,7 @@ export default class RequestPictureInPicture extends Semifunctional<I, O> {
 
   private _exit_picture_in_picture: Promise<any> = Promise.resolve()
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['media', 'opt'],
@@ -31,7 +33,9 @@ export default class RequestPictureInPicture extends Semifunctional<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 
@@ -55,38 +59,42 @@ export default class RequestPictureInPicture extends Semifunctional<I, O> {
 
     const global_id = media.getGlobalId()
 
-    listenGlobalComponent(this.__system, global_id, async (component: Video | null): Promise<void> => {
-      if (component === null) {
-        this._plunk()
-      } else {
-        if (document.pictureInPictureElement === component.$element) {
-          this.err('media is already Picture in Picture')
+    listenGlobalComponent(
+      this.__system,
+      global_id,
+      async (component: Video | null): Promise<void> => {
+        if (component === null) {
+          this._plunk()
         } else {
-          const pictureInPicture = await component.requestPictureInPicture()
+          if (document.pictureInPictureElement === component.$element) {
+            this.err('media is already Picture in Picture')
+          } else {
+            const pictureInPicture = await component.requestPictureInPicture()
 
-          const leavePnPListener = (event) => {
-            // console.log('RequestPictureInPicture', 'leavepictureinpicture')
-            this._picture_in_picture = undefined
+            const leavePnPListener = (event) => {
+              // console.log('RequestPictureInPicture', 'leavepictureinpicture')
+              this._picture_in_picture = undefined
 
-            this._plunk()
-          }
+              this._plunk()
+            }
 
-          component.$element.addEventListener(
-            'leavepictureinpicture',
-            leavePnPListener
-          )
-
-          this._unlisten = () => {
-            component.$element.removeEventListener(
+            component.$element.addEventListener(
               'leavepictureinpicture',
               leavePnPListener
             )
-          }
 
-          this._picture_in_picture = pictureInPicture
+            this._unlisten = () => {
+              component.$element.removeEventListener(
+                'leavepictureinpicture',
+                leavePnPListener
+              )
+            }
+
+            this._picture_in_picture = pictureInPicture
+          }
         }
       }
-    })
+    )
   }
 
   onIterDataInputData(name: string): void {

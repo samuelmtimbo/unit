@@ -1,5 +1,5 @@
 import { addListeners } from '../../../../../client/addListener'
-import { ANIMATION_T_S } from '../../../../../client/animation'
+import { ANIMATION_T_S } from '../../../../../client/animation/animation'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
@@ -14,9 +14,10 @@ import {
   DIM_OPACITY,
   whenInteracted,
 } from '../../../../../client/whenInteracted'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { Unlisten } from '../../../../../Unlisten'
+import { Unlisten } from '../../../../../types/Unlisten'
 import clamp from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
 import Icon from '../../Icon/Component'
@@ -59,8 +60,8 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
 
   private _x: number = 0
 
-  constructor($props: Props = {}, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style = {}, down } = this.$props
 
@@ -75,7 +76,8 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
           height: '24px',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._icon = icon
 
@@ -90,7 +92,8 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
         },
         title: 'transcend',
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     container.registerParentRoot(icon)
     container.addEventListeners([

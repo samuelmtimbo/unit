@@ -1,4 +1,4 @@
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
 import { makePointerDownListener } from './event/pointer/pointerdown'
 import { makePointerEnterListener } from './event/pointer/pointerenter'

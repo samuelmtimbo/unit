@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { Dict } from '../../../types/Dict'
 import { connectDB } from '../../db'
 import { validateBodyMid, validateParamsMid } from '../../middleware/validate'
+import { Req } from '../../req'
 import { userBroadcast } from '../../wss'
 import {
   JOI_GET_SCHEMA,
@@ -9,7 +10,6 @@ import {
   JOI_SHARED_ENTRY_SCHEMA,
 } from './validation'
 import Joi = require('joi')
-import { Req } from '../../req'
 
 export function CRUD(type: string, JOI_SCHEMA: Joi.AnySchema): Router {
   const app = Router()

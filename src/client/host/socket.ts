@@ -1,6 +1,6 @@
-import { EventEmitter_ } from '../../EventEmitter'
+import { EventEmitter } from '../../EventEmitter'
 import { Dict } from '../../types/Dict'
-import { Unlisten } from '../../Unlisten'
+import { Unlisten } from '../../types/Unlisten'
 import { isLocalHost } from '../localhost'
 import { addSignInListener, addSignOutListener, isSignedIn } from './user'
 import isIp = require('is-ip')
@@ -60,10 +60,10 @@ function disconnect(): void {
   socket = null
 }
 
-export const EMITTER: Dict<EventEmitter_> = {
-  user: new EventEmitter_(),
-  cloud: new EventEmitter_(),
-  server: new EventEmitter_(),
+export const EMITTER: Dict<EventEmitter> = {
+  user: new EventEmitter(),
+  cloud: new EventEmitter(),
+  server: new EventEmitter(),
 }
 
 export const SOCKET_CLOUD_EMITTER = EMITTER['cloud']
@@ -71,7 +71,7 @@ export const SOCKET_USER_EMITTER = EMITTER['user']
 export const SOCKET_SERVER_EMITTER = EMITTER['server']
 
 export const SERVER_EMITTER = {
-  peer: new EventEmitter_(),
+  peer: new EventEmitter(),
 }
 
 export const SOCKET_SERVER_PEER_EMITTER = SERVER_EMITTER['peer']
@@ -97,7 +97,7 @@ export function isConnected(): boolean {
   return connected
 }
 
-export const connection_emitter = new EventEmitter_()
+export const connection_emitter = new EventEmitter()
 
 export function addConnectListener(listener: () => void): Unlisten {
   connection_emitter.addListener('connected', listener)

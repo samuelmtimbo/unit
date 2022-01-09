@@ -108,12 +108,12 @@ export type DatumSpec = string
 export type GraphDataSpec = Dict<DatumSpec>
 
 export type BaseSpec = {
+  id: string
   base: true
   type?: string
   method?: boolean
   private?: boolean
   system?: boolean
-  id?: string
   name: string
   inputs: PinsSpecBase
   outputs: PinsSpecBase

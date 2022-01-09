@@ -1,4 +1,6 @@
+import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
+import { System } from '../../../../system'
 
 export interface I<T> {
   init: T
@@ -7,17 +9,23 @@ export interface I<T> {
 
 export interface O<T> {
   current: T
+  local: T
 }
 
 export default class Iterate<T> extends Primitive<I<T>, O<T>> {
   private _current: T | undefined = undefined
   private _next: boolean = undefined
 
-  constructor() {
-    super({
-      i: ['init', 'next'],
-      o: ['local', 'current'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['init', 'next'],
+        o: ['local', 'current'],
+      },
+      {},
+      system,
+      pod
+    )
 
     this.addListener('reset', this._reset)
   }

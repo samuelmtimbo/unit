@@ -1,5 +1,6 @@
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/parentElement'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 
 export interface Props {}
@@ -9,8 +10,8 @@ const DEFAULT_STYLE = {}
 export default class Parent extends Element<HTMLDivElement, Props> {
   private _parent_el: HTMLDivElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {} = this.$props
 

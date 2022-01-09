@@ -1,5 +1,6 @@
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 
 export type I<T> = {
@@ -15,7 +16,7 @@ export default class NArrayBuilder<T> extends Semifunctional<I<T>, O<T>> {
   private _n: number
   private _array: T[]
 
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         fi: ['n'],
@@ -24,7 +25,8 @@ export default class NArrayBuilder<T> extends Semifunctional<I<T>, O<T>> {
         o: [],
       },
       {},
-      system
+      system,
+      pod
     )
 
     this.addListener('reset', () => {

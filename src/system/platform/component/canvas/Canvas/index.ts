@@ -1,10 +1,12 @@
-import { Callback } from '../../../../../Callback'
 import { $ } from '../../../../../Class/$'
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
 import { listenGlobalComponent } from '../../../../../client/globalComponent'
 import { CSOpt } from '../../../../../interface/async/$CS'
 import { CA } from '../../../../../interface/CA'
-import { Unlisten } from '../../../../../Unlisten'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
+import { Callback } from '../../../../../types/Callback'
+import { Unlisten } from '../../../../../types/Unlisten'
 import { Style } from '../../../Props'
 import _Canvas from './Component'
 
@@ -15,12 +17,14 @@ export interface I {
   d?: any[]
 }
 
-export interface O {}
+export interface O {
+  ctx: CA
+}
 
-export default class Canvas extends Element<I, O> {
+export default class Canvas extends Element<I, O, {}> {
   __ = ['U', 'C', 'V']
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['style', 'width', 'height', 'd'],
@@ -32,7 +36,9 @@ export default class Canvas extends Element<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
 
     this._obj = {
@@ -54,7 +60,7 @@ export default class Canvas extends Element<I, O> {
 
         return
       }
-    })()
+    })(this.__system, this.__pod)
 
     this._output.ctx.push(ctx)
   }

@@ -1,7 +1,8 @@
 import * as assert from 'assert'
 import { Primitive } from '../Primitive'
+import { pod, system } from './util/system'
 
-const primitive = new Primitive({})
+const primitive = new Primitive({}, {}, system, pod)
 
 primitive.play()
 

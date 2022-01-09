@@ -1,7 +1,9 @@
-import { Element } from '../../../../Class/Element/Element'
+import { Element } from '../../../../Class/Element'
+import { Unit } from '../../../../Class/Unit'
 import { C } from '../../../../interface/C'
-import { C_U } from '../../../../interface/C_U'
+import { Component_ } from '../../../../interface/component'
 import { W } from '../../../../interface/W'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { UnitClass } from '../../../../types/UnitClass'
@@ -17,17 +19,18 @@ export type O = {
 }
 
 export default class Wrap extends Element<I, O> implements W {
-  private _Container: UnitClass<C_U> = Parent
+  private _Container: UnitClass = Parent
 
-  private _child_container: C_U[] = []
-  private _parent_container: C[] = []
-  private _parent_child_container: C[] = []
+  private _child_container: Component_[] = []
+  private _parent_container: Component_[] = []
+  private _parent_child_container: Component_[] = []
 
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       { i: ['component', 'style'], o: ['parent'] },
       { output: { parent: { ref: true } } },
-      system
+      system,
+      pod
     )
 
     this.prependListener('set', ({ name, data }) => {
@@ -45,7 +48,7 @@ export default class Wrap extends Element<I, O> implements W {
 
       container.destroy()
 
-      const new_container = new this._Container(this.__system)
+      const new_container = new this._Container(this.__system, this.__pod)
 
       new_container.play()
 
@@ -57,7 +60,7 @@ export default class Wrap extends Element<I, O> implements W {
 
       container.destroy()
 
-      const new_container = new this._Container(this.__system)
+      const new_container = new this._Container(this.__system, this.__pod)
 
       new_container.play()
 
@@ -69,7 +72,7 @@ export default class Wrap extends Element<I, O> implements W {
 
       container.destroy()
 
-      const new_container = new this._Container()
+      const new_container = new this._Container(this.__system, this.__pod)
 
       new_container.play()
 
@@ -78,7 +81,7 @@ export default class Wrap extends Element<I, O> implements W {
   }
 
   appendChild(Class: UnitClass): number {
-    const container = new this._Container()
+    const container = new this._Container(this.__system, this.__pod)
 
     container.play()
 
@@ -93,10 +96,10 @@ export default class Wrap extends Element<I, O> implements W {
     return super.removeChild(at)
   }
 
-  registerParentRoot(component: C, slotName: string): void {
+  registerParentRoot(component: Component_, slotName: string): void {
     // console.log('Wrap', 'registerParentRoot')
 
-    const container = new this._Container()
+    const container = new this._Container(this.__system, this.__pod)
 
     container.play()
 
@@ -105,7 +108,7 @@ export default class Wrap extends Element<I, O> implements W {
     return super.registerParentRoot(component, slotName)
   }
 
-  unregisterParentRoot(component: C): void {
+  unregisterParentRoot(component: Unit & C): void {
     const at = this._parent_container.indexOf(component)
 
     this._parent_container.splice(at, 1)
@@ -113,10 +116,10 @@ export default class Wrap extends Element<I, O> implements W {
     return super.unregisterParentRoot(component)
   }
 
-  appendParentChild(component: C, slotName: string): void {
+  appendParentChild(component: Component_, slotName: string): void {
     // console.log('Wrap', 'appendParentChild', component.constructor.name, slotName)
 
-    const container = new this._Container(this.__system)
+    const container = new this._Container(this.__system, this.__pod)
 
     container.play()
 
@@ -127,7 +130,7 @@ export default class Wrap extends Element<I, O> implements W {
     super.appendParentChild(container, slotName)
   }
 
-  removeParentChild(component: C): void {
+  removeParentChild(component: Component_): void {
     const at = this._parent_children.indexOf(component)
 
     if (at > -1) {
@@ -141,7 +144,7 @@ export default class Wrap extends Element<I, O> implements W {
     }
   }
 
-  refParentRootContainer(at: number): C<any, any> {
+  refParentRootContainer(at: number): C {
     return this._parent_container[at]
   }
 

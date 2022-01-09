@@ -1,11 +1,12 @@
-import { System } from '../system'
+import { Pod } from '../pod'
+import { ComponentClass, System } from '../system'
 import { Component } from './component'
 import parentElement from './parentElement'
 
-export function parentClass(): typeof Component {
+export function parentClass(): ComponentClass {
   class Parent extends Component<any, any, any> {
-    constructor($props: any, $system: System) {
-      super($props, $system)
+    constructor($props: any, $system: System, $pod: Pod) {
+      super($props, $system, $pod)
 
       const $element = parentElement()
 
@@ -16,8 +17,12 @@ export function parentClass(): typeof Component {
   return Parent
 }
 
-export function parentComponent($props: any, $system: System): Component {
+export function parentComponent(
+  $props: any,
+  $system: System,
+  $pod: Pod
+): Component {
   const Parent = parentClass()
-  const component = new Parent($props, $system)
+  const component = new Parent($props, $system, $pod)
   return component
 }

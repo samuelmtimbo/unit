@@ -1,8 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Identity from '../../../../system/f/control/Identity'
+import { pod, system } from '../../../util/system'
 
-const identity = new Identity()
+const identity = new Identity(system, pod)
 
 identity.play()
 

@@ -1,7 +1,8 @@
 import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
-import { PropHandler, htmlPropHandler } from '../../../../../client/propHandler'
+import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
 import { $ST } from '../../../../../interface/async/$ST'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -34,8 +35,8 @@ export default class Video extends Element<HTMLVideoElement, Props> {
 
   private prop_handler: PropHandler
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       className,
@@ -45,7 +46,7 @@ export default class Video extends Element<HTMLVideoElement, Props> {
       controls = true,
     } = this.$props
 
-    const video_el = document.createElement('video')
+    const video_el = this.$system.api.document.createElement('video')
 
     video_el.controls = controls
 

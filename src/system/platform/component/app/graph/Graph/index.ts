@@ -1,6 +1,7 @@
-import { Element } from '../../../../../../Class/Element/Element'
+import { Element } from '../../../../../../Class/Element'
 import { Graph } from '../../../../../../Class/Graph'
 import { G } from '../../../../../../interface/G'
+import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
 
@@ -12,7 +13,9 @@ export interface I<T> {
   frame: Element
 }
 
-export interface O<T> {}
+export interface O<T> {
+  pod: G
+}
 
 export default class _Graph<T> extends Element<I<T>, O<T>> {
   __ = ['U', 'C', 'V', 'J', 'G']
@@ -22,7 +25,7 @@ export default class _Graph<T> extends Element<I<T>, O<T>> {
 
   private _pod: G
 
-  constructor(system: System) {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['pod', 'style', 'disabled', 'fullwindow', 'frame'],
@@ -43,10 +46,11 @@ export default class _Graph<T> extends Element<I<T>, O<T>> {
           },
         },
       },
-      system
+      system,
+      pod
     )
 
-    const fallback_graph = new Graph({}, {}, this.__system)
+    const fallback_graph = new Graph({}, {}, this.__system, this.__pod)
     this._fallback_graph = fallback_graph
 
     this._fallback_pod = fallback_graph
@@ -54,18 +58,6 @@ export default class _Graph<T> extends Element<I<T>, O<T>> {
     this._input.pod.push(this._fallback_pod)
 
     this._fallback_graph.play()
-
-    this.addListener('_attach', () => {
-      if (this.__system) {
-        fallback_graph.attach(this.__system)
-      } else {
-        throw new Error('not attached to system')
-      }
-    })
-
-    this.addListener('_dettach', () => {
-      // TODO
-    })
   }
 
   onRefInputInvalid(name: string) {

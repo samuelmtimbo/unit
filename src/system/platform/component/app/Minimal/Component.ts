@@ -1,7 +1,7 @@
 import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
-import { isComponent } from '../../../../../client/spec'
-import { getSpec } from '../../../../../client/spec'
+import { getSpec, isComponent } from '../../../../../client/spec'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import SVGCircle from '../../../component/svg/Circle/Component'
@@ -17,8 +17,8 @@ export interface Props {
 export default class Minimal extends Element<SVGElement, Props> {
   private _svg: SVGSVG
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { id, className, style } = $props
 
@@ -30,7 +30,8 @@ export default class Minimal extends Element<SVGElement, Props> {
         className: classnames('unit-minimal', className),
         style: { ...this._default_style(), ...style },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._svg = svg
 
@@ -149,7 +150,8 @@ export default class Minimal extends Element<SVGElement, Props> {
             fill: 'currentColor',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
       children.push(pin)
     }
@@ -173,7 +175,8 @@ export default class Minimal extends Element<SVGElement, Props> {
             strokeWidth: '1px',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
     } else {
       core = new SVGCircle(
@@ -189,7 +192,8 @@ export default class Minimal extends Element<SVGElement, Props> {
             strokeWidth: '1px',
           },
         },
-        this.$system
+        this.$system,
+        this.$pod
       )
     }
 

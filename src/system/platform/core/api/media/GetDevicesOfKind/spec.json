@@ -15,7 +15,7 @@
     }
   },
   "merges": {
-    "mrqxnpvx": {
+    "0": {
       "enumeratedevices": {
         "output": {
           "devices": true
@@ -27,10 +27,10 @@
         }
       }
     },
-    "eqmeg": {
+    "1": {
       "enumeratedevices": {
         "input": {
-          "a": true
+          "any": true
         }
       },
       "filterpropequals": {
@@ -56,7 +56,7 @@
       "name": "kind",
       "pin": {
         "0": {
-          "mergeId": "eqmeg"
+          "mergeId": "1"
         }
       },
       "type": "any"

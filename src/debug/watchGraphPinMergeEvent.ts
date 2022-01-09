@@ -1,4 +1,4 @@
-import { U } from '../interface/U'
+import { Graph } from '../Class/Graph'
 import { Moment } from './Moment'
 
 export interface GraphMergePinMomentData {
@@ -12,7 +12,7 @@ export interface GraphPinMergeMoment extends Moment<GraphMergePinMomentData> {}
 
 export function watchGraphPinMergeEvent(
   event: 'add_pin_to_merge' | 'remove_pin_from_merge',
-  unit: U,
+  graph: Graph,
   callback: (moment: GraphPinMergeMoment) => void
 ): () => void {
   const listener = (
@@ -32,8 +32,8 @@ export function watchGraphPinMergeEvent(
       },
     })
   }
-  unit.prependListener(event, listener)
+  graph.prependListener(event, listener)
   return () => {
-    unit.removeListener(event, listener)
+    graph.removeListener(event, listener)
   }
 }

@@ -4,7 +4,7 @@
     "qyykyqg": {
       "id": "194683f4-5b90-4501-a8c9-b34f131d4f79",
       "input": {
-        "ftwnpzfjy": {}
+        "obj": {}
       }
     },
     "qwicogom": {
@@ -15,7 +15,7 @@
     "0": {
       "qyykyqg": {
         "output": {
-          "unutqjyl": true
+          "empty": true
         }
       },
       "qwicogom": {
@@ -39,7 +39,7 @@
       "pin": {
         "0": {
           "unitId": "qyykyqg",
-          "pinId": "ftwnpzfjy"
+          "pinId": "obj"
         }
       },
       "type": "<A>[]"

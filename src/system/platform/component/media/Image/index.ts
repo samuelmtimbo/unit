@@ -1,4 +1,6 @@
-import { Element } from '../../../../../Class/Element/Element'
+import { Element } from '../../../../../Class/Element'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I {
   src: string
@@ -8,10 +10,15 @@ export interface I {
 export interface O {}
 
 export default class Image extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['src', 'style'],
-      o: ['click'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['src', 'style'],
+        o: ['click'],
+      },
+      {},
+      system,
+      pod
+    )
   }
 }

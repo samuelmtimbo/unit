@@ -1,16 +1,13 @@
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
 import { GraphMergeSpec, GraphMergesSpec, GraphMergeUnitSpec } from '../types'
+import { IO } from '../types/IO'
 import { reduceObj, _keyCount } from '../util/object'
 
 export function isValidSpecName(name: string) {
   return !!/^[A-Za-z_ ][A-Za-z\d_ ]*$/g.exec(name)
 }
 
-export function getPinNodeId(
-  unitId: string,
-  type: 'input' | 'output',
-  pinId: string
-): string {
+export function getPinNodeId(unitId: string, type: IO, pinId: string): string {
   return `${unitId}/${type}/${pinId}`
 }
 
@@ -26,20 +23,17 @@ export function getExposedPinId(id: string, type: string): string {
   return `${type}/${id}`
 }
 
-export function getMergePinNodeId(
-  mergeId: string,
-  type: 'input' | 'output'
-): string {
+export function getMergePinNodeId(mergeId: string, type: IO): string {
   return `${mergeId}/${type}`
 }
 
-export function oppositePinKind(kind: 'input' | 'output'): 'input' | 'output' {
+export function oppositePinKind(kind: IO): IO {
   return kind === 'input' ? 'output' : 'input'
 }
 
 export const findMergePin = (
   merge: GraphMergeSpec,
-  type: 'input' | 'output'
+  type: IO
 ): { unitId: string; pinId: string } | undefined => {
   for (const unitId in merge) {
     if (merge[unitId][type]) {
@@ -75,12 +69,7 @@ export const getMergeUnitPinCount = (
 
 export const forEachPinOnMerges = (
   merges: GraphMergesSpec,
-  callback: (
-    mergeId: string,
-    unitId: string,
-    type: 'input' | 'output',
-    pinId: string
-  ) => void
+  callback: (mergeId: string, unitId: string, type: IO, pinId: string) => void
 ) => {
   forEachKeyValue(merges || {}, (merge, mergeId) => {
     forEachPinOnMerge(merge, (unitId, type, pinId) =>
@@ -91,7 +80,7 @@ export const forEachPinOnMerges = (
 
 export const forEachPinOnMerge = (
   merge: GraphMergeSpec,
-  callback: (unitId: string, type: 'input' | 'output', pinId: string) => void
+  callback: (unitId: string, type: IO, pinId: string) => void
 ) => {
   forEachKeyValue(merge, ({ input, output }, unitId) => {
     forEachKeyValue(input || {}, (_, inputId) => {

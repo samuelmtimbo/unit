@@ -1,6 +1,7 @@
 import Merge from '../Class/Merge'
-import { GraphState } from '../GraphState'
+import { Unit } from '../Class/Unit'
 import { Pin } from '../Pin'
+import { PinOpt } from '../PinOpt'
 import { State } from '../State'
 import {
   GraphExposedPinSpec,
@@ -14,10 +15,11 @@ import {
   Specs,
 } from '../types'
 import { Dict } from '../types/Dict'
-import { Units } from '../Units'
+import { GraphState } from '../types/GraphState'
+import { IO } from '../types/IO'
 import { U } from './U'
 
-export interface G<I = any, O = any> extends U {
+export interface G<I = any, O = any> {
   stateful: boolean
 
   element: boolean
@@ -55,14 +57,14 @@ export interface G<I = any, O = any> extends U {
   ): void
 
   exposePinSet(
-    type: 'input' | 'output',
+    type: IO,
     pinId: string,
     pinSpec: GraphExposedPinSpec,
     emit?: boolean
   ): void
 
   memExposePinSet(
-    type: 'input' | 'output',
+    type: IO,
     pinId: string,
     pinSpec: GraphExposedPinSpec,
     exposedPin: Pin,
@@ -71,21 +73,17 @@ export interface G<I = any, O = any> extends U {
 
   setGraphState(state: any): void
 
-  setPinSetFunctional(
-    type: 'input' | 'output',
-    name: string,
-    functional: boolean
-  ): void
+  setPinSetFunctional(type: IO, name: string, functional: boolean): void
 
   exposePin(
-    type: 'input' | 'output',
+    type: IO,
     pinId: string,
     subPinId: string,
     subPinSpec: GraphExposedSubPinSpec
   ): void
 
   memExposePin(
-    type: 'input' | 'output',
+    type: IO,
     pinId: string,
     subPinId: string,
     subPinSpec: GraphExposedSubPinSpec
@@ -101,10 +99,10 @@ export interface G<I = any, O = any> extends U {
 
   coverInput(subPinId: string, id: string): void
 
-  coverPinSet(type: 'input' | 'output', id: string, emit?: boolean): void
+  coverPinSet(type: IO, id: string, emit?: boolean): void
 
   plugPin(
-    type: 'input' | 'output',
+    type: IO,
     pinId: string,
     subPinId: string,
     subPinSpec: GraphExposedSubPinSpec
@@ -114,20 +112,15 @@ export interface G<I = any, O = any> extends U {
 
   unplugInput(subPinId: string, id: string): void
 
-  coverPin(
-    type: 'input' | 'output',
-    id: string,
-    subPinId: string,
-    emit?: boolean
-  ): void
+  coverPin(type: IO, id: string, subPinId: string, emit?: boolean): void
 
   getSubPinSpec(
-    type: 'input' | 'output',
+    type: IO,
     pinId: string,
     subPinId: string
   ): GraphExposedSubPinSpec
 
-  unplugPin(type: 'input' | 'output', pinId: string, subPinId: string): void
+  unplugPin(type: IO, pinId: string, subPinId: string): void
 
   isExposedInput(pin: GraphExposedSubPinSpec): boolean
 
@@ -135,10 +128,7 @@ export interface G<I = any, O = any> extends U {
 
   getExposedOutputPin(id: string): Pin<O[keyof O]>
 
-  getExposedPinSpec(
-    type: 'input' | 'output',
-    pinId: string
-  ): GraphExposedPinSpec
+  getExposedPinSpec(type: IO, pinId: string): GraphExposedPinSpec
 
   isExposedInputPinId(pinId: string): boolean
 
@@ -156,9 +146,13 @@ export interface G<I = any, O = any> extends U {
 
   getUnitByPath(path: string[]): U<any, any>
 
-  getUnitPin(id: string, type: 'input' | 'output', pinId: string): Pin<any>
+  getUnitPin(id: string, type: IO, pinId: string): Pin<any>
 
-  getUnitPinData(id: string, type: 'input' | 'output', pinId: string): any
+  getUnitPinData(
+    id: string,
+    type: IO,
+    pinId: string
+  ): { input: Dict<any>; output: Dict<any> }
 
   getUnitInput(id: string, pinId: string): Pin<any>
 
@@ -208,16 +202,11 @@ export interface G<I = any, O = any> extends U {
 
   addMerges(merges: GraphMergesSpec): void
 
-  addMerge(mergeSpec: GraphMergeSpec, mergeId: string): void
+  addMerge(mergeSpec: GraphMergeSpec, mergeId: string, emit: boolean): void
 
   memAddMerge(mergeId: string, mergeSpec: GraphMergesSpec, merge: U): void
 
-  addPinToMerge(
-    mergeId: string,
-    unitId: string,
-    type: 'input' | 'output',
-    pinId: string
-  ): void
+  addPinToMerge(mergeId: string, unitId: string, type: IO, pinId: string): void
 
   removeMerge(mergeId: string): void
 
@@ -226,29 +215,19 @@ export interface G<I = any, O = any> extends U {
   removePinFromMerge(
     mergeId: string,
     unitId: string,
-    type: 'input' | 'output',
+    type: IO,
     pinId: string
   ): void
 
   mergeMerges(mergeIds: string[]): void
 
-  isPinMergedTo(
-    mergeId: string,
-    unitId: string,
-    type: 'input' | 'output',
-    pinId: string
-  ): void
+  isPinMergedTo(mergeId: string, unitId: string, type: IO, pinId: string): void
 
-  togglePinMerge(
-    mergeId: string,
-    unitId: string,
-    type: 'input' | 'output',
-    pinId: string
-  ): void
+  togglePinMerge(mergeId: string, unitId: string, type: IO, pinId: string): void
 
   setUnitPinConstant(
     unitId: string,
-    type: 'input' | 'output',
+    type: IO,
     pinId: string,
     constant: boolean
   ): void
@@ -263,17 +242,12 @@ export interface G<I = any, O = any> extends U {
 
   setUnitPinIgnored(
     unitId: string,
-    type: 'input' | 'output',
+    type: IO,
     pinId: string,
     ignored: boolean
   ): void
 
-  setUnitPinData(
-    unitId: string,
-    type: 'input' | 'output',
-    pinId: string,
-    data: any
-  ): void
+  setUnitPinData(unitId: string, type: IO, pinId: string, data: any): void
 
   setUnitInputData(unitId: string, pinId: string, data: any): void
 
@@ -301,23 +275,28 @@ export interface G<I = any, O = any> extends U {
     graphId: string,
     nodeIds: {
       merge: string[]
-      linkPin: {
+      link: {
         unitId: string
-        type: 'input' | 'output'
+        type: IO
         pinId: string
-        mergeId: string
-        oppositePinId: string
       }[]
       unit: string[]
     },
     nextIdMap: {
       merge: Dict<string>
-      linkPin: Dict<string>
+      link: Dict<{
+        input: Dict<{ mergeId: string; oppositePinId: string }>
+        output: Dict<{ mergeId: string; oppositePinId: string }>
+      }>
       unit: Dict<string>
     },
     nextPinIdMap: Dict<{
       input: Dict<{ pinId: string; subPinId: string }>
       output: Dict<{ pinId: string; subPinId: string }>
+    }>,
+    nextMergePinId: Dict<{
+      nextInputMergePinId: string
+      nextOutputMergePinId: string
     }>,
     nextSubComponentParentMap: Dict<string | null>,
     nextSubComponentChildrenMap: Dict<string[]>
@@ -340,11 +319,20 @@ export interface G<I = any, O = any> extends U {
   moveLinkPinInto(
     graphId: string,
     unitId: string,
-    type: 'input' | 'output',
+    type: IO,
     pinId: string
   ): void
 
-  moveMergeInto(graphId: string, mergeId: string, nextMergeId: string): void
+  moveMergeInto(
+    graphId: string,
+    mergeId: string,
+    nextInputMergeId: string | null,
+    nextOutputMergeId: string | null,
+    nextPinIdMap: Dict<{
+      input: Dict<{ pinId: string; subPinId: string }>
+      output: Dict<{ pinId: string; subPinId: string }>
+    }>
+  ): void
 
   explodeUnit(
     unitId: string,
@@ -352,7 +340,100 @@ export interface G<I = any, O = any> extends U {
     mapMergeId: Dict<string>
   ): void
 
-  refUnits(): Units
+  refUnits(): Dict<Unit>
 
-  refMergePin(mergeId: string, type: 'input' | 'output'): Pin<any>
+  refMergePin(mergeId: string, type: IO): Pin<any>
+}
+
+export type G_J = {}
+
+export type G_EE = {
+  stateful: []
+  stateless: []
+  element: []
+  not_element: []
+  set_exposed_sub_pin: [IO, string, string, Pin, PinOpt]
+  expose_pin_set: [IO, string, GraphExposedPinSpec]
+  cover_pin_set: [IO, string, GraphExposedPinSpec]
+  leaf_expose_pin_set: [string[], IO, string, GraphExposedPinSpec]
+  leaf_cover_pin_set: [string[], IO, string, GraphExposedPinSpec]
+  expose_pin: [IO, string, string, GraphExposedSubPinSpec]
+  plug_pin: [IO, string, string, GraphExposedSubPinSpec]
+  cover_pin: [IO, string, string, GraphExposedSubPinSpec]
+  unplug_pin: [IO, string, string]
+  before_add_unit: [string, Unit]
+  add_unit: [string, Unit]
+  remove_unit: [string, Unit]
+  leaf_add_unit: [Unit, string[]]
+  leaf_remove_unit: [Unit, string[]]
+  leaf_set: [{ path: string[]; name: string; data: any }]
+  move_unit: [string, string, string]
+  before_remove_unit: [string]
+  remove_unit_from_merge: [string, string]
+  before_add_merge: [string, GraphMergeSpec, Merge]
+  add_merge: [string, GraphMergeSpec]
+  before_remove_merge: [string]
+  add_pin_to_merge: [string, string, string, string]
+  remove_merge: [string]
+  remove_pin_from_merge: [string, string, string, string]
+  merge_merges: [string[]]
+  append_root: [string]
+  move_sugraph_into: [
+    string,
+    {
+      merge: string[]
+      link: {
+        unitId: string
+        type: IO
+        pinId: string
+      }[]
+      unit: string[]
+    },
+    {
+      merge: Dict<string>
+      link: Dict<{
+        input: Dict<{ mergeId: string; oppositePinId: string }>
+        output: Dict<{ mergeId: string; oppositePinId: string }>
+      }>
+      unit: Dict<string>
+    },
+    Dict<{
+      input: Dict<{ pinId: string; subPinId: string }>
+      output: Dict<{ pinId: string; subPinId: string }>
+    }>,
+    Dict<{
+      nextInputMergePinId: string
+      nextOutputMergePinId: string
+    }>,
+    Dict<string | null>,
+    Dict<string[]>
+  ]
+  move_unit_into: [
+    string,
+    string,
+    string,
+    { input: Set<string>; output: Set<string> },
+    Set<string>,
+    {
+      input: Dict<{ pinId: string; subPinId: string }>
+      output: Dict<{ pinId: string; subPinId: string }>
+    },
+    string | null,
+    string[]
+  ]
+  move_link_pin_into: [string, string, IO, string, string | null, string | null]
+  move_merge_into: [
+    string,
+    string,
+    string | null,
+    string | null,
+    Dict<{
+      input: Dict<{ pinId: string; subPinId: string }>
+      output: Dict<{ pinId: string; subPinId: string }>
+    }>
+  ]
+  explode_unit: [string, Dict<string>, Dict<string>]
+  metadata: [{ path: string[]; data: any }]
+  component_append: [string, GraphUnitSpec]
+  component_remove: [string]
 }

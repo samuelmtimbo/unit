@@ -1,8 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Concat from '../../../../system/f/string/Concat'
+import { pod, system } from '../../../util/system'
 
-const concat = new Concat()
+const concat = new Concat(system, pod)
 
 concat.play()
 

@@ -1,12 +1,12 @@
-import callAll from '../callAll'
+import { Unit } from '../Class/Unit'
 import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
-import { U } from '../interface/U'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
+import callAll from '../util/call/callAll'
 import { Moment } from './Moment'
 import { watchUnitSpecEvent } from './watchUnitSpecEvent'
 
 export function watchUnitIOSpec(
-  unit: U,
+  unit: Unit,
   callback: (moment: Moment) => void,
   events: string[] = DEFAULT_EVENTS
 ): Unlisten {

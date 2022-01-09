@@ -1,5 +1,6 @@
 import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -24,12 +25,12 @@ export const NO_IMAGE =
 export default class Image extends Element<HTMLImageElement, Props> {
   private _img_el: HTMLImageElement
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style = {}, src = NO_IMAGE } = this.$props
 
-    const img_el = document.createElement('img')
+    const img_el = this.$system.api.document.createElement('img')
 
     if (className) {
       img_el.className = className

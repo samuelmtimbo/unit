@@ -1,4 +1,6 @@
-import { Element } from '../../../../Class/Element/Element'
+import { Element } from '../../../../Class/Element'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I {
   value: any
@@ -8,10 +10,15 @@ export interface I {
 export interface O {}
 
 export default class Datum extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['style', 'value'],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['style', 'value'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
   }
 }

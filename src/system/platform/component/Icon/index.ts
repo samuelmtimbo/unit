@@ -1,5 +1,7 @@
-import { Element } from '../../../../Class/Element/Element'
+import { Element } from '../../../../Class/Element'
 import { IOPointerEvent } from '../../../../client/event/pointer'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 export interface I {
   style: object
@@ -13,10 +15,15 @@ export interface O {
 }
 
 export default class IconButton extends Element<I, O> {
-  constructor() {
-    super({
-      i: ['style', 'icon'],
-      o: [],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: ['style', 'icon'],
+        o: [],
+      },
+      {},
+      system,
+      pod
+    )
   }
 }

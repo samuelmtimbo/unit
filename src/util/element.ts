@@ -1,3 +1,5 @@
+import { IOElement } from '../client/IOElement'
+
 export function appendChild<T extends Node>(node: Node, newChild: T): T {
   return node.appendChild(newChild)
 }
@@ -14,7 +16,14 @@ export function removeChild<T extends Node>(node: Node, oldChild: T): T {
   return node.removeChild(oldChild)
 }
 
-export function prepend<T extends Node>(node: ParentNode, oldChild: T): void {
+export function prepend<T extends IOElement>(
+  node: IOElement,
+  oldChild: T
+): void {
+  if (node instanceof Text) {
+    return
+  }
+
   return node.prepend(oldChild)
 }
 

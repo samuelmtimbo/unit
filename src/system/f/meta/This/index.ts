@@ -5,7 +5,9 @@ import {
   listenGlobalComponent,
   pushGlobalComponent,
 } from '../../../../client/globalComponent'
-import { Unlisten } from '../../../../Unlisten'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
+import { Unlisten } from '../../../../types/Unlisten'
 
 export interface I<T> {}
 
@@ -18,13 +20,18 @@ export interface R<T> {}
 export default class This<T> extends Unit<I<T>, O<T>> {
   private _unlisten: Unlisten
 
-  constructor() {
-    super({
-      i: [],
-      o: ['graph'],
-    })
+  constructor(system: System, pod: Pod) {
+    super(
+      {
+        i: [],
+        o: ['graph'],
+      },
+      {},
+      system,
+      pod
+    )
 
-    this.addListener('parent', (parent: $ | null) => {
+    this.addListener('parent', (parent: Unit | null) => {
       if (parent === null) {
         if (this._unlisten) {
           this._unlisten()
@@ -40,7 +47,10 @@ export default class This<T> extends Unit<I<T>, O<T>> {
           pushGlobalComponent(this.__system, __global_id, component)
         }
 
-        const parentComponent = getGlobalComponent(this.__system, __parent_global_id)
+        const parentComponent = getGlobalComponent(
+          this.__system,
+          __parent_global_id
+        )
         if (parentComponent) {
           _setup_parent_component(parentComponent)
         }

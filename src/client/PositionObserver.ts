@@ -1,6 +1,6 @@
 import ResizeObserver from 'resize-observer-polyfill'
-import callAll from '../callAll'
-import { Unlisten } from '../Unlisten'
+import { Unlisten } from '../types/Unlisten'
+import callAll from '../util/call/callAll'
 import { parseTransformXY } from './parseTransformXY'
 import { animateThrottle } from './throttle'
 import {

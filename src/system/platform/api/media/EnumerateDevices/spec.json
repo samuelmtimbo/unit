@@ -1,7 +1,7 @@
 {
   "name": "enumerate devices",
   "inputs": {
-    "a": {
+    "any": {
       "type": "any"
     }
   },

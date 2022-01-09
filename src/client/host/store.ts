@@ -1,6 +1,6 @@
 import { SharedObject } from '../../SharedObject'
 import { Dict } from '../../types/Dict'
-import { LocalStore, Store } from '../host'
+import { LocalStore, Store } from '../store'
 import { CloudStore } from './CloudStore'
 
 export const DEFAULT_SERVICE_STORE_TYPES = [
@@ -12,7 +12,7 @@ export const DEFAULT_SERVICE_STORE_TYPES = [
 
 export function createServiceStore<T>(
   name: string
-): Dict<SharedObject<Store<any>>> {
+): Dict<SharedObject<Store<any>, {}>> {
   // console.log('createServiceStore', name)
   const { href } = location
 

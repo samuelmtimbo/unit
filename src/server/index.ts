@@ -6,9 +6,9 @@ import * as http from 'http'
 import * as createError from 'http-errors'
 import * as os from 'os'
 import * as path from 'path'
+import { PORT } from './port'
 import ALL from './route'
 import compression = require('compression')
-import { PORT } from './port'
 
 process.on('uncaughtException', function (err) {
   console.error(new Date().toUTCString() + ' uncaughtException:', err.message)

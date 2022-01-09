@@ -1,6 +1,7 @@
 import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -24,8 +25,8 @@ export default class Span extends Element<HTMLSpanElement, Props> {
 
   private _prop_handler: PropHandler
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const {
       id,
@@ -38,7 +39,7 @@ export default class Span extends Element<HTMLSpanElement, Props> {
       data = {},
     } = this.$props
 
-    const $element = document.createElement('span')
+    const $element = this.$system.api.document.createElement('span')
 
     if (id !== undefined) {
       $element.id = id

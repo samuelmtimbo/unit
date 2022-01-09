@@ -1,12 +1,24 @@
-import { ION, Opt, Unit } from './Class/Unit'
+import { ION, Opt, Unit, UnitEvents } from './Class/Unit'
 import { Pin } from './Pin'
 import { PinOpt } from './PinOpt'
 import { Pins } from './Pins'
+import { Pod } from './pod'
 import { System } from './system'
 import forEachKeyValue from './system/core/object/ForEachKeyValue/f'
 import { Dict } from './types/Dict'
 
-export class Primitive<I = any, O = any> extends Unit<I, O> {
+export type Primitive_EE = {}
+
+export type PrimitiveEvents<_EE extends Dict<any[]>> = UnitEvents<
+  _EE & Primitive_EE
+> &
+  Primitive_EE
+
+export class Primitive<
+  I = {},
+  O = {},
+  _EE extends PrimitiveEvents<_EE> & Dict<any[]> = PrimitiveEvents<Primitive_EE>
+> extends Unit<I, O, _EE> {
   protected _i: Partial<I> = {}
   protected _o: Partial<O> = {}
 
@@ -27,11 +39,11 @@ export class Primitive<I = any, O = any> extends Unit<I, O> {
   protected _forwarding_empty: boolean = false
 
   private _inputListeners: {
-    data: Dict<(name: string, data: any) => void>
-    drop: Dict<(name: string, data: any) => void>
-    invalid: Dict<(name: string) => void>
-    start: Dict<(name: string) => void>
-    end: Dict<(name: string) => void>
+    data: Dict<(data: any) => void>
+    drop: Dict<(data: any) => void>
+    invalid: Dict<() => void>
+    start: Dict<() => void>
+    end: Dict<() => void>
   } = {
     data: {},
     drop: {},
@@ -41,9 +53,9 @@ export class Primitive<I = any, O = any> extends Unit<I, O> {
   }
 
   private _outputListeners: {
-    data: Dict<(name: string, data: any) => void>
-    drop: Dict<(name: string, data: any) => void>
-    invalid: Dict<(name: string) => void>
+    data: Dict<(data: any) => void>
+    drop: Dict<(data: any) => void>
+    invalid: Dict<() => void>
   } = {
     data: {},
     drop: {},
@@ -58,8 +70,8 @@ export class Primitive<I = any, O = any> extends Unit<I, O> {
     data?: any
   }[] = []
 
-  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System = null) {
-    super({ i, o }, opt, system)
+  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System, pod: Pod) {
+    super({ i, o }, opt, system, pod)
 
     this._setupInputs(this._input)
     this._setupOutputs(this._output)
@@ -131,9 +143,9 @@ export class Primitive<I = any, O = any> extends Unit<I, O> {
     delete this._outputListeners.drop[name]
     delete this._outputListeners.invalid[name]
 
-    dataListener && output.removeListener('_data', dataListener)
-    dropListener && output.removeListener('_drop', dropListener)
-    invalidListener && output.removeListener('_invalid', invalidListener)
+    dataListener && output.removeListener('data', dataListener)
+    dropListener && output.removeListener('drop', dropListener)
+    invalidListener && output.removeListener('invalid', invalidListener)
   }
 
   private _plunkInput(name: string, input: Pin<I[keyof I]>): void {
@@ -149,11 +161,11 @@ export class Primitive<I = any, O = any> extends Unit<I, O> {
     delete this._inputListeners.start[name]
     delete this._inputListeners.end[name]
 
-    dataListener && input.removeListener('_data', dataListener)
-    dropListener && input.removeListener('_drop', dropListener)
-    invalidListener && input.removeListener('_invalid', invalidListener)
-    startListener && input.removeListener('_start', startListener)
-    endListener && input.removeListener('_end', endListener)
+    dataListener && input.removeListener('data', dataListener)
+    dropListener && input.removeListener('drop', dropListener)
+    invalidListener && input.removeListener('invalid', invalidListener)
+    startListener && input.removeListener('start', startListener)
+    endListener && input.removeListener('end', endListener)
   }
 
   private _setupInputs = (inputs: Pins<I>) => {
@@ -179,12 +191,12 @@ export class Primitive<I = any, O = any> extends Unit<I, O> {
     this._inputListeners.drop[name] = dropListener
     this._inputListeners.end[name] = endListener
 
-    input.addListener('_data', dataListener)
-    input.addListener('_start', startListener)
-    input.addListener('_invalid', invalidListener)
+    input.addListener('data', dataListener)
+    input.addListener('start', startListener)
+    input.addListener('invalid', invalidListener)
 
-    input.prependListener('_drop', dropListener)
-    input.prependListener('_end', endListener)
+    input.prependListener('drop', dropListener)
+    input.prependListener('end', endListener)
   }
 
   private _setupRefInput = (name: string, input: Pin<I[keyof I]>): void => {
@@ -196,10 +208,10 @@ export class Primitive<I = any, O = any> extends Unit<I, O> {
     this._inputListeners.drop[name] = dropListener
     this._inputListeners.invalid[name] = invalidListener
 
-    input.addListener('_data', dataListener)
-    input.addListener('_invalid', invalidListener)
+    input.addListener('data', dataListener)
+    input.addListener('invalid', invalidListener)
 
-    input.prependListener('_drop', dropListener)
+    input.prependListener('drop', dropListener)
   }
 
   private _setupInput = (
@@ -230,9 +242,9 @@ export class Primitive<I = any, O = any> extends Unit<I, O> {
     this._outputListeners.data[name] = dataListener
     this._outputListeners.drop[name] = dropListener
     this._outputListeners.invalid[name] = invalidListener
-    output.prependListener('_data', dataListener)
-    output.addListener('_drop', dropListener)
-    output.prependListener('_invalid', invalidListener)
+    output.prependListener('data', dataListener)
+    output.addListener('drop', dropListener)
+    output.prependListener('invalid', invalidListener)
   }
 
   private _setupDataOutput = (name: string, output: Pin<any>): void => {

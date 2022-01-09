@@ -8,9 +8,4 @@ export function watchRefInput(
   callback: (moment: PinDataMoment) => void
 ): () => void {
   return watchRefPin('ref_input', 'input', pinId, pin, callback)
-  // return watchRefPin('input', pinId, pin, callback)
-  // return watchRefPin('input', pinId, pin, (moment: PinDataMoment) => {
-  //   moment.data.data = "null"
-  //   callback(moment)
-  // })
 }

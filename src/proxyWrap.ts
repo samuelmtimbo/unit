@@ -1,9 +1,9 @@
-import { Callback } from './Callback'
 import { ASYNC_GRAPH_PROXY_CALL_FILTER } from './constant/ASYNC_GRAPH_PROXY_CALL_FILTER'
 import { ASYNC_GRAPH_PROXY_WATCH_FILTER } from './constant/ASYNC_GRAPH_PROXY_WATCH_FILTER'
 import { Moment } from './debug/Moment'
+import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
-import { Unlisten } from './Unlisten'
+import { Unlisten } from './types/Unlisten'
 
 export function proxy<T extends object>(
   unit: T,

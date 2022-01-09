@@ -1,4 +1,3 @@
-import { $ } from '../../Class/$'
 import { Dict } from '../../types/Dict'
 
 export const AsyncWrap = (

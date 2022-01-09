@@ -1,4 +1,4 @@
-import { Callback } from '../../Callback'
+import { Callback } from '../../types/Callback'
 
 export const $J_METHOD_CALL = ['get', 'set']
 

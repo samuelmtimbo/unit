@@ -1,6 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { CH } from '../../../../interface/CH'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
 
 interface I<T> {
   unit: CH
@@ -10,7 +12,7 @@ interface I<T> {
 interface O<T> {}
 
 export default class Send<T> extends Functional<I<T>, O<T>> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['unit', 'data'],
@@ -22,7 +24,9 @@ export default class Send<T> extends Functional<I<T>, O<T>> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 

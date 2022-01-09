@@ -1,6 +1,5 @@
 import { System } from '../../system'
 import namespaceURI from '../component/namespaceURI'
-import { IOPointerEvent } from '../event/pointer'
 
 const LONG_PRESS_DURATION = 0.2
 const LONG_PRESS_TRANSITION = `r ${LONG_PRESS_DURATION}s linear, opacity ${LONG_PRESS_DURATION}s linear`

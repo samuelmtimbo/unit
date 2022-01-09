@@ -1,16 +1,13 @@
-import { Callback } from '../../Callback'
 import { Graph } from '../../Class/Graph'
 import { Unit } from '../../Class/Unit'
 import { GraphMoment } from '../../debug/GraphMoment'
 import { Moment } from '../../debug/Moment'
 import { watchGraph } from '../../debug/watchGraph'
 import { watchUnit } from '../../debug/watchUnit'
-import { GraphState } from '../../GraphState'
 import { proxyWrap } from '../../proxyWrap'
 import { evaluate } from '../../spec/evaluate'
 import { fromId } from '../../spec/fromId'
 import { stringify } from '../../spec/stringify'
-import { stringifyPinData } from '../../stringifyPinData'
 import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
 import {
   Classes,
@@ -23,10 +20,12 @@ import {
   GraphUnitsSpec,
   Specs,
 } from '../../types'
+import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
-import { Unlisten } from '../../Unlisten'
+import { GraphState } from '../../types/GraphState'
+import { stringifyPinData } from '../../types/stringifyPinData'
+import { Unlisten } from '../../types/Unlisten'
 import { mapObjVK } from '../../util/object'
-import { G } from '../G'
 import { U } from '../U'
 import { $Component } from './$Component'
 import { $G, $G_C, $G_R, $G_W } from './$G'
@@ -38,7 +37,7 @@ export interface Holder<T> {
   data: T
 }
 
-export const AsyncGCall = (graph: G): $G_C => {
+export const AsyncGCall = (graph: Graph): $G_C => {
   return {
     $setUnitPinData({
       unitId,
@@ -461,29 +460,35 @@ export const AsyncGCall = (graph: G): $G_C => {
       nodeIds,
       nextIdMap,
       nextPinIdMap,
+      nextMergePinId,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
     }: {
       graphId: string
       nodeIds: {
         merge: string[]
-        linkPin: {
+        link: {
           unitId: string
           type: 'input' | 'output'
           pinId: string
-          mergeId: string
-          oppositePinId: string
         }[]
         unit: string[]
       }
       nextIdMap: {
         merge: Dict<string>
-        linkPin: Dict<string>
+        link: Dict<{
+          input: Dict<{ mergeId: string; oppositePinId: string }>
+          output: Dict<{ mergeId: string; oppositePinId: string }>
+        }>
         unit: Dict<string>
       }
       nextPinIdMap: Dict<{
         input: Dict<{ pinId: string; subPinId: string }>
         output: Dict<{ pinId: string; subPinId: string }>
+      }>
+      nextMergePinId: Dict<{
+        nextInputMergePinId: string
+        nextOutputMergePinId: string
       }>
       nextSubComponentParentMap: Dict<string | null>
       nextSubComponentChildrenMap: Dict<string[]>
@@ -493,6 +498,7 @@ export const AsyncGCall = (graph: G): $G_C => {
         nodeIds,
         nextIdMap,
         nextPinIdMap,
+        nextMergePinId,
         nextSubComponentParentMap,
         nextSubComponentChildrenMap
       )
@@ -549,13 +555,26 @@ export const AsyncGCall = (graph: G): $G_C => {
     $moveMergePinInto({
       graphId,
       mergeId,
-      nextMergeId,
+      nextInputMergeId,
+      nextOutputMergeId,
+      nextPinIdMap,
     }: {
       graphId: string
       mergeId: string
-      nextMergeId: string
+      nextInputMergeId: string | null
+      nextOutputMergeId: string | null
+      nextPinIdMap: Dict<{
+        input: Dict<{ pinId: string; subPinId: string }>
+        output: Dict<{ pinId: string; subPinId: string }>
+      }>
     }): void {
-      graph.moveMergeInto(graphId, mergeId, nextMergeId)
+      graph.moveMergeInto(
+        graphId,
+        mergeId,
+        nextInputMergeId,
+        nextOutputMergeId,
+        nextPinIdMap
+      )
     },
 
     $explodeUnit({
@@ -572,7 +591,7 @@ export const AsyncGCall = (graph: G): $G_C => {
   }
 }
 
-export const AsyncGWatch = (graph: G): $G_W => {
+export const AsyncGWatch = (graph: Graph): $G_W => {
   return {
     $watchGraph(
       { events }: { events: string[] },
@@ -615,7 +634,7 @@ export const AsyncGWatch = (graph: G): $G_W => {
   }
 }
 
-export const AsyncGRef = (graph: G): $G_R => {
+export const AsyncGRef = (graph: Graph): $G_R => {
   return {
     $transcend({
       id,
@@ -626,12 +645,13 @@ export const AsyncGRef = (graph: G): $G_R => {
       unitId: string
       _: string[]
     }): $Graph {
-      const graph_system = graph.refSystem()
-      const _parent_graph = new Graph({}, {}, graph_system)
-      _parent_graph.addUnit({ id }, unitId, graph, false)
-      _parent_graph.play()
-      const $parent_graph = Async(_parent_graph, _)
-      return proxyWrap($parent_graph, _)
+      const system = graph.refSystem()
+      const pod = graph.refPod()
+      const parent = new Graph({}, {}, system, pod)
+      parent.addUnit({ id }, unitId, graph, false)
+      parent.play()
+      const $parent = Async(parent, _)
+      return proxyWrap($parent, _)
     },
 
     $refUnit({ unitId, _ }: { unitId: string; _: string[] }): $U {
@@ -655,7 +675,7 @@ export const AsyncGRef = (graph: G): $G_R => {
   }
 }
 
-export const AsyncG = (g: G): $G => {
+export const AsyncG = (g: Graph): $G => {
   return {
     ...AsyncGWatch(g),
     ...AsyncGCall(g),

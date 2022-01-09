@@ -1,4 +1,3 @@
-import callAll from '../../../../../../callAll'
 import { Component } from '../../../../../../client/component'
 import mergeStyle from '../../../../../../client/component/mergeStyle'
 import {
@@ -7,10 +6,12 @@ import {
   isSignedIn,
 } from '../../../../../../client/host/user'
 import parentElement from '../../../../../../client/parentElement'
+import { Pod } from '../../../../../../pod'
 import { UserSpec } from '../../../../../../server/model/UserSpec'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
-import { Unlisten } from '../../../../../../Unlisten'
+import { Unlisten } from '../../../../../../types/Unlisten'
+import callAll from '../../../../../../util/call/callAll'
 import Div from '../../../../component/Div/Component'
 import Icon from '../../../../component/Icon/Component'
 
@@ -26,8 +27,8 @@ export default class IOAuthWall extends Component<HTMLDivElement, Props> {
   private _signin: Div
   private _content: Div
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style } = $props
 
@@ -40,7 +41,8 @@ export default class IOAuthWall extends Component<HTMLDivElement, Props> {
           alignItems: 'center',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._signin = wall
 
@@ -53,7 +55,8 @@ export default class IOAuthWall extends Component<HTMLDivElement, Props> {
           cursor: 'pointer',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     wall.appendParentRoot(lock)
     this._signin = wall
@@ -64,7 +67,8 @@ export default class IOAuthWall extends Component<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._root = root
 
@@ -74,7 +78,8 @@ export default class IOAuthWall extends Component<HTMLDivElement, Props> {
           display: 'none',
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._content = wall
 

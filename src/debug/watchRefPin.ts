@@ -1,5 +1,5 @@
-import callAll from '../callAll'
 import { Pin } from '../Pin'
+import callAll from '../util/call/callAll'
 import { PinDataMoment } from './PinDataMoment'
 import { PinType } from './PinType'
 import { watchRefPinEvent } from './watchRefPinEvent'

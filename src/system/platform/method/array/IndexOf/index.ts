@@ -1,6 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { A } from '../../../../../interface/A'
+import { Pod } from '../../../../../pod'
+import { System } from '../../../../../system'
 
 export interface I<T> {
   'a[]': A
@@ -12,7 +14,7 @@ export interface O<T> {
 }
 
 export default class IndexOf<T> extends Functional<I<T>, O<T>> {
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['a[]', 'a'],
@@ -24,7 +26,9 @@ export default class IndexOf<T> extends Functional<I<T>, O<T>> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 

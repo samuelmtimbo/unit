@@ -1,6 +1,6 @@
-import callAll from '../callAll'
-import { U } from '../interface/U'
-import { Unlisten } from '../Unlisten'
+import { Unit } from '../Class/Unit'
+import { Unlisten } from '../types/Unlisten'
+import callAll from '../util/call/callAll'
 import { Moment } from './Moment'
 
 export interface UnitSpecMomentData {
@@ -12,7 +12,7 @@ export interface UnitSpecMoment<T = any>
 
 export const watchUnitSpecEvent = (
   event: 'set_input' | 'set_output' | 'remove_input' | 'remove_output',
-  unit: U,
+  unit: Unit,
   callback: (moment: UnitSpecMoment) => void
 ): (() => void) => {
   const all: Unlisten[] = []

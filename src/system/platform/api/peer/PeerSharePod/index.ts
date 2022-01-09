@@ -1,36 +1,38 @@
 import { DEFAULT_STUN_RTC_CONFIG } from '../../../../../api/peer/config'
+import { Peer } from '../../../../../api/peer/Peer'
 import { Graph } from '../../../../../Class/Graph'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { $makeUnitRemoteRef } from '../../../../../client/makeUnitRemoteRef'
 import { RemoteRef } from '../../../../../client/RemoteRef'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
 import { $$refGlobalObj } from '../../../../../interface/async/AsyncU_'
-import { G } from '../../../../../interface/G'
-import { Peer } from '../../../../../Peer'
-import { Primitive } from '../../../../../Primitive'
+import { Pod } from '../../../../../pod'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
+import { System } from '../../../../../system'
 
 export interface I {
-  pod: G
+  pod: Graph
+  answer: string
 }
 
 export interface O {
-  id: string
+  offer: string
 }
 
-export default class PeerSharePod extends Primitive<I, O> {
+export default class PeerSharePod extends Semifunctional<I, O> {
   __ = ['U']
 
   private _connected: boolean = false
-
   private _peer: Peer
-
   private _ref: RemoteRef
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
-        i: ['pod', 'answer'],
+        fi: ['pod'],
+        fo: [],
+        i: ['answer'],
         o: ['offer'],
       },
       {
@@ -39,7 +41,9 @@ export default class PeerSharePod extends Primitive<I, O> {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
 
     this.addListener('destroy', () => {
@@ -51,7 +55,12 @@ export default class PeerSharePod extends Primitive<I, O> {
       }
     })
 
-    const peer = new Peer(true, DEFAULT_STUN_RTC_CONFIG)
+    const peer = new Peer(
+      this.__system,
+      this.__pod,
+      true,
+      DEFAULT_STUN_RTC_CONFIG
+    )
 
     peer.addListener('connect', () => {
       console.log('PeerSharePod', 'connect')
@@ -109,10 +118,7 @@ export default class PeerSharePod extends Primitive<I, O> {
     this._send({ type: TERMINATE })
   }
 
-  onRefInputData(name: string, data: any) {
-    // if (name === 'pod') {
-    const pod = data as Graph
-
+  f({ pod }: I) {
     const { __global_id } = pod
 
     const $pod = $$refGlobalObj(this.__system, __global_id, ['$U', '$C', '$G'])
@@ -126,23 +132,17 @@ export default class PeerSharePod extends Primitive<I, O> {
     if (this._connected) {
       this._send_init()
     }
-    // }
   }
 
-  onRefInputDrop(name: string) {
-    // if (name === 'pod') {
+  d() {
     this._disconnect()
+  }
+
+  public async onIterDataInputData(name: string, data: any): Promise<void> {
+    // if (name === 'answer') {
+    await this._peer.acceptAnswer(data)
     // }
   }
 
-  async onDataInputData(name: string, data: any) {
-    if (name === 'answer') {
-      await this._peer.acceptAnswer(data)
-    }
-  }
-
-  async onDataOutputDrop(name: string) {
-    if (name === 'answer') {
-    }
-  }
+  public async onIterDataInputDrop(name: string): Promise<void> {}
 }

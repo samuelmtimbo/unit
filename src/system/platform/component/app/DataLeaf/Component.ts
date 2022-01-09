@@ -4,22 +4,23 @@ import {
   getLeafWidth,
   LEAF_HEIGHT,
 } from '../../../../../client/component/getDatumSize'
+import { Element } from '../../../../../client/element'
 import { makeBlurListener } from '../../../../../client/event/focus/blur'
 import { makeFocusListener } from '../../../../../client/event/focus/focus'
 import IOFocusEvent from '../../../../../client/event/focus/FocusEvent'
 import { makeInputListener } from '../../../../../client/event/input'
 import {
-  makeKeydownListener,
   IOKeyboardEvent,
+  makeKeydownListener,
 } from '../../../../../client/event/keyboard'
 import { makePasteListener } from '../../../../../client/event/paste'
 import parentElement from '../../../../../client/parentElement'
-import { userSelect } from '../../../../../client/style/userSelect'
-import { Element } from '../../../../../client/element'
+import { userSelect } from '../../../../../client/util/style/userSelect'
+import { Pod } from '../../../../../pod'
 import { TreeNode } from '../../../../../spec/parser'
+import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import TextInput from '../../value/TextInput/Component'
-import { System } from '../../../../../system'
 
 export interface Props {
   className?: string
@@ -32,8 +33,8 @@ export interface Props {
 export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
   public _input: TextInput
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style, value } = $props
 
@@ -57,7 +58,8 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
         },
         value,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
 
     this._input = input

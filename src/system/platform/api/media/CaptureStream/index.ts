@@ -1,13 +1,16 @@
-import { Callback } from '../../../../../Callback'
 import { $CS, CSOpt } from '../../../../../interface/async/$CS'
 import { ST } from '../../../../../interface/ST'
 import { ObjectSource } from '../../../../../ObjectSource'
+import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
-import { Unlisten } from '../../../../../Unlisten'
+import { System } from '../../../../../system'
+import { Callback } from '../../../../../types/Callback'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I {
   source: $CS
   opt: CSOpt
+  stop: any
 }
 
 export interface O {}
@@ -17,7 +20,7 @@ export default class CaptureStream extends Primitive<I, O> implements ST {
 
   private _stream: ObjectSource<MediaStream> = new ObjectSource()
 
-  constructor() {
+  constructor(system: System, pod: Pod) {
     super(
       {
         i: ['source', 'opt', 'stop'],
@@ -29,7 +32,9 @@ export default class CaptureStream extends Primitive<I, O> implements ST {
             ref: true,
           },
         },
-      }
+      },
+      system,
+      pod
     )
   }
 

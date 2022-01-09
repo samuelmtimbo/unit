@@ -3,9 +3,10 @@ import { Component } from '../../../../client/component'
 import { makeCustomListener } from '../../../../client/event/custom'
 import parentElement from '../../../../client/parentElement'
 import { setAlpha, themeBackgroundColor } from '../../../../client/theme'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { Unlisten } from '../../../../Unlisten'
+import { Unlisten } from '../../../../types/Unlisten'
 import PhoneKeyboard from '../../../platform/component/app/PhoneKeyboard/Component'
 import IOUNAPPControl from '../GUIControl/Component'
 
@@ -31,8 +32,8 @@ export default class GUIControlKeyboard extends Component<
   private _root: IOUNAPPControl
   private _content: PhoneKeyboard
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style = {} } = this.$props
 
@@ -46,7 +47,8 @@ export default class GUIControlKeyboard extends Component<
         y: 142,
         collapsed: true,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     root.preventDefault('mousedown')
     root.preventDefault('touchdown')
@@ -56,7 +58,8 @@ export default class GUIControlKeyboard extends Component<
       {
         style: {},
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     root.registerParentRoot(keyboard)
     this._content = keyboard

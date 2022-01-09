@@ -1,5 +1,5 @@
-import { Callback } from '../../Callback'
-import { Unlisten } from '../../Unlisten'
+import { Callback } from '../../types/Callback'
+import { Unlisten } from '../../types/Unlisten'
 
 export const $ST_METHOD_CALL = ['stream']
 

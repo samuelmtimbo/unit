@@ -1,7 +1,7 @@
 import assocPath from '../../system/core/object/AssocPath/f'
 import dissocPath from '../../system/core/object/DissocPath/f'
 import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
-import propPath from '../../system/core/object/PropPath/f'
+import pathGet from '../../system/core/object/PathGet/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import _dissoc from '../../system/f/object/Dissoc/f'
 import merge from '../../system/f/object/Merge/f'
@@ -403,12 +403,12 @@ export const _removePinFromMerge = (
   state = dissocPath(state, ['merges', id, unitId, type, pinId]) as State
 
   // remove type from unit if there are no more pins involved
-  if (isEmptyObject(propPath(state, ['merges', id, unitId, type]))) {
+  if (isEmptyObject(pathGet(state, ['merges', id, unitId, type]))) {
     state = dissocPath(state, ['merges', id, unitId, type]) as State
   }
 
   // remove unit from merge if there are no more pins involved
-  if (isEmptyObject(propPath(state, ['merges', id, unitId]))) {
+  if (isEmptyObject(pathGet(state, ['merges', id, unitId]))) {
     state = dissocPath(state, ['merges', id, unitId]) as State
   }
 
@@ -676,7 +676,7 @@ export const setPinSetId = (
   return assocPath(
     dissocPath(state, [`${type}s`, id]),
     [`${type}s`, newId],
-    propPath(state, [`${type}s`, id])
+    pathGet(state, [`${type}s`, id])
   )
 }
 

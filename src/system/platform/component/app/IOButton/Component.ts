@@ -1,10 +1,11 @@
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/parentElement'
-import { userSelect } from '../../../../../client/style/userSelect'
 import { getActiveColor } from '../../../../../client/theme'
-import { Dict } from '../../../../../types/Dict'
+import { userSelect } from '../../../../../client/util/style/userSelect'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { Dict } from '../../../../../types/Dict'
 import TextDiv from '../TextDiv/Component'
 
 export interface Props {
@@ -29,8 +30,8 @@ export const DEFAULT_STYLE = {
 export default class IOButton extends Element<HTMLDivElement, Props> {
   private _button: TextDiv
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { value, style } = $props
 
@@ -42,7 +43,8 @@ export default class IOButton extends Element<HTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._button = button
 

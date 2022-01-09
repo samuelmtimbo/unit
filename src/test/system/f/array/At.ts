@@ -1,8 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import At from '../../../../system/f/array/At'
+import { pod, system } from '../../../util/system'
 
-const at = new At()
+const at = new At(system, pod)
 
 at.play()
 

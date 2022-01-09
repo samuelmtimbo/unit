@@ -1,6 +1,5 @@
-import { Callback } from '../Callback'
-import { BSE } from './BSE'
+import { IBluetoothService } from '../types/global/IBluetoothService'
 
 export interface BS {
-  getPrimaryService(name: string, callback: Callback<BSE>): void
+  getPrimaryService(name: string): Promise<IBluetoothService>
 }

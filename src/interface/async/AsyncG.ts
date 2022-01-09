@@ -1,4 +1,3 @@
-import { Callback } from '../../Callback'
 import { GraphMoment } from '../../debug/GraphMoment'
 import { Moment } from '../../debug/Moment'
 import {
@@ -10,8 +9,9 @@ import {
   GraphUnitSpec,
   GraphUnitsSpec,
 } from '../../types'
+import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
-import { Unlisten } from '../../Unlisten'
+import { Unlisten } from '../../types/Unlisten'
 import { $Component } from './$Component'
 import { $G, $G_C, $G_R, $G_W } from './$G'
 import { $Graph } from './$Graph'
@@ -272,23 +272,28 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
       graphId: string
       nodeIds: {
         merge: string[]
-        linkPin: {
+        link: {
           unitId: string
           type: 'input' | 'output'
           pinId: string
-          mergeId: string
-          oppositePinId: string
         }[]
         unit: string[]
       }
       nextIdMap: {
         merge: Dict<string>
-        linkPin: Dict<string>
+        link: Dict<{
+          input: Dict<{ mergeId: string; oppositePinId: string }>
+          output: Dict<{ mergeId: string; oppositePinId: string }>
+        }>
         unit: Dict<string>
       }
       nextPinIdMap: Dict<{
         input: Dict<{ pinId: string; subPinId: string }>
         output: Dict<{ pinId: string; subPinId: string }>
+      }>
+      nextMergePinId: Dict<{
+        nextInputMergePinId: string
+        nextOutputMergePinId: string
       }>
       nextSubComponentParentMap: Dict<string | null>
       nextSubComponentChildrenMap: Dict<string[]>
@@ -317,7 +322,12 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
     $moveMergePinInto(data: {
       graphId: string
       mergeId: string
-      nextMergeId: string
+      nextInputMergeId: string | null
+      nextOutputMergeId: string | null
+      nextPinIdMap: Dict<{
+        input: Dict<{ pinId: string; subPinId: string }>
+        output: Dict<{ pinId: string; subPinId: string }>
+      }>
     }): void {
       return graph.$moveMergePinInto(data)
     },

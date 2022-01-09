@@ -1,8 +1,9 @@
 import { watchUnitAndLog } from '../../../../debug'
 import DeepMerge from '../../../../system/f/object/DeepMerge'
 import { testMIMO } from '../../../util'
+import { pod, system } from '../../../util/system'
 
-const deepMerge = new DeepMerge()
+const deepMerge = new DeepMerge(system, pod)
 
 deepMerge.play()
 

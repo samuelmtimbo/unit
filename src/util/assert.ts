@@ -6,11 +6,11 @@ export function assert(test: boolean, message: string = ''): void {
   }
 }
 
-export function equal(a: any, b: any): void {
+export function equal<T>(a: T, b: T): void {
   return assert(a === b)
 }
 
-export function deepEqual(a: any, b: any): void {
+export function deepEqual<T>(a: T, b: T): void {
   return assert(
     isEqual(a, b),
     `${JSON.stringify(a)} is not deep equal to ${JSON.stringify(b)}`

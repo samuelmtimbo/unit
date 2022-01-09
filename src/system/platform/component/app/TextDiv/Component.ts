@@ -1,5 +1,6 @@
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/parentElement'
+import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import Div from '../../Div/Component'
@@ -22,8 +23,8 @@ export default class TextDiv extends Element<HTMLDivElement, Props> {
   private _div: Div
   private _text: _Text
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { className, style, tabIndex, title, draggable, value } = this.$props
 
@@ -37,7 +38,8 @@ export default class TextDiv extends Element<HTMLDivElement, Props> {
         title,
         draggable,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._div = div
 
@@ -45,7 +47,8 @@ export default class TextDiv extends Element<HTMLDivElement, Props> {
       {
         value,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._text = text
 

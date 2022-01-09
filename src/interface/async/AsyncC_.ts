@@ -1,5 +1,3 @@
-import { Callback } from '../../Callback'
-import { Component } from '../../client/component'
 import {
   $appendChild,
   $child,
@@ -10,14 +8,14 @@ import {
 } from '../../component/$component'
 import { $Child } from '../../component/Child'
 import { $Children } from '../../component/Children'
+import { Component_ } from '../../interface/component'
 import { fromId } from '../../spec/fromId'
 import { Classes, Specs } from '../../types'
-import { Unlisten } from '../../Unlisten'
-import { C } from '../C'
+import { Callback } from '../../types/Callback'
 import { $C, $C_C, $C_R, $C_W } from './$C'
 import { $Component } from './$Component'
 
-export const AsyncCCall = (c: C): $C_C => {
+export const AsyncCCall = (c: Component_): $C_C => {
   return {
     $appendChild(
       {
@@ -52,12 +50,11 @@ export const AsyncCCall = (c: C): $C_C => {
   }
 }
 
-export const AsyncCWatch = (c: C): $C_W => {
-  return {
-  }
+export const AsyncCWatch = (c: Component_): $C_W => {
+  return {}
 }
 
-export const AsyncCRef = (c: C): $C_R => {
+export const AsyncCRef = (c: Component_): $C_R => {
   return {
     $refChild(data: { at: number; _: string[] }): $Component {
       return $refChild(c, data)
@@ -65,7 +62,7 @@ export const AsyncCRef = (c: C): $C_R => {
   }
 }
 
-export const AsyncC: (c: C) => $C = (c: C) => {
+export const AsyncC: (c: Component_) => $C = (c: Component_) => {
   return {
     ...AsyncCCall(c),
     ...AsyncCWatch(c),

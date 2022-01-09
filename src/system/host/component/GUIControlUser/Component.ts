@@ -3,9 +3,10 @@ import { Component } from '../../../../client/component'
 import { makeCustomListener } from '../../../../client/event/custom'
 import parentElement from '../../../../client/parentElement'
 import { setAlpha, themeBackgroundColor } from '../../../../client/theme'
+import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { Unlisten } from '../../../../Unlisten'
+import { Unlisten } from '../../../../types/Unlisten'
 import User from '../../../platform/component/app/service/User/Component'
 import IOUNAPPControl from '../GUIControl/Component'
 
@@ -26,8 +27,8 @@ export default class IOUNAPPUser extends Component<HTMLDivElement, Props> {
   private _root: IOUNAPPControl
   private _content: User
 
-  constructor($props: Props, $system: System) {
-    super($props, $system)
+  constructor($props: Props, $system: System, $pod: Pod) {
+    super($props, $system, $pod)
 
     const { style = {} } = this.$props
 
@@ -41,7 +42,8 @@ export default class IOUNAPPUser extends Component<HTMLDivElement, Props> {
         y: 48,
         collapsed: true,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._root = root
 
@@ -49,7 +51,8 @@ export default class IOUNAPPUser extends Component<HTMLDivElement, Props> {
       {
         style,
       },
-      this.$system
+      this.$system,
+      this.$pod
     )
     this._content = user
 

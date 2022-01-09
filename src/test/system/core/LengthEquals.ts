@@ -3,6 +3,7 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
+import { pod, system } from '../../util/system'
 const spec =
   require('../../../system/core/common/LengthEquals/spec.json') as GraphSpec
 
@@ -11,9 +12,7 @@ const LengthEquals = fromSpec<{ a: number[]; b: number }, { equals: boolean }>(
   _specs
 )
 
-import { system } from '../../util/system'
-
-const lengthEquals = new LengthEquals(system)
+const lengthEquals = new LengthEquals(system, pod)
 
 false && watchUnitAndLog(lengthEquals)
 false && watchGraphAndLog(lengthEquals)

@@ -1,0 +1,34 @@
+{
+  "name": "ref",
+  "inputs": {
+    "obj": {
+      "_type": "`J<T object>`",
+      "type": "`J`",
+      "ref": true
+    },
+    "key": {
+      "_type": "<K keyof T>",
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "value": {
+      "_type": "`T[K]`",
+      "type": "`V`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "intantiate `class`",
+    "complexity": 2.6559309156273745,
+    "tags": [
+      "f",
+      "meta"
+    ]
+  },
+  "id": "e1486d65-7d51-436b-949d-4e57d1f9e4a9",
+  "system": true,
+  "base": true,
+  "type": "`U`"
+}

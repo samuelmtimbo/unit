@@ -4,6 +4,7 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
+import { pod, system } from '../../util/system'
 
 const spec =
   require('../../../system/core/common/PriorityMerge/spec.json') as GraphSpec
@@ -13,14 +14,11 @@ const PriorityMerge = fromSpec<{ a: number[]; b: number[] }, { ab: number[] }>(
   _specs
 )
 
-import { system } from '../../util/system'
-
-const priorityMerge = new PriorityMerge(system)
+const priorityMerge = new PriorityMerge(system, pod)
 
 false && watchUnitAndLog(priorityMerge)
 false && watchGraphAndLog(priorityMerge)
 false && watchGraphAndLog(priorityMerge.refUnit('prioritymergefrom') as Graph)
-
 
 priorityMerge.play()
 

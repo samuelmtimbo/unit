@@ -1,5 +1,5 @@
-import { Store } from '../../client/host'
 import { Dict } from '../../types/Dict'
+import { Store } from '../store'
 import { requestJSON } from './fetchJSON'
 import { isSignedIn } from './user'
 

@@ -1,19 +1,16 @@
-import { Callback } from '../Callback'
-import { Component } from '../client/component'
 import { $Component } from '../interface/async/$Component'
 import { Async } from '../interface/async/Async'
-import { C } from '../interface/C'
-import { C_U } from '../interface/C_U'
+import { Component_ } from '../interface/component'
 import { W } from '../interface/W'
 import { proxyWrap } from '../proxyWrap'
+import { Callback } from '../types/Callback'
 import { UnitClass } from '../types/UnitClass'
-import { Unlisten } from '../Unlisten'
 import { $Child } from './Child'
 import { $Children } from './Children'
 
 export function $appendChild(
-  component: C,
-  Class: UnitClass<C_U>,
+  component: Component_,
+  Class: UnitClass<Component_>,
   callback: Callback<number>
 ): void {
   const i = component.appendChild(Class)
@@ -21,14 +18,13 @@ export function $appendChild(
 }
 
 export function $removeChild(
-  component: C,
+  component: Component_,
   { at }: { at: number },
   callback: Callback<{ specId: string }>
 ): void {
   try {
     const Class = component.removeChild(at)
-    // @ts-ignore
-    const specId = Class.constructor.__id
+    const specId = Class.__bundle.unit.id
     callback({ specId })
   } catch (err) {
     callback(undefined, err.message)
@@ -36,7 +32,7 @@ export function $removeChild(
 }
 
 export function $hasChild(
-  component: C,
+  component: Component_,
   { at }: { at: number },
   callback: Callback<boolean>
 ): void {
@@ -45,7 +41,7 @@ export function $hasChild(
 }
 
 export function $child(
-  component: C,
+  component: Component_,
   { at }: { at: number },
   callback: Callback<$Child>
 ): void {
@@ -56,7 +52,7 @@ export function $child(
 }
 
 export function $children(
-  component: C,
+  component: Component_,
   {},
   callback: Callback<$Children>
 ): void {
@@ -64,14 +60,14 @@ export function $children(
 
   const _children = children.map((c) => {
     // @ts-ignore
-    return { id: c.constructor.__id } as $Child
+    return { id: c.constructor.__bundle.unit.id } as $Child
   })
 
   callback(_children)
 }
 
 export function $refChild(
-  component: C,
+  component: Component_,
   { at, _ }: { at: number; _: string[] }
 ): $Component {
   const child = component.refChild(at)
