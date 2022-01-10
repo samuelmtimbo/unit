@@ -24,7 +24,7 @@ The following is a manual on how to run a local version of the unit Programming 
 
 ## Installation
 
-Install [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you haven't aready.
+Install [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you haven't already.
 
 Clone this repository:
 
