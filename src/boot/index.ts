@@ -6,6 +6,7 @@ import { API, BootOpt, System } from '../system'
 import { UserMediaAPINotSupported } from '../system/platform/api/media/UserMedia/MediaDeviceAPINotSupported'
 import { Storage_ } from '../system/platform/api/storage/Storage_'
 import _specs from '../system/_specs'
+import { Dict } from '../types/Dict'
 import { IDownloadDataOpt } from '../types/global/IDownloadData'
 import {
   ISpeechGrammarList,
@@ -187,6 +188,14 @@ export function noHost(): API {
         throw new Error()
       },
     },
+    querystring: {
+      stringify: function (obj: Dict<any>): string {
+        throw new Error('Function not implemented.')
+      },
+      parse: function (str: string): Dict<any> {
+        throw new Error('Function not implemented.')
+      }
+    }
   }
 
   return host

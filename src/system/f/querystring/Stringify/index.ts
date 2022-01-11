@@ -1,4 +1,3 @@
-import * as querystring from 'querystring'
 import { Functional } from '../../../../Class/Functional'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
@@ -16,7 +15,7 @@ export default class Stringify extends Functional<I, O> {
   constructor(system: System, pod: Pod) {
     super(
       {
-        i: ['a'],
+        i: ['obj'],
         o: ['str'],
       },
       {},
@@ -26,7 +25,21 @@ export default class Stringify extends Functional<I, O> {
   }
 
   f({ obj }: I, done): void {
-    // TODO system
-    done({ str: querystring.stringify(obj) })
+    const {
+      api: {
+        querystring: { stringify },
+      },
+    } = this.__system
+
+    let str: string
+
+    try {
+      str = stringify(obj)
+    } catch (err) {
+      done(undefined, err.message)
+      return
+    }
+
+    done({ str })
   }
 }
