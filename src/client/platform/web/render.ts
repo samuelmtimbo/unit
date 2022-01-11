@@ -691,6 +691,22 @@ export default function webRender(
     },
   }
 
+  const querystring = {
+    parse: (str: string): Dict<any> => {
+      const urlSearchParams = new URLSearchParams(str)
+      const obj = {}
+      urlSearchParams.forEach((value, key) => {
+        obj[key] = value
+      })
+      return obj
+    },
+    stringify: (obj: Dict<any>): string => {
+      const urlSearchParams = new URLSearchParams(obj)
+      const str = urlSearchParams.toString()
+      return str
+    },
+  }
+
   const api: API = {
     storage,
     selection,
@@ -706,6 +722,7 @@ export default function webRender(
     pod,
     speech,
     document: _document,
+    querystring,
   }
 
   const _opt = deepMerge({ specs, classes, components, host: api }, opt)

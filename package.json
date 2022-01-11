@@ -42,7 +42,6 @@
     "http-errors": "1.8.0",
     "is-ip": "3.1.0",
     "joi": "17.4.0",
-    "querystring": "0.2.0",
     "ws": "7.4.4"
   },
   "devDependencies": {

@@ -122,6 +122,10 @@ export type API = {
     ): SVGElementTagNameMap[K]
     createTextNode(text: string): Text
   }
+  querystring: {
+    stringify: (obj: Dict<any>) => string,
+    parse: (str: string) => Dict<any>
+  }
 }
 
 export interface System {
