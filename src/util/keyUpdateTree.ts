@@ -100,6 +100,24 @@ export const _keyUpdateTree = (
     ) {
       preventDefault = true
       nextRoot = _updateNodeAt(root, path, getTree(''))
+    } else {
+      const parentPath = getParentPath(path) as number[]
+      if (parentPath) {
+        const parent = _getNodeAtPath(root, parentPath)
+        if (parent.type === TreeNodeType.KeyValue) {
+          if (path[path.length - 1] === 1) {
+            if (selectionStart === 0 && selectionEnd === 0) {
+              preventDefault = true
+              const key = _getNodeAtPath(parent, [0])
+              const nextValue = key.value+value
+              nextRoot = _updateNodeAt(root, parentPath, getTree(nextValue))
+              nextPath = parentPath
+              nextSelectionStart = key.value.length
+              nextSelectionEnd = nextSelectionStart
+            }
+          }
+        }
+      }
     }
   } else if (key === 'ArrowLeft') {
     if (selectionStart === 0) {
@@ -275,9 +293,10 @@ export const _keyUpdateTree = (
       // && _isValidObjKey(data)
     ) {
       preventDefault = true
-      nextRoot = _updateNodeAt(root, path, getTree(`${data.value}:`))
+      nextRoot = _updateNodeAt(root, path, getTree(`${data.value.substring(0,selectionStart)}:${data.value.substring(selectionEnd)}`))
       nextPath = [...path, 1]
-      nextRoot = _updateNodeAt(nextRoot, nextPath, getTree(''))
+      nextSelectionStart = 0
+      nextSelectionEnd = 0
     }
   } else if (key === '[' || key === '{') {
     if (value === '') {
@@ -368,7 +387,8 @@ export const _keyUpdateTree = (
     },
   ]
 }
-export const keydownUpdateTree = (
+
+export const keyUpdateTree = (
   root: string,
   focus: number[],
   value: string,
