@@ -116,3 +116,25 @@ assert.deepEqual(
     },
   ]
 )
+assert.deepEqual(
+  keydownUpdateTree('{color:"red"}', [0, 1], '"red"', 'Backspace', 0, false),
+  [
+    true,
+    {
+      nextRoot: '{color"red"}',
+      nextPath: [0],
+      nextSelectionStart: 5,
+    },
+  ]
+)
+assert.deepEqual(
+  keydownUpdateTree('{color"red"}', [0], 'color"red"', ':', 5, true),
+  [
+    true,
+    {
+      nextRoot: '{color:"red"}',
+      nextPath: [0,1],
+      nextSelectionStart: 0,
+    },
+  ]
+)
