@@ -1,4 +1,3 @@
-import ResizeObserver from 'resize-observer-polyfill'
 import { System } from '../system'
 import { _removeChildren } from '../util/element'
 import { Component } from './component'

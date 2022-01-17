@@ -1,4 +1,3 @@
-import ResizeObserver from 'resize-observer-polyfill'
 import { Unlisten } from '../types/Unlisten'
 import callAll from '../util/call/callAll'
 import { parseTransformXY } from './parseTransformXY'

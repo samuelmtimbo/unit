@@ -1,7 +1,7 @@
 import { assert } from '../../../../util/assert'
-import { keydownUpdateTree } from '../../../../util/keyUpdateTree'
+import { keyUpdateTree } from '../../../../util/keyUpdateTree'
 
-assert.deepEqual(keydownUpdateTree('', [], '', '[', 0, false), [
+assert.deepEqual(keyUpdateTree('', [], '', '[', 0, false), [
   true,
   {
     nextRoot: '[]',
@@ -9,7 +9,7 @@ assert.deepEqual(keydownUpdateTree('', [], '', '[', 0, false), [
     nextSelectionStart: 1,
   },
 ])
-assert.deepEqual(keydownUpdateTree('', [], '', '{', 0, true), [
+assert.deepEqual(keyUpdateTree('', [], '', '{', 0, true), [
   true,
   {
     nextRoot: '{}',
@@ -17,7 +17,7 @@ assert.deepEqual(keydownUpdateTree('', [], '', '{', 0, true), [
     nextSelectionStart: 1,
   },
 ])
-assert.deepEqual(keydownUpdateTree('', [], '', `'`, 0, false), [
+assert.deepEqual(keyUpdateTree('', [], '', `'`, 0, false), [
   true,
   {
     nextRoot: `''`,
@@ -25,7 +25,7 @@ assert.deepEqual(keydownUpdateTree('', [], '', `'`, 0, false), [
     nextSelectionStart: 1,
   },
 ])
-assert.deepEqual(keydownUpdateTree('', [], '', `"`, 0, true), [
+assert.deepEqual(keyUpdateTree('', [], '', `"`, 0, true), [
   true,
   {
     nextRoot: '""',
@@ -33,7 +33,7 @@ assert.deepEqual(keydownUpdateTree('', [], '', `"`, 0, true), [
     nextSelectionStart: 1,
   },
 ])
-assert.deepEqual(keydownUpdateTree('', [], '', '{', 0, true), [
+assert.deepEqual(keyUpdateTree('', [], '', '{', 0, true), [
   true,
   {
     nextRoot: '{}',
@@ -41,7 +41,7 @@ assert.deepEqual(keydownUpdateTree('', [], '', '{', 0, true), [
     nextSelectionStart: 1,
   },
 ])
-assert.deepEqual(keydownUpdateTree('{}', [0], '', 'Backspace', 0, false), [
+assert.deepEqual(keyUpdateTree('{}', [0], '', 'Backspace', 0, false), [
   true,
   {
     nextRoot: '',
@@ -49,7 +49,7 @@ assert.deepEqual(keydownUpdateTree('{}', [0], '', 'Backspace', 0, false), [
     nextSelectionStart: 0,
   },
 ])
-assert.deepEqual(keydownUpdateTree('{}', [0], '', ',', 0, false), [
+assert.deepEqual(keyUpdateTree('{}', [0], '', ',', 0, false), [
   true,
   {
     nextRoot: '{}',
@@ -57,7 +57,7 @@ assert.deepEqual(keydownUpdateTree('{}', [0], '', ',', 0, false), [
     nextSelectionStart: 0,
   },
 ])
-assert.deepEqual(keydownUpdateTree('[]', [0], '', ']', 0, false), [
+assert.deepEqual(keyUpdateTree('[]', [0], '', ']', 0, false), [
   true,
   {
     nextRoot: '[]',
@@ -65,7 +65,7 @@ assert.deepEqual(keydownUpdateTree('[]', [0], '', ']', 0, false), [
     nextSelectionStart: 0,
   },
 ])
-assert.deepEqual(keydownUpdateTree('[1]', [0], '1', ',', 1, false), [
+assert.deepEqual(keyUpdateTree('[1]', [0], '1', ',', 1, false), [
   true,
   {
     nextRoot: '[1,]',
@@ -73,7 +73,7 @@ assert.deepEqual(keydownUpdateTree('[1]', [0], '1', ',', 1, false), [
     nextSelectionStart: 0,
   },
 ])
-assert.deepEqual(keydownUpdateTree('[1,]', [1], '', ',', 0, false), [
+assert.deepEqual(keyUpdateTree('[1,]', [1], '', ',', 0, false), [
   true,
   {
     nextRoot: '[1,]',
@@ -81,7 +81,7 @@ assert.deepEqual(keydownUpdateTree('[1,]', [1], '', ',', 0, false), [
     nextSelectionStart: 0,
   },
 ])
-assert.deepEqual(keydownUpdateTree('{}', [0], '', 'Backspace', 0, false), [
+assert.deepEqual(keyUpdateTree('{}', [0], '', 'Backspace', 0, false), [
   true,
   {
     nextRoot: '',
@@ -89,7 +89,7 @@ assert.deepEqual(keydownUpdateTree('{}', [0], '', 'Backspace', 0, false), [
     nextSelectionStart: 0,
   },
 ])
-assert.deepEqual(keydownUpdateTree('{a:}', [0, 1], '', 'Backspace', 0, false), [
+assert.deepEqual(keyUpdateTree('{a:}', [0, 1], '', 'Backspace', 0, false), [
   true,
   {
     nextRoot: '{a}',
@@ -97,7 +97,7 @@ assert.deepEqual(keydownUpdateTree('{a:}', [0, 1], '', 'Backspace', 0, false), [
     nextSelectionStart: 1,
   },
 ])
-assert.deepEqual(keydownUpdateTree('[[]]', [1], '', 'Backspace', 1, false), [
+assert.deepEqual(keyUpdateTree('[[]]', [1], '', 'Backspace', 1, false), [
   true,
   {
     nextRoot: '[[]]',
@@ -105,19 +105,16 @@ assert.deepEqual(keydownUpdateTree('[[]]', [1], '', 'Backspace', 1, false), [
     nextSelectionStart: 0,
   },
 ])
+assert.deepEqual(keyUpdateTree('[[[]]]', [0, 1], '', 'Backspace', 1, false), [
+  true,
+  {
+    nextRoot: '[[[]]]',
+    nextPath: [0, 0, 0],
+    nextSelectionStart: 0,
+  },
+])
 assert.deepEqual(
-  keydownUpdateTree('[[[]]]', [0, 1], '', 'Backspace', 1, false),
-  [
-    true,
-    {
-      nextRoot: '[[[]]]',
-      nextPath: [0, 0, 0],
-      nextSelectionStart: 0,
-    },
-  ]
-)
-assert.deepEqual(
-  keydownUpdateTree('{color:"red"}', [0, 1], '"red"', 'Backspace', 0, false),
+  keyUpdateTree('{color:"red"}', [0, 1], '"red"', 'Backspace', 0, false),
   [
     true,
     {
@@ -128,12 +125,12 @@ assert.deepEqual(
   ]
 )
 assert.deepEqual(
-  keydownUpdateTree('{color"red"}', [0], 'color"red"', ':', 5, true),
+  keyUpdateTree('{color"red"}', [0], 'color"red"', ':', 5, true),
   [
     true,
     {
       nextRoot: '{color:"red"}',
-      nextPath: [0,1],
+      nextPath: [0, 1],
       nextSelectionStart: 0,
     },
   ]
