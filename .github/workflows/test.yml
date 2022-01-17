@@ -1,14 +1,16 @@
 name: test
-on: [push, pull_request, workflow_dispatch]
+on: [pull_request]
 jobs:
-  Test:
+  test:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.13.1]
     steps:
       - uses: actions/checkout@v2
+      - name: npm i
+        run: npm i
       - name: npm run setup
-      - run: npm run setup
+        run: npm run setup
       - name: npm run test
-      - run: npm run test
+        run: npm run test
