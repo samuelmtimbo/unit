@@ -1,4 +1,3 @@
-import ResizeObserver from 'resize-observer-polyfill'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'

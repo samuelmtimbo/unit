@@ -1,5 +1,3 @@
-import ResizeObserver from 'resize-observer-polyfill'
-
 export default function resizeWith($element: Element, $with: Element): void {
   const { width, height } = $with.getBoundingClientRect()
 
