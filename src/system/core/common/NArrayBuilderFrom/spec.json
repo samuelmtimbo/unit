@@ -49,7 +49,7 @@
     "pauzdiil": {
       "lengthlessthan": {
         "output": {
-          "true": true
+          "test": true
         }
       },
       "looprepeat": {

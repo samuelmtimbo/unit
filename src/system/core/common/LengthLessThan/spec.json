@@ -43,7 +43,7 @@
     }
   },
   "outputs": {
-    "true": {
+    "test": {
       "pin": {
         "0": {
           "unitId": "lessthan",
