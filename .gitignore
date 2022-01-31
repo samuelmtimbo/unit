@@ -25,4 +25,7 @@ yarn-error.log
 public/index.js
 public/sw.js
 
+public/index.js.map
+public/sw.js.map
+
 src/client/static/js/index.js.ts
