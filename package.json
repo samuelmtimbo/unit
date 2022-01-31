@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "v": "ts-node src/script/v.ts",
-    "dev:node": "NODE_ENV=development node",
-    "watch:server": "NODE_ENV=development nodemon --config nodemon.json",
+    "dev:node": "cross-env NODE_ENV=development node",
+    "watch:server": "cross-env NODE_ENV=development nodemon --config nodemon.json",
     "watch:bundle": "ts-node src/script/watch/client.ts",
     "watch:client": "run-p watch:bundle watch:worker watch:sw",
     "watch:worker": "run-s watch:worker:pod",
@@ -35,6 +35,7 @@
   "dependencies": {
     "compression": "1.7.4",
     "cors": "2.8.5",
+    "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "express": "4.17.2",
     "fuzzy": "0.1.3",
