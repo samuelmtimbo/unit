@@ -95,7 +95,7 @@
       },
       "lengthlessthan": {
         "output": {
-          "true": true
+          "test": true
         }
       }
     },

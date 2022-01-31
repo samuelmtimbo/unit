@@ -266,7 +266,7 @@ assert.deepEqual(_getGraphTypeMapByPath(ID_N_ARRAY_BUILDER_FROM, _specs), {
       },
       b: { value: 'number', type: 11, children: [] },
     },
-    output: { true: { value: 'boolean', type: 12, children: [] } },
+    output: { test: { value: 'boolean', type: 12, children: [] } },
   },
   arraybuilderfrom: {
     input: {
