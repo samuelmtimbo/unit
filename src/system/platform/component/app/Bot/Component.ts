@@ -461,6 +461,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
         laser_focus.classList.add('laser-focus')
 
         laser_focus.style.fill = mode_color
+        laser_focus.style.stroke = mode_color
         laser_focus.style.transformOrigin = '50% 50%'
 
         laser_focus.setAttribute('rx', '1')
@@ -927,7 +928,10 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     for (const pointerId in this._laser_focus) {
       const laser_focus = this._laser_focus[pointerId]
       const laser_ray = this._laser_ray[pointerId]
+      
       laser_focus.style.fill = mode_color
+      laser_focus.style.stroke = mode_color
+
       laser_ray.style.stroke = mode_color
     }
   }
