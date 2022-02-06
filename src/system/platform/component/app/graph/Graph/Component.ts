@@ -1700,7 +1700,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   private _pin: Dict<Div> = {}
   private _pin_name: Dict<TextInput> = {}
 
-  private _pin_ref_set: Set<string> = new Set()
+  private _link_pin_ref_set: Set<string> = new Set()
+  private _link_pin_input_set: Set<string> = new Set()
+  private _link_pin_output_set: Set<string> = new Set()
 
   private _pin_link_start_marker: Dict<SVGPath> = {}
   private _pin_link_end_marker: Dict<SVGPath> = {}
@@ -3434,7 +3436,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._data_node = {}
     this._err_node = {}
 
-    this._pin_ref_set = new Set()
+    this._link_pin_ref_set = new Set()
+    this._link_pin_input_set = new Set()
+    this._link_pin_output_set = new Set()
 
     this._layer_node = []
     this._layer_node[0] = {}
@@ -6667,8 +6671,14 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     this._pin_node[pin_node_id] = node
 
+    if (input) {
+      this._link_pin_input_set.add(pin_node_id)
+    } else {
+      this._link_pin_output_set.add(pin_node_id)
+    }
+
     if (ref) {
-      this._pin_ref_set.add(pin_node_id)
+      this._link_pin_ref_set.add(pin_node_id)
     }
 
     if (ignored) {
@@ -11726,8 +11736,14 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _set_all_output_pin_opacity = (opacity: number): void => {
+    for (const pin_node_id of this._link_pin_output_set) {
+      this._set_link_pin_opacity(pin_node_id, opacity)
+    }
+  }
+
   private _set_all_ref_pin_opacity = (opacity: number): void => {
-    for (const pin_node_id of this._pin_ref_set) {
+    for (const pin_node_id of this._link_pin_ref_set) {
       this._set_link_pin_opacity(pin_node_id, opacity)
     }
   }
@@ -11903,8 +11919,10 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       }
 
       if (prev_mode !== 'data' && this._mode === 'data') {
-        this._set_all_ref_pin_opacity(0.25)
+        this._set_all_output_pin_opacity(0.5)
+        this._set_all_ref_pin_opacity(0.5)
       } else if (prev_mode === 'data' && this._mode !== 'data') {
+        this._set_all_output_pin_opacity(1)
         this._set_all_ref_pin_opacity(1)
       }
 
@@ -15106,7 +15124,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._tree_layout) {
-      //
+      // 
     } else {
       if (this._is_unit_node_id(node_id)) {
         this._drop_unit(node_id)
@@ -24012,7 +24030,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     delete this._normal_node[pin_node_id]
     delete this._ignored_node[pin_node_id]
 
-    this._pin_ref_set.delete(pin_node_id)
+    this._link_pin_input_set.delete(pin_node_id)
+    this._link_pin_output_set.delete(pin_node_id)
+    this._link_pin_ref_set.delete(pin_node_id)
 
     this._sim_remove_pin_type(pin_node_id)
     this._sim_remove_node(pin_node_id)
