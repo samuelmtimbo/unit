@@ -40,7 +40,7 @@
   "metadata": {
     "icon": "arrow-up",
     "description": "the biggest between size of `a` and size of `b`",
-    "complexity": 5,
+    "complexity": 9,
     "tags": [
       "core",
       "common"

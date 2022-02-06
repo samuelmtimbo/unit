@@ -26,8 +26,10 @@ export default class Parse extends Functional<I, O> {
   }
 
   f({ str }: I, done: Done<O>): void {
+    const specs = { ...this.__system.specs, ...this.__pod.specs }
+    const classes = this.__system.classes
     done({
-      a: evaluate(str),
+      a: evaluate(str, specs, classes),
     })
   }
 }

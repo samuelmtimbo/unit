@@ -9,7 +9,7 @@
   "metadata": {
     "icon": "alert-circle",
     "description": "throw message",
-    "complexity": 2.655152604562385,
+    "complexity": 3,
     "tags": [
       "f",
       "control"

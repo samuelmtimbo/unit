@@ -1,13 +1,9 @@
 {
   "name": "Alan Kay picture src",
   "units": {
-    "gsonrwg": {
+    "foreach": {
       "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
-      "output": {
-        "hasnext": {
-          "ignored": true
-        }
-      },
+      "output": {},
       "input": {
         "a": {
           "constant": true,
@@ -19,8 +15,8 @@
   "merges": {},
   "metadata": {
     "icon": "image",
-    "description": "no description",
-    "complexity": 3,
+    "description": "source of Alan Kay picture URLs",
+    "complexity": 33,
     "tags": [
       "platform",
       "core",
@@ -29,10 +25,10 @@
   },
   "inputs": {},
   "outputs": {
-    "vmkiln": {
+    "url": {
       "pin": {
-        "0": {
-          "unitId": "gsonrwg",
+        "foreach": {
+          "unitId": "foreach",
           "pinId": "a[i]"
         }
       },

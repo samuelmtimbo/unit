@@ -1,0 +1,29 @@
+{
+  "name": "vm service",
+  "inputs": {
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "network",
+    "description": "list of third party API providers",
+    "complexity": 27,
+    "tags": [
+      "platform",
+      "component",
+      "app",
+      "service"
+    ]
+  },
+  "id": "800161a4-6a58-11eb-9f4c-af7372d551ed",
+  "base": true,
+  "component": {
+    "defaultWidth": 300,
+    "defaultHeight": 360
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}

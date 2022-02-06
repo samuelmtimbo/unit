@@ -6,6 +6,7 @@ import { Pod } from './pod'
 import { System } from './system'
 import forEachKeyValue from './system/core/object/ForEachKeyValue/f'
 import { Dict } from './types/Dict'
+import { IO } from './types/IO'
 
 export type Primitive_EE = {}
 
@@ -64,7 +65,7 @@ export class Primitive<
 
   private __buffer: {
     name: string
-    type: 'input' | 'output'
+    type: IO
     event: 'data' | 'drop'
     ref: boolean
     data?: any

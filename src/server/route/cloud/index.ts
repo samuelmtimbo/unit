@@ -28,7 +28,8 @@ app.use('/web', WEB)
 const SERVICES = ['graph', 'web', 'vm']
 
 app.get('/', async (req: Req, res: Res) => {
-  const { userId } = req
+  const { user } = req
+  const { userId } = user
   const { cloudDB, sharedDB } = await connectDB()
   const all: Dict<{ user: any; shared: any }> = {}
   for (const service of SERVICES) {

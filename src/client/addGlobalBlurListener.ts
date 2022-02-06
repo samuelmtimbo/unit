@@ -1,13 +1,12 @@
-export function addGlobalBlurListener($element, listener) {
-  $element.addEventListener(
-    'blur',
-    function (event: FocusEvent) {
-      const { relatedTarget } = event
+import { Unlisten } from '../types/Unlisten'
+import { IOElement } from './IOElement'
 
-      if (!relatedTarget) {
-        listener()
-      }
-    },
-    true
-  )
+export function addGlobalBlurListener(
+  $element: IOElement,
+  listener: (event: FocusEvent) => void
+): Unlisten {
+  $element.addEventListener('blur', listener, true)
+  return () => {
+    $element.removeEventListener('blur', listener, true)
+  }
 }

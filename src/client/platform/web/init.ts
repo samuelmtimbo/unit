@@ -4,11 +4,11 @@ import { addGlobalBlurListener } from '../../addGlobalBlurListener'
 import { isSupportedKeyboardEvent } from '../../event/keyboard'
 
 export default function init($system: System, $root: HTMLElement): Unlisten {
-  addGlobalBlurListener($root, () => {
+  const unlistenGlobalBlur = addGlobalBlurListener($root, () => {
     // TODO
     // when window is blurred by a popup/alert as a result
     // of a "keydown", "keyup" will not be fired
-    $system.input.keyboard.$pressed = []
+    $system.input.keyboard.pressed = []
   })
 
   // double click is redefined on the unit system
@@ -26,10 +26,10 @@ export default function init($system: System, $root: HTMLElement): Unlisten {
 
       const { keyCode, repeat } = event
 
-      const index = $system.input.keyboard.$pressed.indexOf(keyCode)
-      $system.input.keyboard.$repeat = repeat
+      const index = $system.input.keyboard.pressed.indexOf(keyCode)
+      $system.input.keyboard.repeat = repeat
       if (index === -1) {
-        $system.input.keyboard.$pressed.push(keyCode)
+        $system.input.keyboard.pressed.push(keyCode)
       }
     },
     true
@@ -44,8 +44,8 @@ export default function init($system: System, $root: HTMLElement): Unlisten {
 
       const { keyCode, key } = event
 
-      const index = $system.input.keyboard.$pressed.indexOf(keyCode)
-      $system.input.keyboard.$pressed.splice(index, 1)
+      const index = $system.input.keyboard.pressed.indexOf(keyCode)
+      $system.input.keyboard.pressed.splice(index, 1)
     },
     true
   )
@@ -73,5 +73,29 @@ export default function init($system: System, $root: HTMLElement): Unlisten {
   //   }
   // })
 
-  return () => {}
+  const gamepads = navigator.getGamepads()
+
+  $system.input.gamepads = gamepads
+
+  const onGamepadConnected = (event: GamepadEvent) => {
+    // console.log('web', 'init', 'onGamepadConnected', event)
+    const { gamepad } = event
+    const { index } = gamepad
+    gamepads[index] = gamepad
+  }
+
+  const onGamepadDisconnected = (event: GamepadEvent) => {
+    // console.log('web', 'init', 'onGamepadDisconnected', event)
+    const { gamepad } = event
+    const { index } = gamepad
+    gamepads[index] = null
+  }
+
+  window.addEventListener('gamepadconnected', onGamepadConnected)
+  window.addEventListener('gamepadisconnected', onGamepadDisconnected)
+
+  return () => {
+    window.removeEventListener('gamepadconnected', onGamepadConnected)
+    window.removeEventListener('gamepadisconnected', onGamepadDisconnected)
+  }
 }

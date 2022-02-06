@@ -1,0 +1,133 @@
+{
+  "name": "is between",
+  "inputs": {
+    "c": {
+      "pin": {
+        "0": {
+          "unitId": "lessthan",
+          "pinId": "b"
+        }
+      }
+    },
+    "a": {
+      "pin": {
+        "0": {
+          "unitId": "greaterthanequal",
+          "pinId": "b"
+        }
+      }
+    },
+    "b": {
+      "pin": {
+        "0": {
+          "mergeId": "0"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a ≤ b < c": {
+      "pin": {
+        "0": {
+          "unitId": "and",
+          "pinId": "a and b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "units": {
+    "lessthan": {
+      "id": "82c3cf2a-0855-4c6d-a4c4-807b0ce1fd35",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a < b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 31,
+          "y": -36
+        }
+      }
+    },
+    "greaterthanequal": {
+      "id": "c9e06816-0d2b-43ec-b7c8-d07563e19b6b",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a ≥ b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 31,
+          "y": 35
+        }
+      }
+    },
+    "and": {
+      "id": "407640f7-f1c3-4297-a5ce-baff357a6d31",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a and b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -64,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "greaterthanequal": {
+        "input": {
+          "a": true
+        }
+      },
+      "lessthan": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "greaterthanequal": {
+        "output": {
+          "a ≥ b": true
+        }
+      },
+      "and": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "lessthan": {
+        "output": {
+          "a < b": true
+        }
+      },
+      "and": {
+        "input": {
+          "b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "complexity": 11
+  },
+  "id": "f022d16a-7a47-47c8-8d9b-3278df13bcc5",
+  "system": true,
+  "type": "`U`&`G`"
+}

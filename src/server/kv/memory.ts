@@ -1,12 +1,7 @@
 import { CloudKV, KVStore } from '.'
 
 export const data = {
-  emailToken: {},
   authToken: {},
-  signUpToken: {},
-  PRCodeKVStore: {},
-  PRTokenKVStore: {},
-  PCCodeKVStore: {},
 }
 
 export const makeMemoryKVStore = (name: string): KVStore<any> => {
@@ -27,9 +22,4 @@ export const makeMemoryKVStore = (name: string): KVStore<any> => {
 
 export const memoryKV: CloudKV = {
   authTokenKVStore: makeMemoryKVStore('authToken'),
-  signUpCodeKVStore: makeMemoryKVStore('emailToken'),
-  signUpTokenKVStore: makeMemoryKVStore('signUpToken'),
-  PRCodeKVStore: makeMemoryKVStore('PRCodeKVStore'),
-  PRTokenKVStore: makeMemoryKVStore('PRTokenKVStore'),
-  PCCodeKVStore: makeMemoryKVStore('PCCodeKVStore'),
 }

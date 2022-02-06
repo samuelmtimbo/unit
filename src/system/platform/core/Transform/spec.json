@@ -100,7 +100,7 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "platform",
       "core"

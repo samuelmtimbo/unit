@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "binary",
     "description": "bitwise OR operator",
-    "complexity": 2.6551896669940516,
+    "complexity": 3,
     "tags": [
       "f",
       "bitwise"

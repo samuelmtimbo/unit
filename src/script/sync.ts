@@ -107,7 +107,8 @@ export function sync(dir: string): void {
 
   specs = `export default JSON.parse(\`${JSON.stringify(_specs)
     .replace(/\\/g, '\\\\')
-    .replace(/\`/g, '\\`')}\`)\n`
+    .replace(/\`/g, '\\`')
+    .replace(/\$/g, '\\$')}\`)\n`
 
   writeFile(path.join(dir, '_ids.ts'), ids)
   writeFile(path.join(dir, '_classes.ts'), classes)

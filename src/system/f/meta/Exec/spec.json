@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "circle",
     "description": "execute `unit` `method` with `data`",
-    "complexity": 2.668643329688861,
+    "complexity": 3,
     "tags": [
       "f",
       "meta"

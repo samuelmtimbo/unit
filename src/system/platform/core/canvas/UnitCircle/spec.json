@@ -73,7 +73,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "draw a traditional (trigonometry) unit circle to the canvas",
-    "complexity": 6,
+    "complexity": 86,
     "tags": [
       "platform",
       "core",

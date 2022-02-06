@@ -73,7 +73,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "revert `a`",
-    "complexity": 15.659414784203992,
+    "complexity": 50,
     "tags": [
       "core",
       "array"

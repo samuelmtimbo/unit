@@ -30,7 +30,7 @@
   "metadata": {
     "icon": "volume-2",
     "description": "platform audio component",
-    "complexity": 6.460315401293479,
+    "complexity": 21,
     "tags": [
       "platform",
       "component",

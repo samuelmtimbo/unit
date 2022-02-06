@@ -302,7 +302,7 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "graph + gui",
-    "complexity": 95.48362767081147,
+    "complexity": 169,
     "tags": [
       "platform",
       "core",

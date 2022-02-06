@@ -14,7 +14,7 @@
   "metadata": {
     "icon": "timer",
     "description": "output `ms` every once `ms` milliseconds",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "core",
       "time"

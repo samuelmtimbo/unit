@@ -1,0 +1,29 @@
+{
+  "name": "cloud control",
+  "inputs": {
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "network",
+    "description": "list of cloud connected computers",
+    "complexity": 34,
+    "tags": [
+      "platform",
+      "component",
+      "app",
+      "service"
+    ]
+  },
+  "id": "78b7038e-09ed-11eb-b08b-03856b440a6f",
+  "base": true,
+  "component": {
+    "defaultWidth": 300,
+    "defaultHeight": 360
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}

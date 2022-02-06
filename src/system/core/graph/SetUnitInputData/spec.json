@@ -124,7 +124,7 @@
   "metadata": {
     "icon": "circle",
     "description": "set `graph` `id` unit `name` input pin `data`",
-    "complexity": 4.666530771083891,
+    "complexity": 5,
     "tags": [
       "core",
       "graph"

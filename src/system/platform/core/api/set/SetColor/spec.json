@@ -82,7 +82,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "set context color",
-    "complexity": 4.666271334062228,
+    "complexity": 5,
     "tags": [
       "platform",
       "core",

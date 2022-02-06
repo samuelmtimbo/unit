@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "output an empty array",
-    "complexity": 4.654856105109056,
+    "complexity": 5,
     "tags": [
       "core",
       "array"

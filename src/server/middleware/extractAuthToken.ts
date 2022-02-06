@@ -1,8 +1,6 @@
 import { Req } from '../req'
 
-export const extractAuthTokenFromReqAuthorizationHeader = (
-  req: Req
-): string | undefined => {
+export const extractAuthTokenFromReq = (req: Req): string | undefined => {
   const { headers } = req
   const header = headers['authorization']
   if (header) {

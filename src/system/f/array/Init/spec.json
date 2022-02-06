@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "info-square",
     "description": "create an array of size `n` filled with value `v`",
-    "complexity": 2.6558567907640422,
+    "complexity": 3,
     "tags": [
       "f",
       "array"

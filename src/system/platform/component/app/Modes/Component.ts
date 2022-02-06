@@ -3,8 +3,8 @@ import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { Mode, MODE_LIST } from '../../../../../client/mode'
-import parentElement from '../../../../../client/parentElement'
-import { getThemeModeColor, COLOR_NONE } from '../../../../../client/theme'
+import parentElement from '../../../../../client/platform/web/parentElement'
+import { COLOR_NONE, getThemeModeColor } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -175,7 +175,7 @@ export default class Modes extends Element<HTMLDivElement, Props> {
     list.registerParentRoot(crud)
     list.registerParentRoot(this._mode_button_container['multiselect'])
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$subComponent = {

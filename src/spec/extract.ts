@@ -1,6 +1,7 @@
 import assocPath from '../system/core/object/AssocPath/f'
 import { GraphMergeSpec, GraphSpec, Specs } from '../types'
 import { Dict } from '../types/Dict'
+import { IO } from '../types/IO'
 
 export type GraphSpecSelection = {
   units?: string[]
@@ -146,11 +147,7 @@ export function extractSubSpec(
 
     unitMergePinRename[unitId] = { input: {}, output: {} }
 
-    function addNewSpecPin(
-      type: 'input' | 'output',
-      unitId: string,
-      pinId: string
-    ): string {
+    function addNewSpecPin(type: IO, unitId: string, pinId: string): string {
       const _pinId = suffixId(pinId, newSpec[`${type}s`] || {})
       const newSpecTypeSubPinId = newSpecSubPinId[type]
       const subPinId = (newSpecTypeSubPinId[_pinId] ?? -1) + 1

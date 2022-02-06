@@ -101,7 +101,7 @@ export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
     alphaDecay,
     velocityDecay = 0.2,
     n = 3,
-    stability = 2,
+    stability = 1,
     force = NOOP,
   }: SimulationOpt) {
     super()

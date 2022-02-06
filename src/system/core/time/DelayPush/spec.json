@@ -79,7 +79,7 @@
   "metadata": {
     "icon": "alarm-clock",
     "description": "delay + push",
-    "complexity": 4,
+    "complexity": 13,
     "tags": [
       "core",
       "time"

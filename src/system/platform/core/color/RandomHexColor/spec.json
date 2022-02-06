@@ -83,7 +83,7 @@
   "metadata": {
     "icon": "palette",
     "description": "random HEX color string",
-    "complexity": 6,
+    "complexity": 49,
     "tags": [
       "platform",
       "core",

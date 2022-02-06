@@ -25,7 +25,7 @@
   "metadata": {
     "icon": "question",
     "description": "no description",
-    "complexity": 7,
+    "complexity": 13,
     "tags": [
       "core",
       "string"

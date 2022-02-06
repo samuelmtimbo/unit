@@ -18,7 +18,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "set `unit` property `name` to `data`",
-    "complexity": 2.666123084335563,
+    "complexity": 3,
     "tags": [
       "platform",
       "method",

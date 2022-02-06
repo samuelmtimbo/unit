@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "link",
     "description": "share a pod through ioun.it broadcast",
-    "complexity": 4.228415766358431,
+    "complexity": 6,
     "tags": [
       "host",
       "broadcast",

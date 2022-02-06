@@ -1,12 +1,13 @@
 import { polarToCartesian } from '..'
 import { LINK_DISTANCE } from '../../../../constant/LINK_DISTANCE'
 import { OPENING } from '../../../../constant/OPENING'
+import { IO } from '../../../../types/IO'
 import { getUnitPinAngle } from './getUnitPinAngle'
 
 export const getUnitPinPosition = (
   i: number,
   n: number,
-  t: 'input' | 'output',
+  t: IO,
   r: number,
   x: number,
   y: number,

@@ -60,7 +60,7 @@
   "metadata": {
     "icon": "toggle-right",
     "description": "iteratively toggle `current` value",
-    "complexity": 5,
+    "complexity": 11,
     "tags": [
       "core",
       "iterate"

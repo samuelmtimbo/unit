@@ -16,6 +16,7 @@ import {
   GraphUnitSpec,
   GraphUnitsSpec,
 } from '../../types'
+import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
 import {
   clone,
@@ -170,7 +171,7 @@ export const collapseUnits = (unitIds: string[], state: State): State => {
 }
 
 export const removeUnitExposedTypePins = (
-  { id, type }: { id: string; type: 'input' | 'output' },
+  { id, type }: { id: string; type: IO },
   state: State
 ): State => {
   const nextState = clone(state)
@@ -217,7 +218,7 @@ export const removeUnitMerges = (
     }
   })
 
-  const reasignExposedPins = (type: 'input' | 'output'): void => {
+  const reasignExposedPins = (type: IO): void => {
     const pins = state[`${type}s`] || {}
     for (const exposedPinId in pins) {
       const pinSpec = pins[exposedPinId] as GraphExposedPinSpec
@@ -306,7 +307,7 @@ export const addPinToMerge = (
     unitId,
     type,
     pinId,
-  }: { id: string; type: 'input' | 'output'; unitId: string; pinId: string },
+  }: { id: string; type: IO; unitId: string; pinId: string },
   state: State
 ): State => {
   // reassign exposed pin if it has just been merged
@@ -397,7 +398,7 @@ export const _removePinFromMerge = (
     unitId,
     type,
     pinId,
-  }: { id: string; type: 'input' | 'output'; unitId: string; pinId: string },
+  }: { id: string; type: IO; unitId: string; pinId: string },
   state: State
 ): State => {
   state = dissocPath(state, ['merges', id, unitId, type, pinId]) as State
@@ -421,7 +422,7 @@ export const removePinFromMerge = (
     unitId,
     type,
     pinId,
-  }: { id: string; type: 'input' | 'output'; unitId: string; pinId: string },
+  }: { id: string; type: IO; unitId: string; pinId: string },
   state: State
 ): State => {
   state = _removePinFromMerge({ id, unitId, type, pinId }, state)
@@ -429,7 +430,7 @@ export const removePinFromMerge = (
   // remove merge completely if number of pins is <= 1
   // RETURN
   // if (getMergePinCount(propPath(state, ['merges', id])) <= 1) {
-  //   const reasignExposedPins = (type: 'input' | 'output'): void => {
+  //   const reasignExposedPins = (type: IO): void => {
   //     const pins = state[`${type}s`] || {}
   //     for (const exposedPinId in pins) {
   //       const pinSpec = pins[exposedPinId] as GraphExposedPinSpec
@@ -472,7 +473,7 @@ export const isPinMerged = (
   state: State,
   id,
   unitId: string,
-  type: 'input' | 'output',
+  type: IO,
   pinId: string
 ): boolean => {
   return !!(
@@ -484,7 +485,7 @@ export const isPinMerged = (
 }
 
 export const coverPinSet = (
-  { id, type }: { id: string; type: 'input' | 'output' },
+  { id, type }: { id: string; type: IO },
   state: State
 ): State => dissocPath(state, [`${type}s`, id]) as State
 
@@ -495,7 +496,7 @@ export const coverPin = (
     subPinId,
   }: {
     id: string
-    type: 'input' | 'output'
+    type: IO
     subPinId: string
   },
   state: State
@@ -504,11 +505,7 @@ export const coverPin = (
 }
 
 export const exposePinSet = (
-  {
-    id,
-    type,
-    pin,
-  }: { id: string; type: 'input' | 'output'; pin: GraphExposedPinSpec },
+  { id, type, pin }: { id: string; type: IO; pin: GraphExposedPinSpec },
   state: State
 ): State => assocPath(state, [`${type}s`, id], pin)
 
@@ -520,7 +517,7 @@ export const exposePin = (
     subPin,
   }: {
     id: string
-    type: 'input' | 'output'
+    type: IO
     subPinId: string
     subPin: GraphExposedSubPinSpec
   },
@@ -552,7 +549,7 @@ export const plugPin = (
     subPinId,
     subPinSpec,
   }: {
-    type: 'input' | 'output'
+    type: IO
     id: string
     subPinId: string
     subPinSpec: GraphExposedSubPinSpec
@@ -572,7 +569,7 @@ export const unplugInput = (
   },
   state: State
 ): State => {
-  return unplugPin({ type: 'input', id, subPinId }, state)
+  return unplugPin({ type: 'input', pinId: id, subPinId }, state)
 }
 
 export const unplugOutput = (
@@ -585,22 +582,22 @@ export const unplugOutput = (
   },
   state: State
 ): State => {
-  return unplugPin({ type: 'output', id, subPinId }, state)
+  return unplugPin({ type: 'output', pinId: id, subPinId }, state)
 }
 
 export const unplugPin = (
   {
     type,
-    id,
+    pinId,
     subPinId,
   }: {
-    type: 'input' | 'output'
-    id: string
+    type: IO
+    pinId: string
     subPinId: string
   },
   state: State
 ): State => {
-  return assocPath(state, [`${type}s`, id, 'pin', subPinId], {})
+  return assocPath(state, [`${type}s`, pinId, 'pin', subPinId], {})
 }
 
 export const coverInputSet = ({ id }: { id: string }, state: State): State =>
@@ -663,14 +660,14 @@ export const setUnitErr = (
 }
 
 export const setPinSetName = (
-  { type, id, name }: { type: 'input' | 'output'; id: string; name: string },
+  { type, id, name }: { type: IO; id: string; name: string },
   state: State
 ): State => {
   return assocPath(state, [`${type}s`, id, 'name'], name)
 }
 
 export const setPinSetId = (
-  { type, id, newId }: { type: 'input' | 'output'; id: string; newId: string },
+  { type, id, newId }: { type: IO; id: string; newId: string },
   state: State
 ): State => {
   return assocPath(
@@ -681,21 +678,17 @@ export const setPinSetId = (
 }
 
 export const setPinSetFunctional = (
-  {
-    type,
-    id,
-    functional,
-  }: { type: 'input' | 'output'; id: string; functional: boolean },
+  { type, pinId, functional }: { type: IO; pinId: string; functional: boolean },
   state: State
 ): State => {
-  return assocPath(state, [`${type}s`, id, 'functional'], functional)
+  return assocPath(state, [`${type}s`, pinId, 'functional'], functional)
 }
 
 export const setPinSetRef = (
-  { type, id, ref }: { type: 'input' | 'output'; id: string; ref: boolean },
+  { type, pinId, ref }: { type: IO; pinId: string; ref: boolean },
   state: State
 ): State => {
-  return assocPath(state, [`${type}s`, id, 'ref'], ref)
+  return assocPath(state, [`${type}s`, pinId, 'ref'], ref)
 }
 
 export const setUnitInput = (
@@ -718,7 +711,7 @@ export const setUnitPinData = (
     type,
     pinId,
     data,
-  }: { unitId: string; type: 'input' | 'output'; pinId: string; data: any },
+  }: { unitId: string; type: IO; pinId: string; data: any },
   state: State
 ): State => {
   return assocPath(state, ['units', unitId, type, pinId, 'data'], data)
@@ -762,7 +755,7 @@ export const setUnitPinIgnored = (
     ignored,
   }: {
     unitId: string
-    type: 'input' | 'output'
+    type: IO
     pinId: string
     ignored: boolean
   },
@@ -824,11 +817,7 @@ export const setUnitInputIgnored = (
 }
 
 export const removeUnitPinData = (
-  {
-    unitId,
-    type,
-    pinId,
-  }: { unitId: string; type: 'input' | 'output'; pinId: string },
+  { unitId, type, pinId }: { unitId: string; type: IO; pinId: string },
   state: State
 ): State => {
   state = dissocPath(state, ['units', unitId, type, pinId, 'data']) as State

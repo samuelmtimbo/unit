@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "output a list with a single element `a`",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "core",
       "array"

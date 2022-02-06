@@ -136,7 +136,7 @@
   "metadata": {
     "icon": "array",
     "description": "output every element `a[i]` of `a` in decreasing order",
-    "complexity": 7,
+    "complexity": 30,
     "tags": [
       "core",
       "common"

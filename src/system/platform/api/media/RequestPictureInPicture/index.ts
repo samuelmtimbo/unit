@@ -1,12 +1,12 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { listenGlobalComponent } from '../../../../../client/globalComponent'
 import { _ } from '../../../../../interface/$_'
 import { $C } from '../../../../../interface/async/$C'
 import { $PS } from '../../../../../interface/async/$PS'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { listenGlobalComponent } from '../../../../globalComponent'
 import Video from '../../../component/media/Video/Component'
 
 export interface I {

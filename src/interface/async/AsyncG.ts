@@ -11,6 +11,7 @@ import {
 } from '../../types'
 import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
+import { IO } from '../../types/IO'
 import { Unlisten } from '../../types/Unlisten'
 import { $Component } from './$Component'
 import { $G, $G_C, $G_R, $G_W } from './$G'
@@ -22,17 +23,13 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
     $setUnitPinData(data: {
       unitId: string
       pinId: string
-      type: 'input' | 'output'
+      type: IO
       data: any
     }): void {
       return graph.$setUnitPinData(data)
     },
 
-    $removeUnitPinData(data: {
-      unitId: string
-      type: 'input' | 'output'
-      pinId: string
-    }) {
+    $removeUnitPinData(data: { unitId: string; type: IO; pinId: string }) {
       return graph.$removeUnitPinData(data)
     },
 
@@ -52,20 +49,16 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
       return graph.$removeUnit(data)
     },
 
-    $exposePinSet(data: {
-      type: 'input' | 'output'
-      id: string
-      pin: GraphExposedPinSpec
-    }) {
+    $exposePinSet(data: { type: IO; id: string; pin: GraphExposedPinSpec }) {
       return graph.$exposePinSet(data)
     },
 
-    $coverPinSet(data: { type: 'input' | 'output'; id: string }) {
+    $coverPinSet(data: { type: IO; id: string }) {
       return graph.$coverPinSet(data)
     },
 
     $exposePin(data: {
-      type: 'input' | 'output'
+      type: IO
       id: string
       subPinId: string
       subPin: GraphExposedSubPinSpec
@@ -73,16 +66,12 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
       return graph.$exposePin(data)
     },
 
-    $coverPin(data: {
-      type: 'input' | 'output'
-      id: string
-      subPinId: string
-    }) {
+    $coverPin(data: { type: IO; id: string; subPinId: string }) {
       return graph.$coverPin(data)
     },
 
     $plugPin(data: {
-      type: 'input' | 'output'
+      type: IO
       id: string
       subPinId: string
       subPin: GraphExposedSubPinSpec
@@ -90,34 +79,26 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
       return graph.$plugPin(data)
     },
 
-    $unplugPin(data: {
-      type: 'input' | 'output'
-      id: string
-      subPinId: string
-    }) {
+    $unplugPin(data: { type: IO; id: string; subPinId: string }) {
       return graph.$unplugPin(data)
     },
 
     $exposeUnitPinSet(data: {
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       id: string
       pin: GraphExposedPinSpec
     }) {
       return graph.$exposeUnitPinSet(data)
     },
 
-    $coverUnitPinSet(data: {
-      unitId: string
-      type: 'input' | 'output'
-      id: string
-    }) {
+    $coverUnitPinSet(data: { unitId: string; type: IO; id: string }) {
       return graph.$coverUnitPinSet(data)
     },
 
     $setPinSetFunctional(data: {
-      type: 'input' | 'output'
-      id: string
+      type: IO
+      pinId: string
       functional: boolean
     }) {
       return graph.$setPinSetFunctional(data)
@@ -125,7 +106,7 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
 
     $setUnitPinConstant(data: {
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
       constant: boolean
     }) {
@@ -134,7 +115,7 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
 
     $setUnitPinIgnored(data: {
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
       ignored: boolean
     }) {
@@ -164,7 +145,7 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
     $addPinToMerge(data: {
       mergeId: string
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
     }) {
       return graph.$addPinToMerge(data)
@@ -173,7 +154,7 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
     $removePinFromMerge(data: {
       mergeId: string
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
     }) {
       return graph.$removePinFromMerge(data)
@@ -274,7 +255,7 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
         merge: string[]
         link: {
           unitId: string
-          type: 'input' | 'output'
+          type: IO
           pinId: string
         }[]
         unit: string[]
@@ -312,7 +293,7 @@ export const AsyncGCall = (graph: $G_C): $G_C => {
     $moveLinkPinInto(data: {
       graphId: string
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
       nextPinId: string
     }): void {

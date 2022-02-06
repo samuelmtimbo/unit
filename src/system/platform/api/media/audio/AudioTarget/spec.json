@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "headphones",
     "description": "play audio stream on a selected device",
-    "complexity": 11.672609009877139,
+    "complexity": 12,
     "tags": [
       "platform",
       "api",

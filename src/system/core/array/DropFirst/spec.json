@@ -52,7 +52,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "output list `a` containing all but the first `n` elements of the given list `ab`",
-    "complexity": 10.32298056075459,
+    "complexity": 13,
     "tags": [
       "core",
       "array"

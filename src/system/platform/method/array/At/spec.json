@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "info-square",
     "description": "`a` element at position `i`",
-    "complexity": 2.6680503307822026,
+    "complexity": 3,
     "tags": [
       "platform",
       "method",

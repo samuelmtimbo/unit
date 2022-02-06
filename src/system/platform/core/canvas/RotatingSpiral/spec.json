@@ -489,7 +489,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "draws a spiral step by step",
-    "complexity": 13,
+    "complexity": 70,
     "tags": [
       "platform",
       "core",

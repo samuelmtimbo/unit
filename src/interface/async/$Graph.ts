@@ -5,6 +5,7 @@ import {
   $C_METHOD_REF,
   $C_METHOD_WATCH,
 } from './$C'
+import { $EE } from './$EE'
 import {
   $G,
   $G_METHOD,
@@ -40,4 +41,4 @@ export const $GRAPH_METHOD_REF = [
 
 export const $GRAPH_METHOD = [...$U_METHOD, ...$C_METHOD, ...$G_METHOD]
 
-export interface $Graph extends $U, $C, $G {}
+export interface $Graph extends $U, $C, $G, $EE {}

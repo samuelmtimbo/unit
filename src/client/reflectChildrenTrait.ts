@@ -1,8 +1,8 @@
 import { _NUMBER_LITERAL_REGEX } from '../spec/regex/NUMBER_LITERAL'
-import { LayoutNode } from '../system/platform/component/app/graph/Graph/Component'
+import { LayoutNode } from '../system/platform/component/app/Graph/Component'
 import { Style } from '../system/platform/Props'
-import { parseFontSize } from './util/style/getFontSize'
 import { parseTransformXY } from './parseTransformXY'
+import { parseFontSize } from './util/style/getFontSize'
 import { parseOpacity } from './util/style/getOpacity'
 
 export type LayoutBox = {

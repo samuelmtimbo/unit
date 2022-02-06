@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "parses a URL query string into an object",
-    "complexity": 2.6583029112540073,
+    "complexity": 3,
     "tags": [
       "f",
       "querystring"

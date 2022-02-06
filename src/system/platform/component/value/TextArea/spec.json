@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "align-left",
     "description": "input text through keyboard",
-    "complexity": 6.528621462854177,
+    "complexity": 21,
     "tags": [
       "platform",
       "component",

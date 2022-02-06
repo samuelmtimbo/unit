@@ -49,7 +49,7 @@
   "metadata": {
     "icon": "pointer",
     "description": "pick the smalest from `a` and `b`",
-    "complexity": 4,
+    "complexity": 16,
     "tags": [
       "core",
       "control"

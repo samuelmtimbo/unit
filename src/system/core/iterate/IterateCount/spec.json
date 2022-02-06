@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "sort-desc",
     "description": "iteratively increment `count` starting from 0",
-    "complexity": 8.57461594055186,
+    "complexity": 15,
     "tags": [
       "core",
       "iterate"

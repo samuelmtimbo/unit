@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "chevrons-left",
     "description": "concatenate arrays `a` and `b` into a single one",
-    "complexity": 2.655893853195708,
+    "complexity": 3,
     "tags": [
       "f",
       "array"

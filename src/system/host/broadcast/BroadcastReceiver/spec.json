@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "link",
     "description": "Peer Service Client Connection",
-    "complexity": 8.307618182828975,
+    "complexity": 13,
     "tags": [
       "host",
       "broadcast"

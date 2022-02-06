@@ -15,7 +15,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "keyofStringsOnly": true
+    "keyofStringsOnly": true,
+    "alwaysStrict": true
   },
   "typeAcquisition": {
     "enable": false

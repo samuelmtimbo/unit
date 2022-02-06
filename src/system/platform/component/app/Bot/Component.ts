@@ -58,7 +58,7 @@ export const DEFAULT_STYLE = {
   color: 'current-color',
 }
 
-export default class Bot extends Element<HTMLElement, Props> {
+export default class Bot extends Element<HTMLDivElement, Props> {
   private _r: number = 0
 
   private _x: number = 0
@@ -175,7 +175,8 @@ export default class Bot extends Element<HTMLElement, Props> {
     this.addEventListener(makePointerLeaveListener(this._onPointerLeave))
 
     const position_observer = new PositionObserver(
-      (x, y, sx, sy, rx, ry, rz) => {
+      this.$system,
+      ({ x, y, sx, sy, rx, ry, rz }) => {
         this._container_x = x
         this._container_y = y
         this._container_sx = sx

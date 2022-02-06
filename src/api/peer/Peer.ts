@@ -1,4 +1,5 @@
 import { $, $Events } from '../../Class/$'
+import { APINotSupportedError } from '../../exception/APINotImplementedError'
 import { Pod } from '../../pod'
 import { System } from '../../system'
 
@@ -57,7 +58,7 @@ export class Peer extends $<PeerEvents> {
     this._config = config
 
     if (!RTCPeerConnection) {
-      throw new Error('Web RTC not supported')
+      throw new APINotSupportedError('Web RTC')
     }
 
     const rtc = new RTCPeerConnection(this._config)

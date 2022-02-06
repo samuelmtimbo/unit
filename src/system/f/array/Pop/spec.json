@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "axe",
     "description": "remove the `last` element from `a`",
-    "complexity": 2.660304282563979,
+    "complexity": 3,
     "tags": [
       "f",
       "array"

@@ -1,5 +1,5 @@
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { Unit } from '../../../../../Class/Unit'
+import { EE } from '../../../../../interface/EE'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -8,7 +8,7 @@ export interface I<T> {
   method: string
   data: any
   event: string
-  unit: Unit<any, any, any>
+  unit: EE<any>
 }
 
 export interface O<T> {
@@ -42,6 +42,8 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     this.addListener('destroy', () => {
       if (this._listener) {
         this._remove()
+
+        this._forward_empty('data')
       }
     })
   }
@@ -59,7 +61,9 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     }
     this._listener = listener
 
-    this._unlisten = unit.addListener(event, this._listener)
+    const emitter = unit.refEmitter() || unit
+
+    this._unlisten = emitter.addListener(event, this._listener)
   }
 
   d() {

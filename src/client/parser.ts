@@ -1,5 +1,6 @@
 import { getTree, TreeNode, _isTypeMatch } from '../spec/parser'
 import { Dict } from '../types/Dict'
+import { IO } from '../types/IO'
 
 const _typeMatchCache: Dict<boolean> = {}
 
@@ -16,9 +17,9 @@ const __isTypeMatch = (a: TreeNode, b: TreeNode): boolean => {
 
 export const pinTypeMatch = (
   aTypeStr: string,
-  aKind: 'input' | 'output',
+  aKind: IO,
   bTypeStr: string,
-  bKind: 'input' | 'output'
+  bKind: IO
 ): boolean => {
   const aType = getTree(aTypeStr)
   const bType = getTree(bTypeStr)
@@ -27,9 +28,9 @@ export const pinTypeMatch = (
 
 export const _pinTypeMatch = (
   aType: TreeNode,
-  aKind: 'input' | 'output',
+  aKind: IO,
   bType: TreeNode,
-  bKind: 'input' | 'output'
+  bKind: IO
 ): boolean => {
   if (aKind === 'input' && bKind === 'input') {
     return __isTypeMatch(aType, bType) || __isTypeMatch(bType, aType)

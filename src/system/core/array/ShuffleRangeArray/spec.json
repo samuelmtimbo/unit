@@ -47,7 +47,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "generate a shuffled range array",
-    "complexity": 10,
+    "complexity": 95,
     "tags": [
       "core",
       "array"

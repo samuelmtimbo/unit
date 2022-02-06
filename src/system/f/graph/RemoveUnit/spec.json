@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "circle",
     "description": "add unit of `class` to `graph`",
-    "complexity": 2.6634916516872673,
+    "complexity": 3,
     "tags": [
       "f",
       "graph"

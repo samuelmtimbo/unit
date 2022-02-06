@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "timer",
     "description": "output `ms` after `ms` milliseconds",
-    "complexity": 2.666864332968886,
+    "complexity": 3,
     "tags": [
       "f",
       "time"

@@ -35,14 +35,14 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
   private _capturing = false
   private _pointerId: number
 
-  f({ element, pointerId }): void {
+  f({ element, pointerId }: I): void {
     if (!this._capturing) {
       this._release()
 
       this._capturing = true
       this._pointerId = pointerId
 
-      element.emit('call', {
+      element.refEmitter().emit('call', {
         method: 'setPointerCapture',
         data: [pointerId],
       })
@@ -67,7 +67,7 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
       this._capturing = false
       this._pointerId = undefined
 
-      element.emit('call', {
+      element.refEmitter().emit('call', {
         method: 'releasePointerCapture',
         data: [pointerId],
       })

@@ -25,7 +25,7 @@
   "metadata": {
     "icon": "plus",
     "description": "concat `a`, `b` and `c`",
-    "complexity": 5.655745603469043,
+    "complexity": 6,
     "tags": [
       "core",
       "string"

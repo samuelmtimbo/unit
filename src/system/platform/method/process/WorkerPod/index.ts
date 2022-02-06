@@ -1,8 +1,8 @@
-import { workerPort } from '../../../../../api/worker/workerPort'
 import { bundleSpec } from '../../../../../bundle'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { graphFromPort } from '../../../../../graphFromPort'
+import { workerPort } from '../../../../../client/platform/web/workerPort'
+import { asyncGraphFromPort } from '../../../../../graphFromPort'
 import { $Graph } from '../../../../../interface/async/$Graph'
 import { Pod } from '../../../../../pod'
 import { RemoteClient } from '../../../../../RemoteClient'
@@ -48,10 +48,22 @@ export default class WorkerPod extends Functional<I, O> {
   }
 
   f({ spec }: I, done: Done<O>) {
-    const { specs } = this.__system
+    const {
+      specs,
+      api: {
+        worker: { start },
+      },
+    } = this.__system
 
     if (!this._client) {
-      const port = workerPort()
+      let worker
+      try {
+        worker = start()
+      } catch (err) {
+        done(undefined, err.message)
+        return
+      }
+      const port = workerPort(worker)
       const client = new RemoteClient(port)
       this._client = client
     }
@@ -62,7 +74,7 @@ export default class WorkerPod extends Functional<I, O> {
 
     const port = this._client.port()
 
-    const graph = graphFromPort(this.__system, this.__pod, port)
+    const graph = asyncGraphFromPort(this.__system, this.__pod, port)
 
     done({
       graph,

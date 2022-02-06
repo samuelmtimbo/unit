@@ -37,7 +37,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "init an array with length `n` filled with `a`'s",
-    "complexity": 4,
+    "complexity": 44,
     "tags": [
       "core",
       "array"

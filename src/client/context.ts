@@ -1,11 +1,11 @@
 import { System } from '../system'
 import { Dict } from '../types/Dict'
+import { IPositionObserver } from '../types/global/IPositionObserver'
 import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
-import createFullwindow from './platform/web/createFullwindow'
 import { IOElement } from './IOElement'
 import Listenable from './Listenable'
-import { PositionObserver } from './PositionObserver'
+import createFullwindow from './platform/web/createFullwindow'
 
 export interface FullwindowOpt {
   showExitButton?: boolean
@@ -15,7 +15,7 @@ export interface FullwindowOpt {
 
 export interface Fullwindow {
   component: Component
-  container: HTMLDivElement
+  container: IOElement
 }
 
 export interface Context extends Listenable {
@@ -41,7 +41,7 @@ export interface Context extends Listenable {
   $fullwindow: Fullwindow[]
   $fullwindow_i: number
   $resizeObserver: ResizeObserver
-  $positionObserver: PositionObserver
+  $positionObserver: IPositionObserver
 }
 
 export interface Ref extends Dict<any[]> {}
@@ -75,6 +75,7 @@ export function setParent($context: Context, $parent: Component | null): void {
 
 export function mount($context: Context): void {
   // console.log('mount')
+
   $context.$mounted = true
 
   const { $element, $positionObserver, $resizeObserver } = $context
@@ -135,6 +136,11 @@ export function setTheme($context: Context, $theme: 'light' | 'dark'): void {
     return
   }
   $context.$theme = $theme
+  if ($theme === 'light') {
+    $context.$element.style.filter = 'auto'
+  } else {
+    $context.$element.style.filter = 'invert'
+  }
   dispatchContextEvent($context, 'themechanged', {})
 }
 
@@ -164,7 +170,7 @@ export function enterFullwindow(
     component.unmount()
   }
 
-  const container = createFullwindow()
+  const container = createFullwindow($system)
 
   container.appendChild($element)
   $$element.appendChild(container)

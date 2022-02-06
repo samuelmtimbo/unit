@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "axe",
     "description": "remove the first character `head` of string `a`",
-    "complexity": 2.658228786390675,
+    "complexity": 3,
     "tags": [
       "f",
       "string"

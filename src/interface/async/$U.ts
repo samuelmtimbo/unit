@@ -1,13 +1,13 @@
 import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
 import { GlobalRefSpec } from '../../types/GlobalRefSpec'
+import { IO } from '../../types/IO'
 import { Unlisten } from '../../types/Unlisten'
 import { $PO } from './$PO'
 
 export const $U_METHOD_CALL = [
   'getGlobalId',
   'getListeners',
-  'emit',
   'call',
   'play',
   'pause',
@@ -35,10 +35,6 @@ export const $U_METHOD = [
 export interface $U_C {
   $getGlobalId(data: {}, callback: Callback<string>): void
 
-  $getEventNames(data: {}, callback: Callback<string[]>): void
-
-  $emit(data: { type: string; data: any }): void
-
   $play(data: {}): void
 
   $pause(data: {}): void
@@ -49,17 +45,9 @@ export interface $U_C {
 
   $takeInput({ id }: { id: string }): void
 
-  $setPinData({
-    pinId,
-    type,
-    data,
-  }: {
-    pinId: string
-    type: 'input' | 'output'
-    data: string
-  })
+  $setPinData({ pinId, type, data }: { pinId: string; type: IO; data: string })
 
-  $removePinData({ type, pinId }: { type: 'input' | 'output'; pinId: string })
+  $removePinData({ type, pinId }: { type: IO; pinId: string })
 
   $getPinData(
     data: {},

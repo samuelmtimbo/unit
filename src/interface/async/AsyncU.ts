@@ -2,6 +2,7 @@ import { Moment } from '../../debug/Moment'
 import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
 import { GlobalRefSpec } from '../../types/GlobalRefSpec'
+import { IO } from '../../types/IO'
 import { Unlisten } from '../../types/Unlisten'
 import { $PO } from './$PO'
 import { $U, $U_C, $U_R, $U_W } from './$U'
@@ -10,14 +11,6 @@ export const AsyncUCall = (unit: $U): $U_C => {
   return {
     $getGlobalId(data: {}, callback: Callback<string>) {
       return unit.$getGlobalId(data, callback)
-    },
-
-    $getEventNames(data: {}, callback: Callback<string[]>) {
-      return unit.$getEventNames(data, callback)
-    },
-
-    $emit(_data: { type: string; data: any }) {
-      return unit.$emit(_data)
     },
 
     $play(data: {}) {
@@ -44,19 +37,11 @@ export const AsyncUCall = (unit: $U): $U_C => {
       unit.$takeInput(data)
     },
 
-    $setPinData({
-      type,
-      pinId,
-      data,
-    }: {
-      type: 'input' | 'output'
-      pinId: string
-      data: any
-    }) {
+    $setPinData({ type, pinId, data }: { type: IO; pinId: string; data: any }) {
       unit.$setPinData(data)
     },
 
-    $removePinData(data: { type: 'input' | 'output'; pinId: string }) {
+    $removePinData(data: { type: IO; pinId: string }) {
       unit.$removePinData(data)
     },
 

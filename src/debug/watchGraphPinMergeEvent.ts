@@ -1,10 +1,11 @@
 import { Graph } from '../Class/Graph'
+import { IO } from '../types/IO'
 import { Moment } from './Moment'
 
 export interface GraphMergePinMomentData {
   mergeId: string
   unitId: string
-  type: 'input' | 'output'
+  type: IO
   pinId: string
 }
 
@@ -18,7 +19,7 @@ export function watchGraphPinMergeEvent(
   const listener = (
     mergeId: string,
     unitId: string,
-    type: 'input' | 'output',
+    type: IO,
     pinId: string
   ) => {
     callback({

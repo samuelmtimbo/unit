@@ -1,6 +1,6 @@
 import classnames from '../../../../client/classnames'
 import { Element } from '../../../../client/element'
-import parentElement from '../../../../client/parentElement'
+import parentElement from '../../../../client/platform/web/parentElement'
 import { getTransform, Zoom } from '../../../../client/zoom'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
@@ -30,7 +30,7 @@ const DEFAULT_STYLE = {
   top: '0',
 }
 
-export default class ZoomComponent extends Element<HTMLElement, Props> {
+export default class ZoomComponent extends Element<HTMLDivElement, Props> {
   public _root: Div
 
   public _html: Div
@@ -100,7 +100,7 @@ export default class ZoomComponent extends Element<HTMLElement, Props> {
     zoom.registerParentRoot(html)
     this._html = html
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = {

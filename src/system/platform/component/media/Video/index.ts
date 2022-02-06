@@ -1,6 +1,5 @@
 import { Element } from '../../../../../Class/Element'
 import { Unit } from '../../../../../Class/Unit'
-import { listenGlobalComponent } from '../../../../../client/globalComponent'
 import { CSOpt } from '../../../../../interface/async/$CS'
 import { CS } from '../../../../../interface/CS'
 import { PS } from '../../../../../interface/PS'
@@ -8,6 +7,7 @@ import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { listenGlobalComponent } from '../../../../globalComponent'
 import Video from './Component'
 
 export interface I {

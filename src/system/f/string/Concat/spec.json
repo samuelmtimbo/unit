@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "plus",
     "description": "concatenate two strings",
-    "complexity": 2.6557456034690436,
+    "complexity": 3,
     "tags": [
       "f",
       "string"

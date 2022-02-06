@@ -2,7 +2,6 @@ import { System } from '../system'
 import { _removeChildren } from '../util/element'
 import { Component } from './component'
 import { Context, Fullwindow, resize, setParent } from './context'
-import { PositionObserver } from './PositionObserver'
 import { stopAllPropagation, stopByPropagation } from './stopPropagation'
 import { defaultThemeColor } from './theme'
 
@@ -12,6 +11,12 @@ export function renderFrame(
   $root: HTMLElement,
   $init: Partial<Context> = {}
 ): Context {
+  const {
+    api: {
+      document: { ResizeObserver, PositionObserver },
+    },
+  } = $system
+
   _removeChildren($root)
 
   const $element = $root
@@ -33,15 +38,8 @@ export function renderFrame(
   })
 
   const $positionObserver = new PositionObserver(
-    (
-      x: number,
-      y: number,
-      sx: number,
-      sy: number,
-      rx: number,
-      ry: number,
-      rz: number
-    ): void => {
+    $system,
+    ({ x, y, sx, sy, rx, ry, rz }): void => {
       $context.$x = x
       $context.$y = y
       $context.$sx = sx

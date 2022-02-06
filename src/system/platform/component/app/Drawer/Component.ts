@@ -13,7 +13,7 @@ import { makePointerLeaveListener } from '../../../../../client/event/pointer/po
 import { makePointerMoveListener } from '../../../../../client/event/pointer/pointermove'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { makeResizeListener } from '../../../../../client/event/resize'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
@@ -21,7 +21,7 @@ import { Dict } from '../../../../../types/Dict'
 import { Unlisten } from '../../../../../types/Unlisten'
 import Div from '../../Div/Component'
 import Frame from '../../Frame/Component'
-import IconButton from '../../Icon/Component'
+import Icon from '../../Icon/Component'
 
 export interface Props {
   className?: string
@@ -52,7 +52,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
 
   public frame: Frame
 
-  private _knob: IconButton
+  private _knob: Icon
   private _column: Div
 
   private _active: boolean = false
@@ -84,7 +84,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
 
     const { backgroundColor = 'inherit' } = style
 
-    const knob = new IconButton(
+    const knob = new Icon(
       {
         className: 'drawer-knob',
         icon,
@@ -202,7 +202,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     drawer.registerParentRoot(content)
     drawer.registerParentRoot(column)
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$subComponent = {
       drawer,
@@ -240,6 +240,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
 
       const { backgroundColor = COLOR_NONE } = style
 
+      // @ts-ignore
       this._knob.$slot['default'].$element.style.backgroundColor =
         backgroundColor
     } else if (prop === 'active') {

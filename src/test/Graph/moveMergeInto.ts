@@ -26,7 +26,6 @@ composition0.addUnit(
   },
   UNIT_ID_EMTPY
 )
-
 composition0.addUnit(
   {
     id: ID_IDENTITY,
@@ -62,32 +61,32 @@ composition0.addMerge(
   '0'
 )
 
-// composition0.moveMergeInto(UNIT_ID_EMTPY, '0', '0', '1', {
-//   [UNIT_ID_IDENTITY]: {
-//     output: {
-//       a: {
-//         pinId: 'a',
-//         subPinId: '0',
-//       },
-//     },
-//     input: {},
-//   },
-//   [UNIT_ID_IDENTITY_0]: {
-//     output: {},
-//     input: {
-//       a: {
-//         pinId: 'a',
-//         subPinId: '0',
-//       },
-//     },
-//   },
-// })
+composition0.moveMergeInto(UNIT_ID_EMTPY, '0', '0', '1', {
+  [UNIT_ID_IDENTITY]: {
+    output: {
+      a: {
+        pinId: 'a',
+        subPinId: '0',
+      },
+    },
+    input: {},
+  },
+  [UNIT_ID_IDENTITY_0]: {
+    output: {},
+    input: {
+      a: {
+        pinId: 'a',
+        subPinId: '0',
+      },
+    },
+  },
+})
 
-// assert.equal(composition0.getUnitCount(), 3)
-// assert.equal(composition0.getMergeCount(), 2)
+assert.equal(composition0.getUnitCount(), 3)
+assert.equal(composition0.getMergeCount(), 2)
 
-// assert.equal(empty.getInputCount(), 1)
-// assert.equal(empty.getOutputCount(), 1)
+assert.equal(empty.getInputCount(), 1)
+assert.equal(empty.getOutputCount(), 1)
 
-// assert(empty.hasInputNamed('a'))
-// assert(empty.hasOutputNamed('a'))
+assert(empty.hasInputNamed('a'))
+assert(empty.hasOutputNamed('a'))

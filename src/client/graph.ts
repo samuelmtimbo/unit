@@ -8,11 +8,12 @@ import {
   Specs,
 } from '../types'
 import { Dict } from '../types/Dict'
+import { IO } from '../types/IO'
 import { forEach } from '../util/array'
 import { randomIdNotIn } from '../util/id'
 import {
   getErrNodeId,
-  getExternalNodeId,
+  getExtNodeId,
   getInputNodeId,
   getMergeNodeId,
   getMetadataNodeId,
@@ -20,13 +21,16 @@ import {
   getPinNodeId,
 } from './id'
 
-export type N = {
-  next: { [id: string]: N }
-  previous: { [id: string]: N }
+export type GraphNode = {
+  next: { [id: string]: GraphNode }
+  previous: { [id: string]: GraphNode }
 }
 
+export type GraphNodeMap = { [id: string]: GraphNode }
+export type SubGraphNode = { [id: string]: Set<string> }
+
 export function getSubPinSpecNodeId(
-  type: 'input' | 'output',
+  type: IO,
   subPinSpec: GraphExposedSubPinSpec
 ): string {
   const { mergeId, unitId, pinId } = subPinSpec
@@ -37,18 +41,12 @@ export function getSubPinSpecNodeId(
   }
 }
 
-// graph
-export type G = { [id: string]: N }
-
-// related
-export type SG = { [id: string]: Set<string> }
-
 export function build_graph(
   spec: GraphSpec,
   specs: Specs,
   pinToDatum: { [pinNodeId: string]: string } = {}
-): G {
-  const graph: G = {}
+): GraphNodeMap {
+  const graph: GraphNodeMap = {}
 
   const { units = {}, merges = {} } = spec
 
@@ -128,11 +126,7 @@ export function build_graph(
       forEachKeyValue(
         pin,
         (subPinSpec: GraphExposedSubPinSpec, subPinId: string) => {
-          const extInputNodeId = getExternalNodeId(
-            'input',
-            exposedPinId,
-            subPinId
-          )
+          const extInputNodeId = getExtNodeId('input', exposedPinId, subPinId)
           graph[extInputNodeId] = { next: {}, previous: {} }
           const pinNodeId = getSubPinSpecNodeId('input', subPinSpec)
           graph[extInputNodeId].next[pinNodeId] = graph[pinNodeId]
@@ -156,11 +150,7 @@ export function build_graph(
       forEachKeyValue(
         pin,
         (subPinSpec: GraphExposedSubPinSpec, subPinId: string) => {
-          const extOutputNodeId = getExternalNodeId(
-            'output',
-            exposedPinId,
-            subPinId
-          )
+          const extOutputNodeId = getExtNodeId('output', exposedPinId, subPinId)
           graph[extOutputNodeId] = { next: {}, previous: {} }
           const pinNodeId = getSubPinSpecNodeId('output', subPinSpec)
           graph[extOutputNodeId].previous[pinNodeId] = graph[pinNodeId]
@@ -180,7 +170,10 @@ export function build_graph(
   return graph
 }
 
-export const add_node_to_graph = (graph: G, node_id: string): void => {
+export const add_node_to_graph = (
+  graph: GraphNodeMap,
+  node_id: string
+): void => {
   graph[node_id] = {
     next: {},
     previous: {},
@@ -188,7 +181,7 @@ export const add_node_to_graph = (graph: G, node_id: string): void => {
 }
 
 export const add_link_to_graph = (
-  graph: G,
+  graph: GraphNodeMap,
   source_id: string,
   target_id: string
 ): void => {
@@ -199,7 +192,7 @@ export const add_link_to_graph = (
 }
 
 export const remove_link_from_graph = (
-  graph: G,
+  graph: GraphNodeMap,
   source_id: string,
   target_id: string
 ): void => {
@@ -210,7 +203,7 @@ export const remove_link_from_graph = (
 }
 
 export const change_link_target_on_graph = (
-  graph: G,
+  graph: GraphNodeMap,
   source_id: string,
   target_id: string,
   next_target_id: string
@@ -225,7 +218,7 @@ export const change_link_target_on_graph = (
 }
 
 export const change_link_source_on_graph = (
-  graph: G,
+  graph: GraphNodeMap,
   source_id: string,
   next_source_id: string,
   target_id: string
@@ -239,7 +232,10 @@ export const change_link_source_on_graph = (
   target.previous[next_source_id] = next_source
 }
 
-export const remove_node_from_graph = (graph: G, node_id: string): void => {
+export const remove_node_from_graph = (
+  graph: GraphNodeMap,
+  node_id: string
+): void => {
   const node = graph[node_id]
   const { next, previous } = node
   for (let n_id in next) {
@@ -254,7 +250,7 @@ export const remove_node_from_graph = (graph: G, node_id: string): void => {
 }
 
 export const build_subgraph = (
-  graph: G,
+  graph: GraphNodeMap,
   node_to_subgraph: Dict<string>,
   subgraph_to_node: Dict<Set<string>>,
   visited: Dict<boolean> = {}
@@ -266,7 +262,7 @@ export const build_subgraph = (
 
 const _build_subgraph = (
   id: string,
-  graph: G,
+  graph: GraphNodeMap,
   node_to_subgraph: Dict<string>,
   subgraph_to_node: Dict<Set<string>>,
   visited: Dict<boolean>
@@ -302,7 +298,7 @@ const _build_subgraph = (
 }
 
 // TODO optimize
-export const makeRelated = (graph: G): SG => {
+export const makeRelated = (graph: GraphNodeMap): SubGraphNode => {
   const related: Dict<any> = {}
   forEachKeyValue(graph, (_, id) => {
     const relatedTo = new Set<string>([id])
@@ -314,7 +310,7 @@ export const makeRelated = (graph: G): SG => {
 
 export const setConnectedTo = (
   id: string,
-  graph: G,
+  graph: GraphNodeMap,
   related: Set<string> = new Set(),
   visited: Set<string> = new Set()
 ): void => {

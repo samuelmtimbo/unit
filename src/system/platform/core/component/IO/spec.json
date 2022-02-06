@@ -606,7 +606,7 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "bot + app",
-    "complexity": 44.59420343568742,
+    "complexity": 273,
     "tags": [
       "platform",
       "core",

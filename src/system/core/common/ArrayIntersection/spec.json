@@ -174,7 +174,7 @@
   "metadata": {
     "icon": "array",
     "description": "build a list of size n",
-    "complexity": 10,
+    "complexity": 30,
     "tags": [
       "core",
       "common"

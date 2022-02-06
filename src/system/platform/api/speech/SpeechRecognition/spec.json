@@ -1,0 +1,28 @@
+{
+  "name": "speech recognition",
+  "inputs": {
+    "opt": {
+      "type": "{grammars?:{type:'string'|'url',value:string,weight:number}[],lang?:string,interimResults?:boolean,maxAlternatives?:number,continuous?:boolean}"
+    }
+  },
+  "outputs": {
+    "emitter": {
+      "type": "`EE`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "mic",
+    "description": "hear me",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "speech"
+    ]
+  },
+  "id": "2afcfde0-76d3-4045-a99c-c9809d71307a",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

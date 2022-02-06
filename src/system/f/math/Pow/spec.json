@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "exponential",
     "description": "`a` to the power of `b`",
-    "complexity": 2.655523228879047,
+    "complexity": 3,
     "tags": [
       "f",
       "math"

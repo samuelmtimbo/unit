@@ -1,0 +1,98 @@
+{
+  "name": "text div",
+  "inputs": {
+    "value": {
+      "pin": {
+        "0": {
+          "unitId": "text",
+          "pinId": "value"
+        }
+      },
+      "type": "string"
+    },
+    "style": {
+      "pin": {
+        "0": {
+          "unitId": "div",
+          "pinId": "style"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "div": {
+      "pin": {
+        "0": {
+          "unitId": "div",
+          "pinId": "_self"
+        }
+      },
+      "defaultIgnored": true,
+      "ref": true,
+      "component": true
+    }
+  },
+  "units": {
+    "div": {
+      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "component": {
+          "width": 232.120361328125,
+          "height": 187.77685546875
+        },
+        "position": {
+          "x": -21,
+          "y": -94
+        }
+      }
+    },
+    "text": {
+      "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
+      "input": {
+        "value": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 20,
+          "y": 93
+        }
+      }
+    }
+  },
+  "merges": {},
+  "component": {
+    "subComponents": {
+      "div": {
+        "children": [
+          "text"
+        ]
+      },
+      "text": {
+        "children": []
+      }
+    },
+    "children": [
+      "div"
+    ],
+    "defaultWidth": 180,
+    "defaultHeight": 120
+  },
+  "metadata": {
+    "complexity": 44,
+    "tags": [
+      "platform",
+      "component",
+      "app"
+    ]
+  },
+  "id": "9988a56e-6bee-46c8-864c-e351d84bc7e2",
+  "type": "`U`&`G`&`C`",
+  "system": true,
+  "render": true
+}

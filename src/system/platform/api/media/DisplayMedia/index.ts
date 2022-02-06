@@ -4,7 +4,7 @@ import { ST } from '../../../../../interface/ST'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { stopMediaStream } from '../../../../../util/stream/stopMediaStream'
-import { wrapMediaStream } from '../UserMedia/wrapMediaStream'
+import { wrapMediaStream } from '../../../../../wrap/MediaStream'
 
 export type I = {
   opt: MediaStreamConstraints

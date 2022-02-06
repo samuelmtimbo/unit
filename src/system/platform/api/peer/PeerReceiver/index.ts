@@ -148,7 +148,9 @@ export default class PeerReceiver<T> extends Semifunctional<
       this._disconnect()
     }
     const message_listener = (message: string) => {
-      const data = evaluate(message)
+      const specs = { ...this.__system.specs, ...this.__pod.specs }
+      const classes = this.__system.classes
+      const data = evaluate(message, specs, classes)
       console.log('Receiver', 'Peer', 'data', data)
       this.emit('message', data)
     }

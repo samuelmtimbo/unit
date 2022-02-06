@@ -30,7 +30,7 @@
   "metadata": {
     "icon": null,
     "description": "[0, 1, 2, 3, 4, 5]",
-    "complexity": 3,
+    "complexity": 42,
     "tags": [
       "core",
       "common"

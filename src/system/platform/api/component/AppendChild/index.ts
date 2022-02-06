@@ -11,7 +11,7 @@ export interface I {
 }
 
 export interface O {
-  i: number
+  at: number
 }
 
 export default class AppendChild extends Functional<I, O> {
@@ -19,7 +19,7 @@ export default class AppendChild extends Functional<I, O> {
     super(
       {
         i: ['parent', 'child'],
-        o: ['i'],
+        o: ['at'],
       },
       {
         input: {
@@ -34,7 +34,7 @@ export default class AppendChild extends Functional<I, O> {
   }
 
   f({ parent, child }: I, done: Done<O>): void {
-    const i = parent.appendChild(child)
-    done({ i })
+    const at = parent.appendChild(child)
+    done({ at })
   }
 }

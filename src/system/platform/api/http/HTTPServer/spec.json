@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "server",
     "description": "start an HTTP Server listening on `port`",
-    "complexity": 11.77931175064396,
+    "complexity": 12,
     "globals": [
       "HTTP"
     ],

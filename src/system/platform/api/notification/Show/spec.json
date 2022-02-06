@@ -124,7 +124,7 @@
   "metadata": {
     "icon": "bell",
     "description": "push `notification` to system tray",
-    "complexity": 6,
+    "complexity": 14,
     "tags": [
       "platform",
       "api",

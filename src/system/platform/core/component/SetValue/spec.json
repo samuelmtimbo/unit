@@ -82,7 +82,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "...",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "platform",
       "core",

@@ -49,7 +49,9 @@ export default class _HTTPServer extends Semifunctional {
 
     const {
       api: {
-        http: { local: HTTPServer },
+        http: {
+          server: { local: HTTPServer },
+        },
       },
     } = this.__system
 

@@ -63,7 +63,7 @@
   "metadata": {
     "icon": "tag",
     "description": "delay push random {color}",
-    "complexity": 10,
+    "complexity": 71,
     "tags": [
       "platform",
       "core",

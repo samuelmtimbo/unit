@@ -41,7 +41,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "convert a number into a decimal",
-    "complexity": 4.6697922650705115,
+    "complexity": 5,
     "tags": [
       "core",
       "number"

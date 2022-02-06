@@ -2,7 +2,6 @@ import { EventEmitter } from '../../EventEmitter'
 import { Dict } from '../../types/Dict'
 import { Unlisten } from '../../types/Unlisten'
 import { isLocalHost } from '../localhost'
-import { addSignInListener, addSignOutListener, isSignedIn } from './user'
 import isIp = require('is-ip')
 
 export let socket: WebSocket | null = null
@@ -18,9 +17,7 @@ export const WS_HOST_URL = (hostname: string): string => {
   return ws_url
 }
 
-function connect(): void {
-  const { hostname } = location
-
+export function connect(hostname: string): void {
   connecting = true
 
   const ws_url = WS_HOST_URL(hostname)
@@ -81,17 +78,18 @@ SOCKET_SERVER_EMITTER.addListener('peer', (_data) => {
   SOCKET_SERVER_PEER_EMITTER.emit(type, data)
 })
 
-if (isSignedIn()) {
-  connect()
-}
+// RETURN
+// if (isSignedIn()) {
+//   connect()
+// }
 
-addSignInListener(() => {
-  connect()
-})
+// addSignInListener(() => {
+//   connect()
+// })
 
-addSignOutListener(() => {
-  disconnect()
-})
+// addSignOutListener(() => {
+//   disconnect()
+// })
 
 export function isConnected(): boolean {
   return connected

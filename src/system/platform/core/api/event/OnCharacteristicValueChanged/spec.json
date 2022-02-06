@@ -40,7 +40,7 @@
   "metadata": {
     "icon": "square",
     "description": "listen to Bluetooth GATT `characteristic` value changed event",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "platform",
       "core",

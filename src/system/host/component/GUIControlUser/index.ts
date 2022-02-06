@@ -6,7 +6,7 @@ export interface I<T> {}
 
 export interface O<T> {}
 
-export default class IOUNAPPUser<T> extends Element<I<T>, O<T>> {
+export default class GUIUser<T> extends Element<I<T>, O<T>> {
   constructor(system: System, pod: Pod) {
     super(
       {

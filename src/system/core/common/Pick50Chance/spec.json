@@ -93,7 +93,7 @@
   "metadata": {
     "icon": "scale",
     "description": "pick a or b, 50% chance",
-    "complexity": 5,
+    "complexity": 24,
     "tags": [
       "core",
       "common"

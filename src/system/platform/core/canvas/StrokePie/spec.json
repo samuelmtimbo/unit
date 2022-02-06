@@ -228,7 +228,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "draw a pie",
-    "complexity": 5,
+    "complexity": 55,
     "tags": [
       "platform",
       "core",

@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "percent",
     "description": "remainder arithmetic operator",
-    "complexity": 2.6601560328373144,
+    "complexity": 3,
     "tags": [
       "f",
       "arithmetic"

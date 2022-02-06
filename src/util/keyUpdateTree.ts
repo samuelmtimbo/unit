@@ -109,7 +109,7 @@ export const _keyUpdateTree = (
             if (selectionStart === 0 && selectionEnd === 0) {
               preventDefault = true
               const key = _getNodeAtPath(parent, [0])
-              const nextValue = key.value+value
+              const nextValue = key.value + value
               nextRoot = _updateNodeAt(root, parentPath, getTree(nextValue))
               nextPath = parentPath
               nextSelectionStart = key.value.length
@@ -126,9 +126,9 @@ export const _keyUpdateTree = (
         _getNextLeafPath(root, path, -1) ||
         (parentPath && _getNextLeafPath(root, parentPath, -1))
       if (leftLeafPath) {
+        preventDefault = true
         const leftLeafNode = _getNodeAtPath(nextRoot, leftLeafPath)!
         if (value === '') {
-          preventDefault = true
           nextRoot = _removeNodeAt(nextRoot, path)
         }
         nextPath = leftLeafPath
@@ -287,13 +287,17 @@ export const _keyUpdateTree = (
     }
   } else if (key === ':') {
     const parent = _getParent(root, path)
-    if (
-      parent &&
-      parent.type === TreeNodeType.ObjectLiteral
-      // && _isValidObjKey(data)
-    ) {
+    if (parent && parent.type === TreeNodeType.ObjectLiteral) {
       preventDefault = true
-      nextRoot = _updateNodeAt(root, path, getTree(`${data.value.substring(0,selectionStart)}:${data.value.substring(selectionEnd)}`))
+      nextRoot = _updateNodeAt(
+        root,
+        path,
+        getTree(
+          `${data.value.substring(0, selectionStart)}:${data.value.substring(
+            selectionEnd
+          )}`
+        )
+      )
       nextPath = [...path, 1]
       nextSelectionStart = 0
       nextSelectionEnd = 0

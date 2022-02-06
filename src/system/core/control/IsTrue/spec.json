@@ -37,7 +37,7 @@
   "metadata": {
     "icon": "question",
     "description": "true if `a` is true, false otherwise",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "core",
       "control"

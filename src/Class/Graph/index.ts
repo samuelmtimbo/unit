@@ -16,17 +16,19 @@ import {
 } from '../../component/method'
 import { SELF } from '../../constant/SELF'
 import { UNTITLED } from '../../constant/STRING'
+import { EventEmitter } from '../../EventEmitter'
 import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
 import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
 import { C, C_EE } from '../../interface/C'
 import { Component_ } from '../../interface/Component'
+import { EE } from '../../interface/EE'
 import { G, G_EE } from '../../interface/G'
 import { U } from '../../interface/U'
 import { V } from '../../interface/V'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { Pod } from '../../pod'
-import { Primitive, PrimitiveEvents } from '../../Primitive'
+import { Primitive } from '../../Primitive'
 import { evaluate } from '../../spec/evaluate'
 import { fromId } from '../../spec/fromId'
 import {
@@ -76,7 +78,7 @@ import { objPromise } from '../../util/promise'
 import { Element } from '../Element'
 import Merge from '../Merge'
 import { Stateful, Stateful_EE } from '../Stateful'
-import { Unit } from '../Unit'
+import { Unit, UnitEvents } from '../Unit'
 import { WaitAll } from '../WaitAll'
 
 export function isStateful(unit: U): boolean {
@@ -89,7 +91,7 @@ export function isElement(unit: U): boolean {
 
 export type Graph_EE = G_EE & C_EE & Stateful_EE
 
-export type GraphEvents = PrimitiveEvents<Graph_EE> & Graph_EE
+export type GraphEvents = UnitEvents<Graph_EE> & Graph_EE
 
 export class Graph<I = any, O = any>
   extends Primitive<I, O, GraphEvents>
@@ -147,7 +149,8 @@ export class Graph<I = any, O = any>
 
   // E
 
-  public _children: Component_[] = []
+  private _children: Component_[] = []
+  private _emitter: EventEmitter = new EventEmitter()
 
   constructor(
     graph: GraphSpec = {
@@ -950,6 +953,7 @@ export class Graph<I = any, O = any>
     subPinSpec: GraphExposedSubPinSpec
   ): void => {
     // console.log('Graph', '_plugPin', pinId, subPinId, subPinSpec)
+
     const { mergeId, unitId, pinId: _pinId } = subPinSpec
 
     const pinSpec = this.getExposedPinSpec(type, pinId)
@@ -1392,14 +1396,18 @@ export class Graph<I = any, O = any>
     unitSpec: GraphUnitSpec,
     unit: C
   ): void => {
-    const { specs, classes } = this.__system
+    const { classes } = this.__system
 
     const { children = [] } = unitSpec
 
     for (const child of children) {
       const { id } = child
 
-      const ChildClass = fromId(id, specs, classes)
+      const ChildClass = fromId(
+        id,
+        { ...this.__system.specs, ...this.__pod.specs },
+        classes
+      )
 
       unit.appendChild(ChildClass)
       // TODO state
@@ -2801,9 +2809,11 @@ export class Graph<I = any, O = any>
 
     for (const mergeId of merge) {
       const { nextInputMergePinId, nextOutputMergePinId } =
-        nextMergePinId[mergeId]
+        nextMergePinId[mergeId] || {}
 
       const mergeSpec = merges[mergeId]
+
+      const unitIgnored = new Set<string>(unit)
 
       this._moveMergeInto(
         graphId,
@@ -2812,6 +2822,7 @@ export class Graph<I = any, O = any>
         nextInputMergePinId,
         nextOutputMergePinId,
         nextPinIdMap,
+        unitIgnored,
         unitIgnoredPin
       )
     }
@@ -2879,7 +2890,7 @@ export class Graph<I = any, O = any>
     nextSubComponentParent: string | null,
     nextSubComponentChildren: string[]
   ): void {
-    // console.log('Graph', '_moveUnitInto', graphId, unitId, linkPins)
+    // console.log('Graph', '_moveUnitInto', graphId, unitId, nextUnitId)
 
     const graph = this.refUnit(graphId) as Graph
 
@@ -2907,9 +2918,8 @@ export class Graph<I = any, O = any>
 
     const movePinInto = (type: IO, pinId: string): void => {
       if (!ignoredPin[type].has(pinId) && !unit.isPinIgnored(type, pinId)) {
-        const { pinId: nextPinId, subPinId: nextSubPinId } = pinIdMap[type][
-          pinId
-        ] || { pinId, subPinId: '0' }
+        const { pinId: nextPinId, subPinId: nextSubPinId } =
+          pinIdMap[type][pinId]
 
         const mergeId =
           this._pinToMerge[unitId] &&
@@ -3096,8 +3106,11 @@ export class Graph<I = any, O = any>
       input: Dict<{ pinId: string; subPinId: string }>
       output: Dict<{ pinId: string; subPinId: string }>
     }>,
+    unitIgnored: Set<string> = new Set(),
     unitIgnoredPin: Dict<{ input: Set<string>; output: Set<string> }> = {}
   ): void {
+    // console.log('Graph', '_moveMergeInto', graphId, mergeId)
+
     const graph = this.refGraph(graphId)
     const merge = this.refMerge(mergeId)
 
@@ -3105,26 +3118,49 @@ export class Graph<I = any, O = any>
       this._removeMerge(mergeId)
     }
 
+    let pinIntoCount: number = 0
+
     const moveLinkPinInto = (unitId: string, type: IO, pinId: string): void => {
+      if (unitIgnored.has(unitId)) {
+        pinIntoCount++
+      }
+
       if (unitIgnoredPin[unitId] && unitIgnoredPin[unitId][type].has(pinId)) {
         return
       }
 
-      const unitNextPinId = nextPinIdMap[unitId]
+      const unitNextPinId = nextPinIdMap[unitId] || {}
 
-      const { pinId: nextPinId, subPinId: nextSubPinId } =
-        unitNextPinId[type][pinId]
+      const unitNextPin = unitNextPinId[type] && unitNextPinId[type][pinId]
 
-      const isInput = type === 'input'
+      if (unitNextPin) {
+        const { pinId: nextPinId, subPinId: nextSubPinId } =
+          unitNextPinId[type][pinId]
 
-      const mergeId = isInput ? nextInputMergeId : nextOutputMergeId
+        const isInput = type === 'input'
 
-      this._moveLinkPinInto(graphId, unitId, type, pinId, mergeId, nextPinId)
+        const nextMergeId = isInput ? nextInputMergeId : nextOutputMergeId
+
+        this._moveLinkPinInto(
+          graphId,
+          unitId,
+          type,
+          pinId,
+          nextMergeId,
+          nextPinId
+        )
+      }
     }
 
     forEachPinOnMerge(mergeSpec, moveLinkPinInto)
 
-    graph.addMerge(mergeSpec, mergeId, false)
+    if (pinIntoCount > 1) {
+      graph.addMerge(mergeSpec, mergeId, false)
+    } else {
+      // TODO
+      // AD HOC
+      // add identity
+    }
   }
 
   public explodeUnit(
@@ -3283,5 +3319,9 @@ export class Graph<I = any, O = any>
 
   refSlot(slotName: string): Component_ {
     return refSlot(this, slotName, this._slot)
+  }
+
+  refEmitter(): EE {
+    return this._emitter
   }
 }

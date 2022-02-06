@@ -27,7 +27,7 @@
   "metadata": {
     "icon": "bluetooth",
     "description": "remote GATT charact",
-    "complexity": 2.6356577655059947,
+    "complexity": 3,
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTCharacteristic",
     "tags": [
       "platform",

@@ -2,7 +2,7 @@ import { isColorName, isHEX, nameToColor } from '../../../../../client/color'
 import { Element } from '../../../../../client/element'
 import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
 import { makePointerLeaveListener } from '../../../../../client/event/pointer/pointerleave'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { applyTheme } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
@@ -94,7 +94,7 @@ export default class IconButton extends Element<HTMLDivElement, Props> {
 
     this._icon_comp = icon_comp
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = { default: icon_comp }

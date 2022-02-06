@@ -1,5 +1,4 @@
 {
-  "artifact": "spec",
   "name": "set fill if or default",
   "units": {
     "setifordefault": {
@@ -69,7 +68,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "set `obj` \"fill\" to `value` if `test` true, `default` otherwise",
-    "complexity": 3,
+    "complexity": 24,
     "tags": [
       "platform",
       "core"

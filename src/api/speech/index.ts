@@ -73,7 +73,7 @@ export class SpeechRecorder extends EventEmitter<SpeechRecorderEvents> {
         grammars,
         lang = 'en-US',
         continuous = false,
-        interimResults = true,
+        interimResults = false,
         maxAlternatives = 1,
       } = opt
 

@@ -2,7 +2,7 @@ import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -225,7 +225,7 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
     keyboard.setChildren([line_0, line_1, line_2, line_3, line_4])
     this._keyboard = keyboard
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = keyboard.$slot

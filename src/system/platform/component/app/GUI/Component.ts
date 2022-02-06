@@ -8,10 +8,10 @@ import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeInputListener } from '../../../../../client/event/input'
 import { graphComponentFromId } from '../../../../../client/graphComponentFromSpec'
 import { MAX_Z_INDEX } from '../../../../../client/MAX_Z_INDEX'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import {
-  defaultThemeColor,
   COLOR_NONE,
+  defaultThemeColor,
   setAlpha,
   themeBackgroundColor,
 } from '../../../../../client/theme'
@@ -47,7 +47,7 @@ export const DEFAULT_STYLE = {
   overflow: 'hidden',
 }
 
-export default class GUI extends Element<HTMLElement, Props> {
+export default class GUI extends Element<HTMLDivElement, Props> {
   private _gui: Div
 
   private _background: Div
@@ -220,8 +220,6 @@ export default class GUI extends Element<HTMLElement, Props> {
         ({ drawerId }: { drawerId: string }) => {
           if (drawerId === 'theme') {
             setTheme(this.$context, 'light')
-          } else if (drawerId === 'reload') {
-            location.reload()
           }
         }
       )
@@ -297,7 +295,7 @@ export default class GUI extends Element<HTMLElement, Props> {
 
     this.$ref['control'] = this
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     // this.$slot = control.$slot

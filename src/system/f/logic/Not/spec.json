@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "exclamation",
     "description": "NOT logic operator",
-    "complexity": 2.6545596056557272,
+    "complexity": 3,
     "tags": [
       "f",
       "logic"

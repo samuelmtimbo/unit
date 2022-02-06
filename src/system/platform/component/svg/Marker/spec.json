@@ -10,7 +10,7 @@
   "metadata": {
     "icon": "square",
     "description": "SVG marker",
-    "complexity": 6.418583103237403,
+    "complexity": 21,
     "tags": [
       "platform",
       "component",

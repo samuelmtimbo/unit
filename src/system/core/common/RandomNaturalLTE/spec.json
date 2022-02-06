@@ -47,7 +47,7 @@
   "metadata": {
     "icon": "random",
     "description": "output random natural `i` less than or equal to `max`",
-    "complexity": 4,
+    "complexity": 18,
     "tags": [
       "core",
       "common"

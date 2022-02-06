@@ -90,7 +90,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "stroke a circle path",
-    "complexity": 5,
+    "complexity": 19,
     "tags": [
       "platform",
       "core",

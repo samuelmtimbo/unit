@@ -2,6 +2,7 @@ import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../system/f/object/DeepMerge/f'
 import { BaseSpec, GraphMergeSpec, GraphSpec, Spec, Specs } from '../types'
 import { Dict } from '../types/Dict'
+import { IO } from '../types/IO'
 import { clone, mapObjVK } from '../util/object'
 import {
   applyGenerics,
@@ -250,7 +251,7 @@ export const createGenericTypeInterface = (
   let i = 0
   const inputIds = Object.keys(spec.inputs)
   const outputIds = Object.keys(spec.outputs)
-  function register(kind: 'input' | 'output', pinId: string): void {
+  function register(kind: IO, pinId: string): void {
     typeInterface[kind][pinId] = getTree(`<${i}>`)
     i++
   }
@@ -395,11 +396,7 @@ export const _getGraphTypeMap = (
 
       replacement[unitId] = {}
 
-      function register(
-        type: TreeNode,
-        kind: 'input' | 'output',
-        pinId: string
-      ): void {
+      function register(type: TreeNode, kind: IO, pinId: string): void {
         if (_hasGeneric(type)) {
           const generics = _findGenerics(type)
           for (const generic of generics) {
@@ -456,11 +453,7 @@ export const _getGraphTypeMap = (
     const create_set_equivalent = () => {
       let equivalence_set = new Set<string>()
       let merged = false
-      function set_equivalent(
-        unitId: string,
-        kind: 'input' | 'output',
-        pinId: string
-      ) {
+      function set_equivalent(unitId: string, kind: IO, pinId: string) {
         // AD HOC unit might've removed from subgraph
         if (!typeMap[unitId]) {
           return
@@ -504,11 +497,7 @@ export const _getGraphTypeMap = (
 
     const set_merge_equivalence = (
       mergeId: string,
-      set_equivalent: (
-        unitId: string,
-        kind: 'input' | 'output',
-        pinId: string
-      ) => void
+      set_equivalent: (unitId: string, kind: IO, pinId: string) => void
     ): void => {
       const mergeSpec = merges[mergeId]
       forEachPinOnMerge(mergeSpec, (unitId, kind, pinId) => {
@@ -517,13 +506,9 @@ export const _getGraphTypeMap = (
     }
 
     const set_exposed_equivalence = (
-      kind: 'input' | 'output',
+      kind: IO,
       pinId: string,
-      set_equivalent: (
-        unitId: string,
-        kind: 'input' | 'output',
-        pinId: string
-      ) => void
+      set_equivalent: (unitId: string, kind: IO, pinId: string) => void
     ): void => {
       const { pin } = spec[`${kind}s`][pinId]
       forEachKeyValue(pin, ({ unitId, pinId, mergeId }) => {

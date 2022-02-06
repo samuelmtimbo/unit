@@ -3,11 +3,12 @@ import { Done } from '../../../../Class/Functional/Done'
 import { Graph } from '../../../../Class/Graph'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { IO } from '../../../../types/IO'
 
 export interface I<T> {
   graph: Graph
   id: string
-  type: 'input' | 'output'
+  type: IO
   name: string
   data: any
 }

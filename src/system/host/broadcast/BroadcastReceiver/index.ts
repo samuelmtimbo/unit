@@ -221,8 +221,10 @@ export default class BroadcastReceiver<T> extends Functional<
       this._disconnect()
     }
     const data_listener = (_message) => {
+      const specs = { ...this.__system.specs, ...this.__pod.specs }
+      const classes = this.__system.classes
       const message = _message.toString()
-      const data = evaluate(message)
+      const data = evaluate(message, specs, classes)
       console.log('Receiver', 'Peer', 'data', data)
       const { type: _type, data: _data } = data
       if (_type === 'data') {

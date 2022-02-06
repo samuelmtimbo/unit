@@ -11,7 +11,7 @@ export interface Props {
   width?: number | string
   height?: number | string
   stroke?: string
-  strokeWidth?: string
+  strokeWidth?: number
   preserveAspectRatio?: string
   viewBox?: string
   title?: string

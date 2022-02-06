@@ -1,7 +1,8 @@
 import classnames from '../../../../../client/classnames'
 import { getSpecRadius } from '../../../../../client/complexity'
+import { Component } from '../../../../../client/component'
 import { Element } from '../../../../../client/element'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { isComponent } from '../../../../../client/spec'
 import {
   pointInCircle,
@@ -14,7 +15,7 @@ import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import assert from '../../../../../util/assert'
+import { IO } from '../../../../../types/IO'
 import Icon from '../../../component/Icon/Component'
 import SVGCircle from '../../../component/svg/Circle/Component'
 import SVGG from '../../../component/svg/G/Component'
@@ -34,7 +35,7 @@ export interface Props {
 export const CLASS_DEFAULT_WIDTH = 90
 export const CLASS_DEFAULT_HEIGHT = 90
 
-function line_wrap(text: string, MAX: number = 15): string[] {
+export function line_wrap(text: string, MAX: number = 15): string[] {
   const lines: string[] = []
 
   const segments = text.split(' ')
@@ -64,11 +65,6 @@ function line_wrap(text: string, MAX: number = 15): string[] {
 
   return lines
 }
-
-assert.deepEqual(line_wrap('default video user media'), [
-  'default video',
-  'user media',
-])
 
 export default class ClassDatum extends Element<HTMLDivElement, Props> {
   private _svg: SVGSVG
@@ -118,7 +114,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
       this._render(id)
     }
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot['default'] = svg
@@ -144,7 +140,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
     let width: number = CLASS_DEFAULT_WIDTH
     let height: number = CLASS_DEFAULT_HEIGHT
 
-    const children: Element[] = []
+    const children: Component[] = []
 
     const { inputs = {}, outputs = {} } = spec
 
@@ -179,7 +175,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
       output: output_pin_ids.length,
     }
 
-    const push_pin = (type: 'input' | 'output', i: number): void => {
+    const push_pin = (type: IO, i: number): void => {
       const count = pin_count[type]
       const { x, y } = getUnitPinPosition(
         i,

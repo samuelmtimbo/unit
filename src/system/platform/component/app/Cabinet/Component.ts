@@ -4,7 +4,7 @@ import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeResizeListener } from '../../../../../client/event/resize'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { SimNode, Simulation } from '../../../../../client/simulation'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
@@ -82,7 +82,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     this._simulation.nodes(this._drawer_node)
     this._simulation.addListener('tick', this._tick)
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$subComponent = {
@@ -140,7 +140,11 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     return this._drawer_component[drawerId]
   }
 
-  public setDrawerProp(drawerId: string, name: string, value: any): void {
+  public setDrawerProp<K extends keyof DrawerProps>(
+    drawerId: string,
+    name: K,
+    value: any
+  ): void {
     const drawer_component = this.getDrawer(drawerId)
     drawer_component.setProp(name, value)
   }

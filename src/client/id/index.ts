@@ -1,6 +1,7 @@
 import { SELF } from '../../constant/SELF'
 import { Spec, Specs } from '../../types'
 import { Dict } from '../../types/Dict'
+import { IO } from '../../types/IO'
 import { upperCaseFirstLetter } from '../../util/string'
 
 export const SEPARATOR = '/'
@@ -65,8 +66,8 @@ export function getUnitIdFromPinId(id: string) {
   return getUnitIdFromId(id)
 }
 
-export function getTypeFromLinkPinNodeId(id: string): 'input' | 'output' {
-  return id.split('/')[1] as 'input' | 'output'
+export function getTypeFromLinkPinNodeId(id: string): IO {
+  return id.split('/')[1] as IO
 }
 
 export function getPinIdFromLinkPinNodeId(nodeId: string) {
@@ -92,7 +93,7 @@ export function getPinIdClass(id: string): string {
 
 export const getPinNodeId = (
   unitId: string,
-  type: 'input' | 'output',
+  type: IO,
   pinId: string
 ): string => {
   return `${unitId}/${type}/${pinId}`
@@ -126,11 +127,7 @@ export function getLinkId(source: string, targetId: string) {
   return `${source}${LINK_SEPARATOR}${targetId}`
 }
 
-export function getPinLinkId(
-  unitId: string,
-  type: 'input' | 'output',
-  pinId: string
-): string {
+export function getPinLinkId(unitId: string, type: IO, pinId: string): string {
   const pinNodeId = getPinNodeId(unitId, type, pinId)
   if (type === 'input') {
     return getLinkId(pinNodeId, unitId)
@@ -231,13 +228,9 @@ export function segmentErrNodeId(errNodeId: string): { unitId: string } {
 export function segmentLinkPinNodeId(pinNodeId: string): {
   unitId: string
   pinId: string
-  type: 'input' | 'output'
+  type: IO
 } {
-  const [unitId, type, pinId] = pinNodeId.split('/') as [
-    string,
-    'input' | 'output',
-    string
-  ]
+  const [unitId, type, pinId] = pinNodeId.split('/') as [string, IO, string]
   return {
     unitId,
     type,
@@ -418,24 +411,21 @@ export function getIdFromMergeNodeId(mergeNodeId: string): string {
   return id
 }
 
-export function getExternalNodeId(
-  type: 'input' | 'output',
-  id: string,
-  subPinId: string
-): string {
+export function getExtNodeId(type: IO, id: string, subPinId: string): string {
   return `${EXTERNAL}/${type}/${id}/${subPinId}`
 }
 
 export function getExtNodeIdFromIntNodeId(intNodeId: string): string {
-  const { type, id, subPinId } = segmentInternalNodeId(intNodeId)
-  return getExternalNodeId(type, id, subPinId)
+  const { type, pinId, subPinId } = segmentInternalNodeId(intNodeId)
+  return getExtNodeId(type, pinId, subPinId)
 }
 
-export function getInternalNodeId(
-  type: 'input' | 'output',
-  id: string,
-  subPinId: string
-): string {
+export function getIntNodeIdFromExtNodeId(ext_node_id: string): string {
+  const { type, pinId: id, subPinId } = segmentExposedNodeId(ext_node_id)
+  return getIntNodeId(type, id, subPinId)
+}
+
+export function getIntNodeId(type: IO, id: string, subPinId: string): string {
   return `${INTERNAL}/${type}/${id}/${subPinId}`
 }
 
@@ -444,37 +434,37 @@ export function isExternalNodeId(id: string): boolean {
 }
 
 export function segmentExposedNodeId(exposedNodeId: string): {
-  id: string
-  type: 'input' | 'output'
+  pinId: string
+  type: IO
   subPinId: string
 } {
-  const [_, type, id, subPinId] = exposedNodeId.split('/') as [
+  const [_, type, pinId, subPinId] = exposedNodeId.split('/') as [
     string,
-    'input' | 'output',
+    IO,
     string,
     string
   ]
   return {
     type,
-    id,
+    pinId,
     subPinId,
   }
 }
 
 export function segmentInternalNodeId(internalNodeId: string): {
-  id: string
-  type: 'input' | 'output'
+  pinId: string
+  type: IO
   subPinId: string
 } {
-  const [_, type, id, subPinId] = internalNodeId.split('/') as [
+  const [_, type, pinId, subPinId] = internalNodeId.split('/') as [
     string,
-    'input' | 'output',
+    IO,
     string,
     string
   ]
   return {
     type,
-    id,
+    pinId,
     subPinId,
   }
 }

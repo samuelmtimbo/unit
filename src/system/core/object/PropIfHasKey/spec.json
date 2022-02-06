@@ -84,7 +84,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "output prop if key is present",
-    "complexity": 6,
+    "complexity": 12,
     "tags": [
       "core",
       "object"

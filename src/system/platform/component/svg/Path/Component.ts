@@ -1,14 +1,15 @@
 import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { PropHandler } from '../../../../../client/propHandler'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
-import { Dict } from '../../../../../types/Dict'
+import { Style } from '../../../Props'
 
 export interface Props {
   id?: string
   className?: string
-  style?: Dict<string>
+  style?: Style
   d?: string
   markerStart?: string
   markerEnd?: string
@@ -26,6 +27,42 @@ export const DEFAULT_STYLE = {
 
 export default class SVGPath extends Element<SVGPathElement, Props> {
   private _path_el: SVGPathElement
+
+  private _prop_handler: PropHandler = {
+    className: (className: string | undefined) => {
+      this._path_el.className.value = className
+    },
+    style: (style: Style | undefined) => {
+      applyStyle(this._path_el, { ...DEFAULT_STYLE, ...style })
+    },
+    d: (d: string | undefined) => {
+      if (d === undefined) {
+        this._path_el.removeAttribute('d')
+      } else {
+        this._path_el.setAttribute('d', d)
+      }
+    },
+    markerStart: (markerStart: string | undefined) => {
+      this._path_el.setAttribute('marker-start', markerStart)
+    },
+    markerEnd: (markerEnd: string | undefined) => {
+      this._path_el.setAttribute('marker-end', markerEnd)
+    },
+    strokeWidth: (strokeWidth: string | undefined) => {
+      if (strokeWidth === undefined) {
+        this._path_el.removeAttribute('stroke-width')
+      } else {
+        this._path_el.setAttribute('stroke-width', `${strokeWidth}`)
+      }
+    },
+    fillRule: (fillRule: string | undefined) => {
+      if (fillRule === undefined) {
+        this._path_el.removeAttribute('fill-rule')
+      } else {
+        this._path_el.setAttribute('fill-rule', fillRule)
+      }
+    },
+  }
 
   constructor($props: Props, $system: System, $pod: Pod) {
     super($props, $system, $pod)
@@ -68,32 +105,6 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
   }
 
   onPropChanged(prop: string, current: any): void {
-    if (prop === 'className') {
-      this._path_el.className.value = current
-    } else if (prop === 'style') {
-      applyStyle(this._path_el, { ...DEFAULT_STYLE, ...current })
-    } else if (prop === 'd') {
-      if (current === undefined) {
-        this._path_el.removeAttribute('d')
-      } else {
-        this._path_el.setAttribute('d', current)
-      }
-    } else if (prop === 'markerStart') {
-      this._path_el.setAttribute('marker-start', current)
-    } else if (prop === 'markerEnd') {
-      this._path_el.setAttribute('marker-end', current)
-    } else if (prop === 'strokeWidth') {
-      if (current === undefined) {
-        this._path_el.removeAttribute('stroke-width')
-      } else {
-        this._path_el.setAttribute('stroke-width', `${current}`)
-      }
-    } else if (prop === 'fillRule') {
-      if (current === undefined) {
-        this._path_el.removeAttribute('fill-rule')
-      } else {
-        this._path_el.setAttribute('fill-rule', current)
-      }
-    }
+    this._prop_handler[prop](current)
   }
 }

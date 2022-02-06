@@ -1,6 +1,8 @@
 import { $Component } from '../interface/async/$Component'
+import { $EE } from '../interface/async/$EE'
 import { Async } from '../interface/async/Async'
 import { Component_ } from '../interface/Component'
+import { EE } from '../interface/EE'
 import { W } from '../interface/W'
 import { proxyWrap } from '../proxyWrap'
 import { Callback } from '../types/Callback'
@@ -71,8 +73,14 @@ export function $refChild(
   { at, _ }: { at: number; _: string[] }
 ): $Component {
   const child = component.refChild(at)
-  const local_child = Async(child, _)
-  return proxyWrap(local_child, _)
+  const $child = Async(child, _)
+  return proxyWrap($child, _)
+}
+
+export function $refEmitter(emitter: EE): $EE {
+  const _emitter = emitter.refEmitter()
+  const $_emitter = Async(_emitter, ['$EE'])
+  return proxyWrap($_emitter, ['$EE'])
 }
 
 export function $refChildContainer(
@@ -80,8 +88,8 @@ export function $refChildContainer(
   { at, _ }: { at: number; _: string[] }
 ): $Component {
   const container = component.refChildContainer(at)
-  const local_child = Async(container, _)
-  return proxyWrap(local_child, _)
+  const $container = Async(container, _)
+  return proxyWrap($container, _)
 }
 
 export function $refParentRootContainer(

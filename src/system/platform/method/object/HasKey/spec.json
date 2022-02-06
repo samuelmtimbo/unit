@@ -18,7 +18,7 @@
   "metadata": {
     "icon": "object-get",
     "description": "check whether `obj` has `key`",
-    "complexity": 2.666530771083891,
+    "complexity": 3,
     "tags": [
       "platform",
       "method",

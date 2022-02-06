@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "table",
     "description": "persist data on unit cloud storage",
-    "complexity": 2.6588588477289994,
+    "complexity": 3,
     "tags": [
       "host",
       "cloud",

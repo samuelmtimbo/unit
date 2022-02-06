@@ -104,7 +104,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "no description",
-    "complexity": 13.316235198191354,
+    "complexity": 23,
     "tags": [
       "core",
       "array"

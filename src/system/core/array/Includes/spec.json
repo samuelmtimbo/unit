@@ -452,7 +452,7 @@
   "metadata": {
     "icon": "info-square",
     "description": "find whether array `a[]` contains an element of value `a`",
-    "complexity": 14,
+    "complexity": 50,
     "tags": [
       "core",
       "array"

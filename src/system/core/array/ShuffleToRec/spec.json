@@ -145,7 +145,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "randomly shuffle `a` up to index `i`",
-    "complexity": 9,
+    "complexity": 59,
     "tags": [
       "core",
       "array"

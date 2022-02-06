@@ -1,7 +1,7 @@
-import { ANIMATION_T_S } from '../../../../client/animation/animation'
+import { ANIMATION_T_S } from '../../../../client/animation/ANIMATION_T_S'
 import { Component } from '../../../../client/component'
 import mergeStyle from '../../../../client/component/mergeStyle'
-import parentElement from '../../../../client/parentElement'
+import parentElement from '../../../../client/platform/web/parentElement'
 import { polarToCartesian } from '../../../../client/util/geometry'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
@@ -177,7 +177,7 @@ export default class Unplugged extends Component<HTMLDivElement, Props> {
 
     this._reset()
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot['default'] = container.$slot['default']

@@ -12,7 +12,7 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "id representation in the system",
-    "complexity": 6.813779812093472,
+    "complexity": 21,
     "tags": [
       "host",
       "component"

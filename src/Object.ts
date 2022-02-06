@@ -146,7 +146,6 @@ export class Object_<T extends any> implements J<T>, V<T> {
   }
 
   public async set(name: string, data: any): Promise<void> {
-    this._obj[name] = data
     this._set_path([], name, data)
   }
 

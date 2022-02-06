@@ -40,7 +40,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "build array with elements `0` and `1` and `2`",
-    "complexity": 9,
+    "complexity": 15,
     "tags": [
       "core",
       "array"

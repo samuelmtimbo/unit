@@ -2,10 +2,8 @@ import {
   ensureDir,
   ensureDirSync,
   pathExists,
-  readFile,
   readJSON,
   unlink,
-  writeFile,
   writeJSON,
 } from 'fs-extra'
 import * as path from 'path'
@@ -22,10 +20,6 @@ const FILESYSTEM_DIR_DB_USER_USER_ID_TO_USER = path.join(
   FILESYSTEM_DIR_DB_USER,
   'user_id_to_user'
 )
-const FILESYSTEM_DIR_DB_USER_EMAIL_TO_USER_ID = path.join(
-  FILESYSTEM_DIR_DB_USER,
-  'email_to_user_id'
-)
 const FILESYSTEM_DIR_DB_USER_USERNAME_TO_USER_ID = path.join(
   FILESYSTEM_DIR_DB_USER,
   'username_to_user_id'
@@ -35,7 +29,6 @@ ensureDirSync(FILESYSTEM_DIR)
 ensureDirSync(FILESYSTEM_DIR_DB)
 ensureDirSync(FILESYSTEM_DIR_DB_USER)
 ensureDirSync(FILESYSTEM_DIR_DB_USER_USER_ID_TO_USER)
-ensureDirSync(FILESYSTEM_DIR_DB_USER_EMAIL_TO_USER_ID)
 ensureDirSync(FILESYSTEM_DIR_DB_USER_USERNAME_TO_USER_ID)
 
 export function createFSStore<T>(dir: string, name: string): Store<T> {
@@ -172,38 +165,9 @@ export const FSUserDB: UserDB = {
       return null
     }
   },
-  getByEmail: async function (email: string) {
-    const email_path = path.join(FILESYSTEM_DIR_DB_USER_EMAIL_TO_USER_ID, email)
-
-    ensureDirSync(FILESYSTEM_DIR_DB_USER_EMAIL_TO_USER_ID)
-
-    if (await pathExists(email_path)) {
-      const user_id = (await readFile(email_path)).toString()
-      const user = await FSUserDB.get(user_id)
-      return user
-    } else {
-      return null
-    }
-  },
-  getByUsername: async function (username: string) {
-    const username_path = path.join(
-      FILESYSTEM_DIR_DB_USER_USERNAME_TO_USER_ID,
-      username
-    )
-
-    ensureDirSync(FILESYSTEM_DIR_DB_USER_USERNAME_TO_USER_ID)
-
-    if (await pathExists(username_path)) {
-      const user_id = (await readFile(username_path)).toString()
-      const user = await FSUserDB.get(user_id)
-      return user
-    } else {
-      return null
-    }
-  },
   create: async function (user: UserSpec) {
-    const { userId, email, username } = user
-    const user_id_filename = `${userId}.json`
+    const { userId: pbkey } = user
+    const user_id_filename = `${pbkey}.json`
 
     ensureDirSync(FILESYSTEM_DIR_DB_USER_USER_ID_TO_USER)
 
@@ -211,16 +175,9 @@ export const FSUserDB: UserDB = {
       FILESYSTEM_DIR_DB_USER_USER_ID_TO_USER,
       user_id_filename
     )
-    const email_path = path.join(FILESYSTEM_DIR_DB_USER_EMAIL_TO_USER_ID, email)
-    const username_path = path.join(
-      FILESYSTEM_DIR_DB_USER_USERNAME_TO_USER_ID,
-      username
-    )
 
     // TODO error handling (with rollback)
     await writeJSON(user_path, user)
-    await writeFile(email_path, userId)
-    await writeFile(username_path, userId)
 
     return user
   },

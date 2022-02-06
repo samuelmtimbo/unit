@@ -1,9 +1,9 @@
 import { addListeners } from '../../../../client/addListener'
 import {
   ANIMATION_T_MS,
-  ANIMATION_T_S,
   linearTransition,
 } from '../../../../client/animation/animation'
+import { ANIMATION_T_S } from '../../../../client/animation/ANIMATION_T_S'
 import { Component } from '../../../../client/component'
 import mergeStyle from '../../../../client/component/mergeStyle'
 import { makeCustomListener } from '../../../../client/event/custom'
@@ -14,7 +14,7 @@ import { makePointerMoveListener } from '../../../../client/event/pointer/pointe
 import { makePointerUpListener } from '../../../../client/event/pointer/pointerup'
 import { makeResizeListener } from '../../../../client/event/resize'
 import { MAX_Z_INDEX } from '../../../../client/MAX_Z_INDEX'
-import parentElement from '../../../../client/parentElement'
+import parentElement from '../../../../client/platform/web/parentElement'
 import {
   COLOR_NONE,
   setAlpha,
@@ -53,7 +53,7 @@ export const COLLAPSED_HEIGHT = 33
 
 export const BUTTON_HEIGHT = 24
 
-export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
+export default class GUIControl extends Component<HTMLDivElement, Props> {
   private _root: Div
 
   private _collapsed_x: number
@@ -78,16 +78,17 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
 
     this._collapsed = collapsed
 
-    if (this._collapsed) {
-      this._collapsed_x = this._x
-      this._collapsed_y = this._y
+    // if (this._collapsed) {
+    //   this._collapsed_x = this._x
+    //   this._collapsed_y = this._y
+    // } else {
+    // }
 
-      this._non_collapsed_x = this._x
-      this._non_collapsed_y = this._y
-    } else {
-      this._non_collapsed_x = this._x
-      this._non_collapsed_y = this._y
-    }
+    this._collapsed_x = this._x
+    this._collapsed_y = this._y
+
+    this._non_collapsed_x = this._x
+    this._non_collapsed_y = this._y
 
     const WR = COLLAPSED_WIDTH / width
     const HR = COLLAPSED_HEIGHT / height
@@ -279,6 +280,7 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
 
             const release = () => {
               component.releasePointerCapture(pointerId)
+
               unlisten()
             }
 
@@ -333,24 +335,32 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
 
     const reset_dim = () => {
       if (this._collapsed) {
-        let on_active = (): void => {
+        const on_active = (): void => {
           const message_id = uuid()
+
           this._message_id[message_id] = true
+
           this.dispatchContextEvent('_iounapp_control_foreground', {
             message_id,
           })
+
           this._set_z_index(MAX_Z_INDEX)
+
           if (!this._collapsed) {
             return
           }
+
           undim()
         }
-        let on_inactive = (): void => {
+
+        const on_inactive = (): void => {
           if (!this._collapsed) {
             return
           }
+
           dim()
         }
+
         const unlisten_interacted = whenInteracted(
           root,
           3000,
@@ -358,7 +368,6 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
           on_active,
           on_inactive
         )
-        // on_active()
       }
     }
     this._root = root
@@ -477,7 +486,7 @@ export default class IOUNAPPControl extends Component<HTMLDivElement, Props> {
       this.$pod
     )
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = container.$slot

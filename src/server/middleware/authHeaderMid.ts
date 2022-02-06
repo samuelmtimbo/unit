@@ -1,13 +1,15 @@
-import { _user_auth } from './auth'
-import { extractAuthTokenFromReqAuthorizationHeader } from './extractAuthToken'
+import { verifyAuthToken } from './verifyAuthToken'
+import { Req } from '../req'
+import { extractAuthTokenFromReq } from './extractAuthToken'
 
 export const authHeaderMid = () => {
-  return async function (req, res, next) {
-    const authToken = extractAuthTokenFromReqAuthorizationHeader(req)
+  return async function (req: Req, res, next) {
+    const authToken = extractAuthTokenFromReq(req)
     try {
-      const { userId, username } = await _user_auth(authToken)
-      req.userId = userId
-      req.username = username
+      const user = await verifyAuthToken(authToken)
+
+      req.user = user
+
       next()
     } catch (err) {
       res.status(401).send({})

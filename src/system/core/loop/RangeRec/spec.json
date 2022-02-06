@@ -126,7 +126,7 @@
   "metadata": {
     "icon": "list-ordered",
     "description": "count from `a` to `b`, not inclusive",
-    "complexity": 15,
+    "complexity": 25,
     "tags": [
       "core",
       "loop"

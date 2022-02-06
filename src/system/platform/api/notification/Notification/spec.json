@@ -5,7 +5,7 @@
   "metadata": {
     "icon": "bell",
     "description": "notification object",
-    "complexity": 2.56635101829031,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

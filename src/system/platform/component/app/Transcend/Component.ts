@@ -1,5 +1,5 @@
 import { addListeners } from '../../../../../client/addListener'
-import { ANIMATION_T_S } from '../../../../../client/animation/animation'
+import { ANIMATION_T_S } from '../../../../../client/animation/ANIMATION_T_S'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
@@ -9,7 +9,7 @@ import {
   IOFrameResizeEvent,
   makeResizeListener,
 } from '../../../../../client/event/resize'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import {
   DIM_OPACITY,
   whenInteracted,
@@ -139,7 +139,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
     reset_dim()
     this._container = container
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = container.$slot

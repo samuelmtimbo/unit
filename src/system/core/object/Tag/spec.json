@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "tag",
     "description": "create a single entry object with key `k` and value `v`",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "core",
       "object"

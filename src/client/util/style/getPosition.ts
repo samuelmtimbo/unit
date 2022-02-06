@@ -1,6 +1,6 @@
 import { IOElement } from '../../IOElement'
 import { parseTransformXY } from '../../parseTransformXY'
-import { Position, NULL_VECTOR, addVector3 } from '../geometry'
+import { addVector3, NULL_VECTOR, Position } from '../geometry'
 
 export function getPosition(
   element: IOElement,

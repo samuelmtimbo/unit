@@ -1,5 +1,5 @@
 export class DuplicatedOutputFoundError extends Error {
   constructor(name: string) {
-    super(`Output with name "${name}" already exists`)
+    super(`output with name "${name}" already exists`)
   }
 }

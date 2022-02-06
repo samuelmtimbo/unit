@@ -102,7 +102,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "send this graph spec to clipboard",
-    "complexity": 9.990512017493467,
+    "complexity": 11,
     "tags": [
       "platform",
       "core",

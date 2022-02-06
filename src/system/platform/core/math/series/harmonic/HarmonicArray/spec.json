@@ -65,7 +65,7 @@
   "metadata": {
     "icon": "array",
     "description": "1 + 1/2 + 1/3 + ...",
-    "complexity": 14,
+    "complexity": 82,
     "tags": [
       "platform",
       "core",

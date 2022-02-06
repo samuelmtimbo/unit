@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "form-input",
     "description": "single line password text input",
-    "complexity": 6.462650334488446,
+    "complexity": 21,
     "tags": [
       "platform",
       "component",

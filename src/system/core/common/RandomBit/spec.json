@@ -60,7 +60,7 @@
   "metadata": {
     "icon": "random",
     "description": "50% chance 0, 50% chance 1",
-    "complexity": 4,
+    "complexity": 21,
     "tags": [
       "core",
       "common"

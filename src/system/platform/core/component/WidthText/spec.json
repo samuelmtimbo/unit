@@ -237,7 +237,7 @@
   "metadata": {
     "description": "text box saying 'hello world'",
     "icon": "sign",
-    "complexity": 8,
+    "complexity": 78,
     "position": {
       "merge": {
         "1": {

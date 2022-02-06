@@ -73,7 +73,7 @@
   "metadata": {
     "icon": "filter",
     "description": "false if `a` is false",
-    "complexity": 5,
+    "complexity": 14,
     "tags": [
       "core",
       "common"

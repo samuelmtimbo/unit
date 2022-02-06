@@ -117,7 +117,7 @@
   "metadata": {
     "icon": "filter",
     "description": "forward `a` depending on `a ≤ b`",
-    "complexity": 6,
+    "complexity": 12,
     "tags": [
       "core",
       "common"

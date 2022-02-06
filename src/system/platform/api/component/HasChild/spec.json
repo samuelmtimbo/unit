@@ -29,16 +29,15 @@
     }
   },
   "outputs": {
-    "i": {
-      "type": "number",
-      "defaultIgnored": true
+    "has": {
+      "type": "boolean"
     }
   },
   "base": true,
   "metadata": {
     "icon": "square",
     "description": "check whether `parent` has a child `at`",
-    "complexity": 2.6618979671256233,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

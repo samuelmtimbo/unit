@@ -12,7 +12,7 @@
   "metadata": {
     "icon": "link",
     "description": "Peer Service Server Connection",
-    "complexity": 4.484665418898134,
+    "complexity": 6,
     "tags": [
       "host",
       "broadcast"

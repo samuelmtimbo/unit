@@ -11,6 +11,10 @@
           "ignored": false,
           "constant": true,
           "data": "false"
+        },
+        "opt": {
+          "constant": true,
+          "data": "{audio:false}"
         }
       },
       "output": {},
@@ -76,7 +80,7 @@
   "metadata": {
     "icon": "video",
     "description": "",
-    "complexity": 7,
+    "complexity": 48,
     "tags": [
       "platform",
       "core",

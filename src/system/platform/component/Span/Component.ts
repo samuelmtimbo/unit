@@ -13,7 +13,6 @@ export interface Props {
   tabIndex?: number
   title?: string
   draggable?: boolean
-  data?: Dict<string>
 }
 
 const DEFAULT_STYLE = {
@@ -28,16 +27,8 @@ export default class Span extends Element<HTMLSpanElement, Props> {
   constructor($props: Props, $system: System, $pod: Pod) {
     super($props, $system, $pod)
 
-    const {
-      id,
-      className,
-      style,
-      innerText,
-      tabIndex,
-      title,
-      draggable,
-      data = {},
-    } = this.$props
+    const { id, className, style, innerText, tabIndex, title, draggable } =
+      this.$props
 
     const $element = this.$system.api.document.createElement('span')
 
@@ -59,12 +50,6 @@ export default class Span extends Element<HTMLSpanElement, Props> {
     }
     if (draggable !== undefined) {
       $element.setAttribute('draggable', draggable.toString())
-    }
-    if (data !== undefined) {
-      for (const key in data) {
-        const d = data[key]
-        $element.dataset[key] = d
-      }
     }
 
     this._span_el = $element

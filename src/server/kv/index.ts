@@ -9,20 +9,13 @@ export type KVStore<T> = {
 
 export type KV = Dict<KVStore<any>>
 
-export const connectKV: () => Promise<CloudKV> = () => {
-  // return Promise.resolve(memoryKV)
-  return Promise.resolve(FSKV)
-}
-
 export type AuthTokenKVStore = KVStore<string>
-export type SignUpCodeKVStore = KVStore<string>
-export type SignUpTokenKVStore = KVStore<string>
 
 export type CloudKV = {
   authTokenKVStore: AuthTokenKVStore
-  signUpCodeKVStore: SignUpCodeKVStore
-  signUpTokenKVStore: SignUpTokenKVStore
-  PRCodeKVStore: KVStore<string>
-  PRTokenKVStore: KVStore<string>
-  PCCodeKVStore: KVStore<string>
+}
+
+export const connectKV: () => Promise<CloudKV> = () => {
+  // return Promise.resolve(memoryKV)
+  return Promise.resolve(FSKV)
 }

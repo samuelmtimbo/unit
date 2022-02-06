@@ -15,7 +15,8 @@ export function CRUD(type: string, JOI_SCHEMA: Joi.AnySchema): Router {
   const app = Router()
 
   app.get('/', async function (req: Req, res, next) {
-    const { userId } = req
+    const { user } = req
+    const { userId } = user
     const { cloudDB } = await connectDB()
     const store = cloudDB[type]
     const all = await store.getAll(userId)
@@ -24,7 +25,8 @@ export function CRUD(type: string, JOI_SCHEMA: Joi.AnySchema): Router {
 
   app.get('/:id', validateParamsMid(JOI_RESOURCE_SCHEMA))
   app.get('/:id', async function (req: Req, res, next) {
-    const { userId, params } = req
+    const { user, params } = req
+    const { userId } = user
     const { id } = params
     const { cloudDB } = await connectDB()
     const store = cloudDB[type]
@@ -34,7 +36,8 @@ export function CRUD(type: string, JOI_SCHEMA: Joi.AnySchema): Router {
 
   app.post('/', validateBodyMid(JOI_SCHEMA))
   app.post('/', async function (req: Req, res, next) {
-    const { userId, sessionId, body } = req
+    const { user, sessionId, body } = req
+    const { userId } = user
     const { id, data } = body
     const { cloudDB } = await connectDB()
     const store = cloudDB[type]
@@ -52,7 +55,8 @@ export function CRUD(type: string, JOI_SCHEMA: Joi.AnySchema): Router {
   app.get('/:id', validateParamsMid(JOI_RESOURCE_SCHEMA))
   app.put('/:id', validateBodyMid(JOI_SCHEMA))
   app.put('/:id', async function (req: Req, res, next) {
-    const { userId, sessionId, body, params } = req
+    const { user, sessionId, body, params } = req
+    const { userId } = user
     const { id } = params
     const { data } = body
     const { cloudDB } = await connectDB()
@@ -70,7 +74,8 @@ export function CRUD(type: string, JOI_SCHEMA: Joi.AnySchema): Router {
 
   app.delete('/:id', validateParamsMid(JOI_RESOURCE_SCHEMA))
   app.delete('/:id', async function (req: Req, res, next) {
-    const { userId, sessionId, params } = req
+    const { user, sessionId, params } = req
+    const { userId } = user
     const { id } = params
     const { cloudDB } = await connectDB()
     const store = cloudDB[type]
@@ -93,7 +98,8 @@ export function SHARED(path: string): Router {
   const app = Router()
 
   app.get('/', async function (req: Req, res, next) {
-    const { userId } = req
+    const { user } = req
+    const { userId } = user
     const { cloudDB, sharedDB } = await connectDB()
     const sharedStore = sharedDB[path]
     const cloudStore = cloudDB[path]
@@ -111,7 +117,8 @@ export function SHARED(path: string): Router {
   app.get('/:id', validateParamsMid(JOI_GET_SCHEMA))
 
   app.get('/:id', async function (req: Req, res, next) {
-    const { userId, params } = req
+    const { user, params } = req
+    const { userId } = user
     const { id } = params
     const { cloudDB, sharedDB } = await connectDB()
     const sharedStore = sharedDB[path]
@@ -125,7 +132,8 @@ export function SHARED(path: string): Router {
   app.post('/', validateBodyMid(JOI_SHARED_ENTRY_SCHEMA))
 
   app.post('/', async function (req: Req, res, next) {
-    const { userId, body } = req
+    const { user, body } = req
+    const { userId } = user
     const { id, data } = body
     const { sharedDB } = await connectDB()
     const sharedStore = sharedDB[path]
@@ -136,7 +144,8 @@ export function SHARED(path: string): Router {
   app.delete('/:id', validateParamsMid(JOI_RESOURCE_SCHEMA))
 
   app.delete('/:id', async function (req: Req, res, next) {
-    const { userId, params } = req
+    const { user, params } = req
+    const { userId } = user
     const { id } = params
     const { sharedDB } = await connectDB()
     const sharedStore = sharedDB[path]

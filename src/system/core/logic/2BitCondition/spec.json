@@ -110,7 +110,7 @@
       "pin": {
         "0": {
           "unitId": "notand",
-          "pinId": "hgllh"
+          "pinId": "!a && b"
         }
       },
       "type": "boolean"
@@ -119,7 +119,7 @@
   "metadata": {
     "icon": "binary",
     "description": "2 x 2 = 4",
-    "complexity": 6,
+    "complexity": 21,
     "tags": [
       "core",
       "logic"

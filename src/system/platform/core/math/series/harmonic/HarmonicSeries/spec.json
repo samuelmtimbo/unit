@@ -115,7 +115,7 @@
     "icon": null,
     "description": "1 + 1/2 + 1/3 + ...",
     "link": "https://en.wikipedia.org/wiki/Harmonic_series_(mathematics)",
-    "complexity": 6,
+    "complexity": 63,
     "tags": [
       "platform",
       "core",

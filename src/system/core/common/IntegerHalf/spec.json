@@ -47,7 +47,7 @@
   "metadata": {
     "icon": "half",
     "description": "build a list of size n",
-    "complexity": 4,
+    "complexity": 10,
     "tags": [
       "core",
       "common"

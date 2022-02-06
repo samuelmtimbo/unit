@@ -19,22 +19,23 @@ export const COLOR_LINK_RED = '#ff4d4d'
 export const COLOR_OPAQUE_RED = '#ff0000'
 
 export const COLOR_GREEN = '#00aa11'
-export const COLOR_LINK_GREEN = 'hsla(124, 85%, 30%, 1)'
-export const COLOR_OPAQUE_GREEN = 'rgba(58, 195, 70, 0.24)'
+export const COLOR_LINK_GREEN = '#0b8e14'
+export const COLOR_OPAQUE_GREEN = '#3ac346'
+
+export const COLOR_DARK_GREEN = '#007700'
+export const COLOR_DARK_LINK_GREEN = '#085a01'
+export const COLOR_DARK_OPAQUE_GREEN = '#079013'
 
 export const COLOR_BLUE = '#0066ff'
 export const COLOR_LINK_BLUE = '#1d62c9'
 
 export const COLOR_CHARTREUSE = '#dfff00'
 export const COLOR_LINK_CHARTREUSE = '#cddd00'
+
 export const COLOR_DARK_CHARTREUSE = '#d84315' // orange
 export const COLOR_DARK_LINK_CHARTREUSE = '#bf360c'
 
-export const COLOR_LIGHT_GRAY = COLOR_GRAYSCALE_BASE02
-export const COLOR_GRAY = COLOR_GRAYSCALE_BASE06
-export const COLOR_DARK_GRAY = COLOR_GRAYSCALE_BASE10
-
-export const COLOR_WHITE = 'white'
+export const COLOR_WHITE = '#ffffff'
 
 export const COLOR_YELLOW = '#ffcc00'
 export const COLOR_LINK_YELLOW = '#ffbb00'
@@ -44,7 +45,6 @@ export const COLOR_DARK_LINK_YELLOW = '#e65100'
 
 export const COLOR_NONE = '#00000000'
 
-export const COLOR_CYAN = 'hsl(180, 100%, 40%)'
 export const COLOR_OPAQUE_CYAN = 'hsl(180, 70%, 40%)'
 
 export const COLOR_MAGENTA = 'hsl(300, 100%, 40%)'
@@ -69,7 +69,7 @@ export const DARK_MODE_COLOR: Dict<string> = {
 export const LIGHT_MODE_COLOR: Dict<string> = {
   change: COLOR_BLUE,
   remove: COLOR_RED,
-  add: COLOR_GREEN,
+  add: COLOR_DARK_GREEN,
   data: COLOR_DARK_CHARTREUSE,
 }
 
@@ -81,7 +81,7 @@ export const DARK_LINK_MODE_COLOR: Dict<string> = {
 }
 
 export const LIGHT_LINK_MODE_COLOR: Dict<string> = {
-  add: COLOR_LINK_GREEN,
+  add: COLOR_DARK_LINK_GREEN,
   remove: COLOR_LINK_RED,
   change: COLOR_LINK_BLUE,
   data: COLOR_DARK_LINK_CHARTREUSE,

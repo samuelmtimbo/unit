@@ -1,6 +1,4 @@
-import { Unit } from '../Class/Unit'
 import { ChildOutOfBound } from '../exception/ChildOutOfBoundError'
-import { C } from '../interface/C'
 import { Component_ } from '../interface/Component'
 import { Dict } from '../types/Dict'
 import { UnitClass } from '../types/UnitClass'
@@ -8,7 +6,7 @@ import { UnitClass } from '../types/UnitClass'
 export function appendChild(
   component: Component_,
   children: Component_[],
-  Class: UnitClass<Unit & C>
+  Class: UnitClass<Component_>
 ): number {
   const i = pushChild(component, children, Class)
 
@@ -23,7 +21,7 @@ export function appendChild(
 export function pushChild(
   component: Component_,
   children: Component_[],
-  Class: UnitClass<Unit & C>
+  Class: UnitClass<Component_>
 ): number {
   const system = component.refSystem()
   const pod = component.refPod()
@@ -43,16 +41,20 @@ export function pushChild(
   return i
 }
 
-export function hasChild(element: C, children: C[], at: number): boolean {
+export function hasChild(
+  element: Component_,
+  children: Component_[],
+  at: number
+): boolean {
   const has = at >= 0 && at < children.length
   return has
 }
 
 export function pullChild(
-  element: C,
-  children: C[],
+  element: Component_,
+  children: Component_[],
   at: number
-): UnitClass<Unit & C> {
+): UnitClass<Component_> {
   const has = hasChild(element, children, at)
 
   if (!has) {
@@ -61,7 +63,7 @@ export function pullChild(
 
   const unit = children.splice(at, 1)
 
-  const Class = unit.constructor as UnitClass<Unit & C>
+  const Class = unit.constructor as UnitClass<Component_>
 
   return Class
 }
@@ -70,7 +72,7 @@ export function removeChild(
   element: Component_,
   children: Component_[],
   at: number
-): UnitClass<Unit & C> {
+): UnitClass<Component_> {
   const Class = pullChild(element, children, at)
 
   element.emit('remove_child_at', { at })
@@ -105,7 +107,7 @@ export function refSlot(
 
 export function registerParentRoot(
   component: Component_,
-  parentRoot: C[],
+  parentRoot: Component_[],
   child: Component_,
   slotName: string
 ): void {
@@ -120,7 +122,7 @@ export function registerParentRoot(
 
 export function unregisterParentRoot(
   component: Component_,
-  parentRoot: C[],
+  parentRoot: Component_[],
   child: Component_
 ): void {
   const at = parentRoot.indexOf(child)
@@ -132,7 +134,7 @@ export function unregisterParentRoot(
 
 export function unregisterRoot(
   component: Component_,
-  root: C[],
+  root: Component_[],
   child: Component_
 ): void {
   const at = root.indexOf(child)
@@ -144,7 +146,7 @@ export function unregisterRoot(
 
 export function registerRoot(
   component: Component_,
-  root: C[],
+  root: Component_[],
   child: Component_
 ): void {
   root.push(child)
@@ -154,7 +156,7 @@ export function registerRoot(
 
 export function appendParentChild(
   component: Component_,
-  parentChild: C[],
+  parentChild: Component_[],
   child: Component_,
   slotName: string
 ): void {
@@ -171,7 +173,7 @@ export function appendParentChild(
 
 export function removeParentChild(
   component: Component_,
-  parentRoot: C[],
+  parentRoot: Component_[],
   child: Component_
 ): void {
   const at = parentRoot.indexOf(child)

@@ -29,12 +29,14 @@ export default class EncodeURI<T> extends Functional<I<T>, O<T>> {
       method: { encodeURI },
     } = this.__system
 
-    if (!encodeURI) {
-      done(undefined, 'Encode URI API not supported')
+    let encoded
+
+    try {
+      encoded = encodeURI(uri)
+    } catch (err) {
+      done(undefined, err.message)
       return
     }
-
-    const encoded = encodeURI(uri)
 
     done({ 'UTF-8': encoded })
   }

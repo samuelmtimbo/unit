@@ -14,7 +14,7 @@
       "type": "number",
       "metadata": {
         "examples": [
-          "1"
+          "0"
         ]
       }
     }
@@ -23,7 +23,7 @@
   "metadata": {
     "icon": "message-circle",
     "description": "speak the message",
-    "complexity": 2.694253469970165,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

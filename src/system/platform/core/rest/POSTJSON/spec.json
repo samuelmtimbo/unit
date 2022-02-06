@@ -89,7 +89,7 @@
   "metadata": {
     "icon": "send",
     "description": "...",
-    "complexity": 5,
+    "complexity": 11,
     "tags": [
       "platform",
       "core",

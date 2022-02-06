@@ -5,6 +5,9 @@
   "repository": "git@github.com:samuelmtimbo/unit.git",
   "author": "Samuel Timbó <samuelmtimbo@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": ">=16.13.1"
+  },
   "scripts": {
     "v": "ts-node src/script/v.ts",
     "dev:node": "cross-env NODE_ENV=development node",
@@ -46,9 +49,6 @@
     "ws": "7.4.4"
   },
   "devDependencies": {
-    "@types/base-64": "1.0.0",
-    "@types/encodeurl": "1.0.0",
-    "@types/eventemitter2": "4.1.0",
     "@types/express": "4.17.13",
     "@types/node": "17.0.0",
     "@typescript-eslint/eslint-plugin": "5.7.0",
@@ -62,6 +62,7 @@
     "npm-run-all": "4.1.5",
     "npm-run-scripts": "2.1.2",
     "prettier": "2.3.1",
+    "prettier-plugin-organize-imports": "2.1.0",
     "shx": "0.3.3",
     "ts-node": "10.4.0",
     "typescript": "4.5.4"

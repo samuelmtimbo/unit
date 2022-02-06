@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "value-absolute",
     "description": "absolute value of `a`",
-    "complexity": 2.654893167540722,
+    "complexity": 3,
     "tags": [
       "f",
       "math"

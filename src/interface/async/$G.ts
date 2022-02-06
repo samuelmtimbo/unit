@@ -139,7 +139,7 @@ export interface $G_C {
 
   $setPinSetFunctional(data: {
     type: IO
-    id: string
+    pinId: string
     functional: boolean
   }): void
 

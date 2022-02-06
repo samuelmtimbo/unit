@@ -16,7 +16,7 @@ export function renderBundle(
 
   const __pod = spawn(__system)
 
-  const [_mapping, _graph] = start(__system, __pod, bundle)
+  const _graph = start(__system, __pod, bundle)
 
   const $graph = AsyncGraph(_graph)
 

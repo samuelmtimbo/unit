@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "equal-not",
     "description": "inequality",
-    "complexity": 2.6580064118006783,
+    "complexity": 3,
     "tags": [
       "f",
       "comparisson"

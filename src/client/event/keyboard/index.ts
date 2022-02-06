@@ -74,9 +74,9 @@ export function getKey(keyCode: number): string {
 export function isSupportedKeyboardEvent(event: KeyboardEvent): boolean {
   const { key, metaKey } = event
 
-  if (metaKey) {
-    return false
-  }
+  // if (metaKey) {
+  // return false
+  // }
 
   if (key === 'imeprocess') {
     return false
@@ -153,7 +153,7 @@ export default class KeyboardController {
 
     const { keyboard: $keyboard } = $input
 
-    const { $pressed } = $keyboard
+    const { pressed: $pressed } = $keyboard
 
     // AD HOC
     this._repeat = false
@@ -314,11 +314,19 @@ export default class KeyboardController {
   }
 
   private _onKeydown = (event: KeyboardEvent): void => {
-    if (!isSupportedKeyboardEvent(event)) {
+    const {} = this.$system
+
+    const { keyCode, key, ctrlKey, shiftKey, metaKey, altKey, repeat } = event
+
+    if (metaKey) {
+      // event.preventDefault()
       return
     }
 
-    const { keyCode, key, ctrlKey, shiftKey, metaKey, altKey, repeat } = event
+    if (!isSupportedKeyboardEvent(event)) {
+      event.preventDefault()
+      return
+    }
 
     this._ctrl = ctrlKey
     this._meta = metaKey
@@ -835,7 +843,7 @@ export function isKeyPressed($system: System, key: string): boolean {
 
   const { keyboard: $keyboard } = $input
 
-  const { $pressed } = $keyboard
+  const { pressed: $pressed } = $keyboard
 
   const keyCode = keyToKeyCode[key]
 
@@ -845,7 +853,7 @@ export function isKeyPressed($system: System, key: string): boolean {
 export function isKeyRepeat($system: System): boolean {
   const { input: $input } = $system
   const { keyboard: $keyboard } = $input
-  const { $repeat } = $keyboard
+  const { repeat: $repeat } = $keyboard
   return $repeat
 }
 

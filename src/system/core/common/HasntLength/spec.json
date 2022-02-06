@@ -82,7 +82,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "output list if size is equal to `n`?",
-    "complexity": 5,
+    "complexity": 16,
     "tags": [
       "core",
       "common"

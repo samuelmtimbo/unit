@@ -1,7 +1,7 @@
 import { Element } from '../Class/Element'
+import { Graph } from '../Class/Graph'
 import { Stateful } from '../Class/Stateful'
 import { Unit } from '../Class/Unit'
-import { C_EE } from '../interface/C'
 import { EE } from '../interface/EE'
 import { UnitBundleSpec } from '../system/platform/method/process/UnitBundleSpec'
 import { ComponentAppendChildMoment } from './ComponentAppendChildMoment'
@@ -80,12 +80,12 @@ export function watchStatefulLeafSetEvent(
   }
 }
 
-export function watchComponentAppendEvent<T extends EE<C_EE>>(
+export function watchComponentAppendEvent(
   event: 'append_child',
-  unit: T,
+  unit: EE<{ append_child: [UnitBundleSpec] }>,
   callback: (moment: ComponentAppendChildMoment) => void
 ): () => void {
-  const listener = (data: { bundle: UnitBundleSpec }) => {
+  const listener = (data: UnitBundleSpec) => {
     callback({
       type: 'unit',
       event,
@@ -98,9 +98,9 @@ export function watchComponentAppendEvent<T extends EE<C_EE>>(
   }
 }
 
-export function watchComponentRemoveEvent<T extends EE<C_EE>>(
+export function watchComponentRemoveEvent(
   event: 'remove_child_at',
-  unit: T,
+  unit: Graph | Element,
   callback: (moment: ComponentRemoveChildAtMoment) => void
 ): () => void {
   const listener = (data) => {
@@ -110,15 +110,17 @@ export function watchComponentRemoveEvent<T extends EE<C_EE>>(
       data,
     })
   }
+  // @ts-ignore
   unit.addListener(event, listener)
   return () => {
+    // @ts-ignore
     unit.removeListener(event, listener)
   }
 }
 
-export function watchComponentLeafAppendEvent<T extends EE<C_EE>>(
+export function watchComponentLeafAppendEvent(
   event: 'leaf_append_child',
-  unit: T,
+  unit: Graph | Element,
   callback: (moment: UnitMoment) => void
 ): () => void {
   const listener = (data) => {
@@ -128,15 +130,17 @@ export function watchComponentLeafAppendEvent<T extends EE<C_EE>>(
       data,
     })
   }
+  // @ts-ignore
   unit.addListener(event, listener)
   return () => {
+    // @ts-ignore
     unit.removeListener(event, listener)
   }
 }
 
-export function watchComponentLeafRemoveEvent<T extends EE<C_EE>>(
+export function watchComponentLeafRemoveEvent(
   event: 'leaf_remove_child_at',
-  unit: T,
+  unit: Graph | Element,
   callback: (moment: UnitMoment) => void
 ): () => void {
   const listener = (data) => {
@@ -146,8 +150,10 @@ export function watchComponentLeafRemoveEvent<T extends EE<C_EE>>(
       data,
     })
   }
+  // @ts-ignore
   unit.addListener(event, listener)
   return () => {
+    // @ts-ignore
     unit.removeListener(event, listener)
   }
 }

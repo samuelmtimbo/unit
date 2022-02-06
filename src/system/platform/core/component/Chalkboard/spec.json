@@ -555,7 +555,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "drawing board",
-    "complexity": 21,
+    "complexity": 111,
     "tags": [
       "platform",
       "core",

@@ -234,7 +234,6 @@ export class Unit<
   }
 
   public setInputs(inputs: Pins<I>, opts: PinOpts = {}): void {
-    this._input = this._input || {}
     for (let name in inputs) {
       const input = inputs[name]
       const opt = opts[name]
@@ -370,7 +369,6 @@ export class Unit<
   }
 
   public setOutputs(outputs: Pins<O>, opts: PinOpts = {}): void {
-    this._output = this._output || {}
     for (let name in outputs) {
       const output = outputs[name]
       const opt = opts[name]

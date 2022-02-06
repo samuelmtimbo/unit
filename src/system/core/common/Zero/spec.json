@@ -41,7 +41,7 @@
   "metadata": {
     "icon": "circle",
     "description": "...",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "core",
       "common"

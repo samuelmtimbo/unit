@@ -3,6 +3,7 @@ import { $ } from './Class/$'
 import { $Child } from './component/Child'
 import { $Children } from './component/Children'
 import { $Component } from './interface/async/$Component'
+import { $EE } from './interface/async/$EE'
 import { $Graph } from './interface/async/$Graph'
 import { $PO } from './interface/async/$PO'
 import { $U } from './interface/async/$U'
@@ -22,17 +23,30 @@ import {
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { GlobalRefSpec } from './types/GlobalRefSpec'
+import { IO } from './types/IO'
 import { Unlisten } from './types/Unlisten'
 
-export function graphFromPort(
+export function asyncGraphFromPort(
   system: System,
   pod: Pod,
   port: RemotePort
-): $Graph {
+): $Graph & $ {
   const $graph: $Graph = AsyncWorkerGraph(port)
 
   class AsyncGraph extends $ implements $Graph {
     __: string[] = ['$U', '$C', '$G']
+
+    $addListener(data: { event: string }, callback: Callback<any>): Unlisten {
+      return $graph.$addListener(data, callback)
+    }
+
+    $emit(data: { type: string; data: any }, callback: Callback<any>): void {
+      return $graph.$emit(data, callback)
+    }
+
+    $refEmitter(data: {}): $EE {
+      return $graph.$refEmitter(data)
+    }
 
     $getGlobalId(data: {}, callback: Callback<string>): void {
       return $graph.$getGlobalId(data, callback)
@@ -40,10 +54,6 @@ export function graphFromPort(
 
     $getEventNames(data: {}, callback: Callback<string[]>): void {
       return $graph.$getEventNames(data, callback)
-    }
-
-    $emit(data: { type: string; data: any }): void {
-      return $graph.$emit(data)
     }
 
     $play(data: {}): void {
@@ -66,15 +76,11 @@ export function graphFromPort(
       return $graph.$takeInput(data)
     }
 
-    $setPinData(data: {
-      pinId: string
-      type: 'input' | 'output'
-      data: string
-    }) {
+    $setPinData(data: { pinId: string; type: IO; data: string }) {
       return $graph.$setPinData(data)
     }
 
-    $removePinData(data: { type: 'input' | 'output'; pinId: string }) {
+    $removePinData(data: { type: IO; pinId: string }) {
       return $graph.$removePinData(data)
     }
 
@@ -149,7 +155,7 @@ export function graphFromPort(
     $setUnitPinData(data: {
       unitId: string
       pinId: string
-      type: 'input' | 'output'
+      type: IO
       data: string
     }): void {
       return $graph.$setUnitPinData(data)
@@ -157,7 +163,7 @@ export function graphFromPort(
 
     $removeUnitPinData(data: {
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
     }): void {
       return $graph.$removeUnitPinData(data)
@@ -180,19 +186,19 @@ export function graphFromPort(
     }
 
     $exposePinSet(data: {
-      type: 'input' | 'output'
+      type: IO
       id: string
       pin: GraphExposedPinSpec
     }): void {
       return $graph.$exposePinSet(data)
     }
 
-    $coverPinSet(data: { type: 'input' | 'output'; id: string }): void {
+    $coverPinSet(data: { type: IO; id: string }): void {
       return $graph.$coverPinSet(data)
     }
 
     $exposePin(data: {
-      type: 'input' | 'output'
+      type: IO
       id: string
       subPinId: string
       subPin: GraphExposedSubPinSpec
@@ -200,16 +206,12 @@ export function graphFromPort(
       return $graph.$exposePin(data)
     }
 
-    $coverPin(data: {
-      type: 'input' | 'output'
-      id: string
-      subPinId: string
-    }): void {
+    $coverPin(data: { type: IO; id: string; subPinId: string }): void {
       return $graph.$coverPin(data)
     }
 
     $plugPin(data: {
-      type: 'input' | 'output'
+      type: IO
       id: string
       subPinId: string
       subPin: GraphExposedSubPinSpec
@@ -217,34 +219,26 @@ export function graphFromPort(
       return $graph.$plugPin(data)
     }
 
-    $unplugPin(data: {
-      type: 'input' | 'output'
-      id: string
-      subPinId: string
-    }): void {
+    $unplugPin(data: { type: IO; id: string; subPinId: string }): void {
       return $graph.$unplugPin(data)
     }
 
     $exposeUnitPinSet(data: {
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       id: string
       pin: GraphExposedPinSpec
     }): void {
       return $graph.$exposeUnitPinSet(data)
     }
 
-    $coverUnitPinSet(data: {
-      unitId: string
-      type: 'input' | 'output'
-      id: string
-    }): void {
+    $coverUnitPinSet(data: { unitId: string; type: IO; id: string }): void {
       return $graph.$coverUnitPinSet(data)
     }
 
     $setPinSetFunctional(data: {
-      type: 'input' | 'output'
-      id: string
+      type: IO
+      pinId: string
       functional: boolean
     }): void {
       return $graph.$setPinSetFunctional(data)
@@ -260,7 +254,7 @@ export function graphFromPort(
 
     $setUnitPinConstant(data: {
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
       constant: boolean
     }): void {
@@ -269,7 +263,7 @@ export function graphFromPort(
 
     $setUnitPinIgnored(data: {
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
       ignored: boolean
     }): void {
@@ -291,7 +285,7 @@ export function graphFromPort(
     $addPinToMerge(data: {
       mergeId: string
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
     }): void {
       return $graph.$addPinToMerge(data)
@@ -300,7 +294,7 @@ export function graphFromPort(
     $removePinFromMerge(data: {
       mergeId: string
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
     }): void {
       return $graph.$removePinFromMerge(data)
@@ -340,7 +334,7 @@ export function graphFromPort(
         merge: string[]
         link: {
           unitId: string
-          type: 'input' | 'output'
+          type: IO
           pinId: string
         }[]
         unit: string[]
@@ -378,7 +372,7 @@ export function graphFromPort(
     $moveLinkPinInto(data: {
       graphId: string
       unitId: string
-      type: 'input' | 'output'
+      type: IO
       pinId: string
       nextPinId: string
     }): void {

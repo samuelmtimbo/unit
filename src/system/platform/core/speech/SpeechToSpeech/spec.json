@@ -1,27 +1,33 @@
 {
   "name": "speech to speech",
   "units": {
-    "gyaum": {
-      "id": "6db29a62-2035-4cfc-a9d3-03444a8bc2b8"
+    "texttospeech": {
+      "id": "6db29a62-2035-4cfc-a9d3-03444a8bc2b8",
+      "input": {
+        "voice": {
+          "data": "0",
+          "constant": true
+        }
+      }
     },
-    "eooib": {
+    "speechtotext": {
       "id": "416550cc-6e02-4ff2-aafa-2f0edbf121c6",
       "input": {
-        "lang": {
+        "opt": {
           "constant": true,
-          "data": "'en-US'"
+          "data": "{lang:'en-US'}"
         }
       }
     }
   },
   "merges": {
-    "uvzif": {
-      "eooib": {
+    "0": {
+      "speechtotext": {
         "output": {
-          "message": true
+          "text": true
         }
       },
-      "gyaum": {
+      "texttospeech": {
         "input": {
           "message": true
         }
@@ -33,7 +39,7 @@
   "metadata": {
     "icon": "message-circle",
     "description": "say what I say",
-    "complexity": 5.72301391694309,
+    "complexity": 9,
     "tags": [
       "platform",
       "core",

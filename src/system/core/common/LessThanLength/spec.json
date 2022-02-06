@@ -56,7 +56,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "is `a` lesser than the size of `b`?",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "core",
       "common"

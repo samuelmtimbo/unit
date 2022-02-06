@@ -35,7 +35,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "check whether an object `o` has key-value `k` `v`",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "core",
       "relation"

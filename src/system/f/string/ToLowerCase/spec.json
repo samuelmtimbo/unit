@@ -20,7 +20,7 @@
     "icon": "ruler",
     "description": "conver string to lower case",
     "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase",
-    "complexity": 2.6570427885773586,
+    "complexity": 3,
     "tags": [
       "f",
       "string"

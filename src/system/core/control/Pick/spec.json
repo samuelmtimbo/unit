@@ -78,7 +78,7 @@
   "metadata": {
     "icon": "pointer",
     "description": "conditional picker",
-    "complexity": 4,
+    "complexity": 11,
     "tags": [
       "core",
       "control"

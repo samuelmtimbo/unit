@@ -269,7 +269,7 @@
   "metadata": {
     "icon": "object-get",
     "description": "get value of `obj` at `path`",
-    "complexity": 31,
+    "complexity": 68,
     "tags": [
       "core",
       "object"

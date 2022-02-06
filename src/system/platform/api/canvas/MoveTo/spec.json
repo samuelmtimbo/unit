@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "start new sub-path at the point specified by the given x, y coordinates",
-    "complexity": 2.657858162074014,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

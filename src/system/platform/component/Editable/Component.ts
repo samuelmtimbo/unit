@@ -6,6 +6,7 @@ import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
 export interface Props {
+  value?: string
   id?: string
   className?: string
   style?: Dict<string>

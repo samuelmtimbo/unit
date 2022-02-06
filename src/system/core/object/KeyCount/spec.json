@@ -59,7 +59,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "`obj` total key count",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "core",
       "object"

@@ -14,7 +14,7 @@
     "icon": "edit-3",
     "description": "add a straight line from the current point to the start of the current sub-path",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/closePath",
-    "complexity": 2.657932286937346,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

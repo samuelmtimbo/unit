@@ -36,7 +36,7 @@ export default class NewGraph extends Functional<I, O> {
   f({ bundle }: I, done: Done<O>): void {
     const __pod = spawn(this.__system)
 
-    const [_, graph] = start(this.__system, __pod, bundle)
+    const graph = start(this.__system, __pod, bundle)
 
     done({ graph })
   }

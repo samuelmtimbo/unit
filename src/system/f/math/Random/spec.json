@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "random",
     "description": "random number between 0 and 1, non inclusive",
-    "complexity": 2.6559679780590404,
+    "complexity": 3,
     "tags": [
       "f",
       "math"

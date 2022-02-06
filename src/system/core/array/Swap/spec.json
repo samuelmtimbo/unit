@@ -163,7 +163,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "swap elements at position `i` and `j` ",
-    "complexity": 6,
+    "complexity": 10,
     "tags": [
       "core",
       "array"

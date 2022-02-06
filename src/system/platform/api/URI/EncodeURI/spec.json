@@ -18,7 +18,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "encode URI to UTF-8",
-    "complexity": 2.6685692048255287,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

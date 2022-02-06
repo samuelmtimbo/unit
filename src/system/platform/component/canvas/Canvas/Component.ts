@@ -2,6 +2,7 @@ import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
 import { replaceChild } from '../../../../../client/util/replaceChild'
 import { userSelect } from '../../../../../client/util/style/userSelect'
+import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { NOOP } from '../../../../../NOOP'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
@@ -196,7 +197,7 @@ export default class Canvas extends Element<HTMLCanvasElement, Props> {
     if (this._canvas_el.captureStream) {
       return this._canvas_el.captureStream(frameRate)
     } else {
-      throw new Error('Capture Stream API not supported')
+      throw new APINotSupportedError('Capture Stream')
     }
   }
 }

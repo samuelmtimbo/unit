@@ -1,25 +1,22 @@
 import { SharedObject } from '../../SharedObject'
-import { Dict } from '../../types/Dict'
+import { IO_SERVICE_API, System } from '../../system'
 import { LocalStore, Store } from '../store'
 import { CloudStore } from './CloudStore'
 
-export const DEFAULT_SERVICE_STORE_TYPES = [
-  // 'session',
-  'local',
-  'user',
-  'shared',
-]
+export const DEFAULT_SERVICE_STORE_TYPES = ['local', 'cloud', 'shared']
 
-export function createServiceStore<T>(
+export function createSharedServiceApi<T>(
+  system: System,
+  href: string,
   name: string
-): Dict<SharedObject<Store<any>, {}>> {
-  // console.log('createServiceStore', name)
-  const { href } = location
-
-  const service = {
-    local: new SharedObject(new LocalStore<T>(name)),
-    user: new SharedObject(new CloudStore<any>(`${href}/cloud/${name}`)),
-    shared: new SharedObject(new CloudStore<any>(`${href}/shared/${name}`)),
+): IO_SERVICE_API<SharedObject<Store<T>, {}>> {
+  return {
+    local: new SharedObject(new LocalStore<T>(system, name)),
+    cloud: new SharedObject(
+      new CloudStore<any>(system, `${href}/cloud/${name}`)
+    ),
+    shared: new SharedObject(
+      new CloudStore<any>(system, `${href}/shared/${name}`)
+    ),
   }
-  return service
 }

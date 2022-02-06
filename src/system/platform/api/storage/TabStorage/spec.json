@@ -5,7 +5,7 @@
   "metadata": {
     "icon": "table",
     "description": "persist data on local storage",
-    "complexity": 11.082093286140505,
+    "complexity": 11,
     "tags": [
       "platform",
       "api",

@@ -496,7 +496,7 @@
     ]
   },
   "metadata": {
-    "complexity": 26.506569316012822,
+    "complexity": 94,
     "icon": "toggle-right",
     "description": "select between \"on\" or \"off\"",
     "position": {

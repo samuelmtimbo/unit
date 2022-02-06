@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "divide",
     "description": "division arithmetic operator",
-    "complexity": 2.6596000963623223,
+    "complexity": 3,
     "tags": [
       "f",
       "arithmetic"

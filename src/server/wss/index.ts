@@ -1,10 +1,11 @@
 import * as http from 'http'
 import * as WebSocket from 'ws'
+import { parseCookies } from '../middleware/cookies'
+import { verifyAuthToken } from '../middleware/verifyAuthToken'
 import { EventEmitter } from '../../EventEmitter'
 import { NOOP } from '../../NOOP'
 import { Dict } from '../../types/Dict'
 import { uuidNotIn } from '../../util/id'
-import { parseCookies, verifyAuthToken } from '../middleware/auth'
 import { Req } from '../req'
 import { WSS_PING_T } from './constant'
 
@@ -16,7 +17,6 @@ const wss_user_session_socket_count: Dict<Dict<number>> = {}
 let wss_socket_count: number = 0
 
 export interface Peer {
-  username: string
   userId: string
   sessionId: string
   socketId: string
@@ -121,9 +121,6 @@ export function start(server: http.Server) {
       // TODO deduplicate (authReq)
       const user = await verifyAuthToken(authToken)
 
-      const { userId } = user
-
-      req.userId = userId
       req.user = user
 
       wss.handleUpgrade(req, socket, head, function done(ws) {
@@ -138,9 +135,11 @@ export function start(server: http.Server) {
   const wss = new WebSocket.Server({ noServer: true, path: '/' })
 
   wss.on('connection', function connection(ws, req: Req) {
-    const { userId, user, sessionId } = req
+    const { user, sessionId } = req
 
-    const { username } = user
+    const { userId: pbkey } = user
+
+    const userId = pbkey
 
     wss_user_session_socket[userId] = wss_user_session_socket[userId] || {}
     wss_user_session_socket_alive[userId] =
@@ -186,7 +185,6 @@ export function start(server: http.Server) {
     // console.log('wss_socket_count', wss_socket_count)
 
     const peer: Peer = {
-      username,
       userId,
       sessionId,
       socketId,

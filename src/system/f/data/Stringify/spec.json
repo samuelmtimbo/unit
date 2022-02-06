@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "string",
     "description": "value to string",
-    "complexity": 3.66706817634305,
+    "complexity": 5,
     "tags": [
       "f",
       "data"

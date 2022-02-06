@@ -1,0 +1,29 @@
+{
+  "name": "debug",
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "emitter": {
+      "type": "`EE`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "reference `unit` event `emitter`",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "event"
+    ]
+  },
+  "id": "d8bad470-4174-44e7-921c-d30a895fedf4",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

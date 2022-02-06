@@ -2,7 +2,7 @@ import {
   camelToKebab,
   camelToSnake,
   getDatumNodeId,
-  getExternalNodeId,
+  getExtNodeId,
   getMetadataNodeId,
   getPinIdFromLinkPinNodeId,
   getPinNodeIdFromPinLinkId,
@@ -72,10 +72,7 @@ assert(!isMergeNodeId('abcdef'))
 assert(!isMergeNodeId('merge0'))
 assert(!isMergeNodeId('%/input/merge0'))
 
-assert.equal(
-  getExternalNodeId('input', 'abcdef', 'ghijlm'),
-  '%/input/abcdef/ghijlm'
-)
+assert.equal(getExtNodeId('input', 'abcdef', 'ghijlm'), '%/input/abcdef/ghijlm')
 
 assert(isExternalNodeId('%/input/abcdef'))
 assert(isExternalNodeId('%/output/abcdef'))

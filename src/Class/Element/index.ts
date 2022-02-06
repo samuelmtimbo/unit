@@ -13,9 +13,11 @@ import {
   unregisterParentRoot,
   unregisterRoot,
 } from '../../component/method'
+import { EventEmitter } from '../../EventEmitter'
 import { C_EE } from '../../interface/C'
 import { Component_ } from '../../interface/Component'
 import { E } from '../../interface/E'
+import { EE } from '../../interface/EE'
 import { Pod } from '../../pod'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
@@ -35,12 +37,12 @@ export class Element<
     I = any,
     O = any,
     _J extends Dict<any> = {},
-    _EE extends ElementEvents<_EE> & Dict<any[]> = ElementEvents<Element_EE>
+    _EE extends ElementEvents<_EE> = ElementEvents<Element_EE>
   >
   extends Stateful<I, O, {}, _EE>
   implements E
 {
-  __ = ['U', 'C', 'J', 'V']
+  __ = ['U', 'C', 'J', 'V', 'EE']
 
   public element = true
 
@@ -49,6 +51,7 @@ export class Element<
   public _parent_root: Component_[] = []
   public _parent_children: Component_[] = []
   public _slot: Dict<Component_> = {}
+  public _emitter: EventEmitter = new EventEmitter()
 
   constructor(
     { i = [], o = [] }: ION,
@@ -98,11 +101,11 @@ export class Element<
     return removeParentChild(this, this._parent_children, component)
   }
 
-  appendChild(Class: UnitClass): number {
+  appendChild(Class: UnitClass<Component_>): number {
     return appendChild(this, this._children, Class)
   }
 
-  pushChild(Class: UnitClass): number {
+  pushChild(Class: UnitClass<Component_>): number {
     return pushChild(this, this._children, Class)
   }
 
@@ -110,11 +113,11 @@ export class Element<
     return hasChild(this, this._children, at)
   }
 
-  removeChild(at: number): UnitClass {
+  removeChild(at: number): UnitClass<Component_> {
     return removeChild(this, this._children, at)
   }
 
-  pullChild(at: number): UnitClass {
+  pullChild(at: number): UnitClass<Component_> {
     throw pullChild(this, this._children, at)
   }
 
@@ -134,6 +137,10 @@ export class Element<
     }
 
     throw new Error('Slot not found')
+  }
+
+  refEmitter(): EE {
+    return this._emitter
   }
 
   private _play(): void {

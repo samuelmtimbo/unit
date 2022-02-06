@@ -1,0 +1,80 @@
+{
+  "name": "stack box",
+  "inputs": {},
+  "outputs": {},
+  "units": {
+    "wrap": {
+      "id": "454aaff2-cd74-4f6e-baf2-631bb32e7a6b",
+      "input": {
+        "component": {
+          "constant": true,
+          "data": "dc546440-13ca-4ebf-8831-c28138c7efc6"
+        },
+        "style": {
+          "ignored": true
+        }
+      },
+      "output": {
+        "parent": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 50,
+          "y": -114
+        }
+      }
+    },
+    "div": {
+      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{whiteSpace:\"nowrap\"}"
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -51,
+          "y": 113
+        }
+      }
+    }
+  },
+  "merges": {},
+  "component": {
+    "slots": [
+      [
+        "wrap",
+        "default"
+      ]
+    ],
+    "subComponents": {
+      "wrap": {
+        "children": []
+      },
+      "div": {
+        "children": [
+          "wrap"
+        ]
+      }
+    },
+    "children": [
+      "div"
+    ],
+    "defaultWidth": 180,
+    "defaultHeight": 300
+  },
+  "metadata": {
+    "icon": "square",
+    "complexity": 44,
+    "description": "horizontal scroll container",
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "58f72eed-f3d6-4972-9d13-b1bebdd98e61",
+  "type": "`U`&`G`&`C`"
+}

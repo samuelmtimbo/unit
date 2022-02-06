@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "undo",
     "description": "interatively update a single value",
-    "complexity": 2.5746159405518596,
+    "complexity": 3,
     "tags": [
       "f",
       "control"

@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "object-get",
     "description": "get `unit` property `name`",
-    "complexity": 2.666048959472231,
+    "complexity": 3,
     "tags": [
       "platform",
       "method",

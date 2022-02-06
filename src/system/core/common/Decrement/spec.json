@@ -38,7 +38,7 @@
   "metadata": {
     "icon": "minus",
     "description": "decrement `a`",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "core",
       "common"

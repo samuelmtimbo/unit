@@ -60,7 +60,7 @@
   "metadata": {
     "icon": "random",
     "description": "50%/50% true/false",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "core",
       "logic"

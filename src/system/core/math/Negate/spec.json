@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "minus",
     "description": "turn `a` into `-a`",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "core",
       "math"
