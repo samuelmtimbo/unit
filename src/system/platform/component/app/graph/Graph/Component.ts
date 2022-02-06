@@ -15094,12 +15094,19 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
   private _drop_node = (node_id: string): void => {
     // console.log('_drop_node', node_id)
+
     this._cancel_long_click = true
+
     setTimeout(() => {
       this._cancel_long_click = false
     }, 0)
 
+    if (this._selected_node_count > 1) {
+      return
+    }
+
     if (this._tree_layout) {
+      //
     } else {
       if (this._is_unit_node_id(node_id)) {
         this._drop_unit(node_id)
