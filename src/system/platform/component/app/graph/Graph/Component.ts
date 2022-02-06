@@ -1700,6 +1700,10 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   private _pin: Dict<Div> = {}
   private _pin_name: Dict<TextInput> = {}
 
+  private _link_pin_ref_set: Set<string> = new Set()
+  private _link_pin_input_set: Set<string> = new Set()
+  private _link_pin_output_set: Set<string> = new Set()
+
   private _pin_link_start_marker: Dict<SVGPath> = {}
   private _pin_link_end_marker: Dict<SVGPath> = {}
 
@@ -3431,6 +3435,10 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._visible_unlinked_data_node = {}
     this._data_node = {}
     this._err_node = {}
+
+    this._link_pin_ref_set = new Set()
+    this._link_pin_input_set = new Set()
+    this._link_pin_output_set = new Set()
 
     this._layer_node = []
     this._layer_node[0] = {}
@@ -6662,6 +6670,16 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     const node = this._node[pin_node_id]
 
     this._pin_node[pin_node_id] = node
+
+    if (input) {
+      this._link_pin_input_set.add(pin_node_id)
+    } else {
+      this._link_pin_output_set.add(pin_node_id)
+    }
+
+    if (ref) {
+      this._link_pin_ref_set.add(pin_node_id)
+    }
 
     if (ignored) {
       this._ignored_node[pin_node_id] = node
@@ -11454,18 +11472,39 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     })
   }
 
+  private _set_datum_node_style = (
+    datum_node_id: string,
+    name: string,
+    value: string
+  ) => {
+    const datum_container = this._datum_container[datum_node_id]
+
+    datum_container.$element.style[name] = value
+  }
+
+  private _set_datum_link_style = (
+    datum_link_id: string,
+    name: string,
+    value: string
+  ) => {
+    // console.log('_set_datum_link_style', link_id, color)
+
+    const link_base = this._link_base[datum_link_id]
+
+    link_base.$element.style[name] = value
+  }
+
   private _set_datum_color = (
     datum_node_id: string,
     color: string,
     link_color: string
   ) => {
     // console.log('Graph', '_set_datum_color', color)
-    const datum_container = this._datum_container[datum_node_id]
-    // mergeStyle(datum_container, {
-    //   color,
-    // })
-    datum_container.$element.style.color = color
+
+    this._set_datum_node_style(datum_node_id, 'color', color)
+
     const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+  
     if (datum_pin_node_id) {
       this._set_datum_link_color(datum_node_id, link_color)
     }
@@ -11476,8 +11515,35 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     color: string
   ): void => {
     const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+    
     const datum_link_id = getLinkId(datum_node_id, datum_pin_node_id)
+    
     this._set_link_color(datum_link_id, color)
+  }
+
+  private _set_datum_opacity = (datum_node_id: string, opacity: number) => {
+    this._set_datum_node_opacity(datum_node_id, opacity)
+    this._set_datum_link_opacity(datum_node_id, opacity)
+  }
+
+  private _set_datum_node_opacity = (
+    datum_node_id: string,
+    opacity: number
+  ) => {
+    this._set_datum_node_style(datum_node_id, 'opacity', `${opacity}`)
+  }
+
+  private _set_datum_link_opacity = (
+    datum_node_id: string,
+    opacity: number
+  ) => {
+    const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+
+    if (datum_pin_node_id) {
+      const datum_link_id = getLinkId(datum_node_id, datum_pin_node_id)
+
+      this._set_datum_link_style(datum_link_id, 'opacity', `${opacity}`)
+    }
   }
 
   private _set_err_color = (err_node_id: string, color: string): void => {
@@ -11718,6 +11784,24 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _set_all_output_pin_opacity = (opacity: number): void => {
+    for (const pin_node_id of this._link_pin_output_set) {
+      this._set_link_pin_opacity(pin_node_id, opacity)
+    }
+  }
+
+  private _set_all_ref_pin_opacity = (opacity: number): void => {
+    for (const pin_node_id of this._link_pin_ref_set) {
+      this._set_link_pin_opacity(pin_node_id, opacity)
+    }
+  }
+
+  private _set_all_datum_opacity = (opacity: number): void => {
+    for (const datum_node_id in this._visible_data_node) {
+      this._set_datum_opacity(datum_node_id, opacity)
+    }
+  }
+
   private _on_search_list_shown = () => {
     // console.log('Graph', '_on_search_list_shown')
     const { animate } = this.$props
@@ -11866,10 +11950,13 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
       if (this._hover_node_count > 0) {
         let selected_count = 0
+
         for (const hovered_node_id in this._hover_node_id) {
           const anchor_node_id = this._get_node_anchor_node_id(hovered_node_id)
+
           mode_node(hovered_node_id)
           mode_node(anchor_node_id)
+
           if (this._is_node_selected(anchor_node_id)) {
             selected_count++
           }
@@ -11885,26 +11972,36 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
         }
       }
 
+      if (prev_mode !== 'data' && this._mode === 'data') {
+        this._set_all_output_pin_opacity(0.5)
+        this._set_all_ref_pin_opacity(0.5)
+        this._set_all_datum_opacity(0.5)
+      } else if (prev_mode === 'data' && this._mode !== 'data') {
+        this._set_all_output_pin_opacity(1)
+        this._set_all_ref_pin_opacity(1)
+        this._set_all_datum_opacity(1)
+      }
+
       if (prev_mode !== 'add' && this._mode === 'add') {
         const units = this.get_units()
+
         for (const unit_id in units) {
           this._for_each_unit_pin(unit_id, (pin_node_id: string) => {
             if (this._spec_is_link_pin_ignored(pin_node_id)) {
-              this._set_link_pin_opacity(pin_node_id, '0.5')
+              this._set_link_pin_opacity(pin_node_id, 0.5)
               this._set_link_pin_pointer_events(pin_node_id, 'inherit')
             }
           })
         }
+
         this._start_graph_simulation(LAYER_NORMAL)
-        // if (this._tree_layout) {
-        //   this._start_layout_current_layer_simulation()
-        // }
       } else if (prev_mode === 'add' && this._mode !== 'add') {
         const units = this.get_units()
+
         for (let unit_id in units) {
           this._for_each_unit_pin(unit_id, (pin_node_id: string) => {
             if (this._spec_is_link_pin_ignored(pin_node_id)) {
-              this._set_link_pin_opacity(pin_node_id, '0')
+              this._set_link_pin_opacity(pin_node_id, 0)
               this._set_link_pin_pointer_events(pin_node_id, 'none')
             }
           })
@@ -11922,11 +12019,13 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
         if (this._hover_node_count > 0) {
           this._set_all_nodes_links_opacity(0.2)
+
           for (const hovered_node_id in this._hover_node_id) {
             this._show_node_info(hovered_node_id)
           }
         } else if (this._selected_node_count > 0) {
           this._set_all_nodes_links_opacity(0.2)
+
           for (const selected_node_id in this._selected_node_id) {
             this._show_node_info(selected_node_id)
           }
@@ -11953,6 +12052,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
           const pointer_id = getObjSingleKey(
             this._pressed_node_id_pointer_id[drag_node_id]
           )
+
           this._on_node_blue_drag_start(
             drag_node_id,
             Number.parseInt(pointer_id, 10)
@@ -11969,6 +12069,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
           const pointer_id = getObjSingleKey(
             this._pressed_node_id_pointer_id[drag_node_id]
           )
+
           this._on_node_red_drag_start(
             drag_node_id,
             Number.parseInt(pointer_id, 10)
@@ -12001,12 +12102,15 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
             const pointer_id = Number.parseInt(
               getObjSingleKey(this._pointer_down)
             )
+
             const pointer_node_id =
               this._pointer_id_pressed_node_id[pointer_id] || null
+
             if (pointer_node_id) {
               if (this._is_unit_node_id(pointer_node_id)) {
                 if (this._is_node_selected(pointer_node_id)) {
                   this._explode_unit(pointer_node_id)
+
                   this._cancel_long_click = true
                 } else {
                   this._start_long_press_collapse(
@@ -12070,10 +12174,15 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
             // TODO
           } else if (mode === 'add') {
             const position = this._get_node_position(search_unit_datum_node_id)
+
             const layout_position = position
+
             const spec_id = this._search_unit_datum_spec_id
-            this._remove_data_search_unit()
+
             const new_unit_id = this._new_unit_id(spec_id)
+
+            this._remove_data_search_unit()
+
             this._add_search_unit(
               new_unit_id,
               spec_id,
@@ -12090,6 +12199,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     if (this._search) {
       const color = this._get_color()
+
       this._search.setProp(
         'selectedColor',
         getThemeModeColor($theme, mode, color)
@@ -15058,12 +15168,19 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
   private _drop_node = (node_id: string): void => {
     // console.log('_drop_node', node_id)
+
     this._cancel_long_click = true
+
     setTimeout(() => {
       this._cancel_long_click = false
     }, 0)
 
+    if (this._selected_node_count > 1) {
+      return
+    }
+
     if (this._tree_layout) {
+      //
     } else {
       if (this._is_unit_node_id(node_id)) {
         this._drop_unit(node_id)
@@ -17238,12 +17355,29 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _is_node_dataable = (node_id: string): boolean => {
-    return (
-      this._is_unit_node_id(node_id) ||
-      this._is_link_input_node_id(node_id) ||
-      (this._is_merge_node_id(node_id) && !this._is_output_merge(node_id)) ||
-      (this._is_datum_node_id(node_id) && this._is_datum_class_literal(node_id))
-    )
+    if (this._is_unit_node_id(node_id)) {
+      return true
+    }
+
+    if (this._is_link_input_node_id(node_id)) {
+      if (!this._is_link_pin_ref(node_id)) {
+        return true
+      }
+    }
+
+    if (this._is_merge_node_id(node_id)) {
+      if (!this._is_output_merge(node_id)) {
+        return true
+      }
+    }
+
+    if (this._is_datum_node_id(node_id)) {
+      if (this._is_datum_class_literal(node_id)) {
+        return true
+      }
+    }
+
+    return false
   }
 
   private _is_node_infoable = (node_id: string): boolean => {
@@ -17573,7 +17707,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._set_node_layer(pin_node_id, LAYER_IGNORED)
       this._set_link_layer(link_id, LAYER_IGNORED)
       this._set_link_pin_d(pin_node_id, LINK_DISTANCE_IGNORED)
-      this._set_link_pin_opacity(pin_node_id, '0')
+      this._set_link_pin_opacity(pin_node_id, 0)
       this._set_link_pin_pointer_events(pin_node_id, 'none')
 
       if (pin_datum_tree) {
@@ -17583,7 +17717,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._set_node_layer(pin_node_id, LAYER_NORMAL)
       this._set_link_layer(link_id, LAYER_NORMAL)
       this._set_link_pin_d(pin_node_id, LINK_DISTANCE)
-      this._set_link_pin_opacity(pin_node_id, '1')
+      this._set_link_pin_opacity(pin_node_id, 1)
       this._set_link_pin_pointer_events(pin_node_id, 'inherit')
 
       if (pin_datum_tree) {
@@ -17972,11 +18106,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     const { specs } = this.$system
 
-    if (
-      this._is_link_input_node_id(pin_node_id) ||
-      (this._is_merge_node_id(pin_node_id) &&
-        !this._is_output_merge(pin_node_id))
-    ) {
+    if (this._is_input_node_id(pin_node_id) && !this._is_pin_ref(pin_node_id)) {
       let value: string
 
       const pin_datum_tree = this._pin_datum_tree[pin_node_id]
@@ -23006,6 +23136,13 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
   private _set_link_pin_opacity = (
     pin_node_id: string,
+    opacity: number
+  ): void => {
+    this._set_link_pin_opacity_str(pin_node_id, `${opacity}`)
+  }
+
+  private _set_link_pin_opacity_str = (
+    pin_node_id: string,
     opacity: string
   ): void => {
     const pin = this._pin[pin_node_id]
@@ -23315,10 +23452,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _set_link_color = (link_id: string, color: string): void => {
-    // console.log('_set_link_color', link_id, color)
-    const link_base = this._link_base[link_id]
-    // mergeStyle(link_base, { stroke: color })
-    link_base.$element.style.stroke = color
+    // console.log('_set_link_color', link_id, colo:wq:wqr)
+
+    this._set_datum_link_style(link_id, 'stroke', color)
   }
 
   private _set_link_pin_pin_color = (
@@ -23949,8 +24085,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     delete this._normal_node[pin_node_id]
     delete this._ignored_node[pin_node_id]
 
-    this._sim_remove_pin_type(pin_node_id)
+    this._link_pin_input_set.delete(pin_node_id)
+    this._link_pin_output_set.delete(pin_node_id)
+    this._link_pin_ref_set.delete(pin_node_id)
 
+    this._sim_remove_pin_type(pin_node_id)
     this._sim_remove_node(pin_node_id)
   }
 
