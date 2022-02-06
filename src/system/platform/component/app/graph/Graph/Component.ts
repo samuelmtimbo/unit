@@ -11784,9 +11784,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _set_all_output_pin_opacity = (opacity: number): void => {
+  private _set_all_visible_output_pin_opacity = (opacity: number): void => {
     for (const pin_node_id of this._link_pin_output_set) {
-      this._set_link_pin_opacity(pin_node_id, opacity)
+      if (!this._spec_is_link_pin_ignored(pin_node_id)) {
+        this._set_link_pin_opacity(pin_node_id, opacity)  
+      }
     }
   }
 
@@ -11796,9 +11798,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _set_all_datum_opacity = (opacity: number): void => {
+  private _set_all_literal_datum_opacity = (opacity: number): void => {
     for (const datum_node_id in this._visible_data_node) {
-      this._set_datum_opacity(datum_node_id, opacity)
+      if (!this._is_datum_class_literal(datum_node_id)) {
+        this._set_datum_opacity(datum_node_id, opacity)
+      }
     }
   }
 
@@ -11973,13 +11977,13 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       }
 
       if (prev_mode !== 'data' && this._mode === 'data') {
-        this._set_all_output_pin_opacity(0.5)
+        this._set_all_visible_output_pin_opacity(0.5)
         this._set_all_ref_pin_opacity(0.5)
-        this._set_all_datum_opacity(0.5)
+        this._set_all_literal_datum_opacity(0.5)
       } else if (prev_mode === 'data' && this._mode !== 'data') {
-        this._set_all_output_pin_opacity(1)
+        this._set_all_visible_output_pin_opacity(1)
         this._set_all_ref_pin_opacity(1)
-        this._set_all_datum_opacity(1)
+        this._set_all_literal_datum_opacity(1)
       }
 
       if (prev_mode !== 'add' && this._mode === 'add') {
