@@ -83,7 +83,7 @@
   "metadata": {
     "icon": "scissors",
     "description": "remove `a` element at position `i`",
-    "complexity": 6,
+    "complexity": 10,
     "tags": [
       "core",
       "array"

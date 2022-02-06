@@ -1,17 +1,17 @@
 import { addListener } from '../../../../client/addListener'
 import { Component } from '../../../../client/component'
 import { makeCustomListener } from '../../../../client/event/custom'
-import parentElement from '../../../../client/parentElement'
+import parentElement from '../../../../client/platform/web/parentElement'
 import { setAlpha, themeBackgroundColor } from '../../../../client/theme'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { Unlisten } from '../../../../types/Unlisten'
-import Cloud, {
+import CloudManager, {
   CLOUD_HEIGHT,
   CLOUD_WIDTH,
-} from '../../../platform/component/app/service/Cloud/Component'
-import IOUNAPPControl from '../GUIControl/Component'
+} from '../../../platform/component/app/service/CloudControl/Component'
+import GUIControl from '../GUIControl/Component'
 
 export interface Props {
   className?: string
@@ -27,13 +27,13 @@ export interface Props {
 export const DEFAULT_STYLE = {}
 
 export default class GUIControlCloud extends Component<HTMLDivElement, Props> {
-  private _root: IOUNAPPControl
-  private _content: Cloud
+  private _root: GUIControl
+  private _content: CloudManager
 
   constructor($props: Props, $system: System, $pod: Pod) {
     super($props, $system, $pod)
 
-    const root = new IOUNAPPControl(
+    const root = new GUIControl(
       {
         icon: 'cloud',
         style: {},
@@ -48,7 +48,7 @@ export default class GUIControlCloud extends Component<HTMLDivElement, Props> {
     )
     this._root = root
 
-    const cloud = new Cloud(
+    const cloud = new CloudManager(
       {
         style: {},
       },
@@ -57,7 +57,7 @@ export default class GUIControlCloud extends Component<HTMLDivElement, Props> {
     )
     this._content = cloud
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = root.$slot

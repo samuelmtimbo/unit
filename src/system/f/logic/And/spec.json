@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "question",
     "description": "AND logical operator",
-    "complexity": 2.6553749791523824,
+    "complexity": 3,
     "tags": [
       "f",
       "logic"

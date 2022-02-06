@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "split-text",
     "description": "output an array of strings by separating the string into substrings, using the specified separator `sep`",
-    "complexity": 2.6593035969089933,
+    "complexity": 3,
     "tags": [
       "f",
       "string"

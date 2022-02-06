@@ -80,7 +80,7 @@
   "metadata": {
     "icon": "object-get",
     "description": "if `key` in `obj`, get correspondent value, `default` otherwise",
-    "complexity": 7,
+    "complexity": 18,
     "tags": [
       "core",
       "object"

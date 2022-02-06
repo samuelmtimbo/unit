@@ -1,3 +1,0 @@
-// TODO
-
-export interface Gamepad {}

@@ -1,12 +1,12 @@
-import { ANIMATION_T_S } from '../../../../client/animation/animation'
+import { ANIMATION_T_S } from '../../../../client/animation/ANIMATION_T_S'
 import mergeStyle from '../../../../client/component/mergeStyle'
 import { Element } from '../../../../client/element'
 import { makeClickListener } from '../../../../client/event/pointer/click'
-import parentElement from '../../../../client/parentElement'
+import parentElement from '../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import IOAuthWall from '../../../platform/component/app/service/IOAuthWall/Component'
+import IOAuthWall from '../../../platform/component/app/service/IOAuthWallControl/Component'
 import Div from '../../../platform/component/Div/Component'
 import Icon from '../../../platform/component/Icon/Component'
 import { dragOverTimeListener } from './dragOverTimeListener'
@@ -136,7 +136,7 @@ export default class CloudTabs extends Element<HTMLDivElement, Props> {
 
     lists_comp.registerParentRoot(lists_inner)
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = root.$slot

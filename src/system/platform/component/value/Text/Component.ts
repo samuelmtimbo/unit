@@ -6,13 +6,13 @@ export interface Props {
   value?: string
 }
 
-export default class _Text extends Element<any, Props> {
+export default class _Text extends Element<Text, Props> {
   private _text_el: Text
 
   constructor($props: Props, $system: System, $pod: Pod) {
     super($props, $system, $pod)
 
-    let { value = '' } = $props
+    const { value = '' } = $props
 
     const text_node = this.$system.api.document.createTextNode(value)
 
@@ -23,7 +23,7 @@ export default class _Text extends Element<any, Props> {
 
   onPropChanged(prop: string, current: any): void {
     if (prop === 'value') {
-      this._text_el.nodeValue = current || ''
+      this._text_el.nodeValue = current ?? ''
     }
   }
 

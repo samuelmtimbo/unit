@@ -41,7 +41,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "extract key from `obj`",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "platform",
       "core",

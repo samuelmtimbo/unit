@@ -17,7 +17,7 @@
     "icon": "edit-3",
     "description": "add a rotation to the transformation matrix",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rotate",
-    "complexity": 2.657672849915683,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

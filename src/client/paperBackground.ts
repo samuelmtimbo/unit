@@ -5,7 +5,7 @@ export default async function paperBackground(root: HTMLElement) {
   const data = new Uint8ClampedArray(size * size * 4)
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      data.set(Math.random() > 0.5 ? white : black, (y * size + x) * 4)
+      data.set(Math.random() > 0.9 ? white : black, (y * size + x) * 4)
     }
   }
   const canvas = document.createElement('canvas')

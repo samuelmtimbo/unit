@@ -10,7 +10,7 @@
   "metadata": {
     "icon": "palette",
     "description": "pick a color",
-    "complexity": 6.461501399106796,
+    "complexity": 21,
     "tags": [
       "platform",
       "component",

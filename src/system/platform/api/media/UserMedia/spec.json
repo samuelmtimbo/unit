@@ -1,5 +1,5 @@
 {
-  "name": "get user media",
+  "name": "user media",
   "inputs": {
     "opt": {
       "type": "{audio?:boolean,video?:boolean}"
@@ -15,7 +15,7 @@
   "base": true,
   "metadata": {
     "icon": "film",
-    "complexity": 11.707336508348313,
+    "complexity": 12,
     "tags": [
       "platform",
       "api",

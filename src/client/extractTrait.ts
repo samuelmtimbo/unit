@@ -1,11 +1,13 @@
-import { LayoutNode } from '../system/platform/component/app/graph/Graph/Component'
+import { LayoutNode } from '../system/platform/component/app/Graph/Component'
 import { Component } from './component'
-import { addVector } from './util/geometry'
+import { addVector, Size } from './util/geometry'
 import { getPosition } from './util/style/getPosition'
 import { getSize } from './util/style/getSize'
-import { measureText } from './util/style/measureText'
 
-export const extractTrait = (leaf_comp: Component): LayoutNode => {
+export const extractTrait = (
+  leaf_comp: Component,
+  measureText: (text: string, fontSize: number) => Size
+): LayoutNode => {
   const leaf_context = leaf_comp.$context
 
   const leaf_context_position = { x: leaf_context.$x, y: leaf_context.$y }
@@ -51,7 +53,7 @@ export const extractTrait = (leaf_comp: Component): LayoutNode => {
     let parent_trait: LayoutNode
 
     if (leaf_comp.$parent) {
-      parent_trait = extractTrait(leaf_comp.$parent)
+      parent_trait = extractTrait(leaf_comp.$parent, measureText)
     } else {
       parent_trait = {
         x: leaf_context.$x + 2,

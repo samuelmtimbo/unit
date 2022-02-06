@@ -3,8 +3,18 @@
   "units": {
     "defaultvideomedia": {
       "id": "c03c7ef3-0649-4a99-9e9a-858bcaba1307",
-      "input": {},
-      "output": {}
+      "input": {
+        "opt": {}
+      },
+      "output": {
+        "stream": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 110,
+          "y": 0
+        }
+      }
     },
     "video": {
       "id": "7a8921eb-c1ad-400b-94fc-6c6cead8163d",
@@ -20,7 +30,13 @@
           "ignored": false
         }
       },
-      "output": {}
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -111,
+          "y": -1
+        }
+      }
     }
   },
   "merges": {
@@ -56,6 +72,15 @@
       },
       "defaultIgnored": true,
       "type": "boolean"
+    },
+    "opt": {
+      "pin": {
+        "0": {
+          "unitId": "defaultvideomedia",
+          "pinId": "opt"
+        }
+      },
+      "type": "object"
     }
   },
   "outputs": {
@@ -73,7 +98,7 @@
   "metadata": {
     "icon": "video",
     "description": "",
-    "complexity": 4,
+    "complexity": 45,
     "tags": [
       "platform",
       "core",

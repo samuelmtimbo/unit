@@ -27,9 +27,11 @@ export default class IdToClass<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ id }: I<T>, done: Done<O<T>>): void {
-    const { specs, classes } = this.__system
-
-    const Class = fromId(id, specs, classes)
+    const Class = fromId(
+      id,
+      { ...this.__system.specs, ...this.__pod.specs },
+      this.__system.classes
+    )
     done({ Class })
   }
 }

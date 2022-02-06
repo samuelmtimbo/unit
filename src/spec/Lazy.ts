@@ -3,6 +3,7 @@ import Merge from '../Class/Merge'
 import { Unit, UnitEvents } from '../Class/Unit'
 import { C } from '../interface/C'
 import { Component_ } from '../interface/Component'
+import { EE } from '../interface/EE'
 import { G } from '../interface/G'
 import { U } from '../interface/U'
 import { Pin } from '../Pin'
@@ -25,6 +26,7 @@ import {
 import { Dict } from '../types/Dict'
 import { GraphClass } from '../types/GraphClass'
 import { GraphState } from '../types/GraphState'
+import { IO } from '../types/IO'
 import { UnitClass } from '../types/UnitClass'
 import { fromSpec } from './fromSpec'
 
@@ -175,7 +177,7 @@ export function lazyFromSpec(
         merge: string[]
         link: {
           unitId: string
-          type: 'input' | 'output'
+          type: IO
           pinId: string
         }[]
         unit: string[]
@@ -330,15 +332,17 @@ export function lazyFromSpec(
       return this.__graph.refSlot(slotName)
     }
 
+    public refEmitter(): EE {
+      this._ensure()
+      return this.__graph.refEmitter()
+    }
+
     public refUnits = (): Dict<Unit> => {
       this._ensure()
       return this.__graph.refUnits()
     }
 
-    public refMergePin = (
-      mergeId: string,
-      type: 'input' | 'output'
-    ): Pin<any> => {
+    public refMergePin = (mergeId: string, type: IO): Pin<any> => {
       this._ensure()
       return this.__graph.refMergePin(mergeId, type)
     }
@@ -405,7 +409,7 @@ export function lazyFromSpec(
     }
 
     public exposePinSet = (
-      type: 'input' | 'output',
+      type: IO,
       pinId: string,
       pinSpec: GraphExposedPinSpec
     ): void => {
@@ -414,7 +418,7 @@ export function lazyFromSpec(
     }
 
     public memExposePinSet(
-      type: 'input' | 'output',
+      type: IO,
       pinId: string,
       pinSpec: GraphExposedPinSpec,
       exposedPin: Pin<any>,
@@ -430,7 +434,7 @@ export function lazyFromSpec(
       )
     }
     memExposePin(
-      type: 'input' | 'output',
+      type: IO,
       pinId: string,
       subPinId: string,
       subPinSpec: GraphExposedSubPinSpec
@@ -439,7 +443,7 @@ export function lazyFromSpec(
     }
 
     public setPinSetFunctional(
-      type: 'input' | 'output',
+      type: IO,
       name: string,
       functional: boolean
     ): void {
@@ -448,7 +452,7 @@ export function lazyFromSpec(
     }
 
     public exposePin = (
-      type: 'input' | 'output',
+      type: IO,
       pinId: string,
       subPinId: string,
       subPinSpec: GraphExposedSubPinSpec
@@ -476,18 +480,14 @@ export function lazyFromSpec(
       return this.__graph.coverInput(subPinId, id)
     }
 
-    public coverPinSet = (
-      type: 'input' | 'output',
-      id: string,
-      emit: boolean = true
-    ): void => {
+    public coverPinSet = (type: IO, id: string, emit: boolean = true): void => {
       this._ensure()
 
       return this.__graph.coverPinSet(type, id, emit)
     }
 
     public plugPin = (
-      type: 'input' | 'output',
+      type: IO,
       pinId: string,
       subPinId: string,
       subPinSpec: GraphExposedSubPinSpec
@@ -510,17 +510,13 @@ export function lazyFromSpec(
       return this.unplugInput(subPinId, id)
     }
 
-    public coverPin = (
-      type: 'input' | 'output',
-      id: string,
-      subPinId: string
-    ): void => {
+    public coverPin = (type: IO, id: string, subPinId: string): void => {
       this._ensure()
       return this.__graph.coverPin(type, id, subPinId)
     }
 
     public getSubPinSpec = (
-      type: 'input' | 'output',
+      type: IO,
       pinId: string,
       subPinId: string
     ): GraphExposedSubPinSpec => {
@@ -528,11 +524,7 @@ export function lazyFromSpec(
       return this.__graph.getSubPinSpec(type, pinId, subPinId)
     }
 
-    public unplugPin = (
-      type: 'input' | 'output',
-      pinId: string,
-      subPinId: string
-    ): void => {
+    public unplugPin = (type: IO, pinId: string, subPinId: string): void => {
       this._ensure()
       return this.__graph.unplugPin(type, pinId, subPinId)
     }
@@ -552,10 +544,7 @@ export function lazyFromSpec(
       return this.__graph.getExposedOutputPin(id)
     }
 
-    public getExposedPinSpec(
-      pinId: string,
-      type: 'input' | 'output'
-    ): GraphExposedPinSpec {
+    public getExposedPinSpec(pinId: string, type: IO): GraphExposedPinSpec {
       this._ensure()
       return this.__graph.getExposedPinSpec(type, pinId)
     }
@@ -600,20 +589,12 @@ export function lazyFromSpec(
       return this.__graph.getUnitByPath(path)
     }
 
-    public getUnitPin(
-      id: string,
-      type: 'input' | 'output',
-      pinId: string
-    ): Pin<any> {
+    public getUnitPin(id: string, type: IO, pinId: string): Pin<any> {
       this._ensure()
       return this.__graph.getUnitPin(id, type, pinId)
     }
 
-    public getUnitPinData(
-      id: string,
-      type: 'input' | 'output',
-      pinId: string
-    ): any {
+    public getUnitPinData(id: string, type: IO, pinId: string): any {
       this._ensure()
       return this.__graph.getUnitPinData(id, type, pinId)
     }
@@ -713,7 +694,7 @@ export function lazyFromSpec(
     public moveLinkPinInto(
       graphId: string,
       unitId: string,
-      type: 'input' | 'output',
+      type: IO,
       pinId: string
     ): void {
       this._ensure()
@@ -767,7 +748,7 @@ export function lazyFromSpec(
     public addPinToMerge = (
       mergeId: string,
       unitId: string,
-      type: 'input' | 'output',
+      type: IO,
       pinId: string
     ): void => {
       this._ensure()
@@ -782,7 +763,7 @@ export function lazyFromSpec(
     public removePinFromMerge(
       mergeId: string,
       unitId: string,
-      type: 'input' | 'output',
+      type: IO,
       pinId: string
     ) {
       this._ensure()
@@ -797,7 +778,7 @@ export function lazyFromSpec(
     public isPinMergedTo(
       mergeId: string,
       unitId: string,
-      type: 'input' | 'output',
+      type: IO,
       pinId: string
     ) {
       this._ensure()
@@ -807,7 +788,7 @@ export function lazyFromSpec(
     public togglePinMerge(
       mergeId: string,
       unitId: string,
-      type: 'input' | 'output',
+      type: IO,
       pinId: string
     ) {
       this._ensure()
@@ -816,7 +797,7 @@ export function lazyFromSpec(
 
     public setUnitPinConstant(
       unitId: string,
-      type: 'input' | 'output',
+      type: IO,
       pinId: string,
       constant: boolean
     ) {
@@ -862,7 +843,7 @@ export function lazyFromSpec(
 
     public setUnitPinIgnored(
       unitId: string,
-      type: 'input' | 'output',
+      type: IO,
       pinId: string,
       ignored: boolean
     ): void {
@@ -870,12 +851,7 @@ export function lazyFromSpec(
       return this.__graph.setUnitPinIgnored(unitId, type, pinId, ignored)
     }
 
-    public setUnitPinData(
-      unitId: string,
-      type: 'input' | 'output',
-      pinId: string,
-      data: any
-    ) {
+    public setUnitPinData(unitId: string, type: IO, pinId: string, data: any) {
       this._ensure()
       return this.__graph.setUnitPinData(unitId, type, pinId, data)
     }

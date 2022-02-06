@@ -1,5 +1,4 @@
 import { None } from '../../../types/None'
-import { createServiceStore } from '../store'
 
 export type VMSpecs = {
   [id: string]: VMSpec
@@ -48,14 +47,4 @@ export type VMUnitSpec = {
   path: string
   status: ContainerUnitStatus
   err?: string | None
-}
-
-let store
-
-export const connect = () => {
-  if (!store) {
-    store = createServiceStore('vm')
-  }
-
-  return store
 }

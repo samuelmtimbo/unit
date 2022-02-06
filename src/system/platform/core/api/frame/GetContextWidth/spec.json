@@ -86,9 +86,6 @@
               "y": 18
             }
           }
-        },
-        "context": {
-          "ignored": false
         }
       },
       "metadata": {
@@ -115,7 +112,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "complexity": 4,
+    "complexity": 14,
     "tags": [
       "platform",
       "core",

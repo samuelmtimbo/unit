@@ -1,7 +1,7 @@
 import { DEFAULT_STUN_RTC_CONFIG } from '../../../../../api/peer/config'
 import { Peer } from '../../../../../api/peer/Peer'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
-import { graphFromPort } from '../../../../../graphFromPort'
+import { asyncGraphFromPort } from '../../../../../graphFromPort'
 import { $Graph } from '../../../../../interface/async/$Graph'
 import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
@@ -94,7 +94,10 @@ export default class PeerPod extends Primitive<I, O> {
 
       this._peer.addListener('message', (message: string) => {
         // console.log('PeerPod', 'message', message)
-        const data = evaluate(message)
+        const specs = { ...this.__system.specs, ...this.__pod.specs }
+        const classes = this.__system.classes
+
+        const data = evaluate(message, specs, classes)
 
         const { type, data: _data } = data
 
@@ -108,7 +111,11 @@ export default class PeerPod extends Primitive<I, O> {
             {
               const remote_port = new RemotePort(port)
               this._remote_port = remote_port
-              const pod = graphFromPort(this.__system, this.__pod, remote_port)
+              const pod = asyncGraphFromPort(
+                this.__system,
+                this.__pod,
+                remote_port
+              )
               this._output.pod.push(pod)
             }
             break

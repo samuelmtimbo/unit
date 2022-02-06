@@ -81,7 +81,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "set the color, gradient, or pattern to use for stroke and fill",
-    "complexity": 7.318903693271316,
+    "complexity": 8,
     "tags": [
       "platform",
       "core",

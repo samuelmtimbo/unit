@@ -58,7 +58,7 @@
   "metadata": {
     "icon": "filter",
     "description": "50% chance of passing",
-    "complexity": 7,
+    "complexity": 13,
     "tags": [
       "core",
       "common"

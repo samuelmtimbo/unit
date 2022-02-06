@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "fill the current path",
-    "complexity": 2.6564497896707002,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

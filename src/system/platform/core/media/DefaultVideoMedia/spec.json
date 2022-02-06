@@ -1,19 +1,15 @@
 {
   "name": "default video user media",
-  "units": {
-    "getusermedia": {
-      "id": "a6e30b43-9ab4-4206-bfba-3f2129faac30",
-      "input": {
-        "opt": {
-          "constant": true,
-          "data": "{video:true,audio:{echoCancellation:true,noiseSuppression:true}}"
+  "inputs": {
+    "opt": {
+      "pin": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a"
         }
-      },
-      "output": {}
+      }
     }
   },
-  "merges": {},
-  "inputs": {},
   "outputs": {
     "stream": {
       "pin": {
@@ -26,17 +22,69 @@
       "type": "`ST`"
     }
   },
+  "units": {
+    "getusermedia": {
+      "id": "a6e30b43-9ab4-4206-bfba-3f2129faac30",
+      "input": {
+        "opt": {
+          "constant": false,
+          "data": "{video:true,audio:{echoCancellation:true,noiseSuppression:true}}"
+        }
+      },
+      "output": {
+        "stream": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 51,
+          "y": -1
+        }
+      }
+    },
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{video:true,audio:{echoCancellation:true,noiseSuppression:true}}"
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "getusermedia": {
+        "input": {
+          "opt": true
+        }
+      }
+    }
+  },
+  "component": {},
   "metadata": {
     "icon": "video",
     "description": "",
-    "complexity": 3,
+    "complexity": 22,
     "tags": [
       "platform",
       "core",
       "media"
     ]
   },
-  "id": "c03c7ef3-0649-4a99-9e9a-858bcaba1307",
-  "type": "`U`&`G`",
-  "system": true
+  "id": "c03c7ef3-0649-4a99-9e9a-858bcaba1307"
 }

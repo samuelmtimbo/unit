@@ -1,3 +1,9 @@
+import { System } from '../system'
+import {
+  IPositionCallback,
+  IPositionEntry,
+  IPositionObserver,
+} from '../types/global/IPositionObserver'
 import { Unlisten } from '../types/Unlisten'
 import callAll from '../util/call/callAll'
 import { parseTransformXY } from './parseTransformXY'
@@ -9,46 +15,24 @@ import {
   subtractVector,
 } from './util/geometry'
 
-export class PositionObserver {
-  private _callback: (
-    x: number,
-    y: number,
-    sx: number,
-    sy: number,
-    rx: number,
-    ry: number,
-    rz: number
-  ) => void
+export class PositionObserver implements IPositionObserver {
+  private _system: System
 
+  private _callback: IPositionCallback
   private _unlisten: () => void
-
   private _abort: () => void
 
-  constructor(
-    callback: (
-      x: number,
-      y: number,
-      sx: number,
-      sy: number,
-      rx: number,
-      ry: number,
-      rz: number
-    ) => void
-  ) {
-    // const { f: _callback } = animateThrottle(callback)
-    // this._callback = _callback
+  constructor(system: System, callback: IPositionCallback) {
+    this._system = system
     this._callback = callback
   }
 
-  public observe(element: HTMLElement): {
-    x: number
-    y: number
-    sx: number
-    sy: number
-    rx: number
-    ry: number
-    rz: number
-  } {
+  public observe(element: HTMLElement): IPositionEntry {
+    const {
+      api: {
+        document: { MutationObserver, ResizeObserver },
+      },
+    } = this._system
     if (this._abort) {
       this._abort()
       this._abort = undefined
@@ -225,7 +209,7 @@ export class PositionObserver {
 
     const update = (): void => {
       _update()
-      this._callback(x, y, sx, sy, rx, ry, rz)
+      this._callback({ x, y, sx, sy, rx, ry, rz })
     }
 
     const callback = function (mutationsList) {
@@ -323,15 +307,15 @@ export class PositionObserver {
 
         parentMutationObserver.observe(targetParent, parentConfig)
 
-        const parentPositionCallback = (
-          _parent_x: number,
-          _parent_y: number,
-          _parent_scale_x: number,
-          _parent_scale_y: number,
-          _parent_rotate_x: number,
-          _parent_rotate_y: number,
-          _parent_rotate_z: number
-        ) => {
+        const parentPositionCallback = ({
+          x: _parent_x,
+          y: _parent_y,
+          sx: _parent_scale_x,
+          sy: _parent_scale_y,
+          rx: _parent_rotate_x,
+          ry: _parent_rotate_y,
+          rz: _parent_rotate_z,
+        }) => {
           parent_x = _parent_x
           parent_y = _parent_y
           parent_scale_x = _parent_scale_x
@@ -344,6 +328,7 @@ export class PositionObserver {
         }
 
         const parentPostionObserver = new PositionObserver(
+          this._system,
           parentPositionCallback
         )
 

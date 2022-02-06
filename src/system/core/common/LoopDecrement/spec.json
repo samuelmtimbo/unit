@@ -90,7 +90,7 @@
   "metadata": {
     "icon": "minus",
     "description": "decrement value until `test` is false",
-    "complexity": 4,
+    "complexity": 10,
     "tags": [
       "core",
       "common"

@@ -1,5 +1,5 @@
 export class ListenerNotFoundError extends Error {
   constructor() {
-    super('Listener not found')
+    super('listener not found')
   }
 }

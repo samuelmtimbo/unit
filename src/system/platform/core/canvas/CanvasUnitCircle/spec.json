@@ -49,7 +49,7 @@
         }
       }
     },
-    "oihefjsao": {
+    "text": {
       "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
       "output": {
         "mouseleave": {
@@ -115,7 +115,7 @@
           "ab": true
         }
       },
-      "oihefjsao": {
+      "text": {
         "input": {
           "value": true
         }
@@ -142,7 +142,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "no description",
-    "complexity": 32.465355892000076,
+    "complexity": 166,
     "tags": [
       "platform",
       "core",

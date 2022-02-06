@@ -14,8 +14,7 @@ import {
   makeKeydownListener,
 } from '../../../../../client/event/keyboard'
 import { makePasteListener } from '../../../../../client/event/paste'
-import parentElement from '../../../../../client/parentElement'
-import { userSelect } from '../../../../../client/util/style/userSelect'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import { TreeNode } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
@@ -53,7 +52,7 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
           fontSize: '12px',
           overflowY: 'hidden',
           textOverflow: 'ellipsis',
-          ...userSelect('none'),
+          // ...userSelect('none'),
           ...style,
         },
         value,
@@ -71,7 +70,7 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
     input.addEventListener(makePasteListener(this._on_paste))
     input.preventDefault('paste')
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = input.$slot

@@ -58,8 +58,6 @@ export function baseComplexityByPath(folder_path: string): number {
 export const GLOBAL_COST: number = 9
 
 export function refreshComplexity(specs: Specs, cwd: string): void {
-  const cache = {}
-
   glob
     .sync(`**/**/index.ts`, {
       cwd,
@@ -86,7 +84,7 @@ export function refreshComplexity(specs: Specs, cwd: string): void {
 
       complexity += complexity + global_complexity
 
-      // complexity = Math.round(complexity)
+      complexity = Math.round(complexity)
 
       console.log(folder_path, complexity)
 
@@ -112,7 +110,7 @@ export function refreshComplexity(specs: Specs, cwd: string): void {
       if (base) {
         //
       } else {
-        const complexity = treeComplexity(specs, spec, cache)
+        const complexity = treeComplexity(specs, spec, {})
 
         console.log(folder_path, complexity)
 

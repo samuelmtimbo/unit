@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "square root of `a`",
-    "complexity": 2.6590441598873302,
+    "complexity": 3,
     "tags": [
       "f",
       "math"

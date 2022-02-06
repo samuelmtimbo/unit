@@ -101,7 +101,7 @@
   "metadata": {
     "icon": "split-half",
     "description": "...",
-    "complexity": 11.659600096362322,
+    "complexity": 24,
     "tags": [
       "core",
       "array"

@@ -56,7 +56,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "is the size of this `list` equal to `n`?",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "core",
       "common"

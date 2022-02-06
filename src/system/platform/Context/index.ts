@@ -3,7 +3,6 @@ import { addListener } from '../../../client/addListener'
 import { Context, setColor } from '../../../client/context'
 import { makeCustomListener } from '../../../client/event/custom'
 import { makeResizeListener } from '../../../client/event/resize'
-import { listenGlobalComponent } from '../../../client/globalComponent'
 import { Component_ } from '../../../interface/Component'
 import { J } from '../../../interface/J'
 import { ObjectUpdateType } from '../../../Object'
@@ -11,6 +10,7 @@ import { ObjectWaiter } from '../../../ObjectWaiter'
 import { Pod } from '../../../pod'
 import { System } from '../../../system'
 import { Unlisten } from '../../../types/Unlisten'
+import { listenGlobalComponent } from '../../globalComponent'
 
 export interface I {
   element: Component_

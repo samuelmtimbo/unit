@@ -141,7 +141,7 @@
     "icon": "palette",
     "description": "no description",
     "link": "https://en.wikipedia.org/wiki/Gamma_correction",
-    "complexity": 9.655523228879048,
+    "complexity": 26,
     "tags": [
       "platform",
       "core",

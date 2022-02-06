@@ -84,7 +84,7 @@
   "metadata": {
     "icon": "random",
     "description": "output random natural `n` between `a` and `b`, not inclusive",
-    "complexity": 5,
+    "complexity": 19,
     "tags": [
       "core",
       "common"

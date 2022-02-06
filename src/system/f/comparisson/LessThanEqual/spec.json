@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "less-than-equal",
     "description": "less than or equal to operator",
-    "complexity": 2.6586364731390026,
+    "complexity": 3,
     "tags": [
       "f",
       "comparisson"

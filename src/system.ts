@@ -2,14 +2,18 @@ import { Graph } from './Class/Graph'
 import { Component } from './client/component'
 import { Context } from './client/context'
 import { IOPointerEvent } from './client/event/pointer'
-import { Gamepad } from './client/gamepad'
+import { FetchJSONOpt } from './client/fetch'
+import { PeerSpec } from './client/host/service/peer'
+import { VMSpec } from './client/host/service/vm'
+import { WebSpec } from './client/host/service/web'
 import { IOElement } from './client/IOElement'
-import { Keyboard } from './client/keyboard'
-import { Point } from './client/util/geometry'
+import { Store } from './client/store'
+import { Point, Size } from './client/util/geometry'
 import { J } from './interface/J'
 import { U } from './interface/U'
 import { NOOP } from './NOOP'
 import { Pod } from './pod'
+import { SharedObject } from './SharedObject'
 import { BundleSpec } from './system/platform/method/process/BundleSpec'
 import { IPod, IPodOpt } from './system/platform/method/process/PodGraph'
 import { Classes, GraphSpecs, Specs } from './types'
@@ -23,8 +27,13 @@ import { IChannel, IChannelOpt } from './types/global/IChannel'
 import { IDeviceInfo } from './types/global/IDeviceInfo'
 import { IDisplayMediaOpt } from './types/global/IDisplayMedia'
 import { IFileHandler } from './types/global/IFileHandler'
+import { IGamepad } from './types/global/IGamepad'
 import { IGeoPosition } from './types/global/IGeoPosition'
 import { IHTTPServer, IHTTPServerOpt } from './types/global/IHTTPServer'
+import { IKeyboard } from './types/global/IKeyboard'
+import { IMutationObserverConstructor } from './types/global/IMutationObserver'
+import { IPositionObserverCostructor } from './types/global/IPositionObserver'
+import { IResizeObserverConstructor } from './types/global/IResizeObserver'
 import {
   ISpeechGrammarList,
   ISpeechGrammarListOpt,
@@ -45,37 +54,53 @@ import { IUserMediaOpt } from './types/global/IUserMedia'
 import { IWakeLock, IWakeLockOpt } from './types/global/IWakeLock'
 import { Unlisten } from './types/Unlisten'
 
-export type IOINIT<T, K> = (opt: K) => T
+export type IO_INIT<T, K> = (opt: K) => T
 
-export type IOAPI<T, K> = {
-  tab: IOINIT<T, K> | null
-  session: IOINIT<T, K> | null
-  local: IOINIT<T, K> | null
-  cloud: IOINIT<T, K> | null
+export type IO_HTTP_API<T> = {
+  local: T
+  cloud: T
+}
+export type IO_STORAGE_API<T> = {
+  tab: T
+  session: T
+  local: T
+  cloud: T
+}
+export type IO_SERVICE_API<T> = {
+  local: T
+  cloud: T
+  shared: T
 }
 
+export type IO_HTTP_API_INIT<T, K> = IO_HTTP_API<IO_INIT<T, K>>
+export type IO_STORAGE_API_INIT<T, K> = IO_STORAGE_API<IO_INIT<T, K>>
+export type IO_SERVICE_API_INIT<T, K> = IO_INIT<IO_SERVICE_API<T>, K>
+
 export type IOInput = {
-  keyboard: Keyboard
-  gamepad: Gamepad[]
+  keyboard: IKeyboard
+  gamepad: IGamepad[]
 }
 
 export type IOMethod = Dict<Function>
 
-export type IOStorage = IOAPI<J, undefined>
-export type IOHTTP = IOAPI<IHTTPServer, IHTTPServerOpt>
-export type IOChannel = IOAPI<IChannel, IChannelOpt>
-export type IOPod = IOAPI<IPod, IPodOpt>
+export type APIStorage = IO_STORAGE_API_INIT<J, undefined>
+export type APIHTTP = {
+  server: IO_HTTP_API_INIT<IHTTPServer, IHTTPServerOpt>
+  fetch: (url: string, opt: FetchJSONOpt) => any
+}
+export type APIChannel = IO_STORAGE_API_INIT<IChannel, IChannelOpt>
+export type APIPod = IO_STORAGE_API_INIT<IPod, IPodOpt>
 
 export type API = {
-  storage: IOStorage
-  http: IOHTTP
-  channel: IOChannel
-  pod: IOPod
+  storage: APIStorage
+  http: APIHTTP
+  channel: APIChannel
+  pod: APIPod
   speech: {
-    SpeechGrammarList: IOINIT<ISpeechGrammarList, ISpeechGrammarListOpt>
-    SpeechRecognition: IOINIT<ISpeechRecognition, ISpeechRecognitionOpt>
-    SpeechSynthesis: IOINIT<ISpeechSynthesis, ISpeechSynthesisOpt>
-    SpeechSynthesisUtterance: IOINIT<
+    SpeechGrammarList: IO_INIT<ISpeechGrammarList, ISpeechGrammarListOpt>
+    SpeechRecognition: IO_INIT<ISpeechRecognition, ISpeechRecognitionOpt>
+    SpeechSynthesis: IO_INIT<ISpeechSynthesis, ISpeechSynthesisOpt>
+    SpeechSynthesisUtterance: IO_INIT<
       ISpeechSynthesisUtterance,
       ISpeechSynthesisUtteranceOpt
     >
@@ -113,18 +138,36 @@ export type API = {
   }
   document: {
     createElement<K extends keyof HTMLElementTagNameMap>(
-      tagName: K,
-      options?: ElementCreationOptions
+      tagName: K
     ): HTMLElementTagNameMap[K]
     createElementNS<K extends keyof SVGElementTagNameMap>(
       namespaceURI: 'http://www.w3.org/2000/svg',
       qualifiedName: K
     ): SVGElementTagNameMap[K]
     createTextNode(text: string): Text
+    MutationObserver: IMutationObserverConstructor
+    PositionObserver: IPositionObserverCostructor
+    ResizeObserver: IResizeObserverConstructor
   }
   querystring: {
-    stringify: (obj: Dict<any>) => string,
+    stringify: (obj: Dict<any>) => string
     parse: (str: string) => Dict<any>
+  }
+  text: {
+    measureText: (text: string, fontSize: number) => Size
+  }
+  service: {
+    graph: IO_SERVICE_API_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
+    web: IO_SERVICE_API_INIT<SharedObject<Store<WebSpec>, {}>, {}>
+    peer: IO_SERVICE_API_INIT<SharedObject<Store<PeerSpec>, {}>, {}>
+    vm: IO_SERVICE_API_INIT<SharedObject<Store<VMSpec>, {}>, {}>
+  }
+  worker: {
+    start(): Worker
+  }
+  host: {
+    fetch: (opt: FetchJSONOpt) => Promise<any>
+    send: (opt: {}) => void
   }
 }
 
@@ -139,12 +182,10 @@ export interface System {
     spriteSheetMap: Dict<boolean>
   }
   id: {
-    pbkey: {
-      tab: Dict<string>
-      session: Dict<string>
-      local: Dict<string>
-      cloud: Dict<string>
-    }
+    user: string | null
+    token: string | null
+    pbkey: string[]
+    pvkey: Dict<string>
   }
   feature: Dict<boolean>
   foreground: {
@@ -154,8 +195,8 @@ export interface System {
     canvas?: HTMLCanvasElement
   }
   input: {
-    keyboard: Keyboard
-    gamepad: Gamepad[]
+    keyboard: IKeyboard
+    gamepads: IGamepad[]
   }
   specs: Specs
   classes: Classes
@@ -166,7 +207,6 @@ export interface System {
     component: Dict<Component>
   }
   api: API
-
   method: {
     encodeURI?: (str: string) => string
     showLongPress?: (
@@ -208,10 +248,8 @@ export type ComponentClass = {
 export type ComponentClasses = Dict<ComponentClass>
 
 export interface BootOpt {
-  host?: API
-  specs?: Specs
-  components?: ComponentClasses
-  classes?: Classes
+  api?: API
+  specs?: GraphSpecs
 }
 
 export const HTTPServer = (opt: IHTTPServerOpt): IHTTPServer => {

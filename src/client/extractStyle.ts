@@ -1,8 +1,11 @@
 import { Style } from '../system/platform/Props'
 import { Component } from './component'
-import { measureText } from './util/style/measureText'
+import { Size } from './util/geometry'
 
-export function extractStyle(leaf_comp: Component): Style {
+export function extractStyle(
+  leaf_comp: Component,
+  measureText: (text: string, fontSize: number) => Size
+): Style {
   const style = {}
 
   const { $element } = leaf_comp

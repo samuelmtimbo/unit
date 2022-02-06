@@ -1,3 +1,4 @@
+import { stringify } from '../../spec/stringify'
 import { Callback } from '../../types/Callback'
 import { V } from '../V'
 import { $V, $V_C, $V_R, $V_W } from './$V'
@@ -11,7 +12,8 @@ export const AsyncVCall: (value: V) => $V_C = (value) => {
       } catch (err) {
         return callback(undefined, err.message)
       }
-      callback(data)
+      const _data = stringify(data)
+      callback(_data)
     },
 
     async $write(

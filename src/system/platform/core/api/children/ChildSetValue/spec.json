@@ -126,7 +126,7 @@
   "metadata": {
     "icon": "triangle",
     "description": "set `element` child `at` value to `value`",
-    "complexity": 3,
+    "complexity": 15,
     "tags": [
       "platform",
       "core",

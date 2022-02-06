@@ -72,7 +72,7 @@
     "2": {
       "alankaypicturesrc": {
         "output": {
-          "vmkiln": true
+          "url": true
         }
       },
       "iteratewait": {
@@ -128,7 +128,7 @@
   "metadata": {
     "icon": "image",
     "description": "...",
-    "complexity": 16.441265311417084,
+    "complexity": 69,
     "tags": [
       "platform",
       "core",

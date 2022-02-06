@@ -14,9 +14,9 @@ export function unitFromSpec(
 ): Unit {
   const { id, input, output } = unitSpec
 
-  const { specs, classes } = system || { specs: {}, classes: {} }
+  const { classes } = system
 
-  const Class = fromId(id, specs, classes, branch)
+  const Class = fromId(id, { ...system.specs, ...pod.specs }, classes, branch)
 
   const unit = new Class(system, pod)
 

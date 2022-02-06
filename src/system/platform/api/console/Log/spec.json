@@ -8,7 +8,7 @@
   "metadata": {
     "icon": "terminal",
     "description": "print on the console",
-    "complexity": 2.6564127272390343,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

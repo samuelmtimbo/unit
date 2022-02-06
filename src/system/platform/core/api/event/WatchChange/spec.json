@@ -74,7 +74,7 @@
   "metadata": {
     "icon": "square",
     "description": "output `element` value and listen \"input\" event",
-    "complexity": 9,
+    "complexity": 15,
     "tags": [
       "platform",
       "core",

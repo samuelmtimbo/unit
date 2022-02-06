@@ -76,7 +76,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "output based on whether `a` size is less than `b`",
-    "complexity": 4,
+    "complexity": 21,
     "tags": [
       "core",
       "common"

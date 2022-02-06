@@ -14,7 +14,7 @@
     "icon": "network",
     "description": "create, manage and message a WebSocket connection to a server",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket",
-    "complexity": 2.5902933491466373,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

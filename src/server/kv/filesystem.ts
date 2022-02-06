@@ -15,8 +15,8 @@ const FILESYSTEM_DIR_KV = path.join(FILESYSTEM_DIR, 'kv')
 ensureDirSync(FILESYSTEM_DIR)
 ensureDirSync(FILESYSTEM_DIR_KV)
 
-export const makeFSKVStore = (name: string): KVStore<any> => {
-  const FILESYSTEM_DIR_KV_STORE = path.join(FILESYSTEM_DIR_KV, name)
+export const makeFSKVStore = (cwd: string, name: string): KVStore<any> => {
+  const FILESYSTEM_DIR_KV_STORE = path.join(cwd, name)
 
   return {
     get: async (key: string) => {
@@ -46,10 +46,5 @@ export const makeFSKVStore = (name: string): KVStore<any> => {
 }
 
 export const FSKV: CloudKV = {
-  authTokenKVStore: makeFSKVStore('authToken'),
-  signUpCodeKVStore: makeFSKVStore('emailToken'),
-  signUpTokenKVStore: makeFSKVStore('signUpToken'),
-  PRCodeKVStore: makeFSKVStore('PRCodeKVStore'),
-  PRTokenKVStore: makeFSKVStore('PRTokenKVStore'),
-  PCCodeKVStore: makeFSKVStore('PCCodeKVStore'),
+  authTokenKVStore: makeFSKVStore(FILESYSTEM_DIR_KV, 'authToken'),
 }

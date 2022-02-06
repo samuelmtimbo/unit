@@ -77,7 +77,7 @@
   "component": {},
   "metadata": {
     "icon": "map-signs",
-    "complexity": 10,
+    "complexity": 53,
     "tags": [
       "core",
       "control"

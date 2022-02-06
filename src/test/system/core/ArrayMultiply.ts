@@ -16,9 +16,9 @@ const ArrayMultiply = fromSpec(spec, _specs)
 
 const arrayMultiply = new ArrayMultiply(system, pod) as Graph
 
-false && watchUnitAndLog(arrayMultiply)
-false && watchGraphAndLog(arrayMultiply)
-false && watchTreeAndLog(arrayMultiply)
+0 && watchUnitAndLog(arrayMultiply)
+0 && watchGraphAndLog(arrayMultiply)
+0 && watchTreeAndLog(arrayMultiply)
 
 arrayMultiply.play()
 

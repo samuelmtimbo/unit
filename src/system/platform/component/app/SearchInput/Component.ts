@@ -1,6 +1,6 @@
 import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
@@ -54,7 +54,7 @@ export default class SearchInput extends Element<HTMLDivElement, Props> {
     )
     this._input = input
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot['default'] = input.$slot['default']

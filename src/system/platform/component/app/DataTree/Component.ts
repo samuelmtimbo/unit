@@ -7,7 +7,7 @@ import {
 } from '../../../../../client/component/getDatumSize'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import {
@@ -116,7 +116,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
 
     this._reset()
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
 

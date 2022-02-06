@@ -23,7 +23,7 @@
   "metadata": {
     "icon": "undo",
     "description": "loop forever",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "core",
       "common"

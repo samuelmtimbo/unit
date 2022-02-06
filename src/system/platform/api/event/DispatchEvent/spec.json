@@ -74,7 +74,7 @@
   "metadata": {
     "icon": "square",
     "description": "emit an `event` from `element`",
-    "complexity": 13.663009840075608,
+    "complexity": 20,
     "tags": [
       "platform",
       "api",

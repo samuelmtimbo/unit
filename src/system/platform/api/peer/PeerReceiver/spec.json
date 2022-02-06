@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "link",
     "description": "Peer to Peer (P2P) Receiver",
-    "complexity": 7.997628004373367,
+    "complexity": 13,
     "tags": [
       "platform",
       "api",

@@ -56,7 +56,7 @@
   "metadata": {
     "icon": "equal",
     "description": "does the object have the following keys?",
-    "complexity": 5.658636473139003,
+    "complexity": 8,
     "tags": [
       "core",
       "common"

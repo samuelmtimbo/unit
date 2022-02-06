@@ -1,13 +1,13 @@
 import { $ } from '../../../../Class/$'
 import { Unit } from '../../../../Class/Unit'
+import { Pod } from '../../../../pod'
+import { System } from '../../../../system'
+import { Unlisten } from '../../../../types/Unlisten'
 import {
   getGlobalComponent,
   listenGlobalComponent,
   pushGlobalComponent,
-} from '../../../../client/globalComponent'
-import { Pod } from '../../../../pod'
-import { System } from '../../../../system'
-import { Unlisten } from '../../../../types/Unlisten'
+} from '../../../globalComponent'
 
 export interface I<T> {}
 

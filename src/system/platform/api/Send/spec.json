@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "send",
     "description": "send an arbitrary datum to `unit`",
-    "complexity": 2.6653818357022403,
+    "complexity": 3,
     "tags": [
       "platform",
       "api"

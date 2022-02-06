@@ -1,5 +1,4 @@
 {
-  "artifact": "spec",
   "name": "set if",
   "units": {
     "set": {
@@ -95,7 +94,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "set value at `key` to `value` if `test` is true",
-    "complexity": 4,
+    "complexity": 16,
     "tags": [
       "core",
       "object"

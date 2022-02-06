@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "check if key is in object",
-    "complexity": 2.6567833515556956,
+    "complexity": 3,
     "tags": [
       "f",
       "object"

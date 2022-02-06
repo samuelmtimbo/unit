@@ -1,26 +1,118 @@
 {
-  "name": "read table",
+  "name": "turing read table",
   "units": {
     "at": {
-      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a"
+      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "a": {},
+        "i": {}
+      },
+      "output": {
+        "a[i]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -37,
+          "y": 78
+        }
+      }
     },
     "at0": {
-      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a"
+      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "a": {},
+        "i": {}
+      },
+      "output": {
+        "a[i]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 6,
+          "y": -36
+        }
+      }
     },
     "at1": {
-      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a"
+      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "a": {},
+        "i": {}
+      },
+      "output": {
+        "a[i]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 65,
+          "y": 51
+        }
+      }
     },
     "set": {
-      "id": "22622778-d64f-47e7-8ceb-d175edcc6562"
+      "id": "22622778-d64f-47e7-8ceb-d175edcc6562",
+      "input": {
+        "a": {},
+        "v": {},
+        "i": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -4,
+          "y": -75
+        }
+      }
     },
     "add": {
-      "id": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf"
+      "id": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a + b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -101,
+          "y": -77
+        }
+      }
     },
     "identity": {
-      "id": "260d774e-bc89-4027-aa92-cb1985fb312b"
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 167,
+          "y": 60
+        }
+      }
     },
     "first3": {
-      "id": "df8ed55c-5f3d-460a-a7d7-2fa5aebaac53"
+      "id": "df8ed55c-5f3d-460a-a7d7-2fa5aebaac53",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "0": {},
+        "1": {},
+        "2": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -100,
+          "y": -5
+        }
+      }
     }
   },
   "merges": {
@@ -56,7 +148,7 @@
       },
       "first3": {
         "input": {
-          "loijpa": true
+          "a": true
         }
       }
     },
@@ -68,36 +160,7 @@
       },
       "first3": {
         "output": {
-          "wbniwnd": true
-        }
-      }
-    },
-    "4": {
-      "at0": {
-        "input": {
-          "i": true
-        }
-      },
-      "set": {
-        "input": {
-          "i": true
-        }
-      },
-      "add": {
-        "input": {
-          "a": true
-        }
-      }
-    },
-    "5": {
-      "at0": {
-        "input": {
-          "a": true
-        }
-      },
-      "set": {
-        "input": {
-          "a": true
+          "0": true
         }
       }
     },
@@ -109,7 +172,7 @@
       },
       "first3": {
         "output": {
-          "inzuccq": true
+          "1": true
         }
       }
     },
@@ -129,7 +192,7 @@
   "metadata": {
     "icon": "table",
     "description": "no description",
-    "complexity": 9,
+    "complexity": 21,
     "tags": [
       "platform",
       "core",
@@ -149,7 +212,16 @@
     "i": {
       "pin": {
         "0": {
-          "mergeId": "4"
+          "unitId": "at0",
+          "pinId": "i"
+        },
+        "1": {
+          "unitId": "add",
+          "pinId": "a"
+        },
+        "2": {
+          "unitId": "set",
+          "pinId": "i"
         }
       },
       "type": "number"
@@ -157,7 +229,12 @@
     "tape": {
       "pin": {
         "0": {
-          "mergeId": "5"
+          "unitId": "set",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "at0",
+          "pinId": "a"
         }
       },
       "type": "number[]"
@@ -203,7 +280,7 @@
       "pin": {
         "0": {
           "unitId": "first3",
-          "pinId": "xtizpgc"
+          "pinId": "2"
         }
       },
       "type": "number"

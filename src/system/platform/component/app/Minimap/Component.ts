@@ -1,7 +1,7 @@
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { segmentLinkId } from '../../../../../client/id'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
 import {
   describeCircle,
@@ -100,7 +100,7 @@ export default class Minimap extends Element<HTMLDivElement, Props> {
 
     this.tick()
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = map_children.$slot

@@ -25,7 +25,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "restricts a number to be within a range",
-    "complexity": 5.655226729425717,
+    "complexity": 8,
     "tags": [
       "core",
       "relation"

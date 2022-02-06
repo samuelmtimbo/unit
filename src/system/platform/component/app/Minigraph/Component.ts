@@ -2,7 +2,7 @@ import { getSpecRadius } from '../../../../../client/complexity'
 import mergeProps from '../../../../../client/component/mergeProps'
 import { Element } from '../../../../../client/element'
 import { getLinkId, segmentLinkId } from '../../../../../client/id'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { SimNode, Simulation } from '../../../../../client/simulation'
 import { getSpec, injectSpecs, isComponent } from '../../../../../client/spec'
 import { Shape, surfaceDistance } from '../../../../../client/util/geometry'
@@ -12,11 +12,8 @@ import { emptyGraphSpec } from '../../../../../spec/emptySpec'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { mapObjVK } from '../../../../../util/object'
-import {
-  NOT_SUBGRAPH_MAX_D,
-  SUBGRAPH_MAX_D,
-} from '../../../component/app/graph/Graph/Component'
 import { BundleSpec } from '../../../method/process/BundleSpec'
+import { NOT_SUBGRAPH_MAX_D, SUBGRAPH_MAX_D } from '../Graph/Component'
 import Minimap from '../Minimap/Component'
 
 export interface Props {
@@ -65,7 +62,7 @@ export default class Mingraph extends Element<HTMLDivElement, Props> {
     simulation.addListener('tick', this._tick)
     this._simulation = simulation
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
 

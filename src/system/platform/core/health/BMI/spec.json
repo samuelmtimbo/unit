@@ -32,7 +32,7 @@
     "icon": "scale",
     "description": "weight / height ^ 2",
     "link": "https://en.wikipedia.org/wiki/Body_mass_index",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "platform",
       "core",

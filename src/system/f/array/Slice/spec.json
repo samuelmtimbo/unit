@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "scissors",
     "description": "extracts a section of a string",
-    "complexity": 2.6596000963623223,
+    "complexity": 3,
     "tags": [
       "f",
       "array"

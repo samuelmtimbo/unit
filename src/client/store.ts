@@ -1,3 +1,4 @@
+import { System } from '../system'
 import { Dict } from '../types/Dict'
 import { connect, DATABASE_NAME } from './database'
 
@@ -22,9 +23,11 @@ export interface Store<T> {
 export const SYSTEM_DATABASE_VERSION_KEY = 'SYSTEM_DATABASE_VERSION_KEY'
 
 export class LocalStore<T> implements Store<T> {
+  private _system: System
   private _name: string
 
-  constructor(name: string) {
+  constructor(system: System, name: string) {
+    this._system = system
     this._name = name
   }
 

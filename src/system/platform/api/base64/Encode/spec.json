@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "identify data type",
-    "complexity": 2.6606749068806406,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

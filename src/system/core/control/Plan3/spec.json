@@ -25,7 +25,7 @@
   "metadata": {
     "icon": "list-ordered",
     "description": "output `a` on `0`, then `1`, then `2`",
-    "complexity": 5.577803309675147,
+    "complexity": 6,
     "tags": [
       "core",
       "control"

@@ -6,7 +6,7 @@ import {
   EXEC,
   TERMINATE,
 } from '../../../../../../../constant/STRING'
-import { graphFromPort } from '../../../../../../../graphFromPort'
+import { asyncGraphFromPort } from '../../../../../../../graphFromPort'
 import { $Graph } from '../../../../../../../interface/async/$Graph'
 import { Pod } from '../../../../../../../pod'
 import {
@@ -114,7 +114,7 @@ export default class LocalPod extends Functional<I, O> {
     const remote_port = new RemotePort(port)
     this._remote_port = remote_port
 
-    const graph = graphFromPort(this.__system, this.__pod, remote_port)
+    const graph = asyncGraphFromPort(this.__system, this.__pod, remote_port)
 
     done({ graph })
   }

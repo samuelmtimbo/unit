@@ -10,7 +10,7 @@
   "metadata": {
     "icon": "square",
     "description": "SVG text path",
-    "complexity": 6.418731352964068,
+    "complexity": 21,
     "tags": [
       "platform",
       "component",

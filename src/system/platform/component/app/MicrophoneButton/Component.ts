@@ -4,7 +4,7 @@ import { IOPointerEvent } from '../../../../../client/event/pointer'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { Mode } from '../../../../../client/mode'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -102,7 +102,7 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
       this._speech_recorder.addListener('err', this._on_err)
     }
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$unbundled = false
     this.$element = $element
@@ -162,7 +162,7 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
   private _on_err = (err: string): void => {}
 
   public start(): void {
-    console.log('MicrophoneButton', 'start')
+    // console.log('MicrophoneButton', 'start')
     this._icon_button.setProp('active', true)
     try {
       this._speech_recorder && this._speech_recorder.start()
@@ -172,7 +172,7 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
   }
 
   public stop(): void {
-    console.log('MicrophoneButton', 'stop')
+    // console.log('MicrophoneButton', 'stop')
     this._icon_button.setProp('active', false)
     this._speech_recorder && this._speech_recorder.stop()
   }

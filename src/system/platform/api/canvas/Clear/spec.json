@@ -18,7 +18,7 @@
   "metadata": {
     "icon": "eraser",
     "description": "clear canvas",
-    "complexity": 2.656746289124029,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

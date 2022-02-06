@@ -2,6 +2,7 @@ import { Moment } from '../debug/Moment'
 import { PinDataMoment } from '../debug/PinDataMoment'
 import { $Element } from '../interface/async/$Element'
 import { NOOP } from '../NOOP'
+import { evaluate } from '../spec/evaluate'
 import { GlobalRefSpec } from '../types/GlobalRefSpec'
 import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
@@ -42,7 +43,10 @@ export class Element<
   private _element_unlisten: Unlisten
 
   onConnected($unit: $Element) {
-    const setRef = (name: string, { __global_id, __ }: GlobalRefSpec): void => {
+    const setRef = <K extends keyof P>(
+      name: K,
+      { __global_id, __ }: GlobalRefSpec
+    ): void => {
       __ = __.map((i) => {
         if (i.startsWith('$')) {
           return i
@@ -51,12 +55,13 @@ export class Element<
         }
       })
 
-      const ref = $unit.$refGlobalObj({ __global_id, __ })
+      const ref = $unit.$refGlobalObj({ __global_id, __ }) as unknown
 
+      // @ts-ignore
       this.setProp(name, ref)
     }
 
-    const dropRef = (name: string): void => {
+    const dropRef = <K extends keyof P>(name: K): void => {
       this.setProp(name, undefined)
     }
 
@@ -74,9 +79,9 @@ export class Element<
           data: { pinId, data },
         } = moment
         if (event === 'data') {
-          setRef(pinId, data)
+          setRef(pinId as keyof P, data)
         } else {
-          dropRef(pinId)
+          dropRef(pinId as keyof P)
         }
       },
     }
@@ -94,9 +99,12 @@ export class Element<
     this._element_unlisten = element_unlisten
 
     $unit.$read({}, (state) => {
-      for (let name in state) {
-        const data = state[name]
-        this.setProp(name, data)
+      const specs = { ...this.$system.specs, ...this.$pod.specs }
+      const classes = this.$system.classes
+      const _state = evaluate(state, specs, classes)
+      for (let name in _state) {
+        const data = _state[name]
+        this.setProp(name as keyof P, data)
       }
     })
   }

@@ -31,7 +31,7 @@
   "metadata": {
     "icon": "send",
     "description": "no description",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "platform",
       "core",

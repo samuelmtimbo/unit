@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "square",
     "description": "SVG path",
-    "complexity": 6.47884661712655,
+    "complexity": 21,
     "tags": [
       "platform",
       "component",

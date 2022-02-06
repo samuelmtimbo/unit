@@ -63,7 +63,7 @@
   "metadata": {
     "icon": "scissors",
     "description": "no description",
-    "complexity": 8.315568074421364,
+    "complexity": 9,
     "tags": [
       "core",
       "string"

@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "remove data on input `name` of `unit`",
-    "complexity": 2.657932286937346,
+    "complexity": 3,
     "tags": [
       "f",
       "unit"

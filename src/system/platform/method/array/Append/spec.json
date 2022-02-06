@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "chevrons-left",
     "description": "append an element to an array",
-    "complexity": 2.6628245279172766,
+    "complexity": 3,
     "tags": [
       "platform",
       "method",

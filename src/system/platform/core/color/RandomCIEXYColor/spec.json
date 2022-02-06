@@ -30,7 +30,7 @@
   "metadata": {
     "icon": "palette",
     "description": "generate a random CIE xy color string",
-    "complexity": 24,
+    "complexity": 182,
     "tags": [
       "platform",
       "core",

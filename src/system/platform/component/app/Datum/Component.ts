@@ -2,7 +2,7 @@ import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import IOFocusEvent from '../../../../../client/event/focus/FocusEvent'
 import { IOKeyboardEvent } from '../../../../../client/event/keyboard'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import {
   getParentPath,
@@ -64,7 +64,7 @@ export default class Datum extends Element<HTMLDivElement, Props> {
       makeCustomListener('leafpaste', this._onLeafPaste)
     )
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = data_tree.$slot

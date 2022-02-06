@@ -64,7 +64,7 @@
   "metadata": {
     "icon": "exchange",
     "description": "count from `a` to `b - 1`, then regressive count from `b - 1` to `a`",
-    "complexity": 12,
+    "complexity": 49,
     "tags": [
       "core",
       "loop"

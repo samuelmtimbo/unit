@@ -3,9 +3,11 @@ import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
 import { $Component } from '../interface/async/$Component'
 import { $Graph } from '../interface/async/$Graph'
+import { NOOP } from '../NOOP'
 import { Pod } from '../pod'
 import { evaluate } from '../spec/evaluate'
 import { ComponentClass, System } from '../system'
+import { pushGlobalComponent } from '../system/globalComponent'
 import { GraphSpec } from '../types'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
@@ -38,19 +40,18 @@ import {
   DEFAULT_OPACITY,
   DEFAULT_TEXT_ALIGN,
 } from './DEFAULT_FONT_SIZE'
-import { getFontSize } from './util/style/getFontSize'
-import { pushGlobalComponent } from './globalComponent'
 import { IOElement } from './IOElement'
 import { Listener } from './Listener'
 import { makeEventListener } from './makeEventListener'
 import { mount } from './mount'
-import parentElement from './parentElement'
+import parentElement from './platform/web/parentElement'
 import { unmount } from './unmount'
-import { addVector, NULL_VECTOR, Position } from './util/geometry'
-import { getTextAlign } from './test/getTextAlign'
+import { addVector, NULL_VECTOR, Position, Rect } from './util/geometry'
+import { getFontSize } from './util/style/getFontSize'
+import { getOpacity } from './util/style/getOpacity'
 import { getPosition } from './util/style/getPosition'
 import { getSize } from './util/style/getSize'
-import { getOpacity } from './util/style/getOpacity'
+import { getTextAlign } from './util/style/getTextAlign'
 
 export type ComponentMap = Dict<Component>
 
@@ -64,7 +65,7 @@ export function componentClassFromSpec(spec: GraphSpec): ComponentClass {
 
   const { children = [], subComponents = {}, slots = [] } = component
 
-  class Parent extends Component<any, any, any> {
+  class Parent extends Component<any, any> {
     static id = id
 
     constructor($props: {}, $system: System, $pod: Pod) {
@@ -92,7 +93,7 @@ export function componentClassFromSpec(spec: GraphSpec): ComponentClass {
         }
       }
 
-      const $element = parentElement()
+      const $element = parentElement($system)
 
       this.$element = $element
 
@@ -137,8 +138,8 @@ export function findRef(component: Component, name: string): Component | null {
 }
 
 export class Component<
-  E extends IOElement = any,
-  P extends object = {},
+  E extends IOElement = IOElement,
+  P extends Dict<any> = {},
   U extends $Component | $Graph = $Component
 > {
   static id: string
@@ -201,7 +202,7 @@ export class Component<
     return this.$props[name]
   }
 
-  setProp(prop: string, data: any) {
+  setProp<K extends keyof P>(prop: K, data: P[K]) {
     this.$props[prop] = data
 
     if (this.$mounted) {
@@ -298,11 +299,11 @@ export class Component<
     delete this.$system.cache.pointerCapture[pointerId]
   }
 
-  protected mountDescendent(child: Component): void {
+  public mountDescendent(child: Component): void {
     child.mount(this.$context)
   }
 
-  protected unmountDescendent(child: Component): void {
+  public unmountDescendent(child: Component): void {
     return child.unmount()
   }
 
@@ -441,6 +442,7 @@ export class Component<
       (!(slot_offset.$element instanceof HTMLElement) ||
         slot_offset.$element.style.position === '' ||
         slot_offset.$element.style.position === 'contents') &&
+      slot_offset.$element instanceof HTMLElement &&
       slot_offset.$element.style.display !== 'flex'
     ) {
       slot_offset = slot_offset.$parent
@@ -532,15 +534,13 @@ export class Component<
 
     let p = []
 
-    for (const subComponentId in this.$subComponent) {
-      const subComponent = this.$subComponent[subComponentId]
-      if (this.$root.indexOf(subComponent) > -1) {
-        const subComponentPrim = subComponent.getRootBase([
-          ...path,
-          subComponentId,
-        ])
-        p = [...p, ...subComponentPrim]
-      }
+    for (const subComponent of this.$root) {
+      const subComponentId = this.getSubComponentId(subComponent)
+      const subComponentPrim = subComponent.getRootBase([
+        ...path,
+        subComponentId,
+      ])
+      p = [...p, ...subComponentPrim]
     }
 
     return p
@@ -553,13 +553,22 @@ export class Component<
 
     let p = []
 
-    for (const subComponentId in this.$subComponent) {
-      const subComponent = this.$subComponent[subComponentId]
-      const subComponentPrim = subComponent.getRootBase([
+    const appendSubComponent = (subComponent: Component) => {
+      const subComponentId = this.getSubComponentId(subComponent)
+      const subComponentRootBase = subComponent.getRootBase([
         ...path,
         subComponentId,
       ])
-      p = [...p, ...subComponentPrim]
+
+      p = [...p, ...subComponentRootBase]
+
+      for (const _subComponent of subComponent.$parentRoot) {
+        appendSubComponent(_subComponent)
+      }
+    }
+
+    for (const subComponent of this.$root) {
+      appendSubComponent(subComponent)
     }
 
     return p
@@ -588,7 +597,7 @@ export class Component<
       }
 
       const { $x, $y, $sx, $sy } = this.$context
-      const bcr: DOMRect = this.$element.getBoundingClientRect()
+      const bcr: Rect = this.$element.getBoundingClientRect()
       const { x, y, width, height } = bcr
       return {
         x: (x - $x) / $sx,
@@ -603,61 +612,44 @@ export class Component<
 
   public appendChild(child: Component, slotName: string = 'default'): number {
     // console.log('Component', 'appendChild', slotName)
-
-    const at = this.memAppendChild(child, slotName)
+    const at = this.$children.length
+    this.memAppendChild(child, slotName, at)
     this.domAppendChild(child, slotName, at)
     this.postAppendChild(child, at)
 
     return at
   }
 
-  protected memAppendChild(child: Component, slotName: string): number {
+  public memAppendChild(child: Component, slotName: string, at: number): void {
     // console.log('Component', 'memAppendChild')
-
     this.$slotChildren[slotName] = this.$slotChildren[slotName] || []
     this.$slotChildren[slotName].push(child)
-
     this.$children.push(child)
-
-    const at = this.$children.length - 1
-
     this.$childrenSlot[at] = slotName
-
-    return at
   }
 
-  protected domAppendChild(
-    child: Component,
-    slotName: string,
-    at: number
-  ): void {
+  public domAppendChild(child: Component, slotName: string, at: number): void {
     // console.log('Component', '_domAppendChild')
     const slot = this.$slot[slotName]
 
     slot.$element.appendChild(child.$element)
   }
 
-  protected postAppendChild(child: Component, at: number): void {
+  public postAppendChild(child: Component, at: number): void {
     child.$parent = this
-
     if (this.$mounted) {
       this.mountDescendent(child)
     }
   }
 
-  protected domRemoveChild(
-    child: Component,
-    slotName: string,
-    at: number
-  ): void {
+  public domRemoveChild(child: Component, slotName: string, at: number): void {
     const slot = this.$slot[slotName]
 
     slot.$element.removeChild(child.$element)
   }
 
-  protected postRemoveChild(child: Component, at: number): void {
+  public postRemoveChild(child: Component, at: number): void {
     child.$parent = null
-
     if (this.$mounted) {
       child.unmount()
     }
@@ -684,7 +676,7 @@ export class Component<
   private _addUnitEventListener = (event: string): void => {
     const unlisten = this.addEventListener(
       makeEventListener(event, (data) => {
-        this.$unit.$emit({ type: event, data })
+        this.$unit.$refEmitter({}).$emit({ type: event, data }, NOOP)
       })
     )
     this.$named_unlisten[event] = unlisten
@@ -743,16 +735,17 @@ export class Component<
     const handler = {
       unit: (moment: UnitMoment) => {
         const { event: event_event, data: event_data } = moment
-        if (event_event === 'call') {
-          const { method, data } = event_data
-          this._call(method, data)
-        } else if (event_event === 'listen') {
-          const { event } = event_data
-          listen(event)
-        } else if (event_event === 'unlisten') {
-          const { event } = event_data
-          unlisten(event)
-        } else if (event_event === 'append_child') {
+        // if (event_event === 'call') {
+        //   const { method, data } = event_data
+        //   this._call(method, data)
+        // } else if (event_event === 'listen') {
+        //   const { event } = event_data
+        //   listen(event)
+        // } else if (event_event === 'unlisten') {
+        //   const { event } = event_data
+        //   unlisten(event)
+        // } else
+        if (event_event === 'append_child') {
           const { bundle } = event_data
           const { unit } = bundle
           const { id, input = {} } = unit
@@ -780,12 +773,18 @@ export class Component<
 
     this.$named_listener_count = {}
 
+    $unit.$getGlobalId({}, (__global_id: string) => {
+      this.$globalId = __global_id
+
+      pushGlobalComponent(this.$system, __global_id, this)
+    })
+
     const all_unlisten: Unlisten[] = []
 
     const events = [
-      'call',
-      'listen',
-      'unlisten',
+      // 'call',
+      // 'listen',
+      // 'unlisten',
       'append_child',
       'remove_child_at',
     ]
@@ -794,19 +793,29 @@ export class Component<
 
     all_unlisten.push(pod_unit_unlisten)
 
-    this._unit_unlisten = callAll(all_unlisten)
+    const $emitter = $unit.$refEmitter({})
 
-    $unit.$getGlobalId({}, (__global_id: string) => {
-      this.$globalId = __global_id
-
-      pushGlobalComponent(this.$system, __global_id, this)
-    })
-
-    $unit.$getEventNames({}, (events) => {
+    $emitter.$getEventNames({}, (events: string[]) => {
       for (const event of events) {
         listen(event)
       }
     })
+
+    const unlisten_emitter = callAll([
+      $emitter.$addListener({ event: 'listen' }, ({ event }) => {
+        listen(event)
+      }),
+      $emitter.$addListener({ event: 'unlisten' }, ({ event }) => {
+        unlisten(event)
+      }),
+      $emitter.$addListener({ event: 'call' }, ({ method, data }) => {
+        this._call(method, data)
+      }),
+    ])
+
+    all_unlisten.push(unlisten_emitter)
+
+    this._unit_unlisten = callAll(all_unlisten)
 
     $unit.$children({}, (children: $Children) => {
       if (children.length > 0) {
@@ -839,7 +848,8 @@ export class Component<
   }
 
   public _disconnect(): void {
-    console.log(this.constructor.name, 'disconnect')
+    // console.log(this.constructor.name, 'disconnect')
+
     if (!this.$connected) {
       // throw new Error ('Component is not already disconnected')
       console.log('Component', 'disconnect called unnecessarily')
@@ -862,7 +872,11 @@ export class Component<
     this.$slotChildren[slotName] = this.$slotChildren[slotName] || []
     this.$slotChildren[slotName].unshift(child)
     child.$parent = this
-    slot.$element.prepend(child.$element)
+    if (slot.$element instanceof Text) {
+      //
+    } else {
+      slot.$element.prepend(child.$element)
+    }
     if (this.$mounted) {
       this.mountDescendent(child)
     }
@@ -990,23 +1004,23 @@ export class Component<
     this.removeRoot(component)
   }
 
-  private memAppendRoot(component: Component): number {
+  public memAppendRoot(component: Component): void {
     push(this.$mountRoot, component)
-    return this.$mountRoot.length - 1
   }
 
-  protected postAppendRoot(component: Component): void {
+  public postAppendRoot(component: Component): void {
     set(component, '$parent', this)
     _if(this.$mounted, mount, component, this.$context)
   }
 
-  protected domAppendRoot(component: Component, at: number): void {
+  public domAppendRoot(component: Component): void {
     appendChild(this.$element, component.$element)
   }
 
   public appendRoot(component: Component): void {
-    const at = this.memAppendRoot(component)
-    this.domAppendRoot(component, at)
+    const at = this.$mountRoot.length
+    this.memAppendRoot(component)
+    this.domAppendRoot(component)
     this.postAppendRoot(component)
   }
 
@@ -1093,6 +1107,7 @@ export class Component<
     for (const component of this.$parentRoot) {
       const slotName = this.$parentRootSlot[i]
       this.appendParentRoot(component, slotName)
+      component.collapse()
       i++
     }
   }
@@ -1100,6 +1115,8 @@ export class Component<
   public uncollapse(): void {
     for (const component of this.$parentRoot) {
       this.removeParentRoot(component)
+
+      component.uncollapse()
     }
   }
 
@@ -1119,51 +1136,37 @@ export class Component<
     this.postAppendParentRoot(component, slotName, at)
   }
 
-  protected memAppendParentRoot(
+  public memAppendParentRoot(
     component: Component,
     slotName: string,
     at: number
   ): void {
     push(this.$mountParentRoot, component)
+    const slot = get(this.$slot, slotName)
+    slot.memAppendParentChild(component, 'default', at, at)
   }
 
-  protected domAppendParentRoot(
+  public domAppendParentRoot(
     component: Component,
     slotName: string,
     at: number
   ): void {
     const slot = get(this.$slot, slotName)
-    slot.appendParentChild(component, 'default', at)
-    // appendChild(slot.$element, component.$element)
+    slot.domAppendParentChildAt(component, 'default', at, at)
   }
 
-  protected postAppendParentRoot(
+  public postAppendParentRoot(
     component: Component,
     slotName: string,
     at: number
   ): void {
+    const slot = get(this.$slot, slotName)
+    slot.postAppendParentChild(component, slotName, at)
     set(component, '$parent', this)
-    _if(this.$mounted, mount, component, this.$context)
+    // _if(this.$mounted, mount, component, this.$context)
   }
 
-  public appendParentChild(
-    component: Component,
-    slotName: string = 'default',
-    at: number
-  ): void {
-    const slot = this.$slot[slotName]
-
-    if (slot === this) {
-      const _at = this.$parentChildren.length
-
-      this.memAppendParentChild(component, slotName, at, _at)
-      this.domAppendParentChildAt(component, slotName, at, _at)
-    } else {
-      slot.appendParentChild(component, slotName, at)
-    }
-  }
-
-  protected memAppendParentChild(
+  public memAppendParentChild(
     component: Component,
     slotName: string,
     at: number,
@@ -1173,7 +1176,7 @@ export class Component<
     push(this.$parentChildrenSlot, slotName)
   }
 
-  protected domAppendParentChildAt(
+  public domAppendParentChildAt(
     component: Component,
     slotName: string,
     at: number,
@@ -1182,7 +1185,17 @@ export class Component<
     appendChild(this.$element, component.$element)
   }
 
-  protected insertParentChildAt(
+  public postAppendParentChild(
+    component: Component,
+    slotName: string,
+    at: number
+  ): void {
+    if (this.$mounted) {
+      this.mountDescendent(component)
+    }
+  }
+
+  public insertParentChildAt(
     component: Component,
     slotName: string,
     at: number,
@@ -1197,7 +1210,7 @@ export class Component<
     }
   }
 
-  protected memInsertParentChildAt(
+  public memInsertParentChildAt(
     component: Component,
     slotName: string,
     at: number,
@@ -1207,7 +1220,7 @@ export class Component<
     insert(this.$parentChildrenSlot, slotName, _at)
   }
 
-  protected domInsertParentChildAt(
+  public domInsertParentChildAt(
     component: Component,
     slotName: string,
     at: number,
@@ -1227,15 +1240,16 @@ export class Component<
     if (slot === this) {
       const _at = this.$parentChildren.indexOf(component)
 
-      this.domRemoveParentChildAt(component, at, _at)
-      this.memRemoveParentChildAt(component, at, _at)
+      this.domRemoveParentChildAt(component, slotName, at, _at)
+      this.memRemoveParentChildAt(component, slotName, at, _at)
     } else {
       slot.removeParentChild(component, 'default', at)
     }
   }
 
-  protected memRemoveParentChildAt(
+  public memRemoveParentChildAt(
     component: Component,
+    slotName: string,
     at: number,
     _at: number
   ): void {
@@ -1243,8 +1257,9 @@ export class Component<
     removeAt(this.$parentChildrenSlot, _at)
   }
 
-  protected domRemoveParentChildAt(
+  public domRemoveParentChildAt(
     component: Component,
+    slotName: string,
     at: number,
     _at: number
   ): void {
@@ -1261,7 +1276,7 @@ export class Component<
     this.postInsertParentRootAt(component, at, slotName)
   }
 
-  protected memInsertParentRootAt(
+  public memInsertParentRootAt(
     component: Component,
     at: number,
     slotName: string
@@ -1269,7 +1284,7 @@ export class Component<
     insert(this.$mountParentRoot, component, at)
   }
 
-  protected domInsertParentRootAt(
+  public domInsertParentRootAt(
     component: Component,
     _at: number,
     slotName: string
@@ -1281,7 +1296,7 @@ export class Component<
     slot.insertParentChildAt(component, slotName, at, _at)
   }
 
-  protected postInsertParentRootAt(
+  public postInsertParentRootAt(
     component: Component,
     at: number,
     slotName: string
@@ -1296,25 +1311,41 @@ export class Component<
 
   public removeParentRoot(component: Component): void {
     const at = this.$parentRoot.indexOf(component)
-    this.postRemoveParentRootAt(component, at)
-    this.domRemoveParentRootAt(component, at)
-    this.memRemoveParentRootAt(component, at)
-  }
-
-  protected memRemoveParentRootAt(component: Component, at: number): void {
-    pull(this.$mountParentRoot, component)
-  }
-
-  protected domRemoveParentRootAt(component: Component, at: number): void {
+    const _at = this.$mountParentRoot.indexOf(component)
     const slotName = this.$parentRootSlot[at]
-    const slot = this.$slot[slotName]
-    slot.removeParentChild(component, 'default', at)
-    // slot.$element.removeChild(component.$element)
+    this.postRemoveParentRootAt(component, slotName, at, _at)
+    this.domRemoveParentRootAt(component, slotName, at, _at)
+    this.memRemoveParentRootAt(component, slotName, at, _at)
   }
 
-  protected postRemoveParentRootAt(component: Component, at: number): void {
-    component.$parent = null
+  public memRemoveParentRootAt(
+    component: Component,
+    slotName: string,
+    at: number,
+    _at: number
+  ): void {
+    pull(this.$mountParentRoot, component)
+    const slot = this.$slot[slotName]
+    slot.memRemoveParentChildAt(component, 'default', at, _at)
+  }
 
+  public domRemoveParentRootAt(
+    component: Component,
+    slotName: string,
+    at: number,
+    _at: number
+  ): void {
+    const slot = this.$slot[slotName]
+    slot.domRemoveParentChildAt(component, 'default', at, _at)
+  }
+
+  public postRemoveParentRootAt(
+    component: Component,
+    slotName: string,
+    at: number,
+    _at: number
+  ): void {
+    component.$parent = null
     if (this.$mounted) {
       component.unmount()
     }
@@ -1365,6 +1396,17 @@ export class Component<
     }
 
     return null
+  }
+
+  public getParentChildSlotId(subComponent: Component): string {
+    const i = this.$parentRoot.indexOf(subComponent)
+
+    if (i > -1) {
+      const slotName = this.$parentRootSlot[i]
+      return slotName
+    } else {
+      throw new Error('Parent Child Not Found')
+    }
   }
 
   public addEventListener = (listener: Listener): Unlisten => {

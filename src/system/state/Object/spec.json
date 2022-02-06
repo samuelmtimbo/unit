@@ -14,7 +14,7 @@
   "metadata": {
     "icon": "object-get",
     "description": "new object",
-    "complexity": 2.8382410169931247,
+    "complexity": 4,
     "tags": [
       "state"
     ]

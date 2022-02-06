@@ -30,7 +30,7 @@
   "metadata": {
     "icon": "square",
     "description": "draw on `canvas`",
-    "complexity": 2.6598965958156513,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

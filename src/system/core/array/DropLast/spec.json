@@ -105,7 +105,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "output list `a` containing all but the last `n` elements of the given list `ab`",
-    "complexity": 5,
+    "complexity": 15,
     "tags": [
       "core",
       "array"

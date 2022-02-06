@@ -6,12 +6,9 @@
         "0": {
           "unitId": "if4",
           "pinId": "d"
-        },
-        "oupupman": {
-          "unitId": "lessthan",
-          "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "table": {
@@ -21,6 +18,7 @@
           "pinId": "c"
         }
       },
+      "functional": true,
       "type": "number[][][]"
     },
     "i": {
@@ -28,9 +26,14 @@
         "0": {
           "unitId": "if4",
           "pinId": "a"
+        },
+        "1": {
+          "unitId": "isbetween",
+          "pinId": "b"
         }
       },
-      "type": "boolean"
+      "functional": true,
+      "type": "number"
     },
     "tape": {
       "pin": {
@@ -41,8 +44,13 @@
         "1": {
           "unitId": "if4",
           "pinId": "b"
+        },
+        "2": {
+          "unitId": "length",
+          "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number[]"
     }
   },
@@ -53,7 +61,7 @@
           "unitId": "ifnot",
           "pinId": "a if not b"
         },
-        "plsdbfui": {
+        "1": {
           "unitId": "turingmachine",
           "pinId": "tape"
         }
@@ -82,8 +90,8 @@
       },
       "metadata": {
         "position": {
-          "x": -218,
-          "y": -3
+          "x": -221,
+          "y": -19
         }
       }
     },
@@ -132,8 +140,8 @@
       },
       "metadata": {
         "position": {
-          "x": -12,
-          "y": -1
+          "x": -24,
+          "y": -18
         }
       }
     },
@@ -153,40 +161,8 @@
       },
       "metadata": {
         "position": {
-          "x": -119,
-          "y": -2
-        }
-      }
-    },
-    "lessthan": {
-      "id": "82c3cf2a-0855-4c6d-a4c4-807b0ce1fd35",
-      "input": {
-        "a": {
-          "metadata": {
-            "position": {
-              "x": 158,
-              "y": -66
-            }
-          }
-        },
-        "b": {
-          "constant": true,
-          "data": "3",
-          "metadata": {
-            "position": {
-              "x": 174,
-              "y": -35
-            }
-          }
-        }
-      },
-      "output": {
-        "a < b": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 122,
-          "y": -33
+          "x": -126,
+          "y": -19
         }
       }
     },
@@ -215,8 +191,46 @@
       },
       "metadata": {
         "position": {
-          "x": 121,
-          "y": 35
+          "x": 53,
+          "y": 69
+        }
+      }
+    },
+    "isbetween": {
+      "id": "f022d16a-7a47-47c8-8d9b-3278df13bcc5",
+      "input": {
+        "c": {
+          "constant": false,
+          "data": "3"
+        },
+        "a": {
+          "constant": true,
+          "data": "0"
+        },
+        "b": {}
+      },
+      "output": {
+        "a ≤ b < c": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 103,
+          "y": -1
+        }
+      }
+    },
+    "length": {
+      "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "length": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 213,
+          "y": -15
         }
       }
     }
@@ -276,14 +290,26 @@
           "test": true
         }
       },
-      "lessthan": {
-        "output": {
-          "a < b": true
-        }
-      },
       "ifnot": {
         "input": {
           "b": true
+        }
+      },
+      "isbetween": {
+        "output": {
+          "a ≤ b < c": true
+        }
+      }
+    },
+    "5": {
+      "length": {
+        "output": {
+          "length": true
+        }
+      },
+      "isbetween": {
+        "input": {
+          "c": true
         }
       }
     },
@@ -336,10 +362,11 @@
       }
     }
   },
+  "component": {},
   "metadata": {
     "icon": "cpu",
     "description": "no description",
-    "complexity": 7,
+    "complexity": 59,
     "tags": [
       "platform",
       "core",

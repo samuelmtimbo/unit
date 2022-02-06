@@ -9,7 +9,7 @@
   "metadata": {
     "icon": "info-square",
     "description": "new boolean",
-    "complexity": 2.8039953301336102,
+    "complexity": 3,
     "tags": [
       "state"
     ]

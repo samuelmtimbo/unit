@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "arrow-up",
     "description": "the biggest between `a` and `b`",
-    "complexity": 2.6552267294257175,
+    "complexity": 3,
     "tags": [
       "f",
       "math"

@@ -1,5 +1,5 @@
 export class OutputNotFoundError extends Error {
   constructor(name: string) {
-    super(`Output named "${name}" not found`)
+    super(`output named "${name}" not found`)
   }
 }

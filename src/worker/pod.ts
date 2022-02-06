@@ -3,7 +3,7 @@ import { Graph } from '../Class/Graph'
 import { makeRemoteUnitAPI } from '../client/makeRemoteUnitAPI'
 import { RemoteRef } from '../client/RemoteRef'
 import { init } from '../client/service'
-import { spawn } from '../spawn'
+import { spawn, start } from '../spawn'
 import { BundleSpec } from '../system/platform/method/process/BundleSpec'
 
 const post = (data) => {
@@ -16,19 +16,14 @@ const system = boot()
 
 const pod = spawn(system)
 
-init((data: BundleSpec) => {
-  const { spec: spec, specs } = data
-
-  for (const id in specs) {
-    const _spec = specs[id]
-    globalThis.__specs[id] = _spec
-  }
+init((bundle: BundleSpec) => {
+  const graph = start(system, pod, bundle)
 
   if (_graph) {
     _graph.destroy()
   }
 
-  _graph = new Graph(spec, {}, system, pod)
+  _graph = graph
 
   _graph.play()
 

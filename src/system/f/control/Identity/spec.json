@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "unit",
     "description": "output `a`",
-    "complexity": 2.6557085410373773,
+    "complexity": 3,
     "tags": [
       "f",
       "control"

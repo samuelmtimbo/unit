@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "server",
     "description": "connect to a locally shared process",
-    "complexity": 4.4073161240108965,
+    "complexity": 6,
     "tags": [
       "platform",
       "method",

@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "output an empty object",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "core",
       "object"

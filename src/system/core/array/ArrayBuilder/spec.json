@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "array",
     "description": "build a list from empty list",
-    "complexity": 7.6576728499156825,
+    "complexity": 10,
     "tags": [
       "core",
       "array"

@@ -9,7 +9,7 @@
   "metadata": {
     "icon": "network",
     "description": "list of third party API providers",
-    "complexity": 9.40425847339844,
+    "complexity": 26,
     "tags": [
       "host",
       "component"

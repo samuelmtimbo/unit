@@ -1,4 +1,5 @@
 import { AsyncC } from './AsyncC_'
+import { AsyncEE } from './AsyncEE_'
 import { AsyncE } from './AsyncE_'
 import { AsyncG } from './AsyncG_'
 import { AsyncJ } from './AsyncJ_'
@@ -20,5 +21,6 @@ export const Async = (unit: any, _: string[]) => {
     $J: AsyncJ,
     $PO: AsyncPO,
     $W: AsyncW,
+    $EE: AsyncEE,
   })
 }

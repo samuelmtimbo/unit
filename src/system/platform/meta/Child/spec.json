@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "circle",
     "description": "reference a child element inside `element`",
-    "complexity": 2.7936178492670902,
+    "complexity": 3,
     "tags": [
       "platform",
       "meta"

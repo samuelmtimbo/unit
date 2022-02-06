@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "square",
     "description": "HTML div element",
-    "complexity": 6.489483535014733,
+    "complexity": 21,
     "tags": [
       "platform",
       "component"

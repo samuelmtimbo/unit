@@ -108,7 +108,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "check whether an object `o` has key-value `k` `v` or `default` if key is not present",
-    "complexity": 10,
+    "complexity": 26,
     "tags": [
       "core",
       "relation"

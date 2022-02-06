@@ -2,6 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ISpeechSynthesis } from '../../../../../types/global/ISpeechSynthesis'
 
 export type I = {
   message: string
@@ -34,7 +35,14 @@ export default class SpeechSynthesis extends Functional<I, O> {
       return
     }
 
-    const synth = SpeechSynthesis({})
+    let synth: ISpeechSynthesis
+
+    try {
+      synth = SpeechSynthesis({})
+    } catch (err) {
+      done(undefined, err.message)
+      return
+    }
 
     let voices = []
 

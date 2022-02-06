@@ -196,7 +196,7 @@
   "metadata": {
     "icon": "grid",
     "description": "for every `i` < `a` and `j` < `b`",
-    "complexity": 7,
+    "complexity": 27,
     "tags": [
       "core",
       "loop"

@@ -243,7 +243,7 @@ assert.deepEqual(
     },
   },
   setPinSetFunctional(
-    { type: 'output', id: 'gghdb', functional: true },
+    { type: 'output', pinId: 'gghdb', functional: true },
     {
       name: '?',
       units: {},

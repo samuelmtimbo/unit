@@ -67,7 +67,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "extract `clientX` and `clientY` from `obj`",
-    "complexity": 4,
+    "complexity": 10,
     "tags": [
       "platform",
       "core",

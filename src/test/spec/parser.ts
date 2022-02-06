@@ -20,6 +20,8 @@ import {
   updateNodeAt,
 } from '../../spec/parser'
 import isEqual from '../../system/f/comparisson/Equals/f'
+import _classes from '../../system/_classes'
+import _specs from '../../system/_specs'
 import { ID_IDENTITY } from './id'
 
 // // getTree
@@ -369,20 +371,21 @@ assert(!isValidValue('a + 1'))
 
 // getValueType
 
-assert.equal(getValueType({}, '"foo"'), 'string')
-assert.equal(getValueType({}, "'foo'"), 'string')
-assert.equal(getValueType({}, '1'), 'number')
-// assert.equal(getValueType('[]'), 'any[]')
-assert.equal(getValueType({}, '[]'), '<T>[]')
-assert.equal(getValueType({}, '-2e-23'), 'number')
-assert.equal(getValueType({}, '/abc/'), 'regex')
-assert.equal(getValueType({}, 'true'), 'boolean')
-assert.equal(getValueType({}, 'false'), 'boolean')
-assert.equal(getValueType({}, '{}'), '{}')
-assert.equal(getValueType({}, '{a:1,b:2}'), '{a:number,b:number}')
+const _getValueType = (str: string) => getValueType(_specs, str)
+
+assert.equal(_getValueType('"foo"'), 'string')
+assert.equal(_getValueType("'foo'"), 'string')
+assert.equal(_getValueType('1'), 'number')
+// assert.equal(_getValueType(), 'any[]')
+assert.equal(_getValueType('[]'), '<T>[]')
+assert.equal(_getValueType('-2e-23'), 'number')
+assert.equal(_getValueType('/abc/'), 'regex')
+assert.equal(_getValueType('true'), 'boolean')
+assert.equal(_getValueType('false'), 'boolean')
+assert.equal(_getValueType('{}'), '{}')
+assert.equal(_getValueType('{a:1,b:2}'), '{a:number,b:number}')
 assert.equal(
-  getValueType(
-    {},
+  _getValueType(
     `'{ "error": {  "errors": [   {    "domain": "global",    "reason": "required",    "message": "Login Required",    "locationType": "header",    "location": "Authorization"   }  ],  "code": 401,  "message": "Login Required" }}'`
   ),
   'string'
@@ -397,20 +400,23 @@ assert.deepEqual(findGenerics('{foo:<T>,bar:<K>}'), new Set(['<T>', '<K>']))
 
 // extractGenerics
 
-assert.deepEqual(extractGenerics({}, 'number', '<T>'), { '<T>': 'number' })
-assert.deepEqual(extractGenerics({}, '"foo"', '<T>'), { '<T>': 'string' })
-assert.deepEqual(extractGenerics({}, '1', '<T>'), { '<T>': 'number' })
-assert.deepEqual(extractGenerics({}, '{foo:"bar"}', '<T>'), {
+const _extractGenerics = (value: string, type: string) =>
+  extractGenerics(_specs, value, type)
+
+assert.deepEqual(_extractGenerics('number', '<T>'), { '<T>': 'number' })
+assert.deepEqual(_extractGenerics('"foo"', '<T>'), { '<T>': 'string' })
+assert.deepEqual(_extractGenerics('1', '<T>'), { '<T>': 'number' })
+assert.deepEqual(_extractGenerics('{foo:"bar"}', '<T>'), {
   '<T>': '{foo:string}',
 })
-assert.deepEqual(extractGenerics({}, '{foo:"bar"}', '{foo:<T>}'), {
+assert.deepEqual(_extractGenerics('{foo:"bar"}', '{foo:<T>}'), {
   '<T>': 'string',
 })
-assert.deepEqual(extractGenerics({}, '<0>[]', '<1>[]'), { '<1>': '<0>' })
-assert.deepEqual(extractGenerics({}, 'number|string', '<0>'), {
+assert.deepEqual(_extractGenerics('<0>[]', '<1>[]'), { '<1>': '<0>' })
+assert.deepEqual(_extractGenerics('number|string', '<0>'), {
   '<0>': 'number|string',
 })
-assert.deepEqual(extractGenerics({}, '<0>|<1>', '<2>'), { '<2>': '<0>|<1>' })
+assert.deepEqual(_extractGenerics('<0>|<1>', '<2>'), { '<2>': '<0>|<1>' })
 
 // applyGenerics
 
@@ -511,46 +517,43 @@ assert.equal(removeNodeAt('{foo:}', [0, 1]), '{foo}')
 
 // evaluate
 
-assert.deepEqual(evaluate('1'), 1)
-assert.deepEqual(evaluate('Infinity'), Infinity)
-assert.deepEqual(evaluate('"foo"'), 'foo')
-assert.deepEqual(evaluate("'foo'"), 'foo')
-assert.deepEqual(evaluate('\'"foo"\''), '"foo"')
-assert.deepEqual(evaluate("'\\'foo\\''"), "'foo'")
-assert.deepEqual(evaluate('\'\\"foo\\"\''), '\\"foo\\"')
-assert.deepEqual(evaluate("'\\\\'"), '\\')
-assert.deepEqual(evaluate("'\\'\\\\\\''"), "'\\'")
-assert.deepEqual(evaluate('true'), true)
-assert.deepEqual(evaluate('false'), false)
-assert.deepEqual(evaluate('null'), null)
-assert.deepEqual(evaluate('[]'), [])
-assert.deepEqual(evaluate('[1,2,3]'), [1, 2, 3])
-assert.deepEqual(evaluate('[1,2,3,]'), [1, 2, 3])
-assert.deepEqual(evaluate('{foo:0}'), { foo: 0 })
-assert.deepEqual(evaluate('{foo:0,}'), { foo: 0 })
-assert.deepEqual(evaluate('{foo:"bar zaz"}'), { foo: 'bar zaz' })
-assert.deepEqual(evaluate('{a:1}'), { a: 1 })
-assert.deepEqual(evaluate('{a:"1"}'), { a: '1' })
-assert.deepEqual(evaluate('{1:1}'), { 1: 1 })
-assert.deepEqual(evaluate('{a}'), { a: 'a' })
-assert.deepEqual(evaluate('{a,b}'), { a: 'a', b: 'b' })
-assert.deepEqual(evaluate('{1}'), { 1: '1' })
-assert.deepEqual(evaluate('"\\n"'), '\\n')
+const _evaluate = (str: string) => evaluate(str, _specs, _classes)
+
+assert.deepEqual(_evaluate('1'), 1)
+assert.deepEqual(_evaluate('Infinity'), Infinity)
+assert.deepEqual(_evaluate('"foo"'), 'foo')
+assert.deepEqual(_evaluate("'foo'"), 'foo')
+assert.deepEqual(_evaluate('\'"foo"\''), '"foo"')
+assert.deepEqual(_evaluate("'\\'foo\\''"), "'foo'")
+assert.deepEqual(_evaluate('\'\\"foo\\"\''), '\\"foo\\"')
+assert.deepEqual(_evaluate("'\\\\'"), '\\')
+assert.deepEqual(_evaluate("'\\'\\\\\\''"), "'\\'")
+assert.deepEqual(_evaluate('true'), true)
+assert.deepEqual(_evaluate('false'), false)
+assert.deepEqual(_evaluate('null'), null)
+assert.deepEqual(_evaluate('[]'), [])
+assert.deepEqual(_evaluate('[1,2,3]'), [1, 2, 3])
+assert.deepEqual(_evaluate('[1,2,3,]'), [1, 2, 3])
+assert.deepEqual(_evaluate('{foo:0}'), { foo: 0 })
+assert.deepEqual(_evaluate('{foo:0,}'), { foo: 0 })
+assert.deepEqual(_evaluate('{foo:"bar zaz"}'), { foo: 'bar zaz' })
+assert.deepEqual(_evaluate('{a:1}'), { a: 1 })
+assert.deepEqual(_evaluate('{a:"1"}'), { a: '1' })
+assert.deepEqual(_evaluate('{1:1}'), { 1: 1 })
+assert.deepEqual(_evaluate('{a}'), { a: 'a' })
+assert.deepEqual(_evaluate('{a,b}'), { a: 'a', b: 'b' })
+assert.deepEqual(_evaluate('{1}'), { 1: '1' })
+assert.deepEqual(_evaluate('"\\n"'), '\\n')
 assert.deepEqual(
-  evaluate(`\${unit:{id:'${ID_IDENTITY}'}}`).__bundle.unit.id,
+  _evaluate(`\${unit:{id:'${ID_IDENTITY}'}}`).__bundle.unit.id,
   ID_IDENTITY
 )
 assert.deepEqual(
-  evaluate(
+  _evaluate(
     `'{\\n "error": {\\n  "errors": [\\n   {\\n    "domain": "global",\\n    "reason": "required",\\n    "message": "Login Required",\\n    "locationType": "header",\\n    "location": "Authorization"\\n   }\\n  ],\\n  "code": 401,\\n  "message": "Login Required"\\n }\\n}\\n'`
   ),
   '{\\n "error": {\\n  "errors": [\\n   {\\n    "domain": "global",\\n    "reason": "required",\\n    "message": "Login Required",\\n    "locationType": "header",\\n    "location": "Authorization"\\n   }\\n  ],\\n  "code": 401,\\n  "message": "Login Required"\\n }\\n}\\n'
 )
-// TODO
-// assert.deepEqual(
-//   evaluate(IDENTITY),
-//   fromId(IDENTITY)
-// )
 
 // isGeneric
 

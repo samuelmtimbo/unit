@@ -82,16 +82,6 @@ export default class _Object<T extends Dict<any>>
     return this._obj.pathDelete(path, name)
   }
 
-  getPath(path: string[], name: string): Promise<any> {
-    throw new Error('Method not implemented.')
-  }
-  setPath(path: string[], name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-  deletePath(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
-  }
-
   async read(): Promise<any> {
     return this._obj.read()
   }

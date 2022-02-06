@@ -8,6 +8,15 @@ import {
   $C_W,
 } from './interface/async/$C'
 import {
+  $EE,
+  $EE_C,
+  $EE_METHOD_CALL,
+  $EE_METHOD_REF,
+  $EE_METHOD_WATCH,
+  $EE_R,
+  $EE_W,
+} from './interface/async/$EE'
+import {
   $G,
   $G_C,
   $G_METHOD_CALL,
@@ -109,6 +118,26 @@ export function makeAsyncWorkerR(
     }
   }
   return _$_R
+}
+
+export function AsyncWorkerEE_C(client: RemotePort): $EE_C {
+  return makeAsyncWorkerC(client, $EE_METHOD_CALL)
+}
+
+export function AsyncWorkerEE_W(client: RemotePort): $EE_W {
+  return makeAsyncWorkerW(client, $EE_METHOD_WATCH)
+}
+
+export function AsyncWorkerEE_R(client: RemotePort): $EE_R {
+  return makeAsyncWorkerR(client, $EE_METHOD_REF)
+}
+
+export function AsyncWorkerEE(client: RemotePort): $EE {
+  return {
+    ...AsyncWorkerEE_C(client),
+    ...AsyncWorkerEE_W(client),
+    ...AsyncWorkerEE_R(client),
+  }
 }
 
 export function AsyncWorkerU_C(client: RemotePort): $U_C {
@@ -233,6 +262,7 @@ export function AsyncWorkerST(client: RemotePort): $ST {
 
 export function AsyncWorkerGraph(client: RemotePort): $Graph {
   return {
+    ...AsyncWorkerEE(client),
     ...AsyncWorkerU(client),
     ...AsyncWorkerC(client),
     ...AsyncWorkerG(client),

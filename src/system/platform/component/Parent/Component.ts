@@ -1,5 +1,5 @@
 import { Element } from '../../../../client/element'
-import parentElement from '../../../../client/parentElement'
+import parentElement from '../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 
@@ -15,7 +15,7 @@ export default class Parent extends Element<HTMLDivElement, Props> {
 
     const {} = this.$props
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this._parent_el = $element
 

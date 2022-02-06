@@ -42,7 +42,7 @@
   "metadata": {
     "icon": "array",
     "description": "build a list starting `from`",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "core",
       "array"

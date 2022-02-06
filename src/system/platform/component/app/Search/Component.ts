@@ -17,7 +17,7 @@ import {
   IOScrollEvent,
   makeScrollListener,
 } from '../../../../../client/event/scroll'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { compareByComplexity } from '../../../../../client/search'
 import {
   addAddSpecListener,
@@ -36,11 +36,11 @@ import { GraphSpec, Spec, Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
 import { removeWhiteSpace } from '../../../../../util/string'
 import MicrophoneButton from '../../../component/app/MicrophoneButton/Component'
+import TextDiv from '../../../core/component/TextDiv/Component'
 import Div from '../../Div/Component'
 import Icon from '../../Icon/Component'
 import IconButton from '../IconButton/Component'
 import SearchInput from '../SearchInput/Component'
-import TextDiv from '../TextDiv/Component'
 
 export interface Props {
   className?: string
@@ -290,7 +290,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     search.registerParentRoot(microphone)
     this._search = search
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot['default'] = search.$slot['default']

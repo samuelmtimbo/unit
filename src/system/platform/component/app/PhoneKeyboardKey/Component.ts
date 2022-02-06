@@ -9,14 +9,14 @@ import {
   keyToKeyCode,
 } from '../../../../../client/event/keyboard/keyCode'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import Div from '../../../component/Div/Component'
 import Icon from '../../../component/Icon/Component'
-import TextDiv from '../TextDiv/Component'
+import TextDiv from '../../../core/component/TextDiv/Component'
 
 export interface Props {
   style?: Dict<string>
@@ -139,7 +139,7 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
       key_component.setChildren([icon_component])
     }
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = key_component.$slot

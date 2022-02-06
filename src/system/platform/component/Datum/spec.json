@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "square",
     "description": "unit datum representation",
-    "complexity": 9.683857457887813,
+    "complexity": 25,
     "tags": [
       "platform",
       "component"

@@ -1,6 +1,6 @@
 import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
-import parentElement from '../../../../../client/parentElement'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -58,7 +58,7 @@ export default class ModeIconButton extends Element<HTMLDivElement, Props> {
     icon_button.preventDefault('touchdown')
     this._icon_button = icon_button
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = { default: icon_button }

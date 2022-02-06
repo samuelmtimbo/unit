@@ -37,7 +37,7 @@
   "metadata": {
     "icon": "navigation",
     "description": "select a mode (\"none\"|\"info\"|\"add\"|\"remove\"|\"change\")",
-    "complexity": 3,
+    "complexity": 75,
     "tags": [
       "platform",
       "component",

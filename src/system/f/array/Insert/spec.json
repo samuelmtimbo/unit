@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "info-square",
     "description": "insert `b` element into `a` at index `i`",
-    "complexity": 2.6575246001890185,
+    "complexity": 3,
     "tags": [
       "f",
       "array"

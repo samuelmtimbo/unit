@@ -1,3 +1,4 @@
+import { IO } from '../types/IO'
 import { Moment } from './Moment'
 
 export interface GraphMergePinDataMomentData {
@@ -8,7 +9,7 @@ export interface GraphMergePinDataMomentData {
 }
 
 export interface GraphMergePinDataMoment extends Moment {
-  type: 'input' | 'output'
+  type: IO
   event: 'data' | 'drop'
   data: GraphMergePinDataMomentData
 }

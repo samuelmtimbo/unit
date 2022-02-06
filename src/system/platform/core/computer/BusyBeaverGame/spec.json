@@ -4,57 +4,79 @@
     "init": {
       "id": "32b27ad8-51d9-4767-8b9a-09da5a34f39d",
       "input": {
+        "n": {},
         "a": {
           "constant": true,
           "data": "0"
         }
+      },
+      "output": {
+        "a[]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 107,
+          "y": -4
+        }
       }
     },
-    "hsltiomqs": {
+    "turingmachine": {
       "id": "6833b503-4853-49a2-9780-ded053c2970b",
       "input": {
         "state": {
           "constant": true,
           "data": "0"
+        },
+        "table": {},
+        "i": {},
+        "tape": {}
+      },
+      "output": {
+        "tape": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -2,
+          "y": 19
         }
       }
     },
-    "vcgtkbllv": {
-      "id": "86e310b3-4b84-4be2-a87a-e4ebcc5d3a0c"
+    "inthalf": {
+      "id": "86e310b3-4b84-4be2-a87a-e4ebcc5d3a0c",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a ÷ 2": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -106,
+          "y": -16
+        }
+      }
     }
   },
   "merges": {
-    "ufafzgs": {
+    "0": {
       "init": {
         "output": {
           "a[]": true
         }
       },
-      "hsltiomqs": {
+      "turingmachine": {
         "input": {
-          "states": true
+          "tape": true
         }
       }
     },
-    "yaumic": {
-      "init": {
-        "input": {
-          "n": true
-        }
-      },
-      "vcgtkbllv": {
-        "input": {
-          "a": true
-        }
-      }
-    },
-    "oauqhwuos": {
-      "hsltiomqs": {
+    "2": {
+      "turingmachine": {
         "input": {
           "i": true
         }
       },
-      "vcgtkbllv": {
+      "inthalf": {
         "output": {
           "a ÷ 2": true
         }
@@ -64,7 +86,7 @@
   "metadata": {
     "icon": "alarm-minus",
     "description": "no description",
-    "complexity": 29.65585679076404,
+    "complexity": 67,
     "tags": [
       "platform",
       "core",
@@ -75,7 +97,7 @@
     "table": {
       "pin": {
         "0": {
-          "unitId": "hsltiomqs",
+          "unitId": "turingmachine",
           "pinId": "table"
         }
       },
@@ -84,7 +106,12 @@
     "n": {
       "pin": {
         "0": {
-          "mergeId": "yaumic"
+          "unitId": "init",
+          "pinId": "n"
+        },
+        "1": {
+          "unitId": "inthalf",
+          "pinId": "a"
         }
       },
       "type": "number"
@@ -94,7 +121,7 @@
     "tape": {
       "pin": {
         "0": {
-          "unitId": "hsltiomqs",
+          "unitId": "turingmachine",
           "pinId": "tape"
         }
       },

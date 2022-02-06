@@ -18,7 +18,7 @@
   "metadata": {
     "icon": "circle",
     "description": "unit `class` with the given system `id`",
-    "complexity": 7.541352408131497,
+    "complexity": 12,
     "tags": [
       "f",
       "meta"

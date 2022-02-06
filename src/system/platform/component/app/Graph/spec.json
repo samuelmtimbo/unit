@@ -1,0 +1,50 @@
+{
+  "name": "graph",
+  "inputs": {
+    "style": {
+      "type": "object"
+    },
+    "pod": {
+      "type": "`G`",
+      "ref": true
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "fullwindow": {
+      "type": "boolean",
+      "defaultIgnored": true
+    },
+    "frame": {
+      "type": "`C`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "pod": {
+      "type": "`G`",
+      "ref": true,
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "atom-alt",
+    "description": "Recursive Graph Editor",
+    "complexity": 112,
+    "tags": [
+      "platform",
+      "component",
+      "app",
+      "graph"
+    ]
+  },
+  "id": "e80c912e-7508-11ea-966b-436805345ff0",
+  "base": true,
+  "component": {
+    "defaultWidth": 360,
+    "defaultHeight": 360
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}

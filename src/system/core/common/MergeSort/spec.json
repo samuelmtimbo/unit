@@ -174,7 +174,7 @@
   "metadata": {
     "icon": "list-ordered",
     "description": "sort a number array using the Merge Sort Algorithm",
-    "complexity": 50,
+    "complexity": 118,
     "tags": [
       "core",
       "common"

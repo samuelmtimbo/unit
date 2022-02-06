@@ -51,14 +51,14 @@
   "metadata": {
     "icon": "info-square",
     "description": "array `a`'s first 3 elements",
-    "complexity": 5,
+    "complexity": 7,
     "tags": [
       "core",
       "array"
     ]
   },
   "inputs": {
-    "loijpa": {
+    "a": {
       "pin": {
         "0": {
           "mergeId": "0"

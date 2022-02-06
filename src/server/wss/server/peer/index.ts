@@ -50,7 +50,7 @@ export function send_server_peer(id: string, type: string, data: any): void {
 emitter.addListener('peer', (_data, peer: Peer, ws) => {
   const { type, data } = _data
 
-  const { userId, username } = peer
+  const { userId } = peer
 
   const ws_id = wsId(peer)
 
@@ -59,7 +59,7 @@ emitter.addListener('peer', (_data, peer: Peer, ws) => {
       {
         const { id, _id } = data
 
-        const transmitter_id = `${username}@${id}`
+        const transmitter_id = `${userId}@${id}`
 
         if (_peer_source[transmitter_id]) {
           send_server_peer(ws_id, _id, {

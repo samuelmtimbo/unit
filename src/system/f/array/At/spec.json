@@ -23,7 +23,7 @@
   "metadata": {
     "icon": "info-square",
     "description": "`a` element at position `i`",
-    "complexity": 2.658525285844004,
+    "complexity": 3,
     "tags": [
       "f",
       "array"

@@ -1,1 +1,1 @@
-// TODO
+export type PeerSpec = {}

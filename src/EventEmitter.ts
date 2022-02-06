@@ -89,10 +89,18 @@ export class EventEmitter<
   }
 
   emit<K extends keyof _EE>(event: K, ...args: _EE[K]): void {
-    const listeners = [...(this.__listeners[event] || [])]
+    const listeners = this.__listeners[event]
+
+    if (!listeners) {
+      return
+    }
 
     for (const listener of listeners) {
       listener.call(this, ...args)
     }
+  }
+
+  refEmitter(): EE<any, any> {
+    return null
   }
 }

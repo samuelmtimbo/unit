@@ -1,12 +1,12 @@
 import { $ } from '../../../../../Class/$'
 import { Element } from '../../../../../Class/Element'
-import { listenGlobalComponent } from '../../../../../client/globalComponent'
 import { CSOpt } from '../../../../../interface/async/$CS'
 import { CA } from '../../../../../interface/CA'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { listenGlobalComponent } from '../../../../globalComponent'
 import { Style } from '../../../Props'
 import _Canvas from './Component'
 
@@ -56,7 +56,7 @@ export default class Canvas extends Element<I, O, {}> {
         self._input.d.pull()
         self._backwarding = false
 
-        self.emit('call', { method: 'draw', data: [step] })
+        self.refEmitter().emit('call', { method: 'draw', data: [step] })
 
         return
       }

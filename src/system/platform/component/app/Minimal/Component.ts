@@ -4,6 +4,7 @@ import { getSpec, isComponent } from '../../../../../client/spec'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IO } from '../../../../../types/IO'
 import SVGCircle from '../../../component/svg/Circle/Component'
 import SVGRect from '../../../component/svg/Rect/Component'
 import SVGSVG from '../../../component/svg/SVG/Component'
@@ -108,7 +109,7 @@ export default class Minimal extends Element<SVGElement, Props> {
 
     const r = 1
 
-    const push_pin = (type: 'input' | 'output', i: number): void => {
+    const push_pin = (type: IO, i: number): void => {
       const count = pin_count[type]
 
       let x: number = cX

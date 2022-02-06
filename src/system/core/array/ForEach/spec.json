@@ -78,7 +78,7 @@
   "metadata": {
     "icon": "array",
     "description": "output every element of array `a`",
-    "complexity": 3,
+    "complexity": 31,
     "tags": [
       "core",
       "array"

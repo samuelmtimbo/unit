@@ -1,0 +1,29 @@
+{
+  "name": "web service",
+  "inputs": {
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "network",
+    "description": "list of third party API providers",
+    "complexity": 26,
+    "tags": [
+      "platform",
+      "component",
+      "app",
+      "service"
+    ]
+  },
+  "id": "973c2b6a-6a58-11eb-8627-3f7d030cf3e2",
+  "base": true,
+  "component": {
+    "defaultWidth": 300,
+    "defaultHeight": 360
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}

@@ -31,7 +31,7 @@
   "metadata": {
     "icon": "square",
     "description": "SVG line",
-    "complexity": 6.411207679335841,
+    "complexity": 21,
     "tags": [
       "platform",
       "component",

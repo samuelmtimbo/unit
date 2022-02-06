@@ -1,3 +1,4 @@
+import { ShouldNeverHappenError } from '../exception/ShouldNeverHappenError'
 import { Unlisten } from '../types/Unlisten'
 import callAll from '../util/call/callAll'
 import Listenable from './Listenable'
@@ -24,7 +25,7 @@ export function addListener(
       $listener.splice(i, 1)
       $unlisten.splice(i, 1)
     } else {
-      throw new Error('Should never happen')
+      throw new ShouldNeverHappenError()
     }
   }
 }

@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "circle",
     "description": "object mapping id to spec",
-    "complexity": 2.6565980393973647,
+    "complexity": 3,
     "tags": [
       "f",
       "meta"

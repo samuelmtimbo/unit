@@ -91,7 +91,7 @@ export default class Frame extends Element<HTMLDivElement, Props> {
     this._prop_handler[prop](current)
   }
 
-  protected mountDescendent(child: Component): void {
+  mountDescendent(child: Component): void {
     // console.log('Frame', 'mountDescendent', child)
 
     child.mount(this.$$context)

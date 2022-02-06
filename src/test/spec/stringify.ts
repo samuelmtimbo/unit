@@ -73,5 +73,11 @@ assert.deepEqual(
   "${unit:{id:'fa94b179-00e3-4ed1-814e-7938324a833f'}}"
 )
 
-assert.deepEqual(JSON.parse(evaluate(stringify(JSON.stringify('\n')))), '\n')
-assert.deepEqual(JSON.parse(evaluate(stringify(JSON.stringify('\r')))), '\r')
+assert.deepEqual(
+  JSON.parse(evaluate(stringify(JSON.stringify('\n')), _specs, _classes)),
+  '\n'
+)
+assert.deepEqual(
+  JSON.parse(evaluate(stringify(JSON.stringify('\r')), _specs, _classes)),
+  '\r'
+)

@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "server",
     "description": "share a graph localy",
-    "complexity": 9.819357708059226,
+    "complexity": 17,
     "tags": [
       "platform",
       "method",

@@ -75,7 +75,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "build an array from 0 to `n`",
-    "complexity": 8,
+    "complexity": 40,
     "tags": [
       "core",
       "array"

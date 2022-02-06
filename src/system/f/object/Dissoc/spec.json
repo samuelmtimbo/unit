@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "remove `obj` key-value pair for given `key`",
-    "complexity": 2.6618238422622906,
+    "complexity": 3,
     "tags": [
       "f",
       "object"

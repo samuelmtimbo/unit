@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "circle",
     "description": "get system `spec` with `id`",
-    "complexity": 2.6611567184923004,
+    "complexity": 3,
     "tags": [
       "f",
       "meta"

@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "get `obj` `keys`",
-    "complexity": 2.6658636473139,
+    "complexity": 3,
     "tags": [
       "platform",
       "method",

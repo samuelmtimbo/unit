@@ -48,6 +48,7 @@ export default class Ref<T, K extends keyof T> extends Functional<
 
   async f({ obj, key }: I<T, K>, done): Promise<void> {
     let _value
+
     try {
       _value = await obj.get(key)
     } catch (err) {
@@ -58,15 +59,18 @@ export default class Ref<T, K extends keyof T> extends Functional<
     this._unlisten = obj.subscribe([], key, (type, key, data) => {
       if (type === 'delete') {
         this.err('key value not found')
+
         this._forward_empty('value')
       }
     })
 
     const value = new (class _Value extends $ implements V {
       async read(): Promise<any> {
+        _value = await obj.get(key)
         const v = staticfy(_value)
         return v
       }
+
       async write(data: any): Promise<void> {
         return obj.set(key, data)
       }

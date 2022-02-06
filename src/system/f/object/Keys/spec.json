@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "list keys for this object",
-    "complexity": 2.6586364731390026,
+    "complexity": 3,
     "tags": [
       "f",
       "object"

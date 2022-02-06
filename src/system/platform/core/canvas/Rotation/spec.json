@@ -96,7 +96,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "rotate `+` more every frame",
-    "complexity": 6,
+    "complexity": 17,
     "tags": [
       "platform",
       "core",

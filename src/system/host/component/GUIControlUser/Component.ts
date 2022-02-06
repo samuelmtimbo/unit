@@ -1,14 +1,14 @@
 import { addListener } from '../../../../client/addListener'
 import { Component } from '../../../../client/component'
 import { makeCustomListener } from '../../../../client/event/custom'
-import parentElement from '../../../../client/parentElement'
+import parentElement from '../../../../client/platform/web/parentElement'
 import { setAlpha, themeBackgroundColor } from '../../../../client/theme'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { Unlisten } from '../../../../types/Unlisten'
-import User from '../../../platform/component/app/service/User/Component'
-import IOUNAPPControl from '../GUIControl/Component'
+import User from '../../../platform/component/app/service/UserControl/Component'
+import GUIControl from '../GUIControl/Component'
 
 export interface Props {
   className?: string
@@ -23,8 +23,8 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class IOUNAPPUser extends Component<HTMLDivElement, Props> {
-  private _root: IOUNAPPControl
+export default class GUIControlUser extends Component<HTMLDivElement, Props> {
+  private _root: GUIControl
   private _content: User
 
   constructor($props: Props, $system: System, $pod: Pod) {
@@ -32,7 +32,7 @@ export default class IOUNAPPUser extends Component<HTMLDivElement, Props> {
 
     const { style = {} } = this.$props
 
-    const root = new IOUNAPPControl(
+    const root = new GUIControl(
       {
         icon: 'user',
         style: {},
@@ -56,7 +56,7 @@ export default class IOUNAPPUser extends Component<HTMLDivElement, Props> {
     )
     this._content = user
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$slot = root.$slot

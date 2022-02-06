@@ -102,7 +102,7 @@
   "metadata": {
     "icon": "split",
     "description": "...",
-    "complexity": 5,
+    "complexity": 11,
     "tags": [
       "core",
       "array"

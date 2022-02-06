@@ -1,6 +1,8 @@
+import { IO } from '../IO'
+
 export type GraphSelectionSpec = {
   unitId: string
-  type: 'input' | 'output'
+  type: IO
   pinId: string
   mergeId: string
   oppositePinId: string

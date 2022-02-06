@@ -221,7 +221,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "...",
-    "complexity": 8,
+    "complexity": 44,
     "tags": [
       "core",
       "object"

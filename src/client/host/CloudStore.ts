@@ -1,3 +1,4 @@
+import { System } from '../../system'
 import { Dict } from '../../types/Dict'
 import { Store } from '../store'
 import { requestJSON } from './fetchJSON'
@@ -7,7 +8,7 @@ export class CloudStore<T> implements Store<T> {
   private _hostname: string
   private _init: boolean
 
-  constructor(hostname: string) {
+  constructor(public system: System, hostname: string) {
     this._hostname = hostname
   }
 
@@ -24,7 +25,7 @@ export class CloudStore<T> implements Store<T> {
   }
 
   get = (id: string): Promise<T | null> => {
-    if (isSignedIn()) {
+    if (isSignedIn(this.system)) {
       return requestJSON(this._id(id)).then((response) => {
         return response.json()
       })
@@ -34,7 +35,7 @@ export class CloudStore<T> implements Store<T> {
   }
 
   getAll = (): Promise<Dict<T>> => {
-    if (isSignedIn()) {
+    if (isSignedIn(this.system)) {
       return requestJSON(this._hostname, {}).then((response) => {
         return response.json()
       })

@@ -2,7 +2,7 @@
   "name": "listen",
   "inputs": {
     "unit": {
-      "type": "any",
+      "type": "`EE`",
       "ref": true
     },
     "event": {
@@ -21,7 +21,7 @@
   "metadata": {
     "icon": "circle",
     "description": "listen to `unit` `event`",
-    "complexity": 2.786353612660527,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

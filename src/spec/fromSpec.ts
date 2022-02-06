@@ -9,7 +9,7 @@ import {
   Specs,
 } from '../types'
 import { GraphClass } from '../types/GraphClass'
-import { clone, mapObjVK } from '../util/object'
+import { clone } from '../util/object'
 import { bundleClass } from './bundleClass'
 
 export function fromSpec<I = any, O = any>(
@@ -37,41 +37,39 @@ export function _fromSpec<I = any, O = any>(
 
   for (const unitId in units) {
     const unitSpec: GraphUnitSpec = units[unitId]
-    let { id, input = {}, output = {} } = unitSpec
+
+    unitSpec.input = unitSpec.input || {}
+    unitSpec.output = unitSpec.output || {}
+
+    const { id, input, output } = unitSpec
 
     const spec = specs[id]
 
     const { inputs, outputs } = spec
 
-    function setIgnored(
-      unitPinSpec: GraphUnitPinSpec,
-      pinSpec: PinSpec
-    ): GraphUnitPinSpec {
+    function setIgnored(unitPinSpec: GraphUnitPinSpec, pinSpec: PinSpec): void {
       const { ignored } = unitPinSpec
       if (ignored === undefined) {
         const { defaultIgnored } = pinSpec
         if (defaultIgnored === true) {
-          return { ...unitPinSpec, ignored: true }
+          unitPinSpec.ignored = true
         }
       }
-      return unitPinSpec
     }
 
-    unitSpec.input = mapObjVK(
-      inputs,
-      (inputPinSpec: PinSpec, inputId: string) => {
-        const unitPinSpec = input[inputId] || {}
-        return setIgnored(unitPinSpec, inputPinSpec)
-      }
-    )
+    for (const inputId in inputs) {
+      const inputPinSpec = inputs[inputId]
+      input[inputId] = input[inputId] || {}
+      const unitInputPinSpec = input[inputId]
+      setIgnored(unitInputPinSpec, inputPinSpec)
+    }
 
-    unitSpec.output = mapObjVK(
-      outputs,
-      (outputPinSpec: PinSpec, outputId: string) => {
-        const unitPinSpec = output[outputId] || {}
-        return setIgnored(unitPinSpec, outputPinSpec)
-      }
-    )
+    for (const outputId in outputs) {
+      const outputPinSpec = outputs[outputId]
+      output[outputId] = output[outputId] || {}
+      const unitOutputPinSpec = output[outputId]
+      setIgnored(unitOutputPinSpec, outputPinSpec)
+    }
   }
 
   class Class<I, O> extends Graph<I, O> {

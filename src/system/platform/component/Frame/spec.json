@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "square",
     "description": "context of the connected `element`",
-    "complexity": 7.7168430220706785,
+    "complexity": 21,
     "tags": [
       "platform",
       "component"

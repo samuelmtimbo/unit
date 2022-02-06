@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "watch the size of a component",
-    "complexity": 2.8226747956933456,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

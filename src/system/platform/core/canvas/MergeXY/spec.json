@@ -52,7 +52,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "{ x, y }",
-    "complexity": 5,
+    "complexity": 15,
     "tags": [
       "platform",
       "core",

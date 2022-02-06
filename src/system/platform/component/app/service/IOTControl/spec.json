@@ -1,0 +1,29 @@
+{
+  "name": "iot service",
+  "inputs": {
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "network",
+    "description": "list of third party API providers",
+    "complexity": 26,
+    "tags": [
+      "platform",
+      "component",
+      "app",
+      "service"
+    ]
+  },
+  "id": "afd4ba7e-81f6-11eb-83cd-1f40476dfaee",
+  "base": true,
+  "component": {
+    "defaultWidth": 300,
+    "defaultHeight": 360
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}

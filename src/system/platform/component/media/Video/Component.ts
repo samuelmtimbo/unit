@@ -1,6 +1,7 @@
 import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
+import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { $ST } from '../../../../../interface/async/$ST'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
@@ -21,13 +22,6 @@ export const DEFAULT_STYLE = {
   boxSizing: 'border-box',
   display: 'flex',
   // outline: 'none',
-}
-
-declare global {
-  interface HTMLVideoElement {
-    captureStream(frameRate?: number): MediaStream
-    requestPictureInPicture: () => Promise<PictureInPictureWindow>
-  }
 }
 
 export default class Video extends Element<HTMLVideoElement, Props> {
@@ -106,10 +100,12 @@ export default class Video extends Element<HTMLVideoElement, Props> {
   }: {
     frameRate: number
   }): Promise<MediaStream> {
+    // @ts-ignore
     if (this._video_el.captureStream) {
+      // @ts-ignore
       return this._video_el.captureStream(frameRate)
     } else {
-      throw new Error('Capture Stream API not supported')
+      throw new APINotSupportedError('Capture Stream')
     }
   }
 
@@ -130,7 +126,7 @@ export default class Video extends Element<HTMLVideoElement, Props> {
         }
       }
     } else {
-      throw new Error('Picture-in-Picture API not supported')
+      throw new APINotSupportedError('Picture-in-Picture')
     }
   }
 }

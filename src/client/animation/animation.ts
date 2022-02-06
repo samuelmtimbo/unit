@@ -1,4 +1,5 @@
-export const ANIMATION_T_S = 0.2
+import { ANIMATION_T_S } from './ANIMATION_T_S'
+
 export const ANIMATION_T_MS = ANIMATION_T_S * 1000
 
 export const linearTransition = (...props: string[]): string => {

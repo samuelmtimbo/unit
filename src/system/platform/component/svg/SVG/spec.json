@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "square",
     "description": "SVG container",
-    "complexity": 6.499156829679595,
+    "complexity": 21,
     "tags": [
       "platform",
       "component",

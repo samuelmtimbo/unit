@@ -10,7 +10,7 @@
   "metadata": {
     "icon": "square",
     "description": "parent container",
-    "complexity": 6.733576709967941,
+    "complexity": 21,
     "tags": [
       "platform",
       "component"

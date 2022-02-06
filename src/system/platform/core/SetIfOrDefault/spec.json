@@ -1,5 +1,4 @@
 {
-  "artifact": "spec",
   "name": "set if or default",
   "units": {
     "setif": {
@@ -108,7 +107,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "set value at `key` to `value` if `test` is defined and true or to `default` otherwise",
-    "complexity": 5,
+    "complexity": 22,
     "tags": [
       "platform",
       "core"

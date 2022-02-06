@@ -8,6 +8,7 @@ import { System } from '../../system'
 import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
 import { GlobalRefSpec } from '../../types/GlobalRefSpec'
+import { IO } from '../../types/IO'
 import { stringifyPinData } from '../../types/stringifyPinData'
 import { Unlisten } from '../../types/Unlisten'
 import { mapObjVK } from '../../util/object'
@@ -29,17 +30,6 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       callback(__global_id)
     },
 
-    $getEventNames(data: {}, callback: Callback<string[]>) {
-      const events = unit.eventNames()
-      callback(events)
-    },
-
-    $emit(_data: { type: string; data: any }) {
-      const { type, data } = _data
-
-      unit.emit(type, data)
-    },
-
     $play(data: {}) {
       unit.play()
     },
@@ -57,7 +47,9 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
     },
 
     $push({ id, data }: { id: string; data: any }): void {
-      const _data = evaluate(data)
+      const classes = unit.__system.classes
+      const specs = { ...unit.__system.specs, ...unit.__pod.specs }
+      const _data = evaluate(data, specs, classes)
       unit.push(id, _data)
     },
 
@@ -66,20 +58,14 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       unit.takeInput(id)
     },
 
-    $setPinData({
-      type,
-      pinId,
-      data,
-    }: {
-      type: 'input' | 'output'
-      pinId: string
-      data: any
-    }) {
-      const _data = evaluate(data)
+    $setPinData({ type, pinId, data }: { type: IO; pinId: string; data: any }) {
+      const classes = unit.__system.classes
+      const specs = { ...unit.__system.specs, ...unit.__pod.specs }
+      const _data = evaluate(data, specs, classes)
       unit.setPinData(type, pinId, _data)
     },
 
-    $removePinData(data: { type: 'input' | 'output'; pinId: string }) {
+    $removePinData(data: { type: IO; pinId: string }) {
       const { type, pinId } = data
       unit.removePinData(type, pinId)
     },

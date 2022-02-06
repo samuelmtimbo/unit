@@ -97,7 +97,7 @@
   "metadata": {
     "icon": "repeat",
     "description": "repeats `a` while `next` is true",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "core",
       "common"

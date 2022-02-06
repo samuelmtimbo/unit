@@ -79,7 +79,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "a spiral on canvas",
-    "complexity": 20.316420510349683,
+    "complexity": 68,
     "tags": [
       "platform",
       "core",

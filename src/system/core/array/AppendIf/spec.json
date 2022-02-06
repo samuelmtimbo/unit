@@ -69,7 +69,7 @@
   "metadata": {
     "icon": "chevrons-left",
     "description": "prepend element `b` to `a` if `test`",
-    "complexity": 15.968163371198784,
+    "complexity": 17,
     "tags": [
       "core",
       "array"

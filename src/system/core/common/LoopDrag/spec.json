@@ -178,7 +178,7 @@
   "render": false,
   "metadata": {
     "icon": "undo",
-    "complexity": 6,
+    "complexity": 17,
     "tags": [
       "core",
       "common"

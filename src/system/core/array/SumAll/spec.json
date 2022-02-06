@@ -83,7 +83,7 @@
   "metadata": {
     "icon": "plus",
     "description": "sum all elements of array `a`",
-    "complexity": 7,
+    "complexity": 37,
     "tags": [
       "core",
       "array"

@@ -25,7 +25,7 @@
   "metadata": {
     "icon": "palette",
     "description": "random HEX background color string tag",
-    "complexity": 4,
+    "complexity": 58,
     "tags": [
       "platform",
       "core",

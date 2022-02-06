@@ -1,0 +1,29 @@
+{
+  "name": "file control",
+  "inputs": {
+    "style": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "network",
+    "description": "list of third party API providers",
+    "complexity": 26,
+    "tags": [
+      "platform",
+      "component",
+      "app",
+      "service"
+    ]
+  },
+  "id": "8f84c098-81f6-11eb-a121-53448cbb5bc7",
+  "base": true,
+  "component": {
+    "defaultWidth": 300,
+    "defaultHeight": 360
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}

@@ -2,6 +2,7 @@ import { boot } from '../../../boot'
 import { Graph } from '../../../Class/Graph'
 import { APINotSupportedError } from '../../../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../../../exception/DisplayMediaAPINotSupported'
+import { MediaDevicesAPINotSupported } from '../../../exception/MediaDeviceAPINotSupported'
 import { AsyncGraph } from '../../../interface/async/AsyncGraph'
 import { U } from '../../../interface/U'
 import { NOOP } from '../../../NOOP'
@@ -9,11 +10,8 @@ import { sleep } from '../../../sleep'
 import { spawn, start } from '../../../spawn'
 import { API, BootOpt, System } from '../../../system'
 import deepMerge from '../../../system/f/object/DeepMerge/f'
-import { UserMediaAPINotSupported } from '../../../system/platform/api/media/UserMedia/MediaDeviceAPINotSupported'
 import { Storage_ } from '../../../system/platform/api/storage/Storage_'
 import { BundleSpec } from '../../../system/platform/method/process/BundleSpec'
-import classes from '../../../system/_classes'
-import components from '../../../system/_components'
 import { GraphSpecs } from '../../../types'
 import { Callback } from '../../../types/Callback'
 import { Dict } from '../../../types/Dict'
@@ -46,13 +44,20 @@ import { IUserMediaOpt } from '../../../types/global/IUserMedia'
 import { IWakeLock } from '../../../types/global/IWakeLock'
 import { Unlisten } from '../../../types/Unlisten'
 import env, { dev, prod } from '../../env'
+import { PeerSpec } from '../../host/service/peer'
+import { VMSpec } from '../../host/service/vm'
+import { WebSpec } from '../../host/service/web'
 import { isConnected, send } from '../../host/socket'
+import { createSharedServiceApi } from '../../host/store'
 import noise from '../../paperBackground'
+import { PositionObserver } from '../../PositionObserver'
 import { render } from '../../render'
 import root from '../../root'
 import { showNotification } from '../../showNotification'
 import { COLOR_RED } from '../../theme'
+import { Size } from '../../util/geometry'
 import { isPWA } from '../../util/web/isPWA'
+import { measureText } from '../../util/web/measureText'
 import init from './init'
 
 export default function webRender(
@@ -370,11 +375,11 @@ export default function webRender(
   }
 
   const SpeechSynthesis = (opt: ISpeechSynthesisOpt): ISpeechSynthesis => {
-    if (!window.SpeechSynthesis) {
+    if (!window.speechSynthesis) {
       throw new APINotSupportedError('Speech Synthesis')
     }
 
-    const speechSynthesis = new window.SpeechSynthesis()
+    const { speechSynthesis } = window
 
     return {
       getVoices: () => {
@@ -400,13 +405,16 @@ export default function webRender(
     return utterance
   }
 
+  // TODO
   const http = {
-    tab: HTTPServer,
-    session: HTTPServer,
-    local: HTTPServer,
-    cloud: HTTPServer,
+    server: {
+      local: HTTPServer,
+      cloud: HTTPServer,
+    },
+    fetch: fetch,
   }
 
+  // TODO
   const channel = {
     tab: LocalChannel,
     session: LocalChannel,
@@ -414,6 +422,7 @@ export default function webRender(
     cloud: LocalChannel,
   }
 
+  // TODO
   const pod = {
     tab: LocalPod,
     session: LocalPod,
@@ -575,11 +584,11 @@ export default function webRender(
   const media = {
     getUserMedia: async (opt: IUserMediaOpt): Promise<MediaStream> => {
       if (!navigator || !navigator.mediaDevices) {
-        throw new UserMediaAPINotSupported()
+        throw new MediaDevicesAPINotSupported()
       }
 
       if (!navigator.mediaDevices.getUserMedia) {
-        throw new UserMediaAPINotSupported()
+        throw new MediaDevicesAPINotSupported()
       }
 
       try {
@@ -689,6 +698,9 @@ export default function webRender(
     createTextNode(text: string): Text {
       return document.createTextNode(text)
     },
+    MutationObserver: MutationObserver,
+    ResizeObserver: ResizeObserver,
+    PositionObserver: PositionObserver,
   }
 
   const querystring = {
@@ -704,6 +716,19 @@ export default function webRender(
       const urlSearchParams = new URLSearchParams(obj)
       const str = urlSearchParams.toString()
       return str
+    },
+  }
+
+  const text = {
+    measureText: (text: string, fontSize: number): Size => {
+      return measureText(text, fontSize)
+    },
+  }
+
+  const host = {
+    fetch: (opt) => fetch(location.host, opt),
+    send: () => {
+      // TODO
     },
   }
 
@@ -723,21 +748,38 @@ export default function webRender(
     speech,
     document: _document,
     querystring,
+    text,
+    service: {
+      graph: (opt: {}) =>
+        createSharedServiceApi<BundleSpec>(system, '', 'graph'),
+      web: (opt: {}) => createSharedServiceApi<WebSpec>(system, '', 'web'),
+      peer: (opt: {}) => createSharedServiceApi<PeerSpec>(system, '', 'web'),
+      vm: (opt: {}) => createSharedServiceApi<VMSpec>(system, '', 'web'),
+    },
+    worker: {
+      start() {
+        const { href } = location
+        const url = `${href}/_worker.js`
+        const worker = new Worker(url)
+        return worker
+      },
+    },
+    host,
   }
 
-  const _opt = deepMerge({ specs, classes, components, host: api }, opt)
+  const _opt = deepMerge({ specs, api }, opt)
 
-  const _system = boot(_opt)
+  const system = boot(_opt)
 
-  const _pod = spawn(_system)
+  const _pod = spawn(system)
 
-  const [mapping, graph] = start(_system, _pod, bundle)
+  const graph = start(system, _pod, bundle)
 
   const $graph = AsyncGraph(graph)
 
-  const unlisten = init(_system, root)
+  const unlisten = init(system, root)
 
-  render(root, _system, _pod, $graph)
+  render(root, system, _pod, $graph)
 
-  return _system
+  return system
 }

@@ -9,7 +9,7 @@
   "metadata": {
     "icon": "history",
     "metadata": "remove all occurrences of the given URL from the history",
-    "complexity": 2.711561625558253,
+    "complexity": 3,
     "tags": [
       "platform",
       "extension",

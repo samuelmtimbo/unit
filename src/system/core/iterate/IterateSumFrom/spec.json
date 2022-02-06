@@ -45,7 +45,7 @@
   "metadata": {
     "icon": "",
     "description": "no description",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "core",
       "iterate"

@@ -18,13 +18,13 @@ export function removeChild<T extends Node>(node: Node, oldChild: T): T {
 
 export function prepend<T extends IOElement>(
   node: IOElement,
-  oldChild: T
+  newChild: T
 ): void {
   if (node instanceof Text) {
     return
   }
 
-  return node.prepend(oldChild)
+  return node.prepend(newChild)
 }
 
 export function _removeChildren(element: Element) {

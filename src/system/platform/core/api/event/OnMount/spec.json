@@ -77,7 +77,7 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` 'mount' event",
-    "complexity": 3,
+    "complexity": 5,
     "tags": [
       "platform",
       "core",

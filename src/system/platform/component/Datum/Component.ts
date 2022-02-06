@@ -1,5 +1,5 @@
 import { Element } from '../../../../client/element'
-import parentElement from '../../../../client/parentElement'
+import parentElement from '../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../pod'
 import { getTree } from '../../../../spec/parser'
 import { stringify } from '../../../../spec/stringify'
@@ -32,7 +32,7 @@ export default class _Datum extends Element<HTMLDivElement, Props> {
     )
     this._datum = datum
 
-    const $element = parentElement()
+    const $element = parentElement($system)
 
     this.$element = $element
     this.$subComponent = {

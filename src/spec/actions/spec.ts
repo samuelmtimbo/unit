@@ -46,6 +46,7 @@ import {
   GraphUnitsSpec,
 } from '../../types'
 import { Dict } from '../../types/Dict'
+import { IO } from '../../types/IO'
 
 export const addUnit = (
   id: string,
@@ -99,7 +100,7 @@ export const removeUnits = (ids: string[]) => {
 }
 
 export const exposePin = (
-  type: 'input' | 'output',
+  type: IO,
   id: string,
   subPinId: string,
   subPin: GraphExposedSubPinSpec
@@ -110,11 +111,7 @@ export const exposePin = (
   }
 }
 
-export const setPinSetName = (
-  type: 'input' | 'output',
-  id: string,
-  functional: boolean
-) => {
+export const setPinSetName = (type: IO, id: string, functional: boolean) => {
   return {
     type: SET_PIN_SET_NAME,
     data: { type, id, functional },
@@ -122,7 +119,7 @@ export const setPinSetName = (
 }
 
 export const setPinSetFunctional = (
-  type: 'input' | 'output',
+  type: IO,
   id: string,
   functional: boolean
 ) => {
@@ -133,7 +130,7 @@ export const setPinSetFunctional = (
 }
 
 export const exposePinSet = (
-  type: 'input' | 'output',
+  type: IO,
   id: string,
   pin: GraphExposedPinSpec
 ) => {
@@ -143,7 +140,7 @@ export const exposePinSet = (
   }
 }
 
-export const coverPinSet = (type: 'input' | 'output', id: string) => {
+export const coverPinSet = (type: IO, id: string) => {
   return {
     type: COVER_PIN_SET,
     data: { type, id },
@@ -151,7 +148,7 @@ export const coverPinSet = (type: 'input' | 'output', id: string) => {
 }
 
 export const plugPin = (
-  type: 'input' | 'output',
+  type: IO,
   id: string,
   subPinId: string,
   subPinSpec: GraphExposedSubPinSpec
@@ -162,22 +159,14 @@ export const plugPin = (
   }
 }
 
-export const unplugPin = (
-  type: 'input' | 'output',
-  id: string,
-  subPinId: string
-) => {
+export const unplugPin = (type: IO, id: string, subPinId: string) => {
   return {
     type: UNPLUG_PIN,
     data: { type, id, subPinId },
   }
 }
 
-export const coverPin = (
-  id: string,
-  type: 'input' | 'output',
-  subPinId: string
-) => {
+export const coverPin = (id: string, type: IO, subPinId: string) => {
   return {
     type: COVER_PIN,
     data: { type, id, subPinId },
@@ -186,7 +175,7 @@ export const coverPin = (
 
 export const setUnitPinData = (
   unitId: string,
-  type: 'input' | 'output',
+  type: IO,
   pinId: string,
   data: any
 ) => {
@@ -233,7 +222,7 @@ export const setUnitInputConstant = (
 
 export const setUnitPinIgnored = (
   unitId: string,
-  type: 'input' | 'output',
+  type: IO,
   pinId: string,
   ignored: boolean
 ) => {
@@ -278,11 +267,7 @@ export const setUnitOutputIgnored = (
   }
 }
 
-export const removeUnitPinData = (
-  unitId: string,
-  type: 'input' | 'output',
-  pinId: string
-) => {
+export const removeUnitPinData = (unitId: string, type: IO, pinId: string) => {
   return {
     type: REMOVE_UNIT_PIN_DATA,
     data: {
@@ -364,7 +349,7 @@ export const removeMerges = (ids: string[]): Action => {
 
 export const addPinToMerge = (
   id: string,
-  type: 'input' | 'output',
+  type: IO,
   unitId: string,
   pinId: string
 ): Action => {
@@ -381,7 +366,7 @@ export const addPinToMerge = (
 
 export const removePinFromMerge = (
   id: string,
-  type: 'input' | 'output',
+  type: IO,
   unitId: string,
   pinId: string
 ): Action => {

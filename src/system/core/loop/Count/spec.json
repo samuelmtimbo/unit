@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "sort-desc",
     "description": "iteratively count `a`, starting from 1",
-    "complexity": 8,
+    "complexity": 19,
     "tags": [
       "core",
       "loop"

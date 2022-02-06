@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "axe",
     "description": "output string created from the specified sequence of UTF-16 code",
-    "complexity": 2.6587476604340012,
+    "complexity": 3,
     "tags": [
       "f",
       "string"

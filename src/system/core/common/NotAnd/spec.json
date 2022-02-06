@@ -1,21 +1,21 @@
 {
   "name": "not and",
   "units": {
-    "iczar": {
+    "and": {
       "id": "407640f7-f1c3-4297-a5ce-baff357a6d31"
     },
-    "qxdjs": {
+    "not": {
       "id": "7d02d638-a311-4ea8-a0c0-d45baf739e0d"
     }
   },
   "merges": {
-    "krvv": {
-      "iczar": {
+    "0": {
+      "and": {
         "input": {
           "b": true
         }
       },
-      "qxdjs": {
+      "not": {
         "output": {
           "!a": true
         }
@@ -26,7 +26,7 @@
     "b": {
       "pin": {
         "0": {
-          "unitId": "qxdjs",
+          "unitId": "not",
           "pinId": "a"
         }
       },
@@ -35,7 +35,7 @@
     "a": {
       "pin": {
         "0": {
-          "unitId": "iczar",
+          "unitId": "and",
           "pinId": "a"
         }
       },
@@ -43,10 +43,10 @@
     }
   },
   "outputs": {
-    "hgllh": {
+    "!a && b": {
       "pin": {
         "0": {
-          "unitId": "iczar",
+          "unitId": "and",
           "pinId": "a and b"
         }
       },
@@ -56,7 +56,7 @@
   "metadata": {
     "icon": null,
     "description": "...",
-    "complexity": 4,
+    "complexity": 8,
     "tags": [
       "core",
       "common"

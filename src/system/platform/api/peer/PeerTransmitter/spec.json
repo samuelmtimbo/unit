@@ -32,7 +32,7 @@
   "metadata": {
     "icon": "link",
     "description": "Peer to Peer (P2P) Transmitter",
-    "complexity": 3.9957378203583938,
+    "complexity": 6,
     "tags": [
       "platform",
       "api",

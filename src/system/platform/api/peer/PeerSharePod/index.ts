@@ -76,11 +76,13 @@ export default class PeerSharePod extends Semifunctional<I, O> {
     })
 
     peer.addListener('message', (message: string): void => {
-      const { specs } = this.__system
-
       console.log('PeerSharePod', 'message', message)
       if (this._ref) {
-        const data = evaluate(message, specs)
+        const specs = { ...this.__system.specs, ...this.__pod.specs }
+        const classes = this.__system.classes
+
+        const data = evaluate(message, specs, classes)
+
         this._ref.exec(data)
       }
     })

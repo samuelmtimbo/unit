@@ -45,7 +45,7 @@
         }
       }
     },
-    "gbpohztp": {
+    "test": {
       "id": "c2fec1e6-b370-4069-bb43-6dab5a78b9ab",
       "input": {
         "regex": {
@@ -54,7 +54,7 @@
         }
       }
     },
-    "kagcfh": {
+    "wait": {
       "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
       "input": {
         "a": {
@@ -65,7 +65,7 @@
     }
   },
   "merges": {
-    "kkrapewqc": {
+    "0": {
       "parseint": {
         "input": {
           "str": true
@@ -77,7 +77,7 @@
         }
       }
     },
-    "ccsgfnjcv": {
+    "1": {
       "narraybuilder": {
         "input": {
           "a": true
@@ -89,7 +89,7 @@
         }
       }
     },
-    "dvgrkqvur": {
+    "2": {
       "ifnotempty": {
         "input": {
           "a": true
@@ -101,7 +101,7 @@
         }
       }
     },
-    "ufizmiyj": {
+    "3": {
       "ifnotempty": {
         "output": {
           "!empty": true
@@ -113,7 +113,7 @@
         }
       }
     },
-    "nhiwiktr": {
+    "4": {
       "split": {
         "output": {
           "second": true
@@ -125,7 +125,7 @@
         }
       }
     },
-    "oectjebow": {
+    "5": {
       "tail": {
         "output": {
           "tail": true
@@ -137,7 +137,7 @@
         }
       }
     },
-    "glypwn": {
+    "6": {
       "split": {
         "input": {
           "a": true
@@ -149,19 +149,19 @@
         }
       }
     },
-    "lefutojb": {
+    "7": {
       "validate": {
         "input": {
           "test": true
         }
       },
-      "gbpohztp": {
+      "test": {
         "output": {
           "match": true
         }
       }
     },
-    "dqsjpursq": {
+    "8": {
       "validate": {
         "output": {
           "a": true
@@ -173,25 +173,25 @@
         }
       }
     },
-    "jglyayecm": {
+    "9": {
       "validate": {
         "input": {
           "a": true
         }
       },
-      "gbpohztp": {
+      "test": {
         "input": {
           "str": true
         }
       },
-      "kagcfh": {
+      "wait": {
         "input": {
           "b": true
         }
       }
     },
-    "ovirohhg": {
-      "kagcfh": {
+    "10": {
+      "wait": {
         "output": {
           "a": true
         }
@@ -206,7 +206,7 @@
   "metadata": {
     "icon": "palette",
     "description": "hexadecimal color string to RGB array",
-    "complexity": 25.656375664807367,
+    "complexity": 75,
     "tags": [
       "platform",
       "core",
@@ -218,7 +218,7 @@
       "functional": true,
       "pin": {
         "0": {
-          "mergeId": "jglyayecm"
+          "mergeId": "9"
         }
       },
       "type": "string"

@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "square",
     "description": "request a stream containing a real-time video capture of the `media` element",
-    "complexity": 11.587550729203343,
+    "complexity": 12,
     "tags": [
       "platform",
       "api",

@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "list",
     "description": "output a list of the available media input and output devices, such as microphones, cameras, headsets, and so forth",
-    "complexity": 2.6766117524970814,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

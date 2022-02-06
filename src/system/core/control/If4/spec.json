@@ -41,7 +41,7 @@
   "metadata": {
     "icon": "filter",
     "description": "no description",
-    "complexity": 6,
+    "complexity": 8,
     "tags": [
       "core",
       "control"

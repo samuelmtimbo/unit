@@ -1,0 +1,31 @@
+{
+  "name": "datum",
+  "inputs": {
+    "style": {
+      "type": "object"
+    },
+    "data": {
+      "type": "object"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "atom-alt",
+    "description": "Recursive Graph Editor",
+    "complexity": 24,
+    "tags": [
+      "platform",
+      "component",
+      "app"
+    ]
+  },
+  "id": "e8bce1fc-ae56-4f9f-9685-3cc844758855",
+  "base": true,
+  "component": {
+    "defaultWidth": 360,
+    "defaultHeight": 360
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}
