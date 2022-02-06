@@ -11472,18 +11472,39 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     })
   }
 
+  private _set_datum_node_style = (
+    datum_node_id: string,
+    name: string,
+    value: string
+  ) => {
+    const datum_container = this._datum_container[datum_node_id]
+
+    datum_container.$element.style[name] = value
+  }
+
+  private _set_datum_link_style = (
+    datum_link_id: string,
+    name: string,
+    value: string
+  ) => {
+    // console.log('_set_datum_link_style', link_id, color)
+
+    const link_base = this._link_base[datum_link_id]
+
+    link_base.$element.style[name] = value
+  }
+
   private _set_datum_color = (
     datum_node_id: string,
     color: string,
     link_color: string
   ) => {
     // console.log('Graph', '_set_datum_color', color)
-    const datum_container = this._datum_container[datum_node_id]
-    // mergeStyle(datum_container, {
-    //   color,
-    // })
-    datum_container.$element.style.color = color
+
+    this._set_datum_node_style(datum_node_id, 'color', color)
+
     const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+  
     if (datum_pin_node_id) {
       this._set_datum_link_color(datum_node_id, link_color)
     }
@@ -11494,8 +11515,35 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     color: string
   ): void => {
     const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+    
     const datum_link_id = getLinkId(datum_node_id, datum_pin_node_id)
+    
     this._set_link_color(datum_link_id, color)
+  }
+
+  private _set_datum_opacity = (datum_node_id: string, opacity: number) => {
+    this._set_datum_node_opacity(datum_node_id, opacity)
+    this._set_datum_link_opacity(datum_node_id, opacity)
+  }
+
+  private _set_datum_node_opacity = (
+    datum_node_id: string,
+    opacity: number
+  ) => {
+    this._set_datum_node_style(datum_node_id, 'opacity', `${opacity}`)
+  }
+
+  private _set_datum_link_opacity = (
+    datum_node_id: string,
+    opacity: number
+  ) => {
+    const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+
+    if (datum_pin_node_id) {
+      const datum_link_id = getLinkId(datum_node_id, datum_pin_node_id)
+
+      this._set_datum_link_style(datum_link_id, 'opacity', `${opacity}`)
+    }
   }
 
   private _set_err_color = (err_node_id: string, color: string): void => {
@@ -11748,6 +11796,12 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _set_all_datum_opacity = (opacity: number): void => {
+    for (const datum_node_id in this._visible_data_node) {
+      this._set_datum_opacity(datum_node_id, opacity)
+    }
+  }
+
   private _on_search_list_shown = () => {
     // console.log('Graph', '_on_search_list_shown')
     const { animate } = this.$props
@@ -11921,9 +11975,11 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       if (prev_mode !== 'data' && this._mode === 'data') {
         this._set_all_output_pin_opacity(0.5)
         this._set_all_ref_pin_opacity(0.5)
+        this._set_all_datum_opacity(0.5)
       } else if (prev_mode === 'data' && this._mode !== 'data') {
         this._set_all_output_pin_opacity(1)
         this._set_all_ref_pin_opacity(1)
+        this._set_all_datum_opacity(1)
       }
 
       if (prev_mode !== 'add' && this._mode === 'add') {
@@ -15124,7 +15180,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._tree_layout) {
-      // 
+      //
     } else {
       if (this._is_unit_node_id(node_id)) {
         this._drop_unit(node_id)
@@ -23396,10 +23452,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _set_link_color = (link_id: string, color: string): void => {
-    // console.log('_set_link_color', link_id, color)
-    const link_base = this._link_base[link_id]
-    // mergeStyle(link_base, { stroke: color })
-    link_base.$element.style.stroke = color
+    // console.log('_set_link_color', link_id, colo:wq:wqr)
+
+    this._set_datum_link_style(link_id, 'stroke', color)
   }
 
   private _set_link_pin_pin_color = (
