@@ -7044,6 +7044,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     pin_id: string
   ): void => {
     // console.log('Graph', '_sim_add_link_pin_link', unit_id, type, pin_id)
+
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
     const ignored = this._spec_is_link_pin_ignored(pin_node_id)
@@ -18231,24 +18232,15 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _yellow_click_unit = (unit_id: string): void => {
-    // this._for_each_unit_input(unit_id, (input_node_id: string) => {
-    //   if (!this._is_pin_ref(input_node_id)) {
-    //     const datum_node_id = this._pin_to_datum[input_node_id]
-    //     if (!datum_node_id) {
-    //       this._yellow_click_pin(input_node_id)
-    //     }
-    //   }
-    // })
-
     this._turn_unit_into_data(unit_id)
   }
 
   private _yellow_click_class_literal = (datum_node_id: string): void => {
     this._temp_cancel_double_click()
-    this._yellow_click_unit_0_to_unit(datum_node_id)
+    this._turn_class_literal_into_unit(datum_node_id)
   }
 
-  private _yellow_click_unit_0_to_unit = (datum_node_id: string): void => {
+  private _turn_class_literal_into_unit = (datum_node_id: string): void => {
     const position = this._get_node_position(datum_node_id)
     const pin_position = { input: {}, output: {} }
     const layout_position = NULL_VECTOR
@@ -18275,7 +18267,18 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       layout_position,
       null
     )
+
+    if (this._mode === 'data') {
+      this._for_each_visible_unit_output(new_unit_id, (pin_node_id) =>
+        this._set_link_pin_opacity(pin_node_id, 0.5)
+      )
+      this._for_each_unit_ref_input(new_unit_id, (pin_node_id) =>
+        this._set_link_pin_opacity(pin_node_id, 0.5)
+      )
+    }
+
     this.temp_fixate_node(new_unit_id)
+
     if (this._is_unit_component(new_unit_id)) {
       this._sim_add_unit_component(new_unit_id)
       this._pod_connect_sub_component(new_unit_id)
@@ -25180,6 +25183,17 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     })
   }
 
+  private _for_each_unit_ref_input = (
+    unit_id: string,
+    callback: (input_node_id: string, input_id: string) => void
+  ) => {
+    this._for_each_unit_input(unit_id, (input_node_id, input_id) => {
+      if (this._is_link_pin_ref(input_node_id)) {
+        callback(input_node_id, input_id)
+      }
+    })
+  }
+
   private _for_each_unit_merged_pin = (
     unit_id: string,
     callback: (input_node_id: string, input_id: string) => void
@@ -25260,6 +25274,17 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._for_each_spec_output(spec, (output_id: string) => {
       const output_node_id = getOutputNodeId(unit_id, output_id)
       callback(output_node_id, output_id)
+    })
+  }
+
+  private _for_each_visible_unit_output = (
+    unit_id: string,
+    callback: (pin_node_id: string, output_id: string) => void
+  ) => {
+    this._for_each_unit_output(unit_id, (output_node_id, input_id) => {
+      if (!this._spec_is_link_pin_ignored(output_node_id)) {
+        callback(output_node_id, input_id)
+      }
     })
   }
 
