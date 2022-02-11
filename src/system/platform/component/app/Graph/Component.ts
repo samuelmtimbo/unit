@@ -12267,13 +12267,13 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       }
 
       if (prev_mode !== 'info' && this._mode === 'info') {
-        // for (const unit_id in this._core_name) {
-        //   this._enable_core_name(unit_id)
-        // }
-
-        // for (const unit_id in this._exposed_ext_node) {
-        //   this._enable_plug_name(unit_id)
-        // }
+        for (const selected_node_id in this._selected_node_id) {
+          if (this._is_unit_node_id(selected_node_id)) {
+            this._enable_core_name(selected_node_id)
+          } else if (this._is_exposed_pin_node_id(selected_node_id)) {
+            this._enable_plug_name(selected_node_id)
+          }
+        }
 
         if (this._hover_node_count > 0) {
           this._set_all_nodes_links_opacity(0.2)
@@ -24476,6 +24476,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
   private _sim_remove_link_pin_pin = (pin_node_id: string): void => {
     // console.log('Graph', 'remove_link_pin', pin_node_id)
+
     delete this._pin[pin_node_id]
     delete this._pin_node[pin_node_id]
     delete this._pin_name[pin_node_id]
@@ -24485,29 +24486,23 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     delete this._normal_node[pin_node_id]
     delete this._ignored_node[pin_node_id]
 
-    this._link_pin_input_set.delete(pin_node_id)
-    this._link_pin_output_set.delete(pin_node_id)
-    this._link_pin_ref_set.delete(pin_node_id)
-
     this._sim_remove_pin_type(pin_node_id)
     this._sim_remove_node(pin_node_id)
   }
 
   private _sim_remove_link_pin_link = (pin_node_id: string): void => {
     // console.log('Graph', '_sim_remove_link_pin_link', pin_node_id)
+
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
     const link_id = getPinLinkId(unitId, type, pinId)
 
-    // const pin_datum_tree = this._pin_datum_tree[pin_node_id]
-    // if (pin_datum_tree) {
-    //   const { unitId } = segmentLinkPinNodeId(pin_node_id)
-    //   this._dec_unit_pin_active(unitId)
-    //   delete this._pin_datum_tree[pin_node_id]
-    // }
-
     delete this._pin_link_start_marker[pin_node_id]
     delete this._pin_link_end_marker[pin_node_id]
+
+    this._link_pin_input_set.delete(pin_node_id)
+    this._link_pin_output_set.delete(pin_node_id)
+    this._link_pin_ref_set.delete(pin_node_id)
 
     delete this._pin_link[link_id]
 
