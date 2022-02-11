@@ -12267,13 +12267,13 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       }
 
       if (prev_mode !== 'info' && this._mode === 'info') {
-        // for (const unit_id in this._core_name) {
-        //   this._enable_core_name(unit_id)
-        // }
-
-        // for (const unit_id in this._exposed_ext_node) {
-        //   this._enable_plug_name(unit_id)
-        // }
+        for (const selected_node_id in this._selected_node_id) {
+          if (this._is_unit_node_id(selected_node_id)) {
+            this._enable_core_name(selected_node_id)
+          } else if (this._is_exposed_pin_node_id(selected_node_id)) {
+            this._enable_plug_name(selected_node_id)
+          }
+        }
 
         if (this._hover_node_count > 0) {
           this._set_all_nodes_links_opacity(0.2)
