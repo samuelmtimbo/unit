@@ -34,3 +34,5 @@ src/client/extension/src/background.js
 src/client/extension/src/content.js
 src/client/extension/src/popup.js
 src/client/extension/src/options.js
+
+yarn.lock
