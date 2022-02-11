@@ -31,6 +31,7 @@
     "build:worker": "run-s build:worker:pod",
     "build:worker:pod": "ts-node src/script/build/worker/pod.ts",
     "build:sw": "ts-node src/script/build/sw.ts",
+    "build:ext": "ts-node src/script/build/ext.ts",
     "build:meta": "ts-node src/script/build/meta/client.ts",
     "lint": "eslint src --ext .ts",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write"

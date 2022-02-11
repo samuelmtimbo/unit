@@ -14,6 +14,8 @@ export const PATH_SRC_SYSTEM = path.join(PATH_SRC, 'system')
 export const PATH_SRC_V = path.join(PATH_SRC, 'v.ts')
 export const PATH_BUILD = path.join(CWD, 'build')
 export const PATH_BUILD_CLIENT = path.join(PATH_BUILD, 'client')
+export const PATH_SRC_CLIENT_EXTENSION = path.join(PATH_SRC_CLIENT, 'extension')
+export const PATH_SRC_CLIENT_EXTENSION_SRC = path.join(PATH_SRC_CLIENT_EXTENSION, 'src')
 export const PATH_BUILD_SYSTEM = path.join(PATH_BUILD, 'system')
 
 export const PATH_SRC_SYSTEM_PLATFORM = path.join(PATH_SRC_SYSTEM, 'platform')

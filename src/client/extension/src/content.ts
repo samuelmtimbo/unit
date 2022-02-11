@@ -43,3 +43,5 @@ window.addEventListener(
   },
   false
 )
+
+export default null

@@ -16,3 +16,5 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return false
   }
 })
+
+export default null
