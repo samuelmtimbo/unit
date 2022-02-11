@@ -24476,6 +24476,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
   private _sim_remove_link_pin_pin = (pin_node_id: string): void => {
     // console.log('Graph', 'remove_link_pin', pin_node_id)
+
     delete this._pin[pin_node_id]
     delete this._pin_node[pin_node_id]
     delete this._pin_name[pin_node_id]
@@ -24485,29 +24486,23 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     delete this._normal_node[pin_node_id]
     delete this._ignored_node[pin_node_id]
 
-    this._link_pin_input_set.delete(pin_node_id)
-    this._link_pin_output_set.delete(pin_node_id)
-    this._link_pin_ref_set.delete(pin_node_id)
-
     this._sim_remove_pin_type(pin_node_id)
     this._sim_remove_node(pin_node_id)
   }
 
   private _sim_remove_link_pin_link = (pin_node_id: string): void => {
     // console.log('Graph', '_sim_remove_link_pin_link', pin_node_id)
+
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
     const link_id = getPinLinkId(unitId, type, pinId)
 
-    // const pin_datum_tree = this._pin_datum_tree[pin_node_id]
-    // if (pin_datum_tree) {
-    //   const { unitId } = segmentLinkPinNodeId(pin_node_id)
-    //   this._dec_unit_pin_active(unitId)
-    //   delete this._pin_datum_tree[pin_node_id]
-    // }
-
     delete this._pin_link_start_marker[pin_node_id]
     delete this._pin_link_end_marker[pin_node_id]
+
+    this._link_pin_input_set.delete(pin_node_id)
+    this._link_pin_output_set.delete(pin_node_id)
+    this._link_pin_ref_set.delete(pin_node_id)
 
     delete this._pin_link[link_id]
 
