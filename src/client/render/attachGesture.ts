@@ -1,17 +1,55 @@
+import { getStroke } from 'perfect-freehand'
 import { System } from '../../system'
-import { clearCanvas } from '../../system/platform/component/canvas/Canvas/Component'
+import namespaceURI from '../component/namespaceURI'
 import { _addEventListener } from '../event'
 import { IOPointerEvent } from '../event/pointer'
 import { Point } from '../util/geometry'
 
-export function attachGesture($system: System): void {
-  // console.log('attachGesture')
-  const {
-    root: $root,
-    foreground: { canvas: $canvas },
-  } = $system
+function getSvgPathFromStroke(stroke): string {
+  if (!stroke.length) {
+    return ''
+  }
 
-  const context = $canvas.getContext('2d')!
+  const d = stroke.reduce(
+    (acc, [x0, y0], i, arr) => {
+      const [x1, y1] = arr[(i + 1) % arr.length]
+      acc.push(x0, y0, (x0 + x1) / 2, (y0 + y1) / 2)
+      return acc
+    },
+    ['M', ...stroke[0], 'Q']
+  )
+
+  d.push('Z')
+
+  return d.join(' ')
+}
+
+const STROKE_OPT = {
+  size: 3,
+  smoothing: 0.99,
+  thinning: 0.5,
+  streamline: 0.25,
+  easing: (t) => t,
+  start: {
+    taper: 0,
+    cap: true,
+  },
+  end: {
+    taper: 0,
+    cap: true,
+  },
+}
+
+export function attachGesture(system: System): void {
+  // console.log('attachGesture')
+
+  const {
+    root,
+    foreground: { svg },
+    api: {
+      document: { createElementNS },
+    },
+  } = system
 
   const captureGesture = (
     event: IOPointerEvent,
@@ -25,46 +63,50 @@ export function attachGesture($system: System): void {
 
     // $root.setPointerCapture(pointerId)
 
-    $system.cache.pointerCapture[pointerId] = $root
+    system.cache.pointerCapture[pointerId] = root
+
+    const path = createElementNS(namespaceURI, 'path')
+
+    svg.appendChild(path)
 
     const { lineWidth = 2, strokeStyle = '#d1d1d1' } = opt
 
-    context.lineWidth = lineWidth
-    context.strokeStyle = strokeStyle
+    const color = strokeStyle
 
-    context.beginPath()
-    context.moveTo(Math.floor(screenX), Math.floor(screenY))
+    path.style.stroke = color
+    path.style.strokeWidth = `${lineWidth}px`
+    path.style.fill = color
 
     const track: Point[] = [{ x: screenX, y: screenY }]
 
     const pointerMoveListener = (_event: PointerEvent) => {
       // console.log('attachGesture', 'pointerMoveListener')
+
       const { pointerId: _pointerId } = _event
+
       if (_pointerId === pointerId) {
         const { clientX, clientY } = _event
 
-        // const last = track[track.length - 1]
-        // const xc = (last.x + clientX) / 2
-        // const yc = (last.y + clientY) / 2
-        // context.quadraticCurveTo(last.x, last.y, xc, yc)
-        context.lineTo(Math.floor(clientX), Math.floor(clientY))
-        context.stroke()
+        const outline = getStroke(track, STROKE_OPT)
+
+        const d = getSvgPathFromStroke(outline)
+
+        path.setAttribute('d', d)
 
         track.push({ x: clientX, y: clientY })
       }
     }
-    // const pointerUpListener = (_event: CustomEvent<PointerEvent>) => {
+
     const pointerUpListener = (_event: PointerEvent) => {
       // console.log('attachGesture', 'pointerUpListener')
+
       const { pointerId: _pointerId } = _event
       if (_pointerId === pointerId) {
-        clearCanvas(context)
-
         // $root.releasePointerCapture(pointerId)
-        delete $system.cache.pointerCapture[pointerId]
 
-        // $root.removeEventListener('pointermove', pointerMoveListener)
-        // $root.removeEventListener('pointerup', pointerUpListener)
+        delete system.cache.pointerCapture[pointerId]
+
+        svg.removeChild(path)
 
         unlistenPointerMove()
         unlistenPointerUp()
@@ -75,20 +117,17 @@ export function attachGesture($system: System): void {
 
     const unlistenPointerMove = _addEventListener(
       'pointermove',
-      $root,
+      root,
       pointerMoveListener,
       true
     )
     const unlistenPointerUp = _addEventListener(
       'pointerup',
-      $root,
+      root,
       pointerUpListener,
       true
     )
-
-    // $root.addEventListener('pointermove', pointerMoveListener)
-    // $root.addEventListener('pointerup', pointerUpListener)
   }
 
-  $system.method.captureGesture = captureGesture
+  system.method.captureGesture = captureGesture
 }
