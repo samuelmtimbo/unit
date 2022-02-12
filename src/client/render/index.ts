@@ -22,8 +22,8 @@ export function render(
   attachSprite(system)
   attachApp(system)
   attachCanvas(system)
-  attachGesture(system)
   attachSVG(system)
+  attachGesture(system)
   attachLongPress(system)
 
   const unlisten = renderGraph(system.foreground.app, system, pod, $graph)
