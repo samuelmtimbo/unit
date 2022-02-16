@@ -19,6 +19,7 @@ import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import Modes from '../../../component/app/Modes/Component'
 import Div from '../../Div/Component'
@@ -47,7 +48,7 @@ export const DEFAULT_STYLE = {
   overflow: 'hidden',
 }
 
-export default class GUI extends Element<HTMLDivElement, Props> {
+export default class GUI extends Element<IHTMLDivElement, Props> {
   private _gui: Div
 
   private _background: Div
@@ -298,7 +299,6 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     const $element = parentElement($system)
 
     this.$element = $element
-    // this.$slot = control.$slot
     this.$slot['default'] = foreground
     this.$slot['1'] = background
     this.$subComponent = {

@@ -13,10 +13,10 @@ export function equal<T>(a: T, b: T): void {
 export function deepEqual<T>(a: T, b: T): void {
   return assert(
     isEqual(a, b),
-    `${JSON.stringify(a, null, 1)} is not deep equal to ${JSON.stringify(
+    `${JSON.stringify(a, null, 2)} is not deep equal to ${JSON.stringify(
       b,
       null,
-      1
+      2
     )}`
   )
 }

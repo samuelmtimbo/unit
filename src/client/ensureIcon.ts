@@ -3,11 +3,13 @@ import namespaceURI from './component/namespaceURI'
 import ICONS from './icons'
 
 export const SPRITESHEET_ID = '__SYSTEM__SPRITESHEET__'
-
 export const SPRITESHEET_VIEWBOX = '0 0 24 24'
 
 export const ensureIcon = ($system: System, id: string): void => {
   const {
+    api: {
+      document: { createElementNS },
+    },
     cache: { spriteSheetMap },
     foreground: { sprite },
   } = $system
@@ -17,15 +19,16 @@ export const ensureIcon = ($system: System, id: string): void => {
   }
 
   let d = ICONS[id]
+
   if (!d) {
     return
   }
 
-  const symbol_el = document.createElementNS(namespaceURI, 'symbol')
+  const symbol_el = createElementNS(namespaceURI, 'symbol')
   symbol_el.id = id
   symbol_el.setAttribute('viewBox', SPRITESHEET_VIEWBOX)
 
-  const path_el = document.createElementNS(namespaceURI, 'path')
+  const path_el = createElementNS(namespaceURI, 'path')
   path_el.setAttribute('d', d)
 
   symbol_el.appendChild(path_el)

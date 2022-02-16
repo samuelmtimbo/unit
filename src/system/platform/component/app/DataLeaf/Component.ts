@@ -19,6 +19,7 @@ import { Pod } from '../../../../../pod'
 import { TreeNode } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import TextInput from '../../value/TextInput/Component'
 
 export interface Props {
@@ -29,7 +30,7 @@ export interface Props {
   parent: TreeNode | null
 }
 
-export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
+export default class DataTreeLeaf extends Element<IHTMLDivElement, Props> {
   public _input: TextInput
 
   constructor($props: Props, $system: System, $pod: Pod) {

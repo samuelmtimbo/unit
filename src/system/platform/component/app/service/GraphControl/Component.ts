@@ -25,6 +25,7 @@ import { emptyBundleSpec } from '../../../../../../spec/emptyBundleSpec'
 import { emptyGraphSpec } from '../../../../../../spec/emptySpec'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../../types/global/dom'
 import { Unlisten } from '../../../../../../types/Unlisten'
 import { uuid } from '../../../../../../util/id'
 import { clone } from '../../../../../../util/object'
@@ -64,7 +65,7 @@ if (globalThis.BroadcastChannel) {
   channel = new BroadcastChannel('graph')
 }
 
-export default class GraphControl extends Component<HTMLDivElement, Props> {
+export default class GraphControl extends Component<IHTMLDivElement, Props> {
   private _root: Div
 
   private _tabs: CloudTabs
@@ -111,6 +112,7 @@ export default class GraphControl extends Component<HTMLDivElement, Props> {
 
     const root = new Div(
       {
+        className: 'graph-control-root',
         style: {
           position: 'absolute',
         },
@@ -474,16 +476,19 @@ export default class GraphControl extends Component<HTMLDivElement, Props> {
   }
 
   private _enable_modes = (): void => {
-    const modes = findRef(this, 'modes') as Modes | null
-
-    this._unlisten_mode_keyboard = enable_mode_keyboard(this, (mode: Mode) => {
-      if (modes) {
-        modes.setProp('mode', mode)
+    // console.log('GraphControl', '_enable_modes')
+    this._unlisten_mode_keyboard = enable_mode_keyboard(
+      this._root,
+      (mode: Mode) => {
+        if (this._modes) {
+          this._modes.setProp('mode', mode)
+        }
       }
-    })
+    )
   }
 
   private _disable_modes = (): void => {
+    // console.log('GraphControl', '_disable_modes')
     if (this._unlisten_mode_keyboard) {
       this._unlisten_mode_keyboard()
       this._unlisten_mode_keyboard = undefined
@@ -679,6 +684,10 @@ export default class GraphControl extends Component<HTMLDivElement, Props> {
     } = this.$system
 
     const graph_service = graph_init({})
+
+    const modes = findRef(this, 'modes') as Modes | null
+
+    this._modes = modes
 
     this._enable_modes()
 

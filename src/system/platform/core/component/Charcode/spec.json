@@ -112,5 +112,6 @@
     ]
   },
   "id": "d0c59812-a8ec-4c53-81a9-c9725dda987e",
-  "type": "`U`&`G`&`C`"
+  "type": "`U`&`G`&`C`",
+  "render": true
 }

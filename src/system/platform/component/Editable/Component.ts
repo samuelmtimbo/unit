@@ -4,6 +4,7 @@ import { htmlPropHandler } from '../../../../client/propHandler'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 
 export interface Props {
   value?: string
@@ -24,8 +25,8 @@ const DEFAULT_STYLE = {
   boxSizing: 'border-box',
 }
 
-export default class Editable extends Element<HTMLDivElement, Props> {
-  private _div_el: HTMLDivElement
+export default class Editable extends Element<IHTMLDivElement, Props> {
+  private _div_el: IHTMLDivElement
 
   private _prop_handler
 

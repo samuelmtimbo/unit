@@ -3,6 +3,7 @@ import parentElement from '../../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../../types/global/dom'
 import CloudTabs from '../../../../../host/component/IconTabs/Component'
 
 export interface Props {
@@ -11,7 +12,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class DBControl extends Component<HTMLDivElement, Props> {
+export default class DBControl extends Component<IHTMLDivElement, Props> {
   private _tabs: CloudTabs
 
   constructor($props: Props, $system: System, $pod: Pod) {

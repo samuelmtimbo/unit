@@ -5,6 +5,7 @@ import { makePointerUpListener } from '../../../../../client/event/pointer/point
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../../component/Div/Component'
 import KeyboardKey from '../KeyboardKey/Component'
 
@@ -22,7 +23,7 @@ export const DEFAULT_STYLE = {
 
 const KEY_HEIGHT: number = 42
 
-export default class Keyboard extends Element<HTMLDivElement, Props> {
+export default class Keyboard extends Element<IHTMLDivElement, Props> {
   private _keyboard: Div
   private _keys: KeyboardKey[] = []
 

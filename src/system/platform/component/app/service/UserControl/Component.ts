@@ -15,6 +15,7 @@ import {
 import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../../types/global/dom'
 import { rangeArray } from '../../../../../../util/array'
 import Unplugged from '../../../../../host/component/Unplugged/Component'
 import TextDiv from '../../../../core/component/TextDiv/Component'
@@ -51,7 +52,7 @@ export const BUTTON_STYLE = {
   borderColor: COLOR_NONE,
 }
 
-export default class User extends Component<HTMLDivElement, Props> {
+export default class User extends Component<IHTMLDivElement, Props> {
   private _root: Div
 
   private _picture: Div

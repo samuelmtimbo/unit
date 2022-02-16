@@ -2,6 +2,7 @@ import { Element } from '../../../../../client/element'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 
 export interface Props {
   className?: string
@@ -23,8 +24,8 @@ export type Direction = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw'
 
 export type DirectionUnit = -1 | 0 | 1
 
-export default class Resize extends Element<HTMLDivElement, Props> {
-  private _resize: HTMLDivElement
+export default class Resize extends Element<IHTMLDivElement, Props> {
+  private _resize: IHTMLDivElement
 
   private _x: Dict<DirectionUnit> = {}
   private _y: Dict<DirectionUnit> = {}
@@ -161,7 +162,7 @@ export default class Resize extends Element<HTMLDivElement, Props> {
   }
 
   private _add_pointer_listener = (
-    element: HTMLDivElement,
+    element: IHTMLDivElement,
     x: DirectionUnit,
     y: DirectionUnit,
     direction: Direction

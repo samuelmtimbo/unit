@@ -265,5 +265,6 @@
   },
   "id": "360c691a-ac2d-11eb-95ec-b3053bd928da",
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

@@ -6,6 +6,7 @@ import { polarToCartesian } from '../../../../client/util/geometry'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import { rangeArray } from '../../../../util/array'
 import SVGCircle from '../../../platform/component/svg/Circle/Component'
 import SVGPath from '../../../platform/component/svg/Path/Component'
@@ -115,7 +116,7 @@ export function generate(): LogoPath[] {
   return paths
 }
 
-export default class Unplugged extends Component<HTMLDivElement, Props> {
+export default class Unplugged extends Component<IHTMLDivElement, Props> {
   private _container: SVGSVG
   private _paths: SVGPath[] = []
 

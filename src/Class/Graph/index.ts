@@ -24,7 +24,6 @@ import { Component_ } from '../../interface/Component'
 import { EE } from '../../interface/EE'
 import { G, G_EE } from '../../interface/G'
 import { U } from '../../interface/U'
-import { V } from '../../interface/V'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { Pod } from '../../pod'
@@ -73,17 +72,12 @@ import { UnitClass } from '../../types/UnitClass'
 import { Unlisten } from '../../types/Unlisten'
 import { forEach } from '../../util/array'
 import callAll from '../../util/call/callAll'
-import { clone, filterObj, mapObjVK, someObj } from '../../util/object'
-import { objPromise } from '../../util/promise'
+import { clone, filterObj, someObj } from '../../util/object'
 import { Element } from '../Element'
 import Merge from '../Merge'
-import { Stateful, Stateful_EE } from '../Stateful'
+import { Stateful_EE } from '../Stateful'
 import { Unit, UnitEvents } from '../Unit'
 import { WaitAll } from '../WaitAll'
-
-export function isStateful(unit: U): boolean {
-  return unit instanceof Stateful || (unit instanceof Graph && unit.stateful)
-}
 
 export function isElement(unit: U): boolean {
   return unit instanceof Element || (unit instanceof Graph && unit.element)
@@ -99,9 +93,7 @@ export class Graph<I = any, O = any>
 {
   __ = ['U', 'C', 'G']
 
-  public stateful = false
-
-  public element = false
+  public element: boolean = false
 
   private _spec: GraphSpec
 
@@ -138,9 +130,6 @@ export class Graph<I = any, O = any>
   private _pinToMerge: Dict<{ input: Dict<string>; output: Dict<string> }> = {}
 
   private _branch: Dict<true> = {}
-
-  private _statefulUnitCount: number = 0
-  private _elementUnitCount: number = 0
 
   private _mergePinCount: Dict<number> = {}
 
@@ -182,6 +171,7 @@ export class Graph<I = any, O = any>
       units = {},
       merges = {},
       component = {},
+      render = false,
       metadata = {},
       id,
     } = graph
@@ -192,6 +182,7 @@ export class Graph<I = any, O = any>
       outputs: {},
       units: {},
       merges: {},
+      render,
       component: {},
       metadata,
       id,
@@ -205,6 +196,8 @@ export class Graph<I = any, O = any>
     this._exposeOutputSets(outputs)
 
     this.setupComponent(component)
+
+    this.element = render
 
     this.addListener('reset', this._reset)
     this.addListener('play', this._play)
@@ -508,20 +501,6 @@ export class Graph<I = any, O = any>
     }
   }
 
-  private _incElementCount(): void {
-    this._elementUnitCount++
-    if (this._elementUnitCount === 1) {
-      this.setElement()
-    }
-  }
-
-  private _decElementCount(): void {
-    this._elementUnitCount--
-    if (this._elementUnitCount === 0) {
-      this.setNotElement()
-    }
-  }
-
   public setElement(): void {
     this.element = true
     this.emit('element')
@@ -530,34 +509,6 @@ export class Graph<I = any, O = any>
   public setNotElement(): void {
     this.element = false
     this.emit('not_element')
-  }
-
-  public isStateful(): boolean {
-    return this.stateful
-  }
-
-  public _setStateful(): void {
-    this.stateful = true
-    this.emit('stateful')
-  }
-
-  public _setStateless(): void {
-    this.stateful = false
-    this.emit('stateless')
-  }
-
-  private _incStatefulCount(): void {
-    this._statefulUnitCount++
-    if (this._statefulUnitCount === 1) {
-      this._setStateful()
-    }
-  }
-
-  private _decStatefulCount(): void {
-    this._statefulUnitCount--
-    if (this._statefulUnitCount === 0) {
-      this._setStateless()
-    }
   }
 
   public getSpec = (): GraphSpec => {
@@ -1226,41 +1177,19 @@ export class Graph<I = any, O = any>
   public async setGraphState(state: State): Promise<void> {
     for (const unit_id in state) {
       const unit = this.refUnit(unit_id)
-      if (
-        unit instanceof Stateful ||
-        (unit instanceof Graph && unit.stateful)
-      ) {
-        const unit_state = state[unit_id]
-        unit.write(unit_state)
-      } else {
-        throw new Error('unit is not stateful')
-      }
+      // TODO
     }
   }
 
   public async getUnitState(unitId: string): Promise<State> {
     const unit = this.refUnit(unitId)
-    if (unit instanceof Stateful || (unit instanceof Graph && unit.stateful)) {
-      return unit.read()
-    } else {
-      return null
-    }
+    // TODO
+    return null
   }
 
   public async getGraphState(): Promise<GraphState> {
-    // @ts-ignore
-    const _stateful_unit: Dict<V> = filterObj(this._unit, (unit, unitId) => {
-      return (
-        unit instanceof Stateful || (unit instanceof Graph && unit.stateful)
-      )
-    })
-
-    const state_p = mapObjVK(_stateful_unit, (unit) => {
-      return unit.read()
-    })
-
-    const state = await objPromise<Dict<any>>(state_p)
-
+    // TODO
+    const state = {}
     return state
   }
 
@@ -1412,8 +1341,6 @@ export class Graph<I = any, O = any>
       unit.appendChild(ChildClass)
       // TODO state
     }
-
-    this._incElementCount()
 
     this.setSubComponent(unitId)
 
@@ -1706,28 +1633,17 @@ export class Graph<I = any, O = any>
       )
     }
 
-    if (unit instanceof Stateful || (unit instanceof Graph && unit.stateful)) {
-      all_unlisten.push(
-        // @ts-ignore
-        unit.addListener('leaf_set', ({ name, data, path }) => {
-          this.emit('leaf_set', { name, data, path: [unitId, ...path] })
-        })
-      )
-
-      this._incStatefulCount()
-    }
-
     if (unit instanceof Element) {
       this.injectSubComponent(unitId, unitSpec, unit)
     }
 
-    if (unit instanceof Graph && unit.stateful) {
+    if (unit instanceof Graph) {
       if (unit.element) {
         this.injectSubComponent(unitId, unitSpec, unit)
 
         all_unlisten.push(
           unit.addListener('element', () => {
-            this._on_unit_element(unitId, unitSpec, unit as any) // TODO
+            this._on_unit_element(unitId, unitSpec, unit)
           })
         )
         all_unlisten.push(
@@ -1746,13 +1662,6 @@ export class Graph<I = any, O = any>
           unit.addListener('leaf_remove_child_at', ({ at, path }) => {
             this.emit('leaf_remove_child_at', { at, path: [unitId, ...path] })
           })
-        )
-      }
-
-      if (unit.stateful) {
-        all_unlisten.push(unit.addListener('stateful', this._on_unit_stateful))
-        all_unlisten.push(
-          unit.addListener('stateless', this._on_unit_stateless)
         )
       }
     }
@@ -1796,28 +1705,16 @@ export class Graph<I = any, O = any>
     }
   }
 
-  private _on_unit_stateful = (): void => {
-    this._incStatefulCount()
-  }
-
-  private _on_unit_stateless = (): void => {
-    this._decStatefulCount()
-  }
-
   private _on_unit_element = (
     unitId: string,
     unitSpec: GraphUnitSpec,
     unit: C
   ): void => {
     this.injectSubComponent(unitId, unitSpec, unit)
-
-    this._incElementCount()
   }
 
   private _on_unit_not_element = (unitId: string): void => {
-    // TODO
-
-    this._decElementCount()
+    this._removeSubComponent(unitId)
   }
 
   public removeUnit(unitId: string): U {
@@ -1919,16 +1816,10 @@ export class Graph<I = any, O = any>
       }
     }
 
-    if (unit instanceof Stateful || (unit instanceof Graph && unit.stateful)) {
-      this._decStatefulCount()
-    }
-
     if (unit instanceof Element || (unit instanceof Graph && unit.element)) {
-      this._decElementCount()
-
       this._removeSubComponent(unitId)
 
-      this.componentRemove(unitId)
+      this._componentRemove(unitId)
     }
 
     unit.setParent(null)
@@ -2599,7 +2490,7 @@ export class Graph<I = any, O = any>
   ): void {
     this._subComponentAppendChild(subComponentId, childId, slotName)
 
-    this.emit('sub_component_append_child', subComponentId, childId, slotName)
+    this.emit('append_parent_root', subComponentId, childId, slotName)
   }
 
   public appendParentRootChildren(
@@ -2613,12 +2504,7 @@ export class Graph<I = any, O = any>
       this._subComponentAppendChild(subComponentId, childId, slotName)
     }
 
-    this.emit(
-      'sub_component_append_children',
-      subComponentId,
-      children,
-      slotMap
-    )
+    this.emit('append_parent_root_children', subComponentId, children, slotMap)
   }
 
   public appendRoot(subComponentId: string): void {

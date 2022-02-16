@@ -175,7 +175,6 @@
       }
     }
   },
-  "render": false,
   "metadata": {
     "icon": "undo",
     "complexity": 17,

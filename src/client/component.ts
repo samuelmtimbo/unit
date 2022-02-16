@@ -1029,7 +1029,6 @@ export class Component<
     const nextRoot = at(this.$root, _at + 1)
     insertBefore(this.$element, component.$element, nextRoot.$element)
     set(component, '$parent', this)
-    // _if(this.$mounted, mount, component, this.$context)
     this.$mounted && this.mountDescendent(component)
   }
 
@@ -1041,9 +1040,8 @@ export class Component<
 
   public compose(): void {
     for (const component of this.$root) {
-      this.appendRoot(component)
-
       component.collapse()
+      this.appendRoot(component)
     }
   }
 
@@ -1106,8 +1104,8 @@ export class Component<
     let i = 0
     for (const component of this.$parentRoot) {
       const slotName = this.$parentRootSlot[i]
-      this.appendParentRoot(component, slotName)
       component.collapse()
+      this.appendParentRoot(component, slotName)
       i++
     }
   }

@@ -71,6 +71,13 @@ export class Element<
 
     this.addListener('play', this._play)
     this.addListener('pause', this._pause)
+    this.addListener('set', (name: keyof I, data) => {
+      if (!this._forwarding) {
+        this._backwarding = true
+        this._input[name].pull()
+        this._backwarding = false
+      }
+    })
 
     this._slot = {
       default: this,

@@ -1,6 +1,7 @@
 import { System } from '../../../system'
 import isEqual from '../../../system/f/comparisson/Equals/f'
 import { Dict } from '../../../types/Dict'
+import { IHTMLInputElement } from '../../../types/global/dom'
 import { randomIdNotIn } from '../../../util/id'
 import { addGlobalBlurListener } from '../../addGlobalBlurListener'
 import { IOElement } from '../../IOElement'
@@ -744,7 +745,7 @@ export function processKeydown(
 }
 
 export function writeToInput(
-  input: HTMLInputElement,
+  input: IHTMLInputElement,
   key: string,
   {
     ctrlKey,

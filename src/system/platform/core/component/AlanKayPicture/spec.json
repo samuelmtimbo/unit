@@ -105,7 +105,18 @@
       "type": "object"
     }
   },
-  "outputs": {},
+  "outputs": {
+    "image": {
+      "pin": {
+        "0": {
+          "unitId": "image",
+          "pinId": "_self"
+        }
+      },
+      "ref": true,
+      "defaultIgnored": true
+    }
+  },
   "component": {
     "slots": [
       [
@@ -137,5 +148,6 @@
   },
   "id": "dcce5ef0-997a-11ea-b12e-efcfc46ddfa1",
   "type": "`U`&`C`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

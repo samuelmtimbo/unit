@@ -31,11 +31,11 @@ export function watchStatefulSetEvent(
   unit: Stateful,
   callback: (moment) => void
 ): () => void {
-  const listener = (data) => {
+  const listener = (name, data) => {
     callback({
       type: 'unit',
       event,
-      data,
+      data: { name, data },
     })
   }
   unit.addListener(event, listener)
@@ -55,24 +55,6 @@ export function watchElementCallEvent(
       event,
       data,
     })
-  }
-  unit.addListener(event, listener)
-  return () => {
-    unit.removeListener(event, listener)
-  }
-}
-
-export function watchStatefulLeafSetEvent(
-  event: 'leaf_set',
-  unit: Stateful,
-  callback: (moment: UnitMoment) => void
-): () => void {
-  const listener = (data) => {
-    callback({
-      type: 'unit',
-      event,
-      data,
-    } as UnitMoment)
   }
   unit.addListener(event, listener)
   return () => {

@@ -77,5 +77,6 @@
   },
   "id": "b6dc1d8f-2818-4a01-9e8e-47c6405c6f5a",
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

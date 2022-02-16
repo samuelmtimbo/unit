@@ -15,8 +15,9 @@ import {
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { isEmptyObject } from '../../../../../util/object'
-import SVGG from '../../svg/G/Component'
+import SVGG from '../../svg/Group/Component'
 import SVGPath from '../../svg/Path/Component'
 import SVGSVG from '../../svg/SVG/Component'
 
@@ -43,7 +44,7 @@ export const DEFAULT_STYLE = {}
 export const MINIMAP_WIDTH = 200
 export const MINIMAP_HEIGHT = 150
 
-export default class Minimap extends Element<HTMLDivElement, Props> {
+export default class Minimap extends Element<IHTMLDivElement, Props> {
   public _map_el: SVGSVG
   private _map_graph: SVGG
   private _map_children: SVGG

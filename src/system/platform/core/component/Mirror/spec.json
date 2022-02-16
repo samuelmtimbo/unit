@@ -107,5 +107,6 @@
   },
   "id": "3a56b714-36d3-4a0a-b641-001db6f774e8",
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

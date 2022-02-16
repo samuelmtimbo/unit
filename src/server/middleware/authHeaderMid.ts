@@ -1,6 +1,6 @@
-import { verifyAuthToken } from './verifyAuthToken'
 import { Req } from '../req'
 import { extractAuthTokenFromReq } from './extractAuthToken'
+import { verifyAuthToken } from './verifyAuthToken'
 
 export const authHeaderMid = () => {
   return async function (req: Req, res, next) {

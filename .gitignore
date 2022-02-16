@@ -35,4 +35,5 @@ src/client/extension/src/content.js
 src/client/extension/src/popup.js
 src/client/extension/src/options.js
 
+package-lock.json
 yarn.lock

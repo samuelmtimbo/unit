@@ -323,7 +323,6 @@
       }
     }
   },
-  "render": false,
   "metadata": {
     "icon": "grab",
     "complexity": 49,

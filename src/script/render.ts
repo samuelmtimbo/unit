@@ -1,10 +1,11 @@
 import { writeFileSync } from 'fs'
 import { readJSONSync } from 'fs-extra'
 import * as glob from 'glob'
-import { PATH_BUILD_SYSTEM_PLATFORM_COMPONENT } from '../path'
+import { PATH_BUILD_SYSTEM_PLATFORM_CORE_COMPONENT } from '../path'
 import { removeLastSegment } from '../util/removeLastSegment'
 
-const cwd = PATH_BUILD_SYSTEM_PLATFORM_COMPONENT
+// const cwd = PATH_BUILD_SYSTEM_PLATFORM_COMPONENT
+const cwd = PATH_BUILD_SYSTEM_PLATFORM_CORE_COMPONENT
 
 glob
   .sync(`**/**/spec.json`, {

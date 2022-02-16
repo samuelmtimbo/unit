@@ -1,13 +1,13 @@
 import { Size } from '../geometry'
 
-const _canvas: HTMLCanvasElement = document.createElement('canvas')
-const _ctx = _canvas.getContext('2d')
-_ctx.textAlign = 'center'
+export function measureText(
+  ctx: CanvasRenderingContext2D,
+  str: string,
+  fontSize: number
+): Size {
+  ctx.font = `${Math.ceil(fontSize)}px Inconsolata`
 
-export function measureText(str: string, fontSize: number): Size {
-  _ctx.font = `${Math.ceil(fontSize)}px Inconsolata`
-
-  const textMetrics = _ctx.measureText(str)
+  const textMetrics = ctx.measureText(str)
 
   const {
     width: _width,

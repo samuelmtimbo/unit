@@ -8,10 +8,10 @@ import {
 } from 'fs-extra'
 import * as path from 'path'
 import { CloudDB, SharedDB, Store, UserDB } from '.'
-import { CWD } from '../../path'
+import { PATH_CWD } from '../../path'
 import { UserSpec } from '../model/UserSpec'
 
-const FILESYSTEM_DIR = path.join(CWD, '_unit')
+const FILESYSTEM_DIR = path.join(PATH_CWD, '_unit')
 const FILESYSTEM_DIR_DB = path.join(FILESYSTEM_DIR, 'db')
 const FILESYSTEM_DIR_DB_CLOUD = path.join(FILESYSTEM_DIR_DB, 'cloud')
 const FILESYSTEM_DIR_DB_SHARED = path.join(FILESYSTEM_DIR_DB, 'shared')

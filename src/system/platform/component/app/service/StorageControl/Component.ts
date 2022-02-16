@@ -6,6 +6,7 @@ import { getTree } from '../../../../../../spec/parser'
 import { stringify } from '../../../../../../spec/stringify'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../../types/global/dom'
 import Div from '../../../Div/Component'
 import DataTree from '../../DataTree/Component'
 
@@ -34,7 +35,7 @@ export async function getCloueStorageData(): Promise<CloudStorageSpec> {
   }
 }
 
-export default class StorageService extends Component<HTMLDivElement, Props> {
+export default class StorageService extends Component<IHTMLDivElement, Props> {
   private _root: Div
   private _tree: DataTree
 

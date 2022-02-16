@@ -17,6 +17,7 @@ import { renderFrame } from '../../../../client/renderFrame'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export interface Props {
@@ -34,7 +35,7 @@ export const DEFAULT_STYLE = {
   overflow: 'auto',
 }
 
-export default class Frame extends Element<HTMLDivElement, Props> {
+export default class Frame extends Element<IHTMLDivElement, Props> {
   public $$context: Context
 
   private _context_unlisten: Unlisten

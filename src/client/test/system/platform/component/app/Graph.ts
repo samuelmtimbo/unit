@@ -1,13 +1,10 @@
-import { boot } from '../../../../../../boot'
 import { Graph } from '../../../../../../Class/Graph'
 import { Async } from '../../../../../../interface/async/Async'
 import { spawn } from '../../../../../../spawn'
 import GraphComponent from '../../../../../../system/platform/component/app/Graph/Component'
-import { nodeHost } from '../../../../../platform/node/host'
+import { nodeBoot } from '../../../../../platform/node/boot'
 
-export const system = boot({
-  api: nodeHost(),
-})
+export const system = nodeBoot()
 
 export const pod = spawn(system)
 

@@ -4,6 +4,7 @@ import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import IconButton from '../../../component/app/IconButton/Component'
 
 export interface Props {
@@ -21,7 +22,7 @@ export const DEFAULT_STYLE = {
   height: '21px',
 }
 
-export default class ModeIconButton extends Element<HTMLDivElement, Props> {
+export default class ModeIconButton extends Element<IHTMLDivElement, Props> {
   private _icon_button: IconButton
 
   constructor($props: Props, $system: System, $pod: Pod) {

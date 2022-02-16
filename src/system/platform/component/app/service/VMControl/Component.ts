@@ -8,6 +8,7 @@ import { getActiveColor } from '../../../../../../client/theme'
 import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../../types/global/dom'
 import CloudTabs from '../../../../../host/component/IconTabs/Component'
 import { dragOverTimeListener } from '../../../../../host/component/IconTabs/dragOverTimeListener'
 import TextDiv from '../../../../core/component/TextDiv/Component'
@@ -28,7 +29,7 @@ export const DEFAULT_STYLE = {
 }
 
 export default class VMServiceComponent extends Component<
-  HTMLDivElement,
+  IHTMLDivElement,
   Props
 > {
   private _tabs: CloudTabs

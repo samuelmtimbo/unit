@@ -4,6 +4,7 @@ import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 
 export interface Props {
   id?: string
@@ -23,8 +24,8 @@ const DEFAULT_STYLE = {
   boxSizing: 'border-box',
 }
 
-export default class Div extends Element<HTMLDivElement, Props> {
-  private _div_el: HTMLDivElement
+export default class Div extends Element<IHTMLDivElement, Props> {
+  private _div_el: IHTMLDivElement
 
   private _prop_handler: PropHandler
 
@@ -50,7 +51,6 @@ export default class Div extends Element<HTMLDivElement, Props> {
     if (className !== undefined) {
       $element.className = className
     }
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
     if (innerText) {
       $element.innerText = innerText
     }
@@ -69,6 +69,7 @@ export default class Div extends Element<HTMLDivElement, Props> {
         $element.dataset[key] = d
       }
     }
+    applyStyle($element, { ...DEFAULT_STYLE, ...style })
 
     this._div_el = $element
 

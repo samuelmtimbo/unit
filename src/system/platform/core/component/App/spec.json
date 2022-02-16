@@ -322,6 +322,7 @@
     }
   },
   "id": "4181691b-4790-4191-9b03-86c6c968d1b8",
-  "type": "`U`&`G`",
+  "type": "`U`&`C`&`G`",
+  "render": true,
   "system": true
 }

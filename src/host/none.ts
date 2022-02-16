@@ -53,7 +53,6 @@ export function noService<T>(
 export function noHost(): API {
   const host: API = {
     storage: {
-      tab: () => new Storage_(noStorage('Tab Storage')),
       local: () => new Storage_(noStorage('Local Storage')),
       session: () => new Storage_(noStorage('Session Storage')),
       cloud: () => new Storage_(noStorage('Cloud Storage')),
@@ -85,6 +84,28 @@ export function noHost(): API {
     geolocation: {
       getCurrentPosition: () => {
         throw new APINotSupportedError('Geolocation')
+      },
+    },
+    input: {
+      keyboard: {},
+      gamepad: {
+        getGamepads: () => {
+          throw new APINotSupportedError('Gamepad')
+        },
+        addEventListener: (
+          type: 'gamepadconnected' | 'gamepadisconnected',
+          listener: (ev: GamepadEvent) => any,
+          options?: boolean | AddEventListenerOptions
+        ) => {
+          throw new APINotSupportedError('Gamepad')
+        },
+        removeEventListener: (
+          type: 'gamepadconnected' | 'gamepadisconnected',
+          listener: (ev: GamepadEvent) => any,
+          options?: boolean | AddEventListenerOptions
+        ): void => {
+          throw new APINotSupportedError('Gamepad')
+        },
       },
     },
     media: {
@@ -130,9 +151,6 @@ export function noHost(): API {
       },
     },
     channel: {
-      tab: function (opt): any {
-        throw new APINotSupportedError('Tab Channel')
-      },
       session: function (opt): any {
         throw new APINotSupportedError('Session Channel')
       },
@@ -144,9 +162,6 @@ export function noHost(): API {
       },
     },
     pod: {
-      tab: function (opt): any {
-        throw new APINotSupportedError('Tab Pod')
-      },
       session: function (opt): any {
         throw new APINotSupportedError('Session Pod')
       },

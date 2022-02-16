@@ -8,6 +8,7 @@ import { $Wrap } from '../../../../interface/async/$Wrap'
 import { Pod } from '../../../../pod'
 import { ComponentClass, System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import { UnitClass } from '../../../../types/UnitClass'
 import { insert, push, removeAt, unshift } from '../../../../util/array'
 
@@ -19,7 +20,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
+export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
   $_ = ['$W']
 
   private _Container: ComponentClass = parentClass()

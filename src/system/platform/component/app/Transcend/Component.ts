@@ -17,6 +17,7 @@ import {
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import clamp from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
@@ -54,7 +55,7 @@ export const DEFAULT_STYLE = {
   transition: `opacity ${ANIMATION_T_S}s linear`,
 }
 
-export default class Transcend extends Element<HTMLDivElement, Props> {
+export default class Transcend extends Element<IHTMLDivElement, Props> {
   public _container: Div
   public _icon: Icon
 

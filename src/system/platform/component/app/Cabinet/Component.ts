@@ -10,6 +10,7 @@ import { COLOR_NONE } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
@@ -37,7 +38,7 @@ export const DEFAULT_STYLE = {
   height: '0',
 }
 
-export default class Cabinet extends Element<HTMLDivElement, Props> {
+export default class Cabinet extends Element<IHTMLDivElement, Props> {
   private _cabinet: Div
 
   private _drawer: Dict<CabinetDrawer> = {}

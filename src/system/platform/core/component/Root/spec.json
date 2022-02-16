@@ -252,5 +252,6 @@
   },
   "id": "9aba266d-5200-4281-b477-749c9b3c5815",
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

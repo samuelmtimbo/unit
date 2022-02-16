@@ -1,4 +1,4 @@
-export const SYSTEM_ROOT_ID = '__SYSTEM__ROOT__'
+import { SYSTEM_ROOT_ID } from './SYSTEM_ROOT_ID'
 
 const root = document.getElementById(SYSTEM_ROOT_ID)!
 

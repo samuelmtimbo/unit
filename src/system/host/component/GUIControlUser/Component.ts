@@ -6,6 +6,7 @@ import { setAlpha, themeBackgroundColor } from '../../../../client/theme'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import { Unlisten } from '../../../../types/Unlisten'
 import User from '../../../platform/component/app/service/UserControl/Component'
 import GUIControl from '../GUIControl/Component'
@@ -23,7 +24,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class GUIControlUser extends Component<HTMLDivElement, Props> {
+export default class GUIControlUser extends Component<IHTMLDivElement, Props> {
   private _root: GUIControl
   private _content: User
 

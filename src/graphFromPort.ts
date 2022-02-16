@@ -493,8 +493,8 @@ export function asyncGraphFromPort(
       return $graph.$watchGraphUnitPath(data, callback)
     }
 
-    $transcend(data: { id: string; unitId: string; _: string[] }): $Graph {
-      return $graph.$transcend(data)
+    $compose(data: { id: string; unitId: string; _: string[] }): $Graph {
+      return $graph.$compose(data)
     }
 
     $refSubComponent(data: { unitId: string; _: string[] }): $Component {

@@ -29,6 +29,7 @@ import {
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { clamp } from '../../../../core/relation/Clamp/f'
 
@@ -58,7 +59,7 @@ export const DEFAULT_STYLE = {
   color: 'current-color',
 }
 
-export default class Bot extends Element<HTMLDivElement, Props> {
+export default class Bot extends Element<IHTMLDivElement, Props> {
   private _r: number = 0
 
   private _x: number = 0
@@ -90,7 +91,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
   private _move_timeout: NodeJS.Timer
 
-  private _container: HTMLDivElement
+  private _container: IHTMLDivElement
 
   private _container_x: number = 0
   private _container_y: number = 0
@@ -928,7 +929,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     for (const pointerId in this._laser_focus) {
       const laser_focus = this._laser_focus[pointerId]
       const laser_ray = this._laser_ray[pointerId]
-      
+
       laser_focus.style.fill = mode_color
       laser_focus.style.stroke = mode_color
 

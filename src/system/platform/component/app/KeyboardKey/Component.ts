@@ -14,6 +14,7 @@ import { userSelect } from '../../../../../client/util/style/userSelect'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../../component/Div/Component'
 import Icon from '../../../component/Icon/Component'
 
@@ -30,7 +31,7 @@ export const DEFAULT_STYLE = {
   width: '100%',
 }
 
-export default class KeyboardKey extends Element<HTMLDivElement, Props> {
+export default class KeyboardKey extends Element<IHTMLDivElement, Props> {
   private _key: Div
 
   constructor($props: Props, $system: System, $pod: Pod) {

@@ -5,9 +5,9 @@ import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IO } from '../../../../../types/IO'
-import SVGCircle from '../../../component/svg/Circle/Component'
-import SVGRect from '../../../component/svg/Rect/Component'
-import SVGSVG from '../../../component/svg/SVG/Component'
+import SVGCircle from '../../svg/Circle/Component'
+import SVGRect from '../../svg/Rect/Component'
+import SVGSVG from '../../svg/SVG/Component'
 
 export interface Props {
   id?: string

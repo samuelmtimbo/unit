@@ -27,6 +27,7 @@ const ALL: string[] = [
   'pointerover',
   'pointerout',
   'click',
+  'focus',
   'blur',
   'wheel',
   'scroll',

@@ -25,6 +25,7 @@ import { DIM_OPACITY, whenInteracted } from '../../../../client/whenInteracted'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import { Unlisten } from '../../../../types/Unlisten'
 import callAll from '../../../../util/call/callAll'
 import { uuid } from '../../../../util/id'
@@ -53,7 +54,7 @@ export const COLLAPSED_HEIGHT = 33
 
 export const BUTTON_HEIGHT = 24
 
-export default class GUIControl extends Component<HTMLDivElement, Props> {
+export default class GUIControl extends Component<IHTMLDivElement, Props> {
   private _root: Div
 
   private _collapsed_x: number

@@ -8,6 +8,7 @@ import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { ISpeechGrammarList } from '../../../../../types/global/ISpeechGrammarList'
 import { ISpeechRecognitionOpt } from '../../../../../types/global/ISpeechRecognition'
 import IconButton from '../../../component/app/IconButton/Component'
@@ -42,7 +43,7 @@ const specNameGrammar = (__system: System): ISpeechGrammarList => {
   return grammarsFrom(__system, tokens)
 }
 
-export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
+export default class MicrophoneButton extends Element<IHTMLDivElement, Props> {
   private _icon_button: IconButton
 
   private _speech_recorder: SpeechRecorder

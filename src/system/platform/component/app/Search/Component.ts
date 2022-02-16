@@ -34,6 +34,7 @@ import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { GraphSpec, Spec, Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { removeWhiteSpace } from '../../../../../util/string'
 import MicrophoneButton from '../../../component/app/MicrophoneButton/Component'
 import TextDiv from '../../../core/component/TextDiv/Component'
@@ -94,7 +95,7 @@ export function isSpecVisible(specs: Specs, id: string): boolean {
   }
 }
 
-export default class Search extends Element<HTMLDivElement, Props> {
+export default class Search extends Element<IHTMLDivElement, Props> {
   private _input_value: string = ''
 
   public _search: Div

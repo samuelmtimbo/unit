@@ -9,6 +9,7 @@ import parentElement from '../../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../../types/global/dom'
 import { Unlisten } from '../../../../../../types/Unlisten'
 import callAll from '../../../../../../util/call/callAll'
 import Div from '../../../Div/Component'
@@ -21,7 +22,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class IOAuthWall extends Component<HTMLDivElement, Props> {
+export default class IOAuthWall extends Component<IHTMLDivElement, Props> {
   private _root: Div
   private _signin: Div
   private _content: Div

@@ -7,6 +7,7 @@ import { applyTheme } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Icon from '../../Icon/Component'
 
 export interface Props {
@@ -28,7 +29,7 @@ export const DEFAULT_STYLE = {
   touchAction: 'none',
 }
 
-export default class IconButton extends Element<HTMLDivElement, Props> {
+export default class IconButton extends Element<IHTMLDivElement, Props> {
   private _hovered: boolean = false
 
   private _icon_comp: Icon

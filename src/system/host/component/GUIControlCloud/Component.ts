@@ -6,6 +6,7 @@ import { setAlpha, themeBackgroundColor } from '../../../../client/theme'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import { Unlisten } from '../../../../types/Unlisten'
 import CloudManager, {
   CLOUD_HEIGHT,
@@ -26,7 +27,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class GUIControlCloud extends Component<HTMLDivElement, Props> {
+export default class GUIControlCloud extends Component<IHTMLDivElement, Props> {
   private _root: GUIControl
   private _content: CloudManager
 

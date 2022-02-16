@@ -133,12 +133,12 @@ import {
   getSubComponentParentId,
   injectSpecs,
   isComponent,
-  isComponentSpec,
   newMergeIdInSpec,
   newSpecId,
   newUnitIdInSpec,
   newUnitIdInSpecId,
   setSpec,
+  shouldRender,
 } from '../../../../../client/spec'
 import {
   applyTheme,
@@ -212,7 +212,6 @@ import { GraphMoment } from '../../../../../debug/GraphMoment'
 import { GraphUnitErrMomentData } from '../../../../../debug/GraphUnitErrMoment'
 import { GraphUnitPinDataMomentData } from '../../../../../debug/GraphUnitPinDataMoment'
 import { GraphUnitPinDropMomentData } from '../../../../../debug/GraphUnitPinDropMoment'
-import { GraphUnitPropMomentData } from '../../../../../debug/GraphUnitPropMoment'
 import { Moment } from '../../../../../debug/Moment'
 import { PinDataMomentData } from '../../../../../debug/PinDataMoment'
 import { PinDropMomentData } from '../../../../../debug/PinDropMoment'
@@ -319,6 +318,7 @@ import {
 } from '../../../../../types'
 import { Callback } from '../../../../../types/Callback'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { GraphState } from '../../../../../types/GraphState'
 import { IO } from '../../../../../types/IO'
 import { randomValueOfType } from '../../../../../types/parser/randomValue'
@@ -345,6 +345,7 @@ import assocPath from '../../../../core/object/AssocPath/f'
 import forEachKeyValue from '../../../../core/object/ForEachKeyValue/f'
 import keyCount from '../../../../core/object/KeyCount/f'
 import { clamp } from '../../../../core/relation/Clamp/f'
+import deepMerge from '../../../../f/object/DeepMerge/f'
 import _dissoc from '../../../../f/object/Dissoc/f'
 import keys, { _keys } from '../../../../f/object/Keys/f'
 import { getGlobalComponent } from '../../../../globalComponent'
@@ -356,14 +357,14 @@ import Frame from '../../Frame/Component'
 import Icon from '../../Icon/Component'
 import SVGCircle from '../../svg/Circle/Component'
 import SVGDefs from '../../svg/Defs/Component'
-import SVGG from '../../svg/G/Component'
+import SVGG from '../../svg/Group/Component'
 import SVGLine from '../../svg/Line/Component'
 import SVGMarker from '../../svg/Marker/Component'
 import SVGPath from '../../svg/Path/Component'
 import SVGRect from '../../svg/Rect/Component'
 import SVGSVG from '../../svg/SVG/Component'
-import SVGText from '../../svg/SVGText/Component'
-import SVGTextPath from '../../svg/TextPath/Component'
+import SVGTextPath from '../../svg/SVGTextPath/Component'
+import SVGText from '../../svg/Text/Component'
 import TextInput from '../../value/TextInput/Component'
 import Wrap from '../../Wrap/Component'
 import ZoomComponent from '../../Zoom/Component'
@@ -436,14 +437,17 @@ export const enable_mode_keyboard = (
 ): Unlisten => {
   const { $system } = component
   // console.log('enable_mode_keyboard')
+
   const _mode_keydown: Dict<boolean> = {}
 
   const shortcuts: Shortcut[] = []
+
   for (const mode in MODE_TO_KEY) {
     const mode_key = MODE_TO_KEY[mode]
 
     if (isKeyPressed($system, mode_key)) {
       _mode_keydown[mode_key] = true
+
       callback(mode as Mode)
     }
 
@@ -452,6 +456,7 @@ export const enable_mode_keyboard = (
       strict: false,
       keydown: (key: string, event: IOKeyboardEvent) => {
         const { ctrlKey } = event
+
         if (ctrlKey) {
           return
         }
@@ -459,6 +464,7 @@ export const enable_mode_keyboard = (
         // console.log('keydown', key)
         if (mode_key === key) {
           _mode_keydown[key] = true
+
           callback(mode as Mode)
         }
       },
@@ -471,7 +477,9 @@ export const enable_mode_keyboard = (
 
         if (key === MODE_TO_KEY[mode]) {
           const mode_keydown = Object.keys(_mode_keydown)
+
           const mode_keydown_count = mode_keydown.length
+
           if (mode_keydown_count > 0) {
             callback(KEY_TO_MODE[mode_keydown[mode_keydown_count - 1]] as Mode)
           } else {
@@ -482,14 +490,12 @@ export const enable_mode_keyboard = (
       },
     })
   }
+
   const shortcutListener = makeShortcutListener(shortcuts)
+
   const keyboard_unlisten = component.addEventListener(shortcutListener)
+
   return keyboard_unlisten
-  // const $keyboard = new KeyboardController(component.$context.$element)
-  // const shortcutGroupId = $keyboard.addShortcutGroup(shortcuts)
-  // return () => {
-  //   $keyboard.removeShortcutGroup(shortcutGroupId)
-  // }
 }
 
 // export const SUBGRAPH_MAX_D: number = 9  * LINK_DISTANCE
@@ -848,7 +854,7 @@ export interface Props {
 
 export const GRAPH_SPEC_ID = 'e80c912e-7508-11ea-966b-436805345ff0'
 
-export default class GraphComponent extends Element<HTMLDivElement, Props> {
+export default class GraphComponent extends Element<IHTMLDivElement, Props> {
   private _root: Frame
   private _graph: _GraphComponent
   private _component: Component
@@ -1166,19 +1172,22 @@ export default class GraphComponent extends Element<HTMLDivElement, Props> {
 
     const { component: component_spec = {} } = spec
 
-    const is_component_spec = isComponentSpec(specs, component_spec)
+    const render = shouldRender(component_spec)
 
-    spec.type = `\`U\`&\`G\`&\`C\``
+    spec.render = render
+    spec.type = `\`U\`&\`G\`${render ? `&\`C\`` : ''}`
 
     // AD HOC
     // force update complexity
     delete spec.metadata?.complexity
 
+    console.log(spec)
+
     setSpec(specs, id, spec)
 
     const parent_unit_id = newUnitIdInSpec(specs, {}, id)
 
-    this._pod = this._pod.$transcend({
+    this._pod = this._pod.$compose({
       id,
       unitId: parent_unit_id,
       _: ['$U', '$C', '$G'],
@@ -1189,7 +1198,7 @@ export default class GraphComponent extends Element<HTMLDivElement, Props> {
       metadata: {},
     }
 
-    if (is_component_spec) {
+    if (render) {
       const { width, height } = this._graph.getMaxComponentSpecSizeSize()
       parent_unit.metadata.component = {
         width,
@@ -1285,7 +1294,7 @@ export default class GraphComponent extends Element<HTMLDivElement, Props> {
 
     const fullwindow = this._graph.isFullwindow()
 
-    const next_pod = this._pod.$transcend({
+    const next_pod = this._pod.$compose({
       id,
       unitId: unit_id,
       _: ['$U', '$C', '$G'],
@@ -1572,7 +1581,7 @@ export type LayoutLeaf = [string[], Component]
 
 export type LayoutBase = LayoutLeaf[]
 
-export class _GraphComponent extends Element<HTMLDivElement, _Props> {
+export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
   private _spec: GraphSpec = emptyGraphSpec
 
   private _disabled: boolean = true
@@ -10987,8 +10996,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
           },
         }
 
-        console.log('swap_pin_bag', swap_pin_bag)
-
         const pin_position: UnitPinPosition = {
           input: {},
           output: {},
@@ -12048,7 +12055,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
   private _set_all_ref_pin_opacity = (opacity: number): void => {
     for (const pin_node_id of this._link_pin_ref_set) {
-      this._set_link_pin_opacity(pin_node_id, opacity)
+      if (!this._spec_is_link_pin_ignored(pin_node_id)) {
+        this._set_link_pin_opacity(pin_node_id, opacity)
+      }
     }
   }
 
@@ -13719,7 +13728,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       !parent_id || this._layout_path.includes(parent_id)
 
     const parent_layer = this._get_layout_layer(parent_id)
-    const parent_parent_layer = this._get_spec_parent_layout_layer(parent_id)
+    const parent_parent_layer = this._ensure_parent_layout_layer(parent_id)
 
     const { foreground: parent_foreground } = parent_layer
     const { foreground: parent_parent_foreground } = parent_parent_layer
@@ -14068,7 +14077,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
               const leaf_trait = all_leaf_trait[leaf_id]
 
               const parent_layout_layer =
-                this._get_spec_parent_layout_layer(sub_component_id)
+                this._ensure_parent_layout_layer(sub_component_id)
 
               const { scrollTop = 0 } = parent_layout_layer.layer.$element
 
@@ -14328,7 +14337,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     const { x: __x, y: __y } = position
 
     const parent_layout_layer =
-      this._get_spec_parent_layout_layer(sub_component_id)
+      this._ensure_parent_layout_layer(sub_component_id)
 
     const { scrollTop = 0 } = parent_layout_layer.layer.$element
 
@@ -17473,6 +17482,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     //   base_node,
     //   sub_scale
     // )
+
     const {
       api: {
         text: { measureText },
@@ -19764,7 +19774,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
   }
 
   private _commit_sub_component_base = (sub_component_id: string): void => {
-    // console.log('Graph', '_layout_sub_component_commit_base', sub_component_id)
+    // console.log('Graph', '_commit_sub_component_base', sub_component_id)
 
     return this.__commit_sub_component_base(
       sub_component_id,
@@ -19906,8 +19916,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     const { animate } = this.$props
 
-    const prev_layout_layer =
-      this._get_spec_parent_layout_layer(sub_component_id)
+    const prev_layout_layer = this._ensure_parent_layout_layer(sub_component_id)
 
     this._layout_path.push(sub_component_id)
 
@@ -20070,7 +20079,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
         style: {},
       })
 
-      const parent_layer = this._get_spec_parent_layout_layer(parent_id)
+      const parent_layer = this._ensure_parent_layout_layer(parent_id)
 
       parent_layer.layers.appendChild(layout_layer.layer)
 
@@ -20120,7 +20129,9 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._tree_layout) {
-      this._layout_enter_sub_component(node_id)
+      if (this._mode === 'none') {
+        this._layout_enter_sub_component(node_id)
+      }
     } else {
       if (this._is_unit_node_id(node_id)) {
         if (!this._resize_node_id_pointer_id[node_id]) {
@@ -20680,12 +20691,13 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     this._layout_transfer_parent_animating[parent_id] = true
 
+    const parent_frame = this._get_sub_component_frame(parent_id)
     const parent_context = this._get_sub_component_frame_context(parent_id)
     const parent_component = this._get_sub_component(parent_id)
 
     const slot = parent_component.$slot[slot_name]
 
-    const slot_offset: Component = slot.getOffset()
+    const slot_offset: Component = slot.getOffset() || parent_frame
 
     const _slot_style = extractStyle(slot_offset, measureText)
     const _leaf_style = []
@@ -21485,12 +21497,12 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _get_spec_parent_layout_layer = (
+  private _ensure_parent_layout_layer = (
     sub_component_id: string
   ): LayoutLayer => {
     const parent_id = this._get_sub_component_spec_parent_id(sub_component_id)
     if (parent_id) {
-      return this._layout_layer[parent_id]
+      return this._ensure_parent_layout_layer(parent_id)
     } else {
       return this._layout_root
     }
@@ -22592,7 +22604,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       _: ['$U', '$C', '$G'],
     }) as $Graph
 
-    graph_pod.$getGraphData(({ state, err, pinData, children, mergeData }) => {
+    graph_pod.$getGraphData(({ err, pinData, children, mergeData }) => {
       const _pinData = mapObjKey(pinData, (value, key) => {
         return map_unit_id[key]
       })
@@ -22602,11 +22614,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
         return map_unit_id[key]
       })
       this._process_graph_err(_err)
-
-      const _state = mapObjKey(state, (value, key) => {
-        return map_unit_id[key]
-      })
-      this._process_graph_state(_state)
 
       const _children = mapObjKey(children, (value, key) => {
         return map_unit_id[key]
@@ -22635,9 +22642,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
   private _on_node_click_hold = (node_id: string, event: IOPointerEvent) => {
     // console.log('Graph', '_on_node_click_hold')
-    if (this._tree_layout) {
-      return
-    }
 
     if (this._resize_node_id_pointer_id[node_id]) {
       return
@@ -22647,20 +22651,28 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     this._animate_long_press(screenX, screenY, 'out')
 
-    if (this._is_unit_node_id(node_id)) {
-      // AD HOC
-      // TRELO #2064
-      const node_comp = this._get_node_comp(node_id)
-      node_comp.$element.dispatchEvent(new PointerEvent('pointerleave', event))
+    if (this._tree_layout) {
+      this._on_node_long_press(node_id, event)
+    } else {
+      if (this._is_unit_node_id(node_id)) {
+        // AD HOC
+        // TRELO #2064
+        const node_comp = this._get_node_comp(node_id)
+        node_comp.$element.dispatchEvent(
+          new PointerEvent('pointerleave', event)
+        )
 
-      this._start_gesture(event)
-    } else if (this._is_pin_node_id(node_id)) {
-      // AD HOC
-      // TRELO #2064
-      const node_comp = this._get_node_comp(node_id)
-      node_comp.$element.dispatchEvent(new PointerEvent('pointerleave', event))
+        this._start_gesture(event)
+      } else if (this._is_pin_node_id(node_id)) {
+        // AD HOC
+        // TRELO #2064
+        const node_comp = this._get_node_comp(node_id)
+        node_comp.$element.dispatchEvent(
+          new PointerEvent('pointerleave', event)
+        )
 
-      this._start_gesture(event)
+        this._start_gesture(event)
+      }
     }
   }
 
@@ -23409,6 +23421,14 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._spec_move_datum_to_pin(datum_node_id, pin_node_id, value)
     this._sim_move_datum_to_pin(datum_node_id, pin_node_id)
     this._pod_move_datum_to_pin(datum_pin_node_id, pin_node_id, value)
+  }
+
+  private _move_datum_to_plug = (
+    datum_node_id: string,
+    pin_node_id: string
+  ): void => {
+    // console.log('Graph', '_move_datum_to_plug', datum_node_id, pin_node_id)
+    // TODO
   }
 
   private _pod_move_datum_to_pin = (
@@ -25665,7 +25685,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
 
     const layout_core = this._layout_core[unit_id]
 
-    const parent_layout_layer = this._get_spec_parent_layout_layer(unit_id)
+    const parent_layout_layer = this._ensure_parent_layout_layer(unit_id)
 
     parent_layout_layer.children.removeChild(layout_core)
 
@@ -26830,7 +26850,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._get_sub_component_tree_index(unit_id)
     this._layout_drag_direction[unit_id] = undefined
 
-    const parent_layout_layer = this._get_spec_parent_layout_layer(unit_id)
+    const parent_layout_layer = this._ensure_parent_layout_layer(unit_id)
 
     this._layout_drag_start_scroll_top[unit_id] =
       parent_layout_layer.layer.$element.scrollTop
@@ -26865,7 +26885,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     const scroll_top_start = this._layout_drag_start_scroll_top[unit_id]
     const position = this._layout_drag_init_position[unit_id]
 
-    const parent_layout_layer = this._get_spec_parent_layout_layer(unit_id)
+    const parent_layout_layer = this._ensure_parent_layout_layer(unit_id)
 
     const { scrollTop = 0 } = parent_layout_layer.layer.$element
 
@@ -27002,7 +27022,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     let animate = false
     let d = 0
 
-    const parent_layout_layer = this._get_spec_parent_layout_layer(unit_id)
+    const parent_layout_layer = this._ensure_parent_layout_layer(unit_id)
 
     const { scrollTop = 0, scrollHeight } = parent_layout_layer.layer.$element
 
@@ -28621,11 +28641,13 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
             if (this._mode === 'none' || this._mode === 'multiselect') {
               const newUUID = newSpecId(specs)
 
-              const newSpec = this._add_empty_spec(newUUID)
-              newSpec.component = {
-                defaultWidth: width,
-                defaultHeight: height,
-              }
+              this._add_empty_spec(newUUID, {
+                render: true,
+                component: {
+                  defaultWidth: width,
+                  defaultHeight: height,
+                },
+              })
 
               const unit = {
                 id: newUUID,
@@ -29141,10 +29163,15 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     this._add_random_datum(datum_id, position)
   }
 
-  private _add_empty_spec = (id: string): GraphSpec => {
+  private _add_empty_spec = (
+    id: string,
+    partial: Partial<GraphSpec> = {}
+  ): GraphSpec => {
     const { specs } = this.$system
 
-    const newSpec = emptySpec()
+    const newSpec = deepMerge(emptySpec(), partial)
+
+    console.log('newSpec', newSpec)
 
     setSpec(specs, id, newSpec)
 
@@ -33193,7 +33220,7 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       if (this._search_unit_id === sub_component_id) {
         if (sub_component_id === this._search_unit_id) {
           const parent_layout_layer =
-            this._get_spec_parent_layout_layer(sub_component_id)
+            this._ensure_parent_layout_layer(sub_component_id)
           const { scrollHeight } = parent_layout_layer.layer.$element
           this._refresh_layout_component_scroll(
             sub_component_id,
@@ -33344,10 +33371,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       this._process_graph_err(unit_err)
     })
 
-    pod.$getGraphState({}, (state: Dict<any>) => {
-      this._process_graph_state(state)
-    })
-
     pod.$getGraphChildren({}, (children: Dict<any>) => {
       this._process_graph_children(children)
     })
@@ -33435,13 +33458,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
           this._graph_debug_take_err(unit_id)
         }
       }
-    }
-  }
-
-  private _process_graph_state = (state: Dict<any>): void => {
-    for (const unit_id in state) {
-      const unit_state = state[unit_id]
-      this._graph_state[unit_id] = unit_state
     }
   }
 
@@ -34223,17 +34239,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _on_graph_unit_set_moment = (data: GraphUnitPropMomentData): void => {
-    // console.log('Graph', '_on_graph_unit_set_moment', data)
-    const { unitId, name, data: _data, path } = data
-
-    this._graph_state[unitId] = assocPath(
-      this._graph_state[unitId],
-      [...path, name],
-      _data
-    )
-  }
-
   private _on_graph_unit_append_child_moment = (moment: GraphMoment): void => {
     console.log('Graph', '_on_graph_unit_append_child_moment', moment)
     // TODO
@@ -34475,7 +34480,6 @@ export class _GraphComponent extends Element<HTMLDivElement, _Props> {
       err: this._on_graph_unit_err_moment,
       take_err: this._on_graph_unit_take_err_moment,
       catch_err: this._on_graph_unit_take_err_moment,
-      leaf_set: this._on_graph_unit_set_moment,
       leaf_add_unit: this._on_graph_unit_add_unit_moment,
       leaf_remove_unit: this._on_graph_unit_remove_unit_moment,
       leaf_append_child: this._on_graph_leaf_append_child,

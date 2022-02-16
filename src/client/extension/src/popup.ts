@@ -1,4 +1,4 @@
 // @ts-ignore
-chrome.storage.sync.get('color', function (data) { })
+chrome.storage.sync.get('color', function (data) {})
 
 export default null

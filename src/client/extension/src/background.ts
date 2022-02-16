@@ -1,7 +1,7 @@
 const EXTENSION_ID = 'hcecpkhphpabohdkkpnenodimblpnglc'
 
 // @ts-ignore
-chrome.runtime.onConnect.addListener(port => {})
+chrome.runtime.onConnect.addListener((port) => {})
 // @ts-ignore
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // console.log(message)

@@ -11,6 +11,7 @@ import { Pod } from '../../../../../pod'
 import { emptyGraphSpec } from '../../../../../spec/emptySpec'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { mapObjVK } from '../../../../../util/object'
 import { BundleSpec } from '../../../method/process/BundleSpec'
 import { NOT_SUBGRAPH_MAX_D, SUBGRAPH_MAX_D } from '../Graph/Component'
@@ -26,7 +27,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class Mingraph extends Element<HTMLDivElement, Props> {
+export default class Mingraph extends Element<IHTMLDivElement, Props> {
   public _minimap: Minimap
 
   public _nodes: Dict<SimNode<any>> = {}
