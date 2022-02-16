@@ -15,14 +15,15 @@ import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { IO } from '../../../../../types/IO'
 import Icon from '../../../component/Icon/Component'
-import SVGCircle from '../../../component/svg/Circle/Component'
-import SVGG from '../../../component/svg/G/Component'
-import SVGLine from '../../../component/svg/Line/Component'
-import SVGRect from '../../../component/svg/Rect/Component'
-import SVGSVG from '../../../component/svg/SVG/Component'
-import SVGText from '../../../component/svg/SVGText/Component'
+import SVGCircle from '../../svg/Circle/Component'
+import SVGG from '../../svg/Group/Component'
+import SVGLine from '../../svg/Line/Component'
+import SVGRect from '../../svg/Rect/Component'
+import SVGSVG from '../../svg/SVG/Component'
+import SVGText from '../../svg/Text/Component'
 
 const OPENING: number = 120
 
@@ -66,7 +67,7 @@ export function line_wrap(text: string, MAX: number = 15): string[] {
   return lines
 }
 
-export default class ClassDatum extends Element<HTMLDivElement, Props> {
+export default class ClassDatum extends Element<IHTMLDivElement, Props> {
   private _svg: SVGSVG
   private _svg_g: SVGG
 

@@ -157,5 +157,6 @@
   },
   "id": "16c4c67d-e88c-43e0-acd4-18f5eb4561b1",
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

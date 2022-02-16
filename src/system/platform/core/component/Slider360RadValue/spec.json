@@ -103,5 +103,6 @@
     "defaultHeight": 30
   },
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

@@ -5,6 +5,7 @@ import { getTree } from '../../../../spec/parser'
 import { stringify } from '../../../../spec/stringify'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import Datum from '../app/Datum/Component'
 
 export interface Props {
@@ -12,7 +13,7 @@ export interface Props {
   value?: any
 }
 
-export default class _Datum extends Element<HTMLDivElement, Props> {
+export default class _Datum extends Element<IHTMLDivElement, Props> {
   private _datum: Datum
 
   constructor($props: Props, $system: System, $pod: Pod) {

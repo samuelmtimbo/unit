@@ -5,6 +5,7 @@ import { COLOR_NONE } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import TextInput from '../../value/TextInput/Component'
 
 export interface Props {
@@ -30,7 +31,7 @@ const DEFAULT_STYLE = {
   textAlign: 'center',
 }
 
-export default class SearchInput extends Element<HTMLDivElement, Props> {
+export default class SearchInput extends Element<IHTMLDivElement, Props> {
   public _input: TextInput
 
   constructor($props: Props, $system: System, $pod: Pod) {

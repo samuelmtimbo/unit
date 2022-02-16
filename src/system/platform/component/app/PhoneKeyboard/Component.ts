@@ -6,6 +6,7 @@ import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../../component/Div/Component'
 import PhoneKeyboardKey, { emitPhoneKey } from '../PhoneKeyboardKey/Component'
 
@@ -22,7 +23,7 @@ export const DEFAULT_STYLE = {
 
 const KEY_HEIGHT: number = 30
 
-export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
+export default class PhoneKeyboard extends Element<IHTMLDivElement, Props> {
   private _keyboard: Div
   private _keys: PhoneKeyboardKey[] = []
 

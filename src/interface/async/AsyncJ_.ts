@@ -1,3 +1,4 @@
+import { evaluate } from '../../spec/evaluate'
 import { Callback } from '../../types/Callback'
 import { J } from '../J'
 import { $J, $J_C, $J_R, $J_W } from './$J'
@@ -8,24 +9,26 @@ export const AsyncJCall: (value: J) => $J_C = (value) => {
       { name }: { name: string },
       callback: Callback<any>
     ): Promise<void> {
+      let data
       try {
-        const data = await value.get(name)
-        callback(data)
+        data = await value.get(name)
       } catch (err) {
         callback(undefined, err.message)
       }
+      callback(data)
     },
 
     async $set(
-      { name, data }: { name: string; data: any },
+      { name, data }: { name: string; data: string },
       callback: Callback<any>
     ): Promise<void> {
       try {
-        await value.set(name, data)
-        callback()
+        const _data = evaluate(data, {}, {})
+        await value.set(name, _data)
       } catch (err) {
         callback(undefined, err.message)
       }
+      callback()
     },
   }
 }

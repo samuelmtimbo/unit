@@ -18,6 +18,7 @@ import { COLOR_NONE } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import Div from '../../Div/Component'
 import Frame from '../../Frame/Component'
@@ -45,7 +46,7 @@ const DEFAULT_STYLE = {
   touchAction: 'none',
 }
 
-export default class Drawer extends Element<HTMLDivElement, Props> {
+export default class Drawer extends Element<IHTMLDivElement, Props> {
   public drawer: Div
 
   public content: Div

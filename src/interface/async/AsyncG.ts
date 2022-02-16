@@ -364,8 +364,8 @@ export const AsyncGWatch = (graph: $G_W): $G_W => {
 
 export const AsyncGRef = (graph: $G_R): $G_R => {
   return {
-    $transcend(data: { id: string; unitId: string; _: string[] }): $Graph {
-      return graph.$transcend(data)
+    $compose(data: { id: string; unitId: string; _: string[] }): $Graph {
+      return graph.$compose(data)
     },
 
     $refUnit(data: { unitId: string; _: string[] }): $U {

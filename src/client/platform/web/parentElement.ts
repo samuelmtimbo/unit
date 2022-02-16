@@ -1,6 +1,7 @@
 import { System } from '../../../system'
+import { IHTMLDivElement } from '../../../types/global/dom'
 
-export default function parentElement($system: System): HTMLDivElement {
+export default function parentElement($system: System): IHTMLDivElement {
   const {
     api: {
       document: { createElement },

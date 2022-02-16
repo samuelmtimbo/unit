@@ -212,5 +212,6 @@
   },
   "id": "f8b6b40c-3cbd-4de7-94cc-3a3b7f6391a3",
   "type": "`U`&`C`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

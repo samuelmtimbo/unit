@@ -19,6 +19,7 @@ import {
 } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../Div/Component'
 import DataTreeLeaf from '../DataLeaf/Component'
 
@@ -90,7 +91,7 @@ export const DEFAULT_STYLE = {
   width: 'fit-content',
 }
 
-export default class DataTree extends Element<HTMLDivElement, Props> {
+export default class DataTree extends Element<IHTMLDivElement, Props> {
   private _data: TreeNode
 
   private _root: Div

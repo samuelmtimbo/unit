@@ -46,5 +46,6 @@
   },
   "id": "8b231876-26af-11eb-8e1d-6f057957054d",
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

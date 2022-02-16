@@ -9,7 +9,7 @@ export interface I {
 
 export interface O {}
 
-export default class Defs extends Element<I, O> {
+export default class SVGDefs extends Element<I, O> {
   constructor(system: System, pod: Pod) {
     super(
       {

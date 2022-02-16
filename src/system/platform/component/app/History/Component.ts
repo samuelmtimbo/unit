@@ -14,11 +14,12 @@ import {
 } from '../../../../../client/util/geometry'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
-import SVGG from '../../../../../system/platform/component/svg/G/Component'
-import SVGPath from '../../../../../system/platform/component/svg/Path/Component'
-import SVGSVG from '../../../../../system/platform/component/svg/SVG/Component'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { isEmptyObject } from '../../../../../util/object'
+import SVGG from '../../svg/Group/Component'
+import SVGPath from '../../svg/Path/Component'
+import SVGSVG from '../../svg/SVG/Component'
 
 const MINIMAP_AREA = 180 * 180
 
@@ -43,7 +44,7 @@ export const DEFAULT_STYLE = {}
 export const MINIMAP_WIDTH = 200
 export const MINIMAP_HEIGHT = 150
 
-export default class History extends Element<HTMLDivElement, Props> {
+export default class History extends Element<IHTMLDivElement, Props> {
   public _map_el: SVGSVG
   private _map_graph: SVGG
   private _map_children: SVGG

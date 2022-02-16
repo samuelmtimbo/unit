@@ -3,6 +3,7 @@ import parentElement from '../../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../../types/global/dom'
 import Div from '../../../Div/Component'
 
 export interface Props {
@@ -18,7 +19,7 @@ export const DEFAULT_STYLE = {
   paddingBottom: '3px',
 }
 
-export default class ChatControl extends Component<HTMLDivElement, Props> {
+export default class ChatControl extends Component<IHTMLDivElement, Props> {
   private _root: Div
 
   constructor($props: Props, $system: System, $pod: Pod) {

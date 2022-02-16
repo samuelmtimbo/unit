@@ -3,6 +3,7 @@ import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import SVGCircle from '../../svg/Circle/Component'
 import SVGRect from '../../svg/Rect/Component'
 import SVGSVG from '../../svg/SVG/Component'
@@ -21,7 +22,7 @@ export interface Props {
   strokeDashOffset?: number
 }
 
-export default class Selection extends Element<HTMLDivElement, Props> {
+export default class Selection extends Element<IHTMLDivElement, Props> {
   private _selection: SVGSVG
   private _selection_shape: SVGCircle | SVGRect
 

@@ -3,6 +3,7 @@ import { PinDataMoment } from '../debug/PinDataMoment'
 import { $Element } from '../interface/async/$Element'
 import { NOOP } from '../NOOP'
 import { evaluate } from '../spec/evaluate'
+import { stringify } from '../spec/stringify'
 import { GlobalRefSpec } from '../types/GlobalRefSpec'
 import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
@@ -116,7 +117,8 @@ export class Element<
 
   set(name: string, data: any): void {
     if (this.$connected) {
-      this.$unit.$set({ name, data }, NOOP)
+      const value = stringify(data)
+      this.$unit.$set({ name, data: value }, NOOP)
     }
   }
 }

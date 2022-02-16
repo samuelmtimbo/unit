@@ -19,6 +19,7 @@ import { Pod } from '../../../../../../pod'
 import { SharedObjectClient } from '../../../../../../SharedObject'
 import { System } from '../../../../../../system'
 import { Dict } from '../../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../../types/global/dom'
 import { Unlisten } from '../../../../../../types/Unlisten'
 import callAll from '../../../../../../util/call/callAll'
 import { dragOverTimeListener } from '../../../../../host/component/IconTabs/dragOverTimeListener'
@@ -164,7 +165,7 @@ const SERVICE = [
   },
 ]
 
-export default class CloudManager extends Component<HTMLDivElement, Props> {
+export default class CloudManager extends Component<IHTMLDivElement, Props> {
   private _root: Div
   private _container: Div
   private _list: Div

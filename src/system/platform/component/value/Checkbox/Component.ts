@@ -8,6 +8,7 @@ import {
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLInputElement } from '../../../../../types/global/dom'
 
 export interface Props {
   className?: string
@@ -27,8 +28,8 @@ export const DEFAULT_STYLE = {
   // outline: 'none',
 }
 
-export default class Checkbox extends Element<HTMLInputElement, Props> {
-  private _input_el: HTMLInputElement
+export default class Checkbox extends Element<IHTMLInputElement, Props> {
+  private _input_el: IHTMLInputElement
 
   private _prop_handler: PropHandler
 

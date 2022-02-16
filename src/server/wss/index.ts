@@ -1,11 +1,11 @@
 import * as http from 'http'
 import * as WebSocket from 'ws'
-import { parseCookies } from '../middleware/cookies'
-import { verifyAuthToken } from '../middleware/verifyAuthToken'
 import { EventEmitter } from '../../EventEmitter'
 import { NOOP } from '../../NOOP'
 import { Dict } from '../../types/Dict'
 import { uuidNotIn } from '../../util/id'
+import { parseCookies } from '../middleware/cookies'
+import { verifyAuthToken } from '../middleware/verifyAuthToken'
 import { Req } from '../req'
 import { WSS_PING_T } from './constant'
 

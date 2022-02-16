@@ -3,6 +3,7 @@ import parentElement from '../../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../../component/Div/Component'
 import _Text from '../../../component/value/Text/Component'
 
@@ -19,7 +20,7 @@ export const DEFAULT_STYLE = {
   height: 'fit-content',
 }
 
-export default class TextDiv extends Element<HTMLDivElement, Props> {
+export default class TextDiv extends Element<IHTMLDivElement, Props> {
   private _div: Div
   private _text: _Text
 

@@ -8,6 +8,7 @@ import { makePointerUpListener } from '../../../../../client/event/pointer/point
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import clamp from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
 
@@ -26,7 +27,7 @@ export const DEFAULT_STYLE = {
 
 export const PICKER_SIZE = 12
 
-export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
+export default class HSVColorPicker extends Element<IHTMLDivElement, Props> {
   private _color_picker: Div
   private _picker: Div
   private _background: Div

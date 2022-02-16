@@ -5,11 +5,7 @@ import { System } from '../../../../../system'
 
 export type I = {
   url: string
-  options: {
-    body?: string | null
-    headers?: { [header: string]: string }
-    method?: string
-  }
+  options: RequestInit
 }
 
 export type O = {
@@ -33,6 +29,12 @@ export default class Fetch extends Functional<I, O> {
   }
 
   f({ url, options }: I, done: Done<O>) {
+    const {
+      api: {
+        http: { fetch },
+      },
+    } = this.__system
+
     fetch(url, options)
       .then((response) => {
         return response.text().then((text) => {

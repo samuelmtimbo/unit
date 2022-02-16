@@ -3,6 +3,7 @@ import { Element } from '../../../../../client/element'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLInputElement } from '../../../../../types/global/dom'
 
 export interface Props {
   className?: string
@@ -30,8 +31,8 @@ export const DEFAULT_STYLE = {
   alignItems: 'center',
 }
 
-export default class Slider extends Element<HTMLInputElement, Props> {
-  private _input_el: HTMLInputElement
+export default class Slider extends Element<IHTMLInputElement, Props> {
+  private _input_el: IHTMLInputElement
 
   constructor($props: Props, $system: System, $pod: Pod) {
     super($props, $system, $pod)

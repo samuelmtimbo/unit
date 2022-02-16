@@ -1,13 +1,11 @@
 import { Element } from '../Class/Element'
 import { Graph } from '../Class/Graph'
-import { Stateful } from '../Class/Stateful'
 import { Unit } from '../Class/Unit'
 import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
 import { Unlisten } from '../types/Unlisten'
 import callAll from '../util/call/callAll'
 import { Moment } from './Moment'
-import { watchGraphLeafSetEvent } from './watchGraphLeafSetEvent'
 import { watchDataInput } from './watchInput'
 import { watchDataOutput } from './watchOutput'
 import { watchRefInput } from './watchRefInput'
@@ -18,7 +16,6 @@ import {
   watchComponentLeafAppendEvent,
   watchComponentLeafRemoveEvent,
   watchComponentRemoveEvent,
-  watchStatefulLeafSetEvent,
 } from './watchUnitEvent'
 import { watchUnitIOSpec } from './watchUnitIOSpec'
 import { watchUnitLeafEvent } from './watchUnitLeafEvent'
@@ -83,18 +80,6 @@ export function watchUnitIO<T extends Unit>(
         }
       })
     )
-  }
-
-  if (unit instanceof Stateful) {
-    if (events.includes('leaf_set')) {
-      all.push(watchStatefulLeafSetEvent('leaf_set', unit, callback))
-    }
-  }
-
-  if (unit instanceof Graph) {
-    if (events.includes('leaf_set')) {
-      all.push(watchGraphLeafSetEvent('leaf_set', unit, callback))
-    }
   }
 
   if (unit instanceof Graph) {

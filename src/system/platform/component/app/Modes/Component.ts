@@ -8,6 +8,7 @@ import { COLOR_NONE, getThemeModeColor } from '../../../../../client/theme'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../../component/Div/Component'
 import ModeIconButton from '../ModeIconButton/Component'
 
@@ -57,7 +58,7 @@ const MODE_ICON = {
   multiselect: 'brackets',
 }
 
-export default class Modes extends Element<HTMLDivElement, Props> {
+export default class Modes extends Element<IHTMLDivElement, Props> {
   public _modes: Div
 
   private _mode_button_container: Dict<Div> = {}

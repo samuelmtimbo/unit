@@ -6,6 +6,7 @@ import parentElement from '../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import IOAuthWall from '../../../platform/component/app/service/IOAuthWallControl/Component'
 import Div from '../../../platform/component/Div/Component'
 import Icon from '../../../platform/component/Icon/Component'
@@ -36,7 +37,7 @@ export const DEFAULT_STYLE = {
   flexDirection: 'column',
 }
 
-export default class CloudTabs extends Element<HTMLDivElement, Props> {
+export default class CloudTabs extends Element<IHTMLDivElement, Props> {
   private _root: Div
 
   private _slider_comp: Div

@@ -10,8 +10,7 @@ import { Unlisten } from '../types/Unlisten'
 import { ION, Opt } from './Unit'
 
 export type Stateful_EE = {
-  set: [{ name: string; data: any }]
-  leaf_set: [{ path: string[]; name: string; data: any }]
+  set: [string, any]
 }
 
 export type StatefulEvents<_EE extends Dict<any[]>> = PrimitiveEvents<
@@ -23,7 +22,7 @@ export class Stateful<
     I = any,
     O = any,
     _J extends Dict<any> = {},
-    _EE extends StatefulEvents<_EE> & Dict<any[]> = StatefulEvents<Stateful_EE>
+    _EE extends StatefulEvents<_EE> = StatefulEvents<Stateful_EE>
   >
   extends Primitive<I, O, _EE>
   implements J, V
@@ -65,7 +64,9 @@ export class Stateful<
 
   onDataInputData(name: string, data: any): void {
     // console.log('Stateful', 'onDataInputData', name, data)
+    this._forwarding = true
     this.set(name, data)
+    this._forwarding = false
   }
 
   onDataInputDrop(name: string): void {
@@ -83,13 +84,13 @@ export class Stateful<
   }
 
   public write(data: any): Promise<void> {
-    return (this._obj = data)
+    this._obj = data
+    return
   }
 
   public async set(name: string, data: any): Promise<void> {
     this._obj[name] = data
-    this.emit('set', { name, data })
-    this.emit('leaf_set', { name, data, path: [] })
+    this.emit('set', name, data)
   }
 
   hasKey(name: string): Promise<boolean> {

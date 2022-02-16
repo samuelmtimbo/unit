@@ -7,9 +7,7 @@ import { IGamepad } from '../types/global/IGamepad'
 import { IKeyboard } from '../types/global/IKeyboard'
 
 export function boot(opt: BootOpt = {}): System {
-  let { specs, api = noHost() } = opt
-
-  specs = { ...specs, ..._specs }
+  let { api = noHost() } = opt
 
   const keyboard: IKeyboard = {
     pressed: [],
@@ -39,7 +37,7 @@ export function boot(opt: BootOpt = {}): System {
     customEvent,
     input,
     context,
-    specs,
+    specs: _specs,
     classes: _classes,
     components: _components,
     pods: [],

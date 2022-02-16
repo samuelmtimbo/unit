@@ -1,5 +1,5 @@
 {
-  "name": "svg text path",
+  "name": "text",
   "inputs": {
     "style": {
       "type": "object",
@@ -9,7 +9,7 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "SVG text path",
+    "description": "SVG text",
     "complexity": 21,
     "tags": [
       "platform",
@@ -17,11 +17,11 @@
       "svg"
     ]
   },
-  "id": "00c828fc-9243-11ea-b897-5b0fc55820c5",
+  "id": "49ef122e-b4d1-11ea-b45e-b73d8ee2aae8",
   "base": true,
   "component": {
-    "defaultWidth": 120,
-    "defaultHeight": 120
+    "defaultWidth": 150,
+    "defaultHeight": 60
   },
   "type": "`U`&`C`&`V`&`J`",
   "system": true,

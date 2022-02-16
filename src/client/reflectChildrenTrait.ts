@@ -1,6 +1,7 @@
 import { _NUMBER_LITERAL_REGEX } from '../spec/regex/NUMBER_LITERAL'
 import { LayoutNode } from '../system/platform/component/app/Graph/Component'
 import { Style } from '../system/platform/Props'
+import { parseLayoutValue } from './parseLayoutValue'
 import { parseTransformXY } from './parseTransformXY'
 import { parseFontSize } from './util/style/getFontSize'
 import { parseOpacity } from './util/style/getOpacity'
@@ -12,21 +13,9 @@ export type LayoutBox = {
   height: number
 }
 
-const REGEX_PERCENT = /^([0-9]+)\%$/
-const REGEX_PX = new RegExp('^(' + _NUMBER_LITERAL_REGEX.source + ')px$')
-const REGEX_CALC = /^calc\(([0-9]+)\%[+-]([0-9]+)px\)$/ // TODO
-
-export function parseLayoutValue(value: string): [number, number] {
-  const percentWidthTest = REGEX_PERCENT.exec(value)
-  if (percentWidthTest) {
-    return [0, parseFloat(percentWidthTest[1])]
-  } else {
-    const pxWidthTest = REGEX_PX.exec(value)
-    if (pxWidthTest) {
-      return [parseFloat(pxWidthTest[1]), 0]
-    }
-  }
-}
+export const REGEX_PERCENT = /^([0-9]+)\%$/
+export const REGEX_PX = new RegExp('^(' + _NUMBER_LITERAL_REGEX.source + ')px$')
+export const REGEX_CALC = /^calc\(([0-9]+)\%([+-][0-9]+)px\)$/
 
 export function reflectChildrenTrait(
   parentTrait: LayoutNode,
@@ -38,8 +27,10 @@ export function reflectChildrenTrait(
   const {
     display: parentDisplay = 'block',
     flexDirection: parentFlexDirection = 'row',
+    flexWrap: parentFlexWrap = 'nowrap',
     justifyContent: parentJustifyContent = 'start',
     alignItems: parentAlignItems = 'start',
+    alignContent: parentAlignContent = 'normal',
   } = parentStyle
 
   const { width: parentWidth, height: parentHeight } = parentTrait
@@ -51,6 +42,12 @@ export function reflectChildrenTrait(
 
   let total_relative_px_width = 0
   let total_relative_px_height = 0
+
+  let max_relative_width = 0
+  let max_relative_height = 0
+
+  let total_max_relative_width = 0
+  let total_max_relative_height = 0
 
   const children_percent_left: number[] = []
   const children_percent_top: number[] = []
@@ -155,10 +152,12 @@ export function reflectChildrenTrait(
       postChildrenStyle.push([i, childStyle])
     }
 
-    total_relative_percent_width += percentWidth
-    total_relative_px_width += pxWidth
-    total_relative_percent_height += percentHeight
-    total_relative_px_height += pxHeight
+    if (childPosition === 'relative') {
+      total_relative_percent_width += percentWidth
+      total_relative_px_width += pxWidth
+      total_relative_percent_height += percentHeight
+      total_relative_px_height += pxHeight
+    }
 
     let k = 1
 
@@ -218,10 +217,6 @@ export function reflectChildrenTrait(
     } else if (parentDisplay === 'flex') {
       if (parentFlexDirection === 'row') {
         if (childPosition === 'relative') {
-          if (total_relative_px_width > width) {
-            // TODO
-          }
-
           const pcWidth =
             total_relative_percent_width > 0
               ? (percentWidth / total_relative_percent_width) *
@@ -230,11 +225,35 @@ export function reflectChildrenTrait(
 
           const pcHeight = (percentHeight * parentHeight) / 100
 
-          width = pcWidth + pxWidth
+          if (parentFlexWrap === 'nowrap') {
+            if (total_relative_px_width > parentWidth) {
+              const pxpcWidth =
+                (pxWidth / total_relative_px_width) * (parentWidth - 0)
+
+              width = pxpcWidth
+            } else {
+              width = pcWidth + pxWidth
+            }
+          } else {
+            width = pcWidth + pxWidth
+          }
+
           height = pcHeight + pxHeight
 
           x = acc_relative_width
           y = pxTop
+
+          max_relative_height = Math.max(max_relative_height, height)
+
+          const inline = acc_relative_width + width <= parentWidth
+
+          if (inline) {
+            max_relative_height = Math.max(max_relative_height, height)
+          } else {
+            total_max_relative_height += max_relative_height
+
+            max_relative_height = 0
+          }
 
           if (parentJustifyContent === 'start') {
             //
@@ -248,7 +267,27 @@ export function reflectChildrenTrait(
             y += (parentHeight - total_relative_px_height) / 2
           }
 
-          acc_relative_width += width
+          if (parentAlignContent === 'normal') {
+            //
+          } else if (parentAlignContent === 'start') {
+            if (parentFlexWrap === 'wrap') {
+              y += total_max_relative_height
+
+              if (inline) {
+                //
+              } else {
+                x = pxLeft
+              }
+            }
+          } else if (parentAlignContent === 'center') {
+            //
+          }
+
+          if (inline) {
+            acc_relative_width += width
+          } else {
+            acc_relative_width = width
+          }
         } else if (childPosition === 'absolute') {
           x = pxLeft + (percentLeft * parentWidth) / 100
           y = pxTop + (percentTop * parentHeight) / 100
@@ -273,10 +312,7 @@ export function reflectChildrenTrait(
         }
       } else if (parentFlexDirection === 'column') {
         if (childPosition === 'relative') {
-          // width = parentWidth
           const pcWidth = (percentWidth * parentWidth) / 100
-
-          width = pcWidth + pxWidth
 
           const pcHeight =
             total_relative_percent_height > 0
@@ -284,17 +320,35 @@ export function reflectChildrenTrait(
                 (parentHeight - total_relative_px_height)
               : 0
 
-          if (total_relative_px_height > parentHeight) {
-            const pxpcHeight =
-              (pxHeight / total_relative_px_height) * (parentHeight - 0)
+          width = pcWidth + pxWidth
 
-            height = pxpcHeight
+          if (parentFlexWrap === 'nowrap') {
+            if (total_relative_px_height > parentHeight) {
+              const pxpcHeight =
+                (pxHeight / total_relative_px_height) * (parentHeight - 0)
+
+              height = pxpcHeight
+            } else {
+              height = pcHeight + pxHeight
+            }
           } else {
             height = pcHeight + pxHeight
           }
 
           x = pxLeft
           y = acc_relative_height + pxTop
+
+          max_relative_width = Math.max(max_relative_width, width)
+
+          const inline = acc_relative_height + height <= parentHeight
+
+          if (inline) {
+            max_relative_width = Math.max(max_relative_width, width)
+          } else {
+            total_max_relative_width += max_relative_width
+
+            max_relative_width = 0
+          }
 
           if (parentJustifyContent === 'start') {
             //
@@ -308,7 +362,27 @@ export function reflectChildrenTrait(
             x += (parentWidth - total_relative_px_width) / 2
           }
 
-          acc_relative_height += height
+          if (parentAlignContent === 'normal') {
+            //
+          } else if (parentAlignContent === 'start') {
+            if (parentFlexWrap === 'wrap') {
+              x += total_max_relative_width
+
+              if (inline) {
+                //
+              } else {
+                y = pxTop
+              }
+            }
+          } else if (parentAlignContent === 'center') {
+            //
+          }
+
+          if (inline) {
+            acc_relative_height += height
+          } else {
+            acc_relative_height = height
+          }
         } else if (childPosition === 'absolute') {
           x = pxLeft + (percentLeft * parentWidth) / 100
           y = pxTop + (percentTop * parentHeight) / 100

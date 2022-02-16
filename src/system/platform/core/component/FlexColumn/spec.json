@@ -1,13 +1,13 @@
 {
-  "name": "row",
+  "name": "flex column",
   "units": {
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
       "input": {},
       "metadata": {
         "component": {
-          "width": 210,
-          "height": 120
+          "width": 120,
+          "height": 210
         }
       }
     },
@@ -17,7 +17,7 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{display:'flex',flexDirection:'row',overflow:'auto'}"
+          "data": "{display:'flex',flexDirection:'column',overflow:'auto'}"
         }
       },
       "output": {
@@ -53,8 +53,8 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "row flexbox",
-    "complexity": 31,
+    "description": "column flexbox",
+    "complexity": 4,
     "tags": [
       "platform",
       "core",
@@ -68,8 +68,8 @@
         "default"
       ]
     ],
-    "defaultWidth": 270,
-    "defaultHeight": 180,
+    "defaultWidth": 180,
+    "defaultHeight": 270,
     "subComponents": {
       "div": {
         "children": []
@@ -79,7 +79,8 @@
       "div"
     ]
   },
-  "id": "ad5a2fcc-fdee-11ea-a34f-77e9c48dbe57",
+  "id": "67a6fb5a-feab-11ea-8bd1-a3c19e76592a",
   "type": "`U`&`C`&`V`&`J`",
-  "system": true
+  "system": true,
+  "render": true
 }

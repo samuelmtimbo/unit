@@ -5,7 +5,6 @@ export interface UnitMoment extends Moment {
   event:
     | 'reset'
     | 'state'
-    | 'leaf_set'
     | 'call'
     | 'append_child'
     | 'remove_child_at'

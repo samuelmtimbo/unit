@@ -5,17 +5,21 @@ const LONG_PRESS_DURATION = 0.2
 const LONG_PRESS_TRANSITION = `r ${LONG_PRESS_DURATION}s linear, opacity ${LONG_PRESS_DURATION}s linear`
 const LONG_PRESS_RADIUS = 90
 
-export function attachLongPress($system: System): void {
-  const { foreground: $foreground } = $system
+export function attachLongPress(system: System): void {
+  const {
+    root,
+    foreground: { svg },
+    api: {
+      document: { createElementNS },
+    },
+  } = system
 
-  const { svg: $svg } = $foreground
+  const { offsetWidth, offsetHeight } = root
 
-  const { innerWidth, innerHeight } = window
+  const cx = offsetWidth / 2
+  const cy = offsetHeight / 2
 
-  const cx = innerWidth / 2
-  const cy = innerHeight / 2
-
-  const long_press = document.createElementNS(namespaceURI, 'circle')
+  const long_press = createElementNS(namespaceURI, 'circle')
 
   long_press.style.display = 'block'
   long_press.style.strokeWidth = '2px'
@@ -27,7 +31,7 @@ export function attachLongPress($system: System): void {
   long_press.setAttribute('cy', `${cy}`)
   long_press.setAttribute('r', `${LONG_PRESS_RADIUS}`)
 
-  $svg.appendChild(long_press)
+  svg.appendChild(long_press)
 
   const showLongPress = (
     screenX: number,
@@ -67,5 +71,5 @@ export function attachLongPress($system: System): void {
     }
   }
 
-  $system.method.showLongPress = showLongPress
+  system.method.showLongPress = showLongPress
 }

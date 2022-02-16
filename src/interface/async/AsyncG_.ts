@@ -1,5 +1,6 @@
 import { Graph } from '../../Class/Graph'
 import { Unit } from '../../Class/Unit'
+import { emptySpec, newSpecId } from '../../client/spec'
 import { GraphMoment } from '../../debug/GraphMoment'
 import { Moment } from '../../debug/Moment'
 import { watchGraph } from '../../debug/watchGraph'
@@ -7,6 +8,7 @@ import { watchUnit } from '../../debug/watchUnit'
 import { proxyWrap } from '../../proxyWrap'
 import { evaluate } from '../../spec/evaluate'
 import { fromId } from '../../spec/fromId'
+import { fromSpec } from '../../spec/fromSpec'
 import { stringify } from '../../spec/stringify'
 import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
 import {
@@ -26,7 +28,7 @@ import { GraphState } from '../../types/GraphState'
 import { IO } from '../../types/IO'
 import { stringifyPinData } from '../../types/stringifyPinData'
 import { Unlisten } from '../../types/Unlisten'
-import { mapObjVK } from '../../util/object'
+import { isEmptyObject, mapObjVK } from '../../util/object'
 import { U } from '../U'
 import { $Component } from './$Component'
 import { $G, $G_C, $G_R, $G_W } from './$G'
@@ -633,7 +635,7 @@ export const AsyncGWatch = (graph: Graph): $G_W => {
 
 export const AsyncGRef = (graph: Graph): $G_R => {
   return {
-    $transcend({
+    $compose({
       id,
       unitId,
       _,
@@ -644,7 +646,14 @@ export const AsyncGRef = (graph: Graph): $G_R => {
     }): $Graph {
       const system = graph.refSystem()
       const pod = graph.refPod()
-      const parent = new Graph({}, {}, system, pod)
+      const spec = graph.getSpec()
+      const render =
+        spec.component && !isEmptyObject(spec.component.subComponents)
+      render ? graph.setElement() : graph.setNotElement()
+      // const parent = new Graph({}, {}, system, pod)
+      const parentSpec = emptySpec({ id: newSpecId(system.specs) })
+      const Class = fromSpec(parentSpec, {}, {})
+      const parent = new Class(system, pod)
       parent.addUnit({ id }, unitId, graph, false)
       parent.play()
       const $parent = Async(parent, _)

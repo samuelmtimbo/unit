@@ -61,7 +61,6 @@ export type IO_HTTP_API<T> = {
   cloud: T
 }
 export type IO_STORAGE_API<T> = {
-  tab: T
   session: T
   local: T
   cloud: T
@@ -86,7 +85,7 @@ export type IOMethod = Dict<Function>
 export type APIStorage = IO_STORAGE_API_INIT<J, undefined>
 export type APIHTTP = {
   server: IO_HTTP_API_INIT<IHTTPServer, IHTTPServerOpt>
-  fetch: (url: string, opt: FetchJSONOpt) => any
+  fetch: (url: string, opt: RequestInit) => any
 }
 export type APIChannel = IO_STORAGE_API_INIT<IChannel, IChannelOpt>
 export type APIPod = IO_STORAGE_API_INIT<IPod, IPodOpt>
@@ -96,6 +95,22 @@ export type API = {
   http: APIHTTP
   channel: APIChannel
   pod: APIPod
+  input: {
+    keyboard: {}
+    gamepad: {
+      getGamepads: () => Gamepad[]
+      addEventListener: (
+        type: 'gamepadconnected' | 'gamepadisconnected',
+        listener: (ev: GamepadEvent) => any,
+        options?: boolean | AddEventListenerOptions
+      ) => void
+      removeEventListener: (
+        type: 'gamepadconnected' | 'gamepadisconnected',
+        listener: (ev: GamepadEvent) => any,
+        options?: boolean | AddEventListenerOptions
+      ) => void
+    }
+  }
   speech: {
     SpeechGrammarList: IO_INIT<ISpeechGrammarList, ISpeechGrammarListOpt>
     SpeechRecognition: IO_INIT<ISpeechRecognition, ISpeechRecognitionOpt>
@@ -173,7 +188,7 @@ export type API = {
 
 export interface System {
   mounted: boolean
-  root: HTMLElement
+  root: HTMLElement | null
   customEvent: Set<string>
   context: Context[]
   cache: {
@@ -249,7 +264,6 @@ export type ComponentClasses = Dict<ComponentClass>
 
 export interface BootOpt {
   api?: API
-  specs?: GraphSpecs
 }
 
 export const HTTPServer = (opt: IHTTPServerOpt): IHTTPServer => {

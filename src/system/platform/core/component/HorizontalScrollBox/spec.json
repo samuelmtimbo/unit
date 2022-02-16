@@ -76,5 +76,6 @@
     ]
   },
   "id": "ec8afd36-0718-42f7-9b0d-4b1adbf62766",
-  "type": "`U`&`G`&`C`"
+  "type": "`U`&`G`&`C`",
+  "render": true
 }

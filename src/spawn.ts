@@ -1,5 +1,6 @@
 import { Graph } from './Class/Graph'
 import { Pod } from './pod'
+import { fromSpec } from './spec/fromSpec'
 import { System } from './system'
 import { BundleSpec } from './system/platform/method/process/BundleSpec'
 
@@ -29,7 +30,9 @@ export function start(system: System, pod: Pod, bundle: BundleSpec): Graph {
     pod.specs[spec_id] = spec
   }
 
-  const graph = new Graph(spec, {}, system, pod)
+  const Class = fromSpec(spec, { ...specs, ...pod.specs, ...system.specs }, {})
+
+  const graph = new Class(system, pod)
 
   pod.graphs.push(graph)
 

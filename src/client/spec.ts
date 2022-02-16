@@ -12,7 +12,7 @@ import {
 import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
 import { uuidNotIn } from '../util/id'
-import { clone, isNotEmptyObject } from '../util/object'
+import { clone } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
 
 export function getSpec(specs: Specs, id: string): Spec {
@@ -247,13 +247,9 @@ export function getSpecRender(specs: Specs, id: string): boolean | undefined {
 }
 
 export function isComponent(specs: Specs, id: string): boolean {
-  const componentSpec = getComponentSpec(specs, id)
-  return isComponentSpec(specs, componentSpec)
+  return getSpecRender(specs, id) || false
 }
 
-export function isComponentSpec(
-  specs: Specs,
-  componentSpec: GraphComponentSpec
-): boolean {
-  return isNotEmptyObject(componentSpec)
+export function shouldRender(componentSpec: GraphComponentSpec): boolean {
+  return !!componentSpec.children && componentSpec.children.length > 0
 }

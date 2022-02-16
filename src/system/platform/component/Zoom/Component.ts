@@ -5,8 +5,9 @@ import { getTransform, Zoom } from '../../../../client/zoom'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import Div from '../Div/Component'
-import SVGG from '../svg/G/Component'
+import SVGG from '../svg/Group/Component'
 import SVGSVG from '../svg/SVG/Component'
 
 export type _Style = Dict<string>
@@ -30,7 +31,7 @@ const DEFAULT_STYLE = {
   top: '0',
 }
 
-export default class ZoomComponent extends Element<HTMLDivElement, Props> {
+export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
   public _root: Div
 
   public _html: Div

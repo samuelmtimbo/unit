@@ -1,5 +1,4 @@
 export const DEFAULT_EVENTS = [
-  'leaf_set',
   'listen',
   'unlisten',
   'call',
@@ -25,7 +24,6 @@ export const DEFAULT_EVENTS = [
   'cover_pin',
   'plug_pin',
   'unplug_pin',
-  'leaf_set',
   'leaf_add_unit',
   'leaf_remove_unit',
   'leaf_expose_pin_set',

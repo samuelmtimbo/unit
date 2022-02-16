@@ -33,7 +33,7 @@ export default class Wrap extends Element<I, O> implements W {
       pod
     )
 
-    this.prependListener('set', ({ name, data }) => {
+    this.prependListener('set', (name, data) => {
       if (name === 'component') {
         this._Container = data
 

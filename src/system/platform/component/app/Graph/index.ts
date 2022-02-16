@@ -1,7 +1,9 @@
 import { Element } from '../../../../../Class/Element'
 import { Graph } from '../../../../../Class/Graph'
+import { emptySpec, newSpecId } from '../../../../../client/spec'
 import { G } from '../../../../../interface/G'
 import { Pod } from '../../../../../pod'
+import { fromSpec } from '../../../../../spec/fromSpec'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -28,7 +30,7 @@ export default class _Graph<T> extends Element<I<T>, O<T>> {
   constructor(system: System, pod: Pod) {
     super(
       {
-        i: ['pod', 'style', 'disabled', 'fullwindow', 'frame'],
+        i: ['pod', 'style', 'disabled', 'fullwindow', 'frame', 'zoom'],
         o: ['pod'],
       },
       {
@@ -50,7 +52,11 @@ export default class _Graph<T> extends Element<I<T>, O<T>> {
       pod
     )
 
-    const fallback_graph = new Graph({}, {}, this.__system, this.__pod)
+    const spec = emptySpec({ id: newSpecId(system.specs) })
+
+    const Class = fromSpec(spec, { ...pod.specs, ...system.specs }, {})
+
+    const fallback_graph = new Class(system, pod)
     this._fallback_graph = fallback_graph
 
     this._fallback_pod = fallback_graph

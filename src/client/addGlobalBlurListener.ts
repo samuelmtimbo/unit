@@ -5,8 +5,17 @@ export function addGlobalBlurListener(
   $element: IOElement,
   listener: (event: FocusEvent) => void
 ): Unlisten {
-  $element.addEventListener('blur', listener, true)
+  const _listener = (event: FocusEvent) => {
+    const { relatedTarget } = event
+
+    if (relatedTarget === null) {
+      listener(event)
+    }
+  }
+
+  $element.addEventListener('blur', _listener, true)
+
   return () => {
-    $element.removeEventListener('blur', listener, true)
+    $element.removeEventListener('blur', _listener, true)
   }
 }

@@ -18,6 +18,10 @@
     "frame": {
       "type": "`C`",
       "ref": true
+    },
+    "zoom": {
+      "type": "{x:number,y:number,k:number}",
+      "defaultIgnored": true
     }
   },
   "outputs": {

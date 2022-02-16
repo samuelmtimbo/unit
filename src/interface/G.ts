@@ -20,8 +20,6 @@ import { IO } from '../types/IO'
 import { U } from './U'
 
 export interface G<I = any, O = any> {
-  stateful: boolean
-
   element: boolean
 
   getSpec(): GraphSpec
@@ -348,8 +346,6 @@ export interface G<I = any, O = any> {
 export type G_J = {}
 
 export type G_EE = {
-  stateful: []
-  stateless: []
   element: []
   not_element: []
   set_exposed_sub_pin: [IO, string, string, Pin, PinOpt]
@@ -366,7 +362,6 @@ export type G_EE = {
   remove_unit: [string, Unit]
   leaf_add_unit: [Unit, string[]]
   leaf_remove_unit: [Unit, string[]]
-  leaf_set: [{ path: string[]; name: string; data: any }]
   move_unit: [string, string, string]
   before_remove_unit: [string]
   remove_unit_from_merge: [string, string]

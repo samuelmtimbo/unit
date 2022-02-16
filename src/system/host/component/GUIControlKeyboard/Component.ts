@@ -6,6 +6,7 @@ import { setAlpha, themeBackgroundColor } from '../../../../client/theme'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { IHTMLDivElement } from '../../../../types/global/dom'
 import { Unlisten } from '../../../../types/Unlisten'
 import PhoneKeyboard from '../../../platform/component/app/PhoneKeyboard/Component'
 import GUIControl from '../GUIControl/Component'
@@ -26,7 +27,7 @@ export const DEFAULT_STYLE = {}
 export const DIM_TIMEOUT_T = 3000
 
 export default class GUIControlKeyboard extends Component<
-  HTMLDivElement,
+  IHTMLDivElement,
   Props
 > {
   private _root: GUIControl
