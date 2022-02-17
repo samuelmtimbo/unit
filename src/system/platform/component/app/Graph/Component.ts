@@ -9500,6 +9500,12 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
       // console.log('set_data_color', pin_node_id)
       this._set_link_pin_link_color(pin_node_id, this._theme.data_link)
       this._set_link_pin_link_text_color(pin_node_id, this._theme.pin_text)
+
+      const datum_node_id = this._get_pin_datum_node_id(pin_node_id)
+
+      if (datum_node_id) {
+        this._reset_datum_color(datum_node_id)
+      }
     }
 
     const set_default_color = () => {
@@ -16376,15 +16382,6 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
           const output_merge = this._merge_input_count[merge_id] === 0
           if (output_merge) {
             return false
-          }
-
-          if (
-            this._is_node_selected(merge_node_id) ||
-            this._is_node_hovered(merge_node_id)
-          ) {
-            if (this._mode === 'remove') {
-              return true
-            }
           }
 
           const merge_first_datum_node_id =
