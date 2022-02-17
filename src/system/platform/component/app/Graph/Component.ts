@@ -12199,24 +12199,6 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
         }
       }
 
-      if (prev_mode !== 'none' && this._mode === 'none') {
-        for (const selected_node_id in this._selected_node_id) {
-          if (this._is_unit_node_id(selected_node_id)) {
-            this._enable_core_resize(selected_node_id)
-          } else if (this._is_datum_node_id(selected_node_id)) {
-            this._disable_datum_overlay(selected_node_id)
-          }
-        }
-      } else if (prev_mode === 'none' && this._mode !== 'none') {
-        for (const selected_node_id in this._selected_node_id) {
-          if (this._is_unit_node_id(selected_node_id)) {
-            this._disable_core_resize(selected_node_id)
-          } else if (this._is_datum_node_id(selected_node_id)) {
-            this._enable_datum_overlay(selected_node_id)
-          }
-        }
-      }
-
       const mode_node = (node_id: string): void => {
         this._set_node_mode_color(node_id)
       }
@@ -12242,6 +12224,24 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
       } else if (this._selected_node_count > 0) {
         for (const selected_node_id in this._selected_node_id) {
           mode_node(selected_node_id)
+        }
+      }
+
+      if (prev_mode !== 'none' && this._mode === 'none') {
+        for (const selected_node_id in this._selected_node_id) {
+          if (this._is_unit_node_id(selected_node_id)) {
+            this._enable_core_resize(selected_node_id)
+          } else if (this._is_datum_node_id(selected_node_id)) {
+            this._disable_datum_overlay(selected_node_id)
+          }
+        }
+      } else if (prev_mode === 'none' && this._mode !== 'none') {
+        for (const selected_node_id in this._selected_node_id) {
+          if (this._is_unit_node_id(selected_node_id)) {
+            this._disable_core_resize(selected_node_id)
+          } else if (this._is_datum_node_id(selected_node_id)) {
+            this._enable_datum_overlay(selected_node_id)
+          }
         }
       }
 
@@ -16357,6 +16357,7 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
     }
 
     const pin_node_id = this._datum_to_pin[datum_node_id]
+
     if (pin_node_id) {
       if (this._is_link_pin_node_id(pin_node_id)) {
         if (this._spec_is_link_pin_ignored(pin_node_id)) {
@@ -16368,10 +16369,13 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
         }
 
         const merge_node_id = this._pin_to_merge[pin_node_id]
+
         if (merge_node_id) {
           const { id: merge_id } = segmentMergeNodeId(merge_node_id)
+
           const merge_datum_node_id = this._pin_to_datum[merge_node_id]
           const input_merge = this._merge_output_count[merge_id] === 0
+
           if (input_merge) {
             if (merge_datum_node_id) {
               return true
@@ -16379,21 +16383,15 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
               return false
             }
           }
+
           const output_merge = this._merge_input_count[merge_id] === 0
+
           if (output_merge) {
             return false
           }
 
           const merge_first_datum_node_id =
             this._get_merge_datum_node_id(merge_node_id)
-
-          // console.log(
-          //   'merge_first_datum_node_id',
-          //   merge_first_datum_node_id,
-          //   this._is_node_selected(merge_node_id),
-          //   this._is_node_hovered(merge_node_id),
-          //   this._is_node_hovered(merge_first_datum_node_id)
-          // )
 
           if (merge_first_datum_node_id) {
             if (
@@ -16440,7 +16438,8 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
     }
 
     // TODO
-    // should be able to merge pins from the same unit (?)
+    // should be able to merge same unit pin
+
     const firstUnitIds = this._pin_unit_ids(a)
     const secondUnitIds = this._pin_unit_ids(b)
 
@@ -16449,14 +16448,6 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
         return false
       }
     }
-
-    // if (this._is_pin_constant(a) || this._is_pin_constant(b)) {
-    //   return false
-    // }
-
-    // if (this._is_pin_ignored(a) || this._is_pin_ignored(b)) {
-    //   return false
-    // }
 
     const a_link_pin = this._is_link_pin_node_id(a)
     const b_link_pin = this._is_link_pin_node_id(b)
@@ -16471,6 +16462,7 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
     if (a_link_pin && b_link_pin) {
       const { type: a_type } = segmentLinkPinNodeId(a)
       const { type: b_type } = segmentLinkPinNodeId(b)
+
       if (a_ref && !b_ref) {
         return false
       } else if (!a_ref && b_ref) {
@@ -16480,9 +16472,11 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
           return false
         }
       }
+
       return this._is_link_pin_link_pin_type_match(a, a_type, b, b_type)
     } else if (a_link_pin && !b_link_pin) {
       const { type: a_type } = segmentLinkPinNodeId(a)
+
       if (this._is_input_merge(b)) {
         return this._is_link_pin_link_pin_type_match(a, a_type, b, 'input')
       } else if (this._is_output_merge(b)) {
@@ -16497,6 +16491,7 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
       }
     } else if (!a_link_pin && b_link_pin) {
       const { type: b_type } = segmentLinkPinNodeId(b)
+
       if (this._is_input_merge(a)) {
         return this._is_link_pin_link_pin_type_match(a, 'input', b, b_type)
       } else if (this._is_output_merge(a)) {
@@ -16709,22 +16704,6 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
     datum_node_id: string,
     pin_node_id: string
   ): boolean => {
-    // if (this._datum_to_pin[datumNodeId]) {
-    //   return false
-    // }
-    // if (this._datum_to_pin[datumNodeId] === pinNodeId) {
-    //   return false
-    // }
-
-    // const datum_pin_node_id = this._datum_to_pin[datum_node_id]
-    // if (datum_pin_node_id && this._is_link_pin_merged(datum_pin_node_id)) {
-    //   return false
-    // }
-
-    // if (isMergeNodeId(pinNodeId) && !this._is_input_merge(pinNodeId)) {
-    //   return false
-    // }
-
     if (this._drag_node_id[pin_node_id]) {
       return false
     }
@@ -30034,7 +30013,7 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
     unit_id: string,
     next_unit_id: string
   ): void => {
-    console.log('Graph', '_state_move_unit_into_graph', graph_id, unit_id)
+    // console.log('Graph', '_state_move_unit_into_graph', graph_id, unit_id)
 
     // this._sim_move_unit_into_graph(graph_id, unit_id, next_unit_id)
     // this._spec_move_unit_into_graph(graph_id, unit_id, next_unit_id)
@@ -30088,15 +30067,6 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
         this._long_press_collapse_sub_component_parent_id[unit_id]
       const long_press_sub_component_children =
         this._long_press_collapse_sub_component_children[unit_id]
-
-      console.log(
-        'long_press_sub_component_parent_id',
-        long_press_sub_component_parent_id
-      )
-      console.log(
-        'long_press_sub_component_children',
-        long_press_sub_component_children
-      )
 
       if (is_graph_component) {
         const graph_sub_component = this._get_sub_component(graph_id)
