@@ -29351,6 +29351,7 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
         graph_unit_spec.metadata.icon = null
 
         if (is_graph_component) {
+          graph_unit_spec.render = true
           graph_unit_spec.component = graph_unit_spec.component || {
             subComponents: {},
             children: [],
