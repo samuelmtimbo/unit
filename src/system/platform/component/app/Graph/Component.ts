@@ -17430,33 +17430,14 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
 
   private _animate_sub_component_graph_leave = (
     sub_component_id: string,
-    sub_component_position: Dict<Position>,
-    sub_component_trait: Dict<LayoutNode>,
-    sub_component_base: Dict<LayoutBase>,
-    sub_component_base_node: Dict<LayoutNode[]>,
     base: LayoutBase,
-    base_node: LayoutNode[],
-    sub_scale: number
+    base_node: LayoutNode[]
   ): void => {
     // console.log(
     //   'Graph',
     //   '_animate_sub_component_graph_leave',
-    //   sub_component_id,
-    //   sub_component_position,
-    //   sub_component_trait,
-    //   sub_component_base,
-    //   sub_component_base_node,
     //   base,
     //   base_node,
-    //   sub_scale
-    // )
-
-    // console.log(
-    //   'Graph',
-    //   '_animate_sub_component_graph_leave',
-    //   base,
-    //   base_node,
-    //   sub_scale
     // )
 
     const {
@@ -17481,21 +17462,8 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
     const frame = this._get_sub_component_frame(sub_component_id)
     const context = this._get_sub_component_frame_context(sub_component_id)
 
-    const fontSize = this.getFontSize()
-    const k = this._zoom.k
-    const opacity = 1
-
-    const trait = {
-      x: context.$x,
-      y: context.$y,
-      width: context.$width,
-      height: context.$height,
-      fontSize,
-      k,
-      opacity,
-    }
-
     const style = extractStyle(frame, measureText)
+    const trait = extractTrait(frame, measureText)
 
     let base_trait = this._reflect_sub_component_base_trait(
       sub_component_id,
@@ -17515,6 +17483,9 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
         base_layer,
         (leaf_id: string) => {
           if (i === 0) {
+            const style = extractStyle(frame, measureText)
+            const trait = extractTrait(frame, measureText)
+
             base_trait = this._reflect_sub_component_base_trait(
               sub_component_id,
               base,
@@ -17527,16 +17498,12 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
 
           i = (i + 1) % base_length
 
-          const context =
-            this._get_sub_component_frame_context(sub_component_id)
-
           return {
-            x: context.$x + leaf_trait.x * k + (leaf_trait.width * (k - 1)) / 2,
-            y:
-              context.$y + leaf_trait.y * k + (leaf_trait.height * (k - 1)) / 2,
+            x: context.$x + leaf_trait.x,
+            y: context.$y + leaf_trait.y,
             width: leaf_trait.width,
             height: leaf_trait.height,
-            k: this._zoom.k * leaf_trait.k,
+            k: leaf_trait.k,
             opacity: leaf_trait.opacity,
             fontSize: leaf_trait.fontSize,
           }
@@ -19246,100 +19213,100 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
 
   private _animating_sub_component_base_id: Set<string> = new Set()
 
-  public enter = (
-    animate: boolean,
+  private _animate_enter = (
     animate_config: Dict<{ base: LayoutBase; base_node: LayoutNode[] }> = {}
-  ): void => {
-    // console.log('Graph', 'enter', animate, animate_config)
-
+  ) => {
     const {
       api: {
         text: { measureText },
       },
     } = this.$system
 
+    const leaf_layer = this._foreground
+
+    for (const sub_component_id in this._component.$subComponent) {
+      const frame = this._get_sub_component_frame(sub_component_id)
+      const context = this._get_sub_component_frame_context(sub_component_id)
+
+      const { base, base_node } = animate_config[sub_component_id]
+
+      let i = 0
+      for (const leaf of base) {
+        const [leaf_path] = leaf
+        const leaf_id = getLeafId([sub_component_id, ...leaf_path])
+        const leaf_node = base_node[i]
+        this._leaf_frame_node[leaf_id] = leaf_node
+        i++
+      }
+
+      this._remove_sub_component_root_base(sub_component_id)
+
+      const style = extractStyle(frame, measureText)
+      const trait = extractTrait(frame, measureText)
+
+      let base_trait = this._reflect_sub_component_base_trait(
+        sub_component_id,
+        base,
+        style,
+        trait
+      )
+
+      const base_length = base.length
+
+      i = 0
+      this._abort_tree_layout_sub_component_base_animation[sub_component_id] =
+        this._animate_sub_component_base(
+          sub_component_id,
+          base,
+          base_node,
+          leaf_layer,
+          (leaf_id) => {
+            if (i === 0) {
+              const style = extractStyle(frame, measureText)
+              const trait = extractTrait(frame, measureText)
+
+              base_trait = this._reflect_sub_component_base_trait(
+                sub_component_id,
+                base,
+                style,
+                trait
+              )
+            }
+
+            const _trait = base_trait[leaf_id]
+
+            i = (i + 1) % base_length
+
+            return {
+              x: context.$x + _trait.x,
+              y: context.$y + _trait.y,
+              width: _trait.width,
+              height: _trait.height,
+              k: _trait.k,
+              opacity: _trait.opacity,
+              fontSize: _trait.fontSize,
+            }
+          },
+          () => {
+            this._unplug_sub_component_base_frame(sub_component_id)
+
+            this._enter_sub_component_frame(sub_component_id)
+            this._commit_sub_component_base(sub_component_id)
+          }
+        )
+    }
+  }
+
+  public enter = (
+    animate: boolean,
+    animate_config: Dict<{ base: LayoutBase; base_node: LayoutNode[] }> = {}
+  ): void => {
+    // console.log('Graph', 'enter', animate, animate_config)
+
     this._force_control_animation_false = true
 
     if (animate) {
-      const leaf_layer = this._foreground
-
-      for (const sub_component_id in this._component.$subComponent) {
-        const frame = this._get_sub_component_frame(sub_component_id)
-
-        const { base, base_node } = animate_config[sub_component_id]
-
-        let i = 0
-        for (const leaf of base) {
-          const [leaf_path] = leaf
-          const leaf_id = getLeafId([sub_component_id, ...leaf_path])
-          const leaf_node = base_node[i]
-          this._leaf_frame_node[leaf_id] = leaf_node
-          i++
-        }
-
-        this._remove_sub_component_root_base(sub_component_id)
-
-        const style = extractStyle(frame, measureText)
-        const trait = extractTrait(frame, measureText)
-
-        let base_trait = this._reflect_sub_component_base_trait(
-          sub_component_id,
-          base,
-          style,
-          trait
-        )
-
-        const base_length = base.length
-
-        i = 0
-        this._abort_tree_layout_sub_component_base_animation[sub_component_id] =
-          this._animate_sub_component_base(
-            sub_component_id,
-            base,
-            base_node,
-            leaf_layer,
-            (leaf_id) => {
-              if (i === 0) {
-                base_trait = this._reflect_sub_component_base_trait(
-                  sub_component_id,
-                  base,
-                  style,
-                  trait
-                )
-              }
-
-              const { x, y } = this._get_node_screen_position(sub_component_id)
-              const { width, height } = this._get_node_size(sub_component_id)
-              const { k } = this._zoom
-
-              // const _x = x + ((k - 1) * width) / 2
-              // const _y = y + ((k - 1) * height) / 2
-              const _x = x
-              const _y = y
-
-              let _trait = base_trait[leaf_id]
-
-              i = (i + 1) % base_length
-
-              return {
-                x: _x + _trait.x,
-                y: _y + _trait.y,
-                width: _trait.width,
-                height: _trait.height,
-                // k: _trait.k * k,
-                k: _trait.k,
-                opacity: _trait.opacity,
-                fontSize: _trait.fontSize,
-              }
-            },
-            () => {
-              this._unplug_sub_component_base_frame(sub_component_id)
-
-              this._enter_sub_component_frame(sub_component_id)
-              this._commit_sub_component_base(sub_component_id)
-            }
-          )
-      }
+      this._animate_enter(animate_config)
     }
 
     this._take_component_control()
@@ -19347,24 +19314,16 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
     this._setup_pod(this._pod)
   }
 
-  public _get_base_trait = (base: LayoutBase) => {
+  public _get_base_trait = (sub_base: LayoutBase) => {
     const {
       api: {
         text: { measureText },
       },
     } = this.$system
 
-    const { k } = this._zoom
-
     const sub_base_node = []
 
-    const sub_component_position = {}
-    const sub_component_size = {}
-
-    const sub_component_base: Dict<LayoutBase> = {}
-    const sub_component_base_node: Dict<LayoutNode[]> = {}
-
-    for (const leaf of base) {
+    for (const leaf of sub_base) {
       const [leaf_path, leaf_comp] = leaf
 
       const leaf_trait = extractTrait(leaf_comp, measureText)
@@ -19372,24 +19331,8 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
       sub_base_node.push(leaf_trait)
     }
 
-    for (const sub_component_id in this._component.$subComponent) {
-      const position = this._get_node_screen_position(sub_component_id)
-      const size = this._get_node_size(sub_component_id)
-      const { base, base_node } =
-        this._get_sub_component_base_trait(sub_component_id)
-
-      sub_component_position[sub_component_id] = position
-      sub_component_size[sub_component_id] = size
-      sub_component_base[sub_component_id] = base
-      sub_component_base_node[sub_component_id] = base_node
-    }
-
     const all_sub_component_trait = {
-      sub_component_position,
-      sub_component_size,
-      sub_component_base,
-      sub_component_base_node,
-      sub_base: base,
+      sub_base,
       sub_base_node,
     }
 
@@ -19539,15 +19482,7 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
 
   private _on_subgraph_leave = ({
     clipboard: { units, data },
-    component: {
-      sub_component_position,
-      sub_component_trait: sub_component_trait,
-      sub_component_base,
-      sub_component_base_node,
-      sub_base,
-      sub_base_node,
-    },
-    scale,
+    component: { sub_base, sub_base_node },
   }: {
     clipboard: {
       units: string[]
@@ -19563,16 +19498,7 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
     }
     scale: number
   }) => {
-    // log(data)
-    this._leave_subgraph(
-      sub_component_position,
-      sub_component_trait,
-      sub_component_base,
-      sub_component_base_node,
-      sub_base,
-      sub_base_node,
-      scale
-    )
+    this._leave_subgraph(sub_base, sub_base_node)
   }
 
   private _on_subgraph_enter_unit = (): void => {
@@ -19600,13 +19526,8 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
   }
 
   private _leave_subgraph = (
-    sub_component_position: Dict<Position> = {},
-    sub_component_trait: Dict<LayoutNode> = {},
-    sub_component_base: Dict<LayoutBase> = {},
-    sub_component_base_node: Dict<LayoutNode[]> = {},
     sub_base: LayoutBase = [],
-    sub_base_node: LayoutNode[] = [],
-    sub_scale: number = 1
+    sub_base_node: LayoutNode[] = []
   ): void => {
     const { animate } = this.$props
 
@@ -19648,13 +19569,8 @@ export class _GraphComponent extends Element<IHTMLDivElement, _Props> {
         if (animate) {
           this._animate_sub_component_graph_leave(
             unit_id,
-            sub_component_position,
-            sub_component_trait,
-            sub_component_base,
-            sub_component_base_node,
             sub_base,
-            sub_base_node,
-            sub_scale
+            sub_base_node
           )
         } else {
           this._compose_sub_component(unit_id)
