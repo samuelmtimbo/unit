@@ -365,7 +365,7 @@ assert.deepEqual(
       },
     ]
   ),
-  [{ x: 25, y: 25, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 }]
+  [{ x: 0, y: 0, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 }]
 )
 assert.deepEqual(
   reflectChildrenTrait(
