@@ -2,7 +2,7 @@
   "name": "geolocation",
   "inputs": {
     "any": {
-      "type": "<T>"
+      "type": "any"
     }
   },
   "outputs": {

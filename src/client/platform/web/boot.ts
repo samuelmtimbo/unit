@@ -387,7 +387,7 @@ export function _webBoot(window: Window): System {
     if (
       !navigator ||
       !navigator.geolocation ||
-      navigator.geolocation.getCurrentPosition
+      !navigator.geolocation.getCurrentPosition
     ) {
       throw new APINotSupportedError('Geolocation')
     }
