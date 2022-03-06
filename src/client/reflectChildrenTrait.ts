@@ -31,9 +31,20 @@ export function reflectChildrenTrait(
     justifyContent: parentJustifyContent = 'start',
     alignItems: parentAlignItems = 'start',
     alignContent: parentAlignContent = 'normal',
+    transform: parentTransform = '',
   } = parentStyle
 
   const { width: parentWidth, height: parentHeight } = parentTrait
+
+  const [
+    parentTransformX,
+    parentTransformY,
+    parentScaleX,
+    parentScaleY,
+    parentRotateX,
+    parentRotateY,
+    parentRotateZ,
+  ] = parseTransformXY(parentTransform, parentWidth, parentHeight)
 
   const childrenTrait: LayoutNode[] = []
 
@@ -88,6 +99,16 @@ export function reflectChildrenTrait(
     const [pxWidth, percentWidth] = parseLayoutValue(childWidth)
     const [pxHeight, percentHeight] = parseLayoutValue(childHeight)
 
+    const [
+      childTransformX,
+      childTransformY,
+      childScaleX,
+      childScaleY,
+      childRotateX,
+      childRotateY,
+      childRotateZ,
+    ] = parseTransformXY(childTransform, width, height)
+
     children_px_left.push(pxLeft)
     children_percent_left.push(percentLeft)
 
@@ -114,16 +135,6 @@ export function reflectChildrenTrait(
         width = (percentWidth * parentWidth) / 100 + pxWidth
         height = (percentHeight * parentHeight) / 100 + pxHeight
 
-        const [
-          childTransformX,
-          childTransformY,
-          childScaleX,
-          childScaleY,
-          childRotateX,
-          childRotateY,
-          childRotateZ,
-        ] = parseTransformXY(childTransform, width, height)
-
         x += childTransformX
         y += childTransformY
       } else if (childPosition === 'absolute') {
@@ -132,16 +143,6 @@ export function reflectChildrenTrait(
 
         width = (percentWidth * parentWidth) / 100 + pxWidth
         height = (percentHeight * parentHeight) / 100 + pxHeight
-
-        const [
-          childTransformX,
-          childTransformY,
-          childScaleX,
-          childScaleY,
-          childRotateX,
-          childRotateY,
-          childRotateZ,
-        ] = parseTransformXY(childTransform, width, height)
 
         x += childTransformX
         y += childTransformY
@@ -159,8 +160,7 @@ export function reflectChildrenTrait(
       total_relative_px_height += pxHeight
     }
 
-    let k = 1
-
+    const k = parentScaleX * childScaleX // TODO
     const opacity = parentOpacity * childOpacity
 
     const childTrait = {
