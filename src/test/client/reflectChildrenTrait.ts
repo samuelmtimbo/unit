@@ -1,5 +1,5 @@
 import * as assert from '../../util/assert'
-import { reflectChildrenTrait } from '../reflectChildrenTrait'
+import { reflectChildrenTrait } from '../../client/reflectChildrenTrait'
 
 assert.deepEqual(
   reflectChildrenTrait(

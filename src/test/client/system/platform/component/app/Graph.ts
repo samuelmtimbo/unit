@@ -2,7 +2,7 @@ import { Graph } from '../../../../../../Class/Graph'
 import { Async } from '../../../../../../interface/async/Async'
 import { spawn } from '../../../../../../spawn'
 import GraphComponent from '../../../../../../system/platform/component/app/Graph/Component'
-import { nodeBoot } from '../../../../../platform/node/boot'
+import { nodeBoot } from '../../../../../../client/platform/node/boot'
 
 export const system = nodeBoot()
 
