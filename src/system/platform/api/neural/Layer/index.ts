@@ -38,6 +38,7 @@ export default class Layer extends Functional<I, O> {
   }
 
   async f({}: I, done: Done<O>): Promise<void> {
+    
     done({})
   }
 }
