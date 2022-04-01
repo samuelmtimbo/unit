@@ -4,10 +4,10 @@ import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import * as tf from '@tensorflow/tfjs'
 import { setWasmPath } from '@tensorflow/tfjs-backend-wasm'
-import * as DogsNCats from "dogs-n-cats";
-import {getThreadsCount, setThreadsCount} from '@tensorflow/tfjs-backend-wasm';
+import * as DogsNCats from "dogs-n-cats"
+import {getThreadsCount, setThreadsCount} from '@tensorflow/tfjs-backend-wasm'
 
-//setThreadsCount(2);
+//setThreadsCount(2)
 setWasmPath('tfjs-backend-wasm-threaded-simd.wasm')
 tf.setBackend('wasm')
 
@@ -53,14 +53,14 @@ export default class CatDetector extends Functional<I, O> {
   
   async function loadData(){
     console.log('Loading Dataset.....')
-    dnc = await DogsNCats.load();
+    dnc = await DogsNCats.load()
     console.log('Dataset Loaded')
 
   }
 
   async function createModel(){
     console.log('Creating model...')
-    model = tf.sequential();
+    model = tf.sequential()
     model.add(
       tf.layers.conv2d({
         inputShape: [32, 32, 3],
@@ -71,12 +71,12 @@ export default class CatDetector extends Functional<I, O> {
         activation: "relu",
         kernelInitializer: "heNormal"
       })
-    );
+    )
   
-    // Downsample, batchnorm, and dropout!
-    model.add(tf.layers.maxPooling2d({ poolSize: [2, 2], strides: [2, 2] }));
-    model.add(tf.layers.batchNormalization());
-    model.add(tf.layers.dropout({ rate: 0.25 }));
+    //downsample, batchnorm, and dropout
+    model.add(tf.layers.maxPooling2d({ poolSize: [2, 2], strides: [2, 2] }))
+    model.add(tf.layers.batchNormalization())
+    model.add(tf.layers.dropout({ rate: 0.25 }))
   
     model.add(
       tf.layers.conv2d({
@@ -87,14 +87,13 @@ export default class CatDetector extends Functional<I, O> {
         activation: "relu",
         kernelInitializer: "heNormal"
       })
-    );
-    model.add(tf.layers.maxPooling2d({ poolSize: [2, 2], strides: [2, 2] }));
-    model.add(tf.layers.batchNormalization());
-    model.add(tf.layers.dropout({ rate: 0.25 }));
+    )
+    model.add(tf.layers.maxPooling2d({ poolSize: [2, 2], strides: [2, 2] }))
+    model.add(tf.layers.batchNormalization())
+    model.add(tf.layers.dropout({ rate: 0.25 }))
   
-    // Now we flatten the output from the 2D filters into a 1D vector to prepare
-    // it for input into our last layer.
-    model.add(tf.layers.flatten());
+    // flatten the output from the 2D filters into a 1D vector to prepare it for input into our last layer.
+    model.add(tf.layers.flatten())
   
     // complex dense intermediate
     model.add(
@@ -104,23 +103,22 @@ export default class CatDetector extends Functional<I, O> {
         activation: "relu",
         kernelInitializer: "heNormal"
       })
-    );
+    )
   
-    // Our last layer is a dense layer which has 1 final output
+    // last layer is a dense layer which has 1 final output
     model.add(
       tf.layers.dense({
         units: 1,
         activation: "sigmoid"
       })
-    );
-    // Choose an optimizer, loss function and accuracy metric,
-    // then compile and return the model
+    )
+    // choose an optimizer, loss function and accuracy metric, then compile and return the model
     model.compile({
-      optimizer: "adam", // or use tf.train.adam(); to adjust
+      optimizer: "adam", // or use tf.train.adam() to adjust
       loss: "binaryCrossentropy",
       metrics: ["accuracy"]
-    });
-    console.log("Model Created");
+    })
+    console.log("Model Created")
 
   }
 
@@ -155,22 +153,22 @@ export default class CatDetector extends Functional<I, O> {
   }
 
   async function predict(){
-    console.log("Grab real world dog");
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = "http://192.168.29.183:4000/cat.jpg";
+    console.log("Grab real world dog")
+    const img = new Image()
+    img.crossOrigin = "anonymous"
+    img.src = "http://192.168.29.183:4000/cat.jpg" //add image here
     img.onload = () => {
       tf.tidy(() => {
-        console.log("Real world dog image loaded");
-        const imgTensor = tf.browser.fromPixels(img);
-        const alignCorners = true;
-        const newSize = 32;
-        const resized = tf.image.resizeBilinear(imgTensor, [newSize, newSize], alignCorners);
-        const prediction = model.predict(resized.expandDims());
+        console.log("Real world dog image loaded")
+        const imgTensor = tf.browser.fromPixels(img)
+        const alignCorners = true
+        const newSize = 32
+        const resized = tf.image.resizeBilinear(imgTensor, [newSize, newSize], alignCorners)
+        const prediction = model.predict(resized.expandDims())
         prob = prediction.dataSync()
-        console.log("Predicted", prob);
-      });
-    };
+        console.log("Predicted", prob)
+      })
+    }
 
   }
 
