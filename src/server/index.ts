@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import * as cors from 'cors'
 import * as express from 'express'
 import * as http from 'http'
@@ -7,8 +5,8 @@ import * as createError from 'http-errors'
 import * as os from 'os'
 import * as path from 'path'
 import { PORT } from './port'
-import ALL from './route'
 import compression = require('compression')
+import { PATH_PUBLIC } from '../path'
 
 process.on('uncaughtException', function (err) {
   console.error(new Date().toUTCString() + ' uncaughtException:', err.message)
@@ -47,7 +45,7 @@ app.use(cors(corsOptions))
 
 app.use(compression())
 
-app.use('/_', ALL)
+app.use(express.static(PATH_PUBLIC))
 
 const CWD = process.cwd()
 

@@ -1,16 +1,19 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { G } from '../../../../interface/G'
 import { Pod } from '../../../../pod'
+import { cloneBundle } from '../../../../spec/cloneBundle'
 import { System } from '../../../../system'
-import { UnitClass } from '../../../../types/UnitClass'
+import { G } from '../../../../types/interface/G'
+import { UnitBundle } from '../../../../types/UnitBundle'
 
 export interface I<T> {
   graph: G
   id: string
 }
 
-export interface O<T> {}
+export interface O<T> {
+  class: UnitBundle
+}
 
 export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
   constructor(system: System, pod: Pod) {
@@ -31,20 +34,15 @@ export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f(
-    {
-      id,
-      graph,
-    }: {
-      class: UnitClass<any>
-      graph: G
-      id: string
-    },
-    done: Done<O<T>>
-  ): void {
+  f({ id, graph }: I<T>, done: Done<O<T>>): void {
     try {
-      graph.removeUnit(id)
-      done({})
+      const unit = graph.removeUnit(id)
+
+      const Bundle = cloneBundle(unit)
+
+      done({
+        class: Bundle,
+      })
     } catch (err) {
       done(undefined, err.message)
     }

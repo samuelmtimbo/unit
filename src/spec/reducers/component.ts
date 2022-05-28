@@ -1,7 +1,7 @@
 import removeIndex from '../../system/core/array/RemoveIndex/f'
 import assocPath from '../../system/core/object/AssocPath/f'
 import dissocPath from '../../system/core/object/DissocPath/f'
-import pathGet from '../../system/core/object/PathGet/f'
+import pathGet from '../../system/core/object/DeepGet/f'
 import $indexOf from '../../system/f/array/IndexOf/f'
 import merge from '../../system/f/object/Merge/f'
 import set from '../../system/f/object/Set/f'
@@ -98,8 +98,8 @@ export const appendSubComponentChild = (
   state: State
 ): State => {
   const { subComponents } = state
-  const subComponent = subComponents[id]
-  const { children } = subComponent
+  const subComponent = subComponents[id] || {}
+  const { children = [] } = subComponent
   return assocPath(
     state,
     ['subComponents', id, 'children'],

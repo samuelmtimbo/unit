@@ -25,7 +25,7 @@
   },
   "inputs": {
     "event": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag",
           "pinId": "v"
@@ -36,7 +36,7 @@
   },
   "outputs": {
     "{event}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag",
           "pinId": "kv"

@@ -2,8 +2,13 @@ import { Element } from '../Class/Element'
 import { Graph } from '../Class/Graph'
 import { Unit } from '../Class/Unit'
 import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
+import { Pin } from '../Pin'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
+import { Dict } from '../types/Dict'
+import { IO } from '../types/IO'
+import { IOData } from '../types/IOData'
 import { Unlisten } from '../types/Unlisten'
+import { remove } from '../util/array'
 import callAll from '../util/call/callAll'
 import { Moment } from './Moment'
 import { watchDataInput } from './watchInput'
@@ -16,6 +21,7 @@ import {
   watchComponentLeafAppendEvent,
   watchComponentLeafRemoveEvent,
   watchComponentRemoveEvent,
+  watchUnitRenamePinEvent,
 } from './watchUnitEvent'
 import { watchUnitIOSpec } from './watchUnitIOSpec'
 import { watchUnitLeafEvent } from './watchUnitLeafEvent'
@@ -34,52 +40,116 @@ export function watchUnitIO<T extends Unit>(
   const watch_data_output = events.includes('output')
   const watch_ref_output = events.includes('ref_output')
 
+  const watch_rename_input = events.includes('rename_input')
+  const watch_rename_output = events.includes('rename_output')
+
+  const pin_listener_map: IOData<Dict<Unlisten>> = { input: {}, output: {} }
+
+  const watchPin = (
+    kind: 'ref' | 'data',
+    type: IO,
+    pinId: string,
+    pin: Pin<any>
+  ) => {
+    const unlisten = {
+      ref: {
+        input: watchRefInput,
+        output: watchRefOutput,
+      },
+      data: {
+        input: watchDataInput,
+        output: watchDataOutput,
+      },
+    }[kind][type](pinId, pin, callback)
+
+    pin_listener_map[type][pinId] = unlisten
+
+    all.push(unlisten)
+
+    return unlisten
+  }
+
+  const makeWatchPin = (
+    type: IO,
+    kind: 'ref' | 'data'
+  ): ((pin, pinId) => void) => {
+    return (pin: Pin<any>, pinId: string) => {
+      watchPin(kind, type, pinId, pin)
+    }
+  }
+
   if (watch_data_input) {
-    forEachKeyValue(unit.getDataInputs(), (pin, pinId) => {
-      all.push(watchDataInput(pinId, pin, callback))
-    })
+    forEachKeyValue(unit.getDataInputs(), makeWatchPin('input', 'data'))
   }
 
   if (watch_ref_input) {
-    forEachKeyValue(unit.getRefInputs(), (pin, pinId) => {
-      all.push(watchRefInput(pinId, pin, callback))
-    })
+    forEachKeyValue(unit.getRefInputs(), makeWatchPin('input', 'ref'))
   }
 
   if (watch_data_input || watch_ref_input) {
     all.push(
       unit.addListener('set_input', (pinId, pin, { ref }) => {
         if (ref && watch_ref_input) {
-          all.push(watchRefInput(pinId, pin, callback))
+          watchPin('ref', 'input', pinId, pin)
         } else if (!ref && watch_data_input) {
-          all.push(watchDataInput(pinId, pin, callback))
+          watchPin('data', 'input', pinId, pin)
         }
       })
     )
   }
 
-  if (watch_data_output) {
-    forEachKeyValue(unit.getDataOutputs(), (pin, pinId) => {
-      all.push(watchDataOutput(pinId, pin, callback))
+  all.push(
+    unit.addListener('remove_input', (pinId, pin) => {
+      const unlisten = pin_listener_map.input[pinId]
+      if (unlisten) {
+        unlisten()
+
+        remove(all, unlisten)
+
+        delete pin_listener_map.input[pinId]
+      }
     })
+  )
+
+  if (watch_rename_input) {
+    all.push(watchUnitRenamePinEvent('rename_input', unit, callback))
+  }
+
+  all.push(
+    unit.addListener('remove_output', (pinId, pin) => {
+      const unlisten = pin_listener_map.output[pinId]
+      if (unlisten) {
+        unlisten()
+
+        remove(all, unlisten)
+
+        delete pin_listener_map.output[pinId]
+      }
+    })
+  )
+
+  if (watch_data_output) {
+    forEachKeyValue(unit.getDataOutputs(), makeWatchPin('output', 'data'))
   }
 
   if (watch_ref_output) {
-    forEachKeyValue(unit.getRefOutputs(), (pin, pinId) => {
-      all.push(watchRefOutput(pinId, pin, callback))
-    })
+    forEachKeyValue(unit.getRefOutputs(), makeWatchPin('output', 'ref'))
   }
 
   if (watch_data_output || watch_ref_output) {
     all.push(
       unit.addListener('set_output', (pinId, pin, { ref }) => {
         if (ref && watch_ref_output) {
-          all.push(watchRefOutput(pinId, pin, callback))
+          watchPin('ref', 'output', pinId, pin)
         } else if (!ref && watch_data_output) {
-          all.push(watchDataOutput(pinId, pin, callback))
+          watchPin('data', 'output', pinId, pin)
         }
       })
     )
+  }
+
+  if (watch_rename_output) {
+    all.push(watchUnitRenamePinEvent('rename_output', unit, callback))
   }
 
   if (unit instanceof Graph) {
@@ -109,8 +179,8 @@ export function watchUnitIO<T extends Unit>(
       all.push(watchComponentAppendEvent('append_child', unit, callback))
     }
 
-    if (events.includes('remove_child_at')) {
-      all.push(watchComponentRemoveEvent('remove_child_at', unit, callback))
+    if (events.includes('remove_child')) {
+      all.push(watchComponentRemoveEvent('remove_child', unit, callback))
     }
 
     if (events.includes('leaf_append_child')) {
@@ -119,9 +189,9 @@ export function watchUnitIO<T extends Unit>(
       )
     }
 
-    if (events.includes('leaf_remove_child_at')) {
+    if (events.includes('leaf_remove_child')) {
       all.push(
-        watchComponentLeafRemoveEvent('leaf_remove_child_at', unit, callback)
+        watchComponentLeafRemoveEvent('leaf_remove_child', unit, callback)
       )
     }
   }

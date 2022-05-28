@@ -23,29 +23,29 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prioritymergefrom",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number[]"
     },
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prioritymergefrom",
           "pinId": "b"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     }
   },
   "outputs": {
     "ab": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prioritymergefrom",
           "pinId": "ab"

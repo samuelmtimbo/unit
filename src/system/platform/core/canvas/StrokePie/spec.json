@@ -2,7 +2,7 @@
   "name": "stroke pie",
   "inputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "beginpath",
           "pinId": "d"
@@ -19,7 +19,7 @@
       }
     },
     "rad": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addpie",
           "pinId": "rad"
@@ -36,7 +36,7 @@
       }
     },
     "x": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addpie",
           "pinId": "x"
@@ -53,7 +53,7 @@
       "type": "number"
     },
     "y": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addpie",
           "pinId": "y"
@@ -70,7 +70,7 @@
       "type": "number"
     },
     "r": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addpie",
           "pinId": "r"
@@ -89,7 +89,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "stroke",
           "pinId": "d"

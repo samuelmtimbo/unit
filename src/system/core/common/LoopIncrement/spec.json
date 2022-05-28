@@ -41,7 +41,7 @@
   },
   "inputs": {
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "test"
@@ -50,7 +50,7 @@
       "type": "boolean"
     },
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "init"
@@ -61,7 +61,7 @@
   },
   "outputs": {
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "bauiallzd"
         }
@@ -69,7 +69,7 @@
       "type": "number"
     },
     "local": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "local"
@@ -78,7 +78,7 @@
       "type": "number"
     },
     "final": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "final"

@@ -92,32 +92,32 @@
   },
   "inputs": {
     "graph": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "call",
           "pinId": "unit"
         }
       },
+      "type": "`U`",
       "ref": true
     },
     "Class": {
-      "type": "any",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag",
           "pinId": "v"
         }
-      }
+      },
+      "type": "any"
     },
     "id": {
-      "type": "number|string",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag1",
           "pinId": "v"
         }
-      }
+      },
+      "type": "number|string"
     }
   },
   "outputs": {},

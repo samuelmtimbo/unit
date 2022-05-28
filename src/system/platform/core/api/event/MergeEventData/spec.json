@@ -58,7 +58,7 @@
   },
   "inputs": {
     "data": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagdata",
           "pinId": "data"
@@ -67,7 +67,7 @@
       "type": "any"
     },
     "event": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagevent",
           "pinId": "event"
@@ -78,7 +78,7 @@
   },
   "outputs": {
     "{event,data}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge",
           "pinId": "ab"

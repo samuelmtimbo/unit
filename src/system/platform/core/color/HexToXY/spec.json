@@ -17,7 +17,7 @@
       },
       "jrovawnjv": {
         "input": {
-          "ybuip": true
+          "RGB": true
         }
       }
     }
@@ -34,7 +34,7 @@
   },
   "inputs": {
     "hex": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "umzakg",
           "pinId": "hex"
@@ -45,10 +45,10 @@
   },
   "outputs": {
     "xy": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "jrovawnjv",
-          "pinId": "ppnxndt"
+          "pinId": "XY"
         }
       },
       "type": "number[]"

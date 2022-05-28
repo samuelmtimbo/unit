@@ -13,7 +13,7 @@
   },
   "inputs": {
     "message": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a"
@@ -22,7 +22,7 @@
       "type": "string"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "notequal",
           "pinId": "b"
@@ -31,7 +31,7 @@
       "type": "<A>"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "notequal",
           "pinId": "a"

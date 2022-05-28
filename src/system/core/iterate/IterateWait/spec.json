@@ -39,7 +39,7 @@
   },
   "inputs": {
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate",
           "pinId": "init"
@@ -48,7 +48,7 @@
       "type": "<A>"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "a"
@@ -57,7 +57,7 @@
       "type": "<A>"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "b"
@@ -68,7 +68,7 @@
   },
   "outputs": {
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate",
           "pinId": "current"
@@ -77,7 +77,7 @@
       "type": "<A>"
     },
     "local": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate",
           "pinId": "local"

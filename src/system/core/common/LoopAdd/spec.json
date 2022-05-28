@@ -58,7 +58,7 @@
   },
   "inputs": {
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "init"
@@ -67,7 +67,7 @@
       "type": "number"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "test"
@@ -76,7 +76,7 @@
       "type": "boolean"
     },
     "plus": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add",
           "pinId": "b"
@@ -87,7 +87,7 @@
   },
   "outputs": {
     "local": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "local"
@@ -96,7 +96,7 @@
       "type": "number"
     },
     "final": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "final"
@@ -106,7 +106,7 @@
       "defaultIgnored": true
     },
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "jqmhcjrub"
         }

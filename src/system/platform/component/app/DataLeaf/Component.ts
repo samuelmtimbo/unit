@@ -149,7 +149,7 @@ export default class DataTreeLeaf extends Element<IHTMLDivElement, Props> {
     this.dispatchEvent('leafpaste', { path, value, text })
   }
 
-  public focus = (options?: FocusOptions | undefined) => {
+  public focus = (options: FocusOptions | undefined = { preventScroll: true }) => {
     this._input.$element.focus(options)
   }
 

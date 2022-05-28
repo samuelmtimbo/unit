@@ -167,10 +167,11 @@ export default class Resize extends Element<IHTMLDivElement, Props> {
     y: DirectionUnit,
     direction: Direction
   ) => {
+    const { api: { input: { pointer: { setPointerCapture }} } } = this.$system
     element.addEventListener('pointerdown', (event) => {
       const { clientX, clientY, pointerId } = event
 
-      element.setPointerCapture(pointerId)
+      setPointerCapture(element, pointerId)
 
       // event.stopPropagation()
 

@@ -3,14 +3,14 @@ import { Done } from '../../../../Class/Functional/Done'
 import { Pod } from '../../../../pod'
 import { fromId } from '../../../../spec/fromId'
 import { System } from '../../../../system'
-import { UnitClass } from '../../../../types/UnitClass'
+import { UnitBundle } from '../../../../types/UnitBundle'
 
 export interface I<T> {
   id: string
 }
 
 export interface O<T> {
-  Class: UnitClass<any>
+  Class: UnitBundle<any>
 }
 
 export default class IdToClass<T> extends Functional<I<T>, O<T>> {

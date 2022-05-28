@@ -2,7 +2,7 @@
   "name": "transform",
   "inputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -10,14 +10,14 @@
       "ref": true
     },
     "name": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
       }
     },
     "next": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set0",
           "pinId": "data"
@@ -27,7 +27,7 @@
   },
   "outputs": {
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "get",
           "pinId": "value"

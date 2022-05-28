@@ -57,7 +57,7 @@
   },
   "inputs": {
     "mvrbmatr": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "cpqoubsy",
           "pinId": "json"
@@ -66,7 +66,7 @@
       "type": "<A>"
     },
     "bccuxmrt": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "elhvggatf",
           "pinId": "url"
@@ -77,7 +77,7 @@
   },
   "outputs": {
     "stpyrbnqj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "elhvggatf",
           "pinId": "response"

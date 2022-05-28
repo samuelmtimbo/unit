@@ -14,14 +14,14 @@
   "merges": {},
   "inputs": {},
   "outputs": {
-    "xofjq": {
-      "type": "string",
-      "pin": {
+    "text": {
+      "plug": {
         "0": {
           "unitId": "llyhc",
           "pinId": "a"
         }
-      }
+      },
+      "type": "string"
     }
   },
   "metadata": {

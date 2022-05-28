@@ -45,7 +45,7 @@
   },
   "inputs": {
     "ab": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "wygllzbvi"
         }
@@ -55,7 +55,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "puuzwlxil",
           "pinId": "value"
@@ -64,7 +64,7 @@
       "type": "any"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "vomxk",
           "pinId": "value"

@@ -2,7 +2,7 @@
   "name": "write input",
   "inputs": {
     "name": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "input",
           "pinId": "name"
@@ -10,7 +10,7 @@
       }
     },
     "data": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "write",
           "pinId": "data"
@@ -18,7 +18,7 @@
       }
     },
     "unit": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "input",
           "pinId": "unit"
@@ -29,7 +29,7 @@
   },
   "outputs": {
     "data": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "write",
           "pinId": "data"

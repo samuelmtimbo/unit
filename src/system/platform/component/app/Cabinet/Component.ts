@@ -94,7 +94,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
     this.registerRoot(cabinet)
   }
 
-  private _setActive(drawerId: string, active: boolean): void {
+  private _memSetActive(drawerId: string, active: boolean): void {
     if (active) {
       this._drawer_active.add(drawerId)
     } else {
@@ -312,7 +312,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
         // increase zIndex of this drawer on active
         this._inc_drawer_z_index(drawerId)
 
-        this._setActive(drawerId, true)
+        this._memSetActive(drawerId, true)
 
         this._drawer_y[drawerId] = this._drawer_node[drawerId].y
 
@@ -332,7 +332,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
     drawer_component.addEventListener(
       makeCustomListener('inactive', () => {
         // console.log('Cabinet', '_on_drawer_inactive')
-        this._setActive(drawerId, false)
+        this._memSetActive(drawerId, false)
 
         const drawer = this._drawer[drawerId]
         const { component } = drawer

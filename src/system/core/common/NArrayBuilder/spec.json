@@ -15,16 +15,16 @@
   "merges": {},
   "inputs": {
     "n": {
-      "type": "number",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "buildarrayfrom",
           "pinId": "n"
         }
-      }
+      },
+      "type": "number"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "buildarrayfrom",
           "pinId": "a"
@@ -35,7 +35,7 @@
   },
   "outputs": {
     "a[]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "buildarrayfrom",
           "pinId": "a[]"

@@ -63,7 +63,7 @@
   },
   "inputs": {
     "qszkn": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "dcdag"
         }
@@ -71,7 +71,7 @@
       "type": "boolean"
     },
     "vmhay": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "yktkm"
         }
@@ -81,7 +81,7 @@
   },
   "outputs": {
     "emrwe": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "kisvs",
           "pinId": "a"

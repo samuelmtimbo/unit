@@ -4,17 +4,17 @@ import { Element } from '../../../../../client/element'
 import { getLinkId, segmentLinkId } from '../../../../../client/id'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { SimNode, Simulation } from '../../../../../client/simulation'
-import { getSpec, injectSpecs, isComponent } from '../../../../../client/spec'
+import { getSpec, isComponent } from '../../../../../client/spec'
 import { Shape, surfaceDistance } from '../../../../../client/util/geometry'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { Pod } from '../../../../../pod'
 import { emptyGraphSpec } from '../../../../../spec/emptySpec'
 import { System } from '../../../../../system'
+import { BundleSpec } from '../../../../../types/BundleSpec'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { mapObjVK } from '../../../../../util/object'
-import { BundleSpec } from '../../../method/process/BundleSpec'
-import { NOT_SUBGRAPH_MAX_D, SUBGRAPH_MAX_D } from '../Graph/Component'
+import { NOT_SUBGRAPH_MAX_D, SUBGRAPH_MAX_D } from '../Editor/Component'
 import Minimap from '../Minimap/Component'
 
 export interface Props {
@@ -27,7 +27,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class Mingraph extends Element<IHTMLDivElement, Props> {
+export default class Minigraph extends Element<IHTMLDivElement, Props> {
   public _minimap: Minimap
 
   public _nodes: Dict<SimNode<any>> = {}
@@ -160,13 +160,12 @@ export default class Mingraph extends Element<IHTMLDivElement, Props> {
 
   private _reset = (): void => {
     // console.log('Minigraph', '_render')
-    const { specs } = this.$system
+
+    const specs =  { ...this.$system.specs, ...this.$pod.specs }
 
     const { bundle } = this.$props
 
-    const { spec: spec = emptyGraphSpec, specs: _specs } = bundle
-
-    const map_spec_id: Dict<string> = injectSpecs(specs, _specs)
+    const { spec = emptyGraphSpec(), specs: _specs } = bundle
 
     const { units = {}, merges } = spec
 
@@ -179,7 +178,11 @@ export default class Mingraph extends Element<IHTMLDivElement, Props> {
 
       const { x, y } = position
 
-      let r = getSpecRadius(specs, id, true)
+      let r = getSpecRadius(
+        specs,
+        id,
+        true
+      )
       let width = 2 * r
       let height = 2 * r
 

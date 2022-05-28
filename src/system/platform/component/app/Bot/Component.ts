@@ -5,6 +5,10 @@ import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Context } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
+import { makeDragCancelListener } from '../../../../../client/event/drag/dragcancel'
+import { makeDragDropListener } from '../../../../../client/event/drag/dragdrop'
+import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
+import { makeDragOverListener } from '../../../../../client/event/drag/dragover'
 import { IOPointerEvent } from '../../../../../client/event/pointer'
 import { makePointerCancelListener } from '../../../../../client/event/pointer/pointercancel'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
@@ -77,6 +81,7 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   private _pointer_enter_count: number = 0
   private _pointer_inside: Dict<boolean> = {}
   private _pointer_visible: boolean = false
+  private _pointer_tracked: boolean = false
 
   private _bot: SVGGElement
   private _eye_ellipse: SVGEllipseElement[] = []
@@ -520,6 +525,12 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   }
 
   private _start_move = (): void => {
+    const {
+      api: {
+        animation: { requestAnimationFrame },
+      },
+    } = this.$system
+
     if (this._pointing_self_count > 0) {
       return
     }
@@ -536,6 +547,12 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   }
 
   public _move_tick = (): void => {
+    const {
+      api: {
+        animation: { requestAnimationFrame },
+      },
+    } = this.$system
+
     if (Math.abs(this._x - this._tx) > 1 || Math.abs(this._y - this._ty) > 1) {
       this._x += (this._tx - this._x) * ANIMATION_C
       this._y += (this._ty - this._y) * ANIMATION_C
@@ -549,6 +566,12 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   }
 
   private _start_sync = (): void => {
+    const {
+      api: {
+        animation: { requestAnimationFrame },
+      },
+    } = this.$system
+
     // console.log('Bot', '_start_sync')
     this._sync_animation_frame = requestAnimationFrame(this._sync_tick)
   }
@@ -564,19 +587,23 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     const dy = ty - this._temp_y
     const dz = tz - this._temp_z
 
-    const k = 1 / 100
+    const k = 1 / 4
 
     if (Math.abs(dx) > k || Math.abs(dy) > k || Math.abs(dz) > k) {
       this._temp_x += dx * ANIMATION_C
       this._temp_y += dy * ANIMATION_C
       this._temp_z += dz * ANIMATION_C
 
-      this._tick_body()
-
       this._start_sync()
     } else {
       this._synced = true
+
+      for (const pointer_id in this._pointer_down) {
+        this._laser_position[pointer_id] = this._pointer_position[pointer_id]
+      }
     }
+
+    this._tick_body()
   }
 
   private _onPointerEnter = (event: IOPointerEvent) => {
@@ -600,6 +627,7 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
 
   private __onPointerLeave = (pointerId: number): void => {
     // console.log('Bot', '__onPointerLeave')
+
     delete this._pointing_self[pointerId]
     this._pointing_self_count--
     this._tick_color()
@@ -631,15 +659,21 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   }
 
   private __onContextPointerLeave = (event: IOPointerEvent) => {
-    const { $width, $height } = this.$context
     const { pointerId } = event
+
+    if (this._dnd[pointerId]) {
+      return
+    }
 
     if (this._pointer_inside[pointerId]) {
       // log('Bot', '__onContextPointerLeave', pointerId)
+      
       this._pointer_enter_count--
+      
       if (this._pointer_down[pointerId]) {
         this._remove_pointer_down(event)
       }
+
       const position = this._pointer_position[pointerId]
 
       delete this._pointer_inside[pointerId]
@@ -670,7 +704,7 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     const { pointerId } = event
     // if (this._pointer_inside[pointerId]) {
     this._pointer_position[pointerId] = position
-    if (this._pointer_down[pointerId]) {
+    if (this._pointer_down[pointerId] && this._synced) {
       this._laser_position[pointerId] = position
     }
     this._pointer_visible = this._pointer_enter_count > 0
@@ -704,7 +738,9 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
       this._pointer_inside[pointerId] = true
       this._pointer_position[pointerId] = position
 
-      this._laser_position[pointerId] = position
+      if (this._synced) {
+        this._laser_position[pointerId] = position
+      }
 
       this._tick_body()
     }
@@ -713,12 +749,13 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   private _laser_position: Position[] = []
 
   private _remove_pointer_down = (event: IOPointerEvent): void => {
-    // log('Bot', '_remove_pointer_down')
+    // console.trace('Bot', '_remove_pointer_down')
     const { mode } = this.$props
 
     const { pointerId, pointerType } = event
 
     this._pointer_down_count--
+
     delete this._pointer_down[pointerId]
 
     // AD HOC
@@ -744,7 +781,7 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     const { pointerId } = event
 
     if (this._pointer_down[pointerId]) {
-      // log('Bot', '_onContextPointerUp', pointerId)
+      // console.log('Bot', '_onContextPointerUp', pointerId)
       this._remove_pointer_down(event)
     }
   }
@@ -804,8 +841,6 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     this._x += dx
     this._y += dy
 
-    // console.log(dx, dy)
-
     const P = 3
 
     const D = 2 * r + P
@@ -829,6 +864,8 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   private _unlisten_context: Unlisten
 
   private _following = false
+
+  private _dnd: Dict<boolean> = {}
 
   public _follow = (): void => {
     // console.log('Bot', '_follow')
@@ -882,6 +919,37 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
       true
     )
 
+    const dragEnterListener = makeDragEnterListener((event) => {
+      const { pointerId } = event
+
+      this._dnd[pointerId] = true
+
+      this._onContextPointerEnter(event)
+      this._onContextPointerDown(event)
+    })
+
+    const dragOverListener = makeDragOverListener((event) => {
+      const { pointerId } = event
+
+      this._onContextPointerMove(event)
+    })
+
+    const dragDropListener = makeDragDropListener((event) => {
+      const { pointerId } = event
+
+      delete this._dnd[pointerId]
+
+      this._onContextPointerUp(event)
+    })
+
+    const dragCancelListener = makeDragCancelListener((event) => {
+      const { pointerId } = event
+
+      delete this._dnd[pointerId]
+
+      this._onContextPointerUp(event)
+    })
+
     this._unlisten_context = addListeners(this.$context, [
       pointerDownListener,
       pointerUpListener,
@@ -889,6 +957,10 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
       pointerEnterListener,
       pointerLeaveListener,
       pointerCancelListener,
+      dragEnterListener,
+      dragOverListener,
+      dragDropListener,
+      dragCancelListener,
       // enterModeListener,
       graphEnterModeListener,
     ])

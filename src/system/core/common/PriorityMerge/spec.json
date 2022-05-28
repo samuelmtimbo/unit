@@ -14,7 +14,7 @@
   "merges": {},
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prioritymergefrom",
           "pinId": "a"
@@ -23,7 +23,7 @@
       "type": "number[]"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prioritymergefrom",
           "pinId": "b"
@@ -34,7 +34,7 @@
   },
   "outputs": {
     "ab": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prioritymergefrom",
           "pinId": "ab"

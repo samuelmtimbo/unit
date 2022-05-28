@@ -1,0 +1,26 @@
+{
+  "name": "scroll into view",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{}"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "send",
+    "description": "scroll parent until `component` is visible",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api"
+    ]
+  },
+  "base": true,
+  "id": "de9665db-a188-4252-99f0-ea50fc343058",
+  "type": "`U`",
+  "system": true
+}

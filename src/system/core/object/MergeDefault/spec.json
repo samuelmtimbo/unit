@@ -2,7 +2,7 @@
   "name": "merge default",
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge",
           "pinId": "b"
@@ -19,7 +19,7 @@
       }
     },
     "default": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -37,7 +37,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default",
           "pinId": "a"

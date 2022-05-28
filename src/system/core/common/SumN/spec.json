@@ -23,33 +23,33 @@
   },
   "inputs": {
     "n": {
-      "type": "number",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "sumnfrom",
           "pinId": "n"
         }
-      }
+      },
+      "type": "number"
     },
     "a": {
-      "type": "number",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "sumnfrom",
           "pinId": "a"
         }
-      }
+      },
+      "type": "number"
     }
   },
   "outputs": {
     "sum": {
-      "type": "number",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "sumnfrom",
           "pinId": "sum"
         }
-      }
+      },
+      "type": "number"
     }
   },
   "id": "74edae3f-87de-455c-a65a-e458334d2c47",

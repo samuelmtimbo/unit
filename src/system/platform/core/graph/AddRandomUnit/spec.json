@@ -2,7 +2,7 @@
   "name": "add random unit",
   "inputs": {
     "graph": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addunit",
           "pinId": "graph"
@@ -12,7 +12,7 @@
       "type": "`U`"
     },
     "id": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }

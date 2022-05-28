@@ -1,10 +1,10 @@
 {
   "name": "BMI",
   "units": {
-    "tzeabjqyt": {
+    "divide": {
       "id": "158d85eb-28b8-4355-b637-28a7ec751233"
     },
-    "oedqjmoi": {
+    "pow": {
       "id": "ef4c1d0a-bda1-484e-8fcb-0fdbde195778",
       "input": {
         "b": {
@@ -15,13 +15,13 @@
     }
   },
   "merges": {
-    "woktqgw": {
-      "tzeabjqyt": {
+    "0": {
+      "divide": {
         "input": {
           "b": true
         }
       },
-      "oedqjmoi": {
+      "pow": {
         "output": {
           "a ** b": true
         }
@@ -40,19 +40,19 @@
     ]
   },
   "inputs": {
-    "yymo": {
-      "pin": {
+    "h": {
+      "plug": {
         "0": {
-          "unitId": "oedqjmoi",
+          "unitId": "pow",
           "pinId": "a"
         }
       },
       "type": "number"
     },
-    "ydijub": {
-      "pin": {
+    "m": {
+      "plug": {
         "0": {
-          "unitId": "tzeabjqyt",
+          "unitId": "divide",
           "pinId": "a"
         }
       },
@@ -60,10 +60,10 @@
     }
   },
   "outputs": {
-    "mzrfxtidp": {
-      "pin": {
+    "bmi": {
+      "plug": {
         "0": {
-          "unitId": "tzeabjqyt",
+          "unitId": "divide",
           "pinId": "a ÷ b"
         }
       },

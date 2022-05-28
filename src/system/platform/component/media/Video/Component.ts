@@ -2,7 +2,7 @@ import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
-import { $ST } from '../../../../../interface/async/$ST'
+import { $ST } from '../../../../../types/interface/async/$ST'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -24,7 +24,7 @@ export const DEFAULT_STYLE = {
   // outline: 'none',
 }
 
-export default class Video extends Element<HTMLVideoElement, Props> {
+export default class VideoComp extends Element<HTMLVideoElement, Props> {
   private _video_el: HTMLVideoElement
 
   private prop_handler: PropHandler

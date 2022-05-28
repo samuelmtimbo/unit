@@ -2,7 +2,7 @@
   "name": "random spec id",
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "specids",
           "pinId": "any"
@@ -13,7 +13,7 @@
   },
   "outputs": {
     "id": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "randominarray",
           "pinId": "a[i]"

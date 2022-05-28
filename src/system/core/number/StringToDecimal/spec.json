@@ -18,7 +18,7 @@
   "merges": {},
   "inputs": {
     "str": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "stringtoint",
           "pinId": "str"
@@ -29,7 +29,7 @@
   },
   "outputs": {
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "stringtoint",
           "pinId": "n"

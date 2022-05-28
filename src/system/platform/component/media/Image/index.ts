@@ -14,7 +14,7 @@ export default class Image extends Element<I, O> {
     super(
       {
         i: ['src', 'style'],
-        o: ['click'],
+        o: [],
       },
       {},
       system,

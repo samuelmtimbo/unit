@@ -34,25 +34,25 @@
   },
   "inputs": {
     "any": {
-      "type": "any",
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "randomhexcolor",
           "pinId": "any"
         }
-      }
+      },
+      "type": "any",
+      "functional": true
     }
   },
   "outputs": {
     "{color}": {
-      "type": "{color:string}",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagcolor",
           "pinId": "{color}"
         }
-      }
+      },
+      "type": "{color:string}"
     }
   },
   "id": "8a2d42bf-fc83-4696-9e0c-cf8c6c4641ae",

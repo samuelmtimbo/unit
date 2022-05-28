@@ -24,19 +24,19 @@
   },
   "inputs": {
     "email": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "test",
           "pinId": "str"
         }
       },
+      "functional": true,
       "type": "string"
     }
   },
   "outputs": {
     "valid": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "test",
           "pinId": "match"

@@ -2,7 +2,7 @@
   "name": "child set style",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "childset",
           "pinId": "data"
@@ -19,7 +19,7 @@
       "type": "any"
     },
     "at": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "childset",
           "pinId": "at"
@@ -36,7 +36,7 @@
       "type": "number"
     },
     "parent": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "childset",
           "pinId": "parent"

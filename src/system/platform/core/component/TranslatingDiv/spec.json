@@ -231,7 +231,7 @@
   },
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault",
           "pinId": "a"
@@ -240,7 +240,7 @@
       "type": "object"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default",
           "pinId": "a"
@@ -249,7 +249,7 @@
       "type": "number"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default0",
           "pinId": "a"

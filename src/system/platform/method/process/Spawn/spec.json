@@ -1,0 +1,42 @@
+{
+  "name": "spawn",
+  "inputs": {
+    "init": {
+      "type": "{}",
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    },
+    "system": {
+      "type": "`S`",
+      "ref": true
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "pod": {
+      "type": "`P`",
+      "ref": true,
+      "icon": "server"
+    }
+  },
+  "metadata": {
+    "icon": "server",
+    "description": "instantiate a new pod on `system`",
+    "complexity": 5,
+    "tags": [
+      "platform",
+      "method",
+      "process"
+    ]
+  },
+  "id": "cf3fa1ec-0ec1-41ff-9edf-cc34388441d1",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -1,5 +1,5 @@
 import { Functional } from '../../../../../../Class/Functional'
-import { ST } from '../../../../../../interface/ST'
+import { ST } from '../../../../../../types/interface/ST'
 import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 

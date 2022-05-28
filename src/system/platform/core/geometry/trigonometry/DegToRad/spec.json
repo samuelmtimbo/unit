@@ -83,7 +83,7 @@
   },
   "inputs": {
     "angle": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "remainder",
           "pinId": "a"
@@ -94,7 +94,7 @@
   },
   "outputs": {
     "rad": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "multiply",
           "pinId": "a × b"

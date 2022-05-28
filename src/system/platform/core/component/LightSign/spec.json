@@ -2,7 +2,7 @@
   "name": "light sign",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault0",
           "pinId": "a"
@@ -12,7 +12,7 @@
       "ref": false
     },
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default",
           "pinId": "a"

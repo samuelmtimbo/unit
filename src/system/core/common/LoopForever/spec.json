@@ -31,7 +31,7 @@
   },
   "inputs": {
     "next": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "next"
@@ -40,7 +40,7 @@
       "type": "<A>"
     },
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "init"
@@ -51,7 +51,7 @@
   },
   "outputs": {
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "current"

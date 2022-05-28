@@ -48,7 +48,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "length0",
           "pinId": "a"
@@ -57,7 +57,7 @@
       "type": "<A>[]"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "length",
           "pinId": "a"
@@ -68,7 +68,7 @@
   },
   "outputs": {
     "max": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "max",
           "pinId": "max"

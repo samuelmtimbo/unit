@@ -2,7 +2,7 @@
   "name": "tree",
   "inputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "text",
           "pinId": "value"
@@ -11,7 +11,7 @@
       "type": "string"
     },
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "div",
           "pinId": "style"

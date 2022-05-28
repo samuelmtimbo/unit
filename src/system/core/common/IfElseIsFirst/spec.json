@@ -2,7 +2,7 @@
   "name": "if else first",
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
@@ -12,7 +12,7 @@
   },
   "outputs": {
     "first": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "bpdlaymdf",
           "pinId": "if"
@@ -21,7 +21,7 @@
       "type": "<A>"
     },
     "!first": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "bpdlaymdf",
           "pinId": "else"

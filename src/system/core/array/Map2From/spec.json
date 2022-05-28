@@ -45,7 +45,7 @@
   },
   "inputs": {
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach1",
           "pinId": "a"
@@ -54,7 +54,7 @@
       "type": "<B>[]"
     },
     "c[i]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lgxnwnr",
           "pinId": "a"
@@ -63,7 +63,7 @@
       "type": "<B>"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a"
@@ -72,19 +72,19 @@
       "type": "<A>[]"
     },
     "hqafziavx": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lgxnwnr",
           "pinId": "init"
         }
       },
+      "functional": true,
       "type": "<B>[]"
     }
   },
   "outputs": {
     "b[i]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach1",
           "pinId": "a[i]"
@@ -93,7 +93,7 @@
       "type": "<B>"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lgxnwnr",
           "pinId": "a[]"
@@ -102,7 +102,7 @@
       "type": "<B>[]"
     },
     "a[i]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a[i]"

@@ -22,7 +22,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "gfcxzqyjq",
           "pinId": "a"
@@ -33,7 +33,7 @@
   },
   "outputs": {
     "tail": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "gfcxzqyjq",
           "pinId": "tail"

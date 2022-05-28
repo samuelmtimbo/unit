@@ -59,7 +59,7 @@
   },
   "inputs": {
     "arc": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addarc",
           "pinId": "arc"
@@ -68,7 +68,7 @@
       "type": "{x:number,y:number,r:number,start:number,end:number,anticlockwise?:boolean}"
     },
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "beginpath",
           "pinId": "d"
@@ -79,7 +79,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "stroke",
           "pinId": "d"

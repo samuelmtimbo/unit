@@ -12,8 +12,10 @@ export interface Props {
 
 export const DEFAULT_STYLE = {
   display: 'block',
-  'max-width': '100%',
-  'max-height': '100%',
+  // 'max-width': '100%',
+  // 'max-height': '100%',
+  // 'min-width': '0',
+  // 'min-height': '0',
   width: '100%',
   height: '100%',
   'object-fit': 'contain',
@@ -39,7 +41,8 @@ export default class Image extends Element<HTMLImageElement, Props> {
     if (src !== undefined) {
       img_el.src = src
     }
-    img_el.addEventListener('error', () => {
+    img_el.addEventListener('error', (err) => {
+      console.log('AHA', err)
       img_el.src = NO_IMAGE
     })
     img_el.draggable = false

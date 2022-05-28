@@ -1,24 +1,30 @@
-import { AsyncGraph } from '../../../interface/async/AsyncGraph'
+import { AsyncGraph } from '../../../types/interface/async/AsyncGraph'
 import { spawn, start } from '../../../spawn'
 import { System } from '../../../system'
-import { BundleSpec } from '../../../system/platform/method/process/BundleSpec'
+import { BundleSpec } from '../../../types/BundleSpec'
 import { render } from '../../render'
 import root from '../../root'
 import webBoot from './boot'
 import webInit from './init'
+import { Unlisten } from '../../../types/Unlisten'
+import callAll from '../../../util/call/callAll'
 
-export default function webRender(bundle: BundleSpec): System {
+export default function webRender(bundle: BundleSpec): [System, Unlisten] {
+  const { specs } = bundle
+
   const system = webBoot()
 
-  const _pod = spawn(system)
+  const pod = spawn(system, specs)
 
-  const graph = start(system, _pod, bundle)
+  const graph = start(system, pod, bundle)
 
   const $graph = AsyncGraph(graph)
 
-  const unlisten = webInit(system, window, root)
+  const webUnlisten = webInit(system, window, root)
 
-  render(root, system, _pod, $graph)
+  const renderUnlisten = render(system, pod, $graph)
 
-  return system
+  const unlisten = callAll([webUnlisten, renderUnlisten])
+
+  return [system, unlisten]
 }

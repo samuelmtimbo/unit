@@ -11,7 +11,6 @@ export const _public_key_list: string[] = []
 export const _private_key_list: string[] = []
 
 let init = false
-
 let last = -1
 
 export async function getPublicKeyList($system: System): Promise<string[]> {

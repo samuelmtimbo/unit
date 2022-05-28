@@ -2,7 +2,7 @@
   "name": "full chalkboard",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "chalkboard",
           "pinId": "style"
@@ -21,14 +21,14 @@
   },
   "outputs": {
     "canvas": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "chalkboard",
           "pinId": "canvas"
         }
       },
       "ref": true,
-      "type": "`U`&`C`&`V`&`PS`&`CS`",
+      "type": "`CS`&`CA`",
       "defaultIgnored": true
     }
   },
@@ -47,7 +47,11 @@
         "width": {},
         "height": {}
       },
-      "output": {},
+      "output": {
+        "canvas": {
+          "ignored": false
+        }
+      },
       "metadata": {
         "position": {
           "x": 105,

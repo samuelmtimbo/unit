@@ -59,19 +59,19 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "reduce",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number[]"
     }
   },
   "outputs": {
     "sum": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "reduce",
           "pinId": "result"

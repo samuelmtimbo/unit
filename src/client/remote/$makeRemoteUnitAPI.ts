@@ -2,32 +2,32 @@ import {
   AsyncCCall,
   AsyncCRef,
   AsyncCWatch,
-} from '../../interface/async/AsyncC'
+} from '../../types/interface/async/AsyncC'
 import {
   AsyncGCall,
   AsyncGRef,
   AsyncGWatch,
-} from '../../interface/async/AsyncG'
+} from '../../types/interface/async/AsyncG'
 import {
   AsyncJCall,
   AsyncJRef,
   AsyncJWatch,
-} from '../../interface/async/AsyncJ'
+} from '../../types/interface/async/AsyncJ'
 import {
   AsyncSTCall,
   AsyncSTRef,
   AsyncSTWatch,
-} from '../../interface/async/AsyncST'
+} from '../../types/interface/async/AsyncST'
 import {
   AsyncUCall,
   AsyncURef,
   AsyncUWatch,
-} from '../../interface/async/AsyncU'
+} from '../../types/interface/async/AsyncU'
 import {
   AsyncVCall,
   AsyncVRef,
   AsyncVWatch,
-} from '../../interface/async/AsyncV'
+} from '../../types/interface/async/AsyncV'
 import { RemoteAPI } from '../RemoteAPI'
 
 export function $remoteRef(ref: object): RemoteAPI['ref'] {

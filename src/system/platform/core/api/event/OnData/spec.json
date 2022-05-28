@@ -16,19 +16,19 @@
   "merges": {},
   "inputs": {
     "unit": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "unit"
         }
       },
+      "type": "`U`",
       "ref": true
     }
   },
   "outputs": {
     "data": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "data"

@@ -2,7 +2,7 @@
   "name": "slider value",
   "inputs": {
     "min": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slider",
           "pinId": "min"
@@ -20,7 +20,7 @@
       }
     },
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slider",
           "pinId": "style"
@@ -38,7 +38,7 @@
       }
     },
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slider",
           "pinId": "value"
@@ -56,7 +56,7 @@
       }
     },
     "max": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slider",
           "pinId": "max"
@@ -76,7 +76,7 @@
   },
   "outputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "onvalue",
           "pinId": "value"
@@ -93,7 +93,7 @@
       }
     },
     "slider": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slider",
           "pinId": "_self"

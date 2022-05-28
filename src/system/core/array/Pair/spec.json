@@ -48,7 +48,7 @@
   },
   "inputs": {
     "0": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ijqwhhhmg",
           "pinId": "a"
@@ -57,7 +57,7 @@
       "type": "<A>"
     },
     "1": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ahajqv",
           "pinId": "a"
@@ -68,7 +68,7 @@
   },
   "outputs": {
     "hbsxpnl": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "erpkaeoq",
           "pinId": "ab"

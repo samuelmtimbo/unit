@@ -1,5 +1,5 @@
 import { Graph } from '../Class/Graph'
-import { GraphExposedPinSpec } from '../types'
+import { GraphPinSpec } from '../types'
 import { IO } from '../types/IO'
 import { Moment } from './Moment'
 
@@ -7,7 +7,7 @@ export interface UnitLeafExposedPinSetEventData {
   path: string[]
   type: IO
   pinId: string
-  pinSpec: GraphExposedPinSpec
+  pinSpec: GraphPinSpec
 }
 
 export interface UnitLeafExposedPinSetEvent
@@ -22,7 +22,7 @@ export function watchUnitLeafExposedPinSetEvent(
     path: string[],
     type: IO,
     pinId: string,
-    pinSpec: GraphExposedPinSpec
+    pinSpec: GraphPinSpec
   ) => {
     callback({
       type: 'unit',

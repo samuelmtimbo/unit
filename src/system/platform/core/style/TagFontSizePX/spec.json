@@ -2,7 +2,7 @@
   "name": "tag font size px",
   "inputs": {
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "px",
           "pinId": "n"
@@ -13,7 +13,7 @@
   },
   "outputs": {
     "{fontSize}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagfontsize",
           "pinId": "{fontSize}"

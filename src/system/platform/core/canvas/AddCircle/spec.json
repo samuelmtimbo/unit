@@ -44,7 +44,7 @@
   },
   "inputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addarc",
           "pinId": "d"
@@ -53,7 +53,7 @@
       "type": "any[][]"
     },
     "circle": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge3",
           "pinId": "a"
@@ -64,7 +64,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addarc",
           "pinId": "d"

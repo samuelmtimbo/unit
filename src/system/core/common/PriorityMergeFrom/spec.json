@@ -44,39 +44,39 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "priorityforeach",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number[]"
     },
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "priorityforeach",
           "pinId": "b"
         }
       },
+      "functional": true,
       "type": "number[]"
     },
     "from": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "arraybuilderfrom",
           "pinId": "init"
         }
       },
+      "functional": true,
       "type": "number[]"
     }
   },
   "outputs": {
     "ab": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "arraybuilderfrom",
           "pinId": "a[]"

@@ -63,7 +63,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "memory",
           "pinId": "a"
@@ -72,7 +72,7 @@
       "type": "<A>"
     },
     "ms": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "cgzfvsivu",
           "pinId": "ms"
@@ -83,7 +83,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "memory0",
           "pinId": "a"

@@ -2,7 +2,7 @@
   "name": "app",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "gui",
           "pinId": "style"
@@ -27,7 +27,7 @@
       "type": "object"
     },
     "disabled": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "gui",
           "pinId": "disabled"
@@ -51,11 +51,11 @@
       },
       "type": "boolean"
     },
-    "pod": {
-      "pin": {
+    "graph": {
+      "plug": {
         "0": {
           "unitId": "graph",
-          "pinId": "pod"
+          "pinId": "graph"
         }
       },
       "ref": true,
@@ -70,7 +70,7 @@
       "type": "`G`"
     },
     "fullwindow": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "graph",
           "pinId": "fullwindow"
@@ -79,7 +79,7 @@
       "type": "boolean"
     },
     "frame": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "graph",
           "pinId": "frame"
@@ -91,7 +91,7 @@
   },
   "outputs": {
     "graph": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "graph",
           "pinId": "_self"
@@ -135,7 +135,7 @@
       "id": "e80c912e-7508-11ea-966b-436805345ff0",
       "input": {
         "style": {},
-        "pod": {
+        "graph": {
           "metadata": {
             "position": {
               "x": 187,

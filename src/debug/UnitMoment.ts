@@ -1,30 +1,10 @@
+import { C_EE } from '../types/interface/C'
+import { G_EE } from '../types/interface/G'
+import { U_EE } from '../types/interface/U'
 import { Moment } from './Moment'
 
 export interface UnitMoment extends Moment {
   type: 'unit'
-  event:
-    | 'reset'
-    | 'state'
-    | 'call'
-    | 'append_child'
-    | 'remove_child_at'
-    | 'leaf_add_unit'
-    | 'leaf_remove_unit'
-    | 'leaf_expose_pin_set'
-    | 'leaf_cover_pin_set'
-    | 'leaf_append_child'
-    | 'leaf_remove_child_at'
-    | 'listen'
-    | 'unlisten'
-    | 'err'
-    | 'take_err'
-    | 'catch_err'
-    | 'add_unit'
-    | 'remove_unit'
-    | 'add_merge'
-    | 'remove_merge'
-    | 'add_pin_to_merge'
-    | 'remove_pin_from_merge'
-    | 'metadata'
+  event: keyof U_EE | keyof C_EE | keyof G_EE
   data: any
 }

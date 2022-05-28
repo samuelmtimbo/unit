@@ -38,8 +38,8 @@ export const COLLAPSE_UNITS = 'collapseUnits'
 import { Position } from '../../client/util/geometry'
 import {
   Action,
-  GraphExposedPinSpec,
-  GraphExposedSubPinSpec,
+  GraphPinSpec,
+  GraphSubPinSpec,
   GraphMergeSpec,
   GraphMergesSpec,
   GraphUnitSpec,
@@ -103,7 +103,7 @@ export const exposePin = (
   type: IO,
   id: string,
   subPinId: string,
-  subPin: GraphExposedSubPinSpec
+  subPin: GraphSubPinSpec
 ) => {
   return {
     type: EXPOSE_PIN,
@@ -132,7 +132,7 @@ export const setPinSetFunctional = (
 export const exposePinSet = (
   type: IO,
   id: string,
-  pin: GraphExposedPinSpec
+  pin: GraphPinSpec
 ) => {
   return {
     type: EXPOSE_PIN_SET,
@@ -151,7 +151,7 @@ export const plugPin = (
   type: IO,
   id: string,
   subPinId: string,
-  subPinSpec: GraphExposedSubPinSpec
+  subPinSpec: GraphSubPinSpec
 ) => {
   return {
     type: PLUG_PIN,
@@ -446,7 +446,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case EXPOSE_PIN_SET:
       return coverPinSet(data.type, data.id)
     case COVER_PIN_SET:
-      return exposePinSet(data.type, data.id, data.pin)
+      return exposePinSet(data.type, data.id, data.plug)
     case PLUG_PIN:
       return unplugPin(data.type, data.id, data.subPinId)
     case UNPLUG_PIN:

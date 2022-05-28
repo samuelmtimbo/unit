@@ -2,8 +2,8 @@ import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
 import { renderGraph } from '../../../../client/render/renderPod'
-import { $Graph } from '../../../../interface/async/$Graph'
-import { $PO } from '../../../../interface/async/$PO'
+import { $Graph } from '../../../../types/interface/async/$Graph'
+import { $P } from '../../../../types/interface/async/$P'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
@@ -84,7 +84,7 @@ export default class Render extends Element<IHTMLDivElement, Props> {
 
     this._prop_handler = {
       ...htmlPropHandler(this._div_el, DEFAULT_STYLE),
-      pod: (pod: $PO) => {
+      pod: (pod: $P) => {
         if (pod) {
           this._unlisten = renderGraph(
             this._div_el,

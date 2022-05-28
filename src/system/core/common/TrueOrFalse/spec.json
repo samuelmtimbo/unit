@@ -41,32 +41,32 @@
   },
   "inputs": {
     "a": {
-      "type": "boolean",
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "merge0"
         }
-      }
+      },
+      "type": "boolean"
     }
   },
   "outputs": {
     "a = true": {
-      "type": "boolean",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if0",
           "pinId": "a if b"
         }
-      }
+      },
+      "type": "boolean"
     },
     "a = false": {
-      "type": "boolean",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if1",
           "pinId": "a if b"
         }
-      }
+      },
+      "type": "boolean"
     }
   },
   "metadata": {

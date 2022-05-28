@@ -36,7 +36,7 @@
   },
   "inputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "keys",
           "pinId": "obj"
@@ -47,7 +47,7 @@
   },
   "outputs": {
     "count": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "length",
           "pinId": "length"

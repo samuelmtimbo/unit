@@ -74,17 +74,17 @@
   },
   "inputs": {
     "n": {
-      "type": "number",
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "fulew"
         }
-      }
+      },
+      "type": "number"
     }
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "narraybuilder",
           "pinId": "a[]"

@@ -46,7 +46,7 @@
   },
   "inputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -56,7 +56,7 @@
   },
   "outputs": {
     "y": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prop0",
           "pinId": "value"
@@ -65,7 +65,7 @@
       "type": "number"
     },
     "x": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prop",
           "pinId": "value"

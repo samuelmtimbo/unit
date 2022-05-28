@@ -3,7 +3,7 @@
   "type": "`U`&`C`&`G`",
   "inputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "textbox",
           "pinId": "value"
@@ -11,7 +11,7 @@
       }
     },
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault0",
           "pinId": "a"

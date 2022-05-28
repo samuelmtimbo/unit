@@ -27,7 +27,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iteratecountfrom",
           "pinId": "any"
@@ -38,7 +38,7 @@
   },
   "outputs": {
     "count": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iteratecountfrom",
           "pinId": "current"

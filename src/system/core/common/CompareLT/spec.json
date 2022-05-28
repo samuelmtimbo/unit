@@ -36,7 +36,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -44,7 +44,7 @@
       "type": "number"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
@@ -54,23 +54,23 @@
   },
   "outputs": {
     "a < b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lt",
           "pinId": "a < b"
         }
       },
+      "functional": true,
       "type": "boolean"
     },
     "a ≥ b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "gte",
           "pinId": "a ≥ b"
         }
       },
+      "functional": true,
       "type": "boolean"
     }
   },

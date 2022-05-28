@@ -352,6 +352,7 @@ export default class PhoneKeyboard extends Element<IHTMLDivElement, Props> {
     this._backspace_interval = setInterval(() => {
       // log('backspace')
       emitPhoneKey('Backspace', this._shift, this._alt)
+
       vibrate([10])
     }, 30)
   }

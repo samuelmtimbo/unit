@@ -1,4 +1,4 @@
-import { G } from '../../interface/G'
+import { G } from '../../types/interface/G'
 import { Component } from '../component'
 
 export interface Client {

@@ -3,7 +3,7 @@ import {
   getStorageKeys,
   storageHasKey,
 } from '../../../../client/util/web/storage'
-import { J } from '../../../../interface/J'
+import { J } from '../../../../types/interface/J'
 import { ObjectUpdateType } from '../../../../Object'
 import { Dict } from '../../../../types/Dict'
 import { IStorage } from '../../../../types/global/IStorage'

@@ -1,0 +1,49 @@
+{
+  "name": "on wheel",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'wheel'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "type": "`U`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      },
+      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,deltaX:number,deltaY:number,ctrlKey:boolean,altKey:boolean}"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` wheel event",
+    "complexity": 5,
+    "tags": ["platform", "core", "api", "event"]
+  },
+  "id": "52e6d3c8-0958-4829-bc25-1f6cdbf6e451",
+  "type": "`U`&`G`",
+  "system": true
+}

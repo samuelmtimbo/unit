@@ -14,7 +14,7 @@
   "merges": {},
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ysyvv",
           "pinId": "b"
@@ -25,7 +25,7 @@
   },
   "outputs": {
     "a = false": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ysyvv",
           "pinId": "a if not b"

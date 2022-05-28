@@ -1,4 +1,4 @@
-export const buildIOTurnConfig = (
+export const defaultTurnConfig = (
   username: string,
   credential: string
 ): RTCConfiguration => ({

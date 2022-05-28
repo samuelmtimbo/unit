@@ -37,7 +37,7 @@
   },
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "50chance",
           "pinId": "any"
@@ -48,7 +48,7 @@
   },
   "outputs": {
     "bit": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "a"

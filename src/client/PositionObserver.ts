@@ -1,3 +1,4 @@
+import { NOOP } from '../NOOP'
 import { System } from '../system'
 import {
   IPositionCallback,
@@ -141,11 +142,17 @@ export class PositionObserver implements IPositionObserver {
       height = offsetHeight
     }
 
-    const { f: update_local, abort } = animateThrottle(_update_local)
+    const { f: update_local, abort } = animateThrottle(
+      this._system,
+      _update_local
+    )
 
     this._abort = abort
 
     // const update_local = _update_local
+    
+    // this._abort = NOOP
+
 
     const _update = (): void => {
       sx = scale_x * parent_scale_x
@@ -222,7 +229,7 @@ export class PositionObserver implements IPositionObserver {
       update_local()
     }
 
-    const config = {
+    const mutationConfig = {
       childList: false,
       subtree: false,
       attributes: true,
@@ -231,10 +238,22 @@ export class PositionObserver implements IPositionObserver {
 
     const mutationObserver = new MutationObserver(callback)
 
-    mutationObserver.observe(element, config)
+    mutationObserver.observe(element, mutationConfig)
+
+    const resizeObserver = new ResizeObserver(callback)
+
+    const resizeConfig: ResizeObserverOptions = {
+      box: 'device-pixel-content-box',
+    }
+
+    // Safari (on iOS) will not accept this config
+    // resizeObserver.observe(element, resizeConfig)
+    resizeObserver.observe(element)
 
     const unlisten_self = () => {
       mutationObserver.disconnect()
+      resizeObserver.unobserve(element)
+      resizeObserver.disconnect()
     }
 
     const update_parent = (): (() => void) => {
@@ -258,8 +277,10 @@ export class PositionObserver implements IPositionObserver {
             _scrollTop = scrollTop
             update()
           }
-          const { f: _parentScrollListener } =
-            animateThrottle(parentScrollListener)
+          const { f: _parentScrollListener } = animateThrottle(
+            this._system,
+            parentScrollListener
+          )
           p.addEventListener('scroll', _parentScrollListener, {
             passive: true,
           })
@@ -269,7 +290,7 @@ export class PositionObserver implements IPositionObserver {
           scrollParentUnlisten.push(unlisten)
         }
         let p = parentElement
-        while (p !== targetParent) {
+        while (p && p !== targetParent) {
           pushScrollParent(p)
           p = p.parentElement
         }
@@ -359,6 +380,7 @@ export class PositionObserver implements IPositionObserver {
 
         return () => {
           unlitenScroll()
+
           parentResizeObserver.disconnect()
           parentMutationObserver.disconnect()
           parentPostionObserver.disconnect()

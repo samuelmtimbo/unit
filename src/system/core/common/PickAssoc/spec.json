@@ -40,7 +40,7 @@
   },
   "inputs": {
     "c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "c"
@@ -49,7 +49,7 @@
       "type": "boolean"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "b"
@@ -58,7 +58,7 @@
       "type": "<A>"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "a"
@@ -67,7 +67,7 @@
       "type": "<A>"
     },
     "key": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "assoc",
           "pinId": "key"
@@ -76,7 +76,7 @@
       "type": "number|string"
     },
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "assoc",
           "pinId": "obj"
@@ -87,7 +87,7 @@
   },
   "outputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "assoc",
           "pinId": "obj"

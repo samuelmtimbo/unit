@@ -1,5 +1,5 @@
-import { PO } from '../../interface/PO'
+import { P } from '../interface/P'
 
-export interface IPod extends PO {}
+export interface IPod extends P {}
 
 export interface IPodOpt {}

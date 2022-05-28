@@ -2,19 +2,25 @@
   "name": "debug",
   "inputs": {
     "unit": {
-      "type": "`U`",
+      "type": "`EE`",
       "ref": true
+    },
+    "event": {
+      "type": "string"
+    },
+    "remove": {
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "outputs": {
-    "emitter": {
-      "type": "`EE`",
-      "ref": true
+    "data": {
+      "type": "any"
     }
   },
   "metadata": {
     "icon": "circle",
-    "description": "reference `unit` event `emitter`",
+    "description": "listen to `unit` debug `event`",
     "complexity": 3,
     "tags": [
       "platform",

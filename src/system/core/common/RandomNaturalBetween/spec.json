@@ -51,28 +51,28 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "gttr"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "subtract",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number"
     }
   },
   "outputs": {
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add",
           "pinId": "a + b"

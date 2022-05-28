@@ -1,0 +1,123 @@
+{
+  "name": "download canvas",
+  "inputs": {
+    "name": {
+      "plug": {
+        "0": {
+          "unitId": "downloadurl",
+          "pinId": "name"
+        }
+      },
+      "type": "string"
+    },
+    "type": {
+      "plug": {
+        "0": {
+          "unitId": "toblob",
+          "pinId": "type"
+        }
+      },
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "\"image/png\""
+        ]
+      }
+    },
+    "canvas": {
+      "plug": {
+        "0": {
+          "unitId": "toblob",
+          "pinId": "canvas"
+        }
+      },
+      "type": "`CA`",
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "units": {
+    "downloadurl": {
+      "id": "c18c8f59-f3c8-49a8-9dbd-ed30fdf856e9",
+      "input": {
+        "url": {},
+        "name": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 107,
+          "y": 0
+        }
+      }
+    },
+    "toblob": {
+      "id": "c9d64ef4-35f6-44e7-a16b-1e4173f951dc",
+      "input": {
+        "canvas": {},
+        "quality": {
+          "constant": true,
+          "data": "1"
+        },
+        "type": {}
+      },
+      "output": {
+        "blob": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -115,
+          "y": -1
+        }
+      }
+    },
+    "createbloburl": {
+      "id": "1d5b6bb0-f18e-4428-a350-a29d8ca3ff4a",
+      "input": {
+        "blob": {}
+      },
+      "output": {
+        "url": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 6,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "createbloburl": {
+        "input": {
+          "blob": true
+        }
+      },
+      "toblob": {
+        "output": {
+          "blob": true
+        }
+      }
+    },
+    "1": {
+      "downloadurl": {
+        "input": {
+          "url": true
+        }
+      },
+      "createbloburl": {
+        "output": {
+          "url": true
+        }
+      }
+    }
+  },
+  "render": false,
+  "metadata": {
+    "icon": "download",
+    "description": "download full canvas as png"
+  },
+  "id": "1a398694-284e-4d67-a13c-3a929c38b0fc",
+  "type": "`U`&`G`"
+}

@@ -2,7 +2,7 @@
   "name": "logo",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "svg",
           "pinId": "style"
@@ -19,7 +19,7 @@
       "type": "object"
     },
     "pathStyle": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault",
           "pinId": "a"

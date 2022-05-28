@@ -201,7 +201,7 @@
   },
   "inputs": {
     "state": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "at",
           "pinId": "i"
@@ -210,7 +210,7 @@
       "type": "number"
     },
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "at0",
           "pinId": "i"
@@ -227,7 +227,7 @@
       "type": "number"
     },
     "tape": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "a"
@@ -240,7 +240,7 @@
       "type": "number[]"
     },
     "table": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "7"
         }
@@ -250,7 +250,7 @@
   },
   "outputs": {
     "tape": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "a"
@@ -259,7 +259,7 @@
       "type": "number[]"
     },
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add",
           "pinId": "a + b"
@@ -268,7 +268,7 @@
       "type": "number"
     },
     "table": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "identity",
           "pinId": "a"
@@ -277,7 +277,7 @@
       "type": "number[][][]"
     },
     "state": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "first3",
           "pinId": "2"

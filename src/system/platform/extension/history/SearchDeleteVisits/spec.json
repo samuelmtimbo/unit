@@ -114,7 +114,7 @@
   },
   "inputs": {
     "text": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "assoc",
           "pinId": "value"

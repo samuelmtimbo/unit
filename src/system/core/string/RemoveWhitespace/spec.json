@@ -27,7 +27,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ctvuqkf",
           "pinId": "a"
@@ -38,7 +38,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ctvuqkf",
           "pinId": "a"

@@ -1,7 +1,7 @@
 {
   "name": "prop x0 y0 x1 y1",
   "units": {
-    "mufuusddm": {
+    "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "key": {
@@ -10,7 +10,7 @@
         }
       }
     },
-    "hgrvjwb": {
+    "get0": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "key": {
@@ -19,7 +19,7 @@
         }
       }
     },
-    "hsgyjyuxa": {
+    "get1": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "key": {
@@ -28,7 +28,7 @@
         }
       }
     },
-    "xcvovdsn": {
+    "get2": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "key": {
@@ -39,23 +39,23 @@
     }
   },
   "merges": {
-    "zmaswjs": {
-      "mufuusddm": {
+    "0": {
+      "get": {
         "input": {
           "obj": true
         }
       },
-      "hsgyjyuxa": {
+      "get1": {
         "input": {
           "obj": true
         }
       },
-      "xcvovdsn": {
+      "get2": {
         "input": {
           "obj": true
         }
       },
-      "hgrvjwb": {
+      "get0": {
         "input": {
           "obj": true
         }
@@ -73,47 +73,47 @@
     ]
   },
   "inputs": {
-    "kiusigco": {
-      "pin": {
+    "{x0,y0,x1,y1}": {
+      "plug": {
         "0": {
-          "mergeId": "zmaswjs"
+          "mergeId": "0"
         }
       },
       "type": "object"
     }
   },
   "outputs": {
-    "htyb": {
-      "pin": {
+    "x1": {
+      "plug": {
         "0": {
-          "unitId": "hgrvjwb",
+          "unitId": "get0",
           "pinId": "value"
         }
       },
       "type": "any"
     },
-    "kzxphae": {
-      "pin": {
+    "y0": {
+      "plug": {
         "0": {
-          "unitId": "hsgyjyuxa",
+          "unitId": "get1",
           "pinId": "value"
         }
       },
       "type": "any"
     },
-    "ppmqen": {
-      "pin": {
+    "x0": {
+      "plug": {
         "0": {
-          "unitId": "mufuusddm",
+          "unitId": "get",
           "pinId": "value"
         }
       },
       "type": "any"
     },
-    "mlhf": {
-      "pin": {
+    "y1": {
+      "plug": {
         "0": {
-          "unitId": "xcvovdsn",
+          "unitId": "get2",
           "pinId": "value"
         }
       },

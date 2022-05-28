@@ -2,7 +2,7 @@
   "name": "charcode",
   "inputs": {
     "code": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fromcharcode",
           "pinId": "code"
@@ -11,7 +11,7 @@
       "ref": false
     },
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault",
           "pinId": "a"

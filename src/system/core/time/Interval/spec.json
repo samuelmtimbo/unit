@@ -22,19 +22,19 @@
   },
   "inputs": {
     "ms": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "timer",
           "pinId": "ms"
         }
       },
+      "functional": true,
       "type": "number"
     }
   },
   "outputs": {
     "ms": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "timer",
           "pinId": "ms"

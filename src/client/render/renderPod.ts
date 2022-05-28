@@ -1,4 +1,4 @@
-import { $Graph } from '../../interface/async/$Graph'
+import { $Graph } from '../../types/interface/async/$Graph'
 import { NOOP } from '../../NOOP'
 import { Pod } from '../../pod'
 import { System } from '../../system'

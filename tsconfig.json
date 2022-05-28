@@ -16,11 +16,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "keyofStringsOnly": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "skipDefaultLibCheck": true
   },
   "typeAcquisition": {
     "enable": false
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*.ts", "../server/util/auth/makeVerifyAuthToken.ts"],
   "exclude": ["node_modules", "lib", "build"]
 }

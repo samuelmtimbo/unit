@@ -2,22 +2,22 @@
   "name": "text span",
   "inputs": {
     "style": {
-      "type": "object",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "span",
           "pinId": "style"
         }
-      }
+      },
+      "type": "object"
     },
     "value": {
-      "type": "string",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "text",
           "pinId": "value"
         }
-      }
+      },
+      "type": "string"
     }
   },
   "outputs": {},

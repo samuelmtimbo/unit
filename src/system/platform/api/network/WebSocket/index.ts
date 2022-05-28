@@ -2,7 +2,7 @@ import {
   Semifunctional,
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
-import { CH } from '../../../../../interface/CH'
+import { CH } from '../../../../../types/interface/CH'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 

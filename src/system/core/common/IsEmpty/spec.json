@@ -23,7 +23,7 @@
   },
   "inputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lengthequals",
           "pinId": "a"
@@ -34,7 +34,7 @@
   },
   "outputs": {
     "empty": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lengthequals",
           "pinId": "equals"

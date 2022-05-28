@@ -2,7 +2,7 @@
   "name": "on context width value",
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -18,7 +18,7 @@
       }
     },
     "element": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getcontextwidth",
           "pinId": "element"
@@ -46,7 +46,7 @@
   },
   "outputs": {
     "width": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getcontextwidth",
           "pinId": "width"
@@ -63,7 +63,7 @@
       }
     },
     "context": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getcontextwidth",
           "pinId": "context"

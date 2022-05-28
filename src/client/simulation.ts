@@ -100,7 +100,7 @@ export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
     alphaTarget = 0,
     alphaDecay,
     velocityDecay = 0.2,
-    n = 3,
+    n = 1,
     stability = 1,
     force = NOOP,
   }: SimulationOpt) {
@@ -183,6 +183,9 @@ export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
   }
 
   public stability(_stability?: number): number {
+    if (_stability < 1 || _stability > 4) {
+      throw new Error('simulation stability must be between 1 and 4, inclusive')
+    }
     if (_stability !== undefined) {
       this._stability = _stability
     }
@@ -212,7 +215,8 @@ export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
     const F = 0.75 // friction
     const T = 1
 
-    const order = this._stability
+    // const order = this._stability
+    const order = 4
 
     const order_1 = order - 1
 

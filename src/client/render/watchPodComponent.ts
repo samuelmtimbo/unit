@@ -1,7 +1,7 @@
 import { Moment } from '../../debug/Moment'
 import { GraphSpecComponentAppendMomentData } from '../../debug/watchGraphUnitComponentAppendEvent'
 import { GraphSpecComponentRemoveMomentData } from '../../debug/watchGraphUnitComponentRemoveEvent'
-import { $Graph } from '../../interface/async/$Graph'
+import { $Graph } from '../../types/interface/async/$Graph'
 import { Pod } from '../../pod'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'

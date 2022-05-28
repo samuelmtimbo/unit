@@ -17,7 +17,7 @@
       "type": "`C`",
       "metadata": {
         "examples": [
-          "f27cae4e-fea8-11ea-b91e-db41e114c426"
+          "${unit:{id:'f27cae4e-fea8-11ea-b91e-db41e114c426'}}"
         ],
         "position": {
           "0": {

@@ -50,7 +50,7 @@
   },
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getheight",
           "pinId": "any"
@@ -63,19 +63,19 @@
       "type": "any"
     },
     "element": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "context",
           "pinId": "element"
         }
       },
+      "type": "`U`",
       "ref": true
     }
   },
   "outputs": {
     "width": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getwidth",
           "pinId": "width"
@@ -84,7 +84,7 @@
       "type": "any"
     },
     "height": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getheight",
           "pinId": "height"
@@ -93,7 +93,7 @@
       "type": "any"
     },
     "context": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "context",
           "pinId": "_self"

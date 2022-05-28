@@ -10,12 +10,7 @@
       }
     }
   },
-  "outputs": {
-    "board": {
-      "type": "`CA`",
-      "ref": true
-    }
-  },
+  "outputs": {},
   "metadata": {
     "icon": "square",
     "description": "context of the connected `element`",

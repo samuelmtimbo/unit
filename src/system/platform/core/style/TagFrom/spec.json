@@ -24,7 +24,7 @@
   },
   "inputs": {
     "from": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "hewiyie",
           "pinId": "v"
@@ -35,7 +35,7 @@
   },
   "outputs": {
     "{from}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "hewiyie",
           "pinId": "kv"

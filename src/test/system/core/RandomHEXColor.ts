@@ -56,14 +56,14 @@ const spec = {
   inputs: {
     any: {
       name: 'any',
-      pin: { 0: { unitId: 'wait', pinId: 'b' } },
+      plug: { 0: { unitId: 'wait', pinId: 'b' } },
       functional: true,
     },
   },
   outputs: {
     hex: {
       name: 'hex',
-      pin: { 0: { unitId: 'nstringbuilderfrom', pinId: 'str' } },
+      plug: { 0: { unitId: 'nstringbuilderfrom', pinId: 'str' } },
     },
   },
 } as GraphSpec

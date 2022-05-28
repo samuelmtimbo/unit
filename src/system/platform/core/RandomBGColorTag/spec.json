@@ -34,19 +34,19 @@
   },
   "inputs": {
     "any": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "randomhexcolor",
           "pinId": "any"
         }
       },
+      "functional": true,
       "type": "any"
     }
   },
   "outputs": {
     "{bc}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagbackgroundcolor",
           "pinId": "{bc}"

@@ -33,39 +33,39 @@
   },
   "inputs": {
     "test": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "not",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "boolean"
     },
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prependif",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     },
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prependif",
           "pinId": "b"
         }
       },
+      "functional": true,
       "type": "<A>"
     }
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prependif",
           "pinId": "a"

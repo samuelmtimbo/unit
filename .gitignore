@@ -18,6 +18,8 @@ lib/**/*
 
 build/**/*
 
+dist/**/*
+
 yarn-error.log
 
 .env

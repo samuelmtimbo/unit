@@ -2,7 +2,7 @@
   "name": "set color",
   "inputs": {
     "color": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "data"
@@ -19,7 +19,7 @@
       }
     },
     "context": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "unit"

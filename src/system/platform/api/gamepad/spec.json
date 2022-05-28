@@ -2,21 +2,33 @@
   "name": "gamepad",
   "type": "`U`",
   "inputs": {
-    "id": {
-      "type": "string"
+    "i": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "0"
+        ]
+      }
+    },
+    "done": {
+      "type": "any"
     }
   },
-  "outputs": {},
+  "outputs": {
+    "state": {
+      "type": "`V`&`EE`",
+      "ref": true
+    }
+  },
   "events": {},
   "metadata": {
     "icon": "gamepad",
-    "description": "remote GATT charact",
+    "description": "connect to gamepad controller",
     "complexity": 3,
-    "link": "https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTCharacteristic",
     "tags": [
       "platform",
       "api",
-      "bluetooth"
+      "gamepad"
     ]
   },
   "id": "77238fd9-a968-454d-b7ce-0277bc37475d",

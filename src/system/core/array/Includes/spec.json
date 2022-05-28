@@ -2,8 +2,7 @@
   "name": "includes",
   "inputs": {
     "a[]": {
-      "type": "<A>[]",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "kktcqlhms",
           "pinId": "init"
@@ -17,22 +16,23 @@
           "pinId": "any"
         }
       },
+      "type": "<A>[]",
       "functional": true
     },
     "a": {
-      "type": "<A>",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "rizvvu",
           "pinId": "init"
         }
       },
+      "type": "<A>",
       "functional": true
     }
   },
   "outputs": {
     "found": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "final"

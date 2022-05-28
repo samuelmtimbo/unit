@@ -3,7 +3,7 @@
   "inputs": {},
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "truefalse",
           "pinId": "a"

@@ -18,7 +18,7 @@
   "inputs": {},
   "outputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "identity",
           "pinId": "a"

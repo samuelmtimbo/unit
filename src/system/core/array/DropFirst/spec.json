@@ -20,7 +20,7 @@
   "merges": {},
   "inputs": {
     "ab": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "split",
           "pinId": "a"
@@ -29,7 +29,7 @@
       "type": "<A>[]"
     },
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "split",
           "pinId": "i"
@@ -40,7 +40,7 @@
   },
   "outputs": {
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "split",
           "pinId": "second"

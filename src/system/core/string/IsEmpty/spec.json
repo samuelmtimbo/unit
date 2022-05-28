@@ -39,7 +39,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "length",
           "pinId": "a"
@@ -50,7 +50,7 @@
   },
   "outputs": {
     "empty": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "equals",
           "pinId": "a = b"

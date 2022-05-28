@@ -18,13 +18,15 @@ const addId = '0'
 
 composition0.addUnit(
   {
-    id: ID_ADD,
-    input: {
-      b: {
-        data: 0,
+    unit: {
+      id: ID_ADD,
+      input: {
+        b: {
+          data: '0',
+        },
       },
+      output: {},
     },
-    output: {},
   },
   addId
 )
@@ -66,18 +68,20 @@ const composition1 = new Graph<{ number: number }, { sum: number }>(
 
 composition1.addUnit(
   {
-    id: ID_ADD,
-    input: {
-      a: {
-        data: 1,
-        constant: true,
+    unit: {
+      id: ID_ADD,
+      input: {
+        a: {
+          data: '1',
+          constant: true,
+        },
+        b: {
+          data: '2',
+          constant: true,
+        },
       },
-      b: {
-        data: 2,
-        constant: true,
-      },
+      output: {},
     },
-    output: {},
   },
   addId
 )

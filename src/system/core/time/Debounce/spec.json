@@ -53,7 +53,7 @@
   },
   "inputs": {
     "ms": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "a"
@@ -62,7 +62,7 @@
       "type": "number"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "memory",
           "pinId": "a"
@@ -73,7 +73,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "delay",
           "pinId": "a"

@@ -1,6 +1,6 @@
 import { EXEC, INIT } from './constant/STRING'
 import { RemotePort } from './RemotePort'
-import { BundleSpec } from './system/platform/method/process/BundleSpec'
+import { BundleSpec } from './types/BundleSpec'
 import { IPort } from './types/global/IPort'
 
 export class RemoteClient {

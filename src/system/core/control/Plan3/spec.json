@@ -33,7 +33,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "plan0",
           "pinId": "a"
@@ -44,7 +44,7 @@
   },
   "outputs": {
     "0": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "plan0",
           "pinId": "first"
@@ -53,7 +53,7 @@
       "type": "<A>"
     },
     "1": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "plan",
           "pinId": "first"
@@ -62,7 +62,7 @@
       "type": "<A>"
     },
     "2": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "plan",
           "pinId": "second"

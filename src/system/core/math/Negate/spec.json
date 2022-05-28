@@ -23,19 +23,19 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "multiply",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number"
     }
   },
   "outputs": {
     "-a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "multiply",
           "pinId": "a × b"

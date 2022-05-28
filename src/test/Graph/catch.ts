@@ -12,8 +12,8 @@ const graph = new Graph({}, {}, system, pod)
 
 graph.play()
 
-graph.addUnit({ id: ID_THROW }, 'throw')
-graph.addUnit({ id: ID_CATCH }, 'catch')
+graph.addUnit({ unit: { id: ID_THROW } }, 'throw')
+graph.addUnit({ unit: { id: ID_CATCH } }, 'catch')
 
 const catchy = graph.refUnit('catch')
 const throwy = graph.refUnit('throw')

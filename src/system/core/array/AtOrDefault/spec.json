@@ -112,7 +112,7 @@
   },
   "inputs": {
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
@@ -121,7 +121,7 @@
       "type": "number"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }
@@ -130,7 +130,7 @@
       "type": "<A>[]"
     },
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifnot",
           "pinId": "a"
@@ -142,7 +142,7 @@
   },
   "outputs": {
     "a[i] || d": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "jgunro"
         }

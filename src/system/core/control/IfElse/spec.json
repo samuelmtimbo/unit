@@ -37,27 +37,27 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "merge0"
         }
       },
+      "functional": true,
       "type": "<A>"
     },
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "merge1"
         }
       },
+      "functional": true,
       "type": "boolean"
     }
   },
   "outputs": {
     "if": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a if b"
@@ -66,7 +66,7 @@
       "type": "<A>"
     },
     "else": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifnot",
           "pinId": "a if not b"

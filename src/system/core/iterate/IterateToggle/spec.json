@@ -68,7 +68,7 @@
   },
   "inputs": {
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate",
           "pinId": "init"
@@ -77,7 +77,7 @@
       "type": "boolean"
     },
     "toggle": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "b"
@@ -88,7 +88,7 @@
   },
   "outputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate",
           "pinId": "current"

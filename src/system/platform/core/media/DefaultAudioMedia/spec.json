@@ -16,7 +16,7 @@
   "inputs": {},
   "outputs": {
     "stream": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getusermedia",
           "pinId": "stream"

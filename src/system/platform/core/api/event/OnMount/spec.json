@@ -2,25 +2,25 @@
   "name": "on mount",
   "inputs": {
     "element": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "unit"
         }
       },
+      "type": "`U`",
       "ref": true
     }
   },
   "outputs": {
     "event": {
-      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "data"
         }
-      }
+      },
+      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}"
     }
   },
   "units": {

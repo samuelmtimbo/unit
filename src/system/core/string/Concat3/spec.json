@@ -33,7 +33,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "concat",
           "pinId": "a"
@@ -42,7 +42,7 @@
       "type": "string"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "concat0",
           "pinId": "a"
@@ -51,7 +51,7 @@
       "type": "string"
     },
     "c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "concat0",
           "pinId": "b"
@@ -62,7 +62,7 @@
   },
   "outputs": {
     "abc": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "concat",
           "pinId": "ab"

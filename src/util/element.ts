@@ -12,6 +12,16 @@ export function insertBefore<T extends Node>(
   return node.insertBefore(newChild, refChild)
 }
 
+export function insertBeforeAt<T extends Node>(
+  node: Node,
+  newChild: T,
+  at: number
+): T {
+  const nextChild = node.childNodes.item(at)
+
+  return insertBefore(node, newChild, nextChild)
+}
+
 export function removeChild<T extends Node>(node: Node, oldChild: T): T {
   return node.removeChild(oldChild)
 }

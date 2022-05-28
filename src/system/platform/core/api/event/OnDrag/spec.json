@@ -2,8 +2,7 @@
   "name": "on drag",
   "inputs": {
     "element": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "unit"
@@ -21,12 +20,13 @@
           "pinId": "element"
         }
       },
+      "type": "`U`",
       "ref": true
     }
   },
   "outputs": {
     "move": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "data"
@@ -35,7 +35,7 @@
       "type": "any"
     },
     "down": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -43,7 +43,7 @@
       "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}"
     },
     "up": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }

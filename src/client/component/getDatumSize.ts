@@ -2,10 +2,10 @@ import { TreeNode, TreeNodeType } from '../../spec/parser'
 import { Size } from '../util/geometry'
 
 // export const DELIMITER_WIDTH: number = 8
-export const DELIMITER_WIDTH: number = 7
+export const DELIMITER_WIDTH: number = 6
 export const DELIMITER_HEIGHT: number = 16
-export const COMMA_WIDTH: number = 7
-export const COLON_WIDTH: number = 7
+export const COMMA_WIDTH: number = 6
+export const COLON_WIDTH: number = 6
 export const SPACE_WIDTH: number = 2
 export const CONTAINER_ROW_MARGIN: number = 1
 export const CONTAINER_COLUMN_LEFT_MARGIN: number = 7
@@ -21,7 +21,7 @@ export function getLeafWidth(value: string): number {
   if (value === '') {
     return MIN_WIDTH
   }
-  return Math.min(Math.max(value.length * 6, MIN_WIDTH) + 2, MAX_WIDTH)
+  return Math.min(Math.max(value.length * 6, MIN_WIDTH), MAX_WIDTH)
 }
 
 export const LEAF_HEIGHT: number = 16

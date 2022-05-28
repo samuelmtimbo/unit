@@ -1,6 +1,8 @@
 import { Dict } from '../types/Dict'
 import { Mode } from './mode'
 
+export type Theme = 'light' | 'dark'
+
 export const COLOR_GRAYSCALE_BASE00 = '#FCFCFC'
 export const COLOR_GRAYSCALE_BASE01 = '#E5E5E5'
 export const COLOR_GRAYSCALE_BASE02 = '#D3D3D3'
@@ -87,7 +89,7 @@ export const LIGHT_LINK_MODE_COLOR: Dict<string> = {
   data: COLOR_DARK_LINK_CHARTREUSE,
 }
 
-export const getActiveColor = ($theme: 'dark' | 'light'): string => {
+export const getActiveColor = ($theme: Theme): string => {
   if ($theme === 'dark') {
     return COLOR_YELLOW
   } else {
@@ -96,7 +98,7 @@ export const getActiveColor = ($theme: 'dark' | 'light'): string => {
 }
 
 export const getThemeModeColor = (
-  theme: 'dark' | 'light',
+  theme: Theme,
   mode: Mode,
   _default: string
 ) => {
@@ -115,11 +117,11 @@ export const getThemeLinkModeColor = (theme: string, mode: Mode): string => {
   }
 }
 
-export const themeBackgroundColor = ($theme: 'light' | 'dark'): string => {
+export const themeBackgroundColor = ($theme: Theme): string => {
   return $theme === 'dark' ? '#1f1f1f' : '#d1d1d1'
 }
 
-export const oppositeTheme = ($theme: 'light' | 'dark'): 'light' | 'dark' => {
+export const oppositeTheme = ($theme: Theme): Theme => {
   return $theme === 'dark' ? 'light' : 'dark'
 }
 
@@ -183,7 +185,7 @@ export function RGBtoHSL(
   return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)]
 }
 
-export function defaultThemeColor(theme: 'light' | 'dark'): string {
+export function defaultThemeColor(theme: Theme): string {
   if (theme === 'dark') {
     return COLOR_GRAYSCALE_BASE00
   } else {
@@ -193,7 +195,7 @@ export function defaultThemeColor(theme: 'light' | 'dark'): string {
 
 // TODO Performance
 export function applyTheme(
-  theme: 'light' | 'dark',
+  theme: Theme,
   color: string,
   factor: number
 ): string {

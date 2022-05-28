@@ -40,7 +40,7 @@
   },
   "inputs": {
     "ms": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "delaypush",
           "pinId": "ms"
@@ -51,7 +51,7 @@
   },
   "outputs": {
     "tag": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "delaypush",
           "pinId": "a"

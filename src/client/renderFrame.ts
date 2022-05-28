@@ -33,7 +33,9 @@ export function renderFrame(
 
   const $resizeObserver = new ResizeObserver((entries) => {
     const entry = entries[0]
+
     const { width, height } = entry.contentRect
+
     resize($context, width, height)
   })
 

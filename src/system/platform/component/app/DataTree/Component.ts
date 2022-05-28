@@ -37,16 +37,19 @@ const STYLE_SEPARATOR = {
   alignItems: 'center',
   textAlign: 'center',
   height: '16px',
-  width: '7px',
+  width: '6px',
   fontSize: '12px',
+  lineHeight: '16px',
 }
 
 const STYLE_DELIMITER = {
   display: 'flex',
+  alignItems: 'center',
   textAlign: 'center',
   height: '16px',
-  width: '7px',
-  fontSize: '14px',
+  width: '6px',
+  fontSize: '12px',
+  // lineHeight: '16px',
 }
 
 const STYLE_PARENT = (overflow: boolean) => {
@@ -77,9 +80,9 @@ const STYLE_CONTAINER = (overflow: boolean) => {
 const STYLE_COMMA = {
   display: 'flex',
   height: '16px',
-  width: '7px',
+  width: '6px',
   textAlign: 'left',
-  fontSize: '14px',
+  fontSize: '12px',
 }
 
 const STYLE_SPACE = {
@@ -159,6 +162,7 @@ export default class DataTree extends Element<IHTMLDivElement, Props> {
     [TreeNodeType.Class]: this.__primitive,
     [TreeNodeType.ClassLiteral]: this.__primitive,
     [TreeNodeType.ArithmeticExpression]: this.__primitive,
+    [TreeNodeType.PropExpression]: this.__primitive,
     [TreeNodeType.KeyValue]: this.__key_value,
     [TreeNodeType.ArrayExpression]: this.__array_expression,
     [TreeNodeType.ObjectExpression]: this.__object_expression,
@@ -766,7 +770,9 @@ export default class DataTree extends Element<IHTMLDivElement, Props> {
     }
   }
 
-  public focus = (options?: FocusOptions | undefined) => {
+  public focus = (
+    options: FocusOptions | undefined = { preventScroll: true }
+  ) => {
     if (this._leaf) {
       this._leaf.focus(options)
     }

@@ -33,7 +33,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge",
           "pinId": "a"
@@ -42,7 +42,7 @@
       "type": "object"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge0",
           "pinId": "a"
@@ -51,7 +51,7 @@
       "type": "object"
     },
     "c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge0",
           "pinId": "b"
@@ -62,7 +62,7 @@
   },
   "outputs": {
     "abc": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge",
           "pinId": "ab"

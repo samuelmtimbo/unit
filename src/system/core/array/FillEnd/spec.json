@@ -75,7 +75,7 @@
   },
   "inputs": {
     "a[]": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "nqijmihi"
         }
@@ -83,7 +83,7 @@
       "type": "<A>[]"
     },
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "subtract",
           "pinId": "a"
@@ -92,7 +92,7 @@
       "type": "number"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "init",
           "pinId": "a"
@@ -103,7 +103,7 @@
   },
   "outputs": {
     "a[]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "concat",
           "pinId": "ab"

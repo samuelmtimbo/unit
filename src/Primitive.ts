@@ -566,7 +566,7 @@ export class Primitive<
     this._forwarding_empty = false
   }
 
-  protected _forward_empty(name: string): void {
+  protected _forward_empty(name: keyof O): void {
     this._forwarding_empty = true
     const output = this._output[name]
     output.take()
@@ -579,7 +579,7 @@ export class Primitive<
     this._backwarding = false
   }
 
-  protected _backward(name: string): void {
+  protected _backward(name: keyof I): void {
     this._backwarding = true
     const input = this._input[name]
     input.pull()
@@ -589,4 +589,75 @@ export class Primitive<
   public onDataInputInvalid(name: string) {}
 
   public onRefInputInvalid(name: string) {}
+
+  public snapshotSelf(): Dict<any> {
+    return {
+      ...super.snapshotSelf(),
+      __buffer: this.__buffer,
+      _forwarding: this._forwarding,
+      _backwarding: this._backwarding,
+      _forwarding_empty: this._forwarding_empty,
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    const { __buffer, _forwarding, _backwarding, _forwarding_empty, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    this.__buffer = __buffer || []
+
+    this._forwarding = _forwarding
+    this._backwarding = _backwarding
+    this._forwarding_empty = _forwarding_empty
+
+    this._i = {}
+    this._o = {}
+
+    this._active_i_count = 0
+    this._active_o_count = 0
+
+    this._i_start_count = 0
+    this._i_start = {}
+
+    this._o_invalid_count = 0
+    this._o_invalid = {}
+  
+    this._i_invalid_count = 0
+    this._i_invalid = {}
+
+    for (let name in this._input) {
+      const pin = this._input[name]
+      const data = pin.peak()
+      
+      this._i[name] = data
+      
+      if (data !== undefined) {
+        this._active_i_count++
+
+        this._i_start_count++
+        this._i_start[name] = true
+
+        if (pin.invalid())  {
+          this._i_invalid_count++
+          this._i_invalid[name] = true
+        }
+      }
+    }
+
+    for (let name in this._output) {
+      const output = this._output[name]
+      const data = output.peak()
+      this._o[name] = data
+      
+      if (data !== undefined) {
+        this._active_o_count++
+
+        if (output.invalid())  {
+          this._o_invalid_count++
+          this._o_invalid[name] = true
+        }
+      }
+    }
+  }
 }

@@ -18,6 +18,10 @@ export default function isEqual(a: any, b: any): boolean {
   }
 
   if (ta === 'object') {
+    if (a === b) {
+      return true
+    }
+
     const la = Object.keys(a).length
     const lb = Object.keys(b).length
 
@@ -28,6 +32,7 @@ export default function isEqual(a: any, b: any): boolean {
     for (const ka in a) {
       const va = a[ka]
       const vb = b[ka]
+      
       if (!isEqual(va, vb)) {
         return false
       }

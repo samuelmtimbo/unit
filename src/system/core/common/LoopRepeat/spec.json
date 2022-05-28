@@ -47,7 +47,7 @@
   },
   "inputs": {
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "init"
@@ -56,7 +56,7 @@
       "type": "<A>"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "test"
@@ -67,7 +67,7 @@
   },
   "outputs": {
     "local": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "local"
@@ -76,7 +76,7 @@
       "type": "<A>"
     },
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "wceujsyeq"
         }
@@ -84,7 +84,7 @@
       "type": "<A>"
     },
     "final": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "final"

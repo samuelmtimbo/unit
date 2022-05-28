@@ -1,0 +1,23 @@
+import assert from '../../../../util/assert'
+import { getDivTextSize } from '../../../../util/text/getDivTextSize'
+
+assert.deepEqual(getDivTextSize('identity', 12, 12), {
+  width: 48,
+  height: 12,
+})
+assert.deepEqual(getDivTextSize('find last index from or default', 12, 12), {
+  width: 60,
+  height: 36,
+})
+assert.deepEqual(getDivTextSize('012345678900012345678900', 12, 12), {
+  width: 72,
+  height: 24,
+})
+assert.deepEqual(getDivTextSize('012345678901234567890123456789', 12, 12), {
+  width: 72,
+  height: 36,
+})
+assert.deepEqual(getDivTextSize('not logged in', 12, 18), {
+  width: 78,
+  height: 12,
+})

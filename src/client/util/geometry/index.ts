@@ -30,6 +30,10 @@ export type Rect = {
   height: number
 }
 
+export type Trasform = {
+  x: number
+}
+
 export type Position = Point
 
 export const DEG = Math.PI / 180
@@ -301,7 +305,7 @@ export function pointInRectangle(
 ) {
   const region = rectangleRegion(x, y, width, height, u)
   const tan = u.x / u.y
-  let a = Math.atan2(u.y, u.x)
+  const a = Math.atan2(u.y, u.x)
   if (region === 'left' || region === 'right') {
     const sx = Math.sign(u.x)
     return {
@@ -480,8 +484,28 @@ export function subtractVector(a: Point, b: Point): Point {
   return { x: a.x - b.x, y: a.y - b.y }
 }
 
-export function boundingRadius(width: number, height: number) {
+export function resizeVector(a: Point, k: number): Point {
+  return { x: a.x * k, y: a.y * k }
+}
+
+export function rectBoundingRadius(width: number, height: number) {
   return Math.sqrt(width * width + height + height) / 2
+}
+
+export function rectsBoundingRect(rects: Rect[]): Rect {
+  let minX = Infinity
+  let minY = Infinity
+  let maxX = -Infinity
+  let maxY = -Infinity
+
+  for (const rect of rects) {
+    minX = Math.min(minX, rect.x)
+    minY = Math.min(minY, rect.y)
+    maxX = Math.max(maxX, rect.x + rect.width)
+    maxY = Math.max(maxY, rect.y + rect.height)
+  }
+
+  return { x: minX, y: minY, width: maxX - minX, height: maxY - minY }
 }
 
 export function rectangleRegion(
@@ -593,7 +617,7 @@ export function _surfaceDistance(
   const d = distance(a_x, a_y, b_x, b_y)
   const u = unitVector(a_x, a_y, b_x, b_y)
 
-  let a_d: number = _centerToSurfaceDistance(
+  const a_d: number = _centerToSurfaceDistance(
     a_shape,
     a_x,
     a_y,
@@ -602,7 +626,7 @@ export function _surfaceDistance(
     a_height,
     u
   )
-  let b_d: number = _centerToSurfaceDistance(
+  const b_d: number = _centerToSurfaceDistance(
     b_shape,
     b_x,
     b_y,
@@ -639,8 +663,8 @@ export function surfaceDistanceY(
   const d = Math.abs(a_y - b_y)
   const u = Math.sign(a_y - b_y)
 
-  let a_d: number = a.height / 2
-  let b_d: number = b.height / 2
+  const a_d: number = a.height / 2
+  const b_d: number = b.height / 2
 
   let l: number
   const ds = b_d + a_d

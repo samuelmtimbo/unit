@@ -23,5 +23,5 @@ export default function resizeWith(
     }
   })
 
-  resizeObserver.observe(target)
+  // resizeObserver.observe(target)
 }

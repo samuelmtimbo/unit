@@ -2,13 +2,13 @@
   "name": "add pie",
   "inputs": {
     "d": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "moveto",
           "pinId": "d"
         }
       },
+      "functional": true,
       "type": "any[][]",
       "metadata": {
         "position": {
@@ -20,13 +20,13 @@
       }
     },
     "rad": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "negate",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number",
       "metadata": {
         "position": {
@@ -38,7 +38,7 @@
       }
     },
     "x": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "moveto",
           "pinId": "x"
@@ -71,7 +71,7 @@
       "type": "number"
     },
     "y": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "moveto",
           "pinId": "y"
@@ -104,7 +104,7 @@
       "type": "number"
     },
     "r": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add",
           "pinId": "b"
@@ -131,7 +131,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "closepath",
           "pinId": "d"

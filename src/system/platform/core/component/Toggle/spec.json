@@ -2,7 +2,7 @@
   "name": "toggle",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault0",
           "pinId": "a"
@@ -19,7 +19,7 @@
       }
     },
     "onColor": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default",
           "pinId": "a"
@@ -36,7 +36,7 @@
       }
     },
     "offColor": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default0",
           "pinId": "a"

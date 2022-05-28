@@ -69,18 +69,18 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "nhyud"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     }
   },
   "outputs": {
     "first": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "splitat",
           "pinId": "first"
@@ -89,7 +89,7 @@
       "type": "<A>[]"
     },
     "second": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "splitat",
           "pinId": "second"

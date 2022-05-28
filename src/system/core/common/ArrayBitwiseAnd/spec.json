@@ -109,29 +109,29 @@
   },
   "inputs": {
     "b[]": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "level",
           "pinId": "b[]"
         }
       },
+      "functional": true,
       "type": "number[]"
     },
     "a[]": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "level",
           "pinId": "a[]"
         }
       },
+      "functional": true,
       "type": "number[]"
     }
   },
   "outputs": {
     "a & b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "narraybuilder",
           "pinId": "a[]"

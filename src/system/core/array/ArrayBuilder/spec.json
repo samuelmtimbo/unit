@@ -23,7 +23,7 @@
   },
   "inputs": {
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "arraybuilderfrom",
           "pinId": "test"
@@ -32,7 +32,7 @@
       "type": "boolean"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "arraybuilderfrom",
           "pinId": "a"
@@ -43,7 +43,7 @@
   },
   "outputs": {
     "acc": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "arraybuilderfrom",
           "pinId": "acc"
@@ -52,7 +52,7 @@
       "type": "<A>[]"
     },
     "a[]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "arraybuilderfrom",
           "pinId": "a[]"
@@ -61,7 +61,7 @@
       "type": "<A>[]"
     },
     "local": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "arraybuilderfrom",
           "pinId": "local"

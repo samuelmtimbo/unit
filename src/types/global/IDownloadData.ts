@@ -1,6 +1,6 @@
 export type IDownloadDataOpt = {
   name: string
-  data: boolean | number | string
+  data: string
   mimeType: string
   charset: string
 }

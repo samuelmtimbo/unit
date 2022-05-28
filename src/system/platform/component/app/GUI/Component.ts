@@ -301,11 +301,21 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     this.$element = $element
     this.$slot['default'] = foreground
     this.$slot['1'] = background
+    this.$slotId = {
+      default: 'foreground',
+      '1': 'background',
+    }
+    this.$slotTarget = {
+      default: 'default',
+      '1': 'default',
+    }
     this.$subComponent = {
-      control: gui,
+      gui,
+      control,
       modes,
       search,
       cabinet,
+      foreground,
       background,
     }
     this.$unbundled = false
@@ -427,14 +437,22 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     this._refresh_color()
   }
 
+  private _hidden = false
+
   public hide(animate: boolean): void {
     // console.log('GUI', 'hide')
+
+    this._hidden = true
 
     this.hide_background(animate)
 
     this.hide_search(animate)
     this.hide_modes(animate)
     this.hide_cabinet(animate)
+  }
+
+  public is_hidden(): boolean {
+    return this._hidden
   }
 
   public _animate_background = (
@@ -534,6 +552,8 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
 
   public show(animate: boolean): void {
     // console.log('GUI', 'show')
+
+    this._hidden = false
 
     this.show_background(animate)
 

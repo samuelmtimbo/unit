@@ -71,7 +71,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -79,7 +79,7 @@
       "type": "string"
     },
     "at": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
@@ -89,7 +89,7 @@
   },
   "outputs": {
     "second": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slice",
           "pinId": "a"
@@ -98,7 +98,7 @@
       "type": "string"
     },
     "first": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slice0",
           "pinId": "a"

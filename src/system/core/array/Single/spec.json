@@ -23,7 +23,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "append",
           "pinId": "b"
@@ -34,7 +34,7 @@
   },
   "outputs": {
     "[a]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "append",
           "pinId": "a"

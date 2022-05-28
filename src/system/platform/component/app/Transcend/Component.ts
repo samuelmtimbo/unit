@@ -261,6 +261,12 @@ export default class Transcend extends Element<IHTMLDivElement, Props> {
   private _y_animation: number
 
   private _animate_y = (target_y: number): void => {
+    const {
+      api: {
+        animation: { requestAnimationFrame, cancelAnimationFrame },
+      },
+    } = this.$system
+
     this._y_target = target_y
 
     if (this._y_animation) {

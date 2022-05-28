@@ -15,9 +15,7 @@ false && watchGraphAndLog(composition0)
 
 composition0.addUnit(
   {
-    id: ID_THROW,
-    input: {},
-    output: {},
+    unit: { id: ID_THROW, input: {}, output: {} },
   },
   throwId0
 )
@@ -37,7 +35,7 @@ composition0.reset()
 assert.equal(composition0.getErr(), null)
 
 composition0.exposeInputSet(
-  { name: 'message', pin: { 0: { unitId: throwId0, pinId: 'message' } } },
+  { name: 'message', plug: { 0: { unitId: throwId0, pinId: 'message' } } },
   'message'
 )
 
@@ -59,9 +57,11 @@ false && watchGraphAndLog(composition1)
 
 composition1.addUnit(
   {
-    id: ID_THROW,
-    input: { message: { data: '"honolulu"' } },
-    output: {},
+    unit: {
+      id: ID_THROW,
+      input: { message: { data: '"honolulu"' } },
+      output: {},
+    },
   },
   throwId0
 )
@@ -78,17 +78,17 @@ false && watchGraphAndLog(composition2)
 
 composition2.addUnit(
   {
-    id: ID_THROW,
-    input: { message: { data: '"bang!"' } },
-    output: {},
+    unit: { id: ID_THROW, input: { message: { data: '"bang!"' } }, output: {} },
   },
   throwId0
 )
 composition2.addUnit(
   {
-    id: ID_THROW,
-    input: { message: { data: '"baboom"' } },
-    output: {},
+    unit: {
+      id: ID_THROW,
+      input: { message: { data: '"baboom"' } },
+      output: {},
+    },
   },
   throwId1
 )
@@ -106,9 +106,11 @@ false && watchGraphAndLog(composition3)
 
 composition3.addUnit(
   {
-    id: ID_THROW,
-    input: { message: { data: '"badumtz"' } },
-    output: {},
+    unit: {
+      id: ID_THROW,
+      input: { message: { data: '"badumtz"' } },
+      output: {},
+    },
   },
   throwId0
 )
@@ -121,6 +123,6 @@ composition4.play()
 const throwUnit = new Throw(system, pod)
 throwUnit.pushInput('message', 'mameleco')
 
-composition4.addUnit({ id: ID_THROW }, 'throw', throwUnit)
+composition4.addUnit({ unit: { id: ID_THROW } }, 'throw', throwUnit)
 
 assert.equal(composition4.getErr(), 'mameleco')

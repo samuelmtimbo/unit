@@ -36,7 +36,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "qyykyqg",
           "pinId": "obj"
@@ -47,7 +47,7 @@
   },
   "outputs": {
     "!empty": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "qwicogom",
           "pinId": "!a"

@@ -1,5 +1,14 @@
 import { Dict } from '../types/Dict'
 
+export function forObjVK<A, B>(
+  obj: Dict<A>,
+  callback: (value: A, key: string) => B
+): void {
+  for (const key in obj) {
+    callback(obj[key], key)
+  }
+}
+
 export function mapObjVK<A, B>(
   obj: Dict<A>,
   callback: (value: A, key: string) => B

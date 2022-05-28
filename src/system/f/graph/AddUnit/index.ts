@@ -1,15 +1,15 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { getSpec } from '../../../../client/spec'
-import { G } from '../../../../interface/G'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { GraphUnitSpec } from '../../../../types'
-import { UnitClass } from '../../../../types/UnitClass'
+import { G } from '../../../../types/interface/G'
+import { UnitBundle } from '../../../../types/UnitBundle'
 
 export interface I<T> {
   id: string
-  Class: UnitClass<any>
+  Class: UnitBundle<any>
   graph: G
 }
 
@@ -41,20 +41,25 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
       graph,
     }: {
       id: string
-      Class: UnitClass<any>
+      Class: UnitBundle<any>
       graph: G
     },
     done: Done<O<T>>
   ): void {
-    const { specs } = this.__system
-
     try {
       const { __bundle } = Class
       const { unit: __unit } = __bundle
       const { id: __id, input: __inputs = {} } = __unit
-      const spec = getSpec(specs, __id)
+
+      const spec = getSpec(
+        { ...__bundle.specs, ...this.__pod.specs, ...this.__system.specs },
+        __id
+      )
+
       const unit_spec: GraphUnitSpec = { id: __id, input: {}, output: {} }
+
       const { inputs = {}, outputs = {} } = spec
+
       for (const inputId in inputs) {
         unit_spec.input[inputId] = unit_spec.input[inputId] || {}
         const __input = __inputs[inputId]
@@ -68,6 +73,7 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
           unit_spec.input[inputId].ignored = defaultIgnored
         }
       }
+
       for (const outputId in outputs) {
         const output = outputs[outputId]
         const { defaultIgnored } = output
@@ -76,7 +82,9 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
           unit_spec.output[outputId].ignored = defaultIgnored
         }
       }
-      graph.addUnit(unit_spec, id)
+
+      graph.addUnit({ unit: unit_spec }, id)
+
       done({})
     } catch (err) {
       done(undefined, err.message)

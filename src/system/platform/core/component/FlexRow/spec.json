@@ -41,7 +41,7 @@
   },
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault",
           "pinId": "a"

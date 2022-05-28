@@ -1,5 +1,5 @@
 // import { INDEX_JS } from '../static/js/index.js'
-import { BundleSpec } from '../../system/platform/method/process/BundleSpec'
+import { BundleSpec } from '../../types/BundleSpec'
 import { FONT_DATA_URI } from '../static/font/dataURI'
 
 const INDEX_JS = 'console.log("TODO")'

@@ -116,17 +116,17 @@
   },
   "inputs": {
     "value": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if3",
           "pinId": "c"
         }
       },
+      "functional": true,
       "type": "<A>"
     },
     "key": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "7"
         }
@@ -134,7 +134,7 @@
       "type": "number|string"
     },
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "6"
         }
@@ -142,19 +142,19 @@
       "type": "object"
     },
     "d": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifnot",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "boolean"
     }
   },
   "outputs": {
     "equal": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }

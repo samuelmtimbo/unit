@@ -39,7 +39,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "length0",
           "pinId": "a"
@@ -48,7 +48,7 @@
       "type": "<A>[]"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "length1",
           "pinId": "a"
@@ -59,7 +59,7 @@
   },
   "outputs": {
     "length": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add",
           "pinId": "a + b"

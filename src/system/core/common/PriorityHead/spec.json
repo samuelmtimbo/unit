@@ -2,29 +2,29 @@
   "name": "priority head",
   "inputs": {
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "headordefault1",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number[]"
     },
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "headordefault0",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number[]"
     }
   },
   "outputs": {
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prependif",
           "pinId": "a"
@@ -33,7 +33,7 @@
       "type": "number[]"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prependifnot",
           "pinId": "a"
@@ -42,7 +42,7 @@
       "type": "number[]"
     },
     "head": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "picklesser",
           "pinId": "lesser"

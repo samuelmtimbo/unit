@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { B } from '../../../../interface/B'
-import { CH } from '../../../../interface/CH'
+import { B } from '../../../../types/interface/B'
+import { CH } from '../../../../types/interface/CH'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 

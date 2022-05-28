@@ -6,5 +6,6 @@ export default function mergePropStyle<T>(
   style: Dict<string>
 ) {
   const current = component.getProp('style')
+  
   component.setProp('style', { ...current, ...style })
 }

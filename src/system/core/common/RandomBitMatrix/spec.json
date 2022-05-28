@@ -71,7 +71,7 @@
   },
   "inputs": {
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "mrxes"
         }
@@ -81,7 +81,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "narraybuilder",
           "pinId": "a[]"

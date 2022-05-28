@@ -13,6 +13,7 @@ import { makePointerEnterListener } from './event/pointer/pointerenter'
 import { makePointerLeaveListener } from './event/pointer/pointerleave'
 import { makePointerMoveListener } from './event/pointer/pointermove'
 import { makePointerUpListener } from './event/pointer/pointerup'
+import { makeWheelListener } from './event/wheel'
 import { Listener } from './Listener'
 
 export function makeEventListener(
@@ -50,6 +51,8 @@ export function makeEventListener(
       return makeKeyupListener(callback)
     case 'keypress':
       return makeKeypressListener(callback)
+    case 'wheel':
+      return makeWheelListener(callback)
     default:
       return makeCustomListener(event, callback)
   }

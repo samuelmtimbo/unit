@@ -1,8 +1,9 @@
 import { IOElement } from '../../client/IOElement'
+import { PositionObserver } from '../../client/PositionObserver'
 import { System } from '../../system'
 
 export interface IPositionObserverCostructor {
-  new (system: System, callback: IPositionCallback): IPositionObserver
+  new (system: System, callback: IPositionCallback): PositionObserver
 }
 
 export interface IPositionObserver {

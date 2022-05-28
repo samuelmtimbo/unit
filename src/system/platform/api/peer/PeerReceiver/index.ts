@@ -3,7 +3,7 @@ import { Peer } from '../../../../../api/peer/Peer'
 import { $ } from '../../../../../Class/$'
 import { FunctionalEvents } from '../../../../../Class/Functional'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { ST } from '../../../../../interface/ST'
+import { ST } from '../../../../../types/interface/ST'
 import { NOOP } from '../../../../../NOOP'
 import { Pod } from '../../../../../pod'
 import { evaluate } from '../../../../../spec/evaluate'
@@ -11,6 +11,7 @@ import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { wrapMediaStream } from '../../../../../wrap/MediaStream'
 
 export interface I<T> {
   offer: string
@@ -156,14 +157,7 @@ export default class PeerReceiver<T> extends Semifunctional<
     }
     const start_listener = (stream: MediaStream) => {
       console.log('Receiver', 'Peer', 'start', stream)
-      const _stream = new (class Stream extends $ implements ST {
-        __: string[] = ['ST']
-
-        stream(callback: Callback<MediaStream>): Unlisten {
-          callback(stream)
-          return NOOP
-        }
-      })(this.__system, this.__pod)
+      const _stream = wrapMediaStream(stream, this.__system, this.__pod)
       this._output.stream.push(_stream)
     }
     const stop_listener = () => {

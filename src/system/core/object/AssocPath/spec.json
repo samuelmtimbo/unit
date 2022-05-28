@@ -190,7 +190,7 @@
   },
   "inputs": {
     "path": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a"
@@ -204,7 +204,7 @@
       "type": "(number|string)[]"
     },
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifelse",
           "pinId": "a"
@@ -214,7 +214,7 @@
       "functional": true
     },
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if0",
           "pinId": "a"
@@ -226,7 +226,7 @@
   },
   "outputs": {
     "result": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifelse",
           "pinId": "else"

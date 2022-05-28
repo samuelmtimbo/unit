@@ -1,7 +1,7 @@
 {
   "name": "HTTP basic auth",
   "units": {
-    "huetekhp": {
+    "concat": {
       "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
       "input": {
         "b": {
@@ -10,13 +10,13 @@
         }
       }
     },
-    "mwxga": {
+    "concat0": {
       "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6"
     },
-    "qthvyxad": {
+    "encode": {
       "id": "ee7b692f-5fe5-43c3-b636-aacca92b0bc7"
     },
-    "mouzpjs": {
+    "concat1": {
       "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
       "input": {
         "a": {
@@ -27,37 +27,37 @@
     }
   },
   "merges": {
-    "swoxql": {
-      "huetekhp": {
+    "0": {
+      "concat": {
         "output": {
           "ab": true
         }
       },
-      "mwxga": {
+      "concat0": {
         "input": {
           "a": true
         }
       }
     },
-    "rgivlljdc": {
-      "mwxga": {
+    "1": {
+      "concat0": {
         "output": {
           "ab": true
         }
       },
-      "qthvyxad": {
+      "encode": {
         "input": {
           "a": true
         }
       }
     },
-    "hxhsbe": {
-      "qthvyxad": {
+    "2": {
+      "encode": {
         "output": {
           "b": true
         }
       },
-      "mouzpjs": {
+      "concat1": {
         "input": {
           "b": true
         }
@@ -75,19 +75,19 @@
     ]
   },
   "inputs": {
-    "zqodyann": {
-      "pin": {
+    "username": {
+      "plug": {
         "0": {
-          "unitId": "huetekhp",
+          "unitId": "concat",
           "pinId": "a"
         }
       },
       "type": "string"
     },
-    "pvtauibkq": {
-      "pin": {
+    "password": {
+      "plug": {
         "0": {
-          "unitId": "mwxga",
+          "unitId": "concat0",
           "pinId": "b"
         }
       },
@@ -95,10 +95,10 @@
     }
   },
   "outputs": {
-    "pcwkv": {
-      "pin": {
+    "auth": {
+      "plug": {
         "0": {
-          "unitId": "mouzpjs",
+          "unitId": "concat1",
           "pinId": "ab"
         }
       },

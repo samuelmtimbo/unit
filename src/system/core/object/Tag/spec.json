@@ -23,7 +23,7 @@
   },
   "inputs": {
     "k": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "key"
@@ -32,7 +32,7 @@
       "type": "number|string"
     },
     "v": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "value"
@@ -43,7 +43,7 @@
   },
   "outputs": {
     "kv": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "obj"

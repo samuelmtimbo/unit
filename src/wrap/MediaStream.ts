@@ -1,18 +1,25 @@
 import { $ } from '../Class/$'
-import { ST } from '../interface/ST'
 import { NOOP } from '../NOOP'
+import { Pod } from '../pod'
+import { System } from '../system'
 import { Callback } from '../types/Callback'
+import { ST } from '../types/interface/ST'
 import { Unlisten } from '../types/Unlisten'
 
-export function wrapMediaStream(mediaStream: MediaStream): ST {
+export function wrapMediaStream(
+  mediaStream: MediaStream,
+  system: System,
+  pod: Pod
+): ST {
   const stream = new (class Stream extends $ implements ST {
     __: string[] = ['ST']
 
     stream(callback: Callback<MediaStream>): Unlisten {
       callback(mediaStream)
+
       return NOOP
     }
-  })(this.__system, this.__pod)
+  })(system, pod)
 
   return stream
 }

@@ -20,7 +20,7 @@ composition0.addUnits({
     id: ID_IDENTITY,
     input: {
       a: {
-        data: 0,
+        data: '0',
       },
     },
     output: {},
@@ -76,8 +76,8 @@ const composition1 = new Graph<{}, {}>({}, {}, system, pod)
 composition1.play()
 const id3 = 'id3'
 const id4 = 'id4'
-composition1.addUnit({ id: ID_IDENTITY }, id3)
-composition1.addUnit({ id: ID_IDENTITY }, id4)
+composition1.addUnit({ unit: { id: ID_IDENTITY } }, id3)
+composition1.addUnit({ unit: { id: ID_IDENTITY } }, id4)
 composition1.addMerge(
   {
     [id3]: {
@@ -117,9 +117,9 @@ composition1.addMerge(
 
 const composition2 = new Graph<{}, {}>({}, {}, system, pod)
 composition2.play()
-composition2.addUnit({ id: ID_IDENTITY }, id0)
-composition2.addUnit({ id: ID_IDENTITY }, id1)
-composition2.addUnit({ id: ID_IDENTITY }, id2)
+composition2.addUnit({ unit: { id: ID_IDENTITY } }, id0)
+composition2.addUnit({ unit: { id: ID_IDENTITY } }, id1)
+composition2.addUnit({ unit: { id: ID_IDENTITY } }, id2)
 composition2.addMerge(
   {
     [id0]: {
@@ -161,16 +161,18 @@ composition4.play()
 
 composition4.addUnit(
   {
-    id: ID_FILTER,
-    output: {
-      a: {
-        ignored: true,
-      },
-      i: {
-        ignored: true,
-      },
-      test: {
-        ignored: true,
+    unit: {
+      id: ID_FILTER,
+      output: {
+        a: {
+          ignored: true,
+        },
+        i: {
+          ignored: true,
+        },
+        test: {
+          ignored: true,
+        },
       },
     },
   },
@@ -178,7 +180,7 @@ composition4.addUnit(
 )
 composition4.addUnit(
   {
-    id: ID_TRUE,
+    unit: { id: ID_TRUE },
   },
   UNIT_ID_TRUE
 )

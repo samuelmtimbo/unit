@@ -1,7 +1,7 @@
 {
   "name": "harmonic series",
   "units": {
-    "sjrbu": {
+    "range": {
       "id": "29e43ad7-be5e-437f-8f0f-2df996c8b89c",
       "input": {
         "a": {
@@ -14,7 +14,7 @@
         "i": {}
       }
     },
-    "xeazo": {
+    "divide": {
       "id": "158d85eb-28b8-4355-b637-28a7ec751233",
       "input": {
         "a": {
@@ -27,7 +27,7 @@
         "a ÷ b": {}
       }
     },
-    "utxsz": {
+    "increment": {
       "id": "fafeadd7-06a8-4bb0-9fa5-2149d1b5208e",
       "input": {
         "a": {}
@@ -36,54 +36,54 @@
         "a + 1": {}
       }
     },
-    "csyuenbue": {
+    "sumnextn": {
       "id": "17583c27-6d05-4325-aea0-17237243d7c2"
     }
   },
   "merges": {
-    "dvglc": {
-      "sjrbu": {
+    "0": {
+      "range": {
         "output": {
           "i": true
         }
       },
-      "utxsz": {
+      "increment": {
         "input": {
           "a": true
         }
       }
     },
-    "yyasl": {
-      "utxsz": {
+    "1": {
+      "increment": {
         "output": {
           "a + 1": true
         }
       },
-      "xeazo": {
+      "divide": {
         "input": {
           "b": true
         }
       }
     },
-    "lhdax": {
-      "xeazo": {
+    "2": {
+      "divide": {
         "output": {
           "a ÷ b": true
         }
       },
-      "csyuenbue": {
+      "sumnextn": {
         "input": {
           "a": true
         }
       }
     },
-    "tmell": {
-      "sjrbu": {
+    "3": {
+      "range": {
         "input": {
           "b": true
         }
       },
-      "csyuenbue": {
+      "sumnextn": {
         "input": {
           "n": true
         }
@@ -91,20 +91,20 @@
     }
   },
   "inputs": {
-    "rgeok": {
-      "pin": {
+    "n": {
+      "plug": {
         "0": {
-          "mergeId": "tmell"
+          "mergeId": "3"
         }
       },
       "type": "number"
     }
   },
   "outputs": {
-    "usdsajlo": {
-      "pin": {
+    "a[i]": {
+      "plug": {
         "0": {
-          "unitId": "csyuenbue",
+          "unitId": "sumnextn",
           "pinId": "sum"
         }
       },

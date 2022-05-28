@@ -1,7 +1,7 @@
 {
   "name": "get body",
   "units": {
-    "ghxyrljwi": {
+    "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "key": {
@@ -23,10 +23,10 @@
     ]
   },
   "inputs": {
-    "vlirfp": {
-      "pin": {
+    "{body}": {
+      "plug": {
         "0": {
-          "unitId": "ghxyrljwi",
+          "unitId": "get",
           "pinId": "obj"
         }
       },
@@ -34,10 +34,10 @@
     }
   },
   "outputs": {
-    "hmadbdycv": {
-      "pin": {
+    "body": {
+      "plug": {
         "0": {
-          "unitId": "ghxyrljwi",
+          "unitId": "get",
           "pinId": "value"
         }
       },

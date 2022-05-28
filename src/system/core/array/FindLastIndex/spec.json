@@ -29,7 +29,7 @@
   "merges": {},
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfrom",
           "pinId": "a"
@@ -38,7 +38,7 @@
       "type": "<A>[]"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfrom",
           "pinId": "test"
@@ -49,7 +49,7 @@
   },
   "outputs": {
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfrom",
           "pinId": "i"
@@ -59,7 +59,7 @@
       "type": "number"
     },
     "result": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfrom",
           "pinId": "result"
@@ -68,7 +68,7 @@
       "type": "number"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfrom",
           "pinId": "a"
@@ -78,7 +78,7 @@
       "type": "<A>[]"
     },
     "a[i]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfrom",
           "pinId": "a[i]"
@@ -87,7 +87,7 @@
       "type": "<A>"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfrom",
           "pinId": "test"

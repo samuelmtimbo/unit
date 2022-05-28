@@ -43,7 +43,7 @@
   },
   "inputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "equals",
           "pinId": "b"
@@ -52,7 +52,7 @@
       "type": "<A>"
     },
     "key": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prop",
           "pinId": "key"
@@ -61,7 +61,7 @@
       "type": "number|string"
     },
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prop",
           "pinId": "obj"
@@ -72,7 +72,7 @@
   },
   "outputs": {
     "equal": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "equals",
           "pinId": "a = b"

@@ -24,7 +24,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "length",
           "pinId": "a"
@@ -35,7 +35,7 @@
   },
   "outputs": {
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "randomnaturallte",
           "pinId": "i"

@@ -32,7 +32,7 @@
     }
   },
   "merges": {
-    "oseftkv": {
+    "0": {
       "loop": {
         "output": {
           "current": true
@@ -44,7 +44,7 @@
         }
       }
     },
-    "rdnhyxjs": {
+    "1": {
       "loop": {
         "output": {
           "local": true
@@ -56,7 +56,7 @@
         }
       }
     },
-    "lknmsvbd": {
+    "2": {
       "loop": {
         "input": {
           "test": true
@@ -73,7 +73,7 @@
         }
       }
     },
-    "agdxevb": {
+    "3": {
       "loop": {
         "input": {
           "next": true
@@ -85,7 +85,7 @@
         }
       }
     },
-    "lgvnshoa": {
+    "4": {
       "lessthan": {
         "input": {
           "a": true
@@ -97,7 +97,7 @@
         }
       }
     },
-    "ocbpwfqdt": {
+    "5": {
       "lessthan": {
         "input": {
           "b": true
@@ -121,17 +121,17 @@
   },
   "inputs": {
     "from": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "init"
         }
       },
+      "functional": true,
       "type": "string"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "concat",
           "pinId": "b"
@@ -140,19 +140,19 @@
       "type": "string"
     },
     "n": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "looprepeat",
           "pinId": "init"
         }
       },
+      "functional": true,
       "type": "number"
     }
   },
   "outputs": {
     "str": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "final"

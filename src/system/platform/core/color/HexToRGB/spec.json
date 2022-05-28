@@ -215,18 +215,18 @@
   },
   "inputs": {
     "hex": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "9"
         }
       },
+      "functional": true,
       "type": "string"
     }
   },
   "outputs": {
     "RGB": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "narraybuilder",
           "pinId": "a[]"

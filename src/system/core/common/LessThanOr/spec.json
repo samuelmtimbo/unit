@@ -36,7 +36,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "merge0"
         }
@@ -44,7 +44,7 @@
       "type": "number"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "merge1"
         }
@@ -54,7 +54,7 @@
   },
   "outputs": {
     "a < b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lt",
           "pinId": "a < b"
@@ -63,7 +63,7 @@
       "type": "boolean"
     },
     "a ≥ b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "gte",
           "pinId": "a ≥ b"

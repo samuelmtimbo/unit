@@ -33,49 +33,49 @@
   },
   "inputs": {
     "d": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge",
           "pinId": "b"
         }
       },
+      "functional": true,
       "type": "object"
     },
     "c": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "object"
     },
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge3",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "object"
     },
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge3",
           "pinId": "b"
         }
       },
+      "functional": true,
       "type": "object"
     }
   },
   "outputs": {
     "abcd": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge3",
           "pinId": "abc"

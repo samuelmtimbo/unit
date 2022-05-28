@@ -27,7 +27,7 @@
   "merges": {},
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick0",
           "pinId": "b"
@@ -41,7 +41,7 @@
       "type": "<A>"
     },
     "c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick0",
           "pinId": "c"
@@ -55,7 +55,7 @@
       "type": "boolean"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick0",
           "pinId": "a"
@@ -71,7 +71,7 @@
   },
   "outputs": {
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "a"
@@ -80,7 +80,7 @@
       "type": "<A>"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick0",
           "pinId": "a"

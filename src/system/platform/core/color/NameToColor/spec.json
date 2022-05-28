@@ -24,7 +24,7 @@
   },
   "inputs": {
     "name": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prop",
           "pinId": "key"
@@ -35,13 +35,13 @@
   },
   "outputs": {
     "color": {
-      "type": "string",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prop",
           "pinId": "value"
         }
-      }
+      },
+      "type": "string"
     }
   },
   "id": "5f1dfd62-e6ac-4c1d-80e4-c0e99440def9",

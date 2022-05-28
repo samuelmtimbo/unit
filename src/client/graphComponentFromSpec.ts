@@ -1,5 +1,5 @@
-import { AsyncGraph } from '../interface/async/AsyncGraph'
-import { G } from '../interface/G'
+import { AsyncGraph } from '../types/interface/async/AsyncGraph'
+import { G } from '../types/interface/G'
 import { Pod } from '../pod'
 import { fromSpec } from '../spec/fromSpec'
 import { System } from '../system'

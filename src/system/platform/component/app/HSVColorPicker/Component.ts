@@ -165,7 +165,7 @@ export default class HSVColorPicker extends Element<IHTMLDivElement, Props> {
 
     this.registerRoot(color_picker)
 
-    // PERFORMANCE
+    // PERF
     this.addEventListener(makePointerDownListener(this._on_pointer_down))
     this.addEventListener(makePointerMoveListener(this._on_pointer_move))
     this.addEventListener(makePointerUpListener(this._on_pointer_up))

@@ -63,8 +63,6 @@ export function attachGesture(system: System): void {
 
     // $root.setPointerCapture(pointerId)
 
-    system.cache.pointerCapture[pointerId] = root
-
     const path = createElementNS(namespaceURI, 'path')
 
     svg.appendChild(path)
@@ -102,10 +100,6 @@ export function attachGesture(system: System): void {
 
       const { pointerId: _pointerId } = _event
       if (_pointerId === pointerId) {
-        // $root.releasePointerCapture(pointerId)
-
-        delete system.cache.pointerCapture[pointerId]
-
         svg.removeChild(path)
 
         unlistenPointerMove()

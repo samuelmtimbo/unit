@@ -86,6 +86,8 @@ export function removeHeapNode<T>(
   if (parent) {
     const i: number = +(parent.children[1] === heap)
     if (first && second) {
+      first.parent = null
+      second.parent = null
       if (predicate(first.value, second.value)) {
         parent.children[i] = first
         first.parent = parent
@@ -187,34 +189,32 @@ export function setHeapNode<T>(
     } else {
       removeHeapNode(heap, predicate)
       if (p0) {
-        second.parent = null
         addHeapNode(second, heap, predicate)
       } else if (p1) {
-        first.parent = null
         addHeapNode(first, heap, predicate)
       } else {
         if (predicate(first.value, second.value)) {
-          first.parent = parent
           addHeapNode(first, heap, predicate)
         } else {
-          second.parent = parent
           addHeapNode(second, heap, predicate)
         }
       }
     }
   } else if (first) {
     if (predicate(newValue, first.value)) {
-      //
+      refreshParent(heap, predicate)
     } else {
       removeHeapNode(heap, predicate)
       addHeapNode(first, heap, predicate)
+      refreshParent(first, predicate)
     }
   } else if (second) {
     if (predicate(newValue, second.value)) {
-      //
+      refreshParent(heap, predicate)
     } else {
       removeHeapNode(heap, predicate)
       addHeapNode(second, heap, predicate)
+      refreshParent(second, predicate)
     }
   } else {
     refreshParent(heap, predicate)

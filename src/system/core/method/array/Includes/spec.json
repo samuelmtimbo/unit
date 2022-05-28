@@ -2,7 +2,7 @@
   "name": "includes",
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "indexof",
           "pinId": "a"
@@ -10,7 +10,7 @@
       }
     },
     "a[]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "indexof",
           "pinId": "a[]"
@@ -21,7 +21,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "greaterthan",
           "pinId": "a > b"

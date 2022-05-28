@@ -44,7 +44,7 @@
   },
   "inputs": {
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "numbertostring",
           "pinId": "n"
@@ -55,7 +55,7 @@
   },
   "outputs": {
     "px": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "concat",
           "pinId": "ab"

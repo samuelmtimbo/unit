@@ -1,44 +1,34 @@
 {
   "name": "pick branch",
   "units": {
-    "tpuphtn": {
+    "pick": {
       "id": "396497e4-f8e7-4573-95c9-a4f186a5cd05",
-      "input": {
-        "a": {
-          "data": "1"
-        },
-        "b": {
-          "data": "2"
-        },
-        "c": {
-          "data": "true"
-        }
-      }
+      "input": {}
     },
-    "wtfrczwm": {
+    "ifelse": {
       "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
     }
   },
   "merges": {
     "yeejayjv": {
-      "tpuphtn": {
+      "pick": {
         "input": {
           "c": true
         }
       },
-      "wtfrczwm": {
+      "ifelse": {
         "input": {
           "b": true
         }
       }
     },
     "croouzwck": {
-      "tpuphtn": {
+      "pick": {
         "output": {
           "a": true
         }
       },
-      "wtfrczwm": {
+      "ifelse": {
         "input": {
           "a": true
         }
@@ -55,27 +45,27 @@
     ]
   },
   "inputs": {
-    "wirvgg": {
-      "pin": {
+    "test": {
+      "plug": {
         "0": {
           "mergeId": "yeejayjv"
         }
       },
       "type": "boolean"
     },
-    "qthlrbq": {
-      "pin": {
+    "a": {
+      "plug": {
         "0": {
-          "unitId": "tpuphtn",
+          "unitId": "pick",
           "pinId": "a"
         }
       },
       "type": "<A>"
     },
-    "euuic": {
-      "pin": {
+    "b": {
+      "plug": {
         "0": {
-          "unitId": "tpuphtn",
+          "unitId": "pick",
           "pinId": "b"
         }
       },
@@ -83,19 +73,19 @@
     }
   },
   "outputs": {
-    "uxzqwkgaj": {
-      "pin": {
+    "a": {
+      "plug": {
         "0": {
-          "unitId": "wtfrczwm",
+          "unitId": "ifelse",
           "pinId": "if"
         }
       },
       "type": "<A>"
     },
-    "iuhms": {
-      "pin": {
+    "b": {
+      "plug": {
         "0": {
-          "unitId": "wtfrczwm",
+          "unitId": "ifelse",
           "pinId": "else"
         }
       },

@@ -53,7 +53,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add",
           "pinId": "a"
@@ -62,7 +62,7 @@
       "type": "number"
     },
     "from": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate",
           "pinId": "init"
@@ -73,7 +73,7 @@
   },
   "outputs": {
     "sum": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate",
           "pinId": "current"

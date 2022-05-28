@@ -1,13 +1,13 @@
-import { AsyncCCall, AsyncCRef, AsyncCWatch } from '../interface/async/AsyncC_'
-import { AsyncGCall, AsyncGRef, AsyncGWatch } from '../interface/async/AsyncG_'
-import { AsyncJCall, AsyncJRef, AsyncJWatch } from '../interface/async/AsyncJ_'
+import { AsyncCCall, AsyncCRef, AsyncCWatch } from '../types/interface/async/AsyncC'
+import { AsyncGCall, AsyncGRef, AsyncGWatch } from '../types/interface/async/AsyncG'
+import { AsyncJCall, AsyncJRef, AsyncJWatch } from '../types/interface/async/AsyncJ'
 import {
   AsyncSTCall,
   AsyncSTRef,
   AsyncSTWatch,
-} from '../interface/async/AsyncST_'
-import { AsyncUCall, AsyncURef, AsyncUWatch } from '../interface/async/AsyncU_'
-import { AsyncVCall, AsyncVRef, AsyncVWatch } from '../interface/async/AsyncV_'
+} from '../types/interface/async/AsyncST'
+import { AsyncUCall, AsyncURef, AsyncUWatch } from '../types/interface/async/AsyncU'
+import { AsyncVCall, AsyncVRef, AsyncVWatch } from '../types/interface/async/AsyncV'
 import { $makeRemoteUnitAPI } from './remote/$makeRemoteUnitAPI'
 import { RemoteAPI } from './RemoteAPI'
 

@@ -45,27 +45,27 @@
   },
   "inputs": {
     "a[]": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fillend",
           "pinId": "a[]"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     },
     "b[]": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fillend0",
           "pinId": "a[]"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     },
     "with": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -73,7 +73,7 @@
       "type": "<A>"
     },
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
@@ -83,7 +83,7 @@
   },
   "outputs": {
     "a[]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fillend",
           "pinId": "a[]"
@@ -92,7 +92,7 @@
       "type": "<A>[]"
     },
     "b[]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fillend0",
           "pinId": "a[]"

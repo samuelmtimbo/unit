@@ -13,11 +13,11 @@
         }
       }
     },
-    "child": {
-      "type": "`C`",
+    "at": {
+      "type": "number",
       "metadata": {
         "examples": [
-          "f27cae4e-fea8-11ea-b91e-db41e114c426"
+          "0"
         ],
         "position": {
           "0": {
@@ -29,7 +29,7 @@
     }
   },
   "outputs": {
-    "has": {
+    "test": {
       "type": "boolean"
     }
   },

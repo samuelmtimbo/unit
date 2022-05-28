@@ -2,7 +2,7 @@
   "name": "hello world",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "widthtext",
           "pinId": "style"

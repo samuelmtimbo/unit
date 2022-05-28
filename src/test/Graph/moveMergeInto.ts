@@ -22,24 +22,24 @@ composition0.play()
 
 composition0.addUnit(
   {
-    id: ID_EMPTY,
+    unit: {id: ID_EMPTY},
   },
   UNIT_ID_EMTPY
 )
 composition0.addUnit(
   {
-    id: ID_IDENTITY,
+    unit: {id: ID_IDENTITY,}
   },
   UNIT_ID_IDENTITY
 )
 composition0.addUnit(
   {
-    id: ID_IDENTITY,
+    unit: {id: ID_IDENTITY,}
   },
   UNIT_ID_IDENTITY_0
 )
 
-const empty = composition0.refUnit(UNIT_ID_EMTPY)
+const empty = composition0.refUnit(UNIT_ID_EMTPY) as Graph
 const identity = composition0.refUnit(UNIT_ID_IDENTITY)
 const identity0 = composition0.refUnit(UNIT_ID_IDENTITY_0)
 
@@ -61,26 +61,32 @@ composition0.addMerge(
   '0'
 )
 
-composition0.moveMergeInto(UNIT_ID_EMTPY, '0', '0', '1', {
-  [UNIT_ID_IDENTITY]: {
-    output: {
-      a: {
-        pinId: 'a',
-        subPinId: '0',
+composition0.moveMergeInto(
+  UNIT_ID_EMTPY,
+  '0',
+  { mergeId: '0', pinId: 'a' },
+  { mergeId: '1', pinId: 'a' },
+  {
+    [UNIT_ID_IDENTITY]: {
+      output: {
+        a: {
+          pinId: 'a',
+          subPinId: '0',
+        },
+      },
+      input: {},
+    },
+    [UNIT_ID_IDENTITY_0]: {
+      output: {},
+      input: {
+        a: {
+          pinId: 'a',
+          subPinId: '0',
+        },
       },
     },
-    input: {},
-  },
-  [UNIT_ID_IDENTITY_0]: {
-    output: {},
-    input: {
-      a: {
-        pinId: 'a',
-        subPinId: '0',
-      },
-    },
-  },
-})
+  }
+)
 
 assert.equal(composition0.getUnitCount(), 3)
 assert.equal(composition0.getMergeCount(), 2)
@@ -90,3 +96,9 @@ assert.equal(empty.getOutputCount(), 1)
 
 assert(empty.hasInputNamed('a'))
 assert(empty.hasOutputNamed('a'))
+
+assert.deepEqual(empty.getExposedInputSpec('a'), {
+  plug: {
+    '0': {},
+  },
+})

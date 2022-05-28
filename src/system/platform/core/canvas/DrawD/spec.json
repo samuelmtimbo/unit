@@ -44,7 +44,7 @@
   },
   "inputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a"
@@ -53,13 +53,13 @@
       "type": "(number|string)[][]"
     },
     "canvas": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "draw",
           "pinId": "canvas"
         }
       },
+      "type": "`U`",
       "ref": true
     }
   },

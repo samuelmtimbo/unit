@@ -2,7 +2,7 @@
   "name": "fibonacci series",
   "inputs": {
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "ragdaf"
         }
@@ -20,7 +20,7 @@
   },
   "outputs": {
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "jqwwaapt"
         }
@@ -36,7 +36,7 @@
       "type": "number"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "phsezeim"
         }

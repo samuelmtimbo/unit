@@ -2,7 +2,7 @@
   "name": "switch a b",
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "switch",
           "pinId": "a"
@@ -10,7 +10,7 @@
       }
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "switch",
           "pinId": "b"
@@ -20,7 +20,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "switch",
           "pinId": "a"

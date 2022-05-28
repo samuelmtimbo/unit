@@ -11,5 +11,11 @@ export function componentFromUnitSpec(
 ): Component {
   const { id } = unitSpec
 
-  return componentFromSpecId(system, pod, id, {} /** TODO */)
+  return componentFromSpecId(
+    system,
+    pod,
+    { ...this.$system.specs, ...this.$pod.specs },
+    id,
+    {} /** TODO */
+  )
 }

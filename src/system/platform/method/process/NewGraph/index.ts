@@ -4,7 +4,7 @@ import { Graph } from '../../../../../Class/Graph'
 import { Pod } from '../../../../../pod'
 import { spawn, start } from '../../../../../spawn'
 import { System } from '../../../../../system'
-import { BundleSpec } from '../BundleSpec'
+import { BundleSpec } from '../../../../../types/BundleSpec'
 
 export interface I {
   bundle: BundleSpec
@@ -34,7 +34,9 @@ export default class NewGraph extends Functional<I, O> {
   }
 
   f({ bundle }: I, done: Done<O>): void {
-    const __pod = spawn(this.__system)
+    const { specs = {} } = bundle
+
+    const __pod = spawn(this.__system, specs)
 
     const graph = start(this.__system, __pod, bundle)
 

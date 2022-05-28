@@ -82,6 +82,7 @@ export function listenPointerEvent(
   const pointerEventListener = (_event: PointerEvent) => {
     // console.log(type)
     const { $context } = component
+
     const event = _IOPointerEvent($context, _event)
     listener(event, _event)
   }

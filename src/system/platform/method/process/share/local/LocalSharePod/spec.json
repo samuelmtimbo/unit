@@ -8,6 +8,9 @@
     },
     "opt": {
       "type": "{}"
+    },
+    "done": {
+      "type": "any"
     }
   },
   "outputs": {

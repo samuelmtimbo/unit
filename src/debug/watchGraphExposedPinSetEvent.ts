@@ -1,12 +1,12 @@
 import { Graph } from '../Class/Graph'
-import { GraphExposedPinSpec } from '../types'
+import { GraphPinSpec } from '../types'
 import { IO } from '../types/IO'
 import { Moment } from './Moment'
 
 export interface GraphExposedPinSetMomentData {
   type: IO
   pinId: string
-  pinSpec: GraphExposedPinSpec
+  pinSpec: GraphPinSpec
 }
 
 export interface GraphExposedPinSetMoment
@@ -17,7 +17,7 @@ export function watchGraphExposedPinSetEvent(
   graph: Graph,
   callback: (moment) => void
 ): () => void {
-  const listener = (type: IO, pinId: string, pinSpec: GraphExposedPinSpec) => {
+  const listener = (type: IO, pinId: string, pinSpec: GraphPinSpec) => {
     callback({
       type: 'graph',
       event,

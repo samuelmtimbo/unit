@@ -2,7 +2,7 @@
   "name": "stroke unit logo",
   "inputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "talvwpyq",
           "pinId": "d"
@@ -21,7 +21,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addfillcircle1",
           "pinId": "d"

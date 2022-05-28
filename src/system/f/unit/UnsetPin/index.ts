@@ -1,23 +1,27 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { getSpec } from '../../../../client/spec'
-import { cloneUnitClass } from '../../../../cloneUnitClass'
+import { cloneUnitBundle } from '../../../../cloneUnitClass'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { IO } from '../../../../types/IO'
-import { UnitClass } from '../../../../types/UnitClass'
+import { UnitBundle } from '../../../../types/UnitBundle'
+import Unit from '../../meta/Unit'
 
-export interface I<T> {
-  unit: UnitClass
+export interface I<T extends Unit> {
+  unit: UnitBundle<T>
   type: IO
   name: string
 }
 
-export interface O<T> {
-  unit: UnitClass
+export interface O<T extends Unit> {
+  unit: UnitBundle<T>
 }
 
-export default class TakePinData<T> extends Functional<I<T>, O<T>> {
+export default class TakePinData<T extends Unit> extends Functional<
+  I<T>,
+  O<T>
+> {
   constructor(system: System, pod: Pod) {
     super(
       {
@@ -43,13 +47,13 @@ export default class TakePinData<T> extends Functional<I<T>, O<T>> {
       return
     }
 
-    const next_unit: UnitClass = cloneUnitClass(unit)
+    const NewBundle: UnitBundle = cloneUnitBundle(unit)
 
-    next_unit.__bundle.unit.input = next_unit.__bundle.unit.input || {}
-    next_unit.__bundle.unit.input[name] =
-      next_unit.__bundle.unit.input[name] || {}
-    delete next_unit.__bundle.unit.input[name].data
+    NewBundle.__bundle.unit.input = NewBundle.__bundle.unit.input || {}
+    NewBundle.__bundle.unit.input[name] =
+      NewBundle.__bundle.unit.input[name] || {}
+    delete NewBundle.__bundle.unit.input[name].data
 
-    done({ unit: next_unit })
+    done({ unit: NewBundle })
   }
 }

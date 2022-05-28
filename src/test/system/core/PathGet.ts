@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import pathGet from '../../../system/core/object/PathGet/f'
+import pathGet from '../../../system/core/object/DeepGet/f'
 
 assert.deepEqual(pathGet({}, []), {})
 assert.deepEqual(pathGet({ a: 1, b: 2 }, []), { a: 1, b: 2 })

@@ -1,4 +1,4 @@
-import { UnitBundleSpec } from '../system/platform/method/process/UnitBundleSpec'
+import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { Moment } from './Moment'
 
 export interface ComponentAppendChildMoment extends Moment<UnitBundleSpec> {}

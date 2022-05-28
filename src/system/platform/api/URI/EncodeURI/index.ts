@@ -26,7 +26,9 @@ export default class EncodeURI<T> extends Functional<I<T>, O<T>> {
 
   f({ uri }: I<T>, done: Done<O<T>>): void {
     const {
-      method: { encodeURI },
+      api: {
+        uri: { encodeURI },
+      },
     } = this.__system
 
     let encoded

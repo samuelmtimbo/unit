@@ -2,7 +2,7 @@
   "name": "drag accumulate",
   "inputs": {
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifelse",
           "pinId": "b"
@@ -10,7 +10,7 @@
       }
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifelse",
           "pinId": "a"
@@ -18,7 +18,7 @@
       }
     },
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate0",
           "pinId": "init"
@@ -28,7 +28,7 @@
   },
   "outputs": {
     "a + Δ": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add0",
           "pinId": "a + b"

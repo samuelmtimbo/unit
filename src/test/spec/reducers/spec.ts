@@ -22,20 +22,21 @@ import {
   setUnitPinData,
 } from '../../../spec/reducers/spec'
 import { getMergePinCount } from '../../../spec/util'
+import { ID_IDENTITY } from '../../../system/_ids'
 
 assert.deepEqual(
   {
     name: '?',
     units: {
-      qweer: {
-        id: 'system/f/Identity',
+      identity: {
+        id: ID_IDENTITY,
       },
     },
     merges: {},
     inputs: {
       dfgte: {
         name: 'foo',
-        pin: { '0': { unitId: 'qweer', pinId: 'tfgre' } },
+        plug: { '0': { unitId: 'identity', pinId: 'tfgre' } },
       },
     },
     outputs: {},
@@ -47,13 +48,13 @@ assert.deepEqual(
   exposeInputSet(
     {
       id: 'dfgte',
-      input: { name: 'foo', pin: { '0': { unitId: 'qweer', pinId: 'tfgre' } } },
+      input: { name: 'foo', plug: { '0': { unitId: 'identity', pinId: 'tfgre' } } },
     },
     {
       name: '?',
       units: {
-        qweer: {
-          id: 'system/f/Identity',
+        identity: {
+          id: ID_IDENTITY,
         },
       },
       merges: {},
@@ -71,8 +72,8 @@ assert.deepEqual(
   {
     name: '?',
     units: {
-      qweer: {
-        id: 'system/f/Identity',
+      identity: {
+        id: ID_IDENTITY,
       },
     },
     merges: {},
@@ -88,13 +89,13 @@ assert.deepEqual(
     {
       name: '?',
       units: {
-        qweer: {
-          id: 'system/f/Identity',
+        identity: {
+          id: ID_IDENTITY,
         },
       },
       merges: {},
       inputs: {
-        frtdk: { pin: { 0: { pinId: 'bar', unitId: 'qweer' } }, name: 'foo' },
+        frtdk: { plug: { 0: { pinId: 'bar', unitId: 'identity' } }, name: 'foo' },
       },
       outputs: {},
       metadata: {
@@ -109,13 +110,13 @@ assert.deepEqual(
   {
     name: '?',
     units: {
-      qweer: {
-        id: 'system/f/Identity',
+      identity: {
+        id: ID_IDENTITY,
       },
     },
     merges: {},
     inputs: {
-      asdrw: { pin: { 0: { pinId: 'foo', unitId: 'qweer' } }, name: 'zaz' },
+      asdrw: { plug: { 0: { pinId: 'foo', unitId: 'identity' } }, name: 'zaz' },
     },
     outputs: {},
     metadata: {
@@ -128,13 +129,13 @@ assert.deepEqual(
     {
       name: '?',
       units: {
-        qweer: {
-          id: 'system/f/Identity',
+        identity: {
+          id: ID_IDENTITY,
         },
       },
       merges: {},
       inputs: {
-        asdrw: { pin: { 0: { pinId: 'foo', unitId: 'qweer' } }, name: 'bar' },
+        asdrw: { plug: { 0: { pinId: 'foo', unitId: 'identity' } }, name: 'bar' },
       },
       outputs: {},
       metadata: {
@@ -149,14 +150,14 @@ assert.deepEqual(
   {
     name: '?',
     units: {
-      qweer: {
-        id: 'system/f/Identity',
+      identity: {
+        id: ID_IDENTITY,
       },
     },
     merges: {},
     inputs: {},
     outputs: {
-      llkfd: { pin: { 0: { unitId: 'qwert', pinId: 'bar' } }, name: 'foo' },
+      llkfd: { plug: { 0: { unitId: 'identity', pinId: 'bar' } }, name: 'foo' },
     },
     metadata: {
       icon: null,
@@ -166,13 +167,13 @@ assert.deepEqual(
   exposeOutputSet(
     {
       id: 'llkfd',
-      output: { pin: { 0: { unitId: 'qwert', pinId: 'bar' } }, name: 'foo' },
+      output: { plug: { 0: { unitId: 'identity', pinId: 'bar' } }, name: 'foo' },
     },
     {
       name: '?',
       units: {
-        qweer: {
-          id: 'system/f/Identity',
+        identity: {
+          id: ID_IDENTITY,
         },
       },
       merges: {},
@@ -190,8 +191,8 @@ assert.deepEqual(
   {
     name: '?',
     units: {
-      qwert: {
-        id: 'system/f/Identity',
+      identity: {
+        id: ID_IDENTITY,
       },
     },
     merges: {},
@@ -207,14 +208,14 @@ assert.deepEqual(
     {
       name: '?',
       units: {
-        qwert: {
-          id: 'system/f/Identity',
+        identity: {
+          id: ID_IDENTITY,
         },
       },
       merges: {},
       inputs: {},
       outputs: {
-        oriur: { pin: { 0: { pinId: 'oriur', unitId: 'qwert' } }, name: 'foo' },
+        oriur: { plug: { 0: { pinId: 'oriur', unitId: 'identity' } }, name: 'foo' },
       },
       metadata: {
         icon: null,
@@ -232,7 +233,7 @@ assert.deepEqual(
     inputs: {},
     outputs: {
       gghdb: {
-        pin: { 0: { pinId: 'foo', unitId: '0' } },
+        plug: { 0: { pinId: 'foo', unitId: '0' } },
         name: 'zaz',
         functional: true,
       },
@@ -251,7 +252,7 @@ assert.deepEqual(
       inputs: {},
       outputs: {
         gghdb: {
-          pin: { 0: { pinId: 'foo', unitId: '0' } },
+          plug: { 0: { pinId: 'foo', unitId: '0' } },
           name: 'zaz',
         },
       },
@@ -289,14 +290,14 @@ assert.deepEqual(
       merge0: { if0: { input: { a: true } }, if1: { input: { a: true } } },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { unitId: 'if0', pinId: 'b' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { unitId: 'if0', pinId: 'b' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: null, description: '...' },
@@ -319,14 +320,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '...' },
@@ -350,14 +351,14 @@ assert.deepEqual(
       merge2: { not: { output: { '!a': true } }, if1: { input: { b: true } } },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: 'branch', description: '' },
@@ -380,14 +381,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: 'branch', description: '' },
@@ -412,14 +413,14 @@ assert.deepEqual(
       merge2: { not: { output: { '!a': true } }, if1: { input: { b: true } } },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: 'branch', description: '' },
@@ -442,14 +443,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '' },
@@ -474,14 +475,14 @@ assert.deepEqual(
       merge2: { not: { output: { '!a': true } }, if1: { input: { b: true } } },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: null, description: '...' },
@@ -504,14 +505,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '...' },
@@ -536,14 +537,14 @@ assert.deepEqual(
       merge2: { not: { output: { '!a': true } }, if1: { input: { b: true } } },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: null, description: '...' },
@@ -553,7 +554,7 @@ assert.deepEqual(
     {
       name: 'if else',
       units: {
-        if0: { id: 'system/f/control/If', input: { a: { data: 1 } } },
+        if0: { id: 'system/f/control/If', input: { a: { data: "1" } } },
         if1: { id: 'system/f/control/If' },
         not: { id: 'system/f/logic/Not' },
       },
@@ -566,14 +567,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '...' },
@@ -598,14 +599,14 @@ assert.deepEqual(
       merge2: { not: { output: { '!a': true } }, if1: { input: { b: true } } },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: null, description: '...' },
@@ -628,14 +629,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '...' },
@@ -660,14 +661,14 @@ assert.deepEqual(
       merge2: { not: { output: { '!a': true } }, if1: { input: { b: true } } },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: null, description: '...' },
@@ -690,14 +691,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '...' },
@@ -730,7 +731,7 @@ assert.deepEqual(
     inputs: {
       a: {
         name: 'a',
-        pin: { 0: { mergeId: 'uzzat' } },
+        plug: { 0: { mergeId: 'uzzat' } },
       },
     },
     outputs: {},
@@ -761,7 +762,7 @@ assert.deepEqual(
       inputs: {
         a: {
           name: 'a',
-          pin: {
+          plug: {
             0: {
               unitId: 'lessthanequal',
               pinId: 'a',
@@ -808,17 +809,17 @@ assert.deepEqual(
       },
     },
     inputs: {
-      smtzy: { name: 'a', pin: { 0: { mergeId: 'vuhxu' } } },
-      ajuwn: { name: 'b', pin: { 0: { mergeId: 'myikn' } } },
+      smtzy: { name: 'a', plug: { 0: { mergeId: 'vuhxu' } } },
+      ajuwn: { name: 'b', plug: { 0: { mergeId: 'myikn' } } },
     },
     outputs: {
       gmmch: {
         name: 'a ≤ b ? a',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
       rewmg: {
         name: 'a > b ? a',
-        pin: { 0: { unitId: 'if0', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if0', pinId: 'aifb' } },
       },
     },
     metadata: {
@@ -862,17 +863,17 @@ assert.deepEqual(
         },
       },
       inputs: {
-        smtzy: { name: 'a', pin: { 0: { mergeId: 'vuhxu' } } },
-        ajuwn: { name: 'b', pin: { 0: { mergeId: 'myikn' } } },
+        smtzy: { name: 'a', plug: { 0: { mergeId: 'vuhxu' } } },
+        ajuwn: { name: 'b', plug: { 0: { mergeId: 'myikn' } } },
       },
       outputs: {
         gmmch: {
           name: 'a ≤ b ? a',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
         rewmg: {
           name: 'a > b ? a',
-          pin: { 0: { unitId: 'if0', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if0', pinId: 'aifb' } },
         },
       },
       metadata: {
@@ -903,14 +904,14 @@ assert.deepEqual(
       },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: null, description: '...' },
@@ -933,14 +934,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '...' },
@@ -986,10 +987,10 @@ assert.deepEqual(
       },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { mergeId: 'merge3' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge3' } } },
     },
-    outputs: { i: { name: 'i', pin: { 0: { mergeId: 'merge1' } } } },
+    outputs: { i: { name: 'i', plug: { 0: { mergeId: 'merge1' } } } },
     metadata: { icon: 'sort-numeric-down', description: '...' },
   },
   removePinFromMerge(
@@ -1029,10 +1030,10 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge3' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge3' } } },
       },
-      outputs: { i: { name: 'i', pin: { 0: { mergeId: 'merge1' } } } },
+      outputs: { i: { name: 'i', plug: { 0: { mergeId: 'merge1' } } } },
       metadata: { icon: 'sort-numeric-down', description: '...' },
     }
   ),
@@ -1057,13 +1058,13 @@ assert.deepEqual(
       },
     },
     inputs: {
-      b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: null, description: '...' },
@@ -1086,14 +1087,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '...' },
@@ -1119,14 +1120,14 @@ assert.deepEqual(
       },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { unitId: 'if1', pinId: 'a' } } },
-      b: { name: 'b', pin: { 0: { unitId: 'not', pinId: 'a' } } },
+      a: { name: 'a', plug: { 0: { unitId: 'if1', pinId: 'a' } } },
+      b: { name: 'b', plug: { 0: { unitId: 'not', pinId: 'a' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: null, description: '...' },
@@ -1149,14 +1150,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '...' },
@@ -1187,14 +1188,14 @@ assert.deepEqual(
       },
     },
     inputs: {
-      a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-      b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+      a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+      b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {
-      aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+      aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
       'a if not b': {
         name: 'a if not b',
-        pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+        plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
       },
     },
     metadata: { icon: null, description: '...' },
@@ -1217,14 +1218,14 @@ assert.deepEqual(
         },
       },
       inputs: {
-        a: { name: 'a', pin: { 0: { mergeId: 'merge0' } } },
-        b: { name: 'b', pin: { 0: { mergeId: 'merge1' } } },
+        a: { name: 'a', plug: { 0: { mergeId: 'merge0' } } },
+        b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
       },
       outputs: {
-        aifb: { name: 'aifb', pin: { 0: { unitId: 'if0', pinId: 'aifb' } } },
+        aifb: { name: 'aifb', plug: { 0: { unitId: 'if0', pinId: 'aifb' } } },
         'a if not b': {
           name: 'a if not b',
-          pin: { 0: { unitId: 'if1', pinId: 'aifb' } },
+          plug: { 0: { unitId: 'if1', pinId: 'aifb' } },
         },
       },
       metadata: { icon: null, description: '...' },

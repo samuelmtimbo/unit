@@ -1,9 +1,12 @@
+import { isScrollable } from '../isScrollable'
 import Listenable from '../Listenable'
 import { Listener } from '../Listener'
 
 export interface IOWheelEvent {
   clientX: number
   clientY: number
+  screenX: number
+  screenY: number
   offsetX: number
   offsetY: number
   deltaX: number
@@ -26,10 +29,17 @@ export function listenWheel(
   component: Listenable,
   onWheel: (event: IOWheelEvent, _event: WheelEvent) => void
 ): () => void {
-  const { $element } = component
+  const {
+    $system: {
+      api: {
+        document: { elementFromPoint },
+      },
+    },
+    $element,
+  } = component
 
   const wheelListener = (_event: WheelEvent) => {
-    const { $context } = component
+    const { $context, $element } = component
 
     const { $x, $y, $sx, $sy } = $context
 
@@ -40,9 +50,34 @@ export function listenWheel(
       altKey,
       clientX,
       clientY,
+      screenX,
+      screenY,
       offsetX,
       offsetY,
     } = _event
+    
+    
+    if (ctrlKey) {
+      return
+    }
+
+    if (!altKey) {
+      let targetElement: HTMLElement
+
+      const pointerElement = elementFromPoint(clientX, clientY)
+      
+      if (pointerElement instanceof HTMLElement) {
+        targetElement = pointerElement
+      } else {
+        targetElement = pointerElement.parentElement
+      }
+
+      if (targetElement && isScrollable(targetElement)) {
+        return
+      }
+    }
+
+    _event.preventDefault()
 
     onWheel(
       {
@@ -54,6 +89,8 @@ export function listenWheel(
         clientY: (clientY - $y) / $sy,
         offsetX,
         offsetY,
+        screenX,
+        screenY
       },
       _event
     )

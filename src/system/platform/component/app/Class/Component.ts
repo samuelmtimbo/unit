@@ -14,6 +14,7 @@ import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { IO } from '../../../../../types/IO'
@@ -31,6 +32,7 @@ export interface Props {
   id?: string
   className?: string
   style?: Dict<string>
+  specs: Specs
 }
 
 export const CLASS_DEFAULT_WIDTH = 90
@@ -126,13 +128,11 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
   onPropChanged(prop: string, current: any): void {
     if (prop === 'id') {
       this._render(current)
-      // AD HOC
-      this.dispatchEvent('datumchange', { data: current })
     }
   }
 
   private _render = (id: string): void => {
-    const { specs } = this.$system
+    const { specs } = this.$props
 
     const spec = specs[id]
 
@@ -236,7 +236,8 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
       push_pin('input', index)
     })
 
-    const icon = (spec.metadata && spec.metadata.icon) || 'question'
+    // const icon = (spec.metadata && spec.metadata.icon) || 'question'
+    const icon = (spec.metadata && spec.metadata.icon) || null
 
     let core_shape: SVGCircle | SVGRect
     if (is_component) {

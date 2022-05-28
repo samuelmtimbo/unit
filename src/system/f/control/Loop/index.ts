@@ -1,6 +1,7 @@
 import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
 import { System } from '../../../../system'
+import { Dict } from '../../../../types/Dict'
 
 export interface I<T> {
   init: T
@@ -18,7 +19,6 @@ export default class Loop<T> extends Primitive<I<T>, O<T>> {
   private _current: T | undefined = undefined
   private _next: T | undefined = undefined
   private _test: boolean | undefined = undefined
-
   private _looping: boolean = false
   private _nexting: boolean = false
 
@@ -181,5 +181,28 @@ export default class Loop<T> extends Primitive<I<T>, O<T>> {
     ) {
       this._iterate()
     }
+  }
+
+  public snapshotSelf(): Dict<any> {
+    return {
+      ...super.snapshotSelf(),
+      _current: this._current,
+      _next: this._next,
+      _test: this._test,
+      _nexting: this._nexting,
+      _looping: this._looping,
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    const { _current, _next, _test, _nexting, _looping, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    this._current = _current
+    this._next = _next
+    this._test = _test
+    this._nexting = _nexting
+    this._looping = _looping
   }
 }

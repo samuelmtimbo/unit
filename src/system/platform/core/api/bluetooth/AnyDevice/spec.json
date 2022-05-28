@@ -1,15 +1,46 @@
 {
   "name": "any device",
+  "inputs": {
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "device": {
+      "plug": {
+        "0": {
+          "unitId": "device",
+          "pinId": "device"
+        }
+      },
+      "type": "`BD`",
+      "ref": true
+    }
+  },
   "units": {
     "device": {
       "id": "4ad5bd0e-e11e-11ea-ad4c-83da30628333",
       "input": {
         "opt": {}
       },
-      "output": {}
+      "output": {
+        "device": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 51,
+          "y": -1
+        }
+      }
     },
-    "wait": {
-      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+    "merge": {
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453",
       "input": {
         "a": {
           "constant": true,
@@ -18,15 +49,21 @@
         "b": {}
       },
       "output": {
-        "a": {}
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": 0
+        }
       }
     }
   },
   "merges": {
-    "teucomiq": {
-      "wait": {
+    "0": {
+      "merge": {
         "output": {
-          "a": true
+          "ab": true
         }
       },
       "device": {
@@ -36,29 +73,15 @@
       }
     }
   },
-  "inputs": {
-    "any": {
-      "pin": {
-        "0": {
-          "unitId": "wait",
-          "pinId": "b"
-        }
-      },
-      "type": "any"
-    }
-  },
-  "outputs": {},
+  "render": false,
+  "component": {},
   "metadata": {
     "icon": "bluetooth",
     "description": "select one of all available bluetooth devices",
-    "complexity": 8,
-    "tags": [
-      "platform",
-      "api",
-      "bluetooth"
-    ]
+    "complexity": 11,
+    "tags": ["platform", "core", "api", "bluetooth"]
   },
-  "id": "a08ce854-e13b-11ea-b260-e76cc1643e97",
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "id": "a08ce854-e13b-11ea-b260-e76cc1643e97"
 }

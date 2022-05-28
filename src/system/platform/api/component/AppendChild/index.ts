@@ -1,13 +1,13 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { E } from '../../../../../interface/E'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
-import { UnitClass } from '../../../../../types/UnitClass'
+import { E } from '../../../../../types/interface/E'
+import { UnitBundle } from '../../../../../types/UnitBundle'
 
 export interface I {
   parent: E
-  child: UnitClass<any>
+  child: UnitBundle<any>
 }
 
 export interface O {

@@ -127,7 +127,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }
@@ -135,7 +135,7 @@
       "type": "<A>[]"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "appendif",
           "pinId": "test"
@@ -146,7 +146,7 @@
   },
   "outputs": {
     "a[i]": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
@@ -154,7 +154,7 @@
       "type": "<A>"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "final"
@@ -163,7 +163,7 @@
       "type": "<A>[]"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -172,7 +172,7 @@
       "type": "boolean"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a"
@@ -182,7 +182,7 @@
       "type": "<A>[]"
     },
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "i"

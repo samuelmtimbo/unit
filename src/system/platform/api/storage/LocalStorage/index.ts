@@ -5,8 +5,8 @@ import {
   storageHasKey,
 } from '../../../../../client/util/web/storage'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
-import { J } from '../../../../../interface/J'
-import { V } from '../../../../../interface/V'
+import { J } from '../../../../../types/interface/J'
+import { V } from '../../../../../types/interface/V'
 import { ObjectUpdateType } from '../../../../../Object'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'

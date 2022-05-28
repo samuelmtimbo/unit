@@ -36,58 +36,58 @@
   },
   "inputs": {
     "test": {
-      "name": "test",
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "c"
         }
       },
+      "name": "test",
+      "functional": true,
       "type": "boolean"
     },
     "obj": {
-      "name": "obj",
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
       },
+      "name": "obj",
+      "functional": true,
       "type": "object"
     },
     "key": {
-      "name": "key",
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "key"
         }
       },
+      "name": "key",
+      "functional": true,
       "type": "number|string"
     },
     "value": {
-      "name": "value",
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "value"
         }
       },
+      "name": "value",
+      "functional": true,
       "type": "any"
     }
   },
   "outputs": {
     "obj": {
-      "name": "obj",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "a"
         }
       },
+      "name": "obj",
       "type": "object"
     }
   },

@@ -28,3 +28,32 @@ export function watchGraphUnitEvent(
     graph.removeListener(event, listener)
   }
 }
+
+export interface GraphSpecCloneUnitMomentData {
+  unitId: string
+  newUnitId: string
+}
+
+export interface GraphSpecCloneUnitMoment
+  extends Moment<GraphSpecCloneUnitMomentData> {}
+
+export function watchGraphUnitCloneEvent(
+  event: 'clone_unit',
+  graph: Graph,
+  callback: (moment: GraphSpecCloneUnitMoment) => void
+): () => void {
+  const listener = (unitId: string, newUnitId: string) => {
+    callback({
+      type: 'graph',
+      event,
+      data: {
+        unitId,
+        newUnitId,
+      },
+    })
+  }
+  graph.prependListener(event, listener)
+  return () => {
+    graph.removeListener(event, listener)
+  }
+}

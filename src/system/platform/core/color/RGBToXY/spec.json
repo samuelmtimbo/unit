@@ -1,23 +1,23 @@
 {
   "name": "RGB to xy",
   "units": {
-    "uodzrsnbx": {
+    "rgbtoxyz": {
       "id": "73193df9-d5f4-4689-92ce-d804cf30ee20"
     },
-    "wbuuzxzwu": {
+    "xyztoxy": {
       "id": "31c06a15-ca1a-4175-b60a-0cb5dfff3a6c"
     }
   },
   "merges": {
-    "zkgtjavhp": {
-      "uodzrsnbx": {
+    "0": {
+      "rgbtoxyz": {
         "output": {
-          "rdpajk": true
+          "XYZ": true
         }
       },
-      "wbuuzxzwu": {
+      "xyztoxy": {
         "input": {
-          "zpwdflzip": true
+          "XYZ": true
         }
       }
     }
@@ -33,10 +33,10 @@
     ]
   },
   "inputs": {
-    "ybuip": {
-      "pin": {
+    "RGB": {
+      "plug": {
         "0": {
-          "unitId": "uodzrsnbx",
+          "unitId": "rgbtoxyz",
           "pinId": "RGB"
         }
       },
@@ -44,11 +44,11 @@
     }
   },
   "outputs": {
-    "ppnxndt": {
-      "pin": {
+    "XY": {
+      "plug": {
         "0": {
-          "unitId": "wbuuzxzwu",
-          "pinId": "vxikpyf"
+          "unitId": "xyztoxy",
+          "pinId": "xy"
         }
       },
       "type": "number[]"

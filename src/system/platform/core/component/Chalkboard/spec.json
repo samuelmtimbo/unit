@@ -2,7 +2,7 @@
   "name": "chalkboard",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "canvas",
           "pinId": "style"
@@ -19,7 +19,7 @@
       }
     },
     "width": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "canvas",
           "pinId": "width"
@@ -39,7 +39,7 @@
       "type": "number"
     },
     "height": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "canvas",
           "pinId": "height"
@@ -61,14 +61,15 @@
   },
   "outputs": {
     "canvas": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "canvas",
-          "pinId": "ctx"
+          "pinId": "_self"
         }
       },
       "ref": true,
-      "type": "`U`&`C`&`V`&`PS`&`CS`"
+      "type": "`CS`&`CA`",
+      "defaultIgnored": true
     }
   },
   "units": {
@@ -92,8 +93,8 @@
       },
       "metadata": {
         "position": {
-          "x": 119,
-          "y": -34
+          "x": 34,
+          "y": -54
         }
       }
     },
@@ -108,8 +109,8 @@
       },
       "metadata": {
         "position": {
-          "x": 224,
-          "y": 4
+          "x": 134,
+          "y": -59
         }
       }
     },
@@ -132,8 +133,8 @@
       },
       "metadata": {
         "position": {
-          "x": 371,
-          "y": 94
+          "x": 290,
+          "y": 23
         }
       }
     },
@@ -149,8 +150,8 @@
       },
       "metadata": {
         "position": {
-          "x": 256,
-          "y": 73
+          "x": 186,
+          "y": 9
         }
       }
     },
@@ -165,8 +166,8 @@
       },
       "metadata": {
         "position": {
-          "x": 92,
-          "y": -140
+          "x": -60,
+          "y": -108
         }
       }
     },
@@ -191,8 +192,8 @@
       },
       "metadata": {
         "position": {
-          "x": -2,
-          "y": -174
+          "x": -159,
+          "y": -119
         }
       }
     },
@@ -235,8 +236,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": -29,
-          "y": 48
+          "x": -95,
+          "y": 65
         }
       }
     },
@@ -250,8 +251,8 @@
       },
       "metadata": {
         "position": {
-          "x": -111,
-          "y": -148
+          "x": -255,
+          "y": -69
         }
       }
     },
@@ -264,8 +265,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": 130,
-          "y": 83
+          "x": 68,
+          "y": 44
         }
       }
     },
@@ -278,52 +279,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": -166,
-          "y": -73
-        }
-      }
-    },
-    "clear": {
-      "id": "f41d4f3a-0a08-4e9f-9aa0-182b2686bd0e",
-      "input": {
-        "d": {}
-      },
-      "output": {
-        "d": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -322,
-          "y": 34
-        }
-      }
-    },
-    "drawd1": {
-      "id": "62bd0895-8889-40b2-8147-1c690809f4eb",
-      "input": {
-        "d": {},
-        "canvas": {}
-      },
-      "output": {},
-      "metadata": {
-        "position": {
-          "x": -205,
-          "y": 26
-        }
-      }
-    },
-    "emptyarray": {
-      "id": "b226083c-2797-11eb-a546-c350370e09cb",
-      "input": {
-        "any": {}
-      },
-      "output": {
-        "[]": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -317,
-          "y": 91
+          "x": -240,
+          "y": 14
         }
       }
     },
@@ -337,8 +294,22 @@
       },
       "metadata": {
         "position": {
-          "x": -201,
-          "y": 90
+          "x": 41,
+          "y": 144
+        }
+      }
+    },
+    "clear": {
+      "id": "1ef77768-7394-4b83-ad11-f5905fa9d0d3",
+      "input": {
+        "any": {},
+        "canvas": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 50,
+          "y": 105
         }
       }
     }
@@ -481,46 +452,22 @@
         }
       }
     },
-    "11": {
-      "clear": {
-        "output": {
-          "d": true
-        }
-      },
-      "drawd1": {
-        "input": {
-          "d": true
-        }
-      }
-    },
-    "12": {
-      "emptyarray": {
-        "output": {
-          "[]": true
-        }
-      },
-      "clear": {
-        "input": {
-          "d": true
-        }
-      }
-    },
     "13": {
-      "emptyarray": {
-        "input": {
-          "any": true
-        }
-      },
       "ondoubleclick": {
         "output": {
           "event": true
+        }
+      },
+      "clear": {
+        "input": {
+          "any": true
         }
       }
     },
     "14": {
       "canvas": {
         "output": {
-          "ctx": true
+          "_self": true
         }
       },
       "drawd": {
@@ -533,7 +480,7 @@
           "canvas": true
         }
       },
-      "drawd1": {
+      "clear": {
         "input": {
           "canvas": true
         }
@@ -555,7 +502,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "drawing board",
-    "complexity": 111,
+    "complexity": 59,
     "tags": [
       "platform",
       "core",
@@ -610,10 +557,6 @@
         "12": {
           "x": -361,
           "y": 64
-        },
-        "13": {
-          "x": -261,
-          "y": 96
         }
       }
     }

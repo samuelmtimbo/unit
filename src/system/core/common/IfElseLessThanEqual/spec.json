@@ -76,7 +76,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
@@ -85,7 +85,7 @@
       "type": "number"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -96,7 +96,7 @@
   },
   "outputs": {
     "a ≤ b ? a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if1",
           "pinId": "a if b"
@@ -105,7 +105,7 @@
       "type": "number"
     },
     "a > b ? a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if0",
           "pinId": "a if b"

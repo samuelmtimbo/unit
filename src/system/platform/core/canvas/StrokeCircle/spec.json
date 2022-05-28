@@ -58,27 +58,37 @@
   },
   "inputs": {
     "circle": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addcircle",
           "pinId": "circle"
         }
       },
-      "type": "object"
+      "type": "{x:number,y:number,r:number}",
+      "metadada": {
+        "examples": [
+          "{x:50,y:50,r:25}"
+        ]
+      }
     },
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "beginpath",
           "pinId": "d"
         }
       },
-      "type": "any[][]"
+      "type": "any[][]",
+      "metadata": {
+        "examples": [
+          "[]"
+        ]
+      }
     }
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "stroke",
           "pinId": "d"

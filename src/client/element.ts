@@ -1,6 +1,6 @@
 import { Moment } from '../debug/Moment'
 import { PinDataMoment } from '../debug/PinDataMoment'
-import { $Element } from '../interface/async/$Element'
+import { $Element } from '../types/interface/async/$Element'
 import { NOOP } from '../NOOP'
 import { evaluate } from '../spec/evaluate'
 import { stringify } from '../spec/stringify'
@@ -24,17 +24,6 @@ import { makePointerMoveListener } from './event/pointer/pointermove'
 import { makePointerUpListener } from './event/pointer/pointerup'
 import { IOElement } from './IOElement'
 import { Listener } from './Listener'
-
-export function findRef(component: Component, name: string): Component | null {
-  let c: Component | null = component
-  while (c) {
-    if (c.$ref[name]) {
-      return c.$ref[name]
-    }
-    c = c.$parent
-  }
-  return null
-}
 
 export class Element<
   E extends IOElement = any,

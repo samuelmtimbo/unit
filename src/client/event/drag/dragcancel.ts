@@ -1,0 +1,32 @@
+import Listenable from '../../Listenable'
+import { Listener } from '../../Listener'
+import { IOPointerEvent } from '../pointer'
+
+export type IODragCancelEvent = IOPointerEvent & { data: any }
+
+export function makeDragCancelListener(
+  listener: (event: IODragCancelEvent) => void,
+  _global: boolean = false
+): Listener {
+  return (component) => {
+    return listenDragCancel(component, listener, _global)
+  }
+}
+
+export function listenDragCancel(
+  component: Listenable,
+  listener: (event: IODragCancelEvent) => void,
+  _global: boolean = false
+): () => void {
+  const { $element } = component
+
+  const dragCancelListener = (_event: CustomEvent<IODragCancelEvent>) => {
+    const { detail } = _event
+
+    listener(detail)
+  }
+  $element.addEventListener('_dragcancel', dragCancelListener, _global)
+  return () => {
+    $element.removeEventListener('_dragcancel', dragCancelListener, _global)
+  }
+}

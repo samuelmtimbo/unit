@@ -93,7 +93,7 @@
   },
   "inputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "init"
@@ -103,7 +103,7 @@
       "type": "object"
     },
     "keys": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a"
@@ -115,7 +115,7 @@
   },
   "outputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "final"

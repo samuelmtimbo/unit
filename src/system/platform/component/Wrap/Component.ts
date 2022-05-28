@@ -4,18 +4,18 @@ import { component_ } from '../../../../client/component_'
 import { parentClass } from '../../../../client/createParent'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
-import { $Wrap } from '../../../../interface/async/$Wrap'
 import { Pod } from '../../../../pod'
 import { ComponentClass, System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../types/global/dom'
-import { UnitClass } from '../../../../types/UnitClass'
+import { $Wrap } from '../../../../types/interface/async/$Wrap'
+import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
 import { insert, push, removeAt, unshift } from '../../../../util/array'
 
 export interface Props {
   className?: string
   style?: Dict<string>
-  component?: UnitClass
+  component?: UnitBundleSpec
 }
 
 export const DEFAULT_STYLE = {}
@@ -59,7 +59,7 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
     container.disconnect()
 
     const child = this.$parentRoot[at]
-    const childSlot = this.$parentRootSlot[at]
+    const childSlot = this.$parentRootSlotName[at]
 
     const new_container = this._connected_parent_root_container(at)
     this._parent_child_container[at] = new_container
@@ -81,7 +81,7 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
     container.disconnect()
 
     const child = this.$parentRoot[at]
-    const childSlot = this.$parentRootSlot[at]
+    const childSlot = this.$parentRootSlotName[at]
 
     const new_container = this._connected_parent_root_container(at)
     this._parent_container[at] = new_container
@@ -105,7 +105,7 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
     container.disconnect()
 
     const child = this.$children[at]
-    const childSlot = this.$childrenSlot[at]
+    const childSlot = this.$childSlotName[at]
 
     super.domRemoveChild(container, childSlot, at)
     super.postRemoveChild(container, at)
@@ -162,15 +162,15 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
     at: number,
     _at: number
   ): void {
-    console.log(
-      'Wrap',
-      'memAppendParentChild',
-      component.constructor.name,
-      component.$globalId,
-      slotName,
-      at,
-      _at
-    )
+    // console.log(
+    //   'Wrap',
+    //   'memAppendParentChild',
+    //   component.constructor.name,
+    //   component.$globalId,
+    //   slotName,
+    //   at,
+    //   _at
+    // )
 
     const container = this._connected_parent_child_container(at)
 
@@ -465,13 +465,13 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
       let componentClass: ComponentClass
 
       if (current) {
-        const Class = current as UnitClass
+        const Class = current
 
         const { __bundle } = Class
 
         const { id } = __bundle.unit
 
-        componentClass = componentClassFromSpecId(this.$system, id)
+        componentClass = componentClassFromSpecId(this.$system, { ...this.$system.specs, ...this.$pod.specs }, id)
       } else {
         componentClass = parentClass()
       }

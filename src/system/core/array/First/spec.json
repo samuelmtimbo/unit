@@ -18,7 +18,7 @@
   "merges": {},
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "at",
           "pinId": "a"
@@ -29,7 +29,7 @@
   },
   "outputs": {
     "a[0]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "at",
           "pinId": "a[i]"

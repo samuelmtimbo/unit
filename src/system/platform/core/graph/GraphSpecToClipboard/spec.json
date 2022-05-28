@@ -2,7 +2,7 @@
   "name": "graph spec to clipboard",
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getspec",
           "pinId": "any"
@@ -11,7 +11,7 @@
       "type": "any"
     },
     "graph": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getspec",
           "pinId": "graph"

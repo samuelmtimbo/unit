@@ -3,7 +3,7 @@
   "inputs": {},
   "outputs": {
     "rad": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "degtorad",
           "pinId": "rad"

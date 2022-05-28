@@ -1,8 +1,10 @@
 import { Pin } from '../Pin'
 import { Pod } from '../pod'
 import { Primitive } from '../Primitive'
+import { isPrimitive } from '../spec/primitive'
 import { System } from '../system'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
+import { Dict } from '../types/Dict'
 import { filterObj } from '../util/object'
 
 export interface I<T> {
@@ -174,5 +176,20 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     forEachKeyValue(output_not_empty, (o) => o.push(data))
     this._forwarding = false
     this._backward_if_ready()
+  }
+
+  public snapshotSelf(): Dict<any> {
+    return {
+      ...super.snapshotSelf(),
+      _current: isPrimitive(this._current) ? this._current : undefined,
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    const { _current, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    this._current = _current
   }
 }

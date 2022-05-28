@@ -103,49 +103,49 @@
   },
   "inputs": {
     "x0": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag",
           "pinId": "v"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "x1": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag0",
           "pinId": "v"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "y0": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag1",
           "pinId": "v"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "y1": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag2",
           "pinId": "v"
         }
       },
+      "functional": true,
       "type": "number"
     }
   },
   "outputs": {
     "{x0,y0,x1,y1}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge4",
           "pinId": "abcd"

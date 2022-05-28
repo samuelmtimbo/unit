@@ -2,13 +2,13 @@
   "name": "get height",
   "inputs": {
     "unit": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "get",
           "pinId": "unit"
         }
       },
+      "type": "`U`",
       "ref": true,
       "metadata": {
         "position": {
@@ -20,7 +20,7 @@
       }
     },
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait0",
           "pinId": "b"
@@ -39,13 +39,13 @@
   },
   "outputs": {
     "height": {
-      "type": "any",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "get",
           "pinId": "value"
         }
       },
+      "type": "any",
       "metadata": {
         "position": {
           "0": {

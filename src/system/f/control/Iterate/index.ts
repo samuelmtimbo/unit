@@ -1,6 +1,7 @@
 import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
 import { System } from '../../../../system'
+import { Dict } from '../../../../types/Dict'
 
 export interface I<T> {
   init: T
@@ -82,5 +83,22 @@ export default class Iterate<T> extends Primitive<I<T>, O<T>> {
       this._output.local.invalidate()
     }
     this._output.current.invalidate()
+  }
+
+  public snapshotSelf(): Dict<any> {
+    return {
+      ...super.snapshotSelf(),
+      _current: this._current,
+      _next: this._next,
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    const { _current, _next, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    this._current = _current
+    this._next = _next
   }
 }

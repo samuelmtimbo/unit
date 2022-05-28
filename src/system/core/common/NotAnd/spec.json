@@ -24,7 +24,7 @@
   },
   "inputs": {
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "not",
           "pinId": "a"
@@ -33,7 +33,7 @@
       "type": "boolean"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "and",
           "pinId": "a"
@@ -44,7 +44,7 @@
   },
   "outputs": {
     "!a && b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "and",
           "pinId": "a and b"

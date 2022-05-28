@@ -1,6 +1,13 @@
 // https://codeburst.io/throttling-and-debouncing-in-javascript-b01cad5c8edf
 
-export const throttle = (func: Function, limit): any => {
+import { System } from '../system'
+
+export const throttle = (system: System, func: Function, limit): any => {
+  const {
+    api: {
+      // TODO
+    },
+  } = system
   let lastFunc
   let lastRan
   return function () {
@@ -22,8 +29,14 @@ export const throttle = (func: Function, limit): any => {
 }
 
 export const animateThrottle = (
+  system: System,
   func: Function
 ): { f: (...args: any[]) => void; abort: () => void } => {
+  const {
+    api: {
+      animation: { requestAnimationFrame, cancelAnimationFrame },
+    },
+  } = system
   let run = true
   let frame: number
   let args

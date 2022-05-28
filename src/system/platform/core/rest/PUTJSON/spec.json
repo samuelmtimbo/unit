@@ -75,7 +75,7 @@
   },
   "inputs": {
     "json": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "stringify",
           "pinId": "json"
@@ -84,7 +84,7 @@
       "type": "<A>"
     },
     "url": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fetch",
           "pinId": "url"
@@ -93,7 +93,7 @@
       "type": "string"
     },
     "opt": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "deepmerge",
           "pinId": "b"
@@ -104,7 +104,7 @@
   },
   "outputs": {
     "response": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fetch",
           "pinId": "response"

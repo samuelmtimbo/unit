@@ -1,0 +1,47 @@
+{
+  "name": "to blob",
+  "inputs": {
+    "canvas": {
+      "type": "`CA`",
+      "ref": true
+    },
+    "quality": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "1"
+        ]
+      }
+    },
+    "type": {
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "'image/png'"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "blob": {
+      "type": "`B`",
+      "ref": true,
+      "icon": "binary"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "...",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "c9d64ef4-35f6-44e7-a16b-1e4173f951dc",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

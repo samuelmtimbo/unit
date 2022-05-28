@@ -2,7 +2,7 @@
   "name": "min max slider",
   "inputs": {
     "max": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "max",
           "pinId": "value"
@@ -33,7 +33,7 @@
       }
     },
     "min": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "8"
         },
@@ -64,7 +64,7 @@
       }
     },
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slider",
           "pinId": "value"
@@ -91,7 +91,7 @@
   },
   "outputs": {
     "slider": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slider",
           "pinId": "_self"

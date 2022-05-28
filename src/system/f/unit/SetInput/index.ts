@@ -1,20 +1,20 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { getSpec } from '../../../../client/spec'
-import { cloneUnitClass } from '../../../../cloneUnitClass'
+import { cloneUnitBundle } from '../../../../cloneUnitClass'
 import { Pod } from '../../../../pod'
 import { stringify } from '../../../../spec/stringify'
 import { System } from '../../../../system'
-import { UnitClass } from '../../../../types/UnitClass'
+import { UnitBundle } from '../../../../types/UnitBundle'
 
 export interface I<T> {
-  unit: UnitClass
+  unit: UnitBundle
   name: string
   data: any
 }
 
 export interface O<T> {
-  unit: UnitClass
+  unit: UnitBundle
 }
 
 export default class SetInput<T> extends Functional<I<T>, O<T>> {
@@ -39,16 +39,17 @@ export default class SetInput<T> extends Functional<I<T>, O<T>> {
 
     if (!inputs[name]) {
       done(undefined, 'input not found')
+
       return
     }
 
-    const next_unit: UnitClass = cloneUnitClass(unit)
+    const NewBundle: UnitBundle = cloneUnitBundle(unit)
 
-    next_unit.__bundle.unit.input = next_unit.__bundle.unit.input || {}
-    next_unit.__bundle.unit.input[name] =
-      next_unit.__bundle.unit.input[name] || {}
-    next_unit.__bundle.unit.input[name].data = stringify(data) // TODO
+    NewBundle.__bundle.unit.input = NewBundle.__bundle.unit.input || {}
+    NewBundle.__bundle.unit.input[name] =
+      NewBundle.__bundle.unit.input[name] || {}
+    NewBundle.__bundle.unit.input[name].data = stringify(data) // XABLEAU
 
-    done({ unit: next_unit })
+    done({ unit: NewBundle })
   }
 }

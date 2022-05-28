@@ -2,7 +2,7 @@
   "name": "range bounce towards",
   "inputs": {
     "end": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "3"
         }
@@ -10,7 +10,7 @@
       "functional": true
     },
     "start": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }
@@ -20,7 +20,7 @@
   },
   "outputs": {
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "rangetowards",
           "pinId": "current"

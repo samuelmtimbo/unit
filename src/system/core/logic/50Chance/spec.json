@@ -37,7 +37,7 @@
   },
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "random",
           "pinId": "any"
@@ -48,7 +48,7 @@
   },
   "outputs": {
     "pass": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lessthan",
           "pinId": "a < b"

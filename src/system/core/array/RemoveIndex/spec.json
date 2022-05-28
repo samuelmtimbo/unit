@@ -42,42 +42,42 @@
   },
   "inputs": {
     "i": {
-      "type": "number",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "remove",
           "pinId": "start"
         }
-      }
+      },
+      "type": "number"
     },
     "a": {
-      "type": "<A>[]",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "remove",
           "pinId": "a"
         }
-      }
+      },
+      "type": "<A>[]"
     }
   },
   "outputs": {
     "a": {
-      "type": "<A>[]",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "remove",
           "pinId": "a"
         }
-      }
+      },
+      "type": "<A>[]"
     },
     "a[i]": {
-      "type": "<A>[]",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "first",
           "pinId": "a[0]"
         }
-      }
+      },
+      "type": "<A>[]"
     }
   },
   "metadata": {

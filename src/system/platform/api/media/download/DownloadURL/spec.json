@@ -1,0 +1,28 @@
+{
+  "name": "download url",
+  "inputs": {
+    "url": {
+      "type": "string",
+      "metadata": {
+        "examples": []
+      }
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "outputs": {},
+  "id": "c18c8f59-f3c8-49a8-9dbd-ed30fdf856e9",
+  "metadata": {
+    "icon": "download",
+    "complexity": 12,
+    "tags": [
+      "platform",
+      "api",
+      "media"
+    ]
+  },
+  "type": "`U`",
+  "base": true,
+  "system": true
+}

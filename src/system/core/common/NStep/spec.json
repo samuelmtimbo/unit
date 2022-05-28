@@ -2,12 +2,12 @@
   "name": "steps",
   "inputs": {
     "n": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "4"
         }
       },
+      "functional": true,
       "type": "number",
       "metadata": {
         "position": {
@@ -21,7 +21,7 @@
   },
   "outputs": {
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }

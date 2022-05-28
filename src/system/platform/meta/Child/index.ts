@@ -1,6 +1,7 @@
 import { Element } from '../../../../Class/Element'
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
+import { C } from '../../../../types/interface/C'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Unlisten } from '../../../../types/Unlisten'
@@ -11,7 +12,9 @@ export interface I {
   done: any
 }
 
-export interface O {}
+export interface O {
+  child: C
+}
 
 export default class Child extends Semifunctional<I, O> {
   constructor(system: System, pod: Pod) {
