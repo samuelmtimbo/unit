@@ -121,7 +121,7 @@ const spec = {
   inputs: {
     a: {
       name: 'a',
-      pin: {
+      plug: {
         0: {
           unitId: 'add',
           pinId: 'a',
@@ -130,7 +130,7 @@ const spec = {
     },
     n: {
       name: 'n',
-      pin: {
+      plug: {
         0: {
           unitId: 'loop2',
           pinId: 'inita',
@@ -141,7 +141,7 @@ const spec = {
   outputs: {
     sum: {
       name: 'sum',
-      pin: { 0: { mergeId: '0' } },
+      plug: { 0: { mergeId: '0' } },
     },
   },
 } as GraphSpec

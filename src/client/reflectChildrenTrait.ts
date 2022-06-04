@@ -1,8 +1,11 @@
 import { _NUMBER_LITERAL_REGEX } from '../spec/regex/NUMBER_LITERAL'
-import { LayoutNode } from '../system/platform/component/app/Graph/Component'
 import { Style } from '../system/platform/Props'
+import { LayoutNode } from './LayoutNode'
+import { parseBorder } from './parseBorder'
 import { parseLayoutValue } from './parseLayoutValue'
+import { parseMargin } from './parseMargin'
 import { parseTransformXY } from './parseTransformXY'
+import { Rect, rectsBoundingRect } from './util/geometry'
 import { parseFontSize } from './util/style/getFontSize'
 import { parseOpacity } from './util/style/getOpacity'
 
@@ -15,14 +18,22 @@ export type LayoutBox = {
 
 export const REGEX_PERCENT = /^([0-9]+)\%$/
 export const REGEX_PX = new RegExp('^(' + _NUMBER_LITERAL_REGEX.source + ')px$')
-export const REGEX_CALC = /^calc\(([0-9]+)\%([+-][0-9]+)px\)$/
+export const REGEX_CALC =
+  /^calc\(([0-9]+)\%([+]{0,1}[-]{0,1}[0-9]+(?:\.\d*)?)px\)$/
 
 export function reflectChildrenTrait(
   parentTrait: LayoutNode,
   parentStyle: Style,
-  childrenStyle: Style[]
+  children: Style[],
+  expandChild: (path: number[]) => Style[] = () => [],
+  path: number[] = []
 ): LayoutNode[] {
-  const { fontSize: parentFontSize, opacity: parentOpacity } = parentTrait
+  const {
+    x: parentX,
+    y: parentY,
+    fontSize: parentFontSize,
+    opacity: parentOpacity,
+  } = parentTrait
 
   const {
     display: parentDisplay = 'block',
@@ -76,9 +87,9 @@ export function reflectChildrenTrait(
 
   let postChildrenStyle: [number, Style][] = []
 
-  for (const childStyle of childrenStyle) {
-    let x = 0
-    let y = 0
+  for (const childStyle of children) {
+    let x = parentX
+    let y = parentY
 
     let width = 0
     let height = 0
@@ -92,12 +103,99 @@ export function reflectChildrenTrait(
       fontSize: childFontSizeStr,
       opacity: childOpacityStr = '1',
       transform: childTransform = '',
+      border: childBorder = '',
+      margin: childMargin = '',
+      boxSizing: childBoxSizing = 'content-box',
     } = childStyle
 
-    const [pxLeft, percentLeft] = parseLayoutValue(childTop)
-    const [pxTop, percentTop] = parseLayoutValue(childLeft)
-    const [pxWidth, percentWidth] = parseLayoutValue(childWidth)
-    const [pxHeight, percentHeight] = parseLayoutValue(childHeight)
+    let [pxLeft, pcLeft] = parseLayoutValue(childTop)
+    let [pxTop, pcTop] = parseLayoutValue(childLeft)
+
+    let pxWidth: number = 0
+    let pxHeight: number = 0
+
+    let pcWidth: number = 0
+    let pcHeight: number = 0
+
+    const _path = [...path, i]
+
+    const {
+      left: marginLeft,
+      top: marginTop,
+      right: marginRight,
+      bottom: marginBottom,
+    } = parseMargin(childMargin)
+
+    const [pxMarginLeft] = parseLayoutValue(marginLeft)
+    const [pxMarginRight] = parseLayoutValue(marginRight)
+    const [pxMarginTop] = parseLayoutValue(marginTop)
+    const [pxMarginBottom] = parseLayoutValue(marginBottom)
+
+    x += pxMarginLeft
+    y += pxMarginTop
+
+    const {
+      width: borderWidth,
+      style: borderStyle,
+      color: borderColor,
+    } = parseBorder(childBorder)
+
+    const [pxBorderWidth] = parseLayoutValue(borderWidth)
+
+    let child_children_style: Style[]
+    let children_trait: LayoutNode[]
+    let children_bounding_rect: Rect
+
+    const fit_width = childWidth === 'fit-content'
+    const fit_height = childHeight === 'fit-content'
+
+    const reflect_children = fit_width || fit_height
+
+    if (reflect_children) {
+      child_children_style = child_children_style || expandChild(_path)
+
+      children_trait = reflectChildrenTrait(
+        parentTrait,
+        childStyle,
+        child_children_style,
+        expandChild,
+        _path
+      )
+    }
+
+    if (fit_width) {
+      children_bounding_rect =
+        children_bounding_rect || rectsBoundingRect(children_trait)
+
+      pxWidth = children_bounding_rect.width
+    } else {
+      const parsedWidth = parseLayoutValue(childWidth)
+
+      pxWidth = parsedWidth[0]
+      pcWidth = parsedWidth[1]
+    }
+
+    if (fit_height) {
+      children_bounding_rect =
+        children_bounding_rect || rectsBoundingRect(children_trait)
+
+      pxHeight = children_bounding_rect.height
+    } else {
+      const parsedHeight = parseLayoutValue(childHeight)
+
+      pxHeight = parsedHeight[0]
+      pcHeight = parsedHeight[1]
+    }
+
+    width =
+      (pcWidth * parentWidth) / 100 + pxWidth
+    height =
+      (pcHeight * parentHeight) / 100 + pxHeight
+
+    if (childBoxSizing === 'content-box') {
+      width += 2 * pxBorderWidth
+      height += 2 * pxBorderWidth
+    }
 
     const [
       childTransformX,
@@ -110,13 +208,13 @@ export function reflectChildrenTrait(
     ] = parseTransformXY(childTransform, width, height)
 
     children_px_left.push(pxLeft)
-    children_percent_left.push(percentLeft)
+    children_percent_left.push(pcLeft)
 
     children_px_top.push(pxTop)
-    children_percent_top.push(percentTop)
+    children_percent_top.push(pcTop)
 
-    children_percent_width.push(percentWidth)
-    children_percent_height.push(percentHeight)
+    children_percent_width.push(pcWidth)
+    children_percent_height.push(pcHeight)
 
     children_px_width.push(pxWidth)
     children_px_height.push(pxHeight)
@@ -130,19 +228,17 @@ export function reflectChildrenTrait(
 
     if (parentDisplay === 'block') {
       if (childPosition === 'relative') {
-        y = (total_relative_percent_height * parentHeight) / 100
-
-        width = (percentWidth * parentWidth) / 100 + pxWidth
-        height = (percentHeight * parentHeight) / 100 + pxHeight
+        x += (pcLeft * parentWidth) / 100
+        y +=
+          (total_relative_percent_height * parentHeight) / 100 +
+          total_relative_px_height +
+          (pcTop * parentHeight) / 100
 
         x += childTransformX
         y += childTransformY
       } else if (childPosition === 'absolute') {
-        x = pxLeft + (percentLeft * parentWidth) / 100
-        y = pxTop + (percentTop * parentHeight) / 100
-
-        width = (percentWidth * parentWidth) / 100 + pxWidth
-        height = (percentHeight * parentHeight) / 100 + pxHeight
+        x += pxLeft + (pcLeft * parentWidth) / 100
+        y += pxTop + (pcTop * parentHeight) / 100
 
         x += childTransformX
         y += childTransformY
@@ -154,9 +250,9 @@ export function reflectChildrenTrait(
     }
 
     if (childPosition === 'relative') {
-      total_relative_percent_width += percentWidth
+      total_relative_percent_width += pcWidth
       total_relative_px_width += pxWidth
-      total_relative_percent_height += percentHeight
+      total_relative_percent_height += pcHeight
       total_relative_px_height += pxHeight
     }
 
@@ -182,8 +278,8 @@ export function reflectChildrenTrait(
   let acc_relative_height = 0
 
   for (const [i, childStyle] of postChildrenStyle) {
-    let x = 0
-    let y = 0
+    let x = parentX
+    let y = parentY
 
     let width = 0
     let height = 0
@@ -210,8 +306,8 @@ export function reflectChildrenTrait(
             (parentWidth - total_relative_px_width)
           : 0
 
-      x = pxLeft
-      y = pxTop
+      x += pxLeft
+      y += pxTop
 
       width = pcWidth + pxWidth
     } else if (parentDisplay === 'flex') {
@@ -240,8 +336,8 @@ export function reflectChildrenTrait(
 
           height = pcHeight + pxHeight
 
-          x = acc_relative_width
-          y = pxTop
+          x += acc_relative_width
+          y += pxTop
 
           max_relative_height = Math.max(max_relative_height, height)
 
@@ -276,7 +372,7 @@ export function reflectChildrenTrait(
               if (inline) {
                 //
               } else {
-                x = pxLeft
+                x = parentX
               }
             }
           } else if (parentAlignContent === 'center') {
@@ -289,8 +385,8 @@ export function reflectChildrenTrait(
             acc_relative_width = width
           }
         } else if (childPosition === 'absolute') {
-          x = pxLeft + (percentLeft * parentWidth) / 100
-          y = pxTop + (percentTop * parentHeight) / 100
+          x += pxLeft + (percentLeft * parentWidth) / 100
+          y += pxTop + (percentTop * parentHeight) / 100
 
           width = (percentWidth * parentWidth) / 100 + pxWidth
           height = (percentHeight * parentHeight) / 100 + pxHeight
@@ -316,7 +412,10 @@ export function reflectChildrenTrait(
 
           const pcHeight =
             total_relative_percent_height > 0
-              ? (percentHeight / total_relative_percent_height) *
+              ? (percentHeight /
+                  (parentFlexWrap === 'nowrap'
+                    ? total_relative_percent_height
+                    : 100)) *
                 (parentHeight - total_relative_px_height)
               : 0
 
@@ -335,8 +434,8 @@ export function reflectChildrenTrait(
             height = pcHeight + pxHeight
           }
 
-          x = pxLeft
-          y = acc_relative_height + pxTop
+          x += pxLeft
+          y += acc_relative_height + pxTop
 
           max_relative_width = Math.max(max_relative_width, width)
 
@@ -371,7 +470,7 @@ export function reflectChildrenTrait(
               if (inline) {
                 //
               } else {
-                y = pxTop
+                y = parentY
               }
             }
           } else if (parentAlignContent === 'center') {
@@ -384,8 +483,8 @@ export function reflectChildrenTrait(
             acc_relative_height = height
           }
         } else if (childPosition === 'absolute') {
-          x = pxLeft + (percentLeft * parentWidth) / 100
-          y = pxTop + (percentTop * parentHeight) / 100
+          x += pxLeft + (percentLeft * parentWidth) / 100
+          y += pxTop + (percentTop * parentHeight) / 100
 
           width = (percentWidth * parentWidth) / 100 + pxWidth
           height = (percentHeight * parentHeight) / 100 + pxHeight

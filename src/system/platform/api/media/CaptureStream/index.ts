@@ -1,21 +1,23 @@
-import { $CS, CSOpt } from '../../../../../interface/async/$CS'
-import { ST } from '../../../../../interface/ST'
+import { Done } from '../../../../../Class/Functional/Done'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { CSOpt } from '../../../../../types/interface/async/$CS'
+import { CS } from '../../../../../types/interface/CS'
+import { ST } from '../../../../../types/interface/ST'
 import { ObjectSource } from '../../../../../ObjectSource'
 import { Pod } from '../../../../../pod'
-import { Primitive } from '../../../../../Primitive'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I {
-  source: $CS
+  source: CS
   opt: CSOpt
   stop: any
 }
 
 export interface O {}
 
-export default class CaptureStream extends Primitive<I, O> implements ST {
+export default class CaptureStream extends Semifunctional<I, O> implements ST {
   __ = ['U', 'ST']
 
   private _stream: ObjectSource<MediaStream> = new ObjectSource()
@@ -23,12 +25,14 @@ export default class CaptureStream extends Primitive<I, O> implements ST {
   constructor(system: System, pod: Pod) {
     super(
       {
-        i: ['source', 'opt', 'stop'],
+        fi: ['source', 'opt'],
+        fo: [],
+        i: ['stop'],
         o: [],
       },
       {
         input: {
-          media: {
+          source: {
             ref: true,
           },
         },
@@ -38,60 +42,31 @@ export default class CaptureStream extends Primitive<I, O> implements ST {
     )
   }
 
-  onRefInputData(name: string, data: any): void {
-    // if (name === 'source') {
-    this._setup()
-    // }
-  }
+  async f({ source, opt }: I, done: Done<O>): Promise<void> {
+    let stream: MediaStream
 
-  onDataInputData(name: string): void {
-    if (name === 'opt') {
-      this._setup()
-    } else if (name === 'stop') {
-      this._plunk()
-      this._input.opt.pull()
-      this._input.stop.pull()
-    }
-  }
+    try {
+      stream = await source.captureStream(opt)
+    } catch (err) {
+      done(undefined, err.message)
 
-  onRefInputDrop(name: string): void {
-    // if (name === 'name') {
-    this._plunk()
-    // }
-  }
-
-  onDataInputDrop(name: string): void {
-    if (name === 'opt') {
-      this._plunk()
-    }
-  }
-
-  private _unlisten: Unlisten
-
-  private _setup() {
-    const { source, opt } = this._i
-
-    if (source !== undefined && opt !== undefined) {
-      this._unlisten = source.$captureStream(opt, (stream: MediaStream) => {
-        this._stream.set(stream)
-      })
-    }
-  }
-
-  private _plunk() {
-    if (this._unlisten) {
-      this._unlisten()
-      this._unlisten = undefined
+      return
     }
 
+    this._stream.set(stream)
+  }
+
+  public onIterDataInputData(name: string, data: any): void {
+    // if (name === 'stop') {
     this._stream.set(null)
+
+    this._done()
+
+    this._input.stop.pull()
+    // }
   }
 
   stream(callback: Callback<MediaStream>): Unlisten {
     return this._stream.connect(callback)
-  }
-
-  $stream({}: {}, callback: Callback<MediaStream>): Unlisten {
-    return this.stream(callback)
   }
 }

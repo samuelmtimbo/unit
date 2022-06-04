@@ -27,7 +27,7 @@
     "ojyxw": {
       "auxqbkphv": {
         "output": {
-          "shglvpnwm": true
+          "auth": true
         }
       },
       "dedghul": {
@@ -61,10 +61,10 @@
   },
   "inputs": {
     "kqmydk": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "auxqbkphv",
-          "pinId": "tpbfwhrq"
+          "pinId": "token"
         }
       },
       "type": "string"
@@ -72,7 +72,7 @@
   },
   "outputs": {
     "nkxeiczlc": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "uidsobs",
           "pinId": "kv"

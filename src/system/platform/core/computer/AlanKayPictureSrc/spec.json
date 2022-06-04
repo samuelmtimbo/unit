@@ -26,7 +26,7 @@
   "inputs": {},
   "outputs": {
     "url": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a[i]"

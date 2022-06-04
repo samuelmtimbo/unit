@@ -88,7 +88,7 @@
   },
   "inputs": {
     "key": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "haskey",
           "pinId": "key"
@@ -102,7 +102,7 @@
       "type": "number|string"
     },
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a"
@@ -116,7 +116,7 @@
       "type": "object"
     },
     "default": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifnot",
           "pinId": "a"
@@ -128,7 +128,7 @@
   },
   "outputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "3"
         }

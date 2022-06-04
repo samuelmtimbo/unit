@@ -51,8 +51,6 @@ export default class MicrophoneButton extends Element<IHTMLDivElement, Props> {
   constructor($props: Props, $system: System, $pod: Pod) {
     super($props, $system, $pod)
 
-    const { specs } = this.$system
-
     const {
       className,
       style = {},

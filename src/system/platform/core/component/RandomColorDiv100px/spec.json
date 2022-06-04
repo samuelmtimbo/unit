@@ -2,7 +2,7 @@
   "name": "random color div 100px",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault",
           "pinId": "a"
@@ -12,7 +12,7 @@
   },
   "outputs": {},
   "units": {
-    "randomcolordiv2": {
+    "randomcolordiv": {
       "id": "f27cae4e-fea8-11ea-b91e-db41e114c426",
       "input": {
         "style": {}
@@ -52,7 +52,7 @@
           "a": true
         }
       },
-      "randomcolordiv2": {
+      "randomcolordiv": {
         "input": {
           "style": true
         }
@@ -65,13 +65,19 @@
   },
   "id": "5f162826-e925-408f-8eb2-7984ef14c420",
   "component": {
+    "slots": [
+      [
+        "randomcolordiv",
+        "default"
+      ]
+    ],
     "subComponents": {
-      "randomcolordiv2": {
+      "randomcolordiv": {
         "children": []
       }
     },
     "children": [
-      "randomcolordiv2"
+      "randomcolordiv"
     ],
     "defaultWidth": 120,
     "defaultHeight": 120

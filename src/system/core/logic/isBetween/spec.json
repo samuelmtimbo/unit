@@ -2,7 +2,7 @@
   "name": "is between",
   "inputs": {
     "c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lessthan",
           "pinId": "b"
@@ -10,7 +10,7 @@
       }
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "greaterthanequal",
           "pinId": "b"
@@ -18,7 +18,7 @@
       }
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -27,7 +27,7 @@
   },
   "outputs": {
     "a ≤ b < c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "and",
           "pinId": "a and b"

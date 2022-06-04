@@ -2,7 +2,7 @@
   "name": "fibonacci spiral points",
   "inputs": {
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait1",
           "pinId": "b"
@@ -43,7 +43,7 @@
       "type": "any"
     },
     "angle": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "looprepeat",
           "pinId": "init"
@@ -62,7 +62,7 @@
   },
   "outputs": {
     "x": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "9"
         }
@@ -78,7 +78,7 @@
       "type": "number"
     },
     "y": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "8"
         }
@@ -94,7 +94,7 @@
       "type": "number"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }

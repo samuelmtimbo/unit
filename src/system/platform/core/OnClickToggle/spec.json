@@ -37,7 +37,7 @@
   },
   "inputs": {
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "toggle",
           "pinId": "init"
@@ -46,19 +46,19 @@
       "type": "boolean"
     },
     "element": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "onclick",
           "pinId": "element"
         }
       },
+      "type": "`U`",
       "ref": true
     }
   },
   "outputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "toggle",
           "pinId": "value"

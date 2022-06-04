@@ -10,13 +10,18 @@ import {
   getNextNodePath,
   getNodeAtPath,
   getParent,
+  getTree,
+  getTreeNodeType,
   getValueType,
   hasGeneric,
   insertNodeAt,
   isTypeMatch,
+  isValidObjKey,
+  isValidType,
   isValidValue,
   matchAllExcTypes,
   removeNodeAt,
+  TreeNodeType,
   updateNodeAt,
 } from '../../spec/parser'
 import isEqual from '../../system/f/comparisson/Equals/f'
@@ -24,223 +29,224 @@ import _classes from '../../system/_classes'
 import _specs from '../../system/_specs'
 import { ID_IDENTITY } from './id'
 
-// // getTree
+// getTree
 
-// assert(getTree('{a:"1,2,3"}').children.length === 1)
-// assert(getTree("{a:'1,2,3'}").children.length === 1)
-// assert(getTree("{a:'(1,2,3)'}").children.length === 1)
+assert(getTree('{a:"1,2,3"}').children.length === 1)
+assert(getTree("{a:'1,2,3'}").children.length === 1)
+assert(getTree("{a:'(1,2,3)'}").children.length === 1)
 
-// // getTreeNodeType
+// getTreeNodeType
 
-// assert.deepEqual(getTreeNodeType(':'), TreeNodeType.Invalid)
-// assert.deepEqual(getTreeNodeType('foo'), TreeNodeType.Invalid)
-// // assert.deepEqual(getTreeNodeType('a:'), TreeNodeType.KeyValue)
-// // assert.deepEqual(getTreeNodeType(':1'), TreeNodeType.KeyValue)
-// assert.deepEqual(getTreeNodeType('{a:}'), TreeNodeType.ObjectLiteral)
-// assert.deepEqual(getTreeNodeType('{:1}'), TreeNodeType.ObjectLiteral)
-// assert.deepEqual(getTreeNodeType('"a:b"'), TreeNodeType.StringLiteral)
-// assert.deepEqual(getTreeNodeType('"\\""'), TreeNodeType.StringLiteral)
-// assert.deepEqual(getTreeNodeType('"\r"'), TreeNodeType.StringLiteral)
-// assert.deepEqual(
-//   getTreeNodeType(
-//     `"v=0\r\no=- 7652727450078372599 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=extmap-allow-mixed\r\na=msid-semantic: WMS\r\nm=application 61198 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 201.26.26.115\r\na=candidate:2612718301 1 udp 2122262783 2804:431:e7c2:b2f3:c94:df00:ed4f:6843 54465 typ host generation 0 network-id 2 network-cost 10\r\na=candidate:1333116113 1 udp 2122194687 192.168.15.5 61198 typ host generation 0 network-id 1 network-cost 10\r\na=candidate:3110454533 1 udp 1685987071 201.26.26.115 61198 typ srflx raddr 192.168.15.5 rport 61198 generation 0 network-id 1 network-cost 10\r\na=candidate:3577288237 1 tcp 1518283007 2804:431:e7c2:b2f3:c94:df00:ed4f:6843 9 typ host tcptype active generation 0 network-id 2 network-cost 10\r\na=candidate:32915489 1 tcp 1518214911 192.168.15.5 9 typ host tcptype active generation 0 network-id 1 network-cost 10\r\na=ice-ufrag:YRMo\r\na=ice-pwd:Fwnv2ZDO0wzeeuDeWu+MVisV\r\na=fingerprint:sha-256 08:85:1D:A9:71:D2:CA:22:DD:76:E0:1D:59:CA:0E:E2:CA:93:3A:24:3B:09:28:F5:42:E5:D5:E7:79:C6:2B:E5\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\na=max-message-size:262144\r\n"`
-//   ),
-//   TreeNodeType.StringLiteral
-// )
-// assert.deepEqual(getTreeNodeType('/abc/'), TreeNodeType.RegexLiteral)
-// assert.deepEqual(getTreeNodeType('null'), TreeNodeType.Null)
-// assert.deepEqual(getTreeNodeType('1+1'), TreeNodeType.ArithmeticExpression)
-// assert.deepEqual(getTreeNodeType('`U`'), TreeNodeType.Class)
-// assert.deepEqual(getTreeNodeType('`E`'), TreeNodeType.Class)
-// assert.deepEqual(getTreeNodeType('<T>[]'), TreeNodeType.ArrayExpression)
-// assert.deepEqual(getTreeNodeType('string[]'), TreeNodeType.ArrayExpression)
-// assert.deepEqual(getTreeNodeType("'string|number'"), TreeNodeType.StringLiteral)
-// assert.deepEqual(getTreeNodeType('(string)'), TreeNodeType.Expression)
-// assert.deepEqual(
-//   getTreeNodeType("'{a:number}&{b:string}'"),
-//   TreeNodeType.StringLiteral
-// )
-// assert.deepEqual(getTreeNodeType("'&*::&lt||()><'"), TreeNodeType.StringLiteral)
-// assert.deepEqual(
-//   getTreeNodeType(
-//     "'https://preview.redd.it/award_images/t5_22cerq/80j20o397jj41_NarwhalSalute.png?width=128&amp;height=128&amp;auto=webp&amp;s=5d2c75f44f176f430e936204f9a53b8a2957f2fc'"
-//   ),
-//   TreeNodeType.StringLiteral
-// )
-// assert.deepEqual(
-//   getTreeNodeType('(a:number,b:number)=>(a+b:number)'),
-//   TreeNodeType.ClassLiteral
-// )
-// assert.deepEqual(getTreeNodeType(`\${${ID_IDENTITY}}`), TreeNodeType.Unit)
-// assert.deepEqual(getTreeNodeType('string|number|{}'), TreeNodeType.Or)
-// assert.deepEqual(
-//   getTreeNodeType(
-//     'string|number|{filters?:(string|number|{name?:string,namePrefix?:string})[],optionalServices?:string[],acceptAllDevices?:boolean}'
-//   ),
-//   TreeNodeType.Or
-// )
-// assert.deepEqual(getTreeNodeType('<T>["S"]'), TreeNodeType.PropExpression)
+assert.deepEqual(getTreeNodeType(':'), TreeNodeType.Invalid)
+assert.deepEqual(getTreeNodeType('foo'), TreeNodeType.Invalid)
+assert.deepEqual(getTreeNodeType('[1[]'), TreeNodeType.Invalid)
+// assert.deepEqual(getTreeNodeType('a:'), TreeNodeType.KeyValue)
+// assert.deepEqual(getTreeNodeType(':1'), TreeNodeType.KeyValue)
+assert.deepEqual(getTreeNodeType('{a:}'), TreeNodeType.ObjectLiteral)
+assert.deepEqual(getTreeNodeType('{:1}'), TreeNodeType.ObjectLiteral)
+assert.deepEqual(getTreeNodeType('"a:b"'), TreeNodeType.StringLiteral)
+assert.deepEqual(getTreeNodeType('"\\""'), TreeNodeType.StringLiteral)
+assert.deepEqual(getTreeNodeType('"\r"'), TreeNodeType.StringLiteral)
+assert.deepEqual(
+  getTreeNodeType(
+    `"v=0\r\no=- 7652727450078372599 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=extmap-allow-mixed\r\na=msid-semantic: WMS\r\nm=application 61198 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 201.26.26.115\r\na=candidate:2612718301 1 udp 2122262783 2804:431:e7c2:b2f3:c94:df00:ed4f:6843 54465 typ host generation 0 network-id 2 network-cost 10\r\na=candidate:1333116113 1 udp 2122194687 192.168.15.5 61198 typ host generation 0 network-id 1 network-cost 10\r\na=candidate:3110454533 1 udp 1685987071 201.26.26.115 61198 typ srflx raddr 192.168.15.5 rport 61198 generation 0 network-id 1 network-cost 10\r\na=candidate:3577288237 1 tcp 1518283007 2804:431:e7c2:b2f3:c94:df00:ed4f:6843 9 typ host tcptype active generation 0 network-id 2 network-cost 10\r\na=candidate:32915489 1 tcp 1518214911 192.168.15.5 9 typ host tcptype active generation 0 network-id 1 network-cost 10\r\na=ice-ufrag:YRMo\r\na=ice-pwd:Fwnv2ZDO0wzeeuDeWu+MVisV\r\na=fingerprint:sha-256 08:85:1D:A9:71:D2:CA:22:DD:76:E0:1D:59:CA:0E:E2:CA:93:3A:24:3B:09:28:F5:42:E5:D5:E7:79:C6:2B:E5\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\na=max-message-size:262144\r\n"`
+  ),
+  TreeNodeType.StringLiteral
+)
+assert.deepEqual(getTreeNodeType('/abc/'), TreeNodeType.RegexLiteral)
+assert.deepEqual(getTreeNodeType('null'), TreeNodeType.Null)
+assert.deepEqual(getTreeNodeType('1+1'), TreeNodeType.ArithmeticExpression)
+assert.deepEqual(getTreeNodeType('`U`'), TreeNodeType.Class)
+assert.deepEqual(getTreeNodeType('`E`'), TreeNodeType.Class)
+assert.deepEqual(getTreeNodeType('<T>[]'), TreeNodeType.ArrayExpression)
+assert.deepEqual(getTreeNodeType('string[]'), TreeNodeType.ArrayExpression)
+assert.deepEqual(getTreeNodeType("'string|number'"), TreeNodeType.StringLiteral)
+assert.deepEqual(getTreeNodeType('(string)'), TreeNodeType.Expression)
+assert.deepEqual(
+  getTreeNodeType("'{a:number}&{b:string}'"),
+  TreeNodeType.StringLiteral
+)
+assert.deepEqual(getTreeNodeType("'&*::&lt||()><'"), TreeNodeType.StringLiteral)
+assert.deepEqual(
+  getTreeNodeType(
+    "'https://preview.redd.it/award_images/t5_22cerq/80j20o397jj41_NarwhalSalute.png?width=128&amp;height=128&amp;auto=webp&amp;s=5d2c75f44f176f430e936204f9a53b8a2957f2fc'"
+  ),
+  TreeNodeType.StringLiteral
+)
+assert.deepEqual(
+  getTreeNodeType('(a:number,b:number)=>(a+b:number)'),
+  TreeNodeType.ClassLiteral
+)
+assert.deepEqual(getTreeNodeType(`\${${ID_IDENTITY}}`), TreeNodeType.Unit)
+assert.deepEqual(getTreeNodeType('string|number|{}'), TreeNodeType.Or)
+assert.deepEqual(
+  getTreeNodeType(
+    'string|number|{filters?:(string|number|{name?:string,namePrefix?:string})[],optionalServices?:string[],acceptAllDevices?:boolean}'
+  ),
+  TreeNodeType.Or
+)
+assert.deepEqual(getTreeNodeType('<T>["S"]'), TreeNodeType.PropExpression)
 
-// assert.deepEqual(getTree('{,}').children.length, 1)
+assert.deepEqual(getTree('{,}').children.length, 1)
 
-// // isValidType
+// isValidType
 
-// assert(isValidType('/a/'))
-// assert(isValidType('regex'))
-// assert(isValidType('string'))
-// assert(isValidType('number'))
-// assert(isValidType('boolean'))
-// assert(isValidType('string[]'))
-// assert(isValidType('number[]'))
-// assert(isValidType('boolean[]'))
-// assert(isValidType('object[]'))
-// assert(isValidType('(string)'))
-// assert(isValidType('(1)'))
-// assert(isValidType('(string)[]'))
-// assert(isValidType('(string)[]'))
-// assert(isValidType('"foo"'))
-// assert(isValidType("'foo'"))
-// assert(isValidType('string|number'))
-// assert(isValidType('string|1'))
-// assert(isValidType('string|1|3'))
-// assert(isValidType('string&number'))
-// assert(isValidType('(string|number)[]'))
-// assert(isValidType('{number:1}'))
-// assert(isValidType('{}'))
-// assert(isValidType('[]'))
-// assert(isValidType('1+2'))
-// assert(isValidType('1 +2'))
-// assert(isValidType('1 + 2'))
-// assert(isValidType('{foo:number}'))
-// assert(isValidType('{foo:number,bar:string}'))
-// assert(
-//   isValidType(
-//     '"click"|"mousedown"|"mouseup"|"mouseenter"|"mousemove"|"mouseleave"'
-//   )
-// )
-// assert(isValidType('{"foo":"number"}'))
-// assert(isValidType('{"foo":"number","bar":{"x":"number","y":"number"}}'))
-// assert(isValidType('{foo:number}[]'))
-// assert(isValidType('[]'))
-// assert(isValidType('[1,2,3]'))
-// assert(isValidType('[string,number]'))
-// assert(isValidType('3.14'))
-// assert(isValidType('<T>'))
-// assert(isValidType('string[]'))
-// assert(isValidType('number[]'))
-// assert(isValidType('string[][]'))
-// assert(isValidType('string{}'))
-// assert(isValidType('string[]{}'))
-// assert(isValidType('[1,2,[3,4],5]'))
-// assert(isValidType('{name:string}|{namePrefix:string}'))
-// assert(isValidType('string[]|number[]'))
-// assert(isValidType('[]|[0,1,2]'))
-// assert(
-//   isValidType(
-//     '{headers:object,statusCode:number,statusMessage:string,data:string}'
-//   )
-// )
-// assert(isValidType('{"a":1,"b":true,"c":{"d":"string"}}'))
-// assert(isValidType('(()=>())'))
-// assert(isValidType('()=>()'))
-// assert(isValidType('(a:number)=>()'))
-// assert(isValidType('(a:number,b:number)=>(a+b:number)'))
-// assert(isValidType('any'))
-// assert(isValidType('<T>["S"]'))
-// assert(isValidType('<T>["S","A"]'))
+assert(isValidType('/a/'))
+assert(isValidType('regex'))
+assert(isValidType('string'))
+assert(isValidType('number'))
+assert(isValidType('boolean'))
+assert(isValidType('string[]'))
+assert(isValidType('number[]'))
+assert(isValidType('boolean[]'))
+assert(isValidType('object[]'))
+assert(isValidType('(string)'))
+assert(isValidType('(1)'))
+assert(isValidType('(string)[]'))
+assert(isValidType('(string)[]'))
+assert(isValidType('"foo"'))
+assert(isValidType("'foo'"))
+assert(isValidType('string|number'))
+assert(isValidType('string|1'))
+assert(isValidType('string|1|3'))
+assert(isValidType('string&number'))
+assert(isValidType('(string|number)[]'))
+assert(isValidType('{number:1}'))
+assert(isValidType('{}'))
+assert(isValidType('[]'))
+assert(isValidType('1+2'))
+assert(isValidType('1 +2'))
+assert(isValidType('1 + 2'))
+assert(isValidType('{foo:number}'))
+assert(isValidType('{foo:number,bar:string}'))
+assert(
+  isValidType(
+    '"click"|"mousedown"|"mouseup"|"mouseenter"|"mousemove"|"mouseleave"'
+  )
+)
+assert(isValidType('{"foo":"number"}'))
+assert(isValidType('{"foo":"number","bar":{"x":"number","y":"number"}}'))
+assert(isValidType('{foo:number}[]'))
+assert(isValidType('[]'))
+assert(isValidType('[1,2,3]'))
+assert(isValidType('[string,number]'))
+assert(isValidType('3.14'))
+assert(isValidType('<T>'))
+assert(isValidType('string[]'))
+assert(isValidType('number[]'))
+assert(isValidType('string[][]'))
+assert(isValidType('string{}'))
+assert(isValidType('string[]{}'))
+assert(isValidType('[1,2,[3,4],5]'))
+assert(isValidType('{name:string}|{namePrefix:string}'))
+assert(isValidType('string[]|number[]'))
+assert(isValidType('[]|[0,1,2]'))
+assert(
+  isValidType(
+    '{headers:object,statusCode:number,statusMessage:string,data:string}'
+  )
+)
+assert(isValidType('{"a":1,"b":true,"c":{"d":"string"}}'))
+assert(isValidType('(()=>())'))
+assert(isValidType('()=>()'))
+assert(isValidType('(a:number)=>()'))
+assert(isValidType('(a:number,b:number)=>(a+b:number)'))
+assert(isValidType('any'))
+assert(isValidType('<T>["S"]'))
+assert(isValidType('<T>["S","A"]'))
 
-// assert(!isValidType("'foo's bar'"))
-// assert(!isValidType('{{}}'))
-// assert(!isValidType('{,}'))
-// assert(!isValidType(':'))
-// assert(!isValidType('b'))
-// assert(!isValidType("b'"))
-// assert(!isValidType("'''"))
-// assert(!isValidType('()'))
-// assert(!isValidType('{ foo }'))
-// assert(!isValidType('{ foo: bar }'))
-// assert(!isValidType('|'))
-// assert(!isValidType('string |'))
-// assert(!isValidType('string | foo'))
-// assert(!isValidType('foo'))
-// assert(!isValidType('foo: string'))
-// assert(!isValidType("{ a: b' }"))
-// assert(!isValidType('foo:true'))
-// assert(!isValidType('foo:false'))
-// assert(!isValidType('<T>["S",K]'))
-// assert(!isValidObjKey('*'))
+assert(!isValidType("'foo's bar'"))
+assert(!isValidType('{{}}'))
+assert(!isValidType('{,}'))
+assert(!isValidType(':'))
+assert(!isValidType('b'))
+assert(!isValidType("b'"))
+assert(!isValidType("'''"))
+assert(!isValidType('()'))
+assert(!isValidType('{ foo }'))
+assert(!isValidType('{ foo: bar }'))
+assert(!isValidType('|'))
+assert(!isValidType('string |'))
+assert(!isValidType('string | foo'))
+assert(!isValidType('foo'))
+assert(!isValidType('foo: string'))
+assert(!isValidType("{ a: b' }"))
+assert(!isValidType('foo:true'))
+assert(!isValidType('foo:false'))
+assert(!isValidType('<T>["S",K]'))
+assert(!isValidObjKey('*'))
 
-// assert(isTypeMatch('number', 'number|string'))
-// assert(isTypeMatch('string', 'number|string'))
-// assert(isTypeMatch('number', '(number|string)'))
-// assert(isTypeMatch('string', '(number|string)'))
-// assert(isTypeMatch('number[]', '(number|string)[]'))
-// assert(isTypeMatch('string[]', '(number|string)[]'))
-// assert(isTypeMatch("'number|string'", 'string'))
-// assert(isTypeMatch('"number|string"', 'string'))
-// assert(isTypeMatch('"foo"', '"foo"|"bar"'))
-// assert(isTypeMatch('{a:"foo"}', "{a:'foo'|'bar'}"))
-// assert(isTypeMatch('[{a:"bar"}]', "{a:'foo'|'bar'}[]"))
-// assert(isTypeMatch('<T>', '<G>'))
-// assert(isTypeMatch('number', '<T>'))
-// assert(isTypeMatch('<T>', 'number'))
-// assert(isTypeMatch('<T>', 'string'))
-// assert(isTypeMatch('<T>', 'string[]'))
-// assert(isTypeMatch('<T>[]', 'string[]'))
-// assert(isTypeMatch('[]', 'string[]'))
-// assert(isTypeMatch('string', 'string'))
-// assert(isTypeMatch('/abc/', 'regex'))
-// assert(isTypeMatch('number', 'number'))
-// assert(isTypeMatch('boolean', 'boolean'))
-// assert(isTypeMatch('any', 'any'))
-// assert(isTypeMatch('number', 'any'))
-// assert(isTypeMatch('1', 'any'))
-// assert(isTypeMatch('"foo"', 'string'))
-// assert(isTypeMatch("'foo'", '"foo"'))
-// assert(isTypeMatch('"foo"', '"foo"|"bar"'))
-// assert(isTypeMatch('"foo"', "'foo'|'bar'"))
-// assert(isTypeMatch("'foo'", "'foo'|'bar'"))
-// assert(isTypeMatch('<T>', 'any'))
-// assert(isTypeMatch('any', '<T>'))
-// assert(isTypeMatch('null', 'null'))
-// assert(isTypeMatch('null', 'any'))
-// assert(isTypeMatch('string[]', '<T>[]'))
-// assert(isTypeMatch('string[]', 'string[]'))
-// assert(isTypeMatch('string[]', '(string|number)[]'))
-// assert(isTypeMatch('{"x":number,"y":number}', 'object'))
-// assert(isTypeMatch('{x:0,y:1}', '{"x":number,"y":number}'))
-// assert(
-//   isTypeMatch(
-//     '{x:10,y:10,width:100,height:100}',
-//     '{x:number,y:number,width:number,height:number}'
-//   )
-// )
-// assert(isTypeMatch('{a:number,b:string}', '{a:number,b:string}'))
-// assert(isTypeMatch('{a:number,b:string}', '{b:string,a:number}'))
-// assert(isTypeMatch('{a:number,b:string}', '{a:number}'))
-// assert(isTypeMatch('{a:number,b:string}', '{}'))
-// assert(isTypeMatch('{a:"foo"}', "{a:'foo'}"))
-// assert(isTypeMatch("{a:'foo'}", '{a:"foo"}'))
-// assert(isTypeMatch('{type:"answer"}', "{type:'answer'}"))
-// assert(isTypeMatch('{type:"answer",sdp:\'\'}', "{type:'answer',sdp:string}"))
-// assert(isTypeMatch('{}', '{a?:number}'))
-// assert(isTypeMatch('string[]&object', 'object'))
-// assert(isTypeMatch('string[]&object', 'string[]'))
-// assert(isTypeMatch('string[]&object', '<A>[]'))
-// assert(isTypeMatch('string[]|object', 'string[]|object'))
-// assert(isTypeMatch('string[]|{foo:"bar"}', 'string[]|object'))
-// assert(isTypeMatch('[]', '[]'))
-// assert(isTypeMatch('{a:"foo"}', 'string{}'))
-// assert(isTypeMatch('{a:1}', 'number{}'))
-// assert(isTypeMatch('[1,2,3]', '[1,2,3]'))
-// assert(isTypeMatch('[1,2,3]', '[number,number,number]'))
-// assert(isTypeMatch('any', 'number'))
-// assert(isTypeMatch('<T>', '<K>[]'))
-// assert(isTypeMatch('any', 'object'))
-// assert(isTypeMatch('object', '{}'))
-// assert(isTypeMatch('object', '{"x":number,"y":number}'))
-// assert(isTypeMatch('<T>', ID_IDENTITY))
-// assert(isTypeMatch('any', ID_IDENTITY))
+assert(isTypeMatch('number', 'number|string'))
+assert(isTypeMatch('string', 'number|string'))
+assert(isTypeMatch('number', '(number|string)'))
+assert(isTypeMatch('string', '(number|string)'))
+assert(isTypeMatch('number[]', '(number|string)[]'))
+assert(isTypeMatch('string[]', '(number|string)[]'))
+assert(isTypeMatch("'number|string'", 'string'))
+assert(isTypeMatch('"number|string"', 'string'))
+assert(isTypeMatch('"foo"', '"foo"|"bar"'))
+assert(isTypeMatch('{a:"foo"}', "{a:'foo'|'bar'}"))
+assert(isTypeMatch('[{a:"bar"}]', "{a:'foo'|'bar'}[]"))
+assert(isTypeMatch('<T>', '<G>'))
+assert(isTypeMatch('number', '<T>'))
+assert(isTypeMatch('<T>', 'number'))
+assert(isTypeMatch('<T>', 'string'))
+assert(isTypeMatch('<T>', 'string[]'))
+assert(isTypeMatch('<T>[]', 'string[]'))
+assert(isTypeMatch('[]', 'string[]'))
+assert(isTypeMatch('string', 'string'))
+assert(isTypeMatch('/abc/', 'regex'))
+assert(isTypeMatch('number', 'number'))
+assert(isTypeMatch('boolean', 'boolean'))
+assert(isTypeMatch('any', 'any'))
+assert(isTypeMatch('number', 'any'))
+assert(isTypeMatch('1', 'any'))
+assert(isTypeMatch('"foo"', 'string'))
+assert(isTypeMatch("'foo'", '"foo"'))
+assert(isTypeMatch('"foo"', '"foo"|"bar"'))
+assert(isTypeMatch('"foo"', "'foo'|'bar'"))
+assert(isTypeMatch("'foo'", "'foo'|'bar'"))
+assert(isTypeMatch('<T>', 'any'))
+assert(isTypeMatch('any', '<T>'))
+assert(isTypeMatch('null', 'null'))
+assert(isTypeMatch('null', 'any'))
+assert(isTypeMatch('string[]', '<T>[]'))
+assert(isTypeMatch('string[]', 'string[]'))
+assert(isTypeMatch('string[]', '(string|number)[]'))
+assert(isTypeMatch('{"x":number,"y":number}', 'object'))
+assert(isTypeMatch('{x:0,y:1}', '{"x":number,"y":number}'))
+assert(
+  isTypeMatch(
+    '{x:10,y:10,width:100,height:100}',
+    '{x:number,y:number,width:number,height:number}'
+  )
+)
+assert(isTypeMatch('{a:number,b:string}', '{a:number,b:string}'))
+assert(isTypeMatch('{a:number,b:string}', '{b:string,a:number}'))
+assert(isTypeMatch('{a:number,b:string}', '{a:number}'))
+assert(isTypeMatch('{a:number,b:string}', '{}'))
+assert(isTypeMatch('{a:"foo"}', "{a:'foo'}"))
+assert(isTypeMatch("{a:'foo'}", '{a:"foo"}'))
+assert(isTypeMatch('{type:"answer"}', "{type:'answer'}"))
+assert(isTypeMatch('{type:"answer",sdp:\'\'}', "{type:'answer',sdp:string}"))
+assert(isTypeMatch('{}', '{a?:number}'))
+assert(isTypeMatch('string[]&object', 'object'))
+assert(isTypeMatch('string[]&object', 'string[]'))
+assert(isTypeMatch('string[]&object', '<A>[]'))
+assert(isTypeMatch('string[]|object', 'string[]|object'))
+assert(isTypeMatch('string[]|{foo:"bar"}', 'string[]|object'))
+assert(isTypeMatch('[]', '[]'))
+assert(isTypeMatch('{a:"foo"}', 'string{}'))
+assert(isTypeMatch('{a:1}', 'number{}'))
+assert(isTypeMatch('[1,2,3]', '[1,2,3]'))
+assert(isTypeMatch('[1,2,3]', '[number,number,number]'))
+assert(isTypeMatch('any', 'number'))
+assert(isTypeMatch('<T>', '<K>[]'))
+assert(isTypeMatch('any', 'object'))
+assert(isTypeMatch('object', '{}'))
+assert(isTypeMatch('object', '{"x":number,"y":number}'))
+assert(isTypeMatch('<T>', ID_IDENTITY))
+assert(isTypeMatch('any', ID_IDENTITY))
 assert(isTypeMatch(`\${${ID_IDENTITY}}`, 'any'))
 assert(isTypeMatch('`G`', '`G`'))
 assert(isTypeMatch('`U`&`G`', '`G`'))
@@ -259,6 +265,7 @@ assert(!isTypeMatch('string[]|object', '<A>[]'))
 assert(!isTypeMatch('[]', '[1]'))
 assert(!isTypeMatch('[1,2,3]', '[1,2,3,4]'))
 assert(!isTypeMatch('[1,2,3]', '[number,number, string]'))
+assert(!isTypeMatch('{background: "color"}', "object"))
 assert(!isTypeMatch('null', ID_IDENTITY))
 assert(!isTypeMatch('object', 'class'))
 assert(!isTypeMatch('number', 'class'))
@@ -368,6 +375,7 @@ assert(!isValidValue('{::1}'))
 assert(!isValidValue('{""":1}'))
 assert(!isValidValue("{{':1}"))
 assert(!isValidValue('a + 1'))
+assert(!isValidValue('{foo: "bar"}'))
 
 // getValueType
 

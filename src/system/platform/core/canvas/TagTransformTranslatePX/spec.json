@@ -2,7 +2,7 @@
   "name": "tag transform translate px",
   "inputs": {
     "y": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "px",
           "pinId": "n"
@@ -10,7 +10,7 @@
       }
     },
     "x": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "px0",
           "pinId": "n"
@@ -20,7 +20,7 @@
   },
   "outputs": {
     "{transform}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagtransform",
           "pinId": "{transform}"

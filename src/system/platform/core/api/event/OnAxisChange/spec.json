@@ -1,0 +1,54 @@
+{
+  "name": "on axis change",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'axischange'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "gamepad": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "type": "`GP`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `gamepad` \"axischange\" event",
+    "complexity": 5,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "event"
+    ]
+  },
+  "id": "1448dd43-3e1e-4709-a9e1-3562d61cc6f1",
+  "type": "`U`&`G`",
+  "system": true
+}

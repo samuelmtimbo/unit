@@ -1,26 +1,21 @@
 import classnames from '../../../../client/classnames'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
-import { getTransform, Zoom } from '../../../../client/zoom'
+import { getTransform, Zoom, zoomIdentity } from '../../../../client/zoom'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
-import { Dict } from '../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../types/global/dom'
+import { Style } from '../../Props'
 import Div from '../Div/Component'
 import SVGG from '../svg/Group/Component'
 import SVGSVG from '../svg/SVG/Component'
 
-export type _Style = Dict<string>
-
-export interface _Props {
+export interface Props {
   className?: string
-  style?: _Style
+  style?: Style
   draggable?: boolean
-}
-
-export interface Props extends _Props {
-  width: number
-  height: number
+  width?: number
+  height?: number
   zoom: Zoom
 }
 
@@ -30,6 +25,9 @@ const DEFAULT_STYLE = {
   height: '0',
   top: '0',
 }
+
+const DEFAULT_WIDTH = 240
+const DEFAULT_HEIGHT = 240
 
 export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
   public _root: Div
@@ -41,7 +39,13 @@ export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
   constructor($props: Props, $system: System, $pod: Pod) {
     super($props, $system, $pod)
 
-    const { className, style, width, height, draggable } = this.$props
+    const {
+      className,
+      style,
+      width = DEFAULT_WIDTH,
+      height = DEFAULT_HEIGHT,
+      draggable,
+    } = this.$props
 
     const widthStr = `${width}px`
     const heightStr = `${height}px`
@@ -114,6 +118,7 @@ export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
     }
     this.$subComponent = {
       zoom,
+      html,
       svg,
       svg_g,
     }
@@ -125,7 +130,7 @@ export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
   }
 
   private _transform = () => {
-    const { zoom } = this.$props
+    const { zoom = zoomIdentity } = this.$props
     const transform = getTransform(zoom)
     // mergeStyle(this._html, { transform })
     // mergeStyle(this._svg_g, {

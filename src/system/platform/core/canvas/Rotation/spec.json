@@ -28,7 +28,7 @@
         }
       }
     },
-    "jamqlimq": {
+    "translate": {
       "id": "6f79ee03-4b3f-439c-b955-5529f3bebcc9",
       "input": {
         "x": {
@@ -41,7 +41,7 @@
         }
       }
     },
-    "hurwgmkut": {
+    "translate0": {
       "id": "6f79ee03-4b3f-439c-b955-5529f3bebcc9",
       "input": {
         "x": {
@@ -56,7 +56,7 @@
     }
   },
   "merges": {
-    "prkezfb": {
+    "0": {
       "rotate": {
         "input": {
           "rad": true
@@ -68,8 +68,8 @@
         }
       }
     },
-    "hrxmfjpur": {
-      "jamqlimq": {
+    "1": {
+      "translate": {
         "output": {
           "d": true
         }
@@ -80,8 +80,8 @@
         }
       }
     },
-    "keaxsina": {
-      "hurwgmkut": {
+    "2": {
+      "translate0": {
         "input": {
           "d": true
         }
@@ -104,8 +104,8 @@
     ]
   },
   "inputs": {
-    "qehmeuts": {
-      "pin": {
+    "rad": {
+      "plug": {
         "0": {
           "unitId": "loopadd",
           "pinId": "plus"
@@ -113,10 +113,10 @@
       },
       "type": "number"
     },
-    "xwshdccx": {
-      "pin": {
+    "d": {
+      "plug": {
         "0": {
-          "unitId": "jamqlimq",
+          "unitId": "translate",
           "pinId": "d"
         }
       },
@@ -124,10 +124,10 @@
     }
   },
   "outputs": {
-    "mdwuthc": {
-      "pin": {
+    "d": {
+      "plug": {
         "0": {
-          "unitId": "hurwgmkut",
+          "unitId": "translate0",
           "pinId": "d"
         }
       },

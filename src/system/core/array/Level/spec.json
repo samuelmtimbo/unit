@@ -48,37 +48,37 @@
   },
   "inputs": {
     "with": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tjrsgp",
           "pinId": "with"
         }
       },
+      "functional": true,
       "type": "<A>"
     },
     "a[]": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "oirwnkg"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     },
     "b[]": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "wsguc"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     }
   },
   "outputs": {
     "length": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "cmywa"
         }
@@ -86,7 +86,7 @@
       "type": "number"
     },
     "b[]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tjrsgp",
           "pinId": "b[]"
@@ -95,7 +95,7 @@
       "type": "<A>[]"
     },
     "a[]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tjrsgp",
           "pinId": "a[]"

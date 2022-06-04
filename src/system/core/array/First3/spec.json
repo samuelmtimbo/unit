@@ -59,7 +59,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -69,7 +69,7 @@
   },
   "outputs": {
     "0": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "at",
           "pinId": "a[i]"
@@ -78,7 +78,7 @@
       "type": "<A>"
     },
     "1": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "at0",
           "pinId": "a[i]"
@@ -87,7 +87,7 @@
       "type": "<A>"
     },
     "2": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "at1",
           "pinId": "a[i]"

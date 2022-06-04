@@ -57,27 +57,27 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
       },
+      "functional": true,
       "type": "number"
     }
   },
   "outputs": {
     "lesser": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "a"
@@ -86,7 +86,7 @@
       "type": "number"
     },
     "a < b": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }

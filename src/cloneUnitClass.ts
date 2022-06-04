@@ -1,27 +1,21 @@
-import { Pod } from './pod'
 import { bundleClass } from './spec/bundleClass'
-import { System } from './system'
 import { UnitClass } from './types/UnitClass'
+import { UnitBundle } from "./types/UnitBundle"
 
-export function cloneUnitClass(unit: UnitClass): UnitClass {
-  const { __bundle } = unit
+export function cloneUnitBundle(Bundle: UnitBundle): UnitBundle {
+  const { __bundle } = Bundle
 
-  const NewClass = _cloneUnitClass(unit)
+  const NewClass = cloneUnitClass(Bundle)
 
-  bundleClass(NewClass, __bundle)
+  const NewBundle = bundleClass(NewClass, __bundle)
 
-  return NewClass
+  return NewBundle
 }
 
-export function _cloneUnitClass(unit: UnitClass): UnitClass {
-  class NewClass extends unit {
-    constructor(system: System, pod: Pod) {
-      super(system, pod)
-      // unit.constructor.call(this, system, pod)
-    }
-  }
+export function cloneUnitClass(Class: UnitClass): UnitClass {
+  class NewClass extends Class {}
 
-  Object.defineProperty(NewClass, 'name', { value: unit.constructor.name })
+  Object.defineProperty(NewClass, 'name', { value: Class.constructor.name })
 
   return NewClass
 }

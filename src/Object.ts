@@ -1,6 +1,6 @@
 import { EventEmitter } from './EventEmitter'
-import { J } from './interface/J'
-import { V } from './interface/V'
+import { J } from './types/interface/J'
+import { V } from './types/interface/V'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 import { pop } from './util/array'

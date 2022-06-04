@@ -37,17 +37,17 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     },
     "next": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "next"
@@ -56,19 +56,19 @@
       "type": "<B>"
     },
     "init": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "init"
         }
       },
+      "functional": true,
       "type": "<B>"
     }
   },
   "outputs": {
     "a[i]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a[i]"
@@ -77,7 +77,7 @@
       "type": "<A>"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "orbnh"
         }
@@ -85,7 +85,7 @@
       "type": "boolean"
     },
     "result": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "final"
@@ -94,7 +94,7 @@
       "type": "<B>"
     },
     "local": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop",
           "pinId": "current"

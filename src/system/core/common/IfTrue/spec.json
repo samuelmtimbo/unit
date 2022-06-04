@@ -51,7 +51,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }
@@ -61,7 +61,7 @@
   },
   "outputs": {
     "false": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a if b"

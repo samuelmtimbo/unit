@@ -1,10 +1,10 @@
 import { Element } from '../../../../Class/Element'
-import { PO } from '../../../../interface/PO'
+import { P } from '../../../../types/interface/P'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 
 export interface I {
-  pod: PO
+  pod: P
   className: string
   style: object
 }

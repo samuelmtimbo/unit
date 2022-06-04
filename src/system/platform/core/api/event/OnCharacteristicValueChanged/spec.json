@@ -16,25 +16,25 @@
   "merges": {},
   "inputs": {
     "charact": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "unit"
         }
       },
+      "type": "`U`",
       "ref": true
     }
   },
   "outputs": {
     "value": {
-      "type": "string",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "data"
         }
-      }
+      },
+      "type": "string"
     }
   },
   "metadata": {

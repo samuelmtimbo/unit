@@ -153,7 +153,7 @@ export function extractSubSpec(
       const subPinId = (newSpecTypeSubPinId[_pinId] ?? -1) + 1
       newSpecTypeSubPinId[_pinId] = subPinId
       newSpec = assocPath(newSpec, [`${type}s`, _pinId], {
-        pin: { [subPinId]: { unitId, pinId } },
+        plug: { [subPinId]: { unitId, pinId } },
       })
       unitMergePinRename[unitId][type][pinId] = _pinId
       return _pinId

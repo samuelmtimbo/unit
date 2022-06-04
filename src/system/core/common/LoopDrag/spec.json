@@ -2,7 +2,7 @@
   "name": "loop drag",
   "inputs": {
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "looprepeat",
           "pinId": "test"
@@ -14,7 +14,7 @@
       }
     },
     "+": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add",
           "pinId": "b"
@@ -22,7 +22,7 @@
       }
     },
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loopforever",
           "pinId": "init"
@@ -32,7 +32,7 @@
   },
   "outputs": {
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }

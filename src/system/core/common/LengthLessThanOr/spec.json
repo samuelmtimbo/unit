@@ -24,42 +24,42 @@
   },
   "inputs": {
     "a": {
-      "type": "<A>[]",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "length",
           "pinId": "a"
         }
-      }
+      },
+      "type": "<A>[]"
     },
     "b": {
-      "type": "number",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lessthanor",
           "pinId": "b"
         }
-      }
+      },
+      "type": "number"
     }
   },
   "outputs": {
     "true": {
-      "type": "<A>[]",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lessthanor",
           "pinId": "a < b"
         }
-      }
+      },
+      "type": "<A>[]"
     },
     "false": {
-      "type": "<A>[]",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lessthanor",
           "pinId": "a ≥ b"
         }
-      }
+      },
+      "type": "<A>[]"
     }
   },
   "metadata": {

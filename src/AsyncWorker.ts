@@ -6,7 +6,7 @@ import {
   $C_METHOD_WATCH,
   $C_R,
   $C_W,
-} from './interface/async/$C'
+} from './types/interface/async/$C'
 import {
   $EE,
   $EE_C,
@@ -15,7 +15,7 @@ import {
   $EE_METHOD_WATCH,
   $EE_R,
   $EE_W,
-} from './interface/async/$EE'
+} from './types/interface/async/$EE'
 import {
   $G,
   $G_C,
@@ -24,8 +24,8 @@ import {
   $G_METHOD_WATCH,
   $G_R,
   $G_W,
-} from './interface/async/$G'
-import { $Graph } from './interface/async/$Graph'
+} from './types/interface/async/$G'
+import { $Graph } from './types/interface/async/$Graph'
 import {
   $J,
   $J_C,
@@ -34,7 +34,7 @@ import {
   $J_METHOD_WATCH,
   $J_R,
   $J_W,
-} from './interface/async/$J'
+} from './types/interface/async/$J'
 import {
   $ST,
   $ST_C,
@@ -43,7 +43,7 @@ import {
   $ST_METHOD_WATCH,
   $ST_R,
   $ST_W,
-} from './interface/async/$ST'
+} from './types/interface/async/$ST'
 import {
   $U,
   $U_C,
@@ -52,13 +52,13 @@ import {
   $U_METHOD_WATCH,
   $U_R,
   $U_W,
-} from './interface/async/$U'
+} from './types/interface/async/$U'
 import {
   $V_METHOD_CALL,
   $V_METHOD_REF,
   $V_METHOD_WATCH,
-} from './interface/async/$V'
-import { AsyncWrap } from './interface/async/AsyncWrap'
+} from './types/interface/async/$V'
+import { AsyncWrap } from './types/interface/async/AsyncWrap'
 import { RemotePort } from './RemotePort'
 import { Callback } from './types/Callback'
 import { Unlisten } from './types/Unlisten'

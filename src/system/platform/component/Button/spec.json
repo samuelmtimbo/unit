@@ -1,0 +1,33 @@
+{
+  "name": "button",
+  "type": "`U`&`C`&`V`&`J`",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML div element",
+    "complexity": 21,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "b61f5cc6-37e9-45e1-965b-02940820f7ce",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "system": true,
+  "render": true
+}

@@ -41,24 +41,24 @@
   },
   "inputs": {
     "ntf": {
-      "short": "ntf",
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "call",
           "pinId": "unit"
         }
       },
+      "short": "ntf",
+      "type": "`U`",
       "ref": true
     },
     "any": {
-      "type": "any",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "emptyobject",
           "pinId": "any"
         }
-      }
+      },
+      "type": "any"
     }
   },
   "outputs": {},

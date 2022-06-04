@@ -1,0 +1,51 @@
+{
+  "name": "insert child",
+  "inputs": {
+    "parent": {
+      "type": "`C`",
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -116,
+            "y": 30
+          }
+        }
+      }
+    },
+    "child": {
+      "type": "`C`",
+      "metadata": {
+        "examples": ["${unit:{id:'f27cae4e-fea8-11ea-b91e-db41e114c426'}}"],
+        "position": {
+          "0": {
+            "x": 128,
+            "y": 30
+          }
+        }
+      }
+    },
+    "at": {
+      "type": "number",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -116,
+            "y": 0
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "base": true,
+  "metadata": {
+    "icon": "square",
+    "description": "insert `child` instance to `parent` `at` position",
+    "complexity": 3,
+    "tags": ["platform", "api", "component"]
+  },
+  "id": "41a8c91e-87f8-4d96-9714-33716f329f7b",
+  "type": "`U`",
+  "system": true
+}

@@ -41,7 +41,7 @@
   },
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "b"
@@ -50,7 +50,7 @@
       "type": "any"
     },
     "unit": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "get",
           "pinId": "unit"
@@ -62,7 +62,7 @@
   },
   "outputs": {
     "hostname": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "get",
           "pinId": "value"

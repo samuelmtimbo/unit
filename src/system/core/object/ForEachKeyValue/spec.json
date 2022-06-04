@@ -88,7 +88,7 @@
   },
   "inputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }
@@ -98,7 +98,7 @@
   },
   "outputs": {
     "key": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "4"
         }
@@ -106,7 +106,7 @@
       "type": "number|string"
     },
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prop",
           "pinId": "value"
@@ -115,7 +115,7 @@
       "type": "any"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }

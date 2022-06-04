@@ -1,5 +1,6 @@
 import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
+import { COLOR_WHITE } from '../../../../../client/theme'
 import { replaceChild } from '../../../../../client/util/replaceChild'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
@@ -7,6 +8,18 @@ import { NOOP } from '../../../../../NOOP'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+
+export function draw(ctx: CanvasRenderingContext2D, step: any[]): void {
+  const method = step[0]
+  const args = step.slice(1, step.length)
+  if (method === 'fillStyle') {
+    ctx.fillStyle = args[0]
+  } else if (method === 'strokeStyle') {
+    ctx.strokeStyle = args[0]
+  } else {
+    ctx[method](...args)
+  }
+}
 
 export function clearCanvas(context: CanvasRenderingContext2D) {
   const transform = context.getTransform()
@@ -35,13 +48,7 @@ export const DEFAULT_STYLE: Dict<string> = {
   ...userSelect('none'),
 }
 
-declare global {
-  interface HTMLCanvasElement {
-    captureStream(frameRate?: number): MediaStream
-  }
-}
-
-export default class Canvas extends Element<HTMLCanvasElement, Props> {
+export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   private _context: CanvasRenderingContext2D
   private _canvas_el: HTMLCanvasElement
 
@@ -53,6 +60,7 @@ export default class Canvas extends Element<HTMLCanvasElement, Props> {
     const {} = $props
 
     this._reset()
+    this._setup()
 
     this.$element = this._canvas_el
   }
@@ -82,7 +90,7 @@ export default class Canvas extends Element<HTMLCanvasElement, Props> {
 
   private _create_canvas = () => {
     const { style, width = 200, height = 200 } = this.$props
-
+    // console.log('CanvasComp', '_create_canvas', style)
     const canvas_el = this.$system.api.document.createElement('canvas')
     canvas_el.classList.add('canvas')
     canvas_el.width = width
@@ -116,17 +124,7 @@ export default class Canvas extends Element<HTMLCanvasElement, Props> {
   }
 
   private _draw(step: any[]) {
-    const method = step[0]
-    const args = step.slice(1, step.length)
-    if (method === 'clear') {
-      this.clear()
-    } else if (method === 'fillStyle') {
-      this._context.fillStyle = args[0]
-    } else if (method === 'strokeStyle') {
-      this._context.strokeStyle = args[0]
-    } else {
-      this._context[method](...args)
-    }
+    draw(this._context, step)
   }
 
   private _draw_steps(steps: any[][]) {
@@ -158,7 +156,7 @@ export default class Canvas extends Element<HTMLCanvasElement, Props> {
 
   private _setup_context = (): void => {
     // console.log('Canvas', '_setup_context')
-    const { $color } = this.$context
+    const { $color } = this.$context || { $color: COLOR_WHITE }
     const context = this._canvas_el.getContext('2d')
     this._context = context
     this._context.strokeStyle = $color
@@ -179,6 +177,7 @@ export default class Canvas extends Element<HTMLCanvasElement, Props> {
 
   clear(_?: undefined) {
     clearCanvas(this._context)
+
     this._d = []
   }
 

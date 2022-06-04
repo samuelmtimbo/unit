@@ -2,7 +2,7 @@
   "name": "default video user media",
   "inputs": {
     "opt": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault",
           "pinId": "a"
@@ -12,7 +12,7 @@
   },
   "outputs": {
     "stream": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getusermedia",
           "pinId": "stream"

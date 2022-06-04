@@ -36,7 +36,7 @@
   },
   "inputs": {
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lengthequals",
           "pinId": "b"
@@ -45,7 +45,7 @@
       "type": "number"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "diljw"
         }
@@ -55,7 +55,7 @@
   },
   "outputs": {
     "false": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifelse",
           "pinId": "else"
@@ -64,7 +64,7 @@
       "type": "<A>[]"
     },
     "true": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifelse",
           "pinId": "if"

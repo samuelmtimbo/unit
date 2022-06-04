@@ -49,7 +49,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if0",
           "pinId": "a"
@@ -58,7 +58,7 @@
       "type": "<A>"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if1",
           "pinId": "a"
@@ -67,7 +67,7 @@
       "type": "<B>"
     },
     "c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a"
@@ -76,7 +76,7 @@
       "type": "<C>"
     },
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if2",
           "pinId": "a"
@@ -85,7 +85,7 @@
       "type": "<D>"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -95,7 +95,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if2",
           "pinId": "a if b"
@@ -104,7 +104,7 @@
       "type": "<D>"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if0",
           "pinId": "a if b"
@@ -113,7 +113,7 @@
       "type": "<A>"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if1",
           "pinId": "a if b"
@@ -122,7 +122,7 @@
       "type": "<B>"
     },
     "c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a if b"

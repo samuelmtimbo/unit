@@ -1,10 +1,14 @@
+import { LocalStore } from '../client/store'
 import { noHost } from '../host/none'
+import { SharedObject } from '../SharedObject'
 import { BootOpt, System } from '../system'
 import _classes from '../system/_classes'
 import _components from '../system/_components'
 import _specs from '../system/_specs'
+import { Dict } from '../types/Dict'
 import { IGamepad } from '../types/global/IGamepad'
 import { IKeyboard } from '../types/global/IKeyboard'
+import { IPointer } from '../types/global/IPointer'
 
 export function boot(opt: BootOpt = {}): System {
   let { api = noHost() } = opt
@@ -13,14 +17,15 @@ export function boot(opt: BootOpt = {}): System {
     pressed: [],
     repeat: false,
   }
-
   const gamepads: IGamepad[] = []
+  const pointers: Dict<IPointer> = {}
 
   const customEvent = new Set<string>()
   const context = []
   const input = {
     keyboard,
     gamepads,
+    pointers,
   }
 
   const flag = {
@@ -31,9 +36,12 @@ export function boot(opt: BootOpt = {}): System {
 
   const feature = {}
 
-  const $system: System = {
+  const system: System = {
+    parent: null,
     mounted: false,
+    animated: true,
     root: null,
+    theme: 'dark',
     customEvent,
     input,
     context,
@@ -56,14 +64,9 @@ export function boot(opt: BootOpt = {}): System {
       ref: {},
       component: {},
     },
-    id: {
-      user: null,
-      token: null,
-      pbkey: [],
-      pvkey: {},
-    },
     api,
+    graph: (system, opt) => new SharedObject(new LocalStore(system, 'local')),
   }
 
-  return $system
+  return system
 }

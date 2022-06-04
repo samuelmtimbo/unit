@@ -1,7 +1,7 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { U } from '../../../../../interface/U'
-import { V } from '../../../../../interface/V'
+import { U } from '../../../../../types/interface/U'
+import { V } from '../../../../../types/interface/V'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 

@@ -11,7 +11,12 @@
     },
     "target": {
       "type": "string",
-      "optional": true
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "\"_blank\""
+        ]
+      }
     }
   },
   "outputs": {},

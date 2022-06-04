@@ -66,7 +66,7 @@ export default class Minimal extends Element<SVGElement, Props> {
   }
 
   private _render = (id: string): void => {
-    const { specs } = this.$system
+    const specs =  { ...this.$system.specs, ...this.$pod.specs }
 
     const spec = getSpec(specs, id)
 

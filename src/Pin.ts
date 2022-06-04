@@ -1,5 +1,6 @@
 import { EventEmitter, EventEmitter_EE } from './EventEmitter'
-import { V } from './interface/V'
+import { isPrimitive } from './spec/primitive'
+import { V } from './types/interface/V'
 
 export type PinEvent =
   | 'data'
@@ -19,6 +20,14 @@ export type Pin_EE<T> = {
   invalid: []
   ignored: [boolean]
   constant: [boolean]
+}
+
+export type Pin_M<T = any> = {
+  _register: T | undefined
+  _invalid: boolean
+  _constant: boolean
+  _ignored: boolean
+  _idle: boolean
 }
 
 export type PinEvents<T> = EventEmitter_EE<Pin_EE<T>> & Pin_EE<T>
@@ -140,6 +149,26 @@ export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V {
 
   public invalid(): boolean {
     return this._invalid
+  }
+
+  public snapshot(): Pin_M<T> {
+    return {
+      _register: isPrimitive(this._register) ? this._register : undefined,
+      _invalid: this._invalid,
+      _constant: this._constant,
+      _ignored: this._ignored,
+      _idle: this._idle,
+    }
+  }
+
+  public restore(state: Pin_M<T>): void {
+    const { _register, _invalid, _constant, _ignored, _idle } = state
+
+    this._register = _register
+    this._invalid = _invalid
+    this._constant = _constant
+    this._ignored = _ignored
+    this._idle = _idle
   }
 
   // V

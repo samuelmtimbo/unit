@@ -76,7 +76,7 @@ export function isSupportedKeyboardEvent(event: KeyboardEvent): boolean {
   const { key, metaKey } = event
 
   // if (metaKey) {
-  // return false
+  //   return false
   // }
 
   if (key === 'imeprocess') {
@@ -225,17 +225,18 @@ export default class KeyboardController {
 
   private _filterShortcuts(type: 'keydown' | 'keyup'): Shortcut[] {
     const filtered: Shortcut[] = []
-    for (let id in this._shortcuts) {
+    for (const id in this._shortcuts) {
       const shortcutGroup = this._shortcuts[id]
       const currentCombo = this.getCurrentCombo()
       const currentComboStr = currentCombo.join('+')
-      for (let shortcut of shortcutGroup) {
+      for (const shortcut of shortcutGroup) {
         let match = false
         if (
           (type === 'keydown' && shortcut.keydown) ||
           (type === 'keyup' && shortcut.keyup)
         ) {
-          let { combo, strict } = shortcut
+          let { combo } = shortcut
+          const { strict } = shortcut
           combo = Array.isArray(combo) ? combo : [combo]
           for (const c of combo) {
             if (
@@ -271,12 +272,12 @@ export default class KeyboardController {
     // const current = this.getCurrentCombo()
     // console.log('_keydown', `${previous} -> ${current}`)
     const filtered = this._filterShortcuts('keydown')
-    for (let shortcut of filtered) {
+    for (const shortcut of filtered) {
       if (this._repeat && !shortcut.multiple) {
         continue
       }
       const key = keyCodeToKey[keyCode]
-      shortcut.keydown!(key, {
+      shortcut.keydown(key, {
         key,
         keyCode,
         ctrlKey: this._ctrl,
@@ -300,8 +301,8 @@ export default class KeyboardController {
       // const current = this.getCurrentCombo()
       // console.log('_keyup', `${previous} -> ${current}`)
       const key = keyCodeToKey[keyCode]
-      for (let shortcut of filtered) {
-        shortcut.keyup!(key, {
+      for (const shortcut of filtered) {
+        shortcut.keyup(key, {
           key,
           keyCode,
           ctrlKey: this._ctrl,
@@ -753,7 +754,7 @@ export function writeToInput(
     altKey,
   }: { ctrlKey?: boolean; shiftKey?: boolean; altKey?: boolean } = {}
 ): void {
-  let {
+  const {
     value,
     selectionStart = 0,
     selectionEnd = 0,

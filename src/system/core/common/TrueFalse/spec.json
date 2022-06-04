@@ -2,7 +2,7 @@
   "name": "true false",
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "b"
@@ -13,7 +13,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a[i]"

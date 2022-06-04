@@ -7,7 +7,7 @@ import {
   TERMINATE,
 } from '../../../../../../../constant/STRING'
 import { asyncGraphFromPort } from '../../../../../../../graphFromPort'
-import { $Graph } from '../../../../../../../interface/async/$Graph'
+import { $Graph } from '../../../../../../../types/interface/async/$Graph'
 import { Pod } from '../../../../../../../pod'
 import {
   hasLocalBroadcastSource,

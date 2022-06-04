@@ -65,10 +65,26 @@ export function getSpecOutputCount(specs: Specs, id: string): number {
 }
 
 export function emptySpec(init: Partial<GraphSpec> = {}): GraphSpec {
-  const newSpec: GraphSpec = clone({ ...emptyGraphSpec, ...init }) as GraphSpec
+  const newSpec: GraphSpec = clone({
+    ...emptyGraphSpec(),
+    ...init,
+  }) as GraphSpec
   return newSpec
 }
 
+export function emptyShell(
+  from: GraphSpec,
+  init: Partial<GraphSpec> = {}
+): GraphSpec {
+  const newSpec: GraphSpec = clone({
+    ...emptyGraphSpec(),
+    ...init,
+  }) as GraphSpec
+
+  return newSpec
+}
+
+// RETURN
 export const EMITTER = new EventEmitter()
 
 export function setSpec(specs: Specs, id: string, spec: GraphSpec): void {
@@ -141,17 +157,27 @@ export function newUnitIdInSpecId(
   blacklist?: Set<string>
 ) {
   const spec = getSpec(specs, id) as GraphSpec
-  return newUnitIdInSpec(specs, spec, unit_spec_id, blacklist)
+  return newUnitId(specs, spec, unit_spec_id, blacklist)
 }
 
-export function newUnitIdInSpec(
+export function newUnitId(
   specs: Specs,
   spec: GraphSpec,
   unit_spec_id: string,
   blacklist: Set<string> = new Set()
 ): string {
   const unit_spec = getSpec(specs, unit_spec_id)
-  const { name } = unit_spec
+  
+  const { name = '' } = unit_spec
+
+  return newUnitIdFromName(spec, name, blacklist)
+}
+
+export function newUnitIdFromName(
+  spec: GraphSpec,
+  name: string,
+  blacklist: Set<string> = new Set()
+): string {
   const init_new_unit_id = removeWhiteSpace(name)
   let new_unit_id: string = init_new_unit_id
   let i = 0
@@ -225,7 +251,7 @@ export function getSubComponentParentId(
   if (is_root_child) {
     return null
   } else {
-    // PERFORMANCE
+    // PERF
     for (const sub_component_id in subComponents) {
       const sub_component = subComponents[sub_component_id]
       const { children: sub_component_children } = sub_component
@@ -252,4 +278,70 @@ export function isComponent(specs: Specs, id: string): boolean {
 
 export function shouldRender(componentSpec: GraphComponentSpec): boolean {
   return !!componentSpec.children && componentSpec.children.length > 0
+}
+
+export function findInputDataExamples(
+  specs: Specs,
+  spec_id: string,
+  input_id: string
+): string[] {
+  const spec = getSpec(specs, spec_id)
+
+  const { units, merges, inputs, base } = spec as GraphSpec
+
+  const input = inputs[input_id]
+
+  const { metadata = {} } = input
+
+  const { examples = [] } = metadata
+
+  if (examples.length > 0) {
+    return examples
+  } else {
+    if (base) {
+      return []
+    } else {
+      const { plug } = input
+
+      for (const subPinId in plug) {
+        const subPin = plug[subPinId]
+
+        const { unitId, pinId, mergeId } = subPin
+
+        if (unitId && pinId) {
+          const unit = units[unitId]
+
+          const unit_examples = findInputDataExamples(specs, unit.id, pinId)
+
+          if (unit_examples.length > 0) {
+            return unit_examples
+          }
+        } else if (mergeId) {
+          const merge = merges[mergeId]
+
+          for (const unitId in merge) {
+            const mergeUnit = merge[unitId]
+
+            const { input = {} } = mergeUnit
+
+            const unit = units[unitId]
+
+            for (const inputId in input) {
+              const unit_examples = findInputDataExamples(
+                specs,
+                unit.id,
+                inputId
+              )
+
+              if (unit_examples.length > 0) {
+                return unit_examples
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return []
 }

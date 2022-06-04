@@ -2,25 +2,25 @@
   "name": "on resize",
   "inputs": {
     "element": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "unit"
         }
       },
+      "type": "`U`",
       "ref": true
     }
   },
   "outputs": {
     "event": {
-      "type": "{width:number,height:number}",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "data"
         }
-      }
+      },
+      "type": "{width:number,height:number}"
     }
   },
   "units": {

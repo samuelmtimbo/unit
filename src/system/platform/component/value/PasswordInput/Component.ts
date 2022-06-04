@@ -81,7 +81,7 @@ export default class PasswordInput extends Element<IHTMLInputElement, Props> {
     this._input_el.setSelectionRange(start, end, direction)
   }
 
-  public focus(options?: FocusOptions | undefined) {
+  public focus(options: FocusOptions | undefined = { preventScroll: true }) {
     this._input_el.focus(options)
   }
 

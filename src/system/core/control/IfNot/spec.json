@@ -24,7 +24,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a"
@@ -33,7 +33,7 @@
       "type": "<A>"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "not",
           "pinId": "a"
@@ -44,7 +44,7 @@
   },
   "outputs": {
     "a if not b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a if b"

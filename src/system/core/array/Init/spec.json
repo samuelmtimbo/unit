@@ -45,28 +45,28 @@
   },
   "inputs": {
     "n": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "achlazehm"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "repeatn",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "<A>"
     }
   },
   "outputs": {
     "a[]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "narraybuilder",
           "pinId": "a[]"

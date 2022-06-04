@@ -190,7 +190,7 @@
   },
   "inputs": {
     "icon": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "icon",
           "pinId": "icon"
@@ -199,7 +199,7 @@
       "type": "string"
     },
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default",
           "pinId": "a"
@@ -208,7 +208,7 @@
       "type": "object"
     },
     "active": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifdefault0",
           "pinId": "test"
@@ -217,7 +217,7 @@
       "type": "boolean"
     },
     "activeColor": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifdefault0",
           "pinId": "value"
@@ -226,7 +226,7 @@
       "type": "string"
     },
     "hoverColor": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifdefault",
           "pinId": "value"
@@ -235,7 +235,7 @@
       "type": "string"
     },
     "disabled": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifdefault1",
           "pinId": "test"
@@ -244,7 +244,7 @@
       "type": "boolean"
     },
     "disabledColor": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifdefault1",
           "pinId": "value"

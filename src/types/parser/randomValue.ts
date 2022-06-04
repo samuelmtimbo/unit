@@ -204,9 +204,7 @@ export function randomTreeOfOr(specs: Specs, tree: TreeNode): TreeNode {
 
   const child = randomInArray(children)
 
-  const child_type = randomTreeOfType(specs, child)
-
-  return randomTreeOfType(specs, child_type)
+  return randomTreeOfType(specs, child)
 }
 
 export function randomValueOfAnd(type_tree: TreeNode): string {

@@ -12,7 +12,6 @@ import {
   _getLastLeafPath,
   _getNodeAtPath,
   _getParent,
-  _insertNodeAt,
   _removeNodeAt,
   _updateNodeAt,
 } from '../../../../../spec/parser'
@@ -77,7 +76,6 @@ export default class Datum extends Element<IHTMLDivElement, Props> {
     if (prop === 'data') {
       this._root = current
       this._data_tree.setProp('data', current)
-      this.dispatchEvent('datumchange', { data: current })
     } else if (prop === 'style') {
       this._data_tree.setProp('style', current)
     }
@@ -306,16 +304,6 @@ export default class Datum extends Element<IHTMLDivElement, Props> {
     this._onChange(nextRoot, nextPath, selectionStart, selectionStart)
   }
 
-  private _insert_element_after = (path: number[]): void => {
-    const nextPath = [...path]
-    const parent = _getParent(this._root, path)
-    if (parent) {
-      nextPath[nextPath.length - 1] = nextPath[nextPath.length - 1] + 1
-      const nextRoot = _insertNodeAt(this._root, nextPath, getTree(''))
-      this._onChange(nextRoot, nextPath)
-    }
-  }
-
   private _onChange = (
     data: TreeNode,
     focus: number[],
@@ -323,7 +311,15 @@ export default class Datum extends Element<IHTMLDivElement, Props> {
     selectionEnd?: number,
     direction?: 'forward' | 'backward' | 'none' | undefined
   ) => {
-    // console.log('Datum', '_onChange')
+    // console.log(
+    //   'Datum',
+    //   '_onChange',
+    //   data,
+    //   focus,
+    //   selectionStart,
+    //   selectionEnd,
+    //   direction
+    // )
     this._root = data
     this._ignore_blur = true
     this._data_tree.setProp('data', data)

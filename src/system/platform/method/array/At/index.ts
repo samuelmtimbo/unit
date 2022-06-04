@@ -1,6 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { A } from '../../../../../interface/A'
+import { A } from '../../../../../types/interface/A'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 

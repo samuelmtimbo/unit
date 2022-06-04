@@ -2,7 +2,7 @@
   "name": "animate draw spiral",
   "inputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "kczhi",
           "pinId": "init"
@@ -13,7 +13,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "kczhi",
           "pinId": "final"
@@ -22,7 +22,7 @@
       "type": "any[][]"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "yougupgye"
         }

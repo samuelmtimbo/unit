@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { ST } from '../../../../../interface/ST'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ST } from '../../../../../types/interface/ST'
 import { stopMediaStream } from '../../../../../util/stream/stopMediaStream'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
 
@@ -31,6 +31,7 @@ export default class DisplayMedia extends Functional<I, O> {
     this.addListener('destroy', () => {
       if (this._stream) {
         stopMediaStream(this._stream)
+        
         this._stream = undefined
       }
     })
@@ -49,7 +50,7 @@ export default class DisplayMedia extends Functional<I, O> {
 
     const _stream = await getDisplayMedia(opt)
 
-    const stream = wrapMediaStream(_stream)
+    const stream = wrapMediaStream(_stream, this.__system, this.__pod)
 
     done({
       stream,

@@ -3,7 +3,7 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { makeHTML } from '../../../../../client/html'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
-import { BundleSpec } from '../../../method/process/BundleSpec'
+import { BundleSpec } from '../../../../../types/BundleSpec'
 
 export type I = {
   bundle: BundleSpec

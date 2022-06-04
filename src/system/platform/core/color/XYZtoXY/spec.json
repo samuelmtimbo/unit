@@ -1,10 +1,10 @@
 {
   "name": "XYZ to xy",
   "units": {
-    "hrumitfn": {
+    "sumall": {
       "id": "bd1a9bbb-6129-4031-b7e9-aec351d847d9"
     },
-    "xwqrjvgu": {
+    "at": {
       "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
       "input": {
         "i": {
@@ -13,7 +13,7 @@
         }
       }
     },
-    "lqzfm": {
+    "at0": {
       "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
       "input": {
         "i": {
@@ -22,94 +22,94 @@
         }
       }
     },
-    "pagbohz": {
+    "divide": {
       "id": "158d85eb-28b8-4355-b637-28a7ec751233"
     },
-    "eairyuf": {
+    "divide0": {
       "id": "158d85eb-28b8-4355-b637-28a7ec751233"
     },
-    "siqmdt": {
+    "pair": {
       "id": "a7d5c2f3-6134-4248-b9bc-33271c280267"
     }
   },
   "merges": {
-    "afuuuv": {
-      "hrumitfn": {
+    "0": {
+      "sumall": {
         "input": {
           "a": true
         }
       },
-      "lqzfm": {
+      "at0": {
         "input": {
           "a": true
         }
       },
-      "xwqrjvgu": {
+      "at": {
         "input": {
           "a": true
         }
       }
     },
-    "vysqrwk": {
-      "hrumitfn": {
+    "1": {
+      "sumall": {
         "output": {
           "sum": true
         }
       },
-      "pagbohz": {
+      "divide": {
         "input": {
           "b": true
         }
       },
-      "eairyuf": {
+      "divide0": {
         "input": {
           "b": true
         }
       }
     },
-    "aoujwzh": {
-      "xwqrjvgu": {
+    "2": {
+      "at": {
         "output": {
           "a[i]": true
         }
       },
-      "eairyuf": {
+      "divide0": {
         "input": {
           "a": true
         }
       }
     },
-    "gdtklvapl": {
-      "lqzfm": {
+    "3": {
+      "at0": {
         "output": {
           "a[i]": true
         }
       },
-      "pagbohz": {
+      "divide": {
         "input": {
           "a": true
         }
       }
     },
-    "wjmvswrne": {
-      "eairyuf": {
+    "4": {
+      "divide0": {
         "output": {
           "a ÷ b": true
         }
       },
-      "siqmdt": {
+      "pair": {
         "input": {
           "1": true
         }
       }
     },
-    "keblncyq": {
-      "pagbohz": {
+    "5": {
+      "divide": {
         "output": {
           "a ÷ b": true
         }
       },
-      "siqmdt": {
+      "pair": {
         "input": {
           "0": true
         }
@@ -127,21 +127,21 @@
     ]
   },
   "inputs": {
-    "zpwdflzip": {
-      "functional": true,
-      "pin": {
+    "XYZ": {
+      "plug": {
         "0": {
-          "mergeId": "afuuuv"
+          "mergeId": "0"
         }
       },
+      "functional": true,
       "type": "number[]"
     }
   },
   "outputs": {
-    "vxikpyf": {
-      "pin": {
+    "xy": {
+      "plug": {
         "0": {
-          "unitId": "siqmdt",
+          "unitId": "pair",
           "pinId": "hbsxpnl"
         }
       },

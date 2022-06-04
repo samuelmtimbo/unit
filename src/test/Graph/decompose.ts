@@ -20,7 +20,7 @@ const UNIT_ID_RANDOM_NUMBER_LTE = 'randomnumberlte'
 
 composition0.addUnit(
   {
-    id: ID_RANDOM_COLOR_DIV,
+    unit: { id: ID_RANDOM_COLOR_DIV },
   },
   UNIT_ID_RANDOM_COLOR_DIV
 )
@@ -41,7 +41,7 @@ composition1.play()
 
 composition1.addUnit(
   {
-    id: ID_RANDOM_NATURAL_LTE,
+    unit: { id: ID_RANDOM_NATURAL_LTE },
   },
   UNIT_ID_RANDOM_NUMBER_LTE
 )

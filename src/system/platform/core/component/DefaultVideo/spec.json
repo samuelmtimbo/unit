@@ -55,7 +55,7 @@
   },
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "video",
           "pinId": "style"
@@ -64,7 +64,7 @@
       "type": "object"
     },
     "controls": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "video",
           "pinId": "controls"
@@ -74,7 +74,7 @@
       "type": "boolean"
     },
     "opt": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "defaultvideomedia",
           "pinId": "opt"
@@ -85,7 +85,7 @@
   },
   "outputs": {
     "video": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "video",
           "pinId": "_self"

@@ -14,6 +14,7 @@ import {
 import { Element } from '../../../../client/element'
 import { makeCustomListener } from '../../../../client/event/custom'
 import { renderFrame } from '../../../../client/renderFrame'
+import { Theme } from '../../../../client/theme'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
@@ -25,7 +26,7 @@ export interface Props {
   style?: Dict<any>
   disabled?: boolean
   color?: string
-  theme?: 'dark' | 'light'
+  theme?: Theme
   tabIndex?: number
 }
 
@@ -80,7 +81,7 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
     disabled: (disabled: boolean) => {
       this._refresh_sub_context_disabled()
     },
-    theme: (theme: 'light' | 'dark') => {
+    theme: (theme: Theme) => {
       this._refresh_sub_context_color()
     },
     color: (color: string) => {

@@ -1,7 +1,14 @@
-import { BundleSpec } from '../system/platform/method/process/BundleSpec'
+import deepMerge from '../system/f/object/DeepMerge/f'
+import { BundleSpec } from '../types/BundleSpec'
 import { emptyGraphSpec } from './emptySpec'
 
-export const emptyBundleSpec: BundleSpec = {
-  spec: emptyGraphSpec,
-  specs: {},
-}
+export const emptyBundleSpec = (
+  partial: Partial<BundleSpec> = {}
+): BundleSpec =>
+  deepMerge(
+    {
+      spec: emptyGraphSpec(),
+      specs: {},
+    },
+    partial
+  )

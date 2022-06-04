@@ -2,10 +2,10 @@ import { Functional } from '../../../../Class/Functional'
 import { Unit } from '../../../../Class/Unit'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
-import { UnitClass } from '../../../../types/UnitClass'
+import { UnitBundle } from '../../../../types/UnitBundle'
 
 export interface I<T> {
-  class: UnitClass<any>
+  class: UnitBundle<any>
 }
 
 export interface O<T> {
@@ -19,7 +19,13 @@ export default class New<T> extends Functional<I<T>, O<T>> {
         i: ['class'],
         o: ['unit'],
       },
-      {},
+      {
+        output: {
+          unit: {
+            ref: true,
+          },
+        },
+      },
       system,
       pod
     )

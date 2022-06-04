@@ -73,7 +73,7 @@
   },
   "inputs": {
     "b[i]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "uynyimudy",
           "pinId": "a"
@@ -82,7 +82,7 @@
       "type": "<B>"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "wxnykfsg"
         }
@@ -92,7 +92,7 @@
   },
   "outputs": {
     "a[i]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "foreach",
           "pinId": "a[i]"
@@ -101,7 +101,7 @@
       "type": "<A>"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "uynyimudy",
           "pinId": "a[]"

@@ -45,7 +45,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "qriepmm"
         }
@@ -55,7 +55,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pmlhjcn",
           "pinId": "a"

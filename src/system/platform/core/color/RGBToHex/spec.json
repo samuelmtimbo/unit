@@ -173,7 +173,7 @@
   },
   "inputs": {
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add3",
           "pinId": "mxdtxxyal"
@@ -182,7 +182,7 @@
       "type": "any"
     },
     "g": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "multiply",
           "pinId": "a"
@@ -191,7 +191,7 @@
       "type": "number"
     },
     "r": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "multiply0",
           "pinId": "a"
@@ -202,7 +202,7 @@
   },
   "outputs": {
     "hex": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "concat",
           "pinId": "ab"

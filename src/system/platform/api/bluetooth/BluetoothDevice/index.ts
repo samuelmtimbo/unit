@@ -1,7 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { BD } from '../../../../../interface/BD'
+import { BD } from '../../../../../types/interface/BD'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IBluetoothDeviceOpt } from '../../../../../types/global/IBluetoothDevice'

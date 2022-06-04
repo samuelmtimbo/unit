@@ -2,7 +2,7 @@
   "name": "POST url encoded",
   "inputs": {
     "url": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fetch",
           "pinId": "url"
@@ -19,7 +19,7 @@
       }
     },
     "body": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "stringify",
           "pinId": "a"
@@ -36,7 +36,7 @@
       }
     },
     "opt": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "deepmerge",
           "pinId": "b"
@@ -55,7 +55,7 @@
   },
   "outputs": {
     "response": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fetch",
           "pinId": "response"

@@ -56,8 +56,7 @@
   },
   "inputs": {
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifelse",
           "pinId": "a"
@@ -67,22 +66,23 @@
           "pinId": "obj"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     },
     "default": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "<A>"
     }
   },
   "outputs": {
     "head": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "behead",
           "pinId": "head"
@@ -95,7 +95,7 @@
       "type": "<A>"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "behead",
           "pinId": "a"
@@ -108,7 +108,7 @@
       "type": "<A>[]"
     },
     "empty": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }

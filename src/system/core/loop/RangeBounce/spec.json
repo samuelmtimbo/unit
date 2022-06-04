@@ -72,7 +72,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "plan",
           "pinId": "a"
@@ -81,7 +81,7 @@
       "type": "number"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "bjpzdvv"
         }
@@ -91,7 +91,7 @@
   },
   "outputs": {
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "ymwlenzvu"
         }

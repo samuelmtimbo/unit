@@ -223,23 +223,23 @@ assert.deepEqual(readHeap(_heap), {
   ],
 })
 
-const _heap_0 = _heap.children[0].children[0].children[0]
+let _heap_000 = _heap.children[0].children[0].children[0]
 
-_heap = setHeapNode(_heap_0, 7, predicate)
+_heap = setHeapNode(_heap_000, 7, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 7,
   children: [
+    {
+      value: 1,
+      children: [],
+    },
     {
       value: 6,
       children: [
         {
           value: 4,
           children: [
-            {
-              value: 1,
-              children: [],
-            },
             {
               value: 3,
               children: [],
@@ -258,14 +258,52 @@ assert.deepEqual(readHeap(_heap), {
   value: 7,
   children: [
     {
-      value: 6,
+      value: 1,
+      children: [],
+    },
+    {
+      value: 7,
       children: [
         {
-          value: 4,
+          value: 6,
           children: [
             {
-              value: 1,
-              children: [],
+              value: 4,
+              children: [
+                {
+                  value: 3,
+                  children: [],
+                },
+              ],
+            },
+            { value: 5, children: [] },
+          ],
+        },
+      ],
+    },
+  ],
+})
+
+let _heap_100 = _heap.children[1].children[0].children[0]
+
+_heap = setHeapNode(_heap_100, 7, predicate)
+
+assert.deepEqual(readHeap(_heap), {
+  value: 7,
+  children: [
+    {
+      value: 1,
+      children: [],
+    },
+    {
+      value: 7,
+      children: [
+        {
+          value: 7,
+          children: [
+            {
+              value: 6,
+              children: [{ value: 5, children: [] }],
             },
             {
               value: 3,
@@ -273,11 +311,58 @@ assert.deepEqual(readHeap(_heap), {
             },
           ],
         },
-        { value: 5, children: [] },
+      ],
+    },
+  ],
+})
+
+_heap = removeHeapNode(_heap, predicate)
+
+assert.deepEqual(readHeap(_heap), {
+  value: 7,
+  children: [
+    {
+      value: 7,
+      children: [
+        {
+          value: 6,
+          children: [{ value: 5, children: [] }],
+        },
+        {
+          value: 3,
+          children: [],
+        },
       ],
     },
     {
+      value: 1,
+      children: [],
+    },
+  ],
+})
+
+_heap_000 = _heap.children[0].children[0]
+
+_heap = removeHeapNode(_heap_000, predicate)
+
+assert.deepEqual(readHeap(_heap), {
+  value: 7,
+  children: [
+    {
       value: 7,
+      children: [
+        {
+          value: 5,
+          children: [],
+        },
+        {
+          value: 3,
+          children: [],
+        },
+      ],
+    },
+    {
+      value: 1,
       children: [],
     },
   ],

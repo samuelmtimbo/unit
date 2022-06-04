@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "diqlm": {
+    "0": {
       "rangearray": {
         "output": {
           "a": true
@@ -23,8 +23,8 @@
     }
   },
   "inputs": {
-    "rgvjp": {
-      "pin": {
+    "n": {
+      "plug": {
         "0": {
           "unitId": "rangearray",
           "pinId": "n"
@@ -34,8 +34,8 @@
     }
   },
   "outputs": {
-    "cbcol": {
-      "pin": {
+    "a": {
+      "plug": {
         "0": {
           "unitId": "shuffle",
           "pinId": "a"

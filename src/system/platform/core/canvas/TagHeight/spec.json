@@ -24,7 +24,7 @@
   },
   "inputs": {
     "height": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag",
           "pinId": "v"
@@ -35,7 +35,7 @@
   },
   "outputs": {
     "{height}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag",
           "pinId": "kv"

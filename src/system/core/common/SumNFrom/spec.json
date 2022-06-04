@@ -110,7 +110,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add",
           "pinId": "a"
@@ -119,7 +119,7 @@
       "type": "number"
     },
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop2",
           "pinId": "initb"
@@ -128,7 +128,7 @@
       "type": "any"
     },
     "from": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop2",
           "pinId": "inita"
@@ -139,7 +139,7 @@
   },
   "outputs": {
     "sum": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loop2",
           "pinId": "finala"

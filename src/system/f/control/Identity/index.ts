@@ -1,6 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_IDENTITY } from '../../../_ids'
 
 export interface I<T> {
   a: T
@@ -11,6 +12,8 @@ export interface O<T> {
 }
 
 export default class Identity<T> extends Functional<I<T>, O<T>> {
+  _ = ID_IDENTITY
+
   constructor(system: System, pod: Pod) {
     super(
       {

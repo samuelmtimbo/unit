@@ -1,10 +1,7 @@
 import { Unit } from '../Class/Unit'
 import { Pod } from '../pod'
 import { System } from '../system'
-import { UnitBundleSpec } from '../system/platform/method/process/UnitBundleSpec'
 
-export type UnitClass<T extends Unit = any> = {
-  __bundle?: UnitBundleSpec
-
+export interface UnitClass<T extends Unit = any> {
   new (system: System, pod: Pod): T
 }

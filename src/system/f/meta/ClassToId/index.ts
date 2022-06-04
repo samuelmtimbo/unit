@@ -2,10 +2,10 @@ import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
-import { UnitClass } from '../../../../types/UnitClass'
+import { UnitBundle } from '../../../../types/UnitBundle'
 
 export interface I<T> {
-  Class: UnitClass<any>
+  Class: UnitBundle<any>
 }
 
 export interface O<T> {

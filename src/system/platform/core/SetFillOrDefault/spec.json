@@ -18,7 +18,7 @@
   "merges": {},
   "inputs": {
     "default": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifordefault",
           "pinId": "default"
@@ -27,7 +27,7 @@
       "type": "<A>"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifordefault",
           "pinId": "test"
@@ -36,7 +36,7 @@
       "type": "boolean"
     },
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifordefault",
           "pinId": "value"
@@ -45,7 +45,7 @@
       "type": "<A>"
     },
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifordefault",
           "pinId": "obj"
@@ -56,7 +56,7 @@
   },
   "outputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setifordefault",
           "pinId": "obj"

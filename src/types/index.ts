@@ -8,7 +8,7 @@ export type Type = string
 export type Types = Dict<Type>
 
 export type GraphUnitPinSpec = {
-  data?: any
+  data?: string
   constant?: boolean | None
   ignored?: boolean | None
   memory?: boolean
@@ -37,7 +37,7 @@ export type PinBaseMetadataSpec = NodeMetadataSpec & {
   position?: Dict<Position>
 }
 
-export type PinSpec = PinSpecBase | GraphExposedPinSpec
+export type PinSpec = PinSpecBase | GraphPinSpec
 
 export type PinsSpecBase = Dict<PinSpecBase>
 
@@ -59,16 +59,16 @@ export type GraphExposedEmptyPinSpec = PinSpecBase & {
   mergeId?: undefined
 }
 
-export type GraphExposedSubPinSpec =
+export type GraphSubPinSpec =
   | GraphExposedMergeSpec
   | GraphExposedLinkPinSpec
   | GraphExposedEmptyPinSpec
 
-export type GraphExposedPinSpec = PinSpecBase & {
-  pin?: Dict<GraphExposedSubPinSpec>
+export type GraphPinSpec = PinSpecBase & {
+  plug?: Dict<GraphSubPinSpec>
 }
 
-export type GraphExposedPinsSpec = Dict<GraphExposedPinSpec>
+export type GraphExposedPinsSpec = Dict<GraphPinSpec>
 
 export type PinsSpec = Dict<PinSpec>
 
@@ -78,6 +78,7 @@ export type GraphUnitSpecBase = {
   input?: GraphUnitPinsSpec
   output?: GraphUnitPinsSpec
   state?: Dict<any>
+  memory?: { input: Dict<any>, output: Dict<any>, memory: Dict<any> }
   flag?: Dict<any>
   children?: GraphUnitSpec[] | None
   reorder?: string[] | None

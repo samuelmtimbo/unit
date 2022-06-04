@@ -8,6 +8,7 @@ import {
   _getLastLeafPath,
   _getNextLeafPath,
   _getNextNodePath,
+  _getNextSiblingPath,
   _getNodeAtPath,
   _getParent,
   _insertNodeAt,
@@ -15,6 +16,7 @@ import {
   _removeNodeAt,
   _updateNodeAt,
 } from '../spec/parser'
+import { clone } from './object'
 
 export const _keyUpdateTree = (
   root: TreeNode,
@@ -40,8 +42,8 @@ export const _keyUpdateTree = (
 
   let preventDefault: boolean = false
 
-  let nextRoot: TreeNode = root
-  let nextPath = path
+  let nextRoot: TreeNode = clone(root)
+  let nextPath = clone(path)
   let nextSelectionStart = selectionStart
   let nextSelectionEnd = selectionEnd
 
@@ -114,6 +116,31 @@ export const _keyUpdateTree = (
               nextPath = parentPath
               nextSelectionStart = key.value.length
               nextSelectionEnd = nextSelectionStart
+            }
+          }
+        } else if (parent.type === TreeNodeType.ArrayLiteral) {
+          if (path[path.length - 1] > 0) {
+            if (selectionStart === 0 && selectionEnd === 0) {
+              preventDefault = true
+              const leftPath = _getNextSiblingPath(nextRoot, path, -1)
+              const left = _getNodeAtPath(nextRoot, leftPath)
+              const nextValue = left.value + value
+              nextRoot = _removeNodeAt(nextRoot, path)
+              nextRoot = _updateNodeAt(nextRoot, leftPath, getTree(nextValue))
+              nextPath = leftPath
+              nextSelectionStart = left.value.length
+              nextSelectionEnd = nextSelectionStart
+            }
+          } else {
+            if (selectionStart === 0 && selectionEnd === 0) {
+              preventDefault = true
+              const nextValue = parent.children
+                .map(({ value }) => value)
+                .join(',')
+              nextRoot = _updateNodeAt(nextRoot, parentPath, getTree(nextValue))
+              nextPath = parentPath
+              nextSelectionStart = 0
+              nextSelectionEnd = 0
             }
           }
         }
@@ -193,8 +220,20 @@ export const _keyUpdateTree = (
           if (value === '') {
             //
           } else {
-            nextPath[nextPath.length - 1] += 1
-            nextRoot = _insertNodeAt(root, nextPath, getTree(''))
+            const first = value.substring(0, selectionStart)
+            const second = value.substring(selectionEnd)
+            const rightPath = clone(nextPath)
+            rightPath[rightPath.length - 1] += 1
+            const hasRight = !!_getNodeAtPath(nextRoot, rightPath)
+            const insert =
+              selectionStart > 0 && (selectionStart < value.length || !hasRight)
+            if (hasRight || insert) {
+              nextPath[nextPath.length - 1] += 1
+            }
+            if (insert) {
+              nextRoot = _updateNodeAt(nextRoot, path, getTree(first))
+              nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(second))
+            }
             nextSelectionStart = 0
             nextSelectionEnd = 0
           }
@@ -244,6 +283,8 @@ export const _keyUpdateTree = (
             nextSelectionStart = 0
             nextSelectionEnd = 0
           }
+        } else {
+          preventDefault = true
         }
       } else if (parent.type === TreeNodeType.KeyValue && key === '}') {
         const grangrandpaPath = getParentPath(grandpaPath)
@@ -274,6 +315,8 @@ export const _keyUpdateTree = (
             nextSelectionStart = 0
             nextSelectionEnd = 0
           }
+        } else {
+          preventDefault = true
         }
       }
     } else {
@@ -317,17 +360,28 @@ export const _keyUpdateTree = (
         preventDefault = true
         nextPath = [...path, 0]
         nextRoot = _updateNodeAt(root, path, getTree(key === '{' ? '{}' : `[]`))
-        nextSelectionStart = 1
-        nextSelectionEnd = 1
+        nextSelectionStart = 0
+        nextSelectionEnd = 0
       }
     } else if (selectionStart === 0 && selectionEnd === value.length) {
       preventDefault = true
       const nextValue = key === `[` ? `[${value}]` : `{${value}}`
       nextRoot = _updateNodeAt(root, path, getTree(nextValue))
-      nextPath = _getNextNodePath(nextRoot, path, 1)
-      nextSelectionStart = 1
-      nextSelectionEnd = value.length + 1
-      nextDirection = 'forward'
+      const nextParent = _getNodeAtPath(nextRoot, path)
+      if (
+        (key === '[' && nextParent.type === TreeNodeType.ArrayLiteral) ||
+        (key === '{' && nextParent.type === TreeNodeType.ObjectLiteral)
+      ) {
+        nextPath = _getNextNodePath(nextRoot, path, 1)
+        nextSelectionStart = 0
+        nextSelectionEnd = value.length
+        nextDirection = 'forward'
+      } else {
+        nextPath = clone(path)
+        nextSelectionStart = 1
+        nextSelectionEnd = value.length + 1
+        nextDirection = 'forward'
+      }
     }
   } else if (key === `'` || key === `"`) {
     if (value === '') {
@@ -398,22 +452,28 @@ export const keyUpdateTree = (
   value: string,
   key: string,
   selectionStart: number,
+  selectionEnd: number,
   shiftKey: boolean
 ): [
   boolean,
-  { nextRoot: string; nextPath: number[]; nextSelectionStart: number }
+  {
+    nextRoot: string
+    nextPath: number[]
+    nextSelectionStart: number
+    nextSelectionEnd: number
+  }
 ] => {
   const _root = getTree(root)
   const [
     preventDefault,
-    { nextRoot: _nextRoot, nextPath, nextSelectionStart },
+    { nextRoot: _nextRoot, nextPath, nextSelectionStart, nextSelectionEnd },
   ] = _keyUpdateTree(
     _root,
     focus,
     value,
     key,
     selectionStart,
-    selectionStart,
+    selectionEnd,
     shiftKey
   )
   return [
@@ -422,6 +482,7 @@ export const keyUpdateTree = (
       nextRoot: _nextRoot.value,
       nextPath,
       nextSelectionStart,
+      nextSelectionEnd,
     },
   ]
 }

@@ -2,28 +2,29 @@ import { AsyncWorkerGraph } from './AsyncWorker'
 import { $ } from './Class/$'
 import { $Child } from './component/Child'
 import { $Children } from './component/Children'
-import { $Component } from './interface/async/$Component'
-import { $EE } from './interface/async/$EE'
-import { $Graph } from './interface/async/$Graph'
-import { $PO } from './interface/async/$PO'
-import { $U } from './interface/async/$U'
 import { Pod } from './pod'
 import { RemotePort } from './RemotePort'
 import { State } from './State'
 import { System } from './system'
 import {
-  GraphExposedPinSpec,
-  GraphExposedSubPinSpec,
   GraphMergeSpec,
   GraphMergesSpec,
+  GraphPinSpec,
   GraphSpec,
+  GraphSubPinSpec,
   GraphUnitSpec,
   GraphUnitsSpec,
 } from './types'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { GlobalRefSpec } from './types/GlobalRefSpec'
+import { $Component } from './types/interface/async/$Component'
+import { $EE } from './types/interface/async/$EE'
+import { $Graph } from './types/interface/async/$Graph'
+import { $P } from './types/interface/async/$P'
+import { $U } from './types/interface/async/$U'
 import { IO } from './types/IO'
+import { UnitBundleSpec } from './types/UnitBundleSpec'
 import { Unlisten } from './types/Unlisten'
 
 export function asyncGraphFromPort(
@@ -102,16 +103,8 @@ export function asyncGraphFromPort(
       return $graph.$getRefInputData(data, callback)
     }
 
-    $err(data: { err: string }): void {
-      return $graph.$err(data)
-    }
-
     $reset(data: {}): void {
       return $graph.$reset(data)
-    }
-
-    $destroy(data: {}): void {
-      return $graph.$destroy(data)
     }
 
     $watch(
@@ -169,8 +162,12 @@ export function asyncGraphFromPort(
       return $graph.$removeUnitPinData(data)
     }
 
-    $addUnit(data: { id: string; unit: GraphUnitSpec }): void {
+    $addUnit(data: { id: string; unit: UnitBundleSpec }): void {
       return $graph.$addUnit(data)
+    }
+
+    $cloneUnit(data: { unitId: string; newUnitId: string }): void {
+      return $graph.$cloneUnit(data)
     }
 
     $moveUnit(data: { id: string; unitId: string; inputId: string }): void {
@@ -185,11 +182,7 @@ export function asyncGraphFromPort(
       return $graph.$removeUnit(data)
     }
 
-    $exposePinSet(data: {
-      type: IO
-      id: string
-      pin: GraphExposedPinSpec
-    }): void {
+    $exposePinSet(data: { type: IO; id: string; pin: GraphPinSpec }): void {
       return $graph.$exposePinSet(data)
     }
 
@@ -201,7 +194,7 @@ export function asyncGraphFromPort(
       type: IO
       id: string
       subPinId: string
-      subPin: GraphExposedSubPinSpec
+      subPin: GraphSubPinSpec
     }): void {
       return $graph.$exposePin(data)
     }
@@ -214,7 +207,7 @@ export function asyncGraphFromPort(
       type: IO
       id: string
       subPinId: string
-      subPin: GraphExposedSubPinSpec
+      subPin: GraphSubPinSpec
     }): void {
       return $graph.$plugPin(data)
     }
@@ -227,13 +220,17 @@ export function asyncGraphFromPort(
       unitId: string
       type: IO
       id: string
-      pin: GraphExposedPinSpec
+      pin: GraphPinSpec
     }): void {
       return $graph.$exposeUnitPinSet(data)
     }
 
     $coverUnitPinSet(data: { unitId: string; type: IO; id: string }): void {
       return $graph.$coverUnitPinSet(data)
+    }
+
+    $setPinSetId(data: { type: IO; pinId: string; nextPinId: string }): void {
+      throw new Error('Method not implemented.')
     }
 
     $setPinSetFunctional(data: {
@@ -352,8 +349,8 @@ export function asyncGraphFromPort(
         output: Dict<{ pinId: string; subPinId: string }>
       }>
       nextMergePinId: Dict<{
-        nextInputMergePinId: string
-        nextOutputMergePinId: string
+        input: { mergeId: string; pinId: string }
+        output: { mergeId: string; pinId: string }
       }>
       nextSubComponentParentMap: Dict<string | null>
       nextSubComponentChildrenMap: Dict<string[]>
@@ -382,8 +379,8 @@ export function asyncGraphFromPort(
     $moveMergePinInto(data: {
       graphId: string
       mergeId: string
-      nextInputMergeId: string | null
-      nextOutputMergeId: string | null
+      nextInputMergeId: { mergeId: string; pinId: string }
+      nextOutputMergeId: { mergeId: string; pinId: string }
       nextPinIdMap: Dict<{
         input: Dict<{ pinId: string; subPinId: string }>
         output: Dict<{ pinId: string; subPinId: string }>
@@ -420,6 +417,38 @@ export function asyncGraphFromPort(
         mergeData: Dict<any>
       }>
     ): Promise<void> {
+      throw new Error('Method not implemented.')
+    }
+
+    $snapshot(
+      data: {},
+      callback: (state: {
+        input: Dict<any>
+        output: Dict<any>
+        memory: Dict<any>
+      }) => void
+    ): void {
+      throw new Error('Method not implemented.')
+    }
+
+    $snapshotUnit(
+      data: {},
+      callback: (state: {
+        input: Dict<any>
+        output: Dict<any>
+        memory: Dict<any>
+      }) => void
+    ): void {
+      throw new Error('Method not implemented.')
+    }
+
+    $removeUnitGhost(
+      data: { unitId: string },
+      callback: (data: {
+        spec_id: string
+        state: { input: Dict<any>; output: Dict<any>; memory: Dict<any> }
+      }) => void
+    ): void {
       throw new Error('Method not implemented.')
     }
 
@@ -505,7 +534,7 @@ export function asyncGraphFromPort(
       return $graph.$refUnit(data)
     }
 
-    $refPod(data: {}): $PO {
+    $refPod(data: {}): $P {
       return $graph.$refPod({})
     }
   }

@@ -1,12 +1,12 @@
 {
-  "name": "graph | div",
+  "name": "editor | div",
   "inputs": {},
   "outputs": {
     "graph": {
-      "pin": {
+      "plug": {
         "0": {
-          "unitId": "graph",
-          "pinId": "_self"
+          "unitId": "editor",
+          "pinId": "graph"
         }
       },
       "ref": true,
@@ -15,14 +15,16 @@
     }
   },
   "units": {
-    "graph": {
+    "editor": {
       "id": "e80c912e-7508-11ea-966b-436805345ff0",
       "input": {
         "style": {
           "constant": true,
           "data": "{borderRight:'1px solid currentColor'}"
         },
-        "pod": {},
+        "graph": {
+          "ignored": false
+        },
         "disabled": {},
         "fullwindow": {
           "ignored": true
@@ -44,9 +46,7 @@
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
       "input": {
-        "style": {
-          "data": "{position:'relative',overflow:'auto',display:'flex',flexDirection:'row',overflow:'auto'}"
-        }
+        "style": {}
       },
       "output": {},
       "metadata": {
@@ -80,7 +80,7 @@
   },
   "merges": {
     "0": {
-      "graph": {
+      "editor": {
         "input": {
           "frame": true
         }
@@ -95,38 +95,23 @@
   "metadata": {
     "icon": "atom-alt",
     "complexity": 146,
-    "tags": [
-      "platform",
-      "core",
-      "graph"
-    ]
+    "tags": ["platform", "core", "editor"]
   },
   "component": {
     "slots": [
-      [
-        "graph",
-        "default"
-      ],
-      [
-        "div",
-        "default"
-      ]
+      ["editor", "default"],
+      ["div", "default"]
     ],
-    "children": [
-      "row"
-    ],
+    "children": ["row"],
     "subComponents": {
-      "graph": {
+      "editor": {
         "children": []
       },
       "div": {
         "children": []
       },
       "row": {
-        "children": [
-          "graph",
-          "div"
-        ]
+        "children": ["editor", "div"]
       }
     },
     "defaultWidth": 420,
@@ -134,5 +119,6 @@
   },
   "id": "470428a2-b4b4-4866-a1e9-2f130772cd3b",
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "render": true
 }

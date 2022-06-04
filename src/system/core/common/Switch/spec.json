@@ -51,7 +51,7 @@
   },
   "inputs": {
     "c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "trueorfalse",
           "pinId": "a"
@@ -60,7 +60,7 @@
       "type": "boolean"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lfkoklajr",
           "pinId": "a"
@@ -69,7 +69,7 @@
       "type": "<A>"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tjjny",
           "pinId": "a"
@@ -80,7 +80,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "merge2"
         }

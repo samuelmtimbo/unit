@@ -1,3 +1,4 @@
+import { Pin_M } from '../../Pin'
 import { Pod } from '../../pod'
 import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { System } from '../../system'
@@ -14,9 +15,17 @@ export type FunctionalEvents<_EE extends Dict<any[]>> = PrimitiveEvents<
 > &
   Functional_EE
 
+export type Functional_S = {
+  _looping: boolean
+}
+
+export type FunctionalState<
+  T extends Omit<Dict<any>, keyof Functional_S> = {}
+> = T & Functional_S
+
 export class Functional<
-  I = {},
-  O = {},
+  I extends Dict<any> = {},
+  O extends Dict<any> = {},
   _EE extends FunctionalEvents<_EE> = FunctionalEvents<Functional_EE>
 > extends Primitive<I, O, _EE> {
   private _looping: boolean = false
@@ -59,8 +68,11 @@ export class Functional<
     }
   }
 
-  onRefInputData(name: string): void {
-    this._on_input_data(name)
+  private _on_input_invalid(name: string): void {
+    if (this._i_invalid_count === 1) {
+      this.i(name)
+      this._invalidate()
+    }
   }
 
   onDataInputData(name: string): void {
@@ -71,8 +83,32 @@ export class Functional<
     this._on_input_drop()
   }
 
+  onDataInputStart(name: string): void {
+    if (this._i_start_count === this._i_count) {
+      this._start()
+    }
+  }
+
+  onDataInputInvalid(name: string): void {
+    this._on_input_invalid(name)
+  }
+
+  onDataInputEnd(name: string): void {
+    if (this._i_start_count === this._i_count - 1) {
+      this._end()
+    }
+  }
+
+  onRefInputData(name: string): void {
+    this._on_input_data(name)
+  }
+
   onRefInputDrop(): void {
     this._on_input_drop()
+  }
+
+  onRefInputInvalid(name: string): void {
+    this._on_input_invalid(name)
   }
 
   private _on_data_output_drop = (name: string): void => {
@@ -89,25 +125,6 @@ export class Functional<
   i(name: string) {}
 
   d() {}
-
-  public onDataInputStart(name: string): void {
-    if (this._i_start_count === this._i_count) {
-      this._start()
-    }
-  }
-
-  public onDataInputInvalid(name: string): void {
-    if (this._i_invalid_count === 1) {
-      this.i(name)
-      this._invalidate()
-    }
-  }
-
-  public onDataInputEnd(name: string): void {
-    if (this._i_start_count === this._i_count - 1) {
-      this._end()
-    }
-  }
 
   private _backward_if_ready(): void {
     if (
@@ -173,5 +190,20 @@ export class Functional<
       }
     }
     this._backward_if_ready()
+  }
+
+  public snapshotSelf(): any {
+    return {
+      ...super.snapshotSelf(),
+      _looping: this._looping,
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    const { _looping, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    this._looping = _looping
   }
 }

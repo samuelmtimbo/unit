@@ -2,7 +2,7 @@ import { IOElement } from '../../IOElement'
 import { parseTransformXY } from '../../parseTransformXY'
 import { addVector3, NULL_VECTOR, Position } from '../geometry'
 
-export function getPosition(
+export function getRelativePosition(
   element: IOElement,
   relative: HTMLElement
 ): Position {
@@ -21,7 +21,8 @@ export function getPosition(
   }
 
   const local_position = getLocalPosition(element)
-  const scroll_position = getScrollPosition(element, relative)
+  // const scroll_position = getScrollPosition(element, relative)
+  const scroll_position = { x: 0, y: 0 }
   const parent_position = getParentPosition(element, relative)
 
   return addVector3(local_position, scroll_position, parent_position)
@@ -64,8 +65,8 @@ export function getScrollPosition(
   const pushScrollParent = (p: HTMLElement) => {
     const { scrollLeft, scrollTop } = p
 
-    x += scrollTop
-    y += scrollLeft
+    x += scrollLeft
+    y += scrollTop
   }
 
   let p = parentElement

@@ -30,7 +30,7 @@
   "merges": {},
   "inputs": {
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfromordefault",
           "pinId": "test"
@@ -39,7 +39,7 @@
       "type": "boolean"
     },
     "from": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfromordefault",
           "pinId": "from"
@@ -48,7 +48,7 @@
       "type": "number"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfromordefault",
           "pinId": "a"
@@ -59,7 +59,7 @@
   },
   "outputs": {
     "a[i]": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfromordefault",
           "pinId": "a[i]"
@@ -68,7 +68,7 @@
       "type": "<A>"
     },
     "result": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfromordefault",
           "pinId": "result"
@@ -77,7 +77,7 @@
       "type": "number"
     },
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfromordefault",
           "pinId": "i"
@@ -87,7 +87,7 @@
       "type": "number"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfromordefault",
           "pinId": "a"
@@ -97,7 +97,7 @@
       "type": "<A>[]"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "findlastindexfromordefault",
           "pinId": "test"

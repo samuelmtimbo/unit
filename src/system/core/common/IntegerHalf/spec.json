@@ -24,7 +24,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "half",
           "pinId": "a"
@@ -35,7 +35,7 @@
   },
   "outputs": {
     "a ÷ 2": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "floor",
           "pinId": "⌊a⌋"

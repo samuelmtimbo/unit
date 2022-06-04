@@ -63,7 +63,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "foqjm"
         }
@@ -71,7 +71,7 @@
       "type": "<A>[]"
     },
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "udcto"
         }
@@ -81,7 +81,7 @@
   },
   "outputs": {
     "second": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "yhkxh",
           "pinId": "removed"
@@ -90,7 +90,7 @@
       "type": "<A>[]"
     },
     "first": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "yhkxh",
           "pinId": "a"

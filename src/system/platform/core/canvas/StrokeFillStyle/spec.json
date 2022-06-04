@@ -50,7 +50,7 @@
   },
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
@@ -58,7 +58,7 @@
       "type": "string"
     },
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "fillstyle",
           "pinId": "d"
@@ -69,7 +69,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "strokestyle",
           "pinId": "d"

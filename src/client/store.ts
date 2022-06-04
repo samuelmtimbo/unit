@@ -32,12 +32,12 @@ export class LocalStore<T> implements Store<T> {
   }
 
   private _db = (): Promise<IDBDatabase> => {
-    return connect(DATABASE_NAME, undefined).then((db) => {
+    return connect(this._system, DATABASE_NAME, undefined).then((db) => {
       if (db.objectStoreNames.contains(this._name)) {
         return db
       } else {
         let db_version: number
-        let db_version_str: string | null = localStorage.getItem(
+        const db_version_str: string | null = localStorage.getItem(
           SYSTEM_DATABASE_VERSION_KEY
         )
         if (db_version_str === null) {
@@ -47,7 +47,7 @@ export class LocalStore<T> implements Store<T> {
         }
         db_version++
         localStorage.setItem(SYSTEM_DATABASE_VERSION_KEY, `${db_version}`)
-        return connect(DATABASE_NAME, db_version, (db) => {
+        return connect(this._system, DATABASE_NAME, db_version, (db) => {
           if (!db.objectStoreNames.contains(this._name)) {
             db.createObjectStore(this._name, {})
           }
@@ -88,16 +88,30 @@ export class LocalStore<T> implements Store<T> {
 
   async getAll(): Promise<Dict<T>> {
     return new Promise(async (resolve, reject) => {
-      const store = await this._store('readonly')
+      let store
+
+      try {
+        store = await this._store('readonly')
+      } catch (err) {
+        reject(err)
+
+        return
+      }
+
       const all: Dict<T> = {}
+
       const request: IDBRequest<IDBCursorWithValue | null> = store.openCursor()
+
       request.onsuccess = (event: Event) => {
         const cursor: IDBCursorWithValue | null = (
           event.target as IDBRequest<IDBCursorWithValue | null>
         ).result
+
         if (cursor) {
           const { key, value } = cursor
+
           all[key.toString()] = value
+
           cursor.continue()
         } else {
           resolve(all)

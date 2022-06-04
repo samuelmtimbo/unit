@@ -127,9 +127,6 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   constructor($props: Props, $system: System, $pod: Pod) {
     super($props, $system, $pod)
 
-    // const { specs } = this.$system
-    // const { specs } = this.$pod
-
     const specs = { ...this.$system.specs, ...this.$pod.specs }
 
     const { className, style = {}, selected } = this.$props
@@ -311,30 +308,24 @@ export default class Search extends Element<IHTMLDivElement, Props> {
 
     const unlisten_add_spec = addAddSpecListener(
       (id: string, spec: GraphSpec): void => {
-        const { specs } = this.$system
-
-        console.log('Search', '_on_add_spec', id, spec)
-
-        this._id_list.push(id)
-
-        let i: number
-
-        if (isSpecVisible(specs, id)) {
-          for (i = 0; i < this._ordered_id_list.length; i++) {
-            const i_id = this._ordered_id_list[i]
-            if (compareByComplexity(specs, id, i_id) < 0) {
-              this._ordered_id_list.splice(i, 0, id)
-              break
-            }
-          }
-        }
-
-        const l = this._id_list.length
-        const total = l + 1
-
-        this._add_list_item(id, i, total)
-
-        this._filter_list()
+        // console.log('Search', '_on_add_spec', id, spec)
+        // RETURN
+        // const { specs } = this.$system
+        // this._id_list.push(id)
+        // let i: number
+        // if (isSpecVisible(specs, id)) {
+        //   for (i = 0; i < this._ordered_id_list.length; i++) {
+        //     const i_id = this._ordered_id_list[i]
+        //     if (compareByComplexity(specs, id, i_id) < 0) {
+        //       this._ordered_id_list.splice(i, 0, id)
+        //       break
+        //     }
+        //   }
+        // }
+        // const l = this._id_list.length
+        // const total = l + 1
+        // this._add_list_item(id, i, total)
+        // this._filter_list()
       }
     )
 
@@ -380,7 +371,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   }
 
   private _add_list_item = (id: string, i: number, total: number): void => {
-    const { specs } = this.$system
+    const specs = { ...this.$system.specs, ...this.$pod.specs }
 
     const spec = getSpec(specs, id)
 
@@ -506,14 +497,18 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     this._input._input.blur()
   }
 
-  private _on_microphone_transcript = throttle((transcript: string) => {
-    // console.log('Search', '_on_microphone_transcript', transcript)
-    const value = transcript.toLowerCase().substr(0, 30)
-    this._input.setProp('value', value)
-    this._input_value = value
-    this._filter_list()
-    this._input.focus()
-  }, 100)
+  private _on_microphone_transcript = throttle(
+    this.$system,
+    (transcript: string) => {
+      // console.log('Search', '_on_microphone_transcript', transcript)
+      const value = transcript.toLowerCase().substr(0, 30)
+      this._input.setProp('value', value)
+      this._input_value = value
+      this._filter_list()
+      this._input.focus()
+    },
+    100
+  )
 
   private _on_input_keydown = (
     { keyCode, repeat }: IOKeyboardEvent,
@@ -671,7 +666,8 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   private _filter_list = () => {
     // console.log('Search', '_filter_list')
 
-    const { specs } = this.$system
+    const specs = { ...this.$system.specs, ...this.$pod.specs }
+
     const { style = {}, filter = () => true } = this.$props
 
     const { color = 'currentColor' } = style

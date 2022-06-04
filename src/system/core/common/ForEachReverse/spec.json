@@ -1,0 +1,148 @@
+{
+  "name": "for each reverse",
+  "units": {
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "output": {
+        "local": {
+          "ignored": true
+        }
+      }
+    },
+    "loopdecrement": {
+      "id": "95862764-be74-4372-b734-c767ddd3e323",
+      "output": {
+        "final": {
+          "ignored": true
+        }
+      }
+    },
+    "lastindex": {
+      "id": "f9588979-74e1-477a-8085-594043362fdf"
+    },
+    "at": {
+      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a"
+    },
+    "greaterthanequal": {
+      "id": "c9e06816-0d2b-43ec-b7c8-d07563e19b6b",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "0"
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "loopdecrement": {
+        "output": {
+          "local": true
+        }
+      },
+      "greaterthanequal": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "loopdecrement": {
+        "input": {
+          "test": true
+        }
+      },
+      "greaterthanequal": {
+        "output": {
+          "a ≥ b": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "2": {
+      "looprepeat": {
+        "input": {
+          "init": true
+        }
+      },
+      "lastindex": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "loopdecrement": {
+        "input": {
+          "init": true
+        }
+      },
+      "lastindex": {
+        "output": {
+          "last": true
+        }
+      }
+    },
+    "4": {
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      },
+      "at": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "5": {
+      "loopdecrement": {
+        "output": {
+          "current": true
+        }
+      },
+      "at": {
+        "input": {
+          "i": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "<A>[]"
+    }
+  },
+  "outputs": {
+    "a[i]": {
+      "plug": {
+        "0": {
+          "unitId": "at",
+          "pinId": "a[i]"
+        }
+      },
+      "type": "<A>"
+    }
+  },
+  "metadata": {
+    "icon": "array",
+    "description": "output every element `a[i]` of `a` in decreasing order",
+    "complexity": 30,
+    "tags": [
+      "core",
+      "common"
+    ]
+  },
+  "id": "dd7ae700-3016-4aba-a45f-5fa2c21cb00f",
+  "type": "`U`&`G`",
+  "system": true
+}

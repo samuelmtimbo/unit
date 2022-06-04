@@ -16,25 +16,25 @@
   "merges": {},
   "inputs": {
     "element": {
-      "type": "`C`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "unit"
         }
       },
+      "type": "`C`",
       "ref": true
     }
   },
   "outputs": {
     "event": {
-      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "data"
         }
-      }
+      },
+      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number,pointerId:number,pointerType:string}"
     }
   },
   "metadata": {

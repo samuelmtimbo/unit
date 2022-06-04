@@ -45,38 +45,38 @@
   },
   "inputs": {
     "test": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "c"
         }
       },
+      "functional": true,
       "type": "boolean"
     },
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "prepend",
           "pinId": "b"
         }
       },
+      "functional": true,
       "type": "<A>"
     },
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "kajgjbzz"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     }
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "a"

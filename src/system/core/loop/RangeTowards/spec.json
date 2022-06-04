@@ -2,7 +2,7 @@
   "name": "range towards",
   "inputs": {
     "end": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "looprepeat",
           "pinId": "init"
@@ -12,7 +12,7 @@
       "type": "number"
     },
     "start": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loopadd",
           "pinId": "init"
@@ -24,7 +24,7 @@
   },
   "outputs": {
     "final": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "loopadd",
           "pinId": "final"
@@ -33,7 +33,7 @@
       "type": "number"
     },
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }

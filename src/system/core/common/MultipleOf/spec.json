@@ -30,7 +30,7 @@
   },
   "inputs": {
     "qgvlc": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "rlhly",
           "pinId": "a"
@@ -39,7 +39,7 @@
       "type": "number"
     },
     "xazqe": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "rlhly",
           "pinId": "b"
@@ -50,7 +50,7 @@
   },
   "outputs": {
     "wpuqx": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "dhmjz",
           "pinId": "a = b"

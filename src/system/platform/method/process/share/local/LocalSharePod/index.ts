@@ -1,7 +1,7 @@
 import { Done } from '../../../../../../../Class/Functional/Done'
 import { Graph } from '../../../../../../../Class/Graph'
 import { Semifunctional } from '../../../../../../../Class/Semifunctional'
-import { $$refGlobalObj } from '../../../../../../../interface/async/AsyncU_'
+import { $$refGlobalObj } from '../../../../../../../types/interface/async/AsyncU'
 import { Pod } from '../../../../../../../pod'
 import {
   shareLocalPod,
@@ -33,7 +33,7 @@ export default class LocalSharePod extends Semifunctional<I, O> {
       {
         fi: ['opt', 'graph'],
         fo: ['id'],
-        i: ['stop'],
+        i: ['done'],
         o: [],
       },
       {

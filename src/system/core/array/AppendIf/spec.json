@@ -77,38 +77,38 @@
   },
   "inputs": {
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "<A>"
     },
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ifelse",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "<A>[]"
     },
     "test": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
       },
+      "functional": true,
       "type": "boolean"
     }
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "3"
         }

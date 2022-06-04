@@ -62,7 +62,7 @@
   },
   "inputs": {
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
@@ -70,7 +70,7 @@
       "type": "boolean"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -80,7 +80,7 @@
   },
   "outputs": {
     "a && b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "and",
           "pinId": "a and b"
@@ -89,7 +89,7 @@
       "type": "boolean"
     },
     "!a && !b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "nor",
           "pinId": "!a && !b"
@@ -98,7 +98,7 @@
       "type": "boolean"
     },
     "a && !b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "andnot",
           "pinId": "a && !b"
@@ -107,7 +107,7 @@
       "type": "boolean"
     },
     "!a && b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "notand",
           "pinId": "!a && b"

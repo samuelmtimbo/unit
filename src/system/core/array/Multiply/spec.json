@@ -57,29 +57,29 @@
   },
   "inputs": {
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "map2",
           "pinId": "b"
         }
       },
+      "functional": true,
       "type": "any"
     },
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "map2",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number[]"
     }
   },
   "outputs": {
     "ab": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "map2",
           "pinId": "b"

@@ -2,7 +2,7 @@
   "name": "on drag delta",
   "inputs": {
     "element": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "ondrag",
           "pinId": "element"
@@ -14,7 +14,7 @@
   },
   "outputs": {
     "x": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "subtract",
           "pinId": "a - b"
@@ -23,7 +23,7 @@
       "type": "number"
     },
     "y": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "subgtract",
           "pinId": "a - b"
@@ -32,7 +32,7 @@
       "type": "number"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "6"
         }

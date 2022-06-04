@@ -81,7 +81,7 @@
   },
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "b"
@@ -90,7 +90,7 @@
       "type": "any"
     },
     "init": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate",
           "pinId": "init"
@@ -101,7 +101,7 @@
   },
   "outputs": {
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iterate",
           "pinId": "current"

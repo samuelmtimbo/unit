@@ -3,7 +3,7 @@
   "inputs": {},
   "outputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slidervalue",
           "pinId": "value"
@@ -20,7 +20,7 @@
       "type": "any"
     },
     "slider": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "slidervalue",
           "pinId": "slider"

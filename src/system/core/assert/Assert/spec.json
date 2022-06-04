@@ -2,7 +2,7 @@
   "name": "assert",
   "inputs": {
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "b"
@@ -10,7 +10,7 @@
       }
     },
     "message": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a"

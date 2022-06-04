@@ -2,7 +2,7 @@
   "name": "stroke google spinner",
   "inputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "arc",
           "pinId": "d"
@@ -13,7 +13,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "arc",
           "pinId": "d"

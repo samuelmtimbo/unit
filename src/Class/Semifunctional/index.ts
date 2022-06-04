@@ -25,8 +25,7 @@ export interface SFIO {
 export class Semifunctional<
   I = {},
   O = {},
-  _EE extends SemifunctionalEvents<_EE> &
-    Dict<any[]> = SemifunctionalEvents<Semifunctional_EE>
+  _EE extends SemifunctionalEvents<_EE> = SemifunctionalEvents<Semifunctional_EE>
 > extends Primitive<I, O, _EE> {
   private _f_i: Set<string>
   private _f_o: Set<string>

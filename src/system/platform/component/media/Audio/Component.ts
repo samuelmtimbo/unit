@@ -20,7 +20,7 @@ export const DEFAULT_STYLE = {
   // outline: 'none',
 }
 
-export default class Audio extends Element<HTMLAudioElement, Props> {
+export default class AudioComp extends Element<HTMLAudioElement, Props> {
   private _audio_el: HTMLAudioElement
 
   constructor($props: Props, $system: System, $pod: Pod) {

@@ -2,7 +2,7 @@
   "name": "IO",
   "inputs": {
     "disabled": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "app",
           "pinId": "disabled"
@@ -27,7 +27,7 @@
       }
     },
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "app",
           "pinId": "style"
@@ -55,11 +55,11 @@
         }
       }
     },
-    "pod": {
-      "pin": {
+    "graph": {
+      "plug": {
         "0": {
           "unitId": "app",
-          "pinId": "pod"
+          "pinId": "graph"
         }
       },
       "type": "`U`",
@@ -74,13 +74,13 @@
       }
     },
     "fullwindow": {
-      "type": "boolean",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "app",
           "pinId": "fullwindow"
         }
       },
+      "type": "boolean",
       "metadata": {
         "position": {
           "0": {
@@ -91,7 +91,7 @@
       }
     },
     "frame": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "app",
           "pinId": "frame"
@@ -111,7 +111,7 @@
   },
   "outputs": {
     "graph": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "app",
           "pinId": "graph"
@@ -142,7 +142,7 @@
             }
           }
         },
-        "pod": {
+        "graph": {
           "metadata": {
             "position": {
               "x": -407,
@@ -174,8 +174,8 @@
       },
       "metadata": {
         "position": {
-          "x": -474,
-          "y": -231
+          "x": -456,
+          "y": -151
         }
       }
     },
@@ -218,8 +218,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": 163,
-          "y": -134
+          "x": 174,
+          "y": -131
         }
       }
     },
@@ -247,8 +247,8 @@
       },
       "metadata": {
         "position": {
-          "x": 13,
-          "y": -134
+          "x": 25,
+          "y": -131
         }
       }
     },
@@ -272,8 +272,8 @@
       },
       "metadata": {
         "position": {
-          "x": -14,
-          "y": -50
+          "x": -4,
+          "y": -47
         }
       }
     },
@@ -297,8 +297,8 @@
       },
       "metadata": {
         "position": {
-          "x": -14,
-          "y": -217
+          "x": -4,
+          "y": -215
         }
       }
     },
@@ -327,8 +327,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": 131,
-          "y": 271
+          "x": 110,
+          "y": 266
         },
         "component": {
           "width": 289.85217285156244,
@@ -353,8 +353,8 @@
       },
       "metadata": {
         "position": {
-          "x": -316,
-          "y": 259
+          "x": -335,
+          "y": 212
         }
       }
     },
@@ -372,8 +372,8 @@
       },
       "metadata": {
         "position": {
-          "x": -105,
-          "y": 241
+          "x": -127,
+          "y": 238
         }
       }
     },
@@ -387,8 +387,8 @@
       },
       "metadata": {
         "position": {
-          "x": -211,
-          "y": 257
+          "x": -231,
+          "y": 215
         }
       }
     },
@@ -409,8 +409,8 @@
       },
       "metadata": {
         "position": {
-          "x": 463,
-          "y": -134
+          "x": 474,
+          "y": -131
         }
       }
     },
@@ -424,8 +424,8 @@
       },
       "metadata": {
         "position": {
-          "x": 358,
-          "y": -134
+          "x": 369,
+          "y": -131
         }
       }
     }

@@ -1,7 +1,7 @@
 {
   "name": "HTTP token auth",
   "units": {
-    "xdcafywx": {
+    "concat": {
       "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
       "input": {
         "a": {
@@ -23,10 +23,10 @@
     ]
   },
   "inputs": {
-    "tpbfwhrq": {
-      "pin": {
+    "token": {
+      "plug": {
         "0": {
-          "unitId": "xdcafywx",
+          "unitId": "concat",
           "pinId": "b"
         }
       },
@@ -34,10 +34,10 @@
     }
   },
   "outputs": {
-    "shglvpnwm": {
-      "pin": {
+    "auth": {
+      "plug": {
         "0": {
-          "unitId": "xdcafywx",
+          "unitId": "concat",
           "pinId": "ab"
         }
       },

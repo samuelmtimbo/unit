@@ -24,7 +24,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "length",
           "pinId": "a"
@@ -33,7 +33,7 @@
       "type": "<A>[]"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lessthan",
           "pinId": "b"
@@ -44,7 +44,7 @@
   },
   "outputs": {
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "lessthan",
           "pinId": "a < b"

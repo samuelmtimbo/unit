@@ -1,8 +1,8 @@
 import { forEachPinOnMerge } from '../spec/util'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
 import {
-  GraphExposedPinSpec,
-  GraphExposedSubPinSpec,
+  GraphPinSpec,
+  GraphSubPinSpec,
   GraphSpec,
   PinSpec,
   Specs,
@@ -31,7 +31,7 @@ export type SubGraphNode = { [id: string]: Set<string> }
 
 export function getSubPinSpecNodeId(
   type: IO,
-  subPinSpec: GraphExposedSubPinSpec
+  subPinSpec: GraphSubPinSpec
 ): string {
   const { mergeId, unitId, pinId } = subPinSpec
   if (mergeId) {
@@ -121,11 +121,11 @@ export function build_graph(
 
   forEachKeyValue(
     spec.inputs || {},
-    (pinSpec: GraphExposedPinSpec, exposedPinId: string) => {
-      const { pin = {} } = pinSpec
+    (pinSpec: GraphPinSpec, exposedPinId: string) => {
+      const { plug = {} } = pinSpec
       forEachKeyValue(
-        pin,
-        (subPinSpec: GraphExposedSubPinSpec, subPinId: string) => {
+        plug,
+        (subPinSpec: GraphSubPinSpec, subPinId: string) => {
           const extInputNodeId = getExtNodeId('input', exposedPinId, subPinId)
           graph[extInputNodeId] = { next: {}, previous: {} }
           const pinNodeId = getSubPinSpecNodeId('input', subPinSpec)
@@ -145,11 +145,11 @@ export function build_graph(
 
   forEachKeyValue(
     spec.outputs || {},
-    (pinSpec: GraphExposedPinSpec, exposedPinId: string) => {
-      const { pin = {} } = pinSpec
+    (pinSpec: GraphPinSpec, exposedPinId: string) => {
+      const { plug = {} } = pinSpec
       forEachKeyValue(
-        pin,
-        (subPinSpec: GraphExposedSubPinSpec, subPinId: string) => {
+        plug,
+        (subPinSpec: GraphSubPinSpec, subPinId: string) => {
           const extOutputNodeId = getExtNodeId('output', exposedPinId, subPinId)
           graph[extOutputNodeId] = { next: {}, previous: {} }
           const pinNodeId = getSubPinSpecNodeId('output', subPinSpec)

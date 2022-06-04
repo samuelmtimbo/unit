@@ -33,7 +33,7 @@
   },
   "inputs": {
     "c": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait0",
           "pinId": "b"
@@ -42,7 +42,7 @@
       "type": "any"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "b"
@@ -51,7 +51,7 @@
       "type": "any"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "a"
@@ -62,7 +62,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait0",
           "pinId": "a"

@@ -24,7 +24,7 @@
   },
   "inputs": {
     "start": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "temzrvlyb",
           "pinId": "v"
@@ -35,7 +35,7 @@
   },
   "outputs": {
     "{start}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "temzrvlyb",
           "pinId": "kv"

@@ -60,7 +60,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag1",
           "pinId": "v"
@@ -69,7 +69,7 @@
       "type": "any"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag0",
           "pinId": "v"
@@ -80,7 +80,7 @@
   },
   "outputs": {
     "ab": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "deepmerge",
           "pinId": "ab"

@@ -96,7 +96,7 @@
   },
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "image",
           "pinId": "style"
@@ -107,7 +107,7 @@
   },
   "outputs": {
     "image": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "image",
           "pinId": "_self"

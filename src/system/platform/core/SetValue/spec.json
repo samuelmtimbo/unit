@@ -2,13 +2,13 @@
   "name": "set value",
   "inputs": {
     "element": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "unit"
         }
       },
+      "type": "`U`",
       "ref": true,
       "metadata": {
         "position": {
@@ -20,7 +20,7 @@
       }
     },
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "data"

@@ -1,12 +1,13 @@
 import { ChildOutOfBound } from '../exception/ChildOutOfBoundError'
-import { Component_ } from '../interface/Component'
 import { Dict } from '../types/Dict'
-import { UnitClass } from '../types/UnitClass'
+import { Component_ } from '../types/interface/Component'
+import { UnitBundle } from '../types/UnitBundle'
+import { insert } from '../util/array'
 
 export function appendChild(
   component: Component_,
   children: Component_[],
-  Class: UnitClass<Component_>
+  Class: UnitBundle<Component_>
 ): number {
   const i = pushChild(component, children, Class)
 
@@ -18,17 +19,14 @@ export function appendChild(
   return i
 }
 
-export function pushChild(
-  component: Component_,
-  children: Component_[],
-  Class: UnitClass<Component_>
-): number {
+export function instanceChild(
+  component,
+  Class: UnitBundle<Component_>
+): Component_ {
   const system = component.refSystem()
   const pod = component.refPod()
 
   const unit = new Class(system, pod)
-
-  children.push(unit)
 
   if (component.paused() && !unit.paused()) {
     unit.pause()
@@ -36,9 +34,37 @@ export function pushChild(
     unit.play()
   }
 
+  return unit
+}
+
+export function pushChild(
+  component: Component_,
+  children: Component_[],
+  Class: UnitBundle<Component_>
+): number {
+  const unit = instanceChild(component, Class)
+
+  children.push(unit)
+
   const i = children.length - 1
 
   return i
+}
+
+export function insertChild(
+  component: Component_,
+  children: Component_[],
+  Class: UnitBundle<Component_>,
+  at: number
+): void {
+  const unit = instanceChild(component, Class)
+
+  insert(children, unit, at)
+
+  const { __bundle: bundle } = Class
+
+  component.emit('insert_child', { bundle, at })
+  component.emit('leaf_insert_child', { path: [], bundle, at })
 }
 
 export function hasChild(
@@ -54,32 +80,30 @@ export function pullChild(
   element: Component_,
   children: Component_[],
   at: number
-): UnitClass<Component_> {
+): Component_ {
   const has = hasChild(element, children, at)
 
   if (!has) {
     throw new ChildOutOfBound()
   }
 
-  const unit = children.splice(at, 1)
+  const [unit] = children.splice(at, 1)
 
-  const Class = unit.constructor as UnitClass<Component_>
-
-  return Class
+  return unit
 }
 
 export function removeChild(
   element: Component_,
   children: Component_[],
   at: number
-): UnitClass<Component_> {
-  const Class = pullChild(element, children, at)
+): Component_ {
+  const child = pullChild(element, children, at)
 
-  element.emit('remove_child_at', { at })
+  element.emit('remove_child', { at })
   element.emit(`remove_child_at_${at}`, { at })
-  element.emit('leaf_remove_child_at', { at, path: [] })
+  element.emit('leaf_remove_child', { at, path: [] })
 
-  return Class
+  return child
 }
 
 export function refChild(

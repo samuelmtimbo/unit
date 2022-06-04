@@ -188,7 +188,7 @@ test(
     },
     inputs: {
       a: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity',
             pinId: 'a',
@@ -198,7 +198,7 @@ test(
     },
     outputs: {
       a: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity0',
             pinId: 'a',
@@ -270,7 +270,7 @@ test(
     },
     inputs: {
       a: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity',
             pinId: 'a',
@@ -278,7 +278,7 @@ test(
         },
       },
       a0: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity0',
             pinId: 'a',
@@ -288,7 +288,7 @@ test(
     },
     outputs: {
       a: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity',
             pinId: 'a',
@@ -296,7 +296,7 @@ test(
         },
       },
       a0: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity0',
             pinId: 'a',
@@ -368,7 +368,7 @@ test(
     },
     inputs: {
       a: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity',
             pinId: 'a',
@@ -378,7 +378,7 @@ test(
     },
     outputs: {
       a: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity',
             pinId: 'a',
@@ -453,7 +453,7 @@ test(
     },
     outputs: {
       a: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity',
             pinId: 'a',
@@ -526,7 +526,7 @@ test(
     },
     inputs: {
       a: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity',
             pinId: 'a',
@@ -536,7 +536,7 @@ test(
     },
     outputs: {
       a: {
-        pin: {
+        plug: {
           0: {
             unitId: 'identity',
             pinId: 'a',

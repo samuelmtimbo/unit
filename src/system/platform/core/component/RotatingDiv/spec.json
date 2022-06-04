@@ -434,7 +434,7 @@
   },
   "inputs": {
     "cy": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default",
           "pinId": "a"
@@ -443,7 +443,7 @@
       "type": "number"
     },
     "cx": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default0",
           "pinId": "a"
@@ -452,7 +452,7 @@
       "type": "number"
     },
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault",
           "pinId": "a"
@@ -461,7 +461,7 @@
       "type": "object"
     },
     "R": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default1",
           "pinId": "a"

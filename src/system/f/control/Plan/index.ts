@@ -92,4 +92,21 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
       this._backward_all()
     }
   }
+
+  public snapshotSelf() {
+    return {
+      ...super.snapshotSelf(),
+      _looping: this._looping,
+      _current: this._current,
+    }
+  }
+
+  public restoreSelf(state): void {
+    const { _looping, _current, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    this._looping = _looping
+    this._current = _current
+  }
 }

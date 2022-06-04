@@ -2,11 +2,12 @@ import { Element } from '../Class/Element'
 import { Graph } from '../Class/Graph'
 import { Stateful } from '../Class/Stateful'
 import { Unit } from '../Class/Unit'
-import { EE } from '../interface/EE'
-import { UnitBundleSpec } from '../system/platform/method/process/UnitBundleSpec'
+import { EE } from '../types/interface/EE'
+import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { ComponentAppendChildMoment } from './ComponentAppendChildMoment'
 import { ComponentRemoveChildAtMoment } from './ComponentRemoveChildAtMoment'
 import { UnitMoment } from './UnitMoment'
+import { UnitRenamePinMoment } from './UnitRenamePinMoment'
 
 export function watchUnitEvent(
   event: 'destroy' | 'reset' | 'listen' | 'unlisten',
@@ -19,6 +20,27 @@ export function watchUnitEvent(
       event,
       data,
     } as UnitMoment)
+  }
+  unit.addListener(event, listener)
+  return () => {
+    unit.removeListener(event, listener)
+  }
+}
+
+export function watchUnitRenamePinEvent(
+  event: 'rename_input' | 'rename_output',
+  unit: Unit,
+  callback: (moment: UnitRenamePinMoment) => void
+): () => void {
+  const listener = (name: string, newName: string) => {
+    callback({
+      type: 'unit',
+      event,
+      data: {
+        name,
+        newName,
+      },
+    })
   }
   unit.addListener(event, listener)
   return () => {
@@ -81,7 +103,7 @@ export function watchComponentAppendEvent(
 }
 
 export function watchComponentRemoveEvent(
-  event: 'remove_child_at',
+  event: 'remove_child',
   unit: Graph | Element,
   callback: (moment: ComponentRemoveChildAtMoment) => void
 ): () => void {
@@ -121,7 +143,7 @@ export function watchComponentLeafAppendEvent(
 }
 
 export function watchComponentLeafRemoveEvent(
-  event: 'leaf_remove_child_at',
+  event: 'leaf_remove_child',
   unit: Graph | Element,
   callback: (moment: UnitMoment) => void
 ): () => void {

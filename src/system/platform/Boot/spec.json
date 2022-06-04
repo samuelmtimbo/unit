@@ -1,0 +1,41 @@
+{
+  "name": "boot",
+  "inputs": {
+    "init": {
+      "type": "{}",
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    },
+    "parent": {
+      "type": "`S`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "system": {
+      "type": "`S`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "unit",
+    "description": "start a new system",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "ref",
+      "unit"
+    ]
+  },
+  "id": "c14cebfd-30a4-4d76-b911-a97672050ace",
+  "type": "`U`",
+  "base": true,
+  "system": true
+}

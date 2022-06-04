@@ -23,7 +23,7 @@
   },
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "countfrom",
           "pinId": "any"
@@ -34,7 +34,7 @@
   },
   "outputs": {
     "current": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "countfrom",
           "pinId": "current"

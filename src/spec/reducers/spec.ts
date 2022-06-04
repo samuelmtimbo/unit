@@ -1,15 +1,15 @@
 import assocPath from '../../system/core/object/AssocPath/f'
 import dissocPath from '../../system/core/object/DissocPath/f'
 import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
-import pathGet from '../../system/core/object/PathGet/f'
+import pathGet from '../../system/core/object/DeepGet/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import _dissoc from '../../system/f/object/Dissoc/f'
 import merge from '../../system/f/object/Merge/f'
 import set from '../../system/f/object/Set/f'
 import {
   Action,
-  GraphExposedPinSpec,
-  GraphExposedSubPinSpec,
+  GraphPinSpec,
+  GraphSubPinSpec,
   GraphMergeSpec,
   GraphMergesSpec,
   GraphSpec,
@@ -64,7 +64,7 @@ import { forEachPinOnMerges, getMergePinCount } from '../util'
 
 export type State = GraphSpec
 
-export const defaultState: State = emptyGraphSpec
+export const defaultState: State = emptyGraphSpec()
 
 export const setSpec = ({ spec }: { spec: State }) => spec
 
@@ -116,8 +116,8 @@ export const expandUnit = (
         const { input = {}, output = {} } = merge[id]
         forEachKeyValue(input, (_, inputId) => {
           const inputSpec = spec.inputs[inputId]
-          const { pin } = inputSpec
-          forEachKeyValue(pin, (subInputSpec, subInputId) => {
+          const { plug } = inputSpec
+          forEachKeyValue(plug, (subInputSpec, subInputId) => {
             if (subInputSpec.mergeId) {
               state = mergeMerges(
                 { a: mergeId, b: subInputSpec.mergeId },
@@ -138,8 +138,8 @@ export const expandUnit = (
         })
         forEachKeyValue(output, (_, outputId) => {
           const outputSpec = spec.outputs[outputId]
-          const { pin } = outputSpec
-          forEachKeyValue(pin, (subOutputSpec) => {
+          const { plug } = outputSpec
+          forEachKeyValue(plug, (subOutputSpec) => {
             if (subOutputSpec.mergeId) {
               state = mergeMerges(
                 { a: mergeId, b: subOutputSpec.mergeId },
@@ -176,13 +176,13 @@ export const removeUnitExposedTypePins = (
 ): State => {
   const nextState = clone(state)
   for (const pinId in state[`${type}s`]) {
-    const pinSpec = state[`${type}s`][pinId]
-    const { pin } = pinSpec
-    for (let subPinId in pin) {
-      const subPin = pin[subPinId]
+    const pin = state[`${type}s`][pinId]
+    const { plug } = pin
+    for (let subPinId in plug) {
+      const subPin = plug[subPinId]
       const { unitId } = subPin
       if (unitId === id) {
-        nextState[`${type}s`][pinId]['pin'][subPinId] = {}
+        nextState[`${type}s`][pinId]['plug'][subPinId] = {}
       }
     }
   }
@@ -221,16 +221,16 @@ export const removeUnitMerges = (
   const reasignExposedPins = (type: IO): void => {
     const pins = state[`${type}s`] || {}
     for (const exposedPinId in pins) {
-      const pinSpec = pins[exposedPinId] as GraphExposedPinSpec
-      const { pin } = pinSpec
-      for (let subPinId in pin) {
-        const subPin = pin[subPinId]
+      const pinSpec = pins[exposedPinId] as GraphPinSpec
+      const { plug } = pinSpec
+      for (let subPinId in plug) {
+        const subPin = plug[subPinId]
         const { mergeId } = subPin
         if (mergeId && removedMergeIds[mergeId]) {
           for (const unitId in merges[mergeId]) {
             if (unitId !== id) {
               const pinId = getObjSingleKey(merges[mergeId][unitId][type]!)
-              nextState[`${type}s`][exposedPinId]['pin'][subPinId] = {
+              nextState[`${type}s`][exposedPinId]['plug'][subPinId] = {
                 unitId,
                 pinId,
               }
@@ -261,8 +261,8 @@ export const addMerge = (
   const { inputs = {}, outputs = {} } = state
 
   // reassign exposed inputs that have just been merged
-  forEachKeyValue(inputs, ({ pin }, inputId) => {
-    forEachKeyValue(pin, ({ unitId, pinId }, subPinId) => {
+  forEachKeyValue(inputs, ({ plug }, inputId) => {
+    forEachKeyValue(plug, ({ unitId, pinId }, subPinId) => {
       if (
         unitId &&
         pinId &&
@@ -280,8 +280,8 @@ export const addMerge = (
   })
 
   // reassign exposed outputs that have just been merged
-  forEachKeyValue(outputs, ({ pin }, outputId) => {
-    forEachKeyValue(pin, ({ unitId, pinId }, subPinId) => {
+  forEachKeyValue(outputs, ({ plug }, outputId) => {
+    forEachKeyValue(plug, ({ unitId, pinId }, subPinId) => {
       if (
         unitId &&
         pinId &&
@@ -311,16 +311,16 @@ export const addPinToMerge = (
   state: State
 ): State => {
   // reassign exposed pin if it has just been merged
-  forEachKeyValue(state[`${type}s`], ({ name, pin = {} }, exposedPinId) => {
-    for (const subPinId in pin) {
-      const subPin = pin[subPinId]
+  forEachKeyValue(state[`${type}s`], ({ name, plug = {} }, exposedPinId) => {
+    for (const subPinId in plug) {
+      const subPin = plug[subPinId]
       const { unitId: _unitId, pinId: _pinId } = subPin
       if (_unitId === unitId && _pinId === pinId) {
         state = coverPinSet({ id: exposedPinId, type }, state)
         state = exposePinSet(
           {
             id: exposedPinId,
-            pin: { name, pin: { 0: { mergeId: id } } },
+            pin: { name, plug: { 0: { mergeId: id } } },
             type,
           },
           state
@@ -346,30 +346,30 @@ export const removeMerge = ({ id }: { id: string }, state: State): State => {
   const nextMerges = _dissoc(state.merges!, id)
   nextState.merges = nextMerges
 
-  let nextInputs = mapObjVK<GraphExposedPinSpec, GraphExposedPinSpec>(
+  let nextInputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
     state.inputs,
-    (input: GraphExposedPinSpec) => ({
+    (input: GraphPinSpec) => ({
       ...input,
-      pin: filterObj(input.pin, ({ mergeId }) => !mergeId || mergeId !== id),
+      plug: filterObj(input.plug, ({ mergeId }) => !mergeId || mergeId !== id),
     })
   )
 
-  nextInputs = filterObj(nextInputs, (input: GraphExposedPinSpec) => {
-    return Object.keys(input.pin).length > 0
+  nextInputs = filterObj(nextInputs, (input: GraphPinSpec) => {
+    return Object.keys(input.plug).length > 0
   })
 
   nextState.inputs = nextInputs
 
-  let nextOutputs = mapObjVK<GraphExposedPinSpec, GraphExposedPinSpec>(
+  let nextOutputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
     state.outputs,
-    (output: GraphExposedPinSpec) => ({
+    (output: GraphPinSpec) => ({
       ...output,
-      pin: filterObj(output.pin, ({ mergeId }) => !mergeId || mergeId !== id),
+      plug: filterObj(output.plug, ({ mergeId }) => !mergeId || mergeId !== id),
     })
   )
 
-  nextOutputs = filterObj(nextOutputs, (output: GraphExposedPinSpec) => {
-    return Object.keys(output.pin).length > 0
+  nextOutputs = filterObj(nextOutputs, (output: GraphPinSpec) => {
+    return Object.keys(output.plug).length > 0
   })
 
   nextState.outputs = nextOutputs
@@ -501,11 +501,11 @@ export const coverPin = (
   },
   state: State
 ): State => {
-  return dissocPath(state, [`${type}s`, id, 'pin', subPinId]) as State
+  return dissocPath(state, [`${type}s`, id, 'plug', subPinId]) as State
 }
 
 export const exposePinSet = (
-  { id, type, pin }: { id: string; type: IO; pin: GraphExposedPinSpec },
+  { id, type, pin }: { id: string; type: IO; pin: GraphPinSpec },
   state: State
 ): State => assocPath(state, [`${type}s`, id], pin)
 
@@ -519,15 +519,15 @@ export const exposePin = (
     id: string
     type: IO
     subPinId: string
-    subPin: GraphExposedSubPinSpec
+    subPin: GraphSubPinSpec
   },
   state: State
 ): State => {
-  return assocPath(state, [`${type}s`, id, 'pin', subPinId], subPin)
+  return assocPath(state, [`${type}s`, id, 'plug', subPinId], subPin)
 }
 
 export const exposeInputSet = (
-  { id, input }: { id: string; input: GraphExposedPinSpec },
+  { id, input }: { id: string; input: GraphPinSpec },
   state: State
 ): State => exposePinSet({ id, pin: input, type: 'input' }, state)
 
@@ -536,7 +536,7 @@ export const exposeInput = (
     id,
     subPinId,
     input,
-  }: { id: string; subPinId: string; input: GraphExposedSubPinSpec },
+  }: { id: string; subPinId: string; input: GraphSubPinSpec },
   state: State
 ): State => {
   return exposePin({ id, subPinId, subPin: input, type: 'input' }, state)
@@ -552,11 +552,11 @@ export const plugPin = (
     type: IO
     id: string
     subPinId: string
-    subPinSpec: GraphExposedSubPinSpec
+    subPinSpec: GraphSubPinSpec
   },
   state: State
 ): State => {
-  return assocPath(state, [`${type}s`, id, 'pin', subPinId], subPinSpec)
+  return assocPath(state, [`${type}s`, id, 'plug', subPinId], subPinSpec)
 }
 
 export const unplugInput = (
@@ -597,7 +597,7 @@ export const unplugPin = (
   },
   state: State
 ): State => {
-  return assocPath(state, [`${type}s`, pinId, 'pin', subPinId], {})
+  return assocPath(state, [`${type}s`, pinId, 'plug', subPinId], {})
 }
 
 export const coverInputSet = ({ id }: { id: string }, state: State): State =>
@@ -617,7 +617,7 @@ export const coverInput = (
 }
 
 export const exposeOutputSet = (
-  { id, output }: { id: string; output: GraphExposedPinSpec },
+  { id, output }: { id: string; output: GraphPinSpec },
   state: State
 ): State => exposePinSet({ id, pin: output, type: 'output' }, state)
 
@@ -626,7 +626,7 @@ export const exposeOutput = (
     id,
     subPinId,
     output,
-  }: { id: string; subPinId: string; output: GraphExposedSubPinSpec },
+  }: { id: string; subPinId: string; output: GraphSubPinSpec },
   state: State
 ): State => {
   return exposePin({ id, subPinId, subPin: output, type: 'output' }, state)
@@ -769,8 +769,8 @@ export const setUnitPinIgnored = (
     })
 
     if (type === 'input') {
-      forEachKeyValue(state.inputs, ({ pin }, id) => {
-        forEachKeyValue(pin, (input, subPinId) => {
+      forEachKeyValue(state.inputs, ({ plug }, id) => {
+        forEachKeyValue(plug, (input, subPinId) => {
           if (input.unitId === unitId && input.pinId === pinId) {
             state = unplugInput({ id, subPinId }, state)
           }
@@ -779,8 +779,8 @@ export const setUnitPinIgnored = (
     }
 
     if (type === 'output') {
-      forEachKeyValue(state.outputs, ({ pin }, id) => {
-        forEachKeyValue(pin, (output, subPinId) => {
+      forEachKeyValue(state.outputs, ({ plug }, id) => {
+        forEachKeyValue(plug, (output, subPinId) => {
           if (output.unitId === unitId && output.pinId === pinId) {
             state = unplugOutput({ id, subPinId }, state)
           }

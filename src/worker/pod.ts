@@ -4,7 +4,7 @@ import { makeRemoteUnitAPI } from '../client/makeRemoteUnitAPI'
 import { RemoteRef } from '../client/RemoteRef'
 import { init } from '../client/service'
 import { spawn, start } from '../spawn'
-import { BundleSpec } from '../system/platform/method/process/BundleSpec'
+import { BundleSpec } from '../types/BundleSpec'
 
 const post = (data) => {
   postMessage(data, null)

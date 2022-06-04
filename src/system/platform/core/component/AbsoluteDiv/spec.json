@@ -3,7 +3,7 @@
   "type": "`U`&`G`&`C`",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergedefault",
           "pinId": "a"

@@ -2,7 +2,7 @@
   "name": "remove all children",
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "b"
@@ -19,12 +19,12 @@
       }
     },
     "parent": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
       },
+      "type": "`U`",
       "ref": true,
       "metadata": {
         "position": {
@@ -45,7 +45,7 @@
         "at": {}
       },
       "output": {
-        "has": {}
+        "test": {}
       },
       "metadata": {
         "position": {
@@ -155,7 +155,7 @@
     "2": {
       "haschild": {
         "output": {
-          "has": true
+          "test": true
         }
       },
       "loop": {

@@ -2,7 +2,7 @@
   "name": "text div",
   "inputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "text",
           "pinId": "value"
@@ -11,7 +11,7 @@
       "type": "string"
     },
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "div",
           "pinId": "style"
@@ -22,7 +22,7 @@
   },
   "outputs": {
     "div": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "div",
           "pinId": "_self"

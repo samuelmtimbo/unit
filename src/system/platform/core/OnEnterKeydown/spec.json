@@ -2,7 +2,7 @@
   "name": "on enter keydown",
   "inputs": {
     "element": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "onkeydown",
           "pinId": "element"
@@ -14,7 +14,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "if",
           "pinId": "a if b"

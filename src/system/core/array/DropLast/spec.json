@@ -74,7 +74,7 @@
   },
   "inputs": {
     "ab": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
@@ -82,7 +82,7 @@
       "type": "<A>[]"
     },
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "subtract",
           "pinId": "b"
@@ -93,7 +93,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "split",
           "pinId": "first"

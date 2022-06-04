@@ -2,7 +2,7 @@
   "name": "text area to speech",
   "inputs": {
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "textarea",
           "pinId": "style"
@@ -19,7 +19,7 @@
       }
     },
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "textarea",
           "pinId": "value"
@@ -36,7 +36,7 @@
       }
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default",
           "pinId": "a"

@@ -1,7 +1,7 @@
-import { LayoutNode } from '../system/platform/component/app/Graph/Component'
+import { LayoutNode } from "./LayoutNode"
 import { Component } from './component'
 import { addVector, Size } from './util/geometry'
-import { getPosition } from './util/style/getPosition'
+import { getRelativePosition } from './util/style/getPosition'
 import { getSize } from './util/style/getSize'
 
 export const extractTrait = (
@@ -16,7 +16,7 @@ export const extractTrait = (
     leaf_comp.$element instanceof HTMLElement ||
     leaf_comp.$element instanceof SVGElement
   ) {
-    const relative_position = getPosition(
+    const relative_position = getRelativePosition(
       leaf_comp.$element,
       leaf_context.$element
     )
@@ -48,7 +48,7 @@ export const extractTrait = (
 
     const { width, height } = measureText(textContent, fontSize)
 
-    const position = getPosition(leaf_comp.$element, leaf_context.$element)
+    const position = getRelativePosition(leaf_comp.$element, leaf_context.$element)
 
     let parent_trait: LayoutNode
 

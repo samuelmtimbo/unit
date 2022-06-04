@@ -12,7 +12,7 @@
   },
   "outputs": {
     "pod": {
-      "type": "`PO`",
+      "type": "`P`",
       "ref": true,
       "icon": "server"
     }

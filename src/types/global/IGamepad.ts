@@ -1,3 +1,1 @@
-// TODO
-
-export interface IGamepad {}
+export interface IGamepad extends Gamepad {}

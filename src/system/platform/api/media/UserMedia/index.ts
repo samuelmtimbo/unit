@@ -1,14 +1,11 @@
-import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { ST } from '../../../../../interface/ST'
-import { NOOP } from '../../../../../NOOP'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
-import { Callback } from '../../../../../types/Callback'
 import { IUserMediaOpt } from '../../../../../types/global/IUserMedia'
-import { Unlisten } from '../../../../../types/Unlisten'
+import { ST } from '../../../../../types/interface/ST'
 import { stopMediaStream } from '../../../../../util/stream/stopMediaStream'
+import { wrapMediaStream } from '../../../../../wrap/MediaStream'
 
 export type I = {
   opt: IUserMediaOpt
@@ -61,14 +58,7 @@ export default class UserMedia extends Functional<I, O> {
       return
     }
 
-    const stream = new (class Stream extends $ implements ST {
-      __: string[] = ['ST']
-
-      stream(callback: Callback<MediaStream>): Unlisten {
-        callback(_stream)
-        return NOOP
-      }
-    })(this.__system, this.__pod)
+    const stream = await wrapMediaStream(_stream, this.__system, this.__pod)
 
     done({ stream })
   }

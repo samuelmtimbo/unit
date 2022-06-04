@@ -1,16 +1,18 @@
 import { Element } from '../../../../Class/Element'
 import { Unit } from '../../../../Class/Unit'
-import { C } from '../../../../interface/C'
-import { Component_ } from '../../../../interface/Component'
-import { W } from '../../../../interface/W'
 import { Pod } from '../../../../pod'
+import { bundleClass } from '../../../../spec/bundleClass'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { UnitClass } from '../../../../types/UnitClass'
+import { C } from '../../../../types/interface/C'
+import { Component_ } from '../../../../types/interface/Component'
+import { W } from '../../../../types/interface/W'
+import { UnitBundle } from '../../../../types/UnitBundle'
+import { ID_PARENT } from '../../../_ids'
 import Parent from '../Parent'
 
 export type I = {
-  component: UnitClass
+  component: UnitBundle
   style: Dict<string>
 }
 
@@ -19,7 +21,9 @@ export type O = {
 }
 
 export default class Wrap extends Element<I, O> implements W {
-  private _Container: UnitClass = Parent
+  private _Container: UnitBundle = bundleClass(Parent, {
+    unit: { id: ID_PARENT },
+  })
 
   private _child_container: Component_[] = []
   private _parent_container: Component_[] = []
@@ -80,7 +84,7 @@ export default class Wrap extends Element<I, O> implements W {
     }
   }
 
-  appendChild(Class: UnitClass): number {
+  appendChild(Class: UnitBundle<Component_>): number {
     const container = new this._Container(this.__system, this.__pod)
 
     container.play()
@@ -90,7 +94,7 @@ export default class Wrap extends Element<I, O> implements W {
     return super.appendChild(Class)
   }
 
-  removeChild(at: number): UnitClass {
+  removeChild(at: number): Component_ {
     this._child_container.splice(at, 1)
 
     return super.removeChild(at)

@@ -1,10 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "prettier"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -12,7 +9,16 @@
     "prettier"
   ],
   "rules": {
-    "no-console": 1,       // warning
-    "prettier/prettier": 2 // error
+    "no-console": 1, // warning
+    "prettier/prettier": 2, // error
+    "no-async-promise-executor": "off",
+    "no-empty-pattern": "off",
+    "no-inner-declarations": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-unused-vars": "off"
   }
 }

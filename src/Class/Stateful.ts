@@ -1,12 +1,13 @@
-import { J } from '../interface/J'
-import { V } from '../interface/V'
 import { ObjectUpdateType } from '../Object'
 import { Pod } from '../pod'
 import { Primitive, PrimitiveEvents } from '../Primitive'
 import { State } from '../State'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
+import { J } from '../types/interface/J'
+import { V } from '../types/interface/V'
 import { Unlisten } from '../types/Unlisten'
+import { clone } from '../util/object'
 import { ION, Opt } from './Unit'
 
 export type Stateful_EE = {
@@ -33,7 +34,7 @@ export class Stateful<
 
   protected _defaultState: State = {}
 
-  protected _obj: Dict<any>
+  protected _state: Dict<any>
 
   constructor({ i = [], o = [] }: ION, opt: Opt, system: System, pod: Pod) {
     super(
@@ -46,7 +47,7 @@ export class Stateful<
       pod
     )
 
-    this._obj = {}
+    this._state = {}
   }
 
   subscribe(
@@ -76,20 +77,20 @@ export class Stateful<
   }
 
   public async get(name: string): Promise<any> {
-    return this._obj[name] ?? this._defaultState[name]
+    return this._state[name] ?? this._defaultState[name]
   }
 
   public async read(): Promise<any> {
-    return this._obj
+    return this._state
   }
 
   public write(data: any): Promise<void> {
-    this._obj = data
+    this._state = data
     return
   }
 
   public async set(name: string, data: any): Promise<void> {
-    this._obj[name] = data
+    this._state[name] = data
     this.emit('set', name, data)
   }
 
@@ -98,12 +99,12 @@ export class Stateful<
   }
 
   public delete(name: string): Promise<void> {
-    delete this._obj[name]
+    delete this._state[name]
     return
   }
 
   private _obj_at_path = (path: string[]): Dict<any> => {
-    let obj = this._obj
+    let obj = this._state
     for (const p of path) {
       obj = obj[p]
     }
@@ -124,5 +125,20 @@ export class Stateful<
 
   keys(): Promise<string[]> {
     throw new Error('Method not implemented.')
+  }
+
+  snapshotSelf(): Dict<any> {
+    return {
+      ...super.snapshotSelf(),
+      _state: clone(this._state),
+    }
+  }
+
+  restoreSelf(state: Dict<any>): void {
+    const { _state, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    this._state = _state
   }
 }

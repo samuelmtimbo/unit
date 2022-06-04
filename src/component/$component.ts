@@ -1,18 +1,18 @@
-import { $Component } from '../interface/async/$Component'
-import { $EE } from '../interface/async/$EE'
-import { Async } from '../interface/async/Async'
-import { Component_ } from '../interface/Component'
-import { EE } from '../interface/EE'
-import { W } from '../interface/W'
 import { proxyWrap } from '../proxyWrap'
 import { Callback } from '../types/Callback'
-import { UnitClass } from '../types/UnitClass'
+import { $Component } from '../types/interface/async/$Component'
+import { $EE } from '../types/interface/async/$EE'
+import { Async } from '../types/interface/async/Async'
+import { Component_ } from '../types/interface/Component'
+import { EE } from '../types/interface/EE'
+import { W } from '../types/interface/W'
+import { UnitBundle } from '../types/UnitBundle'
 import { $Child } from './Child'
 import { $Children } from './Children'
 
 export function $appendChild(
   component: Component_,
-  Class: UnitClass<Component_>,
+  Class: UnitBundle<Component_>,
   callback: Callback<number>
 ): void {
   const i = component.appendChild(Class)
@@ -25,8 +25,9 @@ export function $removeChild(
   callback: Callback<{ specId: string }>
 ): void {
   try {
-    const Class = component.removeChild(at)
-    const specId = Class.__bundle.unit.id
+    const child = component.removeChild(at)
+    const bundle = child.getBundleSpec()
+    const specId = bundle.unit.id
     callback({ specId })
   } catch (err) {
     callback(undefined, err.message)
@@ -45,6 +46,7 @@ export function $hasChild(
 export function $child(
   component: Component_,
   { at }: { at: number },
+  // XABLEAU
   callback: Callback<$Child>
 ): void {
   const child = component.refChild(at)

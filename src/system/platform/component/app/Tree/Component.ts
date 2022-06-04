@@ -1,6 +1,6 @@
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { $Graph } from '../../../../../interface/async/$Graph'
+import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { GraphSpec } from '../../../../../types'

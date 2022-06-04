@@ -61,33 +61,33 @@
   },
   "inputs": {
     "y": {
-      "type": "number",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagy",
           "pinId": "y"
         }
-      }
+      },
+      "type": "number"
     },
     "x": {
-      "type": "number",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagx",
           "pinId": "x"
         }
-      }
+      },
+      "type": "number"
     }
   },
   "outputs": {
     "{x,y}": {
-      "type": "{x:number,y:number}",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge",
           "pinId": "ab"
         }
-      }
+      },
+      "type": "{x:number,y:number}"
     }
   },
   "id": "2737cd82-d80b-4d3f-b33d-f00f68361e24",

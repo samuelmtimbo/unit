@@ -102,7 +102,7 @@
   },
   "inputs": {
     "keys": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "reduce",
           "pinId": "a"
@@ -111,7 +111,7 @@
       "type": "(number|string)[]"
     },
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "looprepeat",
           "pinId": "init"
@@ -122,7 +122,7 @@
   },
   "outputs": {
     "has": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "reduce",
           "pinId": "result"

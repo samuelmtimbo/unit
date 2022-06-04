@@ -2,7 +2,7 @@
   "name": "root",
   "inputs": {
     "disabled": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "io",
           "pinId": "disabled"
@@ -20,7 +20,7 @@
       "defaultIgnored": true
     },
     "fullwindow": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "io",
           "pinId": "fullwindow"
@@ -38,7 +38,7 @@
       "defaultIgnored": true
     },
     "style": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "io",
           "pinId": "style"
@@ -55,7 +55,7 @@
       }
     },
     "bundle": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pod",
           "pinId": "bundle"
@@ -74,7 +74,7 @@
   },
   "outputs": {
     "graph": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "io",
           "pinId": "graph"
@@ -106,7 +106,7 @@
             }
           }
         },
-        "pod": {},
+        "graph": {},
         "fullwindow": {
           "metadata": {
             "position": {
@@ -177,24 +177,13 @@
           "y": -8
         }
       }
-    },
-    "iounappuser": {
-      "id": "5be27ad8-9a3c-11eb-8108-375092ceb015",
-      "metadata": {
-        "position": {
-          "x": 578,
-          "y": 292
-        }
-      },
-      "input": {},
-      "output": {}
     }
   },
   "merges": {
     "0": {
       "io": {
         "input": {
-          "pod": true
+          "graph": true
         }
       },
       "pod": {
@@ -215,12 +204,10 @@
       "io": {
         "children": [
           "iounappcloud",
-          "iounappuser",
           "iounappkeyboard"
         ],
         "childSlot": {
           "iounappcloud": "2",
-          "iounappuser": "2",
           "iounappkeyboard": "2"
         }
       },
@@ -228,9 +215,6 @@
         "children": []
       },
       "iounappcloud": {
-        "children": []
-      },
-      "iounappuser": {
         "children": []
       }
     },

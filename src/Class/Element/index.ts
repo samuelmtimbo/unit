@@ -1,3 +1,4 @@
+import { Component } from '../../client/component'
 import {
   appendChild,
   appendParentChild,
@@ -14,21 +15,21 @@ import {
   unregisterRoot,
 } from '../../component/method'
 import { EventEmitter } from '../../EventEmitter'
-import { C_EE } from '../../interface/C'
-import { Component_ } from '../../interface/Component'
-import { E } from '../../interface/E'
-import { EE } from '../../interface/EE'
 import { Pod } from '../../pod'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
-import { UnitClass } from '../../types/UnitClass'
+import { C_EE } from '../../types/interface/C'
+import { ComponentEvents, Component_ } from '../../types/interface/Component'
+import { E } from '../../types/interface/E'
+import { EE } from '../../types/interface/EE'
+import { UnitBundle } from '../../types/UnitBundle'
 import { forEach } from '../../util/array'
 import { Stateful, StatefulEvents } from '../Stateful'
 import { ION, Opt } from '../Unit'
 
 export type Element_EE = C_EE & { call: [{ method: string; data: any[] }] }
 
-export type ElementEvents<_EE extends Dict<any[]>> = StatefulEvents<
+export type ElementEE<_EE extends Dict<any[]>> = StatefulEvents<
   _EE & Element_EE
 > &
   Element_EE
@@ -37,14 +38,13 @@ export class Element<
     I = any,
     O = any,
     _J extends Dict<any> = {},
-    _EE extends ElementEvents<_EE> = ElementEvents<Element_EE>
+    _EE extends ElementEE<_EE> = ElementEE<Element_EE>,
+    _C extends Component = Component
   >
   extends Stateful<I, O, {}, _EE>
   implements E
 {
   __ = ['U', 'C', 'J', 'V', 'EE']
-
-  public element = true
 
   public _children: Component_[] = []
   public _root: Component_[] = []
@@ -52,6 +52,7 @@ export class Element<
   public _parent_children: Component_[] = []
   public _slot: Dict<Component_> = {}
   public _emitter: EventEmitter = new EventEmitter()
+  public _component: _C
 
   constructor(
     { i = [], o = [] }: ION,
@@ -108,23 +109,30 @@ export class Element<
     return removeParentChild(this, this._parent_children, component)
   }
 
-  appendChild(Class: UnitClass<Component_>): number {
-    return appendChild(this, this._children, Class)
+  appendChild(Bundle: UnitBundle<Component_>): number {
+    return appendChild(this, this._children, Bundle)
   }
 
-  pushChild(Class: UnitClass<Component_>): number {
-    return pushChild(this, this._children, Class)
+  insertChild(
+    Bundle: UnitBundle<Component_<ComponentEvents>>,
+    at: number
+  ): void {
+    throw new Error('Method not implemented.')
+  }
+
+  pushChild(Bundle: UnitBundle<Component_>): number {
+    return pushChild(this, this._children, Bundle)
   }
 
   hasChild(at: number): boolean {
     return hasChild(this, this._children, at)
   }
 
-  removeChild(at: number): UnitClass<Component_> {
+  removeChild(at: number): Component_ {
     return removeChild(this, this._children, at)
   }
 
-  pullChild(at: number): UnitClass<Component_> {
+  pullChild(at: number): Component_ {
     throw pullChild(this, this._children, at)
   }
 

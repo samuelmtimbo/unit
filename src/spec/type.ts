@@ -67,11 +67,11 @@ export const typeTreeToType = (
 ): TypeInterface => {
   const { input, output } = typeTreeInterface
   const typeInterface: TypeInterface = { input: {}, output: {} }
-  for (let inputId in input) {
+  for (const inputId in input) {
     const inputTree = input[inputId]
     typeInterface.input[inputId] = inputTree.value
   }
-  for (let outputId in output) {
+  for (const outputId in output) {
     const outputTree = output[outputId]
     typeInterface.output[outputId] = outputTree.value
   }
@@ -157,12 +157,12 @@ export const _getGraphTypeInterface = (
 
   const { inputs = {}, outputs = {} } = spec
 
-  forEachKeyValue(inputs, ({ pin, type }, inputId) => {
+  forEachKeyValue(inputs, ({ plug, type }, inputId) => {
     let inputType = getTree('any')
     if (type) {
       inputType = getTree(type)
     } else {
-      forEachKeyValue(pin, ({ mergeId, unitId, pinId }) => {
+      forEachKeyValue(plug, ({ mergeId, unitId, pinId }) => {
         let subPinType
         if (mergeId) {
           const merge = spec.merges[mergeId]
@@ -181,12 +181,12 @@ export const _getGraphTypeInterface = (
     typeInterface.input[inputId] = inputType
   })
 
-  forEachKeyValue(outputs, ({ pin, type }, outputId) => {
+  forEachKeyValue(outputs, ({ plug, type }, outputId) => {
     let outputType = getTree('any')
     if (type) {
       outputType = getTree(type)
     } else {
-      forEachKeyValue(pin, ({ mergeId, unitId, pinId }) => {
+      forEachKeyValue(plug, ({ mergeId, unitId, pinId }) => {
         let subPinType
         if (mergeId) {
           const merge = spec.merges[mergeId]
@@ -373,8 +373,10 @@ export const _getGraphTypeMap = (
 
   subgraphs.forEach((subgraph: Subgraph) => {
     const { unit, merge } = subgraph
+
     let charCode = 65
-    let replacement: Dict<Dict<string>> = {}
+
+    const replacement: Dict<Dict<string>> = {}
 
     forEachKeyValue(unit, (_, unitId: string) => {
       const unitSpec = units[unitId]
@@ -510,8 +512,8 @@ export const _getGraphTypeMap = (
       pinId: string,
       set_equivalent: (unitId: string, kind: IO, pinId: string) => void
     ): void => {
-      const { pin } = spec[`${kind}s`][pinId]
-      forEachKeyValue(pin, ({ unitId, pinId, mergeId }) => {
+      const { plug } = spec[`${kind}s`][pinId]
+      forEachKeyValue(plug, ({ unitId, pinId, mergeId }) => {
         if (mergeId) {
           set_merge_equivalence(mergeId, set_equivalent)
         } else if (unitId && pinId) {
@@ -537,7 +539,7 @@ export const _getGraphTypeMap = (
 
     const specific = equivalence.map((equivalence_set) => {
       let mostSpecific = undefined
-      for (let t of equivalence_set) {
+      for (const t of equivalence_set) {
         if (mostSpecific === undefined) {
           mostSpecific = t
         } else {
@@ -561,7 +563,7 @@ export const _getGraphTypeMap = (
             const prev_substitution = generic_to_substitute[generic]
             substitution = moreSpecific(extract, prev_substitution)
             if (substitution !== extract) {
-              for (let g in generic_to_substitute) {
+              for (const g in generic_to_substitute) {
                 generic_to_substitute[g] = applyGenerics(
                   generic_to_substitute[g],
                   {
@@ -593,7 +595,7 @@ export const _getGraphTypeMap = (
     charCode = 65
     forEachKeyValue(generic_to_substitute, (value, key) => {
       const generics = findGenerics(value)
-      for (let generic of generics) {
+      for (const generic of generics) {
         if (!substitute_replacement[generic]) {
           substitute_replacement[generic] = `<${String.fromCharCode(
             charCode++

@@ -1,24 +1,31 @@
-import { Functional } from '../../../../../Class/Functional'
-import { Done } from '../../../../../Class/Functional/Done'
-import { Component_ } from '../../../../../interface/Component'
-import { EE } from '../../../../../interface/EE'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { EE } from '../../../../../types/interface/EE'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I<T> {
-  unit: Component_<any>
+  data: any
+  event: string
+  unit: EE<any>
 }
 
 export interface O<T> {
-  emitter: EE
+  data: any
 }
 
-export default class Debug<T> extends Functional<I<T>, O<T>> {
+export default class Debug<T> extends Semifunctional<I<T>, O<T>> {
+  private _listener: ((data: any) => void) | undefined
+
+  private _unlisten: Unlisten | undefined = undefined
+
   constructor(system: System, pod: Pod) {
     super(
       {
-        i: ['unit'],
-        o: ['emitter'],
+        fi: ['unit', 'event'],
+        fo: [],
+        i: ['remove'],
+        o: ['data'],
       },
       {
         input: {
@@ -30,9 +37,46 @@ export default class Debug<T> extends Functional<I<T>, O<T>> {
       system,
       pod
     )
+
+    this.addListener('destroy', () => {
+      if (this._listener) {
+        this._remove()
+
+        this._forward_empty('data')
+      }
+    })
   }
 
-  f({ unit }: I<T>, done: Done<O<T>>) {
-    done({ emitter: unit })
+  private _remove = () => {
+    this._unlisten()
+
+    this._listener = undefined
+    this._unlisten = undefined
+  }
+
+  f({ unit, event }: I<T>) {
+    const listener = (data: any) => {
+      this._output.data.push(data)
+    }
+    this._listener = listener
+
+    const emitter = unit
+
+    this._unlisten = emitter.addListener(event, this._listener)
+  }
+
+  d() {
+    this._remove()
+
+    this._forward_empty('data')
+  }
+
+  onIterDataInputData(name: string, data: any) {
+    // if (name === 'remove') {
+    if (this._listener) {
+      this._remove()
+      this._done()
+    }
+    // }
   }
 }

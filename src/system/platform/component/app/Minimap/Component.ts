@@ -12,6 +12,7 @@ import {
   Thing,
   unitVector,
 } from '../../../../../client/util/geometry'
+import { userSelect } from '../../../../../client/util/style/userSelect'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -39,7 +40,9 @@ export interface Props {
   padding?: number
 }
 
-export const DEFAULT_STYLE = {}
+export const DEFAULT_STYLE = {
+  ...userSelect('none')
+}
 
 export const MINIMAP_WIDTH = 200
 export const MINIMAP_HEIGHT = 150

@@ -2,7 +2,7 @@
   "name": "spec ids",
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "specs",
           "pinId": "any"
@@ -13,7 +13,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "keys",
           "pinId": "keys"

@@ -2,7 +2,7 @@
   "name": "get context width",
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getwidth",
           "pinId": "any"
@@ -11,7 +11,7 @@
       "type": "any"
     },
     "element": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "context",
           "pinId": "element"
@@ -23,7 +23,7 @@
   },
   "outputs": {
     "width": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getwidth",
           "pinId": "width"
@@ -32,7 +32,7 @@
       "type": "any"
     },
     "context": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "context",
           "pinId": "_self"

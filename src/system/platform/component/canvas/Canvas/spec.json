@@ -18,12 +18,7 @@
       "optional": true
     }
   },
-  "outputs": {
-    "ctx": {
-      "type": "`CA`",
-      "ref": true
-    }
-  },
+  "outputs": {},
   "metadata": {
     "icon": "chalkboard",
     "description": "for painting",
@@ -40,7 +35,7 @@
     "defaultWidth": 200,
     "defaultHeight": 200
   },
-  "type": "`U`&`C`&`V`&`J`&`PS`&`CS`",
+  "type": "`U`&`C`&`V`&`J`&`PS`&`CS`&`CA`",
   "system": true,
   "render": true
 }

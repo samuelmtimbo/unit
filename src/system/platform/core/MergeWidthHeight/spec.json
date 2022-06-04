@@ -2,7 +2,7 @@
   "name": "merge width height",
   "inputs": {
     "height": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagheight",
           "pinId": "height"
@@ -11,7 +11,7 @@
       "type": "any"
     },
     "width": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tagwidth",
           "pinId": "width"
@@ -22,7 +22,7 @@
   },
   "outputs": {
     "{width,height}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "merge",
           "pinId": "ab"

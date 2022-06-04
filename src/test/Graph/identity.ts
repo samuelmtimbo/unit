@@ -18,26 +18,30 @@ composition0.play()
 
 composition0.addUnit(
   {
-    id: ID_IDENTITY,
-    input: {
-      a: {
-        data: 0,
+    unit: {
+      id: ID_IDENTITY,
+      input: {
+        a: {
+          data: '0',
+        },
       },
+      output: {},
     },
-    output: {},
   },
   '0'
 )
 
 composition0.addUnit(
   {
-    id: ID_IDENTITY,
-    input: {
-      a: {
-        data: 1,
+    unit: {
+      id: ID_IDENTITY,
+      input: {
+        a: {
+          data: '1',
+        },
       },
+      output: {},
     },
-    output: {},
   },
   '1'
 )

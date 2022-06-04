@@ -136,27 +136,27 @@
   },
   "inputs": {
     "b": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "2"
         }
       },
+      "functional": true,
       "type": "number"
     }
   },
   "outputs": {
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "subtract",
           "pinId": "a - b"

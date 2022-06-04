@@ -277,7 +277,7 @@
   },
   "inputs": {
     "path": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "iihvdgbjf",
           "pinId": "a"
@@ -303,7 +303,7 @@
       "type": "(number|string)[]"
     },
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "hlqjkzg",
           "pinId": "a"
@@ -323,7 +323,7 @@
   },
   "outputs": {
     "result": {
-      "pin": {
+      "plug": {
         "1": {
           "unitId": "ckeuamu",
           "pinId": "obj"

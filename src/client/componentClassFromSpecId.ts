@@ -1,14 +1,15 @@
 import { ComponentClass, System } from '../system'
-import { GraphSpec } from '../types'
-import { componentClassFromSpec } from './component'
+import { GraphSpec, Specs } from '../types'
+import { componentClassFromSpec } from './componentClassFromSpec'
 import { isBaseSpec } from './id'
 import { getSpec } from './spec'
 
 export function componentClassFromSpecId(
   $system: System,
+  specs: Specs,
   id: string
 ): ComponentClass {
-  const { specs, components } = $system
+  const { components } = $system
 
   const spec = getSpec(specs, id)
 

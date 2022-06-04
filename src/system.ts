@@ -2,21 +2,16 @@ import { Graph } from './Class/Graph'
 import { Component } from './client/component'
 import { Context } from './client/context'
 import { IOPointerEvent } from './client/event/pointer'
-import { FetchJSONOpt } from './client/fetch'
-import { PeerSpec } from './client/host/service/peer'
-import { VMSpec } from './client/host/service/vm'
-import { WebSpec } from './client/host/service/web'
 import { IOElement } from './client/IOElement'
 import { Store } from './client/store'
-import { Point, Size } from './client/util/geometry'
-import { J } from './interface/J'
-import { U } from './interface/U'
+import { Theme } from './client/theme'
+import { Point, Rect, Size } from './client/util/geometry'
 import { NOOP } from './NOOP'
 import { Pod } from './pod'
 import { SharedObject } from './SharedObject'
-import { BundleSpec } from './system/platform/method/process/BundleSpec'
-import { IPod, IPodOpt } from './system/platform/method/process/PodGraph'
+import { IPod, IPodOpt } from './system/platform/method/process/Start'
 import { Classes, GraphSpecs, Specs } from './types'
+import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import {
@@ -26,12 +21,15 @@ import {
 import { IChannel, IChannelOpt } from './types/global/IChannel'
 import { IDeviceInfo } from './types/global/IDeviceInfo'
 import { IDisplayMediaOpt } from './types/global/IDisplayMedia'
+import { IDownloadDataOpt } from './types/global/IDownloadData'
+import { IDownloadURLOpt } from './types/global/IDownloadURL'
 import { IFileHandler } from './types/global/IFileHandler'
 import { IGamepad } from './types/global/IGamepad'
 import { IGeoPosition } from './types/global/IGeoPosition'
 import { IHTTPServer, IHTTPServerOpt } from './types/global/IHTTPServer'
 import { IKeyboard } from './types/global/IKeyboard'
 import { IMutationObserverConstructor } from './types/global/IMutationObserver'
+import { IPointer } from './types/global/IPointer'
 import { IPositionObserverCostructor } from './types/global/IPositionObserver'
 import { IResizeObserverConstructor } from './types/global/IResizeObserver'
 import {
@@ -52,9 +50,13 @@ import {
 } from './types/global/ISpeechSynthesisUtterance'
 import { IUserMediaOpt } from './types/global/IUserMedia'
 import { IWakeLock, IWakeLockOpt } from './types/global/IWakeLock'
+import { J } from './types/interface/J'
+import { U } from './types/interface/U'
 import { Unlisten } from './types/Unlisten'
 
 export type IO_INIT<T, K> = (opt: K) => T
+
+export type IO_SYSTEM_INIT<T, K> = (system: System, opt: K) => T
 
 export type IO_HTTP_API<T> = {
   local: T
@@ -63,7 +65,6 @@ export type IO_HTTP_API<T> = {
 export type IO_STORAGE_API<T> = {
   session: T
   local: T
-  cloud: T
 }
 export type IO_SERVICE_API<T> = {
   local: T
@@ -73,11 +74,12 @@ export type IO_SERVICE_API<T> = {
 
 export type IO_HTTP_API_INIT<T, K> = IO_HTTP_API<IO_INIT<T, K>>
 export type IO_STORAGE_API_INIT<T, K> = IO_STORAGE_API<IO_INIT<T, K>>
-export type IO_SERVICE_API_INIT<T, K> = IO_INIT<IO_SERVICE_API<T>, K>
+
+export type IO_SERVICE_API_INIT<T, K> = IO_SYSTEM_INIT<IO_SERVICE_API<T>, K>
 
 export type IOInput = {
   keyboard: IKeyboard
-  gamepad: IGamepad[]
+  gamepad: Gamepad[]
 }
 
 export type IOMethod = Dict<Function>
@@ -91,25 +93,43 @@ export type APIChannel = IO_STORAGE_API_INIT<IChannel, IChannelOpt>
 export type APIPod = IO_STORAGE_API_INIT<IPod, IPodOpt>
 
 export type API = {
+  init: {
+    boot: (root: HTMLElement) => System
+  }
+  animation: {
+    requestAnimationFrame: (callback: FrameRequestCallback) => number
+    cancelAnimationFrame: (frame: number) => void
+  }
   storage: APIStorage
+  db: IDBFactory
   http: APIHTTP
   channel: APIChannel
-  pod: APIPod
   input: {
     keyboard: {}
     gamepad: {
-      getGamepads: () => Gamepad[]
+      getGamepad: (i: number) => Gamepad
       addEventListener: (
         type: 'gamepadconnected' | 'gamepadisconnected',
         listener: (ev: GamepadEvent) => any,
         options?: boolean | AddEventListenerOptions
-      ) => void
-      removeEventListener: (
-        type: 'gamepadconnected' | 'gamepadisconnected',
-        listener: (ev: GamepadEvent) => any,
-        options?: boolean | AddEventListenerOptions
-      ) => void
+      ) => Unlisten
     }
+    pointer: {
+      getPointerPosition: (pointerId: number) => {
+        screenX: number
+        screenY: number
+      }
+      setPointerCapture: (
+        element: HTMLElement | SVGElement,
+        pointerId: number
+      ) => Unlisten
+    }
+  }
+  url: {
+    createObjectURL: (obj) => Promise<string>
+  }
+  uri: {
+    encodeURI?: (str: string) => string
   }
   speech: {
     SpeechGrammarList: IO_INIT<ISpeechGrammarList, ISpeechGrammarListOpt>
@@ -123,7 +143,8 @@ export type API = {
   file: {
     showSaveFilePicker?: (opt: IFilePickerOpt) => Promise<IFileHandler[]>
     showOpenFilePicker?: (opt: IFilePickerOpt) => Promise<IFileHandler[]>
-    downloadData: (opt: {}) => Promise<void>
+    downloadURL: (opt: IDownloadURLOpt) => Promise<void>
+    downloadData: (opt: IDownloadDataOpt) => Promise<void>
   }
   screen: {
     devicePixelRatio?: number
@@ -146,6 +167,13 @@ export type API = {
     getUserMedia: (opt: IUserMediaOpt) => Promise<MediaStream>
     getDisplayMedia: (opt: IDisplayMediaOpt) => Promise<MediaStream>
     enumerateDevices: () => Promise<IDeviceInfo[]>
+    image: {
+      createImageBitmap: (
+        image: ImageBitmapSource,
+        rect: Partial<Rect>,
+        opt: {}
+      ) => Promise<ImageBitmap>
+    }
   }
   selection: {
     containsSelection: (element: IOElement) => boolean
@@ -160,6 +188,8 @@ export type API = {
       qualifiedName: K
     ): SVGElementTagNameMap[K]
     createTextNode(text: string): Text
+    elementsFromPoint(x: number, y: number): Element[]
+    elementFromPoint(x: number, y: number): Element
     MutationObserver: IMutationObserverConstructor
     PositionObserver: IPositionObserverCostructor
     ResizeObserver: IResizeObserverConstructor
@@ -171,36 +201,23 @@ export type API = {
   text: {
     measureText: (text: string, fontSize: number) => Size
   }
-  service: {
-    graph: IO_SERVICE_API_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
-    web: IO_SERVICE_API_INIT<SharedObject<Store<WebSpec>, {}>, {}>
-    peer: IO_SERVICE_API_INIT<SharedObject<Store<PeerSpec>, {}>, {}>
-    vm: IO_SERVICE_API_INIT<SharedObject<Store<VMSpec>, {}>, {}>
-  }
   worker: {
     start(): Worker
-  }
-  host: {
-    fetch: (opt: FetchJSONOpt) => Promise<any>
-    send: (opt: {}) => void
   }
 }
 
 export interface System {
   mounted: boolean
+  parent: HTMLElement | null
   root: HTMLElement | null
   customEvent: Set<string>
   context: Context[]
+  theme: Theme
+  animated: boolean
   cache: {
     dragAndDrop: Dict<any>
     pointerCapture: Dict<any>
     spriteSheetMap: Dict<boolean>
-  }
-  id: {
-    user: string | null
-    token: string | null
-    pbkey: string[]
-    pvkey: Dict<string>
   }
   feature: Dict<boolean>
   foreground: {
@@ -212,6 +229,7 @@ export interface System {
   input: {
     keyboard: IKeyboard
     gamepads: IGamepad[]
+    pointers: Dict<IPointer>
   }
   specs: Specs
   classes: Classes
@@ -221,9 +239,11 @@ export interface System {
     ref: Dict<any>
     component: Dict<Component>
   }
+  graph: IO_SYSTEM_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
   api: API
   method: {
-    encodeURI?: (str: string) => string
+    registerComponent?: (component: Component) => string
+    createSlot?: () => [string, HTMLSlotElement]
     showLongPress?: (
       screenX: number,
       screenY: number,
@@ -290,7 +310,7 @@ export const LocalPod = (opt: IPodOpt): IPod => {
       return // TODO
     },
 
-    refGraph(bundle: BundleSpec): [Dict<string>, Graph] {
+    newGraph(bundle: BundleSpec): [Dict<string>, Graph, Unlisten] {
       return // TODO
     },
 

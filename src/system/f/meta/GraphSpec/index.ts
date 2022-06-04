@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { G } from '../../../../interface/G'
+import { G } from '../../../../types/interface/G'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { GraphSpec } from '../../../../types'

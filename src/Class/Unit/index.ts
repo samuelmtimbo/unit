@@ -5,17 +5,19 @@ import { DuplicatedOutputFoundError } from '../../exception/DuplicatedOutputFoun
 import { InputNotFoundError } from '../../exception/InputNotFoundError'
 import { InvalidArgumentType } from '../../exception/InvalidArgumentType'
 import { OutputNotFoundError } from '../../exception/OutputNotFoundError'
-import { U, U_EE } from '../../interface/U'
-import { Pin } from '../../Pin'
+import { Pin, Pin_M } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { PinOpts } from '../../PinOpts'
 import { Pins } from '../../Pins'
 import { Pod } from '../../pod'
 import { System } from '../../system'
 import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
+import { Specs } from '../../types'
 import { Dict } from '../../types/Dict'
+import { U, U_EE } from '../../types/interface/U'
 import { IO } from '../../types/IO'
 import { None } from '../../types/None'
+import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { pull, push, removeAt } from '../../util/array'
 import { mapObjVK } from '../../util/object'
@@ -54,6 +56,8 @@ export type PinOf<T> = Pin<T[keyof T]>
 
 export type UnitEvents<_EE extends Dict<any[]>> = $Events<_EE & U_EE> & U_EE
 
+export interface U_M {}
+
 export class Unit<
     I extends Dict<any> = any,
     O extends Dict<any> = any,
@@ -62,6 +66,7 @@ export class Unit<
   extends $<_EE>
   implements U<I, O>
 {
+  public _: string
   public __: string[] = ['U']
 
   public $parent: Unit | null = null
@@ -306,7 +311,6 @@ export class Unit<
         throw new InputNotFoundError(name)
       }
     } else {
-      console.trace('name', name)
       throw new InvalidArgumentType('name should be a string')
     }
   }
@@ -678,7 +682,10 @@ export class Unit<
       this._data_input[newName] = input
     }
 
+    // RETURN
     this.emit('rename_input', name, newName)
+    this.emit('remove_input', name, input)
+    this.emit('set_input', newName, input, opt)
   }
 
   public renameOutput(name: keyof O, newName: keyof O): void {
@@ -715,6 +722,8 @@ export class Unit<
     }
 
     this.emit('rename_output', name, newName)
+    this.emit('remove_output', name, output)
+    this.emit('set_output', newName, output, opt)
   }
 
   public getInputOpt(name: string): PinOpt {
@@ -747,12 +756,7 @@ export class Unit<
 
   public setPinData(type: IO, pinId: string, data: any): void {
     const pin = this.getPin(type, pinId)
-    // AD HOC
-    try {
-      pin.push(data)
-    } catch (err) {
-      this.err(err.message.toLowerCase())
-    }
+    pin.push(data)
   }
 
   public removePinData(type: IO, pinId: string): void {
@@ -977,8 +981,8 @@ export class Unit<
     return data
   }
 
-  public getInputData(): Dict<any> {
-    const data: Dict<any> = {}
+  public getInputData(): Partial<I> {
+    const data: Partial<I> = {}
     forEachKeyValue(this._input, (input, inputId) => {
       if (!input.empty()) {
         const datum = input.peak()
@@ -997,5 +1001,107 @@ export class Unit<
       }
     })
     return data
+  }
+
+  public getSpecs(): Specs {
+    return { ...this.__system.specs, ...this.__pod.specs }
+  }
+
+  public getBundleSpec(): UnitBundleSpec {
+    const memory = this.snapshot()
+
+    return { unit: { id: this._, memory }, specs: {} }
+  }
+
+  public snapshotSelf(): Dict<any> {
+    return undefined
+  }
+
+  public snapshotInput<T extends keyof I>(name: T): Pin_M<I[T]> {
+    return this.getInput(name).snapshot()
+  }
+
+  public snapshotInputs(): Dict<Pin_M> {
+    const state = {}
+
+    // for (const name of this._i_name_set) {
+    //   state[name] = this.snapshotInput(name)
+    // }
+
+    for (const name of this._d_i_name) {
+      state[name] = this.snapshotInput(name)
+    }
+
+    return state
+  }
+
+  public snapshotOutput<T extends keyof O>(name: T): Pin_M<O[T]> {
+    return this.getOutput(name).snapshot()
+  }
+
+  public snapshotOutputs(): Dict<Pin_M> {
+    const state = {}
+
+    // for (const name of this._o_name_set) {
+    //   state[name] = this.snapshotOutput(name)
+    // }
+
+    for (const name of this._d_o_name) {
+      state[name] = this.snapshotOutput(name)
+    }
+
+    return state
+  }
+
+  public snapshot(): {
+    input: Dict<any>
+    output: Dict<any>
+    memory: Dict<any>
+  } {
+    return {
+      input: this.snapshotInputs(),
+      output: this.snapshotOutputs(),
+      memory: this.snapshotSelf(),
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    return
+  }
+
+  public restoreInputs(state: Dict<Pin_M>): void {
+    for (const name in state) {
+      const memory = state[name]
+
+      this.restoreInput(name, memory)
+    }
+  }
+
+  public restoreInput(name: string, state: Pin_M): void {
+    this.getInput(name).restore(state)
+  }
+
+  public restoreOutputs(state: Dict<Pin_M>): void {
+    for (const name in state) {
+      const memory = state[name]
+
+      this.restoreOutput(name, memory)
+    }
+  }
+
+  public restoreOutput(name: string, state: Pin_M): void {
+    this.getOutput(name).restore(state)
+  }
+
+  public restore(state: {
+    input: Dict<any>
+    output: Dict<any>
+    memory: Dict<any>
+  }): void {
+    const { input, output, memory } = state
+
+    this.restoreInputs(input)
+    this.restoreOutputs(output)
+    this.restoreSelf(memory)
   }
 }

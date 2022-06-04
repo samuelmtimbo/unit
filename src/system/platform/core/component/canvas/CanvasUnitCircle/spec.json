@@ -1,0 +1,235 @@
+{
+  "name": "canvas unit circle",
+  "inputs": {},
+  "outputs": {},
+  "units": {
+    "canvas": {
+      "id": "94243ec4-8967-4907-8cdd-7223fe256cf6",
+      "input": {
+        "style": {
+          "ignored": true
+        },
+        "width": {},
+        "height": {},
+        "d": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 283,
+          "y": -162
+        }
+      }
+    },
+    "strokeunitcircle": {
+      "id": "da2611b3-1db1-47da-a551-7a9046379261",
+      "output": {
+        "d": {
+          "ignored": false
+        }
+      },
+      "input": {
+        "d": {
+          "constant": true,
+          "data": "[]"
+        },
+        "rad": {},
+        "x": {
+          "constant": true,
+          "data": "100"
+        },
+        "r": {
+          "constant": true,
+          "data": "50"
+        },
+        "y": {
+          "constant": true,
+          "data": "100"
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 93,
+          "y": -97
+        }
+      }
+    },
+    "concat": {
+      "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+      "input": {
+        "b": {
+          "constant": true,
+          "data": "'°'"
+        },
+        "a": {}
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -114,
+          "y": -26
+        }
+      }
+    },
+    "slider360value": {
+      "id": "6bdd7a40-e465-42ae-8219-b428d7d57aea",
+      "input": {},
+      "output": {
+        "value": {},
+        "slider": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -13,
+          "y": 15
+        }
+      }
+    },
+    "degtorad": {
+      "id": "3a138358-cc25-45e3-a0ce-bbe54445736f",
+      "input": {
+        "angle": {}
+      },
+      "output": {
+        "rad": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -9,
+          "y": -47
+        }
+      }
+    },
+    "textdiv": {
+      "id": "9988a56e-6bee-46c8-864c-e351d84bc7e2",
+      "input": {
+        "value": {},
+        "style": {
+          "constant": true,
+          "data": "{display:'flex',alignItems:'center',justifyContent:'center',fontSize:\"30px\",textAlign:\"center\"}"
+        }
+      },
+      "output": {
+        "div": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -295,
+          "y": -12
+        }
+      }
+    },
+    "flexcolumn": {
+      "id": "67a6fb5a-feab-11ea-8bd1-a3c19e76592a",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": 324
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "canvas": {
+        "input": {
+          "d": true
+        }
+      },
+      "strokeunitcircle": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "1": {
+      "strokeunitcircle": {
+        "input": {
+          "rad": true
+        }
+      },
+      "degtorad": {
+        "output": {
+          "rad": true
+        }
+      }
+    },
+    "2": {
+      "degtorad": {
+        "input": {
+          "angle": true
+        }
+      },
+      "slider360value": {
+        "output": {
+          "value": true
+        }
+      },
+      "concat": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "textdiv": {
+        "input": {
+          "value": true
+        }
+      },
+      "concat": {
+        "output": {
+          "ab": true
+        }
+      }
+    }
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "canvas": {
+        "children": []
+      },
+      "slider360value": {
+        "children": []
+      },
+      "textdiv": {
+        "children": []
+      },
+      "flexcolumn": {
+        "children": [
+          "canvas",
+          "textdiv",
+          "slider360value"
+        ]
+      }
+    },
+    "children": [
+      "flexcolumn"
+    ],
+    "defaultWidth": 200,
+    "defaultHeight": 300
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "no description",
+    "complexity": 34,
+    "tags": [
+      "platform",
+      "core",
+      "component",
+      "canvas"
+    ]
+  },
+  "id": "d3025c3d-75cb-4851-adcb-b09526cd5b8e"
+}

@@ -49,26 +49,26 @@
   },
   "inputs": {
     "n": {
-      "metadata": {
-        "description": "number of elements"
-      },
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "uzlnv"
         }
+      },
+      "metadata": {
+        "description": "number of elements"
       },
       "type": "number"
     }
   },
   "outputs": {
     "a": {
-      "metadata": "array",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "narraybuilder",
           "pinId": "a[]"
         }
       },
+      "metadata": "array",
       "type": "number[]"
     }
   },

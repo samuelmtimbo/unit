@@ -3,17 +3,17 @@ import { Component } from './component'
 import { Size } from './util/geometry'
 
 export function extractStyle(
-  leaf_comp: Component,
+  component: Component,
   measureText: (text: string, fontSize: number) => Size
 ): Style {
   const style = {}
 
-  const { $element } = leaf_comp
+  const { $element } = component
 
   if ($element instanceof Text) {
-    const fontSize = leaf_comp.getFontSize()
+    const fontSize = component.getFontSize()
 
-    const { textContent } = leaf_comp.$element
+    const { textContent } = component.$element
 
     const { width, height } = measureText(textContent, fontSize)
 
@@ -30,6 +30,20 @@ export function extractStyle(
 
     if (value && typeof value === 'string' && isNaN(parseInt(key))) {
       style[key] = value
+    }
+  }
+
+  if ($element instanceof HTMLCanvasElement) {
+    if (style['width'] === undefined) {
+      const { width } = $element
+
+      style['width'] = `${width}px`
+    }
+
+    if (style['height'] === undefined) {
+      const { height } = $element
+
+      style['height'] = `${height}px`
     }
   }
 

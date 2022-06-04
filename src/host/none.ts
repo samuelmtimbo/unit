@@ -7,6 +7,7 @@ import { API, IO_SERVICE_API_INIT } from '../system'
 import { Storage_ } from '../system/platform/api/storage/Storage_'
 import { Dict } from '../types/Dict'
 import { IDownloadDataOpt } from '../types/global/IDownloadData'
+import { IDownloadURLOpt } from '../types/global/IDownloadURL'
 import {
   ISpeechGrammarList,
   ISpeechGrammarListOpt,
@@ -51,11 +52,15 @@ export function noService<T>(
 }
 
 export function noHost(): API {
-  const host: API = {
+  const api: API = {
+    init: {
+      boot: () => {
+        throw new APINotSupportedError('System')
+      },
+    },
     storage: {
       local: () => new Storage_(noStorage('Local Storage')),
       session: () => new Storage_(noStorage('Session Storage')),
-      cloud: () => new Storage_(noStorage('Cloud Storage')),
     },
     selection: {
       containsSelection: () => {
@@ -75,6 +80,17 @@ export function noHost(): API {
       downloadData: (opt: IDownloadDataOpt): Promise<void> => {
         throw new APINotSupportedError('Download')
       },
+      downloadURL: (opt: IDownloadURLOpt): Promise<void> => {
+        throw new APINotSupportedError('Download')
+      },
+    },
+    animation: {
+      requestAnimationFrame: () => {
+        throw new APINotSupportedError('Animation Frame')
+      },
+      cancelAnimationFrame: () => {
+        throw new APINotSupportedError('Animation Frame')
+      },
     },
     device: {
       vibrate: () => {
@@ -89,7 +105,7 @@ export function noHost(): API {
     input: {
       keyboard: {},
       gamepad: {
-        getGamepads: () => {
+        getGamepad: () => {
           throw new APINotSupportedError('Gamepad')
         },
         addEventListener: (
@@ -99,12 +115,16 @@ export function noHost(): API {
         ) => {
           throw new APINotSupportedError('Gamepad')
         },
-        removeEventListener: (
-          type: 'gamepadconnected' | 'gamepadisconnected',
-          listener: (ev: GamepadEvent) => any,
-          options?: boolean | AddEventListenerOptions
-        ): void => {
-          throw new APINotSupportedError('Gamepad')
+      },
+      pointer: {
+        getPointerPosition(pointerId: number) {
+          throw new APINotSupportedError('Pointer')
+        },
+        setPointerCapture(
+          element: HTMLElement | SVGElement,
+          pointerId: number
+        ) {
+          throw new APINotSupportedError('Pointer Capture')
         },
       },
     },
@@ -117,6 +137,11 @@ export function noHost(): API {
       },
       enumerateDevices: () => {
         throw new APINotSupportedError('Enumerate Media Devices')
+      },
+      image: {
+        createImageBitmap: () => {
+          throw new APINotSupportedError('Image Bitmap')
+        },
       },
     },
     screen: {
@@ -157,20 +182,6 @@ export function noHost(): API {
       local: function (opt): any {
         throw new APINotSupportedError('Local Channel')
       },
-      cloud: function (opt): any {
-        throw new APINotSupportedError('Cloud Channel')
-      },
-    },
-    pod: {
-      session: function (opt): any {
-        throw new APINotSupportedError('Session Pod')
-      },
-      local: function (opt): any {
-        throw new APINotSupportedError('Local Pod')
-      },
-      cloud: function (opt): any {
-        throw new APINotSupportedError('Cloud Pod')
-      },
     },
     speech: {
       SpeechGrammarList: function (
@@ -208,6 +219,12 @@ export function noHost(): API {
       createTextNode(text: string): Text {
         throw new Error()
       },
+      elementFromPoint(x: number, y: number): Element {
+        throw new Error()
+      },
+      elementsFromPoint(x: number, y: number): Element[] {
+        throw new Error()
+      },
       MutationObserver: null,
       PositionObserver: null,
       ResizeObserver: null,
@@ -225,26 +242,23 @@ export function noHost(): API {
         throw new APINotSupportedError('Measure Text')
       },
     },
-    service: {
-      graph: noService('Graph'),
-      vm: noService('VM'),
-      peer: noService('Peer'),
-      web: noService('Web'),
-    },
     worker: {
       start: () => {
         throw new APINotSupportedError('Worker')
       },
     },
-    host: {
-      fetch: () => {
-        throw new APINotSupportedError('Host')
+    db: undefined,
+    url: {
+      createObjectURL: function (object: any): Promise<string> {
+        throw new Error('Function not implemented.')
       },
-      send: () => {
-        throw new APINotSupportedError('Host')
+    },
+    uri: {
+      encodeURI: function (str: string): string {
+        throw new APINotSupportedError('URI')
       },
     },
   }
 
-  return host
+  return api
 }

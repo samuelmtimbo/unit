@@ -103,7 +103,7 @@
       },
       "esopvvb": {
         "input": {
-          "tfqgrevuj": true
+          "2": true
         }
       }
     },
@@ -115,7 +115,7 @@
       },
       "esopvvb": {
         "input": {
-          "aegky": true
+          "0": true
         }
       }
     },
@@ -127,7 +127,7 @@
       },
       "esopvvb": {
         "input": {
-          "hbqzi": true
+          "1": true
         }
       }
     }
@@ -144,21 +144,21 @@
   },
   "inputs": {
     "RGB": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "qvpyeawq"
         }
       },
+      "functional": true,
       "type": "number[]"
     }
   },
   "outputs": {
-    "rdpajk": {
-      "pin": {
+    "XYZ": {
+      "plug": {
         "0": {
           "unitId": "esopvvb",
-          "pinId": "gylhlifcp"
+          "pinId": "a"
         }
       },
       "type": "number[]"

@@ -1,15 +1,21 @@
 import { NOOP } from '../NOOP'
+import { System } from '../system'
 
 export const DATABASE_NAME: string = 'unit'
 export const DATABASE_VERSION: number = 1
 
 export async function connect(
+  system: System,
   name: string,
   version: number,
   onupgradeneeded: (db: IDBDatabase) => void = NOOP
 ): Promise<IDBDatabase> {
+  const {
+    api: { db },
+  } = system
+
   return new Promise((resolve, reject) => {
-    const request: IDBOpenDBRequest = window.indexedDB.open(name, version)
+    const request: IDBOpenDBRequest = db.open(name, version)
     request.onerror = (event: Event) => {
       reject(
         // @ts-ignore

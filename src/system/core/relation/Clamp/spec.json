@@ -33,7 +33,7 @@
   },
   "inputs": {
     "max": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "min",
           "pinId": "b"
@@ -42,7 +42,7 @@
       "type": "number"
     },
     "min": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "max",
           "pinId": "b"
@@ -51,7 +51,7 @@
       "type": "number"
     },
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "min",
           "pinId": "a"
@@ -62,7 +62,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "max",
           "pinId": "max"

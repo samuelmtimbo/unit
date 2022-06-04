@@ -1,22 +1,27 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { C } from '../../../../../interface/C'
 import { Pod } from '../../../../../pod'
+import { cloneBundle } from '../../../../../spec/cloneBundle'
 import { System } from '../../../../../system'
+import { C } from '../../../../../types/interface/C'
+import { Component_ } from '../../../../../types/interface/Component'
+import { UnitBundle } from '../../../../../types/UnitBundle'
 
 export interface I {
   parent: C
   at: number
 }
 
-export interface O {}
+export interface O {
+  unit: UnitBundle<Component_>
+}
 
 export default class RemoveChild extends Functional<I, O> {
   constructor(system: System, pod: Pod) {
     super(
       {
         i: ['parent', 'at'],
-        o: [],
+        o: ['unit'],
       },
       {
         input: {
@@ -31,11 +36,18 @@ export default class RemoveChild extends Functional<I, O> {
   }
 
   f({ parent, at }: I, done: Done<O>): void {
+    let unit: UnitBundle<Component_>
+
     try {
-      parent.removeChild(at)
-      done({})
+      const child = parent.removeChild(at)
+
+      unit = cloneBundle(child)
     } catch (err) {
       done(undefined, err.message)
     }
+
+    done({
+      unit,
+    })
   }
 }

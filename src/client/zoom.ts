@@ -1,21 +1,21 @@
 import { Point } from './util/geometry'
 
-export type Zoom = { k: number; x: number; y: number }
+export type Zoom = { x: number; y: number; z: number }
 
-export const zoomIdentity: Zoom = { k: 1, x: 0, y: 0 }
+export const zoomIdentity: Zoom = { z: 1, x: 0, y: 0 }
 
 export const zoomTransformCenteredAt = (
   x: number,
   y: number,
-  k: number,
+  z: number,
   width: number,
   height: number
-) => {
-  return { k, x: x - width / 2 / k, y: y - height / 2 / k }
+): Zoom => {
+  return { z, x: x - width / 2 / z, y: y - height / 2 / z }
 }
 
 export const getTransform = (zoom: Zoom): string => {
-  return `scale(${zoom.k}) translate(${-zoom.x}px, ${-zoom.y}px)`
+  return `scale(${zoom.z}) translate(${-zoom.x}px, ${-zoom.y}px)`
 }
 
 export const zoomTransformCentered = (
@@ -27,11 +27,11 @@ export const zoomTransformCentered = (
 }
 
 export const translate = (zoom: Zoom, x: number, y: number): Zoom => {
-  return { k: zoom.k, x: zoom.x - x / zoom.k, y: zoom.y - y / zoom.k }
+  return { z: zoom.z, x: zoom.x - x / zoom.z, y: zoom.y - y / zoom.z }
 }
 
 export const scale = (zoom: Zoom, k: number): Zoom => {
-  return { k, x: zoom.x * k, y: zoom.y * k }
+  return { z: k, x: zoom.x * k, y: zoom.y * k }
 }
 
 export const zoomInvert = (
@@ -39,15 +39,15 @@ export const zoomInvert = (
   x: number,
   y: number
 ): [number, number] => {
-  return [(x - zoom.x) / zoom.k, (y - zoom.y) / zoom.k]
+  return [(x - zoom.x) / zoom.z, (y - zoom.y) / zoom.z]
 }
 
 export const zoomInvertX = (zoom: Zoom, x: number): number => {
-  return (x - zoom.x) / zoom.k
+  return (x - zoom.x) / zoom.z
 }
 
 export const zoomInvertY = (zoom: Zoom, y: number): number => {
-  return (y - zoom.y) / zoom.k
+  return (y - zoom.y) / zoom.z
 }
 
 export const zoomApply = (zoom: Zoom, { x, y }: Point): Point => {
@@ -55,9 +55,9 @@ export const zoomApply = (zoom: Zoom, { x, y }: Point): Point => {
 }
 
 export const zoomApplyX = (zoom: Zoom, x: number): number => {
-  return x * zoom.k + zoom.x
+  return x * zoom.z + zoom.x
 }
 
 export const zoomApplyY = (zoom: Zoom, y: number): number => {
-  return y * zoom.k + zoom.y
+  return y * zoom.z + zoom.y
 }

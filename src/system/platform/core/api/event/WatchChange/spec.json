@@ -51,18 +51,18 @@
   },
   "inputs": {
     "element": {
-      "type": "`C`",
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "0"
         }
       },
+      "type": "`C`",
       "ref": true
     }
   },
   "outputs": {
     "value": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getvalue",
           "pinId": "value"

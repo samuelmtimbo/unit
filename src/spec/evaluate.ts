@@ -1,5 +1,5 @@
-import { UnitBundleSpec } from '../system/platform/method/process/UnitBundleSpec'
 import { Classes, Specs } from '../types'
+import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { fromBundle } from './fromBundle'
 import { getTree, TreeNode, TreeNodeType, _isValidObjKey } from './parser'
 

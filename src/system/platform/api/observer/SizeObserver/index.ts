@@ -1,7 +1,7 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { Component } from '../../../../../client/component'
-import { Component_ } from '../../../../../interface/Component'
+import { Component_ } from '../../../../../types/interface/Component'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import {
@@ -75,7 +75,7 @@ export default class SizeObserver extends Semifunctional<I, O> {
 
       const { $element } = _component
 
-      this._observer.observe($element)
+      // this._observer.observe($element)
     }
 
     if (_component) {

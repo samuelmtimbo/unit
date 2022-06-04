@@ -2,6 +2,7 @@ import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_ADD } from '../../../_ids'
 
 export interface I {
   a: number
@@ -13,6 +14,8 @@ export interface O {
 }
 
 export default class Add extends Functional<I, O> {
+  _ = ID_ADD
+
   constructor(system: System, pod: Pod) {
     super(
       {

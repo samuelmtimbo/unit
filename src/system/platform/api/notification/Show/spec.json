@@ -92,32 +92,32 @@
   },
   "inputs": {
     "ntf": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "call",
           "pinId": "unit"
         }
       },
+      "type": "`U`",
       "ref": true
     },
     "title": {
-      "type": "string",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag",
           "pinId": "v"
         }
-      }
+      },
+      "type": "string"
     },
     "opt": {
-      "type": "{icon?:string,body?:string}",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "tag0",
           "pinId": "v"
         }
-      }
+      },
+      "type": "{icon?:string,body?:string}"
     }
   },
   "outputs": {},

@@ -23,7 +23,7 @@
   },
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "b"
@@ -34,13 +34,13 @@
   },
   "outputs": {
     "{}": {
-      "type": "{}",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "a"
         }
-      }
+      },
+      "type": "{}"
     }
   },
   "id": "dc6e6bc0-081b-11eb-baf7-b7383b70c236",

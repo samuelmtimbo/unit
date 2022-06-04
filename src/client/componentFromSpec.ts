@@ -1,7 +1,8 @@
 import { Pod } from '../pod'
 import { System } from '../system'
 import { GraphSpec } from '../types'
-import { Component, componentClassFromSpec } from './component'
+import { Component } from './component'
+import { componentClassFromSpec } from './componentClassFromSpec'
 
 export function componentFromSpec(
   $system: System,

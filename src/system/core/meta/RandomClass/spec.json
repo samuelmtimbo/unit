@@ -2,7 +2,7 @@
   "name": "random class",
   "inputs": {
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "randomspecid",
           "pinId": "any"
@@ -13,7 +13,7 @@
   },
   "outputs": {
     "class": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "idtoclass",
           "pinId": "Class"

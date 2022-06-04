@@ -427,19 +427,32 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
     this._frame_listener()
   }
 
+  private _animation: Animation
+
   private _animate = (style: Dict<string>, animate: boolean): void => {
     const duration = animate ? ANIMATION_T_MS : 0
     const fill = 'forwards'
 
-    this.drawer.$element.animate([style], {
+    if (this._animation) {
+      this._animation.cancel()
+      this._animation = undefined
+    }
+
+    this._animation = this.drawer.$element.animate([style], {
       duration,
       fill,
-    }).onfinish = () => {
+    })
+
+    this._animation.onfinish = () => {
       mergeStyle(this.drawer.$element, style)
+
+      this._animation = undefined
     }
   }
 
   private _animate_transform = (animate: boolean): void => {
+    // console.log('Drawer', '_animate_transform', animate)
+    
     const transform = this._transform()
 
     this._animate(

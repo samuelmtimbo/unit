@@ -39,7 +39,7 @@
   },
   "inputs": {
     "testdefault": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default",
           "pinId": "d"
@@ -48,7 +48,7 @@
       "type": "boolean"
     },
     "default": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default0",
           "pinId": "d"
@@ -57,55 +57,55 @@
       "type": "<A>"
     },
     "test": {
-      "name": "test",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default",
           "pinId": "a"
         }
       },
+      "name": "test",
       "type": "boolean"
     },
     "value": {
-      "name": "value",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "default0",
           "pinId": "a"
         }
       },
+      "name": "value",
       "type": "<A>"
     },
     "key": {
-      "name": "key",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setif",
           "pinId": "key"
         }
       },
+      "name": "key",
       "type": "number|string"
     },
     "obj": {
-      "name": "obj",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setif",
           "pinId": "obj"
         }
       },
+      "name": "obj",
       "type": "object"
     }
   },
   "outputs": {
     "obj": {
-      "name": "obj",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setif",
           "pinId": "obj"
         }
       },
+      "name": "obj",
       "type": "object"
     }
   },

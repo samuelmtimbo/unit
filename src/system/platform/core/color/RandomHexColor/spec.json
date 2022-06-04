@@ -92,19 +92,19 @@
   },
   "inputs": {
     "any": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "b"
         }
       },
+      "functional": true,
       "type": "any"
     }
   },
   "outputs": {
     "hex": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "dduhlpdy",
           "pinId": "str"

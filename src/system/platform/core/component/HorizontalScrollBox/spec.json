@@ -1,6 +1,15 @@
 {
   "name": "horizontal scroll box",
-  "inputs": {},
+  "inputs": {
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a"
+        }
+      }
+    }
+  },
   "outputs": {},
   "units": {
     "wrap": {
@@ -27,10 +36,7 @@
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
       "input": {
-        "style": {
-          "constant": true,
-          "data": "{whiteSpace:\"nowrap\"}"
-        }
+        "style": {}
       },
       "output": {},
       "metadata": {
@@ -39,29 +45,42 @@
           "y": 113
         }
       }
+    },
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "default": {
+          "constant": true,
+          "data": "{whiteSpace:\"nowrap\"}"
+        }
+      }
     }
   },
-  "merges": {},
+  "merges": {
+    "0": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "div": {
+        "input": {
+          "style": true
+        }
+      }
+    }
+  },
   "component": {
-    "slots": [
-      [
-        "wrap",
-        "default"
-      ]
-    ],
+    "slots": [["wrap", "default"]],
     "subComponents": {
       "wrap": {
         "children": []
       },
       "div": {
-        "children": [
-          "wrap"
-        ]
+        "children": ["wrap"]
       }
     },
-    "children": [
-      "div"
-    ],
+    "children": ["div"],
     "defaultWidth": 300,
     "defaultHeight": 180
   },
@@ -69,11 +88,7 @@
     "icon": "square",
     "complexity": 44,
     "description": "horizontal scroll container",
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "ec8afd36-0718-42f7-9b0d-4b1adbf62766",
   "type": "`U`&`G`&`C`",

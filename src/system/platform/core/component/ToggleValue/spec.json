@@ -69,16 +69,16 @@
   },
   "inputs": {
     "state": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
       },
+      "type": "`U`",
       "ref": true
     },
     "any": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "getvalue",
           "pinId": "any"

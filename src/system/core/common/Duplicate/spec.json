@@ -23,7 +23,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "multiply",
           "pinId": "a"
@@ -34,7 +34,7 @@
   },
   "outputs": {
     "2a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "multiply",
           "pinId": "a × b"

@@ -2,7 +2,7 @@
   "name": "set unit output data",
   "inputs": {
     "name": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setunitpindata",
           "pinId": "name"
@@ -19,7 +19,7 @@
       "type": "string"
     },
     "id": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setunitpindata",
           "pinId": "id"
@@ -36,7 +36,7 @@
       "type": "string"
     },
     "graph": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setunitpindata",
           "pinId": "graph"
@@ -54,7 +54,7 @@
       "type": "`U`"
     },
     "data": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "setunitpindata",
           "pinId": "data"

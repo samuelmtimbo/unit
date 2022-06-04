@@ -98,7 +98,7 @@
   },
   "inputs": {
     "next a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergeab1",
           "pinId": "a"
@@ -107,7 +107,7 @@
       "type": "any"
     },
     "next b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergeab1",
           "pinId": "b"
@@ -116,7 +116,7 @@
       "type": "any"
     },
     "inita": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergeab0",
           "pinId": "a"
@@ -125,7 +125,7 @@
       "type": "any"
     },
     "initb": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergeab0",
           "pinId": "b"
@@ -134,7 +134,7 @@
       "type": "any"
     },
     "test": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "for",
           "pinId": "test"
@@ -145,7 +145,7 @@
   },
   "outputs": {
     "localb": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "splitab0",
           "pinId": "b"
@@ -154,7 +154,7 @@
       "type": "any"
     },
     "locala": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "splitab0",
           "pinId": "a"
@@ -163,27 +163,27 @@
       "type": "any"
     },
     "finalb": {
-      "defaultIgnored": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "splitab1",
           "pinId": "b"
         }
       },
+      "defaultIgnored": true,
       "type": "any"
     },
     "finala": {
-      "defaultIgnored": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "splitab1",
           "pinId": "a"
         }
       },
+      "defaultIgnored": true,
       "type": "any"
     },
     "currenta": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "splitab2",
           "pinId": "a"
@@ -192,7 +192,7 @@
       "type": "any"
     },
     "currentb": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "splitab2",
           "pinId": "b"

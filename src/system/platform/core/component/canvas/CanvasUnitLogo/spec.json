@@ -1,0 +1,104 @@
+{
+  "name": "canvas unit logo",
+  "inputs": {},
+  "outputs": {},
+  "units": {
+    "canvas": {
+      "id": "94243ec4-8967-4907-8cdd-7223fe256cf6",
+      "input": {
+        "d": {},
+        "style": {
+          "metadata": {
+            "position": {
+              "x": 66,
+              "y": 7
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 197,
+          "y": -19
+        }
+      }
+    },
+    "strokeunitlogo": {
+      "id": "193f078a-7a01-4026-a1d5-5ccfbfcb413a",
+      "input": {
+        "d": {
+          "constant": true,
+          "data": "[]",
+          "metadata": {
+            "position": {
+              "x": -42,
+              "y": -49
+            }
+          }
+        }
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 8,
+          "y": -47
+        }
+      }
+    }
+  },
+  "merges": {
+    "qpywpbu": {
+      "strokeunitlogo": {
+        "output": {
+          "d": true
+        }
+      },
+      "canvas": {
+        "input": {
+          "d": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "no description",
+    "complexity": 72,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ],
+    "position": {
+      "merge": {
+        "wtsqbnt": {
+          "x": 18,
+          "y": -2
+        },
+        "qpywpbu": {
+          "x": 60,
+          "y": -40
+        }
+      }
+    }
+  },
+  "id": "07885c98-01da-4e6a-b3ca-acc5d6266016",
+  "component": {
+    "subComponents": {
+      "canvas": {
+        "children": []
+      }
+    },
+    "children": [
+      "canvas"
+    ],
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`G`",
+  "render": true,
+  "system": true
+}

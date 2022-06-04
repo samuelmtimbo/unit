@@ -154,7 +154,7 @@
   },
   "inputs": {
     "rad": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "4"
         }
@@ -162,27 +162,27 @@
       "type": "number"
     },
     "x": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "add",
           "pinId": "b"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "y": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "subtract",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "r": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "7"
         }
@@ -192,7 +192,7 @@
   },
   "outputs": {
     "{x,y}": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergexy",
           "pinId": "{x,y}"

@@ -1,0 +1,32 @@
+{
+  "name": "state",
+  "inputs": {
+    "init": {
+      "type": "<T>"
+    },
+    "done": {
+      "type": "any",
+      "optional": true,
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "data": {
+      "type": "`V<T>`",
+      "optional": true,
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "triangle",
+    "description": "control a value in memory",
+    "complexity": 4,
+    "tags": [
+      "state"
+    ]
+  },
+  "id": "c899b675-c3c4-428e-b548-b228305c0302",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -24,29 +24,29 @@
   },
   "inputs": {
     "ms": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "timer",
           "pinId": "ms"
         }
       },
+      "functional": true,
       "type": "number"
     },
     "a": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "a"
         }
       },
+      "functional": true,
       "type": "<A>"
     }
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "a"

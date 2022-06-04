@@ -352,8 +352,9 @@ export function _isTypeMatch(source: TreeNode, target: TreeNode): boolean {
       )
     case TreeNodeType.Object:
       return (
-        source.type === TreeNodeType.Object ||
-        source.type === TreeNodeType.ObjectLiteral
+        (source.type === TreeNodeType.Object ||
+          source.type === TreeNodeType.ObjectLiteral) &&
+        _isValidTree(source)
       )
     case TreeNodeType.Regex:
       return (
@@ -769,11 +770,15 @@ export function _getTypeTree(
 
   const arrayExpressionTest = /^([^ ]+)\[\]$/.exec(value)
   if (arrayExpressionTest) {
-    const children = [getTree(arrayExpressionTest[1])]
-    return {
-      value,
-      type: TreeNodeType.ArrayExpression,
-      children,
+    const child = getTree(arrayExpressionTest[1])
+
+    if (child.type !== TreeNodeType.Invalid) {
+      const children = [child]
+      return {
+        value,
+        type: TreeNodeType.ArrayExpression,
+        children,
+      }
     }
   }
 
@@ -932,11 +937,11 @@ function _getValueTree(
     }
   }
 
-  const mathExpressionTest =
+  const arithmeticExpressionTest =
     /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?(?:[\s]*[\+\-\*\/][\s]*-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?)+$/g.exec(
       value
     )
-  if (mathExpressionTest) {
+  if (arithmeticExpressionTest) {
     return {
       value,
       type: TreeNodeType.ArithmeticExpression,
@@ -944,10 +949,6 @@ function _getValueTree(
     }
   }
 
-  // const unitTest =
-  //   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.exec(
-  //     value
-  //   )
   const unitTest = /^\$\{(.*)\}$/i.exec(value)
   if (unitTest) {
     return {
@@ -1607,11 +1608,11 @@ export function getNextLeafPath(
 
 // TODO
 export function _getNextSiblingPath(
-  data: TreeNode,
+  tree: TreeNode,
   path: number[],
   direction: 1 | -1
 ): number[] {
-  return []
+  return _getNextLeafPath(tree, path, direction)
 }
 
 // Here is an idea for the mechanics:
@@ -1620,11 +1621,11 @@ export function _getNextSiblingPath(
 // 3) Arrow up -> go uper level
 
 export function getNextSiblingPath(
-  data: string,
+  value: string,
   path: number[],
   direction: 1 | -1
 ): number[] | null {
-  const tree = getTree(data)
+  const tree = getTree(value)
   return _getNextLeafPath(tree, path, direction)
 }
 

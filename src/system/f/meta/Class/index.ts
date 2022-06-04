@@ -1,16 +1,17 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { U } from '../../../../interface/U'
+import { Unit } from '../../../../Class/Unit'
 import { Pod } from '../../../../pod'
+import { cloneBundle } from '../../../../spec/cloneBundle'
 import { System } from '../../../../system'
-import { UnitClass } from '../../../../types/UnitClass'
+import { UnitBundle } from '../../../../types/UnitBundle'
 
 export interface I<T> {
-  unit: U
+  unit: Unit
 }
 
 export interface O<T> {
-  class: UnitClass<any>
+  class: UnitBundle<any>
 }
 
 export default class Class<T> extends Functional<I<T>, O<T>> {
@@ -33,7 +34,8 @@ export default class Class<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ unit }: I<T>, done: Done<O<T>>): void {
-    const Class = unit.constructor as UnitClass
+    const Class = cloneBundle(unit)
+
     done({ class: Class })
   }
 }

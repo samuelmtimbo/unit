@@ -42,32 +42,32 @@
   },
   "inputs": {
     "element": {
-      "type": "`U`",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "call",
           "pinId": "unit"
         }
       },
+      "type": "`U`",
       "ref": true
     },
     "data": {
-      "type": "any",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergeeventdata",
           "pinId": "data"
         }
-      }
+      },
+      "type": "any"
     },
     "event": {
-      "type": "string",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "mergeeventdata",
           "pinId": "event"
         }
-      }
+      },
+      "type": "string"
     }
   },
   "outputs": {},

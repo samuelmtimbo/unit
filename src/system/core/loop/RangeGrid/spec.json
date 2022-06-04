@@ -145,7 +145,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "range",
           "pinId": "a"
@@ -159,7 +159,7 @@
       "type": "number"
     },
     "b": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "looprepeat",
           "pinId": "init"
@@ -175,7 +175,7 @@
   },
   "outputs": {
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "looprepeat0",
           "pinId": "current"
@@ -184,7 +184,7 @@
       "type": "number"
     },
     "j": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "range1",
           "pinId": "i"

@@ -54,6 +54,7 @@ composition0.moveSubgraphInto(
     merge: [],
     link: [],
     unit: [],
+    plug: [],
   },
   { merge: {}, link: {}, unit: {} },
   {},
@@ -115,6 +116,7 @@ composition1.moveSubgraphInto(
     merge: ['0'],
     link: [],
     unit: [UNIT_ID_IDENTITY, UNIT_ID_IDENTITY_0],
+    plug: [],
   },
   {
     merge: {},
@@ -192,6 +194,7 @@ composition2.moveSubgraphInto(
     merge: [],
     link: [],
     unit: [UNIT_ID_IDENTITY, UNIT_ID_IDENTITY_0],
+    plug: [],
   },
   {
     merge: {},
@@ -219,3 +222,97 @@ assert.equal(composition2.getMergeCount(), 1)
 assert.equal(empty2.getUnitCount(), 2)
 assert.equal(empty2.getInputCount(), 2)
 assert.equal(empty2.getOutputCount(), 2)
+
+const composition3 = new Graph<{ number: number }, { sum: number }>(
+  {
+    units: {
+      [UNIT_ID_EMTPY]: {
+        id: ID_EMPTY,
+      },
+      [UNIT_ID_IDENTITY]: {
+        id: ID_IDENTITY,
+      },
+      [UNIT_ID_IDENTITY_0]: {
+        id: ID_IDENTITY,
+      },
+    },
+    merges: {
+      0: {
+        [UNIT_ID_IDENTITY]: {
+          output: {
+            a: true,
+          },
+        },
+        [UNIT_ID_IDENTITY_0]: {
+          input: {
+            a: true,
+          },
+        },
+      },
+    },
+    inputs: {
+      a: {
+        plug: {
+          0: {
+            unitId: UNIT_ID_IDENTITY,
+            pinId: 'a',
+          },
+        },
+      },
+    },
+  },
+  {},
+  system,
+  pod
+)
+
+// true && watchUnitAndLog(composition3)
+true && watchGraphAndLog(composition3)
+
+composition3.play()
+
+const empty3 = composition3.refUnit(UNIT_ID_EMTPY) as Graph
+
+composition3.moveSubgraphInto(
+  UNIT_ID_EMTPY,
+  {
+    merge: [],
+    link: [],
+    unit: [UNIT_ID_IDENTITY, UNIT_ID_IDENTITY_0],
+    plug: [],
+  },
+  {
+    merge: {},
+    link: {},
+    unit: {},
+  },
+  {
+    [UNIT_ID_IDENTITY]: {
+      input: { a: { pinId: 'a', subPinId: '0' } },
+      output: { a: { pinId: 'a0', subPinId: '0' } },
+    },
+    [UNIT_ID_IDENTITY_0]: {
+      input: { a: { pinId: 'a0', subPinId: '0' } },
+      output: { a: { pinId: 'a', subPinId: '0' } },
+    },
+  },
+  {},
+  {},
+  {}
+)
+
+assert.equal(composition3.getUnitCount(), 1)
+assert.equal(composition3.getMergeCount(), 1)
+
+assert.equal(empty3.getUnitCount(), 2)
+assert.equal(empty3.getInputCount(), 2)
+assert.equal(empty3.getOutputCount(), 2)
+
+assert.deepEqual(composition3.getExposedPinSpec('input', 'a'), {
+  plug: {
+    0: {
+      unitId: UNIT_ID_EMTPY,
+      pinId: 'a',
+    },
+  },
+})

@@ -53,24 +53,24 @@
   },
   "inputs": {
     "kind": {
-      "name": "kind",
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
       },
+      "name": "kind",
       "type": "any"
     }
   },
   "outputs": {
     "devices": {
-      "name": "devices",
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "filterpropequals",
           "pinId": "b"
         }
       },
+      "name": "devices",
       "type": "object[]"
     }
   },

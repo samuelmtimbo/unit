@@ -1,7 +1,7 @@
 {
   "name": "harmonic array",
   "units": {
-    "aqjnp": {
+    "narraybuilder": {
       "id": "38033fcc-aa28-4df3-abc8-d4ece231028b",
       "input": {
         "n": {},
@@ -11,30 +11,30 @@
         "a[]": {}
       }
     },
-    "jcmrhfs": {
+    "harmonicseries": {
       "id": "4cbd976a-89c9-4398-a5ce-35504b00d112"
     }
   },
   "merges": {
-    "xfwk": {
-      "jcmrhfs": {
+    "0": {
+      "harmonicseries": {
         "output": {
-          "usdsajlo": true
+          "a[i]": true
         }
       },
-      "aqjnp": {
+      "narraybuilder": {
         "input": {
           "a": true
         }
       }
     },
-    "lgklpe": {
-      "jcmrhfs": {
+    "1": {
+      "harmonicseries": {
         "input": {
-          "rgeok": true
+          "n": true
         }
       },
-      "aqjnp": {
+      "narraybuilder": {
         "input": {
           "n": true
         }
@@ -42,20 +42,20 @@
     }
   },
   "inputs": {
-    "vuriiywtg": {
-      "pin": {
+    "n": {
+      "plug": {
         "0": {
-          "mergeId": "lgklpe"
+          "mergeId": "1"
         }
       },
       "type": "number"
     }
   },
   "outputs": {
-    "ghyqr": {
-      "pin": {
+    "a[]": {
+      "plug": {
         "0": {
-          "unitId": "aqjnp",
+          "unitId": "narraybuilder",
           "pinId": "a[]"
         }
       },
@@ -66,13 +66,7 @@
     "icon": "array",
     "description": "1 + 1/2 + 1/3 + ...",
     "complexity": 82,
-    "tags": [
-      "platform",
-      "core",
-      "math",
-      "series",
-      "harmonic"
-    ]
+    "tags": ["platform", "core", "math", "series", "harmonic"]
   },
   "id": "12f24bde-12cf-412e-8df3-b5af2e31fa86",
   "type": "`U`&`G`",

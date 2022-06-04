@@ -1,6 +1,7 @@
+import { $ } from '../../../../../Class/$'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { B } from '../../../../../interface/B'
-import { ST } from '../../../../../interface/ST'
+import { B } from '../../../../../types/interface/B'
+import { ST } from '../../../../../types/interface/ST'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 
@@ -61,7 +62,13 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
       this._media_recorder.ondataavailable = (event: BlobEvent) => {
         const { data } = event
 
-        this._output.blob.push(data)
+        const _blob = new (class _Blob extends $ implements B {
+          async blob(): Promise<Blob> {
+            return data
+          }
+        })(this.__system, this.__pod)
+
+        this._output.blob.push(_blob)
       }
 
       const start = this._input.start.peak()

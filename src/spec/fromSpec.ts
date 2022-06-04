@@ -3,34 +3,60 @@ import { Pod } from '../pod'
 import { System } from '../system'
 import {
   GraphSpec,
+  GraphSpecs,
   GraphUnitPinSpec,
   GraphUnitSpec,
   PinSpec,
   Specs,
 } from '../types'
-import { GraphClass } from '../types/GraphClass'
+import { Dict } from '../types/Dict'
+import { GraphBundle, GraphClass } from '../types/GraphClass'
 import { clone } from '../util/object'
 import { bundleClass } from './bundleClass'
 
-export function fromSpec<I = any, O = any>(
+export function extractGraphSpecs(spec: GraphSpec, specs: Specs): GraphSpecs {
+  const graphs: GraphSpecs = {}
+
+  const { units } = spec
+
+  for (const unit_id in units) {
+    const unit = units[unit_id]
+
+    const { id } = unit
+
+    const unit_spec = specs[id]
+
+    const { system } = unit_spec
+
+    if (!system) {
+      graphs[id] = unit_spec as GraphSpec
+    }
+  }
+
+  return graphs
+}
+
+export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
   spec: GraphSpec,
-  specs: Specs,
+  _specs: Specs,
   branch: { [path: string]: true } = {}
-): GraphClass {
-  const Class = _fromSpec(spec, specs, branch)
+): GraphBundle<I, O> {
+  const Class = _fromSpec<I, O>(spec, _specs, branch)
 
   const { id } = spec
 
-  bundleClass(Class, { unit: { id } })
+  const specs = extractGraphSpecs(spec, _specs)
 
-  return Class
+  const Bundle = bundleClass(Class, { unit: { id }, specs })
+
+  return Bundle
 }
 
-export function _fromSpec<I = any, O = any>(
+export function _fromSpec<I, O>(
   spec: GraphSpec,
   specs: Specs,
   branch: { [path: string]: true } = {}
-): GraphClass {
+): GraphClass<I, O> {
   spec = clone(spec)
 
   const { name, units } = spec
@@ -73,6 +99,25 @@ export function _fromSpec<I = any, O = any>(
   }
 
   class Class<I, O> extends Graph<I, O> {
+    constructor(system: System, pod: Pod) {
+      super(spec, branch, system, pod)
+    }
+  }
+
+  Object.defineProperty(Class, 'name', {
+    value: name,
+  })
+
+  return __fromSpec(spec, branch)
+}
+
+export function __fromSpec<I, O>(
+  spec: GraphSpec,
+  branch: { [path: string]: true } = {}
+): GraphClass<I, O> {
+  const { name } = spec
+
+  class Class extends Graph<I, O> {
     constructor(system: System, pod: Pod) {
       super(spec, branch, system, pod)
     }

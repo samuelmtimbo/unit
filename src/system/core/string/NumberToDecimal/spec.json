@@ -18,7 +18,7 @@
   "merges": {},
   "inputs": {
     "n": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "numbertostring",
           "pinId": "n"
@@ -29,7 +29,7 @@
   },
   "outputs": {
     "str": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "numbertostring",
           "pinId": "str"

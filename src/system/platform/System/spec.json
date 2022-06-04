@@ -1,0 +1,17 @@
+{
+  "name": "system",
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "global",
+    "complexity": 3,
+    "tags": [
+      "platform"
+    ]
+  },
+  "id": "fbca1721-d7d9-49ea-bfea-25db6efb1049",
+  "type": "`U`&`S`",
+  "base": true,
+  "system": true
+}

@@ -1,36 +1,36 @@
 {
   "name": "triplet",
   "units": {
-    "giqoqhe": {
+    "single": {
       "id": "d2f8bb43-af44-4371-a32e-20b760695e13"
     },
-    "rjybbinj": {
+    "pair": {
       "id": "a7d5c2f3-6134-4248-b9bc-33271c280267"
     },
-    "rhwfop": {
+    "concat": {
       "id": "f57f5318-f26f-4b9f-b9e2-dcc022ad7728"
     }
   },
   "merges": {
-    "gsreknt": {
-      "rhwfop": {
+    "0": {
+      "concat": {
         "input": {
           "b": true
         }
       },
-      "giqoqhe": {
+      "single": {
         "output": {
           "[a]": true
         }
       }
     },
-    "eauak": {
-      "rhwfop": {
+    "1": {
+      "concat": {
         "input": {
           "a": true
         }
       },
-      "rjybbinj": {
+      "pair": {
         "output": {
           "hbsxpnl": true
         }
@@ -47,28 +47,28 @@
     ]
   },
   "inputs": {
-    "tfqgrevuj": {
-      "pin": {
+    "2": {
+      "plug": {
         "0": {
-          "unitId": "giqoqhe",
+          "unitId": "single",
           "pinId": "a"
         }
       },
       "type": "<A>"
     },
-    "hbqzi": {
-      "pin": {
+    "1": {
+      "plug": {
         "0": {
-          "unitId": "rjybbinj",
+          "unitId": "pair",
           "pinId": "1"
         }
       },
       "type": "<A>"
     },
-    "aegky": {
-      "pin": {
+    "0": {
+      "plug": {
         "0": {
-          "unitId": "rjybbinj",
+          "unitId": "pair",
           "pinId": "0"
         }
       },
@@ -76,10 +76,10 @@
     }
   },
   "outputs": {
-    "gylhlifcp": {
-      "pin": {
+    "a": {
+      "plug": {
         "0": {
-          "unitId": "rhwfop",
+          "unitId": "concat",
           "pinId": "ab"
         }
       },

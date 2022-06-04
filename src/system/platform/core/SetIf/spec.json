@@ -36,48 +36,48 @@
   },
   "inputs": {
     "test": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "c"
         }
       },
+      "functional": true,
       "type": "boolean"
     },
     "obj": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "1"
         }
       },
+      "functional": true,
       "type": "object"
     },
     "key": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "key"
         }
       },
+      "functional": true,
       "type": "number|string"
     },
     "value": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set",
           "pinId": "value"
         }
       },
+      "functional": true,
       "type": "any"
     }
   },
   "outputs": {
     "obj": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "pick",
           "pinId": "a"

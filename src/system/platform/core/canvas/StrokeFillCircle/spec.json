@@ -70,17 +70,17 @@
   },
   "inputs": {
     "d": {
-      "functional": true,
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "beginpath",
           "pinId": "d"
         }
       },
+      "functional": true,
       "type": "any[][]"
     },
     "circle": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "addcircle",
           "pinId": "circle"
@@ -91,7 +91,7 @@
   },
   "outputs": {
     "d": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "stroke",
           "pinId": "d"

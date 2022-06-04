@@ -1,4 +1,4 @@
-import { EE } from '../../interface/EE'
+import { EE } from '../interface/EE'
 
 export interface IWakeLockOpt {
   type: 'screen'

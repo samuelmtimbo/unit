@@ -1,5 +1,5 @@
 import { Element } from '../../../../Class/Element'
-import { CA } from '../../../../interface/CA'
+import { CA } from '../../../../types/interface/CA'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'

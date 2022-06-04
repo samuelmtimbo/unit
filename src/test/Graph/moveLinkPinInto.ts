@@ -21,13 +21,13 @@ composition0.play()
 
 composition0.addUnit(
   {
-    id: ID_EMPTY,
+    unit: { id: ID_EMPTY },
   },
   UNIT_ID_EMTPY
 )
 composition0.addUnit(
   {
-    id: ID_IDENTITY,
+    unit: { id: ID_IDENTITY },
   },
   UNIT_ID_IDENTITY
 )

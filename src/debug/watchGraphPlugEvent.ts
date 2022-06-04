@@ -1,5 +1,5 @@
 import { Graph } from '../Class/Graph'
-import { GraphExposedSubPinSpec } from '../types'
+import { GraphSubPinSpec } from '../types'
 import { IO } from '../types/IO'
 import { Moment } from './Moment'
 
@@ -7,7 +7,7 @@ export interface GraphPlugMomentData {
   type: IO
   pinId: string
   subPinId: string
-  subPinSpec: GraphExposedSubPinSpec
+  subPinSpec: GraphSubPinSpec
 }
 
 export interface GraphPlugMoment extends Moment<GraphPlugMomentData> {}
@@ -21,7 +21,7 @@ export function watchGraphPlugEvent(
     type: IO,
     pinId: string,
     subPinId: string,
-    subPinSpec: GraphExposedSubPinSpec
+    subPinSpec: GraphSubPinSpec
   ) => {
     callback({
       type: 'graph',

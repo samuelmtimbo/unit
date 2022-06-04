@@ -125,7 +125,7 @@
   },
   "inputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "fvhcp"
         }
@@ -133,7 +133,7 @@
       "type": "<A>[]"
     },
     "i": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "lgkzp"
         }
@@ -141,7 +141,7 @@
       "type": "number"
     },
     "j": {
-      "pin": {
+      "plug": {
         "0": {
           "mergeId": "mwffy"
         }
@@ -151,7 +151,7 @@
   },
   "outputs": {
     "a": {
-      "pin": {
+      "plug": {
         "0": {
           "unitId": "set1",
           "pinId": "a"
