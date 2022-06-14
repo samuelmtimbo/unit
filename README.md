@@ -8,7 +8,7 @@ Next Generation Visual Programming Platform
 
 unit is a General Purpose Visual Programming Language and Environment built with a primary focus on Developer Experience. 
 
-It is heavily inspired by Live, Data Flow, Reactive, Functional and Object Oriented Programming paradigms. Formally, units are Multi Input Multi Output (MIMO) Finite State Machines (FSE). A program in unit is represented as a Graph.
+It is heavily inspired by Live, Data Flow, Reactive, Functional and Object Oriented Programming paradigms. Formally, units are Multi Input Multi Output (MIMO) Finite State Machines (FSM). A program in unit is represented as a Graph.
 
 The unit Programming Language was developed in close junction to the unit Programming Environment, which is a Web application built for easy composition of new units. The environment is designed to feel visual and kinesthetic, giving the perception of Direct Manipulation of Live Virtual Objects. The unit Programming experience is minimalistic and ergonomic; Programming can be partially performed by Gesture and by Voice.
 
