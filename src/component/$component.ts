@@ -26,7 +26,7 @@ export function $removeChild(
 ): void {
   try {
     const child = component.removeChild(at)
-    const bundle = child.getBundleSpec()
+    const bundle = child.getUnitBundleSpec()
     const specId = bundle.unit.id
     callback({ specId })
   } catch (err) {

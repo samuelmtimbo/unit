@@ -1,5 +1,5 @@
 import { $ } from '../../../Class/$'
-import { Element } from '../../../Class/Element'
+import { Element_ } from '../../../Class/Element'
 import { Semifunctional } from '../../../Class/Semifunctional'
 import { ObjectUpdateType } from '../../../Object'
 import { Pod } from '../../../pod'
@@ -19,7 +19,7 @@ export interface O<T> {
   hub: $ & V<J<J<G>>> & J<J<G>>
 }
 
-export default class Client<T> extends Element<I<T>, O<T>> {
+export default class Client<T> extends Element_<I<T>, O<T>> {
   constructor(system: System, pod: Pod) {
     super(
       {

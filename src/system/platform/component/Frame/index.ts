@@ -1,4 +1,4 @@
-import { Element } from '../../../../Class/Element'
+import { Element_ } from '../../../../Class/Element'
 import { CA } from '../../../../types/interface/CA'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
@@ -12,7 +12,7 @@ export interface O {
   board: CA
 }
 
-export default class FrameElement extends Element<I, O> {
+export default class FrameElement extends Element_<I, O> {
   constructor(system: System, pod: Pod) {
     super(
       {

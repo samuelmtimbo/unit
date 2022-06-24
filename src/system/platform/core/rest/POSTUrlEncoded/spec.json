@@ -1,5 +1,5 @@
 {
-  "name": "POST url encoded",
+  "name": "post url encoded",
   "inputs": {
     "url": {
       "plug": {

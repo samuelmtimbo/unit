@@ -1,10 +1,10 @@
-import { Element } from '../../../../../Class/Element'
+import { Element_ } from '../../../../../Class/Element'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 
 export type I = {
-  element: Element
+  element: Element_
   pointerId: number
   done: any
 }
@@ -34,6 +34,7 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
 
   private _capturing = false
   private _pointerId: number
+  private _element: Element_ = null
 
   f({ element, pointerId }: I): void {
     if (!this._capturing) {
@@ -41,6 +42,7 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
 
       this._capturing = true
       this._pointerId = pointerId
+      this._element = element
 
       element.refEmitter().emit('call', {
         method: 'setPointerCapture',
@@ -58,19 +60,18 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
     if (this._capturing) {
       const pointerId = this._pointerId
 
-      const element = this._input.element.peak()
-
       this._done()
 
       this._input.done.pull()
 
-      this._capturing = false
-      this._pointerId = undefined
-
-      element.refEmitter().emit('call', {
+      this._element.refEmitter().emit('call', {
         method: 'releasePointerCapture',
         data: [pointerId],
       })
+
+      this._capturing = false
+      this._pointerId = undefined
+      this._element = null
     }
   }
 }

@@ -275,9 +275,9 @@ export type IFilePickerOpt = {
   multiple?: boolean
 }
 
-export type ComponentClass = {
+export type ComponentClass<T = any> = {
   id: string
-  new ($props: any, $system: System, $pod: Pod): Component
+  new ($props: T, $system: System, $pod: Pod): Component
 }
 
 export type ComponentClasses = Dict<ComponentClass>

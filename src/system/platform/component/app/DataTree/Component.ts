@@ -3,7 +3,8 @@ import {
   childrenOverflow,
   CONTAINER_COLUMN_LEFT_MARGIN,
   CONTAINER_COLUMN_RIGHT_MARGIN,
-  CONTAINER_ROW_MARGIN,
+  CONTAINER_ROW_LEFT_MARGIN,
+  CONTAINER_ROW_RIGHT_MARGIN,
 } from '../../../../../client/component/getDatumSize'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
@@ -15,7 +16,7 @@ import {
   isCompositeType,
   TreeNode,
   TreeNodeType,
-  _isValidObjKey,
+  _isValidObjKeyType,
 } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -68,10 +69,10 @@ const STYLE_CONTAINER = (overflow: boolean) => {
     flexDirection: overflow ? 'column' : 'row',
     marginLeft: overflow
       ? `${CONTAINER_COLUMN_LEFT_MARGIN}px`
-      : `${CONTAINER_ROW_MARGIN}px`,
+      : `${CONTAINER_ROW_LEFT_MARGIN}px`,
     marginRight: overflow
       ? `${CONTAINER_COLUMN_RIGHT_MARGIN}px`
-      : `${CONTAINER_ROW_MARGIN}px`,
+      : `${CONTAINER_ROW_RIGHT_MARGIN}px`,
     height: 'fit-content',
     width: 'fit-content',
   }
@@ -254,7 +255,7 @@ export default class DataTree extends Element<IHTMLDivElement, Props> {
           'comma-space'
         )
         object_literal_container.appendChild(key_value_tree)
-      } else if (_isValidObjKey(child)) {
+      } else if (_isValidObjKeyType(child)) {
         const key = child
         const key_tree = this._child_element(
           i,

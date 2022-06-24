@@ -1,8 +1,8 @@
 {
   "name": "draw image",
   "inputs": {
-    "image": {
-      "type": "any",
+    "bitmap": {
+      "type": "`IB`",
       "ref": true
     },
     "canvas": {
@@ -15,14 +15,10 @@
   },
   "outputs": {},
   "metadata": {
-    "icon": "eraser",
-    "description": "clear canvas",
+    "icon": "square",
+    "description": "draw an image `bitmap` on `canvas`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "82cf909e-a78f-4f3e-b87a-976458c8e15d",
   "base": true,

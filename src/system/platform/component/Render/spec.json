@@ -11,7 +11,7 @@
         ]
       }
     },
-    "pod": {
+    "graph": {
       "type": "`G`",
       "ref": true
     }

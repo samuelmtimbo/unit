@@ -29,35 +29,37 @@ export type TypeTreeInterface = {
   output: Dict<TreeNode>
 }
 
-export const getSpecTypeInterfaceByPath = (
-  path: string,
+export type TypeTreeInterfaceCache = Dict<TypeTreeInterface>
+
+export const getSpecTypeInterfaceById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeInterface => {
-  const typeInterface = _getSpecTypeInterfaceByPath(path, specs, cache, visited)
+  const typeInterface = _getSpecTypeInterfaceById(id, specs, cache, visited)
   return typeTreeToType(typeInterface)
 }
 
-export const _getSpecTypeInterfaceByPath = (
-  path: string,
+export const _getSpecTypeInterfaceById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeInterface => {
   let typeInterface: TypeTreeInterface
-  if (cache[path]) {
-    typeInterface = cache[path]
+  if (cache[id]) {
+    typeInterface = cache[id]
   } else {
-    const spec = specs[path]
+    const spec = specs[id]
     if (!spec) {
-      throw new Error(`Spec not found ${path}`)
+      throw new Error(`Spec not found ${id}`)
     }
     typeInterface = _getSpecTypeInterface(spec, specs, cache, {
       ...visited,
-      [path]: true,
+      [id]: true,
     })
-    cache[path] = typeInterface
+    cache[id] = typeInterface
   }
   return typeInterface
 }
@@ -87,8 +89,8 @@ export const typeTreeMapToTypeMap = (graphTypeTree: TypeTreeMap): TypeMap => {
 export const _getSpecTypeInterface = (
   spec: Spec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeInterface => {
   let typeInterface: TypeTreeInterface
   const base = !!spec.base
@@ -105,11 +107,11 @@ export const _getSpecTypeInterface = (
   return typeInterface
 }
 
-export const _getBaseTypeInterfaceByPath = (
-  path: string,
+export const _getBaseTypeInterfaceById = (
+  id: string,
   specs: Specs
 ): TypeTreeInterface => {
-  const spec = specs[path] as BaseSpec
+  const spec = specs[id] as BaseSpec
   return _getBaseTypeInterface(spec)
 }
 
@@ -124,22 +126,22 @@ export const _getBaseTypeInterface = (spec: BaseSpec): TypeTreeInterface => {
   return typeInterface
 }
 
-export const _getGraphTypeInterfaceByPath = (
-  path: string,
+export const _getGraphTypeInterfaceById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeInterface => {
-  // console.log('getGraphTypeInterfaceByPath', path)
-  const spec = specs[path] as GraphSpec
+  // console.log('_getGraphTypeInterfaceById', id)
+  const spec = specs[id] as GraphSpec
   return _getGraphTypeInterface(spec, specs, cache, visited)
 }
 
 export const getGraphTypeInterface = (
   spec: GraphSpec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ) => {
   const graphTypeTree = _getGraphTypeInterface(spec, specs, cache, visited)
   return typeTreeToType(graphTypeTree)
@@ -148,8 +150,8 @@ export const getGraphTypeInterface = (
 export const _getGraphTypeInterface = (
   spec: GraphSpec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeInterface => {
   // console.log('_getGraphTypeInterface')
   const typeInterface: TypeTreeInterface = { input: {}, output: {} }
@@ -242,11 +244,11 @@ export const _getGraphTypeInterface = (
 }
 
 export const createGenericTypeInterface = (
-  path: string,
+  id: string,
   specs: Specs
 ): TypeTreeInterface => {
-  // console.log('createGenericTypeInterface', path)
-  const spec = specs[path]
+  // console.log('createGenericTypeInterface', id)
+  const spec = specs[id]
   const typeInterface: TypeTreeInterface = { input: {}, output: {} }
   let i = 0
   const inputIds = Object.keys(spec.inputs)
@@ -326,34 +328,32 @@ export const _lessSpecific = (a: TreeNode, b: TreeNode): TreeNode => {
 export type TypeTreeMap = Dict<TypeTreeInterface>
 export type TypeMap = Dict<TypeInterface>
 
-// export const normalizeGeneric = (typeMap: TypeMap): TypeMap => {}
-
-export const getGraphTypeMapByPath = (
-  path: string,
+export const getGraphTypeMapById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeMap => {
-  const typeTreeMap = _getGraphTypeMapByPath(path, specs, cache, visited)
+  const typeTreeMap = _getGraphTypeMapById(id, specs, cache, visited)
   return typeTreeMapToTypeMap(typeTreeMap)
 }
 
-export const _getGraphTypeMapByPath = (
-  path: string,
+export const _getGraphTypeMapById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeMap => {
-  const spec = specs[path] as GraphSpec
-  // console.log('_getGraphTypeMapByPath', path)
-  return _getGraphTypeMap(spec, specs, cache, { ...visited, [path]: true })
+  const spec = specs[id] as GraphSpec
+  // console.log('_getGraphTypeMapById', id)
+  return _getGraphTypeMap(spec, specs, cache, { ...visited, [id]: true })
 }
 
 export const getGraphTypeMap = (
   spec: GraphSpec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeMap => {
   const typeTreeMap = _getGraphTypeMap(spec, specs, cache, visited)
   return typeTreeMapToTypeMap(typeTreeMap)
@@ -362,8 +362,8 @@ export const getGraphTypeMap = (
 export const _getGraphTypeMap = (
   spec: GraphSpec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeMap => {
   const typeMap: TypeTreeMap = {}
 
@@ -386,14 +386,8 @@ export const _getGraphTypeMap = (
         unitTypeInterface = createGenericTypeInterface(id, specs)
       } else {
         unitTypeInterface = clone(
-          _getSpecTypeInterfaceByPath(id, specs, cache, visited)
+          _getSpecTypeInterfaceById(id, specs, cache, visited)
         )
-        // unitTypeInterface = _getSpecTypeInterfaceByPath(
-        //   path,
-        //   specs,
-        //   cache,
-        //   visited
-        // )
       }
 
       replacement[unitId] = {}

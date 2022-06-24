@@ -69,9 +69,7 @@ export class Unit<
   public _: string
   public __: string[] = ['U']
 
-  public $parent: Unit | null = null
-  public $path: string[] = []
-  public $id: string | null = null
+  public _parent: Unit | null = null
 
   public _input: Pins<I> = {}
   public _output: Pins<O> = {}
@@ -142,8 +140,8 @@ export class Unit<
   }
 
   public setParent(parent: Unit | null) {
-    this.$parent = parent
-    this.emit('parent', this.$parent)
+    this._parent = parent
+    this.emit('parent', this._parent)
   }
 
   public setPinIgnored(type: IO, name: string, ignored: boolean): void {
@@ -629,6 +627,22 @@ export class Unit<
     return this._output[name] !== undefined
   }
 
+  public hasDataPinNamed(type: IO, name: string): boolean {
+    if (type === 'input') {
+      return this.hasDataInputNamed(name)
+    } else {
+      return this.hasDataOutputNamed(name)
+    }
+  }
+
+  public hasDataInputNamed(name: string): boolean {
+    return this._d_i_name.has(name)
+  }
+
+  public hasDataOutputNamed(name: string): boolean {
+    return this._d_o_name.has(name)
+  }
+
   public hasRefPinNamed(type: IO, name: string): boolean {
     if (type === 'input') {
       return this.hasRefInputNamed(name)
@@ -1007,7 +1021,7 @@ export class Unit<
     return { ...this.__system.specs, ...this.__pod.specs }
   }
 
-  public getBundleSpec(): UnitBundleSpec {
+  public getUnitBundleSpec(): UnitBundleSpec {
     const memory = this.snapshot()
 
     return { unit: { id: this._, memory }, specs: {} }

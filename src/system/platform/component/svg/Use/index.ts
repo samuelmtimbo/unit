@@ -1,4 +1,4 @@
-import { Element } from '../../../../../Class/Element'
+import { Element_ } from '../../../../../Class/Element'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -11,7 +11,7 @@ export interface I {
 
 export interface O {}
 
-export default class SVGUse extends Element<I, O> {
+export default class SVGUse extends Element_<I, O> {
   constructor(system: System, pod: Pod) {
     super(
       {

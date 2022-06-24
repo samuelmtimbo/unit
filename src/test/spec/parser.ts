@@ -58,6 +58,7 @@ assert.deepEqual(getTreeNodeType('null'), TreeNodeType.Null)
 assert.deepEqual(getTreeNodeType('1+1'), TreeNodeType.ArithmeticExpression)
 assert.deepEqual(getTreeNodeType('`U`'), TreeNodeType.Class)
 assert.deepEqual(getTreeNodeType('`E`'), TreeNodeType.Class)
+assert.deepEqual(getTreeNodeType('`V<T>`'), TreeNodeType.Class)
 assert.deepEqual(getTreeNodeType('<T>[]'), TreeNodeType.ArrayExpression)
 assert.deepEqual(getTreeNodeType('string[]'), TreeNodeType.ArrayExpression)
 assert.deepEqual(getTreeNodeType("'string|number'"), TreeNodeType.StringLiteral)
@@ -117,6 +118,7 @@ assert(isValidType('[]'))
 assert(isValidType('1+2'))
 assert(isValidType('1 +2'))
 assert(isValidType('1 + 2'))
+assert(isValidType('{a:number,}'))
 assert(isValidType('{foo:number}'))
 assert(isValidType('{foo:number,bar:string}'))
 assert(
@@ -132,6 +134,7 @@ assert(isValidType('[1,2,3]'))
 assert(isValidType('[string,number]'))
 assert(isValidType('3.14'))
 assert(isValidType('<T>'))
+assert(isValidType('`V<T>`'))
 assert(isValidType('string[]'))
 assert(isValidType('number[]'))
 assert(isValidType('string[][]'))
@@ -213,6 +216,7 @@ assert(isTypeMatch('null', 'any'))
 assert(isTypeMatch('string[]', '<T>[]'))
 assert(isTypeMatch('string[]', 'string[]'))
 assert(isTypeMatch('string[]', '(string|number)[]'))
+assert(isTypeMatch('{a:1,}', 'object'))
 assert(isTypeMatch('{"x":number,"y":number}', 'object'))
 assert(isTypeMatch('{x:0,y:1}', '{"x":number,"y":number}'))
 assert(
@@ -265,7 +269,7 @@ assert(!isTypeMatch('string[]|object', '<A>[]'))
 assert(!isTypeMatch('[]', '[1]'))
 assert(!isTypeMatch('[1,2,3]', '[1,2,3,4]'))
 assert(!isTypeMatch('[1,2,3]', '[number,number, string]'))
-assert(!isTypeMatch('{background: "color"}', "object"))
+assert(!isTypeMatch('{background: "color"}', 'object'))
 assert(!isTypeMatch('null', ID_IDENTITY))
 assert(!isTypeMatch('object', 'class'))
 assert(!isTypeMatch('number', 'class'))
@@ -302,6 +306,8 @@ assert(isValidValue('[1,2,3]'))
 assert(isValidValue('[1,2,3,]')) // trailing comma
 assert(isValidValue('[[1,0],[0,1]]'))
 assert(isValidValue('{a}'))
+assert(isValidValue('{a,}'))
+assert(isValidValue('{a:1,}'))
 assert(isValidValue('{a:}'))
 assert(isValidValue('{a,b,c}'))
 assert(isValidValue('{a,b,}'))
@@ -405,6 +411,9 @@ assert.deepEqual(findGenerics('"foo"'), new Set())
 assert.deepEqual(findGenerics('<T>'), new Set(['<T>']))
 assert.deepEqual(findGenerics('<T>[]'), new Set(['<T>']))
 assert.deepEqual(findGenerics('{foo:<T>,bar:<K>}'), new Set(['<T>', '<K>']))
+assert.deepEqual(findGenerics('`V<T>`'), new Set(['<T>']))
+assert.deepEqual(findGenerics('`V`'), new Set())
+assert.deepEqual(findGenerics('`EE`'), new Set())
 
 // extractGenerics
 
@@ -425,6 +434,7 @@ assert.deepEqual(_extractGenerics('number|string', '<0>'), {
   '<0>': 'number|string',
 })
 assert.deepEqual(_extractGenerics('<0>|<1>', '<2>'), { '<2>': '<0>|<1>' })
+assert.deepEqual(_extractGenerics('`V<{value:string}>`', '`V<T>`'), { '<T>': '{value:string}' })
 
 // applyGenerics
 
@@ -439,6 +449,8 @@ assert.equal(
   '{foo:object,bar:string}'
 )
 assert.equal(applyGenerics('<T>', { '<T>': '`P`' }), '`P`')
+assert.equal(applyGenerics('`V<T>`', { '<T>': '{}' }), '`V<{}>`')
+assert.equal(applyGenerics('`V<T>`', { '<T>': '<A>' }), '`V<A>`')
 
 assert.equal(getNodeAtPath('', [1]), undefined)
 assert.equal(getNodeAtPath('"foo"', []), '"foo"')
@@ -550,6 +562,7 @@ assert.deepEqual(_evaluate('{a:"1"}'), { a: '1' })
 assert.deepEqual(_evaluate('{1:1}'), { 1: 1 })
 assert.deepEqual(_evaluate('{a}'), { a: 'a' })
 assert.deepEqual(_evaluate('{a,b}'), { a: 'a', b: 'b' })
+assert.deepEqual(_evaluate('{a,}'), { a: 'a' })
 assert.deepEqual(_evaluate('{1}'), { 1: '1' })
 assert.deepEqual(_evaluate('"\\n"'), '\\n')
 assert.deepEqual(
@@ -568,6 +581,7 @@ assert.deepEqual(
 assert(hasGeneric('<T>'))
 assert(hasGeneric('<0>'))
 assert(hasGeneric('<0>[]'))
+assert(hasGeneric('`V<T>`'))
 
 // matchAllType
 

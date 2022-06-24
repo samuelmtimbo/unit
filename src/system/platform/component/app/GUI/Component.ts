@@ -23,7 +23,7 @@ import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import Modes from '../../../component/app/Modes/Component'
 import Div from '../../Div/Component'
-import ColorInput from '../../value/ColorInput/Component'
+import Color from '../../value/Color/Component'
 import Cabinet from '../Cabinet/Component'
 import { MINIMAP_HEIGHT, MINIMAP_WIDTH } from '../History/Component'
 import Minimap from '../Minimap/Component'
@@ -57,7 +57,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
   public _modes: Modes
   public _cabinet: Cabinet
   public _minimap: Minimap
-  public _color_picker: ColorInput
+  public _color_picker: Color
   public _color_pallete: Div
   public _history: Div
 
@@ -163,7 +163,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
         }
       })
     )
-    const color_picker = new ColorInput(
+    const color_picker = new Color(
       {
         value: '#ffffff',
         style: {

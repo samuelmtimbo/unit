@@ -17,7 +17,7 @@ export function cloneUnitClass<T extends Unit>(unit: T): UnitBundle<T> {
 
   const specs = { ...__system.specs, ...__pod.specs }
 
-  const bundle = unit.getBundleSpec()
+  const bundle = unit.getUnitBundleSpec()
 
   // console.log(JSON.stringify(bundle, null, 2))
 

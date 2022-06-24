@@ -29,7 +29,7 @@ const DEFAULT_STYLE = {
 const DEFAULT_WIDTH = 240
 const DEFAULT_HEIGHT = 240
 
-export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
+export default class Zoom_ extends Element<IHTMLDivElement, Props> {
   public _root: Div
 
   public _html: Div

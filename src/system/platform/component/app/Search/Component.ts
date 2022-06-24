@@ -106,6 +106,8 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   private _shape: Shape = 'circle'
   private _shape_button: IconButton
 
+  private _specs: Specs
+
   private _id_list: string[] = []
 
   private _ordered_id_list: string[] = []
@@ -128,6 +130,8 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     super($props, $system, $pod)
 
     const specs = { ...this.$system.specs, ...this.$pod.specs }
+
+    this._specs = specs
 
     const { className, style = {}, selected } = this.$props
 
@@ -371,7 +375,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   }
 
   private _add_list_item = (id: string, i: number, total: number): void => {
-    const specs = { ...this.$system.specs, ...this.$pod.specs }
+    const specs = this._specs
 
     const spec = getSpec(specs, id)
 
@@ -666,7 +670,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   private _filter_list = () => {
     // console.log('Search', '_filter_list')
 
-    const specs = { ...this.$system.specs, ...this.$pod.specs }
+    const specs = this._specs
 
     const { style = {}, filter = () => true } = this.$props
 
@@ -689,8 +693,10 @@ export default class Search extends Element<IHTMLDivElement, Props> {
       const { fuzzyName } = this._item[id]
       const list_item_div = this._list_item_div[id]
 
+      const clean_fuzzy_pattern = removeWhiteSpace(fuzzy_pattern.replace('-', ' '))
+
       const fuzzy_match = fuzzy.match(
-        removeWhiteSpace(fuzzy_pattern),
+        clean_fuzzy_pattern,
         fuzzyName,
         { caseSensitive: false }
       )

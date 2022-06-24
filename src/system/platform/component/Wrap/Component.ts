@@ -5,16 +5,13 @@ import { parentClass } from '../../../../client/createParent'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
 import { Pod } from '../../../../pod'
-import { ComponentClass, System } from '../../../../system'
-import { Dict } from '../../../../types/Dict'
+import { ComponentClass,System } from '../../../../system'
 import { IHTMLDivElement } from '../../../../types/global/dom'
 import { $Wrap } from '../../../../types/interface/async/$Wrap'
 import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
-import { insert, push, removeAt, unshift } from '../../../../util/array'
+import { insert,push,removeAt,unshift } from '../../../../util/array'
 
 export interface Props {
-  className?: string
-  style?: Dict<string>
   component?: UnitBundleSpec
 }
 
@@ -34,7 +31,13 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
 
     const $element = parentElement($system)
 
+    $element.className = 'wrap'
+
     this.$element = $element
+
+    this.$slot = {
+      default: this,
+    }
   }
 
   private _rewrap = (): void => {
@@ -469,9 +472,14 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
 
         const { __bundle } = Class
 
-        const { id } = __bundle.unit
+        const { id, input } = __bundle.unit
 
-        componentClass = componentClassFromSpecId(this.$system, { ...this.$system.specs, ...this.$pod.specs }, id)
+        componentClass = componentClassFromSpecId(
+          this.$system,
+          { ...this.$system.specs, ...this.$pod.specs },
+          id,
+          input
+        )
       } else {
         componentClass = parentClass()
       }
@@ -479,10 +487,6 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
       this._Container = componentClass
 
       this._rewrap()
-    } else if (name === 'style') {
-      //
-    } else if (name === 'className') {
-      //
     }
   }
 

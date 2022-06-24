@@ -1,4 +1,4 @@
-import { Element } from '../../../../Class/Element'
+import { Element_ } from '../../../../Class/Element'
 import { Unit } from '../../../../Class/Unit'
 import { Pod } from '../../../../pod'
 import { bundleClass } from '../../../../spec/bundleClass'
@@ -13,14 +13,13 @@ import Parent from '../Parent'
 
 export type I = {
   component: UnitBundle
-  style: Dict<string>
 }
 
 export type O = {
   parent: C
 }
 
-export default class Wrap extends Element<I, O> implements W {
+export default class Wrap extends Element_<I, O> implements W {
   private _Container: UnitBundle = bundleClass(Parent, {
     unit: { id: ID_PARENT },
   })
@@ -31,7 +30,7 @@ export default class Wrap extends Element<I, O> implements W {
 
   constructor(system: System, pod: Pod) {
     super(
-      { i: ['component', 'style'], o: ['parent'] },
+      { i: ['component'], o: ['parent'] },
       { output: { parent: { ref: true } } },
       system,
       pod

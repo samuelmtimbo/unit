@@ -62,19 +62,20 @@ export function listenWheel(
     }
 
     if (!altKey) {
-      let targetElement: HTMLElement
+      // RETURN
+      // let targetElement: HTMLElement
 
-      const pointerElement = elementFromPoint(clientX, clientY)
+      // const pointerElement = elementFromPoint(clientX, clientY)
       
-      if (pointerElement instanceof HTMLElement) {
-        targetElement = pointerElement
-      } else {
-        targetElement = pointerElement.parentElement
-      }
+      // if (pointerElement instanceof HTMLElement) {
+      //   targetElement = pointerElement
+      // } else {
+      //   targetElement = pointerElement.parentElement
+      // }
 
-      if (targetElement && isScrollable(targetElement)) {
-        return
-      }
+      // if (targetElement && isScrollable(targetElement)) {
+      //   return
+      // }
     }
 
     _event.preventDefault()

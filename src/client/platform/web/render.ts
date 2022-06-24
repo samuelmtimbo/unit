@@ -10,13 +10,13 @@ import { Unlisten } from '../../../types/Unlisten'
 import callAll from '../../../util/call/callAll'
 
 export default function webRender(bundle: BundleSpec): [System, Unlisten] {
-  const { specs } = bundle
+  const { spec, specs } = bundle
 
   const system = webBoot()
 
   const pod = spawn(system, specs)
 
-  const graph = start(system, pod, bundle)
+  const graph = start(system, pod, spec)
 
   const $graph = AsyncGraph(graph)
 

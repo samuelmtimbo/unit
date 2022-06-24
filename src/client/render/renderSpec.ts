@@ -8,9 +8,11 @@ import { AsyncGraph } from '../../types/interface/async/AsyncGraph'
 export function renderBundle(bundle: BundleSpec, opt: BootOpt): System {
   // console.log('renderBundle')
 
+  const { spec, specs } = bundle
+
   const system = boot(opt)
-  const pod = spawn(system)
-  const graph = start(system, pod, bundle)
+  const pod = spawn(system, specs)
+  const graph = start(system, pod, spec)
   const $graph = AsyncGraph(graph)
 
   render(system, pod, $graph)

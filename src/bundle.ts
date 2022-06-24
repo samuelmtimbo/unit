@@ -89,15 +89,5 @@ function _bundle(spec: GraphSpec, specs: Specs, custom: GraphSpecs): void {
         _bundle(_spec, specs, custom)
       }
     }
-
-    for (const inputId in input) {
-      const { data } = input[inputId]
-
-      if (data) {
-        if (data.startsWith('${') && data.endsWith('}')) {
-          // TODO (?)
-        }
-      }
-    }
   }
 }

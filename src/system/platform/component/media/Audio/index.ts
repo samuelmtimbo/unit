@@ -1,4 +1,4 @@
-import { Element, ElementEE } from '../../../../../Class/Element'
+import { Element_, ElementEE } from '../../../../../Class/Element'
 import { Unit } from '../../../../../Class/Unit'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
@@ -17,7 +17,7 @@ export interface AudioJ {}
 export interface AudioEE extends ElementEE<{}> {}
 export interface AudioC extends AudioComp {}
 
-export default class Audio extends Element<I, O, AudioJ, AudioEE, AudioC> {
+export default class Audio extends Element_<I, O, AudioJ, AudioEE, AudioC> {
   constructor(system: System, pod: Pod) {
     super(
       {

@@ -1,4 +1,4 @@
-import { Element } from '../Class/Element'
+import { Element_ } from '../Class/Element'
 import { Graph } from '../Class/Graph'
 import { Stateful } from '../Class/Stateful'
 import { Unit } from '../Class/Unit'
@@ -29,7 +29,7 @@ export function watchUnit<T extends Unit>(
     }
   }
 
-  if (unit instanceof Element) {
+  if (unit instanceof Element_) {
     if (events.includes('call')) {
       all.push(watchElementCallEvent('call', unit, callback))
     }

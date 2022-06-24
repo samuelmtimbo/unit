@@ -22,6 +22,7 @@ import { fromSpec } from '../../../spec/fromSpec'
 import { stringify } from '../../../spec/stringify'
 import forEachKeyValue from '../../../system/core/object/ForEachKeyValue/f'
 import { isEmptyObject, mapObjVK } from '../../../util/object'
+import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { GraphState } from '../../GraphState'
@@ -336,6 +337,13 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       callback(spec)
     },
 
+
+    $getBundle({}: {}, callback: Callback<BundleSpec>): void {
+      const spec = graph.getBundleSpec()
+
+      callback(spec)
+    },
+
     $getUnitPinData(
       { unitId, type, pinId }: { unitId: string; type: IO; pinId: string },
       callback: (data: { input: Dict<any>; output: Dict<any> }) => void
@@ -515,6 +523,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextIdMap,
       nextPinIdMap,
       nextMergePinId,
+      nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
     }: {
@@ -549,6 +558,10 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         input: { mergeId: string; pinId: string }
         output: { mergeId: string; pinId: string }
       }>
+      nextPlugSpec: {
+        input: Dict<Dict<GraphSubPinSpec>>
+        output: Dict<Dict<GraphSubPinSpec>>
+      }
       nextSubComponentParentMap: Dict<string | null>
       nextSubComponentChildrenMap: Dict<string[]>
     }): void {
@@ -558,6 +571,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         nextIdMap,
         nextPinIdMap,
         nextMergePinId,
+        nextPlugSpec, 
         nextSubComponentParentMap,
         nextSubComponentChildrenMap
       )

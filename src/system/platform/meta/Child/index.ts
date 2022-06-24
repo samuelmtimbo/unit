@@ -1,4 +1,4 @@
-import { Element } from '../../../../Class/Element'
+import { Element_ } from '../../../../Class/Element'
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
 import { C } from '../../../../types/interface/C'
@@ -7,7 +7,7 @@ import { System } from '../../../../system'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export interface I {
-  parent: Element
+  parent: Element_
   at: number
   done: any
 }

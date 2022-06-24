@@ -225,6 +225,10 @@ export interface G<I = any, O = any> {
       input: { mergeId: string, pinId: string }
       output: { mergeId: string, pinId: string }
     }>,
+    nextPlugSpec: {
+      input: Dict<Dict<GraphSubPinSpec>>
+      output: Dict<Dict<GraphSubPinSpec>>
+    },
     nextSubComponentParentMap: Dict<string | null>,
     nextSubComponentChildrenMap: Dict<string[]>
   ): void
@@ -293,6 +297,7 @@ export type G_EE = {
   leaf_cover_pin_set: [string[], IO, string, GraphPinSpec]
   expose_pin: [IO, string, string, GraphSubPinSpec]
   plug_pin: [IO, string, string, GraphSubPinSpec]
+  before_cover_pin: [IO, string, string]
   cover_pin: [IO, string, string, GraphSubPinSpec]
   unplug_pin: [IO, string, string]
   before_add_unit: [string, Unit]
@@ -339,6 +344,10 @@ export type G_EE = {
       input: { mergeId: string, pinId: string }
       output: { mergeId: string, pinId: string }
     }>,
+    {
+      input: Dict<Dict<GraphSubPinSpec>>
+      output: Dict<Dict<GraphSubPinSpec>>
+    },
     Dict<string | null>,
     Dict<string[]>
   ]

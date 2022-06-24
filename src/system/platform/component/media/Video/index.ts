@@ -1,4 +1,4 @@
-import { Element, ElementEE } from '../../../../../Class/Element'
+import { Element_, ElementEE } from '../../../../../Class/Element'
 import { Unit } from '../../../../../Class/Unit'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
@@ -23,7 +23,7 @@ export interface VideoEE extends ElementEE<{}> {}
 export interface VideoC extends VideoComp {}
 
 export default class Video
-  extends Element<I, O, VideoJ, VideoEE, VideoC>
+  extends Element_<I, O, VideoJ, VideoEE, VideoC>
   implements CS, PS
 {
   constructor(system: System, pod: Pod) {

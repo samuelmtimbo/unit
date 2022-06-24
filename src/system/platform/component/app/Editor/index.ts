@@ -1,4 +1,4 @@
-import { Element } from '../../../../../Class/Element'
+import { Element_ } from '../../../../../Class/Element'
 import { Graph } from '../../../../../Class/Graph'
 import { emptySpec, newSpecId } from '../../../../../client/spec'
 import { Zoom } from '../../../../../client/zoom'
@@ -13,7 +13,7 @@ export interface I<T> {
   graph: G
   disabled: boolean
   fullwindow: boolean
-  frame: Element
+  frame: Element_
   zoom: Zoom
 }
 
@@ -21,7 +21,7 @@ export interface O<T> {
   graph: G
 }
 
-export default class Debugger<T> extends Element<I<T>, O<T>> {
+export default class Editor<T> extends Element_<I<T>, O<T>> {
   __ = ['U', 'C', 'V', 'J', 'G']
 
   private _fallback_graph: Graph

@@ -34,11 +34,13 @@ export default class NewGraph extends Functional<I, O> {
   }
 
   f({ bundle }: I, done: Done<O>): void {
-    const { specs = {} } = bundle
+    // console.log('NewGraph', 'f', bundle)
 
-    const __pod = spawn(this.__system, specs)
+    const { spec = {}, specs = {} } = bundle
 
-    const graph = start(this.__system, __pod, bundle)
+    const pod = spawn(this.__system, specs)
+
+    const graph = start(this.__system, pod, spec)
 
     done({ graph })
   }

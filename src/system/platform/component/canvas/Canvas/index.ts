@@ -1,4 +1,4 @@
-import { Element, ElementEE } from '../../../../../Class/Element'
+import { Element_, ElementEE } from '../../../../../Class/Element'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
@@ -20,7 +20,7 @@ export interface CanvasEE extends ElementEE<{}> {}
 export interface CanvasC extends CanvasComp {}
 
 export default class Canvas
-  extends Element<I, O, CanvasJ, CanvasEE, CanvasC>
+  extends Element_<I, O, CanvasJ, CanvasEE, CanvasC>
   implements CA
 {
   __ = ['U', 'C', 'V', 'J']
@@ -53,6 +53,10 @@ export default class Canvas
     this.refEmitter().emit('call', { method: 'clear' })
 
     return
+  }
+
+  drawImage(imageBitmap: ImageBitmap): void {
+    this.refEmitter().emit('call', { method: 'drawImage', data: [imageBitmap] }) // TODO
   }
 
   async draw(step: any[]): Promise<void> {

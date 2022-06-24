@@ -1,4 +1,4 @@
-import { Element } from '../Class/Element'
+import { Element_ } from '../Class/Element'
 import { Graph } from '../Class/Graph'
 import { Stateful } from '../Class/Stateful'
 import { Unit } from '../Class/Unit'
@@ -68,7 +68,7 @@ export function watchStatefulSetEvent(
 
 export function watchElementCallEvent(
   event: 'call',
-  unit: Element,
+  unit: Element_,
   callback: (moment) => void
 ): () => void {
   const listener = (data) => {
@@ -104,7 +104,7 @@ export function watchComponentAppendEvent(
 
 export function watchComponentRemoveEvent(
   event: 'remove_child',
-  unit: Graph | Element,
+  unit: Graph | Element_,
   callback: (moment: ComponentRemoveChildAtMoment) => void
 ): () => void {
   const listener = (data) => {
@@ -124,7 +124,7 @@ export function watchComponentRemoveEvent(
 
 export function watchComponentLeafAppendEvent(
   event: 'leaf_append_child',
-  unit: Graph | Element,
+  unit: Graph | Element_,
   callback: (moment: UnitMoment) => void
 ): () => void {
   const listener = (data) => {
@@ -144,7 +144,7 @@ export function watchComponentLeafAppendEvent(
 
 export function watchComponentLeafRemoveEvent(
   event: 'leaf_remove_child',
-  unit: Graph | Element,
+  unit: Graph | Element_,
   callback: (moment: UnitMoment) => void
 ): () => void {
   const listener = (data) => {

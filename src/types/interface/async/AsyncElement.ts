@@ -1,4 +1,4 @@
-import { Element } from '../../../Class/Element'
+import { Element_ } from '../../../Class/Element'
 import { EE } from '../EE'
 import { $Element } from './$Element'
 import { AsyncC } from './AsyncC'
@@ -8,8 +8,8 @@ import { AsyncJ } from './AsyncJ'
 import { AsyncU } from './AsyncU'
 import { AsyncV } from './AsyncV'
 
-export const AsyncElement: (element: Element) => $Element = (
-  element: Element
+export const AsyncElement: (element: Element_) => $Element = (
+  element: Element_
 ) => {
   return {
     ...AsyncEE(element as EE),

@@ -1,4 +1,4 @@
-import { Element } from '../../../../Class/Element'
+import { Element_ } from '../../../../Class/Element'
 import { IOPointerEvent } from '../../../../client/event/pointer'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
@@ -14,7 +14,7 @@ export interface O {
   pointerleave: IOPointerEvent
 }
 
-export default class IconButton extends Element<I, O> {
+export default class IconButton extends Element_<I, O> {
   constructor(system: System, pod: Pod) {
     super(
       {

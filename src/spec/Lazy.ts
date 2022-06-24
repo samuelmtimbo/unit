@@ -208,6 +208,10 @@ export function lazyFromSpec(
         input: { mergeId: string; pinId: string }
         output: { mergeId: string; pinId: string }
       }>,
+      nextPlugSpec: {
+        input: Dict<Dict<GraphSubPinSpec>>
+        output: Dict<Dict<GraphSubPinSpec>>
+      },
       nextSubComponentParent: Dict<string | null>,
       nextSubComponentChildrenMap: Dict<string[]>
     ): void {
@@ -218,6 +222,7 @@ export function lazyFromSpec(
         nextIdMap,
         nextPinMap,
         nextMergePinId,
+        nextPlugSpec,
         nextSubComponentParent,
         nextSubComponentChildrenMap
       )
@@ -445,7 +450,7 @@ export function lazyFromSpec(
         exposedMerge
       )
     }
-    
+
     public memExposePin(
       type: IO,
       pinId: string,

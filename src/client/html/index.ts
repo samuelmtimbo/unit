@@ -1,10 +1,10 @@
-// import { INDEX_JS } from '../static/js/index.js'
 import { BundleSpec } from '../../types/BundleSpec'
 import { FONT_DATA_URI } from '../static/font/dataURI'
+import { INDEX_JS } from '../static/js/index.js'
 
-const INDEX_JS = 'console.log("TODO")'
+// const INDEX_JS = 'console.log("TODO")'
 
-export function makeHTML(bundle: BundleSpec, opt: {}): string {
+export function makeFullHTML(bundle: BundleSpec, opt: {}): string {
   const html = `
     <!DOCTYPE html>
     <html
@@ -231,6 +231,7 @@ export function makeHTML(bundle: BundleSpec, opt: {}): string {
         </style>
       </head>
       <body>
+        <div id="__SYSTEM__BUNDLE__" style="display: none;">${JSON.stringify(bundle)}</div>
         <div
           id="__SYSTEM__ROOT__"
           style="display: block; position: absolute; width: 100%; height: 100%;"

@@ -4,7 +4,7 @@ import { makeRemoteUnitAPI } from '../client/makeRemoteUnitAPI'
 import { RemoteRef } from '../client/RemoteRef'
 import { init } from '../client/service'
 import { spawn, start } from '../spawn'
-import { BundleSpec } from '../types/BundleSpec'
+import { GraphSpec } from '../types'
 
 const post = (data) => {
   postMessage(data, null)
@@ -16,8 +16,8 @@ const system = boot()
 
 const pod = spawn(system)
 
-init((bundle: BundleSpec) => {
-  const graph = start(system, pod, bundle)
+init((spec: GraphSpec) => {
+  const graph = start(system, pod, spec)
 
   if (_graph) {
     _graph.destroy()

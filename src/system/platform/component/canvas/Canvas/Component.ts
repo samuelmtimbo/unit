@@ -181,6 +181,12 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     this._d = []
   }
 
+  drawImage(imageBitmap: ImageBitmap) {
+    console.log('Canvas', 'drawImage', imageBitmap)
+
+    this._context.drawImage(imageBitmap, 0, 0)
+  }
+
   toBlob(
     { type, quality }: { type: string; quality: string },
     callback: (data: Blob | null) => void = NOOP

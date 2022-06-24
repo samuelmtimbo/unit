@@ -237,8 +237,8 @@ assert.deepEqual(
     ]
   ),
   [
-    { x: 20, y: 20, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
-    { x: 50, y: 20, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
+    { x: 20, y: 35, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
+    { x: 50, y: 35, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
   ]
 )
 assert.deepEqual(
@@ -256,8 +256,8 @@ assert.deepEqual(
     ]
   ),
   [
-    { x: 20, y: 20, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
-    { x: 20, y: 50, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
+    { x: 35, y: 20, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
+    { x: 35, y: 50, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
   ]
 )
 assert.deepEqual(
@@ -281,8 +281,8 @@ assert.deepEqual(
     ]
   ),
   [
-    { x: 30, y: 30, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
-    { x: 20, y: 50, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
+    { x: 45, y: 30, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
+    { x: 35, y: 50, width: 30, height: 30, fontSize: 10, k: 1, opacity: 1 },
   ]
 )
 assert.deepEqual(
@@ -716,4 +716,110 @@ assert.deepEqual(
     ]
   ),
   [{ x: 0, y: 0, width: 56, height: 56, fontSize: 10, k: 1, opacity: 1 }]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    { x: 0, y: 0, width: 100, height: 100, fontSize: 10, k: 1, opacity: 1 },
+    {},
+    [
+      {
+        height: '50px',
+        width: '50px',
+        margin: '10px',
+      },
+    ]
+  ),
+  [{ x: 10, y: 10, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 }]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    { x: 0, y: 0, width: 100, height: 100, fontSize: 10, k: 1, opacity: 1 },
+    {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    [
+      {
+        height: '50px',
+        width: '50px',
+      },
+    ]
+  ),
+  [{ x: 25, y: 25, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 }]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    { x: 0, y: 0, width: 100, height: 100, fontSize: 10, k: 1, opacity: 1 },
+    {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      // gap: '10px' // TODO
+    },
+    [
+      {
+        height: '50px',
+        width: '50px',
+      },
+    ]
+  ),
+  [{ x: 25, y: 25, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 }]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    { x: 0, y: 0, width: 100, height: 100, fontSize: 10, k: 1, opacity: 1 },
+    {},
+    [
+      {
+        position: 'absolute',
+        height: '50px',
+        width: '50px',
+        left: '25px',
+        top: '25px',
+      },
+      {
+        position: 'absolute',
+        height: '50px',
+        width: '50px',
+        left: '25px',
+        top: '75px',
+      },
+    ]
+  ),
+  [
+    { x: 25, y: 25, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 },
+    { x: 25, y: 75, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 },
+  ]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    { x: 0, y: 0, width: 100, height: 100, fontSize: 10, k: 1, opacity: 1 },
+    {
+      display: 'contents',
+    },
+    [
+      {
+        position: 'absolute',
+        height: '50px',
+        width: '50px',
+        left: '25px',
+        top: '25px',
+      },
+      {
+        position: 'absolute',
+        height: '50px',
+        width: '50px',
+        left: '25px',
+        top: '75px',
+      },
+    ],
+    () => [],
+    [],
+    {}
+  ),
+  [
+    { x: 25, y: 25, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 },
+    { x: 25, y: 75, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 },
+  ]
 )

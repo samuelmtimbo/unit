@@ -159,7 +159,7 @@ export default class Minigraph extends Element<IHTMLDivElement, Props> {
   private _node_count: number = 0
 
   private _reset = (): void => {
-    // console.log('Minigraph', '_render')
+    // console.log('Minigraph', '_reset')
 
     const specs =  { ...this.$system.specs, ...this.$pod.specs }
 

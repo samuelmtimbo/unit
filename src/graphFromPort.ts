@@ -12,9 +12,9 @@ import {
   GraphPinSpec,
   GraphSpec,
   GraphSubPinSpec,
-  GraphUnitSpec,
   GraphUnitsSpec,
 } from './types'
+import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { GlobalRefSpec } from './types/GlobalRefSpec'
@@ -484,6 +484,10 @@ export function asyncGraphFromPort(
 
     $getSpec(data: {}, callback: Callback<GraphSpec>): void {
       return $graph.$getSpec(data, callback)
+    }
+
+    $getBundle(data: {}, callback: Callback<BundleSpec>): void {
+      return $graph.$getBundle(data, callback)
     }
 
     $setMetadata(data: { path: string[]; data: any }): void {

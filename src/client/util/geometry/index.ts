@@ -493,10 +493,19 @@ export function rectBoundingRadius(width: number, height: number) {
 }
 
 export function rectsBoundingRect(rects: Rect[]): Rect {
+  if (rects.length === 0) {
+    return {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+    }
+  }
+
   let minX = Infinity
   let minY = Infinity
-  let maxX = -Infinity
-  let maxY = -Infinity
+  let maxX = 0
+  let maxY = 0
 
   for (const rect of rects) {
     minX = Math.min(minX, rect.x)

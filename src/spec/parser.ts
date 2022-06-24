@@ -89,6 +89,10 @@ export const OBJECT_CLOSE = '}'
 export const ARRAY_OPEN = '['
 export const ARRAY_CLOSE = ']'
 
+function trimSides(str: string): string {
+  return str.substring(1, str.length - 1)
+}
+
 function _traverse(
   root: TreeNode,
   callback: (node: TreeNode, path: number[]) => void,
@@ -120,6 +124,7 @@ export function isCompositeType(type: TreeNodeType): boolean {
       TreeNodeType.ObjectLiteral,
       TreeNodeType.ArrayLiteral,
       TreeNodeType.KeyValue,
+      TreeNodeType.Class,
     ].indexOf(type) > -1
   )
 }
@@ -500,7 +505,11 @@ export function _isValidValue(tree: TreeNode): boolean {
             return true
           }
 
-          if (!_isValidObjKey(key_tree)) {
+          if (key_tree.value === '') {
+            return true
+          }
+
+          if (!_isValidObjKeyType(key_tree)) {
             return true
           }
 
@@ -509,7 +518,7 @@ export function _isValidValue(tree: TreeNode): boolean {
           }
 
           return false
-        } else if (_isValidObjKey(element)) {
+        } else if (_isValidObjKeyType(element)) {
           return false
         } else if (element.value === '' && index === tree.children.length - 1) {
           return false
@@ -571,13 +580,22 @@ export function _isValidType(tree: TreeNode): boolean {
           const {
             children: [key, value],
           } = element
+
+          if (key.value === '') {
+            return true
+          }
+
           return (
-            (!key || !_isValidObjKey(key) || !value || !_isValidType(value)) &&
+            (!key ||
+              !_isValidObjKeyType(key) ||
+              !value ||
+              !_isValidType(value)) &&
             (element.value !== '' || index !== tree.children.length - 1)
           )
-        } else if (_isValidObjKey(element)) {
+        } else if (_isValidObjKeyType(element) || element.value === '') {
           return false
         }
+
         return true
       })
     case TreeNodeType.ArrayLiteral:
@@ -605,7 +623,7 @@ export function isValidObjValue(type: string): boolean {
   return _isValidObjValueType(tree.type)
 }
 
-export function _isValidObjKey(tree: TreeNode): boolean {
+export function _isValidObjKeyType(tree: TreeNode): boolean {
   return (
     tree.type === TreeNodeType.Generic ||
     tree.type === TreeNodeType.Identifier ||
@@ -618,7 +636,7 @@ export function _isValidObjKey(tree: TreeNode): boolean {
 export function isValidObjKey(key: string): boolean {
   const tree = getTree(key)
 
-  return _isValidObjKey(tree)
+  return _isValidObjKeyType(tree)
 }
 
 export function _isKey(root: TreeNode, path: number[]): boolean {
@@ -714,15 +732,6 @@ export function _getTypeTree(
     }
   }
 
-  const classTest = /^\`[A-Z]+\`$/i.exec(value)
-  if (classTest) {
-    return {
-      value,
-      type: TreeNodeType.Class,
-      children: [],
-    }
-  }
-
   if (!ignoreKeyword) {
     const regexTest = /^regex$/.exec(value)
     if (regexTest) {
@@ -809,6 +818,16 @@ export function _getTypeTree(
       value,
       type: TreeNodeType.And,
       children,
+    }
+  }
+
+  const classTest = /^\`([A-Z]+)(.*)?\`$/i.exec(value)
+  if (classTest) {
+    const childStr = classTest[2]
+    return {
+      value,
+      type: TreeNodeType.Class,
+      children: childStr ? [getTree(childStr)] : [],
     }
   }
 
@@ -1067,7 +1086,6 @@ export function _extractGenerics(
     case TreeNodeType.ArithmeticExpression:
       break
     case TreeNodeType.ArrayLiteral:
-
     case TreeNodeType.ObjectLiteral:
       const typeKeyValueMap = getObjLiteralKeyValueMap(type)
       const valueKeyValueMap = getObjLiteralKeyValueMap(value)
@@ -1102,6 +1120,22 @@ export function _extractGenerics(
       break
     case TreeNodeType.KeyValue:
       return _extractGenerics(specs, value.children[1], type.children[1])
+    case TreeNodeType.Class:
+      if (
+        value.type === TreeNodeType.Class ||
+        value.type === TreeNodeType.ClassLiteral
+      ) {
+        const valueChild = value.children[0]
+        const _valueTree = valueChild
+          ? getTree(valueChild.value.substring(1, valueChild.value.length - 1))
+          : ANY_TREE
+        return _extractGenerics(specs, _valueTree, type.children[0] || ANY_TREE)
+      } else {
+        throw new Error(
+          'cannot extract class generic from non class (literal) value.'
+        )
+      }
+      break
   }
 
   return generics
@@ -1319,7 +1353,6 @@ export function _applyGenerics(
     case TreeNodeType.Unit:
     case TreeNodeType.Number:
     case TreeNodeType.Boolean:
-    case TreeNodeType.Class:
       return tree
     case TreeNodeType.ObjectLiteral:
     case TreeNodeType.ArrayLiteral:
@@ -1330,7 +1363,7 @@ export function _applyGenerics(
     case TreeNodeType.Expression:
     case TreeNodeType.KeyValue:
     case TreeNodeType.ClassLiteral:
-    case TreeNodeType.PropExpression:
+    case TreeNodeType.PropExpression: {
       const children = tree.children.map((child) => _applyGenerics(child, map))
       const value = tree.children.reduce((acc, child, i) => {
         return acc.replace(child.value, children[i].value)
@@ -1340,6 +1373,24 @@ export function _applyGenerics(
         value,
         children,
       }
+    }
+    case TreeNodeType.Class: {
+      const children = tree.children.map((child) => _applyGenerics(child, map))
+      const value = tree.children.reduce((acc, child, i) => {
+        const _child = children[i]
+        return acc.replace(
+          trimSides(child.value),
+          _child.type === TreeNodeType.Generic
+            ? trimSides(_child.value)
+            : _child.value
+        )
+      }, tree.value)
+      return {
+        ...tree,
+        value,
+        children,
+      }
+    }
     default:
       console.log(tree.type)
       throw new Error('TODO')

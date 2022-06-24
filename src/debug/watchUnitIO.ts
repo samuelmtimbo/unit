@@ -1,4 +1,4 @@
-import { Element } from '../Class/Element'
+import { Element_ } from '../Class/Element'
 import { Graph } from '../Class/Graph'
 import { Unit } from '../Class/Unit'
 import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
@@ -174,7 +174,7 @@ export function watchUnitIO<T extends Unit>(
     }
   }
 
-  if (unit instanceof Graph || unit instanceof Element) {
+  if (unit instanceof Graph || unit instanceof Element_) {
     if (events.includes('append_child')) {
       all.push(watchComponentAppendEvent('append_child', unit, callback))
     }

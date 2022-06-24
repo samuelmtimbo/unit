@@ -1,8 +1,8 @@
-import { $Graph } from '../../types/interface/async/$Graph'
 import { NOOP } from '../../NOOP'
 import { Pod } from '../../pod'
 import { System } from '../../system'
 import { GraphSpec } from '../../types'
+import { $Graph } from '../../types/interface/async/$Graph'
 import { Unlisten } from '../../types/Unlisten'
 import callAll from '../../util/call/callAll'
 import { componentFromSpec } from '../componentFromSpec'
@@ -16,12 +16,15 @@ export function renderGraph(
   pod: Pod,
   $graph: $Graph
 ): Unlisten {
-  // console.log('renderPod')
+  // console.log('renderGraph')
 
   let unlisten: Unlisten = NOOP
 
   $graph.$getSpec({}, (spec: GraphSpec) => {
-    const component = componentFromSpec(system, pod, spec)
+    const component = componentFromSpec(system, pod, spec, {
+      ...system.specs,
+      ...pod.specs,
+    })
 
     const $$context = renderFrame(system, null, root, {})
 

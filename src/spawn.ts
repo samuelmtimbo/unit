@@ -29,20 +29,8 @@ export function spawn(system: System, specs: GraphSpecs = {}): Pod {
   return pod
 }
 
-export function start(system: System, pod: Pod, bundle: BundleSpec): Graph {
-  const { spec = {}, specs = {} } = bundle
-
-  for (const spec_id in specs) {
-    // if (pod.specs[spec_id]) {
-    //   throw new Error('cannot have duplicated spec id')
-    // }
-
-    const spec = specs[spec_id]
-
-    pod.specs[spec_id] = spec
-  }
-
-  const Class = fromSpec(spec, { ...specs, ...pod.specs, ...system.specs }, {})
+export function start(system: System, pod: Pod, spec: GraphSpec): Graph {
+  const Class = fromSpec(spec, { ...pod.specs, ...system.specs }, {})
 
   const graph = new Class(system, pod)
 

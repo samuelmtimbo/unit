@@ -29,7 +29,7 @@ export function graphComponentFromSpec(
 
   const $graph = AsyncGraph(graph)
 
-  const component = componentFromSpec(system, pod, spec)
+  const component = componentFromSpec(system, pod, spec, specs)
 
   component.connect($graph)
 

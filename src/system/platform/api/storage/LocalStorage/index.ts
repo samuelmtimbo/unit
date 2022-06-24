@@ -5,12 +5,12 @@ import {
   storageHasKey,
 } from '../../../../../client/util/web/storage'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
-import { J } from '../../../../../types/interface/J'
-import { V } from '../../../../../types/interface/V'
 import { ObjectUpdateType } from '../../../../../Object'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { J } from '../../../../../types/interface/J'
+import { V } from '../../../../../types/interface/V'
 import { Unlisten } from '../../../../../types/Unlisten'
 
 export type I = {}
@@ -32,6 +32,7 @@ export default class _LocalStorage
       pod
     )
   }
+
   subscribe(
     path: string[],
     key: string,
@@ -98,11 +99,13 @@ export default class _LocalStorage
 
   async keys(): Promise<string[]> {
     const keys = getStorageKeys(localStorage)
+
     return keys
   }
 
   async hasKey(name: string): Promise<boolean> {
     const has = storageHasKey(localStorage, name)
+
     return has
   }
 }

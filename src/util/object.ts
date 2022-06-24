@@ -181,3 +181,41 @@ export function set<T>(obj: object, k: string, v: any): void {
 export function get<T extends object, K extends keyof T>(obj: T, k: K): T[K] {
   return obj[k]
 }
+
+export function setPath(obj: object, path: string[], value: any): void {
+  let o = obj
+
+  const last_index = path.length - 1
+
+  if (last_index >= 0) {
+    const last_p = path[last_index]
+
+    for (let i = 0; i < last_index; i++) {
+      const p = path[i]
+
+      if (o[p] === undefined) {
+        o[p] = {}
+      }
+
+      o = o[p]
+    }
+
+    o[last_p] = value
+  }
+}
+
+export function getPathOrDefault(obj: object, path: string[], d: any): any {
+  let o = obj
+
+  for (let i = 0; i < path.length; i++) {
+    const p = path[i]
+
+    if (o[p] === undefined) {
+      return d
+    }
+
+    o = o[p]
+  }
+
+  return o
+}

@@ -7,6 +7,7 @@ import {
   GraphUnitsSpec,
 } from '../..'
 import { State } from '../../../State'
+import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { IO } from '../../IO'
@@ -28,6 +29,7 @@ export const $G_METHOD_CALL_GET = [
   'getGraphMergeInputData',
   'getUnitInputData',
   'getSpec',
+  'getBundle'
 ]
 
 export const $G_METHOD_CALL_SET_THIS = [
@@ -226,6 +228,7 @@ export interface $G_C {
     callback: (data: Dict<any>) => void
   ): void
   $getSpec(data: {}, callback: Callback<GraphSpec>): void
+  $getBundle(data: {}, callback: Callback<BundleSpec>): void
   $setMetadata(data: { path: string[]; data: any }): void
   $appendSubComponentChild(data: {
     subComponentId: string
@@ -270,6 +273,10 @@ export interface $G_C {
       input: { mergeId: string; pinId: string }
       output: { mergeId: string; pinId: string }
     }>
+    nextPlugSpec: {
+      input: Dict<Dict<GraphSubPinSpec>>
+      output: Dict<Dict<GraphSubPinSpec>>
+    }
     nextSubComponentParentMap: Dict<string | null>
     nextSubComponentChildrenMap: Dict<string[]>
   }): void

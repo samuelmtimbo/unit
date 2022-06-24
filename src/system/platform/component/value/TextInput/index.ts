@@ -1,4 +1,4 @@
-import { Element } from '../../../../../Class/Element'
+import { Element_ } from '../../../../../Class/Element'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 
@@ -10,7 +10,7 @@ export interface I {
 
 export interface O {}
 
-export default class TextInput extends Element<I, O> {
+export default class TextInput extends Element_<I, O> {
   constructor(system: System, pod: Pod) {
     super(
       {

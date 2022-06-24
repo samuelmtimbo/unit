@@ -8,13 +8,13 @@ const identity = new Identity(system, pod)
 
 identity._ = ID_IDENTITY
 
-assert.deepEqual(identity.getBundleSpec(), {
+assert.deepEqual(identity.getUnitBundleSpec(), {
   unit: { id: ID_IDENTITY },
 })
 
 identity.push('a', 0)
 
-assert.deepEqual(identity.getBundleSpec(), {
+assert.deepEqual(identity.getUnitBundleSpec(), {
   unit: {
     id: ID_IDENTITY,
     input: {

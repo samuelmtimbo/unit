@@ -1,7 +1,7 @@
 import { Classes, Specs } from '../types'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { fromBundle } from './fromBundle'
-import { getTree, TreeNode, TreeNodeType, _isValidObjKey } from './parser'
+import { getTree, TreeNode, TreeNodeType, _isValidObjKeyType } from './parser'
 
 export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
   const { value, children } = tree
@@ -39,7 +39,7 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
             specs,
             classes
           )
-        } else if (_isValidObjKey(entry)) {
+        } else if (_isValidObjKeyType(entry)) {
           object[entry.value] = entry.value
         }
       }

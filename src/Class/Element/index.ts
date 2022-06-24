@@ -34,7 +34,7 @@ export type ElementEE<_EE extends Dict<any[]>> = StatefulEvents<
 > &
   Element_EE
 
-export class Element<
+export class Element_<
     I = any,
     O = any,
     _J extends Dict<any> = {},
@@ -78,6 +78,8 @@ export class Element<
         this._input[name].pull()
         this._backwarding = false
       }
+
+      this._emitter.emit(name, data)
     })
 
     this._slot = {

@@ -4,7 +4,7 @@ import { UnitClass } from '../types/UnitClass'
 import { bundleClass } from './bundleClass'
 
 export function cloneBundle<T extends Unit = any>(unit: T): UnitBundle<T> {
-  const __bundle = unit.getBundleSpec()
+  const __bundle = unit.getUnitBundleSpec()
 
   return bundleClass(unit.constructor as UnitClass, __bundle)
 }
