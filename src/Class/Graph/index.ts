@@ -1150,6 +1150,15 @@ export class Graph<I = any, O = any>
   }
 
   private _memUnplugPin = (type: IO, pinId: string, subPinId: string): void => {
+    this.__memUnplugPin(type, pinId, subPinId)
+    this._memPlugEmptyPin(type, pinId, subPinId)
+  }
+
+  private __memUnplugPin = (
+    type: IO,
+    pinId: string,
+    subPinId: string
+  ): void => {
     const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
     this._spec[`${type}s`][pinId].plug[subPinId] = {}
@@ -1163,7 +1172,13 @@ export class Graph<I = any, O = any>
         this._memRemoveMergeOutput(mergeId)
       }
     }
+  }
 
+  private _memPlugEmptyPin = (
+    type: IO,
+    pinId: string,
+    subPinId: string
+  ): void => {
     const emptySubPinId = `${pinId}/${subPinId}`
     const emptySubPin = new Pin()
     this._exposedEmptySubPin[emptySubPinId] = emptySubPin
@@ -1173,7 +1188,15 @@ export class Graph<I = any, O = any>
 
   private _simUnplugPin = (type: IO, pinId: string, subPinId: string): void => {
     // console.log('Graph', '_simUnplugPin', pinId, subPinId)
+    this.__simUnplugPin(type, pinId, subPinId)
+    this._simPlugEmptyPin(type, pinId, subPinId)
+  }
 
+  private __simUnplugPin = (
+    type: IO,
+    pinId: string,
+    subPinId: string
+  ): void => {
     const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
     const isOutput = type === 'output'
@@ -1189,16 +1212,22 @@ export class Graph<I = any, O = any>
     const pin = this.getPin(type, pinId)
     const isRef = this.hasRefPinNamed(type, pinId)
 
-    const emptySubPinId = `${pinId}/${subPinId}`
-    const emptySubPin = this._exposedEmptySubPin[emptySubPinId]
-
-    this._simSetExposedSubPin(type, pinId, subPinId, emptySubPin)
-
     if (isOutput) {
       if (isRef) {
         pin.take()
       }
     }
+  }
+
+  private _simPlugEmptyPin = (
+    type: IO,
+    pinId: string,
+    subPinId: string
+  ): void => {
+    const emptySubPinId = `${pinId}/${subPinId}`
+    const emptySubPin = this._exposedEmptySubPin[emptySubPinId]
+
+    this._simSetExposedSubPin(type, pinId, subPinId, emptySubPin)
   }
 
   private _memUnplugInput = (pinId: string, subPinId: string): void => {
@@ -2296,26 +2325,51 @@ export class Graph<I = any, O = any>
   private _memRemoveMerge(mergeId: string): void {
     this.emit('before_remove_merge', mergeId)
 
-    forEachKeyValue(this._spec.inputs || {}, ({ plug }, inputId) => {
-      for (let subPinId in plug) {
-        const subPinSpec = plug[subPinId]
-        if (subPinSpec.mergeId === mergeId) {
-          this._memUnplugInput(subPinId, inputId)
-          break
-        }
-      }
-    })
-    forEachKeyValue(this._spec.outputs || {}, ({ plug }, outputId) => {
-      for (let subPinId in plug) {
-        const subPinSpec = plug[subPinId]
-        if (subPinSpec.mergeId === mergeId) {
-          this._memUnplugOutput(subPinId, outputId)
-          break
-        }
-      }
-    })
+    this._memRemoveAllMergePlug(mergeId)
+    this._memRemoveAllMergePin(mergeId)
+    this._memRemoveAllMergeRef(mergeId)
+  }
 
-    const merge = clone(this._spec.merges![mergeId])
+  private __memRemoveMerge(mergeId: string): void {
+    this.emit('before_remove_merge', mergeId)
+
+    this.__memRemoveAllMergePlug(mergeId)
+    this._memRemoveAllMergePin(mergeId)
+    this._memRemoveAllMergeRef(mergeId)
+  }
+
+  private _memRemoveAllMergePlug(mergeId: string) {
+    this._forEachSpecPinPlug((type, id, subPinId, subPinSpec) => {
+      if (subPinSpec.mergeId === mergeId) {
+        this._memUnplugPin(type, id, subPinId)
+      }
+    })
+  }
+
+  private __memRemoveAllMergePlug(mergeId: string) {
+    this._forEachSpecPinPlug((type, id, subPinId, subPinSpec) => {
+      if (subPinSpec.mergeId === mergeId) {
+        this.__memUnplugPin(type, id, subPinId)
+      }
+    })
+  }
+
+  private _memRemoveAllMergeRef(mergeId: string): void {
+    const selfUnitId = this._mergeToSelfUnit[mergeId]
+
+    if (selfUnitId) {
+      delete this._mergeToSelfUnit[mergeId]
+      delete this._selfUniToMerge[selfUnitId]
+    }
+
+    delete this._merge[mergeId]
+    delete this._mergePinCount[mergeId]
+
+    this._spec = removeMerge({ id: mergeId }, this._spec)
+  }
+
+  private _memRemoveAllMergePin(mergeId: string): void {
+    const merge = clone(this._spec.merges[mergeId])
 
     forEachKeyValue(merge, ({ input, output }, unitId) => {
       forEachKeyValue(input || {}, (_, inputId: string) => {
@@ -2325,19 +2379,21 @@ export class Graph<I = any, O = any>
         this._memRemovePinFromMerge(mergeId, unitId, 'output', outputId)
       })
     })
+  }
 
-    const selfUnitId = this._mergeToSelfUnit[mergeId]
-    if (selfUnitId) {
-      delete this._mergeToSelfUnit[mergeId]
-      delete this._selfUniToMerge[selfUnitId]
-    }
-
-    delete this._merge[mergeId]
-
-    delete this._mergePinCount[mergeId]
-
-    // @ts-ignore
-    this._spec = removeMerge({ id: mergeId }, this._spec)
+  private _memPostRemoveMerge(mergeId: string): void {
+    this._forEachSpecPinPlug(
+      (
+        type: IO,
+        pinId: string,
+        subPinId: string,
+        subPinSpec: GraphSubPinSpec
+      ) => {
+        if (subPinSpec.mergeId === mergeId) {
+          this._memPlugEmptyPin(type, pinId, subPinId)
+        }
+      }
+    )
   }
 
   public isUnitRefPin(unitId: string, type: IO, name: string): boolean {
@@ -2427,33 +2483,80 @@ export class Graph<I = any, O = any>
     // console.log('Graph', 'removeMerge', mergeId)
     this._validateMergeId(mergeId)
 
-    this._simRemoveMerge(mergeId)
-    this._memRemoveMerge(mergeId)
+    this.__simRemoveMerge(mergeId)
+    this.__memRemoveMerge(mergeId)
+
+    this._memPostRemoveMerge(mergeId)
+    this._simPostRemoveMerge(mergeId)
   }
 
   private _simRemoveMerge(mergeId: string) {
     // console.log('Graph', '_simRemoveMerge', mergeId)
+    this._simRemoveAllPlugsFromMerge(mergeId)
+    this._simRemoveAllPinsFromMerge(mergeId)
+  }
 
+  private _simRemoveAllPlugsFromMerge = (mergeId: string) => {
+    this._forEachSpecPinPlug(
+      (
+        type: IO,
+        pinId: string,
+        subPinId: string,
+        subPinSpec: GraphSubPinSpec
+      ) => {
+        if (subPinSpec.mergeId === mergeId) {
+          this._simUnplugPin(type, pinId, subPinId)
+        }
+      }
+    )
+  }
+
+  private __simRemoveAllPlugsFromMerge = (mergeId: string) => {
+    this._forEachSpecPinPlug(
+      (
+        type: IO,
+        pinId: string,
+        subPinId: string,
+        subPinSpec: GraphSubPinSpec
+      ) => {
+        if (subPinSpec.mergeId === mergeId) {
+          this.__simUnplugPin(type, pinId, subPinId)
+        }
+      }
+    )
+  }
+
+  private _forEachSpecPinPlug = (
+    callback: (
+      type: IO,
+      pinId: string,
+      subPinId: string,
+      subPinSpec: GraphSubPinSpec
+    ) => void
+  ) => {
     forEachKeyValue(this._spec.inputs || {}, ({ plug }, inputId) => {
       for (let subPinId in plug) {
         const subPinSpec = plug[subPinId]
-        if (subPinSpec.mergeId === mergeId) {
-          this._simUnplugInput(subPinId, inputId)
-          break
-        }
+        callback('input', inputId, subPinId, subPinSpec)
       }
     })
     forEachKeyValue(this._spec.outputs || {}, ({ plug }, outputId) => {
       for (let subPinId in plug) {
         const subPinSpec = plug[subPinId]
-        if (subPinSpec.mergeId === mergeId) {
-          this._simUnplugOutput(subPinId, outputId)
-          break
-        }
+          callback('output', outputId, subPinId, subPinSpec)
       }
     })
+  }
 
-    const merge = clone(this._spec.merges![mergeId])
+  private  __simRemoveMerge(mergeId: string): void {
+    // console.log('Graph', '_simRemoveMerge', mergeId)
+
+    this.__simRemoveAllPlugsFromMerge(mergeId)
+    this._simRemoveAllPinsFromMerge(mergeId)
+  }
+
+  private _simRemoveAllPinsFromMerge = (mergeId: string): void => {
+    const merge = clone(this._spec.merges[mergeId])
 
     forEachKeyValue(merge, ({ input, output }, unitId) => {
       forEachKeyValue(input || {}, (_, inputId: string) => {
@@ -2463,6 +2566,21 @@ export class Graph<I = any, O = any>
         this._simRemovePinFromMerge(mergeId, unitId, 'output', outputId)
       })
     })
+  }
+
+  private _simPostRemoveMerge(mergeId: string) {
+    this._forEachSpecPinPlug(
+      (
+        type: IO,
+        pinId: string,
+        subPinId: string,
+        subPinSpec: GraphSubPinSpec
+      ) => {
+        if (subPinSpec.mergeId === mergeId) {
+          this._simPlugEmptyPin(type, pinId, subPinId)
+        }
+      }
+    )
   }
 
   public removePinFromMerge(

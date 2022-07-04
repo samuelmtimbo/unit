@@ -26972,7 +26972,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
   }
 
   private __spec_remove_merge = (merge_id: string): void => {
-    // console.log('Graph', '__spec_remove_merge', merge_id)
+    console.log('Graph', '__spec_remove_merge', merge_id)
 
     this._spec = specReducer.removeMerge({ id: merge_id }, this._spec)
   }
@@ -28793,6 +28793,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     sub_pin_id: string
   ): void => {
     // console.log('Graph', '_unplug_exposed_pin')
+    
     this._state_unplug_exposed_pin(type, pin_id, sub_pin_id)
     this._pod_unplug_exposed_pin(type, pin_id, sub_pin_id)
   }
@@ -28802,7 +28803,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     pinId: string,
     subPinId: string
   ): void => {
-    // console.log('Graph', '_spec_unplug_exposed_pin', type, pinId, subPinId)
+    console.log('Graph', '_spec_unplug_exposed_pin', type, pinId, subPinId)
+
     this._spec = specReducer.unplugPin({ type, pinId, subPinId }, this._spec)
   }
 
@@ -32460,13 +32462,13 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           }
 
           if (!this._long_press_collapse_node_id.has(unit_id)) {
-            console.log('D', this._long_press_collapse_next_id_map)
-
-            const next_pin_id = getPathOrDefault(
-              this._long_press_collapse_next_id_map,
-              ['link', unit_id, type, pin_id, 'oppositePinId'],
-              new_pin_id(type, pin_id)
-            )
+            const next_pin_id =
+              merge_to_exposed_pin_id[type][merge_node_id] ||
+              getPathOrDefault(
+                this._long_press_collapse_next_id_map,
+                ['link', unit_id, type, pin_id, 'oppositePinId'],
+                new_pin_id(type, pin_id)
+              )
 
             expose_link_pin(unit_id, type, pin_id, next_pin_id)
           }
@@ -32483,6 +32485,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           const next_merge_output_id =
             merge_to_exposed_pin_id['input'][merge_node_id] ||
             new_pin_id('output', merge_anchor_pin_id['input'])
+
+          merge_to_exposed_pin_id['input'][merge_node_id] = next_merge_output_id
 
           const next_merge_id = newMergeIdInSpec(this._spec, next_merge_set)
 
@@ -32518,6 +32522,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           const next_merge_input_id =
             merge_to_exposed_pin_id['output'][merge_node_id] ||
             new_pin_id('input', merge_anchor_pin_id['output'])
+
+          merge_to_exposed_pin_id['output'][merge_node_id] = next_merge_input_id
 
           const next_merge_id = newMergeIdInSpec(this._spec, next_merge_set)
 

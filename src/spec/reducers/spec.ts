@@ -1,18 +1,18 @@
 import assocPath from '../../system/core/object/AssocPath/f'
+import pathGet from '../../system/core/object/DeepGet/f'
 import dissocPath from '../../system/core/object/DissocPath/f'
 import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
-import pathGet from '../../system/core/object/DeepGet/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import _dissoc from '../../system/f/object/Dissoc/f'
 import merge from '../../system/f/object/Merge/f'
 import set from '../../system/f/object/Set/f'
 import {
   Action,
-  GraphPinSpec,
-  GraphSubPinSpec,
   GraphMergeSpec,
   GraphMergesSpec,
+  GraphPinSpec,
   GraphSpec,
+  GraphSubPinSpec,
   GraphUnitSpec,
   GraphUnitsSpec,
 } from '../../types'
@@ -20,7 +20,6 @@ import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
 import {
   clone,
-  filterObj,
   getObjSingleKey,
   isEmptyObject,
   mapObjVK,
@@ -346,35 +345,35 @@ export const removeMerge = ({ id }: { id: string }, state: State): State => {
   const nextMerges = _dissoc(state.merges!, id)
   nextState.merges = nextMerges
 
-  let nextInputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
+  nextState.inputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
     state.inputs,
     (input: GraphPinSpec) => ({
       ...input,
-      plug: filterObj(input.plug, ({ mergeId }) => !mergeId || mergeId !== id),
+      plug: mapObjVK(input.plug, (plug) => {
+        const { mergeId } = plug
+
+        return !mergeId || mergeId !== id ? plug : {}
+      }),
     })
   )
 
-  nextInputs = filterObj(nextInputs, (input: GraphPinSpec) => {
-    return Object.keys(input.plug).length > 0
-  })
-
-  nextState.inputs = nextInputs
-
-  let nextOutputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
+  nextState.outputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
     state.outputs,
     (output: GraphPinSpec) => ({
       ...output,
-      plug: filterObj(output.plug, ({ mergeId }) => !mergeId || mergeId !== id),
+      plug: mapObjVK(output.plug, (plug) => {
+        const { mergeId } = plug
+
+        return !mergeId || mergeId !== id ? plug : {}
+      }),
     })
   )
 
-  nextOutputs = filterObj(nextOutputs, (output: GraphPinSpec) => {
-    return Object.keys(output.plug).length > 0
-  })
-
-  nextState.outputs = nextOutputs
-
-  if (nextState.metadata.position && nextState.metadata.position.merge) {
+  if (
+    nextState.metadata &&
+    nextState.metadata.position &&
+    nextState.metadata.position.merge
+  ) {
     delete nextState.metadata.position.merge[id]
   }
 

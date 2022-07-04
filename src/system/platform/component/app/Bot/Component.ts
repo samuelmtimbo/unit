@@ -667,9 +667,9 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
 
     if (this._pointer_inside[pointerId]) {
       // log('Bot', '__onContextPointerLeave', pointerId)
-      
+
       this._pointer_enter_count--
-      
+
       if (this._pointer_down[pointerId]) {
         this._remove_pointer_down(event)
       }
