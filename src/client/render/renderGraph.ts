@@ -1,12 +1,13 @@
 import { NOOP } from '../../NOOP'
 import { Pod } from '../../pod'
 import { System } from '../../system'
+import Frame from '../../system/platform/component/Frame/Component'
 import { GraphSpec } from '../../types'
 import { $Graph } from '../../types/interface/async/$Graph'
 import { Unlisten } from '../../types/Unlisten'
 import callAll from '../../util/call/callAll'
 import { componentFromSpec } from '../componentFromSpec'
-import { enterFullwindow, focusContext, mount as _mount } from '../context'
+import { appendChild, focusContext, mount as _mount } from '../context'
 import { renderFrame } from '../renderFrame'
 import { watchPodComponent } from './watchPodComponent'
 
@@ -28,7 +29,13 @@ export function renderGraph(
 
     const $$context = renderFrame(system, null, root, {})
 
-    const unlisten_fullwindow = enterFullwindow($$context, component)
+    const $frame = new Frame({}, system, pod)
+
+    $frame.appendChild(component)
+
+    root.appendChild($frame.$element)
+
+    const remove_child = appendChild($$context, $frame)
 
     _mount($$context)
 
@@ -36,9 +43,9 @@ export function renderGraph(
 
     component.connect($graph)
 
-    focusContext($$context)
+    component.focus()
 
-    unlisten = callAll([unlisten_fullwindow, unlisten_pod])
+    unlisten = callAll([remove_child, unlisten_pod])
   })
 
   return unlisten

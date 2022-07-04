@@ -170,7 +170,6 @@ import {
   getThemeModeColor,
   LIGHT_LINK_MODE_COLOR,
   LIGHT_MODE_COLOR,
-  randomColorString,
   setAlpha,
   themeBackgroundColor,
 } from '../../../../../client/theme'
@@ -194,6 +193,7 @@ import {
   pointUnitVector,
   Position,
   radBetween,
+  randomInPaddedRect,
   randomInRadius,
   randomInRect,
   randomUnitVector,
@@ -361,6 +361,7 @@ import {
   clone,
   filterObj,
   getObjSingleKey,
+  getPathOrDefault,
   invertObj,
   isEmptyObject,
   mapObjKey,
@@ -1978,8 +1979,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     output: Dict<{ pinId: string; subPinId: string }>
   }> = {}
   private _long_press_collapse_next_merge_pin_map: Dict<{
-    input: { mergeId: string; pinId: string }
-    output: { mergeId: string; pinId: string }
+    input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
+    output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
   }> = {}
   private _long_press_collapse_next_plug_spec_map: {
     input: Dict<Dict<GraphSubPinSpec>>
@@ -2165,8 +2166,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
   private _blue_drag_hover_merge_anchor: Dict<string> = {}
   private _blue_drag_hover_swap: Dict<string> = {}
 
-  private _animating_enter_fullwindow: Dict<boolean> = {}
-  private _animating_leave_fullwindow: Dict<boolean> = {}
+  private _animating_sub_component_fullwindow: Set<string> = new Set()
 
   private _abort_leave_fullwindow: Dict<
     () => {
@@ -4493,10 +4493,16 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
   private _pod_connect_sub_component = (unit_id: string): void => {
     // console.log('Graph', '_pod_connect_sub_component', unit_id)
 
-    const sub_component = this._get_sub_component(unit_id)!
-    const _ = component_(sub_component)
-    const sub_unit = this._pod.$refUnit({ unitId: unit_id, _ }) as $Component
-    sub_component.connect(sub_unit)
+    const { parent } = this.$props
+
+    if (parent) {
+      //
+    } else {
+      const sub_component = this._get_sub_component(unit_id)!
+      const _ = component_(sub_component)
+      const sub_unit = this._pod.$refUnit({ unitId: unit_id, _ }) as $Component
+      sub_component.connect(sub_unit)
+    }
   }
 
   private _pod_disconnect_sub_component = (unit_id: string): void => {
@@ -5442,6 +5448,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
   }
 
   private _mem_add_unit_component = (unit_id: string): void => {
+    // console.log('Graph', '_mem_add_unit_component', unit_id)
+
     const { specs } = this.$props
 
     this._search_adding_unit = true
@@ -5469,19 +5477,19 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     const parent_id = this._get_sub_component_spec_parent_id(unit_id)
 
     if (parent_id) {
-      if (!this.$props.parent) {
-        const parent = this._get_sub_component(parent_id)
+      const parent = this._get_sub_component(parent_id)
 
+      if (!parent.$parentRoot.includes(sub_component)) {
         parent.pushParentRoot(sub_component, 'default')
       }
     } else {
-      if (!this.$props.parent) {
+      if (!this._component.$root.includes(sub_component)) {
         this._component.pushRoot(sub_component)
 
         index = this._get_sub_component_root_index(unit_id)
-      }
 
-      this._set_tree_sub_component_index(unit_id, index)
+        this._set_tree_sub_component_index(unit_id, index)
+      }
     }
 
     this._search_adding_unit = false
@@ -5752,6 +5760,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     console.log('Graph', '_spec_set_exposed_pin_name', type, id, newId)
     // this._spec = specReducer.setPinSetName({ type, pinId, name }, this._spec)
     this._spec = specReducer.setPinSetId({ type, id, newId }, this._spec)
+    console.log(this._spec)
   }
 
   private _get_pin_plug_position = (
@@ -6883,6 +6892,10 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       layout_position,
       null
     )
+
+    if (this._is_unit_component(new_unit_id)) {
+      this._sim_add_unit_component(new_unit_id)
+    }
 
     const replace_exposed = (type: IO, tag: 'ref' | 'data'): void => {
       const exposed_pins = exposed_pin_ids[type][tag]
@@ -10038,6 +10051,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     } else if (this._is_int_pin_node_id(node_id)) {
       const ext_node_id = getExtNodeIdFromIntNodeId(node_id)
       this._show_ext_info(ext_node_id)
+    } else if (this._is_datum_node_id(node_id)) {
+      this._show_datum_info(node_id)
     }
   }
 
@@ -10136,6 +10151,26 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     this._show_ext_pin_type(ext_node_id, int_node_id)
   }
 
+  private _show_datum_info = (datum_node_id: string) => {
+    // console.log('Graph', '_show_datum_info', datum_node_id)
+
+    this._set_node_opacity(datum_node_id, 1)
+
+    const datum_type_tree = this._get_datum_type(datum_node_id)
+
+    const { x, y, width, height } = this._get_node(datum_node_id)
+
+    const position = randomInPaddedRect(
+      x,
+      y,
+      x + width,
+      y + height,
+      LINK_DISTANCE_TYPE
+    )
+
+    this._sim_add_node_type(datum_node_id, datum_type_tree, position)
+  }
+
   private _show_ext_pin_type = (ext_node_id: string, int_node_id: string) => {
     const type_tree = this._get_ext_pin_type(ext_node_id)
 
@@ -10220,6 +10255,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       this._hide_ext_info(node_id)
     } else if (this._is_int_pin_node_id(node_id)) {
       this._hide_int_info(node_id)
+    } else if (this._is_datum_node_id(node_id)) {
+      this._hide_datum_info(node_id)
     }
   }
 
@@ -10231,6 +10268,12 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     const ext_node_id = getExtNodeIdFromIntNodeId(int_node_id)
 
     this._hide_ext_info(ext_node_id)
+  }
+
+  private _hide_datum_info(datum_node_id: string): void {
+    // console.log('Graph', '_hide_datum_info', datum_node_id)
+
+    this._sim_remove_node_type(datum_node_id)
   }
 
   private _hide_unit_info = (unit_id: string): void => {
@@ -13474,28 +13517,30 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       if (_animate) {
         this._abort_fullwindow_animation = this._animate_leave_fullwindow(
           sub_component_ids,
-          (sub_component_id) => {
-            this._unplug_sub_component_root_base_frame(sub_component_id)
-            this._append_sub_component_root(sub_component_id)
-            this._append_sub_component_base(sub_component_id)
+          (sub_component_id) => {},
+          () => {
+            for (const sub_component_id of sub_component_ids) {
+              this._unplug_sub_component_root_base_frame(sub_component_id)
+              this._append_sub_component_root(sub_component_id)
+              this._append_sub_component_base(sub_component_id)
 
-            if (this._tree_layout) {
-              const parent_id =
-                this._get_sub_component_spec_parent_id(sub_component_id)
+              if (this._tree_layout) {
+                const parent_id =
+                  this._get_sub_component_spec_parent_id(sub_component_id)
 
-              if (parent_id) {
-                this._append_sub_component_parent_root(
-                  parent_id,
-                  sub_component_id
-                )
+                if (parent_id) {
+                  this._append_sub_component_parent_root(
+                    parent_id,
+                    sub_component_id
+                  )
+                } else {
+                  this._enter_sub_component_frame(sub_component_id)
+                }
               } else {
                 this._enter_sub_component_frame(sub_component_id)
               }
-            } else {
-              this._enter_sub_component_frame(sub_component_id)
             }
-          },
-          () => {
+
             if (this._is_component_framed) {
               this._leave_component_frame()
             }
@@ -14243,6 +14288,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     return () => {
       if (frame !== undefined) {
         cancelAnimationFrame(frame)
+
         frame = undefined
       }
     }
@@ -14464,7 +14510,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       top: `${y + this._leaf_layer_offset_y}px`,
       width: `${width}px`,
       height: `${height}px`,
-      border: `1px solid ${randomColorString()}`,
+      // border: `1px solid ${randomColorString()}`,
       transform: `scale(${k})`,
       opacity: `${opacity}`,
       fontSize: `${fontSize}px`,
@@ -14603,6 +14649,15 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     }
   }
 
+  private _remove_sub_component_base = (sub_component_id: string): void => {
+    // console.log('Graph', '_remove_sub_component_base', sub_component_id)
+
+    const sub_component = this._get_sub_component(sub_component_id)
+    const base = this._get_sub_component_base(sub_component_id)
+
+    this.__remove_sub_component_root_base(sub_component, base)
+  }
+
   private _remove_sub_component_root_base = (
     sub_component_id: string
   ): void => {
@@ -14647,11 +14702,62 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     }
   }
 
-  private _animate_sub_component_base = (
+  private _plug_sub_component_base = (
+    sub_component_id: string,
+    leaf_base: LayoutBase,
+    leaf_traits: LayoutNode[],
+    leaf_layer: Component<HTMLElement>
+  ): Unlisten => {
+    let i = 0
+
+    const all_unlisten = []
+
+    for (const leaf of leaf_base) {
+      const [leaf_path, leaf_comp] = leaf
+
+      const leaf_id = getLeafId([sub_component_id, ...leaf_path])
+
+      const leaf_node = leaf_traits[i] || this._leaf_frame_node[leaf_id]
+
+      this._plug_leaf_frame(leaf_id, leaf_comp as any, leaf_node, leaf_layer)
+
+      i++
+    }
+
+    return callAll(all_unlisten)
+  }
+
+  private _plug_animate_sub_component_base = (
     sub_component_id: string,
     leaf_base: LayoutBase,
     leaf_traits: LayoutNode[],
     leaf_layer: Component<HTMLElement>,
+    n1: (
+      leaf_id: string,
+      leaf_path: string[],
+      leaf_comp: Component
+    ) => LayoutNode,
+    callback: () => void
+  ): Unlisten => {
+    this._plug_sub_component_base(
+      sub_component_id,
+      leaf_base,
+      leaf_traits,
+      leaf_layer
+    )
+    return this._animate_sub_component_base(
+      sub_component_id,
+      leaf_base,
+      leaf_traits,
+      n1,
+      callback
+    )
+  }
+
+  private _animate_sub_component_base = (
+    sub_component_id: string,
+    leaf_base: LayoutBase,
+    leaf_traits: LayoutNode[],
     n1: (
       leaf_id: string,
       leaf_path: string[],
@@ -14676,26 +14782,24 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
       const leaf_node = leaf_traits[i] || this._leaf_frame_node[leaf_id]
 
-      this._plug_leaf_frame(leaf_id, leaf_comp as any, leaf_node, leaf_layer)
+      const unlisten = this._animate_leaf_frame(
+        leaf_id,
+        leaf_node,
+        () => {
+          return n1(leaf_id, leaf_path, leaf_comp)
+        },
+        () => {
+          leaf_end_count++
 
-      all_unlisten.push(
-        this._animate_leaf_frame(
-          leaf_id,
-          leaf_node,
-          () => {
-            return n1(leaf_id, leaf_path, leaf_comp)
-          },
-          () => {
-            leaf_end_count++
+          if (leaf_end_count === base_length) {
+            this._animating_sub_component_base_id.delete(sub_component_id)
 
-            if (leaf_end_count === base_length) {
-              this._animating_sub_component_base_id.delete(sub_component_id)
-
-              callback()
-            }
+            callback()
           }
-        )
+        }
       )
+
+      all_unlisten.push(unlisten)
 
       i++
     }
@@ -14766,11 +14870,11 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       return
     }
 
-    // console.log(
-    //   'Graph',
-    //   '_cancel_layout_sub_component_animation',
-    //   sub_component_id
-    // )
+    console.log(
+      'Graph',
+      '_cancel_layout_sub_component_animation',
+      sub_component_id
+    )
 
     abort()
 
@@ -14991,12 +15095,11 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
         if (!this._animating_sub_component_base_id.has(sub_component_id)) {
           this._leave_sub_component_frame(sub_component_id)
-          // this._decompose_sub_component(sub_component_id)
           this._remove_sub_component_root_base(sub_component_id)
         }
 
         this._abort_tree_layout_sub_component_base_animation[sub_component_id] =
-          this._animate_sub_component_base(
+          this._plug_animate_sub_component_base(
             sub_component_id,
             base,
             leaf_trait,
@@ -15129,12 +15232,11 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
         if (!this._animating_sub_component_base_id.has(sub_component_id)) {
           this._leave_sub_component_frame(sub_component_id)
-          // this._decompose_sub_component(sub_component_id)
           this._remove_sub_component_root_base(sub_component_id)
         }
 
         this._abort_tree_layout_sub_component_base_animation[sub_component_id] =
-          this._animate_sub_component_base(
+          this._plug_animate_sub_component_base(
             sub_component_id,
             leaf_base,
             leaf_traits,
@@ -15165,7 +15267,6 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
               this._unplug_sub_component_root_base_frame(sub_component_id)
 
               this._append_sub_component_base(sub_component_id)
-              // this._compose_sub_component(sub_component_id)
               this._enter_sub_component_frame(sub_component_id)
             }
           )
@@ -17487,7 +17588,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     _animate: boolean,
     sub_component_ids: string[]
   ) => {
-    // console.log('Graph', '_enter_fullwindow', animate, sub_component_ids)
+    // console.log('Graph', '_enter_fullwindow', _animate, sub_component_ids)
 
     const { animate } = this.$props
 
@@ -17881,6 +17982,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     pin_id: string,
     pin_node_id: string
   ): boolean => {
+    const { specs } = this.$props
+
     const { pinId: pin_exposed_id } = this._spec_get_pin_exposed_id(
       type,
       pin_node_id
@@ -17916,9 +18019,9 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
         const exp_pin_type = this.__get_ext_pin_type(type, pin_id)
         const link_pin_type = this._get_link_pin_type(pin_node_id)
         if (type === 'input') {
-          return _isTypeMatch(exp_pin_type, link_pin_type)
+          return _isTypeMatch(exp_pin_type, link_pin_type, specs)
         } else {
-          return _isTypeMatch(link_pin_type, exp_pin_type)
+          return _isTypeMatch(link_pin_type, exp_pin_type, specs)
         }
       }
     } else if (this._is_merge_node_id(pin_node_id)) {
@@ -17933,9 +18036,9 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
         const exp_pin_type = this.__get_ext_pin_type(type, pin_id)
         const merge_pin_type = this._get_merge_pin_type(pin_node_id, type)
         if (type === 'input') {
-          return _isTypeMatch(exp_pin_type, merge_pin_type)
+          return _isTypeMatch(exp_pin_type, merge_pin_type, specs)
         } else {
-          return _isTypeMatch(merge_pin_type, exp_pin_type)
+          return _isTypeMatch(merge_pin_type, exp_pin_type, specs)
         }
       }
     }
@@ -17977,9 +18080,13 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     pin_node_id: string,
     unit_id: string
   ): boolean => {
+    const { specs } = this.$props
+
     const pin_type_tree = this._get_pin_type(pin_node_id)
     const unit_type_tree = this._get_unit_type(unit_id)
-    const is_type_match = _isTypeMatch(unit_type_tree, pin_type_tree)
+
+    const is_type_match = _isTypeMatch(unit_type_tree, pin_type_tree, specs)
+
     return is_type_match
   }
 
@@ -17988,13 +18095,18 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     pin_id: string,
     unit_id: string
   ): boolean => {
+    const { specs } = this.$props
     // return false
     if (type === 'input') {
       return false
     } else {
       const exp_pin_type_tree = this.__get_ext_pin_type(type, pin_id)
       const unit_type_tree = this._get_unit_type(unit_id)
-      const is_type_match = _isTypeMatch(unit_type_tree, exp_pin_type_tree)
+      const is_type_match = _isTypeMatch(
+        unit_type_tree,
+        exp_pin_type_tree,
+        specs
+      )
       return is_type_match
     }
   }
@@ -18021,9 +18133,10 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     b: string,
     b_type: IO
   ): boolean => {
+    const { specs } = this.$props
     const source_type = this._runtime_pin_type(a, a_type)
     const target_type = this._runtime_pin_type(b, b_type)
-    return _pinTypeMatch(source_type, a_type, target_type, b_type)
+    return _pinTypeMatch(source_type, a_type, target_type, b_type, specs)
   }
 
   private _is_unit_pin_match = (
@@ -18055,10 +18168,12 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     datum_node_id: string,
     ext_node_id: string
   ): boolean => {
+    const { specs } = this.$props
+
     const datum_type = this._get_datum_type(datum_node_id)
     const plug_type = this._get_ext_pin_type(ext_node_id)
 
-    return _isTypeMatch(datum_type, plug_type)
+    return _isTypeMatch(datum_type, plug_type, specs)
   }
 
   private _is_datum_pin_pre_match = (
@@ -18134,11 +18249,13 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     datum_node_id: string,
     pin_node_id: string
   ): boolean => {
+    const { specs } = this.$props
+
     const pin_type = this._pin_type_of_kind(pin_node_id, 'input')
     // const datum_type = this._get_datum_type(datum_node_id)
     const datum_type = this._get_datum_tree(datum_node_id)
 
-    return _isTypeMatch(datum_type, pin_type)
+    return _isTypeMatch(datum_type, pin_type, specs)
   }
 
   private _get_display_node_id = (): string[] => {
@@ -18889,10 +19006,9 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       i++
     }
 
-    this._remove_sub_component_root_base(sub_component_id)
+    this._remove_sub_component_base(sub_component_id)
 
     const frame = this._get_sub_component_frame(sub_component_id)
-    const context = this._get_sub_component_frame_context(sub_component_id)
 
     const style = extractStyle(frame, measureText)
     const trait = extractTrait(frame, measureText)
@@ -18906,13 +19022,14 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
     const base_length = base.length
 
+    this._plug_sub_component_base(sub_component_id, base, base_node, base_layer)
+
     i = 0
     this._abort_tree_layout_sub_component_base_animation[sub_component_id] =
       this._animate_sub_component_base(
         sub_component_id,
         base,
         base_node,
-        base_layer,
         (leaf_id: string) => {
           const { z: k } = this._zoom
 
@@ -20787,6 +20904,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     if (is_component) {
       if (!this._animating_sub_component_base_id.has(unit_id)) {
         this._leave_sub_component_frame(unit_id)
+        // this._remove_sub_component_all_root(unit_id)
+        // this._decouple_sub_component(unit_id)
         this._decompose_sub_component(unit_id)
       } else {
         this._unplug_sub_component_root_base_frame(unit_id)
@@ -20894,6 +21013,24 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
   private _abort_sub_component_enter_base_animation: Dict<Unlisten> = {}
 
+  private _end_sub_component_enter_base_animation = (
+    sub_component_id: string
+  ) => {
+    // console.log(
+    //   'Graph',
+    //   '_end_sub_component_enter_base_animation',
+    //   sub_component_id
+    // )
+
+    this._unplug_sub_component_base_frame(sub_component_id)
+
+    this._append_sub_component_root(sub_component_id)
+    this._append_sub_component_base(sub_component_id)
+    this._enter_sub_component_frame(sub_component_id)
+
+    delete this._abort_sub_component_enter_base_animation[sub_component_id]
+  }
+
   private _animate_enter = (
     animate_config: Dict<{ base: LayoutBase; base_node: LayoutNode[] }> = {}
   ) => {
@@ -20922,6 +21059,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
         i++
       }
 
+      this._remove_sub_component_all_root(sub_component_id)
       this._remove_sub_component_root_base(sub_component_id)
 
       const style = extractStyle(frame, measureText)
@@ -20938,7 +21076,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
       i = 0
       this._abort_sub_component_enter_base_animation[sub_component_id] =
-        this._animate_sub_component_base(
+        this._plug_animate_sub_component_base(
           sub_component_id,
           base,
           base_node,
@@ -20973,11 +21111,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
             }
           },
           () => {
-            this._unplug_sub_component_base_frame(sub_component_id)
-
-            this._append_sub_component_base(sub_component_id)
-            // this._couple_sub_component(sub_component_id)
-            this._enter_sub_component_frame(sub_component_id)
+            this._end_sub_component_enter_base_animation(sub_component_id)
           }
         )
     }
@@ -21065,11 +21199,16 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
         for (const sub_component_id in this._component.$subComponent) {
           if (this._animating_sub_component_base_id.has(sub_component_id)) {
             this._unplug_sub_component_root_base_frame(sub_component_id)
-
-            this._cancel_layout_sub_component_animation(sub_component_id)
           }
 
-          this._remove_sub_component_root_base(sub_component_id)
+          if (
+            this._abort_sub_component_enter_base_animation[sub_component_id]
+          ) {
+            this._cancel_enter_sub_component_animation(sub_component_id)
+            this._end_sub_component_enter_base_animation(sub_component_id)
+          }
+
+          this._cancel_layout_sub_component_animation(sub_component_id)
         }
 
         const scale = this._zoom.z
@@ -21149,8 +21288,6 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       const [_, leaf_comp] = sub_component_base_leaf
 
       const leaf_element = leaf_comp.$element
-
-      
 
       const leaf_node = extractTrait(leaf_comp, measureText)
 
@@ -21353,7 +21490,25 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     return this.__commit_sub_component_base(
       sub_component_id,
       (parent, leaf_comp) => {
-        parent.appendParentRoot(leaf_comp)
+        const slot_name = this._get_sub_component_slot_name(sub_component_id)
+        parent.appendParentRoot(leaf_comp, slot_name)
+      },
+      (leaf_parent, leaf_comp) => {
+        leaf_parent.appendRoot(leaf_comp)
+      }
+    )
+  }
+
+  private _append_sub_component_root_base = (
+    sub_component_id: string
+  ): void => {
+    // console.log('Graph', '_append_sub_component_root_base', sub_component_id)
+
+    return this.__commit_sub_component_root_base(
+      sub_component_id,
+      (parent, leaf_comp) => {
+        const slot_name = this._get_sub_component_slot_name(sub_component_id)
+        parent.appendParentRoot(leaf_comp, slot_name)
       },
       (leaf_parent, leaf_comp) => {
         leaf_parent.appendRoot(leaf_comp)
@@ -21413,7 +21568,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     callback: (parent: Component, leaf_comp: Component) => void,
     _callback: (leaf_parent: Component, leaf_comp: Component) => void
   ): void => {
-    // console.log('Graph', '_layout_sub_component_commit_base', sub_component_id)
+    // console.log('Graph', '__commit_sub_component_base', sub_component_id)
 
     const base = this._get_sub_component_base(sub_component_id)
 
@@ -21425,13 +21580,34 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     )
   }
 
+  private __commit_sub_component_root_base = (
+    sub_component_id: string,
+    callback: (parent: Component, leaf_comp: Component) => void,
+    _callback: (leaf_parent: Component, leaf_comp: Component) => void
+  ): void => {
+    // console.log('Graph', '__commit_sub_component_root_base', sub_component_id)
+
+    const base = this._get_sub_component_root_base(sub_component_id)
+
+    return this.___commit_sub_component_base(
+      sub_component_id,
+      base,
+      callback,
+      _callback
+    )
+  }
+
   private _append_sub_component_root = (sub_component_id: string): void => {
+    // console.log('Graph', '_append_sub_component_root', sub_component_id)
+
     const sub_component = this._get_sub_component(sub_component_id)
 
     sub_component.appendAllRoot()
   }
 
-  private _remove_sub_component_root = (sub_component_id: string): void => {
+  private _remove_sub_component_all_root = (sub_component_id: string): void => {
+    // console.log('Graph', '_remove_sub_component_all_root', sub_component_id)
+
     const sub_component = this._get_sub_component(sub_component_id)
 
     sub_component.removeAllRoot()
@@ -22037,10 +22213,13 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
     for (const sub_component_id of sub_component_ids) {
       const base = this._get_sub_component_root_base(sub_component_id)
-
       const parent_id = this._get_sub_component_spec_parent_id(sub_component_id)
 
-      if (!this._animating_sub_component_base_id.has(sub_component_id)) {
+      if (
+        !this._animating_sub_component_base_id.has(sub_component_id) &&
+        !this._animating_sub_component_fullwindow.has(sub_component_id)
+      ) {
+        // TODO duplicated
         if (this._tree_layout) {
           if (parent_id) {
             this._remove_sub_component_parent_root(parent_id, sub_component_id)
@@ -22051,11 +22230,13 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           this._leave_sub_component_frame(sub_component_id)
         }
 
-        this._remove_sub_component_root(sub_component_id)
+        this._remove_sub_component_all_root(sub_component_id)
         this._remove_sub_component_root_base(sub_component_id)
       }
 
-      const abort = this._animate_sub_component_base(
+      this._animating_sub_component_fullwindow.add(sub_component_id)
+
+      const abort = this._plug_animate_sub_component_base(
         sub_component_id,
         base,
         [],
@@ -22089,6 +22270,10 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           sub_component_end_count++
 
           if (sub_component_end_count === sub_component_total) {
+            for (const sub_component_id of sub_component_ids) {
+              this._animating_sub_component_fullwindow.delete(sub_component_id)
+            }
+
             callback()
           }
         }
@@ -22121,7 +22306,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       },
     } = this.$system
 
-    const all_unlisten = []
+    const all_abort = []
 
     this._measure_all_sub_component_base(sub_component_ids)
 
@@ -22238,11 +22423,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
             for (const p of path) {
               const leaf = _base[p]
 
-              const [leaf_path, leaf_comp] = leaf
-
-              // _base = leaf_comp.$parentRoot.reduce((acc, c) => {
-              //   return [...acc, ...c.getRootBase()]
-              // }, [])
+              const [_, leaf_comp] = leaf
 
               _base = leaf_comp.$mountParentChildren.reduce((acc, c) => {
                 return [...acc, ...c.getRootBase()]
@@ -22367,20 +22548,24 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
     for (const sub_component_id of sub_component_ids) {
       const base = this._get_sub_component_root_base(sub_component_id)
-
       const layer = this._get_fullwindow_foreground()
 
-      if (!this._animating_sub_component_base_id.has(sub_component_id)) {
+      if (
+        !this._animating_sub_component_base_id.has(sub_component_id) &&
+        !this._animating_sub_component_fullwindow.has(sub_component_id)
+      ) {
         this._decouple_sub_component(sub_component_id)
-        this._remove_sub_component_root(sub_component_id)
+        this._remove_sub_component_all_root(sub_component_id)
         this._remove_sub_component_root_base(sub_component_id)
       }
+
+      this._animating_sub_component_fullwindow.add(sub_component_id)
 
       let i = 0
 
       const leaf_total = base.length
 
-      const unlisten = this._animate_sub_component_base(
+      const abort = this._plug_animate_sub_component_base(
         sub_component_id,
         base,
         [],
@@ -22402,15 +22587,19 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           sub_component_end_leaf_count++
 
           if (sub_component_end_leaf_count === sub_component_total) {
+            for (const sub_component_id of sub_component_ids) {
+              this._animating_sub_component_fullwindow.delete(sub_component_id)
+            }
+
             end()
           }
         }
       )
 
-      all_unlisten.push(unlisten)
+      all_abort.push(abort)
     }
 
-    return callAll(all_unlisten)
+    return callAll(all_abort)
   }
 
   private _setup_layout_sub_component_append_children_animation = (
@@ -24292,6 +24481,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
   ): void => {
     const spec = this._get_unit_spec(unit_id)
 
+    const new_render = this._is_unit_component(unit_id)
+
     const new_inputs = mapObjKV(spec.inputs || {}, (input_id) => {
       const pin_node_id = getInputNodeId(unit_id, input_id)
 
@@ -24314,9 +24505,19 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       }
     })
 
+    const { width: defaultWidth, height: defaultHeight } =
+      this._get_unit_component_default_size(unit_id)
+
+    const new_component = {
+      defaultWidth,
+      defaultHeight,
+    }
+
     const new_spec = emptySpec({
       inputs: new_inputs,
       outputs: new_outputs,
+      render: new_render,
+      component: new_component,
     })
 
     const next_unit_id = newUnitIdFromName(this._spec, new_spec.name)
@@ -24532,21 +24733,17 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     for (const _unitId in _units) {
       const _unit = _units[_unitId]
       const { id: _unit_spec_id } = _unit
-      // if (hasUnitId(this._spec, _unitId)) {
       const _next_unit_id = this._new_unit_id(_unit_spec_id, set_unit_id)
       set_unit_id.add(_next_unit_id)
       map_unit_id[_unitId] = _next_unit_id
       new_selected_node_ids.push(_next_unit_id)
-      // }
     }
 
     for (const _mergeId in _merges) {
-      // if (hasMergeId(this._spec, _mergeId)) {
       const _next_merge_id = this._new_merge_id(set_merge_id)
       set_merge_id.add(_next_merge_id)
       map_merge_id[_mergeId] = _next_merge_id
       new_selected_node_ids.push(_next_merge_id)
-      // }
     }
 
     if (this._is_unit_component(unit_id)) {
@@ -27084,9 +27281,17 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       if (node_id) {
         const { clientX, clientY } = event
         const { x, y } = this._screen_to_world(clientX, clientY)
-        if (this._is_link_pin_merged(node_id)) {
-          this._remove_pin_or_merge(node_id)
+        if (this._is_link_pin_node_id(node_id)) {
+          if (this._is_link_pin_merged(node_id)) {
+            this._remove_pin_or_merge(node_id)
+          }
+        } else if (this._is_int_pin_node_id(node_id)) {
+          if (this._exposed_int_plugged[node_id]) {
+            const { type, pinId, subPinId } = segmentExposedNodeId(node_id)
+            this._unplug_exposed_pin(type, pinId, subPinId)
+          }
         }
+
         this._set_node_position(node_id, { x, y })
         this._on_node_pointer_enter(node_id, event)
         this._on_node_pointer_down(node_id, event)
@@ -27568,9 +27773,6 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
       let valid: boolean
       if (datum_pin_node_id) {
-        if (!this._is_datum_pin_type_match(datum_node_id, datum_pin_node_id)) {
-          debugger
-        }
         valid = this._is_datum_pin_type_match(datum_node_id, datum_pin_node_id)
       } else {
         valid = _isValidValue(tree)
@@ -27936,6 +28138,11 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     const parent_id = this._get_sub_component_spec_parent_id(unit_id)
     const children = this._get_sub_component_spec_children(unit_id)
 
+    if (this._abort_sub_component_enter_base_animation[unit_id]) {
+      this._cancel_enter_sub_component_animation(unit_id)
+      this._end_sub_component_enter_base_animation(unit_id)
+    }
+
     if (this._tree_layout) {
       if (children.length > 0) {
         for (const child_id of children) {
@@ -27952,7 +28159,6 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           children,
           () => {
             for (const child_id of children) {
-              // this._enter_sub_component_frame(child_id)
               this._append_sub_component_base(child_id)
             }
           }
@@ -31995,7 +32201,10 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
         output: new Set(_keys(graph_unit_spec.outputs || {})),
       }
 
-      const merge_to_exposed_pin_id: Dict<string> = {}
+      const merge_to_exposed_pin_id: IOData<Dict<string>> = {
+        input: {},
+        output: {},
+      }
       const exposed_pin_id_count: {
         input: Dict<number>
         output: Dict<number>
@@ -32018,11 +32227,11 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
       const expose_link_pin = (
         unit_id: string,
-        type: string,
+        type: IO,
         pin_id: string,
         next_pin_id: string
       ) => {
-        // console.log('expose_link_pin', unit_id, type, pin_id, next_pin_id)
+        console.log('expose_link_pin', unit_id, type, pin_id, next_pin_id)
 
         exposed_pin_id_count[type][next_pin_id] =
           exposed_pin_id_count[type][next_pin_id] ?? -1
@@ -32031,6 +32240,14 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
         const next_sub_pin_id = exposed_pin_id_count[type][next_pin_id]
 
         graph_spec_pin_id_set[type].add(next_pin_id)
+
+        const pin_node_id = getPinNodeId(unit_id, type, pin_id)
+
+        const merge_node_id = this._pin_to_merge[pin_node_id]
+
+        if (merge_node_id) {
+          setPath(merge_to_exposed_pin_id, [type, merge_node_id], next_pin_id)
+        }
 
         setPath(
           this._long_press_collapse_unit_next_pin_map,
@@ -32054,18 +32271,15 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
               let next_pin_id
 
               if (merge_node_id) {
-                next_pin_id = merge_to_exposed_pin_id[merge_node_id]
+                if (!this._long_press_collapse_node_id.has(merge_node_id)) {
+                  next_pin_id = merge_to_exposed_pin_id[type][merge_node_id]
 
-                if (!next_pin_id) {
-                  next_pin_id = new_pin_id(type, pin_id)
+                  if (!next_pin_id) {
+                    next_pin_id = new_pin_id(type, pin_id)
 
-                  merge_to_exposed_pin_id[merge_node_id] = next_pin_id
+                    merge_to_exposed_pin_id[type][merge_node_id] = next_pin_id
+                  }
                 }
-                // if (this._long_press_collapse_node_id.has(merge_node_id)) {
-                //   return
-                // } else {
-
-                // }
               } else {
                 next_pin_id = new_pin_id(type, pin_id)
               }
@@ -32187,6 +32401,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       const next_merge_set = new Set<string>()
 
       const opposite_merge_id_black_list = new Set<string>()
+
       const long_press_merges = []
       const long_press_plugs = []
 
@@ -32199,12 +32414,18 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
         const { id: merge_id } = segmentMergeNodeId(merge_node_id)
 
         this._long_press_collapse_next_merge_pin_map[merge_id] = {
-          input: { mergeId: null, pinId: null },
-          output: { mergeId: null, pinId: null },
+          input: { mergeId: null, pinId: null, subPinSpec: {} },
+          output: { mergeId: null, pinId: null, subPinSpec: {} },
         }
 
         const merge_pin_count_per_type = { input: 0, output: 0 }
-        const merge_collapse_unit_pin_count = { input: 0, output: 0 }
+        const merge_collapse_unit_inside_pin_count = { input: 0, output: 0 }
+        const merge_collapse_unit_inside_pin: IOData<
+          { unit_id: string; pin_id: string }[]
+        > = { input: [], output: [] }
+        const merge_collapse_unit_outside_pin: IOData<
+          { unit_id: string; pin_id: string }[]
+        > = { input: [], output: [] }
         const merge_anchor_pin_id = { input: undefined, output: undefined }
 
         const merge_exposed_input = this._spec_get_pin_exposed_id(
@@ -32230,69 +32451,123 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           if (merge_anchor_pin_id[type] === undefined) {
             merge_anchor_pin_id[type] = pin_id
           }
+
           if (this._long_press_collapse_node_id.has(unit_id)) {
-            merge_collapse_unit_pin_count[type]++
+            merge_collapse_unit_inside_pin_count[type]++
+            merge_collapse_unit_inside_pin[type].push({ unit_id, pin_id })
+          } else {
+            merge_collapse_unit_outside_pin[type].push({ unit_id, pin_id })
           }
 
           if (!this._long_press_collapse_node_id.has(unit_id)) {
-            // const next_pin_id = new_pin_id(type, pin_id)
-            // expose_link_pin(unit_id, type, pin_id, next_pin_id)
+            console.log('D', this._long_press_collapse_next_id_map)
+
+            const next_pin_id = getPathOrDefault(
+              this._long_press_collapse_next_id_map,
+              ['link', unit_id, type, pin_id, 'oppositePinId'],
+              new_pin_id(type, pin_id)
+            )
+
+            expose_link_pin(unit_id, type, pin_id, next_pin_id)
           }
         })
 
-        if (
-          merge_pin_count_per_type.input > merge_collapse_unit_pin_count.input
-        ) {
+        const merge_outside_input_count =
+          merge_pin_count_per_type.input -
+          merge_collapse_unit_inside_pin_count.input
+        const merge_outside_output_count =
+          merge_pin_count_per_type.output -
+          merge_collapse_unit_inside_pin_count.output
+
+        if (merge_outside_input_count > 0) {
           const next_merge_output_id =
-            merge_to_exposed_pin_id[merge_node_id] ||
+            merge_to_exposed_pin_id['input'][merge_node_id] ||
             new_pin_id('output', merge_anchor_pin_id['input'])
 
           const next_merge_id = newMergeIdInSpec(this._spec, next_merge_set)
 
           next_merge_set.add(next_merge_id)
 
+          let next_merge_sub_pin_spec: GraphSubPinSpec = {}
+
+          if (merge_collapse_unit_inside_pin_count['output'] > 1) {
+            const _next_merge_id =
+              this._long_press_collapse_next_id_map.merge[merge_id]
+
+            next_merge_sub_pin_spec = {
+              mergeId: _next_merge_id,
+            }
+          } else if (merge_collapse_unit_inside_pin_count['output'] === 1) {
+            const { unit_id, pin_id } =
+              merge_collapse_unit_inside_pin['output'][0]
+
+            next_merge_sub_pin_spec = {
+              unitId: unit_id,
+              pinId: pin_id,
+            }
+          }
+
           this._long_press_collapse_next_merge_pin_map[merge_id].output = {
             mergeId: next_merge_id,
             pinId: next_merge_output_id,
+            subPinSpec: next_merge_sub_pin_spec,
           }
         }
 
-        if (
-          merge_pin_count_per_type.output > merge_collapse_unit_pin_count.output
-        ) {
+        if (merge_outside_output_count > 0) {
           const next_merge_input_id =
-            merge_to_exposed_pin_id[merge_node_id] ||
+            merge_to_exposed_pin_id['output'][merge_node_id] ||
             new_pin_id('input', merge_anchor_pin_id['output'])
 
           const next_merge_id = newMergeIdInSpec(this._spec, next_merge_set)
 
           next_merge_set.add(next_merge_id)
 
+          let next_merge_sub_pin_spec: GraphSubPinSpec = {}
+
+          if (merge_collapse_unit_inside_pin_count['input'] > 1) {
+            const _next_merge_id =
+              this._long_press_collapse_next_id_map.merge[merge_id]
+
+            next_merge_sub_pin_spec = {
+              mergeId: _next_merge_id,
+            }
+          } else if (merge_collapse_unit_inside_pin_count['input'] === 1) {
+            const { unit_id, pin_id } =
+              merge_collapse_unit_inside_pin['input'][0]
+
+            next_merge_sub_pin_spec = {
+              unitId: unit_id,
+              pinId: pin_id,
+            }
+          }
+
           this._long_press_collapse_next_merge_pin_map[merge_id].input = {
             mergeId: next_merge_id,
             pinId: next_merge_input_id,
+            subPinSpec: next_merge_sub_pin_spec,
           }
         }
 
         const merge_collapse_unit_pin_total =
-          merge_collapse_unit_pin_count.input +
-          merge_collapse_unit_pin_count.output
+          merge_collapse_unit_inside_pin_count.input +
+          merge_collapse_unit_inside_pin_count.output
 
-        if (merge_collapse_unit_pin_total > 1) {
-          let next_merge_id = merge_id
+        // if (merge_collapse_unit_pin_total > 1) {
+        let next_merge_id = merge_id
 
-          if (graph_unit_spec.merges[merge_node_id]) {
-            next_merge_id = newMergeIdInSpec(
-              graph_unit_spec,
-              next_merge_id_blacklist
-            )
-          }
-          next_merge_id_blacklist.add(next_merge_id)
-
-          this._long_press_collapse_next_id_map.merge[merge_id] = next_merge_id
-
-          long_press_merges.push(merge_id)
+        if (graph_unit_spec.merges[merge_node_id]) {
+          next_merge_id = newMergeIdInSpec(
+            graph_unit_spec,
+            next_merge_id_blacklist
+          )
         }
+        next_merge_id_blacklist.add(next_merge_id)
+
+        this._long_press_collapse_next_id_map.merge[merge_id] = next_merge_id
+
+        long_press_merges.push(merge_id)
+        // }
       }
 
       for (const pin_node_id of link_pin_ids) {
@@ -32360,11 +32635,13 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
               opposite_merge_id
           }
 
-          for (const input_id in input) {
-            move_pin_into_graph('input', input_id)
-          }
-          for (const output_id in output) {
-            move_pin_into_graph('output', output_id)
+          if (!this._long_press_collapse_node_id.has(unit_id)) {
+            for (const input_id in input) {
+              move_pin_into_graph('input', input_id)
+            }
+            for (const output_id in output) {
+              move_pin_into_graph('output', output_id)
+            }
           }
         }
       }
@@ -32373,7 +32650,6 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
       const long_press_link_pins = []
 
-      console.log(link_pin_ids)
       for (const pin_node_id of link_pin_ids) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
@@ -32418,16 +32694,22 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
                 mergeId,
               }
             )
-          } else {
-            const { unitId, pinId } = segmentLinkPinNodeId(pin_node_id)
+          } else if (this._is_link_pin_node_id(pin_node_id)) {
+            const { unitId, pinId: _pinId } = segmentLinkPinNodeId(pin_node_id)
 
             setPath(
               this._long_press_collapse_next_plug_spec_map,
               [type, pinId, subPinId],
               {
                 unitId,
-                pinId,
+                pinId: _pinId,
               }
+            )
+          } else {
+            setPath(
+              this._long_press_collapse_next_plug_spec_map,
+              [type, pinId, subPinId],
+              {}
             )
           }
         }
@@ -32443,8 +32725,6 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           exposed_pin_set.add(subPinId)
         }
       }
-
-      console.log(this._long_press_collapse_unit_next_pin_map)
 
       this._long_press_collapse_units = long_press_units
       this._long_press_collapse_link_pins = long_press_link_pins
@@ -32902,15 +33182,16 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
               long_press_sub_component_parent_id
             )
 
+            const slotName = 'default'
+
             parent_sub_component.insertParentRoot(
               unit_sub_component,
               long_press_sub_component_index,
-              'default'
+              slotName
             )
-            parent_sub_component.appendParentRoot(unit_sub_component)
+            parent_sub_component.appendParentRoot(unit_sub_component, slotName)
           } else {
-            // graph_sub_component.pushRoot(unit_sub_component)
-            // graph_sub_component.appendRoot(unit_sub_component)
+            //
           }
         } else {
           graph_sub_component.pushRoot(unit_sub_component)
@@ -32925,14 +33206,13 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
                   sub_component_child_id
                 )
 
-                // graph_sub_component.removeRoot(sub_component_child)
-                // graph_sub_component.pullRoot(sub_component_child)
+                const slotName = 'default' // TODO
 
-                unit_sub_component.pushParentRoot(
+                unit_sub_component.pushParentRoot(sub_component_child, slotName)
+                unit_sub_component.appendParentRoot(
                   sub_component_child,
-                  'default'
+                  slotName
                 )
-                unit_sub_component.appendParentRoot(sub_component_child)
               }
             }
           }
@@ -32985,8 +33265,6 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       setSpec(specs, graph_spec_id, updated_graph_spec)
     }
 
-    
-
     if (!updated_graph_spec.metadata || !updated_graph_spec.metadata.icon) {
       updated_graph_spec.metadata.icon = 'question'
 
@@ -33027,10 +33305,14 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
             const { unitId, type, pinId } =
               segmentLinkPinNodeId(other_pin_node_id)
 
-            setPath(this._long_press_collapse_next_id_map.link, [unitId, type, pinId], {
-              mergeId: next_merge_pin_map.mergeId,
-              oppositePinId: next_merge_pin_map.pinId,
-            })
+            setPath(
+              this._long_press_collapse_next_id_map.link,
+              [unitId, type, pinId],
+              {
+                mergeId: next_merge_pin_map.mergeId,
+                oppositePinId: next_merge_pin_map.pinId,
+              }
+            )
 
             this._start_node_long_press_collapse(other_pin_node_id)
           }
@@ -33403,16 +33685,16 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     opposite_pin_id: string | null,
     merge_id: string | null
   ): void => {
-    console.log(
-      'Graph',
-      '_sim_move_link_pin_into_graph',
-      graph_id,
-      unit_id,
-      type,
-      pin_id,
-      opposite_pin_id,
-      merge_id
-    )
+    // console.log(
+    //   'Graph',
+    //   '_sim_move_link_pin_into_graph',
+    //   graph_id,
+    //   unit_id,
+    //   type,
+    //   pin_id,
+    //   opposite_pin_id,
+    //   merge_id
+    // )
 
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
@@ -33811,12 +34093,16 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
   private _pod_move_merge_into_graph = (
     graph_id: string,
     merge_id: string,
-    next_merge_input_id: { mergeId: string; pinId: string },
-    next_merge_output_id: { mergeId: string; pinId: string },
-    next_pin_id_map: Dict<{
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    }>
+    next_merge_input_id: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+    },
+    next_merge_output_id: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+    }
   ): void => {
     // console.log('Graph', '_pod_move_merge_into_graph', graph_id, merge_id, next_merge_id)
 
@@ -33825,7 +34111,6 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       mergeId: merge_id,
       nextInputMergeId: next_merge_input_id,
       nextOutputMergeId: next_merge_output_id,
-      nextPinIdMap: next_pin_id_map,
     })
   }
 
@@ -35712,9 +35997,12 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
   private _force_custom_layer_type = (alpha: number): void => {
     for (const link_id in this._type_link) {
       const link = this._type_link[link_id]
-      const { source_id: a_id } = link
-      const a = this._node[a_id]
-      a.ay -= 9 * alpha
+      const { source_id, target_id } = link
+      // PERF
+      if (this._is_pin_node_id(target_id) || this._is_unit_node_id(target_id)) {
+        const a = this._node[source_id]
+        a.ay -= 9 * alpha
+      }
     }
   }
 
@@ -36787,7 +37075,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
     let next_spec = clone(spec)
 
-    const removed_unit_id = path[path.length - 1]
+    const removed_unit_id = path[0]
 
     next_spec = specReducer.removeUnit({ id: removed_unit_id }, next_spec)
 
@@ -36808,7 +37096,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
         let sub_component = this._get_sub_component(unitId)
 
-        for (let i = path.length - 2; i >= 0; i--) {
+        for (let i = path.length - 1; i > 0; i--) {
           const unit_id = path[i]
           sub_component = sub_component.getSubComponent(unit_id)
         }

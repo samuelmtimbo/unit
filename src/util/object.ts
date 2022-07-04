@@ -219,3 +219,23 @@ export function getPathOrDefault(obj: object, path: string[], d: any): any {
 
   return o
 }
+
+export function ensure(obj: object, key: string | number, generate: () => any) {
+  let value = obj[key]
+  
+  if (value === undefined) {
+    value = generate()
+
+    obj[key] = value
+  }
+
+  return value
+}
+
+export function omit(obj: object, key: string | number) {
+  let value = obj[key]
+
+  delete obj[key]
+
+  return value
+}

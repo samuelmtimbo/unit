@@ -838,6 +838,8 @@ export class Graph<I = any, O = any>
   }
 
   public _setPinSetId(type: IO, pinId: string, nextPinId: string): void {
+    // console.log('Graph', '_setPinSetId', type, pinId, nextPinId)
+
     const exposedPinId = getExposedPinId(pinId, type)
     const nextExposedPinId = getExposedPinId(nextPinId, type)
 
@@ -964,11 +966,13 @@ export class Graph<I = any, O = any>
   }
 
   private _simCoverPinSet = (type: IO, pinId: string): void => {
-    const exposedNodeId = getExposedPinId(pinId, type)
+    const pinSpec = this.getExposedPinSpec(type, pinId)
 
-    const exposedMerge = this._exposedMerge[exposedNodeId]
+    const { plug } = pinSpec
 
-    exposedMerge.removePin(type, pinId)
+    forEachKeyValue(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
+      this._simCoverPin(type, pinId, subPinId)
+    })
 
     this.removePin(type, pinId)
   }
@@ -2796,8 +2800,8 @@ export class Graph<I = any, O = any>
       output: Dict<{ pinId: string; subPinId: string }>
     }>,
     nextMergePinId: Dict<{
-      input: { mergeId: string; pinId: string }
-      output: { mergeId: string; pinId: string }
+      input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
+      output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
     }>,
     nextPlugSpec: {
       input: Dict<Dict<GraphSubPinSpec>>
@@ -2859,8 +2863,8 @@ export class Graph<I = any, O = any>
       output: Dict<{ pinId: string; subPinId: string }>
     }>,
     nextMergePinId: Dict<{
-      input: { mergeId: string; pinId: string }
-      output: { mergeId: string; pinId: string }
+      input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
+      output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
     }>,
     nextPlugSpec: {
       input: Dict<Dict<GraphSubPinSpec>>
@@ -3254,7 +3258,8 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     mergeId: string | null,
-    oppositePinId: string | null
+    oppositePinId: string | null,
+    subPinSpec: GraphSubPinSpec = {}
   ): void {
     // console.log('Graph', '_moveLinkPinInto')
 
@@ -3272,7 +3277,7 @@ export class Graph<I = any, O = any>
           graph.exposePinSet(
             oppositeType,
             oppositePinId,
-            { plug: { '0': {} } },
+            { plug: { '0': subPinSpec } },
             false
           )
 
@@ -3300,12 +3305,16 @@ export class Graph<I = any, O = any>
   public moveMergeInto(
     graphId: string,
     mergeId: string,
-    nextInputMergeId: { mergeId: string; pinId: string },
-    nextOutputMergeId: { mergeId: string; pinId: string },
-    nextPinIdMap: Dict<{
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    }>
+    nextInputMergeId: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+    },
+    nextOutputMergeId: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+    }
   ): void {
     const mergeSpec = this.getMergeSpec(mergeId)
 
@@ -3314,7 +3323,8 @@ export class Graph<I = any, O = any>
       mergeId,
       mergeSpec,
       nextInputMergeId,
-      nextOutputMergeId
+      nextOutputMergeId,
+      new Set()
     )
 
     this.emit(
@@ -3330,9 +3340,17 @@ export class Graph<I = any, O = any>
     graphId: string,
     mergeId: string,
     mergeSpec: GraphMergeSpec,
-    nextInput: { mergeId: string; pinId: string } | null,
-    nextOutput: { mergeId: string; pinId: string },
-    unitInto: Set<string> = new Set()
+    nextInput: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+    } | null,
+    nextOutput: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+    } | null,
+    ignoredUnit: Set<string> = new Set()
   ): void {
     // console.log('Graph', '_moveMergeInto', graphId, mergeId)
 
@@ -3348,7 +3366,7 @@ export class Graph<I = any, O = any>
     const nextMerge: GraphMergeSpec = {}
 
     const moveLinkPinInto = (unitId: string, type: IO, pinId: string): void => {
-      if (unitInto.has(unitId)) {
+      if (ignoredUnit.has(unitId)) {
         nextMerge[unitId] = nextMerge[unitId] || { input: {}, output: {} }
         nextMerge[unitId][type][pinId] = true
 
@@ -3359,9 +3377,11 @@ export class Graph<I = any, O = any>
 
       const isInput = type === 'input'
 
-      const { mergeId: nextMergeId, pinId: nextPinId } = isInput
-        ? nextOutput
-        : nextInput
+      const {
+        mergeId: nextMergeId,
+        pinId: nextPinId,
+        subPinSpec: nextSubPinSpec,
+      } = isInput ? nextOutput : nextInput
 
       this._moveLinkPinInto(
         graphId,
@@ -3369,7 +3389,8 @@ export class Graph<I = any, O = any>
         type,
         pinId,
         nextMergeId,
-        nextPinId
+        nextPinId,
+        nextSubPinSpec
       )
     }
 

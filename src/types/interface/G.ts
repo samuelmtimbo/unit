@@ -222,8 +222,8 @@ export interface G<I = any, O = any> {
       output: Dict<{ pinId: string; subPinId: string }>
     }>,
     nextMergePinId: Dict<{
-      input: { mergeId: string, pinId: string }
-      output: { mergeId: string, pinId: string }
+      input: { mergeId: string, pinId: string, subPinSpec: GraphSubPinSpec }
+      output: { mergeId: string, pinId: string, subPinSpec: GraphSubPinSpec }
     }>,
     nextPlugSpec: {
       input: Dict<Dict<GraphSubPinSpec>>

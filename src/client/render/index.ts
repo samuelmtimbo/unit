@@ -2,7 +2,7 @@ import { $Graph } from '../../types/interface/async/$Graph'
 import { Pod } from '../../pod'
 import { System } from '../../system'
 import { Unlisten } from '../../types/Unlisten'
-import { renderGraph } from './renderPod'
+import { renderGraph } from './renderGraph'
 
 export function render(
   system: System,
@@ -13,7 +13,7 @@ export function render(
 
   return () => {
     system.mounted = false
-    system.root = null
+    system.root = null 
 
     unlisten()
   }

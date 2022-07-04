@@ -1,5 +1,6 @@
 import { idFromUnitValue } from '../client/idFromUnitValue'
 import { getSpec } from '../client/spec'
+import _specs from '../system/_specs'
 import { PinsSpecBase, Specs } from '../types'
 import { matchAllExc } from '../util/array'
 import { clone } from '../util/object'
@@ -289,7 +290,11 @@ export function getLiteralType(type: TreeNodeType): TreeNodeType {
   return TYPE_TO_LITERAL[type]
 }
 
-export function _isTypeMatch(source: TreeNode, target: TreeNode): boolean {
+export function _isTypeMatch(
+  source: TreeNode,
+  target: TreeNode,
+  specs: Specs
+): boolean {
   if (source.type === TreeNodeType.Invalid) {
     return false
   }
@@ -308,7 +313,7 @@ export function _isTypeMatch(source: TreeNode, target: TreeNode): boolean {
 
   if (source.type === TreeNodeType.Or) {
     return !source.children.some((sourceChild) => {
-      return !_isTypeMatch(sourceChild, target)
+      return !_isTypeMatch(sourceChild, target, specs)
     })
   }
 
@@ -316,19 +321,19 @@ export function _isTypeMatch(source: TreeNode, target: TreeNode): boolean {
     if (target.type === TreeNodeType.And) {
       return target.children.every((targetChild) => {
         return source.children.some((sourceChild) => {
-          const typeMatch = _isTypeMatch(sourceChild, targetChild)
+          const typeMatch = _isTypeMatch(sourceChild, targetChild, specs)
           return typeMatch
         })
       })
     } else {
       return source.children.some((sourceChild) => {
-        return _isTypeMatch(sourceChild, target)
+        return _isTypeMatch(sourceChild, target, specs)
       })
     }
   }
 
   if (source.type === TreeNodeType.Expression) {
-    return _isTypeMatch(source.children[0], target)
+    return _isTypeMatch(source.children[0], target, specs)
   }
 
   switch (target.type) {
@@ -357,9 +362,8 @@ export function _isTypeMatch(source: TreeNode, target: TreeNode): boolean {
       )
     case TreeNodeType.Object:
       return (
-        (source.type === TreeNodeType.Object ||
-          source.type === TreeNodeType.ObjectLiteral) &&
-        _isValidTree(source)
+        source.type === TreeNodeType.Object ||
+        (source.type === TreeNodeType.ObjectLiteral && _isValidTree(source))
       )
     case TreeNodeType.Regex:
       return (
@@ -367,7 +371,18 @@ export function _isTypeMatch(source: TreeNode, target: TreeNode): boolean {
         source.type === TreeNodeType.RegexLiteral
       )
     case TreeNodeType.Class:
-      return source.type === TreeNodeType.Class && source.value === target.value
+      if (source.type === TreeNodeType.Class) {
+        return source.value === target.value
+      } else if (source.type === TreeNodeType.Unit) {
+        const specId = idFromUnitValue(source.value)
+        const spec = getSpec(specs, specId)
+        const { type } = spec
+        const typeTree = getTree(type)
+
+        return _isTypeMatch(typeTree, target, specs)
+      } else {
+        return false
+      }
     case TreeNodeType.Null:
       return source.type === TreeNodeType.Null
     case TreeNodeType.Unit:
@@ -394,13 +409,13 @@ export function _isTypeMatch(source: TreeNode, target: TreeNode): boolean {
           if (targetKey.endsWith('?')) {
             if (
               sourceValue !== undefined &&
-              !_isTypeMatch(sourceValue, targetValue)
+              !_isTypeMatch(sourceValue, targetValue, specs)
             ) {
               return false
             }
           } else if (
             sourceValue === undefined ||
-            !_isTypeMatch(sourceValue, targetValue)
+            !_isTypeMatch(sourceValue, targetValue, specs)
           ) {
             return false
           }
@@ -416,36 +431,38 @@ export function _isTypeMatch(source: TreeNode, target: TreeNode): boolean {
       for (let i = 0; i < target.children.length; i++) {
         const targetChild = target.children[i]
         const sourceChild = source.children[i]
-        if (!sourceChild || !_isTypeMatch(sourceChild, targetChild)) {
+        if (!sourceChild || !_isTypeMatch(sourceChild, targetChild, specs)) {
           return false
         }
       }
       return true
     case TreeNodeType.Or:
       return target.children.some((targetChild) =>
-        _isTypeMatch(source, targetChild)
+        _isTypeMatch(source, targetChild, specs)
       )
     case TreeNodeType.And:
       return source.value === target.value
     case TreeNodeType.Expression:
-      return _isTypeMatch(source, target.children[0])
+      return _isTypeMatch(source, target.children[0], specs)
     case TreeNodeType.ArrayExpression:
       return (
         (source.type === TreeNodeType.ArrayExpression &&
-          _isTypeMatch(source.children[0], target.children[0])) ||
+          _isTypeMatch(source.children[0], target.children[0], specs)) ||
         (source.type === TreeNodeType.ArrayLiteral &&
           (source.children.length === 0 ||
-            !source.children.some((c) => !_isTypeMatch(c, target.children[0]))))
+            !source.children.some(
+              (c) => !_isTypeMatch(c, target.children[0], specs)
+            )))
       )
     case TreeNodeType.ObjectExpression:
       return (
         (source.type === TreeNodeType.ObjectExpression &&
-          _isTypeMatch(source.children[0], target.children[0])) ||
+          _isTypeMatch(source.children[0], target.children[0], specs)) ||
         (source.type === TreeNodeType.ObjectLiteral &&
           (source.children.length === 0 ||
             !source.children.some(
               (keyValue) =>
-                !_isTypeMatch(keyValue.children[1], target.children[0])
+                !_isTypeMatch(keyValue.children[1], target.children[0], specs)
             )))
       )
   }
@@ -453,10 +470,14 @@ export function _isTypeMatch(source: TreeNode, target: TreeNode): boolean {
   return false
 }
 
-export function isTypeMatch(source: string, target: string): boolean {
+export function isTypeMatch(
+  source: string,
+  target: string,
+  specs: Specs = _specs
+): boolean {
   const sourceTree = getTree(source)
   const targetTree = getTree(target)
-  return _isTypeMatch(sourceTree, targetTree)
+  return _isTypeMatch(sourceTree, targetTree, specs)
 }
 
 export function _isValidTree(value: TreeNode): boolean {
@@ -1131,11 +1152,8 @@ export function _extractGenerics(
           : ANY_TREE
         return _extractGenerics(specs, _valueTree, type.children[0] || ANY_TREE)
       } else {
-        throw new Error(
-          'cannot extract class generic from non class (literal) value.'
-        )
+        break
       }
-      break
   }
 
   return generics
@@ -1246,8 +1264,8 @@ export function _getValueType(specs: Specs, tree: TreeNode): TreeNode {
     }
     case TreeNodeType.Unit: {
       const { value } = tree
-      const spec_id = idFromUnitValue(value)
-      const spec = getSpec(specs, spec_id)
+      const specId = idFromUnitValue(value)
+      const spec = getSpec(specs, specId)
       const { type } = spec
       return getTree(type)
     }
@@ -1833,10 +1851,18 @@ export function removeNodeAt(root: string, path: number[]) {
   return updatedRoot.value
 }
 
-export function _matchAllExcTypes(a: TreeNode[], b: TreeNode[]): number[][][] {
-  return matchAllExc(a, b, _isTypeMatch)
+export function _matchAllExcTypes(
+  a: TreeNode[],
+  b: TreeNode[],
+  specs: Specs = _specs
+): number[][][] {
+  return matchAllExc(a, b, (a, b) => _isTypeMatch(a, b, specs))
 }
 
-export function matchAllExcTypes(a: string[], b: string[]): number[][][] {
-  return matchAllExc(a, b, isTypeMatch)
+export function matchAllExcTypes(
+  a: string[],
+  b: string[],
+  specs: Specs = _specs
+): number[][][] {
+  return matchAllExc(a, b, (a, b) => isTypeMatch(a, b, specs))
 }

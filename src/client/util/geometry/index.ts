@@ -274,6 +274,16 @@ export function randomInRect(
   }
 }
 
+export function randomInPaddedRect(
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+  offset: number
+): Point {
+  return randomInRect(x0 - offset, y0 - offset, x1 + offset, y1 + offset) 
+}
+
 export function randomInCircle(cX: number, cY: number, R: number): Point {
   const angle = randomAngle()
   return {

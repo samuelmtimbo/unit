@@ -256,6 +256,7 @@ assert(isTypeMatch('`G`', '`G`'))
 assert(isTypeMatch('`U`&`G`', '`G`'))
 assert(isTypeMatch('`U`&`G`', '`U`&`G`'))
 assert(isTypeMatch('`U`&`C`&`G`', '`U`&`G`'))
+assert(isTypeMatch(`\${unit:{id:'${ID_IDENTITY}'}}`, '`U`'))
 
 assert(!isTypeMatch('', 'any'))
 assert(!isTypeMatch('abc', 'any'))
@@ -434,7 +435,9 @@ assert.deepEqual(_extractGenerics('number|string', '<0>'), {
   '<0>': 'number|string',
 })
 assert.deepEqual(_extractGenerics('<0>|<1>', '<2>'), { '<2>': '<0>|<1>' })
-assert.deepEqual(_extractGenerics('`V<{value:string}>`', '`V<T>`'), { '<T>': '{value:string}' })
+assert.deepEqual(_extractGenerics('`V<{value:string}>`', '`V<T>`'), {
+  '<T>': '{value:string}',
+})
 
 // applyGenerics
 

@@ -725,6 +725,60 @@ assert.deepEqual(
       {
         height: '50px',
         width: '50px',
+        border: '3px solid',
+      },
+    ]
+  ),
+  [{ x: 0, y: 0, width: 56, height: 56, fontSize: 10, k: 1, opacity: 1 }]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    { x: 0, y: 0, width: 100, height: 100, fontSize: 10, k: 1, opacity: 1 },
+    {
+      display: 'flex',
+    },
+    [
+      {
+        height: '50px',
+        width: '50px',
+        border: '3px solid',
+      },
+    ]
+  ),
+  [{ x: 0, y: 0, width: 56, height: 56, fontSize: 10, k: 1, opacity: 1 }]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    { x: 0, y: 0, width: 100, height: 100, fontSize: 10, k: 1, opacity: 1 },
+    {
+      display: 'flex',
+    },
+    [
+      {
+        height: '44px',
+        width: '44px',
+        border: '3px solid',
+      },
+      {
+        height: '44px',
+        width: '44px',
+        border: '3px solid',
+      },
+    ]
+  ),
+  [
+    { x: 0, y: 0, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 },
+    { x: 50, y: 0, width: 50, height: 50, fontSize: 10, k: 1, opacity: 1 },
+  ]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    { x: 0, y: 0, width: 100, height: 100, fontSize: 10, k: 1, opacity: 1 },
+    {},
+    [
+      {
+        height: '50px',
+        width: '50px',
         margin: '10px',
       },
     ]

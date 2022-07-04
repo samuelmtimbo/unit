@@ -270,8 +270,8 @@ export interface $G_C {
       output: Dict<{ pinId: string; subPinId: string }>
     }>
     nextMergePinId: Dict<{
-      input: { mergeId: string; pinId: string }
-      output: { mergeId: string; pinId: string }
+      input: { mergeId: string; pinId: string, subPinSpec: GraphSubPinSpec }
+      output: { mergeId: string; pinId: string, subPinSpec: GraphSubPinSpec }
     }>
     nextPlugSpec: {
       input: Dict<Dict<GraphSubPinSpec>>
@@ -296,10 +296,6 @@ export interface $G_C {
     mergeId: string
     nextInputMergeId: { mergeId: string; pinId: string }
     nextOutputMergeId: { mergeId: string; pinId: string }
-    nextPinIdMap: Dict<{
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    }>
   }): void
   $explodeUnit(data: {
     unitId: string

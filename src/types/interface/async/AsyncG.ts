@@ -220,7 +220,15 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       unit.coverPinSet(type, id)
     },
 
-    $setPinSetId({ type, pinId, nextPinId }: { type: IO; pinId: string; nextPinId: string }): void {
+    $setPinSetId({
+      type,
+      pinId,
+      nextPinId,
+    }: {
+      type: IO
+      pinId: string
+      nextPinId: string
+    }): void {
       graph.setPinSetId(type, pinId, nextPinId)
     },
 
@@ -336,7 +344,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
       callback(spec)
     },
-
 
     $getBundle({}: {}, callback: Callback<BundleSpec>): void {
       const spec = graph.getBundleSpec()
@@ -555,8 +562,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         output: Dict<{ pinId: string; subPinId: string }>
       }>
       nextMergePinId: Dict<{
-        input: { mergeId: string; pinId: string }
-        output: { mergeId: string; pinId: string }
+        input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
+        output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
       }>
       nextPlugSpec: {
         input: Dict<Dict<GraphSubPinSpec>>
@@ -571,7 +578,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         nextIdMap,
         nextPinIdMap,
         nextMergePinId,
-        nextPlugSpec, 
+        nextPlugSpec,
         nextSubComponentParentMap,
         nextSubComponentChildrenMap
       )
@@ -630,24 +637,21 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       mergeId,
       nextInputMergeId,
       nextOutputMergeId,
-      nextPinIdMap,
     }: {
       graphId: string
       mergeId: string
-      nextInputMergeId: { mergeId: string; pinId: string }
-      nextOutputMergeId: { mergeId: string; pinId: string }
-      nextPinIdMap: Dict<{
-        input: Dict<{ pinId: string; subPinId: string }>
-        output: Dict<{ pinId: string; subPinId: string }>
-      }>
+      nextInputMergeId: {
+        mergeId: string
+        pinId: string
+        subPinSpec: GraphSubPinSpec
+      }
+      nextOutputMergeId: {
+        mergeId: string
+        pinId: string
+        subPinSpec: GraphSubPinSpec
+      }
     }): void {
-      graph.moveMergeInto(
-        graphId,
-        mergeId,
-        nextInputMergeId,
-        nextOutputMergeId,
-        nextPinIdMap
-      )
+      graph.moveMergeInto(graphId, mergeId, nextInputMergeId, nextOutputMergeId)
     },
 
     $explodeUnit({

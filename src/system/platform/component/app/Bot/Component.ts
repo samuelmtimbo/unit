@@ -1072,8 +1072,6 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     ])
 
     this._resizeSVG()
-
-    this._position_observer.observe(this._container)
   }
 
   onUnmount($context: Context): void {
@@ -1105,6 +1103,10 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     document.removeEventListener('visibilitychange', this._document_listener)
 
     this._position_observer.disconnect()
+  }
+
+  onRender() {
+    this._position_observer.observe(this._container)
   }
 
   onPropChanged(prop: string, current: any) {

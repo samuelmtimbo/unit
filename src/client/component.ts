@@ -29,8 +29,9 @@ import {
   prepend,
   removeChild,
 } from '../util/element'
-import { get, mapObjVK, set } from '../util/object'
+import { ensure, get, mapObjVK, set } from '../util/object'
 import { addListener, addListeners } from './addListener'
+import namespaceURI from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
 import { component_ } from './component_'
 import { Context, dispatchContextEvent, dispatchCustomEvent } from './context'
@@ -103,6 +104,14 @@ export class Component<
   public $parentChildren: Component[] = []
   public $parentChildrenSlot: string[] = []
 
+  public $rootSVGWrapper: SVGSVGElement[] = []
+  public $parentChildrenSVGWrapper: SVGSVGElement[] = []
+  public $childrenSVGWrapper: SVGSVGElement[] = []
+
+  public $rootHTMLWrapper: HTMLDivElement[] = []
+  public $parentChildrenHTMLWrapper: HTMLDivElement[] = []
+  public $childrenHTMLWrapper: HTMLDivElement[] = []
+
   public $mountRoot: Component[] = []
   public $mountParentRoot: Component[] = []
   public $mountParentChildren: Component[] = []
@@ -166,6 +175,8 @@ export class Component<
   onConnected($unit: U) {}
 
   onDisconnected() {}
+
+  onRender() {}
 
   onMount() {}
 
@@ -277,13 +288,13 @@ export class Component<
       callback(subComponent)
     }
 
-    // for (const subComponent of this.$mountParentRoot) {
-    //   callback(subComponent)
-    // }
-
     for (const subComponent of this.$mountParentChildren) {
       callback(subComponent)
     }
+
+    // for (const child of this.$parentChildren) {
+    //   callback(child)
+    // }
 
     for (const child of this.$children) {
       callback(child)
@@ -307,6 +318,8 @@ export class Component<
     this._forAllMountDescendent((child) => {
       this.mountDescendent(child)
     })
+
+    this.onRender()
 
     const $changed = new Set(this.$changed)
 
@@ -421,9 +434,13 @@ export class Component<
     //   offset = offset.$slotParent
     // }
 
+    if (this.isSVG()) {
+      return offset
+    }
+
     while (
+      offset &&
       !(
-        offset &&
         offset.$element instanceof HTMLElement &&
         offset.$element.style.display !== 'contents' &&
         (offset.$element.style.position === '' ||
@@ -468,8 +485,8 @@ export class Component<
       return fontSize
     }
 
-    if (this.$parent) {
-      return this.$parent.getFontSize()
+    if (this.$slotParent) {
+      return this.$slotParent.getFontSize()
     }
 
     return DEFAULT_FONT_SIZE
@@ -482,8 +499,8 @@ export class Component<
       return opacity
     }
 
-    if (this.$parent) {
-      return this.$parent.getOpacity()
+    if (this.$slotParent) {
+      return this.$slotParent.getOpacity()
     }
 
     return DEFAULT_OPACITY
@@ -514,6 +531,21 @@ export class Component<
   ): Position {
     // TODO
     return NULL_VECTOR
+  }
+
+  isSVG(): boolean {
+    return (
+      this.$element instanceof SVGElement &&
+      !(this.$element instanceof SVGSVGElement)
+    )
+  }
+
+  isHMTL(): boolean {
+    return this.$element instanceof HTMLElement
+  }
+
+  isText(): boolean {
+    return this.$element instanceof Text
   }
 
   isBase(): boolean {
@@ -625,7 +657,8 @@ export class Component<
   public domAppendChild(child: Component, slotName: string, at: number): void {
     // console.log('Component', '_domAppendChild')
     const slot = this.$slot[slotName]
-    slot.$element.appendChild(child.$element)
+    // slot.$element.appendChild(child.$element)
+    slot.$element.appendChild(this.wrapChild(slot, child, at))
     child.$slotParent = slot
   }
 
@@ -636,9 +669,219 @@ export class Component<
     }
   }
 
+  public createSVGWrapper(): SVGSVGElement {
+    const {
+      api: {
+        document: { createElementNS },
+      },
+    } = this.$system
+
+    const element = createElementNS(namespaceURI, 'svg')
+
+    element.style.display = 'block'
+    element.style.width = '100%'
+    element.style.height = '100%'
+
+    return element
+  }
+
+  public createHTMLWrapper(): HTMLDivElement {
+    const {
+      api: {
+        document: { createElement },
+      },
+    } = this.$system
+
+    const element = createElement('div')
+
+    element.style.width = '100%'
+    element.style.height = '100%'
+
+    return element
+  }
+
+  public templateChildWrapper(child, svg, html, fallback) {
+    if (this.isHMTL() && child.isSVG()) {
+      return svg()
+    } else if (this.isSVG() && child.isHMTL()) {
+      return html()
+    } else {
+      return fallback()
+    }
+  }
+
+  private ensureRootHTMLWrapper(at: any) {
+    return ensure(
+      this.$parentChildrenHTMLWrapper,
+      at,
+      this.createHTMLWrapper.bind(this)
+    )
+  }
+
+  private ensureRootSVGWrapper(at: any) {
+    return ensure(
+      this.$parentChildrenSVGWrapper,
+      at,
+      this.createSVGWrapper.bind(this)
+    )
+  }
+
+  private ensureParentChildHTMLWrapper(at: any) {
+    return ensure(
+      this.$parentChildrenHTMLWrapper,
+      at,
+      this.createHTMLWrapper.bind(this)
+    )
+  }
+
+  private ensureParentChildSVGWrapper(at: any) {
+    return ensure(
+      this.$parentChildrenSVGWrapper,
+      at,
+      this.createSVGWrapper.bind(this)
+    )
+  }
+
+  private ensureChildHTMLWrapper(at: any) {
+    return ensure(
+      this.$childrenHTMLWrapper,
+      at,
+      this.createHTMLWrapper.bind(this)
+    )
+  }
+
+  private ensureChildSVGWrapper(at: any) {
+    return ensure(
+      this.$childrenSVGWrapper,
+      at,
+      this.createSVGWrapper.bind(this)
+    )
+  }
+
+  public wrapChild(slot: Component, child: Component, at: number) {
+    if (slot.isHMTL() && child.isSVG()) {
+      const wrapper = slot.ensureChildSVGWrapper(at)
+
+      wrapper.appendChild(child.$element)
+
+      return wrapper
+    } else if (slot.isSVG() && child.isHMTL()) {
+      const wrapper = slot.ensureChildHTMLWrapper(at)
+
+      wrapper.appendChild(child.$element)
+
+      return wrapper
+    } else {
+      return child.$element
+    }
+  }
+
+  public wrapRoot(child: Component, at: number) {
+    if (this.isHMTL() && child.isSVG()) {
+      const wrapper = this.ensureRootSVGWrapper(at)
+
+      wrapper.appendChild(child.$element)
+
+      return wrapper
+    } else if (this.isSVG() && child.isHMTL()) {
+      const wrapper = this.ensureRootHTMLWrapper(at)
+
+      wrapper.appendChild(child.$element)
+
+      return wrapper
+    } else {
+      return child.$element
+    }
+  }
+
+  public wrapParentChildren(child: Component, at: number): IOElement {
+    if (this.isHMTL() && child.isSVG()) {
+      const wrapper = this.ensureParentChildSVGWrapper(at)
+
+      wrapper.appendChild(child.$element)
+
+      return wrapper
+    } else if (this.isSVG() && child.isHMTL()) {
+      const wrapper = this.ensureParentChildHTMLWrapper(at)
+
+      wrapper.appendChild(child.$element)
+
+      return wrapper
+    } else {
+      return child.$element
+    }
+  }
+
+  public unwrapRoot(child: Component, at: number): IOElement {
+    if (this.isHMTL() && child.isSVG()) {
+      const wrapper = this.$parentChildrenSVGWrapper[at]
+
+      delete this.$rootSVGWrapper[at]
+
+      wrapper.removeChild(child.$element)
+
+      return wrapper
+    } else if (this.isSVG() && child.isHMTL()) {
+      const wrapper = this.$parentChildrenHTMLWrapper[at]
+
+      delete this.$rootHTMLWrapper[at]
+
+      wrapper.removeChild(child.$element)
+
+      return wrapper
+    } else {
+      return child.$element
+    }
+  }
+
+  public unwrapParentChildren(child: Component, at: number): IOElement {
+    if (this.isHMTL() && child.isSVG()) {
+      const wrapper = this.$parentChildrenSVGWrapper[at]
+
+      delete this.$parentChildrenSVGWrapper[at]
+
+      wrapper.removeChild(child.$element)
+
+      return wrapper
+    } else if (this.isSVG() && child.isHMTL()) {
+      const wrapper = this.$parentChildrenHTMLWrapper[at]
+
+      delete this.$parentChildrenHTMLWrapper[at]
+
+      wrapper.removeChild(child.$element)
+
+      return wrapper
+    } else {
+      return child.$element
+    }
+  }
+
+  public unwrapChild(slot: Component, child: Component, at: number): IOElement {
+    if (slot.isHMTL() && child.isSVG()) {
+      const wrapper = slot.$childrenSVGWrapper[at]
+
+      delete slot.$childrenSVGWrapper[at]
+
+      wrapper.removeChild(child.$element)
+
+      return wrapper
+    } else if (slot.isSVG() && child.isHMTL()) {
+      const wrapper = slot.$childrenHTMLWrapper[at]
+
+      delete slot.$childrenHTMLWrapper[at]
+
+      wrapper.removeChild(child.$element)
+
+      return wrapper
+    } else {
+      return child.$element
+    }
+  }
+
   public domRemoveChild(child: Component, slotName: string, at: number): void {
     const slot = this.$slot[slotName]
-    slot.$element.removeChild(child.$element)
+    // slot.$element.removeChild(child.$element)
+    slot.$element.removeChild(this.unwrapChild(slot, child, at))
     child.$slotParent = null
   }
 
@@ -684,9 +927,7 @@ export class Component<
 
   public connect($unit: U): void {
     if (this.$connected) {
-      // throw new Error ('Component is already connected')
-      console.log('Component', 'connect called unnecessarily')
-      return
+      throw new Error ('Component is already connected')
     }
 
     this._connect($unit)
@@ -1008,6 +1249,10 @@ export class Component<
   }
 
   public memAppendRoot(component: Component): void {
+    if (this.$mountRoot.includes(component)) {
+      debugger
+    }
+
     push(this.$mountRoot, component)
     set(component, '$slotParent', this)
   }
@@ -1145,7 +1390,7 @@ export class Component<
     let i = 0
     for (const component of this.$parentRoot) {
       const slotName = this.$parentRootSlotName[i]
-      component.collapse()
+      // component.collapse()
       this.appendParentRoot(component, slotName)
       i++
     }
@@ -1155,13 +1400,13 @@ export class Component<
     for (const component of this.$parentRoot) {
       this.removeParentRoot(component)
 
-      component.uncollapse()
+      // component.uncollapse()
     }
   }
 
   public appendParentRoot(
     component: Component,
-    slotName: string = 'default'
+    slotName: string
   ): void {
     // console.log(
     //   this.constructor.name,
@@ -1205,6 +1450,11 @@ export class Component<
   }
 
   public memPushParentChild(component: Component, slotName: string): void {
+    // console.log(
+    //   this.constructor.name,
+    //   'memPushParentChild',
+    //   component.constructor.name
+    // )
     push(this.$parentChildren, component)
     push(this.$parentChildrenSlot, slotName)
     set(component, '$slotParent', this)
@@ -1302,6 +1552,7 @@ export class Component<
     at: number,
     _at: number
   ): void {
+    // console.log(this.constructor.name, 'memRemoveParentChildAt')
     removeAt(this.$mountParentChildren, _at)
   }
 
@@ -1311,7 +1562,13 @@ export class Component<
     at: number,
     _at: number
   ): void {
-    removeChild(this.$element, component.$element)
+    const _slotName = this.$parentChildrenSlot[_at]
+    const slot = this.$slot[_slotName] || this
+    if (slot === this) {
+      removeChild(this.$element, component.$element)
+    } else {
+      debugger
+    }
   }
 
   public insertParentRootAt(

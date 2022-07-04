@@ -215,8 +215,6 @@ export const reflectComponentBaseTrait = (
       slot_style,
       slot_all_style,
       (path) => {
-        let children = []
-
         let _slot_base = slot_base
 
         let base = []
@@ -229,7 +227,7 @@ export const reflectComponentBaseTrait = (
 
           _slot_base = all_slot_base[leaf_id]
 
-          base = sub_component.$parentRoot.reduce((acc, c) => {
+          base = sub_component.$parentChildren.reduce((acc, c) => {
             return [...acc, ...c.getRootBase()]
           }, [])
         }

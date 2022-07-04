@@ -52,6 +52,8 @@ export function renderFrame(
     }
   )
 
+  const $children = []
+
   const $context: Context = {
     $system,
     $mounted: false,
@@ -69,10 +71,9 @@ export function renderFrame(
     $ry: 0,
     $rz: 0,
     $element,
-    $fullwindow,
     $theme,
     $color,
-    $fullwindow_i: -1,
+    $children,
     get $context() {
       return $context
     },

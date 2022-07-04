@@ -1,7 +1,7 @@
 import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { renderGraph } from '../../../../client/render/renderPod'
+import { renderGraph } from '../../../../client/render/renderGraph'
 import { $Graph } from '../../../../types/interface/async/$Graph'
 import { $P } from '../../../../types/interface/async/$P'
 import { Pod } from '../../../../pod'
