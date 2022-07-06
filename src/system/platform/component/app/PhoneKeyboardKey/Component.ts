@@ -188,18 +188,19 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
   private _emit_key = (key: string) => {
     const { shiftKey = false, altKey = false } = this.$props
     const _key = shiftKey && isChar(key) ? key.toUpperCase() : key
-    emitPhoneKey(_key, shiftKey, altKey)
+    emitPhoneKey(this.$system, _key, shiftKey, altKey)
   }
 }
 
 export function emitPhoneKey(
+  system: System,
   key: string,
   shiftKey: boolean,
   altKey: boolean
 ): void {
   const keyCode = keyToKeyCode[key]
   const code = keyToCode[key]
-  emitKeyboardEvent('keydown', {
+  emitKeyboardEvent(system, 'keydown', {
     key,
     keyCode,
     code,
@@ -210,7 +211,7 @@ export function emitPhoneKey(
     bubbles: true,
   })
   // TODO 'keypress' should not be fired if key is a control key (e.g. ALT, CTRL, SHIFT, ESC)
-  emitKeyboardEvent('keypress', {
+  emitKeyboardEvent(system, 'keypress', {
     key,
     keyCode,
     code,
@@ -220,7 +221,7 @@ export function emitPhoneKey(
     metaKey: false,
     bubbles: true,
   })
-  emitKeyboardEvent('keyup', {
+  emitKeyboardEvent(system, 'keyup', {
     key,
     keyCode,
     code,

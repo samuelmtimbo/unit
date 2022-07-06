@@ -57,7 +57,7 @@ export default class KeyboardKey extends Element<IHTMLDivElement, Props> {
 
     key_component.addEventListener(
       makePointerDownListener(() => {
-        emitKeyboardEvent('keydown', {
+        emitKeyboardEvent(this.$system, 'keydown', {
           key,
           keyCode,
           code,
@@ -67,7 +67,7 @@ export default class KeyboardKey extends Element<IHTMLDivElement, Props> {
           bubbles: true,
         })
         // TODO 'keypress' should not be fired if key is a control key (e.g. ALT, CTRL, SHIFT, ESC)
-        emitKeyboardEvent('keypress', {
+        emitKeyboardEvent(this.$system, 'keypress', {
           key,
           keyCode,
           code,
@@ -81,7 +81,7 @@ export default class KeyboardKey extends Element<IHTMLDivElement, Props> {
 
     key_component.addEventListener(
       makePointerUpListener(() => {
-        emitKeyboardEvent('keyup', {
+        emitKeyboardEvent(this.$system, 'keyup', {
           key,
           keyCode,
           code,

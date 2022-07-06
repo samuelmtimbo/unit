@@ -170,7 +170,6 @@ import {
   getThemeModeColor,
   LIGHT_LINK_MODE_COLOR,
   LIGHT_MODE_COLOR,
-  randomColorString,
   setAlpha,
   themeBackgroundColor,
 } from '../../../../../client/theme'
@@ -28796,7 +28795,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     sub_pin_id: string
   ): void => {
     // console.log('Graph', '_unplug_exposed_pin')
-    
+
     this._state_unplug_exposed_pin(type, pin_id, sub_pin_id)
     this._pod_unplug_exposed_pin(type, pin_id, sub_pin_id)
   }
@@ -33690,12 +33689,22 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       if (this._subgraph_cache[graph_id]) {
         const opposite_type = oppositePinType(type)
 
-        this._sim_graph_add_link_pin(graph_id, opposite_type, opposite_pin_id, {})
+        this._sim_graph_add_link_pin(
+          graph_id,
+          opposite_type,
+          opposite_pin_id,
+          {}
+        )
       }
     }
   }
 
-  private _sim_graph_add_link_pin = (graph_id: string, type: IO, pin_id: string, pin_spec: GraphPinSpec) => {
+  private _sim_graph_add_link_pin = (
+    graph_id: string,
+    type: IO,
+    pin_id: string,
+    pin_spec: GraphPinSpec
+  ) => {
     const graph = this._ensure_subgraph(graph_id)
 
     graph.add_exposed_pin_set(type, pin_id, pin_spec)
