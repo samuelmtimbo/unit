@@ -1,5 +1,7 @@
+import Iframe from '../system/platform/component/Iframe/Component'
 import { Style } from '../system/platform/Props'
 import { Component } from './component'
+import { IOElement } from './IOElement'
 import { Size } from './util/geometry'
 
 export function extractStyle(
@@ -10,7 +12,23 @@ export function extractStyle(
 
   const { $element } = component
 
-  if ($element instanceof Text) {
+  let _element = $element
+
+  if (component instanceof Iframe) {
+    _element = component._iframe_el
+  }
+
+  return _extractStyle(component, _element, measureText)
+}
+
+export function _extractStyle(
+  component: Component,
+  element: IOElement,
+  measureText: (text: string, fontSize: number) => Size
+): Style {
+  const style = {}
+
+  if (element instanceof Text) {
     const fontSize = component.getFontSize()
 
     const { textContent } = component.$element
@@ -25,23 +43,23 @@ export function extractStyle(
     }
   }
 
-  for (const key in $element.style) {
-    const value = $element.style[key]
+  for (const key in element.style) {
+    const value = element.style[key]
 
     if (value && typeof value === 'string' && isNaN(parseInt(key))) {
       style[key] = value
     }
   }
 
-  if ($element instanceof HTMLCanvasElement) {
+  if (element instanceof HTMLCanvasElement) {
     if (style['width'] === undefined) {
-      const { width } = $element
+      const { width } = element
 
       style['width'] = `${width}px`
     }
 
     if (style['height'] === undefined) {
-      const { height } = $element
+      const { height } = element
 
       style['height'] = `${height}px`
     }

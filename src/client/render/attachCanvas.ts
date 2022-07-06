@@ -16,7 +16,7 @@ export function attachCanvas(system: System): void {
 
   resizeWith(system, canvas, root)
 
-  root.appendChild(canvas)
+  root.shadowRoot.appendChild(canvas)
 
   system.foreground.canvas = canvas
 }

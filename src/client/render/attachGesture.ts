@@ -78,7 +78,7 @@ export function attachGesture(system: System): void {
     const track: Point[] = [{ x: screenX, y: screenY }]
 
     const pointerMoveListener = (_event: PointerEvent) => {
-      // console.log('attachGesture', 'pointerMoveListener')
+      console.log('attachGesture', 'pointerMoveListener')
 
       const { pointerId: _pointerId } = _event
 
@@ -96,7 +96,7 @@ export function attachGesture(system: System): void {
     }
 
     const pointerUpListener = (_event: PointerEvent) => {
-      // console.log('attachGesture', 'pointerUpListener')
+      console.log('attachGesture', 'pointerUpListener')
 
       const { pointerId: _pointerId } = _event
       if (_pointerId === pointerId) {
@@ -111,13 +111,13 @@ export function attachGesture(system: System): void {
 
     const unlistenPointerMove = _addEventListener(
       'pointermove',
-      root,
+      root.shadowRoot,
       pointerMoveListener,
       true
     )
     const unlistenPointerUp = _addEventListener(
       'pointerup',
-      root,
+      root.shadowRoot,
       pointerUpListener,
       true
     )

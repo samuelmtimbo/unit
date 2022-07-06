@@ -170,6 +170,7 @@ import {
   getThemeModeColor,
   LIGHT_LINK_MODE_COLOR,
   LIGHT_MODE_COLOR,
+  randomColorString,
   setAlpha,
   themeBackgroundColor,
 } from '../../../../../client/theme'
@@ -307,7 +308,7 @@ import {
   forEachPinOnMerge,
   getInputNodeId,
   getMergeUnitPinCount,
-  oppositePinKind,
+  oppositePinKind as oppositePinType,
 } from '../../../../../spec/util'
 import { State } from '../../../../../State'
 import { System } from '../../../../../system'
@@ -17921,7 +17922,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           a,
           a_type,
           b,
-          oppositePinKind(a_type)
+          oppositePinType(a_type)
         )
       }
     } else if (!a_link_pin && b_link_pin) {
@@ -17934,7 +17935,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       } else {
         return this._is_link_pin_link_pin_type_match(
           a,
-          oppositePinKind(b_type),
+          oppositePinType(b_type),
           b,
           b_type
         )
@@ -20104,7 +20105,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       if (merge_node_id) {
         this._search_unit_merged_pin_ids[type][tag].push(pin_id)
 
-        const opposite_kind = oppositePinKind(type)
+        const opposite_kind = oppositePinType(type)
         const merge = this._get_merge(merge_node_id)
         // this unit should not be considered on merge type
         const _merge = _dissoc(merge, unit_id)
@@ -22545,6 +22546,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
         }
       }
     }
+
+    console.log('all_trait', all_trait)
 
     for (const sub_component_id of sub_component_ids) {
       const base = this._get_sub_component_root_base(sub_component_id)
@@ -29613,6 +29616,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
     if (animate) {
       const frame = () => {
+        console.log('AHAAHHA')
         parent_layout_layer.layer.$element.scrollTop = Math.min(
           scrollTop + d,
           scrollHeight
@@ -32582,7 +32586,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
         if (this._is_node_selected(unitId)) {
           //
         } else {
-          const opposite_type = oppositePinKind(type)
+          const opposite_type = oppositePinType(type)
 
           const opposite_pin_id = newSpecPinId(
             graph_unit_spec,
@@ -32617,7 +32621,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           const move_pin_into_graph = (type: IO, pin_id: string) => {
             const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
-            const opposite_type = oppositePinKind(type)
+            const opposite_type = oppositePinType(type)
 
             const opposite_pin_id = newSpecPinId(
               graph_unit_spec,
@@ -33645,16 +33649,16 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
     merge_id: string | null,
     opposite_pin_id: string | null
   ): void => {
-    // console.log(
-    //   'Graph',
-    //   '_state_move_link_pin_into_graph',
-    //   graph_id,
-    //   unit_id,
-    //   type,
-    //   pin_id,
-    //   merge_id,
-    //   opposite_pin_id
-    // )
+    console.log(
+      'Graph',
+      '_state_move_link_pin_into_graph',
+      graph_id,
+      unit_id,
+      type,
+      pin_id,
+      merge_id,
+      opposite_pin_id
+    )
 
     this._graph_spec_move_link_pin_into_graph(
       graph_id,
@@ -33681,6 +33685,20 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       opposite_pin_id,
       merge_id
     )
+
+    if (opposite_pin_id) {
+      if (this._subgraph_cache[graph_id]) {
+        const opposite_type = oppositePinType(type)
+
+        this._sim_graph_add_link_pin(graph_id, opposite_type, opposite_pin_id, {})
+      }
+    }
+  }
+
+  private _sim_graph_add_link_pin = (graph_id: string, type: IO, pin_id: string, pin_spec: GraphPinSpec) => {
+    const graph = this._ensure_subgraph(graph_id)
+
+    graph.add_exposed_pin_set(type, pin_id, pin_spec)
   }
 
   private _sim_move_link_pin_into_graph = (
@@ -33715,7 +33733,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
       this._stop_node_long_press_collapse(pin_node_id)
 
-      const opposite_type = oppositePinKind(type)
+      const opposite_type = oppositePinType(type)
 
       const pin_node = this._node[pin_node_id]
       const graph_node = this._node[graph_id]
@@ -33817,7 +33835,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       if (this.__has_merge(merge_id)) {
         this.__spec_add_link_pin_to_merge(merge_id, unit_id, type, pin_id)
       } else {
-        const opposite_type = oppositePinKind(type)
+        const opposite_type = oppositePinType(type)
 
         const merge = {
           [unit_id]: {
@@ -33873,7 +33891,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       setSpec(specs, graph_spec_id, updated_graph_spec)
     } else {
       if (opposite_pin_id) {
-        const opposite_type = oppositePinKind(type)
+        const opposite_type = oppositePinType(type)
 
         const pin_type = this._get_pin_type(pin_node_id)
 
@@ -34051,7 +34069,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
 
           this._start_node_long_press_collapse(pin_node_id)
 
-          const opposite_type = oppositePinKind(type)
+          const opposite_type = oppositePinType(type)
 
           const {
             [opposite_type]: {

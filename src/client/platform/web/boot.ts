@@ -2,10 +2,10 @@ import { boot } from '../../../boot'
 import { API, System } from '../../../system'
 import { attachApp } from '../../render/attachApp'
 import { attachCanvas } from '../../render/attachCanvas'
-import { attachFocus } from '../../render/attachFocus'
 import { attachGesture } from '../../render/attachGesture'
 import { attachLongPress } from '../../render/attachLongPress'
 import { attachSprite } from '../../render/attachSprite'
+import { attachStyle } from '../../render/attachStyle'
 import { attachSVG } from '../../render/attachSVG'
 import { SYSTEM_ROOT_ID } from '../../SYSTEM_ROOT_ID'
 import { webAnimation } from './api/animation'
@@ -90,12 +90,21 @@ export function _webBoot(
     uri,
   }
 
+  const _root = window.document.createElement('div')
+  // _root.style.display = 'contents'
+  _root.style.width = '100%'
+  _root.style.height = '100%'
+  _root.attachShadow({ mode: 'open' })
+
   const system = boot({ api })
 
-  system.root = root
+  root.appendChild(_root)
+
+  system.root = _root
   system.mounted = true
 
   attachSprite(system)
+  attachStyle(system)
   attachApp(system)
   attachCanvas(system)
   attachSVG(system)

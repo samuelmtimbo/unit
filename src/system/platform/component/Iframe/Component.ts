@@ -3,6 +3,7 @@ import { Element } from '../../../../client/element'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { randomId } from '../../../../util/id'
 
 export interface Props {
   id?: string
@@ -19,16 +20,35 @@ export const DEFAULT_STYLE = {
   border: 'none',
 }
 
-export default class Iframe extends Element<HTMLIFrameElement, Props> {
-  private _iframe_el: HTMLIFrameElement
+export default class Iframe extends Element<HTMLSlotElement, Props> {
+  public _iframe_el: HTMLIFrameElement
+
+  private _slot_id: string
+  private _slot_el: HTMLSlotElement
 
   constructor($props: Props, $system: System, $pod: Pod) {
     super($props, $system, $pod)
 
     const { id, className, style = {}, src = '', srcdoc } = this.$props
 
+    const {
+      root,
+      api: {
+        document: { createElement },
+      },
+    } = this.$system
+
     const iframe_el = this.$system.api.document.createElement('iframe')
+    iframe_el.slot = ''
+    root.appendChild(iframe_el)
     this._iframe_el = iframe_el
+
+    const slot_id = randomId()
+    this._slot_id = slot_id
+
+    const slot_el = createElement('slot')
+    slot_el.name = slot_id
+    this._slot_el = slot_el
 
     if (id !== undefined) {
       iframe_el.id = id
@@ -43,7 +63,7 @@ export default class Iframe extends Element<HTMLIFrameElement, Props> {
 
     applyStyle(iframe_el, { ...DEFAULT_STYLE, ...style })
 
-    this.$element = iframe_el
+    this.$element = slot_el
   }
 
   onPropChanged(prop: string, current: any): void {
@@ -56,5 +76,17 @@ export default class Iframe extends Element<HTMLIFrameElement, Props> {
     } else if (prop === 'srcdoc') {
       this._iframe_el.srcdoc = current || ''
     }
+  }
+
+  onMount(): void {
+    // console.log('Iframe', 'onMount')
+
+    this._iframe_el.slot = this._slot_id
+  }
+
+  onUnmount() {
+    // console.log('Iframe', 'onUnmount')
+
+    this._iframe_el.slot = ''
   }
 }

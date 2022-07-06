@@ -57,7 +57,7 @@ export default function webInit(
     if (window.visualViewport) {
       const scale = window.visualViewport.scale || 1
       if (scale > 1) {
-        event.stopPropagation()
+        // event.stopPropagation()
       }
     }
   }
@@ -67,7 +67,7 @@ export default function webInit(
     if (document.documentElement.scrollTop > 0) {
       document.documentElement.scrollTop = 0
 
-      event.preventDefault()
+      // event.preventDefault()
     }
   }
 

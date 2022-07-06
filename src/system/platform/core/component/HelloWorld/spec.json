@@ -40,8 +40,8 @@
     "children": [
       "widthtext"
     ],
-    "defaultWidth": 200,
-    "defaultHeight": 200
+    "defaultWidth": 420,
+    "defaultHeight": 420
   },
   "metadata": {
     "description": "text box saying 'hello world'",

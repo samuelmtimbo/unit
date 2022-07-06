@@ -78,7 +78,7 @@ export function listenWheel(
       // }
     }
 
-    _event.preventDefault()
+    // _event.preventDefault()
 
     onWheel(
       {
