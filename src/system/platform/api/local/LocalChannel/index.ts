@@ -4,13 +4,13 @@ import {
   Semifunctional,
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
-import { CH } from '../../../../../types/interface/CH'
-import { RE } from '../../../../../types/interface/RE'
 import { Pod } from '../../../../../pod'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { IChannel } from '../../../../../types/global/IChannel'
+import { CH } from '../../../../../types/interface/CH'
+import { RE } from '../../../../../types/interface/RE'
 import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I<T> {

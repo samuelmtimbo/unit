@@ -2,10 +2,10 @@ import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
-import { $ST } from '../../../../../types/interface/async/$ST'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { $ST } from '../../../../../types/interface/async/$ST'
 
 export interface Props {
   className?: string

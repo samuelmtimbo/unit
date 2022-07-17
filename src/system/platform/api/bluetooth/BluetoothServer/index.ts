@@ -1,12 +1,12 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { BD } from '../../../../../types/interface/BD'
-import { BS } from '../../../../../types/interface/BS'
-import { BSE } from '../../../../../types/interface/BSE'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IBluetoothService } from '../../../../../types/global/IBluetoothService'
+import { BD } from '../../../../../types/interface/BD'
+import { BS } from '../../../../../types/interface/BS'
+import { BSE } from '../../../../../types/interface/BSE'
 
 export interface I {
   device: BD

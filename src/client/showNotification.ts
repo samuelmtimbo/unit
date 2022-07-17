@@ -1,11 +1,20 @@
+import { System } from '../system'
 import { Dict } from '../types/Dict'
 
 export function showNotification(
+  system: System,
   message: string,
   style: Dict<string> = {},
   timeout: number | null = null
 ) {
-  const message_div = document.createElement('div')
+  const {
+    root,
+    api: {
+      document: { createElement },
+    },
+  } = system
+
+  const message_div = createElement('div')
 
   message_div.style.color = 'currentColor'
   message_div.style.borderColor = 'currentColor'
@@ -32,7 +41,7 @@ export function showNotification(
     message_div.style[name] = value
   }
 
-  document.body.appendChild(message_div)
+  root.appendChild(message_div)
 
   let mounted = true
 
@@ -44,7 +53,7 @@ export function showNotification(
       timer = undefined
     }
 
-    document.body.removeChild(message_div)
+    root.removeChild(message_div)
   }
 
   message_div.onclick = () => {

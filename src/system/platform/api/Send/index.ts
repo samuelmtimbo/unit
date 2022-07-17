@@ -1,8 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { CH } from '../../../../types/interface/CH'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { CH } from '../../../../types/interface/CH'
 
 interface I<T> {
   unit: CH

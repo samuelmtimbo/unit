@@ -2,9 +2,9 @@ import {
   Semifunctional,
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
-import { CH } from '../../../../../types/interface/CH'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { CH } from '../../../../../types/interface/CH'
 
 export type I = {
   url: string

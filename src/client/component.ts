@@ -927,7 +927,7 @@ export class Component<
 
   public connect($unit: U): void {
     if (this.$connected) {
-      throw new Error ('Component is already connected')
+      throw new Error('Component is already connected')
     }
 
     this._connect($unit)
@@ -1249,10 +1249,6 @@ export class Component<
   }
 
   public memAppendRoot(component: Component): void {
-    if (this.$mountRoot.includes(component)) {
-      debugger
-    }
-
     push(this.$mountRoot, component)
     set(component, '$slotParent', this)
   }
@@ -1360,8 +1356,10 @@ export class Component<
 
   public pullParentRoot(component: Component): void {
     const i = this.$parentRoot.indexOf(component)
+
     if (i > -1) {
       removeAt(this.$parentRoot, i)
+
       const [slotName] = removeAt(this.$parentRootSlotName, i)
 
       const slot = get(this.$slot, slotName)
@@ -1390,7 +1388,7 @@ export class Component<
     let i = 0
     for (const component of this.$parentRoot) {
       const slotName = this.$parentRootSlotName[i]
-      // component.collapse()
+      component.collapse()
       this.appendParentRoot(component, slotName)
       i++
     }
@@ -1400,14 +1398,11 @@ export class Component<
     for (const component of this.$parentRoot) {
       this.removeParentRoot(component)
 
-      // component.uncollapse()
+      component.uncollapse()
     }
   }
 
-  public appendParentRoot(
-    component: Component,
-    slotName: string
-  ): void {
+  public appendParentRoot(component: Component, slotName: string): void {
     // console.log(
     //   this.constructor.name,
     //   'appendParentRoot',
@@ -1425,6 +1420,7 @@ export class Component<
     slotName: string,
     at: number
   ): void {
+    // console.log(this.constructor.name, 'memAppendParentRoot', component.constructor.name, slotName, at)
     push(this.$mountParentRoot, component)
     const slot = get(this.$slot, slotName)
     slot.memAppendParentChild(component, 'default', at, at)
@@ -1489,6 +1485,16 @@ export class Component<
     slotName: string,
     at: number
   ): void {
+    if (this.$mounted) {
+      this.mountDescendent(component)
+    }
+  }
+
+  public postInsertParentChildAt(
+    component: Component,
+    slotName: string,
+    at: number
+  ) {
     if (this.$mounted) {
       this.mountDescendent(component)
     }
@@ -1564,11 +1570,7 @@ export class Component<
   ): void {
     const _slotName = this.$parentChildrenSlot[_at]
     const slot = this.$slot[_slotName] || this
-    if (slot === this) {
-      removeChild(this.$element, component.$element)
-    } else {
-      debugger
-    }
+    removeChild(this.$element, component.$element)
   }
 
   public insertParentRootAt(
@@ -1583,10 +1585,13 @@ export class Component<
 
   public memInsertParentRootAt(
     component: Component,
-    at: number,
+    _at: number,
     slotName: string
   ): void {
-    insert(this.$mountParentRoot, component, at)
+    insert(this.$mountParentRoot, component, _at)
+    const slot = get(this.$slot, slotName)
+    const at = this.$parentRoot.indexOf(component)
+    slot.memInsertParentChildAt(component, slotName, at, _at)
   }
 
   public domInsertParentRootAt(
@@ -1601,11 +1606,12 @@ export class Component<
 
   public postInsertParentRootAt(
     component: Component,
-    at: number,
+    _at: number,
     slotName: string
   ): void {
     set(component, '$parent', this)
-    _if(this.$mounted, mount, component, this.$context)
+    const slot = get(this.$slot, slotName)
+    slot.postInsertParentChildAt(component, slotName, _at)
   }
 
   public prependParentRoot(component: Component, slotName: string): void {
@@ -1638,6 +1644,7 @@ export class Component<
     at: number,
     _at: number
   ): void {
+    // console.log(this.constructor.name, 'domRemoveParentRootAt', component.constructor.name, slotName, at, _at)
     const slot = this.$slot[slotName]
     slot.domRemoveParentChildAt(component, 'default', at, _at)
   }

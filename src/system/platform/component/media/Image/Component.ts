@@ -42,7 +42,6 @@ export default class Image extends Element<HTMLImageElement, Props> {
       img_el.src = src
     }
     img_el.addEventListener('error', (err) => {
-      console.log('AHA', err)
       img_el.src = NO_IMAGE
     })
     img_el.draggable = false

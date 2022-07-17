@@ -85,6 +85,7 @@ export default function webInit(
     // console.error('ERROR')
     if (error) {
       showNotification(
+        system,
         `${error.message}${JSON.stringify(error.stack, null, 2)}`,
         {
           color: COLOR_RED,

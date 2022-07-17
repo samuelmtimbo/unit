@@ -1,13 +1,12 @@
 import { $, $Events } from '../../../../Class/$'
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
-import { EE } from '../../../../types/interface/EE'
-import { V } from '../../../../types/interface/V'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { EE } from '../../../../types/interface/EE'
+import { V } from '../../../../types/interface/V'
 import { Unlisten } from '../../../../types/Unlisten'
 import callAll from '../../../../util/call/callAll'
-import isEqual from '../../../f/comparisson/Equals/f'
 
 export interface I {
   i: number
@@ -150,10 +149,6 @@ export default class _Gamepad extends Semifunctional<I, O> {
           const gamepad = getGamepad(i)
           const buttonsPressed = gamepad.buttons.map((b) => b.pressed)
           this._state.buttons = buttonsPressed
-
-          if (!isEqual(prevButtonsPressed, buttonsPressed)) {
-            console.log('AHA')
-          }
 
           for (let i = 0; i < N_BUTTONS; i++) {
             if (buttonsPressed[i] && !prevButtonsPressed[i]) {

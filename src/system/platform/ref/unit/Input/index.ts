@@ -1,9 +1,9 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { U } from '../../../../../types/interface/U'
-import { V } from '../../../../../types/interface/V'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { U } from '../../../../../types/interface/U'
+import { V } from '../../../../../types/interface/V'
 
 export interface I<T> {
   unit: U

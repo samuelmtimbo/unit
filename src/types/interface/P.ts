@@ -1,8 +1,7 @@
-import { Graph } from '../../Class/Graph'
 import { GraphSpecs } from '..'
+import { Graph } from '../../Class/Graph'
 import { BundleSpec } from '../BundleSpec'
 import { Dict } from '../Dict'
-import { G } from './G'
 import { Unlisten } from '../Unlisten'
 
 export interface P {

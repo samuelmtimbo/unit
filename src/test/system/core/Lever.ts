@@ -6,13 +6,9 @@ import { GraphSpec } from '../../../types'
 import { pod, system } from '../../util/system'
 // import Lever from '../../../unit/system/core/common/Lever/Class'
 
-const spec =
-  require('../../../system/core/common/Lever/spec.json') as GraphSpec
+const spec = require('../../../system/core/common/Lever/spec.json') as GraphSpec
 
-const Lever = fromSpec<{ a: any; b: any; c: boolean }, { a: any }>(
-  spec,
-  _specs
-)
+const Lever = fromSpec<{ a: any; b: any; c: boolean }, { a: any }>(spec, _specs)
 
 const lever = new Lever(system, pod)
 

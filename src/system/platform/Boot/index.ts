@@ -4,7 +4,6 @@ import { Pod } from '../../../pod'
 import { System } from '../../../system'
 import { S } from '../../../types/interface/S'
 import { U } from '../../../types/interface/U'
-import { wrapSystem } from '../../../wrap/System'
 
 export interface I<T> {
   opt: U
@@ -28,8 +27,8 @@ export default class Boot<T> extends Semifunctional<I<T>, O<T>> {
       {
         input: {
           parent: {
-            ref: true
-          }
+            ref: true,
+          },
         },
         output: {
           system: {

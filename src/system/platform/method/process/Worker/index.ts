@@ -3,11 +3,11 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { workerPort } from '../../../../../client/platform/web/workerPort'
 import { asyncGraphFromPort } from '../../../../../graphFromPort'
-import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { Pod } from '../../../../../pod'
 import { RemoteClient } from '../../../../../RemoteClient'
 import { System } from '../../../../../system'
 import { GraphSpec } from '../../../../../types'
+import { $Graph } from '../../../../../types/interface/async/$Graph'
 
 export interface I {
   spec: GraphSpec

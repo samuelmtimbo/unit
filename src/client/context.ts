@@ -183,7 +183,7 @@ export function appendChild(
 
     $context.$element.removeChild($element)
 
-    remove($context.$children, component) 
+    remove($context.$children, component)
 
     return component
   }

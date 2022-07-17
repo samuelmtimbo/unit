@@ -452,7 +452,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
 
   private _animate_transform = (animate: boolean): void => {
     // console.log('Drawer', '_animate_transform', animate)
-    
+
     const transform = this._transform()
 
     this._animate(

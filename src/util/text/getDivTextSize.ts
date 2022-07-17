@@ -48,5 +48,3 @@ export const getDivTextSize = (
 
   return { width, height }
 }
-
-

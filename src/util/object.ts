@@ -1,11 +1,20 @@
 import { Dict } from '../types/Dict'
 
-export function forObjVK<A, B>(
+export function forEachObjVK<A>(
   obj: Dict<A>,
-  callback: (value: A, key: string) => B
+  callback: (value: A, key: string) => void
 ): void {
   for (const key in obj) {
     callback(obj[key], key)
+  }
+}
+
+export function forEachObjKV<A>(
+  obj: Dict<A>,
+  callback: (key: string, value: A) => void
+): void {
+  for (const key in obj) {
+    callback(key, obj[key])
   }
 }
 
@@ -222,7 +231,7 @@ export function getPathOrDefault(obj: object, path: string[], d: any): any {
 
 export function ensure(obj: object, key: string | number, generate: () => any) {
   let value = obj[key]
-  
+
   if (value === undefined) {
     value = generate()
 

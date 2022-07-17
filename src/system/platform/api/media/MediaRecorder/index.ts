@@ -1,9 +1,9 @@
 import { $ } from '../../../../../Class/$'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { B } from '../../../../../types/interface/B'
-import { ST } from '../../../../../types/interface/ST'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { B } from '../../../../../types/interface/B'
+import { ST } from '../../../../../types/interface/ST'
 
 export type I = {
   stream: ST

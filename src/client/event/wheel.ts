@@ -1,4 +1,3 @@
-import { isScrollable } from '../isScrollable'
 import Listenable from '../Listenable'
 import { Listener } from '../Listener'
 
@@ -55,8 +54,7 @@ export function listenWheel(
       offsetX,
       offsetY,
     } = _event
-    
-    
+
     if (ctrlKey) {
       return
     }
@@ -64,15 +62,12 @@ export function listenWheel(
     if (!altKey) {
       // RETURN
       // let targetElement: HTMLElement
-
       // const pointerElement = elementFromPoint(clientX, clientY)
-      
       // if (pointerElement instanceof HTMLElement) {
       //   targetElement = pointerElement
       // } else {
       //   targetElement = pointerElement.parentElement
       // }
-
       // if (targetElement && isScrollable(targetElement)) {
       //   return
       // }
@@ -91,7 +86,7 @@ export function listenWheel(
         offsetX,
         offsetY,
         screenX,
-        screenY
+        screenY,
       },
       _event
     )

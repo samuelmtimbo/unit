@@ -64,7 +64,7 @@ export function webInput(
   const pointerCancelListener = (event) => {
     //
   }
-  
+
   const opt = { capture: true }
 
   root.addEventListener('pointerover', pointerInListener, opt)

@@ -1,9 +1,8 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { S } from '../../../../../types/interface/S'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { S } from '../../../../../types/interface/S'
 
 export interface I {
   init: {}
@@ -21,7 +20,7 @@ export default class NewSystem extends Semifunctional<I, O> {
         fi: ['init'],
         fo: ['system'],
         i: ['done'],
-        o: []
+        o: [],
       },
       {
         output: {

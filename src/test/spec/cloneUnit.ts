@@ -1,7 +1,6 @@
 import assert = require('assert')
 import { Graph } from '../../Class/Graph'
 import { Unit } from '../../Class/Unit'
-import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import { cloneUnit } from '../../spec/cloneUnit'
 import { fromId } from '../../spec/fromId'
 import Add from '../../system/f/arithmetic/Add'

@@ -1,11 +1,11 @@
 import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
-import { J } from '../../../../types/interface/J'
-import { V } from '../../../../types/interface/V'
 import { Pod } from '../../../../pod'
 import { staticfy } from '../../../../spec/staticfy'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { J } from '../../../../types/interface/J'
+import { V } from '../../../../types/interface/V'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export interface I<T extends Dict<any>, K extends keyof T> {

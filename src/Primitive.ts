@@ -473,6 +473,8 @@ export class Primitive<
 
   private _onDataOutputData = (name: string, data: any): void => {
     this.__onOutputData(name, data)
+
+    this.onDataOutputData(name)
   }
 
   private _onRefOutputData = (name: string, data: any): void => {
@@ -497,15 +499,21 @@ export class Primitive<
     }
   }
 
+  public onDataOutputData(name: string): void {}
+
   public onDataOutputDrop(name: string): void {}
 
   public onRefOutputDrop(name: string): void {}
+
+  public onOutputInvalid(name: string): void {}
 
   private _onOutputInvalid = (name: string): void => {
     if (!this._o_invalid[name]) {
       this._o_invalid[name] = true
       this._o_invalid_count++
     }
+
+    this.onOutputInvalid(name)
   }
 
   private _onInputEnd(name: string): void {
@@ -601,7 +609,8 @@ export class Primitive<
   }
 
   public restoreSelf(state: Dict<any>): void {
-    const { __buffer, _forwarding, _backwarding, _forwarding_empty, ...rest } = state
+    const { __buffer, _forwarding, _backwarding, _forwarding_empty, ...rest } =
+      state
 
     super.restoreSelf(rest)
 
@@ -622,23 +631,23 @@ export class Primitive<
 
     this._o_invalid_count = 0
     this._o_invalid = {}
-  
+
     this._i_invalid_count = 0
     this._i_invalid = {}
 
     for (let name in this._input) {
       const pin = this._input[name]
       const data = pin.peak()
-      
+
       this._i[name] = data
-      
+
       if (data !== undefined) {
         this._active_i_count++
 
         this._i_start_count++
         this._i_start[name] = true
 
-        if (pin.invalid())  {
+        if (pin.invalid()) {
           this._i_invalid_count++
           this._i_invalid[name] = true
         }
@@ -649,11 +658,11 @@ export class Primitive<
       const output = this._output[name]
       const data = output.peak()
       this._o[name] = data
-      
+
       if (data !== undefined) {
         this._active_o_count++
 
-        if (output.invalid())  {
+        if (output.invalid()) {
           this._o_invalid_count++
           this._o_invalid[name] = true
         }

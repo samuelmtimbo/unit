@@ -5,11 +5,11 @@ import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { $makeUnitRemoteRef } from '../../../../../client/makeUnitRemoteRef'
 import { RemoteRef } from '../../../../../client/RemoteRef'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
-import { $$refGlobalObj } from '../../../../../types/interface/async/AsyncU'
 import { Pod } from '../../../../../pod'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
+import { $$refGlobalObj } from '../../../../../types/interface/async/AsyncU'
 
 export interface I {
   pod: Graph

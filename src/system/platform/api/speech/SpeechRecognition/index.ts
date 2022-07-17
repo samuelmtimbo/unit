@@ -1,9 +1,9 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { EE } from '../../../../../types/interface/EE'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { ISpeechRecognitionOpt } from '../../../../../types/global/ISpeechRecognition'
+import { EE } from '../../../../../types/interface/EE'
 
 export type I = {
   opt: ISpeechRecognitionOpt

@@ -1,10 +1,10 @@
 import { Unit } from '../Class/Unit'
 import { Classes, GraphSpec, Spec, Specs } from '../types'
 import { Dict } from '../types/Dict'
+import { UnitBundle } from '../types/UnitBundle'
 import { UnitClass } from '../types/UnitClass'
-import { UnitBundle } from "../types/UnitBundle"
 import { bundleClass } from './bundleClass'
-import { fromSpec, _fromSpec } from './fromSpec'
+import { _fromSpec } from './fromSpec'
 import { lazyFromSpec } from './Lazy'
 import { SpecNotFoundError } from './SpecNotFoundError'
 

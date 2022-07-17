@@ -1,4 +1,3 @@
-import { Pin_M } from '../../Pin'
 import { Pod } from '../../pod'
 import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { System } from '../../system'

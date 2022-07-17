@@ -214,27 +214,21 @@ assert.deepEqual(
     },
   ]
 )
-assert.deepEqual(
-  keyUpdateTree('[1,2]', [1], '2', ']', 1, 1, false),
-  [
-    true,
-    {
-      nextRoot: '[1,2]',
-      nextPath: [1],
-      nextSelectionStart: 1,
-      nextSelectionEnd: 1,
-    },
-  ]
-)
-assert.deepEqual(
-  keyUpdateTree('[1,2]', [0], '1', ',', 1, 1, false),
-  [
-    true,
-    {
-      nextRoot: '[1,2]',
-      nextPath: [1],
-      nextSelectionStart: 0,
-      nextSelectionEnd: 0,
-    },
-  ]
-)
+assert.deepEqual(keyUpdateTree('[1,2]', [1], '2', ']', 1, 1, false), [
+  true,
+  {
+    nextRoot: '[1,2]',
+    nextPath: [1],
+    nextSelectionStart: 1,
+    nextSelectionEnd: 1,
+  },
+])
+assert.deepEqual(keyUpdateTree('[1,2]', [0], '1', ',', 1, 1, false), [
+  true,
+  {
+    nextRoot: '[1,2]',
+    nextPath: [1],
+    nextSelectionStart: 0,
+    nextSelectionEnd: 0,
+  },
+])

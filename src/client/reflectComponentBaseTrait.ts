@@ -46,6 +46,33 @@ export const reflectComponentBaseTrait = (
   const all_leaf_slot_trait = {}
   const all_slot_base: Dict<string[]> = {}
 
+  const expand_slot = (slot_id: string, path: number[]): Style[] => {
+    const slot_base = all_slot_base[slot_id]
+
+    let _slot_base = slot_base
+
+    let base = []
+
+    for (const p of path) {
+      const leaf_id = _slot_base[p]
+      const leaf_path = leaf_id.split('/')
+
+      let sub_component = component.pathGetSubComponent(leaf_path)
+
+      _slot_base = all_slot_base[leaf_id]
+
+      base = sub_component.$parentChildren.reduce((acc, c) => {
+        return [...acc, ...c.getRootBase()]
+      }, [])
+    }
+
+    const children_styles = base.map(([_, leaf_comp]) =>
+      extractStyle(_, leaf_comp)
+    )
+
+    return children_styles
+  }
+
   for (const leaf of base) {
     const [leaf_path, leaf_comp] = leaf
 
@@ -163,22 +190,35 @@ export const reflectComponentBaseTrait = (
     style,
     all_root_style,
     (path) => {
+      let parent = component
       let children = root_leaf_id
 
       let base = []
 
       let leaf_id
 
+      const [head, ...tail] = path
+
+      const slot_id = children[head]
+
+      return expand_slot(slot_id, tail)
+
+      const leaf_path = leaf_id === '' ? [] : leaf_id.split('/')
+
+      let sub_component = parent.pathGetSubComponent(leaf_path)
+
       for (const p of path) {
         leaf_id = children[p]
 
         const leaf_path = leaf_id === '' ? [] : leaf_id.split('/')
 
-        let sub_component = component.pathGetSubComponent(leaf_path)
+        let sub_component = parent.pathGetSubComponent(leaf_path)
 
         base = sub_component.$mountParentChildren.reduce((acc, c) => {
           return [...acc, ...c.getRootBase()]
         }, [])
+
+        children = base.map(([path]) => getLeafId(path))
       }
 
       const children_styles = base.map(([leaf_id, leaf_comp]) =>
@@ -215,28 +255,7 @@ export const reflectComponentBaseTrait = (
       slot_style,
       slot_all_style,
       (path) => {
-        let _slot_base = slot_base
-
-        let base = []
-
-        for (const p of path) {
-          const leaf_id = _slot_base[p]
-          const leaf_path = leaf_id.split('/')
-
-          let sub_component = component.pathGetSubComponent(leaf_path)
-
-          _slot_base = all_slot_base[leaf_id]
-
-          base = sub_component.$parentChildren.reduce((acc, c) => {
-            return [...acc, ...c.getRootBase()]
-          }, [])
-        }
-
-        const children_styles = base.map(([_, leaf_comp]) =>
-          extractStyle(_, leaf_comp)
-        )
-
-        return children_styles
+        return expand_slot(slot_id, path)
       }
     )
 

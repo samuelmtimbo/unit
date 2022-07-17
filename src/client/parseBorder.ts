@@ -8,7 +8,8 @@ export type IBorder = {
 
 export function parseBorder(border: string): IBorder {
   // TODO
-  const [width = '0px', style = 'solid', color = 'currentColor'] = border.split(' ')
+  const [width = '0px', style = 'solid', color = 'currentColor'] =
+    border.split(' ')
 
   return {
     width: width || '0px',
@@ -16,7 +17,6 @@ export function parseBorder(border: string): IBorder {
     color,
   }
 }
-
 
 assert.deepEqual(parseBorder(''), {
   width: '0px',

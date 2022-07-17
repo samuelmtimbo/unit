@@ -29,7 +29,7 @@ export const $G_METHOD_CALL_GET = [
   'getGraphMergeInputData',
   'getUnitInputData',
   'getSpec',
-  'getBundle'
+  'getBundle',
 ]
 
 export const $G_METHOD_CALL_SET_THIS = [
@@ -270,8 +270,8 @@ export interface $G_C {
       output: Dict<{ pinId: string; subPinId: string }>
     }>
     nextMergePinId: Dict<{
-      input: { mergeId: string; pinId: string, subPinSpec: GraphSubPinSpec }
-      output: { mergeId: string; pinId: string, subPinSpec: GraphSubPinSpec }
+      input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
+      output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
     }>
     nextPlugSpec: {
       input: Dict<Dict<GraphSubPinSpec>>

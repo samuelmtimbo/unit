@@ -281,7 +281,7 @@ export function randomInPaddedRect(
   y1: number,
   offset: number
 ): Point {
-  return randomInRect(x0 - offset, y0 - offset, x1 + offset, y1 + offset) 
+  return randomInRect(x0 - offset, y0 - offset, x1 + offset, y1 + offset)
 }
 
 export function randomInCircle(cX: number, cY: number, R: number): Point {

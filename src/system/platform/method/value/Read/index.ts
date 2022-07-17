@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { V } from '../../../../../types/interface/V'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { V } from '../../../../../types/interface/V'
 
 export interface I<T> {
   value: V

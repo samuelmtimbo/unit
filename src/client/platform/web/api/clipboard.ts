@@ -3,7 +3,7 @@ import { API } from '../../../../system'
 
 export function webClipboard(window: Window, prefix: string): API['clipboard'] {
   const { navigator } = window
-  
+
   const readText = async () => {
     if (navigator.clipboard && navigator.clipboard.readText) {
       const text = await navigator.clipboard.readText()

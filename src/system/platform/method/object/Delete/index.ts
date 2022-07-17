@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { J } from '../../../../../types/interface/J'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { J } from '../../../../../types/interface/J'
 
 export interface I<T> {
   unit: J

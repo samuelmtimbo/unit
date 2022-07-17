@@ -32,7 +32,7 @@ export default function isEqual(a: any, b: any): boolean {
     for (const ka in a) {
       const va = a[ka]
       const vb = b[ka]
-      
+
       if (!isEqual(va, vb)) {
         return false
       }

@@ -1,6 +1,6 @@
 import { ListenerNotFoundError } from './exception/ListenerNotFoundError'
-import { EE } from './types/interface/EE'
 import { Dict } from './types/Dict'
+import { EE } from './types/interface/EE'
 import { Listener } from './types/Listener'
 import { Unlisten } from './types/Unlisten'
 

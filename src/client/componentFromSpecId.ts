@@ -15,6 +15,6 @@ export function componentFromSpecId(
   const Class = componentClassFromSpecId(system, specs, id)
 
   const component = new Class(props, system, pod)
-  
+
   return component
 }

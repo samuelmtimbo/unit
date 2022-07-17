@@ -1,9 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { CH } from '../../../../../types/interface/CH'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
-import { C } from '../../../../../types/interface/C'
 import { Component_ } from '../../../../../types/interface/Component'
 
 interface I<T> {

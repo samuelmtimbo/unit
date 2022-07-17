@@ -3,7 +3,6 @@ import { Pod } from './pod'
 import { fromSpec } from './spec/fromSpec'
 import { System } from './system'
 import { GraphSpec, GraphSpecs } from './types'
-import { BundleSpec } from './types/BundleSpec'
 import { randomIdNotIn } from './util/id'
 
 export function spawn(system: System, specs: GraphSpecs = {}): Pod {

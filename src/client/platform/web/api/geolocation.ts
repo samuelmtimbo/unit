@@ -2,9 +2,12 @@ import { APINotSupportedError } from '../../../../exception/APINotImplementedErr
 import { API } from '../../../../system'
 import { IGeoPosition } from '../../../../types/global/IGeoPosition'
 
-export function webGeolocation(window: Window, prefix: string): API['geolocation'] {
+export function webGeolocation(
+  window: Window,
+  prefix: string
+): API['geolocation'] {
   const { navigator } = window
-  
+
   const getCurrentPosition = async (): Promise<IGeoPosition> => {
     if (
       !navigator ||

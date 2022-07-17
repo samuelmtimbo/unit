@@ -2,7 +2,6 @@ import { DEFAULT_STUN_RTC_CONFIG } from '../../../../../api/peer/config'
 import { Peer } from '../../../../../api/peer/Peer'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
 import { asyncGraphFromPort } from '../../../../../graphFromPort'
-import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
 import { RemotePort } from '../../../../../RemotePort'
@@ -10,6 +9,7 @@ import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { IPort } from '../../../../../types/global/IPort'
+import { $Graph } from '../../../../../types/interface/async/$Graph'
 
 export interface I {
   offer: string

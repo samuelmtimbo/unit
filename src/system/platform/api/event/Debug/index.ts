@@ -1,7 +1,7 @@
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { EE } from '../../../../../types/interface/EE'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { EE } from '../../../../../types/interface/EE'
 import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I<T> {

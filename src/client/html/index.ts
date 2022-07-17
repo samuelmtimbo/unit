@@ -231,7 +231,9 @@ export function makeFullHTML(bundle: BundleSpec, opt: {}): string {
         </style>
       </head>
       <body>
-        <div id="__SYSTEM__BUNDLE__" style="display: none;">${JSON.stringify(bundle)}</div>
+        <div id="__SYSTEM__BUNDLE__" style="display: none;">${JSON.stringify(
+          bundle
+        )}</div>
         <div
           id="__SYSTEM__ROOT__"
           style="display: block; position: absolute; width: 100%; height: 100%;"

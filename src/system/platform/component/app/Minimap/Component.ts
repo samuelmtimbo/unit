@@ -41,7 +41,7 @@ export interface Props {
 }
 
 export const DEFAULT_STYLE = {
-  ...userSelect('none')
+  ...userSelect('none'),
 }
 
 export const MINIMAP_WIDTH = 200

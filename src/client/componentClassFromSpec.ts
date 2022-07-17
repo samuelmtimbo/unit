@@ -1,12 +1,15 @@
 import { Pod } from '../pod'
 import { ComponentClass, System } from '../system'
-import { GraphSpec, GraphSpecs, Specs } from '../types'
+import { GraphSpec, Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { Component } from './component'
 import { componentClassFromSpecId } from './componentClassFromSpecId'
 import parentElement from './platform/web/parentElement'
 
-export function componentClassFromSpec(spec: GraphSpec, specs: Specs): ComponentClass {
+export function componentClassFromSpec(
+  spec: GraphSpec,
+  specs: Specs
+): ComponentClass {
   const {
     id,
     name,
@@ -38,9 +41,9 @@ export function componentClassFromSpec(spec: GraphSpec, specs: Specs): Component
         const { children = [], childSlot = {} } = subComponentSpec
         for (const childUnitId of children) {
           fillParentRoot(childUnitId)
-          const slot = childSlot[childUnitId] || 'default'
+          const slotName = childSlot[childUnitId] || 'default'
           const childRoot: Component = $subComponent[childUnitId]
-          component.registerParentRoot(childRoot, slot)
+          component.registerParentRoot(childRoot, slotName)
         }
       }
 

@@ -2,10 +2,10 @@ import { $ } from '../../../../../../Class/$'
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
 import { Rect } from '../../../../../../client/util/geometry'
-import { B } from '../../../../../../types/interface/B'
-import { IB } from '../../../../../../types/interface/IB'
 import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
+import { B } from '../../../../../../types/interface/B'
+import { IB } from '../../../../../../types/interface/IB'
 
 export type I = {
   blob: B

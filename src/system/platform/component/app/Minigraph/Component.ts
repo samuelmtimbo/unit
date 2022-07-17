@@ -161,7 +161,7 @@ export default class Minigraph extends Element<IHTMLDivElement, Props> {
   private _reset = (): void => {
     // console.log('Minigraph', '_reset')
 
-    const specs =  { ...this.$system.specs, ...this.$pod.specs }
+    const specs = { ...this.$system.specs, ...this.$pod.specs }
 
     const { bundle } = this.$props
 
@@ -178,11 +178,7 @@ export default class Minigraph extends Element<IHTMLDivElement, Props> {
 
       const { x, y } = position
 
-      let r = getSpecRadius(
-        specs,
-        id,
-        true
-      )
+      let r = getSpecRadius(specs, id, true)
       let width = 2 * r
       let height = 2 * r
 

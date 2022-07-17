@@ -7,7 +7,7 @@ import { $Graph } from '../../types/interface/async/$Graph'
 import { Unlisten } from '../../types/Unlisten'
 import callAll from '../../util/call/callAll'
 import { componentFromSpec } from '../componentFromSpec'
-import { appendChild, focusContext, mount as _mount } from '../context'
+import { appendChild, mount as _mount } from '../context'
 import { renderFrame } from '../renderFrame'
 import { watchPodComponent } from './watchPodComponent'
 

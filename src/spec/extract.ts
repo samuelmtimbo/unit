@@ -2,21 +2,13 @@ import assocPath from '../system/core/object/AssocPath/f'
 import { GraphMergeSpec, GraphSpec, Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'
+import { IOOf } from '../types/IOOf'
 
 export type GraphSpecSelection = {
   units?: string[]
-  unitInputs?: Dict<string[]>
-  unitOutputs?: Dict<string[]>
+  links?: IOOf<Dict<string[]>>
   merges?: string[]
-  datas?: string[]
-  inputs?: {
-    pinId: string
-    subPinId: string
-  }[]
-  outputs?: {
-    pinId: string
-    subPinId: string
-  }[]
+  plugs?: IOOf<{ pinId: string; subPinId: string }[]>
 }
 
 export function extractSubSpec(
@@ -29,15 +21,7 @@ export function extractSubSpec(
   let parentSpec: GraphSpec = {}
   let newSpec: GraphSpec = {}
 
-  const {
-    units = [],
-    unitInputs = {},
-    unitOutputs = {},
-    merges = [],
-    datas = [],
-    inputs = [],
-    outputs = [],
-  } = selection
+  const { units = [], links, merges = [] } = selection
 
   const subUnitSet = new Set(units)
   const subMergeSet = new Set(merges)
@@ -63,13 +47,13 @@ export function extractSubSpec(
   const subUnitInputSets: Dict<Set<string>> = {}
   const subUnitOutputSets: Dict<Set<string>> = {}
 
-  for (const unitId in unitInputs) {
-    const unitInput = unitInputs[unitId]
+  for (const unitId in links.input) {
+    const unitInput = links.input[unitId]
     subUnitInputSets[unitId] = new Set(unitInput)
   }
 
-  for (const unitId in unitOutputs) {
-    const unitOutput = unitOutputs[unitId]
+  for (const unitId in links.output) {
+    const unitOutput = links.output[unitId]
     subUnitOutputSets[unitId] = new Set(unitOutput)
   }
 

@@ -1,5 +1,5 @@
 export interface IPointer {
-    screenX: number
-    screenY: number
-    down: boolean
+  screenX: number
+  screenY: number
+  down: boolean
 }

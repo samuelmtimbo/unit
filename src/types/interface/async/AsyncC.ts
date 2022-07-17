@@ -1,3 +1,4 @@
+import { Classes, Specs } from '../..'
 import {
   $appendChild,
   $child,
@@ -8,10 +9,9 @@ import {
 } from '../../../component/$component'
 import { $Child } from '../../../component/Child'
 import { $Children } from '../../../component/Children'
-import { Component_ } from '../Component'
 import { fromId } from '../../../spec/fromId'
-import { Classes, Specs } from '../..'
 import { Callback } from '../../Callback'
+import { Component_ } from '../Component'
 import { $C, $C_C, $C_R, $C_W } from './$C'
 import { $Component } from './$Component'
 

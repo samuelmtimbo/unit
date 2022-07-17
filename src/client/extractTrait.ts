@@ -1,5 +1,5 @@
-import { LayoutNode } from "./LayoutNode"
 import { Component } from './component'
+import { LayoutNode } from './LayoutNode'
 import { addVector, Size } from './util/geometry'
 import { getRelativePosition } from './util/style/getPosition'
 import { getSize } from './util/style/getSize'
@@ -48,7 +48,10 @@ export const extractTrait = (
 
     const { width, height } = measureText(textContent, fontSize)
 
-    const position = getRelativePosition(leaf_comp.$element, leaf_context.$element)
+    const position = getRelativePosition(
+      leaf_comp.$element,
+      leaf_context.$element
+    )
 
     let parent_trait: LayoutNode
 

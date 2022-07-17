@@ -24,12 +24,12 @@ export default class DrawImage<T> extends Functional<I<T>, O<T>> {
       {
         input: {
           canvas: {
-            ref: true
+            ref: true,
           },
           bitmap: {
-            ref: true
-          }
-        }
+            ref: true,
+          },
+        },
       },
       system,
       pod

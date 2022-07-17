@@ -6,7 +6,7 @@ import { Pin } from '../Pin'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'
-import { IOData } from '../types/IOData'
+import { IOOf } from '../types/IOOf'
 import { Unlisten } from '../types/Unlisten'
 import { remove } from '../util/array'
 import callAll from '../util/call/callAll'
@@ -43,7 +43,7 @@ export function watchUnitIO<T extends Unit>(
   const watch_rename_input = events.includes('rename_input')
   const watch_rename_output = events.includes('rename_output')
 
-  const pin_listener_map: IOData<Dict<Unlisten>> = { input: {}, output: {} }
+  const pin_listener_map: IOOf<Dict<Unlisten>> = { input: {}, output: {} }
 
   const watchPin = (
     kind: 'ref' | 'data',

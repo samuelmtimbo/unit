@@ -121,7 +121,7 @@
     }
   },
   "merges": {
-    "hktktzpjx": {
+    "0": {
       "wait0": {
         "output": {
           "a": true
@@ -146,7 +146,7 @@
     ],
     "position": {
       "merge": {
-        "hktktzpjx": {
+        "0": {
           "x": -2,
           "y": 0
         }

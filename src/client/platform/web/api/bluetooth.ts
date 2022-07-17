@@ -6,7 +6,7 @@ import { IBluetoothServer } from '../../../../types/global/IBluetoothServer'
 
 export function webBluetooth(window: Window, prefix: string): API['bluetooth'] {
   const { navigator } = window
-  
+
   const bluetooth = {
     requestDevice: async (opt: IBluetoothDeviceOpt) => {
       // @ts-ignore

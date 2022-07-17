@@ -1,11 +1,11 @@
 import { Peer } from '../../../../../api/peer/Peer'
 import { $ } from '../../../../../Class/$'
-import { CH } from '../../../../../types/interface/CH'
-import { ST } from '../../../../../types/interface/ST'
 import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
+import { CH } from '../../../../../types/interface/CH'
+import { ST } from '../../../../../types/interface/ST'
 import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface I<T> {

@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { B } from '../../../../../types/interface/B'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { B } from '../../../../../types/interface/B'
 
 export interface I<T> {
   blob: B

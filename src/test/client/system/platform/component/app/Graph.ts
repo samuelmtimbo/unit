@@ -1,8 +1,8 @@
 import { Graph } from '../../../../../../Class/Graph'
 import { nodeBoot } from '../../../../../../client/platform/node/boot'
-import { Async } from '../../../../../../types/interface/async/Async'
 import { spawn } from '../../../../../../spawn'
 import Editor from '../../../../../../system/platform/component/app/Editor/Component'
+import { Async } from '../../../../../../types/interface/async/Async'
 
 export const system = nodeBoot()
 

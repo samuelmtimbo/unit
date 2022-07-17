@@ -17,6 +17,7 @@ export interface O<T> {
 
 export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   private _current: string | undefined = undefined
+  private _looping: boolean = false
 
   constructor(system: System, pod: Pod) {
     super({}, {}, system, pod)
@@ -94,6 +95,17 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     this._forward_if_ready()
   }
 
+  onDataOutputData(name: string) {
+    // RETURN
+    // if (this._looping && !this._forwarding) {
+    //   if (this._current) {
+    //     if (this._active_o_count === 1) {
+    //       this._backward(this._current)
+    //     }
+    //   }
+    // }
+  }
+
   onDataOutputDrop(name: string) {
     this._on_output_drop(name)
   }
@@ -108,12 +120,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  public onDataInputInvalid(name: string): void {
-    if (name === this._current) {
-      // this._looping = false
-      this._invalidate()
-    }
-  }
+  public onOutputInvalid(name: string): void {}
 
   public onInpuRemoved(name: string): void {
     if (name === this._current) {
@@ -135,6 +142,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
 
   private _reset = (): void => {
     this._current = undefined
+    this._looping = false
   }
 
   private _play = (): void => {
@@ -159,9 +167,10 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     if (
       !this._forwarding &&
       this._current !== undefined &&
-      this._active_o_count === 0
+      this._active_o_count - this._o_invalid_count === 0
     ) {
       this._backward(this._current)
+      this._looping = false
       this._forward_if_ready()
     }
   }
@@ -171,6 +180,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     const data = this._i[this._current!]
     const output_empty = filterObj(this._output, (o) => o.empty())
     const output_not_empty = filterObj(this._output, (o) => !o.empty())
+    this._looping = true
     this._forwarding = true
     forEachKeyValue(output_empty, (o) => o.push(data))
     forEachKeyValue(output_not_empty, (o) => o.push(data))

@@ -561,7 +561,10 @@ export function getActiveElement(system: System): Element {
   return activeElement
 }
 
-export function getWindowActiveElement(system: System, _window: Window): Element {
+export function getWindowActiveElement(
+  system: System,
+  _window: Window
+): Element {
   const { root } = system
 
   return root.shadowRoot.activeElement
@@ -587,9 +590,12 @@ export function emitKeyboardEvent(
   }
 }
 
-export function writeToActiveElement(system: System, key: string): void {
+export function writeToActiveElement(system: System, key: string): Element {
   const activeElement = getActiveElement(system)
+
   writeToElement(activeElement, key)
+
+  return activeElement
 }
 
 export function writeToElement(

@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../Class/Element'
-import { P } from '../../../../types/interface/P'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { P } from '../../../../types/interface/P'
 
 export interface I {
   pod: P

@@ -31,7 +31,7 @@ export default class DisplayMedia extends Functional<I, O> {
     this.addListener('destroy', () => {
       if (this._stream) {
         stopMediaStream(this._stream)
-        
+
         this._stream = undefined
       }
     })

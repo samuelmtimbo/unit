@@ -4,8 +4,8 @@ import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
-import SaveControl from '../SaveControl/Component'
 import GUIControl from '../GUIControl/Component'
+import SaveControl from '../SaveControl/Component'
 
 export interface Props {
   className?: string

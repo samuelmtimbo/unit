@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { A } from '../../../../../types/interface/A'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { A } from '../../../../../types/interface/A'
 
 export interface I<T> {
   'a[]': A

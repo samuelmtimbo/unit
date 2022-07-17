@@ -1,6 +1,6 @@
 import { bundleClass } from './spec/bundleClass'
+import { UnitBundle } from './types/UnitBundle'
 import { UnitClass } from './types/UnitClass'
-import { UnitBundle } from "./types/UnitBundle"
 
 export function cloneUnitBundle(Bundle: UnitBundle): UnitBundle {
   const { __bundle } = Bundle

@@ -31,8 +31,8 @@ export default class Start extends Semifunctional<I, O> {
       {
         input: {
           pod: {
-            ref: true
-          }
+            ref: true,
+          },
         },
         output: {
           graph: {
@@ -45,7 +45,7 @@ export default class Start extends Semifunctional<I, O> {
     )
   }
 
-  f({ bundle, pod }: I, done: Done<O>): void {    
+  f({ bundle, pod }: I, done: Done<O>): void {
     const [map, graph, unlisten] = pod.newGraph(bundle)
 
     done({ graph })

@@ -203,7 +203,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
         { combo: 'Escape', keydown: this._on_escape_keydown },
         {
           // combo: 'Ctrl + p',
-          combo: 'Ctrl + ;',
+          combo: ['Ctrl + ;', ';'],
           // combo: 'Ctrl + /',
           keydown: this._on_ctrl_p_keydown,
           strict: false,
@@ -520,7 +520,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   ) => {
     // console.log('Search', '_on_input_keydown', keyCode, repeat)
     // prevent arrow up/down default
-    if (keyCode === 38 || keyCode === 40) {
+    if (keyCode === 38 || keyCode === 40 || keyCode === 186) {
       _event.preventDefault()
     }
 
@@ -693,13 +693,13 @@ export default class Search extends Element<IHTMLDivElement, Props> {
       const { fuzzyName } = this._item[id]
       const list_item_div = this._list_item_div[id]
 
-      const clean_fuzzy_pattern = removeWhiteSpace(fuzzy_pattern.replace('-', ' '))
-
-      const fuzzy_match = fuzzy.match(
-        clean_fuzzy_pattern,
-        fuzzyName,
-        { caseSensitive: false }
+      const clean_fuzzy_pattern = removeWhiteSpace(
+        fuzzy_pattern.replace('-', ' ')
       )
+
+      const fuzzy_match = fuzzy.match(clean_fuzzy_pattern, fuzzyName, {
+        caseSensitive: false,
+      })
 
       if (
         (fuzzy_pattern === '' || fuzzy_match) &&
@@ -762,6 +762,12 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   }
 
   private _on_input_input = (value: string) => {
+    if (value === ';') {
+      this._setValue(this._input_value)
+
+      return
+    }
+
     this._input_value = value
     this._filter_list()
   }
@@ -830,9 +836,13 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   }
 
   public setValue = (value: string): void => {
+    this._setValue(value)
+    this._filter_list()
+  }
+
+  public _setValue = (value: string): void => {
     this._input_value = value
     this._input.setProp('value', value)
-    this._filter_list()
   }
 
   public toggleShape = () => {

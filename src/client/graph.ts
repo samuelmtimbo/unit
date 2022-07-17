@@ -2,8 +2,8 @@ import { forEachPinOnMerge } from '../spec/util'
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
 import {
   GraphPinSpec,
-  GraphSubPinSpec,
   GraphSpec,
+  GraphSubPinSpec,
   PinSpec,
   Specs,
 } from '../types'
@@ -123,23 +123,20 @@ export function build_graph(
     spec.inputs || {},
     (pinSpec: GraphPinSpec, exposedPinId: string) => {
       const { plug = {} } = pinSpec
-      forEachKeyValue(
-        plug,
-        (subPinSpec: GraphSubPinSpec, subPinId: string) => {
-          const extInputNodeId = getExtNodeId('input', exposedPinId, subPinId)
-          graph[extInputNodeId] = { next: {}, previous: {} }
-          const pinNodeId = getSubPinSpecNodeId('input', subPinSpec)
-          graph[extInputNodeId].next[pinNodeId] = graph[pinNodeId]
-          graph[pinNodeId].previous[extInputNodeId] = graph[extInputNodeId]
-          const extInputTypeNodeId = getMetadataNodeId(extInputNodeId, 'type')
-          graph[extInputTypeNodeId] = {
-            next: { [extInputNodeId]: graph[extInputNodeId] },
-            previous: {},
-          }
-          graph[extInputNodeId].previous[extInputTypeNodeId] =
-            graph[extInputTypeNodeId]
+      forEachKeyValue(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
+        const extInputNodeId = getExtNodeId('input', exposedPinId, subPinId)
+        graph[extInputNodeId] = { next: {}, previous: {} }
+        const pinNodeId = getSubPinSpecNodeId('input', subPinSpec)
+        graph[extInputNodeId].next[pinNodeId] = graph[pinNodeId]
+        graph[pinNodeId].previous[extInputNodeId] = graph[extInputNodeId]
+        const extInputTypeNodeId = getMetadataNodeId(extInputNodeId, 'type')
+        graph[extInputTypeNodeId] = {
+          next: { [extInputNodeId]: graph[extInputNodeId] },
+          previous: {},
         }
-      )
+        graph[extInputNodeId].previous[extInputTypeNodeId] =
+          graph[extInputTypeNodeId]
+      })
     }
   )
 
@@ -147,23 +144,20 @@ export function build_graph(
     spec.outputs || {},
     (pinSpec: GraphPinSpec, exposedPinId: string) => {
       const { plug = {} } = pinSpec
-      forEachKeyValue(
-        plug,
-        (subPinSpec: GraphSubPinSpec, subPinId: string) => {
-          const extOutputNodeId = getExtNodeId('output', exposedPinId, subPinId)
-          graph[extOutputNodeId] = { next: {}, previous: {} }
-          const pinNodeId = getSubPinSpecNodeId('output', subPinSpec)
-          graph[extOutputNodeId].previous[pinNodeId] = graph[pinNodeId]
-          graph[pinNodeId].next[extOutputNodeId] = graph[extOutputNodeId]
-          const extOutputTypeNodeId = getMetadataNodeId(extOutputNodeId, 'type')
-          graph[extOutputTypeNodeId] = {
-            next: { [extOutputNodeId]: graph[extOutputNodeId] },
-            previous: {},
-          }
-          graph[extOutputNodeId].previous[extOutputTypeNodeId] =
-            graph[extOutputTypeNodeId]
+      forEachKeyValue(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
+        const extOutputNodeId = getExtNodeId('output', exposedPinId, subPinId)
+        graph[extOutputNodeId] = { next: {}, previous: {} }
+        const pinNodeId = getSubPinSpecNodeId('output', subPinSpec)
+        graph[extOutputNodeId].previous[pinNodeId] = graph[pinNodeId]
+        graph[pinNodeId].next[extOutputNodeId] = graph[extOutputNodeId]
+        const extOutputTypeNodeId = getMetadataNodeId(extOutputNodeId, 'type')
+        graph[extOutputTypeNodeId] = {
+          next: { [extOutputNodeId]: graph[extOutputNodeId] },
+          previous: {},
         }
-      )
+        graph[extOutputNodeId].previous[extOutputTypeNodeId] =
+          graph[extOutputTypeNodeId]
+      })
     }
   )
 

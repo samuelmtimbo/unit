@@ -1,11 +1,11 @@
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { GraphSpec } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
+import { $Graph } from '../../../../../types/interface/async/$Graph'
 import Div from '../../Div/Component'
 
 export interface Props {

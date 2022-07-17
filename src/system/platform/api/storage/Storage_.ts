@@ -3,10 +3,10 @@ import {
   getStorageKeys,
   storageHasKey,
 } from '../../../../client/util/web/storage'
-import { J } from '../../../../types/interface/J'
 import { ObjectUpdateType } from '../../../../Object'
 import { Dict } from '../../../../types/Dict'
 import { IStorage } from '../../../../types/global/IStorage'
+import { J } from '../../../../types/interface/J'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export class Storage_ implements J {

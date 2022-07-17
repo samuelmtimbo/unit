@@ -1,10 +1,10 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { B } from '../../../../../types/interface/B'
-import { CA } from '../../../../../types/interface/CA'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { B } from '../../../../../types/interface/B'
+import { CA } from '../../../../../types/interface/CA'
 
 export interface I<T> {
   canvas: CA

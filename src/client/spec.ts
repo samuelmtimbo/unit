@@ -167,7 +167,7 @@ export function newUnitId(
   blacklist: Set<string> = new Set()
 ): string {
   const unit_spec = getSpec(specs, unit_spec_id)
-  
+
   const { name = '' } = unit_spec
 
   return newUnitIdFromName(spec, name, blacklist)

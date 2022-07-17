@@ -1,7 +1,6 @@
 import { Element_ } from '../../../../Class/Element'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
-import { UnitBundle } from '../../../../types/UnitBundle'
 import { Style } from '../../Props'
 
 export type I = {

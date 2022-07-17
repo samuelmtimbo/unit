@@ -1,11 +1,11 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { BS } from '../../../../../types/interface/BS'
-import { BSE } from '../../../../../types/interface/BSE'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IBluetoothCharacteristic } from '../../../../../types/global/IBluetoothCharacteristic'
+import { BS } from '../../../../../types/interface/BS'
+import { BSE } from '../../../../../types/interface/BSE'
 
 export interface I {
   server: BS

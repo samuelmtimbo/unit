@@ -1,5 +1,11 @@
 import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
-import { GraphMergeSpec, GraphMergesSpec, GraphMergeUnitSpec } from '../types'
+import {
+  GraphMergeSpec,
+  GraphMergesSpec,
+  GraphMergeUnitSpec,
+  GraphPinSpec,
+  GraphSpec,
+} from '../types'
 import { IO } from '../types/IO'
 import { reduceObj, _keyCount } from '../util/object'
 
@@ -89,5 +95,18 @@ export const forEachPinOnMerge = (
     forEachKeyValue(output || {}, (_, outputId) => {
       callback(unitId, 'output', outputId)
     })
+  })
+}
+
+export const forEachSpecPin = (
+  spec: GraphSpec,
+  callback: (type: IO, pinId: string, pinSpec: GraphPinSpec) => void
+) => {
+  const { inputs = {}, outputs = {} } = spec
+  forEachKeyValue(inputs, (inputSpec, inputId) => {
+    callback('input', inputId, inputSpec)
+  })
+  forEachKeyValue(outputs, (outputSpec, outputId) => {
+    callback('output', outputId, outputSpec)
   })
 }

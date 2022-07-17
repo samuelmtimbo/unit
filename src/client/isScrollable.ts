@@ -5,7 +5,10 @@ export function hasScrollbar(): boolean {
   return true
 }
 
-export function isScrollableChild(element: HTMLElement, parentElement: HTMLElement): boolean {
+export function isScrollableChild(
+  element: HTMLElement,
+  parentElement: HTMLElement
+): boolean {
   return true
 }
 
@@ -22,7 +25,9 @@ export function isScrollable(element: HTMLElement): boolean {
     const { parentElement } = element
 
     if (parentElement) {
-      return isScrollableChild(element, parentElement) && isScrollable(parentElement)
+      return (
+        isScrollableChild(element, parentElement) && isScrollable(parentElement)
+      )
     } else {
       return false
     }

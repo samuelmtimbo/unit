@@ -90,3 +90,21 @@ assert.equal(merge1.peakInput('b'), undefined)
 assert.equal(merge1.peakOutput('a'), 0)
 merge1.removeInput('a')
 assert.equal(merge1.peakOutput('a'), 0)
+
+const merge2 = new Merge(system, pod)
+
+merge2.play()
+
+false && watchUnitAndLog(merge2)
+
+merge2.addInput('a', new Pin())
+merge2.addInput('b', new Pin())
+merge2.addOutput('a', new Pin())
+merge2.addOutput('b', new Pin())
+
+merge2.push('a', 0)
+
+merge2.pushOutput('b', 1)
+
+assert.equal(merge2.peakInput('a'), undefined)
+assert.equal(merge2.peakOutput('b'), 1)

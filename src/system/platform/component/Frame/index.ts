@@ -1,8 +1,8 @@
 import { Element_ } from '../../../../Class/Element'
-import { CA } from '../../../../types/interface/CA'
 import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { CA } from '../../../../types/interface/CA'
 
 export interface I {
   style: Dict<string>

@@ -1,4 +1,3 @@
-import { NOOP } from '../NOOP'
 import { System } from '../system'
 import {
   IPositionCallback,
@@ -150,9 +149,8 @@ export class PositionObserver implements IPositionObserver {
     this._abort = abort
 
     // const update_local = _update_local
-    
-    // this._abort = NOOP
 
+    // this._abort = NOOP
 
     const _update = (): void => {
       sx = scale_x * parent_scale_x

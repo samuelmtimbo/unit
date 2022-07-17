@@ -1,13 +1,13 @@
-import { AsyncGraph } from '../../../types/interface/async/AsyncGraph'
 import { spawn, start } from '../../../spawn'
 import { System } from '../../../system'
 import { BundleSpec } from '../../../types/BundleSpec'
+import { AsyncGraph } from '../../../types/interface/async/AsyncGraph'
+import { Unlisten } from '../../../types/Unlisten'
+import callAll from '../../../util/call/callAll'
 import { render } from '../../render'
 import root from '../../root'
 import webBoot from './boot'
 import webInit from './init'
-import { Unlisten } from '../../../types/Unlisten'
-import callAll from '../../../util/call/callAll'
 
 export default function webRender(bundle: BundleSpec): [System, Unlisten] {
   const { spec, specs } = bundle

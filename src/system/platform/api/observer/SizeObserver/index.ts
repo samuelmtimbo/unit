@@ -1,9 +1,9 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { Component } from '../../../../../client/component'
-import { Component_ } from '../../../../../types/interface/Component'
 import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { Component_ } from '../../../../../types/interface/Component'
 import {
   getGlobalComponent,
   listenGlobalComponent,

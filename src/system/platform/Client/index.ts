@@ -1,6 +1,5 @@
 import { $ } from '../../../Class/$'
 import { Element_ } from '../../../Class/Element'
-import { Semifunctional } from '../../../Class/Semifunctional'
 import { ObjectUpdateType } from '../../../Object'
 import { Pod } from '../../../pod'
 import { System } from '../../../system'

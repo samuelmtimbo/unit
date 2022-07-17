@@ -1,5 +1,6 @@
 import { Position } from '../client/util/geometry'
 import { Dict } from './Dict'
+import { _IOOf } from './IOOf'
 import { None } from './None'
 import { UnitClass } from './UnitClass'
 
@@ -78,7 +79,7 @@ export type GraphUnitSpecBase = {
   input?: GraphUnitPinsSpec
   output?: GraphUnitPinsSpec
   state?: Dict<any>
-  memory?: { input: Dict<any>, output: Dict<any>, memory: Dict<any> }
+  memory?: { input: Dict<any>; output: Dict<any>; memory: Dict<any> }
   flag?: Dict<any>
   children?: GraphUnitSpec[] | None
   reorder?: string[] | None
@@ -93,14 +94,7 @@ export type GraphUnitsSpec = Dict<GraphUnitSpec>
 
 export type GraphMergeSpec = Dict<GraphMergeUnitSpec>
 
-export type GraphMergeUnitSpec = {
-  input?: {
-    [pinId: string]: true
-  }
-  output?: {
-    [pinId: string]: true
-  }
-}
+export type GraphMergeUnitSpec = _IOOf<Dict<true>>
 
 export type GraphMergesSpec = Dict<GraphMergeSpec>
 

@@ -7,7 +7,6 @@ import {
   TERMINATE,
 } from '../../../../../../../constant/STRING'
 import { asyncGraphFromPort } from '../../../../../../../graphFromPort'
-import { $Graph } from '../../../../../../../types/interface/async/$Graph'
 import { Pod } from '../../../../../../../pod'
 import {
   hasLocalBroadcastSource,
@@ -19,6 +18,7 @@ import {
 import { RemotePort } from '../../../../../../../RemotePort'
 import { System } from '../../../../../../../system'
 import { IPort } from '../../../../../../../types/global/IPort'
+import { $Graph } from '../../../../../../../types/interface/async/$Graph'
 
 export interface I {
   id: string

@@ -38,21 +38,22 @@ export const COLLAPSE_UNITS = 'collapseUnits'
 import { Position } from '../../client/util/geometry'
 import {
   Action,
-  GraphPinSpec,
-  GraphSubPinSpec,
   GraphMergeSpec,
   GraphMergesSpec,
+  GraphPinSpec,
+  GraphSubPinSpec,
   GraphUnitSpec,
   GraphUnitsSpec,
 } from '../../types'
 import { Dict } from '../../types/Dict'
 import { IO } from '../../types/IO'
+import { IOOf } from '../../types/IOOf'
 
 export const addUnit = (
   id: string,
   unit: GraphUnitSpec,
   position: Position,
-  pinPosition: { input: Dict<Position>; output: Dict<Position> },
+  pinPosition: IOOf<Dict<Position>>,
   layoutPositon: Position,
   parentId: string | null
 ) => {
@@ -129,11 +130,7 @@ export const setPinSetFunctional = (
   }
 }
 
-export const exposePinSet = (
-  type: IO,
-  id: string,
-  pin: GraphPinSpec
-) => {
+export const exposePinSet = (type: IO, id: string, pin: GraphPinSpec) => {
   return {
     type: EXPOSE_PIN_SET,
     data: { type, id, pin },

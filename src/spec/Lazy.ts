@@ -205,8 +205,8 @@ export function lazyFromSpec(
         output: Dict<{ pinId: string; subPinId: string }>
       }>,
       nextMergePinId: Dict<{
-        input: { mergeId: string; pinId: string }
-        output: { mergeId: string; pinId: string }
+        input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
+        output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
       }>,
       nextPlugSpec: {
         input: Dict<Dict<GraphSubPinSpec>>
@@ -732,20 +732,23 @@ export function lazyFromSpec(
     public moveMergeInto(
       graphId: string,
       mergeId: string,
-      nextInputMergeId: { mergeId: string; pinId: string },
-      nextOutputMergeId: { mergeId: string; pinId: string },
-      nextPinIdMap: Dict<{
-        input: Dict<{ pinId: string; subPinId: string }>
-        output: Dict<{ pinId: string; subPinId: string }>
-      }>
+      nextInputMergeId: {
+        mergeId: string
+        pinId: string
+        subPinSpec: GraphSubPinSpec
+      },
+      nextOutputMergeId: {
+        mergeId: string
+        pinId: string
+        subPinSpec: GraphSubPinSpec
+      }
     ): void {
       this._ensure()
       return this.__graph.moveMergeInto(
         graphId,
         mergeId,
         nextInputMergeId,
-        nextOutputMergeId,
-        nextPinIdMap
+        nextOutputMergeId
       )
     }
 

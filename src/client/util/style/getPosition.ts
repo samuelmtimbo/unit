@@ -1,6 +1,6 @@
 import { IOElement } from '../../IOElement'
 import { parseTransformXY } from '../../parseTransformXY'
-import { addVector3,NULL_VECTOR,Position } from '../geometry'
+import { addVector3, NULL_VECTOR, Position } from '../geometry'
 
 export function getRelativePosition(
   element: IOElement,
@@ -37,7 +37,9 @@ export function getSVGRelativePosition(
   relative: HTMLElement
 ): Position {
   // return NULL_VECTOR
-  return element.parentElement ? getHTMLRelativePosition(element.parentElement, relative) : NULL_VECTOR
+  return element.parentElement
+    ? getHTMLRelativePosition(element.parentElement, relative)
+    : NULL_VECTOR
 }
 
 export function getHTMLRelativePosition(
@@ -103,7 +105,13 @@ export function getScrollPosition(
 }
 
 export function getLocalPosition(element: HTMLElement): Position {
-  const { offsetLeft = 0, offsetTop = 0, offsetWidth = 0, offsetHeight = 0, style } = element
+  const {
+    offsetLeft = 0,
+    offsetTop = 0,
+    offsetWidth = 0,
+    offsetHeight = 0,
+    style,
+  } = element
 
   let offset_x = offsetLeft
   let offset_y = offsetTop

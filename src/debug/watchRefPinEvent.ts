@@ -1,6 +1,6 @@
-import { _ } from '../types/interface/$_'
 import { Pin, PinEvent } from '../Pin'
 import { GlobalRefSpec } from '../types/GlobalRefSpec'
+import { _ } from '../types/interface/$_'
 import { Moment } from './Moment'
 import { PinType } from './PinType'
 
