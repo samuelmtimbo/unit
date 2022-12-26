@@ -1,11 +1,10 @@
-import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
+import applyStyle from '../../../../../client/style'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
-import { $ST } from '../../../../../types/interface/async/$ST'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { $ST } from '../../../../../types/interface/async/$ST'
 
 export interface Props {
   className?: string
@@ -25,12 +24,10 @@ export const DEFAULT_STYLE = {
 }
 
 export default class VideoComp extends Element<HTMLVideoElement, Props> {
-  private _video_el: HTMLVideoElement
-
   private prop_handler: PropHandler
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       className,
@@ -40,55 +37,51 @@ export default class VideoComp extends Element<HTMLVideoElement, Props> {
       controls = true,
     } = this.$props
 
-    const video_el = this.$system.api.document.createElement('video')
+    this.$element = this.$system.api.document.createElement('video')
 
-    video_el.controls = controls
+    this.$element.controls = controls
 
     if (className) {
-      video_el.className = className
+      this.$element.className = className
     }
 
     if (src) {
-      video_el.src = src
+      this.$element.src = src
     }
 
-    video_el.autoplay = autoplay
+    this.$element.autoplay = autoplay
 
-    applyStyle(video_el, { ...DEFAULT_STYLE, ...style })
-
-    this._video_el = video_el
+    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
 
     this.prop_handler = {
-      ...htmlPropHandler(this._video_el, DEFAULT_STYLE),
+      ...htmlPropHandler(this, DEFAULT_STYLE),
 
       src: (src: string | undefined) => {
         if (src === undefined) {
-          this._video_el.pause()
-          this._video_el.removeAttribute('src') // empty source
-          this._video_el.load()
+          this.$element.pause()
+          this.$element.removeAttribute('src') // empty source
+          this.$element.load()
         } else {
-          this._video_el.src = src
+          this.$element.src = src
         }
       },
       stream: (stream: $ST | undefined): void => {
         if (stream === undefined) {
-          this._video_el.srcObject = null
+          this.$element.srcObject = null
         } else {
           stream.$stream({}, (_stream: MediaStream) => {
-            this._video_el.srcObject = _stream
+            this.$element.srcObject = _stream
           })
         }
       },
       controls: (controls: boolean | undefined): void => {
         if (controls === undefined) {
-          this._video_el.removeAttribute('controls')
+          this.$element.removeAttribute('controls')
         } else {
-          this._video_el.controls = controls
+          this.$element.controls = controls
         }
       },
     }
-
-    this.$element = video_el
   }
 
   onPropChanged(prop: string, current: any): void {
@@ -101,18 +94,18 @@ export default class VideoComp extends Element<HTMLVideoElement, Props> {
     frameRate: number
   }): Promise<MediaStream> {
     // @ts-ignore
-    if (this._video_el.captureStream) {
+    if (this.$element.captureStream) {
       // @ts-ignore
-      return this._video_el.captureStream(frameRate)
+      return this.$element.captureStream(frameRate)
     } else {
       throw new APINotSupportedError('Capture Stream')
     }
   }
 
   async requestPictureInPicture(): Promise<any> {
-    if (this._video_el.requestPictureInPicture) {
+    if (this.$element.requestPictureInPicture) {
       try {
-        return await this._video_el.requestPictureInPicture()
+        return await this.$element.requestPictureInPicture()
       } catch (err) {
         switch (err.name) {
           case 'InvalidStateError':

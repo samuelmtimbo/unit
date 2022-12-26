@@ -1,12 +1,12 @@
 import { NOOP } from '../../../../NOOP'
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 import {
   IHTTPServer,
   IHTTPServerOpt,
 } from '../../../../types/global/IHTTPServer'
 import { Unlisten } from '../../../../types/Unlisten'
 
-export function webHTTP(window: Window, prefix: string): API['http'] {
+export function webHTTP(window: Window, opt: BootOpt): API['http'] {
   const { fetch } = window
 
   const HTTPServer = (opt: IHTTPServerOpt): IHTTPServer => {

@@ -1,8 +1,11 @@
 import * as assert from 'assert'
 import { Unit } from '../Class/Unit'
-import { pod, system } from './util/system'
+import { newSpecId } from '../client/spec'
+import { system } from './util/system'
 
-const unit = new Unit({}, {}, system, pod)
+const RANDOM_ID = newSpecId(system.specs)
+
+const unit = new Unit({}, {}, system, RANDOM_ID)
 
 unit.play()
 

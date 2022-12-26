@@ -1,7 +1,7 @@
-import { Element } from '../../../../Class/Element'
+import { Element_ } from '../../../../Class/Element'
 import { IOPointerEvent } from '../../../../client/event/pointer'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_ICON } from '../../../_ids'
 
 export interface I {
   style: object
@@ -14,8 +14,8 @@ export interface O {
   pointerleave: IOPointerEvent
 }
 
-export default class IconButton extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class IconButton extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['style', 'icon'],
@@ -23,7 +23,7 @@ export default class IconButton extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_ICON
     )
   }
 }

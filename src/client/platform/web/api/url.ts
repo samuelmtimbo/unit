@@ -1,6 +1,6 @@
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 
-export function webURL(window: Window, prefix: string): API['url'] {
+export function webURL(window: Window, opt: BootOpt): API['url'] {
   const url = {
     createObjectURL: async function (
       object: Blob | MediaSource

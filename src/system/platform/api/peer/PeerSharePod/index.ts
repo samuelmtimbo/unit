@@ -5,14 +5,14 @@ import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { $makeUnitRemoteRef } from '../../../../../client/makeUnitRemoteRef'
 import { RemoteRef } from '../../../../../client/RemoteRef'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
-import { $$refGlobalObj } from '../../../../../types/interface/async/AsyncU'
-import { Pod } from '../../../../../pod'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
+import { $$refGlobalObj } from '../../../../../types/interface/async/AsyncU'
+import { ID_PEER_SHARE_GRAPH } from '../../../../_ids'
 
 export interface I {
-  pod: Graph
+  graph: Graph
   answer: string
 }
 
@@ -20,34 +20,35 @@ export interface O {
   offer: string
 }
 
-export default class PeerSharePod extends Semifunctional<I, O> {
+export default class PeerShareGraph extends Semifunctional<I, O> {
   __ = ['U']
 
   private _connected: boolean = false
   private _peer: Peer
   private _ref: RemoteRef
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
-        fi: ['pod'],
+        fi: ['graph'],
         fo: [],
         i: ['answer'],
         o: ['offer'],
       },
       {
         input: {
-          pod: {
+          graph: {
             ref: true,
           },
         },
       },
       system,
-      pod
+      ID_PEER_SHARE_GRAPH
     )
 
     this.addListener('destroy', () => {
-      console.log('PeerSharePod', 'destroy')
+      // console.log('PeerShareGraph', 'destroy')
+
       if (this._connected) {
         this._disconnect()
 
@@ -55,30 +56,25 @@ export default class PeerSharePod extends Semifunctional<I, O> {
       }
     })
 
-    const peer = new Peer(
-      this.__system,
-      this.__pod,
-      true,
-      DEFAULT_STUN_RTC_CONFIG
-    )
+    const peer = new Peer(this.__system, true, DEFAULT_STUN_RTC_CONFIG)
 
     peer.addListener('connect', () => {
-      console.log('PeerSharePod', 'connect')
+      // console.log('PeerShareGraph', 'connect')
       this._connected = true
-      if (this._input.pod.active()) {
+      if (this._input.graph.active()) {
         this._send_init()
       }
     })
 
     peer.addListener('close', () => {
-      console.log('PeerSharePod', 'close')
+      // console.log('PeerShareGraph', 'close')
       this._connected = false
     })
 
     peer.addListener('message', (message: string): void => {
-      console.log('PeerSharePod', 'message', message)
+      // console.log('PeerShareGraph', 'message', message)
       if (this._ref) {
-        const specs = { ...this.__system.specs, ...this.__pod.specs }
+        const specs = this.__system.specs
         const classes = this.__system.classes
 
         const data = evaluate(message, specs, classes)
@@ -120,12 +116,16 @@ export default class PeerSharePod extends Semifunctional<I, O> {
     this._send({ type: TERMINATE })
   }
 
-  f({ pod }: I) {
-    const { __global_id } = pod
+  f({ graph }: I) {
+    const { __global_id } = graph
 
-    const $pod = $$refGlobalObj(this.__system, __global_id, ['$U', '$C', '$G'])
+    const $graph = $$refGlobalObj(this.__system, __global_id, [
+      '$U',
+      '$C',
+      '$G',
+    ])
 
-    const ref = $makeUnitRemoteRef($pod, ['$U', '$C', '$G'], (data) => {
+    const ref = $makeUnitRemoteRef($graph, ['$U', '$C', '$G'], (data) => {
       this._send_exec(data)
     })
 

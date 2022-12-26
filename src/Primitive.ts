@@ -2,9 +2,8 @@ import { ION, Opt, Unit, UnitEvents } from './Class/Unit'
 import { Pin } from './Pin'
 import { PinOpt } from './PinOpt'
 import { Pins } from './Pins'
-import { Pod } from './pod'
 import { System } from './system'
-import forEachKeyValue from './system/core/object/ForEachKeyValue/f'
+import forEachValueKey from './system/core/object/ForEachKeyValue/f'
 import { Dict } from './types/Dict'
 import { IO } from './types/IO'
 
@@ -71,8 +70,8 @@ export class Primitive<
     data?: any
   }[] = []
 
-  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System, pod: Pod) {
-    super({ i, o }, opt, system, pod)
+  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System, id: string) {
+    super({ i, o }, opt, system, id)
 
     this._setupInputs(this._input)
     this._setupOutputs(this._output)
@@ -84,10 +83,10 @@ export class Primitive<
     this.addListener('rename_input', this._onInputRenamed)
     this.addListener('rename_output', this._onOutputRenamed)
     this.addListener('destroy', () => {
-      forEachKeyValue(this._input, (input: Pin<any>, name: string) => {
+      forEachValueKey(this._input, (input: Pin<any>, name: string) => {
         this._plunkInput(name, input)
       })
-      forEachKeyValue(this._output, (output: Pin<any>, name: string) => {
+      forEachValueKey(this._output, (output: Pin<any>, name: string) => {
         this._plunkOutput(name, output)
       })
     })
@@ -309,15 +308,28 @@ export class Primitive<
     }
   }
 
-  private _onInputSet(name: string, input: Pin<any>, opt: PinOpt): void {
+  private _onInputSet(
+    name: string,
+    input: Pin<any>,
+    opt: PinOpt,
+    propagate: boolean
+  ): void {
     this._setupInput(name, input, opt)
-    this.onInputSet(name, input)
+
+    this.onInputSet(name, input, opt, propagate)
   }
 
-  public onInputSet(name: string, input: Pin<any>): void {
+  public onInputSet(
+    name: string,
+    input: Pin<any>,
+    opt: PinOpt,
+    propagate: boolean
+  ): void {
     if (!input.empty()) {
       this._onInputStart(name)
+
       const data = input.peak()
+
       if (this.hasRefInputNamed(name)) {
         this._onRefInputData(name, data)
       } else {
@@ -329,13 +341,19 @@ export class Primitive<
   private _onOutputSet(
     name: string,
     output: Pin<O[keyof O]>,
-    opt: PinOpt
+    opt: PinOpt,
+    propagate: boolean
   ): void {
     this._setupOutput(name, output, opt)
-    this.onOutputSet(name, output)
+    this.onOutputSet(name, output, opt, propagate)
   }
 
-  public onOutputSet(name: string, output: Pin<O[keyof O]>): void {}
+  public onOutputSet(
+    name: string,
+    output: Pin<O[keyof O]>,
+    opt: PinOpt,
+    propagate: boolean
+  ): void {}
 
   private _onInputRemoved(name: string, input: Pin<any>): void {
     this._plunkInput(name, input)
@@ -473,10 +491,14 @@ export class Primitive<
 
   private _onDataOutputData = (name: string, data: any): void => {
     this.__onOutputData(name, data)
+
+    this.onDataOutputData(name, data)
   }
 
   private _onRefOutputData = (name: string, data: any): void => {
     this.__onOutputData(name, data)
+
+    this.onRefOutputData(name, data)
   }
 
   private _onDataOutputDrop = (name: string): void => {
@@ -497,15 +519,23 @@ export class Primitive<
     }
   }
 
+  public onDataOutputData(name: string, data: any): void {}
+
   public onDataOutputDrop(name: string): void {}
 
+  public onRefOutputData(name: string, data: any): void {}
+
   public onRefOutputDrop(name: string): void {}
+
+  public onOutputInvalid(name: string): void {}
 
   private _onOutputInvalid = (name: string): void => {
     if (!this._o_invalid[name]) {
       this._o_invalid[name] = true
       this._o_invalid_count++
     }
+
+    this.onOutputInvalid(name)
   }
 
   private _onInputEnd(name: string): void {
@@ -537,15 +567,15 @@ export class Primitive<
   }
 
   protected _start() {
-    forEachKeyValue(this._output, (output) => output.start())
+    forEachValueKey(this._output, (output) => output.start())
   }
 
   protected _invalidate() {
-    forEachKeyValue(this._output, (output) => output.invalidate())
+    forEachValueKey(this._output, (output) => output.invalidate())
   }
 
   protected _end() {
-    forEachKeyValue(this._output, (output) => output.end())
+    forEachValueKey(this._output, (output) => output.end())
   }
 
   protected _forward(name: string, data: any): void {
@@ -561,8 +591,7 @@ export class Primitive<
 
   protected _forward_all_empty(): void {
     this._forwarding_empty = true
-    // forEachKeyValue(this.output, o => o.pull())
-    forEachKeyValue(this._output, (o) => o.take())
+    forEachValueKey(this._output, (o) => o.take())
     this._forwarding_empty = false
   }
 
@@ -575,7 +604,7 @@ export class Primitive<
 
   protected _backward_all(): void {
     this._backwarding = true
-    forEachKeyValue(this._data_input, (i) => i.pull())
+    forEachValueKey(this._data_input, (i) => i.pull())
     this._backwarding = false
   }
 
@@ -601,7 +630,8 @@ export class Primitive<
   }
 
   public restoreSelf(state: Dict<any>): void {
-    const { __buffer, _forwarding, _backwarding, _forwarding_empty, ...rest } = state
+    const { __buffer, _forwarding, _backwarding, _forwarding_empty, ...rest } =
+      state
 
     super.restoreSelf(rest)
 
@@ -622,23 +652,23 @@ export class Primitive<
 
     this._o_invalid_count = 0
     this._o_invalid = {}
-  
+
     this._i_invalid_count = 0
     this._i_invalid = {}
 
     for (let name in this._input) {
       const pin = this._input[name]
       const data = pin.peak()
-      
+
       this._i[name] = data
-      
+
       if (data !== undefined) {
         this._active_i_count++
 
         this._i_start_count++
         this._i_start[name] = true
 
-        if (pin.invalid())  {
+        if (pin.invalid()) {
           this._i_invalid_count++
           this._i_invalid[name] = true
         }
@@ -649,11 +679,11 @@ export class Primitive<
       const output = this._output[name]
       const data = output.peak()
       this._o[name] = data
-      
+
       if (data !== undefined) {
         this._active_o_count++
 
-        if (output.invalid())  {
+        if (output.invalid()) {
           this._o_invalid_count++
           this._o_invalid[name] = true
         }

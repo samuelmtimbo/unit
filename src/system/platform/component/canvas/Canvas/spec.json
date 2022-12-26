@@ -6,11 +6,11 @@
       "optional": true
     },
     "width": {
-      "type": "number",
+      "type": "number|string",
       "optional": true
     },
     "height": {
-      "type": "number",
+      "type": "number|string",
       "optional": true
     },
     "d": {
@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "for painting",
-    "complexity": 21,
+    "complexity": 125,
     "tags": [
       "platform",
       "component",

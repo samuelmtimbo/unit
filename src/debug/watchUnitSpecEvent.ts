@@ -1,6 +1,6 @@
 import { Unit } from '../Class/Unit'
 import { Unlisten } from '../types/Unlisten'
-import callAll from '../util/call/callAll'
+import { callAll } from '../util/call/callAll'
 import { Moment } from './Moment'
 
 export interface UnitSpecMomentData {

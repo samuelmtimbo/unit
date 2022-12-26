@@ -1,6 +1,6 @@
-import { Element } from '../../../../Class/Element'
-import { Pod } from '../../../../pod'
+import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
+import { ID_SPAN } from '../../../_ids'
 
 export interface I {
   style: object
@@ -8,8 +8,8 @@ export interface I {
 
 export interface O {}
 
-export default class Span extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class Span extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['style'],
@@ -17,7 +17,7 @@ export default class Span extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_SPAN
     )
   }
 }

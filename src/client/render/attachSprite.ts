@@ -16,7 +16,7 @@ export function attachSprite(system: System): void {
 
   sprite.style.display = 'none'
 
-  root.appendChild(sprite)
+  root.shadowRoot.appendChild(sprite)
 
   system.foreground.sprite = sprite
 }

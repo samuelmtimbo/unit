@@ -25,7 +25,7 @@
   },
   "metadata": {
     "icon": "send",
-    "description": "interface for fetching resources across the network",
+    "description": "fetch a resource across the network through HTTP",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
     "complexity": 3,
     "tags": [

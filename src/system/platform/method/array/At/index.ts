@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { A } from '../../../../../types/interface/A'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { A } from '../../../../../types/interface/A'
+import { ID_AT } from '../../../../_ids'
 
 export interface I<T> {
   'a[]': A
@@ -14,7 +14,7 @@ export interface O<T> {
 }
 
 export default class At<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a[]', 'i'],
@@ -28,7 +28,7 @@ export default class At<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_AT
     )
   }
 

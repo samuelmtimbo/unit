@@ -1,8 +1,8 @@
 import * as assert from 'assert'
 import Append from '../../../../system/f/array/Append'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const append = new Append(system, pod)
+const append = new Append(system)
 
 append.play()
 

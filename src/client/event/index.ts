@@ -3,7 +3,7 @@ import { IOElement } from '../IOElement'
 
 export function _addEventListener(
   type: string,
-  element: IOElement,
+  element: IOElement | ShadowRoot,
   listener: (event: Event) => void,
   _global: boolean = false
 ): Unlisten {

@@ -2,7 +2,6 @@ import { AsyncWorkerGraph } from './AsyncWorker'
 import { $ } from './Class/$'
 import { $Child } from './component/Child'
 import { $Children } from './component/Children'
-import { Pod } from './pod'
 import { RemotePort } from './RemotePort'
 import { State } from './State'
 import { System } from './system'
@@ -12,30 +11,33 @@ import {
   GraphPinSpec,
   GraphSpec,
   GraphSubPinSpec,
-  GraphUnitSpec,
   GraphUnitsSpec,
 } from './types'
+import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { GlobalRefSpec } from './types/GlobalRefSpec'
 import { $Component } from './types/interface/async/$Component'
 import { $EE } from './types/interface/async/$EE'
 import { $Graph } from './types/interface/async/$Graph'
-import { $P } from './types/interface/async/$P'
 import { $U } from './types/interface/async/$U'
 import { IO } from './types/IO'
+import { IOOf } from './types/IOOf'
 import { UnitBundleSpec } from './types/UnitBundleSpec'
 import { Unlisten } from './types/Unlisten'
 
 export function asyncGraphFromPort(
   system: System,
-  pod: Pod,
   port: RemotePort
 ): $Graph & $ {
   const $graph: $Graph = AsyncWorkerGraph(port)
 
   class AsyncGraph extends $ implements $Graph {
     __: string[] = ['$U', '$C', '$G']
+
+    $setUnitName(data: { unitId: string; name: string }): void {
+      return $graph.$setUnitName(data)
+    }
 
     $addListener(data: { event: string }, callback: Callback<any>): Unlisten {
       return $graph.$addListener(data, callback)
@@ -305,7 +307,7 @@ export function asyncGraphFromPort(
       return $graph.$takeUnitErr(data)
     }
 
-    $appendSubComponentChild(data: {
+    $moveSubComponentChild(data: {
       subComponentId: string
       childId: string
       slotName: string
@@ -313,7 +315,7 @@ export function asyncGraphFromPort(
       throw new Error('Method not implemented.')
     }
 
-    $appendSubComponentChildren(data: {
+    $moveSubComponentChildren(data: {
       subComponentId: string
       children: string[]
       slotMap: Dict<string>
@@ -338,10 +340,7 @@ export function asyncGraphFromPort(
       }
       nextIdMap: {
         merge: Dict<string>
-        link: Dict<{
-          input: Dict<{ mergeId: string; oppositePinId: string }>
-          output: Dict<{ mergeId: string; oppositePinId: string }>
-        }>
+        link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
         unit: Dict<string>
       }
       nextPinIdMap: Dict<{
@@ -364,6 +363,16 @@ export function asyncGraphFromPort(
       nextUnitId: string
     }): void {
       return $graph.$moveUnitInto(data)
+    }
+
+    $movePlugInto(data: {
+      graphId: string
+      type: IO
+      pinId: string
+      subPinId: string
+      subPinSpec: GraphSubPinSpec
+    }): void {
+      throw new Error('Method not implemented.')
     }
 
     $moveLinkPinInto(data: {
@@ -486,6 +495,10 @@ export function asyncGraphFromPort(
       return $graph.$getSpec(data, callback)
     }
 
+    $getBundle(data: {}, callback: Callback<BundleSpec>): void {
+      return $graph.$getBundle(data, callback)
+    }
+
     $setMetadata(data: { path: string[]; data: any }): void {
       return $graph.$setMetadata(data)
     }
@@ -533,13 +546,9 @@ export function asyncGraphFromPort(
     $refUnit(data: { unitId: string; _: string[] }): $U {
       return $graph.$refUnit(data)
     }
-
-    $refPod(data: {}): $P {
-      return $graph.$refPod({})
-    }
   }
 
-  const $$graph = new AsyncGraph(system, pod)
+  const $$graph = new AsyncGraph(system)
 
   return $$graph
 }

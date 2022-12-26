@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import NumberToString from '../../../../system/f/number/NumberToString'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const numberToString = new NumberToString(system, pod)
+const numberToString = new NumberToString(system)
 
 numberToString.play()
 

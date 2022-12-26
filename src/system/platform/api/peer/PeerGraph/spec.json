@@ -20,7 +20,7 @@
     "answer": {
       "type": "string"
     },
-    "pod": {
+    "graph": {
       "type": "`G`",
       "ref": true,
       "icon": "graph"
@@ -28,8 +28,8 @@
   },
   "metadata": {
     "icon": "link",
-    "description": "remote peer pod",
-    "complexity": 14,
+    "description": "remote peer graph",
+    "complexity": 58,
     "tags": [
       "platform",
       "api",

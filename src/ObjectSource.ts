@@ -11,7 +11,7 @@ export class ObjectSource<T> {
 
   set(data: T): void {
     this._data = data
-    
+
     for (const callback of this._callback) {
       callback(data)
     }
@@ -19,7 +19,7 @@ export class ObjectSource<T> {
 
   connect(callback: Callback<T>): Unlisten {
     this._callback.push(callback)
-    
+
     if (this._data) {
       callback(this._data)
     }

@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Set from '../../../../system/f/object/Set'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const assoc = new Set(system, pod)
+const assoc = new Set(system)
 
 assoc.play()
 

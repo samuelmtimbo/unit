@@ -14,14 +14,11 @@ import {
   unregisterParentRoot,
   unregisterRoot,
 } from '../../component/method'
-import { EventEmitter } from '../../EventEmitter'
-import { Pod } from '../../pod'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
 import { C_EE } from '../../types/interface/C'
 import { ComponentEvents, Component_ } from '../../types/interface/Component'
 import { E } from '../../types/interface/E'
-import { EE } from '../../types/interface/EE'
 import { UnitBundle } from '../../types/UnitBundle'
 import { forEach } from '../../util/array'
 import { Stateful, StatefulEvents } from '../Stateful'
@@ -34,7 +31,7 @@ export type ElementEE<_EE extends Dict<any[]>> = StatefulEvents<
 > &
   Element_EE
 
-export class Element<
+export class Element_<
     I = any,
     O = any,
     _J extends Dict<any> = {},
@@ -51,14 +48,14 @@ export class Element<
   public _parent_root: Component_[] = []
   public _parent_children: Component_[] = []
   public _slot: Dict<Component_> = {}
-  public _emitter: EventEmitter = new EventEmitter()
   public _component: _C
+  public _state: Dict<any> = {}
 
   constructor(
     { i = [], o = [] }: ION,
     opt: Opt = {},
     system: System,
-    pod: Pod
+    id: string
   ) {
     super(
       {
@@ -67,7 +64,7 @@ export class Element<
       },
       opt,
       system,
-      pod
+      id
     )
 
     this.addListener('play', this._play)
@@ -152,10 +149,6 @@ export class Element<
     }
 
     throw new Error('Slot not found')
-  }
-
-  refEmitter(): EE {
-    return this._emitter
   }
 
   private _play(): void {

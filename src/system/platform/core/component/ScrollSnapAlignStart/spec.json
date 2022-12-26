@@ -1,0 +1,109 @@
+{
+  "name": "scroll snap align start",
+  "inputs": {
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "units": {
+    "div": {
+      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "memory": {
+        "input": {
+          "style": {
+            "_register": {
+              "scroll-snap-align": "start"
+            },
+            "_invalid": false,
+            "_constant": true,
+            "_ignored": false,
+            "_idle": false
+          }
+        },
+        "output": {},
+        "memory": {
+          "__buffer": [],
+          "_forwarding": false,
+          "_backwarding": false,
+          "_forwarding_empty": false,
+          "_state": {
+            "style": {
+              "scroll-snap-align": "start"
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 73,
+          "y": -1
+        }
+      }
+    },
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{\"scroll-snap-align\":'start'}"
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -74,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "div": {
+        "input": {
+          "style": true
+        }
+      }
+    }
+  },
+  "render": true,
+  "component": {
+    "slots": [
+      [
+        "div",
+        "default"
+      ]
+    ],
+    "subComponents": {
+      "div": {
+        "children": []
+      }
+    },
+    "children": [
+      "div"
+    ],
+    "defaultWidth": 300,
+    "defaultHeight": 420
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 128
+  },
+  "id": "b792e421-1c0b-40fc-ac33-87c5c2bbac2a"
+}

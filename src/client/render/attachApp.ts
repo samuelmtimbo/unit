@@ -20,7 +20,7 @@ export function attachApp(system: System): void {
   app.style.top = '0'
   app.style.left = '0'
 
-  root.appendChild(app)
+  root.shadowRoot.appendChild(app)
 
   system.foreground.app = app
 }

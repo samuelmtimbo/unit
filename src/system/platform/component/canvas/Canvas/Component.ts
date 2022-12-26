@@ -1,17 +1,20 @@
-import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
+import { parseRelativeUnit } from '../../../../../client/parseRelativeUnit'
+import applyStyle, { reactToFrameSize } from '../../../../../client/style'
 import { COLOR_WHITE } from '../../../../../client/theme'
 import { replaceChild } from '../../../../../client/util/replaceChild'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { NOOP } from '../../../../../NOOP'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export function draw(ctx: CanvasRenderingContext2D, step: any[]): void {
   const method = step[0]
+
   const args = step.slice(1, step.length)
+
   if (method === 'fillStyle') {
     ctx.fillStyle = args[0]
   } else if (method === 'strokeStyle') {
@@ -23,9 +26,12 @@ export function draw(ctx: CanvasRenderingContext2D, step: any[]): void {
 
 export function clearCanvas(context: CanvasRenderingContext2D) {
   const transform = context.getTransform()
+
   context.setTransform(1, 0, 0, 1, 0, 0)
+
   const width = context.canvas.width
   const height = context.canvas.height
+
   context.clearRect(0, 0, width, height)
   context.setTransform(transform)
   context.beginPath()
@@ -34,8 +40,8 @@ export function clearCanvas(context: CanvasRenderingContext2D) {
 export interface Props {
   className?: string
   style?: Dict<string>
-  width?: number
-  height?: number
+  width?: number | string
+  height?: number | string
   d?: any[]
 }
 
@@ -54,8 +60,8 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
 
   private _d: any[][] = []
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {} = $props
 
@@ -80,7 +86,7 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     canvas_el.draggable = false
 
     this._canvas_el = canvas_el
-    const context = canvas_el.getContext('2d')!
+    const context = canvas_el.getContext('2d')
     this._context = context
 
     if (old_canvas_el) {
@@ -88,15 +94,49 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     }
   }
 
+  private _get_parent_width = (): number => {
+    // TODO
+    return 0
+  }
+
+  private _get_parent_height = (): number => {
+    // TODO
+    return 0
+  }
+
+  private _get_frame_width = (): number => {
+    // TODO
+    return 0
+  }
+
+  private _get_frame_height = (): number => {
+    // TODO
+    return 0
+  }
+
   private _create_canvas = () => {
-    const { style, width = 200, height = 200 } = this.$props
     // console.log('CanvasComp', '_create_canvas', style)
+    const { style, width = 200, height = 200 } = this.$props
+
     const canvas_el = this.$system.api.document.createElement('canvas')
+
     canvas_el.classList.add('canvas')
-    canvas_el.width = width
-    canvas_el.height = height
+
+    canvas_el.width = parseRelativeUnit(
+      width,
+      this._get_parent_width,
+      this._get_frame_height
+    )
+    canvas_el.height = parseRelativeUnit(
+      height,
+      this._get_parent_height,
+      this._get_frame_height
+    )
+
     applyStyle(canvas_el, { ...DEFAULT_STYLE, ...style })
+
     this._canvas_el = canvas_el
+
     return canvas_el
   }
 
@@ -105,25 +145,77 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     this._setup_context()
   }
 
+  private _setup_redraw = () => {
+    this._setup_context()
+    this._redraw()
+  }
+
+  private _set_width = (width: number): void => {
+    this._canvas_el.setAttribute('width', `${width - 1}`)
+    this._setup_redraw()
+  }
+
+  private _set_height = (height: number): void => {
+    this._canvas_el.setAttribute('height', `${height - 1}`)
+    this._setup_redraw()
+  }
+
+  private _width_frame_unlisten: Unlisten
+  private _height_frame_unlisten: Unlisten
+
   onPropChanged(prop: string, current: any): void {
     if (prop === 'style') {
       applyStyle(this._canvas_el, { ...DEFAULT_STYLE, ...current })
     } else if (prop === 'width') {
-      this._canvas_el.setAttribute('width', `${current - 1}`)
-      this._setup_context()
-      this._redraw()
+      this._unlisten_frame_width()
+
+      if (typeof current === 'string') {
+        this._width_frame_unlisten = reactToFrameSize(
+          current,
+          this,
+          this._set_width
+        )
+      } else {
+        this._set_width(current)
+      }
     } else if (prop === 'height') {
-      this._canvas_el.setAttribute('height', `${current - 1}`)
-      this._setup_context()
-      this._redraw()
+      this._unlisten_frame_height()
+
+      if (typeof current === 'string') {
+        this._height_frame_unlisten = reactToFrameSize(
+          current,
+          this,
+          this._set_height
+        )
+      } else {
+        this._set_height(current)
+      }
     } else if (prop === 'd') {
       this.clear()
+
       this._d = current
+
       this._draw_steps(current || [])
     }
   }
 
+  private _unlisten_frame_width() {
+    if (this._width_frame_unlisten) {
+      this._width_frame_unlisten()
+      this._width_frame_unlisten = undefined
+    }
+  }
+
+  private _unlisten_frame_height() {
+    if (this._height_frame_unlisten) {
+      this._height_frame_unlisten()
+      this._height_frame_unlisten = undefined
+    }
+  }
+
   private _draw(step: any[]) {
+    // console.log('Canvas', '_draw')
+
     draw(this._context, step)
   }
 
@@ -148,17 +240,35 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     const { width = 200, height = 200 } = this.$props
 
     this._context.setTransform(1, 0, 0, 1, 0, 0)
+
     const dpr = devicePixelRatio || 1
-    this._canvas_el.width = width * dpr
-    this._canvas_el.height = height * dpr
+
+    const _width = parseRelativeUnit(
+      width,
+      this._get_parent_width,
+      this._get_frame_height
+    )
+    const _height = parseRelativeUnit(
+      height,
+      this._get_parent_height,
+      this._get_frame_height
+    )
+
+    this._canvas_el.width = _width * dpr
+    this._canvas_el.height = _height * dpr
+
     this._context.scale(1 / dpr, 1 / dpr)
   }
 
   private _setup_context = (): void => {
     // console.log('Canvas', '_setup_context')
+
     const { $color } = this.$context || { $color: COLOR_WHITE }
+
     const context = this._canvas_el.getContext('2d')
+
     this._context = context
+
     this._context.strokeStyle = $color
     this._context.fillStyle = $color
     this._context.lineJoin = 'round'
@@ -179,6 +289,12 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     clearCanvas(this._context)
 
     this._d = []
+  }
+
+  drawImage(imageBitmap: ImageBitmap) {
+    // console.log('Canvas', 'drawImage', imageBitmap)
+
+    this._context.drawImage(imageBitmap, 0, 0)
   }
 
   toBlob(

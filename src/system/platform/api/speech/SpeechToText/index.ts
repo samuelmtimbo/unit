@@ -1,9 +1,9 @@
 import { SpeechRecorder } from '../../../../../api/speech'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { ISpeechRecognitionOpt } from '../../../../../types/global/ISpeechRecognition'
+import { ID_SPEECH_TO_TEXT } from '../../../../_ids'
 
 export type I = {
   opt: ISpeechRecognitionOpt
@@ -17,7 +17,7 @@ export type O = {
 export default class SpeechToText extends Semifunctional<I, O> {
   private _recorder: SpeechRecorder | null = null
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['opt'],
@@ -27,7 +27,7 @@ export default class SpeechToText extends Semifunctional<I, O> {
       },
       {},
       system,
-      pod
+      ID_SPEECH_TO_TEXT
     )
   }
 

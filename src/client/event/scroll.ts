@@ -1,4 +1,4 @@
-import Listenable from '../Listenable'
+import { Listenable } from '../Listenable'
 import { Listener } from '../Listener'
 
 export interface IOScrollEvent {}

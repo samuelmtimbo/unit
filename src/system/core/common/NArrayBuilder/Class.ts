@@ -1,7 +1,7 @@
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_N_ARRAY_BUILDER } from '../../../_ids'
 
 export type I<T> = {
   a: T
@@ -16,7 +16,7 @@ export default class NArrayBuilder<T> extends Semifunctional<I<T>, O<T>> {
   private _n: number
   private _array: T[]
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['n'],
@@ -26,7 +26,7 @@ export default class NArrayBuilder<T> extends Semifunctional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_N_ARRAY_BUILDER
     )
 
     this.addListener('reset', () => {
@@ -38,11 +38,13 @@ export default class NArrayBuilder<T> extends Semifunctional<I<T>, O<T>> {
   f({ n }: I<T>, done: Done<O<T>>) {
     if (n < 0) {
       done(undefined, 'n cannot be negative')
+
       return
     }
 
     if (n === 0) {
       this._output['a[]'].push([])
+
       return
     }
 
@@ -60,11 +62,11 @@ export default class NArrayBuilder<T> extends Semifunctional<I<T>, O<T>> {
   }
 
   onIterDataInputData(name: string, data: any): void {
-    console.log('NArrayBuilder', name, data)
+    // console.log('NArrayBuilder', name, data)
+
     // if (name === 'a') {
     const a = data as T
     if (this._n !== undefined) {
-      console.log('HEY')
       this._loop(a)
     }
     // }

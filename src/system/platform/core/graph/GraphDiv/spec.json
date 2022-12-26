@@ -94,15 +94,27 @@
   },
   "metadata": {
     "icon": "atom-alt",
-    "complexity": 146,
-    "tags": ["platform", "core", "editor"]
+    "complexity": 344,
+    "tags": [
+      "platform",
+      "core",
+      "editor"
+    ]
   },
   "component": {
     "slots": [
-      ["editor", "default"],
-      ["div", "default"]
+      [
+        "editor",
+        "default"
+      ],
+      [
+        "div",
+        "default"
+      ]
     ],
-    "children": ["row"],
+    "children": [
+      "row"
+    ],
     "subComponents": {
       "editor": {
         "children": []
@@ -111,7 +123,10 @@
         "children": []
       },
       "row": {
-        "children": ["editor", "div"]
+        "children": [
+          "editor",
+          "div"
+        ]
       }
     },
     "defaultWidth": 420,

@@ -48,7 +48,10 @@ assert.deepEqual(
   exposeInputSet(
     {
       id: 'dfgte',
-      input: { name: 'foo', plug: { '0': { unitId: 'identity', pinId: 'tfgre' } } },
+      input: {
+        name: 'foo',
+        plug: { '0': { unitId: 'identity', pinId: 'tfgre' } },
+      },
     },
     {
       name: '?',
@@ -95,7 +98,10 @@ assert.deepEqual(
       },
       merges: {},
       inputs: {
-        frtdk: { plug: { 0: { pinId: 'bar', unitId: 'identity' } }, name: 'foo' },
+        frtdk: {
+          plug: { 0: { pinId: 'bar', unitId: 'identity' } },
+          name: 'foo',
+        },
       },
       outputs: {},
       metadata: {
@@ -135,7 +141,10 @@ assert.deepEqual(
       },
       merges: {},
       inputs: {
-        asdrw: { plug: { 0: { pinId: 'foo', unitId: 'identity' } }, name: 'bar' },
+        asdrw: {
+          plug: { 0: { pinId: 'foo', unitId: 'identity' } },
+          name: 'bar',
+        },
       },
       outputs: {},
       metadata: {
@@ -167,7 +176,10 @@ assert.deepEqual(
   exposeOutputSet(
     {
       id: 'llkfd',
-      output: { plug: { 0: { unitId: 'identity', pinId: 'bar' } }, name: 'foo' },
+      output: {
+        plug: { 0: { unitId: 'identity', pinId: 'bar' } },
+        name: 'foo',
+      },
     },
     {
       name: '?',
@@ -215,7 +227,10 @@ assert.deepEqual(
       merges: {},
       inputs: {},
       outputs: {
-        oriur: { plug: { 0: { pinId: 'oriur', unitId: 'identity' } }, name: 'foo' },
+        oriur: {
+          plug: { 0: { pinId: 'oriur', unitId: 'identity' } },
+          name: 'foo',
+        },
       },
       metadata: {
         icon: null,
@@ -554,7 +569,7 @@ assert.deepEqual(
     {
       name: 'if else',
       units: {
-        if0: { id: 'system/f/control/If', input: { a: { data: "1" } } },
+        if0: { id: 'system/f/control/If', input: { a: { data: '1' } } },
         if1: { id: 'system/f/control/If' },
         not: { id: 'system/f/logic/Not' },
       },
@@ -739,7 +754,7 @@ assert.deepEqual(
   },
   addMerge(
     {
-      id: 'uzzat',
+      mergeId: 'uzzat',
       merge: {
         lessthanequal: { input: { a: true } },
         greaterthan: { input: { a: true } },
@@ -1058,6 +1073,7 @@ assert.deepEqual(
       },
     },
     inputs: {
+      a: { name: 'a', plug: { 0: {} } },
       b: { name: 'b', plug: { 0: { mergeId: 'merge1' } } },
     },
     outputs: {

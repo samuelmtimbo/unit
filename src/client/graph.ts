@@ -1,9 +1,10 @@
 import { forEachPinOnMerge } from '../spec/util'
-import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
+import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
+import { keys } from '../system/f/object/Keys/f'
 import {
   GraphPinSpec,
-  GraphSubPinSpec,
   GraphSpec,
+  GraphSubPinSpec,
   PinSpec,
   Specs,
 } from '../types'
@@ -50,19 +51,24 @@ export function build_graph(
 
   const { units = {}, merges = {} } = spec
 
-  forEachKeyValue(units, (unit, unitId: string) => {
+  forEachValueKey(units, (unit, unitId: string) => {
     graph[unitId] = { next: {}, previous: {} }
+
     const unitSpec = specs[unit.id]
 
     const errNodeId = getErrNodeId(unitId)
+
     graph[errNodeId] = { next: {}, previous: { [unitId]: graph[unitId] } }
     graph[unitId].next[errNodeId] = graph[errNodeId]
 
-    forEachKeyValue<PinSpec>(unitSpec.inputs || {}, (input, inputId) => {
+    forEachValueKey<PinSpec>(unitSpec.inputs || {}, (input, inputId) => {
       const inputNodeId = getInputNodeId(unitId, inputId)
+
       graph[inputNodeId] = { next: { [unitId]: graph[unitId] }, previous: {} }
       graph[unitId].previous[inputNodeId] = graph[inputNodeId]
+
       const datumNodeId = pinToDatum[inputNodeId]
+
       if (datumNodeId) {
         graph[datumNodeId] = {
           next: { [inputNodeId]: graph[inputNodeId] },
@@ -70,7 +76,9 @@ export function build_graph(
         }
         graph[inputNodeId].previous[datumNodeId] = graph[datumNodeId]
       }
+
       const inputTypeNodeId = getMetadataNodeId(inputNodeId, 'type')
+
       graph[inputTypeNodeId] = {
         next: { [inputNodeId]: graph[inputNodeId] },
         previous: {},
@@ -78,7 +86,7 @@ export function build_graph(
       graph[inputNodeId].previous[inputTypeNodeId] = graph[inputTypeNodeId]
     })
 
-    forEachKeyValue<PinSpec>(unitSpec.outputs || {}, (output, outputId) => {
+    forEachValueKey<PinSpec>(unitSpec.outputs || {}, (output, outputId) => {
       const outputNodeId = getOutputNodeId(unitId, outputId)
       graph[outputNodeId] = { next: {}, previous: { [unitId]: graph[unitId] } }
       graph[unitId].next[outputNodeId] = graph[outputNodeId]
@@ -99,7 +107,7 @@ export function build_graph(
     })
   })
 
-  forEachKeyValue(merges, (merge, mergeId) => {
+  forEachValueKey(merges, (merge, mergeId) => {
     const mergeNodeId = getMergeNodeId(mergeId)
     graph[mergeNodeId] = { next: {}, previous: {} }
     forEachPinOnMerge(merge, (unitId, type, pinId) => {
@@ -119,51 +127,45 @@ export function build_graph(
     graph[mergeNodeId].previous[mergeTypeNodeId] = graph[mergeTypeNodeId]
   })
 
-  forEachKeyValue(
+  forEachValueKey(
     spec.inputs || {},
     (pinSpec: GraphPinSpec, exposedPinId: string) => {
       const { plug = {} } = pinSpec
-      forEachKeyValue(
-        plug,
-        (subPinSpec: GraphSubPinSpec, subPinId: string) => {
-          const extInputNodeId = getExtNodeId('input', exposedPinId, subPinId)
-          graph[extInputNodeId] = { next: {}, previous: {} }
-          const pinNodeId = getSubPinSpecNodeId('input', subPinSpec)
-          graph[extInputNodeId].next[pinNodeId] = graph[pinNodeId]
-          graph[pinNodeId].previous[extInputNodeId] = graph[extInputNodeId]
-          const extInputTypeNodeId = getMetadataNodeId(extInputNodeId, 'type')
-          graph[extInputTypeNodeId] = {
-            next: { [extInputNodeId]: graph[extInputNodeId] },
-            previous: {},
-          }
-          graph[extInputNodeId].previous[extInputTypeNodeId] =
-            graph[extInputTypeNodeId]
+      forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
+        const extInputNodeId = getExtNodeId('input', exposedPinId, subPinId)
+        graph[extInputNodeId] = { next: {}, previous: {} }
+        const pinNodeId = getSubPinSpecNodeId('input', subPinSpec)
+        graph[extInputNodeId].next[pinNodeId] = graph[pinNodeId]
+        graph[pinNodeId].previous[extInputNodeId] = graph[extInputNodeId]
+        const extInputTypeNodeId = getMetadataNodeId(extInputNodeId, 'type')
+        graph[extInputTypeNodeId] = {
+          next: { [extInputNodeId]: graph[extInputNodeId] },
+          previous: {},
         }
-      )
+        graph[extInputNodeId].previous[extInputTypeNodeId] =
+          graph[extInputTypeNodeId]
+      })
     }
   )
 
-  forEachKeyValue(
+  forEachValueKey(
     spec.outputs || {},
     (pinSpec: GraphPinSpec, exposedPinId: string) => {
       const { plug = {} } = pinSpec
-      forEachKeyValue(
-        plug,
-        (subPinSpec: GraphSubPinSpec, subPinId: string) => {
-          const extOutputNodeId = getExtNodeId('output', exposedPinId, subPinId)
-          graph[extOutputNodeId] = { next: {}, previous: {} }
-          const pinNodeId = getSubPinSpecNodeId('output', subPinSpec)
-          graph[extOutputNodeId].previous[pinNodeId] = graph[pinNodeId]
-          graph[pinNodeId].next[extOutputNodeId] = graph[extOutputNodeId]
-          const extOutputTypeNodeId = getMetadataNodeId(extOutputNodeId, 'type')
-          graph[extOutputTypeNodeId] = {
-            next: { [extOutputNodeId]: graph[extOutputNodeId] },
-            previous: {},
-          }
-          graph[extOutputNodeId].previous[extOutputTypeNodeId] =
-            graph[extOutputTypeNodeId]
+      forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
+        const extOutputNodeId = getExtNodeId('output', exposedPinId, subPinId)
+        graph[extOutputNodeId] = { next: {}, previous: {} }
+        const pinNodeId = getSubPinSpecNodeId('output', subPinSpec)
+        graph[extOutputNodeId].previous[pinNodeId] = graph[pinNodeId]
+        graph[pinNodeId].next[extOutputNodeId] = graph[extOutputNodeId]
+        const extOutputTypeNodeId = getMetadataNodeId(extOutputNodeId, 'type')
+        graph[extOutputTypeNodeId] = {
+          next: { [extOutputNodeId]: graph[extOutputNodeId] },
+          previous: {},
         }
-      )
+        graph[extOutputNodeId].previous[extOutputTypeNodeId] =
+          graph[extOutputTypeNodeId]
+      })
     }
   )
 
@@ -255,7 +257,7 @@ export const build_subgraph = (
   subgraph_to_node: Dict<Set<string>>,
   visited: Dict<boolean> = {}
 ) => {
-  forEachKeyValue(graph, (_, id) => {
+  forEachValueKey(graph, (_, id) => {
     _build_subgraph(id, graph, node_to_subgraph, subgraph_to_node, visited)
   })
 }
@@ -284,13 +286,13 @@ const _build_subgraph = (
     subgraph_to_node[subgraph_id] = new Set([id])
   }
 
-  forEachKeyValue(previous, (_, prev_id) => {
+  forEachValueKey(previous, (_, prev_id) => {
     node_to_subgraph[prev_id] = subgraph_id
     subgraph_to_node[subgraph_id].add(prev_id)
     _build_subgraph(prev_id, graph, node_to_subgraph, subgraph_to_node, visited)
   })
 
-  forEachKeyValue(next, (_, next_id) => {
+  forEachValueKey(next, (_, next_id) => {
     node_to_subgraph[next_id] = subgraph_id
     subgraph_to_node[subgraph_id].add(next_id)
     _build_subgraph(next_id, graph, node_to_subgraph, subgraph_to_node, visited)
@@ -300,7 +302,7 @@ const _build_subgraph = (
 // TODO optimize
 export const makeRelated = (graph: GraphNodeMap): SubGraphNode => {
   const related: Dict<any> = {}
-  forEachKeyValue(graph, (_, id) => {
+  forEachValueKey(graph, (_, id) => {
     const relatedTo = new Set<string>([id])
     setConnectedTo(id, graph, relatedTo)
     related[id] = relatedTo
@@ -317,13 +319,13 @@ export const setConnectedTo = (
   const node = graph[id]
   related.add(id)
   visited.add(id)
-  const previous = Object.keys(node.previous)
+  const previous = keys(node.previous)
   forEach<string>(previous, (p) => {
     if (!visited.has(p)) {
       setConnectedTo(p, graph, related, visited)
     }
   })
-  const next = Object.keys(node.next)
+  const next = keys(node.next)
   forEach<string>(next, (p) => {
     if (!visited.has(p)) {
       setConnectedTo(p, graph, related, visited)

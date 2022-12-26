@@ -1,3 +1,4 @@
+import { keys } from '../../../system/f/object/Keys/f'
 import { MODE_TO_KEY } from '../../../system/platform/component/app/Editor/Component'
 import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
@@ -56,7 +57,7 @@ export const enableModeKeyboard = (
         delete _mode_keydown[key]
 
         if (key === MODE_TO_KEY[mode]) {
-          const mode_keydown = Object.keys(_mode_keydown)
+          const mode_keydown = keys(_mode_keydown)
 
           const mode_keydown_count = mode_keydown.length
 

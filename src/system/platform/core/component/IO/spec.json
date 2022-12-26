@@ -307,7 +307,7 @@
       "input": {
         "style": {
           "constant": false,
-          "data": "{opacity:'0.1',position:'absolute',width:'240px',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}",
+          "data": "{opacity:'0.05',position:'absolute',width:'240px',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}",
           "metadata": {
             "position": {
               "x": 88,
@@ -561,8 +561,8 @@
           "bot"
         ],
         "childSlot": {
-          "logo": "3",
-          "bot": "3"
+          "logo": "1",
+          "bot": "1"
         }
       },
       "bot": {
@@ -587,18 +587,6 @@
       [
         "app",
         "2"
-      ],
-      [
-        "app",
-        "3"
-      ],
-      [
-        "bot",
-        "default"
-      ],
-      [
-        "logo",
-        "default"
       ]
     ],
     "defaultWidth": 360,
@@ -607,7 +595,7 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "bot + app",
-    "complexity": 273,
+    "complexity": 762,
     "tags": [
       "platform",
       "core",

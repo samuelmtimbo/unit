@@ -1,8 +1,8 @@
 import * as assert from 'assert'
 import Subtract from '../../../../system/f/arithmetic/Subtract'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const subtract = new Subtract(system, pod)
+const subtract = new Subtract(system)
 
 subtract.play()
 

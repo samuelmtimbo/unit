@@ -1,9 +1,9 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { E } from '../../../../../types/interface/E'
 import { UnitBundle } from '../../../../../types/UnitBundle'
+import { ID_APPEND_CHILD } from '../../../../_ids'
 
 export interface I {
   parent: E
@@ -15,7 +15,7 @@ export interface O {
 }
 
 export default class AppendChild extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['parent', 'child'],
@@ -29,7 +29,7 @@ export default class AppendChild extends Functional<I, O> {
         },
       },
       system,
-      pod
+      ID_APPEND_CHILD
     )
   }
 

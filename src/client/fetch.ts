@@ -9,6 +9,7 @@ export function fetchJSON(
   options: FetchJSONOpt = {}
 ): Promise<any> {
   const { method, data, headers } = options
+
   return fetch(hostname, {
     method,
     body: JSON.stringify(data),

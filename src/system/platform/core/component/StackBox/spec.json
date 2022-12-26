@@ -9,9 +9,6 @@
         "component": {
           "constant": true,
           "data": "dc546440-13ca-4ebf-8831-c28138c7efc6"
-        },
-        "style": {
-          "ignored": true
         }
       },
       "output": {
@@ -67,7 +64,7 @@
   },
   "metadata": {
     "icon": "square",
-    "complexity": 44,
+    "complexity": 238,
     "description": "horizontal scroll container",
     "tags": [
       "platform",

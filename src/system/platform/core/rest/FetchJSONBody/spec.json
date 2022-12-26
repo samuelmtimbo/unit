@@ -6,10 +6,54 @@
       "input": {
         "url": {},
         "opt": {}
+      },
+      "output": {
+        "body": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 2,
+          "y": 6
+        }
       }
     },
     "parse": {
-      "id": "563e92be-ad5e-4a61-a718-9249c3eac51d"
+      "id": "563e92be-ad5e-4a61-a718-9249c3eac51d",
+      "input": {
+        "string": {}
+      },
+      "output": {
+        "json": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 105,
+          "y": 2
+        }
+      }
+    },
+    "assocpath": {
+      "id": "419e468e-e4d4-11ea-8efb-2b9d815b1798",
+      "input": {
+        "path": {
+          "constant": true,
+          "data": "['headers','Content-Type']"
+        },
+        "value": {
+          "constant": true,
+          "data": "'application/json'"
+        },
+        "obj": {}
+      },
+      "output": {
+        "result": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -109,
+          "y": -9
+        }
+      }
     }
   },
   "merges": {
@@ -24,12 +68,26 @@
           "string": true
         }
       }
+    },
+    "1": {
+      "assocpath": {
+        "output": {
+          "result": true
+        }
+      },
+      "fetchbody": {
+        "input": {
+          "opt": true
+        }
+      }
     }
   },
+  "render": false,
+  "component": {},
   "metadata": {
     "icon": "send",
     "description": "no description",
-    "complexity": 13,
+    "complexity": 52,
     "tags": [
       "platform",
       "core",
@@ -49,8 +107,8 @@
     "options": {
       "plug": {
         "0": {
-          "unitId": "fetchbody",
-          "pinId": "opt"
+          "unitId": "assocpath",
+          "pinId": "obj"
         }
       },
       "type": "{body?:string|null,headers?:object,method?:string}"

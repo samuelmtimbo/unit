@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Constant from '../../../../system/f/control/Constant'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const constant = new Constant(system, pod)
+const constant = new Constant(system)
 
 constant.play()
 

@@ -1,11 +1,10 @@
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { $Graph } from '../../../../../types/interface/async/$Graph'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { GraphSpec } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
+import { $Graph } from '../../../../../types/interface/async/$Graph'
 import Div from '../../Div/Component'
 
 export interface Props {
@@ -19,8 +18,8 @@ export const DEFAULT_STYLE = {
 export default class Tree extends Element<IHTMLDivElement, Props> {
   private _div: Div
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { graph } = this.$props
 
@@ -30,13 +29,14 @@ export default class Tree extends Element<IHTMLDivElement, Props> {
       {
         style: { ...DEFAULT_STYLE },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._div = div
 
     this.$element = $element
-    this.$slot = div.$slot
+    this.$slot = {
+      default: div,
+    }
 
     this.registerRoot(div)
 

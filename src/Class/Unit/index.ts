@@ -9,9 +9,9 @@ import { Pin, Pin_M } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { PinOpts } from '../../PinOpts'
 import { Pins } from '../../Pins'
-import { Pod } from '../../pod'
 import { System } from '../../system'
-import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
+import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
+import { keys } from '../../system/f/object/Keys/f'
 import { Specs } from '../../types'
 import { Dict } from '../../types/Dict'
 import { U, U_EE } from '../../types/interface/U'
@@ -66,12 +66,10 @@ export class Unit<
   extends $<_EE>
   implements U<I, O>
 {
-  public _: string
   public __: string[] = ['U']
+  public id: string
 
-  public $parent: Unit | null = null
-  public $path: string[] = []
-  public $id: string | null = null
+  public _parent: Unit | null = null
 
   public _input: Pins<I> = {}
   public _output: Pins<O> = {}
@@ -117,9 +115,9 @@ export class Unit<
     { i = [], o = [] }: ION,
     opt: Opt = {},
     system: System,
-    pod: Pod
+    id: string
   ) {
-    super(system, pod)
+    super(system)
 
     const { input, output } = opt
 
@@ -133,6 +131,10 @@ export class Unit<
     this._selfPin.addListener('drop', () => {
       throw new Error('Self Pin should never be dropped!')
     })
+
+    this.id = id
+
+    system.registerUnit(this)
   }
 
   public isPinIgnored(type: IO, name: string): boolean {
@@ -141,9 +143,18 @@ export class Unit<
     return ignored
   }
 
+  public isPinRef(type: IO, name: string): boolean {
+    const input = type === 'input'
+
+    const ref =
+      (input && !!this._ref_input[name]) || (!input && !!this._ref_output[name])
+
+    return ref
+  }
+
   public setParent(parent: Unit | null) {
-    this.$parent = parent
-    this.emit('parent', this.$parent)
+    this._parent = parent
+    this.emit('parent', this._parent)
   }
 
   public setPinIgnored(type: IO, name: string, ignored: boolean): void {
@@ -199,6 +210,8 @@ export class Unit<
   }
 
   public setPinRef(type: IO, name: string, ref: boolean): void {
+    // console.log('Graph', 'setPinRef', type, name, ref)
+
     if (ref) {
       if (this.hasRefPinNamed(type, name)) {
         return
@@ -250,23 +263,25 @@ export class Unit<
     name: string,
     type: IO,
     pin: Pin<any>,
-    opt: PinOpt = DEFAULT_PIN_OPT
+    opt: PinOpt = DEFAULT_PIN_OPT,
+    propagate: boolean = true
   ) {
     if (type === 'input') {
-      this.setInput(name, pin, opt)
+      this.setInput(name, pin, opt, propagate)
     } else {
-      this.setOutput(name, pin, opt)
+      this.setOutput(name, pin, opt, propagate)
     }
   }
 
   public setInput<K extends keyof I>(
     name: string,
     input: Pin<I[K]>,
-    opt: PinOpt = DEFAULT_PIN_OPT
+    opt: PinOpt = DEFAULT_PIN_OPT,
+    propagate: boolean = true
   ) {
     this._setInput(name, input, opt)
 
-    this.emit('set_input', name, input, opt)
+    this.emit('set_input', name, input, opt, propagate)
   }
 
   public _setInput<K extends keyof I>(
@@ -279,9 +294,10 @@ export class Unit<
     }
 
     this._i_count++
-    this._i_name_set.add(name)
-    this._input[name] = input
 
+    this._i_name_set.add(name)
+
+    this._input[name] = input
     this._i_opt[name] = opt
 
     const { ref } = opt
@@ -383,11 +399,12 @@ export class Unit<
   public setOutput<K extends keyof O>(
     name: K,
     output: Pin<O[K]>,
-    opt: PinOpt = DEFAULT_PIN_OPT
+    opt: PinOpt = DEFAULT_PIN_OPT,
+    propagate: boolean = true
   ) {
     this._setOutput(name, output, opt)
 
-    this.emit('set_output', name, output, opt)
+    this.emit('set_output', name, output, opt, propagate)
   }
 
   public _setOutput<K extends keyof O>(
@@ -560,7 +577,7 @@ export class Unit<
   }
 
   public pushAllInput<K extends keyof I>(data: Dict<I[K]>): void {
-    forEachKeyValue(data, (value, name) => this.pushInput(name, value))
+    forEachValueKey(data, (value, name) => this.pushInput(name, value))
   }
 
   public pushOutput<K extends keyof O>(name: string, data: O[K]): void {
@@ -568,7 +585,7 @@ export class Unit<
   }
 
   public pushAllOutput<K extends keyof O>(data: Dict<O[K]>): void {
-    forEachKeyValue(data, (value, name) => this.pushOutput(name, value))
+    forEachValueKey(data, (value, name) => this.pushOutput(name, value))
   }
 
   public pushAll<K extends keyof I>(data: Dict<I[K]>): void {
@@ -629,6 +646,22 @@ export class Unit<
     return this._output[name] !== undefined
   }
 
+  public hasDataPinNamed(type: IO, name: string): boolean {
+    if (type === 'input') {
+      return this.hasDataInputNamed(name)
+    } else {
+      return this.hasDataOutputNamed(name)
+    }
+  }
+
+  public hasDataInputNamed(name: string): boolean {
+    return this._d_i_name.has(name)
+  }
+
+  public hasDataOutputNamed(name: string): boolean {
+    return this._d_o_name.has(name)
+  }
+
   public hasRefPinNamed(type: IO, name: string): boolean {
     if (type === 'input') {
       return this.hasRefInputNamed(name)
@@ -649,7 +682,11 @@ export class Unit<
     }
   }
 
-  public renameInput(name: keyof I, newName: keyof I): void {
+  public renameInput(
+    name: keyof I,
+    newName: keyof I,
+    propagate: boolean = true
+  ): void {
     if (!this.hasInputNamed(name)) {
       throw new InputNotFoundError(name)
     }
@@ -685,10 +722,14 @@ export class Unit<
     // RETURN
     this.emit('rename_input', name, newName)
     this.emit('remove_input', name, input)
-    this.emit('set_input', newName, input, opt)
+    this.emit('set_input', newName, input, opt, propagate)
   }
 
-  public renameOutput(name: keyof O, newName: keyof O): void {
+  public renameOutput(
+    name: keyof O,
+    newName: keyof O,
+    propagate: boolean = true
+  ): void {
     if (!this.hasOutputNamed(name)) {
       throw new InputNotFoundError(name)
     }
@@ -723,7 +764,7 @@ export class Unit<
 
     this.emit('rename_output', name, newName)
     this.emit('remove_output', name, output)
-    this.emit('set_output', newName, output, opt)
+    this.emit('set_output', newName, output, opt, propagate)
   }
 
   public getInputOpt(name: string): PinOpt {
@@ -747,11 +788,11 @@ export class Unit<
   }
 
   public getInputNames(): string[] {
-    return Object.keys(this._input)
+    return keys(this._input)
   }
 
   public getOutputNames(): string[] {
-    return Object.keys(this._output)
+    return keys(this._output)
   }
 
   public setPinData(type: IO, pinId: string, data: any): void {
@@ -972,10 +1013,10 @@ export class Unit<
       input: {},
       output: {},
     }
-    forEachKeyValue(this._input, (input, inputId) => {
+    forEachValueKey(this._input, (input, inputId) => {
       data.input[inputId] = input.peak()
     })
-    forEachKeyValue(this._output, (output, outputId) => {
+    forEachValueKey(this._output, (output, outputId) => {
       data.output[outputId] = output.peak()
     })
     return data
@@ -983,7 +1024,7 @@ export class Unit<
 
   public getInputData(): Partial<I> {
     const data: Partial<I> = {}
-    forEachKeyValue(this._input, (input, inputId) => {
+    forEachValueKey(this._input, (input, inputId) => {
       if (!input.empty()) {
         const datum = input.peak()
         data[inputId] = datum
@@ -994,23 +1035,54 @@ export class Unit<
 
   public getRefInputData(): Dict<U> {
     const data: Dict<any> = {}
-    forEachKeyValue(this._ref_input, (input, inputId) => {
+
+    forEachValueKey(this._ref_input, (input, inputId) => {
       if (!input.empty()) {
         let datum = input.peak()
+
         data[inputId] = datum
       }
     })
+
     return data
   }
 
   public getSpecs(): Specs {
-    return { ...this.__system.specs, ...this.__pod.specs }
+    return this.__system.specs
   }
 
-  public getBundleSpec(): UnitBundleSpec {
-    const memory = this.snapshot()
+  public getUnitBundleSpec(deep: boolean = true): UnitBundleSpec {
+    let memory = undefined
 
-    return { unit: { id: this._, memory }, specs: {} }
+    if (deep) {
+      memory = this.snapshot()
+    }
+
+    const input = mapObjVK(this._input, (input) => {
+      const ignored = input.ignored()
+      const constant = input.constant()
+      const data = undefined // TODO
+
+      return {
+        ignored,
+        constant,
+        data,
+      }
+    })
+
+    const output = mapObjVK(this._output, (output) => {
+      const ignored = output.ignored()
+      const constant = output.constant()
+      const data = undefined // TODO
+
+      return {
+        ignored,
+        constant,
+        data,
+      }
+    })
+
+    return { unit: { id: this.id, memory, input, output }, specs: {} }
   }
 
   public snapshotSelf(): Dict<any> {
@@ -1094,9 +1166,9 @@ export class Unit<
   }
 
   public restore(state: {
-    input: Dict<any>
-    output: Dict<any>
-    memory: Dict<any>
+    input?: Dict<any>
+    output?: Dict<any>
+    memory?: Dict<any>
   }): void {
     const { input, output, memory } = state
 

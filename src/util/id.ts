@@ -9,7 +9,7 @@ export function randomIdNotIn(obj: object) {
   let id: string
   do {
     id = randomId()
-  } while (!!obj[id])
+  } while (obj[id])
   return id
 }
 
@@ -33,6 +33,7 @@ export function uuid(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8
+
     return v.toString(16)
   })
 }
@@ -41,6 +42,7 @@ export function uuidNotIn(obj: object) {
   let id: string
   do {
     id = uuid()
-  } while (!!obj[id])
+  } while (obj[id])
+
   return id
 }

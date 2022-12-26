@@ -53,11 +53,6 @@ export function noService<T>(
 
 export function noHost(): API {
   const api: API = {
-    init: {
-      boot: () => {
-        throw new APINotSupportedError('System')
-      },
-    },
     storage: {
       local: () => new Storage_(noStorage('Local Storage')),
       session: () => new Storage_(noStorage('Session Storage')),

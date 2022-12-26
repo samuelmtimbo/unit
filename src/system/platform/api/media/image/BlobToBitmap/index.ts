@@ -2,10 +2,10 @@ import { $ } from '../../../../../../Class/$'
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
 import { Rect } from '../../../../../../client/util/geometry'
+import { System } from '../../../../../../system'
 import { B } from '../../../../../../types/interface/B'
 import { IB } from '../../../../../../types/interface/IB'
-import { Pod } from '../../../../../../pod'
-import { System } from '../../../../../../system'
+import { ID_BLOB_TO_BITMAP } from '../../../../../_ids'
 
 export type I = {
   blob: B
@@ -21,7 +21,7 @@ export type O = {
 }
 
 export default class BlobToBitmap extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['opt', 'blob', 'rect'],
@@ -40,7 +40,7 @@ export default class BlobToBitmap extends Functional<I, O> {
         },
       },
       system,
-      pod
+      ID_BLOB_TO_BITMAP
     )
   }
 
@@ -71,7 +71,7 @@ export default class BlobToBitmap extends Functional<I, O> {
       async imageBitmap(): Promise<ImageBitmap> {
         return _bitmap
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     done({
       bitmap,

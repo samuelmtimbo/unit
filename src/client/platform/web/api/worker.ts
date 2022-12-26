@@ -1,6 +1,6 @@
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 
-export function webWorker(window: Window, prefix: string): API['worker'] {
+export function webWorker(window: Window, opt: BootOpt): API['worker'] {
   const worker = {
     start() {
       const { href } = location

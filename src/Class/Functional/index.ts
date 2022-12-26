@@ -1,8 +1,6 @@
-import { Pin_M } from '../../Pin'
-import { Pod } from '../../pod'
 import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { System } from '../../system'
-import forEachKeyValue from '../../system/core/object/ForEachKeyValue/f'
+import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../../types/Dict'
 import { filterObj } from '../../util/object'
 import { ION, Opt } from '../Unit'
@@ -30,15 +28,14 @@ export class Functional<
 > extends Primitive<I, O, _EE> {
   private _looping: boolean = false
 
-  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System, pod: Pod) {
-    super({ i, o }, opt, system, pod)
+  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System, id: string) {
+    super({ i, o }, opt, system, id)
 
     this.addListener('take_err', () => {
       if (this._looping) {
         this._backward_if_ready()
       }
     })
-
     this.addListener('take_caught_err', () => {
       if (!this.hasErr()) {
         this._backward_if_ready()
@@ -50,6 +47,7 @@ export class Functional<
     if (this._i[name] !== undefined && this._active_i_count === this._i_count) {
       this._looping = false
     }
+
     this._forward_if_ready()
   }
 
@@ -175,6 +173,7 @@ export class Functional<
       if (data !== undefined) {
         const output_empty = filterObj(this._output, (o) => o.empty())
         const output_not_empty = filterObj(this._output, (o) => !o.empty())
+
         const push_or_pull = (output, name) => {
           const o = data[name]
           if (o === undefined) {
@@ -183,9 +182,10 @@ export class Functional<
             output.push(o)
           }
         }
+
         this._forwarding = true
-        forEachKeyValue(output_empty, push_or_pull)
-        forEachKeyValue(output_not_empty, push_or_pull)
+        forEachValueKey(output_empty, push_or_pull)
+        forEachValueKey(output_not_empty, push_or_pull)
         this._forwarding = false
       }
     }

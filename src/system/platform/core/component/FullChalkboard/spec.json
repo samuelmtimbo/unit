@@ -44,8 +44,14 @@
             }
           }
         },
-        "width": {},
-        "height": {}
+        "width": {
+          "constant": true,
+          "data": "\"100vw\""
+        },
+        "height": {
+          "constant": true,
+          "data": "\"100vh\""
+        }
       },
       "output": {
         "canvas": {
@@ -54,103 +60,12 @@
       },
       "metadata": {
         "position": {
-          "x": 105,
-          "y": -1
+          "x": 0,
+          "y": 0
         },
         "component": {
           "width": 346.2822265625,
           "height": 384.0284118652344
-        }
-      }
-    },
-    "framewidthvalue": {
-      "id": "4cab1ce1-332d-4296-ad6b-d37a85e74a55",
-      "input": {
-        "any": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": -168,
-              "y": 40
-            }
-          }
-        },
-        "element": {}
-      },
-      "output": {
-        "width": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -119,
-          "y": 22
-        }
-      }
-    },
-    "frameheightvalue": {
-      "id": "62d92432-9fc2-11eb-86f0-536bb7096e6d",
-      "input": {
-        "any": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": -168,
-              "y": -41
-            }
-          }
-        },
-        "element": {}
-      },
-      "output": {
-        "height": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -119,
-          "y": -23
-        }
-      }
-    }
-  },
-  "merges": {
-    "gsbymzxcf": {
-      "framewidthvalue": {
-        "input": {
-          "element": true
-        }
-      },
-      "chalkboard": {
-        "output": {
-          "_self": true
-        }
-      },
-      "frameheightvalue": {
-        "input": {
-          "element": true
-        }
-      }
-    },
-    "dnnbflw": {
-      "framewidthvalue": {
-        "output": {
-          "width": true
-        }
-      },
-      "chalkboard": {
-        "input": {
-          "width": true
-        }
-      }
-    },
-    "cgpompnrt": {
-      "frameheightvalue": {
-        "output": {
-          "height": true
-        }
-      },
-      "chalkboard": {
-        "input": {
-          "height": true
         }
       }
     }
@@ -170,7 +85,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "full frame chalkboard",
-    "complexity": 144,
+    "complexity": 215,
     "position": {
       "merge": {
         "dnnbflw": {

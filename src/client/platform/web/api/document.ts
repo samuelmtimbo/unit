@@ -1,9 +1,13 @@
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 import { MutationObserver_ } from '../../../MutationObserver_'
 import { PositionObserver } from '../../../PositionObserver'
 import { ResizeObserver_ } from '../../../ResizeObserver_'
 
-export function webDocument(window: Window, prefix: string): API['document'] {
+export function webDocument(
+  window: Window,
+  root: HTMLElement,
+  opt: BootOpt
+): API['document'] {
   const { document } = window
 
   // @ts-ignore
@@ -28,10 +32,10 @@ export function webDocument(window: Window, prefix: string): API['document'] {
       return document.createTextNode(text)
     },
     elementFromPoint(x: number, y: number): Element {
-      return document.elementFromPoint(x, y)
+      return root.shadowRoot.elementFromPoint(x, y)
     },
     elementsFromPoint(x: number, y: number): Element[] {
-      return document.elementsFromPoint(x, y)
+      return root.shadowRoot.elementsFromPoint(x, y)
     },
     MutationObserver: MutationObserver,
     ResizeObserver: ResizeObserver,

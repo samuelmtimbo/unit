@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_JOIN } from '../../../_ids'
 
 export interface I {
   a: string[]
@@ -12,7 +12,7 @@ export interface O {
 }
 
 export default class Join extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a', 'sep'],
@@ -20,7 +20,7 @@ export default class Join extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_JOIN
     )
   }
 

@@ -57,7 +57,7 @@
     "bundle": {
       "plug": {
         "0": {
-          "unitId": "pod",
+          "unitId": "graph",
           "pinId": "bundle"
         }
       },
@@ -136,7 +136,7 @@
         }
       }
     },
-    "pod": {
+    "graph": {
       "id": "324b9c5e-5810-11eb-bf7c-634b3bb07f8c",
       "input": {
         "bundle": {
@@ -156,7 +156,7 @@
         }
       }
     },
-    "iounappkeyboard": {
+    "guikeyboard": {
       "id": "96d5d60e-85eb-11eb-ba90-7fc42ab0a641",
       "input": {},
       "output": {},
@@ -164,17 +164,6 @@
         "position": {
           "x": 583,
           "y": -280
-        }
-      }
-    },
-    "iounappcloud": {
-      "id": "6f1111f0-82b3-11eb-9271-07ffc15d08c6",
-      "input": {},
-      "output": {},
-      "metadata": {
-        "position": {
-          "x": 681,
-          "y": -8
         }
       }
     }
@@ -186,7 +175,7 @@
           "graph": true
         }
       },
-      "pod": {
+      "graph": {
         "output": {
           "graph": true
         }
@@ -203,18 +192,13 @@
     "subComponents": {
       "io": {
         "children": [
-          "iounappcloud",
-          "iounappkeyboard"
+          "guikeyboard"
         ],
         "childSlot": {
-          "iounappcloud": "2",
-          "iounappkeyboard": "2"
+          "guikeyboard": "2"
         }
       },
-      "iounappkeyboard": {
-        "children": []
-      },
-      "iounappcloud": {
+      "guikeyboard": {
         "children": []
       }
     },
@@ -227,7 +211,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "io + cloud",
-    "complexity": 378,
+    "complexity": 945,
     "tags": [
       "platform",
       "core",

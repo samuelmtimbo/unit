@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ID_ADD_ARC } from '../../../../_ids'
 
 export interface I<T> {
   d: any[][]
@@ -19,8 +19,8 @@ export interface O<T> {
   d: any[][]
 }
 
-export default class DrawArc<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+export default class AddArc<T> extends Functional<I<T>, O<T>> {
+  constructor(system: System) {
     super(
       {
         i: ['arc', 'd'],
@@ -28,7 +28,7 @@ export default class DrawArc<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_ADD_ARC
     )
   }
 

@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_NOT_EQUAL } from '../../../_ids'
 import isEqual from '../Equals/f'
 
 export interface I<T> {
@@ -13,7 +13,7 @@ export interface O {
 }
 
 export default class NotEqual<T> extends Functional<I<T>, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a', 'b'],
@@ -21,7 +21,7 @@ export default class NotEqual<T> extends Functional<I<T>, O> {
       },
       {},
       system,
-      pod
+      ID_NOT_EQUAL
     )
   }
 

@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "unit",
     "description": "reference `unit` input `name`",
-    "complexity": 3,
+    "complexity": 4,
     "tags": [
       "platform",
       "ref",

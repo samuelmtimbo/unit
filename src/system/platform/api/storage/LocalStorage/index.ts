@@ -5,13 +5,13 @@ import {
   storageHasKey,
 } from '../../../../../client/util/web/storage'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
-import { J } from '../../../../../types/interface/J'
-import { V } from '../../../../../types/interface/V'
 import { ObjectUpdateType } from '../../../../../Object'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { J } from '../../../../../types/interface/J'
+import { V } from '../../../../../types/interface/V'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { ID_LOCAL_STORAGE } from '../../../../_ids'
 
 export type I = {}
 
@@ -21,7 +21,7 @@ export default class _LocalStorage
   extends Unit<I, O>
   implements J<Dict<any>>, V<Dict<string>>
 {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: [],
@@ -29,9 +29,10 @@ export default class _LocalStorage
       },
       {},
       system,
-      pod
+      ID_LOCAL_STORAGE
     )
   }
+
   subscribe(
     path: string[],
     key: string,
@@ -98,11 +99,13 @@ export default class _LocalStorage
 
   async keys(): Promise<string[]> {
     const keys = getStorageKeys(localStorage)
+
     return keys
   }
 
   async hasKey(name: string): Promise<boolean> {
     const has = storageHasKey(localStorage, name)
+
     return has
   }
 }

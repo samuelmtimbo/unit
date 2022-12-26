@@ -1,5 +1,5 @@
 {
-  "name": "spawn worker",
+  "name": "worker",
   "inputs": {
     "spec": {
       "type": "any",

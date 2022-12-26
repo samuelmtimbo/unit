@@ -1,19 +1,19 @@
-import { Element } from '../../../../../Class/Element'
+import { Element_ } from '../../../../../Class/Element'
 import { Graph } from '../../../../../Class/Graph'
 import { emptySpec, newSpecId } from '../../../../../client/spec'
 import { Zoom } from '../../../../../client/zoom'
-import { Pod } from '../../../../../pod'
 import { fromSpec } from '../../../../../spec/fromSpec'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { G } from '../../../../../types/interface/G'
+import { ID_EDITOR } from '../../../../_ids'
 
 export interface I<T> {
   style: Dict<string>
   graph: G
   disabled: boolean
   fullwindow: boolean
-  frame: Element
+  frame: Element_
   zoom: Zoom
 }
 
@@ -21,14 +21,14 @@ export interface O<T> {
   graph: G
 }
 
-export default class Debugger<T> extends Element<I<T>, O<T>> {
+export default class Editor<T> extends Element_<I<T>, O<T>> {
   __ = ['U', 'C', 'V', 'J', 'G']
 
   private _fallback_graph: Graph
 
   private _graph: Graph
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['graph', 'style', 'disabled', 'fullwindow', 'frame', 'zoom'],
@@ -50,14 +50,16 @@ export default class Debugger<T> extends Element<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_EDITOR
     )
 
-    const spec = emptySpec({ id: newSpecId(system.specs) })
+    const { specs } = system
 
-    const Class = fromSpec(spec, { ...pod.specs, ...system.specs }, {})
+    const spec = emptySpec({ id: newSpecId(specs) })
 
-    const fallback_graph = new Class(system, pod)
+    const Class = fromSpec(spec, specs, {})
+
+    const fallback_graph = new Class(system)
     this._fallback_graph = fallback_graph
 
     this._input.graph.push(this._fallback_graph)
@@ -67,7 +69,7 @@ export default class Debugger<T> extends Element<I<T>, O<T>> {
   }
 
   onRefInputInvalid(name: string) {
-    // console.log('Graph', 'onRefInputInvalid', name)
+    // console.log('Editor', 'onRefInputInvalid', name)
 
     if (name === 'graph') {
       //
@@ -75,21 +77,28 @@ export default class Debugger<T> extends Element<I<T>, O<T>> {
   }
 
   onRefInputData(name: string, data: any) {
-    // console.log('Graph', 'onRefInputData', name)
+    // console.log('Editor', 'onRefInputData', name, data)
 
     if (name === 'graph') {
       const graph = data as Graph
+
       this._graph = graph
+
       this._output.graph.push(graph)
     }
   }
 
   onRefInputDrop(name: string) {
-    // console.log('Graph', 'onRefInputDrop', name)
+    // console.log('Editor', 'onRefInputDrop', name)
+
     if (name === 'graph') {
       this._input.graph.push(this._fallback_graph)
       this._output.graph.push(this._fallback_graph)
     }
+  }
+
+  public onRefOutputData(name: string, data: any): void {
+    // console.log('Editor', 'onRefOutputData', name, data)
   }
 
   public snapshotSelf(): Dict<any> {

@@ -1,6 +1,5 @@
-import applyStyle from '../../../../../client/applyStyle'
 import { Element } from '../../../../../client/element'
-import { Pod } from '../../../../../pod'
+import applyStyle from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -27,8 +26,8 @@ export const NO_IMAGE =
 export default class Image extends Element<HTMLImageElement, Props> {
   private _img_el: HTMLImageElement
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { className, style = {}, src = NO_IMAGE } = this.$props
 
@@ -42,7 +41,6 @@ export default class Image extends Element<HTMLImageElement, Props> {
       img_el.src = src
     }
     img_el.addEventListener('error', (err) => {
-      console.log('AHA', err)
       img_el.src = NO_IMAGE
     })
     img_el.draggable = false

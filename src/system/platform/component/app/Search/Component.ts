@@ -19,25 +19,20 @@ import {
 } from '../../../../../client/event/scroll'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { compareByComplexity } from '../../../../../client/search'
-import {
-  addAddSpecListener,
-  addDeleteSpecListener,
-  addSetSpecListener,
-  getSpec,
-  isComponent,
-} from '../../../../../client/spec'
+import { getSpec, isComponent } from '../../../../../client/spec'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { throttle } from '../../../../../client/throttle'
 import { Shape } from '../../../../../client/util/geometry'
 import { userSelect } from '../../../../../client/util/style/userSelect'
-import { Pod } from '../../../../../pod'
+import { UNTITLED } from '../../../../../constant/STRING'
 import { System } from '../../../../../system'
-import { GraphSpec, Spec, Specs } from '../../../../../types'
+import { Spec, Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { removeWhiteSpace } from '../../../../../util/string'
+import { keys } from '../../../../f/object/Keys/f'
 import MicrophoneButton from '../../../component/app/MicrophoneButton/Component'
-import TextDiv from '../../../core/component/TextDiv/Component'
+import TextBox from '../../../core/component/TextBox/Component'
 import Div from '../../Div/Component'
 import Icon from '../../Icon/Component'
 import IconButton from '../IconButton/Component'
@@ -51,7 +46,7 @@ export interface Props {
   filter?: (u: string) => boolean
 }
 
-const HEIGHT: number = 39
+export const SEARCH_ITEM_HEIGHT: number = 39
 
 export type ListItem = {
   id: string
@@ -124,31 +119,23 @@ export default class Search extends Element<IHTMLDivElement, Props> {
 
   private _scrollTop: number = 0
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
-    const specs = { ...this.$system.specs, ...this.$pod.specs }
+    const { specs } = this.$system
 
     const { className, style = {}, selected } = this.$props
 
-    const id_list = Object.keys(specs)
-    this._id_list = id_list
+    const id_list = keys(specs)
 
-    const visible_id_list = id_list.filter((id) => isSpecVisible(specs, id))
-
-    const ordered_id_list = visible_id_list.sort((a, b) => {
-      return compareByComplexity(specs, a, b)
-    })
-
-    this._ordered_id_list = ordered_id_list
-    this._filtered_id_list = ordered_id_list
+    this._refresh_ordered_list()
 
     const list = new Div(
       {
         className: 'search-list',
         style: {
           position: 'relative',
-          maxHeight: `${4 * HEIGHT - 2}px`,
+          maxHeight: `${4 * SEARCH_ITEM_HEIGHT - 2}px`,
           overflowY: 'auto',
           overflowX: 'hidden',
           display: this._list_hidden ? 'none' : 'block',
@@ -156,8 +143,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
           boxSizing: 'content-box',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     list.addEventListener(
       makeScrollListener((event: IOScrollEvent) => {
@@ -169,12 +155,13 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     const total = id_list.length
 
     let i = 0
-    for (let id of ordered_id_list) {
+    for (const id of this._ordered_id_list) {
       this._add_list_item(id, i, total)
       i++
     }
 
-    const input = new SearchInput({}, this.$system, this.$pod)
+    const input = new SearchInput({}, this.$system)
+
     input.addEventListener(makeKeydownListener(this._on_input_keydown))
     input.addEventListener(makeFocusInListener(this._on_input_focus_in))
     input.addEventListener(makeFocusOutListener(this._on_input_focus_out))
@@ -199,7 +186,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
         { combo: 'Escape', keydown: this._on_escape_keydown },
         {
           // combo: 'Ctrl + p',
-          combo: 'Ctrl + ;',
+          combo: ['Ctrl + ;', ';'],
           // combo: 'Ctrl + /',
           keydown: this._on_ctrl_p_keydown,
           strict: false,
@@ -233,8 +220,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
           padding: '11px 9px 10px 11px',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     microphone.addEventListener(
       makeCustomListener('transcript', this._on_microphone_transcript)
@@ -256,8 +242,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
         },
         title: 'layout',
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     shape_button.addEventListener(
       makeClickListener({
@@ -268,6 +253,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     )
     shape_button.preventDefault('mousedown')
     shape_button.preventDefault('touchdown')
+
     this._shape_button = shape_button
 
     const search = new Div(
@@ -279,19 +265,21 @@ export default class Search extends Element<IHTMLDivElement, Props> {
         },
         title: 'search',
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     search.registerParentRoot(list)
     search.registerParentRoot(input)
     search.registerParentRoot(shape_button)
     search.registerParentRoot(microphone)
+
     this._search = search
 
     const $element = parentElement($system)
 
     this.$element = $element
-    this.$slot['default'] = search.$slot['default']
+    this.$slot = {
+      default: search,
+    }
     this.$unbundled = false
 
     if (selected) {
@@ -306,45 +294,51 @@ export default class Search extends Element<IHTMLDivElement, Props> {
 
     this.registerRoot(search)
 
-    const unlisten_add_spec = addAddSpecListener(
-      (id: string, spec: GraphSpec): void => {
-        // console.log('Search', '_on_add_spec', id, spec)
-        // RETURN
-        // const { specs } = this.$system
-        // this._id_list.push(id)
-        // let i: number
-        // if (isSpecVisible(specs, id)) {
-        //   for (i = 0; i < this._ordered_id_list.length; i++) {
-        //     const i_id = this._ordered_id_list[i]
-        //     if (compareByComplexity(specs, id, i_id) < 0) {
-        //       this._ordered_id_list.splice(i, 0, id)
-        //       break
-        //     }
-        //   }
-        // }
-        // const l = this._id_list.length
-        // const total = l + 1
-        // this._add_list_item(id, i, total)
-        // this._filter_list()
-      }
-    )
+    this.$system.specs_.subscribe([], '*', (type, path, key, data) => {
+      if (path.length === 0) {
+        if (type === 'set') {
+          const specId = key
+          const spec = data
 
-    const unlisten_set_spec = addSetSpecListener(
-      (id: string, spec: GraphSpec): void => {
-        // console.log('Search', '_on_set_spec', id, spec)
-        // TODO
-      }
-    )
+          if (isSpecVisible(specs, spec.id)) {
+            if (!this._ordered_id_list.includes(specId)) {
+              this._add_list_item(
+                specId,
+                Math.floor(this._ordered_id_list.length / 2), // RETURN
+                this._ordered_id_list.length
+              )
 
-    const unlisten_delete_spec = addDeleteSpecListener((id: string): void => {
-      // console.log('Search', '_on_delete_spec', id)
-      // TODO
+              this._refresh_ordered_list()
+              this._filter_list()
+            }
+          }
+        }
+      }
     })
+  }
+
+  private _refresh_ordered_list = () => {
+    const { specs } = this.$system
+
+    const id_list = keys(specs)
+
+    this._id_list = id_list
+
+    const visible_id_list = id_list.filter((id) => isSpecVisible(specs, id))
+
+    const ordered_id_list = visible_id_list.sort((a, b) => {
+      return compareByComplexity(specs, a, b)
+    })
+
+    this._ordered_id_list = ordered_id_list
+    this._filtered_id_list = ordered_id_list
   }
 
   private _set_list_item_color = (id: string, color: string) => {
     // console.log('Search', '_set_list_item_color', id, color)
+
     const selected_list_item = this._list_item_content[id]
+
     selected_list_item.$element.style.color = color
   }
 
@@ -371,7 +365,9 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   }
 
   private _add_list_item = (id: string, i: number, total: number): void => {
-    const specs = { ...this.$system.specs, ...this.$pod.specs }
+    // console.log('Search', '_add_list_item', id, i, total)
+
+    const { specs } = this.$system
 
     const spec = getSpec(specs, id)
 
@@ -381,6 +377,8 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     const tagsStr = tags.join(' ')
     // const fuzzyName = `${name} ${tagsStr}`
     const fuzzyName = name
+    const finalName = name || UNTITLED
+
     this._item[id] = { id, name, icon, tags, fuzzyName }
 
     const list_item_icon = new Icon(
@@ -388,10 +386,9 @@ export default class Search extends Element<IHTMLDivElement, Props> {
         style: { width: '18px', height: '18px', margin: '9px' },
         icon,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
-    const list_item_main_name = new TextDiv(
+    const list_item_main_name = new TextBox(
       {
         style: {
           width: 'fit-content',
@@ -399,12 +396,11 @@ export default class Search extends Element<IHTMLDivElement, Props> {
           marginBottom: '2px',
           ...userSelect('none'),
         },
-        value: name,
+        value: finalName,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
-    const list_item_main_tags = new TextDiv(
+    const list_item_main_tags = new TextBox(
       {
         style: {
           fontSize: '12px',
@@ -414,8 +410,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
         },
         value: tagsStr,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
 
     const list_item_main = new Div(
@@ -427,8 +422,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
           marginBottom: '2px',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     list_item_main.appendChild(list_item_main_name)
     list_item_main.appendChild(list_item_main_tags)
@@ -440,12 +434,11 @@ export default class Search extends Element<IHTMLDivElement, Props> {
           display: 'flex',
           width: '100%',
           alignItems: 'center',
-          height: `${HEIGHT - 1}px`,
+          height: `${SEARCH_ITEM_HEIGHT - 1}px`,
           backgroundColor: COLOR_NONE,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     list_item_content.appendChild(list_item_icon)
     list_item_content.appendChild(list_item_main)
@@ -466,8 +459,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
           id,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     list_item_div.preventDefault('mousedown')
     list_item_div.preventDefault('touchdown')
@@ -516,7 +508,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   ) => {
     // console.log('Search', '_on_input_keydown', keyCode, repeat)
     // prevent arrow up/down default
-    if (keyCode === 38 || keyCode === 40) {
+    if (keyCode === 38 || keyCode === 40 || keyCode === 186) {
       _event.preventDefault()
     }
 
@@ -531,6 +523,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
 
   private _on_input_focus_in = (): void => {
     // console.log('Search', '_on_input_focus_in')
+
     // setTimeout(() => {
     this._select_all()
     // }, 0)
@@ -571,9 +564,14 @@ export default class Search extends Element<IHTMLDivElement, Props> {
       const last_list_item_div = this._list_item_div[last_list_item_id]
 
       last_list_item_div.$element.style.borderBottom = color
+
+      if (this._selected_id) {
+        this._scroll_into_item(this._selected_id)
+      }
     }
 
     this._dispatch_list_shown()
+
     if (this._selected_id) {
       this._dispatch_item_selected(this._selected_id)
     }
@@ -629,6 +627,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
 
   public set_selected_item_id = (id: string): void => {
     const prev_selected_id = this._selected_id
+
     this._set_selected_item_id(id)
     if (this._selected_id !== prev_selected_id) {
       this._dispatch_item_selected(id)
@@ -637,28 +636,36 @@ export default class Search extends Element<IHTMLDivElement, Props> {
 
   private _set_selected_item_id = (id: string): void => {
     // console.log('Search', '_set_selected_item_id', id)
+
     const { style = {}, selectedColor = 'currentColor' } = this.$props
     const { color = 'currentColor' } = style
+
     if (this._selected_id) {
       this._set_list_item_color(this._selected_id, color)
     }
+
     this._selected_id = id
+
     this._set_list_item_color(id, selectedColor)
     this._scroll_into_item(id)
   }
 
   private _scroll_into_item = (id: string) => {
     // console.log('Search', '_scroll_into_item', id)
+
     // const scroll_index = Math.ceil(this._list.$element.scrollTop / HEIGHT)
-    const scroll_index = Math.ceil(this._scrollTop / HEIGHT)
+
+    const scroll_index = Math.ceil(this._scrollTop / SEARCH_ITEM_HEIGHT)
+
     const selected_id_index = this._filtered_id_list.indexOf(id)
+
     if (
       selected_id_index - scroll_index >= 4 ||
       selected_id_index - scroll_index < 0
     ) {
       // this._list.$element.scrollTop = selected_id_index * HEIGHT
       this._list.$element.scrollTo({
-        top: selected_id_index * HEIGHT,
+        top: selected_id_index * SEARCH_ITEM_HEIGHT,
       })
     }
   }
@@ -666,7 +673,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   private _filter_list = () => {
     // console.log('Search', '_filter_list')
 
-    const specs = { ...this.$system.specs, ...this.$pod.specs }
+    const { specs } = this.$system
 
     const { style = {}, filter = () => true } = this.$props
 
@@ -685,15 +692,17 @@ export default class Search extends Element<IHTMLDivElement, Props> {
 
     const fuzzy_pattern = this._input_value
 
-    for (let id of this._ordered_id_list) {
+    for (const id of this._ordered_id_list) {
       const { fuzzyName } = this._item[id]
       const list_item_div = this._list_item_div[id]
 
-      const fuzzy_match = fuzzy.match(
-        removeWhiteSpace(fuzzy_pattern),
-        fuzzyName,
-        { caseSensitive: false }
+      const clean_fuzzy_pattern = removeWhiteSpace(
+        fuzzy_pattern.replace('-', ' ')
       )
+
+      const fuzzy_match = fuzzy.match(clean_fuzzy_pattern, fuzzyName, {
+        caseSensitive: false,
+      })
 
       if (
         (fuzzy_pattern === '' || fuzzy_match) &&
@@ -701,12 +710,15 @@ export default class Search extends Element<IHTMLDivElement, Props> {
         (this._shape === 'circle' || isComponent(specs, id))
       ) {
         filtered_score[id] = 0
+
         if (fuzzy_match) {
           const { score } = fuzzy_match
+
           filtered_score[id] = score
         }
 
         list_item_div.$element.style.display = 'flex'
+
         filtered_id_list.push(id)
       } else {
         list_item_div.$element.style.display = 'none'
@@ -716,6 +728,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     filtered_id_list = filtered_id_list.sort((a, b) => {
       const a_score = filtered_score[a]
       const b_score = filtered_score[b]
+
       return b_score - a_score
     })
 
@@ -727,6 +740,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
       for (let i = 0; i < filtered_total; i++) {
         const id = this._filtered_id_list[i]
         const list_item_div = this._list_item_div[id]
+
         this._list.removeChild(list_item_div)
         this._list.appendChild(list_item_div)
       }
@@ -756,6 +770,12 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   }
 
   private _on_input_input = (value: string) => {
+    if (value === ';') {
+      this._setValue(this._input_value)
+
+      return
+    }
+
     this._input_value = value
     this._filter_list()
   }
@@ -823,10 +843,20 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     return this._shape
   }
 
+  public getList(): string[] {
+    return this._filtered_id_list
+  }
+
   public setValue = (value: string): void => {
+    // console.log('Search', 'setValue', value)
+
+    this._setValue(value)
+    this._filter_list()
+  }
+
+  public _setValue = (value: string): void => {
     this._input_value = value
     this._input.setProp('value', value)
-    this._filter_list()
   }
 
   public toggleShape = () => {
@@ -848,12 +878,6 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   }
 
   public onConnected(): void {
-    console.log('Search', 'onConnected')
-
-    console.log(this.$unit)
-
-    const $pod = this.$unit.$refPod({})
-
-    console.log('$pod', $pod)
+    // console.log('Search', 'onConnected')
   }
 }

@@ -1,12 +1,12 @@
-import { Element } from '../Class/Element'
+import { Element_ } from '../Class/Element'
 import { Graph } from '../Class/Graph'
 import { Stateful } from '../Class/Stateful'
 import { Unit } from '../Class/Unit'
-import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
+import { GRAPH_DEFAULT_EVENTS } from '../constant/GRAPH_DEFAULT_EVENTS'
 import { Unlisten } from '../types/Unlisten'
-import callAll from '../util/call/callAll'
+import { callAll } from '../util/call/callAll'
+import { watchGraphInternal } from './graph/watchGraphInternal'
 import { Moment } from './Moment'
-import { watchGraphInternal } from './watchGraphInternal'
 import {
   watchElementCallEvent,
   watchStatefulSetEvent,
@@ -17,7 +17,7 @@ import { watchUnitIO } from './watchUnitIO'
 export function watchUnit<T extends Unit>(
   unit: T,
   callback: (moment: Moment) => void,
-  events: string[] = DEFAULT_EVENTS
+  events: string[] = GRAPH_DEFAULT_EVENTS
 ): Unlisten {
   const all: Unlisten[] = []
 
@@ -29,7 +29,7 @@ export function watchUnit<T extends Unit>(
     }
   }
 
-  if (unit instanceof Element) {
+  if (unit instanceof Element_) {
     if (events.includes('call')) {
       all.push(watchElementCallEvent('call', unit, callback))
     }

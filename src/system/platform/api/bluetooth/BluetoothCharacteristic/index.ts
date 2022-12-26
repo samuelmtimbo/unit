@@ -1,11 +1,11 @@
 import { $ } from '../../../../../Class/$'
 import { Functional, FunctionalEvents } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { BC } from '../../../../../types/interface/BC'
-import { BSE } from '../../../../../types/interface/BSE'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IBluetoothCharacteristic } from '../../../../../types/global/IBluetoothCharacteristic'
+import { BC } from '../../../../../types/interface/BC'
+import { BSE } from '../../../../../types/interface/BSE'
+import { ID_BLUETOOTH_CHARACTERISTIC } from '../../../../_ids'
 
 export interface I {
   service: BSE
@@ -30,7 +30,7 @@ export default class BluetoothCharacteristic extends Functional<
 > {
   private _charac: IBluetoothCharacteristic
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['service', 'uuid'],
@@ -49,7 +49,7 @@ export default class BluetoothCharacteristic extends Functional<
         },
       },
       system,
-      pod
+      ID_BLUETOOTH_CHARACTERISTIC
     )
 
     this.addListener('listen', ({ event }: { event: string }) => {
@@ -82,7 +82,7 @@ export default class BluetoothCharacteristic extends Functional<
         await _charac.writeValue(buffer)
         return
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     done({ charac })
   }

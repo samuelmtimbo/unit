@@ -32,8 +32,8 @@
           "unitId": "gui",
           "pinId": "disabled"
         },
-        "nmlrgwuaw": {
-          "unitId": "graph",
+        "1": {
+          "unitId": "editor",
           "pinId": "disabled"
         }
       },
@@ -43,7 +43,7 @@
             "x": -372,
             "y": -304
           },
-          "nmlrgwuaw": {
+          "1": {
             "x": 183,
             "y": 16
           }
@@ -54,7 +54,7 @@
     "graph": {
       "plug": {
         "0": {
-          "unitId": "graph",
+          "unitId": "editor",
           "pinId": "graph"
         }
       },
@@ -72,7 +72,7 @@
     "fullwindow": {
       "plug": {
         "0": {
-          "unitId": "graph",
+          "unitId": "editor",
           "pinId": "fullwindow"
         }
       },
@@ -81,7 +81,7 @@
     "frame": {
       "plug": {
         "0": {
-          "unitId": "graph",
+          "unitId": "editor",
           "pinId": "frame"
         }
       },
@@ -93,8 +93,8 @@
     "graph": {
       "plug": {
         "0": {
-          "unitId": "graph",
-          "pinId": "_self"
+          "unitId": "editor",
+          "pinId": "graph"
         }
       },
       "ref": true,
@@ -131,7 +131,7 @@
         }
       }
     },
-    "graph": {
+    "editor": {
       "id": "e80c912e-7508-11ea-966b-436805345ff0",
       "input": {
         "style": {},
@@ -243,7 +243,7 @@
           "{color}": true
         }
       },
-      "graph": {
+      "editor": {
         "input": {
           "style": true
         }
@@ -265,31 +265,27 @@
   "component": {
     "slots": [
       [
-        "graph",
-        "default"
-      ],
-      [
-        "graph",
-        "1"
-      ],
-      [
         "gui",
         "default"
       ],
       [
         "gui",
         "1"
+      ],
+      [
+        "gui",
+        "2"
       ]
     ],
     "subComponents": {
       "gui": {
         "children": [
-          "graph"
+          "editor"
         ],
         "width": 420,
         "height": 420
       },
-      "graph": {
+      "editor": {
         "children": []
       }
     },
@@ -301,8 +297,8 @@
   },
   "metadata": {
     "icon": "atom-alt",
-    "description": "graph + gui",
-    "complexity": 169,
+    "description": "editor + gui",
+    "complexity": 367,
     "tags": [
       "platform",
       "core",

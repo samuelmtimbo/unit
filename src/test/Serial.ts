@@ -2,9 +2,9 @@ import * as assert from 'assert'
 import { watchUnitAndLog } from '../debug'
 import { Pin } from '../Pin'
 import Serial from '../Serial'
-import { pod, system } from './util/system'
+import { system } from './util/system'
 
-const serial0 = new Serial(system, pod)
+const serial0 = new Serial(system)
 
 serial0.play()
 

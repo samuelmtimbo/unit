@@ -10,12 +10,21 @@ export default function resizeWith(
       document: { ResizeObserver },
     },
   } = system
+
+  return resizeWithObserver(element, target, ResizeObserver)
+}
+
+export function resizeWithObserver(
+  element: Element,
+  target: Element,
+  Observer: typeof ResizeObserver
+): void {
   const { width, height } = target.getBoundingClientRect()
 
   element.setAttribute('width', `${width}`)
   element.setAttribute('height', `${height}`)
 
-  const resizeObserver = new ResizeObserver((entries) => {
+  const resizeObserver = new Observer((entries) => {
     for (const entry of entries) {
       const { width, height } = entry.contentRect
       element.setAttribute('width', `${width}`)
@@ -23,5 +32,5 @@ export default function resizeWith(
     }
   })
 
-  // resizeObserver.observe(target)
+  resizeObserver.observe(target)
 }

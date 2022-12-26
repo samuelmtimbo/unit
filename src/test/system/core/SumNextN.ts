@@ -4,7 +4,7 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec = {
   id: '47119174-5dcb-11ea-8a04-4b0a14d0ad1a',
@@ -148,7 +148,7 @@ const spec = {
 
 const SumNextN = fromSpec(spec, _specs)
 
-const sumNextN = new SumNextN(system, pod)
+const sumNextN = new SumNextN(system)
 
 false && watchUnitAndLog(sumNextN)
 false && watchGraphAndLog(sumNextN)

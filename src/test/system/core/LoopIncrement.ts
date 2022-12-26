@@ -5,13 +5,13 @@ import {
 } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec = require('../../../system/core/common/LoopIncrement/spec.json')
 
 const LoopIncrement = fromSpec(spec, _specs)
 
-const loopIncrement = new LoopIncrement(system, pod)
+const loopIncrement = new LoopIncrement(system)
 
 false && watchUnitAndLog(loopIncrement)
 false && watchGraphAndLog(loopIncrement)

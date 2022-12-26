@@ -2,10 +2,10 @@ import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { getSpec } from '../../../../client/spec'
 import { cloneUnitBundle } from '../../../../cloneUnitClass'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { IO } from '../../../../types/IO'
 import { UnitBundle } from '../../../../types/UnitBundle'
+import { ID_UNSET_PIN } from '../../../_ids'
 import Unit from '../../meta/Unit'
 
 export interface I<T extends Unit> {
@@ -22,7 +22,7 @@ export default class TakePinData<T extends Unit> extends Functional<
   I<T>,
   O<T>
 > {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['unit', 'type', 'name', 'data'],
@@ -30,7 +30,7 @@ export default class TakePinData<T extends Unit> extends Functional<
       },
       {},
       system,
-      pod
+      ID_UNSET_PIN
     )
   }
 
@@ -40,6 +40,7 @@ export default class TakePinData<T extends Unit> extends Functional<
       specs,
     } = unit.__bundle
 
+    // RETURN
     const spec = getSpec({ ...specs, ...this.__system.specs }, id)
 
     if (!spec[`${type}s`][name]) {

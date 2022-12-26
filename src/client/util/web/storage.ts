@@ -1,3 +1,4 @@
+import { keys } from '../../../system/f/object/Keys/f'
 import { Dict } from '../../../types/Dict'
 import { IStorage } from '../../../types/global/IStorage'
 
@@ -8,8 +9,7 @@ export function storageHasKey(storage: IStorage, key: string): boolean {
 }
 
 export function getStorageKeys(storage: IStorage): string[] {
-  const keys = Object.keys(storage)
-  return keys
+  return keys(storage)
 }
 
 export function getAllStorage(storage: IStorage): Dict<string> {

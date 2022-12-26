@@ -1,5 +1,4 @@
 import { Graph } from '../Class/Graph'
-import { Pod } from '../pod'
 import { System } from '../system'
 import {
   GraphSpec,
@@ -11,7 +10,6 @@ import {
 } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphBundle, GraphClass } from '../types/GraphClass'
-import { clone } from '../util/object'
 import { bundleClass } from './bundleClass'
 
 export function extractGraphSpecs(spec: GraphSpec, specs: Specs): GraphSpecs {
@@ -45,6 +43,10 @@ export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
 
   const { id } = spec
 
+  if (!id) {
+    throw new Error('')
+  }
+
   const specs = extractGraphSpecs(spec, _specs)
 
   const Bundle = bundleClass(Class, { unit: { id }, specs })
@@ -57,8 +59,6 @@ export function _fromSpec<I, O>(
   specs: Specs,
   branch: { [path: string]: true } = {}
 ): GraphClass<I, O> {
-  spec = clone(spec)
-
   const { name, units } = spec
 
   for (const unitId in units) {
@@ -98,16 +98,6 @@ export function _fromSpec<I, O>(
     }
   }
 
-  class Class<I, O> extends Graph<I, O> {
-    constructor(system: System, pod: Pod) {
-      super(spec, branch, system, pod)
-    }
-  }
-
-  Object.defineProperty(Class, 'name', {
-    value: name,
-  })
-
   return __fromSpec(spec, branch)
 }
 
@@ -115,11 +105,15 @@ export function __fromSpec<I, O>(
   spec: GraphSpec,
   branch: { [path: string]: true } = {}
 ): GraphClass<I, O> {
-  const { name } = spec
+  const { id, name } = spec
+
+  if (!id) {
+    throw new Error('')
+  }
 
   class Class extends Graph<I, O> {
-    constructor(system: System, pod: Pod) {
-      super(spec, branch, system, pod)
+    constructor(system: System) {
+      super(spec, branch, system, id)
     }
   }
 

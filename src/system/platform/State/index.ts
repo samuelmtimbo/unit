@@ -1,10 +1,10 @@
 import { Done } from '../../../Class/Functional/Done'
 import { Semifunctional } from '../../../Class/Semifunctional'
-import { Pod } from '../../../pod'
 import { System } from '../../../system'
 import { Dict } from '../../../types/Dict'
 import { V } from '../../../types/interface/V'
 import { wrapValue } from '../../../wrap/Value'
+import { ID_STATE } from '../../_ids'
 
 export interface I<T> {
   init: T
@@ -19,7 +19,7 @@ export default class State<T extends Dict<any>> extends Semifunctional<
   I<T>,
   O<T>
 > {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['init'],
@@ -35,12 +35,12 @@ export default class State<T extends Dict<any>> extends Semifunctional<
         },
       },
       system,
-      pod
+      ID_STATE
     )
   }
 
   f({ init }: I<T>, done: Done<O<T>>): void {
-    const data = wrapValue(init, this.__system, this.__pod)
+    const data = wrapValue(init, this.__system)
 
     done({
       data,

@@ -2,10 +2,10 @@ import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { getSpec } from '../../../../client/spec'
 import { cloneUnitBundle } from '../../../../cloneUnitClass'
-import { Pod } from '../../../../pod'
 import { stringify } from '../../../../spec/stringify'
 import { System } from '../../../../system'
 import { UnitBundle } from '../../../../types/UnitBundle'
+import { ID_SET_INPUT } from '../../../_ids'
 
 export interface I<T> {
   unit: UnitBundle
@@ -18,7 +18,7 @@ export interface O<T> {
 }
 
 export default class SetInput<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['unit', 'name', 'data'],
@@ -26,7 +26,7 @@ export default class SetInput<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_SET_INPUT
     )
   }
 

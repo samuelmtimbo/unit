@@ -1,0 +1,41 @@
+{
+  "name": "text field",
+  "inputs": {
+    "value": {
+      "type": "string",
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "metadata": {
+        "description": ""
+      },
+      "optional": true
+    },
+    "maxLength": {
+      "type": "number",
+      "optional": true,
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "form-input",
+    "description": "single line text input",
+    "complexity": 118,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
+  },
+  "id": "6a14988f-5f4b-4fab-af32-226b7844e41f",
+  "base": true,
+  "component": {
+    "defaultWidth": 180,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}

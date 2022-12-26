@@ -1,18 +1,21 @@
 import { ListenerNotFoundError } from './exception/ListenerNotFoundError'
-import { EE } from './types/interface/EE'
+import { keys } from './system/f/object/Keys/f'
 import { Dict } from './types/Dict'
+import { EE } from './types/interface/EE'
 import { Listener } from './types/Listener'
 import { Unlisten } from './types/Unlisten'
 
 export type EventEmitter_EE<_EE extends Dict<any[]>> = {
   listen: [{ event: 'listen' | keyof _EE }]
   unlisten: [{ event: 'unlisten' | keyof _EE }]
+  emit: [{ event: 'emit' | keyof _EE }]
 }
 
 export class EventEmitter<
   _EE extends EventEmitter_EE<_EE> & Dict<any[]> = Dict<any> & {
     listen: [{ event: 'listen' }]
     unlisten: [{ event: 'unlisten' }]
+    emit: [{ event: 'emit' }]
   }
 > implements EE<_EE>
 {
@@ -81,7 +84,7 @@ export class EventEmitter<
   }
 
   eventNames(): string[] {
-    return Object.keys(this.__listeners)
+    return keys(this.__listeners)
   }
 
   listenerCount<K extends keyof _EE>(name: K): number {
@@ -98,9 +101,7 @@ export class EventEmitter<
     for (const listener of listeners) {
       listener.call(this, ...args)
     }
-  }
 
-  refEmitter(): EE<any, any> {
-    return null
+    this.emit('emit', { event })
   }
 }

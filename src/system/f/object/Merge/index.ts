@@ -1,8 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { ID_MERGE } from '../../../_ids'
 import merge from './f'
 
 export interface I<T, K> {
@@ -15,7 +15,7 @@ export interface O<T, K> {
 }
 
 export default class Merge<T, K> extends Functional<I<T, K>, O<T, K>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a', 'b'],
@@ -23,7 +23,7 @@ export default class Merge<T, K> extends Functional<I<T, K>, O<T, K>> {
       },
       {},
       system,
-      pod
+      ID_MERGE
     )
   }
 

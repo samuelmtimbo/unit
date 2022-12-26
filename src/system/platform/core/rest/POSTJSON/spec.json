@@ -1,95 +1,166 @@
 {
-  "name": "POST JSON",
-  "units": {
-    "cpqoubsy": {
-      "id": "ee184ea6-3c80-4119-919e-290620aafab0",
-      "input": {
-        "json": {}
-      }
-    },
-    "elhvggatf": {
-      "id": "c5856fdc-5154-46ab-a414-47f37af39da1",
-      "input": {
-        "url": {
-          "constant": false
-        }
-      }
-    },
-    "plrdswoeo": {
-      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
-      "input": {
-        "obj": {
-          "constant": true,
-          "data": "{method:'POST',headers:{\"Content-Type\":'application/json'}}"
-        },
-        "key": {
-          "constant": true,
-          "data": "'body'"
-        }
-      }
-    }
-  },
-  "merges": {
-    "dimeu": {
-      "plrdswoeo": {
-        "input": {
-          "value": true
-        }
-      },
-      "cpqoubsy": {
-        "output": {
-          "string": true
-        }
-      }
-    },
-    "krissnnyb": {
-      "elhvggatf": {
-        "input": {
-          "options": true
-        }
-      },
-      "plrdswoeo": {
-        "output": {
-          "obj": true
-        }
-      }
-    }
-  },
+  "name": "post JSON",
   "inputs": {
-    "mvrbmatr": {
+    "json": {
       "plug": {
         "0": {
-          "unitId": "cpqoubsy",
+          "unitId": "stringify",
           "pinId": "json"
         }
       },
-      "type": "<A>"
+      "type": "any"
     },
-    "bccuxmrt": {
+    "url": {
       "plug": {
         "0": {
-          "unitId": "elhvggatf",
+          "unitId": "fetch",
           "pinId": "url"
         }
       },
       "type": "string"
+    },
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "merge",
+          "pinId": "b"
+        }
+      }
     }
   },
   "outputs": {
-    "stpyrbnqj": {
+    "response": {
       "plug": {
         "0": {
-          "unitId": "elhvggatf",
+          "unitId": "fetch",
           "pinId": "response"
         }
       },
       "type": "{status:number,body:string}"
     }
   },
+  "units": {
+    "stringify": {
+      "id": "ee184ea6-3c80-4119-919e-290620aafab0",
+      "input": {
+        "json": {}
+      },
+      "output": {
+        "string": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -76,
+          "y": 54
+        }
+      }
+    },
+    "fetch": {
+      "id": "c5856fdc-5154-46ab-a414-47f37af39da1",
+      "input": {
+        "url": {
+          "constant": false
+        },
+        "options": {}
+      },
+      "output": {
+        "response": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 124,
+          "y": 22
+        }
+      }
+    },
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {
+          "constant": false
+        },
+        "key": {
+          "constant": true,
+          "data": "'body'"
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 14,
+          "y": -1
+        }
+      }
+    },
+    "merge": {
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "{method:'POST',headers:{\"Content-Type\":'application/json'}}"
+        },
+        "b": {
+          "constant": false
+        }
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -64,
+          "y": -77
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "set": {
+        "input": {
+          "value": true
+        }
+      },
+      "stringify": {
+        "output": {
+          "string": true
+        }
+      }
+    },
+    "1": {
+      "fetch": {
+        "input": {
+          "options": true
+        }
+      },
+      "set": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "2": {
+      "merge": {
+        "output": {
+          "ab": true
+        }
+      },
+      "set": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "render": false,
+  "component": {},
   "metadata": {
     "icon": "send",
     "description": "...",
-    "complexity": 11,
+    "complexity": 14,
     "tags": [
       "platform",
       "core",

@@ -1,7 +1,6 @@
-import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
-import { Pod } from '../../../../../pod'
+import applyStyle from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -14,7 +13,7 @@ export interface Props {
 }
 
 export const DEFAULT_STYLE = {
-  fill: 'none',
+  fill: 'currentColor',
   stroke: 'currentColor',
   strokeWidth: '1px',
 }
@@ -22,10 +21,10 @@ export const DEFAULT_STYLE = {
 export default class SVGCircle extends Element<SVGCircleElement, Props> {
   private _circle_el: SVGCircleElement
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
-    const { className, style = {}, x = 0, y = 0, r = 0 } = $props
+    const { className, style = {}, x = 50, y = 50, r = 50 } = $props
 
     const circle_el = this.$system.api.document.createElementNS(
       namespaceURI,

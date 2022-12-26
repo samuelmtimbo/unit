@@ -11,7 +11,7 @@
         ]
       }
     },
-    "pod": {
+    "graph": {
       "type": "`G`",
       "ref": true
     }
@@ -19,8 +19,8 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "visualize a pod",
-    "complexity": 21,
+    "description": "render a graph",
+    "complexity": 119,
     "tags": [
       "platform",
       "component"

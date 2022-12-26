@@ -1,13 +1,13 @@
 import { Unit } from '../Class/Unit'
-import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
-import callAll from '../util/call/callAll'
+import { GRAPH_DEFAULT_EVENTS } from '../constant/GRAPH_DEFAULT_EVENTS'
+import { callAll } from '../util/call/callAll'
 import { UnitErrMoment } from './UnitErrMoment'
 import { watchUnitErrEvent } from './watchUnitErrEvent'
 
 export function watchUnitErr(
   unit: Unit,
   callback: (moment: UnitErrMoment) => void,
-  events: string[] = DEFAULT_EVENTS
+  events: string[] = GRAPH_DEFAULT_EVENTS
 ): () => void {
   const all = []
 

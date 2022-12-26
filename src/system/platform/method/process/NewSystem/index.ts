@@ -1,13 +1,16 @@
-import { Functional } from '../../../../../Class/Functional'
+import { boot } from '../../../../../boot'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { S } from '../../../../../types/interface/S'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { S } from '../../../../../types/interface/S'
+import { wrapSystem } from '../../../../../wrap/System'
+import { ID_NEW_SYSTEM } from '../../../../_ids'
 
 export interface I {
-  init: {}
-  done: any
+  init: {
+    path?: string
+  }
+  done: unknown
 }
 
 export interface O {
@@ -15,13 +18,13 @@ export interface O {
 }
 
 export default class NewSystem extends Semifunctional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['init'],
         fo: ['system'],
         i: ['done'],
-        o: []
+        o: [],
       },
       {
         output: {
@@ -31,9 +34,23 @@ export default class NewSystem extends Semifunctional<I, O> {
         },
       },
       system,
-      pod
+      ID_NEW_SYSTEM
     )
   }
 
-  f({ init }: I, done: Done<O>): void {}
+  f({ init }: I, done: Done<O>): void {
+    const { path } = init
+
+    const _system = boot(this.__system, this.__system.api, {
+      path,
+    })
+
+    const system = wrapSystem(_system, this.__system)
+
+    done({
+      system,
+    })
+  }
 }
+
+export function createSubSystem(system: System, path: string) {}

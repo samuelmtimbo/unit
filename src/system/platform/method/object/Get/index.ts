@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { J } from '../../../../../types/interface/J'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { J } from '../../../../../types/interface/J'
+import { ID_GET_0 } from '../../../../_ids'
 
 export interface I<T> {
   unit: J
@@ -14,7 +14,7 @@ export interface O<T> {
 }
 
 export default class Get<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['unit', 'name'],
@@ -28,13 +28,14 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_GET_0
     )
   }
 
   async f({ unit, name }: I<T>, done: Done<O<T>>) {
     try {
       const value = await unit.get(name)
+
       done({ value })
     } catch (err) {
       done(undefined, err)

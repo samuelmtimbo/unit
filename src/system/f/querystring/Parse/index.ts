@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { ID_PARSE } from '../../../_ids'
 
 export interface I {
   str: string
@@ -12,7 +12,7 @@ export interface O {
 }
 
 export default class Parse extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['str'],
@@ -20,7 +20,7 @@ export default class Parse extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_PARSE
     )
   }
 

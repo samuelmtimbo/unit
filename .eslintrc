@@ -9,16 +9,25 @@
     "prettier"
   ],
   "rules": {
-    "no-console": 1, // warning
-    "prettier/prettier": 2, // error
+    "no-console": 0, // warning
+    "no-constant-condition": "off",
+    "prettier/prettier": 0, // error
     "no-async-promise-executor": "off",
     "no-empty-pattern": "off",
     "no-inner-declarations": "off",
+    "no-empty": "off",
+    "prefer-const": "off",
+    "no-prototype-builtins": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-empty-function": "off",
-    "@typescript-eslint/no-unused-vars": "off"
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-this-alias": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   }
 }

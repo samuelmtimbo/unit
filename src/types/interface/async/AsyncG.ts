@@ -11,21 +11,24 @@ import {
 import { Graph } from '../../../Class/Graph'
 import { Unit } from '../../../Class/Unit'
 import { emptySpec, newSpecId } from '../../../client/spec'
+import { watchGraph } from '../../../debug/graph/watchGraph'
 import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
-import { watchGraph } from '../../../debug/watchGraph'
 import { watchUnit } from '../../../debug/watchUnit'
 import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
 import { fromId } from '../../../spec/fromId'
 import { fromSpec } from '../../../spec/fromSpec'
 import { stringify } from '../../../spec/stringify'
-import forEachKeyValue from '../../../system/core/object/ForEachKeyValue/f'
-import { isEmptyObject, mapObjVK } from '../../../util/object'
+import { _stringifyGraphSpecData } from '../../../spec/stringifySpec'
+import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
+import { clone, isEmptyObject, mapObjVK } from '../../../util/object'
+import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { GraphState } from '../../GraphState'
 import { IO } from '../../IO'
+import { IOOf, _IOOf } from '../../IOOf'
 import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
@@ -42,6 +45,10 @@ export interface Holder<T> {
 
 export const AsyncGCall = (graph: Graph): $G_C => {
   return {
+    $setUnitName({ unitId, name }: { unitId: string; name: string }): void {
+      graph.setUnitName(unitId, name)
+    },
+
     $setUnitPinData({
       unitId,
       pinId,
@@ -52,8 +59,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId: string
       type: IO
       data: string
-    }) {
-      const system = graph.refSystem()
+    }): void {
+      const system = graph.__system
 
       const { specs, classes } = system
 
@@ -74,11 +81,12 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId: string
     }): void {
       const unit: U<any, any> = graph.refUnit(unitId)
+
       unit.getPin(type, pinId).take()
     },
 
     $addUnit({ id, unit }: { id: string; unit: UnitBundleSpec }): void {
-      graph.addUnit(unit, id)
+      graph.addUnitSpec(id, unit)
     },
 
     $cloneUnit({
@@ -116,7 +124,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         ...u,
         Class: fromId(u.id, specs, classes),
       }))
-      graph.addUnits(unitNodes)
+      graph.addUnitSpecs(unitNodes)
     },
 
     $removeUnit({ id }: { id: string }) {
@@ -219,7 +227,15 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       unit.coverPinSet(type, id)
     },
 
-    $setPinSetId({ type, pinId, nextPinId }: { type: IO; pinId: string; nextPinId: string }): void {
+    $setPinSetId({
+      type,
+      pinId,
+      nextPinId,
+    }: {
+      type: IO
+      pinId: string
+      nextPinId: string
+    }): void {
       graph.setPinSetId(type, pinId, nextPinId)
     },
 
@@ -264,7 +280,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     },
 
     $addMerge({ id, merge }: { id: string; merge: GraphMergeSpec }) {
-      graph.addMerge(merge, id)
+      graph.addMerge(clone(merge), id)
     },
 
     $removeMerge({ id }: { id: string }) {
@@ -336,6 +352,16 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       callback(spec)
     },
 
+    $getBundle({}: {}, callback: Callback<BundleSpec>): void {
+      const bundle = graph.getBundleSpec()
+
+      const { spec } = bundle
+
+      _stringifyGraphSpecData(spec)
+
+      callback(bundle)
+    },
+
     $getUnitPinData(
       { unitId, type, pinId }: { unitId: string; type: IO; pinId: string },
       callback: (data: { input: Dict<any>; output: Dict<any> }) => void
@@ -367,7 +393,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
       const pinData = {}
       const units = graph.refUnits()
-      forEachKeyValue(units, (unit: Unit, unitId: string) => {
+      forEachValueKey(units, (unit: Unit, unitId: string) => {
         const unitPinData = unit.getPinData()
         const _unitPinData = stringifyPinData(unitPinData)
         pinData[unitId] = _unitPinData
@@ -455,7 +481,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       // const state = graph.getGraphPinData()
       const pinData = {}
       const units = graph.refUnits()
-      forEachKeyValue(units, (unit: Unit, unitId: string) => {
+      forEachValueKey(units, (unit: Unit, unitId: string) => {
         const unitPinData = unit.getPinData()
         const _unitPinData = stringifyPinData(unitPinData)
         pinData[unitId] = _unitPinData
@@ -481,7 +507,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.setMetadata(path, data)
     },
 
-    $appendSubComponentChild({
+    $moveSubComponentChild({
       subComponentId,
       childId,
       slotName,
@@ -490,10 +516,10 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       childId: string
       slotName: string
     }): void {
-      graph.appendParentRoot(subComponentId, childId, slotName)
+      graph.moveSubComponent(subComponentId, childId, slotName)
     },
 
-    $appendSubComponentChildren({
+    $moveSubComponentChildren({
       subComponentId,
       children,
       slotMap,
@@ -515,6 +541,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextIdMap,
       nextPinIdMap,
       nextMergePinId,
+      nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
     }: {
@@ -535,10 +562,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       }
       nextIdMap: {
         merge: Dict<string>
-        link: Dict<{
-          input: Dict<{ mergeId: string; oppositePinId: string }>
-          output: Dict<{ mergeId: string; oppositePinId: string }>
-        }>
+        link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
+        plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
         unit: Dict<string>
       }
       nextPinIdMap: Dict<{
@@ -546,9 +571,13 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         output: Dict<{ pinId: string; subPinId: string }>
       }>
       nextMergePinId: Dict<{
-        input: { mergeId: string; pinId: string }
-        output: { mergeId: string; pinId: string }
+        input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
+        output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
       }>
+      nextPlugSpec: {
+        input: Dict<Dict<GraphSubPinSpec>>
+        output: Dict<Dict<GraphSubPinSpec>>
+      }
       nextSubComponentParentMap: Dict<string | null>
       nextSubComponentChildrenMap: Dict<string[]>
     }): void {
@@ -558,6 +587,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         nextIdMap,
         nextPinIdMap,
         nextMergePinId,
+        nextPlugSpec,
         nextSubComponentParentMap,
         nextSubComponentChildrenMap
       )
@@ -616,24 +646,37 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       mergeId,
       nextInputMergeId,
       nextOutputMergeId,
-      nextPinIdMap,
     }: {
       graphId: string
       mergeId: string
-      nextInputMergeId: { mergeId: string; pinId: string }
-      nextOutputMergeId: { mergeId: string; pinId: string }
-      nextPinIdMap: Dict<{
-        input: Dict<{ pinId: string; subPinId: string }>
-        output: Dict<{ pinId: string; subPinId: string }>
-      }>
+      nextInputMergeId: {
+        mergeId: string
+        pinId: string
+        subPinSpec: GraphSubPinSpec
+      }
+      nextOutputMergeId: {
+        mergeId: string
+        pinId: string
+        subPinSpec: GraphSubPinSpec
+      }
     }): void {
-      graph.moveMergeInto(
-        graphId,
-        mergeId,
-        nextInputMergeId,
-        nextOutputMergeId,
-        nextPinIdMap
-      )
+      graph.moveMergeInto(graphId, mergeId, nextInputMergeId, nextOutputMergeId)
+    },
+
+    $movePlugInto({
+      graphId,
+      type,
+      pinId,
+      subPinId,
+      subPinSpec,
+    }: {
+      graphId: string
+      type: IO
+      pinId: string
+      subPinId: string
+      subPinSpec: GraphSubPinSpec
+    }): void {
+      graph.movePlugInto(graphId, type, pinId, subPinId, subPinSpec)
     },
 
     $explodeUnit({
@@ -645,7 +688,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       mapUnitId: Dict<string>
       mapMergeId: Dict<string>
     }): void {
-      graph.explodeUnit(unitId, mapUnitId, mapMergeId)
+      graph.explodeUnit(unitId, mapUnitId, mapMergeId, true)
     },
   }
 }
@@ -706,16 +749,15 @@ export const AsyncGRef = (graph: Graph): $G_R => {
     }): $Graph {
       // RETURN
       const system = graph.refSystem()
-      const pod = graph.refPod()
       const spec = graph.getSpec()
       const render =
         spec.component && !isEmptyObject(spec.component.subComponents || {})
       render ? graph.setElement() : graph.setNotElement()
-      // const parent = new Graph({}, {}, system, pod)
+      // const parent = new Graph({}, {}, system)
       const parentSpec = emptySpec({ id: newSpecId(system.specs) })
       const Class = fromSpec(parentSpec, {}, {})
-      const parent = new Class(system, pod)
-      parent.addUnit({ unit: { id } }, unitId, graph, false)
+      const parent = new Class(system)
+      parent.addUnit(unitId, graph, false)
       parent.play()
       const $parent = Async(parent, _)
       return proxyWrap($parent, _)

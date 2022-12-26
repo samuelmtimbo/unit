@@ -1,0 +1,546 @@
+{
+  "name": "vertical split",
+  "inputs": {},
+  "outputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "mergeId": "9"
+        }
+      }
+    }
+  },
+  "units": {
+    "box": {
+      "id": "9eba84b6-d2ca-47e6-9195-8208dbb880bc",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -216,
+          "y": -168
+        }
+      }
+    },
+    "box0": {
+      "id": "9eba84b6-d2ca-47e6-9195-8208dbb880bc",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 599,
+          "y": 52
+        }
+      }
+    },
+    "box1": {
+      "id": "9eba84b6-d2ca-47e6-9195-8208dbb880bc",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -478,
+          "y": 110
+        }
+      }
+    },
+    "ondragdelta": {
+      "id": "ae5c6f18-9ff9-11eb-986e-6fd93ceb151c",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "x": {},
+        "y": {},
+        "test": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -80,
+          "y": -130
+        }
+      }
+    },
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {
+          "constant": false
+        },
+        "default": {
+          "constant": true,
+          "data": "{height:'100%',background:'red'}"
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -300,
+          "y": 106
+        }
+      }
+    },
+    "tagwidth": {
+      "id": "c13fec8e-a253-11eb-bbe5-6bbcbf28b3ef",
+      "input": {
+        "width": {}
+      },
+      "output": {
+        "{width}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -92,
+          "y": 72
+        }
+      }
+    },
+    "numbertodecimal": {
+      "id": "a6ab9464-303a-48a4-8b5f-0cd515ab7b8f",
+      "input": {
+        "n": {}
+      },
+      "output": {
+        "str": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 111,
+          "y": 30
+        }
+      }
+    },
+    "flexrow": {
+      "id": "ad5a2fcc-fdee-11ea-a34f-77e9c48dbe57",
+      "input": {
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -714,
+          "y": -251
+        }
+      }
+    },
+    "mergedefault0": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
+          "constant": true,
+          "data": "{height:'100%',background:'blue',left:'0',position:'relative'}"
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 421,
+          "y": 53
+        }
+      }
+    },
+    "getcontextwidth": {
+      "id": "91201117-902a-4e6d-bc32-14fa689ca1dd",
+      "input": {
+        "any": {},
+        "element": {}
+      },
+      "output": {
+        "width": {},
+        "context": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -80,
+          "y": -186
+        }
+      }
+    },
+    "divide": {
+      "id": "158d85eb-28b8-4355-b637-28a7ec751233",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a ÷ b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 15,
+          "y": -178
+        }
+      }
+    },
+    "multiply": {
+      "id": "872be100-f4dc-4246-8eea-6e3da31137b7",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "100"
+        }
+      },
+      "output": {
+        "a × b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 129,
+          "y": -46
+        }
+      }
+    },
+    "subtract": {
+      "id": "fa94b179-00e3-4ed1-814e-7938324a833f",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "100"
+        },
+        "b": {
+          "constant": false,
+          "data": "100"
+        }
+      },
+      "output": {
+        "a - b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 212,
+          "y": 7
+        }
+      }
+    },
+    "tagwidth0": {
+      "id": "c13fec8e-a253-11eb-bbe5-6bbcbf28b3ef",
+      "input": {
+        "width": {}
+      },
+      "output": {
+        "{width}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 317,
+          "y": 32
+        }
+      }
+    },
+    "numbertodecimal0": {
+      "id": "a6ab9464-303a-48a4-8b5f-0cd515ab7b8f",
+      "input": {
+        "n": {}
+      },
+      "output": {
+        "str": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 170,
+          "y": 224
+        }
+      }
+    },
+    "untitled": {
+      "id": "72a186fe-a18b-44ca-b36b-c014ee44003a",
+      "metadata": {
+        "position": {
+          "x": 10,
+          "y": 60
+        }
+      }
+    },
+    "px": {
+      "id": "87c7b2b8-c17e-11ea-ba3a-072aa030b89f",
+      "input": {
+        "n": {}
+      },
+      "output": {
+        "px": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 42,
+          "y": 273
+        }
+      }
+    },
+    "clamp": {
+      "id": "9ef9ff5b-6a1c-444b-8fc0-bfebbec6f4fd",
+      "input": {
+        "max": {
+          "constant": true,
+          "data": "1"
+        },
+        "min": {
+          "constant": true,
+          "data": "0"
+        },
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 122,
+          "y": -150
+        }
+      }
+    },
+    "memory": {
+      "id": "49e11645-c25d-4bf7-923d-56817f67b686",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -195,
+          "y": 82
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "ondragdelta": {
+        "input": {
+          "element": true
+        }
+      },
+      "box": {
+        "output": {
+          "_self": true
+        }
+      },
+      "getcontextwidth": {
+        "input": {
+          "element": true
+        }
+      }
+    },
+    "1": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "box1": {
+        "input": {
+          "style": true
+        }
+      }
+    },
+    "2": {
+      "mergedefault": {
+        "input": {
+          "a": true
+        }
+      },
+      "memory": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "3": {
+      "numbertodecimal": {
+        "input": {
+          "n": true
+        }
+      },
+      "multiply": {
+        "output": {
+          "a × b": true
+        }
+      },
+      "subtract": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "4": {
+      "numbertodecimal": {
+        "output": {
+          "str": true
+        }
+      },
+      "untitled": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "5": {
+      "ondragdelta": {
+        "output": {
+          "x": true
+        }
+      },
+      "divide": {
+        "input": {
+          "a": true
+        }
+      },
+      "getcontextwidth": {
+        "input": {
+          "any": true
+        }
+      }
+    },
+    "6": {
+      "tagwidth": {
+        "input": {
+          "width": true
+        }
+      },
+      "untitled": {
+        "output": {
+          "ab": true
+        }
+      }
+    },
+    "7": {
+      "mergedefault0": {
+        "output": {
+          "a": true
+        }
+      },
+      "box0": {
+        "input": {
+          "style": true
+        }
+      }
+    },
+    "8": {
+      "divide": {
+        "input": {
+          "b": true
+        }
+      },
+      "getcontextwidth": {
+        "output": {
+          "width": true
+        }
+      }
+    },
+    "9": {
+      "divide": {
+        "output": {
+          "a ÷ b": true
+        }
+      },
+      "clamp": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "10": {
+      "subtract": {
+        "output": {
+          "a - b": true
+        }
+      },
+      "tagwidth0": {
+        "input": {
+          "width": true
+        }
+      }
+    },
+    "11": {
+      "tagwidth0": {
+        "output": {
+          "{width}": true
+        }
+      },
+      "mergedefault0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "12": {
+      "multiply": {
+        "input": {
+          "a": true
+        }
+      },
+      "clamp": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "13": {
+      "memory": {
+        "input": {
+          "a": true
+        }
+      },
+      "tagwidth": {
+        "output": {
+          "{width}": true
+        }
+      }
+    }
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "box": {
+        "children": []
+      },
+      "box0": {
+        "children": []
+      },
+      "box1": {
+        "children": []
+      },
+      "flexrow": {
+        "children": [
+          "box1",
+          "box",
+          "box0"
+        ]
+      }
+    },
+    "children": [
+      "flexrow"
+    ],
+    "defaultWidth": 180,
+    "defaultHeight": 270
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 242,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "01791e01-bfeb-47d0-952a-8dd32a72d1fb",
+  "type": "`U`&`G`",
+  "system": true
+}

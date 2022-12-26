@@ -61,7 +61,8 @@
   },
   "metadata": {
     "icon": "square",
-    "description": "100px div with random background color"
+    "description": "100px div with random background color",
+    "complexity": 189
   },
   "id": "5f162826-e925-408f-8eb2-7984ef14c420",
   "component": {

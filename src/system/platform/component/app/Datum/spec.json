@@ -12,7 +12,7 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "Recursive Graph Editor",
-    "complexity": 24,
+    "complexity": 122,
     "tags": [
       "platform",
       "component",

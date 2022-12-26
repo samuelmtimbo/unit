@@ -1,11 +1,22 @@
+import deepMerge from '../system/f/object/DeepMerge/f'
+import { keys } from '../system/f/object/Keys/f'
 import { Dict } from '../types/Dict'
 
-export function forObjVK<A, B>(
+export function forEachObjVK<A>(
   obj: Dict<A>,
-  callback: (value: A, key: string) => B
+  callback: (value: A, key: string) => void
 ): void {
   for (const key in obj) {
     callback(obj[key], key)
+  }
+}
+
+export function forEachObjKV<A>(
+  obj: Dict<A>,
+  callback: (key: string, value: A) => void
+): void {
+  for (const key in obj) {
+    callback(key, obj[key])
   }
 }
 
@@ -123,7 +134,7 @@ export function filterObj<T>(
 }
 
 export function isEmptyObject(obj: object): boolean {
-  return Object.keys(obj).length === 0
+  return keys(obj).length === 0
 }
 
 export function isNotEmptyObject(obj: object): boolean {
@@ -141,17 +152,24 @@ export function extractFromObj<A>(obj: Dict<A>, keys: string[]): Dict<A> {
 }
 
 export const getObjSingleKey = (obj: Dict<any>): string => {
-  return Object.keys(obj)[0]
+  return keys(obj)[0]
 }
 
 export function clone<T>(a: T): T {
   if (typeof a !== 'object' || a === null) {
     return a
   }
+
+  if (a instanceof Set) {
+    return new Set(clone([...a])) as any
+  }
+
   const _a = (Array.isArray(a) ? [] : {}) as T
+
   for (const k in a) {
     _a[k] = clone(a[k])
   }
+
   return _a
 }
 
@@ -171,7 +189,7 @@ export function clearObj(obj: Dict<any>) {
 }
 
 export function _keyCount(obj: Dict<any>): number {
-  return Object.keys(obj).length
+  return keys(obj).length
 }
 
 export function set<T>(obj: object, k: string, v: any): void {
@@ -180,4 +198,144 @@ export function set<T>(obj: object, k: string, v: any): void {
 
 export function get<T extends object, K extends keyof T>(obj: T, k: K): T[K] {
   return obj[k]
+}
+
+export function pathSet(obj: object, path: string[], value: any): void {
+  let o = obj
+
+  const last_index = path.length - 1
+
+  if (last_index >= 0) {
+    const last_p = path[last_index]
+
+    for (let i = 0; i < last_index; i++) {
+      const p = path[i]
+
+      if (o[p] === undefined) {
+        o[p] = {}
+      }
+
+      o = o[p]
+    }
+
+    o[last_p] = value
+  }
+}
+
+export function pathMerge(obj: object, path: string[], value: any): void {
+  pathSet(obj, path, deepMerge(pathOrDefault(obj, path, {}), value))
+}
+
+export function pathOrDefault(obj: object, path: string[], d: any): any {
+  let o = obj
+
+  for (let i = 0; i < path.length; i++) {
+    const p = path[i]
+
+    if (o[p] === undefined) {
+      return d
+    }
+
+    o = o[p]
+  }
+
+  return o
+}
+
+export function ensureObj(obj: object, key: string | number) {
+  return ensure(obj, key, () => ({}))
+}
+
+export function ensure(obj: object, key: string | number, generate: () => any) {
+  let value = obj[key]
+
+  if (value === undefined) {
+    value = generate()
+
+    obj[key] = value
+  }
+
+  return value
+}
+
+export function inplaceOmit(obj: object, key: string | number) {
+  let value = obj[key]
+
+  delete obj[key]
+
+  return value
+}
+
+export function omit(obj: Dict<any>, key: string): Dict<any> {
+  const { [key]: value, ...rest } = obj
+
+  return rest
+}
+
+export function addKey(obj: object, key: string, value: any): any {
+  if (obj[key] === undefined) {
+    obj[key] = new Set()
+  }
+
+  obj[key].add(value)
+}
+
+export function pushKey(obj: object, key: string, value: any): any {
+  if (obj[key] === undefined) {
+    obj[key] = []
+  }
+
+  obj[key].push(value)
+}
+
+export function unshiftKey(obj: object, key: string, value: any): any {
+  if (obj[key] === undefined) {
+    obj[key] = []
+  }
+
+  obj[key].unshift(value)
+}
+
+export function incKey(obj: object, key: string): any {
+  return incKeyFrom(obj, key, 0)
+}
+
+export function decKey(obj: object, key: string): any {
+  return decKeyFrom(obj, key, 0)
+}
+
+export function incPathFrom(obj: object, path: string[], from: number): any {
+  let value = pathOrDefault(obj, path, undefined)
+
+  if (value === undefined) {
+    value = from
+  }
+
+  pathSet(obj, path, value + 1)
+}
+
+export function decPathFrom(obj: object, path: string[], from: number): any {
+  let value = pathOrDefault(obj, path, undefined)
+
+  if (value === undefined) {
+    value = from
+  }
+
+  pathSet(obj, path, value - 1)
+}
+
+export function incKeyFrom(obj: object, key: string, from: number): any {
+  if (obj[key] === undefined) {
+    obj[key] = from
+  }
+
+  obj[key]++
+}
+
+export function decKeyFrom(obj: object, key: string, from: number): any {
+  if (obj[key] === undefined) {
+    obj[key] = from
+  }
+
+  obj[key]--
 }

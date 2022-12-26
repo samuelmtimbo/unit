@@ -1,5 +1,4 @@
 import { Element } from '../../../../../client/element'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 
 export interface Props {
@@ -9,8 +8,8 @@ export interface Props {
 export default class _Text extends Element<Text, Props> {
   private _text_el: Text
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { value = '' } = $props
 
@@ -33,5 +32,13 @@ export default class _Text extends Element<Text, Props> {
 
   blur() {
     // NOOP
+  }
+
+  onMount() {
+    // console.log('_Text', 'onMount')
+  }
+
+  onUnmount() {
+    // console.log('_Text', 'onUnmount')
   }
 }

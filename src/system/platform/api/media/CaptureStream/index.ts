@@ -1,13 +1,13 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { ObjectSource } from '../../../../../ObjectSource'
+import { System } from '../../../../../system'
+import { Callback } from '../../../../../types/Callback'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { CS } from '../../../../../types/interface/CS'
 import { ST } from '../../../../../types/interface/ST'
-import { ObjectSource } from '../../../../../ObjectSource'
-import { Pod } from '../../../../../pod'
-import { System } from '../../../../../system'
-import { Callback } from '../../../../../types/Callback'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { ID_CAPTURE_STREAM } from '../../../../_ids'
 
 export interface I {
   source: CS
@@ -22,7 +22,7 @@ export default class CaptureStream extends Semifunctional<I, O> implements ST {
 
   private _stream: ObjectSource<MediaStream> = new ObjectSource()
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['source', 'opt'],
@@ -38,7 +38,7 @@ export default class CaptureStream extends Semifunctional<I, O> implements ST {
         },
       },
       system,
-      pod
+      ID_CAPTURE_STREAM
     )
   }
 

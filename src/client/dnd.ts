@@ -75,7 +75,13 @@ export function startDragAndDrop<T = any>(
           // console.log('_dragleave', currentElement)
           currentElement.dispatchEvent(
             new CustomEvent('_dragleave', {
-              detail: { pointerId, clientX: screenX, clientY: screenY, screenX, screenY },
+              detail: {
+                pointerId,
+                clientX: screenX,
+                clientY: screenY,
+                screenX,
+                screenY,
+              },
               bubbles: true,
             })
           )
@@ -85,7 +91,13 @@ export function startDragAndDrop<T = any>(
 
         currentElement.dispatchEvent(
           new CustomEvent('_dragenter', {
-            detail: { pointerId, clientX: screenX, clientY: screenY, screenX, screenY },
+            detail: {
+              pointerId,
+              clientX: screenX,
+              clientY: screenY,
+              screenX,
+              screenY,
+            },
             bubbles: true,
           })
         )
@@ -93,7 +105,13 @@ export function startDragAndDrop<T = any>(
         if (currentElement) {
           currentElement.dispatchEvent(
             new CustomEvent('_dragover', {
-              detail: { pointerId, clientX: screenX, clientY: screenY, screenX, screenY },
+              detail: {
+                pointerId,
+                clientX: screenX,
+                clientY: screenY,
+                screenX,
+                screenY,
+              },
               bubbles: true,
             })
           )
@@ -102,7 +120,13 @@ export function startDragAndDrop<T = any>(
     } else if (currentElement) {
       currentElement.dispatchEvent(
         new CustomEvent('_dragleave', {
-          detail: { pointerId, clientX: screenX, clientY: screenY, screenX, screenY },
+          detail: {
+            pointerId,
+            clientX: screenX,
+            clientY: screenY,
+            screenX,
+            screenY,
+          },
           bubbles: true,
         })
       )
@@ -156,7 +180,10 @@ export function startDragAndDrop<T = any>(
 
         dropTarget.dispatchEvent(
           new CustomEvent('_dragdrop', {
-            detail: { ...{ pointerId: _pointerId, clientX, clientY, ...rest }, data },
+            detail: {
+              ...{ pointerId: _pointerId, clientX, clientY, ...rest },
+              data,
+            },
             bubbles: true,
           })
         )

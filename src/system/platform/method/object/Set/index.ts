@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { J } from '../../../../../types/interface/J'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { J } from '../../../../../types/interface/J'
+import { ID_SET } from '../../../../_ids'
 
 export interface I<T> {
   unit: J
@@ -15,7 +15,7 @@ export interface O<T> {
 }
 
 export default class Set<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['unit', 'name', 'data'],
@@ -29,7 +29,7 @@ export default class Set<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_SET
     )
   }
 

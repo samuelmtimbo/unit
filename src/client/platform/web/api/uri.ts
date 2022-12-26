@@ -1,6 +1,6 @@
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 
-export function webURI(window: Window, prefix: string): API['uri'] {
+export function webURI(window: Window, opt: BootOpt): API['uri'] {
   // @ts-ignore
   const { encodeURI } = window
 

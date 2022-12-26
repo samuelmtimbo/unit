@@ -5,7 +5,7 @@ import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { Mode, MODE_LIST } from '../../../../../client/mode'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE, getThemeModeColor } from '../../../../../client/theme'
-import { Pod } from '../../../../../pod'
+import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -68,8 +68,8 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
 
   private _mode: Mode = 'none'
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { className, style = {} } = this.$props
 
@@ -89,16 +89,18 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor: COLOR_NONE,
+          ...userSelect('none'),
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._selector = selector
 
     this._mode_button = {}
+
     for (const mode of MODE_LIST) {
       const activeColor = 'currentColor'
+
       const icon = MODE_ICON[mode]
       // AD HOC
       // Safari will ignore flex gap if immediate child of `display: contents;` parent is svg
@@ -109,8 +111,7 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
             height: '21px',
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
       const mode_button = new ModeIconButton(
         {
@@ -121,8 +122,7 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
           title: mode,
           activeColor,
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
       mode_button.addEventListener(
         makeClickListener({
@@ -148,10 +148,10 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
           paddingTop: '4px',
           paddingBottom: '4px',
           gap: '12px',
+          ...userSelect('none'),
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     crud.registerParentRoot(this._mode_button_container['change'])
     crud.registerParentRoot(this._mode_button_container['remove'])
@@ -167,8 +167,7 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._modes = list
     list.registerParentRoot(selector)
@@ -198,8 +197,11 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
   private _mode_active_color = (mode: Mode): string => {
     const { $theme } = this.$context
     const { style = {} } = this.$props
+
     const { color = 'currentColor' } = style
+
     const active_color = getThemeModeColor($theme, mode, color)
+
     return active_color
   }
 
@@ -255,14 +257,17 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
     if (this.$context) {
       const { $theme } = this.$context
       const { style = {} } = this.$props
+
       const { color = 'currentColor' } = style
 
       for (const mode of MODE_LIST) {
         const mode_button = this._mode_button[mode]
         const mode_color = getThemeModeColor($theme, mode, color)
+
         mergePropStyle(mode_button, {
           color,
         })
+
         mode_button.setProp('hoverColor', mode_color)
         mode_button.setProp('activeColor', mode_color)
       }
@@ -272,6 +277,7 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
   onPropChanged(prop: string, current: any): void {
     if (prop === 'style') {
       this._modes.setProp('style', { ...DEFAULT_STYLE, ...current })
+
       this._reset_color()
     } else if (prop === 'mode') {
       this._enter_mode(current)

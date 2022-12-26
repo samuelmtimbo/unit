@@ -12,12 +12,12 @@ import {
 import { getUnitPinPosition } from '../../../../../client/util/geometry/unit/getUnitPinPosition'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { IO } from '../../../../../types/IO'
+import { keys } from '../../../../f/object/Keys/f'
 import Icon from '../../../component/Icon/Component'
 import SVGCircle from '../../svg/Circle/Component'
 import SVGG from '../../svg/Group/Component'
@@ -73,8 +73,8 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
   private _svg: SVGSVG
   private _svg_g: SVGG
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { id, className, style } = $props
 
@@ -95,8 +95,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
         },
         viewBox: `0 0 ${width} ${height}`,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._svg = svg
 
@@ -107,8 +106,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
           pointerEvents: 'all',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._svg_g = svg_g
     this._svg.registerParentRoot(svg_g)
@@ -153,7 +151,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
     const cX = width / 2
     const cY = height / 2
 
-    let input_pin_ids = Object.keys(inputs).filter((pinId) => {
+    let input_pin_ids = keys(inputs).filter((pinId) => {
       const input = inputs[pinId]
       const { defaultIgnored } = input
       if (defaultIgnored) {
@@ -162,7 +160,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
       return true
     })
 
-    const output_pin_ids = Object.keys(outputs).filter((pinId) => {
+    const output_pin_ids = keys(outputs).filter((pinId) => {
       const output = outputs[pinId]
       const { defaultIgnored } = output
       if (defaultIgnored) {
@@ -203,8 +201,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
             fill: type === 'output' ? 'currentColor' : 'none',
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
       children.push(pin)
       const { x: x1, y: y1 } = pointInCircle(x, y, r, u)
@@ -226,8 +223,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
             stroke: 'currentColor',
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
       children.push(pin_link)
     }
@@ -254,8 +250,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
             strokeWidth: '1px',
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
     } else {
       core_shape = new SVGCircle(
@@ -270,8 +265,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
             strokeWidth: '1px',
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
     }
 
@@ -287,16 +281,14 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
           color: 'currentColor',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
 
     const core = new SVGG(
       {
         className: 'unit-class-core',
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     core.appendChild(core_shape)
     core.appendChild(core_icon)
@@ -306,7 +298,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
       push_pin('output', index)
     })
 
-    const core_name_g = new SVGG({}, this.$system, this.$pod)
+    const core_name_g = new SVGG({}, this.$system)
     const lines = line_wrap(name)
     for (let i = 0; i < lines.length; i++) {
       const text = lines[i]
@@ -320,8 +312,7 @@ export default class ClassDatum extends Element<IHTMLDivElement, Props> {
           },
           textAnchor: 'middle',
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
       core_name_g.appendChild(core_name_line)
     }

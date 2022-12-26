@@ -1,7 +1,7 @@
 import { System } from '../system'
-import { _removeChildren } from '../util/element'
+import { removeChildren } from '../util/element'
 import { Component } from './component'
-import { Context, Fullwindow, resize, setParent } from './context'
+import { Context, resize, setParent } from './context'
 import { stopAllPropagation, stopByPropagation } from './stopPropagation'
 import { defaultThemeColor } from './theme'
 
@@ -17,13 +17,11 @@ export function renderFrame(
     },
   } = $system
 
-  _removeChildren($root)
+  removeChildren($root)
 
   const $element = $root
 
   stopAllPropagation($element)
-
-  const $fullwindow: Fullwindow[] = []
 
   const $theme = 'dark'
 
@@ -52,6 +50,8 @@ export function renderFrame(
     }
   )
 
+  const $children = []
+
   const $context: Context = {
     $system,
     $mounted: false,
@@ -69,10 +69,9 @@ export function renderFrame(
     $ry: 0,
     $rz: 0,
     $element,
-    $fullwindow,
     $theme,
     $color,
-    $fullwindow_i: -1,
+    $children,
     get $context() {
       return $context
     },

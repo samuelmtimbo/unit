@@ -2,9 +2,9 @@ import {
   Semifunctional,
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
-import { CH } from '../../../../../types/interface/CH'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { CH } from '../../../../../types/interface/CH'
+import { ID_WEB_SOCKET } from '../../../../_ids'
 
 export type I = {
   url: string
@@ -23,7 +23,7 @@ export default class Websocket
 {
   private _web_socket: WebSocket | null = null
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['url'],
@@ -33,7 +33,7 @@ export default class Websocket
       },
       {},
       system,
-      pod
+      ID_WEB_SOCKET
     )
   }
 

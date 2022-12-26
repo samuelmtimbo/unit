@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_DIVIDE } from '../../../_ids'
 
 export interface I {
   a: number
@@ -13,7 +13,7 @@ export interface O {
 }
 
 export default class Divide extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a', 'b'],
@@ -21,7 +21,7 @@ export default class Divide extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_DIVIDE
     )
   }
 

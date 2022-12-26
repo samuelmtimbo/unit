@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { uuid } from '../../../../util/id'
+import { ID_UUID } from '../../../_ids'
 
 export interface I<T> {
   any: T
@@ -12,7 +12,7 @@ export interface O<T> {
 }
 
 export default class UUID<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['any'],
@@ -20,7 +20,7 @@ export default class UUID<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_UUID
     )
   }
 

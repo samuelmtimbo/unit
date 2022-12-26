@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { ID_VALUES } from '../../../_ids'
 
 export interface I<T> {
   obj: Dict<T>
@@ -12,7 +12,7 @@ export interface O<T> {
 }
 
 export default class Values<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['obj'],
@@ -20,7 +20,7 @@ export default class Values<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_VALUES
     )
   }
 

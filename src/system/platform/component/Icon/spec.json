@@ -10,14 +10,19 @@
     },
     "icon": {
       "type": "string",
-      "optional": true
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "\"unit\""
+        ]
+      }
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
     "description": "click me!",
-    "complexity": 25,
+    "complexity": 122,
     "tags": [
       "platform",
       "component"

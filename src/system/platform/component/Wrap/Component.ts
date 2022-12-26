@@ -4,17 +4,13 @@ import { component_ } from '../../../../client/component_'
 import { parentClass } from '../../../../client/createParent'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
-import { Pod } from '../../../../pod'
 import { ComponentClass, System } from '../../../../system'
-import { Dict } from '../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../types/global/dom'
 import { $Wrap } from '../../../../types/interface/async/$Wrap'
 import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
 import { insert, push, removeAt, unshift } from '../../../../util/array'
 
 export interface Props {
-  className?: string
-  style?: Dict<string>
   component?: UnitBundleSpec
 }
 
@@ -29,12 +25,18 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
   private _parent_container: Component[] = []
   private _parent_child_container: Component[] = []
 
-  constructor(props: {}, $system: System, $pod: Pod) {
-    super(props, $system, $pod)
+  constructor(props: {}, $system: System) {
+    super(props, $system)
 
     const $element = parentElement($system)
 
+    $element.className = 'wrap'
+
     this.$element = $element
+
+    this.$slot = {
+      default: this,
+    }
   }
 
   private _rewrap = (): void => {
@@ -119,11 +121,11 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
     this._child_container[at] = new_container
 
     super.domAppendChild(new_container, childSlot, at)
-    super.postAppendChild(new_container, at)
+    super.postAppendChild(new_container, childSlot, at)
   }
 
   private _connected_container = (at: number, method: string): Component => {
-    const container = new this._Container({}, this.$system, this.$pod)
+    const container = new this._Container({}, this.$system)
 
     const _ = component_(container)
 
@@ -302,7 +304,7 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
     super.domAppendChild(container, slotName, at)
   }
 
-  public postAppendChild(child: Component, at: number): void {
+  public postAppendChild(child: Component, slotName: string, at: number): void {
     const container = this._child_container[at]
 
     child.$parent = this
@@ -469,9 +471,9 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
 
         const { __bundle } = Class
 
-        const { id } = __bundle.unit
+        const { id, input } = __bundle.unit
 
-        componentClass = componentClassFromSpecId(this.$system, { ...this.$system.specs, ...this.$pod.specs }, id)
+        componentClass = componentClassFromSpecId(this.$system, id, input)
       } else {
         componentClass = parentClass()
       }
@@ -479,10 +481,6 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
       this._Container = componentClass
 
       this._rewrap()
-    } else if (name === 'style') {
-      //
-    } else if (name === 'className') {
-      //
     }
   }
 

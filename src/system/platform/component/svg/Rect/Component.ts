@@ -1,7 +1,6 @@
-import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
-import { Pod } from '../../../../../pod'
+import applyStyle from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -16,11 +15,15 @@ export interface Props {
   height?: number
 }
 
+const DEFAULT_STYLE = {
+  fill: 'currentColor',
+}
+
 export default class SVGRect extends Element<SVGRectElement, Props> {
   private _rect_el: SVGRectElement
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       className,
@@ -29,24 +32,28 @@ export default class SVGRect extends Element<SVGRectElement, Props> {
       y = 0,
       rx = 0,
       ry = 0,
-      width = 0,
-      height = 0,
+      width = 100,
+      height = 100,
     } = $props
 
     const rect_el = this.$system.api.document.createElementNS(
       namespaceURI,
       'rect'
     )
+
     if (className !== undefined) {
       rect_el.classList.value = className
     }
-    applyStyle(rect_el, style)
+
+    applyStyle(rect_el, { ...DEFAULT_STYLE, ...style })
+
     rect_el.setAttribute('x', `${x}`)
     rect_el.setAttribute('y', `${y}`)
     rect_el.setAttribute('rx', `${rx}`)
     rect_el.setAttribute('ry', `${ry}`)
     rect_el.setAttribute('width', `${width}`)
     rect_el.setAttribute('height', `${height}`)
+
     this._rect_el = rect_el
 
     this.$element = rect_el
@@ -56,7 +63,7 @@ export default class SVGRect extends Element<SVGRectElement, Props> {
     if (prop === 'className') {
       this._rect_el.className.value = current
     } else if (prop === 'style') {
-      applyStyle(this._rect_el, current)
+      applyStyle(this._rect_el, { ...DEFAULT_STYLE, ...current })
     } else if (
       prop === 'x' ||
       prop === 'y' ||

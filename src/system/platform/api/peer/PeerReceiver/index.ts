@@ -1,17 +1,15 @@
 import { DEFAULT_STUN_RTC_CONFIG } from '../../../../../api/peer/config'
 import { Peer } from '../../../../../api/peer/Peer'
-import { $ } from '../../../../../Class/$'
 import { FunctionalEvents } from '../../../../../Class/Functional'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { ST } from '../../../../../types/interface/ST'
-import { NOOP } from '../../../../../NOOP'
-import { Pod } from '../../../../../pod'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
+import { ST } from '../../../../../types/interface/ST'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
+import { ID_PEER_RECEIVER } from '../../../../_ids'
 
 export interface I<T> {
   offer: string
@@ -41,7 +39,7 @@ export default class PeerReceiver<T> extends Semifunctional<
 
   private _flag_err_invalid_offer: boolean = false
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['offer', 'close'],
@@ -51,7 +49,7 @@ export default class PeerReceiver<T> extends Semifunctional<
         input: {},
       },
       system,
-      pod
+      ID_PEER_RECEIVER
     )
 
     this.addListener('destroy', () => {
@@ -61,24 +59,21 @@ export default class PeerReceiver<T> extends Semifunctional<
     this.addListener('take_err', () => {
       if (this._flag_err_invalid_offer) {
         this._flag_err_invalid_offer = false
+
         this._backward('offer')
       } else {
         // TODO
       }
     })
 
-    this._peer = new Peer(
-      this.__system,
-      this.__pod,
-      false,
-      DEFAULT_STUN_RTC_CONFIG
-    )
+    this._peer = new Peer(this.__system, false, DEFAULT_STUN_RTC_CONFIG)
 
     this._setup_peer()
   }
 
   async onDataInputData(name: string, data: any): Promise<void> {
     // console.log('Receiver', 'onDataInputData', name, data)
+
     // TODO
     if (this.hasErr()) {
       this._backwarding = true
@@ -149,7 +144,7 @@ export default class PeerReceiver<T> extends Semifunctional<
       this._disconnect()
     }
     const message_listener = (message: string) => {
-      const specs = { ...this.__system.specs, ...this.__pod.specs }
+      const specs = this.__system.specs
       const classes = this.__system.classes
       const data = evaluate(message, specs, classes)
       console.log('Receiver', 'Peer', 'data', data)
@@ -157,7 +152,7 @@ export default class PeerReceiver<T> extends Semifunctional<
     }
     const start_listener = (stream: MediaStream) => {
       console.log('Receiver', 'Peer', 'start', stream)
-      const _stream = wrapMediaStream(stream, this.__system, this.__pod)
+      const _stream = wrapMediaStream(stream, this.__system)
       this._output.stream.push(_stream)
     }
     const stop_listener = () => {

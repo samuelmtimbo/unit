@@ -71,5 +71,5 @@ export function attachLongPress(system: System): void {
     }
   }
 
-  system.method.showLongPress = showLongPress
+  system.showLongPress = showLongPress
 }

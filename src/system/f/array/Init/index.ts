@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_INIT } from '../../../_ids'
 
 export interface I<T> {
   n: number
@@ -13,7 +13,7 @@ export interface O<T> {
 }
 
 export default class Init<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['n', 'a'],
@@ -21,7 +21,7 @@ export default class Init<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_INIT
     )
   }
 

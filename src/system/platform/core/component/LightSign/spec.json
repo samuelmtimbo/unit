@@ -60,7 +60,7 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{transition:'color 0.5s linear, background-color 0.5s linear',display:'flex',fontSize:'30px',fontFamily:'system-ui',alignItems:'center',justifyContent:'center'}",
+          "data": "{transition:'color 0.5s linear, background-color 0.5s linear',display:'flex',fontSize:'20vw',fontFamily:'system-ui',alignItems:'center',justifyContent:'center'}",
           "metadata": {
             "position": {
               "x": -51,
@@ -185,8 +185,8 @@
         }
       }
     },
-    "widthtext": {
-      "id": "731b92e2-6276-41db-a1e8-857afb07ca44",
+    "textbox": {
+      "id": "9988a56e-6bee-46c8-864c-e351d84bc7e2",
       "input": {
         "value": {},
         "style": {}
@@ -202,7 +202,7 @@
   },
   "merges": {
     "0": {
-      "widthtext": {
+      "textbox": {
         "input": {
           "value": true
         }
@@ -279,7 +279,7 @@
       }
     },
     "6": {
-      "widthtext": {
+      "textbox": {
         "input": {
           "style": true
         }
@@ -293,18 +293,18 @@
   },
   "component": {
     "subComponents": {
-      "widthtext": {
+      "textbox": {
         "children": []
       }
     },
     "children": [
-      "widthtext"
+      "textbox"
     ],
     "defaultWidth": 180,
     "defaultHeight": 120
   },
   "metadata": {
-    "complexity": 151,
+    "complexity": 329,
     "icon": "sign",
     "tags": [
       "platform",

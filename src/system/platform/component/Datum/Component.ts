@@ -1,6 +1,5 @@
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
-import { Pod } from '../../../../pod'
 import { getTree } from '../../../../spec/parser'
 import { stringify } from '../../../../spec/stringify'
 import { System } from '../../../../system'
@@ -16,8 +15,8 @@ export interface Props {
 export default class _Datum extends Element<IHTMLDivElement, Props> {
   private _datum: Datum
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { style, value = '' } = this.$props
 
@@ -28,8 +27,7 @@ export default class _Datum extends Element<IHTMLDivElement, Props> {
         style,
         data,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._datum = datum
 

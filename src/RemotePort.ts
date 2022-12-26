@@ -65,14 +65,20 @@ export class RemotePort {
 
   call(method: string, data: any, callback: Callback<any>): void {
     const id = randomIdNotInSet(this._call_id)
+
     this._call_id.add(id)
+
     const listener = (data) => {
       this._call_emitter.removeListener(id, listener)
       this._call_id.delete(id)
+
       callback(data)
     }
+
     this._call_emitter.addListener(id, listener)
+
     const _data = { type: CALL, data: { id, method, data } }
+
     this._port.send(_data)
   }
 

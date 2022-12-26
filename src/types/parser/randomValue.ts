@@ -1,5 +1,5 @@
 import { Specs } from '..'
-import { randomInArray } from '../../client/id'
+import { randomInArray } from '../../client/id/randomInArray'
 import {
   getTree,
   NULL_TREE,
@@ -8,6 +8,7 @@ import {
   _applyGenerics,
   _findGenerics,
 } from '../../spec/parser'
+import { keys } from '../../system/f/object/Keys/f'
 import { rangeArray } from '../../util/array'
 import { Dict } from '../Dict'
 
@@ -256,7 +257,7 @@ export function randomTreeOfTypeLiteral(
   } else if (type_tree === TreeNodeType.Generic) {
     return randomTreeOfTypeLiteral(specs, randomLiteralType())
   } else if (type_tree === TreeNodeType.Class) {
-    return getTree(`\${unit:{id:"${randomInArray(Object.keys(specs))}"}}`)
+    return getTree(`\${unit:{id:"${randomInArray(keys(specs))}"}}`)
   } else if (type_tree === TreeNodeType.Any) {
     return randomTreeOfTypeLiteral(specs, randomInArray(LITERAL_TREE_NODE_TYPE))
   }

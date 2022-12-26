@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ID_BEGIN_PATH } from '../../../../_ids'
 
 export interface I<T> {
   d: any[][]
@@ -12,7 +12,7 @@ export interface O<T> {
 }
 
 export default class BeginPath<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['d'],
@@ -20,7 +20,7 @@ export default class BeginPath<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_BEGIN_PATH
     )
   }
 

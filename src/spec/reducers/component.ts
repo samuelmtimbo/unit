@@ -1,10 +1,11 @@
 import removeIndex from '../../system/core/array/RemoveIndex/f'
 import assocPath from '../../system/core/object/AssocPath/f'
-import dissocPath from '../../system/core/object/DissocPath/f'
 import pathGet from '../../system/core/object/DeepGet/f'
+import dissocPath from '../../system/core/object/DissocPath/f'
 import $indexOf from '../../system/f/array/IndexOf/f'
+import { _insert } from '../../system/f/array/Insert/f'
 import merge from '../../system/f/object/Merge/f'
-import set from '../../system/f/object/Set/f'
+import _set from '../../system/f/object/Set/f'
 import { Action, GraphComponentSpec, GraphSubComponentSpec } from '../../types'
 import {
   REMOVE_SUB_COMPONENT,
@@ -19,7 +20,15 @@ export const defaultState: State = {}
 
 export const appendChild = ({ id }, state: State): State => {
   const children = state.children || []
-  return set(state, 'children', [...children, id])
+  return _set(state, 'children', [...children, id])
+}
+
+export const insertChild = (
+  { id, at }: { id: string; at: number },
+  state: State
+): State => {
+  const children = state.children || []
+  return _set(state, 'children', _insert(children, at, id))
 }
 
 export const removeChild = ({ id }, state: State): State => {
@@ -27,7 +36,7 @@ export const removeChild = ({ id }, state: State): State => {
   const index = children.indexOf(id)
   if (index > -1) {
     children.splice(index, 1)
-    return set(state, 'children', children)
+    return _set(state, 'children', children)
   }
   return state
 }
@@ -61,7 +70,7 @@ export const setChildren = (
   { children }: { children: string[] },
   state: State
 ): State => {
-  return set(state, 'children', children)
+  return _set(state, 'children', children)
 }
 
 export const setSubComponentSize = (
@@ -104,6 +113,20 @@ export const appendSubComponentChild = (
     state,
     ['subComponents', id, 'children'],
     [...children, childId]
+  )
+}
+
+export const insertSubComponentChild = (
+  { id, childId, at }: { id: string; childId: string; at: number },
+  state: State
+): State => {
+  const { subComponents } = state
+  const subComponent = subComponents[id] || {}
+  const { children = [] } = subComponent
+  return assocPath(
+    state,
+    ['subComponents', id, 'children'],
+    _insert(children, at, childId)
   )
 }
 

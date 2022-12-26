@@ -208,29 +208,40 @@ export function applyTheme(
 
 export function setAlpha(color: string, alpha: number): string {
   const h = Math.floor(alpha * 16 * 16)
-  const A0 = h / 16
-  const A1 = h % 16
+  const A0 = Math.floor(h / 16)
+  const A1 = Math.floor(h % 16)
   const AS0 = A0.toString(16)
   const AS1 = A1.toString(16)
   const A = AS0 + AS1
   return color.substring(0, 7) + A
 }
 
+const ff = 0xff
+const zz = 0
+
 // set color `percent` closer to #ffffff
 export function lightenColor(color: string, percent: number): string {
   const num = parseInt(color.slice(1), 16)
-  const amt = Math.round(2.55 * percent)
+
   const r = num >> 16
   const g = (num >> 8) & 0x00ff
   const b = num & 0x0000ff
-  // const R = r + amt
-  // const G = g + amt
-  // const B = b + amt
-  percent += 100
-  const p = percent / 100
-  const R = Math.round(r * p)
-  const G = Math.round(g * p)
-  const B = Math.round(b * p)
+
+  const t = percent > 0 ? ff : zz
+
+  const dr = t - r
+  const dg = t - g
+  const db = t - b
+
+  const p = Math.abs(percent) / 100
+
+  const pr = p * dr
+  const pg = p * dg
+  const pb = p * db
+
+  const R = Math.round(r + pr)
+  const G = Math.round(g + pg)
+  const B = Math.round(b + pb)
 
   const _color =
     '#' +

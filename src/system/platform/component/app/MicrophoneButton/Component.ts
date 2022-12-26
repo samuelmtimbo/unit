@@ -5,7 +5,6 @@ import { makePointerDownListener } from '../../../../../client/event/pointer/poi
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { Mode } from '../../../../../client/mode'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -48,8 +47,8 @@ export default class MicrophoneButton extends Element<IHTMLDivElement, Props> {
 
   private _speech_recorder: SpeechRecorder
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       className,
@@ -77,8 +76,7 @@ export default class MicrophoneButton extends Element<IHTMLDivElement, Props> {
         disabled,
         title: 'microphone',
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     icon_button.addEventListener(makePointerDownListener(this._on_pointer_down))
     this._icon_button = icon_button

@@ -1,10 +1,10 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
 import { CA } from '../../../../../types/interface/CA'
-import { Pod } from '../../../../../pod'
-import { System } from '../../../../../system'
+import { ID_TO_BLOB } from '../../../../_ids'
 
 export interface I<T> {
   canvas: CA
@@ -17,7 +17,7 @@ export interface O<T> {
 }
 
 export default class ToBlob<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['canvas', 'quality', 'type'],
@@ -31,7 +31,7 @@ export default class ToBlob<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_TO_BLOB
     )
   }
 
@@ -53,7 +53,7 @@ export default class ToBlob<T> extends Functional<I<T>, O<T>> {
         console.log('_Blob', 'read', _blob)
         return _blob
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     done({
       blob,

@@ -9,14 +9,13 @@ export function attachCanvas(system: System): void {
     },
   } = system
 
-  
   const canvas = createElement('canvas')
   canvas.classList.add('__SYSTEM__CANVAS__')
   canvas.style.pointerEvents = 'none'
 
   resizeWith(system, canvas, root)
 
-  root.appendChild(canvas)
+  root.shadowRoot.appendChild(canvas)
 
   system.foreground.canvas = canvas
 }

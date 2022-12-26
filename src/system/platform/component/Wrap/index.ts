@@ -1,26 +1,23 @@
-import { Element } from '../../../../Class/Element'
+import { Element_ } from '../../../../Class/Element'
 import { Unit } from '../../../../Class/Unit'
-import { Pod } from '../../../../pod'
 import { bundleClass } from '../../../../spec/bundleClass'
 import { System } from '../../../../system'
-import { Dict } from '../../../../types/Dict'
 import { C } from '../../../../types/interface/C'
 import { Component_ } from '../../../../types/interface/Component'
 import { W } from '../../../../types/interface/W'
 import { UnitBundle } from '../../../../types/UnitBundle'
-import { ID_PARENT } from '../../../_ids'
+import { ID_PARENT, ID_WRAP } from '../../../_ids'
 import Parent from '../Parent'
 
 export type I = {
   component: UnitBundle
-  style: Dict<string>
 }
 
 export type O = {
   parent: C
 }
 
-export default class Wrap extends Element<I, O> implements W {
+export default class Wrap extends Element_<I, O> implements W {
   private _Container: UnitBundle = bundleClass(Parent, {
     unit: { id: ID_PARENT },
   })
@@ -29,12 +26,12 @@ export default class Wrap extends Element<I, O> implements W {
   private _parent_container: Component_[] = []
   private _parent_child_container: Component_[] = []
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
-      { i: ['component', 'style'], o: ['parent'] },
+      { i: ['component'], o: ['parent'] },
       { output: { parent: { ref: true } } },
       system,
-      pod
+      ID_WRAP
     )
 
     this.prependListener('set', (name, data) => {
@@ -52,7 +49,7 @@ export default class Wrap extends Element<I, O> implements W {
 
       container.destroy()
 
-      const new_container = new this._Container(this.__system, this.__pod)
+      const new_container = new this._Container(this.__system)
 
       new_container.play()
 
@@ -64,7 +61,7 @@ export default class Wrap extends Element<I, O> implements W {
 
       container.destroy()
 
-      const new_container = new this._Container(this.__system, this.__pod)
+      const new_container = new this._Container(this.__system)
 
       new_container.play()
 
@@ -76,7 +73,7 @@ export default class Wrap extends Element<I, O> implements W {
 
       container.destroy()
 
-      const new_container = new this._Container(this.__system, this.__pod)
+      const new_container = new this._Container(this.__system)
 
       new_container.play()
 
@@ -85,7 +82,7 @@ export default class Wrap extends Element<I, O> implements W {
   }
 
   appendChild(Class: UnitBundle<Component_>): number {
-    const container = new this._Container(this.__system, this.__pod)
+    const container = new this._Container(this.__system)
 
     container.play()
 
@@ -103,7 +100,7 @@ export default class Wrap extends Element<I, O> implements W {
   registerParentRoot(component: Component_, slotName: string): void {
     // console.log('Wrap', 'registerParentRoot')
 
-    const container = new this._Container(this.__system, this.__pod)
+    const container = new this._Container(this.__system)
 
     container.play()
 
@@ -123,7 +120,7 @@ export default class Wrap extends Element<I, O> implements W {
   appendParentChild(component: Component_, slotName: string): void {
     // console.log('Wrap', 'appendParentChild', component.constructor.name, slotName)
 
-    const container = new this._Container(this.__system, this.__pod)
+    const container = new this._Container(this.__system)
 
     container.play()
 

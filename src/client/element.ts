@@ -1,10 +1,10 @@
 import { Moment } from '../debug/Moment'
 import { PinDataMoment } from '../debug/PinDataMoment'
-import { $Element } from '../types/interface/async/$Element'
 import { NOOP } from '../NOOP'
 import { evaluate } from '../spec/evaluate'
 import { stringify } from '../spec/stringify'
 import { GlobalRefSpec } from '../types/GlobalRefSpec'
+import { $Element } from '../types/interface/async/$Element'
 import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
 import { makeChangeListener } from './event/change'
@@ -60,6 +60,7 @@ export class Element<
         const { event: event_event, data: event_data } = moment
         if (event_event === 'set') {
           const { name, data } = event_data
+
           this.setProp(name, data)
         }
       },
@@ -89,10 +90,9 @@ export class Element<
     this._element_unlisten = element_unlisten
 
     $unit.$read({}, (state) => {
-      const specs = { ...this.$system.specs, ...this.$pod.specs }
-      const classes = this.$system.classes
+      const { specs, classes } = this.$system
       const _state = evaluate(state, specs, classes)
-      for (let name in _state) {
+      for (const name in _state) {
         const data = _state[name]
         this.setProp(name as keyof P, data)
       }

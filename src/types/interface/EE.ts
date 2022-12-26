@@ -26,6 +26,4 @@ export interface EE<
   emit<K extends keyof _EE>(event: K, ...args: _EE[K]): void
 
   listenerCount(name: keyof _EE): number
-
-  refEmitter(): EE<__EE> | null
 }

@@ -1,0 +1,43 @@
+{
+  "name": "number field",
+  "inputs": {
+    "value": {
+      "type": "number",
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "min": {
+      "type": "number",
+      "optional": true,
+      "defaultIgnored": true
+    },
+    "max": {
+      "type": "number",
+      "optional": true,
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "form-input",
+    "description": "single line number input",
+    "complexity": 118,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
+  },
+  "id": "9bc56564-ef4e-11ea-939a-27ae3feb321e",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}

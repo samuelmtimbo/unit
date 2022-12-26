@@ -1,9 +1,9 @@
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
 export function webQuerystring(
   window: Window,
-  prefix: string
+  opt: BootOpt
 ): API['querystring'] {
   const querystring = {
     parse: (str: string): Dict<any> => {

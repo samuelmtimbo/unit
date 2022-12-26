@@ -1,6 +1,6 @@
 import { Dict } from '../../../../types/Dict'
 
-export default function set<T, V>(
+export default function _set<T, V>(
   obj: Dict<T>,
   key: string | number,
   value: V

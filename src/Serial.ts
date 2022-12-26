@@ -1,5 +1,4 @@
 import { Pin } from './Pin'
-import { Pod } from './pod'
 import { Primitive } from './Primitive'
 import { System } from './system'
 import { forEach } from './util/array'
@@ -13,13 +12,15 @@ export interface O<T> {
   second: T
 }
 
+const ID_SEARIAL = '136a38b6-155a-4ed2-85cd-90bc94688f42'
+
 export default class Serial<T> extends Primitive<I<T>, O<T>> {
   private _current: T | undefined = undefined
   private _index: number | undefined = undefined
 
   private _o_name: string[] = ['a']
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a'],
@@ -27,7 +28,7 @@ export default class Serial<T> extends Primitive<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_SEARIAL
     )
 
     this.addListener('set_output', (name: string, output: Pin<T>) => {

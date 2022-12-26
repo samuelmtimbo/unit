@@ -13,7 +13,7 @@
     "icon": "lock",
     "description": "prevent device from dimming or locking the screen",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API",
-    "complexity": 3,
+    "complexity": 4,
     "tags": [
       "platform",
       "api",

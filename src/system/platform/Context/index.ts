@@ -3,14 +3,14 @@ import { addListener } from '../../../client/addListener'
 import { Context, setColor } from '../../../client/context'
 import { makeCustomListener } from '../../../client/event/custom'
 import { makeResizeListener } from '../../../client/event/resize'
-import { Component_ } from '../../../types/interface/Component'
-import { J } from '../../../types/interface/J'
 import { ObjectUpdateType } from '../../../Object'
 import { ObjectWaiter } from '../../../ObjectWaiter'
-import { Pod } from '../../../pod'
 import { System } from '../../../system'
+import { Component_ } from '../../../types/interface/Component'
+import { J } from '../../../types/interface/J'
 import { Unlisten } from '../../../types/Unlisten'
 import { listenGlobalComponent } from '../../globalComponent'
+import { ID_CONTEXT } from '../../_ids'
 
 export interface I {
   element: Component_
@@ -32,7 +32,7 @@ export default class _Context
   private _unlisten: Unlisten
   private _unlisten_context: Unlisten
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['element'],
@@ -46,7 +46,7 @@ export default class _Context
         },
       },
       system,
-      pod
+      ID_CONTEXT
     )
   }
   subscribe(
@@ -65,37 +65,50 @@ export default class _Context
   public f({ element }: I): void {
     const globalId = element.getGlobalId()
 
+    const _mount = ($context: Context) => {
+      // console.log('Context', '_mount')
+
+      this._context = $context
+
+      const unlisten_context = addListener(
+        this._context,
+        makeResizeListener(({ width, height }) => {
+          this.emit('_resize', { width, height })
+        })
+      )
+
+      this._unlisten_context = unlisten_context
+
+      this._context_waiter.set($context)
+    }
+
+    const _unmount = () => {
+      // console.log('Context', '_unmount')
+
+      if (this._unlisten_context) {
+        this._unlisten_context()
+        this._unlisten_context = undefined
+      }
+
+      this._context = null
+    }
+
+    const component = this.__system.global.component[globalId]
+
+    if (component) {
+      if (component.$mounted) {
+        _mount(component.$context)
+      } else {
+        //
+      }
+    } else {
+      //
+    }
+
     const unlisten = listenGlobalComponent(
       this.__system,
       globalId,
       (_component) => {
-        const _mount = ($context: Context) => {
-          // console.log('Context', '_mount')
-          this._context = $context
-
-          const unlisten_context = addListener(
-            this._context,
-            makeResizeListener(({ width, height }) => {
-              this.emit('_resize', { width, height })
-            })
-          )
-
-          this._unlisten_context = unlisten_context
-
-          this._context_waiter.set($context)
-        }
-
-        const _unmount = () => {
-          // console.log('Context', '_unmount')
-
-          if (this._unlisten_context) {
-            this._unlisten_context()
-            this._unlisten_context = undefined
-          }
-
-          this._context = null
-        }
-
         this._unlisten = _component.addEventListeners([
           makeCustomListener('mount', () => {
             const { $context } = _component

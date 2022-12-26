@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_TEST } from '../../../_ids'
 
 export interface I<T> {
   str: string
@@ -12,7 +12,7 @@ export interface O<T> {
 }
 
 export default class Test<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['str', 'regex'],
@@ -20,7 +20,7 @@ export default class Test<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_TEST
     )
   }
 

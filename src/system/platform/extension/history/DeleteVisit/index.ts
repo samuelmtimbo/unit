@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { callMethod } from '../../../../../client/extension'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ID_DELETE_VISIT } from '../../../../_ids'
 
 export interface I {
   url: string
@@ -11,7 +11,7 @@ export interface I {
 export interface O {}
 
 export default class DeleteVisit extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['url'],
@@ -19,7 +19,7 @@ export default class DeleteVisit extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_DELETE_VISIT
     )
   }
 

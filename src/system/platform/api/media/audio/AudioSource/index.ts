@@ -1,9 +1,9 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
 import { ST } from '../../../../../../types/interface/ST'
 import { wrapMediaStream } from '../../../../../../wrap/MediaStream'
+import { ID_AUDIO_SOURCE } from '../../../../../_ids'
 
 export type I = {
   src: string
@@ -16,7 +16,7 @@ export type O = {
 export default class AudioSource extends Functional<I, O> {
   private _audio: HTMLAudioElement
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['src'],
@@ -24,7 +24,7 @@ export default class AudioSource extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_AUDIO_SOURCE
     )
 
     this._audio = new Audio()
@@ -44,7 +44,7 @@ export default class AudioSource extends Functional<I, O> {
     let stream: ST
 
     if (srcObject instanceof MediaStream) {
-      stream = wrapMediaStream(srcObject, this.__system, this.__pod)
+      stream = wrapMediaStream(srcObject, this.__system)
     } else {
       done(undefined, '')
 

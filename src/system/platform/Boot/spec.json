@@ -27,7 +27,7 @@
   "metadata": {
     "icon": "unit",
     "description": "start a new system",
-    "complexity": 3,
+    "complexity": 4,
     "tags": [
       "platform",
       "ref",

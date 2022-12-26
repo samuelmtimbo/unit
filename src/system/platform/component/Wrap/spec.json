@@ -9,10 +9,6 @@
           "f27cae4e-fea8-11ea-b91e-db41e114c426"
         ]
       }
-    },
-    "style": {
-      "type": "object",
-      "optional": true
     }
   },
   "outputs": {
@@ -24,8 +20,8 @@
   },
   "metadata": {
     "icon": "square",
-    "description": "wrap all children with `wrapper`",
-    "complexity": 21,
+    "description": "wrap all children with `component`",
+    "complexity": 118,
     "tags": [
       "platform",
       "component"

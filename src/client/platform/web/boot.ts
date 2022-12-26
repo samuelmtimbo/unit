@@ -1,11 +1,11 @@
 import { boot } from '../../../boot'
-import { API, System } from '../../../system'
+import { API, BootOpt, System } from '../../../system'
 import { attachApp } from '../../render/attachApp'
 import { attachCanvas } from '../../render/attachCanvas'
-import { attachFocus } from '../../render/attachFocus'
 import { attachGesture } from '../../render/attachGesture'
 import { attachLongPress } from '../../render/attachLongPress'
 import { attachSprite } from '../../render/attachSprite'
+import { attachStyle } from '../../render/attachStyle'
 import { attachSVG } from '../../render/attachSVG'
 import { SYSTEM_ROOT_ID } from '../../SYSTEM_ROOT_ID'
 import { webAnimation } from './api/animation'
@@ -18,7 +18,6 @@ import { webDocument } from './api/document'
 import { webFile } from './api/file'
 import { webGeolocation } from './api/geolocation'
 import { webHTTP } from './api/http'
-import { webInit } from './api/init'
 import { webInput } from './api/input'
 import { webMedia } from './api/media'
 import { webQuerystring } from './api/querystring'
@@ -31,42 +30,48 @@ import { webURI } from './api/uri'
 import { webURL } from './api/url'
 import { webWorker } from './api/worker'
 
-export default function webBoot(): System {
+export default function webBoot(opt: BootOpt = {}): System {
   const root = document.getElementById(SYSTEM_ROOT_ID)
 
-  return _webBoot(window, root)
+  return _webBoot(window, root, opt)
 }
 
 export function _webBoot(
   window: Window,
   root: HTMLElement,
-  prefix: string = ''
+  opt: BootOpt = {}
 ): System {
-  const http = webHTTP(window, prefix)
-  const channel = webChannel(window, prefix)
-  const file = webFile(window, prefix)
-  const screen = webScreen(window, prefix)
-  const device = webDevice(window, prefix)
-  const geolocation = webGeolocation(window, prefix)
-  const speech = webSpeech(window, prefix)
-  const media = webMedia(window, prefix)
-  const clipboard = webClipboard(window, prefix)
-  const selection = webSelection(window, prefix)
-  const storage = webStorage(window, prefix)
-  const animation = webAnimation(window, prefix)
-  const document = webDocument(window, prefix)
-  const querystring = webQuerystring(window, prefix)
-  const bluetooth = webBluetooth(window, prefix)
-  const text = webText(window, prefix)
-  const input = webInput(window, root, prefix)
-  const init = webInit(window, prefix)
-  const db = webDB(window, prefix)
-  const worker = webWorker(window, prefix)
-  const url = webURL(window, prefix)
-  const uri = webURI(window, prefix)
+  const _root = window.document.createElement('div')
+
+  _root.style.width = '100%'
+  _root.style.height = '100%'
+  _root.style.overflow = 'hidden'
+
+  _root.attachShadow({ mode: 'open' })
+
+  const http = webHTTP(window, opt)
+  const channel = webChannel(window, opt)
+  const file = webFile(window, opt)
+  const screen = webScreen(window, opt)
+  const device = webDevice(window, opt)
+  const geolocation = webGeolocation(window, opt)
+  const speech = webSpeech(window, opt)
+  const media = webMedia(window, opt)
+  const clipboard = webClipboard(window, opt)
+  const selection = webSelection(window, opt)
+  const storage = webStorage(window, opt)
+  const animation = webAnimation(window, opt)
+  const document = webDocument(window, _root, opt)
+  const querystring = webQuerystring(window, opt)
+  const bluetooth = webBluetooth(window, opt)
+  const text = webText(window, opt)
+  const input = webInput(window, root, opt)
+  const db = webDB(window, opt)
+  const worker = webWorker(window, opt)
+  const url = webURL(window, opt)
+  const uri = webURI(window, opt)
 
   const api: API = {
-    init,
     storage,
     selection,
     file,
@@ -90,12 +95,15 @@ export function _webBoot(
     uri,
   }
 
-  const system = boot({ api })
+  const system = boot(null, api, opt)
 
-  system.root = root
+  root.appendChild(_root)
+
+  system.root = _root
   system.mounted = true
 
   attachSprite(system)
+  attachStyle(system)
   attachApp(system)
   attachCanvas(system)
   attachSVG(system)

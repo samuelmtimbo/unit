@@ -7,7 +7,6 @@ import { makeResizeListener } from '../../../../../client/event/resize'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { SimNode, Simulation } from '../../../../../client/simulation'
 import { COLOR_NONE } from '../../../../../client/theme'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -58,8 +57,8 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
 
   private _z_index: number = 1
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { className, style = {} } = $props
 
@@ -71,8 +70,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._cabinet = cabinet
 
@@ -303,8 +301,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
           color,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     drawer_component.addEventListener(
       makeCustomListener('active', () => {
@@ -507,6 +504,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
 
     for (const drawer_id in this._drawer_component) {
       const drawer = this._drawer_component[drawer_id]
+
       drawer.show(animate)
     }
   }

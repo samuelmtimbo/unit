@@ -52,7 +52,7 @@ export const _keyUpdateTree = (
   if (key === 'Backspace') {
     if (value === '' && path.length > 0) {
       const parentPath = getParentPath(path) as number[]
-      const parent = _getNodeAtPath(root, parentPath)!
+      const parent = _getNodeAtPath(root, parentPath)
       if (
         parent.type === TreeNodeType.ArrayLiteral ||
         parent.type === TreeNodeType.ObjectLiteral
@@ -154,7 +154,7 @@ export const _keyUpdateTree = (
         (parentPath && _getNextLeafPath(root, parentPath, -1))
       if (leftLeafPath) {
         preventDefault = true
-        const leftLeafNode = _getNodeAtPath(nextRoot, leftLeafPath)!
+        const leftLeafNode = _getNodeAtPath(nextRoot, leftLeafPath)
         if (value === '') {
           nextRoot = _removeNodeAt(nextRoot, path)
         }
@@ -206,7 +206,7 @@ export const _keyUpdateTree = (
   } else if (key === ',') {
     let parentPath = getParentPath(path)
     if (parentPath) {
-      const parent = _getNodeAtPath(root, parentPath)!
+      const parent = _getNodeAtPath(root, parentPath)
       if (
         isCompositeType(parent.type) &&
         (data.type !== TreeNodeType.StringLiteral ||
@@ -253,7 +253,7 @@ export const _keyUpdateTree = (
   } else if ((key === ']' || key === '}') && (valid || value === '')) {
     let parentPath = getParentPath(path)
     if (parentPath) {
-      const parent = _getNodeAtPath(root, parentPath)!
+      const parent = _getNodeAtPath(root, parentPath)
       const grandpaPath = getParentPath(parentPath)
       if (
         (parent.type === TreeNodeType.ArrayLiteral && key === ']') ||
@@ -264,7 +264,7 @@ export const _keyUpdateTree = (
           nextRoot = _removeNodeAt(nextRoot, path)
         }
         if (grandpaPath) {
-          const grandpa = _getNodeAtPath(nextRoot, grandpaPath)!
+          const grandpa = _getNodeAtPath(nextRoot, grandpaPath)
           if (
             grandpa.type === TreeNodeType.ArrayLiteral ||
             grandpa.type === TreeNodeType.ObjectLiteral
@@ -296,7 +296,7 @@ export const _keyUpdateTree = (
           nextPath = [...grandpaPath]
           nextPath[nextPath.length - 1] += 1
 
-          const grangrandpa = _getNodeAtPath(nextRoot, grangrandpaPath)!
+          const grangrandpa = _getNodeAtPath(nextRoot, grangrandpaPath)
           if (
             grangrandpa.type === TreeNodeType.ArrayLiteral ||
             grangrandpa.type === TreeNodeType.ObjectLiteral

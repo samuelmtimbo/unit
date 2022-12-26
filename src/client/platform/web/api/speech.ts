@@ -1,12 +1,24 @@
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
-import { API } from '../../../../system'
-import { ISpeechGrammarListOpt, ISpeechGrammarList } from '../../../../types/global/ISpeechGrammarList'
-import { ISpeechRecognitionOpt, ISpeechRecognition } from '../../../../types/global/ISpeechRecognition'
-import { ISpeechSynthesis, ISpeechSynthesisOpt } from '../../../../types/global/ISpeechSynthesis'
-import { ISpeechSynthesisUtterance, ISpeechSynthesisUtteranceOpt } from '../../../../types/global/ISpeechSynthesisUtterance'
+import { API, BootOpt } from '../../../../system'
+import {
+  ISpeechGrammarList,
+  ISpeechGrammarListOpt,
+} from '../../../../types/global/ISpeechGrammarList'
+import {
+  ISpeechRecognition,
+  ISpeechRecognitionOpt,
+} from '../../../../types/global/ISpeechRecognition'
+import {
+  ISpeechSynthesis,
+  ISpeechSynthesisOpt,
+} from '../../../../types/global/ISpeechSynthesis'
+import {
+  ISpeechSynthesisUtterance,
+  ISpeechSynthesisUtteranceOpt,
+} from '../../../../types/global/ISpeechSynthesisUtterance'
 import { Unlisten } from '../../../../types/Unlisten'
 
-export function webSpeech(window: Window, prefix: string): API['speech'] {
+export function webSpeech(window: Window, opt: BootOpt): API['speech'] {
   const SpeechRecognition = ({
     lang,
     grammars,
@@ -110,7 +122,7 @@ export function webSpeech(window: Window, prefix: string): API['speech'] {
 
     return utterance
   }
-  
+
   const speech = {
     SpeechRecognition,
     SpeechGrammarList,

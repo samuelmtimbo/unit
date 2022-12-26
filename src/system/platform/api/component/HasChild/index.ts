@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { E } from '../../../../../types/interface/E'
+import { ID_HAS_CHILD } from '../../../../_ids'
 
 export interface I {
   parent: E
@@ -14,7 +14,7 @@ export interface O {
 }
 
 export default class HasChild extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['parent', 'at'],
@@ -28,7 +28,7 @@ export default class HasChild extends Functional<I, O> {
         },
       },
       system,
-      pod
+      ID_HAS_CHILD
     )
   }
 

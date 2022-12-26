@@ -9,19 +9,25 @@
       "type": "{x:number,y:number,z:number}",
       "optional": true,
       "metadata": {
-        "examples": ["{x:0,y:0,z:1}"]
+        "examples": [
+          "{x:0,y:0,z:1}"
+        ]
       }
     },
     "width": {
       "type": "number",
       "metadata": {
-        "examples": ["240"]
+        "examples": [
+          "240"
+        ]
       }
     },
     "height": {
       "type": "number",
       "metadata": {
-        "examples": ["240"]
+        "examples": [
+          "240"
+        ]
       }
     }
   },
@@ -29,8 +35,11 @@
   "metadata": {
     "icon": "square",
     "description": "parent container",
-    "complexity": 21,
-    "tags": ["platform", "component"]
+    "complexity": 118,
+    "tags": [
+      "platform",
+      "component"
+    ]
   },
   "id": "3ffeaaf8-30dd-11eb-9dcc-836b075fc64d",
   "component": {

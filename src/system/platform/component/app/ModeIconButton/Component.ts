@@ -1,7 +1,6 @@
 import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -25,8 +24,8 @@ export const DEFAULT_STYLE = {
 export default class ModeIconButton extends Element<IHTMLDivElement, Props> {
   private _icon_button: IconButton
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { title } = this.$props
 
@@ -52,8 +51,7 @@ export default class ModeIconButton extends Element<IHTMLDivElement, Props> {
         activeColor,
         hoverColor: hoverColor || activeColor,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     icon_button.preventDefault('mousedown')
     icon_button.preventDefault('touchdown')

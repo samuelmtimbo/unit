@@ -1,7 +1,6 @@
-import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { Pod } from '../../../../pod'
+import applyStyle from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../types/global/dom'
@@ -29,8 +28,8 @@ export default class Button extends Element<IHTMLDivElement, Props> {
 
   private _prop_handler: PropHandler
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       id,
@@ -71,10 +70,8 @@ export default class Button extends Element<IHTMLDivElement, Props> {
     }
     applyStyle($element, { ...DEFAULT_STYLE, ...style })
 
-    this._div_el = $element
-
     this._prop_handler = {
-      ...htmlPropHandler(this._div_el, DEFAULT_STYLE),
+      ...htmlPropHandler(this, DEFAULT_STYLE),
     }
 
     this.$element = $element

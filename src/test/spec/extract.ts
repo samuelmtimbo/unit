@@ -53,8 +53,10 @@ test(
   },
   {
     units: ['identity', 'identity0'],
-    unitInputs: { identity: ['a'] },
-    unitOutputs: { identity0: ['a'] },
+    links: {
+      input: { identity: ['a'] },
+      output: { identity0: ['a'] },
+    },
     merges: ['0'],
   },
   {
@@ -104,8 +106,10 @@ test(
   },
   {
     units: ['identity', 'identity0'],
-    unitInputs: { identity: ['a'], identity0: ['a'] },
-    unitOutputs: { identity: ['a'], identity0: ['a'] },
+    links: {
+      input: { identity: ['a'], identity0: ['a'] },
+      output: { identity: ['a'], identity0: ['a'] },
+    },
   },
   {
     units: {
@@ -417,8 +421,10 @@ test(
   },
   {
     units: ['identity'],
-    unitInputs: {
-      identity: ['a'],
+    links: {
+      input: {
+        identity: ['a'],
+      },
     },
   },
   {

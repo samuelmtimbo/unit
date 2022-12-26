@@ -25,7 +25,7 @@ export function unitBundleSpec(
       [id]: spec as GraphSpec,
     }
 
-    _bundle(spec as GraphSpec, specs, custom)
+    _bundle(spec as GraphSpec, specs, custom, new Set())
 
     return {
       unit: {
@@ -53,7 +53,7 @@ export function unitBundleSpecById(id: string, specs: Specs): UnitBundleSpec {
       [id]: spec as GraphSpec,
     }
 
-    _bundle(spec as GraphSpec, specs, custom)
+    _bundle(spec as GraphSpec, specs, custom, new Set())
 
     return {
       unit: {
@@ -67,37 +67,38 @@ export function unitBundleSpecById(id: string, specs: Specs): UnitBundleSpec {
 export function bundleSpec(spec: GraphSpec, specs: Specs): BundleSpec {
   const custom: GraphSpecs = {}
 
-  _bundle(spec, specs, custom)
+  _bundle(spec, specs, custom, new Set())
 
   return { spec, specs: custom }
 }
 
-function _bundle(spec: GraphSpec, specs: Specs, custom: GraphSpecs): void {
+function _bundle(
+  spec: GraphSpec,
+  specs: Specs,
+  custom: GraphSpecs,
+  branch: Set<string>
+): void {
   const { units = {} } = spec
+
+  if (branch.has(spec.id)) {
+    return
+  }
+
+  if (!custom[spec.id]) {
+    if (!specs[spec.id] || !isSystemSpecId(specs, spec.id)) {
+      custom[spec.id] = spec
+    }
+  }
+
+  branch.add(spec.id)
 
   for (const unit_id in units) {
     const unit = units[unit_id]
 
-    const { id, input = {} } = unit
+    const { id } = unit
 
-    if (!custom[id]) {
-      if (!isSystemSpecId(specs, id)) {
-        const _spec = getSpec(specs, id) as GraphSpec
+    const _spec = getSpec(specs, id) as GraphSpec
 
-        custom[id] = _spec
-
-        _bundle(_spec, specs, custom)
-      }
-    }
-
-    for (const inputId in input) {
-      const { data } = input[inputId]
-
-      if (data) {
-        if (data.startsWith('${') && data.endsWith('}')) {
-          // TODO (?)
-        }
-      }
-    }
+    _bundle(_spec, specs, custom, new Set(branch))
   }
 }

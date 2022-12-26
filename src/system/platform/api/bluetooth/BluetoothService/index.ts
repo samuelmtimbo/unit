@@ -1,11 +1,11 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { BS } from '../../../../../types/interface/BS'
-import { BSE } from '../../../../../types/interface/BSE'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IBluetoothCharacteristic } from '../../../../../types/global/IBluetoothCharacteristic'
+import { BS } from '../../../../../types/interface/BS'
+import { BSE } from '../../../../../types/interface/BSE'
+import { ID_BLUETOOTH_SERVICE } from '../../../../_ids'
 
 export interface I {
   server: BS
@@ -17,7 +17,7 @@ export interface O {
 }
 
 export default class BluetoothService extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['server', 'uuid'],
@@ -36,7 +36,7 @@ export default class BluetoothService extends Functional<I, O> {
         },
       },
       system,
-      pod
+      ID_BLUETOOTH_SERVICE
     )
   }
 
@@ -47,7 +47,7 @@ export default class BluetoothService extends Functional<I, O> {
       getCharacteristic(name: string): Promise<IBluetoothCharacteristic> {
         return _service.getCharacteristic(name)
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     done({ service })
   }

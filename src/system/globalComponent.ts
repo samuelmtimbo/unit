@@ -20,18 +20,6 @@ export function pushGlobalComponent(
   __component__emitter.emit(id, component)
 }
 
-// TODO
-// should be called onDestroy
-export function pullGlobalComponent(system: System, id: string): void {
-  console.log('pullGlobalComponent', id)
-
-  const {
-    global: { component: _component },
-  } = system
-
-  delete _component[id]
-}
-
 export function getGlobalComponent(system: System, id: string): Component {
   const {
     global: { component: _component },

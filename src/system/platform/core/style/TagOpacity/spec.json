@@ -1,0 +1,50 @@
+{
+  "name": "tag opacity",
+  "units": {
+    "tag": {
+      "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
+      "input": {
+        "k": {
+          "constant": true,
+          "data": "'opacity'"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "tag",
+    "description": "{opacity: `opacity`}",
+    "complexity": 7,
+    "tags": [
+      "platform",
+      "core",
+      "style"
+    ]
+  },
+  "inputs": {
+    "opacity": {
+      "plug": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "v"
+        }
+      },
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "{opacity}": {
+      "plug": {
+        "0": {
+          "unitId": "tag",
+          "pinId": "kv"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "id": "2afbbe21-d399-482a-b53d-50820ee510be",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -17,7 +17,7 @@ export function stopByPropagation($element: IOElement, name: string): void {
   )
 }
 
-const ALL: string[] = [
+export const ALL_EVENTS: string[] = [
   'pointerdown',
   'pointermove',
   'pointerup',
@@ -34,8 +34,9 @@ const ALL: string[] = [
   'keypress',
   'keydown',
   'keyup',
+  'touchstart',
 ]
 
 export function stopAllPropagation($element: IOElement): void {
-  ALL.forEach((name) => stopByPropagation($element, name))
+  ALL_EVENTS.forEach((name) => stopByPropagation($element, name))
 }

@@ -2,9 +2,9 @@ import * as assert from 'assert'
 import { watchUnit } from '../debug/watchUnit'
 import { NOOP } from '../NOOP'
 import Identity from '../system/f/control/Identity'
-import { pod, system } from './util/system'
+import { system } from './util/system'
 
-const identity = new Identity<number>(system, pod)
+const identity = new Identity<number>(system)
 
 assert.equal(identity.listenerCount('err'), 0)
 assert.equal(identity.listenerCount('destroy'), 1)

@@ -26,7 +26,7 @@ export function $removeChild(
 ): void {
   try {
     const child = component.removeChild(at)
-    const bundle = child.getBundleSpec()
+    const bundle = child.getUnitBundleSpec()
     const specId = bundle.unit.id
     callback({ specId })
   } catch (err) {
@@ -63,8 +63,7 @@ export function $children(
   const children = component.refChildren()
 
   const _children = children.map((c) => {
-    // @ts-ignore
-    return { id: c.constructor.__bundle.unit.id } as $Child
+    return { bundle: c.getUnitBundleSpec() } as $Child
   })
 
   callback(_children)
@@ -80,8 +79,10 @@ export function $refChild(
 }
 
 export function $refEmitter(emitter: EE): $EE {
-  const _emitter = emitter.refEmitter()
+  const _emitter = emitter
+
   const $_emitter = Async(_emitter, ['$EE'])
+
   return proxyWrap($_emitter, ['$EE'])
 }
 

@@ -1,7 +1,7 @@
-import { Element, ElementEE } from '../../../../../Class/Element'
+import { ElementEE, Element_ } from '../../../../../Class/Element'
 import { Unit } from '../../../../../Class/Unit'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ID_AUDIO } from '../../../../_ids'
 import AudioComp from './Component'
 
 export interface I {
@@ -17,8 +17,8 @@ export interface AudioJ {}
 export interface AudioEE extends ElementEE<{}> {}
 export interface AudioC extends AudioComp {}
 
-export default class Audio extends Element<I, O, AudioJ, AudioEE, AudioC> {
-  constructor(system: System, pod: Pod) {
+export default class Audio extends Element_<I, O, AudioJ, AudioEE, AudioC> {
+  constructor(system: System) {
     super(
       {
         i: ['src', 'stream', 'style', 'controls'],
@@ -32,7 +32,7 @@ export default class Audio extends Element<I, O, AudioJ, AudioEE, AudioC> {
         },
       },
       system,
-      pod
+      ID_AUDIO
     )
   }
 }

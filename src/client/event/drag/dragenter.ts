@@ -1,4 +1,4 @@
-import Listenable from '../../Listenable'
+import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import { IOPointerEvent } from '../pointer'
 

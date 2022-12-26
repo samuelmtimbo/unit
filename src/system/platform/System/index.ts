@@ -1,17 +1,19 @@
+import { Graph } from '../../../Class/Graph'
 import { Unit } from '../../../Class/Unit'
-import { Pod } from '../../../pod'
 import { System } from '../../../system'
-import { P } from '../../../types/interface/P'
+import { Dict } from '../../../types/Dict'
+import { GraphBundle } from '../../../types/GraphClass'
 import { S } from '../../../types/interface/S'
 import { Unlisten } from '../../../types/Unlisten'
-import { _newPod, _newSystem } from '../../../wrap/System'
+import { _newSystem } from '../../../wrap/System'
+import { ID_SYSTEM } from '../../_ids'
 
 export interface I<T> {}
 
 export interface O<T> {}
 
 export default class _System<T> extends Unit<I<T>, O<T>> implements S {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: [],
@@ -25,15 +27,17 @@ export default class _System<T> extends Unit<I<T>, O<T>> implements S {
         },
       },
       system,
-      pod
+      ID_SYSTEM
     )
   }
 
-  newSystem(opt: {}): [S, Unlisten] {
-    return _newSystem(this.__system, this.__system, this.__pod)
+  newGraph(
+    bundle: GraphBundle<any, any>
+  ): [Dict<string>, Graph<any, any>, Unlisten] {
+    throw new Error('Method not implemented.')
   }
 
-  newPod(): [P, Unlisten] {
-    return _newPod(this.__system, this.__system, this.__pod)
+  newSystem(opt: {}): [S, Unlisten] {
+    return _newSystem(this.__system, this.__system)
   }
 }

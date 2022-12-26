@@ -8,12 +8,12 @@ import {
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { countEvent } from '../../util'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec = require('../../../system/core/array/PrependIf/spec.json')
 const PrependIf = fromSpec(spec, _specs)
 
-const prependIf = new PrependIf(system, pod)
+const prependIf = new PrependIf(system)
 
 const dataCounter = countEvent(prependIf.getOutput('a'), 'data')
 const dropCounter = countEvent(prependIf.getOutput('a'), 'drop')

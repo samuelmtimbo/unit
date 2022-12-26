@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_POW } from '../../../_ids'
 
 export interface I<T> {
   a: number
@@ -12,7 +12,7 @@ export interface O<T> {
 }
 
 export default class Pow<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a', 'b'],
@@ -20,7 +20,7 @@ export default class Pow<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_POW
     )
   }
 

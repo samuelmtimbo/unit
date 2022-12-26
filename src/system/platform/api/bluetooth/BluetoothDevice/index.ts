@@ -1,11 +1,11 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { BD } from '../../../../../types/interface/BD'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IBluetoothDeviceOpt } from '../../../../../types/global/IBluetoothDevice'
 import { IBluetoothServer } from '../../../../../types/global/IBluetoothServer'
+import { BD } from '../../../../../types/interface/BD'
+import { ID_BLUETOOTH_DEVICE } from '../../../../_ids'
 
 export interface I {
   opt: IBluetoothDeviceOpt
@@ -16,7 +16,7 @@ export interface O {
 }
 
 export default class BluetoothDevice extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['opt'],
@@ -30,7 +30,7 @@ export default class BluetoothDevice extends Functional<I, O> {
         },
       },
       system,
-      pod
+      ID_BLUETOOTH_DEVICE
     )
   }
 
@@ -47,7 +47,7 @@ export default class BluetoothDevice extends Functional<I, O> {
         async getServer(): Promise<IBluetoothServer> {
           return _device.getServer()
         }
-      })(this.__system, this.__pod)
+      })(this.__system)
 
       done({ device })
     } catch (err) {

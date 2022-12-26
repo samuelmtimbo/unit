@@ -47,11 +47,11 @@
     ]
   },
   "inputs": {
-    "2": {
+    "0": {
       "plug": {
         "0": {
-          "unitId": "single",
-          "pinId": "a"
+          "unitId": "pair",
+          "pinId": "0"
         }
       },
       "type": "<A>"
@@ -65,11 +65,11 @@
       },
       "type": "<A>"
     },
-    "0": {
+    "2": {
       "plug": {
         "0": {
-          "unitId": "pair",
-          "pinId": "0"
+          "unitId": "single",
+          "pinId": "a"
         }
       },
       "type": "<A>"

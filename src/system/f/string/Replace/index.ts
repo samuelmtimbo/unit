@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_REPLACE } from '../../../_ids'
 
 export interface I {
   a: string
@@ -13,7 +13,7 @@ export interface O {
 }
 
 export default class Replace extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a', 'regex', 'replacement'],
@@ -21,7 +21,7 @@ export default class Replace extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_REPLACE
     )
   }
 

@@ -1,8 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Spec } from '../../../../types'
+import { ID_ID_TO_SPEC } from '../../../_ids'
 
 export interface I<T> {
   id: string
@@ -13,7 +13,7 @@ export interface O<T> {
 }
 
 export default class IdToSpec<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['id'],
@@ -21,7 +21,7 @@ export default class IdToSpec<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_ID_TO_SPEC
     )
   }
 

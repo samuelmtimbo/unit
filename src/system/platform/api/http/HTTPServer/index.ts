@@ -1,6 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { Dict } from '../../../../../types/Dict'
@@ -8,6 +7,7 @@ import {
   IHTTPServer,
   IHTTPServerOpt,
 } from '../../../../../types/global/IHTTPServer'
+import { ID_HTTP_SERVER } from '../../../../_ids'
 
 export interface IHTTPServerResponse {
   status: number
@@ -35,12 +35,12 @@ export type O = {
 export default class _HTTPServer extends Semifunctional {
   private _server: IHTTPServer
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       { fi: ['opt'], fo: [], i: ['port', 'res', 'done'], o: ['req'] },
       {},
       system,
-      pod
+      ID_HTTP_SERVER
     )
   }
 

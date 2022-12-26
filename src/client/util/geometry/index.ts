@@ -274,6 +274,16 @@ export function randomInRect(
   }
 }
 
+export function randomInPaddedRect(
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+  offset: number
+): Point {
+  return randomInRect(x0 - offset, y0 - offset, x1 + offset, y1 + offset)
+}
+
 export function randomInCircle(cX: number, cY: number, R: number): Point {
   const angle = randomAngle()
   return {
@@ -493,10 +503,19 @@ export function rectBoundingRadius(width: number, height: number) {
 }
 
 export function rectsBoundingRect(rects: Rect[]): Rect {
+  if (rects.length === 0) {
+    return {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+    }
+  }
+
   let minX = Infinity
   let minY = Infinity
-  let maxX = -Infinity
-  let maxY = -Infinity
+  let maxX = 0
+  let maxY = 0
 
   for (const rect of rects) {
     minX = Math.min(minX, rect.x)
@@ -538,44 +557,28 @@ export function bezierSpline(): Point[] {
   return []
 }
 
-export function is_inside(a: Thing, b: Thing): boolean {
-  const {
-    x: a_x,
-    y: a_y,
-    shape: a_shape,
-    r: a_r,
-    width: a_width,
-    height: a_height,
-  } = a
-  const {
-    x: b_x,
-    y: b_y,
-    shape: b_shape,
-    r: b_r,
-    width: b_width,
-    height: b_height,
-  } = b
-
-  if (a_shape === 'circle' && b_shape === 'circle') {
-    return distance(a_x, a_y, b_x, b_y) <= b_r - a_r
-  } else if (a_shape === 'circle' && b_shape === 'rect') {
+export function isInside(a: Thing, b: Thing, offset: number = 0): boolean {
+  if (a.shape === 'circle' && b.shape === 'circle') {
+    return distance(a.x, a.y, b.x, b.y) <= b.r - a.r + offset
+  } else if (a.shape === 'circle' && b.shape === 'rect') {
     return (
-      a_x - a.r >= b_x - b_width / 2 &&
-      a_x + a.r <= b_x + b_width / 2 &&
-      a_y - a.r >= b_y - b_height / 2 &&
-      a_y + a.r <= b_y + b_height / 2
+      a.x - a.r >= b.x - b.width / 2 - offset &&
+      a.x + a.r <= b.x + b.width / 2 + offset &&
+      a.y - a.r >= b.y - b.height / 2 - offset &&
+      a.y + a.r <= b.y + b.height / 2 + offset
     )
-  } else if (a_shape === 'rect' && b_shape === 'circle') {
+  } else if (a.shape === 'rect' && b.shape === 'circle') {
     // https://stackoverflow.com/questions/14097290/check-if-circle-contains-rectangle
-    const dx = Math.max(b_x - a_x + a_width / 2, a_x + a_width / 2 - b_x)
-    const dy = Math.max(b_y - a_y + a_height / 2, a_y + a_height / 2 - b_y)
-    return b_r * b_r >= dx * dx + dy * dy
+    const dx = Math.max(b.x - a.x + a.width / 2, a.x + a.width / 2 - b.x)
+    const dy = Math.max(b.y - a.y + a.height / 2, a.y + a.height / 2 - b.y)
+
+    return b.r >= Math.sqrt(dx * dx + dy * dy) - offset
   } else {
     return (
-      a_x - a_width / 2 >= b_x - b_width / 2 &&
-      a_x + a_width / 2 <= b_x + b_width / 2 &&
-      a_y - a_height / 2 >= b_y - b_height / 2 &&
-      a_y + a_height / 2 <= b_y + b_height / 2
+      a.x - a.width / 2 >= b.x - b.width / 2 - offset &&
+      a.x + a.width / 2 <= b.x + b.width / 2 + offset &&
+      a.y - a.height / 2 >= b.y - b.height / 2 - offset &&
+      a.y + a.height / 2 <= b.y + b.height / 2 + offset
     )
   }
 }
@@ -636,15 +639,9 @@ export function _surfaceDistance(
     u
   )
 
-  let l: number
-  const ds = b_d + a_d
-  const dd = Math.abs(a_d - b_d)
-  if (d <= ds && d >= dd - 1) {
-    l = 0
-  } else if (d < dd) {
-    l = d - dd
-  }
-  l = d - ds
+  const d_sum = b_d + a_d
+
+  const l = d - d_sum
 
   return {
     d,

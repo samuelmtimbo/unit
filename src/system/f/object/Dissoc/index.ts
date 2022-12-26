@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { ID_DISSOC } from '../../../_ids'
 import _dissoc from './f'
 
 export interface I<T> {
@@ -15,7 +15,7 @@ export interface O<T> {
 }
 
 export default class Dissoc<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['obj', 'key'],
@@ -23,7 +23,7 @@ export default class Dissoc<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_DISSOC
     )
   }
 

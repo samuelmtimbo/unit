@@ -2,10 +2,6 @@ export function randomBetween(a: number, b: number): number {
   return a + (b - a) * Math.random()
 }
 
-export function randomNaturalBetween(a: number, b: number): number {
-  return Math.floor(randomBetween(a, b))
-}
-
 export function randomIntegerBetween(a: number, b: number): number {
   return Math.floor(randomBetween(a, b))
 }

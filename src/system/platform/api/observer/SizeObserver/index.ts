@@ -1,13 +1,13 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { Component } from '../../../../../client/component'
-import { Component_ } from '../../../../../types/interface/Component'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { Component_ } from '../../../../../types/interface/Component'
 import {
   getGlobalComponent,
   listenGlobalComponent,
 } from '../../../../globalComponent'
+import { ID_SIZE_OBSERVER } from '../../../../_ids'
 
 export type I = {
   component: Component_
@@ -19,7 +19,7 @@ export type O = {
 }
 
 export default class SizeObserver extends Semifunctional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['component'],
@@ -35,7 +35,7 @@ export default class SizeObserver extends Semifunctional<I, O> {
         },
       },
       system,
-      pod
+      ID_SIZE_OBSERVER
     )
   }
 

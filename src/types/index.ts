@@ -1,5 +1,7 @@
 import { Position } from '../client/util/geometry'
 import { Dict } from './Dict'
+import { IO } from './IO'
+import { IOOf, _IOOf } from './IOOf'
 import { None } from './None'
 import { UnitClass } from './UnitClass'
 
@@ -68,7 +70,7 @@ export type GraphPinSpec = PinSpecBase & {
   plug?: Dict<GraphSubPinSpec>
 }
 
-export type GraphExposedPinsSpec = Dict<GraphPinSpec>
+export type GraphPinsSpec = Dict<GraphPinSpec>
 
 export type PinsSpec = Dict<PinSpec>
 
@@ -78,7 +80,7 @@ export type GraphUnitSpecBase = {
   input?: GraphUnitPinsSpec
   output?: GraphUnitPinsSpec
   state?: Dict<any>
-  memory?: { input: Dict<any>, output: Dict<any>, memory: Dict<any> }
+  memory?: { input: Dict<any>; output: Dict<any>; memory: Dict<any> }
   flag?: Dict<any>
   children?: GraphUnitSpec[] | None
   reorder?: string[] | None
@@ -93,14 +95,7 @@ export type GraphUnitsSpec = Dict<GraphUnitSpec>
 
 export type GraphMergeSpec = Dict<GraphMergeUnitSpec>
 
-export type GraphMergeUnitSpec = {
-  input?: {
-    [pinId: string]: true
-  }
-  output?: {
-    [pinId: string]: true
-  }
-}
+export type GraphMergeUnitSpec = _IOOf<Dict<true>>
 
 export type GraphMergesSpec = Dict<GraphMergeSpec>
 
@@ -142,8 +137,8 @@ export type Artifact = 'spec' | 'component' | 'dir' | 'data'
 
 export type GraphSpecBase = {
   merges?: GraphMergesSpec
-  inputs?: GraphExposedPinsSpec
-  outputs?: GraphExposedPinsSpec
+  inputs?: GraphPinsSpec
+  outputs?: GraphPinsSpec
 }
 
 export type GraphSpec = GraphSpecBase & {
@@ -162,6 +157,7 @@ export type GraphSpec = GraphSpecBase & {
   methods?: Dict<GraphSpec>
   self?: string | None
   id?: string
+  specs?: GraphSpecs
 }
 
 export type BaseSpecs = {
@@ -213,6 +209,7 @@ export type SpecAction = {
 export type Action = {
   type: string
   data: any
+  group_id?: string
 }
 
 export type BaseComponentSpec = {
@@ -263,4 +260,27 @@ export type GraphUnitMetadataSpec = {
   rename?: string | None
   comment?: string | None
   position?: { x: number; y: number }
+}
+
+export type GraphUnitPinOuterSpec = {
+  unitId: string
+  type: IO
+  pinId: string
+}
+
+export type GraphPlugOuterSpec = {
+  type: IO
+  pinId: string
+  subPinId: string
+}
+
+export type GraphUnitOuterSpec = {
+  merges: IOOf<
+    Dict<{
+      mergeId: string
+      otherPin: GraphUnitPinOuterSpec | null
+      exposedPin: GraphPlugOuterSpec | null
+    }>
+  >
+  exposed: IOOf<Dict<GraphPlugOuterSpec>>
 }

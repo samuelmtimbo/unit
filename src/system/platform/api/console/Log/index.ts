@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ID_LOG } from '../../../../_ids'
 
 export interface I<T> {
   message: string
@@ -10,7 +10,7 @@ export interface I<T> {
 export interface O<T> {}
 
 export default class Log<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['message'],
@@ -18,12 +18,13 @@ export default class Log<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_LOG
     )
   }
 
   f({ message }: I<T>, done: Done<O<T>>): void {
     console.log(message)
+
     done({})
   }
 }

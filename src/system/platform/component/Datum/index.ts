@@ -1,6 +1,6 @@
-import { Element } from '../../../../Class/Element'
-import { Pod } from '../../../../pod'
+import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
+import { ID_DATUM } from '../../../_ids'
 
 export interface I {
   value: any
@@ -9,8 +9,8 @@ export interface I {
 
 export interface O {}
 
-export default class Datum extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class Datum extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['style', 'value'],
@@ -18,7 +18,7 @@ export default class Datum extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_DATUM
     )
   }
 }

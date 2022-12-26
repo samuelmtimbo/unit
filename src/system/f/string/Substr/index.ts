@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_SUBSTR } from '../../../_ids'
 
 export interface I {
   a: string
@@ -13,7 +13,7 @@ export interface O {
 }
 
 export default class Substr extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a', 'from', 'length'],
@@ -21,7 +21,7 @@ export default class Substr extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_SUBSTR
     )
   }
 

@@ -1,8 +1,8 @@
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { EE } from '../../../../../types/interface/EE'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { EE } from '../../../../../types/interface/EE'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { ID_DEBUG } from '../../../../_ids'
 
 export interface I<T> {
   data: any
@@ -19,7 +19,7 @@ export default class Debug<T> extends Semifunctional<I<T>, O<T>> {
 
   private _unlisten: Unlisten | undefined = undefined
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['unit', 'event'],
@@ -35,7 +35,7 @@ export default class Debug<T> extends Semifunctional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_DEBUG
     )
 
     this.addListener('destroy', () => {

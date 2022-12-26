@@ -1,3 +1,5 @@
+import { keys } from '../../object/Keys/f'
+
 export default function isEqual(a: any, b: any): boolean {
   const ta = typeof a
   const tb = typeof b
@@ -22,8 +24,8 @@ export default function isEqual(a: any, b: any): boolean {
       return true
     }
 
-    const la = Object.keys(a).length
-    const lb = Object.keys(b).length
+    const la = keys(a).length
+    const lb = keys(b).length
 
     if (la !== lb) {
       return false
@@ -32,7 +34,7 @@ export default function isEqual(a: any, b: any): boolean {
     for (const ka in a) {
       const va = a[ka]
       const vb = b[ka]
-      
+
       if (!isEqual(va, vb)) {
         return false
       }

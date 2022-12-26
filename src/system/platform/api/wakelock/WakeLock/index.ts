@@ -1,8 +1,8 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IWakeLock, IWakeLockOpt } from '../../../../../types/global/IWakeLock'
+import { ID_WAKE_LOCK } from '../../../../_ids'
 
 export interface I {
   lock: any
@@ -14,7 +14,7 @@ export interface O {}
 export default class WakeLock extends Semifunctional<I, O> {
   private _wake_lock: IWakeLock
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['lock'],
@@ -24,7 +24,7 @@ export default class WakeLock extends Semifunctional<I, O> {
       },
       {},
       system,
-      pod
+      ID_WAKE_LOCK
     )
   }
 

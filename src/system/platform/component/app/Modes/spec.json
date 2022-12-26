@@ -212,7 +212,7 @@
   "metadata": {
     "icon": "navigation",
     "description": "select a mode (\"none\"|\"info\"|\"add\"|\"remove\"|\"change\")",
-    "complexity": 104,
+    "complexity": 300,
     "tags": [
       "platform",
       "component",

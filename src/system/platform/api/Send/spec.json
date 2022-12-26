@@ -2,7 +2,7 @@
   "name": "send",
   "inputs": {
     "unit": {
-      "type": "`P`",
+      "type": "`CH`",
       "ref": true
     },
     "data": {

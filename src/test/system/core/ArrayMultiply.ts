@@ -8,13 +8,13 @@ import {
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec =
   require('../../../system/core/array/Multiply/spec.json') as GraphSpec
 const ArrayMultiply = fromSpec(spec, _specs)
 
-const arrayMultiply = new ArrayMultiply(system, pod) as Graph
+const arrayMultiply = new ArrayMultiply(system) as Graph
 
 0 && watchUnitAndLog(arrayMultiply)
 0 && watchGraphAndLog(arrayMultiply)

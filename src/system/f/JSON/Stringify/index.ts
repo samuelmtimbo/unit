@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_STRINGIFY } from '../../../_ids'
 
 export interface I<T> {
   json: T
@@ -11,7 +11,7 @@ export interface O {
 }
 
 export default class Stringify<T> extends Functional<I<T>, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['json'],
@@ -19,7 +19,7 @@ export default class Stringify<T> extends Functional<I<T>, O> {
       },
       {},
       system,
-      pod
+      ID_STRINGIFY
     )
   }
 

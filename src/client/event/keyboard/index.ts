@@ -1,11 +1,12 @@
 import { System } from '../../../system'
 import isEqual from '../../../system/f/comparisson/Equals/f'
+import { keys } from '../../../system/f/object/Keys/f'
 import { Dict } from '../../../types/Dict'
 import { IHTMLInputElement } from '../../../types/global/dom'
 import { randomIdNotIn } from '../../../util/id'
 import { addGlobalBlurListener } from '../../addGlobalBlurListener'
 import { IOElement } from '../../IOElement'
-import Listenable from '../../Listenable'
+import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import { isChar, keyCodeToKey, keyToCode, keyToKeyCode } from './keyCode'
 
@@ -201,7 +202,7 @@ export default class KeyboardController {
   public addShortcutGroup(shortcutGroup: Shortcut[]): string {
     const id = randomIdNotIn(this._shortcuts)
     this._shortcuts[id] = shortcutGroup.map(this._removeEmptySpace)
-    if (Object.keys(this._shortcuts).length === 1) {
+    if (keys(this._shortcuts).length === 1) {
       this._listen()
     }
     return id
@@ -209,7 +210,7 @@ export default class KeyboardController {
 
   public removeShortcutGroup(id: string): void {
     delete this._shortcuts[id]
-    if (Object.keys(this._shortcuts).length === 0) {
+    if (keys(this._shortcuts).length === 0) {
       this._unlisten()
     }
   }
@@ -555,25 +556,27 @@ const codeToKey: Dict<[string, string, string, string]> = {
   ArrowRight: ['ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight'],
 }
 
-export function getActiveElement(): Element {
-  const activeElement = getWindowActiveElement(window)
+export function getActiveElement(system: System): Element {
+  const activeElement = getWindowActiveElement(system, window)
+
   return activeElement
 }
 
-export function getWindowActiveElement(_window: Window): Element {
-  let activeElement =
-    _window.document.activeElement || _window.document.documentElement
-  if (activeElement.tagName === 'IFRAME') {
-    const __window = (activeElement as HTMLIFrameElement).contentWindow
-    if (__window) {
-      activeElement = getWindowActiveElement(__window)
-    }
-  }
-  return activeElement
+export function getWindowActiveElement(
+  system: System,
+  _window: Window
+): Element {
+  const { root } = system
+
+  return root.shadowRoot.activeElement
 }
 
-export function emitKeyboardEvent(type: string, init: KeyboardEventInit): void {
-  const activeElement = getActiveElement()
+export function emitKeyboardEvent(
+  system: System,
+  type: string,
+  init: KeyboardEventInit
+): void {
+  const activeElement = getActiveElement(system)
   const event = new KeyboardEvent(type, init)
   const _preventDefault = event.preventDefault.bind(event)
   let defaultPrevented = false
@@ -588,9 +591,12 @@ export function emitKeyboardEvent(type: string, init: KeyboardEventInit): void {
   }
 }
 
-export function writeToActiveElement(key: string): void {
-  const activeElement = getActiveElement()
+export function writeToActiveElement(system: System, key: string): Element {
+  const activeElement = getActiveElement(system)
+
   writeToElement(activeElement, key)
+
+  return activeElement
 }
 
 export function writeToElement(
@@ -808,10 +814,10 @@ export function writeToInput(
   }
 }
 
-export function emitKeyDown(key: string): void {
+export function emitKeyDown(system: System, key: string): void {
   const code = keyToCode[key]
   const keyCode = keyToKeyCode[key]
-  emitKeyboardEvent('keydown', {
+  emitKeyboardEvent(system, 'keydown', {
     key: code,
     // @ts-ignore
     keyCode,
@@ -824,10 +830,10 @@ export function emitKeyDown(key: string): void {
   })
 }
 
-export function emitKeyUp(key: string): void {
+export function emitKeyUp(system: System, key: string): void {
   const code = keyToCode[key]
   const keyCode = keyToKeyCode[key]
-  emitKeyboardEvent('keyup', {
+  emitKeyboardEvent(system, 'keyup', {
     key: code,
     // @ts-ignore
     keyCode,
@@ -840,16 +846,14 @@ export function emitKeyUp(key: string): void {
   })
 }
 
-export function isKeyPressed($system: System, key: string): boolean {
-  const { input: $input } = $system
-
-  const { keyboard: $keyboard } = $input
-
-  const { pressed: $pressed } = $keyboard
+export function isKeyPressed(system: System, key: string): boolean {
+  const { input } = system
+  const { keyboard } = input
+  const { pressed } = keyboard
 
   const keyCode = keyToKeyCode[key]
 
-  return $pressed.indexOf(keyCode) > -1
+  return pressed.indexOf(keyCode) > -1
 }
 
 export function isKeyRepeat($system: System): boolean {

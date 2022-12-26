@@ -1,12 +1,12 @@
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../../../../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../../../../exception/MediaDeviceAPINotSupported'
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 import { IDisplayMediaOpt } from '../../../../types/global/IDisplayMedia'
 import { IUserMediaOpt } from '../../../../types/global/IUserMedia'
 import { Rect } from '../../../util/geometry'
 
-export function webMedia(window: Window, prefix: string): API['media'] {
+export function webMedia(window: Window, opt: BootOpt): API['media'] {
   const media = {
     getUserMedia: async (opt: IUserMediaOpt): Promise<MediaStream> => {
       if (!navigator || !navigator.mediaDevices) {

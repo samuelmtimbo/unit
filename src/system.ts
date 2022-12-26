@@ -1,4 +1,5 @@
 import { Graph } from './Class/Graph'
+import { Unit } from './Class/Unit'
 import { Component } from './client/component'
 import { Context } from './client/context'
 import { IOPointerEvent } from './client/event/pointer'
@@ -7,10 +8,9 @@ import { Store } from './client/store'
 import { Theme } from './client/theme'
 import { Point, Rect, Size } from './client/util/geometry'
 import { NOOP } from './NOOP'
-import { Pod } from './pod'
+import { Object_ } from './Object'
 import { SharedObject } from './SharedObject'
-import { IPod, IPodOpt } from './system/platform/method/process/Start'
-import { Classes, GraphSpecs, Specs } from './types'
+import { Classes, GraphSpec, GraphSpecs, Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
@@ -23,7 +23,6 @@ import { IDeviceInfo } from './types/global/IDeviceInfo'
 import { IDisplayMediaOpt } from './types/global/IDisplayMedia'
 import { IDownloadDataOpt } from './types/global/IDownloadData'
 import { IDownloadURLOpt } from './types/global/IDownloadURL'
-import { IFileHandler } from './types/global/IFileHandler'
 import { IGamepad } from './types/global/IGamepad'
 import { IGeoPosition } from './types/global/IGeoPosition'
 import { IHTTPServer, IHTTPServerOpt } from './types/global/IHTTPServer'
@@ -51,8 +50,14 @@ import {
 import { IUserMediaOpt } from './types/global/IUserMedia'
 import { IWakeLock, IWakeLockOpt } from './types/global/IWakeLock'
 import { J } from './types/interface/J'
-import { U } from './types/interface/U'
 import { Unlisten } from './types/Unlisten'
+
+declare global {
+  interface FileSystemFileHandle {
+    name: string
+    getFile(): any
+  }
+}
 
 export type IO_INIT<T, K> = (opt: K) => T
 
@@ -90,12 +95,8 @@ export type APIHTTP = {
   fetch: (url: string, opt: RequestInit) => any
 }
 export type APIChannel = IO_STORAGE_API_INIT<IChannel, IChannelOpt>
-export type APIPod = IO_STORAGE_API_INIT<IPod, IPodOpt>
 
 export type API = {
-  init: {
-    boot: (root: HTMLElement) => System
-  }
   animation: {
     requestAnimationFrame: (callback: FrameRequestCallback) => number
     cancelAnimationFrame: (frame: number) => void
@@ -141,8 +142,10 @@ export type API = {
     >
   }
   file: {
-    showSaveFilePicker?: (opt: IFilePickerOpt) => Promise<IFileHandler[]>
-    showOpenFilePicker?: (opt: IFilePickerOpt) => Promise<IFileHandler[]>
+    showSaveFilePicker?: (opt: IFilePickerOpt) => Promise<FileSystemFileHandle>
+    showOpenFilePicker?: (
+      opt: IFilePickerOpt
+    ) => Promise<FileSystemFileHandle[]>
     downloadURL: (opt: IDownloadURLOpt) => Promise<void>
     downloadData: (opt: IDownloadDataOpt) => Promise<void>
   }
@@ -208,12 +211,14 @@ export type API = {
 
 export interface System {
   mounted: boolean
-  parent: HTMLElement | null
+  parent: System | null
+  path: string
   root: HTMLElement | null
   customEvent: Set<string>
   context: Context[]
   theme: Theme
   animated: boolean
+  graphs: Graph[]
   cache: {
     dragAndDrop: Dict<any>
     pointerCapture: Dict<any>
@@ -231,36 +236,44 @@ export interface System {
     gamepads: IGamepad[]
     pointers: Dict<IPointer>
   }
+  specs_: Object_<Specs>
   specs: Specs
+  specsCount: Dict<number>
   classes: Classes
   components: ComponentClasses
-  pods: Pod[]
   global: {
     ref: Dict<any>
     component: Dict<Component>
   }
-  graph: IO_SYSTEM_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
   api: API
-  method: {
-    registerComponent?: (component: Component) => string
-    createSlot?: () => [string, HTMLSlotElement]
-    showLongPress?: (
-      screenX: number,
-      screenY: number,
-      opt: {
-        stroke?: string
-        direction?: 'in' | 'out'
-      }
-    ) => void
-    captureGesture?: (
-      event: IOPointerEvent,
-      opt: {
-        lineWidth?: number
-        strokeStyle?: string
-      },
-      callback: (event: PointerEvent, track: Point[]) => void
-    ) => void
-  }
+  boot: (opt: BootOpt) => System
+  graph: IO_SYSTEM_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
+  newSpecId: () => string
+  hasSpec: (id: string) => boolean
+  emptySpec: (partial?: Partial<GraphSpec>) => GraphSpec
+  newSpec: (spec: GraphSpec) => GraphSpec
+  getSpec: (id: string) => GraphSpec
+  setSpec: (id: string, spec: GraphSpec) => void
+  forkSpec: (spec: GraphSpec) => [string, GraphSpec]
+  injectSpecs: (specs: GraphSpecs) => Dict<string>
+  registerComponent: (component: Component) => string
+  registerUnit(unit: Unit): void
+  showLongPress?: (
+    screenX: number,
+    screenY: number,
+    opt: {
+      stroke?: string
+      direction?: 'in' | 'out'
+    }
+  ) => void
+  captureGesture?: (
+    event: IOPointerEvent,
+    opt: {
+      lineWidth?: number
+      strokeStyle?: string
+    },
+    callback: (event: PointerEvent, track: Point[]) => void
+  ) => Unlisten
 }
 
 export type IFilePickerOpt = {
@@ -275,15 +288,16 @@ export type IFilePickerOpt = {
   multiple?: boolean
 }
 
-export type ComponentClass = {
+export type ComponentClass<T = any> = {
   id: string
-  new ($props: any, $system: System, $pod: Pod): Component
+  new ($props: T, $system: System): Component
 }
 
 export type ComponentClasses = Dict<ComponentClass>
 
 export interface BootOpt {
-  api?: API
+  path?: string
+  specs?: GraphSpecs
 }
 
 export const HTTPServer = (opt: IHTTPServerOpt): IHTTPServer => {
@@ -300,22 +314,6 @@ export const LocalChannel = (opt: IChannelOpt): IChannel => {
     postMessage(message: any): void {},
     addListener(event: string, callback: Callback): Unlisten {
       return NOOP
-    },
-  }
-}
-
-export const LocalPod = (opt: IPodOpt): IPod => {
-  return {
-    refUnit(id: string): U {
-      return // TODO
-    },
-
-    newGraph(bundle: BundleSpec): [Dict<string>, Graph, Unlisten] {
-      return // TODO
-    },
-
-    getSpecs(): GraphSpecs {
-      return {} // TODO
     },
   }
 }

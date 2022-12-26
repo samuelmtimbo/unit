@@ -1,3 +1,4 @@
+import { keys } from '../system/f/object/Keys/f'
 import { GraphSpec, Spec, Specs } from '../types'
 
 const HIRC = 1 // Human Information Retrieval Cost
@@ -78,7 +79,7 @@ export function graphComplexity(specs: Specs, graph: GraphSpec): number {
 export function graphMergeComplexity(graph: GraphSpec): number {
   const { merges = {} } = graph
 
-  return Object.keys(merges).length
+  return keys(merges).length
 }
 
 export function graphUnitComplexity(specs: Specs, graph: GraphSpec): number {
@@ -114,9 +115,5 @@ export function specComplexityById(specs: Specs, id: string): number {
 }
 
 export function specComplexity(spec: Spec): number {
-  return (
-    HIRC +
-    Object.keys(spec.inputs || {}).length +
-    Object.keys(spec.outputs || {}).length
-  )
+  return HIRC + keys(spec.inputs || {}).length + keys(spec.outputs || {}).length
 }

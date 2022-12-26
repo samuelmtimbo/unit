@@ -1,12 +1,12 @@
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
 import { sleep } from '../../../../sleep'
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 import { IBluetoothDeviceOpt } from '../../../../types/global/IBluetoothDevice'
 import { IBluetoothServer } from '../../../../types/global/IBluetoothServer'
 
-export function webBluetooth(window: Window, prefix: string): API['bluetooth'] {
+export function webBluetooth(window: Window, opt: BootOpt): API['bluetooth'] {
   const { navigator } = window
-  
+
   const bluetooth = {
     requestDevice: async (opt: IBluetoothDeviceOpt) => {
       // @ts-ignore
@@ -14,9 +14,6 @@ export function webBluetooth(window: Window, prefix: string): API['bluetooth'] {
         // show system UI on next tick to prevent possible
         // interference with triggering event propagation
         await sleep()
-
-        opt.optionalServices = opt.optionalServices || []
-        opt.optionalServices.push('00001805-0000-1000-8000-00805f9b34fb')
 
         try {
           // @ts-ignore

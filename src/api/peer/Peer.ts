@@ -1,6 +1,5 @@
 import { $, $Events } from '../../Class/$'
 import { APINotSupportedError } from '../../exception/APINotImplementedError'
-import { Pod } from '../../pod'
 import { System } from '../../system'
 
 export async function waitAllCandidates(
@@ -45,13 +44,8 @@ export class Peer extends $<PeerEvents> {
   private _video_transceiver: RTCRtpTransceiver
   private _audio_transceiver: RTCRtpTransceiver
 
-  constructor(
-    system: System,
-    pod: Pod,
-    initiatior: boolean,
-    config: RTCConfiguration
-  ) {
-    super(system, pod)
+  constructor(system: System, initiatior: boolean, config: RTCConfiguration) {
+    super(system)
 
     this._initiator = initiatior
 

@@ -1,9 +1,9 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Graph } from '../../../../Class/Graph'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { IO } from '../../../../types/IO'
+import { ID_SET_UNIT_PIN_DATA } from '../../../_ids'
 
 export interface I<T> {
   graph: Graph
@@ -16,7 +16,7 @@ export interface I<T> {
 export interface O<T> {}
 
 export default class SetUnitPinData<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['graph', 'id', 'type', 'name', 'data'],
@@ -30,7 +30,7 @@ export default class SetUnitPinData<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_SET_UNIT_PIN_DATA
     )
   }
 

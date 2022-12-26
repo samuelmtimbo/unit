@@ -1,9 +1,11 @@
-import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
+import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../system/f/object/DeepMerge/f'
+import { keys } from '../system/f/object/Keys/f'
 import { BaseSpec, GraphMergeSpec, GraphSpec, Spec, Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'
-import { clone, mapObjVK } from '../util/object'
+import { clone, mapObjVK, pathOrDefault } from '../util/object'
+import { emptyIO } from './emptyIO'
 import {
   applyGenerics,
   extractGenerics,
@@ -29,35 +31,37 @@ export type TypeTreeInterface = {
   output: Dict<TreeNode>
 }
 
-export const getSpecTypeInterfaceByPath = (
-  path: string,
+export type TypeTreeInterfaceCache = Dict<TypeTreeInterface>
+
+export const getSpecTypeInterfaceById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeInterface => {
-  const typeInterface = _getSpecTypeInterfaceByPath(path, specs, cache, visited)
+  const typeInterface = _getSpecTypeInterfaceById(id, specs, cache, visited)
   return typeTreeToType(typeInterface)
 }
 
-export const _getSpecTypeInterfaceByPath = (
-  path: string,
+export const _getSpecTypeInterfaceById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeInterface => {
   let typeInterface: TypeTreeInterface
-  if (cache[path]) {
-    typeInterface = cache[path]
+  if (cache[id]) {
+    typeInterface = cache[id]
   } else {
-    const spec = specs[path]
+    const spec = specs[id]
     if (!spec) {
-      throw new Error(`Spec not found ${path}`)
+      throw new Error(`Spec not found ${id}`)
     }
     typeInterface = _getSpecTypeInterface(spec, specs, cache, {
       ...visited,
-      [path]: true,
+      [id]: true,
     })
-    cache[path] = typeInterface
+    cache[id] = typeInterface
   }
   return typeInterface
 }
@@ -66,7 +70,7 @@ export const typeTreeToType = (
   typeTreeInterface: TypeTreeInterface
 ): TypeInterface => {
   const { input, output } = typeTreeInterface
-  const typeInterface: TypeInterface = { input: {}, output: {} }
+  const typeInterface: TypeInterface = emptyIO({}, {})
   for (const inputId in input) {
     const inputTree = input[inputId]
     typeInterface.input[inputId] = inputTree.value
@@ -87,8 +91,8 @@ export const typeTreeMapToTypeMap = (graphTypeTree: TypeTreeMap): TypeMap => {
 export const _getSpecTypeInterface = (
   spec: Spec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeInterface => {
   let typeInterface: TypeTreeInterface
   const base = !!spec.base
@@ -105,41 +109,41 @@ export const _getSpecTypeInterface = (
   return typeInterface
 }
 
-export const _getBaseTypeInterfaceByPath = (
-  path: string,
+export const _getBaseTypeInterfaceById = (
+  id: string,
   specs: Specs
 ): TypeTreeInterface => {
-  const spec = specs[path] as BaseSpec
+  const spec = specs[id] as BaseSpec
   return _getBaseTypeInterface(spec)
 }
 
 export const _getBaseTypeInterface = (spec: BaseSpec): TypeTreeInterface => {
-  const typeInterface: TypeTreeInterface = { input: {}, output: {} }
-  forEachKeyValue(spec.inputs, ({ type }, inputId) => {
+  const typeInterface: TypeTreeInterface = emptyIO({}, {})
+  forEachValueKey(spec.inputs, ({ type }, inputId) => {
     typeInterface.input[inputId] = getTree(type)
   })
-  forEachKeyValue(spec.outputs, ({ type }, outputId) => {
+  forEachValueKey(spec.outputs, ({ type }, outputId) => {
     typeInterface.output[outputId] = getTree(type)
   })
   return typeInterface
 }
 
-export const _getGraphTypeInterfaceByPath = (
-  path: string,
+export const _getGraphTypeInterfaceById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeInterface => {
-  // console.log('getGraphTypeInterfaceByPath', path)
-  const spec = specs[path] as GraphSpec
+  // console.log('_getGraphTypeInterfaceById', id)
+  const spec = specs[id] as GraphSpec
   return _getGraphTypeInterface(spec, specs, cache, visited)
 }
 
 export const getGraphTypeInterface = (
   spec: GraphSpec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ) => {
   const graphTypeTree = _getGraphTypeInterface(spec, specs, cache, visited)
   return typeTreeToType(graphTypeTree)
@@ -148,21 +152,21 @@ export const getGraphTypeInterface = (
 export const _getGraphTypeInterface = (
   spec: GraphSpec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeInterface => {
   // console.log('_getGraphTypeInterface')
-  const typeInterface: TypeTreeInterface = { input: {}, output: {} }
+  const typeInterface: TypeTreeInterface = emptyIO({}, {})
   const unitTypeMap = _getGraphTypeMap(spec, specs, cache, visited)
 
   const { inputs = {}, outputs = {} } = spec
 
-  forEachKeyValue(inputs, ({ plug, type }, inputId) => {
+  forEachValueKey(inputs, ({ plug, type }, inputId) => {
     let inputType = getTree('any')
     if (type) {
       inputType = getTree(type)
     } else {
-      forEachKeyValue(plug, ({ mergeId, unitId, pinId }) => {
+      forEachValueKey(plug, ({ mergeId, unitId, pinId }) => {
         let subPinType
         if (mergeId) {
           const merge = spec.merges[mergeId]
@@ -170,42 +174,56 @@ export const _getGraphTypeInterface = (
           subPinType =
             unitTypeMap[mergeInputPin.unitId].input[mergeInputPin.pinId]
         } else if (unitId && pinId) {
-          subPinType = unitTypeMap[unitId].input[pinId]
+          subPinType = pathOrDefault(
+            unitTypeMap,
+            [unitId, 'input', pinId],
+            undefined
+          )
         }
 
         if (subPinType) {
-          inputType = _moreSpecific(inputType, subPinType)
+          inputType = _mostSpecific(inputType, subPinType)
         }
       })
     }
     typeInterface.input[inputId] = inputType
   })
 
-  forEachKeyValue(outputs, ({ plug, type }, outputId) => {
+  forEachValueKey(outputs, ({ plug, type }, outputId) => {
     let outputType = getTree('any')
     if (type) {
       outputType = getTree(type)
     } else {
-      forEachKeyValue(plug, ({ mergeId, unitId, pinId }) => {
+      forEachValueKey(plug, ({ mergeId, unitId, pinId }) => {
         let subPinType
+
         if (mergeId) {
           const merge = spec.merges[mergeId]
+
           let type
+
           forEachPinOnMerge(merge, (unitId, kind, pinId) => {
             if (kind === 'output') {
               if (!type) {
                 type = unitTypeMap[unitId].output[pinId]
               } else {
-                type = _lessSpecific(type, unitTypeMap[unitId].output[pinId])
+                type = _leastSpecific(type, unitTypeMap[unitId].output[pinId])
               }
             }
           })
+
           subPinType = type
         } else if (unitId && pinId) {
-          subPinType = unitTypeMap[unitId].output[pinId]
+          // subPinType = unitTypeMap[unitId].output[pinId]
+          subPinType = pathOrDefault(
+            unitTypeMap,
+            [unitId, 'output', pinId],
+            undefined
+          )
         }
+
         if (subPinType) {
-          outputType = _moreSpecific(outputType, subPinType)
+          outputType = _mostSpecific(outputType, subPinType)
         }
       })
     }
@@ -215,8 +233,8 @@ export const _getGraphTypeInterface = (
   let i = 65
   const replacement: { [generic: string]: string } = {}
   const { input, output } = typeInterface
-  const inputPinIds = Object.keys(input).sort()
-  const outputPinIds = Object.keys(output).sort()
+  const inputPinIds = keys(input).sort()
+  const outputPinIds = keys(output).sort()
   for (const inputPinId of inputPinIds) {
     const type = input[inputPinId]
     const generics = _findGenerics(type)
@@ -242,15 +260,15 @@ export const _getGraphTypeInterface = (
 }
 
 export const createGenericTypeInterface = (
-  path: string,
+  id: string,
   specs: Specs
 ): TypeTreeInterface => {
-  // console.log('createGenericTypeInterface', path)
-  const spec = specs[path]
-  const typeInterface: TypeTreeInterface = { input: {}, output: {} }
+  // console.log('createGenericTypeInterface', id)
+  const spec = specs[id]
+  const typeInterface: TypeTreeInterface = emptyIO({}, {})
   let i = 0
-  const inputIds = Object.keys(spec.inputs)
-  const outputIds = Object.keys(spec.outputs)
+  const inputIds = keys(spec.inputs)
+  const outputIds = keys(spec.outputs)
   function register(kind: IO, pinId: string): void {
     typeInterface[kind][pinId] = getTree(`<${i}>`)
     i++
@@ -291,7 +309,7 @@ export const _isMoreSpecific = (a: TreeNode, b: TreeNode): boolean => {
   }
 }
 
-export const moreSpecific = (a: string, b: string): string => {
+export const mostSpecific = (a: string, b: string): string => {
   if (isMoreSpecific(a, b)) {
     return a
   } else {
@@ -299,7 +317,7 @@ export const moreSpecific = (a: string, b: string): string => {
   }
 }
 
-export const _moreSpecific = (a: TreeNode, b: TreeNode): TreeNode => {
+export const _mostSpecific = (a: TreeNode, b: TreeNode): TreeNode => {
   if (_isMoreSpecific(a, b)) {
     return a
   } else {
@@ -307,7 +325,7 @@ export const _moreSpecific = (a: TreeNode, b: TreeNode): TreeNode => {
   }
 }
 
-export const lessSpecific = (a: string, b: string): string => {
+export const leastSpecific = (a: string, b: string): string => {
   if (isMoreSpecific(a, b)) {
     return b
   } else {
@@ -315,7 +333,7 @@ export const lessSpecific = (a: string, b: string): string => {
   }
 }
 
-export const _lessSpecific = (a: TreeNode, b: TreeNode): TreeNode => {
+export const _leastSpecific = (a: TreeNode, b: TreeNode): TreeNode => {
   if (_isMoreSpecific(a, b)) {
     return b
   } else {
@@ -326,34 +344,32 @@ export const _lessSpecific = (a: TreeNode, b: TreeNode): TreeNode => {
 export type TypeTreeMap = Dict<TypeTreeInterface>
 export type TypeMap = Dict<TypeInterface>
 
-// export const normalizeGeneric = (typeMap: TypeMap): TypeMap => {}
-
-export const getGraphTypeMapByPath = (
-  path: string,
+export const getGraphTypeMapById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeMap => {
-  const typeTreeMap = _getGraphTypeMapByPath(path, specs, cache, visited)
+  const typeTreeMap = _getGraphTypeMapById(id, specs, cache, visited)
   return typeTreeMapToTypeMap(typeTreeMap)
 }
 
-export const _getGraphTypeMapByPath = (
-  path: string,
+export const _getGraphTypeMapById = (
+  id: string,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeMap => {
-  const spec = specs[path] as GraphSpec
-  // console.log('_getGraphTypeMapByPath', path)
-  return _getGraphTypeMap(spec, specs, cache, { ...visited, [path]: true })
+  const spec = specs[id] as GraphSpec
+  // console.log('_getGraphTypeMapById', id)
+  return _getGraphTypeMap(spec, specs, cache, { ...visited, [id]: true })
 }
 
 export const getGraphTypeMap = (
   spec: GraphSpec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeMap => {
   const typeTreeMap = _getGraphTypeMap(spec, specs, cache, visited)
   return typeTreeMapToTypeMap(typeTreeMap)
@@ -362,14 +378,14 @@ export const getGraphTypeMap = (
 export const _getGraphTypeMap = (
   spec: GraphSpec,
   specs: Specs,
-  cache: { [path: string]: TypeTreeInterface } = {},
-  visited: { [path: string]: true } = {}
+  cache: TypeTreeInterfaceCache = {},
+  visited: { [id: string]: true } = {}
 ): TypeTreeMap => {
   const typeMap: TypeTreeMap = {}
 
   const subgraphs = getSubgraphs(spec)
 
-  const { units = {}, merges = {}, outputs = {}, inputs = {} } = spec
+  const { units = {}, merges = {}, outputs = {}, inputs = {} } = clone(spec)
 
   subgraphs.forEach((subgraph: Subgraph) => {
     const { unit, merge } = subgraph
@@ -378,22 +394,21 @@ export const _getGraphTypeMap = (
 
     const replacement: Dict<Dict<string>> = {}
 
-    forEachKeyValue(unit, (_, unitId: string) => {
+    forEachValueKey(unit, (_, unitId: string) => {
       const unitSpec = units[unitId]
+
+      if (!unitSpec) {
+        return
+      }
+
       const { id, input = {} } = unitSpec
       let unitTypeInterface: TypeTreeInterface
       if (visited[id]) {
         unitTypeInterface = createGenericTypeInterface(id, specs)
       } else {
         unitTypeInterface = clone(
-          _getSpecTypeInterfaceByPath(id, specs, cache, visited)
+          _getSpecTypeInterfaceById(id, specs, cache, visited)
         )
-        // unitTypeInterface = _getSpecTypeInterfaceByPath(
-        //   path,
-        //   specs,
-        //   cache,
-        //   visited
-        // )
       }
 
       replacement[unitId] = {}
@@ -414,7 +429,7 @@ export const _getGraphTypeMap = (
           )
         }
       }
-      forEachKeyValue(unitTypeInterface.input, (type, inputId) => {
+      forEachValueKey(unitTypeInterface.input, (type, inputId) => {
         if (
           input[inputId] &&
           input[inputId].constant &&
@@ -431,17 +446,17 @@ export const _getGraphTypeMap = (
                 dataTypeTree,
                 type
               )
-              forEachKeyValue(extracted_generic, (value, generic) => {
+              forEachValueKey(extracted_generic, (value, generic) => {
                 replacement[unitId][generic] = value
               })
             }
           }
         }
       })
-      forEachKeyValue(unitTypeInterface.input, (type, inputId) => {
+      forEachValueKey(unitTypeInterface.input, (type, inputId) => {
         register(type, 'input', inputId)
       })
-      forEachKeyValue(unitTypeInterface.output, (type, outputId) =>
+      forEachValueKey(unitTypeInterface.output, (type, outputId) =>
         register(type, 'output', outputId)
       )
       typeMap[unitId] = unitTypeInterface
@@ -513,7 +528,7 @@ export const _getGraphTypeMap = (
       set_equivalent: (unitId: string, kind: IO, pinId: string) => void
     ): void => {
       const { plug } = spec[`${kind}s`][pinId]
-      forEachKeyValue(plug, ({ unitId, pinId, mergeId }) => {
+      forEachValueKey(plug, ({ unitId, pinId, mergeId }) => {
         if (mergeId) {
           set_merge_equivalence(mergeId, set_equivalent)
         } else if (unitId && pinId) {
@@ -522,38 +537,38 @@ export const _getGraphTypeMap = (
       })
     }
 
-    forEachKeyValue(merge, (_, mergeId: string) => {
+    forEachValueKey(merge, (_, mergeId: string) => {
       const set_equivalent = create_set_equivalent()
       set_merge_equivalence(mergeId, set_equivalent)
     })
 
-    forEachKeyValue(inputs, (_, inputId) => {
+    forEachValueKey(inputs, (_, inputId) => {
       const set_equivalent = create_set_equivalent()
       set_exposed_equivalence('input', inputId, set_equivalent)
     })
 
-    forEachKeyValue(outputs, (_, outputId) => {
+    forEachValueKey(outputs, (_, outputId) => {
       const set_equivalent = create_set_equivalent()
       set_exposed_equivalence('output', outputId, set_equivalent)
     })
 
     const specific = equivalence.map((equivalence_set) => {
-      let mostSpecific = undefined
+      let theMostSpecific = undefined
       for (const t of equivalence_set) {
-        if (mostSpecific === undefined) {
-          mostSpecific = t
+        if (theMostSpecific === undefined) {
+          theMostSpecific = t
         } else {
-          mostSpecific = moreSpecific(mostSpecific, t)
+          theMostSpecific = mostSpecific(theMostSpecific, t)
         }
       }
-      return mostSpecific as string
+      return theMostSpecific as string
     })
 
     const generic_to_substitute: Dict<string> = {}
     equivalence.forEach((equivalence_set, index) => {
       for (const t of equivalence_set) {
-        const mostSpecific = specific[index]
-        const extracted = extractGenerics(specs, mostSpecific, t)
+        const theMostSpecific = specific[index]
+        const extracted = extractGenerics(specs, theMostSpecific, t)
         for (const generic in extracted) {
           const extract = extracted[generic]
           let substitution: string
@@ -561,7 +576,7 @@ export const _getGraphTypeMap = (
             substitution = extract
           } else {
             const prev_substitution = generic_to_substitute[generic]
-            substitution = moreSpecific(extract, prev_substitution)
+            substitution = mostSpecific(extract, prev_substitution)
             if (substitution !== extract) {
               for (const g in generic_to_substitute) {
                 generic_to_substitute[g] = applyGenerics(
@@ -593,7 +608,7 @@ export const _getGraphTypeMap = (
 
     const substitute_replacement: Dict<string> = {}
     charCode = 65
-    forEachKeyValue(generic_to_substitute, (value, key) => {
+    forEachValueKey(generic_to_substitute, (value, key) => {
       const generics = findGenerics(value)
       for (const generic of generics) {
         if (!substitute_replacement[generic]) {
@@ -613,14 +628,14 @@ export const _getGraphTypeMap = (
     // console.log('specific', specific)
     // console.log('substitute_replacement', substitute_replacement)
 
-    forEachKeyValue(unit, (_, unitId: string) => {
+    forEachValueKey(unit, (_, unitId: string) => {
       const unitTypeMap = typeMap[unitId]
       const { input, output } = unitTypeMap
-      forEachKeyValue(input, (type, pinId) => {
+      forEachValueKey(input, (type, pinId) => {
         const nextType = _applyGenerics(type, generic_to_substitute)
         unitTypeMap.input[pinId] = nextType
       })
-      forEachKeyValue(output, (type, pinId) => {
+      forEachValueKey(output, (type, pinId) => {
         const nextType = _applyGenerics(type, generic_to_substitute)
         unitTypeMap.output[pinId] = nextType
       })
@@ -646,21 +661,21 @@ export const getSubgraphs = (spec: GraphSpec): Subgraph[] => {
 
   let i = 0
 
-  forEachKeyValue(merges, (merge: GraphMergeSpec, mergeId: string) => {
+  forEachValueKey(merges, (merge: GraphMergeSpec, mergeId: string) => {
     let subgraph: Subgraph = { unit: {}, merge: {} }
     subgraph.merge[mergeId] = true
     let merged = false
     let index = i
-    forEachKeyValue(merge, (_, unitId) => {
+    forEachValueKey(merge, (_, unitId) => {
       subgraph.unit[unitId] = true
       const unit_index = id_to_index.unit[unitId]
       if (unit_index !== undefined) {
         merged = true
         if (unit_index < index) {
-          forEachKeyValue(subgraph.unit, (_, unitId) => {
+          forEachValueKey(subgraph.unit, (_, unitId) => {
             id_to_index.unit[unitId] = unit_index
           })
-          forEachKeyValue(subgraph.merge, (_, mergeId) => {
+          forEachValueKey(subgraph.merge, (_, mergeId) => {
             id_to_index.merge[mergeId] = unit_index
           })
           subgraph = deepMerge(
@@ -680,7 +695,7 @@ export const getSubgraphs = (spec: GraphSpec): Subgraph[] => {
     index_to_subgraph[index] = subgraph
   })
 
-  forEachKeyValue(units, (_, unitId: string) => {
+  forEachValueKey(units, (_, unitId: string) => {
     if (id_to_index.unit[unitId] === undefined) {
       const subgraph: Subgraph = { unit: { [unitId]: true }, merge: {} }
       index_to_subgraph.push(subgraph)

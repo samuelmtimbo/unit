@@ -1,13 +1,13 @@
-import { Element } from '../../../../Class/Element'
+import { Element_ } from '../../../../Class/Element'
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
-import { C } from '../../../../types/interface/C'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { C } from '../../../../types/interface/C'
 import { Unlisten } from '../../../../types/Unlisten'
+import { ID_CHILD } from '../../../_ids'
 
 export interface I {
-  parent: Element
+  parent: Element_
   at: number
   done: any
 }
@@ -17,7 +17,7 @@ export interface O {
 }
 
 export default class Child extends Semifunctional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['parent', 'at'],
@@ -37,7 +37,7 @@ export default class Child extends Semifunctional<I, O> {
         },
       },
       system,
-      pod
+      ID_CHILD
     )
   }
 

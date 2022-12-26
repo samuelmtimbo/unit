@@ -5,14 +5,13 @@ import { getGlobalRef } from '../../../global'
 import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
 import { System } from '../../../system'
+import { mapObjVK } from '../../../util/object'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { GlobalRefSpec } from '../../GlobalRefSpec'
 import { IO } from '../../IO'
 import { stringifyPinData } from '../../stringifyPinData'
 import { Unlisten } from '../../Unlisten'
-import { mapObjVK } from '../../../util/object'
-import { $P } from './$P'
 import { $U, $U_C, $U_R, $U_W } from './$U'
 import { Async } from './Async'
 
@@ -44,7 +43,7 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
 
     $push({ id, data }: { id: string; data: any }): void {
       const classes = unit.__system.classes
-      const specs = { ...unit.__system.specs, ...unit.__pod.specs }
+      const specs = unit.__system.specs
       const _data = evaluate(data, specs, classes)
       unit.push(id, _data)
     },
@@ -56,7 +55,7 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
 
     $setPinData({ type, pinId, data }: { type: IO; pinId: string; data: any }) {
       const classes = unit.__system.classes
-      const specs = { ...unit.__system.specs, ...unit.__pod.specs }
+      const specs = unit.__system.specs
       const _data = evaluate(data, specs, classes)
       unit.setPinData(type, pinId, _data)
     },
@@ -116,11 +115,6 @@ export const AsyncURef = (unit: Unit): $U_R => {
       const { __global_id, __ } = data
       const $ = $$refGlobalObj(__system, __global_id, __)
       return proxyWrap($, __)
-    },
-    $refPod(data: {}): $P {
-      const pod = unit.refPod()
-      const $pod = Async(pod, ['$PO'])
-      return $pod
     },
   }
 }

@@ -12,7 +12,8 @@ export default function classnames(...args: any[]): string {
       classes.push(arg)
     } else if (Array.isArray(arg)) {
       if (arg.length) {
-        const inner = classnames.apply(null, arg)
+        const inner = classnames(arg)
+
         if (inner) {
           classes.push(inner)
         }

@@ -1,5 +1,5 @@
 {
-  "name": "canvas google spinner",
+  "name": "canvas spinner",
   "inputs": {},
   "outputs": {},
   "units": {
@@ -47,7 +47,7 @@
         }
       }
     },
-    "googlespinner": {
+    "canvasspinner": {
       "id": "9abd5979-c5df-4eda-bb33-931c70574026",
       "input": {
         "d": {}
@@ -88,7 +88,7 @@
           "[]": true
         }
       },
-      "googlespinner": {
+      "canvasspinner": {
         "input": {
           "d": true
         }
@@ -100,7 +100,7 @@
           "a": true
         }
       },
-      "googlespinner": {
+      "canvasspinner": {
         "output": {
           "d": true
         }
@@ -132,7 +132,7 @@
     }
   },
   "metadata": {
-    "complexity": 135,
+    "complexity": 239,
     "tags": [
       "platform",
       "core",

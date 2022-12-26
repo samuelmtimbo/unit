@@ -1,12 +1,11 @@
-import { Pod } from '../pod'
 import { ComponentClass, System } from '../system'
 import { Component } from './component'
 import parentElement from './platform/web/parentElement'
 
 export function parentClass(): ComponentClass {
   class Parent extends Component<any, any, any> {
-    constructor($props: any, $system: System, $pod: Pod) {
-      super($props, $system, $pod)
+    constructor($props: any, $system: System) {
+      super($props, $system)
 
       const $element = parentElement($system)
 
@@ -17,12 +16,10 @@ export function parentClass(): ComponentClass {
   return Parent
 }
 
-export function parentComponent(
-  $props: any,
-  $system: System,
-  $pod: Pod
-): Component {
+export function parentComponent($props: any, $system: System): Component {
   const Parent = parentClass()
-  const component = new Parent($props, $system, $pod)
+
+  const component = new Parent($props, $system)
+
   return component
 }

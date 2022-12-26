@@ -19,19 +19,19 @@ export const getTransform = (zoom: Zoom): string => {
 }
 
 export const zoomTransformCentered = (
-  k: number,
+  z: number,
   width: number,
   height: number
 ) => {
-  return zoomTransformCenteredAt(width / 2, height / 2, k, width, height)
+  return zoomTransformCenteredAt(width / 2, height / 2, z, width, height)
 }
 
 export const translate = (zoom: Zoom, x: number, y: number): Zoom => {
   return { z: zoom.z, x: zoom.x - x / zoom.z, y: zoom.y - y / zoom.z }
 }
 
-export const scale = (zoom: Zoom, k: number): Zoom => {
-  return { z: k, x: zoom.x * k, y: zoom.y * k }
+export const scale = (zoom: Zoom, z: number): Zoom => {
+  return { z: z, x: zoom.x * z, y: zoom.y * z }
 }
 
 export const zoomInvert = (

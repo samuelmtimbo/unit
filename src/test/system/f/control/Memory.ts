@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Memory from '../../../../system/f/control/Memory'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const memory = new Memory(system, pod)
+const memory = new Memory(system)
 
 memory.play()
 

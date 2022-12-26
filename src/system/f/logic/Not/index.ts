@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_NOT_0 } from '../../../_ids'
 
 export interface I {
   a: boolean
@@ -11,7 +11,7 @@ export interface O {
 }
 
 export default class Not extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a'],
@@ -19,7 +19,7 @@ export default class Not extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_NOT_0
     )
   }
 
