@@ -1,10 +1,10 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Pod } from '../../../../pod'
 import { cloneBundle } from '../../../../spec/cloneBundle'
 import { System } from '../../../../system'
 import { G } from '../../../../types/interface/G'
 import { UnitBundle } from '../../../../types/UnitBundle'
+import { ID_REMOVE_UNIT } from '../../../_ids'
 
 export interface I<T> {
   graph: G
@@ -16,7 +16,7 @@ export interface O<T> {
 }
 
 export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['id', 'graph'],
@@ -30,7 +30,7 @@ export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_REMOVE_UNIT
     )
   }
 

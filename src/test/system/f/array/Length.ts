@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Length from '../../../../system/f/array/Length'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const length = new Length(system, pod)
+const length = new Length(system)
 
 length.play()
 

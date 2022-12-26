@@ -1,8 +1,7 @@
-import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { PropHandler } from '../../../../../client/propHandler'
-import { Pod } from '../../../../../pod'
+import applyStyle from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Style } from '../../../Props'
 
@@ -64,8 +63,8 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
     },
   }
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       id,

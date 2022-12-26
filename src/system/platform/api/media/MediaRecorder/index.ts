@@ -1,9 +1,9 @@
 import { $ } from '../../../../../Class/$'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
 import { ST } from '../../../../../types/interface/ST'
-import { Pod } from '../../../../../pod'
-import { System } from '../../../../../system'
+import { ID_MEDIA_RECORDER } from '../../../../_ids'
 
 export type I = {
   stream: ST
@@ -19,7 +19,7 @@ export type O = {
 export default class _MediaRecorder extends Semifunctional<I, O> {
   private _media_recorder: MediaRecorder
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['opt', 'stream'],
@@ -40,7 +40,7 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
         },
       },
       system,
-      pod
+      ID_MEDIA_RECORDER
     )
 
     this.addListener('destroy', () => {
@@ -66,7 +66,7 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
           async blob(): Promise<Blob> {
             return data
           }
-        })(this.__system, this.__pod)
+        })(this.__system)
 
         this._output.blob.push(_blob)
       }

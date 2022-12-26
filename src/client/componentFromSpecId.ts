@@ -1,20 +1,17 @@
-import { Pod } from '../pod'
 import { System } from '../system'
-import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { Component } from './component'
 import { componentClassFromSpecId } from './componentClassFromSpecId'
 
 export function componentFromSpecId(
   system: System,
-  pod: Pod,
-  specs: Specs,
   id: string,
-  props: Dict<any>
+  props: Dict<any>,
+  sub_component_map: Dict<Component> = {}
 ): Component {
-  const Class = componentClassFromSpecId(system, specs, id)
+  const Class = componentClassFromSpecId(system, id, {}, sub_component_map)
 
-  const component = new Class(props, system, pod)
-  
+  const component = new Class(props, system)
+
   return component
 }

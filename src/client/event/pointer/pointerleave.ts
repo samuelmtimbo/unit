@@ -1,5 +1,5 @@
 import { IOPointerEvent, listenPointerEvent } from '.'
-import Listenable from '../../Listenable'
+import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 
 export function makePointerLeaveListener(

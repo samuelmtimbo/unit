@@ -1,5 +1,6 @@
 import { getStroke } from 'perfect-freehand'
 import { System } from '../../system'
+import { Unlisten } from '../../types/Unlisten'
 import namespaceURI from '../component/namespaceURI'
 import { _addEventListener } from '../event'
 import { IOPointerEvent } from '../event/pointer'
@@ -58,10 +59,10 @@ export function attachGesture(system: System): void {
       strokeStyle?: string
     } = {},
     callback: (event: PointerEvent, track: Point[]) => void
-  ): void => {
+  ): Unlisten => {
     const { pointerId, screenX, screenY } = event
 
-    // $root.setPointerCapture(pointerId)
+    // svg.setPointerCapture(pointerId)
 
     const path = createElementNS(namespaceURI, 'path')
 
@@ -99,8 +100,11 @@ export function attachGesture(system: System): void {
       // console.log('attachGesture', 'pointerUpListener')
 
       const { pointerId: _pointerId } = _event
+
       if (_pointerId === pointerId) {
         svg.removeChild(path)
+
+        // svg.releasePointerCapture(pointerId)
 
         unlistenPointerMove()
         unlistenPointerUp()
@@ -111,17 +115,24 @@ export function attachGesture(system: System): void {
 
     const unlistenPointerMove = _addEventListener(
       'pointermove',
-      root,
+      root.shadowRoot,
       pointerMoveListener,
       true
     )
     const unlistenPointerUp = _addEventListener(
       'pointerup',
-      root,
+      root.shadowRoot,
       pointerUpListener,
       true
     )
+
+    return () => {
+      unlistenPointerMove()
+      unlistenPointerUp()
+
+      svg.removeChild(path)
+    }
   }
 
-  system.method.captureGesture = captureGesture
+  system.captureGesture = captureGesture
 }

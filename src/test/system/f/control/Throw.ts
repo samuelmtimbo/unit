@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Throw from '../../../../system/f/control/Throw'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const t = new Throw(system, pod)
+const t = new Throw(system)
 
 t.play()
 

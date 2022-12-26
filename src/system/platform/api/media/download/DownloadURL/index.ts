@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
+import { ID_DOWNLOAD_URL } from '../../../../../_ids'
 
 export type I = {
   url: string
@@ -11,7 +11,7 @@ export type I = {
 export type O = {}
 
 export default class DownloadURL extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['url', 'name'],
@@ -19,7 +19,7 @@ export default class DownloadURL extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_DOWNLOAD_URL
     )
   }
 

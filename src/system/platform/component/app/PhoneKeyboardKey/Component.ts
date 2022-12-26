@@ -11,13 +11,12 @@ import {
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { userSelect } from '../../../../../client/util/style/userSelect'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../../component/Div/Component'
 import Icon from '../../../component/Icon/Component'
-import TextDiv from '../../../core/component/TextDiv/Component'
+import TextBox from '../../../core/component/TextBox/Component'
 
 export interface Props {
   style?: Dict<string>
@@ -49,11 +48,11 @@ export const DEFAULT_STYLE = {
 }
 
 export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
-  private _key_text: TextDiv
+  private _key_text: TextBox
   private _key: Div
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { key = 'a', alt = '', shiftKey = false, style = {} } = this.$props
 
@@ -61,7 +60,7 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
 
     const icon = keyToIcon[key]
 
-    const key_text = new TextDiv(
+    const key_text = new TextBox(
       {
         value: key_text_value,
         style: {
@@ -70,12 +69,11 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
           ...userSelect('none'),
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._key_text = key_text
 
-    const alt_key_text = new TextDiv(
+    const alt_key_text = new TextBox(
       {
         value: icon ? undefined : alt,
         style: {
@@ -88,16 +86,14 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
           ...userSelect('none'),
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
 
     const key_component = new Div(
       {
         style: { ...DEFAULT_STYLE, ...style },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     key_component.appendChild(key_text)
     key_component.appendChild(alt_key_text)
@@ -133,8 +129,7 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
             height: '18px',
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
 
       key_component.setChildren([icon_component])
@@ -188,18 +183,19 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
   private _emit_key = (key: string) => {
     const { shiftKey = false, altKey = false } = this.$props
     const _key = shiftKey && isChar(key) ? key.toUpperCase() : key
-    emitPhoneKey(_key, shiftKey, altKey)
+    emitPhoneKey(this.$system, _key, shiftKey, altKey)
   }
 }
 
 export function emitPhoneKey(
+  system: System,
   key: string,
   shiftKey: boolean,
   altKey: boolean
 ): void {
   const keyCode = keyToKeyCode[key]
   const code = keyToCode[key]
-  emitKeyboardEvent('keydown', {
+  emitKeyboardEvent(system, 'keydown', {
     key,
     keyCode,
     code,
@@ -210,7 +206,7 @@ export function emitPhoneKey(
     bubbles: true,
   })
   // TODO 'keypress' should not be fired if key is a control key (e.g. ALT, CTRL, SHIFT, ESC)
-  emitKeyboardEvent('keypress', {
+  emitKeyboardEvent(system, 'keypress', {
     key,
     keyCode,
     code,
@@ -220,7 +216,7 @@ export function emitPhoneKey(
     metaKey: false,
     bubbles: true,
   })
-  emitKeyboardEvent('keyup', {
+  emitKeyboardEvent(system, 'keyup', {
     key,
     keyCode,
     code,

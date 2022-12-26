@@ -1,13 +1,12 @@
 import { $, $Events } from '../../../../Class/$'
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
+import { System } from '../../../../system'
 import { EE } from '../../../../types/interface/EE'
 import { V } from '../../../../types/interface/V'
-import { Pod } from '../../../../pod'
-import { System } from '../../../../system'
 import { Unlisten } from '../../../../types/Unlisten'
-import callAll from '../../../../util/call/callAll'
-import isEqual from '../../../f/comparisson/Equals/f'
+import { callAll } from '../../../../util/call/callAll'
+import { ID_GAMEPAD } from '../../../_ids'
 
 export interface I {
   i: number
@@ -43,23 +42,23 @@ export default class _Gamepad extends Semifunctional<I, O> {
 
   private _unlisten: Unlisten
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['i'],
         fo: [],
         i: ['done'],
-        o: ['pad'],
+        o: ['state'],
       },
       {
         output: {
-          pad: {
+          state: {
             ref: true,
           },
         },
       },
       system,
-      pod
+      ID_GAMEPAD
     )
   }
 
@@ -119,16 +118,17 @@ export default class _Gamepad extends Semifunctional<I, O> {
         implements V<Gamepad_J>, EE<GamePad_EE>
       {
         private _state: Gamepad_J = {
-          buttons: new Array(N_BUTTONS).fill(false, 0, N_BUTTONS - 1),
-          axes: new Array(N_AXIS).fill(0, 0, N_AXIS - 1),
+          buttons: new Array(N_BUTTONS).fill(false, 0, N_BUTTONS),
+          axes: new Array(N_AXIS).fill(0, 0, N_AXIS),
         }
         private _frame: number | null = null
 
-        constructor(__system, __pod) {
-          super(__system, __pod)
+        constructor(__system) {
+          super(__system)
         }
 
         async read(): Promise<Gamepad_J> {
+          console.log(this._state)
           return this._state
         }
 
@@ -148,12 +148,9 @@ export default class _Gamepad extends Semifunctional<I, O> {
 
           const prevButtonsPressed = [...this._state.buttons]
           const gamepad = getGamepad(i)
+
           const buttonsPressed = gamepad.buttons.map((b) => b.pressed)
           this._state.buttons = buttonsPressed
-
-          if (!isEqual(prevButtonsPressed, buttonsPressed)) {
-            console.log('AHA')
-          }
 
           for (let i = 0; i < N_BUTTONS; i++) {
             if (buttonsPressed[i] && !prevButtonsPressed[i]) {
@@ -191,6 +188,7 @@ export default class _Gamepad extends Semifunctional<I, O> {
 
           if (this._frame !== undefined) {
             cancelAnimationFrame(this._frame)
+
             this._frame = undefined
           }
         }
@@ -216,7 +214,7 @@ export default class _Gamepad extends Semifunctional<I, O> {
             unlisten()
           }
         }
-      })(this.__system, this.__pod)
+      })(this.__system)
 
       this._output.state.push(pad)
     }

@@ -3,13 +3,13 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { countEvent } from '../../util'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec = require('../../../system/core/control/Pick/spec.json')
 
 const Pick = fromSpec<{ a: any; b: any; c: boolean }, { a: any }>(spec, _specs)
 
-const pick = new Pick(system, pod)
+const pick = new Pick(system)
 
 false && watchUnitAndLog(pick)
 false && watchGraphAndLog(pick)

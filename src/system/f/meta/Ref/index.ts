@@ -1,12 +1,12 @@
 import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
-import { J } from '../../../../types/interface/J'
-import { V } from '../../../../types/interface/V'
-import { Pod } from '../../../../pod'
 import { staticfy } from '../../../../spec/staticfy'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { J } from '../../../../types/interface/J'
+import { V } from '../../../../types/interface/V'
 import { Unlisten } from '../../../../types/Unlisten'
+import { ID_REF } from '../../../_ids'
 
 export interface I<T extends Dict<any>, K extends keyof T> {
   obj: J<T>
@@ -21,7 +21,7 @@ export default class Ref<T, K extends keyof T> extends Functional<
   I<T, K>,
   O<T, K>
 > {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['obj', 'key'],
@@ -40,7 +40,7 @@ export default class Ref<T, K extends keyof T> extends Functional<
         },
       },
       system,
-      pod
+      ID_REF
     )
   }
 
@@ -74,7 +74,7 @@ export default class Ref<T, K extends keyof T> extends Functional<
       async write(data: any): Promise<void> {
         return obj.set(key, data)
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     done({ value })
   }

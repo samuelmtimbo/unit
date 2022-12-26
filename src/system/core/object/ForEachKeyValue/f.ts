@@ -1,6 +1,6 @@
 import { Dict } from '../../../../types/Dict'
 
-export default function forEachKeyValue<T extends Dict<any>>(
+export default function forEachValueKey<T extends Dict<any>>(
   obj: T,
   callback: <K extends keyof T>(value: T[K], key: K) => void
 ) {

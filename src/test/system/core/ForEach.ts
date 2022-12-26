@@ -6,12 +6,12 @@ import {
 } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec = require('../../../system/core/array/ForEach/spec.json')
 const ForEach = fromSpec(spec, _specs)
 
-const forEach = new ForEach(system, pod)
+const forEach = new ForEach(system)
 
 false && watchUnitAndLog(forEach)
 false && watchGraphAndLog(forEach)

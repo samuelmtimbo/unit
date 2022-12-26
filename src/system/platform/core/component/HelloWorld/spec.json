@@ -4,7 +4,7 @@
     "style": {
       "plug": {
         "0": {
-          "unitId": "widthtext",
+          "unitId": "textbox",
           "pinId": "style"
         }
       }
@@ -12,14 +12,17 @@
   },
   "outputs": {},
   "units": {
-    "widthtext": {
-      "id": "731b92e2-6276-41db-a1e8-857afb07ca44",
+    "textbox": {
+      "id": "9988a56e-6bee-46c8-864c-e351d84bc7e2",
       "input": {
         "value": {
           "constant": true,
           "data": "'hello world'"
         },
-        "style": {}
+        "style": {
+          "constant": true,
+          "data": "{textAlign:'center',fontFamily:'Inconsolata',display:'flex',justifyContent:'center',alignItems:'center',fontSize:'20vw'}"
+        }
       },
       "output": {},
       "metadata": {
@@ -33,52 +36,21 @@
   "merges": {},
   "component": {
     "subComponents": {
-      "widthtext": {
+      "textbox": {
         "children": []
       }
     },
     "children": [
-      "widthtext"
+      "textbox"
     ],
-    "defaultWidth": 200,
-    "defaultHeight": 200
+    "defaultWidth": 420,
+    "defaultHeight": 420
   },
   "metadata": {
     "description": "text box saying 'hello world'",
     "icon": "sign",
-    "complexity": 80,
-    "position": {
-      "merge": {
-        "1": {
-          "x": -104,
-          "y": -28
-        },
-        "2": {
-          "x": -26,
-          "y": 58
-        },
-        "3": {
-          "x": -76,
-          "y": 62
-        },
-        "4": {
-          "x": 53,
-          "y": -54
-        },
-        "5": {
-          "x": -11,
-          "y": -78
-        },
-        "6": {
-          "x": -113,
-          "y": 5
-        },
-        "7": {
-          "x": -50,
-          "y": -68
-        }
-      }
-    },
+    "complexity": 250,
+    "position": {},
     "tags": [
       "platform",
       "core",

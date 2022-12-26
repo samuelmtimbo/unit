@@ -1,6 +1,6 @@
 import { MIMO } from '../../../../MIMO'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_STRING_TO_FLOAT } from '../../../_ids'
 
 export interface I {
   str: string
@@ -11,7 +11,7 @@ export interface O {
 }
 
 export default class StringToFloat extends MIMO<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['str'],
@@ -19,7 +19,7 @@ export default class StringToFloat extends MIMO<I, O> {
       },
       {},
       system,
-      pod
+      ID_STRING_TO_FLOAT
     )
   }
 

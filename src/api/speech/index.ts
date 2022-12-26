@@ -7,7 +7,7 @@ import {
   ISpeechRecognitionOpt,
 } from '../../types/global/ISpeechRecognition'
 import { Unlisten } from '../../types/Unlisten'
-import callAll from '../../util/call/callAll'
+import { callAll } from '../../util/call/callAll'
 
 export type SpeechOpt = {
   grammar?: string

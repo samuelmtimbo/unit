@@ -1,8 +1,8 @@
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 import { Size } from '../../../util/geometry'
 import { measureText } from '../../../util/web/measureText'
 
-export function webText(window: Window, prefix: string): API['text'] {
+export function webText(window: Window, opt: BootOpt): API['text'] {
   const { document } = window
 
   const canvas: HTMLCanvasElement = document.createElement('canvas')

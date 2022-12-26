@@ -1,7 +1,7 @@
 import { ShouldNeverHappenError } from '../exception/ShouldNeverHappenError'
 import { Unlisten } from '../types/Unlisten'
-import callAll from '../util/call/callAll'
-import Listenable from './Listenable'
+import { callAll } from '../util/call/callAll'
+import { Listenable } from './Listenable'
 import { Listener } from './Listener'
 
 export function addListener(

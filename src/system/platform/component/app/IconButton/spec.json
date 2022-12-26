@@ -1,74 +1,284 @@
 {
   "name": "icon button",
+  "inputs": {
+    "icon": {
+      "plug": {
+        "0": {
+          "unitId": "default0",
+          "pinId": "a"
+        }
+      },
+      "type": "string",
+      "ref": false
+    },
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a"
+        }
+      },
+      "type": "object",
+      "ref": false
+    },
+    "active": {
+      "plug": {
+        "0": {
+          "unitId": "setifdefault0",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean",
+      "ref": false
+    },
+    "activeColor": {
+      "plug": {
+        "0": {
+          "unitId": "setifdefault0",
+          "pinId": "value"
+        }
+      },
+      "type": "string",
+      "ref": false
+    },
+    "hoverColor": {
+      "plug": {
+        "0": {
+          "unitId": "setifdefault",
+          "pinId": "value"
+        }
+      },
+      "type": "string",
+      "ref": false
+    },
+    "disabled": {
+      "plug": {
+        "0": {
+          "unitId": "setifdefault1",
+          "pinId": "test"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "boolean",
+      "ref": false
+    },
+    "disabledColor": {
+      "plug": {
+        "0": {
+          "unitId": "setifdefault1",
+          "pinId": "value"
+        }
+      },
+      "defaultIgnored": true,
+      "type": "string",
+      "ref": false
+    }
+  },
+  "outputs": {},
   "units": {
     "icon": {
       "id": "63a417e5-d354-4b39-9ebd-05f55e70de7b",
-      "output": {}
+      "output": {},
+      "input": {
+        "style": {},
+        "icon": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -72,
+          "y": -51
+        }
+      }
     },
     "setifdefault": {
-      "id": "887e66b8-a08e-11ea-bfea-b3687d92658a",
+      "id": "7b344491-48a2-46e1-949e-56805bebe3da",
       "input": {
         "default": {
           "data": "'#C2C2C2'"
         },
         "obj": {
-          "data": "{fill:'#7E7E7E',cursor:'pointer'}"
+          "data": "{color:'#7E7E7E',cursor:'pointer'}"
+        },
+        "test": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 191,
+          "y": -3
         }
       }
     },
     "setifdefault0": {
-      "id": "887e66b8-a08e-11ea-bfea-b3687d92658a",
+      "id": "7b344491-48a2-46e1-949e-56805bebe3da",
       "input": {
         "default": {
           "data": "'#787878'"
+        },
+        "test": {},
+        "value": {},
+        "obj": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 138,
+          "y": 103
         }
       }
     },
     "setifdefault1": {
-      "id": "887e66b8-a08e-11ea-bfea-b3687d92658a",
+      "id": "7b344491-48a2-46e1-949e-56805bebe3da",
       "input": {
         "default": {
           "data": "'#363636'"
+        },
+        "test": {},
+        "value": {},
+        "obj": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 14,
+          "y": 119
         }
       }
     },
     "true": {
-      "id": "984c4a44-86c7-464c-ad48-4759598c3be3"
+      "id": "984c4a44-86c7-464c-ad48-4759598c3be3",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "true": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 92,
+          "y": -33
+        }
+      }
     },
     "false": {
-      "id": "b4d20f6f-32dc-4d04-97d6-69518976bdea"
+      "id": "b4d20f6f-32dc-4d04-97d6-69518976bdea",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "false": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 104,
+          "y": -80
+        }
+      }
     },
     "merge": {
-      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453"
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -88,
+          "y": 60
+        }
+      }
     },
     "default": {
       "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
       "input": {
         "d": {
           "data": "{}"
+        },
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -194,
+          "y": 85
         }
       }
     },
-    "wdhqnfmvb": {
+    "onpointerenter": {
       "id": "c0bb493a-af78-11ea-b6fa-3b893b757a39",
       "input": {
         "element": {}
       },
       "output": {
         "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -7,
+          "y": -33
+        }
       }
     },
-    "zvjhcgzny": {
+    "onpointerleave": {
       "id": "c7dba94e-af78-11ea-b7d7-47e14ca215b5",
       "input": {
         "element": {}
       },
       "output": {
         "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -5,
+          "y": -86
+        }
+      }
+    },
+    "default0": {
+      "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {},
+        "d": {
+          "constant": true,
+          "data": "\"unit\""
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -181,
+          "y": -87
+        }
       }
     }
   },
   "merges": {
+    "0": {
+      "default0": {
+        "output": {
+          "a": true
+        }
+      },
+      "icon": {
+        "input": {
+          "icon": true
+        }
+      }
+    },
     "2": {
       "false": {
         "output": {
@@ -146,8 +356,8 @@
         }
       }
     },
-    "fagmcgtr": {
-      "wdhqnfmvb": {
+    "8": {
+      "onpointerenter": {
         "input": {
           "element": true
         }
@@ -157,14 +367,14 @@
           "_self": true
         }
       },
-      "zvjhcgzny": {
+      "onpointerleave": {
         "input": {
           "element": true
         }
       }
     },
-    "uwisasxue": {
-      "zvjhcgzny": {
+    "9": {
+      "onpointerleave": {
         "output": {
           "event": true
         }
@@ -176,7 +386,7 @@
       }
     },
     "cuurfvll": {
-      "wdhqnfmvb": {
+      "onpointerenter": {
         "output": {
           "event": true
         }
@@ -188,89 +398,23 @@
       }
     }
   },
-  "inputs": {
-    "icon": {
-      "plug": {
-        "0": {
-          "unitId": "icon",
-          "pinId": "icon"
-        }
-      },
-      "type": "string"
-    },
-    "style": {
-      "plug": {
-        "0": {
-          "unitId": "default",
-          "pinId": "a"
-        }
-      },
-      "type": "object"
-    },
-    "active": {
-      "plug": {
-        "0": {
-          "unitId": "setifdefault0",
-          "pinId": "test"
-        }
-      },
-      "type": "boolean"
-    },
-    "activeColor": {
-      "plug": {
-        "0": {
-          "unitId": "setifdefault0",
-          "pinId": "value"
-        }
-      },
-      "type": "string"
-    },
-    "hoverColor": {
-      "plug": {
-        "0": {
-          "unitId": "setifdefault",
-          "pinId": "value"
-        }
-      },
-      "type": "string"
-    },
-    "disabled": {
-      "plug": {
-        "0": {
-          "unitId": "setifdefault1",
-          "pinId": "test"
-        }
-      },
-      "type": "boolean"
-    },
-    "disabledColor": {
-      "plug": {
-        "0": {
-          "unitId": "setifdefault1",
-          "pinId": "value"
-        }
-      },
-      "type": "string"
-    }
-  },
-  "outputs": {},
+  "render": true,
   "component": {
-    "defaultWidth": 60,
-    "defaultHeight": 60,
     "subComponents": {
       "icon": {
-        "width": 60,
-        "height": 60
+        "children": []
       }
     },
     "children": [
       "icon"
-    ]
+    ],
+    "defaultWidth": 60,
+    "defaultHeight": 60
   },
   "metadata": {
     "icon": null,
     "description": "",
-    "complexity": 73,
+    "complexity": 172,
     "tags": [
       "platform",
       "component",
@@ -278,7 +422,5 @@
     ]
   },
   "id": "65759894-7d11-11ea-a838-93e14e650d65",
-  "type": "`U`&`C`&`G`",
-  "system": true,
-  "render": true
+  "type": "`U`&`G`"
 }

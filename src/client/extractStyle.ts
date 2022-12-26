@@ -1,16 +1,34 @@
+import { isFrameRelativeValue } from '../isFrameRelative'
+import Iframe from '../system/platform/component/Iframe/Component'
 import { Style } from '../system/platform/Props'
+import { Dict } from '../types/Dict'
+import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
+import { IOElement } from './IOElement'
 import { Size } from './util/geometry'
 
 export function extractStyle(
   component: Component,
   measureText: (text: string, fontSize: number) => Size
 ): Style {
-  const style = {}
-
   const { $element } = component
 
-  if ($element instanceof Text) {
+  let _element = $element
+
+  // AD HOC
+  if (component instanceof Iframe) {
+    _element = component._iframe_el
+  }
+
+  return _extractStyle(component, _element, measureText)
+}
+
+export function _extractStyle(
+  component: Component,
+  element: IOElement,
+  measureText: (text: string, fontSize: number) => Size
+): Style {
+  if (element instanceof Text) {
     const fontSize = component.getFontSize()
 
     const { textContent } = component.$element
@@ -25,25 +43,81 @@ export function extractStyle(
     }
   }
 
-  for (const key in $element.style) {
-    const value = $element.style[key]
+  const style = rawExtractStyle(element)
 
-    if (value && typeof value === 'string' && isNaN(parseInt(key))) {
-      style[key] = value
+  if (style['display'] === 'contents') {
+    return {
+      width: '100%',
+      height: '100%',
     }
   }
 
-  if ($element instanceof HTMLCanvasElement) {
-    if (style['width'] === undefined) {
-      const { width } = $element
+  if (element instanceof HTMLCanvasElement) {
+    const treatProp = (name: 'width' | 'height') => {
+      const prop = component.getProp(name)
 
-      style['width'] = `${width}px`
+      if (prop !== undefined) {
+        if (typeof prop === 'string') {
+          if (isFrameRelativeValue(prop)) {
+            const prop_num = prop.substring(0, prop.length - 2)
+
+            style[name] = `${prop_num}%`
+          } else {
+            // TODO
+          }
+        } else {
+          style[name] = `${prop}px`
+        }
+      } else {
+        style[name] = `${element[name]}px`
+      }
     }
 
-    if (style['height'] === undefined) {
-      const { height } = $element
+    treatProp('width')
+    treatProp('height')
+  }
 
-      style['height'] = `${height}px`
+  if (element instanceof SVGPathElement) {
+    const d = element.getAttribute('d')
+
+    const bb = getPathBoundingBox(d)
+
+    style['width'] = `${bb.width}px`
+    style['height'] = `${bb.height}px`
+
+    // TODO
+  }
+
+  if (element instanceof SVGRectElement) {
+    style['width'] = `${element.width.animVal.value}px`
+    style['height'] = `${element.height.animVal.value}px`
+
+    // TODO
+  }
+
+  if (element instanceof SVGCircleElement) {
+    const r = element.r.animVal.value
+
+    const width = 2 * r
+    const height = width
+
+    style['width'] = `${width}px`
+    style['height'] = `${height}px`
+
+    // TODO
+  }
+
+  return style
+}
+
+export function rawExtractStyle(element: HTMLElement | SVGElement) {
+  const style: Dict<string> = {}
+
+  for (const key in element.style) {
+    const value = element.style[key]
+
+    if (value && typeof value === 'string' && isNaN(parseInt(key))) {
+      style[key] = value
     }
   }
 

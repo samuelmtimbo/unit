@@ -3,7 +3,6 @@ import { Dict } from '../../Dict'
 import { GlobalRefSpec } from '../../GlobalRefSpec'
 import { IO } from '../../IO'
 import { Unlisten } from '../../Unlisten'
-import { $P } from './$P'
 
 export const $U_METHOD_CALL = [
   'getGlobalId',
@@ -55,7 +54,6 @@ export interface $U_W {
 
 export interface $U_R {
   $refGlobalObj(data: { __global_id: string; __: string[] }): $U
-  $refPod(data: {}): $P
 }
 
 export interface $U extends $U_C, $U_W, $U_R {}

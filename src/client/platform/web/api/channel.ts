@@ -1,10 +1,10 @@
 import { NOOP } from '../../../../NOOP'
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 import { Callback } from '../../../../types/Callback'
 import { IChannel, IChannelOpt } from '../../../../types/global/IChannel'
 import { Unlisten } from '../../../../types/Unlisten'
 
-export function webChannel(window: Window, prefix: string): API['channel'] {
+export function webChannel(window: Window, opt: BootOpt): API['channel'] {
   const LocalChannel = (opt: IChannelOpt): IChannel => {
     return {
       close(): void {},

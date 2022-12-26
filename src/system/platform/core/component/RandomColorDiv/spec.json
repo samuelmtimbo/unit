@@ -18,7 +18,8 @@
         },
         "examples": [
           "{}",
-          "{opacity:\"0.5\"}"
+          "{opacity:\"0.5\"}",
+          "{width:'100px',height:'100px'}"
         ]
       }
     }
@@ -135,7 +136,7 @@
   "metadata": {
     "icon": "square",
     "description": "div with a random background color",
-    "complexity": 89,
+    "complexity": 186,
     "tags": [
       "platform",
       "core",
@@ -155,7 +156,7 @@
     }
   },
   "id": "f27cae4e-fea8-11ea-b91e-db41e114c426",
-  "type": "`U`&`C`&`V`&`J`",
+  "type": "`U`&`C`&`G`&`V`&`J`",
   "system": true,
   "render": true
 }

@@ -67,6 +67,7 @@
           "mergeId": "1"
         }
       },
+      "functional": true,
       "type": "boolean"
     },
     "a": {
@@ -75,6 +76,7 @@
           "mergeId": "0"
         }
       },
+      "functional": true,
       "type": "boolean"
     }
   },

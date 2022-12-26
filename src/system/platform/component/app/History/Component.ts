@@ -12,7 +12,6 @@ import {
   Thing,
   unitVector,
 } from '../../../../../client/util/geometry'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -60,23 +59,18 @@ export default class History extends Element<IHTMLDivElement, Props> {
   public _width: number
   public _height: number
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { style, width, height } = $props
 
-    const map_graph = new SVGG(
-      { className: 'minimap-graph' },
-      this.$system,
-      this.$pod
-    )
+    const map_graph = new SVGG({ className: 'minimap-graph' }, this.$system)
     this._map_graph = map_graph
 
     // TODO bring "minimap screen" to minimap
     const map_children = new SVGG(
       { className: 'minimap-children' },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._map_children = map_children
 
@@ -92,8 +86,7 @@ export default class History extends Element<IHTMLDivElement, Props> {
         viewBox: '0 0 0 0',
         tabIndex: -1,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     svg.preventDefault('mousedown')
     svg.preventDefault('touchdown')
@@ -118,7 +111,7 @@ export default class History extends Element<IHTMLDivElement, Props> {
     svg.registerParentRoot(map_children)
 
     svg.$element.onfocus = () => {
-      console.log('Minimap', 'onFocus')
+      // console.log('Minimap', 'onFocus')
     }
   }
 
@@ -135,7 +128,7 @@ export default class History extends Element<IHTMLDivElement, Props> {
   public tick(): void {
     const { nodes = {}, links = {}, padding = 0 } = this.$props
 
-    for (let node_id in this._node_component) {
+    for (const node_id in this._node_component) {
       if (!nodes[node_id]) {
         const node_el = this._node_component[node_id]
         this._map_graph.$element.removeChild(node_el.$element)
@@ -143,7 +136,7 @@ export default class History extends Element<IHTMLDivElement, Props> {
       }
     }
 
-    for (let link_id in this._link_el) {
+    for (const link_id in this._link_el) {
       if (!links[link_id]) {
         const link_el = this._link_el[link_id]
         this._map_graph.$element.removeChild(link_el)
@@ -160,7 +153,7 @@ export default class History extends Element<IHTMLDivElement, Props> {
     let min_y = Number.MAX_SAFE_INTEGER
     let max_y = Number.MIN_SAFE_INTEGER
 
-    for (let node_id in nodes) {
+    for (const node_id in nodes) {
       const node = nodes[node_id]
       const { x, y, width, height, r, shape } = node
 
@@ -180,8 +173,7 @@ export default class History extends Element<IHTMLDivElement, Props> {
               strokeWidth: 'inherit',
             },
           },
-          this.$system,
-          this.$pod
+          this.$system
         )
 
         this._node_component[node_id] = node_component
@@ -197,7 +189,7 @@ export default class History extends Element<IHTMLDivElement, Props> {
       node_component.setProp('d', d)
     }
 
-    for (let link_id in links) {
+    for (const link_id in links) {
       const { source, target } = segmentLinkId(link_id)
       let link_el = this._link_el[link_id]
       if (!link_el) {

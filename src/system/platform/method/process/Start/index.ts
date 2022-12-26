@@ -1,18 +1,14 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
-import { BundleSpec } from '../../../../../types/BundleSpec'
+import { GraphBundle } from '../../../../../types/GraphClass'
 import { G } from '../../../../../types/interface/G'
-import { P } from '../../../../../types/interface/P'
-
-export interface IPod extends P {}
-
-export interface IPodOpt {}
+import { S } from '../../../../../types/interface/S'
+import { ID_START } from '../../../../_ids'
 
 export interface I {
-  bundle: BundleSpec
-  pod: P
+  bundle: GraphBundle
+  system: S
 }
 
 export interface O {
@@ -20,19 +16,19 @@ export interface O {
 }
 
 export default class Start extends Semifunctional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
-        fi: ['bundle', 'pod'],
+        fi: ['bundle', 'system'],
         fo: ['graph'],
         i: ['done'],
         o: [],
       },
       {
         input: {
-          pod: {
-            ref: true
-          }
+          system: {
+            ref: true,
+          },
         },
         output: {
           graph: {
@@ -41,12 +37,12 @@ export default class Start extends Semifunctional<I, O> {
         },
       },
       system,
-      pod
+      ID_START
     )
   }
 
-  f({ bundle, pod }: I, done: Done<O>): void {    
-    const [map, graph, unlisten] = pod.newGraph(bundle)
+  f({ bundle, system }: I, done: Done<O>): void {
+    const [map, graph, unlisten] = system.newGraph(bundle)
 
     done({ graph })
   }

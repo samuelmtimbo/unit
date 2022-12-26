@@ -1,15 +1,16 @@
-import { Element } from '../Class/Element'
+import { Element_ } from '../Class/Element'
 import { Graph } from '../Class/Graph'
 import { Unit } from '../Class/Unit'
-import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
+import { GRAPH_DEFAULT_EVENTS } from '../constant/GRAPH_DEFAULT_EVENTS'
 import { Pin } from '../Pin'
-import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
+import { emptyIO } from '../spec/emptyIO'
+import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'
-import { IOData } from '../types/IOData'
+import { IOOf } from '../types/IOOf'
 import { Unlisten } from '../types/Unlisten'
 import { remove } from '../util/array'
-import callAll from '../util/call/callAll'
+import { callAll } from '../util/call/callAll'
 import { Moment } from './Moment'
 import { watchDataInput } from './watchInput'
 import { watchDataOutput } from './watchOutput'
@@ -26,10 +27,13 @@ import {
 import { watchUnitIOSpec } from './watchUnitIOSpec'
 import { watchUnitLeafEvent } from './watchUnitLeafEvent'
 import { watchUnitLeafExposedPinSetEvent } from './watchUnitLeafExposedPinSetEvent'
+import { watchUnitLeafForkEvent } from './watchUnitLeafForkEvent'
+import { watchUnitLeafInjectEvent } from './watchUnitLeafInjectEvent'
+import { watchUnitLeafMoveSubgraphIntoEvent } from './watchUnitLeafMoveSubgraphIntoEvent'
 
 export function watchUnitIO<T extends Unit>(
   unit: T,
-  events: string[] = DEFAULT_EVENTS,
+  events: string[] = GRAPH_DEFAULT_EVENTS,
   callback: (moment: Moment) => void
 ): Unlisten {
   let all: Unlisten[] = []
@@ -43,7 +47,7 @@ export function watchUnitIO<T extends Unit>(
   const watch_rename_input = events.includes('rename_input')
   const watch_rename_output = events.includes('rename_output')
 
-  const pin_listener_map: IOData<Dict<Unlisten>> = { input: {}, output: {} }
+  const pin_listener_map: IOOf<Dict<Unlisten>> = emptyIO({}, {})
 
   const watchPin = (
     kind: 'ref' | 'data',
@@ -79,11 +83,11 @@ export function watchUnitIO<T extends Unit>(
   }
 
   if (watch_data_input) {
-    forEachKeyValue(unit.getDataInputs(), makeWatchPin('input', 'data'))
+    forEachValueKey(unit.getDataInputs(), makeWatchPin('input', 'data'))
   }
 
   if (watch_ref_input) {
-    forEachKeyValue(unit.getRefInputs(), makeWatchPin('input', 'ref'))
+    forEachValueKey(unit.getRefInputs(), makeWatchPin('input', 'ref'))
   }
 
   if (watch_data_input || watch_ref_input) {
@@ -129,11 +133,11 @@ export function watchUnitIO<T extends Unit>(
   )
 
   if (watch_data_output) {
-    forEachKeyValue(unit.getDataOutputs(), makeWatchPin('output', 'data'))
+    forEachValueKey(unit.getDataOutputs(), makeWatchPin('output', 'data'))
   }
 
   if (watch_ref_output) {
-    forEachKeyValue(unit.getRefOutputs(), makeWatchPin('output', 'ref'))
+    forEachValueKey(unit.getRefOutputs(), makeWatchPin('output', 'ref'))
   }
 
   if (watch_data_output || watch_ref_output) {
@@ -153,6 +157,10 @@ export function watchUnitIO<T extends Unit>(
   }
 
   if (unit instanceof Graph) {
+    if (events.includes('leaf_fork')) {
+      all.push(watchUnitLeafForkEvent('leaf_fork', unit, callback))
+    }
+
     if (events.includes('leaf_add_unit')) {
       all.push(watchUnitLeafEvent('leaf_add_unit', unit, callback))
     }
@@ -172,9 +180,23 @@ export function watchUnitIO<T extends Unit>(
         watchUnitLeafExposedPinSetEvent('leaf_cover_pin_set', unit, callback)
       )
     }
+
+    if (events.includes('leaf_inject_graph')) {
+      all.push(watchUnitLeafInjectEvent('leaf_inject_graph', unit, callback))
+    }
+
+    if (events.includes('leaf_move_subgraph_into')) {
+      all.push(
+        watchUnitLeafMoveSubgraphIntoEvent(
+          'leaf_move_subgraph_into',
+          unit,
+          callback
+        )
+      )
+    }
   }
 
-  if (unit instanceof Graph || unit instanceof Element) {
+  if (unit instanceof Graph || unit instanceof Element_) {
     if (events.includes('append_child')) {
       all.push(watchComponentAppendEvent('append_child', unit, callback))
     }

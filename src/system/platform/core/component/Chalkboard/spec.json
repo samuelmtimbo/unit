@@ -36,7 +36,7 @@
           }
         }
       },
-      "type": "number"
+      "type": "number|string"
     },
     "height": {
       "plug": {
@@ -56,7 +56,7 @@
           }
         }
       },
-      "type": "number"
+      "type": "number|string"
     }
   },
   "outputs": {
@@ -390,6 +390,21 @@
         "input": {
           "element": true
         }
+      },
+      "drawd": {
+        "input": {
+          "canvas": true
+        }
+      },
+      "drawd0": {
+        "input": {
+          "canvas": true
+        }
+      },
+      "clear": {
+        "input": {
+          "canvas": true
+        }
       }
     },
     "6": {
@@ -463,28 +478,6 @@
           "any": true
         }
       }
-    },
-    "14": {
-      "canvas": {
-        "output": {
-          "_self": true
-        }
-      },
-      "drawd": {
-        "input": {
-          "canvas": true
-        }
-      },
-      "drawd0": {
-        "input": {
-          "canvas": true
-        }
-      },
-      "clear": {
-        "input": {
-          "canvas": true
-        }
-      }
     }
   },
   "component": {
@@ -502,7 +495,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "drawing board",
-    "complexity": 59,
+    "complexity": 213,
     "tags": [
       "platform",
       "core",

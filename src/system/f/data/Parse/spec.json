@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "wave-triangle",
     "description": "string to value",
-    "complexity": 12,
+    "complexity": 56,
     "tags": [
       "f",
       "data"

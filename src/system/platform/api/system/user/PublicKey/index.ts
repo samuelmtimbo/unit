@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../../pod'
 import { System } from '../../../../../../system'
+import { ID_PUBLIC_KEY } from '../../../../../_ids'
 
 export type I = {
   any: any
@@ -12,7 +12,7 @@ export type O = {
 }
 
 export default class PublicKey extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['any'],
@@ -20,7 +20,7 @@ export default class PublicKey extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_PUBLIC_KEY
     )
   }
 

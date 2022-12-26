@@ -1,12 +1,12 @@
 import { Peer } from '../../../../../api/peer/Peer'
 import { $ } from '../../../../../Class/$'
-import { CH } from '../../../../../types/interface/CH'
-import { ST } from '../../../../../types/interface/ST'
-import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
+import { CH } from '../../../../../types/interface/CH'
+import { ST } from '../../../../../types/interface/ST'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { ID_PEER_TRANSMITTER } from '../../../../_ids'
 
 export interface I<T> {
   opt: RTCConfiguration
@@ -38,7 +38,7 @@ export default class PeerTransmitter<T>
 
   private _stream: MediaStream | null = null
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['opt', 'answer', 'stream', 'close'],
@@ -57,7 +57,7 @@ export default class PeerTransmitter<T>
         },
       },
       system,
-      pod
+      ID_PEER_TRANSMITTER
     )
 
     this.addListener('destroy', () => {
@@ -110,7 +110,7 @@ export default class PeerTransmitter<T>
 
     if (name === 'opt') {
       try {
-        this._peer = new Peer(this.__system, this.__pod, true, data)
+        this._peer = new Peer(this.__system, true, data)
       } catch (err) {
         const { message } = err
         const FAIL_TO_CONSTRUCT_MSG_START = `Failed to construct 'RTCPeerConnection': `
@@ -229,7 +229,7 @@ export default class PeerTransmitter<T>
         peer.send(_data)
         return
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     this._output.port.push(port)
   }

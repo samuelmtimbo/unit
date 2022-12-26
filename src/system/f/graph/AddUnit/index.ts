@@ -1,25 +1,26 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { getSpec } from '../../../../client/spec'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { GraphUnitSpec } from '../../../../types'
 import { G } from '../../../../types/interface/G'
 import { UnitBundle } from '../../../../types/UnitBundle'
+import { weakMerge } from '../../../../types/weakMerge'
+import { ID_ADD_UNIT } from '../../../_ids'
 
 export interface I<T> {
   id: string
-  Class: UnitBundle<any>
+  class: UnitBundle<any>
   graph: G
 }
 
 export interface O<T> {}
 
 export default class AddUnit<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
-        i: ['id', 'Class', 'graph'],
+        i: ['id', 'class', 'graph'],
         o: [],
       },
       {
@@ -30,7 +31,7 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_ADD_UNIT
     )
   }
 
@@ -51,10 +52,9 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
       const { unit: __unit } = __bundle
       const { id: __id, input: __inputs = {} } = __unit
 
-      const spec = getSpec(
-        { ...__bundle.specs, ...this.__pod.specs, ...this.__system.specs },
-        __id
-      )
+      const specs = weakMerge(__bundle.specs, this.__system.specs)
+
+      const spec = getSpec(specs, __id)
 
       const unit_spec: GraphUnitSpec = { id: __id, input: {}, output: {} }
 
@@ -83,7 +83,7 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
         }
       }
 
-      graph.addUnit({ unit: unit_spec }, id)
+      graph.addUnitSpec(id, { unit: unit_spec })
 
       done({})
     } catch (err) {

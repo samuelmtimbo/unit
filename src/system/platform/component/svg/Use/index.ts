@@ -1,7 +1,7 @@
-import { Element } from '../../../../../Class/Element'
-import { Pod } from '../../../../../pod'
+import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { ID_USE } from '../../../../_ids'
 
 export interface I {
   href: string
@@ -11,8 +11,8 @@ export interface I {
 
 export interface O {}
 
-export default class SVGUse extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class SVGUse extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['href', 'class', 'style'],
@@ -20,7 +20,7 @@ export default class SVGUse extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_USE
     )
   }
 }

@@ -2,14 +2,18 @@ import {
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
+  GraphPlugOuterSpec,
   GraphSpec,
   GraphSubPinSpec,
+  GraphUnitPinOuterSpec,
   GraphUnitsSpec,
 } from '../..'
 import { State } from '../../../State'
+import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { IO } from '../../IO'
+import { IOOf, _IOOf } from '../../IOOf'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { $Component } from './$Component'
@@ -28,6 +32,7 @@ export const $G_METHOD_CALL_GET = [
   'getGraphMergeInputData',
   'getUnitInputData',
   'getSpec',
+  'getBundle',
 ]
 
 export const $G_METHOD_CALL_SET_THIS = [
@@ -100,6 +105,7 @@ export interface $G_C {
     type: IO
     data: string
   }): void
+  $setUnitName(data: { unitId: string; name: string }): void
   $removeUnitPinData(data: { unitId: string; type: IO; pinId: string }): void
   $addUnit(data: { id: string; unit: UnitBundleSpec }): void
   $addUnits(data: { units: GraphUnitsSpec }): void
@@ -226,13 +232,14 @@ export interface $G_C {
     callback: (data: Dict<any>) => void
   ): void
   $getSpec(data: {}, callback: Callback<GraphSpec>): void
+  $getBundle(data: {}, callback: Callback<BundleSpec>): void
   $setMetadata(data: { path: string[]; data: any }): void
-  $appendSubComponentChild(data: {
+  $moveSubComponentChild(data: {
     subComponentId: string
     childId: string
     slotName: string
   }): void
-  $appendSubComponentChildren(data: {
+  $moveSubComponentChildren(data: {
     subComponentId: string
     children: string[]
     slotMap: Dict<string>
@@ -242,24 +249,14 @@ export interface $G_C {
     graphId: string
     nodeIds: {
       merge: string[]
-      link: {
-        unitId: string
-        type: IO
-        pinId: string
-      }[]
+      link: GraphUnitPinOuterSpec[]
       unit: string[]
-      plug: {
-        type: IO
-        pinId: string
-        subPinId: string
-      }[]
+      plug: GraphPlugOuterSpec[]
     }
     nextIdMap: {
       merge: Dict<string>
-      link: Dict<{
-        input: Dict<{ mergeId: string; oppositePinId: string }>
-        output: Dict<{ mergeId: string; oppositePinId: string }>
-      }>
+      link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
+      plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
       unit: Dict<string>
     }
     nextPinIdMap: Dict<{
@@ -267,9 +264,13 @@ export interface $G_C {
       output: Dict<{ pinId: string; subPinId: string }>
     }>
     nextMergePinId: Dict<{
-      input: { mergeId: string; pinId: string }
-      output: { mergeId: string; pinId: string }
+      input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
+      output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
     }>
+    nextPlugSpec: {
+      input: Dict<Dict<GraphSubPinSpec>>
+      output: Dict<Dict<GraphSubPinSpec>>
+    }
     nextSubComponentParentMap: Dict<string | null>
     nextSubComponentChildrenMap: Dict<string[]>
   }): void
@@ -289,10 +290,13 @@ export interface $G_C {
     mergeId: string
     nextInputMergeId: { mergeId: string; pinId: string }
     nextOutputMergeId: { mergeId: string; pinId: string }
-    nextPinIdMap: Dict<{
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    }>
+  }): void
+  $movePlugInto(data: {
+    graphId: string
+    type: IO
+    pinId: string
+    subPinId: string
+    subPinSpec: GraphSubPinSpec
   }): void
   $explodeUnit(data: {
     unitId: string

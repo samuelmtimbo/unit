@@ -1,7 +1,8 @@
 import { EventEmitter } from './EventEmitter'
+import { keys } from './system/f/object/Keys/f'
+import { Dict } from './types/Dict'
 import { J } from './types/interface/J'
 import { V } from './types/interface/V'
-import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 import { pop } from './util/array'
 
@@ -12,7 +13,7 @@ export type ObjectNode = {
   children: Dict<ObjectNode>
 }
 
-export class Object_<T extends any> implements J<T>, V<T> {
+export class Object_<T extends Object> implements J<T>, V<T> {
   private _obj: T
   private _node: ObjectNode = {
     emitter: new EventEmitter(),
@@ -131,7 +132,7 @@ export class Object_<T extends any> implements J<T>, V<T> {
 
   public write(data: T): Promise<void> {
     this._obj = data
-    // TODO unlisten
+
     return
   }
 
@@ -173,7 +174,7 @@ export class Object_<T extends any> implements J<T>, V<T> {
   }
 
   public async keys(): Promise<string[]> {
-    return Object.keys(this._obj)
+    return keys(this._obj)
   }
 
   public subscribe(

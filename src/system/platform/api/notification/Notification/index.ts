@@ -1,6 +1,6 @@
-import { Pod } from '../../../../../pod'
 import { Primitive, PrimitiveEvents } from '../../../../../Primitive'
 import { System } from '../../../../../system'
+import { ID_NOTIFICATION } from '../../../../_ids'
 
 export interface I {}
 
@@ -19,7 +19,7 @@ export type NotificationEvents = PrimitiveEvents<Notification_EE> &
 export default class _Notification extends Primitive<I, O, NotificationEvents> {
   private _notification: Notification | null = null
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: [],
@@ -27,7 +27,7 @@ export default class _Notification extends Primitive<I, O, NotificationEvents> {
       },
       {},
       system,
-      pod
+      ID_NOTIFICATION
     )
 
     this._setup()

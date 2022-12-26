@@ -5,13 +5,13 @@ import {
   storageHasKey,
 } from '../../../../../client/util/web/storage'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
-import { J } from '../../../../../types/interface/J'
-import { V } from '../../../../../types/interface/V'
 import { ObjectUpdateType } from '../../../../../Object'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { J } from '../../../../../types/interface/J'
+import { V } from '../../../../../types/interface/V'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { ID_TAB_STORAGE } from '../../../../_ids'
 
 export type I = {}
 
@@ -21,7 +21,7 @@ export default class _TabStorage
   extends Unit<I, O>
   implements J, V<Dict<string>>
 {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: [],
@@ -29,7 +29,7 @@ export default class _TabStorage
       },
       {},
       system,
-      pod
+      ID_TAB_STORAGE
     )
   }
   subscribe(

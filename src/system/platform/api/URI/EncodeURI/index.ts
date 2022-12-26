@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ID_ENCODE_URI } from '../../../../_ids'
 
 export interface I<T> {
   uri: string
@@ -12,7 +12,7 @@ export interface O<T> {
 }
 
 export default class EncodeURI<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['uri'],
@@ -20,7 +20,7 @@ export default class EncodeURI<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_ENCODE_URI
     )
   }
 

@@ -1,11 +1,11 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IUserMediaOpt } from '../../../../../types/global/IUserMedia'
 import { ST } from '../../../../../types/interface/ST'
 import { stopMediaStream } from '../../../../../util/stream/stopMediaStream'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
+import { ID_USER_MEDIA } from '../../../../_ids'
 
 export type I = {
   opt: IUserMediaOpt
@@ -18,7 +18,7 @@ export type O = {
 export default class UserMedia extends Functional<I, O> {
   private _stream: MediaStream
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['opt'],
@@ -32,7 +32,7 @@ export default class UserMedia extends Functional<I, O> {
         },
       },
       system,
-      pod
+      ID_USER_MEDIA
     )
 
     this.addListener('destroy', () => {
@@ -58,7 +58,7 @@ export default class UserMedia extends Functional<I, O> {
       return
     }
 
-    const stream = await wrapMediaStream(_stream, this.__system, this.__pod)
+    const stream = await wrapMediaStream(_stream, this.__system)
 
     done({ stream })
   }

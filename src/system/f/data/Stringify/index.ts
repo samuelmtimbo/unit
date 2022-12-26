@@ -1,8 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Pod } from '../../../../pod'
 import { stringify } from '../../../../spec/stringify'
 import { System } from '../../../../system'
+import { ID_STRINGIFY } from '../../../_ids'
 
 export type I = {
   a: any
@@ -13,7 +13,7 @@ export type O = {
 }
 
 export default class Stringify extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a'],
@@ -21,7 +21,7 @@ export default class Stringify extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_STRINGIFY
     )
   }
 

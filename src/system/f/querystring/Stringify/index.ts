@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { ID_STRINGIFY_0 } from '../../../_ids'
 
 export interface I {
   obj: Dict<any>
@@ -12,7 +12,7 @@ export interface O {
 }
 
 export default class Stringify extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['obj'],
@@ -20,7 +20,7 @@ export default class Stringify extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_STRINGIFY_0
     )
   }
 

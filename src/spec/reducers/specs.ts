@@ -1,6 +1,6 @@
 import _dissoc from '../../system/f/object/Dissoc/f'
 import merge from '../../system/f/object/Merge/f'
-import set from '../../system/f/object/Set/f'
+import _set from '../../system/f/object/Set/f'
 import { Action, GraphSpec, Specs } from '../../types'
 import { ADD_SPEC, REMOVE_SPEC, SET_SPECS } from '../actions/specs'
 
@@ -11,7 +11,7 @@ export const defaultState: State = {}
 const addSpec = (
   { name, spec }: { name: string; spec: GraphSpec },
   state: State
-): State => set(state, name, spec)
+): State => _set(state, name, spec)
 
 const removeSpec = ({ name }: { name: string }, state: State): State =>
   _dissoc(state, name)

@@ -13,9 +13,10 @@
       "type": "any",
       "defaultIgnored": true
     },
-    "pod": {
-      "type": "`P`",
-      "ref": true
+    "system": {
+      "type": "`G`",
+      "ref": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -28,7 +29,7 @@
   "metadata": {
     "icon": "server",
     "description": "asynchronously control a graph",
-    "complexity": 5,
+    "complexity": 4,
     "tags": [
       "platform",
       "method",

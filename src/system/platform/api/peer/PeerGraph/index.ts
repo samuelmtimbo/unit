@@ -2,14 +2,14 @@ import { DEFAULT_STUN_RTC_CONFIG } from '../../../../../api/peer/config'
 import { Peer } from '../../../../../api/peer/Peer'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
 import { asyncGraphFromPort } from '../../../../../graphFromPort'
-import { $Graph } from '../../../../../types/interface/async/$Graph'
-import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
 import { RemotePort } from '../../../../../RemotePort'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { IPort } from '../../../../../types/global/IPort'
+import { $Graph } from '../../../../../types/interface/async/$Graph'
+import { ID_PEER_GRAPH } from '../../../../_ids'
 
 export interface I {
   offer: string
@@ -18,30 +18,30 @@ export interface I {
 }
 
 export interface O {
-  pod: $Graph
+  graph: $Graph
   answer: string
 }
 
-export default class PeerPod extends Primitive<I, O> {
+export default class PeerGraph extends Primitive<I, O> {
   __ = ['U']
 
   private _peer: Peer
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['opt', 'offer', 'close'],
-        o: ['pod', 'answer'],
+        o: ['graph', 'answer'],
       },
       {
         output: {
-          pod: {
+          graph: {
             ref: true,
           },
         },
       },
       system,
-      pod
+      ID_PEER_GRAPH
     )
 
     this.addListener('destroy', () => {
@@ -70,31 +70,26 @@ export default class PeerPod extends Primitive<I, O> {
 
   async onDataInputData(name: string, data: any): Promise<void> {
     if (name === 'opt') {
-      this._peer = new Peer(
-        this.__system,
-        this.__pod,
-        false,
-        DEFAULT_STUN_RTC_CONFIG
-      )
+      this._peer = new Peer(this.__system, false, DEFAULT_STUN_RTC_CONFIG)
 
       const port: IPort = {
         send: (data) => {
-          // console.log('PeerPod', 'postMessage', data)
+          // console.log('PeerGraph', 'postMessage', data)
           const message = stringify(data)
           this._peer.send(message)
         },
         onmessage(data: any) {},
         onerror() {
-          console.log('onerror')
+          // console.log('onerror')
         },
         terminate() {
-          console.log('terminate')
+          // console.log('terminate')
         },
       }
 
       this._peer.addListener('message', (message: string) => {
-        // console.log('PeerPod', 'message', message)
-        const specs = { ...this.__system.specs, ...this.__pod.specs }
+        // console.log('PeerGraph', 'message', message)
+        const specs = this.__system.specs
         const classes = this.__system.classes
 
         const data = evaluate(message, specs, classes)
@@ -111,12 +106,8 @@ export default class PeerPod extends Primitive<I, O> {
             {
               const remote_port = new RemotePort(port)
               this._remote_port = remote_port
-              const pod = asyncGraphFromPort(
-                this.__system,
-                this.__pod,
-                remote_port
-              )
-              this._output.pod.push(pod)
+              const $graph = asyncGraphFromPort(this.__system, remote_port)
+              this._output.graph.push($graph)
             }
             break
           case TERMINATE:
@@ -128,12 +119,12 @@ export default class PeerPod extends Primitive<I, O> {
       })
 
       this._peer.addListener('connect', () => {
-        // console.log('PeerPod', 'peer', 'connect')
+        // console.log('PeerGraph', 'peer', 'connect')
         this._peer_connected = true
       })
 
       this._peer.addListener('close', () => {
-        // console.log('PeerPod', 'peer', 'close')
+        // console.log('PeerGraph', 'peer', 'close')
         this._peer_connected = false
       })
 
@@ -181,10 +172,11 @@ export default class PeerPod extends Primitive<I, O> {
   }
 
   private _disconnect = () => {
-    console.log('PeerPod', '_close')
+    // console.log('PeerGraph', '_close')
+
     this._backwarding = true
 
-    this._output.pod.pull()
+    this._output.graph.pull()
 
     if (this._remote_port) {
       this._remote_port.close()

@@ -72,7 +72,7 @@
         }
       }
     },
-    "pod": {
+    "graph1": {
       "id": "324b9c5e-5810-11eb-bf7c-634b3bb07f8c",
       "input": {
         "bundle": {}
@@ -232,14 +232,14 @@
           "a": true
         }
       },
-      "pod": {
+      "graph1": {
         "input": {
           "bundle": true
         }
       }
     },
     "1": {
-      "pod": {
+      "graph1": {
         "output": {
           "graph": true
         }
@@ -293,7 +293,7 @@
   },
   "metadata": {
     "icon": "atom-alt",
-    "complexity": 160,
+    "complexity": 402,
     "tags": [
       "platform",
       "core",

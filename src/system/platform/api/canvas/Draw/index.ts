@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { CA } from '../../../../../types/interface/CA'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { CA } from '../../../../../types/interface/CA'
+import { ID_DRAW } from '../../../../_ids'
 
 export interface I {
   canvas: CA
@@ -14,7 +14,7 @@ export interface O {
 }
 
 export default class Draw extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['canvas', 'step'],
@@ -28,7 +28,7 @@ export default class Draw extends Functional<I, O> {
         },
       },
       system,
-      pod
+      ID_DRAW
     )
   }
 

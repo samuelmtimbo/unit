@@ -1,5 +1,4 @@
 import { Element } from '../../../../../client/element'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -37,8 +36,8 @@ export default class Resize extends Element<IHTMLDivElement, Props> {
   private _pointer_down: Dict<boolean> = {}
   private _pointer_down_direction: Dict<Direction> = {}
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { disabled, l = 15 } = $props
 
@@ -167,13 +166,16 @@ export default class Resize extends Element<IHTMLDivElement, Props> {
     y: DirectionUnit,
     direction: Direction
   ) => {
-    const { api: { input: { pointer: { setPointerCapture }} } } = this.$system
+    const {
+      api: {
+        input: {
+          pointer: { setPointerCapture },
+        },
+      },
+    } = this.$system
+
     element.addEventListener('pointerdown', (event) => {
       const { clientX, clientY, pointerId } = event
-
-      setPointerCapture(element, pointerId)
-
-      // event.stopPropagation()
 
       this._resize.style.position = 'absolute'
       this._resize.style.width = `100%`
@@ -216,33 +218,40 @@ export default class Resize extends Element<IHTMLDivElement, Props> {
       }
 
       const on_pointer_up = (event) => {
+        // console.log('on_pointer_up')
         const { pointerId } = event
 
         if (this._pointer_down[pointerId]) {
           this._pointer_down_count--
-          delete this._pointer_down[pointerId]
 
-          element.releasePointerCapture(pointerId)
+          delete this._pointer_down[pointerId]
+          delete this._pointer_down_direction[pointerId]
 
           if (this._pointer_down_count === 0) {
             element.removeEventListener('pointermove', on_pointer_move)
             element.removeEventListener('pointerup', on_pointer_up)
             element.removeEventListener('pointercancel', on_pointer_up)
+            element.removeEventListener('pointerleave', on_pointer_up)
 
             this.dispatchEvent('resizeend', {})
+
             this._resize.style.position = 'initial'
             this._resize.style.width = '0'
             this._resize.style.height = '0'
           }
+
+          releasePointerCapture()
         }
       }
 
       if (this._pointer_down_count === 1) {
-        // TODO use IO event system
         element.addEventListener('pointermove', on_pointer_move)
         element.addEventListener('pointerup', on_pointer_up)
         element.addEventListener('pointercancel', on_pointer_up)
+        element.addEventListener('pointerleave', on_pointer_up)
       }
+
+      const releasePointerCapture = setPointerCapture(element, pointerId)
 
       this._dispatch_resize_start(pointerId, direction)
     })

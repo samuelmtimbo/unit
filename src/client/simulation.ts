@@ -1,6 +1,7 @@
 import { EventEmitter, EventEmitter_EE } from '../EventEmitter'
 import { NOOP } from '../NOOP'
 import { Dict } from '../types/Dict'
+import { ANIMATION_C } from './animation/ANIMATION_C'
 import { Shape } from './util/geometry'
 
 export type SimulationOpt = {
@@ -11,6 +12,7 @@ export type SimulationOpt = {
   velocityDecay?: number
   stability?: number
   n?: number
+  t?: number
   force?: (alpha: number) => void
 }
 
@@ -89,6 +91,7 @@ export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
   private _stability: number = 1
   private _velocityDecay: number
   private _n: number = 1
+  private _t: number = 1
 
   private _force: (alpha: number) => void = NOOP
 
@@ -101,6 +104,7 @@ export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
     alphaDecay,
     velocityDecay = 0.2,
     n = 1,
+    t = 3 * ANIMATION_C,
     stability = 1,
     force = NOOP,
   }: SimulationOpt) {
@@ -114,6 +118,7 @@ export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
     this._velocityDecay = velocityDecay
     this._stability = stability
     this._n = n
+    this._t = t
     this._force = force
   }
 
@@ -213,7 +218,7 @@ export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
     }> = {}
 
     const F = 0.75 // friction
-    const T = 1
+    const T = this._t
 
     // const order = this._stability
     const order = 4

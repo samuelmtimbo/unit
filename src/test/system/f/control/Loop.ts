@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Loop from '../../../../system/f/control/Loop'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const loop = new Loop(system, pod)
+const loop = new Loop(system)
 
 loop.play()
 
@@ -257,7 +257,7 @@ loop.setInputConstant('init', false)
 loop.setInputConstant('next', false)
 loop.setInputConstant('test', false)
 
-const loop0 = new Loop(system, pod)
+const loop0 = new Loop(system)
 
 loop0.play()
 

@@ -1,6 +1,6 @@
-import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
 import { System } from '../../../../system'
+import { ID_PLAN } from '../../../_ids'
 
 export interface I<T> {
   a: T
@@ -15,7 +15,7 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
   private _current: T | undefined = undefined
   private _looping: boolean = false
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a'],
@@ -23,7 +23,7 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_PLAN
     )
   }
 

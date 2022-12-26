@@ -1,5 +1,6 @@
-import { EventEmitter } from '../EventEmitter'
 import { emptyGraphSpec } from '../spec/emptySpec'
+import { System } from '../system'
+import { keys } from '../system/f/object/Keys/f'
 import {
   ComponentSpec,
   GraphComponentSpec,
@@ -10,9 +11,9 @@ import {
   Specs,
 } from '../types'
 import { Dict } from '../types/Dict'
-import { Unlisten } from '../types/Unlisten'
+import { IO } from '../types/IO'
 import { uuidNotIn } from '../util/id'
-import { clone } from '../util/object'
+import { clone, pathOrDefault } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
 
 export function getSpec(specs: Specs, id: string): Spec {
@@ -40,6 +41,21 @@ export function getComponentSpec(specs: Specs, id: string): ComponentSpec {
   return component
 }
 
+export function getSpecPins(specs: Specs, id: string, type: IO): PinsSpec {
+  const spec = getSpec(specs, id)
+  const pins = spec[`${type}s`] || {}
+  return pins
+}
+
+export function getSpecPinPlugs(
+  specs: Specs,
+  id: string,
+  type: IO,
+  pinId: string
+): PinsSpec {
+  return pathOrDefault(specs, [id, `${type}s`, pinId, 'plug'], {})
+}
+
 export function getSpecInputs(specs: Specs, id: string): PinsSpec {
   const spec = getSpec(specs, id)
   const { inputs = {} } = spec
@@ -52,15 +68,32 @@ export function getSpecOutputs(specs: Specs, id: string): PinsSpec {
   return outputs
 }
 
+export function getSpecPinPlugCount(
+  specs: Specs,
+  id: string,
+  type: IO,
+  pinId: string
+): number {
+  const plugs = getSpecPinPlugs(specs, id, type, pinId)
+  const count = keys(plugs || {}).length
+  return count
+}
+
+export function getSpecPinCount(specs: Specs, id: string, type: IO): number {
+  const pins = getSpecPins(specs, id, type)
+  const inputCount = keys(pins || {}).length
+  return inputCount
+}
+
 export function getSpecInputCount(specs: Specs, id: string): number {
   const inputs = getSpecInputs(specs, id)
-  const inputCount = Object.keys(inputs || {}).length
+  const inputCount = keys(inputs || {}).length
   return inputCount
 }
 
 export function getSpecOutputCount(specs: Specs, id: string): number {
   const outputs = getSpecOutputs(specs, id)
-  const outputCount = Object.keys(outputs || {}).length
+  const outputCount = keys(outputs || {}).length
   return outputCount
 }
 
@@ -82,57 +115,6 @@ export function emptyShell(
   }) as GraphSpec
 
   return newSpec
-}
-
-// RETURN
-export const EMITTER = new EventEmitter()
-
-export function setSpec(specs: Specs, id: string, spec: GraphSpec): void {
-  // console.log('setSpec', id, spec)
-  const is_new = !specs[id]
-
-  specs[id] = spec
-
-  if (is_new) {
-    EMITTER.emit('add', id, spec)
-  } else {
-    EMITTER.emit('set', id, spec)
-  }
-}
-
-export function deleteSpec(specs: Specs, id: string): void {
-  // console.log('deleteSpec', id)
-  delete specs[id]
-
-  EMITTER.emit('delete', id)
-}
-
-export function addSpecListener(
-  name: string,
-  listener: (id: string, spec: GraphSpec) => void
-): Unlisten {
-  EMITTER.addListener(name, listener)
-  return () => {
-    EMITTER.removeListener(name, listener)
-  }
-}
-
-export function addAddSpecListener(
-  listener: (id: string, spec: GraphSpec) => void
-): Unlisten {
-  return addSpecListener('add', listener)
-}
-
-export function addSetSpecListener(
-  listener: (id: string, spec: GraphSpec) => void
-): Unlisten {
-  return addSpecListener('set', listener)
-}
-
-export function addDeleteSpecListener(
-  listener: (id: string) => void
-): Unlisten {
-  return addSpecListener('delete', listener)
 }
 
 export function getSpecName(specs: Specs, id: string): string {
@@ -167,7 +149,7 @@ export function newUnitId(
   blacklist: Set<string> = new Set()
 ): string {
   const unit_spec = getSpec(specs, unit_spec_id)
-  
+
   const { name = '' } = unit_spec
 
   return newUnitIdFromName(spec, name, blacklist)
@@ -224,19 +206,28 @@ export function isSystemSpecId(specs: Specs, spec_id: string): boolean {
   return system
 }
 
-export function injectSpecs(specs: Specs, new_specs: GraphSpecs): Dict<string> {
+export function injectSpecs(
+  system: System,
+  new_specs: GraphSpecs
+): Dict<string> {
   const map_spec_id: Dict<string> = {}
+
   for (const spec_id in new_specs) {
     const spec = new_specs[spec_id]
+
     let new_spec_id = spec_id
-    if (hasSpec(specs, spec_id)) {
-      // BUG
-      // this might have recursive consequences
-      // these spec ids might be coming from something
-      new_spec_id = newSpecId(specs)
+    let has_spec = false
+
+    while (system.hasSpec(new_spec_id)) {
+      new_spec_id = system.newSpecId()
+      has_spec = true
+    }
+
+    if (has_spec) {
       map_spec_id[spec_id] = new_spec_id
     }
-    setSpec(specs, spec_id, spec)
+
+    system.setSpec(spec_id, spec)
   }
   return map_spec_id
 }

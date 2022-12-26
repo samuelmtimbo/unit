@@ -1,9 +1,9 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { System } from '../../../../system'
 import { B } from '../../../../types/interface/B'
 import { CH } from '../../../../types/interface/CH'
-import { Pod } from '../../../../pod'
-import { System } from '../../../../system'
+import { ID_TRANSFER } from '../../../_ids'
 
 interface I<T> {
   unit: CH
@@ -13,7 +13,7 @@ interface I<T> {
 interface O<T> {}
 
 export default class Transfer<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['unit', 'data'],
@@ -30,7 +30,7 @@ export default class Transfer<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_TRANSFER
     )
   }
 

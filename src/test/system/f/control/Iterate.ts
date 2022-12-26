@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Iterate from '../../../../system/f/control/Iterate'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const iterate = new Iterate(system, pod)
+const iterate = new Iterate(system)
 
 false && watchUnitAndLog(iterate)
 

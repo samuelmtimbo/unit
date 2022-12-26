@@ -16,14 +16,14 @@
   },
   "outputs": {
     "port": {
-      "type": "`P`",
+      "type": "`CH`",
       "ref": true
     }
   },
   "metadata": {
     "icon": "broadcast-tower",
     "description": "channel for local communication",
-    "complexity": 13,
+    "complexity": 56,
     "tags": [
       "platform",
       "api",

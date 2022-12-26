@@ -1,6 +1,6 @@
 import { MIMO } from '../../../../MIMO'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_NUMBER_TO_STRING } from '../../../_ids'
 
 export interface I {
   n: number
@@ -12,7 +12,7 @@ export interface O {
 }
 
 export default class NumberToString extends MIMO<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['n', 'radix'],
@@ -20,7 +20,7 @@ export default class NumberToString extends MIMO<I, O> {
       },
       {},
       system,
-      pod
+      ID_NUMBER_TO_STRING
     )
   }
 

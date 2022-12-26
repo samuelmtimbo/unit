@@ -1,8 +1,8 @@
-import { Element, ElementEE } from '../../../../../Class/Element'
-import { Pod } from '../../../../../pod'
+import { ElementEE, Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { CA } from '../../../../../types/interface/CA'
+import { ID_CANVAS } from '../../../../_ids'
 import { Style } from '../../../Props'
 import CanvasComp from './Component'
 
@@ -20,12 +20,12 @@ export interface CanvasEE extends ElementEE<{}> {}
 export interface CanvasC extends CanvasComp {}
 
 export default class Canvas
-  extends Element<I, O, CanvasJ, CanvasEE, CanvasC>
+  extends Element_<I, O, CanvasJ, CanvasEE, CanvasC>
   implements CA
 {
   __ = ['U', 'C', 'V', 'J']
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['style', 'width', 'height', 'd'],
@@ -39,20 +39,24 @@ export default class Canvas
         },
       },
       system,
-      pod
+      ID_CANVAS
     )
 
     this._state = {
       d: [],
     }
 
-    this._component = new CanvasComp({}, this.__system, this.__pod)
+    this._component = new CanvasComp({}, this.__system)
   }
 
   async clear(): Promise<void> {
-    this.refEmitter().emit('call', { method: 'clear' })
+    this.emit('call', { method: 'clear', data: undefined })
 
     return
+  }
+
+  drawImage(imageBitmap: ImageBitmap): void {
+    this.emit('call', { method: 'drawImage', data: [imageBitmap] }) // TODO
   }
 
   async draw(step: any[]): Promise<void> {
@@ -63,7 +67,7 @@ export default class Canvas
 
     this._component.draw(step)
 
-    this.refEmitter().emit('call', { method: 'draw', data: [step] })
+    this.emit('call', { method: 'draw', data: [step] })
 
     return
   }

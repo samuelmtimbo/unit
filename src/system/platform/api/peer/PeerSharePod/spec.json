@@ -1,7 +1,7 @@
 {
-  "name": "peer share pod",
+  "name": "peer share graph",
   "inputs": {
-    "pod": {
+    "graph": {
       "type": "`G`",
       "ref": true
     },
@@ -16,8 +16,8 @@
   },
   "metadata": {
     "icon": "link",
-    "description": "remote peer pod",
-    "complexity": 17,
+    "description": "allow remote peer to connect to this graph",
+    "complexity": 60,
     "tags": [
       "platform",
       "api",

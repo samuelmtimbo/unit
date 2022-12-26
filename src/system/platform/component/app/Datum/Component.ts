@@ -3,7 +3,6 @@ import { makeCustomListener } from '../../../../../client/event/custom'
 import IOFocusEvent from '../../../../../client/event/focus/FocusEvent'
 import { IOKeyboardEvent } from '../../../../../client/event/keyboard'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { Pod } from '../../../../../pod'
 import {
   getParentPath,
   getTree,
@@ -33,15 +32,14 @@ export default class Datum extends Element<IHTMLDivElement, Props> {
 
   private _ignore_blur: boolean = false
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { style = {}, data } = $props
 
     const data_tree = new DataTree(
       { style, data, path: [], parent: null },
-      this.$system,
-      this.$pod
+      this.$system
     )
 
     this._root = data

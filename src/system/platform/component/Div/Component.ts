@@ -1,7 +1,7 @@
-import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { Pod } from '../../../../pod'
+import { applyDynamicStyle } from '../../../../client/style'
+import { userSelect } from '../../../../client/util/style/userSelect'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../types/global/dom'
@@ -22,15 +22,14 @@ const DEFAULT_STYLE = {
   height: '100%',
   color: 'currentColor',
   boxSizing: 'border-box',
+  ...userSelect('none'),
 }
 
 export default class Div extends Element<IHTMLDivElement, Props> {
-  private _div_el: IHTMLDivElement
-
   private _prop_handler: PropHandler
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       id,
@@ -43,41 +42,38 @@ export default class Div extends Element<IHTMLDivElement, Props> {
       data = {},
     } = this.$props
 
-    const $element = this.$system.api.document.createElement('div')
+    this.$element = this.$system.api.document.createElement('div')
 
     if (id !== undefined) {
-      $element.id = id
+      this.$element.id = id
     }
     if (className !== undefined) {
-      $element.className = className
+      this.$element.className = className
     }
     if (innerText) {
-      $element.innerText = innerText
+      this.$element.innerText = innerText
     }
     if (tabIndex !== undefined) {
-      $element.tabIndex = tabIndex
+      this.$element.tabIndex = tabIndex
     }
     if (title) {
-      $element.title = title
+      this.$element.title = title
     }
     if (draggable !== undefined) {
-      $element.setAttribute('draggable', draggable.toString())
+      this.$element.setAttribute('draggable', draggable.toString())
     }
     if (data !== undefined) {
       for (const key in data) {
         const d = data[key]
-        $element.dataset[key] = d
+        this.$element.dataset[key] = d
       }
     }
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
-
-    this._div_el = $element
+    // applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
+    applyDynamicStyle(this, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {
-      ...htmlPropHandler(this._div_el, DEFAULT_STYLE),
+      ...htmlPropHandler(this, DEFAULT_STYLE),
     }
-
-    this.$element = $element
   }
 
   onPropChanged(prop: string, current: any): void {

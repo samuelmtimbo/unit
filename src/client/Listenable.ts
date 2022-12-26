@@ -5,7 +5,7 @@ import { Context } from './context'
 import { IOElement } from './IOElement'
 import { Listener } from './Listener'
 
-export default interface Listenable {
+export interface Listenable {
   $system: System
   $context: Context
   $element: IOElement

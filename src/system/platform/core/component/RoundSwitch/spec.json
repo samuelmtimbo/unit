@@ -1,0 +1,68 @@
+{
+  "name": "round switch",
+  "inputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "switch",
+          "pinId": "value"
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "switch": {
+      "id": "6253bf76-2e85-11eb-9f59-3703abfd39c7",
+      "input": {
+        "style": {
+          "data": "{height:'30px',width:'60px',border:'1px solid currentColor',borderRadius:'30px',cursor:'pointer'}",
+          "constant": true
+        },
+        "sliderStyle": {
+          "ignored": false,
+          "data": "{borderRadius:'50%',backgroundColor:'currentColor'}",
+          "constant": true
+        },
+        "onColor": {
+          "data": "'#00aa11'",
+          "constant": true
+        },
+        "offColor": {
+          "data": "'#ff6666'",
+          "constant": true
+        },
+        "value": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {},
+  "render": true,
+  "component": {
+    "subComponents": {
+      "switch": {
+        "children": []
+      }
+    },
+    "children": [
+      "switch"
+    ],
+    "defaultWidth": 100,
+    "defaultHeight": 50
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 292
+  },
+  "id": "a9201738-f134-4268-a5ba-b6f88a4d9f92",
+  "type": "`U`&`G`&`C`",
+  "system": true
+}

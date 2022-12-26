@@ -10,9 +10,8 @@ export const throttle = (system: System, func: Function, limit): any => {
   } = system
   let lastFunc
   let lastRan
-  return function () {
+  return function (...args) {
     const context = this
-    const args = arguments
     if (!lastRan) {
       func.apply(context, args)
       lastRan = Date.now()
@@ -37,21 +36,26 @@ export const animateThrottle = (
       animation: { requestAnimationFrame, cancelAnimationFrame },
     },
   } = system
+
   let run = true
   let frame: number
-  let args
   let run_last: boolean = false
-  const f = function () {
+
+  const f = function (...args) {
     const context = this
-    args = arguments
+
     if (run) {
       run = false
       run_last = false
+
       func.apply(context, args)
+
       frame = requestAnimationFrame(function () {
         run = true
+
         if (run_last) {
           run_last = false
+
           func.apply(context, args)
         }
       })

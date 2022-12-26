@@ -1,12 +1,12 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { System } from '../../../../../system'
 import { _ } from '../../../../../types/interface/$_'
 import { $C } from '../../../../../types/interface/async/$C'
 import { $PS } from '../../../../../types/interface/async/$PS'
-import { Pod } from '../../../../../pod'
-import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { listenGlobalComponent } from '../../../../globalComponent'
+import { ID_REQUEST_PICTURE_IN_PICTURE } from '../../../../_ids'
 import VideoComp from '../../../component/media/Video/Component'
 
 export interface I {
@@ -21,7 +21,7 @@ export default class RequestPictureInPicture extends Semifunctional<I, O> {
 
   private _exit_picture_in_picture: Promise<any> = Promise.resolve()
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['media', 'opt'],
@@ -35,7 +35,7 @@ export default class RequestPictureInPicture extends Semifunctional<I, O> {
         },
       },
       system,
-      pod
+      ID_REQUEST_PICTURE_IN_PICTURE
     )
   }
 

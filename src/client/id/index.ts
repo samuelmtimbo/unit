@@ -33,11 +33,11 @@ export const unitIdRegex = new RegExp(UNIT_NODE_ID_REGEX)
 export const pinIdRegex = new RegExp(PIN_NODE_ID_REGEX)
 export const inputIdRegex = new RegExp(INPUT_NODE_ID_REGEX)
 export const outputIdRegex = new RegExp(OUTPUT_NODE_ID_REGEX)
-export const dataRegex = new RegExp(`^${DATA}\/[^#_]+$`)
+export const dataRegex = new RegExp(`^${DATA}/[^#_]+$`)
 export const metadataRegex = new RegExp(`^\\$/[^]+/${UNIT_ID_REGEX}$`)
-export const mergeRegex = new RegExp(`^${MERGE}\/[^/#$]+$`)
+export const mergeRegex = new RegExp(`^${MERGE}/[^/#$]+$`)
 export const externalRegex = new RegExp(
-  `^${EXTERNAL}\/(input|output)\/[^${SEPARATOR}${DATA}${MERGE}]+$`
+  `^${EXTERNAL}/(input|output)/[^${SEPARATOR}${DATA}${MERGE}]+$`
 )
 export const linkRegex = new RegExp(`^(.+)${LINK_SEPARATOR}(.+)$`)
 
@@ -97,6 +97,19 @@ export const getPinNodeId = (
   pinId: string
 ): string => {
   return `${unitId}/${type}/${pinId}`
+}
+
+export const getPinNodeId_ = (
+  unitId: string
+): ((type: IO, pinId: string) => string) => {
+  return (type, pinId) => `${unitId}/${type}/${pinId}`
+}
+
+export const getPinNodeId__ = (
+  unitId: string,
+  type: IO
+): ((pinId: string) => string) => {
+  return (pinId) => `${unitId}/${type}/${pinId}`
 }
 
 export function getInputNodeId(unitId: string, pinId: string) {
@@ -340,10 +353,6 @@ export function getSelectionId(nodeId: string, type: string) {
   return `${nodeId}/selection/${type}`
 }
 
-export function randomInArray<T>(array: T[]): T {
-  return array[Math.floor(Math.random() * array.length)]
-}
-
 export function sameUnit(id0: string, id1: string): boolean {
   return getUnitIdFromNodeId(id0) === getUnitIdFromNodeId(id1)
 }
@@ -398,16 +407,16 @@ export function isMergeNodeId(id: string): boolean {
   return mergeRegex.test(id)
 }
 
-export function segmentMergeNodeId(mergeNodeId: string): { id: string } {
+export function segmentMergeNodeId(mergeNodeId: string): { mergeId: string } {
   // remove '@/'
-  const id = mergeNodeId.substr(2, mergeNodeId.length)
+  const mergeId = mergeNodeId.substring(2, mergeNodeId.length)
   return {
-    id,
+    mergeId,
   }
 }
 
 export function getIdFromMergeNodeId(mergeNodeId: string): string {
-  const { id } = segmentMergeNodeId(mergeNodeId)
+  const { mergeId: id } = segmentMergeNodeId(mergeNodeId)
   return id
 }
 

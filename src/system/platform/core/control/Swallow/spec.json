@@ -1,0 +1,44 @@
+{
+  "name": "swallow",
+  "inputs": {
+    "unit": {
+      "plug": {
+        "0": {
+          "unitId": "catch",
+          "pinId": "unit"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "units": {
+    "catch": {
+      "id": "2520668c-b279-11ea-ace3-5b84eb02bd7f",
+      "input": {
+        "unit": {}
+      },
+      "output": {
+        "err": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {},
+  "render": false,
+  "component": {},
+  "metadata": {
+    "icon": "alert-circle",
+    "description": "throw away any caught error",
+    "complexity": 5
+  },
+  "type": "`U`&`G`",
+  "id": "ecb16ee2-d81f-4f3f-a241-b007087f5055"
+}

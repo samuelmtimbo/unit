@@ -3,7 +3,7 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec =
   require('../../../system/core/common/HasLength/spec.json') as GraphSpec
@@ -13,7 +13,7 @@ const HasLength = fromSpec<
   { true: number[]; false: number[] }
 >(spec, _specs)
 
-const hasLength = new HasLength(system, pod)
+const hasLength = new HasLength(system)
 
 false && watchUnitAndLog(hasLength)
 false && watchGraphAndLog(hasLength)

@@ -1,8 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Unit } from '../../../../Class/Unit'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_EXEC } from '../../../_ids'
 
 export interface I {
   unit: Unit
@@ -15,7 +15,7 @@ export interface O {
 }
 
 export default class Exec extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['unit', 'method', 'args'],
@@ -29,7 +29,7 @@ export default class Exec extends Functional<I, O> {
         },
       },
       system,
-      pod
+      ID_EXEC
     )
   }
 

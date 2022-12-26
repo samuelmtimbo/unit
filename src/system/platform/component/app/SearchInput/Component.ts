@@ -2,11 +2,10 @@ import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
-import TextInput from '../../value/TextInput/Component'
+import TextField from '../../value/TextField/Component'
 
 export interface Props {
   className?: string
@@ -32,14 +31,14 @@ const DEFAULT_STYLE = {
 }
 
 export default class SearchInput extends Element<IHTMLDivElement, Props> {
-  public _input: TextInput
+  public _input: TextField
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { className, style, disabled } = this.$props
 
-    const input = new TextInput(
+    const input = new TextField(
       {
         className: classnames('search-input', className),
         style: {
@@ -50,15 +49,16 @@ export default class SearchInput extends Element<IHTMLDivElement, Props> {
         disabled,
         tabIndex: -1,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._input = input
 
     const $element = parentElement($system)
 
     this.$element = $element
-    this.$slot['default'] = input.$slot['default']
+    this.$slot = {
+      default: input,
+    }
 
     this.registerRoot(input)
   }

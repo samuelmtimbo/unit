@@ -1,59 +1,34 @@
+import { destroy } from '../boot'
 import { $ } from '../Class/$'
-import { Pod } from '../pod'
-import { spawn } from '../spawn'
+import { Graph } from '../Class/Graph'
 import { System } from '../system'
-import { P } from '../types/interface/P'
+import { Dict } from '../types/Dict'
+import { GraphBundle } from '../types/GraphClass'
 import { S } from '../types/interface/S'
 import { Unlisten } from '../types/Unlisten'
-import { wrapPod } from './Pod'
 
-export function _newPod(
-  system: System,
-  _system: System,
-  _pod: Pod
-): [P, Unlisten] {
-  const pod = spawn(system)
+export function _newSystem(system: System, _system: System): [S, Unlisten] {
+  const new_system = system.boot({})
 
-  const p = wrapPod(pod, _system, _pod)
-
-  return [p, () => {}]
-}
-
-export function _newSystem(
-  system: System,
-  _system: System,
-  _pod: Pod
-): [S, Unlisten] {
-  const {
-    api: {
-      document: { createElement },
-      init: { boot },
-    },
-  } = system
-
-  const root = createElement('div')
-
-  const new_system = boot(root)
-
-  const _new_system = wrapSystem(new_system, _system, _pod)
+  const _new_system = wrapSystem(new_system, _system)
 
   return [
     _new_system,
     () => {
-      // TODO
-      // destroy system
+      destroy(system)
     },
   ]
 }
 
-export function wrapSystem(system: System, _system: System, _pod: Pod): $ & S {
+export function wrapSystem(system: System, _system: System): $ & S {
   return new (class System extends $ implements S {
-    newPod(): [P, Unlisten] {
-      return _newPod(system, _system, _pod)
+    newGraph(
+      bundle: GraphBundle<any, any>
+    ): [Dict<string>, Graph<any, any>, Unlisten] {
+      throw new Error('Method not implemented.')
     }
-
     newSystem(opt: {}): [S, Unlisten] {
-      return _newSystem(system, _system, _pod)
+      return _newSystem(system, _system)
     }
-  })(_system, _pod)
+  })(_system)
 }

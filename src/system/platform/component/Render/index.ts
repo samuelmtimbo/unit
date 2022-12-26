@@ -1,32 +1,32 @@
-import { Element } from '../../../../Class/Element'
-import { P } from '../../../../types/interface/P'
-import { Pod } from '../../../../pod'
+import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
+import { P } from '../../../../types/interface/P'
+import { ID_RENDER } from '../../../_ids'
 
 export interface I {
-  pod: P
+  graph: P
   className: string
   style: object
 }
 
 export interface O {}
 
-export default class Render extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class Render extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
-        i: ['style', 'pod'],
+        i: ['style', 'graph'],
         o: [],
       },
       {
         input: {
-          pod: {
+          graph: {
             ref: true,
           },
         },
       },
       system,
-      pod
+      ID_RENDER
     )
   }
 }

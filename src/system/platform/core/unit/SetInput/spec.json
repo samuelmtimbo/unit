@@ -95,7 +95,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "set `unit` input `name` to `data`",
-    "complexity": 8,
+    "complexity": 9,
     "tags": [
       "platform",
       "core",

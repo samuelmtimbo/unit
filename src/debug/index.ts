@@ -1,14 +1,14 @@
 import { Graph } from '../Class/Graph'
 import { Unit } from '../Class/Unit'
-import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
+import { GRAPH_DEFAULT_EVENTS } from '../constant/GRAPH_DEFAULT_EVENTS'
+import { watchGraph } from './graph/watchGraph'
 import { Moment } from './Moment'
-import { watchGraph } from './watchGraph'
 import { watchTree } from './watchTree'
 import { watchUnit } from './watchUnit'
 
 export const watchUnitAndLog = (
   unit: Unit,
-  events: string[] = DEFAULT_EVENTS
+  events: string[] = GRAPH_DEFAULT_EVENTS
 ): (() => void) =>
   watchUnit(
     unit,
@@ -24,7 +24,7 @@ export const watchUnitAndLog = (
 
 export const watchGraphAndLog = (
   graph: Graph<any, any>,
-  events: string[] = DEFAULT_EVENTS
+  events: string[] = GRAPH_DEFAULT_EVENTS
 ): (() => void) => {
   return watchGraph(
     graph,
@@ -50,7 +50,7 @@ export const watchGraphAndLog = (
 
 export const watchTreeAndLog = (
   unit: Unit,
-  events: string[] = DEFAULT_EVENTS
+  events: string[] = GRAPH_DEFAULT_EVENTS
 ): (() => void) => {
   return watchTree(unit, events, (path: string[], moment: Moment) => {
     const { type, event, data } = moment

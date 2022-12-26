@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Void from '../../../../system/f/control/Void'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const voip = new Void(system, pod)
+const voip = new Void(system)
 
 voip.play()
 

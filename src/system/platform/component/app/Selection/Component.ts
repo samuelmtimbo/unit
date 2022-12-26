@@ -1,7 +1,6 @@
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
 import SVGCircle from '../../svg/Circle/Component'
@@ -26,8 +25,8 @@ export default class Selection extends Element<IHTMLDivElement, Props> {
   private _selection: SVGSVG
   private _selection_shape: SVGCircle | SVGRect
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       width = 0,
@@ -56,8 +55,7 @@ export default class Selection extends Element<IHTMLDivElement, Props> {
           stroke,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     selection.appendChild(selection_shape)
     this._selection = selection
@@ -92,14 +90,14 @@ export default class Selection extends Element<IHTMLDivElement, Props> {
           y: height / 2 + y,
           r: width / 2,
           style: {
+            fill: 'none',
             stroke: '',
             strokeDasharray,
             strokeWidth: `${strokeWidth}`,
             strokeDashoffset: `${strokeDashOffset}`,
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
     } else {
       selection_shape = new SVGRect(
@@ -109,14 +107,14 @@ export default class Selection extends Element<IHTMLDivElement, Props> {
           x,
           y,
           style: {
+            fill: 'none',
             stroke: '',
             strokeDasharray,
             strokeWidth: `${strokeWidth}`,
             strokeDashoffset: `${strokeDashOffset}`,
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
     }
 

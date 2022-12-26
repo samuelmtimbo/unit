@@ -2,10 +2,10 @@ import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Throw from '../../../../system/f/control/Throw'
 import Catch from '../../../../system/f/meta/Catch'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const _catch = new Catch(system, pod)
-const _throw = new Throw(system, pod)
+const _catch = new Catch(system)
+const _throw = new Throw(system)
 
 _catch.play()
 _throw.play()

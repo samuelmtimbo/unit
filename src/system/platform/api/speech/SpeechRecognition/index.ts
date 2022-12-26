@@ -1,9 +1,9 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { EE } from '../../../../../types/interface/EE'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { ISpeechRecognitionOpt } from '../../../../../types/global/ISpeechRecognition'
+import { EE } from '../../../../../types/interface/EE'
+import { ID_SPEECH_RECOGNITION } from '../../../../_ids'
 
 export type I = {
   opt: ISpeechRecognitionOpt
@@ -14,7 +14,7 @@ export type O = {
 }
 
 export default class SpeechRecognition extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['opt'],
@@ -22,7 +22,7 @@ export default class SpeechRecognition extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_SPEECH_RECOGNITION
     )
   }
 

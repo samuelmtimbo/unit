@@ -36,23 +36,31 @@ export const REMOVE_UNIT_MERGES = 'removeUnitMerges'
 export const EXPAND_UNIT = 'expandUnit'
 export const COLLAPSE_UNITS = 'collapseUnits'
 import { Position } from '../../client/util/geometry'
+import { keys } from '../../system/f/object/Keys/f'
 import {
   Action,
-  GraphPinSpec,
-  GraphSubPinSpec,
   GraphMergeSpec,
   GraphMergesSpec,
+  GraphPinSpec,
+  GraphSubPinSpec,
   GraphUnitSpec,
   GraphUnitsSpec,
 } from '../../types'
 import { Dict } from '../../types/Dict'
 import { IO } from '../../types/IO'
+import { IOOf } from '../../types/IOOf'
+import {
+  appendSubComponentChildren,
+  APPEND_SUB_COMPONENT_CHILDREN,
+  removeSubComponentChildren,
+  REMOVE_SUB_COMPONENT_CHILDREN,
+} from './component'
 
 export const addUnit = (
   id: string,
   unit: GraphUnitSpec,
   position: Position,
-  pinPosition: { input: Dict<Position>; output: Dict<Position> },
+  pinPosition: IOOf<Dict<Position>>,
   layoutPositon: Position,
   parentId: string | null
 ) => {
@@ -129,11 +137,7 @@ export const setPinSetFunctional = (
   }
 }
 
-export const exposePinSet = (
-  type: IO,
-  id: string,
-  pin: GraphPinSpec
-) => {
+export const exposePinSet = (type: IO, id: string, pin: GraphPinSpec) => {
   return {
     type: EXPOSE_PIN_SET,
     data: { type, id, pin },
@@ -412,7 +416,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.parentId
       )
     case ADD_UNITS:
-      return removeUnits(Object.keys(data.units))
+      return removeUnits(keys(data.units))
     case REMOVE_UNIT:
       return addUnit(
         data.id,
@@ -434,7 +438,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case ADD_MERGE:
       return removeMerge(data.id, data.merge, data.position)
     case ADD_MERGES:
-      return removeMerges(Object.keys(data.merges))
+      return removeMerges(keys(data.merges))
     case ADD_PIN_TO_MERGE:
       return removePinFromMerge(data.id, data.type, data.unitId, data.pinId)
     case REMOVE_MERGE:
@@ -459,6 +463,10 @@ export const reverseAction = ({ type, data }: Action): Action => {
       return setUnitInputIgnored(data.unitId, data.pinId, !data.ignored)
     case SET_UNIT_OUTPUT_IGNORED:
       return setUnitOutputIgnored(data.unitId, data.pinId, !data.ignored)
+    case APPEND_SUB_COMPONENT_CHILDREN:
+      return removeSubComponentChildren(data.id, data.children)
+    case REMOVE_SUB_COMPONENT_CHILDREN:
+      return appendSubComponentChildren(data.id, data.children)
     default:
       throw new Error('Irreversible')
   }

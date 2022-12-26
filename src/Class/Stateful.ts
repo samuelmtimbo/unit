@@ -1,5 +1,4 @@
 import { ObjectUpdateType } from '../Object'
-import { Pod } from '../pod'
 import { Primitive, PrimitiveEvents } from '../Primitive'
 import { State } from '../State'
 import { System } from '../system'
@@ -34,9 +33,9 @@ export class Stateful<
 
   protected _defaultState: State = {}
 
-  protected _state: Dict<any>
+  protected _state: Dict<any> = {}
 
-  constructor({ i = [], o = [] }: ION, opt: Opt, system: System, pod: Pod) {
+  constructor({ i = [], o = [] }: ION, opt: Opt, system: System, id: string) {
     super(
       {
         i,
@@ -44,10 +43,8 @@ export class Stateful<
       },
       opt,
       system,
-      pod
+      id
     )
-
-    this._state = {}
   }
 
   subscribe(
@@ -139,6 +136,6 @@ export class Stateful<
 
     super.restoreSelf(rest)
 
-    this._state = _state
+    this._state = _state || this._defaultState
   }
 }

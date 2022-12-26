@@ -1,8 +1,8 @@
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { EE } from '../../../../../types/interface/EE'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { EE } from '../../../../../types/interface/EE'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { ID_LISTEN } from '../../../../_ids'
 
 export interface I<T> {
   unit: EE<any>
@@ -19,7 +19,7 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
 
   private _unlisten: Unlisten | undefined = undefined
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['unit', 'event'],
@@ -35,7 +35,7 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_LISTEN
     )
 
     this.addListener('destroy', () => {
@@ -55,13 +55,12 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
   }
 
   f({ unit, event }: I<T>) {
-    const listener = (data: any) => {
-      this._output.data.push(data)
+    const listener = (...data: any[]) => {
+      this._output.data.push(data[0])
     }
     this._listener = listener
 
-    // RETURN
-    const emitter = unit.refEmitter() || unit
+    const emitter = unit
 
     this._unlisten = emitter.addListener(event, this._listener)
   }

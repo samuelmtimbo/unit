@@ -1,5 +1,14 @@
-import forEachKeyValue from '../system/core/object/ForEachKeyValue/f'
-import { GraphMergeSpec, GraphMergesSpec, GraphMergeUnitSpec } from '../types'
+import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
+import {
+  GraphMergeSpec,
+  GraphMergesSpec,
+  GraphMergeUnitSpec,
+  GraphPinSpec,
+  GraphPlugOuterSpec,
+  GraphSpec,
+  PinSpec,
+  Spec,
+} from '../types'
 import { IO } from '../types/IO'
 import { reduceObj, _keyCount } from '../util/object'
 
@@ -27,7 +36,7 @@ export function getMergePinNodeId(mergeId: string, type: IO): string {
   return `${mergeId}/${type}`
 }
 
-export function oppositePinKind(kind: IO): IO {
+export function opposite(kind: IO): IO {
   return kind === 'input' ? 'output' : 'input'
 }
 
@@ -71,7 +80,7 @@ export const forEachPinOnMerges = (
   merges: GraphMergesSpec,
   callback: (mergeId: string, unitId: string, type: IO, pinId: string) => void
 ) => {
-  forEachKeyValue(merges || {}, (merge, mergeId) => {
+  forEachValueKey(merges || {}, (merge, mergeId) => {
     forEachPinOnMerge(merge, (unitId, type, pinId) =>
       callback(mergeId, unitId, type, pinId)
     )
@@ -82,12 +91,81 @@ export const forEachPinOnMerge = (
   merge: GraphMergeSpec,
   callback: (unitId: string, type: IO, pinId: string) => void
 ) => {
-  forEachKeyValue(merge, ({ input, output }, unitId) => {
-    forEachKeyValue(input || {}, (_, inputId) => {
+  forEachValueKey(merge, ({ input, output }, unitId) => {
+    forEachValueKey(input || {}, (_, inputId) => {
       callback(unitId, 'input', inputId)
     })
-    forEachKeyValue(output || {}, (_, outputId) => {
+    forEachValueKey(output || {}, (_, outputId) => {
       callback(unitId, 'output', outputId)
     })
   })
+}
+
+export const forEachSpecPin = (
+  spec: Spec,
+  callback: (type: IO, pinId: string, pinSpec: PinSpec) => void
+) => {
+  const { inputs = {}, outputs = {} } = spec
+  forEachValueKey(inputs, (inputSpec, inputId) => {
+    callback('input', inputId, inputSpec)
+  })
+  forEachValueKey(outputs, (outputSpec, outputId) => {
+    callback('output', outputId, outputSpec)
+  })
+}
+
+export const forEachGraphSpecPin = (
+  spec: GraphSpec,
+  callback: (type: IO, pinId: string, pinSpec: GraphPinSpec) => void
+) => {
+  forEachGraphSpecPinOfType(spec, 'input', (inputId, inputSpec) => {
+    callback('input', inputId, inputSpec)
+  })
+  forEachGraphSpecPinOfType(spec, 'output', (outputSpec, outputId) => {
+    callback('output', outputSpec, outputId)
+  })
+}
+
+export const forEachGraphSpecPinOfType = (
+  spec: GraphSpec,
+  type: IO,
+  callback: (pinId: string, pinSpec: GraphPinSpec) => void
+) => {
+  forEachValueKey(spec[`${type}s`] ?? {}, (pinSpec, pinId) => {
+    callback(pinId, pinSpec)
+  })
+}
+
+export const specHasUnit = (spec: GraphSpec, unitId: string): boolean => {
+  return !!spec.units?.[unitId]
+}
+
+export const specHasMerge = (spec: GraphSpec, mergeId: string): boolean => {
+  return !!spec.merges?.[mergeId]
+}
+
+export const findMergePlug = (
+  spec: GraphSpec,
+  type: IO,
+  mergeId: string
+): GraphPlugOuterSpec | null => {
+  let mergePlug: GraphPlugOuterSpec = null
+
+  forEachGraphSpecPinOfType(spec, type, (pinId, pinSpec) => {
+    const { plug = {} } = pinSpec
+
+    for (const subPinId in plug) {
+      const subPin = plug[subPinId]
+
+      if (subPin.mergeId === mergeId) {
+        mergePlug = {
+          pinId,
+          type,
+          subPinId,
+        }
+      }
+    }
+  })
+
+  return mergePlug
 }

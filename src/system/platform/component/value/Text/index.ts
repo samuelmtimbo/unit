@@ -1,6 +1,6 @@
-import { Element } from '../../../../../Class/Element'
-import { Pod } from '../../../../../pod'
+import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
+import { ID_TEXT } from '../../../../_ids'
 
 export interface I {
   value: string
@@ -8,8 +8,8 @@ export interface I {
 
 export interface O {}
 
-export default class TextUnit extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class Text_ extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['value'],
@@ -17,7 +17,7 @@ export default class TextUnit extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_TEXT
     )
 
     this._defaultState = {

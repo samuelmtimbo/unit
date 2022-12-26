@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { IDeviceInfo } from '../../../../../types/global/IDeviceInfo'
+import { ID_ENUMERATE_DEVICES } from '../../../../_ids'
 
 export type I = {
   any: any
@@ -13,7 +13,7 @@ export type O = {
 }
 
 export default class EnumerateDevices extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['any'],
@@ -21,7 +21,7 @@ export default class EnumerateDevices extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_ENUMERATE_DEVICES
     )
   }
 

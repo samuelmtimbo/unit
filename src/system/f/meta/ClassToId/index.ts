@@ -1,8 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { UnitBundle } from '../../../../types/UnitBundle'
+import { ID_CLASS_TO_ID } from '../../../_ids'
 
 export interface I<T> {
   Class: UnitBundle<any>
@@ -13,7 +13,7 @@ export interface O<T> {
 }
 
 export default class ClassToId<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['Class'],
@@ -21,7 +21,7 @@ export default class ClassToId<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_CLASS_TO_ID
     )
   }
 

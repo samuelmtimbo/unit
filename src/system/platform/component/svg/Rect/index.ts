@@ -1,6 +1,6 @@
-import { Element } from '../../../../../Class/Element'
-import { Pod } from '../../../../../pod'
+import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
+import { ID_RECT } from '../../../../_ids'
 import { Style } from '../../../Props'
 
 export interface I {
@@ -13,8 +13,8 @@ export interface I {
 
 export interface O {}
 
-export default class SVGRect extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class SVGRect extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['style', 'x', 'y', 'width', 'height'],
@@ -22,7 +22,7 @@ export default class SVGRect extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_RECT
     )
   }
 }

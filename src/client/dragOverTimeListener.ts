@@ -9,12 +9,16 @@ export function dragOverTimeListener(
 ): Unlisten {
   const drag_enter_listener = ({}: CustomEvent<IODragAndDropEvent>) => {
     let i = 1
+
     const stopListener = () => {
       clearTimeout(over_timeout)
+
       component.$element.removeEventListener('_dragleave', stopListener)
       component.$element.removeEventListener('_dragdrop', stopListener)
     }
+
     let over_timeout: NodeJS.Timeout
+
     const set_over_timeout = () => {
       over_timeout = setTimeout(() => {
         callback()
@@ -22,7 +26,9 @@ export function dragOverTimeListener(
         set_over_timeout()
       }, i * t)
     }
+
     set_over_timeout()
+
     component.$element.addEventListener('_dragleave', stopListener)
     component.$element.addEventListener('_dragdrop', stopListener)
   }

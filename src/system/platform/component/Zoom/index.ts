@@ -1,7 +1,7 @@
-import { Element } from '../../../../Class/Element'
+import { Element_ } from '../../../../Class/Element'
 import { Zoom } from '../../../../client/zoom'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_ZOOM } from '../../../_ids'
 
 export interface I {
   style: object
@@ -10,8 +10,8 @@ export interface I {
 
 export interface O {}
 
-export default class _Zoom extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class _Zoom extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['style', 'zoom', 'width', 'height'],
@@ -19,7 +19,7 @@ export default class _Zoom extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_ZOOM
     )
 
     this._defaultState = {

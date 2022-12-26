@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_GET } from '../../../_ids'
 
 export interface I<T> {
   obj: object
@@ -12,8 +12,8 @@ export interface O<T> {
   value: T
 }
 
-export default class Prop<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+export default class Get<T> extends Functional<I<T>, O<T>> {
+  constructor(system: System) {
     super(
       {
         i: ['obj', 'key'],
@@ -21,7 +21,7 @@ export default class Prop<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_GET
     )
   }
 

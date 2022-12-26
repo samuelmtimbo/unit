@@ -1,11 +1,16 @@
 import { Dict } from '../../../../types/Dict'
-import length from '../../../f/array/Length/f'
-import keys from '../../../f/object/Keys/f'
+import { length } from '../../../f/array/Length/f'
+import { keys } from '../../../f/object/Keys/f'
 
-export default function keyCount<T>({ obj }: { obj: Dict<any> }): {
+export default function _keyCount<T>({ obj }: { obj: Dict<any> }): {
   count: number
 } {
-  const { keys: _keys } = keys({ obj })
-  const { length: _length } = length({ a: _keys })
-  return { count: _length }
+  return { count: keyCount(obj) }
+}
+
+export function keyCount<T>(obj: Dict<any>): number {
+  const _keys = keys(obj)
+  const _length = length(_keys)
+
+  return _length
 }

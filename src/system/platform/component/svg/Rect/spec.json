@@ -3,30 +3,57 @@
   "inputs": {
     "style": {
       "type": "object",
-      "optional": true
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "{fill:'transparent',stroke:'currentColor',strokeWidth:'3px'}"
+        ]
+      }
     },
     "x": {
       "type": "number",
-      "optional": true
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "0"
+        ]
+      }
     },
     "y": {
       "type": "number",
-      "optional": true
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "0"
+        ]
+      }
     },
     "width": {
       "type": "number",
-      "optional": true
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "100",
+          "150"
+        ]
+      }
     },
     "height": {
       "type": "number",
-      "optional": true
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "100",
+          "150"
+        ]
+      }
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
     "description": "SVG rectangle",
-    "complexity": 21,
+    "complexity": 118,
     "tags": [
       "platform",
       "component",

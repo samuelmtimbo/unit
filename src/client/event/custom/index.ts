@@ -1,5 +1,5 @@
 import { _addEventListener } from '..'
-import Listenable from '../../Listenable'
+import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import { stopByPropagation } from '../../stopPropagation'
 

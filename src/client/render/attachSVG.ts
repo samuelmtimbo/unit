@@ -22,7 +22,7 @@ export function attachSVG(system: System): void {
 
   resizeWith(system, svg, root)
 
-  root.appendChild(svg)
+  root.shadowRoot.appendChild(svg)
 
   foreground.svg = svg
 }

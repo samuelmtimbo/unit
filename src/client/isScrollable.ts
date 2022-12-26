@@ -5,30 +5,51 @@ export function hasScrollbar(): boolean {
   return true
 }
 
-export function isScrollable($element: HTMLElement): boolean {
-  if ($element === null) {
+export function isScrollableChild(
+  element: HTMLElement,
+  parentElement: HTMLElement
+): boolean {
+  return true
+}
+
+export function isScrollable(element: HTMLElement): boolean {
+  if (element === null) {
     return false
   }
 
   const {
     style: { overflowY, overflowX },
-  } = $element
+  } = element
+
+  const isParentScrollable = () => {
+    const { parentElement } = element
+
+    if (parentElement) {
+      return (
+        isScrollableChild(element, parentElement) && isScrollable(parentElement)
+      )
+    } else {
+      return false
+    }
+  }
+
   if (SCROLLABLE_OVERFLOW.includes(overflowY)) {
-    const { clientHeight, scrollHeight } = $element
+    const { clientHeight, scrollHeight } = element
+
     if (scrollHeight > clientHeight) {
       return true
     } else {
-      return isScrollable($element.parentElement)
+      return isParentScrollable()
     }
   } else if (SCROLLABLE_OVERFLOW.includes(overflowX)) {
-    const { scrollWidth, clientWidth } = $element
+    const { scrollWidth, clientWidth } = element
 
     if (scrollWidth > clientWidth) {
       return true
     } else {
-      return isScrollable($element.parentElement)
+      return isParentScrollable()
     }
   } else {
-    return isScrollable($element.parentElement)
+    return isParentScrollable()
   }
 }

@@ -3,14 +3,14 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec =
   require('../../../system/core/array/HeadOrDefault/spec.json') as GraphSpec
 
 const HeadOrDefault = fromSpec(spec, _specs)
 
-const headOrDefault = new HeadOrDefault(system, pod)
+const headOrDefault = new HeadOrDefault(system)
 
 false && watchUnitAndLog(headOrDefault)
 false && watchGraphAndLog(headOrDefault)

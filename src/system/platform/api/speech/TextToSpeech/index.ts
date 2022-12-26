@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { ISpeechSynthesis } from '../../../../../types/global/ISpeechSynthesis'
+import { ID_TEXT_TO_SPEECH } from '../../../../_ids'
 
 export type I = {
   message: string
@@ -11,8 +11,8 @@ export type I = {
 
 export type O = {}
 
-export default class SpeechSynthesis extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class TextToSpeech extends Functional<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['message', 'voice'],
@@ -20,7 +20,7 @@ export default class SpeechSynthesis extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_TEXT_TO_SPEECH
     )
   }
 

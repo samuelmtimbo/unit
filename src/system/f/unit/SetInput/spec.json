@@ -21,7 +21,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "set input `name` of `unit` to `data`",
-    "complexity": 5,
+    "complexity": 45,
     "tags": [
       "f",
       "unit"

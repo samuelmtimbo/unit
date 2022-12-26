@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Keys from '../../../../system/f/object/Keys'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const keys = new Keys(system, pod)
+const keys = new Keys(system)
 
 keys.play()
 

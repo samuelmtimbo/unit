@@ -1,10 +1,9 @@
 import { Done } from '../../../Class/Functional/Done'
 import { Semifunctional } from '../../../Class/Semifunctional'
-import { Pod } from '../../../pod'
 import { System } from '../../../system'
 import { S } from '../../../types/interface/S'
 import { U } from '../../../types/interface/U'
-import { wrapSystem } from '../../../wrap/System'
+import { ID_BOOT } from '../../_ids'
 
 export interface I<T> {
   opt: U
@@ -17,7 +16,7 @@ export interface O<T> {
 }
 
 export default class Boot<T> extends Semifunctional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['init', 'parent'],
@@ -28,8 +27,8 @@ export default class Boot<T> extends Semifunctional<I<T>, O<T>> {
       {
         input: {
           parent: {
-            ref: true
-          }
+            ref: true,
+          },
         },
         output: {
           system: {
@@ -38,7 +37,7 @@ export default class Boot<T> extends Semifunctional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_BOOT
     )
   }
 

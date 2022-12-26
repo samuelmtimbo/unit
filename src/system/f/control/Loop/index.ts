@@ -1,7 +1,7 @@
-import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { ID_LOOP } from '../../../_ids'
 
 export interface I<T> {
   init: T
@@ -22,7 +22,7 @@ export default class Loop<T> extends Primitive<I<T>, O<T>> {
   private _looping: boolean = false
   private _nexting: boolean = false
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['init', 'next', 'test'],
@@ -30,7 +30,7 @@ export default class Loop<T> extends Primitive<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_LOOP
     )
 
     this.addListener('reset', this._reset)

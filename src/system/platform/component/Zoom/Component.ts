@@ -2,7 +2,6 @@ import classnames from '../../../../client/classnames'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
 import { getTransform, Zoom, zoomIdentity } from '../../../../client/zoom'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { IHTMLDivElement } from '../../../../types/global/dom'
 import { Style } from '../../Props'
@@ -29,15 +28,15 @@ const DEFAULT_STYLE = {
 const DEFAULT_WIDTH = 240
 const DEFAULT_HEIGHT = 240
 
-export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
+export default class Zoom_ extends Element<IHTMLDivElement, Props> {
   public _root: Div
 
   public _html: Div
   public _svg: SVGSVG
   public _svg_g: SVGG
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       className,
@@ -59,8 +58,7 @@ export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
         },
         draggable,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._root = zoom
 
@@ -75,17 +73,12 @@ export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
           left: '0',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     zoom.registerParentRoot(svg)
     this._svg = svg
 
-    const svg_g = new SVGG(
-      { style: { width: '0', height: '0' } },
-      this.$system,
-      this.$pod
-    )
+    const svg_g = new SVGG({ style: { width: '0', height: '0' } }, this.$system)
     svg.registerParentRoot(svg_g)
     this._svg_g = svg_g
 
@@ -99,8 +92,7 @@ export default class ZoomComponent extends Element<IHTMLDivElement, Props> {
           top: '0',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     zoom.registerParentRoot(html)
     this._html = html

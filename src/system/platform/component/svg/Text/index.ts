@@ -1,7 +1,7 @@
-import { Element } from '../../../../../Class/Element'
-import { Pod } from '../../../../../pod'
+import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { ID_TEXT_0 } from '../../../../_ids'
 
 export interface I {
   style: Dict<string>
@@ -10,8 +10,8 @@ export interface I {
 
 export interface O {}
 
-export default class SVGText extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class SVGText extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['style', 'className'],
@@ -19,7 +19,7 @@ export default class SVGText extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_TEXT_0
     )
   }
 }

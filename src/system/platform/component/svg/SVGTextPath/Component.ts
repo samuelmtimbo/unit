@@ -1,7 +1,6 @@
-import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
-import { Pod } from '../../../../../pod'
+import applyStyle from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -18,8 +17,8 @@ export interface Props {
 export default class SVGTextPath extends Element<SVGTextPathElement, Props> {
   private _text_path_el: SVGTextPathElement
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       style = {},

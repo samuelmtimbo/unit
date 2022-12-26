@@ -1,5 +1,4 @@
 import { addListeners } from '../../../../client/addListener'
-import applyStyle from '../../../../client/applyStyle'
 import { Component } from '../../../../client/component'
 import {
   Context,
@@ -14,8 +13,8 @@ import {
 import { Element } from '../../../../client/element'
 import { makeCustomListener } from '../../../../client/event/custom'
 import { renderFrame } from '../../../../client/renderFrame'
+import applyStyle from '../../../../client/style'
 import { Theme } from '../../../../client/theme'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../types/global/dom'
@@ -31,24 +30,27 @@ export interface Props {
 }
 
 export const DEFAULT_STYLE = {
+  top: '0',
   width: '100%',
   height: '100%',
   overflow: 'auto',
+  zIndex: '0',
 }
 
 export default class Frame extends Element<IHTMLDivElement, Props> {
   public $$context: Context
 
   private _context_unlisten: Unlisten
-
   private _sub_context_unlisten: Unlisten
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { className, style = {}, color, tabIndex, theme, disabled } = $props
 
     const $element = this.$system.api.document.createElement('div')
+
+    $element.classList.add('frame')
 
     applyStyle($element, { ...DEFAULT_STYLE, ...style })
 
@@ -180,6 +182,7 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
 
   private _on_context_theme_changed = (): void => {
     // console.log('Frame', '_on_context_theme_changed')
+
     if (this._manually_changed_theme) {
       return
     }
@@ -188,6 +191,8 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
 
     this._prevent_manual_change_theme = true
 
+    console.log({ $theme })
+
     setTheme(this.$$context, $theme)
 
     this._prevent_manual_change_theme = false
@@ -195,11 +200,13 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
 
   private _on_context_enabled = (): void => {
     // console.log('Frame', '_on_context_enabled')
+
     this._refresh_sub_context_disabled()
   }
 
   private _on_context_disabled = (): void => {
     // console.log('Frame', '_on_context_disabled')
+
     this._refresh_sub_context_disabled()
   }
 
@@ -229,11 +236,12 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
 
   onUnmount() {
     // console.log('Frame', 'onUnmount')
+
     setParent(this.$$context, null)
 
-    unmount(this.$$context)
-
     this._context_unlisten()
+
+    unmount(this.$$context)
 
     this._sub_context_unlisten()
   }

@@ -1,6 +1,5 @@
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { IHTMLDivElement } from '../../../../types/global/dom'
 
@@ -11,8 +10,8 @@ const DEFAULT_STYLE = {}
 export default class Parent extends Element<IHTMLDivElement, Props> {
   private _parent_el: IHTMLDivElement
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {} = this.$props
 
@@ -21,5 +20,9 @@ export default class Parent extends Element<IHTMLDivElement, Props> {
     this._parent_el = $element
 
     this.$element = $element
+  }
+
+  focus() {
+    this.$parentChildren[0] && this.$parentChildren[0].focus()
   }
 }

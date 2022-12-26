@@ -4,7 +4,6 @@ import { makePointerEnterListener } from '../../../../../client/event/pointer/po
 import { makePointerLeaveListener } from '../../../../../client/event/pointer/pointerleave'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { applyTheme } from '../../../../../client/theme'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -72,8 +71,8 @@ export default class IconButton extends Element<IHTMLDivElement, Props> {
     return current_color
   }
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { className, icon = 'question', title, style = {} } = this.$props
 
@@ -87,8 +86,7 @@ export default class IconButton extends Element<IHTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     icon_comp.addEventListener(makePointerEnterListener(this._on_pointer_enter))
     icon_comp.addEventListener(makePointerLeaveListener(this._on_pointer_leave))

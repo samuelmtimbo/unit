@@ -1,20 +1,18 @@
 import { TreeNode, TreeNodeType } from '../../spec/parser'
 import { Size } from '../util/geometry'
 
-// export const DELIMITER_WIDTH: number = 8
 export const DELIMITER_WIDTH: number = 6
 export const DELIMITER_HEIGHT: number = 16
 export const COMMA_WIDTH: number = 6
 export const COLON_WIDTH: number = 6
 export const SPACE_WIDTH: number = 2
-export const CONTAINER_ROW_MARGIN: number = 1
+export const CONTAINER_ROW_LEFT_MARGIN: number = 1
+export const CONTAINER_ROW_RIGHT_MARGIN: number = 1
 export const CONTAINER_COLUMN_LEFT_MARGIN: number = 7
-// export const CONTAINER_COLUMN_RIGHT_MARGIN: number = 0
 export const CONTAINER_COLUMN_RIGHT_MARGIN: number = 7
 
 export const MIN_WIDTH = 6 // cursor
 export const MAX_WIDTH = 180
-// export const MAX_HEIGHT = 210
 export const MAX_HEIGHT = 180
 
 export function getLeafWidth(value: string): number {
@@ -39,10 +37,10 @@ const calcHorizontalWidth = (data: TreeNode): number => {
     data.type === TreeNodeType.ObjectLiteral ||
     data.type === TreeNodeType.ArrayLiteral
   ) {
-    let width = 0
+    let width = 1 // mobile
     width += 2 * DELIMITER_WIDTH
-    width += 2 * CONTAINER_ROW_MARGIN
-    // width += 1 * CONTAINER_ROW_MARGIN
+    width += CONTAINER_ROW_LEFT_MARGIN
+    width += CONTAINER_ROW_RIGHT_MARGIN
     width += Math.max(
       data.children.reduce((acc, c) => acc + calcHorizontalWidth(c), 0),
       MIN_WIDTH

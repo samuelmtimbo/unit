@@ -1,6 +1,5 @@
 import { Element } from '../../../client/element'
 import parentElement from '../../../client/platform/web/parentElement'
-import { Pod } from '../../../pod'
 import { System } from '../../../system'
 import { IHTMLDivElement } from '../../../types/global/dom'
 import { UnitBundleSpec } from '../../../types/UnitBundleSpec'
@@ -16,8 +15,8 @@ export const DEFAULT_STYLE = {
 }
 
 export default class Client extends Element<IHTMLDivElement, Props> {
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {} = this.$props
 
@@ -28,9 +27,10 @@ export default class Client extends Element<IHTMLDivElement, Props> {
   }
 
   onPropChanged(prop: string, current: any) {
-    console.log('Client', 'onPropChanged', prop, current)
+    // console.log('Client', 'onPropChanged', prop, current)
+
     if (prop === 'graph') {
-      //
+      // RETURN
     }
   }
 }

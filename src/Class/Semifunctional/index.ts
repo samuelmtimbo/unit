@@ -1,6 +1,5 @@
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
-import { Pod } from '../../pod'
 import { Primitive, PrimitiveEvents } from '../../Primitive'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
@@ -22,6 +21,8 @@ export interface SFIO {
   o?: string[]
 }
 
+const ID_FUNCTIONAL = ''
+
 export class Semifunctional<
   I = {},
   O = {},
@@ -39,14 +40,14 @@ export class Semifunctional<
     { fi = [], fo = [], i = [], o = [] }: SFIO,
     opt: Opt = {},
     system: System,
-    pod: Pod
+    id: string
   ) {
-    super({ i: [...fi, ...i], o: [...fo, ...o] }, opt, system, pod)
+    super({ i: [...fi, ...i], o: [...fo, ...o] }, opt, system, id)
 
     const self = this
 
     const functional = new (class _Functional extends Functional<I, O> {
-      constructor(system: System, pod: Pod) {
+      constructor(system: System) {
         super(
           {
             i: fi,
@@ -54,7 +55,7 @@ export class Semifunctional<
           },
           {},
           system,
-          pod
+          `${id}__internal__functional`
         )
       }
 
@@ -65,14 +66,14 @@ export class Semifunctional<
       d() {
         self.d()
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     this._functional = functional
 
     functional.play()
 
     const primitive = new (class _Primitive extends Primitive<I, O> {
-      constructor(system: System, pod: Pod) {
+      constructor(system: System) {
         super(
           {
             i,
@@ -80,7 +81,7 @@ export class Semifunctional<
           },
           {},
           system,
-          pod
+          `${id}__internal__primitive`
         )
       }
 
@@ -115,7 +116,7 @@ export class Semifunctional<
       onRefInputInvalid(name: string) {
         self.onIterRefInputInvalid(name)
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     primitive.play()
 
@@ -166,15 +167,17 @@ export class Semifunctional<
 
     this.addListener(
       'set_input',
-      (name: string, pin: Pin<any>, opt: PinOpt) => {
+      (name: string, pin: Pin<any>, opt: PinOpt, propagate) => {
         this._f_i.add(name)
+
         functional.addInput(name, pin, opt)
       }
     )
     this.addListener(
       'set_output',
-      (name: string, pin: Pin<any>, opt: PinOpt) => {
+      (name: string, pin: Pin<any>, opt: PinOpt, propagate) => {
         this._f_o.add(name)
+
         functional.addOutput(name, pin, opt)
       }
     )

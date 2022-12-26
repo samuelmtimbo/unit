@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ID_ADD_LINE_TO } from '../../../../_ids'
 
 export interface I<T> {
   d: any[][]
@@ -14,7 +14,7 @@ export interface O<T> {
 }
 
 export default class AddLineTo<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['d', 'x', 'y'],
@@ -22,7 +22,7 @@ export default class AddLineTo<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_ADD_LINE_TO
     )
   }
 

@@ -1,11 +1,10 @@
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { IDownloadDataOpt } from '../../../../types/global/IDownloadData'
 import { IDownloadURLOpt } from '../../../../types/global/IDownloadURL'
-import { IFileHandler } from '../../../../types/global/IFileHandler'
 
-export function webFile(window: Window, prefix: string): API['file'] {
+export function webFile(window: Window, opt: BootOpt): API['file'] {
   const { document } = window
 
   function showSaveFilePicker(opt: {
@@ -17,7 +16,7 @@ export function webFile(window: Window, prefix: string): API['file'] {
       description: string
       accept: Dict<string[]>
     }[]
-  }): Promise<IFileHandler[]> {
+  }): Promise<FileSystemFileHandle> {
     // @ts-ignore
     if (window.showSaveFilePicker) {
       // @ts-ignore
@@ -37,7 +36,7 @@ export function webFile(window: Window, prefix: string): API['file'] {
       accept: Dict<string[]>
     }[]
     multiple?: boolean
-  }): Promise<IFileHandler[]> {
+  }): Promise<FileSystemFileHandle[]> {
     // @ts-ignore
     if (window.showOpenFilePicker) {
       // @ts-ignore

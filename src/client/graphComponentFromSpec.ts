@@ -1,10 +1,9 @@
-import { AsyncGraph } from '../types/interface/async/AsyncGraph'
-import { G } from '../types/interface/G'
-import { Pod } from '../pod'
 import { fromSpec } from '../spec/fromSpec'
 import { System } from '../system'
 import { GraphSpec } from '../types'
 import { Dict } from '../types/Dict'
+import { AsyncGraph } from '../types/interface/async/AsyncGraph'
+import { G } from '../types/interface/G'
 import { Component } from './component'
 import { componentFromSpec } from './componentFromSpec'
 import { Client } from './render/Client'
@@ -12,7 +11,7 @@ import { getSpec } from './spec'
 
 export function graphComponentFromSpec(
   system: System,
-  pod: Pod,
+
   spec: GraphSpec,
   input: Dict<any> = {}
 ): Client {
@@ -20,7 +19,7 @@ export function graphComponentFromSpec(
 
   const Class = fromSpec(spec, specs)
 
-  const graph = new Class(system, pod)
+  const graph = new Class(system)
 
   for (const pinId in input) {
     const data = input[pinId]
@@ -29,7 +28,7 @@ export function graphComponentFromSpec(
 
   const $graph = AsyncGraph(graph)
 
-  const component = componentFromSpec(system, pod, spec)
+  const component = componentFromSpec(system, spec, specs)
 
   component.connect($graph)
 
@@ -42,7 +41,7 @@ export function graphComponentFromSpec(
 
 export function graphComponentFromId(
   system: System,
-  pod: Pod,
+
   specId: string,
   input: Dict<any> = {}
 ): { graph: G; component: Component } {
@@ -50,7 +49,7 @@ export function graphComponentFromId(
 
   const spec: GraphSpec = getSpec(specs, specId) as GraphSpec
 
-  const controller = graphComponentFromSpec(system, pod, spec, input)
+  const controller = graphComponentFromSpec(system, spec, input)
 
   return controller
 }

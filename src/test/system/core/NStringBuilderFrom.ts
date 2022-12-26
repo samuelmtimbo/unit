@@ -2,12 +2,12 @@ import * as assert from 'assert'
 import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec = require('../../../system/core/string/NStringBuilderFrom/spec.json')
 const NStringBuilderFrom = fromSpec(spec, _specs)
 
-const stringBuilder = new NStringBuilderFrom(system, pod)
+const stringBuilder = new NStringBuilderFrom(system)
 
 false && watchUnitAndLog(stringBuilder)
 false && watchGraphAndLog(stringBuilder)

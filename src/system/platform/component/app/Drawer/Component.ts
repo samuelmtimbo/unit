@@ -1,6 +1,8 @@
 import { addListeners } from '../../../../../client/addListener'
-import { ANIMATION_T_MS } from '../../../../../client/animation/animation'
-import applyStyle, { mergeStyle } from '../../../../../client/applyStyle'
+import {
+  ANIMATION_T_MS,
+  ifLinearTransition,
+} from '../../../../../client/animation/animation'
 import classnames from '../../../../../client/classnames'
 import debounce from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
@@ -14,8 +16,8 @@ import { makePointerMoveListener } from '../../../../../client/event/pointer/poi
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { makeResizeListener } from '../../../../../client/event/resize'
 import parentElement from '../../../../../client/platform/web/parentElement'
+import applyStyle, { mergeStyle } from '../../../../../client/style'
 import { COLOR_NONE } from '../../../../../client/theme'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -62,8 +64,8 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
   private _hover: boolean = false
   private _y: number = 0
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       className,
@@ -105,8 +107,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
         },
         title,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     knob.addEventListener(
       makeClickListener({
@@ -135,8 +136,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
           overflow: 'hidden',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this.frame = frame
 
@@ -161,8 +161,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
           // padding: '3px',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     content.registerParentRoot(frame)
     this.content = content
@@ -182,8 +181,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
           borderColor: 'currentColor',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._column = column
 
@@ -195,8 +193,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this.drawer = drawer
     drawer.registerParentRoot(knob)
@@ -315,7 +312,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
   }
 
   private _resize = (): void => {
-    console.log('Drawer', '_resize')
+    // console.log('Drawer', '_resize')
 
     const { $width } = this.$context
     const { width = 0, height = KNOB_HEIGHT, component } = this.$props
@@ -431,11 +428,12 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
 
   private _animate = (style: Dict<string>, animate: boolean): void => {
     const duration = animate ? ANIMATION_T_MS : 0
+
     const fill = 'forwards'
 
     if (this._animation) {
-      this._animation.cancel()
-      this._animation = undefined
+      this._animation.pause()
+      this._animation.commitStyles()
     }
 
     this._animation = this.drawer.$element.animate([style], {
@@ -452,18 +450,25 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
 
   private _animate_transform = (animate: boolean): void => {
     // console.log('Drawer', '_animate_transform', animate)
-    
+
     const transform = this._transform()
 
-    this._animate(
-      {
-        transform,
-      },
-      animate
-    )
+    // this._animate(
+    //   {
+    //     transform,
+    //   },
+    //   animate
+    // )
+
+    mergeStyle(this.drawer.$element, {
+      transform,
+      transition: ifLinearTransition(animate, 'transform'),
+    })
   }
 
   public show(animate: boolean): void {
+    // console.log('Drawer', 'show', animate)
+
     this._hidden = false
 
     this._animate_transform(animate)

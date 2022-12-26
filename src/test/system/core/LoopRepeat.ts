@@ -6,13 +6,13 @@ import {
 } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec = require('../../../system/core/common/LoopRepeat/spec.json')
 
 const LoopRepeat = fromSpec(spec, _specs)
 
-const loopRepeat = new LoopRepeat(system, pod)
+const loopRepeat = new LoopRepeat(system)
 
 false && watchUnitAndLog(loopRepeat)
 false && watchGraphAndLog(loopRepeat)

@@ -1,13 +1,13 @@
-import { Element } from '../../../../../Class/Element'
-import { Pod } from '../../../../../pod'
+import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
+import { ID_FOREIGN_OBJECT } from '../../../../_ids'
 
 export interface I {}
 
 export interface O {}
 
-export default class ForeignObject extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class ForeignObject extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['class', 'style'],
@@ -15,7 +15,7 @@ export default class ForeignObject extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_FOREIGN_OBJECT
     )
   }
 }

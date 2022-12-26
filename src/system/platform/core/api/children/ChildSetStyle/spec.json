@@ -92,24 +92,6 @@
               "y": -26
             }
           }
-        },
-        "b": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": 29,
-              "y": 31
-            }
-          }
-        },
-        "a": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": -26,
-              "y": 31
-            }
-          }
         }
       },
       "output": {},
@@ -126,7 +108,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "set `element` child `at` style to `style`",
-    "complexity": 15,
+    "complexity": 17,
     "tags": [
       "platform",
       "core",

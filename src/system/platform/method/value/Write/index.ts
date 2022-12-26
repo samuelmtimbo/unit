@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { V } from '../../../../../types/interface/V'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { V } from '../../../../../types/interface/V'
+import { ID_WRITE } from '../../../../_ids'
 
 export interface I<T> {
   value: V
@@ -14,7 +14,7 @@ export interface O<T> {
 }
 
 export default class Write<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['value', 'data'],
@@ -28,7 +28,7 @@ export default class Write<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_WRITE
     )
   }
 

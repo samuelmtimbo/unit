@@ -46,6 +46,33 @@ export const reflectComponentBaseTrait = (
   const all_leaf_slot_trait = {}
   const all_slot_base: Dict<string[]> = {}
 
+  const expand_slot = (slot_id: string, path: number[]): Style[] => {
+    const slot_base = all_slot_base[slot_id]
+
+    let _slot_base = slot_base
+
+    let base = []
+
+    for (const p of path) {
+      const leaf_id = _slot_base[p]
+      const leaf_path = leaf_id.split('/')
+
+      let sub_component = component.pathGetSubComponent(leaf_path)
+
+      _slot_base = all_slot_base[leaf_id]
+
+      base = sub_component.$parentChildren.reduce((acc, c) => {
+        return [...acc, ...c.getRootBase()]
+      }, [])
+    }
+
+    const children_styles = base.map(([_, leaf_comp]) =>
+      extractStyle(_, leaf_comp)
+    )
+
+    return children_styles
+  }
+
   for (const leaf of base) {
     const [leaf_path, leaf_comp] = leaf
 
@@ -79,6 +106,7 @@ export const reflectComponentBaseTrait = (
 
       let c = sub_component
       let p = sub_component_parent
+
       let s = p.getParentRootSlotId(c)
 
       while (p) {
@@ -90,11 +118,13 @@ export const reflectComponentBaseTrait = (
             slot_sub_component_id
           )
 
-          leaf_parent_slot_path.push(
-            slot_sub_component_parent_id ?? slot_sub_component_id
-          )
+          // leaf_parent_slot_path.push(
+          //   slot_sub_component_parent_id ?? slot_sub_component_id
+          // )
+          leaf_parent_slot_path.push(slot_sub_component_id)
 
           p = p.getSubComponent(slot_sub_component_id)
+
           s = slot_target
         } else {
           break
@@ -119,27 +149,7 @@ export const reflectComponentBaseTrait = (
       all_slot_base[leaf_slot_id].push(leaf_id)
     }
 
-    let leaf_style
-
-    if (
-      leaf_comp.$element instanceof HTMLElement ||
-      leaf_comp.$element instanceof SVGElement
-    ) {
-      leaf_style = extractStyle(leaf_id, leaf_comp)
-    } else if (leaf_comp.$element instanceof Text) {
-      const fontSize = slot.getFontSize()
-
-      const { textContent } = leaf_comp.$element
-
-      const { width, height } = measureText(textContent, fontSize)
-
-      leaf_style = {
-        top: `${2}px`,
-        left: `${2}px`,
-        width: `${width}px`,
-        height: `${height}px`,
-      }
-    }
+    const leaf_style = extractStyle(leaf_id, leaf_comp)
 
     all_leaf_style[leaf_id] = leaf_style
 
@@ -173,9 +183,7 @@ export const reflectComponentBaseTrait = (
       )
     } else if (is_root) {
       root_sub_sub_component_id.push(sub_component_id)
-
       all_root_style.push(leaf_style)
-
       root_leaf_id.push(leaf_id)
     }
   }
@@ -184,15 +192,20 @@ export const reflectComponentBaseTrait = (
     trait,
     style,
     all_root_style,
-    (i) => {
-      return []
+    (path) => {
+      let children = root_leaf_id
+
+      const [head, ...tail] = path
+
+      const slot_id = children[head]
+
+      return expand_slot(slot_id, tail)
     }
   )
 
   let root_leaf_i = 0
   for (const leaf_id of root_leaf_id) {
-    // PERF
-    all_leaf_trait[leaf_id] = { ...all_root_trait[root_leaf_i] }
+    all_leaf_trait[leaf_id] = all_root_trait[root_leaf_i]
 
     root_leaf_i++
   }
@@ -213,16 +226,7 @@ export const reflectComponentBaseTrait = (
       slot_style,
       slot_all_style,
       (path) => {
-        let children = slot_base
-        for (const p of path) {
-          const child_id = children[p]
-
-          children = all_slot_base[child_id] || [] // AD HOC
-        }
-        const children_styles = children.map(
-          (leaf_id) => all_leaf_style[leaf_id]
-        )
-        return children_styles
+        return expand_slot(slot_id, path)
       }
     )
 

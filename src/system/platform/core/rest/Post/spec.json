@@ -1,0 +1,96 @@
+{
+  "name": "post",
+  "inputs": {
+    "url": {
+      "plug": {
+        "0": {
+          "unitId": "fetch",
+          "pinId": "url"
+        }
+      },
+      "ref": false
+    },
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "deepmerge",
+          "pinId": "b"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "response": {
+      "plug": {
+        "0": {
+          "unitId": "fetch",
+          "pinId": "response"
+        }
+      },
+      "ref": false
+    }
+  },
+  "units": {
+    "deepmerge": {
+      "id": "2af12780-698c-40ca-baa9-5f3260377e0f",
+      "input": {
+        "a": {
+          "constant": true
+        },
+        "b": {
+          "constant": false
+        }
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -53,
+          "y": 2
+        }
+      }
+    },
+    "fetch": {
+      "id": "c5856fdc-5154-46ab-a414-47f37af39da1",
+      "input": {
+        "url": {},
+        "options": {}
+      },
+      "output": {
+        "response": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": -3
+        }
+      }
+    }
+  },
+  "merges": {
+    "6": {
+      "deepmerge": {
+        "input": {},
+        "output": {
+          "ab": true
+        }
+      },
+      "fetch": {
+        "input": {
+          "options": true
+        },
+        "output": {}
+      }
+    }
+  },
+  "render": false,
+  "component": {},
+  "metadata": {
+    "icon": "send",
+    "description": "fetch a resource across the network through HTTP POST",
+    "complexity": 8
+  },
+  "id": "c4ff2bad-0d60-4d17-9471-c906075d2751"
+}

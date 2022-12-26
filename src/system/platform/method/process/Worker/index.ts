@@ -3,11 +3,11 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { workerPort } from '../../../../../client/platform/web/workerPort'
 import { asyncGraphFromPort } from '../../../../../graphFromPort'
-import { $Graph } from '../../../../../types/interface/async/$Graph'
-import { Pod } from '../../../../../pod'
 import { RemoteClient } from '../../../../../RemoteClient'
 import { System } from '../../../../../system'
 import { GraphSpec } from '../../../../../types'
+import { $Graph } from '../../../../../types/interface/async/$Graph'
+import { ID_WORKER } from '../../../../_ids'
 
 export interface I {
   spec: GraphSpec
@@ -17,10 +17,10 @@ export interface O {
   graph: $Graph // RETURN
 }
 
-export default class WorkerPod extends Functional<I, O> {
+export default class Worker extends Functional<I, O> {
   private _client: RemoteClient
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['spec'],
@@ -34,7 +34,7 @@ export default class WorkerPod extends Functional<I, O> {
         },
       },
       system,
-      pod
+      ID_WORKER
     )
 
     this.addListener('destroy', () => {
@@ -72,7 +72,7 @@ export default class WorkerPod extends Functional<I, O> {
 
     const port = this._client.port()
 
-    const graph = asyncGraphFromPort(this.__system, this.__pod, port)
+    const graph = asyncGraphFromPort(this.__system, port)
 
     done({
       graph,

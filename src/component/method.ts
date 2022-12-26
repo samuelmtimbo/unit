@@ -1,4 +1,5 @@
 import { ChildOutOfBound } from '../exception/ChildOutOfBoundError'
+import { evaluate } from '../spec/evaluate'
 import { Dict } from '../types/Dict'
 import { Component_ } from '../types/interface/Component'
 import { UnitBundle } from '../types/UnitBundle'
@@ -24,9 +25,26 @@ export function instanceChild(
   Class: UnitBundle<Component_>
 ): Component_ {
   const system = component.refSystem()
-  const pod = component.refPod()
 
-  const unit = new Class(system, pod)
+  const unit = new Class(system)
+
+  const {
+    input = {},
+    output = {},
+    memory = { input: {}, output: {}, memory: {} },
+  } = Class.__bundle.unit
+
+  for (const name in input) {
+    const { data } = input[name]
+
+    if (data !== undefined) {
+      const _data = evaluate(data, system.specs, system.classes)
+
+      unit.pushInput(name, _data)
+    }
+  }
+
+  // unit.restore(memory)
 
   if (component.paused() && !unit.paused()) {
     unit.pause()

@@ -1,8 +1,21 @@
+import { buildSync } from 'esbuild'
 import { outputFileSync, readFileSync } from 'fs-extra'
 import * as path from 'path'
 import { PATH_PUBLIC, PATH_SRC_CLIENT } from '../../../path'
 
-const buffer = readFileSync(path.join(PATH_PUBLIC, 'index.js'))
+buildSync({
+  minify: false,
+  sourcemap: true,
+  bundle: true,
+  logLevel: 'warning',
+  entryPoints: ['./src/client/html/meta.ts'],
+  define: {
+    'globalThis.env': '{"NODE_ENV": "production"}',
+  },
+  outfile: 'public/_meta.js',
+})
+
+const buffer = readFileSync(path.join(PATH_PUBLIC, '_meta.js'))
 
 const INDEX_JS = buffer.toString()
 

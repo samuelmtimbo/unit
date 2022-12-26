@@ -1,6 +1,6 @@
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 
-export function webAnimation(window: Window, prefix: string): API['animation'] {
+export function webAnimation(window: Window, opt: BootOpt): API['animation'] {
   const animation = {
     requestAnimationFrame: (callback) => {
       return window.requestAnimationFrame(callback)

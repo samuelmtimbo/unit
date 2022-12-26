@@ -1,9 +1,9 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { System } from '../../../../../system'
 import { U } from '../../../../../types/interface/U'
 import { V } from '../../../../../types/interface/V'
-import { Pod } from '../../../../../pod'
-import { System } from '../../../../../system'
+import { ID_OUTPUT } from '../../../../_ids'
 
 export interface I<T> {
   unit: U
@@ -16,7 +16,7 @@ export interface O<T> {
 }
 
 export default class Output<T> extends Semifunctional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['unit', 'name'],
@@ -36,7 +36,7 @@ export default class Output<T> extends Semifunctional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_OUTPUT
     )
   }
 

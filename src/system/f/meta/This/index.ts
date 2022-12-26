@@ -1,6 +1,5 @@
 import { $ } from '../../../../Class/$'
 import { Unit } from '../../../../Class/Unit'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Unlisten } from '../../../../types/Unlisten'
 import {
@@ -8,6 +7,7 @@ import {
   listenGlobalComponent,
   pushGlobalComponent,
 } from '../../../globalComponent'
+import { ID_THIS } from '../../../_ids'
 
 export interface I<T> {}
 
@@ -20,7 +20,7 @@ export interface R<T> {}
 export default class This<T> extends Unit<I<T>, O<T>> {
   private _unlisten: Unlisten
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: [],
@@ -28,7 +28,7 @@ export default class This<T> extends Unit<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_THIS
     )
 
     this.addListener('parent', (parent: Unit | null) => {

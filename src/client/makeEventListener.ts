@@ -1,5 +1,4 @@
 import { makeChangeListener } from './event/change'
-import { makeCustomListener } from './event/custom'
 import { makeInputListener } from './event/input'
 import {
   makeKeydownListener,
@@ -16,8 +15,45 @@ import { makePointerUpListener } from './event/pointer/pointerup'
 import { makeWheelListener } from './event/wheel'
 import { Listener } from './Listener'
 
-export function makeEventListener(
-  event: string,
+export type IOUIEventName =
+  | 'click'
+  | 'dbclick'
+  | 'longpress'
+  | 'longclick'
+  | 'pointerdown'
+  | 'pointermove'
+  | 'pointerup'
+  | 'pointerenter'
+  | 'pointerleave'
+  | 'input'
+  | 'change'
+  | 'paste'
+  | 'keydown'
+  | 'keyup'
+  | 'keypress'
+  | 'wheel'
+
+export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
+  'click',
+  'dbclick',
+  'longpress',
+  'longclick',
+  'pointerdown',
+  'pointermove',
+  'pointerup',
+  'pointerenter',
+  'pointerleave',
+  'input',
+  'change',
+  'paste',
+  'keydown',
+  'keyup',
+  'keypress',
+  'wheel',
+])
+
+export function makeUIEventListener(
+  event: IOUIEventName,
   callback: (data: any) => void
 ): Listener {
   switch (event) {
@@ -54,6 +90,6 @@ export function makeEventListener(
     case 'wheel':
       return makeWheelListener(callback)
     default:
-      return makeCustomListener(event, callback)
+      throw new Error(`Unknown UI event: ${event}`)
   }
 }

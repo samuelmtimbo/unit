@@ -1,6 +1,5 @@
 import { addListeners } from '../../../../../client/addListener'
 import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
-import applyStyle from '../../../../../client/applyStyle'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Context } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
@@ -21,6 +20,7 @@ import { harmonicArray } from '../../../../../client/id'
 import { randomBetween } from '../../../../../client/math'
 import { Mode } from '../../../../../client/mode'
 import { PositionObserver } from '../../../../../client/PositionObserver'
+import applyStyle from '../../../../../client/style'
 import { getThemeModeColor } from '../../../../../client/theme'
 import {
   describeEllipseArc,
@@ -30,7 +30,6 @@ import {
   Position,
   unitVector,
 } from '../../../../../client/util/geometry'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -61,6 +60,7 @@ export const DEFAULT_STYLE = {
   width: '100%',
   height: '100%',
   color: 'current-color',
+  pointerEvents: 'none',
 }
 
 export default class Bot extends Element<IHTMLDivElement, Props> {
@@ -109,8 +109,8 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   private _move_animation_frame: number | undefined = undefined
   private _sync_animation_frame: number | undefined = undefined
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       className,
@@ -667,9 +667,9 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
 
     if (this._pointer_inside[pointerId]) {
       // log('Bot', '__onContextPointerLeave', pointerId)
-      
+
       this._pointer_enter_count--
-      
+
       if (this._pointer_down[pointerId]) {
         this._remove_pointer_down(event)
       }
@@ -1072,8 +1072,6 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     ])
 
     this._resizeSVG()
-
-    this._position_observer.observe(this._container)
   }
 
   onUnmount($context: Context): void {
@@ -1105,6 +1103,10 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     document.removeEventListener('visibilitychange', this._document_listener)
 
     this._position_observer.disconnect()
+  }
+
+  onRender() {
+    this._position_observer.observe(this._container)
   }
 
   onPropChanged(prop: string, current: any) {

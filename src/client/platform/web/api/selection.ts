@@ -1,6 +1,6 @@
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 
-export function webSelection(window: Window, prefix: string): API['selection'] {
+export function webSelection(window: Window, opt: BootOpt): API['selection'] {
   const containsSelection = (element) => {
     const selection = window.getSelection()
 
@@ -12,7 +12,6 @@ export function webSelection(window: Window, prefix: string): API['selection'] {
   }
 
   const removeSelection = () => {
-    console.log('removeSelection')
     const selection = window.getSelection()
 
     selection.removeAllRanges()

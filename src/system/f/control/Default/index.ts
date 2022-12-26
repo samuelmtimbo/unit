@@ -1,6 +1,6 @@
-import { Pod } from '../../../../pod'
 import { Primitive } from '../../../../Primitive'
 import { System } from '../../../../system'
+import { ID_DEFAULT } from '../../../_ids'
 
 export interface I<T> {
   a: T
@@ -14,8 +14,8 @@ export interface O<T> {
 export default class Default<T> extends Primitive<I<T>, O<T>> {
   private _current: T | undefined = undefined
 
-  constructor(system: System, pod: Pod) {
-    super({ i: ['a', 'd'], o: ['a'] }, {}, system, pod)
+  constructor(system: System) {
+    super({ i: ['a', 'd'], o: ['a'] }, {}, system, ID_DEFAULT)
 
     this.addListener('reset', () => {
       this._current = undefined

@@ -25,14 +25,14 @@
       "type": "string"
     },
     "port": {
-      "type": "`P`",
+      "type": "`CH`",
       "ref": true
     }
   },
   "metadata": {
     "icon": "link",
     "description": "Peer to Peer (P2P) Transmitter",
-    "complexity": 6,
+    "complexity": 46,
     "tags": [
       "platform",
       "api",

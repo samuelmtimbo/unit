@@ -1,7 +1,8 @@
-import { LayoutNode } from "./LayoutNode"
+import Iframe from '../system/platform/component/Iframe/Component'
 import { Component } from './component'
-import { addVector, Size } from './util/geometry'
-import { getRelativePosition } from './util/style/getPosition'
+import { LayoutNode } from './LayoutNode'
+import { Size } from './util/geometry'
+import { getPosition, getRelativePosition } from './util/style/getPosition'
 import { getSize } from './util/style/getSize'
 
 export const extractTrait = (
@@ -10,45 +11,50 @@ export const extractTrait = (
 ): LayoutNode => {
   const leaf_context = leaf_comp.$context
 
-  const leaf_context_position = { x: leaf_context.$x, y: leaf_context.$y }
+  let { $element } = leaf_comp
 
-  if (
-    leaf_comp.$element instanceof HTMLElement ||
-    leaf_comp.$element instanceof SVGElement
-  ) {
-    const relative_position = getRelativePosition(
-      leaf_comp.$element,
-      leaf_context.$element
-    )
+  if (leaf_comp instanceof Iframe) {
+    $element = leaf_comp._iframe_el
+  }
 
-    const position = addVector(leaf_context_position, relative_position)
-    const size = getSize(leaf_comp.$element)
+  // const leaf_context_position = {
+  //   x: leaf_context.$x,
+  //   y: leaf_context.$y,
+  // }
 
+  if ($element instanceof HTMLElement || $element instanceof SVGElement) {
+    // const relative_position = getRelativePosition(
+    //   $element,
+    //   leaf_context.$element
+    // )
+
+    // let { x, y } = addVector(leaf_context_position, relative_position)
+
+    let { width, height } = getSize($element)
+
+    const { x, y } = getPosition($element)
+    const { sx, sy } = leaf_comp.getScale()
     const fontSize: number = leaf_comp.getFontSize()
     const opacity: number = leaf_comp.getOpacity()
 
-    let x: number = position.x
-    let y: number = position.y
+    width /= Math.abs(sx)
+    height /= Math.abs(sy)
 
-    let width: number = size.width
-    let height: number = size.height
-
-    return { x, y, width, height, k: 1, opacity, fontSize }
-  } else if (leaf_comp.$element instanceof Text) {
+    return { x, y, width, height, sx, sy, opacity, fontSize }
+  } else if ($element instanceof Text) {
     const fontSize = leaf_comp.getFontSize()
-
-    const { textContent } = leaf_comp.$element
 
     let x: number
     let y: number
-    // let width: number
-    // let height: number
-    let k: number = 1
+    let width: number
+    let height: number
+    let sx: number = 1
+    let sy: number = 1
     let opacity: number = 1
 
-    const { width, height } = measureText(textContent, fontSize)
+    ;({ width = width, height = height } = getSize($element))
 
-    const position = getRelativePosition(leaf_comp.$element, leaf_context.$element)
+    const position = getRelativePosition($element, leaf_context.$element)
 
     let parent_trait: LayoutNode
 
@@ -60,7 +66,8 @@ export const extractTrait = (
         y: leaf_context.$y + 2,
         width: leaf_context.$width,
         height: leaf_context.$height,
-        k: 1,
+        sx: 1, // TODO
+        sy: 1, // TODO
         opacity: 1,
         fontSize,
       }
@@ -69,12 +76,15 @@ export const extractTrait = (
     x = position.x
     y = position.y
 
+    console.log({ width, height })
+
     return {
       x,
       y,
       width,
       height,
-      k,
+      sx,
+      sy,
       opacity,
       fontSize,
     }

@@ -2,13 +2,14 @@ import * as assert from 'assert'
 import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import { ID_IDENTITY } from '../../system/_ids'
-import { pod, system } from '../util/system'
+import { system } from '../util/system'
+
+const spec = system.emptySpec()
 
 const composition0 = new Graph<{ number: number }, { sum: number }>(
+  spec,
   {},
-  {},
-  system,
-  pod
+  system
 )
 
 false && watchUnitAndLog(composition0)
@@ -16,35 +17,29 @@ false && watchGraphAndLog(composition0)
 
 composition0.play()
 
-composition0.addUnit(
-  {
-    unit: {
-      id: ID_IDENTITY,
-      input: {
-        a: {
-          data: '0',
-        },
+composition0.addUnitSpec('0', {
+  unit: {
+    id: ID_IDENTITY,
+    input: {
+      a: {
+        data: '0',
       },
-      output: {},
     },
+    output: {},
   },
-  '0'
-)
+})
 
-composition0.addUnit(
-  {
-    unit: {
-      id: ID_IDENTITY,
-      input: {
-        a: {
-          data: '1',
-        },
+composition0.addUnitSpec('1', {
+  unit: {
+    id: ID_IDENTITY,
+    input: {
+      a: {
+        data: '1',
       },
-      output: {},
     },
+    output: {},
   },
-  '1'
-)
+})
 
 assert.equal(composition0.getUnitPin('0', 'output', 'a').peak(), 0)
 assert.equal(composition0.getUnitPin('1', 'output', 'a').peak(), 1)

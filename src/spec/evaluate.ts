@@ -1,7 +1,7 @@
 import { Classes, Specs } from '../types'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { fromBundle } from './fromBundle'
-import { getTree, TreeNode, TreeNodeType, _isValidObjKey } from './parser'
+import { getTree, TreeNode, TreeNodeType, _isValidObjKeyType } from './parser'
 
 export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
   const { value, children } = tree
@@ -13,7 +13,7 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
     case TreeNodeType.StringLiteral:
       return value
         .substring(1, value.length - 1)
-        .replace(/\\\'/g, "'")
+        .replace(/\\'/g, "'")
         .replace(/\\n/g, '\\n')
         .replace(/\\r/g, '\\r')
         .replace(/\\\\/g, '\\')
@@ -21,7 +21,7 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
       return value === 'true' ? true : false
     case TreeNodeType.NumberLiteral:
       return Number.parseFloat(value)
-    case TreeNodeType.ArrayLiteral:
+    case TreeNodeType.ArrayLiteral: {
       const array: any[] = []
       for (const element of children) {
         if (element.type !== TreeNodeType.Invalid) {
@@ -29,7 +29,8 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
         }
       }
       return array
-    case TreeNodeType.ObjectLiteral:
+    }
+    case TreeNodeType.ObjectLiteral: {
       const object = {}
       for (const entry of children) {
         if (entry.type === TreeNodeType.KeyValue) {
@@ -39,15 +40,17 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
             specs,
             classes
           )
-        } else if (_isValidObjKey(entry)) {
+        } else if (_isValidObjKeyType(entry)) {
           object[entry.value] = entry.value
         }
       }
       return object
-    case TreeNodeType.Unit:
+    }
+    case TreeNodeType.Unit: {
       const str = value.substring(1)
       const bundle = evaluate(str, specs, classes) as UnitBundleSpec
       return fromBundle(bundle, specs, classes)
+    }
     default:
       throw new Error('invalid data string')
   }

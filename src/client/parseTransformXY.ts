@@ -24,11 +24,13 @@ export function parseTransformXY(
       const _f_args_str = f_args_str.replace(' ', '')
       const f_args_str_list = _f_args_str.split(',')
       const f_args_list = f_args_str_list.map((s) => {
-        // TODO account for font-size units (em, ch, etc.)
-        const _match = /([\+\-]?[0-9]+([.][0-9]+)?)(px|deg|\%)?/.exec(s)
+        // TODO account for font-size units (em, ch, etc.)-
+        const _match = /([+-]?[0-9]+([.][0-9]+)?)(px|deg|%)?/.exec(s)
         const num_str = _match[1]
         const unit_str = _match[3]
+
         let num: number = Number.parseFloat(num_str)
+
         return [num, unit_str]
       }) as [number, string][]
 

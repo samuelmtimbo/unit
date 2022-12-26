@@ -1,0 +1,257 @@
+{
+  "name": "local root",
+  "inputs": {},
+  "outputs": {},
+  "units": {
+    "root": {
+      "id": "9aba266d-5200-4281-b477-749c9b3c5815",
+      "input": {
+        "disabled": {
+          "ignored": true
+        },
+        "fullwindow": {
+          "ignored": true
+        },
+        "style": {},
+        "bundle": {}
+      },
+      "output": {
+        "graph": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 12,
+          "y": 36
+        }
+      }
+    },
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "unit": {},
+        "event": {
+          "constant": true,
+          "data": "'bundle'"
+        },
+        "remove": {
+          "ignored": true
+        }
+      },
+      "output": {
+        "data": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 326,
+          "y": 21
+        }
+      }
+    },
+    "localstorage": {
+      "id": "c8f3faa8-09f4-11eb-a3b1-477aa3ec4193",
+      "input": {},
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 488,
+          "y": 39
+        }
+      }
+    },
+    "set": {
+      "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+      "input": {
+        "unit": {},
+        "name": {
+          "constant": true,
+          "data": "\"graph\""
+        },
+        "data": {}
+      },
+      "output": {
+        "data": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 430,
+          "y": 21
+        }
+      }
+    },
+    "get": {
+      "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": {
+        "unit": {},
+        "name": {
+          "constant": false
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -289,
+          "y": -19
+        }
+      }
+    },
+    "localstorage0": {
+      "id": "c8f3faa8-09f4-11eb-a3b1-477aa3ec4193",
+      "input": {},
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -343,
+          "y": 6
+        }
+      }
+    },
+    "spark": {
+      "id": "3be8272d-310a-4aa2-84a1-71f590a8227a",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "'bundle'"
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -387,
+          "y": -60
+        }
+      }
+    },
+    "swallow": {
+      "id": "ecb16ee2-d81f-4f3f-a241-b007087f5055",
+      "input": {
+        "unit": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -241,
+          "y": -49
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "set": {
+        "input": {
+          "unit": true
+        }
+      },
+      "localstorage": {
+        "output": {
+          "_self": true
+        }
+      }
+    },
+    "1": {
+      "set": {
+        "input": {
+          "data": true
+        }
+      },
+      "listen": {
+        "output": {
+          "data": true
+        }
+      }
+    },
+    "2": {
+      "get": {
+        "input": {
+          "unit": true
+        }
+      },
+      "localstorage0": {
+        "output": {
+          "_self": true
+        }
+      }
+    },
+    "3": {
+      "get": {
+        "output": {
+          "value": true
+        }
+      },
+      "root": {
+        "input": {
+          "bundle": true
+        }
+      }
+    },
+    "4": {
+      "root": {
+        "output": {
+          "graph": true
+        }
+      },
+      "listen": {
+        "input": {
+          "unit": true
+        }
+      }
+    },
+    "5": {
+      "spark": {
+        "output": {
+          "a": true
+        }
+      },
+      "get": {
+        "input": {
+          "name": true
+        }
+      }
+    },
+    "6": {
+      "swallow": {
+        "input": {
+          "unit": true
+        }
+      },
+      "get": {
+        "output": {
+          "_self": true
+        }
+      }
+    }
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "root": {
+        "children": []
+      }
+    },
+    "children": [
+      "root"
+    ],
+    "defaultWidth": 420,
+    "defaultHeight": 420
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "complexity": 975,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "e1b6acd3-69cd-4edb-8e3e-6c78ffd28b49",
+  "type": "`U`&`G`"
+}

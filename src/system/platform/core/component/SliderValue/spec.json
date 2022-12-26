@@ -153,9 +153,7 @@
     },
     "onvalue": {
       "id": "f1e3b2aa-1215-49f0-a2cd-2ef7178a4374",
-      "input": {
-        "element": {}
-      },
+      "input": {},
       "output": {
         "value": {
           "metadata": {
@@ -203,7 +201,7 @@
   "metadata": {
     "icon": "sliders",
     "description": "slider current value",
-    "complexity": 38,
+    "complexity": 136,
     "tags": [
       "platform",
       "core",

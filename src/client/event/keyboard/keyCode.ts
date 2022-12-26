@@ -341,7 +341,7 @@ export const keyToCode = JSON.parse(`{
   "[": "BracketLeft",
   "\\\\": "Backslash",
   "]": "BracketRight",
-  "\'": "Quote",
+  "'": "Quote",
   "altgr": 226,
   "imeprocess": "Process",
   "unicode": "CodeInput",

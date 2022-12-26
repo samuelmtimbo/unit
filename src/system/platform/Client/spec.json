@@ -24,7 +24,7 @@
   "metadata": {
     "icon": "circle",
     "description": "run `graph` on every debug session",
-    "complexity": 3,
+    "complexity": 118,
     "tags": [
       "platform",
       "ref",

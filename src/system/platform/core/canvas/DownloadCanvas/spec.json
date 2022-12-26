@@ -116,7 +116,8 @@
   "render": false,
   "metadata": {
     "icon": "download",
-    "description": "download full canvas as png"
+    "description": "download full canvas as png",
+    "complexity": 11
   },
   "id": "1a398694-284e-4d67-a13c-3a929c38b0fc",
   "type": "`U`&`G`"

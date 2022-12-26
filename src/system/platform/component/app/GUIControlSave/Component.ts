@@ -1,11 +1,10 @@
 import { Component } from '../../../../../client/component'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
-import SaveControl from '../SaveControl/Component'
 import GUIControl from '../GUIControl/Component'
+import SaveControl from '../SaveControl/Component'
 
 export interface Props {
   className?: string
@@ -24,8 +23,8 @@ export default class GUIControlSave extends Component<IHTMLDivElement, Props> {
   private _root: GUIControl
   private _content: SaveControl
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const root = new GUIControl(
       {
@@ -38,8 +37,7 @@ export default class GUIControlSave extends Component<IHTMLDivElement, Props> {
         _x: 12,
         collapsed: true,
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._root = root
 
@@ -47,8 +45,7 @@ export default class GUIControlSave extends Component<IHTMLDivElement, Props> {
       {
         style: {},
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._content = save
 

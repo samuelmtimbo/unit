@@ -48,6 +48,7 @@ export default function webInit(
     const { keyCode, key } = event
 
     const index = system.input.keyboard.pressed.indexOf(keyCode)
+
     system.input.keyboard.pressed.splice(index, 1)
   }
 
@@ -82,15 +83,14 @@ export default function webInit(
   const errorListener = (event: ErrorEvent) => {
     const { error } = event
 
-    // console.error('ERROR')
     if (error) {
-      showNotification(
-        `${error.message}${JSON.stringify(error.stack, null, 2)}`,
-        {
-          color: COLOR_RED,
-          borderColor: COLOR_RED,
-        }
-      )
+      // const message = `${error.message}\n\n${JSON.stringify(error.stack, null, 2)}`
+      const message = `${error.message}`
+
+      showNotification(system, message, {
+        color: COLOR_RED,
+        borderColor: COLOR_RED,
+      })
     }
   }
 

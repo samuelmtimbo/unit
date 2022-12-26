@@ -1,7 +1,7 @@
 {
   "name": "add unit",
   "inputs": {
-    "Class": {
+    "class": {
       "type": "`U`"
     },
     "graph": {
@@ -15,8 +15,8 @@
   "outputs": {},
   "metadata": {
     "icon": "circle",
-    "description": "add unit of `Class` to `graph`",
-    "complexity": 3,
+    "description": "add unit of `class` to `graph`",
+    "complexity": 4,
     "tags": [
       "f",
       "graph"

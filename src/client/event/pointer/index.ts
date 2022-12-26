@@ -1,7 +1,7 @@
 import { _addEventListener } from '..'
 import { Unlisten } from '../../../types/Unlisten'
 import { Context } from '../../context'
-import Listenable from '../../Listenable'
+import { Listenable } from '../../Listenable'
 import { rotateVector } from '../../util/geometry'
 
 export const POINTER_EVENT_NAMES = [
@@ -80,7 +80,6 @@ export function listenPointerEvent(
   const { $element } = component
 
   const pointerEventListener = (_event: PointerEvent) => {
-    // console.log(type)
     const { $context } = component
 
     const event = _IOPointerEvent($context, _event)
@@ -95,10 +94,13 @@ export function listenPointerEvent(
   )
 
   const { $listenCount } = component
+
   $listenCount[type] = $listenCount[type] || 0
   $listenCount[type]++
+
   return () => {
     $listenCount[type]--
+
     if ($listenCount[type] === 0) {
       delete $listenCount[type]
     }

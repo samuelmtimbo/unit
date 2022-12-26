@@ -1,15 +1,15 @@
-import { Pod } from '../pod'
 import { System } from '../system'
-import { GraphSpec } from '../types'
+import { GraphSpec, Specs } from '../types'
 import { Component } from './component'
 import { componentClassFromSpec } from './componentClassFromSpec'
 
 export function componentFromSpec(
-  $system: System,
-  $pod: Pod,
-  spec: GraphSpec
+  system: System,
+
+  spec: GraphSpec,
+  specs: Specs
 ): Component {
-  const Class = componentClassFromSpec(spec)
-  const component = new Class({}, $system, $pod)
+  const Class = componentClassFromSpec(spec, specs)
+  const component = new Class({}, system)
   return component
 }

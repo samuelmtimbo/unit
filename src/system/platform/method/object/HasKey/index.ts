@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { J } from '../../../../../types/interface/J'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { J } from '../../../../../types/interface/J'
+import { ID_HAS_KEY_0 } from '../../../../_ids'
 
 export interface I<T> {
   obj: J
@@ -14,7 +14,7 @@ export interface O<T> {
 }
 
 export default class HasKey<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['obj', 'key'],
@@ -28,7 +28,7 @@ export default class HasKey<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_HAS_KEY_0
     )
   }
 

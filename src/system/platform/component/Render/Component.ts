@@ -1,15 +1,13 @@
-import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { renderGraph } from '../../../../client/render/renderPod'
-import { $Graph } from '../../../../types/interface/async/$Graph'
-import { $P } from '../../../../types/interface/async/$P'
-import { Pod } from '../../../../pod'
+import { renderGraph } from '../../../../client/render/renderGraph'
+import applyStyle from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../types/global/dom'
+import { $Graph } from '../../../../types/interface/async/$Graph'
 import { Unlisten } from '../../../../types/Unlisten'
-import { _removeChildren } from '../../../../util/element'
+import { removeChildren } from '../../../../util/element'
 
 export interface Props {
   graph?: $Graph
@@ -31,14 +29,12 @@ const DEFAULT_STYLE = {
 }
 
 export default class Render extends Element<IHTMLDivElement, Props> {
-  private _div_el: IHTMLDivElement
-
   private _prop_handler: PropHandler
 
   private _unlisten: Unlisten
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       graph,
@@ -52,58 +48,49 @@ export default class Render extends Element<IHTMLDivElement, Props> {
       data = {},
     } = this.$props
 
-    const $element = this.$system.api.document.createElement('div')
+    this.$element = this.$system.api.document.createElement('div')
 
     if (id !== undefined) {
-      $element.id = id
+      this.$element.id = id
     }
     if (className !== undefined) {
-      $element.className = className
+      this.$element.className = className
     }
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
+    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
     if (innerText) {
-      $element.innerText = innerText
+      this.$element.innerText = innerText
     }
     if (tabIndex !== undefined) {
-      $element.tabIndex = tabIndex
+      this.$element.tabIndex = tabIndex
     }
     if (title) {
-      $element.title = title
+      this.$element.title = title
     }
     if (draggable !== undefined) {
-      $element.setAttribute('draggable', draggable.toString())
+      this.$element.setAttribute('draggable', draggable.toString())
     }
     if (data !== undefined) {
       for (const key in data) {
         const d = data[key]
-        $element.dataset[key] = d
+        this.$element.dataset[key] = d
       }
     }
 
-    this._div_el = $element
-
     this._prop_handler = {
-      ...htmlPropHandler(this._div_el, DEFAULT_STYLE),
-      pod: (pod: $P) => {
-        if (pod) {
-          this._unlisten = renderGraph(
-            this._div_el,
-            this.$system,
-            this.$pod,
-            graph
-          )
+      ...htmlPropHandler(this, DEFAULT_STYLE),
+      graph: (graph: $Graph) => {
+        if (graph) {
+          this._unlisten = renderGraph(this.$element, this.$system, graph)
         } else {
           if (this._unlisten) {
             this._unlisten()
             this._unlisten = undefined
           }
 
-          _removeChildren(this._div_el)
+          removeChildren(this.$element)
         }
       },
     }
-
-    this.$element = $element
   }
 
   onPropChanged(prop: string, current: any): void {

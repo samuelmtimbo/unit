@@ -1,9 +1,9 @@
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 
-export function webClipboard(window: Window, prefix: string): API['clipboard'] {
+export function webClipboard(window: Window, opt: BootOpt): API['clipboard'] {
   const { navigator } = window
-  
+
   const readText = async () => {
     if (navigator.clipboard && navigator.clipboard.readText) {
       const text = await navigator.clipboard.readText()

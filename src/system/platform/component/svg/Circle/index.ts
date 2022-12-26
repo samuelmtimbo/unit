@@ -1,6 +1,6 @@
-import { Element } from '../../../../../Class/Element'
-import { Pod } from '../../../../../pod'
+import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
+import { ID_CIRCLE } from '../../../../_ids'
 import { Style } from '../../../Props'
 
 export interface I {
@@ -12,8 +12,8 @@ export interface I {
 
 export interface O {}
 
-export default class SVGCircle extends Element<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class SVGCircle extends Element_<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['style', 'x', 'y', 'r'],
@@ -21,7 +21,7 @@ export default class SVGCircle extends Element<I, O> {
       },
       {},
       system,
-      pod
+      ID_CIRCLE
     )
   }
 }

@@ -3,20 +3,20 @@ import {
   getStorageKeys,
   storageHasKey,
 } from '../../../../../client/util/web/storage'
-import { J } from '../../../../../types/interface/J'
-import { V } from '../../../../../types/interface/V'
 import { ObjectUpdateType } from '../../../../../Object'
-import { Pod } from '../../../../../pod'
 import { Primitive } from '../../../../../Primitive'
 import { System } from '../../../../../system'
+import { J } from '../../../../../types/interface/J'
+import { V } from '../../../../../types/interface/V'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { ID_SESSION_STORAGE } from '../../../../_ids'
 
 export type I = {}
 
 export type O = {}
 
 export default class SessionStorage extends Primitive<I, O> implements V, J {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: [],
@@ -24,7 +24,7 @@ export default class SessionStorage extends Primitive<I, O> implements V, J {
       },
       {},
       system,
-      pod
+      ID_SESSION_STORAGE
     )
   }
 

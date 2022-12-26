@@ -9,8 +9,8 @@ import { None } from '../None'
 
 export type U_EE = {
   parent: [Unit | null]
-  set_input: [string, Pin, PinOpt]
-  set_output: [string, Pin, PinOpt]
+  set_input: [string, Pin, PinOpt, boolean]
+  set_output: [string, Pin, PinOpt, boolean]
   remove_input: [string, Pin]
   remove_output: [string, Pin]
   rename_input: [string, string]
@@ -36,6 +36,7 @@ export interface U<I = any, O = any> {
   setOutputRef(name: string, ref: boolean): void
   setInput(name: string, input: Pin<I[keyof I]>, opt: PinOpt): void
   isPinIgnored(type: IO, name: string): boolean
+  isPinRef(type: IO, name: string): boolean
   addInput(name: string, input: Pin<any>, opt: PinOpt): void
   removeInput(name: string): void
   setOutputs(outputs: Pins<O>, opts: PinOpts)

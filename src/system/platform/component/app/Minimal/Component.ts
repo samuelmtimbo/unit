@@ -1,10 +1,10 @@
 import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
 import { getSpec, isComponent } from '../../../../../client/spec'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IO } from '../../../../../types/IO'
+import { keys } from '../../../../f/object/Keys/f'
 import SVGCircle from '../../svg/Circle/Component'
 import SVGRect from '../../svg/Rect/Component'
 import SVGSVG from '../../svg/SVG/Component'
@@ -18,21 +18,20 @@ export interface Props {
 export default class Minimal extends Element<SVGElement, Props> {
   private _svg: SVGSVG
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { id, className, style } = $props
 
-    let width: number = 80
-    let height: number = 16
+    const width: number = 80
+    const height: number = 16
 
     const svg = new SVGSVG(
       {
         className: classnames('unit-minimal', className),
         style: { ...this._default_style(), ...style },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._svg = svg
 
@@ -41,14 +40,19 @@ export default class Minimal extends Element<SVGElement, Props> {
     }
 
     this.$element = svg.$element
-    this.$slot['default'] = svg.$slot['default']
+    this.$slot = {
+      default: svg,
+    }
+    this.$subComponent = {
+      svg,
+    }
 
     this.registerRoot(svg)
   }
 
   private _default_style = () => {
-    let width: number = 80
-    let height: number = 16
+    const width: number = 80
+    const height: number = 16
 
     return {
       width: `${width}px`,
@@ -66,12 +70,12 @@ export default class Minimal extends Element<SVGElement, Props> {
   }
 
   private _render = (id: string): void => {
-    const specs =  { ...this.$system.specs, ...this.$pod.specs }
+    const { specs } = this.$system
 
     const spec = getSpec(specs, id)
 
-    let width: number = 80
-    let height: number = 16
+    const width: number = 80
+    const height: number = 16
 
     const R = 4
 
@@ -84,7 +88,7 @@ export default class Minimal extends Element<SVGElement, Props> {
     const cX = width / 2
     const cY = height / 2 - 0.5
 
-    let input_pin_ids = Object.keys(inputs).filter((pinId) => {
+    const input_pin_ids = keys(inputs).filter((pinId) => {
       const input = inputs[pinId]
       const { defaultIgnored } = input
       if (defaultIgnored) {
@@ -93,7 +97,7 @@ export default class Minimal extends Element<SVGElement, Props> {
       return true
     })
 
-    const output_pin_ids = Object.keys(outputs).filter((pinId) => {
+    const output_pin_ids = keys(outputs).filter((pinId) => {
       const output = outputs[pinId]
       const { defaultIgnored } = output
       if (defaultIgnored) {
@@ -151,8 +155,7 @@ export default class Minimal extends Element<SVGElement, Props> {
             fill: 'currentColor',
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
       children.push(pin)
     }
@@ -176,8 +179,7 @@ export default class Minimal extends Element<SVGElement, Props> {
             strokeWidth: '1px',
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
     } else {
       core = new SVGCircle(
@@ -193,8 +195,7 @@ export default class Minimal extends Element<SVGElement, Props> {
             strokeWidth: '1px',
           },
         },
-        this.$system,
-        this.$pod
+        this.$system
       )
     }
 

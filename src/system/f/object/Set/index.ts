@@ -1,8 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import set from './f'
+import { ID_SET } from '../../../_ids'
+import _set from './f'
 
 export interface I<T> {
   obj: Dict<T>
@@ -15,7 +15,7 @@ export interface O<T> {
 }
 
 export default class Set<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['obj', 'key', 'value'],
@@ -23,11 +23,11 @@ export default class Set<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_SET
     )
   }
 
   f({ obj, key, value }: I<T>, done): void {
-    done({ obj: set(obj, key, value) })
+    done({ obj: _set(obj, key, value) })
   }
 }

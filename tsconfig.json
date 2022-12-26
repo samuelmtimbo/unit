@@ -22,6 +22,6 @@
   "typeAcquisition": {
     "enable": false
   },
-  "include": ["./src/**/*.ts", "../server/util/auth/makeVerifyAuthToken.ts"],
+  "include": ["./src/**/*.ts"],
   "exclude": ["node_modules", "lib", "build"]
 }

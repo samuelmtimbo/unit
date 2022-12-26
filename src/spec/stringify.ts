@@ -1,3 +1,4 @@
+import { Unit } from '../Class/Unit'
 import { isValidKeyStr } from './parser'
 
 export function escape(str: string): string {
@@ -13,11 +14,7 @@ export function escape(str: string): string {
       res += '\\r'
     } else if (char === "'") {
       res += "\\'"
-    }
-    // else if (char === '"') {
-    //   res += '\\"'
-    // }
-    else if (char === '&') {
+    } else if (char === '&') {
       res += '\\&'
     } else {
       res += char
@@ -50,9 +47,10 @@ export function stringify(value: any): string {
                 `${isValidKeyStr(key) ? key : `"${key}"`}:${stringify(value)}`
             )
             .join(',')}}`
+        } else if (value instanceof Unit) {
+          return `$${stringify(value.getUnitBundleSpec())}`
         } else {
-          // AD HOC
-          return '`U`'
+          throw new Error('Invalid Object.')
         }
       }
     case 'function':

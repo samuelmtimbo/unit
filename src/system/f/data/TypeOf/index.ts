@@ -1,8 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Unit } from '../../../../Class/Unit'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_TYPE_OF } from '../../../_ids'
 
 export type I = {
   a: any
@@ -13,7 +13,7 @@ export type O = {
 }
 
 export default class TypeOf extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a'],
@@ -21,7 +21,7 @@ export default class TypeOf extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_TYPE_OF
     )
   }
 

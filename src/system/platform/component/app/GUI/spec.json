@@ -11,8 +11,8 @@
   "outputs": {},
   "metadata": {
     "icon": "atom-alt",
-    "description": "Futuristic Programming Environment",
-    "complexity": 36,
+    "description": "minimalist UI to control a unit graph",
+    "complexity": 133,
     "tags": [
       "platform",
       "component",

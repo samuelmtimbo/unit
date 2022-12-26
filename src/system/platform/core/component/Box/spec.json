@@ -53,20 +53,31 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "100% 100% div",
-    "complexity": 4,
-    "tags": ["platform", "core", "component"]
+    "description": "100% div",
+    "complexity": 128,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
   },
   "component": {
-    "slots": [["div", "default"]],
+    "slots": [
+      [
+        "div",
+        "default"
+      ]
+    ],
     "defaultWidth": 180,
-    "defaultHeight": 270,
+    "defaultHeight": 180,
     "subComponents": {
       "div": {
         "children": []
       }
     },
-    "children": ["div"]
+    "children": [
+      "div"
+    ]
   },
   "id": "9eba84b6-d2ca-47e6-9195-8208dbb880bc",
   "type": "`U`&`C`&`V`&`J`",

@@ -2,7 +2,6 @@ import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -29,8 +28,8 @@ export default class Keyboard extends Element<IHTMLDivElement, Props> {
 
   private _key_ShiftLeft: Div
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { style = {} } = this.$props
 
@@ -214,8 +213,7 @@ export default class Keyboard extends Element<IHTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     keyboard.setChildren([line_0, line_1, line_2, line_3, line_4])
     this._keyboard = keyboard
@@ -241,8 +239,7 @@ export default class Keyboard extends Element<IHTMLDivElement, Props> {
           boxSizing: 'border-box',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     line.setChildren(children)
     return line
@@ -268,8 +265,7 @@ export default class Keyboard extends Element<IHTMLDivElement, Props> {
           ..._style,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
 
     const key_component_container = new Div(
@@ -284,8 +280,7 @@ export default class Keyboard extends Element<IHTMLDivElement, Props> {
           padding: '2px',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     key_component_container.appendChild(key_component)
 

@@ -1,6 +1,6 @@
-import { API } from '../../../../system'
+import { API, BootOpt } from '../../../../system'
 
-export function webDB(window: Window, prefix: string): API['db'] {
+export function webDB(window: Window, opt: BootOpt): API['db'] {
   const db = window.indexedDB
 
   return db

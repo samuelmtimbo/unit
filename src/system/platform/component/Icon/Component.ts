@@ -1,9 +1,8 @@
-import applyStyle from '../../../../client/applyStyle'
 import namespaceURI from '../../../../client/component/namespaceURI'
 import { Element } from '../../../../client/element'
 import { ensureIcon } from '../../../../client/ensureIcon'
+import applyStyle from '../../../../client/style'
 import { userSelect } from '../../../../client/util/style/userSelect'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -36,8 +35,8 @@ export default class Icon extends Element<SVGSVGElement, Props> {
   private _icon_sprite_el: SVGUseElement
   private _svg_el: SVGSVGElement
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     let { className, icon, style = {}, x, y, width, height, tabIndex } = $props
 

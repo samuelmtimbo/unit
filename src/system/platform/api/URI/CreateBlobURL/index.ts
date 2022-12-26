@@ -1,8 +1,8 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { B } from '../../../../../types/interface/B'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { B } from '../../../../../types/interface/B'
+import { ID_CREATE_BLOB_URL } from '../../../../_ids'
 
 export interface I<T> {
   blob: B
@@ -13,7 +13,7 @@ export interface O<T> {
 }
 
 export default class CreateObjectURI<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['blob'],
@@ -27,7 +27,7 @@ export default class CreateObjectURI<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_CREATE_BLOB_URL
     )
   }
 

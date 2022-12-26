@@ -1,9 +1,9 @@
 import { IOPointerEvent } from '.'
 import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
-import callAll from '../../../util/call/callAll'
+import { callAll } from '../../../util/call/callAll'
 import { addListener } from '../../addListener'
-import Listenable from '../../Listenable'
+import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import stopPropagation from '../../stopPropagation'
 import { pointDistance, Position } from '../../util/geometry'
@@ -17,14 +17,17 @@ export const CLICK_TIMEOUT = 300
 export const LONG_CLICK_TIMEOUT = 300
 export const POINTER_CLICK_RADIUS = 15
 
-export function makeClickListener(handlers: {
+export type Handlers = {
   onClick?: (event: IOPointerEvent) => void
+  onClickCancel?: (event: IOPointerEvent) => void
   onDoubleClick?: (event: IOPointerEvent) => void
   onLongClick?: (event: IOPointerEvent) => void
   onLongPress?: (event: IOPointerEvent, _event: PointerEvent) => void
   onLongClickCancel?: (event: IOPointerEvent) => void
   onClickHold?: (event: IOPointerEvent) => void
-}): Listener {
+}
+
+export function makeClickListener(handlers: Handlers): Listener {
   return (component) => {
     return listenClick(component, handlers)
   }
@@ -32,19 +35,13 @@ export function makeClickListener(handlers: {
 
 export function listenClick(
   component: Listenable,
-  handlers: {
-    onClick?: (event: IOPointerEvent) => void
-    onDoubleClick?: (event: IOPointerEvent) => void
-    onLongClick?: (event: IOPointerEvent) => void
-    onLongPress?: (event: IOPointerEvent, _event: PointerEvent) => void
-    onLongClickCancel?: (event: IOPointerEvent) => void
-    onClickHold?: (event: IOPointerEvent) => void
-  }
+  handlers: Handlers
 ): () => void {
   const { $element } = component
 
   const {
     onClick,
+    onClickCancel,
     onDoubleClick,
     onLongPress,
     onLongClickCancel,
@@ -250,6 +247,8 @@ export function listenClick(
           } else {
             onClick && onClick(event)
           }
+        } else {
+          onClickCancel && onClickCancel(event)
         }
       }
 

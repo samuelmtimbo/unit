@@ -1,0 +1,59 @@
+{
+  "name": "empty string",
+  "units": {
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "\"\""
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "output an empty object",
+    "complexity": 5,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "inputs": {
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "{}": {
+      "plug": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "a"
+        }
+      },
+      "type": "{}"
+    }
+  },
+  "id": "7c8e8a47-2225-4716-986e-1cb2af3ed3b3",
+  "type": "`U`&`G`",
+  "system": true
+}

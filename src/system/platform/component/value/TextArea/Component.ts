@@ -1,11 +1,4 @@
-import applyStyle from '../../../../../client/applyStyle'
-import { Element } from '../../../../../client/element'
-import {
-  htmlPropHandler,
-  inputPropHandler,
-  PropHandler,
-} from '../../../../../client/propHandler'
-import { Pod } from '../../../../../pod'
+import { Field } from '../../../../../client/field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -13,6 +6,7 @@ export interface Props {
   className?: string
   style?: Dict<any>
   value?: string
+  placeholder?: string
 }
 
 export const DEFAULT_STYLE = {
@@ -37,61 +31,20 @@ export const DEFAULT_STYLE = {
   color: '#C2C2C2',
 }
 
-export default class TextArea extends Element<HTMLTextAreaElement, Props> {
-  private _text_area_el: HTMLTextAreaElement
-
-  private _prop_handler: PropHandler
-
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
-
-    let { style = {}, value = '' } = $props
-
-    style = { ...DEFAULT_STYLE, ...style }
-
-    const text_area_el = this.$system.api.document.createElement('textarea')
-    text_area_el.spellcheck = false
-    text_area_el.autocomplete = 'off'
-    // text_area_el.autocorrect = 'off'
-    text_area_el.autocapitalize = 'off'
-    text_area_el.value = value
-    text_area_el.inputMode = 'none'
-    applyStyle(text_area_el, style)
-
-    text_area_el.addEventListener('change', (event: InputEvent) => {
-      const { value } = this._text_area_el
-      event.stopImmediatePropagation()
-      this.set('value', value)
-      this._dispatch_change()
-    })
-    text_area_el.addEventListener('input', (event: InputEvent) => {
-      const { value } = this._text_area_el
-      event.stopImmediatePropagation()
-      this.set('value', value)
-      this._dispatch_input()
+export default class TextArea extends Field<HTMLTextAreaElement, Props> {
+  constructor($props: Props, $system: System) {
+    super($props, $system, $system.api.document.createElement('textarea'), {
+      valueKey: 'value',
+      defaultStyle: DEFAULT_STYLE,
     })
 
-    this._text_area_el = text_area_el
+    const { placeholder = '' } = $props
 
-    this._prop_handler = {
-      ...htmlPropHandler(this._text_area_el, DEFAULT_STYLE),
-      ...inputPropHandler(this._text_area_el, 'value', ''),
-    }
-
-    this.$element = text_area_el
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
-  }
-
-  private _dispatch_input = () => {
-    const value = this._text_area_el.value
-    this.dispatchEvent('input', value)
-  }
-
-  private _dispatch_change = () => {
-    const value = this._text_area_el.value
-    this.dispatchEvent('change', value)
+    this.$element.spellcheck = false
+    this.$element.autocomplete = 'off'
+    // this.$element.autocorrect = 'off'
+    this.$element.autocapitalize = 'off'
+    this.$element.inputMode = 'none'
+    this.$element.placeholder = placeholder
   }
 }

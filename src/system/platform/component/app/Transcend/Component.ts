@@ -1,8 +1,10 @@
 import { addListeners } from '../../../../../client/addListener'
+import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
 import { ANIMATION_T_S } from '../../../../../client/animation/ANIMATION_T_S'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
+import { makePointerLeaveListener } from '../../../../../client/event/pointer/pointerleave'
 import { makePointerMoveListener } from '../../../../../client/event/pointer/pointermove'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import {
@@ -14,7 +16,6 @@ import {
   DIM_OPACITY,
   whenInteracted,
 } from '../../../../../client/whenInteracted'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
@@ -61,8 +62,8 @@ export default class Transcend extends Element<IHTMLDivElement, Props> {
 
   private _x: number = 0
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { style = {}, down } = this.$props
 
@@ -77,8 +78,7 @@ export default class Transcend extends Element<IHTMLDivElement, Props> {
           height: '24px',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     this._icon = icon
 
@@ -93,21 +93,30 @@ export default class Transcend extends Element<IHTMLDivElement, Props> {
         },
         title: 'transcend',
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
+
     container.registerParentRoot(icon)
     container.addEventListeners([
       makePointerDownListener(({ pointerId, clientX }) => {
         // log('Transcend', '_on_pointer_down')
+
         let _clientX = clientX - this._x
+
         container.setPointerCapture(pointerId)
+
         const unlisten = container.addEventListeners([
           makePointerMoveListener(({ clientX }) => {
             this._translate(clientX - _clientX)
           }),
           makePointerUpListener(() => {
             container.releasePointerCapture(pointerId)
+
+            unlisten()
+          }),
+          makePointerLeaveListener(() => {
+            container.releasePointerCapture(pointerId)
+
             unlisten()
           }),
         ])
@@ -280,7 +289,9 @@ export default class Transcend extends Element<IHTMLDivElement, Props> {
     const anim = () => {
       const dy = this._y_target - this._y
 
-      if (Math.abs(dy) > 1) {
+      const k = (dy * ANIMATION_C) / 2
+
+      if (Math.abs(dy) >= 1) {
         this._y += k
 
         this._y_animation = requestAnimationFrame(anim)

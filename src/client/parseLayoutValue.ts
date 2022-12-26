@@ -1,9 +1,15 @@
 import { removeWhiteSpace } from '../util/string'
-import { REGEX_CALC,REGEX_PERCENT,REGEX_PX } from './reflectChildrenTrait'
+import { REGEX_CALC, REGEX_PERCENT, REGEX_PX } from './reflectChildrenTrait'
 
 export function parseLayoutValue(value: string): [number, number] {
   value = removeWhiteSpace(value)
-  if (value === '' || value === 'auto' || value === 'fit-content') {
+  // AD HOC
+  if (
+    value === '' ||
+    value === 'auto' ||
+    value === 'fit-content' ||
+    value === 'none'
+  ) {
     return [0, 0]
   }
   const percentTest = REGEX_PERCENT.exec(value)
@@ -21,7 +27,8 @@ export function parseLayoutValue(value: string): [number, number] {
           parseFloat(calcTest[1]),
         ]
       } else {
-        throw new Error('layout value not recognized')
+        // throw new Error('layout value not recognized')
+        return [0, 0]
       }
     }
   }

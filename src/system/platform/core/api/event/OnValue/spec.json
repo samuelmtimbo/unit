@@ -1,0 +1,54 @@
+{
+  "name": "on value",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'value'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "type": "`U`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` input event",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "event"
+    ]
+  },
+  "id": "d0e6f14c-400c-42f3-bfd6-1bbe0146f490",
+  "type": "`U`&`G`",
+  "system": true
+}

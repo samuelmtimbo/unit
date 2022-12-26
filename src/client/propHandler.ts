@@ -1,7 +1,8 @@
 import { Style } from '../system/platform/Props'
 import { Dict } from '../types/Dict'
 import applyAttr from './applyAttr'
-import applyStyle from './applyStyle'
+import { Component } from './component'
+import applyStyle, { applyDynamicStyle } from './style'
 
 export type Handler = (value: any) => void
 
@@ -21,23 +22,25 @@ export function attrHandler(
 }
 
 export function htmlPropHandler(
-  element: HTMLElement,
+  component: Component<HTMLElement>,
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {
-    ...basePropHandler(element, DEFAULT_STYLE),
+    ...basePropHandler(component.$element, DEFAULT_STYLE),
+    ...stylePropHandler(component, DEFAULT_STYLE),
     innerText: (innerText: string | undefined) => {
-      element.innerText = innerText || ''
+      component.$element.innerText = innerText || ''
     },
   }
 }
 
 export function svgPropHandler(
-  element: SVGElement,
+  component: Component<SVGElement>,
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {
-    ...basePropHandler(element, DEFAULT_STYLE),
+    ...basePropHandler(component.$element, DEFAULT_STYLE),
+    ...stylePropHandler(component, DEFAULT_STYLE),
   }
 }
 
@@ -60,14 +63,32 @@ export function basePropHandler(
   }
 }
 
+export function stylePropHandler(
+  component: Component<HTMLElement | SVGElement>,
+  DEFAULT_STYLE: Style
+): PropHandler {
+  return {
+    style: (style: Dict<string> | undefined = {}) => {
+      applyDynamicStyle(component, { ...DEFAULT_STYLE, ...style })
+    },
+  }
+}
+
 export function inputPropHandler(
-  element: HTMLElement,
+  element:
+    | HTMLInputElement
+    | HTMLTextAreaElement
+    | (HTMLDivElement & ElementContentEditable),
   VALUE_NAME: string,
   DEFAULT_VALUE: any
 ): PropHandler {
   return {
     value: (value: any | undefined) => {
       element[VALUE_NAME] = value || DEFAULT_VALUE
+    },
+    placeholder: (placeholder: string | undefined) => {
+      // @ts-ignore
+      element.placeholder = placeholder ?? ''
     },
     disabled: attrHandler(element, 'disabled'),
   }

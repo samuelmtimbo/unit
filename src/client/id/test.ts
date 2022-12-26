@@ -88,7 +88,7 @@ assert.deepEqual(segmentMetadataId('?/abcdef/input/a/data'), {
   id: 'data',
 })
 assert.deepEqual(segmentMergeNodeId('@/abcdef'), {
-  id: 'abcdef',
+  mergeId: 'abcdef',
 })
 
 assert(isLinkId('length_length/output/length'))

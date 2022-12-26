@@ -1,3 +1,5 @@
+import { RemotePort } from './RemotePort'
+import { Callback } from './types/Callback'
 import {
   $C,
   $C_C,
@@ -59,8 +61,6 @@ import {
   $V_METHOD_WATCH,
 } from './types/interface/async/$V'
 import { AsyncWrap } from './types/interface/async/AsyncWrap'
-import { RemotePort } from './RemotePort'
-import { Callback } from './types/Callback'
 import { Unlisten } from './types/Unlisten'
 
 export function AsyncWorker(client: RemotePort, _: string[]): any {

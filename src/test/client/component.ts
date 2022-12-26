@@ -1,12 +1,12 @@
 import Div from '../../system/platform/component/Div/Component'
 import assert from '../../util/assert'
-import { pod, system } from '../util/system'
+import { system } from '../util/system'
 
-const parent = new Div({}, system, pod)
+const parent = new Div({}, system)
 
-const A = new Div({}, system, pod)
-const B = new Div({}, system, pod)
-const C = new Div({}, system, pod)
+const A = new Div({}, system)
+const B = new Div({}, system)
+const C = new Div({}, system)
 
 assert(parent.$children.length === 0)
 

@@ -1,7 +1,6 @@
-import applyStyle from '../../../../client/applyStyle'
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { Pod } from '../../../../pod'
+import applyStyle from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -23,12 +22,10 @@ const DEFAULT_STYLE = {
 }
 
 export default class Anchor extends Element<HTMLAnchorElement, Props> {
-  private _a_el: HTMLAnchorElement
-
   private _prop_handler: PropHandler
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const {
       href,
@@ -43,62 +40,57 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
       draggable,
     } = this.$props
 
-    const anchor_el = this.$system.api.document.createElement('a')
+    this.$element = this.$system.api.document.createElement('a')
 
     if (href !== undefined) {
-      anchor_el.setAttribute('href', href)
+      this.$element.setAttribute('href', href)
     }
 
     if (target !== undefined) {
-      anchor_el.setAttribute('target', target)
+      this.$element.setAttribute('target', target)
     }
 
     if (rel !== undefined) {
-      anchor_el.setAttribute('rel', rel)
+      this.$element.setAttribute('rel', rel)
     }
 
     if (id !== undefined) {
-      anchor_el.id = id
+      this.$element.id = id
     }
     if (className !== undefined) {
-      anchor_el.className = className
+      this.$element.className = className
     }
-    applyStyle(anchor_el, { ...DEFAULT_STYLE, ...style })
+    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
     if (innerText) {
-      anchor_el.innerText = innerText
+      this.$element.innerText = innerText
     }
     if (tabIndex !== undefined) {
-      anchor_el.tabIndex = tabIndex
+      this.$element.tabIndex = tabIndex
     }
     if (title) {
-      anchor_el.title = title
+      this.$element.title = title
     }
     if (draggable !== undefined) {
-      anchor_el.setAttribute('draggable', draggable.toString())
+      this.$element.setAttribute('draggable', draggable.toString())
     }
 
-    this._a_el = anchor_el
-
     this._prop_handler = {
-      ...htmlPropHandler(this._a_el, DEFAULT_STYLE),
-
+      ...htmlPropHandler(this, DEFAULT_STYLE),
       href: (href: string | undefined) => {
         if (href) {
-          this._a_el.href = href
+          this.$element.href = href
         } else {
-          this._a_el.removeAttribute('href')
+          this.$element.removeAttribute('href')
         }
       },
       target: (target: string | undefined) => {
         if (target) {
-          this._a_el.target = target
+          this.$element.target = target
         } else {
-          this._a_el.removeAttribute('target')
+          this.$element.removeAttribute('target')
         }
       },
     }
-
-    this.$element = anchor_el
   }
 
   onPropChanged(prop: string, current: any): void {

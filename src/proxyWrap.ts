@@ -45,13 +45,21 @@ const ASYNC_INTERFACE_PROXY_CALL_FILTER: Dict<Dict<string>> = {
   $G: ASYNC_GRAPH_PROXY_CALL_FILTER,
 }
 
+const ASYNC_INTERFACE_PROXY_WATCH_FILTER: Dict<Set<string>> = {
+  $G: ASYNC_GRAPH_PROXY_WATCH_FILTER,
+}
+
 export function proxyWrap<T extends object>(unit: T, _: string[] = []): T {
   let CALL = {}
+  let WATCH = new Set<string>()
 
   for (const __ of _) {
     const CALL_FILTER = ASYNC_INTERFACE_PROXY_CALL_FILTER[__] || {}
+    const WATCH_FILTER = ASYNC_INTERFACE_PROXY_WATCH_FILTER[__] || new Set()
+
     CALL = { ...CALL, ...CALL_FILTER }
+    WATCH = new Set([...WATCH, ...WATCH_FILTER])
   }
 
-  return proxy(unit, CALL, new Set(ASYNC_GRAPH_PROXY_WATCH_FILTER))
+  return proxy(unit, CALL, WATCH)
 }

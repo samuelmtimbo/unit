@@ -1,0 +1,103 @@
+{
+  "name": "post JSON body",
+  "inputs": {
+    "json": {
+      "plug": {
+        "0": {
+          "unitId": "postJSON",
+          "pinId": "json"
+        }
+      },
+      "ref": false
+    },
+    "url": {
+      "plug": {
+        "0": {
+          "unitId": "postJSON",
+          "pinId": "url"
+        }
+      },
+      "ref": false
+    },
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "postJSON",
+          "pinId": "opt"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "body": {
+      "plug": {
+        "0": {
+          "unitId": "getbody",
+          "pinId": "body"
+        }
+      },
+      "ref": false
+    }
+  },
+  "units": {
+    "postJSON": {
+      "id": "6fcb6d82-4d64-438e-8a30-82f8b89c524b",
+      "input": {
+        "json": {},
+        "url": {},
+        "opt": {}
+      },
+      "output": {
+        "response": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -53,
+          "y": 9
+        }
+      }
+    },
+    "getbody": {
+      "id": "6a529c4d-07af-4778-8086-8a578694ec3f",
+      "input": {
+        "{body}": {}
+      },
+      "output": {
+        "body": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": -10
+        }
+      }
+    }
+  },
+  "merges": {
+    "2": {
+      "getbody": {
+        "input": {
+          "{body}": true
+        },
+        "output": {}
+      },
+      "postJSON": {
+        "input": {},
+        "output": {
+          "response": true
+        }
+      }
+    }
+  },
+  "render": false,
+  "component": {},
+  "metadata": {
+    "icon": "send",
+    "description": "",
+    "complexity": 21
+  },
+  "id": "1a89a9c0-0dfe-419b-96e7-8aae6bae1859",
+  "system": true,
+  "type": "`U`&`G`"
+}

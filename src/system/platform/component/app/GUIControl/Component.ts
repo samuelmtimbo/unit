@@ -11,6 +11,7 @@ import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { makePointerCancelListener } from '../../../../../client/event/pointer/pointercancel'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
+import { makePointerLeaveListener } from '../../../../../client/event/pointer/pointerleave'
 import { makePointerMoveListener } from '../../../../../client/event/pointer/pointermove'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { makeResizeListener } from '../../../../../client/event/resize'
@@ -26,12 +27,12 @@ import {
   DIM_OPACITY,
   whenInteracted,
 } from '../../../../../client/whenInteracted'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
-import callAll from '../../../../../util/call/callAll'
+import { rangeArray } from '../../../../../util/array'
+import { callAll } from '../../../../../util/call/callAll'
 import { uuid } from '../../../../../util/id'
 import clamp from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
@@ -55,7 +56,8 @@ export const DEFAULT_STYLE = {}
 export const COLLAPSED_WIDTH = 33
 export const COLLAPSED_HEIGHT = 33
 
-export const BUTTON_HEIGHT = 24
+export const BUTTON_HEIGHT = 48
+export const BUTTON_WIDTH = 24
 
 export default class GUIControl extends Component<IHTMLDivElement, Props> {
   private _root: Div
@@ -70,8 +72,8 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
   private _y: number
   private _collapsed: boolean
 
-  constructor($props: Props, $system: System, $pod: Pod) {
-    super($props, $system, $pod)
+  constructor($props: Props, $system: System) {
+    super($props, $system)
 
     const { icon, width = 100, height = 100, style = {} } = this.$props
 
@@ -93,7 +95,7 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
 
     const root = new Div(
       {
-        className: 'iounappcontrol',
+        className: 'gui-control',
         style: {
           position: 'absolute',
           left: `${x}px`,
@@ -114,12 +116,11 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
           ...style,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
 
     const collapse = () => {
-      if (_iounapp_control_in_count === 0) {
+      if (_control_in_count === 0) {
         this._collapsed = true
 
         unlisten_pointer()
@@ -131,6 +132,7 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
         this._clamp_x_y()
 
         const backgroundColor = this._background_color()
+
         mergeStyle(root, {
           left: `${this._x}px`,
           top: `${this._y}px`,
@@ -168,13 +170,21 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
         })
 
         mergeStyle(button, {
-          bottom: '-13px',
+          opacity: '0',
           pointerEvents: 'none',
         })
 
         reset_dim()
+
+        if (docked) {
+          this.dispatchEvent('dock-move', {
+            dy: 0,
+          })
+
+          this.dispatchEvent('dock-leave', {})
+        }
       } else {
-        this.dispatchContextEvent('_iounapp_control_back', false)
+        this.dispatchContextEvent('_control_back', false)
       }
 
       this.dispatchEvent('collapse')
@@ -184,9 +194,6 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
       const { width, height } = this.$props
 
       this._collapsed = false
-
-      unlisten_pointer()
-      unlisten_pointer = listen_pointer(button)
 
       this._x = this._non_collapsed_x || (this._x - width + COLLAPSED_WIDTH) / 2
       this._y = this._non_collapsed_y || this._y - height + COLLAPSED_HEIGHT
@@ -219,7 +226,7 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
       })
 
       mergeStyle(button, {
-        bottom: '-24px',
+        opacity: '1',
         pointerEvents: 'auto',
       })
 
@@ -240,6 +247,17 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
       undim()
 
       this.dispatchEvent('uncollapse')
+
+      unlisten_pointer()
+      unlisten_pointer = listen_pointer(button)
+
+      if (docked) {
+        const height = this._get_height()
+
+        this.dispatchEvent('dock-move', {
+          dy: height + 3 + 2,
+        })
+      }
     }
 
     const toggle_collapse = (): void => {
@@ -250,9 +268,19 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
       }
     }
 
+    let docked: boolean = false
+
+    let last_dy: number = 0
+    let last_dx: number = 0
+    let docking: boolean = false
+
     let unlisten_pointer: Unlisten
 
+    let release
+
     const listen_pointer = (component: Component): Unlisten => {
+      // console.log('listen_pointer', component, release)
+
       return callAll([
         component.addEventListeners([
           makeClickListener({
@@ -261,18 +289,22 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
             },
           }),
           makePointerDownListener(({ pointerId, clientX, clientY }) => {
+            const { $width, $height } = this.$context
+
             component.setPointerCapture(pointerId)
 
             let hx = clientX - this._x
             let hy = clientY - this._y
 
-            const release = () => {
+            release = () => {
               component.releasePointerCapture(pointerId)
 
               unlisten()
+
+              release = undefined
             }
 
-            const unlisten = component.addEventListeners([
+            let unlisten = component.addEventListeners([
               makePointerMoveListener(({ clientX, clientY }) => {
                 this._x = clientX - hx
                 this._y = clientY - hy
@@ -291,11 +323,110 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
                   left: `${this._x}px`,
                   top: `${this._y}px`,
                 })
+
+                if (!this._collapsed) {
+                  const screen_ratio = this._get_screen_ratio()
+
+                  if (screen_ratio < 1) {
+                    const height = this._get_height()
+
+                    const dy = this._y + height - $height + 3
+
+                    if (dy >= 0) {
+                      if (last_dy > dy) {
+                        docking = false
+                      } else {
+                        docking = true
+                      }
+
+                      if (docked && dy > 3) {
+                        docked = false
+
+                        if (docking) {
+                          //
+                        } else {
+                          this.dispatchEvent('dock-move', {
+                            dy,
+                          })
+                        }
+                      } else {
+                        docked = true
+
+                        if (docking) {
+                          this.dispatchEvent('dock-move', {
+                            dy: height + 3 + 2,
+                          })
+                        } else {
+                          //
+                        }
+                      }
+
+                      last_dy = dy
+                    } else {
+                      docked = false
+
+                      this.dispatchEvent('dock-move', {
+                        dy: 0,
+                      })
+
+                      this.dispatchEvent('dock-leave', {})
+                    }
+                  } else {
+                    const width = this._get_width()
+
+                    const dx = this._x - BUTTON_WIDTH + 3
+
+                    if (dx <= 3) {
+                      if (last_dx < dx) {
+                        docking = false
+                      } else {
+                        docking = true
+                      }
+
+                      const dxb = dx
+
+                      if (docked && dxb > 2) {
+                        docked = false
+
+                        if (docking) {
+                          //
+                        } else {
+                          this.dispatchEvent('dock-move', {
+                            dx,
+                          })
+                        }
+                      } else {
+                        docked = true
+
+                        if (docking) {
+                          this.dispatchEvent('dock-move', {
+                            dx: width + BUTTON_WIDTH + 3,
+                          })
+                        } else {
+                          //
+                        }
+                      }
+
+                      last_dx = dx
+                    } else {
+                      docked = false
+
+                      this.dispatchEvent('dock-move', {
+                        dx: 0,
+                      })
+
+                      this.dispatchEvent('dock-leave', {})
+                    }
+                  }
+                }
               }),
               makePointerUpListener(() => {
                 release()
               }),
               makePointerCancelListener(() => {
+                release()
+              }),
+              makePointerLeaveListener(() => {
                 release()
               }),
             ])
@@ -304,6 +435,11 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
         dragOverTimeListener(component, 500, () => {
           toggle_collapse()
         }),
+        () => {
+          if (release) {
+            release()
+          }
+        },
       ])
     }
 
@@ -326,7 +462,7 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
 
           this._message_id[message_id] = true
 
-          this.dispatchContextEvent('_iounapp_control_foreground', {
+          this.dispatchContextEvent('_control_foreground', {
             message_id,
           })
 
@@ -379,22 +515,23 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
           transition: `transform ${ANIMATION_T_S}s linear, opacity ${ANIMATION_T_S}s linear`,
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
-    let _iounapp_control_in_count = 0
+
+    let _control_in_count = 0
+
     container.addEventListeners([
-      makeCustomListener('_iounapp_control_in', () => {
-        _iounapp_control_in_count++
+      makeCustomListener('_control_in', () => {
+        _control_in_count++
       }),
-      makeCustomListener('_iounapp_control_out', () => {
-        _iounapp_control_in_count--
+      makeCustomListener('_control_out', () => {
+        _control_in_count--
       }),
     ])
 
     const _icon = new Icon(
       {
-        className: 'iounapp-control-icon',
+        className: 'control-icon',
         icon,
         style: {
           position: 'absolute',
@@ -411,8 +548,7 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
           pointerEvents: this._collapsed ? 'auto' : 'none',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     _icon.preventDefault('mousedown')
     _icon.preventDefault('touchdown')
@@ -425,54 +561,70 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
 
     const button = new Div(
       {
+        className: 'gui-control-knob',
         style: {
           position: 'absolute',
-          bottom: this._collapsed
-            ? `-${BUTTON_HEIGHT / 2 + 1}px`
-            : `-${BUTTON_HEIGHT}px`,
-          left: '50%',
+          left: `-${BUTTON_WIDTH}px`,
+          opacity: this._collapsed ? '0' : '1',
           height: `${BUTTON_HEIGHT}px`,
+          top: '50%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           backgroundColor: COLOR_NONE,
-          width: '48px',
+          width: `${BUTTON_WIDTH}px`,
           cursor: 'pointer',
-          willChange: 'bottom',
-          transition: linearTransition('bottom'),
-          transform: 'translateX(-50%)',
+          willChange: 'opacity',
+          transition: linearTransition('opacity'),
+          transform: 'translateY(-50%)',
           pointerEvents: this._collapsed ? 'none' : 'auto',
           touchAction: 'none',
         },
       },
-      this.$system,
-      this.$pod
+      this.$system
     )
     button.preventDefault('mousedown')
     button.preventDefault('touchdown')
     button.$element.setAttribute('dropTarget', 'true')
+
+    const button_inner = new Div(
+      {
+        style: {
+          width: '8px',
+          height: '16px',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '3px',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+      },
+      this.$system
+    )
+
+    button.appendChild(button_inner)
+
+    rangeArray(6).forEach((i) => {
+      const grip_circle = new Div(
+        {
+          style: {
+            width: '2px',
+            height: '2px',
+            borderRadius: '50%',
+            backgroundColor: 'currentColor',
+          },
+        },
+        this.$system
+      )
+
+      button_inner.appendChild(grip_circle)
+    })
 
     if (this._collapsed) {
       unlisten_pointer = listen_pointer(root)
     } else {
       unlisten_pointer = listen_pointer(button)
     }
-
-    const button_bar = new Div(
-      {
-        className: 'iounapp-keyboard-knob',
-        style: {
-          position: 'absolute',
-          bottom: '12px',
-          left: '50%',
-          backgroundColor: 'currentColor',
-          height: '1px',
-          width: '18px',
-          cursor: 'pointer',
-          transform: 'translateX(-50%)',
-          ...userSelect('none'),
-        },
-      },
-      this.$system,
-      this.$pod
-    )
 
     const $element = parentElement($system)
 
@@ -482,19 +634,19 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
     this.$subComponent = {
       root,
       button,
-      button_bar,
       icon: _icon,
     }
 
-    this.registerRoot(root)
-
     root.registerParentRoot(container)
-
     root.registerParentRoot(button)
-
-    button.registerParentRoot(button_bar)
-
     root.registerParentRoot(_icon)
+
+    this.registerRoot(root)
+  }
+  private _get_screen_ratio() {
+    const { $width, $height } = this.$context
+
+    return $width / $height
   }
 
   onPropChanged(prop: string, current: any): void {
@@ -524,13 +676,16 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
 
   private _background_color = (): string => {
     const { $theme } = this.$context
+
     const backgroundColor = setAlpha(themeBackgroundColor($theme), 0.75)
+
     return backgroundColor
   }
 
   private _refresh_color = (): void => {
     if (this._collapsed) {
       const backgroundColor = this._background_color()
+
       mergeStyle(this._root, {
         backgroundColor,
       })
@@ -543,6 +698,7 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
 
   private _set_z_index = (zIndex: number) => {
     this._z_index = zIndex
+
     mergeStyle(this._root, {
       zIndex: `${zIndex}`,
     })
@@ -555,22 +711,33 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
   private _message_id: Dict<boolean> = {}
 
   private _clamp_x_y = () => {
-    const { width, height } = this.$props
     const { $width, $height } = this.$context
 
-    const w = this._collapsed ? COLLAPSED_WIDTH : width
-    const h = this._collapsed ? COLLAPSED_HEIGHT : height
+    const w = this._get_width()
+    const h = this._get_height()
 
     this._x = clamp({
       a: this._x,
-      min: 0,
-      max: $width - w - 2,
+      min: BUTTON_WIDTH,
+      max: $width - w - 3,
     }).a
     this._y = clamp({
       a: this._y,
-      min: 0,
-      max: $height - h - BUTTON_HEIGHT - 2,
+      min: 3,
+      max: $height - h - 3,
     }).a
+  }
+
+  private _get_height() {
+    const { height } = this.$props
+
+    return this._collapsed ? COLLAPSED_HEIGHT : height
+  }
+
+  private _get_width() {
+    const { width } = this.$props
+
+    return this._collapsed ? COLLAPSED_WIDTH : width
   }
 
   onMount(): void {
@@ -586,7 +753,7 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
           top: `${this._y}px`,
         })
       }),
-      makeCustomListener('_iounapp_control_foreground', ({ message_id }) => {
+      makeCustomListener('_control_foreground', ({ message_id }) => {
         if (!this._message_id[message_id]) {
           this._set_z_index(this._z_index - 1)
         } else {

@@ -1,25 +1,72 @@
 import { IOElement } from '../../IOElement'
 import { parseTransformXY } from '../../parseTransformXY'
 import { addVector3, NULL_VECTOR, Position } from '../geometry'
+import { getChildrenRect } from './getSize'
+
+export function getPosition(element: IOElement): Position {
+  if (element instanceof Text) {
+    return { x: 0, y: 0 }
+  } else {
+    if (element.classList.contains('__parent')) {
+      const { x, y } = getChildrenRect(element)
+
+      return { x, y }
+    } else {
+      const { x, y } = element.getBoundingClientRect()
+
+      return { x, y }
+    }
+  }
+}
 
 export function getRelativePosition(
   element: IOElement,
   relative: HTMLElement
 ): Position {
-  // RETURN
   if (element instanceof Text) {
-    const range = document.createRange()
-    range.selectNodeContents(element)
-    const rects = range.getClientRects()
-    const rect = rects[0] || { x: 0, y: 0 }
-    return rect
+    return getTextRelativePosition(element, relative)
   }
 
-  // RETURN
   if (element instanceof SVGElement) {
-    return NULL_VECTOR
+    return getSVGRelativePosition(element, relative)
   }
 
+  if (element instanceof HTMLElement) {
+    return getHTMLRelativePosition(element, relative)
+  }
+}
+
+// RETURN
+export function getTextRelativePosition(
+  element: Text,
+  relative: HTMLElement
+): Position {
+  const range = document.createRange()
+
+  range.selectNodeContents(element)
+
+  const rects = range.getClientRects()
+
+  const rect = rects[0] || { x: 0, y: 0 }
+
+  return rect
+}
+
+// RETURN
+export function getSVGRelativePosition(
+  element: SVGElement,
+  relative: HTMLElement
+): Position {
+  // return NULL_VECTOR
+  return element.parentElement
+    ? getHTMLRelativePosition(element.parentElement, relative)
+    : NULL_VECTOR
+}
+
+export function getHTMLRelativePosition(
+  element: HTMLElement,
+  relative: HTMLElement
+): Position {
   const local_position = getLocalPosition(element)
   // const scroll_position = getScrollPosition(element, relative)
   const scroll_position = { x: 0, y: 0 }
@@ -79,7 +126,13 @@ export function getScrollPosition(
 }
 
 export function getLocalPosition(element: HTMLElement): Position {
-  const { offsetLeft, offsetTop, offsetWidth, offsetHeight, style } = element
+  const {
+    offsetLeft = 0,
+    offsetTop = 0,
+    offsetWidth = 0,
+    offsetHeight = 0,
+    style,
+  } = element
 
   let offset_x = offsetLeft
   let offset_y = offsetTop

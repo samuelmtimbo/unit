@@ -4,12 +4,12 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
 // import NArrayBuilder from '../../../system/core/common/NArrayBuilder/Class'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec = require('../../../system/core/common/NArrayBuilder/spec.json')
 const NArrayBuilder = fromSpec(spec, _specs)
 
-const nArrayBuilder = new NArrayBuilder(system, pod)
+const nArrayBuilder = new NArrayBuilder(system)
 
 false && watchGraphAndLog(nArrayBuilder)
 false && watchUnitAndLog(nArrayBuilder)

@@ -8,6 +8,16 @@
         "description": "input text here"
       }
     },
+    "placeholder": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": [
+          "\"Type Text Here\""
+        ]
+      }
+    },
     "style": {
       "type": "object",
       "optional": true
@@ -17,7 +27,7 @@
   "metadata": {
     "icon": "align-left",
     "description": "input text through keyboard",
-    "complexity": 21,
+    "complexity": 118,
     "tags": [
       "platform",
       "component",

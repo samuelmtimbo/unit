@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_TIMER } from '../../../_ids'
 
 export interface I {
   ms: number
@@ -14,7 +14,7 @@ export interface O {
 export default class Timer extends Functional<I, O> {
   private _timer: NodeJS.Timer | null = null
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['ms'],
@@ -22,7 +22,7 @@ export default class Timer extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_TIMER
     )
 
     this.addListener('reset', this._reset)

@@ -1,14 +1,13 @@
 import { $ } from '../../../Class/$'
-import { Element } from '../../../Class/Element'
-import { Semifunctional } from '../../../Class/Semifunctional'
+import { Element_ } from '../../../Class/Element'
 import { ObjectUpdateType } from '../../../Object'
-import { Pod } from '../../../pod'
 import { System } from '../../../system'
 import { GraphClass } from '../../../types/GraphClass'
 import { G } from '../../../types/interface/G'
 import { J } from '../../../types/interface/J'
 import { V } from '../../../types/interface/V'
 import { Unlisten } from '../../../types/Unlisten'
+import { ID_CLIENT } from '../../_ids'
 
 export interface I<T> {
   graph: GraphClass
@@ -19,8 +18,8 @@ export interface O<T> {
   hub: $ & V<J<J<G>>> & J<J<G>>
 }
 
-export default class Client<T> extends Element<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+export default class Client<T> extends Element_<I<T>, O<T>> {
+  constructor(system: System) {
     super(
       {
         i: ['graph', 'done'],
@@ -35,7 +34,7 @@ export default class Client<T> extends Element<I<T>, O<T>> {
         },
       },
       system,
-      pod
+      ID_CLIENT
     )
   }
 
@@ -143,7 +142,7 @@ export default class Client<T> extends Element<I<T>, O<T>> {
         ): Unlisten {
           throw new Error('Method not implemented.')
         }
-      })(this.__system, this.__pod)
+      })(this.__system)
 
       this._output.hub.push(hub)
     } else if (name === 'done') {

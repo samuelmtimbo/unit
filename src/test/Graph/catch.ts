@@ -3,17 +3,19 @@ import { Graph } from '../../Class/Graph'
 import { SELF } from '../../constant/SELF'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import { ID_CATCH, ID_THROW } from '../../system/_ids'
-import { pod, system } from '../util/system'
+import { system } from '../util/system'
 
-const graph = new Graph({}, {}, system, pod)
+const spec = system.emptySpec()
+
+const graph = new Graph(spec, {}, system)
 
 0 && watchUnitAndLog(graph)
 0 && watchGraphAndLog(graph)
 
 graph.play()
 
-graph.addUnit({ unit: { id: ID_THROW } }, 'throw')
-graph.addUnit({ unit: { id: ID_CATCH } }, 'catch')
+graph.addUnitSpec('throw', { unit: { id: ID_THROW } })
+graph.addUnitSpec('catch', { unit: { id: ID_CATCH } })
 
 const catchy = graph.refUnit('catch')
 const throwy = graph.refUnit('throw')

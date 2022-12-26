@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Pod } from '../../../../../pod'
 import { System } from '../../../../../system'
+import { ID_GEOLOCATION } from '../../../../_ids'
 
 export type I = {
   any: any
@@ -14,8 +14,8 @@ export type O = {
   }
 }
 
-export default class CurrentPosition extends Functional<I, O> {
-  constructor(system: System, pod: Pod) {
+export default class Geolocation extends Functional<I, O> {
+  constructor(system: System) {
     super(
       {
         i: ['any'],
@@ -23,7 +23,7 @@ export default class CurrentPosition extends Functional<I, O> {
       },
       {},
       system,
-      pod
+      ID_GEOLOCATION
     )
   }
 

@@ -1,12 +1,12 @@
 import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { System } from '../../../../../system'
+import { IBluetoothService } from '../../../../../types/global/IBluetoothService'
 import { BD } from '../../../../../types/interface/BD'
 import { BS } from '../../../../../types/interface/BS'
 import { BSE } from '../../../../../types/interface/BSE'
-import { Pod } from '../../../../../pod'
-import { System } from '../../../../../system'
-import { IBluetoothService } from '../../../../../types/global/IBluetoothService'
+import { ID_BLUETOOTH_SERVER } from '../../../../_ids'
 
 export interface I {
   device: BD
@@ -19,7 +19,7 @@ export interface O {
 export default class BluetoothServer extends Functional implements BS {
   private _server: any
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['device'],
@@ -38,7 +38,7 @@ export default class BluetoothServer extends Functional implements BS {
         },
       },
       system,
-      pod
+      ID_BLUETOOTH_SERVER
     )
   }
 
@@ -49,7 +49,7 @@ export default class BluetoothServer extends Functional implements BS {
       getPrimaryService(name: string): Promise<IBluetoothService> {
         return _server.getPrimaryService(name)
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     done({ server })
   }

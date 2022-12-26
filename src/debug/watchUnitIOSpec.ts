@@ -1,14 +1,14 @@
 import { Unit } from '../Class/Unit'
-import { DEFAULT_EVENTS } from '../constant/DEFAULT_EVENTS'
+import { GRAPH_DEFAULT_EVENTS } from '../constant/GRAPH_DEFAULT_EVENTS'
 import { Unlisten } from '../types/Unlisten'
-import callAll from '../util/call/callAll'
+import { callAll } from '../util/call/callAll'
 import { Moment } from './Moment'
 import { watchUnitSpecEvent } from './watchUnitSpecEvent'
 
 export function watchUnitIOSpec(
   unit: Unit,
   callback: (moment: Moment) => void,
-  events: string[] = DEFAULT_EVENTS
+  events: string[] = GRAPH_DEFAULT_EVENTS
 ): Unlisten {
   const all: Unlisten[] = []
 

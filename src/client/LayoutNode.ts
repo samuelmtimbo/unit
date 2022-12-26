@@ -3,7 +3,8 @@ export type LayoutNode = {
   y: number
   width: number
   height: number
-  k: number
+  sx: number
+  sy: number
   opacity: number
   fontSize: number
 }

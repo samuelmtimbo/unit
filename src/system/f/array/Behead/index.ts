@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
-import { Pod } from '../../../../pod'
 import { System } from '../../../../system'
+import { ID_BEHEAD } from '../../../_ids'
 
 export interface I<T> {
   a: T[]
@@ -13,7 +13,7 @@ export interface O<T> {
 }
 
 export default class Behead<T> extends Functional<I<T>, O<T>> {
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         i: ['a'],
@@ -21,7 +21,7 @@ export default class Behead<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      pod
+      ID_BEHEAD
     )
   }
 

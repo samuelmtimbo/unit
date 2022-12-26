@@ -1,7 +1,7 @@
 import dissocAll from '../../system/core/object/DissocAll/f'
 import dissocPath from '../../system/core/object/DissocPath/f'
 import merge from '../../system/f/object/Merge/f'
-import set from '../../system/f/object/Set/f'
+import _set from '../../system/f/object/Set/f'
 import { Action, DatumSpec, GraphDataSpec } from '../../types'
 import { REMOVE_DATA, REMOVE_DATUM, SET_DATA, SET_DATUM } from '../actions/data'
 
@@ -28,7 +28,7 @@ export const setDatum = (
   { id, value }: { id: string; value: DatumSpec },
   state: State
 ): State => {
-  return set(state, id, value)
+  return _set(state, id, value)
 }
 
 export default function (

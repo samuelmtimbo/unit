@@ -1,7 +1,9 @@
+import { Graph } from '../../Class/Graph'
+import { Dict } from '../Dict'
+import { GraphBundle } from '../GraphClass'
 import { Unlisten } from '../Unlisten'
-import { P } from './P'
 
 export interface S {
-  newPod(init: {}): [P, Unlisten]
   newSystem(init: {}): [S, Unlisten]
+  newGraph(bundle: GraphBundle): [Dict<string>, Graph, Unlisten]
 }

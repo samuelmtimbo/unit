@@ -1,0 +1,54 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "percent",
+  "units": {
+    "concat": {
+      "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+      "input": {
+        "a": {},
+        "b": {
+          "constant": true,
+          "data": "\"%\""
+        }
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 22,
+          "y": 102
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "a"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "ab": {
+      "plug": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "ab"
+        }
+      },
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "question",
+    "description": "",
+    "complexity": 5
+  },
+  "id": "72a186fe-a18b-44ca-b36b-c014ee44003a"
+}

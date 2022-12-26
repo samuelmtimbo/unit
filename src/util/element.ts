@@ -37,8 +37,8 @@ export function prepend<T extends IOElement>(
   return node.prepend(newChild)
 }
 
-export function _removeChildren(element: Element) {
+export function removeChildren(element: Element) {
   while (element.firstChild) {
-    element.removeChild(element.lastChild!)
+    element.removeChild(element.lastChild)
   }
 }

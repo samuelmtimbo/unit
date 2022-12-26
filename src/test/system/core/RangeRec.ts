@@ -6,12 +6,12 @@ import {
 } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
-import { pod, system } from '../../util/system'
+import { system } from '../../util/system'
 
 const spec = require('../../../system/core/loop/RangeRec/spec.json')
 const Range = fromSpec<{ any: any }, { bit: number }>(spec, _specs)
 
-const range = new Range(system, pod)
+const range = new Range(system)
 
 false && watchUnitAndLog(range)
 false && watchGraphAndLog(range)

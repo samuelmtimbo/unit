@@ -1,3 +1,5 @@
+import { UnitBundleSpec } from '../types/UnitBundleSpec'
+
 export type $Child = {
-  id: string
+  bundle: UnitBundleSpec
 }

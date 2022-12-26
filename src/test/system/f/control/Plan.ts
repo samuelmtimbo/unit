@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import Plan from '../../../../system/f/control/Plan'
-import { pod, system } from '../../../util/system'
+import { system } from '../../../util/system'
 
-const plan = new Plan(system, pod)
+const plan = new Plan(system)
 
 plan.play()
 

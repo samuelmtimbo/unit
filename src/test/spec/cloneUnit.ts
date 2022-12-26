@@ -1,7 +1,6 @@
 import assert = require('assert')
 import { Graph } from '../../Class/Graph'
 import { Unit } from '../../Class/Unit'
-import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import { cloneUnit } from '../../spec/cloneUnit'
 import { fromId } from '../../spec/fromId'
 import Add from '../../system/f/arithmetic/Add'
@@ -9,9 +8,9 @@ import Identity from '../../system/f/control/Identity'
 import _classes from '../../system/_classes'
 import { ID_RANGE } from '../../system/_ids'
 import _specs from '../../system/_specs'
-import { pod, system } from '../util/system'
+import { system } from '../util/system'
 
-const identity = new Identity<number>(system, pod)
+const identity = new Identity<number>(system)
 
 identity.play()
 
@@ -35,7 +34,7 @@ clonedIdentity.push('a', 1)
 assert.equal(clonedIdentity.peakInput('a'), 1)
 assert.equal(clonedIdentity.peakOutput('a'), 1)
 
-const add = new Add(system, pod)
+const add = new Add(system)
 
 add.play()
 
@@ -58,7 +57,7 @@ const Range = fromId<Unit<{ a: number; b: number }, { i: number }>>(
   _classes
 )
 
-const range = new Range(system, pod)
+const range = new Range(system)
 
 range.play()
 

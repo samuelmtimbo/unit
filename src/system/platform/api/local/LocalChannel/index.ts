@@ -4,14 +4,14 @@ import {
   Semifunctional,
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
-import { CH } from '../../../../../types/interface/CH'
-import { RE } from '../../../../../types/interface/RE'
-import { Pod } from '../../../../../pod'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { IChannel } from '../../../../../types/global/IChannel'
+import { CH } from '../../../../../types/interface/CH'
+import { RE } from '../../../../../types/interface/RE'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { ID_LOCAL_CHANNEL } from '../../../../_ids'
 
 export interface I<T> {
   channel: string
@@ -33,7 +33,7 @@ export default class LocalChannel<T>
 {
   private _bc: IChannel | null = null
 
-  constructor(system: System, pod: Pod) {
+  constructor(system: System) {
     super(
       {
         fi: ['channel'],
@@ -49,7 +49,7 @@ export default class LocalChannel<T>
         },
       },
       system,
-      pod
+      ID_LOCAL_CHANNEL
     )
   }
 
@@ -66,8 +66,8 @@ export default class LocalChannel<T>
     const port = new (class Port extends $<LocalChannelEvents> implements CH {
       private _unlisten: Unlisten
 
-      constructor(system: System, pod: Pod) {
-        super(system, pod)
+      constructor(system: System) {
+        super(system)
 
         this._unlisten = bc.addListener('message', (event: MessageEvent) => {
           const { specs, classes } = this.__system
@@ -94,7 +94,7 @@ export default class LocalChannel<T>
 
         return
       }
-    })(this.__system, this.__pod)
+    })(this.__system)
 
     done({ port })
   }
