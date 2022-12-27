@@ -330,6 +330,10 @@ export default class KeyboardController {
       event.preventDefault()
       return
     }
+    
+    if (ctrlKey){
+      event.preventDefault()
+    }
 
     this._ctrl = ctrlKey
     this._meta = metaKey

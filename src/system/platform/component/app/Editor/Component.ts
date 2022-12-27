@@ -39779,8 +39779,8 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
       await this._save_silently(bundle)
     } else {
       downloadData({
-        name: `${name}.json`,
-        data: JSON.stringify(this._spec, null, 2),
+        name: `${name}.unit`,
+        data: JSON.stringify(bundle, null, 2),
         mimeType: 'text/json',
         charset: 'utf-8',
       })
@@ -39802,7 +39802,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
   }
 
   private _on_ctrl_s_keydown = async () => {
-    // console.log('Graph', '_on_ctrl_s_keydown')
+    console.log('Graph', '_on_ctrl_s_keydown')
 
     await this.save()
   }

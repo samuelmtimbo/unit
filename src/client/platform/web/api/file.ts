@@ -69,7 +69,8 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
   }
 
   const file: API['file'] = {
-    showSaveFilePicker,
+    // @ts-ignore
+    showSaveFilePicker: window.showOpenFilePicker? showSaveFilePicker: undefined,
     showOpenFilePicker,
     downloadURL,
     downloadData,
