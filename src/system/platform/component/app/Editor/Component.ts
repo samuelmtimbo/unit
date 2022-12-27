@@ -15185,7 +15185,7 @@ export class _Editor extends Element<IHTMLDivElement, _Props> {
           },
         },
         {
-          combo: ['Ctrl + s'],
+          combo: ['Ctrl + s','Ctrl + Space'],
           keydown: (key, { ctrlKey }) => {
             this._on_ctrl_s_keydown()
           },

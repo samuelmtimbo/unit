@@ -330,9 +330,9 @@ export default class KeyboardController {
       event.preventDefault()
       return
     }
-    
+
     if (ctrlKey){
-      event.preventDefault()
+      // event.preventDefault()
     }
 
     this._ctrl = ctrlKey
