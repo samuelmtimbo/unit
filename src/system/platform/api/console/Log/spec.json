@@ -2,13 +2,13 @@
   "name": "log",
   "inputs": {
     "message": {
-      "type": "<T>"
+      "type": "any"
     }
   },
   "metadata": {
     "icon": "terminal",
     "description": "print on the console",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

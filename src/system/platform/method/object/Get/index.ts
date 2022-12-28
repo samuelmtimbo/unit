@@ -5,7 +5,7 @@ import { J } from '../../../../../types/interface/J'
 import { ID_GET_0 } from '../../../../_ids'
 
 export interface I<T> {
-  unit: J
+  obj: J
   name: string
 }
 
@@ -17,7 +17,7 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['unit', 'name'],
+        i: ['obj', 'name'],
         o: ['value'],
       },
       {
@@ -32,9 +32,9 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ unit, name }: I<T>, done: Done<O<T>>) {
+  async f({ obj, name }: I<T>, done: Done<O<T>>) {
     try {
-      const value = await unit.get(name)
+      const value = await obj.get(name)
 
       done({ value })
     } catch (err) {

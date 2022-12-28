@@ -8,12 +8,13 @@
       "type": "{iceServers:{urls:string[]}[]}",
       "metadata": {
         "examples": [
-          "{iceServers:[{urls:['stun:ice.ioun.net']}]}"
+          "{iceServers:[{urls:['stun:stun.l.google.com:19302']}]}"
         ]
       }
     },
     "close": {
-      "type": "any"
+      "type": "any",
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -29,7 +30,7 @@
   "metadata": {
     "icon": "link",
     "description": "remote peer graph",
-    "complexity": 58,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

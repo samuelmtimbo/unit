@@ -71,7 +71,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "...",
-    "complexity": 9,
+    "complexity": 7,
     "tags": [
       "core",
       "array"

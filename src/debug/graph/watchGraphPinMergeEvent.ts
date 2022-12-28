@@ -7,6 +7,7 @@ export interface GraphMergePinMomentData {
   unitId: string
   type: IO
   pinId: string
+  path: string[]
 }
 
 export interface GraphPinMergeMoment extends Moment<GraphMergePinMomentData> {}
@@ -20,7 +21,8 @@ export function watchGraphPinMergeEvent(
     mergeId: string,
     unitId: string,
     type: IO,
-    pinId: string
+    pinId: string,
+    path: string[]
   ) => {
     callback({
       type: 'graph',
@@ -30,6 +32,7 @@ export function watchGraphPinMergeEvent(
         unitId,
         type,
         pinId,
+        path,
       },
     })
   }

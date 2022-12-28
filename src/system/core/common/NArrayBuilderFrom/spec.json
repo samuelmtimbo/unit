@@ -67,7 +67,7 @@
   "metadata": {
     "icon": "array",
     "description": "build a list of size n",
-    "complexity": 24,
+    "complexity": 19,
     "tags": [
       "core",
       "common"

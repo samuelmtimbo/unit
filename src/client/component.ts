@@ -4,7 +4,6 @@ import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
 import { NOOP } from '../NOOP'
 import { System } from '../system'
-import { pushGlobalComponent } from '../system/globalComponent'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { $Component } from '../types/interface/async/$Component'
@@ -90,6 +89,7 @@ export class Component<
   public $system: System
 
   public $globalId: string
+  public $remoteGlobalId: string
 
   public $ref: Dict<Component<any>> = {}
 
@@ -153,6 +153,8 @@ export class Component<
     this.$props = $props
     this.$system = $system
     this.$element = $element
+
+    this.$globalId = this.$system.registerComponent(this)
   }
 
   getProp(name: string): any {
@@ -1068,10 +1070,10 @@ export class Component<
 
     this.$named_listener_count = {}
 
-    $unit.$getGlobalId({}, (__global_id: string) => {
-      this.$globalId = __global_id
+    $unit.$getGlobalId({}, (remoteGlobalId: string) => {
+      this.$remoteGlobalId = remoteGlobalId
 
-      pushGlobalComponent(this.$system, __global_id, this)
+      this.$system.registerRemoteComponent(this.$globalId, remoteGlobalId)
     })
 
     const all_unlisten: Unlisten[] = []

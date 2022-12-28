@@ -1,11 +1,11 @@
 {
   "name": "get sender",
   "inputs": {
-    "unit": {
+    "obj": {
       "plug": {
         "0": {
           "unitId": "get",
-          "pinId": "unit"
+          "pinId": "obj"
         }
       },
       "type": "`U`",
@@ -60,7 +60,7 @@
     "get": {
       "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
       "input": {
-        "unit": {
+        "obj": {
           "metadata": {
             "position": {
               "x": 100,
@@ -137,7 +137,7 @@
   "metadata": {
     "icon": "object-get",
     "description": "get unit's current sender",
-    "complexity": 8,
+    "complexity": 6,
     "tags": [
       "platform",
       "core",

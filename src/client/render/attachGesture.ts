@@ -76,6 +76,8 @@ export function attachGesture(system: System): void {
     path.style.strokeWidth = `${lineWidth}px`
     path.style.fill = color
 
+    let active = true
+
     const track: Point[] = [{ x: screenX, y: screenY }]
 
     const pointerMoveListener = (_event: PointerEvent) => {
@@ -102,14 +104,20 @@ export function attachGesture(system: System): void {
       const { pointerId: _pointerId } = _event
 
       if (_pointerId === pointerId) {
-        svg.removeChild(path)
+        unlisten()
 
-        // svg.releasePointerCapture(pointerId)
+        callback(_event, track)
+      }
+    }
+
+    const unlisten = () => {
+      if (active) {
+        active = false
 
         unlistenPointerMove()
         unlistenPointerUp()
 
-        callback(_event, track)
+        svg.removeChild(path)
       }
     }
 
@@ -126,12 +134,7 @@ export function attachGesture(system: System): void {
       true
     )
 
-    return () => {
-      unlistenPointerMove()
-      unlistenPointerUp()
-
-      svg.removeChild(path)
-    }
+    return unlisten
   }
 
   system.captureGesture = captureGesture

@@ -67,7 +67,7 @@
   "metadata": {
     "icon": "dot-circle",
     "description": "append \"px\" to `n`",
-    "complexity": 8,
+    "complexity": 6,
     "tags": [
       "platform",
       "core",

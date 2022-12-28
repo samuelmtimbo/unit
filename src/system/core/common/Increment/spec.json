@@ -38,7 +38,7 @@
   "metadata": {
     "icon": "plus",
     "description": "increment `a`",
-    "complexity": 5,
+    "complexity": 4,
     "tags": [
       "core",
       "common"

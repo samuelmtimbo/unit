@@ -4,8 +4,8 @@
     "style": {
       "plug": {
         "0": {
-          "unitId": "textbox",
-          "pinId": "style"
+          "unitId": "mergedefault",
+          "pinId": "a"
         }
       }
     }
@@ -20,20 +20,55 @@
           "data": "'hello world'"
         },
         "style": {
+          "constant": false
+        }
+      },
+      "output": {
+        "div": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 105,
+          "y": 14
+        }
+      }
+    },
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {},
+        "default": {
           "constant": true,
           "data": "{textAlign:'center',fontFamily:'Inconsolata',display:'flex',justifyContent:'center',alignItems:'center',fontSize:'20vw'}"
         }
       },
-      "output": {},
+      "output": {
+        "a": {}
+      },
       "metadata": {
         "position": {
-          "x": 0,
-          "y": 0
+          "x": -106,
+          "y": -15
         }
       }
     }
   },
-  "merges": {},
+  "merges": {
+    "0": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "textbox": {
+        "input": {
+          "style": true
+        }
+      }
+    }
+  },
   "component": {
     "subComponents": {
       "textbox": {
@@ -49,7 +84,7 @@
   "metadata": {
     "description": "text box saying 'hello world'",
     "icon": "sign",
-    "complexity": 250,
+    "complexity": 23,
     "position": {},
     "tags": [
       "platform",
@@ -58,5 +93,8 @@
     ]
   },
   "id": "a9cbed12-9a53-11eb-8c2e-f3146b36128d",
-  "render": true
+  "render": true,
+  "system": true,
+  "specs": {},
+  "type": "`U`&`G`"
 }

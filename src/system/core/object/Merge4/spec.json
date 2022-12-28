@@ -25,7 +25,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "merge objects `a`, `b`, `c` and `d` into `abcd`",
-    "complexity": 9,
+    "complexity": 8,
     "tags": [
       "core",
       "object"

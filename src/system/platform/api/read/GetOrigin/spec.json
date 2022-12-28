@@ -4,7 +4,7 @@
     "get": {
       "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
       "input": {
-        "unit": {},
+        "obj": {},
         "name": {}
       },
       "output": {
@@ -49,11 +49,11 @@
       },
       "type": "any"
     },
-    "unit": {
+    "obj": {
       "plug": {
         "0": {
           "unitId": "get",
-          "pinId": "unit"
+          "pinId": "obj"
         }
       },
       "ref": true,
@@ -74,7 +74,7 @@
   "metadata": {
     "icon": "circle",
     "description": "...",
-    "complexity": 8,
+    "complexity": 6,
     "tags": [
       "platform",
       "api",

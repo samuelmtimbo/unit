@@ -1,4 +1,3 @@
-import { DEFAULT_STUN_RTC_CONFIG } from '../../../../../api/peer/config'
 import { Peer } from '../../../../../api/peer/Peer'
 import { FunctionalEvents } from '../../../../../Class/Functional'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
@@ -14,6 +13,7 @@ import { ID_PEER_RECEIVER } from '../../../../_ids'
 export interface I<T> {
   offer: string
   close: any
+  opt: RTCConfiguration
 }
 
 export interface O<T> {
@@ -42,8 +42,10 @@ export default class PeerReceiver<T> extends Semifunctional<
   constructor(system: System) {
     super(
       {
-        i: ['offer', 'close'],
-        o: ['answer', 'stream'],
+        fi: ['offer', 'opt'],
+        fo: ['answer'],
+        i: ['close'],
+        o: ['stream'],
       },
       {
         input: {},
@@ -65,8 +67,24 @@ export default class PeerReceiver<T> extends Semifunctional<
         // TODO
       }
     })
+  }
 
-    this._peer = new Peer(this.__system, false, DEFAULT_STUN_RTC_CONFIG)
+  async f({ offer, opt }: I<T>) {
+    this._peer = new Peer(this.__system, false, opt)
+
+    try {
+      await this._peer.acceptOffer(offer)
+    } catch (err) {
+      this._flag_err_invalid_offer = true
+
+      this.err('invalid offer')
+
+      return
+    }
+
+    const answer = await this._peer.answer()
+
+    this._output.answer.push(answer)
 
     this._setup_peer()
   }
@@ -74,23 +92,7 @@ export default class PeerReceiver<T> extends Semifunctional<
   async onDataInputData(name: string, data: any): Promise<void> {
     // console.log('Receiver', 'onDataInputData', name, data)
 
-    // TODO
-    if (this.hasErr()) {
-      this._backwarding = true
-      this.takeErr()
-      this._backwarding = false
-    }
-    if (name === 'offer') {
-      try {
-        await this._peer.acceptOffer(data)
-      } catch (err) {
-        this._flag_err_invalid_offer = true
-        this.err('invalid offer')
-        return
-      }
-      const answer = await this._peer.answer()
-      this._output.answer.push(answer)
-    } else if (name === 'close') {
+    if (name === 'close') {
       this._disconnect()
     }
   }

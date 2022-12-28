@@ -1,4 +1,5 @@
 import { Field } from '../../../../../client/field'
+import { processNumberValue } from '../../../../../client/processNumberValue'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLInputElement } from '../../../../../types/global/dom'
@@ -35,6 +36,7 @@ export default class Slider extends Field<IHTMLInputElement, Props> {
       valueKey: 'value',
       defaultValue: '0',
       defaultStyle: DEFAULT_STYLE,
+      processValue: processNumberValue,
     })
 
     const { min = 0, max = 100 } = $props

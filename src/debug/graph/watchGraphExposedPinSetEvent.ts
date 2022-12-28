@@ -7,6 +7,8 @@ export interface GraphExposedPinSetMomentData {
   type: IO
   pinId: string
   pinSpec: GraphPinSpec
+  data: any
+  path: string[]
 }
 
 export interface GraphExposedPinSetMoment
@@ -17,7 +19,13 @@ export function watchGraphExposedPinSetEvent(
   graph: Graph,
   callback: (moment) => void
 ): () => void {
-  const listener = (type: IO, pinId: string, pinSpec: GraphPinSpec) => {
+  const listener = (
+    type: IO,
+    pinId: string,
+    pinSpec: GraphPinSpec,
+    data: any,
+    path: string[]
+  ) => {
     callback({
       type: 'graph',
       event,
@@ -25,6 +33,8 @@ export function watchGraphExposedPinSetEvent(
         type,
         pinId,
         pinSpec,
+        data,
+        path,
       },
     })
   }

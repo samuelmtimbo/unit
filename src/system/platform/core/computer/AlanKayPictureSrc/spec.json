@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "image",
     "description": "source of Alan Kay picture URLs",
-    "complexity": 33,
+    "complexity": 27,
     "tags": [
       "platform",
       "core",

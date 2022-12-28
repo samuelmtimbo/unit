@@ -124,7 +124,7 @@
   "metadata": {
     "icon": "square",
     "description": "add unit with `id` of `Class` to `graph`",
-    "complexity": 14,
+    "complexity": 11,
     "tags": [
       "platform",
       "core",

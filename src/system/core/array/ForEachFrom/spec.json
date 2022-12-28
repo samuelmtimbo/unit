@@ -144,7 +144,7 @@
   "metadata": {
     "icon": "array",
     "description": "...",
-    "complexity": 29,
+    "complexity": 23,
     "tags": [
       "core",
       "array"

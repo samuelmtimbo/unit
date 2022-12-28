@@ -1,0 +1,95 @@
+{
+  "name": "set height",
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "obj"
+        }
+      },
+      "type": "`J`",
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 53,
+            "y": 37
+          }
+        }
+      }
+    },
+    "height": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "data"
+        }
+      },
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 53,
+            "y": -38
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "set": {
+      "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 34,
+              "y": 18
+            }
+          }
+        },
+        "name": {
+          "constant": true,
+          "data": "'height'",
+          "metadata": {
+            "position": {
+              "x": -60,
+              "y": 0
+            }
+          }
+        },
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 34,
+              "y": -19
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -11,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "set height property of `obj`",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "f752e8ce-83ce-4bdd-9ae2-67b241c51cfc",
+  "type": "`U`&`G`",
+  "system": true
+}

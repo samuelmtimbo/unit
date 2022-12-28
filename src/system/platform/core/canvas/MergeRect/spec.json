@@ -203,7 +203,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "{ x, y, width, height }",
-    "complexity": 29,
+    "complexity": 26,
     "position": {
       "merge": {
         "0": {

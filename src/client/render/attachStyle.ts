@@ -1,16 +1,6 @@
 import { System } from '../../system'
 
-export function attachStyle(system: System): void {
-  const {
-    root,
-    api: {
-      document: { createElement },
-    },
-  } = system
-
-  const style = createElement('style')
-
-  style.innerHTML = `*::-webkit-scrollbar {
+export const ROOT_STYLE = `*::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 1px;
     height: 1px;
@@ -132,5 +122,35 @@ export function attachStyle(system: System): void {
   }
 `
 
+export function attachStyle(system: System): void {
+  appendRootStyle(system, ROOT_STYLE)
+}
+
+export function appendRootStyle(system: System, css: string): void {
+  const {
+    root,
+    api: {
+      document: { createElement },
+    },
+  } = system
+
+  const style = createElement('style')
+
+  style.innerHTML = css
+
   root.shadowRoot.appendChild(style)
+}
+
+export function removeRootStyle(system: System, css: string): void {
+  const { root } = system
+
+  const style = Array.from(root.children).find(
+    (child) => child.tagName === 'STYLE' && style.innerHTML === 'css'
+  )
+
+  if (!style) {
+    throw new Error('Style not found.')
+  }
+
+  root.shadowRoot.removeChild(style)
 }

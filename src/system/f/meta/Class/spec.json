@@ -2,7 +2,7 @@
   "name": "class",
   "inputs": {
     "unit": {
-      "type": "<T>",
+      "type": "`U`",
       "ref": true
     },
     "any": {
@@ -11,13 +11,13 @@
   },
   "outputs": {
     "class": {
-      "type": "<T>"
+      "type": "`U`"
     }
   },
   "metadata": {
     "icon": "circle",
     "description": "system `id` of the given unit `class`",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "meta"

@@ -32,7 +32,7 @@
   "base": true,
   "metadata": {
     "icon": "image",
-    "complexity": 12,
+    "complexity": 11,
     "tags": [
       "platform",
       "api",

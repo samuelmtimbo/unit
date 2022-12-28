@@ -85,7 +85,7 @@
   "metadata": {
     "icon": "map-signs",
     "description": "outputs true and then false",
-    "complexity": 36,
+    "complexity": 29,
     "tags": [
       "core",
       "common"

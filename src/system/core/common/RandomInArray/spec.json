@@ -58,7 +58,7 @@
   "metadata": {
     "icon": "random",
     "description": "random element of the array",
-    "complexity": 21,
+    "complexity": 16,
     "tags": [
       "core",
       "common"

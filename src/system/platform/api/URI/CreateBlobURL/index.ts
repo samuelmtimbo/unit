@@ -6,6 +6,7 @@ import { ID_CREATE_BLOB_URL } from '../../../../_ids'
 
 export interface I<T> {
   blob: B
+  init: {}
 }
 
 export interface O<T> {
@@ -16,7 +17,7 @@ export default class CreateObjectURI<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['blob'],
+        i: ['blob', 'init'],
         o: ['url'],
       },
       {
@@ -31,7 +32,7 @@ export default class CreateObjectURI<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ blob }: I<T>, done: Done<O<T>>): Promise<void> {
+  async f({ blob, init }: I<T>, done: Done<O<T>>): Promise<void> {
     const {
       api: {
         url: { createObjectURL },

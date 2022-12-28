@@ -1,6 +1,6 @@
 import { $ } from '../../../../../Class/$'
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
 import { CA } from '../../../../../types/interface/CA'
@@ -10,22 +10,29 @@ export interface I<T> {
   canvas: CA
   quality: number
   type: string
+  done: any
 }
 
 export interface O<T> {
   blob: B
 }
 
-export default class ToBlob<T> extends Functional<I<T>, O<T>> {
+export default class ToBlob<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['canvas', 'quality', 'type'],
-        o: ['blob'],
+        fi: ['canvas', 'quality', 'type'],
+        fo: ['blob'],
+        i: ['done'],
       },
       {
         input: {
           canvas: {
+            ref: true,
+          },
+        },
+        output: {
+          blob: {
             ref: true,
           },
         },
@@ -38,25 +45,35 @@ export default class ToBlob<T> extends Functional<I<T>, O<T>> {
   async f({ canvas, quality, type }: I<T>, done: Done<O<T>>): Promise<void> {
     let _blob: Blob
 
-    try {
-      _blob = await canvas.toBlob(type, quality)
-    } catch (err) {
-      done(undefined, err.message)
-
-      return
-    }
-
     const blob = new (class _Blob extends $ implements B {
       __: string[] = ['ST']
 
       async blob(): Promise<Blob> {
+        try {
+          _blob = await canvas.toBlob(type, quality)
+        } catch (err) {
+          done(undefined, err.message)
+
+          return
+        }
+
         console.log('_Blob', 'read', _blob)
         return _blob
       }
     })(this.__system)
 
+    console.log('BLOB')
+
     done({
       blob,
     })
+  }
+
+  onIterDataInputData(name: string) {
+    // if (name === 'done') {
+    this._forward_empty('blob')
+
+    this._backward('done')
+    // }
   }
 }

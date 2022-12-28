@@ -11,7 +11,7 @@
     "getwidth": {
       "id": "00682850-3e30-11eb-86ea-8f1c604946aa",
       "input": {
-        "unit": {},
+        "obj": {},
         "any": {}
       },
       "output": {
@@ -21,7 +21,7 @@
     "getheight": {
       "id": "f513667c-3e2f-11eb-8a96-4fbfb5c1b798",
       "input": {
-        "unit": {},
+        "obj": {},
         "any": {}
       },
       "output": {
@@ -33,7 +33,7 @@
     "0": {
       "getwidth": {
         "input": {
-          "unit": true
+          "obj": true
         }
       },
       "context": {
@@ -43,7 +43,7 @@
       },
       "getheight": {
         "input": {
-          "unit": true
+          "obj": true
         }
       }
     }
@@ -107,7 +107,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "get the width and height of this frame",
-    "complexity": 18,
+    "complexity": 14,
     "tags": [
       "platform",
       "core",

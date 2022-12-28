@@ -7,8 +7,8 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  first: T
-  second: T
+  0: T
+  1: T
 }
 
 export default class Plan<T> extends Primitive<I<T>, O<T>> {
@@ -19,7 +19,7 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
     super(
       {
         i: ['a'],
-        o: ['first', 'second'],
+        o: ['0', '1'],
       },
       {},
       system,
@@ -28,9 +28,9 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
   }
 
   onDataInputData(name: string, data: any) {
-    if (!this._output.second.empty()) {
+    if (!this._output[1].empty()) {
       this._forwarding_empty = true
-      this._output.second.pull()
+      this._output[1].pull()
       this._forwarding_empty = false
     }
     this._current = data
@@ -46,7 +46,7 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
     ) {
       this._looping = true
       this._forwarding = true
-      this._output.first.push(this._current)
+      this._output[0].push(this._current)
       this._forwarding = false
     }
   }
@@ -55,23 +55,23 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
     if (!this._backwarding) {
       this._current = undefined
       this._looping = false
-      this._output.first.pull()
-      this._output.second.pull()
+      this._output[0].pull()
+      this._output[1].pull()
     }
   }
 
   onDataInputInvalid(name: string) {
     this._looping = false
-    this._output.first.invalidate()
-    this._output.second.invalidate()
+    this._output[0].invalidate()
+    this._output[1].invalidate()
   }
 
   onDataOutputDrop(name: string) {
     // console.log('Plan', 'onDataOutputDrop', name)
-    if (name === 'first') {
+    if (name === '0') {
       if (this._current !== undefined) {
         this._forwarding = true
-        this._output.second.push(this._current)
+        this._output[1].push(this._current)
         this._forwarding = false
       }
     } else {

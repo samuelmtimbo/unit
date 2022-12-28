@@ -12,7 +12,7 @@
     "0": {
       "plan0": {
         "output": {
-          "second": true
+          "1": true
         }
       },
       "plan": {
@@ -25,7 +25,7 @@
   "metadata": {
     "icon": "list-ordered",
     "description": "output `a` on `0`, then `1`, then `2`",
-    "complexity": 6,
+    "complexity": 5,
     "tags": [
       "core",
       "control"
@@ -47,7 +47,7 @@
       "plug": {
         "0": {
           "unitId": "plan0",
-          "pinId": "first"
+          "pinId": "0"
         }
       },
       "type": "<A>"
@@ -56,7 +56,7 @@
       "plug": {
         "0": {
           "unitId": "plan",
-          "pinId": "first"
+          "pinId": "0"
         }
       },
       "type": "<A>"
@@ -65,7 +65,7 @@
       "plug": {
         "0": {
           "unitId": "plan",
-          "pinId": "second"
+          "pinId": "1"
         }
       },
       "type": "<A>"

@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "search",
     "description": "replace every `b` ocurrence in `a` with `c`",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "string"

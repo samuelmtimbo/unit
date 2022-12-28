@@ -2,6 +2,7 @@ import { Specs } from '..'
 import { randomInArray } from '../../client/id/randomInArray'
 import {
   getTree,
+  isLiteralType,
   NULL_TREE,
   TreeNode,
   TreeNodeType,
@@ -225,6 +226,10 @@ export function randomValueOfType(specs: Specs, type_tree: TreeNode): string {
 export function randomTreeOfType(specs: Specs, type_tree: TreeNode): TreeNode {
   const { type } = type_tree
 
+  if (isLiteralType(type)) {
+    return type_tree
+  }
+
   if (type === TreeNodeType.Or) {
     return randomTreeOfOr(specs, type_tree)
   } else if (type === TreeNodeType.And) {
@@ -244,21 +249,21 @@ export function randomTreeOfType(specs: Specs, type_tree: TreeNode): TreeNode {
 
 export function randomTreeOfTypeLiteral(
   specs: Specs,
-  type_tree: TreeNodeType
+  type: TreeNodeType
 ): TreeNode {
-  if (type_tree === TreeNodeType.Number) {
+  if (type === TreeNodeType.Number) {
     return randomInArray(TREE_NUMBER)
-  } else if (type_tree === TreeNodeType.String) {
+  } else if (type === TreeNodeType.String) {
     return randomInArray(TREE_STRING)
-  } else if (type_tree === TreeNodeType.Boolean) {
+  } else if (type === TreeNodeType.Boolean) {
     return randomInArray(TREE_BOOLEAN)
-  } else if (type_tree === TreeNodeType.Object) {
+  } else if (type === TreeNodeType.Object) {
     return randomInArray(TREE_OBJECT)
-  } else if (type_tree === TreeNodeType.Generic) {
+  } else if (type === TreeNodeType.Generic) {
     return randomTreeOfTypeLiteral(specs, randomLiteralType())
-  } else if (type_tree === TreeNodeType.Class) {
+  } else if (type === TreeNodeType.Class) {
     return getTree(`\${unit:{id:"${randomInArray(keys(specs))}"}}`)
-  } else if (type_tree === TreeNodeType.Any) {
+  } else if (type === TreeNodeType.Any) {
     return randomTreeOfTypeLiteral(specs, randomInArray(LITERAL_TREE_NODE_TYPE))
   }
   return NULL_TREE

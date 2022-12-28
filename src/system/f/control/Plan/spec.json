@@ -6,17 +6,17 @@
     }
   },
   "outputs": {
-    "first": {
+    "0": {
       "type": "<A>"
     },
-    "second": {
+    "1": {
       "type": "<A>"
     }
   },
   "metadata": {
     "icon": "list-ordered",
     "description": "output `a` on `0`, then `1`",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "control"

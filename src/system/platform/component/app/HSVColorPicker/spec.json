@@ -27,7 +27,7 @@
   "metadata": {
     "icon": "palette",
     "description": "HSV Saturation and Value (SV) color picker",
-    "complexity": 119,
+    "complexity": 5,
     "tags": [
       "platform",
       "component"

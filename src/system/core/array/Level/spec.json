@@ -107,7 +107,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "match arrays' length",
-    "complexity": 63,
+    "complexity": 54,
     "tags": [
       "core",
       "array"

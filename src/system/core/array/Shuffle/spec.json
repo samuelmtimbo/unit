@@ -37,7 +37,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "randomly shuffle `a`",
-    "complexity": 59,
+    "complexity": 48,
     "tags": [
       "core",
       "array"

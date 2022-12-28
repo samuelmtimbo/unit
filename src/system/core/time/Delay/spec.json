@@ -30,6 +30,12 @@
           "pinId": "ms"
         }
       },
+      "metadata": {
+        "examples": [
+          "500",
+          "1000"
+        ]
+      },
       "functional": true,
       "type": "number"
     },
@@ -58,7 +64,7 @@
   "metadata": {
     "icon": "alarm-clock",
     "description": "...",
-    "complexity": 8,
+    "complexity": 6,
     "tags": [
       "core",
       "time"

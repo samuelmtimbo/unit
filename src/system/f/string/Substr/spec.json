@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "scissors",
     "description": "substring",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "string"

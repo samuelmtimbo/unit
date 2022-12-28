@@ -6,13 +6,10 @@ import { Component_ } from './Component'
 export type C_J = {}
 
 export type C_EE = {
-  append_child: [{ bundle: UnitBundleSpec }]
-  insert_child: [{ bundle: UnitBundleSpec; at: number }]
-  remove_child: [{ at: number }]
+  append_child: [{ bundle: UnitBundleSpec; path: string[] }]
+  insert_child: [{ path: string[]; bundle: UnitBundleSpec; at: number }]
+  remove_child: [{ at: number; path: string[] }]
   [remove_child_at: `remove_child_at_${number}`]: [{ at: number }]
-  leaf_append_child: [{ path: string[]; bundle: UnitBundleSpec }]
-  leaf_remove_child: [{ at: number; path: string[] }]
-  leaf_insert_child: [{ path: string[]; at: number; bundle: UnitBundleSpec }]
   append_parent_root: [string, string, string]
   append_parent_root_children: [string, string[], Dict<string>]
   register_parent_root: [Component_, string]

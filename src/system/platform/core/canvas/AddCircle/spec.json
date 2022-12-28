@@ -35,7 +35,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "add a circular arc to the current sub-path",
-    "complexity": 11,
+    "complexity": 9,
     "tags": [
       "platform",
       "core",

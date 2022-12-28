@@ -7,7 +7,6 @@ export function render(system: System, $graph: $Graph): Unlisten {
   const unlisten = renderGraph(system.foreground.app, system, $graph)
 
   return () => {
-    system.mounted = false
     system.root = null
 
     unlisten()

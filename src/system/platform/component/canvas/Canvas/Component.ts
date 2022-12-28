@@ -152,11 +152,13 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
 
   private _set_width = (width: number): void => {
     this._canvas_el.setAttribute('width', `${width - 1}`)
+
     this._setup_redraw()
   }
 
   private _set_height = (height: number): void => {
     this._canvas_el.setAttribute('height', `${height - 1}`)
+
     this._setup_redraw()
   }
 
@@ -164,6 +166,8 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   private _height_frame_unlisten: Unlisten
 
   onPropChanged(prop: string, current: any): void {
+    // console.log('Canvas', 'onPropChanged', prop, current)
+
     if (prop === 'style') {
       applyStyle(this._canvas_el, { ...DEFAULT_STYLE, ...current })
     } else if (prop === 'width') {
@@ -196,6 +200,16 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
       this._d = current
 
       this._draw_steps(current || [])
+    } else if (prop === 'lineWidth') {
+      this._context.lineWidth = current
+    } else if (prop === 'sx') {
+      const { a, b, c, d, e, f } = this._context.getTransform()
+
+      this._context.setTransform(current ?? 1, b, c, d, e, f)
+    } else if (prop === 'sy') {
+      const { a, b, c, d, e, f } = this._context.getTransform()
+
+      this._context.setTransform(a, b, c, current ?? 1, e, f)
     }
   }
 
@@ -282,6 +296,7 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   draw(step: any[]) {
     // console.log('draw', step)
     this._d.push(step)
+
     this._draw(step)
   }
 
@@ -297,8 +312,32 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     this._context.drawImage(imageBitmap, 0, 0)
   }
 
+  strokePath(d: string) {
+    // console.log('Canvas', 'strokePath', d)
+
+    this._context.stroke(new Path2D(d))
+  }
+
+  fillPath(d: string, fillRule: CanvasFillRule) {
+    // console.log('Canvas', 'fillPath', d)
+
+    this._context.fill(new Path2D(d), fillRule)
+  }
+
+  translate(x: number, y: number) {
+    // console.log('Canvas', 'translate', x, y)
+
+    this._context.translate(x, y)
+  }
+
+  scale(sx: number, sy: number) {
+    // console.log('Canvas', 'scale', sx, sy)
+
+    this._context.scale(sx, sy)
+  }
+
   toBlob(
-    { type, quality }: { type: string; quality: string },
+    { type, quality }: { type: string; quality: number },
     callback: (data: Blob | null) => void = NOOP
   ) {
     this._canvas_el.toBlob(callback, type, quality)

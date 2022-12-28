@@ -4,10 +4,15 @@
     "name": {
       "plug": {
         "0": {
-          "unitId": "downloadurl",
-          "pinId": "name"
+          "unitId": "plan",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "createbloburl",
+          "pinId": "init"
         }
       },
+      "functional": true,
       "type": "string"
     },
     "type": {
@@ -18,6 +23,7 @@
         }
       },
       "type": "string",
+      "functional": true,
       "metadata": {
         "examples": [
           "\"image/png\""
@@ -59,7 +65,8 @@
           "constant": true,
           "data": "1"
         },
-        "type": {}
+        "type": {},
+        "done": {}
       },
       "output": {
         "blob": {}
@@ -84,6 +91,16 @@
           "x": 6,
           "y": 0
         }
+      }
+    },
+    "plan": {
+      "id": "36329d25-218d-48a5-a06c-1e0525da504f",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "0": {},
+        "1": {}
       }
     }
   },
@@ -111,14 +128,44 @@
           "url": true
         }
       }
+    },
+    "2": {
+      "plan": {
+        "output": {
+          "1": true
+        }
+      },
+      "toblob": {
+        "input": {
+          "done": true
+        }
+      }
+    },
+    "3": {
+      "downloadurl": {
+        "input": {
+          "name": true
+        }
+      },
+      "plan": {
+        "output": {
+          "0": true
+        }
+      }
     }
   },
   "render": false,
   "metadata": {
     "icon": "download",
     "description": "download full canvas as png",
-    "complexity": 11
+    "complexity": 10,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
   },
   "id": "1a398694-284e-4d67-a13c-3a929c38b0fc",
-  "type": "`U`&`G`"
+  "type": "`U`&`G`",
+  "system": true
 }

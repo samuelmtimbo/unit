@@ -5,6 +5,7 @@ import { Moment } from './../Moment'
 export interface GraphSpecComponentAppendMomentData {
   unitId: string
   unitSpec: GraphUnitSpec
+  path: string[]
 }
 
 export interface GraphSpecComponentAppendMoment
@@ -15,13 +16,18 @@ export function watchGraphUnitComponentAppendEvent(
   graph: Graph,
   callback: (moment: GraphSpecComponentAppendMoment) => void
 ): () => void {
-  const listener = (unitId: string, unitSpec: GraphUnitSpec) => {
+  const listener = (
+    unitId: string,
+    unitSpec: GraphUnitSpec,
+    path: string[]
+  ) => {
     callback({
       type: 'graph',
       event,
       data: {
         unitId,
         unitSpec,
+        path,
       },
     })
   }

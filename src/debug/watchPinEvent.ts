@@ -25,6 +25,11 @@ export function watchPinEvent<T>(
       },
     })
   }
+
+  if (event === 'data' && pin.active()) {
+    listener(pin.peak())
+  }
+
   pin.prependListener(event, listener)
   return () => {
     pin.removeListener(event, listener)

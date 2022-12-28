@@ -84,7 +84,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "output get if key is present",
-    "complexity": 12,
+    "complexity": 9,
     "tags": [
       "core",
       "object"

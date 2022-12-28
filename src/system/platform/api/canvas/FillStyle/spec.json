@@ -2,7 +2,12 @@
   "name": "fill style",
   "inputs": {
     "d": {
-      "type": "(number|string)[][]"
+      "type": "(number|string)[][]",
+      "metadata": {
+        "examples": [
+          "[]"
+        ]
+      }
     },
     "fillStyle": {
       "type": "string"
@@ -16,7 +21,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "set current fillStyle",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

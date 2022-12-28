@@ -14,8 +14,7 @@ export function appendChild(
 
   const { __bundle: bundle } = Class
 
-  component.emit('append_child', { bundle })
-  component.emit('leaf_append_child', { path: [], bundle })
+  component.emit('append_child', { bundle, path: [] })
 
   return i
 }
@@ -81,8 +80,7 @@ export function insertChild(
 
   const { __bundle: bundle } = Class
 
-  component.emit('insert_child', { bundle, at })
-  component.emit('leaf_insert_child', { path: [], bundle, at })
+  component.emit('insert_child', { bundle, at, path: [] })
 }
 
 export function hasChild(
@@ -117,9 +115,8 @@ export function removeChild(
 ): Component_ {
   const child = pullChild(element, children, at)
 
-  element.emit('remove_child', { at })
+  element.emit('remove_child', { at, path: [] })
   element.emit(`remove_child_at_${at}`, { at })
-  element.emit('leaf_remove_child', { at, path: [] })
 
   return child
 }

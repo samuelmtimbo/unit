@@ -267,15 +267,13 @@ export function getTreeNodeType(value: string): TreeNodeType {
 }
 
 export function isLiteralType(type: TreeNodeType): boolean {
-  return !!LITERAL_TO_TYLE[type]
+  return !!LITERAL_TO_TYPE[type]
 }
 
-const LITERAL_TO_TYLE: { [type: number]: TreeNodeType } = {
+const LITERAL_TO_TYPE: { [type: number]: TreeNodeType } = {
   [TreeNodeType.NumberLiteral]: TreeNodeType.Number,
   [TreeNodeType.StringLiteral]: TreeNodeType.String,
   [TreeNodeType.BooleanLiteral]: TreeNodeType.Boolean,
-  [TreeNodeType.ObjectLiteral]: TreeNodeType.Object,
-  [TreeNodeType.ArrayLiteral]: TreeNodeType.ArrayExpression,
   [TreeNodeType.RegexLiteral]: TreeNodeType.Regex,
   [TreeNodeType.DateLiteral]: TreeNodeType.Date,
 }

@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "adds a rectangle to the current sub-path",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

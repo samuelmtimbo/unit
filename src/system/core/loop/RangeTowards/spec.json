@@ -251,7 +251,7 @@
   "metadata": {
     "icon": "list-ordered",
     "description": "go from `a` to `b` step by step, not inclusive",
-    "complexity": 25,
+    "complexity": 19,
     "position": {
       "merge": {
         "0": {

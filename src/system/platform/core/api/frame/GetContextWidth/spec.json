@@ -67,7 +67,7 @@
     "getwidth": {
       "id": "00682850-3e30-11eb-86ea-8f1c604946aa",
       "input": {
-        "unit": {},
+        "obj": {},
         "any": {
           "data": "''",
           "metadata": {
@@ -100,7 +100,7 @@
     "0": {
       "getwidth": {
         "input": {
-          "unit": true
+          "obj": true
         }
       },
       "context": {
@@ -112,7 +112,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "complexity": 14,
+    "complexity": 10,
     "tags": [
       "platform",
       "core",

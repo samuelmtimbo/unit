@@ -40,7 +40,7 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `element` \"show\" event",
-    "complexity": 6,
+    "complexity": 4,
     "tags": [
       "platform",
       "api",

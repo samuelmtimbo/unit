@@ -90,7 +90,7 @@
   "metadata": {
     "icon": "undo",
     "description": "...",
-    "complexity": 8,
+    "complexity": 6,
     "tags": [
       "core",
       "iterate"

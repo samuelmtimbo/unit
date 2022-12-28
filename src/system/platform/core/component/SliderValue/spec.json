@@ -201,7 +201,7 @@
   "metadata": {
     "icon": "sliders",
     "description": "slider current value",
-    "complexity": 136,
+    "complexity": 19,
     "tags": [
       "platform",
       "core",

@@ -30,8 +30,7 @@ import Div from '../../Div/Component'
 import Parent from '../../Parent/Component'
 import Color from '../../value/Color/Component'
 import Cabinet from '../Cabinet/Component'
-import { MINIMAP_HEIGHT, MINIMAP_WIDTH } from '../History/Component'
-import Minimap from '../Minimap/Component'
+import Minimap, { MINIMAP_HEIGHT, MINIMAP_WIDTH } from '../Minimap/Component'
 import Search from '../Search/Component'
 
 export interface Props {

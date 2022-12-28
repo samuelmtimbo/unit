@@ -1,0 +1,112 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "download graph",
+  "units": {
+    "stringify": {
+      "id": "ee184ea6-3c80-4119-919e-290620aafab0"
+    },
+    "graphbundle": {
+      "id": "13d738b9-401d-43c9-852f-e9611545f5bc",
+      "input": {
+        "graph": {},
+        "opt": {}
+      },
+      "output": {
+        "bundle": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -8,
+          "y": 10
+        }
+      }
+    },
+    "downloadtext": {
+      "id": "b5ab65ce-4306-4a46-8d3c-36b6c29b1c60",
+      "input": {
+        "text": {},
+        "name": {
+          "constant": false
+        },
+        "mimetype": {
+          "constant": true,
+          "data": "\"application/json\""
+        },
+        "charset": {
+          "constant": true,
+          "data": "\"utf-8\""
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 198,
+          "y": -15
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "stringify": {
+        "input": {
+          "json": true
+        }
+      },
+      "graphbundle": {
+        "output": {
+          "bundle": true
+        }
+      }
+    },
+    "1": {
+      "stringify": {
+        "output": {
+          "string": true
+        }
+      },
+      "downloadtext": {
+        "input": {
+          "text": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "graph": {
+      "plug": {
+        "0": {
+          "unitId": "graphbundle",
+          "pinId": "graph"
+        }
+      },
+      "ref": true
+    },
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "graphbundle",
+          "pinId": "opt"
+        }
+      },
+      "ref": false
+    },
+    "name": {
+      "plug": {
+        "0": {
+          "unitId": "downloadtext",
+          "pinId": "name"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "download",
+    "description": "download `graph` bundle as a json file",
+    "complexity": 8
+  },
+  "id": "dcd6a544-e386-4e1c-9282-043da9585957",
+  "system": true
+}

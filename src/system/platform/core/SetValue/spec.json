@@ -5,7 +5,7 @@
       "plug": {
         "0": {
           "unitId": "set",
-          "pinId": "unit"
+          "pinId": "obj"
         }
       },
       "type": "`U`",
@@ -42,7 +42,7 @@
     "set": {
       "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
       "input": {
-        "unit": {
+        "obj": {
           "metadata": {
             "position": {
               "x": 34,
@@ -81,8 +81,8 @@
   "merges": {},
   "metadata": {
     "icon": "object-set",
-    "description": "...",
-    "complexity": 5,
+    "description": "set property `value` of `obj`",
+    "complexity": 4,
     "tags": [
       "platform",
       "core",

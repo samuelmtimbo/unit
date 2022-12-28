@@ -127,7 +127,7 @@
   "metadata": {
     "icon": "lightbulb",
     "description": "click to turn on/off",
-    "complexity": 167,
+    "complexity": 42,
     "tags": [
       "platform",
       "core",

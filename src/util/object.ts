@@ -222,6 +222,28 @@ export function pathSet(obj: object, path: string[], value: any): void {
   }
 }
 
+export function pathDelete(obj: object, path: string[]): void {
+  let o = obj
+
+  const last_index = path.length - 1
+
+  if (last_index >= 0) {
+    const last_p = path[last_index]
+
+    for (let i = 0; i < last_index; i++) {
+      const p = path[i]
+
+      if (o[p] === undefined) {
+        return
+      }
+
+      o = o[p]
+    }
+
+    delete o[last_p]
+  }
+}
+
 export function pathMerge(obj: object, path: string[], value: any): void {
   pathSet(obj, path, deepMerge(pathOrDefault(obj, path, {}), value))
 }

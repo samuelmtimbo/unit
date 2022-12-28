@@ -93,7 +93,7 @@ export default class _Context
       this._context = null
     }
 
-    const component = this.__system.global.component[globalId]
+    const component = this.__system.getRemoteComponent(globalId)
 
     if (component) {
       if (component.$mounted) {

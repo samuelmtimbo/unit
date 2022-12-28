@@ -35,7 +35,11 @@ export function asyncGraphFromPort(
   class AsyncGraph extends $ implements $Graph {
     __: string[] = ['$U', '$C', '$G']
 
-    $setUnitName(data: { unitId: string; name: string }): void {
+    $setUnitName(data: {
+      unitId: string
+      newUnitId: string
+      name: string
+    }): void {
       return $graph.$setUnitName(data)
     }
 

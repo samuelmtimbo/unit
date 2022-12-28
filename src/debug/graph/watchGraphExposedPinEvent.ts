@@ -3,26 +3,27 @@ import { GraphSubPinSpec } from '../../types'
 import { IO } from '../../types/IO'
 import { Moment } from './../Moment'
 
-export interface GraphExposedPinEventData {
+export interface GraphExposePinEventData {
   type: IO
   pinId: string
   subPinId: string
   subPinSpec: GraphSubPinSpec
+  path: string[]
 }
 
-export interface GraphExposedPinEvent
-  extends Moment<GraphExposedPinEventData> {}
+export interface GraphExposePinEvent extends Moment<GraphExposePinEventData> {}
 
-export function watchGraphExposedPinEvent(
+export function watchGraphExposePinEvent(
   event: 'expose_pin' | 'cover_pin',
   graph: Graph,
-  callback: (moment: GraphExposedPinEvent) => void
+  callback: (moment: GraphExposePinEvent) => void
 ): () => void {
   const listener = (
     type: IO,
     pinId: string,
     subPinId: string,
-    subPinSpec: GraphSubPinSpec
+    subPinSpec: GraphSubPinSpec,
+    path: string[]
   ) => {
     callback({
       type: 'graph',
@@ -32,6 +33,7 @@ export function watchGraphExposedPinEvent(
         pinId,
         subPinId,
         subPinSpec,
+        path,
       },
     })
   }

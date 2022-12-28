@@ -70,7 +70,6 @@ export default class Minimap extends Element<IHTMLDivElement, Props> {
     const map_graph = new SVGG({ className: 'minimap-graph' }, this.$system)
     this._map_graph = map_graph
 
-    // TODO bring "minimap screen" to minimap
     const map_children = new SVGG(
       { className: 'minimap-children' },
       this.$system
@@ -204,25 +203,32 @@ export default class Minimap extends Element<IHTMLDivElement, Props> {
       }
 
       let link_el = this._link_el[link_id]
+
       if (!link_el) {
         link_el = this.$system.api.document.createElementNS(
           namespaceURI,
           'line'
         )
-        // link_el.setAttribute('stroke', 'currentColor')
+
         link_el.style.pointerEvents = 'none'
+
         this._link_el[link_id] = link_el
-        // TODO use Component appendChild
+
         this._map_graph.$element.appendChild(link_el)
       }
+
       const sourceNode = nodes[source]
       const targetNode = nodes[target]
+
       const { x: x0, y: y0 } = sourceNode
       const { x: x1, y: y1 } = targetNode
+
       const u = unitVector(x0, y0, x1, y1)
       const nu = oppositeVector(u)
+
       const { x: _x0, y: _y0 } = pointInNode(sourceNode, u)
       const { x: _x1, y: _y1 } = pointInNode(targetNode, nu)
+
       link_el.setAttribute('x1', `${_x0}`)
       link_el.setAttribute('y1', `${_y0}`)
       link_el.setAttribute('x2', `${_x1}`)

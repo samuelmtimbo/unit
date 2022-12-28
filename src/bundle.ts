@@ -67,7 +67,9 @@ export function unitBundleSpecById(id: string, specs: Specs): UnitBundleSpec {
 export function bundleSpec(spec: GraphSpec, specs: Specs): BundleSpec {
   const custom: GraphSpecs = {}
 
-  _bundle(spec, specs, custom, new Set())
+  const branch = new Set<string>([spec.id])
+
+  _bundle(spec, specs, custom, branch)
 
   return { spec, specs: custom }
 }
@@ -78,19 +80,32 @@ function _bundle(
   custom: GraphSpecs,
   branch: Set<string>
 ): void {
-  const { units = {} } = spec
+  if (!spec.id) {
+    throw new Error('Spec id is required.')
+  }
 
-  if (branch.has(spec.id)) {
+  if (spec.system) {
     return
   }
 
-  if (!custom[spec.id]) {
+  if (!custom[spec.id] && !branch.has(spec.id)) {
     if (!specs[spec.id] || !isSystemSpecId(specs, spec.id)) {
       custom[spec.id] = spec
     }
   }
 
   branch.add(spec.id)
+
+  _bundleUnits(spec, specs, custom, branch)
+}
+
+function _bundleUnits(
+  spec: GraphSpec,
+  specs: Specs,
+  custom: GraphSpecs,
+  branch: Set<string>
+): void {
+  const { units = {} } = spec
 
   for (const unit_id in units) {
     const unit = units[unit_id]

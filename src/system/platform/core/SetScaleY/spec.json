@@ -1,0 +1,95 @@
+{
+  "name": "set scale y",
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "obj"
+        }
+      },
+      "type": "`J`",
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 53,
+            "y": 37
+          }
+        }
+      }
+    },
+    "sy": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "data"
+        }
+      },
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 53,
+            "y": -38
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "units": {
+    "set": {
+      "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 34,
+              "y": 18
+            }
+          }
+        },
+        "name": {
+          "constant": true,
+          "data": "'sy'",
+          "metadata": {
+            "position": {
+              "x": -60,
+              "y": 0
+            }
+          }
+        },
+        "data": {
+          "metadata": {
+            "position": {
+              "x": 34,
+              "y": -19
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -11,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "set property `sy` of `object`",
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
+  },
+  "id": "1241b0ea-eaa8-4dc3-95d1-a3e1580e4267",
+  "type": "`U`&`G`",
+  "system": true
+}

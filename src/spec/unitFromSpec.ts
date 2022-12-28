@@ -1,7 +1,6 @@
 import { Unit } from '../Class/Unit'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
-import isEqual from '../system/f/comparisson/Equals/f'
 import { Dict } from '../types/Dict'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { evaluate } from './evaluate'
@@ -19,18 +18,7 @@ export function unitFromBundleSpec(
 
   const { classes } = system
 
-  for (const spec_id in specs) {
-    const spec = specs[spec_id]
-    const system_spec = system.specs[spec_id]
-
-    if (system_spec) {
-      if (!isEqual(system_spec, spec)) {
-        // throw new Error('Cannot inject duplicated spec id on system.')
-      }
-    }
-
-    system.specs[spec_id] = spec
-  }
+  system.injectSpecs(specs)
 
   const Bundle = fromId(id, system.specs, classes, branch)
 

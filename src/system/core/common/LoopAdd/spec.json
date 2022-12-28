@@ -50,7 +50,7 @@
   "metadata": {
     "icon": "undo",
     "description": "loop adding the value of `+` to the current value",
-    "complexity": 8,
+    "complexity": 6,
     "tags": [
       "core",
       "common"

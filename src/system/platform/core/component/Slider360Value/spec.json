@@ -101,7 +101,7 @@
   "metadata": {
     "icon": "sliders",
     "description": "360 slider current value",
-    "complexity": 138,
+    "complexity": 21,
     "tags": [
       "platform",
       "core",

@@ -14,7 +14,7 @@
   "metadata": {
     "icon": "circle",
     "description": "catch all `unit` error",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "meta"

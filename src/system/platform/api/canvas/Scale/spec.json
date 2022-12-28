@@ -1,0 +1,44 @@
+{
+  "name": "scale",
+  "inputs": {
+    "sx": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "1",
+          "0.5",
+          "2"
+        ]
+      }
+    },
+    "sy": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "1",
+          "0.5",
+          "2"
+        ]
+      }
+    },
+    "canvas": {
+      "type": "`CA`",
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "edit-3",
+    "description": "scale a `canvas`",
+    "complexity": 2,
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
+  },
+  "id": "2e2bede5-41a9-4c35-8b02-482b610837ff",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

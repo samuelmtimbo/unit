@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "circle",
     "description": "get `graph` `bundle`",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "meta"

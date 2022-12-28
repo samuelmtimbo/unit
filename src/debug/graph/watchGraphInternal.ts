@@ -4,18 +4,22 @@ import { Dict } from '../../types/Dict'
 import { Unlisten } from '../../types/Unlisten'
 import { callAll } from '../../util/call/callAll'
 import { Moment } from './../Moment'
-import { watchGraphExposedPinEvent } from './watchGraphExposedPinEvent'
+import { watchGraphExposePinEvent } from './watchGraphExposedPinEvent'
 import { watchGraphExposedPinSetEvent } from './watchGraphExposedPinSetEvent'
 import { watchGraphForkEvent } from './watchGraphForkEvent'
+import { watchGraphInjectEvent } from './watchGraphInjectEvent'
 import { watchGraphMergeEvent } from './watchGraphMergeEvent'
 import { watchGraphMoveSubgraphIntoEvent } from './watchGraphMoveSubgraphIntoEvent'
 import { watchGraphPinMergeEvent } from './watchGraphPinMergeEvent'
 import { watchGraphPlugEvent } from './watchGraphPlugEvent'
+import { watchGraphSetPinSetId } from './watchGraphSetPinSetIdEvent'
+import { watchGraphSetUnitIdEvent } from './watchGraphSetUnitIdEvent'
+import { watchGraphSetUnitPinConstant } from './watchGraphSetUnitPinConstantEvent'
+import { watchGraphSetUnitPinData } from './watchGraphSetUnitPinDataEvent'
 import { watchGraphUnitComponentAppendEvent } from './watchGraphUnitComponentAppendEvent'
 import { watchGraphUnitComponentRemoveEvent } from './watchGraphUnitComponentRemoveEvent'
 import { watchGraphUnitEvent } from './watchGraphUnitEvent'
 import { watchGraphUnitMoveEvent } from './watchGraphUnitMoveEvent'
-import { watchGraphInjectGraphEvent } from './watchInjectGraph'
 
 export const GRAPH_EVENT_TO_WATCHER: Dict<
   (event: string, graph: Graph, callback: Callback) => Unlisten
@@ -30,14 +34,18 @@ export const GRAPH_EVENT_TO_WATCHER: Dict<
   remove_merge: watchGraphMergeEvent,
   add_pin_to_merge: watchGraphPinMergeEvent,
   remove_pin_from_merge: watchGraphPinMergeEvent,
-  expose_pin: watchGraphExposedPinEvent,
-  cover_pin: watchGraphExposedPinEvent,
+  expose_pin: watchGraphExposePinEvent,
+  cover_pin: watchGraphExposePinEvent,
   expose_pin_set: watchGraphExposedPinSetEvent,
   cover_pin_set: watchGraphExposedPinSetEvent,
   plug_pin: watchGraphPlugEvent,
   unplug_pin: watchGraphPlugEvent,
   move_subgraph_into: watchGraphMoveSubgraphIntoEvent,
-  inject_graph: watchGraphInjectGraphEvent,
+  inject_graph: watchGraphInjectEvent,
+  set_unit_pin_constant: watchGraphSetUnitPinConstant,
+  set_pin_set_id: watchGraphSetPinSetId,
+  set_unit_pin_data: watchGraphSetUnitPinData,
+  set_unit_id: watchGraphSetUnitIdEvent,
 }
 
 export function watchGraphInternal(

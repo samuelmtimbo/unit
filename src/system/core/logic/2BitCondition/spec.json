@@ -121,7 +121,7 @@
   "metadata": {
     "icon": "binary",
     "description": "2 x 2 = 4",
-    "complexity": 21,
+    "complexity": 18,
     "tags": [
       "core",
       "logic"

@@ -134,7 +134,7 @@
   "component": {},
   "metadata": {
     "icon": "list-ordered",
-    "complexity": 72,
+    "complexity": 60,
     "tags": [
       "core",
       "loop"

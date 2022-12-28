@@ -1,3 +1,4 @@
+import { getSpec } from '../client/spec'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import {
   GraphMergeSpec,
@@ -8,6 +9,7 @@ import {
   GraphSpec,
   PinSpec,
   Spec,
+  Specs,
 } from '../types'
 import { IO } from '../types/IO'
 import { reduceObj, _keyCount } from '../util/object'
@@ -168,4 +170,18 @@ export const findMergePlug = (
   })
 
   return mergePlug
+}
+
+export const findSpecAtPath = (specs: Specs, spec: Spec, path: string[]) => {
+  if (path.length === 0) {
+    return spec
+  } else {
+    const [unitId, ...rest] = path
+
+    const unit = (spec as GraphSpec).units[unitId]
+
+    const unitSpec = getSpec(specs, unit.id)
+
+    return findSpecAtPath(specs, unitSpec, rest)
+  }
 }

@@ -83,7 +83,7 @@ export function webInput(
         return gamepad
       },
       addEventListener: (
-        type: 'gamepadconnected' | 'gamepadisconnected',
+        type: 'gamepadconnected' | 'gamepaddisconnected',
         listener: (ev: GamepadEvent) => any,
         options?: boolean | AddEventListenerOptions
       ) => {

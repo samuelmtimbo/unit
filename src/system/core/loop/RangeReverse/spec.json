@@ -128,7 +128,7 @@
   "metadata": {
     "icon": "sort-asc",
     "description": "regressive count from `b - 1` to `a`",
-    "complexity": 43,
+    "complexity": 37,
     "tags": [
       "core",
       "loop"

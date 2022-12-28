@@ -2,7 +2,12 @@
   "name": "stroke style",
   "inputs": {
     "d": {
-      "type": "(number|string)[][]"
+      "type": "(number|string)[][]",
+      "metadata": {
+        "examples": [
+          "[]"
+        ]
+      }
     },
     "strokeStyle": {
       "type": "string"
@@ -16,7 +21,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "set the color, gradient, or pattern to use for stroke",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

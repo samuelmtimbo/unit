@@ -281,7 +281,7 @@ export const addMerge = (
       if (unitId && pinId && merge[unitId]?.['input']?.[pinId]) {
         state = coverInput({ id: inputId, subPinId }, state)
         state = exposeInput(
-          { id: inputId, subPinId, input: { mergeId: mergeId } },
+          { id: inputId, subPinId, input: { mergeId } },
           state
         )
       }
@@ -300,7 +300,7 @@ export const addMerge = (
       ) {
         state = coverOutput({ id: outputId, subPinId }, state)
         state = exposeOutput(
-          { id: outputId, subPinId, output: { mergeId: mergeId } },
+          { id: outputId, subPinId, output: { mergeId } },
           state
         )
       }
@@ -515,31 +515,31 @@ export const exposeInput = (
 export const plugPin = (
   {
     type,
-    id,
+    pinId,
     subPinId,
     subPinSpec,
   }: {
     type: IO
-    id: string
+    pinId: string
     subPinId: string
     subPinSpec: GraphSubPinSpec
   },
   state: State
 ): State => {
-  return assocPath(state, [`${type}s`, id, 'plug', subPinId], subPinSpec)
+  return assocPath(state, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
 }
 
 export const unplugInput = (
   {
-    id,
+    pinId,
     subPinId,
   }: {
-    id: string
+    pinId: string
     subPinId: string
   },
   state: State
 ): State => {
-  return unplugPin({ type: 'input', pinId: id, subPinId }, state)
+  return unplugPin({ type: 'input', pinId: pinId, subPinId }, state)
 }
 
 export const unplugOutput = (
@@ -745,7 +745,7 @@ export const setUnitPinIgnored = (
       forEachValueKey(state.inputs, ({ plug }, id) => {
         forEachValueKey(plug, (input, subPinId) => {
           if (input.unitId === unitId && input.pinId === pinId) {
-            state = unplugInput({ id, subPinId }, state)
+            state = unplugInput({ pinId: id, subPinId }, state)
           }
         })
       })

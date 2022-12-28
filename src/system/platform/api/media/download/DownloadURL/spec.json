@@ -15,7 +15,8 @@
   "id": "c18c8f59-f3c8-49a8-9dbd-ed30fdf856e9",
   "metadata": {
     "icon": "download",
-    "complexity": 3,
+    "description": "download whatever is at the given `url`",
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

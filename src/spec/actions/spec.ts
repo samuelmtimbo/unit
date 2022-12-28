@@ -50,13 +50,13 @@ import { Dict } from '../../types/Dict'
 import { IO } from '../../types/IO'
 import { IOOf } from '../../types/IOOf'
 import {
-  appendSubComponentChildren,
+  appendSubComponentChildren as makeAppendSubComponentChildren,
   APPEND_SUB_COMPONENT_CHILDREN,
-  removeSubComponentChildren,
+  removeSubComponentChildren as makeRemoveSubComponentChildren,
   REMOVE_SUB_COMPONENT_CHILDREN,
 } from './component'
 
-export const addUnit = (
+export const makeAddUnitAction = (
   id: string,
   unit: GraphUnitSpec,
   position: Position,
@@ -77,7 +77,7 @@ export const addUnit = (
   }
 }
 
-export const addUnits = (units: GraphUnitsSpec) => {
+export const makeAddUnitsAction = (units: GraphUnitsSpec) => {
   return {
     type: ADD_UNITS,
     data: {
@@ -86,7 +86,7 @@ export const addUnits = (units: GraphUnitsSpec) => {
   }
 }
 
-export const removeUnit = (
+export const makeRemoveUnitAction = (
   id: string,
   unit: GraphUnitSpec,
   position: Position,
@@ -100,14 +100,14 @@ export const removeUnit = (
   }
 }
 
-export const removeUnits = (ids: string[]) => {
+export const makeRemoveUnitsAction = (ids: string[]) => {
   return {
     type: REMOVE_UNITS,
     data: { ids },
   }
 }
 
-export const exposePin = (
+export const exposePinAction = (
   type: IO,
   id: string,
   subPinId: string,
@@ -119,14 +119,18 @@ export const exposePin = (
   }
 }
 
-export const setPinSetName = (type: IO, id: string, functional: boolean) => {
+export const setPinSetNameAction = (
+  type: IO,
+  id: string,
+  functional: boolean
+) => {
   return {
     type: SET_PIN_SET_NAME,
     data: { type, id, functional },
   }
 }
 
-export const setPinSetFunctional = (
+export const setPinSetFunctionalAction = (
   type: IO,
   id: string,
   functional: boolean
@@ -137,21 +141,25 @@ export const setPinSetFunctional = (
   }
 }
 
-export const exposePinSet = (type: IO, id: string, pin: GraphPinSpec) => {
+export const makeExposePinSetAction = (
+  type: IO,
+  id: string,
+  pin: GraphPinSpec
+) => {
   return {
     type: EXPOSE_PIN_SET,
     data: { type, id, pin },
   }
 }
 
-export const coverPinSet = (type: IO, id: string) => {
+export const makeCoverPinSetAction = (type: IO, id: string) => {
   return {
     type: COVER_PIN_SET,
     data: { type, id },
   }
 }
 
-export const plugPin = (
+export const makePlugPinAction = (
   type: IO,
   id: string,
   subPinId: string,
@@ -163,21 +171,21 @@ export const plugPin = (
   }
 }
 
-export const unplugPin = (type: IO, id: string, subPinId: string) => {
+export const makeUnplugPinAction = (type: IO, id: string, subPinId: string) => {
   return {
     type: UNPLUG_PIN,
     data: { type, id, subPinId },
   }
 }
 
-export const coverPin = (id: string, type: IO, subPinId: string) => {
+export const coverPinAction = (id: string, type: IO, subPinId: string) => {
   return {
     type: COVER_PIN,
     data: { type, id, subPinId },
   }
 }
 
-export const setUnitPinData = (
+export const setUnitPinDataAction = (
   unitId: string,
   type: IO,
   pinId: string,
@@ -194,7 +202,7 @@ export const setUnitPinData = (
   }
 }
 
-export const setUnitOutputConstant = (
+export const setUnitOutputConstantAction = (
   unitId: string,
   pinId: string,
   constant: boolean
@@ -209,7 +217,7 @@ export const setUnitOutputConstant = (
   }
 }
 
-export const setUnitInputConstant = (
+export const makeSetUnitInputConstantAction = (
   unitId: string,
   pinId: string,
   constant: boolean
@@ -224,7 +232,22 @@ export const setUnitInputConstant = (
   }
 }
 
-export const setUnitPinIgnored = (
+export const makeSetUnitOutputConstantAction = (
+  unitId: string,
+  pinId: string,
+  constant: boolean
+) => {
+  return {
+    type: SET_UNIT_OUTPUT_CONSTANT,
+    data: {
+      unitId,
+      pinId,
+      constant,
+    },
+  }
+}
+
+export const setUnitPinIgnoredAction = (
   unitId: string,
   type: IO,
   pinId: string,
@@ -241,7 +264,7 @@ export const setUnitPinIgnored = (
   }
 }
 
-export const setUnitInputIgnored = (
+export const makeSetUnitInputIgnoredAction = (
   unitId: string,
   pinId: string,
   ignored: boolean
@@ -256,7 +279,7 @@ export const setUnitInputIgnored = (
   }
 }
 
-export const setUnitOutputIgnored = (
+export const makeSetUnitOutputIgnoredAction = (
   unitId: string,
   pinId: string,
   ignored: boolean
@@ -271,7 +294,11 @@ export const setUnitOutputIgnored = (
   }
 }
 
-export const removeUnitPinData = (unitId: string, type: IO, pinId: string) => {
+export const removeUnitPinDataAction = (
+  unitId: string,
+  type: IO,
+  pinId: string
+) => {
   return {
     type: REMOVE_UNIT_PIN_DATA,
     data: {
@@ -282,7 +309,11 @@ export const removeUnitPinData = (unitId: string, type: IO, pinId: string) => {
   }
 }
 
-export const setUnitMetadata = (id: string, path: string[], value: any) => {
+export const setUnitMetadataAction = (
+  id: string,
+  path: string[],
+  value: any
+) => {
   return {
     type: SET_UNIT_METADATA,
     data: {
@@ -293,7 +324,7 @@ export const setUnitMetadata = (id: string, path: string[], value: any) => {
   }
 }
 
-export const setMetadata = (path: string[], value: any) => {
+export const setMetadataAction = (path: string[], value: any) => {
   return {
     type: SET_METADATA,
     data: {
@@ -303,7 +334,7 @@ export const setMetadata = (path: string[], value: any) => {
   }
 }
 
-export const addMerge = (
+export const makeAddMergeAction = (
   id: string,
   merge: GraphMergeSpec,
   position: Position
@@ -318,7 +349,7 @@ export const addMerge = (
   }
 }
 
-export const removeMerge = (
+export const makeRemoveMergeAction = (
   id: string,
   merge: GraphMergeSpec,
   position: Position
@@ -333,7 +364,7 @@ export const removeMerge = (
   }
 }
 
-export const addMerges = (merges: GraphMergesSpec): Action => {
+export const makeAddMergesAction = (merges: GraphMergesSpec): Action => {
   return {
     type: ADD_MERGES,
     data: {
@@ -342,7 +373,7 @@ export const addMerges = (merges: GraphMergesSpec): Action => {
   }
 }
 
-export const removeMerges = (ids: string[]): Action => {
+export const makeRemoveMergesAction = (ids: string[]): Action => {
   return {
     type: REMOVE_MERGES,
     data: {
@@ -351,7 +382,7 @@ export const removeMerges = (ids: string[]): Action => {
   }
 }
 
-export const addPinToMerge = (
+export const makeAddPinToMergeAction = (
   id: string,
   type: IO,
   unitId: string,
@@ -368,7 +399,7 @@ export const addPinToMerge = (
   }
 }
 
-export const removePinFromMerge = (
+export const makeRemovePinFromMergeAction = (
   id: string,
   type: IO,
   unitId: string,
@@ -385,7 +416,7 @@ export const removePinFromMerge = (
   }
 }
 
-export const mergeMerges = (a: string, b: string): Action => {
+export const makeMergeMergesAction = (a: string, b: string): Action => {
   return {
     type: MERGE_MERGES,
     data: {
@@ -395,7 +426,7 @@ export const mergeMerges = (a: string, b: string): Action => {
   }
 }
 
-export const removeUnitMerges = (id: string): Action => {
+export const makeRemoveUnitMergesAction = (id: string): Action => {
   return {
     type: REMOVE_UNIT_MERGES,
     data: {
@@ -407,7 +438,7 @@ export const removeUnitMerges = (id: string): Action => {
 export const reverseAction = ({ type, data }: Action): Action => {
   switch (type) {
     case ADD_UNIT:
-      return removeUnit(
+      return makeRemoveUnitAction(
         data.id,
         data,
         data.position,
@@ -416,9 +447,9 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.parentId
       )
     case ADD_UNITS:
-      return removeUnits(keys(data.units))
+      return makeRemoveUnitsAction(keys(data.units))
     case REMOVE_UNIT:
-      return addUnit(
+      return makeAddUnitAction(
         data.id,
         data.unit,
         data.position,
@@ -427,46 +458,77 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.parentId
       )
     case REMOVE_UNITS:
-      return addUnits(
+      return makeAddUnitsAction(
         data.ids.reduce((acc, id) => {
           acc[id] = data.units[id]
           return acc
         }, {})
       )
     case REMOVE_UNIT_MERGES:
-      return addMerges(data.merges)
+      return makeAddMergesAction(data.merges)
     case ADD_MERGE:
-      return removeMerge(data.id, data.merge, data.position)
+      return makeRemoveMergeAction(data.id, data.merge, data.position)
     case ADD_MERGES:
-      return removeMerges(keys(data.merges))
+      return makeRemoveMergesAction(keys(data.merges))
     case ADD_PIN_TO_MERGE:
-      return removePinFromMerge(data.id, data.type, data.unitId, data.pinId)
+      return makeRemovePinFromMergeAction(
+        data.id,
+        data.type,
+        data.unitId,
+        data.pinId
+      )
     case REMOVE_MERGE:
-      return addMerge(data.id, data.merge, data.position)
+      return makeAddMergeAction(data.id, data.merge, data.position)
     case REMOVE_PIN_FROM_MERGE:
-      return addPinToMerge(data.id, data.type, data.unitId, data.pinId)
+      return makeAddPinToMergeAction(
+        data.id,
+        data.type,
+        data.unitId,
+        data.pinId
+      )
     case MERGE_MERGES:
-      return mergeMerges(data.a, data.b)
+      return makeMergeMergesAction(data.a, data.b)
     case EXPOSE_PIN_SET:
-      return coverPinSet(data.type, data.id)
+      return makeCoverPinSetAction(data.type, data.id)
     case COVER_PIN_SET:
-      return exposePinSet(data.type, data.id, data.plug)
+      return makeExposePinSetAction(data.type, data.id, data.plug)
     case PLUG_PIN:
-      return unplugPin(data.type, data.id, data.subPinId)
+      return makeUnplugPinAction(data.type, data.id, data.subPinId)
     case UNPLUG_PIN:
-      return plugPin(data.type, data.id, data.subPinId, data.subPinSpec)
+      return makePlugPinAction(
+        data.type,
+        data.id,
+        data.subPinId,
+        data.subPinSpec
+      )
     case SET_UNIT_INPUT_CONSTANT:
-      return setUnitInputConstant(data.unitId, data.pinId, !data.constant)
+      return makeSetUnitInputConstantAction(
+        data.unitId,
+        data.pinId,
+        !data.constant
+      )
     case SET_UNIT_OUTPUT_CONSTANT:
-      return setUnitInputConstant(data.unitId, data.pinId, !data.constant)
+      return makeSetUnitOutputConstantAction(
+        data.unitId,
+        data.pinId,
+        !data.constant
+      )
     case SET_UNIT_INPUT_IGNORED:
-      return setUnitInputIgnored(data.unitId, data.pinId, !data.ignored)
+      return makeSetUnitInputIgnoredAction(
+        data.unitId,
+        data.pinId,
+        !data.ignored
+      )
     case SET_UNIT_OUTPUT_IGNORED:
-      return setUnitOutputIgnored(data.unitId, data.pinId, !data.ignored)
+      return makeSetUnitOutputIgnoredAction(
+        data.unitId,
+        data.pinId,
+        !data.ignored
+      )
     case APPEND_SUB_COMPONENT_CHILDREN:
-      return removeSubComponentChildren(data.id, data.children)
+      return makeRemoveSubComponentChildren(data.id, data.children)
     case REMOVE_SUB_COMPONENT_CHILDREN:
-      return appendSubComponentChildren(data.id, data.children)
+      return makeAppendSubComponentChildren(data.id, data.children)
     default:
       throw new Error('Irreversible')
   }

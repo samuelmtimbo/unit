@@ -72,7 +72,7 @@ export class Element_<
     this.addListener('set', (name: keyof I, data) => {
       if (!this._forwarding) {
         this._backwarding = true
-        this._input[name].pull()
+        this._input?.[name]?.pull()
         this._backwarding = false
       }
     })

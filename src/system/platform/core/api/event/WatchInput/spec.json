@@ -4,7 +4,7 @@
     "getvalue": {
       "id": "d74f12c2-1868-11eb-8136-238c1b1a727f",
       "input": {
-        "unit": {},
+        "obj": {},
         "any": {
           "data": "1"
         }
@@ -32,7 +32,7 @@
       },
       "getvalue": {
         "input": {
-          "unit": true
+          "obj": true
         }
       }
     },
@@ -74,7 +74,7 @@
   "metadata": {
     "icon": "square",
     "description": "output `element` value and listen \"input\" event",
-    "complexity": 16,
+    "complexity": 12,
     "tags": [
       "platform",
       "core",

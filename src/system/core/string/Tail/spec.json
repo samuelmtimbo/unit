@@ -14,7 +14,7 @@
   "metadata": {
     "icon": "axe",
     "description": "no description",
-    "complexity": 5,
+    "complexity": 4,
     "tags": [
       "core",
       "string"

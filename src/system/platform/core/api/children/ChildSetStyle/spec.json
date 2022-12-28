@@ -108,7 +108,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "set `element` child `at` style to `style`",
-    "complexity": 17,
+    "complexity": 12,
     "tags": [
       "platform",
       "core",

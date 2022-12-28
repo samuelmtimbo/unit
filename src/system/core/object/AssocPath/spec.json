@@ -182,7 +182,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "get value of `obj` at `path`",
-    "complexity": 50,
+    "complexity": 42,
     "tags": [
       "core",
       "object"

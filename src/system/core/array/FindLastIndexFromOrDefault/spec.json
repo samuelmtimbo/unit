@@ -193,7 +193,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "...",
-    "complexity": 43,
+    "complexity": 35,
     "tags": [
       "core",
       "array"

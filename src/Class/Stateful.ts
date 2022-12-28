@@ -95,17 +95,10 @@ export class Stateful<
     throw new Error('Method not implemented.')
   }
 
-  public delete(name: string): Promise<void> {
+  delete(name: string): Promise<void> {
     delete this._state[name]
-    return
-  }
 
-  private _obj_at_path = (path: string[]): Dict<any> => {
-    let obj = this._state
-    for (const p of path) {
-      obj = obj[p]
-    }
-    return obj
+    return
   }
 
   pathSet(path: string[], name: string, data: any): Promise<void> {

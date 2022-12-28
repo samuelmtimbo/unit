@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { ID_STRINGIFY_0 } from '../../../_ids'
+import { ID_STRINGIFY_1 } from '../../../_ids'
 
 export interface I {
   obj: Dict<any>
@@ -20,7 +20,7 @@ export default class Stringify extends Functional<I, O> {
       },
       {},
       system,
-      ID_STRINGIFY_0
+      ID_STRINGIFY_1
     )
   }
 

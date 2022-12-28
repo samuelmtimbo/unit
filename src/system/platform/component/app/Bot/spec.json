@@ -23,7 +23,7 @@
   "metadata": {
     "icon": "bot",
     "description": "your fellow robot",
-    "complexity": 120,
+    "complexity": 5,
     "tags": [
       "platform",
       "component",

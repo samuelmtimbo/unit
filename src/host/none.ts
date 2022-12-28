@@ -66,13 +66,15 @@ export function noHost(): API {
       },
     },
     file: {
+      isSaveFilePickerSupported: () => false,
+      isOpenFilePickerSupported: () => false,
       showOpenFilePicker: () => {
         throw new APINotSupportedError('File System')
       },
       showSaveFilePicker: () => {
         throw new APINotSupportedError('File System')
       },
-      downloadData: (opt: IDownloadDataOpt): Promise<void> => {
+      downloadText: (opt: IDownloadDataOpt): Promise<void> => {
         throw new APINotSupportedError('Download')
       },
       downloadURL: (opt: IDownloadURLOpt): Promise<void> => {
@@ -104,7 +106,7 @@ export function noHost(): API {
           throw new APINotSupportedError('Gamepad')
         },
         addEventListener: (
-          type: 'gamepadconnected' | 'gamepadisconnected',
+          type: 'gamepadconnected' | 'gamepaddisconnected',
           listener: (ev: GamepadEvent) => any,
           options?: boolean | AddEventListenerOptions
         ) => {

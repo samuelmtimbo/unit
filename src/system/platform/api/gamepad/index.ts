@@ -1,6 +1,7 @@
 import { $, $Events } from '../../../../Class/$'
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
+import { Gamepad_ } from '../../../../client/event/gamepad'
 import { System } from '../../../../system'
 import { EE } from '../../../../types/interface/EE'
 import { V } from '../../../../types/interface/V'
@@ -30,13 +31,12 @@ export type Gamepad_J = {
 
 export type GamepadEvents = $Events<GamePad_EE> & GamePad_EE
 
-const N_BUTTONS = 16
-const N_AXIS = 4
-
-const DEFAULT_TRESHOLD = 0.2
+export const GAMEPAD_BUTTON_COUNT = 16
+export const GAMEPAD_AXIS_COUNT = 4
+export const GAMEPAD_DEFAULT_TRESHOLD = 0.001
 
 export default class _Gamepad extends Semifunctional<I, O> {
-  private _gamepad: Gamepad
+  private _gamepad: Gamepad_
 
   private _connected: boolean
 
@@ -72,7 +72,9 @@ export default class _Gamepad extends Semifunctional<I, O> {
     } = this.__system
 
     try {
-      this._gamepad = getGamepad(i)
+      const gamepad = getGamepad(i)
+
+      this._gamepad = new Gamepad_(this.__system, gamepad)
     } catch (err) {
       done(undefined, err.message)
 
@@ -85,9 +87,9 @@ export default class _Gamepad extends Semifunctional<I, O> {
       const { index } = gamepad
 
       if (index === i) {
-        this._gamepad = gamepad
+        this._gamepad = new Gamepad_(this.__system, gamepad)
 
-        pushPad()
+        pushPad(this._gamepad)
       }
     }
 
@@ -104,7 +106,7 @@ export default class _Gamepad extends Semifunctional<I, O> {
 
     this._unlisten = callAll([
       addEventListener('gamepadconnected', onConnect),
-      addEventListener('gamepadisconnected', onDisconnect),
+      addEventListener('gamepaddisconnected', onDisconnect),
       () => {
         if (this._gamepad) {
           pullPad()
@@ -112,107 +114,18 @@ export default class _Gamepad extends Semifunctional<I, O> {
       },
     ])
 
-    const pushPad = () => {
+    const pushPad = (gamepad_: Gamepad_) => {
       const pad = new (class Pad
         extends $<GamepadEvents>
         implements V<Gamepad_J>, EE<GamePad_EE>
       {
-        private _state: Gamepad_J = {
-          buttons: new Array(N_BUTTONS).fill(false, 0, N_BUTTONS),
-          axes: new Array(N_AXIS).fill(0, 0, N_AXIS),
-        }
-        private _frame: number | null = null
-
-        constructor(__system) {
-          super(__system)
-        }
-
         async read(): Promise<Gamepad_J> {
-          console.log(this._state)
-          return this._state
+          console.log(gamepad_.state)
+          return gamepad_.state
         }
 
         async write(data: Gamepad_J): Promise<void> {
           throw new Error('cannot write to gamepad state')
-        }
-
-        private _event_capture_tick = (): void => {
-          const {
-            api: {
-              input: {
-                gamepad: { getGamepad },
-              },
-              animation: { requestAnimationFrame },
-            },
-          } = this.__system
-
-          const prevButtonsPressed = [...this._state.buttons]
-          const gamepad = getGamepad(i)
-
-          const buttonsPressed = gamepad.buttons.map((b) => b.pressed)
-          this._state.buttons = buttonsPressed
-
-          for (let i = 0; i < N_BUTTONS; i++) {
-            if (buttonsPressed[i] && !prevButtonsPressed[i]) {
-              this.emit('buttondown', i)
-            } else if (!buttonsPressed[i] && prevButtonsPressed[i]) {
-              this.emit('buttonup', i)
-            }
-          }
-
-          const prevAxes = this._state.axes
-          const axes = gamepad.axes.map((a) => a)
-          this._state.axes = axes
-
-          for (let i = 0; i < N_AXIS; i++) {
-            if (Math.abs(axes[i] - prevAxes[i]) >= DEFAULT_TRESHOLD) {
-              this.emit('axischange', [i, axes[i]])
-            }
-          }
-
-          this._frame = requestAnimationFrame(this._event_capture_tick)
-        }
-
-        private _start_event_capture = (): void => {
-          // console.log('_Gamepad', '_start_event_capture')
-          this._event_capture_tick()
-        }
-
-        private _stop_event_capture = (): void => {
-          // console.log('_Gamepad', '_stop_event_capture')
-          const {
-            api: {
-              animation: { cancelAnimationFrame },
-            },
-          } = this.__system
-
-          if (this._frame !== undefined) {
-            cancelAnimationFrame(this._frame)
-
-            this._frame = undefined
-          }
-        }
-
-        private _listenerCount: number = 0
-
-        addListener(event, listener) {
-          const unlisten = super.addListener(event, listener)
-
-          this._listenerCount++
-
-          if (this._listenerCount === 1) {
-            this._start_event_capture()
-          }
-
-          return () => {
-            this._listenerCount--
-
-            if (this._listenerCount === 0) {
-              this._stop_event_capture()
-            }
-
-            unlisten()
-          }
         }
       })(this.__system)
 
@@ -224,7 +137,7 @@ export default class _Gamepad extends Semifunctional<I, O> {
     }
 
     if (this._gamepad) {
-      pushPad()
+      pushPad(this._gamepad)
     }
   }
 

@@ -75,7 +75,7 @@
   "metadata": {
     "icon": "less-than",
     "description": "less than operator",
-    "complexity": 8,
+    "complexity": 6,
     "tags": [
       "core",
       "common"

@@ -234,7 +234,7 @@
   "metadata": {
     "icon": "skip-forward",
     "description": "output true `n` times then false",
-    "complexity": 24,
+    "complexity": 19,
     "tags": [
       "core",
       "common"

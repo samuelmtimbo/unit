@@ -54,12 +54,12 @@ export function _IOPointerEvent(
 
   const fp = rotateVector(t, -$rz)
 
-  const x = fp.x
-  const y = fp.y
+  const clientX_ = fp.x
+  const clientY_ = fp.y
 
   return {
-    clientX: x,
-    clientY: y,
+    clientX: clientX_,
+    clientY: clientY_,
     offsetX,
     offsetY,
     screenX: clientX,

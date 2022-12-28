@@ -9,7 +9,7 @@
   "metadata": {
     "icon": "slash",
     "description": "send data to the void",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "control"

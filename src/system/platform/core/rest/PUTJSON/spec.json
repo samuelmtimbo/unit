@@ -116,7 +116,7 @@
   "metadata": {
     "icon": "send",
     "description": "...",
-    "complexity": 14,
+    "complexity": 10,
     "tags": [
       "platform",
       "core",

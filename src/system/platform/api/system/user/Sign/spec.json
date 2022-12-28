@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "table",
     "description": "sign `value` with user's private key",
-    "complexity": 12,
+    "complexity": 11,
     "tags": [
       "platform",
       "api",

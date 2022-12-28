@@ -97,6 +97,7 @@ export type Shortcut = {
   strict?: boolean
   keydown?: (key: string, event: IOKeyboardEvent) => boolean | void
   keyup?: (key: string, event: IOKeyboardEvent) => boolean | void
+  preventDefault?: boolean
 }
 
 export default class KeyboardController {
@@ -264,7 +265,7 @@ export default class KeyboardController {
     }
   }
 
-  private _keydown = (keyCode: number) => {
+  private _keydown = (keyCode: number): Shortcut[] => {
     const index: number = this._pressed.indexOf(keyCode)
     // const previous = this.getCurrentCombo()
     if (index === -1) {
@@ -291,6 +292,7 @@ export default class KeyboardController {
     // if (sameSetArray(current, ['meta', 'alt', 'i'])) {
     //   this._flush()
     // }
+    return filtered
   }
 
   private _keyup = (keyCode: number) => {
@@ -316,6 +318,16 @@ export default class KeyboardController {
     }
   }
 
+  private _isSystemCombo(event: KeyboardEvent): boolean {
+    const { key, ctrlKey, metaKey } = event
+
+    if ((metaKey || ctrlKey) && ['c', 'v', 'x', 'z'].includes(key)) {
+      return true
+    }
+
+    return false
+  }
+
   private _onKeydown = (event: KeyboardEvent): void => {
     const {} = this.$system
 
@@ -323,11 +335,13 @@ export default class KeyboardController {
 
     if (metaKey) {
       // event.preventDefault()
+
       return
     }
 
     if (!isSupportedKeyboardEvent(event)) {
       event.preventDefault()
+
       return
     }
 
@@ -337,7 +351,13 @@ export default class KeyboardController {
     this._alt = altKey
     this._repeat = repeat
 
-    this._keydown(keyCode)
+    const shortcuts = this._keydown(keyCode)
+
+    for (const shortcut of shortcuts) {
+      if (shortcut && shortcut.preventDefault) {
+        event.preventDefault()
+      }
+    }
   }
 
   public getCurrentCombo(): string[] {

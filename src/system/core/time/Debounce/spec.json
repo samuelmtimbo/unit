@@ -45,7 +45,7 @@
   "metadata": {
     "icon": "alarm-clock",
     "description": "no description",
-    "complexity": 14,
+    "complexity": 11,
     "tags": [
       "core",
       "time"
