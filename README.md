@@ -18,7 +18,7 @@ The unit system is set to grow into a simple and approachable Web Operating Syst
 
 The broader Design Philosophy behind unit is discussed in [Concept](src/docs/concept/README.md).
 
-To jump right into the official unit Programming Environment (Beta), visit [unit.land](https://unit.land). To experiment with a cloud extended version of unit at [ioun.it](https://ioun.it).
+To jump right into the official unit Programming Environment, visit [unit.land](https://unit.land). To experiment with a cloud extended version of unit, check out [ioun.it](https://ioun.it).
 
 ## Installation
 
@@ -62,7 +62,7 @@ yarn watch
 
 ## Documentation
 
-As an application, the unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform. For a step-by-step introduction to unit Programming, visit [Getting Started](src/docs/start/README.md).
+The unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform. For a step-by-step introduction to unit Programming, visit [Getting Started](src/docs/start/README.md).
 
 This codebase is a TypeScript implementation of the unit Programming Language Spec with an accompanying Web based Programming Environment. I tried to make it as clean and organized as I could while still maintaining a space for experimentation. Some folders contain a `README.md` file with information about that piece of the architecture.
 
