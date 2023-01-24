@@ -366,7 +366,7 @@
   "metadata": {
     "icon": "cpu",
     "description": "no description",
-    "complexity": 59,
+    "complexity": 49,
     "tags": [
       "platform",
       "core",

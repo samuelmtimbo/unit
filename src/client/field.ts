@@ -6,10 +6,15 @@ import { Element } from './element'
 import { htmlPropHandler, inputPropHandler, PropHandler } from './propHandler'
 import applyStyle from './style'
 
-export function makeFieldInputEventHandler(
+export type InputElement =
+  | HTMLInputElement
+  | HTMLTextAreaElement
+  | (HTMLDivElement & ElementContentEditable)
+
+export function makeFieldInputEventHandler<E extends InputElement>(
   component: Element,
   keyName: string = 'value',
-  processValue: (value: string) => any = identity
+  processValue: (element: E, value: string) => any = identity
 ) {
   return function (event: InputEvent) {
     const value = this[keyName]
@@ -17,7 +22,7 @@ export function makeFieldInputEventHandler(
     event.preventDefault()
     event.stopImmediatePropagation()
 
-    const nextValue = processValue(value)
+    const nextValue = processValue(component.$element, value)
 
     component.set('value', nextValue)
     component.dispatchEvent(event.type, nextValue)
@@ -25,10 +30,7 @@ export function makeFieldInputEventHandler(
 }
 
 export class Field<
-  E extends
-    | HTMLInputElement
-    | HTMLTextAreaElement
-    | (HTMLDivElement & ElementContentEditable) = any,
+  E extends InputElement = any,
   P extends object = {},
   U extends $Element = $Element
 > extends Element<E, P, U> {
@@ -42,7 +44,7 @@ export class Field<
       valueKey: string
       defaultStyle?: Style
       defaultValue?: any
-      processValue?: (value: string) => any
+      processValue?: ($element: E, value: string) => any
       propHandlers?: Dict<(value: any) => void>
     }
   ) {
@@ -52,7 +54,7 @@ export class Field<
       valueKey,
       defaultStyle,
       defaultValue = '',
-      processValue = identity,
+      processValue = ($element, value) => value,
     } = opt
 
     let { style = {}, value = defaultValue } = $props

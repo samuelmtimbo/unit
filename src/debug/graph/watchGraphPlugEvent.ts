@@ -8,6 +8,7 @@ export interface GraphPlugMomentData {
   pinId: string
   subPinId: string
   subPinSpec: GraphSubPinSpec
+  path: string[]
 }
 
 export interface GraphPlugMoment extends Moment<GraphPlugMomentData> {}
@@ -21,7 +22,8 @@ export function watchGraphPlugEvent(
     type: IO,
     pinId: string,
     subPinId: string,
-    subPinSpec: GraphSubPinSpec
+    subPinSpec: GraphSubPinSpec,
+    path: string[]
   ) => {
     callback({
       type: 'graph',
@@ -31,6 +33,7 @@ export function watchGraphPlugEvent(
         pinId,
         subPinId,
         subPinSpec,
+        path,
       },
     })
   }

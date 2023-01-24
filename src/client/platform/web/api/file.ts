@@ -7,6 +7,16 @@ import { IDownloadURLOpt } from '../../../../types/global/IDownloadURL'
 export function webFile(window: Window, opt: BootOpt): API['file'] {
   const { document } = window
 
+  const isSaveFilePickerSupported = () => {
+    // @ts-ignore
+    return !!window.showSaveFilePicker
+  }
+
+  const isOpenFilePickerSupported = () => {
+    // @ts-ignore
+    return !!window.showOpenFilePicker
+  }
+
   function showSaveFilePicker(opt: {
     suggestedName?: string
     startIn?: string
@@ -17,8 +27,7 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
       accept: Dict<string[]>
     }[]
   }): Promise<FileSystemFileHandle> {
-    // @ts-ignore
-    if (window.showSaveFilePicker) {
+    if (isSaveFilePickerSupported()) {
       // @ts-ignore
       return window.showSaveFilePicker(opt)
     } else {
@@ -37,8 +46,7 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
     }[]
     multiple?: boolean
   }): Promise<FileSystemFileHandle[]> {
-    // @ts-ignore
-    if (window.showOpenFilePicker) {
+    if (isOpenFilePickerSupported()) {
       // @ts-ignore
       return window.showOpenFilePicker(opt)
     } else {
@@ -46,33 +54,59 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
     }
   }
 
-  const downloadData = async ({
+  const downloadText = async ({
     name,
-    mimeType,
+    mimetype: mimeType,
     charset,
-    data,
+    text,
   }: IDownloadDataOpt) => {
     const url = `data:${mimeType};charset=${charset},${encodeURIComponent(
-      data
+      text
     )}`
 
     return downloadURL({ name, url })
   }
 
+  const testGet = async (url: string): Promise<boolean> => {
+    try {
+      await fetch(url)
+
+      return true
+    } catch (err) {
+      console.log(err)
+
+      return false
+    }
+  }
+
   const downloadURL = async ({ name, url }: IDownloadURLOpt) => {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      const accessible = await testGet(url)
+
+      if (!accessible) {
+        throw new Error('URL is not accessible due to CORS policy')
+      }
+    }
+
     const a = document.createElement('a')
+
     document.body.appendChild(a)
+
     a.download = name
     a.href = url
+
     a.click()
+
     document.body.removeChild(a)
   }
 
   const file: API['file'] = {
     showSaveFilePicker,
+    isSaveFilePickerSupported,
+    isOpenFilePickerSupported,
     showOpenFilePicker,
     downloadURL,
-    downloadData,
+    downloadText,
   }
 
   return file

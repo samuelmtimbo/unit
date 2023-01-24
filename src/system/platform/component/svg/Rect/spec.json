@@ -53,7 +53,7 @@
   "metadata": {
     "icon": "square",
     "description": "SVG rectangle",
-    "complexity": 118,
+    "complexity": 5,
     "tags": [
       "platform",
       "component",

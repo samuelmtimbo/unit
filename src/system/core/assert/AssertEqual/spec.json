@@ -44,7 +44,7 @@
   "metadata": {
     "icon": "alert-circle",
     "description": "throw `message` if `a` is not equal `b`",
-    "complexity": 11,
+    "complexity": 8,
     "tags": [
       "core",
       "assert"

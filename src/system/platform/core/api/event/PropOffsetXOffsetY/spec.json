@@ -1,0 +1,81 @@
+{
+  "name": "prop offsetX offsetY",
+  "units": {
+    "propoffsetx": {
+      "id": "cd7cfbb3-c86b-401d-a6b7-9de912672d96",
+      "input": {
+        "event": {}
+      },
+      "output": {
+        "offsetX": {}
+      }
+    },
+    "propclientcy": {
+      "id": "6e9c4adb-77e4-45ef-a71b-ced42a49aae9",
+      "input": {
+        "event": {}
+      },
+      "output": {
+        "offsetY": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "propclientcy": {
+        "input": {
+          "event": true
+        }
+      },
+      "propoffsetx": {
+        "input": {
+          "event": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "offsetY": {
+      "plug": {
+        "0": {
+          "unitId": "propclientcy",
+          "pinId": "offsetY"
+        }
+      },
+      "type": "number"
+    },
+    "offsetX": {
+      "plug": {
+        "0": {
+          "unitId": "propoffsetx",
+          "pinId": "offsetX"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "extract `offsetX` and `offsetY` from `obj`",
+    "complexity": 9,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "event"
+    ]
+  },
+  "id": "2307cacf-1363-40bc-bd6b-d58227927ae0",
+  "type": "`U`&`G`",
+  "system": true
+}

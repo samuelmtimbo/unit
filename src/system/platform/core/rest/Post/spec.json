@@ -36,7 +36,8 @@
       "id": "2af12780-698c-40ca-baa9-5f3260377e0f",
       "input": {
         "a": {
-          "constant": true
+          "constant": true,
+          "data": "{method:'POST'}"
         },
         "b": {
           "constant": false
@@ -90,7 +91,7 @@
   "metadata": {
     "icon": "send",
     "description": "fetch a resource across the network through HTTP POST",
-    "complexity": 8
+    "complexity": 6
   },
   "id": "c4ff2bad-0d60-4d17-9471-c906075d2751"
 }

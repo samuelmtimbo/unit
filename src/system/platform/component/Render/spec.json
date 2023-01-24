@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "square",
     "description": "render a graph",
-    "complexity": 119,
+    "complexity": 5,
     "tags": [
       "platform",
       "component"

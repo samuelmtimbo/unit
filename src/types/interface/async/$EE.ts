@@ -1,14 +1,14 @@
 import { Callback } from '../../Callback'
 import { Unlisten } from '../../Unlisten'
 
-export const $EE_METHOD_CALL = ['getEventNames']
-export const $EE_METHOD_WATCH = ['addListener']
-export const $EE_METHOD_REF = ['refEmitter']
+export const EE_METHOD_CALL = ['getEventNames']
+export const EE_METHOD_WATCH = ['addListener']
+export const EE_METHOD_REF = ['refEmitter']
 
-export const $EE_METHOD = [
-  ...$EE_METHOD_CALL,
-  ...$EE_METHOD_WATCH,
-  ...$EE_METHOD_REF,
+export const EE_METHOD = [
+  ...EE_METHOD_CALL,
+  ...EE_METHOD_WATCH,
+  ...EE_METHOD_REF,
 ]
 
 export interface $EE_C {

@@ -155,22 +155,6 @@
         }
       }
     },
-    "propclientxclienty0": {
-      "id": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
-      "input": {
-        "obj": {}
-      },
-      "output": {
-        "clientY": {},
-        "clientX": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -60,
-          "y": -108
-        }
-      }
-    },
     "addlineto": {
       "id": "2b0ef9e9-028b-4acc-9daf-6999e86cc2af",
       "input": {
@@ -312,6 +296,9 @@
           "y": 105
         }
       }
+    },
+    "propoffsetXoffsetY": {
+      "id": "2307cacf-1363-40bc-bd6b-d58227927ae0"
     }
   },
   "merges": {
@@ -364,15 +351,16 @@
       }
     },
     "4": {
-      "propclientxclienty0": {
-        "input": {
-          "obj": true
-        }
-      },
       "ondrag": {
         "output": {
           "move": true
         }
+      },
+      "propoffsetXoffsetY": {
+        "input": {
+          "obj": true
+        },
+        "output": {}
       }
     },
     "5": {
@@ -413,21 +401,23 @@
           "y": true
         }
       },
-      "propclientxclienty0": {
+      "propoffsetXoffsetY": {
+        "input": {},
         "output": {
-          "clientY": true
+          "offsetY": true
         }
       }
     },
     "7": {
-      "propclientxclienty0": {
-        "output": {
-          "clientX": true
-        }
-      },
       "addlineto": {
         "input": {
           "x": true
+        }
+      },
+      "propoffsetXoffsetY": {
+        "input": {},
+        "output": {
+          "offsetX": true
         }
       }
     },
@@ -495,7 +485,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "drawing board",
-    "complexity": 213,
+    "complexity": 83,
     "tags": [
       "platform",
       "core",

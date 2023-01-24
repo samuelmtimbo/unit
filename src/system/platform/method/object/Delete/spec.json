@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "delete `obj` property `name`",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "method",

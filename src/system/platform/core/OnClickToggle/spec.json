@@ -70,7 +70,7 @@
   "metadata": {
     "icon": "square",
     "description": "toggle true/false on click",
-    "complexity": 19,
+    "complexity": 14,
     "tags": [
       "platform",
       "core",

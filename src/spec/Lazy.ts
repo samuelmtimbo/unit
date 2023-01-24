@@ -110,9 +110,9 @@ export function lazyFromSpec(
       })
     }
 
-    setUnitName(unitId: string, name: string): void {
+    setUnitName(unitId: string, newUnitId: string, name: string): void {
       this._ensure()
-      return this.__graph.setUnitName(unitId, name)
+      return this.__graph.setUnitName(unitId, newUnitId, name)
     }
 
     injectGraph(graph: Graph<any, any>): void {

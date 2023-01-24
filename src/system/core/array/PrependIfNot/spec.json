@@ -25,7 +25,7 @@
   "metadata": {
     "icon": "chevrons-left",
     "description": "prepend element `b` to `a` if not `test`",
-    "complexity": 19,
+    "complexity": 16,
     "tags": [
       "core",
       "array"

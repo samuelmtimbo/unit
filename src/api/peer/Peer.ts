@@ -48,7 +48,6 @@ export class Peer extends $<PeerEvents> {
     super(system)
 
     this._initiator = initiatior
-
     this._config = config
 
     if (!RTCPeerConnection) {

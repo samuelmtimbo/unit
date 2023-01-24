@@ -1,16 +1,10 @@
 import { Callback } from '../../Callback'
 
-export const $J_METHOD_CALL = ['get', 'set']
+export const J_METHOD_CALL = ['get', 'set']
+export const J_METHOD_WATCH = []
+export const J_METHOD_REF = []
 
-export const $J_METHOD_WATCH = []
-
-export const $J_METHOD_REF = []
-
-export const $J_METHOD = [
-  ...$J_METHOD_CALL,
-  ...$J_METHOD_WATCH,
-  ...$J_METHOD_REF,
-]
+export const J_METHOD = [...J_METHOD_CALL, ...J_METHOD_WATCH, ...J_METHOD_REF]
 
 export interface $J_C {
   $get(data: { name: string }, callback: Callback<any>): void

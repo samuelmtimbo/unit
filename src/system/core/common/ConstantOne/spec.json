@@ -30,7 +30,7 @@
   "metadata": {
     "icon": "dot-circle",
     "description": "one forever",
-    "complexity": 5,
+    "complexity": 4,
     "tags": [
       "core",
       "common"

@@ -40,7 +40,7 @@
   "metadata": {
     "icon": "alert-circle",
     "description": "pass if `test`, error `message` otherwise",
-    "complexity": 14,
+    "complexity": 11,
     "tags": [
       "core",
       "assert"

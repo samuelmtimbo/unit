@@ -113,7 +113,7 @@
   "metadata": {
     "icon": "string",
     "description": "build a list of size n",
-    "complexity": 20,
+    "complexity": 15,
     "tags": [
       "core",
       "string"

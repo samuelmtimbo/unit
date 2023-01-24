@@ -11,6 +11,7 @@ export interface GraphMoveSubgraphIntoMomentData {
   nextPlugSpec
   nextSubComponentParent
   nextSubComponentChildrenMap
+  path: string[]
 }
 
 export interface GraphMoveSubgraphIntoMoment
@@ -31,6 +32,7 @@ export function watchGraphMoveSubgraphIntoEvent(
       nextPlugSpec,
       nextSubComponentParent,
       nextSubComponentChildrenMap,
+      path,
     ]: G_EE['move_subgraph_into']
   ) => {
     callback({
@@ -45,6 +47,7 @@ export function watchGraphMoveSubgraphIntoEvent(
         nextPlugSpec,
         nextSubComponentParent,
         nextSubComponentChildrenMap,
+        path,
       },
     })
   }

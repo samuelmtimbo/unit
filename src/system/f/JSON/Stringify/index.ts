@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { System } from '../../../../system'
-import { ID_STRINGIFY } from '../../../_ids'
+import { ID_STRINGIFY_0 } from '../../../_ids'
 
 export interface I<T> {
   json: T
@@ -19,7 +19,7 @@ export default class Stringify<T> extends Functional<I<T>, O> {
       },
       {},
       system,
-      ID_STRINGIFY
+      ID_STRINGIFY_0
     )
   }
 

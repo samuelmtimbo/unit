@@ -10,7 +10,7 @@
   "metadata": {
     "icon": "square",
     "description": "context of the connected `element`",
-    "complexity": 4,
+    "complexity": 2,
     "tags": [
       "platform"
     ]

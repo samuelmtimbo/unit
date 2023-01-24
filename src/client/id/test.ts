@@ -11,6 +11,7 @@ import {
   isDatumNodeId,
   isExternalNodeId,
   isInputPinId,
+  isInternalNodeId,
   isLinkId,
   isLinkPinNodeId,
   isMergeNodeId,
@@ -82,6 +83,9 @@ assert(isExternalNodeId('%/input/pjcmihkdo'))
 assert(!isExternalNodeId('abcdef'))
 assert(!isExternalNodeId('merge0'))
 assert(!isExternalNodeId('%/input/#/abcdef'))
+
+assert(isInternalNodeId('^/input/abcdef/0'))
+assert(isInternalNodeId('^/output/abcdef/0'))
 
 assert.deepEqual(segmentMetadataId('?/abcdef/input/a/data'), {
   nodeId: 'abcdef/input/a',

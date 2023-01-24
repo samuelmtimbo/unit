@@ -4,6 +4,7 @@ import { Moment } from './../Moment'
 export interface GraphSpecUnitMomentData {
   unitId: string
   specId: string
+  path: string[]
 }
 
 export interface GraphSpecUnitMoment extends Moment<GraphSpecUnitMomentData> {}
@@ -13,13 +14,14 @@ export function watchGraphUnitEvent(
   graph: Graph,
   callback: (moment: GraphSpecUnitMoment) => void
 ): () => void {
-  const listener = (unitId: string, _unit: any) => {
+  const listener = (unitId: string, _unit: any, path: string[]) => {
     callback({
       type: 'graph',
       event,
       data: {
         unitId,
         specId: _unit.constructor.__bundle.unit.id,
+        path,
       },
     })
   }
@@ -32,6 +34,7 @@ export function watchGraphUnitEvent(
 export interface GraphSpecCloneUnitMomentData {
   unitId: string
   newUnitId: string
+  path: string[]
 }
 
 export interface GraphSpecCloneUnitMoment
@@ -42,13 +45,19 @@ export function watchGraphUnitCloneEvent(
   graph: Graph,
   callback: (moment: GraphSpecCloneUnitMoment) => void
 ): () => void {
-  const listener = (unitId: string, newUnitId: string) => {
+  const listener = (
+    unitId: string,
+    newUnitId: string,
+    unit,
+    path: string[]
+  ) => {
     callback({
       type: 'graph',
       event,
       data: {
         unitId,
         newUnitId,
+        path,
       },
     })
   }

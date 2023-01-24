@@ -29,8 +29,8 @@
   "outputs": {},
   "metadata": {
     "icon": "video",
-    "description": "TODO",
-    "complexity": 118,
+    "description": "video element",
+    "complexity": 5,
     "tags": [
       "platform",
       "component",

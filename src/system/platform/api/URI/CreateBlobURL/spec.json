@@ -4,6 +4,9 @@
     "blob": {
       "type": "`B`",
       "ref": true
+    },
+    "init": {
+      "type": "any"
     }
   },
   "outputs": {
@@ -14,7 +17,7 @@
   "metadata": {
     "icon": "tilde",
     "description": "encode URI to UTF-8",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

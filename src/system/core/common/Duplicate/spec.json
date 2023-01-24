@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "x",
     "description": "duplicate `a`",
-    "complexity": 5,
+    "complexity": 4,
     "tags": [
       "core",
       "common"

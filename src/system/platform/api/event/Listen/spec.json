@@ -21,7 +21,7 @@
   "metadata": {
     "icon": "circle",
     "description": "listen to `unit` `event`",
-    "complexity": 4,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

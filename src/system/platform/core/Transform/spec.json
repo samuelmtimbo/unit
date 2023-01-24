@@ -39,7 +39,7 @@
     "get": {
       "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
       "input": {
-        "unit": {},
+        "obj": {},
         "name": {}
       },
       "output": {
@@ -55,7 +55,7 @@
     "set0": {
       "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
       "input": {
-        "unit": {},
+        "obj": {},
         "name": {},
         "data": {}
       },
@@ -76,12 +76,12 @@
     "0": {
       "get": {
         "input": {
-          "unit": true
+          "obj": true
         }
       },
       "set0": {
         "input": {
-          "unit": true
+          "obj": true
         }
       }
     },
@@ -100,7 +100,7 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "complexity": 8,
+    "complexity": 6,
     "tags": [
       "platform",
       "core"

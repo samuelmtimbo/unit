@@ -33,7 +33,7 @@
   "metadata": {
     "icon": "filter",
     "description": "no description",
-    "complexity": 7,
+    "complexity": 6,
     "tags": [
       "core",
       "control"

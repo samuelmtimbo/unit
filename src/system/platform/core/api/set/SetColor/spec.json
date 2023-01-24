@@ -22,7 +22,7 @@
       "plug": {
         "0": {
           "unitId": "set",
-          "pinId": "unit"
+          "pinId": "obj"
         }
       },
       "ref": true,
@@ -42,7 +42,7 @@
     "set": {
       "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
       "input": {
-        "unit": {
+        "obj": {
           "metadata": {
             "position": {
               "x": -65,
@@ -82,7 +82,7 @@
   "metadata": {
     "icon": "object-set",
     "description": "set context color",
-    "complexity": 5,
+    "complexity": 4,
     "tags": [
       "platform",
       "core",

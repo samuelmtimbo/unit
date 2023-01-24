@@ -34,7 +34,7 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "Recursive Graph Editor",
-    "complexity": 213,
+    "complexity": 10,
     "tags": [
       "platform",
       "component",

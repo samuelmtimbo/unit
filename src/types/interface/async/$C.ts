@@ -3,7 +3,7 @@ import { $Children } from '../../../component/Children'
 import { Callback } from '../../Callback'
 import { $Component } from './$Component'
 
-export const $C_METHOD_CALL = [
+export const C_METHOD_CALL = [
   'appendChild',
   'removeChild',
   'hasChild',
@@ -11,13 +11,9 @@ export const $C_METHOD_CALL = [
   'children',
   'component',
 ]
-export const $C_METHOD_WATCH = []
-export const $C_METHOD_REF = ['refChild']
-export const $C_METHOD = [
-  ...$C_METHOD_CALL,
-  ...$C_METHOD_WATCH,
-  ...$C_METHOD_REF,
-]
+export const C_METHOD_WATCH = []
+export const C_METHOD_REF = ['refChild']
+export const C_METHOD = [...C_METHOD_CALL, ...C_METHOD_WATCH, ...C_METHOD_REF]
 
 export interface $C_C {
   $appendChild(data: { specId: string }, callback: Callback<number>): void

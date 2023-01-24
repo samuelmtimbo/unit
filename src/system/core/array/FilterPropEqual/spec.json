@@ -107,7 +107,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "filter `a` elements with prop `k` equal to `v`",
-    "complexity": 82,
+    "complexity": 68,
     "tags": [
       "core",
       "array"

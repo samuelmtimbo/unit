@@ -3,6 +3,7 @@ import { Moment } from '../Moment'
 
 export interface GraphForkMomentData {
   specId: string
+  path: string[]
 }
 
 export interface GraphForkMoment extends Moment<GraphForkMomentData> {}
@@ -12,12 +13,13 @@ export function watchGraphForkEvent(
   graph: Graph,
   callback: (moment: GraphForkMoment) => void
 ): () => void {
-  const listener = (specId: string) => {
+  const listener = (specId: string, path) => {
     callback({
       type: 'graph',
       event,
       data: {
         specId,
+        path,
       },
     })
   }

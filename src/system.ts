@@ -1,5 +1,4 @@
 import { Graph } from './Class/Graph'
-import { Unit } from './Class/Unit'
 import { Component } from './client/component'
 import { Context } from './client/context'
 import { IOPointerEvent } from './client/event/pointer'
@@ -7,9 +6,11 @@ import { IOElement } from './client/IOElement'
 import { Store } from './client/store'
 import { Theme } from './client/theme'
 import { Point, Rect, Size } from './client/util/geometry'
+import { EventEmitter } from './EventEmitter'
 import { NOOP } from './NOOP'
 import { Object_ } from './Object'
 import { SharedObject } from './SharedObject'
+import { Style } from './system/platform/Props'
 import { Classes, GraphSpec, GraphSpecs, Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
@@ -21,7 +22,7 @@ import {
 import { IChannel, IChannelOpt } from './types/global/IChannel'
 import { IDeviceInfo } from './types/global/IDeviceInfo'
 import { IDisplayMediaOpt } from './types/global/IDisplayMedia'
-import { IDownloadDataOpt } from './types/global/IDownloadData'
+import { IDownloadDataOpt as IDownloadTextOpt } from './types/global/IDownloadData'
 import { IDownloadURLOpt } from './types/global/IDownloadURL'
 import { IGamepad } from './types/global/IGamepad'
 import { IGeoPosition } from './types/global/IGeoPosition'
@@ -110,7 +111,7 @@ export type API = {
     gamepad: {
       getGamepad: (i: number) => Gamepad
       addEventListener: (
-        type: 'gamepadconnected' | 'gamepadisconnected',
+        type: 'gamepadconnected' | 'gamepaddisconnected',
         listener: (ev: GamepadEvent) => any,
         options?: boolean | AddEventListenerOptions
       ) => Unlisten
@@ -142,12 +143,12 @@ export type API = {
     >
   }
   file: {
-    showSaveFilePicker?: (opt: IFilePickerOpt) => Promise<FileSystemFileHandle>
-    showOpenFilePicker?: (
-      opt: IFilePickerOpt
-    ) => Promise<FileSystemFileHandle[]>
+    isSaveFilePickerSupported: () => boolean
+    isOpenFilePickerSupported: () => boolean
+    showSaveFilePicker: (opt: IFilePickerOpt) => Promise<FileSystemFileHandle>
+    showOpenFilePicker: (opt: IFilePickerOpt) => Promise<FileSystemFileHandle[]>
     downloadURL: (opt: IDownloadURLOpt) => Promise<void>
-    downloadData: (opt: IDownloadDataOpt) => Promise<void>
+    downloadText: (opt: IDownloadTextOpt) => Promise<void>
   }
   screen: {
     devicePixelRatio?: number
@@ -210,9 +211,9 @@ export type API = {
 }
 
 export interface System {
-  mounted: boolean
   parent: System | null
   path: string
+  emitter: EventEmitter
   root: HTMLElement | null
   customEvent: Set<string>
   context: Context[]
@@ -247,17 +248,25 @@ export interface System {
   }
   api: API
   boot: (opt: BootOpt) => System
+  injectPrivateCSSClass: (
+    globalId: string,
+    className: string,
+    style: Style
+  ) => Unlisten
   graph: IO_SYSTEM_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
   newSpecId: () => string
   hasSpec: (id: string) => boolean
   emptySpec: (partial?: Partial<GraphSpec>) => GraphSpec
   newSpec: (spec: GraphSpec) => GraphSpec
   getSpec: (id: string) => GraphSpec
+  getRemoteComponent: (id: string) => Component
   setSpec: (id: string, spec: GraphSpec) => void
   forkSpec: (spec: GraphSpec) => [string, GraphSpec]
   injectSpecs: (specs: GraphSpecs) => Dict<string>
   registerComponent: (component: Component) => string
-  registerUnit(unit: Unit): void
+  registerRemoteComponent: (globalId: string, remoteGlobalId: string) => void
+  registerUnit(id: string): void
+  unregisterUnit(id: string): void
   showLongPress?: (
     screenX: number,
     screenY: number,

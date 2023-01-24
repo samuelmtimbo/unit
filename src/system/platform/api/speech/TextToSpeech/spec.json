@@ -23,7 +23,7 @@
   "metadata": {
     "icon": "message-circle",
     "description": "speak the message",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

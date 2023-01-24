@@ -1,4 +1,5 @@
 import { Field } from '../../../../../client/field'
+import { processNumberValue } from '../../../../../client/processNumberValue'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLInputElement } from '../../../../../types/global/dom'
@@ -31,20 +32,7 @@ export default class NumberField extends Field<IHTMLInputElement, Props> {
       valueKey: 'value',
       defaultStyle: DEFAULT_STYLE,
       defaultValue: '0',
-      processValue: (value) => {
-        let data = Number.parseFloat(value)
-
-        if (isNaN(data)) {
-          // value is not a valid number
-          if (value === '') {
-            this.$element.value = ''
-
-            data = 0
-          }
-        }
-
-        return data
-      },
+      processValue: processNumberValue,
     })
 
     const { min, max } = $props

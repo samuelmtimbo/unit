@@ -137,7 +137,7 @@ export interface G<I = any, O = any> {
     ignored: boolean
   ): void
   setUnitPinData(unitId: string, type: IO, pinId: string, data: any): void
-  setUnitName(unitId: string, name: string): void
+  setUnitName(unitId: string, newUnitId: string, name: string): void
   setUnitInputData(unitId: string, pinId: string, data: any): void
   setUnitOutputData(unitId: string, pinId: string, data: any): void
   setMetadata(path: string[], data: any): void
@@ -258,70 +258,32 @@ export interface G<I = any, O = any> {
 export type G_J = {}
 
 export type G_EE = {
-  fork: [string]
-  leaf_fork: [string, string[]]
-  element: []
-  not_element: []
-  set_exposed_sub_pin: [IO, string, string, Pin, PinOpt]
-  expose_pin_set: [IO, string, GraphPinSpec]
-  cover_pin_set: [IO, string, GraphPinSpec]
-  leaf_expose_pin_set: [string[], IO, string, GraphPinSpec]
-  leaf_cover_pin_set: [string[], IO, string, GraphPinSpec]
-  expose_pin: [IO, string, string, GraphSubPinSpec]
-  plug_pin: [IO, string, string, GraphSubPinSpec]
-  before_cover_pin: [IO, string, string]
-  cover_pin: [IO, string, string, GraphSubPinSpec]
-  unplug_pin: [IO, string, string]
-  before_add_unit: [string, Unit]
-  add_unit: [string, Unit]
-  clone_unit: [string, string]
-  remove_unit: [string, Unit]
-  leaf_add_unit: [Unit, string[]]
-  leaf_remove_unit: [Unit, string[]]
-  move_unit: [string, string, string]
-  before_remove_unit: [string]
-  remove_unit_from_merge: [string, string]
-  before_add_merge: [string, GraphMergeSpec, Merge]
-  add_merge: [string, GraphMergeSpec]
-  before_remove_merge: [string]
-  add_pin_to_merge: [string, string, string, string]
-  remove_merge: [string]
-  remove_pin_from_merge: [string, string, string, string]
-  merge_merges: [string[]]
-  append_root: [string]
+  fork: [string, string[]]
+  element: [string[]]
+  not_element: [string[]]
+  set_exposed_sub_pin: [IO, string, string, Pin, PinOpt, string[]]
+  expose_pin_set: [IO, string, GraphPinSpec, any, string[]]
+  cover_pin_set: [IO, string, GraphPinSpec, any, string[]]
+  expose_pin: [IO, string, string, GraphSubPinSpec, string[]]
+  plug_pin: [IO, string, string, GraphSubPinSpec, string[]]
+  cover_pin: [IO, string, string, GraphSubPinSpec, string[]]
+  unplug_pin: [IO, string, string, GraphSubPinSpec, string[]]
+  before_remove_unit: [string, Unit, string[]]
+  before_add_unit: [string, Unit, string[]]
+  add_unit: [string, Unit, string[]]
+  clone_unit: [string, string, Unit, string[]]
+  remove_unit: [string, Unit, string[]]
+  move_unit: [string, string, string, string[]]
+  remove_unit_from_merge: [string, string, string[]]
+  before_add_merge: [string, GraphMergeSpec, Merge, string[]]
+  add_merge: [string, GraphMergeSpec, Merge, string[]]
+  add_pin_to_merge: [string, string, string, string, string[]]
+  before_remove_merge: [string, GraphMergeSpec, Merge, string[]]
+  remove_merge: [string, GraphMergeSpec, Merge, string[]]
+  remove_pin_from_merge: [string, string, string, string, string[]]
+  merge_merges: [string[], string[]]
+  append_root: [string, string[]]
   move_subgraph_into: [
-    string,
-    {
-      merge: string[]
-      link: {
-        unitId: string
-        type: IO
-        pinId: string
-      }[]
-      unit: string[]
-    },
-    {
-      merge: Dict<string>
-      link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-      plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
-      unit: Dict<string>
-    },
-    Dict<{
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    }>,
-    Dict<{
-      input: { mergeId: string; pinId: string }
-      output: { mergeId: string; pinId: string }
-    }>,
-    {
-      input: Dict<Dict<GraphSubPinSpec>>
-      output: Dict<Dict<GraphSubPinSpec>>
-    },
-    Dict<string | null>,
-    Dict<string[]>
-  ]
-  leaf_move_subgraph_into: [
     string,
     {
       merge: string[]
@@ -365,19 +327,32 @@ export type G_EE = {
       output: Dict<{ pinId: string; subPinId: string }>
     },
     string | null,
+    string[],
     string[]
   ]
-  move_link_pin_into: [string, string, IO, string, string | null, string | null]
+  move_link_pin_into: [
+    string,
+    string,
+    IO,
+    string,
+    string | null,
+    string | null,
+    string[]
+  ]
   move_merge_into: [
     string,
     string,
     { mergeId: string; pinId: string },
-    { mergeId: string; pinId: string }
+    { mergeId: string; pinId: string },
+    string[]
   ]
-  explode_unit: [string, Dict<string>, Dict<string>]
-  inject_graph: [BundleSpec]
-  leaf_inject_graph: [BundleSpec, string[]]
-  metadata: [{ path: string[]; data: any }]
-  component_append: [string, GraphUnitSpec]
-  component_remove: [string]
+  explode_unit: [string, Dict<string>, Dict<string>, string[]]
+  set_unit_pin_constant: [string, IO, string, boolean, string[]]
+  set_unit_pin_data: [string, IO, string, any, string[]]
+  inject_graph: [BundleSpec, string[]]
+  metadata: [{ path: string[]; data: any }, string[]]
+  component_append: [string, GraphUnitSpec, string[]]
+  component_remove: [string, string[]]
+  set_pin_set_id: [IO, string, string, string[]]
+  set_unit_id: [string, string, string, string[]]
 }

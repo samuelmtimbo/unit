@@ -17,7 +17,7 @@
   "metadata": {
     "icon": "square",
     "description": "draw an image `bitmap` on `canvas`",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

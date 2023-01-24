@@ -1,6 +1,5 @@
 import { SELF } from '../../constant/SELF'
 import { Spec, Specs } from '../../types'
-import { Dict } from '../../types/Dict'
 import { IO } from '../../types/IO'
 import { upperCaseFirstLetter } from '../../util/string'
 
@@ -38,6 +37,9 @@ export const metadataRegex = new RegExp(`^\\$/[^]+/${UNIT_ID_REGEX}$`)
 export const mergeRegex = new RegExp(`^${MERGE}/[^/#$]+$`)
 export const externalRegex = new RegExp(
   `^${EXTERNAL}/(input|output)/[^${SEPARATOR}${DATA}${MERGE}]+$`
+)
+export const internalRegex = new RegExp(
+  `^\\${INTERNAL}/(input|output)/${PIN_ID_REGEX}/[^${SEPARATOR}${DATA}${MERGE}]+$`
 )
 export const linkRegex = new RegExp(`^(.+)${LINK_SEPARATOR}(.+)$`)
 
@@ -164,7 +166,7 @@ export function isNodeId(id: string): boolean {
 }
 
 export function isInternalNodeId(id: string): boolean {
-  return isUnitNodeId(id) || isMergeNodeId(id) || isLinkPinNodeId(id)
+  return internalRegex.test(id)
 }
 
 export function isOutputPinId(id: string) {
@@ -308,8 +310,8 @@ export function segmentExternalLinkId(linkId: string): {
 } {
   const { source, target } = segmentLinkId(linkId)
   const sourceExternal = isExternalNodeId(source)
-  const externalNodeId = sourceExternal ? source : target
-  const nodeId = sourceExternal ? target : source
+  const externalNodeId = sourceExternal ? target : source
+  const nodeId = sourceExternal ? source : target
   return {
     nodeId,
     externalNodeId,
@@ -430,7 +432,7 @@ export function getExtNodeIdFromIntNodeId(intNodeId: string): string {
 }
 
 export function getIntNodeIdFromExtNodeId(ext_node_id: string): string {
-  const { type, pinId: id, subPinId } = segmentExposedNodeId(ext_node_id)
+  const { type, pinId: id, subPinId } = segmentPlugNodeId(ext_node_id)
   return getIntNodeId(type, id, subPinId)
 }
 
@@ -442,7 +444,7 @@ export function isExternalNodeId(id: string): boolean {
   return externalRegex.test(id)
 }
 
-export function segmentExposedNodeId(exposedNodeId: string): {
+export function segmentPlugNodeId(exposedNodeId: string): {
   pinId: string
   type: IO
   subPinId: string
@@ -536,15 +538,6 @@ export function camelToSnake(str: string): string {
   const segments = str.split(/(?=[A-Z])/)
   const kebab = segments.map((_str) => _str.toLowerCase()).join('_')
   return kebab
-}
-
-export function styleToCSS(style: Dict<any>): string {
-  let str = ''
-  for (let key in style) {
-    const value = style[key]
-    str += `${key}`
-  }
-  return str
 }
 
 export function kebabCase(str: string): string {

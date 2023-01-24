@@ -5,6 +5,7 @@ export interface GraphSpecUnitMoveMomentData {
   id: string
   unitId: string
   inputId: string
+  path: string[]
 }
 
 export interface GraphSpecUnitMoveMoment
@@ -15,7 +16,12 @@ export function watchGraphUnitMoveEvent(
   graph: Graph,
   callback: (moment: GraphSpecUnitMoveMoment) => void
 ): () => void {
-  const listener = (id: string, unitId: string, inputId: string) => {
+  const listener = (
+    id: string,
+    unitId: string,
+    inputId: string,
+    path: string[]
+  ) => {
     callback({
       type: 'graph',
       event,
@@ -23,6 +29,7 @@ export function watchGraphUnitMoveEvent(
         id,
         unitId,
         inputId,
+        path,
       },
     })
   }

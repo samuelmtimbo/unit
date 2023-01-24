@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "send",
     "description": "scroll parent until `component` is visible",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api"

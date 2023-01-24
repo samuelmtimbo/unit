@@ -35,7 +35,7 @@
   "metadata": {
     "icon": "square",
     "description": "parent container",
-    "complexity": 118,
+    "complexity": 5,
     "tags": [
       "platform",
       "component"

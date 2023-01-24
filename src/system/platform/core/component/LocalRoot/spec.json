@@ -30,7 +30,7 @@
     "listen": {
       "id": "367241d8-ad12-11ea-beed-9777f31699a8",
       "input": {
-        "unit": {},
+        "obj": {},
         "event": {
           "constant": true,
           "data": "'bundle'"
@@ -63,7 +63,7 @@
     "set": {
       "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
       "input": {
-        "unit": {},
+        "obj": {},
         "name": {
           "constant": true,
           "data": "\"graph\""
@@ -85,7 +85,7 @@
     "get": {
       "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
       "input": {
-        "unit": {},
+        "obj": {},
         "name": {
           "constant": false
         }
@@ -132,7 +132,7 @@
     "swallow": {
       "id": "ecb16ee2-d81f-4f3f-a241-b007087f5055",
       "input": {
-        "unit": {}
+        "obj": {}
       },
       "output": {},
       "metadata": {
@@ -147,7 +147,7 @@
     "0": {
       "set": {
         "input": {
-          "unit": true
+          "obj": true
         }
       },
       "localstorage": {
@@ -171,7 +171,7 @@
     "2": {
       "get": {
         "input": {
-          "unit": true
+          "obj": true
         }
       },
       "localstorage0": {
@@ -200,7 +200,7 @@
       },
       "listen": {
         "input": {
-          "unit": true
+          "obj": true
         }
       }
     },
@@ -219,7 +219,7 @@
     "6": {
       "swallow": {
         "input": {
-          "unit": true
+          "obj": true
         }
       },
       "get": {
@@ -245,7 +245,7 @@
   "metadata": {
     "icon": null,
     "description": "",
-    "complexity": 975,
+    "complexity": 116,
     "tags": [
       "platform",
       "core",

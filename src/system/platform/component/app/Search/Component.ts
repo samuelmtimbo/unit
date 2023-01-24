@@ -30,6 +30,7 @@ import { Spec, Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { removeWhiteSpace } from '../../../../../util/string'
+import { clamp } from '../../../../core/relation/Clamp/f'
 import { keys } from '../../../../f/object/Keys/f'
 import MicrophoneButton from '../../../component/app/MicrophoneButton/Component'
 import TextBox from '../../../core/component/TextBox/Component'
@@ -111,6 +112,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   private _filtered_list_item: ListItem[] = []
   private _list_item_div: Dict<Div> = {}
   private _list_item_content: Dict<Div> = {}
+  private _list_item_name: Dict<TextBox> = {}
 
   private _list_hidden: boolean = true
 
@@ -297,19 +299,29 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     this.$system.specs_.subscribe([], '*', (type, path, key, data) => {
       if (path.length === 0) {
         if (type === 'set') {
+          // console.log(key, data)
+
           const specId = key
           const spec = data
 
           if (isSpecVisible(specs, spec.id)) {
-            if (!this._ordered_id_list.includes(specId)) {
+            if (this._ordered_id_list.includes(specId)) {
+              this._refresh_list_item(specId)
+            } else {
               this._add_list_item(
                 specId,
                 Math.floor(this._ordered_id_list.length / 2), // RETURN
                 this._ordered_id_list.length
               )
+            }
 
-              this._refresh_ordered_list()
-              this._filter_list()
+            const selected_item_id = this._selected_id
+
+            this._refresh_ordered_list()
+            this._filter_list()
+
+            if (!this._list_hidden) {
+              this._set_selected_item_id(selected_item_id)
             }
           }
         }
@@ -365,7 +377,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
   }
 
   private _add_list_item = (id: string, i: number, total: number): void => {
-    // console.log('Search', '_add_list_item', id, i, total)
+    // console.trace('Search', '_add_list_item', id, i, total)
 
     const { specs } = this.$system
 
@@ -400,6 +412,8 @@ export default class Search extends Element<IHTMLDivElement, Props> {
       },
       this.$system
     )
+    this._list_item_name[id] = list_item_main_name
+
     const list_item_main_tags = new TextBox(
       {
         style: {
@@ -479,6 +493,29 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     )
     this._list_item_div[id] = list_item_div
     this._list.appendChild(list_item_div)
+  }
+
+  private _refresh_list_item = (id: string) => {
+    const list_item_div = this._list_item_div[id]
+    const list_item_name = this._list_item_name[id]
+
+    const spec = this.$system.getSpec(id)
+
+    const { name = '', metadata = {} } = spec as Spec
+
+    const finalName = name || UNTITLED
+
+    const icon = metadata.icon || 'question'
+    const tags = metadata.tags || []
+    const tagsStr = tags.join(' ')
+    // const fuzzyName = `${name} ${tagsStr}`
+    const fuzzyName = name
+
+    list_item_div.$element.style.borderBottom = `1px solid currentColor`
+
+    this._item[id] = { id, name, icon, tags, fuzzyName }
+
+    list_item_name.setProp('value', finalName)
   }
 
   public focus(options: FocusOptions | undefined = { preventScroll: true }) {
@@ -650,12 +687,30 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     this._scroll_into_item(id)
   }
 
+  public select_next = (offset: number): void => {
+    // console.log('Search', 'select_next', offset)
+
+    let index: number = 0
+
+    if (this._selected_id) {
+      index = this._ordered_id_list.indexOf(this._selected_id)
+    }
+
+    const next_index = clamp(
+      index + offset,
+      0,
+      this._ordered_id_list.length - 1
+    )
+
+    const next_selected_spec_id = this._ordered_id_list[next_index]
+
+    this.set_selected_item_id(next_selected_spec_id)
+  }
+
   private _scroll_into_item = (id: string) => {
     // console.log('Search', '_scroll_into_item', id)
 
-    // const scroll_index = Math.ceil(this._list.$element.scrollTop / HEIGHT)
-
-    const scroll_index = Math.ceil(this._scrollTop / SEARCH_ITEM_HEIGHT)
+    const scroll_index = this._list.$element.scrollTop / SEARCH_ITEM_HEIGHT
 
     const selected_id_index = this._filtered_id_list.indexOf(id)
 
@@ -663,10 +718,14 @@ export default class Search extends Element<IHTMLDivElement, Props> {
       selected_id_index - scroll_index >= 4 ||
       selected_id_index - scroll_index < 0
     ) {
-      // this._list.$element.scrollTop = selected_id_index * HEIGHT
-      this._list.$element.scrollTo({
-        top: selected_id_index * SEARCH_ITEM_HEIGHT,
-      })
+      const list_item = this._list_item_div[id]
+
+      list_item.$element.scrollIntoView({ behavior: 'auto', block: 'start' })
+      // this._list.$element.scrollTop = selected_id_index * SEARCH_ITEM_HEIGHT
+      // this._list.$element.scrollTo({
+      //   top: selected_id_index * SEARCH_ITEM_HEIGHT,
+      //   behavior: 'auto',
+      // })
     }
   }
 
@@ -745,7 +804,15 @@ export default class Search extends Element<IHTMLDivElement, Props> {
         this._list.appendChild(list_item_div)
       }
 
-      this._select_first_list_item()
+      if (this._selected_id) {
+        if (this._filtered_id_list.includes(this._selected_id)) {
+          this._scroll_into_item(this._selected_id)
+        } else {
+          this._select_first_list_item()
+        }
+      } else {
+        this._select_first_list_item()
+      }
 
       if (!this._list_hidden) {
         const last_list_item_id = filtered_id_list[filtered_total - 1]

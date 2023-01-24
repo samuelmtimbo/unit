@@ -34,6 +34,7 @@ export const enableModeKeyboard = (
     shortcuts.push({
       combo: mode_key,
       strict: false,
+      multiple: true,
       keydown: (key: string, event: IOKeyboardEvent) => {
         const { ctrlKey } = event
 
@@ -41,7 +42,6 @@ export const enableModeKeyboard = (
           return
         }
 
-        // console.log('keydown', key)
         if (mode_key === key) {
           _mode_keydown[key] = true
 

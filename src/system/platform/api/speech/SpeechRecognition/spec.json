@@ -14,7 +14,7 @@
   "metadata": {
     "icon": "mic",
     "description": "hear me",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

@@ -50,7 +50,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "draw a circle to the canvas",
-    "complexity": 11,
+    "complexity": 8,
     "tags": [
       "platform",
       "core",

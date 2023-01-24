@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "question",
     "description": "no description",
-    "complexity": 5,
+    "complexity": 4,
     "tags": [
       "core",
       "string"

@@ -20,7 +20,7 @@ import { $Component } from './$Component'
 import { $Graph } from './$Graph'
 import { $U } from './$U'
 
-export const $G_METHOD_CALL_GET = [
+export const G_METHOD_CALL_GET = [
   'getPinData',
   'getInputData',
   'getUnitPinData',
@@ -35,7 +35,7 @@ export const $G_METHOD_CALL_GET = [
   'getBundle',
 ]
 
-export const $G_METHOD_CALL_SET_THIS = [
+export const G_METHOD_CALL_SET_THIS = [
   'addUnit',
   'addUnits',
   'removeUnit',
@@ -50,6 +50,9 @@ export const $G_METHOD_CALL_SET_THIS = [
   'exposeUnitPinSet',
   'coverUnitPinSet',
   'setPinSetFunctional',
+  'setUnitPinData',
+  'setUnitPinConstant',
+  'setPinSetId',
   'addMerge',
   'removeMerge',
   'addMerges',
@@ -65,7 +68,7 @@ export const $G_METHOD_CALL_SET_THIS = [
   'appendParentRootChildren',
 ]
 
-export const $G_METHOD_CALL_SET_THAT = [
+export const G_METHOD_CALL_SET_THAT = [
   'setUnitPinData',
   'removeUnitPinData',
   'setUnitPinConstant',
@@ -75,14 +78,14 @@ export const $G_METHOD_CALL_SET_THAT = [
   'takeUnitErr',
 ]
 
-export const $G_METHOD_CALL_SET = [
-  ...$G_METHOD_CALL_SET_THIS,
-  ...$G_METHOD_CALL_SET_THAT,
+export const G_METHOD_CALL_SET = [
+  ...G_METHOD_CALL_SET_THIS,
+  ...G_METHOD_CALL_SET_THAT,
 ]
 
-export const $G_METHOD_CALL = [...$G_METHOD_CALL_GET, ...$G_METHOD_CALL_SET]
+export const G_METHOD_CALL = [...G_METHOD_CALL_GET, ...G_METHOD_CALL_SET]
 
-export const $G_METHOD_WATCH = [
+export const G_METHOD_WATCH = [
   'watchGraph',
   'watchUnit',
   'watchGraphUnit',
@@ -90,13 +93,9 @@ export const $G_METHOD_WATCH = [
   'watchGraphUnitPath',
 ]
 
-export const $G_METHOD_REF = ['transcend', 'refSubComponent', 'refUnit']
+export const G_METHOD_REF = ['transcend', 'refSubComponent', 'refUnit']
 
-export const $G_METHOD = [
-  ...$G_METHOD_CALL,
-  ...$G_METHOD_WATCH,
-  ...$G_METHOD_REF,
-]
+export const G_METHOD = [...G_METHOD_CALL, ...G_METHOD_WATCH, ...G_METHOD_REF]
 
 export interface $G_C {
   $setUnitPinData(data: {
@@ -105,7 +104,7 @@ export interface $G_C {
     type: IO
     data: string
   }): void
-  $setUnitName(data: { unitId: string; name: string }): void
+  $setUnitName(data: { unitId: string; newUnitId: string; name: string }): void
   $removeUnitPinData(data: { unitId: string; type: IO; pinId: string }): void
   $addUnit(data: { id: string; unit: UnitBundleSpec }): void
   $addUnits(data: { units: GraphUnitsSpec }): void

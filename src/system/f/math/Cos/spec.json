@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "cosine of angle `a` in rad",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "math"

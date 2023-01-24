@@ -1,8 +1,7 @@
-import { DEFAULT_STUN_RTC_CONFIG } from '../../../../../api/peer/config'
 import { Peer } from '../../../../../api/peer/Peer'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
 import { asyncGraphFromPort } from '../../../../../graphFromPort'
-import { Primitive } from '../../../../../Primitive'
 import { RemotePort } from '../../../../../RemotePort'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
@@ -22,7 +21,7 @@ export interface O {
   answer: string
 }
 
-export default class PeerGraph extends Primitive<I, O> {
+export default class PeerGraph extends Semifunctional<I, O> {
   __ = ['U']
 
   private _peer: Peer
@@ -69,8 +68,10 @@ export default class PeerGraph extends Primitive<I, O> {
   private _offer_sent: boolean = false
 
   async onDataInputData(name: string, data: any): Promise<void> {
+    console.log('PeerGraph', 'onDataInputData', name, data)
+
     if (name === 'opt') {
-      this._peer = new Peer(this.__system, false, DEFAULT_STUN_RTC_CONFIG)
+      this._peer = new Peer(this.__system, false, data)
 
       const port: IPort = {
         send: (data) => {
@@ -88,7 +89,8 @@ export default class PeerGraph extends Primitive<I, O> {
       }
 
       this._peer.addListener('message', (message: string) => {
-        // console.log('PeerGraph', 'message', message)
+        console.log('PeerGraph', 'message', message)
+
         const specs = this.__system.specs
         const classes = this.__system.classes
 
@@ -105,8 +107,11 @@ export default class PeerGraph extends Primitive<I, O> {
           case INIT:
             {
               const remote_port = new RemotePort(port)
+
               this._remote_port = remote_port
+
               const $graph = asyncGraphFromPort(this.__system, remote_port)
+
               this._output.graph.push($graph)
             }
             break
@@ -138,6 +143,7 @@ export default class PeerGraph extends Primitive<I, O> {
         this._accept_offer(offer)
       }
     } else if (name === 'close') {
+      this.__forward_empty()
     }
   }
 
@@ -160,6 +166,12 @@ export default class PeerGraph extends Primitive<I, O> {
   }
 
   private __forward_empty = () => {
+    this._forward_all_empty()
+
+    this._backward('offer')
+    this._backward('close')
+    this._backward('opt')
+
     this._forwarding_empty = true
 
     if (this.hasErr()) {
@@ -181,6 +193,11 @@ export default class PeerGraph extends Primitive<I, O> {
     if (this._remote_port) {
       this._remote_port.close()
       this._remote_port = undefined
+    }
+
+    if (this._peer) {
+      // this._peer.close()
+      this._peer = null
     }
 
     this._backwarding = false

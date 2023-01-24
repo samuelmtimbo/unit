@@ -3,19 +3,24 @@ import { isObjNotNull } from './isObjNotNull'
 export default function deepMerge(a: object, b: object): object {
   const _ = Array.isArray(a) ? [...a] : { ...a }
 
+  _deepMerge(_, b)
+
+  return _
+}
+
+export function _deepMerge(a: object, b: object): void {
   for (let k in b) {
-    if (_[k] !== undefined && b[k] !== undefined) {
-      const aObjNotNull = isObjNotNull(_[k])
+    if (a[k] !== undefined && b[k] !== undefined) {
+      const aObjNotNull = isObjNotNull(a[k])
       const bObjNotNull = isObjNotNull(b[k])
 
       if (aObjNotNull && bObjNotNull) {
-        _[k] = deepMerge(_[k], b[k])
+        a[k] = deepMerge(a[k], b[k])
       } else {
-        _[k] = b[k]
+        a[k] = b[k]
       }
     } else {
-      _[k] = b[k]
+      a[k] = b[k]
     }
   }
-  return _
 }

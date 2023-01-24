@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "merge two objects `a` and `b` into `ab`",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "object"

@@ -56,7 +56,6 @@ export function watchGraphComponent(
   const unlisten_graph = $graph.$watch(
     { events: ['component_append', 'component_remove'] },
     (moment: Moment) => {
-      // console.log('watchGraphComponent', moment)
       const { type, event, data } = moment
       const handler = {
         component_append: (data: GraphSpecComponentAppendMomentData) => {

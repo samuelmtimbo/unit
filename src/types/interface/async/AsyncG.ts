@@ -10,7 +10,7 @@ import {
 } from '../..'
 import { Graph } from '../../../Class/Graph'
 import { Unit } from '../../../Class/Unit'
-import { emptySpec, newSpecId } from '../../../client/spec'
+import { emptySpec } from '../../../client/spec'
 import { watchGraph } from '../../../debug/graph/watchGraph'
 import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
@@ -18,7 +18,6 @@ import { watchUnit } from '../../../debug/watchUnit'
 import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
 import { fromId } from '../../../spec/fromId'
-import { fromSpec } from '../../../spec/fromSpec'
 import { stringify } from '../../../spec/stringify'
 import { _stringifyGraphSpecData } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
@@ -45,8 +44,16 @@ export interface Holder<T> {
 
 export const AsyncGCall = (graph: Graph): $G_C => {
   return {
-    $setUnitName({ unitId, name }: { unitId: string; name: string }): void {
-      graph.setUnitName(unitId, name)
+    $setUnitName({
+      unitId,
+      newUnitId,
+      name,
+    }: {
+      unitId: string
+      newUnitId: string
+      name: string
+    }): void {
+      graph.setUnitName(unitId, newUnitId, name)
     },
 
     $setUnitPinData({
@@ -747,19 +754,34 @@ export const AsyncGRef = (graph: Graph): $G_R => {
       unitId: string
       _: string[]
     }): $Graph {
-      // RETURN
       const system = graph.refSystem()
       const spec = graph.getSpec()
+
+      if (system.hasSpec(id)) {
+        throw new Error('Spec with id ' + id + ' already exists')
+      }
+
       const render =
         spec.component && !isEmptyObject(spec.component.subComponents || {})
-      render ? graph.setElement() : graph.setNotElement()
-      // const parent = new Graph({}, {}, system)
-      const parentSpec = emptySpec({ id: newSpecId(system.specs) })
-      const Class = fromSpec(parentSpec, {}, {})
-      const parent = new Class(system)
+
+      if (render) {
+        graph.setElement()
+      } else {
+        graph.setNotElement()
+      }
+
+      const parentSpec = emptySpec({ id })
+
+      system.setSpec(id, parentSpec)
+
+      const parent = new Graph(parentSpec, {}, system)
+
       parent.addUnit(unitId, graph, false)
+
       parent.play()
+
       const $parent = Async(parent, _)
+
       return proxyWrap($parent, _)
     },
 

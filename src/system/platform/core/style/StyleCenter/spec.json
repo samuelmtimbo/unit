@@ -30,7 +30,7 @@
   "metadata": {
     "icon": "repeat-1",
     "description": "style to centralize element on container",
-    "complexity": 5,
+    "complexity": 4,
     "tags": [
       "platform",
       "core",

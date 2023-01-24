@@ -3,6 +3,7 @@ import { Moment } from './../Moment'
 
 export interface GraphSpecComponentRemoveMomentData {
   unitId: string
+  path: string[]
 }
 
 export interface GraphSpecComponentRemoveMoment
@@ -13,12 +14,13 @@ export function watchGraphUnitComponentRemoveEvent(
   graph: Graph,
   callback: (moment: GraphSpecComponentRemoveMoment) => void
 ): () => void {
-  const listener = (unitId: string) => {
+  const listener = (unitId: string, path: string[]) => {
     callback({
       type: 'graph',
       event,
       data: {
         unitId,
+        path,
       },
     })
   }

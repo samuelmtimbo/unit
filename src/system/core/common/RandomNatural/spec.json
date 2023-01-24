@@ -73,7 +73,7 @@
   "metadata": {
     "icon": "random",
     "description": "random natural `i` less than `max`",
-    "complexity": 11,
+    "complexity": 8,
     "tags": [
       "core",
       "common"

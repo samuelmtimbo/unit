@@ -19,17 +19,10 @@ import { watchRefOutput } from './watchRefOutput'
 import { watchUnitErr } from './watchUnitErr'
 import {
   watchComponentAppendEvent,
-  watchComponentLeafAppendEvent,
-  watchComponentLeafRemoveEvent,
   watchComponentRemoveEvent,
   watchUnitRenamePinEvent,
 } from './watchUnitEvent'
 import { watchUnitIOSpec } from './watchUnitIOSpec'
-import { watchUnitLeafEvent } from './watchUnitLeafEvent'
-import { watchUnitLeafExposedPinSetEvent } from './watchUnitLeafExposedPinSetEvent'
-import { watchUnitLeafForkEvent } from './watchUnitLeafForkEvent'
-import { watchUnitLeafInjectEvent } from './watchUnitLeafInjectEvent'
-import { watchUnitLeafMoveSubgraphIntoEvent } from './watchUnitLeafMoveSubgraphIntoEvent'
 
 export function watchUnitIO<T extends Unit>(
   unit: T,
@@ -157,43 +150,29 @@ export function watchUnitIO<T extends Unit>(
   }
 
   if (unit instanceof Graph) {
-    if (events.includes('leaf_fork')) {
-      all.push(watchUnitLeafForkEvent('leaf_fork', unit, callback))
-    }
-
-    if (events.includes('leaf_add_unit')) {
-      all.push(watchUnitLeafEvent('leaf_add_unit', unit, callback))
-    }
-
-    if (events.includes('leaf_remove_unit')) {
-      all.push(watchUnitLeafEvent('leaf_remove_unit', unit, callback))
-    }
-
-    if (events.includes('leaf_expose_pin_set')) {
-      all.push(
-        watchUnitLeafExposedPinSetEvent('leaf_expose_pin_set', unit, callback)
-      )
-    }
-
-    if (events.includes('leaf_cover_pin_set')) {
-      all.push(
-        watchUnitLeafExposedPinSetEvent('leaf_cover_pin_set', unit, callback)
-      )
-    }
-
-    if (events.includes('leaf_inject_graph')) {
-      all.push(watchUnitLeafInjectEvent('leaf_inject_graph', unit, callback))
-    }
-
-    if (events.includes('leaf_move_subgraph_into')) {
-      all.push(
-        watchUnitLeafMoveSubgraphIntoEvent(
-          'leaf_move_subgraph_into',
-          unit,
-          callback
-        )
-      )
-    }
+    // if (events.includes('fork')) {
+    //   all.push(watchGraphForkEvent('fork', unit, callback))
+    // }
+    // if (events.includes('add_unit')) {
+    //   all.push(watchGraphUnitEvent('add_unit', unit, callback))
+    // }
+    // if (events.includes('remove_unit')) {
+    //   all.push(watchGraphUnitEvent('remove_unit', unit, callback))
+    // }
+    // if (events.includes('expose_pin_set')) {
+    //   all.push(watchGraphExposedPinSetEvent('expose_pin_set', unit, callback))
+    // }
+    // if (events.includes('cover_pin_set')) {
+    //   all.push(watchGraphExposedPinSetEvent('cover_pin_set', unit, callback))
+    // }
+    // if (events.includes('inject_graph')) {
+    //   all.push(watchGraphInjectEvent('inject_graph', unit, callback))
+    // }
+    // if (events.includes('move_subgraph_into')) {
+    //   all.push(
+    //     watchGraphMoveSubgraphIntoEvent('move_subgraph_into', unit, callback)
+    //   )
+    // }
   }
 
   if (unit instanceof Graph || unit instanceof Element_) {
@@ -204,22 +183,9 @@ export function watchUnitIO<T extends Unit>(
     if (events.includes('remove_child')) {
       all.push(watchComponentRemoveEvent('remove_child', unit, callback))
     }
-
-    if (events.includes('leaf_append_child')) {
-      all.push(
-        watchComponentLeafAppendEvent('leaf_append_child', unit, callback)
-      )
-    }
-
-    if (events.includes('leaf_remove_child')) {
-      all.push(
-        watchComponentLeafRemoveEvent('leaf_remove_child', unit, callback)
-      )
-    }
   }
 
   all.push(watchUnitErr(unit, callback, events))
-
   all.push(watchUnitIOSpec(unit, callback, events))
 
   let unlisten = callAll(all)

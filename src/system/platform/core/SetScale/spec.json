@@ -1,0 +1,64 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "set scale",
+  "units": {
+    "setscalex": {
+      "id": "cea694c2-9c36-4655-85b6-9b33425a5c33",
+      "input": {
+        "obj": {},
+        "sx": {}
+      },
+      "output": {}
+    },
+    "setscaley": {
+      "id": "1241b0ea-eaa8-4dc3-95d1-a3e1580e4267",
+      "input": {
+        "obj": {},
+        "sy": {}
+      },
+      "output": {}
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "setscaley",
+          "pinId": "obj"
+        },
+        "1": {
+          "unitId": "setscalex",
+          "pinId": "obj"
+        }
+      },
+      "ref": true
+    },
+    "sx": {
+      "plug": {
+        "0": {
+          "unitId": "setscalex",
+          "pinId": "sx"
+        }
+      },
+      "ref": false
+    },
+    "sy": {
+      "plug": {
+        "0": {
+          "unitId": "setscaley",
+          "pinId": "sy"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "set scale `sx` and `sy` of `obj`",
+    "complexity": 9
+  },
+  "system": true,
+  "id": "33a97304-0832-40d9-b013-de0ddf0688af"
+}

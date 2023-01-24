@@ -4,7 +4,7 @@ import { GlobalRefSpec } from '../../GlobalRefSpec'
 import { IO } from '../../IO'
 import { Unlisten } from '../../Unlisten'
 
-export const $U_METHOD_CALL = [
+export const U_METHOD_CALL = [
   'getGlobalId',
   'getListeners',
   'call',
@@ -21,14 +21,10 @@ export const $U_METHOD_CALL = [
   'getRefInputData',
   'err',
 ]
-export const $U_METHOD_WATCH = ['watch']
-export const $U_METHOD_REF = ['refGlobalObj']
+export const U_METHOD_WATCH = ['watch']
+export const U_METHOD_REF = ['refGlobalObj']
 
-export const $U_METHOD = [
-  ...$U_METHOD_CALL,
-  ...$U_METHOD_WATCH,
-  ...$U_METHOD_REF,
-]
+export const U_METHOD = [...U_METHOD_CALL, ...U_METHOD_WATCH, ...U_METHOD_REF]
 
 export interface $U_C {
   $getGlobalId(data: {}, callback: Callback<string>): void

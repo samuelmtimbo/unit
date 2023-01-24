@@ -1,0 +1,53 @@
+{
+  "name": "download text",
+  "inputs": {
+    "text": {
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "\"unit\""
+        ]
+      }
+    },
+    "name": {
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "\"text\""
+        ]
+      }
+    },
+    "mimetype": {
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "\"text/plain\"",
+          "\"application/json\""
+        ]
+      }
+    },
+    "charset": {
+      "type": "string",
+      "metadata": {
+        "examples": [
+          "\"utf-8\""
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "id": "b5ab65ce-4306-4a46-8d3c-36b6c29b1c60",
+  "metadata": {
+    "icon": "download",
+    "description": "download a `text` string",
+    "complexity": 2,
+    "tags": [
+      "platform",
+      "api",
+      "media"
+    ]
+  },
+  "type": "`U`",
+  "base": true,
+  "system": true
+}

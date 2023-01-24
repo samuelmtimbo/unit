@@ -1,11 +1,9 @@
 import { Callback } from '../../Callback'
 import { Unlisten } from '../../Unlisten'
 
-export const $ST_METHOD_CALL = ['stream']
-
-export const $ST_METHOD_WATCH = []
-
-export const $ST_METHOD_REF = []
+export const ST_METHOD_CALL = ['stream']
+export const ST_METHOD_WATCH = []
+export const ST_METHOD_REF = []
 
 export interface $ST_C {
   $stream({}: {}, callback: Callback<MediaStream>): Unlisten

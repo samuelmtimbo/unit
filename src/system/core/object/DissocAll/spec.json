@@ -127,7 +127,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "...",
-    "complexity": 37,
+    "complexity": 30,
     "tags": [
       "core",
       "object"

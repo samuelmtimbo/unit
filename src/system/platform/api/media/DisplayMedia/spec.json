@@ -10,7 +10,7 @@
   "base": true,
   "metadata": {
     "icon": "film",
-    "complexity": 12,
+    "complexity": 11,
     "tags": [
       "platform",
       "api",

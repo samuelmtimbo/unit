@@ -1,0 +1,43 @@
+{
+  "name": "peer share graph",
+  "inputs": {
+    "graph": {
+      "type": "`G`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{iceServers:{urls:string[]}[]}",
+      "metadata": {
+        "examples": [
+          "{iceServers:[{urls:['stun:stun.l.google.com:19302']}]}"
+        ]
+      }
+    },
+    "answer": {
+      "type": "string"
+    },
+    "close": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "offer": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "description": "allow remote peer to connect to this graph",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "peer"
+    ]
+  },
+  "id": "16fa715f-fc94-43f7-831e-335037c8daea",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

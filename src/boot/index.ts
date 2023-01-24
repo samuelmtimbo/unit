@@ -1,13 +1,16 @@
-import { Unit } from '../Class/Unit'
 import { Component } from '../client/component'
+import { styleToCSS } from '../client/id/styleToCSS'
 import { IOElement } from '../client/IOElement'
-import { emptySpec, isSystemSpecId, newSpecId } from '../client/spec'
+import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
+import { emptySpec, newSpecId } from '../client/spec'
 import { LocalStore } from '../client/store'
-import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
+import { EventEmitter } from '../EventEmitter'
 import { noHost } from '../host/none'
+import { NOOP } from '../NOOP'
 import { Object_ } from '../Object'
 import { SharedObject } from '../SharedObject'
 import { API, BootOpt, System } from '../system'
+import { Style } from '../system/platform/Props'
 import classes from '../system/_classes'
 import components from '../system/_components'
 import specs from '../system/_specs'
@@ -17,6 +20,7 @@ import { IGamepad } from '../types/global/IGamepad'
 import { IKeyboard } from '../types/global/IKeyboard'
 import { IPointer } from '../types/global/IPointer'
 import { $Component } from '../types/interface/async/$Component'
+import { Unlisten } from '../types/Unlisten'
 import { weakMerge } from '../types/weakMerge'
 import { uuidNotIn } from '../util/id'
 import { clone } from '../util/object'
@@ -55,10 +59,15 @@ export function boot(
 
   const specs_ = new Object_(merged_specs)
 
+  const emitter = parent ? parent.emitter : new EventEmitter()
+
+  const componentLocalToRemote: Dict<string> = {}
+  const componentRemoteToLocal: Dict<string> = {}
+
   const system: System = {
     path,
-    parent: null,
-    mounted: false,
+    parent,
+    emitter,
     animated: true,
     root: null,
     theme: 'dark',
@@ -80,40 +89,53 @@ export function boot(
     },
     showLongPress: undefined,
     captureGesture: undefined,
-    global: {
-      ref: {},
-      component: {},
-    },
+    global: parent
+      ? parent.global
+      : {
+          ref: {},
+          component: {},
+        },
     api,
-    boot: (opt: BootOpt) =>
-      boot(system, api, {
-        ...opt,
-        specs: weakMerge(merged_specs, opt.specs ?? {}),
-      }),
+    boot: (opt: BootOpt) => boot(system, api, opt),
     graph: (system, opt) => new SharedObject(new LocalStore(system, 'local')),
     registerComponent: function (
       component: Component<IOElement, {}, $Component>
     ): string {
-      throw new MethodNotImplementedError('registerComponent')
-    },
-    registerUnit: (unit: Unit) => {
-      const { id } = unit
+      const id = uuidNotIn(system.global.component)
 
+      system.global.component[id] = component
+
+      return id
+    },
+    registerUnit: (id: string) => {
       system.specsCount[id] = system.specsCount[id] ?? 0
       system.specsCount[id]++
 
       if (system.parent) {
-        system.parent.registerUnit(unit)
+        system.parent.registerUnit(id)
+      }
+    },
+    unregisterUnit: function (id: string): void {
+      system.specsCount[id]--
+
+      if (system.parent) {
+        system.parent.unregisterUnit(id)
       }
     },
     forkSpec: (spec: GraphSpec) => {
-      const clonedSpec = clone(spec)
+      if (system.specsCount[spec.id] > 0) {
+        const clonedSpec = clone(spec)
 
-      const { id: newSpecId } = system.newSpec(clonedSpec)
+        const { id: newSpecId } = system.newSpec(clonedSpec)
 
-      delete clonedSpec.system
+        delete clonedSpec.system
 
-      return [newSpecId, clonedSpec]
+        return [newSpecId, clonedSpec]
+      } else {
+        system.setSpec(spec.id, spec)
+
+        return [spec.id, spec]
+      }
     },
     getSpec: (id: string): GraphSpec => {
       return merged_specs[id]
@@ -139,17 +161,16 @@ export function boot(
       spec.id = specId
 
       // console.log('newSpec', { specId, spec })
-
       specs_.set(specId, spec)
 
       return spec
     },
     setSpec: (specId: string, spec: GraphSpec) => {
       // console.log('setSpec', { specId, spec })
-
       specs_.set(specId, spec)
     },
     injectSpecs: (newSpecs: GraphSpecs): Dict<string> => {
+      // console.log('injectSpecs', { newSpecs })
       const map_spec_id: Dict<string> = {}
 
       const visited: Set<string> = new Set()
@@ -177,7 +198,7 @@ export function boot(
         for (const unitId in units) {
           const unit = units[unitId]
 
-          if (system.hasSpec(unit.id) && isSystemSpecId(specs, unit.id)) {
+          if (system.hasSpec(unit.id) && !!specs[unit.id]) {
             //
           } else {
             const spec = newSpecs[unit.id]
@@ -189,10 +210,21 @@ export function boot(
         visited.add(spec_id)
 
         if (hasSpec) {
-          map_spec_id[spec_id] = nextSpecId
+          if (
+            JSON.stringify(spec) === JSON.stringify(system.getSpec(spec_id))
+          ) {
+            //
+          } else {
+            // TODO
+            map_spec_id[spec_id] = nextSpecId
+
+            specs_.set(spec_id, spec)
+          }
+        } else {
+          specs_.set(spec_id, spec)
         }
 
-        specs_.set(nextSpecId, spec)
+        // specs_.set(nextSpecId, spec) // TODO
       }
 
       for (const spec_id in newSpecs) {
@@ -203,11 +235,61 @@ export function boot(
 
       return map_spec_id
     },
+    injectPrivateCSSClass: function (
+      globalId: string,
+      className: string,
+      style: Style
+    ): Unlisten {
+      if (system.root) {
+        if (!system.global.component[globalId]) {
+          throw new Error('Component not found.')
+        }
+
+        const css = `${styleToCSS(style)}`
+
+        appendRootStyle(system, css)
+
+        return () => {
+          removeRootStyle(system, css)
+        }
+      } else {
+        return NOOP
+      }
+    },
+    registerRemoteComponent: function (
+      globalId: string,
+      remoteGlobalId: string
+    ): void {
+      const component = system.global.component[globalId]
+
+      if (!component) {
+        throw new Error('Component not found.')
+      }
+
+      componentLocalToRemote[globalId] = remoteGlobalId
+      componentRemoteToLocal[remoteGlobalId] = globalId
+
+      emitter.emit(remoteGlobalId, component)
+    },
+    getRemoteComponent: function (remoteId: string): Component {
+      const localId = componentRemoteToLocal[remoteId]
+
+      if (!localId) {
+        return undefined
+      }
+
+      return system.global.component[localId]
+    },
   }
 
   return system
 }
 
 export function destroy(system: System) {
+  const { graphs } = system
+
+  for (const graph of graphs) {
+    graph.destroy()
+  }
   // TODO
 }

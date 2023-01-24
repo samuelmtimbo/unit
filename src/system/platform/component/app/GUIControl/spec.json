@@ -6,7 +6,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "unit class component",
-    "complexity": 124,
+    "complexity": 6,
     "tags": [
       "host",
       "component"

@@ -206,6 +206,16 @@ export function isSystemSpecId(specs: Specs, spec_id: string): boolean {
   return system
 }
 
+export function isEmptySpec(spec: GraphSpec): boolean {
+  const { units = {} } = spec
+
+  const unitCount = keys(units).length
+
+  const empty = unitCount === 0
+
+  return empty
+}
+
 export function injectSpecs(
   system: System,
   new_specs: GraphSpecs

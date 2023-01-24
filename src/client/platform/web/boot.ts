@@ -100,7 +100,6 @@ export function _webBoot(
   root.appendChild(_root)
 
   system.root = _root
-  system.mounted = true
 
   attachSprite(system)
   attachStyle(system)

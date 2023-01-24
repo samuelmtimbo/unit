@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "grip-lines-vertical",
     "description": "output `a` if present, `default` if present, otherwise",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "control"

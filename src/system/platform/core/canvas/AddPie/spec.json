@@ -523,7 +523,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "add a pie to current sub-path",
-    "complexity": 47,
+    "complexity": 38,
     "tags": [
       "platform",
       "core",

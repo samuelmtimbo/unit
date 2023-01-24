@@ -90,7 +90,7 @@
   "metadata": {
     "icon": "undo",
     "description": "iterate over `a` and `b`",
-    "complexity": 25,
+    "complexity": 21,
     "tags": [
       "core",
       "loop"

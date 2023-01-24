@@ -89,7 +89,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "set value at `key` to `value` if `test` is true",
-    "complexity": 16,
+    "complexity": 13,
     "tags": [
       "platform",
       "core"

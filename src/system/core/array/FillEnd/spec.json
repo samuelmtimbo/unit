@@ -67,7 +67,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "fill `from` array with `a` until size `n`",
-    "complexity": 51,
+    "complexity": 43,
     "tags": [
       "core",
       "array"

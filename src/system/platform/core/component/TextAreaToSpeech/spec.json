@@ -124,7 +124,7 @@
     "getvalue": {
       "id": "d74f12c2-1868-11eb-8136-238c1b1a727f",
       "input": {
-        "unit": {},
+        "obj": {},
         "any": {}
       },
       "output": {
@@ -184,7 +184,7 @@
       },
       "getvalue": {
         "input": {
-          "unit": true
+          "obj": true
         }
       }
     },
@@ -238,7 +238,7 @@
     "defaultHeight": 150
   },
   "metadata": {
-    "complexity": 153,
+    "complexity": 31,
     "icon": "align-left",
     "description": "speech text on enter",
     "tags": [

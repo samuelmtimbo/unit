@@ -76,8 +76,6 @@ export const extractTrait = (
     x = position.x
     y = position.y
 
-    console.log({ width, height })
-
     return {
       x,
       y,

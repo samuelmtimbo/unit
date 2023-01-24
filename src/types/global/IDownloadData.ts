@@ -1,6 +1,6 @@
 export type IDownloadDataOpt = {
   name: string
-  data: string
-  mimeType: string
+  text: string
+  mimetype: string
   charset: string
 }

@@ -1,5 +1,3 @@
-import { userSelect } from '../../util/style/userSelect'
-
 export const _DEFAULT_STYLE = {
   position: 'absolute',
   top: '0',
@@ -8,5 +6,5 @@ export const _DEFAULT_STYLE = {
   height: '100%',
   overflow: 'hidden',
   touchAction: 'none',
-  ...userSelect('none'),
+  // ...userSelect('none'),
 }

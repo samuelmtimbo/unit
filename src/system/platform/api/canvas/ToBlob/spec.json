@@ -20,6 +20,9 @@
           "'image/png'"
         ]
       }
+    },
+    "done": {
+      "type": "any"
     }
   },
   "outputs": {
@@ -33,7 +36,7 @@
     "icon": "edit-3",
     "description": "...",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "platform",
       "api",

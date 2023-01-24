@@ -52,7 +52,7 @@
   "metadata": {
     "icon": null,
     "description": "no description",
-    "complexity": 11,
+    "complexity": 9,
     "tags": [
       "core",
       "util"

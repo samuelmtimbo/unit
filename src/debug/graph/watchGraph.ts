@@ -6,9 +6,11 @@ import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../../types/Dict'
 import { U } from '../../types/interface/U'
 import { Unlisten } from '../../types/Unlisten'
+import { callAll } from '../../util/call/callAll'
 import { callAllDict } from '../../util/call/callAllDict'
 import { GraphUnitPinMoment } from '../GraphUnitPinMoment'
 import { Moment } from '../Moment'
+import { watchGraphUnit } from '../watchGraphUnit'
 import { watchPin } from '../watchPin'
 import { watchUnitIO } from '../watchUnitIO'
 
@@ -21,7 +23,7 @@ export function watchGraph<T extends Graph>(
   const _merge_unlisten: Dict<Unlisten> = {}
 
   const _watchUnit = (unit: Unit, unitId: string) => {
-    const unlisten = watchUnitIO(
+    const unitIOUnlisten = watchUnitIO(
       unit,
       events,
       ({ type, event, data }: Moment<any>) => {
@@ -36,7 +38,24 @@ export function watchGraph<T extends Graph>(
       }
     )
 
-    _unit_unlisten[unitId] = unlisten
+    // if (unit instanceof Graph) {
+    const unitGraphUnlisten = watchGraphUnit(
+      unit,
+      events,
+      ({ type, event, data }: Moment<any>) => {
+        callback({
+          type,
+          event,
+          data: {
+            ...data,
+            unitId,
+          },
+        } as GraphUnitPinMoment)
+      }
+    )
+    // }
+
+    _unit_unlisten[unitId] = callAll([unitIOUnlisten, unitGraphUnlisten])
   }
 
   const _watchMerge = (merge: U<any>, mergeId: string) => {
@@ -62,28 +81,60 @@ export function watchGraph<T extends Graph>(
     _merge_unlisten[mergeId] = unlisten
   }
 
-  const addUnitListener = (id, unit) => {
-    _watchUnit(unit, id)
+  const addUnitListener = (id, unit, path) => {
+    if (path.length === 0) {
+      _watchUnit(unit, id)
+    }
   }
 
-  const addMergeListener = (id, mergeSpec, merge) => {
-    _watchMerge(merge, id)
+  const cloneUnitListener = (id, newUnitId, newUnit, path) => {
+    if (path.length === 0) {
+      _watchUnit(newUnit, newUnitId)
+    }
   }
 
-  const removeUnitListener = (unitId: string) => {
-    const unlisten = _unit_unlisten[unitId]
-
-    unlisten()
-
-    delete _unit_unlisten[unitId]
+  const addMergeListener = (id, mergeSpec, merge, path) => {
+    if (path.length === 0) {
+      _watchMerge(merge, id)
+    }
   }
 
-  const removeMergeListener = (mergeId: string) => {
-    const unlisten = _merge_unlisten[mergeId]
+  const removeUnitListener = (unitId: string, unit: Unit, path: string[]) => {
+    if (path.length === 0) {
+      const unlisten = _unit_unlisten[unitId]
 
-    unlisten()
+      unlisten()
 
-    delete _merge_unlisten[mergeId]
+      delete _unit_unlisten[unitId]
+    }
+  }
+
+  const removeMergeListener = (
+    mergeId: string,
+    mergeSpec,
+    merge,
+    path: string[]
+  ) => {
+    if (path.length === 0) {
+      const unlisten = _merge_unlisten[mergeId]
+
+      unlisten()
+
+      delete _merge_unlisten[mergeId]
+    }
+  }
+
+  const setUnitIdListener = (
+    unitId: string,
+    newUnitId: string,
+    name: string,
+    path: string[]
+  ): void => {
+    if (path.length === 0) {
+      _unit_unlisten[newUnitId] = _unit_unlisten[unitId]
+
+      delete _unit_unlisten[unitId]
+    }
   }
 
   const units = graph.refUnits()
@@ -93,15 +144,19 @@ export function watchGraph<T extends Graph>(
   forEachValueKey(merges, _watchMerge)
 
   graph.addListener('before_add_unit', addUnitListener)
+  graph.addListener('clone_unit', cloneUnitListener)
   graph.addListener('before_add_merge', addMergeListener)
   graph.addListener('before_remove_unit', removeUnitListener)
   graph.addListener('before_remove_merge', removeMergeListener)
+  graph.addListener('set_unit_id', setUnitIdListener)
 
   return () => {
     graph.removeListener('before_add_unit', addUnitListener)
+    graph.removeListener('clone_unit', cloneUnitListener)
     graph.removeListener('before_add_merge', addMergeListener)
     graph.removeListener('before_remove_unit', removeUnitListener)
     graph.removeListener('before_remove_merge', removeMergeListener)
+    graph.removeListener('set_unit_id', setUnitIdListener)
 
     callAllDict(_unit_unlisten)()
     callAllDict(_merge_unlisten)()

@@ -1,20 +1,13 @@
 import { Callback } from '../../Callback'
 
-export const $V_METHOD_CALL = ['read', 'write']
+export const V_METHOD_CALL = ['read', 'write']
+export const V_METHOD_WATCH = []
+export const V_METHOD_REF = []
 
-export const $V_METHOD_WATCH = []
-
-export const $V_METHOD_REF = []
-
-export const $V_METHOD = [
-  ...$V_METHOD_CALL,
-  ...$V_METHOD_WATCH,
-  ...$V_METHOD_REF,
-]
+export const V_METHOD = [...V_METHOD_CALL, ...V_METHOD_WATCH, ...V_METHOD_REF]
 
 export interface $V_C {
   $read(data: {}, callback: Callback<any>): void
-
   $write(data: { data: any }, callback: Callback<void>): void
 }
 

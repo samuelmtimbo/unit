@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "filter",
     "description": "conditional filter",
-    "complexity": 3,
+    "complexity": 2,
     "tags": [
       "f",
       "control"

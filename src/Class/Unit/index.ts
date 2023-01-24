@@ -9,6 +9,7 @@ import { Pin, Pin_M } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { PinOpts } from '../../PinOpts'
 import { Pins } from '../../Pins'
+import { stringify } from '../../spec/stringify'
 import { System } from '../../system'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keys } from '../../system/f/object/Keys/f'
@@ -134,13 +135,19 @@ export class Unit<
 
     this.id = id
 
-    system.registerUnit(this)
+    system.registerUnit(id)
   }
 
   public isPinIgnored(type: IO, name: string): boolean {
     const pin = this.getPin(type, name)
     const ignored = pin.ignored()
     return ignored
+  }
+
+  public isPinConstant(type: IO, name: string): boolean {
+    const pin = this.getPin(type, name)
+    const constant = pin.constant()
+    return constant
   }
 
   public isPinRef(type: IO, name: string): boolean {
@@ -163,6 +170,10 @@ export class Unit<
     } else {
       this.setOutputIgnored(name, ignored)
     }
+  }
+
+  public setPinConstant(type: IO, name: string, constant: boolean): void {
+    this.getPin(type, name).constant(constant)
   }
 
   private _memSetPinOptData(type: IO, name: string): void {
@@ -237,9 +248,11 @@ export class Unit<
 
   public setInputIgnored(name: string, ignore: boolean): boolean {
     const input = this.getInput(name)
+
     if (this.hasRefInputNamed(name)) {
       return
     }
+
     return input.ignored(ignore)
   }
 
@@ -247,7 +260,9 @@ export class Unit<
     if (this.hasRefOutputNamed(name)) {
       return
     }
+
     const output = this.getOutput(name)
+
     return output.ignored(ignore)
   }
 
@@ -1061,7 +1076,9 @@ export class Unit<
     const input = mapObjVK(this._input, (input) => {
       const ignored = input.ignored()
       const constant = input.constant()
-      const data = undefined // TODO
+      const _data = input.peak()
+      const data =
+        constant && _data !== undefined ? stringify(_data) : undefined
 
       return {
         ignored,

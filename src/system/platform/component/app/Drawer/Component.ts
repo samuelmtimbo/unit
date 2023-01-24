@@ -125,7 +125,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
       {
         className: 'drawer-frame',
         style: {
-          position: 'absolute',
+          position: 'relative',
           width: `${width + 2}px`,
           height: `${height + 2}px`,
           borderWidth: '1px',

@@ -27,11 +27,13 @@ export class RemotePort {
 
     this._port.onmessage = (event) => {
       const { data } = event
+
       this.exec(data)
     }
 
     this._port.onerror = (event) => {
       const { message } = event
+
       console.log('err', message)
     }
   }
@@ -46,17 +48,20 @@ export class RemotePort {
     const { id, data: __data } = _data
 
     if (type === CALL) {
-      // if (!this._call_id.has(id)) {
-      //   throw new Error('Unexpected worker call message id')
-      // }
+      if (!this._call_id.has(id)) {
+        throw new Error('Unexpected worker call message id')
+      }
+
       this._call_emitter.emit(id, __data)
     } else if (type === WATCH) {
-      // if (!this._watch_id.has(id)) {
-      //   throw new Error('Unexpected worker watch message id')
-      // }
+      if (!this._watch_id.has(id)) {
+        throw new Error('Unexpected worker watch message id')
+      }
+
       this._watch_emitter.emit(id, __data)
     } else if (type === REF) {
       const ref_port = this._ref[id]
+
       ref_port.exec(__data)
     } else {
       throw new Error('Unexpected worker message type')
@@ -84,18 +89,27 @@ export class RemotePort {
 
   watch(method: string, data: any, callback: Callback<any>): Unlisten {
     const id = randomIdNotInSet(this._watch_id)
+
     this._watch_id.add(id)
+
     const listener = (data) => {
       callback(data)
     }
+
     this._watch_emitter.addListener(id, listener)
+
     const _data = { type: WATCH, data: { id, method, data } }
+
     this._port.send(_data)
+
     return () => {
       this._watch_emitter.removeListener(id, listener)
+
       this._watch_id.delete(id)
+
       if (this._valid) {
         const _data = { type: UNWATCH, data: { id } }
+
         this._port.send(_data)
       } else {
         console.log('Invalid Remote Port unlisten called')
@@ -105,8 +119,11 @@ export class RemotePort {
 
   ref(method: string, data: any): RemotePort {
     const id = randomIdNotInSet(this._ref_id)
+
     const _data = { type: REF, data: { id, method, data } }
+
     this._port.send(_data)
+
     const port: IPort = {
       send: (data) => {
         const _data = { type: REF_EXEC, data: { id, data } }
@@ -116,8 +133,11 @@ export class RemotePort {
       onerror() {},
       terminate() {},
     }
+
     const remote_port = new RemotePort(port)
+
     this._ref[id] = remote_port
+
     return remote_port
   }
 
@@ -130,6 +150,7 @@ export class RemotePort {
 
     for (const id in this._ref) {
       const ref = this._ref[id]
+
       ref.close()
     }
   }

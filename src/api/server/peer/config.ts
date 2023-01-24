@@ -5,15 +5,13 @@ export const defaultTurnConfig = (
   iceTransportPolicy: 'relay',
   iceServers: [
     {
-      urls: ['stun:ice.ioun.net'],
-    },
-    {
       urls: [
-        'turn:ice.ioun.net?transport=udp',
-        'turn:ice.ioun.net?transport=tcp',
+        'stun.l.google.com:19302',
+        'stun1.l.google.com:19302',
+        'stun2.l.google.com:19302',
+        'stun3.l.google.com:19302',
+        'stun4.l.google.com:19302',
       ],
-      username,
-      credential,
     },
   ],
 })

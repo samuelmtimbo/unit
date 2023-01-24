@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "palette",
     "description": "turn a color named `name` into its correspondent `hex` string",
-    "complexity": 5,
+    "complexity": 4,
     "tags": [
       "platform",
       "core",

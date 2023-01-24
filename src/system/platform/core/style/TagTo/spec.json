@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "tag",
     "description": "{to: `to`}",
-    "complexity": 7,
+    "complexity": 6,
     "tags": [
       "platform",
       "core",
