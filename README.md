@@ -59,7 +59,6 @@ For development mode:
 ```
 npm run watch
 ```
-
 ## Library
 
 unit can be used as a library in another JavaScript project, both on Web and Node.js.
@@ -71,7 +70,7 @@ npm install --save @_unit/unit
 To install unit globally:
 
 ```
-npm install --global  @_unit/unit
+npm install --global @_unit/unit
 ```
 
 Then to start a local server:
@@ -79,13 +78,11 @@ Then to start a local server:
 ```
 unit
 ```
-
 ## Test
 
 ```
 npm test
 ```
-
 ## Documentation
 
 The unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform. For a step-by-step introduction to unit Programming, visit [Getting Started](src/docs/start/README.md).
