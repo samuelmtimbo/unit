@@ -207,7 +207,11 @@ export function isSystemSpecId(specs: Specs, spec_id: string): boolean {
 }
 
 export function isEmptySpec(spec: GraphSpec): boolean {
-  const { units = {} } = spec
+  const { units = {}, base } = spec
+
+  if (base) {
+    return false
+  }
 
   const unitCount = keys(units).length
 

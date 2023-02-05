@@ -48,7 +48,7 @@ import Div from '../../Div/Component'
 import TextField from '../../value/TextField/Component'
 import { UNIT_NAME_MAX_SIZE } from '../Editor/Component'
 import Minigraph from '../Minigraph/Component'
-import Modes from '../Modes/Component'
+import Modes from '../ModeSelector/Component'
 
 export interface Props {
   style?: Dict<string>

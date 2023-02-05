@@ -1,22 +1,24 @@
-import { Unit } from '../Class/Unit'
-import { Classes, Specs } from '../types'
-import { UnitBundle } from '../types/UnitBundle'
-import { UnitBundleSpec } from '../types/UnitBundleSpec'
-import { bundleClass } from './bundleClass'
-import { fromId } from './fromId'
+import { Specs } from '../types'
+import { BundleSpec } from '../types/BundleSpec'
+import { Dict } from '../types/Dict'
+import { GraphBundle } from '../types/GraphClass'
+import { weakMerge } from '../types/weakMerge'
+import { uuidNotIn } from '../util/id'
+import { fromSpec } from './fromSpec'
 
-export function fromBundle<T extends Unit>(
-  bundle: UnitBundleSpec,
-  specs: Specs,
-  classes: Classes
-): UnitBundle<T> {
-  const { unit, specs: _specs } = bundle
+export function fromBundle<
+  I extends Dict<any> = any,
+  O extends Dict<any> = any
+>(
+  bundle: BundleSpec,
+  _specs: Specs,
+  branch: { [path: string]: true } = {}
+): GraphBundle<I, O> {
+  const { spec = {}, specs = {} } = bundle
 
-  const { id } = unit
+  if (!spec.id) {
+    spec.id = uuidNotIn(_specs)
+  }
 
-  const Class = fromId<T>(id, { ..._specs, ...specs }, classes, {})
-
-  const Bundle = bundleClass<T>(Class, bundle)
-
-  return Bundle
+  return fromSpec(spec, weakMerge(specs, _specs), branch)
 }

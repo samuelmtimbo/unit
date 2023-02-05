@@ -129,11 +129,13 @@ export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V {
     return !this.empty()
   }
 
-  public ignored(value?: boolean): boolean {
+  public ignored(value?: boolean, take: boolean = true): boolean {
     if (value !== undefined) {
       this._ignored = value
-      if (this._ignored && !this._constant) {
-        this.take()
+      if (take) {
+        if (this._ignored && !this._constant) {
+          this.take()
+        }
       }
       this.emit('ignored', this._ignored)
     }

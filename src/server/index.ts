@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import * as cors from 'cors'
 import * as express from 'express'
 import * as http from 'http'
@@ -47,9 +48,7 @@ app.use(compression())
 
 app.use(express.static(PATH_PUBLIC))
 
-const CWD = process.cwd()
-
-const PUBLIC_PATH = path.join(CWD, 'public')
+const PUBLIC_PATH = path.join(__dirname, '../..', 'public')
 
 app.use(express.static(PUBLIC_PATH))
 

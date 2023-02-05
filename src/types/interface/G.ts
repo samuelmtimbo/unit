@@ -102,14 +102,13 @@ export interface G<I = any, O = any> {
     unitId: string,
     nextUnitId: string,
     spec: GraphSpec
-  ): {
-    spec_id: string
-    state: {
-      input: Dict<any>
-      output: Dict<any>
-      memory: Dict<any>
-    }
-  }
+  ): { specId: string; bundle: UnitBundleSpec }
+  addUnitGhost(
+    unitId: string,
+    nextUnitId: string,
+    nextUnitBundle: UnitBundleSpec,
+    nextUnitPinMap: IOOf<Dict<string>>
+  ): void
   swapUnitGhost(unitId: string, nextUnitId: string, spec: UnitBundleSpec): void
   addMerges(merges: GraphMergesSpec): void
   addMerge(mergeSpec: GraphMergeSpec, mergeId: string, emit: boolean): void
@@ -355,4 +354,6 @@ export type G_EE = {
   component_remove: [string, string[]]
   set_pin_set_id: [IO, string, string, string[]]
   set_unit_id: [string, string, string, string[]]
+  add_unit_ghost: [string, string, BundleSpec, string[]]
+  remove_unit_ghost: [string, string, BundleSpec, string[]]
 }

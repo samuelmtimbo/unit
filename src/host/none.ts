@@ -1,9 +1,7 @@
-import { Store } from '../client/store'
+import { API } from '../API'
 import { APINotSupportedError } from '../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../exception/MediaDeviceAPINotSupported'
-import { SharedObject } from '../SharedObject'
-import { API, IO_SERVICE_API_INIT } from '../system'
 import { Storage_ } from '../system/platform/api/storage/Storage_'
 import { Dict } from '../types/Dict'
 import { IDownloadDataOpt } from '../types/global/IDownloadData'
@@ -40,14 +38,6 @@ export function noStorage(name: string): IStorage {
     clear(): void {
       throw new APINotSupportedError(name)
     },
-  }
-}
-
-export function noService<T>(
-  name: string
-): IO_SERVICE_API_INIT<SharedObject<Store<T>, {}>, {}> {
-  return () => {
-    throw new APINotSupportedError(`Local ${name}`)
   }
 }
 
@@ -253,6 +243,14 @@ export function noHost(): API {
     uri: {
       encodeURI: function (str: string): string {
         throw new APINotSupportedError('URI')
+      },
+    },
+    alert: {
+      alert: function (message: string): void {
+        throw new Error('Function not implemented.')
+      },
+      prompt: function (message: string): string {
+        throw new Error('Function not implemented.')
       },
     },
   }

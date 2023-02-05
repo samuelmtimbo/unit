@@ -1,8 +1,8 @@
 {
   "name": "worker",
   "inputs": {
-    "spec": {
-      "type": "any",
+    "init": {
+      "type": "{}",
       "metadata": {
         "examples": [
           "{}"
@@ -11,15 +11,15 @@
     }
   },
   "outputs": {
-    "graph": {
-      "type": "`G`",
+    "system": {
+      "type": "`S`",
       "ref": true,
-      "icon": "graph"
+      "icon": "circle"
     }
   },
   "metadata": {
     "icon": "server",
-    "description": "asynchronously control a graph",
+    "description": "asynchronously control a worker thread",
     "complexity": 2,
     "tags": [
       "platform",

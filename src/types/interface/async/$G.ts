@@ -52,6 +52,7 @@ export const G_METHOD_CALL_SET_THIS = [
   'setPinSetFunctional',
   'setUnitPinData',
   'setUnitPinConstant',
+  'setUnitPinIgnored',
   'setPinSetId',
   'addMerge',
   'removeMerge',
@@ -66,17 +67,13 @@ export const G_METHOD_CALL_SET_THIS = [
   'removeRoot',
   'appendParentRoot',
   'appendParentRootChildren',
-]
-
-export const G_METHOD_CALL_SET_THAT = [
-  'setUnitPinData',
   'removeUnitPinData',
-  'setUnitPinConstant',
-  'setUnitPinIgnored',
   'setMergeData',
   'removeMergeData',
   'takeUnitErr',
 ]
+
+export const G_METHOD_CALL_SET_THAT = []
 
 export const G_METHOD_CALL_SET = [
   ...G_METHOD_CALL_SET_THIS,
@@ -203,15 +200,14 @@ export interface $G_C {
       nextUnitId: string
       nextUnitSpec: GraphSpec
     },
-    callback: (data: {
-      spec_id: string
-      state: {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      }
-    }) => void
+    callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
   ): void
+  $addUnitGhost(data: {
+    unitId: string
+    nextUnitId: string
+    nextUnitBundle: UnitBundleSpec
+    nextUnitPinMap: IOOf<Dict<string>>
+  }): void
   $getGraphData(
     callback: Callback<{
       state: Dict<any>

@@ -1,6 +1,6 @@
 import { Classes, Specs } from '../types'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
-import { fromBundle } from './fromBundle'
+import { fromUnitBundle } from './fromUnitBundle'
 import { getTree, TreeNode, TreeNodeType, _isValidObjKeyType } from './parser'
 
 export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
@@ -14,6 +14,7 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
       return value
         .substring(1, value.length - 1)
         .replace(/\\'/g, "'")
+        .replace(/\\"/g, '"')
         .replace(/\\n/g, '\\n')
         .replace(/\\r/g, '\\r')
         .replace(/\\\\/g, '\\')
@@ -48,8 +49,10 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
     }
     case TreeNodeType.Unit: {
       const str = value.substring(1)
+
       const bundle = evaluate(str, specs, classes) as UnitBundleSpec
-      return fromBundle(bundle, specs, classes)
+
+      return fromUnitBundle(bundle, specs, classes)
     }
     default:
       throw new Error('invalid data string')
@@ -58,5 +61,6 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
 
 export function evaluate(value: string, specs: Specs, classes: Classes): any {
   const tree = getTree(value, false, false)
+
   return _evaluate(tree, specs, classes)
 }

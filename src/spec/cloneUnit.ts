@@ -1,6 +1,6 @@
 import { Unit } from '../Class/Unit'
 import { UnitBundle } from '../types/UnitBundle'
-import { fromBundle } from './fromBundle'
+import { fromUnitBundle } from './fromUnitBundle'
 
 export function cloneUnit<T extends Unit>(unit: T): T {
   const { __system } = unit
@@ -21,7 +21,7 @@ export function cloneUnitClass<T extends Unit>(unit: T): UnitBundle<T> {
 
   // console.log(JSON.stringify(bundle, null, 2))
 
-  const NewBundle = fromBundle<T>(bundle, specs, __system.classes)
+  const NewBundle = fromUnitBundle<T>(bundle, specs, __system.classes)
 
   return NewBundle
 }

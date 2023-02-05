@@ -1,4 +1,5 @@
-import { API, BootOpt } from '../../../../system'
+import { API } from '../../../../API'
+import { BootOpt } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { IPointer } from '../../../../types/global/IPointer'
 import { Unlisten } from '../../../../types/Unlisten'

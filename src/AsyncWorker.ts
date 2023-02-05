@@ -38,6 +38,15 @@ import {
   J_METHOD_WATCH,
 } from './types/interface/async/$J'
 import {
+  $S,
+  $S_C,
+  $S_R,
+  $S_W,
+  S_METHOD_CALL,
+  S_METHOD_REF,
+  S_METHOD_WATCH,
+} from './types/interface/async/$S'
+import {
   $ST,
   $ST_C,
   $ST_R,
@@ -71,6 +80,7 @@ export function AsyncWorker(client: RemotePort, _: string[]): any {
     $J: AsyncWorkerJ,
     $U: AsyncWorkerU,
     $ST: AsyncWorkerST,
+    $S: AsyncWorkerS,
   })
 }
 
@@ -266,5 +276,25 @@ export function AsyncWorkerGraph(client: RemotePort): $Graph {
     ...AsyncWorkerU(client),
     ...AsyncWorkerC(client),
     ...AsyncWorkerG(client),
+  }
+}
+
+export function AsyncWorkerS_C(client: RemotePort): $S_C {
+  return makeAsyncWorkerC(client, S_METHOD_CALL)
+}
+
+export function AsyncWorkerS_W(client: RemotePort): $S_W {
+  return makeAsyncWorkerW(client, S_METHOD_WATCH)
+}
+
+export function AsyncWorkerS_R(client: RemotePort): $S_R {
+  return makeAsyncWorkerR(client, S_METHOD_REF)
+}
+
+export function AsyncWorkerS(client: RemotePort): $S {
+  return {
+    ...AsyncWorkerS_C(client),
+    ...AsyncWorkerS_W(client),
+    ...AsyncWorkerS_R(client),
   }
 }

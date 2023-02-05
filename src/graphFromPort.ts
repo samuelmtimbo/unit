@@ -455,14 +455,24 @@ export function asyncGraphFromPort(
       throw new Error('Method not implemented.')
     }
 
+    $addUnitGhost(data: {
+      unitId: string
+      nextUnitId: string
+      nextUnitBundle: UnitBundleSpec
+      nextUnitPinMap: IOOf<Dict<string>>
+    }): void {
+      return $graph.$addUnitGhost(data)
+    }
+
     $removeUnitGhost(
-      data: { unitId: string },
-      callback: (data: {
-        spec_id: string
-        state: { input: Dict<any>; output: Dict<any>; memory: Dict<any> }
-      }) => void
+      data: {
+        unitId: string
+        nextUnitId: string
+        nextUnitSpec: GraphSpec
+      },
+      callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
     ): void {
-      throw new Error('Method not implemented.')
+      return $graph.$removeUnitGhost(data, callback)
     }
 
     $getGraphState(data: {}, callback: (state: Dict<any>) => void) {

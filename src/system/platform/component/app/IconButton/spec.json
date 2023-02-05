@@ -97,7 +97,7 @@
           "data": "'#C2C2C2'"
         },
         "obj": {
-          "data": "{color:'#7E7E7E',cursor:'pointer'}"
+          "data": "{color:'currentColor',cursor:'pointer'}"
         },
         "test": {},
         "value": {}

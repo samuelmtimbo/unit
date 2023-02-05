@@ -1,5 +1,6 @@
+import { API } from '../../../../API'
 import { NOOP } from '../../../../NOOP'
-import { API, BootOpt } from '../../../../system'
+import { BootOpt } from '../../../../system'
 import { Callback } from '../../../../types/Callback'
 import { IChannel, IChannelOpt } from '../../../../types/global/IChannel'
 import { Unlisten } from '../../../../types/Unlisten'

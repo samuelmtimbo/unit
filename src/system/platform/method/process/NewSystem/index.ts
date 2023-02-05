@@ -1,4 +1,3 @@
-import { boot } from '../../../../../boot'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
@@ -41,7 +40,7 @@ export default class NewSystem extends Semifunctional<I, O> {
   f({ init }: I, done: Done<O>): void {
     const { path } = init
 
-    const _system = boot(this.__system, this.__system.api, {
+    const _system = this.__system.boot({
       path,
     })
 

@@ -59,6 +59,12 @@ export type UnitEvents<_EE extends Dict<any[]>> = $Events<_EE & U_EE> & U_EE
 
 export interface U_M {}
 
+export type Memory = {
+  input: Dict<any>
+  output: Dict<any>
+  memory: Dict<any>
+}
+
 export class Unit<
     I extends Dict<any> = any,
     O extends Dict<any> = any,
@@ -257,19 +263,18 @@ export class Unit<
   }
 
   public setOutputIgnored(name: string, ignore: boolean): boolean {
-    if (this.hasRefOutputNamed(name)) {
-      return
-    }
+    const take = !this.hasRefOutputNamed(name)
 
     const output = this.getOutput(name)
 
-    return output.ignored(ignore)
+    return output.ignored(ignore, take)
   }
 
   public setInputs(inputs: Pins<I>, opts: PinOpts = {}): void {
-    for (let name in inputs) {
+    for (const name in inputs) {
       const input = inputs[name]
       const opt = opts[name]
+
       this.setInput(name, input, opt)
     }
   }
@@ -1142,11 +1147,7 @@ export class Unit<
     return state
   }
 
-  public snapshot(): {
-    input: Dict<any>
-    output: Dict<any>
-    memory: Dict<any>
-  } {
+  public snapshot(): Memory {
     return {
       input: this.snapshotInputs(),
       output: this.snapshotOutputs(),

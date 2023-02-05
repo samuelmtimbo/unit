@@ -1,3 +1,19 @@
+import { Dict } from '../types/Dict'
+import {
+  C_METHOD_CALL,
+  C_METHOD_REF,
+  C_METHOD_WATCH,
+} from '../types/interface/async/$C'
+import {
+  G_METHOD_CALL,
+  G_METHOD_REF,
+  G_METHOD_WATCH,
+} from '../types/interface/async/$G'
+import {
+  U_METHOD_CALL,
+  U_METHOD_REF,
+  U_METHOD_WATCH,
+} from '../types/interface/async/$U'
 import {
   AsyncCCall,
   AsyncCRef,
@@ -14,6 +30,11 @@ import {
   AsyncJWatch,
 } from '../types/interface/async/AsyncJ'
 import {
+  AsyncSCall,
+  AsyncSRef,
+  AsyncSWatch,
+} from '../types/interface/async/AsyncS'
+import {
   AsyncSTCall,
   AsyncSTRef,
   AsyncSTWatch,
@@ -28,19 +49,63 @@ import {
   AsyncVRef,
   AsyncVWatch,
 } from '../types/interface/async/AsyncV'
-import { $makeRemoteUnitAPI } from './remote/$makeRemoteUnitAPI'
 import { RemoteAPI } from './RemoteAPI'
+
+// TODO
+const METHOD: Dict<Record<'call' | 'watch' | 'ref', string[]>> = {
+  $G: {
+    call: G_METHOD_CALL,
+    watch: G_METHOD_WATCH,
+    ref: G_METHOD_REF,
+  },
+  $U: {
+    call: U_METHOD_CALL,
+    watch: U_METHOD_WATCH,
+    ref: U_METHOD_REF,
+  },
+  $C: {
+    call: C_METHOD_CALL,
+    watch: C_METHOD_WATCH,
+    ref: C_METHOD_REF,
+  },
+}
 
 export function remoteRef(ref: object): RemoteAPI['ref'] {
   let _ref: RemoteAPI['ref'] = {}
 
   for (const name in ref) {
     const method = ref[name]
+
     const _method = (data: any): RemoteAPI => {
       const { _ } = data
+
       const $unit = method(data)
-      return $makeRemoteUnitAPI($unit, _)
+
+      const remoteApi: RemoteAPI = {
+        call: {},
+        watch: {},
+        ref: {},
+      }
+
+      for (const __ of _) {
+        const methods = METHOD[__]
+
+        for (const type of ['call', 'watch', 'ref']) {
+          const methodList = methods[type]
+
+          for (const methodName of methodList) {
+            const $methodName = `$${methodName}`
+
+            remoteApi[type][$methodName] = (...args) => {
+              return $unit[$methodName](...args)
+            }
+          }
+        }
+      }
+
+      return remoteApi
     }
+
     _ref[name] = _method
   }
 
@@ -83,6 +148,11 @@ export function makeRemoteUnitAPI(unit: any, _: string[]): RemoteAPI {
         call = { ...call, ...AsyncSTCall(unit) }
         watch = { ...watch, ...AsyncSTWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncSTRef(unit)) }
+        break
+      case '$S':
+        call = { ...call, ...AsyncSCall(unit) }
+        watch = { ...watch, ...AsyncSWatch(unit) }
+        ref = { ...ref, ...remoteRef(AsyncSRef(unit)) }
         break
       default:
         throw new Error('unknown interface')

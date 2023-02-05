@@ -55,7 +55,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
 
     const { specs } = system
 
-    const spec = emptySpec({ id: newSpecId(specs) })
+    const spec = system.newSpec(emptySpec({ id: newSpecId(specs) }))
 
     const Class = fromSpec(spec, specs, {})
 

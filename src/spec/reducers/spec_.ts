@@ -584,7 +584,7 @@ export const setUnitPinData = (
   }: { unitId: string; type: IO; pinId: string; data: any },
   spec: GraphSpec
 ): void => {
-  return assocPath(spec, ['units', unitId, type, pinId, 'data'], data)
+  return pathSet(spec, ['units', unitId, type, pinId, 'data'], data)
 }
 
 export const setUnitPinConstant = (

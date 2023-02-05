@@ -1,6 +1,7 @@
+import { API } from '../../../../API'
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
 import { sleep } from '../../../../sleep'
-import { API, BootOpt } from '../../../../system'
+import { BootOpt } from '../../../../system'
 import { IBluetoothDeviceOpt } from '../../../../types/global/IBluetoothDevice'
 import { IBluetoothServer } from '../../../../types/global/IBluetoothServer'
 

@@ -1,5 +1,6 @@
+import { API } from '../../../../API'
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
-import { API, BootOpt } from '../../../../system'
+import { BootOpt } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { IDownloadDataOpt } from '../../../../types/global/IDownloadData'
 import { IDownloadURLOpt } from '../../../../types/global/IDownloadURL'
