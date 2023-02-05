@@ -26,5 +26,9 @@ export function isPrimitive(data: any): boolean {
     return true
   }
 
+  if (t === 'function' && data.__bundle) {
+    return true
+  }
+
   return false
 }

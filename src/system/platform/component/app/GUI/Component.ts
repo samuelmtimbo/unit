@@ -25,12 +25,12 @@ import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
-import Modes from '../../../component/app/Modes/Component'
 import Div from '../../Div/Component'
 import Parent from '../../Parent/Component'
 import Color from '../../value/Color/Component'
 import Cabinet from '../Cabinet/Component'
 import Minimap, { MINIMAP_HEIGHT, MINIMAP_WIDTH } from '../Minimap/Component'
+import Modes from '../ModeSelector/Component'
 import Search from '../Search/Component'
 
 export interface Props {

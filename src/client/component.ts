@@ -839,7 +839,7 @@ export class Component<
 
   public wrapRoot(child: Component, at: number): Component {
     if (this.isHMTL() && child.isSVG()) {
-      console.log('wrapRoot', at)
+      // console.log('wrapRoot', at)
       const wrapper = this.ensureRootSVGWrapper(at)
 
       wrapper.appendChild(child)
@@ -1692,7 +1692,7 @@ export class Component<
     const wrapped = this.wrapParentChild(component, at)
     const _slotName = this.$parentChildrenSlot[_at]
     const slot = this.$slot[_slotName] || this
-    removeChild(this.$element, wrapped.$element)
+    removeChild(slot.$element, wrapped.$element)
     set(component, '$slotParent', null)
   }
 

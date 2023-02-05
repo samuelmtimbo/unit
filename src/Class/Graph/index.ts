@@ -591,7 +591,7 @@ export class Graph<I = any, O = any>
   }
 
   public getBundleSpec(deep: boolean = false): BundleSpec {
-    const { spec, specs } = bundleSpec(clone(this._spec), this.__system.specs)
+    const { spec, specs } = bundleSpec(this._spec, this.__system.specs)
 
     let memory
 
@@ -611,15 +611,11 @@ export class Graph<I = any, O = any>
   public getUnitBundleSpec(): UnitBundleSpec {
     const { id } = this
 
-    const { specs } = bundleSpec(this._spec, this.__system.specs)
-
-    const memory = this.snapshot()
-
     const inputPins = this.getInputs()
     const outputPins = this.getOutputs()
 
-    const mapPins = (pins: Pins) =>
-      mapObjKV(pins, (name: string, pin: Pin) => {
+    const mapPins = (pins: Pins) => {
+      return mapObjKV(pins, (name: string, pin: Pin) => {
         const data = pin.peak()
 
         return {
@@ -628,11 +624,18 @@ export class Graph<I = any, O = any>
           data: data === undefined ? undefined : stringify(data),
         }
       })
+    }
 
     const input = mapPins(inputPins)
     const output = mapPins(outputPins)
 
-    return { unit: { id, input, output, memory }, specs }
+    const memory = this.snapshot()
+
+    const unit = { id, input, output, memory }
+
+    const bundle = unitBundleSpec(unit, this.__system.specs)
+
+    return bundle
   }
 
   public snapshotSelf(): Dict<any> {
@@ -909,8 +912,7 @@ export class Graph<I = any, O = any>
     //   pinSpec
     // )
 
-    this._spec[`${type}s`] = this._spec[`${type}s`] || {}
-    this._spec[`${type}s`][pinId] = clone(pinSpec)
+    pathSet(this._spec, [`${type}s`, pinId], pinSpec)
 
     const { plug } = pinSpec
 
@@ -1572,24 +1574,37 @@ export class Graph<I = any, O = any>
   public removeUnitGhost(
     unitId: string,
     nextUnitId: string,
-    spec: GraphSpec
-  ): {
-    spec_id: string
-    state: {
-      input: Dict<any>
-      output: Dict<any>
-      memory: Dict<any>
-    }
-  } {
+    spec: GraphSpec,
+    emit: boolean = true
+  ): { specId: string; bundle: UnitBundleSpec } {
     const data = this._removeUnitGhost(unitId, nextUnitId, spec)
 
-    // TODO
-    // this.emit('remove_unit_ghost', unitId, nextUnitId, spec)
+    emit && this.emit('remove_unit_ghost', unitId, nextUnitId, spec, [])
 
     return data
   }
 
-  private _getUnitOuterSpec = (unitId: string): GraphUnitOuterSpec => {
+  public addUnitGhost(
+    unitId: string,
+    nextUnitId: string,
+    nextUnitBundle: UnitBundleSpec,
+    nextUnitPinMap: IOOf<Dict<string>>,
+    emit: boolean = true
+  ): void {
+    // console.log(
+    //   'addUnitGhost',
+    //   unitId,
+    //   nextUnitId,
+    //   nextUnitBundle,
+    //   nextUnitPinMap
+    // )
+
+    this._addUnitGhost(unitId, nextUnitId, nextUnitBundle, nextUnitPinMap)
+
+    emit && this.emit('add_unit_ghost', unitId, nextUnitId, nextUnitBundle, [])
+  }
+
+  public getUnitOuterSpec = (unitId: string): GraphUnitOuterSpec => {
     const outerSpec: GraphUnitOuterSpec = {
       merges: {
         input: {},
@@ -1646,23 +1661,90 @@ export class Graph<I = any, O = any>
     return outerSpec
   }
 
+  private _addUnitGhost(
+    unitId: string,
+    nextUnitId: string,
+    nextUnitBundle: UnitBundleSpec,
+    nextUnitPinMap: IOOf<Dict<string>>
+  ) {
+    const { unit, specs } = nextUnitBundle
+
+    this.__system.injectSpecs(specs)
+
+    if (!this.__system.hasSpec(unit.id)) {
+      throw new Error('TODO')
+    }
+
+    const outerSpec = this.getUnitOuterSpec(unitId)
+
+    this._removeUnit(unitId, false)
+
+    this._addUnitBundleSpec(nextUnitId, nextUnitBundle)
+
+    forIOObjKV(
+      outerSpec.merges,
+      (type, pinId, { mergeId, otherPin, exposedPin }) => {
+        const nextPinId = pathOrDefault(nextUnitPinMap, [type, pinId], pinId)
+
+        if (otherPin) {
+          this._addMerge(
+            {
+              [otherPin.unitId]: {
+                [otherPin.type]: {
+                  [otherPin.pinId]: true,
+                },
+              },
+              [nextUnitId]: {
+                [type]: {
+                  [pinId]: true,
+                },
+              },
+            },
+            mergeId,
+            null
+          )
+        } else {
+          this._addPinToMerge(mergeId, nextUnitId, type, nextPinId)
+        }
+
+        if (exposedPin) {
+          this._plugPin(
+            exposedPin.type,
+            exposedPin.pinId,
+            exposedPin.subPinId,
+            { mergeId }
+          )
+        }
+      }
+    )
+
+    forIOObjKV(outerSpec.exposed, (type, pinId, outerPin) => {
+      const nextPinId = pathOrDefault(nextUnitPinMap, [type, pinId], pinId)
+
+      this._plugPin(outerPin.type, outerPin.pinId, outerPin.subPinId, {
+        unitId: nextUnitId,
+        pinId: nextPinId,
+      })
+    })
+  }
+
   private _removeUnitGhost(
     unitId: string,
     nextUnitId: string,
-    spec: GraphSpec
-  ): {
-    spec_id: string
-    state: {
-      input: Dict<any>
-      output: Dict<any>
-      memory: Dict<any>
-    }
-  } {
+    spec: GraphSpec,
+    snapshot: boolean = true
+  ): { specId: string; bundle: UnitBundleSpec } {
+    const { specs } = this.__system
+
     const { id: specId } = this.__system.newSpec(spec)
 
-    const outerSpec = this._getUnitOuterSpec(unitId)
+    const outerSpec = this.getUnitOuterSpec(unitId)
+
+    const unitSpec = this.getGraphUnitSpec(unitId)
 
     const unit = this._removeUnit(unitId)
+
+    const bundle = unitBundleSpec(unitSpec, specs)
 
     this._addUnitBundleSpec(nextUnitId, { unit: { id: specId } })
 
@@ -1708,9 +1790,11 @@ export class Graph<I = any, O = any>
       })
     })
 
-    const state = unit.snapshot()
+    if (snapshot) {
+      bundle.unit.memory = unit.snapshot()
+    }
 
-    return { spec_id: specId, state }
+    return { specId, bundle }
   }
 
   public swapUnitGhost(
@@ -1997,6 +2081,8 @@ export class Graph<I = any, O = any>
     unit: Unit,
     bundle: UnitBundleSpec = null
   ) => {
+    // console.log('_addUnit', unitId, unit, bundle)
+
     this._fork()
 
     if (this._unit[unitId]) {
@@ -2304,7 +2390,9 @@ export class Graph<I = any, O = any>
     return unit
   }
 
-  public onUnitErr(unitId: string, err: string): void {
+  private _onUnitErr(unitId: string, err: string): void {
+    // console.log('Graph', '_onUnitErr', unitId, err)
+
     const index = this._errUnitIds.indexOf(unitId)
     if (index > -1) {
       if (index === 0) {
@@ -2416,7 +2504,7 @@ export class Graph<I = any, O = any>
     this._pin[selfPinNodeId] = selfPin
 
     const on_unit_err = (err: string): void => {
-      this.onUnitErr(unitId, err)
+      this._onUnitErr(unitId, err)
     }
 
     all_unlisten.push(unit.addListener('err', on_unit_err))
@@ -2428,7 +2516,6 @@ export class Graph<I = any, O = any>
         this._errUnitIds.splice(index, 1)
 
         if (index === 0) {
-          this.takeErr()
           this._nextErr()
         }
       }
@@ -2496,7 +2583,7 @@ export class Graph<I = any, O = any>
     }
 
     if (unit.hasErr()) {
-      this.onUnitErr(unitId, unit.getErr())
+      this._onUnitErr(unitId, unit.getErr())
     }
 
     if (!this._paused) {
@@ -2626,7 +2713,7 @@ export class Graph<I = any, O = any>
     callback: (type: IO, pinId: string) => void
   ): void {
     const merge = this.getMergeSpec(mergeId)
-    const mergeUnit = clone(merge[unitId])
+    const mergeUnit = merge[unitId]
     forIOObjKV(mergeUnit, (type, pinId) => {
       callback(type, pinId)
     })
@@ -3503,7 +3590,7 @@ export class Graph<I = any, O = any>
     pinId: string,
     constant: boolean
   ) {
-    pathSet(this._spec, ['units', unitId, type, pinId], constant)
+    pathSet(this._spec, ['units', unitId, type, pinId, 'constant'], constant)
 
     const unit = this.refUnit(unitId)
 
@@ -5122,8 +5209,9 @@ export class Graph<I = any, O = any>
           )
         } else {
           const unitPin = unit.getPin(type, pinId)
-          const unitPinData = unitPin.peak()
           const unitPinRef = unit.hasRefPinNamed(type, pinId)
+
+          const unitPinData = unitPin.peak()
 
           const nextExposedPin = new Pin({ data: unitPinData })
           const nextExposedMerge = new Merge(this.__system)

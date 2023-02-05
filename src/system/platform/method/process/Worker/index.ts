@@ -1,20 +1,19 @@
-import { bundleSpec } from '../../../../../bundle'
+import { $wrap } from '../../../../../$wrap'
+import { AsyncWorkerS } from '../../../../../AsyncWorker'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { workerPort } from '../../../../../client/platform/web/workerPort'
-import { asyncGraphFromPort } from '../../../../../graphFromPort'
 import { RemoteClient } from '../../../../../RemoteClient'
 import { System } from '../../../../../system'
-import { GraphSpec } from '../../../../../types'
-import { $Graph } from '../../../../../types/interface/async/$Graph'
+import { $S } from '../../../../../types/interface/async/$S'
 import { ID_WORKER } from '../../../../_ids'
 
 export interface I {
-  spec: GraphSpec
+  init: {}
 }
 
 export interface O {
-  graph: $Graph // RETURN
+  system: $S
 }
 
 export default class Worker extends Functional<I, O> {
@@ -23,12 +22,12 @@ export default class Worker extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['spec'],
-        o: ['graph'],
+        i: ['init'],
+        o: ['system'],
       },
       {
         output: {
-          graph: {
+          system: {
             ref: true,
           },
         },
@@ -40,12 +39,13 @@ export default class Worker extends Functional<I, O> {
     this.addListener('destroy', () => {
       if (this._client) {
         this._client.terminate()
+
         this._client = undefined
       }
     })
   }
 
-  f({ spec }: I, done: Done<O>) {
+  f({ init }: I, done: Done<O>) {
     const {
       specs,
       api: {
@@ -55,27 +55,32 @@ export default class Worker extends Functional<I, O> {
 
     if (!this._client) {
       let worker
+
       try {
         worker = start()
       } catch (err) {
         done(undefined, err.message)
+
         return
       }
+
       const port = workerPort(worker)
+
       const client = new RemoteClient(port)
+
       this._client = client
     }
 
-    const _bundle = bundleSpec(spec, specs)
-
-    this._client.init(_bundle)
+    this._client.init({})
 
     const port = this._client.port()
 
-    const graph = asyncGraphFromPort(this.__system, port)
+    const $system = AsyncWorkerS(port)
+
+    const system = $wrap<$S>(this.__system, $system)
 
     done({
-      graph,
+      system,
     })
   }
 

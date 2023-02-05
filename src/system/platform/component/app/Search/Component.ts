@@ -318,7 +318,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
             const selected_item_id = this._selected_id
 
             this._refresh_ordered_list()
-            this._filter_list()
+            this._filter_list(true)
 
             if (!this._list_hidden) {
               this._set_selected_item_id(selected_item_id)
@@ -645,9 +645,10 @@ export default class Search extends Element<IHTMLDivElement, Props> {
 
   private _hide_list = () => {
     this._list_hidden = true
-    // this._select_first_list_item()
-    this._list.$element.style.display = 'none'
+
     this._input._input.$element.style.borderTopWidth = '0'
+
+    this._list.$element.style.display = 'none'
 
     this._dispatch_list_hidden()
   }
@@ -729,7 +730,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     }
   }
 
-  private _filter_list = () => {
+  private _filter_list = (preserve_selected: boolean = false) => {
     // console.log('Search', '_filter_list')
 
     const { specs } = this.$system
@@ -804,9 +805,13 @@ export default class Search extends Element<IHTMLDivElement, Props> {
         this._list.appendChild(list_item_div)
       }
 
-      if (this._selected_id) {
-        if (this._filtered_id_list.includes(this._selected_id)) {
-          this._scroll_into_item(this._selected_id)
+      if (preserve_selected) {
+        if (this._selected_id) {
+          if (this._filtered_id_list.includes(this._selected_id)) {
+            this._scroll_into_item(this._selected_id)
+          } else {
+            this._select_first_list_item()
+          }
         } else {
           this._select_first_list_item()
         }

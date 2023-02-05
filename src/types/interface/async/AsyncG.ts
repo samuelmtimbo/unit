@@ -9,7 +9,7 @@ import {
   Specs,
 } from '../..'
 import { Graph } from '../../../Class/Graph'
-import { Unit } from '../../../Class/Unit'
+import { Memory, Unit } from '../../../Class/Unit'
 import { emptySpec } from '../../../client/spec'
 import { watchGraph } from '../../../debug/graph/watchGraph'
 import { GraphMoment } from '../../../debug/GraphMoment'
@@ -20,6 +20,7 @@ import { evaluate } from '../../../spec/evaluate'
 import { fromId } from '../../../spec/fromId'
 import { stringify } from '../../../spec/stringify'
 import { _stringifyGraphSpecData } from '../../../spec/stringifySpec'
+import { System } from '../../../system'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
 import { clone, isEmptyObject, mapObjVK } from '../../../util/object'
 import { BundleSpec } from '../../BundleSpec'
@@ -40,6 +41,58 @@ import { Async } from './Async'
 
 export interface Holder<T> {
   data: T
+}
+
+export const stringifyBundleData = (bundle: UnitBundleSpec): UnitBundleSpec => {
+  const { unit } = bundle
+
+  const { id, memory } = unit
+
+  stringifyMemoryData(memory)
+
+  return bundle
+}
+
+export const stringifyMemoryData = (memory: Memory): void => {
+  if (memory) {
+    for (const inputId in memory.input) {
+      if (memory.input[inputId]._register !== undefined) {
+        memory.input[inputId]._register = stringify(
+          memory.input[inputId]._register
+        )
+      }
+    }
+    for (const outputId in memory.output) {
+      if (memory.output[outputId]._register !== undefined) {
+        memory.output[outputId]._register = stringify(
+          memory.output[outputId]._register
+        )
+      }
+    }
+  }
+}
+
+export const parseMemoryData = (system: System, memory: Memory): void => {
+  if (memory) {
+    for (const inputId in memory.input) {
+      if (memory.input[inputId]._register !== undefined) {
+        memory.input[inputId]._register = evaluate(
+          memory.input[inputId]._register,
+          system.specs,
+          system.classes
+        )
+      }
+    }
+    for (const outputId in memory.output) {
+      if (memory.output[outputId]._register !== undefined) {
+        memory.output[outputId]._register = evaluate(
+          memory.output[outputId]._register,
+          system.specs,
+          system.classes
+        )
+      }
+    }
+  }
 }
 
 export const AsyncGCall = (graph: Graph): $G_C => {
@@ -455,18 +508,29 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         nextUnitId: string
         nextUnitSpec: GraphSpec
       },
-      callback: (data: {
-        spec_id: string
-        state: {
-          input: Dict<any>
-          output: Dict<any>
-          memory: Dict<any>
-        }
-      }) => void
+      callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
     ): void {
       const ghost = graph.removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
 
+      stringifyBundleData(ghost.bundle)
+
       callback(ghost)
+    },
+
+    $addUnitGhost({
+      unitId,
+      nextUnitId,
+      nextUnitBundle,
+      nextUnitPinMap,
+    }: {
+      unitId: string
+      nextUnitId: string
+      nextUnitBundle: UnitBundleSpec
+      nextUnitPinMap: IOOf<Dict<string>>
+    }): void {
+      parseMemoryData(graph.__system, nextUnitBundle.unit.memory)
+
+      graph.addUnitGhost(unitId, nextUnitId, nextUnitBundle, nextUnitPinMap)
     },
 
     async $getGraphState({}: {}, callback: Callback<GraphState>) {
@@ -788,6 +852,7 @@ export const AsyncGRef = (graph: Graph): $G_R => {
     $refUnit({ unitId, _ }: { unitId: string; _: string[] }): $U {
       const unit = graph.refUnit(unitId)
       const $unit = Async(unit, _)
+
       return proxyWrap($unit, _)
     },
 
@@ -806,10 +871,10 @@ export const AsyncGRef = (graph: Graph): $G_R => {
   }
 }
 
-export const AsyncG = (g: Graph): $G => {
+export const AsyncG = (graph: Graph): $G => {
   return {
-    ...AsyncGWatch(g),
-    ...AsyncGCall(g),
-    ...AsyncGRef(g),
+    ...AsyncGWatch(graph),
+    ...AsyncGCall(graph),
+    ...AsyncGRef(graph),
   }
 }

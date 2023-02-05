@@ -9,7 +9,7 @@ import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IHTMLDivElement } from '../../../../../types/global/dom'
-import Div from '../../../component/Div/Component'
+import Div from '../../Div/Component'
 import ModeIconButton from '../ModeIconButton/Component'
 
 export interface Props {

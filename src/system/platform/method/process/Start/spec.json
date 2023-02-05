@@ -2,7 +2,7 @@
   "name": "start",
   "inputs": {
     "bundle": {
-      "type": "{spec:object,specs?:object{}}",
+      "type": "{spec?:object,specs?:object{}}",
       "metadata": {
         "examples": [
           "{}"
@@ -14,9 +14,8 @@
       "defaultIgnored": true
     },
     "system": {
-      "type": "`G`",
-      "ref": true,
-      "defaultIgnored": true
+      "type": "`S`",
+      "ref": true
     }
   },
   "outputs": {

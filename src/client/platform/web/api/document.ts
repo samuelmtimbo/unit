@@ -1,4 +1,5 @@
-import { API, BootOpt } from '../../../../system'
+import { API } from '../../../../API'
+import { BootOpt } from '../../../../system'
 import { MutationObserver_ } from '../../../MutationObserver_'
 import { PositionObserver } from '../../../PositionObserver'
 import { ResizeObserver_ } from '../../../ResizeObserver_'

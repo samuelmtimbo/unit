@@ -12,7 +12,7 @@ import webInit from './init'
 export default function webRender(
   bundle: BundleSpec
 ): [Graph, System, Unlisten] {
-  const { spec, specs } = bundle
+  const { spec = {}, specs } = bundle
 
   const system = webBoot({
     specs,

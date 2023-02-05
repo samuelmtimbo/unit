@@ -742,14 +742,26 @@ export function lazyFromSpec(
       return this.__graph.removeUnit(unitId)
     }
 
+    addUnitGhost(
+      unitId: string,
+      nextUnitId: string,
+      nextUnitBundle: UnitBundleSpec,
+      nextUnitPinMap: IOOf<Dict<string>>
+    ): void {
+      this._ensure()
+      return this.__graph.addUnitGhost(
+        unitId,
+        nextUnitId,
+        nextUnitBundle,
+        nextUnitPinMap
+      )
+    }
+
     public removeUnitGhost(
       unitId: string,
       nextUnitId: string,
       nextUnitSpec: GraphSpec
-    ): {
-      spec_id: string
-      state: { input: Dict<any>; output: Dict<any>; memory: Dict<any> }
-    } {
+    ): { specId: string; bundle: UnitBundleSpec } {
       this._ensure()
       return this.__graph.removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
     }

@@ -35,19 +35,33 @@ export default class Fetch extends Functional<I, O> {
       },
     } = this.__system
 
-    fetch(url, options)
-      .then((response) => {
-        return response.text().then((text) => {
-          done({
-            response: {
-              status: response.status,
-              body: text,
-            },
+    try {
+      fetch(url, options)
+        .then((response) => {
+          return response.text().then((text) => {
+            done({
+              response: {
+                status: response.status,
+                body: text,
+              },
+            })
           })
         })
-      })
-      .catch((err) => {
-        done(undefined, err.message.toLowerCase())
-      })
+        .catch((err) => {
+          if (
+            err.message.toLowerCase() ===
+            "failed to execute 'fetch' on 'window': request with get/head method cannot have body."
+          ) {
+            done(undefined, 'request with GET/HEAD method cannot have body')
+
+            return
+          }
+
+          done(undefined, err.message.toLowerCase())
+        })
+    } catch (err) {
+      console.log(err)
+      done(undefined, 'malformed')
+    }
   }
 }

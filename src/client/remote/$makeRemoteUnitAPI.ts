@@ -14,6 +14,11 @@ import {
   AsyncJWatch,
 } from '../../types/interface/async/AsyncJ'
 import {
+  AsyncSCall,
+  AsyncSRef,
+  AsyncSWatch,
+} from '../../types/interface/async/AsyncS'
+import {
   AsyncSTCall,
   AsyncSTRef,
   AsyncSTWatch,
@@ -37,8 +42,16 @@ export function $remoteRef(ref: object): RemoteAPI['ref'] {
     const method = ref[name]
     const _method = (data: any): RemoteAPI => {
       const { _ } = data
+
       const $unit = method(data)
-      return $makeRemoteUnitAPI($unit, _)
+
+      return {
+        call: {},
+        watch: {},
+        ref: {},
+      }
+
+      // return $makeRemoteUnitAPI($unit, _)
     }
     _ref[name] = _method
   }
@@ -82,6 +95,11 @@ export function $makeRemoteUnitAPI(unit: any, _: string[]): RemoteAPI {
         call = { ...call, ...AsyncSTCall(unit) }
         watch = { ...watch, ...AsyncSTWatch(unit) }
         ref = { ...ref, ...$remoteRef(AsyncSTRef(unit)) }
+        break
+      case '$S':
+        call = { ...call, ...AsyncSCall(unit) }
+        watch = { ...watch, ...AsyncSWatch(unit) }
+        ref = { ...ref, ...$remoteRef(AsyncSRef(unit)) }
         break
       default:
         throw new Error('Unknown interface')

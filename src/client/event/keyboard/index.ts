@@ -634,6 +634,11 @@ export function writeToElement(
     tagName === 'TEXTAREA'
   ) {
     writeToInput(element as HTMLInputElement, key, modifier)
+  } else if (
+    tagName === 'DIV' &&
+    (element as HTMLDivElement).contentEditable === 'true'
+  ) {
+    writeToContentEditable(element as HTMLDivElement, key, modifier)
   }
 }
 
@@ -832,6 +837,18 @@ export function writeToInput(
   } else {
     _setSelection()
   }
+}
+
+export function writeToContentEditable(
+  input: HTMLDivElement,
+  key: string,
+  {
+    ctrlKey,
+    shiftKey,
+    altKey,
+  }: { ctrlKey?: boolean; shiftKey?: boolean; altKey?: boolean } = {}
+) {
+  // TODO
 }
 
 export function emitKeyDown(system: System, key: string): void {

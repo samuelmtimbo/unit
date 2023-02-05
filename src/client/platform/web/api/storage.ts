@@ -1,4 +1,5 @@
-import { API, BootOpt } from '../../../../system'
+import { API } from '../../../../API'
+import { BootOpt } from '../../../../system'
 import { Storage_ } from '../../../../system/platform/api/storage/Storage_'
 
 export function webStorage(window: Window, opt: BootOpt): API['storage'] {

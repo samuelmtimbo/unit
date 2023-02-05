@@ -1,11 +1,11 @@
 {
-  "name": "CRUD",
+  "name": "mode selector",
   "units": {
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
       "input": {
         "style": {
-          "data": "{opacity:'0.85',top:'50%',left:'6px',textAlign:'center',transform:'translateY(-50%)',display:'flex',flexDirection:'column',position:'absolute'}"
+          "data": "{width:'fit-content',height:'fit-content',opacity:'0.85',top:'50%',left:'6px',textAlign:'center',transform:'translateY(-50%)',display:'flex',flexDirection:'column',position:'relative',gap:'12px',border:'1px solid','min-width':'30px','min-height':'30px'}"
         }
       }
     },
@@ -13,7 +13,7 @@
       "id": "65759894-7d11-11ea-a838-93e14e650d65",
       "input": {
         "icon": {
-          "data": "'io-exchange'"
+          "data": "'description'"
         },
         "style": {
           "data": "{height:'24px',width:'24px',marginTop:'6px',marginBottom:'6px'}"
@@ -35,7 +35,7 @@
       "id": "65759894-7d11-11ea-a838-93e14e650d65",
       "input": {
         "icon": {
-          "data": "'times'"
+          "data": "'exchange'"
         },
         "style": {
           "data": "{height:'24px',width:'24px',marginTop:'6px',marginBottom:'6px'}"
@@ -57,7 +57,7 @@
       "id": "65759894-7d11-11ea-a838-93e14e650d65",
       "input": {
         "icon": {
-          "data": "'plus'"
+          "data": "'x'"
         },
         "style": {
           "data": "{height:'24px',width:'24px',marginTop:'6px',marginBottom:'6px'}"
@@ -79,7 +79,51 @@
       "id": "65759894-7d11-11ea-a838-93e14e650d65",
       "input": {
         "icon": {
-          "data": "'io-info'"
+          "data": "'plus-2'"
+        },
+        "style": {
+          "data": "{height:'24px',width:'24px',marginTop:'6px',marginBottom:'6px'}"
+        },
+        "activeColor": {
+          "ignored": false,
+          "data": "'#E5E5E5'"
+        },
+        "hoverColor": {
+          "ignored": false,
+          "data": "'#C2C2C2'"
+        },
+        "active": {
+          "ignored": false
+        }
+      }
+    },
+    "iconbutton3": {
+      "id": "65759894-7d11-11ea-a838-93e14e650d65",
+      "input": {
+        "icon": {
+          "data": "'data'"
+        },
+        "style": {
+          "data": "{height:'24px',width:'24px',marginTop:'6px',marginBottom:'6px'}"
+        },
+        "activeColor": {
+          "ignored": false,
+          "data": "'#E5E5E5'"
+        },
+        "hoverColor": {
+          "ignored": false,
+          "data": "'#C2C2C2'"
+        },
+        "active": {
+          "ignored": false
+        }
+      }
+    },
+    "iconbutton4": {
+      "id": "65759894-7d11-11ea-a838-93e14e650d65",
+      "input": {
+        "icon": {
+          "data": "'brackets'"
         },
         "style": {
           "data": "{height:'24px',width:'24px',marginTop:'6px',marginBottom:'6px'}"
@@ -176,7 +220,7 @@
   "outputs": {},
   "component": {
     "defaultWidth": 60,
-    "defaultHeight": 180,
+    "defaultHeight": 300,
     "subComponents": {
       "div": {
         "width": 30,
@@ -185,7 +229,9 @@
           "iconbutton",
           "iconbutton0",
           "iconbutton1",
-          "iconbutton2"
+          "iconbutton2",
+          "iconbutton3",
+          "iconbutton4"
         ]
       },
       "iconbutton": {
@@ -203,6 +249,14 @@
       "iconbutton2": {
         "width": 30,
         "height": 30
+      },
+      "iconbutton3": {
+        "width": 30,
+        "height": 30
+      },
+      "iconbutton4": {
+        "width": 30,
+        "height": 30
       }
     },
     "children": [
@@ -212,7 +266,7 @@
   "metadata": {
     "icon": "navigation",
     "description": "select a mode (\"none\"|\"info\"|\"add\"|\"remove\"|\"change\")",
-    "complexity": 63,
+    "complexity": 65,
     "tags": [
       "platform",
       "component",

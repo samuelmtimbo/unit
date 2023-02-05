@@ -20,7 +20,6 @@ export function dev(): void {
     sourcemap: true,
     bundle: true,
     logLevel: 'warning',
-    watch: false,
     entryPoints: ['src/client/platform/web/index.ts'],
     define: {
       'globalThis.env': '{"NODE_ENV": "production"}',

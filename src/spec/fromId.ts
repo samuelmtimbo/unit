@@ -25,7 +25,7 @@ export function fromId<T extends Unit>(
   let Class: UnitClass = classes[id]
 
   if (Class === undefined) {
-    spec = clone(spec) as GraphSpec
+    spec = spec as GraphSpec
 
     const bundle = clone(bundleSpec(spec, specs))
 

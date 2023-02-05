@@ -1,4 +1,5 @@
-import { API, BootOpt } from '../../../../system'
+import { API } from '../../../../API'
+import { BootOpt } from '../../../../system'
 
 export function webURL(window: Window, opt: BootOpt): API['url'] {
   const url = {

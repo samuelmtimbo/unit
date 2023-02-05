@@ -1,8 +1,9 @@
 import { destroy } from '../boot'
 import { $ } from '../Class/$'
 import { Graph } from '../Class/Graph'
+import { fromBundle } from '../spec/fromBundle'
 import { System } from '../system'
-import { Dict } from '../types/Dict'
+import { BundleSpec } from '../types/BundleSpec'
 import { GraphBundle } from '../types/GraphClass'
 import { S } from '../types/interface/S'
 import { Unlisten } from '../types/Unlisten'
@@ -22,9 +23,10 @@ export function _newSystem(system: System, _system: System): [S, Unlisten] {
 
 export function wrapSystem(system: System, _system: System): $ & S {
   return new (class System extends $ implements S {
-    newGraph(
-      bundle: GraphBundle<any, any>
-    ): [Dict<string>, Graph<any, any>, Unlisten] {
+    fromBundle(bundleSpec: BundleSpec): GraphBundle<any, any> {
+      return fromBundle(bundleSpec, _system.specs)
+    }
+    newGraph(bundle: GraphBundle<any, any>): [Graph<any, any>, Unlisten] {
       throw new Error('Method not implemented.')
     }
     newSystem(opt: {}): [S, Unlisten] {

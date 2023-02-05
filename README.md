@@ -20,9 +20,9 @@ The broader Design Philosophy behind unit is discussed in [Concept](src/docs/con
 
 To jump right into the official unit Programming Environment, visit [unit.land](https://unit.land). To experiment with a cloud extended version of unit, check out [ioun.it](https://ioun.it).
 
-## Installation
+## Development
 
-Install [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you haven't already.
+Install [npm](https://nodejs.org/en/download/) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you haven't already.
 
 Clone this repository:
 
@@ -36,28 +36,54 @@ Get into the unit folder:
 cd unit
 ```
 
-Install dependencies and build:
+Install:
 
 ```
-yarn
+npm install
 ```
 
-Build:
+Setup:
 
 ```
-yarn setup
+npm run setup
 ```
 
 Start a local unit server:
 
 ```
-yarn start
+npm start
 ```
 
 For development mode:
 
 ```
-yarn watch
+npm run watch
+```
+
+## Library
+
+unit can be used as a library in another JavaScript project, both on Web and Node.js.
+
+```
+npm install --save @_unit/unit
+```
+
+To install unit globally:
+
+```
+npm install --global  @_unit/unit
+```
+
+Then to start a local server:
+
+```
+unit
+```
+
+## Test
+
+```
+npm test
 ```
 
 ## Documentation

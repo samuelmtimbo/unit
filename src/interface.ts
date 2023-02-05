@@ -31,3 +31,67 @@ export const INHERITANCE = {
   '`U`': ['`EE`'],
   '`G`': ['`U`', '`C`'],
 }
+
+export type AllTypes<T> = {
+  B: T
+  IB: T
+  CA: T
+  CC: T
+  C: T
+  CS: T
+  CO: T
+  G: T
+  GP: T
+  M: T
+  E: T
+  EE: T
+  BD: T
+  BS: T
+  BSE: T
+  BC: T
+  NO: T
+  J: T
+  A: T
+  PP: T
+  PS: T
+  CH: T
+  ST: T
+  S: T
+  U: T
+  V: T
+  TR: T
+  RE: T
+}
+
+export const ALL_TYPES_MAP: AllTypes<true> = {
+  B: true,
+  IB: true,
+  CA: true,
+  CC: true,
+  C: true,
+  CS: true,
+  CO: true,
+  G: true,
+  GP: true,
+  M: true,
+  E: true,
+  EE: true,
+  BD: true,
+  BS: true,
+  BSE: true,
+  BC: true,
+  NO: true,
+  J: true,
+  A: true,
+  PP: true,
+  PS: true,
+  CH: true,
+  ST: true,
+  S: true,
+  U: true,
+  V: true,
+  TR: true,
+  RE: true,
+}
+
+export const ALL_TYPES = Object.keys(ALL_TYPES_MAP)

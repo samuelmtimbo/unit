@@ -29,7 +29,11 @@ export default function webInit(
       return
     }
 
-    const { keyCode, repeat } = event
+    const { keyCode, key, repeat } = event
+
+    if (key === 'Tab') {
+      event.preventDefault()
+    }
 
     const index = system.input.keyboard.pressed.indexOf(keyCode)
 

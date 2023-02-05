@@ -1,3 +1,5 @@
+import { API } from '../API'
+import { Graph } from '../Class/Graph'
 import { Component } from '../client/component'
 import { styleToCSS } from '../client/id/styleToCSS'
 import { IOElement } from '../client/IOElement'
@@ -9,16 +11,19 @@ import { noHost } from '../host/none'
 import { NOOP } from '../NOOP'
 import { Object_ } from '../Object'
 import { SharedObject } from '../SharedObject'
-import { API, BootOpt, System } from '../system'
+import { fromBundle } from '../spec/fromBundle'
+import { BootOpt, System } from '../system'
 import { Style } from '../system/platform/Props'
 import classes from '../system/_classes'
 import components from '../system/_components'
 import specs from '../system/_specs'
 import { GraphSpec, GraphSpecs } from '../types'
+import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { IGamepad } from '../types/global/IGamepad'
 import { IKeyboard } from '../types/global/IKeyboard'
 import { IPointer } from '../types/global/IPointer'
+import { GraphBundle } from '../types/GraphClass'
 import { $Component } from '../types/interface/async/$Component'
 import { Unlisten } from '../types/Unlisten'
 import { weakMerge } from '../types/weakMerge'
@@ -136,6 +141,18 @@ export function boot(
 
         return [spec.id, spec]
       }
+    },
+    fromBundle: (bundle: BundleSpec) => {
+      return fromBundle(bundle, merged_specs, {})
+    },
+    newGraph: (bundle: GraphBundle) => {
+      const graph = new Graph({}, {}, system)
+
+      const unlisten = () => {
+        graph.destroy()
+      }
+
+      return [graph, unlisten]
     },
     getSpec: (id: string): GraphSpec => {
       return merged_specs[id]

@@ -1,9 +1,19 @@
 import { evaluate } from '../spec/evaluate'
+import { System } from '../system'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 
-export function evaluateBundleStr(value: string): UnitBundleSpec {
+export function evaluateBundleStr(
+  system: System,
+  value: string
+): UnitBundleSpec {
   const bundle_str = value.substring(1)
-  const bundle = evaluate(bundle_str, {}, {}) as UnitBundleSpec
+
+  const bundle = evaluate(
+    bundle_str,
+    system.specs,
+    system.classes
+  ) as UnitBundleSpec
+
   return bundle
 }
 

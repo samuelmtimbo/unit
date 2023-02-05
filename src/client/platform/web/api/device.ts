@@ -1,5 +1,6 @@
+import { API } from '../../../../API'
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
-import { API, BootOpt } from '../../../../system'
+import { BootOpt } from '../../../../system'
 
 export function webDevice(window: Window, opt: BootOpt): API['device'] {
   const device = {

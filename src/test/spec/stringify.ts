@@ -20,6 +20,7 @@ assert.deepEqual(stringify(true), 'true')
 assert.deepEqual(stringify(false), 'false')
 assert.deepEqual(stringify([]), '[]')
 assert.deepEqual(stringify([1, 2, 3]), '[1,2,3]')
+assert.deepEqual(stringify({ 'input/a': 'foo' }), '{"input/a":\'foo\'}')
 assert.deepEqual(
   stringify({ method: 'PUT', headers: { 'Content-Type': 'application/json' } }),
   "{method:'PUT',headers:{\"Content-Type\":'application/json'}}"

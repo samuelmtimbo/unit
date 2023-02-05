@@ -1,4 +1,5 @@
-import { API, BootOpt } from '../../../../system'
+import { API } from '../../../../API'
+import { BootOpt } from '../../../../system'
 
 export function webSelection(window: Window, opt: BootOpt): API['selection'] {
   const containsSelection = (element) => {

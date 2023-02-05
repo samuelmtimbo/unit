@@ -1,5 +1,6 @@
+import { API } from '../../../API'
 import { boot } from '../../../boot'
-import { API, BootOpt, System } from '../../../system'
+import { BootOpt, System } from '../../../system'
 import { attachApp } from '../../render/attachApp'
 import { attachCanvas } from '../../render/attachCanvas'
 import { attachGesture } from '../../render/attachGesture'
@@ -8,6 +9,7 @@ import { attachSprite } from '../../render/attachSprite'
 import { attachStyle } from '../../render/attachStyle'
 import { attachSVG } from '../../render/attachSVG'
 import { SYSTEM_ROOT_ID } from '../../SYSTEM_ROOT_ID'
+import { webAlert } from './api/alert'
 import { webAnimation } from './api/animation'
 import { webBluetooth } from './api/bluetooth'
 import { webChannel } from './api/channel'
@@ -70,8 +72,10 @@ export function _webBoot(
   const worker = webWorker(window, opt)
   const url = webURL(window, opt)
   const uri = webURI(window, opt)
+  const alert = webAlert(window, opt)
 
   const api: API = {
+    alert,
     storage,
     selection,
     file,

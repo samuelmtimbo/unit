@@ -1,5 +1,6 @@
+import { API } from '../../../../API'
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
-import { API, BootOpt } from '../../../../system'
+import { BootOpt } from '../../../../system'
 import { IWakeLock } from '../../../../types/global/IWakeLock'
 
 export function webScreen(window: Window, opt: BootOpt): API['screen'] {
