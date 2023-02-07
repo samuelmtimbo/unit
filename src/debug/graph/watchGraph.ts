@@ -124,19 +124,6 @@ export function watchGraph<T extends Graph>(
     }
   }
 
-  const setUnitIdListener = (
-    unitId: string,
-    newUnitId: string,
-    name: string,
-    path: string[]
-  ): void => {
-    if (path.length === 0) {
-      _unit_unlisten[newUnitId] = _unit_unlisten[unitId]
-
-      delete _unit_unlisten[unitId]
-    }
-  }
-
   const units = graph.refUnits()
   const merges = graph.refMerges()
 
@@ -148,7 +135,6 @@ export function watchGraph<T extends Graph>(
   graph.addListener('before_add_merge', addMergeListener)
   graph.addListener('before_remove_unit', removeUnitListener)
   graph.addListener('before_remove_merge', removeMergeListener)
-  graph.addListener('set_unit_id', setUnitIdListener)
 
   return () => {
     graph.removeListener('before_add_unit', addUnitListener)
@@ -156,7 +142,6 @@ export function watchGraph<T extends Graph>(
     graph.removeListener('before_add_merge', addMergeListener)
     graph.removeListener('before_remove_unit', removeUnitListener)
     graph.removeListener('before_remove_merge', removeMergeListener)
-    graph.removeListener('set_unit_id', setUnitIdListener)
 
     callAllDict(_unit_unlisten)()
     callAllDict(_merge_unlisten)()

@@ -718,7 +718,7 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
 
     this._x = clamp({
       a: this._x,
-      min: BUTTON_WIDTH,
+      min: this._collapsed ? 3 : BUTTON_WIDTH,
       max: $width - w - 3,
     }).a
     this._y = clamp({

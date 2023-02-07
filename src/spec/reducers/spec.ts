@@ -85,8 +85,8 @@ export const removeUnits = (
   { ids }: { ids: string[] },
   state: State
 ): State => {
-  forEach(ids, (id) => {
-    state = removeUnit({ id }, state)
+  forEach(ids, (unitId) => {
+    state = removeUnit({ unitId }, state)
   })
   return state
 }
@@ -97,11 +97,11 @@ export const mergeUnits = (
 ): State => _set(state, 'units', merge(state.units, units)) as State
 
 export const expandUnit = (
-  { id, spec }: { id: string; spec: GraphSpec },
+  { unitId, spec }: { unitId: string; spec: GraphSpec },
   state: State
 ): State => {
   // unplug unit
-  state = removeUnit({ id }, state)
+  state = removeUnit({ unitId }, state)
 
   // add new units and merges
   // TODO possible id conflict
@@ -112,8 +112,8 @@ export const expandUnit = (
   forEachValueKey(
     state.merges || {},
     (merge: GraphMergeSpec, mergeId: string) => {
-      if (merge[id]) {
-        const { input = {}, output = {} } = merge[id]
+      if (merge[unitId]) {
+        const { input = {}, output = {} } = merge[unitId]
         forEachValueKey(input, (_, inputId) => {
           const inputSpec = spec.inputs[inputId]
           const { plug } = inputSpec
@@ -263,10 +263,13 @@ export const removeUnitMerges = (
   return nextState
 }
 
-export const removeUnit = ({ id }: { id: string }, state: State): State => {
-  state = removeUnitMerges({ id }, state)
-  state = removeUnitExposedPins({ id }, state)
-  state = dissocPath(state, ['units', id]) as State
+export const removeUnit = (
+  { unitId }: { unitId: string },
+  state: State
+): State => {
+  state = removeUnitMerges({ id: unitId }, state)
+  state = removeUnitExposedPins({ id: unitId }, state)
+  state = dissocPath(state, ['units', unitId]) as State
   return state
 }
 

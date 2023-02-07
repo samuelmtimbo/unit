@@ -212,6 +212,13 @@ export function noHost(): API {
       elementsFromPoint(x: number, y: number): Element[] {
         throw new Error()
       },
+      getSelection(): Selection {
+        // @ts-ignore
+        return root.shadowRoot.getSelection() || document.getSelection()
+      },
+      createRange(): Range {
+        return document.createRange()
+      },
       MutationObserver: null,
       PositionObserver: null,
       ResizeObserver: null,

@@ -18,9 +18,12 @@ export type State = GraphComponentSpec
 
 export const defaultState: State = {}
 
-export const appendChild = ({ id }, state: State): State => {
+export const appendChild = (
+  { unitId }: { unitId: string },
+  state: State
+): State => {
   const children = state.children || []
-  return _set(state, 'children', [...children, id])
+  return _set(state, 'children', [...children, unitId])
 }
 
 export const insertChild = (
@@ -42,10 +45,10 @@ export const removeChild = ({ id }, state: State): State => {
 }
 
 export const setSubComponent = (
-  { id, spec }: { id: string; spec: GraphSubComponentSpec },
+  { unitId, spec }: { unitId: string; spec: GraphSubComponentSpec },
   state: State
 ): State => {
-  return assocPath(state, ['subComponents', id], spec)
+  return assocPath(state, ['subComponents', unitId], spec)
 }
 
 export const removeSubComponent = (

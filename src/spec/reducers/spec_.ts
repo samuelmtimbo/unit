@@ -369,7 +369,7 @@ export const setUnitId = (
 ): void => {
   const unit = spec.units[unitId]
 
-  removeUnit({ unitId: unitId }, spec)
+  removeUnit({ unitId }, spec)
   addUnit({ unitId: newUnitId, unit }, spec)
 }
 

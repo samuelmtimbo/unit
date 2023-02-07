@@ -139,6 +139,8 @@ export type API = {
     createTextNode(text: string): Text
     elementsFromPoint(x: number, y: number): Element[]
     elementFromPoint(x: number, y: number): Element
+    getSelection(): Selection
+    createRange(): Range
     MutationObserver: IMutationObserverConstructor
     PositionObserver: IPositionObserverCostructor
     ResizeObserver: IResizeObserverConstructor

@@ -25,7 +25,7 @@ assert.deepEqual(
     children: ['0'],
   },
   setSubComponent(
-    { id: '1', spec: { width: 240, height: 90, children: [] } },
+    { unitId: '1', spec: { width: 240, height: 90, children: [] } },
     {
       subComponents: {
         0: {

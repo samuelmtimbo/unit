@@ -39,7 +39,6 @@
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
   "dependencies": {
-    "canvas": "2.9.1",
     "compression": "1.7.4",
     "cors": "2.8.5",
     "cross-env": "7.0.3",

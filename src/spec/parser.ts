@@ -375,14 +375,15 @@ export function _isTypeMatch(
       )
     case TreeNodeType.Class:
       if (source.type === TreeNodeType.Class) {
-        let current = source.value
+        const sourceClass = source.value.slice(1, -1)
+        const targetClass = target.value.slice(1, -1)
 
-        const checkMatch = (p) => {
-          if (p === target.value) {
+        const checkMatch = (sourceClass) => {
+          if (sourceClass === targetClass) {
             return true
           }
 
-          const pps = INHERITANCE[p]
+          const pps = INHERITANCE[sourceClass]
 
           if (pps) {
             return pps.some(checkMatch)
@@ -391,7 +392,7 @@ export function _isTypeMatch(
           return false
         }
 
-        const match = checkMatch(current)
+        const match = checkMatch(sourceClass)
 
         return match
       } else if (source.type === TreeNodeType.Unit) {
