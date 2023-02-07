@@ -26,10 +26,12 @@ export const CLASS_TYPE_UNIT = 'U' // Unit
 export const CLASS_TYPE_VALUE = 'V' // Value
 export const CLASS_TYPE_TRASMITTER = 'TR' // TRansmitter
 export const CLASS_TYPE_RECEIVER = 'RE' // REceiver
+export const CLASS_TYPE_PIN = 'PI' // PIn
 
 export const INHERITANCE = {
-  '`U`': ['`EE`'],
-  '`G`': ['`U`', '`C`'],
+  U: ['EE'],
+  G: ['U', 'C'],
+  V: ['EE'],
 }
 
 export type AllTypes<T> = {

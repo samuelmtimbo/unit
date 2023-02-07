@@ -1,3 +1,4 @@
+import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
@@ -43,7 +44,18 @@ export default class Input<T> extends Semifunctional<I<T>, O<T>> {
   async f({ unit, name }: I<T>, done: Done<O<T>>) {
     try {
       const pin = unit.getInput(name)
-      done({ pin })
+
+      const value = new (class Value extends $ implements V<T> {
+        async read(): Promise<T> {
+          return pin.read()
+        }
+
+        async write(data: any): Promise<void> {
+          pin.write(data)
+        }
+      })(this.__system)
+
+      done({ pin: value })
     } catch (err) {
       done(undefined, err)
     }

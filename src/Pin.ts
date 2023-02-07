@@ -32,15 +32,12 @@ export type Pin_M<T = any> = {
 
 export type PinEvents<T> = EventEmitter_EE<Pin_EE<T>> & Pin_EE<T>
 
-export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V {
+export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V<T> {
   private _constant: boolean = false
   private _ignored: boolean = false
-
   private _invalid: boolean = false
-
   private _idle: boolean = true
-
-  protected _register: T | undefined = undefined
+  private _register: T | undefined = undefined
 
   constructor({
     data,

@@ -38,6 +38,13 @@ export function webDocument(
     elementsFromPoint(x: number, y: number): Element[] {
       return root.shadowRoot.elementsFromPoint(x, y)
     },
+    getSelection(): Selection {
+      // @ts-ignore
+      return root.shadowRoot.getSelection() || document.getSelection()
+    },
+    createRange(): Range {
+      return document.createRange()
+    },
     MutationObserver: MutationObserver,
     ResizeObserver: ResizeObserver,
     PositionObserver: PositionObserver,

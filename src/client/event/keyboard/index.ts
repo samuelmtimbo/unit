@@ -607,19 +607,20 @@ export function emitKeyboardEvent(
   activeElement.dispatchEvent(event)
   if (event.type === 'keydown' && !defaultPrevented) {
     const { key } = event
-    writeToElement(activeElement, key, init)
+    writeToElement(system, activeElement, key, init)
   }
 }
 
 export function writeToActiveElement(system: System, key: string): Element {
   const activeElement = getActiveElement(system)
 
-  writeToElement(activeElement, key)
+  writeToElement(system, activeElement, key)
 
   return activeElement
 }
 
 export function writeToElement(
+  system: System,
   element: Element,
   key: string,
   modifier: { ctrlKey?: boolean; shiftKey?: boolean; altKey?: boolean } = {}
@@ -638,7 +639,7 @@ export function writeToElement(
     tagName === 'DIV' &&
     (element as HTMLDivElement).contentEditable === 'true'
   ) {
-    writeToContentEditable(element as HTMLDivElement, key, modifier)
+    writeToContentEditable(system, element as HTMLDivElement, key, modifier)
   }
 }
 
@@ -839,7 +840,61 @@ export function writeToInput(
   }
 }
 
+export const getSelectionRange = (
+  system: System
+): {
+  selectionStart: number
+  selectionEnd: number
+  selectionDirection: 'forward' | 'backward' | 'none' | null
+} => {
+  const {
+    api: {
+      document: { getSelection },
+    },
+  } = system
+
+  const selection: Selection = getSelection()
+
+  const range = selection.getRangeAt(0)
+
+  return {
+    selectionStart: range.startOffset,
+    selectionEnd: range.endOffset,
+    selectionDirection:
+      range.startOffset === range.endOffset
+        ? 'none'
+        : range.startOffset < range.endOffset
+        ? 'forward'
+        : 'backward',
+  }
+}
+
+export function selectElementContents(
+  system: System,
+  element: HTMLDivElement,
+  selectionStart: number,
+  selectionEnd: number
+) {
+  const {
+    api: {
+      document: { createRange, getSelection },
+    },
+  } = system
+
+  const range = createRange()
+
+  range.setStart(element.firstChild, selectionStart)
+  range.setEnd(element.firstChild, selectionEnd)
+
+  const selection = getSelection()
+
+  selection.removeAllRanges()
+
+  selection.addRange(range)
+}
+
 export function writeToContentEditable(
+  system: System,
   input: HTMLDivElement,
   key: string,
   {
@@ -848,7 +903,50 @@ export function writeToContentEditable(
     altKey,
   }: { ctrlKey?: boolean; shiftKey?: boolean; altKey?: boolean } = {}
 ) {
-  // TODO
+  const value = input.innerText
+
+  const {
+    selectionStart = 0,
+    selectionEnd = 0,
+    selectionDirection = 'none',
+  } = getSelectionRange(system)
+
+  const {
+    value: nextValue,
+    selectionStart: nextSelectionStart,
+    selectionEnd: nextSelectionEnd,
+    selectionDirection: nextSelectionDirection,
+  } = processKeydown(
+    {
+      value,
+      selectionStart,
+      selectionEnd,
+      selectionDirection,
+    },
+    { ctrlKey, shiftKey, altKey },
+    key
+  )
+
+  function _setSelection() {
+    if (
+      nextSelectionStart !== selectionStart ||
+      nextSelectionEnd !== selectionEnd
+    ) {
+      selectElementContents(system, input, nextSelectionStart, nextSelectionEnd)
+    }
+  }
+
+  if (nextValue !== value) {
+    input.innerText = nextValue
+
+    const inputEvent = new InputEvent('input', {})
+
+    _setSelection()
+
+    input.dispatchEvent(inputEvent)
+  } else {
+    _setSelection()
+  }
 }
 
 export function emitKeyDown(system: System, key: string): void {

@@ -1,31 +1,37 @@
 import { Graph } from '../../Class/Graph'
+import { Unit } from '../../Class/Unit'
+import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Moment } from './../Moment'
 
-export interface GraphSpecUnitMomentData {
+export interface GraphAddUnitMomentData {
   unitId: string
-  specId: string
+  bundle: UnitBundleSpec
   path: string[]
 }
 
-export interface GraphSpecUnitMoment extends Moment<GraphSpecUnitMomentData> {}
+export interface GraphAddUnitMoment extends Moment<GraphAddUnitMomentData> {}
 
 export function watchGraphUnitEvent(
   event: 'add_unit' | 'remove_unit',
   graph: Graph,
-  callback: (moment: GraphSpecUnitMoment) => void
+  callback: (moment: GraphAddUnitMoment) => void
 ): () => void {
-  const listener = (unitId: string, _unit: any, path: string[]) => {
+  const listener = (unitId: string, unit: Unit, path: string[]) => {
+    const bundle = unit.getUnitBundleSpec()
+
     callback({
       type: 'graph',
       event,
       data: {
         unitId,
-        specId: _unit.constructor.__bundle.unit.id,
+        bundle,
         path,
       },
     })
   }
+
   graph.prependListener(event, listener)
+
   return () => {
     graph.removeListener(event, listener)
   }
@@ -48,7 +54,7 @@ export function watchGraphUnitCloneEvent(
   const listener = (
     unitId: string,
     newUnitId: string,
-    unit,
+    unit: Unit,
     path: string[]
   ) => {
     callback({
@@ -61,7 +67,9 @@ export function watchGraphUnitCloneEvent(
       },
     })
   }
+
   graph.prependListener(event, listener)
+
   return () => {
     graph.removeListener(event, listener)
   }

@@ -154,12 +154,22 @@ export class Semifunctional<
       )
     }
 
+    // assuming primitive side will not throw error
+
+    functional.addListener('err', (err) => {
+      this.err(err)
+    })
+
+    functional.addListener('take_err', () => {
+      this.takeErr()
+    })
+
     this.addListener('take_err', () => {
-      // TODO
+      functional.takeErr()
     })
 
     this.addListener('take_caught_err', () => {
-      // TODO
+      functional.takeCaughtErr()
     })
 
     this._f_i = new Set(fi)

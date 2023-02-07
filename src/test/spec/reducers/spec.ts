@@ -318,7 +318,7 @@ assert.deepEqual(
     metadata: { icon: null, description: '...' },
   },
   removeUnit(
-    { id: 'not' },
+    { unitId: 'not' },
     {
       name: 'if else',
       units: {

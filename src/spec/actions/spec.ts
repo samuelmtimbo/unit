@@ -1,3 +1,24 @@
+import { Position } from '../../client/util/geometry'
+import { keys } from '../../system/f/object/Keys/f'
+import {
+  Action,
+  GraphMergeSpec,
+  GraphMergesSpec,
+  GraphPinSpec,
+  GraphSubPinSpec,
+  GraphUnitSpec,
+  GraphUnitsSpec,
+} from '../../types'
+import { Dict } from '../../types/Dict'
+import { IO } from '../../types/IO'
+import { IOOf } from '../../types/IOOf'
+import {
+  appendSubComponentChildren as makeAppendSubComponentChildren,
+  APPEND_SUB_COMPONENT_CHILDREN,
+  removeSubComponentChildren as makeRemoveSubComponentChildren,
+  REMOVE_SUB_COMPONENT_CHILDREN,
+} from './component'
+
 export const ADD_UNIT = 'addUnit'
 export const ADD_UNITS = 'addUnits'
 export const REMOVE_UNIT = 'removeUnit'
@@ -22,6 +43,7 @@ export const SET_UNIT_OUTPUT = 'setUnitOutput'
 export const SET_UNIT_OUTPUT_CONSTANT = 'setUnitOutputConstant'
 export const SET_UNIT_PIN_DATA = 'setUnitPinData'
 export const REMOVE_UNIT_PIN_DATA = 'removeUnitPinData'
+export const SET_UNIT_PIN_CONSTANT = 'setUnitPinConstant'
 export const SET_UNIT_INPUT_CONSTANT = 'setUnitInputConstant'
 export const SET_UNIT_PIN_IGNORED = 'setUnitPinIgnored'
 export const SET_UNIT_INPUT_IGNORED = 'setUnitInputIgnored'
@@ -35,26 +57,6 @@ export const SET_UNIT_METADATA = 'setUnitMetadata'
 export const REMOVE_UNIT_MERGES = 'removeUnitMerges'
 export const EXPAND_UNIT = 'expandUnit'
 export const COLLAPSE_UNITS = 'collapseUnits'
-import { Position } from '../../client/util/geometry'
-import { keys } from '../../system/f/object/Keys/f'
-import {
-  Action,
-  GraphMergeSpec,
-  GraphMergesSpec,
-  GraphPinSpec,
-  GraphSubPinSpec,
-  GraphUnitSpec,
-  GraphUnitsSpec,
-} from '../../types'
-import { Dict } from '../../types/Dict'
-import { IO } from '../../types/IO'
-import { IOOf } from '../../types/IOOf'
-import {
-  appendSubComponentChildren as makeAppendSubComponentChildren,
-  APPEND_SUB_COMPONENT_CHILDREN,
-  removeSubComponentChildren as makeRemoveSubComponentChildren,
-  REMOVE_SUB_COMPONENT_CHILDREN,
-} from './component'
 
 export const makeAddUnitAction = (
   id: string,
@@ -217,6 +219,23 @@ export const setUnitOutputConstantAction = (
   }
 }
 
+export const makeSetUnitPinConstantAction = (
+  unitId: string,
+  type: IO,
+  pinId: string,
+  constant: boolean
+) => {
+  return {
+    type: SET_UNIT_PIN_CONSTANT,
+    data: {
+      unitId,
+      type,
+      pinId,
+      constant,
+    },
+  }
+}
+
 export const makeSetUnitInputConstantAction = (
   unitId: string,
   pinId: string,
@@ -248,6 +267,23 @@ export const makeSetUnitOutputConstantAction = (
 }
 
 export const setUnitPinIgnoredAction = (
+  unitId: string,
+  type: IO,
+  pinId: string,
+  ignored: boolean
+) => {
+  return {
+    type: SET_UNIT_PIN_IGNORED,
+    data: {
+      unitId,
+      type,
+      pinId,
+      ignored,
+    },
+  }
+}
+
+export const makeSetUnitPinIgnoredAction = (
   unitId: string,
   type: IO,
   pinId: string,
@@ -501,6 +537,13 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.subPinId,
         data.subPinSpec
       )
+    case SET_UNIT_PIN_CONSTANT:
+      return makeSetUnitPinConstantAction(
+        data.unitId,
+        data.type,
+        data.pinId,
+        !data.constant
+      )
     case SET_UNIT_INPUT_CONSTANT:
       return makeSetUnitInputConstantAction(
         data.unitId,
@@ -522,6 +565,13 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case SET_UNIT_OUTPUT_IGNORED:
       return makeSetUnitOutputIgnoredAction(
         data.unitId,
+        data.pinId,
+        !data.ignored
+      )
+    case SET_UNIT_PIN_IGNORED:
+      return makeSetUnitPinIgnoredAction(
+        data.unitId,
+        data.type,
         data.pinId,
         !data.ignored
       )
