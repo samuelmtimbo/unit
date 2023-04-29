@@ -1,21 +1,18 @@
 import { nameToColor } from '../../../../../client/color'
+import { Context } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
-import {
-  emitKeyboardEvent,
-  keyToIcon,
-} from '../../../../../client/event/keyboard'
+import { keyToIcon } from '../../../../../client/event/keyboard'
 import {
   keyToCode,
   keyToKeyCode,
 } from '../../../../../client/event/keyboard/keyCode'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
-import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
-import Div from '../../../component/Div/Component'
 import Icon from '../../../component/Icon/Component'
+import Button from '../../Button/Component'
 
 export interface Props {
   style?: Dict<string>
@@ -28,10 +25,11 @@ export interface Props {
 export const DEFAULT_STYLE = {
   height: '100%',
   width: '100%',
+  background: 'none',
 }
 
-export default class KeyboardKey extends Element<IHTMLDivElement, Props> {
-  private _key: Div
+export default class KeyboardKey extends Element<HTMLDivElement, Props> {
+  private _key: Button
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -45,7 +43,7 @@ export default class KeyboardKey extends Element<IHTMLDivElement, Props> {
 
     const style = this._get_style()
 
-    const key_component = new Div(
+    const key_component = new Button(
       {
         style,
         innerText: icon ? undefined : key,
@@ -55,41 +53,41 @@ export default class KeyboardKey extends Element<IHTMLDivElement, Props> {
 
     key_component.addEventListener(
       makePointerDownListener(() => {
-        emitKeyboardEvent(this.$system, 'keydown', {
-          key,
-          keyCode,
-          code,
-          shiftKey: false,
-          ctrlKey: false,
-          metaKey: false,
-          bubbles: true,
-        })
-        // TODO 'keypress' should not be fired if key is a control key (e.g. ALT, CTRL, SHIFT, ESC)
-        emitKeyboardEvent(this.$system, 'keypress', {
-          key,
-          keyCode,
-          code,
-          shiftKey: false,
-          ctrlKey: false,
-          metaKey: false,
-          bubbles: true,
-        })
+        // emitKeyboardEvent(this.$system, 'keydown', {
+        //   key,
+        //   keyCode,
+        //   code,
+        //   shiftKey: false,
+        //   ctrlKey: false,
+        //   metaKey: false,
+        //   bubbles: true,
+        // })
+        // // TODO 'keypress' should not be fired if key is a control key (e.g. ALT, CTRL, SHIFT, ESC)
+        // emitKeyboardEvent(this.$system, 'keypress', {
+        //   key,
+        //   keyCode,
+        //   code,
+        //   shiftKey: false,
+        //   ctrlKey: false,
+        //   metaKey: false,
+        //   bubbles: true,
+        // })
       })
     )
 
-    key_component.addEventListener(
-      makePointerUpListener(() => {
-        emitKeyboardEvent(this.$system, 'keyup', {
-          key,
-          keyCode,
-          code,
-          shiftKey: false,
-          ctrlKey: false,
-          metaKey: false,
-          bubbles: true,
-        })
-      })
-    )
+    // key_component.addEventListener(
+    //   makePointerUpListener(() => {
+    //     emitKeyboardEvent(this.$system, 'keyup', {
+    //       key,
+    //       keyCode,
+    //       code,
+    //       shiftKey: false,
+    //       ctrlKey: false,
+    //       metaKey: false,
+    //       bubbles: true,
+    //     })
+    //   })
+    // )
     this._key = key_component
 
     if (icon !== undefined) {
@@ -106,8 +104,17 @@ export default class KeyboardKey extends Element<IHTMLDivElement, Props> {
       key_component.setChildren([icon_component])
     }
 
-    this.$element = key_component.$element
+    const $element = parentElement($system)
+
+    this.$element = $element
     this.$slot = key_component.$slot
+    this.$subComponent = {
+      key: key_component,
+    }
+    this.$unbundled = false
+this.$primitive = true
+
+    this.registerRoot(key_component)
   }
 
   private _get_style = () => {
@@ -116,6 +123,7 @@ export default class KeyboardKey extends Element<IHTMLDivElement, Props> {
     color = nameToColor(color) || color
 
     return {
+      ...DEFAULT_STYLE,
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',

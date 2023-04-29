@@ -8,8 +8,8 @@ import { COLOR_NONE, getThemeModeColor } from '../../../../../client/theme'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../Div/Component'
+import SVGRect from '../../svg/Rect/Component'
 import ModeIconButton from '../ModeIconButton/Component'
 
 export interface Props {
@@ -58,7 +58,7 @@ const MODE_ICON = {
   multiselect: 'brackets',
 }
 
-export default class Modes extends Element<IHTMLDivElement, Props> {
+export default class Modes extends Element<HTMLDivElement, Props> {
   public _modes: Div
 
   private _mode_button_container: Dict<Div> = {}
@@ -108,15 +108,45 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
       const mode_button_container = new Div(
         {
           style: {
+            position: 'relative',
             height: '21px',
+            width: '21px',
           },
         },
         this.$system
       )
+
+      const mode_button_touch_area = new SVGRect(
+        {
+          style: {
+            position: 'absolute',
+            top: '0px',
+            left: '0px',
+            width: '33px',
+            height: '33px',
+            transform: 'translate(-6px, -6px)',
+            stroke: 'transparent',
+            zIndex: '-1',
+            fill: 'transparent',
+            cursor: 'pointer',
+          },
+        },
+        this.$system
+      )
+
       const mode_button = new ModeIconButton(
         {
           icon,
           style: {
+            position: 'relative',
+            overflow: 'visible',
+            // top: '50%',
+            // left: '50%',
+            // transform: 'translate(-50%, -50%)',
+            // width: '42px',
+            // height: '42px',
+            // padding: '12px',
+            // zoom: `${0.51}`,
             color,
           },
           title: mode,
@@ -124,7 +154,10 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
         },
         this.$system
       )
-      mode_button.addEventListener(
+
+      mode_button.appendChild(mode_button_touch_area)
+
+      mode_button_container.addEventListener(
         makeClickListener({
           onClick: () => {
             this._toggle_mode(mode)
@@ -148,6 +181,7 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
           paddingTop: '4px',
           paddingBottom: '4px',
           gap: '12px',
+          zIndex: '-1',
           ...userSelect('none'),
         },
       },
@@ -190,6 +224,7 @@ export default class Modes extends Element<IHTMLDivElement, Props> {
       multiselect: this._mode_button['multiselect'],
     }
     this.$unbundled = false
+this.$primitive = true
 
     this.registerRoot(list)
   }

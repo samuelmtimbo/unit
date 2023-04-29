@@ -14,10 +14,9 @@ import {
 } from '../../../../../client/event/keyboard'
 import { makePasteListener } from '../../../../../client/event/paste'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { TreeNode } from '../../../../../spec/parser'
+import { TreeNode, TreeNodeType } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import TextField from '../../value/TextField/Component'
 
 export interface Props {
@@ -28,13 +27,15 @@ export interface Props {
   parent: TreeNode | null
 }
 
-export default class DataTreeLeaf extends Element<IHTMLDivElement, Props> {
+export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
   public _input: TextField
 
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { className, style, value } = $props
+    let { className, style } = $props
+
+    const value = this._parse_value()
 
     const width = getLeafWidth(value)
 
@@ -51,7 +52,9 @@ export default class DataTreeLeaf extends Element<IHTMLDivElement, Props> {
           caretColor: 'inherit',
           fontSize: '12px',
           overflowY: 'hidden',
-          // textOverflow: 'ellipsis',
+          overflowX: 'hidden',
+          maxWidth: '100px',
+          textOverflow: 'ellipsis',
           // ...userSelect('none'),
           ...style,
         },
@@ -79,14 +82,31 @@ export default class DataTreeLeaf extends Element<IHTMLDivElement, Props> {
       input,
     }
     this.$unbundled = false
+    this.$primitive = true
 
     this.registerRoot(input)
+  }
+
+  private _parse_value() {
+    const { value } = this.$props
+
+    let _value: string = value
+
+    // _value = _value.slice(0, 1000)
+
+    _value = _value.replace(/\n/g, '\\n')
+
+    return _value
   }
 
   public onPropChanged(prop: string, current: any) {
     if (prop === 'data') {
       const width = getLeafWidth(current.value)
-      this._input.setProp('value', current.value)
+
+      // AD HOC
+      const _value: string = this._parse_value()
+
+      this._input.setProp('value', _value)
       // mergeStyle(this._input, {
       //   width: `${width}px`,
       // })
@@ -102,6 +122,8 @@ export default class DataTreeLeaf extends Element<IHTMLDivElement, Props> {
     //   width: `${width}px`,
     // })
     this._input.$element.style.width = `${width}px`
+
+    value = value.replace(/\\n/g, '\n')
 
     this.dispatchEvent('leafinput', {
       value,

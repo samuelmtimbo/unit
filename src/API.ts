@@ -77,6 +77,7 @@ export type API = {
   }
   uri: {
     encodeURI?: (str: string) => string
+    encodeURIComponent?: (str: string) => string
   }
   speech: {
     SpeechGrammarList: IO_INIT<ISpeechGrammarList, ISpeechGrammarListOpt>
@@ -92,6 +93,7 @@ export type API = {
     isOpenFilePickerSupported: () => boolean
     showSaveFilePicker: (opt: IFilePickerOpt) => Promise<FileSystemFileHandle>
     showOpenFilePicker: (opt: IFilePickerOpt) => Promise<FileSystemFileHandle[]>
+    fallbackShowOpenFilePicker: (opt: IFilePickerOpt) => Promise<File[]>
     downloadURL: (opt: IDownloadURLOpt) => Promise<void>
     downloadText: (opt: IDownloadTextOpt) => Promise<void>
   }
@@ -111,6 +113,9 @@ export type API = {
   }
   geolocation: {
     getCurrentPosition: () => Promise<IGeoPosition>
+  }
+  location: {
+    toString: () => Promise<string>
   }
   media: {
     getUserMedia: (opt: IUserMediaOpt) => Promise<MediaStream>

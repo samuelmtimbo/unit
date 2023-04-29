@@ -4,7 +4,6 @@ import { applyDynamicStyle } from '../../../../client/style'
 import { userSelect } from '../../../../client/util/style/userSelect'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../types/global/dom'
 
 export interface Props {
   id?: string
@@ -25,7 +24,7 @@ const DEFAULT_STYLE = {
   ...userSelect('none'),
 }
 
-export default class Div extends Element<IHTMLDivElement, Props> {
+export default class Div extends Element<HTMLDivElement, Props> {
   private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {

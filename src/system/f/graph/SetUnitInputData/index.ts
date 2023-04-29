@@ -37,6 +37,7 @@ export default class SetUnitPinData<T> extends Functional<I<T>, O<T>> {
   f({ graph, id, type, name, data }: I<T>, done: Done<O<T>>): void {
     try {
       graph.setUnitPinData(id, type, name, data)
+
       done({})
     } catch (err) {
       done(undefined, err.message)

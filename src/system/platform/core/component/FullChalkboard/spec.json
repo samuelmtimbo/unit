@@ -85,7 +85,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "full frame chalkboard",
-    "complexity": 85,
+    "complexity": 118,
     "position": {
       "merge": {
         "dnnbflw": {

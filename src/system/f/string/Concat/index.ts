@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { System } from '../../../../system'
-import { ID_CONCAT } from '../../../_ids'
+import { ID_CONCAT_0 } from '../../../_ids'
 
 export interface I {
   a: string
@@ -20,7 +20,7 @@ export default class Concat extends Functional<I, O> {
       },
       {},
       system,
-      ID_CONCAT
+      ID_CONCAT_0
     )
   }
 

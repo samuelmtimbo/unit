@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "server",
     "description": "asynchronously control a worker thread",
-    "complexity": 2,
+    "complexity": 3,
     "tags": [
       "platform",
       "method",

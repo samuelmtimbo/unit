@@ -26,7 +26,7 @@ export function wrapSystem(system: System, _system: System): $ & S {
     fromBundle(bundleSpec: BundleSpec): GraphBundle<any, any> {
       return fromBundle(bundleSpec, _system.specs)
     }
-    newGraph(bundle: GraphBundle<any, any>): [Graph<any, any>, Unlisten] {
+    newGraph(bundle: GraphBundle<any, any>): Graph<any, any> {
       throw new Error('Method not implemented.')
     }
     newSystem(opt: {}): [S, Unlisten] {

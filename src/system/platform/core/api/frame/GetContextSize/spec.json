@@ -107,7 +107,7 @@
   "metadata": {
     "icon": "ruler",
     "description": "get the width and height of this frame",
-    "complexity": 14,
+    "complexity": 17,
     "tags": [
       "platform",
       "core",

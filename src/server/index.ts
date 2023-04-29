@@ -1,13 +1,16 @@
 #!/usr/bin/env node
+import { json } from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
+import { ensureDir, writeFile } from 'fs-extra'
 import * as http from 'http'
 import * as createError from 'http-errors'
 import * as os from 'os'
-import * as path from 'path'
-import { PATH_PUBLIC } from '../path'
+import { buildBundle } from '../buildBundle'
+import { PATH_PUBLIC, PATH_UNIT } from '../path'
 import { PORT } from './port'
 import compression = require('compression')
+import path = require('path')
 
 process.on('uncaughtException', function (err) {
   console.error(new Date().toUTCString() + ' uncaughtException:', err.message)
@@ -42,26 +45,22 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
-app.use(cors(corsOptions))
-
-app.use(compression())
-
-app.use(express.static(PATH_PUBLIC))
-
-const PUBLIC_PATH = path.join(__dirname, '../..', 'public')
-
-app.use(express.static(PUBLIC_PATH))
-
-app.use((req, res, next) => {
-  console.log(req.path)
-  res.sendStatus(404)
-})
-
-server = app.listen(PORT, onListening)
 
 app.set('port', PORT)
 
-server.on('error', onError)
+app.use(cors(corsOptions))
+app.use(compression())
+app.use(express.static(PATH_PUBLIC))
+app.use(json())
+
+app.use(function (req, res, next) {
+  next(createError(404))
+})
+
+function onListening() {
+  console.log(`http://localhost:${PORT}`)
+  console.log(`http://${LOCAL_IP_ADDRESS}:${PORT}`)
+}
 
 function onError(error) {
   if (error.syscall !== 'listen') {
@@ -84,11 +83,6 @@ function onError(error) {
   }
 }
 
-function onListening() {
-  console.log(`http://localhost:${PORT}`)
-  console.log(`http://${LOCAL_IP_ADDRESS}:${PORT}`)
-}
+server = app.listen(PORT, onListening)
 
-app.use(function (req, res, next) {
-  next(createError(404))
-})
+server.on('error', onError)

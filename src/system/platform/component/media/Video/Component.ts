@@ -81,10 +81,18 @@ export default class VideoComp extends Element<HTMLVideoElement, Props> {
           this.$element.controls = controls
         }
       },
+      currentTime: (t: number | undefined): void => {
+        if (t === undefined) {
+          //
+        } else {
+          this.$element.currentTime = t
+        }
+      },
     }
   }
 
   onPropChanged(prop: string, current: any): void {
+    // console.log('onPropChanged', prop, current)
     this.prop_handler[prop](current)
   }
 

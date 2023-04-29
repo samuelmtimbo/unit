@@ -47,28 +47,43 @@ export const reflectComponentBaseTrait = (
   const all_slot_base: Dict<string[]> = {}
 
   const expand_slot = (slot_id: string, path: number[]): Style[] => {
-    const slot_base = all_slot_base[slot_id]
+    if (slot_id === '') {
+      return []
+    }
+
+    const slot_base = all_slot_base[slot_id] ?? []
 
     let _slot_base = slot_base
 
-    let base = []
+    const _component =
+      slot_id === ''
+        ? component
+        : component.pathGetSubComponent(slot_id.split('/'))
 
-    for (const p of path) {
-      const leaf_id = _slot_base[p]
-      const leaf_path = leaf_id.split('/')
+    let base: LayoutBase = _component.$parentChildren.reduce((acc, c) => {
+      return [...acc, ...c.getRootBase()]
+    }, [])
 
-      let sub_component = component.pathGetSubComponent(leaf_path)
+    if (slot_id !== '') {
+      for (const p of path) {
+        const leaf_id = _slot_base[p]
+        const leaf_path = leaf_id.split('/')
 
-      _slot_base = all_slot_base[leaf_id]
+        let sub_component = component.pathGetSubComponent(leaf_path)
 
-      base = sub_component.$parentChildren.reduce((acc, c) => {
-        return [...acc, ...c.getRootBase()]
-      }, [])
+        _slot_base = all_slot_base[leaf_id]
+
+        base = sub_component.$parentChildren.reduce((acc, c) => {
+          return [...acc, ...c.getRootBase()]
+        }, [])
+      }
     }
 
-    const children_styles = base.map(([_, leaf_comp]) =>
-      extractStyle(_, leaf_comp)
-    )
+    const children_styles = base.map(([leaf_path, leaf_comp]) => {
+      const leaf_id = getLeafId(leaf_path)
+
+      return extractStyle(leaf_id, leaf_comp)
+    })
 
     return children_styles
   }
@@ -183,6 +198,7 @@ export const reflectComponentBaseTrait = (
       )
     } else if (is_root) {
       root_sub_sub_component_id.push(sub_component_id)
+     
       all_root_style.push(leaf_style)
       root_leaf_id.push(leaf_id)
     }

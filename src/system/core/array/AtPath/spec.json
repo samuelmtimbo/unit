@@ -124,7 +124,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "get value of `a` at `path`",
-    "complexity": 21,
+    "complexity": 27,
     "tags": [
       "core",
       "array"

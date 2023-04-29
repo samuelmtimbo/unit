@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "triangle",
     "description": "control a value in memory",
-    "complexity": 2,
+    "complexity": 3,
     "tags": [
       "state"
     ]

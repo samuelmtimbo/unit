@@ -37,14 +37,6 @@ export class Element<
       name: K,
       { __global_id, __ }: GlobalRefSpec
     ): void => {
-      __ = __.map((i) => {
-        if (i.startsWith('$')) {
-          return i
-        } else {
-          return `$${i}`
-        }
-      })
-
       const ref = $unit.$refGlobalObj({ __global_id, __ }) as unknown
 
       // @ts-ignore
@@ -91,7 +83,9 @@ export class Element<
 
     $unit.$read({}, (state) => {
       const { specs, classes } = this.$system
+      
       const _state = evaluate(state, specs, classes)
+
       for (const name in _state) {
         const data = _state[name]
         this.setProp(name as keyof P, data)

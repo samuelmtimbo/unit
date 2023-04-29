@@ -1,3 +1,4 @@
+import { Spec } from '..'
 import { Opt, Unit } from '../../Class/Unit'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
@@ -109,4 +110,5 @@ export interface U<I = any, O = any> {
   getPinData(): { input: Dict<any>; output: Dict<any> }
   getInputData(): Dict<any>
   getRefInputData(): Dict<U<any, any>>
+  getSpec(): Spec
 }

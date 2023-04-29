@@ -1,0 +1,265 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "text select",
+  "units": {
+    "onchange": {
+      "id": "7f25303a-b1ee-11ea-bab2-5f81e27c8466",
+      "input": {
+        "element": {}
+      },
+      "output": {
+        "event": {}
+      }
+    },
+    "removeallchildren": {
+      "id": "2c7507c4-02bc-11eb-88e5-8bc78086a76f",
+      "input": {
+        "any": {},
+        "parent": {}
+      },
+      "output": {}
+    },
+    "appendchild": {
+      "id": "ee4715e6-f479-11ea-b231-bf95a7f38a99",
+      "input": {
+        "parent": {},
+        "child": {}
+      },
+      "output": {
+        "at": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 45,
+          "y": 79
+        }
+      }
+    },
+    "identity": {
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {
+          "constant": false
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "plan": {
+      "id": "36329d25-218d-48a5-a06c-1e0525da504f",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "0": {},
+        "1": {}
+      }
+    },
+    "setinput": {
+      "id": "43b43afd-9e7d-44ba-aef7-6e9db4ed8744",
+      "input": {
+        "unit": {
+          "constant": true,
+          "data": "${unit:{id:'8543c796-caee-4e35-bffb-0065532afdf9',memory:{input:{value:{_invalid:false,_constant:false,_ignored:false,_idle:true},style:{_invalid:false,_constant:false,_ignored:false,_idle:true},text:{_invalid:false,_constant:false,_ignored:false,_idle:true}},output:{},memory:{unit:{option:{input:{value:{_invalid:false,_constant:false,_ignored:false,_idle:true},style:{_invalid:false,_constant:false,_ignored:false,_idle:true}},output:{},memory:{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_state:{}}},text:{input:{value:{_invalid:false,_constant:false,_ignored:false,_idle:true}},output:{},memory:{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_state:{value:'strawberry'}}}},merge:{},exposedMerge:{\"input/value\":{input:{value:{_invalid:false,_constant:false,_ignored:false,_idle:true}},output:{0:{_invalid:false,_constant:false,_ignored:false,_idle:true}},memory:{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_loop_invalided_o_count:0}},\"input/style\":{input:{style:{_invalid:false,_constant:false,_ignored:false,_idle:true}},output:{0:{_invalid:false,_constant:false,_ignored:false,_idle:true}},memory:{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_loop_invalided_o_count:0}},\"input/text\":{input:{text:{_invalid:false,_constant:false,_ignored:false,_idle:true}},output:{0:{_invalid:false,_constant:false,_ignored:false,_idle:true}},memory:{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_loop_invalided_o_count:0}}},waitAll:{input:{},output:{},memory:{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_looping:false}}}},input:{text:{data:'\\'strawberry\\''}}},specs:{\"8543c796-caee-4e35-bffb-0065532afdf9\":{type:'`U`&`G`&`C`',name:'text option',units:{option:{id:'c0d13c03-9b10-4a6f-a79f-66294d10aae6',input:{value:{},style:{}},output:{},metadata:{position:{x:26,y:56}}},text:{id:'87f99b85-1c24-4e5b-a903-dd27230f4092',input:{value:{}},output:{},metadata:{position:{x:-27,y:-57}}}},merges:{},inputs:{value:{plug:{0:{unitId:'option',pinId:'value'}},ref:false},style:{plug:{0:{unitId:'option',pinId:'style'}},ref:false},text:{plug:{0:{unitId:'text',pinId:'value'}},ref:false}},outputs:{},metadata:{icon:'question',description:'',tags:['platform','core','component']},render:true,component:{subComponents:{option:{children:['text'],childSlot:{}},text:{children:[],childSlot:{}}},children:['option'],defaultWidth:180,defaultHeight:90},id:'8543c796-caee-4e35-bffb-0065532afdf9',system:true,specs:{}}}}"
+        },
+        "name": {
+          "constant": true,
+          "data": "'text'"
+        },
+        "data": {}
+      },
+      "output": {
+        "unit": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 20,
+          "y": -12
+        }
+      }
+    },
+    "foreach": {
+      "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "a": {
+          "ignored": true
+        },
+        "i": {
+          "ignored": true
+        },
+        "test": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -141,
+          "y": 83
+        }
+      }
+    },
+    "select": {
+      "id": "6c7cd7d1-c8a0-4317-9c8c-ba781f150729",
+      "input": {
+        "value": {},
+        "style": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 75,
+          "y": -152
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "setinput": {
+        "input": {
+          "data": true
+        }
+      },
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    },
+    "1": {
+      "appendchild": {
+        "input": {
+          "child": true
+        }
+      },
+      "setinput": {
+        "output": {
+          "unit": true
+        }
+      }
+    },
+    "2": {
+      "onchange": {
+        "input": {
+          "element": true
+        }
+      },
+      "removeallchildren": {
+        "input": {
+          "parent": true
+        }
+      },
+      "appendchild": {
+        "input": {
+          "parent": true
+        }
+      },
+      "select": {
+        "output": {
+          "_self": true
+        }
+      }
+    },
+    "3": {
+      "plan": {
+        "output": {
+          "1": true
+        }
+      },
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "4": {
+      "removeallchildren": {
+        "input": {
+          "any": true
+        }
+      },
+      "plan": {
+        "output": {
+          "0": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "list": {
+      "plug": {
+        "0": {
+          "unitId": "identity",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "plan",
+          "pinId": "a"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "examples": ["['banana','apple','orange']"]
+      }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "select",
+          "pinId": "value"
+        }
+      },
+      "ref": false,
+      "type": "string",
+      "metadata": {
+        "examples": ["'banana'", "'apple'", "'orange'"]
+      }
+    },
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "select",
+          "pinId": "style"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "onchange",
+          "pinId": "event"
+        }
+      },
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "question",
+    "description": ""
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "select": {
+        "children": [],
+        "childSlot": {}
+      }
+    },
+    "children": ["select"],
+    "defaultWidth": 180,
+    "defaultHeight": 45
+  },
+  "id": "de6771c7-fec1-4356-bf1b-e531340abacd",
+  "system": true,
+  "specs": {}
+}

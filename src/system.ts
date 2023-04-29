@@ -6,12 +6,12 @@ import { IOPointerEvent } from './client/event/pointer'
 import { Store } from './client/store'
 import { Theme } from './client/theme'
 import { Point } from './client/util/geometry'
-import { EventEmitter } from './EventEmitter'
+import { EventEmitter_ } from './EventEmitter'
 import { NOOP } from './NOOP'
 import { Object_ } from './Object'
 import { SharedObject } from './SharedObject'
 import { Style } from './system/platform/Props'
-import { Classes, GraphSpec, GraphSpecs, Specs } from './types'
+import { Classes, GraphSpecs, Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
@@ -21,6 +21,7 @@ import { IHTTPServer, IHTTPServerOpt } from './types/global/IHTTPServer'
 import { IKeyboard } from './types/global/IKeyboard'
 import { IPointer } from './types/global/IPointer'
 import { J } from './types/interface/J'
+import { R } from './types/interface/R'
 import { S } from './types/interface/S'
 import { Unlisten } from './types/Unlisten'
 
@@ -65,6 +66,7 @@ export type APIStorage = IO_STORAGE_API_INIT<J, undefined>
 export type APIHTTP = {
   server: IO_HTTP_API_INIT<IHTTPServer, IHTTPServerOpt>
   fetch: (url: string, opt: RequestInit) => any
+  EventSource: typeof EventSource
 }
 export type APIChannel = IO_STORAGE_API_INIT<IChannel, IChannelOpt>
 
@@ -73,10 +75,10 @@ export type APIAlert = {
   prompt: (message: string) => string
 }
 
-export interface System extends S {
+export interface System extends S, R {
   parent: System | null
   path: string
-  emitter: EventEmitter
+  emitter: EventEmitter_
   root: HTMLElement | null
   customEvent: Set<string>
   context: Context[]
@@ -117,18 +119,11 @@ export interface System extends S {
     style: Style
   ) => Unlisten
   graph: IO_SYSTEM_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
-  newSpecId: () => string
-  hasSpec: (id: string) => boolean
-  emptySpec: (partial?: Partial<GraphSpec>) => GraphSpec
-  newSpec: (spec: GraphSpec) => GraphSpec
-  getSpec: (id: string) => GraphSpec
   getRemoteComponent: (id: string) => Component
-  setSpec: (id: string, spec: GraphSpec) => void
-  forkSpec: (spec: GraphSpec) => [string, GraphSpec]
-  injectSpecs: (specs: GraphSpecs) => Dict<string>
   registerComponent: (component: Component) => string
   registerRemoteComponent: (globalId: string, remoteGlobalId: string) => void
   registerUnit(id: string): void
+  stringifyBundleData(bundle: BundleSpec): void
   unregisterUnit(id: string): void
   showLongPress?: (
     screenX: number,
@@ -158,6 +153,8 @@ export type IFilePickerOpt = {
     accept: Dict<string[]>
   }[]
   multiple?: boolean
+  capture?: string
+  accept?: string
 }
 
 export type ComponentClass<T = any> = {
@@ -170,6 +167,8 @@ export type ComponentClasses = Dict<ComponentClass>
 export interface BootOpt {
   path?: string
   specs?: GraphSpecs
+  classes?: Classes
+  components?: ComponentClasses
 }
 
 export const HTTPServer = (opt: IHTTPServerOpt): IHTTPServer => {

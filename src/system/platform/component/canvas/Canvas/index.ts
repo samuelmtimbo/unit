@@ -57,8 +57,14 @@ export default class Canvas
     return
   }
 
-  drawImage(imageBitmap: ImageBitmap): void {
-    this._component.drawImage(imageBitmap)
+  async drawImage(
+    imageBitmap: ImageBitmap,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): Promise<void> {
+    this._component.drawImage(imageBitmap, x, y, width, height)
 
     this.emit('call', { method: 'drawImage', data: [imageBitmap] })
   }

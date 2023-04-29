@@ -13,7 +13,7 @@ export type GraphUnitPinSpec = {
   data?: string
   constant?: boolean | None
   ignored?: boolean | None
-  memory?: boolean
+  ref?: boolean
   metadata?: {
     position?: { x: number; y: number }
   }
@@ -117,6 +117,7 @@ export type BaseSpec = {
   metadata?: NodeMetadataSpec
   render?: boolean
   component?: ComponentSpec
+  deps?: string[]
 }
 
 // <T>:<T>

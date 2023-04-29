@@ -1,33 +1,12 @@
 import { Unit } from '../Class/Unit'
+import { escape } from './escape'
 import { isValidKeyStr } from './parser'
-
-export function escape(str: string): string {
-  let res = ''
-  for (let i = 0; i < str.length; i++) {
-    const char = str[i]
-    const next_char = str[i + 1]
-    if (char === '\\' && next_char !== '\\') {
-      res += '\\\\'
-    } else if (char === '\n') {
-      res += '\\n'
-    } else if (char === '\r') {
-      res += '\\r'
-    } else if (char === "'") {
-      res += "\\'"
-    } else if (char === '&') {
-      res += '\\&'
-    } else {
-      res += char
-    }
-  }
-  return res
-}
 
 export function stringify(value: any): string {
   const t = typeof value
   switch (t) {
     case 'string':
-      return `'${escape(value)}'`
+      return `"${escape(value)}"`
     case 'number':
     case 'boolean':
       return `${value}`

@@ -1,0 +1,26 @@
+{
+  "name": "evaluate",
+  "inputs": {
+    "str": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "a": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "wave-triangle",
+    "description": "string to value",
+    "complexity": 8,
+    "tags": [
+      "f",
+      "data"
+    ]
+  },
+  "id": "69323dab-b425-4a2a-b1c7-d7efc723327a",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

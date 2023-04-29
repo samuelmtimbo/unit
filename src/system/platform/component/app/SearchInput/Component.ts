@@ -4,7 +4,6 @@ import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import TextField from '../../value/TextField/Component'
 
 export interface Props {
@@ -30,7 +29,7 @@ const DEFAULT_STYLE = {
   textAlign: 'center',
 }
 
-export default class SearchInput extends Element<IHTMLDivElement, Props> {
+export default class SearchInput extends Element<HTMLDivElement, Props> {
   public _input: TextField
 
   constructor($props: Props, $system: System) {

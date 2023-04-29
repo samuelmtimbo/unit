@@ -11,6 +11,8 @@ import {
   registerRoot,
   removeChild,
   removeParentChild,
+  reorderParentRoot,
+  reorderRoot,
   unregisterParentRoot,
   unregisterRoot,
 } from '../../component/method'
@@ -52,7 +54,7 @@ export class Element_<
   public _state: Dict<any> = {}
 
   constructor(
-    { i = [], o = [] }: ION,
+    { i = [], o = [] }: ION<I, O>,
     opt: Opt = {},
     system: System,
     id: string
@@ -75,6 +77,16 @@ export class Element_<
         this._input?.[name]?.pull()
         this._backwarding = false
       }
+
+      this._forwarding = true
+      if (data === undefined) {
+        // @ts-ignore
+        this._output?.[name]?.pull()
+      } else {
+        // @ts-ignore
+        this._output?.[name]?.push(data)
+      }
+      this._forwarding = false
     })
 
     this._slot = {
@@ -90,12 +102,20 @@ export class Element_<
     return unregisterRoot(this, this._root, component)
   }
 
+  reorderRoot(component: Component_<ComponentEvents>, to: number): void {
+    return reorderRoot(this, this._root, component, to)
+  }
+
   registerParentRoot(component: Component_, slotName: string): void {
     return registerParentRoot(this, this._parent_root, component, slotName)
   }
 
   unregisterParentRoot(component: Component_): void {
     return unregisterParentRoot(this, this._parent_root, component)
+  }
+
+  reorderParentRoot(component: Component_<ComponentEvents>, to: number): void {
+    return reorderParentRoot(this, this._parent_root, component, to)
   }
 
   appendParentChild(component: Component_, slotName: string): void {
@@ -106,8 +126,8 @@ export class Element_<
     return removeParentChild(this, this._parent_children, component)
   }
 
-  appendChild(Bundle: UnitBundle<Component_>): number {
-    return appendChild(this, this._children, Bundle)
+  appendChild(bundle: UnitBundle<Component_>): number {
+    return appendChild(this, this._children, bundle)
   }
 
   insertChild(

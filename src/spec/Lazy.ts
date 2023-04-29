@@ -7,6 +7,7 @@ import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keys } from '../system/f/object/Keys/f'
 import {
+  Action,
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
@@ -21,7 +22,7 @@ import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { GraphState } from '../types/GraphState'
 import { C } from '../types/interface/C'
-import { Component_ } from '../types/interface/Component'
+import { ComponentEvents, Component_ } from '../types/interface/Component'
 import { G } from '../types/interface/G'
 import { U } from '../types/interface/U'
 import { IO } from '../types/IO'
@@ -110,6 +111,30 @@ export function lazyFromSpec(
       })
     }
 
+    removeUnitPinData(unitId: string, type: IO, pinId: string) {
+      this._ensure()
+      return this.__graph.removeUnitPinData(unitId, type, pinId)
+    }
+
+    addUnitSpecs(units: GraphUnitsSpec): void {
+      this._ensure()
+      return this.__graph.addUnitSpecs(units)
+    }
+
+    addUnitSpec(
+      unitId: string,
+      unit: UnitBundleSpec,
+      emit?: boolean
+    ): U<any, any> {
+      this._ensure()
+      return this.__graph.addUnitSpec(unitId, unit)
+    }
+
+    bulkEdit(actions: Action[]): void {
+      this._ensure()
+      return this.__graph.bulkEdit(actions)
+    }
+
     setUnitName(unitId: string, newUnitId: string, name: string): void {
       this._ensure()
       return this.__graph.setUnitName(unitId, newUnitId, name)
@@ -130,22 +155,28 @@ export function lazyFromSpec(
       return this.__graph.getMergeSpec(mergeId)
     }
 
-    appendParentRoot(
-      subComponentId: string,
-      childId: string,
-      slotName: string
-    ): void {
-      this._ensure()
-      return this.__graph.appendParentRoot(subComponentId, childId, slotName)
+    reorderRoot(component: Component_<ComponentEvents>, to: number): void {
+      throw new Error('Method not implemented.')
     }
 
-    appendParentRootChildren(
+    reorderParentRoot(
+      component: Component_<ComponentEvents>,
+      to: number
+    ): void {
+      throw new Error('Method not implemented.')
+    }
+
+    reorderSubComponent(parentId: string, childId: string, to: number): void {
+      throw new Error('Method not implemented.')
+    }
+
+    moveSubComponentRoot(
       subComponentId: string,
       children: string[],
-      slotMap: Dict<string>
+      slotMap: Dict<string>,
     ): void {
       this._ensure()
-      return this.__graph.appendParentRootChildren(
+      return this.__graph.moveSubComponentRoot(
         subComponentId,
         children,
         slotMap
@@ -160,11 +191,6 @@ export function lazyFromSpec(
     removeParentChild(component: Component_): void {
       this._ensure()
       return this.__graph.removeParentChild(component)
-    }
-
-    appendRoot(subComponentId: any): void {
-      this._ensure()
-      return this.__graph.appendRoot(subComponentId)
     }
 
     removeRoot(subComponentId: string): void {
@@ -191,16 +217,36 @@ export function lazyFromSpec(
       nextIdMap: {
         merge: Dict<string>
         link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-        plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
+        plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
         unit: Dict<string>
       },
       nextPinMap: Dict<{
-        input: Dict<{ pinId: string; subPinId: string }>
-        output: Dict<{ pinId: string; subPinId: string }>
+        input: Dict<{
+          pinId: string
+          subPinId: string
+          ref?: boolean
+          defaultIgnored?: boolean
+        }>
+        output: Dict<{
+          pinId: string
+          subPinId: string
+          ref?: boolean
+          defaultIgnored?: boolean
+        }>
       }>,
       nextMergePinId: Dict<{
-        input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
-        output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
+        input: {
+          mergeId: string
+          pinId: string
+          subPinSpec: GraphSubPinSpec
+          ref?: boolean
+        }
+        output: {
+          mergeId: string
+          pinId: string
+          subPinSpec: GraphSubPinSpec
+          ref?: boolean
+        }
       }>,
       nextPlugSpec: {
         input: Dict<Dict<GraphSubPinSpec>>
@@ -284,11 +330,6 @@ export function lazyFromSpec(
     public getBundleSpec(): BundleSpec {
       this._ensure()
       return this.__graph.getBundleSpec()
-    }
-
-    public getSpecs(): Specs {
-      this._ensure()
-      return this.__graph.getSpecs()
     }
 
     public getUnitState(unitId: string): State {
@@ -655,12 +696,12 @@ export function lazyFromSpec(
       return this.__graph.getMergePinCount(mergeId)
     }
 
-    public addUnitSpecs = (units: GraphUnitsSpec): void => {
+    public addUnits = (units: GraphUnitsSpec): void => {
       this._ensure()
       return this.__graph.addUnitSpecs(units)
     }
 
-    public addUnitSpec = (unitId: string, unit: UnitBundleSpec): U => {
+    public addUnit = (unitId: string, unit: UnitBundleSpec): U => {
       this._ensure()
       return this.__graph.addUnitSpec(unitId, unit)
     }
@@ -816,11 +857,6 @@ export function lazyFromSpec(
     ) {
       this._ensure()
       return this.__graph.removePinFromMerge(mergeId, unitId, type, pinId)
-    }
-
-    public mergeMerges(mergeIds: string[]) {
-      this._ensure()
-      return this.__graph.mergeMerges(mergeIds)
     }
 
     public isPinMergedTo(

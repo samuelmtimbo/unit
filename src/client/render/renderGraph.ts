@@ -20,20 +20,19 @@ export function renderGraph(
   let unlisten: Unlisten = NOOP
 
   $graph.$getSpec({}, (spec: GraphSpec) => {
-    // console.log('renderGraph $getSpec', spec)
     const component = componentFromSpec(system, spec, system.specs)
 
-    const $$context = renderFrame(system, null, root, {})
+    const context = renderFrame(system, null, root, {})
 
-    const $frame = new Frame({}, system)
+    const frame = new Frame({}, system)
 
-    $frame.appendChild(component)
+    frame.appendChild(component)
 
-    root.appendChild($frame.$element)
+    root.appendChild(frame.$element)
 
-    const remove_child = appendChild($$context, $frame)
+    const remove_child = appendChild(context, frame)
 
-    mount($$context)
+    mount(context)
 
     const unlisten_graph = watchGraphComponent(system, $graph, component)
 

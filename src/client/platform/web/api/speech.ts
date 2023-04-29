@@ -83,7 +83,7 @@ export function webSpeech(window: Window, opt: BootOpt): API['speech'] {
       // @ts-ignore
       window.SpeechGrammarList || window.webkitSpeechGrammarList
     if (!SpeechGrammarList_) {
-      throw new APINotSupportedError('Speech')
+      throw new APINotSupportedError('Speech Grammar')
     }
 
     const speechRecognitionList = new SpeechGrammarList_()

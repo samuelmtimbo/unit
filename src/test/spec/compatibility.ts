@@ -1,19 +1,19 @@
 import * as assert from 'assert'
+import system from '../../script/build/worker/system'
 import { compatibleInterface } from '../../spec/compatibility'
-import __specs from '../../system/_specs'
 
 assert(
   compatibleInterface(
+    system,
     'system/f/control/Identity',
-    'system/core/common/Increment',
-    __specs
+    'system/core/common/Increment'
   )
 )
 
 assert(
   !compatibleInterface(
+    system,
     'system/f/control/Identity',
-    'system/f/arithmetic/Add',
-    __specs
+    'system/f/arithmetic/Add'
   )
 )

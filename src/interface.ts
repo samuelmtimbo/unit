@@ -27,6 +27,9 @@ export const CLASS_TYPE_VALUE = 'V' // Value
 export const CLASS_TYPE_TRASMITTER = 'TR' // TRansmitter
 export const CLASS_TYPE_RECEIVER = 'RE' // REceiver
 export const CLASS_TYPE_PIN = 'PI' // PIn
+export const CLASS_TYPE_FILE = 'F' // File
+export const CLASS_TYPE_LOCATION = 'L' // Location
+export const CLASS_TYPE_REGISTRY = 'R' // Registry
 
 export const INHERITANCE = {
   U: ['EE'],
@@ -63,6 +66,8 @@ export type AllTypes<T> = {
   V: T
   TR: T
   RE: T
+  F: T
+  L: T
 }
 
 export const ALL_TYPES_MAP: AllTypes<true> = {
@@ -94,6 +99,8 @@ export const ALL_TYPES_MAP: AllTypes<true> = {
   V: true,
   TR: true,
   RE: true,
+  F: true,
+  L: true,
 }
 
 export const ALL_TYPES = Object.keys(ALL_TYPES_MAP)

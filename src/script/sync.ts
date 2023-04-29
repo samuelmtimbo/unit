@@ -1,12 +1,35 @@
 import { existsSync } from 'fs'
-import { readJSONSync, writeFile } from 'fs-extra'
+import { ensureDir, readJSONSync, writeFile } from 'fs-extra'
 import * as glob from 'glob'
 import * as path from 'path'
 import { isNotSymbol } from '../client/event/keyboard/keyCode'
 import { GraphSpec } from '../types'
 import { removeLastSegment } from '../util/removeLastSegment'
 
-export function sync(dir: string): void {
+export async function sync(
+  systemDir: string,
+  outputDir: string,
+  specIdWhitelist?: Set<string>
+): Promise<void> {
+  const { specs, ids, classes, components } = rawSync(
+    systemDir,
+    specIdWhitelist
+  )
+
+  await ensureDir(outputDir)
+
+  await Promise.all([
+    writeFile(path.join(outputDir, '_ids.ts'), ids),
+    writeFile(path.join(outputDir, '_classes.ts'), classes),
+    writeFile(path.join(outputDir, '_components.ts'), components),
+    writeFile(path.join(outputDir, '_specs.ts'), specs),
+  ])
+}
+
+export function rawSync(
+  dir: string,
+  idSet?: Set<string>
+): { specs: string; classes: string; components: string; ids: string } {
   let specs = ''
 
   const _specs = {}
@@ -34,19 +57,20 @@ export function sync(dir: string): void {
     .forEach((_) => {
       const spec_file_path = `${dir}/${_}/spec.json`
       const spec = readJSONSync(spec_file_path) as GraphSpec
+
       const segments = _.split('/')
       const l = segments.length
       const tags = segments.slice(0, l - 1)
-
-      spec.system = true
-      spec.metadata = spec.metadata || {}
-      spec.metadata.tags = tags
 
       const id = spec.id
 
       if (!id) {
         console.log(`id not specified at ${spec_file_path}`)
       }
+
+      spec.system = true
+      spec.metadata = spec.metadata || {}
+      spec.metadata.tags = tags
 
       const { base, name } = spec
 
@@ -57,6 +81,10 @@ export function sync(dir: string): void {
         i++
       }
       ids_name_set.add(_name)
+
+      if (idSet && !idSet.has(id)) {
+        return
+      }
 
       const NAME = _name
         .split('')
@@ -119,8 +147,5 @@ export function sync(dir: string): void {
     .replace(/`/g, '\\`')
     .replace(/\$/g, '\\$')}\`)\n`
 
-  writeFile(path.join(dir, '_ids.ts'), ids)
-  writeFile(path.join(dir, '_classes.ts'), classes)
-  writeFile(path.join(dir, '_components.ts'), components)
-  writeFile(path.join(dir, '_specs.ts'), specs)
+  return { specs, classes, components, ids }
 }

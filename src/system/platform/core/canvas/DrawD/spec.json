@@ -67,7 +67,7 @@
   "metadata": {
     "icon": "square",
     "description": "draw step of `d` on `canvas`",
-    "complexity": 29,
+    "complexity": 36,
     "tags": [
       "platform",
       "core",

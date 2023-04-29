@@ -44,7 +44,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "a circle on canvas",
-    "complexity": 25,
+    "complexity": 47,
     "tags": [
       "platform",
       "core",

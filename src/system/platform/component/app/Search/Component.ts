@@ -28,7 +28,6 @@ import { UNTITLED } from '../../../../../constant/STRING'
 import { System } from '../../../../../system'
 import { Spec, Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { removeWhiteSpace } from '../../../../../util/string'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import { keys } from '../../../../f/object/Keys/f'
@@ -91,7 +90,7 @@ export function isSpecVisible(specs: Specs, id: string): boolean {
   }
 }
 
-export default class Search extends Element<IHTMLDivElement, Props> {
+export default class Search extends Element<HTMLDivElement, Props> {
   private _input_value: string = ''
 
   public _search: Div
@@ -143,6 +142,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
           display: this._list_hidden ? 'none' : 'block',
           width: 'calc(100% + 3px)',
           boxSizing: 'content-box',
+          scrollSnapType: 'y mandatory',
         },
       },
       this.$system
@@ -241,6 +241,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
           width: '18px',
           height: '18px',
           padding: '11px 11px 10px 9px',
+          ...userSelect('none'),
         },
         title: 'layout',
       },
@@ -283,6 +284,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
       default: search,
     }
     this.$unbundled = false
+    this.$primitive = true
 
     if (selected) {
       if (this._filtered_id_list.includes(selected)) {
@@ -385,7 +387,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
 
     const { name = '', metadata = {} } = spec as Spec
     const icon = metadata.icon || 'question'
-    const tags = metadata.tags || []
+    const tags = metadata.tags || ['user']
     const tagsStr = tags.join(' ')
     // const fuzzyName = `${name} ${tagsStr}`
     const fuzzyName = name
@@ -468,6 +470,7 @@ export default class Search extends Element<IHTMLDivElement, Props> {
           borderBottom: list_item_div_border_bottom,
           boxSizing: 'border-box',
           width: `${309 - 1}px`,
+          scrollSnapAlign: 'start',
         },
         data: {
           id,
@@ -531,9 +534,13 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     (transcript: string) => {
       // console.log('Search', '_on_microphone_transcript', transcript)
       const value = transcript.toLowerCase().substr(0, 30)
+
       this._input.setProp('value', value)
+
       this._input_value = value
+
       this._filter_list()
+
       this._input.focus()
     },
     100
@@ -685,7 +692,10 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     this._selected_id = id
 
     this._set_list_item_color(id, selectedColor)
-    this._scroll_into_item(id)
+
+    if (!this._list_hidden) {
+      this._scroll_into_item(id)
+    }
   }
 
   public select_next = (offset: number): void => {
@@ -721,8 +731,8 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     ) {
       const list_item = this._list_item_div[id]
 
-      list_item.$element.scrollIntoView({ behavior: 'auto', block: 'start' })
-      // this._list.$element.scrollTop = selected_id_index * SEARCH_ITEM_HEIGHT
+      // list_item.$element.scrollIntoView({ behavior: 'auto', block: 'start' })
+      this._list.$element.scrollTop = selected_id_index * SEARCH_ITEM_HEIGHT
       // this._list.$element.scrollTo({
       //   top: selected_id_index * SEARCH_ITEM_HEIGHT,
       //   behavior: 'auto',
@@ -753,6 +763,11 @@ export default class Search extends Element<IHTMLDivElement, Props> {
     const fuzzy_pattern = this._input_value
 
     for (const id of this._ordered_id_list) {
+      if (!this._item[id]) {
+        console.warn('Search', '_filter_list', 'missing item', id)
+        continue
+      }
+
       const { fuzzyName } = this._item[id]
       const list_item_div = this._list_item_div[id]
 

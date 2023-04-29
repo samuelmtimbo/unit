@@ -1,4 +1,5 @@
-import { $makeUnitRemoteRef } from '../../../client/makeUnitRemoteRef'
+import { Graph } from '../../../Class/Graph'
+import { makeUnitRemoteRef } from '../../../client/makeUnitRemoteRef'
 import { RemoteRef } from '../../../client/RemoteRef'
 import { CONNECT, DISCONNECT, EXEC, TERMINATE } from '../../../constant/STRING'
 import { Dict } from '../../../types/Dict'
@@ -59,7 +60,7 @@ export function stopBroadcastTarget(id: string): void {
   localStorage.removeItem(_id)
 }
 
-export function shareLocalGraph(graph: $Graph): {
+export function shareLocalGraph(graph: Graph): {
   id: string
   terminate: Unlisten
 } {
@@ -77,7 +78,7 @@ export function shareLocalGraph(graph: $Graph): {
         {
           const name = _data
           const bc = new BroadcastChannel(name)
-          const ref = $makeUnitRemoteRef(graph, ['$U', '$C', '$G'], (data) => {
+          const ref = makeUnitRemoteRef(graph, ['U', 'C', 'G'], (data) => {
             bc.postMessage({ type: EXEC, data })
           })
           bc.addEventListener('message', (event: MessageEvent): void => {

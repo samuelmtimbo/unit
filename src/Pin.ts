@@ -1,4 +1,4 @@
-import { EventEmitter, EventEmitter_EE } from './EventEmitter'
+import { EventEmitter_, EventEmitter_EE } from './EventEmitter'
 import { isPrimitive } from './spec/primitive'
 import { V } from './types/interface/V'
 
@@ -18,6 +18,7 @@ export type Pin_EE<T> = {
   start: []
   end: []
   invalid: []
+  ref: [boolean]
   ignored: [boolean]
   constant: [boolean]
 }
@@ -32,9 +33,10 @@ export type Pin_M<T = any> = {
 
 export type PinEvents<T> = EventEmitter_EE<Pin_EE<T>> & Pin_EE<T>
 
-export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V<T> {
+export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
   private _constant: boolean = false
   private _ignored: boolean = false
+  private _ref: boolean = false
   private _invalid: boolean = false
   private _idle: boolean = true
   private _register: T | undefined = undefined
@@ -43,10 +45,12 @@ export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V<T> {
     data,
     constant,
     ignored,
+    ref,
   }: {
     data?: any
     constant?: boolean
     ignored?: boolean
+    ref?: boolean
   } = {}) {
     super()
 
@@ -57,15 +61,20 @@ export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V<T> {
 
     this._constant = constant || false
     this._ignored = ignored || false
+    this._ref = ref || false
   }
 
   public take(): T | undefined {
     const data = this._register
+
     if (this._register !== undefined) {
       this._register = undefined
+
       this.emit('drop', data)
     }
+
     this.end()
+
     return data
   }
 
@@ -73,6 +82,7 @@ export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V<T> {
     if (this._register !== undefined && !this._invalid) {
       this._invalid = true
       this._idle = true
+
       this.emit('invalid')
     }
   }
@@ -93,11 +103,16 @@ export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V<T> {
 
   public pull(): T | undefined {
     const data = this._register
+
     if (data !== undefined) {
       if (this._constant) {
         this.emit('data', data)
       } else {
-        this.take()
+        if (this._ref) {
+          //
+        } else {
+          this.take()
+        }
       }
     }
     return data
@@ -105,11 +120,16 @@ export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V<T> {
 
   public push(data: T): void {
     this.invalidate()
+
     this._invalid = false
+
     this.start()
+
     this._register = data
+
     this.emit('data', data)
-    if (this._ignored) {
+
+    if (this._ignored && !this._ref) {
       this.take()
     }
   }
@@ -126,23 +146,35 @@ export class Pin<T = any> extends EventEmitter<PinEvents<T>> implements V<T> {
     return !this.empty()
   }
 
-  public ignored(value?: boolean, take: boolean = true): boolean {
+  public ignored(value?: boolean): boolean {
     if (value !== undefined) {
       this._ignored = value
-      if (take) {
-        if (this._ignored && !this._constant) {
-          this.take()
-        }
+
+      if (this._ignored && !this._constant && !this._ref) {
+        this.take()
       }
+
       this.emit('ignored', this._ignored)
     }
+
     return this._ignored
+  }
+
+  public ref(value?: boolean): boolean {
+    if (value !== undefined) {
+      this._ref = value
+
+      this.emit('ref', this._ref)
+    }
+
+    return this._ref
   }
 
   public constant(value?: boolean): boolean {
     if (value !== undefined) {
       this._constant = value
     }
+
     return this._constant
   }
 

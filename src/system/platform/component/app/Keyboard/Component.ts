@@ -2,9 +2,9 @@ import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
+import parentElement from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../../component/Div/Component'
 import KeyboardKey from '../KeyboardKey/Component'
 
@@ -22,7 +22,7 @@ export const DEFAULT_STYLE = {
 
 const KEY_HEIGHT: number = 42
 
-export default class Keyboard extends Element<IHTMLDivElement, Props> {
+export default class Keyboard extends Element<HTMLDivElement, Props> {
   private _keyboard: Div
   private _keys: KeyboardKey[] = []
 
@@ -218,8 +218,17 @@ export default class Keyboard extends Element<IHTMLDivElement, Props> {
     keyboard.setChildren([line_0, line_1, line_2, line_3, line_4])
     this._keyboard = keyboard
 
-    this.$element = keyboard.$element
+    const $element = parentElement($system)
+
+    this.$element = $element
     this.$slot = keyboard.$slot
+    this.$subComponent = {
+      keyboard,
+    }
+    this.$unbundled = false
+this.$primitive = true
+
+    this.registerRoot(keyboard)
   }
 
   onPropChanged(prop: string, current: any): void {

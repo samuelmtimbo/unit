@@ -1,14 +1,10 @@
-import assocPath from '../../system/core/object/AssocPath/f'
 import pathGet from '../../system/core/object/DeepGet/f'
-import dissocPath from '../../system/core/object/DissocPath/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
-import deepMerge, { _deepMerge } from '../../system/f/object/DeepMerge/f'
-import _dissoc from '../../system/f/object/Dissoc/f'
+import deepMerge from '../../system/f/object/DeepMerge/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import {
   GraphMergeSpec,
-  GraphMergesSpec,
   GraphPinSpec,
   GraphSpec,
   GraphSubPinSpec,
@@ -18,7 +14,6 @@ import {
 import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
 import {
-  clone,
   getObjSingleKey,
   isEmptyObject,
   mapObjVK,
@@ -37,13 +32,6 @@ export const addUnit = (
   spec: GraphSpec
 ): void => {
   pathSet(spec, ['units', unitId], unit)
-}
-
-export const addUnits = (
-  { units }: { units: GraphUnitsSpec },
-  spec: GraphSpec
-): void => {
-  _deepMerge(spec.units, units)
 }
 
 export const removeUnits = (
@@ -92,20 +80,20 @@ export const removeUnitExposedPins = (
 }
 
 export const removeUnitMerges = (
-  { unitId: id }: { unitId: string },
+  { unitId }: { unitId: string },
   spec: GraphSpec
 ): void => {
   const { merges = {} } = spec
 
-  let nextState = clone(spec)
-
   const removedMergeIds: { [id: string]: true } = {}
-  forEachValueKey(merges, (merge, mergeId: string) => {
-    if (merge[id]) {
-      delete nextState.merges![mergeId][id]
 
-      if (getMergePinCount(nextState.merges![mergeId]) < 2) {
-        delete nextState.merges![mergeId]
+  forEachValueKey(merges, (merge, mergeId: string) => {
+    if (merge[unitId]) {
+      pathDelete(spec, ['merges', mergeId, unitId])
+
+      if (getMergePinCount(spec.merges![mergeId]) < 2) {
+        pathDelete(spec, ['merges', mergeId])
+
         removedMergeIds[mergeId] = true
       }
     }
@@ -126,20 +114,20 @@ export const removeUnitMerges = (
 
         if (mergeId && removedMergeIds[mergeId]) {
           for (const unitId in merges[mergeId]) {
-            if (unitId !== id) {
+            if (unitId !== unitId) {
               const pinId = getObjSingleKey(
                 pathOrDefault(merges, [mergeId, unitId, type], {})
               )
 
               if (pinId) {
-                nextState[`${type}s`][exposedPinId]['plug'][subPinId] = {
+                pathSet(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {
                   unitId,
                   pinId,
-                }
+                })
 
                 break
               } else {
-                nextState[`${type}s`][exposedPinId]['plug'][subPinId] = {}
+                pathSet(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {})
 
                 break
               }
@@ -195,29 +183,31 @@ export const addMerge = (
     })
   })
 
-  return assocPath(spec, ['merges', mergeId], merge)
+  return pathSet(spec, ['merges', mergeId], merge)
 }
 
 export const addPinToMerge = (
   {
-    id,
+    mergeId,
     unitId,
     type,
     pinId,
-  }: { id: string; type: IO; unitId: string; pinId: string },
+  }: { mergeId: string; type: IO; unitId: string; pinId: string },
   spec: GraphSpec
 ): void => {
   // reassign exposed pin if it has just been merged
   forEachValueKey(spec[`${type}s`], ({ name, plug = {} }, exposedPinId) => {
     for (const subPinId in plug) {
       const subPin = plug[subPinId]
+
       const { unitId: _unitId, pinId: _pinId } = subPin
+
       if (_unitId === unitId && _pinId === pinId) {
         coverPinSet({ pinId: exposedPinId, type }, spec)
         exposePinSet(
           {
             pinId: exposedPinId,
-            pinSpec: { name, plug: { 0: { mergeId: id } } },
+            pinSpec: { name, plug: { 0: { mergeId } } },
             type,
           },
           spec
@@ -226,53 +216,41 @@ export const addPinToMerge = (
     }
   })
 
-  return assocPath(spec, ['merges', id, unitId, type, pinId], true)
+  return pathSet(spec, ['merges', mergeId, unitId, type, pinId], true)
 }
 
-export const addMerges = (
-  { merges }: { merges: GraphMergesSpec },
+export const removeMerge = (
+  { mergeId }: { mergeId: string },
   spec: GraphSpec
 ): void => {
-  // TODO update exposed inputs/outputs
-  pathSet(spec, ['merges'], deepMerge(merges, spec.merges!))
-}
+  delete spec.merges[mergeId]
 
-export const removeMerge = ({ id }: { id: string }, spec: GraphSpec): void => {
-  const nextState = clone(spec)
-
-  const nextMerges = _dissoc(spec.merges!, id)
-  nextState.merges = nextMerges
-
-  nextState.inputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
+  spec.inputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
     spec.inputs,
     (input: GraphPinSpec) => ({
       ...input,
       plug: mapObjVK(input.plug, (plug) => {
         const { mergeId } = plug
 
-        return !mergeId || mergeId !== id ? plug : {}
+        return !mergeId || mergeId !== mergeId ? plug : {}
       }),
     })
   )
 
-  nextState.outputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
+  spec.outputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
     spec.outputs,
     (output: GraphPinSpec) => ({
       ...output,
       plug: mapObjVK(output.plug, (plug) => {
         const { mergeId } = plug
 
-        return !mergeId || mergeId !== id ? plug : {}
+        return !mergeId || mergeId !== mergeId ? plug : {}
       }),
     })
   )
 
-  if (
-    nextState.metadata &&
-    nextState.metadata.position &&
-    nextState.metadata.position.merge
-  ) {
-    delete nextState.metadata.position.merge[id]
+  if (spec.metadata && spec.metadata.position && spec.metadata.position.merge) {
+    delete spec.metadata.position.merge[mergeId]
   }
 }
 
@@ -289,34 +267,36 @@ export const mergeMerges = (
 
 export const _removePinFromMerge = (
   {
-    id,
+    mergeId,
     unitId,
     type,
     pinId,
-  }: { id: string; type: IO; unitId: string; pinId: string },
+  }: { mergeId: string; type: IO; unitId: string; pinId: string },
   spec: GraphSpec
 ): void => {
-  pathDelete(spec, ['merges', id, unitId, type, pinId])
+  pathDelete(spec, ['merges', mergeId, unitId, type, pinId])
 
-  if (isEmptyObject(pathGet(spec, ['merges', id, unitId, type]))) {
-    pathDelete(spec, ['merges', id, unitId, type])
+  if (
+    isEmptyObject(pathOrDefault(spec, ['merges', mergeId, unitId, type], {}))
+  ) {
+    pathDelete(spec, ['merges', mergeId, unitId, type])
   }
 
-  if (isEmptyObject(pathGet(spec, ['merges', id, unitId]))) {
-    pathDelete(spec, ['merges', id, unitId])
+  if (isEmptyObject(pathOrDefault(spec, ['merges', mergeId, unitId], {}))) {
+    pathDelete(spec, ['merges', mergeId, unitId])
   }
 }
 
 export const removePinFromMerge = (
   {
-    id,
+    mergeId,
     unitId,
     type,
     pinId,
-  }: { id: string; type: IO; unitId: string; pinId: string },
+  }: { mergeId: string; type: IO; unitId: string; pinId: string },
   spec: GraphSpec
 ): void => {
-  _removePinFromMerge({ id, unitId, type, pinId }, spec)
+  _removePinFromMerge({ mergeId, unitId, type, pinId }, spec)
 }
 
 export const isPinMerged = (
@@ -412,18 +392,18 @@ export const exposeInput = (
 export const plugPin = (
   {
     type,
-    id,
+    pinId,
     subPinId,
     subPinSpec,
   }: {
     type: IO
-    id: string
+    pinId: string
     subPinId: string
     subPinSpec: GraphSubPinSpec
   },
   spec: GraphSpec
 ): void => {
-  return assocPath(spec, [`${type}s`, id, 'plug', subPinId], subPinSpec)
+  return pathSet(spec, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
 }
 
 export const unplugInput = (
@@ -464,7 +444,7 @@ export const unplugPin = (
   },
   spec: GraphSpec
 ): void => {
-  return assocPath(spec, [`${type}s`, pinId, 'plug', subPinId], {})
+  return pathSet(spec, [`${type}s`, pinId, 'plug', subPinId], {})
 }
 
 export const coverInputSet = ({ id }: { id: string }, spec: GraphSpec): void =>
@@ -518,61 +498,42 @@ export const coverOutput = (
   return coverPin({ pinId: id, type: 'output', subPinId }, spec)
 }
 
-export const setUnitErr = (
-  { unitId, err }: { unitId: string; err: string | null },
-  spec: GraphSpec
-): void => {
-  if (err !== null) {
-    return assocPath(spec, ['units', unitId, 'err'], err)
-  } else {
-    return pathDelete(spec, ['units', unitId, 'err'])
-  }
-}
-
-export const setPinSetName = (
-  { type, id, name }: { type: IO; id: string; name: string },
-  spec: GraphSpec
-): void => {
-  return assocPath(spec, [`${type}s`, id, 'name'], name)
-}
-
 export const setPinSetId = (
   { type, id, newId }: { type: IO; id: string; newId: string },
   spec: GraphSpec
 ): void => {
-  return assocPath(
-    dissocPath(spec, [`${type}s`, id]),
-    [`${type}s`, newId],
-    pathGet(spec, [`${type}s`, id])
-  )
+  const pinSpec = pathGet(spec, [`${type}s`, id])
+  
+  pathDelete(spec, [`${type}s`, id])
+  pathSet(spec, [`${type}s`, newId], pinSpec)
 }
 
 export const setPinSetFunctional = (
   { type, pinId, functional }: { type: IO; pinId: string; functional: boolean },
   spec: GraphSpec
 ): void => {
-  return assocPath(spec, [`${type}s`, pinId, 'functional'], functional)
+  return pathSet(spec, [`${type}s`, pinId, 'functional'], functional)
 }
 
 export const setPinSetRef = (
   { type, pinId, ref }: { type: IO; pinId: string; ref: boolean },
   spec: GraphSpec
 ): void => {
-  return assocPath(spec, [`${type}s`, pinId, 'ref'], ref)
+  return pathSet(spec, [`${type}s`, pinId, 'ref'], ref)
 }
 
 export const setUnitInput = (
   { id, name, data }: { id: string; name: string; data: string },
   spec: GraphSpec
 ): void => {
-  return assocPath(spec, ['units', id, 'input', name], data)
+  return pathSet(spec, ['units', id, 'input', name], data)
 }
 
 export const setUnitOutput = (
   { id, name, data }: { id: string; name: string; data: string },
   spec: GraphSpec
 ): void => {
-  return assocPath(spec, ['units', id, 'output', name], data)
+  return pathSet(spec, ['units', id, 'output', name], data)
 }
 
 export const setUnitPinData = (
@@ -599,36 +560,6 @@ export const setUnitPinConstant = (
   return pathSet(spec, ['units', unitId, type, pinId, 'constant'], constant)
 }
 
-export const setUnitInputConstant = (
-  {
-    unitId,
-    pinId,
-    constant,
-  }: { unitId: string; pinId: string; constant: boolean },
-  spec: GraphSpec
-): void => {
-  return assocPath(
-    spec,
-    ['units', unitId, 'input', pinId, 'constant'],
-    constant
-  )
-}
-
-export const setUnitOutputConstant = (
-  {
-    unitId,
-    pinId,
-    constant,
-  }: { unitId: string; pinId: string; constant: boolean },
-  spec: GraphSpec
-): void => {
-  return assocPath(
-    spec,
-    ['units', unitId, 'output', pinId, 'constant'],
-    constant
-  )
-}
-
 export const setUnitPinIgnored = (
   {
     unitId,
@@ -646,7 +577,7 @@ export const setUnitPinIgnored = (
   if (ignored) {
     forEachPinOnMerges(spec.merges!, (id, _unitId, _type, _pinId) => {
       if (_unitId === unitId && _type === type && _pinId === pinId) {
-        removePinFromMerge({ id, unitId, type, pinId }, spec)
+        removePinFromMerge({ mergeId: id, unitId, type, pinId }, spec)
       }
     })
 
@@ -671,7 +602,7 @@ export const setUnitPinIgnored = (
     }
   }
 
-  spec = assocPath(spec, ['units', unitId, type, pinId, 'ignored'], ignored)
+  pathDelete(spec, ['units', unitId, type, pinId, 'ignored'])
 
   return spec
 }

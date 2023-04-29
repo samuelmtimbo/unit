@@ -88,7 +88,11 @@ function _bundle(
     return
   }
 
-  if (!custom[spec.id] && !branch.has(spec.id)) {
+  if (branch.has(spec.id)) {
+    return
+  }
+
+  if (!custom[spec.id]) {
     if (!specs[spec.id] || !isSystemSpecId(specs, spec.id)) {
       custom[spec.id] = spec
     }

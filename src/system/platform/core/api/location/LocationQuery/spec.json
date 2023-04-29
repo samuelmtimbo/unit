@@ -1,0 +1,60 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "location query",
+  "units": {
+    "parseurl": {
+      "id": "81ac8195-57ed-4b22-b8b8-fe3e68b11af0",
+      "input": { "url": {} },
+      "output": { "obj": {} },
+      "metadata": { "position": { "x": -79, "y": 80 } }
+    },
+    "location": {
+      "id": "30f6738c-1938-4dcd-9e7f-6c10f9730021",
+      "input": { "any": {} },
+      "output": { "url": {} },
+      "metadata": { "position": { "x": -181, "y": 83 } }
+    },
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": { "obj": {}, "key": { "constant": true, "data": "\"search\"" } },
+      "output": { "value": {} },
+      "metadata": { "position": { "x": 26, "y": 61 } }
+    },
+    "parsequery": {
+      "id": "02f91720-c4d5-4d66-ae91-d46ddc635722",
+      "input": { "str": {} },
+      "output": { "obj": {} },
+      "metadata": { "position": { "x": 129, "y": 63 } }
+    }
+  },
+  "merges": {
+    "0": {
+      "parseurl": { "input": { "url": true } },
+      "location": { "output": { "url": true } }
+    },
+    "1": {
+      "parseurl": { "output": { "obj": true } },
+      "get": { "input": { "obj": true } }
+    },
+    "2": {
+      "get": { "output": { "value": true } },
+      "parsequery": { "input": { "str": true } }
+    }
+  },
+  "inputs": {
+    "any": {
+      "plug": { "0": { "unitId": "location", "pinId": "any" } },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "obj": {
+      "plug": { "0": { "unitId": "parsequery", "pinId": "obj" } },
+      "ref": false
+    }
+  },
+  "metadata": { "icon": "question", "description": "" },
+  "id": "74aea9dc-5247-4689-816f-2a1f24abbfc8",
+  "system": true,
+  "specs": {}
+}

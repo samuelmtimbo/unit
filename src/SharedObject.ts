@@ -1,4 +1,4 @@
-import { EventEmitter, EventEmitter_EE } from './EventEmitter'
+import { EventEmitter_, EventEmitter_EE } from './EventEmitter'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 
@@ -7,7 +7,7 @@ export type SharedObjectClientEvents<_EE extends Dict<any[]>> =
 
 export interface SharedObjectClient<T, _EE extends Dict<any[]>> {
   proxy: T
-  emitter: EventEmitter<SharedObjectClientEvents<_EE>>
+  emitter: EventEmitter_<SharedObjectClientEvents<_EE>>
   disconnect: Unlisten
 }
 
@@ -37,7 +37,7 @@ export class SharedObject<T extends Dict<any>, _EE extends Dict<any[]>> {
         return value
       },
     })
-    const emitter = new EventEmitter<SharedObjectClientEvents<_EE>>()
+    const emitter = new EventEmitter_<SharedObjectClientEvents<_EE>>()
     const disconnect = () => {
       const i = this._clients.indexOf(client)
       this._clients.splice(i, 1)

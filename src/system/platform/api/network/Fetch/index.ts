@@ -28,6 +28,8 @@ export default class Fetch extends Functional<I, O> {
     )
   }
 
+  private _fetch_index: number = 0
+
   f({ url, options }: I, done: Done<O>) {
     const {
       api: {
@@ -35,10 +37,22 @@ export default class Fetch extends Functional<I, O> {
       },
     } = this.__system
 
+    const i = ++this._fetch_index
+
     try {
       fetch(url, options)
         .then((response) => {
+          if (i !== this._fetch_index) {
+            // request is outdated
+            return
+          }
+
           return response.text().then((text) => {
+            if (i !== this._fetch_index) {
+              // request is outdated
+              return
+            }
+
             done({
               response: {
                 status: response.status,
@@ -48,6 +62,11 @@ export default class Fetch extends Functional<I, O> {
           })
         })
         .catch((err) => {
+          if (i !== this._fetch_index) {
+            // request is outdated
+            return
+          }
+          
           if (
             err.message.toLowerCase() ===
             "failed to execute 'fetch' on 'window': request with get/head method cannot have body."
@@ -61,6 +80,7 @@ export default class Fetch extends Functional<I, O> {
         })
     } catch (err) {
       console.log(err)
+
       done(undefined, 'malformed')
     }
   }

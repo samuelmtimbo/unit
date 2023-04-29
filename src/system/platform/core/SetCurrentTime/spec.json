@@ -1,0 +1,34 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "set currentTime",
+  "units": {
+    "set": {
+      "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+      "input": {
+        "obj": {},
+        "name": { "constant": true, "data": "'currentTime'" },
+        "data": {}
+      },
+      "output": { "data": { "ignored": true } },
+      "metadata": { "position": { "x": 6, "y": 19 } }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "obj": {
+      "plug": { "0": { "unitId": "set", "pinId": "obj" } },
+      "ref": true
+    },
+    "data": {
+      "plug": { "0": { "unitId": "set", "pinId": "data" } },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "set currentTime property of `obj`"
+  },
+  "id": "88553858-c62d-4970-98c9-084084528d2a",
+  "system": true
+}

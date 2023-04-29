@@ -25,14 +25,18 @@ export default class SVGLine extends Element<SVGLineElement, Props> {
       namespaceURI,
       'line'
     )
+
     if (className !== undefined) {
       line_el.classList.value = className
     }
+
     applyStyle(line_el, style)
+
     line_el.setAttribute('x1', `${x1}`)
     line_el.setAttribute('y1', `${y1}`)
     line_el.setAttribute('x2', `${x2}`)
     line_el.setAttribute('y2', `${y2}`)
+
     this._line_el = line_el
 
     this.$element = line_el

@@ -11,16 +11,20 @@ import { AsyncW } from './AsyncW'
 import { AsyncWrap } from './AsyncWrap'
 
 export const Async = (unit: any, _: string[]) => {
+  if (unit.__async) {
+    return unit
+  }
+
   return AsyncWrap(unit, _, {
-    $C: AsyncC,
-    $E: AsyncE,
-    $G: AsyncG,
-    $V: AsyncV,
-    $ST: AsyncST,
-    $U: AsyncU,
-    $J: AsyncJ,
-    $W: AsyncW,
-    $EE: AsyncEE,
-    $S: AsyncS,
+    C: AsyncC,
+    E: AsyncE,
+    G: AsyncG,
+    V: AsyncV,
+    ST: AsyncST,
+    U: AsyncU,
+    J: AsyncJ,
+    W: AsyncW,
+    EE: AsyncEE,
+    S: AsyncS,
   })
 }

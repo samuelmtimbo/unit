@@ -54,7 +54,7 @@
   "metadata": {
     "icon": "square",
     "description": "row flexbox",
-    "complexity": 13,
+    "complexity": 30,
     "tags": [
       "platform",
       "core",

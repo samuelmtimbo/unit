@@ -2,7 +2,7 @@ import { Peer } from '../../../../../api/peer/Peer'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Graph } from '../../../../../Class/Graph'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { $makeUnitRemoteRef } from '../../../../../client/makeUnitRemoteRef'
+import { makeUnitRemoteRef } from '../../../../../client/makeUnitRemoteRef'
 import { RemoteRef } from '../../../../../client/RemoteRef'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
 import { evaluate } from '../../../../../spec/evaluate'
@@ -51,7 +51,6 @@ export default class PeerShareGraph extends Semifunctional<I, O> {
 
       if (this._connected) {
         this._disconnect()
-
         this._close()
       }
     })
@@ -81,7 +80,9 @@ export default class PeerShareGraph extends Semifunctional<I, O> {
   }
 
   private _send_terminate = () => {
-    this._send({ type: TERMINATE })
+    if (this._connected) {
+      this._send({ type: TERMINATE })
+    }
   }
 
   f({ graph, opt }: I, done: Done<O>) {
@@ -124,7 +125,7 @@ export default class PeerShareGraph extends Semifunctional<I, O> {
       })
     })()
 
-    const ref = $makeUnitRemoteRef(graph, ['$U', '$C', '$G'], (data) => {
+    const ref = makeUnitRemoteRef(graph, ['U', 'C', 'G'], (data) => {
       this._send_exec(data)
     })
 

@@ -11,9 +11,7 @@
     "opt": {
       "type": "{iceServers:{urls:string[]}[]}",
       "metadata": {
-        "examples": [
-          "{iceServers:[{urls:['stun:ice.ioun.net']}]}"
-        ]
+        "examples": ["{iceServers:[{urls:['stun:stun.l.google.com:19302']}]}"]
       }
     },
     "close": {
@@ -24,20 +22,16 @@
     "offer": {
       "type": "string"
     },
-    "port": {
+    "channel": {
       "type": "`CH`",
       "ref": true
     }
   },
   "metadata": {
     "icon": "link",
-    "description": "Peer to Peer (P2P) Transmitter",
-    "complexity": 2,
-    "tags": [
-      "platform",
-      "api",
-      "peer"
-    ]
+    "description": "output `offer` and input `answer` to stablish a Peer to Peer (P2P) connection with a remote peer",
+    "complexity": 3,
+    "tags": ["platform", "api", "peer"]
   },
   "id": "7375aad5-50fd-403c-80ae-471b95088f04",
   "base": true,

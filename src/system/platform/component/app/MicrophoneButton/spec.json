@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "mic",
     "description": "speak a sentence",
-    "complexity": 6,
+    "complexity": 22,
     "tags": [
       "platform",
       "component",

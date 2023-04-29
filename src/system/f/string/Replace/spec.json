@@ -1,25 +1,28 @@
 {
   "name": "replace",
   "inputs": {
-    "a": {
+    "str": {
       "type": "string"
     },
     "regex": {
       "type": "string"
     },
-    "replacement": {
+    "flags": {
+      "type": "string"
+    },
+    "with": {
       "type": "string"
     }
   },
   "outputs": {
-    "a": {
+    "str": {
       "type": "string"
     }
   },
   "metadata": {
     "icon": "search",
-    "description": "replace every `b` ocurrence in `a` with `c`",
-    "complexity": 2,
+    "description": "replace every `regex` match in `str` `with`",
+    "complexity": 3,
     "tags": [
       "f",
       "string"

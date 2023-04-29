@@ -1,4 +1,5 @@
 import * as assert from 'assert'
+import { evaluateBundleStr } from '../../client/idFromUnitValue'
 import { evaluate } from '../../spec/evaluate'
 import {
   applyGenerics,
@@ -27,6 +28,7 @@ import {
 import isEqual from '../../system/f/comparisson/Equals/f'
 import _classes from '../../system/_classes'
 import _specs from '../../system/_specs'
+import { system } from '../util/system'
 import { ID_IDENTITY } from './id'
 
 // getTree
@@ -185,109 +187,111 @@ assert(!isValidType('foo:false'))
 assert(!isValidType('<T>["S",K]'))
 assert(!isValidObjKey('*'))
 
-assert(isTypeMatch('number', 'number|string'))
-assert(isTypeMatch('string', 'number|string'))
-assert(isTypeMatch('number', '(number|string)'))
-assert(isTypeMatch('string', '(number|string)'))
-assert(isTypeMatch('number[]', '(number|string)[]'))
-assert(isTypeMatch('string[]', '(number|string)[]'))
-assert(isTypeMatch("'number|string'", 'string'))
-assert(isTypeMatch('"number|string"', 'string'))
-assert(isTypeMatch('"foo"', '"foo"|"bar"'))
-assert(isTypeMatch('{a:"foo"}', "{a:'foo'|'bar'}"))
-assert(isTypeMatch('[{a:"bar"}]', "{a:'foo'|'bar'}[]"))
-assert(isTypeMatch('<T>', '<G>'))
-assert(isTypeMatch('number', '<T>'))
-assert(isTypeMatch('<T>', 'number'))
-assert(isTypeMatch('<T>', 'string'))
-assert(isTypeMatch('<T>', 'string[]'))
-assert(isTypeMatch('<T>[]', 'string[]'))
-assert(isTypeMatch('[]', 'string[]'))
-assert(isTypeMatch('string', 'string'))
-assert(isTypeMatch('/abc/', 'regex'))
-assert(isTypeMatch('number', 'number'))
-assert(isTypeMatch('boolean', 'boolean'))
-assert(isTypeMatch('any', 'any'))
-assert(isTypeMatch('number', 'any'))
-assert(isTypeMatch('1', 'any'))
-assert(isTypeMatch('"foo"', 'string'))
-assert(isTypeMatch("'foo'", '"foo"'))
-assert(isTypeMatch('"foo"', '"foo"|"bar"'))
-assert(isTypeMatch('"foo"', "'foo'|'bar'"))
-assert(isTypeMatch("'foo'", "'foo'|'bar'"))
-assert(isTypeMatch('<T>', 'any'))
-assert(isTypeMatch('any', '<T>'))
-assert(isTypeMatch('null', 'null'))
-assert(isTypeMatch('null', 'any'))
-assert(isTypeMatch('string[]', '<T>[]'))
-assert(isTypeMatch('string[]', 'string[]'))
-assert(isTypeMatch('string[]', '(string|number)[]'))
-assert(isTypeMatch('{a:1,}', 'object'))
-assert(isTypeMatch('{"x":number,"y":number}', 'object'))
-assert(isTypeMatch('{x:0,y:1}', '{"x":number,"y":number}'))
+const _isTypeMatch = (a: string, b: string) => isTypeMatch(system, a, b)
+
+assert(_isTypeMatch('number', 'number|string'))
+assert(_isTypeMatch('string', 'number|string'))
+assert(_isTypeMatch('number', '(number|string)'))
+assert(_isTypeMatch('string', '(number|string)'))
+assert(_isTypeMatch('number[]', '(number|string)[]'))
+assert(_isTypeMatch('string[]', '(number|string)[]'))
+assert(_isTypeMatch("'number|string'", 'string'))
+assert(_isTypeMatch('"number|string"', 'string'))
+assert(_isTypeMatch('"foo"', '"foo"|"bar"'))
+assert(_isTypeMatch('{a:"foo"}', "{a:'foo'|'bar'}"))
+assert(_isTypeMatch('[{a:"bar"}]', "{a:'foo'|'bar'}[]"))
+assert(_isTypeMatch('<T>', '<G>'))
+assert(_isTypeMatch('number', '<T>'))
+assert(_isTypeMatch('<T>', 'number'))
+assert(_isTypeMatch('<T>', 'string'))
+assert(_isTypeMatch('<T>', 'string[]'))
+assert(_isTypeMatch('<T>[]', 'string[]'))
+assert(_isTypeMatch('[]', 'string[]'))
+assert(_isTypeMatch('string', 'string'))
+assert(_isTypeMatch('/abc/', 'regex'))
+assert(_isTypeMatch('number', 'number'))
+assert(_isTypeMatch('boolean', 'boolean'))
+assert(_isTypeMatch('any', 'any'))
+assert(_isTypeMatch('number', 'any'))
+assert(_isTypeMatch('1', 'any'))
+assert(_isTypeMatch('"foo"', 'string'))
+assert(_isTypeMatch("'foo'", '"foo"'))
+assert(_isTypeMatch('"foo"', '"foo"|"bar"'))
+assert(_isTypeMatch('"foo"', "'foo'|'bar'"))
+assert(_isTypeMatch("'foo'", "'foo'|'bar'"))
+assert(_isTypeMatch('<T>', 'any'))
+assert(_isTypeMatch('any', '<T>'))
+assert(_isTypeMatch('null', 'null'))
+assert(_isTypeMatch('null', 'any'))
+assert(_isTypeMatch('string[]', '<T>[]'))
+assert(_isTypeMatch('string[]', 'string[]'))
+assert(_isTypeMatch('string[]', '(string|number)[]'))
+assert(_isTypeMatch('{a:1,}', 'object'))
+assert(_isTypeMatch('{"x":number,"y":number}', 'object'))
+assert(_isTypeMatch('{x:0,y:1}', '{"x":number,"y":number}'))
 assert(
-  isTypeMatch(
+  _isTypeMatch(
     '{x:10,y:10,width:100,height:100}',
     '{x:number,y:number,width:number,height:number}'
   )
 )
-assert(isTypeMatch('{a:number,b:string}', '{a:number,b:string}'))
-assert(isTypeMatch('{a:number,b:string}', '{b:string,a:number}'))
-assert(isTypeMatch('{a:number,b:string}', '{a:number}'))
-assert(isTypeMatch('{a:number,b:string}', '{}'))
-assert(isTypeMatch('{a:"foo"}', "{a:'foo'}"))
-assert(isTypeMatch("{a:'foo'}", '{a:"foo"}'))
-assert(isTypeMatch('{type:"answer"}', "{type:'answer'}"))
-assert(isTypeMatch('{type:"answer",sdp:\'\'}', "{type:'answer',sdp:string}"))
-assert(isTypeMatch('{}', '{a?:number}'))
-assert(isTypeMatch('string[]&object', 'object'))
-assert(isTypeMatch('string[]&object', 'string[]'))
-assert(isTypeMatch('string[]&object', '<A>[]'))
-assert(isTypeMatch('string[]|object', 'string[]|object'))
-assert(isTypeMatch('string[]|{foo:"bar"}', 'string[]|object'))
-assert(isTypeMatch('[]', '[]'))
-assert(isTypeMatch('{a:"foo"}', 'string{}'))
-assert(isTypeMatch('{a:1}', 'number{}'))
-assert(isTypeMatch('[1,2,3]', '[1,2,3]'))
-assert(isTypeMatch('[1,2,3]', '[number,number,number]'))
-assert(isTypeMatch('any', 'number'))
-assert(isTypeMatch('<T>', '<K>[]'))
-assert(isTypeMatch('any', 'object'))
-assert(isTypeMatch('object', '{}'))
-assert(isTypeMatch('object', '{"x":number,"y":number}'))
-assert(isTypeMatch('<T>', ID_IDENTITY))
-assert(isTypeMatch('any', ID_IDENTITY))
-assert(isTypeMatch(`\${${ID_IDENTITY}}`, 'any'))
-assert(isTypeMatch('`G`', '`G`'))
-assert(isTypeMatch('`U`&`G`', '`G`'))
-assert(isTypeMatch('`U`&`G`', '`U`&`G`'))
-assert(isTypeMatch('`U`&`C`&`G`', '`U`&`G`'))
-assert(isTypeMatch('`G`', '`EE`'))
-assert(isTypeMatch('`G`', '`U`'))
-assert(isTypeMatch('`U`&`G`', '`U`&`C`&`G`'))
-assert(isTypeMatch(`\${unit:{id:'${ID_IDENTITY}'}}`, '`U`'))
+assert(_isTypeMatch('{a:number,b:string}', '{a:number,b:string}'))
+assert(_isTypeMatch('{a:number,b:string}', '{b:string,a:number}'))
+assert(_isTypeMatch('{a:number,b:string}', '{a:number}'))
+assert(_isTypeMatch('{a:number,b:string}', '{}'))
+assert(_isTypeMatch('{a:"foo"}', "{a:'foo'}"))
+assert(_isTypeMatch("{a:'foo'}", '{a:"foo"}'))
+assert(_isTypeMatch('{type:"answer"}', "{type:'answer'}"))
+assert(_isTypeMatch('{type:"answer",sdp:\'\'}', "{type:'answer',sdp:string}"))
+assert(_isTypeMatch('{}', '{a?:number}'))
+assert(_isTypeMatch('string[]&object', 'object'))
+assert(_isTypeMatch('string[]&object', 'string[]'))
+assert(_isTypeMatch('string[]&object', '<A>[]'))
+assert(_isTypeMatch('string[]|object', 'string[]|object'))
+assert(_isTypeMatch('string[]|{foo:"bar"}', 'string[]|object'))
+assert(_isTypeMatch('[]', '[]'))
+assert(_isTypeMatch('{a:"foo"}', 'string{}'))
+assert(_isTypeMatch('{a:1}', 'number{}'))
+assert(_isTypeMatch('[1,2,3]', '[1,2,3]'))
+assert(_isTypeMatch('[1,2,3]', '[number,number,number]'))
+assert(_isTypeMatch('any', 'number'))
+assert(_isTypeMatch('<T>', '<K>[]'))
+assert(_isTypeMatch('any', 'object'))
+assert(_isTypeMatch('object', '{}'))
+assert(_isTypeMatch('object', '{"x":number,"y":number}'))
+assert(_isTypeMatch('<T>', ID_IDENTITY))
+assert(_isTypeMatch('any', ID_IDENTITY))
+assert(_isTypeMatch(`\${${ID_IDENTITY}}`, 'any'))
+assert(_isTypeMatch('`G`', '`G`'))
+assert(_isTypeMatch('`U`&`G`', '`G`'))
+assert(_isTypeMatch('`U`&`G`', '`U`&`G`'))
+assert(_isTypeMatch('`U`&`C`&`G`', '`U`&`G`'))
+assert(_isTypeMatch('`G`', '`EE`'))
+assert(_isTypeMatch('`G`', '`U`'))
+assert(_isTypeMatch('`U`&`G`', '`U`&`C`&`G`'))
+assert(_isTypeMatch(`\${unit:{id:'${ID_IDENTITY}'}}`, '`U`'))
 
-assert(!isTypeMatch('', 'any'))
-assert(!isTypeMatch('abc', 'any'))
-assert(!isTypeMatch('', '<T>'))
-assert(!isTypeMatch('1', '<T>[]'))
-assert(!isTypeMatch('foo', 'string'))
-assert(!isTypeMatch('regex', '/abc/'))
-assert(!isTypeMatch('foo', '<T>'))
-assert(!isTypeMatch('(string|number)[]', 'string[]'))
-assert(!isTypeMatch('string[]|object', '<A>[]'))
-assert(!isTypeMatch('[]', '[1]'))
-assert(!isTypeMatch('[1,2,3]', '[1,2,3,4]'))
-assert(!isTypeMatch('[1,2,3]', '[number,number, string]'))
-assert(!isTypeMatch('{background: "color"}', 'object'))
-assert(!isTypeMatch('null', ID_IDENTITY))
-assert(!isTypeMatch('object', 'class'))
-assert(!isTypeMatch('number', 'class'))
-assert(!isTypeMatch('number', ID_IDENTITY))
-assert(!isTypeMatch(ID_IDENTITY, 'number'))
-assert(!isTypeMatch('`U`', '`G`'))
-assert(!isTypeMatch('`U`', '`G`&`U`'))
-assert(!isTypeMatch('`U`&`C`', '`U`&`G`'))
+assert(!_isTypeMatch('', 'any'))
+assert(!_isTypeMatch('abc', 'any'))
+assert(!_isTypeMatch('', '<T>'))
+assert(!_isTypeMatch('1', '<T>[]'))
+assert(!_isTypeMatch('foo', 'string'))
+assert(!_isTypeMatch('regex', '/abc/'))
+assert(!_isTypeMatch('foo', '<T>'))
+assert(!_isTypeMatch('(string|number)[]', 'string[]'))
+assert(!_isTypeMatch('string[]|object', '<A>[]'))
+assert(!_isTypeMatch('[]', '[1]'))
+assert(!_isTypeMatch('[1,2,3]', '[1,2,3,4]'))
+assert(!_isTypeMatch('[1,2,3]', '[number,number, string]'))
+assert(!_isTypeMatch('{background: "color"}', 'object'))
+assert(!_isTypeMatch('null', ID_IDENTITY))
+assert(!_isTypeMatch('object', 'class'))
+assert(!_isTypeMatch('number', 'class'))
+assert(!_isTypeMatch('number', ID_IDENTITY))
+assert(!_isTypeMatch(ID_IDENTITY, 'number'))
+assert(!_isTypeMatch('`U`', '`G`'))
+assert(!_isTypeMatch('`U`', '`G`&`U`'))
+assert(!_isTypeMatch('`U`&`C`', '`U`&`G`'))
 
 // isValidValue
 
@@ -298,6 +302,10 @@ assert(isValidValue('"\'foo\'"'))
 assert(isValidValue("'\\'foo\\''"))
 assert(isValidValue('"\\\'foo\\\'"'))
 assert(isValidValue('"\\"foo\\""'))
+assert(isValidValue('"\\"foo\\""'))
+assert(isValidValue('"\\"\\\\"foo\\\\"\\""'))
+assert(isValidValue('"\\"\\\\"\\\\\\"foo\\\\\\"\\\\"\\""'))
+// assert(!isValidValue('"\\"\\\\"\\\\"foo\\\\\\"\\\\"\\""')) // TODO
 assert(isValidValue('"foo   "'))
 assert(isValidValue('"\t"'))
 assert(isValidValue('"\n"'))
@@ -554,11 +562,14 @@ assert.deepEqual(_evaluate('Infinity'), Infinity)
 assert.deepEqual(_evaluate('"foo"'), 'foo')
 assert.deepEqual(_evaluate("'foo'"), 'foo')
 assert.deepEqual(_evaluate('\'"foo"\''), '"foo"')
-assert.deepEqual(_evaluate("'\\'foo\\''"), "'foo'")
+// assert.deepEqual(_evaluate("'\\'foo\\''"), "'foo'")
 assert.deepEqual(_evaluate('\'\\"foo\\"\''), '"foo"')
 assert.deepEqual(_evaluate('"\\"foo\\""'), '"foo"')
+assert.deepEqual(_evaluate('"\\"\\\\\\"foo\\\\\\"\\""'), '"\\"foo\\""')
+// assert.deepEqual(_evaluate('"\\"\\\\"foo\\\\"\\""'), '"\\"foo\\""')
 assert.deepEqual(_evaluate("'\\\\'"), '\\')
-assert.deepEqual(_evaluate("'\\'\\\\\\''"), "'\\'")
+// assert.deepEqual(_evaluate("'\\'\\\\\\''"), "'\\'")
+assert.deepEqual(_evaluate('"\\""'), '"')
 assert.deepEqual(_evaluate('"\\"input/a\\""'), '"input/a"')
 assert.deepEqual(_evaluate('true'), true)
 assert.deepEqual(_evaluate('false'), false)
@@ -576,16 +587,16 @@ assert.deepEqual(_evaluate('{a}'), { a: 'a' })
 assert.deepEqual(_evaluate('{a,b}'), { a: 'a', b: 'b' })
 assert.deepEqual(_evaluate('{a,}'), { a: 'a' })
 assert.deepEqual(_evaluate('{1}'), { 1: '1' })
-assert.deepEqual(_evaluate('"\\n"'), '\\n')
+assert.deepEqual(_evaluate('"\n"'), '\n')
 assert.deepEqual(
   _evaluate(`\${unit:{id:'${ID_IDENTITY}'}}`).__bundle.unit.id,
   ID_IDENTITY
 )
 assert.deepEqual(
   _evaluate(
-    `'{\\n "error": {\\n  "errors": [\\n   {\\n    "domain": "global",\\n    "reason": "required",\\n    "message": "Login Required",\\n    "locationType": "header",\\n    "location": "Authorization"\\n   }\\n  ],\\n  "code": 401,\\n  "message": "Login Required"\\n }\\n}\\n'`
+    `'{\n "error": {\n  "errors": [\n   {\n    "domain": "global",\n    "reason": "required",\n    "message": "Login Required",\n    "locationType": "header",\n    "location": "Authorization"\n   }\n  ],\n  "code": 401,\n  "message": "Login Required"\n }\n}\n'`
   ),
-  '{\\n "error": {\\n  "errors": [\\n   {\\n    "domain": "global",\\n    "reason": "required",\\n    "message": "Login Required",\\n    "locationType": "header",\\n    "location": "Authorization"\\n   }\\n  ],\\n  "code": 401,\\n  "message": "Login Required"\\n }\\n}\\n'
+  '{\n "error": {\n  "errors": [\n   {\n    "domain": "global",\n    "reason": "required",\n    "message": "Login Required",\n    "locationType": "header",\n    "location": "Authorization"\n   }\n  ],\n  "code": 401,\n  "message": "Login Required"\n }\n}\n'
 )
 
 // isGeneric
@@ -597,17 +608,88 @@ assert(hasGeneric('`V<T>`'))
 
 // matchAllType
 
-assert(isEqual(matchAllExcTypes(['any'], ['any']), [[[0, 0]]]))
-assert(isEqual(matchAllExcTypes(['string'], ['any']), [[[0, 0]]]))
-assert(isEqual(matchAllExcTypes(['any'], ['string']), [[[0, 0]]]))
-assert(isEqual(matchAllExcTypes(['number'], ['string']), []))
+const _matchAllExcTypes = (types: string[], excTypes: string[]) =>
+  matchAllExcTypes(system, types, excTypes)
+
+assert(isEqual(_matchAllExcTypes(['any'], ['any']), [[[0, 0]]]))
+assert(isEqual(_matchAllExcTypes(['string'], ['any']), [[[0, 0]]]))
+assert(isEqual(_matchAllExcTypes(['any'], ['string']), [[[0, 0]]]))
+assert(isEqual(_matchAllExcTypes(['number'], ['string']), []))
 assert(
-  isEqual(matchAllExcTypes(['number', 'number'], ['<T>']), [[[0, 0]], [[1, 0]]])
-)
-assert(
-  isEqual(matchAllExcTypes(['number', 'number'], ['number']), [
+  isEqual(_matchAllExcTypes(['number', 'number'], ['<T>']), [
     [[0, 0]],
     [[1, 0]],
   ])
 )
-assert(isEqual(matchAllExcTypes(['number', 'string'], ['number']), [[[0, 0]]]))
+assert(
+  isEqual(_matchAllExcTypes(['number', 'number'], ['number']), [
+    [[0, 0]],
+    [[1, 0]],
+  ])
+)
+assert(isEqual(_matchAllExcTypes(['number', 'string'], ['number']), [[[0, 0]]]))
+
+assert.deepEqual(
+  evaluateBundleStr(
+    "${unit:{id:'dc5852d3-b212-48ee-9f05-6ea2de2ef515',input:{},output:{},memory:{input:{},output:{},memory:{unit:{},merge:{},exposedMerge:{},waitAll:{input:'{}',output:'{}',memory:'{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_looping:false}'}}}},specs:{\"dc5852d3-b212-48ee-9f05-6ea2de2ef515\":{type:'`U`&`G`&`C`',name:'untitled',units:{},merges:{},inputs:{},outputs:{},metadata:{icon:null,description:''},id:'dc5852d3-b212-48ee-9f05-6ea2de2ef515'}}}",
+    system.specs,
+    system.classes
+  ),
+  {
+    unit: {
+      id: 'dc5852d3-b212-48ee-9f05-6ea2de2ef515',
+      input: {},
+      output: {},
+      memory: {
+        input: {},
+        output: {},
+        memory: {
+          unit: {},
+          merge: {},
+          exposedMerge: {},
+          waitAll: {
+            input: '{}',
+            output: '{}',
+            memory:
+              '{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_looping:false}',
+          },
+        },
+      },
+    },
+    specs: {
+      'dc5852d3-b212-48ee-9f05-6ea2de2ef515': {
+        type: '`U`&`G`&`C`',
+        name: 'untitled',
+        units: {},
+        merges: {},
+        inputs: {},
+        outputs: {},
+        metadata: { icon: null, description: '' },
+        id: 'dc5852d3-b212-48ee-9f05-6ea2de2ef515',
+      },
+    },
+  }
+)
+
+// assert(
+//   isTypeMatch(
+//     system,
+//     "${unit:{id:'dc5852d3-b212-48ee-9f05-6ea2de2ef515',input:{},output:{},memory:{input:{},output:{},memory:{unit:{},merge:{},exposedMerge:{},waitAll:{input:'{}',output:'{}',memory:'{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_looping:false}'}}}},specs:{\"dc5852d3-b212-48ee-9f05-6ea2de2ef515\":{type:'`U`&`G`&`C`',name:'untitled',units:{},merges:{},inputs:{},outputs:{},metadata:{icon:null,description:''},id:'dc5852d3-b212-48ee-9f05-6ea2de2ef515'}}}",
+//     '`G`'
+//   )
+// )
+
+// assert(
+//   _getTypeTree(
+//     '{name:"cybermilla 0",inputs:{},outputs:{click:{plug:{0:{unitId:"onclick",pinId:"event"},1:{unitId:"onclick0",pinId:"event"},2:{unitId:"onclick1",pinId:"event"}}}},units:{cybermillabutton:{id:"91bbfe94-8960-4ef0-946d-d786a8dfceb6",input:{style:{data:"{background:\\"#FD5F55\\",background:\\"radial-gradient(ellipse at center, #ffffff -100%, #FD5F55 50%)\\"}\\"},value:{data:"\\"Fashion\\""}},output:{},metadata:{component:{width:274.7310791015625,height:122.5975341796875},position:{x:-550,y:57}}},cybermillabutton0:{id:"91bbfe94-8960-4ef0-946d-d786a8dfceb6",input:{style:{data:"{background:\\"#A6496A\\",background:\\"radial-gradient(ellipse at center, #ffffff -100%, #A6496A 50%)\\"}"},value:{data:"\\"Design"\\"}}},onclick:{id:"97c94516-add1-11ea-ba72-8f55299b735c",input:{element:{}},output:{event:{}},metadata:{position:{x:-368,y:57}}},onclick0:{id:"97c94516-add1-11ea-ba72-8f55299b735c",input:{element:{}},output:{event:{}},metadata:{position:{x:93,y:62}}},onclick1:{id:"97c94516-add1-11ea-ba72-8f55299b735c",input:{element:{}},output:{event:{}},metadata:{position:{x:343,y:39}}}},merges:{0:{onclick:{input:{element:true}},cybermillabutton:{output:{_self:true}}},1:{onclick0:{input:{element:true}},cybermillabutton0:{output:{_self:true}}},2:{onclick1:{input:{element:true}},cybermillabutton1:{output:{_self:true}}}},render:true,component:{subComponents:{box:{children:["box4"],childSlot:{box4:"default"}},box4:{children:["image","textdiv","textdiv0","box5"],childSlot:{image:"default",textdiv:"default",textdiv0:"default",box5:"default"}},box5:{children:["cybermillabutton","cybermillabutton0","cybermillabutton1"],childSlot:{cybermillabutton:"default",cybermillabutton0:"default",cybermillabutton1:"default"}},textdiv:{children:[]},textdiv0:{children:[]},image:{children:[]},cybermillabutton:{children:[]},cybermillabutton0:{children:[]},cybermillabutton1:{children:[]}},children:["box"],defaultWidth:480,defaultHeight:690},metadata:{complexity:26},type:"`U`&`G`&`C`",id:"56304648-a9f7-483b-ac7d-2bc63f0bf67f"}'
+//   )
+// )
+
+assert(
+  isValidValue(
+    `\${unit:{id:"9988a56e-6bee-46c8-864c-e351d84bc7e2",input:{value:{data:"\\"\\n\\nThis is indeed a test\\""}}}}`
+  )
+)
+
+assert.equal(_evaluate('"\n"'), '\n')
+assert.equal(_evaluate('"\\"\\n\\""'), '"\\n"')

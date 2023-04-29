@@ -39,7 +39,7 @@
   "metadata": {
     "icon": "message-circle",
     "description": "say what I say",
-    "complexity": 6,
+    "complexity": 8,
     "tags": [
       "platform",
       "core",

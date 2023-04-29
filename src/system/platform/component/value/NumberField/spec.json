@@ -20,16 +20,17 @@
       "defaultIgnored": true
     }
   },
-  "outputs": {},
+  "outputs": {
+    "value": {
+      "type": "number",
+      "optional": true
+    }
+  },
   "metadata": {
     "icon": "form-input",
     "description": "single line number input",
-    "complexity": 5,
-    "tags": [
-      "platform",
-      "component",
-      "value"
-    ]
+    "complexity": 20,
+    "tags": ["platform", "component", "value"]
   },
   "id": "9bc56564-ef4e-11ea-939a-27ae3feb321e",
   "base": true,

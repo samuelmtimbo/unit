@@ -1,4 +1,3 @@
-import { $wrap } from '../../../../../$wrap'
 import { AsyncWorkerS } from '../../../../../AsyncWorker'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
@@ -6,6 +5,7 @@ import { workerPort } from '../../../../../client/platform/web/workerPort'
 import { RemoteClient } from '../../../../../RemoteClient'
 import { System } from '../../../../../system'
 import { $S } from '../../../../../types/interface/async/$S'
+import { $wrap } from '../../../../../wrap'
 import { ID_WORKER } from '../../../../_ids'
 
 export interface I {

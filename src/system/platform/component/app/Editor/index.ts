@@ -2,6 +2,7 @@ import { Element_ } from '../../../../../Class/Element'
 import { Graph } from '../../../../../Class/Graph'
 import { emptySpec, newSpecId } from '../../../../../client/spec'
 import { Zoom } from '../../../../../client/zoom'
+import { fromBundle } from '../../../../../spec/fromBundle'
 import { fromSpec } from '../../../../../spec/fromSpec'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -102,10 +103,11 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
   }
 
   public snapshotSelf(): Dict<any> {
+    const bundle = this._fallback_graph.getBundleSpec()
+
     return {
       ...super.snapshotSelf(),
-      // TODO
-      _fallback_graph: null,
+      _fallback_graph: bundle,
     }
   }
 
@@ -114,6 +116,10 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
 
     super.restoreSelf(rest)
 
-    // this._fallback_graph = _fallback_graph
+    const Class = fromBundle(_fallback_graph, this.__system.specs, {})
+
+    const graph = new Class(this.__system)
+
+    this._fallback_graph = graph
   }
 }

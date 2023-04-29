@@ -113,6 +113,8 @@ export function reflectChildrenTrait(
       border: childBorder = '',
       margin: childMargin = '',
       boxSizing: childBoxSizing = 'content-box',
+      padding: childPadding = '',
+      aspectRatio: childAspectRatio = '',
     } = childStyle
 
     let [pxLeft, pcLeft] = parseLayoutValue(childLeft)
@@ -211,6 +213,30 @@ export function reflectChildrenTrait(
       height += 2 * pxBorderWidth
     }
 
+    if (childPadding) {
+      // const {
+      //   left: paddingLeft,
+      //   top: paddingTop,
+      //   right: paddingRight,
+      //   bottom: paddingBottom,
+      // } = parsePadding(childPadding)
+
+      // const [pxPaddingLeft] = parseLayoutValue(paddingLeft)
+      // const [pxPaddingRight] = parseLayoutValue(paddingRight)
+      // const [pxPaddingTop] = parseLayoutValue(paddingTop)
+      // const [pxPaddingBottom] = parseLayoutValue(paddingBottom)
+
+      // width += pxPaddingLeft + pxPaddingRight
+      // height += pxPaddingTop + pxPaddingBottom
+
+      const paddingValue = parseLayoutValue(childPadding)
+
+      const [pxPadding] = paddingValue
+
+      width += 2 * pxPadding
+      height += 2 * pxPadding
+    }
+
     const [
       childTransformX,
       childTransformY,
@@ -235,8 +261,18 @@ export function reflectChildrenTrait(
 
     const childFontSize = childFontSizeStr
 
-    const fontSize =
+    let fontSize =
       (childFontSizeStr && parseFontSize(childFontSize)) || parentFontSize
+      
+      const fontSizeUnit = childFontSizeStr?.match(/(px|em|rem|pt|vw|vh|%)$/)?.[1]
+
+    if (fontSizeUnit === 'vw') {
+      fontSize *= parentWidth / 100
+    }
+
+    if (fontSizeUnit === 'vh') {
+      fontSize *= parentHeight / 100
+    }
 
     const childOpacity = parseOpacity(childOpacityStr)
 
@@ -244,7 +280,7 @@ export function reflectChildrenTrait(
       if (childPosition === 'relative') {
         x += (pcLeft * parentWidth) / 100
         y +=
-          (total_relative_percent_height * parentHeight) / 100 +
+          (total_relative_percent_height * parentHeight * parentScaleY) / 100 +
           total_relative_px_height +
           (pcTop * parentHeight) / 100
 

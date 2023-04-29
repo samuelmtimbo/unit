@@ -53,17 +53,17 @@ import { RemoteAPI } from './RemoteAPI'
 
 // TODO
 const METHOD: Dict<Record<'call' | 'watch' | 'ref', string[]>> = {
-  $G: {
+  G: {
     call: G_METHOD_CALL,
     watch: G_METHOD_WATCH,
     ref: G_METHOD_REF,
   },
-  $U: {
+  U: {
     call: U_METHOD_CALL,
     watch: U_METHOD_WATCH,
     ref: U_METHOD_REF,
   },
-  $C: {
+  C: {
     call: C_METHOD_CALL,
     watch: C_METHOD_WATCH,
     ref: C_METHOD_REF,
@@ -80,6 +80,9 @@ export function remoteRef(ref: object): RemoteAPI['ref'] {
       const { _ } = data
 
       const $unit = method(data)
+
+      if (Array.isArray($unit)) {
+      }
 
       const remoteApi: RemoteAPI = {
         call: {},
@@ -119,37 +122,37 @@ export function makeRemoteUnitAPI(unit: any, _: string[]): RemoteAPI {
 
   for (const __ of _) {
     switch (__) {
-      case '$U':
+      case 'U':
         call = { ...call, ...AsyncUCall(unit) }
         watch = { ...watch, ...AsyncUWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncURef(unit)) }
         break
-      case '$C':
+      case 'C':
         call = { ...call, ...AsyncCCall(unit) }
         watch = { ...watch, ...AsyncCWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncCRef(unit)) }
         break
-      case '$G':
+      case 'G':
         call = { ...call, ...AsyncGCall(unit) }
         watch = { ...watch, ...AsyncGWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncGRef(unit)) }
         break
-      case '$V':
+      case 'V':
         call = { ...call, ...AsyncVCall(unit) }
         watch = { ...watch, ...AsyncVWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncVRef(unit)) }
         break
-      case '$J':
+      case 'J':
         call = { ...call, ...AsyncJCall(unit) }
         watch = { ...watch, ...AsyncJWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncJRef(unit)) }
         break
-      case '$ST':
+      case 'ST':
         call = { ...call, ...AsyncSTCall(unit) }
         watch = { ...watch, ...AsyncSTWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncSTRef(unit)) }
         break
-      case '$S':
+      case 'S':
         call = { ...call, ...AsyncSCall(unit) }
         watch = { ...watch, ...AsyncSWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncSRef(unit)) }

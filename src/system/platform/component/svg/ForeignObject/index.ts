@@ -10,7 +10,7 @@ export default class ForeignObject extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['class', 'style'],
+        i: ['style'],
         o: [],
       },
       {},

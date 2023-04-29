@@ -64,6 +64,9 @@ export function noHost(): API {
       showSaveFilePicker: () => {
         throw new APINotSupportedError('File System')
       },
+      fallbackShowOpenFilePicker: () => {
+        throw new APINotSupportedError('File System')
+      },
       downloadText: (opt: IDownloadDataOpt): Promise<void> => {
         throw new APINotSupportedError('Download')
       },
@@ -161,6 +164,7 @@ export function noHost(): API {
       fetch: () => {
         throw new APINotSupportedError('Fetch')
       },
+      EventSource: undefined,
     },
     channel: {
       session: function (opt): any {
@@ -260,6 +264,11 @@ export function noHost(): API {
         throw new Error('Function not implemented.')
       },
     },
+    location: {
+      toString: function (): Promise<string> {
+        throw new Error('Function not implemented.')
+      }
+    }
   }
 
   return api

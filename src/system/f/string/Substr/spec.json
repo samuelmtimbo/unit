@@ -1,5 +1,5 @@
 {
-  "name": "substr",
+  "name": "substring",
   "inputs": {
     "a": {
       "type": "string"
@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "scissors",
     "description": "substring",
-    "complexity": 2,
+    "complexity": 3,
     "tags": [
       "f",
       "string"

@@ -4,7 +4,7 @@ import { keys } from '../system/f/object/Keys/f'
 import { BaseSpec, GraphMergeSpec, GraphSpec, Spec, Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'
-import { clone, mapObjVK, pathOrDefault } from '../util/object'
+import { clone, isEmptyObject, mapObjVK, pathOrDefault } from '../util/object'
 import { emptyIO } from './emptyIO'
 import {
   applyGenerics,
@@ -19,7 +19,7 @@ import {
   _getValueType,
   _hasGeneric,
 } from './parser'
-import { findMergePin, forEachPinOnMerge } from './util'
+import { findFirstMergePin, forEachPinOnMerge } from './util'
 
 export type TypeInterface = {
   input: Dict<string>
@@ -156,21 +156,32 @@ export const _getGraphTypeInterface = (
   visited: { [id: string]: true } = {}
 ): TypeTreeInterface => {
   // console.log('_getGraphTypeInterface')
+
   const typeInterface: TypeTreeInterface = emptyIO({}, {})
+
   const unitTypeMap = _getGraphTypeMap(spec, specs, cache, visited)
 
   const { inputs = {}, outputs = {} } = spec
 
   forEachValueKey(inputs, ({ plug, type }, inputId) => {
     let inputType = getTree('any')
+
     if (type) {
       inputType = getTree(type)
     } else {
       forEachValueKey(plug, ({ mergeId, unitId, pinId }) => {
         let subPinType
+
         if (mergeId) {
-          const merge = spec.merges[mergeId]
-          const mergeInputPin = findMergePin(merge, 'input')
+          const merge = spec.merges[mergeId] ?? {}
+
+          // AD HOC
+          if (isEmptyObject(merge)) {
+            return
+          }
+
+          const mergeInputPin = findFirstMergePin(merge, 'input')
+
           subPinType =
             unitTypeMap[mergeInputPin.unitId].input[mergeInputPin.pinId]
         } else if (unitId && pinId) {
@@ -191,6 +202,7 @@ export const _getGraphTypeInterface = (
 
   forEachValueKey(outputs, ({ plug, type }, outputId) => {
     let outputType = getTree('any')
+
     if (type) {
       outputType = getTree(type)
     } else {
@@ -266,21 +278,27 @@ export const createGenericTypeInterface = (
   // console.log('createGenericTypeInterface', id)
   const spec = specs[id]
   const typeInterface: TypeTreeInterface = emptyIO({}, {})
+
   let i = 0
+
   const inputIds = keys(spec.inputs)
   const outputIds = keys(spec.outputs)
+
   function register(kind: IO, pinId: string): void {
     typeInterface[kind][pinId] = getTree(`<${i}>`)
     i++
   }
+
   inputIds.forEach((inputId) => register('input', inputId))
   outputIds.forEach((outputId) => register('output', outputId))
+
   return typeInterface
 }
 
 export const isMoreSpecific = (a: string, b: string): boolean => {
   const aTree = getTree(a)
   const bTree = getTree(b)
+
   return _isMoreSpecific(aTree, bTree)
 }
 
@@ -292,6 +310,7 @@ export const _isMoreSpecific = (a: TreeNode, b: TreeNode): boolean => {
   }
   const aGenericCount = _findGenerics(a).size
   const bGenericCount = _findGenerics(b).size
+
   if (aGenericCount > bGenericCount) {
     return false
   } else if (aGenericCount < bGenericCount) {
@@ -630,6 +649,13 @@ export const _getGraphTypeMap = (
 
     forEachValueKey(unit, (_, unitId: string) => {
       const unitTypeMap = typeMap[unitId]
+
+      if (!unitTypeMap) {
+        console.warn('unitTypeMap not found', unitId)
+
+        return
+      }
+
       const { input, output } = unitTypeMap
       forEachValueKey(input, (type, pinId) => {
         const nextType = _applyGenerics(type, generic_to_substitute)
@@ -666,7 +692,13 @@ export const getSubgraphs = (spec: GraphSpec): Subgraph[] => {
     subgraph.merge[mergeId] = true
     let merged = false
     let index = i
-    forEachValueKey(merge, (_, unitId) => {
+    forEachValueKey(merge, (mergeUnit, unitId) => {
+      if (isEmptyObject(mergeUnit)) {
+        console.warn('empty merge')
+
+        return
+      }
+
       subgraph.unit[unitId] = true
       const unit_index = id_to_index.unit[unitId]
       if (unit_index !== undefined) {

@@ -11,7 +11,7 @@ export type O = {
   b: string
 }
 
-export default class Encode extends Functional<I, O> {
+export default class EncodeBase64 extends Functional<I, O> {
   constructor(system: System) {
     super(
       {

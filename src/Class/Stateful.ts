@@ -35,7 +35,12 @@ export class Stateful<
 
   protected _state: Dict<any> = {}
 
-  constructor({ i = [], o = [] }: ION, opt: Opt, system: System, id: string) {
+  constructor(
+    { i = [], o = [] }: ION<I, O>,
+    opt: Opt,
+    system: System,
+    id: string
+  ) {
     super(
       {
         i,
@@ -89,6 +94,8 @@ export class Stateful<
   public async set(name: string, data: any): Promise<void> {
     this._state[name] = data
     this.emit('set', name, data)
+    // @ts-ignore
+    this.emit(name, data)
   }
 
   hasKey(name: string): Promise<boolean> {

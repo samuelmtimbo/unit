@@ -1,14 +1,18 @@
 {
   "name": "remove whitespace",
   "units": {
-    "ctvuqkf": {
+    "replace": {
       "id": "af5469c4-a09e-4b22-8133-a21e721e7639",
       "input": {
         "regex": {
           "constant": true,
           "data": "' '"
         },
-        "replacement": {
+        "str": {
+          "constant": true,
+          "data": "''"
+        },
+        "flags": {
           "constant": true,
           "data": "''"
         }
@@ -19,29 +23,29 @@
   "metadata": {
     "icon": "question",
     "description": "no description",
-    "complexity": 4,
+    "complexity": 5,
     "tags": [
       "core",
       "string"
     ]
   },
   "inputs": {
-    "a": {
+    "str": {
       "plug": {
         "0": {
-          "unitId": "ctvuqkf",
-          "pinId": "a"
+          "unitId": "replace",
+          "pinId": "str"
         }
       },
       "type": "string"
     }
   },
   "outputs": {
-    "a": {
+    "str": {
       "plug": {
         "0": {
-          "unitId": "ctvuqkf",
-          "pinId": "a"
+          "unitId": "replace",
+          "pinId": "str"
         }
       },
       "type": "string"

@@ -15,34 +15,32 @@ export const POINTER_EVENT_NAMES = [
   'pointerout',
 ]
 
-export interface IOPointerEvent {
+export interface IOMouseEvent {
   clientX: number
   clientY: number
   offsetX: number
   offsetY: number
   screenX: number
   screenY: number
+}
+
+export interface IOPointerEvent extends IOMouseEvent {
   pointerId: number
   pointerType: string
 }
 
-export function _IOPointerEvent(
-  $context: Context,
-  _event: PointerEvent
-): IOPointerEvent {
-  const { $x, $y, $sx, $sy, $rz, $width, $height } = $context
+export const applyContextTransformToPointerEvent = (
+  context: Context,
+  event: {
+    clientX: number
+    clientY: number
+    offsetX: number
+    offsetY: number
+  }
+) => {
+  const { $x, $y, $sx, $sy, $rz } = context
 
-  const {
-    pointerId,
-    pointerType,
-    clientX,
-    clientY,
-    offsetX,
-    offsetY,
-    screenX,
-    screenY,
-    target,
-  } = _event
+  const { clientX, clientY, offsetX, offsetY } = event
 
   const tx = clientX - $x
   const ty = clientY - $y
@@ -66,6 +64,24 @@ export function _IOPointerEvent(
     screenY: clientY,
     // screenX,
     // screenY,
+  }
+}
+
+export function makeSyntheticPointerEvent(
+  context: Context,
+  event: {
+    pointerId: number
+    pointerType: string
+    clientX: number
+    clientY: number
+    offsetX: number
+    offsetY: number
+  }
+): IOPointerEvent {
+  const { pointerId, pointerType } = event
+
+  return {
+    ...applyContextTransformToPointerEvent(context, event),
     pointerId,
     pointerType,
   }
@@ -82,7 +98,8 @@ export function listenPointerEvent(
   const pointerEventListener = (_event: PointerEvent) => {
     const { $context } = component
 
-    const event = _IOPointerEvent($context, _event)
+    const event = makeSyntheticPointerEvent($context, _event)
+
     listener(event, _event)
   }
 

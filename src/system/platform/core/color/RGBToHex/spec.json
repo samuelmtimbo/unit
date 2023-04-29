@@ -214,7 +214,7 @@
   "metadata": {
     "icon": "palette",
     "description": "RGB color to hexadecimal",
-    "complexity": 17,
+    "complexity": 22,
     "tags": [
       "platform",
       "core",

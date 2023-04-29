@@ -57,12 +57,9 @@ export default class ToBlob<T> extends Semifunctional<I<T>, O<T>> {
           return
         }
 
-        console.log('_Blob', 'read', _blob)
         return _blob
       }
     })(this.__system)
-
-    console.log('BLOB')
 
     done({
       blob,

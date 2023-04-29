@@ -25,6 +25,8 @@ export function webHTTP(window: Window, opt: BootOpt): API['http'] {
       cloud: HTTPServer,
     },
     fetch: fetch,
+    // @ts-ignore
+    EventSource: window.EventSource,
   }
 
   return http

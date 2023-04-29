@@ -55,7 +55,6 @@ assert.deepEqual(snap, {
     },
   },
   memory: {
-    __buffer: [],
     _backwarding: false,
     _forwarding: false,
     _forwarding_empty: false,
@@ -87,7 +86,6 @@ assert.deepEqual(another_identity.snapshot(), {
     },
   },
   memory: {
-    __buffer: [],
     _backwarding: false,
     _forwarding: false,
     _forwarding_empty: false,

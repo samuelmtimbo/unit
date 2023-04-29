@@ -22,7 +22,7 @@
     "opt": {
       "plug": {
         "0": {
-          "unitId": "merge",
+          "unitId": "deepmerge",
           "pinId": "b"
         }
       }
@@ -81,7 +81,7 @@
         },
         "key": {
           "constant": true,
-          "data": "'body'"
+          "data": "\"body\""
         },
         "value": {}
       },
@@ -95,25 +95,17 @@
         }
       }
     },
-    "merge": {
-      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+    "deepmerge": {
+      "id": "2af12780-698c-40ca-baa9-5f3260377e0f",
       "input": {
         "a": {
           "constant": true,
-          "data": "{method:'POST',headers:{\"Content-Type\":'application/json'}}"
+          "data": "{method:\"POST\",headers:{\"Content-Type\":\"application/json\"}}"
         },
-        "b": {
-          "constant": false
-        }
+        "b": {}
       },
       "output": {
         "ab": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -64,
-          "y": -77
-        }
       }
     }
   },
@@ -143,7 +135,7 @@
       }
     },
     "2": {
-      "merge": {
+      "deepmerge": {
         "output": {
           "ab": true
         }
@@ -160,14 +152,11 @@
   "metadata": {
     "icon": "send",
     "description": "...",
-    "complexity": 10,
-    "tags": [
-      "platform",
-      "core",
-      "rest"
-    ]
+    "complexity": 24,
+    "tags": ["platform", "core", "rest"]
   },
   "id": "6fcb6d82-4d64-438e-8a30-82f8b89c524b",
   "type": "`U`&`G`",
-  "system": true
+  "system": true,
+  "specs": {}
 }

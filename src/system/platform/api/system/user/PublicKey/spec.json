@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "table",
     "description": "get user's public key",
-    "complexity": 11,
+    "complexity": 12,
     "tags": [
       "platform",
       "api",

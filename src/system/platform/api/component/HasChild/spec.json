@@ -37,7 +37,7 @@
   "metadata": {
     "icon": "square",
     "description": "check whether `parent` has a child `at`",
-    "complexity": 2,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

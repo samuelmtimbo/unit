@@ -3,7 +3,6 @@ import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import IconButton from '../../../component/app/IconButton/Component'
 
 export interface Props {
@@ -21,8 +20,8 @@ export const DEFAULT_STYLE = {
   height: '21px',
 }
 
-export default class ModeIconButton extends Element<IHTMLDivElement, Props> {
-  private _icon_button: IconButton
+export default class ModeIconButton extends Element<HTMLDivElement, Props> {
+  public _icon_button: IconButton
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -65,6 +64,7 @@ export default class ModeIconButton extends Element<IHTMLDivElement, Props> {
       icon_button,
     }
     this.$unbundled = false
+this.$primitive = true
 
     this.registerRoot(icon_button)
   }

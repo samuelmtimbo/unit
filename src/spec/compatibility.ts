@@ -1,13 +1,15 @@
+import { System } from '../system'
 import { keys } from '../system/f/object/Keys/f'
-import { Specs } from '../types'
 import { isTypeMatch } from './parser'
 import { getSpecTypeInterfaceById, TypeInterface } from './type'
 
 export function compatibleInterface(
+  system: System,
   a: string,
-  b: string,
-  specs: Specs
+  b: string
 ): boolean {
+  const { specs } = system
+
   const aSpec = specs[a]
   const bSpec = specs[b]
 
@@ -41,7 +43,10 @@ export function compatibleInterface(
     const aOType = aOTypes[i]
     const bOType = bOTypes[i]
 
-    if (!isTypeMatch(aIType, bIType) || !isTypeMatch(aOType, bOType)) {
+    if (
+      !isTypeMatch(system, aIType, bIType) ||
+      !isTypeMatch(system, aOType, bOType)
+    ) {
       return false
     }
   }

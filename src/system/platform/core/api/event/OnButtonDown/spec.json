@@ -40,7 +40,7 @@
   "metadata": {
     "icon": "square",
     "description": "listen to `gamepad` \"buttondown\" event",
-    "complexity": 4,
+    "complexity": 5,
     "tags": [
       "platform",
       "core",

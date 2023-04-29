@@ -11,7 +11,6 @@ import { getSpec } from './spec'
 
 export function graphComponentFromSpec(
   system: System,
-
   spec: GraphSpec,
   input: Dict<any> = {}
 ): Client {
@@ -23,6 +22,7 @@ export function graphComponentFromSpec(
 
   for (const pinId in input) {
     const data = input[pinId]
+
     graph.setPinData('input', pinId, data)
   }
 
@@ -49,7 +49,7 @@ export function graphComponentFromId(
 
   const spec: GraphSpec = getSpec(specs, specId) as GraphSpec
 
-  const controller = graphComponentFromSpec(system, spec, input)
+  const { component, graph } = graphComponentFromSpec(system, spec, input)
 
-  return controller
+  return { component, graph }
 }

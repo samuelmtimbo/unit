@@ -2,6 +2,7 @@ import { $Child } from '../component/Child'
 import { $Children } from '../component/Children'
 import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { NOOP } from '../NOOP'
 import { System } from '../system'
 import { Callback } from '../types/Callback'
@@ -20,14 +21,8 @@ import {
 } from '../util/array'
 import { callAll } from '../util/call/callAll'
 import { _if } from '../util/control'
-import {
-  appendChild,
-  insertBefore,
-  insertBeforeAt,
-  prepend,
-  removeChild,
-} from '../util/element'
-import { ensure, get, mapObjVK, set } from '../util/object'
+import { appendChild, insertBefore, removeChild } from '../util/element'
+import { ensure, forEachObjKV, get, set } from '../util/object'
 import { addListener, addListeners } from './addListener'
 import namespaceURI from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
@@ -63,10 +58,12 @@ const $childToComponent = (
 ): Component<IOElement, {}, $Component> => {
   const { unit } = bundle
 
-  const { id, memory: { input = {} } = { input: {} } } = unit
+  const { id, memory = { input: {} } } = unit
 
-  const props = mapObjVK(input, ({ _data }) => {
-    return _data
+  const props = {}
+
+  forEachObjKV(memory.input ?? {}, (pinId, { _data }) => {
+    props[pinId] = _data
   })
 
   const component = componentFromSpecId(system, id, props)
@@ -204,8 +201,6 @@ export class Component<
 
   onDisconnected() {}
 
-  onRender() {}
-
   onMount() {}
 
   onUnmount($context: Context) {}
@@ -242,15 +237,20 @@ export class Component<
     )
   }
 
-  preventDefault(event: string): void {
-    this.$element.addEventListener(
-      event,
-      (event: Event) => {
-        event.preventDefault()
-        return false
-      },
-      { passive: false }
-    )
+  preventDefault(event: string): Unlisten {
+    const listener = (event: Event) => {
+      event.preventDefault()
+      return false
+    }
+
+    const opt = { passive: false }
+
+    this.$element.addEventListener(event, listener, opt)
+
+    return () => {
+      // @ts-ignore
+      this.$element.removeEventListener(event, listener, opt)
+    }
   }
 
   private _releasePointerCapture: Dict<Unlisten> = {}
@@ -303,8 +303,8 @@ export class Component<
     }
   }
 
-  public mountDescendent(child: Component): void {
-    child.mount(this.$context)
+  public mountChild(child: Component, commit: boolean = true): void {
+    child.mount(this.$context, commit)
   }
 
   public unmountDescendent(child: Component): void {
@@ -319,36 +319,14 @@ export class Component<
     for (const subComponent of this.$mountParentChildren) {
       callback(subComponent)
     }
-
-    // for (const child of this.$parentChildren) {
-    //   callback(child)
-    // }
-
-    // for (const child of this.$children) {
-    //   callback(child)
-    // }
   }
 
-  mount($context: Context): void {
-    // console.log(this.constructor.name, 'mount')
-
-    if (this.$mounted) {
-      console.warn('Cannot mount a mounted component.')
-      // throw new Error('Cannot mount a mounted component.')
-      return
-    }
-
-    this.$context = $context
-
-    this.$mounted = true
-
+  commit() {
     this.onMount()
 
     this._forAllMountDescendent((child) => {
-      this.mountDescendent(child)
+      child.commit()
     })
-
-    this.onRender()
 
     const $changed = new Set(this.$changed)
 
@@ -365,12 +343,33 @@ export class Component<
     }
   }
 
+  mount($context: Context, commit: boolean = true): void {
+    // console.log(this.constructor.name, 'mount')
+
+    if (this.$mounted) {
+      console.warn('cannot mount a mounted component')
+      // throw new Error('cannot mount a mounted component')
+      return
+    }
+
+    this.$context = $context
+    this.$mounted = true
+
+    this._forAllMountDescendent((child) => {
+      this.mountChild(child, false)
+    })
+
+    if (commit) {
+      this.commit()
+    }
+  }
+
   unmount() {
     // console.log(this.constructor.name, 'unmount')
 
     if (!this.$mounted) {
-      console.warn('Cannot unmount unmounted component')
-      // throw new Error('Cannot unmount unmounted component')
+      console.warn('cannot unmount unmounted component')
+      // throw new Error('cannot unmount unmounted component')
     }
 
     const $context = this.$context
@@ -396,7 +395,13 @@ export class Component<
         return
       }
 
-      this.$element.focus(options)
+      if (this.$primitive) {
+        this.$element.focus(options)
+      } else {
+        if (this.$root.length > 0) {
+          this.$root[0].focus(options)
+        }
+      }
     } else {
       this.$slot['default'].focus(options)
     }
@@ -408,7 +413,17 @@ export class Component<
         return
       }
 
-      this.$element.blur()
+      if (!this.$primitive) {
+        let i = 0
+
+        while (this.$root[i] instanceof Text) {
+          i++
+        }
+
+        this.$mountRoot[i].blur()
+      } else {
+        this.$element.blur()
+      }
     } else {
       this.$slot['default'].blur()
     }
@@ -433,19 +448,35 @@ export class Component<
       },
     } = this.$system
 
-    return containsSelection(this.$element)
+    if (!this.$primitive) {
+      return this.$root.some((root) => root.containsSelection())
+    } else {
+      return containsSelection(this.$element)
+    }
   }
 
   animate(keyframes, options): Animation {
     if (this.$slot['default'] === this) {
-      if (this.$element instanceof Text) {
-        // RETURN
-        return
-      }
+      if (!this.$primitive) {
+        let i = 0
 
-      return this.$element.animate(keyframes, options)
+        while (this.$element[i] instanceof Text) {
+          i++
+        }
+
+        return (this.$element[i] as HTMLElement | SVGElement).animate(
+          keyframes,
+          options
+        )
+      } else {
+        if (this.$element instanceof Text) {
+          return
+        }
+
+        return this.$element.animate?.(keyframes, options)
+      }
     } else {
-      return this.$slot['default'].animate(keyframes, options)
+      return this.$slot['default'].animate?.(keyframes, options)
     }
   }
 
@@ -493,6 +524,10 @@ export class Component<
       y: this.$context.$y,
     }
 
+    if (!this.$primitive) {
+      throw new Error('Cannot calculate position of multiple elements.')
+    }
+
     const relative_position = getRelativePosition(
       this.$element,
       this.$context.$element
@@ -504,14 +539,20 @@ export class Component<
   }
 
   getElementSize() {
+    if (!this.$primitive) {
+      throw new Error('Cannot calculate size of multiple elements.')
+    }
+
     return getSize(this.$element)
   }
 
   getFontSize(): number {
-    const fontSize = getFontSize(this.$element)
+    if (this.$primitive) {
+      const fontSize = getFontSize(this.$element)
 
-    if (fontSize) {
-      return fontSize
+      if (fontSize) {
+        return fontSize
+      }
     }
 
     if (this.$slotParent) {
@@ -522,10 +563,12 @@ export class Component<
   }
 
   getOpacity(): number {
-    const opacity = getOpacity(this.$element)
+    if (this.$primitive) {
+      const opacity = getOpacity(this.$element)
 
-    if (opacity !== undefined) {
-      return opacity
+      if (opacity !== undefined) {
+        return opacity
+      }
     }
 
     if (this.$slotParent) {
@@ -536,7 +579,11 @@ export class Component<
   }
 
   getScale(): Scale {
-    const scale = getScale(this.$element)
+    let scale = { sx: 1, sy: 1 }
+
+    if (this.$primitive) {
+      scale = getScale(this.$element)
+    }
 
     if (this.$slotParent) {
       const parentScale = this.$slotParent.getScale()
@@ -548,10 +595,12 @@ export class Component<
   }
 
   getTextAlign(): string {
-    const fontSize = getTextAlign(this.$element)
+    if (this.$primitive) {
+      const textAlign = getTextAlign(this.$element)
 
-    if (fontSize) {
-      return fontSize
+      if (textAlign) {
+        return textAlign
+      }
     }
 
     if (this.$parent) {
@@ -663,6 +712,10 @@ export class Component<
     height: number
   } {
     if (this.$context) {
+      if (!this.$primitive) {
+        throw new Error('Cannot calculate position of multiple elements.')
+      }
+
       if (this.$element instanceof Text) {
         // RETURN
         return
@@ -711,7 +764,11 @@ export class Component<
   public domAppendChild(child: Component, slotName: string, at: number): void {
     // console.log('Component', '_domAppendChild')
 
-    const slot = this.$slot[slotName]
+    let slot = this.$slot[slotName]
+
+    while (slot.$slot[slotName] && slot.$slot[slotName] !== slot) {
+      slot = slot.$slot[slotName]
+    }
 
     slot.domAppendParentChildAt(
       this.wrapChild(slot, child, at),
@@ -943,18 +1000,16 @@ export class Component<
   public domRemoveChild(child: Component, slotName: string, at: number): void {
     const slot = this.$slot[slotName]
 
-    slot.domRemoveParentChildAt(
-      this.unwrapChild(slot, child, at),
-      slotName,
-      at,
-      at
-    )
+    const wrapped = this.unwrapChild(slot, child, at)
+
+    slot.domRemoveParentChildAt(wrapped, slotName, at, at)
 
     child.$slotParent = null
   }
 
   public postRemoveChild(child: Component, at: number): void {
     child.$parent = null
+
     if (this.$mounted) {
       child.unmount()
     }
@@ -1018,11 +1073,7 @@ export class Component<
     // console.log(this.constructor.name, 'connect')
 
     if (this.$connected) {
-      // throw new Error ('Component is already connected')
-
-      console.log('Component', 'connect called unnecessarily')
-
-      return
+      throw new Error ('Component is already connected')
     }
 
     this.$unit = $unit
@@ -1048,15 +1099,17 @@ export class Component<
       unit: (moment: UnitMoment) => {
         const { event: event_event, data: event_data } = moment
         if (event_event === 'append_child') {
+          const bundle = event_data
+
           const at = this.$children.length
 
-          const child = this._$instanceChild(event_data, at)
+          const child = this._$instanceChild({ bundle }, at)
 
           const slot_name = 'default'
 
           this.appendChild(child, slot_name)
         } else if (event_event === 'remove_child') {
-          const { at } = event_data
+          const at = event_data
 
           this.removeChildAt(at)
         }
@@ -1170,40 +1223,6 @@ export class Component<
     this.onDisconnected()
   }
 
-  public memInsertChild(child: Component, slotName: string, at: number): void {
-    // console.log('Component', 'memInsertChild')
-    insert(this.$children, child, at)
-    insert(this.$slotChildren[slotName], child, at)
-    insert(this.$childSlotName, slotName, at)
-  }
-
-  public domInsertChild(child: Component, slotName: string, at: number): void {
-    // console.log('Component', 'domInsertChild')
-    const slot = this.$slot[slotName]
-    insertBeforeAt(slot.$element, child.$element, at)
-  }
-
-  public postInsertChild(child: Component, slotName: string, at: number): void {
-    // console.log('Component', 'postInsertChild')
-    set(child, '$parent', this)
-    this.$mounted && this.mountDescendent(child)
-  }
-
-  public insertChild(
-    child: Component,
-    at: number,
-    slotName: string = 'default'
-  ): void {
-    this.$slotChildren[slotName] = this.$slotChildren[slotName] || []
-    if (at > this.$slotChildren[slotName].length - 1) {
-      this.appendChild(child, slotName)
-    } else {
-      this.memInsertChild(child, slotName, at)
-      this.domInsertChild(child, slotName, at)
-      this.postInsertChild(child, slotName, at)
-    }
-  }
-
   public setChildren(
     children: Component[] = [],
     slotNames: string[] = []
@@ -1217,6 +1236,7 @@ export class Component<
     for (let i = 0; i < children.length; i++) {
       const child = children[i]
       const slotName = slotNames[i]
+
       this.appendChild(child, slotName)
     }
   }
@@ -1291,12 +1311,6 @@ export class Component<
     this.$root.splice(at, 0, component)
   }
 
-  public prependRoot(component: Component): void {
-    unshift(this.$root, component)
-    prepend(this.$element, component.$element)
-    _if(this.$mounted, mount, component, this.$context)
-  }
-
   public registerRoot(component: Component): void {
     this.pushRoot(component)
     this.appendRoot(component)
@@ -1329,23 +1343,101 @@ export class Component<
   public domAppendRoot(component: Component): void {
     const wrapped = this.wrapRoot(component, this.$mountRoot.length - 1)
 
-    appendChild(this.$element, wrapped.$element)
+    if (!this.$primitive) {
+      if (!wrapped.$primitive) {
+        for (const root of wrapped.$root) {
+          this.domAppendRoot(root)
+        }
+      } else {
+        if (this.$slotParent) {
+          this.$slotParent.domAppendParentChildAt(
+            wrapped,
+            'default',
+            this.$slotParent.$mountParentChildren.length,
+            this.$slotParent.$mountParentChildren.length
+          )
+        } else {
+          appendChild(this.$element, wrapped.$element)
+        }
+      }
+    } else {
+      if (!wrapped.$primitive) {
+        for (const root of wrapped.$root) {
+          this.domAppendRoot(root)
+        }
+      } else {
+        appendChild(this.$element, wrapped.$element)
+      }
+    }
   }
 
   public appendRoot(component: Component): void {
     // console.log('Component', 'appendRoot', component)
-    const at = this.$mountRoot.length
+
     this.memAppendRoot(component)
     this.domAppendRoot(component)
     this.postAppendRoot(component)
   }
 
   public insertRootAt(component: Component, _at: number): void {
-    insert(this.$mountRoot, component, _at)
-    const nextRoot = at(this.$root, _at + 1)
-    insertBefore(this.$element, component.$element, nextRoot.$element)
+    this.memInsertRootAt(component, _at)
+    this.domInsertRootAt(component, _at)
+    this.postInsertRootAt(component, _at)
+  }
+
+  public postInsertRootAt(component: Component, _at: number): void {
     set(component, '$parent', this)
-    this.$mounted && this.mountDescendent(component)
+
+    this.$mounted && this.mountChild(component)
+  }
+
+  public memInsertRootAt(component: Component, _at: number): void {
+    insert(this.$mountRoot, component, _at)
+  }
+
+  public domInsertRootAt(component: Component, _at: number): void {
+    insert(this.$mountRoot, component, _at)
+
+    let nextRoot = at(this.$root, _at + 1)
+
+    if (!this.$primitive) {
+      if (!component.$primitive) {
+        for (const root of component.$mountRoot) {
+          if (this.$slotParent) {
+            const index =
+              this.$slotParent.$mountParentChildren.indexOf(component)
+
+            this.$slotParent.domInsertParentRootAt(
+              component,
+              index + _at,
+              'default'
+            )
+          } else {
+            insertBefore(this.$element, root.$element, nextRoot.$element)
+          }
+        }
+      } else {
+        if (this.$slotParent) {
+          const index = this.$slotParent.$mountParentChildren.indexOf(component)
+
+          this.$slotParent.domInsertParentRootAt(
+            component,
+            index + _at,
+            'default'
+          )
+        } else {
+          insertBefore(this.$element, component.$element, nextRoot.$element)
+        }
+      }
+    } else {
+      if (!component.$primitive) {
+        for (const root of component.$root) {
+          insertBefore(this.$element, root.$element, nextRoot.$element)
+        }
+      } else {
+        insertBefore(this.$element, component.$element, nextRoot.$element)
+      }
+    }
   }
 
   public appendAllRoot(): void {
@@ -1354,8 +1446,18 @@ export class Component<
     }
   }
 
-  public removeAllRoot(): void {
+  public appendAllMissingRoot(): void {
     for (const root of this.$root) {
+      if (this.$mountRoot.includes(root)) {
+        //
+      } else {
+        this.appendRoot(root)
+      }
+    }
+  }
+
+  public removeAllRoot(): void {
+    for (const root of this.$mountRoot) {
       this.removeRoot(root)
     }
   }
@@ -1363,8 +1465,8 @@ export class Component<
   public removeRoot(component: Component): void {
     const at = this.$root.indexOf(component)
 
-    this.memRemoveRoot(component)
     this.domRemoveRoot(component, at)
+    this.memRemoveRoot(component)
     this.postRemoveRoot(component)
   }
 
@@ -1376,7 +1478,40 @@ export class Component<
   public domRemoveRoot(component: Component, at: number): void {
     const wrapped = this.unwrapRoot(component, at)
 
-    removeChild(this.$element, wrapped.$element)
+    if (!this.$primitive) {
+      if (!wrapped.$primitive) {
+        for (let i = 0; i < wrapped.$mountRoot.length; i++) {
+          if (this.$slotParent) {
+            this.$slotParent.domRemoveParentChildAt(
+              wrapped.$mountRoot[i],
+              'default',
+              at,
+              at
+            )
+          } else {
+            removeChild(this.$element, wrapped.$element)
+          }
+
+          appendChild(component.$element, wrapped.$mountRoot[i].$element)
+        }
+      } else {
+        if (this.$slotParent) {
+          this.$slotParent.domRemoveParentChildAt(wrapped, 'default', at, at)
+        } else {
+          removeChild(this.$element, wrapped.$element)
+        }
+      }
+    } else {
+      if (!wrapped.$primitive) {
+        for (const root of wrapped.$mountRoot) {
+          this.domRemoveRoot(root, at)
+
+          appendChild(component.$element, root.$element)
+        }
+      } else {
+        removeChild(this.$element, wrapped.$element)
+      }
+    }
   }
 
   public postRemoveRoot(component: Component): void {
@@ -1517,6 +1652,7 @@ export class Component<
     //   component.constructor.name
     // )
     const at = this.$parentRoot.indexOf(component)
+
     this.memAppendParentRoot(component, slotName, at)
     this.domAppendParentRoot(component, slotName, at)
     this.postAppendParentRoot(component, slotName, at)
@@ -1528,10 +1664,6 @@ export class Component<
     at: number
   ): void {
     // console.log(this.constructor.name, 'memAppendParentRoot', component.constructor.name, slotName, at)
-
-    if (this.$mountParentRoot.indexOf(component) > -1) {
-      throw new Error()
-    }
 
     push(this.$mountParentRoot, component)
 
@@ -1546,6 +1678,7 @@ export class Component<
     at: number
   ): void {
     const slot = get(this.$slot, slotName)
+
     slot.domAppendParentChildAt(component, 'default', at, at)
   }
 
@@ -1593,7 +1726,37 @@ export class Component<
   ): void {
     const wrapped = this.wrapParentChild(component, at)
 
-    appendChild(this.$element, wrapped.$element)
+    if (!this.$primitive) {
+      if (!wrapped.$primitive) {
+        for (let i = 0; i < wrapped.$mountRoot.length; i++) {
+          this.domAppendParentChildAt(
+            wrapped.$mountRoot[i],
+            slotName,
+            at,
+            at + i
+          )
+        }
+      } else {
+        if (this.$slotParent) {
+          this.$slotParent.domAppendParentChildAt(
+            wrapped,
+            'default',
+            this.$slotParent.$mountParentChildren.length,
+            this.$slotParent.$mountParentChildren.length
+          )
+        } else {
+          appendChild(this.$element, wrapped.$element)
+        }
+      }
+    } else {
+      if (!wrapped.$primitive) {
+        for (const root of wrapped.$mountRoot) {
+          this.domAppendParentChildAt(root, slotName, at, at)
+        }
+      } else {
+        appendChild(this.$element, wrapped.$element)
+      }
+    }
 
     set(component, '$slotParent', this)
   }
@@ -1604,7 +1767,7 @@ export class Component<
     at: number
   ): void {
     if (this.$mounted) {
-      this.mountDescendent(component)
+      this.mountChild(component)
     }
   }
 
@@ -1614,7 +1777,7 @@ export class Component<
     at: number
   ) {
     if (this.$mounted) {
-      this.mountDescendent(component)
+      this.mountChild(component)
     }
   }
 
@@ -1650,9 +1813,15 @@ export class Component<
     at: number,
     _at: number
   ): void {
-    const slot = this.$slot[slotName]
-    const nextElement = slot.$element.childNodes[_at]
-    insertBefore(slot.$element, component.$element, nextElement)
+    if (!this.$primitive) {
+      throw new MethodNotImplementedError('domInsertParentChildAt')
+    }
+
+    if (component.$primitive) {
+      throw new MethodNotImplementedError('domInsertParentChildAt')
+    }
+
+    throw new MethodNotImplementedError('domInsertParentChildAt')
   }
 
   public removeParentChild(
@@ -1692,7 +1861,42 @@ export class Component<
     const wrapped = this.wrapParentChild(component, at)
     const _slotName = this.$parentChildrenSlot[_at]
     const slot = this.$slot[_slotName] || this
-    removeChild(slot.$element, wrapped.$element)
+
+    if (!this.$primitive) {
+      if (!wrapped.$primitive) {
+        for (let i = 0; i < wrapped.$mountRoot.length; i++) {
+          if (this.$slotParent) {
+            this.$slotParent.domRemoveParentChildAt(
+              wrapped.$mountRoot[i],
+              slotName,
+              at,
+              at
+            )
+          } else {
+            removeChild(slot.$element, wrapped.$element)
+          }
+
+          appendChild(component.$element, wrapped.$mountRoot[i].$element)
+        }
+      } else {
+        if (this.$slotParent) {
+          this.$slotParent.domRemoveParentChildAt(wrapped, 'default', at, at)
+        } else {
+          removeChild(this.$element, wrapped.$element)
+        }
+      }
+    } else {
+      if (!wrapped.$primitive) {
+        for (const root of wrapped.$mountRoot) {
+          this.domRemoveParentChildAt(root, slotName, at, at)
+
+          appendChild(component.$element, root.$element)
+        }
+      } else {
+        removeChild(slot.$element, wrapped.$element)
+      }
+    }
+
     set(component, '$slotParent', null)
   }
 
@@ -1865,11 +2069,35 @@ export class Component<
   }
 
   public addEventListener = (listener: Listener): Unlisten => {
-    return addListener(this, listener)
+    if (this.$primitive) {
+      return addListener(this, listener)
+    } else {
+      const allRootUnlisten = []
+
+      for (const root of this.$root) {
+        const rootUnlisten = root.addEventListener(listener)
+
+        allRootUnlisten.push(rootUnlisten)
+      }
+
+      return callAll(allRootUnlisten)
+    }
   }
 
   public addEventListeners = (listeners: Listener[]): Unlisten => {
-    return addListeners(this, listeners)
+    if (this.$primitive) {
+      return addListeners(this, listeners)
+    } else {
+      const allRootUnlisten = []
+
+      for (const root of this.$root) {
+        const rootUnlisten = root.addEventListeners(listeners)
+
+        allRootUnlisten.push(rootUnlisten)
+      }
+
+      return callAll(allRootUnlisten)
+    }
   }
 
   private _call(method: string, data: any[] = []): void {

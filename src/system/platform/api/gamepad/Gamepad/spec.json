@@ -1,0 +1,37 @@
+{
+  "name": "gamepad",
+  "type": "`U`",
+  "inputs": {
+    "i": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "0"
+        ]
+      }
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "state": {
+      "type": "`V`&`EE`",
+      "ref": true
+    }
+  },
+  "events": {},
+  "metadata": {
+    "icon": "gamepad",
+    "description": "connect to gamepad controller",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "gamepad"
+    ]
+  },
+  "id": "77238fd9-a968-454d-b7ce-0277bc37475d",
+  "base": true,
+  "system": true
+}

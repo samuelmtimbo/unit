@@ -1,7 +1,22 @@
+import {
+  UnitGetBundleSpecData,
+  UnitGetGlobalIdData,
+  UnitGetInputDataData,
+  UnitGetPinDataData,
+  UnitGetRefInputDataData,
+  UnitPauseData,
+  UnitPlayData,
+  UnitPullInputData,
+  UnitPushData,
+  UnitRemovePinDataData,
+  UnitResetData,
+  UnitSetPinDataData,
+  UnitTakeInputData,
+} from '../../../Class/Unit/interface'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { GlobalRefSpec } from '../../GlobalRefSpec'
-import { IO } from '../../IO'
+import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 
 export const U_METHOD_CALL = [
@@ -27,21 +42,31 @@ export const U_METHOD_REF = ['refGlobalObj']
 export const U_METHOD = [...U_METHOD_CALL, ...U_METHOD_WATCH, ...U_METHOD_REF]
 
 export interface $U_C {
-  $getGlobalId(data: {}, callback: Callback<string>): void
-  $play(data: {}): void
-  $pause(data: {}): void
-  $push({ id, data }: { id: string; data: any }): void
-  $pullInput({ id }: { id: string }): void
-  $takeInput({ id }: { id: string }): void
-  $setPinData({ pinId, type, data }: { pinId: string; type: IO; data: string })
-  $removePinData({ type, pinId }: { type: IO; pinId: string })
+  $getGlobalId(data: UnitGetGlobalIdData, callback: Callback<string>): void
+  $play(data: UnitPlayData): void
+  $pause(data: UnitPauseData): void
+  $push({ id, data }: UnitPushData): void
+  $pullInput({ id }: UnitPullInputData): void
+  $takeInput({ id }: UnitTakeInputData): void
+  $setPinData({ pinId, type, data }: UnitSetPinDataData)
+  $removePinData({ type, pinId }: UnitRemovePinDataData)
   $getPinData(
-    data: {},
+    data: UnitGetPinDataData,
     callback: (data: { input: Dict<any>; output: Dict<any> }) => void
   ): void
-  $getInputData({}: {}, callback: (data: Dict<any>) => void): void
-  $getRefInputData({}: {}, callback: (data: Dict<GlobalRefSpec>) => void): void
-  $reset(data: {}): void
+  $getInputData(
+    {}: UnitGetInputDataData,
+    callback: (data: Dict<any>) => void
+  ): void
+  $getRefInputData(
+    {}: UnitGetRefInputDataData,
+    callback: (data: Dict<GlobalRefSpec>) => void
+  ): void
+  $getBundleSpec(
+    {}: UnitGetBundleSpecData,
+    callback: (data: UnitBundleSpec) => void
+  ): void
+  $reset(data: UnitResetData): void
 }
 
 export interface $U_W {

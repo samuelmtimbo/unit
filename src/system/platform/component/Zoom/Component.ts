@@ -3,7 +3,6 @@ import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
 import { getTransform, Zoom, zoomIdentity } from '../../../../client/zoom'
 import { System } from '../../../../system'
-import { IHTMLDivElement } from '../../../../types/global/dom'
 import { Style } from '../../Props'
 import Div from '../Div/Component'
 import SVGG from '../svg/Group/Component'
@@ -28,7 +27,7 @@ const DEFAULT_STYLE = {
 const DEFAULT_WIDTH = 240
 const DEFAULT_HEIGHT = 240
 
-export default class Zoom_ extends Element<IHTMLDivElement, Props> {
+export default class Zoom_ extends Element<HTMLDivElement, Props> {
   public _root: Div
 
   public _html: Div
@@ -115,6 +114,7 @@ export default class Zoom_ extends Element<IHTMLDivElement, Props> {
       svg_g,
     }
     this.$unbundled = false
+this.$primitive = true
 
     this.registerRoot(zoom)
 

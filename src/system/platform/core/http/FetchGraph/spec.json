@@ -1,0 +1,68 @@
+{
+  "type": "`U`&`G`",
+  "name": "fetch graph",
+  "units": {
+    "frombundle": {
+      "id": "de2d42e2-4fca-4a3f-8783-3585c546e88b",
+      "input": { "bundle": {} },
+      "output": { "graph": {} },
+      "metadata": { "position": { "x": 242, "y": 187 } }
+    },
+    "fetchJSONbody": {
+      "id": "00a8a078-91bf-4676-aa32-c9cfacdfd527",
+      "input": {
+        "url": {},
+        "options": {
+          "constant": false
+        }
+      },
+      "output": { "json": {} },
+      "metadata": { "position": { "x": 138, "y": 187 } }
+    },
+    "merge": {
+      "id": "60bdba6d-c670-430f-be72-6f39cf4e8453",
+      "input": {
+        "b": { "constant": false },
+        "a": {
+          "constant": true,
+          "data": "{headers:{accept:\"application/json\"}}"
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "merge": { "output": { "ab": true } },
+      "fetchJSONbody": { "input": { "options": true } }
+    },
+    "4": {
+      "frombundle": { "input": { "bundle": true } },
+      "fetchJSONbody": { "output": { "json": true } }
+    }
+  },
+  "inputs": {
+    "url": {
+      "plug": {
+        "0": { "unitId": "fetchJSONbody", "pinId": "url" }
+      },
+      "ref": false
+    },
+    "options": {
+      "plug": { "0": { "unitId": "merge", "pinId": "b" } },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "graph": {
+      "plug": {
+        "0": { "unitId": "frombundle", "pinId": "graph" }
+      },
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "fetch a JSON definded graph class"
+  },
+  "id": "6f1388c8-9ad3-44b4-9669-d1386d8a9fc4"
+}

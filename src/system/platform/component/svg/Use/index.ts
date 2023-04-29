@@ -5,7 +5,6 @@ import { ID_USE } from '../../../../_ids'
 
 export interface I {
   href: string
-  class: string
   style: Dict<string>
 }
 
@@ -15,7 +14,7 @@ export default class SVGUse extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['href', 'class', 'style'],
+        i: ['href', 'style'],
         o: [],
       },
       {},

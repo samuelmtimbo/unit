@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "at-sign",
     "description": "check if email is valid",
-    "complexity": 4,
+    "complexity": 5,
     "tags": [
       "platform",
       "core",

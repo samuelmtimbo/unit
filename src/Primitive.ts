@@ -70,7 +70,12 @@ export class Primitive<
     data?: any
   }[] = []
 
-  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System, id: string) {
+  constructor(
+    { i, o }: ION<I, O> = {},
+    opt: Opt = {},
+    system: System,
+    id: string
+  ) {
     super({ i, o }, opt, system, id)
 
     this._setupInputs(this._input)
@@ -326,14 +331,16 @@ export class Primitive<
     propagate: boolean
   ): void {
     if (!input.empty()) {
-      this._onInputStart(name)
+      if (propagate) {
+        this._onInputStart(name)
 
-      const data = input.peak()
+        const data = input.peak()
 
-      if (this.hasRefInputNamed(name)) {
-        this._onRefInputData(name, data)
-      } else {
-        this._onDataInputData(name, data)
+        if (this.hasRefInputNamed(name)) {
+          this._onRefInputData(name, data)
+        } else {
+          this._onDataInputData(name, data)
+        }
       }
     }
   }
@@ -357,9 +364,11 @@ export class Primitive<
 
   private _onInputRemoved(name: string, input: Pin<any>): void {
     this._plunkInput(name, input)
+    
     if (input.active()) {
       this._deactivateInput(name)
     }
+
     this.onInputRemoved(name, input)
   }
 
@@ -622,7 +631,7 @@ export class Primitive<
   public snapshotSelf(): Dict<any> {
     return {
       ...super.snapshotSelf(),
-      __buffer: this.__buffer,
+      // __buffer: this.__buffer,
       _forwarding: this._forwarding,
       _backwarding: this._backwarding,
       _forwarding_empty: this._forwarding_empty,
@@ -635,7 +644,7 @@ export class Primitive<
 
     super.restoreSelf(rest)
 
-    this.__buffer = __buffer || []
+    // this.__buffer = __buffer || []
 
     this._forwarding = _forwarding
     this._backwarding = _backwarding

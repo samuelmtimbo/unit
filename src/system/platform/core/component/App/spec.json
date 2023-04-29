@@ -298,7 +298,7 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "editor + gui",
-    "complexity": 33,
+    "complexity": 120,
     "tags": [
       "platform",
       "core",

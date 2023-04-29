@@ -1,4 +1,4 @@
-import { Element_ } from '../../../../../Class/Element'
+import { Value } from '../../../../../Class/Value'
 import { System } from '../../../../../system'
 import { ID_TEXT_AREA } from '../../../../_ids'
 
@@ -6,14 +6,16 @@ export interface I {
   style: object
 }
 
-export interface O {}
+export interface O {
+  value: string
+}
 
-export default class TextArea extends Element_<I, O> {
+export default class TextArea extends Value<I, O> {
   constructor(system: System) {
     super(
       {
         i: ['value', 'style', 'placeholder'],
-        o: [],
+        o: ['value'],
       },
       {},
       system,

@@ -1,4 +1,4 @@
-import { Element_ } from '../../../../../Class/Element'
+import { Value } from '../../../../../Class/Value'
 import { System } from '../../../../../system'
 import { ID_NUMBER_FIELD } from '../../../../_ids'
 
@@ -7,13 +7,15 @@ export interface I {
   value: number
 }
 
-export interface O {}
+export interface O {
+  value: number
+}
 
-export default class NumberField extends Element_<I, O> {
+export default class NumberField extends Value<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'value', 'min', 'max'],
+        i: ['style', 'min', 'max'],
         o: [],
       },
       {},

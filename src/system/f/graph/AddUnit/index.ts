@@ -35,18 +35,7 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f(
-    {
-      id,
-      Class,
-      graph,
-    }: {
-      id: string
-      Class: UnitBundle<any>
-      graph: G
-    },
-    done: Done<O<T>>
-  ): void {
+  f({ id, class: Class, graph }: I<T>, done: Done<O<T>>): void {
     try {
       const { __bundle } = Class
       const { unit: __unit } = __bundle

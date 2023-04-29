@@ -54,14 +54,14 @@
         }
       }
     },
-    "bundle": {
+    "graph": {
       "plug": {
         "0": {
           "unitId": "graph",
-          "pinId": "bundle"
+          "pinId": "graph"
         }
       },
-      "type": "any",
+      "type": "`G`",
       "metadata": {
         "position": {
           "0": {
@@ -139,7 +139,7 @@
     "graph": {
       "id": "324b9c5e-5810-11eb-bf7c-634b3bb07f8c",
       "input": {
-        "bundle": {
+        "graph": {
           "metadata": {
             "position": {
               "x": -286,
@@ -211,7 +211,7 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "io + cloud",
-    "complexity": 91,
+    "complexity": 253,
     "tags": [
       "platform",
       "core",

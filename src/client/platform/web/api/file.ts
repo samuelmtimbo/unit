@@ -1,7 +1,6 @@
 import { API } from '../../../../API'
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
-import { BootOpt } from '../../../../system'
-import { Dict } from '../../../../types/Dict'
+import { BootOpt, IFilePickerOpt } from '../../../../system'
 import { IDownloadDataOpt } from '../../../../types/global/IDownloadData'
 import { IDownloadURLOpt } from '../../../../types/global/IDownloadURL'
 
@@ -18,16 +17,9 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
     return !!window.showOpenFilePicker
   }
 
-  function showSaveFilePicker(opt: {
-    suggestedName?: string
-    startIn?: string
-    id?: string
-    excludeAcceptAllOption?: boolean
-    types?: {
-      description: string
-      accept: Dict<string[]>
-    }[]
-  }): Promise<FileSystemFileHandle> {
+  function showSaveFilePicker(
+    opt: IFilePickerOpt
+  ): Promise<FileSystemFileHandle> {
     if (isSaveFilePickerSupported()) {
       // @ts-ignore
       return window.showSaveFilePicker(opt)
@@ -36,22 +28,64 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
     }
   }
 
-  function showOpenFilePicker(opt: {
-    suggestedName?: string
-    startIn?: string
-    id?: string
-    excludeAcceptAllOption?: boolean
-    types?: {
-      description: string
-      accept: Dict<string[]>
-    }[]
-    multiple?: boolean
-  }): Promise<FileSystemFileHandle[]> {
+  function showOpenFilePicker(
+    opt: IFilePickerOpt
+  ): Promise<FileSystemFileHandle[]> {
     if (isOpenFilePickerSupported()) {
       // @ts-ignore
       return window.showOpenFilePicker(opt)
     } else {
       throw new APINotSupportedError('File System')
+    }
+  }
+
+  function fallbackShowOpenFilePicker(opt: IFilePickerOpt): Promise<File[]> {
+    return new Promise((resolve, reject) => {
+      const input = window.document.createElement('input')
+
+      input.type = 'file'
+      input.hidden = true
+      input.multiple = opt.multiple || false
+      input.accept = opt.accept ?? '*/*'
+
+      window.document.body.appendChild(input)
+
+      input.onchange = async () => {
+        const files = input.files
+
+        if (!files) {
+          reject(new Error('No files selected'))
+
+          return
+        }
+
+        const final_files: File[] = []
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files.item(i)
+
+          final_files.push(file)
+        }
+
+        resolve(final_files)
+      }
+
+      input.click()
+
+      window.document.body.removeChild(input)
+    })
+  }
+
+  function shareFile() {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: 'Web Fundamentals',
+          text: 'Check out Web Fundamentals — it rocks!',
+          url: 'https://developers.google.com/web',
+        })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error))
     }
   }
 
@@ -106,6 +140,7 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
     isSaveFilePickerSupported,
     isOpenFilePickerSupported,
     showOpenFilePicker,
+    fallbackShowOpenFilePicker,
     downloadURL,
     downloadText,
   }

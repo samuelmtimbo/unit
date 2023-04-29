@@ -5,7 +5,6 @@ import parentElement from '../../../../../client/platform/web/parentElement'
 import { setAlpha, themeBackgroundColor } from '../../../../../client/theme'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import PhoneKeyboard from '../../../../platform/component/app/PhoneKeyboard/Component'
 import GUIControl from '../GUIControl/Component'
@@ -26,7 +25,7 @@ export const DEFAULT_STYLE = {}
 export const DIM_TIMEOUT_T = 3000
 
 export default class GUIControlKeyboard extends Component<
-  IHTMLDivElement,
+  HTMLDivElement,
   Props
 > {
   private _root: GUIControl
@@ -68,6 +67,7 @@ export default class GUIControlKeyboard extends Component<
     this.$element = $element
     this.$slot = root.$slot
     this.$unbundled = false
+    this.$primitive = true
     this.$subComponent = {
       root,
       keyboard,

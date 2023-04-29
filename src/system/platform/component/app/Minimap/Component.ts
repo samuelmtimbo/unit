@@ -15,8 +15,8 @@ import {
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { isEmptyObject } from '../../../../../util/object'
+import Div from '../../Div/Component'
 import SVGG from '../../svg/Group/Component'
 import SVGPath from '../../svg/Path/Component'
 import SVGSVG from '../../svg/SVG/Component'
@@ -46,7 +46,7 @@ export const DEFAULT_STYLE = {
 export const MINIMAP_WIDTH = 200
 export const MINIMAP_HEIGHT = 150
 
-export default class Minimap extends Element<IHTMLDivElement, Props> {
+export default class Minimap extends Element<HTMLDivElement, Props> {
   public _map_el: SVGSVG
   private _map_graph: SVGG
   private _map_children: SVGG
@@ -66,6 +66,15 @@ export default class Minimap extends Element<IHTMLDivElement, Props> {
     super($props, $system)
 
     const { style, width, height } = $props
+
+    const root = new Div(
+      {
+        className: 'minimap-root',
+      },
+      this.$system
+    )
+    root.preventDefault('mousedown')
+    root.preventDefault('touchdown')
 
     const map_graph = new SVGG({ className: 'minimap-graph' }, this.$system)
     this._map_graph = map_graph
@@ -90,8 +99,7 @@ export default class Minimap extends Element<IHTMLDivElement, Props> {
       },
       this.$system
     )
-    svg.preventDefault('mousedown')
-    svg.preventDefault('touchdown')
+
     this._map_el = svg
 
     this.tick()
@@ -101,19 +109,23 @@ export default class Minimap extends Element<IHTMLDivElement, Props> {
     this.$element = $element
     this.$slot = map_children.$slot
     this.$subComponent = {
+      root,
       svg,
       map_graph,
       map_children,
     }
     this.$unbundled = false
+    this.$primitive = true
 
-    this.registerRoot(svg)
+    root.registerParentRoot(svg)
+
+    this.registerRoot(root)
 
     svg.registerParentRoot(map_graph)
     svg.registerParentRoot(map_children)
 
     svg.$element.onfocus = () => {
-      console.log('Minimap', 'onFocus')
+      // console.log('Minimap', 'onFocus')
     }
   }
 

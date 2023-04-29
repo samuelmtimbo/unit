@@ -106,7 +106,6 @@ assert.deepEqual(getSpecTypeInterfaceById(ID_LOOP_INCREMENT, _specs, cache), {
   input: { init: 'number', test: 'boolean' },
   output: { local: 'number', current: 'number', final: 'number' },
 })
-// console.log(cache)
 
 assert.deepEqual(getSpecTypeInterfaceById(ID_CONCAT_3_0, _specs), {
   input: { a: 'string', b: 'string', c: 'string' },

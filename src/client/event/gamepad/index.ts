@@ -1,13 +1,16 @@
-import { EventEmitter } from '../../../EventEmitter'
+import { EventEmitter_ } from '../../../EventEmitter'
 import { System } from '../../../system'
-import {
-  GAMEPAD_AXIS_COUNT,
-  GAMEPAD_BUTTON_COUNT,
-  GAMEPAD_DEFAULT_TRESHOLD,
-  Gamepad_J,
-} from '../../../system/platform/api/gamepad'
 
-export class Gamepad_ extends EventEmitter {
+export type Gamepad_J = {
+  buttons: boolean[]
+  axes: number[]
+}
+
+export const GAMEPAD_BUTTON_COUNT = 16
+export const GAMEPAD_AXIS_COUNT = 4
+export const GAMEPAD_DEFAULT_TRESHOLD = 0.001
+
+export class Gamepad_ extends EventEmitter_ {
   public system: System
   public gamepad: Gamepad
 
@@ -30,7 +33,6 @@ export class Gamepad_ extends EventEmitter {
   private _frame: number | null = null
 
   async read(): Promise<Gamepad_J> {
-    console.log(this.state)
     return this.state
   }
 
@@ -78,13 +80,13 @@ export class Gamepad_ extends EventEmitter {
   }
 
   private _start_event_capture = (): void => {
-    console.log('Gamepad_', '_start_event_capture')
+    // console.log('Gamepad_', '_start_event_capture')
 
     this._event_capture_tick()
   }
 
   private _stop_event_capture = (): void => {
-    console.log('Gamepad_', '_stop_event_capture')
+    // console.log('Gamepad_', '_stop_event_capture')
 
     const {
       api: {
@@ -102,13 +104,11 @@ export class Gamepad_ extends EventEmitter {
   private _listenerCount: number = 0
 
   addListener(event, listener) {
-    console.log('Gamepad_', 'addListener', event)
+    // console.log('Gamepad_', 'addListener', event)
 
     const unlisten = super.addListener(event, listener)
 
     this._listenerCount++
-
-    console.log(this._listenerCount)
 
     if (this._listenerCount >= 1) {
       this._start_event_capture()

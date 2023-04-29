@@ -36,7 +36,7 @@ export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
 
   f({ id, graph }: I<T>, done: Done<O<T>>): void {
     try {
-      const unit = graph.removeUnit(id)
+      const unit = graph.removeUnit(id, true)
 
       const Bundle = cloneBundle(unit)
 

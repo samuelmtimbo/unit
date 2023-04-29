@@ -15,7 +15,6 @@ import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
 import { System } from '../../../../../system'
 import { Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { IO } from '../../../../../types/IO'
 import { keys } from '../../../../f/object/Keys/f'
 import Icon from '../../../component/Icon/Component'
@@ -69,7 +68,7 @@ export function line_wrap(text: string, MAX: number = 15): string[] {
   return lines
 }
 
-export default class ClassDatum extends Element<IHTMLDivElement, Props> {
+export default class ClassDatum extends Element<HTMLDivElement, Props> {
   private _svg: SVGSVG
   private _svg_g: SVGG
 

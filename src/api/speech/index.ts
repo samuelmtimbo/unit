@@ -1,4 +1,4 @@
-import { EventEmitter, EventEmitter_EE } from '../../EventEmitter'
+import { EventEmitter_, EventEmitter_EE } from '../../EventEmitter'
 import { APINotSupportedError } from '../../exception/APINotImplementedError'
 import { System } from '../../system'
 import { ISpeechGrammarList } from '../../types/global/ISpeechGrammarList'
@@ -54,7 +54,7 @@ export type SpeechRecorder_EE = {
 export type SpeechRecorderEvents = EventEmitter_EE<SpeechRecorder_EE> &
   SpeechRecorder_EE
 
-export class SpeechRecorder extends EventEmitter<SpeechRecorderEvents> {
+export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
   private _recognition: ISpeechRecognition
 
   private _unlisten: Unlisten
@@ -88,6 +88,7 @@ export class SpeechRecorder extends EventEmitter<SpeechRecorderEvents> {
           continuous,
         })
       } catch (err) {
+        //
         throw err
       }
 

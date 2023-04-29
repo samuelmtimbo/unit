@@ -36,7 +36,7 @@
     "icon": "edit-3",
     "description": "...",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob",
-    "complexity": 2,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

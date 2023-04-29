@@ -23,7 +23,7 @@
   "metadata": {
     "icon": "link",
     "description": "HTML anchor element",
-    "complexity": 5,
+    "complexity": 20,
     "tags": [
       "platform",
       "component"

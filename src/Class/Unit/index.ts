@@ -13,7 +13,7 @@ import { stringify } from '../../spec/stringify'
 import { System } from '../../system'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keys } from '../../system/f/object/Keys/f'
-import { Specs } from '../../types'
+import { Spec } from '../../types'
 import { Dict } from '../../types/Dict'
 import { U, U_EE } from '../../types/interface/U'
 import { IO } from '../../types/IO'
@@ -26,20 +26,21 @@ import { mapObjVK } from '../../util/object'
 export type PinMap<T> = Dict<Pin<T[keyof T]>>
 
 const toPinMap = <T>(
-  names: string[]
+  names: string[],
+  opts: PinOpts
 ): {
   [K in keyof T]?: Pin<T[K]>
 } => {
   return names.reduce(
     (acc, name) => ({
       ...acc,
-      [name]: new Pin(),
+      [name]: new Pin(opts[name] ?? {}),
     }),
     {}
   )
 }
 
-export interface ION {
+export interface ION<I, O> {
   i?: string[]
   o?: string[]
 }
@@ -119,7 +120,7 @@ export class Unit<
   public _opt: Opt
 
   constructor(
-    { i = [], o = [] }: ION,
+    { i = [], o = [] }: ION<I, O>,
     opt: Opt = {},
     system: System,
     id: string
@@ -128,13 +129,13 @@ export class Unit<
 
     const { input, output } = opt
 
-    const inputMap = toPinMap<I>(i)
-    const outputMap = toPinMap<O>(o)
+    const inputMap = toPinMap<I>(i, opt.input ?? {})
+    const outputMap = toPinMap<O>(o, opt.output ?? {})
 
     this.setInputs(inputMap, input)
     this.setOutputs(outputMap, output)
 
-    this._selfPin = new Pin<U>({ data: this, constant: false })
+    this._selfPin = new Pin<U>({ data: this, constant: false, ref: true })
     this._selfPin.addListener('drop', () => {
       throw new Error('Self Pin should never be dropped!')
     })
@@ -167,6 +168,7 @@ export class Unit<
 
   public setParent(parent: Unit | null) {
     this._parent = parent
+
     this.emit('parent', this._parent)
   }
 
@@ -263,11 +265,9 @@ export class Unit<
   }
 
   public setOutputIgnored(name: string, ignore: boolean): boolean {
-    const take = !this.hasRefOutputNamed(name)
-
     const output = this.getOutput(name)
 
-    return output.ignored(ignore, take)
+    return output.ignored(ignore)
   }
 
   public setInputs(inputs: Pins<I>, opts: PinOpts = {}): void {
@@ -822,6 +822,7 @@ export class Unit<
 
   public removePinData(type: IO, pinId: string): void {
     const pin = this.getPin(type, pinId)
+
     pin.take()
   }
 
@@ -1025,6 +1026,8 @@ export class Unit<
   }
 
   public destroy(): void {
+    this.__system.unregisterUnit(this.id)
+
     super.destroy()
   }
 
@@ -1067,11 +1070,11 @@ export class Unit<
     return data
   }
 
-  public getSpecs(): Specs {
-    return this.__system.specs
+  public getSpec(): Spec {
+    return this.__system.getSpec(this.id)
   }
 
-  public getUnitBundleSpec(deep: boolean = true): UnitBundleSpec {
+  public getUnitBundleSpec(deep: boolean = false): UnitBundleSpec {
     let memory = undefined
 
     if (deep) {

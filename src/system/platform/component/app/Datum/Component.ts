@@ -16,7 +16,6 @@ import {
 } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { _keyUpdateTree } from '../../../../../util/keyUpdateTree'
 import isEqual from '../../../../f/comparisson/Equals/f'
 import DataTree from '../DataTree/Component'
@@ -26,7 +25,7 @@ export interface Props {
   data: TreeNode
 }
 
-export default class Datum extends Element<IHTMLDivElement, Props> {
+export default class Datum extends Element<HTMLDivElement, Props> {
   private _data_tree: DataTree
   private _root: TreeNode
 

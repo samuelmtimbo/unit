@@ -1,4 +1,5 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { ID_SET } from '../../../_ids'
@@ -27,7 +28,15 @@ export default class Set<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ obj, key, value }: I<T>, done): void {
-    done({ obj: _set(obj, key, value) })
+  f({ obj, key, value }: I<T>, done: Done<O<T>>): void {
+    if (this.isPinRef('input', 'obj')) {
+      obj[key] = value
+    }
+
+    if (this.isPinRef('output', 'obj')) {
+      done({ obj })
+    } else {
+      done({ obj: _set(obj, key, value) })
+    }
   }
 }

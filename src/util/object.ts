@@ -56,6 +56,7 @@ export function mapObjKeyVK<V>(
   const result = {}
   for (const key in obj) {
     const value = obj[key]
+    
     result[callback(value, key)] = value
   }
   return result
@@ -102,7 +103,7 @@ export function reduceObj<V, A>(
   callback: (acc: A, value: V, key: string) => A,
   acc: A
 ): A {
-  let _acc = acc
+  let _acc: A = acc
   for (const key in obj) {
     _acc = callback(_acc, obj[key], key)
   }
@@ -360,4 +361,14 @@ export function decKeyFrom(obj: object, key: string, from: number): any {
   }
 
   obj[key]--
+}
+
+export function makeTagObj<T>(keys: string[], value: T): Dict<T> {
+  const obj = {}
+
+  for (const key of keys) {
+    obj[key] = value
+  }
+
+  return obj
 }

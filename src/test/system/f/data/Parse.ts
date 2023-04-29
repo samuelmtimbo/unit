@@ -1,9 +1,9 @@
 import { watchUnitAndLog } from '../../../../debug'
-import Parse from '../../../../system/f/data/Parse'
+import Evaluate from '../../../../system/f/data/Evaluate'
 import { testSISO } from '../../../util'
 import { system } from '../../../util/system'
 
-const parse = new Parse(system)
+const parse = new Evaluate(system)
 
 parse.play()
 

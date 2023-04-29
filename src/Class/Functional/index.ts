@@ -28,7 +28,12 @@ export class Functional<
 > extends Primitive<I, O, _EE> {
   private _looping: boolean = false
 
-  constructor({ i, o }: ION = {}, opt: Opt = {}, system: System, id: string) {
+  constructor(
+    { i, o }: ION<I, O> = {},
+    opt: Opt = {},
+    system: System,
+    id: string
+  ) {
     super({ i, o }, opt, system, id)
 
     this.addListener('take_err', () => {

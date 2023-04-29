@@ -13,7 +13,7 @@
           "ignored": true
         },
         "style": {},
-        "bundle": {}
+        "graph": {}
       },
       "output": {
         "graph": {
@@ -22,30 +22,8 @@
       },
       "metadata": {
         "position": {
-          "x": 12,
-          "y": 36
-        }
-      }
-    },
-    "listen": {
-      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
-      "input": {
-        "obj": {},
-        "event": {
-          "constant": true,
-          "data": "'bundle'"
-        },
-        "remove": {
-          "ignored": true
-        }
-      },
-      "output": {
-        "data": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 326,
-          "y": 21
+          "x": 15,
+          "y": 35
         }
       }
     },
@@ -55,8 +33,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": 488,
-          "y": 39
+          "x": 487,
+          "y": 5
         }
       }
     },
@@ -66,7 +44,7 @@
         "obj": {},
         "name": {
           "constant": true,
-          "data": "\"graph\""
+          "data": "'bundle'"
         },
         "data": {}
       },
@@ -78,7 +56,7 @@
       "metadata": {
         "position": {
           "x": 430,
-          "y": 21
+          "y": 22
         }
       }
     },
@@ -95,8 +73,8 @@
       },
       "metadata": {
         "position": {
-          "x": -289,
-          "y": -19
+          "x": -288,
+          "y": -13
         }
       }
     },
@@ -106,8 +84,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": -343,
-          "y": 6
+          "x": -340,
+          "y": 15
         }
       }
     },
@@ -124,22 +102,66 @@
       },
       "metadata": {
         "position": {
-          "x": -387,
-          "y": -60
+          "x": -392,
+          "y": -42
         }
       }
     },
     "swallow": {
       "id": "ecb16ee2-d81f-4f3f-a241-b007087f5055",
       "input": {
-        "obj": {}
+        "unit": {}
       },
       "output": {},
       "metadata": {
         "position": {
-          "x": -241,
-          "y": -49
+          "x": -242,
+          "y": -46
         }
+      }
+    },
+    "graphbundle": {
+      "id": "13d738b9-401d-43c9-852f-e9611545f5bc",
+      "input": {
+        "graph": {},
+        "opt": {}
+      },
+      "output": {
+        "graph": {}
+      }
+    },
+    "delaypush": {
+      "id": "8cd6c706-d1d4-11ea-92e1-47577abb9ccf",
+      "input": {
+        "ms": {
+          "constant": true,
+          "data": "1000"
+        },
+        "a": {
+          "constant": true,
+          "data": "{}"
+        }
+      },
+      "output": {
+        "a": {}
+      }
+    },
+    "stringify": {
+      "id": "2b24877a-3221-4288-9f59-efbf29964368",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "str": {}
+      }
+    },
+    "parse": {
+      "id": "69323dab-b425-4a2a-b1c7-d7efc723327a",
+      "input": {
+        "str": {}
+      },
+      "output": {
+        "a": {}
       }
     }
   },
@@ -162,9 +184,9 @@
           "data": true
         }
       },
-      "listen": {
+      "stringify": {
         "output": {
-          "data": true
+          "str": true
         }
       }
     },
@@ -181,14 +203,14 @@
       }
     },
     "3": {
+      "parse": {
+        "input": {
+          "str": true
+        }
+      },
       "get": {
         "output": {
           "value": true
-        }
-      },
-      "root": {
-        "input": {
-          "bundle": true
         }
       }
     },
@@ -198,9 +220,9 @@
           "graph": true
         }
       },
-      "listen": {
+      "graphbundle": {
         "input": {
-          "obj": true
+          "graph": true
         }
       }
     },
@@ -219,12 +241,48 @@
     "6": {
       "swallow": {
         "input": {
-          "obj": true
+          "unit": true
         }
       },
       "get": {
         "output": {
           "_self": true
+        }
+      }
+    },
+    "7": {
+      "stringify": {
+        "input": {
+          "a": true
+        }
+      },
+      "graphbundle": {
+        "output": {
+          "bundle": true
+        }
+      }
+    },
+    "8": {
+      "delaypush": {
+        "output": {
+          "a": true
+        }
+      },
+      "graphbundle": {
+        "input": {
+          "opt": true
+        }
+      }
+    },
+    "9": {
+      "parse": {
+        "output": {
+          "a": true
+        }
+      },
+      "root": {
+        "input": {
+          "graph": true
         }
       }
     }
@@ -236,22 +294,18 @@
         "children": []
       }
     },
-    "children": [
-      "root"
-    ],
+    "children": ["root"],
     "defaultWidth": 420,
     "defaultHeight": 420
   },
   "metadata": {
     "icon": null,
     "description": "",
-    "complexity": 116,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "complexity": 50,
+    "tags": ["platform", "core", "component"]
   },
   "id": "e1b6acd3-69cd-4edb-8e3e-6c78ffd28b49",
-  "type": "`U`&`G`"
+  "type": "`U`&`G`",
+  "system": true,
+  "specs": {}
 }

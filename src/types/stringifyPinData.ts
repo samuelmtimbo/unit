@@ -1,4 +1,6 @@
+import { Classes, Specs } from '.'
 import { $ } from '../Class/$'
+import { evaluate } from '../spec/evaluate'
 import { stringify } from '../spec/stringify'
 import { Dict } from './Dict'
 
@@ -25,5 +27,19 @@ export function stringifyDataObj(obj: Dict<any>) {
       }
     }
   }
+  return _obj
+}
+
+export function evaluateDataObj(obj: Dict<any>, specs: Specs, classes: Classes): Dict<any> {
+  const _obj = {}
+
+  for (const name in obj) {
+    const data = obj[name]
+
+    if (data !== undefined) {
+      _obj[name] = evaluate(data, specs, classes)
+    }
+  }
+
   return _obj
 }

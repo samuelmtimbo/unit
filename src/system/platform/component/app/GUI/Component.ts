@@ -11,7 +11,6 @@ import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeInputListener } from '../../../../../client/event/input'
 import { graphComponentFromId } from '../../../../../client/graphComponentFromSpec'
-import { MAX_Z_INDEX } from '../../../../../client/MAX_Z_INDEX'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import {
   COLOR_NONE,
@@ -23,12 +22,13 @@ import { userSelect } from '../../../../../client/util/style/userSelect'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import Div from '../../Div/Component'
+import Frame from '../../Frame/Component'
 import Parent from '../../Parent/Component'
 import Color from '../../value/Color/Component'
 import Cabinet from '../Cabinet/Component'
+import IconButton from '../IconButton/Component'
 import Minimap, { MINIMAP_HEIGHT, MINIMAP_WIDTH } from '../Minimap/Component'
 import Modes from '../ModeSelector/Component'
 import Search from '../Search/Component'
@@ -40,32 +40,33 @@ export interface Props {
 
 export const DEFAULT_UNIT_ID = 'unit'
 
-const GUI_Z_INDEX = MAX_Z_INDEX - 1000
-
 export const DEFAULT_STYLE = {
   // display: 'none',
   // width: '0px',
   // height: '0px',
   // position: 'absolute',
-  position: 'relative',
+  position: 'absolute',
   width: '100%',
   height: '100%',
   overflow: 'hidden',
   ...userSelect('none'),
 }
 
-export default class GUI extends Element<IHTMLDivElement, Props> {
-  private _gui: Div
-
-  private _background: Div
-
+export default class GUI extends Element<HTMLDivElement, Props> {
+  public _gui: Div
+  public _background: Div
   public _search: Search
   public _modes: Modes
   public _cabinet: Cabinet
   public _minimap: Minimap
   public _color_picker: Color
   public _color_pallete: Div
+  public _share: Div
+  public _import: IconButton
+  public _export: IconButton
   public _history: Div
+
+  private _hidden = true
 
   private _manually_changed_color: boolean = false
 
@@ -89,6 +90,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
       this.$system
     )
     this.$ref['modes'] = modes
+
     this._modes = modes
 
     const search = new Search(
@@ -153,6 +155,13 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
           borderColor: 'currentColor',
           backgroundColor: COLOR_NONE,
         },
+        sliderStyle: {
+          transition: ifLinearTransition(
+            this.$system.animated,
+            'left',
+            'background-color'
+          ),
+        },
       }
     )
     color_theme.addEventListener(
@@ -202,6 +211,49 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     color_pallete.appendChild(color_picker)
     this._color_pallete = color_pallete
 
+    const export_button = new IconButton(
+      {
+        icon: 'upload',
+        style: {
+          width: '21px',
+          height: '21px',
+          padding: '6px',
+        },
+      },
+      this.$system
+    )
+    this.$ref['export'] = export_button
+    this._export = export_button
+
+    const import_button = new IconButton(
+      {
+        icon: 'import',
+        style: {
+          width: '21px',
+          height: '21px',
+          padding: '6px',
+        },
+      },
+      this.$system
+    )
+    this.$ref['import'] = import_button
+    this._import = import_button
+
+    const share = new Div(
+      {
+        style: {
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          height: 'fit-content',
+        },
+      },
+      this.$system
+    )
+    share.appendChild(export_button)
+    share.appendChild(import_button)
+    this._share = share
+
     const cabinet = new Cabinet(
       {
         className: 'graph-gui-cabinet',
@@ -249,7 +301,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     )
     this._background = background
 
-    const control = new Div(
+    const control = new Frame(
       {
         className: 'gui-control',
         style: {
@@ -333,14 +385,25 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
       foreground,
     }
     this.$unbundled = false
+    this.$primitive = true
 
     this.addEventListeners([
       makeCustomListener('dock-move', ({ dy = 0, dx = 0 }) => {
+        if (this._hidden) {
+          return
+        }
+
         mergePropStyle(control, {
           left: `${dx}px`,
           width: `calc(100% - ${dx}px)`,
           height: `calc(100% - ${dy}px)`,
-          transition: linearTransition('left', 'width', 'height'),
+          transition: linearTransition('left', 'width', 'height', 'opacity'),
+        })
+
+        mergePropStyle(background, {
+          paddingBottom: `${dy}px`,
+          paddingLeft: `${dx}px`,
+          transition: linearTransition('padding-bottom', 'padding-left'),
         })
 
         if (dy > 0) {
@@ -373,6 +436,10 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
         }
       }),
       makeCustomListener('dock-leave', () => {
+        if (this._hidden) {
+          return
+        }
+
         mergePropStyle(control, {
           left: `${0}px`,
           width: '100%',
@@ -440,6 +507,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
 
     if (prop === 'style') {
       this._gui.setProp('style', { ...DEFAULT_STYLE, ...current })
+
       this._refresh_color()
     }
   }
@@ -463,7 +531,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
           active: false,
           width: MINIMAP_WIDTH,
           height: MINIMAP_HEIGHT,
-          state: { y: cy - 55 },
+          state: { y: cy - 82.765 },
         },
         color: {
           icon: 'palette',
@@ -472,11 +540,24 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
           active: false,
           width: 100,
           height: 100,
-          state: { y: cy + 20 },
+          state: { y: cy - 17.5 },
+        },
+        file: {
+          icon: 'share-2',
+          title: 'share',
+          component: this._share,
+          active: false,
+          width: 30,
+          height: 67,
+          state: { y: cy + 47.765 },
         },
       })
 
       this._init = true
+
+      if (this._hidden) {
+        this.hide(false)
+      }
     }
 
     this._context_unlisten = addListeners(this.$context, [
@@ -519,15 +600,12 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     this._refresh_color()
   }
 
-  private _hidden = false
-
-  public hide(animate: boolean): void {
-    // console.log('GUI', 'hide')
+  public hide(animate: boolean = false): void {
+    // console.log('GUI', 'hide', animate)
 
     this._hidden = true
 
     this.hide_background(animate)
-
     this.hide_search(animate)
     this.hide_modes(animate)
     this.hide_cabinet(animate)
@@ -544,7 +622,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     const duration = animate ? ANIMATION_T_MS : 0
     const fill = 'forwards'
 
-    this._background.$element.animate(style, {
+    this._background.$element?.animate?.(style, {
       duration,
       fill,
     })
@@ -559,7 +637,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
       this._search_animation.commitStyles()
     }
 
-    this._search_animation = this._search._search.$element.animate(style, {
+    this._search_animation = this._search._search.$element?.animate?.(style, {
       duration,
       fill,
     })
@@ -581,7 +659,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     //   },
     //   animate
     // )
-    mergePropStyle(this._search._search, {
+    mergePropStyle(this._search, {
       transform: 'translate(-50%, 100%)',
       transition: ifLinearTransition(animate, 'transform'),
     })
@@ -599,7 +677,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
       this._modes_animation.commitStyles()
     }
 
-    this._modes_animation = this._modes._modes.$element.animate([style], {
+    this._modes_animation = this._modes._modes.$element.animate?.([style], {
       duration,
       fill,
     })
@@ -612,7 +690,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     //   },
     //   animate
     // )
-    mergePropStyle(this._modes._modes, {
+    mergePropStyle(this._modes, {
       transform: 'translate(-100%, -50%)',
       transition: ifLinearTransition(animate, 'transform'),
     })
@@ -638,7 +716,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     //   },
     //   animate
     // )
-    mergePropStyle(this._search._search, {
+    mergePropStyle(this._search, {
       transform: 'translate(-50%, 0%)',
       transition: ifLinearTransition(animate, 'transform'),
     })
@@ -651,7 +729,7 @@ export default class GUI extends Element<IHTMLDivElement, Props> {
     //   },
     //   animate
     // )
-    mergePropStyle(this._modes._modes, {
+    mergePropStyle(this._modes, {
       transform: 'translate(0%, -50%)',
       transition: ifLinearTransition(animate, 'transform'),
     })

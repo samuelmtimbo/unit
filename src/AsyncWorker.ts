@@ -74,13 +74,13 @@ import { Unlisten } from './types/Unlisten'
 
 export function AsyncWorker(client: RemotePort, _: string[]): any {
   return AsyncWrap(client, _, {
-    $G: AsyncWorkerG,
-    $C: AsyncWorkerC,
-    $V: AsyncWorkerV,
-    $J: AsyncWorkerJ,
-    $U: AsyncWorkerU,
-    $ST: AsyncWorkerST,
-    $S: AsyncWorkerS,
+    G: AsyncWorkerG,
+    C: AsyncWorkerC,
+    V: AsyncWorkerV,
+    J: AsyncWorkerJ,
+    U: AsyncWorkerU,
+    ST: AsyncWorkerST,
+    S: AsyncWorkerS,
   })
 }
 

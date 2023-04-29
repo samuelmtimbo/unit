@@ -25,8 +25,8 @@ export function listenDragCancel(
 
     listener(detail)
   }
-  $element.addEventListener('_dragcancel', dragCancelListener, _global)
+  $element.addEventListener('dragcancel', dragCancelListener, _global)
   return () => {
-    $element.removeEventListener('_dragcancel', dragCancelListener, _global)
+    $element.removeEventListener('dragcancel', dragCancelListener, _global)
   }
 }

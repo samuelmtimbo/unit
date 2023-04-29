@@ -1,0 +1,62 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "remove newline",
+  "units": {
+    "replace": {
+      "id": "af5469c4-a09e-4b22-8133-a21e721e7639",
+      "input": {
+        "str": {},
+        "regex": {
+          "constant": true,
+          "data": "'\\n'"
+        },
+        "with": {
+          "constant": true,
+          "data": "''"
+        },
+        "flags": {
+          "constant": true,
+          "data": "''"
+        }
+      },
+      "output": {
+        "str": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -74,
+          "y": -39
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "str": {
+      "plug": {
+        "0": {
+          "unitId": "replace",
+          "pinId": "str"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "str": {
+      "plug": {
+        "0": {
+          "unitId": "replace",
+          "pinId": "str"
+        }
+      },
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "type",
+    "description": "remove \n",
+    "complexity": 5
+  },
+  "id": "1a0773eb-559c-47e2-81d7-fc28bc80076d"
+}

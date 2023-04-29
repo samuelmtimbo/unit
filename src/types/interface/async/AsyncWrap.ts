@@ -16,9 +16,7 @@ export const AsyncWrap = (
       throw new Error('Async Wrapper is not registered')
     }
 
-    if (!__.includes(___)) {
-      $unit = { ...$unit, ...AsyncWrapper(unit) }
-    }
+    $unit = { ...$unit, ...AsyncWrapper(unit) }
   }
 
   return $unit

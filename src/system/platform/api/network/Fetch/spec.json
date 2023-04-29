@@ -27,7 +27,7 @@
     "icon": "send",
     "description": "fetch a resource across the network through HTTP",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
-    "complexity": 2,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

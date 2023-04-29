@@ -5,6 +5,7 @@ import { getTree, TreeNode, TreeNodeType, _isValidObjKeyType } from './parser'
 
 export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
   const { value, children } = tree
+  
   switch (tree.type) {
     case TreeNodeType.Identifier:
       return value
@@ -13,10 +14,10 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
     case TreeNodeType.StringLiteral:
       return value
         .substring(1, value.length - 1)
-        .replace(/\\'/g, "'")
+        // .replace(/\\'/g, "'")
         .replace(/\\"/g, '"')
-        .replace(/\\n/g, '\\n')
-        .replace(/\\r/g, '\\r')
+        // .replace(/\\n/g, '\n')
+        // .replace(/\\r/g, '\r')
         .replace(/\\\\/g, '\\')
     case TreeNodeType.BooleanLiteral:
       return value === 'true' ? true : false

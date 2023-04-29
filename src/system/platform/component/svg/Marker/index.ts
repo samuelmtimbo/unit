@@ -5,7 +5,6 @@ import { ID_MARKER } from '../../../../_ids'
 
 export interface I {
   style: Dict<string>
-  class: string
 }
 
 export interface O {}

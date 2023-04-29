@@ -1,5 +1,5 @@
 import { CALL, REF, REF_EXEC, UNWATCH, WATCH } from './constant/STRING'
-import { EventEmitter, EventEmitter_EE } from './EventEmitter'
+import { EventEmitter_, EventEmitter_EE } from './EventEmitter'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { IPort } from './types/global/IPort'
@@ -17,8 +17,8 @@ export class RemotePort {
 
   private _ref: Dict<RemotePort> = {}
 
-  private _watch_emitter: EventEmitter<AnyEmitterEvents> = new EventEmitter()
-  private _call_emitter: EventEmitter<AnyEmitterEvents> = new EventEmitter()
+  private _watch_emitter: EventEmitter_<AnyEmitterEvents> = new EventEmitter_()
+  private _call_emitter: EventEmitter_<AnyEmitterEvents> = new EventEmitter_()
 
   private _valid: boolean = true
 
@@ -34,7 +34,7 @@ export class RemotePort {
     this._port.onerror = (event) => {
       const { message } = event
 
-      console.log('err', message)
+      // console.log('err', message)
     }
   }
 
@@ -112,7 +112,7 @@ export class RemotePort {
 
         this._port.send(_data)
       } else {
-        console.log('Invalid Remote Port unlisten called')
+        // console.log('Invalid Remote Port unlisten called')
       }
     }
   }

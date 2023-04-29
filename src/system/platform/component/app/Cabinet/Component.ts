@@ -9,7 +9,6 @@ import { SimNode, Simulation } from '../../../../../client/simulation'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
@@ -27,6 +26,7 @@ export interface Props {
   className?: string
   style?: Dict<string>
   hidden?: boolean
+  dy?: number
 }
 
 export const DEFAULT_STYLE = {
@@ -37,7 +37,7 @@ export const DEFAULT_STYLE = {
   height: '0',
 }
 
-export default class Cabinet extends Element<IHTMLDivElement, Props> {
+export default class Cabinet extends Element<HTMLDivElement, Props> {
   private _cabinet: Div
 
   private _drawer: Dict<CabinetDrawer> = {}
@@ -57,10 +57,14 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
 
   private _z_index: number = 1
 
+  private _dy = 0
+
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { className, style = {} } = $props
+    const { className, style = {}, dy = 0 } = $props
+
+    this._dy = 0
 
     const cabinet = new Div(
       {
@@ -88,6 +92,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
       cabinet,
     }
     this.$unbundled = false
+this.$primitive = true
 
     this.registerRoot(cabinet)
   }
@@ -123,6 +128,10 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
       } else if (!this._hidden && current) {
         this.hide(false)
       }
+    } else if (prop === 'dy') {
+      this._dy = current ?? 0
+
+      this._startSimulation()
     }
   }
 
@@ -151,14 +160,18 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
   private _tick = () => {
     for (const drawer_id in this._drawer_node) {
       const { y } = this._drawer_node[drawer_id]
+
       const drawer = this._drawer_component[drawer_id]
+
       drawer.setProp('y', y)
     }
   }
 
   private _force = (alpha: number): void => {
     const entries = Object.entries(this._drawer_node)
+
     const n = entries.length
+
     for (let i = 0; i < n; i++) {
       const a_entry = entries[i]
 
@@ -180,10 +193,15 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
 
         if (ay + ah <= by) {
           l = by - ay - ah
+
           s = -1
         } else if (ay <= by) {
-          l = ay + ah - by
-          s = -1
+          const l0 = by - ay
+          const l1 = ay + ah - by
+
+          l = Math.min(l0, l1)
+
+          s = l0 < l1 ? 1 : -1
         } else if (by + bh <= ay) {
           l = ay - by - bh
         } else if (by <= ay) {
@@ -209,8 +227,11 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
     for (const drawer_id in this._drawer_node) {
       if (!this._drawer_inactivating.has(drawer_id)) {
         const node = this._drawer_node[drawer_id]
+
         const { y, height } = node
-        const dy = y + height / 2 - this._height / 2
+
+        const dy = y + height / 2 - this._height / 2 + this._dy
+
         node.vy -= (dy * alpha) / 10
       }
     }
@@ -221,6 +242,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
     () => {
       // console.log('Cabinet', '_on_context_resize')
       const { $width, $height } = this.$context
+
       this._on_resize($width, $height)
     }
   // , 300)
@@ -228,6 +250,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
   private _on_drawer_drag_start = (drawerId: string, y: number) => {
     // console.log('Cabinet', '_on_drawer_drag_start', y)
     const node = this._drawer_node[drawerId]
+
     if (node) {
       node.hy = y - node.y
       node.fy = node.y
@@ -250,7 +273,10 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
     const node = this._drawer_node[drawerId]
     if (node) {
       node.hy = 0
-      node.fy = undefined
+
+      if (!this._drawer_active.has(drawerId)) {
+        node.fy = undefined
+      }
     }
   }
 
@@ -306,17 +332,28 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
     drawer_component.addEventListener(
       makeCustomListener('active', () => {
         // console.log('Cabinet', '_on_drawer_active')
-        // increase zIndex of this drawer on active
-        this._inc_drawer_z_index(drawerId)
+
+        // increase z-index of this drawer on active
+        this._incDrawerZIndex(drawerId)
 
         this._memSetActive(drawerId, true)
 
         this._drawer_y[drawerId] = this._drawer_node[drawerId].y
 
         const drawer = this._drawer[drawerId]
+
+        const node = this._drawer_node[drawerId]
+
         const { component } = drawer
+
+        component.$element.style.pointerEvents = `none`
+
         if (component) {
-          this._removeDrawerNode(drawerId)
+          this._fixed_drawer_node.add(drawerId)
+
+          node.fy = node.y
+          node.height = drawer.height
+
           this._startSimulation()
         }
 
@@ -324,6 +361,17 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
         frame.setProp('disabled', false)
 
         this.dispatchEvent('draweractive', { drawerId })
+      })
+    )
+    drawer_component.addEventListener(
+      makeCustomListener('activated', () => {
+        // console.log('Cabinet', '_on_drawer_activated')
+
+        const drawer = this._drawer[drawerId]
+
+        const { component } = drawer
+
+        component.$element.style.pointerEvents = `auto`
       })
     )
     drawer_component.addEventListener(
@@ -358,7 +406,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
     drawer_component.addEventListener(
       makeCustomListener('dragstart', ({ y }) => {
         // increase this drawer zIndex on dragstart
-        this._inc_drawer_z_index(drawerId)
+        this._incDrawerZIndex(drawerId)
         this._drawer_y[drawerId] = y
         this._on_drawer_drag_start(drawerId, y)
       })
@@ -417,6 +465,8 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
     delete this._drawer_node[drawerId]
   }
 
+  private _fixed_drawer_node: Set<string> = new Set()
+
   private _startSimulation = (alpha: number = 0.1): void => {
     // console.log('Cabinet', '_startSimulation')
     this._simulation.alpha(alpha)
@@ -461,7 +511,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
     this._context_unlisten()
   }
 
-  private _inc_drawer_z_index = (drawerId: string): void => {
+  private _incDrawerZIndex = (drawerId: string): void => {
     // increase zIndex of this drawer
     const drawer_component = this._drawer_component[drawerId]
 
@@ -489,6 +539,7 @@ export default class Cabinet extends Element<IHTMLDivElement, Props> {
       drawer_component.setProp('y', _y)
 
       const node = this._drawer_node[drawer_id]
+
       if (node) {
         node.y += dy
       }

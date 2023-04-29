@@ -1,11 +1,11 @@
-import { EventEmitter } from '../EventEmitter'
+import { EventEmitter_ } from '../EventEmitter'
 import { Action } from '../types'
 import { Dict } from '../types/Dict'
 
 const _transmitterChannel: Dict<BroadcastChannel> = {}
 const _receiverChannel: Dict<BroadcastChannel> = {}
 
-const _eventEmitter: EventEmitter = new EventEmitter<any>()
+const _eventEmitter: EventEmitter_ = new EventEmitter_<any>()
 
 export function openReceiverChannel(channel: string): BroadcastChannel {
   let receiverChannel = _receiverChannel[channel]
@@ -16,7 +16,7 @@ export function openReceiverChannel(channel: string): BroadcastChannel {
       _eventEmitter.emit(channel, data)
     }
     receiverChannel.onmessageerror = function (messageerror: any) {
-      console.log('messageerror', messageerror)
+      // console.log('messageerror', messageerror)
     }
     _receiverChannel[channel] = receiverChannel
   }

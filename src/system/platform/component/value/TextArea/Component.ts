@@ -7,6 +7,7 @@ export interface Props {
   style?: Dict<any>
   value?: string
   placeholder?: string
+  maxLength?: number
 }
 
 export const DEFAULT_STYLE = {
@@ -28,7 +29,7 @@ export const DEFAULT_STYLE = {
   resize: 'none',
   // outline: 'none',
   boxSizing: 'border-box',
-  color: '#C2C2C2',
+  color: 'currentColor',
 }
 
 export default class TextArea extends Field<HTMLTextAreaElement, Props> {
@@ -38,7 +39,7 @@ export default class TextArea extends Field<HTMLTextAreaElement, Props> {
       defaultStyle: DEFAULT_STYLE,
     })
 
-    const { placeholder = '' } = $props
+    const { placeholder = '', maxLength = undefined } = $props
 
     this.$element.spellcheck = false
     this.$element.autocomplete = 'off'
@@ -46,5 +47,9 @@ export default class TextArea extends Field<HTMLTextAreaElement, Props> {
     this.$element.autocapitalize = 'off'
     this.$element.inputMode = 'none'
     this.$element.placeholder = placeholder
+
+    if (maxLength !== undefined) {
+      this.$element.maxLength = maxLength
+    }
   }
 }

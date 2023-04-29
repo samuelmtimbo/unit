@@ -11,7 +11,7 @@ export type EventEmitter_EE<_EE extends Dict<any[]>> = {
   emit: [{ event: 'emit' | keyof _EE }]
 }
 
-export class EventEmitter<
+export class EventEmitter_<
   _EE extends EventEmitter_EE<_EE> & Dict<any[]> = Dict<any> & {
     listen: [{ event: 'listen' }]
     unlisten: [{ event: 'unlisten' }]

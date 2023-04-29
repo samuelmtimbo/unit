@@ -1,6 +1,7 @@
 import { System } from '../../system'
 
-export const ROOT_STYLE = `*::-webkit-scrollbar {
+export const ROOT_STYLE = `
+  *::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 1px;
     height: 1px;
@@ -10,14 +11,15 @@ export const ROOT_STYLE = `*::-webkit-scrollbar {
   }
   *::-webkit-scrollbar-thumb {
     opacity: 0.5;
-    background-color: currentColor;
+    background-color: currentcolor;
   }
   *::-webkit-scrollbar-corner {
     display: none;
   }
+  
   * {
     scrollbar-width: thin;
-    scrollbar-color: currentColor #00000000;
+    scrollbar-color: currentcolor #00000000;
   }
 
   input,
@@ -145,7 +147,7 @@ export function removeRootStyle(system: System, css: string): void {
   const { root } = system
 
   const style = Array.from(root.children).find(
-    (child) => child.tagName === 'STYLE' && style.innerHTML === 'css'
+    (child) => child.tagName === 'STYLE' && style.innerHTML === css
   )
 
   if (!style) {

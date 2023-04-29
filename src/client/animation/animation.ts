@@ -13,10 +13,10 @@ export const linearTransition = (...props: string[]): string => {
 export const ifLinearTransition = (
   animate: boolean,
   ...props: string[]
-): string | undefined => {
+): string => {
   if (animate) {
     return linearTransition(...props)
   } else {
-    return undefined
+    return ''
   }
 }

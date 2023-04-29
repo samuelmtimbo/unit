@@ -4,6 +4,28 @@ import { isSupportedKeyboardEvent } from '../../event/keyboard'
 import { showNotification } from '../../showNotification'
 import { COLOR_RED } from '../../theme'
 
+class ShadowSelection {
+  private _ranges: Range[]
+
+  constructor() {
+    this._ranges = []
+  }
+
+  getRangeAt(index) {
+    return this._ranges[index]
+  }
+
+  addRange(range: Range) {
+    this._ranges.push(range)
+  }
+
+  removeAllRanges() {
+    this._ranges = []
+  }
+
+  // todo: implement remaining `Selection` methods and properties.
+}
+
 export default function webInit(
   system: System,
   window: Window,
@@ -98,6 +120,14 @@ export default function webInit(
     }
   }
 
+  const dragOverListener = (event: DragEvent) => {
+    event.preventDefault()
+  }
+
+  const dropListener = (event: DragEvent) => {
+    event.preventDefault()
+  }
+
   root.addEventListener('blur', blurListener, true)
   root.addEventListener('keydown', keyDownListener, true)
   root.addEventListener('keyup', keyUpListener, true)
@@ -107,6 +137,8 @@ export default function webInit(
   })
   root.addEventListener('touchmove', touchListener)
   root.addEventListener('dblclick', dbClickListener)
+  root.addEventListener('dragover', dragOverListener)
+  root.addEventListener('drop', dropListener)
 
   window.addEventListener('error', errorListener)
 
@@ -124,6 +156,8 @@ export default function webInit(
     })
     root.removeEventListener('touchmove', touchListener)
     root.removeEventListener('dblclick', dbClickListener)
+    root.removeEventListener('dragover', dragOverListener)
+    root.removeEventListener('drop', dropListener)
 
     window.removeEventListener('error', errorListener)
 

@@ -3,7 +3,7 @@ import dissocPath from '../../system/core/object/DissocPath/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { Action, DatumSpec, GraphDataSpec } from '../../types'
-import { REMOVE_DATA, REMOVE_DATUM, SET_DATA, SET_DATUM } from '../actions/data'
+import { REMOVE_DATA, REMOVE_DATUM, SET_DATA, SET_DATUM } from '../actions/D'
 
 export type State = GraphDataSpec
 

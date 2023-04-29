@@ -6,6 +6,12 @@
     },
     "close": {
       "type": "any"
+    },
+    "opt": {
+      "type": "{iceServers:{urls:string[]}[]}",
+      "metadata": {
+        "examples": ["{iceServers:[{urls:['stun:stun.l.google.com:19302']}]}"]
+      }
     }
   },
   "outputs": {
@@ -15,17 +21,17 @@
     },
     "answer": {
       "type": "string"
+    },
+    "emitter": {
+      "type": "`EE`",
+      "ref": true
     }
   },
   "metadata": {
     "icon": "link",
     "description": "Peer to Peer (P2P) Receiver",
-    "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "peer"
-    ]
+    "complexity": 9,
+    "tags": ["platform", "api", "peer"]
   },
   "id": "f079a38e-fb4f-496e-8e5f-d5e03a590cda",
   "base": true,

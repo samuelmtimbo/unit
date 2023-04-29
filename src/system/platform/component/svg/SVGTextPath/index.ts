@@ -5,7 +5,6 @@ import { ID_TEXT_PATH } from '../../../../_ids'
 
 export interface I {
   style: Dict<string>
-  class: string
 }
 
 export interface O {}
@@ -14,7 +13,7 @@ export default class SVGTextPath extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'className'],
+        i: ['style'],
         o: [],
       },
       {},

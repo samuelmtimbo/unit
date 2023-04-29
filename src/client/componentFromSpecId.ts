@@ -9,7 +9,14 @@ export function componentFromSpecId(
   props: Dict<any>,
   sub_component_map: Dict<Component> = {}
 ): Component {
-  const Class = componentClassFromSpecId(system, id, {}, sub_component_map)
+  const Class = componentClassFromSpecId(
+    system.components,
+    system.specs,
+    system.classes,
+    id,
+    {},
+    sub_component_map
+  )
 
   const component = new Class(props, system)
 

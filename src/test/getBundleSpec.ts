@@ -16,7 +16,6 @@ assert.deepEqual(identity.getUnitBundleSpec(), {
         a: { _invalid: false, _constant: false, _ignored: false, _idle: true },
       },
       memory: {
-        __buffer: [],
         _forwarding: false,
         _backwarding: false,
         _forwarding_empty: false,
