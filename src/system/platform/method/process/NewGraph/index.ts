@@ -3,11 +3,12 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Graph } from '../../../../../Class/Graph'
 import { start } from '../../../../../start'
 import { System } from '../../../../../system'
-import { BundleSpec } from '../../../../../types/BundleSpec'
+import { GraphSpec } from '../../../../../types'
+import { GraphBundle } from '../../../../../types/GraphClass'
 import { ID_NEW_GRAPH } from '../../../../_ids'
 
 export interface I {
-  bundle: BundleSpec
+  graph: GraphBundle
 }
 
 export interface O {
@@ -18,7 +19,7 @@ export default class NewGraph extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['bundle'],
+        i: ['graph'],
         o: ['graph'],
       },
       {
@@ -33,15 +34,14 @@ export default class NewGraph extends Functional<I, O> {
     )
   }
 
-  f({ bundle }: I, done: Done<O>): void {
+  f({ graph: graphClass }: I, done: Done<O>): void {
     // console.log('NewGraph', 'f', bundle)
 
-    const { spec = {}, specs = {} } = bundle
+    const { unit, specs = {} } = graphClass.__bundle
 
-    // RETURN
-    for (const specId in specs) {
-      this.__system.specs[specId] = specs[specId]
-    }
+    this.__system.injectSpecs(specs)
+
+    const spec = this.__system.getSpec(unit.id) as GraphSpec
 
     const graph = start(this.__system, spec)
 

@@ -30,7 +30,7 @@
   "metadata": {
     "icon": "video",
     "description": "video element",
-    "complexity": 5,
+    "complexity": 20,
     "tags": [
       "platform",
       "component",
@@ -43,7 +43,7 @@
     "defaultWidth": 240,
     "defaultHeight": 180
   },
-  "type": "`U`&`C`&`V`&`PS`&`CS`",
+  "type": "`U`&`C`&`V`&`J`&`PS`&`CS`",
   "system": true,
   "render": true
 }

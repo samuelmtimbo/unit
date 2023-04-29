@@ -146,7 +146,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "a line on canvas",
-    "complexity": 27,
+    "complexity": 50,
     "tags": [
       "platform",
       "core",

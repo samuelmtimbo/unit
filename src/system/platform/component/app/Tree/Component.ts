@@ -3,7 +3,6 @@ import parentElement from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import { GraphSpec } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import Div from '../../Div/Component'
 
@@ -15,7 +14,7 @@ export const DEFAULT_STYLE = {
   display: 'flex',
 }
 
-export default class Tree extends Element<IHTMLDivElement, Props> {
+export default class Tree extends Element<HTMLDivElement, Props> {
   private _div: Div
 
   constructor($props: Props, $system: System) {

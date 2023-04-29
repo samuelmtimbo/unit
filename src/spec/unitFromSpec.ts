@@ -1,26 +1,31 @@
 import { Unit } from '../Class/Unit'
+import { injectSpecs } from '../client/spec'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
+import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { evaluate } from './evaluate'
 import { fromId } from './fromId'
+import { evaluateMemorySpec } from './stringifySpec'
 
 export function unitFromBundleSpec(
+  system: System,
   unitBundleSpec: UnitBundleSpec,
-  branch: Dict<true> = {},
-  system: System
+  specs: Specs,
+  branch: Dict<true> = {}
 ): Unit {
   const {
     unit: { id, input, output },
-    specs = {},
   } = unitBundleSpec
 
   const { classes } = system
 
-  system.injectSpecs(specs)
+  if (unitBundleSpec.specs) {
+    injectSpecs(specs, unitBundleSpec.specs)
+  }
 
-  const Bundle = fromId(id, system.specs, classes, branch)
+  const Bundle = fromId(id, specs, classes, branch)
 
   const unit = new Bundle(system)
 
@@ -45,6 +50,8 @@ export function unitFromBundleSpec(
   } = unitBundleSpec
 
   if (memory) {
+    evaluateMemorySpec(memory, specs, classes)
+
     unit.restore(memory)
   }
 
@@ -52,9 +59,21 @@ export function unitFromBundleSpec(
     if (data !== undefined) {
       const input = unit.getInput(pinId)
 
-      data = evaluate(data, system.specs, classes)
+      const _data = evaluate(data, system.specs, classes)
 
-      input.push(data)
+      if (_data instanceof Function) {
+        system.injectSpecs(_data.__bundle?.specs ?? {})
+      }
+
+      if (input.ref()) {
+        const __data = new _data(system)
+
+        __data.play()
+
+        input.push(__data)
+      } else {
+        input.push(_data)
+      }
     }
   })
 

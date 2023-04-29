@@ -1,6 +1,6 @@
 import { evaluate } from '../spec/evaluate'
-import { ComponentClass, System } from '../system'
-import { GraphSpec, GraphUnitPinsSpec } from '../types'
+import { ComponentClass, ComponentClasses } from '../system'
+import { Classes, GraphSpec, GraphUnitPinsSpec, Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { Component } from './component'
 import { componentClassFromSpec } from './componentClassFromSpec'
@@ -8,13 +8,13 @@ import { isBaseSpec } from './id'
 import { getSpec } from './spec'
 
 export function componentClassFromSpecId<T = any>(
-  $system: System,
+  components: ComponentClasses,
+  specs: Specs,
+  classes: Classes,
   id: string,
   inputs: GraphUnitPinsSpec = {},
-  sub_component_map: Dict<Component> = {}
+  subComponentMap: Dict<Component> = {}
 ): ComponentClass<T> {
-  const { components, specs, classes } = $system
-
   const spec = getSpec(specs, id)
 
   if (isBaseSpec(spec)) {
@@ -39,6 +39,6 @@ export function componentClassFromSpecId<T = any>(
       }
     }
   } else {
-    return componentClassFromSpec(spec as GraphSpec, specs, sub_component_map)
+    return componentClassFromSpec(spec as GraphSpec, specs, subComponentMap)
   }
 }

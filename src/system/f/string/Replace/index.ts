@@ -1,23 +1,25 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_REPLACE } from '../../../_ids'
 
 export interface I {
-  a: string
+  str: string
   regex: string
-  replacement: string
+  flags: string
+  with: string
 }
 
 export interface O {
-  a: string
+  str: string
 }
 
 export default class Replace extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['a', 'regex', 'replacement'],
-        o: ['a'],
+        i: ['str', 'regex', 'flags', 'with'],
+        o: ['str'],
       },
       {},
       system,
@@ -25,7 +27,7 @@ export default class Replace extends Functional<I, O> {
     )
   }
 
-  f({ a, regex, replacement }: I, done): void {
-    done({ a: a.replace(new RegExp(regex, 'g'), replacement) })
+  f({ str, regex, with: _with, flags }: I, done: Done<O>): void {
+    done({ str: str.replace(new RegExp(regex, flags), _with) })
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "graph | graph",
   "inputs": {
-    "bundle": {
+    "graph": {
       "plug": {
         "0": {
           "unitId": "default",
@@ -75,7 +75,7 @@
     "graph1": {
       "id": "324b9c5e-5810-11eb-bf7c-634b3bb07f8c",
       "input": {
-        "bundle": {}
+        "graph": {}
       },
       "output": {
         "graph": {
@@ -234,7 +234,7 @@
       },
       "graph1": {
         "input": {
-          "bundle": true
+          "graph": true
         }
       }
     },
@@ -293,7 +293,7 @@
   },
   "metadata": {
     "icon": "atom-alt",
-    "complexity": 31,
+    "complexity": 114,
     "tags": [
       "platform",
       "core",

@@ -34,7 +34,12 @@ export function componentClassFromSpec(
         let childComponent = sub_component_map[unitId]
 
         if (!childComponent) {
-          const Class = componentClassFromSpecId($system, id)
+          const Class = componentClassFromSpecId(
+            $system.components,
+            $system.specs,
+            $system.classes,
+            id
+          )
 
           childComponent = new Class({}, $system)
         }

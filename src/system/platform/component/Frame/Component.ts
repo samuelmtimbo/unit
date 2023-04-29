@@ -13,11 +13,10 @@ import {
 import { Element } from '../../../../client/element'
 import { makeCustomListener } from '../../../../client/event/custom'
 import { renderFrame } from '../../../../client/renderFrame'
-import applyStyle from '../../../../client/style'
+import { applyDynamicStyle } from '../../../../client/style'
 import { Theme } from '../../../../client/theme'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../types/global/dom'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export interface Props {
@@ -37,11 +36,10 @@ export const DEFAULT_STYLE = {
   zIndex: '0',
 }
 
-export default class Frame extends Element<IHTMLDivElement, Props> {
+export default class Frame extends Element<HTMLDivElement, Props> {
   public $$context: Context
 
   private _context_unlisten: Unlisten
-  private _sub_context_unlisten: Unlisten
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -51,8 +49,6 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
     const $element = this.$system.api.document.createElement('div')
 
     $element.classList.add('frame')
-
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
 
     if (className !== undefined) {
       $element.classList.add(className)
@@ -72,12 +68,15 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
       $$init.$color = color
     }
 
+    applyDynamicStyle(this, { ...DEFAULT_STYLE, ...style })
+
     this.$$context = renderFrame(this.$system, null, $element, $$init)
   }
 
   private _prop_handler = {
     style: (style: Dict<string> = {}) => {
-      applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
+      applyDynamicStyle(this, { ...DEFAULT_STYLE, ...style })
+
       this._refresh_sub_context_color()
     },
     disabled: (disabled: boolean) => {
@@ -95,10 +94,10 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
     this._prop_handler[prop](current)
   }
 
-  mountDescendent(child: Component): void {
-    // console.log('Frame', 'mountDescendent', child)
+  mountChild(child: Component, commit: boolean = true): void {
+    // console.log('Frame', 'mountDescendent', child, commit)
 
-    child.mount(this.$$context)
+    child.mount(this.$$context, commit)
   }
 
   onMount() {
@@ -115,15 +114,19 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
       makeCustomListener('colorchanged', this._on_context_color_changed),
     ])
 
-    this._sub_context_unlisten = addListeners(this.$$context, [
-      makeCustomListener('themechanged', this._on_sub_context_theme_changed),
-      makeCustomListener('colorchanged', this._on_sub_context_color_changed),
-    ])
-
     this._refresh_sub_context_disabled()
 
     this._refresh_sub_context_color()
-    // this._refresh_sub_context_theme()
+    this._refresh_sub_context_theme()
+  }
+  private _refresh_sub_context_theme() {
+    const { $theme } = this.$context
+
+    const { theme } = this.$props
+
+    const _theme = theme ?? $theme ?? 'dark'
+
+    setTheme(this.$$context, _theme)
   }
 
   private _refresh_sub_context_disabled = () => {
@@ -159,23 +162,13 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
   }
 
   private _refresh_sub_context_color = (): void => {
-    if (this._manually_changed_color) {
-      return
-    }
-    // console.log('Frame', '_refresh_sub_context_color', color)
+    // console.log('Frame', '_refresh_sub_context_color')
     const color = this._get_color()
 
-    this._prevent_manual_change_color = true
-
     setColor(this.$$context, color)
-
-    this._prevent_manual_change_color = false
   }
 
   private _on_context_color_changed = (): void => {
-    if (this._manually_changed_color) {
-      return
-    }
     // console.log('Frame', 'colorchanged')
     this._refresh_sub_context_color()
   }
@@ -183,19 +176,9 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
   private _on_context_theme_changed = (): void => {
     // console.log('Frame', '_on_context_theme_changed')
 
-    if (this._manually_changed_theme) {
-      return
-    }
-
     const { $theme } = this.$context
 
-    this._prevent_manual_change_theme = true
-
-    console.log({ $theme })
-
     setTheme(this.$$context, $theme)
-
-    this._prevent_manual_change_theme = false
   }
 
   private _on_context_enabled = (): void => {
@@ -210,30 +193,6 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
     this._refresh_sub_context_disabled()
   }
 
-  private _prevent_manual_change_color: boolean = false
-  private _prevent_manual_change_theme: boolean = false
-
-  private _manually_changed_color: boolean = false
-  private _manually_changed_theme: boolean = false
-
-  private _on_sub_context_theme_changed = (): void => {
-    if (this._prevent_manual_change_theme) {
-      this._prevent_manual_change_theme = false
-      return
-    }
-
-    this._manually_changed_theme = true
-  }
-
-  private _on_sub_context_color_changed = (): void => {
-    if (this._prevent_manual_change_color) {
-      this._prevent_manual_change_color = false
-      return
-    }
-
-    this._manually_changed_color = true
-  }
-
   onUnmount() {
     // console.log('Frame', 'onUnmount')
 
@@ -242,7 +201,5 @@ export default class Frame extends Element<IHTMLDivElement, Props> {
     this._context_unlisten()
 
     unmount(this.$$context)
-
-    this._sub_context_unlisten()
   }
 }

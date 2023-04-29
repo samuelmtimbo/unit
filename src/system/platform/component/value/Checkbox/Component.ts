@@ -1,7 +1,6 @@
 import { Field } from '../../../../../client/field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLInputElement } from '../../../../../types/global/dom'
 
 export interface Props {
   className?: string
@@ -21,7 +20,7 @@ export const DEFAULT_STYLE = {
   // outline: 'none',
 }
 
-export default class Checkbox extends Field<IHTMLInputElement, Props> {
+export default class Checkbox extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'checked',

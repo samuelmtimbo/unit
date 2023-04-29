@@ -13,7 +13,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "stroke a SVG path `d` on `canvas`",
-    "complexity": 2,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

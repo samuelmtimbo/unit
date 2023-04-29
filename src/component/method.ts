@@ -14,7 +14,7 @@ export function appendChild(
 
   const { __bundle: bundle } = Class
 
-  component.emit('append_child', { bundle, path: [] })
+  component.emit('append_child', bundle, [])
 
   return i
 }
@@ -80,7 +80,7 @@ export function insertChild(
 
   const { __bundle: bundle } = Class
 
-  component.emit('insert_child', { bundle, at, path: [] })
+  component.emit('insert_child', bundle, at, [])
 }
 
 export function hasChild(
@@ -115,8 +115,8 @@ export function removeChild(
 ): Component_ {
   const child = pullChild(element, children, at)
 
-  element.emit('remove_child', { at, path: [] })
-  element.emit(`remove_child_at_${at}`, { at })
+  element.emit('remove_child', at, [])
+  element.emit(`remove_child_at_${at}`, at)
 
   return child
 }
@@ -169,6 +169,44 @@ export function unregisterParentRoot(
   parentRoot.splice(at, 1)
 
   component.emit('unregister_parent_root', component)
+}
+
+export function reorderRoot(
+  component: Component_,
+  root: Component_[],
+  child: Component_,
+  to: number
+): void {
+  const currentIndex = root.indexOf(child)
+
+  if (currentIndex === -1) {
+    throw new Error('root not found')
+  }
+
+  root.splice(currentIndex, 1)
+
+  insert(root, child, to)
+
+  component.emit('reorder_root', component, to)
+}
+
+export function reorderParentRoot(
+  component: Component_,
+  parentRoot: Component_[],
+  child: Component_,
+  to: number
+): void {
+  const currentIndex = parentRoot.indexOf(child)
+
+  if (currentIndex === -1) {
+    throw new Error('root not found')
+  }
+
+  parentRoot.splice(currentIndex, 1)
+
+  insert(parentRoot, child, to)
+
+  component.emit('reorder_parent_root', component, to)
 }
 
 export function unregisterRoot(

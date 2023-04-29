@@ -21,13 +21,22 @@ export function attrHandler(
   }
 }
 
-export function htmlPropHandler(
-  component: Component<HTMLElement>,
+export function elementPropHandler(
+  component: Component<HTMLElement> | Component<SVGSVGElement>,
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {
     ...basePropHandler(component.$element, DEFAULT_STYLE),
     ...stylePropHandler(component, DEFAULT_STYLE),
+  }
+}
+
+export function htmlPropHandler(
+  component: Component<HTMLElement>,
+  DEFAULT_STYLE: Style
+): PropHandler {
+  return {
+    ...elementPropHandler(component, DEFAULT_STYLE),
     innerText: (innerText: string | undefined) => {
       component.$element.innerText = innerText || ''
     },
@@ -75,10 +84,7 @@ export function stylePropHandler(
 }
 
 export function inputPropHandler(
-  element:
-    | HTMLInputElement
-    | HTMLTextAreaElement
-    | (HTMLDivElement & ElementContentEditable),
+  element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
   VALUE_NAME: string,
   DEFAULT_VALUE: any
 ): PropHandler {

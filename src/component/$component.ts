@@ -46,7 +46,6 @@ export function $hasChild(
 export function $child(
   component: Component_,
   { at }: { at: number },
-  // XABLEAU
   callback: Callback<$Child>
 ): void {
   const child = component.refChild(at)
@@ -81,9 +80,9 @@ export function $refChild(
 export function $refEmitter(emitter: EE): $EE {
   const _emitter = emitter
 
-  const $_emitter = Async(_emitter, ['$EE'])
+  const $_emitter = Async(_emitter, ['EE'])
 
-  return proxyWrap($_emitter, ['$EE'])
+  return proxyWrap($_emitter, ['EE'])
 }
 
 export function $refChildContainer(

@@ -2,7 +2,7 @@ import { ASYNC_GRAPH_PROXY_CALL_FILTER } from './constant/ASYNC_GRAPH_PROXY_CALL
 import { ASYNC_GRAPH_PROXY_WATCH_FILTER } from './constant/ASYNC_GRAPH_PROXY_WATCH_FILTER'
 import { Moment } from './debug/Moment'
 import { AllTypes } from './interface'
-import { $AllKeys } from './types/AllKeys'
+import { AllKeys } from './types/AllKeys'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
@@ -17,14 +17,15 @@ export function proxy<T extends object>(
   const proxy = new Proxy(unit, {
     get: (target, name: string) => {
       const value = target[name]
-      // if (typeof value == 'function') {
+
       if (CALL[name]) {
         stop_event = CALL[name]
       } else if (WATCH.has(name)) {
         return (data: any, callback: Callback<any>): Unlisten => {
           return value.call(target, data, (moment: Moment) => {
             const { event } = moment
-            if (stop_event === event) {
+
+            if (stop_event === event && moment.data?.path?.length === 0) {
               stop_event = undefined
             } else {
               callback(moment)
@@ -32,7 +33,7 @@ export function proxy<T extends object>(
           })
         }
       }
-      // }
+
       return value
     },
   })
@@ -40,43 +41,45 @@ export function proxy<T extends object>(
   return proxy
 }
 
-const ASYNC_INTERFACE_PROXY_CALL_FILTER: $AllKeys<
+const ASYNC_INTERFACE_PROXY_CALL_FILTER: AllKeys<
   AllTypes<any>,
   Dict<string>
 > = {
-  $V: { $write: 'write' },
-  $J: { $set: 'set' },
-  $CA: { $draw: 'draw' },
-  $G: ASYNC_GRAPH_PROXY_CALL_FILTER,
+  V: { $write: 'write' },
+  J: { $set: 'set' },
+  CA: { $draw: 'draw' },
+  G: ASYNC_GRAPH_PROXY_CALL_FILTER,
   // TODO
-  $B: {},
-  $IB: {},
-  $CC: {},
-  $C: {},
-  $CS: {},
-  $CO: {},
-  $GP: {},
-  $M: {},
-  $E: {},
-  $EE: {},
-  $BD: {},
-  $BS: {},
-  $BSE: {},
-  $BC: {},
-  $NO: {},
-  $A: {},
-  $PP: {},
-  $PS: {},
-  $CH: {},
-  $ST: {},
-  $S: {},
-  $U: {},
-  $TR: {},
-  $RE: {},
+  B: {},
+  IB: {},
+  CC: {},
+  C: {},
+  CS: {},
+  CO: {},
+  GP: {},
+  M: {},
+  E: {},
+  EE: {},
+  BD: {},
+  BS: {},
+  BSE: {},
+  BC: {},
+  NO: {},
+  A: {},
+  PP: {},
+  PS: {},
+  CH: {},
+  ST: {},
+  S: {},
+  U: {},
+  TR: {},
+  RE: {},
+  F: {},
+  L: {},
 }
 
 const ASYNC_INTERFACE_PROXY_WATCH_FILTER: Dict<Set<string>> = {
-  $G: ASYNC_GRAPH_PROXY_WATCH_FILTER,
+  G: ASYNC_GRAPH_PROXY_WATCH_FILTER,
 }
 
 export function proxyWrap<T extends object>(unit: T, _: string[] = []): T {

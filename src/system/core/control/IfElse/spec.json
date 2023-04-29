@@ -78,7 +78,7 @@
   "metadata": {
     "icon": "map-signs",
     "description": "send `a` to `if` if `b` is false or `else` otherwise",
-    "complexity": 9,
+    "complexity": 11,
     "tags": [
       "core",
       "control"

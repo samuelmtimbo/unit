@@ -31,6 +31,7 @@ composition0.addUnitSpec(UNIT_ID_RANDOM_COLOR_DIV, {
 })
 
 composition0.explodeUnit(UNIT_ID_RANDOM_COLOR_DIV, {}, {}, false)
+composition0.removeUnit(UNIT_ID_RANDOM_COLOR_DIV)
 
 assert.equal(composition0.getUnitCount(), 3)
 assert.equal(composition0.getInputCount(), 1)
@@ -58,6 +59,7 @@ const randomNaturalLTE = composition1.refUnit(UNIT_ID_RANDOM_NUMBER_LTE)
 assert.equal(composition1.getUnitCount(), 1)
 
 composition1.explodeUnit(UNIT_ID_RANDOM_NUMBER_LTE, {}, {})
+composition1.removeUnit(UNIT_ID_RANDOM_NUMBER_LTE)
 
 assert.equal(composition1.getUnitCount(), 2)
 

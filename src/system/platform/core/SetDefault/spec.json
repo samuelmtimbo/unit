@@ -107,7 +107,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "set value at `key` to `value` if `test` is defined and true or to `default` otherwise",
-    "complexity": 18,
+    "complexity": 22,
     "tags": [
       "platform",
       "core"

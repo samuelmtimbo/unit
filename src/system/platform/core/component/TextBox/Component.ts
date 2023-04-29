@@ -2,7 +2,6 @@ import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../../component/Div/Component'
 import _Text from '../../../component/value/Text/Component'
 
@@ -19,7 +18,7 @@ export const DEFAULT_STYLE = {
   height: 'fit-content',
 }
 
-export default class TextBox extends Element<IHTMLDivElement, Props> {
+export default class TextBox extends Element<HTMLDivElement, Props> {
   private _div: Div
   private _text: _Text
 

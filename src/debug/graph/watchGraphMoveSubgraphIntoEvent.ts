@@ -1,16 +1,10 @@
 import { Graph } from '../../Class/Graph'
+import { GraphMoveSubGraphIntoData } from '../../Class/Graph/interface'
 import { G_EE } from '../../types/interface/G'
 import { Moment } from './../Moment'
 
-export interface GraphMoveSubgraphIntoMomentData {
-  graphId
-  nodeIds
-  nextIdMap
-  nextPinIdMap
-  nextMergePinId
-  nextPlugSpec
-  nextSubComponentParent
-  nextSubComponentChildrenMap
+export interface GraphMoveSubgraphIntoMomentData
+  extends GraphMoveSubGraphIntoData {
   path: string[]
 }
 
@@ -30,7 +24,7 @@ export function watchGraphMoveSubgraphIntoEvent(
       nextPinIdMap,
       nextMergePinId,
       nextPlugSpec,
-      nextSubComponentParent,
+      nextSubComponentParentMap,
       nextSubComponentChildrenMap,
       path,
     ]: G_EE['move_subgraph_into']
@@ -45,7 +39,7 @@ export function watchGraphMoveSubgraphIntoEvent(
         nextPinIdMap,
         nextMergePinId,
         nextPlugSpec,
-        nextSubComponentParent,
+        nextSubComponentParentMap,
         nextSubComponentChildrenMap,
         path,
       },

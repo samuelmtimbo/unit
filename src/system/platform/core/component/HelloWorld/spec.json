@@ -78,13 +78,13 @@
     "children": [
       "textbox"
     ],
-    "defaultWidth": 420,
-    "defaultHeight": 420
+    "defaultWidth": 300,
+    "defaultHeight": 300
   },
   "metadata": {
     "description": "text box saying 'hello world'",
     "icon": "sign",
-    "complexity": 23,
+    "complexity": 55,
     "position": {},
     "tags": [
       "platform",

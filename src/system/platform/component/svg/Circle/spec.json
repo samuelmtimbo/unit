@@ -22,7 +22,7 @@
   "metadata": {
     "icon": "square",
     "description": "SVG circle",
-    "complexity": 5,
+    "complexity": 20,
     "tags": [
       "platform",
       "component",

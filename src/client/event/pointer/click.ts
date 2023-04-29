@@ -18,7 +18,7 @@ export const LONG_CLICK_TIMEOUT = 300
 export const POINTER_CLICK_RADIUS = 15
 
 export type Handlers = {
-  onClick?: (event: IOPointerEvent) => void
+  onClick?: (event: IOPointerEvent, _event: PointerEvent) => void
   onClickCancel?: (event: IOPointerEvent) => void
   onDoubleClick?: (event: IOPointerEvent) => void
   onLongClick?: (event: IOPointerEvent) => void
@@ -193,7 +193,7 @@ export function listenClick(
     releasePointerDown(pointerId)
   }
 
-  const pointerUpListener = (event: IOPointerEvent) => {
+  const pointerUpListener = (event: IOPointerEvent, _event: PointerEvent) => {
     // console.log('pointerUpListener', pointerId)
 
     const { pointerId, clientX, clientY } = event
@@ -245,7 +245,7 @@ export function listenClick(
           if (longPress[pointerId]) {
             onLongClick && onLongClick(event)
           } else {
-            onClick && onClick(event)
+            onClick && onClick(event, _event)
           }
         } else {
           onClickCancel && onClickCancel(event)
@@ -261,10 +261,10 @@ export function listenClick(
           if (onDoubleClick) {
             onDoubleClick(event)
           } else if (onClick) {
-            onClick(event)
+            onClick(event, _event)
           }
         } else {
-          onClick && onClick(event)
+          onClick && onClick(event, _event)
         }
       }
 

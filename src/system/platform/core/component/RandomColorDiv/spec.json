@@ -136,7 +136,7 @@
   "metadata": {
     "icon": "square",
     "description": "div with a random background color",
-    "complexity": 58,
+    "complexity": 88,
     "tags": [
       "platform",
       "core",

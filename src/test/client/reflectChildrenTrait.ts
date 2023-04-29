@@ -1914,6 +1914,42 @@ assert.deepEqual(
       opacity: 1,
     },
     {
+    },
+    [
+      {
+        height: '50px',
+        width: '50px',
+        padding: '20px',
+        margin: '10px',
+      },
+    ]
+  ),
+  [
+    {
+      x: 10,
+      y: 10,
+      width: 90,
+      height: 90,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+  ]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+    {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',

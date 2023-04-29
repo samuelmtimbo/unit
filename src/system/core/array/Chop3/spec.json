@@ -51,7 +51,7 @@
   "metadata": {
     "icon": "split-three",
     "description": "get array `a` first 3 values",
-    "complexity": 6,
+    "complexity": 7,
     "tags": [
       "core",
       "array"

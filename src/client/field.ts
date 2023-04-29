@@ -9,7 +9,7 @@ import applyStyle from './style'
 export type InputElement =
   | HTMLInputElement
   | HTMLTextAreaElement
-  | (HTMLDivElement & ElementContentEditable)
+  | HTMLSelectElement
 
 export function makeFieldInputEventHandler<E extends InputElement>(
   component: Element,

@@ -1,0 +1,244 @@
+{
+  "type": "`U`&`C`&`G`",
+  "name": "icon grid",
+  "units": {
+    "iconnames": {
+      "id": "89cc231d-07a1-49a0-8dcb-6af7aba1ca18",
+      "input": {
+        "any": {
+          "constant": false,
+          "ignored": false
+        }
+      },
+      "output": {
+        "keys": {
+          "constant": false,
+          "ignored": false
+        }
+      }
+    },
+    "appendchild": {
+      "id": "ee4715e6-f479-11ea-b231-bf95a7f38a99",
+      "input": {
+        "parent": {
+          "ignored": false,
+          "constant": false
+        },
+        "child": {
+          "ignored": false,
+          "constant": false
+        }
+      },
+      "output": {
+        "at": {
+          "ignored": true,
+          "constant": false
+        }
+      }
+    },
+    "setinput": {
+      "id": "43b43afd-9e7d-44ba-aef7-6e9db4ed8744",
+      "input": {
+        "unit": {
+          "ignored": false,
+          "constant": false
+        },
+        "name": {
+          "ignored": false,
+          "constant": true,
+          "data": "'icon'"
+        },
+        "data": {
+          "ignored": false,
+          "constant": false
+        }
+      },
+      "output": {
+        "unit": {
+          "ignored": false,
+          "constant": false
+        }
+      }
+    },
+    "foreach": {
+      "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {
+          "constant": false,
+          "ignored": false
+        }
+      },
+      "output": {
+        "a[i]": {
+          "constant": false,
+          "ignored": false
+        },
+        "a": {
+          "constant": false,
+          "ignored": true
+        },
+        "i": {
+          "constant": false,
+          "ignored": true
+        },
+        "test": {
+          "constant": false,
+          "ignored": true
+        }
+      }
+    },
+    "div": {
+      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+      "input": {
+        "style": {
+          "ignored": false,
+          "constant": true,
+          "data": "{display:'grid',\"grid-template-columns\":'1fr 1fr 1fr 1fr',height:'fit-content',gap:'12px',padding:'12px'}"
+        }
+      },
+      "output": {},
+      "metadata": {
+        "component": {
+          "width": 192.5234375,
+          "height": 188.8046875
+        }
+      }
+    },
+    "spark": {
+      "id": "3be8272d-310a-4aa2-84a1-71f590a8227a",
+      "input": {
+        "a": {
+          "ignored": false,
+          "constant": true,
+          "data": "null"
+        }
+      },
+      "output": {
+        "a": {
+          "ignored": false,
+          "constant": false
+        }
+      }
+    },
+    "setinput0": {
+      "id": "43b43afd-9e7d-44ba-aef7-6e9db4ed8744",
+      "input": {
+        "unit": {
+          "ignored": false,
+          "constant": true,
+          "data": "${unit:{id:'63a417e5-d354-4b39-9ebd-05f55e70de7b',input:{icon:{data:'\\'zoom-out\\''},style:{data:'{height:\\'24px\\',width:\\'24px\\'}'}}}}"
+        },
+        "name": {
+          "ignored": false,
+          "constant": true,
+          "data": "'style'"
+        },
+        "data": {
+          "ignored": false,
+          "constant": true,
+          "data": "{'aspect-ratio':1}"
+        }
+      },
+      "output": {
+        "unit": {
+          "ignored": false,
+          "constant": false
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "setinput": {
+        "output": {
+          "unit": true
+        }
+      },
+      "appendchild": {
+        "input": {
+          "child": true
+        }
+      }
+    },
+    "1": {
+      "iconnames": {
+        "output": {
+          "keys": true
+        }
+      },
+      "foreach": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "2": {
+      "setinput0": {
+        "output": {
+          "unit": true
+        }
+      },
+      "setinput": {
+        "input": {
+          "unit": true
+        }
+      }
+    },
+    "3": {
+      "appendchild": {
+        "input": {
+          "parent": true
+        }
+      },
+      "div": {
+        "output": {
+          "_self": true
+        }
+      }
+    },
+    "4": {
+      "spark": {
+        "output": {
+          "a": true
+        }
+      },
+      "iconnames": {
+        "input": {
+          "any": true
+        }
+      }
+    },
+    "5": {
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "setinput": {
+        "input": {
+          "data": true
+        }
+      }
+    }
+  },
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "grid showin",
+    "complexity": 73
+  },
+  "id": "8d3a4d38-3015-46f2-81d7-694644cec386",
+  "system": true,
+  "render": true,
+  "component": {
+    "subComponents": {
+      "div": {}
+    },
+    "children": [
+      "div"
+    ],
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  }
+}

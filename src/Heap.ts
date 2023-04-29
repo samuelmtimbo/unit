@@ -161,9 +161,12 @@ export function addHeapNode<T>(
     }
   } else {
     addHeapNode(child, root, predicate)
+    
     if (parent) {
       const i = +(parent.children[1] === root)
+      
       parent.children[i] = undefined
+
       addHeapNode(parent, child, predicate)
     }
   }

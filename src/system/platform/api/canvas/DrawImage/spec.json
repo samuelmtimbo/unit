@@ -9,15 +9,44 @@
       "type": "`CA`",
       "ref": true
     },
-    "any": {
-      "type": "any"
+    "x": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "0"
+        ]
+      }
+    },
+    "y": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "0"
+        ]
+      }
+    },
+    "width": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "100"
+        ]
+      }
+    },
+    "height": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "100"
+        ]
+      }
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
     "description": "draw an image `bitmap` on `canvas`",
-    "complexity": 2,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

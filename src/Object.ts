@@ -1,4 +1,4 @@
-import { EventEmitter } from './EventEmitter'
+import { EventEmitter_ } from './EventEmitter'
 import { keys } from './system/f/object/Keys/f'
 import { Dict } from './types/Dict'
 import { J } from './types/interface/J'
@@ -9,14 +9,14 @@ import { pop } from './util/array'
 export type ObjectUpdateType = 'set' | 'delete'
 
 export type ObjectNode = {
-  emitter: EventEmitter | null
+  emitter: EventEmitter_ | null
   children: Dict<ObjectNode>
 }
 
 export class Object_<T extends Object> implements J<T>, V<T> {
   private _obj: T
   private _node: ObjectNode = {
-    emitter: new EventEmitter(),
+    emitter: new EventEmitter_(),
     children: {},
   }
 
@@ -78,11 +78,11 @@ export class Object_<T extends Object> implements J<T>, V<T> {
     }
   }
 
-  private _ensure_emitter = (path: string[]): EventEmitter => {
+  private _ensure_emitter = (path: string[]): EventEmitter_ => {
     let node = this._node
     for (const p of path) {
       if (!node.children[p]) {
-        node.children[p] = { emitter: new EventEmitter(), children: {} }
+        node.children[p] = { emitter: new EventEmitter_(), children: {} }
       }
       node = node.children[p]
     }

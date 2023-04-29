@@ -1,3 +1,5 @@
+import { AsyncWorkerGraph } from '../../../../../../../AsyncWorker'
+import { $ } from '../../../../../../../Class/$'
 import { Functional } from '../../../../../../../Class/Functional'
 import { Done } from '../../../../../../../Class/Functional/Done'
 import {
@@ -6,7 +8,6 @@ import {
   EXEC,
   TERMINATE,
 } from '../../../../../../../constant/STRING'
-import { asyncGraphFromPort } from '../../../../../../../graphFromPort'
 import {
   hasLocalBroadcastSource,
   localBroadcastSourceName,
@@ -18,6 +19,7 @@ import { RemotePort } from '../../../../../../../RemotePort'
 import { System } from '../../../../../../../system'
 import { IPort } from '../../../../../../../types/global/IPort'
 import { $Graph } from '../../../../../../../types/interface/async/$Graph'
+import { $wrap } from '../../../../../../../wrap'
 import { ID_LOCAL_GRAPH } from '../../../../../../_ids'
 
 export interface I {
@@ -25,7 +27,7 @@ export interface I {
 }
 
 export interface O {
-  graph: $Graph // RETURN
+  graph: $Graph & $
 }
 
 export default class LocalGraph extends Functional<I, O> {
@@ -115,7 +117,13 @@ export default class LocalGraph extends Functional<I, O> {
     const remote_port = new RemotePort(port)
     this._remote_port = remote_port
 
-    const graph = asyncGraphFromPort(this.__system, remote_port)
+    const $graph: $Graph = AsyncWorkerGraph(remote_port)
+
+    const graph = $wrap<$Graph>(this.__system, $graph, [
+      'U',
+      'C',
+      'G',
+    ])
 
     done({ graph })
   }

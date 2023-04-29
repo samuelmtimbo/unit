@@ -2,7 +2,6 @@ import { Component } from '../../../../client/component'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
 import { System } from '../../../../system'
-import { IHTMLDivElement } from '../../../../types/global/dom'
 import { Unlisten } from '../../../../types/Unlisten'
 import { Style } from '../../Props'
 
@@ -12,7 +11,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class Inherit extends Element<IHTMLDivElement, Props> {
+export default class Inherit extends Element<HTMLDivElement, Props> {
   $wrap = true
 
   constructor(props: Props, $system: System) {

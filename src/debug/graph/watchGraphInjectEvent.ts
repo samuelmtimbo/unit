@@ -1,5 +1,5 @@
 import { Graph } from '../../Class/Graph'
-import { _stringifyGraphSpecData } from '../../spec/stringifySpec'
+import { stringifyGraphSpecData } from '../../spec/stringifySpec'
 import { BundleSpec } from '../../types/BundleSpec'
 import { G_EE } from '../../types/interface/G'
 import { Moment } from '../Moment'
@@ -20,7 +20,7 @@ export function watchGraphInjectEvent(
   const listener = (...[bundle, path]: G_EE['inject_graph']) => {
     const { spec } = bundle
 
-    _stringifyGraphSpecData(spec)
+    stringifyGraphSpecData(spec)
 
     callback({
       type: 'graph',

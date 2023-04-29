@@ -14,9 +14,7 @@ export function bundleClass<T extends Unit = any>(
 
   // @ts-ignore
   return class Bundle extends Class {
-    __bundle = bundle.unit
-
-    static readonly __bundle = bundle // RETURN
+    static readonly __bundle = bundle
 
     constructor(system: System) {
       super(system, id)

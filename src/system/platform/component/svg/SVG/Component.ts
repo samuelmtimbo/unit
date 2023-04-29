@@ -1,6 +1,7 @@
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import applyStyle from '../../../../../client/style'
+import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -23,6 +24,8 @@ export const DEFAULT_STYLE = {
   height: '100%',
   color: 'currentColor',
   boxSizing: 'border-box',
+  cursor: 'default',
+  ...userSelect('none'),
 }
 
 export default class SVGSVG extends Element<SVGSVGElement, Props> {
@@ -88,6 +91,7 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
 
     this.$element = svg_el
     this.$unbundled = false
+this.$primitive = true
   }
 
   onPropChanged(prop: string, current: any): void {

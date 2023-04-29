@@ -1,14 +1,13 @@
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
 import { System } from '../../../../system'
-import { IHTMLDivElement } from '../../../../types/global/dom'
 
 export interface Props {}
 
 const DEFAULT_STYLE = {}
 
-export default class Parent extends Element<IHTMLDivElement, Props> {
-  private _parent_el: IHTMLDivElement
+export default class Parent extends Element<HTMLDivElement, Props> {
+  private _parent_el: HTMLDivElement
 
   constructor($props: Props, $system: System) {
     super($props, $system)

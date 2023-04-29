@@ -7,7 +7,6 @@ import _dissoc from '../../system/f/object/Dissoc/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import {
-  Action,
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
@@ -25,40 +24,6 @@ import {
   mapObjVK,
   pathOrDefault,
 } from '../../util/object'
-import {
-  ADD_MERGE,
-  ADD_MERGES,
-  ADD_PIN_TO_MERGE,
-  ADD_UNIT,
-  ADD_UNITS,
-  COLLAPSE_UNITS,
-  COVER_PIN,
-  COVER_PIN_SET,
-  EXPAND_UNIT,
-  EXPOSE_PIN,
-  EXPOSE_PIN_SET,
-  MERGE_MERGES,
-  REMOVE_MERGE,
-  REMOVE_PIN_FROM_MERGE,
-  REMOVE_UNIT,
-  REMOVE_UNITS,
-  REMOVE_UNIT_MERGES,
-  REMOVE_UNIT_PIN_DATA,
-  SET_METADATA,
-  SET_PIN_SET_FUNCTIONAL,
-  SET_PIN_SET_NAME,
-  SET_PIN_SET_REF,
-  SET_UNIT_ERR,
-  SET_UNIT_INPUT,
-  SET_UNIT_INPUT_CONSTANT,
-  SET_UNIT_INPUT_IGNORED,
-  SET_UNIT_METADATA,
-  SET_UNIT_OUTPUT,
-  SET_UNIT_OUTPUT_CONSTANT,
-  SET_UNIT_OUTPUT_IGNORED,
-  SET_UNIT_PIN_DATA,
-  SET_UNIT_PIN_IGNORED,
-} from '../actions/spec'
 import { emptyGraphSpec } from '../emptySpec'
 import { forEachPinOnMerges, getMergePinCount } from '../util'
 
@@ -812,78 +777,4 @@ export const setUnitMetadata = (
   state: State
 ): State => {
   return assocPath(state, ['units', id, 'metadata', ...path], value)
-}
-
-export default function (
-  state: State = defaultState,
-  { type, data }: Action
-): State {
-  switch (type) {
-    case ADD_UNIT:
-      return addUnit(data, state)
-    case ADD_UNITS:
-      return addUnits(data, state)
-    case REMOVE_UNIT:
-      return removeUnit(data, state)
-    case REMOVE_UNITS:
-      return removeUnits(data, state)
-    case REMOVE_UNIT_MERGES:
-      return removeUnitMerges(data, state)
-    case ADD_MERGE:
-      return addMerge(data, state)
-    case ADD_MERGES:
-      return addMerges(data, state)
-    case ADD_PIN_TO_MERGE:
-      return addPinToMerge(data, state)
-    case REMOVE_MERGE:
-      return removeMerge(data, state)
-    case REMOVE_PIN_FROM_MERGE:
-      return removePinFromMerge(data, state)
-    case MERGE_MERGES:
-      return mergeMerges(data, state)
-    case EXPOSE_PIN:
-      return exposePin(data, state)
-    case COVER_PIN:
-      return coverPin(data, state)
-    case EXPOSE_PIN_SET:
-      return exposePinSet(data, state)
-    case COVER_PIN_SET:
-      return coverOutputSet(data, state)
-    case SET_UNIT_ERR:
-      return setUnitErr(data, state)
-    case SET_UNIT_INPUT:
-      return setUnitInput(data, state)
-    case SET_UNIT_OUTPUT:
-      return setUnitOutput(data, state)
-    case SET_UNIT_PIN_DATA:
-      return setUnitPinData(data, state)
-    case REMOVE_UNIT_PIN_DATA:
-      return removeUnitPinData(data, state)
-    case SET_UNIT_INPUT_CONSTANT:
-      return setUnitInputConstant(data, state)
-    case SET_UNIT_OUTPUT_CONSTANT:
-      return setUnitOutputConstant(data, state)
-    case SET_UNIT_PIN_IGNORED:
-      return setUnitPinIgnored(data, state)
-    case SET_UNIT_INPUT_IGNORED:
-      return setUnitInputIgnored(data, state)
-    case SET_UNIT_OUTPUT_IGNORED:
-      return setUnitOutputIgnored(data, state)
-    case SET_PIN_SET_NAME:
-      return setPinSetName(data, state)
-    case SET_PIN_SET_FUNCTIONAL:
-      return setPinSetFunctional(data, state)
-    case SET_PIN_SET_REF:
-      return setPinSetRef(data, state)
-    case SET_METADATA:
-      return setMetadata(data, state)
-    case SET_UNIT_METADATA:
-      return setUnitMetadata(data, state)
-    case EXPAND_UNIT:
-      return expandUnit(data, state)
-    case COLLAPSE_UNITS:
-      return collapseUnits(data, state)
-    default:
-      return state
-  }
 }

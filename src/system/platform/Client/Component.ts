@@ -1,7 +1,6 @@
 import { Element } from '../../../client/element'
 import parentElement from '../../../client/platform/web/parentElement'
 import { System } from '../../../system'
-import { IHTMLDivElement } from '../../../types/global/dom'
 import { UnitBundleSpec } from '../../../types/UnitBundleSpec'
 
 export interface Props {
@@ -14,7 +13,7 @@ export const DEFAULT_STYLE = {
   touchAction: 'none',
 }
 
-export default class Client extends Element<IHTMLDivElement, Props> {
+export default class Client extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 

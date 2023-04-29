@@ -35,6 +35,8 @@ export const ALL_EVENTS: string[] = [
   'keydown',
   'keyup',
   'touchstart',
+  'dragover',
+  'drop',
 ]
 
 export function stopAllPropagation($element: IOElement): void {

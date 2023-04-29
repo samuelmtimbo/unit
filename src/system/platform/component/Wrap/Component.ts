@@ -5,7 +5,6 @@ import { parentClass } from '../../../../client/createParent'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
 import { ComponentClass, System } from '../../../../system'
-import { IHTMLDivElement } from '../../../../types/global/dom'
 import { $Wrap } from '../../../../types/interface/async/$Wrap'
 import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
 import { insert, push, removeAt, unshift } from '../../../../util/array'
@@ -16,8 +15,8 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
-  $_ = ['$W']
+export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
+  $_ = ['W']
 
   private _Container: ComponentClass = parentClass()
 
@@ -473,7 +472,13 @@ export default class Wrap extends Element<IHTMLDivElement, Props, $Wrap> {
 
         const { id, input } = __bundle.unit
 
-        componentClass = componentClassFromSpecId(this.$system, id, input)
+        componentClass = componentClassFromSpecId(
+          this.$system.components,
+          this.$system.specs,
+          this.$system.classes,
+          id,
+          input
+        )
       } else {
         componentClass = parentClass()
       }

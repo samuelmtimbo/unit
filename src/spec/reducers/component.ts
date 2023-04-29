@@ -12,7 +12,7 @@ import {
   SET_SIZE,
   SET_SUB_COMPONENT,
   SET_SUB_COMPONENT_CHILDREN,
-} from '../actions/component'
+} from '../actions/C'
 
 export type State = GraphComponentSpec
 

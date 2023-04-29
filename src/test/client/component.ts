@@ -10,9 +10,9 @@ const C = new Div({}, system)
 
 assert(parent.$children.length === 0)
 
-parent.insertChild(A, 0)
-parent.insertChild(B, 1)
-parent.insertChild(C, 1)
+parent.appendChild(A)
+parent.appendChild(B)
+parent.appendChild(C)
 
 assert(parent.$children.length === 3)
 
@@ -24,8 +24,3 @@ assert(parent.$children.length === 2)
 
 assert.deepEqual(parent.$childSlotName, ['default', 'default'])
 
-parent.insertChild(B, 0)
-
-assert(parent.$children.length === 3)
-
-assert.deepEqual(parent.$childSlotName, ['default', 'default', 'default'])

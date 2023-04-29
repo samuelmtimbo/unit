@@ -1,13 +1,15 @@
 import { Peer } from '../../../../../api/peer/Peer'
+import { AsyncWorkerGraph } from '../../../../../AsyncWorker'
+import { $ } from '../../../../../Class/$'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
-import { asyncGraphFromPort } from '../../../../../graphFromPort'
 import { RemotePort } from '../../../../../RemotePort'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { IPort } from '../../../../../types/global/IPort'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
+import { $wrap } from '../../../../../wrap'
 import { ID_PEER_GRAPH } from '../../../../_ids'
 
 export interface I {
@@ -17,7 +19,7 @@ export interface I {
 }
 
 export interface O {
-  graph: $Graph
+  graph: $Graph & $
   answer: string
 }
 
@@ -110,9 +112,15 @@ export default class PeerGraph extends Semifunctional<I, O> {
 
               this._remote_port = remote_port
 
-              const $graph = asyncGraphFromPort(this.__system, remote_port)
+              const $graph: $Graph = AsyncWorkerGraph(remote_port)
 
-              this._output.graph.push($graph)
+              const graph = $wrap<$Graph>(this.__system, $graph, [
+                'U',
+                'C',
+                'G',
+              ])
+
+              this._output.graph.push(graph)
             }
             break
           case TERMINATE:

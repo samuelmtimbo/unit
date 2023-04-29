@@ -12,7 +12,7 @@
   "metadata": {
     "icon": "keyboard",
     "description": "virtual keyboard single key",
-    "complexity": 6,
+    "complexity": 23,
     "tags": [
       "platform",
       "component",

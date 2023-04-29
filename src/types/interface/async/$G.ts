@@ -1,19 +1,48 @@
+import { GraphSpec } from '../..'
 import {
-  GraphMergeSpec,
-  GraphMergesSpec,
-  GraphPinSpec,
-  GraphPlugOuterSpec,
-  GraphSpec,
-  GraphSubPinSpec,
-  GraphUnitPinOuterSpec,
-  GraphUnitsSpec,
-} from '../..'
+  GraphAddMergeData,
+  GraphAddMergesData,
+  GraphAddPinToMergeData,
+  GraphAddUnitData,
+  GraphAddUnitsData,
+  GraphBulkEditData,
+  GraphCloneUnitData,
+  GraphCoverPinData,
+  GraphCoverPinSetData,
+  GraphCoverUnitPinSetData,
+  GraphExplodeUnitData,
+  GraphExposePinData,
+  GraphExposePinSetData,
+  GraphExposeUnitPinSetData,
+  GraphMoveLinkPinIntoData,
+  GraphMoveMergeIntoData,
+  GraphMovePlugIntoData,
+  GraphMoveSubComponentRootData,
+  GraphMoveSubGraphIntoData,
+  GraphMoveUnitData,
+  GraphMoveUnitIntoData,
+  GraphPlugPinData,
+  GraphRemoveMergeData,
+  GraphRemoveMergeDataData,
+  GraphRemovePinFromMergeData,
+  GraphRemoveUnitData,
+  GraphRemoveUnitGhostData,
+  GraphRemoveUnitPinDataData,
+  GraphSetMergeDataData,
+  GraphSetPinSetFunctionalData,
+  GraphSetPinSetIdData,
+  GraphSetUnitNameData,
+  GraphSetUnitPinConstant,
+  GraphSetUnitPinDataData,
+  GraphSetUnitPinIgnoredData,
+  GraphTakeUnitErrData,
+  GraphUnplugPinData,
+} from '../../../Class/Graph/interface'
 import { State } from '../../../State'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
-import { IO } from '../../IO'
-import { IOOf, _IOOf } from '../../IOOf'
+import { IOOf } from '../../IOOf'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { $Component } from './$Component'
@@ -35,7 +64,7 @@ export const G_METHOD_CALL_GET = [
   'getBundle',
 ]
 
-export const G_METHOD_CALL_SET_THIS = [
+export const G_METHOD_CALL_SET = [
   'addUnit',
   'addUnits',
   'removeUnit',
@@ -71,13 +100,9 @@ export const G_METHOD_CALL_SET_THIS = [
   'setMergeData',
   'removeMergeData',
   'takeUnitErr',
-]
-
-export const G_METHOD_CALL_SET_THAT = []
-
-export const G_METHOD_CALL_SET = [
-  ...G_METHOD_CALL_SET_THIS,
-  ...G_METHOD_CALL_SET_THAT,
+  'setUnitName',
+  'moveSubgraphInto',
+  'bulkEdit',
 ]
 
 export const G_METHOD_CALL = [...G_METHOD_CALL_GET, ...G_METHOD_CALL_SET]
@@ -95,79 +120,34 @@ export const G_METHOD_REF = ['transcend', 'refSubComponent', 'refUnit']
 export const G_METHOD = [...G_METHOD_CALL, ...G_METHOD_WATCH, ...G_METHOD_REF]
 
 export interface $G_C {
-  $setUnitPinData(data: {
-    unitId: string
-    pinId: string
-    type: IO
-    data: string
-  }): void
-  $setUnitName(data: { unitId: string; newUnitId: string; name: string }): void
-  $removeUnitPinData(data: { unitId: string; type: IO; pinId: string }): void
-  $addUnit(data: { id: string; unit: UnitBundleSpec }): void
-  $addUnits(data: { units: GraphUnitsSpec }): void
-  $cloneUnit(data: { unitId: string; newUnitId: string }): void
-  $removeUnit(data: { id: string }): void
-  $moveUnit(data: { id: string; unitId: string; inputId: string }): void
-  $exposePinSet(data: { type: IO; id: string; pin: GraphPinSpec }): void
-  $coverPinSet(data: { type: IO; id: string }): void
-  $exposePin(data: {
-    type: IO
-    id: string
-    subPinId: string
-    subPin: GraphSubPinSpec
-  }): void
-  $coverPin(data: { type: IO; id: string; subPinId: string }): void
-  $plugPin(data: {
-    type: IO
-    id: string
-    subPinId: string
-    subPin: GraphSubPinSpec
-  }): void
-  $unplugPin(data: { type: IO; id: string; subPinId: string }): void
-  $exposeUnitPinSet(data: {
-    unitId: string
-    type: IO
-    id: string
-    pin: GraphPinSpec
-  }): void
-  $coverUnitPinSet(data: { unitId: string; type: IO; id: string }): void
-  $setPinSetId(data: { type: IO; pinId: string; nextPinId: string }): void
-  $setPinSetFunctional(data: {
-    type: IO
-    pinId: string
-    functional: boolean
-  }): void
-  $addMerge(data: { id: string; merge: GraphMergeSpec }): void
-  $removeMerge(data: { id: string })
-  $setUnitPinConstant(data: {
-    unitId: string
-    type: IO
-    pinId: string
-    constant: boolean
-  }): void
-  $setUnitPinIgnored(data: {
-    unitId: string
-    type: IO
-    pinId: string
-    ignored: boolean
-  }): void
-  $addMerges(data: { merges: GraphMergesSpec }): void
-  $setMergeData(data: { id: string; data: string }): void
-  $removeMergeData(data: { id: string }): void
-  $addPinToMerge(data: {
-    mergeId: string
-    unitId: string
-    type: IO
-    pinId: string
-  }): void
-  $removePinFromMerge(data: {
-    mergeId: string
-    unitId: string
-    type: IO
-    pinId: string
-  }): void
-  $mergeMerges(data: { mergeIds: string[] }): void
-  $takeUnitErr(data: { unitId: string }): void
+  $setUnitPinData(data: GraphSetUnitPinDataData): void
+  $setUnitName(data: GraphSetUnitNameData): void
+  $removeUnitPinData(data: GraphRemoveUnitPinDataData): void
+  $addUnit(data: GraphAddUnitData): void
+  $addUnits(data: GraphAddUnitsData): void
+  $cloneUnit(data: GraphCloneUnitData): void
+  $removeUnit(data: GraphRemoveUnitData): void
+  $moveUnit(data: GraphMoveUnitData): void
+  $exposePinSet(data: GraphExposePinSetData): void
+  $coverPinSet(data: GraphCoverPinSetData): void
+  $exposePin(data: GraphExposePinData): void
+  $coverPin(data: GraphCoverPinData): void
+  $plugPin(data: GraphPlugPinData): void
+  $unplugPin(data: GraphUnplugPinData): void
+  $exposeUnitPinSet(data: GraphExposeUnitPinSetData): void
+  $coverUnitPinSet(data: GraphCoverUnitPinSetData): void
+  $setPinSetId(data: GraphSetPinSetIdData): void
+  $setPinSetFunctional(data: GraphSetPinSetFunctionalData): void
+  $addMerge(data: GraphAddMergeData): void
+  $removeMerge(data: GraphRemoveMergeData): void
+  $setUnitPinConstant(data: GraphSetUnitPinConstant): void
+  $setUnitPinIgnored(data: GraphSetUnitPinIgnoredData): void
+  $addMerges(data: GraphAddMergesData): void
+  $setMergeData(data: GraphSetMergeDataData): void
+  $removeMergeData(data: GraphRemoveMergeDataData): void
+  $addPinToMerge(data: GraphAddPinToMergeData): void
+  $removePinFromMerge(data: GraphRemovePinFromMergeData): void
+  $takeUnitErr(data: GraphTakeUnitErrData): void
   $getUnitPinData(
     data: {},
     callback: (data: { input: Dict<any>; output: Dict<any> }) => void
@@ -195,11 +175,7 @@ export interface $G_C {
     }) => void
   ): void
   $removeUnitGhost(
-    data: {
-      unitId: string
-      nextUnitId: string
-      nextUnitSpec: GraphSpec
-    },
+    data: GraphRemoveUnitGhostData,
     callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
   ): void
   $addUnitGhost(data: {
@@ -216,7 +192,7 @@ export interface $G_C {
       err: Dict<string | null>
       mergeData: Dict<any>
     }>
-  ): Promise<void>
+  ): void
   $getGraphState(data: {}, callback: (state: Dict<any>) => void): void
   $getGraphChildren(data: {}, callback: (state: Dict<any>) => void)
   $getGraphPinData(data: {}, callback: (data: Dict<any>) => void): void
@@ -229,75 +205,19 @@ export interface $G_C {
   $getSpec(data: {}, callback: Callback<GraphSpec>): void
   $getBundle(data: {}, callback: Callback<BundleSpec>): void
   $setMetadata(data: { path: string[]; data: any }): void
-  $moveSubComponentChild(data: {
-    subComponentId: string
+  $reorderSubComponent(data: {
+    parentId: string | null
     childId: string
-    slotName: string
-  }): void
-  $moveSubComponentChildren(data: {
-    subComponentId: string
-    children: string[]
-    slotMap: Dict<string>
-  }): void
-  $appendSubComponent(data: { subComponentId: string }): void
-  $moveSubgraphInto(data: {
-    graphId: string
-    nodeIds: {
-      merge: string[]
-      link: GraphUnitPinOuterSpec[]
-      unit: string[]
-      plug: GraphPlugOuterSpec[]
-    }
-    nextIdMap: {
-      merge: Dict<string>
-      link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-      plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
-      unit: Dict<string>
-    }
-    nextPinIdMap: Dict<{
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    }>
-    nextMergePinId: Dict<{
-      input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
-      output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
-    }>
-    nextPlugSpec: {
-      input: Dict<Dict<GraphSubPinSpec>>
-      output: Dict<Dict<GraphSubPinSpec>>
-    }
-    nextSubComponentParentMap: Dict<string | null>
-    nextSubComponentChildrenMap: Dict<string[]>
-  }): void
-  $moveUnitInto(data: {
-    graphId: string
-    unitId: string
-    nextUnitId: string
-  }): void
-  $moveLinkPinInto(data: {
-    graphId: string
-    unitId: string
-    type: IO
-    pinId: string
-  }): void
-  $moveMergePinInto(data: {
-    graphId: string
-    mergeId: string
-    nextInputMergeId: { mergeId: string; pinId: string }
-    nextOutputMergeId: { mergeId: string; pinId: string }
-  }): void
-  $movePlugInto(data: {
-    graphId: string
-    type: IO
-    pinId: string
-    subPinId: string
-    subPinSpec: GraphSubPinSpec
-  }): void
-  $explodeUnit(data: {
-    unitId: string
-    mapUnitId: Dict<string>
-    mapMergeId: Dict<string>
-  }): void
+    to: number
+  })
+  $moveSubComponentRoot(data: GraphMoveSubComponentRootData): void
+  $moveSubgraphInto(data: GraphMoveSubGraphIntoData): void
+  $moveUnitInto(data: GraphMoveUnitIntoData): void
+  $moveLinkPinInto(data: GraphMoveLinkPinIntoData): void
+  $moveMergePinInto(data: GraphMoveMergeIntoData): void
+  $movePlugInto(data: GraphMovePlugIntoData): void
+  $explodeUnit(data: GraphExplodeUnitData): void
+  $bulkEdit(data: GraphBulkEditData): void
 }
 
 export interface $G_W {

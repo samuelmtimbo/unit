@@ -1,0 +1,27 @@
+{
+  "name": "location",
+  "inputs": {
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "url": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "map-pin",
+    "description": "current web context location url",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "geolocation"
+    ]
+  },
+  "id": "30f6738c-1938-4dcd-9e7f-6c10f9730021",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

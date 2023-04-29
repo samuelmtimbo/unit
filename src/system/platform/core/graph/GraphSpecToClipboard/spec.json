@@ -4,7 +4,7 @@
     "any": {
       "plug": {
         "0": {
-          "unitId": "getspec",
+          "unitId": "spec",
           "pinId": "any"
         }
       },
@@ -13,8 +13,8 @@
     "graph": {
       "plug": {
         "0": {
-          "unitId": "getspec",
-          "pinId": "graph"
+          "unitId": "spec",
+          "pinId": "unit"
         }
       },
       "ref": true,
@@ -53,10 +53,10 @@
         }
       }
     },
-    "getspec": {
-      "id": "6afeacad-a2bf-440a-a986-ce50be27d94d",
+    "spec": {
+      "id": "ae1f7fc0-d6e7-489c-94ed-dee71c68dbb7",
       "input": {
-        "graph": {},
+        "unit": {},
         "any": {}
       },
       "output": {
@@ -79,7 +79,7 @@
           "json": true
         }
       },
-      "getspec": {
+      "spec": {
         "output": {
           "spec": true
         }
@@ -102,7 +102,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "description": "send this graph spec to clipboard",
-    "complexity": 8,
+    "complexity": 11,
     "tags": [
       "platform",
       "core",

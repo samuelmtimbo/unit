@@ -6,13 +6,13 @@ import {
   stopBroadcastSource,
 } from '../../../../../../../process/share/local'
 import { System } from '../../../../../../../system'
-import { $$refGlobalObj } from '../../../../../../../types/interface/async/AsyncU'
 import { Unlisten } from '../../../../../../../types/Unlisten'
 import { ID_LOCAL_SHARE_GRAPH } from '../../../../../../_ids'
 
 export interface I {
   opt: {}
   graph: Graph
+  done: any
 }
 
 export interface O {
@@ -57,31 +57,37 @@ export default class LocalShareGraph extends Semifunctional<I, O> {
   private _disconnect = () => {
     if (this._connected) {
       stopBroadcastSource(this._id)
+
       this._terminate()
+
       this._connected = false
     }
   }
 
   f({ opt, graph }: I, done: Done<O>): void {
-    const __global_id = graph.getGlobalId()
-
-    const $graph = $$refGlobalObj(this.__system, __global_id, [
-      '$U',
-      '$C',
-      '$G',
-    ])
-
-    const { id, terminate } = shareLocalGraph($graph)
+    const { id, terminate } = shareLocalGraph(graph)
 
     this._id = id
-    this._terminate = terminate
     this._connected = true
+
+    this._terminate = terminate
 
     done({ id })
   }
 
   d() {
     this._disconnect()
+
     this._id = undefined
+  }
+
+  public onIterDataInputData(name: string, data: any): void {
+    // if (name === 'done') {
+    this._disconnect()
+
+    this._forward_empty('id')
+
+    this._backward('done')
+    // }
   }
 }

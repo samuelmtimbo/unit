@@ -158,7 +158,7 @@
   "metadata": {
     "icon": "download",
     "description": "download full canvas as png",
-    "complexity": 10,
+    "complexity": 14,
     "tags": [
       "platform",
       "core",

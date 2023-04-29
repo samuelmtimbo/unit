@@ -1,10 +1,10 @@
-import { $wrap } from '../../../../../$wrap'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { BundleSpec } from '../../../../../types/BundleSpec'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { $S } from '../../../../../types/interface/async/$S'
+import { $wrap } from '../../../../../wrap'
 import { ID_START } from '../../../../_ids'
 
 export interface I {
@@ -43,7 +43,7 @@ export default class Start extends Semifunctional<I, O> {
   }
 
   f({ bundle, system }: I, done: Done<O>): void {
-    const $graph = system.$newGraph({ bundle, _: ['$G', '$C', '$U'] })
+    const $graph = system.$newGraph({ bundle, _: ['G', 'C', 'U'] })
 
     const graph = $wrap<$Graph>(this.__system, $graph)
 

@@ -378,7 +378,6 @@ assert.deepEqual(composition3.getExposedPinSpec('input', 'a'), {
       pinId: 'a',
     },
   },
-  ref: false,
 })
 
 const spec4 = system.newSpec({
@@ -486,7 +485,6 @@ assert.deepEqual(empty4.getExposedPinSpec('input', 'a'), {
       pinId: 'a',
     },
   },
-  ref: false,
 })
 
 const spec5 = system.newSpec({

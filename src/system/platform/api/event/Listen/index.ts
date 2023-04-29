@@ -60,9 +60,7 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     }
     this._listener = listener
 
-    const emitter = unit
-
-    this._unlisten = emitter.addListener(event, this._listener)
+    this._unlisten = unit.addListener(event, this._listener)
   }
 
   d() {

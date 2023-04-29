@@ -1,6 +1,10 @@
 import assert from '../../../../util/assert'
 import { getDivTextSize } from '../../../../util/text/getDivTextSize'
 
+assert.deepEqual(getDivTextSize('', 12, 12), {
+  width: 0,
+  height: 12,
+})
 assert.deepEqual(getDivTextSize('identity', 12, 12), {
   width: 48,
   height: 12,

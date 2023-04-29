@@ -43,8 +43,6 @@ export class PositionObserver implements IPositionObserver {
     const { isConnected } = element
 
     if (!isConnected) {
-      console.log('PositionObserver', 'observe', '!isConnected')
-
       throw new Error('element is not mounted')
     }
 

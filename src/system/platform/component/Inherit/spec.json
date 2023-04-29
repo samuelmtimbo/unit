@@ -15,7 +15,7 @@
   "metadata": {
     "icon": "square",
     "description": "apply default style to all children",
-    "complexity": 5,
+    "complexity": 20,
     "tags": [
       "platform",
       "component"

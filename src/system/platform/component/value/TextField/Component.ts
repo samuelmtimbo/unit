@@ -1,7 +1,6 @@
 import { Field } from '../../../../../client/field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLInputElement } from '../../../../../types/global/dom'
 
 export interface Props {
   className?: string
@@ -13,7 +12,7 @@ export interface Props {
 }
 
 export const DEFAULT_STYLE = {
-  height: '100%',
+  height: 'fit-content',
   width: '100%',
   color: 'inherit',
   backgroundColor: '#00000000',
@@ -24,7 +23,7 @@ export const DEFAULT_STYLE = {
   borderRadius: '0',
 }
 
-export default class TextField extends Field<IHTMLInputElement, Props> {
+export default class TextField extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',

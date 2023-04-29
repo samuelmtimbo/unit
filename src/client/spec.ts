@@ -1,3 +1,4 @@
+import { UNTITLED } from '../constant/STRING'
 import { emptyGraphSpec } from '../spec/emptySpec'
 import { System } from '../system'
 import { keys } from '../system/f/object/Keys/f'
@@ -150,7 +151,7 @@ export function newUnitId(
 ): string {
   const unit_spec = getSpec(specs, unit_spec_id)
 
-  const { name = '' } = unit_spec
+  const { name = UNTITLED } = unit_spec
 
   return newUnitIdFromName(spec, name, blacklist)
 }
@@ -220,7 +221,7 @@ export function isEmptySpec(spec: GraphSpec): boolean {
   return empty
 }
 
-export function injectSpecs(
+export function __injectSpecs(
   system: System,
   new_specs: GraphSpecs
 ): Dict<string> {
@@ -243,6 +244,30 @@ export function injectSpecs(
 
     system.setSpec(spec_id, spec)
   }
+  return map_spec_id
+}
+
+export function injectSpecs(specs: Specs, new_specs: GraphSpecs): Dict<string> {
+  const map_spec_id: Dict<string> = {}
+
+  for (const spec_id in new_specs) {
+    const spec = new_specs[spec_id]
+
+    let new_spec_id = spec_id
+    let has_spec = false
+
+    while (specs[new_spec_id]) {
+      new_spec_id = newSpecId(specs)
+      has_spec = true
+    }
+
+    if (has_spec) {
+      map_spec_id[spec_id] = new_spec_id
+    }
+
+    specs[spec_id] = spec
+  }
+
   return map_spec_id
 }
 

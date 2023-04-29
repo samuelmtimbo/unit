@@ -1,4 +1,4 @@
-import { EventEmitter, EventEmitter_EE } from '../EventEmitter'
+import { EventEmitter_, EventEmitter_EE } from '../EventEmitter'
 import { NOOP } from '../NOOP'
 import { Dict } from '../types/Dict'
 import { ANIMATION_C } from './animation/ANIMATION_C'
@@ -36,7 +36,7 @@ export type SimNode<T extends {} = {}> = T & {
 }
 
 export interface SimLink<T> {
-  d: number
+  l: number
   s: number
   source_id: string
   target_id: string
@@ -78,7 +78,10 @@ export type Simulation_EE = {
 
 export type SimulationEvents = EventEmitter_EE<Simulation_EE> & Simulation_EE
 
-export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
+export class Simulation<
+  N = {},
+  L = {}
+> extends EventEmitter_<SimulationEvents> {
   public _nodes: Dict<SimNode<N>>
   public _links: Dict<SimLink<L>>
 
@@ -104,7 +107,7 @@ export class Simulation<N = {}, L = {}> extends EventEmitter<SimulationEvents> {
     alphaDecay,
     velocityDecay = 0.2,
     n = 1,
-    t = 3 * ANIMATION_C,
+    t = 3 / ANIMATION_C,
     stability = 1,
     force = NOOP,
   }: SimulationOpt) {

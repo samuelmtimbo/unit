@@ -6,10 +6,10 @@ import { Component_ } from './Component'
 export type C_J = {}
 
 export type C_EE = {
-  append_child: [{ bundle: UnitBundleSpec; path: string[] }]
-  insert_child: [{ path: string[]; bundle: UnitBundleSpec; at: number }]
-  remove_child: [{ at: number; path: string[] }]
-  [remove_child_at: `remove_child_at_${number}`]: [{ at: number }]
+  append_child: [UnitBundleSpec, string[]]
+  insert_child: [UnitBundleSpec, number, string[]]
+  remove_child: [number, string[]]
+  [remove_child_at: `remove_child_at_${number}`]: [number]
   append_parent_root: [string, string, string]
   append_parent_root_children: [string, string[], Dict<string>]
   register_parent_root: [Component_, string]
@@ -18,13 +18,17 @@ export type C_EE = {
   unregister_root: [Component_]
   append_parent_child: [Component_, string]
   remove_parent_child: [Component_]
+  reorder_root: [Component_, number]
+  reorder_parent_root: [Component_, number]
 }
 
 export interface C {
   registerRoot(component: Component_): void
   unregisterRoot(component: Component_): void
+  reorderRoot(component: Component_, to: number): void
   registerParentRoot(component: Component_, slotName: string): void
   unregisterParentRoot(component: Component_): void
+  reorderParentRoot(component: Component_, to: number): void
   appendParentChild(component: Component_, slotName: string): void
   removeParentChild(component: Component_): void
   appendChild(Class: UnitBundle<Component_>): number

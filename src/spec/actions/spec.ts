@@ -12,12 +12,6 @@ import {
 import { Dict } from '../../types/Dict'
 import { IO } from '../../types/IO'
 import { IOOf } from '../../types/IOOf'
-import {
-  appendSubComponentChildren as makeAppendSubComponentChildren,
-  APPEND_SUB_COMPONENT_CHILDREN,
-  removeSubComponentChildren as makeRemoveSubComponentChildren,
-  REMOVE_SUB_COMPONENT_CHILDREN,
-} from './component'
 
 export const ADD_UNIT = 'addUnit'
 export const ADD_UNITS = 'addUnits'
@@ -575,10 +569,6 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.pinId,
         !data.ignored
       )
-    case APPEND_SUB_COMPONENT_CHILDREN:
-      return makeRemoveSubComponentChildren(data.id, data.children)
-    case REMOVE_SUB_COMPONENT_CHILDREN:
-      return makeAppendSubComponentChildren(data.id, data.children)
     default:
       throw new Error('Irreversible')
   }

@@ -1,7 +1,8 @@
 import namespaceURI from '../../../../client/component/namespaceURI'
 import { Element } from '../../../../client/element'
 import { ensureIcon } from '../../../../client/ensureIcon'
-import applyStyle from '../../../../client/style'
+import { elementPropHandler, PropHandler } from '../../../../client/propHandler'
+import { applyDynamicStyle } from '../../../../client/style'
 import { userSelect } from '../../../../client/util/style/userSelect'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
@@ -35,6 +36,8 @@ export default class Icon extends Element<SVGSVGElement, Props> {
   private _icon_sprite_el: SVGUseElement
   private _svg_el: SVGSVGElement
 
+  private _prop_handler: PropHandler
+
   constructor($props: Props, $system: System) {
     super($props, $system)
 
@@ -49,10 +52,6 @@ export default class Icon extends Element<SVGSVGElement, Props> {
     if (className) {
       $element.classList.add(className)
     }
-    applyStyle($element, {
-      ...DEFAULT_STYLE,
-      ...style,
-    })
     if (x !== undefined) {
       $element.setAttribute('x', `${x}`)
     }
@@ -92,17 +91,26 @@ export default class Icon extends Element<SVGSVGElement, Props> {
     if (icon !== undefined) {
       ensureIcon(this.$system, icon)
     }
+
+    // applyStyle($element, {
+    //   ...DEFAULT_STYLE,
+    //   ...style,
+    // })
+    applyDynamicStyle(this, { ...DEFAULT_STYLE, ...style })
+
+    this.preventDefault('touchstart')
+
+    this._prop_handler = {
+      ...elementPropHandler(this, DEFAULT_STYLE),
+      icon: (icon: string | undefined = '') => {
+        ensureIcon(this.$system, icon)
+
+        this._icon_sprite_el.setAttribute('href', `#${icon}`)
+      },
+    }
   }
 
   onPropChanged(prop: string, current: any): void {
-    if (prop === 'icon') {
-      ensureIcon(this.$system, current)
-      this._icon_sprite_el.setAttribute('href', `#${current}`)
-    } else if (prop === 'style') {
-      applyStyle(this._svg_el, {
-        ...DEFAULT_STYLE,
-        ...current,
-      })
-    }
+    this._prop_handler[prop](current)
   }
 }

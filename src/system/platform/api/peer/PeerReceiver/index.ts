@@ -1,12 +1,13 @@
 import { Peer } from '../../../../../api/peer/Peer'
 import { FunctionalEvents } from '../../../../../Class/Functional'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
+import { EE } from '../../../../../types/interface/EE'
 import { ST } from '../../../../../types/interface/ST'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { wrapEventEmitter } from '../../../../../wrap/MediaEventEmitter'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
 import { ID_PEER_RECEIVER } from '../../../../_ids'
 
@@ -19,6 +20,7 @@ export interface I<T> {
 export interface O<T> {
   stream: ST
   answer: string
+  emitter: EE<any>
 }
 
 export type PeerReceiver_EE = { message: [any] }
@@ -42,10 +44,10 @@ export default class PeerReceiver<T> extends Semifunctional<
   constructor(system: System) {
     super(
       {
-        fi: ['offer', 'opt'],
+        fi: ['opt'],
         fo: ['answer'],
-        i: ['close'],
-        o: ['stream'],
+        i: ['close', 'offer'],
+        o: ['stream', 'emitter'],
       },
       {
         input: {},
@@ -69,9 +71,17 @@ export default class PeerReceiver<T> extends Semifunctional<
     })
   }
 
-  async f({ offer, opt }: I<T>) {
+  async f({ opt }: I<T>) {
     this._peer = new Peer(this.__system, false, opt)
 
+    this._setup_peer()
+
+    if (this._input.offer.active()) {
+      this._output_answer(this._input.offer.peak())
+    }
+  }
+
+  private _output_answer = async (offer: string) => {
     try {
       await this._peer.acceptOffer(offer)
     } catch (err) {
@@ -85,15 +95,19 @@ export default class PeerReceiver<T> extends Semifunctional<
     const answer = await this._peer.answer()
 
     this._output.answer.push(answer)
-
-    this._setup_peer()
   }
 
   async onDataInputData(name: string, data: any): Promise<void> {
-    // console.log('Receiver', 'onDataInputData', name, data)
+    console.log('Receiver', 'onDataInputData', name, data)
 
     if (name === 'close') {
       this._disconnect()
+
+      this._backward('close')
+    } else if (name === 'offer') {
+      if (this._input.opt.active()) {
+        this._output_answer(data)
+      }
     }
   }
 
@@ -106,9 +120,15 @@ export default class PeerReceiver<T> extends Semifunctional<
     } else if (name === 'offer') {
       if (this._flag_err_invalid_offer) {
         this._flag_err_invalid_offer = false
+
         this.takeErr()
+
         return
       }
+
+      this._forward_empty('emitter')
+      this._forward_empty('stream')
+      this._forward_empty('answer')
     }
   }
 
@@ -125,7 +145,9 @@ export default class PeerReceiver<T> extends Semifunctional<
   private _send = (data: any, callback: Callback): void => {
     if (this._connected) {
       const message = stringify(data)
+
       this._peer.send(message)
+
       callback()
     } else {
       callback(undefined, 'peer not connected')
@@ -135,30 +157,46 @@ export default class PeerReceiver<T> extends Semifunctional<
   private _setup_peer = (): Unlisten => {
     const connect_listener = () => {
       console.log('Receiver', 'Peer', 'connect')
+
       this._connected = true
+
+      const emitter = wrapEventEmitter(this.__system)
+
+      this._output.emitter.push(emitter)
     }
+
     const error_listener = (err) => {
       console.log('Receiver', 'Peer', 'error', err)
+
       this.err(err.message)
     }
+
     const close_listener = () => {
       console.log('Receiver', 'Peer', 'close')
+
       this._disconnect()
     }
+
     const message_listener = (message: string) => {
-      const specs = this.__system.specs
-      const classes = this.__system.classes
-      const data = evaluate(message, specs, classes)
-      console.log('Receiver', 'Peer', 'data', data)
-      this.emit('message', data)
+      console.log('Receiver', 'Peer', 'message', message)
+
+      if (this._output.emitter.active()) {
+        // @ts-ignore
+        this._output.emitter.peak().emit('message', message)
+      }
     }
+
     const start_listener = (stream: MediaStream) => {
       console.log('Receiver', 'Peer', 'start', stream)
+
       const _stream = wrapMediaStream(stream, this.__system)
+
       this._output.stream.push(_stream)
     }
+
     const stop_listener = () => {
       console.log('Receiver', 'Peer', 'stop')
+
       this._output.stream.pull()
     }
 
@@ -185,15 +223,16 @@ export default class PeerReceiver<T> extends Semifunctional<
       this._unlisten = undefined
     }
 
+    this._output.emitter.pull()
+    this._output.stream.pull()
+
     if (this._peer) {
-      this._peer.destroy()
+      this._peer.close()
       this._peer = null
     }
 
     this._connected = false
-  }
 
-  $send({ data }: { data: any }, callback: Callback<void>): void {
-    this._send_data(data, callback)
+    this._done({})
   }
 }

@@ -21,7 +21,7 @@
   "metadata": {
     "icon": "square",
     "description": "wrap all children with `component`",
-    "complexity": 5,
+    "complexity": 20,
     "tags": [
       "platform",
       "component"

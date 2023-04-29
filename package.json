@@ -1,6 +1,6 @@
 {
   "name": "@_unit/unit",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "main": "lib/index.js",
   "bin": "./lib/server/index.js",
   "repository": "git@github.com:samuelmtimbo/unit.git",
@@ -33,6 +33,7 @@
     "build:client": "run-s build:bundle build:worker",
     "build:system": "ts-node -T src/script/build/system.ts",
     "build:worker": "ts-node -T src/script/build/worker/system.ts",
+    "build:web": "ts-node -T src/script/build/web.ts",
     "build:sw": "ts-node -T src/script/build/sw.ts",
     "build:ext": "ts-node -T src/script/build/ext.ts",
     "lint": "eslint src --ext .ts",
@@ -59,8 +60,8 @@
     "@types/node": "16.11.26",
     "@types/svg-path-bounding-box": "1.0.0",
     "@types/ws": "8.5.2",
-    "@typescript-eslint/eslint-plugin": "5.7.0",
-    "@typescript-eslint/parser": "5.7.0",
+    "@typescript-eslint/eslint-plugin": "5.59.0",
+    "@typescript-eslint/parser": "5.59.0",
     "@typescript-eslint/typescript-estree": "5.37.0",
     "esbuild": "0.17.5",
     "eslint": "8.5.0",
@@ -74,7 +75,7 @@
     "prettier-plugin-organize-imports": "2.1.0",
     "shx": "0.3.3",
     "ts-node": "10.4.0",
-    "typescript": "4.5.4",
+    "typescript": "5.0.4",
     "typescript-eslint": "0.0.1-alpha.0"
   }
 }

@@ -5,7 +5,6 @@ import { componentClassFromSpec } from './componentClassFromSpec'
 
 export function componentFromSpec(
   system: System,
-
   spec: GraphSpec,
   specs: Specs
 ): Component {

@@ -91,7 +91,7 @@
   "metadata": {
     "icon": "undo",
     "description": "increment value until `test` is false",
-    "complexity": 8,
+    "complexity": 10,
     "tags": [
       "core",
       "common"

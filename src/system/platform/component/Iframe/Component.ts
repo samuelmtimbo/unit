@@ -89,10 +89,10 @@ export default class Iframe extends Element<HTMLSlotElement, Props> {
   }
 
   private _parseSrc(current: any) {
-    let _src = current
+    let _src: string = current
 
     if (_src !== undefined) {
-      if (_src.startsWith('http://') || _src.startsWith('https://')) {
+      if (new RegExp('^(.+)://', 'i').exec(_src)) {
         //
       } else {
         const { origin, pathname } = (window && window.location) || {
@@ -132,7 +132,7 @@ export default class Iframe extends Element<HTMLSlotElement, Props> {
   }
 
   send(data) {
-    console.log('Iframe', 'send', data)
+    // console.log('Iframe', 'send', data)
 
     this._iframe_el.contentWindow.postMessage(data, '*')
   }

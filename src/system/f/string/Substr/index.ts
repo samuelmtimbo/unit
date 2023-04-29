@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { System } from '../../../../system'
-import { ID_SUBSTR } from '../../../_ids'
+import { ID_SUBSTRING } from '../../../_ids'
 
 export interface I {
   a: string
@@ -12,7 +12,7 @@ export interface O {
   a: string
 }
 
-export default class Substr extends Functional<I, O> {
+export default class Substring extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
@@ -21,11 +21,11 @@ export default class Substr extends Functional<I, O> {
       },
       {},
       system,
-      ID_SUBSTR
+      ID_SUBSTRING
     )
   }
 
   f({ a, from, length }: I, done): void {
-    done({ a: a.substr(from, length) })
+    done({ a: a.substring(from, from + length) })
   }
 }

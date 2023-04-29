@@ -67,7 +67,7 @@
   },
   "component": {},
   "metadata": {
-    "complexity": 6,
+    "complexity": 8,
     "icon": "alert-circle",
     "description": "throw `message` if `test` is false",
     "tags": [

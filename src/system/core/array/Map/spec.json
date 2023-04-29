@@ -9,7 +9,7 @@
         }
       }
     },
-    "uynyimudy": {
+    "arraybuilderfrom": {
       "id": "6db1905f-2343-4c63-97d3-07f4d946ef58",
       "output": {
         "acc": {
@@ -20,7 +20,7 @@
         }
       }
     },
-    "rftbyaqdn": {
+    "wait": {
       "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
       "input": {
         "b": {
@@ -34,37 +34,37 @@
     }
   },
   "merges": {
-    "hyjndoefw": {
+    "0": {
       "foreach": {
         "output": {
           "test": true
         }
       },
-      "uynyimudy": {
+      "arraybuilderfrom": {
         "input": {
           "test": true
         }
       }
     },
-    "wxnykfsg": {
+    "1": {
       "foreach": {
         "input": {
           "a": true
         }
       },
-      "rftbyaqdn": {
+      "wait": {
         "input": {
           "b": true
         }
       }
     },
-    "ejosje": {
-      "uynyimudy": {
+    "2": {
+      "arraybuilderfrom": {
         "input": {
           "init": true
         }
       },
-      "rftbyaqdn": {
+      "wait": {
         "output": {
           "a": true
         }
@@ -75,7 +75,7 @@
     "b[i]": {
       "plug": {
         "0": {
-          "unitId": "uynyimudy",
+          "unitId": "arraybuilderfrom",
           "pinId": "a"
         }
       },
@@ -84,7 +84,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "wxnykfsg"
+          "mergeId": "1"
         }
       },
       "type": "<A>[]"
@@ -103,21 +103,27 @@
     "b": {
       "plug": {
         "0": {
-          "unitId": "uynyimudy",
+          "unitId": "arraybuilderfrom",
           "pinId": "a[]"
         }
       },
       "type": "<B>[]"
+    },
+    "test": {
+      "plug": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "boolean",
+      "defaultIgnored": true
     }
   },
   "metadata": {
     "icon": "map",
     "description": "...",
-    "complexity": 34,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "complexity": 42,
+    "tags": ["core", "array"]
   },
   "id": "1c68d1e5-9170-417d-bfc8-fb7f7f12e714",
   "type": "`U`&`G`",

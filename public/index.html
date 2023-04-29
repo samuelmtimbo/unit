@@ -9,9 +9,12 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.00, maximum-scale=1.00, minimum-scale=1.00"
+      content="width=device-width, height=device-height, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"
     />
-    <meta http-equiv="Content-Security-Policy" content="connect-src 'self' ws: http: ipfs: hyper: blob:" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="connect-src 'self' ws: http: ipfs: ipns: hyper: blob: data:"
+    />
     <meta name="description" content="Next Generation Visual Programming" />
     <meta name="theme-color" content="#1f1f1f" />
 
@@ -58,7 +61,8 @@
         unicode-range: U+60;
       }
 
-      body {
+      body,
+      html {
         position: absolute;
         margin: 0;
         padding: 0;

@@ -29,7 +29,6 @@ import {
 } from '../../../../../client/whenInteracted'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { rangeArray } from '../../../../../util/array'
 import { callAll } from '../../../../../util/call/callAll'
@@ -56,10 +55,12 @@ export const DEFAULT_STYLE = {}
 export const COLLAPSED_WIDTH = 33
 export const COLLAPSED_HEIGHT = 33
 
+export const PADDING = 9
+
 export const BUTTON_HEIGHT = 48
 export const BUTTON_WIDTH = 24
 
-export default class GUIControl extends Component<IHTMLDivElement, Props> {
+export default class GUIControl extends Component<HTMLDivElement, Props> {
   private _root: Div
 
   private _collapsed_x: number
@@ -70,7 +71,16 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
 
   private _x: number
   private _y: number
+
   private _collapsed: boolean
+
+  private _docked: boolean
+  private _docked_x: boolean
+  private _docked_y: boolean
+  private _docking: boolean
+
+  private _last_dx: number
+  private _last_dy: number
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -176,9 +186,10 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
 
         reset_dim()
 
-        if (docked) {
+        if (this._docked) {
           this.dispatchEvent('dock-move', {
             dy: 0,
+            dx: 0,
           })
 
           this.dispatchEvent('dock-leave', {})
@@ -251,11 +262,13 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
       unlisten_pointer()
       unlisten_pointer = listen_pointer(button)
 
-      if (docked) {
+      if (this._docked) {
         const height = this._get_height()
+        const width = this._get_width()
 
         this.dispatchEvent('dock-move', {
-          dy: height + 3 + 2,
+          dx: this._docked_x ? width + BUTTON_WIDTH + PADDING + 3 : 0,
+          dy: this._docked_y ? height + 3 + 2 : 0,
         })
       }
     }
@@ -268,11 +281,13 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
       }
     }
 
-    let docked: boolean = false
+    this._docked = false
+    this._docked_x = false
+    this._docked_y = false
+    this._docking = false
 
-    let last_dy: number = 0
-    let last_dx: number = 0
-    let docking: boolean = false
+    this._last_dy = 0
+    this._last_dx = 0
 
     let unlisten_pointer: Unlisten
 
@@ -289,8 +304,6 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
             },
           }),
           makePointerDownListener(({ pointerId, clientX, clientY }) => {
-            const { $width, $height } = this.$context
-
             component.setPointerCapture(pointerId)
 
             let hx = clientX - this._x
@@ -325,99 +338,7 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
                 })
 
                 if (!this._collapsed) {
-                  const screen_ratio = this._get_screen_ratio()
-
-                  if (screen_ratio < 1) {
-                    const height = this._get_height()
-
-                    const dy = this._y + height - $height + 3
-
-                    if (dy >= 0) {
-                      if (last_dy > dy) {
-                        docking = false
-                      } else {
-                        docking = true
-                      }
-
-                      if (docked && dy > 3) {
-                        docked = false
-
-                        if (docking) {
-                          //
-                        } else {
-                          this.dispatchEvent('dock-move', {
-                            dy,
-                          })
-                        }
-                      } else {
-                        docked = true
-
-                        if (docking) {
-                          this.dispatchEvent('dock-move', {
-                            dy: height + 3 + 2,
-                          })
-                        } else {
-                          //
-                        }
-                      }
-
-                      last_dy = dy
-                    } else {
-                      docked = false
-
-                      this.dispatchEvent('dock-move', {
-                        dy: 0,
-                      })
-
-                      this.dispatchEvent('dock-leave', {})
-                    }
-                  } else {
-                    const width = this._get_width()
-
-                    const dx = this._x - BUTTON_WIDTH + 3
-
-                    if (dx <= 3) {
-                      if (last_dx < dx) {
-                        docking = false
-                      } else {
-                        docking = true
-                      }
-
-                      const dxb = dx
-
-                      if (docked && dxb > 2) {
-                        docked = false
-
-                        if (docking) {
-                          //
-                        } else {
-                          this.dispatchEvent('dock-move', {
-                            dx,
-                          })
-                        }
-                      } else {
-                        docked = true
-
-                        if (docking) {
-                          this.dispatchEvent('dock-move', {
-                            dx: width + BUTTON_WIDTH + 3,
-                          })
-                        } else {
-                          //
-                        }
-                      }
-
-                      last_dx = dx
-                    } else {
-                      docked = false
-
-                      this.dispatchEvent('dock-move', {
-                        dx: 0,
-                      })
-
-                      this.dispatchEvent('dock-leave', {})
-                    }
-                  }
+                  this._refresh_dock()
                 }
               }),
               makePointerUpListener(() => {
@@ -579,12 +500,14 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
           transform: 'translateY(-50%)',
           pointerEvents: this._collapsed ? 'none' : 'auto',
           touchAction: 'none',
+          ...userSelect('none'),
         },
       },
       this.$system
     )
     button.preventDefault('mousedown')
     button.preventDefault('touchdown')
+    button.preventDefault('touchstart')
     button.$element.setAttribute('dropTarget', 'true')
 
     const button_inner = new Div(
@@ -637,8 +560,10 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
       icon: _icon,
     }
 
+    container.registerParentRoot(button)
+
     root.registerParentRoot(container)
-    root.registerParentRoot(button)
+    // root.registerParentRoot(button)
     root.registerParentRoot(_icon)
 
     this.registerRoot(root)
@@ -647,6 +572,112 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
     const { $width, $height } = this.$context
 
     return $width / $height
+  }
+
+  private _refresh_dock = () => {
+    const { $width, $height } = this.$context
+
+    const screen_ratio = this._get_screen_ratio()
+
+    if (screen_ratio < 1) {
+      const height = this._get_height()
+
+      const dy = this._y + height - $height + 3
+
+      if (dy >= 0) {
+        if (this._last_dy > dy) {
+          this._docking = false
+        } else {
+          this._docking = true
+        }
+
+        if (this._docked && dy > 3) {
+          this._docked = false
+
+          if (this._docking) {
+            //
+          } else {
+            this.dispatchEvent('dock-move', {
+              dy,
+            })
+          }
+        } else {
+          this._docked = true
+          this._docked_y = true
+
+          if (this._docking) {
+            this.dispatchEvent('dock-move', {
+              dy: height + 3 + 2,
+            })
+          } else {
+            //
+          }
+        }
+
+        this._last_dy = dy
+      } else {
+        if (this._docked) {
+          this._docked = false
+          this._docked_y = false
+
+          this.dispatchEvent('dock-move', {
+            dy: 0,
+          })
+
+          this.dispatchEvent('dock-leave', {})
+        }
+      }
+    } else {
+      const width = this._get_width()
+
+      const dx = this._x - (BUTTON_WIDTH + PADDING)
+
+      if (dx <= 3) {
+        if (this._last_dx < dx) {
+          this._docking = false
+        } else {
+          this._docking = true
+        }
+
+        const dxb = dx
+
+        if (this._docked && dxb > 2) {
+          this._docked = false
+
+          if (this._docking) {
+            //
+          } else {
+            this.dispatchEvent('dock-move', {
+              dx,
+            })
+          }
+        } else {
+          this._docked = true
+          this._docked_x = true
+
+          if (this._docking) {
+            this.dispatchEvent('dock-move', {
+              dx: width + BUTTON_WIDTH + PADDING + 3,
+            })
+          } else {
+            //
+          }
+        }
+
+        this._last_dx = dx
+      } else {
+        if (this._docked) {
+          this._docked = false
+          this._docked_x = false
+
+          this.dispatchEvent('dock-move', {
+            dx: 0,
+          })
+
+          this.dispatchEvent('dock-leave', {})
+        }
+      }
+    }
   }
 
   onPropChanged(prop: string, current: any): void {
@@ -718,8 +749,8 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
 
     this._x = clamp({
       a: this._x,
-      min: this._collapsed ? 3 : BUTTON_WIDTH,
-      max: $width - w - 3,
+      min: this._collapsed ? PADDING : BUTTON_WIDTH + PADDING,
+      max: $width - w - PADDING,
     }).a
     this._y = clamp({
       a: this._y,
@@ -752,6 +783,8 @@ export default class GUIControl extends Component<IHTMLDivElement, Props> {
           left: `${this._x}px`,
           top: `${this._y}px`,
         })
+
+        this._refresh_dock()
       }),
       makeCustomListener('_control_foreground', ({ message_id }) => {
         if (!this._message_id[message_id]) {

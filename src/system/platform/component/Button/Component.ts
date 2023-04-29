@@ -3,7 +3,6 @@ import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
 import applyStyle from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../types/global/dom'
 
 export interface Props {
   id?: string
@@ -23,9 +22,7 @@ const DEFAULT_STYLE = {
   boxSizing: 'border-box',
 }
 
-export default class Button extends Element<IHTMLDivElement, Props> {
-  private _div_el: IHTMLDivElement
-
+export default class Button extends Element<HTMLButtonElement, Props> {
   private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
@@ -42,32 +39,35 @@ export default class Button extends Element<IHTMLDivElement, Props> {
       data = {},
     } = this.$props
 
-    const $element = this.$system.api.document.createElement('div')
+    const $element = this.$system.api.document.createElement('button')
 
     if (id !== undefined) {
       $element.id = id
     }
+
     if (className !== undefined) {
       $element.className = className
     }
+
     if (innerText) {
       $element.innerText = innerText
     }
+
     if (tabIndex !== undefined) {
       $element.tabIndex = tabIndex
     }
+
     if (title) {
       $element.title = title
     }
-    if (draggable !== undefined) {
-      $element.setAttribute('draggable', draggable.toString())
-    }
+
     if (data !== undefined) {
       for (const key in data) {
         const d = data[key]
         $element.dataset[key] = d
       }
     }
+
     applyStyle($element, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {

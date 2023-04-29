@@ -115,7 +115,6 @@ export function getDatumWidth(data: TreeNode): number {
     case TreeNodeType.Boolean:
     case TreeNodeType.NumberLiteral:
     case TreeNodeType.RegexLiteral:
-    case TreeNodeType.Regex:
     case TreeNodeType.Unit:
     case TreeNodeType.Class:
     case TreeNodeType.ClassLiteral:
@@ -178,18 +177,20 @@ export function getDatumWidth(data: TreeNode): number {
       width = getDatumWidth(data.children[0]) + 2 * DELIMITER_WIDTH
       break
     case TreeNodeType.KeyValue:
-      const valueOverflow = childrenOverflow(data.children[1])
-      if (valueOverflow) {
-        width = Math.max(
-          getDatumWidth(data.children[0]) + COLON_WIDTH,
-          getDatumWidth(data.children[1])
-        )
-      } else {
-        width =
-          getDatumWidth(data.children[0]) +
-          getDatumWidth(data.children[1]) +
-          COLON_WIDTH +
-          SPACE_WIDTH
+      {
+        const valueOverflow = childrenOverflow(data.children[1])
+        if (valueOverflow) {
+          width = Math.max(
+            getDatumWidth(data.children[0]) + COLON_WIDTH,
+            getDatumWidth(data.children[1])
+          )
+        } else {
+          width =
+            getDatumWidth(data.children[0]) +
+            getDatumWidth(data.children[1]) +
+            COLON_WIDTH +
+            SPACE_WIDTH
+        }
       }
       break
     default:
@@ -218,7 +219,6 @@ export function getDatumHeight(data: TreeNode): number {
     case TreeNodeType.Boolean:
     case TreeNodeType.NumberLiteral:
     case TreeNodeType.RegexLiteral:
-    case TreeNodeType.Regex:
     case TreeNodeType.Unit:
     case TreeNodeType.Class:
     case TreeNodeType.ClassLiteral:

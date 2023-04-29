@@ -7,7 +7,6 @@ import { Mode } from '../../../../../client/mode'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { ISpeechGrammarList } from '../../../../../types/global/ISpeechGrammarList'
 import { ISpeechRecognitionOpt } from '../../../../../types/global/ISpeechRecognition'
 import IconButton from '../../../component/app/IconButton/Component'
@@ -42,7 +41,7 @@ const specNameGrammar = (__system: System): ISpeechGrammarList => {
   return grammarsFrom(__system, tokens)
 }
 
-export default class MicrophoneButton extends Element<IHTMLDivElement, Props> {
+export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
   private _icon_button: IconButton
 
   private _speech_recorder: SpeechRecorder
@@ -87,6 +86,11 @@ export default class MicrophoneButton extends Element<IHTMLDivElement, Props> {
       if (!opt.grammars) {
         opt.grammars = specNameGrammar($system)
       }
+    } catch (err) {
+      //
+    }
+
+    try {
       speech_recorder = new SpeechRecorder(this.$system, opt)
     } catch (err) {
       //
@@ -102,6 +106,7 @@ export default class MicrophoneButton extends Element<IHTMLDivElement, Props> {
     const $element = parentElement($system)
 
     this.$unbundled = false
+this.$primitive = true
     this.$element = $element
     this.$slot = icon_button.$slot
     this.$subComponent = {

@@ -11,7 +11,6 @@ import { emptyGraphSpec } from '../../../../../spec/emptySpec'
 import { System } from '../../../../../system'
 import { BundleSpec } from '../../../../../types/BundleSpec'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { mapObjVK } from '../../../../../util/object'
 import { keys } from '../../../../f/object/Keys/f'
 import { NOT_SUBGRAPH_MAX_D, SUBGRAPH_MAX_D } from '../Editor/Component'
@@ -27,7 +26,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class Minigraph extends Element<IHTMLDivElement, Props> {
+export default class Minigraph extends Element<HTMLDivElement, Props> {
   public _minimap: Minimap
 
   public _nodes: Dict<SimNode<any>> = {}

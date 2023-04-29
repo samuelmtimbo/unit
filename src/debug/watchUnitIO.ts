@@ -149,32 +149,6 @@ export function watchUnitIO<T extends Unit>(
     all.push(watchUnitRenamePinEvent('rename_output', unit, callback))
   }
 
-  if (unit instanceof Graph) {
-    // if (events.includes('fork')) {
-    //   all.push(watchGraphForkEvent('fork', unit, callback))
-    // }
-    // if (events.includes('add_unit')) {
-    //   all.push(watchGraphUnitEvent('add_unit', unit, callback))
-    // }
-    // if (events.includes('remove_unit')) {
-    //   all.push(watchGraphUnitEvent('remove_unit', unit, callback))
-    // }
-    // if (events.includes('expose_pin_set')) {
-    //   all.push(watchGraphExposedPinSetEvent('expose_pin_set', unit, callback))
-    // }
-    // if (events.includes('cover_pin_set')) {
-    //   all.push(watchGraphExposedPinSetEvent('cover_pin_set', unit, callback))
-    // }
-    // if (events.includes('inject_graph')) {
-    //   all.push(watchGraphInjectEvent('inject_graph', unit, callback))
-    // }
-    // if (events.includes('move_subgraph_into')) {
-    //   all.push(
-    //     watchGraphMoveSubgraphIntoEvent('move_subgraph_into', unit, callback)
-    //   )
-    // }
-  }
-
   if (unit instanceof Graph || unit instanceof Element_) {
     if (events.includes('append_child')) {
       all.push(watchComponentAppendEvent('append_child', unit, callback))

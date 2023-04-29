@@ -5,7 +5,6 @@ import { makePointerUpListener } from '../../../../../client/event/pointer/point
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import Div from '../../../component/Div/Component'
 import PhoneKeyboardKey, { emitPhoneKey } from '../PhoneKeyboardKey/Component'
 
@@ -16,13 +15,11 @@ export interface Props {
 
 export const DEFAULT_STYLE = {
   boxSizing: 'border-box',
-  // minHeight: '210px',
-  // minWidth: '300px',
 }
 
 const KEY_HEIGHT: number = 30
 
-export default class PhoneKeyboard extends Element<IHTMLDivElement, Props> {
+export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
   private _keyboard: Div
   private _keys: PhoneKeyboardKey[] = []
 
@@ -126,7 +123,7 @@ export default class PhoneKeyboard extends Element<IHTMLDivElement, Props> {
     ][0] as PhoneKeyboardKey
     this._shift_key.addEventListener(
       makeClickListener({
-        onClick: () => {
+        onDoubleClick: () => {
           this._shift = !this._shift
           if (this._shift) {
             this._activate_shift()
@@ -178,7 +175,7 @@ export default class PhoneKeyboard extends Element<IHTMLDivElement, Props> {
     this._alt_key = key_AltLeft.$slotChildren['default'][0] as PhoneKeyboardKey
     this._alt_key.addEventListener(
       makeClickListener({
-        onClick: () => {
+        onDoubleClick: () => {
           this._alt = !this._alt
           if (this._alt) {
             this._activate_alt()
@@ -232,6 +229,7 @@ export default class PhoneKeyboard extends Element<IHTMLDivElement, Props> {
       keyboard,
     }
     this.$unbundled = false
+this.$primitive = true
 
     this.registerRoot(keyboard)
   }
@@ -247,31 +245,19 @@ export default class PhoneKeyboard extends Element<IHTMLDivElement, Props> {
   }
 
   private _activate_shift = (): void => {
-    mergePropStyle(this._shift_key, {
-      backgroundImage: `radial-gradient(currentColor 20%, transparent 20%)`,
-      backgroundSize: '3px 3px',
-    })
+    this._shift_key.setProp('active', true)
   }
 
   private _deactivate_shift = (): void => {
-    mergePropStyle(this._shift_key, {
-      backgroundImage: 'none',
-      backgroundSize: 'none',
-    })
+    this._shift_key.setProp('active', false)
   }
 
   private _activate_alt = (): void => {
-    mergePropStyle(this._alt_key, {
-      backgroundImage: `radial-gradient(currentColor 20%, transparent 20%)`,
-      backgroundSize: '3px 3px',
-    })
+    this._alt_key.setProp('active', true)
   }
 
   private _deactivate_alt = (): void => {
-    mergePropStyle(this._alt_key, {
-      backgroundImage: 'none',
-      backgroundSize: 'none',
-    })
+    this._alt_key.setProp('active', false)
   }
 
   private _line = (children: Element[]): Div => {

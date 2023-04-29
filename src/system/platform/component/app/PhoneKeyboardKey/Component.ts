@@ -1,22 +1,24 @@
+import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
-import {
-  emitKeyboardEvent,
-  keyToIcon,
-} from '../../../../../client/event/keyboard'
+import { keyToIcon } from '../../../../../client/event/keyboard'
 import {
   isChar,
   keyToCode,
   keyToKeyCode,
 } from '../../../../../client/event/keyboard/keyCode'
+import { emitKeyboardEvent } from '../../../../../client/event/keyboard/write'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
+import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
+import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
+import { makePointerLeaveListener } from '../../../../../client/event/pointer/pointerleave'
+import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
-import Div from '../../../component/Div/Component'
 import Icon from '../../../component/Icon/Component'
 import TextBox from '../../../core/component/TextBox/Component'
+import Div from '../../Div/Component'
 
 export interface Props {
   style?: Dict<string>
@@ -24,6 +26,7 @@ export interface Props {
   alt?: string
   shiftKey?: boolean
   altKey?: boolean
+  active?: boolean
 }
 
 export const DEFAULT_STYLE = {
@@ -33,7 +36,6 @@ export const DEFAULT_STYLE = {
   height: `calc(100%)`,
   width: `calc(100%)`,
   overflow: 'hidden',
-  ...userSelect('none'),
   color: 'currentColor',
   borderWidth: '1px',
   borderStyle: 'solid',
@@ -47,9 +49,12 @@ export const DEFAULT_STYLE = {
   ...userSelect('none'),
 }
 
-export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
+export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
   private _key_text: TextBox
   private _key: Div
+
+  private _pointer_in = false
+  private _pointer_down = false
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -97,25 +102,60 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
     )
     key_component.appendChild(key_text)
     key_component.appendChild(alt_key_text)
-    key_component.addEventListener(
+    key_component.addEventListeners([
       makeClickListener({
         onClick: () => {
           // console.log('PhoneKeyboardKey', 'onClick')
+
           const { key } = this.$props
+
           if (key !== undefined) {
             this._emit_key(key)
           }
         },
         onLongPress: () => {
-          // log('PhoneKeyboardKey', 'onLongPress')
+          // console.log('PhoneKeyboardKey', 'onLongPress')
+
           const { alt } = this.$props
+
           if (alt === undefined) {
+            //
           } else {
             this._emit_key(alt)
           }
         },
-      })
-    )
+      }),
+      makePointerEnterListener(() => {
+        this._pointer_in = true
+
+        this._refresh_background()
+      }),
+      makePointerDownListener((event) => {
+        const { pointerId } = event
+
+        this._key.setPointerCapture(pointerId)
+
+        this._pointer_down = true
+
+        this._refresh_background()
+      }),
+      makePointerUpListener((event) => {
+        const { pointerId } = event
+
+        this._pointer_down = false
+
+        if (this._key.hasPointerCapture(pointerId)) {
+          this._key.releasePointerCapture(pointerId)
+        }
+
+        this._refresh_background()
+      }),
+      makePointerLeaveListener(() => {
+        this._pointer_in = false
+
+        this._refresh_background()
+      }),
+    ])
     key_component.preventDefault('mousedown')
     key_component.preventDefault('touchstart')
     this._key = key_component
@@ -143,6 +183,7 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
       key: key_component,
     }
     this.$unbundled = false
+this.$primitive = true
 
     this.registerRoot(key_component)
   }
@@ -170,6 +211,43 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
     }
   }
 
+  private _refresh_background = () => {
+    // console.log('PhoneKeyboardKey', '_refresh_background')
+
+    const { $theme, $color } = this.$context
+
+    const { active, style = {} } = this.$props
+
+    const background = this._pointer_in
+      ? $theme === 'dark'
+        ? '#00000066'
+        : '#00000011'
+      : style.backgroundColor ?? '#00000022'
+
+    if (active) {
+      mergePropStyle(this._key, {
+        backgroundImage: `radial-gradient(currentColor 20%, transparent 20%)`,
+        backgroundSize: '3px 3px',
+        background,
+      })
+    } else {
+      if (this._pointer_down) {
+        mergePropStyle(this._key, {
+          backgroundImage: `radial-gradient(circle, currentColor 15%, transparent 10%)`,
+          backgroundSize: '6px 6px',
+          backgroundPosition: '0.75px 0px',
+          background,
+        })
+      } else {
+        mergePropStyle(this._key, {
+          background,
+          backgroundImage: '',
+          backgroundSize: '',
+        })
+      }
+    }
+  }
+
   onPropChanged(prop: string, current: any): void {
     if (prop === 'style') {
       this._key.setProp('style', { ...DEFAULT_STYLE, ...current })
@@ -177,6 +255,8 @@ export default class PhoneKeyboardKey extends Element<IHTMLDivElement, Props> {
       this._refresh_key_text_value()
     } else if (prop === 'altKey') {
       this._refresh_key_text_value()
+    } else if (prop === 'active') {
+      this._refresh_background()
     }
   }
 
@@ -195,6 +275,7 @@ export function emitPhoneKey(
 ): void {
   const keyCode = keyToKeyCode[key]
   const code = keyToCode[key]
+
   emitKeyboardEvent(system, 'keydown', {
     key,
     keyCode,
@@ -205,6 +286,7 @@ export function emitPhoneKey(
     metaKey: false,
     bubbles: true,
   })
+
   // TODO 'keypress' should not be fired if key is a control key (e.g. ALT, CTRL, SHIFT, ESC)
   emitKeyboardEvent(system, 'keypress', {
     key,

@@ -40,7 +40,7 @@ export function webDocument(
     },
     getSelection(): Selection {
       // @ts-ignore
-      return root.shadowRoot.getSelection() || document.getSelection()
+      return root.shadowRoot?.getSelection?.() || document.getSelection()
     },
     createRange(): Range {
       return document.createRange()

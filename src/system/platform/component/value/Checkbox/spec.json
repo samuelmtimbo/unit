@@ -19,7 +19,7 @@
   "metadata": {
     "icon": "square",
     "description": "checkbox",
-    "complexity": 5,
+    "complexity": 20,
     "tags": [
       "platform",
       "component",

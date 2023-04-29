@@ -20,7 +20,6 @@ import applyStyle, { mergeStyle } from '../../../../../client/style'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import Div from '../../Div/Component'
 import Frame from '../../Frame/Component'
@@ -48,7 +47,7 @@ const DEFAULT_STYLE = {
   touchAction: 'none',
 }
 
-export default class Drawer extends Element<IHTMLDivElement, Props> {
+export default class Drawer extends Element<HTMLDivElement, Props> {
   public drawer: Div
 
   public content: Div
@@ -212,6 +211,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
     this.$element = $element
     this.$slot = drawer.$slot
     this.$unbundled = false
+this.$primitive = true
 
     this.registerRoot(drawer)
   }
@@ -301,8 +301,19 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
 
   private _setActive = (active: boolean) => {
     this._active = active
-    this._knob.setProp('active', active)
+
+    // mergeStyle(this.frame.$element, {
+    //   pointerEvents: 'none',
+    // })
+
     this._animate_transform(true)
+
+    setTimeout(() => {
+      // mergeStyle(this.frame.$element, {
+      //   pointerEvents: 'auto',
+      // })
+      this.dispatchEvent('activated', {})
+    }, ANIMATION_T_MS + 100)
   }
 
   private _translate = (): void => {
@@ -436,7 +447,7 @@ export default class Drawer extends Element<IHTMLDivElement, Props> {
       this._animation.commitStyles()
     }
 
-    this._animation = this.drawer.$element.animate([style], {
+    this._animation = this.drawer.$element.animate?.([style], {
       duration,
       fill,
     })

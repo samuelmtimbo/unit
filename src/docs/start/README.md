@@ -80,11 +80,9 @@ Clicking on any node (unit, datum, etc.) will cut that node out, effectively dea
 
 This also useful as a quick manual way of deleting data iteratively.
 
-![](/public/gif/start/30.gif)
+![](/public/gif/start/5.gif)
 
 Many nodes can be removed with Multiselection.
-
-![](/public/gif/start/31.gif)
 
 ## Change Mode
 

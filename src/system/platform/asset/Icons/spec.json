@@ -1,0 +1,26 @@
+{
+  "name": "icons",
+  "inputs": {
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "icons": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "value-absolute",
+    "description": "output system `icons` dictionary",
+    "complexity": 5,
+    "tags": [
+      "f",
+      "math"
+    ]
+  },
+  "id": "72c84615-4d9c-4a82-a828-fa5d9447a4d5",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

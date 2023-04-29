@@ -6,7 +6,6 @@ import { ID_CHECKBOX } from '../../../../_ids'
 export interface I {
   style: Dict<string>
   attr: Dict<string>
-  class: string
   value: boolean
 }
 
@@ -16,7 +15,7 @@ export default class Checkbox extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['class', 'style', 'attr', 'value'],
+        i: ['style', 'attr', 'value'],
         o: [],
       },
       {},

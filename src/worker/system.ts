@@ -9,7 +9,7 @@ const post = (data) => {
 
 const system = boot()
 
-const api = makeRemoteUnitAPI(system, ['$S'])
+const api = makeRemoteUnitAPI(system, ['S'])
 
 const ref = new RemoteRef(api, post)
 

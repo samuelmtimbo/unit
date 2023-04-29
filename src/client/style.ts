@@ -7,6 +7,10 @@ import { Component } from './component'
 import { makeCustomListener } from './event/custom'
 import { makeResizeListener } from './event/resize'
 
+export const isVValue = (value: string) => {
+  return value.endsWith('vh') || value.endsWith('vw')
+}
+
 export function reactToFrameSize(
   value: string,
   component: Component<HTMLElement | SVGElement>,
@@ -60,7 +64,7 @@ export function reactToFrameSize(
       makeCustomListener('unmount', removeContextListener),
     ])
 
-    return () => callAll([removeContextListener, unlistenComponent])()
+    return callAll([removeContextListener, unlistenComponent])
   }
 
   return NOOP
@@ -74,7 +78,7 @@ export function applyDynamicStyle(
 
   removeStyle($element)
 
-  const { fontSize } = style
+  const { fontSize, width, height } = style
 
   let unlistenResize = NOOP
 
@@ -86,19 +90,41 @@ export function applyDynamicStyle(
     delete component.$propUnlisten['style']
   }
 
-  if ($element instanceof HTMLElement) {
-    if (fontSize) {
-      delete $element.style.fontSize
+  const unlistenAll = []
 
-      unlistenResize = reactToFrameSize(fontSize, component, (value) => {
+  if (fontSize && isVValue(fontSize)) {
+    delete style.fontSize
+
+    unlistenAll.push(
+      reactToFrameSize(fontSize, component, (value) => {
         $element.style.fontSize = value + 'px'
       })
-    }
+    )
+  }
+
+  if (width && isVValue(width)) {
+    delete style.width
+
+    unlistenAll.push(
+      reactToFrameSize(width, component, (value) => {
+        $element.style.width = value + 'px'
+      })
+    )
+  }
+
+  if (height && isVValue(height)) {
+    delete style.height
+
+    unlistenAll.push(
+      reactToFrameSize(height, component, (value) => {
+        $element.style.height = value + 'px'
+      })
+    )
   }
 
   mergeStyle($element, style)
 
-  styleUnlisten = callAll([unlistenResize])
+  styleUnlisten = callAll(unlistenAll)
 
   component.$propUnlisten['style'] = styleUnlisten
 

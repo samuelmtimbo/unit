@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { System } from '../../../../system'
-import { ID_OR } from '../../../_ids'
+import { ID_OR_0 } from '../../../_ids'
 
 export interface I {
   a: boolean
@@ -20,7 +20,7 @@ export default class And extends Functional<I, O> {
       },
       {},
       system,
-      ID_OR
+      ID_OR_0
     )
   }
 

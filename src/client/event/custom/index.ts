@@ -1,4 +1,5 @@
 import { _addEventListener } from '..'
+import { callAll } from '../../../util/call/callAll'
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import { stopByPropagation } from '../../stopPropagation'
@@ -40,7 +41,13 @@ export function listenCustom(
     listener(detail, _event)
   }
 
-  const unlisten = _addEventListener(_type, $element, _listener, global)
+  const elements = Array.isArray($element) ? $element : [$element]
+
+  const unlisten = callAll(
+    elements.map((element) =>
+      _addEventListener(_type, element, _listener, global)
+    )
+  )
 
   return () => {
     $listenCount[type]--

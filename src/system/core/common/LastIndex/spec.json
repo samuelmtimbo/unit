@@ -47,7 +47,7 @@
   "metadata": {
     "icon": "brackets",
     "description": "last position of `a`",
-    "complexity": 8,
+    "complexity": 10,
     "tags": [
       "core",
       "common"

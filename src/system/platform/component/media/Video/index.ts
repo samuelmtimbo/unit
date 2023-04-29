@@ -14,6 +14,7 @@ export interface I {
   src: string
   stream: Unit
   controls: boolean
+  currentTime: number
 }
 
 export interface O {}
@@ -29,7 +30,7 @@ export default class Video
   constructor(system: System) {
     super(
       {
-        i: ['src', 'stream', 'style', 'controls'],
+        i: ['src', 'stream', 'style', 'controls', 'currentTime'],
         o: [],
       },
       {
@@ -54,5 +55,13 @@ export default class Video
 
   requestPictureInPicture(callback: Callback<PictureInPictureWindow>): void {
     // TODO
+  }
+
+  onDataInputData(name: string, data: any): void {
+    super.onDataInputData(name, data)
+
+    if (name === 'currentTime') {
+      this._input.currentTime.pull()
+    }
   }
 }

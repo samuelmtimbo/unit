@@ -1,5 +1,6 @@
 import { Graph } from '../Class/Graph'
 import { System } from '../system'
+import _classes from '../system/_classes'
 import {
   GraphSpec,
   GraphSpecs,
@@ -10,24 +11,66 @@ import {
 } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphBundle, GraphClass } from '../types/GraphClass'
+import { weakMerge } from '../types/weakMerge'
+import { clone } from '../util/object'
 import { bundleClass } from './bundleClass'
+import { evaluate } from './evaluate'
+import { getTree, TreeNodeType } from './parser'
 
-export function extractGraphSpecs(spec: GraphSpec, specs: Specs): GraphSpecs {
-  const graphs: GraphSpecs = {}
-
+export function extractGraphSpecs(
+  spec: GraphSpec,
+  specs: Specs,
+  graphs: GraphSpecs = {}
+): GraphSpecs {
+  graphs[spec.id] = spec
+  
   const { units } = spec
 
   for (const unit_id in units) {
     const unit = units[unit_id]
 
-    const { id } = unit
+    const { id, input } = unit
+
+    for (const inputId in input) {
+      const _input = input[inputId]
+
+      const { data } = _input
+
+      if (data) {
+        const tree = getTree(data)
+
+        if (tree.type === TreeNodeType.Unit) {
+          const str = tree.value.substring(1)
+
+          const bundle = evaluate(str, specs, _classes)
+
+          for (const specId in bundle.specs) {
+            const spec = bundle.specs[specId]
+
+            graphs[specId] = spec
+          }
+
+          for (const specId in bundle.specs) {
+            const spec = bundle.specs[specId]
+
+            extractGraphSpecs(spec, weakMerge(specs, graphs), graphs)
+          }
+        }
+      }
+    }
 
     const unit_spec = specs[id]
+    
+    if (!unit_spec) {
+      return
+    }
 
     const { system } = unit_spec
 
     if (!system) {
       graphs[id] = unit_spec as GraphSpec
+
+      extractGraphSpecs(graphs[id], specs, graphs)
     }
   }
 
@@ -47,7 +90,7 @@ export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
     throw new Error('')
   }
 
-  const specs = extractGraphSpecs(spec, _specs)
+  const specs = extractGraphSpecs(spec, _specs, clone(spec.specs ?? {}))
 
   const Bundle = bundleClass(Class, { unit: { id }, specs })
 

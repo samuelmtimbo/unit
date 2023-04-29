@@ -1,11 +1,11 @@
 {
   "name": "new graph",
   "inputs": {
-    "bundle": {
-      "type": "{spec?:object,specs?:object{}}",
+    "graph": {
+      "type": "`G`",
       "metadata": {
         "examples": [
-          "{}"
+          "${unit:{id:'e33e7dcd-9715-461c-a474-15ed2bda899e'}}"
         ]
       }
     }
@@ -19,13 +19,9 @@
   },
   "metadata": {
     "icon": "server",
-    "description": "asynchronously control a graph",
-    "complexity": 3,
-    "tags": [
-      "platform",
-      "method",
-      "process"
-    ]
+    "description": "start a new graph",
+    "complexity": 8,
+    "tags": ["platform", "method", "process"]
   },
   "id": "324b9c5e-5810-11eb-bf7c-634b3bb07f8c",
   "base": true,

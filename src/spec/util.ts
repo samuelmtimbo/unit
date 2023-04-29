@@ -42,7 +42,7 @@ export function opposite(kind: IO): IO {
   return kind === 'input' ? 'output' : 'input'
 }
 
-export const findMergePin = (
+export const findFirstMergePin = (
   merge: GraphMergeSpec,
   type: IO
 ): { unitId: string; pinId: string } | undefined => {
@@ -54,6 +54,22 @@ export const findMergePin = (
           pinId,
         }
       }
+    }
+  }
+}
+
+export const findPinMerge = (
+  spec: GraphSpec,
+  unitId: string,
+  type: IO,
+  pinId: string
+): string | undefined => {
+  const { merges = {} } = spec
+  for (const mergeId in merges) {
+    const merge = merges[mergeId]
+
+    if (merge?.[unitId]?.[type]?.[pinId]) {
+      return mergeId
     }
   }
 }
@@ -125,6 +141,16 @@ export const forEachGraphSpecPin = (
   })
   forEachGraphSpecPinOfType(spec, 'output', (outputSpec, outputId) => {
     callback('output', outputSpec, outputId)
+  })
+}
+
+export const forEachGraphSpecPinType = (
+  spec: GraphSpec,
+  type: IO,
+  callback: (type: IO, pinId: string, pinSpec: GraphPinSpec) => void
+) => {
+  forEachGraphSpecPinOfType(spec, type, (pinId, pinSpec) => {
+    callback(type, pinId, pinSpec)
   })
 }
 

@@ -18,7 +18,6 @@ import {
 } from '../../../../../client/whenInteracted'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import clamp from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
@@ -56,7 +55,7 @@ export const DEFAULT_STYLE = {
   transition: `opacity ${ANIMATION_T_S}s linear`,
 }
 
-export default class Transcend extends Element<IHTMLDivElement, Props> {
+export default class Transcend extends Element<HTMLDivElement, Props> {
   public _container: Div
   public _icon: Icon
 
@@ -158,6 +157,7 @@ export default class Transcend extends Element<IHTMLDivElement, Props> {
       icon,
     }
     this.$unbundled = false
+this.$primitive = true
 
     this.registerRoot(container)
 
@@ -289,7 +289,7 @@ export default class Transcend extends Element<IHTMLDivElement, Props> {
     const anim = () => {
       const dy = this._y_target - this._y
 
-      const k = (dy * ANIMATION_C) / 2
+      const k = dy / (2 * ANIMATION_C)
 
       if (Math.abs(dy) >= 1) {
         this._y += k

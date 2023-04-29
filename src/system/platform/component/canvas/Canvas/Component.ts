@@ -19,6 +19,12 @@ export function draw(ctx: CanvasRenderingContext2D, step: any[]): void {
     ctx.fillStyle = args[0]
   } else if (method === 'strokeStyle') {
     ctx.strokeStyle = args[0]
+  } else if (method === 'fillPath') {
+    const [d, fillRule] = args
+    ctx.fill(new Path2D(d), fillRule)
+  } else if (method === 'strokePath') {
+    const [d] = args
+    ctx.stroke(new Path2D(d))
   } else {
     ctx[method](...args)
   }
@@ -42,6 +48,8 @@ export interface Props {
   style?: Dict<string>
   width?: number | string
   height?: number | string
+  sx?: number
+  sy?: number
   d?: any[]
 }
 
@@ -240,7 +248,8 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   }
 
   private _redraw = (): void => {
-    // console.log('Graph', '_redraw')
+    // console.log('Graph', '_redraw', this._d)
+
     this._draw_steps(this._d)
   }
 
@@ -279,6 +288,8 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
 
     const { $color } = this.$context || { $color: COLOR_WHITE }
 
+    const { sx = 1, sy = 1 } = this.$props
+
     const context = this._canvas_el.getContext('2d')
 
     this._context = context
@@ -287,6 +298,8 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     this._context.fillStyle = $color
     this._context.lineJoin = 'round'
     this._context.lineWidth = 3
+
+    this._context.scale(sx, sy)
   }
 
   onMount() {
@@ -306,20 +319,42 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     this._d = []
   }
 
-  drawImage(imageBitmap: ImageBitmap) {
+  drawImage(
+    imageBitmap: ImageBitmap,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) {
     // console.log('Canvas', 'drawImage', imageBitmap)
 
-    this._context.drawImage(imageBitmap, 0, 0)
+    this._context.drawImage(imageBitmap, x, y, width, height)
   }
 
   strokePath(d: string) {
     // console.log('Canvas', 'strokePath', d)
+
+    this._d.push(['strokePath', d])
+
+    this._strokePath(d)
+  }
+
+  private _strokePath(d: string) {
+    // console.log('Canvas', '_strokePath', d)
 
     this._context.stroke(new Path2D(d))
   }
 
   fillPath(d: string, fillRule: CanvasFillRule) {
     // console.log('Canvas', 'fillPath', d)
+
+    this._d.push(['fillPath', d, fillRule])
+
+    this._fillPath(d, fillRule)
+  }
+
+  private _fillPath(d: string, fillRule: CanvasFillRule) {
+    // console.log('Canvas', '_fillPath', d)
 
     this._context.fill(new Path2D(d), fillRule)
   }

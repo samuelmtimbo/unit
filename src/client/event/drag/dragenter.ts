@@ -25,8 +25,8 @@ export function listenDragEnter(
 
     listener(detail)
   }
-  $element.addEventListener('_dragenter', dragEnterListener, _global)
+  $element.addEventListener('dragenter', dragEnterListener, _global)
   return () => {
-    $element.removeEventListener('_dragenter', dragEnterListener, _global)
+    $element.removeEventListener('dragenter', dragEnterListener, _global)
   }
 }

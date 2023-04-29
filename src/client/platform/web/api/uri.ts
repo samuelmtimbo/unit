@@ -9,6 +9,9 @@ export function webURI(window: Window, opt: BootOpt): API['uri'] {
     encodeURI: function (str: string): string {
       return encodeURI(str)
     },
+    encodeURIComponent: function (str: string): string {
+      return encodeURIComponent(str)
+    }
   }
 
   return url

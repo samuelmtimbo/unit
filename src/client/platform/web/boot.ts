@@ -21,6 +21,7 @@ import { webFile } from './api/file'
 import { webGeolocation } from './api/geolocation'
 import { webHTTP } from './api/http'
 import { webInput } from './api/input'
+import { webLocation } from './api/location'
 import { webMedia } from './api/media'
 import { webQuerystring } from './api/querystring'
 import { webScreen } from './api/screen'
@@ -73,6 +74,7 @@ export function _webBoot(
   const url = webURL(window, opt)
   const uri = webURI(window, opt)
   const alert = webAlert(window, opt)
+  const location = webLocation(window, opt)
 
   const api: API = {
     alert,
@@ -85,6 +87,7 @@ export function _webBoot(
     screen,
     bluetooth,
     clipboard,
+    location,
     geolocation,
     media,
     http,
@@ -104,6 +107,8 @@ export function _webBoot(
   root.appendChild(_root)
 
   system.root = _root
+
+  _root.shadowRoot
 
   attachSprite(system)
   attachStyle(system)

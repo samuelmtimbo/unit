@@ -19,7 +19,7 @@ identity.push('a', 0)
 assert.equal(identity.peakInput('a'), 0)
 assert.equal(identity.peakOutput('a'), 0)
 
-const clonedIdentity = cloneUnit(identity)
+const [clonedIdentity] = cloneUnit(identity, true)
 
 assert.equal(clonedIdentity.peakInput('a'), 0)
 assert.equal(clonedIdentity.peakOutput('a'), 0)
@@ -41,7 +41,7 @@ add.play()
 add.setInputConstant('a', true)
 add.push('a', 1)
 
-const clonedAdd = cloneUnit(add)
+const [clonedAdd] = cloneUnit(add, true)
 
 clonedAdd.play()
 
@@ -70,7 +70,7 @@ assert.equal(range.peakInput('a'), 0)
 assert.equal(range.peakInput('b'), 3)
 assert.equal(range.peakOutput('i'), 0)
 
-const clonedRange = cloneUnit(range)
+const [clonedRange] = cloneUnit(range, true)
 
 clonedRange.play()
 
@@ -81,7 +81,7 @@ assert.equal(clonedRange.takeOutput('i'), 1)
 assert.equal(clonedRange.takeOutput('i'), 2)
 assert.equal(clonedRange.peakOutput('i'), undefined)
 
-const clonedRange0 = cloneUnit(range) as Graph
+const [clonedRange0] = cloneUnit(range, true)
 
 clonedRange0.play()
 

@@ -10,7 +10,7 @@ export default class SVGLine extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['class', 'style', 'x1', 'x2', 'y1', 'y2'],
+        i: ['style', 'x1', 'x2', 'y1', 'y2'],
         o: [],
       },
       {},

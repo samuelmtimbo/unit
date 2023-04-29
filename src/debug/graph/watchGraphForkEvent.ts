@@ -13,7 +13,7 @@ export function watchGraphForkEvent(
   graph: Graph,
   callback: (moment: GraphForkMoment) => void
 ): () => void {
-  const listener = (specId: string, path) => {
+  const listener = (specId: string, path: string[]) => {
     callback({
       type: 'graph',
       event,

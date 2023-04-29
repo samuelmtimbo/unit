@@ -1,4 +1,4 @@
-import { Element_ } from '../../../../../Class/Element'
+import { Value } from '../../../../../Class/Value'
 import { System } from '../../../../../system'
 import { ID_SLIDER } from '../../../../_ids'
 
@@ -9,14 +9,16 @@ export interface I {
   max: number
 }
 
-export interface O {}
+export interface O {
+  value: number
+}
 
-export default class Slider extends Element_<I, O> {
+export default class Slider extends Value<I, O> {
   constructor(system: System) {
     super(
       {
         i: ['value', 'style', 'min', 'max'],
-        o: [],
+        o: ['value'],
       },
       {},
       system,

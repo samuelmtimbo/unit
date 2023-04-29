@@ -48,7 +48,7 @@ export default class SetInput<T> extends Functional<I<T>, O<T>> {
     NewBundle.__bundle.unit.input = NewBundle.__bundle.unit.input || {}
     NewBundle.__bundle.unit.input[name] =
       NewBundle.__bundle.unit.input[name] || {}
-    NewBundle.__bundle.unit.input[name].data = stringify(data) // XABLEAU
+    NewBundle.__bundle.unit.input[name].data = stringify(data) // AD HOC
 
     done({ unit: NewBundle })
   }

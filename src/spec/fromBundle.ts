@@ -11,14 +11,16 @@ export function fromBundle<
   O extends Dict<any> = any
 >(
   bundle: BundleSpec,
-  _specs: Specs,
+  specs: Specs,
   branch: { [path: string]: true } = {}
 ): GraphBundle<I, O> {
-  const { spec = {}, specs = {} } = bundle
+  const { spec = {}, specs: _specs = {} } = bundle
 
   if (!spec.id) {
-    spec.id = uuidNotIn(_specs)
+    spec.id = uuidNotIn(specs)
   }
+
+  _specs[spec.id] = spec
 
   return fromSpec(spec, weakMerge(specs, _specs), branch)
 }

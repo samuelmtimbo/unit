@@ -155,11 +155,12 @@ export class Peer extends $<PeerEvents> {
 
     rtc.onconnectionstatechange = () => {
       const { connectionState } = rtc
-      console.log('onconnectionstatechange', connectionState)
+      // console.log('onconnectionstatechange', connectionState)
       switch (connectionState) {
         case 'connected':
           // this.emit('connect')
           break
+        case 'disconnected':
         case 'closed':
           this.emit('close')
           break
@@ -177,7 +178,7 @@ export class Peer extends $<PeerEvents> {
 
     if (!this._initiator) {
       rtc.ontrack = (event: RTCTrackEvent) => {
-        console.log('ontrack', event)
+        // console.log('ontrack', event)
         const { streams } = event
         const stream = streams[0]
         if (stream) {
@@ -281,5 +282,13 @@ export class Peer extends $<PeerEvents> {
       const message = JSON.stringify({ type: 'stop' })
       this._rtc_channel.send(message)
     }
+  }
+
+  close(): void {
+    this._plunk_channel(this._rtc_channel)
+    this._rtc_channel.close()
+
+    this._plunk(this._rtc)
+    this._rtc.close()
   }
 }

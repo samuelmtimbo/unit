@@ -35,6 +35,7 @@ export default class AppendChild extends Functional<I, O> {
 
   f({ parent, child }: I, done: Done<O>): void {
     const at = parent.appendChild(child)
+
     done({ at })
   }
 }

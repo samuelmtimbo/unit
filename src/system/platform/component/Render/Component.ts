@@ -4,7 +4,6 @@ import { renderGraph } from '../../../../client/render/renderGraph'
 import applyStyle from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../types/global/dom'
 import { $Graph } from '../../../../types/interface/async/$Graph'
 import { Unlisten } from '../../../../types/Unlisten'
 import { removeChildren } from '../../../../util/element'
@@ -28,7 +27,7 @@ const DEFAULT_STYLE = {
   boxSizing: 'border-box',
 }
 
-export default class Render extends Element<IHTMLDivElement, Props> {
+export default class Render extends Element<HTMLDivElement, Props> {
   private _prop_handler: PropHandler
 
   private _unlisten: Unlisten

@@ -116,7 +116,7 @@
   "metadata": {
     "icon": "edit-3",
     "description": "adds a rotation to the transformation matrix",
-    "complexity": 12,
+    "complexity": 15,
     "tags": [
       "platform",
       "core",

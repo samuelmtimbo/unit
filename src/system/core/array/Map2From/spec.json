@@ -114,7 +114,7 @@
   "metadata": {
     "icon": "map",
     "description": "...",
-    "complexity": 33,
+    "complexity": 40,
     "tags": [
       "core",
       "array"

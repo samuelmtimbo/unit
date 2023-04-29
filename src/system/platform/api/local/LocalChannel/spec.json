@@ -15,7 +15,7 @@
     }
   },
   "outputs": {
-    "port": {
+    "channel": {
       "type": "`CH`",
       "ref": true
     }
@@ -23,7 +23,7 @@
   "metadata": {
     "icon": "broadcast-tower",
     "description": "channel for local communication",
-    "complexity": 3,
+    "complexity": 9,
     "tags": [
       "platform",
       "api",

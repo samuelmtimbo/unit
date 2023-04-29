@@ -16,7 +16,7 @@
   "metadata": {
     "icon": "download",
     "description": "download whatever is at the given `url`",
-    "complexity": 2,
+    "complexity": 3,
     "tags": [
       "platform",
       "api",

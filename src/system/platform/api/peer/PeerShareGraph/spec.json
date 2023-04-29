@@ -29,7 +29,7 @@
   "metadata": {
     "icon": "link",
     "description": "allow remote peer to connect to this graph",
-    "complexity": 3,
+    "complexity": 11,
     "tags": [
       "platform",
       "api",

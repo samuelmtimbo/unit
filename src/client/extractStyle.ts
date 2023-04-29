@@ -4,8 +4,10 @@ import { Style } from '../system/platform/Props'
 import { Dict } from '../types/Dict'
 import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
+import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
 import { IOElement } from './IOElement'
 import { Size } from './util/geometry'
+import { parseFontSize } from './util/style/getFontSize'
 
 export function extractStyle(
   component: Component,
@@ -15,7 +17,6 @@ export function extractStyle(
 
   let _element = $element
 
-  // AD HOC
   if (component instanceof Iframe) {
     _element = component._iframe_el
   }
@@ -75,6 +76,30 @@ export function _extractStyle(
 
     treatProp('width')
     treatProp('height')
+  }
+
+  if (element instanceof HTMLInputElement) {
+    if (
+      element.type === 'text' ||
+      element.type === 'number' ||
+      element.type === 'password'
+    ) {
+      if (style.height === 'fit-content') {
+        const { value } = element
+
+        const fontSize = element.style.fontSize
+
+        const fontSizeNum = parseFontSize(fontSize) ?? DEFAULT_FONT_SIZE
+
+        const { height } = measureText(value, fontSizeNum)
+
+        style.height = `${height}px`
+      }
+    }
+
+    if (element.type === 'range') {
+      style.height = '18px'
+    }
   }
 
   if (element instanceof SVGPathElement) {

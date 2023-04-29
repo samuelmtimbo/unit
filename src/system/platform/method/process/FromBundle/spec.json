@@ -1,0 +1,29 @@
+{
+  "name": "from bundle",
+  "inputs": {
+    "bundle": {
+      "type": "{spec:object,specs:object}",
+      "metadata": {
+        "examples": [
+          "{spec:{},specs:{}}"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "graph": {
+      "type": "`G`",
+      "icon": "graph"
+    }
+  },
+  "metadata": {
+    "icon": "server",
+    "description": "start a new graph",
+    "complexity": 8,
+    "tags": ["platform", "method", "process"]
+  },
+  "id": "de2d42e2-4fca-4a3f-8783-3585c546e88b",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

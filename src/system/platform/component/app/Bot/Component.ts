@@ -4,10 +4,6 @@ import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Context } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
-import { makeDragCancelListener } from '../../../../../client/event/drag/dragcancel'
-import { makeDragDropListener } from '../../../../../client/event/drag/dragdrop'
-import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
-import { makeDragOverListener } from '../../../../../client/event/drag/dragover'
 import { IOPointerEvent } from '../../../../../client/event/pointer'
 import { makePointerCancelListener } from '../../../../../client/event/pointer/pointercancel'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
@@ -19,7 +15,6 @@ import { makeResizeListener } from '../../../../../client/event/resize'
 import { harmonicArray } from '../../../../../client/id'
 import { randomBetween } from '../../../../../client/math'
 import { Mode } from '../../../../../client/mode'
-import { PositionObserver } from '../../../../../client/PositionObserver'
 import applyStyle from '../../../../../client/style'
 import { getThemeModeColor } from '../../../../../client/theme'
 import {
@@ -32,7 +27,6 @@ import {
 } from '../../../../../client/util/geometry'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { IHTMLDivElement } from '../../../../../types/global/dom'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { clamp } from '../../../../core/relation/Clamp/f'
 
@@ -63,7 +57,7 @@ export const DEFAULT_STYLE = {
   pointerEvents: 'none',
 }
 
-export default class Bot extends Element<IHTMLDivElement, Props> {
+export default class Bot extends Element<HTMLDivElement, Props> {
   private _r: number = 0
 
   private _x: number = 0
@@ -75,6 +69,7 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   private _svg: SVGSVGElement
 
   private _pointer_position: Dict<Position> = {}
+  private _pointer_down_position: Dict<Position> = {}
   private _pointer_down: Dict<boolean> = {}
   private _pointer_occluded: Dict<boolean> = {}
   private _pointer_down_count: number = 0
@@ -96,7 +91,7 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
 
   private _move_timeout: NodeJS.Timer
 
-  private _container: IHTMLDivElement
+  private _container: HTMLDivElement
 
   private _container_x: number = 0
   private _container_y: number = 0
@@ -136,7 +131,13 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
       svg.classList.add(className)
     }
     applyStyle(svg, {
-      ...{ position: 'absolute', top: '0', left: '0', stroke: 'currentColor' },
+      ...{
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        stroke: 'currentColor',
+        cursor: 'default',
+      },
     })
     this._svg = svg
 
@@ -180,22 +181,7 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     this.addEventListener(makePointerEnterListener(this._onPointerEnter))
     this.addEventListener(makePointerLeaveListener(this._onPointerLeave))
 
-    const position_observer = new PositionObserver(
-      this.$system,
-      ({ x, y, sx, sy, rx, ry, rz }) => {
-        this._container_x = x
-        this._container_y = y
-        this._container_sx = sx
-        this._container_sy = sy
-        this._container_rx = rx
-        this._container_ry = ry
-        this._container_rz = rz
-      }
-    )
-
     // this._tick_body()
-
-    this._position_observer = position_observer
   }
 
   private _enabled = (): boolean => {
@@ -554,8 +540,8 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     } = this.$system
 
     if (Math.abs(this._x - this._tx) > 1 || Math.abs(this._y - this._ty) > 1) {
-      this._x += (this._tx - this._x) * ANIMATION_C
-      this._y += (this._ty - this._y) * ANIMATION_C
+      this._x += (this._tx - this._x) / ANIMATION_C
+      this._y += (this._ty - this._y) / ANIMATION_C
 
       this._tick_body()
 
@@ -590,9 +576,9 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     const k = 1 / 4
 
     if (Math.abs(dx) > k || Math.abs(dy) > k || Math.abs(dz) > k) {
-      this._temp_x += dx * ANIMATION_C
-      this._temp_y += dy * ANIMATION_C
-      this._temp_z += dz * ANIMATION_C
+      this._temp_x += dx / ANIMATION_C
+      this._temp_y += dy / ANIMATION_C
+      this._temp_z += dz / ANIMATION_C
 
       this._start_sync()
     } else {
@@ -608,7 +594,8 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
 
   private _onPointerEnter = (event: IOPointerEvent) => {
     // console.log('Bot', '_onPointerEnter')
-    const { pointerId } = event
+    const { pointerId, pointerType } = event
+
     this.__onPointerEnter(pointerId)
   }
 
@@ -634,10 +621,25 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   }
 
   private _onContextPointerEnter = (event: IOPointerEvent) => {
+    const { pointerId, pointerType } = event
+
+    if (
+      (pointerType === 'pen' || pointerType === 'mouse') &&
+      !this._pointer_down[pointerId]
+    ) {
+      return
+    }
+
+    this.__onContextPointerEnter(event)
+  }
+
+  private __onContextPointerEnter = (event: IOPointerEvent) => {
     const { x, y } = this._getXY(event)
     const { pointerId } = event
+
     if (!this._pointer_inside[pointerId]) {
       // log('Bot', '_onContextPointerEnter', pointerId)
+
       this._pointer_inside[pointerId] = true
       this._pointer_enter_count++
       this._pointer_position[pointerId] = { x, y }
@@ -659,7 +661,7 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   }
 
   private __onContextPointerLeave = (event: IOPointerEvent) => {
-    const { pointerId } = event
+    const { pointerId, pointerType } = event
 
     if (this._dnd[pointerId]) {
       return
@@ -678,12 +680,15 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
 
       delete this._pointer_inside[pointerId]
       delete this._pointer_position[pointerId]
+
       this._removePointerLaser(pointerId)
+
       this._pointer_visible = this._pointer_enter_count > 0
 
       if (this._synced) {
         if (!this._pointer_visible) {
           this._synced = false
+
           this._start_sync()
         }
       }
@@ -700,8 +705,20 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
 
   private _onContextPointerMove = (event: IOPointerEvent) => {
     // console.log('Bot', '_onContextPointerMove')
-    const position = this._getXY(event)
-    const { pointerId } = event
+
+    const { pointerId, pointerType } = event
+
+    let position = this._getXY(event)
+
+    // ignore pen events for now because Samsung S-Pen hover does not emit
+    // pointerenter/pointerleave events (tested on a Samsung Galaxy Note Ultra).
+    if (
+      (pointerType === 'pen' || pointerType === 'mouse') &&
+      !this._pointer_down[pointerId]
+    ) {
+      return
+    }
+
     // if (this._pointer_inside[pointerId]) {
     this._pointer_position[pointerId] = position
     if (this._pointer_down[pointerId] && this._synced) {
@@ -715,11 +732,15 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   private _getXY = (event: IOPointerEvent): Position => {
     // const { $x, $y, $sx, $sy, $rx, $ry, $rz } = this.$context
 
-    const { screenX, screenY } = event
+    // const { screenX, screenY } = event
+    const { clientX, clientY } = event
+
     const rz_cos = Math.cos(-this._container_rz)
     const rz_sin = Math.sin(-this._container_rz)
-    const sx = (screenX - this._container_x) / this._container_sx
-    const sy = (screenY - this._container_y) / this._container_sy
+
+    const sx = (clientX - this._container_x) / this._container_sx
+    const sy = (clientY - this._container_y) / this._container_sy
+
     const x = sx * rz_cos - sy * rz_sin
     const y = sx * rz_sin + sy * rz_cos
 
@@ -727,22 +748,28 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   }
 
   private _onContextPointerDown = (event: IOPointerEvent) => {
-    const { pointerId } = event
+    const { pointerId, pointerType } = event
 
     if (!this._pointer_down[pointerId]) {
       // log('Bot', '_onContextPointerDown', pointerId)
+
       const position = this._getXY(event)
 
       this._pointer_down_count++
       this._pointer_down[pointerId] = true
       this._pointer_inside[pointerId] = true
       this._pointer_position[pointerId] = position
+      this._pointer_down_position[pointerId] = position
 
       if (this._synced) {
         this._laser_position[pointerId] = position
       }
 
       this._tick_body()
+
+      if (pointerType === 'pen' || pointerType === 'mouse') {
+        this.__onContextPointerEnter(event)
+      }
     }
   }
 
@@ -757,6 +784,7 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     this._pointer_down_count--
 
     delete this._pointer_down[pointerId]
+    delete this._pointer_down_position[pointerId]
 
     // AD HOC
     // https://bugs.chromium.org/p/chromium/issues/detail?id=1147674
@@ -778,11 +806,15 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   }
 
   private _onContextPointerUp = (event: IOPointerEvent) => {
-    const { pointerId } = event
+    const { pointerId, pointerType } = event
 
     if (this._pointer_down[pointerId]) {
       // console.log('Bot', '_onContextPointerUp', pointerId)
       this._remove_pointer_down(event)
+
+      if (pointerType === 'pen' || pointerType === 'mouse') {
+        this._onContextPointerLeave(event)
+      }
     }
   }
 
@@ -919,37 +951,6 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
       true
     )
 
-    const dragEnterListener = makeDragEnterListener((event) => {
-      const { pointerId } = event
-
-      this._dnd[pointerId] = true
-
-      this._onContextPointerEnter(event)
-      this._onContextPointerDown(event)
-    })
-
-    const dragOverListener = makeDragOverListener((event) => {
-      const { pointerId } = event
-
-      this._onContextPointerMove(event)
-    })
-
-    const dragDropListener = makeDragDropListener((event) => {
-      const { pointerId } = event
-
-      delete this._dnd[pointerId]
-
-      this._onContextPointerUp(event)
-    })
-
-    const dragCancelListener = makeDragCancelListener((event) => {
-      const { pointerId } = event
-
-      delete this._dnd[pointerId]
-
-      this._onContextPointerUp(event)
-    })
-
     this._unlisten_context = addListeners(this.$context, [
       pointerDownListener,
       pointerUpListener,
@@ -957,10 +958,6 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
       pointerEnterListener,
       pointerLeaveListener,
       pointerCancelListener,
-      dragEnterListener,
-      dragOverListener,
-      dragDropListener,
-      dragCancelListener,
       // enterModeListener,
       graphEnterModeListener,
     ])
@@ -1016,14 +1013,14 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     // console.log('Bot', '_unfollow')
 
     this._following = false
+
     const unlisten = this._unlisten_context
+
     unlisten()
   }
 
   private _context_unlisten: Unlisten
   private _document_listener: Unlisten
-
-  private _position_observer: PositionObserver
 
   onMount() {
     // console.log('Bot', 'onMount')
@@ -1075,8 +1072,6 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
   }
 
   onUnmount($context: Context): void {
-    // console.log('Bot', 'onUnmount')
-
     const {} = $context
 
     this._disable()
@@ -1101,12 +1096,6 @@ export default class Bot extends Element<IHTMLDivElement, Props> {
     this._pointer_visible = false
 
     document.removeEventListener('visibilitychange', this._document_listener)
-
-    this._position_observer.disconnect()
-  }
-
-  onRender() {
-    this._position_observer.observe(this._container)
   }
 
   onPropChanged(prop: string, current: any) {
