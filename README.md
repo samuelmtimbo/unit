@@ -18,7 +18,7 @@ The unit system is set to grow into a simple and approachable Web Operating Syst
 
 The broader Design Philosophy behind unit is discussed in [Concept](src/docs/concept/README.md).
 
-To jump right into the official unit Programming Environment (Beta), visit [unit.land](https://unit.land). 
+To jump right into the official unit Programming Environment (Beta), visit [unit.land](https://unit.land).
 
 To experiment with a cloud extended version of unit, check out [ioun.it](https://ioun.it).
 
@@ -106,7 +106,7 @@ Fully local version of the unit Environment. Every unit you build will be saved 
 https://unit.town?title=
 ```
 
-Marketplace for searching and sharing units. It is the first place to go look for an open source unit built by the community. 
+Marketplace for searching and sharing units. It is the first place to go look for an open source unit built by the community.
 
 ### [unit.moe](https://unit.moe)
 
@@ -122,7 +122,7 @@ https://unit.moe#https://ioun.it will show the code for https://ioun.it.
 
 ### [ioun.it](https://ioun.it)
 
-UNIT IO is a platform specialized in unit software: tools, infrastructure and services for building and scaling unit systems on the cloud.
+Platform specialized in unit software: tools and and services for building, maintaining and scaling units on the cloud.
 
 ### [iframe.land](https://iframe.land)
 
