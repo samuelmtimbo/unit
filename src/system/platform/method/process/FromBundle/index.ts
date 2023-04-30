@@ -22,8 +22,7 @@ export default class FromBundle extends Functional<I, O> {
         o: ['graph'],
       },
       {
-        output: {
-        },
+        output: {},
       },
       system,
       ID_FROM_BUNDLE

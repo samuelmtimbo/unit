@@ -5,11 +5,20 @@ import { Dict } from '../../../../types/Dict'
 import { randomId } from '../../../../util/id'
 
 export interface Props {
-  id?: string
+  id: string
   className?: string
   style?: Dict<string>
   src?: string
   srcdoc?: string
+  allow?: {
+    autoplay?: boolean
+    camera?: boolean
+    encryptedMedia?: boolean
+    fullscreen?: boolean
+    microphone?: boolean
+    pictureInPicture?: boolean
+    scripts?: boolean
+  }
 }
 
 export const DEFAULT_STYLE = {
@@ -28,7 +37,22 @@ export default class Iframe extends Element<HTMLSlotElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { id, className, style = {}, src, srcdoc } = this.$props
+    const {
+      id,
+      className,
+      style = {},
+      src,
+      srcdoc,
+      allow = {
+        autoplay: false,
+        camera: false,
+        encryptedMedia: false,
+        fullscreen: false,
+        microphone: false,
+        pictureInPicture: false,
+        scripts: false,
+      },
+    } = this.$props
 
     const {
       root,
@@ -41,6 +65,18 @@ export default class Iframe extends Element<HTMLSlotElement, Props> {
     iframe_el.slot = ''
     root.appendChild(iframe_el)
     this._iframe_el = iframe_el
+
+    iframe_el.setAttribute('frameborder', '0')
+
+    allow.fullscreen && iframe_el.setAttribute('allowfullscreen', 'true')
+    allow.autoplay &&
+      iframe_el.setAttribute(
+        'allow',
+        `${(allow.autoplay && 'autoplay; ') || ''}${
+          (allow.encryptedMedia && 'encrypted-media; ') || ''
+        }${(allow.pictureInPicture && 'picture-in-picture; ') || ''}`
+      )
+    allow.scripts && iframe_el.setAttribute('sandbox', 'allow-scripts')
 
     const slot_id = randomId()
     this._slot_id = slot_id

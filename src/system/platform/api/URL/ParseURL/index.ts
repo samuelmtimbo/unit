@@ -51,12 +51,11 @@ export default class ParseUrl<T> extends Functional<I<T>, O<T>> {
         search: urlParser.search,
         hash: urlParser.hash,
       }
-    } catch(err) {
+    } catch (err) {
       done(undefined, 'invalid url')
-      
+
       return
     }
-    
 
     done({ obj })
   }

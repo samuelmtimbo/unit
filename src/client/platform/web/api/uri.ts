@@ -11,7 +11,7 @@ export function webURI(window: Window, opt: BootOpt): API['uri'] {
     },
     encodeURIComponent: function (str: string): string {
       return encodeURIComponent(str)
-    }
+    },
   }
 
   return url

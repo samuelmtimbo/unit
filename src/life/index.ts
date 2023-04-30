@@ -1,10 +1,7 @@
 import { randomBetween } from '../client/math'
 import { resizeWithObserver } from '../client/resizeWith'
 import root from '../client/root'
-import {
-  randomColorString,
-  setAlpha,
-} from '../client/theme'
+import { randomColorString, setAlpha } from '../client/theme'
 import { clamp } from '../system/core/relation/Clamp/f'
 import { rangeArray } from '../util/array'
 

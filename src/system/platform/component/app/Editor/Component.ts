@@ -258,7 +258,6 @@ import { GraphBulkEditMomentData } from '../../../../../debug/graph/watchGraphBu
 import { GraphExposePinEventData } from '../../../../../debug/graph/watchGraphExposedPinEvent'
 import { GraphExposedPinSetMomentData } from '../../../../../debug/graph/watchGraphExposedPinSetEvent'
 import { GraphForkMomentData } from '../../../../../debug/graph/watchGraphForkEvent'
-import { GraphInjectGraphMomentData } from '../../../../../debug/graph/watchGraphInjectEvent'
 import { GraphMergeMomentData } from '../../../../../debug/graph/watchGraphMergeEvent'
 import { GraphMoveSubgraphIntoMomentData } from '../../../../../debug/graph/watchGraphMoveSubgraphIntoEvent'
 import { GraphMergePinMomentData } from '../../../../../debug/graph/watchGraphPinMergeEvent'
@@ -3334,6 +3333,10 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
         } else {
           this._unlock_control()
           this._disable_transcend()
+
+          if (this._focused) {
+            this._hide_control(animate)
+          }
         }
       }
     }
@@ -3430,7 +3433,7 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
 
   private _enable_minimap_drag_and_drop = () => {
     // console.log('Graph', '_enable_minimap_drag_and_drop')
-    
+
     if (this._minimap) {
       this._minimap.$element.setAttribute('draggable', 'true')
 
@@ -17912,11 +17915,11 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
             slot_children,
             slot_name,
             () => {
+              this._layout_sub_components_commit_base(children)
+
               for (const child_id of children) {
                 this._insert_sub_component_child(sub_component_id, child_id)
               }
-
-              this._layout_sub_components_commit_base(children)
             }
           )
         }
@@ -25690,7 +25693,7 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
     sub_component_ids: string[]
   ): void => {
     for (const sub_component_id of sub_component_ids) {
-      this._append_sub_component_base(sub_component_id)
+      this._append_sub_component_root_base(sub_component_id)
     }
   }
 
@@ -30823,7 +30826,7 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
   }
 
   private _pod_set_plug_data = (plug_node_id: string, data: string) => {
-    console.log('Graph', '_pod_set_plug_data', plug_node_id, data)
+    // console.log('Graph', '_pod_set_plug_data', plug_node_id, data)
 
     const { pinId, type } = segmentPlugNodeId(plug_node_id)
 
@@ -37529,7 +37532,7 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_on_capture_gesture_end')
 
-    const { specs } = this.$props
+    const { specs, getSpec, newSpec } = this.$props
 
     const { $x, $y, $sx, $sy } = this.$context
 
@@ -37682,9 +37685,9 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
             const position = { x, y }
 
             if (this._mode === 'none') {
-              const newUUID = newSpecId(specs)
+              const id = newSpecId(specs)
 
-              this._add_empty_spec(newUUID, {
+              this._add_empty_spec(id, {
                 render: true,
                 component: {
                   defaultWidth: width,
@@ -37693,12 +37696,19 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
               })
 
               const unit = {
-                id: newUUID,
+                id,
               }
 
-              const bundle = { unit }
+              const new_spec = getSpec(id) as GraphSpec
 
-              const new_unit_id = this._new_unit_id(newUUID)
+              const bundle: UnitBundleSpec = {
+                unit,
+                specs: {
+                  [id]: new_spec,
+                },
+              }
+
+              const new_unit_id = this._new_unit_id(id)
 
               const pin_position = emptyIO<Dict<Position>>({}, {})
 
@@ -41392,28 +41402,6 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
     )
   }
 
-  private _pod_move_plug_into_graph = (
-    graphId: string,
-    exposed_pin_node_id: string,
-    next_plug_spec_map: IOOf<Dict<Dict<GraphSubPinSpec>>>
-  ) => {
-    const { pinId, type, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
-
-    const subPinSpec = pathOrDefault(
-      next_plug_spec_map,
-      [type, pinId, subPinId],
-      {}
-    )
-
-    this._pod.$movePlugInto({
-      graphId,
-      type,
-      pinId,
-      subPinId,
-      subPinSpec,
-    })
-  }
-
   private _state_move_plug_into_graph__inject = (
     graph_id: string,
     exposed_pin_node_id: string,
@@ -42281,24 +42269,6 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _pod_move_link_pin_into_graph = (
-    graphId: string,
-    unitId: string,
-    type: IO,
-    pinId: string,
-    nextPinId: string,
-    nextMergeId: string
-  ): void => {
-    // console.log('Graph', '_pod_move_link_pin_into_graph', graph_id, unit_id, type, pin_id, next_pin_id)
-
-    this._pod.$moveLinkPinInto({
-      graphId,
-      unitId,
-      type,
-      pinId,
-    })
-  }
-
   private _move_merge_into_graph = (
     graph_id: string,
     merge_id: string,
@@ -42821,30 +42791,6 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
       position
     )
     this._state_move_merge_into_graph__reconnect(graph_id, opt, plug, meta)
-  }
-
-  private _pod_move_merge_into_graph = (
-    graph_id: string,
-    merge_id: string,
-    next_merge_input_id: {
-      mergeId: string
-      pinId: string
-      subPinSpec: GraphSubPinSpec
-    },
-    next_merge_output_id: {
-      mergeId: string
-      pinId: string
-      subPinSpec: GraphSubPinSpec
-    }
-  ): void => {
-    // console.log('Graph', '_pod_move_merge_into_graph', graph_id, merge_id, next_merge_id)
-
-    this._pod.$moveMergePinInto({
-      graphId: graph_id,
-      mergeId: merge_id,
-      nextInputMergeId: next_merge_input_id,
-      nextOutputMergeId: next_merge_output_id,
-    })
   }
 
   private _set_long_press_pointer = (
@@ -45713,7 +45659,7 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
             'add_merge',
             'remove_merge',
             'move_subgraph_into',
-            'inject_graph',
+            'move_subgraph_out_of',
             'set_pin_set_id',
             'set_unit_pin_constant',
             'set_unit_pin_ignored',
@@ -47016,7 +46962,7 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
     } = data
 
     if (path.length === 0) {
-      let spec = emptySpec({})
+      const spec = emptySpec({})
 
       const position = this._jiggle_world_screen_center()
 
@@ -47024,23 +46970,23 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _on_inject_graph = (data: GraphInjectGraphMomentData) => {
-    // console.log('Graph', '_on_inject_graph', data)
-
-    const { specs, setSpec } = this.$props
-
-    const { bundle, path } = data
+  private _on_move_subgraph_out_of = (
+    data: GraphMoveSubgraphIntoMomentData
+  ) => {
+    const {
+      graphId,
+      nodeIds,
+      nextIdMap,
+      nextPinIdMap,
+      nextMergePinId,
+      nextPlugSpec,
+      nextSubComponentParentMap,
+      nextSubComponentChildrenMap,
+      path,
+    } = data
 
     if (path.length === 0) {
-      const new_spec_id = bundle.spec.id
-
-      setSpec(new_spec_id, bundle.spec)
-
-      const position = this._jiggle_world_screen_center()
-
-      this.__state_paste_spec(bundle.spec, position)
-    } else {
-      this._on_graph_unit_inject_graph(data)
+      //
     }
   }
 
@@ -47157,16 +47103,6 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _on_graph_unit_inject_graph = (data: GraphInjectGraphMomentData) => {
-    // console.log('Graph', '_on_graph_unit_inject_graph', data)
-
-    const { specs, setSpec } = this.$props
-
-    const { bundle, path } = data
-
-    // TODO
-  }
-
   private _on_graph_unit_move_subgraph_into = (
     data: GraphMoveSubgraphIntoMomentData
   ) => {
@@ -47217,6 +47153,12 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
         this._spec_graph_unit_remove_pin(graph_unit_id, type, pin_id)
       }
     })
+  }
+
+  private _on_graph_unit_move_subgraph_out_of = (
+    data: GraphMoveSubgraphIntoMomentData
+  ) => {
+    // console.log('Graph', '_on_graph_unit_move_subgraph_out_of', data)
   }
 
   private _sim_graph_remove_unit_pin = (
@@ -47855,6 +47797,15 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
               removePinData: (data) => {
                 //
               },
+              moveSubgraphInto: () => {
+                //
+              },
+              coverPin: () => {
+                //
+              },
+              exposePin: () => {
+                //
+              },
             },
             (_, callback) => {
               return (data) => {
@@ -47920,8 +47871,8 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
       expose_pin_set: this._on_graph_unit_expose_pin_set,
       cover_pin_set: this._on_graph_unit_cover_pin_set,
       set_pin_set_functional: this._on_graph_unit_set_pin_set_functional,
-      inject_graph: this._on_graph_unit_inject_graph,
       move_subgraph_into: this._on_graph_unit_move_subgraph_into,
+      move_subgraph_out_of: this._on_graph_unit_move_subgraph_out_of,
       set_pin_set_id: this._on_graph_unit_set_pin_set_id,
       set_unit_pin_constant: this._on_graph_unit_set_unit_pin_constant,
       set_unit_pin_ignored: this._on_graph_unit_set_unit_pin_ignored,
@@ -48020,7 +47971,7 @@ export class _Editor extends Element<HTMLDivElement, _Props> {
       unplug_pin: this._on_unplug_pin,
       set_pin_set_functional: this._on_set_pin_set_functional,
       move_subgraph_into: this._on_move_subgraph_into,
-      inject_graph: this._on_inject_graph,
+      move_subgraph_out_of: this._on_move_subgraph_out_of,
       set_unit_pin_constant: this._on_set_unit_pin_constant,
       set_unit_pin_data: this._on_set_unit_pin_data,
       bulk_edit: this._on_bulk_edit,

@@ -23,7 +23,7 @@ export function extractGraphSpecs(
   graphs: GraphSpecs = {}
 ): GraphSpecs {
   graphs[spec.id] = spec
-  
+
   const { units } = spec
 
   for (const unit_id in units) {
@@ -60,7 +60,7 @@ export function extractGraphSpecs(
     }
 
     const unit_spec = specs[id]
-    
+
     if (!unit_spec) {
       return
     }
@@ -87,7 +87,7 @@ export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
   const { id } = spec
 
   if (!id) {
-    throw new Error('')
+    throw new Error('spec id is required')
   }
 
   const specs = extractGraphSpecs(spec, _specs, clone(spec.specs ?? {}))

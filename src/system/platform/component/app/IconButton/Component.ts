@@ -100,7 +100,7 @@ export default class IconButton extends Element<HTMLDivElement, Props> {
       icon_comp,
     }
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
 
     this.registerRoot(icon_comp)
   }

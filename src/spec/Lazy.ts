@@ -23,7 +23,7 @@ import { Dict } from '../types/Dict'
 import { GraphState } from '../types/GraphState'
 import { C } from '../types/interface/C'
 import { ComponentEvents, Component_ } from '../types/interface/Component'
-import { G } from '../types/interface/G'
+import { G, G_MoveSubgraphIntoArgs, GraphSelection } from '../types/interface/G'
 import { U } from '../types/interface/U'
 import { IO } from '../types/IO'
 import { IOOf, _IOOf } from '../types/IOOf'
@@ -111,6 +111,31 @@ export function lazyFromSpec(
       })
     }
 
+    moveSubgraphOutOf(
+      ...[
+        graphId,
+        nodeIds,
+        nextIdMap,
+        nextPinIdMap,
+        nextMergePinId,
+        nextPlugSpec,
+        nextSubComponentParentMap,
+        nextSubComponentChildrenMap,
+      ]: G_MoveSubgraphIntoArgs
+    ): void {
+      this._ensure()
+      return this.__graph.moveSubgraphOutOf(
+        graphId,
+        nodeIds,
+        nextIdMap,
+        nextPinIdMap,
+        nextMergePinId,
+        nextPlugSpec,
+        nextSubComponentParentMap,
+        nextSubComponentChildrenMap
+      )
+    }
+
     removeUnitPinData(unitId: string, type: IO, pinId: string) {
       this._ensure()
       return this.__graph.removeUnitPinData(unitId, type, pinId)
@@ -138,11 +163,6 @@ export function lazyFromSpec(
     setUnitName(unitId: string, newUnitId: string, name: string): void {
       this._ensure()
       return this.__graph.setUnitName(unitId, newUnitId, name)
-    }
-
-    injectGraph(graph: Graph<any, any>): void {
-      this._ensure()
-      return this.__graph.injectGraph(graph)
     }
 
     isElement(): boolean {
@@ -173,7 +193,7 @@ export function lazyFromSpec(
     moveSubComponentRoot(
       subComponentId: string,
       children: string[],
-      slotMap: Dict<string>,
+      slotMap: Dict<string>
     ): void {
       this._ensure()
       return this.__graph.moveSubComponentRoot(
@@ -199,71 +219,26 @@ export function lazyFromSpec(
     }
 
     moveSubgraphInto(
-      graphId: string,
-      nodeIds: {
-        merge: string[]
-        link: {
-          unitId: string
-          type: IO
-          pinId: string
-        }[]
-        unit: string[]
-        plug: {
-          type: IO
-          pinId: string
-          subPinId: string
-        }[]
-      },
-      nextIdMap: {
-        merge: Dict<string>
-        link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-        plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
-        unit: Dict<string>
-      },
-      nextPinMap: Dict<{
-        input: Dict<{
-          pinId: string
-          subPinId: string
-          ref?: boolean
-          defaultIgnored?: boolean
-        }>
-        output: Dict<{
-          pinId: string
-          subPinId: string
-          ref?: boolean
-          defaultIgnored?: boolean
-        }>
-      }>,
-      nextMergePinId: Dict<{
-        input: {
-          mergeId: string
-          pinId: string
-          subPinSpec: GraphSubPinSpec
-          ref?: boolean
-        }
-        output: {
-          mergeId: string
-          pinId: string
-          subPinSpec: GraphSubPinSpec
-          ref?: boolean
-        }
-      }>,
-      nextPlugSpec: {
-        input: Dict<Dict<GraphSubPinSpec>>
-        output: Dict<Dict<GraphSubPinSpec>>
-      },
-      nextSubComponentParent: Dict<string | null>,
-      nextSubComponentChildrenMap: Dict<string[]>
+      ...[
+        graphId,
+        nodeIds,
+        nextIdMap,
+        nextPinIdMap,
+        nextMergePinId,
+        nextPlugSpec,
+        nextSubComponentParentMap,
+        nextSubComponentChildrenMap,
+      ]: G_MoveSubgraphIntoArgs
     ): void {
       this._ensure()
       return this.__graph.moveSubgraphInto(
         graphId,
         nodeIds,
         nextIdMap,
-        nextPinMap,
+        nextPinIdMap,
         nextMergePinId,
         nextPlugSpec,
-        nextSubComponentParent,
+        nextSubComponentParentMap,
         nextSubComponentChildrenMap
       )
     }
@@ -711,75 +686,9 @@ export function lazyFromSpec(
       return this.__graph.moveUnit(id, unitId, inputId)
     }
 
-    public moveUnitInto(
-      graphId: string,
-      unitId: string,
-      nextUnitId: string
-    ): void {
-      this._ensure()
-      return this.__graph.moveUnitInto(
-        graphId,
-        unitId,
-        nextUnitId,
-        {
-          input: new Set(),
-          output: new Set(),
-        },
-        new Set(),
-        {
-          input: {},
-          output: {},
-        },
-        null,
-        []
-      )
-    }
-
-    public movePlugInto(
-      graphId: string,
-      type: IO,
-      pinId: string,
-      subPinId: string,
-      subPinSpec: GraphSubPinSpec
-    ): void {
-      throw new Error('Method not implemented.')
-    }
-
-    public moveLinkPinInto(
-      graphId: string,
-      unitId: string,
-      type: IO,
-      pinId: string
-    ): void {
-      this._ensure()
-      return this.__graph.moveLinkPinInto(graphId, unitId, type, pinId)
-    }
-
-    public moveMergeInto(
-      graphId: string,
-      mergeId: string,
-      nextInputMergeId: {
-        mergeId: string
-        pinId: string
-        subPinSpec: GraphSubPinSpec
-      },
-      nextOutputMergeId: {
-        mergeId: string
-        pinId: string
-        subPinSpec: GraphSubPinSpec
-      }
-    ): void {
-      this._ensure()
-      return this.__graph.moveMergeInto(
-        graphId,
-        mergeId,
-        nextInputMergeId,
-        nextOutputMergeId
-      )
-    }
-
     public removeUnit(unitId: string): Unit {
       this._ensure()
+
       return this.__graph.removeUnit(unitId)
     }
 

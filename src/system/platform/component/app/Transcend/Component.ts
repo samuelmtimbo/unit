@@ -157,7 +157,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
       icon,
     }
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
 
     this.registerRoot(container)
 

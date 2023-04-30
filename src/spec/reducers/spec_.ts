@@ -503,7 +503,7 @@ export const setPinSetId = (
   spec: GraphSpec
 ): void => {
   const pinSpec = pathGet(spec, [`${type}s`, id])
-  
+
   pathDelete(spec, [`${type}s`, id])
   pathSet(spec, [`${type}s`, newId], pinSpec)
 }

@@ -212,10 +212,7 @@ export interface $G_C {
   })
   $moveSubComponentRoot(data: GraphMoveSubComponentRootData): void
   $moveSubgraphInto(data: GraphMoveSubGraphIntoData): void
-  $moveUnitInto(data: GraphMoveUnitIntoData): void
-  $moveLinkPinInto(data: GraphMoveLinkPinIntoData): void
-  $moveMergePinInto(data: GraphMoveMergeIntoData): void
-  $movePlugInto(data: GraphMovePlugIntoData): void
+  $moveSubgraphOutOf(data: GraphMoveSubGraphIntoData): void
   $explodeUnit(data: GraphExplodeUnitData): void
   $bulkEdit(data: GraphBulkEditData): void
 }

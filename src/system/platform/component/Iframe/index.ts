@@ -5,7 +5,17 @@ import { ID_IFRAME } from '../../../_ids'
 
 export interface I {
   src: string
+  srcdoc: string
   style: object
+  allow: {
+    autoplay?: boolean
+    camera?: boolean
+    encryptedMedia?: boolean
+    fullscreen?: boolean
+    microphone?: boolean
+    pictureInPicture?: boolean
+    scripts: boolean
+  }
 }
 
 export interface O {}
@@ -16,7 +26,7 @@ export default class Iframe extends Element_<I, O> implements CH {
   constructor(system: System) {
     super(
       {
-        i: ['src', 'srcdoc', 'style'],
+        i: ['src', 'srcdoc', 'style', 'allow'],
         o: [],
       },
       {},

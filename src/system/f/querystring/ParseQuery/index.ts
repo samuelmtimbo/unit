@@ -20,7 +20,7 @@ export default class ParseQuery extends Functional<I, O> {
       },
       {},
       system,
-    ID_PARSE_QUERY
+      ID_PARSE_QUERY
     )
   }
 

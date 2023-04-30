@@ -267,8 +267,8 @@ export function noHost(): API {
     location: {
       toString: function (): Promise<string> {
         throw new Error('Function not implemented.')
-      }
-    }
+      },
+    },
   }
 
   return api

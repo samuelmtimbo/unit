@@ -1073,7 +1073,7 @@ export class Component<
     // console.log(this.constructor.name, 'connect')
 
     if (this.$connected) {
-      throw new Error ('Component is already connected')
+      throw new Error('Component is already connected')
     }
 
     this.$unit = $unit
@@ -1751,6 +1751,7 @@ export class Component<
     } else {
       if (!wrapped.$primitive) {
         for (const root of wrapped.$mountRoot) {
+          // for (const root of wrapped.$root) {
           this.domAppendParentChildAt(root, slotName, at, at)
         }
       } else {

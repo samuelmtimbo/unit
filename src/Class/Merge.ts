@@ -49,7 +49,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
       // if (this._current !== undefined) {
       //   this._i_start_count -= 1
       // }
-      
+
       this._current = name
     }
   }

@@ -198,7 +198,7 @@ export const reflectComponentBaseTrait = (
       )
     } else if (is_root) {
       root_sub_sub_component_id.push(sub_component_id)
-     
+
       all_root_style.push(leaf_style)
       root_leaf_id.push(leaf_id)
     }
