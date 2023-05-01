@@ -114,7 +114,7 @@ export default class Zoom_ extends Element<HTMLDivElement, Props> {
       svg_g,
     }
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
 
     this.registerRoot(zoom)
 

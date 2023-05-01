@@ -13,6 +13,11 @@
       "type": "string",
       "optional": true,
       "defaultIgnored": true
+    },
+    "allow": {
+      "type": "{autoplay?:boolean,camera?:boolean,encryptedMedia?:boolean,fullscreen?:boolean,microphone?:boolean,pictureInPicture?:boolean,scripts:boolean}",
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {},
@@ -20,10 +25,7 @@
     "icon": "square",
     "description": "website container container",
     "complexity": 20,
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "32ff22b0-8221-4584-9c78-d21102dcfa6a",
   "base": true,

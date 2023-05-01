@@ -83,7 +83,7 @@ export class Element<
 
     $unit.$read({}, (state) => {
       const { specs, classes } = this.$system
-      
+
       const _state = evaluate(state, specs, classes)
 
       for (const name in _state) {

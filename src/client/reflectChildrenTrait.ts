@@ -4,6 +4,7 @@ import { LayoutNode } from './LayoutNode'
 import { parseBorder } from './parseBorder'
 import { parseLayoutValue } from './parseLayoutValue'
 import { parseMargin } from './parseMargin'
+import { parsePadding } from './parsePadding'
 import { parseTransformXY } from './parseTransformXY'
 import { Rect, rectsBoundingRect } from './util/geometry'
 import { parseFontSize } from './util/style/getFontSize'
@@ -52,6 +53,7 @@ export function reflectChildrenTrait(
     gap: parentGap = '0px',
     alignItems: parentAlignItems = 'start',
     alignContent: parentAlignContent = 'normal',
+    padding: parentPadding = '0px',
   } = _parentStyle
 
   const { width: parentWidth, height: parentHeight } = parentTrait
@@ -214,27 +216,15 @@ export function reflectChildrenTrait(
     }
 
     if (childPadding) {
-      // const {
-      //   left: paddingLeft,
-      //   top: paddingTop,
-      //   right: paddingRight,
-      //   bottom: paddingBottom,
-      // } = parsePadding(childPadding)
-
-      // const [pxPaddingLeft] = parseLayoutValue(paddingLeft)
-      // const [pxPaddingRight] = parseLayoutValue(paddingRight)
-      // const [pxPaddingTop] = parseLayoutValue(paddingTop)
-      // const [pxPaddingBottom] = parseLayoutValue(paddingBottom)
+      const {
+        left: pxPaddingLeft,
+        top: pxPaddingTop,
+        right: pxPaddingRight,
+        bottom: pxPaddingBottom,
+      } = parsePadding(childPadding)
 
       // width += pxPaddingLeft + pxPaddingRight
       // height += pxPaddingTop + pxPaddingBottom
-
-      const paddingValue = parseLayoutValue(childPadding)
-
-      const [pxPadding] = paddingValue
-
-      width += 2 * pxPadding
-      height += 2 * pxPadding
     }
 
     const [
@@ -263,8 +253,8 @@ export function reflectChildrenTrait(
 
     let fontSize =
       (childFontSizeStr && parseFontSize(childFontSize)) || parentFontSize
-      
-      const fontSizeUnit = childFontSizeStr?.match(/(px|em|rem|pt|vw|vh|%)$/)?.[1]
+
+    const fontSizeUnit = childFontSizeStr?.match(/(px|em|rem|pt|vw|vh|%)$/)?.[1]
 
     if (fontSizeUnit === 'vw') {
       fontSize *= parentWidth / 100
@@ -275,6 +265,21 @@ export function reflectChildrenTrait(
     }
 
     const childOpacity = parseOpacity(childOpacityStr)
+
+    if (parentPadding) {
+      const {
+        left: pxPaddingLeft,
+        top: pxPaddingTop,
+        right: pxPaddingRight,
+        bottom: pxPaddingBottom,
+      } = parsePadding(parentPadding)
+
+      width -= pxPaddingLeft + pxPaddingRight
+      height -= pxPaddingTop + pxPaddingBottom
+
+      x += pxPaddingLeft
+      y += pxPaddingTop
+    }
 
     if (parentDisplay === 'block') {
       if (childPosition === 'relative') {

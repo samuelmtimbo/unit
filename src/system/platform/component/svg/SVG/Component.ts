@@ -91,7 +91,7 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
 
     this.$element = svg_el
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
   }
 
   onPropChanged(prop: string, current: any): void {

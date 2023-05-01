@@ -66,7 +66,7 @@ export default class Fetch extends Functional<I, O> {
             // request is outdated
             return
           }
-          
+
           if (
             err.message.toLowerCase() ===
             "failed to execute 'fetch' on 'window': request with get/head method cannot have body."

@@ -56,7 +56,7 @@ export function mapObjKeyVK<V>(
   const result = {}
   for (const key in obj) {
     const value = obj[key]
-    
+
     result[callback(value, key)] = value
   }
   return result

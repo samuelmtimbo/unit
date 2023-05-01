@@ -1,5 +1,4 @@
 import { Unit } from '../Class/Unit'
-import { injectSpecs } from '../client/spec'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { Specs } from '../types'
@@ -22,7 +21,8 @@ export function unitFromBundleSpec(
   const { classes } = system
 
   if (unitBundleSpec.specs) {
-    injectSpecs(specs, unitBundleSpec.specs)
+    // injectSpecs(specs, unitBundleSpec.specs)
+    system.injectSpecs(unitBundleSpec.specs)
   }
 
   const Bundle = fromId(id, specs, classes, branch)

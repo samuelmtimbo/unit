@@ -64,7 +64,7 @@ export default class ModeIconButton extends Element<HTMLDivElement, Props> {
       icon_button,
     }
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
 
     this.registerRoot(icon_button)
   }

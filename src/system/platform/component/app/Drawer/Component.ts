@@ -211,7 +211,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     this.$element = $element
     this.$slot = drawer.$slot
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
 
     this.registerRoot(drawer)
   }

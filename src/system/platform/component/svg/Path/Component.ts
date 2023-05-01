@@ -101,7 +101,7 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
 
     this.$element = path_el
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
   }
 
   onPropChanged(prop: string, current: any): void {

@@ -3,6 +3,7 @@ import {
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
+  GraphPinsSpec,
   GraphSpec,
   GraphSubPinSpec,
   GraphUnitSpec,
@@ -21,6 +22,73 @@ import { IO } from '../IO'
 import { IOOf, _IOOf } from '../IOOf'
 import { UnitBundleSpec } from '../UnitBundleSpec'
 import { U } from './U'
+
+export type GraphSelection = {
+  merge: string[]
+  link: {
+    unitId: string
+    type: IO
+    pinId: string
+  }[]
+  unit: string[]
+  plug: {
+    type: IO
+    pinId: string
+    subPinId: string
+  }[]
+}
+
+export type GraphSelectionSpec = {
+  units: GraphUnitsSpec
+  merges: GraphMergesSpec
+  inputs: GraphPinsSpec
+  outputs: GraphPinsSpec
+}
+
+export type G_MoveSubgraphIntoArgs = [
+  string,
+  GraphSelection,
+  {
+    merge: Dict<string>
+    link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
+    plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
+    unit: Dict<string>
+  },
+  Dict<{
+    input: Dict<{
+      pinId: string
+      subPinId: string
+      ref?: boolean
+      defaultIgnored?: boolean
+    }>
+    output: Dict<{
+      pinId: string
+      subPinId: string
+      ref?: boolean
+      defaultIgnored?: boolean
+    }>
+  }>,
+  Dict<{
+    input: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+      ref?: boolean
+    }
+    output: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+      ref?: boolean
+    }
+  }>,
+  {
+    input: Dict<Dict<GraphSubPinSpec>>
+    output: Dict<Dict<GraphSubPinSpec>>
+  },
+  Dict<string | null>,
+  Dict<string[]>
+]
 
 export interface G<I = any, O = any> {
   exposePinSet(
@@ -123,88 +191,8 @@ export interface G<I = any, O = any> {
     slotMap: Dict<string>
   ): void
   moveUnit(id: string, unitId: string, inputId: string): void
-  injectGraph(graph: Graph): void
-  moveSubgraphInto(
-    graphId: string,
-    nodeIds: {
-      merge: string[]
-      link: {
-        unitId: string
-        type: IO
-        pinId: string
-      }[]
-      unit: string[]
-      plug: {
-        type: IO
-        pinId: string
-        subPinId: string
-      }[]
-    },
-    nextIdMap: {
-      merge: Dict<string>
-      link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-      plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
-      unit: Dict<string>
-    },
-    nextPinIdMap: Dict<{
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    }>,
-    nextMergePinId: Dict<{
-      input: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
-      output: { mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }
-    }>,
-    nextPlugSpec: {
-      input: Dict<Dict<GraphSubPinSpec>>
-      output: Dict<Dict<GraphSubPinSpec>>
-    },
-    nextSubComponentParentMap: Dict<string | null>,
-    nextSubComponentChildrenMap: Dict<string[]>
-  ): void
-  moveUnitInto(
-    graphId: string,
-    unitId: string,
-    nextUnitId: string,
-    ignoredPin: { input: Set<string>; output: Set<string> },
-    ignoredMerge: Set<string>,
-    nextPinMap: {
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    },
-    nextSubComponentParent: string | null,
-    nextSubComponentChildren: string[]
-  ): void
-  moveLinkPinInto(
-    graphId: string,
-    unitId: string,
-    type: IO,
-    pinId: string,
-    mergeId: string | null,
-    oppositePinId: string | null,
-    emit: boolean,
-    graph?: Graph
-  ): void
-  moveMergeInto(
-    graphId: string,
-    mergeId: string,
-    nextInputMergeId: {
-      mergeId: string
-      pinId: string
-      subPinSpec: GraphSubPinSpec
-    },
-    nextOutputMergeId: {
-      mergeId: string
-      pinId: string
-      subPinSpec: GraphSubPinSpec
-    }
-  ): void
-  movePlugInto(
-    graphId: string,
-    type: IO,
-    pinId: string,
-    subPinId: string,
-    subPinSpec: GraphSubPinSpec
-  ): void
+  moveSubgraphInto(...args: G_MoveSubgraphIntoArgs): void
+  moveSubgraphOutOf(...args: G_MoveSubgraphIntoArgs): void
   reorderSubComponent(
     parentId: string | null,
     childId: string,
@@ -267,64 +255,8 @@ export type G_EE = {
     Dict<string>,
     string[]
   ]
-  move_subgraph_into: [
-    string,
-    {
-      merge: string[]
-      link: {
-        unitId: string
-        type: IO
-        pinId: string
-      }[]
-      unit: string[]
-      plug: {
-        type: IO
-        pinId: string
-        subPinId: string
-      }[]
-    },
-    {
-      merge: Dict<string>
-      link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-      plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
-      unit: Dict<string>
-    },
-    Dict<{
-      input: Dict<{
-        pinId: string
-        subPinId: string
-        ref?: boolean
-        defaultIgnored?: boolean
-      }>
-      output: Dict<{
-        pinId: string
-        subPinId: string
-        ref?: boolean
-        defaultIgnored?: boolean
-      }>
-    }>,
-    Dict<{
-      input: {
-        mergeId: string
-        pinId: string
-        subPinSpec: GraphSubPinSpec
-        ref?: boolean
-      }
-      output: {
-        mergeId: string
-        pinId: string
-        subPinSpec: GraphSubPinSpec
-        ref?: boolean
-      }
-    }>,
-    {
-      input: Dict<Dict<GraphSubPinSpec>>
-      output: Dict<Dict<GraphSubPinSpec>>
-    },
-    Dict<string | null>,
-    Dict<string[]>,
-    string[]
-  ]
+  move_subgraph_into: [...G_MoveSubgraphIntoArgs, string[]]
+  move_subgraph_out_of: [...G_MoveSubgraphIntoArgs, string[]]
   move_unit_into: [
     string,
     string,
@@ -360,7 +292,6 @@ export type G_EE = {
   set_unit_pin_ignored: [string, IO, string, boolean, string[]]
   set_unit_pin_data: [string, IO, string, any, string[]]
   set_unit_pin_functional: [string, IO, string, boolean, string[]]
-  inject_graph: [BundleSpec, string[]]
   metadata: [{ path: string[]; data: any }, string[]]
   component_append: [string, GraphUnitSpec, string[]]
   component_remove: [string, string[]]

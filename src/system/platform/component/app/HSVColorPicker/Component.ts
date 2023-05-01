@@ -148,7 +148,7 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
 
     this.$slot['default'] = color_picker.$slot['default']
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
     this.$subComponent = {
       color_picker,
       background,

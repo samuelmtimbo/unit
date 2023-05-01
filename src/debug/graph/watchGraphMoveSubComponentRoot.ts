@@ -20,7 +20,14 @@ export function watchGraphMoveSubComponentRoot(
   callback: (moment: GraphMoveSubcomponentRootMoment) => void
 ): () => void {
   const listener = (
-    ...[parentId, prevParentIdMap, children, slotMap, prevSlotMap, path]: G_EE['move_sub_component_root']
+    ...[
+      parentId,
+      prevParentIdMap,
+      children,
+      slotMap,
+      prevSlotMap,
+      path,
+    ]: G_EE['move_sub_component_root']
   ) => {
     callback({
       type: 'graph',

@@ -30,7 +30,11 @@ export function stringifyDataObj(obj: Dict<any>) {
   return _obj
 }
 
-export function evaluateDataObj(obj: Dict<any>, specs: Specs, classes: Classes): Dict<any> {
+export function evaluateDataObj(
+  obj: Dict<any>,
+  specs: Specs,
+  classes: Classes
+): Dict<any> {
   const _obj = {}
 
   for (const name in obj) {

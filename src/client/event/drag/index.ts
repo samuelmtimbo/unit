@@ -1,11 +1,9 @@
 import { IOMouseEvent } from '../pointer'
 
-
 export interface IODataTransferItem {
   kind: string
   type: string
 }
-
 
 export interface IODataTransfer {
   dropEffect: string
@@ -14,7 +12,6 @@ export interface IODataTransfer {
   items: IODataTransferItem[]
   types: string[]
 }
-
 
 export interface IODragEvent extends IOMouseEvent {
   dataTransfer: IODataTransfer
@@ -34,7 +31,9 @@ export const parseDataTransfer = (
   }
 }
 
-export const parseDataTransferItems = (items: DataTransferItemList): IODataTransferItem[] => {
+export const parseDataTransferItems = (
+  items: DataTransferItemList
+): IODataTransferItem[] => {
   const result: IODataTransferItem[] = []
 
   for (let i = 0; i < items.length; i++) {

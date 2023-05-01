@@ -106,7 +106,7 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
     const $element = parentElement($system)
 
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
     this.$element = $element
     this.$slot = icon_button.$slot
     this.$subComponent = {

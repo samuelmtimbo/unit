@@ -45,7 +45,7 @@ export const DEFAULT_STYLE = {
   // width: '0px',
   // height: '0px',
   // position: 'absolute',
-  position: 'absolute',
+  position: 'relative',
   width: '100%',
   height: '100%',
   overflow: 'hidden',

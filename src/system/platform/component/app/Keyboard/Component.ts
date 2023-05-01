@@ -226,7 +226,7 @@ export default class Keyboard extends Element<HTMLDivElement, Props> {
       keyboard,
     }
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
 
     this.registerRoot(keyboard)
   }

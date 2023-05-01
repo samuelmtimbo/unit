@@ -11,8 +11,8 @@ export interface GraphMoveSubgraphIntoMomentData
 export interface GraphMoveSubgraphIntoMoment
   extends Moment<GraphMoveSubgraphIntoMomentData> {}
 
-export function watchGraphMoveSubgraphIntoEvent(
-  event: 'move_subgraph_into',
+export function watchGraphMoveSubgraphEvent(
+  event: 'move_subgraph_into' | 'move_subgraph_out_of',
   graph: Graph,
   callback: (moment: GraphMoveSubgraphIntoMoment) => void
 ): () => void {

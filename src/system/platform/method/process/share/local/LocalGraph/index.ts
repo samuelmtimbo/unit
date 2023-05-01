@@ -119,11 +119,7 @@ export default class LocalGraph extends Functional<I, O> {
 
     const $graph: $Graph = AsyncWorkerGraph(remote_port)
 
-    const graph = $wrap<$Graph>(this.__system, $graph, [
-      'U',
-      'C',
-      'G',
-    ])
+    const graph = $wrap<$Graph>(this.__system, $graph, ['U', 'C', 'G'])
 
     done({ graph })
   }

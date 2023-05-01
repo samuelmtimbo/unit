@@ -37,7 +37,7 @@ export default class _Datum extends Element<HTMLDivElement, Props> {
       datum,
     }
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
 
     this.appendRoot(datum)
   }

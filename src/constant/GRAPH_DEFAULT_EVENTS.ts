@@ -18,7 +18,7 @@ export const GRAPH_DEFAULT_EVENTS: (keyof G_EE | keyof C_EE | keyof U_EE)[] = [
   'plug_pin',
   'unplug_pin',
   'move_subgraph_into',
-  'inject_graph',
+  'move_subgraph_into',
   'move_unit_into',
   'expose_pin_set',
   'cover_pin_set',

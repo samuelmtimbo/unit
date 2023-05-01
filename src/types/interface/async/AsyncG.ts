@@ -501,54 +501,26 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       )
     },
 
-    $moveUnitInto({
+    $moveSubgraphOutOf({
       graphId,
-      unitId,
-      nextUnitId,
-      ignoredPin,
-      ignoredMerge,
-      nextPinMap,
-      nextUnitSubComponentParent,
-      nextSubComponentChildren,
-    }: GraphMoveUnitIntoData): void {
-      graph.moveUnitInto(
+      nodeIds,
+      nextIdMap,
+      nextPinIdMap,
+      nextMergePinId,
+      nextPlugSpec,
+      nextSubComponentParentMap,
+      nextSubComponentChildrenMap,
+    }: GraphMoveSubGraphIntoData): void {
+      graph.moveSubgraphInto(
         graphId,
-        unitId,
-        nextUnitId,
-        ignoredPin,
-        ignoredMerge,
-        nextPinMap,
-        nextUnitSubComponentParent,
-        nextSubComponentChildren
+        nodeIds,
+        nextIdMap,
+        nextPinIdMap,
+        nextMergePinId,
+        nextPlugSpec,
+        nextSubComponentParentMap,
+        nextSubComponentChildrenMap
       )
-    },
-
-    $moveLinkPinInto({
-      graphId,
-      unitId,
-      type,
-      pinId,
-    }: GraphMoveLinkPinIntoData): void {
-      graph.moveLinkPinInto(graphId, unitId, type, pinId)
-    },
-
-    $moveMergePinInto({
-      graphId,
-      mergeId,
-      nextInputMergeId,
-      nextOutputMergeId,
-    }: GraphMoveMergeIntoData): void {
-      graph.moveMergeInto(graphId, mergeId, nextInputMergeId, nextOutputMergeId)
-    },
-
-    $movePlugInto({
-      graphId,
-      type,
-      pinId,
-      subPinId,
-      subPinSpec,
-    }: GraphMovePlugIntoData): void {
-      graph.movePlugInto(graphId, type, pinId, subPinId, subPinSpec)
     },
 
     $explodeUnit({

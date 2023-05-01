@@ -364,7 +364,7 @@ export class Primitive<
 
   private _onInputRemoved(name: string, input: Pin<any>): void {
     this._plunkInput(name, input)
-    
+
     if (input.active()) {
       this._deactivateInput(name)
     }

@@ -1,6 +1,9 @@
+import { addListeners } from '../../../../../client/addListener'
 import classnames from '../../../../../client/classnames'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
+import { Context } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
+import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { Mode, MODE_LIST } from '../../../../../client/mode'
 import parentElement from '../../../../../client/platform/web/parentElement'
@@ -8,6 +11,7 @@ import { COLOR_NONE, getThemeModeColor } from '../../../../../client/theme'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { Unlisten } from '../../../../../types/Unlisten'
 import Div from '../../Div/Component'
 import SVGRect from '../../svg/Rect/Component'
 import ModeIconButton from '../ModeIconButton/Component'
@@ -140,13 +144,6 @@ export default class Modes extends Element<HTMLDivElement, Props> {
           style: {
             position: 'relative',
             overflow: 'visible',
-            // top: '50%',
-            // left: '50%',
-            // transform: 'translate(-50%, -50%)',
-            // width: '42px',
-            // height: '42px',
-            // padding: '12px',
-            // zoom: `${0.51}`,
             color,
           },
           title: mode,
@@ -224,7 +221,7 @@ export default class Modes extends Element<HTMLDivElement, Props> {
       multiselect: this._mode_button['multiselect'],
     }
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
 
     this.registerRoot(list)
   }
@@ -289,6 +286,8 @@ this.$primitive = true
   }
 
   private _reset_color = (): void => {
+    // console.log('ModeSelector', '_reset_color')
+
     if (this.$context) {
       const { $theme } = this.$context
       const { style = {} } = this.$props
@@ -322,5 +321,17 @@ this.$primitive = true
 
   public getMode(): Mode {
     return this._mode
+  }
+
+  private _context_unlisten: Unlisten
+
+  onMount(): void {
+    this._context_unlisten = addListeners(this.$context, [
+      makeCustomListener('themechanged', this._reset_color),
+    ])
+  }
+
+  onUnmount($context: Context): void {
+    this._context_unlisten()
   }
 }

@@ -398,7 +398,11 @@ export function _isTypeMatch(
 
         return match
       } else if (source.type === TreeNodeType.Unit) {
-        const bundle = evaluateBundleStr(source.value, system.specs, system.classes) as UnitBundleSpec
+        const bundle = evaluateBundleStr(
+          source.value,
+          system.specs,
+          system.classes
+        ) as UnitBundleSpec
 
         const specId = bundle.unit.id
 
@@ -1150,7 +1154,7 @@ export function _extractGenerics(
         const childGenerics = _extractGenerics(
           specs,
           valueKeyValueMap[_key] ?? valueKeyValueMap[key],
-        typeKeyValueMap[_key] ?? typeKeyValueMap[key]
+          typeKeyValueMap[_key] ?? typeKeyValueMap[key]
         )
         for (const name in childGenerics) {
           const childGeneric = childGenerics[name]

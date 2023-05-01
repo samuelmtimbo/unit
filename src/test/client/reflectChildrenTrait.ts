@@ -1914,22 +1914,22 @@ assert.deepEqual(
       opacity: 1,
     },
     {
+      padding: '20px',
     },
     [
       {
         height: '50px',
         width: '50px',
-        padding: '20px',
         margin: '10px',
       },
     ]
   ),
   [
     {
-      x: 10,
-      y: 10,
-      width: 90,
-      height: 90,
+      x: 30,
+      y: 30,
+      width: 10,
+      height: 10,
       fontSize: 10,
       sx: 1,
       sy: 1,

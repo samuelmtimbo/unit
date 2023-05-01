@@ -92,7 +92,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
       cabinet,
     }
     this.$unbundled = false
-this.$primitive = true
+    this.$primitive = true
 
     this.registerRoot(cabinet)
   }
