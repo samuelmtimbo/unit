@@ -1,9 +1,9 @@
-import { IOPointerEvent, listenPointerEvent } from '.'
+import { UnitPointerEvent, listenPointerEvent } from '.'
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 
 export function makePointerCancelListener(
-  listener: (event: IOPointerEvent) => void,
+  listener: (event: UnitPointerEvent) => void,
   _global: boolean = false
 ): Listener {
   return (component) => {
@@ -13,7 +13,7 @@ export function makePointerCancelListener(
 
 export function listenPointerCancel(
   component: Listenable,
-  listener: (event: IOPointerEvent) => void,
+  listener: (event: UnitPointerEvent) => void,
   _global: boolean = false
 ): () => void {
   return listenPointerEvent('pointercancel', component, listener, _global)

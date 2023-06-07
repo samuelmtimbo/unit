@@ -3,7 +3,7 @@ import { System } from '../../system'
 import { Unlisten } from '../../types/Unlisten'
 import namespaceURI from '../component/namespaceURI'
 import { _addEventListener } from '../event'
-import { IOPointerEvent } from '../event/pointer'
+import { UnitPointerEvent } from '../event/pointer'
 import { Point } from '../util/geometry'
 
 function getSvgPathFromStroke(stroke): string {
@@ -53,7 +53,7 @@ export function attachGesture(system: System): void {
   } = system
 
   const captureGesture = (
-    event: IOPointerEvent,
+    event: UnitPointerEvent,
     opt: {
       lineWidth?: number
       strokeStyle?: string

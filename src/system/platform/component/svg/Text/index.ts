@@ -4,6 +4,7 @@ import { Dict } from '../../../../../types/Dict'
 import { ID_TEXT } from '../../../../_ids'
 
 export interface I {
+  value: string
   style: Dict<string>
 }
 
@@ -13,7 +14,7 @@ export default class SVGText extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style'],
+        i: ['value', 'style'],
         o: [],
       },
       {},

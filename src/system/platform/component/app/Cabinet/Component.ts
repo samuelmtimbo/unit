@@ -88,11 +88,13 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     const $element = parentElement($system)
 
     this.$element = $element
-    this.$subComponent = {
-      cabinet,
-    }
+
     this.$unbundled = false
     this.$primitive = true
+
+    this.setSubComponents({
+      cabinet,
+    })
 
     this.registerRoot(cabinet)
   }

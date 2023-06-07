@@ -1,20 +1,20 @@
 import assocPath from '../../system/core/object/AssocPath/f'
 import pathGet from '../../system/core/object/DeepGet/f'
-import dissocPath from '../../system/core/object/DissocPath/f'
+import dissocPath from '../../system/core/object/DeletePath/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
-import _dissoc from '../../system/f/object/Dissoc/f'
+import _dissoc from '../../system/f/object/Delete/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import {
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
-  GraphSpec,
   GraphSubPinSpec,
   GraphUnitSpec,
   GraphUnitsSpec,
 } from '../../types'
+import { GraphSpec } from '../../types/GraphSpec'
 import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
 import {
@@ -91,7 +91,7 @@ export const expandUnit = (
             } else {
               state = addPinToMerge(
                 {
-                  id: mergeId,
+                  mergeId: mergeId,
                   type: 'input',
                   unitId: subInputSpec.unitId!,
                   pinId: subInputSpec.pinId!,
@@ -113,7 +113,7 @@ export const expandUnit = (
             } else {
               state = addPinToMerge(
                 {
-                  id: mergeId,
+                  mergeId: mergeId,
                   type: 'output',
                   unitId: subOutputSpec.unitId!,
                   pinId: subOutputSpec.pinId!,
@@ -280,24 +280,26 @@ export const addMerge = (
 
 export const addPinToMerge = (
   {
-    id,
+    mergeId,
     unitId,
     type,
     pinId,
-  }: { id: string; type: IO; unitId: string; pinId: string },
+  }: { mergeId: string; type: IO; unitId: string; pinId: string },
   state: State
 ): State => {
   // reassign exposed pin if it has just been merged
   forEachValueKey(state[`${type}s`], ({ name, plug = {} }, exposedPinId) => {
     for (const subPinId in plug) {
       const subPin = plug[subPinId]
+      
       const { unitId: _unitId, pinId: _pinId } = subPin
+      
       if (_unitId === unitId && _pinId === pinId) {
         state = coverPinSet({ pinId: exposedPinId, type }, state)
         state = exposePinSet(
           {
             pinId: exposedPinId,
-            pin: { name, plug: { 0: { mergeId: id } } },
+            pin: { name, plug: { 0: { mergeId } } },
             type,
           },
           state
@@ -306,7 +308,7 @@ export const addPinToMerge = (
     }
   })
 
-  return assocPath(state, ['merges', id, unitId, type, pinId], true)
+  return assocPath(state, ['merges', mergeId, unitId, type, pinId], true)
 }
 
 export const addMerges = (

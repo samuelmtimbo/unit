@@ -225,11 +225,12 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
 
     this.$element = $element
     this.$slot = keyboard.$slot
-    this.$subComponent = {
-      keyboard,
-    }
     this.$unbundled = false
     this.$primitive = true
+
+    this.setSubComponents({
+      keyboard,
+    })
 
     this.registerRoot(keyboard)
   }

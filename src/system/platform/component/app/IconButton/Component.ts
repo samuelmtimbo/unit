@@ -96,11 +96,12 @@ export default class IconButton extends Element<HTMLDivElement, Props> {
 
     this.$element = $element
     this.$slot = { default: icon_comp }
-    this.$subComponent = {
-      icon_comp,
-    }
     this.$unbundled = false
     this.$primitive = true
+
+    this.setSubComponents({
+      icon_comp,
+    })
 
     this.registerRoot(icon_comp)
   }

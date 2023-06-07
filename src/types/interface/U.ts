@@ -7,6 +7,7 @@ import { Pins } from '../../Pins'
 import { Dict } from '../Dict'
 import { IO } from '../IO'
 import { None } from '../None'
+import { UnitBundleSpec } from '../UnitBundleSpec'
 
 export type U_EE = {
   parent: [Unit | null]
@@ -26,7 +27,7 @@ export type U_EE = {
 }
 
 export interface U<I = any, O = any> {
-  setParent(parent: U<any, any> | null)
+  setParent(parent: Unit<any, any> | null)
   setInputs(inputs: Pins<I>, opts: PinOpts): void
   setPin(name: string, type: IO, pin: Pin<any>, opt: PinOpt)
   setPinIgnored(type: IO, name: string, ignored: boolean): void
@@ -36,6 +37,7 @@ export interface U<I = any, O = any> {
   setInputRef(name: string, ref: boolean): void
   setOutputRef(name: string, ref: boolean): void
   setInput(name: string, input: Pin<I[keyof I]>, opt: PinOpt): void
+  isPinConstant(type: IO, name: string): boolean
   isPinIgnored(type: IO, name: string): boolean
   isPinRef(type: IO, name: string): boolean
   addInput(name: string, input: Pin<any>, opt: PinOpt): void
@@ -45,7 +47,7 @@ export interface U<I = any, O = any> {
   addOutput(name: string, output: Pin<any>): void
   removeOutput(name: string): void
   removePin(type: IO, name: string)
-  getPin(type: IO, pinId: string): Pin<any>
+  getPin(type: IO, name: string): Pin<any>
   getInputs(): Pins<I>
   getDataInputs(): Pins<Partial<I>>
   getRefInputs(): Pins<Partial<I>>
@@ -82,10 +84,10 @@ export interface U<I = any, O = any> {
   getOutputCount(): number
   getInputNames(): string[]
   getOutputNames(): string[]
-  setPinData(type: IO, pinId: string, data: any): void
-  removePinData(type: IO, pinId: string): void
-  setInputConstant(pinId: string, constant: boolean): void
-  setOutputConstant(pinId: string, constant: boolean): void
+  setPinData(type: IO, name: string, data: any): void
+  removePinData(type: IO, name: string): void
+  setInputConstant(name: string, constant: boolean): void
+  setOutputConstant(name: string, constant: boolean): void
   getCatchErr(): boolean
   getConfig(): Opt
   reset(): void
@@ -107,8 +109,11 @@ export interface U<I = any, O = any> {
   hasErr(): boolean
   getErr(): string | null
   takeErr(): string | null
-  getPinData(): { input: Dict<any>; output: Dict<any> }
+  getPinsData(): { input: Dict<any>; output: Dict<any> }
   getInputData(): Dict<any>
-  getRefInputData(): Dict<U<any, any>>
+  getRefInputData(): Dict<Unit<any, any>>
   getSpec(): Spec
+  getPinData(type: IO, name: string): any
+  setPinConstant(type: IO, name: string, constant: boolean): void
+  getBundle(): UnitBundleSpec
 }

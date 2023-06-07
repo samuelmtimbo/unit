@@ -17,7 +17,7 @@ export function watchGraphUnitEvent(
   callback: (moment: GraphAddUnitMoment) => void
 ): () => void {
   const listener = (unitId: string, unit: Unit, path: string[]) => {
-    const bundle = unit.getUnitBundleSpec()
+    const bundle = unit.getBundle()
 
     callback({
       type: 'graph',

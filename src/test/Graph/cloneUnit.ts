@@ -36,7 +36,7 @@ composition0.setUnitPinData(UNIT_ID_RANGE, 'input', 'b', 3)
 
 composition0.cloneUnit(UNIT_ID_RANGE, UNIT_ID_RANGE_CLONE)
 
-const clonedRange = composition0.refUnit(UNIT_ID_RANGE_CLONE) as Graph
+const clonedRange = composition0.getUnit(UNIT_ID_RANGE_CLONE) as Graph
 
 assert(!clonedRange.paused())
 

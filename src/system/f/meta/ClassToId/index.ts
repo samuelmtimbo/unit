@@ -5,7 +5,7 @@ import { UnitBundle } from '../../../../types/UnitBundle'
 import { ID_CLASS_TO_ID } from '../../../_ids'
 
 export interface I<T> {
-  Class: UnitBundle<any>
+  class: UnitBundle<any>
 }
 
 export interface O<T> {
@@ -16,7 +16,7 @@ export default class ClassToId<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['Class'],
+        i: ['class'],
         o: ['id'],
       },
       {},
@@ -25,7 +25,7 @@ export default class ClassToId<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ Class }: I<T>, done: Done<O<T>>): void {
+  f({ class: Class }: I<T>, done: Done<O<T>>): void {
     const { __bundle } = Class
 
     const { id } = __bundle.unit

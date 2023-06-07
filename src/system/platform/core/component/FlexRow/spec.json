@@ -17,7 +17,7 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{display:'flex',flexDirection:'row',overflow:'auto'}"
+          "data": "{display:'flex',flexDirection:'row'}"
         }
       },
       "output": {

@@ -58,7 +58,7 @@
           "pinId": "key"
         }
       },
-      "type": "number|string"
+      "type": "string"
     },
     "obj": {
       "plug": {

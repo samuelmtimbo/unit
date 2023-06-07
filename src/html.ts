@@ -1,45 +1,6 @@
-import * as crypto from 'crypto'
-import * as os from 'os'
+import { WebTemplate } from './WebTemplate'
 import { ROOT_STYLE } from './client/render/attachStyle'
 import { FONT_DATA_URI } from './client/static/font/dataURI'
-import { PATH_CWD } from './path'
-import { WebTemplate } from './WebTemplate'
-import path = require('path')
-
-const tempDirIdSet = new Set<string>()
-
-function tempDir(): string {
-  let tempDirId
-  do {
-    tempDirId = crypto.randomBytes(16).toString('hex')
-  } while (tempDirIdSet.has(tempDirId))
-
-  return path.join(PATH_CWD, '_temp', tempDirId)
-}
-
-function tempDirPath(tempDirId: string): string {
-  return path.join(PATH_CWD, '_temp', tempDirId)
-}
-
-function removeTempDir(tempDirId: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const path = tempDirPath(tempDirId)
-
-    // TODO
-  })
-}
-
-function tempFileName(prefix, suffix, tmpdir) {
-  prefix = typeof prefix !== 'undefined' ? prefix : 'tmp.'
-  suffix = typeof suffix !== 'undefined' ? suffix : ''
-
-  tmpdir = tmpdir ? tmpdir : os.tmpdir()
-
-  return path.join(
-    tmpdir,
-    prefix + crypto.randomBytes(16).toString('hex') + suffix
-  )
-}
 
 export async function html(opt: WebTemplate): Promise<string> {
   let {

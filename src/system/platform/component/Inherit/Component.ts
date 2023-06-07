@@ -99,43 +99,22 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
     }
   }
 
-  domAppendParentChildAt(
-    child: Component,
-    slotName: string,
-    at: number,
-    _at: number
-  ) {
+  domCommitAppendChild(child: Component) {
     this._registerChild(child)
 
-    super.domAppendParentChildAt(child, slotName, at, _at)
+    super.domCommitAppendChild(child)
   }
 
-  domAppendParentRoot(child: Component, slotName: string, at: number) {
+  domCommitInsertChild(child: Component, at: number) {
     this._registerChild(child)
 
-    super.domAppendParentRoot(child, slotName, at)
+    super.domCommitInsertChild(child, at)
   }
 
-  domRemoveParentRootAt(
-    component: Component,
-    slotName: string,
-    at: number,
-    _at: number
-  ) {
-    this._unregisterChild(component)
-
-    super.domRemoveParentRootAt(component, slotName, at, _at)
-  }
-
-  domRemoveParentChildAt(
-    child: Component,
-    slotName: string,
-    at: number,
-    _at: number
-  ) {
+  domCommitRemoveChild(child: Component) {
     this._unregisterChild(child)
 
-    super.domRemoveParentChildAt(child, slotName, at, _at)
+    super.domCommitRemoveChild(child)
   }
 
   onPropChanged(name: string, style) {

@@ -42,11 +42,11 @@ export default class SizeObserver extends Semifunctional<I, O> {
   private _observer: ResizeObserver
 
   f({ component }: I, done: Done<O>) {
-    const __global_id = component.getGlobalId()
+    const globalId = component.getGlobalId()
 
     let _component = getGlobalComponent(
       this.__system,
-      __global_id
+      globalId
     ) as Component<HTMLElement>
 
     const setup = (_next_component: Component) => {
@@ -84,7 +84,7 @@ export default class SizeObserver extends Semifunctional<I, O> {
 
     const unlisten_global = listenGlobalComponent(
       this.__system,
-      __global_id,
+      globalId,
       (_component) => {
         setup(_component)
       }

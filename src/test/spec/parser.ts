@@ -29,7 +29,7 @@ import isEqual from '../../system/f/comparisson/Equals/f'
 import _classes from '../../system/_classes'
 import _specs from '../../system/_specs'
 import { system } from '../util/system'
-import { ID_IDENTITY } from './id'
+import { ID_IDENTITY } from '../../system/_ids'
 
 // getTree
 
@@ -95,6 +95,7 @@ assert.deepEqual(
   TreeNodeType.Or
 )
 assert.deepEqual(getTreeNodeType('<T>["S"]'), TreeNodeType.PropExpression)
+assert.deepEqual(getTreeNodeType('unit://123'), TreeNodeType.Url)
 
 assert.deepEqual(getTree('{,}').children.length, 1)
 
@@ -187,7 +188,7 @@ assert(!isValidType('foo:false'))
 assert(!isValidType('<T>["S",K]'))
 assert(!isValidObjKey('*'))
 
-const _isTypeMatch = (a: string, b: string) => isTypeMatch(system, a, b)
+const _isTypeMatch = (a: string, b: string) => isTypeMatch(system.specs, a, b)
 
 assert(_isTypeMatch('number', 'number|string'))
 assert(_isTypeMatch('string', 'number|string'))
@@ -292,6 +293,7 @@ assert(!_isTypeMatch(ID_IDENTITY, 'number'))
 assert(!_isTypeMatch('`U`', '`G`'))
 assert(!_isTypeMatch('`U`', '`G`&`U`'))
 assert(!_isTypeMatch('`U`&`C`', '`U`&`G`'))
+assert(!_isTypeMatch('`U`&`C`&`V`&`J`', '`G`'))
 
 // isValidValue
 
@@ -609,7 +611,7 @@ assert(hasGeneric('`V<T>`'))
 // matchAllType
 
 const _matchAllExcTypes = (types: string[], excTypes: string[]) =>
-  matchAllExcTypes(system, types, excTypes)
+  matchAllExcTypes(system.specs, types, excTypes)
 
 assert(isEqual(_matchAllExcTypes(['any'], ['any']), [[[0, 0]]]))
 assert(isEqual(_matchAllExcTypes(['string'], ['any']), [[[0, 0]]]))
@@ -693,3 +695,9 @@ assert(
 
 assert.equal(_evaluate('"\n"'), '\n')
 assert.equal(_evaluate('"\\"\\n\\""'), '"\\n"')
+
+assert(
+  isValidValue(
+    '${unit:{id:"9f1e9240-08d7-46f4-bb57-11de177b987f"},specs:{"9f1e9240-08d7-46f4-bb57-11de177b987f":{name:"empty",units:{unit:{id:"6f0be5f2-bc6f-4f68-8826-91b69c4aacb7",input:{},output:{}}},merges:{},inputs:{},outputs:{},metadata:{icon:null,description:"empty graph",complexity:2,tags:["core"]},id:"9f1e9240-08d7-46f4-bb57-11de177b987f",type:"`U`&`G`",system:true},"6f0be5f2-bc6f-4f68-8826-91b69c4aacb7":{type:"`U`&`G`",name:"untitled",units:{textarea:{id:"83ec6688-b80b-4ef2-861f-14245ef392c0",input:{value:{ignored:false,constant:false},style:{ignored:false,constant:true,data:"{fontSize:\\"14px\\"}",metadata:{position:{x:52,y:-34}}},placeholder:{ignored:true,constant:false,metadata:{position:{x:52,y:-61}}}},output:{value:{ignored:true,constant:false,metadata:{position:{x:311,y:9}}}},metadata:{position:{x:178,y:9}}},spark:{id:"3be8272d-310a-4aa2-84a1-71f590a8227a",input:{a:{ignored:false,constant:true,data:"\\"M50 100 a 50  50 1 1 1 0 1z M50 100 a 50  50 1, 1, 1, 0, 1M 96 100 a 4  4 1 1 1 0 1M 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \n\nM 100 100 m 25 -25 l 25 -25 m -10 -10 a 60 60 0 0 1 20 20 \nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \n\nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \nM 100 100 m 25 25 l 25 25 m 10 -10 a 60 60 1 0 1 -20 20\n\nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \n\nM 100 100 m -25 25 l -25 25 m 10 10 a 60 60 1 0 1 -20 -20 \nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \n\nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \nM 100 100 m -25 -25 l -25 -25 m -10 10 a 60 60 0 0 1 20 -20\\""}},output:{a:{ignored:false,constant:false}},metadata:{position:{x:13,y:95}}},onvalue:{id:"d0e6f14c-400c-42f3-bfd6-1bbe0146f490",input:{element:{constant:false,ignored:false}},output:{event:{constant:false,ignored:false,data:"\\"M50 100 a 50  50 1 1 1 0 1z \nM50 100 a 50  50 1, 1, 1, 0, 1\n\nM 96 100 a 4  4 1 1 1 0 1\n\nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \n\nM 100 100 m 25 -25 l 25 -25 m -10 -10 a 60 60 0 0 1 20 20 \nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \n\nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \nM 100 100 m 25 25 l 25 25 m 10 -10 a 60 60 1 0 1 -20 20\n\nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \n\nM 100 100 m -25 25 l -25 25 m 10 10 a 60 60 1 0 1 -20 -20 \nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \n\nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \nM 100 100 m -25 -25 l -25 -25 m -10 10 a 60 60 0 0 1 20 -20\\""}},metadata:{position:{x:22,y:4}}},removenewline:{id:"1a0773eb-559c-47e2-81d7-fc28bc80076d",input:{str:{constant:false,ignored:false,data:"\\"M50 100 a 50  50 1 1 1 0 1z \nM50 100 a 50  50 1, 1, 1, 0, 1\n\nM 96 100 a 4  4 1 1 1 0 1\n\nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \n\nM 100 100 m 25 -25 l 25 -25 m -10 -10 a 60 60 0 0 1 20 20 \nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \n\nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \nM 100 100 m 25 25 l 25 25 m 10 -10 a 60 60 1 0 1 -20 20\n\nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \n\nM 100 100 m -25 25 l -25 25 m 10 10 a 60 60 1 0 1 -20 -20 \nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \n\nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \nM 100 100 m -25 -25 l -25 -25 m -10 10 a 60 60 0 0 1 20 -20\\""}},output:{str:{constant:false,ignored:false,data:"\\"M50 100 a 50  50 1 1 1 0 1z M50 100 a 50  50 1, 1, 1, 0, 1\n\nM 96 100 a 4  4 1 1 1 0 1\n\nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \n\nM 100 100 m 25 -25 l 25 -25 m -10 -10 a 60 60 0 0 1 20 20 \nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \n\nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \nM 100 100 m 25 25 l 25 25 m 10 -10 a 60 60 1 0 1 -20 20\n\nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \n\nM 100 100 m -25 25 l -25 25 m 10 10 a 60 60 1 0 1 -20 -20 \nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \n\nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \nM 100 100 m -25 -25 l -25 -25 m -10 10 a 60 60 0 0 1 20 -20\\""}},metadata:{position:{x:-57,y:50}}},untitled:{id:"79c37c2e-4a2b-445f-af75-5599cc6bf31c",metadata:{position:{x:-183,y:-34}},input:{style:{metadata:{position:{x:-53,y:-62}},constant:true,data:"{fill:\\"currentColor\\",fillRule:\\"evenodd\\",strokeWidth:\\"6px\\",strokeLinecap:\\"round\\"}"},d:{}},output:{}}},merges:{0:{textarea:{output:{_self:true}},onvalue:{input:{element:true}}},1:{spark:{output:{a:true}},textarea:{input:{value:true}}},2:{spark:{input:{a:true}},removenewline:{output:{str:true}}},3:{removenewline:{input:{str:true}},onvalue:{output:{event:true}},untitled:{input:{d:true}}}},inputs:{},outputs:{},metadata:{icon:null,description:"",complexity:22,position:{merge:{1:{x:52,y:67},2:{x:-34,y:91},3:{x:-40,y:4}}}},id:"6f0be5f2-bc6f-4f68-8826-91b69c4aacb7",component:{subComponents:{textarea:{},untitled:{}},children:["textarea","untitled"],defaultWidth:200,defaultHeight:150}}}}'
+  )
+)

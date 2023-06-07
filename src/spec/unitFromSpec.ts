@@ -61,11 +61,13 @@ export function unitFromBundleSpec(
 
       const _data = evaluate(data, system.specs, classes)
 
-      if (_data instanceof Function) {
+      const isClass = _data instanceof Function
+
+      if (isClass) {
         system.injectSpecs(_data.__bundle?.specs ?? {})
       }
 
-      if (input.ref()) {
+      if (input.ref() && isClass) {
         const __data = new _data(system)
 
         __data.play()

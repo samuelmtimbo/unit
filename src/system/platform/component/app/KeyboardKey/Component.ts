@@ -108,11 +108,12 @@ export default class KeyboardKey extends Element<HTMLDivElement, Props> {
 
     this.$element = $element
     this.$slot = key_component.$slot
-    this.$subComponent = {
-      key: key_component,
-    }
     this.$unbundled = false
     this.$primitive = true
+
+    this.setSubComponents({
+      key: key_component,
+    })
 
     this.registerRoot(key_component)
   }

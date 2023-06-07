@@ -1,4 +1,4 @@
-import { GraphSpec } from '../..'
+import { GraphSpec } from '../../GraphSpec'
 import {
   GraphAddMergeData,
   GraphAddMergesData,
@@ -14,13 +14,9 @@ import {
   GraphExposePinData,
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
-  GraphMoveLinkPinIntoData,
-  GraphMoveMergeIntoData,
-  GraphMovePlugIntoData,
   GraphMoveSubComponentRootData,
   GraphMoveSubGraphIntoData,
   GraphMoveUnitData,
-  GraphMoveUnitIntoData,
   GraphPlugPinData,
   GraphRemoveMergeData,
   GraphRemoveMergeDataData,
@@ -29,8 +25,10 @@ import {
   GraphRemoveUnitGhostData,
   GraphRemoveUnitPinDataData,
   GraphSetMergeDataData,
+  GraphSetMetadataData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
+  GraphSetUnitMetadataData,
   GraphSetUnitNameData,
   GraphSetUnitPinConstant,
   GraphSetUnitPinDataData,
@@ -96,6 +94,7 @@ export const G_METHOD_CALL_SET = [
   'removeRoot',
   'appendParentRoot',
   'appendParentRootChildren',
+  'reorderSubComponent',
   'removeUnitPinData',
   'setMergeData',
   'removeMergeData',
@@ -202,9 +201,8 @@ export interface $G_C {
     data: { unitId: string },
     callback: (data: Dict<any>) => void
   ): void
-  $getSpec(data: {}, callback: Callback<GraphSpec>): void
   $getBundle(data: {}, callback: Callback<BundleSpec>): void
-  $setMetadata(data: { path: string[]; data: any }): void
+  $setMetadata(data: GraphSetMetadataData): void
   $reorderSubComponent(data: {
     parentId: string | null
     childId: string

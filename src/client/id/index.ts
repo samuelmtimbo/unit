@@ -401,8 +401,8 @@ export function segmentMetadataId(metadataNodeId: string): {
   }
 }
 
-export function getMergeNodeId(id: string): string {
-  return `${MERGE}/${id}`
+export function getMergeNodeId(mergeId: string): string {
+  return `${MERGE}/${mergeId}`
 }
 
 export function isMergeNodeId(id: string): boolean {

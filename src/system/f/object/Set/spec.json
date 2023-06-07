@@ -6,7 +6,7 @@
       "_type": "O"
     },
     "key": {
-      "type": "number|string",
+      "type": "string",
       "_type": "K"
     },
     "value": {

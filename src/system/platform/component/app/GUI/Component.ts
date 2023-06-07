@@ -89,7 +89,6 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    this.$ref['modes'] = modes
 
     this._modes = modes
 
@@ -106,7 +105,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    this.$ref['search'] = search
+
     this._search = search
 
     const minimap = new Minimap(
@@ -125,7 +124,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    this.$ref['minimap'] = minimap
+
     this._minimap = minimap
 
     const history_tree = new Div(
@@ -139,7 +138,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    this.$ref['history'] = history_tree
+
     this._history = history_tree
 
     const TOGGLE_SPEC_ID = '6253bf76-2e85-11eb-9f59-3703abfd39c7'
@@ -222,7 +221,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    this.$ref['export'] = export_button
+
     this._export = export_button
 
     const import_button = new IconButton(
@@ -236,7 +235,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    this.$ref['import'] = import_button
+
     this._import = import_button
 
     const share = new Div(
@@ -285,7 +284,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         }
       )
     )
-    this.$ref['cabinet'] = cabinet
+
     this._cabinet = cabinet
 
     const background = new Div(
@@ -307,7 +306,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         style: {
           position: 'absolute',
           top: '0px',
-          overflow: 'hidden',
+          overflow: 'visible',
           background: 'none',
           pointerEvents: 'none',
         },
@@ -356,7 +355,14 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     this._gui = gui
 
-    this.$ref['control'] = this
+    this._gui.$ref['control'] = this
+    this._gui.$ref['cabinet'] = cabinet
+    this._gui.$ref['export'] = export_button
+    this._gui.$ref['import'] = import_button
+    this._gui.$ref['minimap'] = minimap
+    this._gui.$ref['history'] = history_tree
+    this._gui.$ref['modes'] = modes
+    this._gui.$ref['search'] = search
 
     const $element = parentElement($system)
 
@@ -374,7 +380,11 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       '1': 'default',
       '2': 'default',
     }
-    this.$subComponent = {
+
+    this.$unbundled = false
+    this.$primitive = true
+
+    this.setSubComponents({
       background,
       main,
       gui,
@@ -383,15 +393,20 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       cabinet,
       control,
       foreground,
-    }
-    this.$unbundled = false
-    this.$primitive = true
+    })
 
     this.addEventListeners([
       makeCustomListener('dock-move', ({ dy = 0, dx = 0 }) => {
         if (this._hidden) {
           return
         }
+
+        mergePropStyle(control, {
+          left: `${dx}px`,
+          width: `calc(100% - ${dx}px)`,
+          height: `calc(100% - ${dy}px)`,
+          transition: linearTransition('left', 'width', 'height', 'opacity'),
+        })
 
         mergePropStyle(control, {
           left: `${dx}px`,

@@ -1,4 +1,4 @@
-import { Specs } from '..'
+import { Spec, Specs } from '..'
 import { randomInArray } from '../../client/id/randomInArray'
 import {
   getTree,
@@ -8,6 +8,7 @@ import {
   TreeNodeType,
   _applyGenerics,
   _findGenerics,
+  isTypeMatch,
 } from '../../spec/parser'
 import { keys } from '../../system/f/object/Keys/f'
 import { rangeArray } from '../../util/array'
@@ -67,18 +68,18 @@ export const getTreeNodeTypeName = (tree_node_type: TreeNodeType) => {
 
 export function randomValueOfObjectLiteral(
   specs: Specs,
-  type_tree: TreeNode
+  typeTree: TreeNode
 ): string {
-  return propValue(randomTreeOfObjectLiteral(specs, type_tree))
+  return propValue(randomTreeOfObjectLiteral(specs, typeTree))
 }
 
 export function randomTreeOfObjectLiteral(
   specs: Specs,
-  type_tree: TreeNode
+  typeTree: TreeNode
 ): TreeNode {
   const children = []
 
-  for (const type_key_value of type_tree.children) {
+  for (const type_key_value of typeTree.children) {
     const [type_key_tree, type_value_tree] = type_key_value.children
 
     const { value: key } = type_key_tree
@@ -141,31 +142,26 @@ export function randomTreeOfArrayLiteral(
 
 export function randomValueOfTypeExpression(
   specs: Specs,
-  type_tree: TreeNode,
+  typeTree: TreeNode,
   delimiter_open: string,
   delimiter_close: string
 ) {
   return propValue(
-    randomTreeOfTypeExpression(
-      specs,
-      type_tree,
-      delimiter_open,
-      delimiter_close
-    )
+    randomTreeOfTypeExpression(specs, typeTree, delimiter_open, delimiter_close)
   )
 }
 
 export function randomTreeOfTypeExpression(
   specs: Specs,
-  type_tree: TreeNode,
+  typeTree: TreeNode,
   delimiter_open: string,
   delimiter_close: string
 ): TreeNode {
-  const { children: type_children, type: type_type } = type_tree
+  const { children: type_children, type: type_type } = typeTree
 
-  const type_type_tree = type_children[0]
+  const type_typeTree = type_children[0]
 
-  const generics = _findGenerics(type_type_tree)
+  const generics = _findGenerics(type_typeTree)
 
   const generic_type_map: Dict<string> = {}
 
@@ -178,13 +174,13 @@ export function randomTreeOfTypeExpression(
     }
   }
 
-  const literal_type_tree = _applyGenerics(type_type_tree, generic_type_map)
+  const literal_typeTree = _applyGenerics(type_typeTree, generic_type_map)
 
   const size = Math.floor(Math.random() * 3)
 
   const range = rangeArray(size)
 
-  const children = range.map(() => randomTreeOfType(specs, literal_type_tree))
+  const children = range.map(() => randomTreeOfType(specs, literal_typeTree))
   const value = `${delimiter_open}${children
     .map(propValue)
     .join(',')}${delimiter_close}`
@@ -209,39 +205,49 @@ export function randomTreeOfOr(specs: Specs, tree: TreeNode): TreeNode {
   return randomTreeOfType(specs, child)
 }
 
-export function randomValueOfAnd(type_tree: TreeNode): string {
-  return propValue(randomTreeOfAnd(type_tree))
+export function randomValueOfAnd(typeTree: TreeNode): string {
+  return propValue(randomTreeOfAnd(typeTree))
 }
 
-export function randomTreeOfAnd(type_tree: TreeNode): TreeNode {
+export function randomTreeOfAnd(typeTree: TreeNode): TreeNode {
   // TODO
 
   return NULL_TREE
 }
 
-export function randomValueOfType(specs: Specs, type_tree: TreeNode): string {
-  return propValue(randomTreeOfType(specs, type_tree))
+export function randomValueOfType(specs: Specs, typeTree: TreeNode): string {
+  return propValue(randomTreeOfType(specs, typeTree))
 }
 
-export function randomTreeOfType(specs: Specs, type_tree: TreeNode): TreeNode {
-  const { type } = type_tree
+export function randomTreeOfType(specs: Specs, typeTree: TreeNode): TreeNode {
+  const { type } = typeTree
 
   if (isLiteralType(type)) {
-    return type_tree
+    return typeTree
   }
 
   if (type === TreeNodeType.Or) {
-    return randomTreeOfOr(specs, type_tree)
+    return randomTreeOfOr(specs, typeTree)
   } else if (type === TreeNodeType.And) {
-    return randomTreeOfAnd(type_tree)
+    return randomTreeOfAnd(typeTree)
   } else if (type === TreeNodeType.ObjectLiteral) {
-    return randomTreeOfObjectLiteral(specs, type_tree)
+    return randomTreeOfObjectLiteral(specs, typeTree)
   } else if (type === TreeNodeType.ArrayLiteral) {
-    return randomTreeOfArrayLiteral(specs, type_tree)
+    return randomTreeOfArrayLiteral(specs, typeTree)
   } else if (type === TreeNodeType.ArrayExpression) {
-    return randomTreeOfTypeExpression(specs, type_tree, '[', ']')
+    return randomTreeOfTypeExpression(specs, typeTree, '[', ']')
   } else if (type === TreeNodeType.ObjectExpression) {
-    return randomTreeOfTypeExpression(specs, type_tree, '{', '}')
+    return randomTreeOfTypeExpression(specs, typeTree, '{', '}')
+  } else if (type === TreeNodeType.Class) {
+    let randomSpecId: string
+    let randomSpec: Spec
+
+    do {
+      randomSpecId = randomInArray(keys(specs))
+      randomSpec = specs[randomSpecId]
+    } while (!isTypeMatch(specs, randomSpec.type ?? `G`, typeTree.value))
+
+    return getTree(`\${unit:{id:"${randomSpecId}"}}`)
   } else {
     return randomTreeOfTypeLiteral(specs, type)
   }
@@ -261,8 +267,6 @@ export function randomTreeOfTypeLiteral(
     return randomInArray(TREE_OBJECT)
   } else if (type === TreeNodeType.Generic) {
     return randomTreeOfTypeLiteral(specs, randomLiteralType())
-  } else if (type === TreeNodeType.Class) {
-    return getTree(`\${unit:{id:"${randomInArray(keys(specs))}"}}`)
   } else if (type === TreeNodeType.Any) {
     return randomTreeOfTypeLiteral(specs, randomInArray(LITERAL_TREE_NODE_TYPE))
   }
@@ -271,7 +275,7 @@ export function randomTreeOfTypeLiteral(
 
 export function randomValueOfTypeLiteral(
   specs: Specs,
-  type_tree: TreeNodeType
+  typeTree: TreeNodeType
 ): string {
-  return propValue(randomTreeOfTypeLiteral(specs, type_tree))
+  return propValue(randomTreeOfTypeLiteral(specs, typeTree))
 }

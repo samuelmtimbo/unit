@@ -1,6 +1,6 @@
 import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
-import { IOPointerEvent } from './event/pointer'
+import { UnitPointerEvent } from './event/pointer'
 import { makePointerDownListener } from './event/pointer/pointerdown'
 import { makePointerMoveListener } from './event/pointer/pointermove'
 
@@ -11,7 +11,7 @@ export function makePointerScroll(component: Component): Unlisten {
   const pointerDownUnlisten = component.addEventListener(
     makePointerDownListener(() => {
       pointerDown = true
-      const pointerMoveListener = (event: IOPointerEvent) => {}
+      const pointerMoveListener = (event: UnitPointerEvent) => {}
       component.addEventListener(makePointerMoveListener(pointerMoveListener))
     })
   )

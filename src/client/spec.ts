@@ -5,17 +5,18 @@ import { keys } from '../system/f/object/Keys/f'
 import {
   ComponentSpec,
   GraphComponentSpec,
-  GraphSpec,
   GraphSpecs,
   PinsSpec,
   Spec,
   Specs,
 } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'
 import { uuidNotIn } from '../util/id'
 import { clone, pathOrDefault } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
+import { keyCount } from '../system/core/object/KeyCount/f'
 
 export function getSpec(specs: Specs, id: string): Spec {
   const spec = specs[id]
@@ -303,7 +304,14 @@ export function getSpecRender(specs: Specs, id: string): boolean | undefined {
 }
 
 export function isComponent(specs: Specs, id: string): boolean {
-  return getSpecRender(specs, id) || false
+  return getSpecRender(specs, id) ?? hasSubComponents(specs[id] as GraphSpec)
+}
+
+export function hasSubComponents(spec: GraphSpec): boolean {
+  const { component = {} } = spec
+  const { subComponents = {} } = component
+
+  return keyCount(subComponents) > 0
 }
 
 export function shouldRender(componentSpec: GraphComponentSpec): boolean {

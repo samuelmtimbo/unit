@@ -1,8 +1,7 @@
 {
   "name": "gamma correction",
-  "private": true,
   "units": {
-    "dhvuacovv": {
+    "greaterthan": {
       "id": "1651ce6b-4db0-4787-9edf-f770b72d253c",
       "input": {
         "b": {
@@ -11,10 +10,10 @@
         }
       }
     },
-    "uklqjxu": {
+    "ifelse": {
       "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3"
     },
-    "yvolsio": {
+    "divide": {
       "id": "158d85eb-28b8-4355-b637-28a7ec751233",
       "input": {
         "b": {
@@ -23,7 +22,7 @@
         }
       }
     },
-    "qiawcyftq": {
+    "add": {
       "id": "6fe452f2-2ec1-4ee2-887d-751c3697e6bf",
       "input": {
         "b": {
@@ -32,7 +31,7 @@
         }
       }
     },
-    "jpgjzma": {
+    "divide0": {
       "id": "158d85eb-28b8-4355-b637-28a7ec751233",
       "input": {
         "b": {
@@ -41,7 +40,7 @@
         }
       }
     },
-    "jgcnvhipd": {
+    "pow": {
       "id": "ef4c1d0a-bda1-484e-8fcb-0fdbde195778",
       "input": {
         "b": {
@@ -52,85 +51,85 @@
     }
   },
   "merges": {
-    "rrnnvcne": {
-      "uklqjxu": {
+    "0": {
+      "ifelse": {
         "input": {
           "b": true
         }
       },
-      "dhvuacovv": {
+      "greaterthan": {
         "output": {
           "a > b": true
         }
       }
     },
-    "zwykjel": {
-      "dhvuacovv": {
+    "1": {
+      "greaterthan": {
         "input": {
           "a": true
         }
       },
-      "uklqjxu": {
+      "ifelse": {
         "input": {
           "a": true
         }
       }
     },
-    "wyaqjsg": {
-      "uklqjxu": {
+    "2": {
+      "ifelse": {
         "output": {
-          "!b ? a": true
+          "else": true
         }
       },
-      "yvolsio": {
+      "divide": {
         "input": {
           "a": true
         }
       }
     },
-    "qfsuqlqsf": {
-      "uklqjxu": {
+    "3": {
+      "ifelse": {
         "output": {
-          "b ? a": true
+          "if": true
         }
       },
-      "qiawcyftq": {
+      "add": {
         "input": {
           "a": true
         }
       }
     },
-    "lbljwfbws": {
-      "qiawcyftq": {
+    "4": {
+      "add": {
         "output": {
           "a + b": true
         }
       },
-      "jpgjzma": {
+      "divide0": {
         "input": {
           "a": true
         }
       }
     },
-    "ecnggzpap": {
-      "jpgjzma": {
+    "5": {
+      "divide0": {
         "output": {
           "a ÷ b": true
         }
       },
-      "jgcnvhipd": {
+      "pow": {
         "input": {
           "a": true
         }
       }
     },
-    "txbxaqii": {
-      "yvolsio": {
+    "6": {
+      "divide": {
         "output": {
           "a ÷ b": true
         }
       },
-      "jgcnvhipd": {
+      "pow": {
         "output": {
           "a ** b": true
         }
@@ -142,17 +141,13 @@
     "description": "no description",
     "link": "https://en.wikipedia.org/wiki/Gamma_correction",
     "complexity": 26,
-    "tags": [
-      "platform",
-      "core",
-      "color"
-    ]
+    "tags": ["platform", "core", "color"]
   },
   "inputs": {
     "a": {
       "plug": {
         "0": {
-          "mergeId": "zwykjel"
+          "mergeId": "1"
         }
       },
       "type": "number"
@@ -162,7 +157,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "txbxaqii"
+          "mergeId": "6"
         }
       },
       "type": "number"

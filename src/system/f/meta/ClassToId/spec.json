@@ -1,7 +1,7 @@
 {
   "name": "class to id",
   "inputs": {
-    "Class": {
+    "class": {
       "type": "`U`"
     }
   },

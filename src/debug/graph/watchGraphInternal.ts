@@ -9,9 +9,11 @@ import { watchGraphExposePinEvent } from './watchGraphExposedPinEvent'
 import { watchGraphExposedPinSetEvent } from './watchGraphExposedPinSetEvent'
 import { watchGraphForkEvent } from './watchGraphForkEvent'
 import { watchGraphMergeEvent } from './watchGraphMergeEvent'
+import { watchGraphMoveSubComponentRoot } from './watchGraphMoveSubComponentRoot'
 import { watchGraphMoveSubgraphEvent } from './watchGraphMoveSubgraphIntoEvent'
 import { watchGraphPinMergeEvent } from './watchGraphPinMergeEvent'
 import { watchGraphPlugEvent } from './watchGraphPlugEvent'
+import { watchGraphReorderSubComponent } from './watchGraphReorderSubComponent'
 import { watchGraphSetUnitPinFunctional } from './watchGraphSetPinSetFunctionalEvent'
 import { watchGraphSetPinSetId } from './watchGraphSetPinSetIdEvent'
 import { watchGraphSetUnitIdEvent } from './watchGraphSetUnitIdEvent'
@@ -44,6 +46,8 @@ export const GRAPH_EVENT_TO_WATCHER: Dict<
   unplug_pin: watchGraphPlugEvent,
   move_subgraph_into: watchGraphMoveSubgraphEvent,
   move_subgraph_out_of: watchGraphMoveSubgraphEvent,
+  reorder_sub_component: watchGraphReorderSubComponent,
+  move_sub_component_root: watchGraphMoveSubComponentRoot,
   set_unit_pin_constant: watchGraphSetUnitPinConstant,
   set_unit_pin_ignored: watchGraphSetUnitPinIgnored,
   set_pin_set_functional: watchGraphSetUnitPinFunctional,

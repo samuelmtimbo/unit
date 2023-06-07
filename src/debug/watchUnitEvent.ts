@@ -2,6 +2,7 @@ import { Element_ } from '../Class/Element'
 import { Graph } from '../Class/Graph'
 import { Stateful } from '../Class/Stateful'
 import { Unit } from '../Class/Unit'
+import { stringify } from '../spec/stringify'
 import { EE } from '../types/interface/EE'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { ComponentAppendChildMoment } from './ComponentAppendChildMoment'
@@ -54,6 +55,8 @@ export function watchStatefulSetEvent(
   callback: (moment) => void
 ): () => void {
   const listener = (name, data) => {
+    data = data !== undefined ? stringify(data) : data
+
     callback({
       type: 'unit',
       event,
@@ -86,14 +89,19 @@ export function watchElementCallEvent(
 
 export function watchComponentAppendEvent(
   event: 'append_child',
-  unit: EE<{ append_child: [UnitBundleSpec] }>,
+  unit: EE<{ append_child: [UnitBundleSpec, string[]] }>,
   callback: (moment: ComponentAppendChildMoment) => void
 ): () => void {
-  const listener = (data: UnitBundleSpec) => {
+  const listener = (data: UnitBundleSpec, path: string[]) => {
+    if (path.length > 0) {
+      return
+    }
+
     callback({
       type: 'unit',
       event,
       data,
+      path,
     })
   }
   unit.addListener(event, listener)

@@ -55,10 +55,11 @@ export default class TextBox extends Element<HTMLDivElement, Props> {
     this.$slot = {
       default: div,
     }
-    this.$subComponent = {
+
+    this.setSubComponents({
       div,
       text,
-    }
+    })
 
     this.registerRoot(div)
   }

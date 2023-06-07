@@ -1,4 +1,6 @@
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { Moment } from './Moment'
 
-export interface ComponentAppendChildMoment extends Moment<UnitBundleSpec> {}
+export interface ComponentAppendChildMoment extends Moment<UnitBundleSpec> {
+  path: string[]
+}

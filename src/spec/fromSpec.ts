@@ -2,13 +2,13 @@ import { Graph } from '../Class/Graph'
 import { System } from '../system'
 import _classes from '../system/_classes'
 import {
-  GraphSpec,
   GraphSpecs,
   GraphUnitPinSpec,
   GraphUnitSpec,
   PinSpec,
   Specs,
 } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
 import { GraphBundle, GraphClass } from '../types/GraphClass'
 import { weakMerge } from '../types/weakMerge'

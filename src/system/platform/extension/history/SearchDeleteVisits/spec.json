@@ -44,7 +44,7 @@
       },
       "output": {}
     },
-    "assoc": {
+    "set": {
       "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
       "input": {
         "obj": {
@@ -100,7 +100,7 @@
       }
     },
     "3": {
-      "assoc": {
+      "set": {
         "output": {
           "obj": true
         }
@@ -116,7 +116,7 @@
     "text": {
       "plug": {
         "0": {
-          "unitId": "assoc",
+          "unitId": "set",
           "pinId": "value"
         }
       },
@@ -135,6 +135,7 @@
     "complexity": 47
   },
   "id": "dd22949e-ad44-4571-9af4-322a1e194ebe",
+  "private": true,
   "type": "`U`&`G`",
   "system": true
 }

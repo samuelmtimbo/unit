@@ -31,7 +31,7 @@ const _watchTree = (
     )
   )
   if (unit instanceof Graph) {
-    forEachValueKey(unit.refUnits(), (unit, id: string) => {
+    forEachValueKey(unit.getUnits(), (unit, id: string) => {
       const p = [...path, id]
       all.push(_watchTree(unit, callback, p, events))
     })

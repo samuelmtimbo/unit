@@ -1,4 +1,5 @@
-import { GraphSpec, GraphSpecs } from '.'
+import { GraphSpecs } from '.'
+import { GraphSpec } from './GraphSpec'
 
 export type BundleSpec = {
   spec?: GraphSpec

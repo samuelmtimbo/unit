@@ -1,6 +1,6 @@
 import { grammarsFrom, SpeechRecorder } from '../../../../../api/speech'
 import { Element } from '../../../../../client/element'
-import { IOPointerEvent } from '../../../../../client/event/pointer'
+import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { Mode } from '../../../../../client/mode'
@@ -109,9 +109,10 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
     this.$primitive = true
     this.$element = $element
     this.$slot = icon_button.$slot
-    this.$subComponent = {
+
+    this.setSubComponents({
       icon_button,
-    }
+    })
 
     this.registerRoot(icon_button)
   }
@@ -125,7 +126,7 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
   }
 
   private _on_pointer_down = (
-    event: IOPointerEvent,
+    event: UnitPointerEvent,
     _event: PointerEvent
   ): void => {
     const { disabled } = this.$props

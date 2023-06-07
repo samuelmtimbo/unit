@@ -58,7 +58,7 @@ export function watchGraph<T extends Graph>(
     _unit_unlisten[unitId] = callAll([unitIOUnlisten, unitGraphUnlisten])
   }
 
-  const _watchMerge = (merge: U<any>, mergeId: string) => {
+  const _watchMerge = (merge: Unit<any>, mergeId: string) => {
     const mergeInputNodeId = getMergePinNodeId(mergeId, 'input')
     const input = merge.getInput(mergeInputNodeId)
 
@@ -124,8 +124,8 @@ export function watchGraph<T extends Graph>(
     }
   }
 
-  const units = graph.refUnits()
-  const merges = graph.refMerges()
+  const units = graph.getUnits()
+  const merges = graph.getMerges()
 
   forEachValueKey(units, _watchUnit)
   forEachValueKey(merges, _watchMerge)

@@ -4,7 +4,7 @@ import { compatibleInterface } from '../../spec/compatibility'
 
 assert(
   compatibleInterface(
-    system,
+    system.specs,
     'system/f/control/Identity',
     'system/core/common/Increment'
   )
@@ -12,7 +12,7 @@ assert(
 
 assert(
   !compatibleInterface(
-    system,
+    system.specs,
     'system/f/control/Identity',
     'system/f/arithmetic/Add'
   )

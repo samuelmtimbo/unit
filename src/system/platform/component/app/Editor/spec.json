@@ -22,6 +22,10 @@
     "zoom": {
       "type": "{x:number,y:number,z:number}",
       "defaultIgnored": true
+    },
+    "controls": {
+      "type": "boolean",
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -35,12 +39,7 @@
     "icon": "atom-alt",
     "description": "Recursive Graph Editor",
     "complexity": 71,
-    "tags": [
-      "platform",
-      "component",
-      "app",
-      "graph"
-    ]
+    "tags": ["platform", "component", "app", "graph"]
   },
   "id": "e80c912e-7508-11ea-966b-436805345ff0",
   "base": true,

@@ -10,7 +10,7 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  Class: UnitBundle<any>
+  class: UnitBundle<any>
 }
 
 export default class IdToClass<T> extends Functional<I<T>, O<T>> {
@@ -18,7 +18,7 @@ export default class IdToClass<T> extends Functional<I<T>, O<T>> {
     super(
       {
         i: ['id'],
-        o: ['Class'],
+        o: ['class'],
       },
       {},
       system,
@@ -28,6 +28,7 @@ export default class IdToClass<T> extends Functional<I<T>, O<T>> {
 
   f({ id }: I<T>, done: Done<O<T>>): void {
     const Class = fromId(id, this.__system.specs, this.__system.classes)
-    done({ Class })
+
+    done({ class: Class })
   }
 }

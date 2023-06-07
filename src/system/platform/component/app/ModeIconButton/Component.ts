@@ -60,11 +60,12 @@ export default class ModeIconButton extends Element<HTMLDivElement, Props> {
 
     this.$element = $element
     this.$slot = { default: icon_button }
-    this.$subComponent = {
-      icon_button,
-    }
     this.$unbundled = false
     this.$primitive = true
+
+    this.setSubComponents({
+      icon_button,
+    })
 
     this.registerRoot(icon_button)
   }

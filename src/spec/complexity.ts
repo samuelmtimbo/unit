@@ -1,5 +1,6 @@
 import { keys } from '../system/f/object/Keys/f'
-import { GraphSpec, Spec, Specs } from '../types'
+import { Spec, Specs } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 
 const HIRC = 1 // Human Information Retrieval Cost
 const GFC = 2 // Graph Fundamental Complexity

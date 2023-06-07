@@ -2,7 +2,7 @@ import * as assert from 'assert'
 import { system } from '../../../util/system'
 import { watchUnitAndLog } from '../../../../debug'
 import Bundle from '../../../../system/f/meta/Bundle'
-import { ID_IDENTITY } from '../../../spec/id'
+import { ID_IDENTITY } from '../../../../system/_ids'
 
 const bundle = new Bundle(system)
 
@@ -70,7 +70,7 @@ assert.deepEqual(bundle.take('bundle'), {
   specs: {},
 })
 
-const identity = graph.refUnit('identity')
+const identity = graph.getUnit('identity')
 
 identity.push('a', 1)
 

@@ -3,7 +3,7 @@ import { Graph } from '../../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
-import { GraphSpec } from '../../../types'
+import { GraphSpec } from '../../../types/GraphSpec'
 import { system } from '../../util/system'
 
 const spec = {
@@ -74,7 +74,7 @@ const randomHEXColor = new RandomHEXColor(system)
 
 false && watchUnitAndLog(randomHEXColor)
 false && watchGraphAndLog(randomHEXColor)
-false && watchGraphAndLog(randomHEXColor.refUnit('nstringbuilderfrom') as Graph)
+false && watchGraphAndLog(randomHEXColor.getUnit('nstringbuilderfrom') as Graph)
 
 randomHEXColor.play()
 

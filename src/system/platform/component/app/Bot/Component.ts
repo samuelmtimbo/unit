@@ -1,10 +1,11 @@
+import { PositionObserver } from '../../../../../client/PositionObserver'
 import { addListeners } from '../../../../../client/addListener'
 import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
 import namespaceURI from '../../../../../client/component/namespaceURI'
 import { Context } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
-import { IOPointerEvent } from '../../../../../client/event/pointer'
+import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makePointerCancelListener } from '../../../../../client/event/pointer/pointercancel'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
@@ -51,6 +52,9 @@ export interface Props {
 }
 
 export const DEFAULT_STYLE = {
+  position: 'absolute',
+  top: '0',
+  left: '0',
   width: '100%',
   height: '100%',
   color: 'current-color',
@@ -181,8 +185,19 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this.addEventListener(makePointerEnterListener(this._onPointerEnter))
     this.addEventListener(makePointerLeaveListener(this._onPointerLeave))
 
+    const position_observer = new PositionObserver(this.$system, ({ x, y }) => {
+      if (this.$context) {
+        this._container_x = x - this.$context.$x
+        this._container_y = y - this.$context.$y
+      }
+    })
+
+    this._position_observer = position_observer
+
     // this._tick_body()
   }
+
+  private _position_observer: PositionObserver
 
   private _enabled = (): boolean => {
     const { disabled } = this.$props
@@ -592,7 +607,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this._tick_body()
   }
 
-  private _onPointerEnter = (event: IOPointerEvent) => {
+  private _onPointerEnter = (event: UnitPointerEvent) => {
     // console.log('Bot', '_onPointerEnter')
     const { pointerId, pointerType } = event
 
@@ -606,7 +621,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this._tick_color()
   }
 
-  private _onPointerLeave = (event: IOPointerEvent) => {
+  private _onPointerLeave = (event: UnitPointerEvent) => {
     // console.log('Bot', '_onPointerLeave')
     const { pointerId } = event
     this.__onPointerLeave(pointerId)
@@ -620,7 +635,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this._tick_color()
   }
 
-  private _onContextPointerEnter = (event: IOPointerEvent) => {
+  private _onContextPointerEnter = (event: UnitPointerEvent) => {
     const { pointerId, pointerType } = event
 
     if (
@@ -633,7 +648,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this.__onContextPointerEnter(event)
   }
 
-  private __onContextPointerEnter = (event: IOPointerEvent) => {
+  private __onContextPointerEnter = (event: UnitPointerEvent) => {
     const { x, y } = this._getXY(event)
     const { pointerId } = event
 
@@ -654,13 +669,13 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     }
   }
 
-  private _onContextPointerLeave = (event: IOPointerEvent) => {
+  private _onContextPointerLeave = (event: UnitPointerEvent) => {
     const { pointerId } = event
     // log('Bot', '_onContextPointerLeave', pointerId)
     this.__onContextPointerLeave(event)
   }
 
-  private __onContextPointerLeave = (event: IOPointerEvent) => {
+  private __onContextPointerLeave = (event: UnitPointerEvent) => {
     const { pointerId, pointerType } = event
 
     if (this._dnd[pointerId]) {
@@ -697,13 +712,13 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     }
   }
 
-  private _onContextPointerCancel = (event: IOPointerEvent) => {
+  private _onContextPointerCancel = (event: UnitPointerEvent) => {
     const { pointerId } = event
     // console.log('Bot', '_onContextPointerCancel', pointerId)
     this.__onContextPointerLeave(event)
   }
 
-  private _onContextPointerMove = (event: IOPointerEvent) => {
+  private _onContextPointerMove = (event: UnitPointerEvent) => {
     // console.log('Bot', '_onContextPointerMove')
 
     const { pointerId, pointerType } = event
@@ -729,7 +744,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     // }
   }
 
-  private _getXY = (event: IOPointerEvent): Position => {
+  private _getXY = (event: UnitPointerEvent): Position => {
     // const { $x, $y, $sx, $sy, $rx, $ry, $rz } = this.$context
 
     // const { screenX, screenY } = event
@@ -747,7 +762,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     return { x, y }
   }
 
-  private _onContextPointerDown = (event: IOPointerEvent) => {
+  private _onContextPointerDown = (event: UnitPointerEvent) => {
     const { pointerId, pointerType } = event
 
     if (!this._pointer_down[pointerId]) {
@@ -775,7 +790,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
   private _laser_position: Position[] = []
 
-  private _remove_pointer_down = (event: IOPointerEvent): void => {
+  private _remove_pointer_down = (event: UnitPointerEvent): void => {
     // console.trace('Bot', '_remove_pointer_down')
     const { mode } = this.$props
 
@@ -805,7 +820,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     }, 90)
   }
 
-  private _onContextPointerUp = (event: IOPointerEvent) => {
+  private _onContextPointerUp = (event: UnitPointerEvent) => {
     const { pointerId, pointerType } = event
 
     if (this._pointer_down[pointerId]) {
@@ -1068,6 +1083,8 @@ export default class Bot extends Element<HTMLDivElement, Props> {
       }),
     ])
 
+    this._position_observer.observe(this._container)
+
     this._resizeSVG()
   }
 
@@ -1094,6 +1111,8 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this._pointer_enter_count = 0
     this._pointer_inside = {}
     this._pointer_visible = false
+
+    this._position_observer.disconnect()
 
     document.removeEventListener('visibilitychange', this._document_listener)
   }

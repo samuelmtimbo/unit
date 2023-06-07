@@ -6,46 +6,32 @@ import { IO } from '../types/IO'
 
 const _typeMatchCache: Dict<boolean> = {}
 
-const __isTypeMatch = (system: System, a: TreeNode, b: TreeNode): boolean => {
+const __isTypeMatch = (specs: Specs, a: TreeNode, b: TreeNode): boolean => {
   const cacheKey = `${a.value}/${b.value}`
   if (_typeMatchCache[cacheKey]) {
     return _typeMatchCache[cacheKey]
   } else {
-    const typeMatch = _isTypeMatch(system, a, b)
+    const typeMatch = _isTypeMatch(specs, a, b)
     _typeMatchCache[cacheKey] = typeMatch
     return typeMatch
   }
 }
 
-export const pinTypeMatch = (
-  system: System,
-  aTypeStr: string,
-  aKind: IO,
-  bTypeStr: string,
-  bKind: IO,
-  specs: Specs
-): boolean => {
-  const aType = getTree(aTypeStr)
-  const bType = getTree(bTypeStr)
-  return _pinTypeMatch(system, aType, aKind, bType, bKind, specs)
-}
-
 export const _pinTypeMatch = (
-  system: System,
+  specs: Specs,
   aType: TreeNode,
   aKind: IO,
   bType: TreeNode,
-  bKind: IO,
-  specs: Specs
+  bKind: IO
 ): boolean => {
   if (aKind === 'input' && bKind === 'input') {
     return (
-      __isTypeMatch(system, aType, bType) || __isTypeMatch(system, bType, aType)
+      __isTypeMatch(specs, aType, bType) || __isTypeMatch(specs, bType, aType)
     )
   } else if (aKind === 'input' && bKind === 'output') {
-    return __isTypeMatch(system, bType, aType)
+    return __isTypeMatch(specs, bType, aType)
   } else if (aKind === 'output' && bKind === 'input') {
-    return __isTypeMatch(system, aType, bType)
+    return __isTypeMatch(specs, aType, bType)
   } else {
     return true
   }

@@ -22,6 +22,7 @@ import { C_EE } from '../../types/interface/C'
 import { ComponentEvents, Component_ } from '../../types/interface/Component'
 import { E } from '../../types/interface/E'
 import { UnitBundle } from '../../types/UnitBundle'
+import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { forEach } from '../../util/array'
 import { Stateful, StatefulEvents } from '../Stateful'
 import { ION, Opt } from '../Unit'
@@ -92,6 +93,9 @@ export class Element_<
     this._slot = {
       default: this,
     }
+  }
+  getBundleSpec(): UnitBundleSpec {
+    throw new Error('Method not implemented.')
   }
 
   registerRoot(component: Component_): void {

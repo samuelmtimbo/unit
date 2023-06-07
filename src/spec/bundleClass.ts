@@ -17,6 +17,8 @@ export function bundleClass<T extends Unit = any>(
     static readonly __bundle = bundle
 
     constructor(system: System) {
+      bundle.specs && system.injectSpecs(bundle.specs)
+
       super(system, id)
 
       if (memory) {

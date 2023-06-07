@@ -3,7 +3,7 @@ import { Graph } from '../../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
 import _specs from '../../../system/_specs'
-import { GraphSpec } from '../../../types'
+import { GraphSpec } from '../../../types/GraphSpec'
 import { system } from '../../util/system'
 
 const spec = {
@@ -152,7 +152,7 @@ const sumNextN = new SumNextN(system)
 
 false && watchUnitAndLog(sumNextN)
 false && watchGraphAndLog(sumNextN)
-false && watchGraphAndLog(sumNextN.refUnit('nstringbuilderfrom') as Graph)
+false && watchGraphAndLog(sumNextN.getUnit('nstringbuilderfrom') as Graph)
 
 sumNextN.play()
 

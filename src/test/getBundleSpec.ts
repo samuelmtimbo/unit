@@ -5,7 +5,7 @@ import { system } from './util/system'
 
 const identity = new Identity(system)
 
-assert.deepEqual(identity.getUnitBundleSpec(), {
+assert.deepEqual(identity.getBundle(), {
   unit: {
     id: ID_IDENTITY,
     memory: {

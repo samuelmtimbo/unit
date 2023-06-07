@@ -27,18 +27,18 @@ export function stringify(value: any): string {
             )
             .join(',')}}`
         } else if (value instanceof Unit) {
-          return `$${stringify(value.getUnitBundleSpec())}`
+          return `unit://${value.__global_id}`
         } else {
-          throw new Error('Invalid Object.')
+          throw new Error('invalid object')
         }
       }
     case 'function':
       if (value.__bundle) {
         return `$${stringify(value.__bundle)}`
       } else {
-        throw new Error('Invalid Unit Class.')
+        throw new Error('invalid unit class')
       }
     default:
-      throw new Error('Cannot stringify value.')
+      throw new Error('cannot stringify value')
   }
 }

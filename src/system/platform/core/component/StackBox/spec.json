@@ -8,7 +8,7 @@
       "input": {
         "component": {
           "constant": true,
-          "data": "dc546440-13ca-4ebf-8831-c28138c7efc6"
+          "data": "${unit:{id:'dc546440-13ca-4ebf-8831-c28138c7efc6'}}"
         }
       },
       "output": {
