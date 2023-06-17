@@ -6,7 +6,7 @@ Next Generation Visual Programming System
 
 ## unit
 
-unit is a General Purpose Visual Programming Language and Environment built with a primary focus on Developer Experience.
+unit is a General Purpose Visual Programming Language and Environment built with a primary focus on unifying the currently fragment Developer Experience and Computing Environment.
 
 It is heavily inspired by Live, Data Flow, Reactive, Functional and Object Oriented Programming paradigms. Formally, units are Multi Input Multi Output (MIMO) Finite State Machines (FSM). A program in unit is represented as a Graph.
 
@@ -161,6 +161,8 @@ If you have a question or a suggestion related to Open Source unit, or if you ju
 For weekly updates about unit Development, including thoughts about Vision and Roadmap, follow us on Twitter [@io_unit](https://twitter.com/io_unit).
 
 We hope you enjoy unit and invite you to be part of our community!
+
+All hail the mastermind!
 
 ## License
 
