@@ -92,24 +92,6 @@
               "y": -26
             }
           }
-        },
-        "b": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": 29,
-              "y": 31
-            }
-          }
-        },
-        "a": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": -26,
-              "y": 31
-            }
-          }
         }
       },
       "output": {},

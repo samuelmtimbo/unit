@@ -209,7 +209,10 @@ export default class Modes extends Element<HTMLDivElement, Props> {
     const $element = parentElement($system)
 
     this.$element = $element
-    this.$subComponent = {
+    this.$unbundled = false
+    this.$primitive = true
+
+    this.setSubComponents({
       list,
       crud,
       selector,
@@ -219,9 +222,7 @@ export default class Modes extends Element<HTMLDivElement, Props> {
       add: this._mode_button['add'],
       data: this._mode_button['data'],
       multiselect: this._mode_button['multiselect'],
-    }
-    this.$unbundled = false
-    this.$primitive = true
+    })
 
     this.registerRoot(list)
   }

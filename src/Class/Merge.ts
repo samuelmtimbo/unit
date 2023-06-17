@@ -46,10 +46,6 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     super.onInputSet(name, input, opt, propagate)
 
     if (!input.empty()) {
-      // if (this._current !== undefined) {
-      //   this._i_start_count -= 1
-      // }
-
       this._current = name
     }
   }
@@ -65,7 +61,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     if (this._current !== undefined) {
       const data = this._i[this._current]
 
-      if (propagate) {
+      if (propagate && data !== undefined) {
         this._forward_(output, data)
         this._backward_if_ready()
       }

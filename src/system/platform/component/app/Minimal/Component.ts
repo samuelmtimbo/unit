@@ -43,9 +43,10 @@ export default class Minimal extends Element<SVGElement, Props> {
     this.$slot = {
       default: svg,
     }
-    this.$subComponent = {
+
+    this.setSubComponents({
       svg,
-    }
+    })
 
     this.registerRoot(svg)
   }

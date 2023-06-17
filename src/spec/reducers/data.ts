@@ -1,5 +1,5 @@
-import dissocAll from '../../system/core/object/DissocAll/f'
-import dissocPath from '../../system/core/object/DissocPath/f'
+import dissocAll from '../../system/core/object/DeleteAll/f'
+import dissocPath from '../../system/core/object/DeletePath/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { Action, DatumSpec, GraphDataSpec } from '../../types'

@@ -16,4 +16,4 @@ false && watchGraphAndLog(composition0)
 
 const addId = '0'
 
-assert.equal(composition0.refUnit(addId).getOutput('a + b').take(), 11)
+assert.equal(composition0.getUnit(addId).getOutput('a + b').take(), 11)

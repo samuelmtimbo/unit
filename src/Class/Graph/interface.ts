@@ -4,78 +4,68 @@ import {
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
-  GraphSpec,
   GraphSubPinSpec,
   GraphUnitsSpec,
 } from '../../types'
 import { Dict } from '../../types/Dict'
+import { GraphSpec } from '../../types/GraphSpec'
 import { IO } from '../../types/IO'
 import { IOOf, _IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
+import { GraphSelection } from '../../types/interface/G'
 
-export type GraphMoveSubGraphIntoData = {
-  graphId: string
-  nodeIds: {
-    merge: string[]
-    link: {
-      unitId: string
-      type: IO
-      pinId: string
-    }[]
-    unit: string[]
-    plug: {
-      type: IO
-      pinId: string
-      subPinId: string
-    }[]
-  }
+export type GraphMoveSubGraphData = {
+  nodeIds: GraphSelection
+  nextSpecId: string
   nextIdMap: {
-    merge: Dict<string>
-    link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-    plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
-    unit: Dict<string>
+    merge?: Dict<string>
+    link?: Dict<_IOOf<Dict<{ mergeId: string; oppositePinId: string } | null>>>
+    plug?: _IOOf<
+      Dict<Dict<{ mergeId: string; type: IO; subPinId: string } | null>>
+    >
+    unit?: Dict<string>
+    data?: Dict<string>
   }
-  nextPinIdMap: Dict<{
-    input: Dict<{
-      pinId: string
-      subPinId: string
-      ref?: boolean
-      defaultIgnored?: boolean
-    }>
-    output: Dict<{
-      pinId: string
-      subPinId: string
-      ref?: boolean
-      defaultIgnored?: boolean
-    }>
-  }>
-  nextMergePinId: Dict<{
-    input: {
+  nextPinIdMap: Dict<
+    _IOOf<
+      Dict<{
+        pinId: string
+        subPinId: string
+        ref?: boolean
+        defaultIgnored?: boolean
+        mergeId?: string
+        merge?: GraphMergeSpec
+      }>
+    >
+  >
+  nextUnitPinMergeMap: Dict<_IOOf<Dict<string>>>
+  nextMergePinId: Dict<
+    _IOOf<{
       mergeId: string
       pinId: string
       subPinSpec: GraphSubPinSpec
+      oppositeMerge?: GraphMergeSpec
       ref?: boolean
-    }
-    output: {
-      mergeId: string
-      pinId: string
-      subPinSpec: GraphSubPinSpec
-      ref?: boolean
-    }
-  }>
-  nextPlugSpec: {
-    input: Dict<Dict<GraphSubPinSpec>>
-    output: Dict<Dict<GraphSubPinSpec>>
-  }
+    }>
+  >
+  nextPlugSpec: _IOOf<Dict<Dict<GraphSubPinSpec>>>
+  nextSubComponentIndexMap: Dict<number>
   nextSubComponentParentMap: Dict<string | null>
   nextSubComponentChildrenMap: Dict<string[]>
+  position?: Position
 }
+
+export type GraphMoveSubGraphIntoData = GraphMoveSubGraphData & {
+  graphId: string
+}
+
+export type GraphMoveSubGraphOutOfData = GraphMoveSubGraphIntoData
 
 export type GraphAddUnitData = {
   unitId: string
   bundle: UnitBundleSpec
   position?: Position | undefined
-  pinPosition?: IOOf<Dict<Position>> | undefined
+  pinPosition?: _IOOf<Dict<Position>> | undefined
   layoutPositon?: Position | undefined
   parentId?: string | null | undefined
   merges?: GraphMergesSpec | undefined
@@ -91,10 +81,11 @@ export type GraphSetUnitPinDataData = {
   pinId: string
   type: IO
   data: string
+  lastData: string
 }
 
 export type GraphRemoveMergeDataData = {
-  id: string
+  mergeId: string
 }
 
 export type GraphSetUnitNameData = {
@@ -123,7 +114,7 @@ export type GraphRemoveUnitData = {
   unitId: string
   bundle?: UnitBundleSpec
   position?: Position
-  pinPosition?: { input: Dict<Position>; output: Dict<Position> }
+  pinPosition?: _IOOf<Dict<Position>>
   layoutPositon?: Position
   parentId?: string | null
   merges?: GraphMergesSpec
@@ -228,7 +219,7 @@ export type GraphAddMergesData = {
 }
 
 export type GraphSetMergeDataData = {
-  id: string
+  mergeId: string
   data: string
 }
 
@@ -263,59 +254,6 @@ export type GraphAddUnitGhostData = {
   nextUnitPinMap: IOOf<Dict<string>>
 }
 
-export type GraphMoveUnitIntoData = {
-  graphId: string
-  unitId: string
-  nextUnitId: string
-  ignoredPin: {
-    input: Set<string>
-    output: Set<string>
-  }
-  ignoredMerge: Set<string>
-  nextPinMap: {
-    input: Dict<{
-      pinId: string
-      subPinId: string
-    }>
-    output: Dict<{
-      pinId: string
-      subPinId: string
-    }>
-  }
-  nextUnitSubComponentParent: string | null
-  nextSubComponentChildren: string[]
-}
-
-export type GraphMoveLinkPinIntoData = {
-  graphId: string
-  unitId: string
-  type: IO
-  pinId: string
-}
-
-export type GraphMoveMergeIntoData = {
-  graphId: string
-  mergeId: string
-  nextInputMergeId: {
-    mergeId: string
-    pinId: string
-    subPinSpec: GraphSubPinSpec
-  }
-  nextOutputMergeId: {
-    mergeId: string
-    pinId: string
-    subPinSpec: GraphSubPinSpec
-  }
-}
-
-export type GraphMovePlugIntoData = {
-  graphId: string
-  type: IO
-  pinId: string
-  subPinId: string
-  subPinSpec: GraphSubPinSpec
-}
-
 export type GraphExplodeUnitData = {
   unitId: string
   mapUnitId: Dict<string>
@@ -326,6 +264,40 @@ export type GraphMoveSubComponentRootData = {
   parentId: string | null
   children: string[]
   slotMap: Dict<string>
+}
+
+export type GraphReorderSubComponentData = {
+  parentId: string | null
+  childId: string
+  to: number
+}
+
+export type GraphSetUnitSizeData = {
+  unitId: string
+  width: number
+  height: number
+}
+
+export type GraphSetComponentSizeData = {
+  width: number
+  height: number
+}
+
+export type GraphSetSubComponentSizeData = {
+  unitId: string
+  width: number
+  height: number
+}
+
+export type GraphSetMetadataData = {
+  path: string[]
+  data: any
+}
+
+export type GraphSetUnitMetadataData = {
+  unitId: string
+  path: string[]
+  data: any
 }
 
 export type GraphBulkEditData = {

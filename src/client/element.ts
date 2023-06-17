@@ -35,9 +35,9 @@ export class Element<
   onConnected($unit: $Element) {
     const setRef = <K extends keyof P>(
       name: K,
-      { __global_id, __ }: GlobalRefSpec
+      { globalId }: GlobalRefSpec
     ): void => {
-      const ref = $unit.$refGlobalObj({ __global_id, __ }) as unknown
+      const ref = $unit.$refGlobalObj({ globalId }) as unknown
 
       // @ts-ignore
       this.setProp(name, ref)
@@ -49,33 +49,35 @@ export class Element<
 
     const handler = {
       unit: (moment: Moment) => {
+        const { specs, classes } = this.$system
+
         const { event: event_event, data: event_data } = moment
         if (event_event === 'set') {
           const { name, data } = event_data
 
-          this.setProp(name, data)
-        }
-      },
-      ref_input: (moment: PinDataMoment) => {
-        const {
-          event,
-          data: { pinId, data },
-        } = moment
-        if (event === 'data') {
-          setRef(pinId as keyof P, data)
-        } else {
-          dropRef(pinId as keyof P)
+          if (data !== undefined) {
+            const _data = evaluate(data, specs, classes, (url) => {
+              const globalId = url.slice(7)
+
+              return this.$unit.$refGlobalObj({ globalId })
+            })
+
+            this.setProp(name, _data)
+          } else {
+            this.setProp(name, undefined)
+          }
         }
       },
     }
 
     const element_listener = (moment: Moment): void => {
       const { type } = moment
+
       handler[type] && handler[type](moment)
     }
 
     const element_unlisten = this.$unit.$watch(
-      { events: ['set', 'call', 'ref_input'] },
+      { events: ['set', 'call' /**, 'ref_input' */] },
       element_listener
     )
 
@@ -84,10 +86,19 @@ export class Element<
     $unit.$read({}, (state) => {
       const { specs, classes } = this.$system
 
-      const _state = evaluate(state, specs, classes)
+      const _state = evaluate(state, specs, classes, (url) => {
+        if (url.startsWith('unit://')) {
+          const globalId = url.slice(7)
+
+          return $unit.$refGlobalObj({ globalId })
+        } else {
+          throw new Error('resolver not implemented')
+        }
+      })
 
       for (const name in _state) {
         const data = _state[name]
+
         this.setProp(name as keyof P, data)
       }
     })

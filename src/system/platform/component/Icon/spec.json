@@ -20,7 +20,7 @@
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "click me!",
+    "description": "icon from the system",
     "complexity": 22,
     "tags": ["platform", "component"]
   },

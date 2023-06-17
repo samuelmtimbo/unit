@@ -68,10 +68,11 @@ export default class GUIControlKeyboard extends Component<
     this.$slot = root.$slot
     this.$unbundled = false
     this.$primitive = true
-    this.$subComponent = {
+
+    this.setSubComponents({
       root,
       keyboard,
-    }
+    })
 
     this.registerRoot(root)
   }

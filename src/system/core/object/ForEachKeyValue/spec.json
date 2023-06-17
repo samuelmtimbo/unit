@@ -103,7 +103,7 @@
           "mergeId": "4"
         }
       },
-      "type": "number|string"
+      "type": "string"
     },
     "value": {
       "plug": {

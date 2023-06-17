@@ -10,12 +10,18 @@ import {
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
   GraphMoveSubGraphIntoData,
+  GraphMoveSubGraphOutOfData,
   GraphPlugPinData,
   GraphRemoveMergeData,
   GraphRemoveMergeDataData,
   GraphRemovePinFromMergeData,
   GraphRemoveUnitData,
   GraphRemoveUnitPinDataData,
+  GraphSetComponentSizeData,
+  GraphSetSubComponentSizeData,
+  GraphSetUnitMetadataData,
+  GraphSetUnitPinDataData,
+  GraphSetUnitSizeData,
   GraphUnplugPinData,
 } from '../../Class/Graph/interface'
 import { Position } from '../../client/util/geometry'
@@ -33,12 +39,12 @@ import { Dict } from '../../types/Dict'
 import { G } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
 import { IO } from '../../types/IO'
-import { IOOf, _IOOf } from '../../types/IOOf'
+import { _IOOf, IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import {
-  MOVE_SUB_COMPONENT_ROOT,
   makeMoveSubComponentRootAction,
   makeReorderSubComponentAction,
+  MOVE_SUB_COMPONENT_ROOT,
   REORDER_SUB_COMPONENT,
 } from './C'
 
@@ -76,7 +82,11 @@ export const REMOVE_UNIT_MERGES = 'removeUnitMerges'
 export const EXPAND_UNIT = 'expandUnit'
 export const COLLAPSE_UNITS = 'collapseUnits'
 export const MOVE_SUBGRAPH_INTO = 'moveSubgraphInto'
+export const MOVE_SUBGRAPH_OUT_OF = 'moveSubgraphOutOf'
 export const EXPLODE_UNIT = 'explodeUnit'
+export const SET_UNIT_SIZE = 'setUnitSize'
+export const SET_COMPONENT_SIZE = 'setComponentSize'
+export const SET_SUB_COMPONENT_SIZE = 'setSubComponentSize'
 
 export const wrapAddUnitAction = (data: GraphAddUnitData) => {
   return {
@@ -89,7 +99,7 @@ export const makeAddUnitAction = (
   unitId: string,
   bundle: UnitBundleSpec,
   position?: Position | undefined,
-  pinPosition?: IOOf<Dict<Position>> | undefined,
+  pinPosition?: _IOOf<Dict<Position>> | undefined,
   layoutPositon?: Position | undefined,
   parentId?: string | null | undefined,
   merges?: GraphMergesSpec | undefined
@@ -107,6 +117,13 @@ export const makeAddUnitAction = (
 export const wrapMoveSubgraphIntoData = (data: GraphMoveSubGraphIntoData) => {
   return {
     type: MOVE_SUBGRAPH_INTO,
+    data,
+  }
+}
+
+export const wrapMoveSubgraphOutOfData = (data: GraphMoveSubGraphOutOfData) => {
+  return {
+    type: MOVE_SUBGRAPH_OUT_OF,
     data,
   }
 }
@@ -147,6 +164,7 @@ export const makeMoveSubgraphIntoAction = (
       defaultIgnored?: boolean
     }>
   }>,
+  nextUnitPinMergeMap: Dict<IOOf<Dict<string>>>,
   nextMergePinId: Dict<{
     input: {
       mergeId: string
@@ -166,10 +184,86 @@ export const makeMoveSubgraphIntoAction = (
     output: Dict<Dict<GraphSubPinSpec>>
   },
   nextSubComponentParentMap: Dict<string | null>,
-  nextSubComponentChildrenMap: Dict<string[]>
+  nextSubComponentChildrenMap: Dict<string[]>,
+  nextSubComponentIndexMap: Dict<number>
 ) => {
   return wrapMoveSubgraphIntoData({
     graphId,
+    nextSpecId: null,
+    nodeIds,
+    nextIdMap,
+    nextPinIdMap,
+    nextMergePinId,
+    nextPlugSpec,
+    nextUnitPinMergeMap,
+    nextSubComponentParentMap,
+    nextSubComponentChildrenMap,
+    nextSubComponentIndexMap,
+  })
+}
+
+export const makeMoveSubgraphOutOfAction = (
+  graphId: string,
+  nodeIds: {
+    merge: string[]
+    link: {
+      unitId: string
+      type: IO
+      pinId: string
+    }[]
+    unit: string[]
+    plug: {
+      type: IO
+      pinId: string
+      subPinId: string
+    }[]
+  },
+  nextIdMap: {
+    merge: Dict<string>
+    link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
+    plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
+    unit: Dict<string>
+  },
+  nextUnitPinMergeMap: Dict<IOOf<Dict<string>>>,
+  nextPinIdMap: Dict<{
+    input: Dict<{
+      pinId: string
+      subPinId: string
+      ref?: boolean
+      defaultIgnored?: boolean
+    }>
+    output: Dict<{
+      pinId: string
+      subPinId: string
+      ref?: boolean
+      defaultIgnored?: boolean
+    }>
+  }>,
+  nextMergePinId: Dict<{
+    input: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+      ref?: boolean
+    }
+    output: {
+      mergeId: string
+      pinId: string
+      subPinSpec: GraphSubPinSpec
+      ref?: boolean
+    }
+  }>,
+  nextPlugSpec: {
+    input: Dict<Dict<GraphSubPinSpec>>
+    output: Dict<Dict<GraphSubPinSpec>>
+  },
+  nextSubComponentParentMap: Dict<string | null>,
+  nextSubComponentChildrenMap: Dict<string[]>,
+  nextSubComponentIndexMap: Dict<number>
+) => {
+  return wrapMoveSubgraphOutOfData({
+    graphId,
+    nextSpecId: null,
     nodeIds,
     nextIdMap,
     nextPinIdMap,
@@ -177,6 +271,8 @@ export const makeMoveSubgraphIntoAction = (
     nextPlugSpec,
     nextSubComponentParentMap,
     nextSubComponentChildrenMap,
+    nextSubComponentIndexMap,
+    nextUnitPinMergeMap,
   })
 }
 
@@ -200,7 +296,7 @@ export const makeRemoveUnitAction = (
   unitId: string,
   bundle: UnitBundleSpec,
   position?: Position,
-  pinPosition?: { input: Dict<Position>; output: Dict<Position> },
+  pinPosition?: _IOOf<Dict<Position>>,
   layoutPositon?: Position,
   parentId?: string | null,
   merges?: GraphMergesSpec
@@ -369,21 +465,26 @@ export const makeCoverPinAction = (
   return wrapCoverPinAction({ type, pinId, subPinId, subPinSpec })
 }
 
+export const wrapSetUnitPinDataAction = (data: GraphSetUnitPinDataData) => {
+  return {
+    type: SET_UNIT_PIN_DATA,
+    data,
+  }
+}
+
 export const makeSetUnitPinDataAction = (
   unitId: string,
   type: IO,
   pinId: string,
   data: any
 ) => {
-  return {
-    type: SET_UNIT_PIN_DATA,
-    data: {
-      unitId,
-      type,
-      pinId,
-      data,
-    },
-  }
+  return wrapSetUnitPinDataAction({
+    unitId,
+    type,
+    pinId,
+    data,
+    lastData: undefined,
+  })
 }
 
 export const makeSetUnitPinConstantAction = (
@@ -441,19 +542,89 @@ export const makeRemoveUnitPinDataAction = (
   })
 }
 
-export const makeSetUnitMetadataAction = (
-  id: string,
-  path: string[],
-  value: any
-) => {
+export const wrapSetUnitMetadataAction = (data: GraphSetUnitMetadataData) => {
   return {
     type: SET_UNIT_METADATA,
-    data: {
-      id,
-      path,
-      value,
-    },
+    data,
   }
+}
+
+export const makeSetUnitMetadataAction = (
+  unitId: string,
+  path: string[],
+  data: any
+) => {
+  return wrapSetUnitMetadataAction({
+    unitId,
+    path,
+    data,
+  })
+}
+
+export const wrapSetUnitSizeAction = (data: GraphSetUnitSizeData) => {
+  return {
+    type: SET_UNIT_SIZE,
+    data,
+  }
+}
+
+export const makeSetUnitSizeAction = (
+  unitId: string,
+  width: number,
+  height: number
+) => {
+  return wrapSetUnitSizeAction({
+    unitId,
+    width,
+    height,
+  })
+}
+
+export const makeSetSubComponentSizeAction = (
+  unitId: string,
+  width: number,
+  height: number
+) => {
+  return wrapSetUnitSizeAction({
+    unitId,
+    width,
+    height,
+  })
+}
+
+export const wrapSetSubComponentSizeAction = (
+  data: GraphSetSubComponentSizeData
+) => {
+  return {
+    type: SET_SUB_COMPONENT_SIZE,
+    data,
+  }
+}
+
+export const makeSetSubComponentSize = (
+  unitId: string,
+  width: number,
+  height: number
+) => {
+  return wrapSetSubComponentSizeAction({
+    unitId,
+    width,
+    height,
+  })
+}
+
+export const wrapSetComponentSizeAction = (data: GraphSetComponentSizeData) => {
+  return {
+    type: SET_COMPONENT_SIZE,
+    data,
+  }
+}
+
+export const makeSetComponentSizeAction = (width: number, height: number) => {
+  return wrapSetComponentSizeAction({
+    width,
+    height,
+  })
 }
 
 export const makeSetMetadataAction = (path: string[], value: any) => {
@@ -692,6 +863,13 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.pinId,
         !data.constant
       )
+    case SET_UNIT_PIN_DATA:
+      return makeSetUnitPinDataAction(
+        data.unitId,
+        data.type,
+        data.pinId,
+        undefined
+      )
     case SET_UNIT_PIN_IGNORED:
       return makeSetUnitPinIgnoredAction(
         data.unitId,
@@ -729,7 +907,31 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.from
       )
     case MOVE_SUBGRAPH_INTO:
-      return makeExplodeUnitAction(data.graphId, {}, {}) // TODO
+      return makeMoveSubgraphOutOfAction(
+        data.graphId,
+        data.nodeIds,
+        data.nextIdMap,
+        data.nextUnitPinMergeMap,
+        data.nextPinIdMap,
+        data.nextMergePinId,
+        data.nextPlugSpec,
+        data.nextSubComponentParentMap,
+        data.nextSubComponentChildrenMap,
+        data.nextSubComponentIndexMap
+      )
+    case MOVE_SUBGRAPH_OUT_OF:
+      return makeMoveSubgraphIntoAction(
+        data.graphId,
+        data.nodeIds,
+        data.nextIdMap,
+        data.nextUnitPinMergeMap,
+        data.nextPinIdMap,
+        data.nextMergePinId,
+        data.nextPlugSpec,
+        data.nextSubComponentParentMap,
+        data.nextSubComponentChildrenMap,
+        data.nextSubComponentIndexMap
+      )
     case BULK_EDIT:
       return makeBulkEditAction([...data.actions].reverse().map(reverseAction))
     default:
@@ -739,18 +941,22 @@ export const reverseAction = ({ type, data }: Action): Action => {
 
 export const processAction = (
   action: Action,
-  method: Partial<AllKeys<G & U, Function>>
+  method: Partial<AllKeys<G & U, Function>>,
+  fallback?: (data) => void
 ): void => {
   const { type, data } = action
 
-  if (!method[type]) throw new Error(`No method for ${type}`)
+  if (!method[type] && fallback) {
+    throw new Error(`No method for ${type}`)
+  }
 
-  method[type](data)
+  ;(method[type] ?? fallback)(data)
 }
 
 export const processActions = (
   actions: Action[],
-  method: Partial<AllKeys<G, Function>>
+  method: Partial<AllKeys<G, Function>>,
+  fallback?: (data: any) => void
 ): void => {
-  actions.forEach((action) => processAction(action, method))
+  actions.forEach((action) => processAction(action, method, fallback))
 }

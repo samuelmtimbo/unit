@@ -1,4 +1,4 @@
-import { GraphSpec } from '../..'
+import { GraphSpec } from '../../GraphSpec'
 import { Graph } from '../../../Class/Graph'
 import {
   GraphAddMergeData,
@@ -16,13 +16,9 @@ import {
   GraphExposePinData,
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
-  GraphMoveLinkPinIntoData,
-  GraphMoveMergeIntoData,
-  GraphMovePlugIntoData,
   GraphMoveSubComponentRootData,
   GraphMoveSubGraphIntoData,
   GraphMoveUnitData,
-  GraphMoveUnitIntoData,
   GraphPlugPinData,
   GraphRemoveMergeData,
   GraphRemoveMergeDataData,
@@ -50,8 +46,8 @@ import { evaluate } from '../../../spec/evaluate'
 import { fromId } from '../../../spec/fromId'
 import { stringify } from '../../../spec/stringify'
 import {
-  stringifyBundleSpecData,
   stringifyGraphSpecData,
+  stringifyUnitBundleSpecData,
 } from '../../../spec/stringifySpec'
 import { System } from '../../../system'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
@@ -194,12 +190,12 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId: id,
       pinSpec: pin,
     }: GraphExposeUnitPinSetData) {
-      const unit = graph.refUnit(unitId) as Graph
+      const unit = graph.getUnit(unitId) as Graph
       unit.exposePinSet(type, id, pin)
     },
 
     $coverUnitPinSet({ unitId, type, pinId: id }: GraphCoverUnitPinSetData) {
-      const unit = graph.refUnit(unitId) as Graph
+      const unit = graph.getUnit(unitId) as Graph
       unit.coverPinSet(type, id)
     },
 
@@ -245,23 +241,18 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.addMerges(merges)
     },
 
-    $setMergeData({ id, data }: GraphSetMergeDataData): void {
+    $setMergeData({ mergeId, data }: GraphSetMergeDataData): void {
       const system = graph.refSystem()
 
       const { specs, classes } = system
 
-      const _specs = system.specs
+      const _data = evaluate(data, specs, classes)
 
-      const _data = evaluate(data, { ...specs, ..._specs }, classes)
-
-      const mergePin = graph.refMergePin(id, 'input')
-
-      mergePin.push(_data)
+      graph.setMergeData(mergeId, _data)
     },
 
-    $removeMergeData({ id }: GraphRemoveMergeDataData): void {
-      const mergePin = graph.refMergePin(id, 'input')
-      mergePin.take()
+    $removeMergeData({ mergeId }: GraphRemoveMergeDataData): void {
+      graph.removeMergeData(mergeId)
     },
 
     $addPinToMerge({
@@ -300,7 +291,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     ): void {
       const ghost = graph.removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
 
-      stringifyBundleSpecData(ghost.bundle)
+      stringifyUnitBundleSpecData(ghost.bundle)
 
       callback(ghost)
     },
@@ -314,12 +305,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       parseMemoryData(graph.__system, nextUnitBundle.unit.memory)
 
       graph.addUnitGhost(unitId, nextUnitId, nextUnitBundle, nextUnitPinMap)
-    },
-
-    $getSpec({}: {}, callback: Callback<GraphSpec>): void {
-      const spec = graph.getSpec()
-
-      callback(spec)
     },
 
     $getBundle({}: {}, callback: Callback<BundleSpec>): void {
@@ -336,7 +321,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       { unitId, type, pinId }: { unitId: string; type: IO; pinId: string },
       callback: (data: { input: Dict<any>; output: Dict<any> }) => void
     ): void {
-      const state = graph.getUnitPinData(unitId, type, pinId)
+      const state = graph.getUnitData(unitId, type, pinId)
       callback(state)
     },
 
@@ -360,12 +345,12 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       const state = graph.getGraphState()
       const children = graph.getGraphChildren()
       const err = graph.getGraphErr()
-      const units = graph.refUnits()
+      const units = graph.getUnits()
 
       const pinData = {}
 
       forEachValueKey(units, (unit: Unit, unitId: string) => {
-        const unitPinData = unit.getPinData()
+        const unitPinData = unit.getPinsData()
 
         const _unitPinData = stringifyPinData(unitPinData)
 
@@ -409,7 +394,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         memory: Dict<any>
       }) => void
     ) {
-      const unit = graph.refUnit(unitId)
+      const unit = graph.getUnit(unitId)
       const memory = unit.snapshot()
       callback(memory)
     },
@@ -432,9 +417,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     $getGraphPinData({}: {}, callback: (data: Dict<any>) => void): void {
       // const state = graph.getGraphPinData()
       const pinData = {}
-      const units = graph.refUnits()
+      const units = graph.getUnits()
       forEachValueKey(units, (unit: Unit, unitId: string) => {
-        const unitPinData = unit.getPinData()
+        const unitPinData = unit.getPinsData()
         const _unitPinData = stringifyPinData(unitPinData)
         pinData[unitId] = _unitPinData
       })
@@ -550,7 +535,7 @@ export const AsyncGWatch = (graph: Graph): $G_W => {
       { unitId, events }: { unitId: string; events: string[] },
       callback: (moment: Moment) => void
     ): Unlisten {
-      const unit = graph.refUnit(unitId)
+      const unit = graph.getUnit(unitId)
       return watchUnit(unit, callback, events)
     },
 
@@ -623,7 +608,7 @@ export const AsyncGRef = (graph: Graph): $G_R => {
     },
 
     $refUnit({ unitId, _ }: { unitId: string; _: string[] }): $U {
-      const unit = graph.refUnit(unitId)
+      const unit = graph.getUnit(unitId)
       const $unit = Async(unit, _)
 
       return proxyWrap($unit, _)
@@ -637,7 +622,7 @@ export const AsyncGRef = (graph: Graph): $G_R => {
       _: string[]
     }): $Component {
       console
-      const unit = graph.refUnit(unitId)
+      const unit = graph.getUnit(unitId)
       const $unit = Async(unit, _)
       return proxyWrap($unit, _)
     },

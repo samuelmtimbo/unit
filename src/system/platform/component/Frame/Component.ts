@@ -1,3 +1,4 @@
+import { NOOP } from '../../../../NOOP'
 import { addListeners } from '../../../../client/addListener'
 import { Component } from '../../../../client/component'
 import {
@@ -132,7 +133,7 @@ export default class Frame extends Element<HTMLDivElement, Props> {
   private _refresh_sub_context_disabled = () => {
     const { disabled } = this.$props
     if (disabled === undefined) {
-      const { $disabled } = this.$context
+      const { $disabled } = this.$context ?? {}
       if ($disabled) {
         disableContext(this.$$context)
       } else {
@@ -196,10 +197,12 @@ export default class Frame extends Element<HTMLDivElement, Props> {
   onUnmount() {
     // console.log('Frame', 'onUnmount')
 
-    setParent(this.$$context, null)
-
     this._context_unlisten()
 
+    this._context_unlisten = undefined
+
     unmount(this.$$context)
+
+    setParent(this.$$context, null)
   }
 }

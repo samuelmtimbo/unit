@@ -16,10 +16,10 @@ import { Unlisten } from '../../Unlisten'
 import { $U, $U_C, $U_R, $U_W } from './$U'
 import { Async } from './Async'
 
-export const $$refGlobalObj = (system: System, id: string, _: string[]) => {
-  const $ = getGlobalRef(system, id)
+export const $$refGlobalObj = (system: System, globalId: string) => {
+  const $ = getGlobalRef(system, globalId)
 
-  const $unit = Async($, _)
+  const $unit = Async($, $.__)
 
   return $unit
 }
@@ -27,9 +27,9 @@ export const $$refGlobalObj = (system: System, id: string, _: string[]) => {
 export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
   return {
     $getGlobalId(data: {}, callback: Callback<string>): void {
-      const __global_id = unit.getGlobalId()
+      const __globalId = unit.getGlobalId()
 
-      callback(__global_id)
+      callback(__globalId)
     },
 
     $play(data: {}) {
@@ -72,7 +72,7 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       data: {},
       callback: (data: { input: Dict<any>; output: Dict<any> }) => void
     ): void {
-      const _data = unit.getPinData()
+      const _data = unit.getPinsData()
       const __data = stringifyPinData(_data)
       callback(__data)
     },
@@ -87,10 +87,11 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
 
       const __data = mapObjVK(_data, (unit: Unit) => {
         const __ = unit.getInterface()
-        const __global_id = unit.getGlobalId()
+        const globalId = unit.getGlobalId()
 
-        return { __global_id, __ }
+        return { globalId, __ }
       })
+
       callback(__data)
     },
 
@@ -98,7 +99,7 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       data: { snapshot: boolean },
       callback: Callback<UnitBundleSpec>
     ): void {
-      const unitBundleSpec = unit.getUnitBundleSpec(data.snapshot)
+      const unitBundleSpec = unit.getBundle(data.snapshot)
 
       const $unitBundleSpec = clone(unitBundleSpec)
 
@@ -128,9 +129,12 @@ export const AsyncURef = (unit: Unit): $U_R => {
   return {
     $refGlobalObj(data: GlobalRefSpec): $U {
       const __system = unit.refSystem()
-      const { __global_id, __ } = data
-      const $ = $$refGlobalObj(__system, __global_id, __)
-      return proxyWrap($, __)
+
+      const { globalId } = data
+
+      const $ = $$refGlobalObj(__system, globalId)
+
+      return proxyWrap($, $.__)
     },
   }
 }

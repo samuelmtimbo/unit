@@ -108,7 +108,7 @@
           "pinId": "a"
         }
       },
-      "type": "(number|string)[]"
+      "type": "string[]"
     },
     "obj": {
       "plug": {

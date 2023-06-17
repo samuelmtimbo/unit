@@ -10,7 +10,7 @@ import {
   makeKeydownListener,
   makeShortcutListener,
 } from '../../../../../client/event/keyboard'
-import { IOPointerEvent } from '../../../../../client/event/pointer'
+import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
 import {
@@ -46,7 +46,7 @@ export interface Props {
   filter?: (u: string) => boolean
 }
 
-export const SEARCH_ITEM_HEIGHT: number = 39
+export const SEARCH_ITEM_HEIGHT: number = 40
 
 export type ListItem = {
   id: string
@@ -647,7 +647,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
   private _select_first_list_item = () => {
     const first_list_item_id = this._filtered_id_list[0]
-    this.set_selected_item_id(first_list_item_id)
+
+    this._top_element_index = 0
+
+    this.set_selected_item_id(first_list_item_id, true)
   }
 
   private _hide_list = () => {
@@ -660,26 +663,32 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._dispatch_list_hidden()
   }
 
-  private _on_list_item_pointer_enter = ({}: IOPointerEvent, id: string) => {
+  private _on_list_item_pointer_enter = ({}: UnitPointerEvent, id: string) => {
     // console.log('Search', '_on_list_item_pointer_enter')
     this.set_selected_item_id(id)
   }
 
-  private _on_list_item_click = ({}: IOPointerEvent, id: string) => {
+  private _on_list_item_click = ({}: UnitPointerEvent, id: string) => {
     // console.log('Search', '_on_list_item_click')
     this._dispatch_item_pick(id)
   }
 
-  public set_selected_item_id = (id: string): void => {
+  public set_selected_item_id = (
+    id: string,
+    force_scroll: boolean = false
+  ): void => {
     const prev_selected_id = this._selected_id
 
-    this._set_selected_item_id(id)
+    this._set_selected_item_id(id, force_scroll)
     if (this._selected_id !== prev_selected_id) {
       this._dispatch_item_selected(id)
     }
   }
 
-  private _set_selected_item_id = (id: string): void => {
+  private _set_selected_item_id = (
+    id: string,
+    force_scroll: boolean = false
+  ): void => {
     // console.log('Search', '_set_selected_item_id', id)
 
     const { style = {}, selectedColor = 'currentColor' } = this.$props
@@ -694,7 +703,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._set_list_item_color(id, selectedColor)
 
     if (!this._list_hidden) {
-      this._scroll_into_item(id)
+      this._scroll_into_item(id, force_scroll)
     }
   }
 
@@ -718,21 +727,30 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this.set_selected_item_id(next_selected_spec_id)
   }
 
-  private _scroll_into_item = (id: string) => {
+  private _top_element_index = 0
+
+  private _scroll_into_item = (id: string, force: boolean = false) => {
     // console.log('Search', '_scroll_into_item', id)
 
-    const scroll_index = this._list.$element.scrollTop / SEARCH_ITEM_HEIGHT
+    // const { scrollTop } = this._list.$element
+
+    // const scroll_index = scrollTop / SEARCH_ITEM_HEIGHT
 
     const selected_id_index = this._filtered_id_list.indexOf(id)
 
+    const scroll_index = this._top_element_index ?? selected_id_index
+
     if (
+      force ||
       selected_id_index - scroll_index >= 4 ||
       selected_id_index - scroll_index < 0
     ) {
       const list_item = this._list_item_div[id]
 
-      // list_item.$element.scrollIntoView({ behavior: 'auto', block: 'start' })
-      this._list.$element.scrollTop = selected_id_index * SEARCH_ITEM_HEIGHT
+      list_item.$element.scrollIntoView({ behavior: 'auto', block: 'start' })
+
+      this._top_element_index = selected_id_index
+      // this._list.$element.scrollTop = selected_id_index * SEARCH_ITEM_HEIGHT
       // this._list.$element.scrollTo({
       //   top: selected_id_index * SEARCH_ITEM_HEIGHT,
       //   behavior: 'auto',
@@ -748,6 +766,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
     const { style = {}, filter = () => true } = this.$props
 
     const { color = 'currentColor' } = style
+
+    const prev_selected_id = this._selected_id
 
     if (this._filtered_id_list.length > 0) {
       const last_list_item_id =
@@ -823,7 +843,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
       if (preserve_selected) {
         if (this._selected_id) {
           if (this._filtered_id_list.includes(this._selected_id)) {
-            this._scroll_into_item(this._selected_id)
+            this._top_element_index = 0
+
+            this._scroll_into_item(this._selected_id, true)
           } else {
             this._select_first_list_item()
           }

@@ -78,6 +78,21 @@ export class Stateful<
     }
   }
 
+  onRefInputData(name: any, data: any): void {
+    super.onRefInputData(name, data)
+
+    // console.log('Stateful', 'onRefInputData', name, data)
+    this._forwarding = true
+    this.set(name, data)
+    this._forwarding = false
+  }
+
+  onRefInputDrop(name: any): void {
+    if (!this._backwarding) {
+      this.set(name, undefined)
+    }
+  }
+
   public async get(name: string): Promise<any> {
     return this._state[name] ?? this._defaultState[name]
   }

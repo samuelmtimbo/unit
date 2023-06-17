@@ -1,8 +1,8 @@
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
-import { IOPointerEvent } from '../pointer'
+import { UnitPointerEvent } from '../pointer'
 
-export type IODragEnterEvent = IOPointerEvent & { id: string }
+export type IODragEnterEvent = UnitPointerEvent & { id: string }
 
 export function makeDragStartListener(
   listener: (event: IODragEnterEvent) => void,

@@ -12,7 +12,7 @@
         "a": {}
       }
     },
-    "assoc": {
+    "set": {
       "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
       "input": {
         "obj": {},
@@ -31,7 +31,7 @@
           "a": true
         }
       },
-      "assoc": {
+      "set": {
         "input": {
           "value": true
         }
@@ -69,16 +69,16 @@
     "key": {
       "plug": {
         "0": {
-          "unitId": "assoc",
+          "unitId": "set",
           "pinId": "key"
         }
       },
-      "type": "number|string"
+      "type": "string"
     },
     "obj": {
       "plug": {
         "0": {
-          "unitId": "assoc",
+          "unitId": "set",
           "pinId": "obj"
         }
       },
@@ -89,7 +89,7 @@
     "obj": {
       "plug": {
         "0": {
-          "unitId": "assoc",
+          "unitId": "set",
           "pinId": "obj"
         }
       },

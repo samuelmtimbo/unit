@@ -1,5 +1,6 @@
 import { getSpec, isSystemSpecId } from './client/spec'
-import { GraphSpec, GraphSpecs, GraphUnitSpec, Specs } from './types'
+import { GraphSpecs, GraphUnitSpec, Specs } from './types'
+import { GraphSpec } from './types/GraphSpec'
 import { BundleSpec } from './types/BundleSpec'
 import { UnitBundleSpec } from './types/UnitBundleSpec'
 
@@ -67,7 +68,7 @@ export function unitBundleSpecById(id: string, specs: Specs): UnitBundleSpec {
 export function bundleSpec(spec: GraphSpec, specs: Specs): BundleSpec {
   const custom: GraphSpecs = {}
 
-  const branch = new Set<string>([spec.id])
+  const branch = new Set<string>([])
 
   _bundle(spec, specs, custom, branch)
 

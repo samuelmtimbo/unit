@@ -67,12 +67,12 @@ composition0.addMerges({
   },
 })
 
-assert.equal(composition0.refUnit(id0).peakOutput('a'), 0)
-assert.equal(composition0.refUnit(id0).peakInput('a'), 0)
-assert.equal(composition0.refUnit(id1).peakOutput('a'), 0)
-assert.equal(composition0.refUnit(id1).peakInput('a'), 0)
-assert.equal(composition0.refUnit(id2).peakOutput('a'), 0)
-assert.equal(composition0.refUnit(id2).peakInput('a'), 0)
+assert.equal(composition0.getUnit(id0).peakOutput('a'), 0)
+assert.equal(composition0.getUnit(id0).peakInput('a'), 0)
+assert.equal(composition0.getUnit(id1).peakOutput('a'), 0)
+assert.equal(composition0.getUnit(id1).peakInput('a'), 0)
+assert.equal(composition0.getUnit(id2).peakOutput('a'), 0)
+assert.equal(composition0.getUnit(id2).peakInput('a'), 0)
 
 const spec0 = system.emptySpec()
 
@@ -100,8 +100,8 @@ composition1.addMerge(
   },
   '0'
 )
-const identity3 = composition1.refUnit(id3)
-const identity4 = composition1.refUnit(id4)
+const identity3 = composition1.getUnit(id3)
+const identity4 = composition1.getUnit(id4)
 
 identity3.push('a', 1)
 identity3.push('a', 2)
@@ -193,8 +193,8 @@ composition4.addUnitSpec(UNIT_ID_TRUE, {
   unit: { id: ID_TRUE },
 })
 
-const filter = composition4.refUnit(UNIT_ID_FILTER)
-const _true = composition4.refUnit(UNIT_ID_TRUE)
+const filter = composition4.getUnit(UNIT_ID_FILTER)
+const _true = composition4.getUnit(UNIT_ID_TRUE)
 
 filter.push('a', [0, 1, 2])
 

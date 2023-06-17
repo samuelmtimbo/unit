@@ -1,5 +1,6 @@
 import { Position } from '../client/util/geometry'
 import { Dict } from './Dict'
+import { GraphSpec } from './GraphSpec'
 import { IO } from './IO'
 import { IOOf, _IOOf } from './IOOf'
 import { None } from './None'
@@ -27,6 +28,7 @@ export type PinSpecBase = {
   functional?: boolean
   defaultIgnored?: boolean
   ref?: boolean
+  data?: any
   type?: string
   init?: string
   icon?: string
@@ -140,25 +142,6 @@ export type GraphSpecBase = {
   merges?: GraphMergesSpec
   inputs?: GraphPinsSpec
   outputs?: GraphPinsSpec
-}
-
-export type GraphSpec = GraphSpecBase & {
-  base?: false
-  type?: '`U`&`G`' | '`U`&`G`&`C`'
-  method?: boolean
-  private?: boolean
-  system?: boolean
-  fork?: boolean
-  units?: GraphUnitsSpec
-  name?: string
-  metadata?: GraphMetadataSpec
-  data?: GraphDataSpec
-  render?: boolean
-  component?: GraphComponentSpec
-  methods?: Dict<GraphSpec>
-  self?: string | None
-  id?: string
-  specs?: GraphSpecs
 }
 
 export type BaseSpecs = {

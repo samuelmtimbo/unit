@@ -33,6 +33,13 @@ export type Pin_M<T = any> = {
 
 export type PinEvents<T> = EventEmitter_EE<Pin_EE<T>> & Pin_EE<T>
 
+export type PinConstructor = {
+  data?: any
+  constant?: boolean
+  ignored?: boolean
+  ref?: boolean
+}
+
 export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
   private _constant: boolean = false
   private _ignored: boolean = false
@@ -41,17 +48,7 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
   private _idle: boolean = true
   private _register: T | undefined = undefined
 
-  constructor({
-    data,
-    constant,
-    ignored,
-    ref,
-  }: {
-    data?: any
-    constant?: boolean
-    ignored?: boolean
-    ref?: boolean
-  } = {}) {
+  constructor({ data, constant, ignored, ref }: PinConstructor = {}) {
     super()
 
     if (data !== undefined) {
@@ -129,8 +126,11 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
 
     this.emit('data', data)
 
-    if (this._ignored && !this._ref) {
-      this.take()
+    if (this._ref) {
+    } else {
+      if (this._ignored) {
+        this.take()
+      }
     }
   }
 

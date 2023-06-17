@@ -8,7 +8,7 @@ export interface I {
 
 export interface O {}
 
-export default class Text_ extends Element_<I, O> {
+export default class Text0 extends Element_<I, O> {
   constructor(system: System) {
     super(
       {

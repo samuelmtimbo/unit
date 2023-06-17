@@ -1,13 +1,8 @@
 import { forEachPinOnMerge } from '../spec/util'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keys } from '../system/f/object/Keys/f'
-import {
-  GraphPinSpec,
-  GraphSpec,
-  GraphSubPinSpec,
-  PinSpec,
-  Specs,
-} from '../types'
+import { GraphPinSpec, GraphSubPinSpec, PinSpec, Specs } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'
 import { forEach } from '../util/array'

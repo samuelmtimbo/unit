@@ -99,7 +99,7 @@
         }
       },
       "functional": true,
-      "type": "number|string"
+      "type": "string"
     },
     "obj": {
       "plug": {

@@ -1,4 +1,5 @@
-import { GraphSpec, GraphSpecs, Spec } from '..'
+import { GraphSpecs, Spec } from '..'
+import { GraphSpec } from '../GraphSpec'
 import { Dict } from '../Dict'
 
 export interface R {

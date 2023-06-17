@@ -3,7 +3,14 @@ import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { fromUnitBundle } from './fromUnitBundle'
 import { getTree, TreeNode, TreeNodeType, _isValidObjKeyType } from './parser'
 
-export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
+export function _evaluate(
+  tree: TreeNode,
+  specs: Specs,
+  classes: Classes,
+  resolver: (url: string) => any = () => {
+    throw new Error('cannot resolve')
+  }
+): any {
   const { value, children } = tree
 
   switch (tree.type) {
@@ -29,7 +36,7 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
       const array: any[] = []
       for (const element of children) {
         if (element.type !== TreeNodeType.Invalid) {
-          array.push(_evaluate(element, specs, classes))
+          array.push(_evaluate(element, specs, classes, resolver))
         }
       }
       return array
@@ -42,7 +49,8 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
           object[_evaluate(key, specs, classes)] = _evaluate(
             value,
             specs,
-            classes
+            classes,
+            resolver
           )
         } else if (_isValidObjKeyType(entry)) {
           object[entry.value] = entry.value
@@ -57,13 +65,23 @@ export function _evaluate(tree: TreeNode, specs: Specs, classes: Classes): any {
 
       return fromUnitBundle(bundle, specs, classes)
     }
+    case TreeNodeType.Url: {
+      return resolver(value)
+    }
     default:
       throw new Error('invalid data string')
   }
 }
 
-export function evaluate(value: string, specs: Specs, classes: Classes): any {
+export function evaluate(
+  value: string,
+  specs: Specs,
+  classes: Classes,
+  resolver: (url: string) => any = () => {
+    throw new Error('cannot resolve')
+  }
+): any {
   const tree = getTree(value, false, false)
 
-  return _evaluate(tree, specs, classes)
+  return _evaluate(tree, specs, classes, resolver)
 }

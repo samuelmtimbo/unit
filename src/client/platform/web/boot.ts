@@ -108,8 +108,6 @@ export function _webBoot(
 
   system.root = _root
 
-  _root.shadowRoot
-
   attachSprite(system)
   attachStyle(system)
   attachApp(system)

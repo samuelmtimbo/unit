@@ -1,6 +1,7 @@
 import { evaluate } from '../spec/evaluate'
 import { ComponentClass, ComponentClasses } from '../system'
-import { Classes, GraphSpec, GraphUnitPinsSpec, Specs } from '../types'
+import { Classes, GraphUnitPinsSpec, Specs } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
 import { Component } from './component'
 import { componentClassFromSpec } from './componentClassFromSpec'

@@ -4,6 +4,10 @@
     "style": {
       "type": "object",
       "optional": true
+    },
+    "value": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},
@@ -11,11 +15,7 @@
     "icon": "square",
     "description": "SVG text",
     "complexity": 20,
-    "tags": [
-      "platform",
-      "component",
-      "svg"
-    ]
+    "tags": ["platform", "component", "svg"]
   },
   "id": "49ef122e-b4d1-11ea-b45e-b73d8ee2aae8",
   "base": true,

@@ -2,12 +2,14 @@ import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Unit } from '../../../../Class/Unit'
 import { cloneBundle } from '../../../../spec/cloneBundle'
+import { stringifyUnitBundleSpecData } from '../../../../spec/stringifySpec'
 import { System } from '../../../../system'
 import { UnitBundle } from '../../../../types/UnitBundle'
 import { ID_CLASS } from '../../../_ids'
 
 export interface I<T> {
   unit: Unit
+  deep: boolean
 }
 
 export interface O<T> {
@@ -18,7 +20,7 @@ export default class Class<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['unit', 'any'],
+        i: ['unit', 'deep'],
         o: ['class'],
       },
       {
@@ -33,8 +35,10 @@ export default class Class<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ unit }: I<T>, done: Done<O<T>>): void {
-    const Class = cloneBundle(unit)
+  f({ unit, deep }: I<T>, done: Done<O<T>>): void {
+    const Class = cloneBundle(unit, deep)
+
+    stringifyUnitBundleSpecData(Class.__bundle)
 
     done({ class: Class })
   }

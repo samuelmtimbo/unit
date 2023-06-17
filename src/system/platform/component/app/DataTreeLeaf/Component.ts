@@ -53,8 +53,8 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
           fontSize: '12px',
           overflowY: 'hidden',
           overflowX: 'hidden',
-          maxWidth: '100px',
-          textOverflow: 'ellipsis',
+          // maxWidth: '100px',
+          // textOverflow: 'ellipsis',
           // ...userSelect('none'),
           ...style,
         },
@@ -78,11 +78,12 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
     this.$slot = {
       default: input,
     }
-    this.$subComponent = {
-      input,
-    }
     this.$unbundled = false
     this.$primitive = true
+
+    this.setSubComponents({
+      input,
+    })
 
     this.registerRoot(input)
   }

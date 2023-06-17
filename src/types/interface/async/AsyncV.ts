@@ -6,13 +6,16 @@ import { $V, $V_C, $V_R, $V_W } from './$V'
 export const AsyncVCall: (value: V) => $V_C = (value) => {
   return {
     async $read({}: {}, callback: Callback<any>): Promise<void> {
-      let data
+      let data: any
+
       try {
         data = await value.read()
       } catch (err) {
         return callback(undefined, err.message)
       }
+
       const _data = stringify(data)
+
       callback(_data)
     },
 

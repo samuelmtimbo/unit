@@ -553,18 +553,19 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
 
     this.$element = $element
     this.$slot = container.$slot
-
-    this.$subComponent = {
-      root,
-      button,
-      icon: _icon,
-    }
+    this.$primitive = true
+    this.$unbundled = false
 
     container.registerParentRoot(button)
 
     root.registerParentRoot(container)
-    // root.registerParentRoot(button)
     root.registerParentRoot(_icon)
+
+    this.setSubComponents({
+      root,
+      button,
+      icon: _icon,
+    })
 
     this.registerRoot(root)
   }

@@ -4,7 +4,7 @@ import {
   ID_PRIORITY_MERGE,
   ID_RANGE_ARRAY,
   ID_SINGLE,
-} from './id'
+} from '../../system/_ids'
 
 const paths = [
   ID_INCREMENT,

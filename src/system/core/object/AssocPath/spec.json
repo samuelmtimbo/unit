@@ -28,7 +28,7 @@
         }
       }
     },
-    "assoc": {
+    "set": {
       "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
       "input": {
         "obj": {},
@@ -107,7 +107,7 @@
           "head": true
         }
       },
-      "assoc": {
+      "set": {
         "input": {
           "key": true
         }
@@ -143,7 +143,7 @@
           "obj": true
         }
       },
-      "assoc": {
+      "set": {
         "input": {
           "obj": true
         }
@@ -172,7 +172,7 @@
           "result": true
         }
       },
-      "assoc": {
+      "set": {
         "input": {
           "value": true
         }
@@ -201,7 +201,7 @@
         }
       },
       "functional": true,
-      "type": "(number|string)[]"
+      "type": "string[]"
     },
     "value": {
       "plug": {
@@ -232,7 +232,7 @@
           "pinId": "else"
         },
         "1": {
-          "unitId": "assoc",
+          "unitId": "set",
           "pinId": "obj"
         }
       },

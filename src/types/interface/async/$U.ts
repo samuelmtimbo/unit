@@ -74,7 +74,7 @@ export interface $U_W {
 }
 
 export interface $U_R {
-  $refGlobalObj(data: { __global_id: string; __: string[] }): $U
+  $refGlobalObj(data: { globalId: string }): $U
 }
 
 export interface $U extends $U_C, $U_W, $U_R {}

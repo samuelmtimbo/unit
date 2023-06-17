@@ -6,7 +6,7 @@ import {
 import classnames from '../../../../../client/classnames'
 import debounce from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
-import { IOPointerEvent } from '../../../../../client/event/pointer'
+import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
 import { makePointerCancelListener } from '../../../../../client/event/pointer/pointercancel'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
@@ -103,6 +103,8 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
             'inset 1px 0 0 0 currentColor, inset -1px 0 0 0 #00000000, inset 0 1px 0 0 currentColor, inset 0 -1px 0 0 currentColor',
           backgroundColor,
           cursor: 'pointer',
+          borderTopLeftRadius: '3px',
+          borderBottomLeftRadius: '3px',
         },
         title,
       },
@@ -201,17 +203,17 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
 
     const $element = parentElement($system)
 
-    this.$subComponent = {
-      drawer,
-      knob,
-      content,
-      column,
-    }
-
     this.$element = $element
     this.$slot = drawer.$slot
     this.$unbundled = false
     this.$primitive = true
+
+    this.setSubComponents({
+      drawer,
+      knob,
+      content,
+      column,
+    })
 
     this.registerRoot(drawer)
   }
@@ -347,15 +349,15 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     }
   }
 
-  private _on_knob_click = (event: IOPointerEvent) => {
+  private _on_knob_click = (event: UnitPointerEvent) => {
     this.setActive(!this._active)
   }
 
-  private _on_knob_pointer_enter = (event: IOPointerEvent) => {
+  private _on_knob_pointer_enter = (event: UnitPointerEvent) => {
     this._hover = true
   }
 
-  private _on_knob_pointer_leave = (event: IOPointerEvent) => {
+  private _on_knob_pointer_leave = (event: UnitPointerEvent) => {
     this._hover = false
   }
 
@@ -368,7 +370,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     return Math.max(Math.min(top, $height - KNOB_HEIGHT), 0)
   }
 
-  private _on_knob_pointer_down = (event: IOPointerEvent) => {
+  private _on_knob_pointer_down = (event: UnitPointerEvent) => {
     // log('Drawer', '_on_knob_pointer_down')
 
     const { clientY, pointerId } = event
@@ -380,7 +382,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     this._drag_pointer_id = pointerId
 
     const unlisten_knob = this._knob.addEventListeners([
-      makePointerMoveListener((event: IOPointerEvent) => {
+      makePointerMoveListener((event: UnitPointerEvent) => {
         if (this._drag) {
           const { pointerId } = event
           if (this._drag_pointer_id === pointerId) {
@@ -395,7 +397,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           }
         }
       }),
-      makePointerUpListener((event: IOPointerEvent) => {
+      makePointerUpListener((event: UnitPointerEvent) => {
         // log('Drawer', '_on_knob_pointer_up')
         const { pointerId } = event
         if (this._drag_pointer_id === pointerId) {

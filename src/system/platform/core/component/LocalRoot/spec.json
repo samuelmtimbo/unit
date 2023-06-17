@@ -44,7 +44,7 @@
         "obj": {},
         "name": {
           "constant": true,
-          "data": "'bundle'"
+          "data": "\"bundle\""
         },
         "data": {}
       },
@@ -94,7 +94,7 @@
       "input": {
         "a": {
           "constant": true,
-          "data": "'bundle'"
+          "data": "\"bundle\""
         }
       },
       "output": {
@@ -127,7 +127,8 @@
         "opt": {}
       },
       "output": {
-        "graph": {}
+        "graph": {},
+        "bundle": {}
       }
     },
     "delaypush": {
@@ -162,6 +163,15 @@
       },
       "output": {
         "a": {}
+      }
+    },
+    "frombundle": {
+      "id": "de2d42e2-4fca-4a3f-8783-3585c546e88b",
+      "input": {
+        "bundle": {}
+      },
+      "output": {
+        "graph": {}
       }
     }
   },
@@ -275,9 +285,21 @@
       }
     },
     "9": {
+      "frombundle": {
+        "input": {
+          "bundle": true
+        }
+      },
       "parse": {
         "output": {
           "a": true
+        }
+      }
+    },
+    "10": {
+      "frombundle": {
+        "output": {
+          "graph": true
         }
       },
       "root": {
@@ -301,7 +323,7 @@
   "metadata": {
     "icon": null,
     "description": "",
-    "complexity": 50,
+    "complexity": 49,
     "tags": ["platform", "core", "component"]
   },
   "id": "e1b6acd3-69cd-4edb-8e3e-6c78ffd28b49",

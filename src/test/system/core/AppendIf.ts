@@ -23,7 +23,7 @@ false && watchTreeAndLog(appendIf)
 
 false && watchUnitAndLog(appendIf)
 false && watchGraphAndLog(appendIf)
-false && watchGraphAndLog(appendIf.refUnit('pick') as Graph)
+false && watchGraphAndLog(appendIf.getUnit('pick') as Graph)
 
 appendIf.play()
 

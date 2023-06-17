@@ -56,7 +56,7 @@ assert.deepEqual(getSpecTypeInterfaceById(ID_SINGLE, _specs), {
 })
 
 assert.deepEqual(getSpecTypeInterfaceById(ID_TAG, _specs), {
-  input: { k: 'number|string', v: 'any' },
+  input: { k: 'string', v: 'any' },
   output: { kv: 'object' },
 })
 
@@ -70,8 +70,8 @@ assert.deepEqual(getGraphTypeMapById(ID_MERGE_AB, _specs), {
     input: { a: 'object', b: 'object' },
     output: { ab: 'object' },
   },
-  tag0: { input: { k: 'number|string', v: 'any' }, output: { kv: 'object' } },
-  tag1: { input: { k: 'number|string', v: 'any' }, output: { kv: 'object' } },
+  tag0: { input: { k: 'string', v: 'any' }, output: { kv: 'object' } },
+  tag1: { input: { k: 'string', v: 'any' }, output: { kv: 'object' } },
 })
 assert.deepEqual(getSpecTypeInterfaceById(ID_MERGE_AB, _specs), {
   input: { a: 'any', b: 'any' },

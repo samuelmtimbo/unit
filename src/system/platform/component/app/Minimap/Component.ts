@@ -108,14 +108,15 @@ export default class Minimap extends Element<HTMLDivElement, Props> {
 
     this.$element = $element
     this.$slot = map_children.$slot
-    this.$subComponent = {
+    this.$unbundled = false
+    this.$primitive = true
+
+    this.setSubComponents({
       root,
       svg,
       map_graph,
       map_children,
-    }
-    this.$unbundled = false
-    this.$primitive = true
+    })
 
     root.registerParentRoot(svg)
 

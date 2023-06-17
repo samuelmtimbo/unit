@@ -33,4 +33,4 @@ composition.play()
 
 false && watchGraphAndLog(composition)
 
-assert.equal(composition.refUnit('add').getOutput('a + b').take(), 3)
+assert.equal(composition.getUnit('add').getOutput('a + b').take(), 3)

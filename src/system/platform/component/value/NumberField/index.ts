@@ -15,8 +15,8 @@ export default class NumberField extends Value<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'min', 'max'],
-        o: [],
+        i: ['value', 'style', 'min', 'max'],
+        o: ['value'],
       },
       {},
       system,

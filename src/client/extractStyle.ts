@@ -37,8 +37,6 @@ export function _extractStyle(
     const { width, height } = measureText(textContent, fontSize)
 
     return {
-      left: '2px',
-      top: '2px',
       width: `${width}px`,
       height: `${height}px`,
     }

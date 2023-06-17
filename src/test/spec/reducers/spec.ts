@@ -1277,7 +1277,7 @@ assert.deepEqual(
     metadata: { icon: null, description: '...' },
   },
   addPinToMerge(
-    { id: 'uzzat', unitId: 'if0', type: 'input', pinId: 'a' },
+    { mergeId: 'uzzat', unitId: 'if0', type: 'input', pinId: 'a' },
     {
       name: 'if a ≤ b',
       units: {

@@ -1,7 +1,7 @@
 {
   "name": "assoc data",
   "units": {
-    "assoc": {
+    "set": {
       "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
       "input": {
         "obj": {},
@@ -21,7 +21,7 @@
     "obj": {
       "plug": {
         "0": {
-          "unitId": "assoc",
+          "unitId": "set",
           "pinId": "obj"
         }
       },
@@ -30,7 +30,7 @@
     "value": {
       "plug": {
         "0": {
-          "unitId": "assoc",
+          "unitId": "set",
           "pinId": "value"
         }
       },
@@ -41,7 +41,7 @@
     "obj": {
       "plug": {
         "0": {
-          "unitId": "assoc",
+          "unitId": "set",
           "pinId": "obj"
         }
       },

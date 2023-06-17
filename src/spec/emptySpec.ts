@@ -1,6 +1,6 @@
 import { UNTITLED } from '../constant/STRING'
 import deepMerge from '../system/f/object/DeepMerge/f'
-import { GraphSpec } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 
 export const emptyGraphSpec = (partial: Partial<GraphSpec> = {}): GraphSpec =>
   deepMerge(

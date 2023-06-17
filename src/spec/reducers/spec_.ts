@@ -6,11 +6,11 @@ import _set from '../../system/f/object/Set/f'
 import {
   GraphMergeSpec,
   GraphPinSpec,
-  GraphSpec,
   GraphSubPinSpec,
   GraphUnitSpec,
   GraphUnitsSpec,
 } from '../../types'
+import { GraphSpec } from '../../types/GraphSpec'
 import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
 import {
@@ -18,6 +18,7 @@ import {
   isEmptyObject,
   mapObjVK,
   pathDelete,
+  pathMerge,
   pathOrDefault,
   pathSet,
 } from '../../util/object'
@@ -575,14 +576,14 @@ export const setUnitPinIgnored = (
   spec: GraphSpec
 ) => {
   if (ignored) {
-    forEachPinOnMerges(spec.merges!, (id, _unitId, _type, _pinId) => {
+    forEachPinOnMerges(spec.merges ?? {}, (id, _unitId, _type, _pinId) => {
       if (_unitId === unitId && _type === type && _pinId === pinId) {
         removePinFromMerge({ mergeId: id, unitId, type, pinId }, spec)
       }
     })
 
     if (type === 'input') {
-      forEachValueKey(spec.inputs, ({ plug }, id) => {
+      forEachValueKey(spec.inputs ?? {}, ({ plug }, id) => {
         forEachValueKey(plug, (input, subPinId) => {
           if (input.unitId === unitId && input.pinId === pinId) {
             unplugInput({ id, subPinId }, spec)
@@ -592,7 +593,7 @@ export const setUnitPinIgnored = (
     }
 
     if (type === 'output') {
-      forEachValueKey(spec.outputs, ({ plug }, id) => {
+      forEachValueKey(spec.outputs ?? {}, ({ plug }, id) => {
         forEachValueKey(plug, (output, subPinId) => {
           if (output.unitId === unitId && output.pinId === pinId) {
             unplugOutput({ id, subPinId }, spec)
@@ -602,7 +603,7 @@ export const setUnitPinIgnored = (
     }
   }
 
-  pathDelete(spec, ['units', unitId, type, pinId, 'ignored'])
+  pathSet(spec, ['units', unitId, type, pinId, 'ignored'], ignored)
 
   return spec
 }
@@ -648,4 +649,28 @@ export const setUnitMetadata = (
   spec: GraphSpec
 ): void => {
   pathSet(spec, ['units', id, 'metadata', ...path], value)
+}
+
+export const setUnitSize = (
+  { unitId, width, height }: { unitId: string; width: number; height: number },
+  spec: GraphSpec
+): void => {
+  pathMerge(spec, ['units', unitId, 'metadata'], { width, height })
+}
+
+export const setComponentSize = (
+  { width, height }: { width: number; height: number },
+  spec: GraphSpec
+): void => {
+  pathMerge(spec, ['component'], { defaultWidth: width, defaultHeight: height })
+}
+
+export const setSubComponentSize = (
+  { unitId, width, height }: { unitId: string; width: number; height: number },
+  spec: GraphSpec
+): void => {
+  pathMerge(spec, ['component', 'subComponents', unitId], {
+    defaultWidth: width,
+    defaultHeight: height,
+  })
 }

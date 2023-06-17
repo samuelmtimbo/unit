@@ -5,8 +5,8 @@
       "type": "`U`",
       "ref": true
     },
-    "any": {
-      "type": "any"
+    "deep": {
+      "type": "boolean"
     }
   },
   "outputs": {
@@ -18,10 +18,7 @@
     "icon": "circle",
     "description": "system `id` of the given unit `class`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "meta"
-    ]
+    "tags": ["f", "meta"]
   },
   "id": "123f2837-76c0-4cb2-8d73-29e66879b181",
   "type": "`U`",

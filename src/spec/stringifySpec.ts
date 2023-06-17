@@ -1,11 +1,6 @@
 import { Memory } from '../Class/Unit'
-import {
-  Classes,
-  GraphSpec,
-  GraphUnitPinsSpec,
-  GraphUnitSpec,
-  Specs,
-} from '../types'
+import { Classes, GraphUnitPinsSpec, GraphUnitSpec, Specs } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { evaluateDataObj, stringifyDataObj } from '../types/stringifyPinData'
@@ -17,6 +12,10 @@ export function stringifyBundleSpecData(bundle: BundleSpec): void {
   const { spec } = bundle
 
   stringifyGraphSpecData(spec)
+}
+
+export function stringifyUnitBundleSpecData(unitBundle: UnitBundleSpec): void {
+  stringifyGraphUnitSpecData(unitBundle.unit)
 }
 
 export function stringifyGraphSpecData(spec: GraphSpec): void {

@@ -273,7 +273,7 @@
         }
       }
     },
-    "assoc": {
+    "set": {
       "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
       "input": {
         "obj": {
@@ -460,7 +460,7 @@
       }
     },
     "3": {
-      "assoc": {
+      "set": {
         "input": {
           "value": true
         }
@@ -477,7 +477,7 @@
           "arc": true
         }
       },
-      "assoc": {
+      "set": {
         "output": {
           "obj": true
         }
@@ -513,7 +513,7 @@
           "ab": true
         }
       },
-      "assoc": {
+      "set": {
         "input": {
           "obj": true
         }

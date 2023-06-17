@@ -7,7 +7,7 @@
     },
     "key": {
       "_type": "K keyof T",
-      "type": "number|string"
+      "type": "string"
     }
   },
   "outputs": {

@@ -33,11 +33,12 @@ export default class _Datum extends Element<HTMLDivElement, Props> {
     const $element = parentElement($system)
 
     this.$element = $element
-    this.$subComponent = {
-      datum,
-    }
     this.$unbundled = false
     this.$primitive = true
+
+    this.setSubComponents({
+      datum,
+    })
 
     this.appendRoot(datum)
   }
