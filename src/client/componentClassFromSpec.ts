@@ -1,5 +1,6 @@
 import { ComponentClass, System } from '../system'
-import { GraphSpec, Specs } from '../types'
+import { Specs } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
 import { Component } from './component'
 import { componentClassFromSpecId } from './componentClassFromSpecId'
@@ -25,7 +26,7 @@ export function componentClassFromSpec(
     constructor($props: {}, $system: System) {
       super($props, $system)
 
-      const $subComponent: Dict<Component> = {}
+      // const $subComponent: Dict<Component> = {}
 
       for (const unitId in subComponents) {
         const unitSpec = units[unitId]
@@ -44,11 +45,11 @@ export function componentClassFromSpec(
           childComponent = new Class({}, $system)
         }
 
-        $subComponent[unitId] = childComponent
+        this.setSubComponent(unitId, childComponent)
       }
 
       const fillParentRoot = (unitId: string): void => {
-        const component = $subComponent[unitId]
+        const component = this.$subComponent[unitId]
         const subComponentSpec = subComponents[unitId] || {}
 
         const { children = [], childSlot = {} } = subComponentSpec
@@ -57,7 +58,7 @@ export function componentClassFromSpec(
           fillParentRoot(childUnitId)
 
           const slotName = childSlot[childUnitId] || 'default'
-          const childRoot: Component = $subComponent[childUnitId]
+          const childRoot: Component = this.$subComponent[childUnitId]
 
           component.registerParentRoot(childRoot, slotName)
         }
@@ -67,12 +68,11 @@ export function componentClassFromSpec(
 
       this.$element = $element
       this.$primitive = false
-      this.$subComponent = $subComponent
 
       let i = 0
       for (const _slot of slots) {
         const [slot, slotSlot] = _slot
-        const subComponent = $subComponent[slot]
+        const subComponent = this.$subComponent[slot]
         // AD HOC
         const slotName = i === 0 ? 'default' : `${i}`
         this.$slot[slotName] = subComponent.$slot[slotSlot]
@@ -82,7 +82,7 @@ export function componentClassFromSpec(
       }
 
       for (let child_id of children) {
-        const rootComponent = $subComponent[child_id]
+        const rootComponent = this.$subComponent[child_id]
         fillParentRoot(child_id)
         this.registerRoot(rootComponent)
       }

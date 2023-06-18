@@ -300,6 +300,9 @@ export class Primitive<
 
   private _onRefInputData = (name: string, data: any): void => {
     this._activateInput(name, data)
+    if (data instanceof Function) {
+      data = new data(this.__system)
+    }
     if (!this._paused) {
       this.onRefInputData(name, data)
     } else {

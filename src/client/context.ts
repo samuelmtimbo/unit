@@ -56,7 +56,9 @@ export function dispatchCustomEvent(
 
 export function setParent($context: Context, $parent: Component | null): void {
   $context.$parent = $parent
+
   const { $children } = $context
+
   for (const component of $children) {
     component.$parent = $parent
   }

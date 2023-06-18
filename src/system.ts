@@ -1,8 +1,9 @@
 import { API } from './API'
+import { $ } from './Class/$'
 import { Graph } from './Class/Graph'
 import { Component } from './client/component'
 import { Context } from './client/context'
-import { IOPointerEvent } from './client/event/pointer'
+import { UnitPointerEvent } from './client/event/pointer'
 import { Store } from './client/store'
 import { Theme } from './client/theme'
 import { Point } from './client/util/geometry'
@@ -108,7 +109,7 @@ export interface System extends S, R {
   classes: Classes
   components: ComponentClasses
   global: {
-    ref: Dict<any>
+    ref: Dict<$>
     component: Dict<Component>
   }
   api: API
@@ -134,7 +135,7 @@ export interface System extends S, R {
     }
   ) => void
   captureGesture?: (
-    event: IOPointerEvent,
+    event: UnitPointerEvent,
     opt: {
       lineWidth?: number
       strokeStyle?: string

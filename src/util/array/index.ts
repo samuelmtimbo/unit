@@ -152,3 +152,8 @@ export function _matchAllExc<T>(
   }
   return all
 }
+
+export function reorder<A>(array: A[], element: A, to: number): void {
+  remove(array, element)
+  insert(array, element, to)
+}

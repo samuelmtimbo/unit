@@ -1,0 +1,29 @@
+{
+  "name": "char at",
+  "inputs": {
+    "a": {
+      "type": "string"
+    },
+    "i": {
+      "type": "number",
+      "metadata": {
+        "description": "index"
+      }
+    }
+  },
+  "outputs": {
+    "a[i]": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "get `a` character at position `i`",
+    "complexity": 3,
+    "tags": ["f", "string"]
+  },
+  "id": "eb345e08-08fd-4032-bd69-a4e9f55e7aa6",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

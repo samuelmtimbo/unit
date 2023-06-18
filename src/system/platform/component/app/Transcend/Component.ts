@@ -55,9 +55,12 @@ export const DEFAULT_STYLE = {
   transition: `opacity ${ANIMATION_T_S}s linear`,
 }
 
+let i = 0
+
 export default class Transcend extends Element<HTMLDivElement, Props> {
   public _container: Div
   public _icon: Icon
+  public _id: string = `${i++}`
 
   private _x: number = 0
 
@@ -152,12 +155,13 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
 
     this.$element = $element
     this.$slot = container.$slot
-    this.$subComponent = {
-      container,
-      icon,
-    }
     this.$unbundled = false
     this.$primitive = true
+
+    this.setSubComponents({
+      container,
+      icon,
+    })
 
     this.registerRoot(container)
 

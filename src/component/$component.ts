@@ -26,7 +26,7 @@ export function $removeChild(
 ): void {
   try {
     const child = component.removeChild(at)
-    const bundle = child.getUnitBundleSpec()
+    const bundle = child.getBundle()
     const specId = bundle.unit.id
     callback({ specId })
   } catch (err) {
@@ -62,7 +62,7 @@ export function $children(
   const children = component.refChildren()
 
   const _children = children.map((c) => {
-    return { bundle: c.getUnitBundleSpec() } as $Child
+    return { bundle: c.getBundle() } as $Child
   })
 
   callback(_children)

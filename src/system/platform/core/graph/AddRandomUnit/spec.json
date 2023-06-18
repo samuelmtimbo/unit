@@ -40,7 +40,6 @@
     "addunit": {
       "id": "b80d4b5a-40e9-11eb-a2bb-1777d47bf9ae",
       "input": {
-        "Class": {},
         "graph": {},
         "id": {}
       },
@@ -62,7 +61,7 @@
       },
       "addunit": {
         "input": {
-          "Class": true
+          "class": true
         }
       }
     },

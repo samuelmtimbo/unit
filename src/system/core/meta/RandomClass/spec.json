@@ -16,7 +16,7 @@
       "plug": {
         "0": {
           "unitId": "idtoclass",
-          "pinId": "Class"
+          "pinId": "class"
         }
       },
       "type": "`U`"
@@ -44,7 +44,7 @@
         "id": {}
       },
       "output": {
-        "Class": {}
+        "class": {}
       },
       "metadata": {
         "position": {

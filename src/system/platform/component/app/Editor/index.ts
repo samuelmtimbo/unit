@@ -6,6 +6,7 @@ import { fromBundle } from '../../../../../spec/fromBundle'
 import { fromSpec } from '../../../../../spec/fromSpec'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { GraphBundle, GraphClass } from '../../../../../types/GraphClass'
 import { G } from '../../../../../types/interface/G'
 import { ID_EDITOR } from '../../../../_ids'
 
@@ -16,10 +17,11 @@ export interface I<T> {
   fullwindow: boolean
   frame: Element_
   zoom: Zoom
+  controls: boolean
 }
 
 export interface O<T> {
-  graph: G
+  graph: G | GraphClass
 }
 
 export default class Editor<T> extends Element_<I<T>, O<T>> {
@@ -32,7 +34,15 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['graph', 'style', 'disabled', 'fullwindow', 'frame', 'zoom'],
+        i: [
+          'graph',
+          'style',
+          'disabled',
+          'fullwindow',
+          'frame',
+          'zoom',
+          'controls',
+        ],
         o: ['graph'],
       },
       {
@@ -78,23 +88,30 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
   }
 
   onRefInputData(name: string, data: any) {
+    super.onRefInputData(name, data)
+
     // console.log('Editor', 'onRefInputData', name, data)
 
     if (name === 'graph') {
-      const graph = data as Graph
+      this._graph = data as Graph
 
-      this._graph = graph
-
-      this._output.graph.push(graph)
+      this._output.graph.push(data)
     }
   }
 
   onRefInputDrop(name: string) {
+    super.onRefInputDrop(name)
     // console.log('Editor', 'onRefInputDrop', name)
 
     if (name === 'graph') {
+      const graph = this._graph
+
+      this._graph = this._fallback_graph
+
       this._input.graph.push(this._fallback_graph)
       this._output.graph.push(this._fallback_graph)
+
+      graph.destroy()
     }
   }
 

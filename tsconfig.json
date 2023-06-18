@@ -11,7 +11,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "declaration": true,
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": ["node_modules/@types"], 
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

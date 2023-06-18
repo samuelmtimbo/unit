@@ -1,6 +1,6 @@
 import { fromSpec } from '../spec/fromSpec'
 import { System } from '../system'
-import { GraphSpec } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
 import { AsyncGraph } from '../types/interface/async/AsyncGraph'
 import { G } from '../types/interface/G'

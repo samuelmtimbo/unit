@@ -131,7 +131,7 @@
           "mergeId": "7"
         }
       },
-      "type": "number|string"
+      "type": "string"
     },
     "obj": {
       "plug": {

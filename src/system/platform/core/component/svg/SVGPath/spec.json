@@ -1,0 +1,96 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "svg path",
+  "units": {
+    "path": {
+      "id": "60bc7930-8982-11ea-8b24-cf97a783bb32",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": 111,
+              "y": -80
+            }
+          },
+          "ignored": false
+        },
+        "d": {},
+        "fillRule": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 111,
+              "y": -112
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 194,
+          "y": -14
+        }
+      }
+    },
+    "svg": {
+      "id": "98c279fc-7f5e-11ea-b9e4-f772f9f0bed1",
+      "input": {
+        "style": {},
+        "viewBox": {
+          "ignored": true
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -111,
+          "y": -190
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "d": {
+      "plug": {
+        "0": {
+          "unitId": "path",
+          "pinId": "d"
+        }
+      },
+      "ref": false
+    },
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "path",
+          "pinId": "style"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "question",
+    "description": ""
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "path": {
+        "children": [],
+        "childSlot": {}
+      },
+      "svg": {
+        "children": ["path"],
+        "childSlot": {}
+      }
+    },
+    "children": ["svg"],
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "id": "79c37c2e-4a2b-445f-af75-5599cc6bf31c"
+}

@@ -185,7 +185,6 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
   public domAppendParentChildAt(
     component: Component,
     slotName: string,
-    at: number,
     _at: number
   ): void {
     // console.log(
@@ -200,15 +199,14 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
 
     const container = this._parent_child_container[_at]
 
-    container.domAppendChild(component, 'default', at)
+    container.domAppendChild(component, 'default', _at)
 
-    super.domAppendParentChildAt(container, slotName, at, _at)
+    super.domAppendParentChildAt(container, slotName, _at, _at)
   }
 
   public memInsertParentChildAt(
     component: Component,
     slotName: string,
-    at: number,
     _at: number
   ): void {
     // console.log(
@@ -217,23 +215,21 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
     //   component.constructor.name,
     //   component.$globalId,
     //   slotName,
-    //   at,
     //   _at
     // )
 
-    const container = this._connected_parent_child_container(at)
+    const container = this._connected_parent_child_container(_at)
 
     insert(this._parent_child_container, container, _at)
 
-    container.memAppendChild(component, 'default', at)
+    container.memAppendChild(component, 'default', _at)
 
-    super.memInsertParentChildAt(component, slotName, at, _at)
+    super.memInsertParentChildAt(component, slotName, _at)
   }
 
   public domInsertParentChildAt(
     component: Component,
     slotName: string,
-    at: number,
     _at: number
   ): void {
     // console.log(
@@ -248,9 +244,9 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
 
     const container = this._parent_child_container[_at]
 
-    container.domInsertParentChildAt(component, 'default', at, _at)
+    container.domInsertParentChildAt(component, 'default', _at)
 
-    super.domInsertParentChildAt(container, slotName, at, _at)
+    super.domInsertParentChildAt(container, slotName, _at)
   }
 
   public memRemoveParentChildAt(
@@ -319,8 +315,6 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
     const container = this._parent_child_container[at]
 
     container.mount(this.$context)
-
-    child.$parent = this
   }
 
   public domRemoveChild(child: Component, slotName: string, at: number) {

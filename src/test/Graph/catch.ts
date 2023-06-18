@@ -17,8 +17,8 @@ graph.play()
 graph.addUnitSpec('throw', { unit: { id: ID_THROW } })
 graph.addUnitSpec('catch', { unit: { id: ID_CATCH } })
 
-const catchy = graph.refUnit('catch')
-const throwy = graph.refUnit('throw')
+const catchy = graph.getUnit('catch')
+const throwy = graph.getUnit('throw')
 
 throwy.pushInput('message', 'booom!')
 

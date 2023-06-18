@@ -1,8 +1,8 @@
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
-import { IOPointerEvent } from '../pointer'
+import { UnitPointerEvent } from '../pointer'
 
-export type IODragCancelEvent = IOPointerEvent & { data: any }
+export type IODragCancelEvent = UnitPointerEvent & { data: any }
 
 export function makeDragCancelListener(
   listener: (event: IODragCancelEvent) => void,

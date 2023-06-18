@@ -122,7 +122,7 @@
         }
       },
       "functional": true,
-      "type": "number|string"
+      "type": "string"
     },
     "a": {
       "plug": {

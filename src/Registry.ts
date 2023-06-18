@@ -1,6 +1,7 @@
 import { emptySpec, newSpecId } from './client/spec'
 import { Object_ } from './Object'
-import { GraphSpec, GraphSpecs, Spec, Specs } from './types'
+import { GraphSpecs, Spec, Specs } from './types'
+import { GraphSpec } from './types/GraphSpec'
 import { Dict } from './types/Dict'
 import { R } from './types/interface/R'
 import { uuidNotIn } from './util/id'
@@ -57,7 +58,7 @@ export class Registry implements R {
   }
 
   injectSpecs(newSpecs: GraphSpecs): Dict<string> {
-    // console.log('injectSpecs', { newSpecs })
+    // console.log('injectSpecs', newSpecs)
 
     const mapSpecId: Dict<string> = {}
 
@@ -111,13 +112,13 @@ export class Registry implements R {
         this.specs_.set(specId, spec)
       }
 
-      // specs_.set(nextSpecId, spec) // TODO
+      // this.specs_.set(nextSpecId, spec) // TODO
     }
 
-    for (const spec_id in newSpecs) {
-      const spec = newSpecs[spec_id]
+    for (const specId in newSpecs) {
+      const spec = newSpecs[specId]
 
-      _set(spec_id, spec)
+      _set(specId, spec)
     }
 
     return mapSpecId

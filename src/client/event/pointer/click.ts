@@ -1,4 +1,4 @@
-import { IOPointerEvent } from '.'
+import { UnitPointerEvent } from '.'
 import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
 import { callAll } from '../../../util/call/callAll'
@@ -7,24 +7,25 @@ import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import stopPropagation from '../../stopPropagation'
 import { pointDistance, Position } from '../../util/geometry'
+import {
+  POINTER_CLICK_RADIUS,
+  LONG_CLICK_TIMEOUT,
+  CLICK_TIMEOUT,
+} from './constants'
 import { makePointerCancelListener } from './pointercancel'
 import { listenPointerDown } from './pointerdown'
 import { makePointerLeaveListener } from './pointerleave'
 import { makePointerMoveListener } from './pointermove'
 import { makePointerUpListener } from './pointerup'
 
-export const CLICK_TIMEOUT = 300
-export const LONG_CLICK_TIMEOUT = 300
-export const POINTER_CLICK_RADIUS = 15
-
 export type Handlers = {
-  onClick?: (event: IOPointerEvent, _event: PointerEvent) => void
-  onClickCancel?: (event: IOPointerEvent) => void
-  onDoubleClick?: (event: IOPointerEvent) => void
-  onLongClick?: (event: IOPointerEvent) => void
-  onLongPress?: (event: IOPointerEvent, _event: PointerEvent) => void
-  onLongClickCancel?: (event: IOPointerEvent) => void
-  onClickHold?: (event: IOPointerEvent) => void
+  onClick?: (event: UnitPointerEvent, _event: PointerEvent) => void
+  onClickCancel?: (event: UnitPointerEvent) => void
+  onDoubleClick?: (event: UnitPointerEvent) => void
+  onLongClick?: (event: UnitPointerEvent) => void
+  onLongPress?: (event: UnitPointerEvent, _event: PointerEvent) => void
+  onLongClickCancel?: (event: UnitPointerEvent) => void
+  onClickHold?: (event: UnitPointerEvent) => void
 }
 
 export function makeClickListener(handlers: Handlers): Listener {
@@ -70,7 +71,10 @@ export function listenClick(
   let unlistenPointerLeave: Unlisten | undefined = undefined
   let unlistenPointerCancel: Unlisten | undefined = undefined
 
-  const pointerDownListener = (event: IOPointerEvent, _event: PointerEvent) => {
+  const pointerDownListener = (
+    event: UnitPointerEvent,
+    _event: PointerEvent
+  ) => {
     // console.log('pointerDownListener')
 
     const { pointerId } = event
@@ -98,12 +102,13 @@ export function listenClick(
           makePointerCancelListener(pointerCancelListener)
         )
 
-        unlisten = callAll([
-          unlistenPointerMove,
-          unlistenPointerUp,
-          unlistenPointerLeave,
-          unlistenPointerCancel,
-        ])
+        unlisten = 
+          callAll([
+            unlistenPointerMove,
+            unlistenPointerUp,
+            unlistenPointerLeave,
+            unlistenPointerCancel,
+          ])
       }
 
       pointerPosition[pointerId] = { x: clientX, y: clientY }
@@ -134,6 +139,7 @@ export function listenClick(
                 onLongPress && onLongPress(event, _event)
               }
             }
+
             longClickTimeout = null
           }, LONG_CLICK_TIMEOUT)
         }
@@ -155,7 +161,9 @@ export function listenClick(
       } else {
         if (longClickTimeout) {
           clearTimeout(longClickTimeout)
+
           longPress = {}
+
           longClickTimeout = null
         }
       }
@@ -164,7 +172,7 @@ export function listenClick(
 
   const longClickCancelPointerId = new Set<number>()
 
-  const pointerMoveListener = (event: IOPointerEvent) => {
+  const pointerMoveListener = (event: UnitPointerEvent) => {
     // console.log('pointerMoveListener')
 
     const { clientX, clientY, pointerId } = event
@@ -193,8 +201,8 @@ export function listenClick(
     releasePointerDown(pointerId)
   }
 
-  const pointerUpListener = (event: IOPointerEvent, _event: PointerEvent) => {
-    // console.log('pointerUpListener', pointerId)
+  const pointerUpListener = (event: UnitPointerEvent, _event: PointerEvent) => {
+    // console.log('pointerUpListener', event.pointerId)
 
     const { pointerId, clientX, clientY } = event
 
@@ -274,13 +282,11 @@ export function listenClick(
     }
   }
 
-  const pointerLeaveListener = (event: IOPointerEvent) => {
-    // console.log('pointerLeaveListener')
-
+  const pointerLeaveListener = (event: UnitPointerEvent) => {
     releasePointerDown(event)
   }
 
-  const releasePointerDown = (event: IOPointerEvent) => {
+  const releasePointerDown = (event: UnitPointerEvent) => {
     const { pointerId } = event
 
     if (pointerDown[pointerId]) {

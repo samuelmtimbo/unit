@@ -1,30 +1,10 @@
 import { System } from '../../../system'
+import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
 import { isSupportedKeyboardEvent } from '../../event/keyboard'
 import { showNotification } from '../../showNotification'
 import { COLOR_RED } from '../../theme'
-
-class ShadowSelection {
-  private _ranges: Range[]
-
-  constructor() {
-    this._ranges = []
-  }
-
-  getRangeAt(index) {
-    return this._ranges[index]
-  }
-
-  addRange(range: Range) {
-    this._ranges.push(range)
-  }
-
-  removeAllRanges() {
-    this._ranges = []
-  }
-
-  // todo: implement remaining `Selection` methods and properties.
-}
+import { clonePointerEvent } from './api/input'
 
 export default function webInit(
   system: System,
@@ -141,11 +121,6 @@ export default function webInit(
   root.addEventListener('drop', dropListener)
 
   window.addEventListener('error', errorListener)
-
-  document.addEventListener('scroll', scrollListener, {
-    // passive: true,
-    capture: true,
-  })
 
   return () => {
     root.removeEventListener('blur', blurListener, true)

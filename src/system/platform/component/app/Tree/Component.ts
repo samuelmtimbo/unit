@@ -1,7 +1,7 @@
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
-import { GraphSpec } from '../../../../../types'
+import { GraphSpec } from '../../../../../types/GraphSpec'
 import { Dict } from '../../../../../types/Dict'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import Div from '../../Div/Component'
@@ -45,7 +45,7 @@ export default class Tree extends Element<HTMLDivElement, Props> {
   }
 
   private _setup(graph: $Graph): void {
-    graph.$getSpec({}, (spec: GraphSpec) => {
+    graph.$getBundle({}, (spec: GraphSpec) => {
       //
     })
   }

@@ -25,7 +25,7 @@ export function cloneUnitClass<T extends Unit>(
 
   const specs = __system.specs
 
-  const bundle = clone(unit.getUnitBundleSpec(deep))
+  const bundle = clone(unit.getBundle(deep))
 
   const NewBundle = fromUnitBundle<T>(bundle, specs, __system.classes)
 

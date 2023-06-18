@@ -244,6 +244,7 @@ export default class Minigraph extends Element<HTMLDivElement, Props> {
       for (const input_unit_id in merge_input_unit) {
         let input_unit_sub_graph_id = node_id_to_subgraph[input_unit_id]
         let input_unit_subgraph = subgraph_to_node_id[input_unit_sub_graph_id]
+
         for (const output_unit_id in merge_output_unit) {
           const output_unit_sub_graph_id = node_id_to_subgraph[output_unit_id]
           const output_unit_subgraph =

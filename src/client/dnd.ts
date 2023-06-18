@@ -2,10 +2,10 @@ import { NOOP } from '../NOOP'
 import { System } from '../system'
 import { Unlisten } from '../types/Unlisten'
 import { _addEventListener } from './event'
-import { IOPointerEvent } from './event/pointer'
+import { UnitPointerEvent } from './event/pointer'
 import { IOElement } from './IOElement'
 
-export type IODragAndDropEvent = IOPointerEvent
+export type IODragAndDropEvent = UnitPointerEvent
 
 export function startDragAndDrop<T = any>(
   system: System,

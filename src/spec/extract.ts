@@ -1,5 +1,6 @@
 import assocPath from '../system/core/object/AssocPath/f'
-import { GraphMergeSpec, GraphSpec, Specs } from '../types'
+import { GraphMergeSpec, Specs } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'
 import { IOOf, _IOOf } from '../types/IOOf'

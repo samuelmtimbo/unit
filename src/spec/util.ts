@@ -1,18 +1,21 @@
 import { getSpec } from '../client/spec'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
+import { keyCount } from '../system/core/object/KeyCount/f'
+import { GraphConnectUnitPlugsOpt } from '../system/platform/component/app/Editor/Component'
 import {
   GraphMergeSpec,
   GraphMergesSpec,
   GraphMergeUnitSpec,
   GraphPinSpec,
   GraphPlugOuterSpec,
-  GraphSpec,
+  GraphSubPinSpec,
   PinSpec,
   Spec,
   Specs,
 } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
-import { reduceObj, _keyCount } from '../util/object'
+import { reduceObj, _keyCount, pathOrDefault, pathSet } from '../util/object'
 
 export function isValidSpecName(name: string) {
   return !!/^[A-Za-z_ ][A-Za-z\d_ ]*$/g.exec(name)
@@ -20,6 +23,15 @@ export function isValidSpecName(name: string) {
 
 export function getPinNodeId(unitId: string, type: IO, pinId: string): string {
   return `${unitId}/${type}/${pinId}`
+}
+
+export function isUnitPinConstant(
+  spec: GraphSpec,
+  unitId: string,
+  type: IO,
+  pinId: string
+): boolean {
+  return pathOrDefault(spec, [unitId, type, pinId, 'constant'], false)
 }
 
 export function getInputNodeId(unitId: string, pinId: string): string {
@@ -58,6 +70,41 @@ export const findFirstMergePin = (
   }
 }
 
+export const getPinSpec = (
+  graph: GraphSpec,
+  type: IO,
+  pinId: string
+): GraphPinSpec => {
+  return pathOrDefault(graph, [`${type}s`, pinId], null)
+}
+
+export const getPlugSpecs = (spec: GraphSpec) => {
+  const plugs = {
+    input: {},
+    output: {},
+  }
+
+  forEachGraphSpecPinPlug(
+    spec,
+    (type, pinId, pinSpecs, subPinId, subPinSpec) => {
+      const plug = getSubPinSpec(spec, type, pinId, subPinId)
+
+      pathSet(plugs, [type, pinId, subPinId], plug)
+    }
+  )
+
+  return plugs
+}
+
+export const getSubPinSpec = (
+  graph: GraphSpec,
+  type: IO,
+  pinId: string,
+  subPinId: string
+): GraphSubPinSpec => {
+  return pathOrDefault(graph, [`${type}s`, pinId, 'plug', subPinId], null)
+}
+
 export const findPinMerge = (
   spec: GraphSpec,
   unitId: string,
@@ -72,6 +119,14 @@ export const findPinMerge = (
       return mergeId
     }
   }
+}
+
+export const getPlugCount = (
+  spec: GraphSpec,
+  type: IO,
+  pinId: string
+): number => {
+  return keyCount(pathOrDefault(spec, [`${type}s`, pinId, 'plug'], {}))
 }
 
 export const getMergePinCount = (merge: GraphMergeSpec): number => {
@@ -144,6 +199,28 @@ export const forEachGraphSpecPin = (
   })
 }
 
+export const forEachGraphSpecPinPlug = (
+  spec: GraphSpec,
+  callback: (
+    type: IO,
+    pinId: string,
+    pinSpec: GraphPinSpec,
+    subPinId: string,
+    subPinSpec: GraphSubPinSpec
+  ) => void
+) => {
+  forEachGraphSpecPin(
+    spec,
+    (type: IO, pinId: string, pinSpec: GraphPinSpec) => {
+      for (const subPinId in pinSpec.plug ?? {}) {
+        const subPinSpec = pinSpec.plug[subPinId]
+
+        callback(type, pinId, pinSpec, subPinId, subPinSpec)
+      }
+    }
+  )
+}
+
 export const forEachGraphSpecPinType = (
   spec: GraphSpec,
   type: IO,
@@ -164,12 +241,35 @@ export const forEachGraphSpecPinOfType = (
   })
 }
 
-export const specHasUnit = (spec: GraphSpec, unitId: string): boolean => {
+export const hasUnit = (spec: GraphSpec, unitId: string): boolean => {
   return !!spec.units?.[unitId]
 }
 
-export const specHasMerge = (spec: GraphSpec, mergeId: string): boolean => {
+export const hasMerge = (spec: GraphSpec, mergeId: string): boolean => {
   return !!spec.merges?.[mergeId]
+}
+
+export const hasMergePin = (
+  spec: GraphSpec,
+  mergeId: string,
+  unitId: string,
+  type: IO,
+  pinId: string
+): boolean => {
+  return !!pathOrDefault(spec, ['merges', mergeId, unitId, type, pinId], false)
+}
+
+export const hasPinNamed = (spec: Spec, type: IO, pinId: string): boolean => {
+  return !!pathOrDefault(spec, [`${type}s`, pinId], false)
+}
+
+export const hasPlug = (
+  spec: GraphSpec,
+  type: IO,
+  pinId: string,
+  subPinId: string
+): boolean => {
+  return !!pathOrDefault(spec, [`${type}s`, pinId, 'plug', subPinId], false)
 }
 
 export const findMergePlug = (
@@ -196,6 +296,27 @@ export const findMergePlug = (
   })
 
   return mergePlug
+}
+
+export function getUnitPlugs(
+  spec: GraphSpec,
+  unit_id: string
+): GraphConnectUnitPlugsOpt {
+  const plugs: GraphConnectUnitPlugsOpt = {
+    input: {},
+    output: {},
+  }
+
+  forEachGraphSpecPinPlug(
+    spec,
+    (type, pinId, pinSpec, subPinId, subPinSpec) => {
+      if (subPinSpec.unitId === unit_id) {
+        pathSet(plugs, [type, pinId], { pinId, subPinId })
+      }
+    }
+  )
+
+  return plugs
 }
 
 export const findSpecAtPath = (specs: Specs, spec: Spec, path: string[]) => {

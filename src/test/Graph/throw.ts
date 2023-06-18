@@ -21,7 +21,7 @@ composition0.addUnitSpec(throwId0, {
 
 composition0.play()
 
-const throw0 = composition0.refUnit(throwId0)
+const throw0 = composition0.getUnit(throwId0)
 
 assert.equal(composition0.getErr(), null)
 

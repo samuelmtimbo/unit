@@ -31,7 +31,7 @@ composition0.addUnitSpec(addId, {
 
 composition0.play()
 
-const addUnit = composition0.refUnit(addId)
+const addUnit = composition0.getUnit(addId)
 
 assert.equal(addUnit.peakInput('b'), 0)
 
@@ -84,8 +84,8 @@ composition1.addUnitSpec(addId, {
 
 composition1.play()
 
-assert.equal(composition1.refUnit(addId).take('a + b'), 3)
+assert.equal(composition1.getUnit(addId).take('a + b'), 3)
 
 composition1.setUnitInputData(addId, 'a', 9)
 
-assert.equal(composition1.refUnit(addId).getOutput('a + b').take(), 11)
+assert.equal(composition1.getUnit(addId).getOutput('a + b').take(), 11)

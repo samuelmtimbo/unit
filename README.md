@@ -16,6 +16,8 @@ unit is similar in concept to the Unix shell. For a seasoned programmer, unit sh
 
 The unit system is set to grow into a simple and approachable Web Operating System, which is sandboxed by default, enabling a new era of Software Sharing and Collaboration, unifying the currently fragmented Computer Experience. 
 
+For an introduction to unit Programming, visit [Getting Started](src/docs/start/README.md).
+
 The broader design philosophy behind unit is discussed in [Concept](src/docs/concept/README.md).
 
 To jump right into the official unit Programming Environment, visit [unit.land](https://unit.land) (beta).
@@ -90,7 +92,11 @@ npm test
 
 ## Links
 
-List of useful links:
+List of related web applications (beta):
+
+### [unit.md](https://unit.md)
+
+Redirect to the official unit source code.
 
 ### [unit.land](https://unit.land)
 
@@ -103,7 +109,7 @@ Fully local version of the unit Environment. Every unit you build will be saved 
 ### [unit.town](https://unit.town)
 
 ```
-https://unit.town?title=
+https://unit.town
 ```
 
 Marketplace for searching and sharing units. It is the first place to go look for an open source unit built by the community.
@@ -122,17 +128,15 @@ https://unit.moe#https://ioun.it will show the code for https://ioun.it.
 
 ### [ioun.it](https://ioun.it)
 
-Platform specialized in unit software: tools and and services for building, maintaining and scaling units on the cloud.
+Platform specialized in unit software: tools and services for building, maintaining and scaling units on the cloud.
 
-### [iframe.land](https://iframe.land)
+### [iframe.land](https://iframe.land) (beta)
 
-Collection of utility apps built on top of open Web technology, mostly implemented in TypeScript. This is a nice way to extend the unit experience with pre-existing components such as maps, code editors, rich text, games, video players, social media, private spaces, and more. Each iframe.land subdomain represents one app and can be controlled through Asynchronous Messaging.
-
-The code for iframe.land is Open Source and open for pull requests. Check out https://github.com/samuelmtimbo/iframe for documentation.
+Collection of curated iframe ready web apps. This is a way to extend the unit experience with high quality open web components such as maps, code editors, rich text, games, video players, social media, private spaces, and more. Each \*.iframe.land subdomain is an isolated app that can be controlled through Asynchronous Messaging.
 
 ## Documentation
 
-The unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform. For a step-by-step introduction to unit Programming, visit [Getting Started](src/docs/start/README.md).
+The unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform.
 
 This codebase is a TypeScript implementation of the unit Programming Language Spec with an accompanying Web based Programming Environment. I tried to make it as clean and organized as I could while still maintaining a space for experimentation. Some folders contain a `README.md` file with information about that piece of the architecture.
 

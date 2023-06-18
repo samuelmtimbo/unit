@@ -65,7 +65,7 @@
       },
       "name": "key",
       "functional": true,
-      "type": "number|string"
+      "type": "string"
     },
     "value": {
       "plug": {

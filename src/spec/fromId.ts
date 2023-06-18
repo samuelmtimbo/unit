@@ -1,6 +1,7 @@
 import { bundleSpec } from '../bundle'
 import { Unit } from '../Class/Unit'
-import { Classes, GraphSpec, Spec, Specs } from '../types'
+import { Classes, Spec, Specs } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
 import { UnitBundle } from '../types/UnitBundle'
 import { UnitClass } from '../types/UnitClass'
@@ -27,9 +28,9 @@ export function fromId<T extends Unit>(
   if (Class === undefined) {
     spec = spec as GraphSpec
 
-    const bundle = clone(bundleSpec(spec, specs))
+    // const bundle = clone(bundleSpec(spec, specs))
 
-    spec.specs = bundle.specs
+    // spec.specs = bundle.specs
 
     if (branch[id]) {
       Class = lazyFromSpec(spec, specs, branch)

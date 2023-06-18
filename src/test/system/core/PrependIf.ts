@@ -20,7 +20,7 @@ const dropCounter = countEvent(prependIf.getOutput('a'), 'drop')
 
 false && watchUnitAndLog(prependIf)
 false && watchGraphAndLog(prependIf)
-false && watchGraphAndLog(prependIf.refUnit('pick') as Graph)
+false && watchGraphAndLog(prependIf.getUnit('pick') as Graph)
 false && watchTreeAndLog(prependIf)
 
 prependIf.play()

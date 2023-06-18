@@ -150,25 +150,6 @@
         }
       }
     },
-    "getcontextwidth": {
-      "id": "91201117-902a-4e6d-bc32-14fa689ca1dd",
-      "input": {
-        "any": {},
-        "element": {}
-      },
-      "output": {
-        "width": {},
-        "context": {
-          "ignored": true
-        }
-      },
-      "metadata": {
-        "position": {
-          "x": -80,
-          "y": -186
-        }
-      }
-    },
     "divide": {
       "id": "158d85eb-28b8-4355-b637-28a7ec751233",
       "input": {
@@ -330,11 +311,6 @@
         "output": {
           "_self": true
         }
-      },
-      "getcontextwidth": {
-        "input": {
-          "element": true
-        }
       }
     },
     "1": {
@@ -400,11 +376,6 @@
         "input": {
           "a": true
         }
-      },
-      "getcontextwidth": {
-        "input": {
-          "any": true
-        }
       }
     },
     "6": {
@@ -428,18 +399,6 @@
       "box0": {
         "input": {
           "style": true
-        }
-      }
-    },
-    "8": {
-      "divide": {
-        "input": {
-          "b": true
-        }
-      },
-      "getcontextwidth": {
-        "output": {
-          "width": true
         }
       }
     },

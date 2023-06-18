@@ -22,7 +22,8 @@ export default class Client extends Element<HTMLDivElement, Props> {
     const $element = parentElement($system)
 
     this.$element = $element
-    this.$subComponent = {}
+
+    this.setSubComponents({})
   }
 
   onPropChanged(prop: string, current: any) {

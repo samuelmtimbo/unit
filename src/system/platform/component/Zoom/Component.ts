@@ -107,14 +107,15 @@ export default class Zoom_ extends Element<HTMLDivElement, Props> {
       default: [],
       svg: [],
     }
-    this.$subComponent = {
+    this.$unbundled = false
+    this.$primitive = true
+
+    this.setSubComponents({
       zoom,
       html,
       svg,
       svg_g,
-    }
-    this.$unbundled = false
-    this.$primitive = true
+    })
 
     this.registerRoot(zoom)
 

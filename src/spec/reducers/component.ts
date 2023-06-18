@@ -1,18 +1,12 @@
 import removeIndex from '../../system/core/array/RemoveIndex/f'
 import assocPath from '../../system/core/object/AssocPath/f'
 import pathGet from '../../system/core/object/DeepGet/f'
-import dissocPath from '../../system/core/object/DissocPath/f'
+import dissocPath from '../../system/core/object/DeletePath/f'
 import $indexOf from '../../system/f/array/IndexOf/f'
 import { _insert } from '../../system/f/array/Insert/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
-import { Action, GraphComponentSpec, GraphSubComponentSpec } from '../../types'
-import {
-  REMOVE_SUB_COMPONENT,
-  SET_SIZE,
-  SET_SUB_COMPONENT,
-  SET_SUB_COMPONENT_CHILDREN,
-} from '../actions/C'
+import { GraphComponentSpec, GraphSubComponentSpec } from '../../types'
 
 export type State = GraphComponentSpec
 
@@ -131,22 +125,4 @@ export const insertSubComponentChild = (
     ['subComponents', id, 'children'],
     _insert(children, at, childId)
   )
-}
-
-export default function (
-  state: State = defaultState,
-  { type, data }: Action
-): State {
-  switch (type) {
-    case SET_SUB_COMPONENT:
-      return setSubComponent(data, state)
-    case REMOVE_SUB_COMPONENT:
-      return removeSubComponent(data, state)
-    case SET_SIZE:
-      return setSubComponentSize(data, state)
-    case SET_SUB_COMPONENT_CHILDREN:
-      return setSubComponentChildren(data, state)
-    default:
-      return state
-  }
 }

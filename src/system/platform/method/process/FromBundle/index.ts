@@ -4,6 +4,7 @@ import { fromBundle } from '../../../../../spec/fromBundle'
 import { System } from '../../../../../system'
 import { BundleSpec } from '../../../../../types/BundleSpec'
 import { GraphBundle } from '../../../../../types/GraphClass'
+import { weakMerge } from '../../../../../types/weakMerge'
 import { ID_FROM_BUNDLE } from '../../../../_ids'
 
 export interface I {
@@ -32,8 +33,17 @@ export default class FromBundle extends Functional<I, O> {
   f({ bundle }: I, done: Done<O>): void {
     // console.log('FromBundle', 'f', bundle)
 
-    const graph = fromBundle(bundle, this.__system.specs, {})
+    try {
+      const graph = fromBundle(
+        bundle,
+        weakMerge(bundle.specs ?? {}, this.__system.specs),
+        {}
+      )
+      done({ graph })
+    } catch(err) {
+      console.log(err)
+    }
+    
 
-    done({ graph })
   }
 }

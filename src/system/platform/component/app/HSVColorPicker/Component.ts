@@ -1,7 +1,7 @@
 import { HSVToHEX, hueToColor } from '../../../../../client/color'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
-import { IOPointerEvent } from '../../../../../client/event/pointer'
+import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerMoveListener } from '../../../../../client/event/pointer/pointermove'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
@@ -149,7 +149,8 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
     this.$slot['default'] = color_picker.$slot['default']
     this.$unbundled = false
     this.$primitive = true
-    this.$subComponent = {
+
+    this.setSubComponents({
       color_picker,
       background,
       sat,
@@ -157,7 +158,7 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
       picker,
       picker_outer,
       picker_inner,
-    }
+    })
 
     this.registerRoot(color_picker)
 
@@ -179,7 +180,10 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
     return hex
   }
 
-  private _on_pointer_down = (event: IOPointerEvent, _event: PointerEvent) => {
+  private _on_pointer_down = (
+    event: UnitPointerEvent,
+    _event: PointerEvent
+  ) => {
     // console.log('HSVColorPicker', '_on_pointer_down')
 
     const { pointerId } = event
@@ -193,7 +197,7 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
     this.dispatchEvent('input', this._getValue())
   }
 
-  private _on_drag = (event: IOPointerEvent): void => {
+  private _on_drag = (event: UnitPointerEvent): void => {
     const { offsetX, offsetY } = event
     const { $width, $height } = this._color_picker.$$context
     const bcr = this.getBoundingClientRect()
@@ -227,7 +231,7 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
     this._refresh_v()
   }
 
-  private _on_pointer_move = (event: IOPointerEvent) => {
+  private _on_pointer_move = (event: UnitPointerEvent) => {
     // console.log('HSVColorPicker', '_on_pointer_move')
     const { pointerId } = event
     if (this._pointer_down[pointerId]) {
@@ -236,7 +240,7 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
     }
   }
 
-  private _on_pointer_up = (event: IOPointerEvent, _event: PointerEvent) => {
+  private _on_pointer_up = (event: UnitPointerEvent, _event: PointerEvent) => {
     // console.log('HSVColorPicker', '_on_pointer_up')
     const { pointerId } = event
     this._color_picker.releasePointerCapture(pointerId)

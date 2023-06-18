@@ -24,7 +24,7 @@ export interface IOMouseEvent {
   screenY: number
 }
 
-export interface IOPointerEvent extends IOMouseEvent {
+export interface UnitPointerEvent extends IOMouseEvent {
   pointerId: number
   pointerType: string
 }
@@ -58,8 +58,8 @@ export const applyContextTransformToPointerEvent = (
   return {
     clientX: clientX_,
     clientY: clientY_,
-    offsetX,
-    offsetY,
+    offsetX: t.x,
+    offsetY: t.y,
     screenX: clientX,
     screenY: clientY,
     // screenX,
@@ -77,7 +77,7 @@ export function makeSyntheticPointerEvent(
     offsetX: number
     offsetY: number
   }
-): IOPointerEvent {
+): UnitPointerEvent {
   const { pointerId, pointerType } = event
 
   return {
@@ -90,7 +90,7 @@ export function makeSyntheticPointerEvent(
 export function listenPointerEvent(
   type: string,
   component: Listenable,
-  listener: (event: IOPointerEvent, _event: PointerEvent) => void,
+  listener: (event: UnitPointerEvent, _event: PointerEvent) => void,
   _global: boolean = false
 ): Unlisten {
   const { $element } = component

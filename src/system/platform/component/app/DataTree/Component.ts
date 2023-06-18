@@ -8,6 +8,7 @@ import {
 } from '../../../../../client/component/getDatumSize'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
+import { idFromUnitValue } from '../../../../../client/idFromUnitValue'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
 import {
@@ -48,7 +49,7 @@ const STYLE_DELIMITER = {
   height: '16px',
   width: '6px',
   fontSize: '12px',
-  // lineHeight: '16px',
+  lineHeight: '16px',
 }
 
 const STYLE_PARENT = (overflow: boolean) => {
@@ -124,9 +125,9 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     this.$slot = {
       default: root,
     }
-    this.$subComponent = {
+    this.setSubComponents({
       root,
-    }
+    })
 
     this.registerRoot(root)
   }
@@ -134,6 +135,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
   private __primitive = (data: TreeNode) => this._primitive(data)
   private __key_value = (data: TreeNode) => this._key_value(data)
   private __array_expression = (data: TreeNode) => this._array_expression(data)
+  private __unit = (data: TreeNode) => this._unit(data)
   private __object_expression = (data: TreeNode) =>
     this._object_expression(data)
   private __expression = (data: TreeNode) => this._expression(data)
@@ -162,7 +164,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     [TreeNodeType.NumberLiteral]: this.__primitive,
     [TreeNodeType.Regex]: this.__primitive,
     [TreeNodeType.RegexLiteral]: this.__primitive,
-    [TreeNodeType.Unit]: this.__primitive,
+    [TreeNodeType.Unit]: this.__unit,
     [TreeNodeType.Class]: this.__primitive,
     [TreeNodeType.ClassLiteral]: this.__primitive,
     [TreeNodeType.ArithmeticExpression]: this.__primitive,
@@ -539,6 +541,16 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const children: Element[] = [this._leaf, ...appendChildren]
 
     return { style, children }
+  }
+
+  private _unit = (data: TreeNode) => {
+    const { specs, classes } = this.$system
+
+    const id = idFromUnitValue(data.value, specs, classes)
+
+    const _data = getTree(`\`${id}\``)
+
+    return this._primitive(_data)
   }
 
   private _array_expression = (

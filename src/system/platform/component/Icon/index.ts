@@ -1,5 +1,5 @@
 import { Element_ } from '../../../../Class/Element'
-import { IOPointerEvent } from '../../../../client/event/pointer'
+import { UnitPointerEvent } from '../../../../client/event/pointer'
 import { System } from '../../../../system'
 import { ID_ICON } from '../../../_ids'
 
@@ -9,9 +9,9 @@ export interface I {
 }
 
 export interface O {
-  click: IOPointerEvent
-  pointerenter: IOPointerEvent
-  pointerleave: IOPointerEvent
+  click: UnitPointerEvent
+  pointerenter: UnitPointerEvent
+  pointerleave: UnitPointerEvent
 }
 
 export default class IconButton extends Element_<I, O> {

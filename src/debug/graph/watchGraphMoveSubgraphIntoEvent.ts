@@ -35,12 +35,15 @@ export function watchGraphMoveSubgraphEvent(
       data: {
         graphId,
         nodeIds,
+        nextSpecId: null,
         nextIdMap,
         nextPinIdMap,
         nextMergePinId,
         nextPlugSpec,
         nextSubComponentParentMap,
         nextSubComponentChildrenMap,
+        nextSubComponentIndexMap: {}, // TODO
+        nextUnitPinMergeMap: {},
         path,
       },
     })

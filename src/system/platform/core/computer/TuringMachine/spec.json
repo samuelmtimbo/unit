@@ -200,8 +200,7 @@
       "id": "f022d16a-7a47-47c8-8d9b-3278df13bcc5",
       "input": {
         "c": {
-          "constant": false,
-          "data": "3"
+          "constant": false
         },
         "a": {
           "constant": true,
@@ -367,11 +366,7 @@
     "icon": "cpu",
     "description": "no description",
     "complexity": 59,
-    "tags": [
-      "platform",
-      "core",
-      "computer"
-    ],
+    "tags": ["platform", "core", "computer"],
     "position": {
       "merge": {
         "0": {

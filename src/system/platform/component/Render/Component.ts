@@ -93,6 +93,7 @@ export default class Render extends Element<HTMLDivElement, Props> {
   }
 
   onPropChanged(prop: string, current: any): void {
+    // console.log('Render', 'onPropChanged', prop, current)
     this._prop_handler[prop](current)
   }
 }

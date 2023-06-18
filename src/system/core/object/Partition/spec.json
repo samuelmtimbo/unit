@@ -53,7 +53,7 @@
         "value": {}
       }
     },
-    "assoc": {
+    "set": {
       "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
       "input": {
         "obj": {},
@@ -119,14 +119,14 @@
           "a[i]": true
         }
       },
-      "assoc": {
+      "set": {
         "input": {
           "key": true
         }
       }
     },
     "3": {
-      "assoc": {
+      "set": {
         "output": {
           "obj": true
         }
@@ -138,7 +138,7 @@
       }
     },
     "4": {
-      "assoc": {
+      "set": {
         "input": {
           "obj": true
         }
@@ -155,7 +155,7 @@
           "value": true
         }
       },
-      "assoc": {
+      "set": {
         "input": {
           "value": true
         }
@@ -204,7 +204,7 @@
         }
       },
       "functional": true,
-      "type": "(number|string)[]"
+      "type": "string[]"
     }
   },
   "outputs": {

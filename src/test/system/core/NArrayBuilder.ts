@@ -13,7 +13,7 @@ const nArrayBuilder = new NArrayBuilder(system)
 
 false && watchGraphAndLog(nArrayBuilder)
 false && watchUnitAndLog(nArrayBuilder)
-false && watchGraphAndLog(nArrayBuilder.refUnit('buildarrayfrom') as Graph)
+false && watchGraphAndLog(nArrayBuilder.getUnit('buildarrayfrom') as Graph)
 
 nArrayBuilder.play()
 

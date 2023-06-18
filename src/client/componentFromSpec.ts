@@ -1,5 +1,6 @@
 import { System } from '../system'
-import { GraphSpec, Specs } from '../types'
+import { Specs } from '../types'
+import { GraphSpec } from '../types/GraphSpec'
 import { Component } from './component'
 import { componentClassFromSpec } from './componentClassFromSpec'
 

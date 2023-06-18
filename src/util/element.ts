@@ -42,3 +42,13 @@ export function removeChildren(element: Element) {
     element.removeChild(element.lastChild)
   }
 }
+
+export function insertAt(node: Node, newChild: Node, at: number) {
+  const currentChild = node.childNodes.item(at)
+
+  if (currentChild) {
+    return insertBefore(node, newChild, currentChild)
+  } else {
+    return appendChild(node, newChild)
+  }
+}
