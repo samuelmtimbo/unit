@@ -12,15 +12,15 @@ It is heavily inspired by Live, Data Flow, Reactive, Functional and Object Orien
 
 The unit Programming Language was developed in close junction to the unit Programming Environment, which is a Web application built for easy composition of new units. The environment is designed to feel visual and kinesthetic, giving the perception of Direct Manipulation of Live Virtual Objects. The unit Programming experience is minimalistic, ergonomic, mobile, and can be performed through a variety of input devices, and editing can be partially expressed through Drawing, Gesture and Voice.
 
-unit is similar in concept to the Unix shell; for a seasoned programmer, unit should feel like the 2D evolution of the Command Line Interface (CLI) where units' (commands) inputs and outputs (stdin/stdout/stderr) can be piped together into a graph (script). In fact, unit can be thought of as a re-exploration of the [Unix Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in the context of modern Software Engineering and Web Development.
+unit is similar in concept to the Unix shell. For a seasoned programmer, unit should feel like the 2D evolution of the Command Line Interface (CLI) where units' (commands) inputs and outputs (stdin/stdout/stderr) can be piped together into a graph (script). In fact, unit can be thought of as a re-exploration of the [Unix Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in the context of modern Software Engineering and Web Development.
 
-The unit system is set to grow into a simple and approachable Web Operating System, which is sandboxed by default, enabling a new era of Software Sharing and Collaboration.
+The unit system is set to grow into a simple and approachable Web Operating System, which is sandboxed by default, enabling a new era of Software Sharing and Collaboration, unifying the currently fragmented Computer Experience. 
 
 For an introduction to unit Programming, visit [Getting Started](src/docs/start/README.md).
 
-The broader Design Philosophy behind unit is discussed in [Concept](src/docs/concept/README.md).
+The broader design philosophy behind unit is discussed in [Concept](src/docs/concept/README.md).
 
-To jump right into the official unit Programming Environment (Beta), visit [unit.land](https://unit.land) (beta).
+To jump right into the official unit Programming Environment, visit [unit.land](https://unit.land) (beta).
 
 To experiment with a cloud extended version of unit, check out [ioun.it](https://ioun.it) (beta).
 
