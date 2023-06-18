@@ -162,8 +162,6 @@ For weekly updates about unit Development, including thoughts about Vision and R
 
 We hope you enjoy unit and invite you to be part of our community!
 
-All hail the mastermind!
-
 ## License
 
 MIT License
