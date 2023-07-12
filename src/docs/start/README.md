@@ -96,13 +96,15 @@ In Change Mode, clicking on an input or output will set it to constant or not.
 
 ![](/public/gif/start/25.gif)
 
-## Graph or Tree Layout
+## Graph or Tree View
 
-To switch between Graph Layout or Tree Layout, click on the "circle or square" toggle close to the Search.
+To switch between Graph View or Tree View, click on the "circle or square" toggle close to the Search.
 
 ![](/public/gif/start/20.gif)
 
-This view will show only the current components, which can composed and reordered into a parent-children tree structure, making it possible to build any type of visual layout.
+This view will show only components, which can composed and reordered into a parent-children tree structure, making it possible to build any type of visual layout.
+
+Search will only show component units.
 
 ![](/public/gif/start/21.gif)
 
@@ -110,7 +112,7 @@ To append children to a parent, enter multiselection mode, select the children, 
 
 ![](/public/gif/start/39.gif)
 
-Reversely, to remove all children from parent, enter multiselection mode, then long press on the parent:
+Reversely, to remove all children from parent, enter multiselection mode, then select and long press on the parent:
 
 ![](/public/gif/start/40.gif)
 
@@ -118,7 +120,7 @@ Reversely, to remove all children from parent, enter multiselection mode, then l
 
 To go Fullwindow you can press the "transcend" button, usually located at the top.
 
-This will remove the editing GUI and show the final rendering of the graph. This is more interesting when there are components around, making up a website.
+This will remove the editing GUI and show the final rendering of the graph. This is more interesting when there are components around, so you can see how that unit would look like as a website.
 
 ![](/public/gif/start/0.gif)
 
@@ -128,7 +130,7 @@ The components that will go fullwindow are dependent on the context. This enable
 
 ## Resize Component
 
-A component can be resize when it is either selected or unlocked. To resize, pull from one of the components sides or edges.
+A component can be resized when it is either selected or unlocked. To resize, pull from one of the components sides or edges.
 
 ![](/public/gif/start/19.gif)
 
