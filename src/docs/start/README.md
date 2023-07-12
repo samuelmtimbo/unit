@@ -112,7 +112,7 @@ To append children to a parent, enter multiselection mode, select the children, 
 
 ![](/public/gif/start/39.gif)
 
-Reversely, to remove all children from parent, enter multiselection mode and then select and long press on the parent:
+Reversely, to remove all children from parent, enter multiselection mode, then select and long press on the parent:
 
 ![](/public/gif/start/40.gif)
 
