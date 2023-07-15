@@ -15,7 +15,12 @@
       "defaultIgnored": true
     }
   },
-  "outputs": {},
+  "outputs": {
+    "value": {
+      "type": "boolean",
+      "optional": true
+    }
+  },
   "metadata": {
     "icon": "square",
     "description": "checkbox",

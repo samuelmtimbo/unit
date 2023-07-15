@@ -202,9 +202,17 @@ export function sameSpec(a_spec: GraphSpec, b_spec: GraphSpec): boolean {
   return false
 }
 
-export function isSystemSpecId(specs: Specs, spec_id: string): boolean {
-  const spec = getSpec(specs, spec_id)
+export function isSystemSpecId(specs: Specs, specId: string): boolean {
+  const spec = getSpec(specs, specId)
+
   const { system } = spec
+
+  return system
+}
+
+export function isSystemSpec(spec: Spec): boolean {
+  const { system } = spec
+
   return system
 }
 

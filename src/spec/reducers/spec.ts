@@ -291,9 +291,9 @@ export const addPinToMerge = (
   forEachValueKey(state[`${type}s`], ({ name, plug = {} }, exposedPinId) => {
     for (const subPinId in plug) {
       const subPin = plug[subPinId]
-      
+
       const { unitId: _unitId, pinId: _pinId } = subPin
-      
+
       if (_unitId === unitId && _pinId === pinId) {
         state = coverPinSet({ pinId: exposedPinId, type }, state)
         state = exposePinSet(

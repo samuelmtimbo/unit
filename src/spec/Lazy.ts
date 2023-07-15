@@ -106,7 +106,7 @@ export function lazyFromSpec(
         }
       })
     }
-    
+
     getPlugSpecs(): IOOf<Dict<Dict<GraphSubPinSpec>>> {
       this._ensure()
       return this.__graph.getPlugSpecs()
@@ -183,6 +183,7 @@ export function lazyFromSpec(
     moveSubgraphOutOf(
       ...[
         graphId,
+        nextSpecId,
         nodeIds,
         nextIdMap,
         nextPinIdMap,
@@ -195,6 +196,7 @@ export function lazyFromSpec(
       this._ensure()
       return this.__graph.moveSubgraphOutOf(
         graphId,
+        nextSpecId,
         nodeIds,
         nextIdMap,
         nextPinIdMap,
@@ -290,6 +292,7 @@ export function lazyFromSpec(
     moveSubgraphInto(
       ...[
         graphId,
+        nextSpecId,
         nodeIds,
         nextIdMap,
         nextPinIdMap,
@@ -302,6 +305,7 @@ export function lazyFromSpec(
       this._ensure()
       return this.__graph.moveSubgraphInto(
         graphId,
+        nextSpecId,
         nodeIds,
         nextIdMap,
         nextPinIdMap,

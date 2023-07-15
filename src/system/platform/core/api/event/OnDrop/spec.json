@@ -1,0 +1,49 @@
+{
+  "name": "on drop",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'drop'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "unit"
+        }
+      },
+      "type": "`C`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      },
+      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number}"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` click event",
+    "complexity": 5,
+    "tags": ["platform", "core", "api", "event"]
+  },
+  "id": "4638661f-11d9-4727-83d1-8cdccc01508c",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,4 +1,4 @@
-import { Element_ } from '../../../../../Class/Element'
+import { Field } from '../../../../../Class/Field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { ID_CHECKBOX } from '../../../../_ids'
@@ -9,14 +9,16 @@ export interface I {
   value: boolean
 }
 
-export interface O {}
+export interface O {
+  value: boolean
+}
 
-export default class Checkbox extends Element_<I, O> {
+export default class Checkbox extends Field<I, O> {
   constructor(system: System) {
     super(
       {
         i: ['style', 'attr', 'value'],
-        o: [],
+        o: ['value'],
       },
       {},
       system,

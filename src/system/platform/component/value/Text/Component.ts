@@ -1,3 +1,4 @@
+import { Component } from '../../../../../client/component'
 import { Element } from '../../../../../client/element'
 import { System } from '../../../../../system'
 
@@ -40,5 +41,21 @@ export default class _Text extends Element<Text, Props> {
 
   onUnmount() {
     // console.log('_Text', 'onUnmount')
+  }
+
+  domAppendChild(component: Component): void {
+    // NOOP
+  }
+
+  domRemoveChild(component: Component): void {
+    // NOOP
+  }
+
+  domInsertParentChildAt(component: Component): void {
+    // NOOP
+  }
+
+  domRemoveParentChildAt(component: Component): void {
+    // NOOP
   }
 }

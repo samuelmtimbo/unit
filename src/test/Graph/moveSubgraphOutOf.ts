@@ -3,6 +3,7 @@ import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import { ID_EMPTY, ID_IDENTITY, ID_RANDOM_COLOR_DIV } from '../../system/_ids'
 import { system } from '../util/system'
+import { uuid } from '../../util/id'
 
 const UNIT_ID_EMTPY = 'empty'
 const UNIT_ID_IDENTITY = 'identity'
@@ -30,6 +31,7 @@ composition0.addUnitSpec(UNIT_ID_RANDOM_COLOR_DIV, {
 
 composition0.moveSubgraphOutOf(
   UNIT_ID_RANDOM_COLOR_DIV,
+  uuid(),
   {
     merge: [],
     link: [],
@@ -95,6 +97,7 @@ false && watchGraphAndLog(composition1)
 
 composition1.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [],
@@ -163,6 +166,7 @@ assert.deepEqual(composition1.getMergeSpec('0'), {
 
 composition1.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [],
@@ -269,6 +273,7 @@ false && watchGraphAndLog(composition2)
 
 composition2.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [{ unitId: UNIT_ID_IDENTITY, type: 'input', pinId: 'a' }],
@@ -323,6 +328,7 @@ assert.deepEqual(composition2.getMergeSpec('1'), {
 
 composition2.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [{ unitId: UNIT_ID_IDENTITY, type: 'input', pinId: 'a' }],
@@ -402,6 +408,7 @@ false && watchGraphAndLog(composition3)
 
 composition3.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: ['0'],
     link: [],
@@ -480,6 +487,7 @@ assert.deepEqual(empty4.getPlugSpec('output', 'a', '0'), {
 
 composition3.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: ['0'],
     link: [],
@@ -573,6 +581,7 @@ false && watchGraphAndLog(composition4)
 
 composition4.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: ['0'],
     link: [],
@@ -651,6 +660,7 @@ assert.deepEqual(empty3.getPlugSpec('output', 'a', '0'), {
 
 composition4.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: ['0'],
     link: [],
@@ -754,6 +764,7 @@ false && watchGraphAndLog(composition5)
 
 composition5.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [],
@@ -797,6 +808,7 @@ const empty5 = composition5.getGraph(UNIT_ID_EMTPY)
 
 composition5.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [],

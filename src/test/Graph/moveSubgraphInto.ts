@@ -3,6 +3,7 @@ import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import { ID_DIV, ID_EMPTY, ID_IDENTITY } from '../../system/_ids'
 import { system } from '../util/system'
+import { uuid } from '../../util/id'
 
 const UNIT_ID_EMTPY = 'empty'
 const UNIT_ID_IDENTITY = 'identity'
@@ -39,11 +40,7 @@ const spec0 = system.newSpec({
   },
 })
 
-const composition0 = new Graph<{ number: number }, { sum: number }>(
-  spec0,
-  {},
-  system
-)
+const composition0 = new Graph(spec0, {}, system)
 
 false && watchUnitAndLog(composition0)
 false && watchGraphAndLog(composition0)
@@ -54,6 +51,7 @@ const empty0 = composition0.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition0.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [],
@@ -106,11 +104,7 @@ const spec1 = system.newSpec({
   },
 })
 
-const composition1 = new Graph<{ number: number }, { sum: number }>(
-  spec1,
-  {},
-  system
-)
+const composition1 = new Graph(spec1, {}, system)
 
 false && watchUnitAndLog(composition1)
 false && watchGraphAndLog(composition1)
@@ -121,6 +115,7 @@ const empty1 = composition1.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition1.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: ['0'],
     link: [],
@@ -227,11 +222,7 @@ const spec2 = system.newSpec({
   },
 })
 
-const composition2 = new Graph<{ number: number }, { sum: number }>(
-  spec2,
-  {},
-  system
-)
+const composition2 = new Graph(spec2, {}, system)
 
 false && watchUnitAndLog(composition2)
 false && watchGraphAndLog(composition2)
@@ -242,6 +233,7 @@ const empty2 = composition2.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition2.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [],
@@ -318,11 +310,7 @@ const spec3 = system.newSpec({
   },
 })
 
-const composition3 = new Graph<{ number: number }, { sum: number }>(
-  spec3,
-  {},
-  system
-)
+const composition3 = new Graph(spec3, {}, system)
 
 false && watchUnitAndLog(composition3)
 false && watchGraphAndLog(composition3)
@@ -333,6 +321,7 @@ const empty3 = composition3.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition3.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [],
@@ -403,11 +392,7 @@ const spec4 = system.newSpec({
   },
 })
 
-const composition4 = new Graph<{ number: number }, { sum: number }>(
-  spec4,
-  {},
-  system
-)
+const composition4 = new Graph(spec4, {}, system)
 
 false && watchUnitAndLog(composition4)
 false && watchGraphAndLog(composition4)
@@ -418,6 +403,7 @@ const empty4 = composition4.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition4.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [
@@ -530,11 +516,7 @@ const spec5 = system.newSpec({
   inputs: {},
 })
 
-const composition5 = new Graph<{ number: number }, { sum: number }>(
-  spec5,
-  {},
-  system
-)
+const composition5 = new Graph(spec5, {}, system)
 
 false && watchUnitAndLog(composition5)
 false && watchGraphAndLog(composition5)
@@ -545,6 +527,7 @@ const empty5 = composition5.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition5.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [],
@@ -683,11 +666,7 @@ const spec6 = system.newSpec({
   inputs: {},
 })
 
-const composition6 = new Graph<{ number: number }, { sum: number }>(
-  spec6,
-  {},
-  system
-)
+const composition6 = new Graph(spec6, {}, system)
 
 false && watchUnitAndLog(composition6)
 false && watchGraphAndLog(composition6)
@@ -698,6 +677,7 @@ const empty6 = composition6.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition6.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: ['0', '1'],
     link: [],
@@ -809,11 +789,7 @@ const spec7 = system.newSpec({
   },
 })
 
-const composition7 = new Graph<{ number: number }, { sum: number }>(
-  spec7,
-  {},
-  system
-)
+const composition7 = new Graph(spec7, {}, system)
 
 false && watchUnitAndLog(composition7)
 false && watchGraphAndLog(composition7)
@@ -824,6 +800,7 @@ const empty7 = composition7.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition7.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: ['0', '1'],
     link: [],
@@ -896,11 +873,7 @@ const spec8 = system.newSpec({
   },
 })
 
-const composition8 = new Graph<{ number: number }, { sum: number }>(
-  spec8,
-  {},
-  system
-)
+const composition8 = new Graph(spec8, {}, system)
 
 false && watchUnitAndLog(composition8)
 false && watchGraphAndLog(composition8)
@@ -911,6 +884,7 @@ const empty8 = composition8.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition8.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: [],
     link: [{ unitId: UNIT_ID_IDENTITY, type: 'output', pinId: 'a' }],
@@ -990,11 +964,7 @@ const spec9 = system.newSpec({
   },
 })
 
-const composition9 = new Graph<{ number: number }, { sum: number }>(
-  spec9,
-  {},
-  system
-)
+const composition9 = new Graph(spec9, {}, system)
 
 false && watchUnitAndLog(composition9)
 false && watchGraphAndLog(composition9)
@@ -1005,6 +975,7 @@ const empty9 = composition9.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition9.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  uuid(),
   {
     merge: ['0'],
     link: [],
@@ -1058,3 +1029,120 @@ assert.deepEqual(empty9.getExposedInputSpec('a'), {
 })
 
 assert.deepEqual(empty9.getMergeCount(), 0)
+
+const spec10 = system.newSpec({
+  units: {
+    [UNIT_ID_EMTPY]: {
+      id: ID_EMPTY,
+    },
+    [UNIT_ID_IDENTITY]: {
+      id: ID_IDENTITY,
+    },
+    [UNIT_ID_IDENTITY_0]: {
+      id: ID_IDENTITY,
+    },
+  },
+  merges: {
+    0: {
+      [UNIT_ID_IDENTITY]: {
+        output: {
+          a: true,
+        },
+      },
+      [UNIT_ID_IDENTITY_0]: {
+        input: {
+          a: true,
+        },
+      },
+    },
+  },
+  inputs: {
+    a: {
+      plug: {
+        '0': {
+          mergeId: '0',
+        },
+      },
+    },
+  },
+  outputs: {
+    a: {
+      plug: {
+        '0': {
+          mergeId: '0',
+        },
+      },
+    },
+  },
+})
+
+const composition10 = new Graph(spec10, {}, system)
+
+false && watchUnitAndLog(composition10)
+false && watchGraphAndLog(composition10)
+
+composition10.play()
+
+const empty10 = composition10.getUnit(UNIT_ID_EMTPY) as Graph
+
+composition10.moveSubgraphInto(
+  UNIT_ID_EMTPY,
+  uuid(),
+  {
+    merge: ['0'],
+    link: [],
+    unit: [],
+    plug: [],
+  },
+  {
+    merge: {},
+    link: {},
+    unit: {},
+    plug: {},
+  },
+  {},
+  {
+    '0': {
+      input: {
+        mergeId: '1',
+        pinId: 'a',
+        subPinSpec: {},
+      },
+      output: {
+        mergeId: '2',
+        pinId: 'a',
+        subPinSpec: {},
+      },
+    },
+  },
+  {
+    input: {},
+    output: {},
+  },
+  {},
+  {}
+)
+
+assert.equal(composition10.getUnitCount(), 3)
+assert.equal(composition10.getMergeCount(), 2)
+
+assert.deepEqual(composition10.getExposedInputSpec('a'), {
+  plug: {
+    '0': {
+      mergeId: '1',
+    },
+  },
+})
+
+assert.equal(empty10.getUnitCount(), 0)
+
+assert.deepEqual(empty10.getExposedInputSpec('a'), {
+  plug: {
+    '0': {
+      mergeId: '0',
+    },
+  },
+  ref: false,
+})
+
+assert.deepEqual(empty10.getMergeCount(), 1)

@@ -9,7 +9,7 @@ export interface R {
   newSpec(spec: GraphSpec): GraphSpec
   getSpec(id: string): Spec
   setSpec(id: string, spec: GraphSpec): void
-  forkSpec(spec: GraphSpec): [string, GraphSpec]
+  forkSpec(spec: GraphSpec, specId?: string): [string, GraphSpec]
   injectSpecs(specs: GraphSpecs): Dict<string>
   deleteSpec(id: string): void
   registerUnit(id: string): void

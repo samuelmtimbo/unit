@@ -13,7 +13,12 @@
       "optional": true
     }
   },
-  "outputs": {},
+  "outputs": {
+    "value": {
+      "type": "number",
+      "optional": true
+    }
+  },
   "metadata": {
     "icon": "form-input",
     "description": "single line text input",

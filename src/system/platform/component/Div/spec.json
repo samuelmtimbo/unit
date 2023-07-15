@@ -6,9 +6,14 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}", "{background:'red'}"]
+      }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
       }
     }
   },
@@ -17,10 +22,7 @@
     "icon": "square",
     "description": "HTML div element",
     "complexity": 20,
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "66698a97-15c5-4602-9925-11a1aeb03710",
   "base": true,

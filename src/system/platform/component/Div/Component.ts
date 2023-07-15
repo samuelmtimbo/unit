@@ -14,6 +14,7 @@ export interface Props {
   title?: string
   draggable?: boolean
   data?: Dict<string>
+  attr?: Dict<string>
 }
 
 const DEFAULT_STYLE = {
@@ -39,6 +40,7 @@ export default class Div extends Element<HTMLDivElement, Props> {
       title,
       draggable,
       data = {},
+      attr = {},
     } = this.$props
 
     this.$element = this.$system.api.document.createElement('div')
@@ -64,10 +66,11 @@ export default class Div extends Element<HTMLDivElement, Props> {
     if (data !== undefined) {
       for (const key in data) {
         const d = data[key]
+        
         this.$element.dataset[key] = d
       }
     }
-    // applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
+
     applyDynamicStyle(this, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {

@@ -1,21 +1,33 @@
+import { GraphMoveSubGraphData } from '../Class/Graph/interface'
+import { segmentMergeNodeId } from '../client/id'
 import { getSpec } from '../client/spec'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../system/core/object/KeyCount/f'
+import { keys } from '../system/f/object/Keys/f'
 import { GraphConnectUnitPlugsOpt } from '../system/platform/component/app/Editor/Component'
+import { isEmptyMerge } from './isEmptyMerge'
 import {
   GraphMergeSpec,
   GraphMergesSpec,
   GraphMergeUnitSpec,
   GraphPinSpec,
+  GraphPinsSpec,
   GraphPlugOuterSpec,
   GraphSubPinSpec,
   PinSpec,
   Spec,
   Specs,
 } from '../types'
+import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
-import { reduceObj, _keyCount, pathOrDefault, pathSet } from '../util/object'
+import {
+  reduceObj,
+  _keyCount,
+  pathOrDefault,
+  pathSet,
+  clone,
+} from '../util/object'
 
 export function isValidSpecName(name: string) {
   return !!/^[A-Za-z_ ][A-Za-z\d_ ]*$/g.exec(name)
@@ -330,5 +342,105 @@ export const findSpecAtPath = (specs: Specs, spec: Spec, path: string[]) => {
     const unitSpec = getSpec(specs, unit.id)
 
     return findSpecAtPath(specs, unitSpec, rest)
+  }
+}
+
+export function makeFullSpecCollapseMap(
+  unit_id: string,
+  spec: GraphSpec,
+  unitIdMap: Dict<string>,
+  mergeIdMap: Dict<string>,
+  {
+    getUnitMerges,
+    getMerge,
+    getPinMergeId,
+  }: {
+    getUnitMerges: (unitId: string) => GraphMergesSpec
+    getMerge: (mergeId: string) => GraphMergeSpec
+    getPinMergeId: (unitId: string, type: IO, pinId: string) => string
+  }
+): GraphMoveSubGraphData {
+  const { units = {}, merges = {}, inputs = {}, outputs = {} } = spec
+
+  const unit_merges = getUnitMerges(unit_id)
+
+  const nextIdMap: GraphMoveSubGraphData['nextIdMap'] = {
+    unit: unitIdMap,
+    merge: mergeIdMap,
+  }
+  const nextPinIdMap: GraphMoveSubGraphData['nextPinIdMap'] = {}
+  const nextMergePinId: GraphMoveSubGraphData['nextMergePinId'] = {}
+
+  const process_pins = (type: IO, pins: GraphPinsSpec) => {
+    for (const pinId in pins) {
+      const pin = pins[pinId]
+
+      process_pin(type, pinId, pin)
+    }
+  }
+
+  const process_pin = (type: IO, pinId: string, pin: GraphPinSpec) => {
+    const { plug, ref, defaultIgnored } = pin
+
+    for (const subPinId in plug) {
+      const subPinSpec = plug[subPinId]
+
+      if (subPinSpec.unitId && subPinSpec.pinId) {
+        forEachPinOnMerges(unit_merges, (mergeId, unitId, type, pinId) => {
+          const merge = getMerge(mergeId)
+
+          if (unitId === subPinSpec.unitId && pinId === subPinSpec.pinId) {
+            pathSet(nextPinIdMap, [unitId, type], {
+              pinId,
+              subPinId,
+              ref,
+              defaultIgnored,
+              mergeId,
+              merge,
+            })
+          }
+        })
+      } else if (subPinSpec.mergeId) {
+        const mergeSpec = merges[subPinSpec.mergeId]
+
+        if (isEmptyMerge(mergeSpec)) {
+          const mergeId = getPinMergeId(unit_id, type, pinId)
+
+          const merge = getMerge(mergeId)
+
+          const oppositeMerge = clone(merge)
+
+          delete oppositeMerge[unit_id]
+
+          pathSet(nextMergePinId, [subPinSpec.mergeId, type], {
+            mergeId,
+            pinId,
+            subPinSpec: {
+              mergeId,
+            },
+            oppositeMerge,
+          })
+        }
+      }
+    }
+  }
+
+  process_pins('input', inputs)
+  process_pins('output', outputs)
+
+  return {
+    nodeIds: {
+      unit: keys(units),
+      merge: keys(merges),
+    },
+    nextSpecId: null,
+    nextIdMap,
+    nextPinIdMap,
+    nextMergePinId,
+    nextPlugSpec: {},
+    nextUnitPinMergeMap: {},
+    nextSubComponentParentMap: {},
+    nextSubComponentChildrenMap: {},
+    nextSubComponentIndexMap: {},
   }
 }

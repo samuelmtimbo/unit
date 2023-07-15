@@ -98,8 +98,6 @@ export default class PeerReceiver<T> extends Semifunctional<
   }
 
   async onDataInputData(name: string, data: any): Promise<void> {
-    console.log('Receiver', 'onDataInputData', name, data)
-
     if (name === 'close') {
       this._disconnect()
 
@@ -112,7 +110,6 @@ export default class PeerReceiver<T> extends Semifunctional<
   }
 
   onDataInputDrop(name: string): void {
-    // console.log('Receiver', 'onDataInputDrop', name, data)
     if (name === 'opt') {
       if (!this._backwarding) {
         this._disconnect()
@@ -156,7 +153,7 @@ export default class PeerReceiver<T> extends Semifunctional<
 
   private _setup_peer = (): Unlisten => {
     const connect_listener = () => {
-      console.log('Receiver', 'Peer', 'connect')
+      // console.log('Receiver', 'Peer', 'connect')
 
       this._connected = true
 
@@ -166,19 +163,19 @@ export default class PeerReceiver<T> extends Semifunctional<
     }
 
     const error_listener = (err) => {
-      console.log('Receiver', 'Peer', 'error', err)
+      // console.log('Receiver', 'Peer', 'error', err)
 
       this.err(err.message)
     }
 
     const close_listener = () => {
-      console.log('Receiver', 'Peer', 'close')
+      // console.log('Receiver', 'Peer', 'close')
 
       this._disconnect()
     }
 
     const message_listener = (message: string) => {
-      console.log('Receiver', 'Peer', 'message', message)
+      // console.log('Receiver', 'Peer', 'message', message)
 
       if (this._output.emitter.active()) {
         // @ts-ignore
@@ -187,7 +184,7 @@ export default class PeerReceiver<T> extends Semifunctional<
     }
 
     const start_listener = (stream: MediaStream) => {
-      console.log('Receiver', 'Peer', 'start', stream)
+      // console.log('Receiver', 'Peer', 'start', stream)
 
       const _stream = wrapMediaStream(stream, this.__system)
 
@@ -195,7 +192,7 @@ export default class PeerReceiver<T> extends Semifunctional<
     }
 
     const stop_listener = () => {
-      console.log('Receiver', 'Peer', 'stop')
+      // console.log('Receiver', 'Peer', 'stop')
 
       this._output.stream.pull()
     }

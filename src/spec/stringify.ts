@@ -1,8 +1,7 @@
-import { Unit } from '../Class/Unit'
 import { escape } from './escape'
 import { isValidKeyStr } from './parser'
 
-export function stringify(value: any): string {
+export function stringify(value: any): string | null {
   const t = typeof value
   switch (t) {
     case 'string':
@@ -26,10 +25,8 @@ export function stringify(value: any): string {
                 `${isValidKeyStr(key) ? key : `"${key}"`}:${stringify(value)}`
             )
             .join(',')}}`
-        } else if (value instanceof Unit) {
-          return `unit://${value.__global_id}`
         } else {
-          throw new Error('invalid object')
+          return `unit://${value.__global_id}`
         }
       }
     case 'function':

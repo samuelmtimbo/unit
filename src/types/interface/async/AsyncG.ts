@@ -191,6 +191,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinSpec: pin,
     }: GraphExposeUnitPinSetData) {
       const unit = graph.getUnit(unitId) as Graph
+
       unit.exposePinSet(type, id, pin)
     },
 
@@ -466,6 +467,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
     $moveSubgraphInto({
       graphId,
+      nextSpecId,
       nodeIds,
       nextIdMap,
       nextPinIdMap,
@@ -476,6 +478,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     }: GraphMoveSubGraphIntoData): void {
       graph.moveSubgraphInto(
         graphId,
+        nextSpecId,
         nodeIds,
         nextIdMap,
         nextPinIdMap,
@@ -488,6 +491,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
     $moveSubgraphOutOf({
       graphId,
+      nextSpecId,
       nodeIds,
       nextIdMap,
       nextPinIdMap,
@@ -498,6 +502,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     }: GraphMoveSubGraphIntoData): void {
       graph.moveSubgraphInto(
         graphId,
+        nextSpecId,
         nodeIds,
         nextIdMap,
         nextPinIdMap,

@@ -7,6 +7,21 @@ import { Component } from './component'
 import { LayoutNode } from './LayoutNode'
 import { reflectChildrenTrait } from './reflectChildrenTrait'
 
+export const getBaseStyle = (
+  base: LayoutBase,
+  extractStyle: (leafId: string, component: Component) => Style
+) => {
+  const base_style = base.map(([leaf_path, leaf_comp]) => {
+    const leaf_id = joinLeafPath(leaf_path)
+
+    const leaf_style = extractStyle(leaf_id, leaf_comp)
+
+    return leaf_style
+  })
+
+  return base_style
+}
+
 export const getParentPath = (component: Component, root: Component) => {
   let parent_path = []
   let p = component
@@ -22,13 +37,18 @@ export const getParentPath = (component: Component, root: Component) => {
   return parent_path
 }
 
+export type ExpandChildFunction = (
+  leafId: string,
+  component: Component
+) => Style
+
 export const expandSlot = (
   root: Component,
   component: Component,
   slot_id: string,
   path: number[],
   parent_slot_base: Dict<string[]>,
-  extractStyle: (leafId: string, component: Component) => Style
+  extractStyle: ExpandChildFunction
 ) => {
   let slot_base_ids = parent_slot_base[slot_id]
 
@@ -96,13 +116,7 @@ export const expandSlot = (
       }, [])
     }
 
-    const base_style = base.map(([leaf_path, leaf_comp]) => {
-      const leaf_id = joinLeafPath(leaf_path)
-
-      const leaf_style = extractStyle(leaf_id, leaf_comp)
-
-      return leaf_style
-    })
+    const base_style = getBaseStyle(base, extractStyle)
 
     return base_style
   }
@@ -182,12 +196,10 @@ export const expandSlot = (
     }
   }
 
-  const child_leaf_comp = component.pathGetSubComponent(child_leaf_path)
+  const base_style = slot_base_ids.map((leaf_id) => {
+    const leaf_path = leaf_id.split('/')
 
-  const base = child_leaf_comp.getBase()
-
-  const base_style = base.map(([leaf_path, leaf_comp]) => {
-    const leaf_id = joinLeafPath([...child_leaf_path, ...leaf_path])
+    const leaf_comp = component.pathGetSubComponent(leaf_path)
 
     const leaf_style = extractStyle(leaf_id, leaf_comp)
 

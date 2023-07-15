@@ -14,7 +14,7 @@ import {
 } from '../../../../../client/event/keyboard'
 import { makePasteListener } from '../../../../../client/event/paste'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { TreeNode, TreeNodeType } from '../../../../../spec/parser'
+import { TreeNode } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import TextField from '../../value/TextField/Component'

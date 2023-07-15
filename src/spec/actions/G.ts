@@ -130,6 +130,7 @@ export const wrapMoveSubgraphOutOfData = (data: GraphMoveSubGraphOutOfData) => {
 
 export const makeMoveSubgraphIntoAction = (
   graphId: string,
+  nextSpecId: string,
   nodeIds: {
     merge: string[]
     link: {
@@ -189,7 +190,7 @@ export const makeMoveSubgraphIntoAction = (
 ) => {
   return wrapMoveSubgraphIntoData({
     graphId,
-    nextSpecId: null,
+    nextSpecId,
     nodeIds,
     nextIdMap,
     nextPinIdMap,
@@ -204,6 +205,7 @@ export const makeMoveSubgraphIntoAction = (
 
 export const makeMoveSubgraphOutOfAction = (
   graphId: string,
+  nextSpecId: string,
   nodeIds: {
     merge: string[]
     link: {
@@ -263,7 +265,7 @@ export const makeMoveSubgraphOutOfAction = (
 ) => {
   return wrapMoveSubgraphOutOfData({
     graphId,
-    nextSpecId: null,
+    nextSpecId,
     nodeIds,
     nextIdMap,
     nextPinIdMap,
@@ -909,6 +911,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case MOVE_SUBGRAPH_INTO:
       return makeMoveSubgraphOutOfAction(
         data.graphId,
+        data.nextSpecId,
         data.nodeIds,
         data.nextIdMap,
         data.nextUnitPinMergeMap,
@@ -922,6 +925,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case MOVE_SUBGRAPH_OUT_OF:
       return makeMoveSubgraphIntoAction(
         data.graphId,
+        data.nextSpecId,
         data.nodeIds,
         data.nextIdMap,
         data.nextUnitPinMergeMap,
