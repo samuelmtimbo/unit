@@ -10,13 +10,6 @@ import { Rect, Size, rectsBoundingRect } from './util/geometry'
 import { parseFontSize } from './util/style/getFontSize'
 import { parseOpacity } from './util/style/getOpacity'
 
-export type LayoutBox = {
-  x: number
-  y: number
-  width: number
-  height: number
-}
-
 export const REGEX_PERCENT = /^([0-9]+)%$/
 export const REGEX_PX = new RegExp('^(' + _NUMBER_LITERAL_REGEX.source + ')px$')
 export const REGEX_CALC =
@@ -749,7 +742,9 @@ export function reflectChildrenTrait(
           if (parentAlignItems === 'start') {
             //
           } else if (parentAlignItems === 'center') {
-            childTrait.x += (effectiveWidth - childTrait.width) / 2
+            if (childTrait.width < effectiveWidth) {
+              childTrait.x += (effectiveWidth - childTrait.width) / 2
+            }
           }
         } else if (parentFlexDirection === 'row') {
           if (parentJustifyContent === 'start') {

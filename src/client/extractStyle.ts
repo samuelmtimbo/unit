@@ -5,9 +5,50 @@ import { Dict } from '../types/Dict'
 import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
 import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
+import { extractTrait } from './extractTrait'
 import { IOElement } from './IOElement'
-import { Size } from './util/geometry'
+import { reflectChildrenTrait } from './reflectChildrenTrait'
+import { rectsBoundingRect, Size } from './util/geometry'
 import { parseFontSize } from './util/style/getFontSize'
+
+export function measureChildren(
+  component: Component,
+  style: Style,
+  measureText: (text: string, fontSize: number) => Size
+) {
+  const parentChildren = component.$parentChildren
+
+  const base = parentChildren.reduce((acc, child) => {
+    const childBase = child.getBase()
+
+    return [...acc, ...childBase]
+  }, [])
+
+  const base_style = base.map(([leaf_id, leaf_comp]) => {
+    return extractStyle(leaf_comp, measureText)
+  })
+
+  const relative_base_style = base_style.filter(({ position }) => {
+    return position !== 'fixed' && position !== 'absolute'
+  }, [])
+
+  const trait = extractTrait(component, measureText)
+
+  const [reflected_children_trait, reflected_children_size] =
+    reflectChildrenTrait(
+      trait,
+      style,
+      relative_base_style,
+      (path) => {
+        return []
+      },
+      []
+    )
+
+  const size = rectsBoundingRect(reflected_children_trait)
+
+  return size
+}
 
 export function extractStyle(
   component: Component,
@@ -130,10 +171,29 @@ export function _extractStyle(
     // TODO
   }
 
+  const fitWidth = style['width'] === 'fit-content'
+  const fitHeight = style['height'] === 'fit-content'
+
+  if (fitWidth || fitHeight) {
+    const { width, height } = measureChildren(component, style, measureText)
+
+    if (fitWidth) {
+      style['width'] = `${width}px`
+    }
+
+    if (fitHeight) {
+      style['height'] = `${height}px`
+    }
+  }
+
   return style
 }
 
-export function rawExtractStyle(element: HTMLElement | SVGElement) {
+export function rawExtractStyle(element: IOElement) {
+  if (element instanceof Text) {
+    return {}
+  }
+
   const style: Dict<string> = {}
 
   for (const key in element.style) {

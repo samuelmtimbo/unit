@@ -50,7 +50,7 @@ export default class Iframe extends Element<HTMLSlotElement, Props> {
         fullscreen: false,
         microphone: false,
         pictureInPicture: false,
-        scripts: false,
+        scripts: true,
       },
     } = this.$props
 

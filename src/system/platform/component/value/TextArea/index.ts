@@ -1,4 +1,4 @@
-import { Value } from '../../../../../Class/Value'
+import { Field } from '../../../../../Class/Field'
 import { System } from '../../../../../system'
 import { ID_TEXT_AREA } from '../../../../_ids'
 
@@ -10,7 +10,7 @@ export interface O {
   value: string
 }
 
-export default class TextArea extends Value<I, O> {
+export default class TextArea extends Field<I, O> {
   constructor(system: System) {
     super(
       {

@@ -18,6 +18,13 @@ export function weakMerge<A extends object, B extends object>(
     has(_, p) {
       return p in c || p in b || p in a
     },
+    deleteProperty(target, property) {
+      delete a[property]
+      delete b[property]
+      delete c[property]
+
+      return true
+    },
     ownKeys() {
       return [
         ...new Set([

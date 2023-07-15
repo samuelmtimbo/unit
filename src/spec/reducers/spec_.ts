@@ -231,9 +231,7 @@ export const removeMerge = (
     (input: GraphPinSpec) => ({
       ...input,
       plug: mapObjVK(input.plug, (plug) => {
-        const { mergeId } = plug
-
-        return !mergeId || mergeId !== mergeId ? plug : {}
+        return !mergeId || mergeId !== plug.mergeId ? plug : {}
       }),
     })
   )
@@ -318,7 +316,9 @@ export const isPinMerged = (
 export const coverPinSet = (
   { pinId, type }: { pinId: string; type: IO },
   spec: GraphSpec
-): void => pathDelete(spec, [`${type}s`, pinId])
+): void => {
+  return pathDelete(spec, [`${type}s`, pinId])
+}
 
 export const coverPin = (
   {

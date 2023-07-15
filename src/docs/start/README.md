@@ -140,6 +140,14 @@ To unlock a component unit, Double Click on it.
 
 ![](/public/gif/start/16.gif)
 
+## Minimap
+
+To open or close the minimap drawer, click on the "graph" knob, or press <kbd>M</kbd>.
+
+The minimap is useful for navigating the entirety of the graph, especially on small screens.
+
+![](/public/gif/start/41.gif)
+
 ## Drawing
 
 To start Drawing do a Click + Long Press (also known as Click and Hold).
@@ -152,9 +160,13 @@ Draw a circle to create an empty unit. Draw a rectangle to create an empty unit 
 
 ![](/public/gif/start/33.gif)
 
+Drawing a contour around a group of nodes, will compose those nosdes.
+
+![](/public/gif/start/42.gif)
+
 ## Composition
 
-To collapse a subgraph into a new unit, on Multiselect Mode, select a subgraph and do Long Press on the background.
+To compose a subgraph into a new unit, on Multiselect Mode, select a subgraph and do Long Press on the background.
 
 ![](/public/gif/start/34.gif)
 
@@ -177,3 +189,17 @@ You can edit a unit from inside.
 To undo last action, press <kbd>Ctrl + Z</kbd>. To redo, press <kbd>Ctrl + Shift + Z</kbd>.
 
 ![](/public/gif/start/38.gif)
+
+## Save | Load
+
+To save a graph, you can press <kbd>Ctrl + S</kbd> or open the "share" drawer and click on the "export" button.
+
+![](/public/gif/start/43.gif)
+
+To open a graph file, you can press <kbd>Ctrl + O</kbd> or press on the "import" button.
+
+![](/public/gif/start/44.gif)
+
+You can also drag and drop a .unit file to the editor to open it.
+
+![](/public/gif/start/45.gif)

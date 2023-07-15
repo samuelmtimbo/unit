@@ -1,4 +1,4 @@
-import { Value } from '../../../../../Class/Value'
+import { Field } from '../../../../../Class/Field'
 import { System } from '../../../../../system'
 import { ID_NUMBER_FIELD } from '../../../../_ids'
 
@@ -11,7 +11,7 @@ export interface O {
   value: number
 }
 
-export default class NumberField extends Value<I, O> {
+export default class NumberField extends Field<I, O> {
   constructor(system: System) {
     super(
       {

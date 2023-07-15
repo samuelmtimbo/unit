@@ -2391,3 +2391,44 @@ assert.deepEqual(
     },
   ]
 )
+assert.deepEqual(
+  reflectChildrenTrait(
+    {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+    {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    [
+      {
+        width: '200px',
+        height: '30px',
+      },
+    ],
+    () => [],
+    [],
+    {}
+  )[0],
+  [
+    {
+      x: 0,
+      y: 35,
+      width: 200,
+      height: 30,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+  ]
+)

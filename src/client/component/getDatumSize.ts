@@ -1,8 +1,9 @@
 import { TreeNode, TreeNodeType } from '../../spec/parser'
 import { Size } from '../util/geometry'
 
+export const LEAF_HEIGHT: number = 16
 export const DELIMITER_WIDTH: number = 6
-export const DELIMITER_HEIGHT: number = 16
+export const DELIMITER_HEIGHT: number = LEAF_HEIGHT
 export const COMMA_WIDTH: number = 6
 export const COLON_WIDTH: number = 6
 export const SPACE_WIDTH: number = 2
@@ -21,8 +22,6 @@ export function getLeafWidth(value: string): number {
   }
   return Math.min(Math.max(value.length * 6, MIN_WIDTH), MAX_WIDTH)
 }
-
-export const LEAF_HEIGHT: number = 16
 
 const calcVerticalHeight = (data: TreeNode): number => {
   const verticalHeight =
@@ -205,7 +204,7 @@ export function getDatumHeight(data: TreeNode): number {
   let verticalHeight: number
   let overflowWidth: boolean
 
-  let height = 16
+  let height = LEAF_HEIGHT
 
   switch (data.type) {
     case TreeNodeType.Generic:

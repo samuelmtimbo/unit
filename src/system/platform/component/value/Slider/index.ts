@@ -1,4 +1,4 @@
-import { Value } from '../../../../../Class/Value'
+import { Field } from '../../../../../Class/Field'
 import { System } from '../../../../../system'
 import { ID_SLIDER } from '../../../../_ids'
 
@@ -13,7 +13,7 @@ export interface O {
   value: number
 }
 
-export default class Slider extends Value<I, O> {
+export default class Slider extends Field<I, O> {
   constructor(system: System) {
     super(
       {

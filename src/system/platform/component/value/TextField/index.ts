@@ -1,4 +1,4 @@
-import { Element_ } from '../../../../../Class/Element'
+import { Field } from '../../../../../Class/Field'
 import { System } from '../../../../../system'
 import { ID_TEXT_FIELD } from '../../../../_ids'
 
@@ -8,14 +8,16 @@ export interface I {
   maxLength: number
 }
 
-export interface O {}
+export interface O {
+  value: string
+}
 
-export default class TextField extends Element_<I, O> {
+export default class TextField extends Field<I, O> {
   constructor(system: System) {
     super(
       {
         i: ['value', 'style', 'maxLength'],
-        o: [],
+        o: ['value'],
       },
       {},
       system,

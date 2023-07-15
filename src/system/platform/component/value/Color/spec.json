@@ -6,7 +6,12 @@
       "optional": true
     }
   },
-  "outputs": {},
+  "outputs": {
+    "value": {
+      "type": "string",
+      "optional": true
+    }
+  },
   "metadata": {
     "icon": "palette",
     "description": "pick a color",

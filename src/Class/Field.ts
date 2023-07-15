@@ -3,16 +3,16 @@ import { Dict } from '../types/Dict'
 import { ElementEE, Element_ } from './Element'
 import { ION, Opt } from './Unit'
 
-export type Value_EE = {}
+export type Field_EE = {}
 
-export type ValueEvents<_EE extends Dict<any[]>> = ElementEE<_EE & Value_EE> &
-  Value_EE
+export type FieldEvents<_EE extends Dict<any[]>> = ElementEE<_EE & Field_EE> &
+  Field_EE
 
-export class Value<
+export class Field<
   I = any,
   O extends { value: any } = any,
   _J extends Dict<any> = {},
-  _EE extends ValueEvents<_EE> = ValueEvents<Value_EE>
+  _EE extends FieldEvents<_EE> = FieldEvents<Field_EE>
 > extends Element_<I, O, _EE> {
   constructor(
     { i = [], o = [] }: ION<I, O>,

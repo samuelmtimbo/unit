@@ -19,7 +19,12 @@ import {
 } from '../../../../../client/event/scroll'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { compareByComplexity } from '../../../../../client/search'
-import { getSpec, isComponent } from '../../../../../client/spec'
+import {
+  getSpec,
+  isComponent,
+  isSystemSpec,
+  isSystemSpecId,
+} from '../../../../../client/spec'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { throttle } from '../../../../../client/throttle'
 import { Shape } from '../../../../../client/util/geometry'
@@ -37,6 +42,9 @@ import Div from '../../Div/Component'
 import Icon from '../../Icon/Component'
 import IconButton from '../IconButton/Component'
 import SearchInput from '../SearchInput/Component'
+import { pull, remove } from '../../../../../util/array'
+import { Registry } from '../../../../../Registry'
+import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface Props {
   className?: string
@@ -44,6 +52,7 @@ export interface Props {
   selected?: string
   selectedColor?: string
   filter?: (u: string) => boolean
+  registry?: Registry
 }
 
 export const SEARCH_ITEM_HEIGHT: number = 40
@@ -120,16 +129,14 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
   private _scrollTop: number = 0
 
+  private _registry: Registry
+
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { specs } = this.$system
+    const { className, style = {}, selected, registry } = this.$props
 
-    const { className, style = {}, selected } = this.$props
-
-    const id_list = keys(specs)
-
-    this._refresh_ordered_list()
+    this._registry = registry ?? this.$system
 
     const list = new Div(
       {
@@ -154,13 +161,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     )
     this._list = list
 
-    const total = id_list.length
-
-    let i = 0
-    for (const id of this._ordered_id_list) {
-      this._add_list_item(id, i, total)
-      i++
-    }
+    this._reset()
 
     const input = new SearchInput({}, this.$system)
 
@@ -297,42 +298,35 @@ export default class Search extends Element<HTMLDivElement, Props> {
     }
 
     this.registerRoot(search)
+  }
 
-    this.$system.specs_.subscribe([], '*', (type, path, key, data) => {
-      if (path.length === 0) {
-        if (type === 'set') {
-          // console.log(key, data)
+  private _reset = () => {
+    // console.log('Search', '_reset')
 
-          const specId = key
-          const spec = data
+    this._list.removeChildren()
 
-          if (isSpecVisible(specs, spec.id)) {
-            if (this._ordered_id_list.includes(specId)) {
-              this._refresh_list_item(specId)
-            } else {
-              this._add_list_item(
-                specId,
-                Math.floor(this._ordered_id_list.length / 2), // RETURN
-                this._ordered_id_list.length
-              )
-            }
+    this._item = {}
+    this._list_item_div = {}
+    this._list_item_content = {}
+    this._list_item_name = {}
 
-            const selected_item_id = this._selected_id
+    this._refresh_ordered_list()
 
-            this._refresh_ordered_list()
-            this._filter_list(true)
+    const total = this._ordered_id_list.length
 
-            if (!this._list_hidden) {
-              this._set_selected_item_id(selected_item_id)
-            }
-          }
-        }
-      }
-    })
+    let i = 0
+
+    for (const id of this._ordered_id_list) {
+      this._add_list_item(id, i, total)
+
+      i++
+    }
   }
 
   private _refresh_ordered_list = () => {
-    const { specs } = this.$system
+    // console.log('Search', '_refresh_ordered_list')
+
+    const { specs } = this._registry
 
     const id_list = keys(specs)
 
@@ -353,6 +347,12 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     const selected_list_item = this._list_item_content[id]
 
+    if (!selected_list_item) {
+      console.warn('selected list item not found')
+
+      return
+    }
+
     selected_list_item.$element.style.color = color
   }
 
@@ -362,30 +362,106 @@ export default class Search extends Element<HTMLDivElement, Props> {
         ...DEFAULT_STYLE,
         ...current,
       }
+
       this._search.setProp('style', style)
     } else if (prop === 'selectedColor') {
       if (this._selected_id) {
         const { selectedColor = 'currentColor' } = this.$props
+
         this._set_list_item_color(this._selected_id, selectedColor)
       }
     } else if (prop === 'selected') {
       const { selected } = this.$props
+
       if (selected) {
         this._set_selected_item_id(selected)
       }
     } else if (prop === 'filter') {
       this._filter_list()
+    } else if (prop === 'registry') {
+      this._registry = current ?? this.$system
+
+      this._unlisten_registry()
+      this._listen_registry()
     }
+  }
+
+  private _registry_unlisten: Unlisten
+
+  private _listen_registry = () => {
+    this._registry_unlisten = this._registry.specs_.subscribe(
+      [],
+      '*',
+      (type, path, key, data) => {
+        const { specs } = this._registry
+
+        const specId = key
+        const spec = data
+
+        if (path.length === 0) {
+          if (type === 'set') {
+            if (isSpecVisible(specs, spec.id)) {
+              if (this._item[specId]) {
+                this._refresh_list_item(specId)
+              } else {
+                this._add_list_item(
+                  specId,
+                  Math.floor(this._ordered_id_list.length / 2), // RETURN
+                  this._ordered_id_list.length
+                )
+              }
+
+              const selected_item_id = this._selected_id
+
+              this._refresh_ordered_list()
+              this._filter_list(true)
+
+              if (!this._list_hidden) {
+                this._set_selected_item_id(selected_item_id)
+              }
+            }
+          } else if (type === 'delete') {
+            const specId = key
+
+            if (isSystemSpec(spec)) {
+              return
+            }
+
+            this._remove_list_item(specId)
+
+            const selected_item_id = this._selected_id
+
+            // this._refresh_ordered_list()
+            // this._filter_list(true)
+
+            if (selected_item_id === specId) {
+              if (!this._list_hidden) {
+                this._select_first_list_item()
+              }
+            }
+          }
+        }
+      }
+    )
+
+    this._reset()
+  }
+
+  private _unlisten_registry = () => {
+    this._registry_unlisten()
+
+    this._registry_unlisten = undefined
   }
 
   private _add_list_item = (id: string, i: number, total: number): void => {
     // console.trace('Search', '_add_list_item', id, i, total)
 
-    const { specs } = this.$system
+    const { specs } = this._registry
 
     const spec = getSpec(specs, id)
 
     const { name = '', metadata = {} } = spec as Spec
+
     const icon = metadata.icon || 'question'
     const tags = metadata.tags || ['user']
     const tagsStr = tags.join(' ')
@@ -498,11 +574,29 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._list.appendChild(list_item_div)
   }
 
+  private _remove_list_item = (id: string): void => {
+    // console.log('Search', 'removeItem', id)
+
+    const list_item_div = this._list_item_div[id]
+
+    this._list.removeChild(list_item_div)
+
+    delete this._list_item_div[id]
+    delete this._item[id]
+    delete this._list_item_name[id]
+    delete this._list_item_content[id]
+
+    pull(this._filtered_id_list, id)
+    pull(this._ordered_id_list, id)
+  }
+
   private _refresh_list_item = (id: string) => {
+    // console.log('Graph', '_refresh_list_item', id)
+
     const list_item_div = this._list_item_div[id]
     const list_item_name = this._list_item_name[id]
 
-    const spec = this.$system.getSpec(id)
+    const spec = this._registry.getSpec(id)
 
     const { name = '', metadata = {} } = spec as Spec
 
@@ -680,6 +774,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     const prev_selected_id = this._selected_id
 
     this._set_selected_item_id(id, force_scroll)
+
     if (this._selected_id !== prev_selected_id) {
       this._dispatch_item_selected(id)
     }
@@ -761,7 +856,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
   private _filter_list = (preserve_selected: boolean = false) => {
     // console.log('Search', '_filter_list')
 
-    const { specs } = this.$system
+    const { specs } = this._registry
 
     const { style = {}, filter = () => true } = this.$props
 
@@ -784,7 +879,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     for (const id of this._ordered_id_list) {
       if (!this._item[id]) {
-        console.warn('Search', '_filter_list', 'missing item', id)
+        // console.warn('Search', '_filter_list', 'missing item', id)
+
+        // AD HOC not sure how a spec was added to the registry unnoticed
         continue
       }
 
@@ -829,7 +926,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     this._filtered_id_list = filtered_id_list
 
-    const filtered_total = filtered_id_list.length
+    let filtered_total = filtered_id_list.length
 
     if (filtered_total > 0) {
       for (let i = 0; i < filtered_total; i++) {
@@ -838,6 +935,16 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
         this._list.removeChild(list_item_div)
         this._list.appendChild(list_item_div)
+      }
+
+      if (!this._list_hidden) {
+        const last_list_item_id = filtered_id_list[filtered_total - 1]
+        const last_list_item_div = this._list_item_div[last_list_item_id]
+
+        last_list_item_div.$element.style.borderBottom = color
+
+        this._input._input.$element.style.borderRadius = '0'
+        this._input._input.$element.style.borderTopWidth = '1px'
       }
 
       if (preserve_selected) {
@@ -854,16 +961,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
         }
       } else {
         this._select_first_list_item()
-      }
-
-      if (!this._list_hidden) {
-        const last_list_item_id = filtered_id_list[filtered_total - 1]
-        const last_list_item_div = this._list_item_div[last_list_item_id]
-
-        last_list_item_div.$element.style.borderBottom = color
-
-        this._input._input.$element.style.borderRadius = '0'
-        this._input._input.$element.style.borderTopWidth = '1px'
       }
     } else {
       this._input._input.$element.style.borderRadius = '3px 3px 0px 0px'
@@ -970,13 +1067,16 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
   public toggleShape = () => {
     const shape = this._shape === 'circle' ? 'rect' : 'circle'
+
     this.setShape(shape)
   }
 
   public setShape = (shape: 'rect' | 'circle') => {
     if (this._shape !== shape) {
       this._shape = shape
+
       this._shape_button.setProp('icon', SHAPE_TO_ICON[shape])
+
       this._dispatch_shape()
       this._filter_list()
     }
@@ -984,6 +1084,14 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
   public onMount(): void {
     // console.log('Search', 'onMount')
+
+    this._listen_registry()
+  }
+
+  public onUnmount(): void {
+    // console.log('Search', 'onUnmount')
+
+    this._unlisten_registry()
   }
 
   public onConnected(): void {

@@ -102,13 +102,12 @@ export function listenClick(
           makePointerCancelListener(pointerCancelListener)
         )
 
-        unlisten = 
-          callAll([
-            unlistenPointerMove,
-            unlistenPointerUp,
-            unlistenPointerLeave,
-            unlistenPointerCancel,
-          ])
+        unlisten = callAll([
+          unlistenPointerMove,
+          unlistenPointerUp,
+          unlistenPointerLeave,
+          unlistenPointerCancel,
+        ])
       }
 
       pointerPosition[pointerId] = { x: clientX, y: clientY }

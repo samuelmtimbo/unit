@@ -185,7 +185,7 @@ export default class PeerTransmitter<T>
   }
 
   onDataOutputDrop(name: string): void {
-    console.log('PeerTransmitter', 'onDataOutputDrop', name)
+    // console.log('PeerTransmitter', 'onDataOutputDrop', name)
 
     if (this._connected) {
       this._output_port()
@@ -209,7 +209,8 @@ export default class PeerTransmitter<T>
   }
 
   private _add_stream = (stream: MediaStream) => {
-    console.log('Peer', '_add_stream')
+    // console.log('Peer', '_add_stream')
+
     this._stream = stream
     if (this._peer) {
       this._peer.addStream(stream)
@@ -217,7 +218,8 @@ export default class PeerTransmitter<T>
   }
 
   private _remove_stream = (stream: MediaStream) => {
-    console.log('Transmitter', '_remove_stream')
+    // console.log('Transmitter', '_remove_stream')
+
     this._peer.removeStream()
   }
 
@@ -227,12 +229,14 @@ export default class PeerTransmitter<T>
 
   private async _send(data: any): Promise<void> {
     const message = stringify(data)
+
     this._peer.send(message)
+
     return
   }
 
   private _output_port = () => {
-    console.log('Transmitter', '_output_port')
+    // console.log('Transmitter', '_output_port')
 
     const peer = this._peer
 
@@ -241,7 +245,9 @@ export default class PeerTransmitter<T>
 
       async send(data: any): Promise<void> {
         const _data = stringify(data)
+
         peer.send(_data)
+
         return
       }
     })(this.__system)
@@ -250,25 +256,28 @@ export default class PeerTransmitter<T>
   }
 
   private _setup_peer = (): Unlisten => {
-    console.log('Transmitter', '_setup_peer')
+    // console.log('Transmitter', '_setup_peer')
 
     const signal_listener = (signal) => {
-      console.log('Transmitter', 'signal', signal)
+      // console.log('Transmitter', 'signal', signal)
       const { sdp } = signal
+
       this._output.offer.push(sdp)
     }
     const connect_listener = () => {
-      console.log('Transmitter', 'connect')
+      // console.log('Transmitter', 'connect')
       this._connected = true
 
       this._output_port()
     }
     const error_listener = (err) => {
-      console.log('Transmitter', 'error', err)
+      // console.log('Transmitter', 'error', err)
+
       this.err(err.message)
     }
     const close_listener = () => {
-      console.log('Transmitter', 'close')
+      // console.log('Transmitter', 'close')
+
       this._disconnect()
     }
 
@@ -289,7 +298,9 @@ export default class PeerTransmitter<T>
     }
 
     const unlisten = this._unlisten
+
     unlisten()
+
     this._unlisten = undefined
 
     this._peer.close()

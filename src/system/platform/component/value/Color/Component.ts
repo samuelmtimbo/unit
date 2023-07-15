@@ -36,12 +36,4 @@ export default class Color extends Field<HTMLInputElement, Props> {
     this.$element.type = 'color'
     this.$element.tabIndex = tabIndex
   }
-
-  setSelectionRange(
-    start: number,
-    end: number,
-    direction?: 'forward' | 'backward' | 'none' | undefined
-  ) {
-    this.$element.setSelectionRange(start, end, direction)
-  }
 }

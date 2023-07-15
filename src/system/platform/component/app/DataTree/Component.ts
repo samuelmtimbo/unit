@@ -5,6 +5,7 @@ import {
   CONTAINER_COLUMN_RIGHT_MARGIN,
   CONTAINER_ROW_LEFT_MARGIN,
   CONTAINER_ROW_RIGHT_MARGIN,
+  LEAF_HEIGHT,
 } from '../../../../../client/component/getDatumSize'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
@@ -36,20 +37,20 @@ const STYLE_SEPARATOR = {
   display: 'flex',
   alignItems: 'center',
   textAlign: 'center',
-  height: '16px',
+  height: `${LEAF_HEIGHT}px`,
   width: '6px',
   fontSize: '12px',
-  lineHeight: '16px',
+  lineHeight: `${LEAF_HEIGHT}px`,
 }
 
 const STYLE_DELIMITER = {
   display: 'flex',
   alignItems: 'center',
   textAlign: 'center',
-  height: '16px',
+  height: `${LEAF_HEIGHT}px`,
   width: '6px',
   fontSize: '12px',
-  lineHeight: '16px',
+  lineHeight: `${LEAF_HEIGHT}px`,
 }
 
 const STYLE_PARENT = (overflow: boolean) => {
@@ -79,7 +80,7 @@ const STYLE_CONTAINER = (overflow: boolean) => {
 
 const STYLE_COMMA = {
   display: 'flex',
-  height: '16px',
+  height: `${LEAF_HEIGHT}px`,
   width: '6px',
   textAlign: 'left',
   fontSize: '12px',
@@ -523,7 +524,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
           padding: '0',
           textAlign: 'center',
           resize: 'none',
-          height: '16px',
+          height: `${LEAF_HEIGHT}px`,
           maxWidth: '210px',
           fontWeight: 'inherit',
           wordWrap: 'normal',

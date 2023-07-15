@@ -63,7 +63,9 @@ export function watchStatefulSetEvent(
       data: { name, data },
     })
   }
+
   unit.addListener(event, listener)
+
   return () => {
     unit.removeListener(event, listener)
   }

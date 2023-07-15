@@ -1,4 +1,6 @@
 import { makeChangeListener } from './event/change'
+import { makeDragStartListener } from './event/drag/dragstart'
+import { makeDropListener } from './event/drag/drop'
 import { makeInputListener } from './event/input'
 import {
   makeKeydownListener,
@@ -25,6 +27,8 @@ export type IOUIEventName =
   | 'pointerup'
   | 'pointerenter'
   | 'pointerleave'
+  | 'dragstart'
+  | 'drop'
   | 'input'
   | 'change'
   | 'paste'
@@ -43,6 +47,8 @@ export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
   'pointerup',
   'pointerenter',
   'pointerleave',
+  'dragstart',
+  'drop',
   'input',
   'change',
   'paste',
@@ -75,6 +81,10 @@ export function makeUIEventListener(
       return makePointerEnterListener(callback)
     case 'pointerleave':
       return makePointerLeaveListener(callback)
+    case 'dragstart':
+      return makeDragStartListener(callback)
+    case 'drop':
+      return makeDropListener(callback)
     case 'input':
       return makeInputListener(callback)
     case 'change':
