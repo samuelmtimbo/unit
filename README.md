@@ -156,7 +156,7 @@ If you have a feature idea or hit a malfunction, this is a workflow I like to fo
 
 The unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what motivated me and made it possible.
 
-Ultimately, the goal is for everyone to have an easy to use, powerful, customizable and flexible visual system where one can build anything with absolute freedom, without ever having leave it.
+Ultimately, the goal is for everyone to have an easy to use, powerful, customizable and flexible visual system where one can build anything with absolute freedom, without ever having to leave it.
 
 ## Community
 
