@@ -130,7 +130,7 @@ https://unit.moe#https://ioun.it will show the code for https://ioun.it.
 
 Platform specialized in unit software: tools and services for building, maintaining and scaling units on the cloud.
 
-### [iframe.land](https://iframe.land) (beta)
+### [iframe.land](https://iframe.land)
 
 Collection of curated iframe ready web apps. This is a way to extend the unit experience with high quality open web components such as maps, code editors, rich text, games, video players, social media, private spaces, and more. Each \*.iframe.land subdomain is an isolated app that can be controlled through Asynchronous Messaging.
 
@@ -154,9 +154,9 @@ If you have a feature idea or hit a malfunction, this is a workflow I like to fo
 2. Open a pull request explaining the problem and solution;
 3. Iterate over it to make sure the change is positive and aligned with unit's design and vision.
 
-The unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what motivated me and made the it possible.
+The unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what motivated me and made it possible.
 
-Ultimately, the goal is for everyone to have an easy to use, powerful and flexible visual system where one can build anything with absolute freedom, without ever having leave it.
+Ultimately, the goal is for everyone to have an easy to use, powerful, customizable and flexible visual system where one can build anything with absolute freedom, without ever having leave it.
 
 ## Community
 
