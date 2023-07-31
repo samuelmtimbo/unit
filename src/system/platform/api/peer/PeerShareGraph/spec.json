@@ -2,7 +2,7 @@
   "name": "peer share graph",
   "inputs": {
     "graph": {
-      "type": "`G`",
+      "type": "`U`&`G`",
       "ref": true
     },
     "opt": {

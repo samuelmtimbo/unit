@@ -53,7 +53,7 @@ export default class Runner {
 
   public sendAction(action: { type: string; data: any }): void {
     if (!this._childProcess) {
-      throw new Error(`Cannot send action to dead container.`)
+      throw new Error('cannot send action to dead container')
     }
 
     this._send(action)

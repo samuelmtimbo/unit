@@ -56,7 +56,7 @@ export const _getSpecTypeInterfaceById = (
   } else {
     const spec = specs[id]
     if (!spec) {
-      throw new Error(`Spec not found ${id}`)
+      throw new Error(`spec not found ${id}`)
     }
     typeInterface = _getSpecTypeInterface(spec, specs, cache, {
       ...visited,
@@ -652,9 +652,8 @@ export const _getGraphTypeMap = (
       const unitTypeMap = typeMap[unitId]
 
       if (!unitTypeMap) {
-        console.warn('unitTypeMap not found', unitId)
-
         return
+        // throw new Error('type map not found')
       }
 
       const { input, output } = unitTypeMap
@@ -694,9 +693,8 @@ export const getSubgraphs = (spec: GraphSpec): Subgraph[] => {
     let merged = false
     let index = i
     forEachValueKey(merge, (mergeUnit, unitId) => {
+      // empty merge
       if (isEmptyObject(mergeUnit)) {
-        console.warn('empty merge')
-
         return
       }
 

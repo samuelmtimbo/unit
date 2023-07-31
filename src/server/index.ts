@@ -2,15 +2,15 @@
 import { json } from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
-import { ensureDir, writeFile } from 'fs-extra'
 import * as http from 'http'
 import * as createError from 'http-errors'
 import * as os from 'os'
-import { buildBundle } from '../buildBundle'
-import { PATH_PUBLIC, PATH_UNIT } from '../path'
+import { PATH_PUBLIC } from '../path'
 import { PORT } from './port'
 import compression = require('compression')
 import path = require('path')
+
+/* eslint-disable no-console */
 
 process.on('uncaughtException', function (err) {
   console.error(new Date().toUTCString() + ' uncaughtException:', err.message)

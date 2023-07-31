@@ -1,5 +1,6 @@
 import { $ } from '../../../Class/$'
 import { Element_ } from '../../../Class/Element'
+import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../../../Object'
 import { System } from '../../../system'
 import { GraphClass } from '../../../types/GraphClass'
@@ -42,16 +43,14 @@ export default class Client<T> extends Element_<I<T>, O<T>> {
   onDataInputData(name: keyof I<T>, data: any) {
     super.onDataInputData(name, data)
 
-    console.log('Client', name, data)
-
     if (name === 'graph') {
       const hub = new (class _Hub extends $ implements V<J<J<G>>>, J<J<G>> {
         read(): Promise<J<J<G<any, any>>>> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         write(data: J<J<G<any, any>>>): Promise<void> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         get<
@@ -66,7 +65,7 @@ export default class Client<T> extends Element_<I<T>, O<T>> {
             | 'pathDelete'
             | 'subscribe'
         >(name: K): Promise<J<G<any, any>>[K]> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         set<
@@ -81,7 +80,7 @@ export default class Client<T> extends Element_<I<T>, O<T>> {
             | 'pathDelete'
             | 'subscribe'
         >(name: K, data: J<G<any, any>>[K]): Promise<void> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         delete<
@@ -96,7 +95,7 @@ export default class Client<T> extends Element_<I<T>, O<T>> {
             | 'pathDelete'
             | 'subscribe'
         >(name: K): Promise<void> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         hasKey<
@@ -111,23 +110,23 @@ export default class Client<T> extends Element_<I<T>, O<T>> {
             | 'pathDelete'
             | 'subscribe'
         >(name: K): Promise<boolean> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         keys(): Promise<string[]> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         pathGet(path: string[], name: string): Promise<any> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         pathSet(path: string[], name: string, data: any): Promise<void> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         pathDelete(path: string[], name: string): Promise<void> {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
 
         subscribe(
@@ -140,7 +139,7 @@ export default class Client<T> extends Element_<I<T>, O<T>> {
             data: any
           ) => void
         ): Unlisten {
-          throw new Error('Method not implemented.')
+          throw new MethodNotImplementedError()
         }
       })(this.__system)
 

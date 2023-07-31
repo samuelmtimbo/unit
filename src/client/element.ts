@@ -52,8 +52,11 @@ export class Element<
         const { specs, classes } = this.$system
 
         const { event: event_event, data: event_data } = moment
+
         if (event_event === 'set') {
           const { name, data } = event_data
+
+          // console.log('Element', 'set', name, data)
 
           if (data !== undefined) {
             const _data = evaluate(data, specs, classes, (url) => {
@@ -112,6 +115,7 @@ export class Element<
   set(name: string, data: any): void {
     if (this.$connected) {
       const value = stringify(data)
+
       this.$unit.$set({ name, data: value }, NOOP)
     }
   }

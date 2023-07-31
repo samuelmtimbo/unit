@@ -33,7 +33,7 @@ export default class TypeOf extends Functional<I, O> {
       case 'boolean':
         return done({ type: 'boolean' })
       case 'function':
-        return done({ type: 'function' })
+        return done({ type: 'class' })
       case 'object':
         if (a === null) {
           return done({ type: 'null' })
@@ -41,9 +41,11 @@ export default class TypeOf extends Functional<I, O> {
           if (a instanceof Unit) {
             return done({ type: 'unit' })
           }
+
           if (Array.isArray(a)) {
             return done({ type: 'array' })
           }
+
           return done({ type: 'object' })
         }
       case 'string':

@@ -16,7 +16,7 @@ export default class CharAt extends Functional<I, O> {
     super(
       {
         i: ['a', 'i'],
-        o: ['ab'],
+        o: ['a[i]'],
       },
       {},
       system,

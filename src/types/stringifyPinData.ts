@@ -17,8 +17,10 @@ export function stringifyPinData(data: {
 
 export function stringifyDataObj(obj: Dict<any>) {
   const _obj = {}
+  
   for (const name in obj) {
     const data = obj[name]
+
     if (data !== undefined) {
       if (data instanceof $) {
         _obj[name] = 'null'
@@ -27,6 +29,7 @@ export function stringifyDataObj(obj: Dict<any>) {
       }
     }
   }
+  
   return _obj
 }
 

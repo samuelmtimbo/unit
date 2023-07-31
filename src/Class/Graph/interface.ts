@@ -1,9 +1,14 @@
 import { Position } from '../../client/util/geometry'
 import {
+  GraphUnitMerges,
+  GraphUnitPlugs as GraphUnitPlugs,
+} from '../../system/platform/component/app/Editor/Component'
+import {
   Action,
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
+  GraphPinsSpec,
   GraphSubPinSpec,
   GraphUnitsSpec,
 } from '../../types'
@@ -68,7 +73,8 @@ export type GraphAddUnitData = {
   pinPosition?: _IOOf<Dict<Position>> | undefined
   layoutPositon?: Position | undefined
   parentId?: string | null | undefined
-  merges?: GraphMergesSpec | undefined
+  merges?: GraphUnitMerges | undefined
+  plugs?: GraphUnitPlugs | undefined
 }
 
 export type GraphCloneUnitData = {
@@ -118,12 +124,14 @@ export type GraphRemoveUnitData = {
   layoutPositon?: Position
   parentId?: string | null
   merges?: GraphMergesSpec
+  plugs?: GraphUnitPlugs
 }
 
 export type GraphExposePinSetData = {
   type: IO
   pinId: string
   pinSpec: GraphPinSpec
+  data: any
 }
 
 export type GraphExposePinData = {

@@ -7,25 +7,25 @@
     "floor": {
       "id": "3217edcf-2fa1-4dc4-af7c-d6fb607c888d"
     },
-    "rfwdq": {
+    "multiply": {
       "id": "872be100-f4dc-4246-8eea-6e3da31137b7"
     }
   },
   "merges": {
-    "awhhu": {
+    "0": {
       "random": {
         "output": {
           "random": true
         }
       },
-      "rfwdq": {
+      "multiply": {
         "input": {
           "a": true
         }
       }
     },
-    "goagj": {
-      "rfwdq": {
+    "1": {
+      "multiply": {
         "output": {
           "a × b": true
         }
@@ -36,8 +36,8 @@
         }
       }
     },
-    "nkfjk": {
-      "rfwdq": {
+    "2": {
+      "multiply": {
         "input": {
           "b": true
         }
@@ -53,7 +53,7 @@
     "max": {
       "plug": {
         "0": {
-          "mergeId": "nkfjk"
+          "mergeId": "2"
         }
       },
       "type": "number"

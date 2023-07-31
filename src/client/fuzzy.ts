@@ -44,6 +44,7 @@ export function levenshtein(a: string, b: string): number {
   const [a, b, t] = v
   const d = levenshtein(a as string, b as string)
   if (d !== t) {
+    // eslint-disable-next-line no-console
     console.log(
       'levenstein("' + a + '","' + b + '") was ' + d + ' should be ' + t
     )

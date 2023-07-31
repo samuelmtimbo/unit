@@ -1,5 +1,5 @@
 import { build, BuildOptions } from 'esbuild'
-import { readFile } from 'fs-extra'
+import { pathExists, readFile, readJSON } from 'fs-extra'
 import { buildIdSetFromBundle } from './buildIdSetFromBundle'
 import { watch } from './script/build'
 import { sync } from './script/sync'
@@ -27,14 +27,17 @@ export const DEFAULT_WATCH_OPTIONS: BuildOptions = {
 
 export async function buildBundle(
   unitPath: string,
-  bundlePath: string,
+  projectPath: string,
   outputFolder: string,
   watchMode: boolean = false,
   includeSystem: boolean = false
 ): Promise<void> {
-  const bundleText = await readFile(bundlePath, 'utf8')
+  const bundlePath = path.join(projectPath, 'bundle.json')
+  const bootPath = path.join(projectPath, 'system.json')
 
-  const bundle = JSON.parse(bundleText)
+  const bootPathExists = await pathExists(bootPath)
+
+  const bundle = await readJSON(bundlePath, 'utf8')
 
   const idSet = includeSystem ? undefined : buildIdSetFromBundle(bundle)
 
@@ -53,6 +56,19 @@ export async function buildBundle(
         if (importer === entrypoint) {
           if (args.path === './bundle.json') {
             return { path: bundlePath }
+          }
+
+          if (args.path === './system.json') {
+            if (bootPathExists) {
+              return { path: bootPath }
+            } else {
+              const fallbackSystemPath = path.join(
+                unitPath,
+                'src/client/platform/web/system.json'
+              )
+
+              return { path: fallbackSystemPath }
+            }
           }
         }
 

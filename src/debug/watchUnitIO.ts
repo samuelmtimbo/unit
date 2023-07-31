@@ -75,6 +75,28 @@ export function watchUnitIO<T extends Unit>(
     }
   }
 
+  const unlistenPin = (type: IO, pinId: string) => {
+    const unlisten = pin_listener_map[type][pinId]
+    if (unlisten) {
+      unlisten()
+
+      remove(all, unlisten)
+
+      delete pin_listener_map.input[pinId]
+    }
+  }
+
+  const listenPin = (type: IO, pinId: string) => {
+    const pin = unit.getPin(type, pinId)
+    const ref = unit.isPinRef(type, pinId)
+
+    if (ref && watch_ref_input) {
+      watchPin('ref', type, pinId, pin)
+    } else if (!ref && watch_data_input) {
+      watchPin('data', type, pinId, pin)
+    }
+  }
+
   if (watch_data_input) {
     forEachValueKey(unit.getDataInputs(), makeWatchPin('input', 'data'))
   }
@@ -86,25 +108,21 @@ export function watchUnitIO<T extends Unit>(
   if (watch_data_input || watch_ref_input) {
     all.push(
       unit.addListener('set_input', (pinId, pin, { ref }) => {
-        if (ref && watch_ref_input) {
-          watchPin('ref', 'input', pinId, pin)
-        } else if (!ref && watch_data_input) {
-          watchPin('data', 'input', pinId, pin)
-        }
+        listenPin('input', pinId)
       })
     )
   }
 
   all.push(
-    unit.addListener('remove_input', (pinId, pin) => {
-      const unlisten = pin_listener_map.input[pinId]
-      if (unlisten) {
-        unlisten()
-
-        remove(all, unlisten)
-
-        delete pin_listener_map.input[pinId]
-      }
+    unit.addListener('rename_input', (name, newName) => {
+      unlistenPin('input', name)
+      listenPin('input', newName)
+    })
+  )
+  all.push(
+    unit.addListener('rename_output', (name, newName) => {
+      unlistenPin('output', name)
+      listenPin('output', newName)
     })
   )
 

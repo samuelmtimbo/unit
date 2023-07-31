@@ -1,60 +1,60 @@
 {
   "name": "split at",
   "units": {
-    "yhkxh": {
+    "remove": {
       "id": "f69e88e3-b2c2-481b-b036-a5c0ed7ccccb"
     },
-    "vbuwm": {
+    "length": {
       "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8"
     },
-    "sftwh": {
+    "subtract": {
       "id": "fa94b179-00e3-4ed1-814e-7938324a833f"
     }
   },
   "merges": {
-    "foqjm": {
-      "yhkxh": {
+    "0": {
+      "remove": {
         "input": {
           "a": true
         }
       },
-      "vbuwm": {
+      "length": {
         "input": {
           "a": true
         }
       }
     },
-    "iiynv": {
-      "vbuwm": {
+    "1": {
+      "length": {
         "output": {
           "length": true
         }
       },
-      "sftwh": {
+      "subtract": {
         "input": {
           "a": true
         }
       }
     },
-    "udcto": {
-      "yhkxh": {
+    "2": {
+      "remove": {
         "input": {
           "start": true
         }
       },
-      "sftwh": {
+      "subtract": {
         "input": {
           "b": true
         }
       }
     },
-    "ondfq": {
-      "yhkxh": {
+    "3": {
+      "remove": {
         "input": {
           "count": true
         }
       },
-      "sftwh": {
+      "subtract": {
         "output": {
           "a - b": true
         }
@@ -65,7 +65,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "foqjm"
+          "mergeId": "0"
         }
       },
       "type": "<A>[]"
@@ -73,7 +73,7 @@
     "i": {
       "plug": {
         "0": {
-          "mergeId": "udcto"
+          "mergeId": "2"
         }
       },
       "type": "number"
@@ -83,7 +83,7 @@
     "second": {
       "plug": {
         "0": {
-          "unitId": "yhkxh",
+          "unitId": "remove",
           "pinId": "removed"
         }
       },
@@ -92,7 +92,7 @@
     "first": {
       "plug": {
         "0": {
-          "unitId": "yhkxh",
+          "unitId": "remove",
           "pinId": "a"
         }
       },
@@ -103,10 +103,7 @@
     "icon": "split",
     "description": "...",
     "complexity": 11,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "id": "de2d5ba8-ac0f-461e-849b-f4aa84d2736a",
   "type": "`U`&`G`",

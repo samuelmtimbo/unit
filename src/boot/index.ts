@@ -33,7 +33,7 @@ export function boot(
   api: API = noHost(),
   opt: BootOpt = {}
 ): System {
-  const { path = '', specs: _specs = {} } = opt
+  const { path = '', specs: _specs = {}, flags = {} } = opt
 
   const keyboard: IKeyboard = {
     pressed: [],
@@ -65,6 +65,7 @@ export function boot(
   const { specs_ } = registry
 
   const {
+    specsCount,
     newSpecId,
     hasSpec,
     emptySpec,
@@ -98,7 +99,7 @@ export function boot(
     classes,
     components,
     graphs: [],
-    specsCount: {},
+    specsCount,
     cache: flag,
     feature,
     foreground: {
@@ -115,6 +116,10 @@ export function boot(
           component: {},
         },
     api,
+    flags: {
+      defaultInputModeNone: false,
+      ...flags,
+    },
     boot: (opt: BootOpt) => boot(system, api, opt),
     graph: (system, opt) => new SharedObject(new LocalStore(system, 'local')),
     registerComponent: function (
@@ -155,7 +160,7 @@ export function boot(
     ): Unlisten {
       if (system.root) {
         if (!system.global.component[globalId]) {
-          throw new Error('Component not found.')
+          throw new Error('component not found')
         }
 
         const css = `${styleToCSS(style)}`
@@ -176,7 +181,7 @@ export function boot(
       const component = system.global.component[globalId]
 
       if (!component) {
-        throw new Error('Component not found.')
+        throw new Error('component not found')
       }
 
       componentLocalToRemote[globalId] = remoteGlobalId
@@ -204,5 +209,6 @@ export function destroy(system: System) {
   for (const graph of graphs) {
     graph.destroy()
   }
+
   // TODO
 }

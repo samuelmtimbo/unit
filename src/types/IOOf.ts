@@ -19,6 +19,11 @@ export type KindOf<T = any> = {
 
 export type IOKindOf<T = any> = IOOf<KindOf<T>>
 
+export function io<T>(callback: (type: IO) => void): void {
+  callback('input')
+  callback('output')
+}
+
 export function forIO<T>(
   data: _IOOf<T>,
   callback: (type: IO, data: T) => void

@@ -2,7 +2,6 @@ import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Unit } from '../../../../Class/Unit'
 import { cloneBundle } from '../../../../spec/cloneBundle'
-import { stringifyUnitBundleSpecData } from '../../../../spec/stringifySpec'
 import { System } from '../../../../system'
 import { UnitBundle } from '../../../../types/UnitBundle'
 import { ID_CLASS } from '../../../_ids'
@@ -37,8 +36,6 @@ export default class Class<T> extends Functional<I<T>, O<T>> {
 
   f({ unit, deep }: I<T>, done: Done<O<T>>): void {
     const Class = cloneBundle(unit, deep)
-
-    stringifyUnitBundleSpecData(Class.__bundle)
 
     done({ class: Class })
   }

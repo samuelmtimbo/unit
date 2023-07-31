@@ -36,7 +36,9 @@ export function watchGraphPinMergeEvent(
       },
     })
   }
+
   graph.prependListener(event, listener)
+
   return () => {
     graph.removeListener(event, listener)
   }

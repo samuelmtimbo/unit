@@ -27,10 +27,15 @@ import {
 import { Position } from '../../client/util/geometry'
 import { keys } from '../../system/f/object/Keys/f'
 import {
+  GraphUnitMerges,
+  GraphUnitPlugs,
+} from '../../system/platform/component/app/Editor/Component'
+import {
   Action,
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
+  GraphPinsSpec,
   GraphSubPinSpec,
   GraphUnitsSpec,
 } from '../../types'
@@ -102,7 +107,8 @@ export const makeAddUnitAction = (
   pinPosition?: _IOOf<Dict<Position>> | undefined,
   layoutPositon?: Position | undefined,
   parentId?: string | null | undefined,
-  merges?: GraphMergesSpec | undefined
+  merges?: GraphUnitMerges | undefined,
+  plugs?: GraphUnitPlugs | undefined
 ) => {
   return wrapAddUnitAction({
     unitId,
@@ -111,6 +117,8 @@ export const makeAddUnitAction = (
     pinPosition,
     layoutPositon,
     parentId,
+    merges,
+    plugs,
   })
 }
 
@@ -301,7 +309,8 @@ export const makeRemoveUnitAction = (
   pinPosition?: _IOOf<Dict<Position>>,
   layoutPositon?: Position,
   parentId?: string | null,
-  merges?: GraphMergesSpec
+  merges?: GraphMergesSpec,
+  plugs?: GraphUnitPlugs
 ) => {
   return wrapMakeRemoveUnitAction({
     unitId,
@@ -311,6 +320,7 @@ export const makeRemoveUnitAction = (
     layoutPositon,
     parentId,
     merges,
+    plugs,
   })
 }
 
@@ -399,9 +409,10 @@ export const makeCoverUnitPinSetAction = (
 export const makeExposePinSetAction = (
   type: IO,
   pinId: string,
-  pinSpec: GraphPinSpec
+  pinSpec: GraphPinSpec,
+  data: any
 ) => {
-  return wrapExposePinSetAction({ type, pinId, pinSpec })
+  return wrapExposePinSetAction({ type, pinId, pinSpec, data })
 }
 
 export const wrapCoverPinSetAction = (data: GraphCoverPinSetData) => {
@@ -797,7 +808,8 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.pinPosition,
         data.layoutPosition,
         data.parentId,
-        data.merges
+        data.merges,
+        data.plugs
       )
     case ADD_UNITS:
       return makeRemoveUnitsAction(keys(data.units))
@@ -809,7 +821,8 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.pinPosition,
         data.layoutPosition,
         data.parentId,
-        data.merges
+        data.merges,
+        data.plugs
       )
     case REMOVE_UNITS:
       return makeAddUnitsAction(
@@ -843,7 +856,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case EXPOSE_PIN_SET:
       return makeCoverPinSetAction(data.type, data.pinId, data.pin)
     case COVER_PIN_SET:
-      return makeExposePinSetAction(data.type, data.pinId, data.plug)
+      return makeExposePinSetAction(data.type, data.pinId, data.plug, data.data)
     case PLUG_PIN:
       return makeUnplugPinAction(
         data.type,
@@ -939,7 +952,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case BULK_EDIT:
       return makeBulkEditAction([...data.actions].reverse().map(reverseAction))
     default:
-      throw new Error('Irreversible')
+      throw new Error('irreversible')
   }
 }
 
@@ -951,7 +964,7 @@ export const processAction = (
   const { type, data } = action
 
   if (!method[type] && fallback) {
-    throw new Error(`No method for ${type}`)
+    throw new Error(`no method for ${type}`)
   }
 
   ;(method[type] ?? fallback)(data)

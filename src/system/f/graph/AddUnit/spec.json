@@ -5,7 +5,7 @@
       "type": "`U`"
     },
     "graph": {
-      "type": "`G`",
+      "type": "`U`&`G`",
       "ref": true
     },
     "id": {

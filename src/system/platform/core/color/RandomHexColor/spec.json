@@ -1,7 +1,7 @@
 {
   "name": "random hex color",
   "units": {
-    "pbjnqvo": {
+    "randomnaturalbetween": {
       "id": "9d2b69b2-c468-4fca-a7d5-d158033c0201",
       "input": {
         "b": {
@@ -14,7 +14,7 @@
         }
       }
     },
-    "dduhlpdy": {
+    "nstringbuilderfrom": {
       "id": "9cab124a-b40d-4614-b032-20b0209e90e3",
       "input": {
         "n": {
@@ -32,7 +32,7 @@
         }
       }
     },
-    "hqyihyi": {
+    "numbertohex": {
       "id": "1a7665a2-2af0-11eb-9fdb-4bdf5feec91c",
       "input": {
         "n": {}
@@ -43,8 +43,8 @@
     }
   },
   "merges": {
-    "fjnehgyen": {
-      "dduhlpdy": {
+    "0": {
+      "nstringbuilderfrom": {
         "input": {
           "from": true
         }
@@ -55,25 +55,25 @@
         }
       }
     },
-    "uoovdaxhq": {
-      "hqyihyi": {
+    "1": {
+      "numbertohex": {
         "input": {
           "n": true
         }
       },
-      "pbjnqvo": {
+      "randomnaturalbetween": {
         "output": {
           "n": true
         }
       }
     },
-    "fnswcenmt": {
-      "hqyihyi": {
+    "2": {
+      "numbertohex": {
         "output": {
           "hex": true
         }
       },
-      "dduhlpdy": {
+      "nstringbuilderfrom": {
         "input": {
           "a": true
         }
@@ -84,11 +84,7 @@
     "icon": "palette",
     "description": "random HEX color string",
     "complexity": 49,
-    "tags": [
-      "platform",
-      "core",
-      "color"
-    ]
+    "tags": ["platform", "core", "color"]
   },
   "inputs": {
     "any": {
@@ -106,7 +102,7 @@
     "hex": {
       "plug": {
         "0": {
-          "unitId": "dduhlpdy",
+          "unitId": "nstringbuilderfrom",
           "pinId": "str"
         }
       },

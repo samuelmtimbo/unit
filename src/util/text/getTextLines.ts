@@ -1,89 +1,119 @@
 export const getTextLines = (
   text: string,
   maxLineLength: number,
-  current_line: string = ''
+  currentLine: string = ''
 ): string[] => {
   let lines: string[] = []
 
   const segments = text.split(' ')
 
-  let line_segment_count = 0
+  let lineSegmentCount = 0
 
   for (let i = 0; i < segments.length; i++) {
     const segment = segments[i]
-    const segment_length = segment.length
+    const segmentLength = segment.length
 
-    const space_between = line_segment_count && 1
+    const spaceBetween = lineSegmentCount && 1
 
-    const space = space_between ? ' ' : ''
+    const space = spaceBetween ? ' ' : ''
 
-    if (current_line.length + space_between + segment_length > maxLineLength) {
-      if (segment_length <= maxLineLength) {
-        if (current_line.length === maxLineLength) {
-          lines.push(current_line)
+    if (currentLine.length + spaceBetween + segmentLength > maxLineLength) {
+      if (segmentLength <= maxLineLength) {
+        if (currentLine.length === maxLineLength) {
+          lines.push(currentLine)
 
           const rec_lines = getTextLines(segment, maxLineLength, space)
 
           lines = lines.concat(rec_lines.slice(0, -1))
 
-          current_line = rec_lines[rec_lines.length - 1]
+          currentLine = rec_lines[rec_lines.length - 1]
 
-          line_segment_count = current_line.split(' ').length
+          lineSegmentCount = currentLine.split(' ').length
         } else {
-          if (current_line === ' ') {
+          if (currentLine === ' ') {
             const end = Math.min(
-              maxLineLength - current_line.length - space_between,
-              segment_length
+              maxLineLength - currentLine.length - spaceBetween,
+              segmentLength
             )
 
-            lines.push(current_line + space + segment.slice(0, end))
+            lines.push(currentLine + space + segment.slice(0, end))
 
-            current_line = segment.slice(end)
+            currentLine = segment.slice(end)
 
-            line_segment_count = current_line.length ? 1 : 0
+            lineSegmentCount = currentLine.length ? 1 : 0
           } else {
-            lines.push(current_line + space)
+            lines.push(currentLine + space)
 
-            current_line = segment
+            currentLine = segment
 
-            line_segment_count = 1
+            lineSegmentCount = 1
           }
         }
       } else {
-        const end = maxLineLength - current_line.length - space_between
+        const end = maxLineLength - currentLine.length - spaceBetween
 
-        if (current_line !== '' && segment_length > end) {
-          lines.push(current_line + space)
+        if (currentLine !== '' && segmentLength > end) {
+          lines.push(currentLine + space)
 
           const rec_lines = getTextLines(segment, maxLineLength)
 
           lines = lines.concat(rec_lines.slice(0, -1))
 
-          current_line = rec_lines[rec_lines.length - 1]
+          currentLine = rec_lines[rec_lines.length - 1]
 
-          line_segment_count = current_line.split(' ').length
+          lineSegmentCount = currentLine.split(' ').length
         } else {
-          lines.push(current_line + space + segment.slice(0, end))
+          lines.push(currentLine + space + segment.slice(0, end))
 
           const rec_lines = getTextLines(segment.slice(end), maxLineLength)
 
           lines = lines.concat(rec_lines.slice(0, -1))
 
-          current_line = rec_lines[rec_lines.length - 1]
+          currentLine = rec_lines[rec_lines.length - 1]
 
-          line_segment_count = current_line.split(' ').length
+          lineSegmentCount = currentLine.split(' ').length
         }
       }
     } else {
-      current_line += space + segment
+      currentLine += space + segment
 
-      line_segment_count++
+      lineSegmentCount++
     }
   }
 
-  if (current_line) {
-    lines.push(current_line)
+  if (currentLine) {
+    lines.push(currentLine)
   }
 
   return lines
+}
+
+export function spaces(n: number) {
+  let s = ''
+
+  for (let i = 0; i < n; i++) {
+    s += ' '
+  }
+
+  return s
+}
+
+export function countStartSpaces(text: string) {
+  let i = 0
+
+  while (text[i] === ' ') {
+    i++
+  }
+
+  return i
+}
+
+export function countEndSpaces(text: string) {
+  let i = text.length - 1
+
+  while (text[i] === ' ') {
+    i--
+  }
+
+  return text.length - 1 - i
 }

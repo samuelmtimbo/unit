@@ -30,7 +30,7 @@ export class ObjectSource<T> {
       if (i > -1) {
         this._callback.splice(i, 1)
       } else {
-        throw new Error('Can only unlisten once')
+        throw new Error('can only unlisten once')
       }
     }
   }

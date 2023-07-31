@@ -1,15 +1,13 @@
 import { GraphMoveSubGraphData } from '../Class/Graph/interface'
-import { segmentMergeNodeId } from '../client/id'
 import { getSpec } from '../client/spec'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../system/core/object/KeyCount/f'
 import { keys } from '../system/f/object/Keys/f'
-import { GraphConnectUnitPlugsOpt } from '../system/platform/component/app/Editor/Component'
-import { isEmptyMerge } from './isEmptyMerge'
+import { GraphUnitPlugs } from '../system/platform/component/app/Editor/Component'
 import {
   GraphMergeSpec,
-  GraphMergesSpec,
   GraphMergeUnitSpec,
+  GraphMergesSpec,
   GraphPinSpec,
   GraphPinsSpec,
   GraphPlugOuterSpec,
@@ -21,13 +19,16 @@ import {
 import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
+import { _IOOf } from '../types/IOOf'
+import { GraphSelection } from '../types/interface/G'
 import {
-  reduceObj,
   _keyCount,
+  clone,
   pathOrDefault,
   pathSet,
-  clone,
+  reduceObj,
 } from '../util/object'
+import { isEmptyMerge } from './isEmptyMerge'
 
 export function isValidSpecName(name: string) {
   return !!/^[A-Za-z_ ][A-Za-z\d_ ]*$/g.exec(name)
@@ -151,37 +152,77 @@ export const getMergePinCount = (merge: GraphMergeSpec): number => {
   )
 }
 
-export const getMergeUnitPinCount = (
-  merge_unit: GraphMergeUnitSpec
+export const getMergePinTypeCount = (
+  merge: GraphMergeSpec,
+  type: IO
 ): number => {
-  const { input = {}, output = {} } = merge_unit
-  const input_count = _keyCount(input)
-  const output_count = _keyCount(output)
-  const count = input_count + output_count
-  return count
+  return reduceObj(
+    merge,
+    (count, mergeUnit) => {
+      return count + getMergeUnitTypePinCount(mergeUnit, type)
+    },
+    0
+  )
 }
 
-export const forEachPinOnMerges = (
-  merges: GraphMergesSpec,
-  callback: (mergeId: string, unitId: string, type: IO, pinId: string) => void
+export const getMergeTypePinCount = (
+  merge: GraphMergeSpec,
+  type: IO
+): number => {
+  return reduceObj(
+    merge,
+    (count, mergeUnit) => {
+      return count + getMergeUnitTypePinCount(mergeUnit, type)
+    },
+    0
+  )
+}
+
+export const getMergeUnitPinCount = (mergeUnit: GraphMergeUnitSpec): number => {
+  return (
+    getMergeUnitTypePinCount(mergeUnit, 'input') +
+    getMergeUnitTypePinCount(mergeUnit, 'output')
+  )
+}
+
+export const getMergeUnitTypePinCount = (
+  mergeUnit: GraphMergeUnitSpec,
+  type: IO
+): number => {
+  const { [type]: pins = {} } = mergeUnit
+
+  const pinCount = _keyCount(pins)
+
+  return pinCount
+}
+
+export const forEachPinOnMerges = <T>(
+  merges: Dict<Dict<_IOOf<Dict<T>>>>,
+  callback: (
+    mergeId: string,
+    unitId: string,
+    type: IO,
+    pinId: string,
+    data: T
+  ) => void
 ) => {
   forEachValueKey(merges || {}, (merge, mergeId) => {
-    forEachPinOnMerge(merge, (unitId, type, pinId) =>
-      callback(mergeId, unitId, type, pinId)
+    forEachPinOnMerge(merge, (unitId, type, pinId, data) =>
+      callback(mergeId, unitId, type, pinId, data)
     )
   })
 }
 
-export const forEachPinOnMerge = (
-  merge: GraphMergeSpec,
-  callback: (unitId: string, type: IO, pinId: string) => void
+export const forEachPinOnMerge = <T>(
+  merge: Dict<_IOOf<Dict<T>>>,
+  callback: (unitId: string, type: IO, pinId: string, data: T) => void
 ) => {
   forEachValueKey(merge, ({ input, output }, unitId) => {
     forEachValueKey(input || {}, (_, inputId) => {
-      callback(unitId, 'input', inputId)
+      callback(unitId, 'input', inputId, _)
     })
     forEachValueKey(output || {}, (_, outputId) => {
-      callback(unitId, 'output', outputId)
+      callback(unitId, 'output', outputId, _)
     })
   })
 }
@@ -310,11 +351,8 @@ export const findMergePlug = (
   return mergePlug
 }
 
-export function getUnitPlugs(
-  spec: GraphSpec,
-  unit_id: string
-): GraphConnectUnitPlugsOpt {
-  const plugs: GraphConnectUnitPlugsOpt = {
+export function getUnitPlugs(spec: GraphSpec, unit_id: string): GraphUnitPlugs {
+  const plugs: GraphUnitPlugs = {
     input: {},
     output: {},
   }
@@ -323,7 +361,7 @@ export function getUnitPlugs(
     spec,
     (type, pinId, pinSpec, subPinId, subPinSpec) => {
       if (subPinSpec.unitId === unit_id) {
-        pathSet(plugs, [type, pinId], { pinId, subPinId })
+        pathSet(plugs, [type, subPinSpec.pinId], { pinId, subPinId })
       }
     }
   )
@@ -331,9 +369,13 @@ export function getUnitPlugs(
   return plugs
 }
 
-export const findSpecAtPath = (specs: Specs, spec: Spec, path: string[]) => {
+export const findSpecAtPath = (
+  specs: Specs,
+  spec: Spec,
+  path: string[]
+): GraphSpec => {
   if (path.length === 0) {
-    return spec
+    return spec as GraphSpec
   } else {
     const [unitId, ...rest] = path
 
@@ -345,8 +387,33 @@ export const findSpecAtPath = (specs: Specs, spec: Spec, path: string[]) => {
   }
 }
 
+export const shouldExposePin = (
+  type: IO,
+  pin_id: string,
+  pin_spec: GraphPinSpec,
+  sub_pin_id: string,
+  sub_pin_spec: GraphSubPinSpec,
+  merged: boolean
+) => {
+  const { unitId, pinId, mergeId } = sub_pin_spec
+
+  if (keyCount(pin_spec.plug ?? {}) > 1) {
+    return true
+  }
+
+  if (pinId === pin_id) {
+    return false
+  }
+
+  if (merged) {
+    return false
+  }
+
+  return true
+}
+
 export function makeFullSpecCollapseMap(
-  unit_id: string,
+  unitId: string,
   spec: GraphSpec,
   unitIdMap: Dict<string>,
   mergeIdMap: Dict<string>,
@@ -362,7 +429,14 @@ export function makeFullSpecCollapseMap(
 ): GraphMoveSubGraphData {
   const { units = {}, merges = {}, inputs = {}, outputs = {} } = spec
 
-  const unit_merges = getUnitMerges(unit_id)
+  const nodeIds: GraphSelection = {
+    unit: keys(units),
+    merge: keys(merges),
+    plug: [],
+  }
+
+  const unitMerges = getUnitMerges(unitId)
+  // const unitPlugs = getUnitPlugs(unitId)
 
   const nextIdMap: GraphMoveSubGraphData['nextIdMap'] = {
     unit: unitIdMap,
@@ -370,77 +444,151 @@ export function makeFullSpecCollapseMap(
   }
   const nextPinIdMap: GraphMoveSubGraphData['nextPinIdMap'] = {}
   const nextMergePinId: GraphMoveSubGraphData['nextMergePinId'] = {}
+  const nextPlugSpec: GraphMoveSubGraphData['nextPlugSpec'] = {}
 
-  const process_pins = (type: IO, pins: GraphPinsSpec) => {
+  const processPins = (type: IO, pins: GraphPinsSpec) => {
     for (const pinId in pins) {
       const pin = pins[pinId]
 
-      process_pin(type, pinId, pin)
+      processPin(type, pinId, pin)
     }
   }
 
-  const process_pin = (type: IO, pinId: string, pin: GraphPinSpec) => {
+  const processPin = (type: IO, pinId: string, pin: GraphPinSpec) => {
     const { plug, ref, defaultIgnored } = pin
+
+    const mergeId = getPinMergeId(unitId, type, pinId)
+
+    const merged = !!mergeId
 
     for (const subPinId in plug) {
       const subPinSpec = plug[subPinId]
 
-      if (subPinSpec.unitId && subPinSpec.pinId) {
-        forEachPinOnMerges(unit_merges, (mergeId, unitId, type, pinId) => {
-          const merge = getMerge(mergeId)
+      if (shouldExposePin(type, pinId, pin, subPinId, subPinSpec, merged)) {
+        nodeIds.plug.push({ type, pinId, subPinId })
 
-          if (unitId === subPinSpec.unitId && pinId === subPinSpec.pinId) {
-            pathSet(nextPinIdMap, [unitId, type], {
-              pinId,
-              subPinId,
-              ref,
-              defaultIgnored,
-              mergeId,
-              merge,
-            })
-          }
+        pathSet(nextPlugSpec, [type, pinId, subPinId], subPinSpec)
+      }
+
+      if (subPinSpec.unitId && subPinSpec.pinId) {
+        pathSet(nextPinIdMap, [subPinSpec.unitId, type, subPinSpec.pinId], {
+          pinId,
+          subPinId,
+          ref,
+          defaultIgnored,
+          mergeId: null,
+          merge: null,
         })
+
+        forEachPinOnMerges(
+          unitMerges,
+          (mergeId, unitId, unitMergeType, unitMergePinId) => {
+            const merge = getMerge(mergeId)
+            const merge_clone = clone(merge)
+
+            delete merge_clone[unitId]
+
+            const nextUnitId =
+              nextIdMap.unit[subPinSpec.unitId] ?? subPinSpec.unitId
+
+            merge_clone[nextUnitId] = {
+              [unitMergeType]: { [subPinSpec.pinId]: true },
+            }
+
+            if (unitId === unitId && unitMergePinId === pinId) {
+              pathSet(
+                nextPinIdMap,
+                [subPinSpec.unitId, unitMergeType, subPinSpec.pinId],
+                {
+                  pinId,
+                  subPinId,
+                  ref,
+                  defaultIgnored,
+                  mergeId,
+                  merge: merge_clone,
+                }
+              )
+            }
+          }
+        )
       } else if (subPinSpec.mergeId) {
         const mergeSpec = merges[subPinSpec.mergeId]
 
         if (isEmptyMerge(mergeSpec)) {
-          const mergeId = getPinMergeId(unit_id, type, pinId)
+          const mergeId = getPinMergeId(unitId, type, pinId)
 
-          const merge = getMerge(mergeId)
+          if (mergeId) {
+            const merge = getMerge(mergeId)
 
-          const oppositeMerge = clone(merge)
+            const oppositeMerge = clone(merge)
 
-          delete oppositeMerge[unit_id]
+            delete oppositeMerge[unitId]
 
-          pathSet(nextMergePinId, [subPinSpec.mergeId, type], {
-            mergeId,
-            pinId,
-            subPinSpec: {
+            pathSet(nextMergePinId, [subPinSpec.mergeId, type], {
               mergeId,
-            },
-            oppositeMerge,
-          })
+              pinId,
+              subPinSpec: {
+                mergeId,
+              },
+              oppositeMerge,
+            })
+          }
         }
       }
     }
   }
 
-  process_pins('input', inputs)
-  process_pins('output', outputs)
+  processPins('input', inputs)
+  processPins('output', outputs)
 
-  return {
-    nodeIds: {
-      unit: keys(units),
-      merge: keys(merges),
-    },
+  const collapseMap = {
+    nodeIds,
     nextSpecId: null,
     nextIdMap,
     nextPinIdMap,
     nextMergePinId,
-    nextPlugSpec: {},
+    nextPlugSpec,
     nextUnitPinMergeMap: {},
     nextSubComponentParentMap: {},
     nextSubComponentChildrenMap: {},
     nextSubComponentIndexMap: {},
   }
+
+  return collapseMap
+}
+
+export function getUnitMergesSpec(
+  spec: GraphSpec,
+  unitId: string
+): GraphMergesSpec {
+  const { merges } = spec
+
+  const unit_merges: GraphMergesSpec = {}
+
+  for (const mergeId in merges) {
+    const merge = merges[mergeId]
+
+    if (merge[unitId]) {
+      unit_merges[mergeId] = merge
+    }
+  }
+
+  return unit_merges
+}
+
+export function getUnitPinDatum(
+  spec: GraphSpec,
+  unitId: string,
+  type: IO,
+  pinId: string
+) {
+  return pathOrDefault(spec, ['units', unitId, type, pinId, 'data'], undefined)
+}
+
+export function getUnitInputDatum(
+  spec: GraphSpec,
+  unitId: string,
+  pinId: string
+) {
+  return getUnitPinDatum(spec, unitId, 'input', pinId)
 }

@@ -55,21 +55,13 @@ function last<T>(array: T[]): T {
   return array[array.length - 1]
 }
 
-export function getUnitIdFromId(id: string): string {
-  return id.split('/')[0] as string
-}
-
 export function getDatumNodeIdFromDatumLinkId(linkId: string): string {
   const { source, target } = segmentLinkId(linkId)
   return isDatumNodeId(source) ? source : target
 }
 
-export function getUnitIdFromPinId(id: string) {
-  return getUnitIdFromId(id)
-}
-
-export function getTypeFromLinkPinNodeId(id: string): IO {
-  return id.split('/')[1] as IO
+export function getTypeFromLinkPinNodeId(linkPinNodeId: string): IO {
+  return linkPinNodeId.split('/')[1] as IO
 }
 
 export function getPinIdFromLinkPinNodeId(nodeId: string) {
@@ -77,20 +69,20 @@ export function getPinIdFromLinkPinNodeId(nodeId: string) {
 }
 
 export function getIdFromDatumNodeId(nodeId: string) {
-  const { id } = segmentDatumNodeId(nodeId)
+  const { datumId: id } = segmentDatumNodeId(nodeId)
   return id
 }
 
-export function getPinIdClass(id: string): string {
-  if (isOutputPinId(id)) {
+export function getPinIdClass(pinNodeId: string): string {
+  if (isOutputPinId(pinNodeId)) {
     return 'output'
   }
 
-  if (isInputPinId(id)) {
+  if (isInputPinId(pinNodeId)) {
     return 'input'
   }
 
-  throw `Input with id "${id}" was not found`
+  throw `Input with id "${pinNodeId}" was not found`
 }
 
 export const getPinNodeId = (
@@ -126,18 +118,6 @@ export function getSelfPinNodeId(unitId: string): string {
   return getOutputNodeId(unitId, SELF)
 }
 
-export const getComponentNodeId = (unitId: string): string => {
-  return `${COMPONENT}/${unitId}`
-}
-
-export function getBoundaryNodeId(unitId: string, pinId: string) {
-  return `${unitId}/boundary/${pinId}`
-}
-
-export function getNodeLabelId(id: string): string {
-  return `${id}/label`
-}
-
 export function getLinkId(source: string, targetId: string) {
   return `${source}${LINK_SEPARATOR}${targetId}`
 }
@@ -151,35 +131,30 @@ export function getPinLinkId(unitId: string, type: IO, pinId: string): string {
   }
 }
 
-export function getComponentLinkId(unitId: string): string {
-  const componentNodeId = getComponentNodeId(unitId)
-  return getLinkId(unitId, componentNodeId)
-}
-
 export function getPinLinkIdFromPinNodeId(pinNodeId: string) {
   const { unitId, type, pinId } = segmentLinkPinNodeId(pinNodeId)
   return getPinLinkId(unitId, type, pinId)
 }
 
-export function isNodeId(id: string): boolean {
-  return isUnitNodeId(id) || isPinNodeId(id)
+export function isNodeId(text: string): boolean {
+  return isUnitNodeId(text) || isPinNodeId(text)
 }
 
-export function isInternalNodeId(id: string): boolean {
-  return internalRegex.test(id)
+export function isInternalNodeId(nodeId: string): boolean {
+  return internalRegex.test(nodeId)
 }
 
-export function isOutputPinId(id: string) {
-  return outputIdRegex.test(id)
+export function isOutputPinId(nodeId: string) {
+  return outputIdRegex.test(nodeId)
 }
 
 export function isUnitNodeId(nodeId: string): boolean {
   return !!unitIdRegex.exec(nodeId)
 }
 
-export function isPinId(id: string): boolean {
-  if (id) {
-    return isInputPinId(id) || isOutputPinId(id)
+export function isPinId(nodeId: string): boolean {
+  if (nodeId) {
+    return isInputPinId(nodeId) || isOutputPinId(nodeId)
   } else {
     return false
   }
@@ -194,33 +169,33 @@ export function getUnitIdFromNodeId(nodeId: string): string {
   }
 }
 
-export function isLinkId(id: string) {
-  return !!linkRegex.exec(id)
+export function isLinkId(linkId: string) {
+  return !!linkRegex.exec(linkId)
 }
 
-export function isPinLinkId(id: string) {
-  const [source, target] = id.split(LINK_SEPARATOR)
+export function isPinLinkId(linkId: string) {
+  const [source, target] = linkId.split(LINK_SEPARATOR)
   return (
     (isUnitNodeId(source) && isPinId(target)) ||
     (isPinId(source) && isUnitNodeId(target))
   )
 }
 
-export function isDatumLinkId(id: string) {
-  const [source, target] = id.split(LINK_SEPARATOR)
+export function isDatumLinkId(linkId: string) {
+  const [source, target] = linkId.split(LINK_SEPARATOR)
   return (
     (isPinNodeId(source) && isDatumNodeId(target)) ||
     (isDatumNodeId(source) && isPinNodeId(target))
   )
 }
 
-export function isMetaLinkId(id: string) {
-  const [source, target] = id.split(LINK_SEPARATOR)
+export function isMetaLinkId(linkId: string) {
+  const [source, target] = linkId.split(LINK_SEPARATOR)
   return isMetadataNodeId(source)
 }
 
-export function isExternalLinkId(id: string) {
-  const [source, target] = id.split(LINK_SEPARATOR)
+export function isExternalLinkId(linkId: string) {
+  const [source, target] = linkId.split(LINK_SEPARATOR)
   return (
     isExternalNodeId(source) ||
     isExternalNodeId(target) ||
@@ -328,17 +303,17 @@ export function getUnitIdFromPinLinkId(linkId: string): string {
   return isUnitNodeId(source) ? source : target
 }
 
-export function isInputPinId(id: string) {
-  return inputIdRegex.test(id)
+export function isInputPinId(nodeId: string) {
+  return inputIdRegex.test(nodeId)
 }
 
-export function isPinNodeId(id: string): boolean {
+export function isPinNodeId(nodeId: string): boolean {
   // return isLinkPinNodeId(id) || isMergeNodeId(id) || isExternalNodeId(id)
-  return isLinkPinNodeId(id) || isMergeNodeId(id)
+  return isLinkPinNodeId(nodeId) || isMergeNodeId(nodeId)
 }
 
-export function isLinkPinNodeId(id: string) {
-  return pinIdRegex.test(id)
+export function isLinkPinNodeId(nodeId: string) {
+  return pinIdRegex.test(nodeId)
 }
 
 export function isErrPinId(pinNodeId: string): boolean {
@@ -355,28 +330,27 @@ export function getSelectionId(nodeId: string, type: string) {
   return `${nodeId}/selection/${type}`
 }
 
-export function sameUnit(id0: string, id1: string): boolean {
-  return getUnitIdFromNodeId(id0) === getUnitIdFromNodeId(id1)
+export function sameUnit(pinId0: string, pinId1: string): boolean {
+  return getUnitIdFromNodeId(pinId0) === getUnitIdFromNodeId(pinId1)
 }
 
-export function getDatumNodeId(id: string): string {
-  return `${DATA}/${id}`
+export function getDatumNodeId(nodeId: string): string {
+  return `${DATA}/${nodeId}`
 }
 
 export function isDatumNodeId(nodeId: string): boolean {
   return !!dataRegex.exec(nodeId)
 }
 
-export function segmentDatumNodeId(datumNodeId: string): { id: string } {
-  // remove /#
+export function segmentDatumNodeId(datumNodeId: string): { datumId: string } {
   const id = datumNodeId.substr(2, datumNodeId.length)
   return {
-    id,
+    datumId: id,
   }
 }
 
-export function getMetadataNodeId(nodeId: string, id: string): string {
-  return `${TYPE}/${nodeId}/${id}`
+export function getMetadataNodeId(nodeId: string, name: string): string {
+  return `${TYPE}/${nodeId}/${name}`
 }
 
 export function getTypeNodeId(nodeId: string): string {
@@ -405,8 +379,8 @@ export function getMergeNodeId(mergeId: string): string {
   return `${MERGE}/${mergeId}`
 }
 
-export function isMergeNodeId(id: string): boolean {
-  return mergeRegex.test(id)
+export function isMergeNodeId(nodeId: string): boolean {
+  return mergeRegex.test(nodeId)
 }
 
 export function segmentMergeNodeId(mergeNodeId: string): { mergeId: string } {
@@ -418,30 +392,41 @@ export function segmentMergeNodeId(mergeNodeId: string): { mergeId: string } {
 }
 
 export function getIdFromMergeNodeId(mergeNodeId: string): string {
-  const { mergeId: id } = segmentMergeNodeId(mergeNodeId)
-  return id
+  const { mergeId } = segmentMergeNodeId(mergeNodeId)
+
+  return mergeId
 }
 
-export function getExtNodeId(type: IO, id: string, subPinId: string): string {
-  return `${EXTERNAL}/${type}/${id}/${subPinId}`
+export function getExtNodeId(
+  type: IO,
+  pinId: string,
+  subPinId: string
+): string {
+  return `${EXTERNAL}/${type}/${pinId}/${subPinId}`
 }
 
 export function getExtNodeIdFromIntNodeId(intNodeId: string): string {
   const { type, pinId, subPinId } = segmentInternalNodeId(intNodeId)
+
   return getExtNodeId(type, pinId, subPinId)
 }
 
 export function getIntNodeIdFromExtNodeId(ext_node_id: string): string {
   const { type, pinId: id, subPinId } = segmentPlugNodeId(ext_node_id)
+
   return getIntNodeId(type, id, subPinId)
 }
 
-export function getIntNodeId(type: IO, id: string, subPinId: string): string {
-  return `${INTERNAL}/${type}/${id}/${subPinId}`
+export function getIntNodeId(
+  type: IO,
+  pinId: string,
+  subPinId: string
+): string {
+  return `${INTERNAL}/${type}/${pinId}/${subPinId}`
 }
 
-export function isExternalNodeId(id: string): boolean {
-  return externalRegex.test(id)
+export function isExternalNodeId(pinId: string): boolean {
+  return externalRegex.test(pinId)
 }
 
 export function segmentPlugNodeId(exposedNodeId: string): {

@@ -37,6 +37,20 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
+  public onInputRenamed(name: string, newName: string): void {
+    super.onInputRenamed(name, newName)
+
+    const input = this.getInput(newName)
+
+    if (!input.empty()) {
+      this._current = newName
+    }
+  }
+
+  public onOutputRenamed(name: string, newName: string): void {
+    super.onOutputRenamed(name, newName)
+  }
+
   public onInputSet(
     name: string,
     input: Pin<any>,
@@ -192,7 +206,6 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   }
 
   private _play = (): void => {
-    // console.log('Merge', '_play')
     this._forward_if_ready()
   }
 
@@ -227,7 +240,6 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   }
 
   private _run() {
-    // console.log('Merge', '_run')
     const data = this._i[this._current!]
     const output_empty = filterObj(this._output, (o) => o.empty())
     const output_not_empty = filterObj(this._output, (o) => !o.empty())
@@ -253,5 +265,13 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
 
     this._current = _current
     this._loop_invalid_o_count = _loop_invalided_o_count
+  }
+
+  public getData() {
+    if (this._current) {
+      return this._i[this._current]
+    }
+
+    return undefined
   }
 }

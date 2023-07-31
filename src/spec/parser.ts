@@ -1,6 +1,6 @@
 import { evaluateBundleStr, idFromUnitValue } from '../client/idFromUnitValue'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { INHERITANCE } from '../interface'
-import { System } from '../system'
 import { keys } from '../system/f/object/Keys/f'
 import { PinsSpecBase, Specs } from '../types'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
@@ -14,68 +14,37 @@ import { NUMBER_LITERAL_REGEX } from './regex/NUMBER_LITERAL'
 import { STRING_LITERAL_REGEX } from './regex/STRING_LITERAL'
 
 export enum TreeNodeType {
-  // 0
-  Invalid,
-  // 1
-  Null,
-  // 2
-  Generic,
-  // 3
-  Identifier,
-  // 4
-  Expression,
-  // 5
-  ArrayExpression,
-  // 6
-  ObjectExpression,
-  // 7
-  Or,
-  // 8
-  And,
-  // 9
-  Object,
-  // 10
-  String,
-  // 11
-  Number,
-  // 12
-  Boolean,
-  // 13
-  Class,
-  // 14
-  StringLiteral,
-  // 15
-  BooleanLiteral,
-  // 16
-  NumberLiteral,
-  // 17
-  ObjectLiteral,
-  // 18
-  ArrayLiteral,
-  // 19
-  ClassLiteral,
-  // 20
-  KeyValue,
-  // 21
-  Regex,
-  // 22
-  RegexLiteral,
-  // 23
-  Date,
-  // 24
-  DateLiteral,
-  // 25
-  Time,
-  // 26
-  Unit,
-  // 27
-  Any,
-  // 28
-  PropExpression,
-  // 29
-  ArithmeticExpression,
-  // 30
-  Url,
+  Invalid = 'invalid',
+  Null = 'null',
+  Generic = 'generic',
+  Identifier = 'identifier',
+  Expression = 'expression',
+  ArrayExpression = 'array expression',
+  ObjectExpression = 'object expression',
+  Or = 'or',
+  And = 'and',
+  Object = 'object',
+  String = 'string',
+  Number = 'number',
+  Boolean = 'boolean',
+  Class = 'class',
+  StringLiteral = 'string literal',
+  BooleanLiteral = 'boolean literal',
+  NumberLiteral = 'number literal',
+  ObjectLiteral = 'object literal',
+  ArrayLiteral = 'array literal',
+  ClassLiteral = 'class literal',
+  KeyValue = 'key value',
+  Regex = 'regex',
+  RegexLiteral = 'regex literal',
+  Date = 'date',
+  DateLiteral = 'date literal',
+  Time = 'time',
+  Unit = 'unit',
+  Any = 'any',
+  PropExpression = 'prop expression',
+  ArithmeticExpression = 'arithmetic expression',
+  Url = 'url',
 }
 
 export type TreeNode = {
@@ -113,6 +82,7 @@ function _traverse(
 function _printTree(tree: TreeNode): void {
   // console.log(JSON.stringify(tree, null, 2))
   _traverse(tree, (node: TreeNode, path: number[]) =>
+    // eslint-disable-next-line no-console
     console.log(path, node.value)
   )
 }
@@ -274,7 +244,7 @@ export function isLiteralType(type: TreeNodeType): boolean {
   return !!LITERAL_TO_TYPE[type]
 }
 
-const LITERAL_TO_TYPE: { [type: number]: TreeNodeType } = {
+const LITERAL_TO_TYPE: { [type: string]: TreeNodeType } = {
   [TreeNodeType.NumberLiteral]: TreeNodeType.Number,
   [TreeNodeType.StringLiteral]: TreeNodeType.String,
   [TreeNodeType.BooleanLiteral]: TreeNodeType.Boolean,
@@ -282,7 +252,7 @@ const LITERAL_TO_TYPE: { [type: number]: TreeNodeType } = {
   [TreeNodeType.DateLiteral]: TreeNodeType.Date,
 }
 
-const TYPE_TO_LITERAL: { [type: number]: TreeNodeType } = {
+const TYPE_TO_LITERAL: { [type: string]: TreeNodeType } = {
   [TreeNodeType.Number]: TreeNodeType.NumberLiteral,
   [TreeNodeType.String]: TreeNodeType.StringLiteral,
   [TreeNodeType.Boolean]: TreeNodeType.BooleanLiteral,
@@ -744,7 +714,6 @@ export function getTree(
   keyValue: boolean = false,
   ignoreKeyword: boolean = false
 ): TreeNode {
-  // value = value.trim()
   return (
     _getValueTree(value, keyValue, ignoreKeyword, getTree) ||
     _getTypeTree(value, keyValue, ignoreKeyword) || {
@@ -851,7 +820,7 @@ export function _getTypeTree(
     }
   }
 
-  const objectExpressionTest = /^([^|]+)\{\}$/.exec(value)
+  const objectExpressionTest = /^([^|{}]+)\{\}$/.exec(value)
   if (objectExpressionTest) {
     const children = [getTree(objectExpressionTest[1])]
     return {
@@ -1060,15 +1029,28 @@ function _getValueTree(
 
   if (keyValue) {
     const keyValueTest = /^("[^"]*"|'[^']*'|[^:{]*):([^]*)$/.exec(value)
+
     if (keyValueTest) {
-      const k = _getTree(keyValueTest[1], false, true)
+      let k = _getTree(keyValueTest[1], false, true)
+
+      if (!_isValidObjKeyType(k)) {
+        k = {
+          value: k.value,
+          type: TreeNodeType.Invalid,
+          children: [],
+        }
+      }
+
       const value_value = keyValueTest[2]
+
       const v = _getTree(value_value) || {
         value: value_value,
         type: TreeNodeType.Invalid,
         children: [],
       }
+
       const children = [k, v]
+
       return {
         value,
         type: TreeNodeType.KeyValue,
@@ -1483,8 +1465,7 @@ export function _applyGenerics(
       }
     }
     default:
-      console.log(tree.type)
-      throw new Error('TODO')
+      throw new MethodNotImplementedError()
   }
 }
 

@@ -3,6 +3,7 @@ import {
   getStorageKeys,
   storageHasKey,
 } from '../../../../client/util/web/storage'
+import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../../../../Object'
 import { Dict } from '../../../../types/Dict'
 import { IStorage } from '../../../../types/global/IStorage'
@@ -45,15 +46,15 @@ export class Storage_ implements J {
   }
 
   pathSet(path: string[], name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathGet(path: string[], name: string): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathDelete(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   async keys(): Promise<string[]> {
@@ -76,6 +77,6 @@ export class Storage_ implements J {
       data: any
     ) => void
   ): Unlisten {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 }

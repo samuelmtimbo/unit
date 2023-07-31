@@ -12,7 +12,7 @@
     }
   },
   "merges": {
-    "gttr": {
+    "0": {
       "add": {
         "input": {
           "a": true
@@ -24,7 +24,7 @@
         }
       }
     },
-    "zlxzv": {
+    "1": {
       "add": {
         "input": {
           "b": true
@@ -36,7 +36,7 @@
         }
       }
     },
-    "qcklqt": {
+    "2": {
       "randomnaturallt": {
         "input": {
           "max": true
@@ -53,7 +53,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "gttr"
+          "mergeId": "0"
         }
       },
       "functional": true,

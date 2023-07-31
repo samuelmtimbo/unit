@@ -1,4 +1,5 @@
 import { Position } from '../../client/util/geometry'
+import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
 import { keys } from '../../system/f/object/Keys/f'
 import {
   Action,
@@ -570,6 +571,6 @@ export const reverseAction = ({ type, data }: Action): Action => {
         !data.ignored
       )
     default:
-      throw new Error('Irreversible')
+      throw new CodePathNotImplementedError()
   }
 }

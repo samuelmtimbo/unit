@@ -41,7 +41,10 @@
           "mergeId": "0"
         }
       },
-      "type": "<A>[]"
+      "type": "<A>[]",
+      "metadata": {
+        "examples": ["[0,1,2,3,4]"]
+      }
     }
   },
   "outputs": {

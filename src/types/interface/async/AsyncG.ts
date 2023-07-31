@@ -47,6 +47,7 @@ import { fromId } from '../../../spec/fromId'
 import { stringify } from '../../../spec/stringify'
 import {
   stringifyGraphSpecData,
+  stringifyMemorySpecData,
   stringifyUnitBundleSpecData,
 } from '../../../spec/stringifySpec'
 import { System } from '../../../system'
@@ -65,6 +66,7 @@ import { $G, $G_C, $G_R, $G_W } from './$G'
 import { $Graph } from './$Graph'
 import { $U } from './$U'
 import { Async } from './Async'
+import { weakMerge } from '../../weakMerge'
 
 export interface Holder<T> {
   data: T
@@ -111,7 +113,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
       const _specs = system.specs
 
-      data = evaluate(data, { ...specs, ..._specs }, classes)
+      data = evaluate(data, weakMerge(specs, _specs), classes)
 
       graph.setUnitPinData(unitId, type, pinId, data)
     },
@@ -230,12 +232,12 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.setUnitPinIgnored(unitId, type, pinId, ignored)
     },
 
-    $addMerge({ mergeId: id, mergeSpec: merge }: GraphAddMergeData) {
-      graph.addMerge(clone(merge), id)
+    $addMerge({ mergeId, mergeSpec: merge }: GraphAddMergeData) {
+      graph.addMerge(clone(merge), mergeId)
     },
 
-    $removeMerge({ mergeId: id }: GraphRemoveMergeData) {
-      graph.removeMerge(id)
+    $removeMerge({ mergeId }: GraphRemoveMergeData) {
+      graph.removeMerge(mergeId)
     },
 
     $addMerges({ merges }: GraphAddMergesData): void {
@@ -396,12 +398,17 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       }) => void
     ) {
       const unit = graph.getUnit(unitId)
+
       const memory = unit.snapshot()
+
+      stringifyMemorySpecData(memory)
+
       callback(memory)
     },
 
     async $getGraphState({}: {}, callback: Callback<GraphState>) {
       const state = await graph.getGraphState()
+      
       callback(state)
     },
 
@@ -585,7 +592,7 @@ export const AsyncGRef = (graph: Graph): $G_R => {
       const spec = graph.getSpec()
 
       if (system.hasSpec(id)) {
-        throw new Error('Spec with id ' + id + ' already exists')
+        throw new Error(`spec with id '${id}' already exists`)
       }
 
       const render =
@@ -614,6 +621,7 @@ export const AsyncGRef = (graph: Graph): $G_R => {
 
     $refUnit({ unitId, _ }: { unitId: string; _: string[] }): $U {
       const unit = graph.getUnit(unitId)
+
       const $unit = Async(unit, _)
 
       return proxyWrap($unit, _)
@@ -626,9 +634,10 @@ export const AsyncGRef = (graph: Graph): $G_R => {
       unitId: string
       _: string[]
     }): $Component {
-      console
       const unit = graph.getUnit(unitId)
+
       const $unit = Async(unit, _)
+
       return proxyWrap($unit, _)
     },
   }

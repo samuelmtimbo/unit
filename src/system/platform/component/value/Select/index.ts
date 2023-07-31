@@ -16,7 +16,7 @@ export default class Select extends Field<I, O> {
     super(
       {
         i: ['value', 'style'],
-        o: [],
+        o: ['value'],
       },
       {},
       system,

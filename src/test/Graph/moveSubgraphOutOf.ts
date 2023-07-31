@@ -106,22 +106,7 @@ composition1.moveSubgraphInto(
   },
   {
     merge: {},
-    link: {
-      [UNIT_ID_IDENTITY_0]: {
-        input: {
-          a: {
-            mergeId: '0',
-            oppositePinId: 'a',
-          },
-        },
-        output: {
-          a: {
-            mergeId: null,
-            oppositePinId: null,
-          },
-        },
-      },
-    },
+    link: {},
     unit: {
       [UNIT_ID_IDENTITY_0]: UNIT_ID_IDENTITY_0,
     },
@@ -175,22 +160,7 @@ composition1.moveSubgraphOutOf(
   },
   {
     merge: {},
-    link: {
-      [UNIT_ID_IDENTITY_0]: {
-        input: {
-          a: {
-            mergeId: '0',
-            oppositePinId: 'a',
-          },
-        },
-        output: {
-          a: {
-            mergeId: null,
-            oppositePinId: null,
-          },
-        },
-      },
-    },
+    link: {},
     unit: {
       [UNIT_ID_IDENTITY_0]: UNIT_ID_IDENTITY_0,
     },
@@ -858,3 +828,241 @@ assert.deepEqual(composition5.getPlugSpec('input', 'a', '0'), {
   unitId: 'identity',
   pinId: 'a',
 })
+
+const spec6 = system.newSpec({
+  units: {
+    [UNIT_ID_EMTPY]: {
+      id: ID_EMPTY,
+    },
+    [UNIT_ID_IDENTITY]: {
+      id: ID_IDENTITY,
+    },
+    [UNIT_ID_IDENTITY_0]: {
+      id: ID_IDENTITY,
+    },
+    [UNIT_ID_IDENTITY_1]: {
+      id: ID_IDENTITY,
+    },
+  },
+  merges: {
+    0: {
+      [UNIT_ID_IDENTITY]: {
+        output: {
+          a: true,
+        },
+      },
+      [UNIT_ID_IDENTITY_0]: {
+        input: {
+          a: true,
+        },
+      },
+    },
+    1: {
+      [UNIT_ID_IDENTITY_0]: {
+        output: {
+          a: true,
+        },
+      },
+      [UNIT_ID_IDENTITY_1]: {
+        input: {
+          a: true,
+        },
+      },
+    },
+  },
+  inputs: {
+    a: {
+      plug: {
+        0: {
+          unitId: UNIT_ID_IDENTITY,
+          pinId: 'a',
+        },
+      },
+    },
+  },
+})
+
+const composition6 = new Graph<{ number: number }, { sum: number }>(
+  spec6,
+  {},
+  system
+)
+
+false && watchUnitAndLog(composition6)
+false && watchGraphAndLog(composition6)
+
+composition6.moveSubgraphInto(
+  UNIT_ID_EMTPY,
+  uuid(),
+  {
+    merge: [],
+    link: [],
+    unit: [UNIT_ID_IDENTITY_0],
+    plug: [],
+  },
+  {
+    merge: {},
+    link: {},
+    unit: {},
+    plug: {},
+  },
+  {
+    [UNIT_ID_IDENTITY_0]: {
+      input: { a: { pinId: 'a', subPinId: '0', mergeId: '0' } },
+      output: { a: { pinId: 'a', subPinId: '0', mergeId: '1' } },
+    },
+  },
+  {},
+  {
+    input: {},
+    output: {},
+  },
+  {},
+  {}
+)
+
+assert.equal(composition6.getUnitCount(), 3)
+assert.equal(composition6.getMergeCount(), 2)
+
+const empty6 = composition6.getGraph(UNIT_ID_EMTPY)
+
+composition6.moveSubgraphOutOf(
+  UNIT_ID_EMTPY,
+  uuid(),
+  {
+    merge: [],
+    link: [],
+    unit: [UNIT_ID_IDENTITY_0],
+    plug: [],
+  },
+  {
+    merge: {},
+    link: {},
+    unit: {},
+    plug: {},
+  },
+  {
+    [UNIT_ID_IDENTITY_0]: {
+      input: {
+        a: {
+          pinId: 'a',
+          subPinId: '0',
+          mergeId: '0',
+          merge: { [UNIT_ID_IDENTITY]: { output: { a: true } } },
+        },
+      },
+      output: {
+        a: {
+          pinId: 'a',
+          subPinId: '0',
+          mergeId: '1',
+          merge: { [UNIT_ID_IDENTITY_1]: { input: { a: true } } },
+        },
+      },
+    },
+  },
+  {},
+  {
+    input: {},
+    output: {},
+  },
+  {},
+  {}
+)
+
+assert.equal(composition6.getUnitCount(), 4)
+assert.equal(composition6.getMergeCount(), 2)
+assert.deepEqual(composition6.getMergeSpec('0'), {
+  [UNIT_ID_IDENTITY]: {
+    output: {
+      a: true,
+    },
+  },
+  [UNIT_ID_IDENTITY_0]: {
+    input: {
+      a: true,
+    },
+  },
+})
+
+const spec7 = system.newSpec({
+  units: {
+    [UNIT_ID_EMTPY]: {
+      id: ID_EMPTY,
+    },
+  },
+  merges: {},
+  inputs: {
+    a: {
+      plug: {
+        0: {},
+      },
+    },
+  },
+})
+
+const composition7 = new Graph<{ number: number }, { sum: number }>(
+  spec7,
+  {},
+  system
+)
+
+false && watchUnitAndLog(composition7)
+false && watchGraphAndLog(composition7)
+
+composition7.moveSubgraphInto(
+  UNIT_ID_EMTPY,
+  uuid(),
+  {
+    merge: [],
+    link: [],
+    unit: [],
+    plug: [{ type: 'input', pinId: 'a', subPinId: '0' }],
+  },
+  {
+    merge: {},
+    link: {},
+    unit: {},
+    plug: {},
+  },
+  {},
+  {},
+  {},
+  {},
+  {}
+)
+
+assert.equal(composition7.getUnitCount(), 1)
+assert.equal(composition7.getMergeCount(), 0)
+
+const empty7 = composition7.getGraph(UNIT_ID_EMTPY)
+
+assert.equal(empty7.getInputCount(), 1)
+
+composition7.moveSubgraphOutOf(
+  UNIT_ID_EMTPY,
+  uuid(),
+  {
+    merge: [],
+    link: [],
+    unit: [],
+    plug: [{ type: 'input', pinId: 'a', subPinId: '0' }],
+  },
+  {
+    merge: {},
+    link: {},
+    unit: {},
+    plug: {},
+  },
+  {},
+  {},
+  {},
+  {},
+  {}
+)
+
+assert.equal(empty7.getInputCount(), 0)
+
+assert.equal(composition7.getInputCount(), 1)
+assert.equal(composition7.getUnitCount(), 1)
+assert.equal(composition7.getMergeCount(), 0)

@@ -61,7 +61,6 @@
         "message": {},
         "voice": {
           "constant": false,
-          "data": "14",
           "metadata": {
             "position": {
               "x": 200,

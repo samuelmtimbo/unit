@@ -120,6 +120,9 @@ export interface System extends S, R {
     style: Style
   ) => Unlisten
   graph: IO_SYSTEM_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
+  flags: {
+    defaultInputModeNone?: boolean
+  }
   getRemoteComponent: (id: string) => Component
   registerComponent: (component: Component) => string
   registerRemoteComponent: (globalId: string, remoteGlobalId: string) => void
@@ -170,6 +173,7 @@ export interface BootOpt {
   specs?: GraphSpecs
   classes?: Classes
   components?: ComponentClasses
+  flags?: System['flags']
 }
 
 export const HTTPServer = (opt: IHTTPServerOpt): IHTTPServer => {

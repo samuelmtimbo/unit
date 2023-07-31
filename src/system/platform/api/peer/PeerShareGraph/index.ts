@@ -91,7 +91,8 @@ export default class PeerShareGraph extends Semifunctional<I, O> {
     this._connected = false
 
     peer.addListener('connect', () => {
-      console.log('PeerShareGraph', 'connect')
+      // console.log('PeerShareGraph', 'connect')
+
       this._connected = true
 
       if (this._input.graph.active()) {
@@ -100,12 +101,14 @@ export default class PeerShareGraph extends Semifunctional<I, O> {
     })
 
     peer.addListener('close', () => {
-      console.log('PeerShareGraph', 'close')
+      // console.log('PeerShareGraph', 'close')
+
       this._connected = false
     })
 
     peer.addListener('message', (message: string): void => {
-      console.log('PeerShareGraph', 'message', message)
+      // console.log('PeerShareGraph', 'message', message)
+
       if (this._ref) {
         const specs = this.__system.specs
         const classes = this.__system.classes

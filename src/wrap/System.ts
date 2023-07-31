@@ -1,6 +1,7 @@
 import { destroy } from '../boot'
 import { $ } from '../Class/$'
 import { Graph } from '../Class/Graph'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { fromBundle } from '../spec/fromBundle'
 import { System } from '../system'
 import { BundleSpec } from '../types/BundleSpec'
@@ -27,7 +28,7 @@ export function wrapSystem(system: System, _system: System): $ & S {
       return fromBundle(bundleSpec, _system.specs)
     }
     newGraph(bundle: GraphBundle<any, any>): Graph<any, any> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     }
     newSystem(opt: {}): [S, Unlisten] {
       return _newSystem(system, _system)

@@ -151,7 +151,7 @@ export function nameToColor(name: string): string {
 }
 
 export function isHEX(name: string): boolean {
-  return /^\#[a-fA-F0-9]+$/g.test(name)
+  return /^#[a-fA-F0-9]+$/g.test(name)
 }
 
 // const assert = require('assert')

@@ -25,7 +25,10 @@ export function proxy<T extends object>(
           return value.call(target, data, (moment: Moment) => {
             const { event } = moment
 
-            if (stop_event === event && moment.data?.path?.length === 0) {
+            if (
+              stop_event === event &&
+              (moment.data?.path?.length ?? 0) === 0
+            ) {
               stop_event = undefined
             } else {
               callback(moment)

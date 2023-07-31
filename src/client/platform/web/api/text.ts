@@ -21,7 +21,7 @@ export function webText(window: Window, opt: BootOpt): API['text'] {
   const text: API['text'] = {
     measureText: (text: string, fontSize: number): Size => {
       if (!ctx) {
-        throw new Error('Canvas context not available.')
+        throw new Error('canvas context not available')
       }
 
       return measureText(ctx, text, fontSize)

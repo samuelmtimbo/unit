@@ -8,6 +8,7 @@ import {
 } from '../../../../../client/event/keyboard/keyCode'
 import { emitKeyboardEvent } from '../../../../../client/event/keyboard/write'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
+import { makePointerCancelListener } from '../../../../../client/event/pointer/pointercancel'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
 import { makePointerLeaveListener } from '../../../../../client/event/pointer/pointerleave'
@@ -100,8 +101,18 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
+
     key_component.appendChild(key_text)
     key_component.appendChild(alt_key_text)
+
+    const releasePointer = (pointerId: number) => {
+      this._pointer_down = false
+
+      if (this._key.hasPointerCapture(pointerId)) {
+        this._key.releasePointerCapture(pointerId)
+      }
+    }
+
     key_component.addEventListeners([
       makeClickListener({
         onClick: () => {
@@ -142,18 +153,27 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
       makePointerUpListener((event) => {
         const { pointerId } = event
 
-        this._pointer_down = false
-
-        if (this._key.hasPointerCapture(pointerId)) {
-          this._key.releasePointerCapture(pointerId)
-        }
+        releasePointer(pointerId)
 
         this._refresh_background()
       }),
-      makePointerLeaveListener(() => {
+      makePointerLeaveListener((event) => {
+        const { pointerId } = event
+
+        if (this._pointer_down) {
+          releasePointer(pointerId)
+        }
+
         this._pointer_in = false
 
         this._refresh_background()
+      }),
+      makePointerCancelListener((event) => {
+        const { pointerId } = event
+
+        if (this._pointer_down) {
+          releasePointer(pointerId)
+        }
       }),
     ])
     key_component.preventDefault('mousedown')

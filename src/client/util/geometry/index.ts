@@ -719,14 +719,19 @@ export function _centerToSurfaceDistance(
 export function centerOfMass(points: Point[]): Point {
   let sum_x = 0
   let sum_y = 0
+
   const n = points.length
+
   for (let i = 0; i < points.length; i++) {
     const p = points[i]
+
     sum_x += p.x
     sum_y += p.y
   }
+
   const x = sum_x / n
   const y = sum_y / n
+
   return { x, y }
 }
 

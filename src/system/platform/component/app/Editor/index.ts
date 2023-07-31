@@ -104,14 +104,10 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
     // console.log('Editor', 'onRefInputDrop', name)
 
     if (name === 'graph') {
-      const graph = this._graph
-
       this._graph = this._fallback_graph
 
       this._input.graph.push(this._fallback_graph)
       this._output.graph.push(this._fallback_graph)
-
-      graph.destroy()
     }
   }
 

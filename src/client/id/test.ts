@@ -109,7 +109,7 @@ assert.equal(isDatumNodeId('#/abcdef_abcdef/input/a'), false)
 assert.equal(getMetadataNodeId('abcdef', 'description'), '$/abcdef/description')
 
 assert.deepEqual(segmentDatumNodeId('#/abcdef/input/a'), {
-  id: 'abcdef/input/a',
+  datumId: 'abcdef/input/a',
 })
 
 assert(isLinkPinNodeId('pugej/output/a + b'))

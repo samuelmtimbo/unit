@@ -1,11 +1,6 @@
 {
   "name": "foreign object",
   "inputs": {
-    "class": {
-      "type": "string",
-      "optional": true,
-      "defaultIgnored": true
-    },
     "style": {
       "type": "object",
       "optional": true

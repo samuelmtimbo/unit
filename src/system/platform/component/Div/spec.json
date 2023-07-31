@@ -10,8 +10,9 @@
       }
     },
     "attr": {
-      "type": "object",
+      "type": "{tabIndex:number,title:string,draggable:boolean}",
       "optional": true,
+      "defaultIgnored": true,
       "metadata": {
         "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
       }

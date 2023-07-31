@@ -6,6 +6,8 @@ import { Moment } from './Moment'
 import { watchTree } from './watchTree'
 import { watchUnit } from './watchUnit'
 
+/* eslint-disable no-console */
+
 export const watchUnitAndLog = (
   unit: Unit,
   events: string[] = GRAPH_DEFAULT_EVENTS

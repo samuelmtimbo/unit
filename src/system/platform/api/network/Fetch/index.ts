@@ -79,7 +79,7 @@ export default class Fetch extends Functional<I, O> {
           done(undefined, err.message.toLowerCase())
         })
     } catch (err) {
-      console.log(err)
+      // console.log(err)
 
       done(undefined, 'malformed')
     }

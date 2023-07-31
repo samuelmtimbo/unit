@@ -45,19 +45,19 @@ export default class Websocket
     this._web_socket = new WebSocket(url)
 
     this._web_socket.onopen = () => {
-      console.log('WebSocket', 'onopen')
+      // console.log('WebSocket', 'onopen')
     }
     this._web_socket.onmessage = (message) => {
-      console.log('WebSocket', 'onmessage', message)
+      // console.log('WebSocket', 'onmessage', message)
       this.emit('message', message.data)
     }
     this._web_socket.onerror = (event: Event) => {
-      console.log('WebSocket', 'onerror')
+      // console.log('WebSocket', 'onerror')
       this.err('error') // TODO
     }
     this._web_socket.onclose = (event: CloseEvent) => {
       const { code, reason } = event
-      console.log('WebSocket', 'onclose', code, reason)
+      // console.log('WebSocket', 'onclose', code, reason)
 
       this._plunk()
     }

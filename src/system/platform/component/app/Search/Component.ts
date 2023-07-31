@@ -348,7 +348,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     const selected_list_item = this._list_item_content[id]
 
     if (!selected_list_item) {
-      console.warn('selected list item not found')
+      // console.warn('selected list item not found')
 
       return
     }

@@ -9,7 +9,8 @@
       "ref": true
     },
     "disabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "defaultIgnored": true
     },
     "fullwindow": {
       "type": "boolean",
@@ -17,7 +18,8 @@
     },
     "frame": {
       "type": "`C`",
-      "ref": true
+      "ref": true,
+      "defaultIgnored": true
     },
     "zoom": {
       "type": "{x:number,y:number,z:number}",

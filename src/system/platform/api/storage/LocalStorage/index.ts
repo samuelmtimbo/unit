@@ -5,6 +5,7 @@ import {
   storageHasKey,
 } from '../../../../../client/util/web/storage'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
+import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../../../../../Object'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -43,7 +44,7 @@ export default class _LocalStorage
       data: any
     ) => void
   ): Unlisten {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   private _checkAPI = () => {
@@ -86,15 +87,15 @@ export default class _LocalStorage
   }
 
   async pathSet(path: string[], name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   async pathGet(path: string[], name: string): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   async pathDelete(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   async keys(): Promise<string[]> {

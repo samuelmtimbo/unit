@@ -8,24 +8,26 @@ export const getDivTextSize = (
 ): Size => {
   const lines = getTextLines(text, maxLineLength)
 
-  const line_count = lines.length
+  const lineCount = lines.length
 
-  if (!line_count) {
+  if (!lineCount) {
     return { width: 0, height: fontSize }
   }
 
-  let max_line_char_count = Number.MIN_SAFE_INTEGER
+  let maxLineCharCount = Number.MIN_SAFE_INTEGER
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
 
     const line_length = line.trim().length
 
-    max_line_char_count = Math.max(max_line_char_count, line_length)
+    maxLineCharCount = Math.max(maxLineCharCount, line_length)
   }
 
-  const width: number = (max_line_char_count * fontSize) / 2
-  const height: number = line_count * fontSize
+  const emptySpaceAround = text.length - text.trim().length
+
+  const width: number = ((maxLineCharCount + emptySpaceAround) * fontSize) / 2
+  const height: number = lineCount * fontSize
 
   return { width, height }
 }

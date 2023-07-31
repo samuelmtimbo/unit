@@ -82,6 +82,8 @@ export class Registry implements R {
         hasSpec = true
       }
 
+      visited.add(specId)
+
       const { units } = spec
 
       for (const unitId in units) {
@@ -95,8 +97,6 @@ export class Registry implements R {
           _set(unit.id, spec)
         }
       }
-
-      visited.add(specId)
 
       if (hasSpec) {
         // TODO spec equality
@@ -125,7 +125,10 @@ export class Registry implements R {
   }
 
   forkSpec(spec: GraphSpec, specId?: string): [string, GraphSpec] {
-    if ((this.specsCount[spec.id] ?? 0) > 0) {
+    if (
+      (this.specsCount[spec.id] ?? 0) > 1 ||
+      isSystemSpecId(this.specs, spec.id)
+    ) {
       const clonedSpec = clone(spec)
 
       const { id: newSpecId } = this.newSpec(clonedSpec, specId)
@@ -154,7 +157,7 @@ export class Registry implements R {
     // console.log('unregisterUnit', { id })
 
     if (!this.specsCount[id]) {
-      throw new Error(`unregisterUnit: no spec with id ${id}`)
+      throw new Error(`cannot unregister unit: no spec with id ${id}`)
     }
 
     this.specsCount[id] -= 1
@@ -162,8 +165,9 @@ export class Registry implements R {
     if (this.specsCount[id] === 0) {
       delete this.specsCount[id]
 
+      // TODO delete spec (after tree reference is done)
       if (!isSystemSpecId(this.specs, id)) {
-        this.deleteSpec(id)
+        // this.deleteSpec(id)
       }
     }
   }

@@ -95,7 +95,7 @@ export function shareLocalGraph(graph: Graph): {
         }
         break
       default:
-        throw new Error('Invalid Message Type')
+        throw new Error('invalid message type')
     }
   })
 

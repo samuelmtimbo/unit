@@ -30,7 +30,7 @@
     }
   },
   "merges": {
-    "xsdjz": {
+    "0": {
       "splitat": {
         "input": {
           "i": true
@@ -42,7 +42,7 @@
         }
       }
     },
-    "lqzpx": {
+    "1": {
       "length": {
         "output": {
           "length": true
@@ -54,7 +54,7 @@
         }
       }
     },
-    "nhyud": {
+    "2": {
       "splitat": {
         "input": {
           "a": true
@@ -71,7 +71,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "nhyud"
+          "mergeId": "2"
         }
       },
       "functional": true,

@@ -20,7 +20,7 @@
   },
   "outputs": {
     "graph": {
-      "type": "`G`",
+      "type": "`U`&`G`",
       "ref": true,
       "icon": "graph"
     }
