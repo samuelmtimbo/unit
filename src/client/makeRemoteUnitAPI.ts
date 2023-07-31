@@ -5,20 +5,50 @@ import {
   C_METHOD_WATCH,
 } from '../types/interface/async/$C'
 import {
+  EE_METHOD_CALL,
+  EE_METHOD_REF,
+  EE_METHOD_WATCH,
+} from '../types/interface/async/$EE'
+import {
   G_METHOD_CALL,
   G_METHOD_REF,
   G_METHOD_WATCH,
 } from '../types/interface/async/$G'
+import {
+  J_METHOD_CALL,
+  J_METHOD_REF,
+  J_METHOD_WATCH,
+} from '../types/interface/async/$J'
+import {
+  S_METHOD_CALL,
+  S_METHOD_REF,
+  S_METHOD_WATCH,
+} from '../types/interface/async/$S'
+import {
+  ST_METHOD_CALL,
+  ST_METHOD_REF,
+  ST_METHOD_WATCH,
+} from '../types/interface/async/$ST'
 import {
   U_METHOD_CALL,
   U_METHOD_REF,
   U_METHOD_WATCH,
 } from '../types/interface/async/$U'
 import {
+  V_METHOD_CALL,
+  V_METHOD_REF,
+  V_METHOD_WATCH,
+} from '../types/interface/async/$V'
+import {
   AsyncCCall,
   AsyncCRef,
   AsyncCWatch,
 } from '../types/interface/async/AsyncC'
+import {
+  AsyncEECall,
+  AsyncEERef,
+  AsyncEEWatch,
+} from '../types/interface/async/AsyncEE'
 import {
   AsyncGCall,
   AsyncGRef,
@@ -51,22 +81,46 @@ import {
 } from '../types/interface/async/AsyncV'
 import { RemoteAPI } from './RemoteAPI'
 
-// TODO
 const METHOD: Dict<Record<'call' | 'watch' | 'ref', string[]>> = {
-  G: {
-    call: G_METHOD_CALL,
-    watch: G_METHOD_WATCH,
-    ref: G_METHOD_REF,
+  EE: {
+    call: EE_METHOD_CALL,
+    watch: EE_METHOD_WATCH,
+    ref: EE_METHOD_REF,
   },
   U: {
     call: U_METHOD_CALL,
     watch: U_METHOD_WATCH,
     ref: U_METHOD_REF,
   },
+  G: {
+    call: G_METHOD_CALL,
+    watch: G_METHOD_WATCH,
+    ref: G_METHOD_REF,
+  },
   C: {
     call: C_METHOD_CALL,
     watch: C_METHOD_WATCH,
     ref: C_METHOD_REF,
+  },
+  V: {
+    call: V_METHOD_CALL,
+    watch: V_METHOD_WATCH,
+    ref: V_METHOD_REF,
+  },
+  J: {
+    call: J_METHOD_CALL,
+    watch: J_METHOD_WATCH,
+    ref: J_METHOD_REF,
+  },
+  ST: {
+    call: ST_METHOD_CALL,
+    watch: ST_METHOD_WATCH,
+    ref: ST_METHOD_REF,
+  },
+  S: {
+    call: S_METHOD_CALL,
+    watch: S_METHOD_WATCH,
+    ref: S_METHOD_REF,
   },
 }
 
@@ -80,9 +134,6 @@ export function remoteRef(ref: object): RemoteAPI['ref'] {
       const { _ } = data
 
       const $unit = method(data)
-
-      if (Array.isArray($unit)) {
-      }
 
       const remoteApi: RemoteAPI = {
         call: {},
@@ -100,7 +151,11 @@ export function remoteRef(ref: object): RemoteAPI['ref'] {
             const $methodName = `$${methodName}`
 
             remoteApi[type][$methodName] = (...args) => {
-              return $unit[$methodName](...args)
+              const result = $unit[$methodName](...args)
+
+              return type === 'ref'
+                ? makeRemoteUnitAPI(result, result.__)
+                : result
             }
           }
         }
@@ -122,6 +177,11 @@ export function makeRemoteUnitAPI(unit: any, _: string[]): RemoteAPI {
 
   for (const __ of _) {
     switch (__) {
+      case 'EE':
+        call = { ...call, ...AsyncEECall(unit) }
+        watch = { ...watch, ...AsyncEEWatch(unit) }
+        ref = { ...ref, ...remoteRef(AsyncEERef(unit)) }
+        break
       case 'U':
         call = { ...call, ...AsyncUCall(unit) }
         watch = { ...watch, ...AsyncUWatch(unit) }

@@ -19,10 +19,10 @@
       "plug": {
         "0": {
           "unitId": "listen",
-          "pinId": "unit"
+          "pinId": "emitter"
         }
       },
-      "type": "`U`",
+      "type": "`EE`",
       "ref": true
     }
   },

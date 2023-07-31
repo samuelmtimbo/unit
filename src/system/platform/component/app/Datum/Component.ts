@@ -4,8 +4,6 @@ import IOFocusEvent from '../../../../../client/event/focus/FocusEvent'
 import { IOKeyboardEvent } from '../../../../../client/event/keyboard'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import {
-  getParentPath,
-  getTree,
   TreeNode,
   TreeNodeType,
   _getLastLeafPath,
@@ -13,6 +11,8 @@ import {
   _getParent,
   _removeNodeAt,
   _updateNodeAt,
+  getParentPath,
+  getTree,
 } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'

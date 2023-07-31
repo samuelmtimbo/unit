@@ -7,7 +7,7 @@ import { Callback } from '../../../../../types/Callback'
 import { EE } from '../../../../../types/interface/EE'
 import { ST } from '../../../../../types/interface/ST'
 import { Unlisten } from '../../../../../types/Unlisten'
-import { wrapEventEmitter } from '../../../../../wrap/MediaEventEmitter'
+import { wrapEventEmitter } from '../../../../../wrap/EventEmitter'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
 import { ID_PEER_RECEIVER } from '../../../../_ids'
 

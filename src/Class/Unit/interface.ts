@@ -7,16 +7,16 @@ export type UnitPlayData = {}
 export type UnitPauseData = {}
 
 export type UnitPushData = {
-  id: string
+  pinId: string
   data: any
 }
 
 export type UnitPullInputData = {
-  id: string
+  pinId: string
 }
 
 export type UnitTakeInputData = {
-  id: string
+  pinId: string
 }
 
 export type UnitSetPinDataData = {

@@ -1,30 +1,32 @@
 import { API } from '../API'
 import { Graph } from '../Class/Graph'
-import { Component } from '../client/component'
-import { styleToCSS } from '../client/id/styleToCSS'
-import { IOElement } from '../client/IOElement'
-import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
-import { LocalStore } from '../client/store'
 import { EventEmitter_ } from '../EventEmitter'
-import { noHost } from '../host/none'
 import { NOOP } from '../NOOP'
 import { Registry } from '../Registry'
 import { SharedObject } from '../SharedObject'
+import { IOElement } from '../client/IOElement'
+import { Component } from '../client/component'
+import { styleToCSS } from '../client/id/styleToCSS'
+import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
+import { LocalStore } from '../client/store'
+import { noHost } from '../host/none'
 import { fromBundle } from '../spec/fromBundle'
 import { stringifyBundleSpecData } from '../spec/stringifySpec'
 import { BootOpt, System } from '../system'
-import { Style } from '../system/platform/Props'
-import classes from '../system/_classes'
-import components from '../system/_components'
+
 import specs from '../system/_specs'
+import { Style } from '../system/platform/Props'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
+import { GraphBundle } from '../types/GraphClass'
+import { Unlisten } from '../types/Unlisten'
+
+import classes from '../system/_classes'
+import components from '../system/_components'
 import { IGamepad } from '../types/global/IGamepad'
 import { IKeyboard } from '../types/global/IKeyboard'
 import { IPointer } from '../types/global/IPointer'
-import { GraphBundle } from '../types/GraphClass'
 import { $Component } from '../types/interface/async/$Component'
-import { Unlisten } from '../types/Unlisten'
 import { weakMerge } from '../types/weakMerge'
 import { uuidNotIn } from '../util/id'
 
@@ -77,6 +79,7 @@ export function boot(
     deleteSpec,
     registerUnit,
     unregisterUnit,
+    shouldFork,
   } = registry
 
   const emitter = parent ? parent.emitter : new EventEmitter_()
@@ -114,6 +117,7 @@ export function boot(
       : {
           ref: {},
           component: {},
+          data: {},
         },
     api,
     flags: {
@@ -153,6 +157,7 @@ export function boot(
     deleteSpec: deleteSpec.bind(registry),
     registerUnit: registerUnit.bind(registry),
     unregisterUnit: unregisterUnit.bind(registry),
+    shouldFork: shouldFork.bind(registry),
     injectPrivateCSSClass: function (
       globalId: string,
       className: string,

@@ -3,9 +3,9 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { EventEmitter_EE } from '../../../../../EventEmitter'
 import { System } from '../../../../../system'
-import { EE } from '../../../../../types/interface/EE'
 import { Listener } from '../../../../../types/Listener'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { EE } from '../../../../../types/interface/EE'
 import { ID_EVENT_SOURCE } from '../../../../_ids'
 
 export type I = {

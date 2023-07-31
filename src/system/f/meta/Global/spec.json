@@ -1,0 +1,16 @@
+{
+  "name": "global",
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "table",
+    "description": "globally accessible object scope",
+    "complexity": 11,
+    "tags": ["platform", "api", "storage"],
+    "globals": []
+  },
+  "id": "8383c41e-3f9b-4d04-8380-feb583a1404f",
+  "base": true,
+  "type": "`U`&`J`",
+  "system": true
+}

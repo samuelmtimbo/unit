@@ -37,6 +37,7 @@ export default class Stringify extends Functional<I, O> {
       str = stringify(obj)
     } catch (err) {
       done(undefined, err.message)
+
       return
     }
 

@@ -1,6 +1,6 @@
 import { CodePathNotImplementedError } from '../../../exception/CodePathNotImplemented'
 import { IOElement } from '../../IOElement'
-import { Rect, Size } from '../geometry'
+import { Rect, Size } from '../geometry/types'
 import { getRect } from './getRect'
 
 export function getSize(element: IOElement): Size {

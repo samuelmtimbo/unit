@@ -1,8 +1,8 @@
-import { Position } from '../client/util/geometry'
+import { Position } from '../client/util/geometry/types'
 import { Dict } from './Dict'
 import { GraphSpec } from './GraphSpec'
 import { IO } from './IO'
-import { IOOf, _IOOf } from './IOOf'
+import { IOOf } from './IOOf'
 import { None } from './None'
 import { UnitClass } from './UnitClass'
 
@@ -97,7 +97,7 @@ export type GraphUnitsSpec = Dict<GraphUnitSpec>
 
 export type GraphMergeSpec = Dict<GraphMergeUnitSpec>
 
-export type GraphMergeUnitSpec = _IOOf<Dict<true>>
+export type GraphMergeUnitSpec = IOOf<Dict<true>>
 
 export type GraphMergesSpec = Dict<GraphMergeSpec>
 

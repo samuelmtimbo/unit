@@ -3,11 +3,6 @@ import { Dict } from './Dict'
 import { IO } from './IO'
 
 export type IOOf<T = any> = {
-  input: T
-  output: T
-}
-
-export type _IOOf<T = any> = {
   input?: T
   output?: T
 }
@@ -25,7 +20,7 @@ export function io<T>(callback: (type: IO) => void): void {
 }
 
 export function forIO<T>(
-  data: _IOOf<T>,
+  data: IOOf<T>,
   callback: (type: IO, data: T) => void
 ): void {
   if (data.input !== undefined) {
@@ -37,7 +32,7 @@ export function forIO<T>(
 }
 
 export function forIOObjKV<T>(
-  data: _IOOf<Dict<T>>,
+  data: IOOf<Dict<T>>,
   callback: (type: IO, key: string, data: T) => void
 ): void {
   forIO(data, (type, data) => {
@@ -48,7 +43,7 @@ export function forIOObjKV<T>(
 }
 
 export function forIOObjVK<T>(
-  data: _IOOf<Dict<T>>,
+  data: IOOf<Dict<T>>,
   callback: (type: IO, data: T, key: string) => void
 ): void {
   forIO(data, (type, data) => {

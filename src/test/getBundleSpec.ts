@@ -1,6 +1,6 @@
 import * as assert from 'assert'
-import Identity from '../system/f/control/Identity'
 import { ID_IDENTITY } from '../system/_ids'
+import Identity from '../system/f/control/Identity'
 import { system } from './util/system'
 
 const identity = new Identity(system)

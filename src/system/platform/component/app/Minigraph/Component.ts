@@ -4,7 +4,7 @@ import { Element } from '../../../../../client/element'
 import { getLinkId, segmentLinkId } from '../../../../../client/id'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { SimNode, Simulation } from '../../../../../client/simulation'
-import { getSpec, isComponent } from '../../../../../client/spec'
+import { getSpec, isComponentId } from '../../../../../client/spec'
 import { Shape, surfaceDistance } from '../../../../../client/util/geometry'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { emptyGraphSpec } from '../../../../../spec/emptySpec'
@@ -186,7 +186,7 @@ export default class Minigraph extends Element<HTMLDivElement, Props> {
       let width = 2 * r
       let height = 2 * r
 
-      const is_component = isComponent(specs, id)
+      const is_component = isComponentId(specs, id)
 
       if (is_component) {
         const { width: _width, height: _height } = component

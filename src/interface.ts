@@ -35,6 +35,7 @@ export const INHERITANCE = {
   U: ['EE'],
   G: ['U'],
   V: ['EE'],
+  CH: ['EE'],
 }
 
 export type AllTypes<T> = {

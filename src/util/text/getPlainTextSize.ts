@@ -1,4 +1,4 @@
-import { Size } from '../../client/util/geometry'
+import { Size } from '../../client/util/geometry/types'
 import { getTextHeight } from './getPlainTextHeight'
 import { getTextWidth } from './getPlainTextWidth'
 

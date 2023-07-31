@@ -1,10 +1,9 @@
 import { Pin, PinEvent } from '../Pin'
+import { stringify } from '../spec/stringify'
 import { GlobalRefSpec } from '../types/GlobalRefSpec'
 import { $_ } from '../types/interface/$_'
 import { Moment } from './Moment'
 import { PinType } from './PinType'
-import { Unit } from '../Class/Unit'
-import { stringify } from '../spec/stringify'
 
 export interface RefPinMomentData {
   pinId: string

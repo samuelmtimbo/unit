@@ -2,12 +2,12 @@ import * as assert from 'assert'
 import { UNTITLED } from '../../constant/STRING'
 import { TreeNodeType } from '../../spec/parser'
 import {
+  _getGraphTypeMapById,
+  _getSpecTypeInterfaceById,
   getGraphTypeMap,
   getGraphTypeMapById,
   getSpecTypeInterfaceById,
   mostSpecific,
-  _getGraphTypeMapById,
-  _getSpecTypeInterfaceById,
 } from '../../spec/type'
 import {
   ID_ARRAY_BUILDER_FROM,
@@ -46,6 +46,7 @@ assert.equal(mostSpecific('<A>', 'number'), 'number')
 assert.equal(mostSpecific('<A>[]', 'number[]'), 'number[]')
 assert.equal(mostSpecific('number', 'any'), 'number')
 assert.equal(mostSpecific('<A>', 'any'), '<A>')
+assert.equal(mostSpecific('`U`', '`EE`'), '`U`')
 
 assert.deepEqual(getGraphTypeMapById(ID_SINGLE, _specs), {
   append: { input: { a: '<A>[]', b: '<A>' }, output: { a: '<A>[]' } },
@@ -368,7 +369,7 @@ assert.deepEqual(
   {
     state: {
       input: { init: '<A>', done: 'any' },
-      output: { data: '`V<A>`' },
+      output: { data: '<A>&`V`' },
     },
   }
 )

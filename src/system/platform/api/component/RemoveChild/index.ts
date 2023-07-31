@@ -44,6 +44,8 @@ export default class RemoveChild extends Functional<I, O> {
       unit = cloneBundle(child)
     } catch (err) {
       done(undefined, err.message)
+
+      return
     }
 
     done({

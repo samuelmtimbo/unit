@@ -24,7 +24,8 @@
   "outputs": {
     "value": {
       "type": "string",
-      "optional": true
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "metadata": {

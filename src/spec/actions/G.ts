@@ -24,27 +24,24 @@ import {
   GraphSetUnitSizeData,
   GraphUnplugPinData,
 } from '../../Class/Graph/interface'
-import { Position } from '../../client/util/geometry'
+import { Position } from '../../client/util/geometry/types'
 import { keys } from '../../system/f/object/Keys/f'
-import {
-  GraphUnitMerges,
-  GraphUnitPlugs,
-} from '../../system/platform/component/app/Editor/Component'
 import {
   Action,
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
-  GraphPinsSpec,
   GraphSubPinSpec,
   GraphUnitsSpec,
 } from '../../types'
 import { AllKeys } from '../../types/AllKeys'
 import { Dict } from '../../types/Dict'
+import { GraphUnitMerges } from '../../types/GraphUnitMerges'
+import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
 import { G } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
 import { IO } from '../../types/IO'
-import { _IOOf, IOOf } from '../../types/IOOf'
+import { IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import {
   makeMoveSubComponentRootAction,
@@ -104,7 +101,7 @@ export const makeAddUnitAction = (
   unitId: string,
   bundle: UnitBundleSpec,
   position?: Position | undefined,
-  pinPosition?: _IOOf<Dict<Position>> | undefined,
+  pinPosition?: IOOf<Dict<Position>> | undefined,
   layoutPositon?: Position | undefined,
   parentId?: string | null | undefined,
   merges?: GraphUnitMerges | undefined,
@@ -156,7 +153,7 @@ export const makeMoveSubgraphIntoAction = (
   nextIdMap: {
     merge: Dict<string>
     link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-    plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
+    plug: IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
     unit: Dict<string>
   },
   nextPinIdMap: Dict<{
@@ -231,7 +228,7 @@ export const makeMoveSubgraphOutOfAction = (
   nextIdMap: {
     merge: Dict<string>
     link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-    plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
+    plug: IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
     unit: Dict<string>
   },
   nextUnitPinMergeMap: Dict<IOOf<Dict<string>>>,
@@ -306,7 +303,7 @@ export const makeRemoveUnitAction = (
   unitId: string,
   bundle: UnitBundleSpec,
   position?: Position,
-  pinPosition?: _IOOf<Dict<Position>>,
+  pinPosition?: IOOf<Dict<Position>>,
   layoutPositon?: Position,
   parentId?: string | null,
   merges?: GraphMergesSpec,
@@ -584,24 +581,32 @@ export const wrapSetUnitSizeAction = (data: GraphSetUnitSizeData) => {
 export const makeSetUnitSizeAction = (
   unitId: string,
   width: number,
-  height: number
+  height: number,
+  prevWidth: number,
+  prevHeight: number
 ) => {
   return wrapSetUnitSizeAction({
     unitId,
     width,
     height,
+    prevWidth,
+    prevHeight,
   })
 }
 
 export const makeSetSubComponentSizeAction = (
   unitId: string,
   width: number,
-  height: number
+  height: number,
+  prevWidth: number,
+  prevHeight: number
 ) => {
   return wrapSetUnitSizeAction({
     unitId,
     width,
     height,
+    prevWidth,
+    prevHeight,
   })
 }
 
@@ -617,12 +622,16 @@ export const wrapSetSubComponentSizeAction = (
 export const makeSetSubComponentSize = (
   unitId: string,
   width: number,
-  height: number
+  height: number,
+  prevWidth: number,
+  prevHeight: number
 ) => {
   return wrapSetSubComponentSizeAction({
     unitId,
     width,
     height,
+    prevWidth,
+    prevHeight,
   })
 }
 
@@ -633,10 +642,17 @@ export const wrapSetComponentSizeAction = (data: GraphSetComponentSizeData) => {
   }
 }
 
-export const makeSetComponentSizeAction = (width: number, height: number) => {
+export const makeSetComponentSizeAction = (
+  width: number,
+  height: number,
+  prevWidth: number,
+  prevHeight: number
+) => {
   return wrapSetComponentSizeAction({
     width,
     height,
+    prevWidth,
+    prevHeight,
   })
 }
 
@@ -776,12 +792,14 @@ export const wrapExplodeUnitData = (data: GraphExplodeUnitData) => {
 export const makeExplodeUnitAction = (
   unitId: string,
   mapUnitId: Dict<string>,
-  mapMergeId: Dict<string>
+  mapMergeId: Dict<string>,
+  mapPlugId: IOOf<Dict<Dict<string>>>
 ) => {
   return wrapExplodeUnitData({
     unitId,
     mapUnitId,
     mapMergeId,
+    mapPlugId,
   })
 }
 
@@ -951,6 +969,21 @@ export const reverseAction = ({ type, data }: Action): Action => {
       )
     case BULK_EDIT:
       return makeBulkEditAction([...data.actions].reverse().map(reverseAction))
+    case SET_COMPONENT_SIZE:
+      return makeSetComponentSizeAction(
+        data.prevWidth,
+        data.prevHeight,
+        data.width,
+        data.height
+      )
+    case SET_SUB_COMPONENT_SIZE:
+      return makeSetSubComponentSizeAction(
+        data.unitId,
+        data.prevWidth,
+        data.prevHeight,
+        data.width,
+        data.height
+      )
     default:
       throw new Error('irreversible')
   }

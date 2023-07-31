@@ -1,7 +1,7 @@
 {
   "name": "send",
   "inputs": {
-    "unit": {
+    "channel": {
       "type": "`CH`",
       "ref": true
     },
@@ -12,7 +12,7 @@
   "outputs": {},
   "metadata": {
     "icon": "send",
-    "description": "send an arbitrary datum to `unit`",
+    "description": "send `data` through `channel`",
     "complexity": 3,
     "tags": [
       "platform",

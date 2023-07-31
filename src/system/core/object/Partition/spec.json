@@ -43,7 +43,7 @@
         "current": {}
       }
     },
-    "prop": {
+    "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "obj": {},
@@ -97,7 +97,7 @@
       }
     },
     "1": {
-      "prop": {
+      "get": {
         "input": {
           "obj": true
         }
@@ -109,7 +109,7 @@
       }
     },
     "2": {
-      "prop": {
+      "get": {
         "input": {
           "key": true
         }
@@ -150,7 +150,7 @@
       }
     },
     "5": {
-      "prop": {
+      "get": {
         "output": {
           "value": true
         }

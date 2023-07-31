@@ -1,7 +1,7 @@
 import { ElementEE, Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { CA } from '../../../../../types/interface/CA'
+import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { ID_CANVAS } from '../../../../_ids'
 import { Style } from '../../../Props'
 import CanvasComp from './Component'

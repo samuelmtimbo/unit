@@ -20,6 +20,7 @@ export type C_EE = {
   remove_parent_child: [Component_]
   reorder_root: [Component_, number]
   reorder_parent_root: [Component_, number]
+  call: [{ method: string; data: any[] }]
 }
 
 export interface C {

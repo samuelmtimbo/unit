@@ -128,7 +128,7 @@ export default class PeerShareGraph extends Semifunctional<I, O> {
       })
     })()
 
-    const ref = makeUnitRemoteRef(graph, ['U', 'C', 'G'], (data) => {
+    const ref = makeUnitRemoteRef(graph, ['U', 'C', 'G', 'EE'], (data) => {
       this._send_exec(data)
     })
 

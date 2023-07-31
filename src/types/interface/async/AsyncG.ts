@@ -1,4 +1,3 @@
-import { GraphSpec } from '../../GraphSpec'
 import { Graph } from '../../../Class/Graph'
 import {
   GraphAddMergeData,
@@ -35,11 +34,12 @@ import {
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
-import { Memory, Unit } from '../../../Class/Unit'
+import { Unit } from '../../../Class/Unit'
+import { Memory } from '../../../Class/Unit/Memory'
 import { emptySpec } from '../../../client/spec'
-import { watchGraph } from '../../../debug/graph/watchGraph'
 import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
+import { watchGraph } from '../../../debug/graph/watchGraph'
 import { watchUnit } from '../../../debug/watchUnit'
 import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
@@ -56,17 +56,18 @@ import { clone, isEmptyObject, mapObjVK } from '../../../util/object'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
+import { GraphSpec } from '../../GraphSpec'
 import { GraphState } from '../../GraphState'
 import { IO } from '../../IO'
-import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
+import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
+import { weakMerge } from '../../weakMerge'
 import { $Component } from './$Component'
 import { $G, $G_C, $G_R, $G_W } from './$G'
 import { $Graph } from './$Graph'
 import { $U } from './$U'
 import { Async } from './Async'
-import { weakMerge } from '../../weakMerge'
 
 export interface Holder<T> {
   data: T
@@ -337,6 +338,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     },
 
     $getGraphData(
+      data: {},
       callback: Callback<{
         state: Dict<any>
         children: Dict<any>
@@ -408,7 +410,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
     async $getGraphState({}: {}, callback: Callback<GraphState>) {
       const state = await graph.getGraphState()
-      
       callback(state)
     },
 
@@ -423,14 +424,18 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     },
 
     $getGraphPinData({}: {}, callback: (data: Dict<any>) => void): void {
-      // const state = graph.getGraphPinData()
       const pinData = {}
+
       const units = graph.getUnits()
+
       forEachValueKey(units, (unit: Unit, unitId: string) => {
         const unitPinData = unit.getPinsData()
+
         const _unitPinData = stringifyPinData(unitPinData)
+
         pinData[unitId] = _unitPinData
       })
+
       callback(pinData)
     },
 
@@ -524,8 +529,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       unitId,
       mapUnitId,
       mapMergeId,
+      mapPlugId,
     }: GraphExplodeUnitData): void {
-      graph.explodeUnit(unitId, mapUnitId, mapMergeId, true)
+      graph.explodeUnit(unitId, mapUnitId, mapMergeId, mapPlugId)
     },
 
     $bulkEdit({ actions }: GraphBulkEditData) {

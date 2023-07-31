@@ -14,5 +14,6 @@
   "id": "94e93f42-d05e-45d9-9211-ba903e779f2d",
   "base": true,
   "type": "`U`",
-  "system": true
+  "system": true,
+  "private": true
 }

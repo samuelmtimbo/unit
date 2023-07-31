@@ -1,6 +1,6 @@
 import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
-import { Size } from '../../../util/geometry'
+import { Size } from '../../../util/geometry/types'
 import { measureText } from '../../../util/web/measureText'
 
 export function webText(window: Window, opt: BootOpt): API['text'] {

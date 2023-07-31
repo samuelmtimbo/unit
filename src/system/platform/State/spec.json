@@ -12,7 +12,7 @@
   },
   "outputs": {
     "data": {
-      "type": "`V<T>`",
+      "type": "<T>&`V`",
       "optional": true,
       "ref": true
     }
@@ -21,9 +21,7 @@
     "icon": "triangle",
     "description": "control a value in memory",
     "complexity": 3,
-    "tags": [
-      "state"
-    ]
+    "tags": ["state"]
   },
   "id": "c899b675-c3c4-428e-b548-b228305c0302",
   "base": true,

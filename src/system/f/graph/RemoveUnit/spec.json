@@ -12,12 +12,9 @@
   "outputs": {},
   "metadata": {
     "icon": "circle",
-    "description": "add unit of `class` to `graph`",
+    "description": "remove unit `id` from `graph`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "graph"
-    ]
+    "tags": ["f", "graph"]
   },
   "id": "c47d84b2-4207-11eb-a064-a3633d64f05d",
   "base": true,

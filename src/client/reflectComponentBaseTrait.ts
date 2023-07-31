@@ -167,8 +167,9 @@ export const expandSlot = (
 
       slot_base_ids = child_leaf_comp.$parentChildren.reduce(
         (acc, parentChild) => {
-          const parent_sub_component_id =
-            parentChild.$parent.$parent.getSubComponentId(parentChild.$parent)
+          const parent_sub_component_id = component.getSubComponentId(
+            parentChild.$parent
+          )
 
           const parent_leaf_path = child_leaf_path.slice(
             0,

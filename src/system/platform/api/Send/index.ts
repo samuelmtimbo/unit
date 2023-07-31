@@ -35,8 +35,10 @@ export default class Send<T> extends Functional<I<T>, O<T>> {
       await unit.send(data)
     } catch (err) {
       done(undefined, err.message)
+
       return
     }
+
     done({})
   }
 }

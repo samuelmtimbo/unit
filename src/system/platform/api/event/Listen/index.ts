@@ -5,7 +5,7 @@ import { Unlisten } from '../../../../../types/Unlisten'
 import { ID_LISTEN } from '../../../../_ids'
 
 export interface I<T> {
-  unit: EE<any>
+  emitter: EE<any>
   event: string
   remove: string
 }
@@ -22,14 +22,14 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        fi: ['unit', 'event'],
+        fi: ['emitter', 'event'],
         fo: [],
         i: ['remove'],
         o: ['data'],
       },
       {
         input: {
-          unit: {
+          emitter: {
             ref: true,
           },
         },
@@ -54,13 +54,13 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     this._unlisten = undefined
   }
 
-  f({ unit, event }: I<T>) {
+  f({ emitter, event }: I<T>) {
     const listener = (...data: any[]) => {
       this._output.data.push(data[0])
     }
     this._listener = listener
 
-    this._unlisten = unit.addListener(event, this._listener)
+    this._unlisten = emitter.addListener(event, this._listener)
   }
 
   d() {

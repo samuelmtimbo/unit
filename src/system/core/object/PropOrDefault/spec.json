@@ -1,7 +1,7 @@
 {
   "name": "prop or default",
   "units": {
-    "prop": {
+    "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c"
     },
     "haskey": {
@@ -46,14 +46,14 @@
           "a if b": true
         }
       },
-      "prop": {
+      "get": {
         "input": {
           "obj": true
         }
       }
     },
     "2": {
-      "prop": {
+      "get": {
         "input": {
           "key": true
         }
@@ -65,7 +65,7 @@
       }
     },
     "3": {
-      "prop": {
+      "get": {
         "output": {
           "value": true
         }

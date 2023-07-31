@@ -94,7 +94,7 @@ export function watchComponentAppendEvent(
   unit: EE<{ append_child: [UnitBundleSpec, string[]] }>,
   callback: (moment: ComponentAppendChildMoment) => void
 ): () => void {
-  const listener = (data: UnitBundleSpec, path: string[]) => {
+  const listener = (bundle: UnitBundleSpec, path: string[]) => {
     if (path.length > 0) {
       return
     }
@@ -102,7 +102,7 @@ export function watchComponentAppendEvent(
     callback({
       type: 'unit',
       event,
-      data,
+      data: bundle,
       path,
     })
   }
@@ -117,11 +117,16 @@ export function watchComponentRemoveEvent(
   unit: Graph | Element_,
   callback: (moment: ComponentRemoveChildAtMoment) => void
 ): () => void {
-  const listener = (data) => {
+  const listener = (at: number, path: string[]) => {
+    if (path.length > 0) {
+      return
+    }
+
     callback({
       type: 'unit',
       event,
-      data,
+      data: at,
+      path,
     })
   }
   // @ts-ignore

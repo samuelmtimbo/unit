@@ -1,4 +1,5 @@
 import * as fuzzy from 'fuzzy'
+import { Registry } from '../../../../../Registry'
 import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
@@ -21,9 +22,8 @@ import parentElement from '../../../../../client/platform/web/parentElement'
 import { compareByComplexity } from '../../../../../client/search'
 import {
   getSpec,
-  isComponent,
+  isComponentId,
   isSystemSpec,
-  isSystemSpecId,
 } from '../../../../../client/spec'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { throttle } from '../../../../../client/throttle'
@@ -33,6 +33,8 @@ import { UNTITLED } from '../../../../../constant/STRING'
 import { System } from '../../../../../system'
 import { Spec, Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
+import { Unlisten } from '../../../../../types/Unlisten'
+import { pull } from '../../../../../util/array'
 import { removeWhiteSpace } from '../../../../../util/string'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import { keys } from '../../../../f/object/Keys/f'
@@ -42,9 +44,6 @@ import Div from '../../Div/Component'
 import Icon from '../../Icon/Component'
 import IconButton from '../IconButton/Component'
 import SearchInput from '../SearchInput/Component'
-import { pull, remove } from '../../../../../util/array'
-import { Registry } from '../../../../../Registry'
-import { Unlisten } from '../../../../../types/Unlisten'
 
 export interface Props {
   className?: string
@@ -417,7 +416,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
               this._filter_list(true)
 
               if (!this._list_hidden) {
-                this._set_selected_item_id(selected_item_id)
+                this._set_selected_item_id(selected_item_id, false)
               }
             }
           } else if (type === 'delete') {
@@ -431,8 +430,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
             const selected_item_id = this._selected_id
 
-            // this._refresh_ordered_list()
-            // this._filter_list(true)
+            this._refresh_ordered_list()
+            this._filter_list(true)
 
             if (selected_item_id === specId) {
               if (!this._list_hidden) {
@@ -704,7 +703,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
       last_list_item_div.$element.style.borderBottom = color
 
       if (this._selected_id) {
-        this._scroll_into_item(this._selected_id)
+        this._scroll_into_item_if_needed(this._selected_id, false)
       }
     }
 
@@ -784,7 +783,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     id: string,
     force_scroll: boolean = false
   ): void => {
-    // console.log('Search', '_set_selected_item_id', id)
+    // console.log('Search', '_set_selected_item_id', id, force_scroll)
 
     const { style = {}, selectedColor = 'currentColor' } = this.$props
     const { color = 'currentColor' } = style
@@ -798,7 +797,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._set_list_item_color(id, selectedColor)
 
     if (!this._list_hidden) {
-      this._scroll_into_item(id, force_scroll)
+      this._scroll_into_item_if_needed(id, force_scroll)
     }
   }
 
@@ -824,16 +823,19 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
   private _top_element_index = 0
 
-  private _scroll_into_item = (id: string, force: boolean = false) => {
-    // console.log('Search', '_scroll_into_item', id)
+  private _scroll_into_item_if_needed = (
+    id: string,
+    force: boolean = false
+  ) => {
+    // console.log('Search', '_scroll_into_item_if_needed', id, force)
 
-    // const { scrollTop } = this._list.$element
+    const { scrollTop } = this._list.$element
 
-    // const scroll_index = scrollTop / SEARCH_ITEM_HEIGHT
+    const scroll_index = scrollTop / SEARCH_ITEM_HEIGHT
 
     const selected_id_index = this._filtered_id_list.indexOf(id)
 
-    const scroll_index = this._top_element_index ?? selected_id_index
+    // const scroll_index = this._top_element_index ?? selected_id_index
 
     if (
       force ||
@@ -899,7 +901,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
       if (
         (fuzzy_pattern === '' || fuzzy_match) &&
         filter(id) &&
-        (this._shape === 'circle' || isComponent(specs, id))
+        (this._shape === 'circle' || isComponentId(specs, id))
       ) {
         filtered_score[id] = 0
 
@@ -952,7 +954,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
           if (this._filtered_id_list.includes(this._selected_id)) {
             this._top_element_index = 0
 
-            this._scroll_into_item(this._selected_id, true)
+            this._scroll_into_item_if_needed(this._selected_id, true)
           } else {
             this._select_first_list_item()
           }
@@ -991,9 +993,11 @@ export default class Search extends Element<HTMLDivElement, Props> {
       const selected_id_index = this._filtered_id_list.indexOf(
         this._selected_id
       )
+
       if (selected_id_index < this._filtered_id_list.length - 1) {
         const next_selected_id_index = selected_id_index + 1
         const next_selected_id = this._filtered_id_list[next_selected_id_index]
+
         this.set_selected_item_id(next_selected_id)
       }
     }

@@ -1,4 +1,4 @@
-import { Rect } from '../geometry'
+import { Rect } from '../geometry/types'
 import { getPosition } from './getPosition'
 import { getSize } from './getSize'
 

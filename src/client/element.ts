@@ -1,5 +1,4 @@
 import { Moment } from '../debug/Moment'
-import { PinDataMoment } from '../debug/PinDataMoment'
 import { NOOP } from '../NOOP'
 import { evaluate } from '../spec/evaluate'
 import { stringify } from '../spec/stringify'

@@ -1,13 +1,16 @@
-import { Memory } from '../Class/Unit'
-import { Classes, GraphUnitPinsSpec, GraphUnitSpec, Specs } from '../types'
-import { GraphSpec } from '../types/GraphSpec'
+import { Memory } from '../Class/Unit/Memory'
+import { GraphUnitPinsSpec, GraphUnitSpec } from '../types'
 import { BundleSpec } from '../types/BundleSpec'
-import { Dict } from '../types/Dict'
-import { evaluateDataObj, stringifyDataObj } from '../types/stringifyPinData'
+import { GraphSpec } from '../types/GraphSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
-import { evaluate } from './evaluate'
+import { stringifyDataObj } from '../types/stringifyPinData'
 import { stringify } from './stringify'
-import { clone } from '../util/object'
+
+export const stringifyBundleSpec = (spec: UnitBundleSpec): void => {
+  const { unit, specs } = spec
+
+  stringifyGraphUnitSpecData(unit)
+}
 
 export function stringifyBundleSpecData(bundle: BundleSpec): void {
   const { spec } = bundle
@@ -29,7 +32,7 @@ export function stringifyGraphUnitSpecData(unit: GraphUnitSpec): void {
   const { memory, input } = unit
 
   if (input) {
-    // stringifyGraphUnitPinSpecData(input)
+    stringifyGraphUnitPinSpecData(input)
   }
 
   if (memory) {
@@ -61,80 +64,4 @@ function stringifyGraphUnitPinSpecData(input: GraphUnitPinsSpec) {
       input[inputId].data = stringify(data)
     }
   }
-}
-
-export function evaluateGraphUnitSpecData(
-  unit: GraphUnitSpec,
-  specs: Specs,
-  classes: Classes
-): void {
-  const { memory, input } = unit
-
-  if (input) {
-    evaluateGraphUnitPinSpec(input, specs, classes)
-  }
-
-  if (memory) {
-    evaluateMemorySpec(memory, specs, classes)
-  }
-}
-
-function evaluateGraphUnitPinSpec(
-  input: GraphUnitPinsSpec,
-  specs: Specs,
-  classes: Classes
-) {
-  for (const inputId in input) {
-    const { data } = input[inputId]
-
-    if (data !== undefined) {
-      input[inputId].data = evaluate(data, specs, classes)
-    }
-  }
-}
-
-export function evaluateMemorySpec(
-  memory: {
-    input: Dict<any>
-    output: Dict<any>
-    memory: Dict<any>
-  },
-  specs: Specs,
-  classes: Classes
-) {
-  for (const inputId in memory.input) {
-    const input = memory.input[inputId]
-
-    memory.input[inputId] = evaluateDataObj(input, specs, classes)
-  }
-
-  for (const outputId in memory.output) {
-    const output = memory.output[outputId]
-
-    memory.output[outputId] = evaluateDataObj(output, specs, classes)
-  }
-
-  memory.memory = evaluateDataObj(memory.memory, specs, classes)
-}
-
-export function parseMemorySpec(
-  memory: {
-    input: Dict<any>
-    output: Dict<any>
-    memory: Dict<any>
-  },
-  specs: Specs,
-  classes: Classes
-) {
-  const memoryClone = clone(memory)
-
-  evaluateMemorySpec(memoryClone, specs, classes)
-
-  return memoryClone
-}
-
-export const stringifyBundleSpec = (spec: UnitBundleSpec): void => {
-  const { unit, specs } = spec
-
-  stringifyGraphUnitSpecData(unit)
 }

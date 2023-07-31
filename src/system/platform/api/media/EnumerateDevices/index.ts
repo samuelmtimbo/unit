@@ -32,12 +32,16 @@ export default class EnumerateDevices extends Functional<I, O> {
       },
     } = this.__system
 
-    try {
-      const devices = await enumerateDevices()
+    let devices: IDeviceInfo[]
 
-      done({ devices })
+    try {
+      devices = await enumerateDevices()
     } catch (err) {
       done(undefined, err.message)
+
+      return
     }
+
+    done({ devices })
   }
 }

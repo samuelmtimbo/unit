@@ -1,9 +1,9 @@
 import * as assert from 'assert'
 import { extractSubSpec, GraphSpecSelection } from '../../spec/extract'
+import { ID_IDENTITY } from '../../system/_ids'
 import _specs from '../../system/_specs'
 import { Specs } from '../../types'
 import { GraphSpec } from '../../types/GraphSpec'
-import { ID_IDENTITY } from '../../system/_ids'
 
 const NEW_UNIT_ID = 'new'
 const NEW_UNIT_SPEC_ID = 'bcf31149-1b3a-49dc-b8f9-aad51fdeb9eb'

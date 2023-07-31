@@ -13,12 +13,12 @@ import { idFromUnitValue } from '../../../../../client/idFromUnitValue'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
 import {
+  _isValidObjKeyType,
   getTree,
   isCompositeType,
+  isValidObjKey,
   TreeNode,
   TreeNodeType,
-  _isValidObjKeyType,
-  isValidObjKey,
 } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'

@@ -1,17 +1,17 @@
 import { Functional, FunctionalEvents } from '../../../Class/Functional'
+import { ObjectUpdateType } from '../../../Object'
+import { ObjectWaiter } from '../../../ObjectWaiter'
 import { addListener } from '../../../client/addListener'
 import { Context, setColor } from '../../../client/context'
 import { makeCustomListener } from '../../../client/event/custom'
 import { makeResizeListener } from '../../../client/event/resize'
-import { ObjectUpdateType } from '../../../Object'
-import { ObjectWaiter } from '../../../ObjectWaiter'
+import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
 import { System } from '../../../system'
+import { Unlisten } from '../../../types/Unlisten'
 import { Component_ } from '../../../types/interface/Component'
 import { J } from '../../../types/interface/J'
-import { Unlisten } from '../../../types/Unlisten'
-import { listenGlobalComponent } from '../../globalComponent'
 import { ID_CONTEXT } from '../../_ids'
-import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
+import { listenGlobalComponent } from '../../globalComponent'
 
 export interface I {
   element: Component_

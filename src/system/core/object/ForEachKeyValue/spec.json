@@ -12,7 +12,7 @@
     "keys": {
       "id": "45b9c329-64e9-4c4a-800b-790947c75754"
     },
-    "prop": {
+    "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c"
     },
     "looprepeat": {
@@ -67,7 +67,7 @@
           "current": true
         }
       },
-      "prop": {
+      "get": {
         "input": {
           "obj": true
         }
@@ -79,7 +79,7 @@
           "a[i]": true
         }
       },
-      "prop": {
+      "get": {
         "input": {
           "key": true
         }
@@ -108,7 +108,7 @@
     "value": {
       "plug": {
         "0": {
-          "unitId": "prop",
+          "unitId": "get",
           "pinId": "value"
         }
       },

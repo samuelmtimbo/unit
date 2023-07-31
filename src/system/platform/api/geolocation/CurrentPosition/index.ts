@@ -35,10 +35,12 @@ export default class Geolocation extends Functional<I, O> {
     } = this.__system
 
     let position
+
     try {
       position = await getCurrentPosition()
     } catch (err) {
       done(undefined, err.message)
+
       return
     }
 

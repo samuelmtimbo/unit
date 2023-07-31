@@ -22,7 +22,7 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
       },
       {
         input: {
-          unit: {
+          obj: {
             ref: true,
           },
         },

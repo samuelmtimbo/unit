@@ -31,6 +31,7 @@ export async function html(opt: WebTemplate): Promise<string> {
 >
   <head>
     <title>${title}</title>
+    <base href="${pathname}/" />
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -45,28 +46,28 @@ export async function html(opt: WebTemplate): Promise<string> {
       content="${description}"
     />
     <meta name="theme-color" content="#dddddd" />
-    ${pwa ? `<link rel="manifest" href="${pathname}/manifest.json" />` : ''}
-    <link rel="shortcut icon" href="${pathname}/favicon.ico" />
-    <link rel="icon" sizes="16x16 32x32 64x64" href="${pathname}/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="196x196" href="${pathname}/favicon_192.png" />
-    <link rel="icon" type="image/png" sizes="160x160" href="${pathname}/favicon_160.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="${pathname}/favicon_96.png" />
-    <link rel="icon" type="image/png" sizes="64x64" href="${pathname}/favicon_64.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="${pathname}/favicon_32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="${pathname}/favicon_16.png" />
-    <link rel="apple-touch-icon" href="${pathname}/favicon_57.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="${pathname}/favicon_114.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="${pathname}/favicon_72.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="${pathname}/favicon_144.png" />
-    <link rel="apple-touch-icon" sizes="60x60" href="${pathname}/favicon_60.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="${pathname}/favicon_120.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="${pathname}/favicon_76.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="${pathname}/favicon_152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="${pathname}/favicon_180.png" />
+    ${pwa ? `<link rel="manifest" href="/manifest.json" />` : ''}
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" sizes="16x16 32x32 64x64" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="196x196" href="/favicon_192.png" />
+    <link rel="icon" type="image/png" sizes="160x160" href="/favicon_160.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon_96.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon_64.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon_16.png" />
+    <link rel="apple-touch-icon" href="/favicon_57.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/favicon_114.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/favicon_72.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon_144.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/favicon_60.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/favicon_120.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/favicon_76.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon_152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon_180.png" />
     <meta name="msapplication-TileColor" content="#1f1f1f" />
-    <meta name="msapplication-TileImage" content="${pathname}/favicon_144.png" />
-    <meta name="msapplication-config" content="${pathname}/browserconfig.xml" />
-    <link rel="mask-icon" href="${pathname}/safari-pinned-tab.svg" color="#f1f1f1" />
+    <meta name="msapplication-TileImage" content="/favicon_144.png" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#f1f1f1" />
 
     <style>
       @font-face {

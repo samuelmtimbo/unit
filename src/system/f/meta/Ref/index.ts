@@ -53,6 +53,7 @@ export default class Ref<T, K extends keyof T> extends Functional<
       _value = await obj.get(key)
     } catch (err) {
       done(undefined, err.message)
+
       return
     }
 

@@ -124,11 +124,12 @@ export class Registry implements R {
     return mapSpecId
   }
 
+  shouldFork(id: string): boolean {
+    return (this.specsCount[id] ?? 0) > 1 || isSystemSpecId(this.specs, id)
+  }
+
   forkSpec(spec: GraphSpec, specId?: string): [string, GraphSpec] {
-    if (
-      (this.specsCount[spec.id] ?? 0) > 1 ||
-      isSystemSpecId(this.specs, spec.id)
-    ) {
+    if (this.shouldFork(spec.id)) {
       const clonedSpec = clone(spec)
 
       const { id: newSpecId } = this.newSpec(clonedSpec, specId)

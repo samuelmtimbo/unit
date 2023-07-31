@@ -1,4 +1,3 @@
-import { NOOP } from '../../../../NOOP'
 import { addListeners } from '../../../../client/addListener'
 import { Component } from '../../../../client/component'
 import {

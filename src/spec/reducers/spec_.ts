@@ -1,3 +1,4 @@
+import { SELF } from '../../constant/SELF'
 import pathGet from '../../system/core/object/DeepGet/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
@@ -9,9 +10,11 @@ import {
   GraphSubPinSpec,
   GraphUnitSpec,
   GraphUnitsSpec,
+  Spec,
 } from '../../types'
 import { GraphSpec } from '../../types/GraphSpec'
 import { IO } from '../../types/IO'
+import { io } from '../../types/IOOf'
 import { forEach } from '../../util/array'
 import {
   clone,
@@ -155,37 +158,31 @@ export const removeUnit = (
 }
 
 export const addMerge = (
-  { mergeId, merge }: { mergeId: string; merge: GraphMergeSpec },
+  { mergeId, mergeSpec }: { mergeId: string; mergeSpec: GraphMergeSpec },
   spec: GraphSpec
 ): void => {
-  const { inputs = {}, outputs = {} } = spec
+  io((type) => {
+    const pins = spec[`${type}s`] || {}
 
-  forEachValueKey(inputs, ({ plug }, inputId) => {
-    forEachValueKey(plug, ({ unitId, pinId }, subPinId) => {
-      if (unitId && pinId && merge[unitId]?.['input']?.[pinId]) {
-        coverInput({ id: inputId, subPinId }, spec)
-        exposeInput({ id: inputId, subPinId, input: { mergeId } }, spec)
-      }
+    forEachValueKey(pins, ({ plug }, pinId) => {
+      forEachValueKey(plug, (subPinSpec, subPinId) => {
+        if (
+          subPinSpec.unitId &&
+          subPinSpec.pinId &&
+          pathOrDefault(
+            mergeSpec,
+            [subPinSpec.unitId, type, subPinSpec.pinId],
+            null
+          )
+        ) {
+          coverPin({ type, pinId, subPinId }, spec)
+          exposePin({ type, pinId, subPinId, subPinSpec: { mergeId } }, spec)
+        }
+      })
     })
   })
 
-  // reassign exposed outputs that have just been merged
-  forEachValueKey(outputs, ({ plug }, outputId) => {
-    forEachValueKey(plug, ({ unitId, pinId }, subPinId) => {
-      if (
-        unitId &&
-        pinId &&
-        merge[unitId] &&
-        merge[unitId]['output'] &&
-        merge[unitId]['output']![pinId]
-      ) {
-        coverOutput({ id: outputId, subPinId }, spec)
-        exposeOutput({ id: outputId, subPinId, output: { mergeId } }, spec)
-      }
-    })
-  })
-
-  return pathSet(spec, ['merges', mergeId], merge)
+  return pathSet(spec, ['merges', mergeId], mergeSpec)
 }
 
 export const addPinToMerge = (
@@ -685,9 +682,12 @@ export const setSubComponentSize = (
 
 export const isPinRef = (
   { type, pinId }: { type: IO; pinId: string },
-  spec: GraphSpec
+  spec: Spec
 ) => {
-  return pathOrDefault(spec, [`${type}s`, pinId, 'ref'], false)
+  return (
+    pathOrDefault(spec, [`${type}s`, pinId, 'ref'], false) ||
+    (type === 'output' && pinId === SELF)
+  )
 }
 
 export const renameUnitPin = (

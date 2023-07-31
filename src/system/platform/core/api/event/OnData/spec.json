@@ -19,7 +19,7 @@
       "plug": {
         "0": {
           "unitId": "listen",
-          "pinId": "unit"
+          "pinId": "emitter"
         }
       },
       "type": "`EE`",

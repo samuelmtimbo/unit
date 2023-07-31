@@ -1,5 +1,5 @@
 import { IOElement } from './client/IOElement'
-import { Rect, Size } from './client/util/geometry'
+import { Rect, Size } from './client/util/geometry/types'
 import {
   APIAlert,
   APIChannel,

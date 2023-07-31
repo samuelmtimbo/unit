@@ -1,6 +1,7 @@
 import { UNTITLED } from '../constant/STRING'
 import { emptyGraphSpec } from '../spec/emptySpec'
 import { System } from '../system'
+import { keyCount } from '../system/core/object/KeyCount/f'
 import { keys } from '../system/f/object/Keys/f'
 import {
   ComponentSpec,
@@ -10,13 +11,12 @@ import {
   Spec,
   Specs,
 } from '../types'
-import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
+import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
 import { uuidNotIn } from '../util/id'
 import { clone, pathOrDefault } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
-import { keyCount } from '../system/core/object/KeyCount/f'
 
 export function getSpec(specs: Specs, id: string): Spec {
   const spec = specs[id]
@@ -280,39 +280,29 @@ export function injectSpecs(specs: Specs, new_specs: GraphSpecs): Dict<string> {
   return map_spec_id
 }
 
-export function getSubComponentParentId(
-  spec: GraphSpec,
-  subComponentId: string
-): string | null {
-  const { component = {} } = spec
-  const { children = [], subComponents = {} } = component
-  const is_root_child = children.includes(subComponentId)
-  if (is_root_child) {
-    return null
-  } else {
-    // PERF
-    for (const sub_component_id in subComponents) {
-      const sub_component = subComponents[sub_component_id]
-      const { children: sub_component_children } = sub_component
-      const is_sub_component_child =
-        sub_component_children.includes(subComponentId)
-      if (is_sub_component_child) {
-        return sub_component_id
-      }
-    }
-  }
+export function getSpecRenderById(
+  specs: Specs,
+  id: string
+): boolean | undefined {
+  const spec = getSpec(specs, id)
 
-  return null
+  return getSpecRender(spec)
 }
 
-export function getSpecRender(specs: Specs, id: string): boolean | undefined {
-  const spec = getSpec(specs, id)
+export function getSpecRender(spec: Spec): boolean | undefined {
   const { render } = spec
+
   return render
 }
 
-export function isComponent(specs: Specs, id: string): boolean {
-  return getSpecRender(specs, id) ?? hasSubComponents(specs[id] as GraphSpec)
+export function isComponentId(specs: Specs, id: string): boolean {
+  return (
+    getSpecRenderById(specs, id) ?? hasSubComponents(specs[id] as GraphSpec)
+  )
+}
+
+export function isComponentSpec(spec: Spec): boolean {
+  return getSpecRender(spec) ?? hasSubComponents(spec as GraphSpec)
 }
 
 export function hasSubComponents(spec: GraphSpec): boolean {

@@ -1,9 +1,10 @@
 import { PinEvent } from '../Pin'
+import { IO } from '../types/IO'
 import { Moment } from './Moment'
 import { PinType } from './PinType'
 
 export interface PinDropMomentData {
-  type: string
+  type: IO
   pinId: string
 }
 

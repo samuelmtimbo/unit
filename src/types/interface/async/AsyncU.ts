@@ -44,22 +44,25 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       unit.reset()
     },
 
-    $push({ id, data }: { id: string; data: any }): void {
-      const classes = unit.__system.classes
-      const specs = unit.__system.specs
+    $push({ pinId, data }: { pinId: string; data: any }): void {
+      const { classes, specs } = unit.__system
+
       const _data = evaluate(data, specs, classes)
-      unit.push(id, _data)
+
+      unit.push(pinId, _data)
     },
 
-    $takeInput(data: { path: string[]; id: string }): void {
-      const { id } = data
-      unit.takeInput(id)
+    $takeInput(data: { path: string[]; pinId: string }): void {
+      const { pinId } = data
+
+      unit.takeInput(pinId)
     },
 
     $setPinData({ type, pinId, data }: { type: IO; pinId: string; data: any }) {
-      const classes = unit.__system.classes
-      const specs = unit.__system.specs
+      const { classes, specs } = unit.__system
+
       const _data = evaluate(data, specs, classes)
+
       unit.setPinData(type, pinId, _data)
     },
 
@@ -73,7 +76,9 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       callback: (data: { input: Dict<any>; output: Dict<any> }) => void
     ): void {
       const _data = unit.getPinsData()
+
       const __data = stringifyPinData(_data)
+
       callback(__data)
     },
 
@@ -106,9 +111,11 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       callback($unitBundleSpec)
     },
 
-    $pullInput(data: { id: string }): void {
-      const { id } = data
-      const input = unit.getInput(id)
+    $pullInput(data: { pinId: string }): void {
+      const { pinId } = data
+
+      const input = unit.getInput(pinId)
+
       input.pull()
     },
   }

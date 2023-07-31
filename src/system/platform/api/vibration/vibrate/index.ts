@@ -33,6 +33,7 @@ export default class Vibrate extends Functional<I, O> {
       vibrate(pattern)
     } catch (err) {
       done(undefined, err.message)
+
       return
     }
 

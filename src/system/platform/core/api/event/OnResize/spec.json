@@ -5,10 +5,10 @@
       "plug": {
         "0": {
           "unitId": "listen",
-          "pinId": "unit"
+          "pinId": "emitter"
         }
       },
-      "type": "`U`",
+      "type": "`EE`",
       "ref": true
     }
   },
@@ -27,7 +27,7 @@
     "listen": {
       "id": "367241d8-ad12-11ea-beed-9777f31699a8",
       "input": {
-        "unit": {
+        "emitter": {
           "metadata": {
             "position": {
               "x": -15,

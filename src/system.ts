@@ -1,12 +1,11 @@
 import { API } from './API'
-import { $ } from './Class/$'
 import { Graph } from './Class/Graph'
 import { Component } from './client/component'
 import { Context } from './client/context'
 import { UnitPointerEvent } from './client/event/pointer'
 import { Store } from './client/store'
 import { Theme } from './client/theme'
-import { Point } from './client/util/geometry'
+import { Point } from './client/util/geometry/types'
 import { EventEmitter_ } from './EventEmitter'
 import { NOOP } from './NOOP'
 import { Object_ } from './Object'
@@ -95,6 +94,7 @@ export interface System extends S, R {
   foreground: {
     sprite?: SVGSVGElement
     app?: HTMLElement
+    html?: HTMLHtmlElement
     svg?: SVGSVGElement
     canvas?: HTMLCanvasElement
   }
@@ -109,7 +109,8 @@ export interface System extends S, R {
   classes: Classes
   components: ComponentClasses
   global: {
-    ref: Dict<$>
+    data: Dict<any>
+    ref: Dict<any>
     component: Dict<Component>
   }
   api: API

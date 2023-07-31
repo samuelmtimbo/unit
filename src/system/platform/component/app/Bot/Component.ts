@@ -21,11 +21,10 @@ import { getThemeModeColor } from '../../../../../client/theme'
 import {
   describeEllipseArc,
   norm,
-  Point,
   pointDistance,
-  Position,
   unitVector,
 } from '../../../../../client/util/geometry'
+import { Point, Position } from '../../../../../client/util/geometry/types'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { Unlisten } from '../../../../../types/Unlisten'

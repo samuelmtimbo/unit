@@ -1,6 +1,6 @@
 import * as assert from 'assert'
-import { watchUnit } from '../debug/watchUnit'
 import { NOOP } from '../NOOP'
+import { watchUnit } from '../debug/watchUnit'
 import Identity from '../system/f/control/Identity'
 import { system } from './util/system'
 

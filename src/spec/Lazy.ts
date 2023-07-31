@@ -19,6 +19,7 @@ import {
 } from '../types'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
+import { GraphBundle } from '../types/GraphClass'
 import { GraphSpec } from '../types/GraphSpec'
 import { GraphState } from '../types/GraphState'
 import { IO } from '../types/IO'
@@ -30,12 +31,12 @@ import { C } from '../types/interface/C'
 import { ComponentEvents, Component_ } from '../types/interface/Component'
 import { G, G_MoveSubgraphIntoArgs } from '../types/interface/G'
 import { U } from '../types/interface/U'
-import { fromSpec } from './fromSpec'
 
 export function lazyFromSpec(
   spec: GraphSpec,
   specs: Specs,
-  branch: Dict<true> = {}
+  branch: Dict<true> = {},
+  fromSpec: (spec: GraphSpec, specs: Specs, branch: Dict<true>) => GraphBundle
 ): UnitClass {
   const { inputs, outputs, id } = spec
 
@@ -107,6 +108,22 @@ export function lazyFromSpec(
         }
       })
     }
+
+    fork(): void {
+      this._ensure()
+      return this.__graph.fork()
+    }
+
+    startTransaction(): void {
+      this._ensure()
+      return this.__graph.startTransaction()
+    }
+
+    endTransaction(): void {
+      this._ensure()
+      return this.__graph.endTransaction()
+    }
+
     getMergeData(mergeId: string) {
       this._ensure()
       return this.__graph.getPlugSpecs()
@@ -359,15 +376,17 @@ export function lazyFromSpec(
     }
 
     private _load(): void {
-      // console.log('Lazy', '_load')
       const Class = fromSpec(spec, specs, branch)
+
       this.__graph = new Class(this.__system)
+
       this.__graph.addListener('err', (err) => {
         this.err(err)
       })
       this.__graph.addListener('take_err', () => {
         this.takeErr()
       })
+
       forEachValueKey(this.__graph.getOutputs(), (output, name) => {
         const merge = new Merge(this.__system)
         merge.play()
@@ -382,6 +401,7 @@ export function lazyFromSpec(
         merge.setInput(name, this._input[name])
         merge.setOutput(name, input)
       })
+
       this.__graph.play()
     }
 
@@ -776,10 +796,9 @@ export function lazyFromSpec(
       return this.__graph.moveUnit(id, unitId, inputId)
     }
 
-    public removeUnit(unitId: string) {
+    public removeUnit(unitId: string, ...extra: any[]) {
       this._ensure()
-
-      return this.__graph.removeUnit(unitId)
+      return this.__graph.removeUnit(unitId, ...extra)
     }
 
     addUnitGhost(
@@ -818,10 +837,11 @@ export function lazyFromSpec(
     public explodeUnit(
       unitId: string,
       mapUnitId: Dict<string>,
-      mapMergeId: Dict<string>
+      mapMergeId: Dict<string>,
+      mapPlugId: IOOf<Dict<Dict<string>>>
     ): void {
       this._ensure()
-      return this.__graph.explodeUnit(unitId, mapUnitId, mapMergeId)
+      return this.__graph.explodeUnit(unitId, mapUnitId, mapMergeId, mapPlugId)
     }
 
     public addMerges = (merges: GraphMergesSpec): void => {

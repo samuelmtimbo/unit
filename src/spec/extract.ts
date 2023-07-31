@@ -1,14 +1,14 @@
 import assocPath from '../system/core/object/AssocPath/f'
 import { GraphMergeSpec, Specs } from '../types'
-import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
+import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
-import { IOOf, _IOOf } from '../types/IOOf'
+import { IOOf } from '../types/IOOf'
 import { emptyIO } from './emptyIO'
 
 export type GraphSpecSelection = {
   units?: string[]
-  links?: _IOOf<Dict<string[]>>
+  links?: IOOf<Dict<string[]>>
   merges?: string[]
   plugs?: IOOf<{ pinId: string; subPinId: string }[]>
 }
@@ -114,10 +114,7 @@ export function extractSubSpec(
     return id
   }
 
-  const unitMergePinRename: Dict<{
-    input: Dict<string>
-    output: Dict<string>
-  }> = {}
+  const unitMergePinRename: Dict<IOOf<Dict<string>>> = {}
 
   for (const unitId in spec.units) {
     const unit = spec.units[unitId]

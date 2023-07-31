@@ -1,7 +1,7 @@
 {
   "name": "listen",
   "inputs": {
-    "unit": {
+    "emitter": {
       "type": "`EE`",
       "ref": true
     },
@@ -20,7 +20,7 @@
   },
   "metadata": {
     "icon": "circle",
-    "description": "listen to `unit` `event`",
+    "description": "listen to `emitter` `event`",
     "complexity": 3,
     "tags": [
       "platform",

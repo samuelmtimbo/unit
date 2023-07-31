@@ -10,6 +10,7 @@ export type InputElement =
   | HTMLInputElement
   | HTMLTextAreaElement
   | HTMLSelectElement
+  | HTMLDivElement
 
 export function makeFieldInputEventHandler<E extends InputElement>(
   component: Element,
@@ -67,6 +68,11 @@ export class Field<
 
     applyStyle($element, style)
 
+    const isInput =
+      $element instanceof HTMLInputElement ||
+      $element instanceof HTMLTextAreaElement ||
+      $element instanceof HTMLSelectElement
+
     const inputEventHandler = makeFieldInputEventHandler(
       this,
       valueKey,
@@ -78,7 +84,17 @@ export class Field<
 
     this._prop_handler = {
       ...htmlPropHandler(this, defaultStyle),
-      ...inputPropHandler(this.$element, valueKey, defaultValue),
+      ...(isInput
+        ? inputPropHandler(
+            this.$element as HTMLInputElement,
+            valueKey,
+            defaultValue
+          )
+        : {
+            value: (value: any | undefined) => {
+              this.$element.textContent = value
+            },
+          }),
     }
   }
 

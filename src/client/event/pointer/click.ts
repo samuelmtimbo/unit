@@ -6,11 +6,12 @@ import { addListener } from '../../addListener'
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import stopPropagation from '../../stopPropagation'
-import { pointDistance, Position } from '../../util/geometry'
+import { pointDistance } from '../../util/geometry'
+import { Position } from '../../util/geometry/types'
 import {
-  POINTER_CLICK_RADIUS,
-  LONG_CLICK_TIMEOUT,
   CLICK_TIMEOUT,
+  LONG_CLICK_TIMEOUT,
+  POINTER_CLICK_RADIUS,
 } from './constants'
 import { makePointerCancelListener } from './pointercancel'
 import { listenPointerDown } from './pointerdown'

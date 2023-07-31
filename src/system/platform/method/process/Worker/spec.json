@@ -19,7 +19,7 @@
   },
   "metadata": {
     "icon": "server",
-    "description": "asynchronously control a worker thread",
+    "description": "remote control a new worker system",
     "complexity": 3,
     "tags": [
       "platform",

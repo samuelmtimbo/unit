@@ -37,6 +37,7 @@ export default class EncodeURI<T> extends Functional<I<T>, O<T>> {
       encoded = encodeURI(uri)
     } catch (err) {
       done(undefined, err.message)
+
       return
     }
 

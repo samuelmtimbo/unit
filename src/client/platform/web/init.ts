@@ -1,10 +1,8 @@
 import { System } from '../../../system'
-import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
 import { isSupportedKeyboardEvent } from '../../event/keyboard'
 import { showNotification } from '../../showNotification'
 import { COLOR_RED } from '../../theme'
-import { clonePointerEvent } from './api/input'
 
 export default function webInit(
   system: System,
@@ -31,7 +29,12 @@ export default function webInit(
       return
     }
 
-    const { keyCode, key, repeat } = event
+    const { metaKey, keyCode, key, repeat } = event
+
+    // ignore all key events when meta key is pressed
+    if (metaKey) {
+      return
+    }
 
     if (key === 'Tab') {
       event.preventDefault()
@@ -51,7 +54,11 @@ export default function webInit(
       return
     }
 
-    const { keyCode, key } = event
+    const { metaKey, keyCode, key } = event
+
+    if (metaKey) {
+      return
+    }
 
     const index = system.input.keyboard.pressed.indexOf(keyCode)
 

@@ -1,13 +1,13 @@
+import {
+  GraphComponentSpec,
+  GraphDataSpec,
+  GraphMetadataSpec,
+  GraphSpecBase,
+  GraphSpecs,
+  GraphUnitsSpec,
+} from '.'
 import { Dict } from './Dict'
 import { None } from './None'
-import {
-  GraphSpecBase,
-  GraphUnitsSpec,
-  GraphMetadataSpec,
-  GraphDataSpec,
-  GraphComponentSpec,
-  GraphSpecs,
-} from '.'
 
 export type GraphSpec = GraphSpecBase & {
   base?: false

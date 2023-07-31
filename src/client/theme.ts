@@ -1,4 +1,5 @@
 import { Dict } from '../types/Dict'
+import { darkenColor, lightenColor } from './color'
 import { Mode } from './mode'
 
 export type Theme = 'light' | 'dark'
@@ -125,74 +126,6 @@ export const oppositeTheme = ($theme: Theme): Theme => {
   return $theme === 'dark' ? 'light' : 'dark'
 }
 
-export const randomColorString = (): string => {
-  const letters = '0123456789ABCDEF'
-  let color = '#'
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)]
-  }
-  return color
-}
-
-export function randomColorArray(n: number): string[] {
-  const array: string[] = []
-  for (let i = 0; i < n; i++) {
-    array.push(randomColorString())
-  }
-  return array
-}
-
-// TODO
-export function RGBStrToRGB(str: string): [number, number, number] {
-  return [0, 0, 0]
-}
-
-export function RGBtoHSL(
-  r: number,
-  g: number,
-  b: number
-): [number, number, number] {
-  r /= 255
-  g /= 255
-  b /= 255
-  const max = Math.max(r, g, b)
-  const min = Math.min(r, g, b)
-
-  let h
-  let s
-  let l = (max + min) / 2
-
-  if (max === min) {
-    h = s = 0 // achromatic
-  } else {
-    const d = max - min
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-    switch (max) {
-      case r:
-        h = (g - b) / d + (g < b ? 6 : 0)
-        break
-      case g:
-        h = (b - r) / d + 2
-        break
-      case b:
-        h = (r - g) / d + 4
-        break
-      default:
-    }
-    h /= 6
-  }
-
-  return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)]
-}
-
-export function defaultThemeColor(theme: Theme): string {
-  if (theme === 'dark') {
-    return COLOR_GRAYSCALE_BASE00
-  } else {
-    return COLOR_GRAYSCALE_BASE11
-  }
-}
-
 // TODO Performance
 export function applyTheme(
   theme: Theme,
@@ -206,57 +139,10 @@ export function applyTheme(
   }
 }
 
-export function setAlpha(color: string, alpha: number): string {
-  const h = Math.floor(alpha * 16 * 16)
-  const A0 = Math.floor(h / 16)
-  const A1 = Math.floor(h % 16)
-  const AS0 = A0.toString(16)
-  const AS1 = A1.toString(16)
-  const A = AS0 + AS1
-  return color.substring(0, 7) + A
-}
-
-const ff = 0xff
-const zz = 0
-
-// set color `percent` closer to #ffffff
-export function lightenColor(color: string, percent: number): string {
-  const num = parseInt(color.slice(1), 16)
-
-  const r = num >> 16
-  const g = (num >> 8) & 0x00ff
-  const b = num & 0x0000ff
-
-  const t = percent > 0 ? ff : zz
-
-  const dr = t - r
-  const dg = t - g
-  const db = t - b
-
-  const p = Math.abs(percent) / 100
-
-  const pr = p * dr
-  const pg = p * dg
-  const pb = p * db
-
-  const R = Math.round(r + pr)
-  const G = Math.round(g + pg)
-  const B = Math.round(b + pb)
-
-  const _color =
-    '#' +
-    (
-      0x1000000 +
-      (R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
-      (G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
-      (B < 255 ? (B < 0 ? 0 : B) : 255)
-    )
-      .toString(16)
-      .slice(1)
-
-  return _color
-}
-
-export function darkenColor(color: string, percent: number): string {
-  return lightenColor(color, -percent)
+export function defaultThemeColor(theme: Theme): string {
+  if (theme === 'dark') {
+    return COLOR_GRAYSCALE_BASE00
+  } else {
+    return COLOR_GRAYSCALE_BASE11
+  }
 }

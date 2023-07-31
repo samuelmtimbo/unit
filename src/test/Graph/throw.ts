@@ -1,8 +1,8 @@
 import * as assert from 'assert'
 import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
-import Throw from '../../system/f/control/Throw'
 import { ID_THROW } from '../../system/_ids'
+import Throw from '../../system/f/control/Throw'
 import { system } from '../util/system'
 
 const spec = system.newSpec({})

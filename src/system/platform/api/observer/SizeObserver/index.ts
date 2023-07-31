@@ -3,11 +3,11 @@ import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { Component } from '../../../../../client/component'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
+import { ID_SIZE_OBSERVER } from '../../../../_ids'
 import {
   getGlobalComponent,
   listenGlobalComponent,
 } from '../../../../globalComponent'
-import { ID_SIZE_OBSERVER } from '../../../../_ids'
 
 export type I = {
   component: Component_

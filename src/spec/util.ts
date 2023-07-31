@@ -3,8 +3,8 @@ import { getSpec } from '../client/spec'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../system/core/object/KeyCount/f'
 import { keys } from '../system/f/object/Keys/f'
-import { GraphUnitPlugs } from '../system/platform/component/app/Editor/Component'
 import {
+  GraphComponentSpec,
   GraphMergeSpec,
   GraphMergeUnitSpec,
   GraphMergesSpec,
@@ -12,23 +12,28 @@ import {
   GraphPinsSpec,
   GraphPlugOuterSpec,
   GraphSubPinSpec,
+  GraphUnitSpec,
   PinSpec,
   Spec,
   Specs,
 } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
+import { GraphUnitMerges } from '../types/GraphUnitMerges'
+import { GraphUnitPlugs } from '../types/GraphUnitPlugs'
 import { IO } from '../types/IO'
-import { _IOOf } from '../types/IOOf'
+import { IOOf } from '../types/IOOf'
 import { GraphSelection } from '../types/interface/G'
 import {
   _keyCount,
   clone,
+  mapObjVK,
   pathOrDefault,
   pathSet,
   reduceObj,
 } from '../util/object'
 import { isEmptyMerge } from './isEmptyMerge'
+import { isPinRef } from './reducers/spec_'
 
 export function isValidSpecName(name: string) {
   return !!/^[A-Za-z_ ][A-Za-z\d_ ]*$/g.exec(name)
@@ -81,6 +86,38 @@ export const findFirstMergePin = (
       }
     }
   }
+}
+
+export const getUnitExposedPins = (
+  graph: GraphSpec,
+  unitId: string
+): IOOf<Dict<{ type: IO; pinId: string; subPinId: string }>> => {
+  const pins = {
+    input: {},
+    output: {},
+  }
+
+  forEachGraphSpecPin(graph, (type, pinId, pinSpec) => {
+    const { plug = {} } = pinSpec
+
+    for (const subPinId in plug) {
+      const subPinSpec = plug[subPinId]
+
+      const { unitId: unitId_, pinId: pinId_, mergeId } = subPinSpec
+
+      if (unitId_ === unitId) {
+        pathSet(pins, [type, pinId_], {
+          type,
+          pinId,
+          subPinId,
+        })
+      } else if (mergeId) {
+        //
+      }
+    }
+  })
+
+  return pins
 }
 
 export const getPinSpec = (
@@ -197,7 +234,7 @@ export const getMergeUnitTypePinCount = (
 }
 
 export const forEachPinOnMerges = <T>(
-  merges: Dict<Dict<_IOOf<Dict<T>>>>,
+  merges: Dict<Dict<IOOf<Dict<T>>>>,
   callback: (
     mergeId: string,
     unitId: string,
@@ -214,7 +251,7 @@ export const forEachPinOnMerges = <T>(
 }
 
 export const forEachPinOnMerge = <T>(
-  merge: Dict<_IOOf<Dict<T>>>,
+  merge: Dict<IOOf<Dict<T>>>,
   callback: (unitId: string, type: IO, pinId: string, data: T) => void
 ) => {
   forEachValueKey(merge, ({ input, output }, unitId) => {
@@ -387,29 +424,94 @@ export const findSpecAtPath = (
   }
 }
 
+export const findUnitAtPath = (
+  specs: Specs,
+  spec: Spec,
+  path: string[],
+  unit?: GraphUnitSpec
+): GraphUnitSpec => {
+  if (path.length === 0) {
+    return unit
+  } else {
+    const [unitId, ...rest] = path
+
+    const unit = (spec as GraphSpec).units[unitId] as GraphUnitSpec
+
+    const unitSpec = getSpec(specs, unit.id)
+
+    return findUnitAtPath(specs, unitSpec, rest, unit)
+  }
+}
+
 export const shouldExposePin = (
   type: IO,
-  pin_id: string,
-  pin_spec: GraphPinSpec,
-  sub_pin_id: string,
-  sub_pin_spec: GraphSubPinSpec,
-  merged: boolean
+  pinId: string,
+  pinSpec: GraphPinSpec,
+  subPinId: string,
+  subPinSpec: GraphSubPinSpec,
+  merged: boolean,
+  outerPlug: GraphPlugOuterSpec | null = null
 ) => {
-  const { unitId, pinId, mergeId } = sub_pin_spec
-
-  if (keyCount(pin_spec.plug ?? {}) > 1) {
-    return true
-  }
-
-  if (pinId === pin_id) {
+  if (merged || outerPlug) {
     return false
   }
 
-  if (merged) {
+  if (keyCount(pinSpec.plug ?? {}) > 1) {
+    return true
+  }
+
+  if (subPinSpec.pinId === pinId) {
     return false
   }
 
   return true
+}
+
+export function isSubPinSpecRef(
+  specs: Specs,
+  spec: GraphSpec,
+  type: IO,
+  subPinSpec: GraphSubPinSpec
+) {
+  let ref = false
+
+  if (subPinSpec.unitId && subPinSpec.pinId) {
+    const unit = spec.units[subPinSpec.unitId]
+
+    const unit_spec = getSpec(specs, unit.id)
+
+    ref = isPinRef({ type, pinId: subPinSpec.pinId }, unit_spec)
+  } else if (subPinSpec.mergeId) {
+    const merge = spec.merges[subPinSpec.mergeId]
+
+    forEachPinOnMerge(merge, (unitId, type, pinId) => {
+      const unit = spec.units[unitId]
+
+      const unit_spec = getSpec(specs, unit.id)
+
+      if (ref === true) {
+        return
+      }
+
+      ref = isPinRef({ type, pinId: subPinSpec.pinId }, unit_spec)
+    })
+  }
+
+  return ref
+}
+
+export function isPinSpecRef(specs: Specs, spec: GraphSpec, type: IO, pinSpec) {
+  const { plug = {} } = pinSpec
+
+  for (const subPinId in plug) {
+    const subPinSpec = plug[subPinId]
+
+    if (isSubPinSpecRef(specs, spec, type, subPinSpec)) {
+      return true
+    }
+  }
+
+  return false
 }
 
 export function makeFullSpecCollapseMap(
@@ -417,12 +519,15 @@ export function makeFullSpecCollapseMap(
   spec: GraphSpec,
   unitIdMap: Dict<string>,
   mergeIdMap: Dict<string>,
+  plugIdMap: IOOf<Dict<Dict<string>>>,
   {
     getUnitMerges,
+    getUnitPlugs,
     getMerge,
     getPinMergeId,
   }: {
-    getUnitMerges: (unitId: string) => GraphMergesSpec
+    getUnitMerges: (unitId: string) => GraphUnitMerges
+    getUnitPlugs: (unitId: string) => GraphUnitPlugs
     getMerge: (mergeId: string) => GraphMergeSpec
     getPinMergeId: (unitId: string, type: IO, pinId: string) => string
   }
@@ -436,11 +541,18 @@ export function makeFullSpecCollapseMap(
   }
 
   const unitMerges = getUnitMerges(unitId)
-  // const unitPlugs = getUnitPlugs(unitId)
+  const unitPlugs = getUnitPlugs(unitId)
 
   const nextIdMap: GraphMoveSubGraphData['nextIdMap'] = {
     unit: unitIdMap,
     merge: mergeIdMap,
+    plug: mapObjVK(plugIdMap, (pinMap) =>
+      mapObjVK(pinMap, (subPinMap) =>
+        mapObjVK(subPinMap, (nextSubPinId) => ({
+          subPinId: nextSubPinId,
+        }))
+      )
+    ),
   }
   const nextPinIdMap: GraphMoveSubGraphData['nextPinIdMap'] = {}
   const nextMergePinId: GraphMoveSubGraphData['nextMergePinId'] = {}
@@ -461,28 +573,50 @@ export function makeFullSpecCollapseMap(
 
     const merged = !!mergeId
 
+    const outerPlug = pathOrDefault(unitPlugs, [type, pinId], null)
+
     for (const subPinId in plug) {
       const subPinSpec = plug[subPinId]
 
-      if (shouldExposePin(type, pinId, pin, subPinId, subPinSpec, merged)) {
+      if (
+        shouldExposePin(
+          type,
+          pinId,
+          pin,
+          subPinId,
+          subPinSpec,
+          merged,
+          outerPlug
+        )
+      ) {
         nodeIds.plug.push({ type, pinId, subPinId })
 
-        pathSet(nextPlugSpec, [type, pinId, subPinId], subPinSpec)
+        let nextSubPinSpec = {}
+
+        if (subPinSpec.unitId && subPinSpec.pinId) {
+          const nextUnitId =
+            nextIdMap.unit[subPinSpec.unitId] ?? subPinSpec.unitId
+
+          nextSubPinSpec = {
+            unitId: nextUnitId,
+            pinId: subPinSpec.pinId,
+          }
+        } else {
+          const nextMergeId =
+            nextIdMap.merge[subPinSpec.mergeId] ?? subPinSpec.mergeId
+
+          nextSubPinSpec = {
+            mergeId: nextMergeId,
+          }
+        }
+
+        pathSet(nextPlugSpec, [type, pinId, subPinId], nextSubPinSpec)
       }
 
       if (subPinSpec.unitId && subPinSpec.pinId) {
-        pathSet(nextPinIdMap, [subPinSpec.unitId, type, subPinSpec.pinId], {
-          pinId,
-          subPinId,
-          ref,
-          defaultIgnored,
-          mergeId: null,
-          merge: null,
-        })
-
         forEachPinOnMerges(
           unitMerges,
-          (mergeId, unitId, unitMergeType, unitMergePinId) => {
+          (mergeId, mergeUnitId, mergeUnitType, mergeUnitPinId) => {
             const merge = getMerge(mergeId)
             const merge_clone = clone(merge)
 
@@ -492,13 +626,17 @@ export function makeFullSpecCollapseMap(
               nextIdMap.unit[subPinSpec.unitId] ?? subPinSpec.unitId
 
             merge_clone[nextUnitId] = {
-              [unitMergeType]: { [subPinSpec.pinId]: true },
+              [mergeUnitType]: { [subPinSpec.pinId]: true },
             }
 
-            if (unitId === unitId && unitMergePinId === pinId) {
+            if (
+              mergeUnitId === unitId &&
+              mergeUnitType === type &&
+              mergeUnitPinId === pinId
+            ) {
               pathSet(
                 nextPinIdMap,
-                [subPinSpec.unitId, unitMergeType, subPinSpec.pinId],
+                [subPinSpec.unitId, mergeUnitType, subPinSpec.pinId],
                 {
                   pinId,
                   subPinId,
@@ -532,7 +670,28 @@ export function makeFullSpecCollapseMap(
               },
               oppositeMerge,
             })
+          } else {
+            pathSet(nextMergePinId, [subPinSpec.mergeId, type], {
+              mergeId: null,
+              pinId: null,
+              subPinSpec: {},
+              oppositeMerge: {},
+            })
           }
+        } else {
+          const nextMergeId =
+            mergeIdMap[subPinSpec.mergeId] ?? subPinSpec.mergeId
+
+          const oppositeType = opposite(type)
+
+          const oppositeMerge = unitMerges[mergeId] ?? {}
+
+          pathSet(nextMergePinId, [subPinSpec.mergeId, oppositeType], {
+            mergeId: nextMergeId,
+            pinId,
+            subPinSpec: {},
+            oppositeMerge,
+          })
         }
       }
     }
@@ -591,4 +750,32 @@ export function getUnitInputDatum(
   pinId: string
 ) {
   return getUnitPinDatum(spec, unitId, 'input', pinId)
+}
+
+export function getSubComponentParentId(
+  spec: GraphSpec,
+  unitId: string
+): string | null {
+  return getComponentSubComponentParentId(spec.component, unitId)
+}
+
+export function getComponentSubComponentParentId(
+  componentSpec: GraphComponentSpec,
+  unitId: string
+): string | null {
+  const { subComponents } = componentSpec
+
+  for (const subComponentId in subComponents) {
+    const subComponent = subComponents[subComponentId]
+
+    const { children = [] } = subComponent
+
+    for (const childId of children) {
+      if (childId === unitId) {
+        return subComponentId
+      }
+    }
+  }
+
+  return null
 }

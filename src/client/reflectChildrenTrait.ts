@@ -7,7 +7,8 @@ import { parseLayoutValue } from './parseLayoutValue'
 import { parseMargin } from './parseMargin'
 import { parsePadding } from './parsePadding'
 import { parseTransformXY } from './parseTransformXY'
-import { Rect, Size, rectsBoundingRect } from './util/geometry'
+import { rectsBoundingRect } from './util/geometry'
+import { Rect, Size } from './util/geometry/types'
 import { parseFontSize } from './util/style/getFontSize'
 import { parseOpacity } from './util/style/getOpacity'
 
@@ -50,6 +51,7 @@ export function reflectChildrenTrait(
     gap: parentGap = '0px',
     alignItems: parentAlignItems = 'start',
     alignContent: parentAlignContent = 'normal',
+    placeContent: parentPlaceContent,
     padding: parentPadding = '0px',
     paddingTop: parentPaddingTop = '',
     paddingLeft: parentPaddingLeft = '',
@@ -315,8 +317,8 @@ export function reflectChildrenTrait(
           total_relative_px_height +
           (pcTop * parentHeight) / 100
       } else if (childPosition === 'absolute') {
-        x += pxLeft + (pcLeft * parentWidth) / 100
-        y += pxTop + (pcTop * parentHeight) / 100
+        x += (pxLeft + (pcLeft * parentWidth) / 100) * parentScaleX
+        y += (pxTop + (pcTop * parentHeight) / 100) * parentScaleY
       } else {
         //
       }
@@ -345,8 +347,8 @@ export function reflectChildrenTrait(
       }
     }
 
-    x += childTransformX
-    y += childTransformY
+    x += childTransformX * parentScaleX
+    y += childTransformY * parentScaleY
 
     if (childPosition === 'relative') {
       total_relative_percent_width += pcWidth
@@ -516,10 +518,13 @@ export function reflectChildrenTrait(
 
           height += pcHeight + pxHeight
 
-          x += acc_relative_width
-          y += pxTop
+          x += acc_relative_width * parentScaleX
+          y += pxTop * parentScaleY
 
-          max_relative_height = Math.max(max_relative_height, height)
+          max_relative_height = Math.max(
+            max_relative_height,
+            height * parentScaleX
+          )
 
           const inline = acc_relative_width + width <= parentWidth
 
@@ -571,11 +576,13 @@ export function reflectChildrenTrait(
             acc_relative_width = width
           }
         } else if (childPosition === 'absolute') {
-          x += pxLeft + (percentLeft * effectiveWidth) / 100
-          y += pxTop + (percentTop * effectiveHeight) / 100
+          x += ((pxLeft + percentLeft * effectiveWidth) * parentScaleX) / 100
+          y += ((pxTop + percentTop * effectiveHeight) * parentScaleY) / 100
 
-          width += (percentWidth * effectiveWidth) / 100 + pxWidth
-          height += (percentHeight * effectiveHeight) / 100 + pxHeight
+          width +=
+            ((percentWidth * effectiveWidth) / 100 + pxWidth) * parentScaleX
+          height +=
+            ((percentHeight * effectiveHeight) / 100 + pxHeight) * parentScaleY
 
           const [
             childTransformX,
@@ -754,10 +761,21 @@ export function reflectChildrenTrait(
             childTrait.x += (effectiveWidth - internal_width) / 2 + acc_gap
           }
 
-          if (parentAlignItems === 'start') {
-            //
-          } else if (parentAlignItems === 'center') {
-            childTrait.y += (effectiveHeight - childTrait.height) / 2
+          if (parentPlaceContent) {
+            if (parentPlaceContent === 'start') {
+              //
+            } else if (parentPlaceContent === 'center') {
+              childTrait.y += (effectiveHeight - childTrait.height) / 2
+            }
+          } else {
+            if (parentAlignItems === 'start') {
+              //
+            } else if (
+              parentAlignItems === 'center' ||
+              parentPlaceContent === 'center'
+            ) {
+              childTrait.y += (effectiveHeight - childTrait.height) / 2
+            }
           }
         }
       }

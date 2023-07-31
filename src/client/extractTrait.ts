@@ -1,7 +1,7 @@
 import Iframe from '../system/platform/component/Iframe/Component'
 import { Component } from './component'
 import { LayoutNode } from './LayoutNode'
-import { Size } from './util/geometry'
+import { Size } from './util/geometry/types'
 import { getPosition, getRelativePosition } from './util/style/getPosition'
 import { getSize } from './util/style/getSize'
 

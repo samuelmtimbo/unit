@@ -35,15 +35,23 @@ export default class Exec extends Functional<I, O> {
 
   public f({ unit, method, args }: Partial<I>, done: Done<O>) {
     const f = unit[method]
+
+    let _return: any
+
     if (typeof f === 'function') {
       try {
-        const _return = f.call(unit, ...args)
-        done({ return: _return })
+        _return = f.call(unit, ...args)
       } catch (err) {
         done(undefined, err.message)
+
+        return
       }
     } else {
       done(undefined, 'invalid method')
+
+      return
     }
+
+    done({ return: _return })
   }
 }

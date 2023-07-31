@@ -13,9 +13,9 @@ import { Unlisten } from '../../../../../types/Unlisten'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
 import Frame from '../../Frame/Component'
-import Drawer, { KNOB_HEIGHT, Props as DrawerProps } from '../Drawer/Component'
+import Drawer, { Props as DrawerProps, KNOB_HEIGHT } from '../Drawer/Component'
 
-export interface CabinetDrawer extends DrawerProps {
+export interface CabinetDrawerProps extends DrawerProps {
   active?: boolean
   state?: {
     y?: number
@@ -40,7 +40,7 @@ export const DEFAULT_STYLE = {
 export default class Cabinet extends Element<HTMLDivElement, Props> {
   private _cabinet: Div
 
-  private _drawer: Dict<CabinetDrawer> = {}
+  private _drawer: Dict<CabinetDrawerProps> = {}
   private _drawer_component: Dict<Drawer> = {}
   private _drawer_node: Dict<SimNode> = {}
   private _drawer_active: Set<string> = new Set()
@@ -282,7 +282,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     }
   }
 
-  public addDrawers = (drawers: Dict<CabinetDrawer>) => {
+  public addDrawers = (drawers: Dict<CabinetDrawerProps>) => {
     for (const drawerId in drawers) {
       const drawer = drawers[drawerId]
       this.addDrawer(drawerId, drawer)
@@ -291,7 +291,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
 
   private _drawer_inactivating: Set<string> = new Set()
 
-  public addDrawer = (drawerId: string, cabinetDrawer: CabinetDrawer) => {
+  public addDrawer = (drawerId: string, cabinetDrawer: CabinetDrawerProps) => {
     // console.log('Cabinet', 'addDrawer')
 
     // const { $width } = this.$context

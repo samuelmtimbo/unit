@@ -124,17 +124,16 @@ export default class Zoom_ extends Element<HTMLDivElement, Props> {
 
   private _transform = () => {
     const { zoom = zoomIdentity } = this.$props
+
     const transform = getTransform(zoom)
-    // mergeStyle(this._html, { transform })
-    // mergeStyle(this._svg_g, {
-    //   transform,
-    // })
+
     this._html.$element.style.transform = transform
     this._svg_g.$element.style.transform = transform
   }
 
   onPropChanged(prop: string, current: any): void {
     // console.log('Zoom', 'onPropChanged', prop, current)
+
     if (prop === 'className') {
       this._root.setProp('className', current)
     } else if (prop === 'style') {
@@ -142,14 +141,8 @@ export default class Zoom_ extends Element<HTMLDivElement, Props> {
     } else if (prop === 'zoom') {
       this._transform()
     } else if (prop === 'width') {
-      // mergeStyle(this._svg, {
-      //   width: `${current}px`,
-      // })
       this._svg.$element.style.width = `${current}px`
     } else if (prop === 'height') {
-      // mergeStyle(this._svg, {
-      //   height: `${current}px`,
-      // })
       this._svg.$element.style.height = `${current}px`
     } else if (prop === 'draggable') {
       this._root.setProp('draggable', current)
