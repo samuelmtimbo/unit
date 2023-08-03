@@ -1,3 +1,4 @@
+import { CodePathNotImplementedError } from '../../../exception/CodePathNotImplemented'
 import { IOElement } from '../../IOElement'
 import { Rect, Size } from '../geometry'
 import { getRect } from './getRect'
@@ -53,8 +54,8 @@ export function getChildrenRect(element: IOElement): Rect {
 
     return { x, y, width, height }
   } else if (element instanceof SVGElement) {
-    throw new Error('Not implemented')
+    throw new CodePathNotImplementedError()
   } else {
-    throw new Error('Not implemented')
+    throw new CodePathNotImplementedError()
   }
 }

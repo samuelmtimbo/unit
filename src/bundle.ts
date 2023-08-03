@@ -82,7 +82,7 @@ function _bundle(
   branch: Set<string>
 ): void {
   if (!spec.id) {
-    throw new Error('Spec id is required.')
+    throw new Error('spec id is required')
   }
 
   if (spec.system) {
@@ -91,12 +91,6 @@ function _bundle(
 
   if (branch.has(spec.id)) {
     return
-  }
-
-  if (!custom[spec.id]) {
-    if (!specs[spec.id] || !isSystemSpecId(specs, spec.id)) {
-      custom[spec.id] = spec
-    }
   }
 
   branch.add(spec.id)
@@ -118,6 +112,10 @@ function _bundleUnits(
     const { id } = unit
 
     const _spec = getSpec(specs, id) as GraphSpec
+
+    if (!specs[id] || !isSystemSpecId(specs, id)) {
+      custom[id] = _spec
+    }
 
     _bundle(_spec, specs, custom, new Set(branch))
   }

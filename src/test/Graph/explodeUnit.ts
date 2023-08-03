@@ -37,7 +37,7 @@ composition0.addUnitSpec(UNIT_ID_RANDOM_COLOR_DIV, {
 composition0.explodeUnit(UNIT_ID_RANDOM_COLOR_DIV, {}, {})
 
 assert.equal(composition0.getUnitCount(), 3)
-assert.equal(composition0.getInputCount(), 0)
+assert.equal(composition0.getInputCount(), 1)
 assert.equal(composition0.getOutputCount(), 0)
 
 const spec0 = system.newSpec({})

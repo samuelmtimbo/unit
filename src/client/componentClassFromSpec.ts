@@ -26,8 +26,6 @@ export function componentClassFromSpec(
     constructor($props: {}, $system: System) {
       super($props, $system)
 
-      // const $subComponent: Dict<Component> = {}
-
       for (const unitId in subComponents) {
         const unitSpec = units[unitId]
         const { id } = unitSpec
@@ -37,7 +35,7 @@ export function componentClassFromSpec(
         if (!childComponent) {
           const Class = componentClassFromSpecId(
             $system.components,
-            $system.specs,
+            specs,
             $system.classes,
             id
           )

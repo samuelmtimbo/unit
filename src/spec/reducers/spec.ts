@@ -91,7 +91,7 @@ export const expandUnit = (
             } else {
               state = addPinToMerge(
                 {
-                  mergeId: mergeId,
+                  mergeId,
                   type: 'input',
                   unitId: subInputSpec.unitId!,
                   pinId: subInputSpec.pinId!,

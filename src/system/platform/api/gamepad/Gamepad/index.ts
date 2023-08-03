@@ -111,7 +111,6 @@ export default class _Gamepad extends Semifunctional<I, O> {
         implements V<Gamepad_J>, EE<GamePad_EE>
       {
         async read(): Promise<Gamepad_J> {
-          console.log(gamepad_.state)
           return gamepad_.state
         }
 

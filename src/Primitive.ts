@@ -244,6 +244,7 @@ export class Primitive<
     const dataListener = this._onDataOutputData.bind(this, name)
     const dropListener = this._onDataOutputDrop.bind(this, name)
     const invalidListener = this._onOutputInvalid.bind(this, name)
+
     this._outputListeners.data[name] = dataListener
     this._outputListeners.drop[name] = dropListener
     this._outputListeners.invalid[name] = invalidListener
@@ -298,12 +299,18 @@ export class Primitive<
     }
   }
 
+  private _input_effemeral: Dict<Unit> = {}
+
   private _onRefInputData = (name: string, data: any): void => {
     this._activateInput(name, data)
-    if (data instanceof Function) {
-      data = new data(this.__system)
-    }
+
     if (!this._paused) {
+      if (data instanceof Function) {
+        data = new data(this.__system)
+
+        this._input_effemeral[name] = data
+      }
+
       this.onRefInputData(name, data)
     } else {
       this.__buffer.push({
@@ -381,9 +388,11 @@ export class Primitive<
 
   public _onOutputRemoved(name: string, output: Pin<any>): void {
     this._plunkOutput(name, output)
+
     if (!output.empty()) {
       this._deactivateOutput(name)
     }
+
     this.onOutputRemoved(name, output)
   }
 
@@ -406,6 +415,8 @@ export class Primitive<
     this._plunkInput(name, input)
 
     this._setupInput(newName, input, opt)
+
+    this.onInputRenamed(name, newName)
   }
 
   private _onOutputRenamed(name: string, newName: string) {
@@ -417,6 +428,16 @@ export class Primitive<
     this._plunkOutput(name, output)
 
     this._setupOutput(newName, output, opt)
+
+    this.onOutputRenamed(name, newName)
+  }
+
+  public onInputRenamed(name: string, newName: string): void {
+    //
+  }
+
+  public onOutputRenamed(name: string, newName: string): void {
+    //
   }
 
   private _activateInput = (name: string, data: any) => {
@@ -456,6 +477,15 @@ export class Primitive<
 
   private _onRefInputDrop = (name: string): void => {
     this._deactivateInput(name)
+
+    if (this._input_effemeral[name]) {
+      const effemeral_unit = this._input_effemeral[name]
+
+      delete this._input_effemeral[name]
+
+      effemeral_unit.destroy()
+    }
+
     if (!this._paused) {
       this.onRefInputDrop(name)
     } else {

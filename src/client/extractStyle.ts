@@ -139,6 +139,8 @@ export function _extractStyle(
     if (element.type === 'range') {
       style.height = '18px'
     }
+  } else if (element instanceof HTMLSelectElement) {
+    style.height = '18px'
   }
 
   if (element instanceof SVGPathElement) {

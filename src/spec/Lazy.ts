@@ -17,19 +17,19 @@ import {
   GraphUnitsSpec,
   Specs,
 } from '../types'
-import { GraphSpec } from '../types/GraphSpec'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
+import { GraphSpec } from '../types/GraphSpec'
 import { GraphState } from '../types/GraphState'
-import { C } from '../types/interface/C'
-import { ComponentEvents, Component_ } from '../types/interface/Component'
-import { G, G_MoveSubgraphIntoArgs, GraphSelection } from '../types/interface/G'
-import { U } from '../types/interface/U'
 import { IO } from '../types/IO'
-import { IOOf, _IOOf } from '../types/IOOf'
+import { IOOf } from '../types/IOOf'
 import { UnitBundle } from '../types/UnitBundle'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { UnitClass } from '../types/UnitClass'
+import { C } from '../types/interface/C'
+import { ComponentEvents, Component_ } from '../types/interface/Component'
+import { G, G_MoveSubgraphIntoArgs } from '../types/interface/G'
+import { U } from '../types/interface/U'
 import { fromSpec } from './fromSpec'
 
 export function lazyFromSpec(
@@ -79,6 +79,7 @@ export function lazyFromSpec(
 
       for (const name in this._input) {
         const i = this._input[name]
+
         i.addListener('data', (data) => {
           this._ensure()
         })
@@ -106,6 +107,10 @@ export function lazyFromSpec(
         }
       })
     }
+    getMergeData(mergeId: string) {
+      this._ensure()
+      return this.__graph.getPlugSpecs()
+    }
 
     getPlugSpecs(): IOOf<Dict<Dict<GraphSubPinSpec>>> {
       this._ensure()
@@ -123,31 +128,38 @@ export function lazyFromSpec(
     }
 
     getMergesSpec(): GraphMergesSpec {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.getMergesSpec()
     }
 
     getUnitPinData(unitId: string, type: IO, pinId: string): void {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.getUnitPinData(unitId, type, pinId)
     }
 
     isUnitPinRef(unitId: string, type: IO, pinId: string): boolean {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.isUnitPinRef(unitId, type, pinId)
     }
 
     getExposedPinSpecs(): IOOf<GraphPinsSpec> {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.getExposedPinSpecs()
     }
 
     getPinPlugCount(type: IO, pinId: string): number {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.getPinPlugCount(type, pinId)
     }
 
     moveRoot(parentId: string, childId: string, slotName: string): void {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.moveRoot(parentId, childId, slotName)
     }
 
     hasPlug(type: IO, pinId: string, subPinId: string): boolean {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.hasPlug(type, pinId, subPinId)
     }
 
     removePinOrMerge(
@@ -157,7 +169,14 @@ export function lazyFromSpec(
       pinId: string,
       ...extra: any[]
     ): void {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.removePinOrMerge(
+        mergeId,
+        unitId,
+        type,
+        pinId,
+        ...extra
+      )
     }
 
     removeMergeData(mergeId: string) {
@@ -247,18 +266,21 @@ export function lazyFromSpec(
     }
 
     reorderRoot(component: Component_<ComponentEvents>, to: number): void {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.reorderRoot(component, to)
     }
 
     reorderParentRoot(
       component: Component_<ComponentEvents>,
       to: number
     ): void {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.reorderParentRoot(component, to)
     }
 
     reorderSubComponent(parentId: string, childId: string, to: number): void {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      return this.__graph.reorderSubComponent(parentId, childId, to)
     }
 
     moveSubComponentRoot(
@@ -789,7 +811,8 @@ export function lazyFromSpec(
       nextUnitId: string,
       spec: UnitBundleSpec
     ): void {
-      throw new Error('Method not implemented.')
+      this._ensure()
+      this.__graph.swapUnitGhost(unitId, nextUnitId, spec)
     }
 
     public explodeUnit(

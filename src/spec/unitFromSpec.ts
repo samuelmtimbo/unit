@@ -67,12 +67,16 @@ export function unitFromBundleSpec(
         system.injectSpecs(_data.__bundle?.specs ?? {})
       }
 
-      if (input.ref() && isClass) {
-        const __data = new _data(system)
+      if (input.ref()) {
+        if (isClass) {
+          const __data = new _data(system)
 
-        __data.play()
+          __data.play()
 
-        input.push(__data)
+          input.push(__data)
+        } else {
+          //
+        }
       } else {
         input.push(_data)
       }

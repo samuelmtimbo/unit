@@ -10,6 +10,7 @@ import { PinOpt } from '../../PinOpt'
 import { PinOpts } from '../../PinOpts'
 import { Pins } from '../../Pins'
 import { stringify } from '../../spec/stringify'
+import { stringifyMemorySpecData } from '../../spec/stringifySpec'
 import { System } from '../../system'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keys } from '../../system/f/object/Keys/f'
@@ -18,6 +19,7 @@ import { Dict } from '../../types/Dict'
 import { U, U_EE } from '../../types/interface/U'
 import { IO } from '../../types/IO'
 import { None } from '../../types/None'
+import { stringifyDataObj } from '../../types/stringifyPinData'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { pull, push, removeAt } from '../../util/array'
@@ -716,6 +718,8 @@ export class Unit<
     newName: keyof I,
     propagate: boolean = true
   ): void {
+    // console.log('renameInput', name, newName, propagate)
+
     if (!this.hasInputNamed(name)) {
       throw new InputNotFoundError(name)
     }
@@ -727,9 +731,9 @@ export class Unit<
     this._i_name_set.add(newName)
 
     delete this._input[name]
-    this._input[newName] = input
-
     delete this._i_opt[name]
+
+    this._input[newName] = input
     this._i_opt[newName] = opt
 
     const { ref } = opt
@@ -739,19 +743,18 @@ export class Unit<
       this._r_i_name.add(newName)
 
       delete this._ref_input[name]
+
       this._ref_input[newName] = input
     } else {
       this._d_i_name.delete(name)
       this._d_i_name.add(newName)
 
       delete this._data_input[name]
+
       this._data_input[newName] = input
     }
 
-    // RETURN
     this.emit('rename_input', name, newName)
-    this.emit('remove_input', name, input)
-    this.emit('set_input', newName, input, opt, propagate)
   }
 
   public renameOutput(
@@ -792,8 +795,6 @@ export class Unit<
     }
 
     this.emit('rename_output', name, newName)
-    this.emit('remove_output', name, output)
-    this.emit('set_output', newName, output, opt, propagate)
   }
 
   public getInputOpt(name: string): PinOpt {
@@ -917,7 +918,7 @@ export class Unit<
           _check_all_done()
         }
       } else {
-        throw new Error('Unregistered Catcher cannot call unlisten')
+        throw new Error('unregistered Catcher cannot call unlisten')
       }
     }
 
@@ -927,17 +928,17 @@ export class Unit<
         if (i > -1) {
           const done = this._catcherDone[i]
           if (done) {
-            throw new Error('Catcher cannot be done twice')
+            throw new Error('catcher cannot be done twice')
           } else {
             this._catcherDone[i] = true
             this._catcherDoneCount++
             _check_all_done()
           }
         } else {
-          throw new Error('Unregistered Catcher cannot call done')
+          throw new Error('unregistered Catcher cannot call done')
         }
       } else {
-        throw new Error("Catcher cannot call done when there's no Caught Error")
+        throw new Error("catcher cannot call done when there's no caught error")
       }
     }
 
@@ -946,11 +947,6 @@ export class Unit<
 
   public getConfig(): Opt {
     return this._opt
-  }
-
-  // just a little more helpful log
-  protected _log(...args: any[]) {
-    console.log(`[${this.constructor.name}]`, ...args)
   }
 
   public reset(): void {
@@ -1096,6 +1092,8 @@ export class Unit<
 
     if (deep) {
       memory = this.snapshot()
+
+      stringifyMemorySpecData(memory)
     }
 
     const input = mapObjVK(this._input, (input) => {
@@ -1137,10 +1135,6 @@ export class Unit<
 
   public snapshotInputs(): Dict<Pin_M> {
     const state = {}
-
-    // for (const name of this._i_name_set) {
-    //   state[name] = this.snapshotInput(name)
-    // }
 
     for (const name of this._d_i_name) {
       state[name] = this.snapshotInput(name)
@@ -1212,6 +1206,6 @@ export class Unit<
 
     this.restoreInputs(input)
     this.restoreOutputs(output)
-    this.restoreSelf(memory)
+    this.restoreSelf(memory ?? {})
   }
 }

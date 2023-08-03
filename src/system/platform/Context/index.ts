@@ -11,6 +11,7 @@ import { J } from '../../../types/interface/J'
 import { Unlisten } from '../../../types/Unlisten'
 import { listenGlobalComponent } from '../../globalComponent'
 import { ID_CONTEXT } from '../../_ids'
+import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
 
 export interface I {
   element: Component_
@@ -59,7 +60,7 @@ export default class _Context
       data: any
     ) => void
   ): Unlisten {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   public f({ element }: I): void {
@@ -184,26 +185,26 @@ export default class _Context
   }
 
   delete(name: string): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathSet(path: string[], name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathGet(path: string[], name: string): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathDelete(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   keys(): Promise<string[]> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   hasKey(name: string): Promise<boolean> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 }

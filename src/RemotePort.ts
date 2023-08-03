@@ -49,13 +49,13 @@ export class RemotePort {
 
     if (type === CALL) {
       if (!this._call_id.has(id)) {
-        throw new Error('Unexpected worker call message id')
+        throw new Error('unexpected worker call message id')
       }
 
       this._call_emitter.emit(id, __data)
     } else if (type === WATCH) {
       if (!this._watch_id.has(id)) {
-        throw new Error('Unexpected worker watch message id')
+        throw new Error('unexpected worker watch message id')
       }
 
       this._watch_emitter.emit(id, __data)
@@ -64,7 +64,7 @@ export class RemotePort {
 
       ref_port.exec(__data)
     } else {
-      throw new Error('Unexpected worker message type')
+      throw new Error('unexpected worker message type')
     }
   }
 

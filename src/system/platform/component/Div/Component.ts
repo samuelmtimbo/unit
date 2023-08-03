@@ -66,7 +66,7 @@ export default class Div extends Element<HTMLDivElement, Props> {
     if (data !== undefined) {
       for (const key in data) {
         const d = data[key]
-        
+
         this.$element.dataset[key] = d
       }
     }

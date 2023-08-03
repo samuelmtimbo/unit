@@ -33,7 +33,7 @@ export const CLASS_TYPE_REGISTRY = 'R' // Registry
 
 export const INHERITANCE = {
   U: ['EE'],
-  G: ['U', 'C'],
+  G: ['U'],
   V: ['EE'],
 }
 

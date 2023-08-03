@@ -64,7 +64,7 @@ export class RemoteRef {
         }
         break
       default:
-        throw new Error('Invalid Remote API Data Type')
+        throw new Error('invalid remote API data type')
     }
   }
 }

@@ -5,30 +5,34 @@ import { $J, $J_C, $J_R, $J_W } from './$J'
 
 export const AsyncJCall: (value: J) => $J_C = (value) => {
   return {
-    async $get(
-      { name }: { name: string },
-      callback: Callback<any>
-    ): Promise<void> {
-      let data
-      try {
-        data = await value.get(name)
-      } catch (err) {
-        callback(undefined, err.message)
-      }
-      callback(data)
+    $get({ name }: { name: string }, callback: Callback<any>): void {
+      ;(async () => {
+        let data: any
+
+        try {
+          data = await value.get(name)
+        } catch (err) {
+          callback(undefined, err.message)
+        }
+        callback(data)
+      })()
     },
 
-    async $set(
+    $set(
       { name, data }: { name: string; data: string },
       callback: Callback<any>
-    ): Promise<void> {
-      try {
-        const _data = evaluate(data, {}, {})
-        await value.set(name, _data)
-      } catch (err) {
-        callback(undefined, err.message)
-      }
-      callback()
+    ): void {
+      ;(async () => {
+        try {
+          const _data = evaluate(data, {}, {})
+
+          await value.set(name, _data)
+        } catch (err) {
+          callback(undefined, err.message)
+        }
+
+        callback()
+      })()
     },
   }
 }

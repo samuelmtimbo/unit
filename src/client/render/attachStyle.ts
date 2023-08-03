@@ -151,7 +151,7 @@ export function removeRootStyle(system: System, css: string): void {
   )
 
   if (!style) {
-    throw new Error('Style not found.')
+    throw new Error('style not found')
   }
 
   root.shadowRoot.removeChild(style)

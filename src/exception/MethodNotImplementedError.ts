@@ -1,5 +1,5 @@
 export class MethodNotImplementedError extends Error {
-  constructor(message?: string) {
-    super('method not implemented')
+  constructor() {
+    super(`method not implemented`)
   }
 }

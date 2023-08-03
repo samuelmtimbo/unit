@@ -3,6 +3,7 @@ import {
   getStorageKeys,
   storageHasKey,
 } from '../../../../../client/util/web/storage'
+import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../../../../../Object'
 import { Primitive } from '../../../../../Primitive'
 import { System } from '../../../../../system'
@@ -30,7 +31,7 @@ export default class SessionStorage extends Primitive<I, O> implements V, J {
 
   private _checkAPI = () => {
     if (!sessionStorage) {
-      throw new Error('Session Storage API not implemented')
+      throw new Error('session Storage API not implemented')
     }
   }
 
@@ -44,7 +45,7 @@ export default class SessionStorage extends Primitive<I, O> implements V, J {
   async write(data: any): Promise<void> {
     this._checkAPI()
 
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   async get(name: string): Promise<any> {
@@ -71,15 +72,15 @@ export default class SessionStorage extends Primitive<I, O> implements V, J {
   }
 
   pathSet(path: string[], name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathGet(path: string[], name: string): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathDelete(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   subscribe(
@@ -92,7 +93,7 @@ export default class SessionStorage extends Primitive<I, O> implements V, J {
       data: any
     ) => void
   ): Unlisten {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   async keys(): Promise<string[]> {

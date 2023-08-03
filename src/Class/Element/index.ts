@@ -16,6 +16,7 @@ import {
   unregisterParentRoot,
   unregisterRoot,
 } from '../../component/method'
+import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
 import { C_EE } from '../../types/interface/C'
@@ -73,10 +74,15 @@ export class Element_<
     this.addListener('play', this._play)
     this.addListener('pause', this._pause)
     this.addListener('set', (name: keyof I, data) => {
-      if (!this._forwarding) {
+      if (!this._forwarding && data !== undefined) {
         this._backwarding = true
-        this._input?.[name]?.pull()
-        this._backwarding = false
+
+        // TODO add to end of event queue
+        setTimeout(() => {
+          this._input?.[name]?.pull()
+
+          this._backwarding = false
+        }, 0)
       }
 
       this._forwarding = true
@@ -95,7 +101,7 @@ export class Element_<
     }
   }
   getBundleSpec(): UnitBundleSpec {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   registerRoot(component: Component_): void {
@@ -138,7 +144,7 @@ export class Element_<
     Bundle: UnitBundle<Component_<ComponentEvents>>,
     at: number
   ): void {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pushChild(Bundle: UnitBundle<Component_>): number {
@@ -172,7 +178,7 @@ export class Element_<
       return slot
     }
 
-    throw new Error('Slot not found')
+    throw new MethodNotImplementedError()
   }
 
   private _play(): void {

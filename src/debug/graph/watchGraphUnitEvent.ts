@@ -37,19 +37,19 @@ export function watchGraphUnitEvent(
   }
 }
 
-export interface GraphSpecCloneUnitMomentData {
+export interface GraphCloneUnitMomentData {
   unitId: string
   newUnitId: string
   path: string[]
 }
 
-export interface GraphSpecCloneUnitMoment
-  extends Moment<GraphSpecCloneUnitMomentData> {}
+export interface GraphCloneUnitMoment
+  extends Moment<GraphCloneUnitMomentData> {}
 
-export function watchGraphUnitCloneEvent(
+export function watchGraphCloneUnitEvent(
   event: 'clone_unit',
   graph: Graph,
-  callback: (moment: GraphSpecCloneUnitMoment) => void
+  callback: (moment: GraphCloneUnitMoment) => void
 ): () => void {
   const listener = (
     unitId: string,

@@ -91,13 +91,8 @@ export function getDatumWidth(data: TreeNode): number {
     return MIN_WIDTH
   }
 
-  // if (type === TreeNodeType.Generic) {
-  //   value = value.substr(1, value.length - 2)
-  // }
-
   let horizontalWidth: number
 
-  // TODO
   let width = MIN_WIDTH
   switch (type) {
     case TreeNodeType.Any:

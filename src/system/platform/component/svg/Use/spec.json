@@ -6,11 +6,6 @@
       "optional": true,
       "defaultIgnored": true
     },
-    "class": {
-      "type": "string",
-      "optional": true,
-      "defaultIgnored": true
-    },
     "style": {
       "type": "object",
       "optional": true

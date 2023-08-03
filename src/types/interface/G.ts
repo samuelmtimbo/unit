@@ -107,6 +107,7 @@ export interface G<I = any, O = any, U_ = any> {
   getUnitInputData(unitId: string): Dict<any>
   getGraphMergeInputData(): Dict<any>
   getGraphErr(): Dict<string | null>
+  getMergeData(mergeId: string): any
   getMergeCount(): number
   getMergeUnitCount(mergeId: string): number
   getMergePinCount(mergeId: string): number
@@ -161,7 +162,8 @@ export interface G<I = any, O = any, U_ = any> {
     unitId: string,
     type: IO,
     pinId: string,
-    constant: boolean
+    constant: boolean,
+    ...extra: any[]
   ): void
   setUnitPinIgnored(
     unitId: string,

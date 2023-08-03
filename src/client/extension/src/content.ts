@@ -27,6 +27,7 @@ window.addEventListener(
             // @ts-ignore
             if (chrome.runtime.lastError) {
               // @ts-ignore
+              // eslint-disable-next-line no-console
               console.log(chrome.runtime.lastError.message)
             } else {
               window.postMessage({ type: 'EXTENSION_OUT', id, data })

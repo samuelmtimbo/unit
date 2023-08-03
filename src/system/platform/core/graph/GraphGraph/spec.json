@@ -107,7 +107,7 @@
         },
         "d": {
           "constant": true,
-          "data": "{}",
+          "data": "${unit:{id:'e33e7dcd-9715-461c-a474-15ed2bda899e'}}",
           "metadata": {
             "position": {
               "x": 162,
@@ -258,14 +258,8 @@
   },
   "component": {
     "slots": [
-      [
-        "graph",
-        "default"
-      ],
-      [
-        "graph0",
-        "default"
-      ]
+      ["graph", "default"],
+      ["graph0", "default"]
     ],
     "subComponents": {
       "graph": {
@@ -278,27 +272,17 @@
         "children": []
       },
       "row": {
-        "children": [
-          "graph0",
-          "div",
-          "graph"
-        ]
+        "children": ["graph0", "div", "graph"]
       }
     },
-    "children": [
-      "row"
-    ],
+    "children": ["row"],
     "defaultWidth": 420,
     "defaultHeight": 420
   },
   "metadata": {
     "icon": "atom-alt",
     "complexity": 114,
-    "tags": [
-      "platform",
-      "core",
-      "graph"
-    ],
+    "tags": ["platform", "core", "graph"],
     "position": {
       "merge": {
         "0": {

@@ -8,8 +8,9 @@
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
+  "ignorePatterns": ["src/script/**/*.ts", "src/**/_*.ts"],
   "rules": {
-    "no-console": 0, // warning
+    "no-console": "error",
     "no-constant-condition": "off",
     "prettier/prettier": 0, // error
     "no-async-promise-executor": "off",
@@ -19,6 +20,7 @@
     "no-empty": "off",
     "import/no-duplicates": "error",
     "prefer-const": "off",
+    "prefer-rest-params": "off",
     "no-useless-catch": "off",
     "no-prototype-builtins": "off",
     "no-misleading-character-class": "off",

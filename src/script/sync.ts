@@ -6,6 +6,8 @@ import { isNotSymbol } from '../client/event/keyboard/keyCode'
 import { GraphSpec } from '../types/GraphSpec'
 import { removeLastSegment } from '../util/removeLastSegment'
 
+/* eslint-disable no-console */
+
 export async function sync(
   systemDir: string,
   outputDir: string,

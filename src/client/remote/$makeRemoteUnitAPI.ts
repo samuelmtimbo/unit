@@ -102,7 +102,7 @@ export function $makeRemoteUnitAPI(unit: any, _: string[]): RemoteAPI {
         ref = { ...ref, ...$remoteRef(AsyncSRef(unit)) }
         break
       default:
-        throw new Error('Unknown interface')
+        throw new Error('unknown interface')
     }
   }
 

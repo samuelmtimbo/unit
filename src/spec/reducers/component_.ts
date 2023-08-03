@@ -8,6 +8,7 @@ import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { GraphComponentSpec, GraphSubComponentSpec } from '../../types'
 import { reorder } from '../../util/array'
+import { pathSet, set } from '../../util/object'
 
 export type State = GraphComponentSpec
 
@@ -16,9 +17,10 @@ export const defaultState: State = {}
 export const appendChild = (
   { unitId }: { unitId: string },
   state: State
-): State => {
+): void => {
   const children = state.children || []
-  return _set(state, 'children', [...children, unitId])
+
+  set(state, 'children', [...children, unitId])
 }
 
 export const insertChild = (
@@ -42,8 +44,8 @@ export const removeChild = ({ id }, state: State): State => {
 export const setSubComponent = (
   { unitId, spec }: { unitId: string; spec: GraphSubComponentSpec },
   state: State
-): State => {
-  return assocPath(state, ['subComponents', unitId], spec)
+): void => {
+  pathSet(state, ['subComponents', unitId], spec)
 }
 
 export const removeSubComponent = (

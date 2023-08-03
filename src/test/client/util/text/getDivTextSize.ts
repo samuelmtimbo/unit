@@ -9,6 +9,14 @@ assert.deepEqual(getDivTextSize('identity', 12, 12), {
   width: 48,
   height: 12,
 })
+assert.deepEqual(getDivTextSize('a  ', 12, 12), {
+  width: 18,
+  height: 12,
+})
+assert.deepEqual(getDivTextSize('  a  ', 12, 12), {
+  width: 30,
+  height: 12,
+})
 assert.deepEqual(getDivTextSize('find last index from or default', 12, 12), {
   width: 60,
   height: 36,

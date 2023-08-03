@@ -1,16 +1,17 @@
 import { Functional, FunctionalEvents } from '../../../Class/Functional'
+import { ObjectUpdateType } from '../../../Object'
+import { ObjectWaiter } from '../../../ObjectWaiter'
 import { addListener } from '../../../client/addListener'
 import { Context, setColor } from '../../../client/context'
 import { makeCustomListener } from '../../../client/event/custom'
 import { makeResizeListener } from '../../../client/event/resize'
-import { ObjectUpdateType } from '../../../Object'
-import { ObjectWaiter } from '../../../ObjectWaiter'
+import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
 import { System } from '../../../system'
+import { Unlisten } from '../../../types/Unlisten'
 import { Component_ } from '../../../types/interface/Component'
 import { J } from '../../../types/interface/J'
-import { Unlisten } from '../../../types/Unlisten'
-import { listenGlobalComponent } from '../../globalComponent'
 import { ID_CONTEXT } from '../../_ids'
+import { listenGlobalComponent } from '../../globalComponent'
 
 export interface I {
   element: Component_
@@ -59,7 +60,7 @@ export default class _Context
       data: any
     ) => void
   ): Unlisten {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   public f({ element }: I): void {
@@ -184,26 +185,26 @@ export default class _Context
   }
 
   delete(name: string): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathSet(path: string[], name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathGet(path: string[], name: string): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathDelete(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   keys(): Promise<string[]> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   hasKey(name: string): Promise<boolean> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 }

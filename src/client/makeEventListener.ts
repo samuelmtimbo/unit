@@ -100,6 +100,6 @@ export function makeUIEventListener(
     case 'wheel':
       return makeWheelListener(callback)
     default:
-      throw new Error(`Unknown UI event: ${event}`)
+      throw new Error(`unknown UI event: ${event}`)
   }
 }

@@ -1,3 +1,4 @@
+import { CodePathNotImplementedError } from '../exception/CodePathNotImplemented'
 import { _NUMBER_LITERAL_REGEX } from '../spec/regex/NUMBER_LITERAL'
 import { Style } from '../system/platform/Props'
 import { LayoutNode } from './LayoutNode'
@@ -340,7 +341,7 @@ export function reflectChildrenTrait(
           y += pxPaddingTop
         }
       } else {
-        console.log(`flex-direction not supported: ${parentFlexDirection}`)
+        throw new CodePathNotImplementedError()
       }
     }
 

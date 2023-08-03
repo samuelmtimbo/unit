@@ -76,7 +76,7 @@ export default class PeerTransmitter<T>
           this._flag_err_peer_construct = false
           this._backward('opt')
         } else {
-          throw new Error('PeerTransmitter: invalid err state.')
+          throw new Error('PeerTransmitter: invalid err state')
         }
       }
     })

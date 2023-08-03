@@ -1,5 +1,6 @@
 import { DataEvent } from '../events/DataEvent'
 import { _ErrorEvent } from '../events/ErrorEvent'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { IPort } from '../types/global/IPort'
@@ -85,16 +86,16 @@ window.onmessage = (event: MessageEvent) => {
 
 const channel: IPort = {
   send: function (message: any) {
-    throw new Error('Function not implemented.')
+    throw new MethodNotImplementedError()
   },
   onmessage: function (event: DataEvent) {
-    throw new Error('Function not implemented.')
+    throw new MethodNotImplementedError()
   },
   onerror: function (event: _ErrorEvent) {
-    throw new Error('Function not implemented.')
+    throw new MethodNotImplementedError()
   },
   terminate: function () {
-    throw new Error('Function not implemented.')
+    throw new MethodNotImplementedError()
   },
 }
 
@@ -114,5 +115,5 @@ const remoteSystem = createAPI<ISystem>(
 })()
 
 function createAPI<T>(spec: string, chane): T {
-  throw new Error('Function not implemented.')
+  throw new MethodNotImplementedError()
 }

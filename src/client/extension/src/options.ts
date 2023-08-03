@@ -9,6 +9,7 @@ function constructOptions(kButtonColors) {
     button.addEventListener('click', function () {
       // @ts-ignore
       chrome.storage.sync.set({ color: item }, function () {
+        // eslint-disable-next-line no-console
         console.log('color is ' + item)
       })
     })

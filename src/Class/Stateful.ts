@@ -1,3 +1,4 @@
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../Object'
 import { Primitive, PrimitiveEvents } from '../Primitive'
 import { State } from '../State'
@@ -62,7 +63,7 @@ export class Stateful<
       data: any
     ) => void
   ): Unlisten {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   onDataInputData(name: string, data: any): void {
@@ -114,7 +115,7 @@ export class Stateful<
   }
 
   hasKey(name: string): Promise<boolean> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   delete(name: string): Promise<void> {
@@ -124,19 +125,19 @@ export class Stateful<
   }
 
   pathSet(path: string[], name: string, data: any): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathGet(path: string[], name: string): Promise<any> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   pathDelete(path: string[], name: string): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   keys(): Promise<string[]> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   snapshotSelf(): Dict<any> {

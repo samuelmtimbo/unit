@@ -18,6 +18,7 @@ import {
   TreeNode,
   TreeNodeType,
   _isValidObjKeyType,
+  isValidObjKey,
 } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -31,6 +32,7 @@ export interface Props {
   data: TreeNode
   parent?: TreeNode | null
   appendChildren?: Element[]
+  invalid?: boolean
 }
 
 const STYLE_SEPARATOR = {
@@ -97,11 +99,8 @@ export const DEFAULT_STYLE = {
 
 export default class DataTree extends Element<HTMLDivElement, Props> {
   private _data: TreeNode
-
   private _root: Div
-
   private _child: Dict<DataTree> = {}
-
   private _leaf: DataTreeLeaf | null = null
 
   constructor($props: Props, $system: System) {
@@ -183,13 +182,15 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
   private _reset = () => {
     // console.log('DataTree', 'reset')
 
-    const { data, style: _style } = this.$props
+    const { data, style: _style, invalid } = this.$props
 
     this._data = data
 
     this._child = {}
 
-    const element = this.NODE_TYPE_TO_ELEMENT[data.type](data)
+    const element = invalid
+      ? this.__primitive(data)
+      : this.NODE_TYPE_TO_ELEMENT[data.type](data)
 
     const { style, children } = element
 
@@ -202,7 +203,8 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     data: TreeNode,
     appendChildren?: Element[],
     className?: string,
-    style?: Dict<string>
+    style?: Dict<string>,
+    invalid?: boolean
   ): DataTree => {
     const { path = [], data: parent_data } = this.$props
     const child = new DataTree(
@@ -210,6 +212,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         className,
         style,
         data,
+        invalid,
         path: [...path, index],
         parent: parent_data,
         appendChildren,
@@ -456,11 +459,16 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
+
+    const is_invalid_key = !isValidObjKey(key_tree.value)
+
     const key_value_key_tree = this._child_element(
       0,
       key_tree,
       [],
-      'key-value-key-tree'
+      'key-value-key-tree',
+      {},
+      is_invalid_key
     )
     key_value_key.appendChild(key_value_key_tree)
 
@@ -832,7 +840,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
       if (child) {
         child = child.getChild(index)
       } else {
-        throw new Error(`There is no child at ${path}`)
+        throw new Error(`there is no child at ${path}`)
       }
     }
     return child

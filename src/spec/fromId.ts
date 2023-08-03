@@ -28,10 +28,6 @@ export function fromId<T extends Unit>(
   if (Class === undefined) {
     spec = spec as GraphSpec
 
-    // const bundle = clone(bundleSpec(spec, specs))
-
-    // spec.specs = bundle.specs
-
     if (branch[id]) {
       Class = lazyFromSpec(spec, specs, branch)
     } else {

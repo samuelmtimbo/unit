@@ -22,8 +22,11 @@ import { watchGraphSetUnitPinData } from './watchGraphSetUnitPinDataEvent'
 import { watchGraphSetUnitPinIgnored } from './watchGraphSetUnitPinIgnoredEvent'
 import { watchGraphUnitComponentAppendEvent } from './watchGraphUnitComponentAppendEvent'
 import { watchGraphUnitComponentRemoveEvent } from './watchGraphUnitComponentRemoveEvent'
-import { watchGraphUnitEvent } from './watchGraphUnitEvent'
-import { watchGraphUnitMoveEvent } from './watchGraphUnitMoveEvent'
+import {
+  watchGraphCloneUnitEvent,
+  watchGraphUnitEvent,
+} from './watchGraphUnitEvent'
+import { watchGraphUnitMoveEvent as watchGraphMoveUnitEvent } from './watchGraphUnitMoveEvent'
 
 export const GRAPH_EVENT_TO_WATCHER: Dict<
   (event: string, graph: Graph, callback: Callback) => Unlisten
@@ -31,7 +34,8 @@ export const GRAPH_EVENT_TO_WATCHER: Dict<
   fork: watchGraphForkEvent,
   add_unit: watchGraphUnitEvent,
   remove_unit: watchGraphUnitEvent,
-  move_unit: watchGraphUnitMoveEvent,
+  clone_unit: watchGraphCloneUnitEvent,
+  move_unit: watchGraphMoveUnitEvent,
   component_append: watchGraphUnitComponentAppendEvent,
   component_remove: watchGraphUnitComponentRemoveEvent,
   add_merge: watchGraphMergeEvent,

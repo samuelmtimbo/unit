@@ -755,8 +755,8 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
     }).a
     this._y = clamp({
       a: this._y,
-      min: 3,
-      max: $height - h - 3,
+      min: 0,
+      max: this._collapsed ? $height : $height - h,
     }).a
   }
 

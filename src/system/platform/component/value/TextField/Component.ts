@@ -31,6 +31,10 @@ export default class TextField extends Field<HTMLInputElement, Props> {
       defaultValue: '',
     })
 
+    const {
+      flags: { defaultInputModeNone },
+    } = $system
+
     const { maxLength, tabIndex } = $props
 
     this.$element.type = 'text'
@@ -39,8 +43,11 @@ export default class TextField extends Field<HTMLInputElement, Props> {
     // this.$element.autocomplete = 'disabled'
     // this.$element.autocorrect = 'off'
     this.$element.autocapitalize = 'off'
-    this.$element.inputMode = 'none'
-    // this.$element.inputMode = 'text'
+    this.$element.inputMode = 'text'
+
+    if (defaultInputModeNone) {
+      this.$element.inputMode = 'none'
+    }
 
     if (maxLength !== undefined) {
       this.$element.maxLength = maxLength

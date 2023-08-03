@@ -2,6 +2,7 @@ import { API } from '../API'
 import { APINotSupportedError } from '../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../exception/MediaDeviceAPINotSupported'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { Storage_ } from '../system/platform/api/storage/Storage_'
 import { Dict } from '../types/Dict'
 import { IDownloadDataOpt } from '../types/global/IDownloadData'
@@ -199,22 +200,22 @@ export function noHost(): API {
         tagName: K,
         options?: ElementCreationOptions
       ): HTMLElementTagNameMap[K] {
-        throw new Error() // TODO
+        throw new MethodNotImplementedError()
       },
       createElementNS<K extends keyof SVGElementTagNameMap>(
         namespaceURI: 'http://www.w3.org/2000/svg',
         qualifiedName: K
       ): SVGElementTagNameMap[K] {
-        throw new Error()
+        throw new MethodNotImplementedError()
       },
       createTextNode(text: string): Text {
-        throw new Error()
+        throw new MethodNotImplementedError()
       },
       elementFromPoint(x: number, y: number): Element {
-        throw new Error()
+        throw new MethodNotImplementedError()
       },
       elementsFromPoint(x: number, y: number): Element[] {
-        throw new Error()
+        throw new MethodNotImplementedError()
       },
       getSelection(): Selection {
         // @ts-ignore
@@ -229,10 +230,10 @@ export function noHost(): API {
     },
     querystring: {
       stringify: function (obj: Dict<any>): string {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
       parse: function (str: string): Dict<any> {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
     },
     text: {
@@ -248,7 +249,7 @@ export function noHost(): API {
     db: undefined,
     url: {
       createObjectURL: function (object: any): Promise<string> {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
     },
     uri: {
@@ -258,15 +259,15 @@ export function noHost(): API {
     },
     alert: {
       alert: function (message: string): void {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
       prompt: function (message: string): string {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
     },
     location: {
       toString: function (): Promise<string> {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
     },
   }

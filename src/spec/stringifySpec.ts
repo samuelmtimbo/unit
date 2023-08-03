@@ -7,6 +7,7 @@ import { evaluateDataObj, stringifyDataObj } from '../types/stringifyPinData'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { evaluate } from './evaluate'
 import { stringify } from './stringify'
+import { clone } from '../util/object'
 
 export function stringifyBundleSpecData(bundle: BundleSpec): void {
   const { spec } = bundle
@@ -49,11 +50,7 @@ export function stringifyMemorySpecData(memory: Memory) {
     memory.output[outputId] = stringifyDataObj(output)
   }
 
-  for (const stateId in memory.memory) {
-    const state = memory.memory[stateId]
-
-    memory.memory[stateId] = stringifyDataObj(state)
-  }
+  memory.memory = stringifyDataObj(memory.memory)
 }
 
 function stringifyGraphUnitPinSpecData(input: GraphUnitPinsSpec) {
@@ -117,11 +114,23 @@ export function evaluateMemorySpec(
     memory.output[outputId] = evaluateDataObj(output, specs, classes)
   }
 
-  for (const stateId in memory.memory) {
-    const state = memory.memory[stateId]
+  memory.memory = evaluateDataObj(memory.memory, specs, classes)
+}
 
-    memory.memory[stateId] = evaluateDataObj(state, specs, classes)
-  }
+export function parseMemorySpec(
+  memory: {
+    input: Dict<any>
+    output: Dict<any>
+    memory: Dict<any>
+  },
+  specs: Specs,
+  classes: Classes
+) {
+  const memoryClone = clone(memory)
+
+  evaluateMemorySpec(memoryClone, specs, classes)
+
+  return memoryClone
 }
 
 export const stringifyBundleSpec = (spec: UnitBundleSpec): void => {

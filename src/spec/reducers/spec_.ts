@@ -14,6 +14,7 @@ import { GraphSpec } from '../../types/GraphSpec'
 import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
 import {
+  clone,
   getObjSingleKey,
   isEmptyObject,
   mapObjVK,
@@ -231,7 +232,7 @@ export const removeMerge = (
     (input: GraphPinSpec) => ({
       ...input,
       plug: mapObjVK(input.plug, (plug) => {
-        return !mergeId || mergeId !== plug.mergeId ? plug : {}
+        return !plug.mergeId || mergeId !== plug.mergeId ? plug : {}
       }),
     })
   )
@@ -241,9 +242,7 @@ export const removeMerge = (
     (output: GraphPinSpec) => ({
       ...output,
       plug: mapObjVK(output.plug, (plug) => {
-        const { mergeId } = plug
-
-        return !mergeId || mergeId !== mergeId ? plug : {}
+        return !plug.mergeId || mergeId !== plug.mergeId ? plug : {}
       }),
     })
   )
@@ -338,7 +337,9 @@ export const coverPin = (
 export const exposePinSet = (
   { pinId, type, pinSpec }: { pinId: string; type: IO; pinSpec: GraphPinSpec },
   spec: GraphSpec
-): void => pathSet(spec, [`${type}s`, pinId], pinSpec)
+): void => {
+  return pathSet(spec, [`${type}s`, pinId], pinSpec)
+}
 
 export const setUnitId = (
   {
@@ -516,6 +517,13 @@ export const setPinSetFunctional = (
   return pathSet(spec, [`${type}s`, pinId, 'functional'], functional)
 }
 
+export const setPinSetDataType = (
+  { type, pinId, dataType }: { type: IO; pinId: string; dataType: string },
+  spec: GraphSpec
+): void => {
+  return pathSet(spec, [`${type}s`, pinId, 'type'], dataType)
+}
+
 export const setPinSetRef = (
   { type, pinId, ref }: { type: IO; pinId: string; ref: boolean },
   spec: GraphSpec
@@ -576,9 +584,9 @@ export const setUnitPinIgnored = (
   spec: GraphSpec
 ) => {
   if (ignored) {
-    forEachPinOnMerges(spec.merges ?? {}, (id, _unitId, _type, _pinId) => {
+    forEachPinOnMerges(spec.merges ?? {}, (mergeId, _unitId, _type, _pinId) => {
       if (_unitId === unitId && _type === type && _pinId === pinId) {
-        removePinFromMerge({ mergeId: id, unitId, type, pinId }, spec)
+        removePinFromMerge({ mergeId, unitId, type, pinId }, spec)
       }
     })
 
@@ -672,5 +680,37 @@ export const setSubComponentSize = (
   pathMerge(spec, ['component', 'subComponents', unitId], {
     defaultWidth: width,
     defaultHeight: height,
+  })
+}
+
+export const isPinRef = (
+  { type, pinId }: { type: IO; pinId: string },
+  spec: GraphSpec
+) => {
+  return pathOrDefault(spec, [`${type}s`, pinId, 'ref'], false)
+}
+
+export const renameUnitPin = (
+  {
+    unitId,
+    type,
+    pinId,
+    newPinId,
+  }: { unitId: string; type: IO; pinId: string; newPinId: string },
+  spec: GraphSpec
+) => {
+  const { units = {}, merges = {} } = spec
+
+  for (const unitId in units) {
+    const unit = units[unitId]
+
+    // TODO
+  }
+
+  forEachPinOnMerges(clone(merges), (mergeId, _unitId, _type, _pinId) => {
+    if (_unitId === unitId && _type === type && _pinId === pinId) {
+      pathDelete(spec, ['merges', mergeId, unitId, type, pinId])
+      pathSet(spec, ['merges', mergeId, unitId, type, newPinId], true)
+    }
   })
 }

@@ -1,0 +1,38 @@
+{
+  "name": "interval",
+  "inputs": {
+    "ms": {
+      "type": "number",
+      "metadata": {
+        "description": "number of milliseconds to wait before output"
+      }
+    },
+    "done": {
+      "type": "number",
+      "metadata": {
+        "description": "signal the interval should stop"
+      }
+    }
+  },
+  "outputs": {
+    "ms": {
+      "type": "number",
+      "metadata": {
+        "description": "same as the inputed `ms`"
+      }
+    }
+  },
+  "metadata": {
+    "icon": "timer",
+    "description": "output `ms` after `ms` milliseconds, until `done`",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "time"
+    ]
+  },
+  "id": "42a8023a-0581-4e92-968a-b31584d0ed75",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

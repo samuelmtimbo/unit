@@ -354,8 +354,7 @@ export const _keyUpdateTree = (
         !parent ||
         ((parent.type !== TreeNodeType.KeyValue ||
           (parent.type === TreeNodeType.KeyValue && lastIndex !== 0)) &&
-          (parent.type !== TreeNodeType.ObjectLiteral ||
-            (parent.type === TreeNodeType.ObjectLiteral && lastIndex !== 0)))
+          parent.type !== TreeNodeType.ObjectLiteral)
       ) {
         preventDefault = true
         nextPath = [...path, 0]

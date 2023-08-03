@@ -77,11 +77,6 @@ assert.deepEqual(getSpecTypeInterfaceById(ID_MERGE_AB, _specs), {
   input: { a: 'any', b: 'any' },
   output: { ab: 'object' },
 })
-// TODO
-// assert.deepEqual(getSpecTypeInterfaceByPath(MERGE_AB, _specs), {
-//   input: { a: '<A>', b: '<B>' },
-//   output: { ab: '<A>&<B>' },
-// })
 
 assert.deepEqual(getGraphTypeMapById(ID_CONSTANT_ONE, _specs), {
   identity: { input: { a: 'number' }, output: { a: 'number' } },
@@ -198,21 +193,21 @@ assert.deepEqual(_getSpecTypeInterfaceById(ID_ARRAY_BUILDER_FROM, _specs), {
   input: {
     a: {
       value: '<A>',
-      type: 2,
+      type: 'generic',
       children: [],
     },
     test: {
       value: 'boolean',
-      type: 12,
+      type: 'boolean',
       children: [],
     },
     init: {
       value: '<A>[]',
-      type: 5,
+      type: 'array expression',
       children: [
         {
           value: '<A>',
-          type: 2,
+          type: 'generic',
           children: [],
         },
       ],
@@ -221,33 +216,33 @@ assert.deepEqual(_getSpecTypeInterfaceById(ID_ARRAY_BUILDER_FROM, _specs), {
   output: {
     acc: {
       value: '<A>[]',
-      type: 5,
+      type: 'array expression',
       children: [
         {
           value: '<A>',
-          type: 2,
+          type: 'generic',
           children: [],
         },
       ],
     },
     'a[]': {
       value: '<A>[]',
-      type: 5,
+      type: 'array expression',
       children: [
         {
           value: '<A>',
-          type: 2,
+          type: 'generic',
           children: [],
         },
       ],
     },
     local: {
       value: '<A>[]',
-      type: 5,
+      type: 'array expression',
       children: [
         {
           value: '<A>',
-          type: 2,
+          type: 'generic',
           children: [],
         },
       ],
@@ -260,50 +255,50 @@ assert.deepEqual(_getGraphTypeMapById(ID_N_ARRAY_BUILDER_FROM, _specs), {
     input: {
       a: {
         value: '<A>[]',
-        type: 5,
-        children: [{ value: '<A>', type: 2, children: [] }],
+        type: 'array expression',
+        children: [{ value: '<A>', type: 'generic', children: [] }],
       },
-      b: { value: 'number', type: 11, children: [] },
+      b: { value: 'number', type: 'number', children: [] },
     },
-    output: { test: { value: 'boolean', type: 12, children: [] } },
+    output: { test: { value: 'boolean', type: 'boolean', children: [] } },
   },
   arraybuilderfrom: {
     input: {
-      a: { value: '<A>', type: 2, children: [] },
-      test: { value: 'boolean', type: 12, children: [] },
+      a: { value: '<A>', type: 'generic', children: [] },
+      test: { value: 'boolean', type: 'boolean', children: [] },
       init: {
         value: '<A>[]',
-        type: 5,
-        children: [{ value: '<A>', type: 2, children: [] }],
+        type: 'array expression',
+        children: [{ value: '<A>', type: 'generic', children: [] }],
       },
     },
     output: {
       acc: {
         value: '<A>[]',
-        type: 5,
-        children: [{ value: '<A>', type: 2, children: [] }],
+        type: 'array expression',
+        children: [{ value: '<A>', type: 'generic', children: [] }],
       },
       'a[]': {
         value: '<A>[]',
-        type: 5,
-        children: [{ value: '<A>', type: 2, children: [] }],
+        type: 'array expression',
+        children: [{ value: '<A>', type: 'generic', children: [] }],
       },
       local: {
         value: '<A>[]',
-        type: 5,
-        children: [{ value: '<A>', type: 2, children: [] }],
+        type: 'array expression',
+        children: [{ value: '<A>', type: 'generic', children: [] }],
       },
     },
   },
   looprepeat: {
     input: {
-      init: { value: 'number', type: 11, children: [] },
-      test: { value: 'boolean', type: 12, children: [] },
+      init: { value: 'number', type: 'number', children: [] },
+      test: { value: 'boolean', type: 'boolean', children: [] },
     },
     output: {
-      local: { value: 'number', type: 11, children: [] },
-      current: { value: 'number', type: 11, children: [] },
-      final: { value: 'number', type: 11, children: [] },
+      local: { value: 'number', type: 'number', children: [] },
+      current: { value: 'number', type: 'number', children: [] },
+      final: { value: 'number', type: 'number', children: [] },
     },
   },
 })
@@ -457,80 +452,3 @@ assert.deepEqual(getSpecTypeInterfaceById(ID_MERGE_SORT, _specs), {
     a: 'number[]',
   },
 })
-
-// TODO
-// assert.deepEqual(getGraphTypeMapByPath(PROP_PATH, _specs), {
-//   if: {
-//     input: {
-//       a: 'string[]',
-//       b: 'boolean',
-//     },
-//     output: {
-//       'a if b': 'string[]',
-//     },
-//   },
-//   ifelse: {
-//     input: {
-//       a: 'object',
-//       b: 'boolean',
-//     },
-//     output: {
-//       if: 'object',
-//       else: 'object',
-//     },
-//   },
-//   lengthgt: {
-//     input: {
-//       a: 'string[]',
-//       b: 'number',
-//     },
-//     output: {
-//       true: 'boolean',
-//     },
-//   },
-//   head: {
-//     input: {
-//       a: 'string[]',
-//     },
-//     output: {
-//       a: 'string[]',
-//       head: 'string',
-//     },
-//   },
-//   prop: {
-//     input: {
-//       obj: 'object',
-//       key: 'string',
-//     },
-//     output: {
-//       value: 'any',
-//     },
-//   },
-//   proppath: {
-//     input: {
-//       path: 'string[]',
-//       obj: 'object',
-//     },
-//     output: {
-//       result: 'any',
-//     },
-//   },
-// })
-
-// TODO
-// assert.deepEqual(getSpecTypeInterfaceByPath(PROP_PATH, _specs), {
-//   input: { obj: 'object', path: '(number|string)[]' },
-//   output: { result: 'any' },
-// })
-
-// TODO
-// assert.deepEqual(getSpecTypeInterfaceByPath(LOOP_2, _specs), {
-//   input: {
-//     inita: '<A>',
-//     initb: '<B>',
-//     "next a": '<A>',
-//     "next b": '<B>',
-//     test: 'boolean',
-//   },
-//   output: { locala: '<A>', localb: '<B>', currenta: '<A>', currentb: '<B>' },
-// })

@@ -55,6 +55,7 @@ import { getRect } from './util/style/getRect'
 import { getScale, Scale } from './util/style/getScale'
 import { getSize } from './util/style/getSize'
 import { getTextAlign } from './util/style/getTextAlign'
+import { proxyWrap } from '../proxyWrap'
 
 const $childToComponent = (
   system: System,
@@ -267,7 +268,7 @@ export class Component<
     // console.log(this.constructor.name, 'setPointerCapture', pointerId)
 
     if (this.$element instanceof Text) {
-      throw new Error('Cannot set pointer capture on a text element.')
+      throw new Error('cannot set pointer capture on a text element')
     }
 
     this._releasePointerCapture[pointerId] = setPointerCapture(
@@ -286,7 +287,7 @@ export class Component<
 
       delete this._releasePointerCapture[pointerId]
     } else {
-      throw new Error('Element is not capturing pointer.')
+      throw new Error('element is not capturing pointer')
     }
   }
 
@@ -344,9 +345,7 @@ export class Component<
     // console.log(this.constructor.name, 'mount')
 
     if (this.$mounted) {
-      console.warn('cannot mount a mounted component')
-      // throw new Error('cannot mount a mounted component')
-      return
+      throw new Error('cannot mount a mounted component')
     }
 
     this.$context = $context
@@ -512,7 +511,7 @@ export class Component<
 
   getElementPosition() {
     if (!this.$mounted) {
-      throw new Error('Cannot calculate position of unmounted component.')
+      throw new Error('cannot calculate position of unmounted component')
     }
 
     const context_position = {
@@ -521,7 +520,7 @@ export class Component<
     }
 
     if (!this.$primitive) {
-      throw new Error('Cannot calculate position of multiple elements.')
+      throw new Error('cannot calculate position of multiple elements')
     }
 
     const relative_position = getRelativePosition(
@@ -536,7 +535,7 @@ export class Component<
 
   getElementSize() {
     if (!this.$primitive) {
-      throw new Error('Cannot calculate size of multiple elements.')
+      throw new Error('cannot calculate size of multiple elements')
     }
 
     return getSize(this.$element)
@@ -709,7 +708,7 @@ export class Component<
   } {
     if (this.$context) {
       if (!this.$primitive) {
-        throw new Error('Cannot calculate position of multiple elements.')
+        throw new Error('cannot calculate position of multiple elements.')
       }
 
       if (this.$element instanceof Text) {
@@ -872,7 +871,7 @@ export class Component<
 
   public connect($unit: U, deep: boolean = true): void {
     if (this.$connected) {
-      // throw new Error('Component is already connected')
+      // throw new Error('component is already connected')
       return
     }
 
@@ -885,7 +884,7 @@ export class Component<
 
           const _ = component_(childSubComponent)
 
-          const subUnit = (this.$unit as $Graph).$refSubComponent({ unitId, _ })
+          const subUnit = ($unit as $Graph).$refSubComponent({ unitId, _ })
 
           childSubComponent.connect(subUnit)
         }
@@ -897,7 +896,8 @@ export class Component<
     // console.log(this.constructor.name, 'connect')
 
     if (this.$connected) {
-      throw new Error('Component is already connected')
+      // throw new Error('component is already connected')
+      return
     }
 
     this.$unit = $unit
@@ -1030,8 +1030,7 @@ export class Component<
     // console.log(this.constructor.name, 'disconnect')
 
     if (!this.$connected) {
-      // throw new Error ('Component is not already disconnected')
-      console.warn('Component', 'disconnect called unnecessarily')
+      throw new Error('component is not already disconnected')
 
       return
     }
@@ -1114,20 +1113,18 @@ export class Component<
 
   public pushRoot(component: Component): void {
     if (this.$root.indexOf(component) > -1) {
-      throw new Error('Component is already a root')
+      throw new Error('component is already a root')
     }
 
-    // set(component, '$parent', this)
     this.$root.push(component)
   }
 
   public pullRoot(component: Component): void {
     const index = this.$root.indexOf(component)
     if (index > -1) {
-      // set(component, '$parent', null)
       this.$root.splice(index, 1)
     } else {
-      throw new Error('Cannot pull; not root component')
+      throw new Error('cannot pull; not root component')
     }
   }
 
@@ -1297,7 +1294,7 @@ export class Component<
   }
 
   public removeAllRoot(): void {
-    for (const root of this.$mountRoot) {
+    for (const root of [...this.$mountRoot]) {
       this.removeRoot(root)
     }
   }
@@ -1754,8 +1751,6 @@ export class Component<
 
   protected domCommitRemoveChild(component: Component) {
     removeChild(this.$element, component.$element)
-
-    // set(component, '$slotParent', null)
   }
 
   public insertParentRootAt(

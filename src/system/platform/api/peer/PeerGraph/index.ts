@@ -27,6 +27,12 @@ export default class PeerGraph extends Semifunctional<I, O> {
   __ = ['U']
 
   private _peer: Peer
+  private _peer_connected: boolean = false
+  private _id: string
+  private _target_channel: BroadcastChannel
+  private _source_channel: BroadcastChannel
+  private _remote_port: RemotePort
+  private _offer_sent: boolean = false
 
   constructor(system: System) {
     super(
@@ -58,19 +64,8 @@ export default class PeerGraph extends Semifunctional<I, O> {
     })
   }
 
-  private _peer_connected: boolean = false
-
-  private _id: string
-
-  private _target_channel: BroadcastChannel
-  private _source_channel: BroadcastChannel
-
-  private _remote_port: RemotePort
-
-  private _offer_sent: boolean = false
-
   async onDataInputData(name: string, data: any): Promise<void> {
-    console.log('PeerGraph', 'onDataInputData', name, data)
+    // console.log('PeerGraph', 'onDataInputData', name, data)
 
     if (name === 'opt') {
       this._peer = new Peer(this.__system, false, data)
@@ -91,7 +86,7 @@ export default class PeerGraph extends Semifunctional<I, O> {
       }
 
       this._peer.addListener('message', (message: string) => {
-        console.log('PeerGraph', 'message', message)
+        // console.log('PeerGraph', 'message', message)
 
         const specs = this.__system.specs
         const classes = this.__system.classes

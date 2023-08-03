@@ -78,7 +78,7 @@ export function applyDynamicStyle(
 
   removeStyle($element)
 
-  const { fontSize, width, height } = style
+  let { fontSize, width, height } = style
 
   let unlistenResize = NOOP
 
@@ -91,6 +91,10 @@ export function applyDynamicStyle(
   }
 
   const unlistenAll = []
+
+  if (typeof fontSize === 'number') {
+    fontSize = `${fontSize}px`
+  }
 
   if (fontSize && isVValue(fontSize)) {
     delete style.fontSize

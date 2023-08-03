@@ -141,7 +141,7 @@ export default class Wrap extends Element_<I, O> implements W {
 
       super.removeParentChild(container)
     } else {
-      throw new Error('Parent Child not found')
+      throw new Error('parent child not found')
     }
   }
 

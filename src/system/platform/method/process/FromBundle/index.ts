@@ -41,7 +41,7 @@ export default class FromBundle extends Functional<I, O> {
       )
       done({ graph })
     } catch (err) {
-      console.log(err)
+      // console.log(err)
     }
   }
 }
