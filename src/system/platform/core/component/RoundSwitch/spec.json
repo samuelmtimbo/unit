@@ -7,38 +7,104 @@
           "unitId": "switch",
           "pinId": "value"
         }
+      },
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 107,
+            "y": -7
+          }
+        }
       }
     }
   },
-  "outputs": {},
+  "outputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "switch",
+          "pinId": "value"
+        }
+      },
+      "type": "boolean",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 89,
+            "y": 47
+          }
+        }
+      }
+    }
+  },
   "units": {
     "switch": {
       "id": "6253bf76-2e85-11eb-9f59-3703abfd39c7",
       "input": {
         "style": {
-          "data": "{height:'30px',width:'60px',border:'1px solid currentColor',borderRadius:'30px',cursor:'pointer'}",
-          "constant": true
+          "data": "{height:\"30px\",width:\"60px\",border:\"1px solid currentColor\",borderRadius:\"30px\",cursor:\"pointer\"}",
+          "constant": true,
+          "metadata": {
+            "position": {
+              "x": -82,
+              "y": 26
+            }
+          }
         },
         "sliderStyle": {
           "ignored": false,
-          "data": "{borderRadius:'50%',backgroundColor:'currentColor'}",
-          "constant": true
+          "data": "{borderRadius:\"50%\",backgroundColor:\"currentColor\"}",
+          "constant": true,
+          "metadata": {
+            "position": {
+              "x": 79,
+              "y": -41
+            }
+          }
         },
         "onColor": {
-          "data": "'#00aa11'",
-          "constant": true
+          "data": "\"#00aa11\"",
+          "constant": true,
+          "metadata": {
+            "position": {
+              "x": -82,
+              "y": -41
+            }
+          }
         },
         "offColor": {
-          "data": "'#ff6666'",
-          "constant": true
+          "data": "\"#ff6666\"",
+          "constant": true,
+          "metadata": {
+            "position": {
+              "x": -85,
+              "y": -7
+            }
+          }
         },
-        "value": {}
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 83,
+              "y": -7
+            }
+          }
+        }
       },
-      "output": {},
+      "output": {
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 79,
+              "y": 26
+            }
+          }
+        }
+      },
       "metadata": {
         "position": {
-          "x": 0,
-          "y": 0
+          "x": -1,
+          "y": -7
         }
       }
     }
@@ -51,18 +117,17 @@
         "children": []
       }
     },
-    "children": [
-      "switch"
-    ],
+    "children": ["switch"],
     "defaultWidth": 100,
     "defaultHeight": 50
   },
   "metadata": {
     "icon": null,
     "description": "",
-    "complexity": 95
+    "complexity": 95,
+    "tags": ["platform", "core", "component"]
   },
   "id": "a9201738-f134-4268-a5ba-b6f88a4d9f92",
-  "type": "`U`&`G`&`C`",
+  "type": "`U`&`G`",
   "system": true
 }

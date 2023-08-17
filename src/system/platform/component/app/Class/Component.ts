@@ -3,7 +3,7 @@ import { getSpecRadius } from '../../../../../client/complexity'
 import { Component } from '../../../../../client/component'
 import { Element } from '../../../../../client/element'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import { isComponent } from '../../../../../client/spec'
+import { isComponentId } from '../../../../../client/spec'
 import {
   pointInCircle,
   pointInRectangle,
@@ -145,7 +145,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
     const core_r = getSpecRadius(specs, id) - 2
     const r = PIN_RADIUS - 3
 
-    const is_component = isComponent(specs, id)
+    const is_component = isComponentId(specs, id)
 
     const cX = width / 2
     const cY = height / 2

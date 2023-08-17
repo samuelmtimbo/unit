@@ -5,7 +5,6 @@ import {
   GraphPinSpec,
   GraphPinsSpec,
   GraphSubPinSpec,
-  GraphUnitPinOuterSpec,
   GraphUnitSpec,
   GraphUnitsSpec,
 } from '..'
@@ -20,7 +19,7 @@ import { Dict } from '../Dict'
 import { GraphSpec } from '../GraphSpec'
 import { GraphState } from '../GraphState'
 import { IO } from '../IO'
-import { IOOf, _IOOf } from '../IOOf'
+import { IOOf } from '../IOOf'
 import { UnitBundleSpec } from '../UnitBundleSpec'
 
 export type GraphSelection = {
@@ -195,7 +194,8 @@ export interface G<I = any, O = any, U_ = any> {
   explodeUnit(
     unitId: string,
     mapUnitId: Dict<string>,
-    mapMergeId: Dict<string>
+    mapMergeId: Dict<string>,
+    mapPlugId: IOOf<Dict<Dict<string>>>
   ): void
   hasUnit(unitId: string): boolean
   hasMerge(mergeId: string): boolean
@@ -222,6 +222,9 @@ export interface G<I = any, O = any, U_ = any> {
     pinId: string,
     ...extra: any[]
   ): void
+  startTransaction(): void
+  endTransaction(): void
+  fork(): void
 }
 
 export type G_J = {}
@@ -264,7 +267,7 @@ export type G_EE = {
   move_subgraph_into: [...G_MoveSubgraphIntoArgs, string[]]
   move_subgraph_out_of: [...G_MoveSubgraphIntoArgs, string[]]
   explode_unit: [string, Dict<string>, Dict<string>, string[]]
-  set_unit_pin_constant: [string, IO, string, boolean, string[]]
+  set_unit_pin_constant: [string, IO, string, boolean, any, string[]]
   set_unit_pin_ignored: [string, IO, string, boolean, string[]]
   set_unit_pin_data: [string, IO, string, any, string[]]
   set_unit_pin_functional: [string, IO, string, boolean, string[]]

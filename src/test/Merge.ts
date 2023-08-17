@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 import Merge from '../Class/Merge'
-import { watchUnitAndLog } from '../debug'
 import { Pin } from '../Pin'
+import { watchUnitAndLog } from '../debug'
 import { system } from './util/system'
 
 const merge0 = new Merge(system)

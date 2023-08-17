@@ -1,7 +1,7 @@
 {
   "name": "tag filter",
   "units": {
-    "hewiyie": {
+    "tag": {
       "id": "5480c89e-31ef-4fdb-b232-60f25b3e36f3",
       "input": {
         "k": {
@@ -16,28 +16,24 @@
     "icon": "tag",
     "description": "{filter: `filter`}",
     "complexity": 7,
-    "tags": [
-      "platform",
-      "core",
-      "style"
-    ]
+    "tags": ["platform", "core", "style"]
   },
   "inputs": {
     "filter": {
       "plug": {
         "0": {
-          "unitId": "hewiyie",
+          "unitId": "tag",
           "pinId": "v"
         }
       },
-      "type": "string"
+      "type": "any"
     }
   },
   "outputs": {
     "{filter}": {
       "plug": {
         "0": {
-          "unitId": "hewiyie",
+          "unitId": "tag",
           "pinId": "kv"
         }
       },

@@ -1,6 +1,6 @@
 import classnames from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
-import { getSpec, isComponent } from '../../../../../client/spec'
+import { getSpec, isComponentId } from '../../../../../client/spec'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IO } from '../../../../../types/IO'
@@ -84,7 +84,7 @@ export default class Minimal extends Element<SVGElement, Props> {
 
     const { inputs = {}, outputs = {} } = spec
 
-    const is_component = isComponent(specs, id)
+    const is_component = isComponentId(specs, id)
 
     const cX = width / 2
     const cY = height / 2 - 0.5

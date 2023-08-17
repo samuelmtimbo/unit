@@ -1,13 +1,5 @@
-import {
-  centerOfMass,
-  Circle,
-  DEG,
-  Line,
-  Point,
-  pointDistance,
-  Rect,
-  vectorAngle,
-} from './util/geometry'
+import { centerOfMass, DEG, pointDistance, vectorAngle } from './util/geometry'
+import { Circle, Line, Point, Rect } from './util/geometry/types'
 
 export function linearSample<T>(points: T[], n: number): any[] {
   let s: T[] = []

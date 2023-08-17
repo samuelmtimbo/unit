@@ -29,7 +29,7 @@ export type U_EE = {
 export interface U<I = any, O = any> {
   setParent(parent: Unit<any, any> | null)
   setInputs(inputs: Pins<I>, opts: PinOpts): void
-  setPin(name: string, type: IO, pin: Pin<any>, opt: PinOpt)
+  setPin(type: IO, name: string, pin: Pin<any>, opt: PinOpt)
   setPinIgnored(type: IO, name: string, ignored: boolean): void
   setInputIgnored(name: string, ignore?: boolean): boolean
   setOutputIgnored(name: string, ignore?: boolean): boolean

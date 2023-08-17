@@ -20,7 +20,7 @@ import { MethodNotImplementedError } from '../../exception/MethodNotImplementedE
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
 import { C_EE } from '../../types/interface/C'
-import { ComponentEvents, Component_ } from '../../types/interface/Component'
+import { Component_, ComponentEvents } from '../../types/interface/Component'
 import { E } from '../../types/interface/E'
 import { UnitBundle } from '../../types/UnitBundle'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
@@ -28,7 +28,7 @@ import { forEach } from '../../util/array'
 import { Stateful, StatefulEvents } from '../Stateful'
 import { ION, Opt } from '../Unit'
 
-export type Element_EE = C_EE & { call: [{ method: string; data: any[] }] }
+export type Element_EE = C_EE
 
 export type ElementEE<_EE extends Dict<any[]>> = StatefulEvents<
   _EE & Element_EE

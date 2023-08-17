@@ -1,5 +1,4 @@
-import { getTree, TreeNode, _isTypeMatch } from '../spec/parser'
-import { System } from '../system'
+import { TreeNode, _isTypeMatch } from '../spec/parser'
 import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'

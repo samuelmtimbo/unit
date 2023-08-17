@@ -1,7 +1,7 @@
 import { ComponentClass, System } from '../system'
 import { Specs } from '../types'
-import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
+import { GraphSpec } from '../types/GraphSpec'
 import { Component } from './component'
 import { componentClassFromSpecId } from './componentClassFromSpecId'
 import parentElement from './platform/web/parentElement'

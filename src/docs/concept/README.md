@@ -8,7 +8,7 @@ unit is based on a fundamental Law of Computing:
 
 This forms the base of Flow-based Programming.
 
-unit is also heavily inspired by Functional and Reactive Programming, a highly sophisticated and wildly powerful Software Paradigm that can materialize very useful virtual tooling incredibly fast. unit is the product of infinitely recursing on this very own concept, with a focus in Development Experience.
+unit is also heavily inspired by Functional and Reactive Programming, a highly sophisticated and wildly powerful Software Paradigm that can materialize very useful virtual tooling incredibly fast. unit is the product of infinitely recursing on this very own concept, with a focus on Development Experience.
 
 The unit paradigm was specially designed to enable easy visual creation of programs called units, which can be interacted with through their inputs and outputs. A new unit can be built by piping and collapsing together smaller units, in a process called Composition. unit's fundamentals are not new by themselves - in fact, unit represents a purposeful re-exploration of Computer Science principles in the context of modern Software Development.
 

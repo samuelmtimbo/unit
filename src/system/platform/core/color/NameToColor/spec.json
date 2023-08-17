@@ -1,7 +1,7 @@
 {
   "name": "name to color",
   "units": {
-    "prop": {
+    "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "obj": {
@@ -26,7 +26,7 @@
     "name": {
       "plug": {
         "0": {
-          "unitId": "prop",
+          "unitId": "get",
           "pinId": "key"
         }
       },
@@ -37,7 +37,7 @@
     "color": {
       "plug": {
         "0": {
-          "unitId": "prop",
+          "unitId": "get",
           "pinId": "value"
         }
       },

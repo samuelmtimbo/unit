@@ -1,4 +1,10 @@
+// organize-imports-ignore
 import { $ } from '../$'
+import { Pin } from '../../Pin'
+import { PinOpt } from '../../PinOpt'
+import { Pins } from '../../Pins'
+
+import { State } from '../../State'
 import { bundleSpec, unitBundleSpec } from '../../bundle'
 import { emptySpec } from '../../client/spec'
 import {
@@ -22,11 +28,10 @@ import {
 } from '../../component/method'
 import { GRAPH_DEFAULT_EVENTS } from '../../constant/GRAPH_DEFAULT_EVENTS'
 import { SELF } from '../../constant/SELF'
+import { InvalidStateError } from '../../exception/InvalidStateError'
 import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
+import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
 import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
-import { Pin } from '../../Pin'
-import { PinOpt } from '../../PinOpt'
-import { Pins } from '../../Pins'
 import { Primitive } from '../../Primitive'
 import {
   makeAddMergeAction,
@@ -40,22 +45,22 @@ import {
   processAction,
 } from '../../spec/actions/G'
 import { cloneUnit } from '../../spec/cloneUnit'
-import { emptyIO, emptyObjIO } from '../../spec/emptyIO'
+import { emptyIO } from '../../spec/emptyIO'
 import { fromId } from '../../spec/fromId'
 import {
+  coverPin,
+  coverPinSet,
+  plugPin,
+  renameUnitPin,
+  setComponentSize,
   setPinSetFunctional,
+  setSubComponentSize,
   setUnitPinData,
   setUnitSize,
-  setComponentSize,
-  setSubComponentSize,
-  plugPin,
-  addPinToMerge,
-  coverPin,
   unplugPin,
-  coverPinSet,
-  renameUnitPin,
 } from '../../spec/reducers/spec_'
 import { stringify } from '../../spec/stringify'
+import { stringifyMemorySpecData } from '../../spec/stringifySpec'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
 import {
   forEachGraphSpecPinOfType,
@@ -68,6 +73,7 @@ import {
   getOutputNodeId,
   getPinNodeId,
   getPlugSpecs,
+  getSubComponentParentId,
   getUnitMergesSpec,
   getUnitPlugs,
   hasMerge,
@@ -75,7 +81,6 @@ import {
   makeFullSpecCollapseMap,
   opposite,
 } from '../../spec/util'
-import { State } from '../../State'
 import { System } from '../../system'
 import pathGet from '../../system/core/object/DeepGet/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
@@ -100,23 +105,25 @@ import {
   Spec,
   Specs,
 } from '../../types'
-import { GraphSpec } from '../../types/GraphSpec'
 import { BundleSpec } from '../../types/BundleSpec'
 import { Dict } from '../../types/Dict'
+import { GraphSpec } from '../../types/GraphSpec'
 import { GraphState } from '../../types/GraphState'
+import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
+import { IO } from '../../types/IO'
+import { IOOf, forIO, forIOObjKV } from '../../types/IOOf'
+import { UnitBundle } from '../../types/UnitBundle'
+import { UnitBundleSpec } from '../../types/UnitBundleSpec'
+import { Unlisten } from '../../types/Unlisten'
 import { C, C_EE } from '../../types/interface/C'
 import { ComponentEvents, Component_ } from '../../types/interface/Component'
 import { G, G_EE, G_MoveSubgraphIntoArgs } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
-import { IO } from '../../types/IO'
-import { forIO, forIOObjKV, IOOf, _IOOf } from '../../types/IOOf'
-import { UnitBundle } from '../../types/UnitBundle'
-import { UnitBundleSpec } from '../../types/UnitBundleSpec'
-import { Unlisten } from '../../types/Unlisten'
 import { weakMerge } from '../../types/weakMerge'
 import { forEach, insert, remove } from '../../util/array'
 import { callAll } from '../../util/call/callAll'
 import {
+  _keyCount,
   clone,
   filterObj,
   forEachObjKV,
@@ -126,16 +133,14 @@ import {
   omit,
   pathDelete,
   pathOrDefault,
-  pathSet as pathSet,
-  reduceObj,
+  pathSet,
   someObj,
-  _keyCount,
 } from '../../util/object'
 import { Element_ } from '../Element'
 import Merge from '../Merge'
 import { Stateful_EE } from '../Stateful'
 import { Unit, UnitEvents } from '../Unit'
-import { UnitRemovePinDataData } from '../Unit/interface'
+import { UnitRemovePinDataData, UnitTakeInputData } from '../Unit/interface'
 import { WaitAll } from '../WaitAll'
 import {
   GraphAddMergeData,
@@ -174,11 +179,8 @@ import {
   GraphUnplugPinData,
 } from './interface'
 import { moveSubgraph } from './moveSubgraph'
-import { GraphUnitPlugs } from '../../system/platform/component/app/Editor/Component'
-import { InvalidStateError } from '../../exception/InvalidStateError'
-import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
-import { stringifyDataObj } from '../../types/stringifyPinData'
-import { stringifyMemorySpecData } from '../../spec/stringifySpec'
+import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
+import { GraphUnitMerges } from '../../types/GraphUnitMerges'
 
 export type Graph_EE = G_EE & C_EE & Stateful_EE
 
@@ -235,7 +237,7 @@ export class Graph<I = any, O = any>
 
   private _children: Component_[] = []
 
-  private _waitAll: WaitAll
+  private _waitAll: IOOf<WaitAll> = {}
 
   private _specs: Specs
 
@@ -256,6 +258,10 @@ export class Graph<I = any, O = any>
     )
 
     this._spec = spec
+
+    if (!this._spec.id) {
+      system.newSpec(this._spec)
+    }
 
     const specs = { ...(spec.specs ?? {}), [id]: spec }
 
@@ -290,19 +296,34 @@ export class Graph<I = any, O = any>
     const fInputs = filterObj(inputs, ({ functional }) => !!functional)
     const fInputNames = keys(fInputs)
 
-    const waitAll = new WaitAll<any>(this.__system)
+    const fOutputs = filterObj(outputs, ({ functional }) => !!functional)
+    const fOutputNames = keys(fOutputs)
 
-    this._waitAll = waitAll
+    this._waitAll = {
+      input: new WaitAll<any>(this.__system),
+      output: new WaitAll<any>(this.__system),
+    }
 
     forEach(fInputNames, (name) => {
-      this._plugToWaitAll(name)
+      this._plugToWaitAll('input', name)
+    })
+    forEach(fOutputNames, (name) => {
+      this._plugToWaitAll('output', name)
     })
   }
 
-  private _onPinSetRenamed = (type: IO, name: string, newName: string) => {
-    // console.log('Graph', '_onPinSetRenamed', type, name, newName)
+  private _onPinSetRenamed = (
+    type: IO,
+    name: string,
+    newName: string,
+    opt: PinOpt,
+    newOpt: PinOpt
+  ) => {
+    // console.log('Graph', '_onPinSetRenamed', type, name, newName, opt, newOpt)
 
     const oppositeType = opposite(type)
+
+    const { functional } = opt
 
     const exposedPinId = getExposedPinId(name, type)
     const newExposedPinId = getExposedPinId(newName, type)
@@ -312,10 +333,14 @@ export class Graph<I = any, O = any>
 
     exposedMerge.renamePin(type, name, newName)
 
+    if (functional) {
+      this._unplugFromWaitAll(type, name)
+    }
+
     delete this._exposedPin[exposedPinId]
     delete this._exposedMerge[exposedPinId]
 
-    this._exposedPin[exposedPinId] = exposedPin
+    this._exposedPin[newExposedPinId] = exposedPin
     this._exposedMerge[newExposedPinId] = exposedMerge
 
     const emptySubPins = pathGet(this._exposedEmptySubPin, [type, name])
@@ -327,22 +352,47 @@ export class Graph<I = any, O = any>
 
       pathSet(emptySubPins, [type, newName, subPinId], emptySubPin)
     }
+
+    const pinSpec = this.getExposedPinSpec(type, newName)
+
+    const { plug = {} } = pinSpec
+
+    for (const subPinId in plug) {
+      const subPin = plug[subPinId]
+
+      if (subPin.unitId && subPin.pinId) {
+        pathSet(this._pinToPlug, [subPin.unitId, type, subPin.pinId], {
+          pinId: newName,
+          subPinId,
+        })
+      }
+    }
   }
 
-  public onInputRenamed(name: string, newName: string): void {
-    // console.log('Graph', 'onInputRenamed', name, newName)
+  public onInputRenamed(
+    name: string,
+    newName: string,
+    opt: PinOpt,
+    newOpt: PinOpt
+  ): void {
+    // console.log('Graph', 'onInputRenamed', name, newName, opt, newOpt)
 
-    super.onInputRenamed(name, newName)
+    super.onInputRenamed(name, newName, opt, newOpt)
 
-    this._onPinSetRenamed('input', name, newName)
+    this._onPinSetRenamed('input', name, newName, opt, newOpt)
   }
 
-  public onOutputRenamed(name: string, newName: string) {
-    // console.log('Graph', 'onOutputRenamed', name, newName)
+  public onOutputRenamed(
+    name: string,
+    newName: string,
+    opt: PinOpt,
+    newOpt: PinOpt
+  ) {
+    // console.log('Graph', 'onOutputRenamed', name, newName, opt, newOpt)
 
-    super.onOutputRenamed(name, newName)
+    super.onOutputRenamed(name, newName, opt, newOpt)
 
-    this._onPinSetRenamed('output', name, newName)
+    this._onPinSetRenamed('output', name, newName, opt, newOpt)
   }
 
   isUnitPinRef(unitId: string, type: IO, pinId: string): boolean {
@@ -395,24 +445,32 @@ export class Graph<I = any, O = any>
     mergePin.take()
   }
 
-  private _plugToWaitAll = (inputName: string): void => {
-    const inputPin = new Pin()
+  private _plugToWaitAll = (type: IO, name: string): void => {
+    const oppositeType = opposite(type)
 
-    const outputPin = this.getExposedInputPin(inputName)
+    const pin = new Pin()
 
-    this._waitAll.addInput(inputName, inputPin)
-    this._waitAll.setOutput(inputName, outputPin)
+    const oppositePin = this.getExposedInputPin(name)
 
-    this.setInput(inputName, inputPin, {})
+    const waitAll = this._waitAll[type]
+
+    waitAll.addPin(type, name, pin, {})
+    waitAll.setPin(oppositeType, name, oppositePin)
+
+    this.setPin(type, name, pin, {})
   }
 
-  private _unplugFromWaitAll = (inputName: string): void => {
-    const inputPin = this.getExposedInputPin(inputName)
+  private _unplugFromWaitAll = (type: IO, name: string): void => {
+    const oppositeType = opposite(type)
 
-    this._waitAll.removeInput(inputName)
-    this._waitAll.removeOutput(inputName)
+    const pin = this.getExposedInputPin(name)
 
-    this.setInput(inputName, inputPin, {})
+    const waitAll = this._waitAll[type]
+
+    waitAll.removePin(type, name)
+    waitAll.removePin(oppositeType, name)
+
+    this.setPin(type, name, pin, {})
   }
 
   private _getExposedSubPinNodeId = (
@@ -555,13 +613,13 @@ export class Graph<I = any, O = any>
 
   private _plugPinToMerge = (
     type: IO,
-    name: string,
+    pinId: string,
     subPinId: string,
     mergeId: string,
     opt: PinOpt,
     propagate: boolean = true
   ): void => {
-    // console.log('Graph', '_plugPinToMerge', type, name, subPinId, mergeId, opt)
+    // console.log('Graph', '_plugPinToMerge', type, pinId, subPinId, mergeId, opt)
 
     const mergePinNodeId = getMergePinNodeId(mergeId, type)
 
@@ -569,12 +627,12 @@ export class Graph<I = any, O = any>
 
     const subPin = this._pin[mergePinNodeId]
 
-    this._setExposedSubPin(type, name, subPinId, subPin, opt, propagate)
+    this._setExposedSubPin(type, pinId, subPinId, subPin, opt, propagate)
   }
 
   private _simPlugPinToMerge = (
     type: IO,
-    name: string,
+    pinId: string,
     subPinId: string,
     mergeId: string,
     propagate: boolean = true
@@ -585,7 +643,7 @@ export class Graph<I = any, O = any>
 
     const subPin = this._pin[mergePinNodeId]
 
-    this._simSetExposedSubPin(type, name, subPinId, subPin, propagate)
+    this._simSetExposedSubPin(type, pinId, subPinId, subPin, propagate)
   }
 
   private _simUnplugPinFromMerge = (
@@ -634,6 +692,15 @@ export class Graph<I = any, O = any>
     this._memSetExposedSubPin(type, name, subPinId, subPin)
   }
 
+  private _memPlugPinToMerge = (
+    type: IO,
+    name: string,
+    subPinId: string,
+    mergeId: string
+  ): void => {
+    //
+  }
+
   private _simPlugPinToUnitPin = (
     type: IO,
     name: string,
@@ -672,7 +739,7 @@ export class Graph<I = any, O = any>
 
     const exposedMerge = this._exposedMerge[exposedPinId]
 
-    exposedMerge.setPin(subPinId, oppositeType, subPin, opt, propagate)
+    exposedMerge.setPin(oppositeType, subPinId, subPin, opt, propagate)
   }
 
   private _memSetExposedSubPin(
@@ -706,7 +773,7 @@ export class Graph<I = any, O = any>
 
     const exposedMerge = this._exposedMerge[exposedPinId]
 
-    exposedMerge.setPin(subPinId, oppositeType, subPin, {}, propagate)
+    exposedMerge.setPin(oppositeType, subPinId, subPin, {}, propagate)
   }
 
   private _simRemoveExposedSubPin(type: IO, name: string, subPinId: string) {
@@ -892,7 +959,7 @@ export class Graph<I = any, O = any>
       state.exposedMerge[pinId] = merge_state
     }
 
-    state.waitAll = this._waitAll.snapshot()
+    state.waitAll = this._waitAll['input'].snapshot()
 
     return state
   }
@@ -937,7 +1004,7 @@ export class Graph<I = any, O = any>
     const wait_all_state = state.waitAll
 
     if (wait_all_state) {
-      this._waitAll.restore(wait_all_state)
+      this._waitAll['input'].restore(wait_all_state)
     }
   }
 
@@ -1193,13 +1260,13 @@ export class Graph<I = any, O = any>
   ) {
     const { plug, ref } = pinSpec
 
-    exposedMerge.setPin(pinId, type, exposedPin)
+    exposedMerge.setPin(type, pinId, exposedPin)
 
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
       this._simExposePin(type, pinId, subPinId, subPinSpec, propagate)
     })
 
-    this.setPin(pinId, type, exposedPin, { ref }, propagate)
+    this.setPin(type, pinId, exposedPin, { ref }, propagate)
   }
 
   public isPinSetFunctional = (type: IO, pinId: string): boolean => {
@@ -1216,15 +1283,7 @@ export class Graph<I = any, O = any>
       throw new Error('cannot set output pin set functional')
     }
 
-    const isPinFunctional = this.isPinSetFunctional(type, pinId)
-
     this._setPinSetFunctional(type, pinId, functional)
-
-    if (!isPinFunctional && functional) {
-      this._plugToWaitAll(pinId)
-    } else if (isPinFunctional && !functional) {
-      this._unplugFromWaitAll(pinId)
-    }
 
     emit && this.emit('set_pin_set_functional', type, pinId, functional, [])
   }
@@ -1235,6 +1294,8 @@ export class Graph<I = any, O = any>
     functional: boolean
   ): void {
     this._specSetPinSetFunctional(type, name, functional)
+    this._memSetPinSetFunctional(type, name, functional)
+    this._simSetPinSetFunctional(type, name, functional)
   }
 
   private _specSetPinSetFunctional(
@@ -1250,6 +1311,28 @@ export class Graph<I = any, O = any>
       },
       this._spec
     )
+  }
+
+  private _memSetPinSetFunctional(
+    type: IO,
+    pinId: string,
+    functional: boolean
+  ): void {
+    pathSet(this._i_opt, [type, pinId, 'functional'], functional)
+  }
+
+  private _simSetPinSetFunctional(
+    type: IO,
+    pinId: string,
+    functional: boolean
+  ): void {
+    const isPinFunctional = this.isPinSetFunctional(type, pinId)
+
+    if (!isPinFunctional && functional) {
+      this._plugToWaitAll(type, pinId)
+    } else if (isPinFunctional && !functional) {
+      this._unplugFromWaitAll(type, pinId)
+    }
   }
 
   public setPinSetId(type: IO, pinId: string, nextPinId: string): void {
@@ -1372,14 +1455,14 @@ export class Graph<I = any, O = any>
     }
   }
 
-  public _coverPinSet = (type: IO, id: string): void => {
-    // console.log('Graph', '_coverPinSet', type, id)
+  public _coverPinSet = (type: IO, pinId: string): void => {
+    // console.log('Graph', '_coverPinSet', type, pinId)
 
     this._fork()
 
-    this._simCoverPinSet(type, id)
-    this._memCoverPinSet(type, id)
-    this._specCoverPinSet(type, id)
+    this._simCoverPinSet(type, pinId)
+    this._memCoverPinSet(type, pinId)
+    this._specCoverPinSet(type, pinId)
   }
 
   private _memCoverPinSet = (type: IO, pinId: string): void => {
@@ -1443,6 +1526,8 @@ export class Graph<I = any, O = any>
       if (this.isUnitRefPin(_unitId, type, _pinId) || _pinId === SELF) {
         ref = true
       }
+
+      this._memPlugPinToUnitPin(type, pinId, subPinId, _unitId, _pinId)
     } else if (mergeId) {
       const merge = this.getMergeSpec(mergeId)
 
@@ -1456,6 +1541,8 @@ export class Graph<I = any, O = any>
       if (this._mergeToSelfUnit[mergeId]) {
         ref = true
       }
+
+      this._memPlugPinToMerge(type, pinId, subPinId, mergeId)
     } else {
       this._memPlugEmptyPin(type, pinId, subPinId)
     }
@@ -1463,8 +1550,6 @@ export class Graph<I = any, O = any>
     if (ref !== undefined) {
       this.setPinRef(type, pinId, ref)
     }
-
-    pathSet(this._spec, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
   }
 
   private _specPlugPin = (
@@ -1706,10 +1791,10 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     subPinId: string,
-    emit?: false,
+    emit: boolean = true,
     propagate: boolean = true
   ): void => {
-    // console.log('Graph', 'unplugPin', pinId, subPinId)
+    // console.log('Graph', 'unplugPin', type, pinId, subPinId)
 
     const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
@@ -1724,15 +1809,15 @@ export class Graph<I = any, O = any>
     subPinId: string,
     propagate: boolean = true
   ): void => {
-    // console.log('Graph', 'unplugPin', pinId, subPinId)
+    // console.log('Graph', '_unplugPin', type, pinId, subPinId)
 
     this._fork()
 
     const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
-    this._specUnplugPin(type, pinId, subPinId)
     this._simUnplugPin(type, pinId, subPinId, propagate)
     this._memUnplugPin(type, pinId, subPinId)
+    this._specUnplugPin(type, pinId, subPinId)
 
     const { mergeId } = subPinSpec
 
@@ -1845,8 +1930,14 @@ export class Graph<I = any, O = any>
 
       this._simUnplugPinFromUnitPin(type, pinId, subPinId, _unitId, _pinId)
 
-      if (isUnitPinRef) {
-        unit.takePin(type, _pinId)
+      if (propagate) {
+        if (isUnitPinRef) {
+          if (isOutput) {
+            pin.take()
+          } else {
+            unit.takePin(type, _pinId)
+          }
+        }
       }
     }
 
@@ -2018,7 +2109,7 @@ export class Graph<I = any, O = any>
     unitId: string,
     nextUnitId: string,
     nextUnitBundle: UnitBundleSpec,
-    nextUnitPinMap: _IOOf<Dict<string>>,
+    nextUnitPinMap: IOOf<Dict<string>>,
     emit: boolean = true
   ): void {
     // console.log(
@@ -2096,7 +2187,7 @@ export class Graph<I = any, O = any>
     unitId: string,
     nextUnitId: string,
     nextUnitBundle: UnitBundleSpec,
-    nextUnitPinMap: _IOOf<Dict<string>>
+    nextUnitPinMap: IOOf<Dict<string>>
   ) {
     const { unit, specs } = nextUnitBundle
 
@@ -2544,11 +2635,7 @@ export class Graph<I = any, O = any>
 
   private _fork(specId?: string) {
     if (this._spec.system || (this.__system.specsCount[this.id] ?? 0) > 1) {
-
       const [id, spec] = this.__system.forkSpec(this._spec, specId)
-
-      this.__system.unregisterUnit(this.id)
-      this.__system.registerUnit(id)
 
       this.id = id
       this._spec = spec
@@ -2721,23 +2808,7 @@ export class Graph<I = any, O = any>
   }
 
   private _getSubComponentParentId = (unitId: string): string | null => {
-    const componentSpec = this._spec.component
-
-    const { subComponents } = componentSpec
-
-    for (const subComponentId in subComponents) {
-      const sub_component = subComponents[subComponentId]
-
-      const { children = [] } = sub_component
-
-      for (const childId of children) {
-        if (childId === unitId) {
-          return subComponentId
-        }
-      }
-    }
-
-    return null
+    return getSubComponentParentId(this._spec, unitId)
   }
 
   private _getSubComponentSlotName = (unitId: string): string | null => {
@@ -3118,7 +3189,9 @@ export class Graph<I = any, O = any>
       all_unlisten.push(
         unit.addListener('fork', (forkId: string, path: string[]) => {
           if (path.length === 0) {
-            pathSet(this._spec, ['units', unitId, 'id'], forkId)
+            this._fork()
+
+            // pathSet(this._spec, ['units', unitId, 'id'], forkId)
           }
         })
       )
@@ -3146,22 +3219,6 @@ export class Graph<I = any, O = any>
         all_unlisten.push(
           unit.addListener('not_element', () => {
             this._on_unit_not_element(unitId)
-          })
-        )
-
-        all_unlisten.push(
-          unit.addListener('append_child', (bundle, path) => {
-            this.emit('append_child', bundle, [unitId, ...path])
-          })
-        )
-        all_unlisten.push(
-          unit.addListener('insert_child', (bundle, at, path) => {
-            this.emit('insert_child', bundle, at, [unitId, ...path])
-          })
-        )
-        all_unlisten.push(
-          unit.addListener('remove_child', (at, path) => {
-            this.emit('remove_child', at, [unitId, ...path])
           })
         )
       }
@@ -3411,8 +3468,10 @@ export class Graph<I = any, O = any>
 
     this._simUnplugUnit(unitId, take)
 
-    if (exposedOutputId) {
-      this.takeOutput(exposedOutputId)
+    if (take) {
+      if (exposedOutputId) {
+        this.takeOutput(exposedOutputId)
+      }
     }
 
     if (
@@ -3445,7 +3504,7 @@ export class Graph<I = any, O = any>
     const _merges = clone(merges)
 
     forEachPinOnMerges(clone(merges), (mergeId, mergeUnitId, type, pinId) => {
-      const merge = clone(_merges[mergeId])
+      const merge = clone(this.getMergeSpec(mergeId))
 
       if (mergeUnitId === unitId) {
         if (merge) {
@@ -3493,13 +3552,32 @@ export class Graph<I = any, O = any>
 
     this._forEachSpecPinPlug((type, pinId, subPinId, subPinSpec) => {
       if (subPinSpec.unitId === unitId) {
-        this.__simUnplugPin(type, pinId, subPinId)
+        this._simUnplugPin(type, pinId, subPinId, take)
       }
     })
   }
 
   public addMerges = (merges: GraphMergesSpec): void => {
     forEachValueKey(merges, this.addMerge)
+  }
+
+  private _addUnitMerges = (
+    merges: GraphUnitMerges,
+    propagate: boolean = true
+  ): void => {
+    forEachValueKey(merges, (merge, mergeId) => {
+      if (this.hasMerge(mergeId)) {
+        forEachPinOnMerge(merge, (mergeUnitId, type, pinId) => {
+          if (this.hasMergePin(mergeId, mergeUnitId, type, pinId)) {
+            //
+          } else {
+            this._addPinToMerge(mergeId, mergeUnitId, type, pinId, propagate)
+          }
+        })
+      } else {
+        this._addMerge(merge, mergeId, undefined, propagate)
+      }
+    })
   }
 
   private _addMerges = (
@@ -3544,6 +3622,12 @@ export class Graph<I = any, O = any>
   private _memUnplugUnit(unitId: string) {
     const unitToMerge = clone(this._unitToMerge[unitId] || new Set<string>())
     const unitToMergeCount = clone(this._unitToMergeCount[unitId] || {})
+
+    const unitToPlug = clone(this._pinToPlug[unitId] ?? {})
+
+    forIOObjKV(unitToPlug, (type, unitPinId, { pinId, subPinId }) => {
+      this._memUnplugPin(type, pinId, subPinId)
+    })
 
     for (const mergeId of unitToMerge) {
       const unitMergeCount = unitToMergeCount[mergeId]
@@ -3686,7 +3770,7 @@ export class Graph<I = any, O = any>
     pinId: string,
     propagate: boolean = true
   ): void {
-    // console.log('Graph', '_simAddPinToMerge', mergeId, unitId, type, pinId
+    // console.log('Graph', '_simAddPinToMerge', mergeId, unitId, type, pinId)
 
     const pinNodeId = getPinNodeId(unitId, type, pinId)
 
@@ -3874,9 +3958,9 @@ export class Graph<I = any, O = any>
     return isRefPin
   }
 
-  public isUnitRefInput(unitId: string, name: string): boolean {
+  public isUnitRefInput(unitId: string, pinId: string): boolean {
     const unit = this.getUnit(unitId)
-    const isRefPin = unit.hasRefInputNamed(name)
+    const isRefPin = unit.hasRefInputNamed(pinId)
     return isRefPin
   }
 
@@ -3913,7 +3997,11 @@ export class Graph<I = any, O = any>
     this._validateMergeId(mergeId)
     this._validateUnitId(unitId)
 
-    const plug = pathOrDefault(this._pinToPlug, [unitId, type, pinId], undefined)
+    const plug = pathOrDefault(
+      this._pinToPlug,
+      [unitId, type, pinId],
+      undefined
+    )
 
     if (plug) {
       this._unplugPin(type, plug.pinId, plug.subPinId, propagate)
@@ -3921,7 +4009,7 @@ export class Graph<I = any, O = any>
 
     this._specAddPinToMerge(mergeId, unitId, type, pinId)
     this._memAddPinToMerge(mergeId, unitId, type, pinId)
-    this._simAddPinToMerge(mergeId, unitId, type, pinId)
+    this._simAddPinToMerge(mergeId, unitId, type, pinId, propagate)
 
     if (plug) {
       this._plugPin(type, plug.pinId, plug.subPinId, { mergeId }, propagate)
@@ -3986,7 +4074,7 @@ export class Graph<I = any, O = any>
         subPinSpec: GraphSubPinSpec
       ) => {
         if (subPinSpec.mergeId === mergeId) {
-          this.__simUnplugPin(type, pinId, subPinId)
+          this._simUnplugPin(type, pinId, subPinId)
         }
       }
     )
@@ -4001,7 +4089,7 @@ export class Graph<I = any, O = any>
         subPinSpec: GraphSubPinSpec
       ) => {
         if (subPinSpec.mergeId === mergeId) {
-          this.__simUnplugPin(type, pinId, subPinId)
+          this._simUnplugPin(type, pinId, subPinId)
         }
       }
     )
@@ -4263,8 +4351,18 @@ export class Graph<I = any, O = any>
   ) {
     this._setUnitPinConstant(unitId, type, pinId, constant)
 
+    const data = this.getUnitPinData(unitId, type, pinId)
+
     emit &&
-      this.emit('set_unit_pin_constant', unitId, type, pinId, constant, [])
+      this.emit(
+        'set_unit_pin_constant',
+        unitId,
+        type,
+        pinId,
+        constant,
+        data,
+        []
+      )
   }
 
   private _setUnitPinConstant(
@@ -4386,7 +4484,8 @@ export class Graph<I = any, O = any>
   public _setUnitName(unitId: string, newUnitId: string, name: string): void {
     const spec = this._getUnitSpec(unitId) as GraphSpec
 
-    const unitMerges = this.getUnitMergesSpec(unitId)
+    const unitMerges = clone(this.getUnitMergesSpec(unitId))
+    const unitPlugs = clone(this.getUnitPlugsSpec(unitId))
 
     const renameUnitInMerges = (
       unitMerges: GraphMergesSpec
@@ -4405,7 +4504,7 @@ export class Graph<I = any, O = any>
       return newUnitMerges
     }
 
-    const newUnitMerges = renameUnitInMerges(clone(unitMerges))
+    const newUnitMerges = renameUnitInMerges(unitMerges)
 
     const unit = this._removeUnit(unitId)
 
@@ -4418,7 +4517,30 @@ export class Graph<I = any, O = any>
     this._specs[spec.id] = spec
 
     this._addUnit(newUnitId, unit)
-    this._addMerges(newUnitMerges, false)
+    this._addUnitMerges(newUnitMerges, false)
+    this._addUnitPlugs(newUnitId, unitPlugs, false)
+  }
+
+  private _addUnitPlugs(
+    unitId: string,
+    plugs: GraphUnitPlugs,
+    propagate: boolean = true
+  ) {
+    forIOObjKV(
+      plugs,
+      (type: IO, pinId: string, plugSpec: GraphPlugOuterSpec) => {
+        this._plugPin(
+          type,
+          plugSpec.pinId,
+          plugSpec.subPinId,
+          {
+            unitId,
+            pinId,
+          },
+          propagate
+        )
+      }
+    )
   }
 
   public setPlugData(
@@ -4562,7 +4684,8 @@ export class Graph<I = any, O = any>
   public moveSubComponentRoot(
     subComponentId: string | null,
     children: string[],
-    slotMap: Dict<string>
+    slotMap: Dict<string>,
+    emit: boolean = true
   ): void {
     const prevParentMap = this.getSubComponentsParentMap(children)
     const prevSlotMap = this.getSubComponentsParentMap(children)
@@ -4573,15 +4696,16 @@ export class Graph<I = any, O = any>
       this._moveSubComponentRoot(subComponentId, childId, slotName)
     }
 
-    this.emit(
-      'move_sub_component_root',
-      subComponentId,
-      prevParentMap,
-      children,
-      slotMap,
-      prevSlotMap,
-      []
-    )
+    emit &&
+      this.emit(
+        'move_sub_component_root',
+        subComponentId,
+        prevParentMap,
+        children,
+        slotMap,
+        prevSlotMap,
+        []
+      )
   }
 
   private _appendRoot(subComponentId: string): void {
@@ -4717,14 +4841,14 @@ export class Graph<I = any, O = any>
     },
     nextIdMap: {
       merge: Dict<string>
-      link: Dict<_IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
+      link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
       unit: Dict<string>
     },
-    nextPinIdMap: Dict<_IOOf<Dict<{ pinId: string; subPinId: string }>>>,
+    nextPinIdMap: Dict<IOOf<Dict<{ pinId: string; subPinId: string }>>>,
     nextMergePinId: Dict<
-      _IOOf<{ mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }>
+      IOOf<{ mergeId: string; pinId: string; subPinSpec: GraphSubPinSpec }>
     >,
-    nextPlugSpec: _IOOf<Dict<Dict<GraphSubPinSpec>>>,
+    nextPlugSpec: IOOf<Dict<Dict<GraphSubPinSpec>>>,
     nextSubComponentParentMap: Dict<string | null>,
     nextSubComponentChildrenMap: Dict<string[]>,
     unitSpecs: GraphUnitsSpec,
@@ -5273,7 +5397,7 @@ export class Graph<I = any, O = any>
     nextIdMap: {
       merge: Dict<string>
       link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-      plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
+      plug: IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
       unit: Dict<string>
     }
   ): void => {
@@ -5330,7 +5454,7 @@ export class Graph<I = any, O = any>
     nextIdMap: {
       merge: Dict<string>
       link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-      plug: _IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
+      plug: IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
       unit: Dict<string>
     },
     plugs
@@ -6469,11 +6593,11 @@ export class Graph<I = any, O = any>
     graphId: string,
     mapUnitId: Dict<string>,
     mapMergeId: Dict<string>,
-    ignorePins: boolean = false
+    plugIdMap: IOOf<Dict<Dict<string>>>
   ): void {
     // console.log('Graph', 'explodeUnit', graphId, mapUnitId, mapMergeId)
 
-    this._explodeUnit(graphId, mapUnitId, mapMergeId, ignorePins)
+    this._explodeUnit(graphId, mapUnitId, mapMergeId, plugIdMap)
 
     this.emit('explode_unit', graphId, mapUnitId, mapMergeId, [])
   }
@@ -6594,7 +6718,7 @@ export class Graph<I = any, O = any>
     graphId: string,
     unitIdMap: Dict<string>,
     mergeIdMap: Dict<string>,
-    ignorePins = true
+    plugIdMap: IOOf<Dict<Dict<string>>>
   ): void {
     // console.log('Graph', '_explodeUnit', graphId, unitIdMap, mergeIdMap)
 
@@ -6607,9 +6731,11 @@ export class Graph<I = any, O = any>
       spec,
       unitIdMap,
       mergeIdMap,
+      plugIdMap,
       {
         getMerge: (mergeId) => this.getMergeSpec(mergeId),
         getUnitMerges: (unitId) => this.getUnitMergesSpec(unitId),
+        getUnitPlugs: (unitId) => this.getUnitPlugsSpec(unitId),
         getPinMergeId: (unitId, type, pinId) =>
           this.getPinMergeId(unitId, type, pinId),
       }
@@ -6703,6 +6829,8 @@ export class Graph<I = any, O = any>
     childId: string,
     slotName: string
   ): void {
+    // console.log('Graph', 'moveRoot', parentId, childId, slotName)
+
     this._moveSubComponentRoot(parentId, childId, slotName)
   }
 
@@ -6888,229 +7016,249 @@ export class Graph<I = any, O = any>
     // console.log('Graph', 'bulkEdit', actions)
 
     for (const action of actions) {
-      processAction(action, {
-        addUnitSpec: (data: GraphAddUnitData) => {
-          const { unitId, bundle } = data
+      processAction(
+        action,
+        {
+          addUnitSpec: (data: GraphAddUnitData) => {
+            const { unitId, bundle } = data
 
-          this._addUnitSpec(unitId, bundle)
-        },
-        removeUnit: (data: GraphRemoveUnitData) => {
-          const { unitId } = data
+            this._addUnitSpec(unitId, bundle)
+          },
+          removeUnit: (data: GraphRemoveUnitData) => {
+            const { unitId } = data
 
-          this._removeUnit(unitId)
-        },
-        exposePinSet: (data: GraphExposePinSetData) => {
-          const { type, pinId, pinSpec } = data
+            this._removeUnit(unitId)
+          },
+          exposePinSet: (data: GraphExposePinSetData) => {
+            const { type, pinId, pinSpec } = data
 
-          this._exposePinSet(type, pinId, pinSpec)
-        },
-        exposePin: (data: GraphExposePinData) => {
-          const { type, pinId, subPinId, subPinSpec } = data
+            this._exposePinSet(type, pinId, pinSpec)
+          },
+          exposePin: (data: GraphExposePinData) => {
+            const { type, pinId, subPinId, subPinSpec } = data
 
-          this._exposePin(type, pinId, subPinId, subPinSpec)
-        },
-        coverPin: (data: GraphCoverPinData) => {
-          const { type, pinId, subPinId } = data
+            this._exposePin(type, pinId, subPinId, subPinSpec)
+          },
+          coverPin: (data: GraphCoverPinData) => {
+            const { type, pinId, subPinId } = data
 
-          this._coverPin(type, pinId, subPinId)
-        },
-        coverPinSet: (data: GraphCoverPinSetData) => {
-          const { type, pinId } = data
+            this._coverPin(type, pinId, subPinId)
+          },
+          coverPinSet: (data: GraphCoverPinSetData) => {
+            const { type, pinId } = data
 
-          this._coverPinSet(type, pinId)
-        },
-        plugPin: (data: GraphPlugPinData) => {
-          const { type, pinId, subPinId, subPinSpec } = data
+            this._coverPinSet(type, pinId)
+          },
+          plugPin: (data: GraphPlugPinData) => {
+            const { type, pinId, subPinId, subPinSpec } = data
 
-          this._plugPin(type, pinId, subPinId, subPinSpec)
-        },
-        unplugPin: (data: GraphUnplugPinData) => {
-          const { type, pinId, subPinId } = data
+            this._plugPin(type, pinId, subPinId, subPinSpec)
+          },
+          unplugPin: (data: GraphUnplugPinData) => {
+            const { type, pinId, subPinId } = data
 
-          this._unplugPin(type, pinId, subPinId)
-        },
-        addUnitSpecs: (data: GraphAddUnitsData) => {
-          const { units } = data
+            this._unplugPin(type, pinId, subPinId)
+          },
+          addUnitSpecs: (data: GraphAddUnitsData) => {
+            const { units } = data
 
-          this._addUnitSpecs(units)
-        },
-        removeMerge: (data: GraphRemoveMergeData) => {
-          const { mergeId } = data
+            this._addUnitSpecs(units)
+          },
+          removeMerge: (data: GraphRemoveMergeData) => {
+            const { mergeId } = data
 
-          this._removeMerge(mergeId, true)
-        },
-        removePinFromMerge: (data: GraphRemovePinFromMergeData) => {
-          const { mergeId, unitId, type, pinId } = data
+            this._removeMerge(mergeId, true)
+          },
+          removePinFromMerge: (data: GraphRemovePinFromMergeData) => {
+            const { mergeId, unitId, type, pinId } = data
 
-          this._removePinFromMerge(mergeId, unitId, type, pinId)
-        },
-        removeUnitGhost: (data: GraphRemoveUnitGhostData) => {
-          const { unitId, nextUnitId, nextUnitSpec } = data
+            this._removePinFromMerge(mergeId, unitId, type, pinId)
+          },
+          removeUnitGhost: (data: GraphRemoveUnitGhostData) => {
+            const { unitId, nextUnitId, nextUnitSpec } = data
 
-          this._removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
-        },
-        addUnitGhost: (data: GraphAddUnitGhostData) => {
-          const { unitId, nextUnitId, nextUnitBundle, nextUnitPinMap } = data
+            this._removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
+          },
+          addUnitGhost: (data: GraphAddUnitGhostData) => {
+            const { unitId, nextUnitId, nextUnitBundle, nextUnitPinMap } = data
 
-          this._addUnitGhost(unitId, nextUnitId, nextUnitBundle, nextUnitPinMap)
-        },
-        addMerges: (data: GraphAddMergesData) => {
-          const { merges } = data
+            this._addUnitGhost(
+              unitId,
+              nextUnitId,
+              nextUnitBundle,
+              nextUnitPinMap
+            )
+          },
+          addMerges: (data: GraphAddMergesData) => {
+            const { merges } = data
 
-          this._addMerges(merges)
-        },
-        addMerge: (data: GraphAddMergeData) => {
-          const { mergeId, mergeSpec } = data
+            this._addMerges(merges)
+          },
+          addMerge: (data: GraphAddMergeData) => {
+            const { mergeId, mergeSpec } = data
 
-          this._addMerge(mergeSpec, mergeId)
-        },
-        addPinToMerge: (data: GraphAddPinToMergeData) => {
-          const { mergeId, unitId, type, pinId } = data
+            this._addMerge(mergeSpec, mergeId)
+          },
+          addPinToMerge: (data: GraphAddPinToMergeData) => {
+            const { mergeId, unitId, type, pinId } = data
 
-          this._addPinToMerge(mergeId, unitId, type, pinId)
-        },
-        takeUnitErr: (data: GraphTakeUnitErrData) => {
-          const { unitId } = data
+            this._addPinToMerge(mergeId, unitId, type, pinId)
+          },
+          takeUnitErr: (data: GraphTakeUnitErrData) => {
+            const { unitId } = data
 
-          this.takeUnitErr(unitId)
-        },
-        setPinSetId: (data: GraphSetPinSetIdData) => {
-          const { type, pinId, nextPinId } = data
+            this.takeUnitErr(unitId)
+          },
+          setPinSetId: (data: GraphSetPinSetIdData) => {
+            const { type, pinId, nextPinId } = data
 
-          this._setPinSetId(type, pinId, nextPinId)
-        },
-        setPinSetFunctional: (data: GraphSetPinSetFunctionalData) => {
-          const { type, pinId, functional } = data
+            this._setPinSetId(type, pinId, nextPinId)
+          },
+          setPinSetFunctional: (data: GraphSetPinSetFunctionalData) => {
+            const { type, pinId, functional } = data
 
-          this._setPinSetFunctional(type, pinId, functional)
-        },
-        setUnitPinConstant: (data: GraphSetUnitPinConstant) => {
-          const { unitId, type, pinId, constant } = data
+            this._setPinSetFunctional(type, pinId, functional)
+          },
+          setUnitPinConstant: (data: GraphSetUnitPinConstant) => {
+            const { unitId, type, pinId, constant } = data
 
-          this._setUnitPinConstant(unitId, type, pinId, constant)
-        },
-        setUnitPinIgnored: (data: GraphSetUnitPinIgnoredData) => {
-          const { unitId, type, pinId, ignored } = data
+            this._setUnitPinConstant(unitId, type, pinId, constant)
+          },
+          setUnitPinIgnored: (data: GraphSetUnitPinIgnoredData) => {
+            const { unitId, type, pinId, ignored } = data
 
-          this._setUnitPinIgnored(unitId, type, pinId, ignored)
-        },
-        setUnitPinData: (_data: GraphSetUnitPinDataData) => {
-          const { unitId, type, pinId, data } = _data
+            this._setUnitPinIgnored(unitId, type, pinId, ignored)
+          },
+          setUnitPinData: (_data: GraphSetUnitPinDataData) => {
+            const { unitId, type, pinId, data } = _data
 
-          this._setUnitPinData(unitId, type, pinId, data)
-        },
-        setUnitName: (data: GraphSetUnitNameData) => {
-          const { unitId, newUnitId, name } = data
+            this._setUnitPinData(unitId, type, pinId, data)
+          },
+          setUnitName: (data: GraphSetUnitNameData) => {
+            const { unitId, newUnitId, name } = data
 
-          this._setUnitName(unitId, newUnitId, name)
-        },
-        removeUnitPinData: (data: GraphRemoveUnitPinDataData) => {
-          const { unitId, type, pinId } = data
+            this._setUnitName(unitId, newUnitId, name)
+          },
+          removeUnitPinData: (data: GraphRemoveUnitPinDataData) => {
+            const { unitId, type, pinId } = data
 
-          this._removeUnitPinData(unitId, type, pinId)
-        },
-        removeMergeData: (data: GraphRemoveMergeData) => {
-          const { mergeId } = data
+            this._removeUnitPinData(unitId, type, pinId)
+          },
+          removeMergeData: (data: GraphRemoveMergeData) => {
+            const { mergeId } = data
 
-          this._removeMergeData(mergeId)
-        },
-        moveSubComponentRoot: (data: GraphMoveSubComponentRootData) => {
-          const {} = data
+            this._removeMergeData(mergeId)
+          },
+          moveSubComponentRoot: (data: GraphMoveSubComponentRootData) => {
+            const { parentId, children, slotMap } = data
 
-          // TODO
-        },
-        moveUnit: (data: GraphMoveUnitData) => {
-          const {} = data
+            for (const childId of children) {
+              const slotName = slotMap[childId] || 'default'
 
-          // TODO
-        },
-        moveSubgraphInto: (data: GraphMoveSubGraphIntoData) => {
-          const {
-            graphId,
-            nextSpecId,
-            nodeIds,
-            nextIdMap,
-            nextPinIdMap,
-            nextMergePinId,
-            nextPlugSpec,
-            nextSubComponentParentMap,
-            nextSubComponentChildrenMap,
-          } = data
+              this._moveSubComponentRoot(parentId, childId, slotName)
+            }
+          },
+          moveUnit: (data: GraphMoveUnitData) => {
+            const {} = data
 
-          this._moveSubgraphInto(
-            graphId,
-            nextSpecId,
-            nodeIds,
-            nextIdMap,
-            nextPinIdMap,
-            nextMergePinId,
-            nextPlugSpec,
-            nextSubComponentParentMap,
-            nextSubComponentChildrenMap
-          )
-        },
-        moveSubgraphOutOf: (data: GraphMoveSubGraphOutOfData) => {
-          const {
-            graphId,
-            nextSpecId,
-            nodeIds,
-            nextIdMap,
-            nextPinIdMap,
-            nextMergePinId,
-            nextPlugSpec,
-            nextSubComponentParentMap,
-            nextSubComponentChildrenMap,
-          } = data
+            // TODO
+          },
+          moveSubgraphInto: (data: GraphMoveSubGraphIntoData) => {
+            const {
+              graphId,
+              nextSpecId,
+              nodeIds,
+              nextIdMap,
+              nextPinIdMap,
+              nextMergePinId,
+              nextPlugSpec,
+              nextSubComponentParentMap,
+              nextSubComponentChildrenMap,
+            } = data
 
-          this._moveSubgraphOutOf(
-            graphId,
-            nextSpecId,
-            nodeIds,
-            nextIdMap,
-            nextPinIdMap,
-            nextMergePinId,
-            nextPlugSpec,
-            nextSubComponentParentMap,
-            nextSubComponentChildrenMap
-          )
-        },
-        reorderSubComponent: (data: GraphReorderSubComponentData) => {
-          const { parentId, childId, to } = data
+            this._moveSubgraphInto(
+              graphId,
+              nextSpecId,
+              nodeIds,
+              nextIdMap,
+              nextPinIdMap,
+              nextMergePinId,
+              nextPlugSpec,
+              nextSubComponentParentMap,
+              nextSubComponentChildrenMap
+            )
+          },
+          moveSubgraphOutOf: (data: GraphMoveSubGraphOutOfData) => {
+            const {
+              graphId,
+              nextSpecId,
+              nodeIds,
+              nextIdMap,
+              nextPinIdMap,
+              nextMergePinId,
+              nextPlugSpec,
+              nextSubComponentParentMap,
+              nextSubComponentChildrenMap,
+            } = data
 
-          this._reorderSubComponent(parentId, childId, to)
-        },
-        explodeUnit: (data: GraphExplodeUnitData) => {
-          const { unitId, mapUnitId, mapMergeId } = data
+            this._moveSubgraphOutOf(
+              graphId,
+              nextSpecId,
+              nodeIds,
+              nextIdMap,
+              nextPinIdMap,
+              nextMergePinId,
+              nextPlugSpec,
+              nextSubComponentParentMap,
+              nextSubComponentChildrenMap
+            )
+          },
+          reorderSubComponent: (data: GraphReorderSubComponentData) => {
+            const { parentId, childId, to } = data
 
-          this._explodeUnit(unitId, mapUnitId, mapMergeId)
-        },
-        // TODO move removePinData to Unit's bulkEdit
-        removePinData: (data: UnitRemovePinDataData) => {
-          const { type, pinId } = data
+            this._reorderSubComponent(parentId, childId, to)
+          },
+          explodeUnit: (data: GraphExplodeUnitData) => {
+            const { unitId, mapUnitId, mapMergeId, mapPlugId } = data
 
-          this.removePinData(type, pinId)
-        },
-        setUnitSize: (data: GraphSetUnitSizeData) => {
-          const { unitId, width, height } = data
+            this._explodeUnit(unitId, mapUnitId, mapMergeId, mapPlugId)
+          },
+          // TODO move removePinData to Unit's bulkEdit
+          removePinData: (data: UnitRemovePinDataData) => {
+            const { type, pinId } = data
 
-          this._setUnitSize(unitId, width, height)
-        },
-        setSubComponentSize: (data: GraphSetUnitSizeData) => {
-          const { unitId, width, height } = data
+            this.removePinData(type, pinId)
+          },
+          takeInput: (data: UnitTakeInputData) => {
+            const { pinId } = data
 
-          this._setSubComponentSize(unitId, width, height)
-        },
-        setComponentSize: (data: GraphSetComponentSizeData) => {
-          const { width, height } = data
+            this.removePinData('input', pinId)
+          },
+          setUnitSize: (data: GraphSetUnitSizeData) => {
+            const { unitId, width, height } = data
 
-          this._setComponentSize(width, height)
-        },
-        bulkEdit: (data: GraphBulkEditData) => {
-          const { actions } = data
+            this._setUnitSize(unitId, width, height)
+          },
+          setSubComponentSize: (data: GraphSetUnitSizeData) => {
+            const { unitId, width, height } = data
 
-          this.bulkEdit(actions)
+            this._setSubComponentSize(unitId, width, height)
+          },
+          setComponentSize: (data: GraphSetComponentSizeData) => {
+            const { width, height } = data
+
+            this._setComponentSize(width, height)
+          },
+          bulkEdit: (data: GraphBulkEditData) => {
+            const { actions } = data
+
+            this.bulkEdit(actions)
+          },
         },
-      })
+        () => {
+          throw new CodePathNotImplementedError()
+        }
+      )
     }
   }
 

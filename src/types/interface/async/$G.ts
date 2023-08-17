@@ -1,4 +1,3 @@
-import { GraphSpec } from '../../GraphSpec'
 import {
   GraphAddMergeData,
   GraphAddMergesData,
@@ -28,7 +27,6 @@ import {
   GraphSetMetadataData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
-  GraphSetUnitMetadataData,
   GraphSetUnitNameData,
   GraphSetUnitPinConstant,
   GraphSetUnitPinDataData,
@@ -55,6 +53,7 @@ export const G_METHOD_CALL_GET = [
   'getGraphState',
   'getGraphChildren',
   'getGraphPinData',
+  'getGraphData',
   'getGraphErr',
   'getGraphMergeInputData',
   'getUnitInputData',
@@ -184,6 +183,7 @@ export interface $G_C {
     nextUnitPinMap: IOOf<Dict<string>>
   }): void
   $getGraphData(
+    data: {},
     callback: Callback<{
       state: Dict<any>
       children: Dict<any>

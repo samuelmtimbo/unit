@@ -1,4 +1,4 @@
-import { $refEmitter } from '../../../component/$component'
+import { $refEmitter } from '../../../component/$refEmitter'
 import { Callback } from '../../Callback'
 import { Unlisten } from '../../Unlisten'
 import { EE } from '../EE'
@@ -10,7 +10,7 @@ export const AsyncEECall = (emitter: EE): $EE_C => {
       emitter.emit(type, data)
       callback()
     },
-    $getEventNames(data: {}, callback) {
+    $eventNames(data: {}, callback) {
       const eventNames = emitter.eventNames()
       callback(eventNames)
     },

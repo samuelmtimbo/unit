@@ -1,5 +1,5 @@
 import { IOElement } from './IOElement'
-import { Size } from './util/geometry'
+import { Size } from './util/geometry/types'
 
 // RETURN use system
 export function getSize(element: IOElement): Size {

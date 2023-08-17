@@ -19,11 +19,11 @@ import { Dict } from '../../types/Dict'
 import { U, U_EE } from '../../types/interface/U'
 import { IO } from '../../types/IO'
 import { None } from '../../types/None'
-import { stringifyDataObj } from '../../types/stringifyPinData'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { pull, push, removeAt } from '../../util/array'
 import { mapObjVK } from '../../util/object'
+import { Memory } from './Memory'
 
 export type PinMap<T> = Dict<Pin<T[keyof T]>>
 
@@ -61,12 +61,6 @@ export type PinOf<T> = Pin<T[keyof T]>
 export type UnitEvents<_EE extends Dict<any[]>> = $Events<_EE & U_EE> & U_EE
 
 export interface U_M {}
-
-export type Memory = {
-  input: Dict<any>
-  output: Dict<any>
-  memory: Dict<any>
-}
 
 export class Unit<
     I extends Dict<any> = any,
@@ -164,6 +158,10 @@ export class Unit<
 
   public isPinRef(type: IO, pinId: string): boolean {
     const input = type === 'input'
+
+    if (!input && pinId === SELF) {
+      return true
+    }
 
     const ref =
       (input && !!this._ref_input[pinId]) ||
@@ -284,8 +282,8 @@ export class Unit<
   }
 
   public setPin(
-    pinId: string,
     type: IO,
+    pinId: string,
     pin: Pin<any>,
     opt: PinOpt = DEFAULT_PIN_OPT,
     propagate: boolean = true
@@ -362,6 +360,14 @@ export class Unit<
       }
     } else {
       throw new InvalidArgumentType('name should be a string')
+    }
+  }
+
+  public addPin(type: IO, name: string, pin: Pin<any>, opt: PinOpt): void {
+    if (type === 'input') {
+      this.addInput(name, pin, opt)
+    } else {
+      this.addOutput(name, pin, opt)
     }
   }
 

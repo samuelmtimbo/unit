@@ -7,13 +7,16 @@ import { Component } from './component'
 import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
 import { extractTrait } from './extractTrait'
 import { IOElement } from './IOElement'
+import { LayoutNode } from './LayoutNode'
 import { reflectChildrenTrait } from './reflectChildrenTrait'
-import { rectsBoundingRect, Size } from './util/geometry'
+import { rectsBoundingRect } from './util/geometry'
+import { Size } from './util/geometry/types'
 import { parseFontSize } from './util/style/getFontSize'
 
 export function measureChildren(
   component: Component,
   style: Style,
+  fallbackTrait: LayoutNode,
   measureText: (text: string, fontSize: number) => Size
 ) {
   const parentChildren = component.$parentChildren
@@ -25,14 +28,24 @@ export function measureChildren(
   }, [])
 
   const base_style = base.map(([leaf_id, leaf_comp]) => {
-    return extractStyle(leaf_comp, measureText)
+    return extractStyle(leaf_comp, fallbackTrait, measureText)
   })
 
   const relative_base_style = base_style.filter(({ position }) => {
     return position !== 'fixed' && position !== 'absolute'
   }, [])
 
+  const fitWidth = style['width'] === 'fit-content'
+  const fitHeight = style['height'] === 'fit-content'
+
   const trait = extractTrait(component, measureText)
+
+  if (fitWidth) {
+    trait.width = fallbackTrait.width
+  }
+  if (fitHeight) {
+    trait.height = fallbackTrait.height
+  }
 
   const [reflected_children_trait, reflected_children_size] =
     reflectChildrenTrait(
@@ -52,6 +65,7 @@ export function measureChildren(
 
 export function extractStyle(
   component: Component,
+  fallbackTrait: LayoutNode,
   measureText: (text: string, fontSize: number) => Size
 ): Style {
   const { $element } = component
@@ -62,15 +76,20 @@ export function extractStyle(
     _element = component._iframe_el
   }
 
-  return _extractStyle(component, _element, measureText)
+  return _extractStyle(component, _element, fallbackTrait, measureText)
 }
 
 export function _extractStyle(
   component: Component,
   element: IOElement,
+  fallbackTrait: LayoutNode,
   measureText: (text: string, fontSize: number) => Size
 ): Style {
-  if (element instanceof Text) {
+  if (
+    element instanceof Text ||
+    (element instanceof HTMLDivElement &&
+      element.getAttribute('contenteditable') === 'true')
+  ) {
     const fontSize = component.getFontSize()
 
     const { textContent } = component.$element
@@ -173,20 +192,25 @@ export function _extractStyle(
     // TODO
   }
 
-  const fitWidth = style['width'] === 'fit-content'
-  const fitHeight = style['height'] === 'fit-content'
-
-  if (fitWidth || fitHeight) {
-    const { width, height } = measureChildren(component, style, measureText)
-
-    if (fitWidth) {
-      style['width'] = `${width}px`
-    }
-
-    if (fitHeight) {
-      style['height'] = `${height}px`
-    }
-  }
+  // const fitWidth = style['width'] === 'fit-content'
+  // const fitHeight = style['height'] === 'fit-content'
+  //
+  // if (fitWidth || fitHeight) {
+  //   const { width, height } = measureChildren(
+  //     component,
+  //     style,
+  //     fallbackTrait,
+  //     measureText
+  //   )
+  //
+  //   if (fitWidth) {
+  //     style['width'] = `${width}px`
+  //   }
+  //
+  //   if (fitHeight) {
+  //     style['height'] = `${height}px`
+  //   }
+  // }
 
   return style
 }

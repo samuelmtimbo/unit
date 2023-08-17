@@ -1,6 +1,6 @@
 import { GraphSpecs, Spec } from '..'
-import { GraphSpec } from '../GraphSpec'
 import { Dict } from '../Dict'
+import { GraphSpec } from '../GraphSpec'
 
 export interface R {
   newSpecId(): string
@@ -9,6 +9,7 @@ export interface R {
   newSpec(spec: GraphSpec): GraphSpec
   getSpec(id: string): Spec
   setSpec(id: string, spec: GraphSpec): void
+  shouldFork(id: string): boolean
   forkSpec(spec: GraphSpec, specId?: string): [string, GraphSpec]
   injectSpecs(specs: GraphSpecs): Dict<string>
   deleteSpec(id: string): void

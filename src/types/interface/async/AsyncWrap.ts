@@ -14,7 +14,11 @@ export const AsyncWrap = (
       throw new Error('async wrapper is not registered')
     }
 
-    $unit = { ...$unit, ...AsyncWrapper(unit) }
+    const api = AsyncWrapper(unit)
+
+    for (const method in api) {
+      $unit[method] = api[method]
+    }
   }
 
   return $unit

@@ -1,9 +1,9 @@
 import { Unit } from '../Class/Unit'
 import { fromId } from '../spec/fromId'
-import Identity from '../system/f/control/Identity'
 import _classes from '../system/_classes'
 import { ID_RANGE } from '../system/_ids'
 import _specs from '../system/_specs'
+import Identity from '../system/f/control/Identity'
 import { system } from './util/system'
 const now = require('performance-now')
 

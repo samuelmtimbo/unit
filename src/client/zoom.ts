@@ -1,4 +1,4 @@
-import { Point } from './util/geometry'
+import { Point } from './util/geometry/types'
 
 export type Zoom = { x: number; y: number; z: number }
 

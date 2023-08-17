@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { GraphSpec } from '../../../../../types/GraphSpec'
 import { Dict } from '../../../../../types/Dict'
+import { GraphSpec } from '../../../../../types/GraphSpec'
 import { ID_MINIGRAPH } from '../../../../_ids'
 
 export interface I<T> {

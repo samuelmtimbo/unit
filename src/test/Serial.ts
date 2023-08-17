@@ -1,7 +1,7 @@
 import * as assert from 'assert'
-import { watchUnitAndLog } from '../debug'
 import { Pin } from '../Pin'
 import Serial from '../Serial'
+import { watchUnitAndLog } from '../debug'
 import { system } from './util/system'
 
 const serial0 = new Serial(system)

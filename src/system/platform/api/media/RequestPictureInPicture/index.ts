@@ -1,12 +1,12 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
+import { Unlisten } from '../../../../../types/Unlisten'
 import { $_ } from '../../../../../types/interface/$_'
 import { $C } from '../../../../../types/interface/async/$C'
 import { $PS } from '../../../../../types/interface/async/$PS'
-import { Unlisten } from '../../../../../types/Unlisten'
-import { listenGlobalComponent } from '../../../../globalComponent'
 import { ID_REQUEST_PICTURE_IN_PICTURE } from '../../../../_ids'
+import { listenGlobalComponent } from '../../../../globalComponent'
 import VideoComp from '../../../component/media/Video/Component'
 
 export interface I {

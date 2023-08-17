@@ -1,4 +1,4 @@
-import { Size } from '../../client/util/geometry'
+import { Size } from '../../client/util/geometry/types'
 
 export const getTextAreaSize = (
   str: string,

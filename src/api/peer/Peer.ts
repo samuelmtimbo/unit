@@ -225,10 +225,15 @@ export class Peer extends $<PeerEvents> {
       offerToReceiveAudio: true,
       offerToReceiveVideo: true,
     })
+
     rtc.setLocalDescription(answer)
+
     const { sdp } = answer
+
     const candidates = await waitAllCandidates(rtc)
+
     const signal = JSON.stringify({ sdp, candidates })
+
     return signal
   }
 
@@ -238,8 +243,15 @@ export class Peer extends $<PeerEvents> {
 
   async _acceptAnswer(rtc: RTCPeerConnection, signal: string): Promise<void> {
     const { sdp, candidates } = JSON.parse(signal)
+
+    if (rtc.connectionState !== 'connecting') {
+      throw new Error()
+    }
+
     const answer = new RTCSessionDescription({ type: 'answer', sdp })
+
     await rtc.setRemoteDescription(answer)
+
     for (const candidate of candidates) {
       await rtc.addIceCandidate(candidate)
     }

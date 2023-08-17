@@ -1,5 +1,5 @@
 import { build, BuildOptions } from 'esbuild'
-import { pathExists, readFile, readJSON } from 'fs-extra'
+import { pathExists, readJSON } from 'fs-extra'
 import { buildIdSetFromBundle } from './buildIdSetFromBundle'
 import { watch } from './script/build'
 import { sync } from './script/sync'

@@ -1,8 +1,7 @@
-import { $ } from './Class/$'
 import { System } from './system'
 import { randomIdNotIn } from './util/id'
 
-export function getGlobalRef(system: System, id: string): $ {
+export function getGlobalRef(system: System, id: string): any {
   const {
     global: { ref },
   } = system

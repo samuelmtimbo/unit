@@ -1,24 +1,24 @@
 {
   "name": "is not empty",
   "units": {
-    "qyykyqg": {
+    "isempty": {
       "id": "194683f4-5b90-4501-a8c9-b34f131d4f79",
       "input": {
         "obj": {}
       }
     },
-    "qwicogom": {
+    "not": {
       "id": "7d02d638-a311-4ea8-a0c0-d45baf739e0d"
     }
   },
   "merges": {
     "0": {
-      "qyykyqg": {
+      "isempty": {
         "output": {
           "empty": true
         }
       },
-      "qwicogom": {
+      "not": {
         "input": {
           "a": true
         }
@@ -38,7 +38,7 @@
     "a": {
       "plug": {
         "0": {
-          "unitId": "qyykyqg",
+          "unitId": "isempty",
           "pinId": "obj"
         }
       },
@@ -49,7 +49,7 @@
     "!empty": {
       "plug": {
         "0": {
-          "unitId": "qwicogom",
+          "unitId": "not",
           "pinId": "!a"
         }
       },

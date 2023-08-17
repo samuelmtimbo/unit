@@ -100,20 +100,23 @@ export class Primitive<
       this._forwarding = false
       this._forwarding_empty = false
     })
+
     this.addListener('play', () => {
       while (this.__buffer.length > 0) {
         const { name, type, event, data } = this.__buffer.shift()!
+
         if (type === 'input') {
           const { ref } = this.getInputOpt(name)
+
           if (event === 'data') {
             if (ref) {
-              this.onRefInputData(name, data)
+              this.__onRefInputData(name, data)
             } else {
               this.onDataInputData(name, data)
             }
           } else {
             if (ref) {
-              this.onRefInputDrop(name)
+              this.__onRefInputDrop(name)
             } else {
               this.onDataInputDrop(name)
             }
@@ -286,6 +289,7 @@ export class Primitive<
 
   private _onDataInputData = (name: string, data: any): void => {
     this._activateInput(name, data)
+
     if (!this._paused) {
       this.onDataInputData(name, data)
     } else {
@@ -305,13 +309,7 @@ export class Primitive<
     this._activateInput(name, data)
 
     if (!this._paused) {
-      if (data instanceof Function) {
-        data = new data(this.__system)
-
-        this._input_effemeral[name] = data
-      }
-
-      this.onRefInputData(name, data)
+      this.__onRefInputData(name, data)
     } else {
       this.__buffer.push({
         name,
@@ -321,6 +319,17 @@ export class Primitive<
         ref: true,
       })
     }
+  }
+
+  private __onRefInputData = (name: string, data: any): void => {
+    if (data instanceof Function) {
+      data = new data(this.__system)
+
+      this._input_effemeral[name] = data
+      this._i[name] = data
+    }
+
+    this.onRefInputData(name, data)
   }
 
   private _onInputSet(
@@ -341,10 +350,12 @@ export class Primitive<
     propagate: boolean
   ): void {
     if (!input.empty()) {
+      const data = input.peak()
+
+      this._activateInput(name, data)
+
       if (propagate) {
         this._onInputStart(name)
-
-        const data = input.peak()
 
         if (this.hasRefInputNamed(name)) {
           this._onRefInputData(name, data)
@@ -416,7 +427,7 @@ export class Primitive<
 
     this._setupInput(newName, input, opt)
 
-    this.onInputRenamed(name, newName)
+    this.onInputRenamed(name, newName, opt, opt)
   }
 
   private _onOutputRenamed(name: string, newName: string) {
@@ -429,14 +440,24 @@ export class Primitive<
 
     this._setupOutput(newName, output, opt)
 
-    this.onOutputRenamed(name, newName)
+    this.onOutputRenamed(name, newName, opt, opt)
   }
 
-  public onInputRenamed(name: string, newName: string): void {
+  public onInputRenamed(
+    name: string,
+    newName: string,
+    opt: PinOpt,
+    newOpt: PinOpt
+  ): void {
     //
   }
 
-  public onOutputRenamed(name: string, newName: string): void {
+  public onOutputRenamed(
+    name: string,
+    newName: string,
+    opt: PinOpt,
+    newOpt: PinOpt
+  ): void {
     //
   }
 
@@ -468,6 +489,7 @@ export class Primitive<
 
   private _onDataInputDrop = (name: string): void => {
     this._deactivateInput(name)
+
     if (!this._paused) {
       this.onDataInputDrop(name)
     } else {
@@ -478,6 +500,14 @@ export class Primitive<
   private _onRefInputDrop = (name: string): void => {
     this._deactivateInput(name)
 
+    if (!this._paused) {
+      this.__onRefInputDrop(name)
+    } else {
+      this.__buffer.push({ name, type: 'input', event: 'drop', ref: true })
+    }
+  }
+
+  private __onRefInputDrop = (name: string): void => {
     if (this._input_effemeral[name]) {
       const effemeral_unit = this._input_effemeral[name]
 
@@ -486,11 +516,7 @@ export class Primitive<
       effemeral_unit.destroy()
     }
 
-    if (!this._paused) {
-      this.onRefInputDrop(name)
-    } else {
-      this.__buffer.push({ name, type: 'input', event: 'drop', ref: true })
-    }
+    this.onRefInputDrop(name)
   }
 
   private _onRefInputInvalid = (name: string): void => {

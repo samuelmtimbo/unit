@@ -5,7 +5,7 @@ import { MediaDevicesAPINotSupported } from '../../../../exception/MediaDeviceAP
 import { BootOpt } from '../../../../system'
 import { IDisplayMediaOpt } from '../../../../types/global/IDisplayMedia'
 import { IUserMediaOpt } from '../../../../types/global/IUserMedia'
-import { Rect } from '../../../util/geometry'
+import { Rect } from '../../../util/geometry/types'
 
 export function webMedia(window: Window, opt: BootOpt): API['media'] {
   const media = {

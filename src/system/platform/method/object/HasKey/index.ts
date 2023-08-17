@@ -22,7 +22,7 @@ export default class HasKey<T> extends Functional<I<T>, O<T>> {
       },
       {
         input: {
-          unit: {
+          obj: {
             ref: true,
           },
         },

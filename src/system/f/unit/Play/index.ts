@@ -2,7 +2,7 @@ import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Unit } from '../../../../Class/Unit'
 import { System } from '../../../../system'
-import { ID_PLAY, ID_SET_INPUT } from '../../../_ids'
+import { ID_PLAY } from '../../../_ids'
 
 export interface I<T> {
   unit: Unit

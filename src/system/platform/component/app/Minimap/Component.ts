@@ -8,10 +8,10 @@ import {
   describeRect,
   oppositeVector,
   pointInNode,
-  Size,
   Thing,
   unitVector,
 } from '../../../../../client/util/geometry'
+import { Size } from '../../../../../client/util/geometry/types'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'

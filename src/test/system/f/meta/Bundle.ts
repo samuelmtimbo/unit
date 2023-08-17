@@ -1,8 +1,8 @@
 import * as assert from 'assert'
-import { system } from '../../../util/system'
 import { watchUnitAndLog } from '../../../../debug'
-import Bundle from '../../../../system/f/meta/Bundle'
 import { ID_IDENTITY } from '../../../../system/_ids'
+import Bundle from '../../../../system/f/meta/Bundle'
+import { system } from '../../../util/system'
 
 const bundle = new Bundle(system)
 

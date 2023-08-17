@@ -1,9 +1,11 @@
+import { MAX_Z_INDEX } from '../../../../../client/MAX_Z_INDEX'
 import { addListeners } from '../../../../../client/addListener'
+import { ANIMATION_T_S } from '../../../../../client/animation/ANIMATION_T_S'
 import {
   ANIMATION_T_MS,
   linearTransition,
 } from '../../../../../client/animation/animation'
-import { ANIMATION_T_S } from '../../../../../client/animation/ANIMATION_T_S'
+import { setAlpha } from '../../../../../client/color'
 import { Component } from '../../../../../client/component'
 import mergeStyle from '../../../../../client/component/mergeStyle'
 import { dragOverTimeListener } from '../../../../../client/dragOverTimeListener'
@@ -15,13 +17,8 @@ import { makePointerLeaveListener } from '../../../../../client/event/pointer/po
 import { makePointerMoveListener } from '../../../../../client/event/pointer/pointermove'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { makeResizeListener } from '../../../../../client/event/resize'
-import { MAX_Z_INDEX } from '../../../../../client/MAX_Z_INDEX'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import {
-  COLOR_NONE,
-  setAlpha,
-  themeBackgroundColor,
-} from '../../../../../client/theme'
+import { COLOR_NONE, themeBackgroundColor } from '../../../../../client/theme'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import {
   DIM_OPACITY,

@@ -45,9 +45,9 @@ export interface $U_C {
   $getGlobalId(data: UnitGetGlobalIdData, callback: Callback<string>): void
   $play(data: UnitPlayData): void
   $pause(data: UnitPauseData): void
-  $push({ id, data }: UnitPushData): void
-  $pullInput({ id }: UnitPullInputData): void
-  $takeInput({ id }: UnitTakeInputData): void
+  $push({ pinId, data }: UnitPushData): void
+  $pullInput({ pinId }: UnitPullInputData): void
+  $takeInput({ pinId }: UnitTakeInputData): void
   $setPinData({ pinId, type, data }: UnitSetPinDataData)
   $removePinData({ type, pinId }: UnitRemovePinDataData)
   $getPinData(

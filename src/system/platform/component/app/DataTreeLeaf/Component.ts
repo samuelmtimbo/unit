@@ -33,9 +33,9 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    let { className, style } = $props
+    let { className, style, value } = $props
 
-    const value = this._parse_value()
+    const _value = this._parse_value()
 
     const width = getLeafWidth(value)
 
@@ -58,7 +58,7 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
           // ...userSelect('none'),
           ...style,
         },
-        value,
+        value: _value,
       },
       this.$system
     )

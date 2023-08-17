@@ -1,13 +1,13 @@
 import * as assert from 'assert'
 import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
-import { system } from '../util/system'
 import {
   ID_EMPTY,
   ID_IDENTITY,
   ID_RANDOM_COLOR_DIV,
   ID_RANDOM_NATURAL_LTE,
 } from '../../system/_ids'
+import { system } from '../util/system'
 
 const UNIT_ID_RANDOM_COLOR_DIV = 'randomcolordiv'
 const UNIT_ID_EMTPY = 'empty'
@@ -34,7 +34,7 @@ composition0.addUnitSpec(UNIT_ID_RANDOM_COLOR_DIV, {
   unit: { id: ID_RANDOM_COLOR_DIV },
 })
 
-composition0.explodeUnit(UNIT_ID_RANDOM_COLOR_DIV, {}, {})
+composition0.explodeUnit(UNIT_ID_RANDOM_COLOR_DIV, {}, {}, {})
 
 assert.equal(composition0.getUnitCount(), 3)
 assert.equal(composition0.getInputCount(), 1)
@@ -61,7 +61,7 @@ const randomNaturalLTE = composition1.getUnit(UNIT_ID_RANDOM_NUMBER_LTE)
 
 assert.equal(composition1.getUnitCount(), 1)
 
-composition1.explodeUnit(UNIT_ID_RANDOM_NUMBER_LTE, {}, {})
+composition1.explodeUnit(UNIT_ID_RANDOM_NUMBER_LTE, {}, {}, {})
 
 assert.equal(composition1.getUnitCount(), 2)
 

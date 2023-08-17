@@ -18,7 +18,13 @@
       "defaultIgnored": true
     }
   },
-  "outputs": {},
+  "outputs": {
+    "value": {
+      "type": "string",
+      "optional": true,
+      "defaultIgnored": true
+    }
+  },
   "metadata": {
     "icon": "form-input",
     "description": "single line text input",

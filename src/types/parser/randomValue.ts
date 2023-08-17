@@ -1,13 +1,13 @@
 import { Spec, Specs } from '..'
 import { randomInArray } from '../../client/id/randomInArray'
 import {
-  getTree,
-  isLiteralType,
   NULL_TREE,
   TreeNode,
   TreeNodeType,
   _applyGenerics,
   _findGenerics,
+  getTree,
+  isLiteralType,
   isTypeMatch,
 } from '../../spec/parser'
 import { keys } from '../../system/f/object/Keys/f'

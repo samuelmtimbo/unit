@@ -1,0 +1,43 @@
+{
+  "name": "label",
+  "type": "`U`&`C`&`V`&`J`",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": [
+          "{}"
+        ]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML label element",
+    "complexity": 20,
+    "tags": [
+      "platform",
+      "component"
+    ]
+  },
+  "id": "23b7df22-79e0-4233-8388-7e6e8f1859c6",
+  "base": true,
+  "component": {
+    "defaultWidth": 150,
+    "defaultHeight": 45
+  },
+  "system": true,
+  "render": true
+}

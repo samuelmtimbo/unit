@@ -1,4 +1,4 @@
-import { Position } from '../../client/util/geometry'
+import { Position } from '../../client/util/geometry/types'
 import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
 import { keys } from '../../system/f/object/Keys/f'
 import {

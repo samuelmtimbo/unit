@@ -1,26 +1,27 @@
 import { Graph } from '../Class/Graph'
 import { System } from '../system'
-import _classes from '../system/_classes'
 import {
+  Classes,
   GraphSpecs,
   GraphUnitPinSpec,
   GraphUnitSpec,
   PinSpec,
   Specs,
 } from '../types'
-import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
 import { GraphBundle, GraphClass } from '../types/GraphClass'
+import { GraphSpec } from '../types/GraphSpec'
 import { weakMerge } from '../types/weakMerge'
 import { clone } from '../util/object'
 import { bundleClass } from './bundleClass'
 import { evaluate } from './evaluate'
-import { getTree, TreeNodeType } from './parser'
+import { TreeNodeType, getTree } from './parser'
 
 export function extractGraphSpecs(
   spec: GraphSpec,
   specs: Specs,
-  graphs: GraphSpecs = {}
+  graphs: GraphSpecs = {},
+  classes: Classes = {}
 ): GraphSpecs {
   graphs[spec.id] = spec
 
@@ -42,7 +43,7 @@ export function extractGraphSpecs(
         if (tree.type === TreeNodeType.Unit) {
           const str = tree.value.substring(1)
 
-          const bundle = evaluate(str, specs, _classes)
+          const bundle = evaluate(str, specs, classes)
 
           for (const specId in bundle.specs) {
             const spec = bundle.specs[specId]

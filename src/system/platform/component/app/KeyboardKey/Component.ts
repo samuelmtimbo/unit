@@ -1,5 +1,4 @@
 import { nameToColor } from '../../../../../client/color'
-import { Context } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
 import { keyToIcon } from '../../../../../client/event/keyboard'
 import {

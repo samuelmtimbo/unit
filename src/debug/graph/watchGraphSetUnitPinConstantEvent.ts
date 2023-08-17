@@ -1,4 +1,6 @@
+import { $ } from '../../Class/$'
 import { Graph } from '../../Class/Graph'
+import { stringify } from '../../spec/stringify'
 import { G_EE } from '../../types/interface/G'
 import { IO } from '../../types/IO'
 import { Moment } from '../Moment'
@@ -8,6 +10,7 @@ export interface GraphSetUnitPinConstantMomentData {
   type: IO
   pinId: string
   constant: boolean
+  data: string
   path: string[]
 }
 
@@ -20,8 +23,23 @@ export function watchGraphSetUnitPinConstant(
   callback: (moment: GraphSetUnitPinConstantMoment) => void
 ): () => void {
   const listener = (
-    ...[unitId, type, pinId, constant, path]: G_EE['set_unit_pin_constant']
+    ...[
+      unitId,
+      type,
+      pinId,
+      constant,
+      data,
+      path,
+    ]: G_EE['set_unit_pin_constant']
   ) => {
+    if (data instanceof $) {
+      data = null
+    }
+
+    if (data !== undefined) {
+      data = stringify(data)
+    }
+
     callback({
       type: 'graph',
       event,
@@ -30,6 +48,7 @@ export function watchGraphSetUnitPinConstant(
         type,
         pinId,
         constant,
+        data,
         path,
       },
     })

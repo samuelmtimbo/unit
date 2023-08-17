@@ -3,8 +3,8 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Graph } from '../../../../../Class/Graph'
 import { start } from '../../../../../start'
 import { System } from '../../../../../system'
-import { GraphSpec } from '../../../../../types/GraphSpec'
 import { GraphBundle } from '../../../../../types/GraphClass'
+import { GraphSpec } from '../../../../../types/GraphSpec'
 import { ID_NEW_GRAPH } from '../../../../_ids'
 
 export interface I {

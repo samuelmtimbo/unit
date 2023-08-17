@@ -5,8 +5,8 @@ import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { evaluate } from './evaluate'
+import { evaluateMemorySpec } from './evaluateSpec'
 import { fromId } from './fromId'
-import { evaluateMemorySpec } from './stringifySpec'
 
 export function unitFromBundleSpec(
   system: System,

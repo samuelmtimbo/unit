@@ -38,6 +38,7 @@ export default class UserMedia extends Functional<I, O> {
     this.addListener('destroy', () => {
       if (this._stream) {
         stopMediaStream(this._stream)
+
         this._stream = undefined
       }
     })
@@ -50,15 +51,17 @@ export default class UserMedia extends Functional<I, O> {
       },
     } = this.__system
 
-    let _stream: MediaStream
+    let stream: ST
+
     try {
-      _stream = await getUserMedia(opt)
+      const _stream = await getUserMedia(opt)
+
+      stream = wrapMediaStream(_stream, this.__system)
     } catch (err) {
       done(undefined, err.message)
+
       return
     }
-
-    const stream = await wrapMediaStream(_stream, this.__system)
 
     done({ stream })
   }

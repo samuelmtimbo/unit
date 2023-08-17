@@ -1,21 +1,18 @@
-import { Position } from '../../client/util/geometry'
-import {
-  GraphUnitMerges,
-  GraphUnitPlugs as GraphUnitPlugs,
-} from '../../system/platform/component/app/Editor/Component'
+import { Position } from '../../client/util/geometry/types'
 import {
   Action,
   GraphMergeSpec,
   GraphMergesSpec,
   GraphPinSpec,
-  GraphPinsSpec,
   GraphSubPinSpec,
   GraphUnitsSpec,
 } from '../../types'
 import { Dict } from '../../types/Dict'
 import { GraphSpec } from '../../types/GraphSpec'
+import { GraphUnitMerges } from '../../types/GraphUnitMerges'
+import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
 import { IO } from '../../types/IO'
-import { IOOf, _IOOf } from '../../types/IOOf'
+import { IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { GraphSelection } from '../../types/interface/G'
 
@@ -24,15 +21,15 @@ export type GraphMoveSubGraphData = {
   nextSpecId: string
   nextIdMap: {
     merge?: Dict<string>
-    link?: Dict<_IOOf<Dict<{ mergeId: string; oppositePinId: string } | null>>>
-    plug?: _IOOf<
+    link?: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string } | null>>>
+    plug?: IOOf<
       Dict<Dict<{ mergeId: string; type: IO; subPinId: string } | null>>
     >
     unit?: Dict<string>
     data?: Dict<string>
   }
   nextPinIdMap: Dict<
-    _IOOf<
+    IOOf<
       Dict<{
         pinId: string
         subPinId: string
@@ -43,9 +40,9 @@ export type GraphMoveSubGraphData = {
       }>
     >
   >
-  nextUnitPinMergeMap: Dict<_IOOf<Dict<string>>>
+  nextUnitPinMergeMap: Dict<IOOf<Dict<string>>>
   nextMergePinId: Dict<
-    _IOOf<{
+    IOOf<{
       mergeId: string
       pinId: string
       subPinSpec: GraphSubPinSpec
@@ -53,7 +50,7 @@ export type GraphMoveSubGraphData = {
       ref?: boolean
     }>
   >
-  nextPlugSpec: _IOOf<Dict<Dict<GraphSubPinSpec>>>
+  nextPlugSpec: IOOf<Dict<Dict<GraphSubPinSpec>>>
   nextSubComponentIndexMap: Dict<number>
   nextSubComponentParentMap: Dict<string | null>
   nextSubComponentChildrenMap: Dict<string[]>
@@ -70,7 +67,7 @@ export type GraphAddUnitData = {
   unitId: string
   bundle: UnitBundleSpec
   position?: Position | undefined
-  pinPosition?: _IOOf<Dict<Position>> | undefined
+  pinPosition?: IOOf<Dict<Position>> | undefined
   layoutPositon?: Position | undefined
   parentId?: string | null | undefined
   merges?: GraphUnitMerges | undefined
@@ -120,7 +117,7 @@ export type GraphRemoveUnitData = {
   unitId: string
   bundle?: UnitBundleSpec
   position?: Position
-  pinPosition?: _IOOf<Dict<Position>>
+  pinPosition?: IOOf<Dict<Position>>
   layoutPositon?: Position
   parentId?: string | null
   merges?: GraphMergesSpec
@@ -266,6 +263,7 @@ export type GraphExplodeUnitData = {
   unitId: string
   mapUnitId: Dict<string>
   mapMergeId: Dict<string>
+  mapPlugId: IOOf<Dict<Dict<string>>>
 }
 
 export type GraphMoveSubComponentRootData = {
@@ -284,17 +282,23 @@ export type GraphSetUnitSizeData = {
   unitId: string
   width: number
   height: number
+  prevHeight: number
+  prevWidth: number
 }
 
 export type GraphSetComponentSizeData = {
   width: number
   height: number
+  prevHeight: number
+  prevWidth: number
 }
 
 export type GraphSetSubComponentSizeData = {
   unitId: string
   width: number
   height: number
+  prevWidth: number
+  prevHeight: number
 }
 
 export type GraphSetMetadataData = {

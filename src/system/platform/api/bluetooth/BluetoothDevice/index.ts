@@ -40,18 +40,23 @@ export default class BluetoothDevice extends Functional<I, O> {
         bluetooth: { requestDevice },
       },
     } = this.__system
+
+    let device: any
+
     try {
       const _device = await requestDevice(opt)
 
-      const device = new (class _BluetoothDevice extends $ implements BD {
+      device = new (class _BluetoothDevice extends $ implements BD {
         async getServer(): Promise<IBluetoothServer> {
           return _device.getServer()
         }
       })(this.__system)
-
-      done({ device })
     } catch (err) {
       done(undefined, err.message)
+
+      return
     }
+
+    done({ device })
   }
 }

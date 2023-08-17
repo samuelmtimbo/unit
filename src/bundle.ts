@@ -1,7 +1,7 @@
 import { getSpec, isSystemSpecId } from './client/spec'
 import { GraphSpecs, GraphUnitSpec, Specs } from './types'
-import { GraphSpec } from './types/GraphSpec'
 import { BundleSpec } from './types/BundleSpec'
+import { GraphSpec } from './types/GraphSpec'
 import { UnitBundleSpec } from './types/UnitBundleSpec'
 
 export function unitBundleSpec(

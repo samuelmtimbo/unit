@@ -1,4 +1,4 @@
-import { Size } from '../geometry'
+import { Size } from '../geometry/types'
 
 export function measureText(
   ctx: CanvasRenderingContext2D,

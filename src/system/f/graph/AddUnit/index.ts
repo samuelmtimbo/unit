@@ -73,10 +73,12 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
       }
 
       graph.addUnitSpec(id, { unit: unit_spec })
-
-      done({})
     } catch (err) {
       done(undefined, err.message)
+
+      return
     }
+
+    done({})
   }
 }

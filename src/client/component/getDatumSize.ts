@@ -1,5 +1,5 @@
 import { TreeNode, TreeNodeType } from '../../spec/parser'
-import { Size } from '../util/geometry'
+import { Size } from '../util/geometry/types'
 
 export const LEAF_HEIGHT: number = 16
 export const DELIMITER_WIDTH: number = 6
@@ -20,7 +20,10 @@ export function getLeafWidth(value: string): number {
   if (value === '') {
     return MIN_WIDTH
   }
-  return Math.min(Math.max(value.length * 6, MIN_WIDTH), MAX_WIDTH)
+
+  const _value = value.replace(/\n/g, '\\n')
+
+  return Math.min(Math.max(_value.length * 6, MIN_WIDTH), MAX_WIDTH)
 }
 
 const calcVerticalHeight = (data: TreeNode): number => {

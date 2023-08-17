@@ -3,8 +3,8 @@ import { getTree, TreeNodeType } from './spec/parser'
 import _classes from './system/_classes'
 import _specs from './system/_specs'
 import { BaseSpec, Spec } from './types'
-import { GraphSpec } from './types/GraphSpec'
 import { BundleSpec } from './types/BundleSpec'
+import { GraphSpec } from './types/GraphSpec'
 import { UnitBundleSpec } from './types/UnitBundleSpec'
 
 export function buildIdSet(

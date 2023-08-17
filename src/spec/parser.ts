@@ -54,13 +54,10 @@ export type TreeNode = {
 }
 
 export const COMMA = ','
-
 export const DOUBLE_QUOTE = '"'
 export const SINGLE_QUOTE = "'"
-
 export const OBJECT_OPEN = '{'
 export const OBJECT_CLOSE = '}'
-
 export const ARRAY_OPEN = '['
 export const ARRAY_CLOSE = ']'
 
@@ -95,6 +92,8 @@ export function printTree(data: string): void {
 export function isCompositeType(type: TreeNodeType): boolean {
   return (
     [
+      TreeNodeType.Or,
+      TreeNodeType.And,
       TreeNodeType.ArrayExpression,
       TreeNodeType.Expression,
       TreeNodeType.ObjectLiteral,
@@ -266,6 +265,25 @@ export function getLiteralType(type: TreeNodeType): TreeNodeType {
   return TYPE_TO_LITERAL[type]
 }
 
+export const checkClassInheritance = (
+  sourceClass: string,
+  targetClass: string
+) => {
+  if (sourceClass === targetClass) {
+    return true
+  }
+
+  const parentClasses = INHERITANCE[sourceClass]
+
+  if (parentClasses) {
+    return parentClasses.some((parentClass) =>
+      checkClassInheritance(parentClass, targetClass)
+    )
+  }
+
+  return false
+}
+
 export function _isTypeMatch(
   specs: Specs,
   source: TreeNode,
@@ -352,21 +370,7 @@ export function _isTypeMatch(
         const sourceClass = source.value.slice(1, -1)
         const targetClass = target.value.slice(1, -1)
 
-        const checkMatch = (sourceClass) => {
-          if (sourceClass === targetClass) {
-            return true
-          }
-
-          const pps = INHERITANCE[sourceClass]
-
-          if (pps) {
-            return pps.some(checkMatch)
-          }
-
-          return false
-        }
-
-        const match = checkMatch(sourceClass)
+        const match = checkClassInheritance(sourceClass, targetClass)
 
         return match
       } else if (source.type === TreeNodeType.Unit) {
@@ -447,7 +451,9 @@ export function _isTypeMatch(
         _isTypeMatch(specs, source, targetChild)
       )
     case TreeNodeType.And:
-      return source.value === target.value
+      return !target.children.some(
+        (targetChild) => !_isTypeMatch(specs, source, targetChild)
+      )
     case TreeNodeType.Expression:
       return _isTypeMatch(specs, source, target.children[0])
     case TreeNodeType.ArrayExpression:
@@ -882,23 +888,29 @@ export function getValueTree(
   )
 }
 
+const a = { foo: '"bar}' }
+
 function execComposed(
   str: string,
   open_delimiter: string,
   close_delimiter: string
 ): [any, string] | null {
   const l = str.length
+
   if (str[0] === open_delimiter && str[l - 1] === close_delimiter) {
     let sq_open = false
     let dq_open = false
     let open = 0
+
     for (let i = 1; i < l - 1; i++) {
       const c = str[i]
-      if (c === "'") {
+      const pc = str[i - 1]
+
+      if (c === "'" && pc !== '\\') {
         if (!dq_open) {
           sq_open = !sq_open
         }
-      } else if (c === '"') {
+      } else if (c === '"' && pc !== '\\') {
         if (!sq_open) {
           dq_open = !dq_open
         }
@@ -908,6 +920,7 @@ function execComposed(
             open++
           } else if (c === close_delimiter) {
             open--
+
             if (open === -1) {
               return null
             }
@@ -1162,7 +1175,15 @@ export function _extractGenerics(
     }
     case TreeNodeType.Or:
     case TreeNodeType.And:
-      return _extractGenerics(specs, value.children[0], type.children[0])
+      for (const child of type.children) {
+        if (_hasGeneric(child)) {
+          generics = {
+            ...generics,
+            ..._extractGenerics(specs, value, child),
+          }
+        }
+      }
+      break
     case TreeNodeType.ArrayExpression:
     case TreeNodeType.ObjectExpression:
       return _extractGenerics(
@@ -1823,18 +1844,25 @@ export function _insertNodeAt(
     return node
   }
   root = clone(root)
+
   const parentPath = getParentPath(path)!
   const parentNode = _getNodeAtPath(root, parentPath)!
+
   const last = path[path.length - 1]
+
   parentNode.children.splice(last, 0, node)
+
   let i = 0
   let n = root
+
   do {
     n.value = _stringify(n)
     n = n.children[path[i]]
     i++
   } while (i < path.length - 1)
-  return root
+
+  // TODO performance
+  return getTree(root.value)
 }
 
 export function insertNodeAt(
@@ -1856,18 +1884,25 @@ export function _updateNodeAt(
   if (path.length === 0) {
     return update
   }
+
   root = clone(root)
+
   const parentPath = getParentPath(path)!
   const parentNode = _getNodeAtPath(root, parentPath)!
+
   const last = path[path.length - 1]
+
   parentNode.children[last] = update
+
   let i = 0
   let n = root
+
   do {
     n.value = _stringify(n)
     n = n.children[path[i]]
     i++
   } while (i < path.length - 1)
+
   // TODO performance
   return getTree(root.value)
 }

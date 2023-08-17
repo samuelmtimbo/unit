@@ -1,13 +1,12 @@
 import assert = require('assert')
-import { Graph } from '../../Class/Graph'
 import { Unit } from '../../Class/Unit'
 import { cloneUnit } from '../../spec/cloneUnit'
 import { fromId } from '../../spec/fromId'
-import Add from '../../system/f/arithmetic/Add'
-import Identity from '../../system/f/control/Identity'
 import _classes from '../../system/_classes'
 import { ID_RANGE } from '../../system/_ids'
 import _specs from '../../system/_specs'
+import Add from '../../system/f/arithmetic/Add'
+import Identity from '../../system/f/control/Identity'
 import { system } from '../util/system'
 
 const identity = new Identity<number>(system)

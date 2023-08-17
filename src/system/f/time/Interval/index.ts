@@ -1,4 +1,3 @@
-import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
 import { System } from '../../../../system'

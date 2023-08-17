@@ -15,7 +15,7 @@ export const wrapTakeInputAction = (data: UnitTakeInputData) => {
 }
 
 export const makeTakeInputAction = (id: string) => {
-  return wrapTakeInputAction({ id })
+  return wrapTakeInputAction({ pinId: id })
 }
 
 export const wrapRemovePinDataAction = (data: UnitRemovePinDataData) => {

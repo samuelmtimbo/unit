@@ -2,16 +2,13 @@ import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../system/f/object/DeepMerge/f'
 import { keys } from '../system/f/object/Keys/f'
 import { BaseSpec, GraphMergeSpec, Spec, Specs } from '../types'
-import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
+import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
+import { IOOf } from '../types/IOOf'
 import { clone, isEmptyObject, mapObjVK, pathOrDefault } from '../util/object'
 import { emptyIO } from './emptyIO'
 import {
-  applyGenerics,
-  extractGenerics,
-  findGenerics,
-  getTree,
   TreeNode,
   TreeNodeType,
   _applyGenerics,
@@ -19,19 +16,16 @@ import {
   _findGenerics,
   _getValueType,
   _hasGeneric,
+  applyGenerics,
+  checkClassInheritance,
+  extractGenerics,
+  findGenerics,
+  getTree,
 } from './parser'
 import { findFirstMergePin, forEachPinOnMerge } from './util'
 
-export type TypeInterface = {
-  input: Dict<string>
-  output: Dict<string>
-}
-
-export type TypeTreeInterface = {
-  input: Dict<TreeNode>
-  output: Dict<TreeNode>
-}
-
+export type TypeInterface = IOOf<Dict<string>>
+export type TypeTreeInterface = IOOf<Dict<TreeNode>>
 export type TypeTreeInterfaceCache = Dict<TypeTreeInterface>
 
 export const getSpecTypeInterfaceById = (
@@ -183,8 +177,11 @@ export const _getGraphTypeInterface = (
 
           const mergeInputPin = findFirstMergePin(merge, 'input')
 
-          subPinType =
-            unitTypeMap[mergeInputPin.unitId].input[mergeInputPin.pinId]
+          subPinType = pathOrDefault(
+            unitTypeMap,
+            [mergeInputPin.unitId, 'input', mergeInputPin.pinId],
+            undefined
+          )
         } else if (unitId && pinId) {
           subPinType = pathOrDefault(
             unitTypeMap,
@@ -227,7 +224,6 @@ export const _getGraphTypeInterface = (
 
           subPinType = type
         } else if (unitId && pinId) {
-          // subPinType = unitTypeMap[unitId].output[pinId]
           subPinType = pathOrDefault(
             unitTypeMap,
             [unitId, 'output', pinId],
@@ -309,6 +305,7 @@ export const _isMoreSpecific = (a: TreeNode, b: TreeNode): boolean => {
   } else if (b.value === 'any') {
     return true
   }
+
   const aGenericCount = _findGenerics(a).size
   const bGenericCount = _findGenerics(b).size
 
@@ -317,6 +314,10 @@ export const _isMoreSpecific = (a: TreeNode, b: TreeNode): boolean => {
   } else if (aGenericCount < bGenericCount) {
     return true
   } else {
+    if (a.type === TreeNodeType.Class && b.type === TreeNodeType.Class) {
+      return !checkClassInheritance(a.value, b.value)
+    }
+
     if (a.children.length > b.children.length) {
       return true
     } else if (a.children.length < b.children.length) {
@@ -489,17 +490,13 @@ export const _getGraphTypeMap = (
 
     const create_set_equivalent = () => {
       let equivalence_set = new Set<string>()
-      let merged = false
-      function set_equivalent(unitId: string, kind: IO, pinId: string) {
-        // AD HOC unit might've removed from subgraph
-        if (!typeMap[unitId]) {
-          return
-        }
 
-        const type = typeMap[unitId][kind][pinId]
+      let merged = false
+
+      function set_equivalent(unitId: string, kind: IO, pinId: string) {
+        const type = pathOrDefault(typeMap, [unitId, kind, pinId], undefined)
 
         // AD HOC
-        // SELF
         if (!type) {
           return
         }
@@ -509,26 +506,34 @@ export const _getGraphTypeMap = (
           return
         }
 
-        if (equivalence_index[type.value] !== undefined) {
+        if (equivalence_index[type.value] === undefined) {
+          equivalence_set.add(type.value)
+
+          equivalence_index[type.value] = i
+        } else {
           merged = true
+
           i = equivalence_index[type.value]
+
           equivalence[i] = new Set([
             ...(equivalence[i] || []),
             ...equivalence_set,
           ])
-          equivalence_set.forEach((t) => {
-            equivalence_index[t] = i
+
+          equivalence_set.forEach((j) => {
+            equivalence_index[j] = i
           })
+
           equivalence_set = equivalence[i]
-        } else {
-          equivalence_set.add(type.value)
-          equivalence_index[type.value] = i
         }
+
         if (!merged) {
           equivalence.push(equivalence_set)
         }
+
         i = equivalence.length
       }
+
       return set_equivalent
     }
 
@@ -537,6 +542,7 @@ export const _getGraphTypeMap = (
       set_equivalent: (unitId: string, kind: IO, pinId: string) => void
     ): void => {
       const mergeSpec = merges[mergeId]
+
       forEachPinOnMerge(mergeSpec, (unitId, kind, pinId) => {
         set_equivalent(unitId, kind, pinId)
       })
@@ -548,6 +554,7 @@ export const _getGraphTypeMap = (
       set_equivalent: (unitId: string, kind: IO, pinId: string) => void
     ): void => {
       const { plug } = spec[`${kind}s`][pinId]
+
       forEachValueKey(plug, ({ unitId, pinId, mergeId }) => {
         if (mergeId) {
           set_merge_equivalence(mergeId, set_equivalent)
@@ -559,21 +566,27 @@ export const _getGraphTypeMap = (
 
     forEachValueKey(merge, (_, mergeId: string) => {
       const set_equivalent = create_set_equivalent()
+
       set_merge_equivalence(mergeId, set_equivalent)
     })
 
     forEachValueKey(inputs, (_, inputId) => {
       const set_equivalent = create_set_equivalent()
+
       set_exposed_equivalence('input', inputId, set_equivalent)
     })
 
     forEachValueKey(outputs, (_, outputId) => {
       const set_equivalent = create_set_equivalent()
+
       set_exposed_equivalence('output', outputId, set_equivalent)
     })
 
-    const specific = equivalence.map((equivalence_set) => {
+    function reduceEquivalence(equivalence_set: Set<string>) {}
+
+    const reduced_equivalence = equivalence.map((equivalence_set) => {
       let theMostSpecific = undefined
+
       for (const t of equivalence_set) {
         if (theMostSpecific === undefined) {
           theMostSpecific = t
@@ -581,22 +594,44 @@ export const _getGraphTypeMap = (
           theMostSpecific = mostSpecific(theMostSpecific, t)
         }
       }
+
+      return theMostSpecific as string
+    })
+
+    const specific = equivalence.map((equivalence_set) => {
+      let theMostSpecific = undefined
+
+      for (const t of equivalence_set) {
+        if (theMostSpecific === undefined) {
+          theMostSpecific = t
+        } else {
+          theMostSpecific = mostSpecific(theMostSpecific, t)
+        }
+      }
+
       return theMostSpecific as string
     })
 
     const generic_to_substitute: Dict<string> = {}
+
     equivalence.forEach((equivalence_set, index) => {
       for (const t of equivalence_set) {
         const theMostSpecific = specific[index]
+
         const extracted = extractGenerics(specs, theMostSpecific, t)
+
         for (const generic in extracted) {
           const extract = extracted[generic]
+
           let substitution: string
+
           if (generic_to_substitute[generic] === undefined) {
             substitution = extract
           } else {
             const prev_substitution = generic_to_substitute[generic]
+
             substitution = mostSpecific(extract, prev_substitution)
+
             if (substitution !== extract) {
               for (const g in generic_to_substitute) {
                 generic_to_substitute[g] = applyGenerics(
@@ -607,6 +642,7 @@ export const _getGraphTypeMap = (
                 )
               }
             }
+
             if (prev_substitution !== substitution) {
               for (const gen in generic_to_substitute) {
                 generic_to_substitute[gen] = applyGenerics(
@@ -618,6 +654,7 @@ export const _getGraphTypeMap = (
               }
             }
           }
+
           generic_to_substitute[generic] = substitution
         }
       }

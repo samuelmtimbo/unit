@@ -5,6 +5,7 @@ import {
   linearTransition,
 } from '../../../../../client/animation/animation'
 import classnames from '../../../../../client/classnames'
+import { setAlpha } from '../../../../../client/color'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Context, setColor, setTheme } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
@@ -15,7 +16,6 @@ import parentElement from '../../../../../client/platform/web/parentElement'
 import {
   COLOR_NONE,
   defaultThemeColor,
-  setAlpha,
   themeBackgroundColor,
 } from '../../../../../client/theme'
 import { userSelect } from '../../../../../client/util/style/userSelect'

@@ -1,7 +1,7 @@
 import { Element } from '../../../../../client/element'
 import { parseRelativeUnit } from '../../../../../client/parseRelativeUnit'
 import applyStyle, { reactToFrameSize } from '../../../../../client/style'
-import { COLOR_WHITE } from '../../../../../client/theme'
+import { COLOR_WHITE, defaultThemeColor } from '../../../../../client/theme'
 import { replaceChild } from '../../../../../client/util/replaceChild'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
@@ -177,7 +177,28 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     // console.log('Canvas', 'onPropChanged', prop, current)
 
     if (prop === 'style') {
-      applyStyle(this._canvas_el, { ...DEFAULT_STYLE, ...current })
+      const { $theme } = this.$context
+
+      const final_style = { ...DEFAULT_STYLE, ...current }
+
+      applyStyle(this._canvas_el, final_style)
+
+      const fallbackColor =
+        final_style.strokeStyle ??
+        final_style.color ??
+        defaultThemeColor($theme)
+
+      const fallbackStrokeWidth =
+        final_style.strokeStyle ??
+        final_style.color ??
+        defaultThemeColor($theme)
+
+      this._context.fillStyle = fallbackColor
+      this._context.strokeStyle = fallbackColor
+
+      clearCanvas(this._context)
+
+      this._redraw()
     } else if (prop === 'width') {
       this._unlisten_frame_width()
 

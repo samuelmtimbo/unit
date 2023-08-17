@@ -1,38 +1,19 @@
+import { NOOP } from '../NOOP'
 import { $Child } from '../component/Child'
 import { $Children } from '../component/Children'
 import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
-import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
-import { NOOP } from '../NOOP'
 import { System } from '../system'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
+import { Unlisten } from '../types/Unlisten'
 import { $Component } from '../types/interface/async/$Component'
 import { $Graph } from '../types/interface/async/$Graph'
-import { Unlisten } from '../types/Unlisten'
-import {
-  at,
-  insert,
-  pull,
-  push,
-  remove,
-  removeAt,
-  unshift,
-} from '../util/array'
+import { insert, pull, push, remove, removeAt, unshift } from '../util/array'
 import { callAll } from '../util/call/callAll'
 import { _if } from '../util/control'
-import {
-  appendChild,
-  insertAt,
-  insertBefore,
-  removeChild,
-} from '../util/element'
-import { ensure, forEachObjKV, get, set } from '../util/object'
-import { addListener, addListeners } from './addListener'
-import namespaceURI from './component/namespaceURI'
-import { componentFromSpecId } from './componentFromSpecId'
-import { component_ } from './component_'
-import { Context, dispatchContextEvent, dispatchCustomEvent } from './context'
+import { appendChild, insertAt, removeChild } from '../util/element'
+import { forEachObjKV, get, set } from '../util/object'
 import {
   DEFAULT_FONT_SIZE,
   DEFAULT_OPACITY,
@@ -40,22 +21,28 @@ import {
 } from './DEFAULT_FONT_SIZE'
 import { IOElement } from './IOElement'
 import { Listener } from './Listener'
+import { addListener, addListeners } from './addListener'
+import namespaceURI from './component/namespaceURI'
+import { componentFromSpecId } from './componentFromSpecId'
+import { component_ } from './component_'
+import { Context, dispatchContextEvent, dispatchCustomEvent } from './context'
+import { makeCustomListener } from './event/custom'
 import {
   IOUIEventName,
-  makeUIEventListener,
   UI_EVENT_SET,
+  makeUIEventListener,
 } from './makeEventListener'
 import { mount } from './mount'
 import { unmount } from './unmount'
-import { addVector, NULL_VECTOR, Position, Rect } from './util/geometry'
+import { NULL_VECTOR, addVector } from './util/geometry'
+import { Position, Rect } from './util/geometry/types'
 import { getFontSize } from './util/style/getFontSize'
 import { getOpacity } from './util/style/getOpacity'
 import { getRelativePosition } from './util/style/getPosition'
 import { getRect } from './util/style/getRect'
-import { getScale, Scale } from './util/style/getScale'
+import { Scale, getScale } from './util/style/getScale'
 import { getSize } from './util/style/getSize'
 import { getTextAlign } from './util/style/getTextAlign'
-import { proxyWrap } from '../proxyWrap'
 
 const $childToComponent = (
   system: System,
@@ -206,7 +193,15 @@ export class Component<
   onDestroy() {}
 
   dispatchEvent(type: string, detail: any = {}, bubbles: boolean = true) {
-    dispatchCustomEvent(this.$element, type, detail, bubbles)
+    if (this.$primitive) {
+      dispatchCustomEvent(this.$element, type, detail, bubbles)
+    } else {
+      if (this.$mounted) {
+        dispatchCustomEvent(this.$slotParent.$element, type, detail, bubbles)
+      } else {
+        dispatchCustomEvent(this.$element, type, detail, bubbles)
+      }
+    }
   }
 
   dispatchContextEvent(type: string, data: any = {}) {
@@ -287,7 +282,7 @@ export class Component<
 
       delete this._releasePointerCapture[pointerId]
     } else {
-      throw new Error('element is not capturing pointer')
+      // throw new Error('element is not capturing pointer')
     }
   }
 
@@ -855,12 +850,29 @@ export class Component<
   private _unit_unlisten: Unlisten
 
   private _addUnitEventListener = (event: IOUIEventName): void => {
-    const unlisten = this.addEventListener(
-      makeUIEventListener(event, (data) => {
-        this.$unit.$refEmitter({}).$emit({ type: event, data }, NOOP)
-      })
-    )
-    this.$named_unlisten[event] = unlisten
+    if (event.startsWith('_')) {
+      const _event = event.slice(1)
+
+      const unlisten = this.addEventListener(
+        makeCustomListener(_event, (data) => {
+          const $emitter = this.$unit.$refEmitter({ _: ['EE'] })
+
+          $emitter.$emit({ type: event, data }, NOOP)
+        })
+      )
+
+      this.$named_unlisten[event] = unlisten
+    } else {
+      const unlisten = this.addEventListener(
+        makeUIEventListener(event, (data) => {
+          const $emitter = this.$unit.$refEmitter({ _: ['EE'] })
+
+          $emitter.$emit({ type: event, data }, NOOP)
+        })
+      )
+
+      this.$named_unlisten[event] = unlisten
+    }
   }
 
   private _removeUnitEventListener = (event: string): void => {
@@ -961,11 +973,11 @@ export class Component<
 
     all_unlisten.push(unit_unlisten)
 
-    const $emitter = $unit.$refEmitter({})
+    const $emitter = $unit.$refEmitter({ _: ['EE'] })
 
-    $emitter.$getEventNames({}, (events: string[]) => {
+    $emitter.$eventNames({}, (events: string[]) => {
       for (const event of events) {
-        if (UI_EVENT_SET.has(event as IOUIEventName)) {
+        if (UI_EVENT_SET.has(event as IOUIEventName) || event.startsWith('_')) {
           listen(event as IOUIEventName)
         }
       }
@@ -973,12 +985,14 @@ export class Component<
 
     const unlisten_emitter = callAll([
       $emitter.$addListener({ event: 'listen' }, ({ event }) => {
-        if (UI_EVENT_SET.has(event as IOUIEventName)) {
+        if (UI_EVENT_SET.has(event as IOUIEventName) || event.startsWith('_')) {
           listen(event)
         }
       }),
       $emitter.$addListener({ event: 'unlisten' }, ({ event }) => {
-        if (UI_EVENT_SET.has(event as IOUIEventName)) {
+        if (
+          UI_EVENT_SET.has((event as IOUIEventName) || event.startsWith('_'))
+        ) {
           unlisten(event)
         }
       }),

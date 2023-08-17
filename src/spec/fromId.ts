@@ -1,15 +1,13 @@
-import { bundleSpec } from '../bundle'
 import { Unit } from '../Class/Unit'
 import { Classes, Spec, Specs } from '../types'
-import { GraphSpec } from '../types/GraphSpec'
 import { Dict } from '../types/Dict'
+import { GraphSpec } from '../types/GraphSpec'
 import { UnitBundle } from '../types/UnitBundle'
 import { UnitClass } from '../types/UnitClass'
-import { clone } from '../util/object'
-import { bundleClass } from './bundleClass'
-import { _fromSpec } from './fromSpec'
 import { lazyFromSpec } from './Lazy'
 import { SpecNotFoundError } from './SpecNotFoundError'
+import { bundleClass } from './bundleClass'
+import { _fromSpec, fromSpec } from './fromSpec'
 
 export function fromId<T extends Unit>(
   id: string,
@@ -29,7 +27,7 @@ export function fromId<T extends Unit>(
     spec = spec as GraphSpec
 
     if (branch[id]) {
-      Class = lazyFromSpec(spec, specs, branch)
+      Class = lazyFromSpec(spec, specs, branch, fromSpec)
     } else {
       Class = _fromSpec(spec, specs, {
         ...branch,

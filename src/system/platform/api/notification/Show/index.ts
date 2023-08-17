@@ -1,4 +1,4 @@
-import { Primitive, PrimitiveEvents } from '../../../../../Primitive'
+import { Primitive } from '../../../../../Primitive'
 import { System } from '../../../../../system'
 import { ID_SHOW } from '../../../../_ids'
 

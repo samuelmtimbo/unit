@@ -2432,3 +2432,79 @@ assert.deepEqual(
     },
   ]
 )
+assert.deepEqual(
+  reflectChildrenTrait(
+    {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+    {},
+    [
+      {
+        width: '100px',
+        height: '30px',
+        boxSizing: 'content-box',
+        border: '10px solid black',
+      },
+    ],
+    () => [],
+    [],
+    {}
+  )[0],
+  [
+    {
+      x: 0,
+      y: 0,
+      width: 120,
+      height: 50,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+  ]
+)
+assert.deepEqual(
+  reflectChildrenTrait(
+    {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+    {},
+    [
+      {
+        width: '100px',
+        height: '30px',
+        boxSizing: 'border-box',
+        border: '10px solid black',
+      },
+    ],
+    () => [],
+    [],
+    {}
+  )[0],
+  [
+    {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 30,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+  ]
+)

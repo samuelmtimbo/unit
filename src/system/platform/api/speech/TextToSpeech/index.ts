@@ -41,6 +41,7 @@ export default class TextToSpeech extends Functional<I, O> {
       synth = SpeechSynthesis({})
     } catch (err) {
       done(undefined, err.message)
+
       return
     }
 

@@ -1,21 +1,15 @@
 import { IOElement } from '../../IOElement'
 import { parseTransformXY } from '../../parseTransformXY'
-import { addVector3, NULL_VECTOR, Position } from '../geometry'
-import { getChildrenRect } from './getSize'
+import { addVector3, NULL_VECTOR } from '../geometry'
+import { Position } from '../geometry/types'
 
 export function getPosition(element: IOElement): Position {
   if (element instanceof Text) {
     return { x: 0, y: 0 }
   } else {
-    if (element.classList.contains('__parent')) {
-      const { x, y } = getChildrenRect(element)
+    const { x, y } = element.getBoundingClientRect()
 
-      return { x, y }
-    } else {
-      const { x, y } = element.getBoundingClientRect()
-
-      return { x, y }
-    }
+    return { x, y }
   }
 }
 

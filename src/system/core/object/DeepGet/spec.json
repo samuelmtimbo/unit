@@ -1,7 +1,7 @@
 {
   "name": "deep get",
   "units": {
-    "prop": {
+    "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c"
     },
     "head": {
@@ -57,7 +57,7 @@
       }
     },
     "2": {
-      "prop": {
+      "get": {
         "input": {
           "key": true
         }
@@ -74,7 +74,7 @@
           "obj": true
         }
       },
-      "prop": {
+      "get": {
         "output": {
           "value": true
         }
@@ -93,7 +93,7 @@
       }
     },
     "5": {
-      "prop": {
+      "get": {
         "input": {
           "obj": true
         }

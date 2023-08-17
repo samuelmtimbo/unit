@@ -5,8 +5,8 @@ import { parentClass } from '../../../../client/createParent'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
 import { ComponentClass, System } from '../../../../system'
-import { $Wrap } from '../../../../types/interface/async/$Wrap'
 import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
+import { $Wrap } from '../../../../types/interface/async/$Wrap'
 import { insert, push, removeAt, unshift } from '../../../../util/array'
 
 export interface Props {

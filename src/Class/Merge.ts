@@ -37,8 +37,13 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  public onInputRenamed(name: string, newName: string): void {
-    super.onInputRenamed(name, newName)
+  public onInputRenamed(
+    name: string,
+    newName: string,
+    opt: PinOpt,
+    newOpt: PinOpt
+  ): void {
+    super.onInputRenamed(name, newName, opt, newOpt)
 
     const input = this.getInput(newName)
 
@@ -47,8 +52,13 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  public onOutputRenamed(name: string, newName: string): void {
-    super.onOutputRenamed(name, newName)
+  public onOutputRenamed(
+    name: string,
+    newName: string,
+    opt: PinOpt,
+    newOpt: PinOpt
+  ): void {
+    super.onOutputRenamed(name, newName, opt, newOpt)
   }
 
   public onInputSet(

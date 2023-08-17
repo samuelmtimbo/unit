@@ -1,17 +1,15 @@
-import { $ } from '../Class/$'
+import { SharedRef } from '../SharefRef'
 import { System } from '../system'
 import { V } from '../types/interface/V'
 
-export function wrapValue<T>(data: T, _system: System): $ & V {
-  return new (class Value extends $ implements V<T> {
-    private _data: T = data
-
+export function wrapValue<T>(data: SharedRef<T>, _system: System): V {
+  return {
     async read(): Promise<T> {
-      return this._data
-    }
+      return data.current
+    },
 
     async write(data: any): Promise<void> {
-      this._data = data
-    }
-  })(_system)
+      data.current = data
+    },
+  }
 }

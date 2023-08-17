@@ -1,7 +1,7 @@
 import { Callback } from '../../Callback'
 import { Unlisten } from '../../Unlisten'
 
-export const EE_METHOD_CALL = ['getEventNames']
+export const EE_METHOD_CALL = ['emit', 'eventNames']
 export const EE_METHOD_WATCH = ['addListener']
 export const EE_METHOD_REF = ['refEmitter']
 
@@ -13,7 +13,7 @@ export const EE_METHOD = [
 
 export interface $EE_C {
   $emit(data: { type: string; data: any }, callback: Callback): void
-  $getEventNames(data: {}, callback: Callback<string[]>): void
+  $eventNames(data: {}, callback: Callback<string[]>): void
 }
 
 export interface $EE_W {

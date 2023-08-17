@@ -1,7 +1,7 @@
 import { Classes, Specs } from '../types'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { fromUnitBundle } from './fromUnitBundle'
-import { getTree, TreeNode, TreeNodeType, _isValidObjKeyType } from './parser'
+import { TreeNode, TreeNodeType, _isValidObjKeyType, getTree } from './parser'
 
 export function _evaluate(
   tree: TreeNode,

@@ -27,7 +27,9 @@ export default class Insert<T> extends Functional<I<T>, O<T>> {
 
   f({ a, i, b }: I<T>, done): void {
     const _a = [...a]
+
     _a.splice(i, 0, b)
+
     done({ a: _a })
   }
 }

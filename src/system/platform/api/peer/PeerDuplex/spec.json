@@ -163,7 +163,6 @@
     "send": {
       "id": "b296242e-8b82-11eb-ac6c-0f8d3f9948d0",
       "input": {
-        "unit": {},
         "data": {
           "metadata": {
             "position": {
@@ -264,7 +263,7 @@
     "onmessage": {
       "id": "23c3952a-ef19-11ea-b80e-3f693508091e",
       "input": {
-        "unit": {}
+        "channel": {}
       },
       "output": {
         "message": {}
@@ -281,7 +280,7 @@
     "0": {
       "onmessage": {
         "input": {
-          "unit": true
+          "channel": true
         }
       },
       "receiver": {
@@ -293,7 +292,7 @@
     "1": {
       "send": {
         "input": {
-          "unit": true
+          "channel": true
         }
       },
       "transmitter": {

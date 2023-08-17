@@ -1,7 +1,7 @@
 {
   "name": "prop x y",
   "units": {
-    "prop": {
+    "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "key": {
@@ -22,7 +22,7 @@
   },
   "merges": {
     "0": {
-      "prop": {
+      "get": {
         "input": {
           "obj": true
         }
@@ -67,7 +67,7 @@
     "x": {
       "plug": {
         "0": {
-          "unitId": "prop",
+          "unitId": "get",
           "pinId": "value"
         }
       },

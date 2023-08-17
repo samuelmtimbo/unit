@@ -80,6 +80,7 @@ export function AsyncWorker(client: RemotePort, _: string[]): any {
     J: AsyncWorkerJ,
     U: AsyncWorkerU,
     ST: AsyncWorkerST,
+    EE: AsyncWorkerEE,
     S: AsyncWorkerS,
   })
 }

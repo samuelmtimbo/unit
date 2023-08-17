@@ -6,7 +6,7 @@ import { fromBundle } from '../../../../../spec/fromBundle'
 import { fromSpec } from '../../../../../spec/fromSpec'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { GraphBundle, GraphClass } from '../../../../../types/GraphClass'
+import { GraphClass } from '../../../../../types/GraphClass'
 import { G } from '../../../../../types/interface/G'
 import { ID_EDITOR } from '../../../../_ids'
 
