@@ -2,7 +2,8 @@ import { evaluate } from './spec/evaluate'
 import { getTree, TreeNodeType } from './spec/parser'
 import _classes from './system/_classes'
 import _specs from './system/_specs'
-import { BaseSpec, Spec } from './types'
+import { Spec } from './types'
+import { BaseSpec } from './types/BaseSpec'
 import { BundleSpec } from './types/BundleSpec'
 import { GraphSpec } from './types/GraphSpec'
 import { UnitBundleSpec } from './types/UnitBundleSpec'
@@ -25,7 +26,7 @@ export function buildIdSet(
     const { id, input = {} } = unit
 
     for (const inputId in input) {
-      const _input = input[inputId]
+      const _input = input[inputId] ?? {}
 
       const { data } = _input
 

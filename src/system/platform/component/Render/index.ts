@@ -1,10 +1,10 @@
 import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
-import { P } from '../../../../types/interface/P'
+import { Component_ } from '../../../../types/interface/Component'
 import { ID_RENDER } from '../../../_ids'
 
 export interface I {
-  graph: P
+  component: Component_
   className: string
   style: object
 }
@@ -15,12 +15,12 @@ export default class Render extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'graph'],
+        i: ['style', 'component'],
         o: [],
       },
       {
         input: {
-          graph: {
+          component: {
             ref: true,
           },
         },

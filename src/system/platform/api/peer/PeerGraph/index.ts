@@ -1,8 +1,8 @@
 import { Peer } from '../../../../../api/peer/Peer'
 import { AsyncWorkerGraph } from '../../../../../AsyncWorker'
 import { $ } from '../../../../../Class/$'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
+import { Primitive } from '../../../../../Primitive'
 import { RemotePort } from '../../../../../RemotePort'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
@@ -23,7 +23,7 @@ export interface O {
   answer: string
 }
 
-export default class PeerGraph extends Semifunctional<I, O> {
+export default class PeerGraph extends Primitive<I, O> {
   __ = ['U']
 
   private _peer: Peer

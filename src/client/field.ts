@@ -4,7 +4,7 @@ import { $Element } from '../types/interface/async/$Element'
 import { identity } from '../util/identity'
 import { Element } from './element'
 import { htmlPropHandler, inputPropHandler, PropHandler } from './propHandler'
-import applyStyle from './style'
+import { applyStyle } from './style'
 
 export type InputElement =
   | HTMLInputElement
@@ -83,7 +83,7 @@ export class Field<
     this.$element.addEventListener('input', inputEventHandler)
 
     this._prop_handler = {
-      ...htmlPropHandler(this, defaultStyle),
+      ...htmlPropHandler(this, this.$element, defaultStyle),
       ...(isInput
         ? inputPropHandler(
             this.$element as HTMLInputElement,

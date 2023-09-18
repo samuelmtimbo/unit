@@ -2,7 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { IUserMediaOpt } from '../../../../../types/global/IUserMedia'
-import { ST } from '../../../../../types/interface/ST'
+import { MS } from '../../../../../types/interface/MS'
 import { stopMediaStream } from '../../../../../util/stream/stopMediaStream'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
 import { ID_USER_MEDIA } from '../../../../_ids'
@@ -12,7 +12,7 @@ export type I = {
 }
 
 export type O = {
-  stream: ST
+  stream: MS
 }
 
 export default class UserMedia extends Functional<I, O> {
@@ -51,7 +51,7 @@ export default class UserMedia extends Functional<I, O> {
       },
     } = this.__system
 
-    let stream: ST
+    let stream: MS
 
     try {
       const _stream = await getUserMedia(opt)

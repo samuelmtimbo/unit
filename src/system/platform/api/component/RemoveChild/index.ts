@@ -42,6 +42,8 @@ export default class RemoveChild extends Functional<I, O> {
       const child = parent.removeChild(at)
 
       unit = cloneBundle(child)
+
+      child.destroy()
     } catch (err) {
       done(undefined, err.message)
 

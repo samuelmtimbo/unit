@@ -2,8 +2,11 @@ import dissocAll from '../../system/core/object/DeleteAll/f'
 import dissocPath from '../../system/core/object/DeletePath/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
-import { Action, DatumSpec, GraphDataSpec } from '../../types'
-import { REMOVE_DATA, REMOVE_DATUM, SET_DATA, SET_DATUM } from '../actions/D'
+import { DatumSpec, GraphDataSpec } from '../../types'
+import { Action } from '../../types/Action'
+import { GraphSpec } from '../../types/GraphSpec'
+import { pathSet } from '../../util/object'
+import { REMOVE_DATUM, SET_DATUM } from '../actions/D'
 
 export const defaultState: GraphDataSpec = {}
 
@@ -28,11 +31,19 @@ export const removeDatum = (
   return dissocPath(state, [id])
 }
 
-export const setDatum = (
-  { id, value }: { id: string; value: DatumSpec },
+export const $setDatum = (
+  { id, datumSpec: value }: { id: string; datumSpec: DatumSpec },
   state: GraphDataSpec
 ): GraphDataSpec => {
   return _set(state, id, value)
+}
+
+export const _setSpecDatum = (
+  spec: GraphSpec,
+  datumId: string,
+  datumSpec: DatumSpec
+): void => {
+  return pathSet(spec, ['data', datumId], datumSpec)
 }
 
 export default function (
@@ -41,13 +52,9 @@ export default function (
 ): GraphDataSpec {
   switch (type) {
     case SET_DATUM:
-      return setDatum(data, state)
-    case SET_DATA:
-      return setData(data, state)
+      return $setDatum(data, state)
     case REMOVE_DATUM:
       return removeDatum(data, state)
-    case REMOVE_DATA:
-      return removeData(data, state)
     default:
       return state
   }

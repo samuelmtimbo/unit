@@ -5,7 +5,7 @@ import { ID_FETCH } from '../../../../_ids'
 
 export type I = {
   url: string
-  options: RequestInit
+  opt: RequestInit
 }
 
 export type O = {
@@ -19,7 +19,7 @@ export default class Fetch extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['url', 'options'],
+        i: ['url', 'opt'],
         o: ['response'],
       },
       {},
@@ -30,7 +30,7 @@ export default class Fetch extends Functional<I, O> {
 
   private _fetch_index: number = 0
 
-  f({ url, options }: I, done: Done<O>) {
+  f({ url, opt }: I, done: Done<O>) {
     const {
       api: {
         http: { fetch },
@@ -40,7 +40,7 @@ export default class Fetch extends Functional<I, O> {
     const i = ++this._fetch_index
 
     try {
-      fetch(url, options)
+      fetch(url, opt)
         .then((response) => {
           if (i !== this._fetch_index) {
             // request is outdated

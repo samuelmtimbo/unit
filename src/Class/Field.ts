@@ -31,7 +31,20 @@ export class Field<
     )
 
     this.addListener('play', () => {
-      this._output.value.push(this._defaultState.value)
+      this._output.value.push(this.initialValue())
     })
+  }
+
+  initialValue() {
+    // @ts-ignore
+    return this._input?.value?.peak() ?? this._defaultState.value
+  }
+
+  onDataInputData(name: string, data: any): void {
+    super.onDataInputData(name, data)
+
+    if (name === 'value') {
+      this._output.value.push(data)
+    }
   }
 }

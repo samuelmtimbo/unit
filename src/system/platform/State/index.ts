@@ -5,9 +5,9 @@ import { System } from '../../../system'
 import { V } from '../../../types/interface/V'
 import { weakMerge } from '../../../types/weakMerge'
 import { $wrap } from '../../../wrap'
-import { wrapArray } from '../../../wrap/Array'
-import { wrapObject } from '../../../wrap/Object'
-import { wrapValue } from '../../../wrap/Value'
+import { wrapSharedRefArrayInterface } from '../../../wrap/Array'
+import { wrapSharedRef } from '../../../wrap/Object'
+import { wrapSharedValue } from '../../../wrap/SharedValue'
 import { ID_STATE } from '../../_ids'
 
 export function extractInterface(data: any): string {
@@ -59,7 +59,7 @@ export default class State<T> extends Semifunctional<I<T>, O<T>> {
   f({ init }: I<T>, done: Done<O<T>>): void {
     const sharedRef: SharedRef<T> = { current: init }
 
-    let api: any = wrapValue(sharedRef, this.__system)
+    let api: any = wrapSharedValue(sharedRef, this.__system)
 
     const _ = extractInterface(init)
 
@@ -69,13 +69,16 @@ export default class State<T> extends Semifunctional<I<T>, O<T>> {
           {
             api = weakMerge(
               api,
-              wrapArray(sharedRef as SharedRef<any[]>, this.__system)
+              wrapSharedRefArrayInterface(
+                sharedRef as SharedRef<any[]>,
+                this.__system
+              )
             )
           }
           break
         case 'J':
           {
-            api = weakMerge(api, wrapObject(sharedRef, this.__system))
+            api = weakMerge(api, wrapSharedRef(sharedRef, this.__system))
           }
           break
       }

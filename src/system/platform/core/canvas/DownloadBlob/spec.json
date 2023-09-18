@@ -1,0 +1,85 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "download blob",
+  "units": {
+    "downloadurl": {
+      "id": "c18c8f59-f3c8-49a8-9dbd-ed30fdf856e9",
+      "input": {
+        "url": {},
+        "name": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 107,
+          "y": 0
+        }
+      }
+    },
+    "createbloburl": {
+      "id": "1d5b6bb0-f18e-4428-a350-a29d8ca3ff4a",
+      "input": {
+        "blob": {},
+        "init": {}
+      },
+      "output": {
+        "url": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 6,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "1": {
+      "downloadurl": {
+        "input": {
+          "url": true
+        }
+      },
+      "createbloburl": {
+        "output": {
+          "url": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "name": {
+      "plug": {
+        "0": {
+          "unitId": "downloadurl",
+          "pinId": "name"
+        }
+      },
+      "ref": false
+    },
+    "blob": {
+      "plug": {
+        "0": {
+          "unitId": "createbloburl",
+          "pinId": "blob"
+        }
+      },
+      "ref": true
+    },
+    "init": {
+      "plug": {
+        "0": {
+          "unitId": "createbloburl",
+          "pinId": "init"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "question",
+    "description": ""
+  },
+  "id": "c3a080cc-f2f2-4c7c-998d-17809c555ef1"
+}

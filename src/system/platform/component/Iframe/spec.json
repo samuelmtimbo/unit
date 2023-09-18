@@ -9,13 +9,12 @@
       "type": "object",
       "optional": true
     },
+    "attr": {
+      "type": "object",
+      "optional": true
+    },
     "srcdoc": {
       "type": "string",
-      "optional": true,
-      "defaultIgnored": true
-    },
-    "allow": {
-      "type": "{autoplay?:boolean,camera?:boolean,encryptedMedia?:boolean,fullscreen?:boolean,microphone?:boolean,pictureInPicture?:boolean,scripts:boolean}",
       "optional": true,
       "defaultIgnored": true
     }

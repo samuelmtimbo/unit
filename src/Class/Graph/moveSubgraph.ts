@@ -10,17 +10,14 @@ import {
 import pathGet from '../../system/core/object/DeepGet/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'
-import {
-  GraphMergeSpec,
-  GraphMergesSpec,
-  GraphPinSpec,
-  GraphPlugOuterSpec,
-  GraphSubPinSpec,
-} from '../../types'
+import { GraphPinSpec, GraphPlugOuterSpec, GraphSubPinSpec } from '../../types'
 import { Dict } from '../../types/Dict'
+import { GraphMergeSpec } from '../../types/GraphMergeSpec'
+import { GraphMergesSpec } from '../../types/GraphMergesSpec'
+import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitConnect } from '../../types/GraphUnitConnect'
 import { IO } from '../../types/IO'
-import { IOOf, forIO } from '../../types/IOOf'
+import { IOOf, forIO, forIOObjKV } from '../../types/IOOf'
 import { UCG } from '../../types/interface/UCG'
 import {
   clone,
@@ -64,8 +61,16 @@ export function moveUnit(
     output: new Set(),
   }
 
-  source.removeUnit(unitId, false, false, false)
+  const spec = source.getSpec() as GraphSpec
 
+  const { units, component = {} } = spec
+
+  const { subComponents = {} } = component
+
+  const unitSpec = units[unitId]
+  const subComponent = subComponents[unitId]
+
+  source.removeUnit(unitId, false, false, false)
   target.addUnit(nextUnitId, unit, undefined, false)
 
   if (nextSubComponentParent) {
@@ -79,6 +84,18 @@ export function moveUnit(
       if (target.hasUnit(nextSubComponentChildId)) {
         target.moveRoot(nextUnitId, nextSubComponentChildId, 'default')
       }
+    }
+  }
+
+  if (subComponent) {
+    const { metadata: { component } = {} } = unitSpec
+
+    if (
+      component &&
+      typeof component.width === 'number' &&
+      typeof component.height === 'number'
+    ) {
+      target.setUnitSize(nextUnitId, component.width, component.height)
     }
   }
 
@@ -182,6 +199,7 @@ export function moveUnit(
                 unitId: nextUnitId,
                 pinId,
               },
+              false,
               false
             )
           } else {
@@ -339,6 +357,10 @@ export function moveLinkPinInto(
   })
 
   if (graphId === unitId) {
+    const constant = target.isPinConstant(type, pinId)
+
+    const pinSpec = clone(target.getExposedPinSpec(type, pinId))
+
     if (mergeId && merge) {
       const mergeUnit = merge[unitId]
 
@@ -352,6 +374,29 @@ export function moveLinkPinInto(
       }
     } else {
       target.coverPinSet(type, pinId, false)
+    }
+
+    if (constant) {
+      const { plug = {} } = pinSpec
+
+      for (const subPinId in plug) {
+        const subPinSpec = plug[subPinId]
+
+        if (subPinSpec.unitId && subPinSpec.pinId) {
+          target.setUnitPinConstant(
+            subPinSpec.unitId,
+            type,
+            subPinSpec.pinId,
+            true
+          )
+        } else if (subPinSpec.mergeId) {
+          const mergeSpec = target.getMergeSpec(subPinSpec.mergeId)
+
+          forEachPinOnMerge(mergeSpec, (unitId, type, pinId) => {
+            target.setUnitPinConstant(unitId, type, pinId, true)
+          })
+        }
+      }
     }
   } else {
     if (oppositeMergeId && oppositePinId) {
@@ -476,8 +521,6 @@ export function moveMerge(
 
   const sourceMergeSpec = source.getMergeSpec(mergeId)
 
-  const mergeSpecClone = clone(mergeSpec)
-
   const nextMerge: GraphMergeSpec = {}
 
   const { merges: graphMerges } = connectOpt
@@ -567,6 +610,19 @@ export function moveMerge(
       pinIntoCount > 1
     ) {
       target.addMerge(nextMerge, nextMergeId, false, false)
+
+      if (reverse) {
+        //
+      } else {
+        if (
+          keyCount(mergeSpec ?? {}) === 1 &&
+          getObjSingleKey(mergeSpec) === graphId
+        ) {
+          forEachPinOnMerge(mergeSpec, (_graphId, type, pinId) => {
+            target.coverPinSet(type, pinId)
+          })
+        }
+      }
     }
   }
 
@@ -592,7 +648,7 @@ export function moveMerge(
         // }
 
         if (target.hasMergePin(_mergeId, graphId, type, pinId)) {
-          target.removePinOrMerge(_mergeId, graphId, type, pinId, false, false)
+          target.removeMerge(_mergeId, false, false)
         }
 
         for (const graphMergeId in graphMerges) {
@@ -636,19 +692,28 @@ export function moveMerge(
                   )
 
                   if (target.hasMerge(newMergeId)) {
-                    forEachPinOnMerge(mergeClone, (unitId, type, pinId) => {
-                      if (
-                        !target.hasMergePin(newMergeId, unitId, type, pinId)
-                      ) {
-                        target.addPinToMerge(
-                          newMergeId,
-                          unitId,
-                          type,
-                          pinId,
-                          false
-                        )
+                    forEachPinOnMerge(
+                      mergeClone,
+                      (unitId, unitPinType, pinId) => {
+                        if (
+                          unitPinType !== type &&
+                          !target.hasMergePin(
+                            newMergeId,
+                            unitId,
+                            unitPinType,
+                            pinId
+                          )
+                        ) {
+                          target.addPinToMerge(
+                            newMergeId,
+                            unitId,
+                            unitPinType,
+                            pinId,
+                            false
+                          )
+                        }
                       }
-                    })
+                    )
                   } else {
                     const newMergeSpec = {
                       [otherUnitId]: {
@@ -714,22 +779,7 @@ export function moveMerge(
         }
       } else {
         if (target.hasPinNamed(type, pinId)) {
-          target.exposePin(type, pinId, '0', subPinSpec, false)
-          // if (subPinSpec.mergeId) {
-          //   if (target.hasMerge(subPinSpec.mergeId)) {
-          //     target.exposePin(type, pinId, '0', subPinSpec, false)
-          //   } else {
-          //     console.log('A')
-          //     target.exposePin(type, pinId, '0', {}, false)
-          //   }
-          // } else {
-          //   if (target.hasUnit(subPinSpec.unitId)) {
-          //     target.exposePin(type, pinId, '0', subPinSpec, false)
-          //   } else {
-          //     console.log('B')
-          //     target.exposePin(type, pinId, '0', {}, false)
-          //   }
-          // }
+          target.exposePin(type, pinId, '0', subPinSpec, false, false)
         } else {
           target.exposePinSet(
             type,
@@ -905,23 +955,19 @@ export function movePlug(
 ) {
   const currentPinSpec = source.getExposedPinSpec(type, pinId)
 
-  const plugCount = keyCount(currentPinSpec.plug ?? {})
+  let data: any
 
-  const data = source.getPinData(type, pinId)
+  if (currentPinSpec) {
+    const plugCount = keyCount(currentPinSpec.plug ?? {})
 
-  if (plugCount === 1) {
-    source.coverPinSet(type, pinId, false)
-  } else {
-    source.coverPin(type, pinId, subPinId, false)
+    data = source.getPinData(type, pinId)
+
+    if (plugCount === 1) {
+      source.coverPinSet(type, pinId, false)
+    } else {
+      source.coverPin(type, pinId, subPinId, false)
+    }
   }
-
-  const oppositeType = opposite(type)
-
-  const nextPinId = pathOrDefault(
-    nextPlugSpec,
-    [type, pinId, subPinId, 'pinId'],
-    pinId
-  )
 
   const nextType = pathOrDefault(
     nextIdMap,
@@ -938,8 +984,27 @@ export function movePlug(
   const nextSubPinSpec = pathOrDefault(
     nextPlugSpec,
     [type, pinId, subPinId],
-    {}
+    undefined
   )
+
+  if (!subPinSpec) {
+    source.exposePinSet(
+      type,
+      pinId,
+      { plug: { [subPinId]: {} } },
+      undefined,
+      false,
+      false
+    )
+
+    return
+  }
+
+  if (!nextSubPinSpec) {
+    return
+  }
+
+  const { nextPinId } = nextSubPinSpec
 
   let nextSubPinSpec_ = nextSubPinSpec
 
@@ -1054,22 +1119,7 @@ export function movePlug(
         false
       )
     } else {
-      const nextMergeId = pathOrDefault(
-        nextIdMap,
-        ['plug', type, pinId, subPinId, 'mergeId'],
-        null
-      )
-
-      if (nextMergeId) {
-        source.addPinToMerge(
-          nextMergeId,
-          graphId,
-          nextType,
-          nextPinId,
-          false,
-          false
-        )
-      }
+      //
     }
   }
 }
@@ -1111,6 +1161,9 @@ export type GraphLike<T extends UCG = UCG> = Pick<
   | 'getPlugSpecs'
   | 'getSubPinSpec'
   | 'getMergeData'
+  | 'getSpec'
+  | 'setUnitSize'
+  | 'setSubComponentSize'
 >
 
 export function moveSubgraph<T extends UCG<any, any, any>>(
@@ -1152,22 +1205,22 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
   }
 
   const findUnitPinPlug = (
-    unitId: string,
-    type: IO,
-    pinId: string
+    unitId_: string,
+    type_: IO,
+    pinId_: string
   ): GraphPlugOuterSpec => {
-    let plugSpec: GraphPlugOuterSpec | undefined
+    let plugSpec: GraphPlugOuterSpec
 
-    forEachObjKV(pinSpecs[type], (_pinId, _pinSpec: GraphPinSpec) => {
-      const { plug } = _pinSpec
+    forIOObjKV(pinSpecs, (type, pinId: string, pinSpec: GraphPinSpec) => {
+      const { plug } = pinSpec
 
       for (const subPinId in plug) {
-        const subPin = plug[subPinId]
+        const subPinSpec = plug[subPinId]
 
-        if (subPin.unitId === unitId && subPin.pinId === pinId) {
+        if (subPinSpec.unitId === unitId_ && subPinSpec.pinId === pinId_) {
           plugSpec = {
             type,
-            pinId: _pinId,
+            pinId,
             subPinId,
           }
         }
@@ -1271,7 +1324,11 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
 
   for (const { type, pinId, subPinId } of plug) {
     const pinSpec = pathGet(pinSpecs, [type, pinId])
-    const subPinSpec = pathGet(pinSpecs, [type, pinId, 'plug', subPinId])
+    const subPinSpec = pathOrDefault(
+      pinSpecs,
+      [type, pinId, 'plug', subPinId],
+      undefined
+    )
 
     movePlug(
       source,

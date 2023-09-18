@@ -1,6 +1,6 @@
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import applyStyle from '../../../../client/style'
+import { applyStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -53,7 +53,7 @@ export default class Label extends Element<HTMLLabelElement, Props> {
     applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {
-      ...htmlPropHandler(this, DEFAULT_STYLE),
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
     }
   }
 

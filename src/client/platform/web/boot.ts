@@ -4,10 +4,13 @@ import { BootOpt, System } from '../../../system'
 import { attachApp } from '../../render/attachApp'
 import { attachCanvas } from '../../render/attachCanvas'
 import { attachGesture } from '../../render/attachGesture'
+import { attachHTML } from '../../render/attachHTML'
+import { attachLayout } from '../../render/attachLayout'
 import { attachLongPress } from '../../render/attachLongPress'
 import { attachSprite } from '../../render/attachSprite'
 import { attachStyle } from '../../render/attachStyle'
 import { attachSVG } from '../../render/attachSVG'
+import { attachVoid } from '../../render/attachVoid'
 import { SYSTEM_ROOT_ID } from '../../SYSTEM_ROOT_ID'
 import { webAlert } from './api/alert'
 import { webAnimation } from './api/animation'
@@ -21,8 +24,10 @@ import { webFile } from './api/file'
 import { webGeolocation } from './api/geolocation'
 import { webHTTP } from './api/http'
 import { webInput } from './api/input'
+import { webLayout } from './api/layout'
 import { webLocation } from './api/location'
 import { webMedia } from './api/media'
+import { webNavigator } from './api/navigator'
 import { webQuerystring } from './api/querystring'
 import { webScreen } from './api/screen'
 import { webSelection } from './api/selection'
@@ -31,6 +36,7 @@ import { webStorage } from './api/storage'
 import { webText } from './api/text'
 import { webURI } from './api/uri'
 import { webURL } from './api/url'
+import { webWindow } from './api/window'
 import { webWorker } from './api/worker'
 
 export default function webBoot(opt: BootOpt = {}): System {
@@ -75,6 +81,9 @@ export function _webBoot(
   const uri = webURI(window, opt)
   const alert = webAlert(window, opt)
   const location = webLocation(window, opt)
+  const _window = webWindow(window, opt)
+  const navigator = webNavigator(window, opt)
+  const layout = webLayout(window, opt)
 
   const api: API = {
     alert,
@@ -89,6 +98,7 @@ export function _webBoot(
     clipboard,
     location,
     geolocation,
+    layout,
     media,
     http,
     channel,
@@ -100,6 +110,8 @@ export function _webBoot(
     worker,
     url,
     uri,
+    window: _window,
+    navigator,
   }
 
   const system = boot(null, api, opt)
@@ -108,13 +120,26 @@ export function _webBoot(
 
   system.root = _root
 
+  window.addEventListener('message', (event) => {
+    for (const iframe of system.cache.iframe) {
+      let iframeEl = iframe.$node as HTMLIFrameElement
+
+      if (event.source === iframeEl.contentWindow) {
+        iframe.dispatchEvent('_message', event.data)
+      }
+    }
+  })
+
   attachSprite(system)
   attachStyle(system)
   attachApp(system)
   attachCanvas(system)
   attachSVG(system)
+  attachHTML(system)
   attachGesture(system)
   attachLongPress(system)
+  attachLayout(system)
+  attachVoid(system)
   // attachFocus(system)
 
   return system

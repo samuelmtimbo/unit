@@ -1,7 +1,9 @@
 import { Element } from '../../../../client/element'
-import applyStyle from '../../../../client/style'
+import { PropHandler, htmlPropHandler } from '../../../../client/propHandler'
+import { applyStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { pull, push } from '../../../../util/array'
 import { randomId } from '../../../../util/id'
 
 export interface Props {
@@ -23,36 +25,23 @@ export interface Props {
 
 export const DEFAULT_STYLE = {
   display: 'block',
-  width: '100%',
-  height: '100%',
   border: 'none',
 }
 
-export default class Iframe extends Element<HTMLSlotElement, Props> {
+export default class Iframe extends Element<
+  HTMLSlotElement | HTMLIFrameElement,
+  Props
+> {
   public _iframe_el: HTMLIFrameElement
 
   private _slot_id: string
-  private _slot_el: HTMLSlotElement
+
+  private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const {
-      id,
-      className,
-      style = {},
-      src,
-      srcdoc,
-      allow = {
-        autoplay: false,
-        camera: false,
-        encryptedMedia: false,
-        fullscreen: false,
-        microphone: false,
-        pictureInPicture: false,
-        scripts: true,
-      },
-    } = this.$props
+    const { id, className, style = {}, src, srcdoc } = this.$props
 
     const {
       root,
@@ -68,22 +57,11 @@ export default class Iframe extends Element<HTMLSlotElement, Props> {
 
     iframe_el.setAttribute('frameborder', '0')
 
-    allow.fullscreen && iframe_el.setAttribute('allowfullscreen', 'true')
-    allow.autoplay &&
-      iframe_el.setAttribute(
-        'allow',
-        `${(allow.autoplay && 'autoplay; ') || ''}${
-          (allow.encryptedMedia && 'encrypted-media; ') || ''
-        }${(allow.pictureInPicture && 'picture-in-picture; ') || ''}`
-      )
-    allow.scripts && iframe_el.setAttribute('sandbox', 'allow-scripts')
-
     const slot_id = randomId()
     this._slot_id = slot_id
 
     const slot_el = createElement('slot')
     slot_el.name = slot_id
-    this._slot_el = slot_el
 
     if (id !== undefined) {
       iframe_el.id = id
@@ -99,19 +77,24 @@ export default class Iframe extends Element<HTMLSlotElement, Props> {
 
     applyStyle(iframe_el, { ...DEFAULT_STYLE, ...style })
 
+    this._prop_handler = {
+      ...htmlPropHandler(this, iframe_el, DEFAULT_STYLE),
+      srcdoc: (current: string) => {
+        this._iframe_el.srcdoc = current || ''
+      },
+      src: (current: string) => {
+        this._setSrc(current)
+      },
+    }
+
     this.$element = slot_el
+    this.$node = iframe_el
+
+    push(this.$system.cache.iframe, this)
   }
 
   onPropChanged(prop: string, current: any): void {
-    if (prop === 'className') {
-      this._iframe_el.className = current
-    } else if (prop === 'style') {
-      applyStyle(this._iframe_el, { ...DEFAULT_STYLE, ...current })
-    } else if (prop === 'src') {
-      this._setSrc(current)
-    } else if (prop === 'srcdoc') {
-      this._iframe_el.srcdoc = current || ''
-    }
+    this._prop_handler[prop](current)
   }
 
   private _setSrc(current: string) {
@@ -171,5 +154,9 @@ export default class Iframe extends Element<HTMLSlotElement, Props> {
     // console.log('Iframe', 'send', data)
 
     this._iframe_el.contentWindow.postMessage(data, '*')
+  }
+
+  onDestroy(): void {
+    pull(this.$system.cache.iframe, this)
   }
 }

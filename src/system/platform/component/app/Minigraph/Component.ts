@@ -29,7 +29,7 @@ export const DEFAULT_STYLE = {}
 export default class Minigraph extends Element<HTMLDivElement, Props> {
   public _minimap: Minimap
 
-  public _nodes: Dict<SimNode<any>> = {}
+  private _nodes: Dict<SimNode<any>> = {}
   private _links: Dict<number> = {}
 
   private _subgraph_to_node_id: Set<string>[] = []

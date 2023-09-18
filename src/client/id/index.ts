@@ -9,15 +9,17 @@ export const LINK_SEPARATOR = '_'
 export const INPUT = 'input'
 export const OUTPUT = 'output'
 
+export const I = 'i'
+export const O = 'o'
+
 export const MERGE = '@'
 export const DATA = '#'
 export const TYPE = '$'
 export const EXTERNAL = '%'
 export const INTERNAL = '^'
-export const COMPONENT = '&'
 export const ERR = '!'
 
-const UNIT_ID_REGEX = `[^${SEPARATOR}${MERGE}${DATA}${TYPE}${EXTERNAL}]+`
+const UNIT_ID_REGEX = `[^${SEPARATOR}${MERGE}${DATA}${TYPE}${EXTERNAL}${INTERNAL}]+`
 const PIN_ID_REGEX = `[^]+`
 
 const UNIT_NODE_ID_REGEX = `^(${UNIT_ID_REGEX})$`
@@ -412,9 +414,9 @@ export function getExtNodeIdFromIntNodeId(intNodeId: string): string {
 }
 
 export function getIntNodeIdFromExtNodeId(ext_node_id: string): string {
-  const { type, pinId: id, subPinId } = segmentPlugNodeId(ext_node_id)
+  const { type, pinId, subPinId } = segmentPlugNodeId(ext_node_id)
 
-  return getIntNodeId(type, id, subPinId)
+  return getIntNodeId(type, pinId, subPinId)
 }
 
 export function getIntNodeId(
@@ -522,6 +524,12 @@ export function camelToKebab(str: string): string {
 export function camelToSnake(str: string): string {
   const segments = str.split(/(?=[A-Z])/)
   const kebab = segments.map((_str) => _str.toLowerCase()).join('_')
+  return kebab
+}
+
+export function camelToDashed(str: string): string {
+  const segments = str.split(/(?=[A-Z])/)
+  const kebab = segments.map((_str) => _str.toLowerCase()).join('-')
   return kebab
 }
 

@@ -1,3 +1,4 @@
+import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
@@ -5,7 +6,7 @@ import { CH } from '../../../../types/interface/CH'
 import { ID_SEND } from '../../../_ids'
 
 interface I<T> {
-  unit: CH
+  channel: CH
   data: any
 }
 
@@ -15,12 +16,12 @@ export default class Send<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['unit', 'data'],
+        i: ['channel', 'data'],
         o: [],
       },
       {
         input: {
-          unit: {
+          channel: {
             ref: true,
           },
         },
@@ -30,15 +31,21 @@ export default class Send<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ unit, data }: I<T>, done: Done<O<T>>) {
+  async f({ channel, data }: I<T>, done: Done<O<T>>) {
     try {
-      await unit.send(data)
+      let _data = data
+
+      if (_data instanceof $) {
+        _data = await _data.raw()
+      }
+
+      await channel.send(_data)
     } catch (err) {
       done(undefined, err.message)
 
       return
     }
 
-    done({})
+    done()
   }
 }

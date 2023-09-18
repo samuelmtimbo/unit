@@ -56,7 +56,7 @@ export class Functional<
     this._forward_if_ready()
   }
 
-  private _on_input_drop(): void {
+  private _on_input_drop(name: string, data: any): void {
     if (this._active_i_count === this._i_count - 1) {
       if (!this._backwarding && !this._forwarding_empty) {
         this._looping = false
@@ -65,7 +65,7 @@ export class Functional<
         } else {
           this.takeErr()
         }
-        this.d()
+        this.d(name, data)
         this._forward_all_empty()
       }
     }
@@ -82,8 +82,8 @@ export class Functional<
     this._on_input_data(name)
   }
 
-  onDataInputDrop(name: string): void {
-    this._on_input_drop()
+  onDataInputDrop(name: string, data: any): void {
+    this._on_input_drop(name, data)
   }
 
   onDataInputStart(name: string): void {
@@ -106,8 +106,8 @@ export class Functional<
     this._on_input_data(name)
   }
 
-  onRefInputDrop(): void {
-    this._on_input_drop()
+  onRefInputDrop(name: string, data: any): void {
+    this._on_input_drop(name, data)
   }
 
   onRefInputInvalid(name: string): void {
@@ -127,7 +127,7 @@ export class Functional<
 
   i(name: string) {}
 
-  d() {}
+  d(name: string, data: any) {}
 
   private _backward_if_ready(): void {
     if (
@@ -138,12 +138,15 @@ export class Functional<
       this._active_o_count === 0
     ) {
       this._looping = false
+
       this._backward_all()
 
       // without setTimeout an infinite loop will turn into a stack overflow
       // setTimeout(() => {
       this._forward_if_ready()
       // }, 0)
+
+      // this.__system.tick(this._forward_if_ready.bind(this))
     }
   }
 

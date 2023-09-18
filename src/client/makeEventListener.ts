@@ -1,4 +1,5 @@
 import { makeChangeListener } from './event/change'
+import { makeCustomListener } from './event/custom'
 import { makeDragStartListener } from './event/drag/dragstart'
 import { makeDropListener } from './event/drag/drop'
 import { makeInputListener } from './event/input'
@@ -36,6 +37,7 @@ export type IOUIEventName =
   | 'keyup'
   | 'keypress'
   | 'wheel'
+  | 'message'
 
 export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
   'click',
@@ -56,6 +58,7 @@ export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
   'keyup',
   'keypress',
   'wheel',
+  'message',
 ])
 
 export function makeUIEventListener(
@@ -99,6 +102,8 @@ export function makeUIEventListener(
       return makeKeypressListener(callback)
     case 'wheel':
       return makeWheelListener(callback)
+    case 'message':
+      return makeCustomListener('_message', callback)
     default:
       throw new Error(`unknown UI event: ${event}`)
   }

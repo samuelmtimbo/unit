@@ -4,6 +4,10 @@
     "style": {
       "type": "object"
     },
+    "attr": {
+      "type": "object",
+      "defaultIgnored": true
+    },
     "graph": {
       "type": "`G`",
       "ref": true

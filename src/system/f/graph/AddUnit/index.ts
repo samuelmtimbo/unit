@@ -2,7 +2,7 @@ import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { getSpec } from '../../../../client/spec'
 import { System } from '../../../../system'
-import { GraphUnitSpec } from '../../../../types'
+import { GraphUnitSpec } from '../../../../types/GraphUnitSpec'
 import { G } from '../../../../types/interface/G'
 import { UnitBundle } from '../../../../types/UnitBundle'
 import { weakMerge } from '../../../../types/weakMerge'
@@ -79,6 +79,6 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
       return
     }
 
-    done({})
+    done()
   }
 }

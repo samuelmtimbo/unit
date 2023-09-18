@@ -10,7 +10,7 @@
       }
     },
     "attr": {
-      "type": "{tabIndex:number,title:string,draggable:boolean}",
+      "type": "object",
       "optional": true,
       "defaultIgnored": true,
       "metadata": {

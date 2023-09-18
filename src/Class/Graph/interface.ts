@@ -1,16 +1,18 @@
 import { Position } from '../../client/util/geometry/types'
 import {
-  Action,
-  GraphMergeSpec,
-  GraphMergesSpec,
   GraphPinSpec,
+  GraphSubComponentSpec,
   GraphSubPinSpec,
-  GraphUnitsSpec,
 } from '../../types'
+import { Action } from '../../types/Action'
+import { BundleSpec } from '../../types/BundleSpec'
 import { Dict } from '../../types/Dict'
+import { GraphMergeSpec } from '../../types/GraphMergeSpec'
+import { GraphMergesSpec } from '../../types/GraphMergesSpec'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitMerges } from '../../types/GraphUnitMerges'
 import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
+import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
@@ -59,6 +61,7 @@ export type GraphMoveSubGraphData = {
 
 export type GraphMoveSubGraphIntoData = GraphMoveSubGraphData & {
   graphId: string
+  graphBundle: BundleSpec
 }
 
 export type GraphMoveSubGraphOutOfData = GraphMoveSubGraphIntoData
@@ -72,6 +75,7 @@ export type GraphAddUnitData = {
   parentId?: string | null | undefined
   merges?: GraphUnitMerges | undefined
   plugs?: GraphUnitPlugs | undefined
+  subComponent?: GraphSubComponentSpec
 }
 
 export type GraphCloneUnitData = {
@@ -91,10 +95,11 @@ export type GraphRemoveMergeDataData = {
   mergeId: string
 }
 
-export type GraphSetUnitNameData = {
+export type GraphSetUnitIdData = {
   unitId: string
   newUnitId: string
   name: string
+  specId: string
 }
 
 export type GraphRemoveUnitPinDataData = {
@@ -257,13 +262,6 @@ export type GraphAddUnitGhostData = {
   nextUnitId: string
   nextUnitBundle: UnitBundleSpec
   nextUnitPinMap: IOOf<Dict<string>>
-}
-
-export type GraphExplodeUnitData = {
-  unitId: string
-  mapUnitId: Dict<string>
-  mapMergeId: Dict<string>
-  mapPlugId: IOOf<Dict<Dict<string>>>
 }
 
 export type GraphMoveSubComponentRootData = {

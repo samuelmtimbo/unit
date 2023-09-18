@@ -42,6 +42,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
           'frame',
           'zoom',
           'controls',
+          'attr',
         ],
         o: ['graph'],
       },
@@ -116,7 +117,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
   }
 
   public snapshotSelf(): Dict<any> {
-    const bundle = this._fallback_graph.getBundleSpec()
+    const bundle = this._fallback_graph.getUnitBundleSpec()
 
     return {
       ...super.snapshotSelf(),

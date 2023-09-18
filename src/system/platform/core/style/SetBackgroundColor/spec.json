@@ -1,0 +1,64 @@
+{
+  "name": "set background-color",
+  "units": {
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {
+          "constant": true,
+          "data": "'backgroundColor'"
+        },
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "value"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "...",
+    "complexity": 5,
+    "tags": [
+      "platform",
+      "core",
+      "style"
+    ]
+  },
+  "id": "0ca54c4f-148e-49e5-bedf-d24276200f66",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,4 +1,4 @@
-import namespaceURI from '../../component/namespaceURI'
+import { namespaceURI } from '../../component/namespaceURI'
 
 export const makeRect = (
   x: number,

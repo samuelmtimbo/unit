@@ -6,6 +6,7 @@ import {
 } from '../types/global/IPositionObserver'
 import { Unlisten } from '../types/Unlisten'
 import { callAll } from '../util/call/callAll'
+import { applyLayoutValue } from './parseLayoutValue'
 import { parseTransformXY } from './parseTransformXY'
 import { animateThrottle } from './throttle'
 import {
@@ -37,6 +38,7 @@ export class PositionObserver implements IPositionObserver {
     } = this._system
     if (this._abort) {
       this._abort()
+
       this._abort = undefined
     }
 
@@ -55,6 +57,9 @@ export class PositionObserver implements IPositionObserver {
     let rx: number = 0
     let ry: number = 0
     let rz: number = 0
+
+    let px: number = 0
+    let py: number = 0
 
     let width: number = 0
     let height: number = 0
@@ -86,6 +91,7 @@ export class PositionObserver implements IPositionObserver {
     let parent_rz = 0
 
     let _transform: string | undefined
+    let _border: string | undefined
 
     const _update_local = (): void => {
       __update_local()
@@ -100,7 +106,7 @@ export class PositionObserver implements IPositionObserver {
       offset_x = offsetLeft
       offset_y = offsetTop
 
-      const { transform } = style
+      const { transform, border } = style
 
       if (
         transform !== _transform ||
@@ -134,6 +140,25 @@ export class PositionObserver implements IPositionObserver {
           rotate_z = 0
         }
         _transform = transform
+      }
+
+      if (border !== _border) {
+        if (border) {
+          const [borderSizeStr] = border.split(' ')
+
+          let borderSize = 0
+
+          if (['thin', 'medium', 'thick'].includes(borderSizeStr)) {
+            // TODO
+          } else {
+            borderSize = applyLayoutValue(borderSizeStr, 0)
+          }
+
+          px = borderSize
+          py = borderSize
+        }
+
+        _border = border
       }
 
       width = offsetWidth
@@ -216,7 +241,7 @@ export class PositionObserver implements IPositionObserver {
     const update = (): void => {
       _update()
 
-      this._callback({ x, y, sx, sy, rx, ry, rz })
+      this._callback(x, y, sx, sy, rx, ry, rz, px, py)
     }
 
     const mutationConfig = {
@@ -250,10 +275,12 @@ export class PositionObserver implements IPositionObserver {
     const update_parent = (): (() => void) => {
       const { offsetParent, parentElement } = element
 
-      const targetParent = parentElement
+      // const targetParent = parentElement
+      const targetParent = offsetParent
 
       if (targetParent) {
         const scrollParentUnlisten: Unlisten[] = []
+
         const pushScrollParent = (p: Element) => {
           const { scrollLeft, scrollTop } = p
 
@@ -271,8 +298,10 @@ export class PositionObserver implements IPositionObserver {
 
             _scrollLeft = scrollLeft
             _scrollTop = scrollTop
+
             update()
           }
+
           const { f: _parentScrollListener } = animateThrottle(
             this._system,
             parentScrollListener
@@ -287,15 +316,28 @@ export class PositionObserver implements IPositionObserver {
           scrollParentUnlisten.push(unlisten)
         }
 
-        let p = parentElement
+        if (element.style.position === 'absolute') {
+          //
+        } else {
+          let p = parentElement
 
-        while (p && p !== targetParent) {
-          pushScrollParent(p)
+          while (p && p !== targetParent) {
+            if (p instanceof HTMLElement) {
+              if (
+                p.style.position === 'absolute' ||
+                p.style.position === 'fixed'
+              ) {
+                break
+              }
+            }
 
-          p = p.parentElement
+            pushScrollParent(p)
+
+            p = p.parentElement
+          }
+
+          pushScrollParent(targetParent)
         }
-
-        pushScrollParent(targetParent)
 
         const unlitenScroll = callAll(scrollParentUnlisten)
 
@@ -316,22 +358,24 @@ export class PositionObserver implements IPositionObserver {
 
         parentMutationObserver.observe(targetParent, parentConfig)
 
-        const parentPositionCallback = ({
-          x: _parent_x,
-          y: _parent_y,
-          sx: _parent_scale_x,
-          sy: _parent_scale_y,
-          rx: _parent_rotate_x,
-          ry: _parent_rotate_y,
-          rz: _parent_rotate_z,
-        }) => {
-          parent_x = _parent_x
-          parent_y = _parent_y
-          parent_scale_x = _parent_scale_x
-          parent_scale_y = _parent_scale_y
-          parent_rx = _parent_rotate_x
-          parent_ry = _parent_rotate_y
-          parent_rz = _parent_rotate_z
+        const parentPositionCallback = (
+          x: number,
+          y: number,
+          sx: number,
+          sy: number,
+          rx: number,
+          ry: number,
+          rz: number,
+          px: number,
+          py: number
+        ) => {
+          parent_x = x + px
+          parent_y = y + py
+          parent_scale_x = sx
+          parent_scale_y = sy
+          parent_rx = rx
+          parent_ry = ry
+          parent_rz = rz
 
           update_local()
         }
@@ -390,7 +434,7 @@ export class PositionObserver implements IPositionObserver {
     __update_local()
     _update()
 
-    return { x, y, sx, sy, rx, ry, rz }
+    return { x, y, sx, sy, rx, ry, rz, px, py }
   }
 
   disconnect() {
@@ -398,6 +442,7 @@ export class PositionObserver implements IPositionObserver {
 
     if (this._unlisten) {
       this._unlisten()
+
       this._unlisten = undefined
     }
   }

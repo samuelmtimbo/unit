@@ -39,3 +39,5 @@ src/client/extension/src/options.js
 
 package-lock.json
 yarn.lock
+
+public/build.json

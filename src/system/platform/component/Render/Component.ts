@@ -1,15 +1,15 @@
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { renderGraph } from '../../../../client/render/renderGraph'
-import applyStyle from '../../../../client/style'
+import { renderComponent } from '../../../../client/render/renderComponent'
+import { applyStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { $Graph } from '../../../../types/interface/async/$Graph'
+import { $Component } from '../../../../types/interface/async/$Component'
 import { Unlisten } from '../../../../types/Unlisten'
 import { removeChildren } from '../../../../util/element'
 
 export interface Props {
-  graph?: $Graph
+  component?: $Component
   id?: string
   className?: string
   style?: Dict<string>
@@ -36,7 +36,7 @@ export default class Render extends Element<HTMLDivElement, Props> {
     super($props, $system)
 
     const {
-      graph,
+      component,
       id,
       className,
       style,
@@ -55,7 +55,9 @@ export default class Render extends Element<HTMLDivElement, Props> {
     if (className !== undefined) {
       this.$element.className = className
     }
+
     applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
+
     if (innerText) {
       this.$element.innerText = innerText
     }
@@ -71,22 +73,28 @@ export default class Render extends Element<HTMLDivElement, Props> {
     if (data !== undefined) {
       for (const key in data) {
         const d = data[key]
+
         this.$element.dataset[key] = d
       }
     }
 
     this._prop_handler = {
-      ...htmlPropHandler(this, DEFAULT_STYLE),
-      graph: (graph: $Graph) => {
-        if (graph) {
-          this._unlisten = renderGraph(this.$element, this.$system, graph)
-        } else {
-          if (this._unlisten) {
-            this._unlisten()
-            this._unlisten = undefined
-          }
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
+      component: (component: $Component) => {
+        if (this._unlisten) {
+          this._unlisten()
+
+          this._unlisten = undefined
 
           removeChildren(this.$element)
+        }
+
+        if (component) {
+          this._unlisten = renderComponent(
+            this.$element,
+            this.$system,
+            component
+          )
         }
       },
     }

@@ -103,13 +103,9 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
 
     if (data !== undefined) {
       if (this._constant) {
-        this.emit('data', data)
+        //
       } else {
-        if (this._ref) {
-          //
-        } else {
-          this.take()
-        }
+        this.take()
       }
     }
     return data
@@ -128,7 +124,7 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
 
     if (this._ref) {
     } else {
-      if (this._ignored) {
+      if (this._ignored && !this._constant) {
         this.take()
       }
     }

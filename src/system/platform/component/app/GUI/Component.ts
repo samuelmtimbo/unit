@@ -18,11 +18,11 @@ import {
   defaultThemeColor,
   themeBackgroundColor,
 } from '../../../../../client/theme'
-import { userSelect } from '../../../../../client/util/style/userSelect'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { Unlisten } from '../../../../../types/Unlisten'
+import { ID_SWITCH } from '../../../../_ids'
 import Div from '../../Div/Component'
 import Frame from '../../Frame/Component'
 import Parent from '../../Parent/Component'
@@ -41,15 +41,10 @@ export interface Props {
 export const DEFAULT_UNIT_ID = 'unit'
 
 export const DEFAULT_STYLE = {
-  // display: 'none',
-  // width: '0px',
-  // height: '0px',
-  // position: 'absolute',
   position: 'relative',
   width: '100%',
   height: '100%',
   overflow: 'hidden',
-  ...userSelect('none'),
 }
 
 export default class GUI extends Element<HTMLDivElement, Props> {
@@ -141,10 +136,9 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     this._history = history_tree
 
-    const TOGGLE_SPEC_ID = '6253bf76-2e85-11eb-9f59-3703abfd39c7'
     const { component: color_theme } = graphComponentFromId(
       this.$system,
-      TOGGLE_SPEC_ID,
+      ID_SWITCH,
       {
         style: {
           height: '26px',
@@ -152,9 +146,11 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor: 'currentColor',
+          borderRadius: '3px',
           backgroundColor: COLOR_NONE,
         },
         sliderStyle: {
+          borderRadius: '1.5px',
           transition: ifLinearTransition(
             this.$system.animated,
             'left',
@@ -177,10 +173,12 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         value: '#ffffff',
         style: {
           position: 'relative',
-          height: 'calc(100% - 28px)',
+          height: '26px',
+          width: '100%',
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor: 'currentColor',
+          borderRadius: '3px',
           boxSizing: 'border-box',
         },
       },
@@ -189,7 +187,9 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     color_picker.addEventListener(
       makeInputListener((data) => {
         this._manually_changed_color = true
+
         setColor(this.$context, data)
+
         this._refresh_color()
       })
     )
@@ -553,8 +553,8 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           title: 'color',
           component: this._color_pallete,
           active: false,
-          width: 100,
-          height: 100,
+          width: 60,
+          height: 55,
           state: { y: cy - 17.5 },
         },
         file: {

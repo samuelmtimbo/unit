@@ -60,15 +60,25 @@ export function watchGraphComponent(
       const handler = {
         component_append: (data: GraphSpecComponentAppendMomentData) => {
           const { unitId, unitSpec } = data
-          const sub_component = componentFromUnitSpec(system, unitSpec)
+
+          const sub_component = componentFromUnitSpec(
+            system,
+            system.specs,
+            unitSpec
+          )
+
           component.setSubComponent(unitId, sub_component)
           component.appendRoot(sub_component)
+
           listen_sub_component(unitId, sub_component)
         },
         component_remove: (data: GraphSpecComponentRemoveMomentData) => {
           const { unitId } = data
+
           unlisten_sub_component(unitId)
+
           const sub_component = component.removeSubComponent(unitId)
+
           component.removeRoot(sub_component)
         },
       }

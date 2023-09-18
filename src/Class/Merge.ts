@@ -15,13 +15,13 @@ export interface O<T> {
   [name: string]: T
 }
 
-const ID_MERGE = 'd2c4b19b-aa58-438b-8541-9df478b80aa3'
+export const ID_SYSTEM_MERGE = 'd2c4b19b-aa58-438b-8541-9df478b80aa3'
 
 export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   private _current: string | undefined = undefined
 
   constructor(system: System) {
-    super({}, {}, system, ID_MERGE)
+    super({}, {}, system, ID_SYSTEM_MERGE)
 
     this.addListener('reset', this._reset)
     this.addListener('play', this._play)

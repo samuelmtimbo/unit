@@ -1,15 +1,21 @@
+import { bundleSpec } from '../../../../../bundle'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
-import { BundleSpec } from '../../../../../types/BundleSpec'
+import { GraphBundle } from '../../../../../types/GraphClass'
+import { GraphSpec } from '../../../../../types/GraphSpec'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { $S } from '../../../../../types/interface/async/$S'
+import { weakMerge } from '../../../../../types/weakMerge'
 import { $wrap } from '../../../../../wrap'
 import { ID_START } from '../../../../_ids'
 
 export interface I {
-  bundle: BundleSpec
+  graph: GraphBundle
   system: $S
+  opt: {
+    paused?: boolean
+  }
 }
 
 export interface O {
@@ -20,7 +26,7 @@ export default class Start extends Semifunctional<I, O> {
   constructor(system: System) {
     super(
       {
-        fi: ['bundle', 'system'],
+        fi: ['graph', 'system', 'opt'],
         fo: ['graph'],
         i: ['done'],
         o: [],
@@ -42,10 +48,29 @@ export default class Start extends Semifunctional<I, O> {
     )
   }
 
-  f({ bundle, system }: I, done: Done<O>): void {
-    const $graph = system.$newGraph({ bundle, _: ['G', 'C', 'U'] })
+  f({ graph: Graph, system, opt }: I, done: Done<O>): void {
+    const { paused } = opt || {}
 
-    const graph = $wrap<$Graph>(this.__system, $graph)
+    const { __bundle } = Graph
+
+    const id = __bundle.unit.id
+
+    const spec = (this.__system.getSpec(id) ?? __bundle.specs[id]) as GraphSpec
+
+    const bundle = bundleSpec(
+      spec,
+      weakMerge(__bundle.specs, this.__system.specs)
+    )
+
+    const _ = ['G', 'C', 'U']
+
+    const $graph = system.$newGraph({ bundle, _ })
+
+    const graph = $wrap<$Graph>(this.__system, $graph, _)
+
+    if (!paused) {
+      graph.$play({})
+    }
 
     done({ graph })
   }

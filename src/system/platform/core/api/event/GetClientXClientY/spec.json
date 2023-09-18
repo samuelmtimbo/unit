@@ -1,0 +1,81 @@
+{
+  "name": "get clientX clientY",
+  "units": {
+    "getclientx": {
+      "id": "4556afd4-2463-48c8-abb6-12e30fff6ed0",
+      "input": {
+        "event": {}
+      },
+      "output": {
+        "clientX": {}
+      }
+    },
+    "getclienty": {
+      "id": "97c4f4ec-2613-11eb-8c54-4b82dde232ca",
+      "input": {
+        "event": {}
+      },
+      "output": {
+        "clientY": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "getclienty": {
+        "input": {
+          "event": true
+        }
+      },
+      "getclientx": {
+        "input": {
+          "event": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "y": {
+      "plug": {
+        "0": {
+          "unitId": "getclienty",
+          "pinId": "clientY"
+        }
+      },
+      "type": "number"
+    },
+    "x": {
+      "plug": {
+        "0": {
+          "unitId": "getclientx",
+          "pinId": "clientX"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "extract `clientX` and `clientY` from `obj`",
+    "complexity": 10,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "event"
+    ]
+  },
+  "id": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
+  "type": "`U`&`G`",
+  "system": true
+}

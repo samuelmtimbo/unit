@@ -1,6 +1,6 @@
 import { Element } from '../../../../../client/element'
 import { parseRelativeUnit } from '../../../../../client/parseRelativeUnit'
-import applyStyle, { reactToFrameSize } from '../../../../../client/style'
+import { applyStyle, reactToFrameSize } from '../../../../../client/style'
 import { COLOR_WHITE, defaultThemeColor } from '../../../../../client/theme'
 import { replaceChild } from '../../../../../client/util/replaceChild'
 import { userSelect } from '../../../../../client/util/style/userSelect'
@@ -94,8 +94,10 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     canvas_el.draggable = false
 
     this._canvas_el = canvas_el
-    const context = canvas_el.getContext('2d')
+    const context = canvas_el.getContext('2d', { willReadFrequently: true })
     this._context = context
+
+    this._context
 
     if (old_canvas_el) {
       replaceChild(old_canvas_el, canvas_el)
@@ -173,32 +175,38 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   private _width_frame_unlisten: Unlisten
   private _height_frame_unlisten: Unlisten
 
+  private _get_fill_style = (): string => {
+    const { $theme } = this.$context ?? { $color: COLOR_WHITE, $theme: 'dark' }
+
+    const final_style = { ...DEFAULT_STYLE, ...this.$props.style }
+
+    const fallbackColor =
+      final_style.strokeStyle ?? final_style.color ?? defaultThemeColor($theme)
+
+    return fallbackColor
+  }
+
   onPropChanged(prop: string, current: any): void {
     // console.log('Canvas', 'onPropChanged', prop, current)
 
     if (prop === 'style') {
-      const { $theme } = this.$context
-
       const final_style = { ...DEFAULT_STYLE, ...current }
+
+      const color = this._get_fill_style().toLowerCase()
 
       applyStyle(this._canvas_el, final_style)
 
-      const fallbackColor =
-        final_style.strokeStyle ??
-        final_style.color ??
-        defaultThemeColor($theme)
+      if (
+        this._context.fillStyle !== color ||
+        this._context.strokeStyle !== color
+      ) {
+        this._context.fillStyle = color
+        this._context.strokeStyle = color
 
-      const fallbackStrokeWidth =
-        final_style.strokeStyle ??
-        final_style.color ??
-        defaultThemeColor($theme)
+        clearCanvas(this._context)
 
-      this._context.fillStyle = fallbackColor
-      this._context.strokeStyle = fallbackColor
-
-      clearCanvas(this._context)
-
-      this._redraw()
+        this._redraw()
+      }
     } else if (prop === 'width') {
       this._unlisten_frame_width()
 
@@ -307,16 +315,16 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   private _setup_context = (): void => {
     // console.log('Canvas', '_setup_context')
 
-    const { $color } = this.$context || { $color: COLOR_WHITE }
-
     const { sx = 1, sy = 1 } = this.$props
+
+    const color = this._get_fill_style()
 
     const context = this._canvas_el.getContext('2d')
 
     this._context = context
 
-    this._context.strokeStyle = $color
-    this._context.fillStyle = $color
+    this._context.strokeStyle = color
+    this._context.fillStyle = color
     this._context.lineJoin = 'round'
     this._context.lineWidth = 3
 
@@ -341,15 +349,27 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   }
 
   drawImage(
-    imageBitmap: ImageBitmap,
+    image: ImageBitmap | HTMLVideoElement,
     x: number,
     y: number,
     width: number,
     height: number
   ) {
-    // console.log('Canvas', 'drawImage', imageBitmap)
-
-    this._context.drawImage(imageBitmap, x, y, width, height)
+    if (image instanceof ImageBitmap) {
+      this._context.drawImage(
+        image,
+        0,
+        0,
+        image.width,
+        image.height,
+        x,
+        y,
+        width,
+        height
+      )
+    } else if (image instanceof HTMLVideoElement) {
+      this._context.drawImage(image, x, y, width, height)
+    }
   }
 
   strokePath(d: string) {
@@ -409,5 +429,17 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     } else {
       throw new APINotSupportedError('Capture Stream')
     }
+  }
+
+  putImageData(
+    image: ImageData,
+    dx: number,
+    dy: number,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): void {
+    this._context.putImageData(image, dx, dy, x, y, width, height)
   }
 }

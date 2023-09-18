@@ -1,8 +1,10 @@
 import { API } from '../API'
+import { LayoutNode } from '../client/LayoutNode'
 import { APINotSupportedError } from '../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../exception/MediaDeviceAPINotSupported'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
+import { Style } from '../system/platform/Props'
 import { Storage_ } from '../system/platform/api/storage/Storage_'
 import { Dict } from '../types/Dict'
 import { IDownloadDataOpt } from '../types/global/IDownloadData'
@@ -46,7 +48,6 @@ export function noHost(): API {
   const api: API = {
     storage: {
       local: () => new Storage_(noStorage('Local Storage')),
-      session: () => new Storage_(noStorage('Session Storage')),
     },
     selection: {
       containsSelection: () => {
@@ -154,23 +155,12 @@ export function noHost(): API {
       },
     },
     http: {
-      server: {
-        local: function (opt): any {
-          throw new APINotSupportedError('Local HTTP Server')
-        },
-        cloud: function (opt): any {
-          throw new APINotSupportedError('Cloud HTTP Server')
-        },
-      },
       fetch: () => {
         throw new APINotSupportedError('Fetch')
       },
       EventSource: undefined,
     },
     channel: {
-      session: function (opt): any {
-        throw new APINotSupportedError('Session Channel')
-      },
       local: function (opt): any {
         throw new APINotSupportedError('Local Channel')
       },
@@ -268,6 +258,34 @@ export function noHost(): API {
     location: {
       toString: function (): Promise<string> {
         throw new MethodNotImplementedError()
+      },
+    },
+    window: {
+      open: function (url: string, target: string, features: string): Window {
+        throw new Error('Function not implemented.')
+      },
+      AudioContext: undefined,
+      OscillatorNode: undefined,
+      MediaStreamAudioSourceNode: undefined,
+      AnalyserNode: undefined,
+      GainNode: undefined,
+      DelayNode: undefined,
+      ImageCapture: undefined,
+    },
+    navigator: {
+      share: function (data: ShareData): Promise<void> {
+        throw new Error('Function not implemented.')
+      },
+    },
+    layout: {
+      reflectChildrenTrait: function (
+        parentTrait: LayoutNode,
+        parentStyle: Style,
+        children: Style[],
+        path?: number[],
+        expandChild?: (path: number[]) => Style[]
+      ): LayoutNode[] {
+        throw new Error('Function not implemented.')
       },
     },
   }

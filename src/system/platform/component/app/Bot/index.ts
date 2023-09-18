@@ -7,8 +7,8 @@ export interface I<T> {
   style: Dict<string>
   disabled: boolean
   r: number
-  x: number
-  y: number
+  x: string
+  y: string
 }
 
 export interface O<T> {}

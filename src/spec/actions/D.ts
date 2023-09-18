@@ -1,22 +1,21 @@
-import { GraphDataSpec } from '../../types'
+export const ADD_DATUM = 'addDatum'
+export const SET_DATUM = 'setDatum'
+export const REMOVE_DATUM = 'removeDatum'
 
-export const SET_DATUM = 'SPEC_SET_DATUM'
-export const SET_DATA = 'SPEC_ADD_DATA'
-export const REMOVE_DATUM = 'SPEC_REMOVE_DATUM'
-export const REMOVE_DATA = 'SPEC_REMOVE_DATA'
-
-export const removeData = (ids: string[]) => {
+export const makeSetDatumAction = (id: string, value: any, prevValue: any) => {
   return {
-    type: REMOVE_DATA,
+    type: SET_DATUM,
     data: {
-      ids,
+      id,
+      value,
+      prevValue,
     },
   }
 }
 
-export const setDatum = (id: string, value: any) => {
+export const makeAddDatumAction = (id: string, value: any) => {
   return {
-    type: SET_DATUM,
+    type: ADD_DATUM,
     data: {
       id,
       value,
@@ -24,20 +23,12 @@ export const setDatum = (id: string, value: any) => {
   }
 }
 
-export const removeDatum = (id: string) => {
+export const makeRemoveDatumAction = (id: string, value: any) => {
   return {
     type: REMOVE_DATUM,
     data: {
       id,
-    },
-  }
-}
-
-export const setData = (data: GraphDataSpec) => {
-  return {
-    type: SET_DATA,
-    data: {
-      data,
+      value,
     },
   }
 }

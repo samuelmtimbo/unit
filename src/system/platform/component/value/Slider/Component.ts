@@ -13,7 +13,7 @@ export interface Props {
 }
 
 export const DEFAULT_STYLE = {
-  height: 'fit-content',
+  height: '18px',
   width: '100%',
   color: 'inherit',
   backgroundColor: '#00000000',

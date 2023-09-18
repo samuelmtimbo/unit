@@ -10,7 +10,7 @@ export interface $S_C {}
 export interface $S_W {}
 
 export interface $S_R {
-  $newGraph({ bundle }: { bundle: BundleSpec; _: string[] }): $Graph
+  $newGraph(data: { bundle: BundleSpec; _: string[] }): $Graph
 }
 
 export interface $S extends $S_C, $S_W, $S_R {}

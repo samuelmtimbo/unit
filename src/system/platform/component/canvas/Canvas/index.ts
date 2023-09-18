@@ -23,7 +23,10 @@ export default class Canvas
   extends Element_<I, O, CanvasJ, CanvasEE, CanvasC>
   implements CA
 {
-  __ = ['U', 'C', 'V', 'J']
+  __ = ['U', 'C', 'V', 'J', 'CA', 'EE']
+
+  private _offscreen: OffscreenCanvas
+  private _offscreen_ctx: OffscreenCanvasRenderingContext2D
 
   constructor(system: System) {
     super(
@@ -47,6 +50,11 @@ export default class Canvas
     }
 
     this._component = new CanvasComp({}, this.__system)
+
+    this._offscreen = new OffscreenCanvas(1000, 1000)
+    this._offscreen_ctx = this._offscreen.getContext('2d', {
+      willReadFrequently: true,
+    })
   }
 
   async clear(): Promise<void> {
@@ -64,9 +72,16 @@ export default class Canvas
     width: number,
     height: number
   ): Promise<void> {
-    this._component.drawImage(imageBitmap, x, y, width, height)
+    // console.log('drawImage', imageBitmap, x, y, width, height)
 
-    this.emit('call', { method: 'drawImage', data: [imageBitmap] })
+    // this._component.drawImage(imageBitmap, x, y, width, height)
+
+    this._offscreen_ctx.drawImage(imageBitmap, x, y, width, height)
+
+    this.emit('call', {
+      method: 'drawImage',
+      data: [imageBitmap, x, y, width, height],
+    })
   }
 
   strokePath(d: string): void {
@@ -121,5 +136,46 @@ export default class Canvas
 
   async captureStream({ frameRate }: CSOpt): Promise<MediaStream> {
     return this._component.$element.captureStream(frameRate)
+  }
+
+  getImageData(x: number, y: number, width: number, height: number): ImageData {
+    const imageData = this._offscreen_ctx.getImageData(x, y, width, height)
+    return imageData
+  }
+
+  putImageData(
+    image: ImageData,
+    dx: number,
+    dy: number,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): void {
+    this._component.$element
+      .getContext('2d')
+      .putImageData(image, dx, dy, x, y, width, height)
+
+    this.emit('call', {
+      method: 'putImageData',
+      data: [image, dx, dy, x, y, width, height],
+    })
+  }
+
+  onDataInputData(name: string, data: any): void {
+    // console.log('Canvas', 'onDataInputData', name, data)
+
+    super.onDataInputData(name, data)
+
+    switch (name) {
+      case 'width':
+        this._offscreen.width = data
+
+        break
+      case 'height':
+        this._offscreen.height = data
+
+        break
+    }
   }
 }

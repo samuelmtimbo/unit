@@ -1,17 +1,17 @@
 import * as assert from 'assert'
-import { setDatum } from '../../../spec/reducers/data'
+import { $setDatum } from '../../../spec/reducers/data'
 
 // setDatum
 
 assert.deepEqual(
   {
-    data0: 'foo',
-    data1: 'bar',
+    data0: { value: 'foo'} ,
+    data1: { value: 'bar' },
   },
-  setDatum(
-    { id: 'data1', value: 'bar' },
+  $setDatum(
+    { id: 'data1', datumSpec: { value: 'bar' } },
     {
-      data0: 'foo',
+      data0: { value: 'foo' },
     }
   ),
   'setDatum'

@@ -48,7 +48,8 @@ export default class SpeechToText extends Semifunctional<I, O> {
 
     this._recorder.addListener('end', () => {
       this._recorder = null
-      done({})
+
+      done()
     })
   }
 

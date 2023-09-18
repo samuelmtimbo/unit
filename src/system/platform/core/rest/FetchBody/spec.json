@@ -52,7 +52,7 @@
       "plug": {
         "0": {
           "unitId": "fetch",
-          "pinId": "options"
+          "pinId": "opt"
         }
       },
       "type": "{body?:string|null,headers?:object,method?:string}"

@@ -1,16 +1,16 @@
 import { Element } from '../../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
-import applyStyle from '../../../../../client/style'
+import { applyStyle } from '../../../../../client/style'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { $ST } from '../../../../../types/interface/async/$ST'
+import { $MS } from '../../../../../types/interface/async/$MS'
 
 export interface Props {
   className?: string
   style?: Dict<string>
   src?: string
-  stream?: $ST
+  stream?: $MS
   autoplay?: boolean
   controls?: boolean
 }
@@ -54,7 +54,7 @@ export default class VideoComp extends Element<HTMLVideoElement, Props> {
     applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
 
     this.prop_handler = {
-      ...htmlPropHandler(this, DEFAULT_STYLE),
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
 
       src: (src: string | undefined) => {
         if (src === undefined) {
@@ -65,11 +65,11 @@ export default class VideoComp extends Element<HTMLVideoElement, Props> {
           this.$element.src = src
         }
       },
-      stream: (stream: $ST | undefined): void => {
+      stream: (stream: $MS | undefined): void => {
         if (stream === undefined) {
           this.$element.srcObject = null
         } else {
-          stream.$stream({}, (_stream: MediaStream) => {
+          stream.$get({}, (_stream: MediaStream) => {
             this.$element.srcObject = _stream
           })
         }
@@ -93,6 +93,7 @@ export default class VideoComp extends Element<HTMLVideoElement, Props> {
 
   onPropChanged(prop: string, current: any): void {
     // console.log('onPropChanged', prop, current)
+
     this.prop_handler[prop](current)
   }
 
@@ -129,5 +130,13 @@ export default class VideoComp extends Element<HTMLVideoElement, Props> {
     } else {
       throw new APINotSupportedError('Picture-in-Picture')
     }
+  }
+
+  play(): void {
+    this.$element.play()
+  }
+
+  pause(): void {
+    this.$element.pause()
   }
 }

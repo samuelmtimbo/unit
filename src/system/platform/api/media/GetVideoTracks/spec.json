@@ -1,0 +1,31 @@
+{
+  "name": "get video tracks",
+  "inputs": {
+    "stream": {
+      "type": "`MS`",
+      "ref": true
+    },
+    "init": {
+      "type": "any"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "tracks": {
+      "type": "`MST`[]",
+      "ref": true
+    }
+  },
+  "id": "0bc0c4ad-d2e0-4e3e-92e8-5b9dfee1cf5e",
+  "base": true,
+  "metadata": {
+    "icon": "film",
+    "complexity": 12,
+    "tags": ["platform", "api", "media"],
+    "globals": ["MediaStreamTrack"]
+  },
+  "type": "`U`",
+  "system": true
+}

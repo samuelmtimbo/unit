@@ -4,7 +4,7 @@ import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
-import { ST } from '../../../../../types/interface/ST'
+import { MS } from '../../../../../types/interface/MS'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { ID_PEER_TRANSMITTER } from '../../../../_ids'
 
@@ -12,7 +12,7 @@ export interface I<T> {
   opt: RTCConfiguration
   close: any
   answer: string
-  stream: ST
+  stream: MS
 }
 
 export interface O<T> {
@@ -114,9 +114,9 @@ export default class PeerTransmitter<T>
     this._output.offer.push(offer)
   }
 
-  onRefInputData(name: string, unit: ST): void {
+  onRefInputData(name: string, unit: MS): void {
     // if (name === 'stream') {
-    this._unlisten_stream = unit.stream((_stream: MediaStream) => {
+    unit.mediaStream((_stream: MediaStream) => {
       if (_stream === null) {
         if (this._stream) {
           this._remove_stream(this._stream)
@@ -241,7 +241,7 @@ export default class PeerTransmitter<T>
     const peer = this._peer
 
     const channel = new (class Channel extends $ implements CH {
-      __: string[] = ['ST']
+      __: string[] = ['MS']
 
       async send(data: any): Promise<void> {
         const _data = stringify(data)

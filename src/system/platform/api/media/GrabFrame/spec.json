@@ -1,0 +1,31 @@
+{
+  "name": "grab frame",
+  "inputs": {
+    "camera": {
+      "type": "`IC`",
+      "ref": true
+    },
+    "init": {
+      "type": "any"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "image": {
+      "type": "`IB`",
+      "ref": true
+    }
+  },
+  "id": "f238caff-3f71-40d9-b1a9-d992060fea04",
+  "base": true,
+  "metadata": {
+    "icon": "film",
+    "complexity": 12,
+    "tags": ["platform", "api", "media"],
+    "globals": ["MediaRecorder"]
+  },
+  "type": "`U`",
+  "system": true
+}

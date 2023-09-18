@@ -23,7 +23,6 @@ import { C_EE } from '../../types/interface/C'
 import { Component_, ComponentEvents } from '../../types/interface/Component'
 import { E } from '../../types/interface/E'
 import { UnitBundle } from '../../types/UnitBundle'
-import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { forEach } from '../../util/array'
 import { Stateful, StatefulEvents } from '../Stateful'
 import { ION, Opt } from '../Unit'
@@ -85,22 +84,26 @@ export class Element_<
         }, 0)
       }
 
-      this._forwarding = true
-      if (data === undefined) {
-        // @ts-ignore
-        this._output?.[name]?.pull()
-      } else {
-        // @ts-ignore
-        this._output?.[name]?.push(data)
+      if (!this._forwarding) {
+        this._forwarding = true
+
+        if (data === undefined) {
+          // @ts-ignore
+          this._output?.[name]?.pull()
+        } else {
+          // @ts-ignore
+          this._output?.[name]?.push(data)
+        }
+
+        this._forwarding = false
       }
-      this._forwarding = false
     })
 
     this._slot = {
       default: this,
     }
   }
-  getBundleSpec(): UnitBundleSpec {
+  detach(): void {
     throw new MethodNotImplementedError()
   }
 

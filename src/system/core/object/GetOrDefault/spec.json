@@ -1,0 +1,142 @@
+{
+  "name": "get or default",
+  "units": {
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c"
+    },
+    "haskey": {
+      "id": "ad2ae8b9-9674-4b22-bed4-4458e0030b1a"
+    },
+    "if": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    },
+    "ifnot": {
+      "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda"
+    },
+    "if0": {
+      "id": "06bc3983-44b0-43d6-b041-2e9218ea89c8"
+    }
+  },
+  "merges": {
+    "0": {
+      "haskey": {
+        "output": {
+          "has": true
+        }
+      },
+      "if": {
+        "input": {
+          "b": true
+        }
+      },
+      "if0": {
+        "input": {
+          "b": true
+        }
+      },
+      "ifnot": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "1": {
+      "if": {
+        "output": {
+          "a if b": true
+        }
+      },
+      "get": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "2": {
+      "get": {
+        "input": {
+          "key": true
+        }
+      },
+      "if0": {
+        "output": {
+          "a if b": true
+        }
+      }
+    },
+    "3": {
+      "get": {
+        "output": {
+          "value": true
+        }
+      },
+      "ifnot": {
+        "output": {
+          "a if not b": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "if `key` in `obj`, get correspondent value, `default` otherwise",
+    "complexity": 18,
+    "tags": [
+      "core",
+      "object"
+    ]
+  },
+  "inputs": {
+    "key": {
+      "plug": {
+        "0": {
+          "unitId": "haskey",
+          "pinId": "key"
+        },
+        "1": {
+          "unitId": "if0",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "string"
+    },
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "if",
+          "pinId": "a"
+        },
+        "1": {
+          "unitId": "haskey",
+          "pinId": "obj"
+        }
+      },
+      "functional": true,
+      "type": "object"
+    },
+    "default": {
+      "plug": {
+        "0": {
+          "unitId": "ifnot",
+          "pinId": "a"
+        }
+      },
+      "functional": true,
+      "type": "<A>"
+    }
+  },
+  "outputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "mergeId": "3"
+        }
+      },
+      "type": "any"
+    }
+  },
+  "id": "aeac1075-e01f-4d22-b01b-9a77cbba504b",
+  "type": "`U`&`G`",
+  "system": true
+}

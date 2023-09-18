@@ -59,7 +59,10 @@ export function webInput(
   const pointerUpListener = (event) => {
     const { pointerId } = event
 
-    pointers[pointerId].down = false
+    // Safari can fire a pointer up without a preceding pointer down
+    if (pointers[pointerId]) {
+      pointers[pointerId].down = false
+    }
   }
 
   const pointerCancelListener = (event) => {

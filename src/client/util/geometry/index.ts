@@ -354,6 +354,10 @@ export function vector(x0: number, y0: number, x1: number, y1: number): Point {
   return { x: x1 - x0, y: y1 - y0 }
 }
 
+export function pointVector(p0: Point, p1: Point): Point {
+  return vector(p0.x, p0.y, p1.x, p1.y)
+}
+
 export function jigglePoint(point: Point, intensity: number = 1): Point {
   const r = randomUnitVector()
   const jiggled = {
@@ -706,4 +710,11 @@ export const vectorAngle = (p0: Point, p1: Point): number => {
     a += TWO_PI
   }
   return a / DEG
+}
+
+export const roundPosition = (position: Position): Position => {
+  return {
+    x: Math.round(position.x),
+    y: Math.round(position.y),
+  }
 }

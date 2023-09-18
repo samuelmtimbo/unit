@@ -18,7 +18,7 @@ export default class HasKey<T> extends Functional<I<T>, O<T>> {
     super(
       {
         i: ['obj', 'key'],
-        o: ['data'],
+        o: ['has'],
       },
       {
         input: {
@@ -33,11 +33,16 @@ export default class HasKey<T> extends Functional<I<T>, O<T>> {
   }
 
   async f({ obj, key }: I<T>, done: Done<O<T>>) {
+    let has: boolean
+
     try {
-      const has = await obj.hasKey(key)
-      done({ has })
+      has = await obj.hasKey(key)
     } catch (err) {
-      done(undefined, err)
+      done(undefined, err.message)
+
+      return
     }
+
+    done({ has })
   }
 }

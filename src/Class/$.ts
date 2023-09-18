@@ -41,4 +41,8 @@ export class $<
 
     this.emit('destroy')
   }
+
+  raw(): any {
+    throw new Error("object doens't have raw form")
+  }
 }

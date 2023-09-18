@@ -1,4 +1,5 @@
 import { escape } from './escape'
+import { globalUrl } from './globalUrl'
 import { isValidKeyStr } from './parser'
 
 export function stringify(value: any): string | null {
@@ -26,14 +27,15 @@ export function stringify(value: any): string | null {
             )
             .join(',')}}`
         } else {
-          return `unit://${value.__global_id}`
+          return globalUrl(value.__global_id)
         }
       }
     case 'function':
       if (value.__bundle) {
         return `$${stringify(value.__bundle)}`
       } else {
-        throw new Error('invalid unit class')
+        // throw new Error('invalid unit class')
+        return 'null'
       }
     default:
       throw new Error('cannot stringify value')

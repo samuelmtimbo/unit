@@ -20,7 +20,7 @@ export const CLASS_TYPE_ARRAY = 'A' // Array
 export const CLASS_TYPE_PICTURE_IN_PICTURE = 'PP' // PictureInPicture
 export const CLASS_TYPE_PICTURE_IN_PICTURE_SOURCE = 'PS' // PictureInPictureSource
 export const CLASS_TYPE_CHANNEL = 'CH' // CHannel
-export const CLASS_TYPE_STREAM = 'ST' // STream
+export const CLASS_TYPE_MEDIA_STREAM = 'MS' // MediaStream
 export const CLASS_TYPE_SYSTEM = 'S' // System
 export const CLASS_TYPE_UNIT = 'U' // Unit
 export const CLASS_TYPE_VALUE = 'V' // Value
@@ -30,12 +30,26 @@ export const CLASS_TYPE_PIN = 'PI' // PIn
 export const CLASS_TYPE_FILE = 'F' // File
 export const CLASS_TYPE_LOCATION = 'L' // Location
 export const CLASS_TYPE_REGISTRY = 'R' // Registry
+export const CLASS_TYPE_AUDIO_CONTEXT = 'AC' // AudioContext
+export const CLASS_TYPE_AUDIO_OSCILLATOR_NODE = 'ON' // OscillatorNode
+export const CLASS_TYPE_AUDIO_NODE = 'ON' // AudioNode
+export const CLASS_TYPE_DATE = 'D' // Date
+export const CLASS_TYPE_IMAGE_CAPTURE = 'IC' // ImageCapture
+export const CLASS_TYPE_IMAGE_BITMAP_RENDERING_CONTEXT = 'IBRC' // ImageBitmapRenderingContext
+export const CLASS_TYPE_IMAGE = 'IM' // IMage
+export const CLASS_TYPE_IMAGE_DATA = 'ID' // ImageData
+export const CLASS_TYPE_WRAPER = 'WP' // WraPer
+export const CLASS_TYPE_WINDOW = 'W' // Window
+export const CLASS_TYPE_MEDIA_ELEMENT = 'ME' // MediaElement
 
 export const INHERITANCE = {
   U: ['EE'],
   G: ['U'],
+  C: ['U'],
   V: ['EE'],
   CH: ['EE'],
+  IB: ['I'],
+  W: ['EE', 'CH'],
 }
 
 export type AllTypes<T> = {
@@ -61,7 +75,7 @@ export type AllTypes<T> = {
   PP: T
   PS: T
   CH: T
-  ST: T
+  MS: T
   S: T
   U: T
   V: T
@@ -69,6 +83,8 @@ export type AllTypes<T> = {
   RE: T
   F: T
   L: T
+  AC: T
+  D: T
 }
 
 export const ALL_TYPES_MAP: AllTypes<true> = {
@@ -94,7 +110,7 @@ export const ALL_TYPES_MAP: AllTypes<true> = {
   PP: true,
   PS: true,
   CH: true,
-  ST: true,
+  MS: true,
   S: true,
   U: true,
   V: true,
@@ -102,6 +118,8 @@ export const ALL_TYPES_MAP: AllTypes<true> = {
   RE: true,
   F: true,
   L: true,
+  AC: true,
+  D: true,
 }
 
 export const ALL_TYPES = Object.keys(ALL_TYPES_MAP)

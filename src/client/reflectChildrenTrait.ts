@@ -1,21 +1,15 @@
 import { CodePathNotImplementedError } from '../exception/CodePathNotImplemented'
-import { _NUMBER_LITERAL_REGEX } from '../spec/regex/NUMBER_LITERAL'
 import { Style } from '../system/platform/Props'
 import { LayoutNode } from './LayoutNode'
 import { parseBorder } from './parseBorder'
-import { parseLayoutValue } from './parseLayoutValue'
+import { applyLayoutValue, parseLayoutValue } from './parseLayoutValue'
 import { parseMargin } from './parseMargin'
 import { parsePadding } from './parsePadding'
 import { parseTransformXY } from './parseTransformXY'
 import { rectsBoundingRect } from './util/geometry'
-import { Rect, Size } from './util/geometry/types'
+import { Rect } from './util/geometry/types'
 import { parseFontSize } from './util/style/getFontSize'
 import { parseOpacity } from './util/style/getOpacity'
-
-export const REGEX_PERCENT = /^([0-9]+)%$/
-export const REGEX_PX = new RegExp('^(' + _NUMBER_LITERAL_REGEX.source + ')px$')
-export const REGEX_CALC =
-  /^calc\(([0-9]+)%([+]{0,1}[-]{0,1}[0-9]+(?:\.\d*)?)px\)$/
 
 export function reflectChildrenTrait(
   parentTrait: LayoutNode,
@@ -25,7 +19,7 @@ export function reflectChildrenTrait(
   path: number[] = [],
   rootStyle: Style = parentStyle,
   expandChildren: boolean = true
-): [LayoutNode[], Size] {
+): LayoutNode[] {
   const {
     x: parentX,
     y: parentY,
@@ -61,6 +55,28 @@ export function reflectChildrenTrait(
 
   const parent_fit_width = parentStyleWidth === 'fit-content'
   const parent_fit_height = parentStyleHeight === 'fit-content'
+
+  const parentNoWrap = parentFlexWrap === 'nowrap'
+
+  const applyAspectRatio = (
+    childAspectRatioStr: string,
+    valueStr: string,
+    otherValueStr: string,
+    value: number,
+    otherValue: number
+  ) => {
+    if (childAspectRatioStr) {
+      const childAspectRatio = parseFloat(childAspectRatioStr)
+
+      if (valueStr && !otherValueStr) {
+        return value / childAspectRatio
+      } else if (!valueStr && otherValueStr) {
+        return otherValue * childAspectRatio
+      }
+    }
+
+    return value
+  }
 
   let {
     left: pxPaddingLeft,
@@ -98,8 +114,12 @@ export function reflectChildrenTrait(
 
   const children_percent_left: number[] = []
   const children_percent_top: number[] = []
+  const children_percent_right: number[] = []
+  const children_percent_bottom: number[] = []
 
   const children_px_left: number[] = []
+  const children_px_right: number[] = []
+  const children_px_bottom: number[] = []
   const children_px_top: number[] = []
 
   const children_percent_width: number[] = []
@@ -124,13 +144,17 @@ export function reflectChildrenTrait(
     let width = 0
     let height = 0
 
-    const {
+    let {
       display: childDisplay = 'block',
       position: childPosition = 'relative',
-      left: childLeft = '0px',
       top: childTop = '0px',
-      width: childWidth = '100%',
-      height: childHeight = '0px',
+      left: childLeft = '',
+      bottom: childBottom = '',
+      right: childRight = '',
+      width: childWidthStr = '',
+      height: childHeightStr = '',
+      maxWidth: childMaxWidthStr = undefined,
+      maxHeight: childMaxHeightStr = undefined,
       fontSize: childFontSizeStr,
       opacity: childOpacityStr = '1',
       transform: childTransform = '',
@@ -138,11 +162,34 @@ export function reflectChildrenTrait(
       margin: childMargin = '',
       boxSizing: childBoxSizing = 'content-box',
       padding: childPadding = '',
-      aspectRatio: childAspectRatio = '',
+      aspectRatio: childAspectRatioStr = '',
     } = childStyle
 
-    let [pxLeft, pcLeft] = parseLayoutValue(childLeft)
+    if (!childLeft && !childRight) {
+      childLeft = '0px'
+    }
+
+    const applyMaxValue = (value, maxValueStr) => {
+      if (maxValueStr !== undefined) {
+        const [maxHValue] = parseLayoutValue(maxValueStr)
+
+        return Math.min(value, maxHValue)
+      }
+
+      return value
+    }
+
+    const applyMaxWidth = (width) => {
+      return applyMaxValue(width, childMaxWidthStr)
+    }
+    const applyMaxHeight = (height) => {
+      return applyMaxValue(height, childMaxHeightStr)
+    }
+
     let [pxTop, pcTop] = parseLayoutValue(childTop)
+    let [pxLeft, pcLeft] = parseLayoutValue(childLeft)
+    let [pxRight, pcRight] = parseLayoutValue(childRight)
+    let [pxBottom, pcBottom] = parseLayoutValue(childBottom)
 
     let pxWidth: number = 0
     let pxHeight: number = 0
@@ -186,8 +233,8 @@ export function reflectChildrenTrait(
 
     const display_contents = childDisplay === 'contents'
 
-    const fit_width = childWidth === 'fit-content'
-    const fit_height = childHeight === 'fit-content'
+    const fit_width = childWidthStr === 'fit-content'
+    const fit_height = childHeightStr === 'fit-content'
 
     const reflect_children =
       expandChildren && (fit_width || fit_height || display_contents)
@@ -204,14 +251,13 @@ export function reflectChildrenTrait(
 
       const _childStyle = display_contents ? _parentStyle : childStyle
 
-      const [reflected_children_trait, reflected_children_size] =
-        reflectChildrenTrait(
-          parentTrait,
-          _childStyle,
-          relative_children_style,
-          expandChild,
-          _path
-        )
+      const reflected_children_trait = reflectChildrenTrait(
+        parentTrait,
+        _childStyle,
+        relative_children_style,
+        expandChild,
+        _path
+      )
 
       children_trait = reflected_children_trait
     }
@@ -221,8 +267,10 @@ export function reflectChildrenTrait(
         children_bounding_rect || rectsBoundingRect(children_trait)
 
       pxWidth = children_bounding_rect.width
+
+      width += pxWidth
     } else {
-      const parsedWidth = parseLayoutValue(childWidth)
+      const parsedWidth = parseLayoutValue(childWidthStr)
 
       pxWidth = parsedWidth[0]
       pcWidth = parsedWidth[1]
@@ -233,15 +281,17 @@ export function reflectChildrenTrait(
         children_bounding_rect || rectsBoundingRect(children_trait)
 
       pxHeight = children_bounding_rect.height
+
+      height += pxHeight
     } else {
-      const parsedHeight = parseLayoutValue(childHeight)
+      const parsedHeight = parseLayoutValue(childHeightStr)
 
       pxHeight = parsedHeight[0]
       pcHeight = parsedHeight[1]
     }
 
-    width += (pcWidth * (parentWidth - pxPaddingHorizontal)) / 100 + pxWidth
-    height += (pcHeight * (parentHeight - pxPaddingVertical)) / 100 + pxHeight
+    width += applyLayoutValue(childWidthStr, parentWidth - pxPaddingHorizontal)
+    height += applyLayoutValue(childHeightStr, parentHeight - pxPaddingVertical)
 
     if (childBoxSizing === 'content-box') {
       width += 2 * pxBorderWidth
@@ -281,10 +331,14 @@ export function reflectChildrenTrait(
     ] = parseTransformXY(childTransform, width, height)
 
     children_px_left.push(pxLeft)
-    children_percent_left.push(pcLeft)
-
+    children_px_right.push(pxRight)
+    children_px_bottom.push(pxBottom)
     children_px_top.push(pxTop)
+
+    children_percent_left.push(pcLeft)
     children_percent_top.push(pcTop)
+    children_percent_right.push(pcRight)
+    children_percent_bottom.push(pcBottom)
 
     children_percent_width.push(pcWidth)
     children_percent_height.push(pcHeight)
@@ -311,14 +365,43 @@ export function reflectChildrenTrait(
 
     if (parentDisplay === 'block') {
       if (childPosition === 'relative') {
-        x += (pcLeft * parentWidth) / 100
-        y +=
-          (total_relative_percent_height * parentHeight * parentScaleY) / 100 +
-          total_relative_px_height +
-          (pcTop * parentHeight) / 100
+        if (childLeft) {
+          x += pxLeft + (pcLeft * parentWidth) / 100
+        } else if (childRight) {
+          x += parentWidth - width + pxRight + (pcRight * parentWidth) / 100
+        }
+
+        if (childTop) {
+          y +=
+            (total_relative_percent_height * parentHeight * parentScaleY) /
+              100 +
+            total_relative_px_height +
+            (pcTop * parentHeight) / 100
+        } else if (childBottom) {
+          y +=
+            (total_relative_percent_height * parentHeight * parentScaleY) /
+              100 +
+            total_relative_px_height +
+            ((pcBottom - height) * parentHeight) / 100
+        }
       } else if (childPosition === 'absolute') {
-        x += (pxLeft + (pcLeft * parentWidth) / 100) * parentScaleX
-        y += (pxTop + (pcTop * parentHeight) / 100) * parentScaleY
+        if (childRight) {
+          x +=
+            (parentWidth - (pxLeft - width) + (pcLeft * parentWidth) / 100) *
+            parentScaleX
+        } else if (childLeft) {
+          x += (pxLeft + (pcLeft * parentWidth) / 100) * parentScaleX
+        }
+
+        if (childBottom) {
+          y +=
+            (parentHeight -
+              (pxBottom - height) +
+              (pcTop * parentHeight) / 100) *
+            parentScaleY
+        } else if (childTop) {
+          y += (pxTop + (pcTop * parentHeight) / 100) * parentScaleY
+        }
       } else {
         //
       }
@@ -352,14 +435,42 @@ export function reflectChildrenTrait(
 
     if (childPosition === 'relative') {
       total_relative_percent_width += pcWidth
-      total_relative_px_width += pxWidth
+      total_relative_px_width += applyMaxHeight(pxWidth)
       total_relative_percent_height += pcHeight
-      total_relative_px_height += pxHeight
+      total_relative_px_height += applyMaxHeight(pxHeight)
     }
 
     const sx = parentScaleX * childScaleX
     const sy = parentScaleY * childScaleY
     const opacity = parentOpacity * childOpacity
+
+    if (childMaxWidthStr !== undefined) {
+      const [childMaxWidth] = parseLayoutValue(childMaxWidthStr)
+
+      width = Math.min(width, childMaxWidth)
+    }
+    if (childMaxHeightStr !== undefined) {
+      const [childMaxHeight] = parseLayoutValue(childMaxHeightStr)
+
+      height = Math.min(height, childMaxHeight)
+    }
+
+    if (childAspectRatioStr) {
+      height = applyAspectRatio(
+        childAspectRatioStr,
+        childWidthStr,
+        childHeightStr,
+        width,
+        height
+      )
+      width = applyAspectRatio(
+        childAspectRatioStr,
+        childHeightStr,
+        childWidthStr,
+        width,
+        height
+      )
+    }
 
     const childTrait: LayoutNode = {
       x,
@@ -399,11 +510,15 @@ export function reflectChildrenTrait(
     let width = 0
     let height = 0
 
-    const pxLeft = children_px_left[i]
     const pxTop = children_px_top[i]
+    const pxLeft = children_px_left[i]
+    const pxBottom = children_px_bottom[i]
+    const pxRight = children_px_right[i]
 
-    const percentLeft = children_percent_left[i]
     const percentTop = children_percent_top[i]
+    const percentLeft = children_percent_left[i]
+    const percentBottom = children_percent_bottom[i]
+    const percentRight = children_percent_right[i]
 
     const percentWidth = children_percent_width[i]
     const percentHeight = children_percent_height[i]
@@ -419,21 +534,54 @@ export function reflectChildrenTrait(
     const applyParentLeftPadding = () => {
       x += pxPaddingLeft
     }
-
     const applyParentTopPadding = () => {
       y += pxPaddingTop
     }
 
-    const {
+    const applyMaxValue = (value, maxValueStr) => {
+      if (maxValueStr !== undefined) {
+        const [maxHValue] = parseLayoutValue(maxValueStr)
+
+        return Math.min(value, maxHValue)
+      }
+
+      return value
+    }
+
+    const applyMaxWidth = (width) => {
+      return applyMaxValue(width, childMaxWidthStr)
+    }
+    const applyMaxHeight = (height) => {
+      return applyMaxValue(height, childMaxHeightStr)
+    }
+
+    let {
       position: childPosition = 'relative',
       transform: childTransform,
       boxSizing: childBoxSizing = 'content-box',
       padding: childPadding = '',
+      width: childWidthStr = '',
+      height: childHeightStr = '',
+      aspectRatio: childAspectRatioStr = '',
       paddingLeft: childPaddingLeft = '',
       paddingRight: childPaddingRight = '',
       paddingTop: childPaddingTop = '',
       paddingBottom: childPaddingBottom = '',
+      maxWidth: childMaxWidthStr = undefined,
+      maxHeight: childMaxHeightStr = undefined,
+      top: childTop = '',
+      left: childLeft = '',
+      bottom: childBottom = '',
+      right: childRight = '',
     } = childStyle
+
+    if (childLeft && childRight) {
+      childRight = ''
+    }
+
+    if (!childLeft && !childRight) {
+      childLeft = '0px'
+    }
 
     if (childBoxSizing === 'content-box') {
       width += pxBorderLeft + pxBorderRight
@@ -486,23 +634,35 @@ export function reflectChildrenTrait(
             (parentWidth - total_relative_px_width - pxPaddingHorizontal)
           : 0
 
-      x += pxLeft
-      y += pxTop
+      if (pxLeft) {
+        x += pxLeft
+      }
+      if (pxTop) {
+        y += pxTop
+      }
+      if (pxRight) {
+        x += parentWidth - pxRight + width
+      }
+      if (pxBottom) {
+        y += parentHeight - pxBottom + height
+      }
 
       width += pcWidth + pxWidth
     } else if (parentDisplay === 'flex') {
       if (parentFlexDirection === 'row') {
         if (childPosition === 'relative') {
-          const pcWidth =
-            total_relative_percent_width > 0
-              ? (percentWidth / total_relative_percent_width) *
-                (effectiveWidth - total_relative_px_width - pxPaddingHorizontal)
-              : 0
+          let pcWidth: number = 0
+
+          if (total_relative_percent_width > 0) {
+            pcWidth =
+              (percentWidth / total_relative_percent_width) *
+              (effectiveWidth - total_relative_px_width - pxPaddingHorizontal)
+          }
 
           const pcHeight =
             (percentHeight * (parentHeight - pxPaddingVertical)) / 100
 
-          if (parentFlexWrap === 'nowrap') {
+          if (parentNoWrap) {
             if (total_relative_px_width > parentWidth) {
               const pxpcWidth =
                 (pxWidth / total_relative_px_width) *
@@ -521,14 +681,17 @@ export function reflectChildrenTrait(
           x += acc_relative_width * parentScaleX
           y += pxTop * parentScaleY
 
+          width = applyMaxWidth(width)
+          height = applyMaxHeight(height)
+
           max_relative_height = Math.max(
             max_relative_height,
             height * parentScaleX
           )
 
-          const inline = acc_relative_width + width <= parentWidth
+          const inline_width = acc_relative_width + width <= parentWidth
 
-          if (inline) {
+          if (inline_width) {
             max_relative_height = Math.max(max_relative_height, height)
           } else {
             total_max_relative_height += max_relative_height
@@ -542,7 +705,7 @@ export function reflectChildrenTrait(
             if (parentFlexWrap === 'wrap') {
               y += total_max_relative_height
 
-              if (inline) {
+              if (inline_width) {
                 //
               } else {
                 x = parentX
@@ -570,19 +733,29 @@ export function reflectChildrenTrait(
             applyParentTopPadding()
           }
 
-          if (inline) {
+          if (inline_width) {
             acc_relative_width += width
           } else {
             acc_relative_width = width
           }
         } else if (childPosition === 'absolute') {
-          x += ((pxLeft + percentLeft * effectiveWidth) * parentScaleX) / 100
-          y += ((pxTop + percentTop * effectiveHeight) * parentScaleY) / 100
-
           width +=
             ((percentWidth * effectiveWidth) / 100 + pxWidth) * parentScaleX
           height +=
             ((percentHeight * effectiveHeight) / 100 + pxHeight) * parentScaleY
+
+          if (childLeft) {
+            x += (pxLeft + (percentLeft * effectiveWidth) / 100) * parentScaleX
+          } else if (childRight) {
+            x +=
+              (parentWidth -
+                pxRight -
+                width +
+                (percentRight * effectiveWidth) / 100) *
+              parentScaleX
+          }
+
+          y += ((pxTop + percentTop * effectiveHeight) * parentScaleY) / 100
 
           const [
             childTransformX,
@@ -601,42 +774,60 @@ export function reflectChildrenTrait(
         }
       } else if (parentFlexDirection === 'column') {
         if (childPosition === 'relative') {
-          const pcWidth =
-            (percentWidth * (effectiveWidth - pxPaddingHorizontal)) / 100
+          width += applyLayoutValue(
+            childWidthStr,
+            effectiveWidth - pxPaddingHorizontal
+          )
 
-          const pcHeight =
-            total_relative_percent_height > 0
-              ? (percentHeight /
-                  (parentFlexWrap === 'nowrap'
-                    ? total_relative_percent_height
-                    : 100)) *
-                (effectiveHeight - total_relative_px_height - pxPaddingVertical)
-              : 0
+          if (childHeightStr === 'fit-content') {
+            height = pxHeight
+          } else {
+            height = applyLayoutValue(
+              childHeightStr,
+              (effectiveHeight - total_relative_px_height - pxPaddingVertical) *
+                (100 /
+                  (parentNoWrap ? total_relative_percent_height || 100 : 100))
+            )
+          }
 
-          width += pcWidth + pxWidth
+          if (childAspectRatioStr) {
+            height = applyAspectRatio(
+              childAspectRatioStr,
+              childWidthStr,
+              childHeightStr,
+              width,
+              height
+            )
+            width = applyAspectRatio(
+              childAspectRatioStr,
+              childHeightStr,
+              childWidthStr,
+              width,
+              height
+            )
+          }
 
-          if (parentFlexWrap === 'nowrap') {
+          if (parentNoWrap) {
             if (total_relative_px_height > effectiveHeight) {
               const pxpcHeight =
                 (pxHeight / total_relative_px_height) *
                 (effectiveHeight - 0 - pxPaddingVertical)
 
-              height += pxpcHeight
-            } else {
-              height += pcHeight + pxHeight
+              height = pxpcHeight
             }
-          } else {
-            height += pcHeight + pxHeight
           }
 
           x += pxLeft
           y += acc_relative_height + pxTop
 
+          width = applyMaxWidth(width)
+          height = applyMaxHeight(height)
+
           max_relative_width = Math.max(max_relative_width, width)
 
-          const inline = acc_relative_height + height <= effectiveHeight
+          const inline_height = acc_relative_height + height <= effectiveHeight
 
-          if (inline) {
+          if (inline_height) {
             max_relative_width = Math.max(max_relative_width, width)
           } else {
             total_max_relative_width += max_relative_width
@@ -650,7 +841,7 @@ export function reflectChildrenTrait(
             if (parentFlexWrap === 'wrap') {
               x += total_max_relative_width
 
-              if (inline) {
+              if (inline_height) {
                 //
               } else {
                 y = parentY
@@ -678,14 +869,29 @@ export function reflectChildrenTrait(
             applyParentTopPadding()
           }
 
-          if (inline) {
+          if (inline_height) {
             acc_relative_height += height
           } else {
             acc_relative_height = height
           }
         } else if (childPosition === 'absolute') {
-          x += pxLeft + (percentLeft * effectiveWidth) / 100
-          y += pxTop + (percentTop * effectiveHeight) / 100
+          if (pxTop) {
+            y += pxTop + (percentTop * effectiveHeight) / 100
+          } else if (pxBottom) {
+            y +=
+              parentHeight -
+              pxBottom +
+              height +
+              (percentTop * effectiveHeight) / 100
+          }
+
+          if (childLeft) {
+            x += pxLeft
+          } else if (childRight) {
+            x += parentWidth - pxRight + width
+          }
+
+          x += (percentLeft * effectiveWidth) / 100
 
           width += (percentWidth * effectiveWidth) / 100 + pxWidth
           height += (percentHeight * effectiveHeight) / 100 + pxHeight
@@ -714,6 +920,9 @@ export function reflectChildrenTrait(
       max_x = Math.max(max_x, x + width)
       max_y = Math.max(max_y, y + height)
     }
+
+    width = applyMaxValue(width, childMaxWidthStr)
+    height = applyMaxValue(height, childMaxHeightStr)
 
     const childTrait = childrenTrait[i]
 
@@ -744,8 +953,10 @@ export function reflectChildrenTrait(
           if (parentJustifyContent === 'start') {
             //
           } else if (parentJustifyContent === 'center') {
-            childTrait.y += (effectiveHeight - internal_height) / 2 + acc_gap
+            childTrait.y += (effectiveHeight - internal_height) / 2
           }
+
+          childTrait.y += acc_gap
 
           if (parentAlignItems === 'start') {
             //
@@ -784,11 +995,5 @@ export function reflectChildrenTrait(
     }
   }
 
-  return [
-    childrenTrait,
-    {
-      width: parent_fit_width ? total_relative_px_width : 0,
-      height: parent_fit_height ? total_relative_px_height : 0,
-    },
-  ]
+  return childrenTrait
 }

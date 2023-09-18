@@ -1,5 +1,4 @@
 import { Spec, Specs } from '..'
-import { randomInArray } from '../../client/id/randomInArray'
 import {
   NULL_TREE,
   TreeNode,
@@ -12,6 +11,7 @@ import {
 } from '../../spec/parser'
 import { keys } from '../../system/f/object/Keys/f'
 import { rangeArray } from '../../util/array'
+import { randomInArray } from '../../util/array/randomInArray'
 import { Dict } from '../Dict'
 
 export function propValue<T>({ value }: { value: T }): T {

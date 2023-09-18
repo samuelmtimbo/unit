@@ -34,6 +34,6 @@ export default class Clear<T> extends Functional<I<T>, O<T>> {
   f({ any, canvas }: I<T>, done: Done<O<T>>): void {
     canvas.clear()
 
-    done({})
+    done()
   }
 }

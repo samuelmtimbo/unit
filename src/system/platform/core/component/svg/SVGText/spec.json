@@ -1,0 +1,126 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "svg text",
+  "units": {
+    "svg": {
+      "id": "98c279fc-7f5e-11ea-b9e4-f772f9f0bed1",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": -65,
+              "y": -181
+            }
+          }
+        },
+        "viewBox": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -64,
+              "y": -210
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 69,
+          "y": -181
+        }
+      }
+    },
+    "text": {
+      "id": "49ef122e-b4d1-11ea-b45e-b73d8ee2aae8",
+      "input": {
+        "style": {
+          "metadata": {
+            "position": {
+              "x": 108,
+              "y": 27
+            }
+          }
+        },
+        "value": {
+          "constant": true,
+          "data": "\"SVG\"",
+          "metadata": {
+            "position": {
+              "x": 106,
+              "y": 61
+            }
+          }
+        },
+        "x": {
+          "constant": true,
+          "data": "\"50%\"",
+          "metadata": {
+            "position": {
+              "x": -107,
+              "y": 61
+            }
+          }
+        },
+        "y": {
+          "constant": true,
+          "data": "\"50%\"",
+          "metadata": {
+            "position": {
+              "x": -109,
+              "y": 27
+            }
+          }
+        },
+        "dx": {
+          "metadata": {
+            "position": {
+              "x": -107,
+              "y": -6
+            }
+          }
+        },
+        "dy": {
+          "constant": true,
+          "metadata": {
+            "position": {
+              "x": 106,
+              "y": -6
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 0,
+          "y": 27
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {},
+  "outputs": {},
+  "metadata": {
+    "icon": "question",
+    "description": ""
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "svg": {
+        "children": ["text"],
+        "childSlot": {}
+      },
+      "text": {
+        "children": [],
+        "childSlot": {}
+      }
+    },
+    "children": ["svg"],
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "id": "e08596c5-fdb2-464f-802b-f52217295c04"
+}

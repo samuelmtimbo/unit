@@ -7,7 +7,7 @@ export function cloneBundle<T extends Unit = any>(
   unit: T,
   deep: boolean = false
 ): UnitBundle<T> {
-  const __bundle = unit.getBundle(deep)
+  const __bundle = unit.getUnitBundleSpec(deep)
 
   return bundleClass(unit.constructor as UnitClass, __bundle)
 }

@@ -3,25 +3,21 @@ import Merge from '../Class/Merge'
 import { Unit, UnitEvents } from '../Class/Unit'
 import { Pin } from '../Pin'
 import { State } from '../State'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keys } from '../system/f/object/Keys/f'
-import {
-  Action,
-  GraphMergeSpec,
-  GraphMergesSpec,
-  GraphPinSpec,
-  GraphPinsSpec,
-  GraphSubPinSpec,
-  GraphUnitSpec,
-  GraphUnitsSpec,
-  Specs,
-} from '../types'
+import { GraphPinSpec, GraphPinsSpec, GraphSubPinSpec, Specs } from '../types'
+import { Action } from '../types/Action'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { GraphBundle } from '../types/GraphClass'
+import { GraphMergeSpec } from '../types/GraphMergeSpec'
+import { GraphMergesSpec } from '../types/GraphMergesSpec'
 import { GraphSpec } from '../types/GraphSpec'
 import { GraphState } from '../types/GraphState'
+import { GraphUnitSpec } from '../types/GraphUnitSpec'
+import { GraphUnitsSpec } from '../types/GraphUnitsSpec'
 import { IO } from '../types/IO'
 import { IOOf } from '../types/IOOf'
 import { UnitBundle } from '../types/UnitBundle'
@@ -219,6 +215,7 @@ export function lazyFromSpec(
     moveSubgraphOutOf(
       ...[
         graphId,
+        graphBundle,
         nextSpecId,
         nodeIds,
         nextIdMap,
@@ -232,6 +229,7 @@ export function lazyFromSpec(
       this._ensure()
       return this.__graph.moveSubgraphOutOf(
         graphId,
+        graphBundle,
         nextSpecId,
         nodeIds,
         nextIdMap,
@@ -267,9 +265,14 @@ export function lazyFromSpec(
       return this.__graph.bulkEdit(actions)
     }
 
-    setUnitName(unitId: string, newUnitId: string, name: string): void {
+    setUnitId(
+      unitId: string,
+      newUnitId: string,
+      name: string,
+      specId: string
+    ): void {
       this._ensure()
-      return this.__graph.setUnitName(unitId, newUnitId, name)
+      return this.__graph.setUnitId(unitId, newUnitId, name, specId)
     }
 
     isElement(): boolean {
@@ -328,9 +331,14 @@ export function lazyFromSpec(
       return this.__graph.removeRoot(subComponentId)
     }
 
+    detach(): void {
+      throw new MethodNotImplementedError()
+    }
+
     moveSubgraphInto(
       ...[
         graphId,
+        graphBundle,
         nextSpecId,
         nodeIds,
         nextIdMap,
@@ -344,6 +352,7 @@ export function lazyFromSpec(
       this._ensure()
       return this.__graph.moveSubgraphInto(
         graphId,
+        graphBundle,
         nextSpecId,
         nodeIds,
         nextIdMap,
@@ -376,6 +385,8 @@ export function lazyFromSpec(
     }
 
     private _load(): void {
+      // console.log('Lazy', '_load', spec.name)
+
       const Class = fromSpec(spec, specs, branch)
 
       this.__graph = new Class(this.__system)
@@ -419,7 +430,7 @@ export function lazyFromSpec(
 
     public getBundleSpec(): BundleSpec {
       this._ensure()
-      return this.__graph.getBundleSpec()
+      return this.__graph.getUnitBundleSpec()
     }
 
     public getUnitState(unitId: string): State {

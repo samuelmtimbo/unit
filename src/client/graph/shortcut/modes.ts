@@ -1,5 +1,5 @@
 import { keys } from '../../../system/f/object/Keys/f'
-import { MODE_TO_KEY } from '../../../system/platform/component/app/Editor/Component'
+import { MODE_TO_KEY } from '../../../system/platform/component/app/Editor/MODE_TO_KEY'
 import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
 import { Component } from '../../component'

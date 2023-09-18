@@ -10,9 +10,9 @@
     }
   },
   "outputs": {
-    "data": {
+    "has": {
       "_type": "<T>['S',N]",
-      "type": "any"
+      "type": "boolean"
     }
   },
   "metadata": {

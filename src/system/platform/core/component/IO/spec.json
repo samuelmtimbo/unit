@@ -1,3 +1,4 @@
+
 {
   "name": "IO",
   "inputs": {
@@ -129,53 +130,59 @@
         "style": {
           "metadata": {
             "position": {
-              "x": -406,
-              "y": -35
+              "x": -298.14547795324887,
+              "y": -65.91218709181067
             }
           }
         },
         "disabled": {
           "metadata": {
             "position": {
-              "x": -407,
-              "y": -63
+              "x": -296.63631535157305,
+              "y": -93.3196446293664
             }
           }
         },
         "graph": {
           "metadata": {
             "position": {
-              "x": -407,
-              "y": -89
+              "x": -297.8124928367791,
+              "y": -117.4403828446583
             }
           }
         },
         "fullwindow": {
           "metadata": {
             "position": {
-              "x": -407,
-              "y": -115
+              "x": -294.8412524037967,
+              "y": -140.76131893701523
             }
           }
         },
         "frame": {
           "metadata": {
             "position": {
-              "x": -406,
-              "y": -144
+              "x": -300.38405571934464,
+              "y": -164.66781047034897
             }
           }
         }
       },
       "output": {
         "graph": {
-          "ignored": false
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -289.3118062141259,
+              "y": -193.78207427539593
+            }
+          }
         }
       },
       "metadata": {
         "position": {
-          "x": -456,
-          "y": -151
+          "x": -558.6621783671444,
+          "y": -187.7214238075927
         }
       }
     },
@@ -193,8 +200,8 @@
         "disabled": {
           "metadata": {
             "position": {
-              "x": 244,
-              "y": -132
+              "x": 608.4371966644069,
+              "y": -126.35953831311235
             }
           }
         },
@@ -203,102 +210,39 @@
           "data": "42",
           "metadata": {
             "position": {
-              "x": 240,
-              "y": -36
+              "x": 608.4371966644069,
+              "y": -88.11799803592231
             }
           }
         },
         "x": {
-          "ignored": false
+          "ignored": false,
+          "constant": true,
+          "data": "\"50%\"",
+          "metadata": {
+            "position": {
+              "x": 344.6521748892934,
+              "y": -146.95460063857104
+            }
+          }
         },
         "y": {
-          "ignored": false
+          "ignored": false,
+          "constant": true,
+          "data": "\"25%\"",
+          "metadata": {
+            "position": {
+              "x": 344.04774836238016,
+              "y": -111.87036908016006
+            }
+          }
         }
       },
       "output": {},
       "metadata": {
         "position": {
-          "x": 174,
-          "y": -131
-        }
-      }
-    },
-    "contextsize": {
-      "id": "356fc870-ae54-4ae5-9a9f-a8cf6a37abea",
-      "input": {
-        "any": {
-          "constant": true,
-          "data": "'foo'",
-          "metadata": {
-            "position": {
-              "x": 146,
-              "y": -47
-            }
-          }
-        },
-        "element": {}
-      },
-      "output": {
-        "width": {},
-        "height": {},
-        "context": {
-          "ignored": true
-        }
-      },
-      "metadata": {
-        "position": {
-          "x": 25,
-          "y": -131
-        }
-      }
-    },
-    "divide": {
-      "id": "158d85eb-28b8-4355-b637-28a7ec751233",
-      "input": {
-        "a": {},
-        "b": {
-          "constant": true,
-          "data": "4",
-          "metadata": {
-            "position": {
-              "x": 134,
-              "y": 61
-            }
-          }
-        }
-      },
-      "output": {
-        "a ÷ b": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -4,
-          "y": -47
-        }
-      }
-    },
-    "divide0": {
-      "id": "158d85eb-28b8-4355-b637-28a7ec751233",
-      "input": {
-        "a": {},
-        "b": {
-          "constant": true,
-          "data": "2",
-          "metadata": {
-            "position": {
-              "x": 138,
-              "y": -153
-            }
-          }
-        }
-      },
-      "output": {
-        "a ÷ b": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -4,
-          "y": -215
+          "x": 456.8352328715838,
+          "y": -165.32510948865962
         }
       }
     },
@@ -317,8 +261,8 @@
         "pathStyle": {
           "metadata": {
             "position": {
-              "x": 88,
-              "y": 436
+              "x": 16.563833359252612,
+              "y": 257.5886659437294
             }
           }
         }
@@ -326,8 +270,8 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": 110,
-          "y": 266
+          "x": 173.16660309439214,
+          "y": 173.2234477527877
         },
         "component": {
           "width": 289.85217285156244,
@@ -340,20 +284,39 @@
       "input": {
         "key": {
           "constant": true,
-          "data": "\"color\""
+          "data": "\"color\"",
+          "metadata": {
+            "position": {
+              "x": -298.94494978295836,
+              "y": 196.08159083731522
+            }
+          }
         },
-        "obj": {}
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -298.8358195703903,
+              "y": 159.80266490724836
+            }
+          }
+        }
       },
       "output": {
         "value": {},
         "has": {
-          "ignored": true
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -239.9166585172394,
+              "y": 219.97849994896745
+            }
+          }
         }
       },
       "metadata": {
         "position": {
-          "x": -335,
-          "y": 212
+          "x": -272.0954539021811,
+          "y": 119.959139632355
         }
       }
     },
@@ -363,7 +326,13 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{opacity:'0.1',position:'relative',width:'240px',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}"
+          "data": "{opacity:'0.1',position:'relative',width:'240px',top:'50%',left:'50%',transform:'translate(-50%,-50%)'}",
+          "metadata": {
+            "position": {
+              "x": -86.10647839053826,
+              "y": 227.19237683975695
+            }
+          }
         }
       },
       "output": {
@@ -371,8 +340,8 @@
       },
       "metadata": {
         "position": {
-          "x": -127,
-          "y": 238
+          "x": -63.78741231550606,
+          "y": 145.57886546423185
         }
       }
     },
@@ -386,8 +355,8 @@
       },
       "metadata": {
         "position": {
-          "x": -231,
-          "y": 215
+          "x": -167.78523908533958,
+          "y": 122.43466233697382
         }
       }
     },
@@ -396,20 +365,39 @@
       "input": {
         "key": {
           "constant": true,
-          "data": "\"color\""
+          "data": "\"color\"",
+          "metadata": {
+            "position": {
+              "x": 133.26902724217234,
+              "y": -34.83180774135582
+            }
+          }
         },
-        "obj": {}
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 217.0177338501544,
+              "y": -3.7406470225576527
+            }
+          }
+        }
       },
       "output": {
         "value": {},
         "has": {
-          "ignored": true
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 141.7487345246251,
+              "y": -7.95714449713995
+            }
+          }
         }
       },
       "metadata": {
         "position": {
-          "x": 474,
-          "y": -131
+          "x": 164.35467772260517,
+          "y": -92.17071555881313
         }
       }
     },
@@ -423,73 +411,13 @@
       },
       "metadata": {
         "position": {
-          "x": 369,
-          "y": -131
+          "x": 267.97376998158984,
+          "y": -115.97886633128314
         }
       }
     }
   },
   "merges": {
-    "0": {
-      "divide": {
-        "input": {
-          "a": true
-        }
-      },
-      "contextsize": {
-        "output": {
-          "height": true
-        }
-      }
-    },
-    "1": {
-      "divide0": {
-        "input": {
-          "a": true
-        }
-      },
-      "contextsize": {
-        "output": {
-          "width": true
-        }
-      }
-    },
-    "2": {
-      "divide0": {
-        "output": {
-          "a ÷ b": true
-        }
-      },
-      "bot": {
-        "input": {
-          "x": true
-        }
-      }
-    },
-    "3": {
-      "divide": {
-        "output": {
-          "a ÷ b": true
-        }
-      },
-      "bot": {
-        "input": {
-          "y": true
-        }
-      }
-    },
-    "4": {
-      "contextsize": {
-        "input": {
-          "element": true
-        }
-      },
-      "bot": {
-        "output": {
-          "_self": true
-        }
-      }
-    },
     "5": {
       "tagcolor": {
         "input": {
@@ -555,10 +483,7 @@
   "component": {
     "subComponents": {
       "app": {
-        "children": [
-          "logo",
-          "bot"
-        ],
+        "children": ["logo", "bot"],
         "childSlot": {
           "logo": "1",
           "bot": "1"
@@ -571,22 +496,11 @@
         "children": []
       }
     },
-    "children": [
-      "app"
-    ],
+    "children": ["app"],
     "slots": [
-      [
-        "app",
-        "default"
-      ],
-      [
-        "app",
-        "1"
-      ],
-      [
-        "app",
-        "2"
-      ]
+      ["app", "default"],
+      ["app", "1"],
+      ["app", "2"]
     ],
     "defaultWidth": 360,
     "defaultHeight": 360
@@ -594,12 +508,7 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "bot + app",
-    "complexity": 219,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
         "0": {
@@ -623,3 +532,4 @@
   },
   "id": "6f267de2-b02c-11ea-b55c-db553f4c6c45"
 }
+

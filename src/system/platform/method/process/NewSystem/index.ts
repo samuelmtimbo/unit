@@ -1,7 +1,8 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
-import { S } from '../../../../../types/interface/S'
+import { $S } from '../../../../../types/interface/async/$S'
+import { Async } from '../../../../../types/interface/async/Async'
 import { wrapSystem } from '../../../../../wrap/System'
 import { ID_NEW_SYSTEM } from '../../../../_ids'
 
@@ -13,7 +14,7 @@ export interface I {
 }
 
 export interface O {
-  system: S
+  system: $S
 }
 
 export default class NewSystem extends Semifunctional<I, O> {
@@ -46,8 +47,10 @@ export default class NewSystem extends Semifunctional<I, O> {
 
     const system = wrapSystem(_system, this.__system)
 
+    const $system = Async(system, ['S'])
+
     done({
-      system,
+      system: $system,
     })
   }
 }

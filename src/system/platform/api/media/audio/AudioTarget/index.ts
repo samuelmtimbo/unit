@@ -1,11 +1,11 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { System } from '../../../../../../system'
-import { ST } from '../../../../../../types/interface/ST'
+import { MS } from '../../../../../../types/interface/MS'
 import { ID_AUDIO_TARGET } from '../../../../../_ids'
 
 export type I = {
   id: string
-  stream: ST
+  stream: MS
 }
 
 export type O = {}
@@ -34,7 +34,7 @@ export default class AudioTarget extends Functional<I, O> {
   }
 
   async f({ stream, id }: I) {
-    stream.stream((_stream) => {
+    stream.mediaStream((_stream) => {
       this._audio.srcObject = _stream
     })
 

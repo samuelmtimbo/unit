@@ -6,6 +6,7 @@ import { addListener } from './addListener'
 import { Component } from './component'
 import { makeCustomListener } from './event/custom'
 import { makeResizeListener } from './event/resize'
+import { camelToDashed } from './id'
 
 export const isVValue = (value: string) => {
   return value.endsWith('vh') || value.endsWith('vw')
@@ -72,10 +73,9 @@ export function reactToFrameSize(
 
 export function applyDynamicStyle(
   component: Component<HTMLElement | SVGElement>,
+  $element: HTMLElement | SVGElement,
   style: Dict<string>
 ): Unlisten {
-  const { $element } = component
-
   removeStyle($element)
 
   let { fontSize, width, height } = style
@@ -143,7 +143,7 @@ export function removeStyle(element: HTMLElement | SVGElement) {
   }
 }
 
-export default function applyStyle(
+export function applyStyle(
   element: HTMLElement | SVGElement,
   style: Dict<string>
 ) {
@@ -160,6 +160,6 @@ export function mergeStyle(
   for (const key in style) {
     const value = style[key]
 
-    _style[key] = value
+    _style[camelToDashed(key)] = value
   }
 }

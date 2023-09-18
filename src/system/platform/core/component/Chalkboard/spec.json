@@ -26,9 +26,7 @@
         }
       },
       "metadata": {
-        "examples": [
-          "200"
-        ],
+        "examples": ["200"],
         "position": {
           "0": {
             "x": -165,
@@ -46,9 +44,7 @@
         }
       },
       "metadata": {
-        "examples": [
-          "200"
-        ],
+        "examples": ["200"],
         "position": {
           "0": {
             "x": -153,
@@ -104,8 +100,8 @@
         "obj": {}
       },
       "output": {
-        "clientY": {},
-        "clientX": {}
+        "y": {},
+        "x": {}
       },
       "metadata": {
         "position": {
@@ -322,7 +318,7 @@
       },
       "propclientxclienty": {
         "output": {
-          "clientX": true
+          "x": true
         }
       }
     },
@@ -334,7 +330,7 @@
       },
       "propclientxclienty": {
         "output": {
-          "clientY": true
+          "y": true
         }
       }
     },
@@ -476,9 +472,7 @@
         "children": []
       }
     },
-    "children": [
-      "canvas"
-    ],
+    "children": ["canvas"],
     "defaultWidth": 200,
     "defaultHeight": 200
   },
@@ -486,11 +480,7 @@
     "icon": "chalkboard",
     "description": "drawing board",
     "complexity": 116,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
         "0": {
@@ -545,7 +535,7 @@
     }
   },
   "id": "a24f049c-7bb0-11ea-bbdc-17b9984e1f06",
-  "type": "`U`&`G`",
+  "type": "`U`&`C`&`G`",
   "system": true,
   "render": true
 }

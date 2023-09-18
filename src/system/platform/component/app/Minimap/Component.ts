@@ -1,4 +1,4 @@
-import namespaceURI from '../../../../../client/component/namespaceURI'
+import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { segmentLinkId } from '../../../../../client/id'
 import parentElement from '../../../../../client/platform/web/parentElement'

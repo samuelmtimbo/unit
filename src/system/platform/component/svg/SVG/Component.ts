@@ -1,12 +1,13 @@
-import namespaceURI from '../../../../../client/component/namespaceURI'
+import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
-import applyStyle from '../../../../../client/style'
+import { applyStyle } from '../../../../../client/style'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
 export interface Props {
   className?: string
+  value?: string
   style?: Dict<string>
   width?: number | string
   height?: number | string

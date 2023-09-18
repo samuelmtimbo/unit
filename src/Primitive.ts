@@ -22,8 +22,8 @@ export class Primitive<
   protected _i: Partial<I> = {}
   protected _o: Partial<O> = {}
 
-  protected _active_i_count: number = 0
-  protected _active_o_count: number = 0
+  public _active_i_count: number = 0
+  public _active_o_count: number = 0
 
   protected _i_start_count: number = 0
   protected _i_start: Dict<boolean> = {}
@@ -116,9 +116,9 @@ export class Primitive<
             }
           } else {
             if (ref) {
-              this.__onRefInputDrop(name)
+              this.__onRefInputDrop(name, data)
             } else {
-              this.onDataInputDrop(name)
+              this.onDataInputDrop(name, data)
             }
           }
         } else {
@@ -487,27 +487,27 @@ export class Primitive<
     }
   }
 
-  private _onDataInputDrop = (name: string): void => {
+  private _onDataInputDrop = (name: string, data: any): void => {
     this._deactivateInput(name)
 
     if (!this._paused) {
-      this.onDataInputDrop(name)
+      this.onDataInputDrop(name, data)
     } else {
       this.__buffer.push({ name, type: 'input', event: 'drop', ref: false })
     }
   }
 
-  private _onRefInputDrop = (name: string): void => {
+  private _onRefInputDrop = (name: string, data: any): void => {
     this._deactivateInput(name)
 
     if (!this._paused) {
-      this.__onRefInputDrop(name)
+      this.__onRefInputDrop(name, data)
     } else {
       this.__buffer.push({ name, type: 'input', event: 'drop', ref: true })
     }
   }
 
-  private __onRefInputDrop = (name: string): void => {
+  private __onRefInputDrop = (name: string, data: any): void => {
     if (this._input_effemeral[name]) {
       const effemeral_unit = this._input_effemeral[name]
 
@@ -516,7 +516,7 @@ export class Primitive<
       effemeral_unit.destroy()
     }
 
-    this.onRefInputDrop(name)
+    this.onRefInputDrop(name, data)
   }
 
   private _onRefInputInvalid = (name: string): void => {
@@ -527,9 +527,9 @@ export class Primitive<
     this.onRefInputInvalid(name)
   }
 
-  public onDataInputDrop(name: string): void {}
+  public onDataInputDrop(name: string, data: any): void {}
 
-  public onRefInputDrop(name: string): void {}
+  public onRefInputDrop(name: string, data: any): void {}
 
   private _activateOutput = (name: string) => {
     if (this._o[name] === undefined) {

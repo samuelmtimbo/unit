@@ -1,4 +1,4 @@
-import namespaceURI from '../../../../client/component/namespaceURI'
+import { namespaceURI } from '../../../../client/component/namespaceURI'
 import { Element } from '../../../../client/element'
 import { ensureIcon } from '../../../../client/ensureIcon'
 import { elementPropHandler, PropHandler } from '../../../../client/propHandler'
@@ -96,12 +96,12 @@ export default class Icon extends Element<SVGSVGElement, Props> {
     //   ...DEFAULT_STYLE,
     //   ...style,
     // })
-    applyDynamicStyle(this, { ...DEFAULT_STYLE, ...style })
+    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
 
     this.preventDefault('touchstart')
 
     this._prop_handler = {
-      ...elementPropHandler(this, DEFAULT_STYLE),
+      ...elementPropHandler(this, this.$element, DEFAULT_STYLE),
       icon: (icon: string | undefined = '') => {
         ensureIcon(this.$system, icon)
 

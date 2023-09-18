@@ -1,15 +1,12 @@
-import {
-  GraphComponentSpec,
-  GraphDataSpec,
-  GraphMetadataSpec,
-  GraphSpecBase,
-  GraphSpecs,
-  GraphUnitsSpec,
-} from '.'
+import { GraphComponentSpec, GraphDataSpec, GraphMetadataSpec } from '.'
 import { Dict } from './Dict'
+import { GraphSpecBase } from './GraphSpecBase'
+import { GraphSpecs } from './GraphSpecs'
+import { GraphUnitsSpec } from './GraphUnitsSpec'
 import { None } from './None'
 
 export type GraphSpec = GraphSpecBase & {
+  version?: string
   base?: false
   type?: '`U`&`G`' | '`U`&`G`&`C`'
   method?: boolean

@@ -1,0 +1,36 @@
+{
+  "name": "style",
+  "type": "`U`&`C`&`V`&`J`",
+  "inputs": {
+    "value": {
+      "type": "string",
+      "optional": true,
+      "metadata": {
+        "examples": ["div { outline: 1px solid currentColor; }"]
+      }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML style element",
+    "complexity": 20,
+    "tags": ["platform", "component"]
+  },
+  "id": "62ca7eae-ea36-4960-a8f2-6b5978cabbab",
+  "base": true,
+  "component": {
+    "defaultWidth": 60,
+    "defaultHeight": 60
+  },
+  "system": true,
+  "render": true
+}

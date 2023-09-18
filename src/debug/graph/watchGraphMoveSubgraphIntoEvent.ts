@@ -19,6 +19,7 @@ export function watchGraphMoveSubgraphEvent(
   const listener = (
     ...[
       graphId,
+      graphBundle,
       nextSpecId,
       nodeIds,
       nextIdMap,
@@ -35,6 +36,7 @@ export function watchGraphMoveSubgraphEvent(
       event,
       data: {
         graphId,
+        graphBundle,
         nodeIds,
         nextSpecId,
         nextIdMap,

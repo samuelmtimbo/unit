@@ -1,0 +1,96 @@
+{
+  "name": "read input",
+  "inputs": {
+    "name": {
+      "plug": {
+        "0": {
+          "unitId": "input",
+          "pinId": "name"
+        }
+      }
+    },
+    "unit": {
+      "plug": {
+        "0": {
+          "unitId": "input",
+          "pinId": "unit"
+        },
+        "1": {
+          "unitId": "read",
+          "pinId": "any"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "data": {
+      "plug": {
+        "0": {
+          "unitId": "read",
+          "pinId": "data"
+        }
+      }
+    }
+  },
+  "units": {
+    "read": {
+      "id": "c6da6b9f-a783-4e58-a252-e543aef109fb",
+      "input": {
+        "value": {}
+      },
+      "output": {
+        "data": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 58,
+          "y": -1
+        }
+      }
+    },
+    "input": {
+      "id": "4ae69887-a087-4d37-8743-d83ca48184d1",
+      "input": {
+        "unit": {},
+        "name": {},
+        "done": {
+          "ignored": true
+        }
+      },
+      "output": {
+        "pin": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -59,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "read": {
+        "input": {
+          "value": true
+        }
+      },
+      "input": {
+        "output": {
+          "pin": true
+        }
+      }
+    }
+  },
+  "component": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "set `unit` input `name` to `data`",
+    "complexity": 8,
+    "tags": ["platform", "core", "unit"]
+  },
+  "id": "850a3303-cdf7-4232-996f-760743e4f068"
+}

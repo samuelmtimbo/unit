@@ -1,6 +1,6 @@
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import applyStyle from '../../../../client/style'
+import { applyStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -17,9 +17,7 @@ export interface Props {
   draggable?: boolean
 }
 
-const DEFAULT_STYLE = {
-  color: 'currentColor',
-}
+const DEFAULT_STYLE = {}
 
 export default class Anchor extends Element<HTMLAnchorElement, Props> {
   private _prop_handler: PropHandler
@@ -45,22 +43,18 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
     if (href !== undefined) {
       this.$element.setAttribute('href', href)
     }
-
     if (target !== undefined) {
       this.$element.setAttribute('target', target)
     }
-
     if (rel !== undefined) {
       this.$element.setAttribute('rel', rel)
     }
-
     if (id !== undefined) {
       this.$element.id = id
     }
     if (className !== undefined) {
       this.$element.className = className
     }
-    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
     if (innerText) {
       this.$element.innerText = innerText
     }
@@ -74,8 +68,10 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
       this.$element.setAttribute('draggable', draggable.toString())
     }
 
+    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
+
     this._prop_handler = {
-      ...htmlPropHandler(this, DEFAULT_STYLE),
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
       href: (href: string | undefined) => {
         if (href) {
           this.$element.href = href

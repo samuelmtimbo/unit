@@ -47,7 +47,7 @@ assert.deepEqual(
   },
   exposeInputSet(
     {
-      id: 'dfgte',
+      pinId: 'dfgte',
       input: {
         name: 'foo',
         plug: { '0': { unitId: 'identity', pinId: 'tfgre' } },
@@ -88,7 +88,7 @@ assert.deepEqual(
     },
   },
   coverInputSet(
-    { id: 'frtdk' },
+    { pinId: 'frtdk' },
     {
       name: '?',
       units: {
@@ -175,7 +175,7 @@ assert.deepEqual(
   },
   exposeOutputSet(
     {
-      id: 'llkfd',
+      pinId: 'llkfd',
       output: {
         plug: { 0: { unitId: 'identity', pinId: 'bar' } },
         name: 'foo',
@@ -216,7 +216,7 @@ assert.deepEqual(
     },
   },
   coverOutputSet(
-    { id: 'oriur' },
+    { pinId: 'oriur' },
     {
       name: '?',
       units: {

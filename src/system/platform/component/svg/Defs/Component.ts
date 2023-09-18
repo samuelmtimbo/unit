@@ -1,7 +1,7 @@
-import namespaceURI from '../../../../../client/component/namespaceURI'
+import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
-import applyStyle from '../../../../../client/style'
+import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -29,7 +29,7 @@ export default class SVGDefs extends Element<SVGDefsElement, Props> {
 
     applyStyle(this.$element, style)
 
-    this._prop_handler = svgPropHandler(this, {})
+    this._prop_handler = svgPropHandler(this, this.$element, {})
   }
 
   onPropChanged(name: string, current: any): void {

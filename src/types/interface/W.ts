@@ -1,7 +1,7 @@
-import { C } from './C'
+import { CH } from './CH'
+import { EE } from './EE'
 
-export interface W {
-  refChildContainer(at: number): C
-  refParentRootContainer(at: number): C
-  refParentChildContainer(at: number): C
+export interface W extends CH, EE<any> {
+  window(): Window
+  postMessage(data: any, target: string): void
 }

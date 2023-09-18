@@ -1,4 +1,5 @@
 import { Field } from '../../../../../client/field'
+import { applyDynamicStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -37,7 +38,7 @@ export default class EditableField extends Field<HTMLDivElement, Props> {
       flags: { defaultInputModeNone },
     } = $system
 
-    const { maxLength, tabIndex } = $props
+    const { style, maxLength, tabIndex } = $props
 
     this.$element.spellcheck = false
     this.$element.autocapitalize = 'off'
@@ -50,6 +51,8 @@ export default class EditableField extends Field<HTMLDivElement, Props> {
     if (tabIndex !== undefined) {
       this.$element.tabIndex = tabIndex
     }
+
+    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
   }
 
   // setSelectionRange(

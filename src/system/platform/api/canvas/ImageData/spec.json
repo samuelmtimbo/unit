@@ -1,0 +1,50 @@
+{
+  "name": "image data",
+  "inputs": {
+    "data": {
+      "type": "`V`",
+      "ref": true
+    },
+    "width": {
+      "type": "number",
+      "metadata": {
+        "examples": ["100"]
+      }
+    },
+    "height": {
+      "type": "number",
+      "metadata": {
+        "examples": ["100"]
+      }
+    },
+    "opt": {
+      "type": "{colorSpace?:'srgb'|'display-p3'}",
+      "metadata": {
+        "examples": ["{}", "{colorSpace:'srgb'}"]
+      }
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "image": {
+      "type": "`ID`&`J`",
+      "ref": true,
+      "metadata": {
+        "examples": ["1"]
+      }
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "...",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/getImageData",
+    "complexity": 3,
+    "tags": ["platform", "api", "canvas"]
+  },
+  "id": "8e978642-b686-41fd-b2af-9a4c5db6bfa4",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

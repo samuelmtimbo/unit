@@ -6,25 +6,20 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     },
-    "graph": {
-      "type": "`G`",
+    "component": {
+      "type": "`C`",
       "ref": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "render a graph",
+    "description": "render a component",
     "complexity": 20,
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "7772a2f5-40c8-482e-83f4-bed9bfb364e3",
   "base": true,

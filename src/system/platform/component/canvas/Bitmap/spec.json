@@ -1,0 +1,37 @@
+{
+  "name": "bitmap",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true
+    },
+    "width": {
+      "type": "number|string",
+      "optional": true
+    },
+    "height": {
+      "type": "number|string",
+      "optional": true
+    },
+    "d": {
+      "type": "any[][]",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "image bitmap rendering context",
+    "complexity": 23,
+    "tags": ["platform", "component", "canvas"]
+  },
+  "id": "8866cb3a-a274-4f66-b395-6813ccb1c3c9",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 200
+  },
+  "type": "`U`&`C`&`V`&`J`&`IBRC`",
+  "system": true,
+  "render": true
+}

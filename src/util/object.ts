@@ -245,6 +245,24 @@ export function pathDelete(obj: object, path: string[]): void {
   }
 }
 
+export function pathDestroy(obj: object, path: string[]): void {
+  if (path.length === 1) {
+    delete obj[path[0]]
+
+    return
+  }
+
+  const [p, ...rest] = path
+
+  const o = obj[p]
+
+  pathDestroy(o, rest)
+
+  if (isEmptyObject(o)) {
+    delete obj[p]
+  }
+}
+
 export function pathMerge(obj: object, path: string[], value: any): void {
   pathSet(obj, path, deepMerge(pathOrDefault(obj, path, {}), value))
 }

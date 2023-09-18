@@ -6,7 +6,6 @@ import {
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphCoverUnitPinSetData,
-  GraphExplodeUnitData,
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
   GraphMoveSubGraphIntoData,
@@ -26,29 +25,35 @@ import {
 } from '../../Class/Graph/interface'
 import { Position } from '../../client/util/geometry/types'
 import { keys } from '../../system/f/object/Keys/f'
-import {
-  Action,
-  GraphMergeSpec,
-  GraphMergesSpec,
-  GraphPinSpec,
-  GraphSubPinSpec,
-  GraphUnitsSpec,
-} from '../../types'
+import { GraphPinSpec, GraphSubPinSpec } from '../../types'
+import { Action } from '../../types/Action'
 import { AllKeys } from '../../types/AllKeys'
+import { BundleSpec } from '../../types/BundleSpec'
 import { Dict } from '../../types/Dict'
+import { GraphMergeSpec } from '../../types/GraphMergeSpec'
+import { GraphMergesSpec } from '../../types/GraphMergesSpec'
 import { GraphUnitMerges } from '../../types/GraphUnitMerges'
 import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
-import { G } from '../../types/interface/G'
-import { U } from '../../types/interface/U'
+import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
+import { G } from '../../types/interface/G'
+import { U } from '../../types/interface/U'
 import {
-  makeMoveSubComponentRootAction,
-  makeReorderSubComponentAction,
   MOVE_SUB_COMPONENT_ROOT,
   REORDER_SUB_COMPONENT,
+  makeMoveSubComponentRootAction,
+  makeReorderSubComponentAction,
 } from './C'
+import {
+  ADD_DATUM,
+  REMOVE_DATUM,
+  SET_DATUM,
+  makeAddDatumAction,
+  makeRemoveDatumAction,
+  makeSetDatumAction,
+} from './D'
 
 export const ADD_UNIT = 'addUnitSpec'
 export const ADD_UNITS = 'addUnits'
@@ -85,7 +90,6 @@ export const EXPAND_UNIT = 'expandUnit'
 export const COLLAPSE_UNITS = 'collapseUnits'
 export const MOVE_SUBGRAPH_INTO = 'moveSubgraphInto'
 export const MOVE_SUBGRAPH_OUT_OF = 'moveSubgraphOutOf'
-export const EXPLODE_UNIT = 'explodeUnit'
 export const SET_UNIT_SIZE = 'setUnitSize'
 export const SET_COMPONENT_SIZE = 'setComponentSize'
 export const SET_SUB_COMPONENT_SIZE = 'setSubComponentSize'
@@ -135,6 +139,7 @@ export const wrapMoveSubgraphOutOfData = (data: GraphMoveSubGraphOutOfData) => {
 
 export const makeMoveSubgraphIntoAction = (
   graphId: string,
+  graphBundle: BundleSpec,
   nextSpecId: string,
   nodeIds: {
     merge: string[]
@@ -195,6 +200,7 @@ export const makeMoveSubgraphIntoAction = (
 ) => {
   return wrapMoveSubgraphIntoData({
     graphId,
+    graphBundle,
     nextSpecId,
     nodeIds,
     nextIdMap,
@@ -210,6 +216,7 @@ export const makeMoveSubgraphIntoAction = (
 
 export const makeMoveSubgraphOutOfAction = (
   graphId: string,
+  graphBundle: BundleSpec,
   nextSpecId: string,
   nodeIds: {
     merge: string[]
@@ -270,6 +277,7 @@ export const makeMoveSubgraphOutOfAction = (
 ) => {
   return wrapMoveSubgraphOutOfData({
     graphId,
+    graphBundle,
     nextSpecId,
     nodeIds,
     nextIdMap,
@@ -619,22 +627,6 @@ export const wrapSetSubComponentSizeAction = (
   }
 }
 
-export const makeSetSubComponentSize = (
-  unitId: string,
-  width: number,
-  height: number,
-  prevWidth: number,
-  prevHeight: number
-) => {
-  return wrapSetSubComponentSizeAction({
-    unitId,
-    width,
-    height,
-    prevWidth,
-    prevHeight,
-  })
-}
-
 export const wrapSetComponentSizeAction = (data: GraphSetComponentSizeData) => {
   return {
     type: SET_COMPONENT_SIZE,
@@ -782,27 +774,6 @@ export const makeRemoveUnitMergesAction = (id: string): Action => {
   }
 }
 
-export const wrapExplodeUnitData = (data: GraphExplodeUnitData) => {
-  return {
-    type: EXPLODE_UNIT,
-    data,
-  }
-}
-
-export const makeExplodeUnitAction = (
-  unitId: string,
-  mapUnitId: Dict<string>,
-  mapMergeId: Dict<string>,
-  mapPlugId: IOOf<Dict<Dict<string>>>
-) => {
-  return wrapExplodeUnitData({
-    unitId,
-    mapUnitId,
-    mapMergeId,
-    mapPlugId,
-  })
-}
-
 export const wrapBulkEditData = (data: GraphBulkEditData) => {
   return {
     type: BULK_EDIT,
@@ -942,8 +913,38 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case MOVE_SUBGRAPH_INTO:
       return makeMoveSubgraphOutOfAction(
         data.graphId,
+        data.graphBundle,
         data.nextSpecId,
-        data.nodeIds,
+        {
+          ...data.nodeIds,
+          unit: data.nodeIds.unit.map(
+            (unitId: string) => data.nextIdMap.unit[unitId] ?? unitId
+          ),
+          link: data.nodeIds.link.filter(({ unitId, type, pinId }) => {
+            if (!data.nodeIds.unit.includes(unitId)) {
+              return false
+            }
+
+            return true
+          }),
+          plug: data.nodeIds.plug.concat(
+            data.nodeIds.link
+              .filter(({ unitId, type, pinId }) => {
+                if (!data.nodeIds.unit.includes(unitId)) {
+                  return true
+                }
+
+                return false
+              })
+              .map(({ unitId, type, pinId }) => {
+                return {
+                  type,
+                  pinId,
+                  subPinId: '0',
+                }
+              })
+          ),
+        },
         data.nextIdMap,
         data.nextUnitPinMergeMap,
         data.nextPinIdMap,
@@ -956,8 +957,14 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case MOVE_SUBGRAPH_OUT_OF:
       return makeMoveSubgraphIntoAction(
         data.graphId,
+        data.graphBundle,
         data.nextSpecId,
-        data.nodeIds,
+        {
+          ...data.nodeIds,
+          unit: data.nodeIds.unit.map(
+            (unitId: string) => data.nextIdMap.unit[unitId] ?? unitId
+          ),
+        },
         data.nextIdMap,
         data.nextUnitPinMergeMap,
         data.nextPinIdMap,
@@ -984,6 +991,20 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.width,
         data.height
       )
+    case SET_UNIT_SIZE:
+      return makeSetUnitSizeAction(
+        data.unitId,
+        data.prevWidth,
+        data.prevHeight,
+        data.width,
+        data.height
+      )
+    case ADD_DATUM:
+      return makeRemoveDatumAction(data.id, data.value)
+    case SET_DATUM:
+      return makeSetDatumAction(data.id, data.value, data.prevValue)
+    case REMOVE_DATUM:
+      return makeAddDatumAction(data.id, data.value)
     default:
       throw new Error('irreversible')
   }

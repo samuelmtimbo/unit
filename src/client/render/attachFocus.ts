@@ -1,6 +1,5 @@
 import { System } from '../../system'
-import { IPositionEntry } from '../../types/global/IPositionObserver'
-import namespaceURI from '../component/namespaceURI'
+import { namespaceURI } from '../component/namespaceURI'
 import { getSize } from '../getSize'
 import { IOElement } from '../IOElement'
 import { PositionObserver } from '../PositionObserver'
@@ -84,11 +83,19 @@ export function attachFocus(system: System): void {
     update()
   }
 
-  const position_callback = (entry: IPositionEntry): void => {
-    const { x, y, sx, sy } = entry
-
-    _x = x
-    _y = y
+  const position_callback = (
+    x: number,
+    y: number,
+    sx: number,
+    sy: number,
+    rx: number,
+    ry: number,
+    rz: number,
+    px: number,
+    py: number
+  ): void => {
+    _x = x + px
+    _y = y + py
     _sx = sx
     _sy = sy
 

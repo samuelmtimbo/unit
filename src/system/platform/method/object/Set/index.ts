@@ -36,9 +36,12 @@ export default class Set<T> extends Functional<I<T>, O<T>> {
   async f({ obj, name, data }: I<T>, done: Done<O<T>>) {
     try {
       await obj.set(name, data)
-      done({ data })
     } catch (err) {
-      done(undefined, err)
+      done(undefined, err.message)
+
+      return
     }
+
+    done({ data })
   }
 }

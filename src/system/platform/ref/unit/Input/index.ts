@@ -57,7 +57,7 @@ export default class Input<T> extends Semifunctional<I<T>, O<T>> {
 
       done({ pin: value })
     } catch (err) {
-      done(undefined, err)
+      done(undefined, err.message)
     }
   }
 
