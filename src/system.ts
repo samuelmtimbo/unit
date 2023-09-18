@@ -1,20 +1,22 @@
 import { API } from './API'
 import { Graph } from './Class/Graph'
+import { EventEmitter_ } from './EventEmitter'
+import { NOOP } from './NOOP'
+import { Object_ } from './Object'
+import { SharedObject } from './SharedObject'
 import { Component } from './client/component'
 import { Context } from './client/context'
 import { UnitPointerEvent } from './client/event/pointer'
 import { Store } from './client/store'
 import { Theme } from './client/theme'
 import { Point } from './client/util/geometry/types'
-import { EventEmitter_ } from './EventEmitter'
-import { NOOP } from './NOOP'
-import { Object_ } from './Object'
-import { SharedObject } from './SharedObject'
 import { Style } from './system/platform/Props'
-import { Classes, GraphSpecs, Specs } from './types'
+import { Classes, Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
+import { GraphSpecs } from './types/GraphSpecs'
+import { Unlisten } from './types/Unlisten'
 import { IChannel, IChannelOpt } from './types/global/IChannel'
 import { IGamepad } from './types/global/IGamepad'
 import { IHTTPServer, IHTTPServerOpt } from './types/global/IHTTPServer'
@@ -23,7 +25,6 @@ import { IPointer } from './types/global/IPointer'
 import { J } from './types/interface/J'
 import { R } from './types/interface/R'
 import { S } from './types/interface/S'
-import { Unlisten } from './types/Unlisten'
 
 declare global {
   interface FileSystemFileHandle {
@@ -109,24 +110,28 @@ export interface System extends S, R {
   classes: Classes
   components: ComponentClasses
   global: {
-    data: Dict<any>
+    data: Object_<any>
     ref: Dict<any>
     component: Dict<Component>
+    scope: Dict<any>
   }
   api: API
+  graph: IO_SYSTEM_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
+  flags: {
+    defaultInputModeNone?: boolean
+  }
   boot: (opt: BootOpt) => System
   injectPrivateCSSClass: (
     globalId: string,
     className: string,
     style: Style
   ) => Unlisten
-  graph: IO_SYSTEM_INIT<SharedObject<Store<BundleSpec>, {}>, {}>
-  flags: {
-    defaultInputModeNone?: boolean
-  }
-  getRemoteComponent: (id: string) => Component
-  registerComponent: (component: Component) => string
-  registerRemoteComponent: (globalId: string, remoteGlobalId: string) => void
+  getLocalComponents: (remoteGlobalId: string) => Component[]
+  registerLocalComponent: (
+    component: Component,
+    remoteGlobalId: string
+  ) => string
+  unregisterLocalComponent: (remoteGlobalId: string, localId: string) => void
   registerUnit(id: string): void
   stringifyBundleData(bundle: BundleSpec): void
   unregisterUnit(id: string): void

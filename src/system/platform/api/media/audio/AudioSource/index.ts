@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
 import { System } from '../../../../../../system'
-import { ST } from '../../../../../../types/interface/ST'
+import { MS } from '../../../../../../types/interface/MS'
 import { wrapMediaStream } from '../../../../../../wrap/MediaStream'
 import { ID_AUDIO_SOURCE } from '../../../../../_ids'
 
@@ -10,7 +10,7 @@ export type I = {
 }
 
 export type O = {
-  stream: ST
+  stream: MS
 }
 
 export default class AudioSource extends Functional<I, O> {
@@ -41,7 +41,7 @@ export default class AudioSource extends Functional<I, O> {
 
     const { srcObject } = this._audio
 
-    let stream: ST
+    let stream: MS
 
     if (srcObject instanceof MediaStream) {
       stream = wrapMediaStream(srcObject, this.__system)

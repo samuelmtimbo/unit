@@ -1,4 +1,5 @@
 import { escape } from './escape'
+import { globalUrl } from './globalUrl'
 import { isValidKeyStr } from './parser'
 
 export function stringify(value: any): string | null {
@@ -26,7 +27,7 @@ export function stringify(value: any): string | null {
             )
             .join(',')}}`
         } else {
-          return `unit://${value.__global_id}`
+          return globalUrl(value.__global_id)
         }
       }
     case 'function':

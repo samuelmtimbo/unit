@@ -7,6 +7,7 @@ export interface GraphAddUnitMomentData {
   unitId: string
   bundle: UnitBundleSpec
   path: string[]
+  parentId?: string
 }
 
 export interface GraphAddUnitMoment extends Moment<GraphAddUnitMomentData> {}
@@ -17,7 +18,7 @@ export function watchGraphUnitEvent(
   callback: (moment: GraphAddUnitMoment) => void
 ): () => void {
   const listener = (unitId: string, unit: Unit, path: string[]) => {
-    const bundle = unit.getBundle()
+    const bundle = unit.getUnitBundleSpec()
 
     callback({
       type: 'graph',

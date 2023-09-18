@@ -27,24 +27,24 @@ export function at<T>(array: T[], index: number): T {
   return array[index]
 }
 
-export function removeAt<T>(array: T[], index: number): T[] {
-  return array.splice(index, 1)
+export function removeAt<T>(array: T[], index: number): void {
+  array.splice(index, 1)
 }
 
-export function remove<T>(array: T[], element: T): T[] {
+export function remove<T>(array: T[], element: T): void {
   const index = array.indexOf(element)
-  return removeAt(array, index)
+
+  removeAt(array, index)
 }
 
-export function pull<T>(array: T[], element: T): T[] {
+export function pull<T>(array: T[], element: T): void {
   const index = array.indexOf(element)
-  array = removeAt(array, index)
-  return array
+
+  removeAt(array, index)
 }
 
-export function push<T>(array: T[], element: T): T[] {
+export function push<T>(array: T[], element: T): void {
   array.push(element)
-  return array
 }
 
 export function insert<T>(array: T[], element: T, at: number): T[] {
@@ -65,6 +65,11 @@ export function last<T>(array: T[]): T {
   const _lastIndex = lastIndex(array)
   const _last = array[_lastIndex]
   return _last
+}
+
+export function butLast<T>(array: T[]): T[] {
+  const _butLast = array.slice(0, -1)
+  return _butLast
 }
 
 export function pop<T>(array: T[]): [T, T[]] {
@@ -156,4 +161,16 @@ export function _matchAllExc<T>(
 export function reorder<A>(array: A[], element: A, to: number): void {
   remove(array, element)
   insert(array, element, to)
+}
+
+export function sum(array: number[]): number {
+  return array.reduce((acc, value) => acc + value, 0)
+}
+
+export function min(array: number[]): number {
+  return array.reduce((acc, value) => Math.min(acc, value), Infinity)
+}
+
+export function max(array: number[]): number {
+  return array.reduce((acc, value) => Math.max(acc, value), -Infinity)
 }

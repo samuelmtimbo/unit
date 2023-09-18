@@ -244,10 +244,6 @@ export class Peer extends $<PeerEvents> {
   async _acceptAnswer(rtc: RTCPeerConnection, signal: string): Promise<void> {
     const { sdp, candidates } = JSON.parse(signal)
 
-    if (rtc.connectionState !== 'connecting') {
-      throw new Error()
-    }
-
     const answer = new RTCSessionDescription({ type: 'answer', sdp })
 
     await rtc.setRemoteDescription(answer)

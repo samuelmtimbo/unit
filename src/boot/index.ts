@@ -1,11 +1,8 @@
 import { API } from '../API'
-import { Graph } from '../Class/Graph'
 import { EventEmitter_ } from '../EventEmitter'
 import { NOOP } from '../NOOP'
 import { Registry } from '../Registry'
 import { SharedObject } from '../SharedObject'
-import { IOElement } from '../client/IOElement'
-import { Component } from '../client/component'
 import { styleToCSS } from '../client/id/styleToCSS'
 import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
 import { LocalStore } from '../client/store'
@@ -21,6 +18,9 @@ import { Dict } from '../types/Dict'
 import { GraphBundle } from '../types/GraphClass'
 import { Unlisten } from '../types/Unlisten'
 
+import { Object_ } from '../Object'
+import { IOElement } from '../client/IOElement'
+import { Component } from '../client/component'
 import classes from '../system/_classes'
 import components from '../system/_components'
 import { IGamepad } from '../types/global/IGamepad'
@@ -28,7 +28,7 @@ import { IKeyboard } from '../types/global/IKeyboard'
 import { IPointer } from '../types/global/IPointer'
 import { $Component } from '../types/interface/async/$Component'
 import { weakMerge } from '../types/weakMerge'
-import { uuidNotIn } from '../util/id'
+import { randomIdNotIn } from '../util/id'
 
 export function boot(
   parent: System | null = null,
@@ -85,7 +85,8 @@ export function boot(
   const emitter = parent ? parent.emitter : new EventEmitter_()
 
   const componentLocalToRemote: Dict<string> = {}
-  const componentRemoteToLocal: Dict<string> = {}
+  const componentLocal: Dict<Component> = {}
+  const componentRemoteToLocal: Dict<Set<string>> = {}
 
   const system: System = {
     path,
@@ -117,7 +118,8 @@ export function boot(
       : {
           ref: {},
           component: {},
-          data: {},
+          data: new Object_({}),
+          scope: {},
         },
     api,
     flags: {
@@ -126,23 +128,14 @@ export function boot(
     },
     boot: (opt: BootOpt) => boot(system, api, opt),
     graph: (system, opt) => new SharedObject(new LocalStore(system, 'local')),
-    registerComponent: function (
-      component: Component<IOElement, {}, $Component>
-    ): string {
-      const id = uuidNotIn(system.global.component)
-
-      system.global.component[id] = component
-
-      return id
-    },
     stringifyBundleData: (bundle: BundleSpec) => {
       return stringifyBundleSpecData(bundle)
     },
     fromBundle: (bundle: BundleSpec) => {
       return fromBundle(bundle, merged_specs, {})
     },
-    newGraph: (bundle: GraphBundle) => {
-      const graph = new Graph({}, {}, system)
+    newGraph: (Bundle: GraphBundle) => {
+      const graph = new Bundle(system)
 
       return graph
     },
@@ -179,29 +172,47 @@ export function boot(
         return NOOP
       }
     },
-    registerRemoteComponent: function (
-      globalId: string,
+    getLocalComponents: function (
       remoteGlobalId: string
-    ): void {
-      const component = system.global.component[globalId]
+    ): Component<IOElement, {}, $Component>[] {
+      const localIds = componentRemoteToLocal[remoteGlobalId]
 
-      if (!component) {
-        throw new Error('component not found')
-      }
+      return localIds ? [...localIds].map((id) => componentLocal[id]) : []
+    },
+    registerLocalComponent: function (
+      component: Component,
+      remoteGlobalId: string
+    ): string {
+      const localId = randomIdNotIn(componentLocalToRemote)
 
-      componentLocalToRemote[globalId] = remoteGlobalId
-      componentRemoteToLocal[remoteGlobalId] = globalId
+      componentLocal[localId] = component
+
+      componentLocalToRemote[localId] = remoteGlobalId
+
+      componentRemoteToLocal[remoteGlobalId] =
+        componentRemoteToLocal[remoteGlobalId] ?? new Set()
+      componentRemoteToLocal[remoteGlobalId].add(localId)
 
       emitter.emit(remoteGlobalId, component)
-    },
-    getRemoteComponent: function (remoteId: string): Component {
-      const localId = componentRemoteToLocal[remoteId]
 
-      if (!localId) {
-        return undefined
+      return localId
+    },
+    unregisterLocalComponent: function (localId: string): void {
+      const remoteGlobalId = componentLocalToRemote[localId]
+
+      if (!remoteGlobalId) {
+        throw new Error('local component not found')
       }
 
-      return system.global.component[localId]
+      const localIds = componentRemoteToLocal[remoteGlobalId]
+
+      localIds.delete(localId)
+
+      if (localIds.size === 0) {
+        delete componentRemoteToLocal[remoteGlobalId]
+      }
+
+      delete componentLocalToRemote[localId]
     },
   }
 

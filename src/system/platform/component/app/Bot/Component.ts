@@ -16,6 +16,7 @@ import { makeResizeListener } from '../../../../../client/event/resize'
 import { harmonicArray } from '../../../../../client/id'
 import { randomBetween } from '../../../../../client/math'
 import { Mode } from '../../../../../client/mode'
+import { parseLayoutValue } from '../../../../../client/parseLayoutValue'
 import applyStyle from '../../../../../client/style'
 import { getThemeModeColor } from '../../../../../client/theme'
 import {
@@ -35,7 +36,8 @@ const HARMONIC = harmonicArray(20)
 export const DEFAULT_N = 4
 export const DEFAULT_K = 4
 export const DEFAULT_R = 42
-export const DEFAULT_M = 'none'
+
+export const DEFAULT_MODE = 'none'
 
 const MOVE_TIMEOUT_MAX = 12 // sec
 
@@ -184,7 +186,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this.addEventListener(makePointerEnterListener(this._onPointerEnter))
     this.addEventListener(makePointerLeaveListener(this._onPointerLeave))
 
-    const position_observer = new PositionObserver(this.$system, ({ x, y }) => {
+    const position_observer = new PositionObserver(this.$system, (x, y) => {
       if (this.$context) {
         this._container_x = x - this.$context.$x
         this._container_y = y - this.$context.$y
@@ -979,7 +981,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
   private _get_color = (): { color: string; mode_color: string } => {
     const { $theme, $color } = this.$context
-    const { style = {}, mode = DEFAULT_M } = this.$props
+    const { style = {}, mode = DEFAULT_MODE } = this.$props
     const { color = $color } = style
     const mode_color = getThemeModeColor($theme, mode, color)
     return { color, mode_color }
@@ -988,7 +990,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   private _tick_color = (): void => {
     // console.log('Bot', '_tick_color')
 
-    const { mode = DEFAULT_M } = this.$props
+    const { mode = DEFAULT_MODE } = this.$props
 
     const { color, mode_color } = this._get_color()
 
@@ -1137,11 +1139,27 @@ export default class Bot extends Element<HTMLDivElement, Props> {
       this._tick_body()
     } else if (prop === 'x') {
       const { r = DEFAULT_R } = this.$props
+
+      if (typeof current === 'string') {
+        current = parseLayoutValue(current)
+
+        current = current[0] + (current[1] * this.$context.$width) / 100
+      }
+
       this._x = current - r - 2
+
       this._tick_body()
     } else if (prop === 'y') {
       const { r = DEFAULT_R } = this.$props
+
+      if (typeof current === 'string') {
+        current = parseLayoutValue(current)
+
+        current = current[0] + (current[1] * this.$context.$height) / 100
+      }
+
       this._y = current - r - 2
+
       this._tick_body()
     }
   }

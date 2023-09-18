@@ -1,7 +1,8 @@
 import { Memory } from '../Class/Unit/Memory'
-import { GraphUnitPinsSpec, GraphUnitSpec } from '../types'
 import { BundleSpec } from '../types/BundleSpec'
 import { GraphSpec } from '../types/GraphSpec'
+import { GraphUnitPinsSpec } from '../types/GraphUnitPinsSpec'
+import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { stringifyDataObj } from '../types/stringifyPinData'
 import { stringify } from './stringify'
@@ -29,11 +30,7 @@ export function stringifyGraphSpecData(spec: GraphSpec): void {
 }
 
 export function stringifyGraphUnitSpecData(unit: GraphUnitSpec): void {
-  const { memory, input } = unit
-
-  if (input) {
-    stringifyGraphUnitPinSpecData(input)
-  }
+  const { memory } = unit
 
   if (memory) {
     stringifyMemorySpecData(memory)

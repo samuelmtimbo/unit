@@ -15,14 +15,15 @@
   },
   "merges": {},
   "inputs": {
-    "channel": {
+    "emitter": {
       "plug": {
         "0": {
           "unitId": "listen",
           "pinId": "emitter"
         }
       },
-      "type": "any",
+      "type": "`EE`",
+      "_type": "<T:`EE`>",
       "ref": true
     }
   },
@@ -34,7 +35,8 @@
           "pinId": "data"
         }
       },
-      "type": "string"
+      "type": "any",
+      "_type": "<T:`EE`>['message']"
     }
   },
   "metadata": {

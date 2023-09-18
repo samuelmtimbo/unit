@@ -1,0 +1,33 @@
+{
+  "name": "gain node",
+  "inputs": {
+    "node": {
+      "type": "`AC`|`AN`",
+      "ref": true
+    },
+    "gain": {
+      "type": "number",
+      "metadata": {
+        "description": "",
+        "examples": ["1", "0", "0.5"]
+      }
+    }
+  },
+  "outputs": {
+    "node": {
+      "type": "`ON`&`AN`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "activity",
+    "description": "periodic waveform, such as a sine wave",
+    "complexity": 12,
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["AudioContext"]
+  },
+  "id": "a8d7c089-0385-4922-bb3a-6c550a8a1b3b",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

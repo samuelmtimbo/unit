@@ -1,16 +1,13 @@
 import { Position } from '../../client/util/geometry/types'
 import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
 import { keys } from '../../system/f/object/Keys/f'
-import {
-  Action,
-  GraphMergeSpec,
-  GraphMergesSpec,
-  GraphPinSpec,
-  GraphSubPinSpec,
-  GraphUnitSpec,
-  GraphUnitsSpec,
-} from '../../types'
+import { GraphPinSpec, GraphSubPinSpec } from '../../types'
+import { Action } from '../../types/Action'
 import { Dict } from '../../types/Dict'
+import { GraphMergeSpec } from '../../types/GraphMergeSpec'
+import { GraphMergesSpec } from '../../types/GraphMergesSpec'
+import { GraphUnitSpec } from '../../types/GraphUnitSpec'
+import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { IOOf } from '../../types/IOOf'
 

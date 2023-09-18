@@ -72,13 +72,15 @@ const ASYNC_INTERFACE_PROXY_CALL_FILTER: AllKeys<
   PP: {},
   PS: {},
   CH: {},
-  ST: {},
+  MS: {},
   S: {},
   U: {},
   TR: {},
   RE: {},
   F: {},
   L: {},
+  AC: {},
+  D: {},
 }
 
 const ASYNC_INTERFACE_PROXY_WATCH_FILTER: Dict<Set<string>> = {

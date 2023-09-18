@@ -1,16 +1,12 @@
 import { Graph } from '../Class/Graph'
 import { System } from '../system'
-import {
-  Classes,
-  GraphSpecs,
-  GraphUnitPinSpec,
-  GraphUnitSpec,
-  PinSpec,
-  Specs,
-} from '../types'
+import { Classes, PinSpec, Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphBundle, GraphClass } from '../types/GraphClass'
 import { GraphSpec } from '../types/GraphSpec'
+import { GraphSpecs } from '../types/GraphSpecs'
+import { GraphUnitPinSpec } from '../types/GraphUnitPinSpec'
+import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { weakMerge } from '../types/weakMerge'
 import { clone } from '../util/object'
 import { bundleClass } from './bundleClass'
@@ -69,9 +65,11 @@ export function extractGraphSpecs(
     const { system } = unit_spec
 
     if (!system) {
-      graphs[id] = unit_spec as GraphSpec
+      if (!graphs[id]) {
+        graphs[id] = unit_spec as GraphSpec
 
-      extractGraphSpecs(graphs[id], specs, graphs)
+        extractGraphSpecs(graphs[id], specs, graphs)
+      }
     }
   }
 

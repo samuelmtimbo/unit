@@ -16,7 +16,6 @@ export interface O<T> {
 
 export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
   private _listener: ((data: any) => void) | undefined
-
   private _unlisten: Unlisten | undefined = undefined
 
   constructor(system: System) {
@@ -56,8 +55,13 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
 
   f({ emitter, event }: I<T>) {
     const listener = (...data: any[]) => {
+      if (this._paused) {
+        return
+      }
+
       this._output.data.push(data[0])
     }
+
     this._listener = listener
 
     this._unlisten = emitter.addListener(event, this._listener)

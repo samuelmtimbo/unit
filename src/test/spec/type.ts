@@ -31,7 +31,6 @@ import {
   ID_RANDOM_BIT_MATRIX,
   ID_RANDOM_NATURAL_LTE,
   ID_RANGE_ARRAY,
-  ID_SHUFFLE_TO_REC,
   ID_SINGLE,
   ID_SWAP,
   ID_TAG,
@@ -133,47 +132,6 @@ assert.deepEqual(getSpecTypeInterfaceById(ID_SWAP, _specs), {
 assert.deepEqual(getSpecTypeInterfaceById(ID_RANDOM_NATURAL_LTE, _specs), {
   input: { max: 'number' },
   output: { i: 'number' },
-})
-
-assert.deepEqual(getGraphTypeMapById(ID_SHUFFLE_TO_REC, _specs), {
-  greaterthan: {
-    input: { a: 'number', b: 'number' },
-    output: { 'a > b': 'boolean' },
-  },
-  randomnaturallte: {
-    input: { max: 'number' },
-    output: { i: 'number' },
-  },
-  if: {
-    input: { a: 'number', b: 'boolean' },
-    output: { 'a if b': 'number' },
-  },
-  swap: {
-    input: { a: '<A>[]', i: 'number', j: 'number' },
-    output: { a: '<A>[]' },
-  },
-  decrement: {
-    input: { a: 'number' },
-    output: { 'a - 1': 'number' },
-  },
-  shuffletorec: {
-    input: { a: '<A>[]', to: 'number' },
-    output: { a: '<A>[]' },
-  },
-  ifelse: {
-    input: {
-      a: '<A>[]',
-      b: 'boolean',
-    },
-    output: {
-      if: '<A>[]',
-      else: '<A>[]',
-    },
-  },
-})
-assert.deepEqual(getSpecTypeInterfaceById(ID_SHUFFLE_TO_REC, _specs), {
-  input: { a: '<A>[]', to: 'number' },
-  output: { a: '<A>[]' },
 })
 
 assert.deepEqual(getSpecTypeInterfaceById(ID_RANDOM_BIT, _specs), {

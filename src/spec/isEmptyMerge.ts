@@ -1,4 +1,4 @@
-import { GraphMergeSpec } from '../types'
+import { GraphMergeSpec } from '../types/GraphMergeSpec'
 import { getMergePinCount } from './util'
 
 export function isEmptyMerge(mergeSpec: GraphMergeSpec) {

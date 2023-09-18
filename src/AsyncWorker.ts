@@ -1,5 +1,6 @@
 import { RemotePort } from './RemotePort'
 import { Callback } from './types/Callback'
+import { Unlisten } from './types/Unlisten'
 import {
   $C,
   $C_C,
@@ -38,6 +39,15 @@ import {
   J_METHOD_WATCH,
 } from './types/interface/async/$J'
 import {
+  $MS,
+  $MS_C,
+  $MS_R,
+  $MS_W,
+  MS_METHOD_CALL,
+  MS_METHOD_REF,
+  MS_METHOD_WATCH,
+} from './types/interface/async/$MS'
+import {
   $S,
   $S_C,
   $S_R,
@@ -46,15 +56,6 @@ import {
   S_METHOD_REF,
   S_METHOD_WATCH,
 } from './types/interface/async/$S'
-import {
-  $ST,
-  $ST_C,
-  $ST_R,
-  $ST_W,
-  ST_METHOD_CALL,
-  ST_METHOD_REF,
-  ST_METHOD_WATCH,
-} from './types/interface/async/$ST'
 import {
   $U,
   $U_C,
@@ -70,7 +71,6 @@ import {
   V_METHOD_WATCH,
 } from './types/interface/async/$V'
 import { AsyncWrap } from './types/interface/async/AsyncWrap'
-import { Unlisten } from './types/Unlisten'
 
 export function AsyncWorker(client: RemotePort, _: string[]): any {
   return AsyncWrap(client, _, {
@@ -79,7 +79,7 @@ export function AsyncWorker(client: RemotePort, _: string[]): any {
     V: AsyncWorkerV,
     J: AsyncWorkerJ,
     U: AsyncWorkerU,
-    ST: AsyncWorkerST,
+    MS: AsyncWorkerMS,
     EE: AsyncWorkerEE,
     S: AsyncWorkerS,
   })
@@ -251,23 +251,23 @@ export function AsyncWorkerJ(client: RemotePort): $J {
   }
 }
 
-export function AsyncWorkerST_C(client: RemotePort): $ST_C {
-  return makeAsyncWorkerC(client, ST_METHOD_CALL)
+export function AsyncWorkerMS_C(client: RemotePort): $MS_C {
+  return makeAsyncWorkerC(client, MS_METHOD_CALL)
 }
 
-export function AsyncWorkerST_W(client: RemotePort): $ST_W {
-  return makeAsyncWorkerW(client, ST_METHOD_WATCH)
+export function AsyncWorkerMS_W(client: RemotePort): $MS_W {
+  return makeAsyncWorkerW(client, MS_METHOD_WATCH)
 }
 
-export function AsyncWorkerST_R(client: RemotePort): $ST_R {
-  return makeAsyncWorkerR(client, ST_METHOD_REF)
+export function AsyncWorkerMS_R(client: RemotePort): $MS_R {
+  return makeAsyncWorkerR(client, MS_METHOD_REF)
 }
 
-export function AsyncWorkerST(client: RemotePort): $ST {
+export function AsyncWorkerMS(client: RemotePort): $MS {
   return {
-    ...AsyncWorkerST_C(client),
-    ...AsyncWorkerST_W(client),
-    ...AsyncWorkerST_R(client),
+    ...AsyncWorkerMS_C(client),
+    ...AsyncWorkerMS_W(client),
+    ...AsyncWorkerMS_R(client),
   }
 }
 

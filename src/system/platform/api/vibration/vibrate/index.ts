@@ -37,6 +37,6 @@ export default class Vibrate extends Functional<I, O> {
       return
     }
 
-    done({})
+    done()
   }
 }

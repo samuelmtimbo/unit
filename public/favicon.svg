@@ -1,0 +1,27 @@
+<svg
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  x="0px"
+  y="0px"
+  viewBox="0 0 96 72"
+  xml:space="preserve"
+>
+  <style>
+    path {
+      stroke: #1f1f1f;
+      fill: #1f1f1f;
+    }
+    @media (prefers-color-scheme: dark) {
+      path {
+        stroke: #ffffff;
+        fill: #ffffff;
+      }
+    }
+  </style>
+	<path
+		fill-rule="evenodd"
+		style="stroke-width:7px;"
+		d="M2,36.00000000000001 A6,6,1,1,0,2,35.99900000000001z M2,36.00000000000001 A6,6,1,1,0,2,35.99900000000001zM14,36.00000000000001 L24,36.00000000000001M24,36 A24,24,1,1,0,24,35.999z M24,36 A24,24,1,1,0,24,35.999zM82,36 A6,6,1,1,0,82,35.999zM82,36 L72,36"
+	/>
+</svg>

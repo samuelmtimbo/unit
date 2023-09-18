@@ -1,0 +1,87 @@
+{
+  "name": "value equals",
+  "units": {
+    "equals": {
+      "id": "85204bf6-6692-4686-a785-23127c0594b5",
+      "input": {
+        "b": {
+          "constant": false
+        }
+      }
+    },
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": false
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "get": {
+        "output": {
+          "value": true
+        }
+      },
+      "equals": {
+        "input": {
+          "a": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "check whether an object `o` has key-value `k` `v`",
+    "complexity": 8,
+    "tags": [
+      "core",
+      "relation"
+    ]
+  },
+  "inputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "equals",
+          "pinId": "b"
+        }
+      },
+      "type": "<A>"
+    },
+    "key": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "key"
+        }
+      },
+      "type": "string"
+    },
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "obj"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "equal": {
+      "plug": {
+        "0": {
+          "unitId": "equals",
+          "pinId": "a = b"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "id": "9df84140-dd90-48b3-a6a7-0651c8b5bfd7",
+  "type": "`U`&`G`",
+  "system": true
+}

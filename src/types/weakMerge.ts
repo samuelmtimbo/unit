@@ -19,11 +19,25 @@ export function weakMerge<A extends object, B extends object>(
       return p in c || p in b || p in a
     },
     deleteProperty(target, property) {
-      delete a[property]
-      delete b[property]
-      delete c[property]
+      if (c[property] !== undefined) {
+        delete c[property]
 
-      return true
+        return true
+      }
+
+      if (b[property] !== undefined) {
+        delete b[property]
+
+        return true
+      }
+
+      if (a[property] !== undefined) {
+        delete a[property]
+
+        return true
+      }
+
+      return false
     },
     ownKeys() {
       return [

@@ -1,3 +1,4 @@
+import { ID_SYSTEM_MERGE } from '../Class/Merge'
 import { UNTITLED } from '../constant/STRING'
 import { emptyGraphSpec } from '../spec/emptySpec'
 import { System } from '../system'
@@ -6,13 +7,13 @@ import { keys } from '../system/f/object/Keys/f'
 import {
   ComponentSpec,
   GraphComponentSpec,
-  GraphSpecs,
   PinsSpec,
   Spec,
   Specs,
 } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
+import { GraphSpecs } from '../types/GraphSpecs'
 import { IO } from '../types/IO'
 import { uuidNotIn } from '../util/id'
 import { clone, pathOrDefault } from '../util/object'
@@ -203,6 +204,10 @@ export function sameSpec(a_spec: GraphSpec, b_spec: GraphSpec): boolean {
 }
 
 export function isSystemSpecId(specs: Specs, specId: string): boolean {
+  if (specId === ID_SYSTEM_MERGE) {
+    return true
+  }
+
   const spec = getSpec(specs, specId)
 
   const { system } = spec
@@ -303,6 +308,16 @@ export function isComponentId(specs: Specs, id: string): boolean {
 
 export function isComponentSpec(spec: Spec): boolean {
   return getSpecRender(spec) ?? hasSubComponents(spec as GraphSpec)
+}
+
+export function hasSubComponent(
+  spec: GraphSpec,
+  subComponentId: string
+): boolean {
+  const { component = {} } = spec
+  const { subComponents = {} } = component
+
+  return !!subComponents[subComponentId]
 }
 
 export function hasSubComponents(spec: GraphSpec): boolean {

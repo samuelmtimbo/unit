@@ -10,6 +10,7 @@ export const DEFAULT_BUILD_OPTIONS: BuildOptions = {
   sourcemap: false,
   bundle: true,
   logLevel: 'warning',
+  // metafile: true,
   define: {
     'globalThis.env': '{"NODE_ENV": "production"}',
   },

@@ -51,7 +51,7 @@ export default class Span extends Element<HTMLSpanElement, Props> {
     applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {
-      ...htmlPropHandler(this, DEFAULT_STYLE),
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
     }
   }
 

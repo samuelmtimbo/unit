@@ -85,6 +85,16 @@ export function componentClassFromSpec(
         this.registerRoot(rootComponent)
       }
     }
+
+    onDestroy(): void {
+      super.onDestroy()
+
+      for (const unitId in this.$subComponent) {
+        const component = this.$subComponent[unitId]
+
+        component.destroy()
+      }
+    }
   }
 
   Object.defineProperty(Parent, 'name', {

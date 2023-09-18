@@ -7,7 +7,7 @@ import { Dict } from '../types/Dict'
 import { J } from '../types/interface/J'
 import { V } from '../types/interface/V'
 import { Unlisten } from '../types/Unlisten'
-import { clone } from '../util/object'
+import { $ } from './$'
 import { ION, Opt } from './Unit'
 
 export type Stateful_EE = {
@@ -140,9 +140,21 @@ export class Stateful<
   }
 
   snapshotSelf(): Dict<any> {
+    const _state = {}
+
+    for (const key in this._state) {
+      const value = this._state[key]
+
+      if (value instanceof $) {
+        _state[key] = null
+      } else {
+        _state[key] = value
+      }
+    }
+
     return {
       ...super.snapshotSelf(),
-      _state: clone(this._state),
+      _state,
     }
   }
 

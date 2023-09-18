@@ -5,28 +5,29 @@ import { keyCount } from '../system/core/object/KeyCount/f'
 import { keys } from '../system/f/object/Keys/f'
 import {
   GraphComponentSpec,
-  GraphMergeSpec,
-  GraphMergeUnitSpec,
-  GraphMergesSpec,
   GraphPinSpec,
   GraphPinsSpec,
   GraphPlugOuterSpec,
   GraphSubPinSpec,
-  GraphUnitSpec,
   PinSpec,
   Spec,
   Specs,
 } from '../types'
 import { Dict } from '../types/Dict'
+import { GraphMergeSpec } from '../types/GraphMergeSpec'
+import { GraphMergeUnitSpec } from '../types/GraphMergeUnitSpec'
+import { GraphMergesSpec } from '../types/GraphMergesSpec'
 import { GraphSpec } from '../types/GraphSpec'
 import { GraphUnitMerges } from '../types/GraphUnitMerges'
 import { GraphUnitPlugs } from '../types/GraphUnitPlugs'
+import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { IO } from '../types/IO'
 import { IOOf } from '../types/IOOf'
 import { GraphSelection } from '../types/interface/G'
 import {
   _keyCount,
   clone,
+  getObjSingleKey,
   mapObjVK,
   pathOrDefault,
   pathSet,
@@ -85,6 +86,13 @@ export const findFirstMergePin = (
         }
       }
     }
+  }
+}
+
+export const getExposedPinSpecs = (graph: GraphSpec) => {
+  return {
+    input: graph.inputs,
+    output: graph.outputs,
   }
 }
 
@@ -537,6 +545,7 @@ export function makeFullSpecCollapseMap(
   const nodeIds: GraphSelection = {
     unit: keys(units),
     merge: keys(merges),
+    link: [],
     plug: [],
   }
 
@@ -699,6 +708,54 @@ export function makeFullSpecCollapseMap(
 
   processPins('input', inputs)
   processPins('output', outputs)
+
+  for (const mergeId in unitMerges) {
+    const merge = getMerge(mergeId)
+
+    const merge_clone = clone(merge)
+
+    const merge_unit = merge_clone[unitId]
+
+    const mergeUntPintype = getObjSingleKey(merge_unit)
+
+    const mergeUntPinId = getObjSingleKey(merge_unit[mergeUntPintype])
+
+    delete merge_clone[unitId]
+
+    const merge_pin_count = getMergePinCount(merge_clone)
+
+    if (merge_pin_count === 1) {
+      const otherUnitId = getObjSingleKey(merge_clone)
+      const otherUnitPinType = getObjSingleKey(merge_clone[otherUnitId]) as IO
+      const otherUnitPinId = getObjSingleKey(
+        merge_clone[otherUnitId][otherUnitPinType]
+      )
+
+      nodeIds.link.push({
+        unitId: otherUnitId,
+        type: otherUnitPinType,
+        pinId: otherUnitPinId,
+      })
+
+      pathSet(
+        nextIdMap,
+        ['link', otherUnitId, otherUnitPinType, otherUnitPinId],
+        {
+          mergeId,
+          oppositePinId: mergeUntPinId,
+        }
+      )
+    } else {
+      // TODO
+    }
+  }
+
+  forEachPinOnMerges(
+    unitMerges,
+    (mergeId, mergeUnitId, mergeUnitType, mergeUnitPinId) => {
+      const merge = getMerge(mergeId)
+    }
+  )
 
   const collapseMap = {
     nodeIds,

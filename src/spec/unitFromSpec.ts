@@ -29,17 +29,20 @@ export function unitFromBundleSpec(
 
   const unit = new Bundle(system)
 
-  forEachValueKey(input || {}, ({ constant }, pinId: string) => {
+  forEachValueKey(input || {}, (pinSpec = {}, pinId: string) => {
+    const { constant, ignored } = pinSpec
+
     if (constant !== undefined && constant !== null) {
       unit.setInputConstant(pinId, constant)
     }
-  })
-  forEachValueKey(input || {}, ({ ignored }, pinId: string) => {
+
     if (typeof ignored === 'boolean') {
       unit.setInputIgnored(pinId, ignored)
     }
   })
-  forEachValueKey(output || {}, ({ ignored }, pinId: string) => {
+  forEachValueKey(output || {}, (pinSpec = {}, pinId: string) => {
+    const { ignored } = pinSpec
+
     if (typeof ignored === 'boolean') {
       unit.setOutputIgnored(pinId, ignored)
     }

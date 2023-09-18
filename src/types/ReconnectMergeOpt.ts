@@ -1,4 +1,4 @@
-import { GraphMergeSpec } from '.'
+import { GraphMergeSpec } from './GraphMergeSpec'
 import { IOOf } from './IOOf'
 
 export type ReconnectMergeOpt = IOOf<{

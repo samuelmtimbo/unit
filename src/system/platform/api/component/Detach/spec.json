@@ -1,0 +1,30 @@
+{
+  "name": "detach",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "host": {
+      "type": "`C`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{animate?:boolean}"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "base": true,
+  "metadata": {
+    "icon": "square",
+    "description": "visually append `component` to `host` without affecting tree structure",
+    "complexity": 3,
+    "tags": ["platform", "api", "component"]
+  },
+  "id": "1ba97b81-5084-49b8-8fbf-227ccd31cabc",
+  "type": "`U`",
+  "system": true
+}

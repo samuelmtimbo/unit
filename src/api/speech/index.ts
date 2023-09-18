@@ -81,7 +81,7 @@ export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
 
       try {
         recognition = SpeechRecognition({
-          grammars,
+          grammars: undefined,
           lang,
           interimResults,
           maxAlternatives,

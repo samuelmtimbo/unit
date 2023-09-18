@@ -1,23 +1,19 @@
-import {
-  Action,
-  GraphMergeSpec,
-  GraphMergesSpec,
-  GraphPinSpec,
-  GraphPinsSpec,
-  GraphSubPinSpec,
-  GraphUnitSpec,
-  GraphUnitsSpec,
-} from '..'
+import { GraphPinSpec, GraphPinsSpec, GraphSubPinSpec } from '..'
 import { GraphMoveSubGraphData } from '../../Class/Graph/interface'
 import Merge from '../../Class/Merge'
 import { Unit } from '../../Class/Unit'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { State } from '../../State'
+import { Action } from '../Action'
 import { BundleSpec } from '../BundleSpec'
 import { Dict } from '../Dict'
+import { GraphMergeSpec } from '../GraphMergeSpec'
+import { GraphMergesSpec } from '../GraphMergesSpec'
 import { GraphSpec } from '../GraphSpec'
 import { GraphState } from '../GraphState'
+import { GraphUnitSpec } from '../GraphUnitSpec'
+import { GraphUnitsSpec } from '../GraphUnitsSpec'
 import { IO } from '../IO'
 import { IOOf } from '../IOOf'
 import { UnitBundleSpec } from '../UnitBundleSpec'
@@ -47,6 +43,7 @@ export type GraphSelectionSpec = {
 
 export type G_MoveSubgraphIntoArgs = [
   string,
+  BundleSpec,
   string,
   GraphSelection,
   GraphMoveSubGraphData['nextIdMap'],
@@ -175,7 +172,7 @@ export interface G<I = any, O = any, U_ = any> {
   isUnitPinRef(unitId: string, type: IO, pinId: string): boolean
   removeUnitPinData(unitId: string, type: IO, pinId: string): any
   removeMergeData(mergeId: string): any
-  setUnitName(unitId: string, newUnitId: string, name: string): void
+  setUnitId(unitId: string, newUnitId: string, name: string, specId: string): void
   setMetadata(path: string[], data: any): void
   getExposedPinSpecs(): IOOf<GraphPinsSpec>
   moveSubComponentRoot(
@@ -230,7 +227,7 @@ export interface G<I = any, O = any, U_ = any> {
 export type G_J = {}
 
 export type G_EE = {
-  fork: [string, string[]]
+  fork: [string, GraphSpec, string[]]
   element: [string[]]
   not_element: [string[]]
   set_exposed_sub_pin: [IO, string, string, Pin, PinOpt, string[]]
@@ -270,12 +267,13 @@ export type G_EE = {
   set_unit_pin_constant: [string, IO, string, boolean, any, string[]]
   set_unit_pin_ignored: [string, IO, string, boolean, string[]]
   set_unit_pin_data: [string, IO, string, any, string[]]
+  remove_unit_pin_data: [string, IO, string, string[]]
   set_unit_pin_functional: [string, IO, string, boolean, string[]]
   metadata: [{ path: string[]; data: any }, string[]]
   component_append: [string, GraphUnitSpec, string[]]
   component_remove: [string, string[]]
   set_pin_set_id: [IO, string, string, string[]]
-  set_unit_id: [string, string, string, string[]]
+  set_unit_id: [string, string, string, string, string[]]
   add_unit_ghost: [string, string, BundleSpec, string[]]
   remove_unit_ghost: [string, string, BundleSpec, string[]]
   bulk_edit: [Action[], boolean, string[]]

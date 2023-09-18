@@ -20,6 +20,14 @@ export interface Props {
   strokeDashOffset?: number
 }
 
+export const DEFAULT_STYLE = {
+  position: 'absolute',
+  fill: 'none',
+  pointerEvents: 'none',
+  transform: 'translate(-50%, -50%)',
+  userSelect: 'none',
+}
+
 export default class Selection extends Element<HTMLDivElement, Props> {
   private _selection: SVGSVG
   private _selection_shape: SVGCircle | SVGRect
@@ -51,6 +59,7 @@ export default class Selection extends Element<HTMLDivElement, Props> {
           top: `calc(50% + ${y}px)`,
           left: `calc(50% + ${x}px)`,
           transform: 'translate(-50%, -50%)',
+          userSelect: 'none',
           stroke,
         },
       },

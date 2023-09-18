@@ -7,11 +7,11 @@ import { Dict } from '../../../../../types/Dict'
 export interface Props {
   className?: string
   style?: Dict<string>
-  text?: string
-  x?: number
-  y?: number
-  dx?: number
-  dy?: number
+  value?: string
+  x?: string
+  y?: string
+  dx?: string
+  dy?: string
   textAnchor?: string
 }
 
@@ -28,24 +28,26 @@ export default class SVGText extends Element<SVGTextElement, Props> {
     const {
       style = {},
       className,
-      text,
+      value,
       x,
       y,
       dx,
       dy,
-      textAnchor,
+      textAnchor = 'start',
     } = this.$props
 
     const text_el = this.$system.api.document.createElementNS(
       namespaceURI,
       'text'
     )
+
     applyStyle(text_el, { ...DEFAULT_STYLE, ...style })
+
     if (className) {
       text_el.classList.add(className)
     }
-    if (text !== undefined) {
-      text_el.textContent = text
+    if (value !== undefined) {
+      text_el.textContent = value
     }
     if (x !== undefined) {
       text_el.setAttribute('x', `${x}`)
@@ -67,20 +69,19 @@ export default class SVGText extends Element<SVGTextElement, Props> {
     this.$element = text_el
   }
 
-  // TODO
   onPropChanged(prop: string, current: any): void {
     if (prop === 'style') {
-      applyStyle(this._text_el, current)
-    } else if (prop === 'text') {
-      this._text_el.setAttribute('textContent', current)
+      applyStyle(this._text_el, { ...DEFAULT_STYLE, ...current })
+    } else if (prop === 'value') {
+      this._text_el.textContent = current
     } else if (prop === 'dy') {
-      this._text_el.setAttribute('dy', `${current}`)
+      this._text_el.setAttribute('dy', `${current ?? ''}`)
     } else if (prop === 'dx') {
-      this._text_el.setAttribute('dx', `${current}`)
+      this._text_el.setAttribute('dx', `${current ?? ''}`)
     } else if (prop === 'x') {
-      this._text_el.setAttribute('x', `${current}`)
+      this._text_el.setAttribute('x', `${current ?? ''}`)
     } else if (prop === 'y') {
-      this._text_el.setAttribute('y', `${current}`)
+      this._text_el.setAttribute('y', `${current ?? ''}`)
     } else if (prop === 'textAnchor') {
       this._text_el.setAttribute('text-anchor', current)
     }

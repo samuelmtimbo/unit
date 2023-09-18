@@ -33,11 +33,16 @@ export default class Read<T> extends Functional<I<T>, O<T>> {
   }
 
   async f({ value, any }: I<T>, done: Done<O<T>>) {
+    let data: any
+
     try {
-      const data = await value.read()
-      done({ data })
+      data = await value.read()
     } catch (err) {
-      done(undefined, err)
+      done(undefined, err.message)
+
+      return
     }
+
+    done({ data })
   }
 }

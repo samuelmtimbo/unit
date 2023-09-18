@@ -51,6 +51,9 @@ export type API = {
   http: APIHTTP
   channel: APIChannel
   alert: APIAlert
+  navigator: {
+    share: (data: ShareData) => Promise<void>
+  }
   input: {
     keyboard: {}
     gamepad: {
@@ -132,6 +135,15 @@ export type API = {
   selection: {
     containsSelection: (element: IOElement) => boolean
     removeSelection: () => void
+  }
+  window: {
+    AudioContext: AudioContext
+    OscillatorNode: OscillatorNode
+    MediaStreamAudioSourceNode: MediaStreamAudioSourceNode
+    AnalyserNode: AnalyserNode
+    GainNode: GainNode
+    DelayNode: DelayNode
+    open: (url: string, target: string, features: string) => Window
   }
   document: {
     createElement<K extends keyof HTMLElementTagNameMap>(

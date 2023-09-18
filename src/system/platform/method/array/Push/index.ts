@@ -33,6 +33,6 @@ export default class Push<T> extends Functional<I<T>, O<T>> {
   async f({ 'a[]': _a, a }: I<T>, done: Done<O<T>>): Promise<void> {
     await _a.append(a)
 
-    done({})
+    done()
   }
 }

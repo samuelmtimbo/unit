@@ -40,6 +40,12 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       unit.pause()
     },
 
+    $paused(data: {}, callback: Callback<boolean>): void {
+      const paused = unit.paused()
+
+      callback(paused)
+    },
+
     $reset(data: {}): void {
       unit.reset()
     },
@@ -100,11 +106,11 @@ export const AsyncUCall = (unit: Unit<any, any, any>): $U_C => {
       callback(__data)
     },
 
-    $getBundleSpec(
-      data: { snapshot: boolean },
+    $getUnitBundleSpec(
+      data: { deep: boolean },
       callback: Callback<UnitBundleSpec>
     ): void {
-      const unitBundleSpec = unit.getBundle(data.snapshot)
+      const unitBundleSpec = unit.getUnitBundleSpec(data.deep)
 
       const $unitBundleSpec = clone(unitBundleSpec)
 

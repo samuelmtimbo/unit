@@ -2,14 +2,14 @@ import { $ } from '../Class/$'
 import { NOOP } from '../NOOP'
 import { System } from '../system'
 import { Callback } from '../types/Callback'
-import { ST } from '../types/interface/ST'
+import { MS } from '../types/interface/MS'
 import { Unlisten } from '../types/Unlisten'
 
-export function wrapMediaStream(mediaStream: MediaStream, system: System): ST {
-  const stream = new (class Stream extends $ implements ST {
-    __: string[] = ['ST']
+export function wrapMediaStream(mediaStream: MediaStream, system: System): MS {
+  const stream = new (class Stream extends $ implements MS {
+    __: string[] = ['MS']
 
-    stream(callback: Callback<MediaStream>): Unlisten {
+    get(callback: Callback<MediaStream>): Unlisten {
       callback(mediaStream)
 
       return NOOP

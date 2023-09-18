@@ -4,17 +4,13 @@ import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
-import {
-  GraphMergeSpec,
-  GraphPinSpec,
-  GraphSubPinSpec,
-  GraphUnitSpec,
-  GraphUnitsSpec,
-  Spec,
-} from '../../types'
+import { GraphPinSpec, GraphSubPinSpec, Spec } from '../../types'
+import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphSpec } from '../../types/GraphSpec'
+import { GraphUnitSpec } from '../../types/GraphUnitSpec'
+import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
-import { io } from '../../types/IOOf'
+import { forIOObjKV, io } from '../../types/IOOf'
 import { forEach } from '../../util/array'
 import {
   clone,
@@ -26,7 +22,21 @@ import {
   pathOrDefault,
   pathSet,
 } from '../../util/object'
-import { forEachPinOnMerges, getMergePinCount } from '../util'
+import {
+  forEachPinOnMerges,
+  getMergePinCount,
+  getSubComponentParentId,
+  getUnitMergesSpec,
+  getUnitPlugs,
+} from '../util'
+import {
+  insertChild,
+  insertSubComponentChild,
+  removeChild,
+  removeSubComponent,
+  removeSubComponentChild,
+  setSubComponent,
+} from './component_'
 
 export const setName = ({ name }: { name: string }, spec: GraphSpec): void => {
   pathSet(spec, ['name'], name)
@@ -347,9 +357,80 @@ export const setUnitId = (
   spec: GraphSpec
 ): void => {
   const unit = spec.units[unitId]
+  const subComponent = pathOrDefault(
+    spec,
+    ['component', 'subComponents', unitId],
+    undefined
+  )
+  const parentId =
+    (subComponent && getSubComponentParentId(spec, unitId)) || null
+
+  const specClone = clone(spec)
+
+  const unitPlugs = getUnitPlugs(specClone, unitId)
+  const unitMerges = getUnitMergesSpec(specClone, unitId)
 
   removeUnit({ unitId }, spec)
   addUnit({ unitId: newUnitId, unit }, spec)
+
+  if (subComponent) {
+    removeSubComponent({ unitId }, spec.component)
+    setSubComponent({ unitId: newUnitId, subComponent }, spec.component)
+
+    if (parentId) {
+      const at = spec.component.subComponents[parentId].children.indexOf(unitId)
+
+      removeSubComponentChild(
+        { subComponentId: parentId, childId: unitId },
+        spec.component
+      )
+      insertSubComponentChild(
+        { parentId, childId: newUnitId, at },
+        spec.component
+      )
+    } else {
+      const at = spec.component.children.indexOf(unitId)
+
+      removeChild({ childId: unitId }, spec.component)
+      insertChild({ childId: newUnitId, at }, spec.component)
+    }
+  }
+
+  for (const mergeId in unitMerges) {
+    const mergeSpec = unitMerges[mergeId]
+
+    for (const _unitId in mergeSpec) {
+      if (_unitId === unitId) {
+        mergeSpec[newUnitId] = mergeSpec[_unitId]
+
+        delete mergeSpec[_unitId]
+      }
+    }
+
+    addMerge({ mergeId, mergeSpec }, spec)
+  }
+
+  forIOObjKV(
+    unitPlugs,
+    (type, pinId, { type: _type, pinId: _pinId, subPinId: _subPinId }) => {
+      const subPinSpec = pathGet(specClone, [
+        `${_type ?? type}s`,
+        _pinId,
+        'plug',
+        _subPinId,
+      ])
+
+      if (subPinSpec.unitId === unitId) {
+        subPinSpec.unitId = newUnitId
+      }
+
+      pathSet(
+        spec,
+        [`${_type ?? type}s`, _pinId, 'plug', _subPinId],
+        subPinSpec
+      )
+    }
+  )
 }
 
 export const exposePin = (
@@ -370,20 +451,20 @@ export const exposePin = (
 }
 
 export const exposeInputSet = (
-  { id, input }: { id: string; input: GraphPinSpec },
+  { pinId, input }: { pinId: string; input: GraphPinSpec },
   spec: GraphSpec
-): void => exposePinSet({ pinId: id, pinSpec: input, type: 'input' }, spec)
+): void => exposePinSet({ pinId, pinSpec: input, type: 'input' }, spec)
 
 export const exposeInput = (
   {
-    id,
+    pinId,
     subPinId,
     input,
-  }: { id: string; subPinId: string; input: GraphSubPinSpec },
+  }: { pinId: string; subPinId: string; input: GraphSubPinSpec },
   spec: GraphSpec
 ): void => {
   return exposePin(
-    { pinId: id, subPinId, subPinSpec: input, type: 'input' },
+    { pinId, subPinId, subPinSpec: input, type: 'input' },
     spec
   )
 }
@@ -407,28 +488,28 @@ export const plugPin = (
 
 export const unplugInput = (
   {
-    id,
+    pinId,
     subPinId,
   }: {
-    id: string
+    pinId: string
     subPinId: string
   },
   spec: GraphSpec
 ): void => {
-  return unplugPin({ type: 'input', pinId: id, subPinId }, spec)
+  return unplugPin({ type: 'input', pinId, subPinId }, spec)
 }
 
 export const unplugOutput = (
   {
-    id,
+    pinId,
     subPinId,
   }: {
-    id: string
+    pinId: string
     subPinId: string
   },
   spec: GraphSpec
 ): void => {
-  return unplugPin({ type: 'output', pinId: id, subPinId }, spec)
+  return unplugPin({ type: 'output', pinId, subPinId }, spec)
 }
 
 export const unplugPin = (
@@ -446,64 +527,68 @@ export const unplugPin = (
   return pathSet(spec, [`${type}s`, pinId, 'plug', subPinId], {})
 }
 
-export const coverInputSet = ({ id }: { id: string }, spec: GraphSpec): void =>
-  coverPinSet({ pinId: id, type: 'input' }, spec)
+export const coverInputSet = (
+  { pinId }: { pinId: string },
+  spec: GraphSpec
+): void => coverPinSet({ pinId, type: 'input' }, spec)
 
 export const coverInput = (
   {
-    id,
+    pinId,
     subPinId,
   }: {
-    id: string
+    pinId: string
     subPinId: string
   },
   spec: GraphSpec
 ): void => {
-  return coverPin({ pinId: id, type: 'input', subPinId }, spec)
+  return coverPin({ pinId, type: 'input', subPinId }, spec)
 }
 
 export const exposeOutputSet = (
-  { id, output }: { id: string; output: GraphPinSpec },
+  { pinId, output }: { pinId: string; output: GraphPinSpec },
   spec: GraphSpec
-): void => exposePinSet({ pinId: id, pinSpec: output, type: 'output' }, spec)
+): void => exposePinSet({ pinId, pinSpec: output, type: 'output' }, spec)
 
 export const exposeOutput = (
   {
-    id,
+    pinId,
     subPinId,
     output,
-  }: { id: string; subPinId: string; output: GraphSubPinSpec },
+  }: { pinId: string; subPinId: string; output: GraphSubPinSpec },
   spec: GraphSpec
 ): void => {
   return exposePin(
-    { pinId: id, subPinId, subPinSpec: output, type: 'output' },
+    { pinId, subPinId, subPinSpec: output, type: 'output' },
     spec
   )
 }
 
-export const coverOutputSet = ({ id }: { id: string }, spec: GraphSpec): void =>
-  coverPinSet({ pinId: id, type: 'output' }, spec)
+export const coverOutputSet = (
+  { pinId }: { pinId: string },
+  spec: GraphSpec
+): void => coverPinSet({ pinId, type: 'output' }, spec)
 
 export const coverOutput = (
   {
-    id,
+    pinId,
     subPinId,
   }: {
-    id: string
+    pinId: string
     subPinId: string
   },
   spec: GraphSpec
 ): void => {
-  return coverPin({ pinId: id, type: 'output', subPinId }, spec)
+  return coverPin({ pinId, type: 'output', subPinId }, spec)
 }
 
 export const setPinSetId = (
-  { type, id, newId }: { type: IO; id: string; newId: string },
+  { type, pinId, newId }: { type: IO; pinId: string; newId: string },
   spec: GraphSpec
 ): void => {
-  const pinSpec = pathGet(spec, [`${type}s`, id])
+  const pinSpec = pathGet(spec, [`${type}s`, pinId])
 
-  pathDelete(spec, [`${type}s`, id])
+  pathDelete(spec, [`${type}s`, pinId])
   pathSet(spec, [`${type}s`, newId], pinSpec)
 }
 
@@ -588,20 +673,20 @@ export const setUnitPinIgnored = (
     })
 
     if (type === 'input') {
-      forEachValueKey(spec.inputs ?? {}, ({ plug }, id) => {
+      forEachValueKey(spec.inputs ?? {}, ({ plug }, _pinId) => {
         forEachValueKey(plug, (input, subPinId) => {
           if (input.unitId === unitId && input.pinId === pinId) {
-            unplugInput({ id, subPinId }, spec)
+            unplugInput({ pinId: _pinId, subPinId }, spec)
           }
         })
       })
     }
 
     if (type === 'output') {
-      forEachValueKey(spec.outputs ?? {}, ({ plug }, id) => {
+      forEachValueKey(spec.outputs ?? {}, ({ plug }, _pinId) => {
         forEachValueKey(plug, (output, subPinId) => {
           if (output.unitId === unitId && output.pinId === pinId) {
-            unplugOutput({ id, subPinId }, spec)
+            unplugOutput({ pinId: _pinId, subPinId }, spec)
           }
         })
       })
@@ -660,7 +745,7 @@ export const setUnitSize = (
   { unitId, width, height }: { unitId: string; width: number; height: number },
   spec: GraphSpec
 ): void => {
-  pathMerge(spec, ['units', unitId, 'metadata'], { width, height })
+  pathMerge(spec, ['units', unitId, 'metadata', 'component'], { width, height })
 }
 
 export const setComponentSize = (
@@ -675,8 +760,8 @@ export const setSubComponentSize = (
   spec: GraphSpec
 ): void => {
   pathMerge(spec, ['component', 'subComponents', unitId], {
-    defaultWidth: width,
-    defaultHeight: height,
+    width,
+    height,
   })
 }
 

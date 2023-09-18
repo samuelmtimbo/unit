@@ -1,3 +1,3 @@
-import { GraphMergesSpec } from '.'
+import { GraphMergesSpec } from './GraphMergesSpec'
 
 export type GraphUnitMerges = GraphMergesSpec

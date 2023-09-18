@@ -2,11 +2,11 @@ import { $ } from '../../../../../Class/$'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
-import { ST } from '../../../../../types/interface/ST'
+import { MS } from '../../../../../types/interface/MS'
 import { ID_MEDIA_RECORDER } from '../../../../_ids'
 
 export type I = {
-  stream: ST
+  stream: MS
   opt: MediaRecorderOptions
   start: number
   stop: any
@@ -45,13 +45,16 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
 
     this.addListener('destroy', () => {
       this._media_recorder.stop()
+
       this._media_recorder.ondataavailable = null
       this._media_recorder = null
     })
   }
 
   f({ opt, stream }: I): void {
-    stream.stream((_stream: MediaStream): void => {
+    const chunks = []
+
+    stream.get((_stream: MediaStream): void => {
       if (this._media_recorder) {
         this._media_recorder.stop()
         this._media_recorder.ondataavailable = null
@@ -61,6 +64,14 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
 
       this._media_recorder.ondataavailable = (event: BlobEvent) => {
         const { data } = event
+
+        if (data.size > 0) {
+          chunks.push(data)
+        }
+      }
+
+      this._media_recorder.onstop = () => {
+        const data = new Blob(chunks, { type: 'audio/wav' })
 
         const _blob = new (class _Blob extends $ implements B {
           async blob(): Promise<Blob> {
@@ -72,6 +83,7 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
       }
 
       const start = this._input.start.peak()
+
       if (start !== undefined) {
         this._start_recorder(start)
       }

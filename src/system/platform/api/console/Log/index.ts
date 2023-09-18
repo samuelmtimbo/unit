@@ -26,6 +26,6 @@ export default class Log<T> extends Functional<I<T>, O<T>> {
     // eslint-disable-next-line no-console
     console.log(message)
 
-    done({})
+    done()
   }
 }

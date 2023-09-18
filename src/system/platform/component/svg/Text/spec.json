@@ -8,6 +8,22 @@
     "value": {
       "type": "string",
       "optional": true
+    },
+    "x": {
+      "type": "string",
+      "optional": true
+    },
+    "y": {
+      "type": "string",
+      "optional": true
+    },
+    "dx": {
+      "type": "string",
+      "optional": true
+    },
+    "dy": {
+      "type": "string",
+      "optional": true
     }
   },
   "outputs": {},

@@ -30,6 +30,7 @@ export const GRAPH_DEFAULT_EVENTS: (keyof G_EE | keyof C_EE | keyof U_EE)[] = [
   'set_unit_pin_constant',
   'set_unit_pin_ignored',
   'set_unit_pin_data',
+  'remove_unit_pin_data',
   'set_unit_id',
   'bulk_edit',
 ]

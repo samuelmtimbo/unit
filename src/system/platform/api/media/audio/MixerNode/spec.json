@@ -1,0 +1,30 @@
+{
+  "name": "mixer node",
+  "inputs": {
+    "a": {
+      "type": "`AN`",
+      "ref": true
+    },
+    "b": {
+      "type": "`AN`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "node": {
+      "type": "`AN`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "activity",
+    "description": "add two audio signals together",
+    "complexity": 12,
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["AudioContext"]
+  },
+  "id": "33c623e5-bce2-4f30-9a98-50218bb6c431",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

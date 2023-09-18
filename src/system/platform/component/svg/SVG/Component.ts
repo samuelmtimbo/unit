@@ -7,6 +7,7 @@ import { Dict } from '../../../../../types/Dict'
 
 export interface Props {
   className?: string
+  value?: string
   style?: Dict<string>
   width?: number | string
   height?: number | string

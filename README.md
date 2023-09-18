@@ -1,28 +1,26 @@
-# unit
+# Unit
 
 Next Generation Visual Programming System
 
-![unit merge sort example](/public/gif/0.gif)
+![Unit merge sort example](/public/gif/0.gif)
 
-## unit
+## Unit
 
-unit is a General Purpose Visual Programming Language and Environment built with a primary focus on Developer Experience.
+Unit is a General Purpose Visual Programming Language and Environment built with a primary focus on Developer Experience.
 
-It is heavily inspired by Live, Data Flow, Reactive, Functional and Object Oriented Programming paradigms. Formally, units are Multi Input Multi Output (MIMO) Finite State Machines (FSM). A program in unit is represented as a Graph.
+It is heavily inspired by Live, Data Flow, Reactive, Functional and Object Oriented Programming paradigms. Formally, units are Multi Input Multi Output (MIMO) Finite State Machines (FSM). A program in Unit is represented as a Graph.
 
-The unit Programming Language was developed in close junction to the unit Programming Environment, which is a Web application built for easy composition of new units. The environment is designed to feel visual and kinesthetic, giving the perception of Direct Manipulation of Live Virtual Objects. The unit Programming experience is minimalistic, ergonomic, mobile, and can be performed through a variety of input devices, and editing can be partially expressed through Drawing, Gesture and Voice.
+The Unit Programming Language was developed in close junction to the Unit Programming Environment, which is a Web application built for easy composition of new units. The environment is designed to feel visual and kinesthetic, giving the perception of Direct Manipulation of Live Virtual Objects. The Unit Programming experience is minimalistic, ergonomic, mobile, and can be performed through a variety of input devices, and editing can be partially expressed through Drawing, Gesture and Voice.
 
-unit is similar in concept to the Unix shell. For a seasoned programmer, unit should feel like the 2D evolution of the Command Line Interface (CLI) where units' (commands) inputs and outputs (stdin/stdout/stderr) can be piped together into a graph (script). In fact, unit can be thought of as a re-exploration of the [Unix Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in the context of modern Software Engineering and Web Development.
+Unit is similar in concept to the Unix shell. For a seasoned programmer, Unit should feel like the 2D evolution of the Command Line Interface (CLI) where units' (commands) inputs and outputs (stdin/stdout/stderr) can be piped together into a graph (script). In fact, Unit can be thought of as a re-exploration of the [Unix Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in the context of modern Software Engineering and Web Development.
 
-The unit system is set to grow into a simple and approachable Web Operating System, which is sandboxed by default, enabling a new era of Software Sharing and Collaboration, unifying the currently fragmented Computer Experience. 
+The Unit system is set to grow into a simple and approachable Web Operating System, which is sandboxed by default, enabling a new era of Software Sharing and Collaboration, unifying the currently fragmented Computer Experience.
 
-For an introduction to unit Programming, visit [Getting Started](src/docs/start/README.md).
+For an introduction to Unit Programming, visit [Getting Started](src/docs/start/README.md).
 
-The broader design philosophy behind unit is discussed in [Concept](src/docs/concept/README.md).
+The broader design philosophy behind Unit is discussed in [Concept](src/docs/concept/README.md).
 
-To jump right into the official unit Programming Environment, visit [unit.land](https://unit.land) (beta).
-
-To experiment with a cloud extended version of unit, check out [ioun.it](https://ioun.it) (beta).
+To jump right into the official Unit Programming Environment, visit [unit.land](https://unit.land) (beta).
 
 ## Development
 
@@ -100,71 +98,63 @@ Redirect to the official unit source code.
 
 ### [unit.land](https://unit.land)
 
-```
-https://*.unit.land
-```
+Fully local version of the Unit Environment.
 
-Fully local version of the unit Environment. Every unit you build will be saved automatically. Going to any \*.unit.land subdomain represents a completely isolated instance of the unit system.
-
-### [unit.town](https://unit.town)
-
-```
-https://unit.town
-```
-
-Marketplace for searching and sharing units. It is the first place to go look for an open source unit built by the community.
+Any \*.unit.land subdomain represents a completely isolated instance of the Unit system.
 
 ### [unit.moe](https://unit.moe)
-
-```
-https://unit.moe#url
-```
 
 Appending #url to https://unit.moe will attempt to encapsulate the unit served at that URL in a graph editor. This is helpful for debugging an open unit website, for instance:
 
 https://unit.moe#https://unit.land will show the code for https://unit.land.
 
-https://unit.moe#https://ioun.it will show the code for https://ioun.it.
-
-### [ioun.it](https://ioun.it)
-
-Platform specialized in unit software: tools and services for building, maintaining and scaling units on the cloud.
-
-### [iframe.land](https://iframe.land)
-
-Collection of curated iframe ready web apps. This is a way to extend the unit experience with high quality open web components such as maps, code editors, rich text, games, video players, social media, private spaces, and more. Each \*.iframe.land subdomain is an isolated app that can be controlled through Asynchronous Messaging.
+https://unit.moe#https://unit.tools will show the code for https://unit.tools.
 
 ## Documentation
 
-The unit Programming Environment was designed to be learnable by Experimentation and Exploration; visual and written documentation can be found inside the platform.
+The unit Programming Environment was designed to be learnable by Experimentation and Exploration. Visual and written documentation about each unit can be accessed using [Info Mode](https://github.com/samuelmtimbo/unit/tree/main/src/docs/start#info-mode).
 
 This codebase is a TypeScript implementation of the unit Programming Language Spec with an accompanying Web based Programming Environment. I tried to make it as clean and organized as I could while still maintaining a space for experimentation. Some folders contain a `README.md` file with information about that piece of the architecture.
 
 ## Contributing
 
-First of all, please feel free to clone or fork unit source code.
+First of all, please feel free to clone or fork Unit's source code.
 
-This is the best place to learn about unit design and implementation, and the official channel for Open Source collaboration.
+This is the best place to learn about Unit's design and implementation, and the official channel for Open Source collaboration.
 
-This repository is open for pull requests from contributors. Please hit me up at [@io_sammt](https://twitter.com/io_sammt) if you want to help with unit development.
+This repository is open for pull requests from contributors.
+
+If you want to collaborate with Unit's development. Please hit me up at [@io_sammt](https://twitter.com/io_sammt).
 
 If you have a feature idea or hit a malfunction, this is a workflow I like to follow:
 
 1. Iterate over a solution on top the latest main, testing it locally until it works and the code is clean;
 2. Open a pull request explaining the problem and solution;
-3. Iterate over it to make sure the change is positive and aligned with unit's design and vision.
+3. Iterate over it to make sure the change is positive and aligned with Unit's design and vision.
 
-The unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what motivated me and made it possible.
+The Unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what motivated me and made it possible.
 
 Ultimately, the goal is for everyone to have an easy to use, powerful, customizable and flexible visual system where one can build anything with absolute freedom, without ever having to leave it.
 
+## Backlog
+
+All currently available primitives live in the [system](/src/system) folder.
+
+Unit system API is composed of logical, platform (frontend and backend) and "operating system" units.
+
+The direction of growth is feature parity with Web and a subset of NodeJS (not native to the Web), like TCP and HTTP
+
+Check out these examples of primitive classes: [`add`](/src/system/f/arithmetic/Add/index.ts) (`+` operation), [`oscilator node`](/src/system/platform/api/media/audio/OscillatorNode/index.ts) (Web Audio API), and `peer transmitter` (simplified Web RTC).
+
+The default Unit system comes with a collection of useful unit graphs out of the box. Take a look at what a graph looks like in JSON: [`if else`](/src/unit/src/system/core/control/IfElse/spec.json) and [`range`](/src/system/core/loop/Range/spec.json).
+
 ## Community
 
-If you have a question or a suggestion related to Open Source unit, or if you just want to talk about the Future of Programming, or if you want to join unit team, feel free to DM me at [@io_sammt](https://twitter.com/io_sammt).
+If you have a question or a suggestion related to Unit, or if you just want to talk about the future of Programming, or if you wish to join Unit team, feel free to message me at [@io_sammt](https://twitter.com/io_sammt).
 
-For weekly updates about unit Development, including thoughts about Vision and Roadmap, follow us on Twitter [@io_unit](https://twitter.com/io_unit).
+For weekly updates about Unit's development, including thoughts about vision and roadmap, follow us on Twitter [@io_unit](https://twitter.com/io_unit).
 
-We hope you enjoy unit and invite you to be part of our community!
+We hope you enjoy Unit and invite you to be part of our community!
 
 ## License
 

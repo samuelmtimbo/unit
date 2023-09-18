@@ -3,12 +3,17 @@ import { Done } from './Class/Functional/Done'
 
 export class MIMO<I, O> extends Functional<I, O> {
   f(i: I, done: Done<O>) {
+    let m: any
+
     try {
-      const m = this.m(i)
-      done(m)
+      m = this.m(i)
     } catch (err) {
-      done(undefined, err)
+      done(undefined, err.message)
+
+      return
     }
+
+    done(m)
   }
 
   m(i: I): Partial<O> | undefined {

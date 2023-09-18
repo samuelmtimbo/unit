@@ -5,7 +5,7 @@ import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { CS } from '../../../../../types/interface/CS'
-import { ST } from '../../../../../types/interface/ST'
+import { MS } from '../../../../../types/interface/MS'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { ID_CAPTURE_STREAM } from '../../../../_ids'
 
@@ -17,8 +17,8 @@ export interface I {
 
 export interface O {}
 
-export default class CaptureStream extends Semifunctional<I, O> implements ST {
-  __ = ['U', 'ST']
+export default class CaptureStream extends Semifunctional<I, O> implements MS {
+  __ = ['U', 'MS']
 
   private _stream: ObjectSource<MediaStream> = new ObjectSource()
 
@@ -66,7 +66,7 @@ export default class CaptureStream extends Semifunctional<I, O> implements ST {
     // }
   }
 
-  stream(callback: Callback<MediaStream>): Unlisten {
+  get(callback: Callback<MediaStream>): Unlisten {
     return this._stream.connect(callback)
   }
 }

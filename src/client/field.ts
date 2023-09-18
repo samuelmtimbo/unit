@@ -83,7 +83,7 @@ export class Field<
     this.$element.addEventListener('input', inputEventHandler)
 
     this._prop_handler = {
-      ...htmlPropHandler(this, defaultStyle),
+      ...htmlPropHandler(this, this.$element, defaultStyle),
       ...(isInput
         ? inputPropHandler(
             this.$element as HTMLInputElement,

@@ -1,20 +1,17 @@
-import assocPath from '../../system/core/object/AssocPath/f'
 import pathGet from '../../system/core/object/DeepGet/f'
+import assocPath from '../../system/core/object/DeepSet/f'
 import dissocPath from '../../system/core/object/DeletePath/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import _dissoc from '../../system/f/object/Delete/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
-import {
-  GraphMergeSpec,
-  GraphMergesSpec,
-  GraphPinSpec,
-  GraphSubPinSpec,
-  GraphUnitSpec,
-  GraphUnitsSpec,
-} from '../../types'
+import { GraphPinSpec, GraphSubPinSpec } from '../../types'
+import { GraphMergeSpec } from '../../types/GraphMergeSpec'
+import { GraphMergesSpec } from '../../types/GraphMergesSpec'
 import { GraphSpec } from '../../types/GraphSpec'
+import { GraphUnitSpec } from '../../types/GraphUnitSpec'
+import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
 import {
@@ -250,9 +247,9 @@ export const addMerge = (
   forEachValueKey(inputs, ({ plug }, inputId) => {
     forEachValueKey(plug, ({ unitId, pinId }, subPinId) => {
       if (unitId && pinId && merge[unitId]?.['input']?.[pinId]) {
-        state = coverInput({ id: inputId, subPinId }, state)
+        state = coverInput({ pinId: inputId, subPinId }, state)
         state = exposeInput(
-          { id: inputId, subPinId, input: { mergeId } },
+          { pinId: inputId, subPinId, input: { mergeId } },
           state
         )
       }
@@ -269,9 +266,9 @@ export const addMerge = (
         merge[unitId]['output'] &&
         merge[unitId]['output']![pinId]
       ) {
-        state = coverOutput({ id: outputId, subPinId }, state)
+        state = coverOutput({ pinId: outputId, subPinId }, state)
         state = exposeOutput(
-          { id: outputId, subPinId, output: { mergeId } },
+          { pinId: outputId, subPinId, output: { mergeId } },
           state
         )
       }
@@ -437,17 +434,17 @@ export const coverPinSet = (
 
 export const coverPin = (
   {
-    id,
+    pinId,
     type,
     subPinId,
   }: {
-    id: string
+    pinId: string
     type: IO
     subPinId: string
   },
   state: GraphSpec
 ): GraphSpec => {
-  return dissocPath(state, [`${type}s`, id, 'plug', subPinId]) as GraphSpec
+  return dissocPath(state, [`${type}s`, pinId, 'plug', subPinId]) as GraphSpec
 }
 
 export const exposePinSet = (
@@ -473,19 +470,19 @@ export const exposePin = (
 }
 
 export const exposeInputSet = (
-  { id, input }: { id: string; input: GraphPinSpec },
+  { pinId, input }: { pinId: string; input: GraphPinSpec },
   state: GraphSpec
-): GraphSpec => exposePinSet({ pinId: id, pin: input, type: 'input' }, state)
+): GraphSpec => exposePinSet({ pinId, pin: input, type: 'input' }, state)
 
 export const exposeInput = (
   {
-    id,
+    pinId,
     subPinId,
     input,
-  }: { id: string; subPinId: string; input: GraphSubPinSpec },
+  }: { pinId: string; subPinId: string; input: GraphSubPinSpec },
   state: GraphSpec
 ): GraphSpec => {
-  return exposePin({ pinId: id, subPinId, subPin: input, type: 'input' }, state)
+  return exposePin({ pinId, subPinId, subPin: input, type: 'input' }, state)
 }
 
 export const plugPin = (
@@ -515,20 +512,20 @@ export const unplugInput = (
   },
   state: GraphSpec
 ): GraphSpec => {
-  return unplugPin({ type: 'input', pinId: pinId, subPinId }, state)
+  return unplugPin({ type: 'input', pinId, subPinId }, state)
 }
 
 export const unplugOutput = (
   {
-    id,
+    pinId,
     subPinId,
   }: {
-    id: string
+    pinId: string
     subPinId: string
   },
   state: GraphSpec
 ): GraphSpec => {
-  return unplugPin({ type: 'output', pinId: id, subPinId }, state)
+  return unplugPin({ type: 'output', pinId, subPinId }, state)
 }
 
 export const unplugPin = (
@@ -547,58 +544,55 @@ export const unplugPin = (
 }
 
 export const coverInputSet = (
-  { id }: { id: string },
+  { pinId }: { pinId: string },
   state: GraphSpec
-): GraphSpec => coverPinSet({ pinId: id, type: 'input' }, state)
+): GraphSpec => coverPinSet({ pinId, type: 'input' }, state)
 
 export const coverInput = (
   {
-    id,
+    pinId,
     subPinId,
   }: {
-    id: string
+    pinId: string
     subPinId: string
   },
   state: GraphSpec
 ): GraphSpec => {
-  return coverPin({ id, type: 'input', subPinId }, state)
+  return coverPin({ pinId, type: 'input', subPinId }, state)
 }
 
 export const exposeOutputSet = (
-  { id, output }: { id: string; output: GraphPinSpec },
+  { pinId, output }: { pinId: string; output: GraphPinSpec },
   state: GraphSpec
-): GraphSpec => exposePinSet({ pinId: id, pin: output, type: 'output' }, state)
+): GraphSpec => exposePinSet({ pinId, pin: output, type: 'output' }, state)
 
 export const exposeOutput = (
   {
-    id,
+    pinId,
     subPinId,
     output,
-  }: { id: string; subPinId: string; output: GraphSubPinSpec },
+  }: { pinId: string; subPinId: string; output: GraphSubPinSpec },
   state: GraphSpec
 ): GraphSpec => {
-  return exposePin(
-    { pinId: id, subPinId, subPin: output, type: 'output' },
-    state
-  )
+  return exposePin({ pinId, subPinId, subPin: output, type: 'output' }, state)
 }
 
 export const coverOutputSet = (
-  { id }: { id: string },
+  { pinId }: { pinId: string },
   state: GraphSpec
-): GraphSpec => coverPinSet({ pinId: id, type: 'output' }, state)
+): GraphSpec => coverPinSet({ pinId, type: 'output' }, state)
 
 export const coverOutput = (
   {
-    id,
+    pinId,
     subPinId,
   }: {
-    id: string
+    pinId: string
     subPinId: string
   },
   state: GraphSpec
 ): GraphSpec => {
-  return coverPin({ id, type: 'output', subPinId }, state)
+  return coverPin({ pinId, type: 'output', subPinId }, state)
 }
 
 export const setUnitErr = (
@@ -735,7 +729,7 @@ export const setUnitPinIgnored = (
       forEachValueKey(state.outputs, ({ plug }, id) => {
         forEachValueKey(plug, (output, subPinId) => {
           if (output.unitId === unitId && output.pinId === pinId) {
-            state = unplugOutput({ id, subPinId }, state)
+            state = unplugOutput({ pinId: id, subPinId }, state)
           }
         })
       })
@@ -789,4 +783,22 @@ export const setUnitMetadata = (
   state: GraphSpec
 ): GraphSpec => {
   return assocPath(state, ['units', id, 'metadata', ...path], value)
+}
+
+export const renameUnitInMerges = (
+  unitId: string,
+  unitMerges: GraphMergesSpec,
+  newUnitId: string
+): GraphMergesSpec => {
+  const newUnitMerges: GraphMergesSpec = {}
+
+  forEachValueKey(unitMerges, (merge, mergeId) => {
+    newUnitMerges[mergeId] = {}
+
+    forEachValueKey(merge, (pins, _unitId) => {
+      newUnitMerges[mergeId][unitId === _unitId ? newUnitId : _unitId] = pins
+    })
+  })
+
+  return newUnitMerges
 }

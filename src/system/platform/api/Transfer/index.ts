@@ -43,6 +43,6 @@ export default class Transfer<T> extends Functional<I<T>, O<T>> {
       return
     }
 
-    done({})
+    done()
   }
 }

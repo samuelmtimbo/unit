@@ -18,7 +18,6 @@ import {
   defaultThemeColor,
   themeBackgroundColor,
 } from '../../../../../client/theme'
-import { userSelect } from '../../../../../client/util/style/userSelect'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -41,15 +40,10 @@ export interface Props {
 export const DEFAULT_UNIT_ID = 'unit'
 
 export const DEFAULT_STYLE = {
-  // display: 'none',
-  // width: '0px',
-  // height: '0px',
-  // position: 'absolute',
   position: 'relative',
   width: '100%',
   height: '100%',
   overflow: 'hidden',
-  ...userSelect('none'),
 }
 
 export default class GUI extends Element<HTMLDivElement, Props> {

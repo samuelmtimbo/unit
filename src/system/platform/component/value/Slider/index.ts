@@ -31,4 +31,11 @@ export default class Slider extends Field<I, O> {
       max: 100,
     }
   }
+
+  initialValue() {
+    const { value = 0, min = 0, max = 100 } = this._i
+
+    // @ts-ignore
+    return this._input?.value?.peak() ? value : min
+  }
 }

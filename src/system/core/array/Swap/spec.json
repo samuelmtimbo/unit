@@ -45,7 +45,7 @@
     }
   },
   "merges": {
-    "fvhcp": {
+    "0": {
       "set0": {
         "input": {
           "a": true
@@ -62,7 +62,7 @@
         }
       }
     },
-    "yuinh": {
+    "1": {
       "set1": {
         "input": {
           "v": true
@@ -74,7 +74,7 @@
         }
       }
     },
-    "caqns": {
+    "2": {
       "set0": {
         "input": {
           "v": true
@@ -86,7 +86,7 @@
         }
       }
     },
-    "lgkzp": {
+    "3": {
       "set0": {
         "input": {
           "i": true
@@ -98,7 +98,7 @@
         }
       }
     },
-    "tvuhz": {
+    "4": {
       "set0": {
         "output": {
           "a": true
@@ -110,7 +110,7 @@
         }
       }
     },
-    "mwffy": {
+    "5": {
       "at0": {
         "input": {
           "i": true
@@ -127,7 +127,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "fvhcp"
+          "mergeId": "0"
         }
       },
       "type": "<A>[]"
@@ -135,7 +135,7 @@
     "i": {
       "plug": {
         "0": {
-          "mergeId": "lgkzp"
+          "mergeId": "3"
         }
       },
       "type": "number"
@@ -143,7 +143,7 @@
     "j": {
       "plug": {
         "0": {
-          "mergeId": "mwffy"
+          "mergeId": "5"
         }
       },
       "type": "number"

@@ -5,6 +5,11 @@ import {
   C_METHOD_WATCH,
 } from '../types/interface/async/$C'
 import {
+  CA_METHOD_CALL,
+  CA_METHOD_REF,
+  CA_METHOD_WATCH,
+} from '../types/interface/async/$CA'
+import {
   EE_METHOD_CALL,
   EE_METHOD_REF,
   EE_METHOD_WATCH,
@@ -20,15 +25,15 @@ import {
   J_METHOD_WATCH,
 } from '../types/interface/async/$J'
 import {
+  MS_METHOD_CALL,
+  MS_METHOD_REF,
+  MS_METHOD_WATCH,
+} from '../types/interface/async/$MS'
+import {
   S_METHOD_CALL,
   S_METHOD_REF,
   S_METHOD_WATCH,
 } from '../types/interface/async/$S'
-import {
-  ST_METHOD_CALL,
-  ST_METHOD_REF,
-  ST_METHOD_WATCH,
-} from '../types/interface/async/$ST'
 import {
   U_METHOD_CALL,
   U_METHOD_REF,
@@ -45,6 +50,11 @@ import {
   AsyncCWatch,
 } from '../types/interface/async/AsyncC'
 import {
+  AsyncCACall,
+  AsyncCARef,
+  AsyncCAWatch,
+} from '../types/interface/async/AsyncCA'
+import {
   AsyncEECall,
   AsyncEERef,
   AsyncEEWatch,
@@ -60,15 +70,15 @@ import {
   AsyncJWatch,
 } from '../types/interface/async/AsyncJ'
 import {
+  AsyncMSCall,
+  AsyncMSRef,
+  AsyncMSWatch,
+} from '../types/interface/async/AsyncMS'
+import {
   AsyncSCall,
   AsyncSRef,
   AsyncSWatch,
 } from '../types/interface/async/AsyncS'
-import {
-  AsyncSTCall,
-  AsyncSTRef,
-  AsyncSTWatch,
-} from '../types/interface/async/AsyncST'
 import {
   AsyncUCall,
   AsyncURef,
@@ -112,15 +122,20 @@ const METHOD: Dict<Record<'call' | 'watch' | 'ref', string[]>> = {
     watch: J_METHOD_WATCH,
     ref: J_METHOD_REF,
   },
-  ST: {
-    call: ST_METHOD_CALL,
-    watch: ST_METHOD_WATCH,
-    ref: ST_METHOD_REF,
+  MS: {
+    call: MS_METHOD_CALL,
+    watch: MS_METHOD_WATCH,
+    ref: MS_METHOD_REF,
   },
   S: {
     call: S_METHOD_CALL,
     watch: S_METHOD_WATCH,
     ref: S_METHOD_REF,
+  },
+  CA: {
+    call: CA_METHOD_CALL,
+    watch: CA_METHOD_WATCH,
+    ref: CA_METHOD_REF,
   },
 }
 
@@ -207,15 +222,20 @@ export function makeRemoteUnitAPI(unit: any, _: string[]): RemoteAPI {
         watch = { ...watch, ...AsyncJWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncJRef(unit)) }
         break
-      case 'ST':
-        call = { ...call, ...AsyncSTCall(unit) }
-        watch = { ...watch, ...AsyncSTWatch(unit) }
-        ref = { ...ref, ...remoteRef(AsyncSTRef(unit)) }
+      case 'MS':
+        call = { ...call, ...AsyncMSCall(unit) }
+        watch = { ...watch, ...AsyncMSWatch(unit) }
+        ref = { ...ref, ...remoteRef(AsyncMSRef(unit)) }
         break
       case 'S':
         call = { ...call, ...AsyncSCall(unit) }
         watch = { ...watch, ...AsyncSWatch(unit) }
         ref = { ...ref, ...remoteRef(AsyncSRef(unit)) }
+        break
+      case 'CA':
+        call = { ...call, ...AsyncCACall(unit) }
+        watch = { ...watch, ...AsyncCAWatch(unit) }
+        ref = { ...ref, ...remoteRef(AsyncCARef(unit)) }
         break
       default:
         throw new Error('unknown interface')

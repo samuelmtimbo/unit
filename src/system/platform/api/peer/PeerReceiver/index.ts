@@ -5,7 +5,7 @@ import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { EE } from '../../../../../types/interface/EE'
-import { ST } from '../../../../../types/interface/ST'
+import { MS } from '../../../../../types/interface/MS'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { wrapEventEmitter } from '../../../../../wrap/EventEmitter'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
@@ -18,7 +18,7 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  stream: ST
+  stream: MS
   answer: string
   emitter: EE<any>
 }

@@ -49,6 +49,7 @@ export const DEFAULT_STYLE = {
   justifyContent: 'center',
   touchAction: 'none',
   alignItems: 'center',
+  zIndex: '1',
   // borderTop: 'none',
   marginTop: '-4px',
   // transition: 'top ${ANIMATION_T_S}s linear',

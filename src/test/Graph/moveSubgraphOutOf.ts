@@ -31,6 +31,7 @@ composition0.addUnitSpec(UNIT_ID_RANDOM_COLOR_DIV, {
 
 composition0.moveSubgraphOutOf(
   UNIT_ID_RANDOM_COLOR_DIV,
+  null,
   uuid(),
   {
     merge: [],
@@ -97,6 +98,7 @@ false && watchGraphAndLog(composition1)
 
 composition1.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -151,6 +153,7 @@ assert.deepEqual(composition1.getMergeSpec('0'), {
 
 composition1.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -243,6 +246,7 @@ false && watchGraphAndLog(composition2)
 
 composition2.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -298,6 +302,7 @@ assert.deepEqual(composition2.getMergeSpec('1'), {
 
 composition2.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -378,6 +383,7 @@ false && watchGraphAndLog(composition3)
 
 composition3.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: ['0'],
@@ -457,6 +463,7 @@ assert.deepEqual(empty4.getPlugSpec('output', 'a', '0'), {
 
 composition3.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: ['0'],
@@ -551,6 +558,7 @@ false && watchGraphAndLog(composition4)
 
 composition4.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: ['0'],
@@ -630,6 +638,7 @@ assert.deepEqual(empty3.getPlugSpec('output', 'a', '0'), {
 
 composition4.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: ['0'],
@@ -734,6 +743,7 @@ false && watchGraphAndLog(composition5)
 
 composition5.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -778,6 +788,7 @@ const empty5 = composition5.getGraph(UNIT_ID_EMTPY)
 
 composition5.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -893,6 +904,7 @@ false && watchGraphAndLog(composition6)
 
 composition6.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -928,6 +940,7 @@ const empty6 = composition6.getGraph(UNIT_ID_EMTPY)
 
 composition6.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -1012,6 +1025,7 @@ false && watchGraphAndLog(composition7)
 
 composition7.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -1027,7 +1041,13 @@ composition7.moveSubgraphInto(
   },
   {},
   {},
-  {},
+  {
+    input: {
+      a: {
+        '0': {},
+      },
+    },
+  },
   {},
   {}
 )
@@ -1041,6 +1061,7 @@ assert.equal(empty7.getInputCount(), 1)
 
 composition7.moveSubgraphOutOf(
   UNIT_ID_EMTPY,
+  null,
   uuid(),
   {
     merge: [],
@@ -1056,7 +1077,13 @@ composition7.moveSubgraphOutOf(
   },
   {},
   {},
-  {},
+  {
+    input: {
+      a: {
+        '0': {},
+      },
+    },
+  },
   {},
   {}
 )

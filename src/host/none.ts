@@ -270,6 +270,22 @@ export function noHost(): API {
         throw new MethodNotImplementedError()
       },
     },
+    window: {
+      open: function (url: string, target: string, features: string): Window {
+        throw new Error('Function not implemented.')
+      },
+      AudioContext: undefined,
+      OscillatorNode: undefined,
+      MediaStreamAudioSourceNode: undefined,
+      AnalyserNode: undefined,
+      GainNode: undefined,
+      DelayNode: undefined,
+    },
+    navigator: {
+      share: function (data: ShareData): Promise<void> {
+        throw new Error('Function not implemented.')
+      },
+    },
   }
 
   return api

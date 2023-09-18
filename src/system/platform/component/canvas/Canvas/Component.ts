@@ -173,28 +173,29 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   private _width_frame_unlisten: Unlisten
   private _height_frame_unlisten: Unlisten
 
+  private _get_fill_style = (): string => {
+    const { $theme } = this.$context ?? { $color: COLOR_WHITE, $theme: 'dark' }
+
+    const final_style = { ...DEFAULT_STYLE, ...this.$props.style }
+
+    const fallbackColor =
+      final_style.strokeStyle ?? final_style.color ?? defaultThemeColor($theme)
+
+    return fallbackColor
+  }
+
   onPropChanged(prop: string, current: any): void {
     // console.log('Canvas', 'onPropChanged', prop, current)
 
     if (prop === 'style') {
-      const { $theme } = this.$context
-
       const final_style = { ...DEFAULT_STYLE, ...current }
 
+      const color = this._get_fill_style()
+
+      this._context.fillStyle = color
+      this._context.strokeStyle = color
+
       applyStyle(this._canvas_el, final_style)
-
-      const fallbackColor =
-        final_style.strokeStyle ??
-        final_style.color ??
-        defaultThemeColor($theme)
-
-      const fallbackStrokeWidth =
-        final_style.strokeStyle ??
-        final_style.color ??
-        defaultThemeColor($theme)
-
-      this._context.fillStyle = fallbackColor
-      this._context.strokeStyle = fallbackColor
 
       clearCanvas(this._context)
 
@@ -307,16 +308,16 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   private _setup_context = (): void => {
     // console.log('Canvas', '_setup_context')
 
-    const { $color } = this.$context || { $color: COLOR_WHITE }
-
     const { sx = 1, sy = 1 } = this.$props
+
+    const color = this._get_fill_style()
 
     const context = this._canvas_el.getContext('2d')
 
     this._context = context
 
-    this._context.strokeStyle = $color
-    this._context.fillStyle = $color
+    this._context.strokeStyle = color
+    this._context.fillStyle = color
     this._context.lineJoin = 'round'
     this._context.lineWidth = 3
 

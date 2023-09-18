@@ -27,7 +27,7 @@ import {
   GraphSetMetadataData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
-  GraphSetUnitNameData,
+  GraphSetUnitIdData,
   GraphSetUnitPinConstant,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
@@ -76,6 +76,7 @@ export const G_METHOD_CALL_SET = [
   'exposeUnitPinSet',
   'coverUnitPinSet',
   'setPinSetFunctional',
+  'setUnitId',
   'setUnitPinData',
   'setUnitPinConstant',
   'setUnitPinIgnored',
@@ -98,7 +99,7 @@ export const G_METHOD_CALL_SET = [
   'setMergeData',
   'removeMergeData',
   'takeUnitErr',
-  'setUnitName',
+  'setUnitId',
   'moveSubgraphInto',
   'bulkEdit',
 ]
@@ -119,7 +120,7 @@ export const G_METHOD = [...G_METHOD_CALL, ...G_METHOD_WATCH, ...G_METHOD_REF]
 
 export interface $G_C {
   $setUnitPinData(data: GraphSetUnitPinDataData): void
-  $setUnitName(data: GraphSetUnitNameData): void
+  $setUnitId(data: GraphSetUnitIdData): void
   $removeUnitPinData(data: GraphRemoveUnitPinDataData): void
   $addUnit(data: GraphAddUnitData): void
   $addUnits(data: GraphAddUnitsData): void

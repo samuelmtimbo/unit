@@ -31,8 +31,8 @@ export class Semifunctional<
   private _f_i: Set<string>
   private _f_o: Set<string>
 
-  private _functional: Functional<any, any>
-  private _primitive: Primitive
+  protected _functional: Functional<any, any>
+  protected _primitive: Primitive
 
   private _i_input_err = false
 
@@ -200,7 +200,11 @@ export class Semifunctional<
 
   f(i: Partial<I>, done: Done<O>) {}
 
-  d() {}
+  d() {
+    this.fd()
+  }
+
+  fd() {}
 
   protected _done: Done<O> = (data, err = null) => {
     this._functional._done(data, err)
