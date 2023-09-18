@@ -17,9 +17,7 @@ export interface Props {
   draggable?: boolean
 }
 
-const DEFAULT_STYLE = {
-  color: 'currentColor',
-}
+const DEFAULT_STYLE = {}
 
 export default class Anchor extends Element<HTMLAnchorElement, Props> {
   private _prop_handler: PropHandler
@@ -75,7 +73,7 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
     }
 
     this._prop_handler = {
-      ...htmlPropHandler(this, DEFAULT_STYLE),
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
       href: (href: string | undefined) => {
         if (href) {
           this.$element.href = href

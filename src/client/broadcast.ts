@@ -1,5 +1,5 @@
 import { EventEmitter_ } from '../EventEmitter'
-import { Action } from '../types'
+import { Action } from '../types/Action'
 import { Dict } from '../types/Dict'
 
 const _transmitterChannel: Dict<BroadcastChannel> = {}

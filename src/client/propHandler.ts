@@ -8,7 +8,7 @@ export type Handler = (value: any) => void
 
 export type PropHandler = Dict<Handler>
 
-export function attrHandler(
+export function makeAttrHandler(
   element: HTMLElement | SVGElement,
   name: string
 ): Handler {
@@ -23,37 +23,41 @@ export function attrHandler(
 
 export function elementPropHandler(
   component: Component<HTMLElement> | Component<SVGSVGElement>,
+  element: HTMLElement | SVGSVGElement,
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {
-    ...basePropHandler(component.$element, DEFAULT_STYLE),
-    ...stylePropHandler(component, DEFAULT_STYLE),
+    ...basePropHandler(component, element, DEFAULT_STYLE),
+    ...stylePropHandler(component, element, DEFAULT_STYLE),
   }
 }
 
 export function htmlPropHandler(
   component: Component<HTMLElement>,
+  element: HTMLElement,
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {
-    ...elementPropHandler(component, DEFAULT_STYLE),
+    ...elementPropHandler(component, element, DEFAULT_STYLE),
     innerText: (innerText: string | undefined) => {
-      component.$element.innerText = innerText || ''
+      element.innerText = innerText || ''
     },
   }
 }
 
 export function svgPropHandler(
   component: Component<SVGElement>,
+  element: SVGElement,
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {
-    ...basePropHandler(component.$element, DEFAULT_STYLE),
-    ...stylePropHandler(component, DEFAULT_STYLE),
+    ...basePropHandler(component, element, DEFAULT_STYLE),
+    ...stylePropHandler(component, element, DEFAULT_STYLE),
   }
 }
 
 export function basePropHandler(
+  component: Component,
   element: HTMLElement | SVGElement,
   DEFAULT_STYLE: Style
 ): PropHandler {
@@ -64,21 +68,22 @@ export function basePropHandler(
     style: (style: Dict<string> | undefined = {}) => {
       applyStyle(element, { ...DEFAULT_STYLE, ...style })
     },
-    className: attrHandler(element, 'className'),
-    id: attrHandler(element, 'id'),
-    tabIndex: attrHandler(element, 'tabIndex'),
-    title: attrHandler(element, 'title'),
-    draggable: attrHandler(element, 'draggable'),
+    className: makeAttrHandler(element, 'className'),
+    id: makeAttrHandler(element, 'id'),
+    tabIndex: makeAttrHandler(element, 'tabIndex'),
+    title: makeAttrHandler(element, 'title'),
+    draggable: makeAttrHandler(element, 'draggable'),
   }
 }
 
 export function stylePropHandler(
   component: Component<HTMLElement | SVGElement>,
+  element: HTMLElement | SVGElement,
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {
     style: (style: Dict<string> | undefined = {}) => {
-      applyDynamicStyle(component, { ...DEFAULT_STYLE, ...style })
+      applyDynamicStyle(component, element, { ...DEFAULT_STYLE, ...style })
     },
   }
 }
@@ -96,6 +101,6 @@ export function inputPropHandler(
       // @ts-ignore
       element.placeholder = placeholder ?? ''
     },
-    disabled: attrHandler(element, 'disabled'),
+    disabled: makeAttrHandler(element, 'disabled'),
   }
 }

@@ -46,6 +46,7 @@ export default class Child extends Semifunctional<I, O> {
   private _plunk = () => {
     if (this._unlisten) {
       this._unlisten()
+
       this._unlisten = undefined
     }
 
@@ -56,14 +57,15 @@ export default class Child extends Semifunctional<I, O> {
     const child = parent.refChild(at)
 
     if (!child) {
-      this.err('no child at this position')
+      done(undefined, 'no child at this position')
+
       return
     }
 
     const remove_child_at_listener = () => {
       this._forward_empty('child')
 
-      this.err('no child at this position')
+      this._functional.err('no child at this position')
     }
 
     parent.addListener(`remove_child_at_${at}`, remove_child_at_listener)
@@ -75,6 +77,10 @@ export default class Child extends Semifunctional<I, O> {
     done({
       child,
     })
+  }
+
+  d(): void {
+    this._plunk()
   }
 
   onIterDataInputData(name: string): void {

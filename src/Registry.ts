@@ -1,8 +1,9 @@
 import { Object_ } from './Object'
 import { emptySpec, isSystemSpecId, newSpecId } from './client/spec'
-import { GraphSpecs, Spec, Specs } from './types'
+import { Spec, Specs } from './types'
 import { Dict } from './types/Dict'
 import { GraphSpec } from './types/GraphSpec'
+import { GraphSpecs } from './types/GraphSpecs'
 import { R } from './types/interface/R'
 import { uuidNotIn } from './util/id'
 import { clone } from './util/object'
@@ -36,7 +37,7 @@ export class Registry implements R {
   }
 
   newSpec(spec: GraphSpec, specId?: string) {
-    // console.log('newSpec', { spec, specId })
+    // console.log('newSpec', spec, specId)
 
     specId = specId ?? newSpecId(this.specs)
 
@@ -129,17 +130,17 @@ export class Registry implements R {
   }
 
   forkSpec(spec: GraphSpec, specId?: string): [string, GraphSpec] {
+    // console.log('forkSpec', spec, specId)
+
     if (this.shouldFork(spec.id)) {
       const clonedSpec = clone(spec)
 
-      const { id: newSpecId } = this.newSpec(clonedSpec, specId)
-
       delete clonedSpec.system
+
+      const { id: newSpecId } = this.newSpec(clonedSpec, specId)
 
       return [newSpecId, clonedSpec]
     } else {
-      this.setSpec(spec.id, spec)
-
       return [spec.id, spec]
     }
   }
@@ -166,9 +167,8 @@ export class Registry implements R {
     if (this.specsCount[id] === 0) {
       delete this.specsCount[id]
 
-      // TODO delete spec (after tree reference is done)
       if (!isSystemSpecId(this.specs, id)) {
-        // this.deleteSpec(id)
+        this.deleteSpec(id)
       }
     }
   }

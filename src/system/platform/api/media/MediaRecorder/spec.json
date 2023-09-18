@@ -21,7 +21,7 @@
       "type": "any"
     },
     "stream": {
-      "type": "`ST`",
+      "type": "`MS`",
       "ref": true
     }
   },

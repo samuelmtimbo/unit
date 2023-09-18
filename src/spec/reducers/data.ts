@@ -2,8 +2,9 @@ import dissocAll from '../../system/core/object/DeleteAll/f'
 import dissocPath from '../../system/core/object/DeletePath/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
-import { Action, DatumSpec, GraphDataSpec } from '../../types'
-import { REMOVE_DATA, REMOVE_DATUM, SET_DATA, SET_DATUM } from '../actions/D'
+import { DatumSpec, GraphDataSpec } from '../../types'
+import { Action } from '../../types/Action'
+import { REMOVE_DATUM, SET_DATUM } from '../actions/D'
 
 export const defaultState: GraphDataSpec = {}
 
@@ -42,12 +43,8 @@ export default function (
   switch (type) {
     case SET_DATUM:
       return setDatum(data, state)
-    case SET_DATA:
-      return setData(data, state)
     case REMOVE_DATUM:
       return removeDatum(data, state)
-    case REMOVE_DATA:
-      return removeData(data, state)
     default:
       return state
   }

@@ -68,14 +68,14 @@ export default class Frame extends Element<HTMLDivElement, Props> {
       $$init.$color = color
     }
 
-    applyDynamicStyle(this, { ...DEFAULT_STYLE, ...style })
+    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
 
     this.$$context = renderFrame(this.$system, null, $element, $$init)
   }
 
   private _prop_handler = {
     style: (style: Dict<string> = {}) => {
-      applyDynamicStyle(this, { ...DEFAULT_STYLE, ...style })
+      applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
 
       this._refresh_sub_context_color()
     },
@@ -106,6 +106,11 @@ export default class Frame extends Element<HTMLDivElement, Props> {
     setParent(this.$$context, this.$parent)
 
     mount(this.$$context)
+
+    // AD HOC
+    if (this._context_unlisten) {
+      this._context_unlisten()
+    }
 
     this._context_unlisten = addListeners(this.$context, [
       makeCustomListener('enabled', this._on_context_enabled),

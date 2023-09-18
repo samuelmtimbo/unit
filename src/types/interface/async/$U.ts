@@ -1,9 +1,9 @@
 import {
-  UnitGetBundleSpecData,
   UnitGetGlobalIdData,
   UnitGetInputDataData,
   UnitGetPinDataData,
   UnitGetRefInputDataData,
+  UnitGetUnitBundleSpecData,
   UnitPauseData,
   UnitPlayData,
   UnitPullInputData,
@@ -45,6 +45,7 @@ export interface $U_C {
   $getGlobalId(data: UnitGetGlobalIdData, callback: Callback<string>): void
   $play(data: UnitPlayData): void
   $pause(data: UnitPauseData): void
+  $paused(data: UnitPauseData, callback: Callback<boolean>): void
   $push({ pinId, data }: UnitPushData): void
   $pullInput({ pinId }: UnitPullInputData): void
   $takeInput({ pinId }: UnitTakeInputData): void
@@ -62,8 +63,8 @@ export interface $U_C {
     {}: UnitGetRefInputDataData,
     callback: (data: Dict<GlobalRefSpec>) => void
   ): void
-  $getBundleSpec(
-    {}: UnitGetBundleSpecData,
+  $getUnitBundleSpec(
+    {}: UnitGetUnitBundleSpecData,
     callback: (data: UnitBundleSpec) => void
   ): void
   $reset(data: UnitResetData): void

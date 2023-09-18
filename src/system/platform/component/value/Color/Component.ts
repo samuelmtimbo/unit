@@ -12,13 +12,9 @@ export interface Props {
 
 export const DEFAULT_STYLE = {
   display: 'block',
-  height: '100%',
-  width: '100%',
   color: 'inherit',
   backgroundColor: '#00000000',
   padding: '0',
-  fontSize: '12px',
-  // outline: 'none',
   border: 'none',
   borderRadius: '0',
 }

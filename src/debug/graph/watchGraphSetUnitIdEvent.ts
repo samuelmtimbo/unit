@@ -5,6 +5,7 @@ export interface GraphSetUnitIdMomentData {
   unitId: string
   newUnitId: string
   name: string
+  specId: string
   path: string[]
 }
 
@@ -20,6 +21,7 @@ export function watchGraphSetUnitIdEvent(
     unitId: string,
     newUnitId: string,
     name: string,
+    specId: string,
     path: string[]
   ) => {
     callback({
@@ -29,6 +31,7 @@ export function watchGraphSetUnitIdEvent(
         unitId,
         newUnitId,
         name,
+        specId,
         path,
       },
     })

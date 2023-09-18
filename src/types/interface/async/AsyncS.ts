@@ -18,8 +18,6 @@ export const AsyncSRef = (system: S): $S_R => {
 
       const graph = system.newGraph(_bundle)
 
-      graph.play()
-
       const $graph = AsyncGraph(graph)
 
       return proxyWrap($graph, _)

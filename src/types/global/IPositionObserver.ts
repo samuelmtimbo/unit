@@ -12,7 +12,17 @@ export interface IPositionObserver {
 }
 
 export interface IPositionCallback {
-  (entry: IPositionEntry): void
+  (
+    x: number,
+    y: number,
+    sx: number,
+    sy: number,
+    rx: number,
+    ry: number,
+    rz: number,
+    px: number,
+    py: number
+  ): void
 }
 
 export interface IPositionEntry {
@@ -23,4 +33,6 @@ export interface IPositionEntry {
   rx: number
   ry: number
   rz: number
+  px: number
+  py: number
 }

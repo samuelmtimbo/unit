@@ -72,10 +72,9 @@ export function reactToFrameSize(
 
 export function applyDynamicStyle(
   component: Component<HTMLElement | SVGElement>,
+  $element: HTMLElement | SVGElement,
   style: Dict<string>
 ): Unlisten {
-  const { $element } = component
-
   removeStyle($element)
 
   let { fontSize, width, height } = style

@@ -1,5 +1,5 @@
 import { Graph } from '../../Class/Graph'
-import { GraphMergeSpec } from '../../types'
+import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { G_EE } from '../../types/interface/G'
 import { Moment } from './../Moment'
 

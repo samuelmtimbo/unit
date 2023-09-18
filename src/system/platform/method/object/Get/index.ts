@@ -38,7 +38,7 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
 
       done({ value })
     } catch (err) {
-      done(undefined, err)
+      done(undefined, err.message)
     }
   }
 }

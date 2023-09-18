@@ -39,9 +39,9 @@ export function renderFrame(
 
   const $positionObserver = new PositionObserver(
     $system,
-    ({ x, y, sx, sy, rx, ry, rz }): void => {
-      $context.$x = x
-      $context.$y = y
+    (x, y, sx, sy, rx, ry, rz, px, py): void => {
+      $context.$x = x + px
+      $context.$y = y + py
       $context.$sx = sx
       $context.$sy = sy
       $context.$rx = rx

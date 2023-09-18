@@ -38,6 +38,6 @@ export default class DownloadURL extends Functional<I, O> {
       return
     }
 
-    done({})
+    done()
   }
 }

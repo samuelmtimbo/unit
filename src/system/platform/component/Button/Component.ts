@@ -16,8 +16,6 @@ export interface Props {
 }
 
 const DEFAULT_STYLE = {
-  width: '100%',
-  height: '100%',
   color: 'currentColor',
   boxSizing: 'border-box',
 }
@@ -70,11 +68,11 @@ export default class Button extends Element<HTMLButtonElement, Props> {
 
     applyStyle($element, { ...DEFAULT_STYLE, ...style })
 
-    this._prop_handler = {
-      ...htmlPropHandler(this, DEFAULT_STYLE),
-    }
-
     this.$element = $element
+
+    this._prop_handler = {
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
+    }
   }
 
   onPropChanged(prop: string, current: any): void {

@@ -43,6 +43,6 @@ export default class DownloadText extends Functional<I, O> {
       return
     }
 
-    done({})
+    done()
   }
 }

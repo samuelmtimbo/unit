@@ -1,0 +1,80 @@
+{
+  "name": "get x y",
+  "units": {
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'x'"
+        }
+      }
+    },
+    "prop0": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "key": {
+          "constant": true,
+          "data": "'y'"
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "get": {
+        "input": {
+          "obj": true
+        }
+      },
+      "prop0": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "no description",
+    "complexity": 6,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
+  },
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "{x:number,y:number}"
+    }
+  },
+  "outputs": {
+    "y": {
+      "plug": {
+        "0": {
+          "unitId": "prop0",
+          "pinId": "value"
+        }
+      },
+      "type": "number"
+    },
+    "x": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value"
+        }
+      },
+      "type": "number"
+    }
+  },
+  "id": "5bf348b6-9776-4b23-9516-d802b6b3c846",
+  "type": "`U`&`G`",
+  "system": true
+}

@@ -1,0 +1,33 @@
+{
+  "name": "delay node",
+  "inputs": {
+    "node": {
+      "type": "`AC`|`AN`",
+      "ref": true
+    },
+    "gain": {
+      "type": "number",
+      "metadata": {
+        "description": "",
+        "examples": ["1", "0", "0.5"]
+      }
+    }
+  },
+  "outputs": {
+    "node": {
+      "type": "`ON`&`AN`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "activity",
+    "description": "periodic waveform, such as a sine wave",
+    "complexity": 12,
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["AudioContext"]
+  },
+  "id": "9543c94b-e19e-430b-8a48-9cda8dae44c5",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

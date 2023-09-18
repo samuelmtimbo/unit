@@ -22,5 +22,5 @@ export function fromBundle<
 
   _specs[spec.id] = spec
 
-  return fromSpec(spec, weakMerge(specs, _specs), branch)
+  return fromSpec(spec, weakMerge(_specs, specs), branch)
 }

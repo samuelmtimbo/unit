@@ -1,11 +1,11 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { Unit } from '../../../../Class/Unit'
 import { System } from '../../../../system'
+import { $U } from '../../../../types/interface/async/$U'
 import { ID_PLAY } from '../../../_ids'
 
 export interface I<T> {
-  unit: Unit
+  unit: $U
   opt: {}
 }
 
@@ -31,8 +31,8 @@ export default class Play<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ unit, opt }: I<T>, done: Done<O<T>>): void {
-    unit.play()
+    unit.$play({})
 
-    done({})
+    done()
   }
 }

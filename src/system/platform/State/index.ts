@@ -5,7 +5,7 @@ import { System } from '../../../system'
 import { V } from '../../../types/interface/V'
 import { weakMerge } from '../../../types/weakMerge'
 import { $wrap } from '../../../wrap'
-import { wrapArray } from '../../../wrap/Array'
+import { wrapSharedRefArrayInterface } from '../../../wrap/Array'
 import { wrapObject } from '../../../wrap/Object'
 import { wrapValue } from '../../../wrap/Value'
 import { ID_STATE } from '../../_ids'
@@ -69,7 +69,10 @@ export default class State<T> extends Semifunctional<I<T>, O<T>> {
           {
             api = weakMerge(
               api,
-              wrapArray(sharedRef as SharedRef<any[]>, this.__system)
+              wrapSharedRefArrayInterface(
+                sharedRef as SharedRef<any[]>,
+                this.__system
+              )
             )
           }
           break

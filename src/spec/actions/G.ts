@@ -26,29 +26,35 @@ import {
 } from '../../Class/Graph/interface'
 import { Position } from '../../client/util/geometry/types'
 import { keys } from '../../system/f/object/Keys/f'
-import {
-  Action,
-  GraphMergeSpec,
-  GraphMergesSpec,
-  GraphPinSpec,
-  GraphSubPinSpec,
-  GraphUnitsSpec,
-} from '../../types'
+import { GraphPinSpec, GraphSubPinSpec } from '../../types'
+import { Action } from '../../types/Action'
 import { AllKeys } from '../../types/AllKeys'
+import { BundleSpec } from '../../types/BundleSpec'
 import { Dict } from '../../types/Dict'
+import { GraphMergeSpec } from '../../types/GraphMergeSpec'
+import { GraphMergesSpec } from '../../types/GraphMergesSpec'
 import { GraphUnitMerges } from '../../types/GraphUnitMerges'
 import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
-import { G } from '../../types/interface/G'
-import { U } from '../../types/interface/U'
+import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
+import { G } from '../../types/interface/G'
+import { U } from '../../types/interface/U'
 import {
-  makeMoveSubComponentRootAction,
-  makeReorderSubComponentAction,
   MOVE_SUB_COMPONENT_ROOT,
   REORDER_SUB_COMPONENT,
+  makeMoveSubComponentRootAction,
+  makeReorderSubComponentAction,
 } from './C'
+import {
+  ADD_DATUM,
+  REMOVE_DATUM,
+  SET_DATUM,
+  makeAddDatumAction,
+  makeRemoveDatumAction,
+  makeSetDatumAction,
+} from './D'
 
 export const ADD_UNIT = 'addUnitSpec'
 export const ADD_UNITS = 'addUnits'
@@ -135,6 +141,7 @@ export const wrapMoveSubgraphOutOfData = (data: GraphMoveSubGraphOutOfData) => {
 
 export const makeMoveSubgraphIntoAction = (
   graphId: string,
+  graphBundle: BundleSpec,
   nextSpecId: string,
   nodeIds: {
     merge: string[]
@@ -195,6 +202,7 @@ export const makeMoveSubgraphIntoAction = (
 ) => {
   return wrapMoveSubgraphIntoData({
     graphId,
+    graphBundle,
     nextSpecId,
     nodeIds,
     nextIdMap,
@@ -210,6 +218,7 @@ export const makeMoveSubgraphIntoAction = (
 
 export const makeMoveSubgraphOutOfAction = (
   graphId: string,
+  graphBundle: BundleSpec,
   nextSpecId: string,
   nodeIds: {
     merge: string[]
@@ -270,6 +279,7 @@ export const makeMoveSubgraphOutOfAction = (
 ) => {
   return wrapMoveSubgraphOutOfData({
     graphId,
+    graphBundle,
     nextSpecId,
     nodeIds,
     nextIdMap,
@@ -619,22 +629,6 @@ export const wrapSetSubComponentSizeAction = (
   }
 }
 
-export const makeSetSubComponentSize = (
-  unitId: string,
-  width: number,
-  height: number,
-  prevWidth: number,
-  prevHeight: number
-) => {
-  return wrapSetSubComponentSizeAction({
-    unitId,
-    width,
-    height,
-    prevWidth,
-    prevHeight,
-  })
-}
-
 export const wrapSetComponentSizeAction = (data: GraphSetComponentSizeData) => {
   return {
     type: SET_COMPONENT_SIZE,
@@ -942,6 +936,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case MOVE_SUBGRAPH_INTO:
       return makeMoveSubgraphOutOfAction(
         data.graphId,
+        data.graphBundle,
         data.nextSpecId,
         data.nodeIds,
         data.nextIdMap,
@@ -956,6 +951,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
     case MOVE_SUBGRAPH_OUT_OF:
       return makeMoveSubgraphIntoAction(
         data.graphId,
+        data.graphBundle,
         data.nextSpecId,
         data.nodeIds,
         data.nextIdMap,
@@ -984,6 +980,12 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.width,
         data.height
       )
+    case ADD_DATUM:
+      return makeRemoveDatumAction(data.id, data.value)
+    case SET_DATUM:
+      return makeSetDatumAction(data.id, data.value, data.prevValue)
+    case REMOVE_DATUM:
+      return makeAddDatumAction(data.id, data.value)
     default:
       throw new Error('irreversible')
   }

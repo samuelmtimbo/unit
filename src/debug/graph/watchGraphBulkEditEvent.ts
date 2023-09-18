@@ -1,5 +1,5 @@
 import { Graph } from '../../Class/Graph'
-import { Action } from '../../types'
+import { Action } from '../../types/Action'
 import { Moment } from '../Moment'
 
 export interface GraphBulkEditMomentData {

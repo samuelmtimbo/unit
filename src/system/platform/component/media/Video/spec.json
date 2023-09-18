@@ -13,7 +13,7 @@
       "optional": true
     },
     "stream": {
-      "type": "`ST`",
+      "type": "`MS`",
       "ref": true,
       "metadata": {
         "description": "stream object"

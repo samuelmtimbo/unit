@@ -34,6 +34,7 @@ export default class Draw extends Functional<I, O> {
 
   f({ canvas, step }: I, done: Done<O>): void {
     canvas.draw(step)
-    done({})
+
+    done()
   }
 }

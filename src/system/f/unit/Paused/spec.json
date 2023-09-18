@@ -1,0 +1,30 @@
+{
+  "name": "paused",
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "paused": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "question",
+    "description": "check whether unit is paused",
+    "complexity": 3,
+    "tags": [
+      "f",
+      "unit"
+    ]
+  },
+  "id": "49517cda-b9da-4d80-b849-61fc2260317d",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

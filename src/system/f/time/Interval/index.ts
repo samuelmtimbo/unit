@@ -35,8 +35,6 @@ export default class Interval extends Semifunctional<I, O> {
       clearInterval(this._interval)
 
       this._interval = null
-
-      this._done({})
     }
   }
 
@@ -57,6 +55,7 @@ export default class Interval extends Semifunctional<I, O> {
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
     this._reset()
+    this._done({})
     // }
   }
 }

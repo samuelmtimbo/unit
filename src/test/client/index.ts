@@ -1,4 +1,4 @@
-// import './component'
+import './component'
 import './parseLayoutValue'
 import './reflectChildrenTrait'
 import './system'

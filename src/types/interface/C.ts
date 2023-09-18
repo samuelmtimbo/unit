@@ -41,4 +41,5 @@ export interface C {
   refChild(at: number): Component_
   refChildren(): Component_[]
   refSlot(slotName: string): Component_
+  detach(): void
 }

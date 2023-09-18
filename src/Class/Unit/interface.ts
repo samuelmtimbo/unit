@@ -36,6 +36,8 @@ export type UnitGetInputDataData = {}
 
 export type UnitGetRefInputDataData = {}
 
-export type UnitGetBundleSpecData = {}
+export type UnitGetUnitBundleSpecData = {
+  deep?: boolean
+}
 
 export type UnitResetData = {}

@@ -23,6 +23,7 @@ import { webHTTP } from './api/http'
 import { webInput } from './api/input'
 import { webLocation } from './api/location'
 import { webMedia } from './api/media'
+import { webNavigator } from './api/navigator'
 import { webQuerystring } from './api/querystring'
 import { webScreen } from './api/screen'
 import { webSelection } from './api/selection'
@@ -31,6 +32,7 @@ import { webStorage } from './api/storage'
 import { webText } from './api/text'
 import { webURI } from './api/uri'
 import { webURL } from './api/url'
+import { webWindow } from './api/window'
 import { webWorker } from './api/worker'
 
 export default function webBoot(opt: BootOpt = {}): System {
@@ -75,6 +77,8 @@ export function _webBoot(
   const uri = webURI(window, opt)
   const alert = webAlert(window, opt)
   const location = webLocation(window, opt)
+  const _window = webWindow(window, opt)
+  const navigator = webNavigator(window, opt)
 
   const api: API = {
     alert,
@@ -100,6 +104,8 @@ export function _webBoot(
     worker,
     url,
     uri,
+    window: _window,
+    navigator,
   }
 
   const system = boot(null, api, opt)

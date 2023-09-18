@@ -11,11 +11,11 @@
       "type": "number"
     },
     "x": {
-      "type": "number",
+      "type": "string",
       "defaultIgnored": true
     },
     "y": {
-      "type": "number",
+      "type": "string",
       "defaultIgnored": true
     }
   },

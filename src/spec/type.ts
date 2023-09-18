@@ -1,14 +1,17 @@
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../system/f/object/DeepMerge/f'
 import { keys } from '../system/f/object/Keys/f'
-import { BaseSpec, GraphMergeSpec, Spec, Specs } from '../types'
+import { Spec, Specs } from '../types'
+import { BaseSpec } from '../types/BaseSpec'
 import { Dict } from '../types/Dict'
+import { GraphMergeSpec } from '../types/GraphMergeSpec'
 import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
 import { IOOf } from '../types/IOOf'
 import { clone, isEmptyObject, mapObjVK, pathOrDefault } from '../util/object'
 import { emptyIO } from './emptyIO'
 import {
+  ANY_TREE,
   TreeNode,
   TreeNodeType,
   _applyGenerics,
@@ -215,9 +218,20 @@ export const _getGraphTypeInterface = (
           forEachPinOnMerge(merge, (unitId, kind, pinId) => {
             if (kind === 'output') {
               if (!type) {
-                type = unitTypeMap[unitId].output[pinId]
+                type = pathOrDefault(
+                  unitTypeMap,
+                  [unitId, 'output', pinId],
+                  ANY_TREE
+                )
               } else {
-                type = _leastSpecific(type, unitTypeMap[unitId].output[pinId])
+                type = _leastSpecific(
+                  type,
+                  pathOrDefault(
+                    unitTypeMap,
+                    [unitId, 'output', pinId],
+                    ANY_TREE
+                  )
+                )
               }
             }
           })

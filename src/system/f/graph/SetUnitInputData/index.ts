@@ -43,6 +43,6 @@ export default class SetUnitPinData<T> extends Functional<I<T>, O<T>> {
       return
     }
 
-    done({})
+    done()
   }
 }

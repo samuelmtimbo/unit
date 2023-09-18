@@ -1,53 +1,72 @@
 import { GraphMoveSubComponentRootData } from '../../Class/Graph/interface'
-import removeIndex from '../../system/core/array/RemoveIndex/f'
-import assocPath from '../../system/core/object/AssocPath/f'
 import pathGet from '../../system/core/object/DeepGet/f'
-import dissocPath from '../../system/core/object/DeletePath/f'
-import $indexOf from '../../system/f/array/IndexOf/f'
-import { _insert } from '../../system/f/array/Insert/f'
+import assocPath from '../../system/core/object/DeepSet/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { GraphComponentSpec, GraphSubComponentSpec } from '../../types'
-import { pull, push, reorder } from '../../util/array'
-import { pathSet } from '../../util/object'
+import { insert, pull, push, removeAt, reorder } from '../../util/array'
+import { pathDelete, pathOrDefault, pathSet } from '../../util/object'
 import { getComponentSubComponentParentId } from '../util'
 
 export const defaultState: GraphComponentSpec = {}
 
 export const appendChild = (
-  { unitId }: { unitId: string },
+  { childId }: { childId: string },
   state: GraphComponentSpec
 ): void => {
   state.children = state.children ?? []
 
-  state.children.push(unitId)
+  state.children.push(childId)
 }
 
 export const insertChild = (
-  { id, at }: { id: string; at: number },
+  { childId, at }: { childId: string; at: number },
   state: GraphComponentSpec
-): GraphComponentSpec => {
+): void => {
   const children = state.children || []
-  return _set(state, 'children', _insert(children, at, id))
+
+  insert(children, childId, at)
 }
 
 export const removeChild = ({ childId }, state: GraphComponentSpec): void => {
-  pull(state.children ?? [], childId)
+  pull(state.children, childId)
 }
 
 export const setSubComponent = (
-  { unitId, spec }: { unitId: string; spec: GraphSubComponentSpec },
+  {
+    unitId,
+    subComponent,
+  }: { unitId: string; subComponent: GraphSubComponentSpec },
   state: GraphComponentSpec
 ): void => {
-  pathSet(state, ['subComponents', unitId], spec)
+  pathSet(state, ['subComponents', unitId], subComponent)
 }
 
 export const removeSubComponent = (
-  { id }: { id: string },
+  { unitId }: { unitId: string },
   state: GraphComponentSpec
-): GraphComponentSpec => {
-  state = dissocPath(state, ['subComponents', id])
-  return state
+): void => {
+  const subComponent = pathOrDefault(state, ['subComponents', unitId], {})
+
+  const parentId = getComponentSubComponentParentId(state, unitId)
+
+  const { children = [] } = subComponent
+
+  pathDelete(state, ['subComponents', unitId])
+
+  const index = state?.slots?.findIndex(([_unitId]) => _unitId === unitId)
+
+  if (index > -1) {
+    removeAt(state.slots, index)
+  }
+
+  for (const childId of children) {
+    if (parentId) {
+      appendSubComponentChild({ parentId, childId }, state)
+    } else {
+      appendChild({ childId }, state)
+    }
+  }
 }
 
 export const setSize = (
@@ -86,14 +105,16 @@ export const setSubComponentChildren = (
 }
 
 export const removeSubComponentChild = (
-  { id, childId }: { id: string; childId: string },
+  { subComponentId, childId }: { subComponentId: string; childId: string },
   state: GraphComponentSpec
-): GraphComponentSpec => {
-  const children = pathGet(state, ['subComponents', id, 'children'])
-  const { i } = $indexOf({ 'a[]': children, a: childId })
-  const { a: _children } = removeIndex({ a: children, i })
-  state = assocPath(state, ['subComponents', id, 'children'], _children)
-  return state
+): void => {
+  const subComponent = pathGet(state, ['subComponents', subComponentId])
+
+  const { children = [], childSlot = {} } = subComponent
+
+  pull(children, childId)
+
+  pathDelete(childSlot, [childId])
 }
 
 export const appendSubComponentChild = (
@@ -102,25 +123,32 @@ export const appendSubComponentChild = (
 ): void => {
   const { subComponents } = state
 
-  const subComponent = subComponents[parentId] || {}
+  subComponents[parentId] = subComponents[parentId] ?? {}
 
-  const { children = [] } = subComponent
+  const subComponent = subComponents[parentId]
+
+  subComponent.children = subComponent.children || []
+
+  const { children } = subComponent
 
   push(children, childId)
 }
 
 export const insertSubComponentChild = (
-  { id, childId, at }: { id: string; childId: string; at: number },
+  { parentId, childId, at }: { parentId: string; childId: string; at: number },
   state: GraphComponentSpec
-): GraphComponentSpec => {
+): void => {
   const { subComponents } = state
-  const subComponent = subComponents[id] || {}
-  const { children = [] } = subComponent
-  return assocPath(
-    state,
-    ['subComponents', id, 'children'],
-    _insert(children, at, childId)
-  )
+
+  subComponents[parentId] = subComponents[parentId] ?? {}
+
+  const subComponent = subComponents[parentId]
+
+  subComponent.children = subComponent.children ?? []
+
+  const { children } = subComponent
+
+  insert(children, childId, at)
 }
 
 export const reorderSubComponent = (
@@ -141,9 +169,9 @@ export const _removeSubComponentFromParent = (
   for (const childId of children) {
     if (parentId) {
       removeChild({ childId }, state)
-      appendSubComponentChild({ parentId: parentId, childId }, state)
+      appendSubComponentChild({ parentId, childId }, state)
     } else {
-      appendChild({ unitId: childId }, state)
+      appendChild({ childId }, state)
     }
   }
 }
@@ -156,7 +184,10 @@ export const moveSubComponentRoot = (
     const currentParentId = getComponentSubComponentParentId(state, childId)
 
     if (currentParentId) {
-      removeSubComponentChild({ id: currentParentId, childId }, state)
+      removeSubComponentChild(
+        { subComponentId: currentParentId, childId },
+        state
+      )
     } else {
       removeChild({ childId }, state)
     }
@@ -164,7 +195,7 @@ export const moveSubComponentRoot = (
     if (parentId) {
       appendSubComponentChild({ parentId, childId }, state)
     } else {
-      appendChild({ unitId: childId }, state)
+      appendChild({ childId }, state)
     }
   }
 }

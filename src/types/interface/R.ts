@@ -1,6 +1,7 @@
-import { GraphSpecs, Spec } from '..'
+import { Spec } from '..'
 import { Dict } from '../Dict'
 import { GraphSpec } from '../GraphSpec'
+import { GraphSpecs } from '../GraphSpecs'
 
 export interface R {
   newSpecId(): string

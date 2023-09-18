@@ -4,11 +4,13 @@ import { $Children } from '../component/Children'
 import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
 import { System } from '../system'
+import { LayoutBase } from '../system/platform/component/app/Editor/layout'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
 import { $Component } from '../types/interface/async/$Component'
 import { $Graph } from '../types/interface/async/$Graph'
+import { weakMerge } from '../types/weakMerge'
 import { insert, pull, push, remove, removeAt, unshift } from '../util/array'
 import { callAll } from '../util/call/callAll'
 import { _if } from '../util/control'
@@ -49,7 +51,7 @@ const $childToComponent = (
 
   { bundle }: $Child
 ): Component<IOElement, {}, $Component> => {
-  const { unit } = bundle
+  const { unit, specs } = bundle
 
   const { id, memory = { input: {} } } = unit
 
@@ -59,7 +61,12 @@ const $childToComponent = (
     props[pinId] = _data
   })
 
-  const component = componentFromSpecId(system, id, props)
+  const component = componentFromSpecId(
+    system,
+    weakMerge(specs, system.specs),
+    id,
+    props
+  )
 
   return component
 }
@@ -76,10 +83,12 @@ export class Component<
   public $props: P
   public $changed: Set<string> = new Set()
 
+  private _$node: E
+
   public $system: System
 
-  public $globalId: string
-  public $remoteGlobalId: string
+  public $localId: string
+  public $remoteId: string
 
   public $ref: Dict<Component<any>> = {}
 
@@ -129,14 +138,19 @@ export class Component<
 
   public $listenCount: Dict<number> = {}
 
-  private $transaction: boolean = false
-
-  constructor($props: P, $system: System, $element?: E) {
+  constructor($props: P, $system: System, $element?: E, $node?: E) {
     this.$props = $props
     this.$system = $system
     this.$element = $element
+    this._$node = $node ?? $element
+  }
 
-    this.$globalId = this.$system.registerComponent(this)
+  get $node() {
+    return this._$node ?? this.$element
+  }
+
+  set $node($node: E) {
+    this._$node = $node
   }
 
   getProp(name: string): any {
@@ -190,7 +204,11 @@ export class Component<
 
   onUnmount($context: Context) {}
 
-  onDestroy() {}
+  onDestroy() {
+    for (const child of this.$children) {
+      child.destroy()
+    }
+  }
 
   dispatchEvent(type: string, detail: any = {}, bubbles: boolean = true) {
     if (this.$primitive) {
@@ -296,6 +314,122 @@ export class Component<
     }
   }
 
+  private $detached: boolean = false
+
+  detach(host: string, opt: { animate?: boolean }): void {
+    // console.log('Component', 'detach', host, opt)
+
+    const { getLocalComponents } = this.$system
+
+    if (this.$detached) {
+      throw new Error('component is already detached')
+    }
+
+    this.$detached = true
+
+    const hostGlobalId = host.replace('unit://', '')
+
+    const hosts = getLocalComponents(hostGlobalId)
+
+    if (hosts.length === 0) {
+      // TODO maybe the host has not been registered yet
+
+      return
+    }
+
+    const hostComponent = hosts[0] // TODO heuristic: get closest on the tree
+
+    const hostSlot = hostComponent.getSlot('default')
+
+    const base = this.getRootBase()
+
+    this.domRemoveBase(base)
+
+    for (const [path, leaf] of base) {
+      leaf.unmount()
+      
+      hostSlot.$element.appendChild(leaf.$element)
+
+      leaf.mount(hostComponent.$context)
+    }
+  }
+
+  attach(opt: { animate?: boolean }): void {
+    // console.log('Component', 'detach', opt)
+
+    if (!this.$detached) {
+      throw new Error('component is not detached')
+    }
+
+    this.$detached = false
+
+    const base = this.getRootBase()
+
+    this.domAppendBase(base)
+  }
+
+  public templateBase = (
+    base: LayoutBase,
+    root: (parent: Component, leaf_comp: Component) => void,
+    parentRoot: (parent: Component, leaf_comp: Component) => void
+  ): void => {
+    // console.log('Component', 'appendBase', sub_component_id)
+
+    for (const leaf of base) {
+      const [leaf_path, leaf_comp] = leaf
+
+      const leaf_parent_last = leaf_path[leaf_path.length - 1]
+      const leaf_parent_path = leaf_path.slice(0, -1)
+
+      const leaf_parent = this.pathGetSubComponent(leaf_parent_path)
+
+      if (leaf_parent === leaf_comp) {
+        //
+      } else {
+        const parent_id = leaf_parent.getSubComponentParentId(leaf_parent_last)
+        if (parent_id) {
+          const parent = leaf_parent.getSubComponent(parent_id)
+
+          parentRoot(parent, leaf_comp)
+        } else {
+          root(leaf_parent, leaf_comp)
+        }
+      }
+    }
+  }
+
+  public domRemoveBase = (base: LayoutBase): void => {
+    this.templateBase(
+      base,
+      (parent, leaf_comp) => {
+        const index = parent.$root.indexOf(leaf_comp)
+
+        parent.domRemoveRoot(leaf_comp, index)
+      },
+      (parent, leaf_comp) => {
+        const index = parent.$parentRoot.indexOf(leaf_comp)
+
+        parent.domRemoveParentRootAt(leaf_comp, 'default', index, index)
+      }
+    )
+  }
+
+  public domAppendBase = (base: LayoutBase): void => {
+    // console.log('Component', 'domAppendBase', sub_component_id)
+
+    this.templateBase(
+      base,
+      (parent, leaf_comp) => {
+        parent.domAppendRoot(leaf_comp)
+      },
+      (parent, leaf_comp) => {
+        const index = parent.$parentRoot.indexOf(leaf_comp)
+
+        parent.domAppendParentRoot(leaf_comp, 'default', index)
+      }
+    )
+  }
+
   public mountChild(child: Component, commit: boolean = true): void {
     child.mount(this.$context, commit)
   }
@@ -315,6 +449,10 @@ export class Component<
   }
 
   commit() {
+    if (this.$detached) {
+      return
+    }
+
     this.onMount()
 
     this._forAllMountDescendent((child) => {
@@ -347,6 +485,10 @@ export class Component<
     this.$mounted = true
 
     this._forAllMountDescendent((child) => {
+      if (child.$detached) {
+        return
+      }
+
       this.mountChild(child, false)
     })
 
@@ -365,6 +507,10 @@ export class Component<
     const $context = this.$context
 
     this._forAllMountDescendent((child) => {
+      if (child.$detached) {
+        return
+      }
+
       this.unmountDescendent(child)
     })
 
@@ -730,6 +876,7 @@ export class Component<
 
   appendChild(child: Component, slotName: string = 'default'): number {
     // console.log('Component', 'appendChild', slotName)
+
     const at = this.$children.length
 
     this.memAppendChild(child, slotName, at)
@@ -741,6 +888,7 @@ export class Component<
 
   public memAppendChild(child: Component, slotName: string, at: number): void {
     // console.log('Component', 'memAppendChild')
+
     this.$slotChildren[slotName] = this.$slotChildren[slotName] || []
     this.$slotChildren[slotName].push(child)
     this.$children.push(child)
@@ -947,7 +1095,11 @@ export class Component<
         } else if (event_event === 'remove_child') {
           const at = event_data
 
+          const child = this.$children[at]
+
           this.removeChildAt(at)
+
+          child.destroy()
         }
       },
     }
@@ -959,10 +1111,10 @@ export class Component<
 
     this.$named_listener_count = {}
 
-    $unit.$getGlobalId({}, (remoteGlobalId: string) => {
-      this.$remoteGlobalId = remoteGlobalId
+    $unit.$getGlobalId({}, (remoteId: string) => {
+      this.$remoteId = remoteId
 
-      this.$system.registerRemoteComponent(this.$globalId, remoteGlobalId)
+      this.$localId = this.$system.registerLocalComponent(this, remoteId)
     })
 
     const all_unlisten: Unlisten[] = []
@@ -1382,30 +1534,6 @@ export class Component<
     }
   }
 
-  public startTransaction(): Unlisten {
-    const unlisten = this._startTransaction()
-
-    const allUnlisten: Unlisten[] = [unlisten]
-
-    for (const subComponentId in this.$subComponent) {
-      const subComponent = this.$subComponent[subComponentId]
-
-      const subComponentUnlisten = subComponent.startTransaction()
-
-      allUnlisten.push(subComponentUnlisten)
-    }
-
-    return callAll(allUnlisten)
-  }
-
-  private _startTransaction(): Unlisten {
-    this.$transaction = true
-
-    return () => {
-      this.$transaction = false
-    }
-  }
-
   public hasParentRoot(component: Component): boolean {
     return this.$parentRoot.includes(component)
   }
@@ -1439,9 +1567,10 @@ export class Component<
     const i = this.$parentRoot.indexOf(component)
 
     if (i > -1) {
-      removeAt(this.$parentRoot, i)
+      const slotName = this.$parentRootSlotName[i]
 
-      const [slotName] = removeAt(this.$parentRootSlotName, i)
+      removeAt(this.$parentRoot, i)
+      removeAt(this.$parentRootSlotName, i)
 
       const slot = get(this.$slot, slotName)
 
@@ -1654,7 +1783,7 @@ export class Component<
           if (this.$slotParent) {
             const index = this.$parent?.$root.includes(this)
               ? this.$parent?.$root.indexOf(this)
-              : this.$slotParent.$mountParentChildren.indexOf(this)
+              : 0
 
             this.$slotParent.domInsertParentChildAt(
               component,
@@ -1682,8 +1811,12 @@ export class Component<
       }
     } else {
       if (!component.$primitive) {
+        let j = 0
+
         for (const root of component.$mountRoot) {
-          this.domInsertParentChildAt(root, 'default', i)
+          this.domInsertParentChildAt(root, 'default', i + j)
+
+          j++
         }
       } else {
         this.domCommitInsertChild(component, i)
@@ -1937,6 +2070,24 @@ export class Component<
     } else {
       return []
     }
+  }
+
+  public getPath(): string[] {
+    let path: string[] = []
+    let c: Component = this
+    let p = this.$parent
+
+    while (p) {
+      const subComponentId = p.getSubComponentId(c)
+
+      path.unshift(subComponentId)
+
+      c = p
+
+      p = p.$parent
+    }
+
+    return path
   }
 
   public addEventListener = (listener: Listener): Unlisten => {

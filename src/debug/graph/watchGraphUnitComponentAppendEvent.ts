@@ -1,5 +1,5 @@
 import { Graph } from '../../Class/Graph'
-import { GraphUnitSpec } from '../../types'
+import { GraphUnitSpec } from '../../types/GraphUnitSpec'
 import { Moment } from './../Moment'
 
 export interface GraphSpecComponentAppendMomentData {

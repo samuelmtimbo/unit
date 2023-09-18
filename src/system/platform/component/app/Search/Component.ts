@@ -168,11 +168,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
     input.addEventListener(makeFocusInListener(this._on_input_focus_in))
     input.addEventListener(makeFocusOutListener(this._on_input_focus_out))
     input.addEventListener(makeInputListener(this._on_input_input))
-    // input.addEventListener(
-    //   makeClickListener({
-    //     onClick: this._on_input_click,
-    //   })
-    // )
     input.addEventListener(
       makeShortcutListener([
         {
@@ -378,6 +373,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
     } else if (prop === 'filter') {
       this._filter_list()
     } else if (prop === 'registry') {
+      if (this._registry === current) {
+        return
+      }
+
       this._registry = current ?? this.$system
 
       this._unlisten_registry()
@@ -421,6 +420,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
             }
           } else if (type === 'delete') {
             const specId = key
+            // console.log('delete', specId)
 
             if (isSystemSpec(spec)) {
               return
@@ -453,7 +453,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _add_list_item = (id: string, i: number, total: number): void => {
-    // console.trace('Search', '_add_list_item', id, i, total)
+    // console.log('Search', '_add_list_item', id, i, total)
 
     const { specs } = this._registry
 
@@ -681,10 +681,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _show_list = () => {
+    // console.log('Search', '_show_list')
     const { style = {} } = this.$props
     const { color = 'currentColor' } = style
 
-    // console.log('Search', '_show_list')
     this._list_hidden = false
 
     const filtered_total = this._filtered_id_list.length
@@ -870,7 +870,11 @@ export default class Search extends Element<HTMLDivElement, Props> {
       const last_list_item_id =
         this._filtered_id_list[this._filtered_id_list.length - 1]
       const last_list_item_div = this._list_item_div[last_list_item_id]
-      last_list_item_div.$element.style.borderBottom = '1px solid currentColor'
+
+      if (last_list_item_div) {
+        last_list_item_div.$element.style.borderBottom =
+          '1px solid currentColor'
+      }
     }
 
     let filtered_id_list: string[] = []
@@ -954,7 +958,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
           if (this._filtered_id_list.includes(this._selected_id)) {
             this._top_element_index = 0
 
-            this._scroll_into_item_if_needed(this._selected_id, true)
+            this._scroll_into_item_if_needed(this._selected_id, false)
           } else {
             this._select_first_list_item()
           }

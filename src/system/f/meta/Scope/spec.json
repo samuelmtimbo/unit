@@ -1,0 +1,25 @@
+{
+  "name": "scope",
+  "inputs": {
+    "unit": {
+      "type": "`U`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "obj": {
+      "type": "`J`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "access object local scope",
+    "complexity": 3,
+    "tags": ["f", "meta"]
+  },
+  "id": "f9f93972-0764-4095-9ca2-d18b7d9344d4",
+  "system": true,
+  "base": true,
+  "type": "`U`"
+}

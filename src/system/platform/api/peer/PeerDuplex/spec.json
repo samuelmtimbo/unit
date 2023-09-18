@@ -211,7 +211,7 @@
             }
           }
         },
-        "channel": {}
+        "emitter": {}
       },
       "metadata": {
         "position": {
@@ -263,7 +263,7 @@
     "onmessage": {
       "id": "23c3952a-ef19-11ea-b80e-3f693508091e",
       "input": {
-        "channel": {}
+        "emitter": {}
       },
       "output": {
         "message": {}
@@ -280,7 +280,7 @@
     "0": {
       "onmessage": {
         "input": {
-          "channel": true
+          "emitter": true
         }
       },
       "receiver": {
@@ -292,12 +292,12 @@
     "1": {
       "send": {
         "input": {
-          "channel": true
+          "emitter": true
         }
       },
       "transmitter": {
         "output": {
-          "channel": true
+          "emitter": true
         }
       }
     },

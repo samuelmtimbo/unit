@@ -29,7 +29,7 @@ export default class SVGDefs extends Element<SVGDefsElement, Props> {
 
     applyStyle(this.$element, style)
 
-    this._prop_handler = svgPropHandler(this, {})
+    this._prop_handler = svgPropHandler(this, this.$element, {})
   }
 
   onPropChanged(name: string, current: any): void {

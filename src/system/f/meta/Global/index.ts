@@ -1,12 +1,10 @@
 import { Unit } from '../../../../Class/Unit'
 import { ObjectUpdateType } from '../../../../Object'
-import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { Unlisten } from '../../../../types/Unlisten'
 import { J } from '../../../../types/interface/J'
 import { ID_GLOBAL } from '../../../_ids'
-import { keys } from '../../object/Keys/f'
 
 export type I = {}
 
@@ -35,40 +33,38 @@ export default class Global extends Unit<I, O> implements J<Dict<any>> {
       data: any
     ) => void
   ): Unlisten {
-    throw new MethodNotImplementedError()
+    return this.__system.global.data.subscribe(path, key, listener)
   }
 
   async get(name: string): Promise<any> {
-    return this.__system.global.data[name]
+    return this.__system.global.data.get(name)
   }
 
   async set(name: string, data: string): Promise<void> {
-    this.__system.global.data[name] = data
+    return this.__system.global.data.set(name, data)
   }
 
   async delete(name: string): Promise<any> {
-    delete this.__system.global.data[name]
+    return this.__system.global.data.delete(name)
   }
 
   async pathSet(path: string[], name: string, data: any): Promise<void> {
-    throw new MethodNotImplementedError()
+    return this.__system.global.data.pathSet(path, name, data)
   }
 
   async pathGet(path: string[], name: string): Promise<any> {
-    throw new MethodNotImplementedError()
+    return this.__system.global.data.pathGet(path, name)
   }
 
   async pathDelete(path: string[], name: string): Promise<void> {
-    throw new MethodNotImplementedError()
+    return this.__system.global.data.pathDelete(path, name)
   }
 
   async keys(): Promise<string[]> {
-    return keys(this.__system.global.data)
+    return this.__system.global.data.keys()
   }
 
   async hasKey(name: string): Promise<boolean> {
-    const has = this.__system.global.data[name] !== undefined
-
-    return has
+    return this.__system.global.data.hasKey(name)
   }
 }

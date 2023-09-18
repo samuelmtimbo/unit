@@ -186,6 +186,8 @@ export class Unit<
 
   public setPinConstant(type: IO, pinId: string, constant: boolean): void {
     this.getPin(type, pinId).constant(constant)
+
+    this.emit('set_pin_constant', type, pinId, constant)
   }
 
   private _memSetPinOptData(type: IO, pinId: string): void {
@@ -1093,7 +1095,7 @@ export class Unit<
     return this.__system.getSpec(this.id)
   }
 
-  public getBundle(deep: boolean = false): UnitBundleSpec {
+  public getUnitBundleSpec(deep: boolean = false): UnitBundleSpec {
     let memory = undefined
 
     if (deep) {

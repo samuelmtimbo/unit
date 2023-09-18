@@ -53,7 +53,7 @@ export default class Label extends Element<HTMLLabelElement, Props> {
     applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {
-      ...htmlPropHandler(this, DEFAULT_STYLE),
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
     }
   }
 

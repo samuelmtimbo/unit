@@ -1,7 +1,6 @@
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
 import { applyDynamicStyle } from '../../../../client/style'
-import { userSelect } from '../../../../client/util/style/userSelect'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -22,7 +21,6 @@ const DEFAULT_STYLE = {
   height: '100%',
   color: 'currentColor',
   boxSizing: 'border-box',
-  ...userSelect('none'),
 }
 
 export default class Div extends Element<HTMLDivElement, Props> {
@@ -70,11 +68,18 @@ export default class Div extends Element<HTMLDivElement, Props> {
         this.$element.dataset[key] = d
       }
     }
+    if (attr !== undefined) {
+      for (const key in attr) {
+        const a = attr[key]
 
-    applyDynamicStyle(this, { ...DEFAULT_STYLE, ...style })
+        this.$element.setAttribute(key, a)
+      }
+    }
+
+    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {
-      ...htmlPropHandler(this, DEFAULT_STYLE),
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
     }
   }
 

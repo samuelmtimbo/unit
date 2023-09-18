@@ -1,5 +1,6 @@
-import { ObjectUpdateType } from '../Object'
+import { ObjectUpdateType, Object_ } from '../Object'
 import { SharedRef } from '../SharefRef'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
@@ -9,30 +10,32 @@ export function wrapObject<T extends Dict<any>>(
   data: SharedRef<T>,
   _system: System
 ): J<T> {
+  const _data = new Object_(data)
+
   return {
     get<K extends string & keyof T>(name: K): Promise<T[K]> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     },
     set<K extends string & keyof T>(name: K, data: T[K]): Promise<void> {
-      throw new Error('Method not implemented.')
+      return _data.pathSet(['current'], name, data)
     },
     delete<K extends string & keyof T>(name: K): Promise<void> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     },
     hasKey<K extends string & keyof T>(name: K): Promise<boolean> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     },
     keys(): Promise<string[]> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     },
     pathGet(path: string[], name: string): Promise<any> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     },
     pathSet(path: string[], name: string, data: any): Promise<void> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     },
     pathDelete(path: string[], name: string): Promise<void> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     },
     subscribe(
       path: string[],
@@ -44,7 +47,7 @@ export function wrapObject<T extends Dict<any>>(
         data: any
       ) => void
     ): Unlisten {
-      throw new Error('Method not implemented.')
+      return _data.subscribe(['current', ...path], key, listener)
     },
   }
 }

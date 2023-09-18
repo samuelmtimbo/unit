@@ -1,0 +1,19 @@
+{
+  "name": "share",
+  "inputs": {
+    "data": {
+      "type": "{text:string,url:string,title:string}"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "share",
+    "description": "watch the size of a component",
+    "complexity": 3,
+    "tags": ["platform", "api", "observer"]
+  },
+  "id": "04eda925-4423-40c8-83c8-2117a0d81185",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

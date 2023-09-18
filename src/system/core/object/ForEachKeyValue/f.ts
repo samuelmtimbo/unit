@@ -5,6 +5,8 @@ export default function forEachValueKey<T extends Dict<any>>(
   callback: <K extends keyof T>(value: T[K], key: K) => void
 ) {
   for (const key in obj) {
-    callback(obj[key], key)
+    const value = obj[key]
+
+    callback(value, key)
   }
 }

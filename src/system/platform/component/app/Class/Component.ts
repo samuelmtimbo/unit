@@ -300,12 +300,12 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
     const core_name_g = new SVGG({}, this.$system)
     const lines = line_wrap(name)
     for (let i = 0; i < lines.length; i++) {
-      const text = lines[i]
+      const value = lines[i]
       const core_name_line = new SVGText(
         {
-          text,
-          dx: width / 2,
-          dy: height / 2 + core_r + 12 + i * 9,
+          value,
+          dx: `${width / 2}`,
+          dy: `${height / 2 + core_r + 12 + i * 9}`,
           style: {
             fontSize: '9px',
           },

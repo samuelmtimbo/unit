@@ -1,6 +1,6 @@
 import removeIndex from '../../system/core/array/RemoveIndex/f'
-import assocPath from '../../system/core/object/AssocPath/f'
 import pathGet from '../../system/core/object/DeepGet/f'
+import assocPath from '../../system/core/object/DeepSet/f'
 import dissocPath from '../../system/core/object/DeletePath/f'
 import $indexOf from '../../system/f/array/IndexOf/f'
 import { _insert } from '../../system/f/array/Insert/f'

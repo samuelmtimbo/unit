@@ -17,6 +17,8 @@ export type U_EE = {
   remove_output: [string, Pin]
   rename_input: [string, string]
   rename_output: [string, string]
+  set_pin_constant: [IO, string, boolean]
+  set_pin_ignored: [IO, string, boolean]
   catch_err: [string]
   err: [string]
   take_err: [string]
@@ -115,5 +117,5 @@ export interface U<I = any, O = any> {
   getSpec(): Spec
   getPinData(type: IO, name: string): any
   setPinConstant(type: IO, name: string, constant: boolean): void
-  getBundle(): UnitBundleSpec
+  getUnitBundleSpec(deep?: boolean): UnitBundleSpec
 }

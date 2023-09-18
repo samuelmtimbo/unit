@@ -9,26 +9,73 @@ import { extractTrait } from './extractTrait'
 import { IOElement } from './IOElement'
 import { LayoutNode } from './LayoutNode'
 import { reflectChildrenTrait } from './reflectChildrenTrait'
+import { expandSlot } from './reflectComponentBaseTrait'
 import { rectsBoundingRect } from './util/geometry'
 import { Size } from './util/geometry/types'
 import { parseFontSize } from './util/style/getFontSize'
 
 export function measureChildren(
+  root: Component,
   component: Component,
   style: Style,
   fallbackTrait: LayoutNode,
-  measureText: (text: string, fontSize: number) => Size
+  measureText: (text: string, fontSize: number) => Size,
+  fitContent: boolean,
+  getLeafStyle: (
+    parent_trait: LayoutNode,
+    leaf_path: string[],
+    leaf_comp: Component
+  ) => Style = (parent_trait, leaf_path, leaf_comp) =>
+    extractStyle(root, leaf_comp, parent_trait, measureText, fitContent)
 ) {
   const parentChildren = component.$parentChildren
 
   const base = parentChildren.reduce((acc, child) => {
-    const childBase = child.getBase()
+    const childBase = child.getRootBase()
 
-    return [...acc, ...childBase]
+    let child_path: string[] = []
+    let c: Component = child
+    let p = child.$parent
+
+    while (p) {
+      let z = component
+
+      let drop = false
+
+      while (z) {
+        if (c.getSubComponentId(component.$parent)) {
+          drop = true
+
+          break
+        }
+
+        z = z.$parent
+      }
+
+      if (drop) {
+        break
+      }
+
+      const subComponentId = p.getSubComponentId(c)
+
+      child_path.unshift(subComponentId)
+
+      c = p
+
+      p = p.$parent
+    }
+
+    return [
+      ...acc,
+      ...childBase.map(([leaf_path, leaf_comp]) => [
+        [...child_path, ...leaf_path],
+        leaf_comp,
+      ]),
+    ]
   }, [])
 
-  const base_style = base.map(([leaf_id, leaf_comp]) => {
-    return extractStyle(leaf_comp, fallbackTrait, measureText)
+  const base_style = base.map(([leaf_path, leaf_comp]) => {
+    return getLeafStyle(fallbackTrait, leaf_path, leaf_comp)
   })
 
   const relative_base_style = base_style.filter(({ position }) => {
@@ -53,7 +100,16 @@ export function measureChildren(
       style,
       relative_base_style,
       (path) => {
-        return []
+        return expandSlot(
+          root,
+          component,
+          '',
+          path,
+          {},
+          (leaf_id, leaf_comp) => {
+            return getLeafStyle(fallbackTrait, leaf_id.split('/'), leaf_comp)
+          }
+        )
       },
       []
     )
@@ -64,9 +120,17 @@ export function measureChildren(
 }
 
 export function extractStyle(
+  root: Component,
   component: Component,
   fallbackTrait: LayoutNode,
-  measureText: (text: string, fontSize: number) => Size
+  measureText: (text: string, fontSize: number) => Size,
+  fitContent: boolean = false,
+  getLeafStyle: (
+    parent_trait: LayoutNode,
+    leaf_path: string[],
+    leaf_comp: Component
+  ) => Style = (parent_trait, leaf_path, leaf_comp) =>
+    extractStyle(root, leaf_comp, parent_trait, measureText, fitContent)
 ): Style {
   const { $element } = component
 
@@ -76,20 +140,37 @@ export function extractStyle(
     _element = component._iframe_el
   }
 
-  return _extractStyle(component, _element, fallbackTrait, measureText)
+  return _extractStyle(
+    root,
+    component,
+    _element,
+    fallbackTrait,
+    measureText,
+    fitContent,
+    getLeafStyle
+  )
 }
 
 export function _extractStyle(
+  root: Component,
   component: Component,
   element: IOElement,
   fallbackTrait: LayoutNode,
-  measureText: (text: string, fontSize: number) => Size
+  measureText: (text: string, fontSize: number) => Size,
+  fitContent: boolean = false,
+  getLeafStyle: (
+    parent_trait: LayoutNode,
+    leaf_path: string[],
+    leaf_comp: Component
+  ) => Style = (parent_trait, leaf_path, leaf_comp) =>
+    extractStyle(root, leaf_comp, parent_trait, measureText, fitContent)
 ): Style {
-  if (
-    element instanceof Text ||
-    (element instanceof HTMLDivElement &&
-      element.getAttribute('contenteditable') === 'true')
-  ) {
+  const style = rawExtractStyle(element)
+
+  const fitWidth = style['width'] === 'fit-content'
+  const fitHeight = style['height'] === 'fit-content'
+
+  if (element instanceof Text) {
     const fontSize = component.getFontSize()
 
     const { textContent } = component.$element
@@ -102,7 +183,25 @@ export function _extractStyle(
     }
   }
 
-  const style = rawExtractStyle(element)
+  if (
+    element instanceof HTMLDivElement &&
+    element.getAttribute('contenteditable') === 'true' &&
+    (fitWidth || fitHeight)
+  ) {
+    const fontSize = component.getFontSize()
+
+    const { textContent } = component.$element
+
+    const { width, height } = measureText(textContent, fontSize)
+
+    if (fitWidth) {
+      style['width'] = `${width}px`
+    }
+
+    if (fitHeight) {
+      style['height'] = `${height}px`
+    }
+  }
 
   if (style['display'] === 'contents') {
     return {
@@ -192,25 +291,27 @@ export function _extractStyle(
     // TODO
   }
 
-  // const fitWidth = style['width'] === 'fit-content'
-  // const fitHeight = style['height'] === 'fit-content'
-  //
-  // if (fitWidth || fitHeight) {
-  //   const { width, height } = measureChildren(
-  //     component,
-  //     style,
-  //     fallbackTrait,
-  //     measureText
-  //   )
-  //
-  //   if (fitWidth) {
-  //     style['width'] = `${width}px`
-  //   }
-  //
-  //   if (fitHeight) {
-  //     style['height'] = `${height}px`
-  //   }
-  // }
+  if (fitContent) {
+    if (fitWidth || fitHeight) {
+      const { width, height } = measureChildren(
+        root,
+        component,
+        style,
+        fallbackTrait,
+        measureText,
+        fitContent,
+        getLeafStyle
+      )
+
+      if (fitWidth) {
+        style['width'] = `${width}px`
+      }
+
+      if (fitHeight) {
+        style['height'] = `${height}px`
+      }
+    }
+  }
 
   return style
 }

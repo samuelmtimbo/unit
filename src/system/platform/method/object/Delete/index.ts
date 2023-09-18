@@ -36,7 +36,7 @@ export default class Delete<T> extends Functional<I<T>, O<T>> {
 
       done()
     } catch (err) {
-      done(undefined, err)
+      done(undefined, err.message)
     }
   }
 }

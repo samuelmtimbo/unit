@@ -1,5 +1,7 @@
-import { Classes, GraphUnitPinsSpec, GraphUnitSpec, Specs } from '../types'
+import { Classes, Specs } from '../types'
 import { Dict } from '../types/Dict'
+import { GraphUnitPinsSpec } from '../types/GraphUnitPinsSpec'
+import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { clone } from '../util/object'
 import { evaluate } from './evaluate'
 

@@ -1,13 +1,17 @@
 import { System } from '../system'
-import { GraphUnitSpec } from '../types'
+import { Specs } from '../types'
+import { Dict } from '../types/Dict'
+import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { Component } from './component'
 import { componentFromSpecId } from './componentFromSpecId'
 
 export function componentFromUnitSpec(
   system: System,
-  unitSpec: GraphUnitSpec
+  specs: Specs,
+  unitSpec: GraphUnitSpec,
+  subComponentMap: Dict<Component> = {}
 ): Component {
   const { id } = unitSpec
 
-  return componentFromSpecId(system, id, {} /** TODO */)
+  return componentFromSpecId(system, specs, id, subComponentMap)
 }

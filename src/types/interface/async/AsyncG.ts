@@ -27,7 +27,7 @@ import {
   GraphSetMergeDataData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
-  GraphSetUnitNameData,
+  GraphSetUnitIdData,
   GraphSetUnitPinConstant,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
@@ -35,7 +35,6 @@ import {
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
 import { Unit } from '../../../Class/Unit'
-import { Memory } from '../../../Class/Unit/Memory'
 import { emptySpec } from '../../../client/spec'
 import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
@@ -50,7 +49,6 @@ import {
   stringifyMemorySpecData,
   stringifyUnitBundleSpecData,
 } from '../../../spec/stringifySpec'
-import { System } from '../../../system'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
 import { clone, isEmptyObject, mapObjVK } from '../../../util/object'
 import { BundleSpec } from '../../BundleSpec'
@@ -73,33 +71,10 @@ export interface Holder<T> {
   data: T
 }
 
-export const parseMemoryData = (system: System, memory: Memory): void => {
-  if (memory) {
-    for (const inputId in memory.input) {
-      if (memory.input[inputId]._register !== undefined) {
-        memory.input[inputId]._register = evaluate(
-          memory.input[inputId]._register,
-          system.specs,
-          system.classes
-        )
-      }
-    }
-    for (const outputId in memory.output) {
-      if (memory.output[outputId]._register !== undefined) {
-        memory.output[outputId]._register = evaluate(
-          memory.output[outputId]._register,
-          system.specs,
-          system.classes
-        )
-      }
-    }
-  }
-}
-
 export const AsyncGCall = (graph: Graph): $G_C => {
   return {
-    $setUnitName({ unitId, newUnitId, name }: GraphSetUnitNameData): void {
-      graph.setUnitName(unitId, newUnitId, name)
+    $setUnitId({ unitId, newUnitId, name, specId }: GraphSetUnitIdData): void {
+      graph.setUnitId(unitId, newUnitId, name, specId)
     },
 
     $setUnitPinData({
@@ -149,58 +124,49 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.addUnitSpecs(unitNodes)
     },
 
-    $removeUnit({ unitId: id }: GraphRemoveUnitData) {
-      graph.removeUnit(id)
+    $removeUnit({ unitId }: GraphRemoveUnitData) {
+      graph.removeUnit(unitId)
     },
 
-    $exposePinSet({ type, pinId: id, pinSpec: pin }: GraphExposePinSetData) {
-      graph.exposePinSet(type, id, pin)
+    $exposePinSet({ type, pinId, pinSpec: pin }: GraphExposePinSetData) {
+      graph.exposePinSet(type, pinId, pin)
     },
 
-    $coverPinSet({ type, pinId: id }: GraphCoverPinSetData) {
-      graph.coverPinSet(type, id, true)
+    $coverPinSet({ type, pinId }: GraphCoverPinSetData) {
+      graph.coverPinSet(type, pinId, true)
     },
 
-    $exposePin({
-      type,
-      pinId: id,
-      subPinId,
-      subPinSpec: subPin,
-    }: GraphExposePinData) {
-      graph.exposePin(type, id, subPinId, subPin)
+    $exposePin({ type, pinId, subPinId, subPinSpec }: GraphExposePinData) {
+      graph.exposePin(type, pinId, subPinId, subPinSpec)
     },
 
-    $coverPin({ type, pinId: id, subPinId }: GraphCoverPinData) {
-      graph.coverPin(type, id, subPinId)
+    $coverPin({ type, pinId, subPinId }: GraphCoverPinData) {
+      graph.coverPin(type, pinId, subPinId)
     },
 
-    $plugPin({
-      type,
-      pinId: id,
-      subPinId,
-      subPinSpec: subPin,
-    }: GraphPlugPinData) {
-      graph.plugPin(type, id, subPinId, subPin)
+    $plugPin({ type, pinId, subPinId, subPinSpec }: GraphPlugPinData) {
+      graph.plugPin(type, pinId, subPinId, subPinSpec)
     },
 
-    $unplugPin({ type, pinId: id, subPinId }: GraphUnplugPinData) {
-      graph.unplugPin(type, id, subPinId)
+    $unplugPin({ type, pinId, subPinId }: GraphUnplugPinData) {
+      graph.unplugPin(type, pinId, subPinId)
     },
 
     $exposeUnitPinSet({
       unitId,
       type,
-      pinId: id,
-      pinSpec: pin,
+      pinId,
+      pinSpec,
     }: GraphExposeUnitPinSetData) {
       const unit = graph.getUnit(unitId) as Graph
 
-      unit.exposePinSet(type, id, pin)
+      unit.exposePinSet(type, pinId, pinSpec)
     },
 
-    $coverUnitPinSet({ unitId, type, pinId: id }: GraphCoverUnitPinSetData) {
+    $coverUnitPinSet({ unitId, type, pinId }: GraphCoverUnitPinSetData) {
       const unit = graph.getUnit(unitId) as Graph
-      unit.coverPinSet(type, id)
+
+      unit.coverPinSet(type, pinId)
     },
 
     $setPinSetId({ type, pinId, nextPinId }: GraphSetPinSetIdData): void {
@@ -306,8 +272,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextUnitBundle,
       nextUnitPinMap,
     }: GraphAddUnitGhostData): void {
-      parseMemoryData(graph.__system, nextUnitBundle.unit.memory)
-
       graph.addUnitGhost(unitId, nextUnitId, nextUnitBundle, nextUnitPinMap)
     },
 
@@ -488,8 +452,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
     }: GraphMoveSubGraphIntoData): void {
+      const graphBundle = graph.getGraphUnitBundleSpec(graphId)
+
       graph.moveSubgraphInto(
         graphId,
+        graphBundle,
         nextSpecId,
         nodeIds,
         nextIdMap,
@@ -512,8 +479,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
     }: GraphMoveSubGraphIntoData): void {
+      const graphBundle = graph.getGraphUnitBundleSpec(graphId)
+
       graph.moveSubgraphInto(
         graphId,
+        graphBundle,
         nextSpecId,
         nodeIds,
         nextIdMap,

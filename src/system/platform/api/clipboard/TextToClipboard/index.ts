@@ -37,6 +37,6 @@ export default class TextToClipboard<T> extends Functional<I<T>, O<T>> {
       return
     }
 
-    done({})
+    done()
   }
 }

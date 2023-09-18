@@ -36,6 +36,6 @@ export default class ScrollIntoView<T> extends Functional<I<T>, O<T>> {
       data: [opt],
     })
 
-    done({})
+    done()
   }
 }

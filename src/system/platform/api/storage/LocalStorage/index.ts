@@ -1,4 +1,6 @@
 import { Unit } from '../../../../../Class/Unit'
+import { EventEmitter_ } from '../../../../../EventEmitter'
+import { ObjectUpdateType } from '../../../../../Object'
 import {
   getAllLocalStorage,
   getStorageKeys,
@@ -6,12 +8,11 @@ import {
 } from '../../../../../client/util/web/storage'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
-import { ObjectUpdateType } from '../../../../../Object'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { Unlisten } from '../../../../../types/Unlisten'
 import { J } from '../../../../../types/interface/J'
 import { V } from '../../../../../types/interface/V'
-import { Unlisten } from '../../../../../types/Unlisten'
 import { ID_LOCAL_STORAGE } from '../../../../_ids'
 
 export type I = {}
@@ -34,6 +35,8 @@ export default class _LocalStorage
     )
   }
 
+  private ___emitter = new EventEmitter_()
+
   subscribe(
     path: string[],
     key: string,
@@ -44,7 +47,31 @@ export default class _LocalStorage
       data: any
     ) => void
   ): Unlisten {
-    throw new MethodNotImplementedError()
+    const { emitter } = this.__system
+
+    if (path.length > 0) {
+      throw new Error('local storage path length must be 0')
+    }
+
+    const setListener = (key_, data) => {
+      if (key === '*' || key_ === key) {
+        listener('set', path, key_, data)
+      }
+    }
+
+    const deleteListener = (data) => {
+      listener('delete', path, key, data)
+    }
+
+    emitter.addListener('set', setListener)
+    emitter.addListener('delete', deleteListener)
+
+    const unlisten = () => {
+      emitter.removeListener('set', setListener)
+      emitter.removeListener('delete', deleteListener)
+    }
+
+    return unlisten
   }
 
   private _checkAPI = () => {
@@ -54,6 +81,7 @@ export default class _LocalStorage
   }
 
   async read(): Promise<Dict<string>> {
+    // TODO system
     const obj = getAllLocalStorage()
     return obj
   }
@@ -67,6 +95,7 @@ export default class _LocalStorage
     this._checkAPI()
 
     const value = localStorage.getItem(name)
+
     if (value === null) {
       throw new Error('item not found')
     } else {
@@ -75,15 +104,25 @@ export default class _LocalStorage
   }
 
   async set(name: string, data: string): Promise<void> {
+    const { emitter } = this.__system
+
     this._checkAPI()
 
     localStorage.setItem(name, data)
+
+    emitter.emit('set', name, data)
   }
 
   async delete(name: string): Promise<any> {
+    const { emitter } = this.__system
+
     this._checkAPI()
 
+    const data = localStorage.getItem(name)
+
     localStorage.removeItem(name)
+
+    emitter.emit('delete', name, data)
   }
 
   async pathSet(path: string[], name: string, data: any): Promise<void> {

@@ -23,7 +23,7 @@ export default class Canvas
   extends Element_<I, O, CanvasJ, CanvasEE, CanvasC>
   implements CA
 {
-  __ = ['U', 'C', 'V', 'J']
+  __ = ['U', 'C', 'V', 'J', 'CA', 'EE']
 
   constructor(system: System) {
     super(

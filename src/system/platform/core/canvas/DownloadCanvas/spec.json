@@ -8,12 +8,12 @@
           "pinId": "a"
         },
         "1": {
-          "unitId": "createbloburl",
+          "unitId": "downloadblob",
           "pinId": "init"
         }
       },
       "functional": true,
-      "type": "string"
+      "type": "<A>"
     },
     "type": {
       "plug": {
@@ -25,9 +25,7 @@
       "type": "string",
       "functional": true,
       "metadata": {
-        "examples": [
-          "\"image/png\""
-        ]
+        "examples": ["\"image/png\""]
       }
     },
     "canvas": {
@@ -43,20 +41,6 @@
   },
   "outputs": {},
   "units": {
-    "downloadurl": {
-      "id": "c18c8f59-f3c8-49a8-9dbd-ed30fdf856e9",
-      "input": {
-        "url": {},
-        "name": {}
-      },
-      "output": {},
-      "metadata": {
-        "position": {
-          "x": 107,
-          "y": 0
-        }
-      }
-    },
     "toblob": {
       "id": "c9d64ef4-35f6-44e7-a16b-1e4173f951dc",
       "input": {
@@ -78,21 +62,6 @@
         }
       }
     },
-    "createbloburl": {
-      "id": "1d5b6bb0-f18e-4428-a350-a29d8ca3ff4a",
-      "input": {
-        "blob": {}
-      },
-      "output": {
-        "url": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 6,
-          "y": 0
-        }
-      }
-    },
     "plan": {
       "id": "36329d25-218d-48a5-a06c-1e0525da504f",
       "input": {
@@ -102,30 +71,21 @@
         "0": {},
         "1": {}
       }
+    },
+    "downloadblob": {
+      "id": "c3a080cc-f2f2-4c7c-998d-17809c555ef1"
     }
   },
   "merges": {
     "0": {
-      "createbloburl": {
-        "input": {
-          "blob": true
-        }
-      },
       "toblob": {
         "output": {
           "blob": true
         }
-      }
-    },
-    "1": {
-      "downloadurl": {
-        "input": {
-          "url": true
-        }
       },
-      "createbloburl": {
-        "output": {
-          "url": true
+      "downloadblob": {
+        "input": {
+          "blob": true
         }
       }
     },
@@ -141,15 +101,15 @@
         }
       }
     },
-    "3": {
-      "downloadurl": {
-        "input": {
-          "name": true
-        }
-      },
+    "4": {
       "plan": {
         "output": {
           "0": true
+        }
+      },
+      "downloadblob": {
+        "input": {
+          "name": true
         }
       }
     }
@@ -158,14 +118,9 @@
   "metadata": {
     "icon": "download",
     "description": "download full canvas as png",
-    "complexity": 14,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "complexity": 21,
+    "tags": ["platform", "core", "canvas"]
   },
   "id": "1a398694-284e-4d67-a13c-3a929c38b0fc",
-  "type": "`U`&`G`",
-  "system": true
+  "type": "`U`&`G`"
 }
