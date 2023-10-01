@@ -1,6 +1,6 @@
 import { GraphMoveSubComponentRootData } from '../../Class/Graph/interface'
 import pathGet from '../../system/core/object/DeepGet/f'
-import assocPath from '../../system/core/object/DeepSet/f'
+import deepSet from '../../system/core/object/DeepSet/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { GraphComponentSpec, GraphSubComponentSpec } from '../../types'
@@ -90,7 +90,7 @@ export const setSubComponentSize = (
   { id, width, height }: { id: string; width: number; height: number },
   state: GraphComponentSpec
 ): GraphComponentSpec => {
-  return assocPath(
+  return deepSet(
     state,
     ['subComponents', id],
     merge(state.subComponents[id], { width, height })
@@ -101,7 +101,7 @@ export const setSubComponentChildren = (
   { id, children }: { id: string; children: string[] },
   state: GraphComponentSpec
 ): GraphComponentSpec => {
-  return assocPath(state, ['subComponents', id, 'children'], children)
+  return deepSet(state, ['subComponents', id, 'children'], children)
 }
 
 export const removeSubComponentChild = (

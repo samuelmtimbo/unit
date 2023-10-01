@@ -1,0 +1,36 @@
+{
+  "name": "paragraph",
+  "type": "`U`&`C`&`V`&`J`",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": ["{}", "{background:'red'}"]
+      }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML h3 heading element",
+    "complexity": 20,
+    "tags": ["platform", "component"]
+  },
+  "id": "2a5ad480-9d38-4918-8774-41fac7b54203",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "system": true,
+  "render": true
+}

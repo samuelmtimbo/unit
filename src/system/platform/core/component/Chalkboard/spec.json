@@ -100,8 +100,8 @@
         "obj": {}
       },
       "output": {
-        "clientY": {},
-        "clientX": {}
+        "y": {},
+        "x": {}
       },
       "metadata": {
         "position": {
@@ -318,7 +318,7 @@
       },
       "propclientxclienty": {
         "output": {
-          "clientX": true
+          "x": true
         }
       }
     },
@@ -330,7 +330,7 @@
       },
       "propclientxclienty": {
         "output": {
-          "clientY": true
+          "y": true
         }
       }
     },

@@ -153,7 +153,6 @@ import {
   GraphBulkEditData,
   GraphCoverPinData,
   GraphCoverPinSetData,
-  GraphExplodeUnitData,
   GraphExposePinData,
   GraphExposePinSetData,
   GraphMoveSubComponentRootData,
@@ -2598,8 +2597,6 @@ export class Graph<I = any, O = any>
     let pinSpec = null
 
     this._forEachSpecPinOfType(type, (pinId, subPinId, subPinSpec) => {
-      const { mergeId } = subPinSpec
-
       if (subPinSpec.mergeId === mergeId) {
         pinSpec = { pinId, subPinId }
       }
@@ -3626,7 +3623,7 @@ export class Graph<I = any, O = any>
 
     const _merges = clone(merges)
 
-    forEachPinOnMerges(clone(merges), (mergeId, mergeUnitId, type, pinId) => {
+    forEachPinOnMerges(_merges, (mergeId, mergeUnitId, type, pinId) => {
       const merge = clone(this.getMergeSpec(mergeId))
 
       if (mergeUnitId === unitId) {
@@ -3636,7 +3633,43 @@ export class Graph<I = any, O = any>
           const mergePinCount = getMergePinCount(merge)
 
           if (mergePinCount < 2) {
+            const mergeInputPlug = this.findMergeExposedSubPin('input', mergeId)
+            const mergeOutputPlug = this.findMergeExposedSubPin(
+              'output',
+              mergeId
+            )
+
+            const mergeSpec = clone(this.getMergeSpec(mergeId))
+
+            delete mergeSpec[unitId]
+
+            const otherMergeUnitId = getObjSingleKey(mergeSpec)
+            const otherMergeUnitType = getObjSingleKey(
+              mergeSpec?.[otherMergeUnitId]
+            )
+            const otherMergeUnitPinId = getObjSingleKey(
+              mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType]
+            )
+
             this._specRemoveMerge(mergeId)
+
+            if (mergeInputPlug) {
+              this._specPlugPin(
+                'input',
+                mergeInputPlug.pinId,
+                mergeInputPlug.subPinId,
+                { unitId: otherMergeUnitId, pinId: otherMergeUnitPinId }
+              )
+            }
+
+            if (mergeOutputPlug) {
+              this._specPlugPin(
+                'output',
+                mergeOutputPlug.pinId,
+                mergeOutputPlug.subPinId,
+                { unitId: otherMergeUnitId, pinId: otherMergeUnitPinId }
+              )
+            }
           } else {
             this._specRemoveUnitFromMerge(unitId, mergeId)
           }
@@ -3667,7 +3700,42 @@ export class Graph<I = any, O = any>
       const mergePinCount = this.getMergePinCount(mergeId)
 
       if (mergePinCount - unitMergeCount < 2) {
+        const mergeInputPlug = this.findMergeExposedSubPin('input', mergeId)
+        const mergeOutputPlug = this.findMergeExposedSubPin('output', mergeId)
+
+        const mergeSpec = clone(this.getMergeSpec(mergeId))
+
+        delete mergeSpec[unitId]
+
+        const otherMergeUnitId = getObjSingleKey(mergeSpec)
+        const otherMergeUnitType = getObjSingleKey(
+          mergeSpec?.[otherMergeUnitId]
+        )
+        const otherMergeUnitPinId = getObjSingleKey(
+          mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType]
+        )
+
         this._simRemoveMerge(mergeId, take)
+
+        if (mergeInputPlug) {
+          this._simPlugPin(
+            'input',
+            mergeInputPlug.pinId,
+            mergeInputPlug.subPinId,
+            { unitId: otherMergeUnitId, pinId: otherMergeUnitPinId },
+            false
+          )
+        }
+
+        if (mergeOutputPlug) {
+          this._simPlugPin(
+            'output',
+            mergeOutputPlug.pinId,
+            mergeOutputPlug.subPinId,
+            { unitId: otherMergeUnitId, pinId: otherMergeUnitPinId },
+            false
+          )
+        }
       } else {
         this._simRemoveUnitFromMerge(unitId, mergeId, take)
       }
@@ -5881,11 +5949,6 @@ export class Graph<I = any, O = any>
             const { parentId, childId, to } = data
 
             this._reorderSubComponent(parentId, childId, to)
-          },
-          explodeUnit: (data: GraphExplodeUnitData) => {
-            const { unitId, mapUnitId, mapMergeId, mapPlugId } = data
-
-            this._explodeUnit(unitId, mapUnitId, mapMergeId, mapPlugId)
           },
           // TODO move removePinData to Unit's bulkEdit
           removePinData: (data: UnitRemovePinDataData) => {

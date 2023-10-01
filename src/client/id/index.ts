@@ -527,6 +527,12 @@ export function camelToSnake(str: string): string {
   return kebab
 }
 
+export function camelToDashed(str: string): string {
+  const segments = str.split(/(?=[A-Z])/)
+  const kebab = segments.map((_str) => _str.toLowerCase()).join('-')
+  return kebab
+}
+
 export function kebabCase(str: string): string {
   return str.toLowerCase().replace(' ', '-')
 }

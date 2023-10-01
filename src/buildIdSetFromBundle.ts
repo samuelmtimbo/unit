@@ -26,7 +26,7 @@ export function buildIdSet(
     const { id, input = {} } = unit
 
     for (const inputId in input) {
-      const _input = input[inputId]
+      const _input = input[inputId] ?? {}
 
       const { data } = _input
 

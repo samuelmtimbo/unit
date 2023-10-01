@@ -46,7 +46,7 @@ export function treeComplexity(
       const { id, input = {} } = unit
 
       for (const inputId in input) {
-        const _input = input[inputId]
+        const _input = input[inputId] ?? {}
 
         if (_input.data !== undefined) {
           const l = _input.data.length

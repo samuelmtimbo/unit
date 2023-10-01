@@ -1,6 +1,6 @@
 import { Element } from '../../../../../client/element'
 import { parseRelativeUnit } from '../../../../../client/parseRelativeUnit'
-import applyStyle, { reactToFrameSize } from '../../../../../client/style'
+import { applyStyle, reactToFrameSize } from '../../../../../client/style'
 import { COLOR_WHITE, defaultThemeColor } from '../../../../../client/theme'
 import { replaceChild } from '../../../../../client/util/replaceChild'
 import { userSelect } from '../../../../../client/util/style/userSelect'
@@ -94,8 +94,10 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     canvas_el.draggable = false
 
     this._canvas_el = canvas_el
-    const context = canvas_el.getContext('2d')
+    const context = canvas_el.getContext('2d', { willReadFrequently: true })
     this._context = context
+
+    this._context
 
     if (old_canvas_el) {
       replaceChild(old_canvas_el, canvas_el)
@@ -190,16 +192,21 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     if (prop === 'style') {
       const final_style = { ...DEFAULT_STYLE, ...current }
 
-      const color = this._get_fill_style()
-
-      this._context.fillStyle = color
-      this._context.strokeStyle = color
+      const color = this._get_fill_style().toLowerCase()
 
       applyStyle(this._canvas_el, final_style)
 
-      clearCanvas(this._context)
+      if (
+        this._context.fillStyle !== color ||
+        this._context.strokeStyle !== color
+      ) {
+        this._context.fillStyle = color
+        this._context.strokeStyle = color
 
-      this._redraw()
+        clearCanvas(this._context)
+
+        this._redraw()
+      }
     } else if (prop === 'width') {
       this._unlisten_frame_width()
 
@@ -342,15 +349,27 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   }
 
   drawImage(
-    imageBitmap: ImageBitmap,
+    image: ImageBitmap | HTMLVideoElement,
     x: number,
     y: number,
     width: number,
     height: number
   ) {
-    // console.log('Canvas', 'drawImage', imageBitmap)
-
-    this._context.drawImage(imageBitmap, x, y, width, height)
+    if (image instanceof ImageBitmap) {
+      this._context.drawImage(
+        image,
+        0,
+        0,
+        image.width,
+        image.height,
+        x,
+        y,
+        width,
+        height
+      )
+    } else if (image instanceof HTMLVideoElement) {
+      this._context.drawImage(image, x, y, width, height)
+    }
   }
 
   strokePath(d: string) {
@@ -410,5 +429,17 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     } else {
       throw new APINotSupportedError('Capture Stream')
     }
+  }
+
+  putImageData(
+    image: ImageData,
+    dx: number,
+    dy: number,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): void {
+    this._context.putImageData(image, dx, dy, x, y, width, height)
   }
 }

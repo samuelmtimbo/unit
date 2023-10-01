@@ -51,7 +51,7 @@ export default class Detach extends Semifunctional<I, O> {
       case 'done':
         this._i.component.emit('call', {
           method: 'attach',
-          data: [{ opt: this._i.opt }],
+          data: [this._i.opt],
         })
 
         this._done()

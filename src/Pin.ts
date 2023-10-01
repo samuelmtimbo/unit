@@ -105,11 +105,7 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
       if (this._constant) {
         //
       } else {
-        if (this._ref) {
-          //
-        } else {
-          this.take()
-        }
+        this.take()
       }
     }
     return data

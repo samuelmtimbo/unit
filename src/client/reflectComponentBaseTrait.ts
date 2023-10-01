@@ -1,16 +1,15 @@
-import { joinLeafPath } from '../system/platform/component/app/Editor/Component'
+import { joinLeafPath } from '../system/platform/component/app/Editor/joinLeafPath'
 import { LayoutBase } from '../system/platform/component/app/Editor/layout'
 import { Style } from '../system/platform/Props'
 import { Tree } from '../Tree'
 import { Dict } from '../types/Dict'
 import { Component } from './component'
 import { LayoutNode } from './LayoutNode'
-import { reflectChildrenTrait } from './reflectChildrenTrait'
 
 export const getBaseStyle = (
   base: LayoutBase,
   parentPath: string[],
-  extractStyle: (leafId: string, component: Component) => Style
+  extractStyle: (leafId: string, leafComp: Component) => Style
 ) => {
   const base_style = base.map(([leaf_path, leaf_comp]) => {
     const leaf_id = joinLeafPath([...parentPath, ...leaf_path])
@@ -233,9 +232,14 @@ export const reflectComponentBaseTrait = (
   base: LayoutBase,
   style: Style,
   trait: LayoutNode,
-  extractStyle: (leafId: string, component: Component) => Style,
-  expand_children: boolean = true
+  extractStyle: (leafId: string, component: Component) => Style
 ): Dict<LayoutNode> => {
+  const {
+    api: {
+      layout: { reflectChildrenTrait },
+    },
+  } = root.$system
+
   const sub_component_id_slot: Dict<string> = {}
 
   const root_sub_sub_component_id: string[] = []
@@ -379,10 +383,11 @@ export const reflectComponentBaseTrait = (
     }
   }
 
-  const [all_root_trait, root_size] = reflectChildrenTrait(
+  const all_root_trait = reflectChildrenTrait(
     trait,
     style,
     all_root_style,
+    [],
     (path) => {
       let children = root_leaf_id
 
@@ -391,10 +396,7 @@ export const reflectComponentBaseTrait = (
       const slot_id = children[head]
 
       return expand_slot(slot_id, tail)
-    },
-    [],
-    null,
-    expand_children
+    }
   )
 
   let root_leaf_i = 0
@@ -415,15 +417,14 @@ export const reflectComponentBaseTrait = (
 
     const slot_trait: LayoutNode = all_leaf_trait[slot_id] || trait
 
-    const [slot_base_trait] = reflectChildrenTrait(
+    const slot_base_trait = reflectChildrenTrait(
       slot_trait,
       slot_style,
       slot_all_style,
+      [],
       (path) => {
         return expand_slot(slot_id, path)
-      },
-      [],
-      null
+      }
     )
 
     let leaf_i = 0

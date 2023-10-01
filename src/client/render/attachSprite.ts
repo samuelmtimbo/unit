@@ -1,5 +1,5 @@
 import { System } from '../../system'
-import namespaceURI from '../component/namespaceURI'
+import { namespaceURI } from '../component/namespaceURI'
 import { SPRITESHEET_ID } from '../ensureIcon'
 
 export function attachSprite(system: System): void {

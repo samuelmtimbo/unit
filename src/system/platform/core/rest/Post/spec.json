@@ -57,7 +57,7 @@
       "id": "c5856fdc-5154-46ab-a414-47f37af39da1",
       "input": {
         "url": {},
-        "options": {}
+        "opt": {}
       },
       "output": {
         "response": {}
@@ -80,7 +80,7 @@
       },
       "fetch": {
         "input": {
-          "options": true
+          "opt": true
         },
         "output": {}
       }

@@ -1,0 +1,36 @@
+{
+  "name": "header 1",
+  "type": "`U`&`C`&`V`&`J`",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": ["{}", "{background:'red'}"]
+      }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML h3 heading element",
+    "complexity": 20,
+    "tags": ["platform", "component"]
+  },
+  "id": "dd7616e2-2e64-4d9c-b13e-ca7efeacd982",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "system": true,
+  "render": true
+}

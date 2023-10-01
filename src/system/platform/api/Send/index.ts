@@ -1,3 +1,4 @@
+import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
@@ -32,7 +33,13 @@ export default class Send<T> extends Functional<I<T>, O<T>> {
 
   async f({ channel, data }: I<T>, done: Done<O<T>>) {
     try {
-      await channel.send(data)
+      let _data = data
+
+      if (_data instanceof $) {
+        _data = await _data.raw()
+      }
+
+      await channel.send(_data)
     } catch (err) {
       done(undefined, err.message)
 

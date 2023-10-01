@@ -34,12 +34,22 @@ export const CLASS_TYPE_AUDIO_CONTEXT = 'AC' // AudioContext
 export const CLASS_TYPE_AUDIO_OSCILLATOR_NODE = 'ON' // OscillatorNode
 export const CLASS_TYPE_AUDIO_NODE = 'ON' // AudioNode
 export const CLASS_TYPE_DATE = 'D' // Date
+export const CLASS_TYPE_IMAGE_CAPTURE = 'IC' // ImageCapture
+export const CLASS_TYPE_IMAGE_BITMAP_RENDERING_CONTEXT = 'IBRC' // ImageBitmapRenderingContext
+export const CLASS_TYPE_IMAGE = 'IM' // IMage
+export const CLASS_TYPE_IMAGE_DATA = 'ID' // ImageData
+export const CLASS_TYPE_WRAPER = 'WP' // WraPer
+export const CLASS_TYPE_WINDOW = 'W' // Window
+export const CLASS_TYPE_MEDIA_ELEMENT = 'ME' // MediaElement
 
 export const INHERITANCE = {
   U: ['EE'],
   G: ['U'],
+  C: ['U'],
   V: ['EE'],
   CH: ['EE'],
+  IB: ['I'],
+  W: ['EE', 'CH'],
 }
 
 export type AllTypes<T> = {

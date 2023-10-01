@@ -79,11 +79,9 @@
       "getbody": {
         "input": {
           "{body}": true
-        },
-        "output": {}
+        }
       },
       "postJSON": {
-        "input": {},
         "output": {
           "response": true
         }

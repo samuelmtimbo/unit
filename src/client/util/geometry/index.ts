@@ -711,3 +711,10 @@ export const vectorAngle = (p0: Point, p1: Point): number => {
   }
   return a / DEG
 }
+
+export const roundPosition = (position: Position): Position => {
+  return {
+    x: Math.round(position.x),
+    y: Math.round(position.y),
+  }
+}

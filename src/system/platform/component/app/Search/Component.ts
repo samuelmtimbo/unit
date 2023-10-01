@@ -1,6 +1,7 @@
 import * as fuzzy from 'fuzzy'
 import { Registry } from '../../../../../Registry'
 import classnames from '../../../../../client/classnames'
+import debounce from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeFocusInListener } from '../../../../../client/event/focus/focusin'
@@ -96,6 +97,16 @@ export function isSpecVisible(specs: Specs, id: string): boolean {
   } else {
     return true
   }
+}
+
+export function isSpecFuzzyMatch(str: string, pattern: string) {
+  const cleanPattern = removeWhiteSpace(pattern.replace('-', ' '))
+
+  const isMatch = fuzzy.match(cleanPattern, str, {
+    caseSensitive: false,
+  })
+
+  return isMatch
 }
 
 export default class Search extends Element<HTMLDivElement, Props> {
@@ -292,6 +303,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
     }
 
     this.registerRoot(search)
+
+    this._listen_registry()
   }
 
   private _reset = () => {
@@ -390,7 +403,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._registry_unlisten = this._registry.specs_.subscribe(
       [],
       '*',
-      (type, path, key, data) => {
+      debounce((type, path, key, data) => {
         const { specs } = this._registry
 
         const specId = key
@@ -414,7 +427,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
               this._refresh_ordered_list()
               this._filter_list(true)
 
-              if (!this._list_hidden) {
+              if (!this._list_hidden && selected_item_id) {
                 this._set_selected_item_id(selected_item_id, false)
               }
             }
@@ -440,7 +453,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
             }
           }
         }
-      }
+      }, 100)
     )
 
     this._reset()
@@ -894,13 +907,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
       const { fuzzyName } = this._item[id]
       const list_item_div = this._list_item_div[id]
 
-      const clean_fuzzy_pattern = removeWhiteSpace(
-        fuzzy_pattern.replace('-', ' ')
-      )
-
-      const fuzzy_match = fuzzy.match(clean_fuzzy_pattern, fuzzyName, {
-        caseSensitive: false,
-      })
+      const fuzzy_match = isSpecFuzzyMatch(fuzzyName, fuzzy_pattern)
 
       if (
         (fuzzy_pattern === '' || fuzzy_match) &&
@@ -1092,17 +1099,19 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
   public onMount(): void {
     // console.log('Search', 'onMount')
-
-    this._listen_registry()
   }
 
   public onUnmount(): void {
     // console.log('Search', 'onUnmount')
-
-    this._unlisten_registry()
   }
 
   public onConnected(): void {
     // console.log('Search', 'onConnected')
+  }
+
+  onDestroy(): void {
+    // console.log('Search', 'onDestroy')
+
+    this._unlisten_registry()
   }
 }

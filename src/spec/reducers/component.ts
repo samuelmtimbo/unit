@@ -1,6 +1,6 @@
 import removeIndex from '../../system/core/array/RemoveIndex/f'
 import pathGet from '../../system/core/object/DeepGet/f'
-import assocPath from '../../system/core/object/DeepSet/f'
+import deepSet from '../../system/core/object/DeepSet/f'
 import dissocPath from '../../system/core/object/DeletePath/f'
 import $indexOf from '../../system/f/array/IndexOf/f'
 import { _insert } from '../../system/f/array/Insert/f'
@@ -42,7 +42,7 @@ export const setSubComponent = (
   { unitId, spec }: { unitId: string; spec: GraphSubComponentSpec },
   state: State
 ): State => {
-  return assocPath(state, ['subComponents', unitId], spec)
+  return deepSet(state, ['subComponents', unitId], spec)
 }
 
 export const removeSubComponent = (
@@ -74,7 +74,7 @@ export const setSubComponentSize = (
   { id, width, height }: { id: string; width: number; height: number },
   state: State
 ): State => {
-  return assocPath(
+  return deepSet(
     state,
     ['subComponents', id],
     merge(state.subComponents[id], { width, height })
@@ -85,7 +85,7 @@ export const setSubComponentChildren = (
   { id, children }: { id: string; children: string[] },
   state: State
 ): State => {
-  return assocPath(state, ['subComponents', id, 'children'], children)
+  return deepSet(state, ['subComponents', id, 'children'], children)
 }
 
 export const removeSubComponentChild = (
@@ -95,7 +95,7 @@ export const removeSubComponentChild = (
   const children = pathGet(state, ['subComponents', id, 'children'])
   const { i } = $indexOf({ 'a[]': children, a: childId })
   const { a: _children } = removeIndex({ a: children, i })
-  state = assocPath(state, ['subComponents', id, 'children'], _children)
+  state = deepSet(state, ['subComponents', id, 'children'], _children)
   return state
 }
 
@@ -106,7 +106,7 @@ export const appendSubComponentChild = (
   const { subComponents } = state
   const subComponent = subComponents[id] || {}
   const { children = [] } = subComponent
-  return assocPath(
+  return deepSet(
     state,
     ['subComponents', id, 'children'],
     [...children, childId]
@@ -120,7 +120,7 @@ export const insertSubComponentChild = (
   const { subComponents } = state
   const subComponent = subComponents[id] || {}
   const { children = [] } = subComponent
-  return assocPath(
+  return deepSet(
     state,
     ['subComponents', id, 'children'],
     _insert(children, at, childId)

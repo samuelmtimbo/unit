@@ -2,6 +2,8 @@ import { reflectChildrenTrait } from '../../client/reflectChildrenTrait'
 import isEqual from '../../system/f/comparisson/Equals/f'
 import * as assert from '../../util/assert'
 
+// DEPRECATED
+
 assert.deepEqual(
   reflectChildrenTrait(
     {
@@ -19,7 +21,7 @@ assert.deepEqual(
       { width: '100%', height: '100%' },
       { width: '100%', height: '100%' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -60,7 +62,7 @@ assert.deepEqual(
       { position: 'absolute', width: '100%', height: '100%' },
       { width: '100%', height: '100%' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -103,7 +105,7 @@ assert.deepEqual(
       { width: '100%', height: '100%' },
       { width: '100%', height: '100%' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -164,7 +166,7 @@ assert.deepEqual(
       { width: '100%', height: '100%' },
       { width: '100%', height: '100%' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -205,7 +207,7 @@ assert.deepEqual(
       { width: '100%', height: '100%' },
       { width: '100%', height: '100%' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -246,7 +248,7 @@ assert.deepEqual(
       { width: '100%', height: '100%' },
       { width: '100%', height: '100%' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -289,7 +291,7 @@ assert.deepEqual(
       { width: '100%', height: '100%' },
       { width: '100%', height: '100%' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -352,7 +354,7 @@ assert.deepEqual(
       { width: '100%', height: '100%' },
       { width: '100%', height: '100%' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -410,7 +412,7 @@ assert.deepEqual(
     },
     { display: 'flex', flexDirection: 'column' },
     [{ height: '30px' }, { height: '30px' }]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -453,7 +455,7 @@ assert.deepEqual(
       { height: '30px' },
       { height: '30px' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -516,7 +518,7 @@ assert.deepEqual(
       { width: '30px', height: '100%' },
       { width: '30px', height: '100%' },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -575,7 +577,7 @@ assert.deepEqual(
     },
     {},
     [{ height: '30px', width: '60px' }]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -604,7 +606,7 @@ assert.deepEqual(
     },
     { display: 'flex', flexDirection: 'column' },
     [{ height: '30px', width: '60px' }]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -632,7 +634,7 @@ assert.deepEqual(
     },
     { display: 'flex', flexDirection: 'row' },
     [{ height: '30px', width: '60px' }]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -661,7 +663,7 @@ assert.deepEqual(
     },
     { display: 'flex', flexDirection: 'row' },
     [{ height: '30.1px', width: '60.1px' }]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -695,7 +697,7 @@ assert.deepEqual(
       alignItems: 'center',
     },
     [{ height: '30px', width: '60px' }]
-  )[0],
+  ),
   [
     {
       x: 20,
@@ -729,7 +731,7 @@ assert.deepEqual(
       padding: '10px',
     },
     [{ height: '30px', width: '60px' }]
-  )[0],
+  ),
   [
     {
       x: 20,
@@ -765,7 +767,7 @@ assert.deepEqual(
       { height: '30px', width: '30px' },
       { height: '30px', width: '30px' },
     ]
-  )[0],
+  ),
   [
     {
       x: 20,
@@ -811,7 +813,7 @@ assert.deepEqual(
       { height: '30px', width: '30px' },
       { height: '30px', width: '30px' },
     ]
-  )[0],
+  ),
   [
     {
       x: 35,
@@ -863,7 +865,7 @@ assert.deepEqual(
       },
       { height: '30px', width: '30px' },
     ]
-  )[0],
+  ),
   [
     {
       x: 45,
@@ -909,7 +911,7 @@ assert.deepEqual(
         width: '50px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 50,
@@ -952,7 +954,7 @@ assert.deepEqual(
         width: '50px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 20,
@@ -1005,7 +1007,7 @@ assert.deepEqual(
         width: '50%',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 20,
@@ -1050,7 +1052,7 @@ assert.deepEqual(
         transform: 'translate(50%, 50%)',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 25,
@@ -1087,7 +1089,7 @@ assert.deepEqual(
         transform: 'translate(50px, 50px)',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 100,
@@ -1129,7 +1131,7 @@ assert.deepEqual(
       },
       { height: '30px', width: '30px' },
     ]
-  )[0],
+  ),
   [
     {
       x: 10,
@@ -1175,7 +1177,7 @@ assert.deepEqual(
         width: 'calc(50%-6px)',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1215,7 +1217,7 @@ assert.deepEqual(
         height: '100%',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1262,7 +1264,7 @@ assert.deepEqual(
         width: '100%',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1312,7 +1314,7 @@ assert.deepEqual(
         width: '40px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1392,7 +1394,7 @@ assert.deepEqual(
         width: '40px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1480,7 +1482,7 @@ assert.deepEqual(
         width: '40px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1567,7 +1569,7 @@ assert.deepEqual(
         transform: 'translate(-50%, -50%)',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 25,
@@ -1604,7 +1606,7 @@ assert.deepEqual(
         transform: 'translate(-50%, -50%)',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 50,
@@ -1682,7 +1684,7 @@ assert.deepEqual(
         ]
       }
     }
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1732,7 +1734,7 @@ assert.deepEqual(
         ]
       }
     }
-  )[0],
+  ),
   [
     {
       x: 25,
@@ -1766,7 +1768,7 @@ assert.deepEqual(
         border: '3px solid white',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1800,7 +1802,7 @@ assert.deepEqual(
         border: '3px solid',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1836,7 +1838,7 @@ assert.deepEqual(
         border: '3px solid',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1877,7 +1879,7 @@ assert.deepEqual(
         border: '3px solid',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -1921,7 +1923,7 @@ assert.deepEqual(
         margin: '10px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 10,
@@ -1957,7 +1959,7 @@ assert.deepEqual(
         margin: '10px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 30,
@@ -1994,7 +1996,7 @@ assert.deepEqual(
         width: '50px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 25,
@@ -2032,7 +2034,7 @@ assert.deepEqual(
         width: '50px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 25,
@@ -2075,7 +2077,7 @@ assert.deepEqual(
         top: '75px',
       },
     ]
-  )[0],
+  ),
   [
     {
       x: 25,
@@ -2133,7 +2135,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 25,
@@ -2180,7 +2182,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2218,7 +2220,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 20,
@@ -2257,7 +2259,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 20,
@@ -2297,7 +2299,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 20,
@@ -2337,7 +2339,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2377,7 +2379,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 20,
@@ -2417,7 +2419,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2458,7 +2460,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2496,7 +2498,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2534,7 +2536,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2578,7 +2580,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2633,7 +2635,7 @@ assert.deepEqual(
     () => [{ height: '100px' }],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2685,7 +2687,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 60,
@@ -2731,7 +2733,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2767,7 +2769,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2803,7 +2805,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2839,7 +2841,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2875,7 +2877,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2916,7 +2918,7 @@ assert.deepEqual(
     () => [],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 50,
@@ -2956,7 +2958,7 @@ assert.deepEqual(
     () => [{ width: '50px', height: '100px' }],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -2997,7 +2999,7 @@ assert.deepEqual(
     () => [{ width: '50px', height: '100px' }],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -3033,7 +3035,7 @@ assert.deepEqual(
     () => [{ width: '50px', height: '100px' }],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -3069,7 +3071,7 @@ assert.deepEqual(
     () => [{ width: '50px', height: '100px' }],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -3112,7 +3114,7 @@ assert.deepEqual(
     () => [{ width: '50px', height: '100px' }],
     [],
     {}
-  )[0],
+  ),
   [
     {
       x: 0,
@@ -3136,3 +3138,56 @@ assert.deepEqual(
     },
   ]
 )
+// assert.deepEqual(
+//   reflectChildrenTrait(
+//     {
+//       x: 0,
+//       y: 0,
+//       width: 300,
+//       height: 100,
+//       fontSize: 10,
+//       sx: 1,
+//       sy: 1,
+//       opacity: 1,
+//     },
+//     {
+//       display: 'flex',
+//       flexDirection: 'row',
+//     },
+//     [
+//       {
+//         width: '100px',
+//         height: '100px',
+//       },
+//       {
+//         width: '100%',
+//         height: '100px',
+//       },
+//     ],
+//     () => [],
+//     [],
+//     {}
+//   ),
+//   [
+//     {
+//       x: 0,
+//       y: 0,
+//       width: 75,
+//       height: 100,
+//       fontSize: 10,
+//       sx: 1,
+//       sy: 1,
+//       opacity: 1,
+//     },
+//     {
+//       x: 0,
+//       y: 100,
+//       width: 225,
+//       height: 100,
+//       fontSize: 10,
+//       sx: 1,
+//       sy: 1,
+//       opacity: 1,
+//     },
+//   ]
+// )

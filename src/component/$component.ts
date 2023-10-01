@@ -3,7 +3,7 @@ import { Callback } from '../types/Callback'
 import { $Component } from '../types/interface/async/$Component'
 import { Async } from '../types/interface/async/Async'
 import { Component_ } from '../types/interface/Component'
-import { W } from '../types/interface/W'
+import { WP } from '../types/interface/WP'
 import { UnitBundle } from '../types/UnitBundle'
 import { $Child } from './Child'
 import { $Children } from './Children'
@@ -76,7 +76,7 @@ export function $refChild(
 }
 
 export function $refChildContainer(
-  component: W,
+  component: WP,
   { at, _ }: { at: number; _: string[] }
 ): $Component {
   const container = component.refChildContainer(at)
@@ -85,7 +85,7 @@ export function $refChildContainer(
 }
 
 export function $refParentRootContainer(
-  component: W,
+  component: WP,
   { at, _ }: { at: number; _: string[] }
 ): $Component {
   const container = component.refParentRootContainer(at)
@@ -94,7 +94,7 @@ export function $refParentRootContainer(
 }
 
 export function $refParentChildContainer(
-  component: W,
+  component: WP,
   { at, _ }: { at: number; _: string[] }
 ): $Component {
   const container = component.refParentChildContainer(at)

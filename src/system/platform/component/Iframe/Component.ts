@@ -1,8 +1,9 @@
 import { Element } from '../../../../client/element'
 import { PropHandler, htmlPropHandler } from '../../../../client/propHandler'
-import applyStyle from '../../../../client/style'
+import { applyStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { pull, push } from '../../../../util/array'
 import { randomId } from '../../../../util/id'
 
 export interface Props {
@@ -88,6 +89,8 @@ export default class Iframe extends Element<
 
     this.$element = slot_el
     this.$node = iframe_el
+
+    push(this.$system.cache.iframe, this)
   }
 
   onPropChanged(prop: string, current: any): void {
@@ -151,5 +154,9 @@ export default class Iframe extends Element<
     // console.log('Iframe', 'send', data)
 
     this._iframe_el.contentWindow.postMessage(data, '*')
+  }
+
+  onDestroy(): void {
+    pull(this.$system.cache.iframe, this)
   }
 }

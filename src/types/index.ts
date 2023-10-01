@@ -69,7 +69,14 @@ export type PinsSpec = Dict<PinSpec>
 
 export type Classes = Dict<UnitClass<any>>
 
-export type DatumSpec = string
+export type DatumSpec = {
+  value: string
+  metadata?: DatumMetadataSpec
+}
+
+export type DatumMetadataSpec = {
+  position?: Position
+}
 
 export type GraphDataSpec = Dict<DatumSpec>
 

@@ -10,7 +10,7 @@ export interface Props {
 export const DEFAULT_STYLE = {
   cursor: 'pointer',
   color: 'currentColor',
-  touchAction: 'none',
+  'touch-action': 'none',
 }
 
 export default class Client extends Element<HTMLDivElement, Props> {

@@ -6,6 +6,7 @@ import { GraphUnitsSpec } from './GraphUnitsSpec'
 import { None } from './None'
 
 export type GraphSpec = GraphSpecBase & {
+  version?: string
   base?: false
   type?: '`U`&`G`' | '`U`&`G`&`C`'
   method?: boolean

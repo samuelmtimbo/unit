@@ -1,4 +1,4 @@
-import namespaceURI from '../../../../client/component/namespaceURI'
+import { namespaceURI } from '../../../../client/component/namespaceURI'
 import { Element } from '../../../../client/element'
 import { ensureIcon } from '../../../../client/ensureIcon'
 import { elementPropHandler, PropHandler } from '../../../../client/propHandler'

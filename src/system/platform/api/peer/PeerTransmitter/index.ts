@@ -116,7 +116,7 @@ export default class PeerTransmitter<T>
 
   onRefInputData(name: string, unit: MS): void {
     // if (name === 'stream') {
-    unit.get((_stream: MediaStream) => {
+    unit.mediaStream((_stream: MediaStream) => {
       if (_stream === null) {
         if (this._stream) {
           this._remove_stream(this._stream)

@@ -1,7 +1,6 @@
 import { writeFileSync } from 'fs'
 import { build } from '../build'
-
-(async () => {
+;(async () => {
   const result = await build({
     minify: true,
     sourcemap: false,
@@ -12,9 +11,10 @@ import { build } from '../build'
       'globalThis.env': '{"NODE_ENV": "production"}',
     },
     outfile: 'public/index.js',
+    metafile: true,
   })
 
   writeFileSync('public/build.json', JSON.stringify(result.metafile ?? {}))
-})();
+})()
 
 export default null

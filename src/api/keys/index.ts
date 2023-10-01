@@ -50,7 +50,7 @@ export async function newPublicKey($system: System): Promise<string> {
     },
   } = $system
 
-  const localStorage = local(undefined)
+  const localStorage = local()
 
   if (!localStorage) {
     throw new APINotSupportedError('Local Storage')

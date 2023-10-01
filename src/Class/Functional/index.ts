@@ -138,12 +138,15 @@ export class Functional<
       this._active_o_count === 0
     ) {
       this._looping = false
+
       this._backward_all()
 
       // without setTimeout an infinite loop will turn into a stack overflow
       // setTimeout(() => {
       this._forward_if_ready()
       // }, 0)
+
+      // this.__system.tick(this._forward_if_ready.bind(this))
     }
   }
 

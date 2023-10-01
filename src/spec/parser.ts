@@ -627,7 +627,10 @@ export function _isValidType(tree: TreeNode): boolean {
               !_isValidType(value)) &&
             (element.value !== '' || index !== tree.children.length - 1)
           )
-        } else if (_isValidObjKeyType(element) || element.value === '') {
+        } else if (
+          _isValidObjKeyType(element) ||
+          (element.value === '' && index === tree.children.length - 1)
+        ) {
           return false
         }
 
@@ -887,8 +890,6 @@ export function getValueTree(
     }
   )
 }
-
-const a = { foo: '"bar}' }
 
 function execComposed(
   str: string,
@@ -1565,9 +1566,9 @@ function _getDelimiterSeparated(
     ) {
       const childString = value.substring(lastStop, pos)
 
-      if (_isEmtpyString(childString)) {
-        break
-      }
+      // if (_isEmtpyString(childString)) {
+      //   break
+      // }
 
       children.push(_getTree(childString, keyValue, ignoreKeyword))
       lastStop = pos + 1
@@ -1701,12 +1702,14 @@ export function _getNextNodePath(
   direction: 1 | -1
 ): number[] | null {
   const paths = _getNodePaths(root)
+
   for (let i = 0; i < paths.length; i++) {
     const p = paths[i]
     if (_pathEqual(path, p)) {
       return paths[i + direction]
     }
   }
+
   return null
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "get clientX clientY",
   "units": {
-    "propclientx": {
+    "getclientx": {
       "id": "4556afd4-2463-48c8-abb6-12e30fff6ed0",
       "input": {
         "event": {}
@@ -10,7 +10,7 @@
         "clientX": {}
       }
     },
-    "propclientcy": {
+    "getclienty": {
       "id": "97c4f4ec-2613-11eb-8c54-4b82dde232ca",
       "input": {
         "event": {}
@@ -22,12 +22,12 @@
   },
   "merges": {
     "0": {
-      "propclientcy": {
+      "getclienty": {
         "input": {
           "event": true
         }
       },
-      "propclientx": {
+      "getclientx": {
         "input": {
           "event": true
         }
@@ -45,19 +45,19 @@
     }
   },
   "outputs": {
-    "clientY": {
+    "y": {
       "plug": {
         "0": {
-          "unitId": "propclientcy",
+          "unitId": "getclienty",
           "pinId": "clientY"
         }
       },
       "type": "number"
     },
-    "clientX": {
+    "x": {
       "plug": {
         "0": {
-          "unitId": "propclientx",
+          "unitId": "getclientx",
           "pinId": "clientX"
         }
       },

@@ -1,4 +1,3 @@
-import Iframe from '../system/platform/component/Iframe/Component'
 import { Component } from './component'
 import { LayoutNode } from './LayoutNode'
 import { Size } from './util/geometry/types'
@@ -11,28 +10,12 @@ export const extractTrait = (
 ): LayoutNode => {
   const leaf_context = leaf_comp.$context
 
-  let { $element } = leaf_comp
+  let { $node } = leaf_comp
 
-  if (leaf_comp instanceof Iframe) {
-    $element = leaf_comp._iframe_el
-  }
+  if ($node instanceof HTMLElement || $node instanceof SVGElement) {
+    let { width, height } = getSize($node)
 
-  // const leaf_context_position = {
-  //   x: leaf_context.$x,
-  //   y: leaf_context.$y,
-  // }
-
-  if ($element instanceof HTMLElement || $element instanceof SVGElement) {
-    // const relative_position = getRelativePosition(
-    //   $element,
-    //   leaf_context.$element
-    // )
-
-    // let { x, y } = addVector(leaf_context_position, relative_position)
-
-    let { width, height } = getSize($element)
-
-    const { x, y } = getPosition($element)
+    const { x, y } = getPosition($node)
     const { sx, sy } = leaf_comp.getScale()
     const fontSize: number = leaf_comp.getFontSize()
     const opacity: number = leaf_comp.getOpacity()
@@ -41,7 +24,7 @@ export const extractTrait = (
     height /= Math.abs(sy)
 
     return { x, y, width, height, sx, sy, opacity, fontSize }
-  } else if ($element instanceof Text) {
+  } else if ($node instanceof Text) {
     const fontSize = leaf_comp.getFontSize()
 
     let x: number
@@ -52,9 +35,9 @@ export const extractTrait = (
     let sy: number = 1
     let opacity: number = 1
 
-    ;({ width = width, height = height } = getSize($element))
+    ;({ width = width, height = height } = getSize($node))
 
-    const position = getRelativePosition($element, leaf_context.$element)
+    const position = getRelativePosition($node, leaf_context.$element)
 
     let parent_trait: LayoutNode
 

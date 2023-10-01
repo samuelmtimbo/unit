@@ -98,9 +98,9 @@ export const removeUnitMerges = (
   { unitId }: { unitId: string },
   spec: GraphSpec
 ): void => {
-  const { merges = {} } = spec
+  const { merges = {} } = clone(spec)
 
-  const removedMergeIds: { [id: string]: true } = {}
+  const removedMergeIdSet: Set<string> = new Set()
 
   forEachValueKey(merges, (merge, mergeId: string) => {
     if (merge[unitId]) {
@@ -109,7 +109,7 @@ export const removeUnitMerges = (
       if (getMergePinCount(spec.merges![mergeId]) < 2) {
         pathDelete(spec, ['merges', mergeId])
 
-        removedMergeIds[mergeId] = true
+        removedMergeIdSet.add(mergeId)
       }
     }
   })
@@ -127,26 +127,30 @@ export const removeUnitMerges = (
 
         const { mergeId } = subPin
 
-        if (mergeId && removedMergeIds[mergeId]) {
-          for (const unitId in merges[mergeId]) {
-            if (unitId !== unitId) {
-              const pinId = getObjSingleKey(
-                pathOrDefault(merges, [mergeId, unitId, type], {})
-              )
+        if (mergeId && removedMergeIdSet.has(mergeId)) {
+          const mergeSpec = clone(merges[mergeId])
 
-              if (pinId) {
-                pathSet(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {
-                  unitId,
-                  pinId,
-                })
+          delete mergeSpec[unitId]
 
-                break
-              } else {
-                pathSet(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {})
+          const mergePinCount = getMergePinCount(mergeSpec)
 
-                break
-              }
-            }
+          if (mergePinCount > 1) {
+            continue
+          } else if (mergePinCount === 1) {
+            const otherMergeUnitId = getObjSingleKey(mergeSpec)
+            const otherMergeUnitType = getObjSingleKey(
+              mergeSpec?.[otherMergeUnitId]
+            )
+            const otherMergeUnitPinId = getObjSingleKey(
+              mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType]
+            )
+
+            pathSet(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {
+              unitId: otherMergeUnitId,
+              pinId: otherMergeUnitPinId,
+            })
+          } else {
+            //
           }
         }
       }
@@ -463,10 +467,7 @@ export const exposeInput = (
   }: { pinId: string; subPinId: string; input: GraphSubPinSpec },
   spec: GraphSpec
 ): void => {
-  return exposePin(
-    { pinId, subPinId, subPinSpec: input, type: 'input' },
-    spec
-  )
+  return exposePin({ pinId, subPinId, subPinSpec: input, type: 'input' }, spec)
 }
 
 export const plugPin = (

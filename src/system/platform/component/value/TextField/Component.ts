@@ -44,6 +44,7 @@ export default class TextField extends Field<HTMLInputElement, Props> {
     // this.$element.autocorrect = 'off'
     this.$element.autocapitalize = 'off'
     this.$element.inputMode = 'text'
+    // this.$element.autofocus = false
 
     if (defaultInputModeNone) {
       this.$element.inputMode = 'none'

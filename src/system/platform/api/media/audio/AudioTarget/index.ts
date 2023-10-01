@@ -34,7 +34,7 @@ export default class AudioTarget extends Functional<I, O> {
   }
 
   async f({ stream, id }: I) {
-    stream.get((_stream) => {
+    stream.mediaStream((_stream) => {
       this._audio.srcObject = _stream
     })
 

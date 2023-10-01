@@ -1,5 +1,5 @@
 import { System } from '../../system'
-import namespaceURI from '../component/namespaceURI'
+import { namespaceURI } from '../component/namespaceURI'
 import resizeWith from '../resizeWith'
 
 export function attachSVG(system: System): void {

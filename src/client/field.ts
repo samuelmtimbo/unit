@@ -4,7 +4,7 @@ import { $Element } from '../types/interface/async/$Element'
 import { identity } from '../util/identity'
 import { Element } from './element'
 import { htmlPropHandler, inputPropHandler, PropHandler } from './propHandler'
-import applyStyle from './style'
+import { applyStyle } from './style'
 
 export type InputElement =
   | HTMLInputElement

@@ -23,13 +23,10 @@
   },
   "merges": {},
   "metadata": {
-    "icon": "brackets-curly",
+    "icon": "string",
     "description": "output an empty object",
     "complexity": 5,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "inputs": {
     "any": {
@@ -43,14 +40,14 @@
     }
   },
   "outputs": {
-    "{}": {
+    "\"\"": {
       "plug": {
         "0": {
           "unitId": "wait",
           "pinId": "a"
         }
       },
-      "type": "{}"
+      "type": "\"\""
     }
   },
   "id": "7c8e8a47-2225-4716-986e-1cb2af3ed3b3",

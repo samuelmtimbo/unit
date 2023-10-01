@@ -146,7 +146,13 @@ export class PositionObserver implements IPositionObserver {
         if (border) {
           const [borderSizeStr] = border.split(' ')
 
-          const borderSize = applyLayoutValue(borderSizeStr, 0)
+          let borderSize = 0
+
+          if (['thin', 'medium', 'thick'].includes(borderSizeStr)) {
+            // TODO
+          } else {
+            borderSize = applyLayoutValue(borderSizeStr, 0)
+          }
 
           px = borderSize
           py = borderSize
@@ -327,7 +333,6 @@ export class PositionObserver implements IPositionObserver {
 
             pushScrollParent(p)
 
-
             p = p.parentElement
           }
 
@@ -437,7 +442,6 @@ export class PositionObserver implements IPositionObserver {
 
     if (this._unlisten) {
       this._unlisten()
-      
       this._unlisten = undefined
     }
   }

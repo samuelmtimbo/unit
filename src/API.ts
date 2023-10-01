@@ -1,4 +1,5 @@
 import { IOElement } from './client/IOElement'
+import { LayoutNode } from './client/LayoutNode'
 import { Rect, Size } from './client/util/geometry/types'
 import {
   APIAlert,
@@ -6,8 +7,8 @@ import {
   APIHTTP,
   APIStorage,
   IFilePickerOpt,
-  IO_INIT,
 } from './system'
+import { Style } from './system/platform/Props'
 import { Dict } from './types/Dict'
 import {
   IBluetoothDevice,
@@ -82,14 +83,22 @@ export type API = {
     encodeURI?: (str: string) => string
     encodeURIComponent?: (str: string) => string
   }
+  layout: {
+    reflectChildrenTrait(
+      parentTrait: LayoutNode,
+      parentStyle: Style,
+      children: Style[],
+      path?: number[],
+      expandChild?: (path: number[]) => Style[]
+    ): LayoutNode[]
+  }
   speech: {
-    SpeechGrammarList: IO_INIT<ISpeechGrammarList, ISpeechGrammarListOpt>
-    SpeechRecognition: IO_INIT<ISpeechRecognition, ISpeechRecognitionOpt>
-    SpeechSynthesis: IO_INIT<ISpeechSynthesis, ISpeechSynthesisOpt>
-    SpeechSynthesisUtterance: IO_INIT<
-      ISpeechSynthesisUtterance,
-      ISpeechSynthesisUtteranceOpt
-    >
+    SpeechGrammarList: (opt: ISpeechGrammarListOpt) => ISpeechGrammarList
+    SpeechRecognition: (opt: ISpeechRecognitionOpt) => ISpeechRecognition
+    SpeechSynthesis: (opt: ISpeechSynthesis) => ISpeechSynthesisOpt
+    SpeechSynthesisUtterance: (
+      opt: ISpeechSynthesisUtteranceOpt
+    ) => ISpeechSynthesisUtterance
   }
   file: {
     isSaveFilePickerSupported: () => boolean
@@ -143,6 +152,7 @@ export type API = {
     AnalyserNode: AnalyserNode
     GainNode: GainNode
     DelayNode: DelayNode
+    ImageCapture: ImageCapture
     open: (url: string, target: string, features: string) => Window
   }
   document: {

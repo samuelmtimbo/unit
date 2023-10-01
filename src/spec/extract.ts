@@ -1,4 +1,4 @@
-import assocPath from '../system/core/object/DeepSet/f'
+import deepSet from '../system/core/object/DeepSet/f'
 import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphMergeSpec } from '../types/GraphMergeSpec'
@@ -94,9 +94,9 @@ export function extractSubSpec(
   for (const unitId in spec.units) {
     const unit = spec.units[unitId]
     if (subUnitSet.has(unitId)) {
-      newSpec = assocPath(newSpec, ['units', unitId], unit)
+      newSpec = deepSet(newSpec, ['units', unitId], unit)
     } else {
-      parentSpec = assocPath(parentSpec, ['units', unitId], unit)
+      parentSpec = deepSet(parentSpec, ['units', unitId], unit)
     }
   }
 
@@ -136,7 +136,7 @@ export function extractSubSpec(
       const newSpecTypeSubPinId = newSpecSubPinId[type]
       const subPinId = (newSpecTypeSubPinId[_pinId] ?? -1) + 1
       newSpecTypeSubPinId[_pinId] = subPinId
-      newSpec = assocPath(newSpec, [`${type}s`, _pinId], {
+      newSpec = deepSet(newSpec, [`${type}s`, _pinId], {
         plug: { [subPinId]: { unitId, pinId } },
       })
       unitMergePinRename[unitId][type][pinId] = _pinId
@@ -245,15 +245,15 @@ export function extractSubSpec(
         }
       }
       if (mergeTotalSelectedCount > 1) {
-        newSpec = assocPath(newSpec, ['merges', mergeId], newMerge)
+        newSpec = deepSet(newSpec, ['merges', mergeId], newMerge)
 
         if (mergeTotalSelectedCount < mergeTotalCount) {
-          parentSpec = assocPath(newSpec, ['merges', mergeId], parentMerge)
+          parentSpec = deepSet(newSpec, ['merges', mergeId], parentMerge)
         }
       }
 
       if (mergeTotalSelectedCount === mergeTotalCount) {
-        newSpec = assocPath(newSpec, ['merges', mergeId], newMerge)
+        newSpec = deepSet(newSpec, ['merges', mergeId], newMerge)
       }
     } else {
       const _merge: GraphMergeSpec = {}
@@ -274,7 +274,7 @@ export function extractSubSpec(
         }
       }
 
-      parentSpec = assocPath(parentSpec, ['merges', mergeId], _merge)
+      parentSpec = deepSet(parentSpec, ['merges', mergeId], _merge)
     }
   }
 

@@ -11,10 +11,12 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
     GainNode: window.GainNode,
     // @ts-ignore
     AnalyserNode: window.AnalyserNode,
-    // @ts-ignore 
+    // @ts-ignore
     MediaStreamAudioSourceNode: window.MediaStreamAudioSourceNode,
-    // @ts-ignore 
+    // @ts-ignore
     DelayNode: window.DelayNode,
+    // @ts-ignore
+    ImageCapture: window.ImageCapture,
     open(url: string, target: string, features: string) {
       return window.open(url, target, features)
     },

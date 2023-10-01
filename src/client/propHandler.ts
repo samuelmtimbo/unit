@@ -2,7 +2,7 @@ import { Style } from '../system/platform/Props'
 import { Dict } from '../types/Dict'
 import applyAttr from './applyAttr'
 import { Component } from './component'
-import applyStyle, { applyDynamicStyle } from './style'
+import { applyDynamicStyle, applyStyle } from './style'
 
 export type Handler = (value: any) => void
 

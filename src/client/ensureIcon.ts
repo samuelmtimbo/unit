@@ -1,5 +1,5 @@
 import { System } from '../system'
-import namespaceURI from './component/namespaceURI'
+import { namespaceURI } from './component/namespaceURI'
 import ICONS from './icons'
 
 export const SPRITESHEET_ID = '__SYSTEM__SPRITESHEET__'

@@ -9,10 +9,14 @@ export function wrapMediaStream(mediaStream: MediaStream, system: System): MS {
   const stream = new (class Stream extends $ implements MS {
     __: string[] = ['MS']
 
-    get(callback: Callback<MediaStream>): Unlisten {
+    mediaStream(callback: Callback<MediaStream>): Unlisten {
       callback(mediaStream)
 
       return NOOP
+    }
+
+    async getVideoTracks(): Promise<MediaStreamTrack[]> {
+      return mediaStream.getVideoTracks()
     }
   })(system)
 

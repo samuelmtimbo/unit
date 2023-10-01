@@ -9,7 +9,6 @@ import {
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphCoverUnitPinSetData,
-  GraphExplodeUnitData,
   GraphExposePinData,
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
@@ -89,7 +88,6 @@ export const G_METHOD_CALL_SET = [
   'mergeMerges',
   'setMetadata',
   'moveUnitInto',
-  'explodeUnit',
   'appendRoot',
   'removeRoot',
   'appendParentRoot',
@@ -212,7 +210,6 @@ export interface $G_C {
   $moveSubComponentRoot(data: GraphMoveSubComponentRootData): void
   $moveSubgraphInto(data: GraphMoveSubGraphIntoData): void
   $moveSubgraphOutOf(data: GraphMoveSubGraphIntoData): void
-  $explodeUnit(data: GraphExplodeUnitData): void
   $bulkEdit(data: GraphBulkEditData): void
 }
 

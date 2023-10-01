@@ -4,7 +4,7 @@ import { ID_WAIT } from '../../../_ids'
 
 export interface I<T> {
   a: T
-  signal: any
+  b: any
 }
 
 export interface O<T> {

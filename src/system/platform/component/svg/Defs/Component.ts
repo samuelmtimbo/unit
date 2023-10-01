@@ -1,7 +1,7 @@
-import namespaceURI from '../../../../../client/component/namespaceURI'
+import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
-import applyStyle from '../../../../../client/style'
+import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 

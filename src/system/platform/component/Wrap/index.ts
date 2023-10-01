@@ -4,7 +4,7 @@ import { bundleClass } from '../../../../spec/bundleClass'
 import { System } from '../../../../system'
 import { C } from '../../../../types/interface/C'
 import { Component_ } from '../../../../types/interface/Component'
-import { W } from '../../../../types/interface/W'
+import { WP } from '../../../../types/interface/WP'
 import { UnitBundle } from '../../../../types/UnitBundle'
 import { ID_PARENT, ID_WRAP } from '../../../_ids'
 import Parent from '../Parent'
@@ -17,7 +17,7 @@ export type O = {
   parent: C
 }
 
-export default class Wrap extends Element_<I, O> implements W {
+export default class Wrap extends Element_<I, O> implements WP {
   private _Container: UnitBundle = bundleClass(Parent, {
     unit: { id: ID_PARENT },
   })

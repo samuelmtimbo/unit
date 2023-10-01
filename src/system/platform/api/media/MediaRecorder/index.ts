@@ -54,7 +54,7 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
   f({ opt, stream }: I): void {
     const chunks = []
 
-    stream.get((_stream: MediaStream): void => {
+    stream.mediaStream((_stream: MediaStream): void => {
       if (this._media_recorder) {
         this._media_recorder.stop()
         this._media_recorder.ondataavailable = null

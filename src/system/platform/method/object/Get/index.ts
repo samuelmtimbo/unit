@@ -33,12 +33,16 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
   }
 
   async f({ obj, name }: I<T>, done: Done<O<T>>) {
-    try {
-      const value = await obj.get(name)
+    let value: any
 
-      done({ value })
+    try {
+      value = await obj.get(name)
     } catch (err) {
       done(undefined, err.message)
+
+      return
     }
+
+    done({ value })
   }
 }
