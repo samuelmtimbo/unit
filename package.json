@@ -28,7 +28,7 @@
     "tsc": "tsc",
     "rm": "shx rm -rf lib",
     "test": "ts-node -T src/test/index.ts",
-    "build": "run-s build:system build:client build:worker build:sw build:ext",
+    "build": "run-s build:system build:client build:sw build:ext",
     "build:bundle": "ts-node -T src/script/build/client.ts",
     "build:client": "run-s build:bundle build:worker",
     "build:system": "ts-node -T src/script/build/system.ts",
