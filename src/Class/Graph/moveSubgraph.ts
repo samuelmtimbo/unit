@@ -358,7 +358,7 @@ export function moveLinkPinInto(
 
   if (graphId === unitId) {
     const constant = target.isPinConstant(type, pinId)
-    
+
     const pinSpec = clone(target.getExposedPinSpec(type, pinId))
 
     if (mergeId && merge) {
@@ -648,7 +648,7 @@ export function moveMerge(
         // }
 
         if (target.hasMergePin(_mergeId, graphId, type, pinId)) {
-          target.removePinOrMerge(_mergeId, graphId, type, pinId, false, false)
+          target.removeMerge(_mergeId, false, false)
         }
 
         for (const graphMergeId in graphMerges) {
@@ -696,6 +696,7 @@ export function moveMerge(
                       mergeClone,
                       (unitId, unitPinType, pinId) => {
                         if (
+                          unitPinType !== type &&
                           !target.hasMergePin(
                             newMergeId,
                             unitId,
@@ -954,14 +955,18 @@ export function movePlug(
 ) {
   const currentPinSpec = source.getExposedPinSpec(type, pinId)
 
-  const plugCount = keyCount(currentPinSpec.plug ?? {})
+  let data: any
 
-  const data = source.getPinData(type, pinId)
+  if (currentPinSpec) {
+    const plugCount = keyCount(currentPinSpec.plug ?? {})
 
-  if (plugCount === 1) {
-    source.coverPinSet(type, pinId, false)
-  } else {
-    source.coverPin(type, pinId, subPinId, false)
+    data = source.getPinData(type, pinId)
+
+    if (plugCount === 1) {
+      source.coverPinSet(type, pinId, false)
+    } else {
+      source.coverPin(type, pinId, subPinId, false)
+    }
   }
 
   const nextType = pathOrDefault(
@@ -981,6 +986,19 @@ export function movePlug(
     [type, pinId, subPinId],
     undefined
   )
+
+  if (!subPinSpec) {
+    source.exposePinSet(
+      type,
+      pinId,
+      { plug: { [subPinId]: {} } },
+      undefined,
+      false,
+      false
+    )
+
+    return
+  }
 
   if (!nextSubPinSpec) {
     return
@@ -1310,7 +1328,11 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
 
   for (const { type, pinId, subPinId } of plug) {
     const pinSpec = pathGet(pinSpecs, [type, pinId])
-    const subPinSpec = pathGet(pinSpecs, [type, pinId, 'plug', subPinId])
+    const subPinSpec = pathOrDefault(
+      pinSpecs,
+      [type, pinId, 'plug', subPinId],
+      undefined
+    )
 
     movePlug(
       source,

@@ -34,7 +34,8 @@ export function stringify(value: any): string | null {
       if (value.__bundle) {
         return `$${stringify(value.__bundle)}`
       } else {
-        throw new Error('invalid unit class')
+        // throw new Error('invalid unit class')
+        return 'null'
       }
     default:
       throw new Error('cannot stringify value')

@@ -61,7 +61,7 @@
         "url": {
           "constant": false
         },
-        "options": {}
+        "opt": {}
       },
       "output": {
         "response": {}
@@ -125,7 +125,7 @@
     "1": {
       "fetch": {
         "input": {
-          "options": true
+          "opt": true
         }
       },
       "set": {

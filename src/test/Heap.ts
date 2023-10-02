@@ -1,369 +1,366 @@
 import {
+  Heap,
   addHeapNode,
-  HeapSpec,
+  findInsertionPoint,
+  findLastLeaf,
   parentHeap,
   readHeap,
   removeHeapNode,
   setHeapNode,
+  toSortedArray,
 } from '../Heap'
 import assert from '../util/assert'
 
-const heap: HeapSpec<number> = {
+const heap: Heap<number> = {
   value: 6,
-  children: [
-    {
-      value: 5,
-      children: [
-        { value: 4, children: [] },
-        { value: 3, children: [] },
-      ],
-    },
-    {
-      value: 2,
-      children: [
-        { value: 1, children: [] },
-        { value: 0, children: [] },
-      ],
-    },
-  ],
+  left: {
+    value: 5,
+    left: { value: 4 },
+    right: { value: 3 },
+  },
+  right: {
+    value: 2,
+    left: { value: 1 },
+    right: { value: 0 },
+  },
 }
+
 const predicate = (a: number, b: number) => a >= b
 
 let _heap = parentHeap(heap, null)
 
 assert.deepEqual(readHeap(_heap), {
   value: 6,
-  children: [
-    {
+  left: {
+    value: 5,
+    left: { value: 4 },
+    right: { value: 3 },
+  },
+  right: {
+    value: 2,
+    left: { value: 1 },
+    right: { value: 0 },
+  },
+})
+
+assert.deepEqual(findInsertionPoint(_heap).value, 4)
+assert.deepEqual(findLastLeaf(_heap).value, 0)
+
+_heap = addHeapNode(
+  _heap,
+  { value: 7, parent: null, left: null, right: null },
+  predicate
+)
+
+assert.deepEqual(readHeap(_heap), {
+  value: 7,
+  left: {
+    value: 6,
+    left: {
       value: 5,
-      children: [
-        { value: 4, children: [] },
-        { value: 3, children: [] },
-      ],
+      left: {
+        value: 4,
+      },
     },
-    {
-      value: 2,
-      children: [
-        { value: 1, children: [] },
-        { value: 0, children: [] },
-      ],
+    right: {
+      value: 3,
     },
-  ],
+  },
+  right: {
+    value: 2,
+    left: {
+      value: 1,
+    },
+    right: {
+      value: 0,
+    },
+  },
+})
+
+assert.deepEqual(findLastLeaf(_heap).value, 4)
+assert.deepEqual(findInsertionPoint(_heap).value, 5)
+
+_heap = removeHeapNode(_heap, predicate)
+
+assert.deepEqual(readHeap(_heap), {
+  value: 6,
+  left: {
+    value: 5,
+    left: {
+      value: 4,
+    },
+    right: {
+      value: 3,
+    },
+  },
+  right: {
+    value: 2,
+    left: {
+      value: 1,
+    },
+    right: {
+      value: 0,
+    },
+  },
 })
 
 _heap = removeHeapNode(_heap, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 5,
-  children: [
-    {
-      value: 4,
-      children: [
-        {
-          value: 2,
-          children: [
-            {
-              value: 1,
-              children: [],
-            },
-            {
-              value: 0,
-              children: [],
-            },
-          ],
-        },
-      ],
+  left: {
+    value: 4,
+    left: {
+      value: 0,
     },
-    {
+    right: {
       value: 3,
-      children: [],
     },
-  ],
+  },
+  right: {
+    value: 2,
+    left: {
+      value: 1,
+    },
+  },
 })
 
 _heap = removeHeapNode(_heap, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 4,
-  children: [
-    {
+  left: {
+    value: 3,
+    left: {
+      value: 0,
+    },
+    right: {
+      value: 1,
+    },
+  },
+  right: {
+    value: 2,
+  },
+})
+
+_heap = addHeapNode(_heap, { value: 7, parent: null }, predicate)
+
+assert.deepEqual(readHeap(_heap), {
+  value: 7,
+  left: {
+    value: 3,
+    left: {
+      value: 0,
+    },
+    right: {
+      value: 1,
+    },
+  },
+  right: {
+    value: 4,
+    left: {
       value: 2,
-      children: [
-        {
-          value: 1,
-          children: [],
-        },
-        {
-          value: 0,
-          children: [],
-        },
-      ],
     },
-    {
-      value: 3,
-      children: [],
-    },
-  ],
+  },
 })
 
-_heap = addHeapNode(_heap, { value: 7, parent: null, children: [] }, predicate)
+_heap = addHeapNode(_heap, { value: 6, parent: null }, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 7,
-  children: [
-    {
-      value: 4,
-      children: [
-        {
-          value: 2,
-          children: [
-            {
-              value: 1,
-              children: [],
-            },
-            {
-              value: 0,
-              children: [],
-            },
-          ],
-        },
-        {
-          value: 3,
-          children: [],
-        },
-      ],
+  left: {
+    value: 3,
+    left: {
+      value: 0,
     },
-  ],
+    right: {
+      value: 1,
+    },
+  },
+  right: {
+    value: 6,
+    left: {
+      value: 2,
+    },
+    right: {
+      value: 4,
+    },
+  },
 })
 
-_heap = addHeapNode(_heap, { value: 6, parent: null, children: [] }, predicate)
+assert.deepEqual(findLastLeaf(_heap).value, 4)
+assert.deepEqual(findInsertionPoint(_heap).value, 0)
 
-assert.deepEqual(readHeap(_heap), {
-  value: 7,
-  children: [
-    {
-      value: 4,
-      children: [
-        {
-          value: 2,
-          children: [
-            {
-              value: 1,
-              children: [],
-            },
-            {
-              value: 0,
-              children: [],
-            },
-          ],
-        },
-        {
-          value: 3,
-          children: [],
-        },
-      ],
-    },
-    { value: 6, children: [] },
-  ],
-})
-
-const _heap_2 = _heap.children[0].children[0]
+const _heap_2 = _heap.left.left
 
 _heap = removeHeapNode(_heap_2, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 7,
-  children: [
-    {
-      value: 4,
-      children: [
-        {
-          value: 1,
-          children: [
-            {
-              value: 0,
-              children: [],
-            },
-          ],
-        },
-        {
-          value: 3,
-          children: [],
-        },
-      ],
+  left: {
+    value: 4,
+    left: {
+      value: 3,
     },
-    { value: 6, children: [] },
-  ],
+    right: {
+      value: 1,
+    },
+  },
+  right: {
+    value: 6,
+    left: {
+      value: 2,
+    },
+  },
 })
 
 _heap = setHeapNode(_heap, 5, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 6,
-  children: [
-    {
+  left: {
+    value: 4,
+    left: {
+      value: 3,
+    },
+    right: {
+      value: 1,
+    },
+  },
+  right: {
+    value: 5,
+    left: {
+      value: 2,
+    },
+  },
+})
+
+let _heap_00 = _heap.left.left
+
+_heap = setHeapNode(_heap_00, 7, predicate)
+
+assert.deepEqual(readHeap(_heap), {
+  value: 7,
+  left: {
+    value: 6,
+    left: {
       value: 4,
-      children: [
-        {
-          value: 1,
-          children: [
-            {
-              value: 0,
-              children: [],
-            },
-          ],
-        },
-        {
-          value: 3,
-          children: [],
-        },
-      ],
     },
-    { value: 5, children: [] },
-  ],
+    right: {
+      value: 1,
+    },
+  },
+  right: {
+    value: 5,
+    left: {
+      value: 2,
+    },
+  },
 })
 
-let _heap_000 = _heap.children[0].children[0].children[0]
-
-_heap = setHeapNode(_heap_000, 7, predicate)
+_heap = addHeapNode(_heap, { value: 7, parent: null }, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 7,
-  children: [
-    {
+  left: {
+    value: 6,
+    left: {
+      value: 4,
+    },
+    right: {
       value: 1,
-      children: [],
     },
-    {
-      value: 6,
-      children: [
-        {
-          value: 4,
-          children: [
-            {
-              value: 3,
-              children: [],
-            },
-          ],
-        },
-        { value: 5, children: [] },
-      ],
+  },
+  right: {
+    value: 7,
+    left: {
+      value: 2,
     },
-  ],
+    right: {
+      value: 5,
+    },
+  },
 })
 
-_heap = addHeapNode(_heap, { value: 7, parent: null, children: [] }, predicate)
+let _heap_10 = _heap.right.left
+
+_heap = setHeapNode(_heap_10, 7, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 7,
-  children: [
-    {
-      value: 1,
-      children: [],
+  left: {
+    value: 6,
+    left: {
+      value: 4,
     },
-    {
+    right: {
+      value: 1,
+    },
+  },
+  right: {
+    value: 7,
+    left: {
       value: 7,
-      children: [
-        {
-          value: 6,
-          children: [
-            {
-              value: 4,
-              children: [
-                {
-                  value: 3,
-                  children: [],
-                },
-              ],
-            },
-            { value: 5, children: [] },
-          ],
-        },
-      ],
     },
-  ],
-})
-
-let _heap_100 = _heap.children[1].children[0].children[0]
-
-_heap = setHeapNode(_heap_100, 7, predicate)
-
-assert.deepEqual(readHeap(_heap), {
-  value: 7,
-  children: [
-    {
-      value: 1,
-      children: [],
+    right: {
+      value: 5,
     },
-    {
-      value: 7,
-      children: [
-        {
-          value: 7,
-          children: [
-            {
-              value: 6,
-              children: [{ value: 5, children: [] }],
-            },
-            {
-              value: 3,
-              children: [],
-            },
-          ],
-        },
-      ],
-    },
-  ],
+  },
 })
 
 _heap = removeHeapNode(_heap, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 7,
-  children: [
-    {
-      value: 7,
-      children: [
-        {
-          value: 6,
-          children: [{ value: 5, children: [] }],
-        },
-        {
-          value: 3,
-          children: [],
-        },
-      ],
+  left: {
+    value: 6,
+    left: {
+      value: 4,
     },
-    {
+    right: {
       value: 1,
-      children: [],
     },
-  ],
+  },
+  right: {
+    value: 7,
+    left: {
+      value: 5,
+    },
+  },
 })
 
-_heap_000 = _heap.children[0].children[0]
+_heap_00 = _heap.left.left
 
-_heap = removeHeapNode(_heap_000, predicate)
+_heap = removeHeapNode(_heap_00, predicate)
 
 assert.deepEqual(readHeap(_heap), {
   value: 7,
-  children: [
-    {
-      value: 7,
-      children: [
-        {
-          value: 5,
-          children: [],
-        },
-        {
-          value: 3,
-          children: [],
-        },
-      ],
+  left: {
+    value: 6,
+    left: {
+      value: 5,
     },
-    {
+    right: {
       value: 1,
-      children: [],
     },
-  ],
+  },
+  right: {
+    value: 7,
+  },
 })
+
+assert.deepEqual(toSortedArray(_heap, predicate), [7, 7, 6, 5, 1])
+
+const last_leaf = findLastLeaf(_heap)
+
+assert.equal(findLastLeaf(_heap).value, 1)
+
+_heap = removeHeapNode(last_leaf, predicate)
+
+// _heap = addHeapNode(_heap, { value: 7, parent: null }, predicate)
+
+// assert.deepEqual(toSortedArray(_heap, predicate), [7, 7, 7, 6, 5, 1])
+
+// _heap = addHeapNode(_heap, { value: 7, parent: null, children: [] }, predicate)
+
+// assert.deepEqual(toArray(_heap), [7, 7, 6, 5, 4, 3, 2, 1, 0])

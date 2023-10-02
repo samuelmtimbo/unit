@@ -4,6 +4,8 @@ import { APINotSupportedError } from '../../../../../exception/APINotImplemented
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { CS } from '../../../../../types/interface/CS'
+import { IM } from '../../../../../types/interface/IM'
+import { ME } from '../../../../../types/interface/ME'
 import { PS } from '../../../../../types/interface/PS'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { ID_VIDEO } from '../../../../_ids'
@@ -25,7 +27,7 @@ export interface VideoC extends VideoComp {}
 
 export default class Video
   extends Element_<I, O, VideoJ, VideoEE, VideoC>
-  implements CS, PS
+  implements CS, PS, IM, ME
 {
   constructor(system: System) {
     super(
@@ -53,15 +55,29 @@ export default class Video
     throw new APINotSupportedError('Video Capture')
   }
 
+  async image(): Promise<any> {
+    const { getLocalComponents } = this.__system
+
+    const localComponents = getLocalComponents(this.__global_id)
+
+    if (localComponents.length === 0) {
+      return null
+    }
+
+    const localComponent = localComponents[0]
+
+    return localComponent.$element
+  }
+
   requestPictureInPicture(callback: Callback<PictureInPictureWindow>): void {
     // TODO
   }
 
-  onDataInputData(name: string, data: any): void {
-    super.onDataInputData(name, data)
+  public mediaPlay(): void {
+    this.emit('call', { method: 'play', data: [] })
+  }
 
-    if (name === 'currentTime') {
-      this._input.currentTime.pull()
-    }
+  public mediaPause(): void {
+    this.emit('call', { method: 'pause', data: [] })
   }
 }

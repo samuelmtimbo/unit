@@ -1,9 +1,9 @@
-import { Graph } from '../../../../../../Class/Graph'
-import { nodeBoot } from '../../../../../../client/platform/node/boot'
-import { Async } from '../../../../../../types/interface/async/Async'
+// import { Graph } from '../../../../../../Class/Graph'
+// import { nodeBoot } from '../../../../../../client/platform/node/boot'
+// import { Async } from '../../../../../../types/interface/async/Async'
 
-export const system = nodeBoot()
+// export const system = nodeBoot()
 
-const graph = new Graph({}, {}, system)
+// const graph = new Graph({}, {}, system)
 
-const $graph = Async(graph, ['U', 'G', 'C', 'EE'])
+// const $graph = Async(graph, ['U', 'G', 'C', 'EE'])

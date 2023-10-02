@@ -190,7 +190,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
 
     const element = invalid
       ? this.__primitive(data)
-      : this.NODE_TYPE_TO_ELEMENT[data.type](data)
+      : (this.NODE_TYPE_TO_ELEMENT[data.type] ?? this.__primitive)(data)
 
     const { style, children } = element
 
@@ -251,8 +251,10 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     )
     for (let i = 0; i < data.children.length; i++) {
       const child = data.children[i]
+
       const comma = this._comma()
       const space = this._space()
+
       if (child.type === TreeNodeType.KeyValue) {
         const key_value = child
         const key_value_tree = this._child_element(
@@ -288,10 +290,13 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
         object_literal_container.appendChild(invalid_tree)
       }
     }
+
     if (empty) {
       const empty_tree = this._child_element(0, getTree(''))
+
       object_literal_container.appendChild(empty_tree)
     }
+
     const object_literal_close_delimiter = this._delimiter({}, `}`)
     const object_literal_end = new Div(
       {

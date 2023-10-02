@@ -1,7 +1,7 @@
 import { PositionObserver } from '../../../../../client/PositionObserver'
 import { addListeners } from '../../../../../client/addListener'
 import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
-import namespaceURI from '../../../../../client/component/namespaceURI'
+import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Context } from '../../../../../client/context'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
@@ -17,7 +17,7 @@ import { harmonicArray } from '../../../../../client/id'
 import { randomBetween } from '../../../../../client/math'
 import { Mode } from '../../../../../client/mode'
 import { parseLayoutValue } from '../../../../../client/parseLayoutValue'
-import applyStyle from '../../../../../client/style'
+import { applyStyle } from '../../../../../client/style'
 import { getThemeModeColor } from '../../../../../client/theme'
 import {
   describeEllipseArc,
@@ -59,7 +59,7 @@ export const DEFAULT_STYLE = {
   width: '100%',
   height: '100%',
   color: 'current-color',
-  pointerEvents: 'none',
+  'pointer-events': 'none',
 }
 
 export default class Bot extends Element<HTMLDivElement, Props> {

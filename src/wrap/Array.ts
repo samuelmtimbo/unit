@@ -35,22 +35,20 @@ export function wrapArray<T>(array: T[], system: System): A<T> & $ {
   const _array = new (class Array extends $ implements A<T> {
     __: string[] = ['A']
 
-    append(a: T): Promise<void> {
+    async append(a: T): Promise<void> {
       array.push(a)
-
-      return
     }
 
     put(i: number, data: any): Promise<void> {
       throw new Error('Method not implemented.')
     }
 
-    at(i: number): Promise<any> {
-      throw new Error('Method not implemented.')
+    async at(i: number): Promise<T> {
+      return array[i]
     }
 
-    length(): Promise<number> {
-      throw new Error('Method not implemented.')
+    async length(): Promise<number> {
+      return array.length
     }
 
     indexOf(a: T): Promise<number> {
@@ -62,7 +60,7 @@ export function wrapArray<T>(array: T[], system: System): A<T> & $ {
 }
 
 export function wrapUint8Array(
-  array: Uint8Array,
+  array: Uint8Array | Uint8ClampedArray,
   system: System
 ): A<number> & $ {
   const _array = new (class Array extends $ implements A<number> {
@@ -74,8 +72,8 @@ export function wrapUint8Array(
       return
     }
 
-    put(i: number, data: any): Promise<void> {
-      throw new Error('Method not implemented.')
+    async put(i: number, data: any): Promise<void> {
+      array[i] = data
     }
 
     async at(i: number): Promise<any> {
@@ -88,6 +86,10 @@ export function wrapUint8Array(
 
     indexOf(a: number): Promise<number> {
       throw new Error('Method not implemented.')
+    }
+
+    raw() {
+      return array
     }
   })(system)
 

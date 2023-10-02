@@ -1,14 +1,12 @@
 import { isFrameRelativeValue } from '../isFrameRelative'
-import Iframe from '../system/platform/component/Iframe/Component'
 import { Style } from '../system/platform/Props'
-import { Dict } from '../types/Dict'
 import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
 import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
 import { extractTrait } from './extractTrait'
 import { IOElement } from './IOElement'
 import { LayoutNode } from './LayoutNode'
-import { reflectChildrenTrait } from './reflectChildrenTrait'
+import { rawExtractStyle } from './rawExtractStyle'
 import { expandSlot } from './reflectComponentBaseTrait'
 import { rectsBoundingRect } from './util/geometry'
 import { Size } from './util/geometry/types'
@@ -28,6 +26,14 @@ export function measureChildren(
   ) => Style = (parent_trait, leaf_path, leaf_comp) =>
     extractStyle(root, leaf_comp, parent_trait, measureText, fitContent)
 ) {
+  const { $system } = component
+
+  const {
+    api: {
+      layout: { reflectChildrenTrait },
+    },
+  } = $system
+
   const parentChildren = component.$parentChildren
 
   const base = parentChildren.reduce((acc, child) => {
@@ -94,25 +100,17 @@ export function measureChildren(
     trait.height = fallbackTrait.height
   }
 
-  const [reflected_children_trait, reflected_children_size] =
-    reflectChildrenTrait(
-      trait,
-      style,
-      relative_base_style,
-      (path) => {
-        return expandSlot(
-          root,
-          component,
-          '',
-          path,
-          {},
-          (leaf_id, leaf_comp) => {
-            return getLeafStyle(fallbackTrait, leaf_id.split('/'), leaf_comp)
-          }
-        )
-      },
-      []
-    )
+  const reflected_children_trait = reflectChildrenTrait(
+    trait,
+    style,
+    relative_base_style,
+    [],
+    (path) => {
+      return expandSlot(root, component, '', path, {}, (leaf_id, leaf_comp) => {
+        return getLeafStyle(fallbackTrait, leaf_id.split('/'), leaf_comp)
+      })
+    }
+  )
 
   const size = rectsBoundingRect(reflected_children_trait)
 
@@ -132,18 +130,12 @@ export function extractStyle(
   ) => Style = (parent_trait, leaf_path, leaf_comp) =>
     extractStyle(root, leaf_comp, parent_trait, measureText, fitContent)
 ): Style {
-  const { $element } = component
-
-  let _element = $element
-
-  if (component instanceof Iframe) {
-    _element = component._iframe_el
-  }
+  const { $node } = component
 
   return _extractStyle(
     root,
     component,
-    _element,
+    $node,
     fallbackTrait,
     measureText,
     fitContent,
@@ -310,24 +302,6 @@ export function _extractStyle(
       if (fitHeight) {
         style['height'] = `${height}px`
       }
-    }
-  }
-
-  return style
-}
-
-export function rawExtractStyle(element: IOElement) {
-  if (element instanceof Text) {
-    return {}
-  }
-
-  const style: Dict<string> = {}
-
-  for (const key in element.style) {
-    const value = element.style[key]
-
-    if (value && typeof value === 'string' && isNaN(parseInt(key))) {
-      style[key] = value
     }
   }
 

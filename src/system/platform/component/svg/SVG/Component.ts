@@ -1,6 +1,6 @@
-import namespaceURI from '../../../../../client/component/namespaceURI'
+import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
-import applyStyle from '../../../../../client/style'
+import { applyStyle } from '../../../../../client/style'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'

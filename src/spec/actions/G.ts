@@ -6,7 +6,6 @@ import {
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphCoverUnitPinSetData,
-  GraphExplodeUnitData,
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
   GraphMoveSubGraphIntoData,
@@ -91,7 +90,6 @@ export const EXPAND_UNIT = 'expandUnit'
 export const COLLAPSE_UNITS = 'collapseUnits'
 export const MOVE_SUBGRAPH_INTO = 'moveSubgraphInto'
 export const MOVE_SUBGRAPH_OUT_OF = 'moveSubgraphOutOf'
-export const EXPLODE_UNIT = 'explodeUnit'
 export const SET_UNIT_SIZE = 'setUnitSize'
 export const SET_COMPONENT_SIZE = 'setComponentSize'
 export const SET_SUB_COMPONENT_SIZE = 'setSubComponentSize'
@@ -776,27 +774,6 @@ export const makeRemoveUnitMergesAction = (id: string): Action => {
   }
 }
 
-export const wrapExplodeUnitData = (data: GraphExplodeUnitData) => {
-  return {
-    type: EXPLODE_UNIT,
-    data,
-  }
-}
-
-export const makeExplodeUnitAction = (
-  unitId: string,
-  mapUnitId: Dict<string>,
-  mapMergeId: Dict<string>,
-  mapPlugId: IOOf<Dict<Dict<string>>>
-) => {
-  return wrapExplodeUnitData({
-    unitId,
-    mapUnitId,
-    mapMergeId,
-    mapPlugId,
-  })
-}
-
 export const wrapBulkEditData = (data: GraphBulkEditData) => {
   return {
     type: BULK_EDIT,
@@ -938,7 +915,36 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.graphId,
         data.graphBundle,
         data.nextSpecId,
-        data.nodeIds,
+        {
+          ...data.nodeIds,
+          unit: data.nodeIds.unit.map(
+            (unitId: string) => data.nextIdMap.unit[unitId] ?? unitId
+          ),
+          link: data.nodeIds.link.filter(({ unitId, type, pinId }) => {
+            if (!data.nodeIds.unit.includes(unitId)) {
+              return false
+            }
+
+            return true
+          }),
+          plug: data.nodeIds.plug.concat(
+            data.nodeIds.link
+              .filter(({ unitId, type, pinId }) => {
+                if (!data.nodeIds.unit.includes(unitId)) {
+                  return true
+                }
+
+                return false
+              })
+              .map(({ unitId, type, pinId }) => {
+                return {
+                  type,
+                  pinId,
+                  subPinId: '0',
+                }
+              })
+          ),
+        },
         data.nextIdMap,
         data.nextUnitPinMergeMap,
         data.nextPinIdMap,
@@ -953,7 +959,12 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.graphId,
         data.graphBundle,
         data.nextSpecId,
-        data.nodeIds,
+        {
+          ...data.nodeIds,
+          unit: data.nodeIds.unit.map(
+            (unitId: string) => data.nextIdMap.unit[unitId] ?? unitId
+          ),
+        },
         data.nextIdMap,
         data.nextUnitPinMergeMap,
         data.nextPinIdMap,
@@ -974,6 +985,14 @@ export const reverseAction = ({ type, data }: Action): Action => {
       )
     case SET_SUB_COMPONENT_SIZE:
       return makeSetSubComponentSizeAction(
+        data.unitId,
+        data.prevWidth,
+        data.prevHeight,
+        data.width,
+        data.height
+      )
+    case SET_UNIT_SIZE:
+      return makeSetUnitSizeAction(
         data.unitId,
         data.prevWidth,
         data.prevHeight,

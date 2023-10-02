@@ -1,5 +1,5 @@
 import pathGet from '../../system/core/object/DeepGet/f'
-import assocPath from '../../system/core/object/DeepSet/f'
+import deepSet from '../../system/core/object/DeepSet/f'
 import dissocPath from '../../system/core/object/DeletePath/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
@@ -36,7 +36,7 @@ export const setName = (
 export const addUnit = (
   { id, unit }: { id: string; unit: GraphUnitSpec },
   state: GraphSpec
-): GraphSpec => assocPath(state, ['units', id], unit)
+): GraphSpec => deepSet(state, ['units', id], unit)
 
 export const addUnits = (
   { units }: { units: GraphUnitsSpec },
@@ -275,7 +275,7 @@ export const addMerge = (
     })
   })
 
-  return assocPath(state, ['merges', mergeId], merge)
+  return deepSet(state, ['merges', mergeId], merge)
 }
 
 export const addPinToMerge = (
@@ -308,7 +308,7 @@ export const addPinToMerge = (
     }
   })
 
-  return assocPath(state, ['merges', mergeId, unitId, type, pinId], true)
+  return deepSet(state, ['merges', mergeId, unitId, type, pinId], true)
 }
 
 export const addMerges = (
@@ -370,7 +370,7 @@ export const mergeMerges = (
   const aMerge = state.merges![a]
   const bMerge = state.merges![b]
   state = dissocPath(state, ['merges', b]) as GraphSpec
-  state = assocPath(state, ['merges', a], deepMerge(aMerge, bMerge))
+  state = deepSet(state, ['merges', a], deepMerge(aMerge, bMerge))
   return state
 }
 
@@ -450,7 +450,7 @@ export const coverPin = (
 export const exposePinSet = (
   { pinId, type, pin }: { pinId: string; type: IO; pin: GraphPinSpec },
   state: GraphSpec
-): GraphSpec => assocPath(state, [`${type}s`, pinId], pin)
+): GraphSpec => deepSet(state, [`${type}s`, pinId], pin)
 
 export const exposePin = (
   {
@@ -466,7 +466,7 @@ export const exposePin = (
   },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, [`${type}s`, pinId, 'plug', subPinId], subPin)
+  return deepSet(state, [`${type}s`, pinId, 'plug', subPinId], subPin)
 }
 
 export const exposeInputSet = (
@@ -499,7 +499,7 @@ export const plugPin = (
   },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
+  return deepSet(state, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
 }
 
 export const unplugInput = (
@@ -540,7 +540,7 @@ export const unplugPin = (
   },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, [`${type}s`, pinId, 'plug', subPinId], {})
+  return deepSet(state, [`${type}s`, pinId, 'plug', subPinId], {})
 }
 
 export const coverInputSet = (
@@ -600,7 +600,7 @@ export const setUnitErr = (
   state: GraphSpec
 ): GraphSpec => {
   if (err !== null) {
-    return assocPath(state, ['units', unitId, 'err'], err)
+    return deepSet(state, ['units', unitId, 'err'], err)
   } else {
     return dissocPath(state, ['units', unitId, 'err']) as GraphSpec
   }
@@ -610,14 +610,14 @@ export const setPinSetName = (
   { type, id, name }: { type: IO; id: string; name: string },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, [`${type}s`, id, 'name'], name)
+  return deepSet(state, [`${type}s`, id, 'name'], name)
 }
 
 export const setPinSetId = (
   { type, id, newId }: { type: IO; id: string; newId: string },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(
+  return deepSet(
     dissocPath(state, [`${type}s`, id]),
     [`${type}s`, newId],
     pathGet(state, [`${type}s`, id])
@@ -628,28 +628,28 @@ export const setPinSetFunctional = (
   { type, pinId, functional }: { type: IO; pinId: string; functional: boolean },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, [`${type}s`, pinId, 'functional'], functional)
+  return deepSet(state, [`${type}s`, pinId, 'functional'], functional)
 }
 
 export const setPinSetRef = (
   { type, pinId, ref }: { type: IO; pinId: string; ref: boolean },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, [`${type}s`, pinId, 'ref'], ref)
+  return deepSet(state, [`${type}s`, pinId, 'ref'], ref)
 }
 
 export const setUnitInput = (
   { id, name, data }: { id: string; name: string; data: string },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, ['units', id, 'input', name], data)
+  return deepSet(state, ['units', id, 'input', name], data)
 }
 
 export const setUnitOutput = (
   { id, name, data }: { id: string; name: string; data: string },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, ['units', id, 'output', name], data)
+  return deepSet(state, ['units', id, 'output', name], data)
 }
 
 export const setUnitPinData = (
@@ -661,7 +661,7 @@ export const setUnitPinData = (
   }: { unitId: string; type: IO; pinId: string; data: any },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, ['units', unitId, type, pinId, 'data'], data)
+  return deepSet(state, ['units', unitId, type, pinId, 'data'], data)
 }
 
 export const setUnitInputConstant = (
@@ -672,7 +672,7 @@ export const setUnitInputConstant = (
   }: { unitId: string; pinId: string; constant: boolean },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(
+  return deepSet(
     state,
     ['units', unitId, 'input', pinId, 'constant'],
     constant
@@ -687,7 +687,7 @@ export const setUnitOutputConstant = (
   }: { unitId: string; pinId: string; constant: boolean },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(
+  return deepSet(
     state,
     ['units', unitId, 'output', pinId, 'constant'],
     constant
@@ -736,7 +736,7 @@ export const setUnitPinIgnored = (
     }
   }
 
-  state = assocPath(state, ['units', unitId, type, pinId, 'ignored'], ignored)
+  state = deepSet(state, ['units', unitId, type, pinId, 'ignored'], ignored)
 
   return state
 }
@@ -775,14 +775,14 @@ export const setMetadata = (
   { path, value }: { path: string[]; value: any },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, path, value)
+  return deepSet(state, path, value)
 }
 
 export const setUnitMetadata = (
   { id, path, value }: { id: string; path: string[]; value: any },
   state: GraphSpec
 ): GraphSpec => {
-  return assocPath(state, ['units', id, 'metadata', ...path], value)
+  return deepSet(state, ['units', id, 'metadata', ...path], value)
 }
 
 export const renameUnitInMerges = (

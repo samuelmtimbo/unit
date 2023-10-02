@@ -1,28 +1,24 @@
 import { API } from '../API'
 import { EventEmitter_ } from '../EventEmitter'
 import { NOOP } from '../NOOP'
+import { Object_ } from '../Object'
 import { Registry } from '../Registry'
-import { SharedObject } from '../SharedObject'
+import { IOElement } from '../client/IOElement'
+import { Component } from '../client/component'
 import { styleToCSS } from '../client/id/styleToCSS'
 import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
-import { LocalStore } from '../client/store'
 import { noHost } from '../host/none'
 import { fromBundle } from '../spec/fromBundle'
 import { stringifyBundleSpecData } from '../spec/stringifySpec'
 import { BootOpt, System } from '../system'
-
+import classes from '../system/_classes'
+import components from '../system/_components'
 import specs from '../system/_specs'
 import { Style } from '../system/platform/Props'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { GraphBundle } from '../types/GraphClass'
 import { Unlisten } from '../types/Unlisten'
-
-import { Object_ } from '../Object'
-import { IOElement } from '../client/IOElement'
-import { Component } from '../client/component'
-import classes from '../system/_classes'
-import components from '../system/_components'
 import { IGamepad } from '../types/global/IGamepad'
 import { IKeyboard } from '../types/global/IKeyboard'
 import { IPointer } from '../types/global/IPointer'
@@ -33,7 +29,7 @@ import { randomIdNotIn } from '../util/id'
 export function boot(
   parent: System | null = null,
   api: API = noHost(),
-  opt: BootOpt = {}
+  opt: BootOpt = { flags: {} }
 ): System {
   const { path = '', specs: _specs = {}, flags = {} } = opt
 
@@ -52,7 +48,8 @@ export function boot(
     pointers,
   }
 
-  const flag = {
+  const cache = {
+    iframe: [],
     dragAndDrop: {},
     pointerCapture: {},
     spriteSheetMap: {},
@@ -104,7 +101,7 @@ export function boot(
     components,
     graphs: [],
     specsCount,
-    cache: flag,
+    cache,
     feature,
     foreground: {
       svg: undefined,
@@ -124,10 +121,16 @@ export function boot(
     api,
     flags: {
       defaultInputModeNone: false,
+      tick: 'sync',
       ...flags,
     },
+    tick:
+      flags.tick === 'sync'
+        ? (callback: () => void) => {
+            callback()
+          }
+        : (callback) => system.api.animation.requestAnimationFrame(callback),
     boot: (opt: BootOpt) => boot(system, api, opt),
-    graph: (system, opt) => new SharedObject(new LocalStore(system, 'local')),
     stringifyBundleData: (bundle: BundleSpec) => {
       return stringifyBundleSpecData(bundle)
     },

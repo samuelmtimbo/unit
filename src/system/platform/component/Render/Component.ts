@@ -1,7 +1,7 @@
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
 import { renderComponent } from '../../../../client/render/renderComponent'
-import applyStyle from '../../../../client/style'
+import { applyStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { $Component } from '../../../../types/interface/async/$Component'

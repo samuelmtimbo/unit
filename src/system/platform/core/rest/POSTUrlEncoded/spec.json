@@ -85,7 +85,7 @@
             }
           }
         },
-        "options": {}
+        "opt": {}
       },
       "output": {
         "response": {
@@ -189,7 +189,7 @@
     "0": {
       "fetch": {
         "input": {
-          "options": true
+          "opt": true
         }
       },
       "set": {
@@ -228,11 +228,7 @@
     "icon": "send",
     "description": "...",
     "complexity": 14,
-    "tags": [
-      "platform",
-      "core",
-      "rest"
-    ],
+    "tags": ["platform", "core", "rest"],
     "position": {
       "merge": {
         "0": {

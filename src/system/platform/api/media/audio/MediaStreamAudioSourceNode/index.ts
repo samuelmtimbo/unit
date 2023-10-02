@@ -79,7 +79,7 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
       context = sourceNode.getContext()
     }
 
-    stream.get((mediaStream: MediaStream) => {
+    stream.mediaStream((mediaStream: MediaStream) => {
       try {
         // @ts-ignore
         _node = new MediaStreamAudioSourceNode(context, {

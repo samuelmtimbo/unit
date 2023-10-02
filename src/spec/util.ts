@@ -1,5 +1,6 @@
 import { GraphMoveSubGraphData } from '../Class/Graph/interface'
 import { getSpec } from '../client/spec'
+import pathGet from '../system/core/object/DeepGet/f'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../system/core/object/KeyCount/f'
 import { keys } from '../system/f/object/Keys/f'
@@ -28,6 +29,7 @@ import {
   _keyCount,
   clone,
   getObjSingleKey,
+  isEmptyObject,
   mapObjVK,
   pathOrDefault,
   pathSet,
@@ -675,7 +677,7 @@ export function makeFullSpecCollapseMap(
               mergeId,
               pinId,
               subPinSpec: {
-                mergeId,
+                mergeId: subPinSpec.mergeId,
               },
               oppositeMerge,
             })
@@ -716,35 +718,68 @@ export function makeFullSpecCollapseMap(
 
     const merge_unit = merge_clone[unitId]
 
-    const mergeUntPintype = getObjSingleKey(merge_unit)
+    if (isEmptyObject(merge_unit['input'] ?? {})) {
+      delete merge_unit['input']
+    }
 
-    const mergeUntPinId = getObjSingleKey(merge_unit[mergeUntPintype])
+    if (isEmptyObject(merge_unit['output'] ?? {})) {
+      delete merge_unit['output']
+    }
+
+    const merge_unit_pin_type = getObjSingleKey(merge_unit)
+
+    const merge_unit_pin_id = getObjSingleKey(merge_unit[merge_unit_pin_type])
 
     delete merge_clone[unitId]
 
     const merge_pin_count = getMergePinCount(merge_clone)
 
     if (merge_pin_count === 1) {
-      const otherUnitId = getObjSingleKey(merge_clone)
-      const otherUnitPinType = getObjSingleKey(merge_clone[otherUnitId]) as IO
-      const otherUnitPinId = getObjSingleKey(
-        merge_clone[otherUnitId][otherUnitPinType]
-      )
+      const mergeUnitPinSpec = pathGet(spec, [
+        `${merge_unit_pin_type}s`,
+        merge_unit_pin_id,
+      ])
 
-      nodeIds.link.push({
-        unitId: otherUnitId,
-        type: otherUnitPinType,
-        pinId: otherUnitPinId,
-      })
+      const { plug = {} } = mergeUnitPinSpec
 
-      pathSet(
-        nextIdMap,
-        ['link', otherUnitId, otherUnitPinType, otherUnitPinId],
-        {
-          mergeId,
-          oppositePinId: mergeUntPinId,
+      let is_empty_merge = false
+
+      for (const subPinId in plug) {
+        const subPinSpec = plug[subPinId]
+
+        if (subPinSpec.mergeId) {
+          const mergeSpec = merges[subPinSpec.mergeId]
+
+          const mergePinCount = getMergePinCount(mergeSpec)
+
+          if (mergePinCount === 0) {
+            is_empty_merge = true
+          }
         }
-      )
+      }
+
+      if (!is_empty_merge) {
+        const otherUnitId = getObjSingleKey(merge_clone)
+        const otherUnitPinType = getObjSingleKey(merge_clone[otherUnitId]) as IO
+        const otherUnitPinId = getObjSingleKey(
+          merge_clone[otherUnitId][otherUnitPinType]
+        )
+
+        nodeIds.link.push({
+          unitId: otherUnitId,
+          type: otherUnitPinType,
+          pinId: otherUnitPinId,
+        })
+
+        pathSet(
+          nextIdMap,
+          ['link', otherUnitId, otherUnitPinType, otherUnitPinId],
+          {
+            mergeId,
+            oppositePinId: merge_unit_pin_id,
+          }
+        )
+      }
     } else {
       // TODO
     }

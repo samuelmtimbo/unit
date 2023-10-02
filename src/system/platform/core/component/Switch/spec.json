@@ -267,7 +267,7 @@
               }
           }
       },
-      "assocbackgroundcolor0": {
+      "setbackgroundcolor0": {
           "id": "0ca54c4f-148e-49e5-bedf-d24276200f66",
           "input": {
               "obj": {
@@ -292,7 +292,7 @@
               }
           }
       },
-      "assocbackgroundcolor": {
+      "setbackgroundcolor": {
           "id": "0ca54c4f-148e-49e5-bedf-d24276200f66",
           "input": {
               "obj": {
@@ -317,7 +317,7 @@
               }
           }
       },
-      "pickassoc": {
+      "pickset": {
           "id": "9a85acf3-c40b-4e82-b04c-68c3dd1b0d4b",
           "input": {
               "c": {},
@@ -450,14 +450,14 @@
                   "default": true
               }
           },
-          "pickassoc": {
+          "pickset": {
               "output": {
                   "obj": true
               }
           }
       },
       "2": {
-          "pickassoc": {
+          "pickset": {
               "input": {
                   "c": true
               }
@@ -510,7 +510,7 @@
           }
       },
       "6": {
-          "assocbackgroundcolor": {
+          "setbackgroundcolor": {
               "input": {
                   "value": true
               }
@@ -522,7 +522,7 @@
           }
       },
       "7": {
-          "assocbackgroundcolor0": {
+          "setbackgroundcolor0": {
               "input": {
                   "value": true
               }
@@ -539,19 +539,19 @@
                   "default": true
               }
           },
-          "assocbackgroundcolor0": {
+          "setbackgroundcolor0": {
               "output": {
                   "obj": true
               }
           }
       },
       "9": {
-          "assocbackgroundcolor": {
+          "setbackgroundcolor": {
               "output": {
                   "obj": true
               }
           },
-          "pickassoc": {
+          "pickset": {
               "input": {
                   "obj": true
               }

@@ -1,7 +1,9 @@
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
+import { Heap, asyncAddHeapNode, asyncToSortedArray } from '../../../../Heap'
+import { Waiter } from '../../../../Waiter'
 import { System } from '../../../../system'
-import { ID_APPEND } from '../../../_ids'
+import { ID_SORT } from '../../../_ids'
 
 export interface I<T> {
   a: T[]
@@ -9,12 +11,15 @@ export interface I<T> {
 }
 
 export interface O<T> {
+  b: T[]
   'a[i]': T
   'a[j]': T
-  b: T[]
 }
 
 export default class Sort<T> extends Semifunctional<I<T>, O<T>> {
+  private _forward_waiter: Waiter<boolean> = new Waiter()
+  private _backward_waiter: Waiter<boolean> = new Waiter()
+
   constructor(system: System) {
     super(
       {
@@ -25,86 +30,66 @@ export default class Sort<T> extends Semifunctional<I<T>, O<T>> {
       },
       {},
       system,
-      ID_APPEND
+      ID_SORT
     )
   }
 
-  private _index = 0
-  private _test: boolean[] = []
-  private _pairs: [T, T][] = []
-
-  f({ a }: I<T>, done: Done<O<T>>): void {
-    if (a.length < 2) {
-      done({ b: a })
-
-      return
-    }
-
-    this._index = 0
-    this._test = []
-    this._pairs = []
-
-    a.sort((a, b) => {
-      this._pairs.push([a, b])
-
-      return 0
-    })
-
-    this._push_current()
-  }
-
-  private _push_current = () => {
+  private _predicate = async (a: T, b: T) => {
     this._forwarding = true
 
-    const [a, b] = this._pairs[this._index]
-
-    this.pushOutput('a[i]', a)
-    this.pushOutput('a[j]', b)
+    this._output['a[i]'].push(a)
+    this._output['a[j]'].push(b)
 
     this._forwarding = false
 
-    this._loop()
+    const result = await this._forward_waiter.once()
+
+    this._forward_waiter.clear()
+
+    this._input['a[i] < a[j]'].pull()
+
+    await this._backward_waiter.once()
+
+    this._backward_waiter.clear()
+
+    return result
+  }
+
+  async f({ a }: I<T>, done: Done<O<T>>): Promise<void> {
+    let heap: Heap<T> = null
+
+    for (const value of a) {
+      heap = await asyncAddHeapNode(
+        heap,
+        { parent: null, left: null, right: null, value },
+        this._predicate
+      )
+    }
+
+    const b = heap ? await asyncToSortedArray(heap, this._predicate) : []
+
+    done({
+      b,
+    })
   }
 
   public onIterDataInputData(name: string, data: any): void {
     switch (name) {
       case 'a[i] < a[j]': {
-        this._test.push(data)
-
-        this._index++
-
-        this._input['a[i] < a[j]'].pull()
-
-        this._loop()
+        this._forward_waiter.set(data)
 
         break
       }
     }
   }
 
-  private _loop = () => {
-    if (this._primitive._active_o_count === 0) {
-      if (this._index === this._pairs.length - 1) {
-        let j = 0
-
-        const b = this._i.a.sort((a, b) => {
-          const result = this._test[j]
-
-          j++
-
-          return result ? 1 : -1
-        })
-
-        this._done({ b })
-      } else if (this._index < this._pairs.length - 1) {
-        this._push_current()
-      }
-    }
-  }
-
   public onIterDataOutputDrop(name: string): void {
+    // console.log('onIterDataOutputDrop', name)
+
     if (!this._forwarding) {
-      this._loop()
+      if (this._output['a[i]'].empty() && this._output['a[j]'].empty()) {
+        this._backward_waiter.set(true)
+      }
     }
   }
 }

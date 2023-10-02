@@ -1,7 +1,7 @@
 import { getStroke } from 'perfect-freehand'
 import { System } from '../../system'
 import { Unlisten } from '../../types/Unlisten'
-import namespaceURI from '../component/namespaceURI'
+import { namespaceURI } from '../component/namespaceURI'
 import { _addEventListener } from '../event'
 import { UnitPointerEvent } from '../event/pointer'
 import { Point } from '../util/geometry/types'

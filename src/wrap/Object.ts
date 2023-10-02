@@ -6,7 +6,7 @@ import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
 import { J } from '../types/interface/J'
 
-export function wrapObject<T extends Dict<any>>(
+export function wrapSharedRef<T extends Dict<any>>(
   data: SharedRef<T>,
   _system: System
 ): J<T> {

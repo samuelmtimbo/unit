@@ -58,7 +58,9 @@ export function unitFromBundleSpec(
     unit.restore(memory)
   }
 
-  forEachValueKey(input || {}, ({ data }, pinId: string) => {
+  forEachValueKey(input || {}, (unitPinSpec, pinId: string) => {
+    const { data } = unitPinSpec ?? {}
+
     if (data !== undefined) {
       const input = unit.getInput(pinId)
 

@@ -1,6 +1,6 @@
 import { max, min } from '../util/array'
+import { REGEX_CALC, REGEX_PERCENT, REGEX_PX } from '../util/regex'
 import { removeWhiteSpace } from '../util/string'
-import { REGEX_CALC, REGEX_PERCENT, REGEX_PX } from './reflectChildrenTrait'
 
 export function parseLayoutValue(value: string): [number, number] {
   value = removeWhiteSpace(value)
@@ -107,7 +107,7 @@ export function applyCalc(value: string, baseValue: number): number {
       case '/':
         {
           if (open_paren_count === 0) {
-            const subValue = value.slice(last_i, i)
+            const subValue = value.slice(last_i, i) || value
 
             result += applyLayoutValue(subValue, baseValue)
 

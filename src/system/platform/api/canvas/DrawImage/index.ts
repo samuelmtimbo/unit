@@ -2,16 +2,17 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { CA } from '../../../../../types/interface/CA'
-import { IB } from '../../../../../types/interface/IB'
+import { IM } from '../../../../../types/interface/IM'
 import { ID_DRAW_IMAGE } from '../../../../_ids'
 
 export interface I<T> {
   canvas: CA
-  bitmap: IB
+  image: IM
   x: number
   y: number
   width: number
   height: number
+  any: any
 }
 
 export interface O<T> {}
@@ -20,7 +21,7 @@ export default class DrawImage<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['canvas', 'bitmap', 'x', 'y', 'width', 'height'],
+        i: ['canvas', 'image', 'x', 'y', 'width', 'height', 'any'],
         o: [],
       },
       {
@@ -28,7 +29,7 @@ export default class DrawImage<T> extends Functional<I<T>, O<T>> {
           canvas: {
             ref: true,
           },
-          bitmap: {
+          image: {
             ref: true,
           },
         },
@@ -39,12 +40,12 @@ export default class DrawImage<T> extends Functional<I<T>, O<T>> {
   }
 
   async f(
-    { canvas, bitmap, x, y, width, height }: I<T>,
+    { any, canvas, image, x, y, width, height }: I<T>,
     done: Done<O<T>>
   ): Promise<void> {
-    const imageBitmap = await bitmap.imageBitmap()
+    const _image = await image.image()
 
-    await canvas.drawImage(imageBitmap, x, y, width, height)
+    await canvas.drawImage(_image, x, y, width, height)
 
     done()
   }

@@ -100,8 +100,11 @@ assert.deepEqual(
 assert.deepEqual(getTreeNodeType('<T>["S"]'), TreeNodeType.PropExpression)
 assert.deepEqual(getTreeNodeType('unit://123'), TreeNodeType.Url)
 assert.deepEqual(getTreeNodeType('{{}'), TreeNodeType.Invalid)
+assert.deepEqual(getTreeNodeType('{a:1,,b:2}'), TreeNodeType.ObjectLiteral)
+assert.deepEqual(getTree('{a:1,,b:2}').children.length, 3)
+assert.deepEqual(getTree('{a:1,,b:2}').children[2].type, TreeNodeType.KeyValue)
 
-assert.deepEqual(getTree('{,}').children.length, 1)
+assert.deepEqual(getTree('{,}').children.length, 2)
 
 // isValidType
 
@@ -278,6 +281,8 @@ assert(_isTypeMatch(`\${unit:{id:'${ID_IDENTITY}'}}`, '`U`'))
 assert(_isTypeMatch(CUSTOM_GRAPH_UNIT_STR, '`G`'))
 assert(_isTypeMatch(CUSTOM_GRAPH_UNIT_STR, '`G`&`U`'))
 assert(_isTypeMatch(CUSTOM_GRAPH_UNIT_STR, '`U`&`G`'))
+assert(_isTypeMatch('<T>', '`C`'))
+assert(_isTypeMatch('`C`', '<T>'))
 
 assert(!_isTypeMatch('', 'any'))
 assert(!_isTypeMatch('abc', 'any'))

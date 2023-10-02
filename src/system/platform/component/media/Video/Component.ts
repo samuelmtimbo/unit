@@ -1,6 +1,6 @@
 import { Element } from '../../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
-import applyStyle from '../../../../../client/style'
+import { applyStyle } from '../../../../../client/style'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -93,6 +93,7 @@ export default class VideoComp extends Element<HTMLVideoElement, Props> {
 
   onPropChanged(prop: string, current: any): void {
     // console.log('onPropChanged', prop, current)
+
     this.prop_handler[prop](current)
   }
 
@@ -129,5 +130,13 @@ export default class VideoComp extends Element<HTMLVideoElement, Props> {
     } else {
       throw new APINotSupportedError('Picture-in-Picture')
     }
+  }
+
+  play(): void {
+    this.$element.play()
+  }
+
+  pause(): void {
+    this.$element.pause()
   }
 }

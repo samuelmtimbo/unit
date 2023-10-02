@@ -1,0 +1,121 @@
+{
+  "name": "get context size",
+  "units": {
+    "context": {
+      "id": "62e46cdc-e1ec-11ea-957a-3f9e932ddd48",
+      "input": {
+        "element": {}
+      },
+      "output": {}
+    },
+    "getwidth": {
+      "id": "00682850-3e30-11eb-86ea-8f1c604946aa",
+      "input": {
+        "obj": {},
+        "any": {}
+      },
+      "output": {
+        "width": {}
+      }
+    },
+    "getheight": {
+      "id": "f513667c-3e2f-11eb-8a96-4fbfb5c1b798",
+      "input": {
+        "obj": {},
+        "any": {}
+      },
+      "output": {
+        "height": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "getwidth": {
+        "input": {
+          "obj": true
+        }
+      },
+      "context": {
+        "output": {
+          "_self": true
+        }
+      },
+      "getheight": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "getheight",
+          "pinId": "any"
+        },
+        "lalsnz": {
+          "unitId": "getwidth",
+          "pinId": "any"
+        }
+      },
+      "type": "any"
+    },
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "context",
+          "pinId": "element"
+        }
+      },
+      "type": "`U`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "width": {
+      "plug": {
+        "0": {
+          "unitId": "getwidth",
+          "pinId": "width"
+        }
+      },
+      "type": "any"
+    },
+    "height": {
+      "plug": {
+        "0": {
+          "unitId": "getheight",
+          "pinId": "height"
+        }
+      },
+      "type": "any"
+    },
+    "context": {
+      "plug": {
+        "0": {
+          "unitId": "context",
+          "pinId": "_self"
+        }
+      },
+      "ref": true,
+      "type": "`CO`",
+      "defaultIgnored": true
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "get the width and height of this frame",
+    "complexity": 17,
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "frame"
+    ]
+  },
+  "id": "356fc870-ae54-4ae5-9a9f-a8cf6a37abea",
+  "type": "`U`&`G`",
+  "system": true
+}

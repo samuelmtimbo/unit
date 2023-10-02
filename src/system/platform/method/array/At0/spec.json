@@ -1,8 +1,8 @@
 {
   "name": "at",
   "inputs": {
-    "a[]": {
-      "type": "`A`",
+    "a": {
+      "type": "<A>[]",
       "ref": true
     },
     "i": {
@@ -18,11 +18,7 @@
     "icon": "info-square",
     "description": "`a` element at position `i`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "method",
-      "array"
-    ]
+    "tags": ["platform", "method", "array"]
   },
   "id": "c320b1b2-c130-4d69-b172-0c737b72c6b5",
   "base": true,

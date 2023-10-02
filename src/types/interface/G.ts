@@ -172,7 +172,12 @@ export interface G<I = any, O = any, U_ = any> {
   isUnitPinRef(unitId: string, type: IO, pinId: string): boolean
   removeUnitPinData(unitId: string, type: IO, pinId: string): any
   removeMergeData(mergeId: string): any
-  setUnitId(unitId: string, newUnitId: string, name: string, specId: string): void
+  setUnitId(
+    unitId: string,
+    newUnitId: string,
+    name: string,
+    specId: string
+  ): void
   setMetadata(path: string[], data: any): void
   getExposedPinSpecs(): IOOf<GraphPinsSpec>
   moveSubComponentRoot(
@@ -199,7 +204,6 @@ export interface G<I = any, O = any, U_ = any> {
   hasMergePin(mergeId: string, unitId: string, type: IO, pinId: string): boolean
   isExposedInput(pin: GraphSubPinSpec): boolean
   isExposedOutput(pin: GraphSubPinSpec): boolean
-  isPinMergedTo(mergeId: string, unitId: string, type: IO, pinId: string): void
   isExposedInputPinId(pinId: string): boolean
   isExposedOutputPinId(pinId: string): boolean
   isElement(): boolean

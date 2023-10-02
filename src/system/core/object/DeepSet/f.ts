@@ -1,6 +1,6 @@
 import { Dict } from '../../../../types/Dict'
 
-export default function assocPath(
+export default function deepSet(
   obj: Dict<any>,
   path: string[],
   value: any
@@ -8,7 +8,7 @@ export default function assocPath(
   let _obj = { ...obj }
   if (path.length > 0) {
     const [head, ...tail] = path
-    _obj[head] = assocPath(_obj[head] || {}, tail, value)
+    _obj[head] = deepSet(_obj[head] || {}, tail, value)
     return _obj
   } else {
     return value
@@ -16,6 +16,6 @@ export default function assocPath(
 }
 
 // import * as assert from 'assert'
-// assert.deepEqual(assocPath({}, [], 0), 0)
-// assert.deepEqual(assocPath({}, ['a'], 0), { a: 0 })
-// assert.deepEqual(assocPath({}, ['a', 'b'], 0), { a: { b: 0 } })
+// assert.deepEqual(deepSet({}, [], 0), 0)
+// assert.deepEqual(deepSet({}, ['a'], 0), { a: 0 })
+// assert.deepEqual(deepSet({}, ['a', 'b'], 0), { a: { b: 0 } })

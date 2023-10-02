@@ -1,5 +1,6 @@
 import { Callback } from '../Callback'
 
 export interface MS {
-  get(callback: Callback<MediaStream>): void
+  mediaStream(callback: Callback<MediaStream>): void
+  getVideoTracks(): Promise<MediaStreamTrack[]>
 }

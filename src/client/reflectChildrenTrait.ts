@@ -1,5 +1,4 @@
 import { CodePathNotImplementedError } from '../exception/CodePathNotImplemented'
-import { _NUMBER_LITERAL_REGEX } from '../spec/regex/NUMBER_LITERAL'
 import { Style } from '../system/platform/Props'
 import { LayoutNode } from './LayoutNode'
 import { parseBorder } from './parseBorder'
@@ -8,14 +7,9 @@ import { parseMargin } from './parseMargin'
 import { parsePadding } from './parsePadding'
 import { parseTransformXY } from './parseTransformXY'
 import { rectsBoundingRect } from './util/geometry'
-import { Rect, Size } from './util/geometry/types'
+import { Rect } from './util/geometry/types'
 import { parseFontSize } from './util/style/getFontSize'
 import { parseOpacity } from './util/style/getOpacity'
-
-export const REGEX_PERCENT = /^([0-9]+)%$/
-export const REGEX_PX = new RegExp('^(' + _NUMBER_LITERAL_REGEX.source + ')px$')
-export const REGEX_CALC =
-  /^calc\(([0-9]+)%([+]{0,1}[-]{0,1}[0-9]+(?:\.\d*)?)px\)$/
 
 export function reflectChildrenTrait(
   parentTrait: LayoutNode,
@@ -25,7 +19,7 @@ export function reflectChildrenTrait(
   path: number[] = [],
   rootStyle: Style = parentStyle,
   expandChildren: boolean = true
-): [LayoutNode[], Size] {
+): LayoutNode[] {
   const {
     x: parentX,
     y: parentY,
@@ -257,14 +251,13 @@ export function reflectChildrenTrait(
 
       const _childStyle = display_contents ? _parentStyle : childStyle
 
-      const [reflected_children_trait, reflected_children_size] =
-        reflectChildrenTrait(
-          parentTrait,
-          _childStyle,
-          relative_children_style,
-          expandChild,
-          _path
-        )
+      const reflected_children_trait = reflectChildrenTrait(
+        parentTrait,
+        _childStyle,
+        relative_children_style,
+        expandChild,
+        _path
+      )
 
       children_trait = reflected_children_trait
     }
@@ -1002,11 +995,5 @@ export function reflectChildrenTrait(
     }
   }
 
-  return [
-    childrenTrait,
-    {
-      width: parent_fit_width ? total_relative_px_width : 0,
-      height: parent_fit_height ? total_relative_px_height : 0,
-    },
-  ]
+  return childrenTrait
 }

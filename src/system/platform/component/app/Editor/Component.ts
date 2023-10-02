@@ -107,6 +107,8 @@ import { IOElement } from '../../../../../client/IOElement'
 import { MAX_Z_INDEX } from '../../../../../client/MAX_Z_INDEX'
 import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
 import { ANIMATION_T_S } from '../../../../../client/animation/ANIMATION_T_S'
+import { animateSimulate } from '../../../../../client/animation/animateSimulate'
+import { animateSimulateTick } from '../../../../../client/animation/animateSimulateTick'
 import {
   ifLinearTransition,
   linearTransition,
@@ -170,10 +172,7 @@ import {
   IOWheelEvent,
   makeWheelListener,
 } from '../../../../../client/event/wheel'
-import {
-  extractStyle,
-  rawExtractStyle,
-} from '../../../../../client/extractStyle'
+import { extractStyle } from '../../../../../client/extractStyle'
 import { extractTrait } from '../../../../../client/extractTrait'
 import { findRef } from '../../../../../client/findRef'
 import { getSize } from '../../../../../client/getSize'
@@ -237,7 +236,7 @@ import {
 } from '../../../../../client/idFromUnitValue'
 import { Mode } from '../../../../../client/mode'
 import { _pinTypeMatch } from '../../../../../client/parser'
-import { reflectChildrenTrait } from '../../../../../client/reflectChildrenTrait'
+import { rawExtractStyle } from '../../../../../client/rawExtractStyle'
 import {
   ExpandChildFunction,
   expandSlot,
@@ -245,7 +244,7 @@ import {
 } from '../../../../../client/reflectComponentBaseTrait'
 import { showNotification } from '../../../../../client/showNotification'
 import { SimLink, SimNode, Simulation } from '../../../../../client/simulation'
-import applyStyle, { mergeStyle } from '../../../../../client/style'
+import { applyStyle, mergeStyle } from '../../../../../client/style'
 import {
   COLOR_DARK_LINK_YELLOW,
   COLOR_DARK_YELLOW,
@@ -288,8 +287,8 @@ import {
   randomInRadius,
   randomInRect,
   randomUnitVector,
-  rectsBoundingRect,
   resizeVector,
+  roundPosition,
   surfaceDistance,
   unitVector,
 } from '../../../../../client/util/geometry'
@@ -370,7 +369,6 @@ import {
   BULK_EDIT,
   COVER_PIN_SET,
   COVER_UNIT_PIN_SET,
-  EXPLODE_UNIT,
   EXPOSE_PIN_SET,
   EXPOSE_UNIT_PIN_SET,
   MOVE_SUBGRAPH_INTO,
@@ -450,6 +448,7 @@ import {
   reorderSubComponent,
   setSubComponent,
 } from '../../../../../spec/reducers/component_'
+import { _setSpecDatum } from '../../../../../spec/reducers/data'
 import {
   addMerge,
   addPinToMerge,
@@ -521,9 +520,14 @@ import {
   shouldExposePin,
 } from '../../../../../spec/util'
 import {
+  validateBundleSpec,
+  validateGraphSpec,
+} from '../../../../../spec/validate'
+import {
   BaseComponentSpec,
   Classes,
   ComponentSpec,
+  DatumSpec,
   GraphComponentSpec,
   GraphDataSpec,
   GraphPinSpec,
@@ -627,6 +631,8 @@ import Modes from '../ModeSelector/Component'
 import { IOResizeEvent, default as Resize } from '../Resize/Component'
 import Search from '../Search/Component'
 import Selection from '../Selection/Component'
+import { ANIMATION_DELTA_TRESHOLD } from './ANIMATION_DELTA_TRESHOLD'
+import { joinLeafPath } from './joinLeafPath'
 import { LayoutBase, LayoutLeaf } from './layout'
 
 const UNIT_NAME_MAX_CHAR_LINE: number = 12
@@ -655,12 +661,6 @@ const SURFACE_UNPLUG_DISTANCE = 1.5 * LINK_DISTANCE_EXPOSED
 export const NEAR = 36
 
 let i = 0
-
-export const joinLeafPath = (leafPath: string[]): string => {
-  const leaf_id = leafPath.join('/')
-
-  return leaf_id
-}
 
 export const OPPOSITE_MOMENT_EVENT = {
   data: 'drop',
@@ -697,80 +697,6 @@ export const describeArrowShape = (shape: Shape, r: number): string => {
   }
 }
 
-export const animateSimulateTick = (
-  n: Dict<number>,
-  _n: Dict<number>,
-  ff: [string, number][],
-  tick: (n: Dict<number>) => void
-): boolean => {
-  let ended = true
-
-  for (const [prop, treshold] of ff) {
-    const dp = _n[prop] - n[prop]
-
-    if (Math.abs(dp) > treshold) {
-      ended = false
-
-      n[prop] += dp / ANIMATION_C
-    } else {
-      n[prop] = _n[prop]
-    }
-  }
-
-  tick(n)
-
-  return ended
-}
-
-export const animateSimulate = (
-  system: System,
-  n0: Dict<number>,
-  n1: () => Dict<number>,
-  ff: [string, number][],
-  tf: (n: Dict<number>) => void,
-  callback: () => void | boolean
-): Callback => {
-  const {
-    api: {
-      animation: { requestAnimationFrame, cancelAnimationFrame },
-    },
-  } = system
-
-  // console.log('Graph', '_animate_simulate')
-
-  let n = n0
-
-  let frame
-
-  const next = () => (frame = requestAnimationFrame(tick))
-
-  const tick = () => {
-    const _n = n1()
-
-    const ended = animateSimulateTick(n, _n, ff, tf)
-
-    if (ended) {
-      const result = callback()
-
-      if (result === false) {
-        next()
-      }
-    } else {
-      next()
-    }
-  }
-
-  next()
-
-  return () => {
-    if (frame !== undefined) {
-      cancelAnimationFrame(frame)
-
-      frame = undefined
-    }
-  }
-}
-
 export const ARROW_NONE = ''
 export const ARROW_MEMORY = 'M-6,4 L0,1 L-6,-2'
 export const ARROW_NORMAL = 'M-0.25,2.25 L2,1 L-0.25,-0.25'
@@ -782,8 +708,6 @@ export const ID_ARROW_SEMICIRCLE = 'id-arrow-semicircle'
 
 export const LAYOUT_HORIZONTAL_PADDING = 45
 export const LAYOUT_VERTICAL_PADDING = 80
-
-export const ANIMATION_DELTA_TRESHOLD = 1
 
 export const KEYBOARD_POINTER_ID = -1
 
@@ -816,13 +740,14 @@ export interface Props {
 }
 
 export default class Editor extends Element<HTMLDivElement, Props> {
+  private _fallback_graph: $Graph
+  private _pod: $Graph
+
   private _root: Frame
   private _editor: Editor_
   private _component: Component
   private _fallback_frame: Component<HTMLElement>
   private _transcend: Transcend
-  private _fallback_graph: $Graph
-  private _pod: $Graph
   private _frame: Component<HTMLElement>
   private _frame_out: boolean = false
   private _background: Div
@@ -1013,6 +938,18 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   moment(path, data: { type: 'unit' | 'graph'; moment: Moment }): void {
     this._editor.moment(path, data)
+  }
+
+  public focus(options: FocusOptions | undefined = { preventScroll: true }) {
+    // console.log('Editor', 'focus')
+
+    this._editor.focus()
+  }
+
+  public blur(options: FocusOptions | undefined = { preventScroll: true }) {
+    // console.log('Editor', 'blur')
+
+    this._editor.blur()
   }
 
   private _set_spec = (id: string, spec: GraphSpec): void => {
@@ -1831,15 +1768,6 @@ export const NOT_SELECTED_AREA = { x0: 0, y0: 0, x1: 0, y1: 0 }
 // area
 
 export const NODE_PADDING: number = 12
-
-export const MODE_TO_KEY: Dict<string> = {
-  info: 'q',
-  add: 's',
-  remove: 'd',
-  change: 'f',
-  data: 'a',
-  multiselect: 'Shift',
-}
 
 export const hasPinId = (spec: Spec, type: IO, pinId: string): boolean => {
   return !!(spec[`${type}s`] || {})[pinId]
@@ -3840,28 +3768,35 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this.get_nodes_relative_positions(this._node)
   }
 
-  public get_nodes_relative_positions = (units: Dict<any>): Dict<Position> => {
-    const unit_positions: Dict<Position> = {}
+  public get_nodes_relative_positions = (nodes: Dict<any>): Dict<Position> => {
+    const node_positions_list = []
 
-    const unit_positions_list = []
+    for (const node_id in nodes) {
+      const unit_node_position = this._get_node_position(node_id)
 
-    for (const unitId in units) {
-      const unit_node_position = this._get_node_position(unitId)
-
-      unit_positions_list.push(unit_node_position)
+      node_positions_list.push(unit_node_position)
     }
 
-    const center = centerOfMass(unit_positions_list)
+    const center = centerOfMass(node_positions_list)
 
-    for (const unitId in units) {
-      const unit_node_position = this._get_node_position(unitId)
+    return this.get_nodes_relative_positions_to(nodes, center)
+  }
+
+  public get_nodes_relative_positions_to = (
+    nodes: Dict<any>,
+    center: Point
+  ): Dict<Position> => {
+    const node_positions: Dict<Position> = {}
+
+    for (const node_id in nodes) {
+      const unit_node_position = this._get_node_position(node_id)
 
       const unit_relative_position = pointVector(center, unit_node_position)
 
-      unit_positions[unitId] = unit_relative_position
+      node_positions[node_id] = unit_relative_position
     }
 
-    return unit_positions
+    return node_positions
   }
 
   public get_node_positions = (): Dict<Position> => {
@@ -4122,22 +4057,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return merge
   }
 
-  // PERF
-  // _unit_to_merge
+  // PERF _unit_to_merge
   private _get_unit_merges = (unit_id: string): GraphMergesSpec => {
-    const merges = this._spec_get_merges()
-
-    const unit_merges: GraphMergesSpec = {}
-
-    for (const merge_id in merges) {
-      const merge = merges[merge_id]
-
-      if (merge[unit_id]) {
-        unit_merges[merge_id] = merge
-      }
-    }
-
-    return unit_merges
+    return getUnitMergesSpec(this._spec, unit_id)
   }
 
   private _get_unit_plugs = (unit_id: string): GraphUnitPlugs => {
@@ -4667,7 +4589,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._merge_ref[merge_node_id]
   }
 
-  private _is_graph_pin_ref = (pin_node_id: string): boolean => {
+  private _is_pin_node_ref = (pin_node_id: string): boolean => {
     if (this._is_link_pin_node_id(pin_node_id)) {
       return this._is_link_pin_ref(pin_node_id)
     } else if (this._is_merge_node_id(pin_node_id)) {
@@ -4687,7 +4609,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _is_input_pin_ref = (pin_node_id: string): boolean => {
     return (
-      this._is_input_node_id(pin_node_id) && this._is_graph_pin_ref(pin_node_id)
+      this._is_input_pin_node_id(pin_node_id) &&
+      this._is_pin_node_ref(pin_node_id)
     )
   }
 
@@ -5073,17 +4996,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._simulation_prevent_restart = true
 
     for (const datum_id in data) {
-      const datum_value = data[datum_id]
-      const { x, y } = randomInRect(
-        this._width / 4,
-        this._height / 4,
-        (3 * this._width) / 4,
-        (3 * this._height) / 4
-      )
-      this._add_datum(datum_id, datum_value, {
-        x,
-        y,
-      })
+      const datum_spec = data[datum_id]
+
+      let value: string
+      let position: Position
+
+      if (typeof datum_spec === 'string') {
+        value = datum_spec
+        position = this._init_random_datum_position()
+      } else {
+        value = datum_spec.value
+        position =
+          datum_spec?.metadata?.position ?? this._init_random_datum_position()
+      }
+
+      this._add_datum(datum_id, value, position)
     }
 
     this._unit_to_unit = {}
@@ -9240,11 +9167,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._pin_line_position(anchor_node_id, LINK_DISTANCE_DATA)
   }
 
+  private _init_random_datum_position = () => {
+    return randomInRect(
+      this._width / 4,
+      this._height / 4,
+      (3 * this._width) / 4,
+      (3 * this._height) / 4
+    )
+  }
+
   private _predict_plug_initial_position = (
     plug_node_id: string
   ): Position | null => {
     const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
 
+    return this.__predict_plug_initial_position(type, pinId, subPinId)
+  }
+
+  private __predict_plug_initial_position = (
+    type: IO,
+    pinId: string,
+    subPinId: string
+  ): Position | null => {
     const plug_spec = this._get_exposed_sub_pin_spec(type, pinId, subPinId)
 
     if (plug_spec.unitId && plug_spec.pinId) {
@@ -9816,7 +9760,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_id: string,
     { x, y }: Position
   ): void => {
-    // console.log('Graph', '_sim_add_link_pin_node', unit_id, type, pin_id, { x, y })
+    // console.log('Graph', '_sim_add_link_pin_node', unit_id, type, pin_id, {
+    //   x,
+    //   y,
+    // })
 
     const { getSpec } = this.$props
 
@@ -10568,11 +10515,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _add_node_link_heap_node = (node_id: string): void => {
     // console.log('Graph', '_add_node_link_heap_node', node_id)
-    const heap_node = {
+
+    const heap_node: Heap<{ count: number; id: string }> = {
       value: { count: 0, id: node_id },
       parent: null,
-      children: [],
+      left: null,
+      right: null,
     }
+
     this._node_link_heap[node_id] = heap_node
     this._node_link_heap_root = addHeapNode(
       this._node_link_heap_root,
@@ -10583,11 +10533,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _remove_node_link_heap = (node_id: string) => {
     // console.log('Graph', '_remove_node_link_heap', node_id)
+
     const heap_node = this._node_link_heap[node_id]
+
     this._node_link_heap_root = removeHeapNode(
       heap_node,
       this._node_link_heap_predicative
     )
+
     delete this._node_link_heap[node_id]
   }
 
@@ -10815,6 +10768,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const node = this._node[merge_node_id]
 
+    this._node_type[merge_node_id] = 'm'
     this._pin_node[merge_node_id] = node
     this._normal_node[merge_node_id] = node
 
@@ -10914,10 +10868,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   public add_datum = (datum_id: string, value: string, position: Position) => {
-    if (this._has_datum(datum_id)) {
-      throw new Error('datum with same id already in graph')
-    }
-
     this._add_datum(datum_id, value, position)
 
     this._dispatch_action(makeAddDatumAction(datum_id, value))
@@ -11609,45 +11559,43 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    if (this._node_target_count > 0) {
-      for (const node_id in this._node_target) {
-        const a_id = node_id
-        const t_id = this._node_target[node_id]
+    for (const node_id in this._node_target) {
+      const a_id = node_id
+      const t_id = this._node_target[node_id]
 
-        const a = this._node[a_id]
-        const t = this._node[this._get_node_anchor_node_id(t_id)]
+      const a = this._node[a_id]
+      const t = this._node[this._get_node_anchor_node_id(t_id)]
 
-        const { l, d } = surfaceDistance(a, t)
+      const { l, d } = surfaceDistance(a, t)
 
-        if (this._is_pin_node_id(node_id)) {
-          if (this._is_pin_node_id(t_id)) {
-            if (d < 3) {
-              this._on_pin_pin_target_end(node_id, t_id)
-            }
-          } else if (this._is_unit_node_id(t_id)) {
-            if (l < 3) {
-              this._on_pin_unit_target_end(node_id, t_id)
-            }
-          } else {
-            throw new InvalidStateError()
+      if (this._is_pin_node_id(node_id)) {
+        if (this._is_pin_node_id(t_id)) {
+          if (d < 3) {
+            this._on_pin_pin_target_end(node_id, t_id)
           }
-        } else if (this._is_int_node_id(node_id)) {
-          const { type } = segmentInternalNodeId(node_id)
-
-          const b_id = getExtNodeIdFromIntNodeId(node_id)
-
-          const is_close = isInside(a, t, 3)
-          const is_inside = isInside(a, t, 1)
-
-          this._set_plug_marker_to_default(type, b_id, a_id)
-
-          if (is_close) {
-            this._set_exposed_pin_marker_to_node(type, b_id, a_id, a_id, 3 - l)
+        } else if (this._is_unit_node_id(t_id)) {
+          if (l < 3) {
+            this._on_pin_unit_target_end(node_id, t_id)
           }
+        } else {
+          throw new InvalidStateError()
+        }
+      } else if (this._is_int_node_id(node_id)) {
+        const { type } = segmentInternalNodeId(node_id)
 
-          if (is_inside) {
-            this._on_plug_target_end(node_id, t_id)
-          }
+        const b_id = getExtNodeIdFromIntNodeId(node_id)
+
+        const is_close = isInside(a, t, 3)
+        const is_inside = isInside(a, t, 1)
+
+        this._set_plug_marker_to_default(type, b_id, a_id)
+
+        if (is_close) {
+          this._set_exposed_pin_marker_to_node(type, b_id, a_id, a_id, 3 - l)
+        }
+
+        if (is_inside) {
+          this._on_plug_target_end(node_id, t_id)
         }
       }
     }
@@ -11840,7 +11788,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const node = {
         parent: null,
         value: { link_id, l, t },
-        children: [],
+        left: null,
+        right: null,
       }
 
       pathSet(this._node_link_heap_node, [node_id, link_id], node)
@@ -12840,6 +12789,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this.__show_pin_info(node_id)
 
       const merge_to_pin = this._merge_to_pin[node_id]
+
       for (const pin_node_id in merge_to_pin) {
         this._show_pin_info(pin_node_id)
       }
@@ -12883,6 +12833,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private __show_pin_info = (pin_node_id: string): void => {
+    // console.log('Graph', '__show_pin_info', pin_node_id)
+
     this._show_pin_info_opacity(pin_node_id)
 
     const anchor_node_id = this._get_pin_anchor_node_id(pin_node_id)
@@ -12891,6 +12843,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { x, y } = this._predict_pin_type_initial_position(anchor_node_id)
 
       const type_node_id = getTypeNodeId(anchor_node_id)
+
       if (!this._has_node(type_node_id)) {
         this._sim_add_pin_type(anchor_node_id, { x, y })
       }
@@ -13317,7 +13270,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _is_link_pin_present = (pin_node_id: string): boolean => {
     return (
       !this._is_link_pin_merged(pin_node_id) ||
-      (this._is_output_node_id(pin_node_id) &&
+      (this._is_output_pin_node_id(pin_node_id) &&
         this._is_link_pin_ref(pin_node_id))
     )
   }
@@ -13473,24 +13426,32 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     width: number,
     height: number
   ) => {
-    // console.log('Graph', 'resize_component', width, height)
+    // console.log('Graph', 'resize_sub_component', width, height)
 
     if (this._tree_layout) {
-      this._layout_resize_sub_component(unit_id, width, height)
+      this._sim_layout_resize_sub_component(unit_id, width, height)
 
       this._spec_component_set_unit_graph_size(unit_id, width, height)
     } else {
-      this._sim_resize_unit_graph_component(unit_id, width, height)
-      this._spec_resize_unit_component(unit_id, width, height)
+      this._state_set_unit_size(unit_id, width, height)
     }
   }
 
-  private _spec_resize_unit_component = (
+  private _state_set_unit_size = (
+    unit_id: string,
+    width: number,
+    height: number
+  ) => {
+    this._sim_set_unit_size(unit_id, width, height)
+    this._spec_set_unit_size(unit_id, width, height)
+  }
+
+  private _spec_set_unit_size = (
     unit_id: string,
     width: number,
     height: number
   ): void => {
-    // console.log('Graph', '_spec_resize_unit_component', unit_id, width, height)
+    // console.log('Graph', '_spec_set_unit_size', unit_id, width, height)
 
     setUnitMetadata(
       { id: unit_id, path: ['component', 'width'], value: width },
@@ -13587,7 +13548,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._spec_component_set_default_size()
   }
 
-  private _sim_resize_unit_graph_component = (
+  private _sim_set_unit_size = (
     unit_id: string,
     width: number,
     height: number
@@ -13842,7 +13803,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     core_area.$element.style.height = `${height + NODE_PADDING + 2}px`
   }
 
-  private _layout_resize_sub_component = (
+  private _sim_layout_resize_sub_component = (
     unit_id: string,
     width: number,
     height: number
@@ -15243,7 +15204,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (!this._spec_is_link_pin_ignored(pin_node_id)) {
         if (
           (!this._is_link_pin_merged(pin_node_id) ||
-            (this._is_output_node_id(pin_node_id) &&
+            (this._is_output_pin_node_id(pin_node_id) &&
               this._is_link_pin_ref(pin_node_id))) &&
           !this._collapse_node_id.has(pin_node_id)
         ) {
@@ -16046,6 +16007,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _set_node_compatible = (node_id: string): void => {
+    // console.log('Graph', '_set_node_compatible', node_id)
+
     this._compatible_node_id[node_id] = true
     this._compatible_node_count++
   }
@@ -16271,10 +16234,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _enable_unit_pin_names = (unit_id: string) => {
+    this._for_each_unit_pin(unit_id, (pin_node_id: string) => {
+      this._enable_pin_name(pin_node_id)
+    })
+  }
+
   private _enable_all_node_name = () => {
     for (const unit_id in this._unit_node) {
       if (!this._is_unit_base(unit_id)) {
         this._enable_core_name(unit_id)
+        this._enable_unit_pin_names(unit_id)
       }
     }
 
@@ -16413,14 +16383,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       if (prev_mode !== 'info' && this._mode === 'info') {
-        // for (const selected_node_id in this._selected_node_id) {
-        //   if (this._is_unit_node_id(selected_node_id)) {
-        //     this._enable_core_name(selected_node_id)
-        //   } else if (this._is_plug_node_id(selected_node_id)) {
-        //     this._enable_plug_name(selected_node_id)
-        //   }
-        // }
-
         this._enable_all_node_name()
 
         if (this._hover_node_count > 0) {
@@ -18259,7 +18221,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._get_unit_component_layout_size(sub_component_id)
 
       // PERF
-      this._layout_resize_sub_component(sub_component_id, width, height)
+      this._sim_layout_resize_sub_component(sub_component_id, width, height)
     }
 
     for (const sub_component_id in this._component.$subComponent) {
@@ -18386,7 +18348,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       leaf_frame = new Frame(
         {
           style: frame_style,
-          // disabled: false,
           disabled: true,
         },
         this.$system
@@ -18495,22 +18456,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (!is_text) {
         mergeStyle(leaf_comp.$node, {
           position: style.position ?? '',
-          boxSizing: style.boxSizing ?? '',
+          boxSizing: style['box-sizing'] ?? '',
           margin: style.margin ?? '',
-          marginTop: style.marginTop ?? '',
-          marginLeft: style.marginLeft ?? '',
-          marginRight: style.marginRight ?? '',
-          marginBottom: style.marginBottom ?? '',
+          marginTop: style['margin-top'] ?? '',
+          marginLeft: style['margin-left'] ?? '',
+          marginRight: style['margin-bottom'] ?? '',
+          marginBottom: style['margin-bottom'] ?? '',
           top: style.top ?? '',
           left: style.left ?? '',
           right: style.right ?? '',
           bottom: style.bottom ?? '',
-          width: is_canvas ? undefined : style.width ?? '',
-          height: is_canvas ? undefined : style.height ?? '',
-          opacity: style.opacity ?? '',
-          fontSize: style.fontSize ?? '',
-          transform: style.transform ?? '',
-          aspectRatio: style.aspectRatio ?? '',
+          width: is_canvas ? undefined : style['width'] ?? '',
+          height: is_canvas ? undefined : style['height'] ?? '',
+          opacity: style['opacity'] ?? '',
+          fontSize: style['font-size'] ?? '',
+          transform: style['transform'] ?? '',
+          aspectRatio: style['aspect-ratio'] ?? '',
         })
 
         const leaf_attr = this._leaf_attr[leaf_id]
@@ -18729,7 +18690,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (leaf_end_count === base_length) {
             this._animating_sub_component_base_id.delete(sub_component_id)
 
-            callback()
+            return callback()
           }
         }
       )
@@ -18922,8 +18883,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     sub_component_id: string,
     base: LayoutBase,
     style: Style,
-    trait: LayoutNode,
-    expand_children: boolean = true
+    trait: LayoutNode
   ): Dict<LayoutNode> => {
     const sub_component = this._get_sub_component(sub_component_id)
 
@@ -18933,8 +18893,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       sub_component,
       base,
       style,
-      trait,
-      expand_children
+      trait
     )
   }
 
@@ -18944,8 +18903,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     component: Component,
     base: LayoutBase,
     style: Style,
-    trait: LayoutNode,
-    expand_children: boolean = true
+    trait: LayoutNode
   ): Dict<LayoutNode> => {
     const base_trait = this.___reflect_sub_component_base_trait(
       root_prefix,
@@ -18953,8 +18911,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       component,
       base,
       style,
-      trait,
-      expand_children
+      trait
     )
 
     const _base_trait = mapObjKeyKV(
@@ -18965,66 +18922,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return _base_trait
   }
 
-  private _make_sub_component_measure_children = (
-    sub_component_id: string,
-    parentTrait: LayoutNode,
-    expandChild: ExpandChildFunction
-  ) => {
-    const {
-      api: {
-        text: { measureText },
-      },
-    } = this.$system
-
-    return (parentStyle: Style) => {
-      const component = this._get_sub_component(sub_component_id)
-
-      const children = this._spec_get_sub_component_children(sub_component_id)
-
-      const base = children.reduce((acc, child_id) => {
-        const child_base = this._get_sub_component_base(child_id)
-
-        return [...acc, ...child_base]
-      }, [])
-
-      const base_style = base.map(([leaf_id, leaf_comp]) => {
-        return extractStyle(
-          this._component,
-          leaf_comp,
-          parentTrait,
-          measureText
-        )
-      })
-
-      const relative_base_style = base_style.filter(({ position }) => {
-        return position !== 'fixed' && position !== 'absolute'
-      }, [])
-
-      const [reflected_children_trait, reflected_children_size] =
-        reflectChildrenTrait(
-          parentTrait,
-          parentStyle,
-          relative_base_style,
-          (path) => {
-            return []
-          },
-          []
-        )
-
-      const size = rectsBoundingRect(reflected_children_trait)
-
-      return size
-    }
-  }
-
   private ___reflect_sub_component_base_trait = (
     root_prefix: string,
     sub_component_id: string,
     component: Component,
     base: LayoutBase,
     style: Style,
-    trait: LayoutNode,
-    expand_children: boolean = true
+    trait: LayoutNode
   ): Dict<LayoutNode> => {
     const {
       api: {
@@ -19055,8 +18959,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       base,
       style,
       trait,
-      _extractStyle,
-      expand_children
+      _extractStyle
     )
 
     return base_trait
@@ -19517,8 +19420,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   sub_component_id,
                   leaf_base,
                   frame_style,
-                  trait,
-                  true
+                  trait
                 )
               }
 
@@ -20440,6 +20342,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._is_dropable_mode()) {
+      if (node_id === this._subgraph_unit_id) {
+        return
+      }
+
       this._drop_node(node_id)
     }
   }
@@ -20679,42 +20585,63 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _is_unit_pin_pre_match = (unit_id: string, pin_node_id: string) => {
+    return (
+      ((this._is_link_pin_node_id(pin_node_id) &&
+        !this._spec_is_link_pin_ignored(pin_node_id)) ||
+        this._is_merge_node_id(pin_node_id)) &&
+      this._is_input_pin_node_id(pin_node_id) &&
+      this._is_pin_node_ref(pin_node_id) &&
+      !this._is_pin_unit_connected(pin_node_id, unit_id)
+    )
+  }
+
   private _is_unit_node_match = (unit_id: string, node_id: string): boolean => {
-    if (
-      this._is_link_pin_node_id(node_id) &&
-      this._is_input_node_id(node_id) &&
-      !this._spec_is_link_pin_ignored(node_id) &&
-      this._is_graph_pin_ref(node_id) &&
-      !this._is_pin_unit_connected(node_id, unit_id)
-    ) {
-      const { unitId, type } = segmentLinkPinNodeId(node_id)
+    // console.log('Graph', '_is_unit_node_match', unit_id, node_id)
 
-      const merge_node_id = this._ref_unit_to_merge[unit_id]
-
-      if (merge_node_id) {
-        const merge = this._get_merge(merge_node_id)
-
-        if (merge[unitId]) {
-          return false
-        } else {
-          return true
-        }
-      } else {
-        const ref = this._is_link_pin_ref(node_id)
-
-        if (ref) {
-          const int_node_id = this._pin_to_int[type][node_id]
-
-          if (int_node_id) {
-            return false
-          }
-        }
-
-        return true
-      }
+    if (this._is_unit_pin_pre_match(unit_id, node_id)) {
+      return this._is_unit_pin_post_match(unit_id, node_id)
     } else {
       return false
     }
+  }
+
+  private _is_unit_link_post_match = (
+    unit_id: string,
+    pin_node_id: string
+  ): boolean => {
+    const { unitId, type } = segmentLinkPinNodeId(pin_node_id)
+
+    const merge_node_id = this._ref_unit_to_merge[unit_id]
+
+    if (merge_node_id) {
+      const merge = this._get_merge(merge_node_id)
+
+      if (merge[unitId]) {
+        return false
+      } else {
+        return this._is_ref_pin_unit_type_match(pin_node_id, unit_id)
+      }
+    } else {
+      const ref = this._is_link_pin_ref(pin_node_id)
+
+      if (ref) {
+        const int_node_id = this._pin_to_int[type][pin_node_id]
+
+        if (int_node_id) {
+          return false
+        }
+      }
+
+      return true
+    }
+  }
+
+  private _is_unit_merge_post_match = (
+    unit_id: string,
+    merge_node_id: string
+  ): boolean => {
+    return true
   }
 
   private _drop_unit = (unit_id: string): void => {
@@ -20733,14 +20660,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_node_id: string,
     node_id: string
   ): boolean => {
-    const ref = this._is_graph_pin_ref(pin_node_id)
-
     if (this._is_unit_node_id(node_id)) {
-      if (ref) {
-        return this._is_ref_pin_unit_match(pin_node_id, node_id)
-      } else {
-        return false
-      }
+      return this._is_pin_unit_match(pin_node_id, node_id)
     } else if (this._is_link_pin_node_id(node_id)) {
       if (!this._spec_is_link_pin_ignored(node_id)) {
         if (this._is_pin_pin_match(pin_node_id, node_id)) {
@@ -20760,6 +20681,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _drop_pin = (pin_node_id: string): void => {
+    // console.log('Graph', '_drop_pin', pin_node_id)
+
     const is_link_pin = this._is_link_pin_node_id(pin_node_id)
     const is_link_pin_ignored =
       is_link_pin && this._spec_is_link_pin_ignored(pin_node_id)
@@ -21386,6 +21309,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  public blur(options: FocusOptions | undefined = { preventScroll: true }) {
+    // console.log('Graph', 'blur', this._id)
+
+    this._graph.blur()
+
+    if (this._control_lock) {
+      this._unlock_control()
+    }
+  }
+
   public temp_fixate_node = (node_id: string, t: number = 100): void => {
     this._set_node_fixed(node_id, true)
 
@@ -21541,19 +21474,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _unlock_control = (): void => {
-    // console.log('Graph', '_unlock_control', this._id)
-
     const { animate } = this.$props
 
     if (this._control_lock) {
+      // console.log('Graph', '_unlock_control', this._id)
+
       this._control_lock = false
 
       this._disable_input()
 
-      // if (!this._focusing_sub_component) {
-      //   // this._hide_control(false)
-      //   this._hide_control(animate)
-      // }
+      if (!this._focusing_sub_component) {
+        // this._hide_control(false)
+        this._hide_control(animate)
+      }
     }
   }
 
@@ -21692,14 +21625,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._is_link_pin_node_id(node_id) && isOutputPinId(node_id)
   }
 
-  private _is_input_node_id = (node_id: string): boolean => {
+  private _is_input_pin_node_id = (node_id: string): boolean => {
     return (
       this._is_link_input_node_id(node_id) ||
       (this._is_merge_node_id(node_id) && this._is_input_only_merge(node_id))
     )
   }
 
-  private _is_output_node_id = (node_id: string): boolean => {
+  private _is_output_pin_node_id = (node_id: string): boolean => {
     return (
       this._is_link_output_node_id(node_id) ||
       (this._is_merge_node_id(node_id) && this._is_output_only_merge(node_id))
@@ -22121,6 +22054,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_enable_plug_name', ext_node_id)
 
     this._set_plug_name_style_attr(ext_node_id, 'pointerEvents', 'inherit')
+  }
+
+  private _enable_pin_name = (pin_node_id: string): void => {
+    // console.log('Graph', '_enable_pin_name', pin_node_id)
   }
 
   private _disable_plug_name = (ext_node_id: string): void => {
@@ -22846,8 +22783,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const a_link_pin = this._is_link_pin_node_id(a)
     const b_link_pin = this._is_link_pin_node_id(b)
 
-    const a_ref = this._is_graph_pin_ref(a)
-    const b_ref = this._is_graph_pin_ref(b)
+    const a_ref = this._is_pin_node_ref(a)
+    const b_ref = this._is_pin_node_ref(b)
 
     // if (a_ref !== b_ref) {
     //   return false
@@ -22859,12 +22796,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (a_ref && !b_ref) {
         return (
-          b_type === 'output' &&
+          // b_type === 'output' &&
           this._is_link_pin_ref_link_pin_type_match(a, a_type, b, b_type)
         )
       } else if (!a_ref && b_ref) {
         return (
-          a_type === 'output' &&
+          // a_type === 'output' &&
           this._is_ref_link_pin_link_pin_type_match(a, a_type, b, b_type)
         )
       } else if (a_ref && b_ref) {
@@ -22904,7 +22841,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         return this._is_pin_pin_type_match(a, 'output', b, b_type)
       } else {
         return (
-          a_ref === b_ref &&
+          // a_ref === b_ref &&
           this._is_pin_pin_type_match(a, oppositePinType(b_type), b, b_type)
         )
       }
@@ -23055,8 +22992,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_node_id: string,
     unit_id: string
   ): boolean => {
+    // console.log('Graph', '_is_ref_pin_unit_match', pin_node_id, unit_id)
+
     if (this._is_link_pin_node_id(pin_node_id)) {
       const { type } = segmentLinkPinNodeId(pin_node_id)
+
       if (type === 'output') {
         return false
       } else {
@@ -23075,12 +23015,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._is_pin_unit_connected(pin_node_id, unit_id)) {
         return false
       } else {
-        const { type } = segmentLinkPinNodeId(pin_node_id)
+        if (this._is_input_only_merge(pin_node_id)) {
+          return this._is_ref_pin_unit_type_match(pin_node_id, unit_id)
+        }
 
-        return (
-          type === 'input' &&
-          this._is_ref_pin_unit_type_match(pin_node_id, unit_id)
-        )
+        return false
       }
     }
   }
@@ -23152,15 +23091,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): boolean => {
     const target_type = this._runtime_pin_type(b, b_type)
 
-    if (
-      [
-        TreeNodeType.Class,
-        TreeNodeType.ClassLiteral,
-        TreeNodeType.Unit,
-      ].includes(target_type.type)
-    ) {
-      return this._is_pin_pin_type_match(a, a_type, b, b_type)
-    }
+    // if (
+    //   [
+    //     TreeNodeType.Class,
+    //     TreeNodeType.ClassLiteral,
+    //     TreeNodeType.Unit,
+    //   ].includes(target_type.type)
+    // ) {
+    return this._is_pin_pin_type_match(a, a_type, b, b_type)
+    // }
 
     return false
   }
@@ -23178,6 +23117,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         TreeNodeType.Class,
         TreeNodeType.ClassLiteral,
         TreeNodeType.Unit,
+        TreeNodeType.Generic,
       ].includes(source_type.type)
     ) {
       return this._is_pin_pin_type_match(a, a_type, b, b_type)
@@ -23192,6 +23132,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     b: string,
     b_type: IO
   ): boolean => {
+    // console.log('Graph', '_is_pin_pin_type_match', a, a_type, b, b_type)
+
     const { specs } = this.$props
 
     const source_type = this._runtime_pin_type(a, a_type)
@@ -23200,13 +23142,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return _pinTypeMatch(specs, source_type, a_type, target_type, b_type)
   }
 
-  private _is_unit_pin_match = (
+  private _is_unit_pin_post_match = (
     unit_id: string,
     pin_node_id: string
   ): boolean => {
-    const ref = this._is_graph_pin_ref(pin_node_id)
+    const ref = this._is_pin_node_ref(pin_node_id)
+
     if (ref) {
-      return this._is_ref_pin_unit_match(pin_node_id, unit_id)
+      if (this._is_link_pin_node_id(pin_node_id)) {
+        return this._is_unit_link_post_match(unit_id, pin_node_id)
+      } else if (this._is_merge_node_id(pin_node_id)) {
+        return this._is_unit_merge_post_match(unit_id, pin_node_id)
+      }
     } else {
       return false
     }
@@ -23262,7 +23209,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       // }
     }
 
-    if (this._is_graph_pin_ref(pin_node_id)) {
+    if (this._is_pin_node_ref(pin_node_id)) {
       if (!this._is_datum_class_literal(datum_node_id)) {
         return false
       }
@@ -23455,6 +23402,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_node_id: string,
     all_unit_id: string[]
   ): boolean => {
+    // console.log('Graph', '_is_pin_all_unit_match', pin_node_id, all_unit_id)
+
     if (all_unit_id.length > 1) {
       return false
     }
@@ -23464,18 +23413,34 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._is_unit_pin_match(unit_id, pin_node_id)
   }
 
+  private _is_pin_unit_match = (pin_node_id: string, unit_id: string) => {
+    return this._is_unit_pin_match(unit_id, pin_node_id)
+  }
+
+  private _is_unit_pin_match = (unit_id: string, pin_node_id: string) => {
+    if (this._is_unit_pin_pre_match(unit_id, pin_node_id)) {
+      if (this._is_ref_pin_unit_type_match(pin_node_id, unit_id)) {
+        return true
+      }
+    }
+
+    return false
+  }
+
   private _is_unit_all_pin_match = (
     unit_id: string,
     all_pin_node_id: string[]
   ): boolean => {
     let compatible = true
+
     for (const _pin_node_id of all_pin_node_id) {
-      compatible =
-        compatible && this._is_ref_pin_unit_match(_pin_node_id, unit_id)
+      compatible = compatible && this._is_unit_pin_match(unit_id, _pin_node_id)
+
       if (!compatible) {
         break
       }
     }
+
     return compatible
   }
 
@@ -23538,7 +23503,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       all_pin = all_pin && this._is_pin_node_id(node_id)
       all_pin_link =
         all_pin && all_pin_link && this._is_link_pin_node_id(node_id)
-      all_pin_ref = all_pin && all_pin_ref && this._is_graph_pin_ref(node_id)
+      all_pin_ref = all_pin && all_pin_ref && this._is_pin_node_ref(node_id)
 
       if (all_pin_ref) {
         if (this._is_link_pin_node_id(node_id)) {
@@ -23661,10 +23626,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
         } else if (all_unit) {
-          for (let pin_node_id in this._pin_node) {
+          for (const pin_node_id in this._pin_node) {
             if (this._is_input_pin_ref(pin_node_id)) {
               if (this._is_link_pin_node_id(pin_node_id)) {
                 const { unitId } = segmentLinkPinNodeId(pin_node_id)
+
                 if (!display_node_id.includes(unitId)) {
                   if (
                     this._is_pin_all_unit_match(pin_node_id, display_node_id)
@@ -23674,13 +23640,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 }
               } else {
                 let compatible = true
+
                 const merge = this._get_merge_by_node_id(pin_node_id)
+
                 for (const unit_id in merge) {
                   if (display_node_id.includes(unit_id)) {
                     compatible = false
+
                     break
                   }
                 }
+
                 if (compatible) {
                   this._set_node_compatible(pin_node_id)
                 }
@@ -26714,8 +26684,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         this._unplug_base_frame(unit_id, base)
       } else {
-        this._leave_sub_component_frame(unit_id)
         this._decompose_sub_component(unit_id)
+        this._leave_sub_component_frame(unit_id)
       }
     }
 
@@ -26873,7 +26843,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // )
 
     this._unplug_sub_component_base_frame(sub_component_id)
-    this._append_sub_component_all_root(sub_component_id)
+    // this._append_sub_component_all_root(sub_component_id)
     this._append_sub_component_root_base(sub_component_id)
 
     if (this._in_component_control) {
@@ -26932,10 +26902,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (component_collapsed) {
         if (!this._animating_sub_component_base_id.has(sub_component_id)) {
-          this._remove_sub_component_all_root(sub_component_id)
+          // this._remove_sub_component_all_root(sub_component_id)
         }
 
-        this._remove_sub_component_root_base(sub_component_id)
+        // this._remove_sub_component_root_base(sub_component_id)
       } else {
         if (should_uncollapse) {
           const sub_component = this._get_sub_component(sub_component_id)
@@ -26991,8 +26961,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 sub_component_id,
                 base,
                 style,
-                trait,
-                false
+                trait
               )
             }
 
@@ -27130,7 +27099,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const scale = this._zoom.z
 
-        this._stop_debugger()
+        // this._stop_debugger()
         this._lose_component_control()
         this._disable_transcend()
         this._hide_transcend(animate)
@@ -28301,6 +28270,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const {
       api: {
         text: { measureText },
+        layout: { reflectChildrenTrait },
       },
     } = this.$system
 
@@ -28435,10 +28405,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const base_style = base.map(leaf_to_style)
 
-        const [parent_base_trait] = reflectChildrenTrait(
+        const parent_base_trait = reflectChildrenTrait(
           parent_trait,
           parent_style,
           base_style,
+          [],
           (path) => {
             let _base = base
 
@@ -28546,10 +28517,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           )
 
-          const [parent_base_trait] = reflectChildrenTrait(
+          const parent_base_trait = reflectChildrenTrait(
             slot_trait,
             slot_style,
             slot_base_style,
+            [],
             (path) => {
               // RETURN
               return []
@@ -29182,6 +29154,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const {
       api: {
         text: { measureText },
+        layout: { reflectChildrenTrait },
       },
     } = this.$system
 
@@ -29364,10 +29337,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           )
         const slot_trait = extractTrait(slot_offset, measureText)
 
-        const [slot_base_trait, slot_internal_size] = reflectChildrenTrait(
+        const slot_base_trait = reflectChildrenTrait(
           slot_trait,
           slot_style,
           slot_base_style,
+          [],
           (path): Style[] => {
             // TODO
             return []
@@ -29395,10 +29369,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const slot_trait: LayoutNode = all_leaf_trait[slot_id]
       const slot_style: Style = all_leaf_style[slot_id]
 
-      const [slot_base_trait] = reflectChildrenTrait(
+      const slot_base_trait = reflectChildrenTrait(
         slot_trait,
         slot_style,
         slot_base_style,
+        [],
         (path) => {
           return expandSlot(
             this._component,
@@ -30414,7 +30389,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _is_node_blue_long_press_able = (node_id: string): boolean => {
     if (this._is_link_pin_node_id(node_id)) {
-      if (this._is_input_node_id(node_id)) {
+      if (this._is_input_pin_node_id(node_id)) {
         return true
       }
     }
@@ -31045,8 +31020,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _generate_identity_matches = (unit_id: string) => {
     const unit_spec = this._get_unit_spec(unit_id)
 
-    const input_names = keys(unit_spec.inputs)
-    const output_names = keys(unit_spec.outputs)
+    const input_names = keys(unit_spec.inputs ?? {})
+    const output_names = keys(unit_spec.outputs ?? {})
 
     const data_input_names = input_names.filter(
       (pin_id) => !this.__is_link_pin_ref(unit_id, 'input', pin_id)
@@ -31508,9 +31483,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               opposite_pin_id
             )
 
-            // if (this._has_node(opposite_pin_node_id)) {
-            selected_node_ids.push(opposite_pin_node_id)
-            // }
+            if (this._has_node(opposite_pin_node_id)) {
+              selected_node_ids.push(opposite_pin_node_id)
+            }
           }
         } else if (merge_pin_count > 1) {
           selected_node_ids.push(merge_node_id)
@@ -32746,6 +32721,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._sim_plug_exposed_pin(type, pinId, subPinId, { mergeId })
     }
 
+    const merge_ref = this._merge_ref[merge_node_id]
+
+    this._pin_to_merge[pin_node_id] = merge_node_id
+    this._merge_to_pin[merge_node_id][pin_node_id] = true
+
     if (is_pin_output_self) {
       this._merge_to_ref_unit[merge_node_id] = unitId
       this._ref_unit_to_merge[unitId] = merge_node_id
@@ -32772,11 +32752,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else {
       this._sim_change_link_pin_to_merge(pin_node_id, merge_node_id)
     }
-
-    const merge_ref = this._merge_ref[merge_node_id]
-
-    this._pin_to_merge[pin_node_id] = merge_node_id
-    this._merge_to_pin[merge_node_id][pin_node_id] = true
 
     const merge_input = this._merge_input[merge_node_id]
     const merge_output = this._merge_output[merge_node_id]
@@ -32845,6 +32820,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     for (const pin_node_id in this._merge_to_pin[merge_node_id]) {
       const pin_datum_node_id = this._pin_to_datum[pin_node_id]
+
       if (pin_datum_node_id) {
         this._refresh_datum_visible(pin_datum_node_id)
       }
@@ -32893,6 +32869,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     padding: number = 0
   ): void => {
     const r = this._get_node_r(node_id)
+
     this._set_ref_link_pin_start_marker_r(pin_node_id, r + padding)
   }
 
@@ -32900,23 +32877,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_node_id: string,
     merge_node_id: string
   ): void => {
+    // console.log(
+    //   'Graph',
+    //   '_sim_change_link_pin_to_merge',
+    //   pin_node_id,
+    //   merge_node_id
+    // )
+
     const { type } = segmentLinkPinNodeId(pin_node_id)
+
     const input = type === 'input'
+
     const datum_node_id = this._pin_to_datum[pin_node_id]
     const merge_unit_id = this._merge_to_ref_unit[merge_node_id]
     const merge_ref_output_id = this._merge_to_ref_output[merge_node_id]
+
     const pin_link_id = getPinLinkIdFromPinNodeId(pin_node_id)
+
     if (merge_unit_id) {
       this._sim_change_link_node(pin_link_id, merge_unit_id, input)
 
       this._set_link_pin_padding_source(pin_node_id, -1.75)
-      this._set_ref_link_pin_start_marker_to_node_r(
-        pin_node_id,
-        merge_unit_id,
-        1.75
-      )
-
       this._set_link_pin_link_color(pin_node_id, this._theme.data)
+
+      this._refresh_pin_anchor_marker(pin_node_id)
     } else if (merge_ref_output_id) {
       this._sim_change_link_node(pin_link_id, merge_ref_output_id, input)
 
@@ -32926,12 +32910,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         merge_ref_output_id,
         1.75
       )
+
+      this._refresh_pin_anchor_marker(pin_node_id)
     } else {
       this._sim_change_link_node(pin_link_id, merge_node_id, input)
 
       if (datum_node_id) {
         const datum_link_id = getLinkId(datum_node_id, pin_node_id)
+
         this._sim_change_link_target(datum_link_id, merge_node_id)
+
         this._refresh_datum_visible(datum_node_id)
       }
     }
@@ -33935,9 +33923,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._flush_debugger()
 
     this._pod_remove_pin_datum__template(pin_node_id, {
-      takeInput: this._pod.$takeInput.bind(this._pod),
-      removeMergeData: this._pod.$removeMergeData.bind(this._pod),
-      removeUnitPinData: this._pod.$removeUnitPinData.bind(this._pod),
+      takeInput: (data) => this._pod.$takeInput(data),
+      removeMergeData: (data) => this._pod.$removeMergeData(data),
+      removeUnitPinData: (data) => this._pod.$removeUnitPinData(data),
     })
   }
 
@@ -34077,6 +34065,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _refresh_link_pin_marker = (pin_node_id: string, node_id: string) => {
+    // console.log('Graph', '_refresh_link_pin_marker', pin_node_id, node_id)
+
     const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
 
     const node_shape = this._get_node_shape(node_id)
@@ -34220,7 +34210,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       } else {
         this._dec_merge_output_active(merge_node_id)
       }
+
       const datum_link_id = getLinkId(datum_node_id, pin_node_id)
+
       this._sim_change_link_target(datum_link_id, pin_node_id)
 
       if (!merge_ref) {
@@ -34230,9 +34222,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         datum_node.x = x
         datum_node.y = y
-
-        this._refresh_datum_visible(datum_node_id)
       }
+
+      this._refresh_datum_visible(datum_node_id)
     }
 
     if (is_input && (merge_ref || merge_output_ref)) {
@@ -34771,8 +34763,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._ignored_node[pin_node_id]
 
     this._sim_remove_node(pin_node_id)
-
-    this._remove_node_link_heap(pin_node_id)
   }
 
   private _sim_remove_link_pin_link = (pin_node_id: string): void => {
@@ -34942,6 +34932,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _sim_remove_merge_node = (merge_node_id: string): void => {
+    // console.log('Graph', '_sim_remove_merge_node', merge_node_id)
+
     delete this._pin_node[merge_node_id]
     delete this._normal_node[merge_node_id]
     delete this._empty_merge_node[merge_node_id]
@@ -35153,6 +35145,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._node_link_count[node_id]
     // delete this._node_graph[node_id]
 
+    delete this._node_max_link_length_heap[node_id]
+    delete this._node_link_heap_node[node_id]
+
     const compatible_node_id = this._compatible_node_id[node_id]
 
     if (compatible_node_id) {
@@ -35166,7 +35161,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._node_layer[node_id]
     delete this._layer_node[layer][node_id]
 
-    if (node_id === '@/15') remove_node_from_graph(this._node_graph, node_id)
+    remove_node_from_graph(this._node_graph, node_id)
 
     this._rebuild_subgraph()
   }
@@ -35845,6 +35840,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._commit_data_value(edit_datum_id, data, prevent)
 
       this._edit_datum_just_blurred = true
+
       setTimeout(() => {
         this._edit_datum_just_blurred = false
       }, 0)
@@ -35871,7 +35867,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const datum_plug_node_id = this._datum_to_plug[datum_node_id]
 
     if (datum_pin_node_id) {
-      if (this._is_output_node_id(datum_pin_node_id)) {
+      if (this._is_output_pin_node_id(datum_pin_node_id)) {
         if (!prevent) {
           this._remove_pin_datum_link(datum_node_id)
         }
@@ -36234,6 +36230,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._sim_remove_link_pin_pin(pin_node_id)
     }
 
+    if (this._node_link_heap[pin_node_id]) {
+      this._remove_node_link_heap(pin_node_id)
+    }
+
     this._start_graph_simulation(LAYER_NONE)
   }
 
@@ -36348,6 +36348,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (destroy && sub_component) {
       sub_component.destroy()
     }
+  }
+
+  private _refresh_pin_anchor_marker(pin_node_id: string) {
+    const anchor_node_id = this._get_node_anchor_node_id(pin_node_id)
+
+    this._refresh_link_pin_marker(pin_node_id, anchor_node_id)
   }
 
   private _mem_remove_component(unit_id: string): void {
@@ -36978,7 +36984,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const pin_node_id = getSubPinSpecNodeId(type, subPinSpec)
 
-    const ref = this._is_graph_pin_ref(pin_node_id)
+    const ref = this._is_pin_node_ref(pin_node_id)
 
     if (ref) {
       this._spec_set_exposed_pin_ref(type, pinId, true)
@@ -37462,8 +37468,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       resized = true
     }
     if (resized) {
-      this._sim_resize_unit_graph_component(unit_id, nextWidth, nextHeight)
-      this._spec_resize_unit_component(unit_id, nextWidth, nextHeight)
+      this._sim_set_unit_size(unit_id, nextWidth, nextHeight)
+      this._spec_set_unit_size(unit_id, nextWidth, nextHeight)
 
       const node = this._node[unit_id]
       node.fx += dx
@@ -37526,7 +37532,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (resized) {
-      this._layout_resize_sub_component(unit_id, nextWidth, nextHeight)
+      this._sim_layout_resize_sub_component(unit_id, nextWidth, nextHeight)
       this._spec_component_set_unit_graph_size(unit_id, nextWidth, nextHeight)
     }
   }
@@ -37591,7 +37597,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._pod.$bulkEdit({ actions })
   }
 
-  private _pod_set_unit_metadata_component_size = (
+  private _pod_set_unit_size = (
     unit_id: string,
     width: number,
     height: number
@@ -37600,6 +37606,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       width,
       height,
     })
+  }
+
+  private _pod_set_sub_component_size(
+    unit_id: string,
+    width: number,
+    height: number
+  ) {
+    throw new Error('Method not implemented.')
   }
 
   private _is_node_selectable = (node_id: string): boolean => {
@@ -38568,6 +38582,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._on_unit_red_drag_start(node_id, pointer_id)
     } else if (this._is_link_pin_node_id(node_id)) {
       const { unitId } = segmentLinkPinNodeId(node_id)
+
       this._on_unit_red_drag_start(unitId, pointer_id)
     }
   }
@@ -38598,11 +38613,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pointer_id: number
   ): void => {
     // console.log('Graph', '_on_unit_red_drag_start')
+
     this._remove_unit_merges(unit_id)
 
     const unit_merge_node_id = this._ref_unit_to_merge[unit_id]
+
     if (unit_merge_node_id) {
       const self_pin_node_id = getSelfPinNodeId(unit_id)
+
       this._remove_pin_from_merge(unit_merge_node_id, self_pin_node_id)
     }
 
@@ -38722,7 +38740,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
       if (merge_anchor_node_id) {
         if (type === 'input') {
-          if (this._is_output_node_id(merge_anchor_node_id)) {
+          if (this._is_output_pin_node_id(merge_anchor_node_id)) {
             this._set_output_reduced(merge_anchor_node_id, anchored)
           }
         } else {
@@ -38836,7 +38854,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   this._set_node_position(pin_node_id, init_pin_node_position)
 
                   if (type === 'input') {
-                    if (this._is_output_node_id(init_anchor_node_id)) {
+                    if (this._is_output_pin_node_id(init_anchor_node_id)) {
                       this._set_output_reduced(init_anchor_node_id, true)
                     }
                   } else {
@@ -38892,7 +38910,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   this._set_node_position(pin_node_id, hover_pin_node_position)
 
                   if (type === 'input') {
-                    if (this._is_output_node_id(hover_anchor_node_id)) {
+                    if (this._is_output_pin_node_id(hover_anchor_node_id)) {
                       this._set_output_reduced(hover_anchor_node_id, true)
                     }
                   } else {
@@ -39876,9 +39894,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (isBaseSpecId(specs, id)) {
       throw new Error('cannot expose base unit pin set')
     } else {
-      const spec = this._get_unit_spec(unitId) as GraphSpec
-
-      const [next_spec_id, next_spec] = forkSpec(spec)
+      const next_spec = clone(this._get_unit_spec(unitId)) as GraphSpec
 
       exposePinSet(
         {
@@ -39891,7 +39907,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       setSpec(next_spec.id, next_spec)
 
-      this._spec_set_unit_spec_id(unitId, next_spec_id)
       this._sim_graph_unit_add_pin(unitId, type, pinId, position)
 
       this.temp_fixate_node(unitId)
@@ -39939,9 +39954,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (isBaseSpecId(specs, id)) {
       throw new Error('cannot cover base unit pin set')
     } else {
-      const spec = this._get_unit_spec(unitId) as GraphSpec
+      const next_spec = clone(this._get_unit_spec(unitId)) as GraphSpec
 
-      const [next_spec_id, next_spec] = forkSpec(spec)
+      const pin_node_id = getPinNodeId(unitId, type, pinId)
+
+      this._sim_graph_unit_remove_pin(pin_node_id)
 
       coverPinSet(
         {
@@ -39951,13 +39968,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         next_spec
       )
 
-      setSpec(spec.id, next_spec)
-
-      this._spec_set_unit_spec_id(unitId, next_spec_id)
-
-      const pin_node_id = getPinNodeId(unitId, type, pinId)
-
-      this._sim_graph_unit_remove_pin(pin_node_id)
+      setSpec(next_spec.id, next_spec)
     }
   }
 
@@ -40031,9 +40042,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     const add_unit_pin = (unit_id: string, type: IO, position: Position) => {
+      const { shouldFork, newSpecId } = this.$props
+
       const spec = this._get_unit_spec(unit_id) as GraphSpec
 
       const new_pin_id = newSpecPinIdStart(spec, type)
+
+      if (shouldFork(spec.id)) {
+        const new_spec_id = newSpecId()
+
+        this._spec_fork_unit(unit_id, new_spec_id)
+      }
 
       this.expose_unit_pin_set(
         unit_id,
@@ -40804,7 +40823,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                             const source_heap_node = {
                               parent: null,
                               value: { node_id: target_node_id, l },
-                              children: [],
+                              left: null,
+                              right: null,
                             }
 
                             if (pin_drop_min_distance[pin_node_id]) {
@@ -40825,7 +40845,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                                 l,
                                 heap: source_heap_node,
                               },
-                              children: [],
+                              left: null,
+                              right: null,
                             }
 
                             if (pin_drop_min_target[target_node_id]) {
@@ -41673,6 +41694,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   'Graph',
     //   '_state_move_subgraph_into',
     //   graph_unit_id,
+    //   should_predict_size,
+    //   do_not_animate_graph_size
     // )
 
     const {
@@ -43551,6 +43574,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const merge_node_id = this._pin_to_merge[pin_node_id]
 
           if (merge_node_id) {
+            const merge_ref_unit = this._merge_to_ref_unit[merge_node_id]
+
             if (!node_id_set.has(merge_node_id) || pin_id === SELF) {
               let next_pin_id = pathOrDefault(
                 merge_to_exposed_pin_id,
@@ -44774,6 +44799,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     opt: GraphUnitConnect,
     source: {
       hasMerge: (merge_id: string) => boolean
+      hasMergePin: (
+        merge_id: string,
+        unit_id: string,
+        type: IO,
+        pin_id: string
+      ) => boolean
       addPinToMerge: (type: IO, pin_id: string, merge_id: string) => void
       addMerge(merge_id: string, merge: GraphMergeSpec)
       getUnitPinPlug: (
@@ -44799,10 +44830,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ) => void
     }
   ) {
-    const { merges, plugs, data } = opt
+    const { merges, plugs } = opt
+
     const {
       addPinToMerge,
       addMerge,
+      hasMergePin,
       plugPin,
       hasMerge,
       getUnitPinPlug,
@@ -44833,14 +44866,41 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const merge_unit = merge[graph_id]
 
         forIOObjKV(merge_unit, (type, pin_id) => {
+          // if (!hasMergePin(next_merge_id, graph_id, type, pin_id)) {
           addPinToMerge(type, pin_id, next_merge_id)
+          // }
         })
       } else {
-        addMerge(next_merge_id, merge)
+        const merge_has_self = pathOrDefault(
+          merge,
+          [graph_id, 'output', SELF],
+          false
+        )
+
+        forEachPinOnMerge(
+          merge,
+          (mergeUnitId, mergeUnitPinType, mergeUnitPinId) => {
+            if (mergeUnitId !== graph_id) {
+              const pin_node_id = getPinNodeId(
+                mergeUnitId,
+                mergeUnitPinType,
+                mergeUnitPinId
+              )
+
+              this._state_remove_pin_or_merge(pin_node_id)
+            }
+          }
+        )
+
+        if (!merge_has_self) {
+          addMerge(next_merge_id, merge)
+        }
       }
     }
 
     forIOObjKV(plugs, (type, pin_id, { pinId, subPinId, position }) => {
+      position = position ?? this._jiggle_world_screen_center()
+
       const next_pin_id = pathOrDefault(
         this._collapse_next_map.nextPinIdMap,
         [unit_id, type, pin_id, 'pinId'],
@@ -44904,6 +44964,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         },
         removePin: (type, pin_id, sub_pin_id) => {
           return this.__spec_remove_exposed_sub_pin(type, pin_id, sub_pin_id)
+        },
+        hasMergePin: (merge_id, unit_id, type, pin_id) => {
+          return this._spec_has_merge_pin(merge_id, unit_id, type, pin_id)
         },
       },
       {
@@ -45015,7 +45078,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         hasMerge: (merge_id) => {
           const merge_node_id = getMergeNodeId(merge_id)
 
-          return this._has_node(merge_node_id)
+          const anchor_node_id = this._get_merge_anchor_node_id(merge_node_id)
+
+          return anchor_node_id && this._has_node(anchor_node_id)
+        },
+        hasMergePin: (merge_id, unit_id, type, pin_id) => {
+          return this._spec_has_merge_pin(merge_id, unit_id, type, pin_id)
         },
         getUnitPinPlug: (
           unit_id: string,
@@ -45047,6 +45115,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         if (this._has_anchor_node(pin_node_id)) {
           const anchor_node_id = this._get_pin_anchor_node_id(pin_node_id)
+
+          const merge_ref_unit_id = this._merge_to_ref_unit[anchor_node_id]
+
+          if (this._is_unit_node_id(anchor_node_id)) {
+            if (this._ref_unit_to_merge[anchor_node_id]) {
+              return
+            }
+          }
 
           const next_datum_id = this._new_datum_id()
           const next_datum_node_id = getDatumNodeId(next_datum_id)
@@ -45127,16 +45203,39 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const unit = this._get_unit(unit_id)
 
+    // const prev_merges = getUnitMergesSpec(this._collapse_init_spec, unit_id)
     const prev_merges = this._get_unit_merges(unit_id)
-    // const prev_plugs = this._get_unit_exposed_pins(unit_id)
     const prev_plugs = getUnitExposedPins(this._collapse_init_spec, unit_id)
+
     const prev_inputs = this._get_unit_input_node_ids(unit_id)
     const prev_outputs = this._get_unit_output_node_ids(unit_id)
     const prev_data = this._get_unit_data(unit_id)
 
     const merges = {}
-    const plugs = clone(prev_plugs)
     const data = clone(prev_data)
+
+    const _plugs = clone(prev_plugs)
+
+    const makePlugFilter = (type: IO, pins) => {
+      return filterObj(pins, ({ type: type_, pinId, subPinId }) => {
+        const ext_node_id = getExtNodeId(type, pinId, subPinId)
+        const int_node_id = getIntNodeId(type, pinId, subPinId)
+
+        if (
+          this._collapse_init_node_id_set.has(ext_node_id) ||
+          this._collapse_init_node_id_set.has(int_node_id)
+        ) {
+          return false
+        }
+
+        return true
+      })
+    }
+
+    const plugs = {
+      input: makePlugFilter('input', _plugs.input),
+      output: makePlugFilter('output', _plugs.output),
+    }
 
     const next_pin_map = next_unit_pin_map[unit_id] ?? {}
 
@@ -45175,16 +45274,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const merge_is_collapsing_too = this._collapse_node_id.has(merge_node_id)
 
-      let merge_any_unit_pin_not_collapsing = false
+      let any_merge_unit_pin_not_collapsing = false
 
       forEachPinOnMerge(merge, (unitId) => {
         if (!this._collapse_node_id.has(unitId)) {
-          merge_any_unit_pin_not_collapsing = true
+          any_merge_unit_pin_not_collapsing = true
         }
       })
 
       let merge_should_be_ignored =
-        merge_is_collapsing_too && !merge_any_unit_pin_not_collapsing
+        merge_is_collapsing_too && !any_merge_unit_pin_not_collapsing
 
       forIOObjKV(prev_merge_unit, (type, pin_id: string) => {
         if (
@@ -46530,10 +46629,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     exposePinSet({ pinId, type, pinSpec }, next_graph_spec)
 
-    // const ref = isPinSpecRef(specs, next_graph_spec, type, pinSpec)
-
-    // setPinSetRef({ type, pinId, ref }, next_graph_spec)
-
     setSpec(graph_spec_id, next_graph_spec)
   }
 
@@ -47495,15 +47590,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { name = 'untitled' } = this._spec
 
-    this._spec.type = '`U`&`G`&`C`'
-
-    const spec = clone(this._spec)
-
-    delete spec.system
-
-    this._spec_set_nodes_position(spec)
-
-    spec.units = spec.units ?? {}
+    const spec = this._get_full_user_spec()
 
     const bundle = bundleSpec(spec, specs)
 
@@ -47514,6 +47601,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         for (const node_id in node_positions) {
           const node_position = node_positions[node_id]
+
+          const round_node_position = roundPosition(node_position)
 
           if (isLinkPinNodeId(node_id)) {
             const { unitId, type, pinId } = segmentLinkPinNodeId(node_id)
@@ -47530,7 +47619,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 'metadata',
                 'position',
               ],
-              node_position
+              round_node_position
             )
           } else if (isMergeNodeId(node_id)) {
             //
@@ -47540,10 +47629,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (const unit_id in unit_positions) {
           const unit_position = unit_positions[unit_id]
 
+          const round_unit_position = roundPosition(unit_position)
+
           pathSet(
             bundle,
             ['specs', editor_spec.id, 'units', unit_id, 'metadata', 'position'],
-            unit_position
+            round_unit_position
           )
         }
 
@@ -47806,7 +47897,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const { value } = tree
 
-      data[datumId] = value
+      data[datumId] = { value }
     }
 
     for (const exposed_node_id of exposed_node_ids) {
@@ -47963,8 +48054,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _validate_graph_spec = (data: any): boolean => {
-    // TODO
-    return true
+    return validateGraphSpec(data)
+  }
+
+  private _validate_bundle_spec = (data: any): boolean => {
+    return validateBundleSpec(data)
   }
 
   private _paste_clipboard = async (position: Position) => {
@@ -48002,20 +48096,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (json) {
-      const valid = this._validate_graph_spec(json)
+      const valid = this._validate_bundle_spec(json)
 
       if (valid) {
         this.paste_bundle(json, position)
       } else {
-        // TODO
+        this.add_new_datum(stringify(json), position)
       }
     } else {
       if (text) {
-        const text_to_paste = `'${escape(text)}'`
-
-        this._paste_plain_text(text_to_paste, position)
+        this._paste_escaped_plain_text(text, position)
       }
     }
+  }
+
+  private _paste_escaped_plain_text = (text: string, position: Position) => {
+    const text_to_paste = `"${escape(text)}"`
+
+    this._paste_plain_text(text_to_paste, position)
   }
 
   private _paste_plain_text = (text: string, position: Position): void => {
@@ -48306,7 +48404,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     for (const datum_id in data) {
-      const value = data[datum_id]
+      const { value } = data[datum_id]
+
       this._sim_add_datum_node(datum_id, value, position)
 
       const datum_node_id = getDatumNodeId(datum_id)
@@ -48475,6 +48574,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const pin_node_id = getPinNodeId(unitId, type, _pinId)
 
       const merge_node_id = this._pin_to_merge[pin_node_id]
+
+      position =
+        position ?? this.__predict_plug_initial_position(type, pinId, subPinId)
 
       if (merge_node_id) {
         const { mergeId } = segmentMergeNodeId(merge_node_id)
@@ -48722,37 +48824,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             this._pod_unplug_exposed_pin(data.type, data.pinId, data.subPinId)
         }
         break
-      case EXPLODE_UNIT:
-        {
-          const unit_spec = this._get_unit_spec(data.unitId) as GraphSpec
-
-          const { map_unit_id, map_merge_id, map_plug_id, selected_node_ids } =
-            buildGraphRemap(
-              unit_spec,
-              getSpec,
-              this._new_unit_id,
-              this._new_merge_id,
-              this._new_sub_pin_id,
-              this._new_datum_id
-            )
-
-          const actions = this._make_explode_unit_actions(
-            data.unitId,
-            map_unit_id,
-            map_merge_id,
-            map_plug_id
-          )
-
-          this._state_explode_unit(
-            data.unitId,
-            {},
-            {},
-            { input: {}, output: {} },
-            []
-          ) // TODO
-          emit && this._pod_explode_unit(data.unitId, {}, {}, actions)
-        }
-        break
       case SET_UNIT_PIN_IGNORED:
         {
           const pin_node_id = getPinNodeId(data.unitId, data.type, data.pinId)
@@ -48771,10 +48842,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           this._force_finish_last_action = () => {
             for (const node_id of [...this._collapse_node_id]) {
-              this._stop_node_long_press_collapse(node_id)
+              this._long_press_collapse_node(node_id)
             }
 
-            this._stop_collapse()
+            if (this._abort_sub_component_leave_base_animation[_data.graphId]) {
+              const abort =
+                this._abort_sub_component_leave_base_animation[_data.graphId]
+
+              abort()
+
+              delete this._abort_sub_component_leave_base_animation[
+                _data.graphId
+              ]
+            }
 
             this._force_finish_last_action = undefined
           }
@@ -48810,13 +48890,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         break
       case SET_SUB_COMPONENT_SIZE:
-        this._sim_resize_unit_graph_component(
-          data.unitId,
-          data.width,
-          data.height
-        )
+        {
+          this._sim_set_unit_size(data.unitId, data.width, data.height)
 
-        // emit && this._pod_set_unit_metadata_component_size() // TODO
+          emit &&
+            this._pod_set_sub_component_size(
+              data.unitId,
+              data.width,
+              data.height
+            )
+        }
 
         break
       case SET_COMPONENT_SIZE:
@@ -48832,13 +48915,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         break
       case SET_UNIT_SIZE:
         {
-          this._sim_resize_unit_graph_component(
-            data.unitId,
-            data.width,
-            data.height
-          )
+          this._state_set_unit_size(data.unitId, data.width, data.height)
 
-          // emit && this._pod_set_unit_metadata_component_size() // TODO
+          emit && this._pod_set_unit_size(data.unitId, data.width, data.height)
         }
         break
       default:
@@ -48873,6 +48952,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._action_buffer_cursor++
 
       const action = this._action_buffer[this._action_buffer_cursor]
+
+      if (this._force_finish_last_action) {
+        this._force_finish_last_action()
+
+        this._force_finish_last_action = undefined
+      }
 
       this._execute_action(action, true)
     }
@@ -49590,7 +49675,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _force_custom_layer_collapse = (alpha: number) => {
     if (this._collapsing) {
-      const { x: cx, y: cy } = this._collapse_world_position
+      const { x: cx, y: cy } = this._get_node_position(
+        this._collapse_next_unit_id
+      )
 
       for (const a_id of this._collapse_node_id) {
         const a = this._node[a_id]
@@ -50181,14 +50268,60 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     layout_node.y = y
   }
 
-  private _spec_set_nodes_position = (spec: GraphSpec): void => {
+  private _set_spec_nodes_position = (spec: GraphSpec): void => {
     this.__spec_set_nodes_position(spec)
   }
 
-  private __spec_set_nodes_position = (spec: GraphSpec): void => {
-    const position_map = this._nodes_cm_position_map(this._node)
+  private _get_datum_spec = (datum_node_id: string): DatumSpec => {
+    const value = this._get_datum_value(datum_node_id)
 
-    spec = clone(spec)
+    const position = this._get_node_position(datum_node_id)
+
+    const datum_spec: DatumSpec = { value, metadata: { position } }
+
+    return datum_spec
+  }
+
+  private _set_spec_data = (spec: GraphSpec): void => {
+    for (const datum_node_id in this._visible_unlinked_data_node) {
+      const { datumId } = segmentDatumNodeId(datum_node_id)
+
+      const datum_spec: DatumSpec = this._get_datum_spec(datum_node_id)
+
+      _setSpecDatum(spec, datumId, datum_spec)
+    }
+  }
+
+  private _get_full_user_spec = (): GraphSpec => {
+    const spec = clone(this._spec)
+
+    delete spec.system
+
+    spec.units = spec.units ?? {}
+
+    this._set_spec_nodes_position(spec)
+    this._set_spec_data(spec)
+
+    if (this._is_component()) {
+      this._spec.type = '`U`&`G`&`C`'
+    } else {
+      this._spec.type = '`U`&`G`'
+    }
+
+    return spec
+  }
+
+  private _is_component = () => {
+    return isComponentSpec(this._spec)
+  }
+
+  private __spec_set_nodes_position = (spec: GraphSpec): void => {
+    const center = centerOfMass(Object.values(this._unit_node))
+
+    const position_map = this.get_nodes_relative_positions_to(
+      this._node,
+      center
+    )
 
     for (const node_id in position_map) {
       const position = position_map[node_id]
@@ -50568,6 +50701,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._start_node_long_press_collapse(plug_node_id)
     }
 
+    this._collapse_init_node_id_set = new Set(this._collapse_node_id)
+
     const should_predict_size =
       this._get_unit_spec_render(graphId) === undefined &&
       there_is_selected_sub_component
@@ -50704,7 +50839,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (!this._pod_started) {
       return
     }
-    // console.log('Graph', '_plunk_pod')
 
     this._unlisten_pod()
     this._stop_debugger()
@@ -51769,7 +51903,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     let all_added_unit_ancestors_are_component = true
 
-    for (let i = path.length - 2; i >= 0; i--) {
+    for (let i = path.length - 1; i >= 0; i--) {
       const sub_path = path.slice(0, i + 1)
 
       const ancestor_spec = findSpecAtPath(specs, this._spec, sub_path)
@@ -51846,6 +51980,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           next_graph_spec.component
         )
 
+        delete next_graph_spec.render
+
         if (path.length > 1) {
           sub_component.removeSubComponent(possibly_turned_circle_unit_id)
         }
@@ -51853,34 +51989,39 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         setSpec(next_graph_spec.id, next_graph_spec)
       }
 
-      if (this._in_component_control) {
-        if (this._subgraph_unit_id !== path[0]) {
-          if (graph_unit_was_component) {
-            if (
-              is_removed_unit_component &&
-              all_added_unit_ancestors_are_component
-            ) {
-              let sub_component = this._get_sub_component(graph_unit_id)
+      // if (this._in_component_control) {
+      // if (this._subgraph_unit_id !== path[0]) {
+      if (graph_unit_was_component) {
+        if (
+          is_removed_unit_component &&
+          all_added_unit_ancestors_are_component
+        ) {
+          let sub_component = this._get_sub_component(graph_unit_id)
 
-              for (let i = path.length - 1; i > 0; i--) {
-                const unit_id = path[i]
+          for (let i = path.length - 1; i > 0; i--) {
+            const unit_id = path[i]
 
-                sub_component = sub_component.getSubComponent(unit_id)
-              }
+            sub_component = sub_component.getSubComponent(unit_id)
+          }
 
-              const sub_sub_component = sub_component.$subComponent[unitId]
+          const sub_sub_component = sub_component.$subComponent[unitId]
 
-              if (sub_sub_component) {
+          if (sub_sub_component) {
+            if (this._in_component_control) {
+              if (this._subgraph_unit_id !== path[0]) {
                 sub_component.removeRoot(sub_sub_component)
-                sub_component.removeSubComponent(unitId)
-                sub_component.pullRoot(sub_sub_component)
-
-                sub_sub_component.disconnect()
               }
             }
+
+            sub_component.removeSubComponent(unitId)
+            sub_component.pullRoot(sub_sub_component)
+
+            sub_sub_component.disconnect()
           }
         }
       }
+      // }
+      // }
     }
 
     const graph_unit_is_component = this._is_unit_component(graph_unit_id)
@@ -51963,8 +52104,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       for (const node_id in node_ids) {
         const p = this._get_node_position(node_id)
+
         const { x, y } = p
+
         const rp = { x: Math.floor(x - cx), y: Math.floor(y - cy) }
+
         position[node_id] = rp
       }
     }
@@ -52531,7 +52675,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._unit_ref_pin_global_ref[pin_node_id] = _data.data
 
     if (
-      this._is_input_node_id(pin_node_id) &&
+      this._is_input_pin_node_id(pin_node_id) &&
       this._spec_is_link_pin_constant(unitId, type, pinId)
     ) {
       this._tick_constant_input_ref(unitId, pinId, _data.data)
@@ -52856,7 +53000,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (
         this._is_pin_node_id(anchor_node_id) &&
-        (!this._is_graph_pin_ref(anchor_node_id) || is_class_literal)
+        (!this._is_pin_node_ref(anchor_node_id) || is_class_literal)
       ) {
         const position =
           this._predict_pin_datum_initial_position(anchor_node_id)
@@ -53260,9 +53404,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           exposePin: (data) => {
             throw new MethodNotImplementedError()
           },
-          explodeUnit: () => {
-            throw new MethodNotImplementedError()
-          },
           setSubComponentSize: (data) => {
             this._on_graph_unit_set_sub_component_size({ ...data, path })
           },
@@ -53465,7 +53606,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_moment = (moment: Moment): void => {
-    // console.log('_on_moment', moment)
+    // console.log('_on_moment', moment, this._id)
 
     const { event, type, data } = moment
 

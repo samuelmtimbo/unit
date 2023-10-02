@@ -8,32 +8,28 @@
     "opt": {
       "type": "{frameRate?:number}",
       "metadata": {
-        "examples": [
-          "{}",
-          "{frameRate:60}"
-        ]
+        "examples": ["{}", "{frameRate:60}"]
       }
     },
     "stop": {
       "type": "any"
     }
   },
-  "outputs": {},
+  "outputs": {
+    "stream": {
+      "type": "`MS`",
+      "ref": true
+    }
+  },
   "metadata": {
     "icon": "square",
     "description": "request a stream containing a real-time video capture of the `media` element",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "media"
-    ],
-    "globals": [
-      "MediaSource"
-    ]
+    "tags": ["platform", "api", "media"],
+    "globals": ["MediaSource"]
   },
   "base": true,
   "id": "30e125ba-af81-11ea-ba6b-e70218ca7afe",
-  "type": "`U`&MS",
+  "type": "`U`&`MS`",
   "system": true
 }

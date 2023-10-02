@@ -16,7 +16,7 @@ import { makePointerMoveListener } from '../../../../../client/event/pointer/poi
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { makeResizeListener } from '../../../../../client/event/resize'
 import parentElement from '../../../../../client/platform/web/parentElement'
-import applyStyle, { mergeStyle } from '../../../../../client/style'
+import { applyStyle, mergeStyle } from '../../../../../client/style'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'

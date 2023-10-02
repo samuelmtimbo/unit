@@ -1,5 +1,5 @@
 import { System } from '../../system'
-import namespaceURI from '../component/namespaceURI'
+import { namespaceURI } from '../component/namespaceURI'
 import { getSize } from '../getSize'
 import { IOElement } from '../IOElement'
 import { PositionObserver } from '../PositionObserver'

@@ -13,7 +13,7 @@
     "head": {
       "id": "e9831075-2e62-43a4-84af-0653f7e707a9"
     },
-    "assocpath": {
+    "deepset": {
       "id": "419e468e-e4d4-11ea-8efb-2b9d815b1798"
     },
     "if": {
@@ -114,7 +114,7 @@
       }
     },
     "3": {
-      "assocpath": {
+      "deepset": {
         "input": {
           "obj": true
         }
@@ -131,7 +131,7 @@
           "a": true
         }
       },
-      "assocpath": {
+      "deepset": {
         "input": {
           "path": true
         }
@@ -155,7 +155,7 @@
       }
     },
     "ykrqmso": {
-      "assocpath": {
+      "deepset": {
         "input": {
           "value": true
         }
@@ -167,7 +167,7 @@
       }
     },
     "oobtsi": {
-      "assocpath": {
+      "deepset": {
         "output": {
           "result": true
         }

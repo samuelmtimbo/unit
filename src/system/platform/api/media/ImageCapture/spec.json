@@ -1,0 +1,31 @@
+{
+  "name": "image capture",
+  "inputs": {
+    "track": {
+      "type": "`MST`",
+      "ref": true
+    },
+    "init": {
+      "type": "any"
+    },
+    "done": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "camera": {
+      "type": "`IC`",
+      "ref": true
+    }
+  },
+  "id": "a57383a9-5b24-4dbb-a5d1-0e278d036f89",
+  "base": true,
+  "metadata": {
+    "icon": "film",
+    "complexity": 12,
+    "tags": ["platform", "api", "media"],
+    "globals": ["ImageCapture"]
+  },
+  "type": "`U`",
+  "system": true
+}

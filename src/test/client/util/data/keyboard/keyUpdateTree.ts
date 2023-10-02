@@ -242,18 +242,6 @@ assert.deepEqual(keyUpdateTree('{a,b}', [1], 'b', 'Backspace', 0, 0, false), [
   },
 ])
 assert.deepEqual(
-  keyUpdateTree('{a:"b",c:"d"}', [1, 0], 'c', 'Backspace', 0, 0, false),
-  [
-    true,
-    {
-      nextRoot: '{a:"b"c:"d"}',
-      nextPath: [1],
-      nextSelectionStart: 5,
-      nextSelectionEnd: 5,
-    },
-  ]
-)
-assert.deepEqual(
   keyUpdateTree('{a:"b",c}', [1], 'c', 'Backspace', 0, 0, false),
   [
     true,
@@ -265,3 +253,81 @@ assert.deepEqual(
     },
   ]
 )
+assert.deepEqual(
+  keyUpdateTree('{a:"b",c:"d"}', [0, 1], '"b"', ',', 3, 3, false),
+  [
+    true,
+    {
+      nextRoot: '{a:"b",,c:"d"}',
+      nextPath: [1],
+      nextSelectionStart: 0,
+      nextSelectionEnd: 0,
+    },
+  ]
+)
+assert.deepEqual(
+  keyUpdateTree('{a:"b",c:"d"}', [1, 0], 'c', 'Backspace', 0, 0, false),
+  [
+    true,
+    {
+      nextRoot: '{a:"b",c:"d"}',
+      nextPath: [0, 1],
+      nextSelectionStart: 3,
+      nextSelectionEnd: 3,
+    },
+  ]
+)
+assert.deepEqual(keyUpdateTree('{,c:"d"}', [0], '', 'Backspace', 0, 0, false), [
+  true,
+  {
+    nextRoot: '{c:"d"}',
+    nextPath: [0, 0],
+    nextSelectionStart: 0,
+    nextSelectionEnd: 0,
+  },
+])
+assert.deepEqual(keyUpdateTree('{a:"b",}', [1], '', 'Backspace', 0, 0, false), [
+  true,
+  {
+    nextRoot: '{a:"b"}',
+    nextPath: [0, 1],
+    nextSelectionStart: 3,
+    nextSelectionEnd: 3,
+  },
+])
+assert.deepEqual(keyUpdateTree('{a:"b",}', [1], '', 'Backspace', 0, 0, false), [
+  true,
+  {
+    nextRoot: '{a:"b"}',
+    nextPath: [0, 1],
+    nextSelectionStart: 3,
+    nextSelectionEnd: 3,
+  },
+])
+assert.deepEqual(keyUpdateTree('[{}]', [0, 0], '', 'ArrowLeft', 0, 0, false), [
+  true,
+  {
+    nextRoot: '[,{}]',
+    nextPath: [0],
+    nextSelectionStart: 0,
+    nextSelectionEnd: 0,
+  },
+])
+assert.deepEqual(keyUpdateTree('[,{}]', [0], '', 'ArrowRight', 0, 0, false), [
+  true,
+  {
+    nextRoot: '[{}]',
+    nextPath: [0, 0],
+    nextSelectionStart: 0,
+    nextSelectionEnd: 0,
+  },
+])
+assert.deepEqual(keyUpdateTree('[{}]', [0, 0], '', 'ArrowRight', 0, 0, false), [
+  true,
+  {
+    nextRoot: '[{},]',
+    nextPath: [1],
+    nextSelectionStart: 0,
+    nextSelectionEnd: 0,
+  },
+])

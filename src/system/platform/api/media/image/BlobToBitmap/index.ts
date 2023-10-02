@@ -71,6 +71,10 @@ export default class BlobToBitmap extends Functional<I, O> {
       async imageBitmap(): Promise<ImageBitmap> {
         return _bitmap
       }
+
+      async image(): Promise<any> {
+        return _bitmap
+      }
     })(this.__system)
 
     done({

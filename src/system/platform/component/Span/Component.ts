@@ -1,6 +1,6 @@
 import { Element } from '../../../../client/element'
 import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import applyStyle from '../../../../client/style'
+import { applyStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 

@@ -62,9 +62,15 @@ export default class Start extends Semifunctional<I, O> {
       weakMerge(__bundle.specs, this.__system.specs)
     )
 
-    const $graph = system.$newGraph({ bundle, _: ['G', 'C', 'U'] })
+    const _ = ['G', 'C', 'U']
 
-    const graph = $wrap<$Graph>(this.__system, $graph)
+    const $graph = system.$newGraph({ bundle, _ })
+
+    const graph = $wrap<$Graph>(this.__system, $graph, _)
+
+    if (!paused) {
+      graph.$play({})
+    }
 
     if (!paused) {
       graph.$play({})

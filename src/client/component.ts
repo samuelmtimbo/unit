@@ -4,7 +4,11 @@ import { $Children } from '../component/Children'
 import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
 import { System } from '../system'
-import { LayoutBase } from '../system/platform/component/app/Editor/layout'
+import { ANIMATION_PROPERTY_DELTA_PAIRS } from '../system/platform/component/app/Editor/ANIMATION_PROPERTY_DELTA_PAIRS'
+import {
+  LayoutBase,
+  LayoutLeaf,
+} from '../system/platform/component/app/Editor/layout'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
@@ -24,17 +28,22 @@ import {
 import { IOElement } from './IOElement'
 import { Listener } from './Listener'
 import { addListener, addListeners } from './addListener'
-import namespaceURI from './component/namespaceURI'
+import { animateSimulate } from './animation/animateSimulate'
+import { namespaceURI } from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
 import { component_ } from './component_'
 import { Context, dispatchContextEvent, dispatchCustomEvent } from './context'
 import { makeCustomListener } from './event/custom'
+import { extractTrait } from './extractTrait'
 import {
   IOUIEventName,
   UI_EVENT_SET,
   makeUIEventListener,
 } from './makeEventListener'
 import { mount } from './mount'
+import { rawExtractStyle } from './rawExtractStyle'
+import { getBaseStyle } from './reflectComponentBaseTrait'
+import { applyStyle } from './style'
 import { unmount } from './unmount'
 import { NULL_VECTOR, addVector } from './util/geometry'
 import { Position, Rect } from './util/geometry/types'
@@ -316,10 +325,111 @@ export class Component<
 
   private $detached: boolean = false
 
+  private _animateBase = (
+    base: LayoutBase,
+    hostSlot: Component<any>,
+    reverse: boolean = false,
+    commit: Callback
+  ): Unlisten => {
+    const {
+      foreground: { html },
+      api: {
+        text: { measureText },
+        document: { createElement },
+        layout: { reflectChildrenTrait },
+      },
+    } = this.$system
+
+    const allAbort = []
+
+    const hostTrait = extractTrait(hostSlot, measureText)
+    const hostStyle = rawExtractStyle(hostSlot.$element)
+
+    delete hostStyle['transform']
+    delete hostStyle['opacity']
+
+    const baseStyle = getBaseStyle(base, [], (leafPath, leafComp) => {
+      return rawExtractStyle(leafComp.$element)
+    })
+
+    const targetTraits = reflectChildrenTrait(
+      hostTrait,
+      hostStyle,
+      baseStyle,
+      []
+    )
+
+    let leafFinished = 0
+    let leafFrames = []
+
+    for (let i = 0; i < base.length; i++) {
+      const targetTrait = targetTraits[i]
+
+      const leaf = base[i]
+
+      const [_, leafComp] = leaf
+
+      const leafTrait = extractTrait(leafComp, measureText)
+
+      const leafFrame = createElement('div')
+
+      applyStyle(leafFrame, {
+        position: 'absolute',
+        left: `${leafTrait.x}px`,
+        top: `${leafTrait.y}px`,
+        width: `${leafTrait.width}px`,
+        height: `${leafTrait.height}px`,
+      })
+
+      !reverse && this.domRemoveLeaf(leaf)
+
+      leafFrame.appendChild(leafComp.$element)
+
+      html.appendChild(leafFrame)
+
+      leafFrames.push(leafFrame)
+
+      const abortAnimation = animateSimulate(
+        this.$system,
+        leafTrait,
+        () => {
+          return targetTrait
+        },
+        ANIMATION_PROPERTY_DELTA_PAIRS,
+        ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
+          leafFrame.style.left = `${x + ((Math.abs(sx) - 1) * width) / 2}px`
+          leafFrame.style.top = `${y + ((Math.abs(sy) - 1) * height) / 2}px`
+          leafFrame.style.width = `${width}px`
+          leafFrame.style.height = `${height}px`
+          leafFrame.style.transform = `scale(${sx}, ${sy})`
+          leafFrame.style.opacity = `${opacity}`
+          leafFrame.style.fontSize = `${fontSize}px`
+        },
+        () => {
+          leafFinished++
+
+          if (leafFinished === base.length) {
+            commit()
+          }
+
+          for (const leafFrame of leafFrames) {
+            html.removeChild(leafFrame)
+          }
+        }
+      )
+
+      allAbort.push(abortAnimation)
+    }
+
+    return callAll(allAbort)
+  }
+
   detach(host: string, opt: { animate?: boolean }): void {
     // console.log('Component', 'detach', host, opt)
 
     const { getLocalComponents } = this.$system
+
+    const { animate = false } = opt
 
     if (this.$detached) {
       throw new Error('component is already detached')
@@ -343,14 +453,22 @@ export class Component<
 
     const base = this.getRootBase()
 
-    this.domRemoveBase(base)
+    const commit = () => {
+      for (const [path, leaf] of base) {
+        leaf.unmount()
 
-    for (const [path, leaf] of base) {
-      leaf.unmount()
-      
-      hostSlot.$element.appendChild(leaf.$element)
+        hostSlot.$element.appendChild(leaf.$element)
 
-      leaf.mount(hostComponent.$context)
+        leaf.mount(hostSlot.$context)
+      }
+    }
+
+    if (animate) {
+      this._animateBase(base, hostSlot, false, commit)
+    } else {
+      this.domRemoveBase(base)
+
+      commit()
     }
   }
 
@@ -361,11 +479,47 @@ export class Component<
       throw new Error('component is not detached')
     }
 
+    const { animate } = opt
+
     this.$detached = false
 
     const base = this.getRootBase()
 
-    this.domAppendBase(base)
+    let leafEnd = 0
+
+    if (animate) {
+      const targetSlots = []
+
+      this.templateBase(
+        base,
+        (root) => {
+          targetSlots.push(root.$slot['default'])
+        },
+        (parentRoot) => {
+          targetSlots.push(parentRoot.$slot['default'])
+        }
+      )
+
+      for (let i = 0; i < base.length; i++) {
+        const leaf = base[i]
+
+        const [_, leafComp] = leaf
+
+        const targetSlot = this.$slotParent
+
+        this._animateBase([leaf], targetSlot, true, () => {
+          leafEnd++
+
+          leafComp.unmount()
+
+          this.domAppendBase([leaf])
+
+          leafComp.mount(this.$context)
+        })
+      }
+    } else {
+      this.domAppendBase(base)
+    }
   }
 
   public templateBase = (
@@ -373,27 +527,37 @@ export class Component<
     root: (parent: Component, leaf_comp: Component) => void,
     parentRoot: (parent: Component, leaf_comp: Component) => void
   ): void => {
-    // console.log('Component', 'appendBase', sub_component_id)
+    // console.log('Component', 'templateBase', sub_component_id)
 
     for (const leaf of base) {
-      const [leaf_path, leaf_comp] = leaf
+      this.templateLeaf(leaf, root, parentRoot)
+    }
+  }
 
-      const leaf_parent_last = leaf_path[leaf_path.length - 1]
-      const leaf_parent_path = leaf_path.slice(0, -1)
+  public templateLeaf = (
+    leaf: LayoutLeaf,
+    root: (parent: Component, leaf_comp: Component) => void,
+    parentRoot: (parent: Component, leaf_comp: Component) => void
+  ): void => {
+    // console.log('Component', 'templateLeaf', sub_component_id)
 
-      const leaf_parent = this.pathGetSubComponent(leaf_parent_path)
+    const [leaf_path, leaf_comp] = leaf
 
-      if (leaf_parent === leaf_comp) {
-        //
+    const leaf_parent_last = leaf_path[leaf_path.length - 1]
+    const leaf_parent_path = leaf_path.slice(0, -1)
+
+    const leaf_parent = this.pathGetSubComponent(leaf_parent_path)
+
+    if (leaf_parent === leaf_comp) {
+      //
+    } else {
+      const parent_id = leaf_parent.getSubComponentParentId(leaf_parent_last)
+      if (parent_id) {
+        const parent = leaf_parent.getSubComponent(parent_id)
+
+        parentRoot(parent, leaf_comp)
       } else {
-        const parent_id = leaf_parent.getSubComponentParentId(leaf_parent_last)
-        if (parent_id) {
-          const parent = leaf_parent.getSubComponent(parent_id)
-
-          parentRoot(parent, leaf_comp)
-        } else {
-          root(leaf_parent, leaf_comp)
-        }
+        root(leaf_parent, leaf_comp)
       }
     }
   }
@@ -401,6 +565,22 @@ export class Component<
   public domRemoveBase = (base: LayoutBase): void => {
     this.templateBase(
       base,
+      (parent, leaf_comp) => {
+        const index = parent.$root.indexOf(leaf_comp)
+
+        parent.domRemoveRoot(leaf_comp, index)
+      },
+      (parent, leaf_comp) => {
+        const index = parent.$parentRoot.indexOf(leaf_comp)
+
+        parent.domRemoveParentRootAt(leaf_comp, 'default', index, index)
+      }
+    )
+  }
+
+  public domRemoveLeaf = (leaf: LayoutLeaf): void => {
+    this.templateLeaf(
+      leaf,
       (parent, leaf_comp) => {
         const index = parent.$root.indexOf(leaf_comp)
 

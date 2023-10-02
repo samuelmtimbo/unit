@@ -11,7 +11,6 @@ import {
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphCoverUnitPinSetData,
-  GraphExplodeUnitData,
   GraphExposePinData,
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
@@ -493,15 +492,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         nextSubComponentParentMap,
         nextSubComponentChildrenMap
       )
-    },
-
-    $explodeUnit({
-      unitId,
-      mapUnitId,
-      mapMergeId,
-      mapPlugId,
-    }: GraphExplodeUnitData): void {
-      graph.explodeUnit(unitId, mapUnitId, mapMergeId, mapPlugId)
     },
 
     $bulkEdit({ actions }: GraphBulkEditData) {

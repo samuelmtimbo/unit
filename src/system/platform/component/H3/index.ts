@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { ID_H3 } from '../../../_ids'
+import { ID_HEADER_3 } from '../../../_ids'
 
 export interface I {
   style: object
@@ -19,7 +19,7 @@ export default class H3 extends Element_<I, O> {
       },
       {},
       system,
-      ID_H3
+      ID_HEADER_3
     )
   }
 }

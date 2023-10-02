@@ -264,13 +264,6 @@ export type GraphAddUnitGhostData = {
   nextUnitPinMap: IOOf<Dict<string>>
 }
 
-export type GraphExplodeUnitData = {
-  unitId: string
-  mapUnitId: Dict<string>
-  mapMergeId: Dict<string>
-  mapPlugId: IOOf<Dict<Dict<string>>>
-}
-
 export type GraphMoveSubComponentRootData = {
   parentId: string | null
   children: string[]
