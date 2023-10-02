@@ -118,8 +118,7 @@ import classnames from '../../../../../client/classnames'
 import {
   isHEX,
   nameToColor,
-  randomColorString,
-  setAlpha,
+  setAlpha
 } from '../../../../../client/color'
 import {
   UNIT_MIN_RADIUS,
@@ -18303,7 +18302,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }px`,
       width: `${width}px`,
       height: `${height}px`,
-      border: `1px solid ${randomColorString()}`,
+      // border: `1px solid ${randomColorString()}`,
       boxSizing: 'content-box',
       transform: `scale(${sx}, ${sy})`,
       opacity: `${opacity}`,
