@@ -115,11 +115,7 @@ import {
 } from '../../../../../client/animation/animation'
 import { setAttributes } from '../../../../../client/attr'
 import classnames from '../../../../../client/classnames'
-import {
-  isHEX,
-  nameToColor,
-  setAlpha
-} from '../../../../../client/color'
+import { isHEX, nameToColor, setAlpha } from '../../../../../client/color'
 import {
   UNIT_MIN_RADIUS,
   getSpecRadius,
@@ -1617,6 +1613,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       setAttributes(this.$element as HTMLElement, attr)
     } else if (prop === 'disabled') {
       this._refresh_fallback_graph_paused()
+
+      this._editor.setProp('disabled', current)
     } else if (prop === 'graph') {
       this._reset_graph(() => {
         this._editor.setProp('graph', this._pod)
@@ -3721,7 +3719,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._context_unlisten()
 
-    this._disable_input()
+    // this._disable_input()
+    this._disable()
 
     this._stop_graph_simulation()
     this._stop_debugger()
@@ -17742,7 +17741,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _frame: Component<HTMLElement> | null = null
 
   private _lock_control = (): void => {
-    // console.log('Graph', 'lock_control')
+    // console.log('Graph', 'lock_control', this._id)
+
     const { animate } = this.$props
 
     if (this._control) {
@@ -17865,7 +17865,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _disable_search = (): void => {
     if (this._unlisten_search) {
-      // console.trace('Graph', '_disable_search', this._id)
+      // console.log('Graph', '_disable_search', this._id)
 
       this._unlisten_search()
 
@@ -19925,7 +19925,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_focus = () => {
-    // console.log('Graph', '_on_focus', this._id)
+    // console.log('Graph', '_on_focus', this._id, this._disabled)
 
     if (this._subgraph_graph) {
       this._subgraph_graph.focus()
@@ -21785,7 +21785,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     } else if (this._is_link_pin_node_id(node_id)) {
       this._selected_pin_count++
-      //
     } else if (this._is_datum_node_id(node_id)) {
       if (this._mode === 'multiselect') {
         //
@@ -22107,6 +22106,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     delete this._selected_node_id[node_id]
 
+    if (this._is_pin_node_id(node_id)) {
+      this._selected_pin_count--
+    }
+
     if (this._is_unit_node_id(node_id)) {
       if (this._is_unit_component(node_id)) {
         this._selected_component_count--
@@ -22159,10 +22162,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._set_all_nodes_links_opacity(1)
         }
       }
-    }
-
-    if (this._is_pin_node_id(node_id)) {
-      this._selected_pin_count--
     }
 
     this._refresh_all_invisible_datum()
@@ -22266,7 +22265,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _hide_control = (animate: boolean): void => {
-    // console.log('Graph', '_hide_control', animate, this._id)
+    // console.trace('Graph', '_hide_control', animate, this._id)
 
     if (this._force_control_animation_false) {
       this._force_control_animation_false = false
@@ -22630,8 +22629,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-        if (this._is_link_pin_ref(pin_node_id) && type === 'output') {
-          return true
+        if (this._is_link_pin_ref(pin_node_id)) {
+          if (type === 'output') {
+            return true
+          } else {
+            const tree = this._get_datum_tree(datum_node_id)
+
+            if (
+              [
+                TreeNodeType.Class,
+                TreeNodeType.ClassLiteral,
+                TreeNodeType.Unit,
+                TreeNodeType.Generic,
+              ].includes(tree.type)
+            ) {
+              //
+            } else {
+              return true
+            }
+          }
         }
 
         if (this._collapsing) {
@@ -22938,7 +22954,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const link_pin_type = this._get_link_pin_type(pin_node_id)
 
         if (_type === 'input') {
-          return _isTypeMatch(specs, exp_pin_type, link_pin_type)
+          if (this._is_link_pin_ref(pin_node_id)) {
+            if (this._is_unit_datum_type(exp_pin_type)) {
+              return true
+            } else {
+              return _isTypeMatch(specs, exp_pin_type, link_pin_type)
+            }
+          } else {
+            return _isTypeMatch(specs, exp_pin_type, link_pin_type)
+          }
         } else {
           return _isTypeMatch(specs, link_pin_type, exp_pin_type)
         }
@@ -23082,6 +23106,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _is_unit_datum_type = (tree: TreeNode) => {
+    if (
+      [
+        TreeNodeType.Class,
+        TreeNodeType.ClassLiteral,
+        TreeNodeType.Unit,
+      ].includes(tree.type)
+    ) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   private _is_link_pin_ref_link_pin_type_match = (
     a: string,
     a_type: IO,
@@ -23111,14 +23149,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): boolean => {
     const source_type = this._runtime_pin_type(a, a_type)
 
-    if (
-      [
-        TreeNodeType.Class,
-        TreeNodeType.ClassLiteral,
-        TreeNodeType.Unit,
-        TreeNodeType.Generic,
-      ].includes(source_type.type)
-    ) {
+    if (this._is_unit_datum_type(source_type)) {
       return this._is_pin_pin_type_match(a, a_type, b, b_type)
     }
 
@@ -26902,9 +26933,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (component_collapsed) {
         if (!this._animating_sub_component_base_id.has(sub_component_id)) {
           // this._remove_sub_component_all_root(sub_component_id)
+          this._remove_sub_component_root_base(sub_component_id)
         }
-
-        // this._remove_sub_component_root_base(sub_component_id)
       } else {
         if (should_uncollapse) {
           const sub_component = this._get_sub_component(sub_component_id)
@@ -31518,13 +31548,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
     })
-
-    forEachPinOnMerges(
-      unit_merges,
-      (mergeId: string, unitId: string, type: IO, pinId: string) => {
-        const merge_node_id = getMergeNodeId(mergeId)
-      }
-    )
 
     const core_node = this._node[unit_id]
 
@@ -43014,7 +43037,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const sub_component_index_map = {}
     const sub_component_children_map = {}
 
-    const next_unit_pin_map: GraphMoveSubGraphData['nextPinIdMap'] = {}
+    const next_pin_map: GraphMoveSubGraphData['nextPinIdMap'] = {}
     const next_merge_pin_id: GraphMoveSubGraphData['nextMergePinId'] = {}
     const next_plug_spec_map: GraphMoveSubGraphData['nextPlugSpec'] = {
       input: {},
@@ -43116,7 +43139,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const ref = this._is_link_pin_ref(pin_node_id)
       const ignored = this._spec_is_link_pin_ignored(pin_node_id)
 
-      pathSet(next_unit_pin_map, [unit_id, type, pin_id], {
+      pathSet(next_pin_map, [unit_id, type, pin_id], {
         pinId: next_pin_id,
         subPinId: `${next_sub_pin_id}`,
         ref,
@@ -43294,9 +43317,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             if (merge_inside_pin_count === 0 || merge_inside_pin_count > 1) {
               pathSet(next_merge_pin_id, [mergeId, type, 'pinId'], pinId)
 
-              // pathSet(next_plug_spec_map, [type, pinId, subPinId], {
-              //   mergeId,
-              // })
+              pathSet(next_plug_spec_map, [type, pinId, subPinId], {
+                mergeId,
+              })
             } else {
               pathSet(next_plug_spec_map, [type, pinId, subPinId], {})
             }
@@ -43573,9 +43596,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const merge_node_id = this._pin_to_merge[pin_node_id]
 
           if (merge_node_id) {
-            const merge_ref_unit = this._merge_to_ref_unit[merge_node_id]
+            const merge_ref_unit_id = this._merge_to_ref_unit[merge_node_id]
 
-            if (!node_id_set.has(merge_node_id) || pin_id === SELF) {
+            if (
+              !merge_ref_unit_id &&
+              (!node_id_set.has(merge_node_id) || pin_id === SELF)
+            ) {
               let next_pin_id = pathOrDefault(
                 merge_to_exposed_pin_id,
                 [type, merge_node_id],
@@ -43898,7 +43924,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
       nextSpecId,
       nextIdMap: next_id_map,
-      nextPinIdMap: next_unit_pin_map,
+      nextPinIdMap: next_pin_map,
       nextMergePinId: next_merge_pin_id,
       nextUnitPinMergeMap: next_unit_pin_merge_map,
       nextPlugSpec: next_plug_spec_map,
@@ -45469,6 +45495,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   graph_id,
     //   exposed_pin_node_id
     // )
+
     const { type, pinId, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
 
     const pin_spec = this._get_pin_spec(type, pinId)
@@ -45493,110 +45520,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       next_pin_id_map,
       next_merge_pin_map,
       next_id_map
-    )
-
-    // const position = this._get_node_position(ext_node_id)
-
-    // const ref = this._spec_is_plug_ref(type, pinId)
-
-    // const datum_node_id = this._plug_to_datum[ext_node_id]
-
-    // if (datum_node_id) {
-    //   this._sim_remove_plug_set_datum_link(ext_node_id)
-
-    //   if (this._collapse_node_id.has(datum_node_id)) {
-    //     this._stop_node_long_press_collapse(datum_node_id)
-
-    //     this._deselect_node(datum_node_id)
-    //   }
-    // }
-
-    // this._state_move_plug_into_graph__remove(exposed_pin_node_id)
-    // this._state_move_plug_into_graph__inject(
-    //   graph_id,
-    //   exposed_pin_node_id,
-    //   ref,
-    //   next_id_map,
-    //   next_plug_spec_map,
-    //   datum_node_id,
-    //   position
-    // )
-    // this._state_move_plug_into_graph__reconnect(
-    //   graph_id,
-    //   exposed_pin_node_id,
-    //   sub_pin_spec,
-    //   next_plug_spec_map,
-    //   next_id_map,
-    //   next_merge_pin_map,
-    //   datum_node_id,
-    //   position
-    // )
-  }
-
-  private _state_move_plug_into_graph__inject = (
-    graph_id: string,
-    exposed_pin_node_id: string,
-    ref: boolean,
-    next_id_map: GraphMoveSubGraphData['nextIdMap'],
-    next_plug_spec_map: IOOf<Dict<Dict<GraphSubPinSpec>>>,
-    datum_node_id: string | null,
-    position: Position
-  ): void => {
-    const { type, pinId, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
-
-    this._spec_move_plug_into_graph__inject(
-      graph_id,
-      type,
-      pinId,
-      subPinId,
-      ref,
-      next_id_map,
-      next_plug_spec_map
-    )
-    this._sim_move_plug_into_graph__inject(
-      graph_id,
-      type,
-      pinId,
-      subPinId,
-      next_id_map,
-      datum_node_id,
-      position
-    )
-  }
-
-  private _state_move_plug_into_graph__reconnect = (
-    graph_id: string,
-    exposed_pin_node_id: string,
-    sub_pin_spec: GraphSubPinSpec,
-    next_plug_spec_map: GraphMoveSubGraphData['nextPlugSpec'],
-    next_id_map: GraphMoveSubGraphData['nextIdMap'],
-    next_merge_pin_map: GraphMoveSubGraphData['nextMergePinId'],
-    datum_node_id: string | null,
-    position: Position
-  ): void => {
-    const { type, pinId, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
-
-    this._spec_move_plug_into_graph__reconnect(
-      graph_id,
-      type,
-      pinId,
-      subPinId,
-      sub_pin_spec,
-      next_plug_spec_map,
-      next_id_map,
-      next_merge_pin_map
-    )
-    this._sim_move_plug_into_graph__reconnect(
-      graph_id,
-      type,
-      pinId,
-      subPinId,
-      sub_pin_spec,
-      datum_node_id,
-      next_plug_spec_map,
-      next_id_map,
-      next_merge_pin_map,
-      position
     )
   }
 
@@ -45746,126 +45669,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (next_merge_id) {
         this._spec_add_link_pin_to_merge(next_merge_id, graph_id, _type, pin_id)
-      }
-    }
-  }
-
-  private _sim_move_plug_into_graph__inject = (
-    graph_id: string,
-    type: IO,
-    pinId: string,
-    subPinId: string,
-    next_id_map: GraphMoveSubGraphData['nextIdMap'],
-    datum_node_id: string | null,
-    position: Position
-  ): void => {
-    const _type = pathOrDefault(
-      next_id_map,
-      ['plug', type, pinId, subPinId, 'type'],
-      type
-    )
-
-    const pin_node_id = getPinNodeId(graph_id, _type, pinId)
-
-    if (this._has_anchor_node(pin_node_id)) {
-      //
-    } else {
-      this._sim_graph_unit_add_pin(graph_id, _type, pinId, position)
-
-      if (datum_node_id) {
-        this._sim_add_pin_datum_link(datum_node_id, pin_node_id)
-
-        const { datumId } = segmentDatumNodeId(datum_node_id)
-
-        this._mem_set_pin_datum(pin_node_id, datumId)
-      }
-    }
-  }
-
-  private _sim_move_plug_into_graph__reconnect = (
-    graph_id: string,
-    type: IO,
-    pin_id: string,
-    sub_pin_id: string,
-    sub_pin_spec: GraphSubPinSpec,
-    datum_node_id: string | null,
-    next_plug_spec_map: GraphMoveSubGraphData['nextPlugSpec'],
-    next_id_map: GraphMoveSubGraphData['nextIdMap'],
-    next_merge_pin_map: GraphMoveSubGraphData['nextMergePinId'],
-    position: Position
-  ): void => {
-    const next_pin_id = pathOrDefault(
-      next_plug_spec_map,
-      [type, pin_id, sub_pin_id, 'pinId'],
-      pin_id
-    )
-
-    const _type = pathOrDefault(
-      next_id_map,
-      ['plug', type, pin_id, sub_pin_id, 'type'],
-      type
-    )
-
-    const pin_node_id = getPinNodeId(graph_id, _type, next_pin_id)
-
-    if (sub_pin_spec.unitId && sub_pin_spec.pinId) {
-      let next_merge_id = pathOrDefault(
-        next_id_map,
-        ['link', sub_pin_spec.unitId, type, sub_pin_spec.pinId, 'mergeId'],
-        null
-      )
-
-      if (next_merge_id) {
-        //
-      } else {
-        next_merge_id = pathOrDefault(
-          next_id_map,
-          ['plug', type, pin_id, sub_pin_id, 'mergeId'],
-          null
-        )
-      }
-
-      if (next_merge_id) {
-        const merge_spec = this._spec_get_merge(next_merge_id)
-
-        this._sim_add_merge(next_merge_id, merge_spec, position)
-        this._sim_collapse_merge(next_merge_id)
-      }
-    } else if (sub_pin_spec.mergeId) {
-      const next_merge_id = pathOrDefault(
-        next_merge_pin_map,
-        [sub_pin_spec.mergeId, type, 'mergeId'],
-        sub_pin_spec.mergeId
-      )
-
-      if (next_merge_id) {
-        const next_merge_node_id = getMergeNodeId(next_merge_id)
-
-        this._sim_add_link_pin_to_merge(pin_node_id, next_merge_node_id, true)
-      } else {
-        const next_merge_id = pathOrDefault(
-          next_id_map,
-          ['plug', type, pin_id, sub_pin_id, 'mergeId'],
-          null
-        )
-
-        const next_merge_node_id = getMergeNodeId(next_merge_id)
-
-        if (next_merge_id) {
-          this._sim_add_link_pin_to_merge(pin_node_id, next_merge_node_id)
-        }
-      }
-    } else {
-      const next_merge_id = pathOrDefault(
-        next_id_map,
-        ['plug', type, pin_id, sub_pin_id, 'mergeId'],
-        null
-      )
-
-      const next_merge_node_id = getMergeNodeId(next_merge_id)
-
-      if (next_merge_id) {
-        this._sim_add_link_pin_to_merge(pin_node_id, next_merge_node_id)
       }
     }
   }
@@ -51823,20 +51626,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const init_spec = getGraphSpec(specs, init_spec_id)
 
-    if (init_spec.fork) {
-      return { spec_id: init_spec_id, spec: init_spec, forked: false }
-    } else {
-      const forked_spec_id = newSpecId(specs)
-      const forked_spec = clone(init_spec)
+    const forked_spec_id = newSpecId(specs)
+    const forked_spec = clone(init_spec)
 
-      forked_spec.id = forked_spec_id
-      forked_spec.fork = true
+    forked_spec.id = forked_spec_id
 
-      return {
-        spec_id: forked_spec_id,
-        spec: forked_spec,
-        forked: true,
-      }
+    return {
+      spec_id: forked_spec_id,
+      spec: forked_spec,
+      forked: true,
     }
   }
 
@@ -51988,38 +51786,44 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         setSpec(next_graph_spec.id, next_graph_spec)
       }
 
-      // if (this._in_component_control) {
       // if (this._subgraph_unit_id !== path[0]) {
       if (graph_unit_was_component) {
         if (
           is_removed_unit_component &&
           all_added_unit_ancestors_are_component
         ) {
-          let sub_component = this._get_sub_component(graph_unit_id)
+          const graph_sub_component = this._get_sub_component(graph_unit_id)
+
+          let sub_component = graph_sub_component
 
           for (let i = path.length - 1; i > 0; i--) {
             const unit_id = path[i]
 
             sub_component = sub_component.getSubComponent(unit_id)
+
+            if (!sub_component) {
+              break
+            }
           }
 
-          const sub_sub_component = sub_component.$subComponent[unitId]
+          if (sub_component) {
+            const sub_sub_component = sub_component.$subComponent[unitId]
 
-          if (sub_sub_component) {
-            if (this._in_component_control) {
-              if (this._subgraph_unit_id !== path[0]) {
-                sub_component.removeRoot(sub_sub_component)
+            if (sub_sub_component) {
+              if (this._in_component_control) {
+                if (this._subgraph_unit_id !== path[0]) {
+                  sub_component.removeRoot(sub_sub_component)
+                }
               }
+
+              sub_component.removeSubComponent(unitId)
+              sub_component.pullRoot(sub_sub_component)
+
+              sub_sub_component.disconnect()
             }
-
-            sub_component.removeSubComponent(unitId)
-            sub_component.pullRoot(sub_sub_component)
-
-            sub_sub_component.disconnect()
           }
         }
       }
-      // }
       // }
     }
 

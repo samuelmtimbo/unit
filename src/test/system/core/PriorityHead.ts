@@ -1,12 +1,12 @@
 import * as assert from 'assert'
 import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
-import { fromSpec } from '../../../spec/fromSpec'
+import { fromBundle } from '../../../spec/fromBundle'
 import _specs from '../../../system/_specs'
 import { system } from '../../util/system'
 
-const spec = require('../../../system/core/common/PriorityHead/spec.json')
+const bundle = require('./PriorityHead.json')
 
-const PriorityHead = fromSpec(spec, _specs)
+const PriorityHead = fromBundle(bundle, _specs)
 
 const priorityHead = new PriorityHead(system)
 

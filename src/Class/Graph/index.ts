@@ -1543,7 +1543,7 @@ export class Graph<I = any, O = any>
     pinId: string,
     subPinId: string,
     subPinSpec: GraphSubPinSpec
-  ): void => {
+  ): boolean => {
     const { mergeId, unitId: _unitId, pinId: _pinId } = subPinSpec
 
     let ref = undefined
@@ -1573,9 +1573,7 @@ export class Graph<I = any, O = any>
       this._memPlugEmptyPin(type, pinId, subPinId)
     }
 
-    if (ref !== undefined) {
-      this.setPinRef(type, pinId, ref)
-    }
+    return ref
   }
 
   private _specPlugPin = (
@@ -1661,8 +1659,6 @@ export class Graph<I = any, O = any>
 
     const { mergeId, unitId, pinId: _pinId } = subPinSpec
 
-    const pinSpec = this.getExposedPinSpec(type, pinId)
-
     if (
       pathOrDefault(
         this._exposedEmptySubPin,
@@ -1675,9 +1671,7 @@ export class Graph<I = any, O = any>
     }
 
     this._specPlugPin(type, pinId, subPinId, subPinSpec)
-    this._memPlugPin(type, pinId, subPinId, subPinSpec)
-
-    const { ref } = pinSpec
+    const ref = this._memPlugPin(type, pinId, subPinId, subPinSpec)
 
     const opt = { ref: !!ref }
 
@@ -1695,6 +1689,10 @@ export class Graph<I = any, O = any>
       )
     } else {
       //
+    }
+
+    if (ref !== undefined) {
+      this.setPinRef(type, pinId, ref)
     }
   }
 

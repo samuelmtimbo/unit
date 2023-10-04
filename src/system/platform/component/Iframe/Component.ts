@@ -26,6 +26,8 @@ export interface Props {
 export const DEFAULT_STYLE = {
   display: 'block',
   border: 'none',
+  width: '100%',
+  height: '100%',
 }
 
 export default class Iframe extends Element<

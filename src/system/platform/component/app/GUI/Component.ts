@@ -45,9 +45,11 @@ export const DEFAULT_STYLE = {
   width: '100%',
   height: '100%',
   overflow: 'hidden',
+  zIndex: '3',
 }
 
 export default class GUI extends Element<HTMLDivElement, Props> {
+  public _container: Div
   public _gui: Div
   public _background: Div
   public _search: Search
@@ -148,9 +150,11 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           borderColor: 'currentColor',
           borderRadius: '3px',
           backgroundColor: COLOR_NONE,
+          cursor: 'pointer',
         },
         sliderStyle: {
           borderRadius: '1.5px',
+          cursor: 'pointer',
           transition: ifLinearTransition(
             this.$system.animated,
             'left',
@@ -342,8 +346,10 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       {
         className: classnames('gui', className),
         style: {
-          ...DEFAULT_STYLE,
-          ...style,
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
         },
       },
       this.$system
@@ -352,17 +358,29 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     gui.registerParentRoot(main)
     gui.registerParentRoot(control)
     gui.registerParentRoot(foreground)
-
     this._gui = gui
 
-    this._gui.$ref['control'] = this
-    this._gui.$ref['cabinet'] = cabinet
-    this._gui.$ref['export'] = export_button
-    this._gui.$ref['import'] = import_button
-    this._gui.$ref['minimap'] = minimap
-    this._gui.$ref['history'] = history_tree
-    this._gui.$ref['modes'] = modes
-    this._gui.$ref['search'] = search
+    const container = new Div(
+      {
+        className: classnames('gui-root', className),
+        style: {
+          ...DEFAULT_STYLE,
+          ...style,
+        },
+      },
+      this.$system
+    )
+    container.registerParentRoot(gui)
+    this._container = container
+
+    this._container.$ref['control'] = this
+    this._container.$ref['cabinet'] = cabinet
+    this._container.$ref['export'] = export_button
+    this._container.$ref['import'] = import_button
+    this._container.$ref['minimap'] = minimap
+    this._container.$ref['history'] = history_tree
+    this._container.$ref['modes'] = modes
+    this._container.$ref['search'] = search
 
     const $element = parentElement($system)
 
@@ -477,7 +495,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       }),
     ])
 
-    this.registerRoot(gui)
+    this.registerRoot(container)
   }
 
   private _get_color = (): string => {
@@ -521,7 +539,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     // console.log('GUI', 'onPropChanged', prop, current)
 
     if (prop === 'style') {
-      this._gui.setProp('style', { ...DEFAULT_STYLE, ...current })
+      this._container.setProp('style', { ...DEFAULT_STYLE, ...current })
 
       this._refresh_color()
     }
@@ -554,7 +572,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           component: this._color_pallete,
           active: false,
           width: 60,
-          height: 55,
+          height: 56,
           state: { y: cy - 17.5 },
         },
         file: {

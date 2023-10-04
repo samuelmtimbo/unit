@@ -19,13 +19,9 @@ import {
   ID_LAST_INDEX,
   ID_LOOP_INCREMENT,
   ID_MERGE_AB,
-  ID_MERGE_SORT,
   ID_N_ARRAY_BUILDER,
   ID_N_ARRAY_BUILDER_FROM,
   ID_PICK_LESSER,
-  ID_PRIORITY_HEAD,
-  ID_PRIORITY_MERGE,
-  ID_PRIORITY_MERGE_FROM,
   ID_RANDOM_BIT,
   ID_RANDOM_BIT_ARRAY,
   ID_RANDOM_BIT_MATRIX,
@@ -379,35 +375,5 @@ assert.deepEqual(getSpecTypeInterfaceById(ID_HEAD_OR_DEFAULT, _specs), {
     a: '<A>[]',
     head: '<A>',
     empty: 'boolean',
-  },
-})
-
-assert.deepEqual(getSpecTypeInterfaceById(ID_PRIORITY_HEAD, _specs), {
-  input: { a: 'number[]', b: 'number[]' },
-  output: {
-    head: 'number',
-    a: 'number[]',
-    b: 'number[]',
-  },
-})
-
-assert.deepEqual(getSpecTypeInterfaceById(ID_PRIORITY_MERGE_FROM, _specs), {
-  input: { a: 'number[]', b: 'number[]', from: 'number[]' },
-  output: {
-    ab: 'number[]',
-  },
-})
-
-assert.deepEqual(getSpecTypeInterfaceById(ID_PRIORITY_MERGE, _specs), {
-  input: { a: 'number[]', b: 'number[]' },
-  output: {
-    ab: 'number[]',
-  },
-})
-
-assert.deepEqual(getSpecTypeInterfaceById(ID_MERGE_SORT, _specs), {
-  input: { a: 'number[]' },
-  output: {
-    a: 'number[]',
   },
 })

@@ -672,11 +672,7 @@ export const setUnitInputConstant = (
   }: { unitId: string; pinId: string; constant: boolean },
   state: GraphSpec
 ): GraphSpec => {
-  return deepSet(
-    state,
-    ['units', unitId, 'input', pinId, 'constant'],
-    constant
-  )
+  return deepSet(state, ['units', unitId, 'input', pinId, 'constant'], constant)
 }
 
 export const setUnitOutputConstant = (

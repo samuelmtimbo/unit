@@ -432,11 +432,13 @@ export const _getGraphTypeMap = (
     forEachValueKey(unit, (_, unitId: string) => {
       const unitSpec = units[unitId]
 
+      // AD HOC
       if (!unitSpec) {
         return
       }
 
       const { id, input = {} } = unitSpec
+
       let unitTypeInterface: TypeTreeInterface
       if (visited[id]) {
         unitTypeInterface = createGenericTypeInterface(id, specs)

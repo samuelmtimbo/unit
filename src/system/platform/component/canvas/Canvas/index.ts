@@ -152,9 +152,9 @@ export default class Canvas
     width: number,
     height: number
   ): void {
-    this._component.$element
-      .getContext('2d')
-      .putImageData(image, dx, dy, x, y, width, height)
+    // this._component.$element
+    //   .getContext('2d')
+    //   .putImageData(image, dx, dy, x, y, width, height)
 
     this.emit('call', {
       method: 'putImageData',
@@ -169,11 +169,27 @@ export default class Canvas
 
     switch (name) {
       case 'width':
-        this._offscreen.width = data
+        // if (typeof data === 'string' && data.endsWith('vw')) {
+        //   data = 0
+        // }
+        try {
+          this._offscreen.width = data
+        } catch (err) {
+          //
+        }
+        // this._component.setProp('width', data)
 
         break
       case 'height':
-        this._offscreen.height = data
+        // if (typeof data === 'string' && data.endsWith('vw')) {
+        //   data = 0
+        // }
+        try {
+          this._offscreen.height = data
+        } catch (err) {
+          //
+        }
+        // this._component.setProp('height', data)
 
         break
     }
