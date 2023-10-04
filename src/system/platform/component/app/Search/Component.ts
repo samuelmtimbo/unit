@@ -1,7 +1,6 @@
 import * as fuzzy from 'fuzzy'
 import { Registry } from '../../../../../Registry'
 import classnames from '../../../../../client/classnames'
-import debounce from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeFocusInListener } from '../../../../../client/event/focus/focusin'
@@ -403,7 +402,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._registry_unlisten = this._registry.specs_.subscribe(
       [],
       '*',
-      debounce((type, path, key, data) => {
+      (type, path, key, data) => {
         const { specs } = this._registry
 
         const specId = key
@@ -453,7 +452,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
             }
           }
         }
-      }, 100)
+      }
     )
 
     this._reset()
@@ -681,6 +680,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _select_all = (): void => {
+    // console.log('Search', '_select_all')
+
     this._input.setSelectionRange(0, this._input_value.length)
   }
 

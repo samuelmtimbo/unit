@@ -36,6 +36,7 @@ export class PositionObserver implements IPositionObserver {
         document: { MutationObserver, ResizeObserver },
       },
     } = this._system
+
     if (this._abort) {
       this._abort()
 

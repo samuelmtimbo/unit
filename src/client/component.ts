@@ -342,8 +342,14 @@ export class Component<
 
     const allAbort = []
 
-    const hostTrait = extractTrait(hostSlot, measureText)
-    const hostStyle = rawExtractStyle(hostSlot.$element)
+    let hostTarget = hostSlot
+
+    while (hostTarget.$element?.classList?.contains('__parent')) {
+      hostTarget = hostTarget.$slotParent
+    }
+
+    const hostTrait = extractTrait(hostTarget, measureText)
+    const hostStyle = rawExtractStyle(hostTarget.$element)
 
     delete hostStyle['transform']
     delete hostStyle['opacity']
@@ -360,7 +366,7 @@ export class Component<
     )
 
     let leafFinished = 0
-    let leafFrames = []
+    let leafFrames: HTMLDivElement[] = []
 
     for (let i = 0; i < base.length; i++) {
       const targetTrait = targetTraits[i]
@@ -379,13 +385,21 @@ export class Component<
         top: `${leafTrait.y}px`,
         width: `${leafTrait.width}px`,
         height: `${leafTrait.height}px`,
+        pointerEvents: 'none',
+        // border: `1px solid ${randomColorString()}`,
       })
+
+      hostSlot.$element.appendChild(leafFrame)
 
       !reverse && this.domRemoveLeaf(leaf)
 
+      leafComp.unmount()
+
       leafFrame.appendChild(leafComp.$element)
 
-      html.appendChild(leafFrame)
+      leafComp.$slotParent = hostSlot
+
+      leafComp.mount(hostSlot.$context)
 
       leafFrames.push(leafFrame)
 
@@ -397,8 +411,16 @@ export class Component<
         },
         ANIMATION_PROPERTY_DELTA_PAIRS,
         ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
-          leafFrame.style.left = `${x + ((Math.abs(sx) - 1) * width) / 2}px`
-          leafFrame.style.top = `${y + ((Math.abs(sy) - 1) * height) / 2}px`
+          leafFrame.style.left = `${
+            x -
+            (reverse ? this.$context.$x : hostTrait.x) +
+            ((Math.abs(sx) - 1) * width) / 2
+          }px`
+          leafFrame.style.top = `${
+            y -
+            (reverse ? this.$context.$y : hostTrait.y) +
+            ((Math.abs(sy) - 1) * height) / 2
+          }px`
           leafFrame.style.width = `${width}px`
           leafFrame.style.height = `${height}px`
           leafFrame.style.transform = `scale(${sx}, ${sy})`
@@ -409,11 +431,13 @@ export class Component<
           leafFinished++
 
           if (leafFinished === base.length) {
-            commit()
-          }
+            for (const leafFrame of leafFrames) {
+              leafFrame.removeChild(leafComp.$element)
 
-          for (const leafFrame of leafFrames) {
-            html.removeChild(leafFrame)
+              hostSlot.$element.removeChild(leafFrame)
+            }
+
+            commit()
           }
         }
       )
@@ -449,17 +473,13 @@ export class Component<
 
     const hostComponent = hosts[0] // TODO heuristic: get closest on the tree
 
-    const hostSlot = hostComponent.getSlot('default')
+    let hostSlot = hostComponent.getSlot('default')
 
     const base = this.getRootBase()
 
     const commit = () => {
-      for (const [path, leaf] of base) {
-        leaf.unmount()
-
-        hostSlot.$element.appendChild(leaf.$element)
-
-        leaf.mount(hostSlot.$context)
+      for (const [_, leaf] of base) {
+        hostSlot.domAppendChild(leaf)
       }
     }
 
@@ -988,6 +1008,7 @@ export class Component<
 
     const appendSubComponent = (subComponent: Component) => {
       const subComponentId = this.getSubComponentId(subComponent)
+
       const subComponentRootBase = subComponent.getRootBase([
         ...path,
         subComponentId,
@@ -1079,8 +1100,14 @@ export class Component<
     slot.memAppendParentChild(child, slotName, at, at)
   }
 
-  public domAppendChild(child: Component, slotName: string, at: number): void {
+  public domAppendChild(
+    child: Component,
+    slotName: string = 'default',
+    at?: number
+  ): void {
     // console.log('Component', '_domAppendChild')
+
+    at = at ?? this.$children.length
 
     // BUG
     let slot = this.$slot[slotName]
@@ -1145,8 +1172,14 @@ export class Component<
     }
   }
 
-  public domRemoveChild(child: Component, slotName: string, at: number): void {
+  public domRemoveChild(
+    child: Component,
+    slotName: string = 'default',
+    at?: number
+  ): void {
     const slot = this.$slot[slotName]
+
+    at = at ?? slot.$slotChildren[slotName].indexOf(child)
 
     slot.domRemoveParentChildAt(child, slotName, at, at)
 
@@ -1658,6 +1691,8 @@ export class Component<
   }
 
   public domRemoveRoot(component: Component, at: number): void {
+    set(component, '$slotParent', null)
+
     if (!this.$primitive) {
       if (!component.$primitive) {
         for (let i = 0; i < component.$mountRoot.length; i++) {

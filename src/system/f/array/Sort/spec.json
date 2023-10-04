@@ -21,12 +21,9 @@
   },
   "metadata": {
     "icon": "list-ordered",
-    "description": "sort array by comparing each adjacent element",
+    "description": "sort array `a` by comparing its elements",
     "complexity": 3,
-    "tags": [
-      "f",
-      "array"
-    ]
+    "tags": ["f", "array"]
   },
   "id": "d4572f1c-83d3-4a3d-be76-fa16578286d2",
   "base": true,

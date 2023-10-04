@@ -55,7 +55,6 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
   public frame: Frame
 
   private _knob: Icon
-  private _column: Div
 
   private _active: boolean = false
   private _hidden: boolean = false
@@ -99,12 +98,16 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           height: `${KNOB_HEIGHT - 12 - 2}px`,
           width: `${KNOB_HEIGHT - 12 - 2}px`,
           touchAction: 'none',
-          boxShadow:
-            'inset 1px 0 0 0 currentColor, inset -1px 0 0 0 #00000000, inset 0 1px 0 0 currentColor, inset 0 -1px 0 0 currentColor',
+          // boxShadow:
+          //   'inset 1px 0 0 0 currentColor, inset -1px 0 0 0 #00000000, inset 0 1px 0 0 currentColor, inset 0 -1px 0 0 currentColor',
           backgroundColor,
           cursor: 'pointer',
           borderTopLeftRadius: '3px',
           borderBottomLeftRadius: '3px',
+          borderWidth: '1px 0px 1px 1px',
+          borderStyle: 'solid',
+          borderColor: 'currentColor',
+          borderBottom: '0',
         },
         title,
       },
@@ -151,9 +154,10 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           // borderWidth: component ? '1px' : '0',
           // borderStyle: 'solid',
           // borderColor: 'currentColor',
-          boxShadow:
-            'inset 1px 0 0 0 #00000000, inset -1px 0 0 0 currentColor, inset 0 1px 0 0 currentColor, inset 0 -1px 0 0 currentColor',
+          // boxShadow:
+          //   'inset 1px 0 0 0 #00000000, inset -1px 0 0 0 currentColor, inset 0 1px 0 0 currentColor, inset 0 -1px 0 0 currentColor',
           // borderLeftColor: NONE,
+          borderTop: '1px solid currentColor',
           boxSizing: 'border-box',
           borderRadius: '0px',
           borderBottomLeftRadius: '1px',
@@ -174,17 +178,76 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           position: 'absolute',
           bottom: '0px',
           left: '0px',
-          width: '0px',
-          height: 'calc(100% - 32px)',
+          width: '4px',
+          height: 'calc(100% - 36px)',
+          backgroundColor: 'none',
+          borderWidth: '0px 0px 1px 1px',
+          borderStyle: 'solid',
+          borderColor: 'currentColor',
+          borderBottomLeftRadius: '3px',
+        },
+      },
+      this.$system
+    )
+
+    const row = new Div(
+      {
+        className: 'drawer-row',
+        style: {
+          position: 'absolute',
+          bottom: '0px',
+          right: '0px',
+          width: 'calc(100% - 3px)',
+          height: '3px',
           backgroundColor: 'none',
           borderWidth: '0px 1px 0px 0px',
+          borderStyle: 'solid',
+          borderColor: 'currentColor',
+          borderBottom: '1px solid currentColor',
+        },
+      },
+      this.$system
+    )
+
+    const notch = new Div(
+      {
+        className: 'drawer-notch',
+        style: {
+          position: 'absolute',
+          bottom: '0px',
+          left: '-31px',
+          top: '34px',
+          width: '32px',
+          height: '4px',
+          backgroundColor: 'none',
+          borderWidth: '1px 1px 0px 0px',
+          borderTopRightRadius: '3px',
           borderStyle: 'solid',
           borderColor: 'currentColor',
         },
       },
       this.$system
     )
-    this._column = column
+
+    const notch0 = new Div(
+      {
+        className: 'drawer-notch0',
+        style: {
+          position: 'absolute',
+          bottom: '0px',
+          left: '-34px',
+          top: '31px',
+          width: '5px',
+          height: '4px',
+          backgroundColor: 'none',
+          borderWidth: '0px 0px 1px 1px',
+          borderBottomLeftRadius: '3px',
+          borderStyle: 'solid',
+          borderColor: 'currentColor',
+        },
+      },
+      this.$system
+    )
 
     const drawer = new Div(
       {
@@ -200,6 +263,9 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     drawer.registerParentRoot(knob)
     drawer.registerParentRoot(content)
     drawer.registerParentRoot(column)
+    drawer.registerParentRoot(row)
+    drawer.registerParentRoot(notch)
+    drawer.registerParentRoot(notch0)
 
     const $element = parentElement($system)
 

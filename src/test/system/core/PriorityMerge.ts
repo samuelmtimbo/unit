@@ -6,11 +6,10 @@ import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types/GraphSpec'
 import { system } from '../../util/system'
 
-const spec =
-  require('../../../system/core/common/PriorityMerge/spec.json') as GraphSpec
+const bundle = require('./PriorityMerge.json') as GraphSpec
 
 const PriorityMerge = fromSpec<{ a: number[]; b: number[] }, { ab: number[] }>(
-  spec,
+  bundle,
   _specs
 )
 

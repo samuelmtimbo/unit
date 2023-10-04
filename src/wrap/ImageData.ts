@@ -64,6 +64,10 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
     ): Unlisten {
       throw new Error('read only')
     }
+
+    raw() {
+      return imageData
+    }
   })(system)
 
   return image

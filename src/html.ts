@@ -88,9 +88,6 @@ export async function html(opt: WebTemplate): Promise<string> {
         background: transparent;
         // touch-action: none;
         overflow: hidden;
-        // user-select: none;
-        // -webkit-user-select: none;
-        // -moz-user-select: none;
         -ms-text-size-adjust: none;
         -webkit-text-size-adjust: none;
         overscroll-behavior: none;

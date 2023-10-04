@@ -6,6 +6,7 @@ import { GraphSpec } from '../types/GraphSpec'
 const ALLOWED_BUNDLE_SPEC_KEY_SET = new Set(['spec', 'specs', 'metadata'])
 
 const ALLOWED_SPEC_KEY_SET = new Set([
+  'name',
   'version',
   'id',
   'units',
@@ -15,6 +16,8 @@ const ALLOWED_SPEC_KEY_SET = new Set([
   'metadata',
   'inputs',
   'outputs',
+  'type',
+  'render',
 ])
 
 export function validObjectKeys(obj: Dict<any>, set: Set<string>) {
