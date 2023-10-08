@@ -28,7 +28,7 @@ const fitChildren = (
       display: childDisplay = 'block',
       width: childWidthStr = '',
       height: childHeightStr = '',
-      fontSize: childFontSizeStr,
+      'font-size': childFontSizeStr,
       opacity: childOpacityStr = '1',
       transform: childTransform = '',
     } = childStyle

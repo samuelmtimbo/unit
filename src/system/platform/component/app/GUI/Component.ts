@@ -60,6 +60,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
   public _color_pallete: Div
   public _share: Div
   public _import: IconButton
+  public _folder: IconButton
   public _export: IconButton
   public _history: Div
 
@@ -214,6 +215,20 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     color_pallete.appendChild(color_picker)
     this._color_pallete = color_pallete
 
+    const folder_button = new IconButton(
+      {
+        icon: 'folder',
+        style: {
+          width: '21px',
+          height: '21px',
+          padding: '6px',
+        },
+      },
+      this.$system
+    )
+
+    this._folder = folder_button
+
     const export_button = new IconButton(
       {
         icon: 'upload',
@@ -253,6 +268,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
+    share.appendChild(folder_button)
     share.appendChild(export_button)
     share.appendChild(import_button)
     this._share = share
@@ -510,7 +526,9 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
   private _background_color = (): string => {
     const { $theme } = this.$context
+
     const backgroundColor = setAlpha(themeBackgroundColor($theme), 0.75)
+
     return backgroundColor
   }
 
@@ -521,15 +539,12 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     mergePropStyle(this._cabinet, {
       backgroundColor,
     })
-
     mergePropStyle(this._modes, {
       backgroundColor,
     })
-
     mergePropStyle(this._search, {
       backgroundColor,
     })
-
     mergePropStyle(this._minimap, {
       color,
     })
@@ -581,7 +596,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           component: this._share,
           active: false,
           width: 30,
-          height: 67,
+          height: 97,
           state: { y: cy + 47.765 },
         },
       })

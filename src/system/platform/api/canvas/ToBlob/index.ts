@@ -46,7 +46,11 @@ export default class ToBlob<T> extends Semifunctional<I<T>, O<T>> {
     let _blob: Blob
 
     const blob = new (class _Blob extends $ implements B {
-      __: string[] = ['MS']
+      __: string[] = ['B', 'IM']
+
+      async image(): Promise<any> {
+        return _blob
+      }
 
       async blob(): Promise<Blob> {
         try {

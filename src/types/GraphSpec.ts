@@ -2,7 +2,6 @@ import { GraphComponentSpec, GraphDataSpec, GraphMetadataSpec } from '.'
 import { GraphSpecBase } from './GraphSpecBase'
 import { GraphSpecs } from './GraphSpecs'
 import { GraphUnitsSpec } from './GraphUnitsSpec'
-import { None } from './None'
 
 export type GraphSpec = GraphSpecBase & {
   version?: string

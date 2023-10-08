@@ -45,6 +45,9 @@ export function webDocument(
     createRange(): Range {
       return document.createRange()
     },
+    exitPictureInPicture(): Promise<void> {
+      return document.exitPictureInPicture()
+    },
     MutationObserver: MutationObserver,
     ResizeObserver: ResizeObserver,
     PositionObserver: PositionObserver,

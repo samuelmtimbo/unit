@@ -198,6 +198,13 @@ export type GraphSetPinSetFunctionalData = {
   functional: boolean
 }
 
+export type GraphSetUnitPinSetId = {
+  unitId: string
+  type: IO
+  pinId: string
+  nextPinId: string
+}
+
 export type GraphSetUnitPinConstant = {
   unitId: string
   type: IO

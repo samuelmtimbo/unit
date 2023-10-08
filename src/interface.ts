@@ -50,6 +50,7 @@ export const INHERITANCE = {
   CH: ['EE'],
   IB: ['I'],
   W: ['EE', 'CH'],
+  B: ['IM'],
 }
 
 export type AllTypes<T> = {

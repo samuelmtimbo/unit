@@ -345,7 +345,7 @@ export function moveLinkPinInto(
   ignoredUnit: Set<string> = new Set(),
   reverse: boolean
 ): void {
-  if (ignoredUnit.has(unitId)) {
+  if (ignoredUnit.has(unitId) && graphId !== unitId) {
     return
   }
 
@@ -571,29 +571,29 @@ export function moveMerge(
 
     const pickInput = !isInput && !ignoredUnit.has(unitId)
 
-    if ((pickInput && nextInput) || (!pickInput && nextOutput)) {
-      const {
-        mergeId: nextMergeId,
-        pinId: nextPinId,
-        subPinSpec: nextSubPinSpec,
-      } = pickInput ? nextInput : nextOutput
+    // if ((pickInput && nextInput) || (!pickInput && nextOutput)) {
+    const {
+      mergeId: nextMergeId,
+      pinId: nextPinId,
+      subPinSpec: nextSubPinSpec,
+    } = (pickInput ? nextInput : nextOutput) ?? {}
 
-      moveLinkPinInto(
-        source,
-        target,
-        graphId,
-        unitId,
-        type,
-        pinId,
-        data,
-        collapseMap,
-        nextMergeId,
-        nextPinId,
-        null,
-        ignoredUnit,
-        reverse
-      )
-    }
+    moveLinkPinInto(
+      source,
+      target,
+      graphId,
+      unitId,
+      type,
+      pinId,
+      data,
+      collapseMap,
+      nextMergeId,
+      nextPinId,
+      null,
+      ignoredUnit,
+      reverse
+    )
+    // }
   }
 
   forEachPinOnMerge(mergeSpec, moveMergePin)
@@ -981,7 +981,7 @@ export function movePlug(
     subPinId
   )
 
-  const nextSubPinSpec = pathOrDefault(
+  const nextSubPinSpec: GraphSubPinSpec = pathOrDefault(
     nextPlugSpec,
     [type, pinId, subPinId],
     undefined
@@ -1004,7 +1004,7 @@ export function movePlug(
     return
   }
 
-  const { nextPinId } = nextSubPinSpec
+  const { pinId: nextPinId = subPinSpec.pinId } = nextSubPinSpec
 
   let nextSubPinSpec_ = nextSubPinSpec
 

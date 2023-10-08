@@ -1,5 +1,5 @@
 {
-  "type": "`U`&`G`&`C`",
+  "type": "`U`&`G`",
   "name": "percent",
   "units": {
     "concat": {
@@ -35,7 +35,7 @@
     }
   },
   "outputs": {
-    "ab": {
+    "pa": {
       "plug": {
         "0": {
           "unitId": "concat",

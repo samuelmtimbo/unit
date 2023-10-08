@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs'
+import { copy, writeFile } from 'fs-extra'
 import { build } from '../build'
 ;(async () => {
   const result = await build({
@@ -14,7 +14,9 @@ import { build } from '../build'
     metafile: true,
   })
 
-  writeFileSync('public/build.json', JSON.stringify(result.metafile ?? {}))
+  await writeFile('public/build.json', JSON.stringify(result.metafile ?? {}))
+
+  await copy('public/index.js', 'build/web.js')
 })()
 
 export default null

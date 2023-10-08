@@ -1,6 +1,5 @@
 import { ElementEE, Element_ } from '../../../../../Class/Element'
 import { Unit } from '../../../../../Class/Unit'
-import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { CS } from '../../../../../types/interface/CS'
@@ -52,7 +51,21 @@ export default class Video
   async captureStream({ frameRate }: CSOpt): Promise<MediaStream> {
     // TODO
     // const stream = await this._element.captureStream({ frameRate })
-    throw new APINotSupportedError('Video Capture')
+    // throw new APINotSupportedError('Video Capture')
+
+    const localComponents = this.__system.getLocalComponents(this.__global_id)
+
+    const firstLocalComponent: any = localComponents[0]
+
+    if (firstLocalComponent) {
+      return firstLocalComponent.$element.captureStream({ frameRate })
+    }
+
+    return new Promise((resolve) => {
+      this.__system.emitter.addListener(this.__global_id, (localComponent) => {
+        resolve(localComponent.$element.captureStream({ frameRate }))
+      })
+    })
   }
 
   async image(): Promise<any> {

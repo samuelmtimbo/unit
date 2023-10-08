@@ -35,6 +35,7 @@ export function showNotification(
   message_div.style.overflow = 'auto'
   message_div.style.transform = 'translateX(-50%)'
   message_div.style.padding = '6px'
+  message_div.style.zIndex = '1'
 
   for (const name in style) {
     const value = style[name]

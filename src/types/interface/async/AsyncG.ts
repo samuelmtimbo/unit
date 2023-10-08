@@ -30,6 +30,7 @@ import {
   GraphSetUnitPinConstant,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
+  GraphSetUnitPinSetId,
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
@@ -196,6 +197,15 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       ignored,
     }: GraphSetUnitPinIgnoredData): void {
       graph.setUnitPinIgnored(unitId, type, pinId, ignored)
+    },
+
+    $setUnitPinSetId({
+      unitId,
+      type,
+      pinId,
+      nextPinId,
+    }: GraphSetUnitPinSetId): void {
+      graph.setUnitPinSetId(unitId, type, pinId, nextPinId)
     },
 
     $addMerge({ mergeId, mergeSpec: merge }: GraphAddMergeData) {

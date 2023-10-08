@@ -168,6 +168,7 @@ export type API = {
     elementFromPoint(x: number, y: number): Element
     getSelection(): Selection
     createRange(): Range
+    exitPictureInPicture(): Promise<void>
     MutationObserver: IMutationObserverConstructor
     PositionObserver: IPositionObserverCostructor
     ResizeObserver: IResizeObserverConstructor

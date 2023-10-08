@@ -118,7 +118,6 @@ import { C, C_EE } from '../../types/interface/C'
 import { ComponentEvents, Component_ } from '../../types/interface/Component'
 import { G, G_EE, G_MoveSubgraphIntoArgs } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
-import { weakMerge } from '../../types/weakMerge'
 import { forEach, insert, remove } from '../../util/array'
 import { callAll } from '../../util/call/callAll'
 import {
@@ -264,7 +263,7 @@ export class Graph<I = any, O = any>
 
     const specs = { ...(spec.specs ?? {}), [id]: spec }
 
-    this._specs = weakMerge(this.__system.specs, specs)
+    this._specs = this.__system.specs
 
     const {
       inputs = {},
@@ -874,7 +873,8 @@ export class Graph<I = any, O = any>
   }
 
   public getBundleSpec(deep: boolean = false): BundleSpec {
-    const { spec, specs } = bundleSpec(this._spec, this.__system.specs)
+    // const { spec, specs } = bundleSpec(this._spec, this.__system.specs)
+    const { spec, specs } = bundleSpec(this._spec, this._specs)
 
     let memory: Memory
 
@@ -2644,12 +2644,12 @@ export class Graph<I = any, O = any>
   ): void => {
     this._addUnit(unitId, unit)
 
-    const unitSpec = unit.getUnitBundleSpec()
+    const unitBundle = unit.getUnitBundleSpec()
 
-    emit && this.emit('add_unit', unitId, unit, [])
+    emit && this.emit('add_unit', unitId, unitBundle, unit, [])
 
     if (this._transacting) {
-      this._transaction.push(makeAddUnitAction(unitId, unitSpec))
+      this._transaction.push(makeAddUnitAction(unitId, unitBundle))
     }
   }
 
@@ -3391,14 +3391,14 @@ export class Graph<I = any, O = any>
   ): U {
     const unit = this.getUnit(unitId)
 
-    const bundle = unit.getUnitBundleSpec()
+    const unitBundle = unit.getUnitBundleSpec()
 
     this._removeUnit(unitId, take, destroy)
 
-    emit && this.emit('remove_unit', unitId, unit, [])
+    emit && this.emit('remove_unit', unitId, unitBundle, unit, [])
 
     if (this._transacting) {
-      this._transaction.push(makeRemoveUnitAction(unitId, bundle))
+      this._transaction.push(makeRemoveUnitAction(unitId, unitBundle))
     }
 
     return unit
@@ -4532,6 +4532,20 @@ export class Graph<I = any, O = any>
       merges[mergeId][unitId][type] &&
       merges[mergeId][unitId][type][pinId]
     )
+  }
+
+  setUnitPinSetId(
+    unitId: string,
+    type: IO,
+    pinId: string,
+    newPinId: string,
+    emit: boolean = true
+  ): void {
+    const unit = this.getUnit(unitId) as Graph
+
+    unit.setPinSetId(type, pinId, newPinId)
+
+    emit && this.emit('set_unit_pin_set_id', unitId, type, pinId, newPinId, [])
   }
 
   public setUnitPinConstant(

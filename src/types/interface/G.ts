@@ -154,6 +154,13 @@ export interface G<I = any, O = any, U_ = any> {
   setUnitSize(unitId: string, width: number, height: number): void
   setSubComponentSize(unitId: string, width: number, height: number): void
   setComponentSize(unitId: string, width: number, height: number): void
+  setUnitPinSetId(
+    unitId: string,
+    type: IO,
+    pinId: string,
+    newPinId: string,
+    ...extra: any[]
+  ): void
   setUnitPinConstant(
     unitId: string,
     type: IO,
@@ -244,9 +251,9 @@ export type G_EE = {
   set_pin_set_functional: [IO, string, boolean, string[]]
   before_remove_unit: [string, Unit, string[]]
   before_add_unit: [string, Unit, string[]]
-  add_unit: [string, Unit, string[]]
+  add_unit: [string, UnitBundleSpec, Unit, string[]]
   clone_unit: [string, string, Unit, string[]]
-  remove_unit: [string, Unit, string[]]
+  remove_unit: [string, UnitBundleSpec, Unit, string[]]
   move_unit: [string, string, string, string[]]
   remove_unit_from_merge: [string, string, string[]]
   before_add_merge: [string, GraphMergeSpec, Merge, string[]]
@@ -271,6 +278,7 @@ export type G_EE = {
   set_unit_pin_constant: [string, IO, string, boolean, any, string[]]
   set_unit_pin_ignored: [string, IO, string, boolean, string[]]
   set_unit_pin_data: [string, IO, string, any, string[]]
+  set_unit_pin_set_id: [string, IO, string, string, string[]]
   remove_unit_pin_data: [string, IO, string, string[]]
   set_unit_pin_functional: [string, IO, string, boolean, string[]]
   metadata: [{ path: string[]; data: any }, string[]]
