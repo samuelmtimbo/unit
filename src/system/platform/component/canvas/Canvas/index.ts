@@ -175,6 +175,7 @@ export default class Canvas
         try {
           this._offscreen.width = data
         } catch (err) {
+          // console.log(err)
           //
         }
         // this._component.setProp('width', data)
@@ -187,6 +188,7 @@ export default class Canvas
         try {
           this._offscreen.height = data
         } catch (err) {
+          // console.log(err)
           //
         }
         // this._component.setProp('height', data)

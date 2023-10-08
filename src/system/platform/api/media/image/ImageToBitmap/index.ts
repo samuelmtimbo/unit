@@ -3,12 +3,12 @@ import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
 import { Rect } from '../../../../../../client/util/geometry/types'
 import { System } from '../../../../../../system'
-import { B } from '../../../../../../types/interface/B'
 import { IB } from '../../../../../../types/interface/IB'
-import { ID_BLOB_TO_BITMAP } from '../../../../../_ids'
+import { IM } from '../../../../../../types/interface/IM'
+import { ID_IMAGE_TO_BITMAP } from '../../../../../_ids'
 
 export type I = {
-  blob: B
+  image: IM
   opt: {}
   rect:
     | Rect
@@ -20,16 +20,16 @@ export type O = {
   bitmap: IB
 }
 
-export default class BlobToBitmap extends Functional<I, O> {
+export default class ImageToBitmap extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['opt', 'blob', 'rect'],
+        i: ['opt', 'image', 'rect'],
         o: ['bitmap'],
       },
       {
         input: {
-          blob: {
+          image: {
             ref: true,
           },
         },
@@ -40,11 +40,11 @@ export default class BlobToBitmap extends Functional<I, O> {
         },
       },
       system,
-      ID_BLOB_TO_BITMAP
+      ID_IMAGE_TO_BITMAP
     )
   }
 
-  async f({ opt, rect, blob }: I, done: Done<O>): Promise<void> {
+  async f({ opt, rect, image }: I, done: Done<O>): Promise<void> {
     const {
       api: {
         media: {
@@ -53,12 +53,12 @@ export default class BlobToBitmap extends Functional<I, O> {
       },
     } = this.__system
 
-    const _blob = await blob.blob()
+    const _image = await image.image()
 
     let _bitmap: ImageBitmap
 
     try {
-      _bitmap = await createImageBitmap(_blob, rect, opt)
+      _bitmap = await createImageBitmap(_image, rect, opt)
     } catch (err) {
       done(undefined, err.message)
 

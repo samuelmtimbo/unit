@@ -98,6 +98,10 @@ export const getExposedPinSpecs = (graph: GraphSpec) => {
   }
 }
 
+export const getExposePinSpec = (graph: GraphSpec, type: IO, pinId: string) => {
+  return pathOrDefault(graph, [`${type}s`, pinId], undefined)
+}
+
 export const getUnitExposedPins = (
   graph: GraphSpec,
   unitId: string

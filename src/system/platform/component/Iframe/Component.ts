@@ -75,6 +75,8 @@ export default class Iframe extends Element<
       iframe_el.srcdoc = srcdoc
     }
 
+    iframe_el.allowFullscreen = true
+
     this._setSrc(src)
 
     applyStyle(iframe_el, { ...DEFAULT_STYLE, ...style })

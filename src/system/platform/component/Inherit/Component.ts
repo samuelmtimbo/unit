@@ -34,18 +34,6 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
   private _registerChild = (child) => {
     let base = child.getRootBase()
 
-    for (const parent_root of child.$parentRoot) {
-      const parent_child_base = parent_root.getRootBase()
-
-      base = [...base, ...parent_child_base]
-    }
-
-    for (const parent_child of child.$parentChildren) {
-      const parent_child_base = parent_child.getRootBase()
-
-      base = [...base, ...parent_child_base]
-    }
-
     for (const leaf of base) {
       const [leaf_path, leaf_comp] = leaf
 
@@ -67,12 +55,6 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
 
   private _unregisterChild = (child: Component) => {
     let base = child.getRootBase()
-
-    for (const parent_child of child.$parentChildren) {
-      const parent_child_base = parent_child.getRootBase()
-
-      base = [...base, ...parent_child_base]
-    }
 
     const base_length = base.length
 

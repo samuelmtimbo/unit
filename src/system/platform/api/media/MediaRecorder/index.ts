@@ -74,6 +74,12 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
         const data = new Blob(chunks, { type: 'audio/wav' })
 
         const _blob = new (class _Blob extends $ implements B {
+          public __: string[] = ['B', 'IM']
+
+          async image(): Promise<any> {
+            return data
+          }
+
           async blob(): Promise<Blob> {
             return data
           }

@@ -1042,19 +1042,14 @@ export class Component<
     return getRect(this.$element)
   }
 
-  getBoundingClientRect(): {
-    x: number
-    y: number
-    width: number
-    height: number
-  } {
+  getBoundingClientRect(): Rect {
     if (this.$context) {
       if (!this.$primitive) {
         throw new Error('cannot calculate position of multiple elements.')
       }
 
       if (this.$element instanceof Text) {
-        // RETURN
+        // TODO
         return
       }
 

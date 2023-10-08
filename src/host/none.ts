@@ -214,6 +214,9 @@ export function noHost(): API {
       createRange(): Range {
         return document.createRange()
       },
+      exitPictureInPicture() {
+        throw new MethodNotImplementedError()
+      },
       MutationObserver: null,
       PositionObserver: null,
       ResizeObserver: null,

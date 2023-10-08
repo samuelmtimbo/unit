@@ -19,7 +19,7 @@ export interface O {}
 export default class RequestPictureInPicture extends Semifunctional<I, O> {
   private _picture_in_picture: any
 
-  private _exit_picture_in_picture: Promise<any> = Promise.resolve()
+  private _exit_picture_in_picture_promise: Promise<any> = Promise.resolve()
 
   constructor(system: System) {
     super(
@@ -42,26 +42,31 @@ export default class RequestPictureInPicture extends Semifunctional<I, O> {
   private _unlisten: Unlisten
 
   private _plunk() {
+    const {
+      api: {
+        document: { exitPictureInPicture },
+      },
+    } = this.__system
     if (this._unlisten) {
       this._unlisten()
       this._unlisten = undefined
     }
 
     if (this._picture_in_picture) {
-      this._exit_picture_in_picture = document.exitPictureInPicture()
+      this._exit_picture_in_picture_promise = exitPictureInPicture()
 
       this._picture_in_picture = undefined
     }
   }
 
   async f({ media, opt }: I, done: Done<O>): Promise<void> {
-    await this._exit_picture_in_picture
+    await this._exit_picture_in_picture_promise
 
-    const global_id = media.getGlobalId()
+    const globalId = media.getGlobalId()
 
     listenGlobalComponent(
       this.__system,
-      global_id,
+      globalId,
       async (component: VideoComp | null): Promise<void> => {
         if (component === null) {
           this._plunk()

@@ -1,24 +1,20 @@
 {
-  "name": "blob to bitmap",
+  "name": "image to bitmap",
   "inputs": {
     "opt": {
       "type": "{imageOrientation?:'none'|'flipY',premultiplyAlpha?:'none'|'premultiply'|'default',colorSpaceConversion?:'none'|'default',resizeWidth?:number,resizeHeight?:number,resizeQuality?:'pixelated'|'low'|'medium'}",
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     },
-    "blob": {
-      "type": "`B`",
+    "image": {
+      "type": "`IM`",
       "ref": true
     },
     "rect": {
       "type": "{x?:number,y?:number,width?:number,height?:number}",
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     }
   },
@@ -33,14 +29,9 @@
   "metadata": {
     "icon": "image",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "media"
-    ],
-    "globals": [
-      "MediaRecorder"
-    ]
+    "description": "transform image to bitmap",
+    "tags": ["platform", "api", "media"],
+    "globals": ["MediaRecorder"]
   },
   "type": "`U`",
   "system": true

@@ -30,6 +30,7 @@ import {
   GraphSetUnitPinConstant,
   GraphSetUnitPinDataData,
   GraphSetUnitPinIgnoredData,
+  GraphSetUnitPinSetId,
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
@@ -79,6 +80,7 @@ export const G_METHOD_CALL_SET = [
   'setUnitPinData',
   'setUnitPinConstant',
   'setUnitPinIgnored',
+  'setUnitPinSetId',
   'setPinSetId',
   'addMerge',
   'removeMerge',
@@ -137,6 +139,7 @@ export interface $G_C {
   $setPinSetFunctional(data: GraphSetPinSetFunctionalData): void
   $addMerge(data: GraphAddMergeData): void
   $removeMerge(data: GraphRemoveMergeData): void
+  $setUnitPinSetId(data: GraphSetUnitPinSetId): void
   $setUnitPinConstant(data: GraphSetUnitPinConstant): void
   $setUnitPinIgnored(data: GraphSetUnitPinIgnoredData): void
   $addMerges(data: GraphAddMergesData): void

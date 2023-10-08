@@ -87,18 +87,20 @@ export const _keyUpdateTree = (
         ) {
           const grandParentPath = getParentPath(parentPath)
 
-          const grandParent = _getNodeAtPath(root, grandParentPath)
+          if (grandParentPath) {
+            const grandParent = _getNodeAtPath(root, grandParentPath)
 
-          if (grandParent) {
-            if (
-              grandParent.type === TreeNodeType.ArrayLiteral ||
-              grandParent.type === TreeNodeType.ObjectLiteral
-            ) {
-              preventDefault = true
-              nextPath = [...grandParentPath, 0]
-              nextRoot = _insertNodeAt(root, nextPath, getTree(''))
-              nextSelectionStart = 0
-              nextSelectionEnd = 0
+            if (grandParent) {
+              if (
+                grandParent.type === TreeNodeType.ArrayLiteral ||
+                grandParent.type === TreeNodeType.ObjectLiteral
+              ) {
+                preventDefault = true
+                nextPath = [...grandParentPath, 0]
+                nextRoot = _insertNodeAt(root, nextPath, getTree(''))
+                nextSelectionStart = 0
+                nextSelectionEnd = 0
+              }
             }
           }
         }
@@ -164,18 +166,20 @@ export const _keyUpdateTree = (
         ) {
           const grandParentPath = getParentPath(parentPath)
 
-          const grandParent = _getNodeAtPath(root, grandParentPath)
+          if (grandParentPath) {
+            const grandParent = _getNodeAtPath(root, grandParentPath)
 
-          if (grandParent) {
-            if (
-              grandParent.type === TreeNodeType.ArrayLiteral ||
-              grandParent.type === TreeNodeType.ObjectLiteral
-            ) {
-              preventDefault = true
-              nextPath = [...grandParentPath, parentPath.length]
-              nextRoot = _insertNodeAt(root, nextPath, getTree(''))
-              nextSelectionStart = 0
-              nextSelectionEnd = 0
+            if (grandParent) {
+              if (
+                grandParent.type === TreeNodeType.ArrayLiteral ||
+                grandParent.type === TreeNodeType.ObjectLiteral
+              ) {
+                preventDefault = true
+                nextPath = [...grandParentPath, parentPath.length]
+                nextRoot = _insertNodeAt(root, nextPath, getTree(''))
+                nextSelectionStart = 0
+                nextSelectionEnd = 0
+              }
             }
           }
         }

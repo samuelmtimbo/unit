@@ -53,8 +53,7 @@ export function lazyFromSpec(
 
     public __ = ['U', 'G']
 
-    public stateful: boolean = false // RETURN __stateful
-    public __element: boolean = false // RETURN __element
+    public __element: boolean = false
 
     private __graph: Graph
 
@@ -103,6 +102,15 @@ export function lazyFromSpec(
           this.__graph.reset()
         }
       })
+    }
+    setUnitPinSetId(
+      unitId: string,
+      type: IO,
+      pinId: string,
+      newPinId: string,
+      ...extra: any[]
+    ): void {
+      throw new Error('Method not implemented.')
     }
 
     fork(): void {
