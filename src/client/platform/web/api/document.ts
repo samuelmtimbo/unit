@@ -1,8 +1,10 @@
 import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
-import { MutationObserver_ } from '../../../MutationObserver_'
 import { PositionObserver } from '../../../PositionObserver'
-import { ResizeObserver_ } from '../../../ResizeObserver_'
+import { NoopIntersectionObserver } from '../../../noop/IntersectionObserver'
+import { NoopMutationObserver } from '../../../noop/MutationObserver'
+import { NoopResizeObserver } from '../../../noop/ResizeObserver'
+import { Theme, themeBackgroundColor } from '../../../theme'
 
 export function webDocument(
   window: Window,
@@ -12,12 +14,16 @@ export function webDocument(
   const { document } = window
 
   // @ts-ignore
-  const MutationObserver = window.MutationObserver || MutationObserver_
+  const MutationObserver = window.MutationObserver || NoopMutationObserver
 
   // @ts-ignore
-  const ResizeObserver = window.ResizeObserver || ResizeObserver_
+  const ResizeObserver = window.ResizeObserver || NoopResizeObserver
 
-  const _document = {
+  const IntersectionObserver =
+    // @ts-ignore
+    window.IntersectionObserver || NoopIntersectionObserver
+
+  const _document: API['document'] = {
     createElement<K extends keyof HTMLElementTagNameMap>(
       tagName: K
     ): HTMLElementTagNameMap[K] {
@@ -51,6 +57,12 @@ export function webDocument(
     MutationObserver: MutationObserver,
     ResizeObserver: ResizeObserver,
     PositionObserver: PositionObserver,
+    IntersectionObserver: IntersectionObserver,
+    setTheme: async function (theme: Theme): Promise<void> {
+      const color = themeBackgroundColor(theme)
+
+      document.body.style.backgroundColor = color
+    },
   }
 
   return _document

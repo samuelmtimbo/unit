@@ -41,6 +41,9 @@ export default class Detach extends Semifunctional<I, O> {
   }
 
   f({ component, host, opt }: I, done: Done<O>): void {
+    component.emit('call', { method: 'register', data: [] })
+    host.emit('call', { method: 'register', data: [] })
+
     const hostUrl = globalUrl(host.__global_id)
 
     component.emit('call', { method: 'detach', data: [hostUrl, opt] })

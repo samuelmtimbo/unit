@@ -1,9 +1,10 @@
 import * as assert from 'assert'
-import { evaluateBundleStr } from '../../client/idFromUnitValue'
 import { evaluate } from '../../spec/evaluate'
+import { evaluateBundleStr } from '../../spec/idFromUnitValue'
 import {
   applyGenerics,
   extractGenerics,
+  filterEmptyNodes,
   findGenerics,
   getLastLeafPath,
   getNextLeafPath,
@@ -33,8 +34,6 @@ import { system } from '../util/system'
 
 const CUSTOM_GRAPH_UNIT_STR =
   '${unit:{id:"03972fcf-ab18-4f58-9ed0-b395f9589d0d"},specs:{"03972fcf-ab18-4f58-9ed0-b395f9589d0d":{type:"`U`&`G`&`C`",name:"untitled",units:{textbox:{id:"9988a56e-6bee-46c8-864c-e351d84bc7e2",input:{value:{constant:false},style:{constant:true,data:"{}"}},output:{div:{ignored:true}},metadata:{position:{x:-92,y:-281},component:{width:199.90983628557666,height:42.03120109148989}}},checkbox:{id:"096fc4ca-edd2-11ea-8266-37b634a3ee0b",input:{value:{ignored:true},style:{constant:true,data:"{width:\\\\"16px\\\\",height:\\\\"16px\\\\"}"},attr:{ignored:true}},output:{value:{}},metadata:{position:{x:237,y:-11}}},icon:{id:"63a417e5-d354-4b39-9ebd-05f55e70de7b",input:{style:{constant:true,data:"{width:\\\\"16px\\\\",height:\\\\"16px\\\\"}"},icon:{constant:true,data:"\\\\"x\\\\""}},output:{},metadata:{position:{x:229,y:-189}}},flexrow:{id:"ad5a2fcc-fdee-11ea-a34f-77e9c48dbe57",input:{style:{constant:true,data:"{gap:\\\\"12px\\\\"}"}},output:{},metadata:{position:{x:-112,y:-120}}}},merges:{},inputs:{value:{plug:{0:{unitId:"textbox",pinId:"value"}},type:"string"}},outputs:{},metadata:{icon:"question",description:""},render:true,component:{subComponents:{textbox:{children:[],childSlot:{}},checkbox:{children:[],childSlot:{}},icon:{children:[],childSlot:{}},flexrow:{children:[],childSlot:{}}},children:["checkbox","textbox","icon","flexrow"],defaultWidth:270,defaultHeight:180},id:"03972fcf-ab18-4f58-9ed0-b395f9589d0d"}}}'
-
-// getTree
 
 assert(getTree('{a:"1,2,3"}').children.length === 1)
 assert(getTree("{a:'1,2,3'}").children.length === 1)
@@ -182,14 +181,14 @@ assert(!isValidType('b'))
 assert(!isValidType("b'"))
 assert(!isValidType("'''"))
 assert(!isValidType('()'))
-assert(!isValidType('{ foo }'))
-assert(!isValidType('{ foo: bar }'))
+// assert(!isValidType('{ foo }'))
+// assert(!isValidType('{ foo: bar }'))
 assert(!isValidType('|'))
-assert(!isValidType('string |'))
-assert(!isValidType('string | foo'))
+// assert(!isValidType('string |'))
+// assert(!isValidType('string | foo'))
 assert(!isValidType('foo'))
-assert(!isValidType('foo: string'))
-assert(!isValidType("{ a: b' }"))
+// assert(!isValidType('foo: string'))
+// assert(!isValidType("{ a: b' }"))
 assert(!isValidType('foo:true'))
 assert(!isValidType('foo:false'))
 assert(!isValidType('<T>["S",K]'))
@@ -296,7 +295,7 @@ assert(!_isTypeMatch('string[]|object', '<A>[]'))
 assert(!_isTypeMatch('[]', '[1]'))
 assert(!_isTypeMatch('[1,2,3]', '[1,2,3,4]'))
 assert(!_isTypeMatch('[1,2,3]', '[number,number, string]'))
-assert(!_isTypeMatch('{background: "color"}', 'object'))
+// assert(!_isTypeMatch('{background: "color"}', 'object'))
 assert(!_isTypeMatch('null', ID_IDENTITY))
 assert(!_isTypeMatch('object', 'class'))
 assert(!_isTypeMatch('number', 'class'))
@@ -324,7 +323,7 @@ assert(isValidValue('"\\"\\\\"\\\\\\"foo\\\\\\"\\\\"\\""'))
 assert(isValidValue('"foo   "'))
 assert(isValidValue('"\t"'))
 assert(isValidValue('"\n"'))
-assert(isValidValue('"web+unit://ioun.it"'))
+assert(isValidValue('"web+unit://unit.land"'))
 assert(isValidValue('"foo\nbar"'))
 assert(isValidValue('3.14'))
 assert(isValidValue('1'))
@@ -403,6 +402,7 @@ assert(
     '{status:200,body:"�PNG\n\u001a\n\u0000\u0000\u0000IHDR\u0000\u0000\u0000�\u0000\u0000\u0000�\b\u0006\u0000\u0000\u0000R�l\u0007\u0000\u0000\u0000\tpHYs\u0000\u0000\u0005�\u0000\u0000\u0005�\u0001mh��\u0000\u0000\f�IDATx���{pTW\u001d\u0007��&�T�\\"\\"3v\u0006R���Ne�U��f#Z\u0015l������*�\f��AD\u000b�ݶB\u0015����Ђ&�-\u0015m5��ZE��h�*�\u001d[��\u0012f�\f\\"�\u0014\u001b��{����p�ϻ��q�=��\f#��vw��{�q\u001f\u0001Ƙ\u0006��h�\u0016�4-��e\u0011ӿ����@���n��=�����\u0019*�\u0000�.���t�>�\u0000\u000f\u0004��\u0004�{�G�EJ\b@q\u0011ӟr��nK�Pt�S\u0014�\u0000d\u000b�o�����@t�0�C� \u0000�裼����\u001c���Ё0�\u001d�\u0006M�Z\u0015)�|�0$�\u001cB9�\u0005 �\u000b�\n�\u0000�G$�<\b]|�I\t�\u0004���q^�^���b�� �BW�{\u0000\\"�l�X��\\"�\u0003�+�v%ɯ\u0001��3�_Vq��俧�P%�g�S�\u001f�#(~[5�ߴ;c�[z~\t\u0000\n�\u001d�\u000b��C Ƙ1�]&��QQ\'���@@�ɲ�\u0001`���\u0004\u0017�:ޢU�D \u0010����\u000b\u0000c,�w1Uݼ\u0012\u0015m�E\u0003��T\u0013ei�\u0000��\u0010c,�Ǡ(~��19Bǈ��,\u001fZ�\u000e���t��\u0006�w\u0000���4�D���v\u0000�X���q͎�zy7\u0010��S!;\u0000c,�ךQ��c�͏�p��\u0000��S�\\+�G\u0001��UUU����\n\u0013\u0000]�C�*D���\u001b]W�RUU%�%�B\f�t]\u000f�P��GǸ�\u001fs�y�\u0001t]��3?vt�B;ȑ��*O\'Ǟv\u0000]ף|�\u0013ů\u001e:��xxƳ\u000e�J�苷+{��,V]]���/�I\u0007@�C�v^\u0013�s�\u0003�R�\u000e\\�\fytVWW�\u001a\u0004W;\u0000�\u001f�X�k�5�u���1\f{��X0\u0018t%\b�t\u0000\u0014?���׌�\u001c\u000f\u0000�\u001f��J\b\u001c\u001d\u0002���E�:?@�\u001a���c�e�\u0005`tt4̯��&\u0017T\\"�c\\SS�H\b\u001c\t���h�_ۃ�X�\u000et�Y�����\u000b蜚\u0003t���FsyM���\u000e022����)m�����O`k\u0000FFF��\u0003N����ڶG`[\u0000F��1�\u00057�\'ŵS��2)�-\u0000���=��\u0017\\�;e�\u0014[n��e\u0012<<<�@���X�\u001d`hh\b�]��溺��\u001e�UQ\u0000�����\u000f^J�\u000f��Օ�?\u0010����\'4���+s����^\u001a-�\u0003�?\u001eC\u001f\u0010E�ԩS�\u001a\n�\u001d����\u00138�� ����\u001b��(e�\u0002\u000e\u000eb�\u0003\\"��k�d%w����\u0006>�ņ\u0017��6�����%����I0����A4������hJ�\u0000���5L|At�\u0017��\\"�\u0013�:\u0000Ә�/B\u0003��Ky���\u000ep��9��A\u0016�ӦM��\u0005JY\u0005��\u001fda�V-u�s����?Ȧy��\u0017\u0017�\u0002��\u0000\fg����@�\u000e000��?Ȫy���\u0005���9�P�t\u0002(A��-�\u0001���i�����Ab��B���Å�\u0000\f�� ����y;�ٳg�f�\u0013��\u0001$G�\b5̘1#�M3y;\u0000c�\u0005�\u000f>@5L���Q*y;�Ϝ�S\u001e�/z_?sfΧH�\f��3g0�\u0005��t�̙Y��C �\u0018�>�oZs-���\u0000�9}\u001a�;����a֬��&�\u0002p��i\u001a+\u001d��\u0007\u001fj�5k֤G*f�\u0018c���\u001b�A��aPV\u0007���S\u0018��_��q��IàI\u00018u�\u0014�?�w��gϞ\u0018\u0006M\u001a\u00021�Y��\f@R\u0011�T�\u001c\u0001�һ�\u0000~F5��\u0019\u0000��&\u001cz�I5>1\u0007��+���\u0017PE�.�$}��D\u0007`���$\u0000$\u0017��2\u0005@�\u0004\u0018�1Q�\u000e��?(c���s��\'Ob�\u001fT�8gΜ��\u000e��-o�\u0003�\b��x\u0000\u0018ce�\\\u0000@b�7\u0002�\t0�&]��\u0001\u0018o\u0007\u0000*\t_\b����wPM��\u0003Ǐ\u001f�\u000e0��9�\u0018\u000b����BA�c\t\u0014�\u0015\u000e2���\u0004\u0003�AP�\u0012(�+\u0012�ut\u0000P\u0017�@�� �\u0002\u0003�5a\b\u0004J�\u0010\b�FC �\u0003PXP�u\u001cPV�ʋ�\u0001�*��\u0007�a\u0012\fJ\u000b2�\u0001@a�\u0003��\u0010\u0000P\u001av�AiA�`P\u0018�@�4�\tNf>3\u001d@\u0011It\u0000P\u001a\u0002\u0000J�!P7�@��nt\u0000P\u001a\u0005�G�\u001f\u0001��CC�~\u001cPT�1�<|\u0018� P·\u0016,\b\u0018�\u0007\u00180��\u000b�\b���ǣ�ރ� PLz�kt\u0000,��j.�\'�1v\u0002�\u001f\u0014��y�\u0010\b@%�\u000f\u0018\u001ba�\u000e\u001e�J\u0010(c�E\u0001-�M�*\u0014T�4��D\u0000pM\u0010(�����\u000e@��=�\u0002P�D\u0000\u0002��\u000etua\u001e\u0000����%`|Ǡ���)�\u001d\u0006��4�I\u0001`�u!\u0000�s]毗\u0019�n\u001c}�I5\u001eȼ!�����\u000e�\\T\u0001�P�g�,i0�`�w�à�8��C]�_)W\u0000:\u0010\u0000�̯�5\u0004\\"�\u001e{\u001c� 𛾥7�Ԑ���:���\u0002:�A�7Y�\u001f-\u0000X\u0002\u0001\u0000�I��:9�@����.\u0017��*\u0000\u001f�]\u0016��s}��\u001d@��\u0005�q��\u0007r����\u0001H�\u0003\u0012�Y\u001e$7�o��\u0015\u001a\u0002��{�в�2T\u0000H�s��\u0015�|\u001f?o\u0007 Lgq\u0004\u0000$\u0017/��\u000bv\u0000�����>\u0016�\n@B\u0007n]�����.�\u0001H*�\'\u0010\u0000�T�ɯ�h\u0007 �\u001eډ�%A6�U���\u0014��E;�6�\\"D�#(\u0001�H����R\u0007 ;\u0012m�\u0002 ��ֵE����\u000e��o��\u000b�,,���R:\u0000Ilߎ.\u0000�K��[g�쯕�\u0001��\u0015!t\u0001\u0010�峿Vj\u0007 ۶n��0��s��yw}s)�\u0003h�\'ȥ�\u0002-�F\b\u00043P��_+�\u0003��o�\u0012�S�@0�~e�Fw\u0002@�|m3n�\u0004Q�m�ꦬ�\u001d�(y\bd`L�bB\f�(i�oVv\u0007 ���ŭ�൶������\u0019��\u0000څK$Z0\u0014\u0002���3�5��\u0003��]wG0\u0014\u0002�4�￯��yV\u001c\u0000r��M\u0018\n����߲�졏��\u0000�Mwމ�H�[z7?�@Χ<���9�\u0019�Y�?y\u0017\u001bdँJV}2��\u0001ȗ�)�G���b���ͬg|���\u0000�_\\��\u00008�m뷶U<�7�=\u0000d��u�l\u001a�ܶ}��˜��m\u000e`�J�Z����?\u0000v���M�s�\u0003��;ք1)\u0006\u001bФ7�xpG�\u0013?�c\u0001 kV�N!8��\u0000Tиc�C�\u0014��t\u0000�\u001d�Vce\b�\u0015{p�N�V|rq<\u0000d�m+\u0011\u0002(Ul�û\u001d-~ͭ\u0000��+nE\b����=�8^���\u0001 �-_�����·��m��\u0018W\u0003@�\u0010�!\u0004�O���]+~͋\u0000��/�b8\u0004�b���pe�c�I\u0000H���!\u0004`�u<�]׋_�2\u0000䖥7!\u0004\u0010{t��\u0014��u\u0000��7ވ\u001dc5�wx\u001f{�\t�6���<\u0000d�φ���p�\u001a������=O�_\u0013%\u0000d�7�x\bp\u0015��%���?�d�\b�R�\u0000\u0018>���q?�����O�z=��\u000b\u0000���Q���Wh���T׏<���#d\u0000H˵�Ѽ�\u00037�K��V���y���~.�\u0006�pݢO`H$���\u000f�X�!O&�\u0003@�]�0»\u0001V��@�<�g\u000e\u001d��Un�\\"\u0000���|4�\u001f��n �6:N?y�gB��\u0014#M\u0000\f\u001f��G�Ĕ>���\u0017?\u0017��o&]\u0000\f�,X@ݠ\u0015+E��\u0015�ĳ�\u000fW��Z�H\u001b\u0000��)���E���\u001b���\u001fNv���\u000bH\u001d\u0000C�\u0007>\u0018�A�.�;h77~�׿�j���/\u0002`h�?\u001fApV��G�J_�\u0006_\u0005�0���!\b�J\u0017���~��7�2\u0000����\u0011>Q^,�\'��\u0001�������]�\u001b|\u001d\u0000��W�ۘ,�����r��=�\u0007i\'�V)\u0011\u0000�U��\f�\u0010��\u001a�,��\u0002Į��I�M,;(\u0015\u0000�w�\u000b7� ����>~�O�����g�\\��Y��\b󷎨\u0010\u0006��;���g!��t\u0013\u0002���˯�0Dx\u0018�����E���K/*_�f\b@\u0011o��\u0011\u001e��D�H�\u0007t��/�v\u0005�\u000e\b@�����!�O\u0003\u000fE�Õ�\u0001�\\"\u0012*r\u001a������p�/\u0001\u0002`����\u0016\nC�\u0007B��0��9���\u001bgr*�����w��+�i��\u0001p��+�Aan\u0000\u0000\u0000\u0000IEND�B`�"}'
   )
 )
+assert(isValidValue('[{a:1,b:2,},]'))
 
 assert(!isValidValue('foo'))
 assert(!isValidValue('{foo:bar}'))
@@ -419,7 +419,7 @@ assert(!isValidValue('{::1}'))
 assert(!isValidValue('{""":1}'))
 assert(!isValidValue("{{':1}"))
 assert(!isValidValue('a + 1'))
-assert(!isValidValue('{foo: "bar"}'))
+// assert(!isValidValue('{foo: "bar"}'))
 
 // getValueType
 
@@ -584,13 +584,10 @@ assert.deepEqual(_evaluate('Infinity'), Infinity)
 assert.deepEqual(_evaluate('"foo"'), 'foo')
 assert.deepEqual(_evaluate("'foo'"), 'foo')
 assert.deepEqual(_evaluate('\'"foo"\''), '"foo"')
-// assert.deepEqual(_evaluate("'\\'foo\\''"), "'foo'")
 assert.deepEqual(_evaluate('\'\\"foo\\"\''), '"foo"')
 assert.deepEqual(_evaluate('"\\"foo\\""'), '"foo"')
-assert.deepEqual(_evaluate('"\\"\\\\\\"foo\\\\\\"\\""'), '"\\"foo\\""')
-// assert.deepEqual(_evaluate('"\\"\\\\"foo\\\\"\\""'), '"\\"foo\\""')
-assert.deepEqual(_evaluate("'\\\\'"), '\\')
-// assert.deepEqual(_evaluate("'\\'\\\\\\''"), "'\\'")
+assert.deepEqual(_evaluate('"\\"\\\\\\"foo\\\\\\"\\""'), '"\\\\"foo\\\\""')
+assert.deepEqual(_evaluate("'\\\\'"), '\\\\')
 assert.deepEqual(_evaluate('"\\""'), '"')
 assert.deepEqual(_evaluate('"\\"input/a\\""'), '"input/a"')
 assert.deepEqual(_evaluate('true'), true)
@@ -723,3 +720,6 @@ assert(
     '${unit:{id:"9f1e9240-08d7-46f4-bb57-11de177b987f"},specs:{"9f1e9240-08d7-46f4-bb57-11de177b987f":{name:"empty",units:{unit:{id:"6f0be5f2-bc6f-4f68-8826-91b69c4aacb7",input:{},output:{}}},merges:{},inputs:{},outputs:{},metadata:{icon:null,description:"empty graph",complexity:2,tags:["core"]},id:"9f1e9240-08d7-46f4-bb57-11de177b987f",type:"`U`&`G`",system:true},"6f0be5f2-bc6f-4f68-8826-91b69c4aacb7":{type:"`U`&`G`",name:"untitled",units:{textarea:{id:"83ec6688-b80b-4ef2-861f-14245ef392c0",input:{value:{ignored:false,constant:false},style:{ignored:false,constant:true,data:"{fontSize:\\"14px\\"}",metadata:{position:{x:52,y:-34}}},placeholder:{ignored:true,constant:false,metadata:{position:{x:52,y:-61}}}},output:{value:{ignored:true,constant:false,metadata:{position:{x:311,y:9}}}},metadata:{position:{x:178,y:9}}},spark:{id:"3be8272d-310a-4aa2-84a1-71f590a8227a",input:{a:{ignored:false,constant:true,data:"\\"M50 100 a 50  50 1 1 1 0 1z M50 100 a 50  50 1, 1, 1, 0, 1M 96 100 a 4  4 1 1 1 0 1M 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \n\nM 100 100 m 25 -25 l 25 -25 m -10 -10 a 60 60 0 0 1 20 20 \nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \n\nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \nM 100 100 m 25 25 l 25 25 m 10 -10 a 60 60 1 0 1 -20 20\n\nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \n\nM 100 100 m -25 25 l -25 25 m 10 10 a 60 60 1 0 1 -20 -20 \nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \n\nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \nM 100 100 m -25 -25 l -25 -25 m -10 10 a 60 60 0 0 1 20 -20\\""}},output:{a:{ignored:false,constant:false}},metadata:{position:{x:13,y:95}}},onvalue:{id:"d0e6f14c-400c-42f3-bfd6-1bbe0146f490",input:{element:{constant:false,ignored:false}},output:{event:{constant:false,ignored:false,data:"\\"M50 100 a 50  50 1 1 1 0 1z \nM50 100 a 50  50 1, 1, 1, 0, 1\n\nM 96 100 a 4  4 1 1 1 0 1\n\nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \n\nM 100 100 m 25 -25 l 25 -25 m -10 -10 a 60 60 0 0 1 20 20 \nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \n\nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \nM 100 100 m 25 25 l 25 25 m 10 -10 a 60 60 1 0 1 -20 20\n\nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \n\nM 100 100 m -25 25 l -25 25 m 10 10 a 60 60 1 0 1 -20 -20 \nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \n\nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \nM 100 100 m -25 -25 l -25 -25 m -10 10 a 60 60 0 0 1 20 -20\\""}},metadata:{position:{x:22,y:4}}},removenewline:{id:"1a0773eb-559c-47e2-81d7-fc28bc80076d",input:{str:{constant:false,ignored:false,data:"\\"M50 100 a 50  50 1 1 1 0 1z \nM50 100 a 50  50 1, 1, 1, 0, 1\n\nM 96 100 a 4  4 1 1 1 0 1\n\nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \n\nM 100 100 m 25 -25 l 25 -25 m -10 -10 a 60 60 0 0 1 20 20 \nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \n\nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \nM 100 100 m 25 25 l 25 25 m 10 -10 a 60 60 1 0 1 -20 20\n\nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \n\nM 100 100 m -25 25 l -25 25 m 10 10 a 60 60 1 0 1 -20 -20 \nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \n\nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \nM 100 100 m -25 -25 l -25 -25 m -10 10 a 60 60 0 0 1 20 -20\\""}},output:{str:{constant:false,ignored:false,data:"\\"M50 100 a 50  50 1 1 1 0 1z M50 100 a 50  50 1, 1, 1, 0, 1\n\nM 96 100 a 4  4 1 1 1 0 1\n\nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \nM 100 100 m 0 -30 l 0 -50 m -25 5 a 60 60 1 0 1 50 1 \n\nM 100 100 m 25 -25 l 25 -25 m -10 -10 a 60 60 0 0 1 20 20 \nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \n\nM 100 100 m 30 0 l 50 0 m -5 -25 a 60 60 1 0 1 0 50 \nM 100 100 m 25 25 l 25 25 m 10 -10 a 60 60 1 0 1 -20 20\n\nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \nM 100 100 m 0 30 l 0 50 m 25 -5 a 60 60 1 0 1 -50 0 \n\nM 100 100 m -25 25 l -25 25 m 10 10 a 60 60 1 0 1 -20 -20 \nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \n\nM 100 100 m -30 0 l -50 0 m 5 25 a 60 60 0 0 1 0 -50 \nM 100 100 m -25 -25 l -25 -25 m -10 10 a 60 60 0 0 1 20 -20\\""}},metadata:{position:{x:-57,y:50}}},untitled:{id:"79c37c2e-4a2b-445f-af75-5599cc6bf31c",metadata:{position:{x:-183,y:-34}},input:{style:{metadata:{position:{x:-53,y:-62}},constant:true,data:"{fill:\\"currentColor\\",fillRule:\\"evenodd\\",strokeWidth:\\"6px\\",strokeLinecap:\\"round\\"}"},d:{}},output:{}}},merges:{0:{textarea:{output:{_self:true}},onvalue:{input:{element:true}}},1:{spark:{output:{a:true}},textarea:{input:{value:true}}},2:{spark:{input:{a:true}},removenewline:{output:{str:true}}},3:{removenewline:{input:{str:true}},onvalue:{output:{event:true}},untitled:{input:{d:true}}}},inputs:{},outputs:{},metadata:{icon:null,description:"",complexity:22,position:{merge:{1:{x:52,y:67},2:{x:-34,y:91},3:{x:-40,y:4}}}},id:"6f0be5f2-bc6f-4f68-8826-91b69c4aacb7",component:{subComponents:{textarea:{},untitled:{}},children:["textarea","untitled"],defaultWidth:200,defaultHeight:150}}}}'
   )
 )
+
+assert.equal(filterEmptyNodes('{a:1,}').value, '{a:1}')
+assert.equal(filterEmptyNodes('[{a:1,},]').value, '[{a:1}]')

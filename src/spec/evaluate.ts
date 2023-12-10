@@ -19,15 +19,7 @@ export function _evaluate(
     case TreeNodeType.Null:
       return null
     case TreeNodeType.StringLiteral:
-      return (
-        value
-          .substring(1, value.length - 1)
-          // .replace(/\\'/g, "'")
-          .replace(/\\"/g, '"')
-          // .replace(/\\n/g, '\n')
-          // .replace(/\\r/g, '\r')
-          .replace(/\\\\/g, '\\')
-      )
+      return value.substring(1, value.length - 1).replace(/\\"/g, '"')
     case TreeNodeType.BooleanLiteral:
       return value === 'true' ? true : false
     case TreeNodeType.NumberLiteral:

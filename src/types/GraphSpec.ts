@@ -1,6 +1,5 @@
 import { GraphComponentSpec, GraphDataSpec, GraphMetadataSpec } from '.'
 import { GraphSpecBase } from './GraphSpecBase'
-import { GraphSpecs } from './GraphSpecs'
 import { GraphUnitsSpec } from './GraphUnitsSpec'
 
 export type GraphSpec = GraphSpecBase & {
@@ -16,5 +15,4 @@ export type GraphSpec = GraphSpecBase & {
   render?: boolean
   component?: GraphComponentSpec
   id?: string
-  specs?: GraphSpecs
 }

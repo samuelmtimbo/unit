@@ -1,6 +1,9 @@
 import { API } from '../../../API'
 import { boot } from '../../../boot'
 import { BootOpt, System } from '../../../system'
+import _classes from '../../../system/_classes'
+import _components from '../../../system/_components'
+import _specs from '../../../system/_specs'
 import { attachApp } from '../../render/attachApp'
 import { attachCanvas } from '../../render/attachCanvas'
 import { attachGesture } from '../../render/attachGesture'
@@ -22,6 +25,7 @@ import { webDevice } from './api/device'
 import { webDocument } from './api/document'
 import { webFile } from './api/file'
 import { webGeolocation } from './api/geolocation'
+import { webHistory } from './api/history'
 import { webHTTP } from './api/http'
 import { webInput } from './api/input'
 import { webLayout } from './api/layout'
@@ -39,16 +43,20 @@ import { webURL } from './api/url'
 import { webWindow } from './api/window'
 import { webWorker } from './api/worker'
 
-export default function webBoot(opt: BootOpt = {}): System {
+export default function defaultWebBoot(opt?: BootOpt): System {
   const root = document.getElementById(SYSTEM_ROOT_ID)
 
-  return _webBoot(window, root, opt)
+  return webBoot(window, root, opt)
 }
 
-export function _webBoot(
+export function webBoot(
   window: Window,
   root: HTMLElement,
-  opt: BootOpt = {}
+  opt: BootOpt = {
+    specs: _specs,
+    classes: _classes,
+    components: _components,
+  }
 ): System {
   const _root = window.document.createElement('div')
 
@@ -81,6 +89,7 @@ export function _webBoot(
   const uri = webURI(window, opt)
   const alert = webAlert(window, opt)
   const location = webLocation(window, opt)
+  const history = webHistory(window, opt)
   const _window = webWindow(window, opt)
   const navigator = webNavigator(window, opt)
   const layout = webLayout(window, opt)
@@ -97,6 +106,7 @@ export function _webBoot(
     bluetooth,
     clipboard,
     location,
+    history,
     geolocation,
     layout,
     media,
@@ -119,16 +129,6 @@ export function _webBoot(
   root.appendChild(_root)
 
   system.root = _root
-
-  window.addEventListener('message', (event) => {
-    for (const iframe of system.cache.iframe) {
-      let iframeEl = iframe.$node as HTMLIFrameElement
-
-      if (event.source === iframeEl.contentWindow) {
-        iframe.dispatchEvent('_message', event.data)
-      }
-    }
-  })
 
   attachSprite(system)
   attachStyle(system)

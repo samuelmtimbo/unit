@@ -12,7 +12,7 @@
     }
   },
   "merges": {
-    "butqpzbvl": {
+    "0": {
       "if": {
         "input": {
           "b": true
@@ -24,7 +24,7 @@
         }
       }
     },
-    "vjwuigye": {
+    "1": {
       "ifnot": {
         "output": {
           "a if not b": true
@@ -70,7 +70,7 @@
     "test": {
       "plug": {
         "0": {
-          "mergeId": "butqpzbvl"
+          "mergeId": "0"
         }
       },
       "functional": true,

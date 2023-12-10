@@ -9,7 +9,7 @@ export type FieldEvents<_EE extends Dict<any[]>> = ElementEE<_EE & Field_EE> &
   Field_EE
 
 export class Field<
-  I = any,
+  I extends { value: any } = any,
   O extends { value: any } = any,
   _J extends Dict<any> = {},
   _EE extends FieldEvents<_EE> = FieldEvents<Field_EE>
@@ -32,6 +32,12 @@ export class Field<
 
     this.addListener('play', () => {
       this._output.value.push(this.initialValue())
+    })
+
+    this.addListener('set', () => {
+      if (!this._forwarding) {
+        this._input.value.pull()
+      }
     })
   }
 

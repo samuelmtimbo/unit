@@ -1,0 +1,49 @@
+{
+  "name": "on drag end",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'dragend'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "emitter"
+        }
+      },
+      "type": "`C`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      },
+      "type": "{clientX:number,clientY:number,offsetX:number,offsetY:number}"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` dragend event",
+    "complexity": 5,
+    "tags": ["platform", "core", "api", "event"]
+  },
+  "id": "d0972c71-45a8-4a01-8bf1-9ed588c13493",
+  "type": "`U`&`G`",
+  "system": true
+}

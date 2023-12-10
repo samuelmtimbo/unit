@@ -21,7 +21,13 @@ export default class This<T> extends Unit<I<T>, O<T>> {
         i: [],
         o: ['graph'],
       },
-      {},
+      {
+        output: {
+          graph: {
+            ref: true,
+          },
+        },
+      },
       system,
       ID_THIS
     )

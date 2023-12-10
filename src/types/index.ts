@@ -39,11 +39,12 @@ export type GraphExposedMergeSpec = PinSpecBase & {
   mergeId: string
   unitId?: undefined
   pinId?: undefined
+  kind?: undefined
 }
 
 export type GraphExposedLinkPinSpec = PinSpecBase & {
   unitId: string
-  type?: IO
+  kind?: IO | undefined
   pinId: string
   mergeId?: undefined
 }
@@ -52,6 +53,7 @@ export type GraphExposedEmptyPinSpec = PinSpecBase & {
   unitId?: undefined
   pinId?: undefined
   mergeId?: undefined
+  kind?: undefined
 }
 
 export type GraphSubPinSpec =
@@ -151,6 +153,7 @@ export type GraphUnitPinOuterSpec = {
 export type GraphPlugOuterSpec = {
   type: IO
   pinId: string
+  kind?: IO
   subPinId: string
 }
 

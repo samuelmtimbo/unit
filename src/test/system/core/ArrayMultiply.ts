@@ -12,6 +12,7 @@ import { system } from '../../util/system'
 
 const spec =
   require('../../../system/core/array/Multiply/spec.json') as GraphSpec
+
 const ArrayMultiply = fromSpec(spec, _specs)
 
 const arrayMultiply = new ArrayMultiply(system) as Graph

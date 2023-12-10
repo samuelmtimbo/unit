@@ -18,8 +18,8 @@ export default function webInit(
     system.input.keyboard.pressed = []
   }
 
-  // double click is redefined on the unit system;
-  // "whatever" browser default behavior should be ignored
+  // double click is redefined in the system, so "whatever"
+  // browser default behavior should be ignored
   const dbClickListener = (event: MouseEvent) => {
     event.preventDefault()
   }

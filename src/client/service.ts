@@ -13,13 +13,17 @@ export function init<T>(reset: (data: T) => RemoteRef): void {
     switch (type) {
       case INIT:
         _init = true
+
         _ref = reset(_data)
+
         break
       case EXEC:
         if (!_init) {
           throw new Error('ref was not initialized')
         }
+
         _ref.exec(_data)
+
         break
       default:
         throw new Error('invalid message type')

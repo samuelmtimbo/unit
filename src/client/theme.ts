@@ -126,7 +126,6 @@ export const oppositeTheme = ($theme: Theme): Theme => {
   return $theme === 'dark' ? 'light' : 'dark'
 }
 
-// TODO Performance
 export function applyTheme(
   theme: Theme,
   color: string,

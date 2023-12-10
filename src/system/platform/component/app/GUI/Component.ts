@@ -178,7 +178,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         value: '#ffffff',
         style: {
           position: 'relative',
-          height: '26px',
+          height: '42px',
           width: '100%',
           borderWidth: '1px',
           borderStyle: 'solid',
@@ -268,7 +268,6 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    share.appendChild(folder_button)
     share.appendChild(export_button)
     share.appendChild(import_button)
     this._share = share
@@ -391,6 +390,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     this._container.$ref['control'] = this
     this._container.$ref['cabinet'] = cabinet
+    this._container.$ref['folder'] = folder_button
     this._container.$ref['export'] = export_button
     this._container.$ref['import'] = import_button
     this._container.$ref['minimap'] = minimap
@@ -427,6 +427,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       cabinet,
       control,
       foreground,
+      container,
     })
 
     this.addEventListeners([
@@ -587,7 +588,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           component: this._color_pallete,
           active: false,
           width: 60,
-          height: 56,
+          height: 72,
           state: { y: cy - 17.5 },
         },
         file: {
@@ -596,7 +597,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           component: this._share,
           active: false,
           width: 30,
-          height: 97,
+          height: 68,
           state: { y: cy + 47.765 },
         },
       })
@@ -624,11 +625,16 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
   private _on_context_theme_changed = (): void => {
     // console.log('GUI', '_on_context_theme_changed')
+    const {
+      api: {
+        document: { setTheme },
+      },
+    } = this.$system
 
     const { $theme } = this.$context
 
     if (this.$context.$parent === null) {
-      document.body.style.backgroundColor = themeBackgroundColor($theme)
+      setTheme($theme)
     }
 
     if (!this._manually_changed_color) {

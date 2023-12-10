@@ -1,123 +1,54 @@
-
 {
   "name": "IO",
   "inputs": {
     "disabled": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "disabled"
-        },
-        "1": {
-          "unitId": "bot",
-          "pinId": "disabled"
-        }
-      },
+      "plug": { "0": { "unitId": "app", "pinId": "disabled" } },
       "type": "boolean",
       "metadata": {
         "position": {
-          "0": {
-            "x": -435,
-            "y": -53
-          },
-          "1": {
-            "x": 250,
-            "y": -164
-          }
+          "0": { "x": -435, "y": -53 },
+          "1": { "x": 250, "y": -164 }
         }
       }
     },
     "style": {
       "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "style"
-        },
-        "1": {
-          "unitId": "propifhaskey0",
-          "pinId": "obj"
-        },
-        "2": {
-          "unitId": "propifhaskey",
-          "pinId": "obj"
-        }
+        "0": { "unitId": "app", "pinId": "style" },
+        "2": { "unitId": "propifhaskey", "pinId": "obj" }
       },
       "type": "object",
       "metadata": {
         "position": {
-          "0": {
-            "x": 248,
-            "y": 77
-          },
-          "1": {
-            "x": -419,
-            "y": -9
-          }
+          "0": { "x": 248, "y": 77 },
+          "1": { "x": -419, "y": -9 }
         }
       }
     },
     "graph": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "graph"
-        }
-      },
+      "plug": { "0": { "unitId": "app", "pinId": "graph" } },
       "type": "`G`",
       "ref": true,
-      "metadata": {
-        "position": {
-          "0": {
-            "x": -437,
-            "y": -89
-          }
-        }
-      }
+      "metadata": { "position": { "0": { "x": -437, "y": -89 } } }
     },
     "fullwindow": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "fullwindow"
-        }
-      },
+      "plug": { "0": { "unitId": "app", "pinId": "fullwindow" } },
       "type": "boolean",
       "metadata": {
-        "position": {
-          "0": {
-            "x": -389,
-            "y": -134
-          }
-        }
+        "position": { "0": { "x": -389, "y": -134 } }
       }
     },
     "frame": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "frame"
-        }
-      },
+      "plug": { "0": { "unitId": "app", "pinId": "frame" } },
       "ref": true,
       "type": "`U`",
       "metadata": {
-        "position": {
-          "0": {
-            "x": -419,
-            "y": -169
-          }
-        }
+        "position": { "0": { "x": -419, "y": -169 } }
       }
     }
   },
   "outputs": {
     "graph": {
-      "plug": {
-        "0": {
-          "unitId": "app",
-          "pinId": "graph"
-        }
-      },
+      "plug": { "0": { "unitId": "app", "pinId": "graph" } },
       "ref": true,
       "type": "`U`&`G`",
       "defaultIgnored": true
@@ -186,77 +117,12 @@
         }
       }
     },
-    "bot": {
-      "id": "0e9e6cd4-67eb-11ea-995b-4b0721193361",
-      "input": {
-        "style": {
-          "metadata": {
-            "position": {
-              "x": 244,
-              "y": 45
-            }
-          }
-        },
-        "disabled": {
-          "metadata": {
-            "position": {
-              "x": 608.4371966644069,
-              "y": -126.35953831311235
-            }
-          }
-        },
-        "r": {
-          "constant": true,
-          "data": "42",
-          "metadata": {
-            "position": {
-              "x": 608.4371966644069,
-              "y": -88.11799803592231
-            }
-          }
-        },
-        "x": {
-          "ignored": false,
-          "constant": true,
-          "data": "\"50%\"",
-          "metadata": {
-            "position": {
-              "x": 344.6521748892934,
-              "y": -146.95460063857104
-            }
-          }
-        },
-        "y": {
-          "ignored": false,
-          "constant": true,
-          "data": "\"25%\"",
-          "metadata": {
-            "position": {
-              "x": 344.04774836238016,
-              "y": -111.87036908016006
-            }
-          }
-        }
-      },
-      "output": {},
-      "metadata": {
-        "position": {
-          "x": 456.8352328715838,
-          "y": -165.32510948865962
-        }
-      }
-    },
     "logo": {
       "id": "8aee8e9f-a132-46de-a0c7-17f8035b1898",
       "input": {
         "style": {
           "constant": false,
-          "metadata": {
-            "position": {
-              "x": 88,
-              "y": 474
-            }
-          }
+          "metadata": { "position": { "x": 88, "y": 474 } }
         },
         "pathStyle": {
           "metadata": {
@@ -335,9 +201,7 @@
           }
         }
       },
-      "output": {
-        "a": {}
-      },
+      "output": { "a": {} },
       "metadata": {
         "position": {
           "x": -63.78741231550606,
@@ -347,154 +211,38 @@
     },
     "tagcolor": {
       "id": "dfba14dd-bd14-4fd2-bbfa-c910eadd9f7d",
-      "input": {
-        "color": {}
-      },
-      "output": {
-        "{color}": {}
-      },
+      "input": { "color": {} },
+      "output": { "{color}": {} },
       "metadata": {
         "position": {
           "x": -167.78523908533958,
           "y": 122.43466233697382
         }
       }
-    },
-    "propifhaskey0": {
-      "id": "8c4f4d5e-2c98-4dfb-aeac-d1e6605a673e",
-      "input": {
-        "key": {
-          "constant": true,
-          "data": "\"color\"",
-          "metadata": {
-            "position": {
-              "x": 133.26902724217234,
-              "y": -34.83180774135582
-            }
-          }
-        },
-        "obj": {
-          "metadata": {
-            "position": {
-              "x": 217.0177338501544,
-              "y": -3.7406470225576527
-            }
-          }
-        }
-      },
-      "output": {
-        "value": {},
-        "has": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": 141.7487345246251,
-              "y": -7.95714449713995
-            }
-          }
-        }
-      },
-      "metadata": {
-        "position": {
-          "x": 164.35467772260517,
-          "y": -92.17071555881313
-        }
-      }
-    },
-    "tagcolor0": {
-      "id": "dfba14dd-bd14-4fd2-bbfa-c910eadd9f7d",
-      "input": {
-        "color": {}
-      },
-      "output": {
-        "{color}": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 267.97376998158984,
-          "y": -115.97886633128314
-        }
-      }
     }
   },
   "merges": {
     "5": {
-      "tagcolor": {
-        "input": {
-          "color": true
-        }
-      },
-      "propifhaskey": {
-        "output": {
-          "value": true
-        }
-      }
+      "tagcolor": { "input": { "color": true } },
+      "propifhaskey": { "output": { "value": true } }
     },
     "6": {
-      "tagcolor": {
-        "output": {
-          "{color}": true
-        }
-      },
-      "mergedefault": {
-        "input": {
-          "a": true
-        }
-      }
+      "tagcolor": { "output": { "{color}": true } },
+      "mergedefault": { "input": { "a": true } }
     },
     "7": {
-      "mergedefault": {
-        "output": {
-          "a": true
-        }
-      },
-      "logo": {
-        "input": {
-          "style": true
-        }
-      }
-    },
-    "8": {
-      "tagcolor0": {
-        "input": {
-          "color": true
-        }
-      },
-      "propifhaskey0": {
-        "output": {
-          "value": true
-        }
-      }
-    },
-    "9": {
-      "tagcolor0": {
-        "output": {
-          "{color}": true
-        }
-      },
-      "bot": {
-        "input": {
-          "style": true
-        }
-      }
+      "mergedefault": { "output": { "a": true } },
+      "logo": { "input": { "style": true } }
     }
   },
   "render": true,
   "component": {
     "subComponents": {
       "app": {
-        "children": ["logo", "bot"],
-        "childSlot": {
-          "logo": "1",
-          "bot": "1"
-        }
+        "children": ["logo"],
+        "childSlot": { "logo": "1" }
       },
-      "bot": {
-        "children": []
-      },
-      "logo": {
-        "children": []
-      }
+      "logo": { "children": [] }
     },
     "children": ["app"],
     "slots": [
@@ -507,29 +255,16 @@
   },
   "metadata": {
     "icon": "atom-alt",
-    "description": "bot + app",
+    "description": "app + logo",
     "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
-        "0": {
-          "x": 165,
-          "y": -7
-        },
-        "1": {
-          "x": 165,
-          "y": -86
-        },
-        "2": {
-          "x": 230,
-          "y": -102
-        },
-        "3": {
-          "x": 229,
-          "y": 14
-        }
+        "0": { "x": 165, "y": -7 },
+        "1": { "x": 165, "y": -86 },
+        "2": { "x": 230, "y": -102 },
+        "3": { "x": 229, "y": 14 }
       }
     }
   },
   "id": "6f267de2-b02c-11ea-b55c-db553f4c6c45"
 }
-

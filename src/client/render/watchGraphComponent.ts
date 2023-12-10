@@ -8,7 +8,7 @@ import { $Graph } from '../../types/interface/async/$Graph'
 import { callAll } from '../../util/call/callAll'
 import { Component } from '../component'
 import { componentFromUnitSpec } from '../componentFromUnitSpec'
-import { component_ } from '../component_'
+import { getComponentInterface } from '../component_'
 
 export function watchGraphComponent(
   system: System,
@@ -36,7 +36,7 @@ export function watchGraphComponent(
     unitId: string,
     sub_component: Component
   ): void => {
-    const _ = component_(sub_component)
+    const _ = getComponentInterface(sub_component)
     const sub_component_async_ref = $graph.$refSubComponent({ unitId, _ })
     const sub_component_unlisten = watchGraphComponent(
       system,

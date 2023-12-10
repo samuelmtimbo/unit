@@ -1,4 +1,4 @@
-import deepSet from '../system/core/object/DeepSet/f'
+import deepSet from '../deepSet'
 import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphMergeSpec } from '../types/GraphMergeSpec'

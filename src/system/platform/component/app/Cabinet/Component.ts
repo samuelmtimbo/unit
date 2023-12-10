@@ -53,8 +53,6 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
   private _width: number = 0
   private _height: number = 0
 
-  // z-index
-
   private _z_index: number = 1
 
   private _dy = 0

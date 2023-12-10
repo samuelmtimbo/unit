@@ -1,5 +1,5 @@
 import { $ } from '../Class/$'
-import { ObjectUpdateType } from '../Object'
+import { ObjectUpdateType } from '../ObjectUpdateType'
 import { System } from '../system'
 import { Unlisten } from '../types/Unlisten'
 import { ID } from '../types/interface/ID'

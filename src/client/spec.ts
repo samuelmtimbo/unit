@@ -1,4 +1,3 @@
-import { ID_SYSTEM_MERGE } from '../Class/Merge'
 import { UNTITLED } from '../constant/STRING'
 import { emptyGraphSpec } from '../spec/emptySpec'
 import { System } from '../system'
@@ -204,7 +203,7 @@ export function sameSpec(a_spec: GraphSpec, b_spec: GraphSpec): boolean {
 }
 
 export function isSystemSpecId(specs: Specs, specId: string): boolean {
-  if (specId === ID_SYSTEM_MERGE) {
+  if (specId.startsWith('_')) {
     return true
   }
 

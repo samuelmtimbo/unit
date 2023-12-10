@@ -1,3 +1,4 @@
+import { $ } from './Class/$'
 import { ION, Opt, Unit, UnitEvents } from './Class/Unit'
 import { Pin } from './Pin'
 import { PinOpt } from './PinOpt'
@@ -6,6 +7,7 @@ import { System } from './system'
 import forEachValueKey from './system/core/object/ForEachKeyValue/f'
 import { Dict } from './types/Dict'
 import { IO } from './types/IO'
+import { Unlisten } from './types/Unlisten'
 
 export type Primitive_EE = {}
 
@@ -38,29 +40,8 @@ export class Primitive<
   protected _backwarding: boolean = false
   protected _forwarding_empty: boolean = false
 
-  private _inputListeners: {
-    data: Dict<(data: any) => void>
-    drop: Dict<(data: any) => void>
-    invalid: Dict<() => void>
-    start: Dict<() => void>
-    end: Dict<() => void>
-  } = {
-    data: {},
-    drop: {},
-    invalid: {},
-    start: {},
-    end: {},
-  }
-
-  private _outputListeners: {
-    data: Dict<(data: any) => void>
-    drop: Dict<(data: any) => void>
-    invalid: Dict<() => void>
-  } = {
-    data: {},
-    drop: {},
-    invalid: {},
-  }
+  private _inputUnlisten: Dict<Unlisten> = {}
+  private _outputUnlisten: Dict<Unlisten> = {}
 
   private __buffer: {
     name: string
@@ -143,37 +124,19 @@ export class Primitive<
   }
 
   private _plunkOutput(name: string, output: Pin<O[keyof O]>): void {
-    const dataListener = this._outputListeners.data[name]
-    const dropListener = this._outputListeners.drop[name]
-    const invalidListener = this._outputListeners.invalid[name]
+    const unlisten = this._outputUnlisten[name]
 
-    delete this._outputListeners.data[name]
-    delete this._outputListeners.drop[name]
-    delete this._outputListeners.invalid[name]
+    unlisten && unlisten()
 
-    dataListener && output.removeListener('data', dataListener)
-    dropListener && output.removeListener('drop', dropListener)
-    invalidListener && output.removeListener('invalid', invalidListener)
+    delete this._outputUnlisten[name]
   }
 
   private _plunkInput(name: string, input: Pin<I[keyof I]>): void {
-    const dataListener = this._inputListeners.data[name]
-    const dropListener = this._inputListeners.drop[name]
-    const invalidListener = this._inputListeners.invalid[name]
-    const startListener = this._inputListeners.start[name]
-    const endListener = this._inputListeners.end[name]
+    const unlisten = this._inputUnlisten[name]
 
-    delete this._inputListeners.data[name]
-    delete this._inputListeners.drop[name]
-    delete this._inputListeners.invalid[name]
-    delete this._inputListeners.start[name]
-    delete this._inputListeners.end[name]
+    unlisten && unlisten()
 
-    dataListener && input.removeListener('data', dataListener)
-    dropListener && input.removeListener('drop', dropListener)
-    invalidListener && input.removeListener('invalid', invalidListener)
-    startListener && input.removeListener('start', startListener)
-    endListener && input.removeListener('end', endListener)
+    delete this._inputUnlisten[name]
   }
 
   private _setupInputs = (inputs: Pins<I>) => {
@@ -193,18 +156,22 @@ export class Primitive<
     const startListener = this._onInputStart.bind(this, name)
     const endListener = this._onInputEnd.bind(this, name)
 
-    this._inputListeners.data[name] = dataListener
-    this._inputListeners.start[name] = startListener
-    this._inputListeners.invalid[name] = invalidListener
-    this._inputListeners.drop[name] = dropListener
-    this._inputListeners.end[name] = endListener
-
     input.addListener('data', dataListener)
     input.addListener('start', startListener)
     input.addListener('invalid', invalidListener)
 
     input.prependListener('drop', dropListener)
     input.prependListener('end', endListener)
+
+    const unlisten = () => {
+      input.removeListener('data', dataListener)
+      input.removeListener('start', startListener)
+      input.removeListener('invalid', invalidListener)
+      input.removeListener('drop', dropListener)
+      input.removeListener('end', endListener)
+    }
+
+    this._inputUnlisten[name] = unlisten
   }
 
   private _setupRefInput = (name: string, input: Pin<I[keyof I]>): void => {
@@ -212,14 +179,18 @@ export class Primitive<
     const dropListener = this._onRefInputDrop.bind(this, name)
     const invalidListener = this._onRefInputInvalid.bind(this, name)
 
-    this._inputListeners.data[name] = dataListener
-    this._inputListeners.drop[name] = dropListener
-    this._inputListeners.invalid[name] = invalidListener
-
     input.addListener('data', dataListener)
     input.addListener('invalid', invalidListener)
 
     input.prependListener('drop', dropListener)
+
+    const unlisten = () => {
+      input.removeListener('data', dataListener)
+      input.removeListener('invalid', invalidListener)
+      input.removeListener('drop', dropListener)
+    }
+
+    this._inputUnlisten[name] = unlisten
   }
 
   private _setupInput = (
@@ -248,12 +219,18 @@ export class Primitive<
     const dropListener = this._onDataOutputDrop.bind(this, name)
     const invalidListener = this._onOutputInvalid.bind(this, name)
 
-    this._outputListeners.data[name] = dataListener
-    this._outputListeners.drop[name] = dropListener
-    this._outputListeners.invalid[name] = invalidListener
-    output.prependListener('data', dataListener)
     output.addListener('drop', dropListener)
+
+    output.prependListener('data', dataListener)
     output.prependListener('invalid', invalidListener)
+
+    const unlisten = () => {
+      output.removeListener('data', dataListener)
+      output.removeListener('drop', dropListener)
+      output.removeListener('invalid', invalidListener)
+    }
+
+    this._outputUnlisten[name] = unlisten
   }
 
   private _setupDataOutput = (name: string, output: Pin<any>): void => {
@@ -261,6 +238,7 @@ export class Primitive<
 
     if (output.active()) {
       const data = output.peak()
+
       this._onDataOutputData(name, data)
     }
   }
@@ -270,6 +248,7 @@ export class Primitive<
 
     if (output.active()) {
       const data = output.peak()
+
       this._onRefOutputData(name, data)
     }
   }
@@ -327,6 +306,10 @@ export class Primitive<
 
       this._input_effemeral[name] = data
       this._i[name] = data
+    }
+
+    if (data instanceof $) {
+      data.register()
     }
 
     this.onRefInputData(name, data)

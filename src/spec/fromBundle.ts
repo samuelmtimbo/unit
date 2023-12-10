@@ -1,9 +1,9 @@
-import { Specs } from '../types'
+import { Classes, Specs } from '../types'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { GraphBundle } from '../types/GraphClass'
-import { weakMerge } from '../types/weakMerge'
 import { uuidNotIn } from '../util/id'
+import { weakMerge } from '../weakMerge'
 import { fromSpec } from './fromSpec'
 
 export function fromBundle<
@@ -12,6 +12,7 @@ export function fromBundle<
 >(
   bundle: BundleSpec,
   specs: Specs,
+  classes: Classes,
   branch: { [path: string]: true } = {}
 ): GraphBundle<I, O> {
   const { spec = {}, specs: _specs = {} } = bundle
@@ -22,5 +23,5 @@ export function fromBundle<
 
   _specs[spec.id] = spec
 
-  return fromSpec(spec, weakMerge(_specs, specs), branch)
+  return fromSpec(spec, weakMerge(_specs, specs), classes, branch)
 }

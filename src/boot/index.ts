@@ -3,17 +3,12 @@ import { EventEmitter_ } from '../EventEmitter'
 import { NOOP } from '../NOOP'
 import { Object_ } from '../Object'
 import { Registry } from '../Registry'
-import { IOElement } from '../client/IOElement'
 import { Component } from '../client/component'
 import { styleToCSS } from '../client/id/styleToCSS'
 import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
-import { noHost } from '../host/none'
 import { fromBundle } from '../spec/fromBundle'
 import { stringifyBundleSpecData } from '../spec/stringifySpec'
 import { BootOpt, System } from '../system'
-import classes from '../system/_classes'
-import components from '../system/_components'
-import specs from '../system/_specs'
 import { Style } from '../system/platform/Props'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
@@ -22,16 +17,20 @@ import { Unlisten } from '../types/Unlisten'
 import { IGamepad } from '../types/global/IGamepad'
 import { IKeyboard } from '../types/global/IKeyboard'
 import { IPointer } from '../types/global/IPointer'
-import { $Component } from '../types/interface/async/$Component'
-import { weakMerge } from '../types/weakMerge'
 import { randomIdNotIn } from '../util/id'
 
 export function boot(
   parent: System | null = null,
-  api: API = noHost(),
-  opt: BootOpt = { flags: {} }
+  api: API,
+  opt: BootOpt
 ): System {
-  const { path = '', specs: _specs = {}, flags = {} } = opt
+  const {
+    path = '',
+    specs = {},
+    classes = {},
+    components = {},
+    flags = {},
+  } = opt
 
   const keyboard: IKeyboard = {
     pressed: [],
@@ -57,9 +56,7 @@ export function boot(
 
   const feature = {}
 
-  const merged_specs = weakMerge(specs, _specs)
-
-  const registry = new Registry(merged_specs)
+  const registry = new Registry(specs)
 
   const { specs_ } = registry
 
@@ -96,7 +93,7 @@ export function boot(
     input,
     context,
     specs_,
-    specs: merged_specs,
+    specs,
     classes,
     components,
     graphs: [],
@@ -114,7 +111,7 @@ export function boot(
       ? parent.global
       : {
           ref: {},
-          component: {},
+          component: componentLocal,
           data: new Object_({}),
           scope: {},
         },
@@ -135,7 +132,7 @@ export function boot(
       return stringifyBundleSpecData(bundle)
     },
     fromBundle: (bundle: BundleSpec) => {
-      return fromBundle(bundle, merged_specs, {})
+      return fromBundle(bundle, specs, {})
     },
     newGraph: (Bundle: GraphBundle) => {
       const graph = new Bundle(system)
@@ -175,9 +172,7 @@ export function boot(
         return NOOP
       }
     },
-    getLocalComponents: function (
-      remoteGlobalId: string
-    ): Component<IOElement, {}, $Component>[] {
+    getLocalComponents: function (remoteGlobalId: string): Component[] {
       const localIds = componentRemoteToLocal[remoteGlobalId]
 
       return localIds ? [...localIds].map((id) => componentLocal[id]) : []

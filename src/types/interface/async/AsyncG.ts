@@ -42,7 +42,7 @@ import { watchGraph } from '../../../debug/graph/watchGraph'
 import { watchUnit } from '../../../debug/watchUnit'
 import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
-import { fromId } from '../../../spec/fromId'
+import { bundleFromId } from '../../../spec/fromId'
 import { stringify } from '../../../spec/stringify'
 import {
   stringifyGraphSpecData,
@@ -51,6 +51,7 @@ import {
 } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
 import { clone, isEmptyObject, mapObjVK } from '../../../util/object'
+import { weakMerge } from '../../../weakMerge'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
@@ -60,7 +61,6 @@ import { IO } from '../../IO'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
-import { weakMerge } from '../../weakMerge'
 import { $Component } from './$Component'
 import { $G, $G_C, $G_R, $G_W } from './$G'
 import { $Graph } from './$Graph'
@@ -119,7 +119,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
       const unitNodes = mapObjVK(units, (u) => ({
         ...u,
-        Class: fromId(u.id, specs, classes),
+        Class: bundleFromId(u.id, specs, classes),
       }))
       graph.addUnitSpecs(unitNodes)
     },

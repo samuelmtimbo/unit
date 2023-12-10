@@ -1620,37 +1620,72 @@ assert.deepEqual(
     },
   ]
 )
-// TODO
-// assert.deepEqual(
-//   reflectChildrenTrait(
-//     { x: 0, y: 0, width: 100, height: 100, fontSize: 10, sx: 1, sy: 1, opacity: 1 },
-//     {
-//       display: 'flex',
-//       alignContent: 'start',
-//       flexDirection: 'column',
-//       flexWrap: 'wrap',
-//     },
-//     [
-//       {
-//         height: '100%',
-//         width: '100%',
-//       },
-//       {
-//         height: '100%',
-//         width: '100%',
-//       },
-//       {
-//         height: '100%',
-//         width: '100%',
-//       },
-//     ]
-//   ),
-//   [
-//     { x: 0, y: 0, width: 100, height: 100, fontSize: 10, sx: 1, sy: 1, opacity: 1 },
-//     { x: 100, y: 0, width: 100, height: 100, fontSize: 10, sx: 1, sy: 1, opacity: 1 },
-//     { x: 200, y: 0, width: 100, height: 100, fontSize: 10, sx: 1, sy: 1, opacity: 1 },
-//   ]
-// )
+assert.deepEqual(
+  reflectChildrenTrait(
+    {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+    {
+      display: 'flex',
+      alignContent: 'start',
+      flexDirection: 'column',
+      flexWrap: 'wrap',
+    },
+    [
+      {
+        height: '100%',
+        width: '100%',
+      },
+      {
+        height: '100%',
+        width: '100%',
+      },
+      {
+        height: '100%',
+        width: '100%',
+      },
+    ]
+  ),
+  [
+    {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 100,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+    {
+      x: 100,
+      y: 0,
+      width: 100,
+      height: 100,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+    {
+      x: 200,
+      y: 0,
+      width: 100,
+      height: 100,
+      fontSize: 10,
+      sx: 1,
+      sy: 1,
+      opacity: 1,
+    },
+  ]
+)
 assert.deepEqual(
   reflectChildrenTrait(
     {

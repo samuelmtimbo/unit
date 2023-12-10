@@ -1,0 +1,28 @@
+{
+  "name": "deep set",
+  "inputs": {
+    "path": {
+      "type": "string[]"
+    },
+    "value": {
+      "type": "any"
+    },
+    "obj": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "result": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "object-set",
+    "description": "get value of `obj` at `path`",
+    "complexity": 50,
+    "tags": ["core", "object"]
+  },
+  "id": "419e468e-e4d4-11ea-8efb-2b9d815b1798",
+  "type": "`U`&`G`",
+  "system": true
+}

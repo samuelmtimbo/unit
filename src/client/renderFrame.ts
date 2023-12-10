@@ -2,7 +2,7 @@ import { System } from '../system'
 import { removeChildren } from '../util/element'
 import { Component } from './component'
 import { Context, resize, setParent } from './context'
-import { stopAllPropagation, stopByPropagation } from './stopPropagation'
+import { stopByPropagation } from './stopPropagation'
 import { defaultThemeColor } from './theme'
 
 export function renderFrame(
@@ -20,8 +20,6 @@ export function renderFrame(
   removeChildren($root)
 
   const $element = $root
-
-  stopAllPropagation($element)
 
   const $theme = 'dark'
 

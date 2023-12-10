@@ -54,8 +54,8 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
     if (data !== undefined) {
       this._idle = false
     }
-    this._register = data
 
+    this._register = data
     this._constant = constant || false
     this._ignored = ignored || false
     this._ref = ref || false
@@ -87,6 +87,7 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
   public start() {
     if (this._idle) {
       this._idle = false
+
       this.emit('start')
     }
   }
@@ -94,6 +95,7 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
   public end() {
     if (this._register === undefined && !this._idle) {
       this._idle = true
+
       this.emit('end')
     }
   }
@@ -123,6 +125,7 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
     this.emit('data', data)
 
     if (this._ref) {
+      //
     } else {
       if (this._ignored && !this._constant) {
         this.take()
@@ -198,12 +201,11 @@ export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
     this._idle = _idle
   }
 
-  // V
-
   async read(): Promise<any> {
     if (this._register === undefined) {
       throw new Error('empty')
     }
+
     return this._register
   }
 

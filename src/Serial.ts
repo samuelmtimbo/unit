@@ -12,7 +12,7 @@ export interface O<T> {
   second: T
 }
 
-const ID_SEARIAL = '136a38b6-155a-4ed2-85cd-90bc94688f42'
+const ID_SEARIAL = '_136a38b6-155a-4ed2-85cd-90bc94688f42'
 
 export default class Serial<T> extends Primitive<I<T>, O<T>> {
   private _current: T | undefined = undefined

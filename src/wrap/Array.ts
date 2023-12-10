@@ -40,7 +40,7 @@ export function wrapArray<T>(array: T[], system: System): A<T> & $ {
     }
 
     put(i: number, data: any): Promise<void> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     }
 
     async at(i: number): Promise<T> {
@@ -52,7 +52,7 @@ export function wrapArray<T>(array: T[], system: System): A<T> & $ {
     }
 
     indexOf(a: T): Promise<number> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     }
   })(system)
 
@@ -85,7 +85,7 @@ export function wrapUint8Array(
     }
 
     indexOf(a: number): Promise<number> {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     }
 
     raw() {

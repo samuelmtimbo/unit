@@ -1,7 +1,7 @@
 import { $ } from '../../../Class/$'
 import { Element_ } from '../../../Class/Element'
 import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
-import { ObjectUpdateType } from '../../../Object'
+import { ObjectUpdateType } from '../../../ObjectUpdateType'
 import { System } from '../../../system'
 import { GraphClass } from '../../../types/GraphClass'
 import { G } from '../../../types/interface/G'

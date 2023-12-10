@@ -4,20 +4,53 @@
     "onclick": {
       "id": "97c94516-add1-11ea-ba72-8f55299b735c",
       "input": {
-        "element": {}
+        "element": {
+          "metadata": {
+            "position": {
+              "x": -105,
+              "y": -18
+            }
+          }
+        }
       },
       "output": {
         "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": -9
+        }
       }
     },
     "toggle": {
       "id": "58c50bb2-569f-4b7a-aba3-176d9ac91d5c",
       "input": {
-        "init": {},
+        "init": {
+          "metadata": {
+            "position": {
+              "x": 15,
+              "y": 34
+            }
+          }
+        },
         "toggle": {}
       },
       "output": {
-        "value": {}
+        "value": {
+          "metadata": {
+            "position": {
+              "x": 97,
+              "y": 2
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": 9
+        }
       }
     }
   },
@@ -54,6 +87,16 @@
       },
       "type": "`C`",
       "ref": true
+    },
+    "toggle": {
+      "plug": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "type": "any",
+      "ref": false,
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -71,13 +114,8 @@
     "icon": "square",
     "description": "toggle true/false on click",
     "complexity": 18,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core"]
   },
   "id": "9b2bdc7c-eb5d-11ea-bdb1-1760294f446b",
-  "type": "`U`&`G`",
-  "system": true
+  "type": "`U`&`G`"
 }

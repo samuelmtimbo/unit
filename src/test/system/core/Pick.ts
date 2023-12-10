@@ -7,7 +7,11 @@ import { system } from '../../util/system'
 
 const spec = require('../../../system/core/control/Pick/spec.json')
 
-const Pick = fromSpec<{ a: any; b: any; c: boolean }, { a: any }>(spec, _specs)
+const Pick = fromSpec<{ a: any; b: any; c: boolean }, { a: any }>(
+  spec,
+  _specs,
+  {}
+)
 
 const pick = new Pick(system)
 

@@ -59,3 +59,28 @@ export function awaitGlobalComponent(
 
   return unlisten
 }
+
+export function firstGlobalComponentPromise(
+  system: System,
+  id: string
+): Promise<Component> {
+  const { emitter } = system
+
+  const component = system.getLocalComponents(id)[0]
+
+  if (component) {
+    return Promise.resolve(component)
+  }
+
+  return new Promise((resolve) => {
+    const listener = (component: Component) => {
+      setTimeout(() => {
+        emitter.removeListener(id, listener)
+      }, 0)
+
+      resolve(component)
+    }
+
+    emitter.addListener(id, listener)
+  })
+}

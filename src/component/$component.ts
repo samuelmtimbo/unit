@@ -14,6 +14,7 @@ export function $appendChild(
   callback: Callback<number>
 ): void {
   const i = component.appendChild(Class)
+
   callback(i)
 }
 

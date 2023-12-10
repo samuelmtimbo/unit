@@ -95,8 +95,8 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           top: '0',
           padding: '6px',
           transform: 'translateX(-100%)',
-          height: `${KNOB_HEIGHT - 12 - 2}px`,
-          width: `${KNOB_HEIGHT - 12 - 2}px`,
+          height: `${KNOB_HEIGHT - 12 - 1}px`,
+          width: `${KNOB_HEIGHT - 12 - 1}px`,
           touchAction: 'none',
           // boxShadow:
           //   'inset 1px 0 0 0 currentColor, inset -1px 0 0 0 #00000000, inset 0 1px 0 0 currentColor, inset 0 -1px 0 0 currentColor',
@@ -179,7 +179,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           bottom: '0px',
           left: '0px',
           width: '4px',
-          height: 'calc(100% - 36px)',
+          height: 'calc(100% - 38px)',
           backgroundColor: 'none',
           borderWidth: '0px 0px 1px 1px',
           borderStyle: 'solid',
@@ -211,17 +211,16 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
 
     const notch = new Div(
       {
-        className: 'drawer-notch',
+        className: 'drawer-knob-notch-bottom',
         style: {
           position: 'absolute',
           bottom: '0px',
-          left: '-31px',
-          top: '34px',
-          width: '32px',
+          left: '-30px',
+          top: '31px',
+          width: '27px',
           height: '4px',
           backgroundColor: 'none',
-          borderWidth: '1px 1px 0px 0px',
-          borderTopRightRadius: '3px',
+          borderWidth: '0px 0px 1px 0px',
           borderStyle: 'solid',
           borderColor: 'currentColor',
         },
@@ -231,17 +230,36 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
 
     const notch0 = new Div(
       {
-        className: 'drawer-notch0',
+        className: 'drawer-knob-notch-bottom-left',
         style: {
           position: 'absolute',
           bottom: '0px',
-          left: '-34px',
+          left: '-35px',
           top: '31px',
           width: '5px',
           height: '4px',
           backgroundColor: 'none',
           borderWidth: '0px 0px 1px 1px',
           borderBottomLeftRadius: '3px',
+          borderStyle: 'solid',
+          borderColor: 'currentColor',
+        },
+      },
+      this.$system
+    )
+
+    const notch1 = new Div(
+      {
+        className: 'drawer-armpit-top-right',
+        style: {
+          position: 'absolute',
+          left: '21px',
+          bottom: '-10px',
+          width: '10px',
+          height: '10px',
+          backgroundColor: 'none',
+          borderWidth: '1px 1px 0px 0px',
+          borderTopRightRadius: '3px',
           borderStyle: 'solid',
           borderColor: 'currentColor',
         },
@@ -266,6 +284,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     drawer.registerParentRoot(row)
     drawer.registerParentRoot(notch)
     drawer.registerParentRoot(notch0)
+    notch.registerParentRoot(notch1)
 
     const $element = parentElement($system)
 
@@ -361,7 +380,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     }
 
     if (this._hidden) {
-      translateX = -translateX + 34
+      translateX = -translateX + 34 + 1
     }
 
     return translateX

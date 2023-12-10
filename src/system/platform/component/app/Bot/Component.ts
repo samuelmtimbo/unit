@@ -94,7 +94,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
   private _removed: boolean = false
 
-  private _move_timeout: NodeJS.Timer
+  private _move_timeout: number
 
   private _container: HTMLDivElement
 
@@ -234,6 +234,8 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
       this._reset_move_timeout()
     }
+
+    // @ts-ignore
     this._move_timeout = setTimeout(
       moveTimeoutHandler,
       offset + randomBetween(0, MOVE_TIMEOUT_MAX) * 1000

@@ -154,17 +154,13 @@ export function isHEX(name: string): boolean {
   return /^#[a-fA-F0-9]+$/g.test(name)
 }
 
-// const assert = require('assert')
-// assert(isHEX('#ff0011'))
-// assert(isHEX('#334455'))
-
 export function RGBToHEX(r: number, g: number, b: number) {
   const hex =
     '#' + (0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1)
   return hex
 }
 
-export function HEXToRGB(hex: string): number[] {
+export function hexToRgb(hex: string): number[] {
   hex = hex.slice(1)
   const r = Number.parseInt(hex.slice(0, 2), 16)
   const g = Number.parseInt(hex.slice(2, 4), 16)
@@ -172,8 +168,8 @@ export function HEXToRGB(hex: string): number[] {
   return [r, g, b]
 }
 
-export function HEXToHSV(hex: string): number[] {
-  const [r, g, b] = HEXToRGB(hex)
+export function hexToHsv(hex: string): number[] {
+  const [r, g, b] = hexToRgb(hex)
   const hsv = RGBToHSV(r, g, b)
   return hsv
 }

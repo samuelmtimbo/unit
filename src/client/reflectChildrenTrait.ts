@@ -5,7 +5,7 @@ import { parseBorder } from './parseBorder'
 import { applyLayoutValue, parseLayoutValue } from './parseLayoutValue'
 import { parseMargin } from './parseMargin'
 import { parsePadding } from './parsePadding'
-import { parseTransformXY } from './parseTransformXY'
+import { parseTransform } from './parseTransform'
 import { rectsBoundingRect } from './util/geometry'
 import { Rect } from './util/geometry/types'
 import { parseFontSize } from './util/style/getFontSize'
@@ -328,7 +328,7 @@ export function reflectChildrenTrait(
       childRotateX,
       childRotateY,
       childRotateZ,
-    ] = parseTransformXY(childTransform, width, height)
+    ] = parseTransform(childTransform, width, height)
 
     children_px_left.push(pxLeft)
     children_px_right.push(pxRight)
@@ -765,7 +765,7 @@ export function reflectChildrenTrait(
             childRotateX,
             childRotateY,
             childRotateZ,
-          ] = parseTransformXY(childTransform, width, height)
+          ] = parseTransform(childTransform, width, height)
 
           x += childTransformX
           y += childTransformY
@@ -904,7 +904,7 @@ export function reflectChildrenTrait(
             childRotateX,
             childRotateY,
             childRotateZ,
-          ] = parseTransformXY(childTransform, width, height)
+          ] = parseTransform(childTransform, width, height)
 
           x += childTransformX
           y += childTransformY

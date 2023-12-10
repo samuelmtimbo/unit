@@ -42,6 +42,12 @@ export default class SizeObserver extends Semifunctional<I, O> {
   private _observer: ResizeObserver
 
   f({ component }: I, done: Done<O>) {
+    const {
+      api: {
+        document: { ResizeObserver },
+      },
+    } = this.__system
+
     const globalId = component.getGlobalId()
 
     let _component = getGlobalComponent(

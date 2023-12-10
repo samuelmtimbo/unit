@@ -5,7 +5,7 @@ import { GraphSpec } from '../types/GraphSpec'
 export const emptyGraphSpec = (partial: Partial<GraphSpec> = {}): GraphSpec =>
   deepMerge(
     {
-      type: '`U`&`G`&`C`',
+      type: '`U`&`G`',
       name: UNTITLED,
       units: {},
       merges: {},

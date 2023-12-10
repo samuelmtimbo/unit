@@ -19,7 +19,7 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
 
     const $element = parentElement($system)
 
-    $element.className = 'default-style'
+    $element.className = 'inherit'
 
     this.$element = $element
 

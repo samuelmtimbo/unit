@@ -1,7 +1,7 @@
 import { Graph } from '../../Class/Graph'
 import { Unit } from '../../Class/Unit'
 import { GRAPH_DEFAULT_EVENTS } from '../../constant/GRAPH_DEFAULT_EVENTS'
-import { getMergePinNodeId } from '../../spec/util'
+import { getMergePinNodeId } from '../../spec/util/spec'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../../types/Dict'
 import { Unlisten } from '../../types/Unlisten'

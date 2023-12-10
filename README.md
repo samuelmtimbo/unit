@@ -22,6 +22,8 @@ The broader design philosophy behind Unit is discussed in [Concept](src/docs/con
 
 To jump right into the official Unit Programming Environment, visit [unit.land](https://unit.land) (beta).
 
+Check out a collection of public open source units at [unit.tools](https://unit.tools) (beta).
+
 ## Development
 
 Install [npm](https://nodejs.org/en/download/) and [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) if you haven't already.
@@ -62,29 +64,77 @@ For development mode:
 npm run watch
 ```
 
-## Library
+## Server
 
-unit can be used as a library in another JavaScript project, both on Web and Node.js.
+Unit source code can be used as a general purpose library in any JavaScript project, both on Web and Node.js.
 
-```
+```sh
 npm install --save @_unit/unit
 ```
 
 To install unit globally:
 
-```
+```sh
 npm install --global @_unit/unit
 ```
 
 Then to start a local server:
 
-```
+```sh
 unit
+```
+
+To render a unit JSON bundle:
+
+```js
+import { renderBundle } from '@_unit/unit/lib/client/platform/web/render'
+
+const root = document.getElementById('root')
+
+const bundle = {
+  spec: {
+    units: {
+      helloworld: {
+        id: 'a9cbed12-9a53-11eb-8c2e-f3146b36128d',
+      },
+    },
+  },
+}
+
+const [system, graph] = renderBundle(root, bundle)
+
+const helloworld = graph.getUnit('helloworld')
+
+helloworld.push('style', {
+  color: '#ffdd00',
+})
+```
+
+To boot a system and instantiate a new unit on it:
+
+```js
+import { boot } from '@_unit/unit/lib/client/platform/node/boot'
+import { fromBundle } from '@_unit/unit/lib/spec/fromBundle'
+import _specs from '@_unit/unit/lib/system/_specs'
+
+export const system = boot()
+
+const bundle = require('./MergeSort.json')
+
+const MergeSort = fromBundle(bundle, _specs, {})
+
+const mergeSort = new MergeSort(system)
+
+mergeSort.play()
+
+mergeSort.push('a', [2, 1])
+
+console.log(mergeSort.take('a')) // [1, 2]
 ```
 
 ## Test
 
-```
+```sh
 npm test
 ```
 
@@ -101,6 +151,10 @@ Redirect to the official unit source code.
 Fully local version of the Unit Environment.
 
 Any \*.unit.land subdomain represents a completely isolated instance of the Unit system.
+
+### [unit.tools](https://unit.tools)
+
+Marketplace to explore, collect and play with live visual programs built in Unit.
 
 ### [unit.moe](https://unit.moe)
 
@@ -138,15 +192,11 @@ Ultimately, the goal is for everyone to have an easy to use, powerful, customiza
 
 ## Backlog
 
-All currently available primitives live in the [system](/src/system) folder.
-
 Unit system API is composed of logical, platform (frontend and backend) and "operating system" units.
 
-The direction of growth is feature parity with Web and a subset of NodeJS (not native to the Web), like TCP and HTTP
+The direction of growth right now is ensuring a robust basic UI/UX and feature parity with Web and a subset of NodeJS (not native to the Web), like TCP and HTTP.
 
-Check out these examples of primitive classes: [`add`](/src/system/f/arithmetic/Add/index.ts) (`+` operation), [`oscilator node`](/src/system/platform/api/media/audio/OscillatorNode/index.ts) (Web Audio API), and `peer transmitter` (simplified Web RTC).
-
-The default Unit system comes with a collection of useful unit graphs out of the box. Take a look at what a graph looks like in JSON: [`if else`](/src/unit/src/system/core/control/IfElse/spec.json) and [`range`](/src/system/core/loop/Range/spec.json).
+Visit [Evolution](/src/docs/direction/README.md) to learn more about where Unit development is headed.
 
 ## Community
 

@@ -5,12 +5,11 @@ export default function debounce(
   threshold: number = 100,
   execAsap: boolean = false
 ) {
-  let timeout
+  let timeout: NodeJS.Timeout
 
-  return function debounced() {
+  return function debounced(...args: any[]) {
     // @ts-ignore
     let obj = this
-    let args = arguments
 
     function delayed() {
       if (!execAsap) {

@@ -5,7 +5,7 @@ import { System } from '../../../../system'
 import { GraphUnitSpec } from '../../../../types/GraphUnitSpec'
 import { G } from '../../../../types/interface/G'
 import { UnitBundle } from '../../../../types/UnitBundle'
-import { weakMerge } from '../../../../types/weakMerge'
+import { weakMerge } from '../../../../weakMerge'
 import { ID_ADD_UNIT } from '../../../_ids'
 
 export interface I<T> {

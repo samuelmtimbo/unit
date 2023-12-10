@@ -1,8 +1,8 @@
 // import { Graph } from '../../../../../../Class/Graph'
-// import { nodeBoot } from '../../../../../../client/platform/node/boot'
+// import { boot } from '../../../../../../client/platform/node/boot'
 // import { Async } from '../../../../../../types/interface/async/Async'
 
-// export const system = nodeBoot()
+// export const system = boot()
 
 // const graph = new Graph({}, {}, system)
 

@@ -40,7 +40,7 @@ export class RemotePort {
 
   exec(data) {
     const { type, data: _data } = data as {
-      type: 'call' | 'watch'
+      type: 'call' | 'watch' | 'ref'
       id: string
       data: any
     }

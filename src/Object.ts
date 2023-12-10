@@ -1,12 +1,11 @@
 import { EventEmitter_ } from './EventEmitter'
+import { ObjectUpdateType } from './ObjectUpdateType'
 import { keys } from './system/f/object/Keys/f'
 import { Dict } from './types/Dict'
 import { J } from './types/interface/J'
 import { V } from './types/interface/V'
 import { Unlisten } from './types/Unlisten'
 import { pop } from './util/array'
-
-export type ObjectUpdateType = 'set' | 'delete'
 
 export type ObjectNode = {
   emitter: EventEmitter_ | null

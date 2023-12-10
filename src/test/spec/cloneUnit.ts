@@ -1,7 +1,7 @@
 import assert = require('assert')
 import { Unit } from '../../Class/Unit'
 import { cloneUnit } from '../../spec/cloneUnit'
-import { fromId } from '../../spec/fromId'
+import { bundleFromId } from '../../spec/fromId'
 import _classes from '../../system/_classes'
 import { ID_RANGE } from '../../system/_ids'
 import _specs from '../../system/_specs'
@@ -50,7 +50,7 @@ assert.equal(clonedAdd.getInput('a').constant(), true)
 assert.equal(clonedAdd.peakInput('a'), 1)
 assert.equal(clonedAdd.peakOutput('a + b'), 3)
 
-const Range = fromId<Unit<{ a: number; b: number }, { i: number }>>(
+const Range = bundleFromId<Unit<{ a: number; b: number }, { i: number }>>(
   ID_RANGE,
   _specs,
   _classes

@@ -174,3 +174,25 @@ export function min(array: number[]): number {
 export function max(array: number[]): number {
   return array.reduce((acc, value) => Math.max(acc, value), -Infinity)
 }
+
+export function shuffleInplace(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+
+    const temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+}
+
+export function shuffle(array) {
+  const shuffledArray = [...array]
+
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+
+    ;[shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]
+  }
+
+  return shuffledArray
+}

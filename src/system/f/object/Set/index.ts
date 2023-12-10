@@ -29,6 +29,8 @@ export default class Set<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ obj, key, value }: I<T>, done: Done<O<T>>): void {
+    // console.log('Set_normal', 'f', obj, key, value)
+
     if (this.isPinRef('input', 'obj')) {
       obj[key] = value
     }

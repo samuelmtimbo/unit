@@ -68,7 +68,9 @@ export default class Ref<T, K extends keyof T> extends Functional<
     const value = new (class _Value extends $ implements V {
       async read(): Promise<any> {
         _value = await obj.get(key)
+
         const v = staticfy(_value)
+
         return v
       }
 

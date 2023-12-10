@@ -18,7 +18,7 @@ export default class IconButton extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'icon'],
+        i: ['style', 'icon', 'attr'],
         o: [],
       },
       {},

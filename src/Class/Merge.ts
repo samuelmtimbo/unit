@@ -15,7 +15,7 @@ export interface O<T> {
   [name: string]: T
 }
 
-export const ID_SYSTEM_MERGE = 'd2c4b19b-aa58-438b-8541-9df478b80aa3'
+export const ID_SYSTEM_MERGE = '_d2c4b19b-aa58-438b-8541-9df478b80aa3'
 
 export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   private _current: string | undefined = undefined

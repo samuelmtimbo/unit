@@ -5,7 +5,7 @@ import _specs from '../../../system/_specs'
 import { system } from '../../util/system'
 
 const spec = require('../../../system/core/loop/RangeReverse/spec.json')
-const RangeReverse = fromSpec<{ any: any }, { bit: number }>(spec, _specs)
+const RangeReverse = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
 
 const rangeRev = new RangeReverse(system)
 

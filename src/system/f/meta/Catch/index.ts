@@ -38,7 +38,6 @@ export default class Catch<T> extends Primitive<I<T>, O<T>> {
     // if (name === 'unit') {
     const { unlisten, done } = unit.catch((err: string | null) => {
       if (err === null) {
-        // this._backward_all()
         this._forward_all_empty()
       } else {
         this._output.err.push(err)

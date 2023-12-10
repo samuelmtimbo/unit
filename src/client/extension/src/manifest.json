@@ -1,23 +1,22 @@
 {
-  "name": "unit",
+  "name": "Unit",
   "version": "1.0",
-  "description": "Extend ioun.it functionality",
-  "manifest_version": 2,
+  "description": "Extend Unit system with Web Extension functionality",
+  "manifest_version": 3,
   "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "matches": [
-        "<all_urls>"
+        "https://unit.land/*",
+        "http://localhost:4000/*"
       ],
       "js": ["content.js"]
     }
   ],
   "permissions": [
+    "tabs",
     "activeTab",
     "alarms",
     "background",
@@ -49,11 +48,12 @@
     "topSites",
     "tts",
     "ttsEngine",
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "scripting"
   ],
   "options_page": "options.html",
-  "page_action": {
-    "default_title": "unit",
+  "action": {
+    "default_title": "Unit X",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "favicon_16.png",

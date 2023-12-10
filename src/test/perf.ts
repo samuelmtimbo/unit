@@ -1,5 +1,5 @@
 import { Unit } from '../Class/Unit'
-import { fromId } from '../spec/fromId'
+import { bundleFromId } from '../spec/fromId'
 import _classes from '../system/_classes'
 import { ID_RANGE } from '../system/_ids'
 import _specs from '../system/_specs'
@@ -21,7 +21,7 @@ t1 = now()
 log('new Identity()', (t1 - t0).toFixed(3))
 
 t0 = now()
-const Range = fromId<Unit<{ a: number; b: number }, { i: number }>>(
+const Range = bundleFromId<Unit<{ a: number; b: number }, { i: number }>>(
   ID_RANGE,
   _specs,
   _classes

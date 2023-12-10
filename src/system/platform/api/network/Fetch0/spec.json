@@ -1,0 +1,39 @@
+{
+  "name": "fetch",
+  "inputs": {
+    "url": {
+      "type": "string",
+      "metadata": {
+        "examples": ["'/'"]
+      }
+    },
+    "opt": {
+      "type": "{body?:string|null,headers?:object,method?:string}",
+      "metadata": {
+        "examples": ["{method:'GET'}"]
+      }
+    },
+    "body": {
+      "type": "`BO`",
+      "metadata": {},
+      "ref": true
+    }
+  },
+  "outputs": {
+    "res": {
+      "type": "`RES`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "fetch a resource across the network through HTTP",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+    "complexity": 3,
+    "tags": ["platform", "api", "network"]
+  },
+  "id": "b97c0133-6c87-4b69-af4e-354c0b590ece",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

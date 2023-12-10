@@ -9,6 +9,10 @@ export interface UrlObject {
   pathname: string
   search: string
   hash: string
+  port: string
+  host: string
+  href: string
+  origin: string
 }
 
 export interface I<T> {
@@ -39,7 +43,7 @@ export default class ParseUrl<T> extends Functional<I<T>, O<T>> {
       },
     } = this.__system
 
-    let obj
+    let obj: UrlObject
 
     try {
       const urlParser = new URL(url)
@@ -50,6 +54,10 @@ export default class ParseUrl<T> extends Functional<I<T>, O<T>> {
         pathname: urlParser.pathname,
         search: urlParser.search,
         hash: urlParser.hash,
+        host: urlParser.host,
+        href: urlParser.href,
+        origin: urlParser.origin,
+        port: urlParser.port,
       }
     } catch (err) {
       done(undefined, 'invalid url')

@@ -25,7 +25,7 @@ const spec = system.newSpec({
   outputs: {},
 })
 
-const Class = fromSpec(spec, _specs)
+const Class = fromSpec(spec, _specs, system.classes)
 
 const composition = new Class(system)
 

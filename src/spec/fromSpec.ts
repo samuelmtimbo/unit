@@ -7,10 +7,9 @@ import { GraphSpec } from '../types/GraphSpec'
 import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitPinSpec } from '../types/GraphUnitPinSpec'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
-import { weakMerge } from '../types/weakMerge'
-import { clone } from '../util/object'
+import { weakMerge } from '../weakMerge'
 import { bundleClass } from './bundleClass'
-import { evaluate } from './evaluate'
+import { evaluateBundleStr } from './idFromUnitValue'
 import { TreeNodeType, getTree } from './parser'
 
 export function extractGraphSpecs(
@@ -37,9 +36,9 @@ export function extractGraphSpecs(
         const tree = getTree(data)
 
         if (tree.type === TreeNodeType.Unit) {
-          const str = tree.value.substring(1)
+          const { value } = tree
 
-          const bundle = evaluate(str, specs, classes)
+          const bundle = evaluateBundleStr(value, specs, classes)
 
           for (const specId in bundle.specs) {
             const spec = bundle.specs[specId]
@@ -78,10 +77,11 @@ export function extractGraphSpecs(
 
 export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
   spec: GraphSpec,
-  _specs: Specs,
+  specs_: Specs,
+  classes: Classes = {},
   branch: { [path: string]: true } = {}
 ): GraphBundle<I, O> {
-  const Class = _fromSpec<I, O>(spec, _specs, branch)
+  const Class = classFromSpec<I, O>(spec, specs_, classes, branch)
 
   const { id } = spec
 
@@ -89,18 +89,16 @@ export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
     throw new Error('spec id is required')
   }
 
-  const specs = extractGraphSpecs(spec, _specs, clone(spec.specs ?? {}))
+  const specs = extractGraphSpecs(spec, specs_, {})
 
-  const Bundle = bundleClass(Class, { unit: { id }, specs })
+  const unit = { id }
+
+  const Bundle = bundleClass(Class, { unit, specs })
 
   return Bundle
 }
 
-export function _fromSpec<I, O>(
-  spec: GraphSpec,
-  specs: Specs,
-  branch: { [path: string]: true } = {}
-): GraphClass<I, O> {
+export function applyDefaultIgnored(spec: GraphSpec, specs: Specs) {
   const { name, units } = spec
 
   for (const unitId in units) {
@@ -139,22 +137,26 @@ export function _fromSpec<I, O>(
       setIgnored(unitOutputPinSpec, outputPinSpec)
     }
   }
-
-  return __fromSpec(spec, branch)
 }
 
-export function __fromSpec<I, O>(
+export function classFromSpec<I, O>(
   spec: GraphSpec,
+  specs: Specs,
+  classes: Classes,
   branch: { [path: string]: true } = {}
 ): GraphClass<I, O> {
+  applyDefaultIgnored(spec, specs)
+
   const { id, name } = spec
 
-  if (!id) {
-    throw new Error('')
+  if (classes[id]) {
+    return classes[id]
   }
 
   class Class extends Graph<I, O> {
     constructor(system: System) {
+      const spec = system.getSpec(id) as GraphSpec
+
       super(spec, branch, system, id)
     }
   }
@@ -163,5 +165,20 @@ export function __fromSpec<I, O>(
     value: name,
   })
 
+  if (!branch[id]) {
+    // classes[id] = Class
+  }
+
   return Class
+}
+
+export function graphFromSpec<I, O>(
+  system: System,
+  spec: GraphSpec,
+  specs: Specs,
+  branch: { [path: string]: true } = {}
+): Graph<I, O> {
+  applyDefaultIgnored(spec, specs)
+
+  return new Graph(spec, branch, system, spec.id)
 }

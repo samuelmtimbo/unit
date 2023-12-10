@@ -7,8 +7,6 @@ import {
   setSubComponentSize,
 } from '../../../spec/reducers/component'
 
-// setSubComponent
-
 assert.deepEqual(
   {
     subComponents: {
@@ -70,8 +68,6 @@ assert.deepEqual(
   'removeSubComponent'
 )
 
-// setSize
-
 assert.deepEqual(
   {
     subComponents: {
@@ -89,8 +85,6 @@ assert.deepEqual(
   ),
   'setSize'
 )
-
-// setSubComponentChildren
 
 assert.deepEqual(
   {
@@ -123,8 +117,6 @@ assert.deepEqual(
   ),
   'setSubComponentChildren'
 )
-
-// removeSubComponentChild
 
 assert.deepEqual(
   {

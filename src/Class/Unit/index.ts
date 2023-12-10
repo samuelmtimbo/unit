@@ -144,6 +144,10 @@ export class Unit<
     system.registerUnit(id)
   }
 
+  public isElement() {
+    return false
+  }
+
   public isPinIgnored(type: IO, pinId: string): boolean {
     const pin = this.getPin(type, pinId)
     const ignored = pin.ignored()
@@ -625,6 +629,18 @@ export class Unit<
 
   public pushAll<K extends keyof I>(data: Dict<I[K]>): void {
     this.pushAllInput(data)
+  }
+
+  public pullInput<K extends keyof I>(name: string): I[K] {
+    return this.getInput(name).pull()
+  }
+
+  public pullOutput<K extends keyof O>(name: string): O[K] {
+    return this.getOutput(name).pull()
+  }
+
+  public pullPin<K extends keyof O>(type: IO, name: string): O[K] | I[K] {
+    return type === 'input' ? this.pullInput(name) : this.pullOutput(name)
   }
 
   public takePin<K extends keyof O>(type: IO, name: string): O[K] | I[K] {

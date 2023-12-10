@@ -90,7 +90,6 @@ export default class OscillatorNode_ extends Functional<I, O> {
     this._node = _node
 
     const node = wrapAudioNode(_node, this.__system)
-
     const frequency = wrapAudioParam(_node.frequency, this.__system)
     const detune = wrapAudioParam(_node.detune, this.__system)
 

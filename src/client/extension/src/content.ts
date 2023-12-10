@@ -1,45 +1,45 @@
-const div = document.createElement('div')
-div.style.display = 'none'
-div.id = '__EXTENSION_INSTALLED'
-document.body.appendChild(div)
+import { SYSTEM_EXTENSION_ID, dispatchExtensionEvent } from '..'
+import { CALL } from '../../../constant/STRING'
+import { Action } from '../../../types/Action'
 
-// @ts-ignore
-const port = chrome.runtime.connect({ name: 'knockknock' })
+const element = document.createElement('div')
 
-window.addEventListener(
+element.style.display = 'none'
+
+element.id = SYSTEM_EXTENSION_ID
+
+document.body.appendChild(element)
+
+type ExtensionAction = Action & { id?: string }
+
+element.addEventListener(
   'message',
-  function (event) {
-    // only accept messages from this window
-    if (event.source !== window) {
-      return
-    }
+  function (event: CustomEvent<ExtensionAction>) {
+    const { detail } = event
 
-    const { data } = event
+    const { type, id, data } = detail
 
-    const { type, id, data: _data } = data
+    if (type === 'send') {
+      const { type: _type, data: _data } = data
 
-    if (type && type === 'EXTENSION_IN' && id) {
-      const { type: _type, data: __data } = _data
       switch (_type) {
-        case 'CALL':
-          // @ts-ignore
-          chrome.runtime.sendMessage(__data, (data) => {
-            // @ts-ignore
+        case CALL:
+          chrome.runtime.sendMessage(_data, (data) => {
             if (chrome.runtime.lastError) {
-              // @ts-ignore
-              // eslint-disable-next-line no-console
-              console.log(chrome.runtime.lastError.message)
+              const err = chrome.runtime.lastError.message.toLowerCase()
+
+              dispatchExtensionEvent('callback', id, { err })
             } else {
-              window.postMessage({ type: 'EXTENSION_OUT', id, data })
+              dispatchExtensionEvent('callback', id, data)
             }
           })
-          break
-        case 'PING':
-          window.postMessage({ type: 'EXTENSION_OUT', id, data: true })
+
           break
         default:
-          throw new Error('not supported')
+          dispatchExtensionEvent('callback', id, { err: 'not supported' })
       }
+    } else {
+      // ignore "callback"
     }
   },
   false

@@ -14,12 +14,12 @@ import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
 import { $Component } from '../types/interface/async/$Component'
 import { $Graph } from '../types/interface/async/$Graph'
-import { weakMerge } from '../types/weakMerge'
 import { insert, pull, push, remove, removeAt, unshift } from '../util/array'
 import { callAll } from '../util/call/callAll'
 import { _if } from '../util/control'
 import { appendChild, insertAt, removeChild } from '../util/element'
 import { forEachObjKV, get, set } from '../util/object'
+import { weakMerge } from '../weakMerge'
 import {
   DEFAULT_FONT_SIZE,
   DEFAULT_OPACITY,
@@ -31,9 +31,10 @@ import { addListener, addListeners } from './addListener'
 import { animateSimulate } from './animation/animateSimulate'
 import { namespaceURI } from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
-import { component_ } from './component_'
+import { getComponentInterface } from './component_'
 import { Context, dispatchContextEvent, dispatchCustomEvent } from './context'
 import { makeCustomListener } from './event/custom'
+import { readDataTransferItemAsText } from './event/drag'
 import { extractTrait } from './extractTrait'
 import {
   IOUIEventName,
@@ -43,6 +44,7 @@ import {
 import { mount } from './mount'
 import { rawExtractStyle } from './rawExtractStyle'
 import { getBaseStyle } from './reflectComponentBaseTrait'
+import { stopImmediatePropagation, stopPropagation } from './stopPropagation'
 import { applyStyle } from './style'
 import { unmount } from './unmount'
 import { NULL_VECTOR, addVector } from './util/geometry'
@@ -60,7 +62,7 @@ const $childToComponent = (
 
   { bundle }: $Child
 ): Component<IOElement, {}, $Component> => {
-  const { unit, specs } = bundle
+  const { unit, specs = {} } = bundle
 
   const { id, memory = { input: {} } } = unit
 
@@ -152,6 +154,8 @@ export class Component<
     this.$system = $system
     this.$element = $element
     this._$node = $node ?? $element
+
+    this.register()
   }
 
   get $node() {
@@ -238,23 +242,59 @@ export class Component<
   }
 
   stopPropagation(event: string): void {
-    this.$element.addEventListener(
-      event,
-      function (event: Event) {
-        event.stopPropagation()
-      },
-      { passive: true }
-    )
+    const base = this.getRootBase()
+
+    for (const [_, leaf] of base) {
+      leaf.$element.addEventListener(event, stopPropagation, { passive: true })
+    }
   }
 
   stopImmediatePropagation(event: string): void {
-    this.$element.addEventListener(
-      event,
-      function (event: Event) {
-        event.stopImmediatePropagation()
-      },
-      { passive: true }
-    )
+    this.$element.addEventListener(event, stopImmediatePropagation, {
+      passive: true,
+    })
+  }
+
+  attachText(type: string, text: string): void {
+    const base = this.getRootBase()
+
+    for (const [_, leaf] of base) {
+      leaf.$element.addEventListener('dragstart', (event: DragEvent) => {
+        event.dataTransfer.setData(type, text)
+      })
+    }
+  }
+
+  attachDropTarget(): void {
+    const rootLeaf = this.getFirstRootLeaf()
+
+    rootLeaf.$element.addEventListener('dragover', (event) => {
+      event.preventDefault()
+    })
+
+    rootLeaf.$element.addEventListener('drop', async (event: DragEvent) => {
+      event.preventDefault()
+
+      const { dataTransfer } = event
+
+      const { items } = dataTransfer
+
+      const promises: Promise<string>[] = []
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i]
+
+        promises.push(readDataTransferItemAsText(item))
+      }
+
+      const texts: string[] = await Promise.all(promises)
+
+      if (this.$unit) {
+        const $emitter = this.$unit.$refEmitter({ _: ['EE'] })
+
+        $emitter.$emit({ type: 'drop', data: texts }, NOOP)
+      }
+    })
   }
 
   preventDefault(event: string): Unlisten {
@@ -315,8 +355,14 @@ export class Component<
 
   scrollIntoView(opt: ScrollIntoViewOptions): void {
     if (this.$slot['default'] === this) {
-      if (this.$element instanceof HTMLElement) {
-        this.$element.scrollIntoView(opt)
+      if (this.$primitive) {
+        if (this.$element instanceof HTMLElement) {
+          this.$element.scrollIntoView(opt)
+        }
+      } else {
+        if (this.$root.length > 0) {
+          this.$root[0].scrollIntoView(opt)
+        }
       }
     } else {
       this.$slot['default'].scrollIntoView(opt)
@@ -386,6 +432,7 @@ export class Component<
         width: `${leafTrait.width}px`,
         height: `${leafTrait.height}px`,
         pointerEvents: 'none',
+        zIndex: '0',
         // border: `1px solid ${randomColorString()}`,
       })
 
@@ -424,7 +471,8 @@ export class Component<
           leafFrame.style.width = `${width}px`
           leafFrame.style.height = `${height}px`
           leafFrame.style.transform = `scale(${sx}, ${sy})`
-          leafFrame.style.opacity = `${opacity}`
+          // leafFrame.style.opacity = `${opacity}`
+          leafFrame.style.opacity = `1`
           leafFrame.style.fontSize = `${fontSize}px`
         },
         () => {
@@ -446,6 +494,36 @@ export class Component<
     }
 
     return callAll(allAbort)
+  }
+
+  register() {
+    const { registerLocalComponent } = this.$system
+
+    if (this.$localId) {
+      return
+    }
+
+    if (!this.$remoteId) {
+      return
+    }
+
+    this.$localId = registerLocalComponent(this, this.$remoteId)
+
+    this._forAllDescendent((child) => {
+      child.register()
+    })
+  }
+
+  unregister() {
+    const { unregisterLocalComponent } = this.$system
+
+    if (!this.$localId) {
+      return
+    }
+
+    unregisterLocalComponent(this.$remoteId, this.$localId)
+
+    this.$localId = undefined
   }
 
   detach(host: string, opt: { animate?: boolean }): void {
@@ -644,6 +722,16 @@ export class Component<
     }
 
     for (const subComponent of this.$mountParentChildren) {
+      callback(subComponent)
+    }
+  }
+
+  private _forAllDescendent(callback: Callback<Component>): void {
+    for (const subComponent of this.$root) {
+      callback(subComponent)
+    }
+
+    for (const subComponent of this.$parentChildren) {
       callback(subComponent)
     }
   }
@@ -975,7 +1063,7 @@ export class Component<
   }
 
   isBase(): boolean {
-    return this.$primitive && this.$root.length === 0
+    return this.$primitive && !this.$wrap && this.$root.length === 0
   }
 
   getRootBase(path: string[] = []): [string[], Component][] {
@@ -997,6 +1085,14 @@ export class Component<
     }
 
     return p
+  }
+
+  getFirstRootLeaf(): Component {
+    const base = this.getRootBase()
+
+    const [_, leaf] = base[0]
+
+    return leaf
   }
 
   getBase(path: string[] = []): [string[], Component][] {
@@ -1233,7 +1329,9 @@ export class Component<
 
   private _removeUnitEventListener = (event: string): void => {
     const unlisten = this.$named_unlisten[event]
+
     delete this.$named_unlisten[event]
+
     unlisten()
   }
 
@@ -1250,7 +1348,7 @@ export class Component<
         for (const unitId in this.$subComponent) {
           const childSubComponent = this.$subComponent[unitId]
 
-          const _ = component_(childSubComponent)
+          const _ = getComponentInterface(childSubComponent)
 
           const subUnit = ($unit as $Graph).$refSubComponent({ unitId, _ })
 
@@ -1290,6 +1388,7 @@ export class Component<
     const handler = {
       unit: (moment: UnitMoment) => {
         const { event: event_event, data: event_data } = moment
+
         if (event_event === 'append_child') {
           const bundle = event_data
 
@@ -1308,12 +1407,17 @@ export class Component<
           this.removeChildAt(at)
 
           child.destroy()
+        } else if (event_event === 'register') {
+          this.register()
+        } else if (event_event === 'unregister') {
+          this.unregister()
         }
       },
     }
 
     const unit_listener = (moment: Moment): void => {
       const { type } = moment
+
       handler[type] && handler[type](moment)
     }
 
@@ -1322,12 +1426,12 @@ export class Component<
     $unit.$getGlobalId({}, (remoteId: string) => {
       this.$remoteId = remoteId
 
-      this.$localId = this.$system.registerLocalComponent(this, remoteId)
+      this.register()
     })
 
     const all_unlisten: Unlisten[] = []
 
-    const events = ['append_child', 'remove_child']
+    const events = ['append_child', 'remove_child', 'register', 'unregister']
 
     const unit_unlisten = this.$unit.$watch({ events }, unit_listener)
 
@@ -1380,7 +1484,7 @@ export class Component<
   private _$instanceChild = ($child: $Child, at: number) => {
     const component = $childToComponent(this.$system, $child)
 
-    const _ = component_(component)
+    const _ = getComponentInterface(component)
 
     const $childRef = this.$unit.$refChild({ at, _ })
 
@@ -1405,8 +1509,6 @@ export class Component<
 
     if (!this.$connected) {
       throw new Error('component is not already disconnected')
-
-      return
     }
 
     this._unit_unlisten()
@@ -1699,7 +1801,7 @@ export class Component<
               at
             )
           } else {
-            this.domCommitRemoveChild(component)
+            this.domRemoveRoot(component.$mountRoot[i], at)
           }
 
           appendChild(component.$element, component.$mountRoot[i].$element)
@@ -2341,6 +2443,8 @@ export class Component<
   }
 
   public destroy() {
+    // console.log(this.constructor.name, 'destroy')
+
     this.onDestroy()
   }
 }

@@ -1,6 +1,6 @@
 import { Component } from './component'
 
-export function component_(component: Component): string[] {
+export function getComponentInterface(component: Component): string[] {
   let _ = ['EE', 'U', 'C', ...component.$_]
 
   if (component.$primitive) {

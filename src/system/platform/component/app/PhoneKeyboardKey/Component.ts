@@ -102,9 +102,6 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
       this.$system
     )
 
-    key_component.appendChild(key_text)
-    key_component.appendChild(alt_key_text)
-
     const releasePointer = (pointerId: number) => {
       this._pointer_down = false
 
@@ -193,6 +190,8 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
       )
 
       key_component.setChildren([icon_component])
+    } else {
+      key_component.setChildren([key_text, alt_key_text])
     }
 
     const $element = parentElement($system)

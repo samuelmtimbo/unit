@@ -62,9 +62,10 @@ export function showNotification(
     remove()
   }
 
-  let timer: NodeJS.Timer
+  let timer: number
 
   if (typeof timeout === 'number') {
+    // @ts-ignore
     timer = setTimeout(() => {
       remove()
     }, timeout)

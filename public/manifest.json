@@ -48,9 +48,9 @@
   "display": "fullscreen",
   "theme_color": "#7f7f7f",
   "background_color": "#1f1f1f",
-  "url": "https://ioun.it",
+  "url": "https://unit.software/system/x",
   "lang": "English",
-  "description": "unit is a Futuristic Programming Language and Environment designed for Personal and Professional usage.",
+  "description": "Extends the Unit Web System with Web Extension specific APIs.",
   "screenshots": [
     {
       "src": "screenshot/unit_screenshot_1280_800.png",

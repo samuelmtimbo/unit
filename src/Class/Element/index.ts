@@ -103,6 +103,11 @@ export class Element_<
       default: this,
     }
   }
+
+  isElement(): boolean {
+    return true
+  }
+
   detach(): void {
     throw new MethodNotImplementedError()
   }

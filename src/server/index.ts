@@ -8,7 +8,6 @@ import * as os from 'os'
 import { PATH_PUBLIC } from '../path'
 import { PORT } from './port'
 import compression = require('compression')
-import path = require('path')
 
 /* eslint-disable no-console */
 
@@ -33,6 +32,8 @@ const LOCAL_IP_ADDRESS = Object.values(os.networkInterfaces()).reduce(
 export let server: http.Server | null = null
 
 const app = express()
+
+app.disable('x-powered-by')
 
 app.use((req, res, next) => {
   const { url, method } = req

@@ -3,11 +3,18 @@ import Merge from '../Class/Merge'
 import { Unit, UnitEvents } from '../Class/Unit'
 import { Pin } from '../Pin'
 import { State } from '../State'
+import { isComponentSpec } from '../client/spec'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keys } from '../system/f/object/Keys/f'
-import { GraphPinSpec, GraphPinsSpec, GraphSubPinSpec, Specs } from '../types'
+import {
+  Classes,
+  GraphPinSpec,
+  GraphPinsSpec,
+  GraphSubPinSpec,
+  Specs,
+} from '../types'
 import { Action } from '../types/Action'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
@@ -32,7 +39,12 @@ export function lazyFromSpec(
   spec: GraphSpec,
   specs: Specs,
   branch: Dict<true> = {},
-  fromSpec: (spec: GraphSpec, specs: Specs, branch: Dict<true>) => GraphBundle
+  fromSpec: (
+    spec: GraphSpec,
+    specs: Specs,
+    classes: Classes,
+    branch: Dict<true>
+  ) => GraphBundle
 ): UnitClass {
   const { inputs, outputs, id } = spec
 
@@ -110,7 +122,7 @@ export function lazyFromSpec(
       newPinId: string,
       ...extra: any[]
     ): void {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     }
 
     fork(): void {
@@ -284,8 +296,7 @@ export function lazyFromSpec(
     }
 
     isElement(): boolean {
-      this._ensure()
-      return this.__graph.isElement()
+      return isComponentSpec(spec)
     }
 
     getMergeSpec(mergeId: string): GraphMergeSpec {
@@ -395,7 +406,7 @@ export function lazyFromSpec(
     private _load(): void {
       // console.log('Lazy', '_load', spec.name)
 
-      const Class = fromSpec(spec, specs, branch)
+      const Class = fromSpec(spec, specs, this.__system.classes, branch)
 
       this.__graph = new Class(this.__system)
 

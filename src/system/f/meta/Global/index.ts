@@ -1,5 +1,5 @@
 import { Unit } from '../../../../Class/Unit'
-import { ObjectUpdateType } from '../../../../Object'
+import { ObjectUpdateType } from '../../../../ObjectUpdateType'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { Unlisten } from '../../../../types/Unlisten'

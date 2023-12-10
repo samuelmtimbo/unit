@@ -1,5 +1,6 @@
 import { makeChangeListener } from './event/change'
-import { makeCustomListener } from './event/custom'
+import { makeDragEndListener } from './event/drag/dragend'
+import { makeDragOverListener } from './event/drag/dragover'
 import { makeDragStartListener } from './event/drag/dragstart'
 import { makeDropListener } from './event/drag/drop'
 import { makeInputListener } from './event/input'
@@ -29,6 +30,8 @@ export type IOUIEventName =
   | 'pointerenter'
   | 'pointerleave'
   | 'dragstart'
+  | 'dragover'
+  | 'dragend'
   | 'drop'
   | 'input'
   | 'change'
@@ -50,6 +53,8 @@ export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
   'pointerenter',
   'pointerleave',
   'dragstart',
+  'dragend',
+  'dragover',
   'drop',
   'input',
   'change',
@@ -86,6 +91,10 @@ export function makeUIEventListener(
       return makePointerLeaveListener(callback)
     case 'dragstart':
       return makeDragStartListener(callback)
+    case 'dragend':
+      return makeDragEndListener(callback)
+    case 'dragover':
+      return makeDragOverListener(callback)
     case 'drop':
       return makeDropListener(callback)
     case 'input':
@@ -102,8 +111,6 @@ export function makeUIEventListener(
       return makeKeypressListener(callback)
     case 'wheel':
       return makeWheelListener(callback)
-    case 'message':
-      return makeCustomListener('_message', callback)
     default:
       throw new Error(`unknown UI event: ${event}`)
   }

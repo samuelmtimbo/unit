@@ -1,0 +1,38 @@
+{
+  "name": "remote graph",
+  "inputs": {
+    "opt": {
+      "type": "{}",
+      "metadata": {
+        "examples": ["{}"]
+      }
+    },
+    "close": {
+      "type": "any",
+      "defaultIgnored": true
+    },
+    "message": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "graph": {
+      "type": "`U`&`G`",
+      "ref": true,
+      "icon": "graph"
+    },
+    "message": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "link",
+    "description": "remote peer graph",
+    "complexity": 9,
+    "tags": ["platform", "meta", "remote"]
+  },
+  "id": "57bcdd88-a4f4-49ab-92d4-ed1969895520",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

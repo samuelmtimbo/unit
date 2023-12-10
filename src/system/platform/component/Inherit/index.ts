@@ -9,7 +9,7 @@ export type I = {
 
 export type O = {}
 
-export default class Styler extends Element_<I, O> {
+export default class Inherit extends Element_<I, O> {
   constructor(system: System) {
     super(
       { i: ['style'], o: [] },

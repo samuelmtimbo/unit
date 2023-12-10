@@ -1,11 +1,11 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { getSpec } from '../../../../client/spec'
-import { cloneUnitBundle } from '../../../../cloneUnitClass'
+import { _cloneUnitBundle } from '../../../../cloneUnitClass'
 import { stringify } from '../../../../spec/stringify'
 import { System } from '../../../../system'
 import { UnitBundle } from '../../../../types/UnitBundle'
-import { weakMerge } from '../../../../types/weakMerge'
+import { weakMerge } from '../../../../weakMerge'
 import { ID_SET_INPUT } from '../../../_ids'
 
 export interface I<T> {
@@ -32,10 +32,14 @@ export default class SetInput<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ unit, name, data }: I<T>, done: Done<O<T>>): void {
-    const { id } = unit.__bundle.unit
+    const { __bundle } = unit
+
+    const {
+      unit: { id },
+    } = __bundle
 
     const spec = getSpec(
-      weakMerge(this.__system.specs, unit.__bundle.specs ?? {}),
+      weakMerge(this.__system.specs, __bundle.specs ?? {}),
       id
     )
 
@@ -47,12 +51,12 @@ export default class SetInput<T> extends Functional<I<T>, O<T>> {
       return
     }
 
-    const NewBundle: UnitBundle = cloneUnitBundle(unit)
+    const NewBundle: UnitBundle = _cloneUnitBundle(unit, __bundle)
 
     NewBundle.__bundle.unit.input = NewBundle.__bundle.unit.input || {}
     NewBundle.__bundle.unit.input[name] =
       NewBundle.__bundle.unit.input[name] || {}
-    NewBundle.__bundle.unit.input[name].data = stringify(data) // AD HOC
+    NewBundle.__bundle.unit.input[name].data = stringify(data)
 
     done({ unit: NewBundle })
   }

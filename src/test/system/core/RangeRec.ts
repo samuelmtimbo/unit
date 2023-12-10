@@ -9,7 +9,7 @@ import _specs from '../../../system/_specs'
 import { system } from '../../util/system'
 
 const spec = require('../../../system/core/loop/RangeRec/spec.json')
-const Range = fromSpec<{ any: any }, { bit: number }>(spec, _specs)
+const Range = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
 
 const range = new Range(system)
 

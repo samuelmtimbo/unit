@@ -1,7 +1,11 @@
 import { IOElement } from './IOElement'
 
-export default function stopPropagation(event: Event): void {
+export function stopPropagation(event: Event): void {
   event.stopPropagation()
+}
+
+export function stopImmediatePropagation(event: Event): void {
+  event.stopImmediatePropagation()
 }
 
 export function stopByPropagation($element: IOElement, name: string): void {

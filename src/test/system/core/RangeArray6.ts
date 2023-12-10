@@ -5,7 +5,7 @@ import _specs from '../../../system/_specs'
 import { system } from '../../util/system'
 
 const spec = require('../../../system/core/common/RangeArray6/spec.json')
-const RangeArray6 = fromSpec<{ any: any }, { bit: number }>(spec, _specs)
+const RangeArray6 = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
 
 const rangeArray6 = new RangeArray6(system)
 

@@ -13,7 +13,7 @@
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
-  "ignorePatterns": ["src/script/**/*.ts", "src/**/_*.ts"],
+  "ignorePatterns": ["src/script/**/*.ts", "src/**/_*.ts", "src/examples/**/*"],
   "rules": {
     "no-console": "error",
     "no-constant-condition": "off",

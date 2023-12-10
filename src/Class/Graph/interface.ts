@@ -1,6 +1,7 @@
 import { Position } from '../../client/util/geometry/types'
 import {
   GraphPinSpec,
+  GraphPlugOuterSpec,
   GraphSubComponentSpec,
   GraphSubPinSpec,
 } from '../../types'
@@ -37,6 +38,7 @@ export type GraphMoveSubGraphData = {
         subPinId: string
         ref?: boolean
         defaultIgnored?: boolean
+        plug?: GraphPlugOuterSpec
         mergeId?: string
         merge?: GraphMergeSpec
       }>

@@ -1,24 +1,21 @@
 import { IOElement } from './client/IOElement'
 import { LayoutNode } from './client/LayoutNode'
+import { Theme } from './client/theme'
 import { Rect, Size } from './client/util/geometry/types'
-import {
-  APIAlert,
-  APIChannel,
-  APIHTTP,
-  APIStorage,
-  IFilePickerOpt,
-} from './system'
 import { Style } from './system/platform/Props'
 import { Dict } from './types/Dict'
+import { Unlisten } from './types/Unlisten'
 import {
   IBluetoothDevice,
   IBluetoothDeviceOpt,
 } from './types/global/IBluetoothDevice'
+import { IChannel, IChannelOpt } from './types/global/IChannel'
 import { IDeviceInfo } from './types/global/IDeviceInfo'
 import { IDisplayMediaOpt } from './types/global/IDisplayMedia'
 import { IDownloadDataOpt as IDownloadTextOpt } from './types/global/IDownloadData'
 import { IDownloadURLOpt } from './types/global/IDownloadURL'
 import { IGeoPosition } from './types/global/IGeoPosition'
+import { IIntersectionObserverConstructor } from './types/global/IIntersectionObserver'
 import { IMutationObserverConstructor } from './types/global/IMutationObserver'
 import { IPositionObserverCostructor } from './types/global/IPositionObserver'
 import { IResizeObserverConstructor } from './types/global/IResizeObserver'
@@ -40,18 +37,60 @@ import {
 } from './types/global/ISpeechSynthesisUtterance'
 import { IUserMediaOpt } from './types/global/IUserMedia'
 import { IWakeLock, IWakeLockOpt } from './types/global/IWakeLock'
-import { Unlisten } from './types/Unlisten'
+import { J } from './types/interface/J'
+
+declare global {
+  type ImageCapture = any
+}
+
+export type BasicHTTPResponse = {
+  status: number
+  headers: Dict<string>
+  body: string
+}
+
+export type BasicHTTPRequest = {
+  headers: Dict<string>
+  method: string
+  path: string
+  body: string
+}
+
+export type BasicHTTPHandler = (
+  req: BasicHTTPRequest
+) => Promise<BasicHTTPResponse>
+
+export type IFilePickerOpt = {
+  suggestedName?: string
+  startIn?: string
+  id?: string
+  excludeAcceptAllOption?: boolean
+  types?: {
+    description: string
+    accept: Dict<string[]>
+  }[]
+  multiple?: boolean
+  capture?: string
+  accept?: string
+}
 
 export type API = {
   animation: {
     requestAnimationFrame: (callback: FrameRequestCallback) => number
     cancelAnimationFrame: (frame: number) => void
   }
-  storage: APIStorage
+  storage: { local: () => J }
   db: IDBFactory
-  http: APIHTTP
-  channel: APIChannel
-  alert: APIAlert
+  http: {
+    fetch: (url: string, opt: RequestInit) => Promise<Response>
+    listen: (port: number, handler: BasicHTTPHandler) => Unlisten
+    EventSource: typeof EventSource
+  }
+  channel: { local: (opt: IChannelOpt) => IChannel }
+  alert: {
+    alert: (message: string) => void
+    prompt: (message: string) => string
+  }
   navigator: {
     share: (data: ShareData) => Promise<void>
   }
@@ -129,6 +168,10 @@ export type API = {
   location: {
     toString: () => Promise<string>
   }
+  history: {
+    pushState: (data: any, title: string, url: string) => void
+    replaceState: (data: any, title: string, url: string) => void
+  }
   media: {
     getUserMedia: (opt: IUserMediaOpt) => Promise<MediaStream>
     getDisplayMedia: (opt: IDisplayMediaOpt) => Promise<MediaStream>
@@ -153,6 +196,11 @@ export type API = {
     GainNode: GainNode
     DelayNode: DelayNode
     ImageCapture: ImageCapture
+    CompressionStream: { new (format: CompressionFormat): CompressionStream }
+    DecompressionStream: {
+      new (format: CompressionFormat): DecompressionStream
+    }
+    ReadableStream: ReadableStream
     open: (url: string, target: string, features: string) => Window
   }
   document: {
@@ -166,12 +214,15 @@ export type API = {
     createTextNode(text: string): Text
     elementsFromPoint(x: number, y: number): Element[]
     elementFromPoint(x: number, y: number): Element
+    exitPictureInPicture(): Promise<void>
     getSelection(): Selection
     createRange(): Range
     exitPictureInPicture(): Promise<void>
+    setTheme(theme: Theme): Promise<void>
     MutationObserver: IMutationObserverConstructor
     PositionObserver: IPositionObserverCostructor
     ResizeObserver: IResizeObserverConstructor
+    IntersectionObserver: IIntersectionObserverConstructor
   }
   querystring: {
     stringify: (obj: Dict<any>) => string

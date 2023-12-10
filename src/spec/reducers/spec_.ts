@@ -1,10 +1,9 @@
-import { SELF } from '../../constant/SELF'
-import pathGet from '../../system/core/object/DeepGet/f'
+import deepGet from '../../deepGet'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
-import { GraphPinSpec, GraphSubPinSpec, Spec } from '../../types'
+import { GraphPinSpec, GraphSubPinSpec } from '../../types'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitSpec } from '../../types/GraphUnitSpec'
@@ -22,13 +21,13 @@ import {
   pathOrDefault,
   pathSet,
 } from '../../util/object'
+import { getSubComponentParentId } from '../util/component'
 import {
   forEachPinOnMerges,
   getMergePinCount,
-  getSubComponentParentId,
   getUnitMergesSpec,
   getUnitPlugs,
-} from '../util'
+} from '../util/spec'
 import {
   insertChild,
   insertSubComponentChild,
@@ -139,10 +138,10 @@ export const removeUnitMerges = (
           } else if (mergePinCount === 1) {
             const otherMergeUnitId = getObjSingleKey(mergeSpec)
             const otherMergeUnitType = getObjSingleKey(
-              mergeSpec?.[otherMergeUnitId]
+              mergeSpec?.[otherMergeUnitId] ?? {}
             )
             const otherMergeUnitPinId = getObjSingleKey(
-              mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType]
+              mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType] ?? {}
             )
 
             pathSet(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {
@@ -417,7 +416,7 @@ export const setUnitId = (
   forIOObjKV(
     unitPlugs,
     (type, pinId, { type: _type, pinId: _pinId, subPinId: _subPinId }) => {
-      const subPinSpec = pathGet(specClone, [
+      const subPinSpec = deepGet(specClone, [
         `${_type ?? type}s`,
         _pinId,
         'plug',
@@ -587,7 +586,7 @@ export const setPinSetId = (
   { type, pinId, newId }: { type: IO; pinId: string; newId: string },
   spec: GraphSpec
 ): void => {
-  const pinSpec = pathGet(spec, [`${type}s`, pinId])
+  const pinSpec = deepGet(spec, [`${type}s`, pinId])
 
   pathDelete(spec, [`${type}s`, pinId])
   pathSet(spec, [`${type}s`, newId], pinSpec)
@@ -764,16 +763,6 @@ export const setSubComponentSize = (
     width,
     height,
   })
-}
-
-export const isPinRef = (
-  { type, pinId }: { type: IO; pinId: string },
-  spec: Spec
-) => {
-  return (
-    pathOrDefault(spec, [`${type}s`, pinId, 'ref'], false) ||
-    (type === 'output' && pinId === SELF)
-  )
 }
 
 export const renameUnitPin = (

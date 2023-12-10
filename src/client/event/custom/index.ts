@@ -24,13 +24,14 @@ export function listenCustom(
 
   const _type = `_${type}`
 
-  const { customEvent: $customEvent, context: $context } = $system
+  const { customEvent, context } = $system
 
-  if (!$customEvent.has(type)) {
-    for (const $c of $context) {
-      stopByPropagation($c.$element, _type)
+  if (!customEvent.has(type)) {
+    for (const c of context) {
+      stopByPropagation(c.$element, _type)
     }
-    $customEvent.add(type)
+
+    customEvent.add(type)
   }
 
   $listenCount[type] = $listenCount[type] || 0

@@ -11,7 +11,13 @@ import { UnitMoment } from './UnitMoment'
 import { UnitRenamePinMoment } from './UnitRenamePinMoment'
 
 export function watchUnitEvent(
-  event: 'destroy' | 'reset' | 'listen' | 'unlisten',
+  event:
+    | 'destroy'
+    | 'reset'
+    | 'listen'
+    | 'unlisten'
+    | 'register'
+    | 'unregister',
   unit: Unit,
   callback: (moment: UnitMoment) => void
 ): () => void {

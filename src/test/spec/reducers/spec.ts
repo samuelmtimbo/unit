@@ -21,7 +21,7 @@ import {
   setUnitOutputIgnored,
   setUnitPinData,
 } from '../../../spec/reducers/spec'
-import { getMergePinCount } from '../../../spec/util'
+import { getMergePinCount } from '../../../spec/util/spec'
 import { ID_IDENTITY } from '../../../system/_ids'
 
 assert.deepEqual(

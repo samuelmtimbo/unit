@@ -11,7 +11,7 @@ const spec =
 const HasLength = fromSpec<
   { a: number[]; b: number },
   { true: number[]; false: number[] }
->(spec, _specs)
+>(spec, _specs, {})
 
 const hasLength = new HasLength(system)
 
