@@ -8,7 +8,7 @@ import { system } from '../../util/system'
 const spec =
   require('../../../system/core/common/RandomBit/spec.json') as GraphSpec
 
-const RandomBit = fromSpec<{ any: any }, { bit: number }>(spec, _specs)
+const RandomBit = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
 
 const randomBit = new RandomBit(system)
 

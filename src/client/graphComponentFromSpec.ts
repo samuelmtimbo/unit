@@ -1,4 +1,4 @@
-import { fromSpec } from '../spec/fromSpec'
+import { graphFromSpec } from '../spec/fromSpec'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
@@ -16,9 +16,7 @@ export function graphComponentFromSpec(
 ): Client {
   const { specs } = system
 
-  const Class = fromSpec(spec, specs)
-
-  const graph = new Class(system)
+  const graph = graphFromSpec(system, spec, specs)
 
   for (const pinId in input) {
     const data = input[pinId]

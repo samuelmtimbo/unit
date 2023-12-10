@@ -84,13 +84,12 @@ export class Registry implements R {
       }
 
       visited.add(specId)
-
       const { units } = spec
 
       for (const unitId in units) {
         const unit = units[unitId]
 
-        if (this.hasSpec(unit.id) && !!this.specs[unit.id]) {
+        if (this.hasSpec(unit.id)) {
           //
         } else {
           const spec = newSpecs[unit.id]

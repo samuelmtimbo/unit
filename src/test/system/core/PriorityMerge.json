@@ -149,8 +149,7 @@
         "tags": ["core", "common"]
       },
       "id": "cd9d76f0-8eee-11ea-96c8-e3ee1362938c",
-      "type": "`U`&`G`",
-      "system": true
+      "type": "`U`&`G`"
     },
     "c4cf2732-907c-11ea-82fc-87f8cee9f066": {
       "name": "priority for each",
@@ -347,8 +346,7 @@
         "tags": ["core", "common"]
       },
       "id": "c4cf2732-907c-11ea-82fc-87f8cee9f066",
-      "type": "`U`&`G`",
-      "system": true
+      "type": "`U`&`G`"
     },
     "71744c98-0364-49af-b350-a34f68182c96": {
       "name": "priority head",

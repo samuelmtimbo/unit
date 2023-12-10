@@ -1,5 +1,6 @@
 import { copy, writeFile } from 'fs-extra'
 import { build } from '../build'
+
 ;(async () => {
   const result = await build({
     minify: true,

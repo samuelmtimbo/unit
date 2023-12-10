@@ -1,8 +1,6 @@
 import * as assert from 'assert'
 import { $setDatum } from '../../../spec/reducers/data'
 
-// setDatum
-
 assert.deepEqual(
   {
     data0: { value: 'foo' },

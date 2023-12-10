@@ -1,4 +1,5 @@
 import { $ } from '../Class/$'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
 import { AC } from '../types/interface/AC'
 
@@ -29,7 +30,7 @@ export function wrapAudioContext(
     }
 
     createAnalyser(opt: AnalyserOptions): AnalyserNode {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     }
   })(system)
 

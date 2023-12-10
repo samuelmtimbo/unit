@@ -25,7 +25,7 @@
   },
   "metadata": {
     "icon": "mic",
-    "description": "hear me",
+    "description": "transcribe user's microphone speech recording",
     "complexity": 3,
     "tags": [
       "platform",

@@ -5,6 +5,7 @@ import { cloneUnitBundle } from '../../../../cloneUnitClass'
 import { System } from '../../../../system'
 import { IO } from '../../../../types/IO'
 import { UnitBundle } from '../../../../types/UnitBundle'
+import { weakMerge } from '../../../../weakMerge'
 import { ID_UNSET_PIN } from '../../../_ids'
 import Unit from '../../meta/Unit'
 
@@ -18,10 +19,7 @@ export interface O<T extends Unit> {
   unit: UnitBundle<T>
 }
 
-export default class TakePinData<T extends Unit> extends Functional<
-  I<T>,
-  O<T>
-> {
+export default class UnsetPin<T extends Unit> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
@@ -40,11 +38,11 @@ export default class TakePinData<T extends Unit> extends Functional<
       specs,
     } = unit.__bundle
 
-    // RETURN
-    const spec = getSpec({ ...specs, ...this.__system.specs }, id)
+    const spec = getSpec(weakMerge(specs, this.__system.specs), id)
 
     if (!spec[`${type}s`][name]) {
       done(undefined, `${type} not found`)
+
       return
     }
 

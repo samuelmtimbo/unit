@@ -1,6 +1,6 @@
 import { Component } from '../../../../client/component'
 import { componentClassFromSpecId } from '../../../../client/componentClassFromSpecId'
-import { component_ } from '../../../../client/component_'
+import { getComponentInterface } from '../../../../client/component_'
 import { parentClass } from '../../../../client/createParent'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
@@ -126,7 +126,7 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
   private _connected_container = (at: number, method: string): Component => {
     const container = new this._Container({}, this.$system)
 
-    const _ = component_(container)
+    const _ = getComponentInterface(container)
 
     const containerUnit = this.$unit[`${method}`]({ at, _ })
 

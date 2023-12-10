@@ -24,6 +24,16 @@ export default class Stringify<T> extends Functional<I<T>, O> {
   }
 
   f({ json }: I<T>, done): void {
-    done({ string: JSON.stringify(json) })
+    let string: string
+
+    try {
+      string = JSON.stringify(json)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
+
+    done({ string })
   }
 }

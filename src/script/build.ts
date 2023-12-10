@@ -1,5 +1,8 @@
 import * as esbuild from 'esbuild'
-import { DEFAULT_BUILD_OPTIONS, DEFAULT_WATCH_OPTIONS } from '../buildBundle'
+import {
+  DEFAULT_BUILD_OPTIONS,
+  DEFAULT_WATCH_OPTIONS,
+} from '../build/constants'
 
 export async function watch(opt: esbuild.BuildOptions): Promise<any> {
   const context = await esbuild.context({ ...DEFAULT_WATCH_OPTIONS, ...opt })

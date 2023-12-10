@@ -32,10 +32,8 @@ public/sw.js.map
 
 src/client/static/js/index.js.ts
 
-src/client/extension/src/background.js
-src/client/extension/src/content.js
-src/client/extension/src/popup.js
-src/client/extension/src/options.js
+src/client/extension/src/*.js
+src/client/extension/src/*.js.map
 
 package-lock.json
 yarn.lock

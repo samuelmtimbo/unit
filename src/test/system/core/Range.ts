@@ -10,11 +10,12 @@ import { system } from '../../util/system'
 
 const spec = require('../../../system/core/loop/Range/spec.json')
 
-const Range = fromSpec<{ any: any }, { bit: number }>(spec, _specs)
+const Range = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
 
 const range = new Range(system)
 
 range.setOutputIgnored('test', true)
+range.setOutputIgnored('final', true)
 
 false && watchUnitAndLog(range)
 false && watchGraphAndLog(range)

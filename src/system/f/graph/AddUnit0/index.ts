@@ -9,7 +9,8 @@ import { GraphBundle } from '../../../../types/GraphClass'
 import { GraphSpec } from '../../../../types/GraphSpec'
 import { GraphUnitSpec } from '../../../../types/GraphUnitSpec'
 import { UnitBundle } from '../../../../types/UnitBundle'
-import { weakMerge } from '../../../../types/weakMerge'
+import { clone } from '../../../../util/object'
+import { weakMerge } from '../../../../weakMerge'
 import { ID_ADD_UNIT_0 } from '../../../_ids'
 
 export interface I<T> {
@@ -78,13 +79,15 @@ export default class AddUnit0<T> extends Functional<I<T>, O<T>> {
       const new_spec_id = newSpecId(specs)
       const spec = getSpec(specs, graph.__bundle.unit.id) as GraphSpec
 
-      const new_spec: GraphSpec = { ...spec, id: new_spec_id }
+      const new_spec: GraphSpec = clone(spec)
+
+      new_spec.id = new_spec_id
 
       addUnit({ unitId: id, unit: unit_graph_spec }, new_spec)
 
       const new_bundle = bundleSpec(new_spec, specs)
 
-      new_graph = fromBundle(new_bundle, specs)
+      new_graph = fromBundle(new_bundle, specs, this.__system.classes)
     } catch (err) {
       done(undefined, err.message)
 

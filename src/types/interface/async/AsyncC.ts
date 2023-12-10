@@ -9,7 +9,7 @@ import {
 } from '../../../component/$component'
 import { $Child } from '../../../component/Child'
 import { $Children } from '../../../component/Children'
-import { fromId } from '../../../spec/fromId'
+import { bundleFromId } from '../../../spec/fromId'
 import { Callback } from '../../Callback'
 import { Component_ } from '../Component'
 import { $C, $C_C, $C_R, $C_W } from './$C'
@@ -25,7 +25,7 @@ export const AsyncCCall = (c: Component_): $C_C => {
       }: { specs: Specs; specId: string; classes: Classes },
       callback: Callback<number>
     ): void {
-      const Class = fromId<Component_>(specId, specs, classes)
+      const Class = bundleFromId<Component_>(specId, specs, classes)
 
       $appendChild(c, Class, callback)
     },

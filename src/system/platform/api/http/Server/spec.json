@@ -1,0 +1,38 @@
+{
+  "name": "server",
+  "inputs": {
+    "port": {
+      "type": "number",
+      "metadata": {
+        "examples": [
+          "8080"
+        ]
+      }
+    },
+    "done": {
+      "type": "any"
+    },
+    "res": {
+      "type": "{headers?:string{},status?:number,body?:string}"
+    }
+  },
+  "outputs": {
+    "req": {
+      "type": "{headers:string{},method:string,path:string,body:string,query:string}"
+    }
+  },
+  "metadata": {
+    "icon": "map-pin",
+    "description": "current gps latitude and latitude",
+    "complexity": 3,
+    "tags": [
+      "platform",
+      "api",
+      "http"
+    ]
+  },
+  "id": "8f72e51a-0c65-47f6-b22b-868c8a00c6dc",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

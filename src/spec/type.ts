@@ -25,7 +25,7 @@ import {
   findGenerics,
   getTree,
 } from './parser'
-import { findFirstMergePin, forEachPinOnMerge } from './util'
+import { findFirstMergePin, forEachPinOnMerge } from './util/spec'
 
 export type TypeInterface = IOOf<Dict<string>>
 export type TypeTreeInterface = IOOf<Dict<TreeNode>>
@@ -167,8 +167,8 @@ export const _getGraphTypeInterface = (
     if (type) {
       inputType = getTree(type)
     } else {
-      forEachValueKey(plug, ({ mergeId, unitId, pinId }) => {
-        let subPinType
+      forEachValueKey(plug, ({ mergeId, unitId, pinId, kind = 'input' }) => {
+        let subPinType: TreeNode
 
         if (mergeId) {
           const merge = spec.merges[mergeId] ?? {}
@@ -188,7 +188,7 @@ export const _getGraphTypeInterface = (
         } else if (unitId && pinId) {
           subPinType = pathOrDefault(
             unitTypeMap,
-            [unitId, 'input', pinId],
+            [unitId, kind, pinId],
             undefined
           )
         }
@@ -207,13 +207,13 @@ export const _getGraphTypeInterface = (
     if (type) {
       outputType = getTree(type)
     } else {
-      forEachValueKey(plug, ({ mergeId, unitId, pinId }) => {
+      forEachValueKey(plug, ({ mergeId, unitId, pinId, kind = 'output' }) => {
         let subPinType
 
         if (mergeId) {
           const merge = spec.merges[mergeId]
 
-          let type
+          let type: TreeNode
 
           forEachPinOnMerge(merge, (unitId, kind, pinId) => {
             if (kind === 'output') {
@@ -240,7 +240,7 @@ export const _getGraphTypeInterface = (
         } else if (unitId && pinId) {
           subPinType = pathOrDefault(
             unitTypeMap,
-            [unitId, 'output', pinId],
+            [unitId, kind, pinId],
             undefined
           )
         }

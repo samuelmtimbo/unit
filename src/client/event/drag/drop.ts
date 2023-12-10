@@ -19,8 +19,11 @@ export function listenDrop(
 ): () => void {
   const { $element } = component
 
-  const dragOverListener = (_event: DragEvent) => {
+  const dropListener = (_event: DragEvent) => {
     const { $context } = component
+
+    // AD HOC
+    _event.preventDefault()
 
     const { dataTransfer } = _event
 
@@ -32,8 +35,8 @@ export function listenDrop(
     listener(event, _event)
   }
 
-  $element.addEventListener('drop', dragOverListener, _global)
+  $element.addEventListener('drop', dropListener, _global)
   return () => {
-    $element.removeEventListener('drop', dragOverListener, _global)
+    $element.removeEventListener('drop', dropListener, _global)
   }
 }

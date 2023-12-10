@@ -1,5 +1,5 @@
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
-import { ObjectUpdateType } from '../Object'
+import { ObjectUpdateType } from '../ObjectUpdateType'
 import { Primitive, PrimitiveEvents } from '../Primitive'
 import { State } from '../State'
 import { System } from '../system'
@@ -67,7 +67,6 @@ export class Stateful<
   }
 
   onDataInputData(name: string, data: any): void {
-    // console.log('Stateful', 'onDataInputData', name, data)
     this._forwarding = true
     this.set(name, data)
     this._forwarding = false

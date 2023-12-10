@@ -42,6 +42,8 @@ export default class Register extends Semifunctional<I, O> {
     // TODO
 
     this.__system.global.scope[name] = ref
+
+    this.__system.emitter.emit('register', name, ref)
   }
 
   public onIterDataInputData(name: string, data: any): void {

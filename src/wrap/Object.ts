@@ -1,4 +1,5 @@
-import { ObjectUpdateType, Object_ } from '../Object'
+import { Object_ } from '../Object'
+import { ObjectUpdateType } from '../ObjectUpdateType'
 import { SharedRef } from '../SharefRef'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'

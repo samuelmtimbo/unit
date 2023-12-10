@@ -12,7 +12,7 @@ export interface O {
 }
 
 export default class Interval extends Semifunctional<I, O> {
-  private _interval: NodeJS.Timer | null = null
+  private _interval: number | null = null
 
   constructor(system: System) {
     super(
@@ -41,6 +41,7 @@ export default class Interval extends Semifunctional<I, O> {
   public f({ ms }: I, done: Done<O>): void {
     this._reset()
 
+    // @ts-ignore
     this._interval = setInterval(() => {
       this.pushOutput('ms', ms)
     }, ms)

@@ -9,9 +9,9 @@ import {
 } from '../../../../../client/component/getDatumSize'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
-import { idFromUnitValue } from '../../../../../client/idFromUnitValue'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
+import { idFromUnitValue } from '../../../../../spec/idFromUnitValue'
 import {
   _isValidObjKeyType,
   getTree,

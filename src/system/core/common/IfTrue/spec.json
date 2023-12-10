@@ -60,7 +60,7 @@
     }
   },
   "outputs": {
-    "false": {
+    "true": {
       "plug": {
         "0": {
           "unitId": "if",

@@ -1,0 +1,322 @@
+{
+  "type": "`U`&`G`",
+  "name": "get many",
+  "units": {
+    "loop": {
+      "id": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {},
+        "test": {},
+        "init": {
+          "constant": false
+        }
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -40,
+              "y": -28
+            }
+          }
+        },
+        "final": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -56,
+              "y": -10
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -61,
+          "y": 7
+        }
+      }
+    },
+    "emptyobject": {
+      "id": "dc6e6bc0-081b-11eb-baf7-b7383b70c236",
+      "input": {
+        "any": {
+          "metadata": {
+            "position": {
+              "x": -169,
+              "y": 32
+            }
+          }
+        }
+      },
+      "output": {
+        "{}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -170,
+          "y": 25
+        }
+      }
+    },
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": 61,
+              "y": -98
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 39,
+              "y": -84
+            }
+          }
+        },
+        "current": {},
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 124,
+              "y": -90
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 35,
+          "y": -62
+        }
+      }
+    },
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 41,
+          "y": 38
+        }
+      }
+    },
+    "foreach": {
+      "id": "e2da2ac1-26bd-4c91-b8ad-a0395d9c8857",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 61,
+              "y": 53
+            }
+          }
+        }
+      },
+      "output": {
+        "a[i]": {},
+        "a": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 28,
+              "y": 0
+            }
+          }
+        },
+        "i": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 122,
+              "y": 40
+            }
+          }
+        },
+        "test": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 30,
+          "y": -1
+        }
+      }
+    },
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 126,
+          "y": -8
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "foreach": {
+        "output": {
+          "test": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "1": {
+      "emptyobject": {
+        "output": {
+          "{}": true
+        }
+      },
+      "loop": {
+        "input": {
+          "init": true
+        }
+      }
+    },
+    "2": {
+      "set": {
+        "output": {
+          "obj": true
+        }
+      },
+      "loop": {
+        "input": {
+          "next": true
+        }
+      }
+    },
+    "3": {
+      "set": {
+        "input": {
+          "obj": true
+        }
+      },
+      "loop": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "4": {
+      "set": {
+        "input": {
+          "key": true
+        }
+      },
+      "foreach": {
+        "output": {
+          "a[i]": true
+        }
+      },
+      "get": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "5": {
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      },
+      "get": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "6": {
+      "set": {
+        "input": {
+          "value": true
+        }
+      },
+      "get": {
+        "output": {
+          "value": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "emptyobject",
+          "pinId": "any"
+        },
+        "1": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
+      "functional": true
+    },
+    "keys": {
+      "plug": {
+        "0": {
+          "unitId": "foreach",
+          "pinId": "a"
+        }
+      },
+      "functional": true
+    }
+  },
+  "outputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "loop",
+          "pinId": "final",
+          "kind": "output"
+        }
+      },
+      "type": "object",
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "question",
+    "description": "create new `obj` by picking `keys` from input `obj`",
+    "tags": ["core", "object"]
+  },
+  "id": "034734a1-719b-41af-845f-ea50a4964d52",
+  "component": {}
+}

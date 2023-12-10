@@ -1,6 +1,6 @@
+import deepGet from '../../deepGet'
+import deepSet from '../../deepSet'
 import removeIndex from '../../system/core/array/RemoveIndex/f'
-import pathGet from '../../system/core/object/DeepGet/f'
-import deepSet from '../../system/core/object/DeepSet/f'
 import dissocPath from '../../system/core/object/DeletePath/f'
 import $indexOf from '../../system/f/array/IndexOf/f'
 import { _insert } from '../../system/f/array/Insert/f'
@@ -92,7 +92,7 @@ export const removeSubComponentChild = (
   { id, childId }: { id: string; childId: string },
   state: State
 ): State => {
-  const children = pathGet(state, ['subComponents', id, 'children'])
+  const children = deepGet(state, ['subComponents', id, 'children'])
   const { i } = $indexOf({ 'a[]': children, a: childId })
   const { a: _children } = removeIndex({ a: children, i })
   state = deepSet(state, ['subComponents', id, 'children'], _children)

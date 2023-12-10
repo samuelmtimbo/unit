@@ -176,7 +176,6 @@ export const keyToKeyCode = JSON.parse(`
 }
 `)
 
-// TODO
 export const keyToCode = JSON.parse(`{
   "0": "Digit0",
   "1": "Digit1",

@@ -46,3 +46,19 @@ export const parseDataTransferItems = (
 
   return result
 }
+
+export const readDataTransferItemAsText = (
+  dataTransferItem: DataTransferItem
+) => {
+  return new Promise<string>((resolve, reject) => {
+    if (dataTransferItem.kind === 'file') {
+      const file = dataTransferItem.getAsFile()
+
+      resolve(file.text())
+
+      return
+    } else {
+      dataTransferItem.getAsString(resolve)
+    }
+  })
+}

@@ -1,3 +1,4 @@
+import applyAttr from '../../../../client/applyAttr'
 import { namespaceURI } from '../../../../client/component/namespaceURI'
 import { Element } from '../../../../client/element'
 import { ensureIcon } from '../../../../client/ensureIcon'
@@ -12,6 +13,7 @@ export interface Props {
   icon?: string
   title?: string
   style?: Dict<string>
+  attr?: Dict<string>
   x?: number
   y?: number
   width?: number
@@ -41,7 +43,17 @@ export default class Icon extends Element<SVGSVGElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    let { className, icon, style = {}, x, y, width, height, tabIndex } = $props
+    let {
+      className,
+      icon,
+      style = {},
+      attr = {},
+      x,
+      y,
+      width,
+      height,
+      tabIndex,
+    } = $props
 
     const { title } = this.$props
 
@@ -74,6 +86,9 @@ export default class Icon extends Element<SVGSVGElement, Props> {
       )
       title_el.innerHTML = title
       $element.appendChild(title_el)
+    }
+    if (attr) {
+      applyAttr($element, attr)
     }
     this._svg_el = $element
 

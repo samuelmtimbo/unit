@@ -1,0 +1,118 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "children length",
+  "units": {
+    "length0": {
+      "id": "ec482aaf-0029-4b85-b03a-de5bd361d706",
+      "input": {
+        "a": {},
+        "any": {
+          "metadata": {
+            "position": {
+              "x": 20,
+              "y": 31
+            }
+          }
+        }
+      },
+      "output": {
+        "length": {
+          "metadata": {
+            "position": {
+              "x": 100,
+              "y": -3
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 57,
+          "y": 9
+        }
+      }
+    },
+    "children": {
+      "id": "d4945010-686d-431b-a884-1a4db0bfafc4",
+      "input": {
+        "parent": {
+          "metadata": {
+            "position": {
+              "x": -112,
+              "y": -21
+            }
+          }
+        }
+      },
+      "output": {
+        "children": {
+          "metadata": {
+            "position": {
+              "x": -6,
+              "y": -14
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -57,
+          "y": -9
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "length0": {
+        "input": {
+          "a": true
+        }
+      },
+      "children": {
+        "output": {
+          "children": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "length0",
+          "pinId": "any",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "parent": {
+      "plug": {
+        "0": {
+          "unitId": "children",
+          "pinId": "parent",
+          "kind": "input"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "length": {
+      "plug": {
+        "0": {
+          "unitId": "length0",
+          "pinId": "length",
+          "kind": "output"
+        }
+      },
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "get component children count"
+  },
+  "id": "5bfd6983-ac96-4b74-a469-c0add966cdf2"
+}

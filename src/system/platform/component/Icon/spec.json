@@ -9,6 +9,15 @@
         "examples": ["{}"]
       }
     },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "description": "",
+        "examples": ["{}"]
+      }
+    },
     "icon": {
       "type": "string",
       "optional": true,

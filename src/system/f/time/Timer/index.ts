@@ -12,7 +12,7 @@ export interface O {
 }
 
 export default class Timer extends Functional<I, O> {
-  private _timer: NodeJS.Timer | null = null
+  private _timer: number | null = null
 
   constructor(system: System) {
     super(
@@ -38,6 +38,8 @@ export default class Timer extends Functional<I, O> {
 
   public f({ ms }: I, done: Done<O>): void {
     this._reset()
+
+    // @ts-ignore
     this._timer = setTimeout(() => {
       this._timer = null
       done({ ms })

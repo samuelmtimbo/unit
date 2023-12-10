@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { fromId } from '../../../../spec/fromId'
+import { bundleFromId } from '../../../../spec/fromId'
 import { System } from '../../../../system'
 import { UnitBundle } from '../../../../types/UnitBundle'
 import { ID_ID_TO_CLASS } from '../../../_ids'
@@ -27,7 +27,7 @@ export default class IdToClass<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ id }: I<T>, done: Done<O<T>>): void {
-    const Class = fromId(id, this.__system.specs, this.__system.classes)
+    const Class = bundleFromId(id, this.__system.specs, this.__system.classes)
 
     done({ class: Class })
   }

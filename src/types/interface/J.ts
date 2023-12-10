@@ -1,4 +1,4 @@
-import { ObjectUpdateType } from '../../Object'
+import { ObjectUpdateType } from '../../ObjectUpdateType'
 import { Dict } from '../Dict'
 import { Unlisten } from '../Unlisten'
 

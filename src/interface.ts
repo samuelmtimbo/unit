@@ -41,6 +41,9 @@ export const CLASS_TYPE_IMAGE_DATA = 'ID' // ImageData
 export const CLASS_TYPE_WRAPER = 'WP' // WraPer
 export const CLASS_TYPE_WINDOW = 'W' // Window
 export const CLASS_TYPE_MEDIA_ELEMENT = 'ME' // MediaElement
+export const CLASS_TYPE_OBSERVER = 'OB' // OBserver
+export const CLASS_TYPE_RESPONSE = 'RES' // RESponse
+export const CLASS_TYPE_BODY = 'BO' // BOdy
 
 export const INHERITANCE = {
   U: ['EE'],

@@ -25,6 +25,16 @@ export default class Format<T> extends Functional<I<T>, O> {
   }
 
   f({ json, space }: I<T>, done): void {
-    done({ string: JSON.stringify(json, null, space) })
+    let string: string
+
+    try {
+      string = JSON.stringify(json, null, space)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
+
+    done({ string })
   }
 }

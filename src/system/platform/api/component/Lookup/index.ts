@@ -42,13 +42,15 @@ export default class Lookup extends Semifunctional<I, O> {
   }
 
   f({ unit, name }: I, done: Done<O>): void {
-    // TODO
-
     const ref = this.__system.global.scope[name]
 
     this.__system.emitter.addListener(
       'register',
-      (name: string, ref: Component_) => {}
+      (_name: string, ref: Component_) => {
+        if (_name === name) {
+          done({ ref })
+        }
+      }
     )
 
     if (ref) {

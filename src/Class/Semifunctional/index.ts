@@ -34,8 +34,6 @@ export class Semifunctional<
   protected _functional: Functional<any, any>
   protected _primitive: Primitive
 
-  private _i_input_err = false
-
   constructor(
     { fi = [], fo = [], i = [], o = [] }: SFIO,
     opt: Opt = {},
@@ -55,7 +53,7 @@ export class Semifunctional<
           },
           {},
           system,
-          `${id}__internal__functional`
+          `_${id}`
         )
       }
 
@@ -81,7 +79,7 @@ export class Semifunctional<
           },
           {},
           system,
-          `${id}__internal__primitive`
+          `_${id}`
         )
       }
 
@@ -225,4 +223,11 @@ export class Semifunctional<
   public onIterDataInputInvalid(name: string) {}
 
   public onIterRefInputInvalid(name: string) {}
+
+  public destroy(): void {
+    this._functional.destroy()
+    this._primitive.destroy()
+
+    super.destroy()
+  }
 }

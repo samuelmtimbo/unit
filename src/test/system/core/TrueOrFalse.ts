@@ -10,7 +10,7 @@ const spec =
 const TrueOrFalse = fromSpec<
   { a: boolean },
   { 'a = true': boolean; 'a = false': boolean }
->(spec, _specs)
+>(spec, _specs, {})
 
 const trueOrFalse = new TrueOrFalse(system)
 

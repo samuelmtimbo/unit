@@ -5,29 +5,26 @@ import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { evaluate } from './evaluate'
-import { evaluateMemorySpec } from './evaluateSpec'
-import { fromId } from './fromId'
+import { evaluateMemorySpec } from './evaluate/evaluateMemorySpec'
+import { unitFromId } from './fromId'
 
 export function unitFromBundleSpec(
   system: System,
-  unitBundleSpec: UnitBundleSpec,
+  bundle: UnitBundleSpec,
   specs: Specs,
   branch: Dict<true> = {}
 ): Unit {
   const {
     unit: { id, input, output },
-  } = unitBundleSpec
+  } = bundle
 
   const { classes } = system
 
-  if (unitBundleSpec.specs) {
-    // injectSpecs(specs, unitBundleSpec.specs)
-    system.injectSpecs(unitBundleSpec.specs)
+  if (bundle.specs) {
+    system.injectSpecs(bundle.specs)
   }
 
-  const Bundle = fromId(id, specs, classes, branch)
-
-  const unit = new Bundle(system)
+  const unit = unitFromId(system, id, specs, classes, branch)
 
   forEachValueKey(input || {}, (pinSpec = {}, pinId: string) => {
     const { constant, ignored } = pinSpec
@@ -50,7 +47,7 @@ export function unitFromBundleSpec(
 
   const {
     unit: { memory },
-  } = unitBundleSpec
+  } = bundle
 
   if (memory) {
     evaluateMemorySpec(memory, specs, classes)

@@ -1,13 +1,13 @@
 import { SELF } from '../../constant/SELF'
-import { isEmptyMerge } from '../../spec/isEmptyMerge'
+import deepGet from '../../deepGet'
 import {
   forEachPinOnMerge,
   getMergePinCount,
   getMergeTypePinCount,
   getMergeUnitPinCount,
+  isEmptyMerge,
   opposite,
-} from '../../spec/util'
-import pathGet from '../../system/core/object/DeepGet/f'
+} from '../../spec/util/spec'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'
 import { GraphPinSpec, GraphPlugOuterSpec, GraphSubPinSpec } from '../../types'
@@ -100,19 +100,18 @@ export function moveUnit(
   }
 
   const moveUnitPin = (type: IO, pinId: string): void => {
-    // console.log('movePinInto', unitId, type, pinId)
+    const {
+      pinId: nextPinId,
+      subPinId: nextSubPinId,
+      plug,
+      mergeId,
+      merge,
+    } = pathOrDefault(nextUnitPinMap, [type, pinId], {
+      pinId: undefined,
+      subPinId: undefined,
+    })
 
     if (!ignoredPin[type].has(pinId) && !unit.isPinIgnored(type, pinId)) {
-      const {
-        pinId: nextPinId,
-        subPinId: nextSubPinId,
-        mergeId,
-        merge,
-      } = pathOrDefault(nextUnitPinMap, [type, pinId], {
-        pinId: undefined,
-        subPinId: undefined,
-      })
-
       const shouldSwapMergePin =
         mergeId && (!ignoredMerge.has(mergeId) || reverse)
 
@@ -239,6 +238,7 @@ export function moveUnit(
                       unitId: graphId,
                       pinId: nextPinId,
                     },
+                    false,
                     false
                   )
 
@@ -314,6 +314,24 @@ export function moveUnit(
               )
             }
           }
+        }
+      }
+    }
+
+    if (plug) {
+      const { type, pinId, subPinId, kind = type } = plug
+
+      if (reverse) {
+        //
+      } else {
+        if (target.hasPlug(type, pinId, subPinId)) {
+          target.plugPin(type, pinId, subPinId, {
+            unitId: nextUnitId,
+            pinId,
+            kind,
+          })
+        } else {
+          //
         }
       }
     }
@@ -539,7 +557,7 @@ export function moveMerge(
   const moveMergePin = (unitId: string, type: IO, pinId: string): void => {
     const nextUnitId = nextIdMap.unit?.[unitId] || unitId
 
-    if (nextUnitId === graphId) {
+    if (unitId === graphId && !ignoredUnit.has(unitId)) {
       const pinSpec = target.getExposedPinSpec(type, pinId)
 
       const { plug } = pinSpec
@@ -571,7 +589,6 @@ export function moveMerge(
 
     const pickInput = !isInput && !ignoredUnit.has(unitId)
 
-    // if ((pickInput && nextInput) || (!pickInput && nextOutput)) {
     const {
       mergeId: nextMergeId,
       pinId: nextPinId,
@@ -593,7 +610,6 @@ export function moveMerge(
       ignoredUnit,
       reverse
     )
-    // }
   }
 
   forEachPinOnMerge(mergeSpec, moveMergePin)
@@ -619,7 +635,9 @@ export function moveMerge(
           getObjSingleKey(mergeSpec) === graphId
         ) {
           forEachPinOnMerge(mergeSpec, (_graphId, type, pinId) => {
-            target.coverPinSet(type, pinId)
+            if (target.hasPinNamed(type, pinId)) {
+              target.coverPinSet(type, pinId)
+            }
           })
         }
       }
@@ -1327,7 +1345,7 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
   }
 
   for (const { type, pinId, subPinId } of plug) {
-    const pinSpec = pathGet(pinSpecs, [type, pinId])
+    const pinSpec = deepGet(pinSpecs, [type, pinId])
     const subPinSpec = pathOrDefault(
       pinSpecs,
       [type, pinId, 'plug', subPinId],

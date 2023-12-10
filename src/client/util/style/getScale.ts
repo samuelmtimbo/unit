@@ -1,5 +1,5 @@
 import { IOElement } from '../../IOElement'
-import { parseTransformXY } from '../../parseTransformXY'
+import { parseTransform } from '../../parseTransform'
 
 export type Scale = {
   sx: number
@@ -20,7 +20,7 @@ export function getScale(element: IOElement): Scale {
       _rotate_x,
       _rotate_y,
       _rotate_z,
-    ] = parseTransformXY(transform, offsetWidth, offsetHeight)
+    ] = parseTransform(transform, offsetWidth, offsetHeight)
 
     return { sx, sy }
   } else {

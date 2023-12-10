@@ -1,3 +1,3 @@
-import { nodeBoot } from './boot'
+import { boot } from './boot'
 
-const system = nodeBoot()
+const system = boot()

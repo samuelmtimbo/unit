@@ -42,7 +42,6 @@ export function watchRefPinEvent(
       data: { type: pinType, pinId, data },
     })
   }
-  pin.prependListener(event, listener)
 
   if (event === 'data') {
     if (pin.active()) {
@@ -51,6 +50,8 @@ export function watchRefPinEvent(
       listener(_data)
     }
   }
+
+  pin.prependListener(event, listener)
 
   return () => {
     pin.removeListener(event, listener)

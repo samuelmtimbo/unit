@@ -22,6 +22,15 @@
           "{width:'100px',height:'100px'}"
         ]
       }
+    },
+    "attr": {
+      "plug": {
+        "0": {
+          "unitId": "div",
+          "pinId": "attr"
+        }
+      },
+      "type": "object"
     }
   },
   "outputs": {},
@@ -76,7 +85,10 @@
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
       "input": {
-        "style": {}
+        "style": {},
+        "attr": {
+          "ignored": false
+        }
       },
       "output": {},
       "metadata": {
@@ -114,12 +126,7 @@
     }
   },
   "component": {
-    "slots": [
-      [
-        "div",
-        "default"
-      ]
-    ],
+    "slots": [["div", "default"]],
     "subComponents": {
       "div": {
         "width": 120,
@@ -127,9 +134,7 @@
         "children": []
       }
     },
-    "children": [
-      "div"
-    ],
+    "children": ["div"],
     "defaultWidth": 120,
     "defaultHeight": 120
   },
@@ -137,11 +142,7 @@
     "icon": "square",
     "description": "div with a random background color",
     "complexity": 88,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
         "0": {

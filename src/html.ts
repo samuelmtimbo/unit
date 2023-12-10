@@ -39,13 +39,13 @@ export async function html(opt: WebTemplate): Promise<string> {
     />
     <meta
       http-equiv="Content-Security-Policy"
-      content="connect-src 'self' ws: http: blob: ipfs: ipns: hyper: data:"
+      content="connect-src 'self' ws: http: blob: ipfs: ipns: hyper: data: unit:"
     />
     <meta
       name="description"
       content="${description}"
     />
-    <meta name="theme-color" content="#f1f1f1" />
+    <meta name="theme-color" content="#ffffff" />
     ${pwa ? `<link rel="manifest" href="/manifest.json" />` : ''}
     <link rel="shortcut icon" href="favicon.svg" />
 

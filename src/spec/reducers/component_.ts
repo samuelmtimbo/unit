@@ -1,12 +1,12 @@
 import { GraphMoveSubComponentRootData } from '../../Class/Graph/interface'
-import pathGet from '../../system/core/object/DeepGet/f'
-import deepSet from '../../system/core/object/DeepSet/f'
+import deepGet from '../../deepGet'
+import deepSet from '../../deepSet'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { GraphComponentSpec, GraphSubComponentSpec } from '../../types'
 import { insert, pull, push, removeAt, reorder } from '../../util/array'
 import { pathDelete, pathOrDefault, pathSet } from '../../util/object'
-import { getComponentSubComponentParentId } from '../util'
+import { getComponentSubComponentParentId } from '../util/component'
 
 export const defaultState: GraphComponentSpec = {}
 
@@ -108,7 +108,7 @@ export const removeSubComponentChild = (
   { subComponentId, childId }: { subComponentId: string; childId: string },
   state: GraphComponentSpec
 ): void => {
-  const subComponent = pathGet(state, ['subComponents', subComponentId])
+  const subComponent = deepGet(state, ['subComponents', subComponentId])
 
   const { children = [], childSlot = {} } = subComponent
 

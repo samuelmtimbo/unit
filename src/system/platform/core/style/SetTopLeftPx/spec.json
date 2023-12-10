@@ -1,0 +1,118 @@
+{
+  "type": "`U`&`G`",
+  "name": "set top left px",
+  "units": {
+    "set0": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {
+          "constant": true,
+          "data": "{}",
+          "metadata": {
+            "position": {
+              "x": -123.98447658585758,
+              "y": 236.81172319973763
+            }
+          }
+        },
+        "key": {
+          "constant": true,
+          "data": "\"left\"",
+          "metadata": {
+            "position": {
+              "x": -48.257481422809064,
+              "y": 232.59708643485345
+            }
+          }
+        },
+        "value": {}
+      },
+      "output": { "obj": {} },
+      "metadata": { "position": { "x": 53, "y": 194 } }
+    },
+    "px": {
+      "id": "87c7b2b8-c17e-11ea-ba3a-072aa030b89f",
+      "input": { "n": {} },
+      "output": { "px": {} },
+      "metadata": { "position": { "x": 61, "y": 59 } }
+    },
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": { "constant": false },
+        "key": {
+          "constant": true,
+          "data": "\"top\"",
+          "metadata": {
+            "position": {
+              "x": 41.455115269298176,
+              "y": 163.18213935695036
+            }
+          }
+        },
+        "value": {}
+      },
+      "output": { "obj": {} },
+      "metadata": { "position": { "x": 143, "y": 126 } }
+    },
+    "px0": {
+      "id": "87c7b2b8-c17e-11ea-ba3a-072aa030b89f",
+      "input": { "n": {} },
+      "output": { "px": {} },
+      "metadata": { "position": { "x": -57, "y": 183 } }
+    }
+  },
+  "merges": {
+    "5": {
+      "set": { "input": { "obj": true } },
+      "set0": { "output": { "obj": true } }
+    },
+    "7": {
+      "set0": { "input": { "value": true } },
+      "px0": { "output": { "px": true } }
+    },
+    "8": {
+      "px": { "output": { "px": true } },
+      "set": { "input": { "value": true } }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "set0",
+          "pinId": "obj",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "y": {
+      "plug": {
+        "0": { "unitId": "px", "pinId": "n", "kind": "input" }
+      },
+      "ref": false
+    },
+    "x": {
+      "plug": {
+        "0": { "unitId": "px0", "pinId": "n", "kind": "input" }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "obj",
+          "kind": "output"
+        }
+      },
+      "ref": false
+    }
+  },
+  "metadata": { "icon": "object-set", "description": "" },
+  "id": "cc5e3d8d-1de5-4c12-9054-4c27b1a49d55",
+  "system": true
+}

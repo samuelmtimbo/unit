@@ -1,6 +1,6 @@
 import { Unit } from '../../../../../Class/Unit'
 import { EventEmitter_ } from '../../../../../EventEmitter'
-import { ObjectUpdateType } from '../../../../../Object'
+import { ObjectUpdateType } from '../../../../../ObjectUpdateType'
 import {
   getAllLocalStorage,
   getStorageKeys,

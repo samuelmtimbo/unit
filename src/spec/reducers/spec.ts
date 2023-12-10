@@ -1,5 +1,5 @@
-import pathGet from '../../system/core/object/DeepGet/f'
-import deepSet from '../../system/core/object/DeepSet/f'
+import deepGet from '../../deepGet'
+import deepSet from '../../deepSet'
 import dissocPath from '../../system/core/object/DeletePath/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
@@ -22,7 +22,7 @@ import {
   pathOrDefault,
 } from '../../util/object'
 import { emptyGraphSpec } from '../emptySpec'
-import { forEachPinOnMerges, getMergePinCount } from '../util'
+import { forEachPinOnMerges, getMergePinCount } from '../util/spec'
 
 export const defaultState: GraphSpec = emptyGraphSpec()
 
@@ -386,12 +386,12 @@ export const _removePinFromMerge = (
   state = dissocPath(state, ['merges', id, unitId, type, pinId]) as GraphSpec
 
   // remove type from unit if there are no more pins involved
-  if (isEmptyObject(pathGet(state, ['merges', id, unitId, type]))) {
+  if (isEmptyObject(deepGet(state, ['merges', id, unitId, type]))) {
     state = dissocPath(state, ['merges', id, unitId, type]) as GraphSpec
   }
 
   // remove unit from merge if there are no more pins involved
-  if (isEmptyObject(pathGet(state, ['merges', id, unitId]))) {
+  if (isEmptyObject(deepGet(state, ['merges', id, unitId]))) {
     state = dissocPath(state, ['merges', id, unitId]) as GraphSpec
   }
 
@@ -620,7 +620,7 @@ export const setPinSetId = (
   return deepSet(
     dissocPath(state, [`${type}s`, id]),
     [`${type}s`, newId],
-    pathGet(state, [`${type}s`, id])
+    deepGet(state, [`${type}s`, id])
   )
 }
 

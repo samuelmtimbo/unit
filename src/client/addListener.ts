@@ -21,7 +21,9 @@ export function addListener(
 
     if (i > -1) {
       const unlisten = $unlisten[i]
+
       unlisten()
+
       $listener.splice(i, 1)
       $unlisten.splice(i, 1)
     } else {

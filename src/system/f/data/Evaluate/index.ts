@@ -28,8 +28,18 @@ export default class Evaluate extends Functional<I, O> {
   f({ str }: I, done: Done<O>): void {
     const { specs, classes } = this.__system
 
+    let a: any
+
+    try {
+      a = evaluate(str, specs, classes)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
+
     done({
-      a: evaluate(str, specs, classes),
+      a,
     })
   }
 }

@@ -1,3 +1,3 @@
-import { nodeBoot } from '../../client/platform/node/boot'
+import { boot } from '../../client/platform/node/boot'
 
-export const system = nodeBoot()
+export const system = boot()

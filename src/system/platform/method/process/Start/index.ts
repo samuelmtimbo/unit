@@ -6,7 +6,7 @@ import { GraphBundle } from '../../../../../types/GraphClass'
 import { GraphSpec } from '../../../../../types/GraphSpec'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { $S } from '../../../../../types/interface/async/$S'
-import { weakMerge } from '../../../../../types/weakMerge'
+import { weakMerge } from '../../../../../weakMerge'
 import { $wrap } from '../../../../../wrap'
 import { ID_START } from '../../../../_ids'
 

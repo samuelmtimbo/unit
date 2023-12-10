@@ -1,0 +1,25 @@
+{
+  "name": "deep get",
+  "inputs": {
+    "path": {
+      "type": "string[]"
+    },
+    "obj": {
+      "type": "object"
+    }
+  },
+  "outputs": {
+    "result": {
+      "type": "any"
+    }
+  },
+  "id": "2ff102a7-b469-461f-a3b1-a61b81c1b325",
+  "type": "`U`&`G`",
+  "metadata": {
+    "icon": "object-get",
+    "description": "get value of `obj` at `path`",
+    "complexity": 36,
+    "tags": ["core", "object"]
+  },
+  "system": true
+}

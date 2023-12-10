@@ -1,24 +1,47 @@
+import { CALL, CALLBACK } from '../../constant/STRING'
 import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
 import { uuid } from '../../util/id'
 
-const isInstalled = (): boolean => {
-  const __EXTENSION_INSTALLED = !!document.getElementById(
-    '__EXTENSION_INSTALLED'
-  )
-  return __EXTENSION_INSTALLED
+const _callback: Dict<Callback> = {}
+
+export const SYSTEM_EXTENSION_ID = '___SYSTEM__EXTENSION___'
+
+export function getExtensionElement(): HTMLElement {
+  return document.getElementById(SYSTEM_EXTENSION_ID) as HTMLElement
 }
 
-const _callback: Dict<Callback> = {}
+export function isExtensionInstalled(): boolean {
+  const installed = !!getExtensionElement()
+
+  return installed
+}
+
+export function dispatchExtensionEvent(
+  type: 'send' | 'callback',
+  id: string,
+  data: any
+) {
+  const element = getExtensionElement()
+
+  element.dispatchEvent(
+    new CustomEvent('message', {
+      detail: { type, id, data },
+    })
+  )
+}
 
 export function postMessage(data: any, callback: Callback): void {
   setup()
 
-  const installed = isInstalled()
+  const installed = isExtensionInstalled()
+
   if (installed) {
     const id = uuid()
+
     _callback[id] = callback
-    window.postMessage({ type: 'EXTENSION_IN', id, data }, location.origin)
+
+    dispatchExtensionEvent('send', id, data)
   } else {
     callback(undefined, 'extension not installed')
   }
@@ -27,14 +50,14 @@ export function postMessage(data: any, callback: Callback): void {
 export function postCallMessage(data: any, callback: Callback<any>): void {
   postMessage(
     {
-      type: 'CALL',
+      type: CALL,
       data,
     },
     callback
   )
 }
 
-export function callMethod(
+export function callExtensionMethod(
   type: string,
   method: string,
   data: any,
@@ -57,21 +80,20 @@ export function setup(): void {
     return
   }
 
-  window.addEventListener('message', (event: MessageEvent) => {
-    // only accept messages from this window
-    if (event.source !== window) {
-      return
-    }
+  const element = getExtensionElement()
 
-    const { data } = event
+  element.addEventListener('message', (event: CustomEvent<any>) => {
+    const { detail } = event
 
-    const { type, id, data: _data } = data
+    const { type, id, data } = detail
 
-    if (type && type === 'EXTENSION_OUT' && id) {
+    if (type === CALLBACK) {
       const callback = _callback[id]
+
       if (callback) {
         delete _callback[id]
-        callback(_data)
+
+        callback(data)
       }
     }
   })

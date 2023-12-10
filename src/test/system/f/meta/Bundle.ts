@@ -1,7 +1,7 @@
-import * as assert from 'assert'
 import { watchUnitAndLog } from '../../../../debug'
 import { ID_IDENTITY } from '../../../../system/_ids'
 import Bundle from '../../../../system/f/meta/Bundle'
+import assert from '../../../../util/assert'
 import { system } from '../../../util/system'
 
 const bundle = new Bundle(system)
@@ -103,15 +103,26 @@ assert.deepEqual(bundle.take('bundle'), {
             },
           },
           memory: {
-            __buffer: {},
-            _forwarding: {},
-            _backwarding: {},
-            _forwarding_empty: {},
-            _looping: {},
+            _forwarding: 'false',
+            _backwarding: 'false',
+            _forwarding_empty: 'false',
+            _looping: 'true',
           },
         },
-        input: { a: { ignored: false, constant: false, data: undefined } },
-        output: { a: { ignored: false, constant: false, data: undefined } },
+        input: {
+          a: {
+            ignored: false,
+            data: undefined,
+            constant: false,
+          },
+        },
+        output: {
+          a: {
+            ignored: false,
+            data: undefined,
+            constant: false,
+          },
+        },
       },
     },
   },

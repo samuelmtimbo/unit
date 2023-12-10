@@ -1,6 +1,5 @@
 import { escape } from './escape'
 import { globalUrl } from './globalUrl'
-import { isValidKeyStr } from './parser'
 
 export function stringify(value: any): string | null {
   const t = typeof value
@@ -21,10 +20,7 @@ export function stringify(value: any): string | null {
             .filter(([key, value]) => {
               return value !== undefined
             })
-            .map(
-              ([key, value]) =>
-                `${isValidKeyStr(key) ? key : `"${key}"`}:${stringify(value)}`
-            )
+            .map(([key, value]) => `${`"${escape(key)}"`}:${stringify(value)}`)
             .join(',')}}`
         } else {
           return globalUrl(value.__global_id)

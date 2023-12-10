@@ -12,6 +12,7 @@ import {
 import { getUnitPinPosition } from '../../../../../client/util/geometry/unit/getUnitPinPosition'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
+import { lineWrap } from '../../../../../spec/lineWrap'
 import { System } from '../../../../../system'
 import { Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
@@ -36,37 +37,6 @@ export interface Props {
 
 export const CLASS_DEFAULT_WIDTH = 90
 export const CLASS_DEFAULT_HEIGHT = 90
-
-export function line_wrap(text: string, MAX: number = 15): string[] {
-  const lines: string[] = []
-
-  const segments = text.split(' ')
-
-  const l = segments.length
-
-  let line_segments: string[] = []
-  let line_segments_char_count = 0
-
-  for (let i = 0; i < l; i++) {
-    const segment = segments[i]
-    const segment_l = segment.length
-
-    if (line_segments_char_count + line_segments.length - 1 + segment_l > MAX) {
-      lines.push(line_segments.join(' '))
-      line_segments = []
-      line_segments_char_count = 0
-    }
-
-    line_segments.push(segment)
-    line_segments_char_count += segment_l
-  }
-
-  if (line_segments.length > 0) {
-    lines.push(line_segments.join(' '))
-  }
-
-  return lines
-}
 
 export default class ClassDatum extends Element<HTMLDivElement, Props> {
   private _svg: SVGSVG
@@ -101,9 +71,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
     const svg_g = new SVGG(
       {
         className: classnames('unit-class-g', className),
-        style: {
-          pointerEvents: 'all',
-        },
+        style: {},
       },
       this.$system
     )
@@ -298,7 +266,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
     })
 
     const core_name_g = new SVGG({}, this.$system)
-    const lines = line_wrap(name)
+    const lines = lineWrap(name)
     for (let i = 0; i < lines.length; i++) {
       const value = lines[i]
       const core_name_line = new SVGText(

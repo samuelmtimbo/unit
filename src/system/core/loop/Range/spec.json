@@ -6,6 +6,9 @@
       "output": {
         "current": {
           "ignored": true
+        },
+        "final": {
+          "ignored": false
         }
       }
     },

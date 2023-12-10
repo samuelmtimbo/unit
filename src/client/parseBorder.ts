@@ -1,5 +1,3 @@
-import * as assert from '../util/assert'
-
 export type IBorder = {
   width?: string
   style?: string
@@ -17,21 +15,3 @@ export function parseBorder(border: string): IBorder {
     color,
   }
 }
-
-assert.deepEqual(parseBorder(''), {
-  width: '0px',
-  style: 'solid',
-  color: 'currentColor',
-})
-
-assert.deepEqual(parseBorder('1px'), {
-  width: '1px',
-  style: 'solid',
-  color: 'currentColor',
-})
-
-assert.deepEqual(parseBorder('1px solid white'), {
-  width: '1px',
-  style: 'solid',
-  color: 'white',
-})

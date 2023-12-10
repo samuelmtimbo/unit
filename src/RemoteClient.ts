@@ -5,7 +5,6 @@ import { IPort } from './types/global/IPort'
 
 export class RemoteClient {
   private _remote_port: RemotePort
-
   private _port: IPort
 
   constructor(port: IPort) {
@@ -14,6 +13,7 @@ export class RemoteClient {
     const _port: IPort = {
       send: (data) => {
         const _data = this._exec_data(data)
+
         this._port.send(_data)
       },
       onmessage(data: any) {},
@@ -38,6 +38,7 @@ export class RemoteClient {
 
   init(bundle: BundleSpec) {
     const _data = this._init_data(bundle)
+
     this._port.send(_data)
   }
 

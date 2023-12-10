@@ -4,6 +4,7 @@ import { ID_TEXT_AREA } from '../../../../_ids'
 
 export interface I {
   style: object
+  value: string
 }
 
 export interface O {

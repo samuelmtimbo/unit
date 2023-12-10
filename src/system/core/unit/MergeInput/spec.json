@@ -11,7 +11,7 @@
         "key": {},
         "value": {},
         "test": {
-          "ignored": true
+          "ignored": false
         }
       },
       "metadata": {
@@ -35,6 +35,23 @@
         "position": {
           "x": 49,
           "y": 0
+        }
+      }
+    },
+    "loop": {
+      "id": "3432494e-fab6-4e9d-a846-0c48a7c429cd",
+      "input": {
+        "next": {},
+        "test": {},
+        "init": {}
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true
+        },
+        "final": {
+          "ignored": false
         }
       }
     }
@@ -63,6 +80,42 @@
           "name": true
         }
       }
+    },
+    "2": {
+      "foreachkeyvalue": {
+        "output": {
+          "test": true
+        }
+      },
+      "loop": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "3": {
+      "setinput": {
+        "input": {
+          "unit": true
+        }
+      },
+      "loop": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "4": {
+      "setinput": {
+        "output": {
+          "unit": true
+        }
+      },
+      "loop": {
+        "input": {
+          "next": true
+        }
+      }
     }
   },
   "inputs": {
@@ -78,8 +131,9 @@
     "unit": {
       "plug": {
         "0": {
-          "unitId": "setinput",
-          "pinId": "unit"
+          "unitId": "loop",
+          "pinId": "init",
+          "kind": "input"
         }
       },
       "ref": false
@@ -89,8 +143,9 @@
     "unit": {
       "plug": {
         "0": {
-          "unitId": "setinput",
-          "pinId": "unit"
+          "unitId": "loop",
+          "pinId": "final",
+          "kind": "output"
         }
       },
       "ref": false
@@ -98,7 +153,8 @@
   },
   "metadata": {
     "icon": "question",
-    "description": "merge `unit` `input` to `obj`"
+    "description": "set each `unit` key value input",
+    "tags": ["core", "unit"]
   },
   "id": "568638fd-0338-4ad3-a76f-8581c7b3aa44"
 }

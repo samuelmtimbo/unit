@@ -1,4 +1,4 @@
-import path = require('path')
+import * as path from 'path'
 import { PATH_SRC_CLIENT_EXTENSION_SRC } from '../../path'
 import { build } from '../build'
 

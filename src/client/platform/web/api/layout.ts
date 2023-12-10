@@ -2,7 +2,7 @@ import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
 import { Style } from '../../../../system/platform/Props'
 import { LayoutNode } from '../../../LayoutNode'
-import { parseTransformXY } from '../../../parseTransformXY'
+import { parseTransform } from '../../../parseTransform'
 import { applyStyle } from '../../../style'
 import { parseFontSize } from '../../../util/style/getFontSize'
 import { parseOpacity } from '../../../util/style/getOpacity'
@@ -41,7 +41,7 @@ const fitChildren = (
       childRotateX,
       childRotateY,
       childRotateZ,
-    ] = parseTransformXY(childTransform, parentTrait.width, parentTrait.height)
+    ] = parseTransform(childTransform, parentTrait.width, parentTrait.height)
 
     const childOpacity = parseOpacity(childOpacityStr)
 

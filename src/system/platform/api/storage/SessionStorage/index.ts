@@ -4,7 +4,7 @@ import {
   storageHasKey,
 } from '../../../../../client/util/web/storage'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
-import { ObjectUpdateType } from '../../../../../Object'
+import { ObjectUpdateType } from '../../../../../ObjectUpdateType'
 import { Primitive } from '../../../../../Primitive'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'

@@ -47,21 +47,25 @@ export default class EventSource_ extends Semifunctional<I, O> {
       },
     } = this.__system
 
-    const event_source = new EventSource(url)
+    const eventSource = new EventSource(url)
 
-    this._event_source = event_source
+    this._event_source = eventSource
 
-    event_source.onerror = (err) => {
+    eventSource.onerror = (err) => {
       this._pluck()
+
       done(undefined, 'error connecting to server')
     }
 
-    event_source.onopen = () => {
+    eventSource.onopen = (event) => {
       const emitter = new (class EventEmitter__ extends $ {
-        addListener<K extends keyof EventEmitter_EE<$_EE> | 'destroy'>(
-          event: K,
-          listener: Listener<$Events<$_EE>[K]>
-        ): Unlisten {
+        addListener<
+          K extends
+            | keyof EventEmitter_EE<$_EE>
+            | 'destroy'
+            | 'register'
+            | 'unregister'
+        >(event: K, listener: Listener<$Events<$_EE>[K]>): Unlisten {
           super.addListener(event, listener)
 
           const _listener = (event: MessageEvent) => {
@@ -69,10 +73,10 @@ export default class EventSource_ extends Semifunctional<I, O> {
             listener(event.data)
           }
 
-          event_source.addEventListener(event, _listener)
+          eventSource.addEventListener(event, _listener)
 
           return () => {
-            event_source.removeEventListener(event, _listener)
+            eventSource.removeEventListener(event, _listener)
           }
         }
       })(this.__system)
@@ -83,14 +87,16 @@ export default class EventSource_ extends Semifunctional<I, O> {
   }
 
   public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'close') {
-    this._pluck()
-    // }
+    if (name === 'close') {
+      this._pluck()
+    }
   }
 
   private _pluck = () => {
-    this._event_source.close()
+    if (this._event_source) {
+      this._event_source.close()
 
-    this._event_source = null
+      this._event_source = null
+    }
   }
 }

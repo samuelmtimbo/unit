@@ -1,4 +1,4 @@
-import { forEachPinOnMerges } from '../../spec/util'
+import { forEachPinOnMerges } from '../../spec/util/spec'
 
 export function templateMoveUnitIntoGraph(
   unit_id: string,

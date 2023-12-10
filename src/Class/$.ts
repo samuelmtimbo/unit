@@ -3,7 +3,7 @@ import { deleteGlobalRef, setGlobalRef } from '../global'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
 
-export type $_EE = { destroy: [] }
+export type $_EE = { destroy: []; register: []; unregister: [] }
 
 export type $Events<_EE extends Dict<any[]>> = EventEmitter_EE<_EE & $_EE> &
   $_EE
@@ -15,13 +15,14 @@ export class $<
   public __system: System
   public __global_id: string
   public __async: boolean = false
+  public __ref_count: number = 0
 
   constructor(system: System) {
     super()
 
     this.__system = system
 
-    this.__global_id = setGlobalRef(this.__system, this)
+    this.register()
   }
 
   getGlobalId(): string {
@@ -34,6 +35,24 @@ export class $<
 
   refSystem(): System {
     return this.__system
+  }
+
+  register(): void {
+    this.__ref_count++
+
+    if (this.__ref_count === 1) {
+      this.__global_id = setGlobalRef(this.__system, this)
+    }
+
+    this.emit('register')
+  }
+
+  unregister(): void {
+    this.__ref_count--
+
+    if (this.__ref_count === 0) {
+      this.emit('unregister')
+    }
   }
 
   destroy() {

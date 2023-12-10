@@ -1,5 +1,5 @@
 import { IOElement } from '../../IOElement'
-import { parseTransformXY } from '../../parseTransformXY'
+import { parseTransform } from '../../parseTransform'
 import { addVector3, NULL_VECTOR } from '../geometry'
 import { Position } from '../geometry/types'
 
@@ -144,7 +144,7 @@ export function getLocalPosition(element: HTMLElement): Position {
 
   if (width !== offsetWidth || height !== offsetHeight) {
     if (transform) {
-      const [_transform_x, _transform_y, _scale_x, _scale_y] = parseTransformXY(
+      const [_transform_x, _transform_y, _scale_x, _scale_y] = parseTransform(
         transform,
         offsetWidth,
         offsetHeight

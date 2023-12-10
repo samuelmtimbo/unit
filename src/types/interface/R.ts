@@ -7,7 +7,7 @@ export interface R {
   newSpecId(): string
   hasSpec(id: string): boolean
   emptySpec(partial?: Partial<GraphSpec>): GraphSpec
-  newSpec(spec: GraphSpec): GraphSpec
+  newSpec(spec: GraphSpec, id?: string): GraphSpec
   getSpec(id: string): Spec
   setSpec(id: string, spec: GraphSpec): void
   shouldFork(id: string): boolean

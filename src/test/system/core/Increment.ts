@@ -7,7 +7,7 @@ import { system } from '../../util/system'
 const spec =
   require('../../../system/core/common/Increment/spec.json') as GraphSpec
 
-const Increment = fromSpec<{ a: number }, { 'a + 1': number }>(spec, _specs)
+const Increment = fromSpec<{ a: number }, { 'a + 1': number }>(spec, _specs, {})
 
 const increment = new Increment(system)
 

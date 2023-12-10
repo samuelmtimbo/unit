@@ -2,12 +2,13 @@ import { UnitPointerEvent } from '.'
 import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
 import { callAll } from '../../../util/call/callAll'
-import { addListener } from '../../addListener'
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
-import stopPropagation from '../../stopPropagation'
+import { addListener } from '../../addListener'
+import { stopPropagation } from '../../stopPropagation'
 import { pointDistance } from '../../util/geometry'
 import { Position } from '../../util/geometry/types'
+import { setTimeoutRAF } from '../../util/timer/setTimeoutRAF'
 import {
   CLICK_TIMEOUT,
   LONG_CLICK_TIMEOUT,
@@ -39,7 +40,7 @@ export function listenClick(
   component: Listenable,
   handlers: Handlers
 ): () => void {
-  const { $element } = component
+  const { $element, $system } = component
 
   const {
     onClick,
@@ -62,8 +63,8 @@ export function listenClick(
 
   let longPress: Dict<boolean> = {}
 
-  let doubleClickTimeout: NodeJS.Timer | null = null
-  let longClickTimeout: NodeJS.Timer | null = null
+  let doubleClickTimeout: Unlisten = null
+  let longClickTimeout: Unlisten = null
 
   let unlisten: Unlisten | undefined = undefined
 
@@ -123,25 +124,30 @@ export function listenClick(
               POINTER_CLICK_RADIUS)
         ) {
           if (longClickTimeout) {
-            clearTimeout(longClickTimeout)
+            longClickTimeout()
           }
-          longClickTimeout = setTimeout(() => {
-            if (
-              tapCount === 0 &&
-              pointerDown[pointerId] &&
-              pointerDownCount === 1
-            ) {
-              longPress[pointerId] = true
-              if (
-                pointerDownMaxDistance[pointerId] <
-                POINTER_CLICK_RADIUS / 3
-              ) {
-                onLongPress && onLongPress(event, _event)
-              }
-            }
 
-            longClickTimeout = null
-          }, LONG_CLICK_TIMEOUT)
+          longClickTimeout = setTimeoutRAF(
+            $system,
+            () => {
+              if (
+                tapCount === 0 &&
+                pointerDown[pointerId] &&
+                pointerDownCount === 1
+              ) {
+                longPress[pointerId] = true
+                if (
+                  pointerDownMaxDistance[pointerId] <
+                  POINTER_CLICK_RADIUS / 3
+                ) {
+                  onLongPress && onLongPress(event, _event)
+                }
+              }
+
+              longClickTimeout = null
+            },
+            LONG_CLICK_TIMEOUT
+          )
         }
 
         if (
@@ -149,18 +155,22 @@ export function listenClick(
           pointDistance(pointerPosition[pointerId], lastPointerDownPosition) <=
             POINTER_CLICK_RADIUS
         ) {
-          setTimeout(() => {
-            if (
-              pointerDown[pointerId] &&
-              pointerDownMaxDistance[pointerId] < POINTER_CLICK_RADIUS
-            ) {
-              onClickHold && onClickHold(event)
-            }
-          }, LONG_CLICK_TIMEOUT)
+          setTimeoutRAF(
+            $system,
+            () => {
+              if (
+                pointerDown[pointerId] &&
+                pointerDownMaxDistance[pointerId] < POINTER_CLICK_RADIUS
+              ) {
+                onClickHold && onClickHold(event)
+              }
+            },
+            LONG_CLICK_TIMEOUT
+          )
         }
       } else {
         if (longClickTimeout) {
-          clearTimeout(longClickTimeout)
+          longClickTimeout()
 
           longPress = {}
 
@@ -231,7 +241,7 @@ export function listenClick(
         tapCount = 1
         pointerDownMaxDistance[pointerId] = 0
         if (doubleClickTimeout) {
-          clearTimeout(doubleClickTimeout)
+          doubleClickTimeout()
           doubleClickTimeout = null
         }
       }
@@ -240,10 +250,14 @@ export function listenClick(
 
       if (tapCount > 0 && tapCount % 2 === 1) {
         if (pointerDownMovedDistance < POINTER_CLICK_RADIUS) {
-          doubleClickTimeout = setTimeout(() => {
-            tapCount = 0
-            doubleClickTimeout = null
-          }, CLICK_TIMEOUT)
+          doubleClickTimeout = setTimeoutRAF(
+            $system,
+            () => {
+              tapCount = 0
+              doubleClickTimeout = null
+            },
+            CLICK_TIMEOUT
+          )
         } else {
           tapCount = 0
           doubleClickTimeout = null

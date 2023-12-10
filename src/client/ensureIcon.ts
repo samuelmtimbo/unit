@@ -2,17 +2,17 @@ import { System } from '../system'
 import { namespaceURI } from './component/namespaceURI'
 import ICONS from './icons'
 
-export const SPRITESHEET_ID = '__SYSTEM__SPRITESHEET__'
+export const SYSTEM_SPRITESHEET_ID = '__SYSTEM__SPRITESHEET__'
 export const SPRITESHEET_VIEWBOX = '0 0 24 24'
 
-export const ensureIcon = ($system: System, id: string): void => {
+export const ensureIcon = (system: System, id: string): void => {
   const {
     api: {
       document: { createElementNS },
     },
     cache: { spriteSheetMap },
     foreground: { sprite },
-  } = $system
+  } = system
 
   if (spriteSheetMap[id]) {
     return

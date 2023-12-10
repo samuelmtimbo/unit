@@ -6,9 +6,9 @@ import {
 } from '../types/global/IPositionObserver'
 import { Unlisten } from '../types/Unlisten'
 import { callAll } from '../util/call/callAll'
+import { animateThrottle } from './animateThrottle'
 import { applyLayoutValue } from './parseLayoutValue'
-import { parseTransformXY } from './parseTransformXY'
-import { animateThrottle } from './throttle'
+import { parseTransform } from './parseTransform'
 import {
   addVector,
   angleToRad,
@@ -34,6 +34,7 @@ export class PositionObserver implements IPositionObserver {
     const {
       api: {
         document: { MutationObserver, ResizeObserver },
+        animation: { requestAnimationFrame, cancelAnimationFrame },
       },
     } = this._system
 
@@ -94,13 +95,13 @@ export class PositionObserver implements IPositionObserver {
     let _transform: string | undefined
     let _border: string | undefined
 
-    const _update_local = (): void => {
+    function _update_local(): void {
       __update_local()
 
       update()
     }
 
-    const __update_local = (): void => {
+    function __update_local(): void {
       const { offsetLeft, offsetTop, offsetWidth, offsetHeight, style } =
         element
 
@@ -123,7 +124,8 @@ export class PositionObserver implements IPositionObserver {
             _rotate_x,
             _rotate_y,
             _rotate_z,
-          ] = parseTransformXY(transform, offsetWidth, offsetHeight)
+          ] = parseTransform(transform, offsetWidth, offsetHeight)
+
           transform_x = _transform_x
           transform_y = _transform_y
           scale_x = _scale_x
@@ -167,17 +169,18 @@ export class PositionObserver implements IPositionObserver {
     }
 
     const { f: update_local, abort } = animateThrottle(
-      this._system,
-      _update_local
+      _update_local,
+      requestAnimationFrame,
+      cancelAnimationFrame
     )
-
-    this._abort = abort
 
     // const update_local = _update_local
 
-    // this._abort = NOOP
+    // const abort = NOOP
 
-    const _update = (): void => {
+    // this._abort = abort
+
+    function _update(): void {
       sx = scale_x * parent_scale_x
       sy = scale_y * parent_scale_y
 
@@ -266,14 +269,16 @@ export class PositionObserver implements IPositionObserver {
     // resizeObserver.observe(element, resizeConfig)
     resizeObserver.observe(element)
 
-    const unlisten_self = () => {
+    function unlisten_self() {
+      abort()
+
       mutationObserver.disconnect()
 
       resizeObserver.unobserve(element)
       resizeObserver.disconnect()
     }
 
-    const update_parent = (): (() => void) => {
+    const update_parent = () => {
       const { offsetParent, parentElement } = element
 
       // const targetParent = parentElement
@@ -291,7 +296,7 @@ export class PositionObserver implements IPositionObserver {
           let _scrollLeft = scrollLeft
           let _scrollTop = scrollTop
 
-          const parentScrollListener = function () {
+          function parentScrollListener() {
             const { scrollLeft, scrollTop } = p
 
             parent_scroll_left += scrollLeft - _scrollLeft
@@ -303,17 +308,23 @@ export class PositionObserver implements IPositionObserver {
             update()
           }
 
-          const { f: _parentScrollListener } = animateThrottle(
-            this._system,
-            parentScrollListener
-          )
+          const { f: parentScrollListener_, abort: parentScrollAbort_ } =
+            animateThrottle(
+              parentScrollListener,
+              requestAnimationFrame,
+              cancelAnimationFrame
+            )
 
-          p.addEventListener('scroll', _parentScrollListener, {
+          p.addEventListener('scroll', parentScrollListener_, {
             passive: true,
           })
-          const unlisten = () => {
-            p.removeEventListener('scroll', _parentScrollListener)
+
+          function unlisten() {
+            p.removeEventListener('scroll', parentScrollListener_)
+
+            parentScrollAbort_()
           }
+
           scrollParentUnlisten.push(unlisten)
         }
 
@@ -349,7 +360,7 @@ export class PositionObserver implements IPositionObserver {
           attributeFilter: ['style'],
         }
 
-        const parentMutationCallback: MutationCallback = (mutationsList) => {
+        function parentMutationCallback() {
           update_local()
         }
 
@@ -359,7 +370,7 @@ export class PositionObserver implements IPositionObserver {
 
         parentMutationObserver.observe(targetParent, parentConfig)
 
-        const parentPositionCallback = (
+        function parentPositionCallback(
           x: number,
           y: number,
           sx: number,
@@ -369,7 +380,7 @@ export class PositionObserver implements IPositionObserver {
           rz: number,
           px: number,
           py: number
-        ) => {
+        ) {
           parent_x = x + px
           parent_y = y + py
           parent_scale_x = sx
@@ -401,7 +412,7 @@ export class PositionObserver implements IPositionObserver {
 
         _update()
 
-        const parentResizeObserverCallback = () => {
+        function parentResizeObserverCallback() {
           update_local()
         }
 
@@ -411,7 +422,7 @@ export class PositionObserver implements IPositionObserver {
 
         parentResizeObserver.observe(targetParent)
 
-        return () => {
+        return function () {
           unlitenScroll()
 
           parentResizeObserver.disconnect()
@@ -419,18 +430,19 @@ export class PositionObserver implements IPositionObserver {
           parentPostionObserver.disconnect()
         }
       } else {
-        return () => {}
+        return function () {}
       }
     }
 
     const unlisten_parent = update_parent()
 
-    const unlisten = () => {
+    function unlisten() {
       unlisten_self()
       unlisten_parent()
     }
 
     this._unlisten = unlisten
+    this._abort = abort
 
     __update_local()
     _update()
@@ -444,6 +456,11 @@ export class PositionObserver implements IPositionObserver {
     if (this._unlisten) {
       this._unlisten()
       this._unlisten = undefined
+    }
+
+    if (this._abort) {
+      this._abort()
+      this._abort = undefined
     }
   }
 }

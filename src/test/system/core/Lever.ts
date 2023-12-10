@@ -8,7 +8,11 @@ import { system } from '../../util/system'
 
 const spec = require('../../../system/core/common/Lever/spec.json') as GraphSpec
 
-const Lever = fromSpec<{ a: any; b: any; c: boolean }, { a: any }>(spec, _specs)
+const Lever = fromSpec<{ a: any; b: any; c: boolean }, { a: any }>(
+  spec,
+  _specs,
+  {}
+)
 
 const lever = new Lever(system)
 

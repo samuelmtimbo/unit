@@ -6,7 +6,8 @@ import { countEvent } from '../../util'
 import { system } from '../../util/system'
 
 const bundle = require('./MergeSort.json')
-const MergeSort = fromBundle(bundle, _specs)
+
+const MergeSort = fromBundle(bundle, _specs, {})
 
 const mergeSort = new MergeSort(system)
 

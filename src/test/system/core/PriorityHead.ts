@@ -6,7 +6,7 @@ import { system } from '../../util/system'
 
 const bundle = require('./PriorityHead.json')
 
-const PriorityHead = fromBundle(bundle, _specs)
+const PriorityHead = fromBundle(bundle, _specs, {})
 
 const priorityHead = new PriorityHead(system)
 

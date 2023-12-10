@@ -24,7 +24,7 @@ export function _newSystem(system: System, _system: System): [S, Unlisten] {
 export function wrapSystem(system: System, _system: System): $ & S {
   return new (class System extends $ implements S {
     fromBundle(bundleSpec: BundleSpec): GraphBundle<any, any> {
-      return fromBundle(bundleSpec, _system.specs)
+      return fromBundle(bundleSpec, _system.specs, _system.classes)
     }
     newGraph(bundle: GraphBundle<any, any>): Graph<any, any> {
       return system.newGraph(bundle)

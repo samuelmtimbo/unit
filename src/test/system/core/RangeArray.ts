@@ -6,7 +6,7 @@ import { system } from '../../util/system'
 
 const spec = require('../../../system/core/array/RangeArray/spec.json')
 
-const RangeArray = fromSpec<{ any: any }, { bit: number }>(spec, _specs)
+const RangeArray = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
 
 const rangeArray = new RangeArray(system)
 

@@ -8,7 +8,11 @@ import { system } from '../../util/system'
 
 const spec = require('../../../system/core/common/SumN/spec.json') as GraphSpec
 
-const SumN = fromSpec<{ a: number; n: number }, { sum: number }>(spec, _specs)
+const SumN = fromSpec<{ a: number; n: number }, { sum: number }>(
+  spec,
+  _specs,
+  {}
+)
 
 const sumN = new SumN(system)
 

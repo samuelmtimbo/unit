@@ -1,6 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { callMethod } from '../../../../../client/extension'
+import { callExtensionMethod } from '../../../../../client/extension'
 import { System } from '../../../../../system'
 import { ID_DELETE_VISIT } from '../../../../_ids'
 
@@ -24,7 +24,7 @@ export default class DeleteVisit extends Functional<I, O> {
   }
 
   f({ url }: I, done: Done<O>) {
-    callMethod('history', 'deleteUrl', { url }, (_, err) => {
+    callExtensionMethod('history', 'deleteUrl', { url }, (_, err) => {
       done(undefined, err)
     })
   }

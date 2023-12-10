@@ -1,13 +1,13 @@
-import { evaluateBundleStr, idFromUnitValue } from '../client/idFromUnitValue'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { INHERITANCE } from '../interface'
 import { keys } from '../system/f/object/Keys/f'
 import { PinsSpecBase, Specs } from '../types'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
-import { weakMerge } from '../types/weakMerge'
 import { matchAllExc } from '../util/array'
 import { clone } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
+import { weakMerge } from '../weakMerge'
+import { evaluateBundleStr, idFromUnitValue } from './idFromUnitValue'
 import { BOOLEAN_LITERAL_REGEX } from './regex/BOOLEAN_LITERAL'
 import { IDENTIFIER_REGEX } from './regex/IDENTIFIER'
 import { NUMBER_LITERAL_REGEX } from './regex/NUMBER_LITERAL'
@@ -183,7 +183,6 @@ export function _isValueOfType(value: TreeNode, type: TreeNode): boolean {
       return value.type === TreeNodeType.NumberLiteral
     case TreeNodeType.Boolean:
       return value.type === TreeNodeType.BooleanLiteral
-
     case TreeNodeType.Or:
       return type.children.some((child) => _isValueOfType(value, child))
     case TreeNodeType.And:
@@ -738,7 +737,7 @@ export function _getTypeTree(
   keyValue: boolean = false,
   ignoreKeyword: boolean = false
 ): TreeNode | undefined {
-  // value = value.trim()
+  value = value.trim()
 
   if (!ignoreKeyword) {
     const classLiteralTest = /^\((.*)\)=>\((.*)\)$/.exec(value)
@@ -895,7 +894,7 @@ function execComposed(
   str: string,
   open_delimiter: string,
   close_delimiter: string
-): [any, string] | null {
+): [string, string] | null {
   const l = str.length
 
   if (str[0] === open_delimiter && str[l - 1] === close_delimiter) {
@@ -929,20 +928,22 @@ function execComposed(
         }
       }
     }
+
     if (open > 0) {
       return null
     }
+
     return [str, str.substr(1, l - 2)]
   } else {
     return null
   }
 }
 
-function execObject(str: string): [any, string] | null {
+function execObject(str: string): [string, string] | null {
   return execComposed(str, OBJECT_OPEN, OBJECT_CLOSE)
 }
 
-function execArray(str: string): [any, string] | null {
+function execArray(str: string): [string, string] | null {
   return execComposed(str, ARRAY_OPEN, ARRAY_CLOSE)
 }
 
@@ -956,6 +957,8 @@ function _getValueTree(
     ignoreKeyword?: boolean
   ) => TreeNode = _getValueTree
 ): TreeNode | undefined {
+  value = value.trim()
+
   if (!ignoreKeyword) {
     const nullTest = /^null$/.exec(value)
     if (nullTest) {
@@ -1394,8 +1397,32 @@ export function _stringify(tree: TreeNode): string {
   }
 }
 
+export function _filterEmptyNodes(tree: TreeNode): TreeNode {
+  if (isCompositeType(tree.type)) {
+    const children = tree.children.map(_filterEmptyNodes)
+
+    const filteredTree = getTree(
+      _stringify({
+        ...tree,
+        children: children.filter((c) => !!c.value),
+      })
+    )
+
+    return filteredTree
+  } else {
+    return tree
+  }
+}
+
+export function filterEmptyNodes(value: string): TreeNode {
+  const tree = getTree(value)
+
+  return _filterEmptyNodes(tree)
+}
+
 export function findGenerics(value: string): Set<string> {
   const tree = getTree(value)
+
   return _findGenerics(tree)
 }
 
@@ -1516,6 +1543,8 @@ function _getDelimiterSeparated(
     ignoreKeyword?: boolean
   ) => TreeNode
 ): TreeNode[] {
+  value = value.trim()
+
   let objectOpenCount = 0
   let arrayOpenCount = 0
   let singleQuoteOpen = false
@@ -1571,6 +1600,7 @@ function _getDelimiterSeparated(
       // }
 
       children.push(_getTree(childString, keyValue, ignoreKeyword))
+
       lastStop = pos + 1
       pushNext = true
     }

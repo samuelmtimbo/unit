@@ -39,7 +39,7 @@
   },
   "metadata": {
     "icon": "square",
-    "description": "listen to `element` click event",
+    "description": "listen to `element` dragstart event",
     "complexity": 5,
     "tags": ["platform", "core", "api", "event"]
   },

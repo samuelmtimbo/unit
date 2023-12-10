@@ -26,8 +26,18 @@ export default class Stringify extends Functional<I, O> {
   }
 
   f({ a }: I, done: Done<O>): void {
+    let str: string
+
+    try {
+      str = stringify(a)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
+
     done({
-      str: stringify(a),
+      str,
     })
   }
 }

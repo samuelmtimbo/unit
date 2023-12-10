@@ -1,6 +1,6 @@
 import { System } from '../../system'
 import { namespaceURI } from '../component/namespaceURI'
-import { SPRITESHEET_ID } from '../ensureIcon'
+import { SYSTEM_SPRITESHEET_ID } from '../ensureIcon'
 
 export function attachSprite(system: System): void {
   const {
@@ -12,7 +12,7 @@ export function attachSprite(system: System): void {
 
   const sprite = createElementNS(namespaceURI, 'svg')
 
-  sprite.id = SPRITESHEET_ID
+  sprite.id = SYSTEM_SPRITESHEET_ID
 
   sprite.style.display = 'none'
 

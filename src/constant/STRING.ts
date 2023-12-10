@@ -1,5 +1,7 @@
 export const UNTITLED = 'untitled'
 export const CALL = 'call'
+export const CALLBACK = 'callback'
+export const SEND = 'send'
 export const WATCH = 'watch'
 export const UNWATCH = 'unwatch'
 export const REF = 'ref'

@@ -30,9 +30,7 @@ export default class FromBundle extends Functional<I, O> {
   }
 
   f({ bundle }: I, done: Done<O>): void {
-    // console.log('FromBundle', 'f', bundle)
-
-    let graph
+    let graph: GraphBundle
 
     try {
       graph = fromBundle(bundle, this.__system.specs, {})

@@ -1,6 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { callMethod } from '../../../../../client/extension'
+import { callExtensionMethod } from '../../../../../client/extension'
 import { System } from '../../../../../system'
 import { ID_GET_VISITS } from '../../../../_ids'
 
@@ -45,8 +45,14 @@ export default class GetVisits extends Functional<I, O> {
   }
 
   f({ url }: I, done: Done<O>) {
-    callMethod('history', 'getVisits', { url }, (visits, err) => {
-      done({ visits }, err)
+    callExtensionMethod('history', 'getVisits', { url }, (visits, err) => {
+      if (err) {
+        done(undefined, err)
+
+        return
+      }
+
+      done({ visits })
     })
   }
 }

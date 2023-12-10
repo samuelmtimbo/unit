@@ -1,0 +1,65 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "text paragraph",
+  "units": {
+    "text0": {
+      "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
+      "input": { "value": {} },
+      "output": {},
+      "metadata": { "position": { "x": 104, "y": 50 } }
+    },
+    "paragraph": {
+      "id": "2a5ad480-9d38-4918-8774-41fac7b54203",
+      "input": { "style": {}, "attr": { "ignored": true } },
+      "output": {},
+      "metadata": { "position": { "x": -105, "y": -51 } }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "text0",
+          "pinId": "value",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "paragraph",
+          "pinId": "style",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": { "icon": "question", "description": "" },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "text0": {
+        "children": [],
+        "childSlot": {},
+        "width": 180,
+        "height": 90
+      },
+      "paragraph": {
+        "children": ["text0"],
+        "childSlot": {},
+        "width": 120,
+        "height": 120
+      }
+    },
+    "children": ["paragraph"],
+    "defaultWidth": 180,
+    "defaultHeight": 120
+  },
+  "id": "2e596b5f-f4b6-44fe-8ad0-6e17d12fa104",
+  "system": true
+}

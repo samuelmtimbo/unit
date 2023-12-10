@@ -1,5 +1,3 @@
-import { Element_ } from '../Class/Element'
-import { Graph } from '../Class/Graph'
 import { Unit } from '../Class/Unit'
 import { GRAPH_DEFAULT_EVENTS } from '../constant/GRAPH_DEFAULT_EVENTS'
 import { Pin } from '../Pin'
@@ -167,12 +165,14 @@ export function watchUnitIO<T extends Unit>(
     all.push(watchUnitRenamePinEvent('rename_output', unit, callback))
   }
 
-  if (unit instanceof Graph || unit instanceof Element_) {
+  if (unit.isElement()) {
     if (events.includes('append_child')) {
+      // @ts-ignore
       all.push(watchComponentAppendEvent('append_child', unit, callback))
     }
 
     if (events.includes('remove_child')) {
+      // @ts-ignore
       all.push(watchComponentRemoveEvent('remove_child', unit, callback))
     }
   }

@@ -1,5 +1,6 @@
-import { API } from '../API'
+import { API, BasicHTTPHandler } from '../API'
 import { LayoutNode } from '../client/LayoutNode'
+import { Theme } from '../client/theme'
 import { APINotSupportedError } from '../exception/APINotImplementedError'
 import { DisplayMediaAPINotSupported } from '../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../exception/MediaDeviceAPINotSupported'
@@ -7,6 +8,7 @@ import { MethodNotImplementedError } from '../exception/MethodNotImplementedErro
 import { Style } from '../system/platform/Props'
 import { Storage_ } from '../system/platform/api/storage/Storage_'
 import { Dict } from '../types/Dict'
+import { Unlisten } from '../types/Unlisten'
 import { IDownloadDataOpt } from '../types/global/IDownloadData'
 import { IDownloadURLOpt } from '../types/global/IDownloadURL'
 import {
@@ -159,6 +161,9 @@ export function noHost(): API {
         throw new APINotSupportedError('Fetch')
       },
       EventSource: undefined,
+      listen: function (port: number, handler: BasicHTTPHandler): Unlisten {
+        throw new APINotSupportedError('HTTP Server')
+      },
     },
     channel: {
       local: function (opt): any {
@@ -217,9 +222,13 @@ export function noHost(): API {
       exitPictureInPicture() {
         throw new MethodNotImplementedError()
       },
+      setTheme: function (theme: Theme): Promise<void> {
+        throw new MethodNotImplementedError()
+      },
       MutationObserver: null,
       PositionObserver: null,
       ResizeObserver: null,
+      IntersectionObserver: null,
     },
     querystring: {
       stringify: function (obj: Dict<any>): string {
@@ -265,7 +274,7 @@ export function noHost(): API {
     },
     window: {
       open: function (url: string, target: string, features: string): Window {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
       AudioContext: undefined,
       OscillatorNode: undefined,
@@ -274,10 +283,13 @@ export function noHost(): API {
       GainNode: undefined,
       DelayNode: undefined,
       ImageCapture: undefined,
+      CompressionStream: undefined,
+      DecompressionStream: undefined,
+      ReadableStream: undefined,
     },
     navigator: {
       share: function (data: ShareData): Promise<void> {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
     },
     layout: {
@@ -288,7 +300,15 @@ export function noHost(): API {
         path?: number[],
         expandChild?: (path: number[]) => Style[]
       ): LayoutNode[] {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
+      },
+    },
+    history: {
+      pushState: function (data: any, title: string, url: string): void {
+        throw new MethodNotImplementedError()
+      },
+      replaceState: function (data: any, title: string, url: string): void {
+        throw new MethodNotImplementedError()
       },
     },
   }

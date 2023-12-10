@@ -119,8 +119,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
   private _shape: Shape = 'circle'
   private _shape_button: IconButton
 
-  private _id_list: string[] = []
-
   private _ordered_id_list: string[] = []
   private _filtered_id_list: string[] = []
 
@@ -336,8 +334,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     const id_list = keys(specs)
 
-    this._id_list = id_list
-
     const visible_id_list = id_list.filter((id) => isSpecVisible(specs, id))
 
     const ordered_id_list = visible_id_list.sort((a, b) => {
@@ -454,8 +450,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
         }
       }
     )
-
-    this._reset()
   }
 
   private _unlisten_registry = () => {

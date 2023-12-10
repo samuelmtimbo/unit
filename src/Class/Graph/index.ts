@@ -45,7 +45,7 @@ import {
   processAction,
 } from '../../spec/actions/G'
 import { cloneUnit } from '../../spec/cloneUnit'
-import { fromId } from '../../spec/fromId'
+import { bundleFromId } from '../../spec/fromId'
 import {
   coverPin,
   coverPinSet,
@@ -63,25 +63,24 @@ import { stringify } from '../../spec/stringify'
 import { stringifyMemorySpecData } from '../../spec/stringifySpec'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
 import {
+  findUnitPinPlug,
   forEachGraphSpecPinOfType,
+  forEachInputOnMerge,
   forEachPinOnMerge,
   forEachPinOnMerges,
-  getExposedPinId,
   getMergePinCount,
   getMergePinNodeId,
   getOutputNodeId,
   getPinNodeId,
   getPlugSpecs,
-  getSubComponentParentId,
   getUnitMergesSpec,
   getUnitPlugs,
   hasMerge,
   hasMergePin,
   makeFullSpecCollapseMap,
   opposite,
-} from '../../spec/util'
+} from '../../spec/util/spec'
 import { System } from '../../system'
-import pathGet from '../../system/core/object/DeepGet/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
@@ -179,6 +178,9 @@ import {
 } from './interface'
 import { moveSubgraph } from './moveSubgraph'
 import { renameUnitInMerges } from '../../spec/reducers/spec'
+import { weakMerge } from '../../weakMerge'
+import { getSubComponentParentId } from '../../spec/util/component'
+import deepGet from '../../deepGet'
 
 export type Graph_EE = G_EE & C_EE & Stateful_EE
 
@@ -215,8 +217,8 @@ export class Graph<I = any, O = any>
     [id: string]: Pin
   } = {}
 
-  private _exposedPin: Dict<Pin> = {}
-  private _exposedMerge: Dict<Merge> = {}
+  private _exposedPin: IOOf<Dict<Pin>> = {}
+  private _exposedMerge: IOOf<Dict<IOOf<Merge>>> = {}
   private _exposedEmptySubPin: IOOf<Dict<Dict<Pin>>> = { input: {}, output: {} }
 
   private _mergeToSelfUnit: Dict<string> = {}
@@ -230,8 +232,6 @@ export class Graph<I = any, O = any>
 
   private _unitToMerge: Dict<Set<string>> = {}
   private _unitToMergeCount: Dict<Dict<number>> = {}
-
-  // E
 
   private _children: Component_[] = []
 
@@ -261,9 +261,9 @@ export class Graph<I = any, O = any>
       system.newSpec(this._spec)
     }
 
-    const specs = { ...(spec.specs ?? {}), [id]: spec }
+    const specs = weakMerge(system.specs, { [id]: spec })
 
-    this._specs = this.__system.specs
+    this._specs = specs
 
     const {
       inputs = {},
@@ -323,11 +323,13 @@ export class Graph<I = any, O = any>
 
     const { functional } = opt
 
-    const exposedPinId = getExposedPinId(name, type)
-    const newExposedPinId = getExposedPinId(newName, type)
-
-    const exposedPin = this._exposedPin[exposedPinId]
-    const exposedMerge = this._exposedMerge[exposedPinId]
+    const exposedPin = deepGet(this._exposedPin, [type, name])
+    const exposedMerge = deepGet(this._exposedMerge, [type, name, type])
+    const exposedMergeOpposite = deepGet(this._exposedMerge, [
+      type,
+      name,
+      oppositeType,
+    ])
 
     exposedMerge.renamePin(type, name, newName)
 
@@ -335,13 +337,19 @@ export class Graph<I = any, O = any>
       this._unplugFromWaitAll(type, name)
     }
 
-    delete this._exposedPin[exposedPinId]
-    delete this._exposedMerge[exposedPinId]
+    pathDestroy(this._exposedPin, [type, name])
+    pathDestroy(this._exposedMerge, [type, name, type])
+    pathDestroy(this._exposedMerge, [type, name, oppositeType])
 
-    this._exposedPin[newExposedPinId] = exposedPin
-    this._exposedMerge[newExposedPinId] = exposedMerge
+    pathSet(this._exposedPin, [type, newName], exposedPin)
+    pathSet(this._exposedMerge, [type, newName, type], exposedMerge)
+    pathSet(
+      this._exposedMerge,
+      [type, newName, oppositeType],
+      exposedMergeOpposite
+    )
 
-    const emptySubPins = pathGet(this._exposedEmptySubPin, [type, name])
+    const emptySubPins = deepGet(this._exposedEmptySubPin, [type, name])
 
     for (const subPinId in { ...emptySubPins }) {
       const emptySubPin = emptySubPins[subPinId]
@@ -517,6 +525,7 @@ export class Graph<I = any, O = any>
     // console.log('Graph', '_simSetBranch', mergeId, type, pinNodeId)
 
     const merge = this._merge[mergeId]
+
     if (type === 'input') {
       const input = this._pin[pinNodeId]
 
@@ -575,6 +584,7 @@ export class Graph<I = any, O = any>
 
   private _memEnsureMergePin = (type: IO, mergeId: string): void => {
     const mergePinNodeId = getMergePinNodeId(mergeId, type)
+
     if (!this._pin[mergePinNodeId]) {
       const oppositeType = opposite(type)
 
@@ -625,7 +635,7 @@ export class Graph<I = any, O = any>
 
     const subPin = this._pin[mergePinNodeId]
 
-    this._setExposedSubPin(type, pinId, subPinId, subPin, opt, propagate)
+    this._setExposedSubPin(type, pinId, type, subPinId, subPin, opt, propagate)
   }
 
   private _simPlugPinToMerge = (
@@ -641,7 +651,7 @@ export class Graph<I = any, O = any>
 
     const subPin = this._pin[mergePinNodeId]
 
-    this._simSetExposedSubPin(type, pinId, subPinId, subPin, propagate)
+    this._simSetExposedSubPin(type, pinId, type, subPinId, subPin, propagate)
   }
 
   private _simUnplugPinFromMerge = (
@@ -658,7 +668,8 @@ export class Graph<I = any, O = any>
     pinId,
     subPinId,
     _unitId,
-    _pinId
+    _pinId,
+    _type
   ) => {
     this._simRemoveExposedSubPin(type, pinId, subPinId)
   }
@@ -668,26 +679,36 @@ export class Graph<I = any, O = any>
     name: string,
     subPinId: string,
     unitId: string,
+    kind: IO,
     pinId: string,
     opt: PinOpt,
     propagate: boolean = false
   ): void => {
-    this._memPlugPinToUnitPin(type, name, subPinId, unitId, pinId)
-    this._simPlugPinToUnitPin(type, name, subPinId, unitId, pinId, propagate)
+    this._memPlugPinToUnitPin(type, name, subPinId, unitId, kind, pinId)
+    this._simPlugPinToUnitPin(
+      type,
+      name,
+      subPinId,
+      unitId,
+      kind,
+      pinId,
+      propagate
+    )
   }
 
   private _memPlugPinToUnitPin = (
     type: IO,
-    name: string,
+    pinId: string,
     subPinId: string,
     unitId: string,
-    pinId: string
+    kind: IO,
+    pinId_: string
   ): void => {
-    const subPin = this.getUnitPin(unitId, type, pinId)
+    const subPin = this.getUnitPin(unitId, kind, pinId_)
 
-    pathSet(this._pinToPlug, [unitId, type, pinId], { pinId: name, subPinId })
+    pathSet(this._pinToPlug, [unitId, type, pinId_], { pinId, subPinId, kind })
 
-    this._memSetExposedSubPin(type, name, subPinId, subPin)
+    this._memSetExposedSubPin(type, pinId, subPinId, subPin)
   }
 
   private _memPlugPinToMerge = (
@@ -704,40 +725,27 @@ export class Graph<I = any, O = any>
     name: string,
     subPinId: string,
     unitId: string,
+    kind: IO,
     pinId: string,
     propagate: boolean = true
   ): void => {
-    const subPin = this.getUnitPin(unitId, type, pinId)
+    const subPin = this.getUnitPin(unitId, kind, pinId)
 
-    this._simSetExposedSubPin(type, name, subPinId, subPin, propagate)
-  }
-
-  private setExposedSubPin(
-    type: IO,
-    name: string,
-    subPinId: string,
-    subPin: Pin,
-    opt: PinOpt
-  ) {
-    this._setExposedSubPin(type, name, subPinId, subPin, opt)
-
-    this.emit('set_exposed_sub_pin', type, name, subPinId, subPin, opt, [])
+    this._simSetExposedSubPin(type, name, kind, subPinId, subPin, propagate)
   }
 
   private _setExposedSubPin(
     type: IO,
     name: string,
+    kind: IO,
     subPinId: string,
     subPin: Pin,
     opt: PinOpt,
     propagate: boolean = true
   ) {
-    const oppositeType = opposite(type)
-    const exposedPinId = getExposedPinId(name, type)
+    // console.log('Graph', '_setExposedSubPin', type, name, kind, subPinId, subPin, opt)
 
-    const exposedMerge = this._exposedMerge[exposedPinId]
-
-    exposedMerge.setPin(oppositeType, subPinId, subPin, opt, propagate)
+    this._simSetExposedSubPin(type, name, kind, subPinId, subPin, propagate)
   }
 
   private _memSetExposedSubPin(
@@ -752,6 +760,7 @@ export class Graph<I = any, O = any>
   private _simSetExposedSubPin(
     type: IO,
     name: string,
+    kind: IO,
     subPinId: string,
     subPin: Pin,
     propagate: boolean = true
@@ -761,28 +770,53 @@ export class Graph<I = any, O = any>
     //   '_simSetExposedSubPin',
     //   type,
     //   name,
+    //   kind,
     //   subPinId,
     //   subPin,
     //   propagate
     // )
 
     const oppositeType = opposite(type)
-    const exposedPinId = getExposedPinId(name, type)
 
-    const exposedMerge = this._exposedMerge[exposedPinId]
+    const exposedMerge = deepGet(this._exposedMerge, [type, name, type])
+    const exposedMergeOpposite = deepGet(this._exposedMerge, [
+      type,
+      name,
+      oppositeType,
+    ])
 
-    exposedMerge.setPin(oppositeType, subPinId, subPin, {}, propagate)
+    if (
+      type === kind ||
+      pathOrDefault(this._exposedEmptySubPin, [type, name, subPinId], undefined)
+    ) {
+      exposedMerge.setPin(oppositeType, subPinId, subPin, {}, propagate)
+    } else {
+      exposedMergeOpposite.setPin(type, subPinId, subPin, {}, propagate)
+    }
   }
 
   private _simRemoveExposedSubPin(type: IO, name: string, subPinId: string) {
-    // console.log('Graph', '_simRemoveExposedSubPin', type, name, subPinId)
+    const subPinSpec = this.getSubPinSpec(type, name, subPinId)
+
+    const { kind = type } = subPinSpec
 
     const oppositeType = opposite(type)
-    const exposedPinId = getExposedPinId(name, type)
 
-    const exposedMerge = this._exposedMerge[exposedPinId]
+    const exposedMerge = deepGet(this._exposedMerge, [type, name, type])
+    const exposedMergeOpposite = deepGet(this._exposedMerge, [
+      type,
+      name,
+      oppositeType,
+    ])
 
-    exposedMerge.removePin(oppositeType, subPinId)
+    if (
+      type === kind ||
+      pathOrDefault(this._exposedEmptySubPin, [type, name, subPinId], undefined)
+    ) {
+      exposedMerge.removePin(oppositeType, subPinId)
+    } else {
+      exposedMergeOpposite.removePin(type, subPinId)
+    }
   }
 
   private _takeErr = (): void => {
@@ -851,7 +885,7 @@ export class Graph<I = any, O = any>
   }
 
   public isElement(): boolean {
-    return this._element
+    return !!this._element
   }
 
   public setElement(): void {
@@ -952,13 +986,26 @@ export class Graph<I = any, O = any>
       state.merge[mergeId] = merge_state
     }
 
-    for (const pinId in this._exposedMerge) {
-      const merge = this._exposedMerge[pinId]
+    forIOObjKV(this._exposedMerge, (type, pinId) => {
+      const oppositeType = opposite(type)
 
-      const merge_state = merge.snapshot()
+      const merge = deepGet(this._exposedMerge, [type, pinId, type])
+      const mergeOpposite = deepGet(this._exposedMerge, [
+        type,
+        pinId,
+        oppositeType,
+      ])
 
-      state.exposedMerge[pinId] = merge_state
-    }
+      const mergeState = merge.snapshot()
+      const mergeOppositeState = mergeOpposite.snapshot()
+
+      pathSet(state.exposedMerge, [type, pinId, type], mergeState)
+      pathSet(
+        state.exposedMerge,
+        [type, pinId, oppositeType],
+        mergeOppositeState
+      )
+    })
 
     state.waitAll = this._waitAll['input'].snapshot()
 
@@ -988,19 +1035,36 @@ export class Graph<I = any, O = any>
       }
     }
 
-    for (const exposedPinId in this._exposedMerge) {
-      const [type, pinId] = exposedPinId.split('/') as [IO, string]
+    forIOObjKV(this._exposedMerge, (type, pinId) => {
+      const oppositeType = opposite(type)
 
       if (this.hasDataPinNamed(type, pinId)) {
-        const merge = this._exposedMerge[exposedPinId]
+        const merge = deepGet(this._exposedMerge, [type, pinId, type])
+        const mergeOpposite = deepGet(this._exposedMerge, [
+          type,
+          pinId,
+          oppositeType,
+        ])
 
-        const merge_state = state.exposedMerge?.[exposedPinId]
+        const mergeState = pathOrDefault(
+          state,
+          ['exposedMerge', type, pinId, type],
+          undefined
+        )
+        const mergeOppositeState = pathOrDefault(
+          state,
+          ['exposedMerge', type, pinId, oppositeType],
+          undefined
+        )
 
-        if (merge_state) {
-          merge.restore(merge_state)
+        if (mergeState) {
+          merge.restore(mergeState)
+        }
+        if (mergeOppositeState) {
+          mergeOpposite.restore(mergeOppositeState)
         }
       }
-    }
+    })
 
     const wait_all_state = state.waitAll
 
@@ -1086,12 +1150,17 @@ export class Graph<I = any, O = any>
 
   public getExposedOutput(pin: GraphSubPinSpec): string {
     const outputs = this._spec.outputs || {}
+
     const nodeId = this._getExposedSubPinNodeId('output', pin)
+
     for (const outputId in outputs) {
       const output = outputs[outputId]
+
       const { plug } = output
+
       for (const subPinId in plug) {
         const subPin = plug[subPinId]
+
         if (this._getExposedSubPinNodeId('output', subPin) === nodeId) {
           return outputId
         }
@@ -1195,18 +1264,28 @@ export class Graph<I = any, O = any>
     // console.log('Graph', '_exposePinSet', type, pinId, pinSpec, data, propagate)
 
     const exposedPin = new Pin({ data })
-    const exposedMerge = new Merge(this.__system)
+
+    const exposeMerge = new Merge(this.__system)
+    const exposedMergeOpposite = new Merge(this.__system)
 
     this._fork()
 
     this._specExposePinSet(type, pinId, pinSpec)
-    this._memExposePinSet(type, pinId, pinSpec, exposedPin, exposedMerge)
+    this._memExposePinSet(
+      type,
+      pinId,
+      pinSpec,
+      exposedPin,
+      exposeMerge,
+      exposedMergeOpposite
+    )
     this._simExposePinSet(
       type,
       pinId,
       pinSpec,
       exposedPin,
-      exposedMerge,
+      exposeMerge,
+      exposedMergeOpposite,
       propagate
     )
   }
@@ -1222,15 +1301,25 @@ export class Graph<I = any, O = any>
     const { ref } = pinSpec
 
     const exposedPin = new Pin({ ref })
-    const exposedMerge = new Merge(this.__system)
 
-    this._memExposePinSet(type, pinId, pinSpec, exposedPin, exposedMerge)
+    const exposedMerge = new Merge(this.__system)
+    const exposedMergeOpposite = new Merge(this.__system)
+
+    this._memExposePinSet(
+      type,
+      pinId,
+      pinSpec,
+      exposedPin,
+      exposedMerge,
+      exposedMergeOpposite
+    )
     this._simExposePinSet(
       type,
       pinId,
       pinSpec,
       exposedPin,
       exposedMerge,
+      exposedMergeOpposite,
       propagate
     )
   }
@@ -1256,16 +1345,23 @@ export class Graph<I = any, O = any>
     pinId: string,
     pinSpec: GraphPinSpec,
     exposedPin: Pin,
-    exposedMerge: Merge
+    exposedMerge: Merge,
+    exposedMergeOpposite: Merge
   ) => {
     // console.log('Graph', '_memExposePinSet', type, pinId, pinSpec)
 
     const { plug } = pinSpec
 
-    const exposedNodeId = getExposedPinId(pinId, type)
+    const oppositeType = opposite(type)
 
-    this._exposedPin[exposedNodeId] = exposedPin
-    this._exposedMerge[exposedNodeId] = exposedMerge
+    pathSet(this._exposedPin, [type, pinId], exposedPin)
+
+    pathSet(this._exposedMerge, [type, pinId, type], exposedMerge)
+    pathSet(
+      this._exposedMerge,
+      [type, pinId, oppositeType],
+      exposedMergeOpposite
+    )
 
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
       this._memExposePin(type, pinId, subPinId, subPinSpec)
@@ -1278,11 +1374,15 @@ export class Graph<I = any, O = any>
     pinSpec: GraphPinSpec,
     exposedPin: Pin,
     exposedMerge: Merge,
+    exposedMergeOpposite: Merge,
     propagate: boolean = true
   ) {
     const { plug, ref } = pinSpec
 
+    const oppositeType = opposite(type)
+
     exposedMerge.setPin(type, pinId, exposedPin)
+    exposedMergeOpposite.setPin(oppositeType, pinId, exposedPin)
 
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
       this._simExposePin(type, pinId, subPinId, subPinSpec, propagate)
@@ -1315,6 +1415,8 @@ export class Graph<I = any, O = any>
     name: string,
     functional: boolean
   ): void {
+    this._fork()
+
     this._specSetPinSetFunctional(type, name, functional)
     this._memSetPinSetFunctional(type, name, functional)
     this._simSetPinSetFunctional(type, name, functional)
@@ -1357,12 +1459,17 @@ export class Graph<I = any, O = any>
     }
   }
 
-  public setPinSetId(type: IO, pinId: string, nextPinId: string): void {
+  public setPinSetId(
+    type: IO,
+    pinId: string,
+    nextPinId: string,
+    emit: boolean = true
+  ): void {
     this._setPinSetId(type, pinId, nextPinId)
 
     this.renamePin(type, pinId, nextPinId)
 
-    this.emit('set_pin_set_id', type, pinId, nextPinId, [])
+    emit && this.emit('set_pin_set_id', type, pinId, nextPinId, [])
   }
 
   public _setPinSetId(type: IO, pinId: string, nextPinId: string): void {
@@ -1498,14 +1605,28 @@ export class Graph<I = any, O = any>
 
     const { plug } = pinSpec
 
-    const exposedNodeId = getExposedPinId(pinId, type)
-
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
       this._memCoverPin(type, pinId, subPinId)
     })
 
-    delete this._exposedPin[exposedNodeId]
-    delete this._exposedMerge[exposedNodeId]
+    pathDestroy(this._exposedPin, [type, pinId])
+
+    const exposedMergeInput = deepGet(this._exposedMerge, [
+      type,
+      pinId,
+      'input',
+    ])
+    const exposedMergeOutput = deepGet(this._exposedMerge, [
+      type,
+      pinId,
+      'output',
+    ])
+
+    pathDestroy(this._exposedMerge, [type, pinId, 'input'])
+    pathDestroy(this._exposedMerge, [type, pinId, 'output'])
+
+    exposedMergeInput.destroy()
+    exposedMergeOutput.destroy()
   }
 
   private _specCoverPinSet = (type: IO, pinId: string): void => {
@@ -1544,21 +1665,22 @@ export class Graph<I = any, O = any>
     subPinId: string,
     subPinSpec: GraphSubPinSpec
   ): boolean => {
-    const { mergeId, unitId: _unitId, pinId: _pinId } = subPinSpec
+    const { mergeId, unitId: _unitId, pinId: _pinId, kind = type } = subPinSpec
 
     let ref = undefined
 
     if (_unitId && _pinId) {
-      if (this.isUnitRefPin(_unitId, type, _pinId) || _pinId === SELF) {
+      if (this.isUnitRefPin(_unitId, kind, _pinId) || _pinId === SELF) {
         ref = true
       }
 
-      this._memPlugPinToUnitPin(type, pinId, subPinId, _unitId, _pinId)
+      this._memPlugPinToUnitPin(type, pinId, subPinId, _unitId, kind, _pinId)
     } else if (mergeId) {
       const merge = this.getMergeSpec(mergeId)
 
       forEachPinOnMerge(merge, (unitId, type, pinId) => {
         const unit = this.getUnit(unitId)
+
         if (unit.hasRefPinNamed(type, pinId)) {
           ref = true
         }
@@ -1584,12 +1706,17 @@ export class Graph<I = any, O = any>
   ): void => {
     // console.log('Graph', '_specPlugPin', type, pinId, subPinId, subPinSpec)
 
-    const { mergeId: _mergeId, unitId: _unitId, pinId: _pinId } = subPinSpec
+    const {
+      mergeId: _mergeId,
+      unitId: _unitId,
+      pinId: _pinId,
+      kind = type,
+    } = subPinSpec
 
     let ref = undefined
 
     if (_unitId && _pinId) {
-      if (this.isUnitRefPin(_unitId, type, _pinId) || _pinId === SELF) {
+      if (this.isUnitRefPin(_unitId, kind, _pinId) || _pinId === SELF) {
         ref = true
       }
     } else if (_mergeId) {
@@ -1623,7 +1750,7 @@ export class Graph<I = any, O = any>
     emit: boolean = true,
     propagate: boolean = true
   ): void => {
-    // console.log('Graph', 'plugPin', pinId, subPinId, subPinSpec)
+    // console.log('Graph', 'plugPin', type, pinId, subPinId, subPinSpec)
 
     this._plugPin(type, pinId, subPinId, subPinSpec, propagate)
 
@@ -1657,7 +1784,7 @@ export class Graph<I = any, O = any>
   ): void => {
     // console.log('Graph', '_plugPin', type, pinId, subPinId, subPinSpec)
 
-    const { mergeId, unitId, pinId: _pinId } = subPinSpec
+    const { mergeId, unitId, pinId: _pinId, kind = type } = subPinSpec
 
     if (
       pathOrDefault(
@@ -1683,6 +1810,7 @@ export class Graph<I = any, O = any>
         pinId,
         subPinId,
         unitId,
+        kind,
         _pinId,
         opt,
         propagate
@@ -1705,7 +1833,7 @@ export class Graph<I = any, O = any>
   ): void => {
     // console.log('Graph', '_simPlugPin', pinId, subPinId, subPinSpec)
 
-    const { mergeId, unitId, pinId: _pinId } = subPinSpec
+    const { mergeId, unitId, pinId: _pinId, kind = type } = subPinSpec
 
     if (mergeId) {
       this._simPlugPinToMerge(type, pinId, subPinId, mergeId, propagate)
@@ -1715,6 +1843,7 @@ export class Graph<I = any, O = any>
         pinId,
         subPinId,
         unitId!,
+        kind,
         _pinId!,
         propagate
       )
@@ -1932,7 +2061,12 @@ export class Graph<I = any, O = any>
   ): void => {
     const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
-    const { mergeId: _mergeId, unitId: _unitId, pinId: _pinId } = subPinSpec
+    const {
+      mergeId: _mergeId,
+      unitId: _unitId,
+      pinId: _pinId,
+      kind = type,
+    } = subPinSpec
 
     const isOutput = type === 'output'
 
@@ -1952,7 +2086,14 @@ export class Graph<I = any, O = any>
 
       const isUnitPinRef = unit.isPinRef(type, _pinId)
 
-      this._simUnplugPinFromUnitPin(type, pinId, subPinId, _unitId, _pinId)
+      this._simUnplugPinFromUnitPin(
+        type,
+        pinId,
+        subPinId,
+        _unitId,
+        _pinId,
+        kind
+      )
 
       if (propagate) {
         if (isUnitPinRef) {
@@ -1966,11 +2107,17 @@ export class Graph<I = any, O = any>
     }
 
     if (isRef) {
-      const exposedPinId = getExposedPinId(pinId, type)
+      const oppositeType = opposite(type)
 
-      const exposedMerge = this._exposedMerge[exposedPinId]
+      const exposedMerge = deepGet(this._exposedMerge, [type, pinId, type])
+      const exposedMergeOpposite = deepGet(this._exposedMerge, [
+        type,
+        pinId,
+        oppositeType,
+      ])
 
       exposedMerge.reset()
+      exposedMergeOpposite.reset()
     }
   }
 
@@ -1984,7 +2131,14 @@ export class Graph<I = any, O = any>
 
     const emptySubPin = this._ensureEmptySubPin(type, pinId, subPinId)
 
-    this._simSetExposedSubPin(type, pinId, subPinId, emptySubPin, propagate)
+    this._simSetExposedSubPin(
+      type,
+      pinId,
+      type,
+      subPinId,
+      emptySubPin,
+      propagate
+    )
   }
 
   private _memUnplugInput = (pinId: string, subPinId: string): void => {
@@ -2004,26 +2158,25 @@ export class Graph<I = any, O = any>
   }
 
   public isExposedInput(pin: GraphSubPinSpec): boolean {
-    const inputs = this._spec.inputs || {}
+    const { inputs = {} } = this._spec
+
     const pinNodeId = this._getExposedSubPinNodeId('input', pin)
+
     return someObj(inputs, ({ plug }) => {
       return someObj(plug, (i) => {
         const exposedSubPinNodeId = this._getExposedSubPinNodeId('input', i)
+
         return exposedSubPinNodeId === pinNodeId
       })
     })
   }
 
   public getExposedInputPin = (id: string): Pin<I[keyof I]> => {
-    const exposedInputId = getExposedPinId(id, 'input')
-
-    return this._exposedPin[exposedInputId]
+    return deepGet(this._exposedPin, ['input', id])
   }
 
   public getExposedOutputPin = (id: string): Pin<O[keyof O]> => {
-    const exposedOutputId = getExposedPinId(id, 'output')
-
-    return this._exposedPin[exposedOutputId]
+    return deepGet(this._exposedPin, ['output', id])
   }
 
   public getExposedPinSpecs(): IOOf<GraphPinsSpec> {
@@ -2272,6 +2425,7 @@ export class Graph<I = any, O = any>
       this._plugPin(outerPin.type, outerPin.pinId, outerPin.subPinId, {
         unitId: nextUnitId,
         pinId: nextPinId,
+        kind: outerPin.type,
       })
     })
   }
@@ -2335,6 +2489,7 @@ export class Graph<I = any, O = any>
       this._plugPin(outerPin.type, outerPin.pinId, outerPin.subPinId, {
         unitId: nextUnitId,
         pinId,
+        kind: outerPin.type,
       })
     })
 
@@ -2415,11 +2570,9 @@ export class Graph<I = any, O = any>
     const children = {}
     for (const unitId in this._unit) {
       const unit = this.getUnit(unitId)
-      if (
-        unit instanceof Element_ ||
-        (unit instanceof Graph && unit.isElement())
-      ) {
-        const unitChildren = (unit as C).refChildren()
+      if (unit.isElement()) {
+        // @ts-ignore
+        const unitChildren = unit.refChildren()
         if (unitChildren !== undefined) {
           children[unitId] = unitChildren
         }
@@ -2563,9 +2716,8 @@ export class Graph<I = any, O = any>
 
   public getPlug(type: IO, pinId: string, subPinId: string): Pin {
     const oppositeType = opposite(type)
-    const exposedPinId = getExposedPinId(pinId, type)
 
-    const exposedMerge = this._exposedMerge[exposedPinId]
+    const exposedMerge = deepGet(this._exposedMerge, [type, pinId, type])
 
     const plug = exposedMerge.getPin(oppositeType, subPinId)
 
@@ -2576,7 +2728,7 @@ export class Graph<I = any, O = any>
     return this._merge[mergeId]
   }
 
-  public refExposedMerges(): Dict<Merge> {
+  public refExposedMerges(): IOOf<Dict<IOOf<Merge>>> {
     return this._exposedMerge
   }
 
@@ -2683,7 +2835,7 @@ export class Graph<I = any, O = any>
     )
 
     this._memAddUnit(unitId, _unit)
-    this._simAddUnit(unitId, { unit }, _unit)
+    this._simAddUnit(unitId, { unit }, _unit, false)
   }
 
   private _initAddUnits(units: GraphUnitsSpec): void {
@@ -2753,7 +2905,11 @@ export class Graph<I = any, O = any>
     for (const child of children) {
       const { id } = child
 
-      const ChildBundle = fromId<Component_>(id, this.__system.specs, classes)
+      const ChildBundle = bundleFromId<Component_>(
+        id,
+        this.__system.specs,
+        classes
+      )
 
       unit.appendChild(ChildBundle)
     }
@@ -2771,7 +2927,11 @@ export class Graph<I = any, O = any>
     for (const child of children) {
       const { id } = child
 
-      const ChildBundle = fromId<Component_>(id, this.__system.specs, classes)
+      const ChildBundle = bundleFromId<Component_>(
+        id,
+        this.__system.specs,
+        classes
+      )
 
       unit.appendChild(ChildBundle)
       // TODO state
@@ -3045,10 +3205,7 @@ export class Graph<I = any, O = any>
 
     pathSet(this._spec, ['units', unitId], unitSpec)
 
-    if (
-      unit instanceof Element_ ||
-      (unit instanceof Graph && unit.isElement())
-    ) {
+    if (unit.isElement()) {
       this._specInjectSubComponent(unitId)
       this._specAppendRoot(unitId)
     }
@@ -3095,12 +3252,18 @@ export class Graph<I = any, O = any>
       const pipedToMerge = this._pipedTo[pinNodeId]
       const pipedFromMerge = this._pipedFrom[pinNodeId]
 
+      const pinPlug = findUnitPinPlug(this._spec, unitId, type, pinId)
+
       if (pipedToMerge) {
         this._removePinOrMerge(pipedToMerge, unitId, type, pinId)
       }
 
       if (pipedFromMerge) {
         this._removePinOrMerge(pipedFromMerge, unitId, type, pinId)
+      }
+
+      if (pinPlug) {
+        this._unplugPin(type, pinPlug.pinId, pinPlug.subPinId)
       }
 
       delete this._pipedTo[pinNodeId]
@@ -3193,8 +3356,6 @@ export class Graph<I = any, O = any>
 
       this._specSetUnitPinData(unitId, type, pinId, data)
 
-      // this.emit('set_unit_pin_data', unitId, type, pinId, data, [])
-
       const pin_data_unlisten = pin.addListener('data', (data) => {
         if (this._settingUnitData) {
           return
@@ -3243,7 +3404,6 @@ export class Graph<I = any, O = any>
     all_unlisten.push(
       unit.addListener('rename_output', rename_unit_pin.bind(this, 'output'))
     )
-
     all_unlisten.push(
       unit.addListener(
         'set_pin_constant',
@@ -3350,16 +3510,15 @@ export class Graph<I = any, O = any>
   private _simAddUnit(
     unitId: string,
     bundle: UnitBundleSpec,
-    unit: Unit
+    unit: Unit,
+    registerRoot: boolean = true
   ): void {
     // console.log('_simAddUnit', unitId, bundle, bundle.unit.id)
 
-    if (
-      unit instanceof Element_ ||
-      (unit instanceof Graph && unit.isElement())
-    ) {
-      this.registerRoot(unit)
-      this._simInjectSubComponent(unitId, bundle.unit, unit)
+    if (unit.isElement()) {
+      registerRoot && this.registerRoot(unit as Component_)
+
+      this._simInjectSubComponent(unitId, bundle.unit, unit as Component_)
     }
 
     if (unit.hasErr()) {
@@ -3446,17 +3605,6 @@ export class Graph<I = any, O = any>
     this.emit('move_unit', id, unitId, inputId, [])
   }
 
-  private removeUnitFromMerge(unitId: string, mergeId: string): void {
-    this._removeUnitFromMerge(unitId, mergeId)
-
-    this.emit('remove_unit_from_merge', unitId, mergeId, [])
-  }
-
-  private _removeUnitFromMerges(unitId: string): void {
-    this._simRemoveUnitFromMerges(unitId)
-    this._memRemoveUnitFromMerges(unitId)
-  }
-
   private _memRemoveUnitFromMerges(unitId: string): void {
     const merges = this._unitToMerge[unitId]
 
@@ -3509,9 +3657,11 @@ export class Graph<I = any, O = any>
 
     const mergeUnit = merge[unitId]
 
-    forIOObjKV(mergeUnit, (type, pinId) => {
-      callback(type, pinId)
-    })
+    if (mergeUnit) {
+      forIOObjKV(mergeUnit, (type, pinId) => {
+        callback(type, pinId)
+      })
+    }
   }
 
   private _removeUnit(
@@ -3582,6 +3732,7 @@ export class Graph<I = any, O = any>
     const exposedOutputId: string = this.getExposedOutput({
       unitId,
       pinId: SELF,
+      kind: 'output',
     })
 
     this._simUnplugUnit(unitId, take)
@@ -3592,10 +3743,7 @@ export class Graph<I = any, O = any>
       }
     }
 
-    if (
-      unit instanceof Element_ ||
-      (unit instanceof Graph && unit.isElement())
-    ) {
+    if (unit.isElement()) {
       const subComponentSpec = this._spec.component?.subComponents[unitId]
 
       const { children = [] } = subComponentSpec
@@ -3643,10 +3791,10 @@ export class Graph<I = any, O = any>
 
             const otherMergeUnitId = getObjSingleKey(mergeSpec)
             const otherMergeUnitType = getObjSingleKey(
-              mergeSpec?.[otherMergeUnitId]
+              mergeSpec?.[otherMergeUnitId] ?? {}
             )
             const otherMergeUnitPinId = getObjSingleKey(
-              mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType]
+              mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType] ?? {}
             )
 
             this._specRemoveMerge(mergeId)
@@ -3656,7 +3804,11 @@ export class Graph<I = any, O = any>
                 'input',
                 mergeInputPlug.pinId,
                 mergeInputPlug.subPinId,
-                { unitId: otherMergeUnitId, pinId: otherMergeUnitPinId }
+                {
+                  unitId: otherMergeUnitId,
+                  pinId: otherMergeUnitPinId,
+                  kind: 'input',
+                }
               )
             }
 
@@ -3665,7 +3817,11 @@ export class Graph<I = any, O = any>
                 'output',
                 mergeOutputPlug.pinId,
                 mergeOutputPlug.subPinId,
-                { unitId: otherMergeUnitId, pinId: otherMergeUnitPinId }
+                {
+                  unitId: otherMergeUnitId,
+                  pinId: otherMergeUnitPinId,
+                  kind: 'output',
+                }
               )
             }
           } else {
@@ -3707,10 +3863,10 @@ export class Graph<I = any, O = any>
 
         const otherMergeUnitId = getObjSingleKey(mergeSpec)
         const otherMergeUnitType = getObjSingleKey(
-          mergeSpec?.[otherMergeUnitId]
+          mergeSpec?.[otherMergeUnitId] ?? {}
         )
         const otherMergeUnitPinId = getObjSingleKey(
-          mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType]
+          mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType] ?? {}
         )
 
         this._simRemoveMerge(mergeId, take)
@@ -3720,7 +3876,11 @@ export class Graph<I = any, O = any>
             'input',
             mergeInputPlug.pinId,
             mergeInputPlug.subPinId,
-            { unitId: otherMergeUnitId, pinId: otherMergeUnitPinId },
+            {
+              unitId: otherMergeUnitId,
+              pinId: otherMergeUnitPinId,
+              kind: 'input',
+            },
             false
           )
         }
@@ -3730,7 +3890,11 @@ export class Graph<I = any, O = any>
             'output',
             mergeOutputPlug.pinId,
             mergeOutputPlug.subPinId,
-            { unitId: otherMergeUnitId, pinId: otherMergeUnitPinId },
+            {
+              unitId: otherMergeUnitId,
+              pinId: otherMergeUnitPinId,
+              kind: 'output',
+            },
             false
           )
         }
@@ -4020,6 +4184,9 @@ export class Graph<I = any, O = any>
 
     delete this._pin[mergeInputNodeId]
     delete this._pin[mergeOutputNodeId]
+
+    delete this._merge[mergeId]
+    delete this._mergePinCount[mergeId]
   }
 
   private _specRemoveMerge(mergeId: string): void {
@@ -4053,9 +4220,6 @@ export class Graph<I = any, O = any>
       delete this._mergeToSelfUnit[mergeId]
       delete this._selfUniToMerge[selfUnitId]
     }
-
-    delete this._merge[mergeId]
-    delete this._mergePinCount[mergeId]
   }
 
   private _specRemoveAllMergeRef(mergeId: string): void {
@@ -4250,6 +4414,8 @@ export class Graph<I = any, O = any>
   private _simRemoveMerge(mergeId: string, take: boolean) {
     // console.log('Graph', '_simRemoveMerge', mergeId)
 
+    const merge = this.getMerge(mergeId)
+
     this._simRemoveAllPlugsFromMerge(mergeId)
     this._simRemoveAllPinsFromMerge(mergeId, take)
   }
@@ -4332,11 +4498,11 @@ export class Graph<I = any, O = any>
     const merge = clone(this._spec.merges[mergeId])
 
     forEachValueKey(merge, ({ input, output }, unitId) => {
-      forEachValueKey(input || {}, (_, inputId: string) => {
-        this._simRemovePinFromMerge(mergeId, unitId, 'input', inputId, take)
-      })
       forEachValueKey(output || {}, (_, outputId: string) => {
         this._simRemovePinFromMerge(mergeId, unitId, 'output', outputId, take)
+      })
+      forEachValueKey(input || {}, (_, inputId: string) => {
+        this._simRemovePinFromMerge(mergeId, unitId, 'input', inputId, take)
       })
     })
   }
@@ -4493,11 +4659,21 @@ export class Graph<I = any, O = any>
     pinId: string,
     take: boolean = true
   ): void {
+    // console.log(
+    //   'Graph',
+    //   '_simRemovePinFromMerge',
+    //   mergeId,
+    //   unitId,
+    //   type,
+    //   pinId
+    // )
     const pinNodeId = getPinNodeId(unitId, type, pinId)
+
+    const shouldTake = take || (type === 'output' && pinId === SELF)
 
     this._simRemoveBranch(mergeId, type, pinNodeId)
 
-    if (take) {
+    if (shouldTake) {
       if (type === 'input') {
         if (
           this._mergeToSelfUnit[mergeId] ||
@@ -4509,10 +4685,10 @@ export class Graph<I = any, O = any>
         }
       } else {
         if (pinId === SELF) {
-          const merge = this._merge[mergeId]
+          const mergeSpec = this.getMergeSpec(mergeId)
 
-          forEachValueKey(merge.getOutputs(), (pin, name): void => {
-            merge.takeOutput(name)
+          forEachInputOnMerge(mergeSpec, (unitId, type, pinId): void => {
+            this._removeUnitPinData(unitId, type, pinId)
           })
         }
       }
@@ -4543,7 +4719,7 @@ export class Graph<I = any, O = any>
   ): void {
     const unit = this.getUnit(unitId) as Graph
 
-    unit.setPinSetId(type, pinId, newPinId)
+    unit.setPinSetId(type, pinId, newPinId, false)
 
     emit && this.emit('set_unit_pin_set_id', unitId, type, pinId, newPinId, [])
   }
@@ -4746,6 +4922,7 @@ export class Graph<I = any, O = any>
           {
             unitId,
             pinId,
+            kind: type,
           },
           propagate
         )
@@ -5159,7 +5336,7 @@ export class Graph<I = any, O = any>
       pinId
     )
 
-    const plug = pathGet(plugs, [type, pinId, subPinId])
+    const plug = deepGet(plugs, [type, pinId, subPinId])
 
     const finalType = pathOrDefault(
       nextIdMap,
@@ -5294,8 +5471,7 @@ export class Graph<I = any, O = any>
   private _isUnitComponent = (unitId: string): boolean => {
     const unit = this.getUnit(unitId)
 
-    const isComponent =
-      unit instanceof Element_ || (unit instanceof Graph && unit.isElement())
+    const isComponent = unit.isElement()
 
     return isComponent
   }
@@ -5583,6 +5759,12 @@ export class Graph<I = any, O = any>
       this._initAddSubComponent(subComponentId, subComponent)
     }
 
+    for (const childId of children) {
+      const child = this.getUnit(childId) as Component_
+
+      this.registerRoot(child)
+    }
+
     for (let i = 0; i < slots.length; i++) {
       const slot = slots[i]
 
@@ -5673,12 +5855,10 @@ export class Graph<I = any, O = any>
   }
 
   registerRoot(component: Component_): void {
-    // console.log('Graph', 'registerRoot', component)
     return registerRoot(this, this._root, component)
   }
 
   unregisterRoot(component: Component_): void {
-    // console.log('Graph', 'unregisterRoot', component)
     return unregisterRoot(this, this._root, component)
   }
 
