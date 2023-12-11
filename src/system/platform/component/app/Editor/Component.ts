@@ -50805,10 +50805,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const node_id in position_map) {
       const position = position_map[node_id]
 
+      const round_position = roundPoint(position)
+
       if (this._is_unit_node_id(node_id)) {
         const unit_id = node_id
 
-        pathSet(spec, ['units', unit_id, 'metadata', 'position'], position)
+        pathSet(
+          spec,
+          ['units', unit_id, 'metadata', 'position'],
+          round_position
+        )
       } else if (this._is_link_pin_node_id(node_id)) {
         const pin_node_id = node_id
 
@@ -50817,7 +50823,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         pathSet(
           spec,
           ['units', unitId, type, pinId, 'metadata', 'position'],
-          position
+          round_position
         )
       } else if (this._is_merge_node_id(node_id)) {
         const merge_node_id = node_id
@@ -50833,7 +50839,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         pathSet(
           spec,
           [`${type}s`, pinId, 'metadata', 'position', subPinId],
-          position
+          round_position
         )
       } else {
         //
