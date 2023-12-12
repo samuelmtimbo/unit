@@ -432,7 +432,7 @@ export class Component<
         width: `${leafTrait.width}px`,
         height: `${leafTrait.height}px`,
         pointerEvents: 'none',
-        zIndex: '0',
+        zIndex: '1',
         // border: `1px solid ${randomColorString()}`,
       })
 
