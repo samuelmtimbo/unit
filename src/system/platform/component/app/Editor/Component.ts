@@ -42631,7 +42631,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         return this._state_remove_merge(merge_node_id)
       },
-      moveRoot: (parentId: string, childId: string, slotName: string): void => {
+      moveRoot: (
+        parentId: string,
+        childId: string,
+        to: number,
+        slotName: string
+      ): void => {
         throw new MethodNotImplementedError()
       },
       setPinData: (type: IO, pinId: string, data: any): void => {
@@ -42900,7 +42905,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       removeMerge: (mergeId: string): void => {
         return this._spec_graph_unit_remove_merge(graph_id, mergeId)
       },
-      moveRoot: (parentId: string, childId: string, slotName: string): void => {
+      moveRoot: (
+        parentId: string,
+        childId: string,
+        to: number,
+        slotName: string
+      ): void => {
         throw new MethodNotImplementedError()
       },
       setPinData: (type: IO, pinId: string, data: any): void => {
@@ -43373,6 +43383,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       moveRoot: function (
         parentId: string,
         childId: string,
+        at: number,
         slotName: string
       ): void {
         throw new MethodNotImplementedError()
@@ -45180,9 +45191,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             updated_graph_spec.component
           )
 
+          const at =
+            this._collapse_init_spec.component.subComponents[
+              sub_component.parent_id
+            ].children.indexOf(unit_id)
+
           updated_graph_spec.component =
-            componentReducer.appendSubComponentChild(
-              { id: sub_component.parent_id, childId: next_unit_id },
+            componentReducer.insertSubComponentChild(
+              { id: sub_component.parent_id, childId: next_unit_id, at },
               updated_graph_spec.component
             )
         }

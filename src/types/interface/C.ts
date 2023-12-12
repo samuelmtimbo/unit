@@ -27,7 +27,7 @@ export interface C {
   registerRoot(component: Component_): void
   unregisterRoot(component: Component_): void
   reorderRoot(component: Component_, to: number): void
-  registerParentRoot(component: Component_, slotName: string): void
+  registerParentRoot(component: Component_, slotName: string, at?: number): void
   unregisterParentRoot(component: Component_): void
   reorderParentRoot(component: Component_, to: number): void
   appendParentChild(component: Component_, slotName: string): void

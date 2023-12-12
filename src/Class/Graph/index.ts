@@ -3022,6 +3022,20 @@ export class Graph<I = any, O = any>
     this._simSubComponentAppendChild(subComponentId, childId, slot)
   }
 
+  private _insertSubComponentChild = (
+    subComponentId: string,
+    childId: string,
+    at: number,
+    slot: string
+  ): void => {
+    // console.log('Graph', '_insertSubComponentChild', subComponentId, childId, at, slot)
+
+    this._fork()
+
+    this._specSubComponentInsertChild(subComponentId, childId, at, slot)
+    this._simSubComponentInsertChild(subComponentId, childId, at, slot)
+  }
+
   private _simRemoveSubComponentFromParent = (subComponentId: string): void => {
     // console.log('Graph', '_simRemoveSubComponentFromParent', subComponentId)
 
@@ -3102,6 +3116,24 @@ export class Graph<I = any, O = any>
     subComponent.childSlot = childSlot
   }
 
+  private _specSubComponentInsertChild = (
+    subComponentId: string,
+    childId: string,
+    at: number,
+    slot: string
+  ) => {
+    const subComponent = this._spec.component.subComponents[subComponentId]
+
+    const { children = [], childSlot = {} } = subComponent
+
+    children.splice(at, 0, childId)
+
+    childSlot[childId] = slot
+
+    subComponent.children = children
+    subComponent.childSlot = childSlot
+  }
+
   private _simSubComponentAppendChild = (
     subComponentId: string,
     childId: string,
@@ -3111,8 +3143,18 @@ export class Graph<I = any, O = any>
     const childUnit = this.getUnit(childId) as Element_ | Graph
 
     subComponentUnit.registerParentRoot(childUnit, slotName)
+  }
 
-    // this.unregisterRoot(childUnit)
+  private _simSubComponentInsertChild = (
+    subComponentId: string,
+    childId: string,
+    at: number,
+    slotName: string
+  ) => {
+    const subComponentUnit = this.getUnit(subComponentId) as Element_ | Graph
+    const childUnit = this.getUnit(childId) as Element_ | Graph
+
+    subComponentUnit.registerParentRoot(childUnit, slotName)
   }
 
   private _unitUnlisten: Dict<Unlisten> = {}
@@ -5083,10 +5125,12 @@ export class Graph<I = any, O = any>
     const prevParentMap = this.getSubComponentsParentMap(children)
     const prevSlotMap = this.getSubComponentsParentMap(children)
 
-    for (const childId of children) {
+    for (let i = 0; i < children.length; i++) {
+      const childId = children[i]
+
       const slotName = slotMap[childId] || 'default'
 
-      this._moveSubComponentRoot(subComponentId, childId, slotName)
+      this._moveSubComponentRoot(subComponentId, childId, i, slotName)
     }
 
     emit &&
@@ -5729,22 +5773,24 @@ export class Graph<I = any, O = any>
   public moveRoot(
     parentId: string | null,
     childId: string,
+    to: number,
     slotName: string
   ): void {
-    // console.log('Graph', 'moveRoot', parentId, childId, slotName)
+    // console.log('Graph', 'moveRoot', parentId, childId, to, slotName)
 
-    this._moveSubComponentRoot(parentId, childId, slotName)
+    this._moveSubComponentRoot(parentId, childId, to, slotName)
   }
 
   private _moveSubComponentRoot(
     parentId: string | null,
     childId: string,
+    to: number,
     slotName: string
   ): void {
     this._removeSubComponentFromParent(childId)
 
     if (parentId) {
-      this._appendSubComponentChild(parentId, childId, slotName)
+      this._insertSubComponentChild(parentId, childId, to, slotName)
     } else {
       this._appendRoot(childId)
     }
@@ -5862,8 +5908,12 @@ export class Graph<I = any, O = any>
     return unregisterRoot(this, this._root, component)
   }
 
-  registerParentRoot(component: Component_, slotName: string): void {
-    return registerParentRoot(this, this._parent_root, component, slotName)
+  registerParentRoot(
+    component: Component_,
+    slotName: string,
+    at?: number
+  ): void {
+    return registerParentRoot(this, this._parent_root, component, slotName, at)
   }
 
   unregisterParentRoot(component: Component_): void {
@@ -5871,11 +5921,11 @@ export class Graph<I = any, O = any>
   }
 
   reorderRoot(component: Component_<ComponentEvents>, to: number): void {
-    reorderRoot(this, this._root, component, to)
+    return reorderRoot(this, this._root, component, to)
   }
 
   reorderParentRoot(component: Component_<ComponentEvents>, to: number): void {
-    reorderParentRoot(this, this._parent_root, component, to)
+    return reorderParentRoot(this, this._parent_root, component, to)
   }
 
   insertChild(Bundle: UnitBundle<Component_>, at: number): void {
@@ -6072,10 +6122,12 @@ export class Graph<I = any, O = any>
           moveSubComponentRoot: (data: GraphMoveSubComponentRootData) => {
             const { parentId, children, slotMap } = data
 
-            for (const childId of children) {
+            for (let i = 0; i < children.length; i++) {
+              const childId = children[i]
+
               const slotName = slotMap[childId] || 'default'
 
-              this._moveSubComponentRoot(parentId, childId, slotName)
+              this._moveSubComponentRoot(parentId, childId, i, slotName)
             }
           },
           moveUnit: (data: GraphMoveUnitData) => {
