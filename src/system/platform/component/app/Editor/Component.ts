@@ -610,6 +610,7 @@ import { getTextLines, spaces } from '../../../../../util/text/getTextLines'
 import swap from '../../../../core/array/Swap/f'
 import forEachValueKey from '../../../../core/object/ForEachKeyValue/f'
 import { keyCount } from '../../../../core/object/KeyCount/f'
+import isEqual from '../../../../f/comparisson/Equals/f'
 import deepMerge from '../../../../f/object/DeepMerge/f'
 import _dissoc from '../../../../f/object/Delete/f'
 import _keys, { keys } from '../../../../f/object/Keys/f'
@@ -3081,8 +3082,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     specs = specs || weakMerge(this.$system.specs, {})
 
-    // this._registry = registry ?? new Registry(specs)
-    this._registry = registry ?? this.$system
+    this._registry = registry ?? new Registry(specs)
 
     this._zoom = zoom ?? zoomIdentity
 
@@ -5090,6 +5090,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (this._is_fullwindow) {
           this._fullwindow_component_ids.push(unit_id)
           this._fullwindow_component_set.add(unit_id)
+
           if (this._in_component_control) {
             const frame = this._core_component_frame[unit_id]
             const core_content = this._core_content[unit_id]
@@ -5636,7 +5637,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     unit: GraphUnitSpec,
     mirror: boolean = true
   ) => {
-    // console.log('Graph', '_spec_add_unit', unitId, unit)
+    // console.log('Graph', '_spec_add_unit', unitId, unit, mirror)
 
     const { setSpec } = this.$props
 
@@ -21486,12 +21487,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._enter_all_fullwindow(animate)
   }
 
-  public getPath(): string[] {
+  public getSubgraphPath(): string[] {
     if (this._subgraph_unit_id) {
       return [this._subgraph_unit_id, ...this._subgraph_graph.getPath()]
     }
 
     return []
+  }
+
+  public getSubgraphAtPath(path: string[]): Editor_ {
+    if (path.length === 0) {
+      return this
+    } else {
+      const [unit_id, ...sub_path] = path
+
+      const cached_subgraph = this._subgraph_cache[unit_id]
+
+      if (!cached_subgraph) {
+        throw new Error('subgraph not cached')
+      }
+
+      return cached_subgraph.getSubgraphAtPath(sub_path)
+    }
   }
 
   public focus(options: FocusOptions | undefined = { preventScroll: true }) {
@@ -44528,6 +44545,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._start_graph_simulation(LAYER_NONE)
+
+    this.dispatchEvent('collapse_end', undefined, false)
   }
 
   private _client_to_graph = (
@@ -48928,7 +48947,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const is_unit_component = isComponentSpec(spec)
 
       const bundle = clone(unitBundleSpec(unit, specs))
-      // const bundle = unitBundleSpec(unit, specs)
 
       bulk_actions.push(makeAddUnitAction(unit_id, bundle))
     }
@@ -52959,6 +52977,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const unit_spec = findSpecAtPath(specs, this._spec, path)
 
     if (this._is_spec_updater(path)) {
+      const parent_spec = findSpecAtPath(specs, this._spec, path)
+
       const spec = findSpecAtPath(specs, this._spec, [...path, graphId])
 
       const next_spec = clone(spec)
@@ -52979,22 +52999,45 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const spec_interface = this._make_graph_spec_interface(spec)
 
-      moveSubgraph(
-        this._state_get_subgraph_graph_interface(graph_unit_id),
-        weakMerge(spec_interface, {
-          coverPinSet: (type, pinId, path) => {
-            pathDelete(next_spec, ['units', graphId, type, pinId])
+      const subgraph_path = this.getSubgraphPath()
 
-            setSpec(next_spec.id, next_spec)
+      const commit = () => {
+        moveSubgraph(
+          this._state_get_subgraph_graph_interface(graph_unit_id),
+          weakMerge(spec_interface, {
+            coverPinSet: (type, pinId, path) => {
+              pathDelete(parent_spec, ['units', graphId, type, pinId])
 
-            spec_interface.coverPinSet(type, pinId, path)
-          },
-        }),
-        data.graphId,
-        data,
-        connectOpt,
-        false
-      )
+              coverPinSet({ type, pinId }, next_spec)
+
+              setSpec(next_spec.id, next_spec)
+              setSpec(parent_spec.id, parent_spec)
+            },
+          }),
+          data.graphId,
+          data,
+          connectOpt,
+          false
+        )
+      }
+
+      if (isEqual(subgraph_path, path)) {
+        const subgraph = this.getSubgraphAtPath(subgraph_path)
+
+        if (subgraph._collapsing) {
+          const unlisten = subgraph.addEventListener(
+            makeCustomListener('collapse_end', () => {
+              commit()
+
+              unlisten()
+            })
+          )
+        } else {
+          commit()
+        }
+      } else {
+        commit()
+      }
     }
   }
 
