@@ -632,21 +632,38 @@ export function moveMerge(
           (mergeInputCount > 0 && mergeOutputCount > 0))) ||
       pinIntoCount > 1
     ) {
-      target.addMerge(nextMerge, nextMergeId, false, false)
+      let shouldPropagate = false
 
-      if (reverse) {
-        //
-      } else {
-        if (
-          keyCount(mergeSpec ?? {}) === 1 &&
-          getObjSingleKey(mergeSpec) === graphId
-        ) {
-          forEachPinOnMerge(mergeSpec, (_graphId, type, pinId) => {
-            if (target.hasPinNamed(type, pinId)) {
-              target.coverPinSet(type, pinId)
-            }
-          })
+      if (getMergePinCount(nextMerge) > 0) {
+        const sampleMergeUnitId = getObjSingleKey(nextMerge)
+        const sampeMergeUnit = nextMerge[sampleMergeUnitId]
+        const sampleMergeUnitType = getObjSingleKey(sampeMergeUnit) as IO
+        const sampleMergeUnitPinId = getObjSingleKey(
+          sampeMergeUnit[sampleMergeUnitType]
+        )
+
+        const unit = target.getUnit(sampleMergeUnitId)
+
+        const pin = unit.getPin(sampleMergeUnitType, sampleMergeUnitPinId)
+
+        const ref = pin.ref()
+
+        if (ref) {
+          shouldPropagate = true
         }
+      }
+
+      target.addMerge(nextMerge, nextMergeId, false, shouldPropagate)
+
+      if (
+        keyCount(mergeSpec ?? {}) === 1 &&
+        getObjSingleKey(mergeSpec) === graphId
+      ) {
+        forEachPinOnMerge(mergeSpec, (_graphId, type, pinId) => {
+          if (target.hasPinNamed(type, pinId)) {
+            target.coverPinSet(type, pinId)
+          }
+        })
       }
     }
   }
