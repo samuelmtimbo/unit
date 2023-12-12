@@ -148,9 +148,14 @@ export function registerParentRoot(
   component: Component_,
   parentRoot: Component_[],
   child: Component_,
-  slotName: string
+  slotName: string,
+  at?: number
 ): void {
-  parentRoot.push(child)
+  if (at === undefined) {
+    parentRoot.push(child)
+  } else {
+    insert(parentRoot, child, at)
+  }
 
   component.emit('register_parent_root', child, slotName)
 

@@ -52,7 +52,7 @@ export function moveUnit(
   const unit = source.getUnit(unitId)
 
   const nextUnitId = nextIdMap.unit?.[unitId] || unitId
-  const nextSubComponentParent = nextSubComponentParentMap[unitId] || null
+  const nextSubComponentParentId = nextSubComponentParentMap[unitId] || null
   const nextSubComponentChildren = nextSubComponentChildrenMap[unitId] || []
   const nextUnitPinMap = nextPinIdMap[unitId] || {}
 
@@ -73,16 +73,23 @@ export function moveUnit(
   source.removeUnit(unitId, false, false, false)
   target.addUnit(nextUnitId, unit, undefined, false)
 
-  if (nextSubComponentParent) {
-    if (target.hasUnit(nextSubComponentParent)) {
-      target.moveRoot(nextSubComponentParent, nextUnitId, 'default')
+  if (nextSubComponentParentId) {
+    if (target.hasUnit(nextSubComponentParentId)) {
+      const to =
+        nextSubComponentChildrenMap[nextSubComponentParentId].indexOf(
+          nextUnitId
+        )
+
+      target.moveRoot(nextSubComponentParentId, nextUnitId, to, 'default')
     }
   }
 
   if (nextSubComponentChildren) {
-    for (const nextSubComponentChildId of nextSubComponentChildren) {
+    for (let i = 0; i < nextSubComponentChildren.length; i++) {
+      const nextSubComponentChildId = nextSubComponentChildren[i]
+
       if (target.hasUnit(nextSubComponentChildId)) {
-        target.moveRoot(nextUnitId, nextSubComponentChildId, 'default')
+        target.moveRoot(nextUnitId, nextSubComponentChildId, i, 'default')
       }
     }
   }

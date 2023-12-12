@@ -221,7 +221,7 @@ export interface G<I = any, O = any, U_ = any> {
   getPlugSpecs(): IOOf<Dict<Dict<GraphSubPinSpec>>>
   getMerge(mergeId: string): U_
   bulkEdit(actions: Action[]): void
-  moveRoot(parentId: string | null, childId: string, slotName: string): void
+  moveRoot(parentId: string | null, childId: string, to: number, slotName: string): void
   hasPlug(type: IO, pinId: string, subPinId: string): boolean
   removePinOrMerge(
     mergeId: string,
