@@ -185,7 +185,12 @@ export function lazyFromSpec(
       return this.__graph.getPinPlugCount(type, pinId)
     }
 
-    moveRoot(parentId: string, childId: string, to: number, slotName: string): void {
+    moveRoot(
+      parentId: string,
+      childId: string,
+      to: number,
+      slotName: string
+    ): void {
       this._ensure()
       return this.__graph.moveRoot(parentId, childId, to, slotName)
     }
