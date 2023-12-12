@@ -53,6 +53,12 @@ app.use(cors(corsOptions))
 app.use(compression())
 app.use(express.static(PATH_PUBLIC))
 app.use(json())
+app.use('*/index.js', (req, res, next) => {
+  res.setHeader('Content-Type', 'application/javascript')
+
+  res.sendFile(PATH_PUBLIC + '/index.js')
+})
+app.use('*', express.static(PATH_PUBLIC))
 
 app.use(function (req, res, next) {
   next(createError(404))
