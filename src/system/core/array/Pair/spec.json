@@ -67,7 +67,7 @@
     }
   },
   "outputs": {
-    "hbsxpnl": {
+    "pair": {
       "plug": {
         "0": {
           "unitId": "concat",

@@ -142,7 +142,7 @@
       "plug": {
         "0": {
           "unitId": "pair",
-          "pinId": "hbsxpnl"
+          "pinId": "pair"
         }
       },
       "type": "number[]"

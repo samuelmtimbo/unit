@@ -32,7 +32,7 @@
       },
       "pair": {
         "output": {
-          "hbsxpnl": true
+          "pair": true
         }
       }
     }
