@@ -21,7 +21,7 @@
     }
   },
   "metadata": {
-    "icon": "brackets-curly",
+    "icon": "object-set",
     "description": "set value at given key",
     "complexity": 3,
     "tags": [
