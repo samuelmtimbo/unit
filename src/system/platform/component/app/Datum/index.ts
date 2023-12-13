@@ -12,7 +12,7 @@ export default class Datum<T> extends Element_<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['id'],
+        i: ['data'],
         o: [],
       },
       {},

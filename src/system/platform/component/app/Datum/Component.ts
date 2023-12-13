@@ -34,7 +34,7 @@ export default class Datum extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { style = {}, data } = $props
+    const { style = {}, data = getTree('') } = $props
 
     const data_tree = new DataTree(
       { style, data, path: [], parent: null },
@@ -139,6 +139,7 @@ export default class Datum extends Element<HTMLDivElement, Props> {
         this._ignore_blur = true
       }
       _event.preventDefault()
+
       this._onChange(
         nextRoot,
         nextPath,
