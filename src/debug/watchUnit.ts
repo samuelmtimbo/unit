@@ -35,6 +35,14 @@ export function watchUnit<T extends Unit>(
     }
   }
 
+  if (events.includes('play')) {
+    all.push(watchUnitEvent('play', unit, callback))
+  }
+
+  if (events.includes('pause')) {
+    all.push(watchUnitEvent('pause', unit, callback))
+  }
+
   if (events.includes('listen')) {
     all.push(watchUnitEvent('listen', unit, callback))
   }
