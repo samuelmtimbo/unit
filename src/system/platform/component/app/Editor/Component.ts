@@ -42895,7 +42895,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         return this._spec_unit_has_pin_named(graph_id, type, name)
       },
       getUnit: (unitId: string): U => {
-        return this._spec_graph_get_unit_interface(graph_id, unitId)
+        return this._spec_graph_get_unit_interface_from_spec(spec, unitId, {})
       },
       getUnitPinData: (unitId: string, type: IO, pinId: string) => {
         return this._spec_graph_get_unit_pin_data(graph_id, unitId, type, pinId)
@@ -46437,13 +46437,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const spec = clone(this._get_unit_spec(graph_id)) as GraphSpec
 
+    const unit_data = this._get_unit_data(graph_id)
+
+    return this._spec_graph_get_unit_interface_from_spec(spec, unit_id, unit_data)
+  }
+
+  private _spec_graph_get_unit_interface_from_spec = (spec: GraphSpec, unit_id: string, unit_data: IOOf<Dict<TreeNode>>): U => {
+    const { getSpec } = this.$props
+
     const unit = spec.units[unit_id]
 
     const { id } = unit
 
     const unit_spec = getSpec(id)
-
-    const unit_data = this._get_unit_data(graph_id)
 
     return {
       setParent: function (parent: Unit<any, any>) {
