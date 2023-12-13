@@ -17,7 +17,9 @@ export function watchUnitEvent(
     | 'listen'
     | 'unlisten'
     | 'register'
-    | 'unregister',
+    | 'unregister'
+    | 'play'
+    | 'pause',
   unit: Unit,
   callback: (moment: UnitMoment) => void
 ): () => void {

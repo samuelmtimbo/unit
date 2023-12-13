@@ -46439,10 +46439,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const unit_data = this._get_unit_data(graph_id)
 
-    return this._spec_graph_get_unit_interface_from_spec(spec, unit_id, unit_data)
+    return this._spec_graph_get_unit_interface_from_spec(
+      spec,
+      unit_id,
+      unit_data
+    )
   }
 
-  private _spec_graph_get_unit_interface_from_spec = (spec: GraphSpec, unit_id: string, unit_data: IOOf<Dict<TreeNode>>): U => {
+  private _spec_graph_get_unit_interface_from_spec = (
+    spec: GraphSpec,
+    unit_id: string,
+    unit_data: IOOf<Dict<TreeNode>>
+  ): U => {
     const { getSpec } = this.$props
 
     const unit = spec.units[unit_id]
@@ -50956,6 +50964,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       pod.$watch(
         {
           events: [
+            'pause',
             'fork',
             'input',
             'output',
@@ -51739,6 +51748,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_clone_unit_moment = (unitId: string, newUnitId: string): void => {
     // console.log('Graph', '_on_clone_unit_moment', unitId, newUnitId)
     // TODO
+  }
+
+  private _on_unit_pause_moment = () => {
+    this._flush_debugger()
   }
 
   private _on_graph_unit_fork_moment = (
@@ -54160,6 +54173,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       // err: NOOP,
       // take_err: NOOP,
       // catch_err: NOOP,
+      pause: this._on_unit_pause_moment,
     },
     graph: {
       fork: this._on_fork_moment,
