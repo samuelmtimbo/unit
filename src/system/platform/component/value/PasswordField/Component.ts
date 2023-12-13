@@ -22,6 +22,7 @@ export const DEFAULT_STYLE = {
   // outline: 'none',
   border: 'none',
   borderRadius: '0',
+  boxSizing: 'border-box',
 }
 
 export default class PasswordField extends Field<HTMLInputElement, Props> {

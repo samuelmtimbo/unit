@@ -16,7 +16,7 @@ export default class PasswordField extends Field<I, O> {
     super(
       {
         i: ['style', 'value'],
-        o: [],
+        o: ['value'],
       },
       {},
       system,
