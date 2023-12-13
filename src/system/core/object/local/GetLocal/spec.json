@@ -1,0 +1,55 @@
+{
+  "type": "`U`&`G`",
+  "name": "get local",
+  "units": {
+    "localstorage0": {
+      "id": "c8f3faa8-09f4-11eb-a3b1-477aa3ec4193",
+      "input": {},
+      "output": {},
+      "metadata": { "position": { "x": -156, "y": 51 } }
+    },
+    "get": {
+      "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": { "obj": {}, "name": { "constant": false } },
+      "output": { "value": {} },
+      "metadata": { "position": { "x": -203, "y": 20 } }
+    }
+  },
+  "merges": {
+    "0": {
+      "get": { "input": { "obj": true } },
+      "localstorage0": { "output": { "_self": true } }
+    }
+  },
+  "inputs": {
+    "name": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "name",
+          "kind": "input"
+        }
+      },
+      "type": "string",
+      "ref": false
+    }
+  },
+  "outputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value",
+          "kind": "output"
+        }
+      },
+      "type": "string",
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "get local storage property `name`"
+  },
+  "id": "ffe53373-f413-45c6-8c14-ac93f7b2f4bf"
+}
