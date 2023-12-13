@@ -1,5 +1,6 @@
 import { EventEmitter_, EventEmitter_EE } from './EventEmitter'
 import { isPrimitive } from './spec/primitive'
+import { PI } from './types/interface/PI'
 import { V } from './types/interface/V'
 
 export type PinEvent =
@@ -40,7 +41,10 @@ export type PinConstructor = {
   ref?: boolean
 }
 
-export class Pin<T = any> extends EventEmitter_<PinEvents<T>> implements V<T> {
+export class Pin<T = any>
+  extends EventEmitter_<PinEvents<T>>
+  implements V<T>, PI<T>
+{
   private _constant: boolean = false
   private _ignored: boolean = false
   private _ref: boolean = false
