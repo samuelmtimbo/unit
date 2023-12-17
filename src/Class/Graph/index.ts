@@ -401,12 +401,20 @@ export class Graph<I = any, O = any>
     this._onPinSetRenamed('output', name, newName, opt, newOpt)
   }
 
+  isUnitPinConstant(unitId: string, type: IO, pinId: string): boolean {
+    const unit = this.getUnit(unitId)
+
+    const constant = unit.isPinConstant(type, pinId)
+
+    return constant
+  }
+
   isUnitPinRef(unitId: string, type: IO, pinId: string): boolean {
     const unit = this.getUnit(unitId)
 
-    const data = unit.isPinRef(type, pinId)
+    const ref = unit.isPinRef(type, pinId)
 
-    return data
+    return ref
   }
 
   getUnitPinData(unitId: string, type: IO, pinId: string): any {
