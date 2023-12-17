@@ -2,7 +2,7 @@
   "name": "from bundle",
   "inputs": {
     "bundle": {
-      "type": "{spec:object,specs:object}",
+      "type": "{spec?:object,specs?:object}",
       "metadata": {
         "examples": [
           "{spec:{},specs:{}}"
