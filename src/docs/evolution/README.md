@@ -48,7 +48,7 @@ These are some common areas the editor can continuously improve:
 
 The default Unit system comes with a standard collection of generally useful logical unit graphs out of the box.
 
-This is what a graph looks like in JSON, usually found at the "core" folder: [`if else`](/src/unit/src/system/core/control/IfElse/spec.json) and [`range`](/src/system/core/loop/Range/spec.json).
+This is what a graph looks like in JSON, usually found at the "core" folder: [`if else`](/src/system/core/control/IfElse/spec.json) and [`range`](/src/system/core/loop/Range/spec.json).
 
 Expanding and reusing the core library can reduce the global size of units when sharing units around.
 
