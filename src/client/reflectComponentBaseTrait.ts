@@ -5,6 +5,7 @@ import { Tree } from '../Tree'
 import { Dict } from '../types/Dict'
 import { Component } from './component'
 import { LayoutNode } from './LayoutNode'
+import { rawExtractStyle } from './rawExtractStyle'
 
 export const getBaseStyle = (
   base: LayoutBase,
@@ -101,6 +102,25 @@ export const expandSlot = (
             ]),
         ]
       }, [])
+
+      const base_style = getBaseStyle(base, [], extractStyle).concat(
+        sub.$mountParentChildren.reduce((acc, parentChild) => {
+          if (parentChild.$parent === null) {
+            const parentChildBase = parentChild.getRootBase()
+
+            for (const [leaf_path, leaf_comp] of parentChildBase) {
+              const leaf_style = rawExtractStyle(leaf_comp.$element)
+  
+              acc.push(leaf_style)
+            }
+          }
+          
+          return acc
+          
+        }, [])
+      )
+
+      return base_style
     }
 
     const base_style = getBaseStyle(base, [], extractStyle)
@@ -136,6 +156,8 @@ export const expandSlot = (
 
     return base_style
   }
+
+  let children_style = []
 
   for (const i of path) {
     if (child_leaf_id === slot_base_ids[i]) {
@@ -178,14 +200,6 @@ export const expandSlot = (
             i++
           }
 
-          const parent_leaf_path = child_leaf_path.slice(
-            0,
-            child_leaf_path.indexOf(parent_sub_component_id) + i
-          )
-
-          const sub_component_id =
-            parentChild.$parent.getSubComponentId(parentChild)
-
           return [
             ...acc,
             ...parentChild
@@ -197,6 +211,18 @@ export const expandSlot = (
         },
         []
       )
+
+      child_leaf_comp.$mountParentChildren.forEach((parentChild) => {
+        if (parentChild.$parent === null) {
+          const parentChildBase = parentChild.getRootBase()
+
+          for (const [leaf_path, leaf_comp] of parentChildBase) {
+            const leaf_style = rawExtractStyle(leaf_comp.$element)
+
+            children_style.push(leaf_style)
+          }
+        }
+      })
     }
   }
 
@@ -208,7 +234,7 @@ export const expandSlot = (
     const leaf_style = extractStyle(leaf_id, leaf_comp)
 
     return leaf_style
-  })
+  }).concat(children_style)
 
   return base_style
 }
