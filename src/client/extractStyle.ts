@@ -89,17 +89,7 @@ export function measureChildren(
     return position !== 'fixed' && position !== 'absolute'
   }, [])
 
-  const fitWidth = style['width'] === 'fit-content'
-  const fitHeight = style['height'] === 'fit-content'
-
   const trait = extractTrait(component, measureText)
-
-  if (fitWidth) {
-    trait.width = fallbackTrait.width
-  }
-  if (fitHeight) {
-    trait.height = fallbackTrait.height
-  }
 
   const reflected_children_trait = reflectChildrenTrait(
     trait,

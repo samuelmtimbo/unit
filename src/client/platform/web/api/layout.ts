@@ -64,7 +64,8 @@ const fitChildren = (
 
     const displayContents = childDisplay === 'contents'
     const fitWidth = childWidthStr === 'fit-content'
-    const fitHeight = childHeightStr === 'fit-content'
+    const fitHeight =
+      childHeightStr === 'fit-content' || childHeightStr === 'auto'
 
     if (fitWidth || fitHeight || displayContents) {
       const childPath = [...path, i]
