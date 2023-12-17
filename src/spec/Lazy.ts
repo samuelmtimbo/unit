@@ -115,6 +115,7 @@ export function lazyFromSpec(
         }
       })
     }
+
     setUnitPinSetId(
       unitId: string,
       type: IO,
@@ -168,6 +169,11 @@ export function lazyFromSpec(
     getUnitPinData(unitId: string, type: IO, pinId: string): void {
       this._ensure()
       return this.__graph.getUnitPinData(unitId, type, pinId)
+    }
+
+    isUnitPinConstant(unitId: string, type: IO, pinId: string): boolean {
+      this._ensure()
+      return this.__graph.isUnitPinConstant(unitId, type, pinId)
     }
 
     isUnitPinRef(unitId: string, type: IO, pinId: string): boolean {
