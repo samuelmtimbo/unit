@@ -18514,7 +18514,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const temp_style = {
       position: 'relative',
       boxSizing: 'border-box',
-      // margin: '0',
+      margin: '0',
       top: '0',
       left: '0',
       right: '0',

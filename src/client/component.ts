@@ -1084,6 +1084,10 @@ export class Component<
       p = [...p, ...subComponentRootBase]
     }
 
+    if (p.length === 0) {
+      p = [[path, this]]
+    }
+
     return p
   }
 

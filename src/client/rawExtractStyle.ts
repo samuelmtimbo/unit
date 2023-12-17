@@ -1,7 +1,8 @@
+import { Style } from '@_unit/unit/lib/system/platform/Props'
 import { Dict } from '../types/Dict'
 import { IOElement } from './IOElement'
 
-export function rawExtractStyle(element: IOElement) {
+export function rawExtractStyle(element: IOElement): Style {
   if (element instanceof Text) {
     return {}
   }
