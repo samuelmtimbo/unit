@@ -4684,6 +4684,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return a_sg_id === b_sg_id
   }
 
+  private _fetching_bundle: boolean = false
+
   private _reset_spec = (): void => {
     const { injectSpecs } = this.$props
 
@@ -4691,8 +4693,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return
     }
 
+    this._fetching_bundle = true
+
     this._pod.$getBundle({}, (bundle) => {
       const { spec, specs } = bundle
+
+      this._fetching_bundle = false
 
       injectSpecs(specs ?? {})
 
@@ -27317,7 +27323,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._force_control_animation_false = true
 
-    if (animate) {
+    if (animate && !this._fetching_bundle) {
       this._animate_enter(
         animate_config,
         component_collapsed,
