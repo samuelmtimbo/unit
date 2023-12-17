@@ -42537,7 +42537,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _state_make_this_graph_interface = (
     position?: Position
   ): GraphLike => {
-    return {
+    const graph_interface: GraphLike = {
       removeUnit: (unitId: string) => {
         return this._state_remove_unit(unitId)
       },
@@ -42724,7 +42724,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ): void {
         throw new MethodNotImplementedError()
       },
+      isUnitPinConstant: function (
+        unitId: string,
+        type: IO,
+        pinId: string
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
     }
+
+    return graph_interface
   }
   public get state_make_this_graph_interface() {
     return this._state_make_this_graph_interface
@@ -42738,7 +42747,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): GraphLike => {
     const spec = clone(this._get_unit_spec(graph_id)) as GraphSpec
 
-    return {
+    const graph_interface: GraphLike = {
       removeUnit: (unitId: string): void => {
         const bundle = this._spec_graph_unit_get_unit_bundle(graph_id, unitId)
 
@@ -42912,7 +42921,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
 
         // this._spec_graph_unit_add_unit(graph_id, unitId, bundle.unit)
-
         this._on_graph_unit_add_unit_moment({
           unitId,
           bundle,
@@ -43010,7 +43018,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ): void {
         //
       },
+      isUnitPinConstant: function (
+        unitId: string,
+        type: IO,
+        pinId: string
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
     }
+
+    return graph_interface
   }
 
   private _state_get_graph_unit_graph_unit_interface = (
@@ -43064,7 +43081,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         return false // TODO
       },
       isPinRef: function (type: IO, name: string): boolean {
-        throw new MethodNotImplementedError()
+        return isPinRef({ type, pinId: name }, spec)
       },
       addInput: function (name: string, input: Pin<any>, opt: PinOpt): void {
         throw new MethodNotImplementedError()
@@ -43294,7 +43311,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { getSpec } = this.$props
 
-    return {
+    const spec_interface: GraphLike = {
       removeUnit: (unitId: string): void => {
         //
       },
@@ -43486,7 +43503,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ): void {
         throw new MethodNotImplementedError()
       },
+      isUnitPinConstant: function (
+        unitId: string,
+        type: IO,
+        pinId: string
+      ): boolean {
+        throw new MethodNotImplementedError()
+      },
     }
+
+    return spec_interface
   }
 
   private _state_move_subgraph_out_of = (

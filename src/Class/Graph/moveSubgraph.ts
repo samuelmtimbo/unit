@@ -382,44 +382,48 @@ export function moveLinkPinInto(
   })
 
   if (graphId === unitId) {
-    const constant = target.isPinConstant(type, pinId)
+    if (reverse) {
+      //
+    } else {
+      const constant = target.isPinConstant(type, pinId)
 
-    const pinSpec = clone(target.getExposedPinSpec(type, pinId))
+      const pinSpec = clone(target.getExposedPinSpec(type, pinId))
 
-    if (mergeId && merge) {
-      const mergeUnit = merge[unitId]
+      if (mergeId && merge) {
+        const mergeUnit = merge[unitId]
 
-      const mergePinCount = getMergePinCount(merge)
-      const unitMergePinCount = getMergeUnitPinCount(mergeUnit)
+        const mergePinCount = getMergePinCount(merge)
+        const unitMergePinCount = getMergeUnitPinCount(mergeUnit)
 
-      if (mergePinCount - unitMergePinCount > 0) {
-        //
+        if (mergePinCount - unitMergePinCount > 0) {
+          //
+        } else {
+          target.coverPinSet(type, pinId, false)
+        }
       } else {
         target.coverPinSet(type, pinId, false)
       }
-    } else {
-      target.coverPinSet(type, pinId, false)
-    }
 
-    if (constant) {
-      const { plug = {} } = pinSpec
+      if (constant) {
+        const { plug = {} } = pinSpec
 
-      for (const subPinId in plug) {
-        const subPinSpec = plug[subPinId]
+        for (const subPinId in plug) {
+          const subPinSpec = plug[subPinId]
 
-        if (subPinSpec.unitId && subPinSpec.pinId) {
-          target.setUnitPinConstant(
-            subPinSpec.unitId,
-            type,
-            subPinSpec.pinId,
-            true
-          )
-        } else if (subPinSpec.mergeId) {
-          const mergeSpec = target.getMergeSpec(subPinSpec.mergeId)
+          if (subPinSpec.unitId && subPinSpec.pinId) {
+            target.setUnitPinConstant(
+              subPinSpec.unitId,
+              type,
+              subPinSpec.pinId,
+              true
+            )
+          } else if (subPinSpec.mergeId) {
+            const mergeSpec = target.getMergeSpec(subPinSpec.mergeId)
 
-          forEachPinOnMerge(mergeSpec, (unitId, type, pinId) => {
-            target.setUnitPinConstant(unitId, type, pinId, true)
-          })
+            forEachPinOnMerge(mergeSpec, (unitId, type, pinId) => {
+              target.setUnitPinConstant(unitId, type, pinId, true)
+            })
+          }
         }
       }
     }
@@ -642,14 +646,14 @@ export function moveMerge(
           sampeMergeUnit[sampleMergeUnitType]
         )
 
-        const unit = target.getUnit(sampleMergeUnitId)
+        if (target.hasUnit(sampleMergeUnitId)) {
+          const unit = target.getUnit(sampleMergeUnitId)
 
-        const pin = unit.getPin(sampleMergeUnitType, sampleMergeUnitPinId)
+          const ref = unit.isPinRef(sampleMergeUnitType, sampleMergeUnitPinId)
 
-        const ref = pin.ref()
-
-        if (ref) {
-          shouldPropagate = true
+          if (ref) {
+            shouldPropagate = true
+          }
         }
       }
 
@@ -1197,6 +1201,7 @@ export type GraphLike<T extends UCG = UCG> = Pick<
   | 'hasPlug'
   | 'coverPin'
   | 'isUnitPinRef'
+  | 'isUnitPinConstant'
   | 'addMerge'
   | 'hasMerge'
   | 'getExposedPinSpec'
