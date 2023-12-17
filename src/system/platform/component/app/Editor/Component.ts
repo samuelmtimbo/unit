@@ -36672,9 +36672,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._unwatch_constant_input_ref(unitId, 'input', pinId)
     }
 
+    const opposite_type = opposite(type)
+
     const int_node_id = this._pin_to_int[type][pin_node_id]
+    const opposite_int_node_id = this._pin_to_int[opposite_type][pin_node_id]
+
     if (int_node_id) {
       const { type, pinId, subPinId } = segmentPlugNodeId(int_node_id)
+
+      this._sim_unplug_exposed_pin(type, pinId, subPinId)
+    }
+
+    if (opposite_int_node_id) {
+      const { type, pinId, subPinId } = segmentPlugNodeId(opposite_int_node_id)
 
       this._sim_unplug_exposed_pin(type, pinId, subPinId)
     }
