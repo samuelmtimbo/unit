@@ -284,6 +284,7 @@ import {
   randomInRadius,
   randomInRect,
   randomUnitVector,
+  rectsBoundingRect,
   resizeVector,
   roundPoint,
   surfaceDistance,
@@ -3815,15 +3816,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   public get_nodes_relative_positions = (nodes: Dict<any>): Dict<Position> => {
-    const node_positions_list = []
+    const nodes_list = Object.values(nodes)
 
-    for (const node_id in nodes) {
-      const unit_node_position = this._get_node_position(node_id)
+    const rect = rectsBoundingRect(nodes_list)
 
-      node_positions_list.push(unit_node_position)
-    }
-
-    const center = centerOfMass(node_positions_list)
+    const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
 
     return this.get_nodes_relative_positions_to(nodes, center)
   }
