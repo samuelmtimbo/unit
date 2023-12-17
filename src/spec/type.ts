@@ -19,6 +19,7 @@ import {
   _findGenerics,
   _getValueType,
   _hasGeneric,
+  _isGeneric,
   applyGenerics,
   checkClassInheritance,
   extractGenerics,
@@ -525,7 +526,9 @@ export const _getGraphTypeMap = (
         if (equivalence_index[type.value] === undefined) {
           equivalence_set.add(type.value)
 
-          equivalence_index[type.value] = i
+          if (_isGeneric(type)) {
+            equivalence_index[type.value] = i
+          }
         } else {
           merged = true
 
