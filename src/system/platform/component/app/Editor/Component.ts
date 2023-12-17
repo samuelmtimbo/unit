@@ -29738,12 +29738,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const fitWidth = slot_leaf_style['width'] === 'fit-content'
       const fitHeight = slot_leaf_style['height'] === 'fit-content'
 
-      if (fitWidth) {
-        slot_leaf_trait.width = target_frame_trait.width
-      }
-      if (fitHeight) {
-        slot_leaf_trait.height = target_frame_trait.height
-      }
+      // if (fitWidth) {
+      //   slot_leaf_trait.width = target_frame_trait.width
+      // }
+      // if (fitHeight) {
+      //   slot_leaf_trait.height = target_frame_trait.height
+      // }
 
       slot_leaf_trait.x -= this.$context.$x
       slot_leaf_trait.y -= this.$context.$y
