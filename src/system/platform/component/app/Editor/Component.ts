@@ -54410,8 +54410,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._plunk_pod()
 
-      this._sim_remove_unit
-
       this._pod = pod
 
       this._reset_spec()
