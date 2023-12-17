@@ -177,6 +177,7 @@ export interface G<I = any, O = any, U_ = any> {
   setUnitPinData(unitId: string, type: IO, pinId: string, data: any): void
   getUnitPinData(unitId: string, type: IO, pinId: string): any
   isUnitPinRef(unitId: string, type: IO, pinId: string): boolean
+  isUnitPinConstant(unitId: string, type: IO, pinId: string): boolean
   removeUnitPinData(unitId: string, type: IO, pinId: string): any
   removeMergeData(mergeId: string): any
   setUnitId(
