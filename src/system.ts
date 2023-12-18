@@ -3,6 +3,7 @@ import { Graph } from './Class/Graph'
 import { EventEmitter_ } from './EventEmitter'
 import { NOOP } from './NOOP'
 import { Object_ } from './Object'
+import { IOElement } from './client/IOElement'
 import { UnitPointerEvent } from './client/event/pointer'
 import { Theme } from './client/theme'
 import { Point } from './client/util/geometry/types'
@@ -113,7 +114,7 @@ export type IFilePickerOpt = {
 
 export type ComponentClass<T = any> = {
   id: string
-  new ($props: T, $system: System): any
+  new ($props: T, $system: System, $element?: IOElement): any
 }
 
 export type ComponentClasses = Dict<ComponentClass>

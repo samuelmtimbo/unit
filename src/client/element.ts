@@ -31,6 +31,8 @@ export class Element<
 > extends Component<E, P, U> {
   private _element_unlisten: Unlisten
 
+  public $preventLoad: boolean = false
+
   onConnected($unit: $Element) {
     const setRef = <K extends keyof P>(
       name: K,
@@ -85,25 +87,27 @@ export class Element<
 
     this._element_unlisten = element_unlisten
 
-    $unit.$read({}, (state) => {
-      const { specs, classes } = this.$system
+    if (!this.$preventLoad) {
+      $unit.$read({}, (state) => {
+        const { specs, classes } = this.$system
 
-      const _state = evaluate(state, specs, classes, (url) => {
-        if (url.startsWith('unit://')) {
-          const globalId = url.slice(7)
+        const _state = evaluate(state, specs, classes, (url) => {
+          if (url.startsWith('unit://')) {
+            const globalId = url.slice(7)
 
-          return $unit.$refGlobalObj({ globalId })
-        } else {
-          throw new Error('resolver not implemented')
+            return $unit.$refGlobalObj({ globalId })
+          } else {
+            throw new Error('resolver not implemented')
+          }
+        })
+
+        for (const name in _state) {
+          const data = _state[name]
+
+          this.setProp(name as keyof P, data)
         }
       })
-
-      for (const name in _state) {
-        const data = _state[name]
-
-        this.setProp(name as keyof P, data)
-      }
-    })
+    }
   }
 
   onDisconnected() {
