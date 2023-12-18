@@ -1,0 +1,70 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "text button",
+  "units": {
+    "text": {
+      "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
+      "input": {
+        "value": {}
+      },
+      "output": {}
+    },
+    "button": {
+      "id": "b61f5cc6-37e9-45e1-965b-02940820f7ce",
+      "input": {
+        "style": {}
+      },
+      "output": {}
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "text",
+          "pinId": "value",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "button",
+          "pinId": "style",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "question",
+    "description": ""
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "text": {
+        "children": [],
+        "childSlot": {},
+        "width": 180,
+        "height": 90
+      },
+      "button": {
+        "children": ["text"],
+        "childSlot": {},
+        "width": 120,
+        "height": 120
+      }
+    },
+    "children": ["button"],
+    "defaultWidth": 180,
+    "defaultHeight": 120
+  },
+  "id": "1dbbadab-bdbc-4dea-ba6d-442a3c7f33ed",
+  "system": true
+}
