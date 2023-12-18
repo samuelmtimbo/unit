@@ -4,6 +4,7 @@ import { Classes, Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
 import { GraphUnitPinsSpec } from '../types/GraphUnitPinsSpec'
+import { IOElement } from './IOElement'
 import { Component } from './component'
 import { componentClassFromSpec } from './componentClassFromSpec'
 import { isBaseSpec } from './id'
@@ -15,7 +16,8 @@ export function componentClassFromSpecId<T = any>(
   classes: Classes,
   id: string,
   inputs: GraphUnitPinsSpec = {},
-  subComponentMap: Dict<Component> = {}
+  subComponentMap: Dict<Component> = {},
+  element: IOElement = undefined
 ): ComponentClass<T> {
   const spec = getSpec(specs, id)
 
@@ -26,7 +28,7 @@ export function componentClassFromSpecId<T = any>(
       static id = id
 
       constructor($props, $system) {
-        super($props, $system)
+        super($props, $system, element)
 
         for (const name in inputs) {
           const input = inputs[name]

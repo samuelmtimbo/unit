@@ -53,7 +53,7 @@ import { $Component } from '../../../../../types/interface/async/$Component'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { AsyncGraph } from '../../../../../types/interface/async/AsyncGraph'
 import { weakMerge } from '../../../../../weakMerge'
-import { ID_EDITOR } from '../../../../_ids'
+import { ID_EDITOR, ID_IMAGE } from '../../../../_ids'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import {
   getGlobalComponent,
@@ -619,6 +619,7 @@ import { Style } from '../../../Props'
 import { default as Icon, default as IconButton } from '../../Icon/Component'
 import Zoom_ from '../../Zoom/Component'
 import CanvasComp from '../../canvas/Canvas/Component'
+import Image_ from '../../media/Image/Component'
 import SVGDefs from '../../svg/Defs/Component'
 import SVGG from '../../svg/Group/Component'
 import SVGMarker from '../../svg/Marker/Component'
@@ -3277,7 +3278,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   return
                 }
 
-                this._paste_file(file)
+                const world_position = this._screen_to_world(clientX, clientY)
+
+                this._paste_file(file, world_position)
               } else if (item.kind === 'string') {
                 if (item.type === 'text/plain') {
                   item.getAsString((text) => {
@@ -3416,7 +3419,94 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _last_open_filename: string
 
-  private _paste_file = async (file: File): Promise<void> => {
+  private _paste_file = async (
+    file: File,
+    position?: Position
+  ): Promise<void> => {
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader()
+
+      reader.onload = async (e) => {
+        const image_data_url = e.target.result.toString()
+
+        const image = this.$system.api.document.createElement('img')
+
+        image.src = image_data_url
+
+        image.onload = () => {
+          const new_unit_id = this._new_unit_id(ID_IMAGE)
+
+          const ratio = image.naturalWidth / image.naturalHeight
+
+          let width = image.naturalWidth
+          let height = image.naturalHeight
+
+          if (width > height) {
+            width = clamp(width, MIN_WIDTH, 420)
+            height = width / ratio
+          } else {
+            height = clamp(height, MIN_HEIGHT, 420)
+            width = height * ratio
+          }
+
+          const bundle: UnitBundleSpec = {
+            unit: {
+              id: ID_IMAGE,
+              input: {
+                src: {
+                  data: `"${image_data_url}"`,
+                  constant: true,
+                },
+              },
+              metadata: {
+                component: {
+                  width,
+                  height,
+                },
+              },
+            },
+            specs: {},
+          }
+
+          const center_of_screen =
+            position ?? this._jiggle_world_screen_center()
+
+          this._add_unit(
+            new_unit_id,
+            bundle,
+            position,
+            {},
+            center_of_screen,
+            null
+          )
+
+          this._sim_add_sub_component(
+            new_unit_id,
+            {},
+            undefined,
+            undefined,
+            image
+          )
+
+          const sub_component = this._get_sub_component(new_unit_id) as Image_
+
+          sub_component.$preventLoad = true
+
+          sub_component.$props.src = image_data_url
+
+          this._connect_sub_component(new_unit_id)
+
+          sub_component.$preventLoad = false
+
+          image.onload = null
+        }
+      }
+
+      reader.readAsDataURL(file)
+
+      return
+    }
+
     this._last_open_filename = file.name
 
     let json: string
@@ -3467,7 +3557,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       throw new Error('invalid JSON file')
     }
 
-    const position = this._jiggle_world_screen_center()
+    position = position ?? this._jiggle_world_screen_center()
 
     this.paste_bundle(bundle, position)
   }
@@ -7110,7 +7200,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     unit_id: string,
     sub_component_map: Dict<Component> = {},
     at?: number,
-    add_to_parent: boolean = true
+    add_to_parent: boolean = true,
+    element: IOElement = undefined
   ): void => {
     // console.log(
     //   'Graph',
@@ -7121,7 +7212,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   add_to_parent
     // )
 
-    this._mem_add_unit_component(unit_id, sub_component_map)
+    this._mem_add_unit_component(unit_id, sub_component_map, element)
 
     if (add_to_parent) {
       this._sim_add_sub_component_to_parent(unit_id, at)
@@ -7154,9 +7245,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _mem_add_unit_component = (
     unit_id: string,
-    sub_component_map: Dict<Component>
+    sub_component_map: Dict<Component>,
+    element: IOElement = undefined
   ): void => {
-    // console.log('Graph', '_mem_add_unit_component', unit_id)
+    // console.log(
+    //   'Graph',
+    //   '_mem_add_unit_component',
+    //   unit_id,
+    //   sub_component_map,
+    //   element
+    // )
 
     const { components, classes } = this.$system
 
@@ -7180,7 +7278,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           classes,
           spec_id,
           {},
-          sub_component_map
+          sub_component_map,
+          element
         )
 
         sub_component = new Class({}, this.$system)

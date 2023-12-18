@@ -93,7 +93,7 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
 
     let _value: string = value
 
-    // _value = _value.slice(0, 1000)
+    _value = _value.slice(0, 1000)
 
     _value = _value.replace(/\n/g, '\\n')
 

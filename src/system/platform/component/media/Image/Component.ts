@@ -23,15 +23,15 @@ export const DEFAULT_STYLE = {
 export const NO_IMAGE =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
-export default class Image extends Element<HTMLImageElement, Props> {
+export default class Image_ extends Element<HTMLImageElement, Props> {
   private _img_el: HTMLImageElement
 
-  constructor($props: Props, $system: System) {
+  constructor($props: Props, $system: System, $element?: HTMLImageElement) {
     super($props, $system)
 
-    const { className, style = {}, src = NO_IMAGE } = this.$props
+    const { className, style = {}, src } = this.$props
 
-    const img_el = this.$system.api.document.createElement('img')
+    const img_el = $element ?? this.$system.api.document.createElement('img')
 
     if (className) {
       img_el.className = className
