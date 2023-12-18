@@ -32,7 +32,7 @@ export default class DeepGet<T> extends Functional<I<T>, O<T>> {
     try {
       result = deepGet(obj, path)
     } catch (err) {
-      done(undefined, err.message)
+      done(undefined, 'key not found')
 
       return
     }
