@@ -29,7 +29,7 @@ export default class Get<T> extends Functional<I<T>, O<T>> {
     if (obj.hasOwnProperty(key)) {
       done({ value: obj[key] })
     } else {
-      done(undefined, 'key not found in object')
+      done(undefined, 'key not found')
     }
   }
 }
