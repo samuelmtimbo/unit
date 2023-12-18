@@ -110,13 +110,12 @@ export const expandSlot = (
 
             for (const [leaf_path, leaf_comp] of parentChildBase) {
               const leaf_style = rawExtractStyle(leaf_comp.$element)
-  
+
               acc.push(leaf_style)
             }
           }
-          
+
           return acc
-          
         }, [])
       )
 
@@ -226,15 +225,17 @@ export const expandSlot = (
     }
   }
 
-  const base_style = slot_base_ids.map((leaf_id) => {
-    const leaf_path = leaf_id.split('/')
+  const base_style = slot_base_ids
+    .map((leaf_id) => {
+      const leaf_path = leaf_id.split('/')
 
-    const leaf_comp = component.pathGetSubComponent(leaf_path)
+      const leaf_comp = component.pathGetSubComponent(leaf_path)
 
-    const leaf_style = extractStyle(leaf_id, leaf_comp)
+      const leaf_style = extractStyle(leaf_id, leaf_comp)
 
-    return leaf_style
-  }).concat(children_style)
+      return leaf_style
+    })
+    .concat(children_style)
 
   return base_style
 }
