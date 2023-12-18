@@ -24,5 +24,6 @@
   },
   "id": "419e468e-e4d4-11ea-8efb-2b9d815b1798",
   "type": "`U`&`G`",
+  "base": true,
   "system": true
 }

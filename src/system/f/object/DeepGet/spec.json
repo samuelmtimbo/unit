@@ -21,5 +21,6 @@
     "complexity": 36,
     "tags": ["core", "object"]
   },
+  "base": true,
   "system": true
 }
