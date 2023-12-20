@@ -282,6 +282,8 @@ assert(_isTypeMatch(CUSTOM_GRAPH_UNIT_STR, '`G`&`U`'))
 assert(_isTypeMatch(CUSTOM_GRAPH_UNIT_STR, '`U`&`G`'))
 assert(_isTypeMatch('<T>', '`C`'))
 assert(_isTypeMatch('`C`', '<T>'))
+assert(_isTypeMatch('`C`', 'any'))
+assert(_isTypeMatch('any', '`C`'))
 
 assert(!_isTypeMatch('', 'any'))
 assert(!_isTypeMatch('abc', 'any'))
