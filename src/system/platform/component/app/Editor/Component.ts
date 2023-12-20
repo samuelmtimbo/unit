@@ -23177,7 +23177,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         return (
           a_type === 'output' &&
           b_type === 'input' &&
-          this._is_ref_link_pin_link_pin_type_match(a, a_type, b, b_type)
+          this._is_pin_pin_type_match(a, a_type, b, b_type)
         )
       } else if (a_ref && b_ref) {
         if (a_type === 'output' && b_type === 'output') {
@@ -23985,6 +23985,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 }
               }
             }
+
             for (const pin_node_id in this._pin_node) {
               if (this._is_pin_all_pin_match(pin_node_id, display_node_id)) {
                 this._set_node_compatible(pin_node_id)
@@ -25194,7 +25195,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._start_graph_simulation(LAYER_NONE)
   }
 
-  private _sim_set_unit_pin_ref = (pin_node_id: string, ref: boolean) => {
+  private _sim_set_unit_pin_ref = (
+    pin_node_id: string,
+    ref: boolean,
+    onRemoval: Callback<void> = NOOP,
+    onAddMerge: (mergeId: string, merge_spec: GraphMergeSpec) => void,
+    onAddLinkPinToMerge: (
+      unitId: string,
+      type: IO,
+      pinId: string,
+      mergeId: string
+    ) => void,
+    onRemovePinFromMerge: (
+      unitId: string,
+      type: IO,
+      pinId: string,
+      mergeId: string
+    ) => void
+  ) => {
     // console.log('Graph', '_sim_set_unit_pin_ref', pin_node_id, ref)
 
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
@@ -25203,6 +25221,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const merge_spec = merge_node_id && this._get_merge(merge_node_id)
     const merge_position =
       merge_spec && this._get_anchor_node_position(merge_node_id)
+    const merge_ref = this._merge_ref[merge_node_id]
+    const merge_output_ref = this._merge_to_ref_output[merge_node_id]
 
     const ext_node_id = this._pin_to_ext[type][pin_node_id]
 
@@ -25210,35 +25230,45 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const data = this._pin_datum_tree[pin_node_id]
 
-    // this._sim_graph_unit_remove_pin(pin_node_id)
-    // this._sim_graph_unit_add_unit_pin(unitId, type, pinId, position)
+    this._sim_graph_remove_unit_pin(unitId, type, pinId)
 
-    // if (ext_node_id) {
-    //   const { type, pinId, subPinId } = segmentPlugNodeId(ext_node_id)
+    onRemoval()
 
-    //   this._sim_plug_exposed_pin(type, pinId, subPinId, {
-    //     unitId,
-    //     pinId,
-    //     kind: type,
-    //   })
-    // }
+    this._sim_graph_unit_add_unit_pin(unitId, type, pinId, position)
 
-    // if (data) {
-    //   this._graph_debug_set_pin_data_tree(pin_node_id, data)
-    // }
+    if (ext_node_id) {
+      const { type, pinId, subPinId } = segmentPlugNodeId(ext_node_id)
+
+      this._sim_plug_exposed_pin(type, pinId, subPinId, {
+        unitId,
+        pinId,
+        kind: type,
+      })
+    }
+
+    if (data) {
+      this._graph_debug_set_pin_data_tree(pin_node_id, data)
+    }
 
     if (merge_node_id) {
       const { mergeId } = segmentMergeNodeId(merge_node_id)
 
       if (this._is_merge_ref(merge_node_id)) {
-        // TODO
+        //
       } else {
         if (this._has_node(merge_node_id)) {
           this._sim_remove_pin_from_merge(merge_node_id, pin_node_id)
+
+          onRemovePinFromMerge(unitId, type, pinId, mergeId)
+
           this._sim_add_link_pin_to_merge(pin_node_id, merge_node_id)
+
+          onAddLinkPinToMerge(unitId, type, pinId, mergeId)
         } else {
+          onAddMerge(mergeId, merge_spec)
+
           this._sim_add_merge(mergeId, merge_spec, merge_position)
-          this._sim_collapse_merge(mergeId)
+          this.__sim_collapse_merge(mergeId, merge_spec)
         }
       }
     }
@@ -35469,7 +35499,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const merge_ref = this._is_merge_ref(merge_node_id)
 
-    const merge_unit_id = this._merge_to_ref_unit[merge_node_id]
+    const merge_ref_unit_id = this._merge_to_ref_unit[merge_node_id]
     const merge_ref_output_id = this._merge_to_ref_output[merge_node_id]
 
     delete this._merge_pin_count[mergeId]
@@ -35489,11 +35519,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._pin_datum_tree[merge_node_id]
 
     if (merge_ref) {
-      if (merge_unit_id) {
+      if (merge_ref_unit_id) {
         delete this._merge_to_ref_unit[merge_node_id]
-        delete this._ref_unit_to_merge[merge_unit_id]
+        delete this._ref_unit_to_merge[merge_ref_unit_id]
 
-        this._refresh_core_border_color(merge_unit_id)
+        this._refresh_core_border_color(merge_ref_unit_id)
 
         for (const input_node_id in merge_to_input) {
           const { unitId } = segmentLinkPinNodeId(input_node_id)
@@ -35507,7 +35537,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    if (this._node[merge_node_id]) {
+    const has_merge_node = this._has_node(merge_node_id)
+
+    if (has_merge_node) {
       this._sim_remove_pin_type(merge_node_id)
       this._sim_remove_merge_node(merge_node_id)
     }
@@ -52356,16 +52388,37 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         next_unit_spec
       )
 
+      const prev_pin_spec = getPinSpec(spec, type, pinId)
+
+      const was_ref = isPinSpecRef(specs, spec, type, prev_pin_spec)
       const ref = isSubPinSpecRef(specs, spec, type, subPinSpec)
 
-      setPinSetRef({ type, pinId, ref }, next_unit_spec)
-
-      setSpec(spec.id, next_unit_spec)
+      const setPinRef = () => {
+        setPinSetRef({ type, pinId, ref }, next_unit_spec)
+        setSpec(spec.id, next_unit_spec)
+      }
 
       if (path.length === 1) {
         const pin_node_id = getPinNodeId(unitId, type, pinId)
 
-        this._sim_set_unit_pin_ref(pin_node_id, ref)
+        if (was_ref !== ref) {
+          this._sim_set_unit_pin_ref(
+            pin_node_id,
+            ref,
+            setPinRef,
+            (mergeId: string, mergeSpec: GraphMergeSpec) => {
+              this._spec_add_merge(mergeId, mergeSpec)
+            },
+            (unitId: string, type: IO, pinId: string, mergeId: string) => {
+              this._spec_add_link_pin_to_merge(mergeId, unitId, type, pinId)
+            },
+            (unitId: string, type: IO, pinId, mergeId: string) => {
+              this.__spec_remove_pin_from_merge(mergeId, unitId, type, pinId)
+            }
+          )
+        }
+      } else {
+        setPinRef()
       }
     }
   }
@@ -52397,22 +52450,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         next_unit_spec
       )
 
+      const sub_pin_spec = getSubPinSpec(spec, type, pinId, subPinId)
       const pinSpec = getPinSpec(next_unit_spec, type, pinId)
 
+      const was_ref = isSubPinSpecRef(specs, spec, type, sub_pin_spec)
       const ref = isPinSpecRef(specs, spec, type, pinSpec)
 
-      setPinSetRef({ type, pinId, ref }, next_unit_spec)
-
-      setSpec(spec.id, next_unit_spec)
+      const commit = () => {
+        setPinSetRef({ type, pinId, ref }, next_unit_spec)
+        setSpec(spec.id, next_unit_spec)
+      }
 
       if (path.length === 1) {
         const pin_node_id = getPinNodeId(unitId, type, pinId)
 
-        if (ref && this._is_link_pin_merged(pin_node_id)) {
-          return
+        if (was_ref !== ref) {
+          this._sim_set_unit_pin_ref(pin_node_id, ref, commit, (mergeId: string, mergeSpec: GraphMergeSpec) => {
+            this._spec_add_merge(mergeId, mergeSpec)
+          },
+          (unitId: string, type: IO, pinId: string, mergeId: string) => {
+            this._spec_add_link_pin_to_merge(mergeId, unitId, type, pinId)
+          },
+          (unitId: string, type: IO, pinId, mergeId: string) => {
+            this.__spec_remove_pin_from_merge(mergeId, unitId, type, pinId)
+          })
         }
-
-        this._sim_set_unit_pin_ref(pin_node_id, ref)
+      } else {
+        commit()
       }
     }
   }
@@ -52820,6 +52884,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const merge_node_id = getMergeNodeId(merge_id)
 
     const merge_spec = this._spec_get_merge(merge_id)
+
+    return this.__sim_collapse_merge(merge_id, merge_spec)
+  }
+
+  private __sim_collapse_merge = (
+    merge_id: string,
+    merge_spec: GraphMergeSpec
+  ): void => {
+    // console.log('Graph', '__sim_collapse_merge', merge_id)
+
+    const merge_node_id = getMergeNodeId(merge_id)
 
     const merge_ref_unit_id = this._merge_to_ref_unit[merge_node_id]
     const merge_ref_output_id = this._merge_to_ref_output[merge_node_id]
