@@ -5,30 +5,12 @@ import { COLOR_WHITE, defaultThemeColor } from '../../../../../client/theme'
 import { replaceChild } from '../../../../../client/util/replaceChild'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
+import { isRelativeValue } from '../../../../../isRelative'
 import { NOOP } from '../../../../../NOOP'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { Unlisten } from '../../../../../types/Unlisten'
-
-export function draw(ctx: CanvasRenderingContext2D, step: any[]): void {
-  const method = step[0]
-
-  const args = step.slice(1, step.length)
-
-  if (method === 'fillStyle') {
-    ctx.fillStyle = args[0]
-  } else if (method === 'strokeStyle') {
-    ctx.strokeStyle = args[0]
-  } else if (method === 'fillPath') {
-    const [d, fillRule] = args
-    ctx.fill(new Path2D(d), fillRule)
-  } else if (method === 'strokePath') {
-    const [d] = args
-    ctx.stroke(new Path2D(d))
-  } else {
-    ctx[method](...args)
-  }
-}
+import { draw } from './draw'
 
 export function clearCanvas(context: CanvasRenderingContext2D) {
   const transform = context.getTransform()
@@ -211,11 +193,21 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
       this._unlisten_frame_width()
 
       if (typeof current === 'string') {
-        this._width_frame_unlisten = reactToFrameSize(
-          current,
-          this,
-          this._set_width
-        )
+        if (isRelativeValue(current)) {
+          this._width_frame_unlisten = reactToFrameSize(
+            current,
+            this,
+            this._set_width
+          )
+        } else {
+          const width = Number.parseInt(current)
+
+          if (Number.isNaN(width)) {
+            //
+          } else {
+            this._set_width(width)
+          }
+        }
       } else {
         this._set_width(current)
       }
@@ -223,11 +215,21 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
       this._unlisten_frame_height()
 
       if (typeof current === 'string') {
-        this._height_frame_unlisten = reactToFrameSize(
-          current,
-          this,
-          this._set_height
-        )
+        if (isRelativeValue(current)) {
+          this._height_frame_unlisten = reactToFrameSize(
+            current,
+            this,
+            this._set_height
+          )
+        } else {
+          const height = Number.parseInt(current)
+
+          if (Number.isNaN(height)) {
+            //
+          } else {
+            this._set_height(height)
+          }
+        }
       } else {
         this._set_height(current)
       }
