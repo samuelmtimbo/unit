@@ -45,6 +45,14 @@ export default class ToBlob<T> extends Semifunctional<I<T>, O<T>> {
   async f({ canvas, quality, type }: I<T>, done: Done<O<T>>): Promise<void> {
     let _blob: Blob
 
+    try {
+      _blob = await canvas.toBlob(type, quality)
+    } catch (err) {
+      done(undefined, err.message)
+
+      return
+    }
+
     const blob = new (class _Blob extends $ implements B {
       __: string[] = ['B', 'IM']
 
@@ -53,14 +61,10 @@ export default class ToBlob<T> extends Semifunctional<I<T>, O<T>> {
       }
 
       async blob(): Promise<Blob> {
-        try {
-          _blob = await canvas.toBlob(type, quality)
-        } catch (err) {
-          done(undefined, err.message)
+        return _blob
+      }
 
-          return
-        }
-
+      async raw() {
         return _blob
       }
     })(this.__system)
