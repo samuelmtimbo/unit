@@ -54,7 +54,7 @@ export default class ToBlob<T> extends Semifunctional<I<T>, O<T>> {
     }
 
     const blob = new (class _Blob extends $ implements B {
-      __: string[] = ['B', 'IM']
+      __: string[] = ['B', 'IM', 'BO']
 
       async image(): Promise<any> {
         return _blob
