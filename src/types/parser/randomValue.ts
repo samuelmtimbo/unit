@@ -80,7 +80,7 @@ export function randomTreeOfObjectLiteral(
   const children = []
 
   if (typeTree.children.length === 0) {
-    let key_tree = getTree("'sample_key'")
+    let key_tree = getTree("'foo'")
     let value_tree = getTree("'foo'")
 
     let sample_key_value: TreeNode = {
