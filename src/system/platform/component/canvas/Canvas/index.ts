@@ -35,11 +35,7 @@ export default class Canvas
         o: [],
       },
       {
-        output: {
-          ctx: {
-            ref: true,
-          },
-        },
+        output: {},
       },
       system,
       ID_CANVAS
