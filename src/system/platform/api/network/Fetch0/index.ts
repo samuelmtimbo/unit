@@ -4,6 +4,7 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { BO } from '../../../../../types/interface/BO'
 import { RES } from '../../../../../types/interface/RES'
+import { wrapResponse } from '../../../../../wrap/Response'
 import { ID_FETCH_0 } from '../../../../_ids'
 
 export type I = {
@@ -60,5 +61,9 @@ export default class Fetch0 extends Functional<I, O> {
 
       return
     }
+
+    const res = wrapResponse(response, this.__system)
+
+    done({ res })
   }
 }
