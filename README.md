@@ -186,9 +186,9 @@ If you have a feature idea or hit a malfunction, this is a workflow I like to fo
 2. Open a pull request explaining the problem and solution;
 3. Iterate over it to make sure the change is positive and aligned with Unit's design and vision.
 
-The Unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what motivated me and made it possible.
+The Unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what motivated it.
 
-Ultimately, the goal is for everyone to have an easy to use, powerful, customizable and flexible visual system where one can build anything with absolute freedom, without ever having to leave it.
+Ultimately, the goal is for everyone to have an easy to use, flexible and powerful visual system where one can build anything with absolute freedom, without ever having to leave it.
 
 ## Backlog
 
