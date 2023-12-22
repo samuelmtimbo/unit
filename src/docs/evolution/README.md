@@ -42,6 +42,8 @@ These are some common areas the editor can continuously improve:
 - Customization
 - Meta Programming
 - External API
+- Sonification
+- 3D
 - UI/UX
 
 ## Composition
