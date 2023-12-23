@@ -82,6 +82,10 @@ export function randomTreeOfObjectLiteral(
   for (const type_key_value of typeTree.children) {
     const [type_key_tree, type_value_tree] = type_key_value.children
 
+    if (type_value_tree.type === TreeNodeType.Invalid) {
+      continue
+    }
+
     const { value: key } = type_key_tree
 
     let _key: string = key
@@ -107,6 +111,20 @@ export function randomTreeOfObjectLiteral(
       children.push(key_value_tree)
     }
   }
+
+  if (children.length === 0) {
+    const key_tree = getTree("'foo'")
+    const value_tree = getTree("'foo'")
+
+    let sample_key_value: TreeNode = {
+      value: `${key_tree.value}:${value_tree.value}`,
+      children: [key_tree, value_tree],
+      type: TreeNodeType.KeyValue,
+    }
+
+    children.push(sample_key_value)
+  }
+
   return {
     value: `{${children.map(propValue).join(',')}}`,
     children,
