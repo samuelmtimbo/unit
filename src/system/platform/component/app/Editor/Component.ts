@@ -722,6 +722,8 @@ export const LAYOUT_VERTICAL_PADDING = 80
 
 export const KEYBOARD_POINTER_ID = -1
 
+export const LAYER_OPACITY_MULTIPLIER = 0.1
+
 const DEFAULT_STYLE = {
   position: 'relative',
   width: '100%',
@@ -9910,12 +9912,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           top: '0',
           left: '0',
           flexWrap: 'wrap',
-          // padding: `${LAYOUT_VERTICAL_PADDING}px ${LAYOUT_HORIZONTAL_PADDING}px ${LAYOUT_VERTICAL_PADDING}px ${LAYOUT_HORIZONTAL_PADDING}px`,
           boxSizing: 'border-box',
           overflowY: 'hidden',
           overflowX: 'hidden',
           pointerEvents: 'none',
-          // touchAction: 'none',
           ...style,
         },
       },
@@ -18488,6 +18488,69 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
   }
 
+  private _animate_element_opacity = (
+    element: HTMLElement,
+    to: number,
+    callback: Unlisten = NOOP
+  ): Animation => {
+    // console.log('Graph', '_animate_element_opacity', to)
+
+    const animation = element.animate(
+      [
+        {
+          opacity: `${to}`,
+          composite: 'replace',
+        },
+      ],
+      { duration: ANIMATION_T_MS, fill: 'forwards' }
+    )
+
+    animation.onfinish = () => {
+      animation.commitStyles()
+      animation.cancel()
+
+      element.style.opacity = `${to}`
+
+      callback()
+    }
+
+    return animation
+  }
+
+  private _animate_layout_root_element_opacity = (to: number) => {
+    // console.log('Graph', '_animate_layout_root_element_opacity', to)
+
+    if (this._layout_root_opacity_animation) {
+      this._layout_root_opacity_animation.commitStyles()
+      this._layout_root_opacity_animation.cancel()
+    }
+
+    this._layout_root_opacity_animation = this._animate_element_opacity(
+      this._layout_root.children.$element,
+      to,
+      () => {
+        this._layout_root_opacity_animation = undefined
+      }
+    )
+  }
+
+  private _animate_layout_layer_element_opacity = (
+    layer_id: string,
+    to: number
+  ) => {
+    const layout_layer = this._get_layout_layer(layer_id)
+
+    if (this._layout_layer_opacity_animation[layer_id]) {
+      this._layout_layer_opacity_animation[layer_id].commitStyles()
+      this._layout_layer_opacity_animation[layer_id].cancel()
+    }
+
+    this._layout_layer_opacity_animation[layer_id] =
+      this._animate_element_opacity(layout_layer.children.$element, to, () => {
+        delete this._layout_layer_opacity_animation[layer_id]
+      })
+  }
+
   private _enter_tree_layout = (): void => {
     // console.log('Graph', '_enter_tree_layout')
 
@@ -18499,13 +18562,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._layout_comp.$element.style.pointerEvents = 'inherit'
 
-    this._layout_root.children.$element.style.opacity = '1'
+    this._animate_layout_root_element_opacity(1)
 
     this._refresh_all_layout_layer_opacity()
 
+    const current_layout_layer_id = this._get_current_layout_layer_id()
+
     const current_layout_layer = this._get_current_layout_layer()
 
-    current_layout_layer.children.$element.style.opacity = '1'
+    if (current_layout_layer_id) {
+      this._animate_layout_layer_element_opacity(current_layout_layer_id, 1)
+    }
 
     current_layout_layer.layer.$element.style.overflowX = 'hidden'
     current_layout_layer.layer.$element.style.overflowY = 'auto'
@@ -18566,7 +18633,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       // TODO
     }
 
-    this._zoom_comp._root.$element.style.opacity = '0.25'
+    this._animate_zoom_opacity(LAYER_OPACITY_MULTIPLIER)
 
     for (const sub_component_id in this._component.$subComponent) {
       const layout_core = this._layout_core[sub_component_id]
@@ -19038,16 +19105,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _abort_tree_layout_sub_component_base_animation: Dict<Callback> = {}
 
-  private _cancel_tree_layout_animation = (): void => {
-    // console.log('Graph', '_cancel_tree_layout_animation')
-
-    for (const sub_component_id in {
-      ...this._abort_tree_layout_sub_component_base_animation,
-    }) {
-      this._cancel_layout_sub_component_animation(sub_component_id)
-    }
-  }
-
   private _cancel_all_layout_sub_component_animation = (): void => {
     for (const sub_component_id in {
       ...this._abort_tree_layout_sub_component_base_animation,
@@ -19171,7 +19228,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (i === this._layout_path.length - 1) {
             return 1
           } else {
-            return 0.25 / (l - i)
+            return LAYER_OPACITY_MULTIPLIER / (l - i)
           }
         } else {
           const pi = this._layout_path.indexOf(parent_id)
@@ -19180,14 +19237,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             if (pi === this._layout_path.length - 1) {
               return 1
             } else {
-              return 0.25 / (l - pi)
+              return LAYER_OPACITY_MULTIPLIER / (l - pi)
             }
           } else {
             return 0
           }
         }
       } else {
-        return 0.25 / l
+        return LAYER_OPACITY_MULTIPLIER / l
       }
     }
 
@@ -19306,7 +19363,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._cancel_fullwindow_animation()
-    this._cancel_tree_layout_animation()
+    this._cancel_all_layout_sub_component_animation()
     this._cancel_enter_animation()
 
     const sub_component_ids = keys(this._component.$subComponent)
@@ -19318,8 +19375,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let sub_component_parent_root: string[] = []
     let sub_component_parent_root_slot_children: Dict<Dict<string[]>> = {}
 
+    let finished = false
+
     const finish = () => {
       if (sub_component_finish_count === sub_component_count) {
+        if (finished) {
+          return
+        }
+
+        finished = true
+
         for (const sub_component_id of sub_component_root) {
           delete this._abort_tree_layout_sub_component_base_animation[
             sub_component_id
@@ -19434,8 +19499,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sub_component_id,
             slot_children,
             slot_name,
-            () => {
+            async () => {
               sub_component_finish_count++
+
+              const grandparent_id =
+                this._spec_get_sub_component_parent_id(sub_component_id)
+
+              if (grandparent_id) {
+                if (this._layout_layer_opacity_animation[grandparent_id]) {
+                  await this._layout_layer_opacity_animation[grandparent_id]
+                    .finished
+                }
+              } else {
+                if (this._layout_root_opacity_animation) {
+                  await this._layout_root_opacity_animation.finished
+                }
+              }
 
               finish()
             }
@@ -19531,10 +19610,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 fontSize: leaf_trait.fontSize,
               }
             },
-            () => {
+            async () => {
               sub_component_finish_count++
 
-              finish()
+              if (this._layout_root_opacity_animation) {
+                await this._layout_root_opacity_animation.finished
+              }
+
+              if (this._tree_layout) {
+                finish()
+              }
             }
           )
       }
@@ -19568,15 +19653,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const visible_root = []
 
+    let finished = false
+
     const finish = () => {
       if (animated_sub_component_finished === animated_sub_component_total) {
+        if (finished) {
+          return
+        }
+
+        finished = true
+
         for (const sub_component_id of visible_root) {
           delete this._abort_tree_layout_sub_component_base_animation[
             sub_component_id
           ]
 
           this._unplug_sub_component_root_base_frame(sub_component_id)
-          // this._append_sub_component_all_root(sub_component_id)
           this._append_sub_component_root_base(sub_component_id)
           this._enter_sub_component_frame(sub_component_id)
         }
@@ -19609,7 +19701,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             this._enter_sub_component_frame(child_id)
             this._append_sub_component_root_base(child_id)
-            // this._append_sub_component_all_root(child_id)
           }
         }
       }
@@ -19655,7 +19746,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sub_component_id,
             slot_name,
             slot_children,
-            () => {
+            async () => {
               visible_parent_root_slot_finished[sub_component_id]++
 
               if (
@@ -19663,6 +19754,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 visible_parent_root_slot_total[sub_component_id]
               ) {
                 animated_sub_component_finished++
+
+                if (this._zoom_opacity_animation) {
+                  await this._zoom_opacity_animation.finished
+                }
 
                 finish()
               }
@@ -19680,8 +19775,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const frame = this._get_sub_component_frame(sub_component_id)
 
         const graph_node = this._node[sub_component_id]
-
-        // this._remove_sub_component_all_root(sub_component_id)
 
         let i = 0
 
@@ -19707,10 +19800,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
               if (i === 0) {
                 const trait = {
-                  x: 0,
-                  y: 0,
-                  width: graph_node.width,
-                  height: graph_node.height,
+                  x: 1,
+                  y: 1,
+                  width: graph_node.width - 2,
+                  height: graph_node.height - 2,
                   sx: z,
                   sy: z,
                   opacity: 1,
@@ -19754,10 +19847,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 fontSize: leaf_trait.fontSize,
               }
             },
-            () => {
+            async () => {
               animated_sub_component_finished++
 
-              finish()
+              if (this._zoom_opacity_animation) {
+                await this._zoom_opacity_animation.finished
+              }
+
+              if (!this._tree_layout) {
+                finish()
+              }
             }
           )
       }
@@ -20017,6 +20116,23 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return animating_sub_component
   }
 
+  private _zoom_opacity_animation: Animation
+
+  private _animate_zoom_opacity = (to: number): void => {
+    if (this._zoom_opacity_animation) {
+      this._zoom_opacity_animation.commitStyles()
+      this._zoom_opacity_animation.cancel()
+    }
+
+    this._zoom_opacity_animation = this._animate_element_opacity(
+      this._zoom_comp._root.$element,
+      to,
+      () => {
+        this._zoom_opacity_animation = undefined
+      }
+    )
+  }
+
   private _leave_tree_layout = (): void => {
     // console.log('Graph', '_leave_tree_layout')
 
@@ -20036,13 +20152,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._cancel_fullwindow_animation()
-    this._cancel_tree_layout_animation()
+    this._cancel_all_layout_sub_component_animation()
 
     this._tree_layout = false
 
-    this._zoom_comp._root.$element.style.opacity = '1'
+    this._animate_zoom_opacity(1)
 
     this._layout_comp.$element.style.pointerEvents = 'none'
+
+    if (this._layout_root_opacity_animation) {
+      this._layout_root_opacity_animation.commitStyles()
+      this._layout_root_opacity_animation.cancel()
+
+      this._layout_root_opacity_animation = undefined
+    }
 
     this._layout_root.children.$element.style.opacity = '0'
 
@@ -22693,7 +22816,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       component.$element.style.transition = ''
     }
 
-    component.$element.style.opacity = '0.25'
+    component.$element.style.opacity = `${LAYER_OPACITY_MULTIPLIER}`
   }
 
   private _clear_main = (animate: boolean): void => {
@@ -24583,7 +24706,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       base,
       base_node,
       tick,
-      () => {
+      async () => {
+        if (
+          this._main_opacity_animation &&
+          this._main_opacity_animation.playState !== 'idle' &&
+          this._main_opacity_animation.playState !== 'finished'
+        ) {
+          await this._main_opacity_animation.finished
+        }
+
         this._unplug_sub_component_base_frame(sub_component_id)
         this._compose_sub_component(sub_component_id)
         this._append_sub_component_base(sub_component_id)
@@ -26921,6 +27052,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._dom_enter_subgraph(animate)
   }
 
+  private _main_opacity_animation: Animation
+
+  private _animate_main_opacity = (to: number) => {
+    if (this._main_opacity_animation) {
+      this._main_opacity_animation.commitStyles()
+      this._main_opacity_animation.cancel()
+    }
+
+    this._main_opacity_animation = this._animate_element_opacity(
+      this._main.$element,
+      to
+    )
+  }
+
   private _dom_enter_subgraph = (animate: boolean) => {
     mergePropStyle(this._subgraph_graph, {
       opacity: '1',
@@ -26929,14 +27074,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     })
 
     this._subgraph.$element.style.pointerEvents = 'inherit'
-    // this._subgraph.$element.style.opacity = '1'
 
     this._main.$element.style.pointerEvents = 'none'
-    this._main.$element.style.transition = ifLinearTransition(
-      animate,
-      'opacity'
-    )
-    this._main.$element.style.opacity = '0.20'
+
+    if (animate) {
+      this._animate_main_opacity(LAYER_OPACITY_MULTIPLIER)
+    } else {
+      this._main.$element.style.opacity = `${LAYER_OPACITY_MULTIPLIER}`
+    }
   }
 
   private _dom_leave_subgraph = (animate: boolean) => {
@@ -26947,14 +27092,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     })
 
     this._subgraph.$element.style.pointerEvents = 'none'
-    // this._subgraph.$element.style.opacity = '0'
 
     this._main.$element.style.pointerEvents = 'inherit'
-    this._main.$element.style.transition = ifLinearTransition(
-      animate,
-      'opacity'
-    )
-    this._main.$element.style.opacity = '1'
+
+    if (animate) {
+      this._animate_main_opacity(1)
+    } else {
+      this._main.$element.style.opacity = '1'
+    }
   }
 
   private _ensure_graph_and__template = (
@@ -27139,8 +27284,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._leave_all_fullwindow(true, NOOP)
     }
 
-    const animating_sub_component =
-      this._animating_sub_component_base_id.has(unit_id)
+    const animating_sub_component = this._is_sub_component_animating(unit_id)
 
     if (is_component) {
       if (animating_sub_component) {
@@ -27174,14 +27318,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const can_uncollapse = !was_animating_leave
 
+    this._dom_enter_subgraph(animate)
+
     // graph.setProp('disabled', true)
     graph.setProp('disabled', false)
 
     graph.focus()
 
-    graph.enter(animate, opt, !animating_sub_component, can_uncollapse)
-
-    this._dom_enter_subgraph(animate)
+    graph.enter(
+      animate,
+      opt,
+      !animating_sub_component,
+      can_uncollapse,
+      this._main_opacity_animation?.finished
+    )
 
     this.dispatchEvent('enterunit', {}, false)
   }
@@ -27278,7 +27428,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._couple_all_fullwindow_component()
     } else {
       for (const sub_component_id in this._spec?.component?.subComponents) {
-        if (!this._animating_sub_component_base_id.has(sub_component_id)) {
+        if (!this._is_sub_component_animating(sub_component_id)) {
           this._enter_sub_component_frame(sub_component_id)
         }
       }
@@ -27299,7 +27449,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._leave_component_frame()
     } else {
       for (const sub_component_id in this._component.$subComponent) {
-        if (!this._animating_sub_component_base_id.has(sub_component_id)) {
+        if (!this._is_sub_component_animating(sub_component_id)) {
           this._leave_sub_component_frame(sub_component_id)
         }
       }
@@ -27329,7 +27479,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _animate_enter = (
     animate_config: Dict<{ base: LayoutBase; base_node: LayoutNode[] }> = {},
     component_collapsed: boolean,
-    should_uncollapse: boolean = true
+    should_uncollapse: boolean = true,
+    wait_for: Promise<void> = Promise.resolve()
   ) => {
     // console.log('Graph', '_animate_enter', animate_config)
 
@@ -27453,7 +27604,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               fontSize: trait.fontSize,
             }
           },
-          () => {
+          async () => {
+            await wait_for
+
             this._end_sub_component_enter_base_animation(sub_component_id)
           }
         )
@@ -27464,7 +27617,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     animate: boolean,
     animate_config: Dict<{ base: LayoutBase; base_node: LayoutNode[] }> = {},
     component_collapsed: boolean = true,
-    should_uncollapse: boolean = true
+    should_uncollapse: boolean = true,
+    wait_for: Promise<any> = Promise.resolve()
   ): void => {
     // console.log('Graph', 'enter', animate, animate_config)
 
@@ -27474,7 +27628,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._animate_enter(
         animate_config,
         component_collapsed,
-        should_uncollapse
+        should_uncollapse,
+        wait_for
       )
     } else {
       //
@@ -27715,10 +27870,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _refresh_main_opacity = () => {
     let opacity: number = 0
+
     if (this._subgraph_depth < 4) {
-      opacity = Math.pow(0.25, this._subgraph_depth)
+      opacity = Math.pow(LAYER_OPACITY_MULTIPLIER, this._subgraph_depth)
     }
-    this._main.$element.style.opacity = `${opacity}`
+
+    this._animate_main_opacity(opacity)
   }
 
   public leave_subgraph = (): void => {
@@ -27851,18 +28008,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     core_component_frame.removeChild(sub_component)
   }
 
+  private _layout_layer_opacity_animation: Dict<Animation> = {}
+  private _layout_root_opacity_animation: Animation
+
   private _refresh_all_layout_layer_opacity = () => {
+    // console.log('Graph', '_refresh_all_layout_layer_opacity')
+
     const l = this._layout_path.length
 
     if (l > 0) {
       for (let i = 0; i < l - 1; i++) {
         const layout_layer_id = this._layout_path[i]
-        const layout_layer = this._layout_layer[layout_layer_id]
 
-        layout_layer.children.$element.style.opacity = `${0.25 / (l - 1 - i)}`
+        this._animate_layout_layer_element_opacity(
+          layout_layer_id,
+          LAYER_OPACITY_MULTIPLIER / (l - 1 - i)
+        )
       }
 
-      this._layout_root.children.$element.style.opacity = `${0.25 / l}`
+      this._animate_layout_root_element_opacity(LAYER_OPACITY_MULTIPLIER / l)
     }
   }
 
@@ -28061,7 +28225,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     layout_layer.children.$element.style.overflowX = 'initial'
     layout_layer.children.$element.style.overflowY = 'initial'
 
-    layout_layer.children.$element.style.opacity = '1'
+    this._animate_layout_layer_element_opacity(sub_component_id, 1)
   }
 
   private _layout_leave_sub_component = () => {
@@ -28091,7 +28255,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     layout_layer.children.$element.style.overflowY = 'initial'
     layout_layer.children.$element.style.overflowX = 'initial'
 
-    next_layout_layer.children.$element.style.opacity = '1'
+    // next_layout_layer.children.$element.style.opacity = '1'
+
+    if (next_unit_id) {
+      this._animate_layout_layer_element_opacity(next_unit_id, 1)
+    } else {
+      this._animate_layout_root_element_opacity(1)
+    }
 
     next_layout_layer.layer.$element.style.overflowY = 'auto'
     next_layout_layer.layer.$element.style.overflowX = 'auto'
@@ -28133,7 +28303,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           sub_component_id,
           slot_children,
           slot_name,
-          () => {
+          async () => {
+            if (next_unit_id) {
+              if (this._layout_layer_opacity_animation[next_unit_id]) {
+                await this._layout_layer_opacity_animation[next_unit_id]
+                  .finished
+              }
+            } else {
+              if (this._layout_root_opacity_animation) {
+                await this._layout_root_opacity_animation.finished
+              }
+            }
+
             this._end_layout_sub_component_transfer_children_animation(
               sub_component_id,
               slot_name,
@@ -28614,7 +28795,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         parent_id,
         all_children,
         slot_name,
-        () => {
+        async () => {
           this._end_layout_sub_component_transfer_children_animation(
             parent_id,
             slot_name,
@@ -29647,22 +29828,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ) {
         this._start_layout_children_animation(parent_id, slot_name, frame)
       } else {
-        for (const child_id of children) {
-          if (this._layout_core_animating.has(child_id)) {
-            this._start_layout_children_animation(parent_id, slot_name, frame)
+        ;(async () => {
+          for (const child_id of children) {
+            if (this._layout_core_animating.has(child_id)) {
+              this._start_layout_children_animation(parent_id, slot_name, frame)
 
-            return
+              return
+            }
           }
-        }
 
-        callback()
+          callback()
+        })()
       }
     }
 
     frame()
 
     return () => {
-      this._cancel_tree_layout_animation()
+      this._cancel_all_layout_sub_component_animation()
     }
   }
 
@@ -33325,7 +33508,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       sub_component_id,
       'default',
       children,
-      () => {
+      async () => {
+        if (this._layout_layer_opacity_animation[sub_component_id]) {
+          await this._layout_layer_opacity_animation[sub_component_id].finished
+        }
+
         this._end_layout_sub_component_transfer_children_animation(
           sub_component_id,
           'default',
