@@ -284,6 +284,7 @@ import {
   randomInRadius,
   randomInRect,
   randomUnitVector,
+  rectCenter,
   rectsBoundingRect,
   resizeVector,
   roundPoint,
@@ -3900,37 +3901,42 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   public get_unit_relative_positions = () => {
-    const units = this.get_units()
-
-    return this.get_nodes_relative_positions(units)
+    return this.get_nodes_center_relative_positions(this._unit_node)
   }
 
   public get_node_relative_positions = (): Dict<Position> => {
-    return this.get_nodes_relative_positions(this._node)
+    return this.get_nodes_center_relative_positions(this._node)
   }
 
-  public get_nodes_relative_positions = (nodes: Dict<any>): Dict<Position> => {
+  public get_nodes_center_relative_positions = (
+    nodes: Dict<any>
+  ): Dict<Position> => {
     const nodes_list = Object.values(nodes)
 
     const rect = rectsBoundingRect(nodes_list)
 
-    const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
+    const center = { x: rect.x, y: rect.y }
 
-    return this.get_nodes_relative_positions_to(nodes, center)
+    return this.get_nodes_center_relative_positions_to(nodes, center)
   }
 
-  public get_nodes_relative_positions_to = (
+  public get_nodes_center_relative_positions_to = (
     nodes: Dict<any>,
     center: Point
   ): Dict<Position> => {
     const node_positions: Dict<Position> = {}
 
     for (const node_id in nodes) {
-      const unit_node_position = this._get_node_position(node_id)
+      const node = this.get_node(node_id)
 
-      const unit_relative_position = pointVector(center, unit_node_position)
+      const node_center_position = {
+        x: node.x + node.width / 2,
+        y: node.y + node.height / 2,
+      }
 
-      node_positions[node_id] = unit_relative_position
+      const node_relative_position = pointVector(center, node_center_position)
+
+      node_positions[node_id] = roundPoint(node_relative_position)
     }
 
     return node_positions
@@ -5273,7 +5279,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _get_spec_init_unit_pin_position = (
     spec: GraphSpec,
-    unit_id: string
+    unit_id: string,
+    center: Point = NULL_VECTOR
   ): UnitPinPosition => {
     const { units = {} } = spec
 
@@ -5290,7 +5297,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { position } = metadata
 
       if (position) {
-        const p = addVector(this._jiggle_world_screen_center(), position)
+        center = center ?? this._jiggle_world_screen_center()
+
+        const p = addVector(center, position)
 
         pin_position[type][pin_id] = p
       }
@@ -49145,9 +49154,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         memory = { input: {}, output: {}, memory: {} },
       } = unit
 
+      const unit_position = this._get_node_position(unit_id)
+
       const unit_pin_position = this._get_spec_init_unit_pin_position(
         graph,
-        unit_id
+        unit_id,
+        position
       )
 
       this._sim_add_unit_pins(unit_id, unit, unit_pin_position)
@@ -51201,9 +51213,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private __spec_set_nodes_position = (spec: GraphSpec): void => {
-    const center = centerOfMass(Object.values(this._unit_node))
+    const rect = rectsBoundingRect(Object.values(this._unit_node))
 
-    const position_map = this.get_nodes_relative_positions_to(
+    const center = rectCenter(rect)
+
+    const position_map = this.get_nodes_center_relative_positions_to(
       this._node,
       center
     )
