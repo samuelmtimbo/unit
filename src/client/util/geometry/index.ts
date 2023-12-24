@@ -685,6 +685,13 @@ export function _centerToSurfaceDistance(
   }
 }
 
+export function rectCenter(rect: Rect): Point {
+  return {
+    x: rect.x + rect.width / 2,
+    y: rect.y + rect.height / 2,
+  }
+}
+
 export function centerOfMass(points: Point[]): Point {
   let sum_x = 0
   let sum_y = 0
