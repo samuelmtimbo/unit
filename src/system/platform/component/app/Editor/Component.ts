@@ -45049,6 +45049,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (graph_id) {
       this._refresh_core_border_color(graph_id)
+      this._refresh_node_fixed(graph_id)
       this._refresh_unit_layer(graph_id)
     }
 
@@ -45105,11 +45106,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
 
     if (this._collapse_remaining === 0) {
-      if (this._collapse_next_unit_id) {
-        this._refresh_node_fixed(this._collapse_next_unit_id)
-        this._refresh_unit_layer(this._collapse_next_unit_id)
-      }
-
       this._stop_collapse()
     }
   }
