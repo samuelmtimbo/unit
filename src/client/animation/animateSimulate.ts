@@ -1,6 +1,6 @@
 import { System } from '../../system'
-import { Callback } from '../../types/Callback'
 import { Dict } from '../../types/Dict'
+import { Unlisten } from '../../types/Unlisten'
 import { animateSimulateTick } from './animateSimulateTick'
 
 export const animateSimulate = (
@@ -10,17 +10,16 @@ export const animateSimulate = (
   ff: [string, number][],
   tf: (n: Dict<number>) => void,
   callback: () => void | boolean
-): Callback => {
+): Unlisten => {
   const {
     api: {
       animation: { requestAnimationFrame, cancelAnimationFrame },
     },
   } = system
 
-  // console.log('Graph', '_animate_simulate')
   let n = n0
 
-  let frame
+  let frame: number
 
   const next = () => (frame = requestAnimationFrame(tick))
 
