@@ -589,9 +589,11 @@ export function moveMerge(
 
       pinIntoCount++
     } else if (ignoredUnit.has(unitId)) {
-      pathSet(nextMerge, [nextUnitId, type, pinId], true)
+      if (target.hasUnit(nextUnitId)) {
+        pathSet(nextMerge, [nextUnitId, type, pinId], true)
 
-      pinIntoCount++
+        pinIntoCount++
+      }
     } else {
       //
     }
@@ -865,10 +867,6 @@ export function moveMerge(
             (type === 'input' ? nextInput : nextOutput) ?? {}
 
           if (reverse) {
-            // if (target.hasPlug(type, pinId, subPinId)) {
-            //   target.unplugPin(type, pinId, subPinId, false, false)
-            // }
-
             if (isEmptyMerge(sourceMergeSpec)) {
               const targetPinSpecs = target.getExposedPinSpecs()
 
@@ -1070,14 +1068,25 @@ export function movePlug(
   }
 
   if (target.hasPinNamed(nextType, pinId)) {
-    target.exposePin(
-      nextType,
-      pinId,
-      nextSubPinId,
-      nextSubPinSpec_,
-      false,
-      false
-    )
+    if (target.hasPlug(nextType, pinId, nextSubPinId)) {
+      target.plugPin(
+        nextType,
+        pinId,
+        nextSubPinId,
+        nextSubPinSpec_,
+        false,
+        false
+      )
+    } else {
+      target.exposePin(
+        nextType,
+        pinId,
+        nextSubPinId,
+        nextSubPinSpec_,
+        false,
+        false
+      )
+    }
   } else {
     target.exposePinSet(
       nextType,
@@ -1156,7 +1165,7 @@ export function movePlug(
     const nextMergeId = pathOrDefault(
       nextMergePinId,
       ['merge', subPinSpec.mergeId, type],
-      null
+      pathOrDefault(nextIdMap, ['plug', type, pinId, subPinId, 'mergeId'], null)
     )
 
     if (nextMergeId) {
@@ -1164,7 +1173,7 @@ export function movePlug(
         nextMergeId,
         graphId,
         nextType,
-        nextPinId,
+        nextPinId ?? pinId,
         false,
         false
       )

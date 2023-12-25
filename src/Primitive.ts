@@ -416,12 +416,17 @@ export class Primitive<
   private _onOutputRenamed(name: string, newName: string) {
     // console.log('Primitive', '_onOutputRenamed', name, newName)
 
+    const active = this._o[name] !== undefined
     const output = this.getOutput(newName)
     const opt = this.getOutputOpt(newName)
 
     this._plunkOutput(name, output)
 
     this._setupOutput(newName, output, opt)
+
+    if (active) {
+      this._active_o_count--
+    }
 
     this.onOutputRenamed(name, newName, opt, opt)
   }

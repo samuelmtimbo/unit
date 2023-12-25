@@ -429,6 +429,34 @@ export const findMergePlug = (
   return mergePlug
 }
 
+export const findMergePlugs = (
+  spec: GraphSpec,
+  mergeId: string
+): IOOf<GraphPlugOuterSpec | null> => {
+  const mergePlugs: IOOf<GraphPlugOuterSpec | null> = {
+    input: null,
+    output: null,
+  }
+
+  forEachGraphSpecPin(spec, (type, pinId, pinSpec) => {
+    const { plug = {} } = pinSpec
+
+    for (const subPinId in plug) {
+      const subPin = plug[subPinId]
+
+      if (subPin.mergeId === mergeId) {
+        mergePlugs[type] = {
+          pinId,
+          type,
+          subPinId,
+        }
+      }
+    }
+  })
+
+  return mergePlugs
+}
+
 export const findUnitPinPlug = (
   spec: GraphSpec,
   unitId: string,
@@ -456,7 +484,7 @@ export const findUnitPinPlug = (
   return pinPlug
 }
 
-export function getUnitPlugs(spec: GraphSpec, unit_id: string): GraphUnitPlugs {
+export function findUnitPlugs(spec: GraphSpec, unitId: string): GraphUnitPlugs {
   const plugs: GraphUnitPlugs = {
     input: {},
     output: {},
@@ -465,8 +493,12 @@ export function getUnitPlugs(spec: GraphSpec, unit_id: string): GraphUnitPlugs {
   forEachGraphSpecPinPlug(
     spec,
     (type, pinId, pinSpec, subPinId, subPinSpec) => {
-      if (subPinSpec.unitId === unit_id) {
-        pathSet(plugs, [type, subPinSpec.pinId], { pinId, subPinId })
+      if (subPinSpec.unitId === unitId) {
+        pathSet(plugs, [subPinSpec.kind ?? type, subPinSpec.pinId], {
+          type,
+          pinId,
+          subPinId,
+        })
       }
     }
   )
@@ -792,7 +824,7 @@ export function makeFullSpecCollapseMap(
 
     const merge_pin_count = getMergePinCount(merge_clone)
 
-    if (merge_pin_count === 1) {
+    if (merge_pin_count === 1 && merge_unit_pin_id !== SELF) {
       const mergeUnitPinSpec = deepGet(spec, [
         `${merge_unit_pin_type}s`,
         merge_unit_pin_id,
