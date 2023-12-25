@@ -64,6 +64,7 @@ import { stringifyMemorySpecData } from '../../spec/stringifySpec'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
 import {
   findUnitPinPlug,
+  findUnitPlugs,
   forEachGraphSpecPinOfType,
   forEachInputOnMerge,
   forEachPinOnMerge,
@@ -74,7 +75,6 @@ import {
   getPinNodeId,
   getPlugSpecs,
   getUnitMergesSpec,
-  getUnitPlugs,
   hasMerge,
   hasMergePin,
   makeFullSpecCollapseMap,
@@ -1392,11 +1392,11 @@ export class Graph<I = any, O = any>
     exposedMerge.setPin(type, pinId, exposedPin)
     exposedMergeOpposite.setPin(oppositeType, pinId, exposedPin)
 
+    this.setPin(type, pinId, exposedPin, { ref }, propagate)
+
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
       this._simExposePin(type, pinId, subPinId, subPinSpec, propagate)
     })
-
-    this.setPin(type, pinId, exposedPin, { ref }, propagate)
   }
 
   public isPinSetFunctional = (type: IO, pinId: string): boolean => {
@@ -2751,12 +2751,12 @@ export class Graph<I = any, O = any>
   public findMergeExposedSubPin(
     type: IO,
     mergeId: string
-  ): { pinId: string; subPinId: string } | null {
-    let pinSpec = null
+  ): GraphPlugOuterSpec | null {
+    let pinSpec: GraphPlugOuterSpec = null
 
     this._forEachSpecPinOfType(type, (pinId, subPinId, subPinSpec) => {
       if (subPinSpec.mergeId === mergeId) {
-        pinSpec = { pinId, subPinId }
+        pinSpec = { pinId, subPinId, type, kind: subPinSpec.kind ?? type }
       }
     })
 
@@ -3840,11 +3840,11 @@ export class Graph<I = any, O = any>
             delete mergeSpec[unitId]
 
             const otherMergeUnitId = getObjSingleKey(mergeSpec)
-            const otherMergeUnitType = getObjSingleKey(
+            const otherMergeUnitPinType = getObjSingleKey(
               mergeSpec?.[otherMergeUnitId] ?? {}
-            )
+            ) as IO
             const otherMergeUnitPinId = getObjSingleKey(
-              mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType] ?? {}
+              mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitPinType] ?? {}
             )
 
             this._specRemoveMerge(mergeId)
@@ -3857,7 +3857,7 @@ export class Graph<I = any, O = any>
                 {
                   unitId: otherMergeUnitId,
                   pinId: otherMergeUnitPinId,
-                  kind: 'input',
+                  kind: otherMergeUnitPinType,
                 }
               )
             }
@@ -3870,7 +3870,7 @@ export class Graph<I = any, O = any>
                 {
                   unitId: otherMergeUnitId,
                   pinId: otherMergeUnitPinId,
-                  kind: 'output',
+                  kind: otherMergeUnitPinType,
                 }
               )
             }
@@ -3912,11 +3912,11 @@ export class Graph<I = any, O = any>
         delete mergeSpec[unitId]
 
         const otherMergeUnitId = getObjSingleKey(mergeSpec)
-        const otherMergeUnitType = getObjSingleKey(
+        const otherMergeUnitPinType = getObjSingleKey(
           mergeSpec?.[otherMergeUnitId] ?? {}
-        )
+        ) as IO
         const otherMergeUnitPinId = getObjSingleKey(
-          mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType] ?? {}
+          mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitPinType] ?? {}
         )
 
         this._simRemoveMerge(mergeId, take)
@@ -3929,7 +3929,7 @@ export class Graph<I = any, O = any>
             {
               unitId: otherMergeUnitId,
               pinId: otherMergeUnitPinId,
-              kind: 'input',
+              kind: mergeInputPlug.kind ?? 'input',
             },
             false
           )
@@ -3943,7 +3943,7 @@ export class Graph<I = any, O = any>
             {
               unitId: otherMergeUnitId,
               pinId: otherMergeUnitPinId,
-              kind: 'output',
+              kind: otherMergeUnitPinType,
             },
             false
           )
@@ -4453,9 +4453,6 @@ export class Graph<I = any, O = any>
     this._memRemoveMerge(mergeId)
     this._specRemoveMerge(mergeId)
 
-    this._memPostRemoveMerge(mergeId)
-    this._simPostRemoveMerge(mergeId)
-
     merge.destroy()
 
     return merge
@@ -4466,11 +4463,14 @@ export class Graph<I = any, O = any>
 
     const merge = this.getMerge(mergeId)
 
-    this._simRemoveAllPlugsFromMerge(mergeId)
+    this._simRemoveAllPlugsFromMerge(mergeId, take)
     this._simRemoveAllPinsFromMerge(mergeId, take)
   }
 
-  private _simRemoveAllPlugsFromMerge = (mergeId: string) => {
+  private _simRemoveAllPlugsFromMerge = (
+    mergeId: string,
+    take: boolean = true
+  ) => {
     // console.log('Graph', '_simRemoveAllPlugsFromMerge', mergeId, this._spec.outputs)
 
     this._forEachSpecPinPlug(
@@ -4481,7 +4481,7 @@ export class Graph<I = any, O = any>
         subPinSpec: GraphSubPinSpec
       ) => {
         if (subPinSpec.mergeId === mergeId) {
-          this._simUnplugPin(type, pinId, subPinId)
+          this._simUnplugPin(type, pinId, subPinId, take)
         }
       }
     )
@@ -5495,7 +5495,7 @@ export class Graph<I = any, O = any>
   }
 
   public getUnitPlugsSpec(unitId: string): GraphUnitPlugs {
-    return getUnitPlugs(this._spec, unitId)
+    return findUnitPlugs(this._spec, unitId)
   }
 
   private _transacting = false

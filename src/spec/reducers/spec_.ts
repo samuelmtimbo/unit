@@ -23,10 +23,10 @@ import {
 } from '../../util/object'
 import { getSubComponentParentId } from '../util/component'
 import {
+  findUnitPlugs,
   forEachPinOnMerges,
   getMergePinCount,
   getUnitMergesSpec,
-  getUnitPlugs,
 } from '../util/spec'
 import {
   insertChild,
@@ -207,25 +207,27 @@ export const addPinToMerge = (
   }: { mergeId: string; type: IO; unitId: string; pinId: string },
   spec: GraphSpec
 ): void => {
-  // reassign exposed pin if it has just been merged
-  forEachValueKey(spec[`${type}s`], ({ name, plug = {} }, exposedPinId) => {
-    for (const subPinId in plug) {
-      const subPin = plug[subPinId]
+  io((_type) => {
+    forEachValueKey(spec[`${_type}s`], ({ name, plug = {} }, exposedPinId) => {
+      for (const subPinId in plug) {
+        const subPin = plug[subPinId]
 
-      const { unitId: _unitId, pinId: _pinId } = subPin
+        const { unitId: _unitId, pinId: _pinId } = subPin
 
-      if (_unitId === unitId && _pinId === pinId) {
-        coverPinSet({ pinId: exposedPinId, type }, spec)
-        exposePinSet(
-          {
-            pinId: exposedPinId,
-            pinSpec: { name, plug: { 0: { mergeId } } },
-            type,
-          },
-          spec
-        )
+        if (_unitId === unitId && _pinId === pinId && type === _type) {
+          unplugPin({ pinId: exposedPinId, type: _type, subPinId }, spec)
+          plugPin(
+            {
+              type: _type,
+              pinId: exposedPinId,
+              subPinId,
+              subPinSpec: { mergeId },
+            },
+            spec
+          )
+        }
       }
-    }
+    })
   })
 
   return pathSet(spec, ['merges', mergeId, unitId, type, pinId], true)
@@ -370,7 +372,7 @@ export const setUnitId = (
 
   const specClone = clone(spec)
 
-  const unitPlugs = getUnitPlugs(specClone, unitId)
+  const unitPlugs = findUnitPlugs(specClone, unitId)
   const unitMerges = getUnitMergesSpec(specClone, unitId)
 
   removeUnit({ unitId }, spec)
