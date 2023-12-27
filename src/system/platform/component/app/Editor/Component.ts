@@ -15438,7 +15438,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       output,
     }
 
-    this._spec_add_unit(unit_id, unit_spec, true)
+    this._spec_add_unit(unit_id, unit_spec, false)
 
     let parent_id: string | null = null
 
@@ -16116,6 +16116,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._mode === 'multiselect' ||
         this._mode === 'info'
       ) {
+        this._spec_mirror_unit(search_unit_id)
+
         this._set_unit_color(
           search_unit_id,
           this._theme.node,
@@ -16514,8 +16516,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       this._mem_remove_search_unit_id()
-
-      // this._unregister_unit(search_unit_spec_id)
 
       if (should_refresh_search_start_unit) {
         this._reset_unit_color(search_start_unit_id)
