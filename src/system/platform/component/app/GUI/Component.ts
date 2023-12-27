@@ -73,6 +73,8 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     const { className, style = {} } = this.$props
 
+    const pointerEvents = style.pointerEvents === 'none' ? 'inherit' : 'all'
+
     const modes = new Modes(
       {
         className: 'graph-gui-crud',
@@ -82,7 +84,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           left: '0px',
           transform: 'translate(0%, -50%)',
           backgroundColor: 'none',
-          pointerEvents: 'all',
+          pointerEvents,
         },
       },
       this.$system
@@ -98,7 +100,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           left: '50%',
           transform: 'translate(-50%, 0%)',
           backgroundColor: 'none',
-          pointerEvents: 'all',
+          pointerEvents,
         },
       },
       this.$system
@@ -277,7 +279,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         className: 'graph-gui-cabinet',
         style: {
           backgroundColor: 'none',
-          pointerEvents: 'all',
+          pointerEvents,
         },
         // hidden: true,
       },
@@ -533,6 +535,22 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     return backgroundColor
   }
 
+  private _refresh_pointer_events = (): void => {
+    const { style = {} } = this.$props
+
+    const pointerEvents = style.pointerEvents === 'none' ? 'inherit' : 'all'
+
+    mergePropStyle(this._modes, {
+      pointerEvents,
+    })
+    mergePropStyle(this._search, {
+      pointerEvents,
+    })
+    mergePropStyle(this._cabinet, {
+      pointerEvents,
+    })
+  }
+
   private _refresh_color = (): void => {
     const color = this._get_color()
     const backgroundColor = this._background_color()
@@ -557,6 +575,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     if (prop === 'style') {
       this._container.setProp('style', { ...DEFAULT_STYLE, ...current })
 
+      this._refresh_pointer_events()
       this._refresh_color()
     }
   }
