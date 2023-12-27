@@ -42,7 +42,8 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
       !this._forwarding &&
       !this._backwarding &&
       !this._looping &&
-      this._current !== undefined
+      this._current !== undefined &&
+      this._i_invalid_count === 0
     ) {
       this._looping = true
       this._forwarding = true
@@ -62,6 +63,7 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
 
   onDataInputInvalid(name: string) {
     this._looping = false
+    this._current = undefined
     this._output[0].invalidate()
     this._output[1].invalidate()
   }
