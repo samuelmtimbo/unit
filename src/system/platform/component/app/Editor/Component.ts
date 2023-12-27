@@ -28463,7 +28463,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_unit_long_click = (unit_id: string) => {
     if (
       !this._resize_node_id_pointer_id[unit_id] &&
-      !this._animating_unit_explosion.has(unit_id)
+      !this._animating_unit_explosion[unit_id]
     ) {
       if (this._mode === 'none') {
         if (!this._is_unit_base(unit_id)) {
@@ -32514,32 +32514,34 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._disable_unit_pointer_events(unit_id)
 
-    this._animating_unit_explosion.add(unit_id)
+    this._animating_unit_explosion[unit_id] = new Promise<void>((resolve) => {
+      this._animate_core_style(
+        unit_id,
+        init_node,
+        () => {
+          return target_node
+        },
+        ({ x, y, width, height, opacity }) => {
+          set_opacity(unit_id, opacity)
 
-    this._animate_core_style(
-      unit_id,
-      init_node,
-      () => {
-        return target_node
-      },
-      ({ x, y, width, height, opacity }) => {
-        set_opacity(unit_id, opacity)
+          this._set_node_x(unit_id, x)
+          this._set_node_y(unit_id, y)
 
-        this._set_node_x(unit_id, x)
-        this._set_node_y(unit_id, y)
+          this._resize_core_width(unit_id, width)
+          this._resize_node_width(unit_id, width)
 
-        this._resize_core_width(unit_id, width)
-        this._resize_node_width(unit_id, width)
+          this._resize_core_height(unit_id, height)
+          this._resize_node_height(unit_id, height)
+        },
+        () => {
+          delete this._animating_unit_explosion[unit_id]
 
-        this._resize_core_height(unit_id, height)
-        this._resize_node_height(unit_id, height)
-      },
-      () => {
-        this._animating_unit_explosion.delete(unit_id)
+          this._state_remove_unit(unit_id)
 
-        this._state_remove_unit(unit_id)
-      }
-    )
+          resolve()
+        }
+      )
+    })
 
     this._simulation.alpha(1)
     this._simulation.alphaDecay(0)
@@ -37080,13 +37082,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _spec_remove_unit = (unitId: string, unregister: boolean = true) => {
     // console.log('Graph', '_spec_remove_unit', unitId, unregister)
 
+    const { parent } = this.$props
+
     const unit = this._get_unit(unitId)
 
     if (this._is_unit_component(unitId)) {
       this._spec_remove_component(unitId)
     }
 
-    if (unregister) {
+    if (unregister && !parent) {
       this._unregister_unit(unit.id)
     }
 
@@ -48157,7 +48161,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._unlisten_gesture = undefined
   }
 
-  private _animating_unit_explosion: Set<string> = new Set()
+  private _animating_unit_explosion: Set<Promise<any>> = new Set()
 
   private _on_graph_background_multiselect_long_press = (
     event: UnitPointerEvent
@@ -48174,7 +48178,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       const valid_selected_node_ids = selected_node_ids.filter((node_id) => {
-        if (this._animating_unit_explosion.has(node_id)) {
+        if (this._animating_unit_explosion[node_id]) {
           return false
         }
 
@@ -52845,7 +52849,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_on_graph_unit_remove_unit_moment', data)
 
-    const { setSpec, specs, parent } = this.$props
+    const { setSpec, specs, parent, unregisterUnit } = this.$props
 
     const { bundle, path, unitId } = data
 
@@ -52873,6 +52877,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._is_spec_updater(path)) {
       next_spec = clone(spec)
 
+      const unit = next_spec.units[unitId]
+
       removeUnit({ unitId }, next_spec)
 
       next_spec.metadata = next_spec.metadata || {}
@@ -52898,6 +52904,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       setSpec(spec.id, next_spec)
+
+      const subgraph = this.getSubgraphAtPath(path)
+
+      ;(async () => {
+        if (subgraph) {
+          if (subgraph._animating_unit_explosion[unitId]) {
+            await subgraph._animating_unit_explosion[unitId]
+          }
+
+          unregisterUnit(unit.id)
+        }
+      })()
     }
 
     let all_added_unit_ancestors_are_component = true
