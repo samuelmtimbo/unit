@@ -1035,6 +1035,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           height: '100%',
           overflow: 'auto',
           pointerEvents: 'none',
+          zIndex: '0',
         },
       },
       this.$system
