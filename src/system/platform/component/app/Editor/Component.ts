@@ -907,7 +907,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     root.registerParentRoot(this._editor)
     root.registerParentRoot(this._fallback_frame)
     root.registerParentRoot(this._transcend)
-    // RETURN
     root.$element.oncontextmenu = function () {
       return false
     }
