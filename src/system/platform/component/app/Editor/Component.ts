@@ -25520,7 +25520,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const { value } = tree
 
-        this._spec_set_pin_data(pin_node_id, value)
+        // this._spec_set_pin_data(pin_node_id, value)
       } else {
         this._spec_remove_pin_data(pin_node_id)
       }
@@ -34776,9 +34776,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     datum_node_id: string
   ): void => {
     if (this._is_link_pin_node_id(pin_node_id)) {
-      if (this._is_link_pin_constant(pin_node_id)) {
-        this._spec_remove_pin_data(pin_node_id)
-      }
+      // if (this._is_link_pin_constant(pin_node_id)) {
+      this._spec_remove_pin_data(pin_node_id)
+      // }
     }
   }
 
@@ -50938,29 +50938,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             let kb = mab * k
             let ka = mba * k
 
-            // const a_target_id = this._node_target[a_id]
-            // if (a_target_id) {
-            //   if (a_target_id === b_id) {
-            //     const kt = (-1.5 / NEAR) * d
-
-            //     ka *= kt
-            //     kb *= kt
-            //   } else {
-            //     kb = 0
-            //   }
-            // }
-            // const b_target_id = this._node_target[b_id]
-            // if (b_target_id) {
-            //   if (b_target_id === a_id) {
-            //     const kt = (-1.5 / NEAR) * d
-
-            //     kb *= kt
-            //     ka *= kt
-            //   } else {
-            //     ka = 0
-            //   }
-            // }
-
             const charge_ab = this._node_charge[a_id]?.[b_id] ?? 1
             const charge_ba = this._node_charge[b_id]?.[a_id] ?? 1
 
@@ -51014,8 +50991,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
               const charge_ba = this._node_charge[b_id]?.[a_id] ?? 1
 
-              a.ax += u.x * k * charge_ba
-              a.ay += u.y * k * charge_ba
+              if (a.fx === undefined) {
+                a.ax += u.x * k * charge_ba
+              }
+
+              if (a.fy === undefined) {
+                a.ay += u.y * k * charge_ba
+              }
             }
           }
         }
