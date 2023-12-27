@@ -11895,6 +11895,36 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const { l, d } = surfaceDistance(a, t)
 
+      const on_plug_target_end = (
+        int_node_id,
+        int_node,
+        target_id,
+        target_node
+      ) => {
+        const { type } = segmentInternalNodeId(int_node_id)
+
+        const b_id = getExtNodeIdFromIntNodeId(int_node_id)
+
+        const is_close = isInside(int_node, target_node, 3)
+        const is_inside = isInside(int_node, target_node, 1)
+
+        this._set_plug_marker_to_default(type, b_id, int_node_id)
+
+        if (is_close) {
+          this._set_exposed_pin_marker_to_node(
+            type,
+            b_id,
+            int_node_id,
+            int_node_id,
+            3 - l
+          )
+        }
+
+        if (is_inside) {
+          this._on_plug_target_end(int_node_id, target_id)
+        }
+      }
+
       if (this._is_pin_node_id(node_id)) {
         if (this._is_pin_node_id(t_id)) {
           if (d < 3) {
@@ -11905,25 +11935,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             this._on_pin_unit_target_end(node_id, t_id)
           }
         } else {
-          throw new InvalidStateError()
+          on_plug_target_end(t_id, t, node_id, a)
         }
       } else if (this._is_int_node_id(node_id)) {
-        const { type } = segmentInternalNodeId(node_id)
-
-        const b_id = getExtNodeIdFromIntNodeId(node_id)
-
-        const is_close = isInside(a, t, 3)
-        const is_inside = isInside(a, t, 1)
-
-        this._set_plug_marker_to_default(type, b_id, a_id)
-
-        if (is_close) {
-          this._set_exposed_pin_marker_to_node(type, b_id, a_id, a_id, 3 - l)
-        }
-
-        if (is_inside) {
-          this._on_plug_target_end(node_id, t_id)
-        }
+        on_plug_target_end(node_id, a, t_id, t)
       }
     }
 
@@ -13722,8 +13737,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._stop_static()
       }
     }
-
-    this._refresh_compatible()
   }
 
   public resize_sub_component = (
@@ -20797,11 +20810,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (this._is_dropable_mode()) {
       if (node_id === this._subgraph_unit_id) {
-        return
+        //
+      } else {
+        this._drop_node(node_id)
       }
-
-      this._drop_node(node_id)
     }
+
+    this._refresh_compatible()
   }
 
   private __on_node_drag_end = (node_id: string) => {
@@ -21208,11 +21223,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private __drop_pin(pin_node_id: string, nearest_compatible_node_id: string) {
     if (this._is_pin_node_id(nearest_compatible_node_id)) {
       this._set_node_target(pin_node_id, nearest_compatible_node_id)
-      this._set_node_target(nearest_compatible_node_id, pin_node_id)
     } else if (this._is_unit_node_id(nearest_compatible_node_id)) {
       this._set_node_target(pin_node_id, nearest_compatible_node_id)
     } else if (this._is_int_node_id(nearest_compatible_node_id)) {
-      this._set_node_target(nearest_compatible_node_id, pin_node_id)
+      this._set_node_target(pin_node_id, nearest_compatible_node_id)
     }
   }
 
@@ -21487,9 +21501,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._target_node[target_id] = this._target_node[target_id] ?? new Set()
     this._target_node[target_id].add(node_id)
 
-    this._start_node_target_frame()
-
     this._refresh_compatible()
+
+    this._start_node_target_frame()
   }
 
   private _node_target_tick = (): void => {
@@ -21561,14 +21575,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const target_id = this._node_target[node_id]
 
-    if (this._has_node(node_id)) {
-      this._set_node_fixed(node_id, false)
-    }
-
-    if (this._has_node(target_id)) {
-      this._set_node_fixed(target_id, false)
-    }
-
     this._target_node[target_id].delete(node_id)
 
     if (this._target_node[target_id].size === 0) {
@@ -21580,6 +21586,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._node_target_count--
 
     this._refresh_compatible()
+
+    if (this._has_node(node_id)) {
+      this._refresh_node_fixed(node_id)
+    }
+
+    if (this._has_node(target_id)) {
+      this._refresh_node_fixed(target_id)
+    }
   }
 
   private _on_node_target_end(node_id: string, target_node_id: string): void {
@@ -21607,19 +21621,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // )
 
     const target_anchor_id = this._get_pin_anchor_node_id(target_pin_node_id)
-
-    this._remove_node_target(pin_node_id)
-    this._remove_node_target(target_pin_node_id)
+    const target_position = this._get_node_position(target_anchor_id)
 
     let merge_node_id: string
 
     const output_ref_merge_node_id = this._ref_output_to_merge[target_anchor_id]
 
     if (output_ref_merge_node_id) {
-      merge_node_id = this._merge_pin_pin(pin_node_id, output_ref_merge_node_id)
+      merge_node_id = this._merge_pin_pin(
+        pin_node_id,
+        output_ref_merge_node_id,
+        target_position
+      )
     } else {
-      merge_node_id = this._merge_pin_pin(pin_node_id, target_anchor_id)
+      merge_node_id = this._merge_pin_pin(
+        pin_node_id,
+        target_anchor_id,
+        target_position
+      )
     }
+
+    this._remove_node_target(pin_node_id)
+    this._remove_node_target(target_pin_node_id)
   }
 
   private _on_pin_unit_target_end = (
@@ -21811,10 +21834,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       node.fx = undefined
       node.fy = undefined
     }
-
-    const default_node_layer = this._get_node_default_layer(node_id)
-
-    this._start_graph_simulation(clamp(default_node_layer - 1, 0, Infinity))
   }
 
   private _set_all_node_fixed = (fixed: boolean): void => {
@@ -24295,6 +24314,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let fixed = false
     if (
       this._drag_node_id[node_id] ||
+      this._target_node[node_id] ||
       (!this._all_data &&
         this._compatible_node_id[node_id] &&
         (this._is_node_id(node_id) || this._is_int_node_id(node_id)))
@@ -33045,7 +33065,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _merge_pin_pin = (
     pin_0_node_id: string,
-    pin_1_node_id: string
+    pin_1_node_id: string,
+    position?: Position
   ): string => {
     // console.log('Graph', '_merge_pin_pin', pin_0_node_id, pin_1_node_id)
 
@@ -33053,7 +33074,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._is_link_pin_node_id(pin_0_node_id) &&
       this._is_link_pin_node_id(pin_1_node_id)
     ) {
-      return this._merge_link_pin_link_pin(pin_0_node_id, pin_1_node_id)
+      return this._merge_link_pin_link_pin(
+        pin_0_node_id,
+        pin_1_node_id,
+        position
+      )
     } else if (
       this._is_link_pin_node_id(pin_0_node_id) &&
       this._is_merge_node_id(pin_1_node_id)
@@ -33222,7 +33247,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _merge_link_pin_link_pin = (
     pin_0_node_id: string,
-    pin_1_node_id: string
+    pin_1_node_id: string,
+    position?: Position
   ): string => {
     // console.log(
     //   'Graph',
@@ -33266,7 +33292,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const merge_node_id = this.__sim_merge_link_pin_link_pin(
       merge_id,
       pin_0_node_id,
-      pin_1_node_id
+      pin_1_node_id,
+      position
     )
 
     bulk_actions.push(makeAddMergeAction(merge_id, merge))
@@ -33290,21 +33317,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _sim_merge_link_pin_link_pin = (
     pin_0_node_id: string,
-    pin_1_node_id: string
+    pin_1_node_id: string,
+    position?: Position
   ): string => {
     const merge_id = this._new_merge_id()
 
     return this.__sim_merge_link_pin_link_pin(
       merge_id,
       pin_0_node_id,
-      pin_1_node_id
+      pin_1_node_id,
+      position
     )
   }
 
   private __sim_merge_link_pin_link_pin = (
     merge_id: string,
     pin_0_node_id: string,
-    pin_1_node_id: string
+    pin_1_node_id: string,
+    position?: Position
   ): string => {
     const {
       unitId: pin_0_unit_id,
@@ -33349,7 +33379,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     }
 
-    let position: Position
     if (!merge_unit_id) {
       const { x: x0, y: y0 } = this._node[pin_0_node_id]
       const { x: x1, y: y1 } = this._node[pin_1_node_id]
@@ -36103,6 +36132,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._layer_node[layer][node_id]
 
     remove_node_from_graph(this._node_graph, node_id)
+
+    this._refresh_compatible()
 
     this._rebuild_subgraph()
   }
@@ -45905,7 +45936,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         type: IO,
         pin_id: string
       ) => boolean
-      addPinToMerge: (unit_id: string, type: IO, pin_id: string, merge_id: string) => void
+      addPinToMerge: (
+        unit_id: string,
+        type: IO,
+        pin_id: string,
+        merge_id: string
+      ) => void
       addMerge(merge_id: string, merge: GraphMergeSpec)
       getUnitPinPlug: (
         unit_id: string,
