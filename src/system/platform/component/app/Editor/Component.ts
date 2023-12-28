@@ -6653,6 +6653,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           path: [unitId],
         })
 
+        const subgraph = this._subgraph_cache[unitId]
+
+        if (subgraph) {
+          subgraph._state_set_exposed_pin_name(type, pinId, value)
+        }
+
         this._pod_set_unit_pin_set_id(unitId, type, pinId, value)
 
         next_pin_id = value
