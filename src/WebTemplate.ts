@@ -10,4 +10,5 @@ export type WebTemplate = {
   installable?: boolean
   inline?: boolean
   system?: boolean
+  csp?: string
 }
