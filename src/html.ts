@@ -2,15 +2,19 @@ import { WebTemplate } from './WebTemplate'
 import { ROOT_STYLE } from './client/render/attachStyle'
 import { FONT_DATA_URI } from './client/static/font/dataURI'
 
+export const DEFAULT_CONTENT_SECURITY_POLICY = `connect-src 'self' ws: https: http: blob: ipfs: ipns: hyper: data: unit:`
+export const ALLOW_ALL_CONTENT_SECURITY_POLICY = `${DEFAULT_CONTENT_SECURITY_POLICY} *`
+
 export async function html(opt: WebTemplate): Promise<string> {
   let {
     pathname,
-    title = 'unit Website',
-    description = 'This website was developed with the unit Programming Language.',
+    title = 'Unit Website',
+    description = 'This website was developed with the Unit Programming Language.',
     head = '',
     html: baseHtml,
     pwa = false,
     background = true,
+    csp = DEFAULT_CONTENT_SECURITY_POLICY,
   } = opt
 
   /* html */
@@ -39,7 +43,7 @@ export async function html(opt: WebTemplate): Promise<string> {
     />
     <meta
       http-equiv="Content-Security-Policy"
-      content="connect-src 'self' ws: http: blob: ipfs: ipns: hyper: data: unit:"
+      content="${csp}"
     />
     <meta
       name="description"
