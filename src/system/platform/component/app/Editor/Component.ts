@@ -33955,7 +33955,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { target_id } = link
 
-    this._swap_node_node_link_count(prev_source_id, source_id)
+    if (this._is_node_id(prev_source_id) && this._is_node_id(source_id)) {
+      this._swap_node_node_link_count(prev_source_id, source_id)
+    }
 
     change_link_source_on_graph(
       this._node_graph,
@@ -33976,7 +33978,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     link.target_id = target_id
 
-    this._swap_node_node_link_count(prev_target_id, target_id)
+    if (this._is_node_id(prev_target_id) && this._is_node_id(target_id)) {
+      this._swap_node_node_link_count(prev_target_id, target_id)
+    }
 
     change_link_target_on_graph(
       this._node_graph,
