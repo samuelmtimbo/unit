@@ -13796,11 +13796,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_spec_set_unit_size', unit_id, width, height)
 
     setUnitMetadata(
-      { id: unit_id, path: ['component', 'width'], value: width },
+      { id: unit_id, path: ['component', 'width'], value: Math.round(width) },
       this._spec
     )
     setUnitMetadata(
-      { id: unit_id, path: ['component', 'height'], value: height },
+      { id: unit_id, path: ['component', 'height'], value: Math.round(height) },
       this._spec
     )
 
@@ -13845,14 +13845,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _spec_component_set_default_size = (): void => {
     // console.log('Graph', '_spec_component_set_default_size')
-    // detault this component width and height to
-    // max width and max height of its sub components
-    const defaultWidth =
+
+    const defaultWidth = Math.round(
       this._core_component_max_width[this._core_component_max_width.length - 1]
-    const defaultHeight =
+    )
+    const defaultHeight = Math.round(
       this._core_component_max_height[
         this._core_component_max_height.length - 1
       ]
+    )
     this._spec.component = this._spec.component || {}
     this._spec.component = componentReducer.setSize(
       {
