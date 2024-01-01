@@ -13753,6 +13753,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._stop_static()
       }
     }
+
+    if (this._drag_count === 1) {
+      this._simulation.alphaDecay(0)
+    }
+
+    if (this._drag_count === 0) {
+      this._simulation.alphaDecay(SIMULATION_DEFAULT_ALPHA_DECAY)
+    }
   }
 
   public resize_sub_component = (
@@ -39423,8 +39431,92 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._node_charge[a_node_id]?.[b_node_id]
   }
 
+  private _drag_edge_animation: number
+
+  private _drag_edge_animation_tick = () => {
+    // console.log('Graph', '_drag_edge_animation_tick')
+
+    const { $width, $height } = this.$context
+
+    if (this._drag_count === 0) {
+      this._drag_edge_animation = undefined
+
+      return
+    }
+
+    for (const drag_node_id in this._drag_node_pointer_id) {
+      const node = this._node[drag_node_id]
+
+      const { x0, y0, x1, y1 } = this._get_node_edge_offset(drag_node_id, 1)
+
+      let dx: number = 0
+      let dy: number = 0
+
+      const MAX_V = 6
+
+      if (x1 >= 0) {
+        dx = Math.min(x1, MAX_V)
+      } else if (x0 <= 0) {
+        dx = Math.max(x0, -MAX_V)
+      }
+
+      if (y1 >= 0) {
+        dy = Math.min(y1, MAX_V)
+      } else if (y0 <= 0) {
+        dy = Math.max(y0, -MAX_V)
+      }
+
+      this._set_node_position(drag_node_id, addVector(node, { x: dx, y: dy }))
+
+      node.hx -= 2 * dx
+      node.hy -= 2 * dy
+
+      const zoom = translate(this._zoom, -dx, -dy)
+
+      this.set_zoom(zoom)
+    }
+
+    this._drag_edge_animation = requestAnimationFrame(
+      this._drag_edge_animation_tick
+    )
+  }
+
+  private _drag_translate_x: number = 0
+
+  private _start_drag_edge_animation = () => {
+    if (this._drag_edge_animation) {
+      return
+    }
+
+    this._drag_edge_animation_tick()
+  }
+
+  private _get_node_edge_offset = (
+    node_id: string,
+    offset: number = 0
+  ): Line => {
+    const node = this._node[node_id]
+
+    const { x: _x, y: _y } = node
+
+    const screen_position = this._world_to_screen(_x, _y)
+
+    const { $width, $height } = this.$context
+
+    const _x0 = screen_position.x - node.width / 2 - offset
+    const _y0 = screen_position.y - node.height / 2 - offset
+
+    const x0 = _x0
+    const y0 = _y0
+    const x1 = screen_position.x + node.width / 2 - $width - offset
+    const y1 = screen_position.y + node.height / 2 - $height - offset
+
+    return { x0, x1, y0, y1 }
+  }
+
   private _drag_move = (node_id: string, event: UnitPointerEvent): void => {
     // console.log('_drag_move', node_id)
+
     const { clientX, clientY, pointerId } = event
 
     const node_layer = this._get_node_default_layer(node_id)
@@ -39434,6 +39526,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const [x, y] = this._client_to_graph(clientX, clientY)
 
     if (this._is_draggable_mode()) {
+      const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 1)
+
+      const node = this._node[node_id]
+
+      const dx = x - node.hx - node.x
+      const dy = y - node.hy - node.y
+
+      let lock_x = (x1 > 0 && dx >= -3) || (x0 < 0 && dx <= 3)
+      let lock_y = (y1 > 0 && dy >= -3) || (y0 < 0 && dy <= 3)
+
+      if (lock_x || lock_y) {
+        this._start_drag_edge_animation()
+      } else {
+        if (this._drag_edge_animation) {
+          cancelAnimationFrame(this._drag_edge_animation)
+
+          this._drag_edge_animation = undefined
+        }
+      }
+
       this._node_drag_move(node_id, x, y)
 
       if (this._selected_node_id[node_id]) {
