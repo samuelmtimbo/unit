@@ -436,6 +436,7 @@ import {
   _filterEmptyNodes,
   _getValueType,
   _isTypeMatch,
+  _isValidTree,
   _isValidValue,
   _matchAllExcTypes,
   _updateNodeAt,
@@ -49016,7 +49017,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           tree = _filterEmptyNodes(tree)
 
-          if (tree.type === TreeNodeType.Invalid) {
+          if (!_isValidTree(tree)) {
             tree = getTree(`"${escape(text)}"`)
           }
 
