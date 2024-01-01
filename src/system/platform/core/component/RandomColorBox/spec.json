@@ -1,5 +1,5 @@
 {
-  "name": "random color div",
+  "name": "random color box",
   "inputs": {
     "style": {
       "plug": {
@@ -26,11 +26,11 @@
     "attr": {
       "plug": {
         "0": {
-          "unitId": "div",
-          "pinId": "attr"
+          "unitId": "box",
+          "pinId": "attr",
+          "kind": "input"
         }
-      },
-      "type": "object"
+      }
     }
   },
   "outputs": {},
@@ -43,8 +43,8 @@
           "data": "null",
           "metadata": {
             "position": {
-              "x": -112,
-              "y": -26
+              "x": 42,
+              "y": 8
             }
           }
         }
@@ -54,8 +54,8 @@
       },
       "metadata": {
         "position": {
-          "x": -61,
-          "y": -24
+          "x": 16,
+          "y": 16
         }
       }
     },
@@ -65,8 +65,8 @@
         "a": {
           "metadata": {
             "position": {
-              "x": 5,
-              "y": 28
+              "x": 156,
+              "y": 58
             }
           }
         },
@@ -77,24 +77,33 @@
       },
       "metadata": {
         "position": {
-          "x": 42,
-          "y": 1
+          "x": 119,
+          "y": 39
         }
       }
     },
-    "div": {
-      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+    "box": {
+      "id": "9eba84b6-d2ca-47e6-9195-8208dbb880bc",
       "input": {
         "style": {},
         "attr": {
-          "ignored": false
+          "metadata": {
+            "position": {
+              "x": 259,
+              "y": 89
+            }
+          }
         }
       },
       "output": {},
       "metadata": {
+        "component": {
+          "width": 138,
+          "height": 128
+        },
         "position": {
-          "x": 190,
-          "y": 3
+          "x": 333,
+          "y": 114
         }
       }
     }
@@ -113,7 +122,7 @@
       }
     },
     "1": {
-      "div": {
+      "box": {
         "input": {
           "style": true
         }
@@ -126,22 +135,17 @@
     }
   },
   "component": {
-    "slots": [["div", "default"]],
+    "slots": [],
     "subComponents": {
-      "div": {
-        "width": 120,
-        "height": 120,
-        "children": []
-      }
+      "box": {}
     },
-    "children": ["div"],
+    "children": ["box"],
     "defaultWidth": 120,
     "defaultHeight": 120
   },
   "metadata": {
     "icon": "square",
     "description": "div with a random background color",
-    "complexity": 88,
     "tags": ["platform", "core", "component"],
     "position": {
       "merge": {

@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
-import { ID_EMPTY, ID_IDENTITY, ID_RANDOM_COLOR_DIV } from '../../system/_ids'
+import { ID_EMPTY, ID_IDENTITY, ID_RANDOM_COLOR_BOX } from '../../system/_ids'
 import { uuid } from '../../util/id'
 import { system } from '../util/system'
 
@@ -9,10 +9,7 @@ const UNIT_ID_EMTPY = 'empty'
 const UNIT_ID_IDENTITY = 'identity'
 const UNIT_ID_IDENTITY_0 = 'identity0'
 const UNIT_ID_IDENTITY_1 = 'identity1'
-const UNIT_ID_DIV = 'div'
-const UNIT_ID_DIV_0 = 'div0'
-
-const UNIT_ID_RANDOM_COLOR_DIV = 'randomcolordiv'
+const UNIT_ID_RANDOM_COLOR_BOX = 'randomcolorbox'
 
 const spec0 = system.newSpec({})
 
@@ -25,25 +22,25 @@ const composition0 = new Graph<{ number: number }, { sum: number }>(
 false && watchUnitAndLog(composition0)
 false && watchGraphAndLog(composition0)
 
-composition0.addUnitSpec(UNIT_ID_RANDOM_COLOR_DIV, {
-  unit: { id: ID_RANDOM_COLOR_DIV },
+composition0.addUnitSpec(UNIT_ID_RANDOM_COLOR_BOX, {
+  unit: { id: ID_RANDOM_COLOR_BOX },
 })
 
 composition0.moveSubgraphOutOf(
-  UNIT_ID_RANDOM_COLOR_DIV,
+  UNIT_ID_RANDOM_COLOR_BOX,
   null,
   uuid(),
   {
     merge: [],
     link: [],
-    unit: ['div'],
+    unit: ['box'],
     plug: [],
   },
   {
     merge: {},
     link: {},
     unit: {
-      ['div']: 'div',
+      ['box']: 'box',
     },
     plug: {},
   },

@@ -70,6 +70,9 @@ export default class Minimap extends Element<HTMLDivElement, Props> {
     const root = new Div(
       {
         className: 'minimap-root',
+        style: {
+          height: '100%',
+        },
       },
       this.$system
     )

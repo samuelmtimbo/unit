@@ -3200,6 +3200,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           top: '0',
           left: '0',
           pointerEvents: 'none',
+          height: '100%',
         },
       },
       this.$system
@@ -3224,6 +3225,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           pointerEvents: 'none',
           userSelect: 'none',
+          height: '100%',
         },
       },
       this.$system
@@ -6516,6 +6518,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         className: 'core-content',
         style: {
           position: 'relative',
+          height: '100%',
         },
       },
       this.$system
@@ -9932,6 +9935,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           overflowY: 'hidden',
           overflowX: 'hidden',
           pointerEvents: 'none',
+          height: '100%',
           ...style,
         },
       },
@@ -9944,6 +9948,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           position: 'absolute',
           pointerEvents: 'none',
+          height: '100%',
         },
       },
       this.$system
@@ -9961,6 +9966,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           overflowX: 'hidden',
           transition: `opacity ${ANIMATION_T_S}s linear`,
           pointerEvents: 'none',
+          height: '100%',
         },
       },
       this.$system
@@ -9973,6 +9979,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           position: 'absolute',
           pointerEvents: 'none',
+          height: '100%',
         },
       },
       this.$system
@@ -9989,6 +9996,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           overflowY: 'hidden',
           overflowX: 'hidden',
           pointerEvents: 'none',
+          height: '100%',
         },
       },
       this.$system
@@ -10005,6 +10013,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           overflowY: 'hidden',
           overflowX: 'hidden',
           pointerEvents: 'none',
+          height: '100%',
         },
       },
       this.$system

@@ -15,6 +15,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {
   boxSizing: 'border-box',
+  height: '100%',
 }
 
 const KEY_HEIGHT: number = 30
