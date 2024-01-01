@@ -1,1 +1,3 @@
-export interface RES {}
+export interface RES {
+  toJson(): Promise<any>
+}

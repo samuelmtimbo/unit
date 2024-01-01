@@ -1,0 +1,28 @@
+{
+  "name": "to json",
+  "inputs": {
+    "res": {
+      "type": "`RES`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "json": {
+      "type": "any"
+    }
+  },
+  "metadata": {
+    "icon": "send",
+    "description": "reads response to completion and parse the body text as JSON",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+    "complexity": 3,
+    "tags": ["platform", "api", "network"]
+  },
+  "id": "4e14b9e8-a694-4c58-b509-fc53a279c22c",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
