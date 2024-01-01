@@ -879,28 +879,70 @@ export class Component<
     }
   }
 
-  animate(keyframes, options): Animation {
-    if (this.$slot['default'] === this) {
-      if (!this.$primitive) {
-        let i = 0
+  animate(
+    keyframes: Keyframe[],
+    options: KeyframeAnimationOptions
+  ): Animation[] {
+    const base = this.getAnimatableBase()
 
-        while (this.$element[i] instanceof Text) {
-          i++
-        }
+    const animations = []
 
-        return (this.$element[i] as HTMLElement | SVGElement).animate(
-          keyframes,
-          options
-        )
-      } else {
-        if (this.$element instanceof Text) {
-          return
-        }
+    for (const leaf of base) {
+      const animation = leaf.$element.animate(keyframes, options)
 
-        return this.$element.animate?.(keyframes, options)
+      animations.push(animation)
+    }
+
+    return animations
+  }
+
+  getAnimatableBase(): Component<HTMLElement | SVGElement>[] {
+    const base = this.getRootBase()
+
+    const root = []
+
+    for (const [_, leaf] of base) {
+      if (leaf.$element instanceof Text) {
+        continue
       }
-    } else {
-      return this.$slot['default'].animate?.(keyframes, options)
+
+      root.push(leaf)
+    }
+
+    return root
+  }
+
+  getAnimationsById(id: string): Animation[] {
+    const base = this.getAnimatableBase()
+
+    const animations: Animation[] = []
+
+    for (const leaf of base) {
+      const leafAnimations = leaf.$element.getAnimations()
+
+      const animation = leafAnimations.find((a) => {
+        return a.id === id
+      })
+
+      animations.push(animation)
+    }
+
+    return animations
+  }
+
+  cancelAnimation(id: string) {
+    const animations = this.getAnimationsById(id)
+
+    for (const animation of animations) {
+      animation.cancel()
+    }
+  }
+
+  commitAnimation(id: string) {
+    const animations = this.getAnimationsById(id)
+
+    for (const animation of animations) {
+      animation.commitStyles()
     }
   }
 
