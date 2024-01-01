@@ -4,18 +4,16 @@ import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import {
   ID_EMPTY,
   ID_IDENTITY,
-  ID_RANDOM_COLOR_DIV,
+  ID_RANDOM_COLOR_BOX,
   ID_RANDOM_NATURAL_LTE,
 } from '../../system/_ids'
 import { system } from '../util/system'
 
-const UNIT_ID_RANDOM_COLOR_DIV = 'randomcolordiv'
+const UNIT_ID_RANDOM_COLOR_BOX = 'randomcolorbox'
 const UNIT_ID_EMTPY = 'empty'
 const UNIT_ID_IDENTITY = 'identity'
 const UNIT_ID_IDENTITY_0 = 'identity0'
 const UNIT_ID_IDENTITY_1 = 'identity1'
-const UNIT_ID_DIV = 'div'
-const UNIT_ID_DIV_0 = 'div0'
 
 const spec = system.newSpec({})
 
@@ -30,11 +28,11 @@ false && watchGraphAndLog(composition0)
 
 const UNIT_ID_RANDOM_NUMBER_LTE = 'randomnumberlte'
 
-composition0.addUnitSpec(UNIT_ID_RANDOM_COLOR_DIV, {
-  unit: { id: ID_RANDOM_COLOR_DIV },
+composition0.addUnitSpec(UNIT_ID_RANDOM_COLOR_BOX, {
+  unit: { id: ID_RANDOM_COLOR_BOX },
 })
 
-composition0.explodeUnit(UNIT_ID_RANDOM_COLOR_DIV, {}, {}, {})
+composition0.explodeUnit(UNIT_ID_RANDOM_COLOR_BOX, {}, {}, {})
 
 assert.equal(composition0.getUnitCount(), 3)
 assert.equal(composition0.getInputCount(), 1)

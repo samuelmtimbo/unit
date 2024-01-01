@@ -18,7 +18,6 @@ export interface Props {
 
 const DEFAULT_STYLE = {
   width: '100%',
-  height: '100%',
   color: 'currentColor',
   boxSizing: 'border-box',
 }

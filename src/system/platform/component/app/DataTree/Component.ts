@@ -95,6 +95,7 @@ const STYLE_SPACE = {
 
 export const DEFAULT_STYLE = {
   width: 'fit-content',
+  height: '100%',
 }
 
 export default class DataTree extends Element<HTMLDivElement, Props> {
@@ -301,7 +302,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const object_literal_end = new Div(
       {
         className: 'object-literal',
-        style: { display: 'flex', width: 'fit-content' },
+        style: { display: 'flex', width: 'fit-content', height: '100%' },
       },
       this.$system
     )

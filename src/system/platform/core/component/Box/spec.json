@@ -3,11 +3,15 @@
   "units": {
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
-      "input": {},
+      "input": {
+        "attr": {
+          "ignored": false
+        }
+      },
       "metadata": {
         "component": {
           "width": 120,
-          "height": 210
+          "height": 120
         }
       }
     },
@@ -48,6 +52,15 @@
         }
       },
       "type": "object"
+    },
+    "attr": {
+      "plug": {
+        "0": {
+          "unitId": "div",
+          "pinId": "attr"
+        }
+      },
+      "type": "object"
     }
   },
   "outputs": {},
@@ -55,29 +68,18 @@
     "icon": "square",
     "description": "100% div",
     "complexity": 30,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "component": {
-    "slots": [
-      [
-        "div",
-        "default"
-      ]
-    ],
-    "defaultWidth": 180,
-    "defaultHeight": 180,
+    "slots": [["div", "default"]],
+    "defaultWidth": 120,
+    "defaultHeight": 120,
     "subComponents": {
       "div": {
         "children": []
       }
     },
-    "children": [
-      "div"
-    ]
+    "children": ["div"]
   },
   "id": "9eba84b6-d2ca-47e6-9195-8208dbb880bc",
   "type": "`U`&`C`&`V`&`J`",
