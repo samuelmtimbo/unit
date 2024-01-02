@@ -5,12 +5,14 @@ import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
 import { ID_DETACH } from '../../../../_ids'
 
+export type DetachOpt = {
+  animate?: boolean
+}
+
 export interface I {
   component: Component_
   host: Component_
-  opt: {
-    animate?: boolean
-  }
+  opt: DetachOpt
   done: any
 }
 
@@ -49,15 +51,25 @@ export default class Detach extends Semifunctional<I, O> {
     component.emit('call', { method: 'detach', data: [hostUrl, opt] })
   }
 
+  private _attach = () => {
+    this._i.component.emit('call', {
+      method: 'attach',
+      data: [this._i.opt],
+    })
+  }
+
+  d() {
+    this._attach()
+  }
+
   public onIterDataInputData(name: string, data: any): void {
     switch (name) {
       case 'done':
-        this._i.component.emit('call', {
-          method: 'attach',
-          data: [this._i.opt],
-        })
+        if (this._functional._active_i_count === 3) {
+          this._attach()
 
-        this._done()
+          this._done()
+        }
 
         this._backward('done')
 
