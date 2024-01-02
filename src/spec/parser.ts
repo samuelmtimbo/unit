@@ -984,12 +984,30 @@ function _getValueTree(
     }
   }
 
-  const stringLiteralTest = STRING_LITERAL_REGEX.exec(value)
-  if (stringLiteralTest) {
-    return {
-      value,
-      type: TreeNodeType.StringLiteral,
-      children: [],
+  // const stringLiteralTest = STRING_LITERAL_REGEX.exec(value)
+  // if (stringLiteralTest) {
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    const startChar = value[0]
+
+    let valid = true
+
+    for (let i = 1; i < value.length - 1; i++) {
+      if (value[i] === startChar && value[i - 1] !== '\\') {
+        valid = false
+
+        break
+      }
+    }
+
+    if (valid) {
+      return {
+        value,
+        type: TreeNodeType.StringLiteral,
+        children: [],
+      }
     }
   }
 
