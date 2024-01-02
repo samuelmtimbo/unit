@@ -25545,7 +25545,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const { value } = tree
 
-        // this._spec_set_pin_data(pin_node_id, value)
+        this._spec_set_pin_data(pin_node_id, value)
       } else {
         this._spec_remove_pin_data(pin_node_id)
       }
@@ -54208,9 +54208,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._mem_set_pin_datum(pin_node_id, datum_id)
     }
 
-    // if (type === 'input' && this._is_link_pin_constant(pin_node_id)) {
-    //   this._spec_set_pin_data(pin_node_id, tree.value)
-    // }
+    if (type === 'input' && this._is_link_pin_constant(pin_node_id)) {
+      this._spec_set_pin_data(pin_node_id, tree.value)
+    }
   }
 
   private _on_graph_unit_link_pin_drop_moment = (
