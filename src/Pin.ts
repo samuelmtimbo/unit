@@ -4,6 +4,7 @@ import { PI } from './types/interface/PI'
 import { V } from './types/interface/V'
 
 export type PinEvent =
+  | '_data'
   | 'data'
   | 'drop'
   | 'invalid'
@@ -13,6 +14,7 @@ export type PinEvent =
   | 'ignored'
 
 export type Pin_EE<T> = {
+  _data: [T]
   data: [T]
   pull: []
   drop: [T]
@@ -109,7 +111,7 @@ export class Pin<T = any>
 
     if (data !== undefined) {
       if (this._constant) {
-        //
+        this.emit('_data', data)
       } else {
         this.take()
       }

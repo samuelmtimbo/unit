@@ -156,6 +156,7 @@ export class Primitive<
     const startListener = this._onInputStart.bind(this, name)
     const endListener = this._onInputEnd.bind(this, name)
 
+    input.addListener('_data', dataListener)
     input.addListener('data', dataListener)
     input.addListener('start', startListener)
     input.addListener('invalid', invalidListener)
