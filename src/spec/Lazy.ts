@@ -460,7 +460,7 @@ export function lazyFromSpec(
 
     public getBundleSpec(): BundleSpec {
       this._ensure()
-      return this.__graph.getUnitBundleSpec()
+      return this.__graph.getBundleSpec()
     }
 
     public getUnitState(unitId: string): State {
