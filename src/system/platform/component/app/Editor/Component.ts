@@ -26086,6 +26086,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  public add_merge_pin_data = (merge_node_id: string, data: string) => {
+    const { mergeId } = segmentMergeNodeId(merge_node_id)
+
+    this._state_add_merge_pin_data(merge_node_id, data)
+    this._pod_set_merge_pin_data(mergeId, data)
+  }
+
   public set_merge_pin_data = (merge_node_id: string, data: string) => {
     const { mergeId } = segmentMergeNodeId(merge_node_id)
 
@@ -26093,7 +26100,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._pod_set_merge_pin_data(mergeId, data)
   }
 
-  private _state_set_merge_pin_data = (merge_node_id: string, data: string) => {
+  private _state_add_merge_pin_data = (merge_node_id: string, data: string) => {
     const datum_id = this._new_datum_id()
     const datum_node_id = getDatumNodeId(datum_id)
 
@@ -26101,6 +26108,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._sim_add_datum_node(datum_id, data, merge_position)
     this._sim_add_datum_node_link(datum_node_id, merge_node_id)
+  }
+
+  private _state_set_merge_pin_data = (merge_node_id: string, data: string) => {
+    const merge_datum_node_id = this._pin_to_datum[merge_node_id]
+
+    if (merge_datum_node_id) {
+      const { datumId } = segmentDatumNodeId(merge_datum_node_id)
+
+      this._set_datum(datumId, getTree(data))
+    } else {
+      this._state_add_merge_pin_data(merge_node_id, data)
+    }
   }
 
   private _spec_type_interface_cache: Dict<any> = {}
@@ -34129,7 +34148,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._is_link_pin_node_id(pin_node_id)) {
       this.set_unit_pin_data(pin_node_id, data)
     } else if (this._is_merge_node_id(pin_node_id)) {
-      this.set_merge_pin_data(pin_node_id, data)
+      this.add_merge_pin_data(pin_node_id, data)
     }
   }
 
