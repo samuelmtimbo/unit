@@ -73,7 +73,26 @@ export class Element_<
     this.addListener('play', this._play)
     this.addListener('pause', this._pause)
     this.addListener('set', (name: keyof I, data) => {
-      if (!this._forwarding && data !== undefined) {
+      if (!this._forwarding) {
+        if (data === undefined) {
+          this._forwarding_empty = true
+          // @ts-ignore
+          this._output?.[name]?.pull()
+          this._forwarding_empty = false
+        } else {
+          this._forwarding = true
+          // @ts-ignore
+          this._output?.[name]?.push(data)
+          this._forwarding = false
+        }
+      }
+
+      if (
+        !this._set_from_input &&
+        !this._backwarding &&
+        !this._forwarding &&
+        data !== undefined
+      ) {
         this._backwarding = true
 
         // TODO add to end of event queue
@@ -82,20 +101,6 @@ export class Element_<
 
           this._backwarding = false
         }, 0)
-      }
-
-      if (!this._forwarding) {
-        this._forwarding = true
-
-        if (data === undefined) {
-          // @ts-ignore
-          this._output?.[name]?.pull()
-        } else {
-          // @ts-ignore
-          this._output?.[name]?.push(data)
-        }
-
-        this._forwarding = false
       }
     })
 

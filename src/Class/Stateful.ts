@@ -66,13 +66,15 @@ export class Stateful<
     throw new MethodNotImplementedError()
   }
 
+  public _set_from_input: boolean = false
+
   onDataInputData(name: string, data: any): void {
-    this._forwarding = true
-    this.set(name, data)
-    this._forwarding = false
+    this.set(name, data, true)
   }
 
   onDataInputDrop(name: string): void {
+    this._set_from_input = false
+
     if (!this._backwarding) {
       this.set(name, undefined)
     }
@@ -105,7 +107,13 @@ export class Stateful<
     return
   }
 
-  public async set(name: string, data: any): Promise<void> {
+  public async set(
+    name: string,
+    data: any,
+    auto: boolean = false
+  ): Promise<void> {
+    this._set_from_input = auto
+
     this._state[name] = data
     this.emit('set', name, data)
     // @ts-ignore
