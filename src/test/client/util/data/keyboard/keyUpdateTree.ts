@@ -304,6 +304,18 @@ assert.deepEqual(keyUpdateTree('{a:"b",}', [1], '', 'Backspace', 0, 0, false), [
     nextSelectionEnd: 3,
   },
 ])
+assert.deepEqual(
+  keyUpdateTree('{"a":"b","c","d":"e"}', [2], '"c"', 'Backspace', 3, 3, false),
+  [
+    false,
+    {
+      nextRoot: '{"a":"b","c","d":"e"}',
+      nextPath: [2],
+      nextSelectionStart: 2,
+      nextSelectionEnd: 2,
+    },
+  ]
+)
 assert.deepEqual(keyUpdateTree('[{}]', [0, 0], '', 'ArrowLeft', 0, 0, false), [
   true,
   {

@@ -1069,8 +1069,8 @@ function _getValueTree(
       let k = _getTree(keyValueTest[1], false, true)
 
       if (!_isValidObjKeyType(k)) {
-        k = {
-          value: k.value,
+        return {
+          value,
           type: TreeNodeType.Invalid,
           children: [],
         }

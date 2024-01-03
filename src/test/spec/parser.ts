@@ -45,8 +45,6 @@ assert(
   getTree('{a:[true,true,]}').children[0].children[1].children[2].value === ''
 )
 
-// getTreeNodeType
-
 assert.deepEqual(getTreeNodeType(':'), TreeNodeType.Invalid)
 assert.deepEqual(getTreeNodeType('foo'), TreeNodeType.Invalid)
 assert.deepEqual(getTreeNodeType('[1[]'), TreeNodeType.Invalid)
@@ -101,11 +99,9 @@ assert.deepEqual(getTreeNodeType('unit://123'), TreeNodeType.Url)
 assert.deepEqual(getTreeNodeType('{{}'), TreeNodeType.Invalid)
 assert.deepEqual(getTreeNodeType('{a:1,,b:2}'), TreeNodeType.ObjectLiteral)
 assert.deepEqual(getTree('{a:1,,b:2}').children.length, 3)
+assert.deepEqual(getTree('{a:1,"b,"c":2}').children.length, 2)
 assert.deepEqual(getTree('{a:1,,b:2}').children[2].type, TreeNodeType.KeyValue)
-
 assert.deepEqual(getTree('{,}').children.length, 2)
-
-// isValidType
 
 assert(isValidType('/a/'))
 assert(isValidType('regex'))
@@ -309,8 +305,6 @@ assert(!_isTypeMatch('`U`&`C`', '`U`&`G`'))
 assert(!_isTypeMatch('`U`&`C`&`V`&`J`', '`G`'))
 assert(!_isTypeMatch('`U`&`G`', '`U`&`C`&`G`'))
 
-// isValidValue
-
 assert(isValidValue('null'))
 assert(isValidValue('"foo"'))
 assert(isValidValue("'\\\\'"))
@@ -423,8 +417,6 @@ assert(!isValidValue("{{':1}"))
 assert(!isValidValue('a + 1'))
 // assert(!isValidValue('{foo: "bar"}'))
 
-// getValueType
-
 const _getValueType = (str: string) => getValueType(_specs, str)
 
 assert.equal(_getValueType('"foo"'), 'string')
@@ -445,8 +437,6 @@ assert.equal(
   'string'
 )
 
-// findGenerics
-
 assert.deepEqual(findGenerics('"foo"'), new Set())
 assert.deepEqual(findGenerics('<T>'), new Set(['<T>']))
 assert.deepEqual(findGenerics('<T>[]'), new Set(['<T>']))
@@ -454,8 +444,6 @@ assert.deepEqual(findGenerics('{foo:<T>,bar:<K>}'), new Set(['<T>', '<K>']))
 assert.deepEqual(findGenerics('`V<T>`'), new Set(['<T>']))
 assert.deepEqual(findGenerics('`V`'), new Set())
 assert.deepEqual(findGenerics('`EE`'), new Set())
-
-// extractGenerics
 
 const _extractGenerics = (value: string, type: string) =>
   extractGenerics(_specs, value, type)
@@ -477,8 +465,6 @@ assert.deepEqual(_extractGenerics('<0>|<1>', '<2>'), { '<2>': '<0>|<1>' })
 assert.deepEqual(_extractGenerics('`V<{value:string}>`', '`V<T>`'), {
   '<T>': '{value:string}',
 })
-
-// applyGenerics
 
 assert.equal(applyGenerics('<T>', {}), '<T>')
 assert.equal(applyGenerics('<T>', { '<T>': 'string' }), 'string')
@@ -504,15 +490,11 @@ assert.equal(getNodeAtPath('{foo:"bar"}', [0, 0]), 'foo')
 assert.equal(getNodeAtPath('string[][]', [0]), 'string[]')
 assert.equal(getNodeAtPath('string[][]', [0, 0]), 'string')
 
-// getParent
-
 assert.equal(getParent('"foo"', []), undefined)
 assert.equal(getParent('{foo:"bar zaz"}', []), undefined)
 assert.equal(getParent('{foo:"bar zaz"}', [0]), '{foo:"bar zaz"}')
 assert.equal(getParent('{foo:"bar zaz"}', [0, 0]), 'foo:"bar zaz"')
 assert.equal(getParent('{foo:"bar zaz"}', [0, 1]), 'foo:"bar zaz"')
-
-// getNextNodePath
 
 assert.deepEqual(getNextNodePath('"foo"', [], 1), undefined)
 assert.deepEqual(getNextNodePath('"foo"', [], -1), undefined)
@@ -523,8 +505,6 @@ assert.deepEqual(getNextNodePath('{foo:"bar"}', [0], 1), [0, 0])
 assert.deepEqual(getNextNodePath('{foo:"bar"}', [0], -1), [])
 assert.deepEqual(getNextNodePath('{foo:"bar"}', [0, 0], 1), [0, 1])
 
-// getNextNode
-
 assert.equal(getNextNode('"foo"', [], 1), undefined)
 assert.equal(getNextNode('"foo"', [], -1), undefined)
 assert.equal(getNextNode('[0,1,2,3]', [1], 1), '2')
@@ -532,8 +512,6 @@ assert.equal(getNextNode('[0,1,2,3]', [1], -1), '0')
 assert.equal(getNextNode('{foo:"bar"}', [0], 1), 'foo')
 assert.equal(getNextNode('{foo:"bar"}', [0], -1), '{foo:"bar"}')
 assert.equal(getNextNode('{foo:"bar"}', [0, 0], 1), '"bar"')
-
-// getNextLeafPath
 
 assert.deepEqual(getNextLeafPath('"foo"', [], 1), undefined)
 assert.deepEqual(getNextLeafPath('"foo"', [], -1), undefined)
@@ -562,22 +540,16 @@ assert.equal(
 assert.equal(insertNodeAt('[]', [0], '1'), '[1]')
 assert.equal(updateNodeAt('{a:}', [0, 1], '1'), '{a:1}')
 
-// updateNodeAt
-
 assert.equal(updateNodeAt('"foo"', [], '"bar"'), '"bar"')
 assert.equal(updateNodeAt('[0,1,2,3]', [2], '"foo"'), '[0,1,"foo",3]')
 assert.equal(updateNodeAt('{foo:"bar zaz"}', [0, 0], '1'), '{1:"bar zaz"}')
 assert.equal(updateNodeAt('[]', [0], '1'), '[1]')
 assert.equal(updateNodeAt('{a:}', [0, 1], '1'), '{a:1}')
 
-// removeNodeAt
-
 assert.equal(removeNodeAt('"foo"', []), '')
 assert.equal(removeNodeAt('[0,1,2,3]', [0]), '[1,2,3]')
 assert.equal(removeNodeAt('{foo:"bar zaz"}', [0]), '{}')
 assert.equal(removeNodeAt('{foo:}', [0, 1]), '{foo}')
-
-// evaluate
 
 const _evaluate = (str: string) => evaluate(str, _specs, _classes)
 
@@ -620,16 +592,12 @@ assert.deepEqual(
   '{\n "error": {\n  "errors": [\n   {\n    "domain": "global",\n    "reason": "required",\n    "message": "Login Required",\n    "locationType": "header",\n    "location": "Authorization"\n   }\n  ],\n  "code": 401,\n  "message": "Login Required"\n }\n}\n'
 )
 
-// isGeneric
-
 assert(hasGeneric('<T>'))
 assert(hasGeneric('<0>'))
 assert(hasGeneric('<0>[]'))
 assert(hasGeneric('`V<T>`'))
 assert(hasGeneric('`V`&<T>'))
 assert(hasGeneric('<T>&`V`'))
-
-// matchAllType
 
 const _matchAllExcTypes = (types: string[], excTypes: string[]) =>
   matchAllExcTypes(system.specs, types, excTypes)

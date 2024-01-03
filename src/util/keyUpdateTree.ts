@@ -9,6 +9,7 @@ import {
   _getNodeAtPath,
   _getParent,
   _insertNodeAt,
+  _isValidObjKeyType,
   _isValidTree,
   _removeNodeAt,
   _updateNodeAt,
@@ -337,6 +338,9 @@ export const _keyUpdateTree = (
             preventDefault = true
             nextSelectionStart = previous.value.length
             nextSelectionEnd = nextSelectionStart
+          } else {
+            nextSelectionStart = selectionStart - 1
+            nextSelectionEnd = nextSelectionStart
           }
         }
       }
@@ -504,20 +508,32 @@ export const _keyUpdateTree = (
     }
   } else if (key === ':') {
     const parent = _getParent(root, path)
+    const node = _getNodeAtPath(root, path)
+
     if (parent && parent.type === TreeNodeType.ObjectLiteral) {
-      preventDefault = true
-      nextRoot = _updateNodeAt(
-        root,
-        path,
-        getTree(
-          `${data.value.substring(0, selectionStart)}:${data.value.substring(
-            selectionEnd
-          )}`
+      if (
+        node.type === TreeNodeType.StringLiteral &&
+        selectionStart === selectionEnd &&
+        selectionStart !== 0 &&
+        selectionStart !== value.length
+      ) {
+        //
+      } else {
+        const start = `${data.value.substring(0, selectionStart)}`
+
+        const nextNode = getTree(
+          `${start}:${data.value.substring(selectionEnd)}`
         )
-      )
-      nextPath = [...path, 1]
-      nextSelectionStart = 0
-      nextSelectionEnd = 0
+
+        if (_isValidObjKeyType(getTree(start, false, true))) {
+          preventDefault = true
+
+          nextRoot = _updateNodeAt(root, path, nextNode)
+          nextPath = [...path, 1]
+          nextSelectionStart = 0
+          nextSelectionEnd = 0
+        }
+      }
     }
   } else if (key === '[' || key === '{') {
     if (value === '') {
@@ -649,6 +665,7 @@ export const keyUpdateTree = (
     selectionEnd,
     shiftKey
   )
+
   return [
     preventDefault,
     {
