@@ -220,7 +220,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   }
 
   private _forward_if_ready() {
-    while (
+    if (
       !this._backwarding &&
       !this._forwarding &&
       this._active_o_count - this._o_invalid_count === 0 &&
