@@ -395,6 +395,8 @@ export class Unit<
 
     const input = this._input[name]
 
+    this.emit('before_remove_input', name, input)
+
     this._i_count--
     this._i_name_set.delete(name)
     delete this._input[name]
@@ -530,6 +532,10 @@ export class Unit<
       throw new OutputNotFoundError(name)
     }
 
+    const output = this._output[name]
+
+    this.emit('before_remove_output', name, output)
+
     this._o_count--
     this._o_name_set.delete(name)
 
@@ -542,8 +548,6 @@ export class Unit<
     } else {
       this._memRemoveDataOutput(name)
     }
-
-    const output = this._output[name]
 
     delete this._output[name]
 

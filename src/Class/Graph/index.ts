@@ -3452,9 +3452,13 @@ export class Graph<I = any, O = any>
     })
 
     all_unlisten.push(unit.addListener('set_input', boundSetUnitInput))
-    all_unlisten.push(unit.addListener('remove_input', remove_unit_input))
+    all_unlisten.push(
+      unit.addListener('before_remove_input', remove_unit_input)
+    )
     all_unlisten.push(unit.addListener('set_output', boundSetUnitOutput))
-    all_unlisten.push(unit.addListener('remove_output', remove_unit_output))
+    all_unlisten.push(
+      unit.addListener('before_remove_output', remove_unit_output)
+    )
     all_unlisten.push(
       unit.addListener('rename_input', rename_unit_pin.bind(this, 'input'))
     )
