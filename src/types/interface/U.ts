@@ -13,6 +13,8 @@ export type U_EE = {
   parent: [Unit | null]
   set_input: [string, Pin, PinOpt, boolean]
   set_output: [string, Pin, PinOpt, boolean]
+  before_remove_input: [string, Pin]
+  before_remove_output: [string, Pin]
   remove_input: [string, Pin]
   remove_output: [string, Pin]
   rename_input: [string, string]
