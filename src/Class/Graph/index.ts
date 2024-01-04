@@ -464,7 +464,7 @@ export class Graph<I = any, O = any>
 
     const pin = new Pin()
 
-    const oppositePin = this.getExposedInputPin(name)
+    const oppositePin = this.getExposedPin(type, name)
 
     const waitAll = this._waitAll[type]
 
@@ -1363,7 +1363,6 @@ export class Graph<I = any, O = any>
     const oppositeType = opposite(type)
 
     pathSet(this._exposedPin, [type, pinId], exposedPin)
-
     pathSet(this._exposedMerge, [type, pinId, type], exposedMerge)
     pathSet(
       this._exposedMerge,
@@ -2177,6 +2176,14 @@ export class Graph<I = any, O = any>
         return exposedSubPinNodeId === pinNodeId
       })
     })
+  }
+
+  public getExposedPin = (type: IO, id: string): Pin => {
+    if (type === 'input') {
+      return this.getExposedInputPin(id)
+    } else {
+      return this.getExposedOutputPin(id)
+    }
   }
 
   public getExposedInputPin = (id: string): Pin<I[keyof I]> => {
