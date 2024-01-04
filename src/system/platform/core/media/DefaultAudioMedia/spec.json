@@ -20,10 +20,10 @@
         "0": {
           "unitId": "getusermedia",
           "pinId": "stream"
-        },
-        "ref": true,
-        "type": "`MS`"
-      }
+        }
+      },
+      "ref": true,
+      "type": "`MS`"
     }
   },
   "metadata": {

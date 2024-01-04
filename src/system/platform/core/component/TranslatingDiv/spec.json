@@ -91,7 +91,7 @@
     }
   },
   "merges": {
-    "sxphnyptw": {
+    "0": {
       "rangebounce": {
         "output": {
           "i": true
@@ -103,7 +103,7 @@
         }
       }
     },
-    "nhgecfu": {
+    "1": {
       "tag": {
         "output": {
           "kv": true
@@ -115,7 +115,7 @@
         }
       }
     },
-    "ymctkl": {
+    "2": {
       "px": {
         "input": {
           "n": true
@@ -127,7 +127,7 @@
         }
       }
     },
-    "gutvaxyeb": {
+    "3": {
       "px": {
         "output": {
           "px": true
@@ -139,7 +139,7 @@
         }
       }
     },
-    "hegpulsxl": {
+    "4": {
       "mergedefault": {
         "input": {
           "default": true
@@ -151,7 +151,7 @@
         }
       }
     },
-    "nnaifm": {
+    "5": {
       "div": {
         "input": {
           "style": true
@@ -163,7 +163,7 @@
         }
       }
     },
-    "yyznop": {
+    "6": {
       "default0": {
         "output": {
           "a": true
@@ -175,7 +175,7 @@
         }
       }
     },
-    "jnbxumenh": {
+    "7": {
       "default": {
         "output": {
           "a": true
@@ -187,7 +187,7 @@
         }
       }
     },
-    "nbehealht": {
+    "8": {
       "requestanimationframe": {
         "output": {
           "a": true

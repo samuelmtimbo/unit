@@ -19,5 +19,6 @@
   },
   "id": "29e974cc-081b-11eb-a607-1fd4ec67a52f",
   "type": "`U`",
-  "system": true
+  "system": true,
+  "base": true
 }
