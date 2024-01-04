@@ -274,28 +274,6 @@ export function _extractStyle(
     // TODO
   }
 
-  if (fitContent) {
-    if (fitWidth || fitHeight) {
-      const { width, height } = measureChildren(
-        root,
-        component,
-        style,
-        fallbackTrait,
-        measureText,
-        fitContent,
-        getLeafStyle
-      )
-
-      if (fitWidth) {
-        style['width'] = `${width}px`
-      }
-
-      if (fitHeight) {
-        style['height'] = `${height}px`
-      }
-    }
-  }
-
   return style
 }
 
