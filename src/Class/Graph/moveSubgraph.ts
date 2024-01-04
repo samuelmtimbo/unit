@@ -29,6 +29,72 @@ import {
 } from '../../util/object'
 import { GraphMoveSubGraphData } from './interface'
 
+export type GraphLike<T extends UCG = UCG> = Pick<
+  T,
+  | 'getMergeSpec'
+  | 'getMergesSpec'
+  | 'coverPinSet'
+  | 'hasPinNamed'
+  | 'hasMergePin'
+  | 'getUnit'
+  | 'exposePinSet'
+  | 'getUnitPinData'
+  | 'hasUnit'
+  | 'addUnit'
+  | 'removeUnit'
+  | 'removeMerge'
+  | 'moveRoot'
+  | 'unplugPin'
+  | 'plugPin'
+  | 'exposePin'
+  | 'setPinData'
+  | 'addPinToMerge'
+  | 'getPinPlugCount'
+  | 'getPinData'
+  | 'setPinConstant'
+  | 'setUnitPinConstant'
+  | 'hasPlug'
+  | 'coverPin'
+  | 'isUnitPinRef'
+  | 'isUnitPinConstant'
+  | 'addMerge'
+  | 'hasMerge'
+  | 'getExposedPinSpec'
+  | 'getExposedPinSpecs'
+  | 'removePinOrMerge'
+  | 'removePinFromMerge'
+  | 'isPinConstant'
+  | 'getPlugSpecs'
+  | 'getSubPinSpec'
+  | 'getMergeData'
+  | 'getSpec'
+  | 'setUnitSize'
+  | 'setSubComponentSize'
+>
+
+export function isRefMerge(graph: GraphLike, mergeSpec: GraphMergeSpec) {
+  let isRef = false
+
+  if (getMergePinCount(mergeSpec) > 0) {
+    const sampleMergeUnitId = getObjSingleKey(mergeSpec)
+    const sampeMergeUnit = mergeSpec[sampleMergeUnitId]
+    const sampleMergeUnitType = getObjSingleKey(sampeMergeUnit) as IO
+    const sampleMergeUnitPinId = getObjSingleKey(
+      sampeMergeUnit[sampleMergeUnitType]
+    )
+
+    const unit = graph.getUnit(sampleMergeUnitId)
+
+    const ref = unit.isPinRef(sampleMergeUnitType, sampleMergeUnitPinId)
+
+    if (ref) {
+      isRef = true
+    }
+  }
+
+  return isRef
+}
+
 export function moveUnit(
   source: GraphLike,
   target: GraphLike,
@@ -269,6 +335,8 @@ export function moveUnit(
 
         if (shouldSwapMergePin) {
           if (reverse) {
+            const shouldPropagate = isRefMerge(target, merge)
+
             if (target.hasMergePin(mergeId, graphId, type, pinId)) {
               target.removePinOrMerge(
                 mergeId,
@@ -281,7 +349,7 @@ export function moveUnit(
             }
 
             if (!target.hasMerge(mergeId)) {
-              target.addMerge(merge ?? {}, mergeId, false, false)
+              target.addMerge(merge ?? {}, mergeId, false, shouldPropagate)
             }
 
             if (!target.hasMergePin(mergeId, nextUnitId, type, pinId)) {
@@ -291,23 +359,14 @@ export function moveUnit(
                 type,
                 pinId,
                 false,
-                false
+                shouldPropagate
               )
             }
           } else {
-            if (!source.hasMerge(mergeId)) {
-              source.addMerge(merge ?? {}, mergeId, false, false)
-            }
+            const shouldPropagate = isRefMerge(source, merge)
 
-            if (source.hasMergePin(mergeId, unitId, type, pinId)) {
-              source.removePinFromMerge(
-                mergeId,
-                unitId,
-                type,
-                pinId,
-                false,
-                false
-              )
+            if (!source.hasMerge(mergeId)) {
+              source.addMerge(merge ?? {}, mergeId, false, shouldPropagate)
             }
 
             if (!source.hasMergePin(mergeId, graphId, type, nextPinId)) {
@@ -317,7 +376,7 @@ export function moveUnit(
                 type,
                 nextPinId,
                 false,
-                false
+                shouldPropagate
               )
             }
           }
@@ -638,26 +697,7 @@ export function moveMerge(
           (mergeInputCount > 0 && mergeOutputCount > 0))) ||
       pinIntoCount > 1
     ) {
-      let shouldPropagate = false
-
-      if (getMergePinCount(nextMerge) > 0) {
-        const sampleMergeUnitId = getObjSingleKey(nextMerge)
-        const sampeMergeUnit = nextMerge[sampleMergeUnitId]
-        const sampleMergeUnitType = getObjSingleKey(sampeMergeUnit) as IO
-        const sampleMergeUnitPinId = getObjSingleKey(
-          sampeMergeUnit[sampleMergeUnitType]
-        )
-
-        if (target.hasUnit(sampleMergeUnitId)) {
-          const unit = target.getUnit(sampleMergeUnitId)
-
-          const ref = unit.isPinRef(sampleMergeUnitType, sampleMergeUnitPinId)
-
-          if (ref) {
-            shouldPropagate = true
-          }
-        }
-      }
+      const shouldPropagate = isRefMerge(target, nextMerge)
 
       target.addMerge(nextMerge, nextMergeId, false, shouldPropagate)
 
@@ -841,6 +881,38 @@ export function moveMerge(
             false,
             false
           )
+        }
+
+        if (!source.hasMerge(_mergeId)) {
+          if (oppositeMerge) {
+            const mergeClone = clone(oppositeMerge)
+
+            delete mergeClone[subPinSpec.unitId]
+
+            const otherUnitId = getObjSingleKey(mergeClone)
+
+            if (otherUnitId) {
+              const otherUnitPinType = getObjSingleKey(mergeClone[otherUnitId])
+              const otherUnitPinId = getObjSingleKey(
+                mergeClone[otherUnitId][otherUnitPinType]
+              )
+
+              source.addMerge(
+                {
+                  [graphId]: {
+                    [type]: { [pinId]: true },
+                  },
+                  [otherUnitId]: {
+                    [otherUnitPinType]: { [otherUnitPinId]: true },
+                  },
+                },
+                _mergeId,
+                false,
+                false,
+                undefined
+              )
+            }
+          }
         }
       }
     }
@@ -1182,49 +1254,6 @@ export function movePlug(
     }
   }
 }
-
-export type GraphLike<T extends UCG = UCG> = Pick<
-  T,
-  | 'getMergeSpec'
-  | 'getMergesSpec'
-  | 'coverPinSet'
-  | 'hasPinNamed'
-  | 'hasMergePin'
-  | 'getUnit'
-  | 'exposePinSet'
-  | 'getUnitPinData'
-  | 'hasUnit'
-  | 'addUnit'
-  | 'removeUnit'
-  | 'removeMerge'
-  | 'moveRoot'
-  | 'unplugPin'
-  | 'plugPin'
-  | 'exposePin'
-  | 'setPinData'
-  | 'addPinToMerge'
-  | 'getPinPlugCount'
-  | 'getPinData'
-  | 'setPinConstant'
-  | 'setUnitPinConstant'
-  | 'hasPlug'
-  | 'coverPin'
-  | 'isUnitPinRef'
-  | 'isUnitPinConstant'
-  | 'addMerge'
-  | 'hasMerge'
-  | 'getExposedPinSpec'
-  | 'getExposedPinSpecs'
-  | 'removePinOrMerge'
-  | 'removePinFromMerge'
-  | 'isPinConstant'
-  | 'getPlugSpecs'
-  | 'getSubPinSpec'
-  | 'getMergeData'
-  | 'getSpec'
-  | 'setUnitSize'
-  | 'setSubComponentSize'
->
 
 export function moveSubgraph<T extends UCG<any, any, any>>(
   source: GraphLike<T>,
