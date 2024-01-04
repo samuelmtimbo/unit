@@ -39477,7 +39477,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       let dx: number = 0
       let dy: number = 0
 
-      const MAX_V = 6
+      const MAX_V = 24
 
       if (x1 >= 0) {
         dx = Math.min(x1, MAX_V)
