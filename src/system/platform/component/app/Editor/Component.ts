@@ -39558,8 +39558,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const dx = x - node.hx - node.x
       const dy = y - node.hy - node.y
 
-      let lock_x = (x1 > 0 && dx >= -3) || (x0 < 0 && dx <= 3)
-      let lock_y = (y1 > 0 && dy >= -3) || (y0 < 0 && dy <= 3)
+      let lock_x = (x1 > 0 && dx >= 0) || (x0 < 0 && dx <= 0)
+      let lock_y = (y1 > 0 && dy >= 0) || (y0 < 0 && dy <= 0)
 
       if (lock_x || lock_y) {
         this._start_drag_edge_animation()
