@@ -19304,7 +19304,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     sub_component_id: string,
     base: LayoutBase,
     style: Style,
-    trait: LayoutNode
+    trait: LayoutNode,
+    expandSlot: boolean
   ): Dict<LayoutNode> => {
     const sub_component = this._get_sub_component(sub_component_id)
 
@@ -19314,7 +19315,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       sub_component,
       base,
       style,
-      trait
+      trait,
+      expandSlot
     )
   }
 
@@ -19324,7 +19326,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     component: Component,
     base: LayoutBase,
     style: Style,
-    trait: LayoutNode
+    trait: LayoutNode,
+    expandSlot: boolean
   ): Dict<LayoutNode> => {
     const base_trait = this.___reflect_sub_component_base_trait(
       root_prefix,
@@ -19332,7 +19335,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       component,
       base,
       style,
-      trait
+      trait,
+      expandSlot
     )
 
     const _base_trait = mapObjKeyKV(
@@ -19349,7 +19353,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     component: Component,
     base: LayoutBase,
     style: Style,
-    trait: LayoutNode
+    trait: LayoutNode,
+    expandSlot: boolean
   ): Dict<LayoutNode> => {
     const {
       api: {
@@ -19375,7 +19380,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       base,
       style,
       trait,
-      _extractStyle
+      _extractStyle,
+      expandSlot
     )
 
     return base_trait
@@ -19639,7 +19645,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   sub_component_id,
                   leaf_base,
                   style,
-                  trait
+                  trait,
+                  true
                 )
               }
 
@@ -19871,7 +19878,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   sub_component_id,
                   leaf_base,
                   frame_style,
-                  trait
+                  trait,
+                  false
                 )
               }
 
@@ -24833,7 +24841,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               sub_component_id,
               base,
               style,
-              trait
+              trait,
+              true
             )
           }
 
@@ -27621,7 +27630,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         sub_component_id,
         base,
         style,
-        trait
+        trait,
+        true
       )
 
       const base_length = base.length
@@ -27658,7 +27668,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 sub_component_id,
                 base,
                 style,
-                trait
+                trait,
+                true
               )
             }
 
@@ -29133,7 +29144,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               this._component,
               all_base,
               style,
-              trait
+              trait,
+              true
             )
           }
 

@@ -259,7 +259,8 @@ export const reflectComponentBaseTrait = (
   base: LayoutBase,
   style: Style,
   trait: LayoutNode,
-  extractStyle: (leafId: string, component: Component) => Style
+  extractStyle: (leafId: string, component: Component) => Style,
+  shouldExpandSlot: boolean = true
 ): Dict<LayoutNode> => {
   const {
     api: {
@@ -283,19 +284,23 @@ export const reflectComponentBaseTrait = (
   const all_slot_base: Dict<string[]> = {}
 
   const expand_slot = (slot_id: string, path: number[]): Style[] => {
-    return expandSlot(
-      root,
-      component,
-      slot_id,
-      path,
-      all_slot_base,
-      (leaf_id, leaf_comp) => {
-        return extractStyle(
-          (root_prefix && `${root_prefix}/${leaf_id}`) || leaf_id,
-          leaf_comp
-        )
-      }
-    )
+    if (shouldExpandSlot) {
+      return expandSlot(
+        root,
+        component,
+        slot_id,
+        path,
+        all_slot_base,
+        (leaf_id, leaf_comp) => {
+          return extractStyle(
+            (root_prefix && `${root_prefix}/${leaf_id}`) || leaf_id,
+            leaf_comp
+          )
+        }
+      )
+    } else {
+      return []
+    }
   }
 
   for (const leaf of base) {
