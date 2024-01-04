@@ -647,6 +647,7 @@ import Selection from '../Selection/Component'
 import { ANIMATION_DELTA_TRESHOLD } from './ANIMATION_DELTA_TRESHOLD'
 import { joinLeafPath } from './joinLeafPath'
 import { LayoutBase, LayoutLeaf } from './layout'
+import { isEmptyMerge } from '../../../../../spec/isEmptyMerge'
 
 const UNIT_NAME_MAX_CHAR_LINE: number = 12
 const UNIT_NAME_MAX_LINE_COUNT: number = 3
@@ -46085,6 +46086,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     unit_id: string,
     opt: GraphUnitConnect,
     source: {
+      hasUnit: (unitId: string) => boolean
       hasMerge: (merge_id: string) => boolean
       hasMergePin: (
         merge_id: string,
@@ -46129,6 +46131,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       addMerge,
       hasMergePin,
       plugPin,
+      hasUnit,
       hasMerge,
       getUnitPinPlug,
       removePin,
@@ -46169,23 +46172,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           false
         )
 
-        forEachPinOnMerge(
-          merge,
-          (mergeUnitId, mergeUnitPinType, mergeUnitPinId) => {
-            if (mergeUnitId !== graph_id) {
-              const pin_node_id = getPinNodeId(
-                mergeUnitId,
-                mergeUnitPinType,
-                mergeUnitPinId
-              )
+        const merge_ = {}
 
-              this._state_remove_pin_or_merge(pin_node_id)
-            }
+        forEachPinOnMerge(merge, (unit_id, type, pin_id) => {
+          if (hasUnit(unit_id)) {
+            pathSet(merge_, [unit_id, type, pin_id], true)
           }
-        )
+        })
 
-        if (!merge_has_self) {
-          addMerge(next_merge_id, merge)
+        if (!merge_has_self && !isEmptyMerge(merge_)) {
+          addMerge(next_merge_id, merge_)
         }
       }
     }
@@ -46245,6 +46241,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         },
         plugPin: (type, pin_id, sub_pin_id, sub_pin_spec) => {
           this._spec_plug_sub_pin(type, pin_id, sub_pin_id, sub_pin_spec)
+        },
+        hasUnit: (unit_id) => {
+          return this._spec_has_unit(unit_id)
         },
         hasMerge: (merge_id) => {
           return this.__spec_has_merge(merge_id)
@@ -46319,6 +46318,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           } else {
             this._sim_add_link_pin_to_merge(pin_node_id, merge_node_id)
           }
+        },
+        hasUnit: (unit_id) => {
+          return this._spec_has_unit(unit_id)
         },
         addMerge: (merge_id, merge) => {
           const merge_node_id = getMergeNodeId(merge_id)
