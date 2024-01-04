@@ -15,31 +15,6 @@
   "units": {
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
-      "memory": {
-        "input": {
-          "style": {
-            "_register": {
-              "scroll-snap-align": "start"
-            },
-            "_invalid": false,
-            "_constant": true,
-            "_ignored": false,
-            "_idle": false
-          }
-        },
-        "output": {},
-        "memory": {
-          "__buffer": [],
-          "_forwarding": false,
-          "_backwarding": false,
-          "_forwarding_empty": false,
-          "_state": {
-            "style": {
-              "scroll-snap-align": "start"
-            }
-          }
-        }
-      },
       "metadata": {
         "position": {
           "x": 73,

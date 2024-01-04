@@ -210,8 +210,7 @@
               "y": 47
             }
           }
-        },
-        "emitter": {}
+        }
       },
       "metadata": {
         "position": {
@@ -292,12 +291,12 @@
     "1": {
       "send": {
         "input": {
-          "emitter": true
+          "channel": true
         }
       },
       "transmitter": {
         "output": {
-          "emitter": true
+          "channel": true
         }
       }
     },
