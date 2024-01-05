@@ -496,6 +496,31 @@ export function rectsBoundingRect(rects: Rect[]): Rect {
   return { x: minX, y: minY, width: maxX - minX, height: maxY - minY }
 }
 
+export function centerRectsBoundingRect(rects: Rect[]): Rect {
+  if (rects.length === 0) {
+    return {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+    }
+  }
+
+  let minX = Infinity
+  let minY = Infinity
+  let maxX = 0
+  let maxY = 0
+
+  for (const rect of rects) {
+    minX = Math.min(minX, rect.x - rect.width / 2)
+    minY = Math.min(minY, rect.y - rect.height / 2)
+    maxX = Math.max(maxX, rect.x + rect.width / 2)
+    maxY = Math.max(maxY, rect.y + rect.height / 2)
+  }
+
+  return { x: minX, y: minY, width: maxX - minX, height: maxY - minY }
+}
+
 export function rectangleRegion(
   x: number,
   y: number,
