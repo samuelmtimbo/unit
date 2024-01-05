@@ -428,6 +428,7 @@ import {
   evaluateBundleStr,
   idFromUnitValue,
 } from '../../../../../spec/idFromUnitValue'
+import { isEmptyMerge } from '../../../../../spec/isEmptyMerge'
 import {
   ANY_TREE,
   STRING_TREE,
@@ -647,7 +648,6 @@ import Selection from '../Selection/Component'
 import { ANIMATION_DELTA_TRESHOLD } from './ANIMATION_DELTA_TRESHOLD'
 import { joinLeafPath } from './joinLeafPath'
 import { LayoutBase, LayoutLeaf } from './layout'
-import { isEmptyMerge } from '../../../../../spec/isEmptyMerge'
 
 const UNIT_NAME_MAX_CHAR_LINE: number = 12
 const UNIT_NAME_MAX_LINE_COUNT: number = 3
@@ -44828,11 +44828,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           next_merge_set.add(next_merge_id)
 
+          const opposite_merge = {}
+
+          forEachPinOnMerge(merge, (unitId, type_, pinId) => {
+            if (type_ === type) {
+              pathSet(opposite_merge, [unitId, type_, pinId], true)
+            }
+          })
+
           pathSet(next_merge_pin_id, [mergeId, opposite_type], {
             mergeId: next_merge_id,
             pinId: next_pin_id,
             subPinSpec: next_merge_sub_pin_spec,
-            oppositeMerge: merge,
+            oppositeMerge: opposite_merge,
             ref,
           })
         }
@@ -45077,11 +45085,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           opposite_merge_id_blacklist.add(opposite_merge_id)
 
           opposite_merge_id_map[pin_node_id] = opposite_merge_id
-
-          pathSet(next_id_map, ['link', unit_id, type, pin_id], {
-            mergeId: opposite_merge_id,
-            oppositePinId: opposite_pin_id,
-          })
         }
 
         if (!node_id_set.has(unit_id)) {
@@ -46253,9 +46256,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const merge_unit = merge[graph_id]
 
         forEachPinOnMerge(merge, (unit_id, type, pin_id) => {
-          if (!hasMergePin(next_merge_id, unit_id, type, pin_id)) {
-            addPinToMerge(unit_id, type, pin_id, next_merge_id)
-          }
+          addPinToMerge(unit_id, type, pin_id, next_merge_id)
         })
       } else {
         const merge_has_self = pathOrDefault(
