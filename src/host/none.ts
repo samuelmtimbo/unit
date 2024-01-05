@@ -149,6 +149,9 @@ export function noHost(): API {
       },
     },
     clipboard: {
+      read: () => {
+        throw new APINotSupportedError('Clipboard')
+      },
       readText: () => {
         throw new APINotSupportedError('Clipboard')
       },

@@ -159,6 +159,7 @@ export type API = {
     vibrate: (opt: VibratePattern) => Promise<void>
   }
   clipboard: {
+    read: () => Promise<any>
     readText: () => Promise<string>
     writeText: (text: string) => Promise<void>
   }

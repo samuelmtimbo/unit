@@ -238,7 +238,6 @@ import {
   expandSlot,
   reflectComponentBaseTrait,
 } from '../../../../../client/reflectComponentBaseTrait'
-import { showNotification } from '../../../../../client/showNotification'
 import { SimLink, SimNode, Simulation } from '../../../../../client/simulation'
 import { stopAllPropagation } from '../../../../../client/stopPropagation'
 import { applyStyle, mergeStyle } from '../../../../../client/style'
@@ -249,7 +248,6 @@ import {
   COLOR_LINK_YELLOW,
   COLOR_NONE,
   COLOR_OPAQUE_RED,
-  COLOR_RED,
   COLOR_YELLOW,
   applyTheme,
   getThemeLinkModeColor,
@@ -3264,12 +3262,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         onLongClickCancel: this._on_long_click_cancel,
         onClickHold: this._on_click_hold,
       }),
-      makeDropListener((event, _event) => {
+      makeDropListener(async (event, _event) => {
         _event.preventDefault()
 
         const { clientX, clientY } = event
 
         const { dataTransfer } = _event
+
+        const pasteAsString = async (item: DataTransferItem) => {
+          return new Promise((resolve) => {
+            item.getAsString((text) => {
+              const position = this._screen_to_world(clientX, clientY)
+
+              this._paste_text(text, position)
+
+              resolve(text)
+            })
+          })
+        }
 
         if (dataTransfer) {
           const { items, files } = dataTransfer
@@ -3292,11 +3302,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 this._paste_file(file, world_position)
               } else if (item.kind === 'string') {
                 if (item.type === 'text/plain') {
-                  item.getAsString((text) => {
-                    const position = this._screen_to_world(clientX, clientY)
+                  await pasteAsString(item)
 
-                    this._paste_text(text, position)
-                  })
+                  break
+                } else if (item.type === 'text/html') {
+                  // await pasteAsString(item)
+                } else if (item.type === 'text/uri-list') {
+                  await pasteAsString(item)
                 }
               } else if (item.kind === 'text/uri-list') {
                 // TODO
@@ -3429,7 +3441,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _last_open_filename: string
 
   private _paste_file = async (
-    file: File,
+    file: File | Blob,
     position?: Position
   ): Promise<void> => {
     if (file.type.startsWith('image/')) {
@@ -3514,61 +3526,75 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       reader.readAsDataURL(file)
 
       return
+    } else if (file.type.startsWith('"text/plain"')) {
+      const reader = new FileReader()
+
+      reader.onload = async (e) => {
+        const text = e.target.result.toString()
+
+        this._paste_text(text, position)
+      }
+
+      reader.readAsText(file)
+
+      return
     }
 
-    this._last_open_filename = file.name
+    if (file instanceof File) {
+      this._last_open_filename = file.name
 
-    let json: string
+      let json: string
 
-    if (file.name.endsWith('.unit')) {
-      json = await file.text()
-    } else if (file.name.endsWith('.unit.gzip')) {
-      const decompressionStream = new DecompressionStream('gzip')
-      const decompressedStream = file
-        .stream()
-        // @ts-ignore
-        .pipeThrough(decompressionStream) as ReadableStream
+      if (file.name.endsWith('.unit')) {
+        json = await file.text()
+      } else if (file.name.endsWith('.unit.gzip')) {
+        const decompressionStream = new DecompressionStream('gzip')
+        const decompressedStream = file
+          .stream()
+          // @ts-ignore
+          .pipeThrough(decompressionStream) as ReadableStream
 
-      const reader = decompressedStream.getReader()
-      const chunks = []
+        const reader = decompressedStream.getReader()
+        const chunks = []
 
-      while (true) {
-        const { value, done } = await reader.read()
+        while (true) {
+          const { value, done } = await reader.read()
 
-        if (done) {
-          break
+          if (done) {
+            break
+          }
+
+          chunks.push(value)
         }
 
-        chunks.push(value)
+        const concatenated = new Uint8Array(
+          chunks.reduce((acc, chunk) => acc + chunk.length, 0)
+        )
+
+        let offset = 0
+
+        for (const chunk of chunks) {
+          concatenated.set(chunk, offset)
+
+          offset += chunk.length
+        }
+
+        json = new TextDecoder().decode(concatenated)
       }
 
-      const concatenated = new Uint8Array(
-        chunks.reduce((acc, chunk) => acc + chunk.length, 0)
-      )
+      let bundle: BundleSpec
 
-      let offset = 0
-
-      for (const chunk of chunks) {
-        concatenated.set(chunk, offset)
-
-        offset += chunk.length
+      try {
+        bundle = JSON.parse(json)
+      } catch (err) {
+        // TODO
+        throw new Error('invalid JSON file')
       }
 
-      json = new TextDecoder().decode(concatenated)
+      position = position ?? this._jiggle_world_screen_center()
+
+      this.paste_bundle(bundle, position)
     }
-
-    let bundle: BundleSpec
-
-    try {
-      bundle = JSON.parse(json)
-    } catch (err) {
-      // TODO
-      throw new Error('invalid JSON file')
-    }
-
-    position = position ?? this._jiggle_world_screen_center()
-
-    this.paste_bundle(bundle, position)
   }
 
   private _spec_refresh_node_position = (spec: GraphSpec): void => {
@@ -20035,7 +20061,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const { type, kind } = item
 
           if (kind === 'string') {
-            if (type === 'text/plain') {
+            if (type === 'text/plain' || type === 'text/uri-list') {
               _event.stopPropagation()
 
               _event.dataTransfer.items[i].getAsString((text) => {
@@ -49173,25 +49199,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _paste_clipboard = async (position: Position) => {
     const {
       api: {
-        clipboard: { readText },
+        clipboard: { readText, read },
       },
     } = this.$system
 
     let text: string
 
     try {
+      const items: ClipboardItems = await read()
+
+      for (const item of items) {
+        if (item.types.includes('image/png')) {
+          const blob = await item.getType('image/png')
+
+          this._paste_file(blob, position)
+        } else if (item.types.includes('text/plain')) {
+          const text = await item.getType('text/plain')
+
+          this._paste_file(text, position)
+        }
+      }
+    } catch (err) {
+      //
+    }
+
+    try {
       text = await readText()
     } catch (err) {
-      showNotification(
-        this.$system,
-        err.message,
-        {
-          color: COLOR_RED,
-          borderColor: COLOR_RED,
-        },
-        3000
-      )
-
       return
     }
 

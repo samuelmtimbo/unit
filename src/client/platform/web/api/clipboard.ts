@@ -5,6 +5,13 @@ import { BootOpt } from '../../../../system'
 export function webClipboard(window: Window, opt: BootOpt): API['clipboard'] {
   const { navigator } = window
 
+  const read = async () => {
+    if (navigator.clipboard && navigator.clipboard.read) {
+      const data = await navigator.clipboard.read()
+      return data
+    }
+  }
+
   const readText = async () => {
     if (navigator.clipboard && navigator.clipboard.readText) {
       const text = await navigator.clipboard.readText()
@@ -21,6 +28,7 @@ export function webClipboard(window: Window, opt: BootOpt): API['clipboard'] {
   }
 
   const clipboard = {
+    read,
     readText,
     writeText,
   }
