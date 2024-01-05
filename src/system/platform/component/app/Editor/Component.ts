@@ -284,8 +284,10 @@ import {
   randomUnitVector,
   rectCenter,
   rectsBoundingRect,
+  centerRectsBoundingRect,
   resizeVector,
   roundPoint,
+  subtractVector,
   surfaceDistance,
   unitVector,
 } from '../../../../../client/util/geometry'
@@ -3938,14 +3940,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this.get_nodes_center_relative_positions(this._node)
   }
 
+  public get_nodes_bounding_rect_center = (nodes: Dict<any>): Point => {
+    const nodes_list = Object.values(nodes)
+
+    const rect = centerRectsBoundingRect(nodes_list)
+
+    const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
+
+    return center
+  }
+
   public get_nodes_center_relative_positions = (
     nodes: Dict<any>
   ): Dict<Position> => {
-    const nodes_list = Object.values(nodes)
-
-    const rect = rectsBoundingRect(nodes_list)
-
-    const center = { x: rect.x, y: rect.y }
+    const center = this.get_nodes_bounding_rect_center(nodes)
 
     return this.get_nodes_center_relative_positions_to(nodes, center)
   }
@@ -5300,11 +5308,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._simulation_prevent_restart = false
 
+    this._center_graph()
+
     this._start_graph_simulation(LAYER_NONE)
 
     this._tick()
 
     this._start_debugger()
+  }
+
+  private _center_graph = () => {
+    if (this._node_count === 0) {
+      return
+    }
+
+    const center = this.get_nodes_bounding_rect_center(this._node)
+    const screen_center = this._world_screen_center()
+
+    const v = subtractVector(screen_center, center)
+
+    const next_zoom = translate(this._zoom, v.x, v.y)
+
+    this._zoom_center_at(center.x, center.y)
   }
 
   private _get_spec_init_unit_pin_position = (
@@ -14878,6 +14903,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     offset_y: number = 0
   ): Position => {
     const { x, y } = this._screen_center()
+
     const world_screen_center = this._screen_to_world(
       x + offset_x,
       y + offset_y
