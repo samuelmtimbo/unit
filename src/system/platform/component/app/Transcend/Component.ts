@@ -202,9 +202,11 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
   }
 
   private _translate = (x: number): void => {
-    // console.log('Transcend', '_translate', x)
-
     const { $width } = this.$context
+
+    if ($width === 0) {
+      return
+    }
 
     this._x = clamp({
       a: x,
@@ -237,11 +239,8 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
     width,
     height,
   }: IOFrameResizeEvent): void => {
-    const { $width } = this.$context
     // console.log('Transcend', '_on_context_resize', width, height)
-    const dw = width - $width
-    const dw2 = dw / 2
-    // this._translate(this._x + dw2)
+
     this._translate(this._x)
   }
 
