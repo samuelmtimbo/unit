@@ -135,7 +135,7 @@
     }
   },
   "component": {
-    "slots": [],
+    "slots": [["box", "default"]],
     "subComponents": {
       "box": {}
     },
@@ -145,7 +145,7 @@
   },
   "metadata": {
     "icon": "square",
-    "description": "div with a random background color",
+    "description": "box with a random background color",
     "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
