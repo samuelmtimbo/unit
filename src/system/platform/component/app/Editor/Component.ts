@@ -18104,6 +18104,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           multiple: true,
           keydown: this._on_arrow_keydown,
         },
+        {
+          combo: ['Space'],
+          keydown: this._on_space_keydown,
+        },
       ]
       const shortcutListener = makeShortcutListener(combo_list)
       this._keyboard_unlisten = this.addEventListener(shortcutListener)
@@ -50340,6 +50344,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         true
       )
     }
+  }
+
+  private _on_space_keydown = (): void => {
+    this._center_graph()
   }
 
   private _hide_search = () => {
