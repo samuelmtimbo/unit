@@ -4,9 +4,7 @@
     "defaultvideo": {
       "id": "68ee3bf2-7d57-4828-92ac-1070e988ffe7",
       "input": {
-        "style": {
-          "constant": true
-        },
+        "style": {},
         "controls": {
           "ignored": false,
           "constant": true,
@@ -81,27 +79,16 @@
     "icon": "video",
     "description": "",
     "complexity": 47,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "component": {
-    "slots": [
-      [
-        "defaultvideo",
-        "default"
-      ]
-    ],
+    "slots": [["defaultvideo", "default"]],
     "subComponents": {
       "defaultvideo": {
         "children": []
       }
     },
-    "children": [
-      "defaultvideo"
-    ],
+    "children": ["defaultvideo"],
     "defaultWidth": 260,
     "defaultHeight": 195
   },
