@@ -844,7 +844,9 @@ export class Component<
           i++
         }
 
-        this.$mountRoot[i].blur()
+        if (this.$mountRoot[i]) {
+          this.$mountRoot[i].blur()
+        }
       } else {
         this.$element.blur()
       }
