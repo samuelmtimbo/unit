@@ -335,8 +335,6 @@ export function moveUnit(
 
         if (shouldSwapMergePin) {
           if (reverse) {
-            const shouldPropagate = isRefMerge(target, merge)
-
             if (target.hasMergePin(mergeId, graphId, type, pinId)) {
               target.removePinOrMerge(
                 mergeId,
@@ -349,7 +347,7 @@ export function moveUnit(
             }
 
             if (!target.hasMerge(mergeId)) {
-              target.addMerge(merge ?? {}, mergeId, false, shouldPropagate)
+              target.addMerge(merge ?? {}, mergeId, false, false)
             }
 
             if (!target.hasMergePin(mergeId, nextUnitId, type, pinId)) {
@@ -359,14 +357,25 @@ export function moveUnit(
                 type,
                 pinId,
                 false,
-                shouldPropagate
+                false
               )
             }
           } else {
-            const shouldPropagate = isRefMerge(source, merge)
-
             if (!source.hasMerge(mergeId)) {
-              source.addMerge(merge ?? {}, mergeId, false, shouldPropagate)
+              source.addMerge({}, mergeId, false, false)
+
+              forEachPinOnMerge(merge, (unitId, type, pinId) => {
+                if (source.hasUnit(unitId)) {
+                  source.addPinToMerge(
+                    mergeId,
+                    unitId,
+                    type,
+                    pinId,
+                    false,
+                    false
+                  )
+                }
+              })
             }
 
             if (!source.hasMergePin(mergeId, graphId, type, nextPinId)) {
@@ -376,7 +385,7 @@ export function moveUnit(
                 type,
                 nextPinId,
                 false,
-                shouldPropagate
+                false
               )
             }
           }
@@ -562,7 +571,7 @@ export function moveLinkPinInto(
     }
 
     if (plugPinSpec) {
-      const nextUnitId = unitId // TODO
+      const nextUnitId = unitId
 
       const newPinSpec =
         graphId !== unitId
@@ -697,9 +706,7 @@ export function moveMerge(
           (mergeInputCount > 0 && mergeOutputCount > 0))) ||
       pinIntoCount > 1
     ) {
-      const shouldPropagate = isRefMerge(target, nextMerge)
-
-      target.addMerge(nextMerge, nextMergeId, false, shouldPropagate)
+      target.addMerge(nextMerge, nextMergeId, false, false)
 
       if (
         keyCount(mergeSpec ?? {}) === 1 &&
@@ -727,14 +734,6 @@ export function moveMerge(
 
     if (pinId && subPinSpec) {
       if (reverse) {
-        // if (source.hasPinNamed(type, pinId)) {
-        //   if (source.getPinPlugCount(type, pinId) > 1) {
-        //     source.coverPin(type, pinId, '0', false)
-        //   } else {
-        //     source.coverPinSet(type, pinId, false)
-        //   }
-        // }
-
         if (target.hasMergePin(_mergeId, graphId, type, pinId)) {
           target.removeMerge(_mergeId, false, false)
         }

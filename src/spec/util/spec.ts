@@ -658,6 +658,20 @@ export function makeFullSpecCollapseMap(
   const nextPinIdMap: GraphMoveSubGraphData['nextPinIdMap'] = {}
   const nextMergePinId: GraphMoveSubGraphData['nextMergePinId'] = {}
   const nextPlugSpec: GraphMoveSubGraphData['nextPlugSpec'] = {}
+  const nextUnitPinMergeMap: GraphMoveSubGraphData['nextUnitPinMergeMap'] = {}
+
+  forEachPinOnMerges(
+    merges,
+    (mergeId, mergeUnitId, mergeUnitType, mergePinId) => {
+      const nextMergeId = mergeIdMap[mergeId] ?? mergeId
+
+      pathSet(
+        nextUnitPinMergeMap,
+        [mergeUnitId, mergeUnitType, mergePinId],
+        nextMergeId
+      )
+    }
+  )
 
   const processPins = (type: IO, pins: GraphPinsSpec) => {
     for (const pinId in pins) {
@@ -780,19 +794,7 @@ export function makeFullSpecCollapseMap(
             })
           }
         } else {
-          const nextMergeId =
-            mergeIdMap[subPinSpec.mergeId] ?? subPinSpec.mergeId
-
-          const oppositeType = opposite(type)
-
-          const oppositeMerge = unitMerges[mergeId] ?? {}
-
-          pathSet(nextMergePinId, [subPinSpec.mergeId, oppositeType], {
-            mergeId: nextMergeId,
-            pinId,
-            subPinSpec: {},
-            oppositeMerge,
-          })
+          //
         }
       }
     }
@@ -855,12 +857,6 @@ export function makeFullSpecCollapseMap(
           merge_clone[otherUnitId][otherUnitPinType]
         )
 
-        nodeIds.link.push({
-          unitId: otherUnitId,
-          type: otherUnitPinType,
-          pinId: otherUnitPinId,
-        })
-
         pathSet(
           nextIdMap,
           ['link', otherUnitId, otherUnitPinType, otherUnitPinId],
@@ -889,7 +885,7 @@ export function makeFullSpecCollapseMap(
     nextPinIdMap,
     nextMergePinId,
     nextPlugSpec,
-    nextUnitPinMergeMap: {},
+    nextUnitPinMergeMap,
     nextSubComponentParentMap: {},
     nextSubComponentChildrenMap: {},
     nextSubComponentIndexMap: {},

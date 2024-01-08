@@ -40,6 +40,8 @@ import { IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { G } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
+import { mapObjKeyKV, mapObjVK, pathSet, revertObj } from '../../util/object'
+import { forEachPinOnMerges } from '../util/spec'
 import {
   MOVE_SUB_COMPONENT_ROOT,
   REORDER_SUB_COMPONENT,
@@ -141,62 +143,15 @@ export const makeMoveSubgraphIntoAction = (
   graphId: string,
   graphBundle: BundleSpec,
   nextSpecId: string,
-  nodeIds: {
-    merge: string[]
-    link: {
-      unitId: string
-      type: IO
-      pinId: string
-    }[]
-    unit: string[]
-    plug: {
-      type: IO
-      pinId: string
-      subPinId: string
-    }[]
-  },
-  nextIdMap: {
-    merge: Dict<string>
-    link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-    plug: IOOf<Dict<Dict<{ mergeId: string; type: IO; subPinId: string }>>>
-    unit: Dict<string>
-  },
-  nextPinIdMap: Dict<{
-    input: Dict<{
-      pinId: string
-      subPinId: string
-      ref?: boolean
-      defaultIgnored?: boolean
-    }>
-    output: Dict<{
-      pinId: string
-      subPinId: string
-      ref?: boolean
-      defaultIgnored?: boolean
-    }>
-  }>,
-  nextUnitPinMergeMap: Dict<IOOf<Dict<string>>>,
-  nextMergePinId: Dict<{
-    input: {
-      mergeId: string
-      pinId: string
-      subPinSpec: GraphSubPinSpec
-      ref?: boolean
-    }
-    output: {
-      mergeId: string
-      pinId: string
-      subPinSpec: GraphSubPinSpec
-      ref?: boolean
-    }
-  }>,
-  nextPlugSpec: {
-    input: Dict<Dict<GraphSubPinSpec>>
-    output: Dict<Dict<GraphSubPinSpec>>
-  },
-  nextSubComponentParentMap: Dict<string | null>,
-  nextSubComponentChildrenMap: Dict<string[]>,
-  nextSubComponentIndexMap: Dict<number>
+  nodeIds: GraphMoveSubGraphIntoData['nodeIds'],
+  nextIdMap: GraphMoveSubGraphIntoData['nextIdMap'],
+  nextUnitPinMergeMap: GraphMoveSubGraphIntoData['nextUnitPinMergeMap'],
+  nextPinIdMap: GraphMoveSubGraphIntoData['nextPinIdMap'],
+  nextMergePinId: GraphMoveSubGraphIntoData['nextMergePinId'],
+  nextPlugSpec: GraphMoveSubGraphIntoData['nextPlugSpec'],
+  nextSubComponentParentMap: GraphMoveSubGraphIntoData['nextSubComponentParentMap'],
+  nextSubComponentChildrenMap: GraphMoveSubGraphIntoData['nextSubComponentChildrenMap'],
+  nextSubComponentIndexMap: GraphMoveSubGraphIntoData['nextSubComponentIndexMap']
 ) => {
   return wrapMoveSubgraphIntoData({
     graphId,
@@ -910,70 +865,175 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.to,
         data.from
       )
-    case MOVE_SUBGRAPH_INTO:
+    case MOVE_SUBGRAPH_INTO: {
+      const data_ = data as GraphMoveSubGraphIntoData
+
+      const nextNodeIds_ = {
+        ...data.nodeIds,
+        unit: data.nodeIds.unit.map(
+          (unitId: string) => data.nextIdMap.unit[unitId] ?? unitId
+        ),
+        link: data.nodeIds.link.filter(({ unitId, type, pinId }) => {
+          if (!data.nodeIds.unit.includes(unitId)) {
+            return false
+          }
+
+          return true
+        }),
+        plug: data.nodeIds.plug.concat(
+          data.nodeIds.link
+            .filter(({ unitId, type, pinId }) => {
+              if (!data.nodeIds.unit.includes(unitId)) {
+                return true
+              }
+
+              return false
+            })
+            .map(({ unitId, type, pinId }) => {
+              return {
+                type,
+                pinId,
+                subPinId: '0',
+              }
+            })
+        ),
+      }
+
+      const nextIdMap_ = {
+        ...data.nextIdMap,
+        unit: revertObj(data.nextIdMap.unit ?? {}),
+        merge: revertObj(data.nextIdMap.merge ?? {}),
+      }
+
       return makeMoveSubgraphOutOfAction(
         data.graphId,
         data.graphBundle,
         data.nextSpecId,
-        {
-          ...data.nodeIds,
-          unit: data.nodeIds.unit.map(
-            (unitId: string) => data.nextIdMap.unit[unitId] ?? unitId
-          ),
-          link: data.nodeIds.link.filter(({ unitId, type, pinId }) => {
-            if (!data.nodeIds.unit.includes(unitId)) {
-              return false
+        nextNodeIds_,
+        nextIdMap_,
+        data.nextUnitPinMergeMap,
+        data.nextPinIdMap,
+        data.nextMergePinId,
+        data.nextPlugSpec,
+        data.nextSubComponentParentMap,
+        data.nextSubComponentChildrenMap,
+        data.nextSubComponentIndexMap
+      )
+    }
+
+    case MOVE_SUBGRAPH_OUT_OF: {
+      const data_ = data as GraphMoveSubGraphIntoData
+
+      const nextIdMap_ = {
+        ...data_.nextIdMap,
+        unit: revertObj(data_.nextIdMap.unit ?? {}),
+        merge: revertObj(data_.nextIdMap.merge ?? {}),
+      }
+
+      const nextNodeIds_ = {
+        ...data_.nodeIds,
+        unit: data_.nodeIds.unit.map(
+          (unitId: string) => data_.nextIdMap.unit[unitId] ?? unitId
+        ),
+        merge: data_.nodeIds.merge.map(
+          (mergeId: string) => data_.nextIdMap.merge[mergeId] ?? mergeId
+        ),
+      }
+
+      const nextUnitPinMergeMap_ = {}
+
+      forEachPinOnMerges(
+        data_.graphBundle.spec.merges ?? {},
+        (mergeId, unitId, type, pinId) => {
+          const nextUnitId = nextIdMap_.unit[unitId] ?? unitId
+
+          pathSet(nextUnitPinMergeMap_, [unitId, type, pinId], mergeId)
+        }
+      )
+
+      const nextPinIdMap_ = mapObjVK(
+        mapObjKeyKV(data_.nextPinIdMap, (unitId) => {
+          return data_.nextIdMap.unit[unitId] ?? unitId
+        }),
+        (pinIdMap) => {
+          return {
+            input: mapObjVK(pinIdMap.input, (pin) => {
+              return {
+                ...pin,
+                merge: mapObjKeyKV(pin.merge, (unitId) => {
+                  return nextIdMap_.unit[unitId] ?? unitId
+                }),
+              }
+            }),
+            output: mapObjVK(pinIdMap.output, (pin) => {
+              return {
+                ...pin,
+                merge: mapObjKeyKV(pin.merge, (unitId) => {
+                  return nextIdMap_.unit[unitId] ?? unitId
+                }),
+              }
+            }),
+          }
+        }
+      )
+
+      const nextPlugSpec_ = {
+        input: mapObjVK<any, any>(data_.nextPlugSpec.input, (pinSpec) => {
+          return mapObjVK<any, any>(pinSpec, (subPinSpec) => {
+            const { mergeId, unitId } = subPinSpec
+
+            if (mergeId) {
+              return {
+                ...subPinSpec,
+                mergeId: nextIdMap_.merge[mergeId] ?? mergeId,
+              }
+            } else if (unitId) {
+              return {
+                ...subPinSpec,
+                unitId: nextIdMap_.unit[unitId] ?? unitId,
+              }
             }
 
-            return true
-          }),
-          plug: data.nodeIds.plug.concat(
-            data.nodeIds.link
-              .filter(({ unitId, type, pinId }) => {
-                if (!data.nodeIds.unit.includes(unitId)) {
-                  return true
-                }
+            return subPinSpec
+          })
+        }),
+        output: mapObjVK<any, any>(data_.nextPlugSpec.output, (nextPlug) => {
+          return mapObjVK<any, any>(nextPlug, (subPinSpec) => {
+            const { mergeId, unitId } = subPinSpec
 
-                return false
-              })
-              .map(({ unitId, type, pinId }) => {
-                return {
-                  type,
-                  pinId,
-                  subPinId: '0',
-                }
-              })
-          ),
-        },
-        data.nextIdMap,
-        data.nextUnitPinMergeMap,
-        data.nextPinIdMap,
-        data.nextMergePinId,
-        data.nextPlugSpec,
-        data.nextSubComponentParentMap,
-        data.nextSubComponentChildrenMap,
-        data.nextSubComponentIndexMap
-      )
-    case MOVE_SUBGRAPH_OUT_OF:
+            if (mergeId) {
+              return {
+                ...subPinSpec,
+                mergeId: nextIdMap_.merge[mergeId] ?? mergeId,
+              }
+            } else if (unitId) {
+              return {
+                ...subPinSpec,
+                unitId: nextIdMap_.unit[unitId] ?? unitId,
+              }
+            }
+
+            return subPinSpec
+          })
+        }),
+      }
+
       return makeMoveSubgraphIntoAction(
-        data.graphId,
-        data.graphBundle,
-        data.nextSpecId,
-        {
-          ...data.nodeIds,
-          unit: data.nodeIds.unit.map(
-            (unitId: string) => data.nextIdMap.unit[unitId] ?? unitId
-          ),
-        },
-        data.nextIdMap,
-        data.nextUnitPinMergeMap,
-        data.nextPinIdMap,
-        data.nextMergePinId,
-        data.nextPlugSpec,
-        data.nextSubComponentParentMap,
-        data.nextSubComponentChildrenMap,
-        data.nextSubComponentIndexMap
+        data_.graphId,
+        data_.graphBundle,
+        data_.nextSpecId,
+        nextNodeIds_,
+        nextIdMap_,
+        nextUnitPinMergeMap_,
+        nextPinIdMap_,
+        data_.nextMergePinId,
+        nextPlugSpec_,
+        data_.nextSubComponentParentMap,
+        data_.nextSubComponentChildrenMap,
+        data_.nextSubComponentIndexMap
       )
+    }
+
     case BULK_EDIT:
       return makeBulkEditAction([...data.actions].reverse().map(reverseAction))
     case SET_COMPONENT_SIZE:
