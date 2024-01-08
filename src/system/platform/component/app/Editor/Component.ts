@@ -43047,6 +43047,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._collapse_merges = merge
     this._collapse_plugs = plug
 
+    if (this._search) {
+      this._search.disable_regsitry()
+    }
+
     const none_node_selected =
       unit.length === 0 &&
       link.length === 0 &&
@@ -45338,6 +45342,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._simulation.alphaDecay(0.01)
+
+    if (this._search) {
+      this._search.enable_registry()
+    }
 
     if (graph_id) {
       this._refresh_core_border_color(graph_id)
