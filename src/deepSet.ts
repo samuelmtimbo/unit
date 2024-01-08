@@ -18,3 +18,17 @@ export default function deepSet(
     return value
   }
 }
+
+export function deepSet_(obj: Dict<any>, path: string[], value: any): void {
+  if (path.length > 1) {
+    const [head, ...tail] = path
+
+    obj[head] = obj[head] ?? {}
+
+    deepSet_(obj[head], tail, value)
+  } else {
+    const [head] = path
+
+    obj[head] = value
+  }
+}

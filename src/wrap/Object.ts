@@ -18,7 +18,7 @@ export function wrapSharedRef<T extends Dict<any>>(
       throw new MethodNotImplementedError()
     },
     set<K extends string & keyof T>(name: K, data: T[K]): Promise<void> {
-      return _data.pathSet(['current'], name, data)
+      return _data.deepSet(['current', name], data)
     },
     delete<K extends string & keyof T>(name: K): Promise<void> {
       throw new MethodNotImplementedError()
@@ -29,13 +29,13 @@ export function wrapSharedRef<T extends Dict<any>>(
     keys(): Promise<string[]> {
       throw new MethodNotImplementedError()
     },
-    pathGet(path: string[], name: string): Promise<any> {
+    deepGet(path: string[]): Promise<any> {
       throw new MethodNotImplementedError()
     },
-    pathSet(path: string[], name: string, data: any): Promise<void> {
+    deepSet(path: string[], data: any): Promise<void> {
       throw new MethodNotImplementedError()
     },
-    pathDelete(path: string[], name: string): Promise<void> {
+    deepDelete(path: string[]): Promise<void> {
       throw new MethodNotImplementedError()
     },
     subscribe(

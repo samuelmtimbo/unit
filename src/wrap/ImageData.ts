@@ -39,17 +39,17 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
     async keys(): Promise<string[]> {
       return ['width', 'height', 'data', 'colorSpace']
     }
-    pathGet(path: string[], name: string): Promise<any> {
-      if (path.length === 0) {
-        return this.get(name)
+    deepGet(path: string[]): Promise<any> {
+      if (path.length === 1) {
+        return this.get(path[0])
       }
 
       throw new Error('invalid key path')
     }
-    pathSet(path: string[], name: string, data: any): Promise<void> {
+    deepSet(path: string[], data: any): Promise<void> {
       throw new Error('read only')
     }
-    pathDelete(path: string[], name: string): Promise<void> {
+    deepDelete(path: string[]): Promise<void> {
       throw new Error('read only')
     }
     subscribe(

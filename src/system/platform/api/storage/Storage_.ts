@@ -45,15 +45,15 @@ export class Storage_ implements J {
     this._storage.removeItem(name)
   }
 
-  pathSet(path: string[], name: string, data: any): Promise<void> {
+  deepSet(path: string[], data: any): Promise<void> {
     throw new MethodNotImplementedError()
   }
 
-  pathGet(path: string[], name: string): Promise<any> {
+  deepGet(path: string[]): Promise<any> {
     throw new MethodNotImplementedError()
   }
 
-  pathDelete(path: string[], name: string): Promise<void> {
+  deepDelete(path: string[]): Promise<void> {
     throw new MethodNotImplementedError()
   }
 

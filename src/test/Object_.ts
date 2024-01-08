@@ -34,14 +34,14 @@ const unlisten2 = _obj_emitter.subscribe(
   }
 )
 
-_obj_emitter.pathSet([], 'foo', {})
-_obj_emitter.pathSet(['foo'], 'name', 'bar')
-_obj_emitter.pathSet(['foo'], 'name', 'zaz')
-_obj_emitter.pathDelete(['foo'], 'name')
+_obj_emitter.deepSet(['foo'], {})
+_obj_emitter.deepSet(['foo', 'name'], 'bar')
+_obj_emitter.deepSet(['foo', 'name'], 'zaz')
+_obj_emitter.deepDelete(['foo', 'name'])
 
 unlisten()
 unlisten0()
 unlisten1()
 unlisten2()
 
-_obj_emitter.pathSet(['foo'], 'name', 'tar')
+_obj_emitter.deepSet(['foo', 'name'], 'tar')

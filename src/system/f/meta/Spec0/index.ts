@@ -1,12 +1,17 @@
-import { ObjectUpdateType } from '@_unit/unit/lib/ObjectUpdateType'
-import { Unlisten } from '@_unit/unit/lib/types/Unlisten'
-import { J } from '@_unit/unit/lib/types/interface/J'
 import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { Unit } from '../../../../Class/Unit'
+import { ObjectUpdateType } from '../../../../ObjectUpdateType'
+import deepGet from '../../../../deepGet'
+import { deepSet_ } from '../../../../deepSet'
+import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../system'
+import { Unlisten } from '../../../../types/Unlisten'
+import { J } from '../../../../types/interface/J'
+import { hasKey } from '../../../../util/object'
 import { ID_SPEC_0 } from '../../../_ids'
+import { keys } from '../../object/Keys/f'
 
 export interface I<T> {
   unit: Unit
@@ -17,6 +22,8 @@ export interface O<T> {
 }
 
 export default class Spec_<T> extends Functional<I<T>, O<T>> {
+  __: string[] = ['J']
+
   constructor(system: System) {
     super(
       {
@@ -57,27 +64,43 @@ export default class Spec_<T> extends Functional<I<T>, O<T>> {
       }
 
       delete<K extends string & keyof T>(name: string): Promise<void> {
-        throw new Error('Method not implemented.')
+        const _spec = unit.getSpec()
+
+        delete _spec[name]
+
+        return
       }
 
-      hasKey<K extends string & keyof T>(name: string): Promise<boolean> {
-        throw new Error('Method not implemented.')
+      async hasKey<K extends string & keyof T>(name: string): Promise<boolean> {
+        const _spec = unit.getSpec()
+
+        const has = hasKey(_spec, name)
+
+        return has
       }
 
-      keys(): Promise<string[]> {
-        throw new Error('Method not implemented.')
+      async keys(): Promise<string[]> {
+        const _spec = unit.getSpec()
+
+        return keys(_spec)
       }
 
-      pathGet(path: string[], name: string): Promise<any> {
-        throw new Error('Method not implemented.')
+      deepGet(path: string[]): Promise<any> {
+        const _spec = unit.getSpec()
+
+        return deepGet(_spec, path)
       }
 
-      pathSet(path: string[], name: string, data: any): Promise<void> {
-        throw new Error('Method not implemented.')
+      deepSet(path: string[], data: any): Promise<void> {
+        const _spec = unit.getSpec()
+
+        deepSet_(_spec, path, data)
+
+        return
       }
 
-      pathDelete(path: string[], name: string): Promise<void> {
-        throw new Error('Method not implemented.')
+      deepDelete(path: string[]): Promise<void> {
+        throw new MethodNotImplementedError()
       }
 
       subscribe(
@@ -90,9 +113,8 @@ export default class Spec_<T> extends Functional<I<T>, O<T>> {
           data: any
         ) => void
       ): Unlisten {
-        throw new Error('Method not implemented.')
+        throw new MethodNotImplementedError()
       }
-      __: string[] = ['J']
     })(this.__system)
 
     done({

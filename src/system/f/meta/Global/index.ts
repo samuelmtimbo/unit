@@ -48,16 +48,16 @@ export default class Global extends Unit<I, O> implements J<Dict<any>> {
     return this.__system.global.data.delete(name)
   }
 
-  async pathSet(path: string[], name: string, data: any): Promise<void> {
-    return this.__system.global.data.pathSet(path, name, data)
+  async deepSet(path: string[], data: any): Promise<void> {
+    return this.__system.global.data.deepSet(path, data)
   }
 
-  async pathGet(path: string[], name: string): Promise<any> {
-    return this.__system.global.data.pathGet(path, name)
+  async deepGet(path: string[]): Promise<any> {
+    return this.__system.global.data.deepGet(path)
   }
 
-  async pathDelete(path: string[], name: string): Promise<void> {
-    return this.__system.global.data.pathDelete(path, name)
+  async deepDelete(path: string[]): Promise<void> {
+    return this.__system.global.data.deepDelete(path)
   }
 
   async keys(): Promise<string[]> {

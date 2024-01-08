@@ -5,7 +5,7 @@ import { Dict } from './types/Dict'
 import { J } from './types/interface/J'
 import { V } from './types/interface/V'
 import { Unlisten } from './types/Unlisten'
-import { pop } from './util/array'
+import { last, pop } from './util/array'
 
 export type ObjectNode = {
   emitter: EventEmitter_ | null
@@ -107,22 +107,33 @@ export class Object_<T extends Object> implements J<T>, V<T> {
     return node
   }
 
-  private _set_path = (path: string[], key: string, data: any) => {
-    const obj = this._obj_at_path(path)
+  private _set_path = (path: string[], data: any) => {
+    const parent_path = path.slice(0, -1)
+    const key = last(path)
+
+    const obj = this._obj_at_path(parent_path)
+
     obj[key] = data
-    this._dispatch('set', path, key, data)
+
+    this._dispatch('set', parent_path, key, data)
   }
 
   private _delete = async (name: string): Promise<void> => {
-    this._delete_path([], name)
+    this._delete_path([name])
     return
   }
 
-  private _delete_path = (path: string[], name: string) => {
-    const obj = this._obj_at_path(path)
-    const value = obj[name]
-    delete obj[name]
-    this._dispatch('delete', path, name, value)
+  private _delete_path = (path: string[]) => {
+    const parent_path = path.slice(0, -1)
+    const key = last(path)
+
+    const obj = this._obj_at_path(parent_path)
+
+    const value = obj[key]
+
+    delete obj[key]
+
+    this._dispatch('delete', path, key, value)
   }
 
   public async read(): Promise<T> {
@@ -146,7 +157,7 @@ export class Object_<T extends Object> implements J<T>, V<T> {
   }
 
   public async set(name: string, data: any): Promise<void> {
-    this._set_path([], name, data)
+    this._set_path([name], data)
   }
 
   public async hasKey(name: string): Promise<boolean> {
@@ -157,18 +168,20 @@ export class Object_<T extends Object> implements J<T>, V<T> {
     return this._delete(name)
   }
 
-  public async pathGet(path: string[], name: string): Promise<any> {
-    const obj = this._obj_at_path(path)
-    return obj[name]
+  public async deepGet(path: string[]): Promise<any> {
+    const value = this._obj_at_path(path)
+
+    return value
   }
 
-  public async pathSet(path: string[], name: string, data: any): Promise<void> {
-    this._set_path(path, name, data)
+  public async deepSet(path: string[], data: any): Promise<void> {
+    this._set_path(path, data)
+
     return
   }
 
-  public async pathDelete(path: string[], name: string): Promise<void> {
-    this._delete_path(path, name)
+  public async deepDelete(path: string[]): Promise<void> {
+    this._delete_path(path)
     return
   }
 
