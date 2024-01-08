@@ -53,12 +53,18 @@ export function mapObjKeyVK<V>(
   obj: Dict<V>,
   callback: (value: V, key: string) => string
 ): Dict<V> {
-  const result = {}
+  const entries = []
+
   for (const key in obj) {
     const value = obj[key]
 
-    result[callback(value, key)] = value
+    const newKey = callback(value, key)
+
+    entries.push([newKey, value])
   }
+
+  const result: Dict<V> = fromEntries(entries)
+
   return result
 }
 
@@ -66,11 +72,18 @@ export function mapObjKeyKV<V>(
   obj: Dict<V>,
   callback: (key: string, value: V) => string
 ): Dict<V> {
-  const result = {}
+  const entries = []
+
   for (const key in obj) {
     const value = obj[key]
-    result[callback(key, value)] = value
+
+    const newKey = callback(key, value)
+
+    entries.push([newKey, value])
   }
+
+  const result: Dict<V> = fromEntries(entries)
+
   return result
 }
 
@@ -389,4 +402,20 @@ export function makeTagObj<T>(keys: string[], value: T): Dict<T> {
   }
 
   return obj
+}
+
+export function entries<T>(obj: Dict<T>): [string, T][] {
+  return Object.entries(obj)
+}
+
+export function fromEntries<T>(entries: [string, T][]): Dict<T> {
+  return Object.fromEntries(entries)
+}
+
+export function revertObj(obj: Dict<string>) {
+  return fromEntries(
+    entries(obj).map(([key, value]) => {
+      return [value, key]
+    })
+  )
 }

@@ -4730,28 +4730,19 @@ export class Graph<I = any, O = any>
     // )
     const pinNodeId = getPinNodeId(unitId, type, pinId)
 
-    const shouldTake = take || (type === 'output' && pinId === SELF)
-
     this._simRemoveBranch(mergeId, type, pinNodeId)
 
-    if (shouldTake) {
-      if (type === 'input') {
-        if (
-          this._mergeToSelfUnit[mergeId] ||
-          this.isUnitRefInput(unitId, pinId)
-        ) {
-          const pin = this._pin[pinNodeId]
+    if (take) {
+      const pin = this._pin[pinNodeId]
 
-          pin.take()
-        }
+      const mergeSpec = this.getMergeSpec(mergeId)
+
+      if (this.isUnitRefPin(unitId, 'output', pinId)) {
+        forEachInputOnMerge(mergeSpec, (unitId, type, pinId): void => {
+          this._removeUnitPinData(unitId, type, pinId)
+        })
       } else {
-        if (pinId === SELF) {
-          const mergeSpec = this.getMergeSpec(mergeId)
-
-          forEachInputOnMerge(mergeSpec, (unitId, type, pinId): void => {
-            this._removeUnitPinData(unitId, type, pinId)
-          })
-        }
+        pin.take()
       }
     }
   }
