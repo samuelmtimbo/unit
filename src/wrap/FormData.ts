@@ -36,15 +36,15 @@ export function wrapFormData(
       throw new Error('Method not implemented.')
     }
 
-    pathGet(path: string[], name: string): Promise<any> {
+    deepGet(path: string[]): Promise<any> {
       throw new Error('Method not implemented.')
     }
 
-    pathSet(path: string[], name: string, data: any): Promise<void> {
+    deepSet(path: string[], data: any): Promise<void> {
       throw new Error('Method not implemented.')
     }
 
-    pathDelete(path: string[], name: string): Promise<void> {
+    deepDelete(path: string[]): Promise<void> {
       throw new Error('Method not implemented.')
     }
 

@@ -10,9 +10,9 @@ export interface J<T extends Dict<any> = any> {
   delete<K extends string & keyof T>(name: K): Promise<void>
   hasKey<K extends string & keyof T>(name: K): Promise<boolean>
   keys(): Promise<string[]>
-  pathGet(path: string[], name: string): Promise<any>
-  pathSet(path: string[], name: string, data: any): Promise<void>
-  pathDelete(path: string[], name: string): Promise<void>
+  deepGet(path: string[]): Promise<any>
+  deepSet(path: string[], data: any): Promise<void>
+  deepDelete(path: string[]): Promise<void>
   subscribe(
     path: string[],
     key: string,

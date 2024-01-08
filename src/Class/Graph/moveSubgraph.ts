@@ -179,10 +179,7 @@ export function moveUnit(
       plug,
       mergeId,
       merge,
-    } = pathOrDefault(nextUnitPinMap, [type, pinId], {
-      pinId: undefined,
-      subPinId: undefined,
-    })
+    } = pathOrDefault(nextUnitPinMap, [type, pinId], {})
 
     if (!ignoredPin[type].has(pinId) && !unit.isPinIgnored(type, pinId)) {
       const shouldSwapMergePin =

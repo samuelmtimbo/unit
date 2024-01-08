@@ -4728,11 +4728,12 @@ export class Graph<I = any, O = any>
     //   type,
     //   pinId
     // )
+
     const pinNodeId = getPinNodeId(unitId, type, pinId)
 
     this._simRemoveBranch(mergeId, type, pinNodeId)
 
-    if (take) {
+    if (take || (type === 'output' && pinId === SELF)) {
       const pin = this._pin[pinNodeId]
 
       const mergeSpec = this.getMergeSpec(mergeId)

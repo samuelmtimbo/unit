@@ -419,3 +419,7 @@ export function revertObj(obj: Dict<string>) {
     })
   )
 }
+
+export function hasKey(obj: Dict<any>, key: string): boolean {
+  return obj[key] !== undefined
+}

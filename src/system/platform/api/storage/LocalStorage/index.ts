@@ -125,15 +125,15 @@ export default class _LocalStorage
     emitter.emit('delete', name, data)
   }
 
-  async pathSet(path: string[], name: string, data: any): Promise<void> {
+  async deepSet(path: string[], data: any): Promise<void> {
     throw new MethodNotImplementedError()
   }
 
-  async pathGet(path: string[], name: string): Promise<any> {
+  async deepGet(path: string[]): Promise<any> {
     throw new MethodNotImplementedError()
   }
 
-  async pathDelete(path: string[], name: string): Promise<void> {
+  async deepDelete(path: string[]): Promise<void> {
     throw new MethodNotImplementedError()
   }
 
