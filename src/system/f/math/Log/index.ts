@@ -1,0 +1,29 @@
+import { Functional } from '../../../../Class/Functional'
+import { System } from '../../../../system'
+import { ID_POW } from '../../../_ids'
+
+export interface I<T> {
+  a: number
+}
+
+export interface O<T> {
+  'log(a)': number
+}
+
+export default class Log<T> extends Functional<I<T>, O<T>> {
+  constructor(system: System) {
+    super(
+      {
+        i: ['a'],
+        o: ['ln(a)'],
+      },
+      {},
+      system,
+      ID_POW
+    )
+  }
+
+  f({ a }: I<T>, done): void {
+    done({ 'ln(a)': Math.log(a) })
+  }
+}
