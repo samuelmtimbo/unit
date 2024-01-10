@@ -44,8 +44,13 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "Recursive Graph Editor",
-    "complexity": 71,
-    "tags": ["platform", "component", "app", "graph"]
+    "complexity": 148,
+    "tags": [
+      "platform",
+      "component",
+      "app",
+      "graph"
+    ]
   },
   "id": "e80c912e-7508-11ea-966b-436805345ff0",
   "base": true,

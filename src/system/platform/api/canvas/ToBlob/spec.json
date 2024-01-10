@@ -8,17 +8,13 @@
     "quality": {
       "type": "number",
       "metadata": {
-        "examples": [
-          "1"
-        ]
+        "examples": ["1"]
       }
     },
     "type": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "'image/png'"
-        ]
+        "examples": ["'image/png'"]
       }
     },
     "done": {
@@ -34,14 +30,10 @@
   },
   "metadata": {
     "icon": "edit-3",
-    "description": "...",
+    "description": "get `blob` from `canvas`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "c9d64ef4-35f6-44e7-a16b-1e4173f951dc",
   "base": true,

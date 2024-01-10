@@ -13,8 +13,11 @@
   "metadata": {
     "icon": "circle",
     "description": "remove unit `id` from `graph`",
-    "complexity": 3,
-    "tags": ["f", "graph"]
+    "complexity": 18,
+    "tags": [
+      "f",
+      "graph"
+    ]
   },
   "id": "c47d84b2-4207-11eb-a064-a3633d64f05d",
   "base": true,

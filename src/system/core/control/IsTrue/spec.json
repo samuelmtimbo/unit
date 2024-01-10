@@ -24,7 +24,7 @@
     }
   },
   "outputs": {
-    "a = false": {
+    "test": {
       "plug": {
         "0": {
           "unitId": "if",

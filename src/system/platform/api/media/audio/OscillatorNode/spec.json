@@ -8,8 +8,9 @@
     "opt": {
       "type": "{frequency?:number,type?:string,detune?:number}",
       "metadata": {
-        "description": "",
-        "examples": ["{type:'sine',frequency:440}"]
+        "examples": [
+          "{type:'sine',frequency:440}"
+        ]
       }
     }
   },
@@ -33,8 +34,15 @@
     "icon": "activity",
     "description": "periodic waveform, such as a sine wave",
     "complexity": 12,
-    "tags": ["platform", "api", "media", "audio"],
-    "globals": ["AudioContext"]
+    "tags": [
+      "platform",
+      "api",
+      "media",
+      "audio"
+    ],
+    "globals": [
+      "AudioContext"
+    ]
   },
   "id": "c2738ec3-72fa-4432-96b9-74abb1a6f26a",
   "base": true,

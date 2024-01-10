@@ -40,7 +40,7 @@
   },
   "metadata": {
     "icon": "filter",
-    "description": "no description",
+    "description": "conditionally filter `a`, `b`, `c` and `d` based on `test`",
     "complexity": 8,
     "tags": [
       "core",

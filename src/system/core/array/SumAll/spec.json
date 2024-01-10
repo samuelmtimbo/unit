@@ -20,7 +20,7 @@
     }
   },
   "merges": {
-    "sstwb": {
+    "0": {
       "reduce": {
         "output": {
           "a[i]": true
@@ -32,7 +32,7 @@
         }
       }
     },
-    "yhgjl": {
+    "1": {
       "reduce": {
         "output": {
           "local": true

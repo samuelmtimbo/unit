@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "rehbd": {
+    "0": {
       "lessthan": {
         "input": {
           "b": true
@@ -43,7 +43,7 @@
     }
   },
   "outputs": {
-    "true": {
+    "test": {
       "plug": {
         "0": {
           "unitId": "lessthan",

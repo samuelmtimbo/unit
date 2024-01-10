@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "lxbvanzk": {
+    "0": {
       "map2": {
         "output": {
           "a[i]": true
@@ -21,7 +21,7 @@
         }
       }
     },
-    "dkllawfhv": {
+    "1": {
       "map2": {
         "output": {
           "b[i]": true
@@ -33,7 +33,7 @@
         }
       }
     },
-    "kynujs": {
+    "2": {
       "multiply": {
         "output": {
           "a × b": true
@@ -48,7 +48,7 @@
   },
   "metadata": {
     "icon": "x",
-    "description": "no description",
+    "description": "build new array by multiply arrays `a` and `b` element by element",
     "complexity": 51,
     "tags": [
       "core",
@@ -82,7 +82,7 @@
       "plug": {
         "0": {
           "unitId": "map2",
-          "pinId": "b"
+          "pinId": "c"
         }
       },
       "type": "number[]"

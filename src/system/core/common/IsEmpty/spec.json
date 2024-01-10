@@ -14,7 +14,7 @@
   "merges": {},
   "metadata": {
     "icon": "question",
-    "description": "no description",
+    "description": "check whether `obj` is empty",
     "complexity": 10,
     "tags": [
       "core",
@@ -33,7 +33,7 @@
     }
   },
   "outputs": {
-    "empty": {
+    "test": {
       "plug": {
         "0": {
           "unitId": "lengthequals",

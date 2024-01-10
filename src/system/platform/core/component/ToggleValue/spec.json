@@ -54,7 +54,7 @@
         }
       }
     },
-    "fewowjo": {
+    "2": {
       "setvalue": {
         "input": {
           "value": true
@@ -68,7 +68,7 @@
     }
   },
   "inputs": {
-    "state": {
+    "obj": {
       "plug": {
         "0": {
           "mergeId": "1"
@@ -90,13 +90,9 @@
   "outputs": {},
   "metadata": {
     "icon": "toggle-left",
-    "description": "...",
+    "description": "toggle `obj` boolean property",
     "complexity": 18,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "dae754da-d773-41b9-bbc8-f72b83b6f03d",
   "type": "`U`&`G`",

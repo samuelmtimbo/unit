@@ -12,7 +12,7 @@
     }
   },
   "merges": {
-    "ixnwjcyy": {
+    "0": {
       "range": {
         "input": {
           "a": true
@@ -24,7 +24,7 @@
         }
       }
     },
-    "dpqjcxzt": {
+    "1": {
       "plan": {
         "output": {
           "1": true

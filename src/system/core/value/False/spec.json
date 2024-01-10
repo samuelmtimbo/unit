@@ -14,7 +14,7 @@
   "merges": {},
   "metadata": {
     "icon": "x-circle",
-    "description": "no description",
+    "description": "output false",
     "complexity": 5,
     "tags": [
       "core",

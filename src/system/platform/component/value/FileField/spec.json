@@ -3,9 +3,6 @@
   "inputs": {
     "style": {
       "type": "object",
-      "metadata": {
-        "description": ""
-      },
       "optional": true
     },
     "opt": {
@@ -16,9 +13,6 @@
   "outputs": {
     "files": {
       "type": "`F`[]",
-      "metadata": {
-        "description": ""
-      },
       "optional": true,
       "ref": true
     }
@@ -26,8 +20,12 @@
   "metadata": {
     "icon": "form-input",
     "description": "single line text input",
-    "complexity": 20,
-    "tags": ["platform", "component", "value"]
+    "complexity": 43,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
   },
   "id": "e2109627-9783-4664-a70c-858fd8c46ea5",
   "base": true,

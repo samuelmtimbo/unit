@@ -343,8 +343,8 @@
   },
   "metadata": {
     "icon": "grab",
-    "description": "...",
-    "complexity": 35,
+    "description": "listen to pointer down, move and up events",
+    "complexity": 23,
     "tags": ["platform", "core", "api", "event"],
     "position": {
       "merge": {

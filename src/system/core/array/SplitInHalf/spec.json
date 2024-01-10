@@ -100,7 +100,7 @@
   },
   "metadata": {
     "icon": "split-half",
-    "description": "...",
+    "description": "split array `a` in half",
     "complexity": 24,
     "tags": [
       "core",

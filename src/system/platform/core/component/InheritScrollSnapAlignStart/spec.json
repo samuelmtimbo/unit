@@ -80,8 +80,8 @@
   },
   "metadata": {
     "icon": null,
-    "description": "",
-    "complexity": 30
+    "description": "style children with scroll-snap-align start",
+    "complexity": 53
   },
   "id": "b62c0058-9183-435f-baae-c51a3ee1855b"
 }

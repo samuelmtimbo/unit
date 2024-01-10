@@ -7,9 +7,6 @@
     },
     "style": {
       "type": "object",
-      "metadata": {
-        "description": ""
-      },
       "optional": true
     }
   },
@@ -17,7 +14,7 @@
   "metadata": {
     "icon": "form-input",
     "description": "single line text input",
-    "complexity": 20,
+    "complexity": 42,
     "tags": [
       "platform",
       "component",

@@ -14,7 +14,7 @@
     }
   },
   "merges": {
-    "uqrhbkeci": {
+    "0": {
       "loop": {
         "input": {
           "next": true
@@ -26,7 +26,7 @@
         }
       }
     },
-    "bauiallzd": {
+    "1": {
       "loop": {
         "output": {
           "current": true
@@ -63,7 +63,7 @@
     "current": {
       "plug": {
         "0": {
-          "mergeId": "bauiallzd"
+          "mergeId": "1"
         }
       },
       "type": "number"

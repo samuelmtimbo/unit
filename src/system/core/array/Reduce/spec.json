@@ -22,7 +22,7 @@
     }
   },
   "merges": {
-    "orbnh": {
+    "0": {
       "foreach": {
         "output": {
           "test": true
@@ -79,7 +79,7 @@
     "test": {
       "plug": {
         "0": {
-          "mergeId": "orbnh"
+          "mergeId": "0"
         }
       },
       "type": "boolean"
@@ -105,7 +105,7 @@
   },
   "metadata": {
     "icon": "brackets",
-    "description": "no description",
+    "description": "accumulatively iterate over array `a` to produce `result`",
     "complexity": 34,
     "tags": [
       "core",

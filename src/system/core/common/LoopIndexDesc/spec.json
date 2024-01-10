@@ -18,7 +18,7 @@
         }
       }
     },
-    "gyyfi": {
+    "lastindex": {
       "id": "f9588979-74e1-477a-8085-594043362fdf"
     }
   },
@@ -53,7 +53,7 @@
           "init": true
         }
       },
-      "gyyfi": {
+      "lastindex": {
         "output": {
           "last": true
         }
@@ -64,7 +64,7 @@
     "a": {
       "plug": {
         "0": {
-          "unitId": "gyyfi",
+          "unitId": "lastindex",
           "pinId": "a"
         }
       },
@@ -92,7 +92,7 @@
   },
   "metadata": {
     "icon": "undo",
-    "description": "...",
+    "description": "loop through array `a` elements in descending order",
     "complexity": 21,
     "tags": [
       "core",

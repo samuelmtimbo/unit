@@ -121,9 +121,12 @@
   },
   "metadata": {
     "icon": "map",
-    "description": "...",
+    "description": "map elements of an array `a` to a new array `b`",
     "complexity": 42,
-    "tags": ["core", "array"]
+    "tags": [
+      "core",
+      "array"
+    ]
   },
   "id": "1c68d1e5-9170-417d-bfc8-fb7f7f12e714",
   "type": "`U`&`G`",

@@ -16,8 +16,14 @@
   "metadata": {
     "icon": "film",
     "complexity": 12,
-    "tags": ["platform", "api", "media"],
-    "globals": ["MediaDevices"],
+    "tags": [
+      "platform",
+      "api",
+      "media"
+    ],
+    "globals": [
+      "MediaDevices"
+    ],
     "href": ""
   },
   "type": "`U`",

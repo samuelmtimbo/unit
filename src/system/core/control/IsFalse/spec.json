@@ -1,7 +1,7 @@
 {
   "name": "is false",
   "units": {
-    "ysyvv": {
+    "ifnot": {
       "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda",
       "input": {
         "a": {
@@ -16,7 +16,7 @@
     "a": {
       "plug": {
         "0": {
-          "unitId": "ysyvv",
+          "unitId": "ifnot",
           "pinId": "b"
         }
       },
@@ -24,10 +24,10 @@
     }
   },
   "outputs": {
-    "a = false": {
+    "test": {
       "plug": {
         "0": {
-          "unitId": "ysyvv",
+          "unitId": "ifnot",
           "pinId": "a if not b"
         }
       },

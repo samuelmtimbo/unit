@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "gnurtgifi": {
+    "0": {
       "wait": {
         "output": {
           "a": true

@@ -14,7 +14,7 @@
   "merges": {},
   "metadata": {
     "icon": "type",
-    "description": "no description",
+    "description": "output english alphabet string",
     "complexity": 5,
     "tags": [
       "core",

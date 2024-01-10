@@ -86,8 +86,8 @@
   "component": {},
   "metadata": {
     "icon": "send",
-    "description": "no description",
-    "complexity": 52,
+    "description": "fetch JSON",
+    "complexity": 16,
     "tags": [
       "platform",
       "core",

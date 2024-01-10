@@ -23,7 +23,11 @@
     "icon": "square",
     "description": "lookup a registered component by `name`",
     "complexity": 3,
-    "tags": ["platform", "api", "component"]
+    "tags": [
+      "platform",
+      "api",
+      "component"
+    ]
   },
   "id": "1ba931d8-0226-4600-9a48-dbb1b17d8d82",
   "type": "`U`",

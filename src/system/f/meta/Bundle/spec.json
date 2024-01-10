@@ -8,7 +8,9 @@
     "opt": {
       "type": "{snapshot?:boolean}",
       "medatata": {
-        "examples": ["{}"]
+        "examples": [
+          "{}"
+        ]
       }
     }
   },
@@ -21,7 +23,10 @@
     "icon": "circle",
     "description": "get `graph` `bundle`",
     "complexity": 3,
-    "tags": ["f", "meta"]
+    "tags": [
+      "f",
+      "meta"
+    ]
   },
   "id": "13d738b9-401d-43c9-852f-e9611545f5bc",
   "base": true,

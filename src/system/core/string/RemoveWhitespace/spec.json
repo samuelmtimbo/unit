@@ -22,7 +22,7 @@
   "merges": {},
   "metadata": {
     "icon": "question",
-    "description": "no description",
+    "description": "remove all string `str` whitespace",
     "complexity": 5,
     "tags": [
       "core",

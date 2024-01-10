@@ -220,12 +220,9 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "description": "...",
+    "description": "build `obj` by getting all `keys` from input `obj`",
     "complexity": 44,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "id": "9daf6128-fd26-11ea-8f82-7374faa69acf",
   "type": "`U`&`G`",

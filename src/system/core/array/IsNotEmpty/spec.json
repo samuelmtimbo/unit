@@ -15,7 +15,7 @@
     "0": {
       "isempty": {
         "output": {
-          "empty": true
+          "test": true
         }
       },
       "not": {
@@ -27,7 +27,7 @@
   },
   "metadata": {
     "icon": "question",
-    "description": "no description",
+    "description": "check whether array `a` is empty",
     "complexity": 15,
     "tags": [
       "core",
@@ -46,7 +46,7 @@
     }
   },
   "outputs": {
-    "!empty": {
+    "test": {
       "plug": {
         "0": {
           "unitId": "not",

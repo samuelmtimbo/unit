@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "lessthanequal": {
         "input": {
           "a": true
@@ -21,7 +21,7 @@
         }
       }
     },
-    "merge1": {
+    "1": {
       "lessthanequal": {
         "input": {
           "b": true
@@ -38,7 +38,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "merge0"
+          "mergeId": "0"
         }
       },
       "type": "number"
@@ -46,7 +46,7 @@
     "b": {
       "plug": {
         "0": {
-          "mergeId": "merge1"
+          "mergeId": "1"
         }
       },
       "type": "number"
@@ -74,7 +74,7 @@
   },
   "metadata": {
     "icon": null,
-    "description": "...",
+    "description": "less than euqal + greater than",
     "complexity": 8,
     "tags": [
       "core",

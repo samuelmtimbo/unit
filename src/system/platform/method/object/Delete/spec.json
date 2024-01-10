@@ -14,7 +14,11 @@
     "icon": "object-set",
     "description": "delete `obj` property `name`",
     "complexity": 3,
-    "tags": ["platform", "method", "object"]
+    "tags": [
+      "platform",
+      "method",
+      "object"
+    ]
   },
   "id": "275af55d-9fcf-4b53-9087-d97455cbe528",
   "base": true,

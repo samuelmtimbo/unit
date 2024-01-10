@@ -20,7 +20,7 @@
     }
   },
   "merges": {
-    "rphjsvj": {
+    "0": {
       "loop": {
         "input": {
           "next": true
@@ -32,7 +32,7 @@
         }
       }
     },
-    "wceujsyeq": {
+    "1": {
       "loop": {
         "output": {
           "current": true
@@ -78,7 +78,7 @@
     "current": {
       "plug": {
         "0": {
-          "mergeId": "wceujsyeq"
+          "mergeId": "1"
         }
       },
       "type": "<A>"

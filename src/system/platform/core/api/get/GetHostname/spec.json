@@ -73,7 +73,7 @@
   },
   "metadata": {
     "icon": "circle",
-    "description": "...",
+    "description": "get hostname `obj` property",
     "complexity": 8,
     "tags": [
       "platform",

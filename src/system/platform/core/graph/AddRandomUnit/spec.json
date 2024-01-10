@@ -2,12 +2,23 @@
   "name": "add random unit",
   "inputs": {
     "graph": {
-      "plug": { "0": { "unitId": "addunit", "pinId": "graph" } },
+      "plug": {
+        "0": {
+          "unitId": "addunit",
+          "pinId": "graph"
+        }
+      },
       "ref": true,
       "type": "`U`"
     },
     "any": {
-      "plug": { "0": { "unitId": "wait", "pinId": "b", "kind": "input" } },
+      "plug": {
+        "0": {
+          "unitId": "wait",
+          "pinId": "b",
+          "kind": "input"
+        }
+      },
       "ref": false
     }
   },
@@ -15,24 +26,54 @@
   "units": {
     "randomclass": {
       "id": "96c788b0-9bc1-11eb-931a-7312c12cb4c3",
-      "input": { "any": {} },
-      "output": { "class": {} },
-      "metadata": { "position": { "x": 138, "y": 26 } }
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "class": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 138,
+          "y": 26
+        }
+      }
     },
     "addunit": {
       "id": "b80d4b5a-40e9-11eb-a2bb-1777d47bf9ae",
       "input": {
-        "graph": { "metadata": { "position": { "x": 67, "y": 72 } } },
+        "graph": {
+          "metadata": {
+            "position": {
+              "x": 67,
+              "y": 72
+            }
+          }
+        },
         "id": {}
       },
       "output": {},
-      "metadata": { "position": { "x": 57, "y": 56 } }
+      "metadata": {
+        "position": {
+          "x": 57,
+          "y": 56
+        }
+      }
     },
     "randomnatural": {
       "id": "9569f78e-18d3-40a3-9373-c56afa0214f6",
-      "input": { "max": {} },
-      "output": { "i": {} },
-      "metadata": { "position": { "x": -65, "y": -34 } }
+      "input": {
+        "max": {}
+      },
+      "output": {
+        "i": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -65,
+          "y": -34
+        }
+      }
     },
     "wait": {
       "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
@@ -40,43 +81,112 @@
         "a": {
           "constant": true,
           "data": "1000000",
-          "metadata": { "position": { "x": -158, "y": -21 } }
+          "metadata": {
+            "position": {
+              "x": -158,
+              "y": -21
+            }
+          }
         },
-        "b": { "metadata": { "position": { "x": -158, "y": -57 } } }
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -158,
+              "y": -57
+            }
+          }
+        }
       },
-      "output": { "a": {} },
-      "metadata": { "position": { "x": -168, "y": -36 } }
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -168,
+          "y": -36
+        }
+      }
     },
     "numbertodecimal": {
       "id": "a6ab9464-303a-48a4-8b5f-0cd515ab7b8f",
-      "input": { "n": {} },
-      "output": { "str": {} },
-      "metadata": { "position": { "x": 38, "y": -12 } }
+      "input": {
+        "n": {}
+      },
+      "output": {
+        "str": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 38,
+          "y": -12
+        }
+      }
     }
   },
   "merges": {
     "0": {
-      "randomclass": { "output": { "class": true } },
-      "addunit": { "input": { "class": true } }
+      "randomclass": {
+        "output": {
+          "class": true
+        }
+      },
+      "addunit": {
+        "input": {
+          "class": true
+        }
+      }
     },
     "1": {
-      "randomclass": { "input": { "any": true } },
-      "addunit": { "input": { "id": true } },
-      "numbertodecimal": { "output": { "str": true } }
+      "randomclass": {
+        "input": {
+          "any": true
+        }
+      },
+      "addunit": {
+        "input": {
+          "id": true
+        }
+      },
+      "numbertodecimal": {
+        "output": {
+          "str": true
+        }
+      }
     },
     "2": {
-      "wait": { "output": { "a": true } },
-      "randomnatural": { "input": { "max": true } }
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "randomnatural": {
+        "input": {
+          "max": true
+        }
+      }
     },
     "3": {
-      "numbertodecimal": { "input": { "n": true } },
-      "randomnatural": { "output": { "i": true } }
+      "numbertodecimal": {
+        "input": {
+          "n": true
+        }
+      },
+      "randomnatural": {
+        "output": {
+          "i": true
+        }
+      }
     }
   },
   "metadata": {
     "icon": null,
-    "description": "",
-    "tags": ["platform", "core", "graph"]
+    "description": "add random unit to `graph`",
+    "tags": [
+      "platform",
+      "core",
+      "graph"
+    ],
+    "complexity": 65
   },
   "id": "ca6c1e54-b482-4fa1-aba9-04568fb59958",
   "type": "`U`&`G`",

@@ -44,7 +44,7 @@
   },
   "metadata": {
     "icon": "alarm-clock",
-    "description": "no description",
+    "description": "output only after stream has stopped for `delay` milliseconds",
     "complexity": 14,
     "tags": [
       "core",

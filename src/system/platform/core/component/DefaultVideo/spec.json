@@ -97,8 +97,8 @@
   },
   "metadata": {
     "icon": "video",
-    "description": "",
-    "complexity": 44,
+    "description": "default video media",
+    "complexity": 62,
     "tags": [
       "platform",
       "core",

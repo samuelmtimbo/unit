@@ -25,8 +25,12 @@
   "metadata": {
     "icon": "timer",
     "description": "animate `element` root style property",
-    "complexity": 3,
-    "tags": ["platform", "api", "animation"]
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "api",
+      "animation"
+    ]
   },
   "id": "1df77a6e-7632-44f0-9878-2aa5e0903928",
   "base": true,

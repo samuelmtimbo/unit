@@ -89,7 +89,7 @@
   },
   "metadata": {
     "icon": "undo",
-    "description": "...",
+    "description": "iterate + wait",
     "complexity": 8,
     "tags": [
       "core",

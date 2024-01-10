@@ -39,7 +39,7 @@
       },
       "isnotempty": {
         "output": {
-          "!empty": true
+          "test": true
         }
       },
       "loop1": {

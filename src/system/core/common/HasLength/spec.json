@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "sxqrd": {
+    "0": {
       "ifelse": {
         "input": {
           "b": true
@@ -21,7 +21,7 @@
         }
       }
     },
-    "diljw": {
+    "1": {
       "ifelse": {
         "input": {
           "a": true
@@ -47,7 +47,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "diljw"
+          "mergeId": "1"
         }
       },
       "type": "<A>[]"

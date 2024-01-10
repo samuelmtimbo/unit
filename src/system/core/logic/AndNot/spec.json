@@ -55,7 +55,7 @@
   },
   "metadata": {
     "icon": null,
-    "description": "...",
+    "description": "AND NOT logical operator",
     "complexity": 8,
     "tags": [
       "core",

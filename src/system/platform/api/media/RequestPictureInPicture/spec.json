@@ -14,17 +14,11 @@
   },
   "outputs": {},
   "metadata": {
-    "complexity": 12,
+    "complexity": 13,
     "icon": "arrow-up-right",
-    "description": "...",
-    "tags": [
-      "platform",
-      "api",
-      "media"
-    ],
-    "globals": [
-      "Video"
-    ]
+    "description": "request picture in picture window for `media`",
+    "tags": ["platform", "api", "media"],
+    "globals": ["Video"]
   },
   "base": true,
   "id": "3889d2f1-a0ed-4e8c-8e75-7a6683224275",

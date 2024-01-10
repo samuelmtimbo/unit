@@ -12,8 +12,12 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "minimalist UI to control a unit graph",
-    "complexity": 28,
-    "tags": ["platform", "component", "app"]
+    "complexity": 58,
+    "tags": [
+      "platform",
+      "component",
+      "app"
+    ]
   },
   "id": "0f043df2-46fc-11eb-ae20-6f1fedd527ba",
   "component": {
@@ -24,5 +28,7 @@
   "type": "`U`&`C`&`V`&`J`",
   "system": true,
   "render": true,
-  "deps": ["6253bf76-2e85-11eb-9f59-3703abfd39c7"]
+  "deps": [
+    "6253bf76-2e85-11eb-9f59-3703abfd39c7"
+  ]
 }

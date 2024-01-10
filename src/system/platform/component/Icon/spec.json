@@ -5,8 +5,9 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "description": "",
-        "examples": ["{}"]
+        "examples": [
+          "{}"
+        ]
       }
     },
     "attr": {
@@ -14,15 +15,20 @@
       "optional": true,
       "defaultIgnored": true,
       "metadata": {
-        "description": "",
-        "examples": ["{}"]
+        "examples": [
+          "{}"
+        ]
       }
     },
     "icon": {
       "type": "string",
       "optional": true,
       "metadata": {
-        "examples": ["\"unit\"", "\"circle\"", "\"square\""]
+        "examples": [
+          "\"unit\"",
+          "\"circle\"",
+          "\"square\""
+        ]
       }
     }
   },
@@ -30,8 +36,11 @@
   "metadata": {
     "icon": "square",
     "description": "icon from the system",
-    "complexity": 22,
-    "tags": ["platform", "component"]
+    "complexity": 47,
+    "tags": [
+      "platform",
+      "component"
+    ]
   },
   "id": "63a417e5-d354-4b39-9ebd-05f55e70de7b",
   "base": true,

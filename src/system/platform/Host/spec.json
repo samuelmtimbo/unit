@@ -5,8 +5,10 @@
   "metadata": {
     "icon": "square",
     "description": "communicate with host system",
-    "complexity": 3,
-    "tags": ["platform"]
+    "complexity": 2,
+    "tags": [
+      "platform"
+    ]
   },
   "id": "738a0ac4-8805-4189-a46c-b7d7fcf63456",
   "base": true,

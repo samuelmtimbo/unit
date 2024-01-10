@@ -43,7 +43,8 @@
   "outputs": {},
   "metadata": {
     "icon": "question",
-    "description": ""
+    "description": "text button",
+    "complexity": 87
   },
   "render": true,
   "component": {
@@ -55,13 +56,17 @@
         "height": 90
       },
       "button": {
-        "children": ["text"],
+        "children": [
+          "text"
+        ],
         "childSlot": {},
         "width": 120,
         "height": 120
       }
     },
-    "children": ["button"],
+    "children": [
+      "button"
+    ],
     "defaultWidth": 180,
     "defaultHeight": 120
   },

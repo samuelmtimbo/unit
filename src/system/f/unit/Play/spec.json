@@ -9,8 +9,7 @@
       "type": "{}"
     }
   },
-  "outputs": {
-  },
+  "outputs": {},
   "metadata": {
     "icon": "play",
     "description": "start unit execution",

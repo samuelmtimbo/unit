@@ -17,7 +17,11 @@
     "icon": "object-set",
     "description": "prevent `name` event from bubbling up",
     "complexity": 3,
-    "tags": ["platform", "method", "object"]
+    "tags": [
+      "platform",
+      "method",
+      "object"
+    ]
   },
   "id": "d0f94e4e-43f4-4c0a-b07e-ca40c82f48f4",
   "base": true,

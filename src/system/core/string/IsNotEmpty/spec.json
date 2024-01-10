@@ -24,7 +24,7 @@
   },
   "metadata": {
     "icon": "question",
-    "description": "no description",
+    "description": "check whether array `a` is not empty",
     "complexity": 13,
     "tags": [
       "core",

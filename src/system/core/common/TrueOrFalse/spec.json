@@ -12,7 +12,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "if0": {
         "input": {
           "a": true,
@@ -25,7 +25,7 @@
         }
       }
     },
-    "merge1": {
+    "1": {
       "not0": {
         "output": {
           "!a": true
@@ -43,7 +43,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "merge0"
+          "mergeId": "0"
         }
       },
       "type": "boolean"

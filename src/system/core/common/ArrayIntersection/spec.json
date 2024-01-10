@@ -33,7 +33,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "id0": {
         "input": {
           "a": true
@@ -45,7 +45,7 @@
         }
       }
     },
-    "merge1": {
+    "1": {
       "wait": {
         "output": {
           "a": true
@@ -72,7 +72,7 @@
         }
       }
     },
-    "merge2": {
+    "2": {
       "id0": {
         "output": {
           "a": true
@@ -94,7 +94,7 @@
         }
       }
     },
-    "merge3": {
+    "3": {
       "lengthequals": {
         "output": {
           "equals": true
@@ -116,7 +116,7 @@
         }
       }
     },
-    "merge4": {
+    "4": {
       "ifnot1": {
         "output": {
           "a if not b": true
@@ -145,7 +145,7 @@
     "n": {
       "plug": {
         "0": {
-          "mergeId": "merge0"
+          "mergeId": "0"
         }
       },
       "type": "number"

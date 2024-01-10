@@ -413,8 +413,8 @@
   },
   "metadata": {
     "icon": null,
-    "description": "",
-    "complexity": 71,
+    "description": "button with icon",
+    "complexity": 96,
     "tags": [
       "platform",
       "component",

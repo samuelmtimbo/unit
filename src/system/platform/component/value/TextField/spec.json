@@ -7,9 +7,6 @@
     },
     "style": {
       "type": "object",
-      "metadata": {
-        "description": ""
-      },
       "optional": true
     },
     "maxLength": {
@@ -28,7 +25,7 @@
   "metadata": {
     "icon": "form-input",
     "description": "single line text input",
-    "complexity": 20,
+    "complexity": 43,
     "tags": [
       "platform",
       "component",

@@ -23,8 +23,14 @@
   "metadata": {
     "icon": "film",
     "complexity": 12,
-    "tags": ["platform", "api", "media"],
-    "globals": ["ImageCapture"]
+    "tags": [
+      "platform",
+      "api",
+      "media"
+    ],
+    "globals": [
+      "ImageCapture"
+    ]
   },
   "type": "`U`",
   "system": true

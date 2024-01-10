@@ -19,7 +19,7 @@
     "0": {
       "lessthanlength": {
         "output": {
-          "true": true
+          "test": true
         }
       },
       "looprepeat": {
@@ -143,7 +143,7 @@
   },
   "metadata": {
     "icon": "array",
-    "description": "...",
+    "description": "output every element of array `a` starting `from` index",
     "complexity": 29,
     "tags": [
       "core",

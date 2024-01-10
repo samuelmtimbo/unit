@@ -81,7 +81,7 @@
   "merges": {},
   "metadata": {
     "icon": "object-set",
-    "description": "...",
+    "description": "set `obj` property `name` to `data`",
     "complexity": 5,
     "tags": [
       "platform",

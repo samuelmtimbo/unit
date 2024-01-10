@@ -42,7 +42,7 @@
   },
   "metadata": {
     "icon": "brackets",
-    "description": "no description",
+    "description": "get all available device descriptions of `kind`",
     "complexity": 87,
     "tags": [
       "platform",

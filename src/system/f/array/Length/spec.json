@@ -12,7 +12,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "size of array",
+    "description": "size of array `a`",
     "complexity": 3,
     "tags": [
       "f",

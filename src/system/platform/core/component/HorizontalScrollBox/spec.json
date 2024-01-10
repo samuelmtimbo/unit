@@ -89,7 +89,7 @@
   },
   "metadata": {
     "icon": "square",
-    "complexity": 50,
+    "complexity": 96,
     "description": "horizontal scroll container",
     "tags": [
       "platform",

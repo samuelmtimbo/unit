@@ -22,7 +22,7 @@
     }
   },
   "merges": {
-    "lmuhl": {
+    "0": {
       "narraybuilder": {
         "input": {
           "a": true
@@ -34,7 +34,7 @@
         }
       }
     },
-    "uzlnv": {
+    "1": {
       "narraybuilder": {
         "input": {
           "n": true
@@ -51,7 +51,7 @@
     "n": {
       "plug": {
         "0": {
-          "mergeId": "uzlnv"
+          "mergeId": "1"
         }
       },
       "metadata": {

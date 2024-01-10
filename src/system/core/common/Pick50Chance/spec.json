@@ -1,60 +1,60 @@
 {
   "name": "pick 50% chance",
   "units": {
-    "kisvs": {
+    "pick": {
       "id": "396497e4-f8e7-4573-95c9-a4f186a5cd05"
     },
-    "iqtjs": {
+    "wait": {
       "id": "ba38b0af-80c0-49e4-9e39-864396964ccc"
     },
-    "iubpagjjj": {
+    "50chance": {
       "id": "6c3c8c8f-e383-46bc-ac0c-a294e65040bb"
     }
   },
   "merges": {
-    "dcdag": {
-      "kisvs": {
+    "0": {
+      "pick": {
         "input": {
           "b": true
         }
       },
-      "iqtjs": {
+      "wait": {
         "input": {
           "b": true
         }
       }
     },
-    "yktkm": {
-      "kisvs": {
+    "1": {
+      "pick": {
         "input": {
           "a": true
         }
       },
-      "iqtjs": {
+      "wait": {
         "input": {
           "a": true
         }
       }
     },
-    "rnnrejbbx": {
-      "kisvs": {
+    "2": {
+      "pick": {
         "input": {
           "c": true
         }
       },
-      "iubpagjjj": {
+      "50chance": {
         "output": {
-          "pass": true
+          "test": true
         }
       }
     },
-    "lcdhaup": {
-      "iqtjs": {
+    "3": {
+      "wait": {
         "output": {
           "a": true
         }
       },
-      "iubpagjjj": {
+      "50chance": {
         "input": {
           "any": true
         }
@@ -62,18 +62,18 @@
     }
   },
   "inputs": {
-    "qszkn": {
+    "a": {
       "plug": {
         "0": {
-          "mergeId": "dcdag"
+          "mergeId": "0"
         }
       },
       "type": "boolean"
     },
-    "vmhay": {
+    "b": {
       "plug": {
         "0": {
-          "mergeId": "yktkm"
+          "mergeId": "1"
         }
       },
       "type": "boolean"
@@ -83,7 +83,7 @@
     "emrwe": {
       "plug": {
         "0": {
-          "unitId": "kisvs",
+          "unitId": "pick",
           "pinId": "a"
         }
       },

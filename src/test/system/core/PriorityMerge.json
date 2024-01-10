@@ -192,7 +192,7 @@
           },
           "isnotempty": {
             "output": {
-              "!empty": true
+              "test": true
             }
           }
         },
@@ -204,7 +204,7 @@
           },
           "isnotempty0": {
             "output": {
-              "!empty": true
+              "test": true
             }
           }
         },

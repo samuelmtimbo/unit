@@ -4,42 +4,42 @@
     "maxlength": {
       "id": "85343b1d-93db-4fc0-8fcf-655739dbd494"
     },
-    "tjrsgp": {
+    "fillbothend": {
       "id": "b94fd858-9fa6-4487-bc2e-87801d3dfcc3"
     }
   },
   "merges": {
-    "cmywa": {
+    "0": {
       "maxlength": {
         "output": {
           "max": true
         }
       },
-      "tjrsgp": {
+      "fillbothend": {
         "input": {
           "n": true
         }
       }
     },
-    "oirwnkg": {
+    "1": {
       "maxlength": {
         "input": {
           "a": true
         }
       },
-      "tjrsgp": {
+      "fillbothend": {
         "input": {
           "a[]": true
         }
       }
     },
-    "wsguc": {
+    "2": {
       "maxlength": {
         "input": {
           "b": true
         }
       },
-      "tjrsgp": {
+      "fillbothend": {
         "input": {
           "b[]": true
         }
@@ -50,7 +50,7 @@
     "with": {
       "plug": {
         "0": {
-          "unitId": "tjrsgp",
+          "unitId": "fillbothend",
           "pinId": "with"
         }
       },
@@ -60,7 +60,7 @@
     "a[]": {
       "plug": {
         "0": {
-          "mergeId": "oirwnkg"
+          "mergeId": "1"
         }
       },
       "functional": true,
@@ -69,7 +69,7 @@
     "b[]": {
       "plug": {
         "0": {
-          "mergeId": "wsguc"
+          "mergeId": "2"
         }
       },
       "functional": true,
@@ -80,7 +80,7 @@
     "length": {
       "plug": {
         "0": {
-          "mergeId": "cmywa"
+          "mergeId": "0"
         }
       },
       "type": "number"
@@ -88,7 +88,7 @@
     "b[]": {
       "plug": {
         "0": {
-          "unitId": "tjrsgp",
+          "unitId": "fillbothend",
           "pinId": "b[]"
         }
       },
@@ -97,7 +97,7 @@
     "a[]": {
       "plug": {
         "0": {
-          "unitId": "tjrsgp",
+          "unitId": "fillbothend",
           "pinId": "a[]"
         }
       },

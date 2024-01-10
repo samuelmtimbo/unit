@@ -192,7 +192,7 @@
   },
   "metadata": {
     "icon": "brackets",
-    "description": "...",
+    "description": "find index `i` of first element in array `a` for which `test` is true",
     "complexity": 61,
     "tags": [
       "core",

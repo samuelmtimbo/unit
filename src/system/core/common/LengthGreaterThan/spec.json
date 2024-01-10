@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "length": {
         "output": {
           "length": true
@@ -43,7 +43,7 @@
     }
   },
   "outputs": {
-    "true": {
+    "test": {
       "plug": {
         "0": {
           "unitId": "greaterthan",
@@ -55,7 +55,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "is the size of `a` greater than `b`?",
+    "description": "check whether the length of `a` greater than `b`",
     "complexity": 8,
     "tags": [
       "core",

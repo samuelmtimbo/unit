@@ -24,7 +24,7 @@
     }
   },
   "merges": {
-    "mpiooer": {
+    "0": {
       "deepmerge": {
         "input": {
           "b": true
@@ -36,7 +36,7 @@
         }
       }
     },
-    "wysaetky": {
+    "1": {
       "deepmerge": {
         "input": {
           "a": true
@@ -51,7 +51,7 @@
   },
   "metadata": {
     "icon": null,
-    "description": "no description",
+    "description": "create object `ab` with values `a` and `b`",
     "complexity": 11,
     "tags": [
       "core",

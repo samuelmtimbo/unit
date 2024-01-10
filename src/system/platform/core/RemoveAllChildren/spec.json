@@ -192,7 +192,7 @@
   "metadata": {
     "icon": "square",
     "description": "remove all `parent` children",
-    "complexity": 19,
+    "complexity": 34,
     "tags": [
       "platform",
       "core",

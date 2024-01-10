@@ -20,7 +20,7 @@
   "metadata": {
     "icon": "square",
     "description": "offscreen iframe document",
-    "complexity": 20,
+    "complexity": 3,
     "tags": [
       "platform",
       "component"

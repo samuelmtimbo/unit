@@ -25,7 +25,9 @@
       "type": "string",
       "functional": true,
       "metadata": {
-        "examples": ["\"image/png\""]
+        "examples": [
+          "\"image/png\""
+        ]
       }
     },
     "canvas": {
@@ -118,8 +120,12 @@
   "metadata": {
     "icon": "download",
     "description": "download full canvas as png",
-    "complexity": 21,
-    "tags": ["platform", "core", "canvas"]
+    "complexity": 16,
+    "tags": [
+      "platform",
+      "core",
+      "canvas"
+    ]
   },
   "id": "1a398694-284e-4d67-a13c-3a929c38b0fc",
   "type": "`U`&`G`"

@@ -50,13 +50,9 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "description": "...",
+    "description": "set `obj` property \"to\" to `value`",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "style"
-    ]
+    "tags": ["platform", "core", "style"]
   },
   "id": "aab4ce68-49a6-4c84-a7f8-87359c453be9",
   "type": "`U`&`G`",

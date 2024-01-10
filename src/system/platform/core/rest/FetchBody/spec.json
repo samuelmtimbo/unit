@@ -30,7 +30,7 @@
   },
   "metadata": {
     "icon": "send",
-    "description": "no description",
+    "description": "fetch + get body",
     "complexity": 8,
     "tags": [
       "platform",

@@ -70,8 +70,8 @@
   },
   "metadata": {
     "icon": null,
-    "description": "",
-    "complexity": 41,
+    "description": "random unit class",
+    "complexity": 51,
     "tags": [
       "core",
       "meta"

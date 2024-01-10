@@ -99,7 +99,7 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "description": "...",
+    "description": "create object with values `x`, `y` and `r`",
     "complexity": 23,
     "tags": [
       "platform",

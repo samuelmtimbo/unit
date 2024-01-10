@@ -26,7 +26,9 @@
         }
       },
       "metadata": {
-        "examples": ["200"],
+        "examples": [
+          "200"
+        ],
         "position": {
           "0": {
             "x": -165,
@@ -44,7 +46,9 @@
         }
       },
       "metadata": {
-        "examples": ["200"],
+        "examples": [
+          "200"
+        ],
         "position": {
           "0": {
             "x": -153,
@@ -472,15 +476,21 @@
         "children": []
       }
     },
-    "children": ["canvas"],
+    "children": [
+      "canvas"
+    ],
     "defaultWidth": 200,
     "defaultHeight": 200
   },
   "metadata": {
     "icon": "chalkboard",
     "description": "drawing board",
-    "complexity": 116,
-    "tags": ["platform", "core", "component"],
+    "complexity": 147,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ],
     "position": {
       "merge": {
         "0": {

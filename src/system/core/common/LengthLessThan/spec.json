@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "length": {
         "output": {
           "length": true
@@ -55,7 +55,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "is the size of `a` lesser than `b`?",
+    "description": "check wether the length of `a` lesser than `b`",
     "complexity": 8,
     "tags": [
       "core",

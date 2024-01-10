@@ -1,7 +1,7 @@
 {
   "name": "tail",
   "units": {
-    "gfcxzqyjq": {
+    "behead": {
       "id": "3e20a18c-60a3-40cd-bbee-f2f9e289b14d",
       "output": {
         "head": {
@@ -13,7 +13,7 @@
   "merges": {},
   "metadata": {
     "icon": "axe",
-    "description": "no description",
+    "description": "output `tail` of string `a`",
     "complexity": 5,
     "tags": [
       "core",
@@ -24,7 +24,7 @@
     "a": {
       "plug": {
         "0": {
-          "unitId": "gfcxzqyjq",
+          "unitId": "behead",
           "pinId": "a"
         }
       },
@@ -35,7 +35,7 @@
     "tail": {
       "plug": {
         "0": {
-          "unitId": "gfcxzqyjq",
+          "unitId": "behead",
           "pinId": "tail"
         }
       },

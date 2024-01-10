@@ -15,7 +15,7 @@
   },
   "metadata": {
     "icon": "percent",
-    "description": "remainder arithmetic operator",
+    "description": "remainder of `a` divided by `b`",
     "complexity": 3,
     "tags": [
       "f",

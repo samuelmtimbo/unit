@@ -47,7 +47,7 @@
     }
   },
   "outputs": {
-    "pass": {
+    "test": {
       "plug": {
         "0": {
           "unitId": "lessthan",

@@ -315,7 +315,11 @@
   "metadata": {
     "icon": "question",
     "description": "create new `obj` by picking `keys` from input `obj`",
-    "tags": ["core", "object"]
+    "tags": [
+      "core",
+      "object"
+    ],
+    "complexity": 46
   },
   "id": "034734a1-719b-41af-845f-ea50a4964d52",
   "component": {}

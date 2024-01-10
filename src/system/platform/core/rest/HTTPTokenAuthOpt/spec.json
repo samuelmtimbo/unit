@@ -51,7 +51,7 @@
   },
   "metadata": {
     "icon": "send",
-    "description": "no description",
+    "description": "build HTTP token auth header options",
     "complexity": 13,
     "tags": [
       "platform",

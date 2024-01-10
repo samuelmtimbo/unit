@@ -63,7 +63,8 @@
   "outputs": {},
   "metadata": {
     "icon": "question",
-    "description": ""
+    "description": "text option",
+    "complexity": 86
   },
   "render": true,
   "component": {

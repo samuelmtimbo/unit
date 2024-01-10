@@ -15,25 +15,33 @@
     "x": {
       "type": "number",
       "metadata": {
-        "examples": ["0"]
+        "examples": [
+          "0"
+        ]
       }
     },
     "y": {
       "type": "number",
       "metadata": {
-        "examples": ["0"]
+        "examples": [
+          "0"
+        ]
       }
     },
     "width": {
       "type": "number",
       "metadata": {
-        "examples": ["100"]
+        "examples": [
+          "100"
+        ]
       }
     },
     "height": {
       "type": "number",
       "metadata": {
-        "examples": ["100"]
+        "examples": [
+          "100"
+        ]
       }
     }
   },
@@ -42,7 +50,11 @@
     "icon": "square",
     "description": "draw an image `bitmap` on `canvas`",
     "complexity": 3,
-    "tags": ["platform", "api", "canvas"]
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
   },
   "id": "82cf909e-a78f-4f3e-b87a-976458c8e15d",
   "base": true,

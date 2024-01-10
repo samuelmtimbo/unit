@@ -6,23 +6,47 @@
       "id": "c8f3faa8-09f4-11eb-a3b1-477aa3ec4193",
       "input": {},
       "output": {},
-      "metadata": { "position": { "x": 206, "y": -26 } }
+      "metadata": {
+        "position": {
+          "x": 206,
+          "y": -26
+        }
+      }
     },
     "set": {
       "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
       "input": {
         "obj": {},
-        "name": { "constant": false },
+        "name": {
+          "constant": false
+        },
         "data": {}
       },
-      "output": { "data": { "ignored": true } },
-      "metadata": { "position": { "x": 152, "y": -47 } }
+      "output": {
+        "data": {
+          "ignored": true
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 152,
+          "y": -47
+        }
+      }
     }
   },
   "merges": {
-    "1": {
-      "set": { "input": { "obj": true } },
-      "localstorage": { "output": { "_self": true } }
+    "0": {
+      "set": {
+        "input": {
+          "obj": true
+        }
+      },
+      "localstorage": {
+        "output": {
+          "_self": true
+        }
+      }
     }
   },
   "inputs": {
@@ -52,7 +76,8 @@
   "outputs": {},
   "metadata": {
     "icon": "object-set",
-    "description": "set local storage property `name` to `data`"
+    "description": "set local storage property `name` to `data`",
+    "complexity": 16
   },
   "id": "26dc57a1-e372-47b0-8d06-1b6cf2056783"
 }

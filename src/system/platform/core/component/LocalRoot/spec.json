@@ -316,15 +316,21 @@
         "children": []
       }
     },
-    "children": ["root"],
+    "children": [
+      "root"
+    ],
     "defaultWidth": 420,
     "defaultHeight": 420
   },
   "metadata": {
     "icon": null,
-    "description": "",
-    "complexity": 49,
-    "tags": ["platform", "core", "component"]
+    "description": "root app local auto-save",
+    "complexity": 481,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
   },
   "id": "e1b6acd3-69cd-4edb-8e3e-6c78ffd28b49",
   "type": "`U`&`G`",

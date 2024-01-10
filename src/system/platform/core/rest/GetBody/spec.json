@@ -14,7 +14,7 @@
   "merges": {},
   "metadata": {
     "icon": "send",
-    "description": "",
+    "description": "get body property",
     "complexity": 5,
     "tags": [
       "platform",

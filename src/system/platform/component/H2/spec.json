@@ -6,7 +6,10 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": ["{}", "{background:'red'}"]
+        "examples": [
+          "{}",
+          "{background:'red'}"
+        ]
       }
     },
     "attr": {
@@ -14,7 +17,11 @@
       "optional": true,
       "defaultIgnored": true,
       "metadata": {
-        "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
+        "examples": [
+          "{tabIndex:1}",
+          "{title:'hello'}",
+          "{draggable:true}"
+        ]
       }
     }
   },
@@ -22,8 +29,11 @@
   "metadata": {
     "icon": "square",
     "description": "HTML h3 heading element",
-    "complexity": 20,
-    "tags": ["platform", "component"]
+    "complexity": 43,
+    "tags": [
+      "platform",
+      "component"
+    ]
   },
   "id": "321f971c-b898-4ca4-9e6e-3d75d68940f7",
   "base": true,

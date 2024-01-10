@@ -4,7 +4,9 @@
     "opt": {
       "type": "{}",
       "metadata": {
-        "examples": ["{}"]
+        "examples": [
+          "{}"
+        ]
       }
     },
     "close": {
@@ -28,8 +30,12 @@
   "metadata": {
     "icon": "link",
     "description": "remote peer graph",
-    "complexity": 9,
-    "tags": ["platform", "meta", "remote"]
+    "complexity": 4,
+    "tags": [
+      "platform",
+      "meta",
+      "remote"
+    ]
   },
   "id": "57bcdd88-a4f4-49ab-92d4-ed1969895520",
   "base": true,

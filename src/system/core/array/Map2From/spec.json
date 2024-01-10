@@ -17,7 +17,7 @@
         }
       }
     },
-    "lgxnwnr": {
+    "arraybuilderfrom": {
       "id": "6db1905f-2343-4c63-97d3-07f4d946ef58",
       "output": {
         "local": {
@@ -30,7 +30,7 @@
     }
   },
   "merges": {
-    "hyjndoefw": {
+    "0": {
       "foreach": {
         "output": {
           "test": true
@@ -113,7 +113,7 @@
   },
   "metadata": {
     "icon": "map",
-    "description": "...",
+    "description": "map elements of arrays `a` and `b` to a new array `c` starting from index `from`",
     "complexity": 40,
     "tags": [
       "core",

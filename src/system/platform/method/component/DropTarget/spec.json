@@ -15,7 +15,11 @@
     "icon": "object-set",
     "description": "make `component` a drag and drop target",
     "complexity": 3,
-    "tags": ["platform", "method", "component"]
+    "tags": [
+      "platform",
+      "method",
+      "component"
+    ]
   },
   "id": "05169310-5447-4cf8-a90f-fda957de4891",
   "base": true,
