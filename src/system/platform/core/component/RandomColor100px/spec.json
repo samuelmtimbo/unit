@@ -12,10 +12,13 @@
   },
   "outputs": {},
   "units": {
-    "randomcolordiv": {
+    "randomcolorbox": {
       "id": "f27cae4e-fea8-11ea-b91e-db41e114c426",
       "input": {
-        "style": {}
+        "style": {},
+        "attr": {
+          "ignored": true
+        }
       },
       "output": {},
       "metadata": {
@@ -52,7 +55,7 @@
           "a": true
         }
       },
-      "randomcolordiv": {
+      "randomcolorbox": {
         "input": {
           "style": true
         }
@@ -66,20 +69,13 @@
   },
   "id": "5f162826-e925-408f-8eb2-7984ef14c420",
   "component": {
-    "slots": [
-      [
-        "randomcolordiv",
-        "default"
-      ]
-    ],
+    "slots": [["randomcolorbox", "default"]],
     "subComponents": {
-      "randomcolordiv": {
+      "randomcolorbox": {
         "children": []
       }
     },
-    "children": [
-      "randomcolordiv"
-    ],
+    "children": ["randomcolorbox"],
     "defaultWidth": 120,
     "defaultHeight": 120
   },
