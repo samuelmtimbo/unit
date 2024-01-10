@@ -30,7 +30,8 @@
           "pinId": "attr",
           "kind": "input"
         }
-      }
+      },
+      "defaultIgnored": true
     }
   },
   "outputs": {},
@@ -135,29 +136,18 @@
     }
   },
   "component": {
-    "slots": [
-      [
-        "box",
-        "default"
-      ]
-    ],
+    "slots": [["box", "default"]],
     "subComponents": {
       "box": {}
     },
-    "children": [
-      "box"
-    ],
+    "children": ["box"],
     "defaultWidth": 120,
     "defaultHeight": 120
   },
   "metadata": {
     "icon": "square",
     "description": "box with a random background color",
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
         "0": {
