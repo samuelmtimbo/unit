@@ -27454,15 +27454,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (is_component) {
       if (animating_sub_component) {
-        this._unplug_sub_component_root_base_frame(unit_id)
-        this._cancel_layout_sub_component_animation(unit_id)
-
-        this._uncollapse_sub_component(unit_id)
-
-        this._cancel_enter_sub_component_animation(unit_id)
-
         const sub_component = this._get_sub_component(unit_id)
 
+        this._unplug_sub_component_root_base_frame(unit_id)
+        this._cancel_layout_sub_component_animation(unit_id)
+        this._uncollapse_sub_component(unit_id)
+        this._cancel_enter_sub_component_animation(unit_id)
         this._unplug_leaf_frame(unit_id, sub_component)
 
         const base = this._get_sub_component_base(unit_id)
@@ -27631,7 +27628,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   sub_component_id
     // )
 
-    this._unplug_sub_component_base_frame(sub_component_id)
+    this._unplug_sub_component_root_base_frame(sub_component_id)
     // this._append_sub_component_all_root(sub_component_id)
     this._append_sub_component_root_base(sub_component_id)
 
@@ -43547,7 +43544,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     graph_id: string
   ): GraphLike => {
     const { specs } = this.$props
-    
+
     const spec = clone(this._get_unit_spec(graph_id)) as GraphSpec
 
     const graph_interface: GraphLike = {
