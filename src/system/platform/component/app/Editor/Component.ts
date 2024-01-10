@@ -41669,6 +41669,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const pointer_track_sample = track
 
           const _is_node_inside = (node_id: string): boolean => {
+            if (!this._is_node_visible(node_id)) {
+              return false
+            }
+
             const node = this.get_node(node_id)
 
             let intersect_count = 0
@@ -45791,8 +45795,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._deselect_node(target_node_id)
     this._deselect_node(new_source_merge_id)
     this._deselect_node(new_target_merge_id)
-
-    this._select_node(new_unit_id)
   }
 
   private _state_set_unit_pin_data(pin_node_id: string, data: string) {
