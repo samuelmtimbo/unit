@@ -1,5 +1,6 @@
 import { $ } from '../Class/$'
 import { ObjectUpdateType } from '../ObjectUpdateType'
+import { InvalidKeyPathError } from '../exception/InvalidKeyPathError'
 import { System } from '../system'
 import { Unlisten } from '../types/Unlisten'
 import { ID } from '../types/interface/ID'
@@ -44,7 +45,7 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
         return this.get(path[0])
       }
 
-      throw new Error('invalid key path')
+      throw new InvalidKeyPathError()
     }
     deepSet(path: string[], data: any): Promise<void> {
       throw new Error('read only')
