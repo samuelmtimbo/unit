@@ -483,8 +483,8 @@ export function rectsBoundingRect(rects: Rect[]): Rect {
 
   let minX = Infinity
   let minY = Infinity
-  let maxX = 0
-  let maxY = 0
+  let maxX = -Infinity
+  let maxY = -Infinity
 
   for (const rect of rects) {
     minX = Math.min(minX, rect.x)
@@ -508,8 +508,8 @@ export function centerRectsBoundingRect(rects: Rect[]): Rect {
 
   let minX = Infinity
   let minY = Infinity
-  let maxX = 0
-  let maxY = 0
+  let maxX = -Infinity
+  let maxY = -Infinity
 
   for (const rect of rects) {
     minX = Math.min(minX, rect.x - rect.width / 2)

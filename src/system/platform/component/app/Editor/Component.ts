@@ -287,7 +287,6 @@ import {
   rectsBoundingRect,
   resizeVector,
   roundPoint,
-  subtractVector,
   surfaceDistance,
   unitVector,
 } from '../../../../../client/util/geometry'
@@ -5318,16 +5317,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _center_graph = () => {
+    const { $width, $height } = this.$context
+
     if (this._node_count === 0) {
       return
     }
 
-    const center = this.get_nodes_bounding_rect_center(this._node)
-    const screen_center = this._world_screen_center()
-
-    const v = subtractVector(screen_center, center)
-
-    const next_zoom = translate(this._zoom, v.x, v.y)
+    const center = this.get_nodes_bounding_rect_center(this._unit_node)
 
     this._zoom_center_at(center.x, center.y)
   }
