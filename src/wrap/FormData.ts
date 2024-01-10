@@ -1,5 +1,7 @@
 import { $ } from '../Class/$'
 import { ObjectUpdateType } from '../ObjectUpdateType'
+import { InvalidKeyPathError } from '../exception/InvalidKeyPathError'
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
 import { Unlisten } from '../types/Unlisten'
 import { FD } from '../types/interface/FD'
@@ -12,40 +14,64 @@ export function wrapFormData(
   const _obj = new (class Object_ extends $ implements J<any>, FD {
     __: string[] = ['J', 'FD']
 
-    get(name: string): Promise<any> {
+    async get(name: string): Promise<any> {
       const data = formData.get(name)
 
       return Promise.resolve(data)
     }
 
-    set(name: string, data: any): Promise<void> {
+    async set(name: string, data: any): Promise<void> {
       formData.set(name, data)
 
       return
     }
 
-    delete(name: string): Promise<void> {
-      throw new Error('Method not implemented.')
+    async delete(name: string): Promise<void> {
+      formData.delete(name)
+
+      return
     }
 
-    hasKey(name: string): Promise<boolean> {
-      throw new Error('Method not implemented.')
+    async hasKey(name: string): Promise<boolean> {
+      return formData.has(name)
     }
 
-    keys(): Promise<string[]> {
-      throw new Error('Method not implemented.')
+    async keys(): Promise<string[]> {
+      const keys = []
+
+      for (const key of formData.keys()) {
+        keys.push(key)
+      }
+
+      return keys
     }
 
     deepGet(path: string[]): Promise<any> {
-      throw new Error('Method not implemented.')
+      if (path.length === 1) {
+        return Promise.resolve(formData.get(path[0]))
+      }
+
+      throw new InvalidKeyPathError()
     }
 
     deepSet(path: string[], data: any): Promise<void> {
-      throw new Error('Method not implemented.')
+      if (path.length === 1) {
+        formData.set(path[0], data)
+
+        return
+      }
+
+      throw new InvalidKeyPathError()
     }
 
     deepDelete(path: string[]): Promise<void> {
-      throw new Error('Method not implemented.')
+      if (path.length === 1) {
+        formData.delete(path[0])
+
+        return
+      }
+
+      throw new InvalidKeyPathError()
     }
 
     subscribe(
@@ -58,7 +84,7 @@ export function wrapFormData(
         data: any
       ) => void
     ): Unlisten {
-      throw new Error('Method not implemented.')
+      throw new MethodNotImplementedError()
     }
 
     raw() {
