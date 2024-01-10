@@ -63,7 +63,7 @@
   },
   "metadata": {
     "icon": "alarm-clock",
-    "description": "...",
+    "description": "output after `ms` milliseconds",
     "complexity": 8,
     "tags": [
       "core",

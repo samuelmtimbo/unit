@@ -17,7 +17,7 @@
       },
       "50chance": {
         "output": {
-          "pass": true
+          "test": true
         }
       }
     },

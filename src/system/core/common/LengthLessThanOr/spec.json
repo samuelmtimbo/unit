@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "length": {
         "output": {
           "length": true

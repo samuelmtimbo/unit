@@ -31,13 +31,13 @@
     }
   },
   "units": {
-    "xptoptcoq": {
+    "isfirst": {
       "id": "fb311fff-521b-4066-b830-81d3a50f0f01",
       "input": {
         "a": {}
       },
       "output": {
-        "first": {}
+        "test": {}
       },
       "metadata": {
         "position": {
@@ -71,9 +71,9 @@
           "b": true
         }
       },
-      "xptoptcoq": {
+      "isfirst": {
         "output": {
-          "first": true
+          "test": true
         }
       }
     },
@@ -83,7 +83,7 @@
           "a": true
         }
       },
-      "xptoptcoq": {
+      "isfirst": {
         "input": {
           "a": true
         }
@@ -92,7 +92,7 @@
   },
   "metadata": {
     "icon": "map-signs",
-    "description": "",
+    "description": "if else + is first",
     "complexity": 26,
     "tags": [
       "core",

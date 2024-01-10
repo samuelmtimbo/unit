@@ -22,7 +22,7 @@
     }
   },
   "merges": {
-    "yhqkcrmnq": {
+    "0": {
       "lengthlessthan": {
         "input": {
           "a": true
@@ -34,7 +34,7 @@
         }
       }
     },
-    "jswlhsl": {
+    "1": {
       "looprepeat": {
         "output": {
           "local": true
@@ -46,7 +46,7 @@
         }
       }
     },
-    "pauzdiil": {
+    "2": {
       "lengthlessthan": {
         "output": {
           "test": true

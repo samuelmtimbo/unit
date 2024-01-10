@@ -39,8 +39,8 @@
     }
   },
   "metadata": {
-    "icon": "circle",
-    "description": "...",
+    "icon": "output 0",
+    "description": "output 0",
     "complexity": 5,
     "tags": [
       "core",

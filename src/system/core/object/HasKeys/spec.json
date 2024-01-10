@@ -133,7 +133,7 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "description": "does `obj` have all `keys`?",
+    "description": "check whether `obj` has all `keys`",
     "complexity": 43,
     "tags": [
       "core",

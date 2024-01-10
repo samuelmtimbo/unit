@@ -66,7 +66,7 @@
   },
   "metadata": {
     "icon": "send",
-    "description": "no description",
+    "description": "build HTTP basic auth header value",
     "complexity": 10,
     "tags": [
       "platform",

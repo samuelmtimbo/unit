@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "kajgjbzz": {
+    "0": {
       "prepend": {
         "input": {
           "a": true
@@ -21,7 +21,7 @@
         }
       }
     },
-    "jlayrqhpi": {
+    "1": {
       "prepend": {
         "output": {
           "a": true
@@ -67,7 +67,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "kajgjbzz"
+          "mergeId": "0"
         }
       },
       "functional": true,

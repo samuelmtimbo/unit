@@ -26,7 +26,10 @@
     "icon": "info-square",
     "description": "`a` element at position `i`",
     "complexity": 3,
-    "tags": ["f", "array"]
+    "tags": [
+      "f",
+      "array"
+    ]
   },
   "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
   "base": true,

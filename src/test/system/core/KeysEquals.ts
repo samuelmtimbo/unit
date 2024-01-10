@@ -21,12 +21,12 @@ false && watchGraphAndLog(keysEquals)
 
 keysEquals.play()
 
-keysEquals.push('a', {})
+keysEquals.push('obj', {})
 keysEquals.push('keys', [])
 assert.equal(keysEquals.take('equals'), true)
 assert.equal(keysEquals.take('equals'), undefined)
 
-keysEquals.push('a', { foo: 'bar' })
+keysEquals.push('obj', { foo: 'bar' })
 keysEquals.push('keys', ['foo'])
 assert.equal(keysEquals.take('equals'), true)
 assert.equal(keysEquals.take('equals'), undefined)

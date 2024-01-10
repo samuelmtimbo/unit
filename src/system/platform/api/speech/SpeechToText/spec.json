@@ -26,7 +26,7 @@
   "metadata": {
     "icon": "mic",
     "description": "transcribe user's microphone speech recording",
-    "complexity": 3,
+    "complexity": 4,
     "tags": [
       "platform",
       "api",

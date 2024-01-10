@@ -71,7 +71,7 @@
   "id": "4f8c249e-9bbf-11eb-b3ff-e3ecdde1acd1",
   "metadata": {
     "icon": null,
-    "description": "",
+    "description": "all system spec ids",
     "complexity": 8,
     "tags": [
       "core",

@@ -18,7 +18,7 @@
   },
   "metadata": {
     "icon": "scissors",
-    "description": "extracts a section of a string",
+    "description": "extracts a section from string `a` from `begin` to `end`",
     "complexity": 3,
     "tags": [
       "f",

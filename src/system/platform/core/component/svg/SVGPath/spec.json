@@ -74,7 +74,8 @@
   "outputs": {},
   "metadata": {
     "icon": "question",
-    "description": ""
+    "description": "SVG path",
+    "complexity": 88
   },
   "render": true,
   "component": {
@@ -84,11 +85,15 @@
         "childSlot": {}
       },
       "svg": {
-        "children": ["path"],
+        "children": [
+          "path"
+        ],
         "childSlot": {}
       }
     },
-    "children": ["svg"],
+    "children": [
+      "svg"
+    ],
     "defaultWidth": 200,
     "defaultHeight": 200
   },

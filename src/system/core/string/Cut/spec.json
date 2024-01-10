@@ -62,7 +62,7 @@
   },
   "metadata": {
     "icon": "scissors",
-    "description": "no description",
+    "description": "split string `a` `at` index",
     "complexity": 9,
     "tags": [
       "core",

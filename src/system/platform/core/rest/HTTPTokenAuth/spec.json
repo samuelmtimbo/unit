@@ -14,7 +14,7 @@
   "merges": {},
   "metadata": {
     "icon": "send",
-    "description": "no description",
+    "description": "build HTTP token auth value",
     "complexity": 5,
     "tags": [
       "platform",

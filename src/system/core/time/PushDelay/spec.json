@@ -68,7 +68,7 @@
   },
   "metadata": {
     "icon": "alarm-clock",
-    "description": "",
+    "description": "memory + delay",
     "complexity": 13,
     "tags": [
       "core",

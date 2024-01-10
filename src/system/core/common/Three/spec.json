@@ -40,9 +40,12 @@
   },
   "metadata": {
     "icon": "dot-circle",
-    "description": "...",
+    "description": "output 3",
     "complexity": 5,
-    "tags": ["core", "common"]
+    "tags": [
+      "core",
+      "common"
+    ]
   },
   "id": "a9405f74-fd5f-4e89-a66e-efe2ef9d6b70",
   "type": "`U`&`G`",

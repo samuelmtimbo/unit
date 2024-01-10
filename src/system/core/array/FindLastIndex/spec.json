@@ -99,7 +99,7 @@
   },
   "metadata": {
     "icon": "brackets",
-    "description": "...",
+    "description": "find index `i` of last element in array `a` for which `test` is true",
     "complexity": 47,
     "tags": [
       "core",

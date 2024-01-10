@@ -69,7 +69,7 @@
     }
   },
   "merges": {
-    "1": {
+    "0": {
       "px": {
         "output": {
           "px": true
@@ -83,42 +83,18 @@
     }
   },
   "metadata": {
-    "description": "...",
+    "description": "create obj with property \"fontSize\" to `n` px",
     "icon": "brackets-curly",
     "complexity": 17,
     "position": {
       "merge": {
-        "1": {
+        "0": {
           "x": 12,
           "y": 4
-        },
-        "2": {
-          "x": 27,
-          "y": 88
-        },
-        "3": {
-          "x": -76,
-          "y": 62
-        },
-        "4": {
-          "x": 96,
-          "y": -46
-        },
-        "5": {
-          "x": -11,
-          "y": -78
-        },
-        "uvpern": {
-          "x": 45,
-          "y": 117
         }
       }
     },
-    "tags": [
-      "platform",
-      "core",
-      "style"
-    ]
+    "tags": ["platform", "core", "style"]
   },
   "id": "06d91634-9aee-11eb-8e48-8bdcd8add0ff",
   "type": "`U`&`G`",

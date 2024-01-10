@@ -6,20 +6,50 @@
       "id": "bb28c9d9-0afd-4ef2-8c5b-41815ea65bf1",
       "input": {
         "a": {},
-        "b": { "constant": true, "data": "\"/\"" },
+        "b": {
+          "constant": true,
+          "data": "\"/\""
+        },
         "c": {}
       },
-      "output": { "abc": {} }
+      "output": {
+        "abc": {}
+      }
     }
   },
   "merges": {},
   "inputs": {
-    "b": { "plug": { "0": { "unitId": "concat3", "pinId": "c" } } },
-    "a": { "plug": { "0": { "unitId": "concat3", "pinId": "a" } } }
+    "b": {
+      "plug": {
+        "0": {
+          "unitId": "concat3",
+          "pinId": "c"
+        }
+      }
+    },
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "concat3",
+          "pinId": "a"
+        }
+      }
+    }
   },
   "outputs": {
-    "ab": { "plug": { "0": { "unitId": "concat3", "pinId": "abc" } } }
+    "ab": {
+      "plug": {
+        "0": {
+          "unitId": "concat3",
+          "pinId": "abc"
+        }
+      }
+    }
   },
-  "metadata": { "icon": "question", "description": "" },
+  "metadata": {
+    "icon": "question",
+    "description": "a + / + b",
+    "complexity": 8
+  },
   "id": "c0418d25-9739-4957-91f5-a835e5d818ec"
 }

@@ -4,63 +4,132 @@
   "units": {
     "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
-      "input": { "obj": {}, "key": {} },
-      "output": { "value": {} }
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "value": {}
+      }
     },
     "map": {
       "id": "1c68d1e5-9170-417d-bfc8-fb7f7f12e714",
-      "input": { "b[i]": {}, "a": {} },
-      "output": { "a[i]": {}, "b": {}, "test": { "ignored": false } }
+      "input": {
+        "b[i]": {},
+        "a": {}
+      },
+      "output": {
+        "a[i]": {},
+        "b": {},
+        "test": {
+          "ignored": false
+        }
+      }
     },
     "looprepeat": {
       "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
-      "input": { "init": {}, "test": {} },
+      "input": {
+        "init": {},
+        "test": {}
+      },
       "output": {
-        "local": { "ignored": true },
+        "local": {
+          "ignored": true
+        },
         "current": {},
-        "final": { "ignored": true }
+        "final": {
+          "ignored": true
+        }
       }
     }
   },
   "merges": {
     "0": {
-      "get": { "input": { "key": true } },
-      "looprepeat": { "output": { "current": true } }
+      "get": {
+        "input": {
+          "key": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
     },
     "1": {
-      "get": { "input": { "obj": true } },
-      "map": { "output": { "a[i]": true } }
+      "get": {
+        "input": {
+          "obj": true
+        }
+      },
+      "map": {
+        "output": {
+          "a[i]": true
+        }
+      }
     },
     "2": {
-      "map": { "output": { "test": true } },
-      "looprepeat": { "input": { "test": true } }
+      "map": {
+        "output": {
+          "test": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
     },
     "3": {
-      "get": { "output": { "value": true } },
-      "map": { "input": { "b[i]": true } }
+      "get": {
+        "output": {
+          "value": true
+        }
+      },
+      "map": {
+        "input": {
+          "b[i]": true
+        }
+      }
     }
   },
   "inputs": {
     "a": {
       "ref": false,
-      "plug": { "0": { "unitId": "map", "pinId": "a" } },
+      "plug": {
+        "0": {
+          "unitId": "map",
+          "pinId": "a"
+        }
+      },
       "functional": true
     },
     "key": {
       "ref": false,
-      "plug": { "0": { "unitId": "looprepeat", "pinId": "init" } },
+      "plug": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init"
+        }
+      },
       "functional": true
     }
   },
   "outputs": {
     "b": {
       "ref": false,
-      "plug": { "0": { "unitId": "map", "pinId": "b" } }
+      "plug": {
+        "0": {
+          "unitId": "map",
+          "pinId": "b"
+        }
+      }
     }
   },
   "metadata": {
     "icon": "question",
-    "description": "map array objects `a` to their `key` values"
+    "description": "map array objects `a` to their `key` values",
+    "complexity": 48
   },
   "id": "bad2ec99-81c0-4a7d-9b3a-562b870c13eb"
 }

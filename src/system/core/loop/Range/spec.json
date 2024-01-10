@@ -34,7 +34,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "looprepeat": {
         "output": {
           "local": true
@@ -46,7 +46,7 @@
         }
       }
     },
-    "merge1": {
+    "1": {
       "loopincrement": {
         "output": {
           "local": true
@@ -58,7 +58,7 @@
         }
       }
     },
-    "merge2": {
+    "2": {
       "lessthan": {
         "output": {
           "a < b": true
@@ -80,7 +80,10 @@
     "icon": "list-ordered",
     "description": "count from `a` to `b`, not inclusive",
     "complexity": 21,
-    "tags": ["core", "loop"]
+    "tags": [
+      "core",
+      "loop"
+    ]
   },
   "inputs": {
     "a": {
@@ -93,7 +96,9 @@
       "functional": true,
       "type": "number",
       "metadata": {
-        "examples": ["0"]
+        "examples": [
+          "0"
+        ]
       }
     },
     "b": {
@@ -106,7 +111,9 @@
       "functional": true,
       "type": "number",
       "metadata": {
-        "examples": ["3"]
+        "examples": [
+          "3"
+        ]
       }
     }
   },
@@ -123,7 +130,7 @@
     "test": {
       "plug": {
         "0": {
-          "mergeId": "merge2"
+          "mergeId": "2"
         }
       },
       "type": "boolean",

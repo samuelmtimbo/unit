@@ -226,9 +226,13 @@
   "component": {},
   "metadata": {
     "icon": "send",
-    "description": "...",
+    "description": "POST url-encoded body",
     "complexity": 14,
-    "tags": ["platform", "core", "rest"],
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ],
     "position": {
       "merge": {
         "0": {

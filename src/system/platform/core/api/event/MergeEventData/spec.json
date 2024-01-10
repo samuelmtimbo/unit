@@ -89,7 +89,7 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "description": "...",
+    "description": "create object with values `event` and `data`",
     "complexity": 15,
     "tags": [
       "platform",

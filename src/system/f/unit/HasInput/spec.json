@@ -19,7 +19,10 @@
     "icon": "object-set",
     "description": "check whether `unit` has input with `name`",
     "complexity": 3,
-    "tags": ["f", "unit"]
+    "tags": [
+      "f",
+      "unit"
+    ]
   },
   "id": "ac5863fc-5156-4a27-a6ce-148dc93f34dd",
   "base": true,

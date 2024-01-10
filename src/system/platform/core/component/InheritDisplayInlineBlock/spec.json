@@ -80,8 +80,8 @@
   },
   "metadata": {
     "icon": null,
-    "description": "",
-    "complexity": 30
+    "description": "style children with display inline block",
+    "complexity": 53
   },
   "id": "e16f9ac0-29c3-4ae7-a2e7-2aa6b98bcc1b"
 }

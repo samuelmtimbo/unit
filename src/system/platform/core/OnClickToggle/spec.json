@@ -114,7 +114,10 @@
     "icon": "square",
     "description": "toggle true/false on click",
     "complexity": 18,
-    "tags": ["platform", "core"]
+    "tags": [
+      "platform",
+      "core"
+    ]
   },
   "id": "9b2bdc7c-eb5d-11ea-bdb1-1760294f446b",
   "type": "`U`&`G`"

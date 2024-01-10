@@ -476,18 +476,28 @@
         "children": []
       },
       "flexrow": {
-        "children": ["box1", "box", "box0"]
+        "children": [
+          "box1",
+          "box",
+          "box0"
+        ]
       }
     },
-    "children": ["flexrow"],
+    "children": [
+      "flexrow"
+    ],
     "defaultWidth": 180,
     "defaultHeight": 270
   },
   "metadata": {
     "icon": null,
-    "description": "",
-    "complexity": 141,
-    "tags": ["platform", "core", "component"]
+    "description": "adjustable vertically split container",
+    "complexity": 156,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
   },
   "id": "01791e01-bfeb-47d0-952a-8dd32a72d1fb",
   "type": "`U`&`G`",

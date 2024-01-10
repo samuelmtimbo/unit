@@ -24,7 +24,7 @@
   },
   "metadata": {
     "icon": "plus",
-    "description": "no description",
+    "description": "concat arrays `a`, `b` and `c`",
     "complexity": 6,
     "tags": [
       "core",

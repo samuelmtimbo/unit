@@ -104,13 +104,16 @@
   "outputs": {},
   "metadata": {
     "icon": "question",
-    "description": ""
+    "description": "SVG text",
+    "complexity": 88
   },
   "render": true,
   "component": {
     "subComponents": {
       "svg": {
-        "children": ["text"],
+        "children": [
+          "text"
+        ],
         "childSlot": {}
       },
       "text": {
@@ -118,7 +121,9 @@
         "childSlot": {}
       }
     },
-    "children": ["svg"],
+    "children": [
+      "svg"
+    ],
     "defaultWidth": 200,
     "defaultHeight": 200
   },

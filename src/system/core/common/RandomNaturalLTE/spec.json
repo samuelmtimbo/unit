@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "mosa": {
+    "0": {
       "randomnaturallt": {
         "input": {
           "max": true

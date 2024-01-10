@@ -27,7 +27,7 @@
         }
       }
     },
-    "mrxes": {
+    "1": {
       "narraybuilder": {
         "input": {
           "n": true
@@ -44,7 +44,7 @@
         }
       }
     },
-    "teris": {
+    "2": {
       "randombitarray": {
         "input": {
           "n": true
@@ -56,7 +56,7 @@
         }
       }
     },
-    "nmfpg": {
+    "3": {
       "repeatn": {
         "input": {
           "a": true
@@ -73,7 +73,7 @@
     "n": {
       "plug": {
         "0": {
-          "mergeId": "mrxes"
+          "mergeId": "1"
         }
       },
       "type": "number"

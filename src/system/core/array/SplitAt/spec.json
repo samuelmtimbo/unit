@@ -101,7 +101,7 @@
   },
   "metadata": {
     "icon": "split",
-    "description": "...",
+    "description": "split array `a` at index `at`",
     "complexity": 11,
     "tags": ["core", "array"]
   },

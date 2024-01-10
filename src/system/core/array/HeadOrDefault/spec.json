@@ -28,7 +28,7 @@
       },
       "isempty": {
         "output": {
-          "empty": true
+          "test": true
         }
       }
     },
@@ -47,7 +47,7 @@
   },
   "metadata": {
     "icon": null,
-    "description": "no description",
+    "description": "head of array or default",
     "complexity": 27,
     "tags": [
       "core",

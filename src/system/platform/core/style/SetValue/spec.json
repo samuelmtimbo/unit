@@ -50,7 +50,7 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "description": "...",
+    "description": "set `obj` property \"value\" to `value`",
     "complexity": 5,
     "tags": ["platform", "core", "style"]
   },

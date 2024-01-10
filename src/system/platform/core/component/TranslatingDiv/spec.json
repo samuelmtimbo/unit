@@ -216,13 +216,13 @@
   },
   "metadata": {
     "icon": null,
-    "description": "no description",
+    "description": "animated `div` example",
     "editor": {
       "on": true,
       "lit": false,
       "edit": false
     },
-    "complexity": 101,
+    "complexity": 124,
     "tags": [
       "platform",
       "core",

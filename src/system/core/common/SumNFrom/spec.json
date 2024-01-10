@@ -26,7 +26,7 @@
     }
   },
   "merges": {
-    "mxhdfwqki": {
+    "0": {
       "loop2": {
         "output": {
           "localb": true
@@ -38,7 +38,7 @@
         }
       }
     },
-    "xaycilon": {
+    "1": {
       "loop2": {
         "input": {
           "test": true
@@ -50,7 +50,7 @@
         }
       }
     },
-    "ilurxqxf": {
+    "2": {
       "loop2": {
         "output": {
           "currentb": true
@@ -62,7 +62,7 @@
         }
       }
     },
-    "yncygfort": {
+    "3": {
       "loop2": {
         "input": {
           "next b": true
@@ -74,7 +74,7 @@
         }
       }
     },
-    "msleufqc": {
+    "4": {
       "loop2": {
         "input": {
           "next a": true
@@ -86,7 +86,7 @@
         }
       }
     },
-    "xlqymzvp": {
+    "5": {
       "loop2": {
         "output": {
           "currenta": true
@@ -101,7 +101,7 @@
   },
   "metadata": {
     "icon": null,
-    "description": "no description",
+    "description": "add `n` next numbers to `from`",
     "complexity": 40,
     "tags": [
       "core",

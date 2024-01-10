@@ -9,7 +9,9 @@
       "type": "`ID`",
       "ref": true,
       "metadata": {
-        "examples": ["1"]
+        "examples": [
+          "1"
+        ]
       }
     },
     "any": {
@@ -18,37 +20,49 @@
     "dx": {
       "type": "number",
       "metadata": {
-        "examples": ["0"]
+        "examples": [
+          "0"
+        ]
       }
     },
     "dy": {
       "type": "number",
       "metadata": {
-        "examples": ["0"]
+        "examples": [
+          "0"
+        ]
       }
     },
     "x": {
       "type": "number",
       "metadata": {
-        "examples": ["0"]
+        "examples": [
+          "0"
+        ]
       }
     },
     "y": {
       "type": "number",
       "metadata": {
-        "examples": ["0"]
+        "examples": [
+          "0"
+        ]
       }
     },
     "width": {
       "type": "number",
       "metadata": {
-        "examples": ["100"]
+        "examples": [
+          "100"
+        ]
       }
     },
     "height": {
       "type": "number",
       "metadata": {
-        "examples": ["100"]
+        "examples": [
+          "100"
+        ]
       }
     }
   },
@@ -60,10 +74,14 @@
   },
   "metadata": {
     "icon": "edit-3",
-    "description": "...",
+    "description": "put `image` data on `canvas`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/putImageData",
     "complexity": 3,
-    "tags": ["platform", "api", "canvas"]
+    "tags": [
+      "platform",
+      "api",
+      "canvas"
+    ]
   },
   "id": "138d16a7-a200-4329-9b4a-17abd24943d4",
   "base": true,

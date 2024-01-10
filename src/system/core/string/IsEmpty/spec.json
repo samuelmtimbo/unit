@@ -30,7 +30,7 @@
   },
   "metadata": {
     "icon": "question",
-    "description": "no description",
+    "description": "check whether array `a` is empty",
     "complexity": 8,
     "tags": [
       "core",

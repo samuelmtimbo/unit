@@ -407,11 +407,11 @@
   },
   "metadata": {
     "icon": null,
-    "description": "no description",
+    "description": "rotating div animation example",
     "editor": {
       "on": true
     },
-    "complexity": 103,
+    "complexity": 126,
     "tags": [
       "platform",
       "core",

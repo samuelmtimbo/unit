@@ -94,7 +94,7 @@
   "component": {},
   "metadata": {
     "icon": "object-set",
-    "description": "set `unit` input `name` to `data`",
+    "description": "write `data` to `unit` input `name`",
     "complexity": 8,
     "tags": [
       "platform",

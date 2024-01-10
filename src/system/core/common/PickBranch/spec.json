@@ -10,7 +10,7 @@
     }
   },
   "merges": {
-    "yeejayjv": {
+    "0": {
       "pick": {
         "input": {
           "c": true
@@ -22,7 +22,7 @@
         }
       }
     },
-    "croouzwck": {
+    "1": {
       "pick": {
         "output": {
           "a": true
@@ -37,7 +37,7 @@
   },
   "metadata": {
     "icon": null,
-    "description": "",
+    "description": "filter `a` or `b` based on `test`",
     "complexity": 17,
     "tags": [
       "core",
@@ -48,7 +48,7 @@
     "test": {
       "plug": {
         "0": {
-          "mergeId": "yeejayjv"
+          "mergeId": "0"
         }
       },
       "type": "boolean"

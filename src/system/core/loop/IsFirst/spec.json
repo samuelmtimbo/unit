@@ -62,7 +62,7 @@
   },
   "metadata": {
     "icon": null,
-    "description": "no description",
+    "description": "check whether this is the first element of stream `a`",
     "complexity": 13,
     "tags": [
       "core",
@@ -81,7 +81,7 @@
     }
   },
   "outputs": {
-    "first": {
+    "test": {
       "plug": {
         "0": {
           "mergeId": "0"

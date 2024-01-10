@@ -28,9 +28,13 @@
   },
   "metadata": {
     "icon": "mic",
-    "description": "",
+    "description": "get default device audio stream",
     "complexity": 14,
-    "tags": ["platform", "core", "media"]
+    "tags": [
+      "platform",
+      "core",
+      "media"
+    ]
   },
   "id": "1b164d72-2c14-4ec2-a1c8-253679a2bf13",
   "type": "`U`&`G`",

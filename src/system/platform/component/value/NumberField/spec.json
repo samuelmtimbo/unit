@@ -9,7 +9,10 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": ["{fontSize:'30px'}", "{}"]
+        "examples": [
+          "{fontSize:'30px'}",
+          "{}"
+        ]
       }
     },
     "min": {
@@ -32,8 +35,12 @@
   "metadata": {
     "icon": "form-input",
     "description": "single line number input",
-    "complexity": 20,
-    "tags": ["platform", "component", "value"]
+    "complexity": 43,
+    "tags": [
+      "platform",
+      "component",
+      "value"
+    ]
   },
   "id": "9bc56564-ef4e-11ea-939a-27ae3feb321e",
   "base": true,

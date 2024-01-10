@@ -77,7 +77,7 @@
     }
   },
   "merges": {
-    "fkbdryh": {
+    "0": {
       "looprepeat": {
         "output": {
           "current": true
@@ -89,7 +89,7 @@
         }
       }
     },
-    "zmaaxfolo": {
+    "1": {
       "looprepeat": {
         "input": {
           "test": true
@@ -106,7 +106,7 @@
         }
       }
     },
-    "bvnpvzh": {
+    "2": {
       "looprepeat0": {
         "input": {
           "init": true
@@ -118,7 +118,7 @@
         }
       }
     },
-    "oddozsvfm": {
+    "3": {
       "range1": {
         "output": {
           "test": true
@@ -130,7 +130,7 @@
         }
       }
     },
-    "yvjfxhanq": {
+    "4": {
       "looprepeat1": {
         "output": {
           "current": true

@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "keys": {
         "output": {
           "keys": true
@@ -23,7 +23,7 @@
     }
   },
   "inputs": {
-    "a": {
+    "obj": {
       "plug": {
         "0": {
           "unitId": "keys",
@@ -55,7 +55,7 @@
   },
   "metadata": {
     "icon": "equal",
-    "description": "does the object have the following keys?",
+    "description": "check whether `obj` has all `keys`",
     "complexity": 8,
     "tags": [
       "core",

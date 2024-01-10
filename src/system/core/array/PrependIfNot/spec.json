@@ -9,7 +9,7 @@
     }
   },
   "merges": {
-    "obgzpvr": {
+    "0": {
       "prependif": {
         "input": {
           "test": true

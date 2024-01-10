@@ -39,7 +39,7 @@
     }
   },
   "merges": {
-    "hyjndoefw": {
+    "0": {
       "foreach": {
         "output": {
           "test": true
@@ -51,7 +51,7 @@
         }
       }
     },
-    "kllyjc": {
+    "1": {
       "wait2": {
         "input": {
           "c": true
@@ -63,7 +63,7 @@
         }
       }
     },
-    "yknwpbete": {
+    "2": {
       "arraybuilderfrom": {
         "input": {
           "init": true
@@ -75,7 +75,7 @@
         }
       }
     },
-    "vlntyntal": {
+    "3": {
       "foreach": {
         "input": {
           "a": true
@@ -92,7 +92,7 @@
     "b": {
       "plug": {
         "0": {
-          "mergeId": "kllyjc"
+          "mergeId": "1"
         }
       },
       "functional": true,
@@ -110,7 +110,7 @@
     "a": {
       "plug": {
         "0": {
-          "mergeId": "vlntyntal"
+          "mergeId": "3"
         }
       },
       "functional": true,
@@ -127,7 +127,7 @@
       },
       "type": "<B>"
     },
-    "b": {
+    "c": {
       "plug": {
         "0": {
           "unitId": "arraybuilderfrom",
@@ -148,7 +148,7 @@
   },
   "metadata": {
     "icon": "map",
-    "description": "...",
+    "description": "map elements of arrays `a` and `b` to a new array `c`",
     "complexity": 46,
     "tags": [
       "core",

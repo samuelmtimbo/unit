@@ -24,9 +24,12 @@
   "merges": {},
   "metadata": {
     "icon": "string",
-    "description": "output an empty object",
+    "description": "output an empty string",
     "complexity": 5,
-    "tags": ["core", "object"]
+    "tags": [
+      "core",
+      "object"
+    ]
   },
   "inputs": {
     "any": {

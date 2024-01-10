@@ -8,8 +8,9 @@
     "opt": {
       "type": "{}",
       "metadata": {
-        "description": "",
-        "examples": ["{}"]
+        "examples": [
+          "{}"
+        ]
       }
     },
     "stream": {
@@ -27,8 +28,15 @@
     "icon": "activity",
     "description": "periodic waveform, such as a sine wave",
     "complexity": 12,
-    "tags": ["platform", "api", "media", "audio"],
-    "globals": ["AudioContext"]
+    "tags": [
+      "platform",
+      "api",
+      "media",
+      "audio"
+    ],
+    "globals": [
+      "AudioContext"
+    ]
   },
   "id": "31408be3-cc2a-490a-b0d1-96e0028ca68e",
   "base": true,

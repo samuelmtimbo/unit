@@ -2,53 +2,113 @@
   "name": "IO",
   "inputs": {
     "disabled": {
-      "plug": { "0": { "unitId": "app", "pinId": "disabled" } },
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "disabled"
+        }
+      },
       "type": "boolean",
       "metadata": {
         "position": {
-          "0": { "x": -435, "y": -53 },
-          "1": { "x": 250, "y": -164 }
+          "0": {
+            "x": -435,
+            "y": -53
+          },
+          "1": {
+            "x": 250,
+            "y": -164
+          }
         }
       }
     },
     "style": {
       "plug": {
-        "0": { "unitId": "app", "pinId": "style" },
-        "2": { "unitId": "propifhaskey", "pinId": "obj" }
+        "0": {
+          "unitId": "app",
+          "pinId": "style"
+        },
+        "2": {
+          "unitId": "propifhaskey",
+          "pinId": "obj"
+        }
       },
       "type": "object",
       "metadata": {
         "position": {
-          "0": { "x": 248, "y": 77 },
-          "1": { "x": -419, "y": -9 }
+          "0": {
+            "x": 248,
+            "y": 77
+          },
+          "1": {
+            "x": -419,
+            "y": -9
+          }
         }
       }
     },
     "graph": {
-      "plug": { "0": { "unitId": "app", "pinId": "graph" } },
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "graph"
+        }
+      },
       "type": "`G`",
       "ref": true,
-      "metadata": { "position": { "0": { "x": -437, "y": -89 } } }
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -437,
+            "y": -89
+          }
+        }
+      }
     },
     "fullwindow": {
-      "plug": { "0": { "unitId": "app", "pinId": "fullwindow" } },
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "fullwindow"
+        }
+      },
       "type": "boolean",
       "metadata": {
-        "position": { "0": { "x": -389, "y": -134 } }
+        "position": {
+          "0": {
+            "x": -389,
+            "y": -134
+          }
+        }
       }
     },
     "frame": {
-      "plug": { "0": { "unitId": "app", "pinId": "frame" } },
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "frame"
+        }
+      },
       "ref": true,
       "type": "`U`",
       "metadata": {
-        "position": { "0": { "x": -419, "y": -169 } }
+        "position": {
+          "0": {
+            "x": -419,
+            "y": -169
+          }
+        }
       }
     }
   },
   "outputs": {
     "graph": {
-      "plug": { "0": { "unitId": "app", "pinId": "graph" } },
+      "plug": {
+        "0": {
+          "unitId": "app",
+          "pinId": "graph"
+        }
+      },
       "ref": true,
       "type": "`U`&`G`",
       "defaultIgnored": true
@@ -122,7 +182,12 @@
       "input": {
         "style": {
           "constant": false,
-          "metadata": { "position": { "x": 88, "y": 474 } }
+          "metadata": {
+            "position": {
+              "x": 88,
+              "y": 474
+            }
+          }
         },
         "pathStyle": {
           "metadata": {
@@ -201,7 +266,9 @@
           }
         }
       },
-      "output": { "a": {} },
+      "output": {
+        "a": {}
+      },
       "metadata": {
         "position": {
           "x": -63.78741231550606,
@@ -211,8 +278,12 @@
     },
     "tagcolor": {
       "id": "dfba14dd-bd14-4fd2-bbfa-c910eadd9f7d",
-      "input": { "color": {} },
-      "output": { "{color}": {} },
+      "input": {
+        "color": {}
+      },
+      "output": {
+        "{color}": {}
+      },
       "metadata": {
         "position": {
           "x": -167.78523908533958,
@@ -223,32 +294,73 @@
   },
   "merges": {
     "5": {
-      "tagcolor": { "input": { "color": true } },
-      "propifhaskey": { "output": { "value": true } }
+      "tagcolor": {
+        "input": {
+          "color": true
+        }
+      },
+      "propifhaskey": {
+        "output": {
+          "value": true
+        }
+      }
     },
     "6": {
-      "tagcolor": { "output": { "{color}": true } },
-      "mergedefault": { "input": { "a": true } }
+      "tagcolor": {
+        "output": {
+          "{color}": true
+        }
+      },
+      "mergedefault": {
+        "input": {
+          "a": true
+        }
+      }
     },
     "7": {
-      "mergedefault": { "output": { "a": true } },
-      "logo": { "input": { "style": true } }
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "logo": {
+        "input": {
+          "style": true
+        }
+      }
     }
   },
   "render": true,
   "component": {
     "subComponents": {
       "app": {
-        "children": ["logo"],
-        "childSlot": { "logo": "1" }
+        "children": [
+          "logo"
+        ],
+        "childSlot": {
+          "logo": "1"
+        }
       },
-      "logo": { "children": [] }
+      "logo": {
+        "children": []
+      }
     },
-    "children": ["app"],
+    "children": [
+      "app"
+    ],
     "slots": [
-      ["app", "default"],
-      ["app", "1"],
-      ["app", "2"]
+      [
+        "app",
+        "default"
+      ],
+      [
+        "app",
+        "1"
+      ],
+      [
+        "app",
+        "2"
+      ]
     ],
     "defaultWidth": 360,
     "defaultHeight": 360
@@ -256,15 +368,32 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "app + logo",
-    "tags": ["platform", "core", "component"],
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ],
     "position": {
       "merge": {
-        "0": { "x": 165, "y": -7 },
-        "1": { "x": 165, "y": -86 },
-        "2": { "x": 230, "y": -102 },
-        "3": { "x": 229, "y": 14 }
+        "0": {
+          "x": 165,
+          "y": -7
+        },
+        "1": {
+          "x": 165,
+          "y": -86
+        },
+        "2": {
+          "x": 230,
+          "y": -102
+        },
+        "3": {
+          "x": 229,
+          "y": 14
+        }
       }
-    }
+    },
+    "complexity": 328
   },
   "id": "6f267de2-b02c-11ea-b55c-db553f4c6c45"
 }

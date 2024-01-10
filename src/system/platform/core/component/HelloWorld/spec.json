@@ -84,7 +84,7 @@
   "metadata": {
     "description": "text box saying 'hello world'",
     "icon": "sign",
-    "complexity": 55,
+    "complexity": 100,
     "position": {},
     "tags": [
       "platform",

@@ -8,8 +8,9 @@
     "opt": {
       "type": "{fftSize?:number,frequencyBinCount?:number,minDecibels?:number,maxDecibels?:number,smoothingTimeConstant?:number}",
       "metadata": {
-        "description": "",
-        "examples": ["{fftSize:2048}"]
+        "examples": [
+          "{fftSize:2048}"
+        ]
       }
     }
   },
@@ -23,8 +24,15 @@
     "icon": "activity",
     "description": "provide real-time frequency and time-domain analysis information from input `node`",
     "complexity": 12,
-    "tags": ["platform", "api", "media", "audio"],
-    "globals": ["AudioAnalyser"]
+    "tags": [
+      "platform",
+      "api",
+      "media",
+      "audio"
+    ],
+    "globals": [
+      "AudioAnalyser"
+    ]
   },
   "id": "210632fc-f85b-4f13-a2a9-f689ff85da78",
   "base": true,

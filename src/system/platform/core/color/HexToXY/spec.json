@@ -1,21 +1,21 @@
 {
   "name": "hex to xy",
   "units": {
-    "umzakg": {
+    "hextorgb": {
       "id": "653279dc-893d-4627-854e-d110aece0b72"
     },
-    "jrovawnjv": {
+    "rgbtoxy": {
       "id": "23cae4c7-b88c-4004-865f-e618bfb0c63f"
     }
   },
   "merges": {
-    "uvlsnnmat": {
-      "umzakg": {
+    "0": {
+      "hextorgb": {
         "output": {
           "RGB": true
         }
       },
-      "jrovawnjv": {
+      "rgbtoxy": {
         "input": {
           "RGB": true
         }
@@ -24,7 +24,7 @@
   },
   "metadata": {
     "icon": "palette",
-    "description": "no description",
+    "description": "convert hex color to xyz",
     "complexity": 148,
     "tags": [
       "platform",
@@ -36,7 +36,7 @@
     "hex": {
       "plug": {
         "0": {
-          "unitId": "umzakg",
+          "unitId": "hextorgb",
           "pinId": "hex"
         }
       },
@@ -47,7 +47,7 @@
     "xy": {
       "plug": {
         "0": {
-          "unitId": "jrovawnjv",
+          "unitId": "rgbtoxy",
           "pinId": "XY"
         }
       },

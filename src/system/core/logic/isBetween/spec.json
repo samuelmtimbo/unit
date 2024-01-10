@@ -26,7 +26,7 @@
     }
   },
   "outputs": {
-    "a ≤ b < c": {
+    "test": {
       "plug": {
         "0": {
           "unitId": "and",

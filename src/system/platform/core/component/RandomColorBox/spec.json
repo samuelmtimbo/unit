@@ -135,18 +135,29 @@
     }
   },
   "component": {
-    "slots": [["box", "default"]],
+    "slots": [
+      [
+        "box",
+        "default"
+      ]
+    ],
     "subComponents": {
       "box": {}
     },
-    "children": ["box"],
+    "children": [
+      "box"
+    ],
     "defaultWidth": 120,
     "defaultHeight": 120
   },
   "metadata": {
     "icon": "square",
     "description": "box with a random background color",
-    "tags": ["platform", "core", "component"],
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ],
     "position": {
       "merge": {
         "0": {
@@ -158,7 +169,8 @@
           "y": 2
         }
       }
-    }
+    },
+    "complexity": 114
   },
   "id": "f27cae4e-fea8-11ea-b91e-db41e114c426",
   "type": "`U`&`C`&`G`&`V`&`J`",

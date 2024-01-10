@@ -77,18 +77,29 @@
   },
   "metadata": {
     "icon": "video",
-    "description": "",
-    "complexity": 47,
-    "tags": ["platform", "core", "component"]
+    "description": "default user media",
+    "complexity": 70,
+    "tags": [
+      "platform",
+      "core",
+      "component"
+    ]
   },
   "component": {
-    "slots": [["defaultvideo", "default"]],
+    "slots": [
+      [
+        "defaultvideo",
+        "default"
+      ]
+    ],
     "subComponents": {
       "defaultvideo": {
         "children": []
       }
     },
-    "children": ["defaultvideo"],
+    "children": [
+      "defaultvideo"
+    ],
     "defaultWidth": 260,
     "defaultHeight": 195
   },

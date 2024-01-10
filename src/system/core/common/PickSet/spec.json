@@ -39,7 +39,7 @@
     }
   },
   "inputs": {
-    "c": {
+    "test": {
       "plug": {
         "0": {
           "unitId": "pick",
@@ -98,12 +98,9 @@
   },
   "metadata": {
     "icon": "brackets-curly",
-    "description": "...",
+    "description": "conditionally set `obj` property `key` to `a` or `b` based on `test`",
     "complexity": 16,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "9a85acf3-c40b-4e82-b04c-68c3dd1b0d4b",
   "type": "`U`&`G`",

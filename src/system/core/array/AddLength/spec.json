@@ -12,7 +12,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "length0": {
         "output": {
           "length": true
@@ -24,7 +24,7 @@
         }
       }
     },
-    "merge1": {
+    "1": {
       "length1": {
         "output": {
           "length": true
@@ -70,7 +70,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "...",
+    "description": "add arrays `a` and `b` lengths",
     "complexity": 9,
     "tags": [
       "core",

@@ -4,15 +4,32 @@
   "units": {
     "text0": {
       "id": "87f99b85-1c24-4e5b-a903-dd27230f4092",
-      "input": { "value": {} },
+      "input": {
+        "value": {}
+      },
       "output": {},
-      "metadata": { "position": { "x": 104, "y": 50 } }
+      "metadata": {
+        "position": {
+          "x": 104,
+          "y": 50
+        }
+      }
     },
     "paragraph": {
       "id": "2a5ad480-9d38-4918-8774-41fac7b54203",
-      "input": { "style": {}, "attr": { "ignored": true } },
+      "input": {
+        "style": {},
+        "attr": {
+          "ignored": true
+        }
+      },
       "output": {},
-      "metadata": { "position": { "x": -105, "y": -51 } }
+      "metadata": {
+        "position": {
+          "x": -105,
+          "y": -51
+        }
+      }
     }
   },
   "merges": {},
@@ -39,7 +56,11 @@
     }
   },
   "outputs": {},
-  "metadata": { "icon": "question", "description": "" },
+  "metadata": {
+    "icon": "question",
+    "description": "text paragraph",
+    "complexity": 87
+  },
   "render": true,
   "component": {
     "subComponents": {
@@ -50,13 +71,17 @@
         "height": 90
       },
       "paragraph": {
-        "children": ["text0"],
+        "children": [
+          "text0"
+        ],
         "childSlot": {},
         "width": 120,
         "height": 120
       }
     },
-    "children": ["paragraph"],
+    "children": [
+      "paragraph"
+    ],
     "defaultWidth": 180,
     "defaultHeight": 120
   },

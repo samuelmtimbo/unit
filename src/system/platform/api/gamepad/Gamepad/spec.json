@@ -24,7 +24,7 @@
   "metadata": {
     "icon": "gamepad",
     "description": "connect to gamepad controller",
-    "complexity": 3,
+    "complexity": 4,
     "tags": [
       "platform",
       "api",

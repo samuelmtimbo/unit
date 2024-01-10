@@ -1,7 +1,7 @@
 {
-  "name": "split ab",
+  "name": "get a b",
   "units": {
-    "puuzwlxil": {
+    "get": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "key": {
@@ -10,7 +10,7 @@
         }
       }
     },
-    "vomxk": {
+    "get0": {
       "id": "9414421d-3376-4438-aa03-7afcd860972c",
       "input": {
         "key": {
@@ -21,13 +21,13 @@
     }
   },
   "merges": {
-    "wygllzbvi": {
-      "vomxk": {
+    "0": {
+      "get0": {
         "input": {
           "obj": true
         }
       },
-      "puuzwlxil": {
+      "get": {
         "input": {
           "obj": true
         }
@@ -36,7 +36,7 @@
   },
   "metadata": {
     "icon": null,
-    "description": "no description",
+    "description": "get `a` and `b` from object `ab`",
     "complexity": 6,
     "tags": [
       "core",
@@ -47,7 +47,7 @@
     "ab": {
       "plug": {
         "0": {
-          "mergeId": "wygllzbvi"
+          "mergeId": "0"
         }
       },
       "type": "object"
@@ -57,7 +57,7 @@
     "a": {
       "plug": {
         "0": {
-          "unitId": "puuzwlxil",
+          "unitId": "get",
           "pinId": "value"
         }
       },
@@ -66,7 +66,7 @@
     "b": {
       "plug": {
         "0": {
-          "unitId": "vomxk",
+          "unitId": "get0",
           "pinId": "value"
         }
       },

@@ -12,7 +12,7 @@
     }
   },
   "merges": {
-    "rsmsjsodm": {
+    "0": {
       "if": {
         "input": {
           "b": true
@@ -32,7 +32,7 @@
   },
   "metadata": {
     "icon": "filter",
-    "description": "no description",
+    "description": "conditionally filter `a`, `b` and `c` based on `test`",
     "complexity": 7,
     "tags": [
       "core",
@@ -70,7 +70,7 @@
     "test": {
       "plug": {
         "0": {
-          "mergeId": "rsmsjsodm"
+          "mergeId": "0"
         }
       },
       "type": "boolean"

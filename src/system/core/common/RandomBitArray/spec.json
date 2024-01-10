@@ -35,7 +35,7 @@
     }
   },
   "merges": {
-    "etjbu": {
+    "0": {
       "randombit": {
         "input": {
           "any": true
@@ -47,7 +47,7 @@
         }
       }
     },
-    "mxzbr": {
+    "1": {
       "narraybuilder": {
         "input": {
           "a": true
@@ -59,7 +59,7 @@
         }
       }
     },
-    "fulew": {
+    "2": {
       "range": {
         "input": {
           "b": true
@@ -76,7 +76,7 @@
     "n": {
       "plug": {
         "0": {
-          "mergeId": "fulew"
+          "mergeId": "2"
         }
       },
       "type": "number"

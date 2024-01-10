@@ -36,7 +36,7 @@
       },
       "lengthgreaterthan": {
         "output": {
-          "true": true
+          "test": true
         }
       }
     },
@@ -103,7 +103,7 @@
   },
   "metadata": {
     "icon": "brackets",
-    "description": "no description",
+    "description": "get array `a` element at position `at` or `d` if not present",
     "complexity": 23,
     "tags": [
       "core",

@@ -180,8 +180,11 @@
   },
   "metadata": {
     "icon": "question",
-    "description": "",
-    "tags": ["core", "common"],
+    "description": "filter `a` based on `b` and `c` equality",
+    "tags": [
+      "core",
+      "common"
+    ],
     "position": {
       "merge": {
         "0": {
@@ -197,7 +200,8 @@
           "y": 26.548630527374655
         }
       }
-    }
+    },
+    "complexity": 9
   },
   "id": "8a3e15c3-aa92-483b-9408-ef549f2b7dc0",
   "system": true

@@ -59,8 +59,8 @@
   },
   "metadata": {
     "icon": "alarm-clock",
-    "description": "no description",
-    "complexity": 14,
+    "description": "output element from stream every `ms` milliseconds",
+    "complexity": 12,
     "tags": [
       "core",
       "time"

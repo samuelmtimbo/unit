@@ -15,7 +15,7 @@
   },
   "metadata": {
     "icon": "divide",
-    "description": "division arithmetic operator",
+    "description": "divide `a` by `b`",
     "complexity": 3,
     "tags": [
       "f",

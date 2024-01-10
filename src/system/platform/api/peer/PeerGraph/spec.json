@@ -30,7 +30,7 @@
   "metadata": {
     "icon": "link",
     "description": "remote peer graph",
-    "complexity": 9,
+    "complexity": 19,
     "tags": [
       "platform",
       "api",

@@ -41,7 +41,12 @@
     "icon": "square",
     "description": "listen to `element` dragend event",
     "complexity": 5,
-    "tags": ["platform", "core", "api", "event"]
+    "tags": [
+      "platform",
+      "core",
+      "api",
+      "event"
+    ]
   },
   "id": "d0972c71-45a8-4a01-8bf1-9ed588c13493",
   "type": "`U`&`G`",

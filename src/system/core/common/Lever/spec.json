@@ -12,7 +12,7 @@
     }
   },
   "merges": {
-    "merge0": {
+    "0": {
       "trueorfalse": {
         "output": {
           "a = true": true
@@ -24,7 +24,7 @@
         }
       }
     },
-    "merge1": {
+    "1": {
       "trueorfalse": {
         "output": {
           "a = false": true
@@ -90,6 +90,7 @@
   },
   "metadata": {
     "icon": "map-signs",
+    "description": "pick `a` or `b` based on `test`, but do not consume the other",
     "complexity": 15,
     "tags": [
       "core",

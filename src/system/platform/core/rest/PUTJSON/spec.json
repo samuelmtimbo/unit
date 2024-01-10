@@ -115,9 +115,13 @@
   },
   "metadata": {
     "icon": "send",
-    "description": "...",
+    "description": "PUT JSON body",
     "complexity": 14,
-    "tags": ["platform", "core", "rest"]
+    "tags": [
+      "platform",
+      "core",
+      "rest"
+    ]
   },
   "id": "3698d7af-8d4c-40f6-bcfa-222d9efb0940",
   "type": "`U`&`G`",

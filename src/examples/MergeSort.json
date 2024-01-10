@@ -172,7 +172,7 @@
     },
     "metadata": {
       "icon": "list-ordered",
-      "description": "sort a number array using the Merge Sort Algorithm",
+      "description": "sort a number array using the Merge Sort algorithm",
       "complexity": 118,
       "tags": ["core", "common"]
     },
@@ -372,7 +372,7 @@
           },
           "isnotempty": {
             "output": {
-              "!empty": true
+              "test": true
             }
           }
         },
@@ -384,7 +384,7 @@
           },
           "isnotempty0": {
             "output": {
-              "!empty": true
+              "test": true
             }
           }
         },

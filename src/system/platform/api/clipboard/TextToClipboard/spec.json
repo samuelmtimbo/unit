@@ -8,7 +8,7 @@
   "outputs": {},
   "metadata": {
     "icon": "clipboard",
-    "description": "",
+    "description": "copy `text` to clipboard",
     "complexity": 3,
     "tags": [
       "platform",

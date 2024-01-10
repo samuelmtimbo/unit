@@ -30,7 +30,7 @@
   },
   "metadata": {
     "icon": "arrow-right",
-    "description": "no description",
+    "description": "parse response `res` body into JSON",
     "complexity": 8,
     "tags": [
       "platform",
