@@ -7,7 +7,7 @@ import { Dict } from '../types/Dict'
 import { GraphMergeSpec } from '../types/GraphMergeSpec'
 import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
-import { IOOf } from '../types/IOOf'
+import { IOOf, io } from '../types/IOOf'
 import { clone, isEmptyObject, mapObjVK, pathOrDefault } from '../util/object'
 import { emptyIO } from './emptyIO'
 import {
@@ -25,6 +25,7 @@ import {
   extractGenerics,
   findGenerics,
   getTree,
+  isGeneric,
 } from './parser'
 import { findFirstMergePin, forEachPinOnMerge } from './util/spec'
 
@@ -601,22 +602,6 @@ export const _getGraphTypeMap = (
       set_exposed_equivalence('output', outputId, set_equivalent)
     })
 
-    function reduceEquivalence(equivalence_set: Set<string>) {}
-
-    const reduced_equivalence = equivalence.map((equivalence_set) => {
-      let theMostSpecific = undefined
-
-      for (const t of equivalence_set) {
-        if (theMostSpecific === undefined) {
-          theMostSpecific = t
-        } else {
-          theMostSpecific = mostSpecific(theMostSpecific, t)
-        }
-      }
-
-      return theMostSpecific as string
-    })
-
     const specific = equivalence.map((equivalence_set) => {
       let theMostSpecific = undefined
 
@@ -651,25 +636,27 @@ export const _getGraphTypeMap = (
 
             substitution = mostSpecific(extract, prev_substitution)
 
-            if (substitution !== extract) {
-              for (const g in generic_to_substitute) {
-                generic_to_substitute[g] = applyGenerics(
-                  generic_to_substitute[g],
-                  {
-                    [extract]: substitution,
-                  }
-                )
+            if (!isGeneric(substitution)) {
+              if (substitution !== extract) {
+                for (const g in generic_to_substitute) {
+                  generic_to_substitute[g] = applyGenerics(
+                    generic_to_substitute[g],
+                    {
+                      [extract]: substitution,
+                    }
+                  )
+                }
               }
-            }
 
-            if (prev_substitution !== substitution) {
-              for (const gen in generic_to_substitute) {
-                generic_to_substitute[gen] = applyGenerics(
-                  generic_to_substitute[gen],
-                  {
-                    [prev_substitution]: substitution,
-                  }
-                )
+              if (prev_substitution !== substitution) {
+                for (const gen in generic_to_substitute) {
+                  generic_to_substitute[gen] = applyGenerics(
+                    generic_to_substitute[gen],
+                    {
+                      [prev_substitution]: substitution,
+                    }
+                  )
+                }
               }
             }
           }
@@ -679,30 +666,27 @@ export const _getGraphTypeMap = (
       }
     })
 
-    // console.log(spec.name, 'equivalence', equivalence)
-    // console.log(spec.name, 'generic_to_substitute', generic_to_substitute)
-
     const substitute_replacement: Dict<string> = {}
+    const generic_to_substitute_: Dict<string> = {}
+
     charCode = 65
     forEachValueKey(generic_to_substitute, (value, key) => {
+      generic_to_substitute_[key] = value
+
       const generics = findGenerics(value)
+
       for (const generic of generics) {
         if (!substitute_replacement[generic]) {
           substitute_replacement[generic] = `<${String.fromCharCode(
             charCode++
           )}>`
         }
-        generic_to_substitute[key] = applyGenerics(
-          generic_to_substitute[key],
+        generic_to_substitute_[key] = applyGenerics(
+          value,
           substitute_replacement
         )
       }
     })
-
-    // console.log('typeMap', JSON.stringify(typeMap, null, 2))
-    // console.log('equivalence_index', equivalence_index)
-    // console.log('specific', specific)
-    // console.log('substitute_replacement', substitute_replacement)
 
     forEachValueKey(unit, (_, unitId: string) => {
       const unitTypeMap = typeMap[unitId]
@@ -712,14 +696,14 @@ export const _getGraphTypeMap = (
         // throw new Error('type map not found')
       }
 
-      const { input, output } = unitTypeMap
-      forEachValueKey(input, (type, pinId) => {
-        const nextType = _applyGenerics(type, generic_to_substitute)
-        unitTypeMap.input[pinId] = nextType
-      })
-      forEachValueKey(output, (type, pinId) => {
-        const nextType = _applyGenerics(type, generic_to_substitute)
-        unitTypeMap.output[pinId] = nextType
+      io((kind: IO) => {
+        const pinTypeMap = unitTypeMap[kind]
+
+        forEachValueKey(pinTypeMap, (type, pinId) => {
+          const nextType = _applyGenerics(type, generic_to_substitute_)
+
+          unitTypeMap[kind][pinId] = nextType
+        })
       })
     })
   })

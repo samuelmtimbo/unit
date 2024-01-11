@@ -35,6 +35,13 @@ graph.addUnitSpec('identity', {
     input: {
       a: {
         data: '1',
+        ignored: false,
+      },
+    },
+    output: {
+      a: {
+        constant: false,
+        ignored: false,
       },
     },
   },
@@ -51,16 +58,13 @@ assert.deepEqual(bundle.take('bundle'), {
         id: '260d774e-bc89-4027-aa92-cb1985fb312b',
         input: {
           a: {
-            constant: false,
-            data: undefined,
+            data: '1',
             ignored: false,
           },
         },
-        memory: undefined,
         output: {
           a: {
             constant: false,
-            data: undefined,
             ignored: false,
           },
         },
@@ -112,14 +116,12 @@ assert.deepEqual(bundle.take('bundle'), {
         input: {
           a: {
             ignored: false,
-            data: undefined,
-            constant: false,
+            data: '1',
           },
         },
         output: {
           a: {
             ignored: false,
-            data: undefined,
             constant: false,
           },
         },
