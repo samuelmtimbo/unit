@@ -2806,12 +2806,12 @@ export class Graph<I = any, O = any>
   public addUnit = (
     unitId: string,
     unit: Unit,
-    bundle?: BundleSpec,
+    bundle?: UnitBundleSpec,
     emit: boolean = true
   ): void => {
-    this._addUnit(unitId, unit)
+    this._addUnit(unitId, unit, bundle)
 
-    const unitBundle = unit.getUnitBundleSpec()
+    const unitBundle = bundle ?? unit.getUnitBundleSpec()
 
     emit && this.emit('add_unit', unitId, unitBundle, unit, [])
 
@@ -2872,9 +2872,7 @@ export class Graph<I = any, O = any>
       throw new Error('duplicated unit id ' + unitId)
     }
 
-    if (!bundle) {
-      bundle = unit.getUnitBundleSpec(false)
-    }
+    bundle = bundle ?? unit.getUnitBundleSpec(false)
 
     this.__system.injectSpecs(bundle.specs)
 

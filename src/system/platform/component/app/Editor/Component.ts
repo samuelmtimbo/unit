@@ -822,14 +822,9 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         },
         this.$system
       )
-    this._unlisten_transcend = transcend.addEventListener(
-      makeClickListener({
-        onLongPress: this._on_transcend_long_press,
-        onLongClickCancel: this._on_transcend_long_click_cancel,
-        onLongClick: this._on_transcend_long_click,
-      })
-    )
     this._transcend = transcend
+
+    this._listen_transcend()
 
     this._component = component ?? parentComponent({}, this.$system)
 
@@ -1047,7 +1042,13 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _listen_graph = (): void => {
     this._unlisten_graph = this._editor.addEventListeners([
       makeCustomListener('compose', this._on_compose, false),
-      makeCustomListener('transcend', this._on_transcend, false),
+      makeCustomListener(
+        'transcend',
+        () => {
+          this._on_transcend()
+        },
+        false
+      ),
       makeCustomListener('enter_fullwindow', this._on_enter_fullwindow, false),
       makeCustomListener('leave_fullwindow', this._on_leave_fullwindow, false),
       makeCustomListener('zoom', this._on_zoom),
@@ -1056,12 +1057,12 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   private _listen_transcend = (): void => {
     this._unlisten_transcend = this._transcend.addEventListener(
-      makeClickListener({
-        onLongPress: this._on_transcend_long_press,
-        onLongClickCancel: this._on_transcend_long_click_cancel,
-        onLongClick: this._on_transcend_long_click,
-      })
+      makeCustomListener('transcend', this._on_transcend_detach, false)
     )
+  }
+
+  private _on_transcend_detach = () => {
+    this._on_transcend()
   }
 
   private _reset_graph = (callback: Callback = NOOP) => {
@@ -1343,47 +1344,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       _: ['U', 'C', 'G'],
     })
 
-    next_graph.$addUnit({
-      unitId: editor_unit_id,
-      bundle: {
-        unit: {
-          id: ID_EDITOR,
-          input: {
-            controls: {
-              ignored: true,
-            },
-            zoom: {
-              ignored: true,
-            },
-            fullwindow: {
-              ignored: true,
-            },
-            disabled: {
-              ignored: true,
-            },
-            frame: {
-              ignored: true,
-            },
-            graph: {
-              constant: true,
-              ignored: false,
-            },
-          },
-          state: {
-            fullwindow,
-          },
-        },
-      },
-    })
-
-    next_graph.$moveUnit({
-      id: unit_id,
-      unitId: editor_unit_id,
-      inputId: 'graph',
-    })
-
-    const spec = emptySpec()
-
     const GRAPH_WIDTH = 300
     const GRAPH_HEIGHT = 300
     const PADDING = 60
@@ -1402,18 +1362,35 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       max_height = Math.max(max_height, height)
     }
 
-    const _width = clamp(max_width, GRAPH_WIDTH - PADDING, $width)
-    const _height = clamp(max_height, GRAPH_HEIGHT - PADDING, $height)
+    const _width = clamp(max_width, GRAPH_WIDTH, $width)
+    const _height = clamp(max_height, GRAPH_HEIGHT, $height)
 
     const width = _width + PADDING
     const height = _height + PADDING
 
-    spec.units = spec.units || {}
-    spec.units[editor_unit_id] = {
+    const unit_spec = {
       id: ID_EDITOR,
       input: {
+        controls: {
+          ignored: true,
+        },
+        zoom: {
+          ignored: true,
+        },
+        fullwindow: {
+          ignored: !fullwindow,
+          data: `${fullwindow}`,
+        },
         disabled: {
           data: 'false',
+          ignored: true,
+        },
+        frame: {
+          ignored: true,
+        },
+        graph: {
+          constant: true,
+          ignored: false,
         },
       },
       metadata: {
@@ -1423,6 +1400,24 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         },
       },
     }
+
+    next_graph.$addUnit({
+      unitId: editor_unit_id,
+      bundle: {
+        unit: unit_spec,
+      },
+    })
+
+    next_graph.$moveUnit({
+      id: unit_id,
+      unitId: editor_unit_id,
+      inputId: 'graph',
+    })
+
+    const spec = emptySpec()
+
+    spec.units = spec.units || {}
+    spec.units[editor_unit_id] = unit_spec
     spec.component = {
       subComponents: {
         [editor_unit_id]: {},
