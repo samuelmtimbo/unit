@@ -7,6 +7,7 @@ import { State } from '../../State'
 import { bundleSpec, unitBundleSpec } from '../../bundle'
 import { emptySpec } from '../../client/spec'
 import {
+  animate,
   appendChild,
   appendParentChild,
   hasChild,
@@ -113,7 +114,7 @@ import { IOOf, forIOObjKV } from '../../types/IOOf'
 import { UnitBundle } from '../../types/UnitBundle'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
-import { C, C_EE } from '../../types/interface/C'
+import { AnimationSpec, C, C_EE } from '../../types/interface/C'
 import { ComponentEvents, Component_ } from '../../types/interface/Component'
 import { G, G_EE, G_MoveSubgraphIntoArgs } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
@@ -234,6 +235,8 @@ export class Graph<I = any, O = any>
   private _unitToMergeCount: Dict<Dict<number>> = {}
 
   private _children: Component_[] = []
+
+  private _animations: AnimationSpec[] = []
 
   private _waitAll: IOOf<WaitAll> = {}
 
@@ -5971,6 +5974,14 @@ export class Graph<I = any, O = any>
 
   refSlot(slotName: string): Component_ {
     return refSlot(this, slotName, this._slot)
+  }
+
+  getAnimations(): AnimationSpec[] {
+    return this._animations
+  }
+
+  animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
+    return animate(this, this._animations, keyframes, opt)
   }
 
   bulkEdit(actions: Action[]): void {

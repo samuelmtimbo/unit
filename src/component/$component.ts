@@ -2,6 +2,7 @@ import { proxyWrap } from '../proxyWrap'
 import { Callback } from '../types/Callback'
 import { $Component } from '../types/interface/async/$Component'
 import { Async } from '../types/interface/async/Async'
+import { AnimationSpec, C } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
 import { WP } from '../types/interface/WP'
 import { UnitBundle } from '../types/UnitBundle'
@@ -101,4 +102,14 @@ export function $refParentChildContainer(
   const container = component.refParentChildContainer(at)
   const local_child = Async(container, _)
   return proxyWrap(local_child, _)
+}
+
+export function $getAnimations(
+  component: C,
+  data: {},
+  callback: Callback<AnimationSpec[]>
+): void {
+  const animations = component.getAnimations()
+
+  callback(animations)
 }

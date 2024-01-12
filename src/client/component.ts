@@ -926,7 +926,9 @@ export class Component<
         return a.id === id
       })
 
-      animations.push(animation)
+      if (animation) {
+        animations.push(animation)
+      }
     }
 
     return animations
@@ -1475,6 +1477,14 @@ export class Component<
       this.$remoteId = remoteId
 
       this.register()
+    })
+
+    $unit.$getAnimations({}, (animations) => {
+      for (const animation of animations) {
+        const { keyframes, opt } = animation
+
+        this.animate(keyframes, opt)
+      }
     })
 
     const all_unlisten: Unlisten[] = []
