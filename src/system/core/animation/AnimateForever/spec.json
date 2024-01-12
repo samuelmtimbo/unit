@@ -1,0 +1,63 @@
+{
+  "type": "`U`&`G`",
+  "name": "animate forever",
+  "units": {
+    "animate": {
+      "id": "1df77a6e-7632-44f0-9878-2aa5e0903928",
+      "input": { "keyframes": {}, "opt": {}, "element": {}, "done": {} },
+      "output": { "animation": {} },
+      "metadata": { "position": { "x": 54, "y": -10 } }
+    },
+    "deepmerge": {
+      "id": "2af12780-698c-40ca-baa9-5f3260377e0f",
+      "input": {
+        "a": { "constant": true, "data": "{\"iterations\":Infinity}" },
+        "b": { "constant": false }
+      },
+      "output": { "ab": {} },
+      "metadata": { "position": { "x": -55, "y": 9 } }
+    }
+  },
+  "merges": {
+    "0": {
+      "animate": { "input": { "opt": true } },
+      "deepmerge": { "output": { "ab": true } }
+    }
+  },
+  "inputs": {
+    "opt": {
+      "plug": {
+        "0": { "unitId": "deepmerge", "pinId": "b", "kind": "input" }
+      }
+    },
+    "keyframes": {
+      "plug": {
+        "0": { "unitId": "animate", "pinId": "keyframes", "kind": "input" }
+      },
+      "ref": false
+    },
+    "element": {
+      "plug": {
+        "0": { "unitId": "animate", "pinId": "element", "kind": "input" }
+      },
+      "ref": true
+    },
+    "done": {
+      "plug": {
+        "0": { "unitId": "animate", "pinId": "done", "kind": "input" }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {
+    "animation": {
+      "plug": {
+        "0": { "unitId": "animate", "pinId": "animation", "kind": "output" }
+      },
+      "ref": true
+    }
+  },
+  "metadata": { "icon": "timer", "description": "animate `element` forever" },
+  "id": "5dbcc486-a865-452c-9f14-e0d26e3354d7",
+  "system": true
+}
