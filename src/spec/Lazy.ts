@@ -30,7 +30,7 @@ import { IOOf } from '../types/IOOf'
 import { UnitBundle } from '../types/UnitBundle'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { UnitClass } from '../types/UnitClass'
-import { C } from '../types/interface/C'
+import { AnimationSpec, C } from '../types/interface/C'
 import { ComponentEvents, Component_ } from '../types/interface/Component'
 import { G, G_MoveSubgraphIntoArgs } from '../types/interface/G'
 import { U } from '../types/interface/U'
@@ -521,6 +521,16 @@ export function lazyFromSpec(
     public refSlot(slotName: string): Component_ {
       this._ensure()
       return this.__graph.refSlot(slotName)
+    }
+
+    animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
+      this._ensure()
+      return this.__graph.animate(keyframes, opt)
+    }
+
+    getAnimations(): AnimationSpec[] {
+      this._ensure()
+      return this.__graph.getAnimations()
     }
 
     public getUnits = (): Dict<Unit> => {

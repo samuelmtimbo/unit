@@ -21,8 +21,6 @@ export interface SFIO {
   o?: string[]
 }
 
-const ID_FUNCTIONAL = ''
-
 export class Semifunctional<
   I = {},
   O = {},
@@ -63,6 +61,10 @@ export class Semifunctional<
 
       d() {
         self.d()
+      }
+
+      i() {
+        self.i()
       }
     })(this.__system)
 
@@ -203,6 +205,12 @@ export class Semifunctional<
   }
 
   fd() {}
+
+  i() {
+    this.fi()
+  }
+
+  fi() {}
 
   protected _done: Done<O> = (data, err = null) => {
     this._functional._done(data, err)

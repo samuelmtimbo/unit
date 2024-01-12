@@ -73,10 +73,7 @@ export default class Animate extends Semifunctional<I, O> {
       id,
     }
 
-    element.emit('call', {
-      method: 'animate',
-      data: [keyframes, _opt],
-    })
+    element.animate(keyframes, _opt)
 
     const animation = new (class Node extends $ implements ANI {
       __: string[] = ['ANI']
@@ -116,7 +113,11 @@ export default class Animate extends Semifunctional<I, O> {
     done({ animation })
   }
 
-  d() {
+  fd() {
+    this._cancel()
+  }
+
+  fi() {
     this._cancel()
   }
 

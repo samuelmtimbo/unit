@@ -1,6 +1,7 @@
 import { $Child } from '../../../component/Child'
 import { $Children } from '../../../component/Children'
 import { Callback } from '../../Callback'
+import { AnimationSpec } from '../C'
 import { $Component } from './$Component'
 
 export const C_METHOD_CALL = [
@@ -24,6 +25,7 @@ export interface $C_C {
   $hasChild(data: { at: number }, callback: Callback<boolean>): void
   $child(data: { at: number }, callback: Callback<$Child>): void
   $children(data: {}, callback: Callback<$Children>): void
+  $getAnimations(data: {}, callback: Callback<AnimationSpec[]>): void
 }
 
 export interface $C_W {}

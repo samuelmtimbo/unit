@@ -1,5 +1,6 @@
 import { Component } from '../../client/component'
 import {
+  animate,
   appendChild,
   appendParentChild,
   hasChild,
@@ -19,7 +20,7 @@ import {
 import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
-import { C_EE } from '../../types/interface/C'
+import { AnimationSpec, C_EE } from '../../types/interface/C'
 import { Component_, ComponentEvents } from '../../types/interface/Component'
 import { E } from '../../types/interface/E'
 import { UnitBundle } from '../../types/UnitBundle'
@@ -53,6 +54,7 @@ export class Element_<
   public _slot: Dict<Component_> = {}
   public _component: _C
   public _state: Dict<any> = {}
+  public _animations: AnimationSpec[] = []
 
   constructor(
     { i = [], o = [] }: ION<I, O>,
@@ -192,6 +194,14 @@ export class Element_<
     }
 
     throw new MethodNotImplementedError()
+  }
+
+  getAnimations(): AnimationSpec[] {
+    return this._animations
+  }
+
+  animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
+    return animate(this, this._animations, keyframes, opt)
   }
 
   private _play(): void {

@@ -1,6 +1,7 @@
 import { ChildOutOfBound } from '../exception/ChildOutOfBoundError'
 import { evaluate } from '../spec/evaluate'
 import { Dict } from '../types/Dict'
+import { AnimationSpec } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
 import { UnitBundle } from '../types/UnitBundle'
 import { insert } from '../util/array'
@@ -263,4 +264,18 @@ export function removeParentChild(
   parentRoot.splice(at, 1)
 
   component.emit('remove_parent_child', component)
+}
+
+export function animate(
+  component: Component_,
+  animations: AnimationSpec[],
+  keyframes: Keyframe[],
+  opt: KeyframeAnimationOptions
+) {
+  animations.push({ keyframes, opt })
+
+  component.emit('call', {
+    method: 'animate',
+    data: [keyframes, opt],
+  })
 }

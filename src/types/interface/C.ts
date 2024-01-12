@@ -23,6 +23,11 @@ export type C_EE = {
   call: [{ method: string; data: any[] }]
 }
 
+export type AnimationSpec = {
+  opt: KeyframeAnimationOptions
+  keyframes: Keyframe[]
+}
+
 export interface C {
   registerRoot(component: Component_): void
   unregisterRoot(component: Component_): void
@@ -42,4 +47,6 @@ export interface C {
   refChildren(): Component_[]
   refSlot(slotName: string): Component_
   detach(): void
+  animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void
+  getAnimations(): AnimationSpec[]
 }

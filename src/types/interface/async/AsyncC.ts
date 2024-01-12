@@ -3,6 +3,7 @@ import {
   $appendChild,
   $child,
   $children,
+  $getAnimations,
   $hasChild,
   $refChild,
   $removeChild,
@@ -47,6 +48,10 @@ export const AsyncCCall = (c: Component_): $C_C => {
 
     $children(data: {}, callback: Callback<$Children>): void {
       return $children(c, data, callback)
+    },
+
+    $getAnimations(data, callback) {
+      return $getAnimations(c, data, callback)
     },
   }
 }
