@@ -270,10 +270,7 @@
     "icon": "object-get",
     "description": "get value of `obj` at `path`",
     "complexity": 68,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "inputs": {
     "path": {
@@ -282,19 +279,19 @@
           "unitId": "if1",
           "pinId": "a"
         },
-        "nlfaoop": {
+        "1": {
           "unitId": "lengthgt",
           "pinId": "a"
         },
-        "wavfunmop": {
+        "2": {
           "unitId": "lengthequals",
           "pinId": "a"
         },
-        "ylidxx": {
+        "3": {
           "unitId": "if",
           "pinId": "a"
         },
-        "ldazigncc": {
+        "4": {
           "unitId": "if3",
           "pinId": "a"
         }
@@ -308,11 +305,11 @@
           "unitId": "if2",
           "pinId": "a"
         },
-        "fstg": {
+        "1": {
           "unitId": "if0",
           "pinId": "a"
         },
-        "kehglhzu": {
+        "2": {
           "unitId": "if4",
           "pinId": "a"
         }
@@ -324,15 +321,15 @@
   "outputs": {
     "result": {
       "plug": {
-        "1": {
+        "0": {
           "unitId": "set",
           "pinId": "obj"
         },
-        "sckhdglks": {
+        "1": {
           "unitId": "delete",
           "pinId": "obj"
         },
-        "okosmdza": {
+        "2": {
           "unitId": "if4",
           "pinId": "a if b"
         }

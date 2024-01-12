@@ -125,10 +125,7 @@
     "icon": "brackets",
     "description": "get value of `a` at `path`",
     "complexity": 27,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "inputs": {
     "a": {
@@ -139,7 +136,7 @@
         }
       },
       "functional": true,
-      "type": "<A>[][][]"
+      "type": "any[]"
     },
     "path": {
       "plug": {
@@ -160,7 +157,7 @@
           "pinId": "final"
         }
       },
-      "type": "<A>[][][]"
+      "type": "any"
     }
   },
   "id": "c4de657d-0af7-45a0-b5a9-64127d78fb18",
