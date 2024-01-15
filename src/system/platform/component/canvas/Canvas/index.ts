@@ -56,6 +56,8 @@ export default class Canvas
   async clear(): Promise<void> {
     this._component.clear()
 
+    this.set('d', [])
+
     this.emit('call', { method: 'clear', data: undefined })
 
     return
