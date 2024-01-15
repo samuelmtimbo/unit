@@ -915,6 +915,16 @@ export class Component<
   }
 
   getAnimationsById(id: string): Animation[] {
+    const animations: Animation[] = this.getAnimations()
+
+    const animations_ = animations.filter((a) => {
+      return a.id === id
+    })
+
+    return animations_
+  }
+
+  getAnimations(): Animation[] {
     const base = this.getAnimatableBase()
 
     const animations: Animation[] = []
@@ -922,11 +932,7 @@ export class Component<
     for (const leaf of base) {
       const leafAnimations = leaf.$element.getAnimations()
 
-      const animation = leafAnimations.find((a) => {
-        return a.id === id
-      })
-
-      if (animation) {
+      for (const animation of leafAnimations) {
         animations.push(animation)
       }
     }
@@ -1461,6 +1467,10 @@ export class Component<
           this.register()
         } else if (event_event === 'unregister') {
           this.unregister()
+        } else if (event_event === 'play') {
+          this.play()
+        } else {
+          this.pause()
         }
       },
     }
@@ -1489,7 +1499,14 @@ export class Component<
 
     const all_unlisten: Unlisten[] = []
 
-    const events = ['append_child', 'remove_child', 'register', 'unregister']
+    const events = [
+      'append_child',
+      'remove_child',
+      'register',
+      'unregister',
+      'play',
+      'pause',
+    ]
 
     const unit_unlisten = this.$unit.$watch({ events }, unit_listener)
 
@@ -2497,6 +2514,22 @@ export class Component<
       this[method](...data)
     } else {
       throw 'method not implemented'
+    }
+  }
+
+  public play() {
+    const animations = this.getAnimations()
+
+    for (const animation of animations) {
+      animation.play()
+    }
+  }
+
+  public pause() {
+    const animations = this.getAnimations()
+
+    for (const animation of animations) {
+      animation.pause()
     }
   }
 

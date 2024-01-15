@@ -279,3 +279,20 @@ export function animate(
     data: [keyframes, opt],
   })
 }
+
+export function cancelAnimation(
+  component: Component_,
+  animations: AnimationSpec[],
+  id: string
+) {
+  const i = animations.findIndex((animation) => {
+    return animation.opt.id === id
+  })
+
+  animations.splice(i, 1)
+
+  component.emit('call', {
+    method: 'cancelAnimation',
+    data: [id],
+  })
+}

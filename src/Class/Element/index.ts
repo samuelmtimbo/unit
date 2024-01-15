@@ -3,6 +3,7 @@ import {
   animate,
   appendChild,
   appendParentChild,
+  cancelAnimation,
   hasChild,
   pullChild,
   pushChild,
@@ -202,6 +203,10 @@ export class Element_<
 
   animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
     return animate(this, this._animations, keyframes, opt)
+  }
+
+  cancelAnimation(id: string): void {
+    return cancelAnimation(this, this._animations, id)
   }
 
   private _play(): void {

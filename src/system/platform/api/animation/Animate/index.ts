@@ -51,10 +51,7 @@ export default class Animate extends Semifunctional<I, O> {
   private _cancel(): void {
     if (this._i.element) {
       if (this._id) {
-        this._i.element.emit('call', {
-          method: 'cancelAnimation',
-          data: [this._id],
-        })
+        this._i.element.cancelAnimation(this._id)
 
         this._id = undefined
       }
