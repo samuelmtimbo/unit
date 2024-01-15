@@ -47,7 +47,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
 
     const input = this.getInput(newName)
 
-    if (!input.empty()) {
+    if (!input.empty() || name === this._current) {
       this._current = newName
     }
   }
