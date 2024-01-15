@@ -36968,7 +36968,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._lock_datum(datum_node_id)
 
-      this._commit_data_value(edit_datum_id, data, prevent)
+      const data_ = _filterEmptyNodes(data)
+
+      const datum_anchor_node_id = this._get_node_anchor_node_id(datum_node_id)
+
+      this._sim_set_datum_value(
+        edit_datum_id,
+        datum_node_id,
+        datum_anchor_node_id,
+        data_.value,
+        data_
+      )
+
+      this._commit_data_value(edit_datum_id, data_, prevent)
 
       this._edit_datum_just_blurred = true
 
