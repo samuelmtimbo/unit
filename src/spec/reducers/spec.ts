@@ -21,10 +21,7 @@ import {
   mapObjVK,
   pathOrDefault,
 } from '../../util/object'
-import { emptyGraphSpec } from '../emptySpec'
 import { forEachPinOnMerges, getMergePinCount } from '../util/spec'
-
-export const defaultState: GraphSpec = emptyGraphSpec()
 
 export const setSpec = ({ spec }: { spec: GraphSpec }) => spec
 

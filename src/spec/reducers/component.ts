@@ -10,8 +10,6 @@ import { GraphComponentSpec, GraphSubComponentSpec } from '../../types'
 
 export type State = GraphComponentSpec
 
-export const defaultState: State = {}
-
 export const appendChild = (
   { unitId }: { unitId: string },
   state: State
