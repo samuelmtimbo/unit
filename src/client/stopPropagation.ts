@@ -41,6 +41,7 @@ export const ALL_EVENTS: string[] = [
   'touchstart',
   'dragover',
   'drop',
+  'contextmenu',
 ]
 
 export function stopAllPropagation($element: IOElement): void {
