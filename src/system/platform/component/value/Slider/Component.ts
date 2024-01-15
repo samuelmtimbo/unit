@@ -10,6 +10,7 @@ export interface Props {
   min?: number
   max?: number
   disabled?: boolean
+  attr?: Dict<string>
 }
 
 export const DEFAULT_STYLE = {
