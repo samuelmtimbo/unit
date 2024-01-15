@@ -8,6 +8,7 @@ import classnames from '../../../../../client/classnames'
 import { setAlpha } from '../../../../../client/color'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Context, setColor, setTheme } from '../../../../../client/context'
+import { preventContextMenu } from '../../../../../client/contextMenu'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeInputListener } from '../../../../../client/event/input'
@@ -378,6 +379,8 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     gui.registerParentRoot(control)
     gui.registerParentRoot(foreground)
     this._gui = gui
+
+    preventContextMenu(gui)
 
     const container = new Div(
       {
