@@ -6067,7 +6067,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     subComponent: GraphSubComponentSpec | null = null
   ): void {
     // console.log('Graph', '_pod_add_unit', unit_id, unit)
-    this._flush_debugger()
 
     this._pod.$addUnit({
       unitId,
@@ -6077,8 +6076,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _pod_clone_unit(unitId: string, newUnitId: string): void {
-    this._flush_debugger()
-
     this._pod.$cloneUnit({
       unitId,
       newUnitId,
@@ -7688,8 +7685,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     name: string,
     fork_spec_id: string
   ): void => {
-    this._flush_debugger()
-
     this._pod.$setUnitId({
       unitId: unit_id,
       newUnitId: new_unit_id,
@@ -25068,6 +25063,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _dispatch_action = (action: Action): void => {
     // console.log('Graph', '_dispatch_action', action)
 
+    this._flush_debugger()
+
     if (this._action_buffer_cursor < this._action_buffer.length - 1) {
       const start = this._action_buffer_cursor + 1
       const delete_count =
@@ -34378,8 +34375,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_pod_set_pin_data', pin_node_id, data, lastData)
 
-    this._flush_debugger()
-
     if (this._is_link_pin_node_id(pin_node_id)) {
       const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
@@ -35070,8 +35065,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _pod_remove_pin_datum = (pin_node_id: string) => {
     // console.log('Graph', '_pod_remove_pin_datum', pin_node_id)
 
-    this._flush_debugger()
-
     this._pod_remove_pin_datum__template(pin_node_id, {
       takeInput: (data) => this._pod.$takeInput(data),
       removeMergeData: (data) => this._pod.$removeMergeData(data),
@@ -35091,11 +35084,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       removeUnitPinData(data: GraphRemoveUnitPinDataData): void
     }
   ) => {
-    this._flush_debugger()
-
-    const { pinId: exposed_pin_id } =
-      this._spec_get_pin_node_plug_spec('input', pin_node_id) ?? {}
-
     if (this._is_merge_node_id(pin_node_id)) {
       const { mergeId } = segmentMergeNodeId(pin_node_id)
 
@@ -35443,8 +35431,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     type: IO,
     pinId: string
   ) => {
-    this._flush_debugger()
-
     this._pod.$removePinFromMerge({
       mergeId,
       unitId,
@@ -35975,8 +35961,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _pod_remove_merge = (merge_node_id: string): void => {
     // console.log('Graph', '_pod_remove_merge', merge_node_id)
-
-    this._flush_debugger()
 
     const { mergeId } = segmentMergeNodeId(merge_node_id)
 
@@ -37299,8 +37283,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _pod_remove_unit = (unit_id: string, is_component: boolean): void => {
-    this._flush_debugger()
-
     this._pod.$removeUnit({ unitId: unit_id })
 
     if (is_component) {
