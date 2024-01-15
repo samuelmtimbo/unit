@@ -133,7 +133,7 @@ export class Object_<T extends Object> implements J<T>, V<T> {
 
     delete obj[key]
 
-    this._dispatch('delete', path, key, value)
+    this._dispatch('delete', parent_path, key, value)
   }
 
   public async read(): Promise<T> {
