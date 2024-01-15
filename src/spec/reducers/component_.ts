@@ -8,8 +8,6 @@ import { insert, pull, push, removeAt, reorder } from '../../util/array'
 import { pathDelete, pathOrDefault, pathSet } from '../../util/object'
 import { getComponentSubComponentParentId } from '../util/component'
 
-export const defaultState: GraphComponentSpec = {}
-
 export const appendChild = (
   { childId }: { childId: string },
   state: GraphComponentSpec
