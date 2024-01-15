@@ -27,7 +27,7 @@ export const DEFAULT_STYLE = {
 export default class EditableField extends Field<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system, $system.api.document.createElement('div'), {
-      valueKey: 'textContent',
+      valueKey: 'innerText',
       defaultStyle: DEFAULT_STYLE,
       defaultValue: '',
     })
