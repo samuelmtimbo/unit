@@ -408,6 +408,10 @@ export function entries<T>(obj: Dict<T>): [string, T][] {
   return Object.entries(obj)
 }
 
+export function values<T>(obj: Dict<T>): T[] {
+  return Object.values(obj)
+}
+
 export function fromEntries<T>(entries: [string, T][]): Dict<T> {
   return Object.fromEntries(entries)
 }

@@ -25944,7 +25944,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const data = randomTreeOfType(specs, type)
 
-    this._set_plug_data(plug_node_id, data.value)
+    if (data) {
+      this._set_plug_data(plug_node_id, data.value)
+    }
   }
 
   private _turn_class_literal_into_unit = (datum_node_id: string): string => {
@@ -26157,12 +26159,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      if (this._is_merge_node_id(pin_node_id)) {
-        this.set_merge_pin_data(pin_node_id, value)
-      } else if (this._is_link_pin_node_id(pin_node_id)) {
-        this.set_unit_pin_data(pin_node_id, value)
-      } else {
-        throw new CodePathNotImplementedError()
+      if (value) {
+        if (this._is_merge_node_id(pin_node_id)) {
+          this.set_merge_pin_data(pin_node_id, value)
+        } else if (this._is_link_pin_node_id(pin_node_id)) {
+          this.set_unit_pin_data(pin_node_id, value)
+        } else {
+          throw new CodePathNotImplementedError()
+        }
       }
     }
   }

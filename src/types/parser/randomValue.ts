@@ -1,4 +1,4 @@
-import { Spec, Specs } from '..'
+import { Specs } from '..'
 import {
   NULL_TREE,
   TreeNode,
@@ -9,12 +9,12 @@ import {
   isLiteralType,
   isTypeMatch,
 } from '../../spec/parser'
-import { keys } from '../../system/f/object/Keys/f'
 import { rangeArray } from '../../util/array'
 import { randomInArray } from '../../util/array/randomInArray'
+import { values } from '../../util/object'
 import { Dict } from '../Dict'
 
-export function propValue<T>({ value }: { value: T }): T {
+export function getValue<T>({ value }: { value: T }): T {
   return value
 }
 
@@ -70,7 +70,7 @@ export function randomValueOfObjectLiteral(
   specs: Specs,
   typeTree: TreeNode
 ): string {
-  return propValue(randomTreeOfObjectLiteral(specs, typeTree))
+  return getValue(randomTreeOfObjectLiteral(specs, typeTree))
 }
 
 export function randomTreeOfObjectLiteral(
@@ -126,7 +126,7 @@ export function randomTreeOfObjectLiteral(
   }
 
   return {
-    value: `{${children.map(propValue).join(',')}}`,
+    value: `{${children.map(getValue).join(',')}}`,
     children,
     type: TreeNodeType.ObjectLiteral,
   }
@@ -136,7 +136,7 @@ export function randomValueOfArrayLiteral(
   specs: Specs,
   tree_type: TreeNode
 ): string {
-  return propValue(randomTreeOfArrayLiteral(specs, tree_type))
+  return getValue(randomTreeOfArrayLiteral(specs, tree_type))
 }
 
 export function randomTreeOfArrayLiteral(
@@ -152,7 +152,7 @@ export function randomTreeOfArrayLiteral(
   }
 
   return {
-    value: `[${children.map(propValue).join(',')}]`,
+    value: `[${children.map(getValue).join(',')}]`,
     type: TreeNodeType.ArrayLiteral,
     children,
   }
@@ -164,7 +164,7 @@ export function randomValueOfTypeExpression(
   delimiter_open: string,
   delimiter_close: string
 ) {
-  return propValue(
+  return getValue(
     randomTreeOfTypeExpression(specs, typeTree, delimiter_open, delimiter_close)
   )
 }
@@ -200,7 +200,7 @@ export function randomTreeOfTypeExpression(
 
   const children = range.map(() => randomTreeOfType(specs, literal_typeTree))
   const value = `${delimiter_open}${children
-    .map(propValue)
+    .map(getValue)
     .join(',')}${delimiter_close}`
   const type = MAP_TYPE_EXPRESSION_TO_LITERAL[type_type]
 
@@ -224,7 +224,7 @@ export function randomTreeOfOr(specs: Specs, tree: TreeNode): TreeNode {
 }
 
 export function randomValueOfAnd(typeTree: TreeNode): string {
-  return propValue(randomTreeOfAnd(typeTree))
+  return getValue(randomTreeOfAnd(typeTree))
 }
 
 export function randomTreeOfAnd(typeTree: TreeNode): TreeNode {
@@ -234,7 +234,13 @@ export function randomTreeOfAnd(typeTree: TreeNode): TreeNode {
 }
 
 export function randomValueOfType(specs: Specs, typeTree: TreeNode): string {
-  return propValue(randomTreeOfType(specs, typeTree))
+  const randomTree = randomTreeOfType(specs, typeTree)
+
+  if (randomTree) {
+    return getValue(randomTree)
+  } else {
+    return null
+  }
 }
 
 export function randomTreeOfType(specs: Specs, typeTree: TreeNode): TreeNode {
@@ -257,15 +263,17 @@ export function randomTreeOfType(specs: Specs, typeTree: TreeNode): TreeNode {
   } else if (type === TreeNodeType.ObjectExpression) {
     return randomTreeOfTypeExpression(specs, typeTree, '{', '}')
   } else if (type === TreeNodeType.Class) {
-    let randomSpecId: string
-    let randomSpec: Spec
+    const filteredSpecs = values(specs).filter((spec) => {
+      return isTypeMatch(specs, spec.type ?? `G`, typeTree.value)
+    })
 
-    do {
-      randomSpecId = randomInArray(keys(specs))
-      randomSpec = specs[randomSpecId]
-    } while (!isTypeMatch(specs, randomSpec.type ?? `G`, typeTree.value))
+    const randomSpec = randomInArray(filteredSpecs)
 
-    return getTree(`\${unit:{id:"${randomSpecId}"}}`)
+    if (randomSpec) {
+      return getTree(`\${unit:{id:"${randomSpec.id}"}}`)
+    } else {
+      return null
+    }
   } else {
     return randomTreeOfTypeLiteral(specs, type)
   }
@@ -295,5 +303,5 @@ export function randomValueOfTypeLiteral(
   specs: Specs,
   typeTree: TreeNodeType
 ): string {
-  return propValue(randomTreeOfTypeLiteral(specs, typeTree))
+  return getValue(randomTreeOfTypeLiteral(specs, typeTree))
 }
