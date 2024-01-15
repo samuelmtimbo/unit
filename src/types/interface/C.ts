@@ -48,5 +48,6 @@ export interface C {
   refSlot(slotName: string): Component_
   detach(): void
   animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void
+  cancelAnimation(id: string): void
   getAnimations(): AnimationSpec[]
 }

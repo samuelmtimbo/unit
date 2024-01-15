@@ -528,6 +528,11 @@ export function lazyFromSpec(
       return this.__graph.animate(keyframes, opt)
     }
 
+    cancelAnimation(id: string): void {
+      this._ensure()
+      return this.__graph.cancelAnimation(id)
+    }
+
     getAnimations(): AnimationSpec[] {
       this._ensure()
       return this.__graph.getAnimations()

@@ -10,6 +10,7 @@ import {
   animate,
   appendChild,
   appendParentChild,
+  cancelAnimation,
   hasChild,
   insertChild,
   pullChild,
@@ -5982,6 +5983,10 @@ export class Graph<I = any, O = any>
 
   animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
     return animate(this, this._animations, keyframes, opt)
+  }
+
+  cancelAnimation(id: string): void {
+    return cancelAnimation(this, this._animations, id)
   }
 
   bulkEdit(actions: Action[]): void {
