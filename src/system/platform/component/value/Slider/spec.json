@@ -18,6 +18,10 @@
       "type": "number",
       "optional": true,
       "defaultIgnored": true
+    },
+    "attr": {
+      "type": "object",
+      "defaultIgnored": true
     }
   },
   "outputs": {
@@ -30,11 +34,7 @@
     "icon": "sliders",
     "description": "slide",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "value"
-    ]
+    "tags": ["platform", "component", "value"]
   },
   "id": "e06518cf-9edf-430b-8751-74c486e407aa",
   "base": true,

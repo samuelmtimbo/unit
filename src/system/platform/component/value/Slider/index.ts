@@ -7,6 +7,7 @@ export interface I {
   style: object
   min: number
   max: number
+  attr: object
 }
 
 export interface O {
@@ -17,7 +18,7 @@ export default class Slider extends Field<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['value', 'style', 'min', 'max'],
+        i: ['value', 'style', 'min', 'max', 'attr'],
         o: ['value'],
       },
       {},
