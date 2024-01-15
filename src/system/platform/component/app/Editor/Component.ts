@@ -135,6 +135,7 @@ import {
 } from '../../../../../client/componentFromSpecId'
 import { getComponentInterface } from '../../../../../client/component_'
 import { Context } from '../../../../../client/context'
+import { preventContextMenu } from '../../../../../client/contextMenu'
 import debounce from '../../../../../client/debounce'
 import { getCircle, getLine, getRectangle } from '../../../../../client/drawing'
 import { IODragEvent } from '../../../../../client/event/drag'
@@ -903,9 +904,9 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     root.registerParentRoot(this._editor)
     root.registerParentRoot(this._fallback_frame)
     root.registerParentRoot(this._transcend)
-    root.$element.oncontextmenu = function () {
-      return false
-    }
+
+    preventContextMenu(root)
+
     this._root = root
 
     this._root.$ref['transcend'] = transcend
