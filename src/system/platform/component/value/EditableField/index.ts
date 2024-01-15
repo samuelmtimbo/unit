@@ -5,7 +5,7 @@ import { ID_EDITABLE_FIELD } from '../../../../_ids'
 export interface I {
   style: object
   value: string
-  maxLength: number
+  attr: number
 }
 
 export interface O {
@@ -16,7 +16,7 @@ export default class EditableField extends Field<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['value', 'style', 'maxLength'],
+        i: ['value', 'style', 'attr'],
         o: ['value'],
       },
       {},

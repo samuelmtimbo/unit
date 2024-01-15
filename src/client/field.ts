@@ -92,7 +92,7 @@ export class Field<
           )
         : {
             value: (value: any | undefined) => {
-              this.$element.textContent = value
+              this.$element[valueKey] = value
             },
           }),
     }
