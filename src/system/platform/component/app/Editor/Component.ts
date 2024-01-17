@@ -5734,18 +5734,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _get_sub_component = (unit_id: string): Component | undefined => {
-    return this._sub_component[unit_id]
-    // if (this._component) {
-    //   const { $subComponent = {} } = this._component
-    //   const sub_component = $subComponent[unit_id]
-    //   if (sub_component) {
-    //     return sub_component
-    //   } else {
-    //     return undefined
-    //   }
-    // } else {
-    //   return undefined
-    // }
+    if (this._component) {
+      return this._component.getSubComponent(unit_id)
+    } else {
+      return undefined
+    }
   }
 
   private _get_sub_component_spec = (
@@ -43142,6 +43135,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const sub_components = []
 
+      const base = this._get_sub_component_base(graph_unit_id)
+
+      this._measure_sub_component_base(graph_unit_id, base)
+
+      for (const sub_component_id of ordered_sub_component_ids) {
+        this._leave_sub_component_frame(sub_component_id)
+      }
+
       for (const sub_component_id of ordered_sub_component_ids) {
         const sub_component = this._get_sub_component(sub_component_id)
 
@@ -43193,14 +43194,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           graph_component.pushRoot(sub_component)
         }
-      }
-
-      const base = this._get_sub_component_base(graph_unit_id)
-
-      this._measure_sub_component_base(graph_unit_id, base)
-
-      for (const sub_component_id of ordered_sub_component_ids) {
-        this._leave_sub_component_frame(sub_component_id)
       }
 
       this._decompose_sub_component(graph_unit_id)
