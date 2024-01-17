@@ -44790,8 +44790,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (merge_outside_pin_count[type] > 0) {
           const opposite_type = opposite(type)
 
+          const type_ =
+            merge_collapse_unit_inside_pin_count[opposite_type] === 0
+              ? opposite_type
+              : type
+
+          const opposite_type_ = opposite(type_)
+
           let start_merge_anchor =
-            merge_anchor_pin_id[opposite_type] || merge_anchor_pin_id[type]
+            merge_anchor_pin_id[opposite_type_] || merge_anchor_pin_id[type_]
 
           let start_merge_anchor_pin_id = start_merge_anchor.pin_id
 
@@ -44802,21 +44809,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const next_pin_id =
             pathOrDefault(
               next_merge_pin_id,
-              [mergeId, opposite_type, 'pinId'],
+              [mergeId, opposite_type_, 'pinId'],
               undefined
             ) ||
-            merge_to_exposed_pin_id[opposite_type][merge_node_id] ||
-            merge_graph_pin[opposite_type][0] ||
+            merge_to_exposed_pin_id[opposite_type_][merge_node_id] ||
+            merge_graph_pin[opposite_type_][0] ||
             newSpecPinId(
               graph_unit_spec,
-              opposite_type,
+              opposite_type_,
               start_merge_anchor_pin_id,
-              graph_spec_pin_id_set[opposite_type]
+              graph_spec_pin_id_set[opposite_type_]
             )
 
-          graph_spec_pin_id_set[opposite_type].add(next_pin_id)
+          graph_spec_pin_id_set[opposite_type_].add(next_pin_id)
 
-          merge_to_exposed_pin_id[opposite_type][merge_node_id] = next_pin_id
+          merge_to_exposed_pin_id[opposite_type_][merge_node_id] = next_pin_id
 
           let next_merge_id = newMergeIdInSpec(
             next_spec,
@@ -44825,10 +44832,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           let next_merge_sub_pin_spec: GraphSubPinSpec = {}
 
-          if (merge_collapse_unit_inside_pin_count[opposite_type] === 0) {
+          if (merge_collapse_unit_inside_pin_count[opposite_type_] === 0) {
             if (
-              (merge_collapse_unit_inside_pin_count[type] === 0 ||
-                merge_collapse_unit_inside_pin_count[type] > 1) &&
+              (merge_collapse_unit_inside_pin_count[type_] === 0 ||
+                merge_collapse_unit_inside_pin_count[type_] > 1) &&
               merge_pin_count_per_type.input > 0 &&
               merge_pin_count_per_type.output > 0
             ) {
@@ -44841,7 +44848,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               next_merge_sub_pin_spec = {}
             }
           } else if (
-            merge_collapse_unit_inside_pin_count[opposite_type] > 1 &&
+            merge_collapse_unit_inside_pin_count[opposite_type_] +
+              merge_collapse_unit_inside_pin_count[type_] >
+              1 &&
             merge_pin_count_per_type[type] >= 1
           ) {
             const _next_merge_id = next_id_map.merge[mergeId] ?? mergeId
@@ -44850,16 +44859,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               mergeId: _next_merge_id,
             }
           } else if (
-            merge_collapse_unit_inside_pin_count[opposite_type] === 1
+            merge_collapse_unit_inside_pin_count[opposite_type_] === 1
           ) {
             const { unit_id, pin_id } =
-              merge_collapse_unit_inside_pin[opposite_type][0]
+              merge_collapse_unit_inside_pin[opposite_type_][0]
 
             if (unit_id !== graph_unit_id) {
               next_merge_sub_pin_spec = {
                 unitId: unit_id,
                 pinId: pin_id,
-                kind: opposite_type,
+                kind: opposite_type_,
               }
             } else {
               next_merge_id = mergeId
@@ -44875,12 +44884,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const opposite_merge = {}
 
           forEachPinOnMerge(merge, (unitId, type_, pinId) => {
-            if (type_ === type) {
+            if (type_ === type_) {
               pathSet(opposite_merge, [unitId, type_, pinId], true)
             }
           })
 
-          pathSet(next_merge_pin_id, [mergeId, opposite_type], {
+          pathSet(next_merge_pin_id, [mergeId, opposite_type_], {
             mergeId: next_merge_id,
             pinId: next_pin_id,
             subPinSpec: next_merge_sub_pin_spec,
@@ -46300,11 +46309,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const type = isEmptyObject(merge_unit.input ?? {}) ? 'output' : 'input'
 
+      const opposite_type = opposite(type)
+
       const next_merge_id =
         pathOrDefault(
           this._collapse_next_map.nextMergePinId,
           [merge_id, type, 'mergeId'],
-          null
+          pathOrDefault(
+            this._collapse_next_map.nextMergePinId,
+            [merge_id, opposite_type, 'mergeId'],
+            null
+          )
         ) ?? merge_id
 
       const merge_ = {}
@@ -48397,7 +48412,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   merge_id,
     //   next_merge_id,
     //   next_unit_pin_id_map,
-    //   next_pin_id_map,
+    //   next_pin_id_map
     // )
 
     const merge_spec = this._collapse_init_spec.merges[merge_id]

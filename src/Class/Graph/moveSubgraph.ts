@@ -891,6 +891,12 @@ export function moveMerge(
 
             delete mergeClone[subPinSpec.unitId]
 
+            forEachPinOnMerge(oppositeMerge, (unitId) => {
+              if (ignoredUnit.has(unitId)) {
+                delete mergeClone[unitId]
+              }
+            })
+
             const otherUnitId = getObjSingleKey(mergeClone)
 
             if (otherUnitId) {

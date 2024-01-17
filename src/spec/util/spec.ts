@@ -794,7 +794,20 @@ export function makeFullSpecCollapseMap(
             })
           }
         } else {
-          //
+          const mergeId = getPinMergeId(unitId, type, pinId)
+
+          if (mergeId) {
+            const merge = getMerge(mergeId)
+
+            const oppositeMerge = clone(merge)
+
+            delete oppositeMerge[unitId]
+
+            pathSet(nextMergePinId, [subPinSpec.mergeId, type], {
+              mergeId,
+              oppositeMerge,
+            })
+          }
         }
       }
     }
