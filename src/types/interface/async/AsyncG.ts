@@ -128,8 +128,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.removeUnit(unitId)
     },
 
-    $exposePinSet({ type, pinId, pinSpec: pin }: GraphExposePinSetData) {
-      graph.exposePinSet(type, pinId, pin)
+    $exposePinSet({ type, pinId, pinSpec: pin, data }: GraphExposePinSetData) {
+      const data_ =
+        data && evaluate(data, graph.__system.specs, graph.__system.classes)
+
+      graph.exposePinSet(type, pinId, pin, data_)
     },
 
     $coverPinSet({ type, pinId }: GraphCoverPinSetData) {
