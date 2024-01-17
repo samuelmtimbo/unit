@@ -15226,6 +15226,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // )
 
     if (this._search_unit_spec_id !== spec_id) {
+      this._flush_debugger()
+
       const search_unit_id = this._search_unit_id
 
       if (search_unit_id) {
@@ -16262,6 +16264,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             this._dispatch_add_unit_action(search_unit_id, unit)
           }
+
+          this._setup_pod(this._pod)
         }
 
         if (did_spec_id_change) {
@@ -26215,6 +26219,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return
       //
     }
+
+    this._plunk_pod()
 
     this._search_start_unit_id = unit_id
     this._search_start_spec_id = spec_id
