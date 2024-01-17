@@ -8112,7 +8112,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_add_exposed_pin_set', type, pin_id, pin_spec)
 
     this._state_add_exposed_pin_set(type, pin_id, pin_spec, position)
-    emit && this._pod_add_exposed_pin_set(type, pin_id, pin_spec)
+    emit && this._pod_add_exposed_pin_set(type, pin_id, pin_spec, data)
 
     if (data !== undefined) {
       this._sim_set_pin_set_data(type, pin_id, data)
@@ -8157,14 +8157,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _pod_add_exposed_pin_set = (
     type: IO,
     pinId: string,
-    pin: GraphPinSpec
+    pin: GraphPinSpec,
+    data?: string
   ): void => {
     // console.log('Graph', '_pod_add_exposed_pin_set', id, type, pin)
     this._pod.$exposePinSet({
       type,
       pinId,
       pinSpec: clone(pin),
-      data: undefined,
+      data,
     })
   }
 
@@ -41521,11 +41522,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               ref,
             }
 
+            const data = this._get_pin_datum_value(pin_node_id)
+
             this.add_new_exposed_pin_set_at(
               new_pin_id,
               _type,
               pin_spec,
-              undefined,
+              data,
               ext_node_position,
               int_node_position
             )
