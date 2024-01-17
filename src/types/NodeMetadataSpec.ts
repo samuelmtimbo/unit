@@ -12,4 +12,5 @@ export type NodeMetadataSpec = {
     edit?: boolean
   }
   complexity?: number
+  author?: string
 }
