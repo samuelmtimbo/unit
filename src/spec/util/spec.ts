@@ -28,11 +28,11 @@ import { GraphSelection } from '../../types/interface/G'
 import {
   _keyCount,
   clone,
+  deepGetOrDefault,
+  deepSet,
   getObjSingleKey,
   isEmptyObject,
   mapObjVK,
-  pathOrDefault,
-  pathSet,
   reduceObj,
 } from '../../util/object'
 
@@ -50,7 +50,7 @@ export function isUnitPinConstant(
   type: IO,
   pinId: string
 ): boolean {
-  return pathOrDefault(spec, [unitId, type, pinId, 'constant'], false)
+  return deepGetOrDefault(spec, [unitId, type, pinId, 'constant'], false)
 }
 
 export const isPinRef = (
@@ -58,7 +58,7 @@ export const isPinRef = (
   spec: Spec
 ) => {
   return (
-    pathOrDefault(spec, [`${type}s`, pinId, 'ref'], false) ||
+    deepGetOrDefault(spec, [`${type}s`, pinId, 'ref'], false) ||
     (type === 'output' && pinId === SELF)
   )
 }
@@ -103,7 +103,7 @@ export const getExposedPinSpecs = (graph: GraphSpec) => {
 }
 
 export const getExposePinSpec = (graph: GraphSpec, type: IO, pinId: string) => {
-  return pathOrDefault(graph, [`${type}s`, pinId], undefined)
+  return deepGetOrDefault(graph, [`${type}s`, pinId], undefined)
 }
 
 export const getUnitExposedPins = (
@@ -124,7 +124,7 @@ export const getUnitExposedPins = (
       const { unitId: unitId_, pinId: pinId_, mergeId } = subPinSpec
 
       if (unitId_ === unitId) {
-        pathSet(pins, [type, pinId_], {
+        deepSet(pins, [type, pinId_], {
           type,
           pinId,
           subPinId,
@@ -143,7 +143,7 @@ export const getPinSpec = (
   type: IO,
   pinId: string
 ): GraphPinSpec => {
-  return pathOrDefault(graph, [`${type}s`, pinId], null)
+  return deepGetOrDefault(graph, [`${type}s`, pinId], null)
 }
 
 export const getPlugSpecs = (spec: GraphSpec) => {
@@ -157,7 +157,7 @@ export const getPlugSpecs = (spec: GraphSpec) => {
     (type, pinId, pinSpecs, subPinId, subPinSpec) => {
       const plug = getSubPinSpec(spec, type, pinId, subPinId)
 
-      pathSet(plugs, [type, pinId, subPinId], plug)
+      deepSet(plugs, [type, pinId, subPinId], plug)
     }
   )
 
@@ -170,7 +170,7 @@ export const getSubPinSpec = (
   pinId: string,
   subPinId: string
 ): GraphSubPinSpec => {
-  return pathOrDefault(graph, [`${type}s`, pinId, 'plug', subPinId], null)
+  return deepGetOrDefault(graph, [`${type}s`, pinId, 'plug', subPinId], null)
 }
 
 export const findPinMerge = (
@@ -195,7 +195,7 @@ export const getPlugCount = (
   type: IO,
   pinId: string
 ): number => {
-  return keyCount(pathOrDefault(spec, [`${type}s`, pinId, 'plug'], {}))
+  return keyCount(deepGetOrDefault(spec, [`${type}s`, pinId, 'plug'], {}))
 }
 
 export const getMergePinCount = (merge: GraphMergeSpec): number => {
@@ -387,11 +387,15 @@ export const hasMergePin = (
   type: IO,
   pinId: string
 ): boolean => {
-  return !!pathOrDefault(spec, ['merges', mergeId, unitId, type, pinId], false)
+  return !!deepGetOrDefault(
+    spec,
+    ['merges', mergeId, unitId, type, pinId],
+    false
+  )
 }
 
 export const hasPinNamed = (spec: Spec, type: IO, pinId: string): boolean => {
-  return !!pathOrDefault(spec, [`${type}s`, pinId], false)
+  return !!deepGetOrDefault(spec, [`${type}s`, pinId], false)
 }
 
 export const hasPlug = (
@@ -400,7 +404,7 @@ export const hasPlug = (
   pinId: string,
   subPinId: string
 ): boolean => {
-  return !!pathOrDefault(spec, [`${type}s`, pinId, 'plug', subPinId], false)
+  return !!deepGetOrDefault(spec, [`${type}s`, pinId, 'plug', subPinId], false)
 }
 
 export const findMergePlug = (
@@ -494,7 +498,7 @@ export function findUnitPlugs(spec: GraphSpec, unitId: string): GraphUnitPlugs {
     spec,
     (type, pinId, pinSpec, subPinId, subPinSpec) => {
       if (subPinSpec.unitId === unitId) {
-        pathSet(plugs, [subPinSpec.kind ?? type, subPinSpec.pinId], {
+        deepSet(plugs, [subPinSpec.kind ?? type, subPinSpec.pinId], {
           type,
           pinId,
           subPinId,
@@ -665,7 +669,7 @@ export function makeFullSpecCollapseMap(
     (mergeId, mergeUnitId, mergeUnitType, mergePinId) => {
       const nextMergeId = mergeIdMap[mergeId] ?? mergeId
 
-      pathSet(
+      deepSet(
         nextUnitPinMergeMap,
         [mergeUnitId, mergeUnitType, mergePinId],
         nextMergeId
@@ -688,7 +692,7 @@ export function makeFullSpecCollapseMap(
 
     const merged = !!mergeId
 
-    const outerPlug = pathOrDefault(unitPlugs, [type, pinId], null)
+    const outerPlug = deepGetOrDefault(unitPlugs, [type, pinId], null)
 
     for (const subPinId in plug) {
       const subPinSpec = plug[subPinId]
@@ -725,7 +729,7 @@ export function makeFullSpecCollapseMap(
           }
         }
 
-        pathSet(nextPlugSpec, [type, pinId, subPinId], nextSubPinSpec)
+        deepSet(nextPlugSpec, [type, pinId, subPinId], nextSubPinSpec)
       }
 
       if (subPinSpec.unitId && subPinSpec.pinId) {
@@ -749,7 +753,7 @@ export function makeFullSpecCollapseMap(
               mergeUnitType === type &&
               mergeUnitPinId === pinId
             ) {
-              pathSet(
+              deepSet(
                 nextPinIdMap,
                 [subPinSpec.unitId, mergeUnitType, subPinSpec.pinId],
                 {
@@ -777,7 +781,7 @@ export function makeFullSpecCollapseMap(
 
             delete oppositeMerge[unitId]
 
-            pathSet(nextMergePinId, [subPinSpec.mergeId, type], {
+            deepSet(nextMergePinId, [subPinSpec.mergeId, type], {
               mergeId,
               pinId,
               subPinSpec: {
@@ -786,7 +790,7 @@ export function makeFullSpecCollapseMap(
               oppositeMerge,
             })
           } else {
-            pathSet(nextMergePinId, [subPinSpec.mergeId, type], {
+            deepSet(nextMergePinId, [subPinSpec.mergeId, type], {
               mergeId: null,
               pinId: null,
               subPinSpec: {},
@@ -803,7 +807,7 @@ export function makeFullSpecCollapseMap(
 
             delete oppositeMerge[unitId]
 
-            pathSet(nextMergePinId, [subPinSpec.mergeId, type], {
+            deepSet(nextMergePinId, [subPinSpec.mergeId, type], {
               mergeId,
               oppositeMerge,
             })
@@ -870,7 +874,7 @@ export function makeFullSpecCollapseMap(
           merge_clone[otherUnitId][otherUnitPinType]
         )
 
-        pathSet(
+        deepSet(
           nextIdMap,
           ['link', otherUnitId, otherUnitPinType, otherUnitPinId],
           {
@@ -932,7 +936,11 @@ export function getUnitPinDatum(
   type: IO,
   pinId: string
 ) {
-  return pathOrDefault(spec, ['units', unitId, type, pinId, 'data'], undefined)
+  return deepGetOrDefault(
+    spec,
+    ['units', unitId, type, pinId, 'data'],
+    undefined
+  )
 }
 
 export function getUnitInputDatum(

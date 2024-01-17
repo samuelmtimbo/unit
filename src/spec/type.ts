@@ -8,7 +8,12 @@ import { GraphMergeSpec } from '../types/GraphMergeSpec'
 import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
 import { IOOf, io } from '../types/IOOf'
-import { clone, isEmptyObject, mapObjVK, pathOrDefault } from '../util/object'
+import {
+  clone,
+  deepGetOrDefault,
+  isEmptyObject,
+  mapObjVK,
+} from '../util/object'
 import { emptyIO } from './emptyIO'
 import {
   ANY_TREE,
@@ -182,13 +187,13 @@ export const _getGraphTypeInterface = (
 
           const mergeInputPin = findFirstMergePin(merge, 'input')
 
-          subPinType = pathOrDefault(
+          subPinType = deepGetOrDefault(
             unitTypeMap,
             [mergeInputPin.unitId, 'input', mergeInputPin.pinId],
             undefined
           )
         } else if (unitId && pinId) {
-          subPinType = pathOrDefault(
+          subPinType = deepGetOrDefault(
             unitTypeMap,
             [unitId, kind, pinId],
             undefined
@@ -220,7 +225,7 @@ export const _getGraphTypeInterface = (
           forEachPinOnMerge(merge, (unitId, kind, pinId) => {
             if (kind === 'output') {
               if (!type) {
-                type = pathOrDefault(
+                type = deepGetOrDefault(
                   unitTypeMap,
                   [unitId, 'output', pinId],
                   ANY_TREE
@@ -228,7 +233,7 @@ export const _getGraphTypeInterface = (
               } else {
                 type = _leastSpecific(
                   type,
-                  pathOrDefault(
+                  deepGetOrDefault(
                     unitTypeMap,
                     [unitId, 'output', pinId],
                     ANY_TREE
@@ -240,7 +245,7 @@ export const _getGraphTypeInterface = (
 
           subPinType = type
         } else if (unitId && pinId) {
-          subPinType = pathOrDefault(
+          subPinType = deepGetOrDefault(
             unitTypeMap,
             [unitId, kind, pinId],
             undefined
@@ -512,7 +517,7 @@ export const _getGraphTypeMap = (
       let merged = false
 
       function set_equivalent(unitId: string, kind: IO, pinId: string) {
-        const type = pathOrDefault(typeMap, [unitId, kind, pinId], undefined)
+        const type = deepGetOrDefault(typeMap, [unitId, kind, pinId], undefined)
 
         // AD HOC
         if (!type) {

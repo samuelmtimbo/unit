@@ -5,7 +5,7 @@ import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { GraphComponentSpec, GraphSubComponentSpec } from '../../types'
 import { insert, pull, push, removeAt, reorder } from '../../util/array'
-import { pathDelete, pathOrDefault, pathSet } from '../../util/object'
+import { deepDelete, deepGetOrDefault, deepSet } from '../../util/object'
 import { getComponentSubComponentParentId } from '../util/component'
 
 export const appendChild = (
@@ -37,20 +37,20 @@ export const setSubComponent = (
   }: { unitId: string; subComponent: GraphSubComponentSpec },
   state: GraphComponentSpec
 ): void => {
-  pathSet(state, ['subComponents', unitId], subComponent)
+  deepSet(state, ['subComponents', unitId], subComponent)
 }
 
 export const removeSubComponent = (
   { unitId }: { unitId: string },
   state: GraphComponentSpec
 ): void => {
-  const subComponent = pathOrDefault(state, ['subComponents', unitId], {})
+  const subComponent = deepGetOrDefault(state, ['subComponents', unitId], {})
 
   const parentId = getComponentSubComponentParentId(state, unitId)
 
   const { children = [] } = subComponent
 
-  pathDelete(state, ['subComponents', unitId])
+  deepDelete(state, ['subComponents', unitId])
 
   const index = state?.slots?.findIndex(([_unitId]) => _unitId === unitId)
 
@@ -112,7 +112,7 @@ export const removeSubComponentChild = (
 
   pull(children, childId)
 
-  pathDelete(childSlot, [childId])
+  deepDelete(childSlot, [childId])
 }
 
 export const appendSubComponentChild = (

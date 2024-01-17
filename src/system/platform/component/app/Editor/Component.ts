@@ -595,6 +595,9 @@ import { hashCode } from '../../../../../util/hashCode'
 import { randomIdNotIn } from '../../../../../util/id'
 import {
   clone,
+  deepDelete,
+  deepGetOrDefault,
+  deepSet,
   filterObj,
   forEachObjKV,
   getObjSingleKey,
@@ -604,9 +607,6 @@ import {
   mapObjKV,
   mapObjKey,
   mapObjKeyKV,
-  pathDelete,
-  pathOrDefault,
-  pathSet,
   reduceObj,
 } from '../../../../../util/object'
 import { removeWhiteSpace } from '../../../../../util/string'
@@ -2043,7 +2043,7 @@ const buildGraphRemap = (
     }
 
     forEachPinOnMerge(merge_spec, (unit_id, type, pin_id) => {
-      pathSet(pin_to_merge, [unit_id, type, pin_id], new_merge_id)
+      deepSet(pin_to_merge, [unit_id, type, pin_id], new_merge_id)
     })
   }
 
@@ -2061,7 +2061,7 @@ const buildGraphRemap = (
         set_plug_id[type][pin_id]
       )
 
-      pathSet(map_plug_id, [type, pin_id, sub_pin_id], new_sub_pin_id)
+      deepSet(map_plug_id, [type, pin_id, sub_pin_id], new_sub_pin_id)
 
       set_plug_id[type][pin_id].add(new_sub_pin_id)
 
@@ -2070,7 +2070,7 @@ const buildGraphRemap = (
       if (sub_pin.unitId && sub_pin.pinId) {
         const next_unit_id = map_unit_id[sub_pin.unitId]
 
-        pathSet(pin_to_plug, [next_unit_id, type, sub_pin.pinId], {
+        deepSet(pin_to_plug, [next_unit_id, type, sub_pin.pinId], {
           pin_id,
           pin_spec,
           sub_pin_id,
@@ -2105,13 +2105,13 @@ const buildGraphRemap = (
 
       const pin_node_id = getPinNodeId(new_unit_id, type, unit_pin_id)
 
-      const next_merge_id = pathOrDefault(
+      const next_merge_id = deepGetOrDefault(
         pin_to_merge,
         [unit_id, type, unit_pin_id],
         null
       )
 
-      const next_plug_spec = pathOrDefault(
+      const next_plug_spec = deepGetOrDefault(
         pin_to_plug,
         [new_unit_id, type, unit_pin_id],
         null
@@ -2231,7 +2231,7 @@ const remapGraph = (
       for (const sub_pin_id in plug) {
         const sub_pin = plug[sub_pin_id]
 
-        const next_sub_pin_id = pathOrDefault(
+        const next_sub_pin_id = deepGetOrDefault(
           map_plug_id,
           [type, pin_id, sub_pin_id],
           sub_pin_id
@@ -5338,7 +5338,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_position: UnitPinPosition = emptyIO({}, {})
 
     this._for_each_spec_id_pin(id, (type: IO, pin_id: string) => {
-      const pin = pathOrDefault(unit, [type, pin_id], {})
+      const pin = deepGetOrDefault(unit, [type, pin_id], {})
 
       const { metadata = {} } = pin
       const { position } = metadata
@@ -6168,7 +6168,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const unit = this._get_unit(unit_id)
 
-    const unit_pin_spec = pathOrDefault(unit, [type, pin_id], {})
+    const unit_pin_spec = deepGetOrDefault(unit, [type, pin_id], {})
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
     const merged = this._is_link_pin_merged(pin_node_id)
@@ -7625,7 +7625,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const [next_spec_id, next_spec] = forkSpec(spec)
 
-    pathSet(next_spec, ['name'], name)
+    deepSet(next_spec, ['name'], name)
 
     this._spec_set_unit_spec_id(unit_id, next_spec_id)
 
@@ -9171,7 +9171,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             const swap_pin_id = pin_id_merge_swap[type][pin_id]
 
-            pathSet(swap_merge_spec, [new_unit_id, type, swap_pin_id], true)
+            deepSet(swap_merge_spec, [new_unit_id, type, swap_pin_id], true)
 
             next_swap_merges[mergeId] = swap_merge_spec
           }
@@ -9221,8 +9221,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         //
       } else {
         if (hasPinId(swap_spec, type, pinId)) {
-          pathSet(graph_unit_spec, [type, pinId, 'constant'], constant)
-          pathSet(graph_unit_spec, [type, pinId, 'ignored'], ignored)
+          deepSet(graph_unit_spec, [type, pinId, 'constant'], constant)
+          deepSet(graph_unit_spec, [type, pinId, 'ignored'], ignored)
         } else {
           //
         }
@@ -9230,10 +9230,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     })
 
     if (is_unit_component && is_swap_unit_component) {
-      pathSet(
+      deepSet(
         graph_unit_spec,
         ['metadata', 'component'],
-        pathOrDefault(unit, ['metadata', 'component'], undefined)
+        deepGetOrDefault(unit, ['metadata', 'component'], undefined)
       )
     }
 
@@ -12160,7 +12160,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         right: null,
       }
 
-      pathSet(this._node_link_heap_node, [node_id, link_id], node)
+      deepSet(this._node_link_heap_node, [node_id, link_id], node)
 
       if (this._node_max_link_length_heap[node_id]) {
         this._node_max_link_length_heap[node_id] = addHeapNode(
@@ -13092,7 +13092,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._search_unit_id) {
       const search_unit_merge_pins = this._search_unit_merges[mergeId]
 
-      const search_unit_merge_outputs = pathOrDefault(
+      const search_unit_merge_outputs = deepGetOrDefault(
         search_unit_merge_pins ?? {},
         [this._search_unit_id, 'output'],
         {}
@@ -25638,7 +25638,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pinId: string,
     ref: boolean
   ): void => {
-    pathSet(this._spec, ['units', unitId, type, pinId, 'ref'], ref)
+    deepSet(this._spec, ['units', unitId, type, pinId, 'ref'], ref)
   }
 
   private _is_node_duplicatable = (node_id: string): boolean => {
@@ -32577,7 +32577,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       for (const sub_pin_id in plug) {
         const sub_pin_spec = plug[sub_pin_id]
 
-        const next_sub_pin_id = pathOrDefault(
+        const next_sub_pin_id = deepGetOrDefault(
           map_plug_id,
           [type, pinId, sub_pin_id],
           sub_pin_id
@@ -32766,7 +32766,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     forEachPinOnMerges(unit_merges, (mergeId, unitId, type, pinId) => {
       if (unitId === graph_id) {
-        pathSet(pin_to_merge, [type, pinId], mergeId)
+        deepSet(pin_to_merge, [type, pinId], mergeId)
       }
     })
 
@@ -32791,7 +32791,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           const { plug = {} } = pin_spec
 
-          const merged = !!pathOrDefault(
+          const merged = !!deepGetOrDefault(
             pin_to_merge,
             [type, pin_id],
             undefined
@@ -32865,7 +32865,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       let next_merge_id = this._new_merge_id(new_merge_blacklist)
 
-      const pin_merge_id = pathOrDefault(pin_to_merge, [type, pinId], undefined)
+      const pin_merge_id = deepGetOrDefault(
+        pin_to_merge,
+        [type, pinId],
+        undefined
+      )
 
       const merged = !!pin_merge_id
 
@@ -32900,7 +32904,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             pin_positions.push(pin_position)
 
-            pathSet(next_merge, [next_unit_id, type, pinId_], true)
+            deepSet(next_merge, [next_unit_id, type, pinId_], true)
           } else if (mergeId) {
             merge_plug_count[mergeId] = (merge_plug_count[mergeId] ?? 0) + 1
 
@@ -33003,7 +33007,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                     (__unitId, __type, __pinId) => {
                       const ___unitId = __unitId
 
-                      pathSet(next_merge, [___unitId, __type, __pinId], true)
+                      deepSet(next_merge, [___unitId, __type, __pinId], true)
 
                       next_merge_pin_count++
                     }
@@ -33013,7 +33017,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   forEachPinOnMerge(merge, (unitId, type, pinId) => {
                     if (unitId !== graph_id) {
                       if (
-                        pathOrDefault(
+                        deepGetOrDefault(
                           next_merge,
                           [unitId, type, pinId],
                           undefined
@@ -33022,7 +33026,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                         return
                       }
 
-                      pathSet(next_merge, [unitId, type, pinId], true)
+                      deepSet(next_merge, [unitId, type, pinId], true)
 
                       next_merge_pin_count++
                     }
@@ -33031,7 +33035,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               } else if (unitId && pinId) {
                 const sub_next_unit_id = map_unit_id[unitId] ?? unitId
 
-                pathSet(next_merge, [sub_next_unit_id, _type, pinId], true)
+                deepSet(next_merge, [sub_next_unit_id, _type, pinId], true)
 
                 next_merge_id = merge_id
                 next_merge_node_id = merge_node_id
@@ -35537,7 +35541,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const merge_id in merges) {
       const merge = merges[merge_id]
 
-      const pin = pathOrDefault(merge, [unitId, type, pinId], null)
+      const pin = deepGetOrDefault(merge, [unitId, type, pinId], null)
 
       if (pin) {
         const merge_node_id = getMergeNodeId(merge_id)
@@ -37325,7 +37329,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { type, unitId, pinId } = segmentLinkPinNodeId(pin_node_id)
 
     if (
-      pathOrDefault(
+      deepGetOrDefault(
         this._constant_input_ref_interval,
         [unitId, pinId],
         undefined
@@ -37765,7 +37769,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const exposed_pin_node_id of exposed_node_ids) {
       const { type, pinId, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
 
-      pathSet(removed_plugs, [type, pinId, subPinId], true)
+      deepSet(removed_plugs, [type, pinId, subPinId], true)
 
       if (!removed_exposed_pin_id[type].has(pinId)) {
         const pin_count = this._get_exposed_pin_set_count(exposed_pin_node_id)
@@ -37880,7 +37884,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       } else if (datum_plug_node_id) {
         const { type, pinId, subPinId } = segmentPlugNodeId(datum_plug_node_id)
 
-        if (pathOrDefault(removed_plugs, [type, pinId, subPinId], false)) {
+        if (deepGetOrDefault(removed_plugs, [type, pinId, subPinId], false)) {
           //
         } else {
           push_remove_datum_bulk_action(
@@ -39557,7 +39561,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   charge
     // )
 
-    pathSet(this._node_charge, [a_node_id, b_node_id], charge)
+    deepSet(this._node_charge, [a_node_id, b_node_id], charge)
   }
 
   private _delete_node_to_node_charge = (
@@ -43460,7 +43464,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         type: IO,
         pinId: string
       ): { input: Dict<any>; output: Dict<any> } => {
-        return pathOrDefault(this._unit_datum, [type, pinId], undefined)
+        return deepGetOrDefault(this._unit_datum, [type, pinId], undefined)
       },
       setPinConstant: (type: IO, pinId: string, constant: boolean): void => {
         throw new MethodNotImplementedError()
@@ -43871,8 +43875,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
       isPinConstant: function (type: IO, name: string): boolean {
         return (
-          pathOrDefault(unit, [type, name, 'constant'], undefined) ??
-          pathOrDefault(spec, [`${type}s`, name, 'defaultIgnored'], false)
+          deepGetOrDefault(unit, [type, name, 'constant'], undefined) ??
+          deepGetOrDefault(spec, [`${type}s`, name, 'defaultIgnored'], false)
         )
       },
       isPinIgnored: function (type: IO, name: string): boolean {
@@ -44183,7 +44187,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         return merges
       },
       getMergeSpec: (mergeId: string): GraphMergeSpec => {
-        return pathOrDefault(spec, ['merges', mergeId], undefined)
+        return deepGetOrDefault(spec, ['merges', mergeId], undefined)
       },
       hasPinNamed: (type: IO, name: string): boolean => {
         // TODO
@@ -44450,7 +44454,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       let merge: GraphMergeSpec | null = null
 
       if (merge_node_id) {
-        pathSet(merge_to_exposed_pin_id, [type, merge_node_id], next_pin_id)
+        deepSet(merge_to_exposed_pin_id, [type, merge_node_id], next_pin_id)
 
         const { mergeId } = segmentMergeNodeId(merge_node_id)
 
@@ -44462,7 +44466,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      merge_id = pathOrDefault(
+      merge_id = deepGetOrDefault(
         next_merge_pin_id,
         [merge_id, type, 'mergeId'],
         merge_id
@@ -44471,7 +44475,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const ref = this._is_link_pin_ref(pin_node_id)
       const ignored = this._spec_is_link_pin_ignored(pin_node_id)
 
-      pathSet(next_pin_id_map, [unit_id, type, pin_id], {
+      deepSet(next_pin_id_map, [unit_id, type, pin_id], {
         pinId: next_pin_id,
         subPinId: `${next_sub_pin_id}`,
         ref,
@@ -44511,12 +44515,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._spec_get_pin_node_plug_spec(type, pin_node_id) ?? {}
 
         if (pinId && subPinId) {
-          pathSet(next_plug_spec_map, [type, pinId, subPinId], {
+          deepSet(next_plug_spec_map, [type, pinId, subPinId], {
             unitId: next_unit_id,
             pinId: pin_id,
           })
 
-          pathSet(next_pin_id_map, [next_unit_id, type, pin_id], {
+          deepSet(next_pin_id_map, [next_unit_id, type, pin_id], {
             type,
             pinId,
             subPinId,
@@ -44590,7 +44594,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       })
 
-      pathSet(merge_inside_pin_count, [mergeId], merge_unit_inside_pin_count)
+      deepSet(merge_inside_pin_count, [mergeId], merge_unit_inside_pin_count)
 
       const merge_outside_input_count =
         merge_pin_count_per_type.input - merge_unit_inside_pin_count.input
@@ -44600,12 +44604,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       merge_pin_count_per_type_map[mergeId] = merge_pin_count_per_type
       merge_unit_inside_pin_count_map[mergeId] = merge_unit_inside_pin_count
 
-      pathSet(
+      deepSet(
         merge_outside_pin_count,
         [mergeId, 'input'],
         merge_outside_input_count
       )
-      pathSet(
+      deepSet(
         merge_outside_pin_count,
         [mergeId, 'output'],
         merge_outside_output_count
@@ -44637,7 +44641,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const add_merge = (other_type, merge_id?: string) => {
           const new_merge_id = merge_id
 
-          pathSet(next_id_map, ['plug', type, pinId, subPinId], {
+          deepSet(next_id_map, ['plug', type, pinId, subPinId], {
             mergeId: new_merge_id,
             type: other_type,
           })
@@ -44654,20 +44658,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               merge_unit_inside_pin_count_map[mergeId]['output']
 
             if (merge_inside_pin_count === 0 || merge_inside_pin_count > 1) {
-              pathSet(next_merge_pin_id, [mergeId, type, 'pinId'], pinId)
+              deepSet(next_merge_pin_id, [mergeId, type, 'pinId'], pinId)
 
-              pathSet(next_plug_spec_map, [type, pinId, subPinId], {
+              deepSet(next_plug_spec_map, [type, pinId, subPinId], {
                 mergeId,
               })
             } else {
-              pathSet(next_plug_spec_map, [type, pinId, subPinId], {})
+              deepSet(next_plug_spec_map, [type, pinId, subPinId], {})
             }
 
             if (merge_outside_pin_count[mergeId][other_type] > 0) {
               add_merge(other_type, mergeId)
             }
           } else {
-            pathSet(next_plug_spec_map, [type, pinId, subPinId], {})
+            deepSet(next_plug_spec_map, [type, pinId, subPinId], {})
 
             add_merge(opposite_type, mergeId)
           }
@@ -44676,12 +44680,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             segmentLinkPinNodeId(internal_node_id)
 
           if (unit_ids.includes(unitId)) {
-            pathSet(next_plug_spec_map, [type, pinId, subPinId], {
+            deepSet(next_plug_spec_map, [type, pinId, subPinId], {
               unitId,
               pinId: _pinId,
             })
 
-            pathSet(next_pin_id_map, [unitId, type, _pinId, 'plug'], {
+            deepSet(next_pin_id_map, [unitId, type, _pinId, 'plug'], {
               type,
               pinId,
               subPinId,
@@ -44691,7 +44695,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               add_merge(type)
             }
           } else {
-            pathSet(next_plug_spec_map, [type, pinId, subPinId], {})
+            deepSet(next_plug_spec_map, [type, pinId, subPinId], {})
 
             const merge_id = this._new_merge_id(next_merge_id_blacklist)
 
@@ -44700,12 +44704,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             add_merge(opposite_type, merge_id)
           }
         } else if (this._is_unit_node_id(internal_node_id)) {
-          pathSet(next_plug_spec_map, [type, pinId, subPinId], {
+          deepSet(next_plug_spec_map, [type, pinId, subPinId], {
             unitId: internal_node_id,
             pinId: SELF,
           })
         } else {
-          pathSet(next_plug_spec_map, [type, pinId, subPinId], {})
+          deepSet(next_plug_spec_map, [type, pinId, subPinId], {})
         }
       }
 
@@ -44807,7 +44811,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
 
           const next_pin_id =
-            pathOrDefault(
+            deepGetOrDefault(
               next_merge_pin_id,
               [mergeId, opposite_type_, 'pinId'],
               undefined
@@ -44885,11 +44889,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           forEachPinOnMerge(merge, (unitId, type_, pinId) => {
             if (type_ === type_) {
-              pathSet(opposite_merge, [unitId, type_, pinId], true)
+              deepSet(opposite_merge, [unitId, type_, pinId], true)
             }
           })
 
-          pathSet(next_merge_pin_id, [mergeId, opposite_type_], {
+          deepSet(next_merge_pin_id, [mergeId, opposite_type_], {
             mergeId: next_merge_id,
             pinId: next_pin_id,
             subPinSpec: next_merge_sub_pin_spec,
@@ -44962,7 +44966,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             const merge_ref_unit_id = this._merge_to_ref_unit[merge_node_id]
 
             if (!node_id_set.has(merge_node_id) || pin_id === SELF) {
-              let next_pin_id = pathOrDefault(
+              let next_pin_id = deepGetOrDefault(
                 merge_to_exposed_pin_id,
                 [type, merge_node_id],
                 null
@@ -44976,7 +44980,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 next_pin_id
               )
 
-              pathSet(
+              deepSet(
                 merge_to_exposed_pin_id,
                 [type, merge_node_id],
                 next_pin_id
@@ -45174,7 +45178,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ) {
         //
       } else {
-        pathSet(next_id_map, ['link', unitId, type, pinId], {
+        deepSet(next_id_map, ['link', unitId, type, pinId], {
           mergeId,
           oppositePinId,
         })
@@ -45194,7 +45198,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           forEachPinOnMerge(merge, (unitId, type, pinId) => {
             if (unit_ids.includes(unitId)) {
-              pathSet(
+              deepSet(
                 next_unit_pin_merge_map,
                 [unitId, type, pinId],
                 next_merge_id
@@ -45212,7 +45216,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 const { unitId, pinId, mergeId } = sub_pin_spec
 
                 if (unitId && pinId) {
-                  pathSet(
+                  deepSet(
                     next_unit_pin_merge_map,
                     [unitId, type, pinId],
                     next_merge_id
@@ -45485,7 +45489,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       link: (pin_node_id) => {
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-        const { mergeId, oppositePinId } = pathOrDefault(
+        const { mergeId, oppositePinId } = deepGetOrDefault(
           nextIdMap,
           ['link', unitId, type, pinId],
           { mergeId: null, oppositePinId: null }
@@ -45547,7 +45551,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         forEachPinOnMerge(merge, (unitId, type, pinId) => {
           if (unitId !== graph_id) {
             if (nextIdMap.unit?.[unitId]) {
-              pathSet(next_merge, [unitId, type, pinId], true)
+              deepSet(next_merge, [unitId, type, pinId], true)
             }
           }
         })
@@ -45893,7 +45897,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const is_graph_component = this._is_unit_component(graph_id)
     const graph_spec = this._get_unit_spec(graph_id) as GraphSpec
 
-    const icon = pathOrDefault(graph_spec, ['metadata', 'icon'], 'question')
+    const icon = deepGetOrDefault(graph_spec, ['metadata', 'icon'], 'question')
 
     this._set_core_icon(graph_id, icon)
 
@@ -45913,7 +45917,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     const insert_pin = (type: IO, pin_id: string) => {
-      const { pinId, subPinId, plug } = pathOrDefault(
+      const { pinId, subPinId, plug } = deepGetOrDefault(
         next_pin_id_map,
         [type, pin_id],
         {
@@ -45939,7 +45943,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           this._set_node_layer(next_pin_node_id, LAYER_COLLAPSE)
 
-          const constant = pathOrDefault(
+          const constant = deepGetOrDefault(
             graph_unit_spec,
             [type, pin_id, 'constant'],
             false
@@ -46061,11 +46065,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       // AD HOC
-      pathDelete(updated_graph_spec, ['metadata', 'complexity'])
+      deepDelete(updated_graph_spec, ['metadata', 'complexity'])
     }
 
     if (!updated_graph_spec.metadata || !updated_graph_spec.metadata.icon) {
-      pathSet(updated_graph_spec, ['metadata', 'icon'], 'question')
+      deepSet(updated_graph_spec, ['metadata', 'icon'], 'question')
     }
 
     const { id: unit_spec_id } = unit
@@ -46074,7 +46078,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const unit_spec = this._collapse_unit_spec[unit_id] as GraphSpec
 
     const insert_pin = (type, pin_id) => {
-      const { pinId, subPinId, ref, plug } = pathOrDefault(
+      const { pinId, subPinId, ref, plug } = deepGetOrDefault(
         next_pin_id_map,
         [type, pin_id],
         {
@@ -46084,7 +46088,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       )
 
       if (pinId && subPinId) {
-        const pin_spec = pathOrDefault(
+        const pin_spec = deepGetOrDefault(
           updated_graph_spec,
           [`${type}s`, pinId],
           undefined
@@ -46277,7 +46281,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const unit_spec = getSpec(unit.id) as GraphSpec
 
     forEachSpecPin(unit_spec, (type, pin_id) => {
-      const mergeId = pathOrDefault(
+      const mergeId = deepGetOrDefault(
         nextUnitPinMergeMap,
         [nextUnitId, type, pin_id],
         undefined
@@ -46296,7 +46300,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     })
 
-    const next_unit_id = pathOrDefault(
+    const next_unit_id = deepGetOrDefault(
       this._collapse_next_map.nextIdMap,
       ['unit', unit_id],
       unit_id
@@ -46312,10 +46316,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const opposite_type = opposite(type)
 
       const next_merge_id =
-        pathOrDefault(
+        deepGetOrDefault(
           this._collapse_next_map.nextMergePinId,
           [merge_id, type, 'mergeId'],
-          pathOrDefault(
+          deepGetOrDefault(
             this._collapse_next_map.nextMergePinId,
             [merge_id, opposite_type, 'mergeId'],
             null
@@ -46326,7 +46330,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       forEachPinOnMerge(merge, (unit_id, type, pin_id) => {
         if (hasUnit(unit_id)) {
-          pathSet(merge_, [unit_id, type, pin_id], true)
+          deepSet(merge_, [unit_id, type, pin_id], true)
         }
       })
 
@@ -46337,7 +46341,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           addPinToMerge(unit_id, type, pin_id, next_merge_id)
         })
       } else {
-        const merge_has_self = pathOrDefault(
+        const merge_has_self = deepGetOrDefault(
           merge,
           [graph_id, 'output', SELF],
           false
@@ -46352,7 +46356,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     forIOObjKV(plugs, (type, pin_id, { pinId, subPinId, position }) => {
       position = position ?? this._jiggle_world_screen_center()
 
-      const next_pin_id = pathOrDefault(
+      const next_pin_id = deepGetOrDefault(
         this._collapse_next_map.nextPinIdMap,
         [unit_id, type, pin_id, 'pinId'],
         pin_id
@@ -46538,7 +46542,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           } else {
             const fallback_position = this._init_merge_spec_position(merge)
 
-            const position = pathOrDefault(
+            const position = deepGetOrDefault(
               meta,
               ['position', 'merges', merge_id],
               fallback_position
@@ -46803,12 +46807,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               pin_id,
               pin_id_blacklist[type]
             )
-            const next_pin_id = pathOrDefault(
+            const next_pin_id = deepGetOrDefault(
               next_pin_map,
               [type, pin_id, 'pinId'],
               fallback_pin_id
             )
-            const next_sub_pin_id = pathOrDefault(
+            const next_sub_pin_id = deepGetOrDefault(
               next_pin_map,
               [type, pin_id, 'subPinId'],
               '0'
@@ -46820,16 +46824,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               pin_id
             )
 
-            pathSet(next_merge_unit, [type, next_pin_id], true)
+            deepSet(next_merge_unit, [type, next_pin_id], true)
           }
         })
       }
 
-      pathSet(
+      deepSet(
         merges,
         [merge_id, graph_id],
         deepMerge(
-          pathOrDefault(merges, [merge_id, graph_id], {}),
+          deepGetOrDefault(merges, [merge_id, graph_id], {}),
           next_merge_unit
         )
       )
@@ -46849,7 +46853,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       forEachObjKV(pin_data, (pin_id, datum_tree) => {
         delete data[type][pin_id]
 
-        const next_pin_id = pathOrDefault(
+        const next_pin_id = deepGetOrDefault(
           next_pin_map,
           [type, pin_id, 'pinId'],
           null
@@ -46893,7 +46897,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._is_link_pin_merged(pin_node_id)) {
         //
       } else {
-        const next_graph_pin_id = pathOrDefault(
+        const next_graph_pin_id = deepGetOrDefault(
           next_pin_map,
           [type, pin_id, 'pinId'],
           newSpecPinId(graph_spec, type, pin_id, pin_id_blacklist[type])
@@ -47178,10 +47182,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const spec = getSpec(id)
 
-    const ignored = pathOrDefault(
+    const ignored = deepGetOrDefault(
       unit,
       [type, pin_id, 'ignored'],
-      pathOrDefault(spec, [`${type}s`, pin_id, 'defaultIgnored'], false)
+      deepGetOrDefault(spec, [`${type}s`, pin_id, 'defaultIgnored'], false)
     )
 
     return ignored
@@ -47252,10 +47256,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         return isUnitPinConstant(spec, unit_id, type, name)
       },
       isPinIgnored: (type: IO, name: string): boolean => {
-        const ignored = pathOrDefault(
+        const ignored = deepGetOrDefault(
           unit,
           [type, name, 'ignored'],
-          pathOrDefault(unit_spec, [`${type}s`, name, 'defaultIgnored'], false)
+          deepGetOrDefault(
+            unit_spec,
+            [`${type}s`, name, 'defaultIgnored'],
+            false
+          )
         )
 
         return ignored
@@ -47471,7 +47479,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         throw new MethodNotImplementedError()
       },
       getPinData: function (type: IO, pinId: string) {
-        return pathOrDefault(unit_data, [type, pinId, 'value'], undefined)
+        return deepGetOrDefault(unit_data, [type, pinId, 'value'], undefined)
       },
       setPinConstant: function (
         type: IO,
@@ -47743,7 +47751,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         return spec
       },
       getPinData: function (type: IO, pinId: string) {
-        return pathOrDefault(unit_data, [type, pinId, 'value'], undefined)
+        return deepGetOrDefault(unit_data, [type, pinId, 'value'], undefined)
       },
       setPinConstant: function (
         type: IO,
@@ -47854,7 +47862,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._spec_remove_pin_or_merge(pin_node_id)
     }
 
-    pathDelete(this._spec, ['units', graphId, type, pinId])
+    deepDelete(this._spec, ['units', graphId, type, pinId])
 
     setSpec(graph_spec_id, next_graph_spec)
   }
@@ -48342,7 +48350,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         updated_graph_spec
       )
 
-      pathDelete(this._spec, ['units', graph_id, type, pinId])
+      deepDelete(this._spec, ['units', graph_id, type, pinId])
 
       setSpec(graph_spec_id, updated_graph_spec)
     } else {
@@ -48772,7 +48780,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             const { unitId, type, pinId } = segmentLinkPinNodeId(node_id)
 
-            pathSet(
+            deepSet(
               bundle,
               [
                 'specs',
@@ -48796,7 +48804,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           const round_unit_position = roundPoint(unit_position)
 
-          pathSet(
+          deepSet(
             bundle,
             ['specs', editor_spec.id, 'units', unit_id, 'metadata', 'position'],
             round_unit_position
@@ -49196,7 +49204,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             async (unit_bundle_spec: UnitBundleSpec) => {
               const { unit } = unit_bundle_spec
 
-              pathSet(bundle, ['spec', 'units', unit_id], unit)
+              deepSet(bundle, ['spec', 'units', unit_id], unit)
 
               unit_memory_processed_count++
 
@@ -49529,7 +49537,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const unit_id in units) {
       const unit = units[unit_id]
 
-      const unit_position = pathOrDefault(
+      const unit_position = deepGetOrDefault(
         graph,
         ['units', unit_id, 'metadata', 'position'],
         NULL_VECTOR
@@ -51427,8 +51435,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const z = tl / l
 
-        pathSet(this._node_z, [a_id, link_id], z)
-        pathSet(this._node_z, [b_id, link_id], z)
+        deepSet(this._node_z, [a_id, link_id], z)
+        deepSet(this._node_z, [b_id, link_id], z)
 
         const ax = a._x
         const bx = b._x
@@ -51626,7 +51634,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._is_unit_node_id(node_id)) {
         const unit_id = node_id
 
-        pathSet(
+        deepSet(
           spec,
           ['units', unit_id, 'metadata', 'position'],
           round_position
@@ -51636,7 +51644,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-        pathSet(
+        deepSet(
           spec,
           ['units', unitId, type, pinId, 'metadata', 'position'],
           round_position
@@ -51646,13 +51654,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const { mergeId } = segmentMergeNodeId(merge_node_id)
 
-        pathSet(spec, ['metadata', 'position', 'merge', mergeId], position)
+        deepSet(spec, ['metadata', 'position', 'merge', mergeId], position)
       } else if (this._is_ext_node_id(node_id)) {
         const exposed_node_id = node_id
 
         const { type, pinId, subPinId } = segmentPlugNodeId(exposed_node_id)
 
-        pathSet(
+        deepSet(
           spec,
           [`${type}s`, pinId, 'metadata', 'position', subPinId],
           round_position
@@ -52341,7 +52349,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       setUnitId({ unitId, newUnitId, name }, spec)
 
-      pathSet(spec, ['units', newUnitId, 'id'], specId)
+      deepSet(spec, ['units', newUnitId, 'id'], specId)
 
       setSpec(spec.id, spec)
     }
@@ -52354,7 +52362,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _spec_remove_unit_pin = (unitId: string, type: IO, pinId: string) => {
     // console.log('Graph', '_spec_remove_unit_pin', unitId, type, pinId)
 
-    pathDelete(this._spec, ['units', unitId, type, pinId])
+    deepDelete(this._spec, ['units', unitId, type, pinId])
   }
 
   private _on_graph_unit_cover_pin_set = (
@@ -52390,7 +52398,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const pin_plug = findUnitPinPlug(parent_spec, unit_id, type, pinId)
 
-      pathDelete(parent_spec, ['units', unit_id, type, pinId])
+      deepDelete(parent_spec, ['units', unit_id, type, pinId])
 
       setSpec(parent_spec.id, parent_spec)
     }
@@ -52567,7 +52575,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       // setSpec(specId, clone(forked_unit_spec))
 
-      pathSet(next_spec, ['units', forked_unit_id, 'id'], specId)
+      deepSet(next_spec, ['units', forked_unit_id, 'id'], specId)
 
       setSpec(next_spec.id, next_spec)
     }
@@ -53316,7 +53324,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ) as GraphSpec
 
       const sub_component_count = keyCount(
-        pathOrDefault(
+        deepGetOrDefault(
           possibly_turned_component_unit_spec,
           ['component', 'subComponents'],
           {}
@@ -53733,7 +53741,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   global_ref
     // )
 
-    pathSet(
+    deepSet(
       this._constant_input_ref_interval,
       [unit_id, pin_id],
       setInterval(() => {
@@ -53747,7 +53755,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     type: 'input',
     pin_id: string
   ) => {
-    const frame = pathOrDefault(
+    const frame = deepGetOrDefault(
       this._constant_input_ref_interval,
       [unit_id, pin_id],
       null
@@ -53756,7 +53764,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (frame !== undefined) {
       clearInterval(frame)
 
-      pathDelete(this._constant_input_ref_interval, [unit_id, pin_id])
+      deepDelete(this._constant_input_ref_interval, [unit_id, pin_id])
     }
   }
 
@@ -53861,7 +53869,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const spec_interface = weakMerge(this._make_graph_spec_interface(spec), {
         coverPinSet: (type, pinId, path) => {
-          pathDelete(parent_spec, ['units', graphId, type, pinId])
+          deepDelete(parent_spec, ['units', graphId, type, pinId])
 
           coverPinSet({ type, pinId }, next_spec)
 
@@ -54609,15 +54617,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         this._state_graph_unit_remove_pin(pin_node_id, graphUnitId, type, pinId)
 
-        const unit_pin_spec = pathOrDefault(
+        const unit_pin_spec = deepGetOrDefault(
           this._spec,
           ['units', graphUnitId, type, pinId],
           undefined
         )
 
-        pathDelete(this._spec, ['units', graphUnitId, type, pinId])
+        deepDelete(this._spec, ['units', graphUnitId, type, pinId])
 
-        pathSet(
+        deepSet(
           this._spec,
           ['units', graphUnitId, type, nextPinId],
           unit_pin_spec
@@ -54650,8 +54658,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               merge_node_id
             )
           } else {
-            pathDelete(merge, [graphUnitId, type, pinId])
-            pathSet(merge, [graphUnitId, type, nextPinId], true)
+            deepDelete(merge, [graphUnitId, type, pinId])
+            deepSet(merge, [graphUnitId, type, nextPinId], true)
 
             this._state_add_merge(mergeId, merge, merge_position)
             this._sim_collapse_merge(mergeId)
@@ -54685,20 +54693,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const mergeId = findPinMerge(spec, unitId, type, pinId)
 
-      const unit_pin_spec = pathOrDefault(
+      const unit_pin_spec = deepGetOrDefault(
         spec,
         ['units', unitId, type, pinId],
         {}
       )
 
-      pathDelete(next_spec, ['units', unitId, type, pinId])
-      pathSet(next_spec, ['units', unitId, type, nextPinId], unit_pin_spec)
+      deepDelete(next_spec, ['units', unitId, type, pinId])
+      deepSet(next_spec, ['units', unitId, type, nextPinId], unit_pin_spec)
 
       if (mergeId) {
         const merge = next_spec.merges[mergeId]
 
-        pathDelete(merge, [unitId, type, pinId])
-        pathSet(merge, [unitId, type, nextPinId], true)
+        deepDelete(merge, [unitId, type, pinId])
+        deepSet(merge, [unitId, type, nextPinId], true)
 
         removeMerge({ mergeId }, next_spec)
         addMerge({ mergeId, mergeSpec: merge }, next_spec)
@@ -54775,7 +54783,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._is_spec_updater(path)) {
       const spec = findSpecAtPath(specs, this._spec, path)
 
-      const constant = pathOrDefault(
+      const constant = deepGetOrDefault(
         spec,
         ['units', unitId, type, pinId, 'constant'],
         false
