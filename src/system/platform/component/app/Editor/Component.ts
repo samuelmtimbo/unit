@@ -33485,7 +33485,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       position
     )
 
-    bulk_actions.push(makeAddMergeAction(merge_id, merge))
+    bulk_actions.push(makeAddMergeAction(merge_id, clone(merge)))
 
     forIO(merge_plugs, (type, plug) => {
       if (plug) {
@@ -52307,6 +52307,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _on_graph_unit_rename_pin_set = (
+    data: GraphExposedPinSetMomentData
+  ): void => {
+    // console.log('Graph', '_on_graph_unit_rename_pin_set', data)
+    // TODO
+  }
+
   private _on_graph_unit_set_unit_id = (data: GraphSetUnitIdMomentData) => {
     // console.log('Graph', '_on_graph_unit_set_unit_id', data)
 
@@ -52555,22 +52562,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //
   }
 
-  private _spec_fork_unit = (unit_id: string, next_spec_id: string): void => {
+  private _spec_fork_unit = (
+    unit_id: string,
+    next_spec_id: string,
+    unit_spec?: GraphSpec
+  ): void => {
     // console.log('_spec_fork_unit', unit_id, next_spec_id)
 
     const { specs, setSpec, registerUnit, unregisterUnit } = this.$props
 
-    const unit_spec = clone(this._get_unit_spec(unit_id) as GraphSpec)
+    const unit_spec_id = this._get_unit_spec_id(unit_id)
+
+    unit_spec = unit_spec ?? clone(this._get_unit_spec(unit_id) as GraphSpec)
 
     this._spec.units[unit_id].id = next_spec_id
 
     delete unit_spec.system
 
-    const unit_spec_id = unit_spec.id
-
     unit_spec.id = next_spec_id
-
-    // setSpec(this._spec.id, clone(this._spec))
 
     setSpec(next_spec_id, unit_spec)
 
@@ -54282,7 +54291,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     datum_id: string,
     datum_node_id: string,
     anchor_node_id: string,
-    data: string
+    data: string,
+    next_tree?: TreeNode
   ) => {
     const { classes } = this.$system
     const { specs } = this.$props
@@ -54294,7 +54304,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const class_literal = tree.type === TreeNodeType.Unit
 
-    const next_tree = _getValueTree(data)
+    next_tree = next_tree ?? _getValueTree(data)
 
     const next_class_literal = next_tree.type === TreeNodeType.Unit
 
@@ -54736,7 +54746,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Editor', '_on_graph_unit_set_unit_pin_data', _data)
 
-    const { setSpec, specs } = this.$props
+    const {
+      setSpec,
+      forkSpec,
+      shouldFork,
+      registerUnit,
+      unregisterUnit,
+      specs,
+    } = this.$props
 
     const { unitId, type, pinId, data, path } = _data
 
@@ -54750,11 +54767,56 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       )
 
       if (constant) {
-        setUnitPinData({ unitId, type, pinId, data }, spec)
+        for (let i = path.length; i > 0; i--) {
+          const graphId = path[i - 1]
 
-        // RETURN
+          const path_ = path.slice(0, i)
+          const parent_path_ = path.slice(0, i - 1)
 
-        // setSpec(spec.id, spec)
+          let spec_ = clone(findSpecAtPath(specs, this._spec, path_))
+          let parent_spec_ = clone(
+            findSpecAtPath(specs, this._spec, parent_path_)
+          )
+
+          let next_spec_ = clone(spec_)
+          let next_parent_spec_ = clone(parent_spec_)
+
+          if (i === path.length) {
+            if (shouldFork(spec_.id)) {
+              ;[, next_spec_] = forkSpec(spec_)
+            }
+
+            setUnitPinData({ unitId, type, pinId, data }, next_spec_)
+
+            setSpec(next_spec_.id, next_spec_)
+
+            if (next_spec_.id === spec_.id) {
+              //
+            } else {
+              registerUnit(next_spec_.id)
+              unregisterUnit(spec_.id)
+            }
+          }
+
+          if (shouldFork(parent_spec_.id)) {
+            ;[, next_parent_spec_] = forkSpec(parent_spec_)
+          }
+
+          next_parent_spec_.units[graphId].id = next_spec_.id
+
+          if (i === 1) {
+            this._spec = next_parent_spec_
+          } else {
+            setSpec(next_parent_spec_.id, next_parent_spec_)
+          }
+
+          if (next_parent_spec_.id === parent_spec_.id) {
+            //
+          } else {
+            registerUnit(next_parent_spec_.id)
+            unregisterUnit(parent_spec_.id)
+          }
+        }
       }
     }
   }
@@ -54890,6 +54952,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       append_child: this._on_graph_unit_append_child_moment,
       remove_child: this._on_graph_unit_remove_child_at_moment,
       insert_child: this._on_graph_unit_insert_child_at_moment,
+      rename_input: this._on_graph_unit_rename_pin_set,
+      rename_output: this._on_graph_unit_rename_pin_set,
     },
     graph: {
       fork: this._on_graph_unit_fork_moment,
@@ -54903,6 +54967,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       expose_pin: this._on_graph_unit_expose_pin,
       cover_pin: this._on_graph_unit_cover_pin,
       expose_pin_set: this._on_graph_unit_expose_pin_set,
+      rename_pin_set: this._on_graph_unit_rename_pin_set,
       cover_pin_set: this._on_graph_unit_cover_pin_set,
       add_pin_to_merge: this._on_graph_unit_add_pin_to_merge_moment,
       remove_pin_from_merge: this._on_graph_unit_remove_pin_from_merge_moment,

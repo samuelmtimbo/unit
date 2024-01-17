@@ -31,7 +31,6 @@ import {
 import { GRAPH_DEFAULT_EVENTS } from '../../constant/GRAPH_DEFAULT_EVENTS'
 import { SELF } from '../../constant/SELF'
 import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
-import { InvalidStateError } from '../../exception/InvalidStateError'
 import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
 import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
 import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
@@ -53,6 +52,7 @@ import {
   coverPin,
   coverPinSet,
   plugPin,
+  removePinFromMerge,
   renameUnitPin,
   setComponentSize,
   setPinSetFunctional,
@@ -179,7 +179,7 @@ import {
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from './interface'
-import { moveSubgraph } from './moveSubgraph'
+import { isRefMerge, moveSubgraph } from './moveSubgraph'
 import { renameUnitInMerges } from '../../spec/reducers/spec'
 import { weakMerge } from '../../weakMerge'
 import { getSubComponentParentId } from '../../spec/util/component'
@@ -341,6 +341,7 @@ export class Graph<I = any, O = any>
     ])
 
     exposedMerge.renamePin(type, name, newName)
+    exposedMergeOpposite.renamePin(oppositeType, name, newName)
 
     if (functional) {
       this._unplugFromWaitAll(type, name)
@@ -1840,6 +1841,12 @@ export class Graph<I = any, O = any>
     }
   }
 
+  public isRefMerge = (mergeId: string): boolean => {
+    const mergeSpec = this.getMergeSpec(mergeId)
+
+    return isRefMerge(this, mergeSpec)
+  }
+
   private _simPlugPin = (
     type: IO,
     pinId: string,
@@ -1852,8 +1859,12 @@ export class Graph<I = any, O = any>
     const { mergeId, unitId, pinId: _pinId, kind = type } = subPinSpec
 
     if (mergeId) {
+      propagate = propagate || this.isRefMerge(mergeId)
+
       this._simPlugPinToMerge(type, pinId, subPinId, mergeId, propagate)
     } else {
+      propagate = propagate || this.isUnitPinRef(unitId, kind, _pinId)
+
       this._simPlugPinToUnitPin(
         type,
         pinId,
@@ -2392,13 +2403,9 @@ export class Graph<I = any, O = any>
     nextUnitBundle: UnitBundleSpec,
     nextUnitPinMap: IOOf<Dict<string>>
   ) {
-    const { unit, specs } = nextUnitBundle
+    const { specs } = nextUnitBundle
 
     this.__system.injectSpecs(specs)
-
-    if (!this.__system.hasSpec(unit.id)) {
-      throw new InvalidStateError()
-    }
 
     const outerSpec = this.getUnitOuterSpec(unitId)
 
@@ -4191,9 +4198,9 @@ export class Graph<I = any, O = any>
     pinId: string,
     propagate: boolean = true
   ): void {
-    // console.log('Graph', '_simAddPinToMerge', mergeId, unitId, type, pinId)
-
     const pinNodeId = getPinNodeId(unitId, type, pinId)
+
+    propagate = propagate || this.isUnitRefPin(unitId, type, pinId)
 
     this._simSetBranch(mergeId, type, pinNodeId, propagate)
   }
@@ -4709,15 +4716,7 @@ export class Graph<I = any, O = any>
     //   pinId
     // )
 
-    delete this._spec.merges[mergeId][unitId][type][pinId]
-
-    if (isEmptyObject(this._spec.merges[mergeId][unitId][type])) {
-      delete this._spec.merges[mergeId][unitId][type]
-    }
-
-    if (isEmptyObject(this._spec.merges[mergeId][unitId])) {
-      delete this._spec.merges[mergeId][unitId]
-    }
+    removePinFromMerge({ mergeId, unitId, type, pinId }, this._spec)
   }
 
   private _simRemovePinFromMerge(
@@ -4740,7 +4739,11 @@ export class Graph<I = any, O = any>
 
     this._simRemoveBranch(mergeId, type, pinNodeId)
 
-    if (take || (type === 'output' && pinId === SELF)) {
+    if (
+      take ||
+      (type === 'output' && pinId === SELF) ||
+      this.isUnitRefPin(unitId, 'input', pinId)
+    ) {
       const pin = this._pin[pinNodeId]
 
       const mergeSpec = this.getMergeSpec(mergeId)
