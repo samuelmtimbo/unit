@@ -694,7 +694,10 @@ export function moveMerge(
 
   if (reverse) {
     if (mergePinCount === 0 || pinIntoCount > 1) {
-      target.addMerge(nextMerge, nextMergeId, false, false)
+      // AD HOC
+      const propagate = isRefMerge(target, nextMerge)
+
+      target.addMerge(nextMerge, nextMergeId, false, propagate)
     }
   } else {
     if (
@@ -703,7 +706,10 @@ export function moveMerge(
           (mergeInputCount > 0 && mergeOutputCount > 0))) ||
       pinIntoCount > 1
     ) {
-      target.addMerge(nextMerge, nextMergeId, false, false)
+      // AD HOC
+      const propagate = isRefMerge(target, nextMerge)
+
+      target.addMerge(nextMerge, nextMergeId, false, propagate)
 
       if (
         keyCount(mergeSpec ?? {}) === 1 &&

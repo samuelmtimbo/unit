@@ -50,7 +50,7 @@ import {
   stringifyUnitBundleSpecData,
 } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
-import { clone, isEmptyObject, mapObjVK } from '../../../util/object'
+import { isEmptyObject, mapObjVK } from '../../../util/object'
 import { weakMerge } from '../../../weakMerge'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
@@ -212,11 +212,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     },
 
     $addMerge({ mergeId, mergeSpec: merge }: GraphAddMergeData) {
-      graph.addMerge(clone(merge), mergeId)
+      graph.addMerge(merge, mergeId)
     },
 
     $removeMerge({ mergeId }: GraphRemoveMergeData) {
-      graph.removeMerge(mergeId)
+      graph.removeMerge(mergeId, true, false)
     },
 
     $addMerges({ merges }: GraphAddMergesData): void {
