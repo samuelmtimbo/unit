@@ -15,7 +15,7 @@ import { GraphSpec } from '../types/GraphSpec'
 import { GraphSpecs } from '../types/GraphSpecs'
 import { IO } from '../types/IO'
 import { uuidNotIn } from '../util/id'
-import { clone, pathOrDefault } from '../util/object'
+import { clone, deepGetOrDefault } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
 
 export function getSpec(specs: Specs, id: string): Spec {
@@ -55,7 +55,7 @@ export function getSpecPinPlugs(
   type: IO,
   pinId: string
 ): PinsSpec {
-  return pathOrDefault(specs, [id, `${type}s`, pinId, 'plug'], {})
+  return deepGetOrDefault(specs, [id, `${type}s`, pinId, 'plug'], {})
 }
 
 export function getSpecInputs(specs: Specs, id: string): PinsSpec {

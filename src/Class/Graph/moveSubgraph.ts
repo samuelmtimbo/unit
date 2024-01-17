@@ -21,11 +21,11 @@ import { IOOf, forIO, forIOObjKV } from '../../types/IOOf'
 import { UCG } from '../../types/interface/UCG'
 import {
   clone,
+  deepGetOrDefault,
+  deepSet,
   forEachObjKV,
   forEachObjVK,
   getObjSingleKey,
-  pathOrDefault,
-  pathSet,
 } from '../../util/object'
 import { GraphMoveSubGraphData } from './interface'
 
@@ -179,7 +179,7 @@ export function moveUnit(
       plug,
       mergeId,
       merge,
-    } = pathOrDefault(nextUnitPinMap, [type, pinId], {})
+    } = deepGetOrDefault(nextUnitPinMap, [type, pinId], {})
 
     if (!ignoredPin[type].has(pinId) && !unit.isPinIgnored(type, pinId)) {
       const shouldSwapMergePin =
@@ -441,7 +441,7 @@ export function moveLinkPinInto(
 
   const { nextPinIdMap } = collapseMap
 
-  const { mergeId, merge } = pathOrDefault(nextPinIdMap, [type, pinId], {
+  const { mergeId, merge } = deepGetOrDefault(nextPinIdMap, [type, pinId], {
     pinId: undefined,
     subPinId: undefined,
   })
@@ -642,12 +642,12 @@ export function moveMerge(
         const subPin = plug[subPinId]
 
         if (subPin.unitId && subPin.pinId) {
-          pathSet(nextMerge, [subPin.unitId, type, subPin.pinId], true)
+          deepSet(nextMerge, [subPin.unitId, type, subPin.pinId], true)
         } else if (subPin.mergeId) {
           const mergeSpec = target.getMergeSpec(subPin.mergeId)
 
           forEachPinOnMerge(mergeSpec, (unitId, type, pinId) => {
-            pathSet(nextMerge, [nextUnitId, type, pinId], true)
+            deepSet(nextMerge, [nextUnitId, type, pinId], true)
           })
         }
       }
@@ -655,7 +655,7 @@ export function moveMerge(
       pinIntoCount++
     } else if (ignoredUnit.has(unitId)) {
       if (target.hasUnit(nextUnitId)) {
-        pathSet(nextMerge, [nextUnitId, type, pinId], true)
+        deepSet(nextMerge, [nextUnitId, type, pinId], true)
 
         pinIntoCount++
       }
@@ -932,7 +932,7 @@ export function moveMerge(
   forIO(pinSpecs, (type, pinsSpec) => {
     forEachObjKV(pinsSpec, (pinId, pinSpec) => {
       if (
-        pathOrDefault(collapseMap, ['nextPlugSpec', type, pinId], undefined)
+        deepGetOrDefault(collapseMap, ['nextPlugSpec', type, pinId], undefined)
       ) {
         return
       }
@@ -1093,19 +1093,19 @@ export function movePlug(
     }
   }
 
-  const nextType = pathOrDefault(
+  const nextType = deepGetOrDefault(
     nextIdMap,
     ['plug', type, pinId, subPinId, 'type'],
     type
   )
 
-  const nextSubPinId = pathOrDefault(
+  const nextSubPinId = deepGetOrDefault(
     nextIdMap,
     ['plug', type, pinId, subPinId, 'subPinId'],
     subPinId
   )
 
-  const nextSubPinSpec: GraphSubPinSpec = pathOrDefault(
+  const nextSubPinSpec: GraphSubPinSpec = deepGetOrDefault(
     nextPlugSpec,
     [type, pinId, subPinId],
     undefined
@@ -1187,7 +1187,7 @@ export function movePlug(
   }
 
   if (subPinSpec.unitId && subPinSpec.pinId) {
-    let nextMergeId = pathOrDefault(
+    let nextMergeId = deepGetOrDefault(
       nextIdMap,
       ['link', subPinSpec.unitId, subPinSpec.type, pinId, 'mergeId'],
       null
@@ -1203,7 +1203,7 @@ export function movePlug(
         false
       )
     } else {
-      nextMergeId = pathOrDefault(
+      nextMergeId = deepGetOrDefault(
         nextIdMap,
         ['plug', type, pinId, subPinId, 'mergeId'],
         null
@@ -1242,10 +1242,14 @@ export function movePlug(
       }
     }
   } else if (subPinSpec.mergeId) {
-    const nextMergeId = pathOrDefault(
+    const nextMergeId = deepGetOrDefault(
       nextMergePinId,
       ['merge', subPinSpec.mergeId, type],
-      pathOrDefault(nextIdMap, ['plug', type, pinId, subPinId, 'mergeId'], null)
+      deepGetOrDefault(
+        nextIdMap,
+        ['plug', type, pinId, subPinId, 'mergeId'],
+        null
+      )
     )
 
     if (nextMergeId) {
@@ -1361,7 +1365,7 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
   }
 
   for (const { unitId, type, pinId } of link) {
-    const { mergeId, oppositePinId } = pathOrDefault(
+    const { mergeId, oppositePinId } = deepGetOrDefault(
       nextIdMap,
       ['link', unitId, type, pinId],
       { mergeId: null, oppositePinId: null }
@@ -1421,7 +1425,7 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
 
   for (const { type, pinId, subPinId } of plug) {
     const pinSpec = deepGet(pinSpecs, [type, pinId])
-    const subPinSpec = pathOrDefault(
+    const subPinSpec = deepGetOrDefault(
       pinSpecs,
       [type, pinId, 'plug', subPinId],
       undefined

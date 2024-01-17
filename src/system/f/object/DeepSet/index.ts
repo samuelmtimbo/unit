@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
-import { clone, pathSet } from '../../../../util/object'
+import { clone, deepSet } from '../../../../util/object'
 import { ID_DEEP_SET } from '../../../_ids'
 
 export interface I<T> {
@@ -31,7 +31,7 @@ export default class DeepSet<T> extends Functional<I<T>, O<T>> {
     let result = clone(obj)
 
     try {
-      pathSet(result, path, value)
+      deepSet(result, path, value)
     } catch (err) {
       done(undefined, err.message)
 

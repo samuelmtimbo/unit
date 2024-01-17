@@ -214,7 +214,7 @@ export function get<T extends object, K extends keyof T>(obj: T, k: K): T[K] {
   return obj[k]
 }
 
-export function pathSet(obj: object, path: string[], value: any): void {
+export function deepSet(obj: object, path: string[], value: any): void {
   let o = obj
 
   const last_index = path.length - 1
@@ -236,7 +236,7 @@ export function pathSet(obj: object, path: string[], value: any): void {
   }
 }
 
-export function pathDelete(obj: object, path: string[]): void {
+export function deepDelete(obj: object, path: string[]): void {
   let o = obj
 
   const last_index = path.length - 1
@@ -258,7 +258,7 @@ export function pathDelete(obj: object, path: string[]): void {
   }
 }
 
-export function pathDestroy(obj: object, path: string[]): void {
+export function deepDestroy(obj: object, path: string[]): void {
   if (path.length === 1) {
     delete obj[path[0]]
 
@@ -269,18 +269,18 @@ export function pathDestroy(obj: object, path: string[]): void {
 
   const o = obj[p]
 
-  pathDestroy(o, rest)
+  deepDestroy(o, rest)
 
   if (isEmptyObject(o)) {
     delete obj[p]
   }
 }
 
-export function pathMerge(obj: object, path: string[], value: any): void {
-  pathSet(obj, path, deepMerge(pathOrDefault(obj, path, {}), value))
+export function deepDeepMerge(obj: object, path: string[], value: any): void {
+  deepSet(obj, path, deepMerge(deepGetOrDefault(obj, path, {}), value))
 }
 
-export function pathOrDefault(obj: object, path: string[], d: any): any {
+export function deepGetOrDefault(obj: object, path: string[], d: any): any {
   let o = obj
 
   for (let i = 0; i < path.length; i++) {
@@ -358,24 +358,24 @@ export function decKey(obj: object, key: string): any {
   return decKeyFrom(obj, key, 0)
 }
 
-export function incPathFrom(obj: object, path: string[], from: number): any {
-  let value = pathOrDefault(obj, path, undefined)
+export function deepIncFrom(obj: object, path: string[], from: number): any {
+  let value = deepGetOrDefault(obj, path, undefined)
 
   if (value === undefined) {
     value = from
   }
 
-  pathSet(obj, path, value + 1)
+  deepSet(obj, path, value + 1)
 }
 
-export function decPathFrom(obj: object, path: string[], from: number): any {
-  let value = pathOrDefault(obj, path, undefined)
+export function deepDecFrom(obj: object, path: string[], from: number): any {
+  let value = deepGetOrDefault(obj, path, undefined)
 
   if (value === undefined) {
     value = from
   }
 
-  pathSet(obj, path, value - 1)
+  deepSet(obj, path, value - 1)
 }
 
 export function incKeyFrom(obj: object, key: string, from: number): any {

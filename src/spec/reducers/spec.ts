@@ -16,10 +16,10 @@ import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
 import {
   clone,
+  deepGetOrDefault,
   getObjSingleKey,
   isEmptyObject,
   mapObjVK,
-  pathOrDefault,
 } from '../../util/object'
 import { forEachPinOnMerges, getMergePinCount } from '../util/spec'
 
@@ -197,7 +197,7 @@ export const removeUnitMerges = (
           for (const unitId in merges[mergeId]) {
             if (unitId !== id) {
               const pinId = getObjSingleKey(
-                pathOrDefault(merges, [mergeId, unitId, type], {})
+                deepGetOrDefault(merges, [mergeId, unitId, type], {})
               )
 
               if (pinId) {

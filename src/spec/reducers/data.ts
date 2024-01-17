@@ -4,7 +4,7 @@ import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { DatumSpec, GraphDataSpec } from '../../types'
 import { GraphSpec } from '../../types/GraphSpec'
-import { pathSet } from '../../util/object'
+import { deepSet } from '../../util/object'
 
 export const removeData = (
   { ids }: { ids: string[] },
@@ -39,5 +39,5 @@ export const _setSpecDatum = (
   datumId: string,
   datumSpec: DatumSpec
 ): void => {
-  return pathSet(spec, ['data', datumId], datumSpec)
+  return deepSet(spec, ['data', datumId], datumSpec)
 }

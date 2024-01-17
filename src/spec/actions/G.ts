@@ -40,7 +40,7 @@ import { IOOf } from '../../types/IOOf'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { G } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
-import { mapObjKeyKV, mapObjVK, pathSet, revertObj } from '../../util/object'
+import { deepSet, mapObjKeyKV, mapObjVK, revertObj } from '../../util/object'
 import { forEachPinOnMerges } from '../util/spec'
 import {
   MOVE_SUB_COMPONENT_ROOT,
@@ -947,7 +947,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
         (mergeId, unitId, type, pinId) => {
           const nextUnitId = nextIdMap_.unit[unitId] ?? unitId
 
-          pathSet(nextUnitPinMergeMap_, [unitId, type, pinId], mergeId)
+          deepSet(nextUnitPinMergeMap_, [unitId, type, pinId], mergeId)
         }
       )
 
