@@ -21325,7 +21325,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _is_pin_active = (pin_node_id: string): boolean => {
-    const datum_node_id = this._pin_to_datum[pin_node_id]
+    const datum_node_id = this._pin_datum_tree[pin_node_id]
     return !!datum_node_id
   }
 
