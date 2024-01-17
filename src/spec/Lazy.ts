@@ -4,7 +4,6 @@ import { Unit, UnitEvents } from '../Class/Unit'
 import { Pin } from '../Pin'
 import { State } from '../State'
 import { isComponentSpec } from '../client/spec'
-import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keys } from '../system/f/object/Keys/f'
@@ -30,7 +29,8 @@ import { IOOf } from '../types/IOOf'
 import { UnitBundle } from '../types/UnitBundle'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { UnitClass } from '../types/UnitClass'
-import { AnimationSpec, C } from '../types/interface/C'
+import { Unlisten } from '../types/Unlisten'
+import { AnimationSpec, C, ComponentSetup } from '../types/interface/C'
 import { ComponentEvents, Component_ } from '../types/interface/Component'
 import { G, G_MoveSubgraphIntoArgs } from '../types/interface/G'
 import { U } from '../types/interface/U'
@@ -116,6 +116,16 @@ export function lazyFromSpec(
       })
     }
 
+    stopPropagation(name: string): Unlisten {
+      this._ensure()
+      return this.__graph.stopPropagation(name)
+    }
+
+    getSetup(): ComponentSetup {
+      this._ensure()
+      return this.__graph.getSetup()
+    }
+
     setUnitPinSetId(
       unitId: string,
       type: IO,
@@ -123,7 +133,14 @@ export function lazyFromSpec(
       newPinId: string,
       ...extra: any[]
     ): void {
-      throw new MethodNotImplementedError()
+      this._ensure()
+      return this.__graph.setUnitPinSetId(
+        unitId,
+        type,
+        pinId,
+        newPinId,
+        ...extra
+      )
     }
 
     fork(): void {
@@ -362,7 +379,8 @@ export function lazyFromSpec(
     }
 
     detach(): void {
-      throw new MethodNotImplementedError()
+      this._ensure()
+      return this.__graph.detach()
     }
 
     moveSubgraphInto(

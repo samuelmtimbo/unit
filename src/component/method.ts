@@ -4,6 +4,7 @@ import { Dict } from '../types/Dict'
 import { AnimationSpec } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
 import { UnitBundle } from '../types/UnitBundle'
+import { Unlisten } from '../types/Unlisten'
 import { insert } from '../util/array'
 
 export function appendChild(
@@ -295,4 +296,25 @@ export function cancelAnimation(
     method: 'cancelAnimation',
     data: [id],
   })
+}
+
+export function stopPropagation(
+  component: Component_,
+  stopPropagationCount: Dict<number>,
+  name: string
+): Unlisten {
+  stopPropagationCount[name] = stopPropagationCount[name] ?? 0
+  stopPropagationCount[name]++
+
+  component.emit('call', { method: 'stopPropagation', data: [name] })
+
+  return () => {
+    stopPropagationCount[name]--
+
+    if (stopPropagationCount[name] === 0) {
+      delete stopPropagationCount[name]
+
+      component.emit('call', { method: 'cancelStopPropagation', data: [name] })
+    }
+  }
 }

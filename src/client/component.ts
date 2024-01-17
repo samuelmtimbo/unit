@@ -149,6 +149,10 @@ export class Component<
 
   public $listenCount: Dict<number> = {}
 
+  private _stopPropagationSet: Set<string>
+  private _stopImmediatePropagationSet: Set<string>
+  private _preventDefaultSet: Set<string>
+
   constructor($props: P, $system: System, $element?: E, $node?: E) {
     this.$props = $props
     this.$system = $system
@@ -242,6 +246,14 @@ export class Component<
   }
 
   stopPropagation(event: string): void {
+    this._stopPropagationSet = this._stopPropagationSet ?? new Set()
+
+    if (this._stopPropagationSet.has(event)) {
+      return
+    }
+
+    this._stopPropagationSet.add(event)
+
     const base = this.getRootBase()
 
     for (const [_, leaf] of base) {
@@ -249,7 +261,30 @@ export class Component<
     }
   }
 
+  cancelStopPropagation(event: string): void {
+    if (!this._stopPropagationSet.has(event)) {
+      return
+    }
+
+    this._stopPropagationSet.delete(event)
+
+    const base = this.getRootBase()
+
+    for (const [_, leaf] of base) {
+      leaf.$element.removeEventListener(event, stopPropagation)
+    }
+  }
+
   stopImmediatePropagation(event: string): void {
+    this._stopImmediatePropagationSet =
+      this._stopImmediatePropagationSet ?? new Set()
+
+    if (this._stopImmediatePropagationSet.has(event)) {
+      return
+    }
+
+    this._stopImmediatePropagationSet.add(event)
+
     this.$element.addEventListener(event, stopImmediatePropagation, {
       passive: true,
     })
@@ -298,6 +333,14 @@ export class Component<
   }
 
   preventDefault(event: string): Unlisten {
+    this._preventDefaultSet = this._preventDefaultSet ?? new Set()
+
+    if (this._preventDefaultSet.has(event)) {
+      return
+    }
+
+    this._preventDefaultSet.add(event)
+
     const listener = (event: Event) => {
       event.preventDefault()
       return false
@@ -1512,15 +1555,33 @@ export class Component<
 
     all_unlisten.push(unit_unlisten)
 
-    const $emitter = $unit.$refEmitter({ _: ['EE'] })
+    this.$unit.$getSetup({}, (setup) => {
+      const {
+        events,
+        animations,
+        stopPropagation,
+        stopImmediatePropagation,
+        preventDefault,
+      } = setup
 
-    $emitter.$eventNames({}, (events: string[]) => {
       for (const event of events) {
         if (UI_EVENT_SET.has(event as IOUIEventName) || event.startsWith('_')) {
           listen(event as IOUIEventName)
         }
       }
+
+      for (const animation of animations) {
+        const { keyframes, opt } = animation
+
+        this.animate(keyframes, opt)
+      }
+
+      for (const event of stopPropagation) {
+        this.stopPropagation(event)
+      }
     })
+
+    const $emitter = $unit.$refEmitter({ _: ['EE'] })
 
     const unlisten_emitter = callAll([
       $emitter.$addListener({ event: 'listen' }, ({ event }) => {

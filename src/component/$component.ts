@@ -2,7 +2,7 @@ import { proxyWrap } from '../proxyWrap'
 import { Callback } from '../types/Callback'
 import { $Component } from '../types/interface/async/$Component'
 import { Async } from '../types/interface/async/Async'
-import { AnimationSpec, C } from '../types/interface/C'
+import { AnimationSpec, C, ComponentSetup } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
 import { WP } from '../types/interface/WP'
 import { UnitBundle } from '../types/UnitBundle'
@@ -112,4 +112,14 @@ export function $getAnimations(
   const animations = component.getAnimations()
 
   callback(animations)
+}
+
+export function $getSetup(
+  component: C,
+  data: {},
+  callback: Callback<ComponentSetup>
+): void {
+  const setup = component.getSetup()
+
+  callback(setup)
 }

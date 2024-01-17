@@ -1,6 +1,7 @@
 import { Dict } from '../Dict'
 import { UnitBundle } from '../UnitBundle'
 import { UnitBundleSpec } from '../UnitBundleSpec'
+import { Unlisten } from '../Unlisten'
 import { Component_ } from './Component'
 
 export type C_J = {}
@@ -28,6 +29,14 @@ export type AnimationSpec = {
   keyframes: Keyframe[]
 }
 
+export type ComponentSetup = {
+  animations: AnimationSpec[]
+  events: string[]
+  stopPropagation: string[]
+  stopImmediatePropagation: string[]
+  preventDefault: string[]
+}
+
 export interface C {
   registerRoot(component: Component_): void
   unregisterRoot(component: Component_): void
@@ -50,4 +59,6 @@ export interface C {
   animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void
   cancelAnimation(id: string): void
   getAnimations(): AnimationSpec[]
+  stopPropagation(name: string): Unlisten
+  getSetup(): ComponentSetup
 }
