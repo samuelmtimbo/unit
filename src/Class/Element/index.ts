@@ -15,16 +15,18 @@ import {
   removeParentChild,
   reorderParentRoot,
   reorderRoot,
+  stopPropagation,
   unregisterParentRoot,
   unregisterRoot,
 } from '../../component/method'
 import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
-import { AnimationSpec, C_EE } from '../../types/interface/C'
+import { AnimationSpec, C_EE, ComponentSetup } from '../../types/interface/C'
 import { Component_, ComponentEvents } from '../../types/interface/Component'
 import { E } from '../../types/interface/E'
 import { UnitBundle } from '../../types/UnitBundle'
+import { Unlisten } from '../../types/Unlisten'
 import { forEach } from '../../util/array'
 import { Stateful, StatefulEvents } from '../Stateful'
 import { ION, Opt } from '../Unit'
@@ -56,6 +58,9 @@ export class Element_<
   public _component: _C
   public _state: Dict<any> = {}
   public _animations: AnimationSpec[] = []
+  public _stopPropagation: Dict<number> = {}
+  public _stopImmediatePropagation: Dict<number> = {}
+  public _preventDefault: Dict<number> = {}
 
   constructor(
     { i = [], o = [] }: ION<I, O>,
@@ -207,6 +212,22 @@ export class Element_<
 
   cancelAnimation(id: string): void {
     return cancelAnimation(this, this._animations, id)
+  }
+
+  stopPropagation(name: string): Unlisten {
+    return stopPropagation(this, this._stopPropagation, name)
+  }
+
+  getSetup(): ComponentSetup {
+    const setup: ComponentSetup = {
+      animations: this._animations,
+      events: this.eventNames(),
+      stopPropagation: Object.keys(this._stopPropagation),
+      stopImmediatePropagation: Object.keys(this._stopImmediatePropagation),
+      preventDefault: Object.keys(this._preventDefault),
+    }
+
+    return setup
   }
 
   private _play(): void {

@@ -1,3 +1,4 @@
+import { Unlisten } from '@_unit/unit/lib/types/Unlisten'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
@@ -31,15 +32,32 @@ export default class StopPropagation<T> extends Semifunctional<I<T>, O<T>> {
     )
   }
 
+  private _unlisten: Unlisten
+
   async f({ component, name }: I<T>, done: Done<O<T>>) {
-    component.emit('call', { method: 'stopPropagation', data: [name] })
+    this._unlisten = component.stopPropagation(name)
+  }
+
+  d() {
+    this._cancel()
+  }
+
+  i() {
+    this._cancel()
+  }
+
+  private _cancel = () => {
+    if (this._unlisten) {
+      this._unlisten()
+      this._unlisten = undefined
+
+      this._done()
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {
     if (name === 'done') {
-      // TODO
-
-      this._done()
+      this._cancel()
 
       this.takeInput('done')
     }

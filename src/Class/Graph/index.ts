@@ -24,6 +24,7 @@ import {
   removeParentChild,
   reorderParentRoot,
   reorderRoot,
+  stopPropagation,
   unregisterParentRoot,
   unregisterRoot,
 } from '../../component/method'
@@ -115,7 +116,7 @@ import { IOOf, forIOObjKV } from '../../types/IOOf'
 import { UnitBundle } from '../../types/UnitBundle'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
-import { AnimationSpec, C, C_EE } from '../../types/interface/C'
+import { AnimationSpec, C, C_EE, ComponentSetup } from '../../types/interface/C'
 import { ComponentEvents, Component_ } from '../../types/interface/Component'
 import { G, G_EE, G_MoveSubgraphIntoArgs } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
@@ -238,6 +239,10 @@ export class Graph<I = any, O = any>
   private _children: Component_[] = []
 
   private _animations: AnimationSpec[] = []
+
+  private _stopPropagation: Dict<number> = {}
+  private _stopImmediatePropagation: Dict<number> = {}
+  private _preventDefault: Dict<number> = {}
 
   private _waitAll: IOOf<WaitAll> = {}
 
@@ -5987,6 +5992,22 @@ export class Graph<I = any, O = any>
 
   cancelAnimation(id: string): void {
     return cancelAnimation(this, this._animations, id)
+  }
+
+  stopPropagation(name: string): Unlisten {
+    return stopPropagation(this, this._stopPropagation, name)
+  }
+
+  getSetup(): ComponentSetup {
+    const setup: ComponentSetup = {
+      animations: this._animations,
+      events: this.eventNames(),
+      stopPropagation: Object.keys(this._stopPropagation),
+      stopImmediatePropagation: Object.keys(this._stopImmediatePropagation),
+      preventDefault: Object.keys(this._preventDefault),
+    }
+
+    return setup
   }
 
   bulkEdit(actions: Action[]): void {
