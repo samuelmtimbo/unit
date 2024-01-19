@@ -9,6 +9,7 @@ import { makeInputListener } from '../../../../../client/event/input'
 import {
   IOKeyboardEvent,
   makeKeydownListener,
+  makeKeyupListener,
   makeShortcutListener,
 } from '../../../../../client/event/keyboard'
 import { UnitPointerEvent } from '../../../../../client/event/pointer'
@@ -176,6 +177,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     const input = new SearchInput({}, this.$system)
 
     input.addEventListener(makeKeydownListener(this._on_input_keydown))
+    input.addEventListener(makeKeyupListener(this._on_input_keyup))
     input.addEventListener(makeFocusInListener(this._on_input_focus_in))
     input.addEventListener(makeFocusOutListener(this._on_input_focus_out))
     input.addEventListener(makeInputListener(this._on_input_input))
@@ -665,7 +667,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
   )
 
   private _on_input_keydown = (
-    { keyCode, repeat }: IOKeyboardEvent,
+    { keyCode, repeat, key }: IOKeyboardEvent,
     _event: KeyboardEvent
   ) => {
     // console.log('Search', '_on_input_keydown', keyCode, repeat)
@@ -674,11 +676,29 @@ export default class Search extends Element<HTMLDivElement, Props> {
       _event.preventDefault()
     }
 
+    if (key === '\\') {
+      if (!this._microphone.recording()) {
+        this._microphone.start()
+
+        _event.preventDefault()
+      }
+    }
+
     if (repeat) {
       if (keyCode === 8) {
         //
       } else {
         _event.preventDefault()
+      }
+    }
+  }
+
+  private _on_input_keyup = ({ key }) => {
+    // console.log('Search', '_on_input_keyup')
+
+    if (key === '\\') {
+      if (this._microphone.recording()) {
+        this._microphone.stop()
       }
     }
   }
