@@ -1243,14 +1243,14 @@ export class Component<
         throw new Error('cannot calculate position of multiple elements.')
       }
 
-      if (this.$element instanceof Text) {
+      if (this.$node instanceof Text) {
         // TODO
         return
       }
 
       const { $x, $y, $sx, $sy } = this.$context
 
-      const bcr: Rect = this.$element.getBoundingClientRect()
+      const bcr: Rect = this.$node.getBoundingClientRect()
 
       const { x, y, width, height } = bcr
 

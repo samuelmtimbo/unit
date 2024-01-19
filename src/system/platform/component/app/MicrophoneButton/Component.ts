@@ -46,6 +46,8 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
 
   private _speech_recorder: SpeechRecorder
 
+  private _recording: boolean = false
+
   constructor($props: Props, $system: System) {
     super($props, $system)
 
@@ -166,6 +168,7 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
 
   public start(): void {
     // console.log('MicrophoneButton', 'start')
+    this._recording = true
     this._icon_button.setProp('active', true)
     try {
       this._speech_recorder && this._speech_recorder.start()
@@ -178,5 +181,10 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
     // console.log('MicrophoneButton', 'stop')
     this._icon_button.setProp('active', false)
     this._speech_recorder && this._speech_recorder.stop()
+    this._recording = false
+  }
+
+  public recording (): boolean {
+    return this._recording
   }
 }

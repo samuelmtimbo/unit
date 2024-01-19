@@ -45,6 +45,7 @@ import Div from '../../Div/Component'
 import Icon from '../../Icon/Component'
 import IconButton from '../IconButton/Component'
 import SearchInput from '../SearchInput/Component'
+import Tooltip, { TOOLTIP_WIDTH } from '../Tooltip/Component'
 
 export interface Props {
   className?: string
@@ -116,6 +117,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
   public _list: Div
   public _input: SearchInput
   public _microphone: MicrophoneButton
+
+  private _tooltip: Tooltip
+  private _shape_tooltip: Tooltip
+  private _microphone_tooltip: Tooltip
 
   private _shape: Shape = 'circle'
   private _shape_button: IconButton
@@ -283,6 +288,30 @@ export default class Search extends Element<HTMLDivElement, Props> {
     search.registerParentRoot(shape_button)
     search.registerParentRoot(microphone)
 
+    const tooltip = new Tooltip(
+      {
+        shortcut: ';',
+      },
+      this.$system
+    )
+    this._tooltip = tooltip
+
+    const shape_tooltip = new Tooltip(
+      {
+        shortcut: 'l',
+      },
+      this.$system
+    )
+    this._shape_tooltip = shape_tooltip
+
+    const microphone_tooltip = new Tooltip(
+      {
+        shortcut: '|',
+      },
+      this.$system
+    )
+    this._microphone_tooltip = microphone_tooltip
+
     this._search = search
 
     const $element = parentElement($system)
@@ -305,6 +334,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
     }
 
     this.registerRoot(search)
+    this.registerRoot(tooltip)
+    this.registerRoot(shape_tooltip)
+    this.registerRoot(microphone_tooltip)
 
     this._listen_registry()
   }
@@ -1148,5 +1180,25 @@ export default class Search extends Element<HTMLDivElement, Props> {
     // console.log('Search', 'onDestroy')
 
     this._unlisten_registry()
+  }
+
+  public showTooltip(): void {
+    const bbox = this._search.getBoundingClientRect()
+
+    this._tooltip.show(
+      bbox.x + bbox.width / 2 - TOOLTIP_WIDTH / 2,
+      bbox.y - SEARCH_ITEM_HEIGHT + 6
+    )
+    this._shape_tooltip.show(bbox.x + 6, bbox.y - SEARCH_ITEM_HEIGHT + 6)
+    this._microphone_tooltip.show(
+      bbox.x + bbox.width - TOOLTIP_WIDTH - 4.5,
+      bbox.y - SEARCH_ITEM_HEIGHT + 6
+    )
+  }
+
+  public hideTooltip(): void {
+    this._tooltip.hide()
+    this._shape_tooltip.hide()
+    this._microphone_tooltip.hide()
   }
 }
