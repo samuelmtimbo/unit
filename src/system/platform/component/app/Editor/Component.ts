@@ -38953,7 +38953,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { pointerId, clientX, clientY } = event
 
-    if (this._restart_gesture) {
+    if (this._restart_gesture || this._is_alt_pressed()) {
       this._main.setPointerCapture(pointerId)
 
       this._start_gesture(event)
