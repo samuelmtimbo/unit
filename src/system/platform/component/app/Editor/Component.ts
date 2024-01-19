@@ -31942,7 +31942,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     f: (n: Rect & { opacity: number }) => void,
     callback: Callback
   ): Unlisten => {
-    const unlisten = this._animate_simulate(
+    const unlisten = this.__animate_core_style(
+      unit_id,
       n0,
       n1,
       [
@@ -31953,6 +31954,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       f,
       callback
     )
+
+    return unlisten
+  }
+
+  private __animate_core_style = (
+    unit_id: string,
+    n0: Dict<any>,
+    n1: () => Dict<any>,
+    ff: [string, number][],
+    f: (n: Dict<any>) => void,
+    callback: Callback
+  ): Unlisten => {
+    const unlisten = this._animate_simulate(n0, n1, ff, f, callback)
 
     this._abort_graph_node_transition[unit_id] = unlisten
 
@@ -41597,6 +41611,194 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _on_circle_gesture_end = (
+    x: number,
+    y: number,
+    r: number,
+    contained_nodes: string[]
+  ) => {
+    // console.log('circle', circle)
+
+    const { specs } = this.$props
+
+    const position = { x, y }
+
+    if (this._mode === 'none') {
+      const new_spec_id = newSpecId(specs)
+
+      this._add_empty_spec(new_spec_id)
+
+      const new_unit_id = this._new_unit_id(new_spec_id)
+
+      const unit: GraphUnitSpec = {
+        id: new_spec_id,
+      }
+
+      const bundle = unitBundleSpec(unit, specs)
+
+      const pin_position = { input: {}, output: {} }
+
+      const layout_position = { x: 0, y: 0 }
+
+      this.add_unit(
+        new_unit_id,
+        bundle,
+        position,
+        pin_position,
+        layout_position,
+        null
+      )
+
+      const contains_rect = contained_nodes.find((node_id) => {
+        const shape = this._get_node_shape(node_id)
+
+        if (shape === 'rect') {
+          return true
+        }
+
+        return false
+      })
+
+      if (!contains_rect) {
+        const n1 = clone(this.get_node(new_unit_id))
+
+        const n0 = { width: 2 * r, height: 2 * r }
+
+        this.__animate_core_style(
+          new_unit_id,
+          n0,
+          () => n1,
+          [
+            ['width', 1],
+            ['height', 1],
+          ],
+          ({ width, height }) => {
+            this._resize_core_width(new_unit_id, width)
+            this._resize_node_width(new_unit_id, width)
+
+            this._resize_core_height(new_unit_id, height)
+            this._resize_node_height(new_unit_id, height)
+          },
+          () => {
+            //
+          }
+        )
+      }
+
+
+      this._move_contained_nodes(new_unit_id, contained_nodes)
+    } else if (this._mode === 'add') {
+      this._search_unit_graph_position = position
+      this._set_search_filter((id: string) => {
+        if (!isComponentId(specs, id)) {
+          return true
+        } else {
+          return false
+        }
+      })
+      this._show_search()
+    } else if (this._mode === 'change') {
+      // TODO
+    }
+  }
+
+  private _on_rectangle_gesture_end = (
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    contained_nodes: string[]
+  ): void => {
+    const { specs, getSpec } = this.$props
+
+    const position = { x, y }
+
+    if (this._mode === 'none') {
+      const id = newSpecId(specs)
+
+      this._add_empty_spec(id, {
+        render: true,
+        component: {
+          defaultWidth: width,
+          defaultHeight: height,
+        },
+      })
+
+      const unit = {
+        id,
+      }
+
+      const new_spec = getSpec(id) as GraphSpec
+
+      const bundle: UnitBundleSpec = {
+        unit,
+        specs: {
+          [id]: new_spec,
+        },
+      }
+
+      const new_unit_id = this._new_unit_id(id)
+
+      const pin_position = emptyIO<Dict<Position>>({}, {})
+
+      const layout_position = { x: 0, y: 0 }
+
+      this._add_unit(
+        new_unit_id,
+        bundle,
+        position,
+        pin_position,
+        layout_position,
+        null
+      )
+
+      this._sim_add_sub_component(new_unit_id)
+      this._connect_sub_component(new_unit_id)
+
+      this._move_contained_nodes(new_unit_id, contained_nodes)
+    } else if (this._mode === 'add') {
+      this._search_unit_graph_position = position
+      this._search_unit_component_size = {
+        width,
+        height,
+      }
+      this._set_search_filter((id: string) => {
+        if (isComponentId(specs, id)) {
+          return true
+        } else {
+          return false
+        }
+      })
+      this._show_search()
+    } else if (this._mode === 'change') {
+      // TODO
+    }
+  }
+
+  private _move_contained_nodes = (
+    new_unit_id: string,
+    contained_nodes: string[]
+  ) => {
+    if (contained_nodes.length > 0) {
+      const collapse_map = this._predict_collapse_map(
+        new_unit_id,
+        contained_nodes
+      )
+
+      const data = {
+        graphId: new_unit_id,
+        graphBundle: null,
+        ...collapse_map,
+      }
+
+      this._start_move_subgraph_into(new_unit_id, data)
+
+      // console.log(data)
+
+      this._pod.$moveSubgraphInto(data)
+    }
+  }
+
   private _on_capture_gesture_end = (
     event: UnitPointerEvent,
     track: Point[]
@@ -41719,27 +41921,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
 
-          const move_contained_nodes = (new_unit_id: string) => {
-            if (contained_nodes.length > 0) {
-              const collapse_map = this._predict_collapse_map(
-                new_unit_id,
-                contained_nodes
-              )
-
-              const data = {
-                graphId: new_unit_id,
-                graphBundle: null,
-                ...collapse_map,
-              }
-
-              this._start_move_subgraph_into(new_unit_id, data)
-
-              // console.log(data)
-
-              this._pod.$moveSubgraphInto(data)
-            }
-          }
-
           if ((rect = getRectangle(track))) {
             const x = _x(rect.x + rect.width / 2)
             const y = _y(rect.y + rect.height / 2)
@@ -41750,116 +41931,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               MIN_HEIGHT
             )
 
-            const position = { x, y }
-
-            if (this._mode === 'none') {
-              const id = newSpecId(specs)
-
-              this._add_empty_spec(id, {
-                render: true,
-                component: {
-                  defaultWidth: width,
-                  defaultHeight: height,
-                },
-              })
-
-              const unit = {
-                id,
-              }
-
-              const new_spec = getSpec(id) as GraphSpec
-
-              const bundle: UnitBundleSpec = {
-                unit,
-                specs: {
-                  [id]: new_spec,
-                },
-              }
-
-              const new_unit_id = this._new_unit_id(id)
-
-              const pin_position = emptyIO<Dict<Position>>({}, {})
-
-              const layout_position = { x: 0, y: 0 }
-
-              this._add_unit(
-                new_unit_id,
-                bundle,
-                position,
-                pin_position,
-                layout_position,
-                null
-              )
-
-              this._sim_add_sub_component(new_unit_id)
-              this._connect_sub_component(new_unit_id)
-
-              move_contained_nodes(new_unit_id)
-            } else if (this._mode === 'add') {
-              this._search_unit_graph_position = position
-              this._search_unit_component_size = {
-                width,
-                height,
-              }
-              this._set_search_filter((id: string) => {
-                if (isComponentId(specs, id)) {
-                  return true
-                } else {
-                  return false
-                }
-              })
-              this._show_search()
-            } else if (this._mode === 'change') {
-              // TODO
-            }
+            this._on_rectangle_gesture_end(x, y, width, height, contained_nodes)
           } else if ((circle = getCircle(track, 0.3))) {
-            // console.log('circle', circle)
-
             const x = _x(circle.x)
             const y = _y(circle.y)
 
-            const position = { x, y }
-
-            if (this._mode === 'none') {
-              const new_spec_id = newSpecId(specs)
-
-              this._add_empty_spec(new_spec_id)
-
-              const new_unit_id = this._new_unit_id(new_spec_id)
-
-              const unit: GraphUnitSpec = {
-                id: new_spec_id,
-              }
-
-              const bundle = unitBundleSpec(unit, specs)
-
-              const pin_position = { input: {}, output: {} }
-
-              const layout_position = { x: 0, y: 0 }
-
-              this.add_unit(
-                new_unit_id,
-                bundle,
-                position,
-                pin_position,
-                layout_position,
-                null
-              )
-
-              move_contained_nodes(new_unit_id)
-            } else if (this._mode === 'add') {
-              this._search_unit_graph_position = position
-              this._set_search_filter((id: string) => {
-                if (!isComponentId(specs, id)) {
-                  return true
-                } else {
-                  return false
-                }
-              })
-              this._show_search()
-            } else if (this._mode === 'change') {
-              // TODO
-            }
+            this._on_circle_gesture_end(x, y, circle.r, contained_nodes)
           } else {
             fallback()
           }
