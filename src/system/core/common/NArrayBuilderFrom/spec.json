@@ -13,7 +13,7 @@
       "id": "6db1905f-2343-4c63-97d3-07f4d946ef58",
       "output": {
         "acc": {
-          "ignored": true
+          "ignored": false
         }
       }
     },
@@ -113,6 +113,25 @@
         }
       },
       "type": "<A>[]"
+    },
+    "test": {
+      "plug": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "type": "boolean",
+      "defaultIgnored": true
+    },
+    "acc": {
+      "plug": {
+        "0": {
+          "unitId": "arraybuilderfrom",
+          "pinId": "acc"
+        }
+      },
+      "type": "<A>[]",
+      "defaultIgnored": true
     }
   },
   "id": "6c5543a6-d558-490d-8a94-20709375b10f",
