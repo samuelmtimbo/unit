@@ -42,16 +42,33 @@
         }
       },
       "type": "<A>[]"
+    },
+    "test": {
+      "plug": {
+        "0": {
+          "unitId": "buildarrayfrom",
+          "pinId": "test"
+        }
+      },
+      "type": "boolean",
+      "defaultIgnored": true
+    },
+    "acc": {
+      "plug": {
+        "0": {
+          "unitId": "buildarrayfrom",
+          "pinId": "acc"
+        }
+      },
+      "type": "<A>[]",
+      "defaultIgnored": true
     }
   },
   "metadata": {
     "icon": "array",
     "description": "build a list of size n",
     "complexity": 26,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "38033fcc-aa28-4df3-abc8-d4ece231028b",
   "type": "`U`&`G`",

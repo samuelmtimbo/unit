@@ -261,16 +261,22 @@ assert.deepEqual(_getGraphTypeMapById(ID_N_ARRAY_BUILDER_FROM, _specs), {
 assert.deepEqual(_getGraphTypeMapById(ID_N_ARRAY_BUILDER, _specs), {
   buildarrayfrom: {
     input: {
-      n: { value: 'number', type: TreeNodeType.Number, children: [] },
+      a: { value: '<A>', type: TreeNodeType.Generic, children: [] },
       from: {
         value: '<A>[]',
         type: TreeNodeType.ArrayExpression,
         children: [{ value: '<A>', type: TreeNodeType.Generic, children: [] }],
       },
-      a: { value: '<A>', type: TreeNodeType.Generic, children: [] },
+      n: { value: 'number', type: TreeNodeType.Number, children: [] },
     },
     output: {
       'a[]': {
+        value: '<A>[]',
+        type: TreeNodeType.ArrayExpression,
+        children: [{ value: '<A>', type: TreeNodeType.Generic, children: [] }],
+      },
+      test: { value: 'boolean', type: TreeNodeType.Boolean, children: [] },
+      acc: {
         value: '<A>[]',
         type: TreeNodeType.ArrayExpression,
         children: [{ value: '<A>', type: TreeNodeType.Generic, children: [] }],
@@ -282,13 +288,13 @@ assert.deepEqual(_getGraphTypeMapById(ID_N_ARRAY_BUILDER, _specs), {
 assert.deepEqual(getGraphTypeMapById(ID_N_ARRAY_BUILDER, _specs), {
   buildarrayfrom: {
     input: { n: 'number', from: '<A>[]', a: '<A>' },
-    output: { 'a[]': '<A>[]' },
+    output: { 'a[]': '<A>[]', test: 'boolean', acc: '<A>[]' },
   },
 })
 
 assert.deepEqual(getSpecTypeInterfaceById(ID_N_ARRAY_BUILDER_FROM, _specs), {
   input: { n: 'number', from: '<A>[]', a: '<A>' },
-  output: { 'a[]': '<A>[]' },
+  output: { 'a[]': '<A>[]', test: 'boolean', acc: '<A>[]' },
 })
 
 assert.deepEqual(getSpecTypeInterfaceById(ID_RANDOM_BIT_ARRAY, _specs), {
