@@ -18093,6 +18093,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           combo: ['Space'],
           keydown: this._on_space_keydown,
         },
+        {
+          combo: ['\\'],
+          keydown: this._on_backslash_keydown,
+          keyup: this._on_backslash_keyup,
+        },
       ]
       const shortcutListener = makeShortcutListener(combo_list)
       this._keyboard_unlisten = this.addEventListener(shortcutListener)
@@ -50434,6 +50439,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (this._search) {
       this._search.focus({ preventScroll: true })
+    }
+  }
+
+  private _on_backslash_keydown = (): void => {
+    if (this._search) {
+      this._search._microphone.start()
+    }
+  }
+
+  private _on_backslash_keyup = (): void => {
+    console.log('Editor', '_on_backslash_keyup')
+
+    if (this._search) {
+      this._search._microphone.stop()
     }
   }
 

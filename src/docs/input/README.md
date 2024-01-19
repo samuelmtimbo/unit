@@ -20,6 +20,7 @@
 | <kbd>Ctrl</kbd> + <kbd>P</kbd>                    | Toggle Pallete    |
 | <kbd>Ctrl</kbd> + <kbd>A</kbd>                    | Toggle Select All |
 | <kbd>Ctrl</kbd> + <kbd>;</kbd>                    | Toggle Search     |
+| <kbd>Ctrl</kbd> + <kbd>\</kbd>                    | Toggle Microphone |
 | <kbd>Ctrl</kbd> + <kbd>C</kbd>                    | Copy              |
 | <kbd>Ctrl</kbd> + <kbd>X</kbd>                    | Cut               |
 | <kbd>Ctrl</kbd> + <kbd>V</kbd>                    | Paste             |
