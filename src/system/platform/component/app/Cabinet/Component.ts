@@ -20,6 +20,7 @@ export interface CabinetDrawerProps extends DrawerProps {
   state?: {
     y?: number
   }
+  shortcut?: string
 }
 
 export interface Props {
@@ -304,6 +305,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
       state = {},
       width = 0,
       height = KNOB_HEIGHT,
+      shortcut,
     } = cabinetDrawer
     const { y = 0 } = state
 
@@ -326,6 +328,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
           backgroundColor,
           color,
         },
+        shortcut,
       },
       this.$system
     )
@@ -566,6 +569,23 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     for (const drawer_id in this._drawer_component) {
       const drawer = this._drawer_component[drawer_id]
       drawer.hide(animate)
+    }
+  }
+
+  public show_tooltips = (): void => {
+    for (const drawer_id in this._drawer_component) {
+      const drawer = this._drawer_component[drawer_id]
+
+      if (drawer.$props.shortcut) {
+        drawer.show_tooltip()
+      }
+    }
+  }
+
+  public hide_tooltips = (): void => {
+    for (const drawer_id in this._drawer_component) {
+      const drawer = this._drawer_component[drawer_id]
+      drawer.hide_tooltip()
     }
   }
 }

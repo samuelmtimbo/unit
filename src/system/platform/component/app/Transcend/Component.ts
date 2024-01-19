@@ -23,6 +23,7 @@ import { Unlisten } from '../../../../../types/Unlisten'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import Div from '../../Div/Component'
 import Icon from '../../Icon/Component'
+import Tooltip from '../Tooltip/Component'
 
 export interface Props {
   className?: string
@@ -65,6 +66,8 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
   public _container: Div
   public _icon: Icon
   public _id: string = `${i++}`
+
+  private _tooltip: Tooltip
 
   private _x: number = 0
   private _y: number = 0
@@ -155,12 +158,16 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
 
             this._cancel_pull_tick_frame()
 
+            this._pointer_down_id = undefined
+
             unlisten()
           }),
           makePointerLeaveListener(() => {
             container.releasePointerCapture(pointerId)
 
             this._cancel_pull_tick_frame()
+
+            this._pointer_down_id = undefined
 
             this._translate(this._x, 0)
 

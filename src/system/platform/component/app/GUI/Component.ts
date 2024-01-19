@@ -605,6 +605,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           width: MINIMAP_WIDTH,
           height: MINIMAP_HEIGHT,
           state: { y: cy - 82.765 },
+          shortcut: 'm'
         },
         color: {
           icon: 'palette',
@@ -815,6 +816,18 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
   public show_cabinet = (animate: boolean): void => {
     this._cabinet.show(animate)
+  }
+
+  public show_tooltips = (): void => {
+    this._modes.show_tooltips()
+    this._cabinet.show_tooltips()
+    this._search.showTooltip()
+  }
+
+  public hide_tooltips = (): void => {
+    this._modes.hide_tooltips()
+    this._cabinet.hide_tooltips()
+    this._search.hideTooltip()
   }
 
   public show(animate: boolean): void {

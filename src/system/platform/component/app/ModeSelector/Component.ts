@@ -62,6 +62,15 @@ const MODE_ICON = {
   multiselect: 'brackets',
 }
 
+const MODE_SHORTCUT = {
+  info: 'q',
+  change: 'f',
+  remove: 'd',
+  add: 's',
+  data: 'a',
+  multiselect: 'Shift',
+}
+
 export default class Modes extends Element<HTMLDivElement, Props> {
   public _modes: Div
 
@@ -106,6 +115,7 @@ export default class Modes extends Element<HTMLDivElement, Props> {
       const activeColor = 'currentColor'
 
       const icon = MODE_ICON[mode]
+      const shortcut = MODE_SHORTCUT[mode]
       // AD HOC
       // Safari will ignore flex gap if immediate child of `display: contents;` parent is svg
       // surround SVG in a container due to Safari bug
@@ -148,6 +158,7 @@ export default class Modes extends Element<HTMLDivElement, Props> {
           },
           title: mode,
           activeColor,
+          shortcut,
         },
         this.$system
       )
@@ -245,6 +256,22 @@ export default class Modes extends Element<HTMLDivElement, Props> {
       }
     } else {
       this._enter_mode(mode)
+    }
+  }
+
+  public show_tooltips = () => {
+    for (const mode of MODE_LIST) {
+      const mode_button = this._mode_button[mode]
+
+      mode_button.showTooltip()
+    }
+  }
+
+  public hide_tooltips = () => {
+    for (const mode of MODE_LIST) {
+      const mode_button = this._mode_button[mode]
+
+      mode_button.hideTooltip()
     }
   }
 

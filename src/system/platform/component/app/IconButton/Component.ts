@@ -95,6 +95,8 @@ export default class IconButton extends Element<HTMLDivElement, Props> {
     const $element = parentElement($system)
 
     this.$element = $element
+    // @ts-ignore
+    this.$node = icon_comp.$node
     this.$slot = { default: icon_comp }
     this.$unbundled = false
     this.$primitive = true

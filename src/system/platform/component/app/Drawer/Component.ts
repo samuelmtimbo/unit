@@ -24,6 +24,7 @@ import { Unlisten } from '../../../../../types/Unlisten'
 import Div from '../../Div/Component'
 import Frame from '../../Frame/Component'
 import Icon from '../../Icon/Component'
+import Tooltip from '../Tooltip/Component'
 
 export interface Props {
   className?: string
@@ -36,6 +37,7 @@ export interface Props {
   active?: boolean
   hidden?: boolean
   y?: number
+  shortcut?: string
 }
 
 export const KNOB_HEIGHT = 35
@@ -55,6 +57,8 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
   public frame: Frame
 
   private _knob: Icon
+
+  private _tooltip: Tooltip
 
   private _active: boolean = false
   private _hidden: boolean = false
@@ -76,6 +80,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
       y = 0,
       width = 0,
       height = KNOB_HEIGHT,
+      shortcut,
     } = this.$props
 
     this._active = active
@@ -124,6 +129,11 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     knob.preventDefault('mousedown')
     knob.preventDefault('touchdown')
     this._knob = knob
+
+    const tooltip = new Tooltip({
+      shortcut,
+    }, this.$system)
+    this._tooltip = tooltip
 
     const frame = new Frame(
       {
@@ -301,6 +311,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     })
 
     this.registerRoot(drawer)
+    this.registerRoot(tooltip)
   }
 
   private _drawer_style = (): Dict<string> => {
@@ -576,5 +587,15 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     this._hidden = true
 
     this._animate_transform(animate)
+  }
+
+  public show_tooltip = () => {
+    const bbox = this._knob.getBoundingClientRect()
+
+    this._tooltip.show(bbox.x - 30 - 3, bbox.y + 4.5)
+  }
+
+  public hide_tooltip = () => {
+    this._tooltip.hide()
   }
 }

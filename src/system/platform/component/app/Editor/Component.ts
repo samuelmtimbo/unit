@@ -50503,6 +50503,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._center_graph()
   }
 
+  private _on_slash_keydown = (): void => {
+    if (this._control) {
+      this._control.show_tooltips()
+    }
+  }
+
+  private _on_slash_keyup = (): void => {
+    if (this._control) {
+      this._control.hide_tooltips()
+    }
+  }
+
   private _hide_search = () => {
     // console.log('Graph', '_hide_search')
 
@@ -50526,8 +50538,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_backslash_keyup = (): void => {
-    console.log('Editor', '_on_backslash_keyup')
-
     if (this._search) {
       this._search._microphone.stop()
     }
