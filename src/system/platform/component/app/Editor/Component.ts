@@ -46860,7 +46860,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       emptyIO(new Set(), new Set())
     )
 
-    forEachObjKV(prev_merges, (merge_id) => {
+    forEachObjKV(curr_merges, (merge_id) => {
       const merge_node_id = getMergeNodeId(merge_id)
 
       const ref = this._is_merge_ref(merge_node_id)
@@ -46915,7 +46915,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         merges,
         [merge_id, graph_id],
         deepMerge(
-          deepGetOrDefault(merges, [merge_id, graph_id], {}),
+          deepGetOrDefault(curr_merges, [merge_id, graph_id], {}),
           next_merge_unit
         )
       )
