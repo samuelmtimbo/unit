@@ -372,12 +372,14 @@ export class Component<
     } = this.$system
     // console.log(this.constructor.name, 'setPointerCapture', pointerId)
 
-    if (this.$element instanceof Text) {
+    const leaf = this.getFirstRootLeaf()
+
+    if (leaf.$node instanceof Text) {
       throw new Error('cannot set pointer capture on a text element')
     }
 
     this._releasePointerCapture[pointerId] = setPointerCapture(
-      this.$element,
+      leaf.$node,
       pointerId
     )
   }
@@ -1234,7 +1236,7 @@ export class Component<
   }
 
   getRect(): Rect {
-    return getRect(this.$element)
+    return getRect(this.$node)
   }
 
   getBoundingClientRect(): Rect {
