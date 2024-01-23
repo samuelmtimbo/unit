@@ -15120,7 +15120,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_refresh_search_list_height_offset')
 
     if (this._search) {
-      const search_rect = this._search.getRect()
+      const search_rect = this._search._list.getRect()
 
       const { $x, $y, $width, $height } = this.$context
 
