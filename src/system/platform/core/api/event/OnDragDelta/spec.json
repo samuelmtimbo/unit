@@ -1,5 +1,6 @@
 {
   "name": "on drag delta",
+  "type": "`U`&`G`",
   "inputs": {
     "element": {
       "plug": {
@@ -25,7 +26,7 @@
     "y": {
       "plug": {
         "0": {
-          "unitId": "subgtract",
+          "unitId": "subtract0",
           "pinId": "a - b"
         }
       },
@@ -127,7 +128,7 @@
         }
       }
     },
-    "subgtract": {
+    "subtract0": {
       "id": "fa94b179-00e3-4ed1-814e-7938324a833f",
       "input": {
         "a": {},
@@ -253,12 +254,12 @@
       },
       "getclientxclienty": {
         "output": {
-          "y": true
+          "x": true
         }
       }
     },
     "4": {
-      "subgtract": {
+      "subtract0": {
         "input": {
           "a": true
         }
@@ -270,7 +271,7 @@
       }
     },
     "5": {
-      "subgtract": {
+      "subtract0": {
         "input": {
           "b": true
         }
