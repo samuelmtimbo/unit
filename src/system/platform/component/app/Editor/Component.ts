@@ -5303,7 +5303,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._simulation_prevent_restart = false
 
-    this._center_graph()
+    // ADHOC Safari will have frame height 0 while page is loading
+    setTimeout(() => {
+      this._center_graph()
+    }, 0)
 
     this._start_graph_simulation(LAYER_NONE)
 
