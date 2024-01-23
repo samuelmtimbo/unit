@@ -11,4 +11,5 @@ export type WebTemplate = {
   inline?: boolean
   system?: boolean
   csp?: string
+  script?: boolean
 }

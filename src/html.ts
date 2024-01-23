@@ -15,6 +15,7 @@ export async function html(opt: WebTemplate): Promise<string> {
     pwa = false,
     background = true,
     csp = DEFAULT_CONTENT_SECURITY_POLICY,
+    script = true,
   } = opt
 
   /* html */
@@ -118,7 +119,7 @@ export async function html(opt: WebTemplate): Promise<string> {
     >
       ${baseHtml || ''}
     </div>
-    <script type="text/javascript" src="${pathname}/index.js"></script>
+    ${script ? `<script type="text/javascript" src="${pathname}/index.js"></script>` : ``}
   </body>
 </html>
   `
