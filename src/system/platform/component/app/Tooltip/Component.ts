@@ -18,6 +18,7 @@ export const TOOLTIP_HEIGHT = 30
 
 export const DEFAULT_STYLE = {
   position: 'relative',
+  display: 'none',
   minWidth: `${TOOLTIP_WIDTH}px`,
   width: 'fit-content',
   height: `${TOOLTIP_HEIGHT}px`,
@@ -46,8 +47,6 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-
-    tooltip.$element.hidePopover()
     this._tooltip = tooltip
 
     const tooltipContent = new Div(
@@ -82,6 +81,8 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
     })
 
     this.registerRoot(tooltip)
+
+    this.hide()
   }
 
   onPropChanged(prop: string, current: any): void {
@@ -102,7 +103,7 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
   }
 
   public hide(): void {
-    if (this._tooltip.$element.showPopover) {
+    if (this._tooltip.$element.hidePopover) {
       this._tooltip.$element.hidePopover()
     }
   }
