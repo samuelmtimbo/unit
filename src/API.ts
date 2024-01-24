@@ -39,9 +39,7 @@ import { IUserMediaOpt } from './types/global/IUserMedia'
 import { IWakeLock, IWakeLockOpt } from './types/global/IWakeLock'
 import { J } from './types/interface/J'
 
-declare global {
-  type ImageCapture = any
-}
+export type ImageCapture = any
 
 export type BasicHTTPResponse = {
   status: number

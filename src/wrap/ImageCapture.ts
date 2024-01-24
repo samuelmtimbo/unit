@@ -1,3 +1,4 @@
+import { ImageCapture } from '../API'
 import { $ } from '../Class/$'
 import { System } from '../system'
 import { IC } from '../types/interface/IC'
