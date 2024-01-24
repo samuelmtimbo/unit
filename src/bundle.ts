@@ -7,7 +7,6 @@ import { GraphSpec } from './types/GraphSpec'
 import { GraphSpecs } from './types/GraphSpecs'
 import { GraphUnitSpec } from './types/GraphUnitSpec'
 import { UnitBundleSpec } from './types/UnitBundleSpec'
-import { weakMerge } from './weakMerge'
 
 export function unitBundleSpec(
   unit: GraphUnitSpec,
@@ -125,23 +124,7 @@ function _bundleUnits(
         const tree = getTree(data)
 
         if (tree.type === TreeNodeType.Unit) {
-          const str = tree.value.substring(1)
-
-          const bundle = evaluate(str, specs, {}) as UnitBundleSpec
-
-          const _spec = getSpec(
-            weakMerge(bundle.specs ?? {}, specs),
-            bundle.unit.id
-          ) as GraphSpec
-
-          // _bundle(_spec, specs, custom, branch)
-
-          if (
-            !specs[bundle.unit.id] ||
-            !isSystemSpecId(specs, bundle.unit.id)
-          ) {
-            // custom[bundle.unit.id] = _spec
-          }
+          const bundle = evaluate(tree.value, specs, {}) as UnitBundleSpec
 
           for (const specId in bundle.specs) {
             const spec = bundle.specs[specId]
