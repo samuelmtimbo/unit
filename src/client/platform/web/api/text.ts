@@ -13,7 +13,9 @@ export function webText(window: Window, opt: BootOpt): API['text'] {
   try {
     ctx = canvas.getContext('2d')
 
-    ctx.textAlign = 'center'
+    if (ctx) {
+      ctx.textAlign = 'center'
+    }
   } catch (err) {
     //
   }
