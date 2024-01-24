@@ -11,6 +11,7 @@ export function boot(): System {
   const root = window.document.getElementById(SYSTEM_ROOT_ID)
 
   window.fetch = fetch
+  window.HTMLCanvasElement.prototype.getContext = () => null
 
   // @ts-ignore
   return webBoot(window, root)
