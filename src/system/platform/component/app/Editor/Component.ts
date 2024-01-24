@@ -28169,6 +28169,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const sub_component = this._get_sub_component(unit_id)
 
+    this.__leave_sub_component_frame(unit_id, sub_component)
+  }
+
+  private __leave_sub_component_frame = (
+    unit_id: string,
+    sub_component: Component
+  ): void => {
+    // console.log('Graph', '__leave_sub_component_frame', unit_id)
+
     const core_component_frame = this._core_component_frame[unit_id]
 
     core_component_frame.removeChild(sub_component)
@@ -41688,7 +41697,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         )
       }
 
-
       this._move_contained_nodes(new_unit_id, contained_nodes)
     } else if (this._mode === 'add') {
       this._search_unit_graph_position = position
@@ -43230,14 +43238,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const sub_components = []
 
-      const base = this._get_sub_component_base(graph_unit_id)
-
-      this._measure_sub_component_base(graph_unit_id, base)
-
-      for (const sub_component_id of ordered_sub_component_ids) {
-        this._leave_sub_component_frame(sub_component_id)
-      }
-
       for (const sub_component_id of ordered_sub_component_ids) {
         const sub_component = this._get_sub_component(sub_component_id)
 
@@ -43289,6 +43289,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           graph_component.pushRoot(sub_component)
         }
+      }
+
+      const base = this._get_sub_component_base(graph_unit_id)
+
+      this._measure_sub_component_base(graph_unit_id, base)
+
+      for (const sub_component_id of ordered_sub_component_ids) {
+        const sub_component = graph_component.getSubComponent(sub_component_id)
+
+        this.__leave_sub_component_frame(sub_component_id, sub_component)
       }
 
       this._decompose_sub_component(graph_unit_id)
