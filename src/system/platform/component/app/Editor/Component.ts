@@ -3943,6 +3943,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const rect = centerRectsBoundingRect(nodes_list)
 
+    console.log(rect)
+
     const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
 
     return center
@@ -5318,16 +5320,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._start_debugger()
   }
 
-  private _center_graph = () => {
-    const { $width, $height } = this.$context
+  private _center_on_nodes = (nodes: Dict<GraphSimNode>) => {
+    const center = this.get_nodes_bounding_rect_center(nodes)
 
+    this._zoom_center_at(center.x, center.y)
+  }
+
+  private _center_graph = () => {
     if (this._node_count === 0) {
       return
     }
 
-    const center = this.get_nodes_bounding_rect_center(this._unit_node)
+    this._center_on_nodes(this._unit_node)
+  }
 
-    this._zoom_center_at(center.x, center.y)
+  private _center_graph_on_selected = () => {
+    const selected_node = {}
+
+    for (const node_id in this._selected_node_id) {
+      const node = this._node[node_id]
+
+      selected_node[node_id] = node
+    }
+
+    this._center_on_nodes(selected_node)
   }
 
   private _get_spec_init_unit_pin_position = (
@@ -50541,7 +50557,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_space_keydown = (): void => {
-    this._center_graph()
+    if (this._selected_node_count > 0) {
+      this._center_graph_on_selected()
+    } else {
+      this._center_graph()
+    }
   }
 
   private _on_slash_keydown = (): void => {
