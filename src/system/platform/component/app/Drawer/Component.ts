@@ -130,9 +130,12 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     knob.preventDefault('touchdown')
     this._knob = knob
 
-    const tooltip = new Tooltip({
-      shortcut,
-    }, this.$system)
+    const tooltip = new Tooltip(
+      {
+        shortcut,
+      },
+      this.$system
+    )
     this._tooltip = tooltip
 
     const frame = new Frame(

@@ -605,7 +605,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           width: MINIMAP_WIDTH,
           height: MINIMAP_HEIGHT,
           state: { y: cy - 82.765 },
-          shortcut: 'm'
+          shortcut: 'm',
         },
         color: {
           icon: 'palette',

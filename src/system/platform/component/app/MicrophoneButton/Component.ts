@@ -184,7 +184,7 @@ export default class MicrophoneButton extends Element<HTMLDivElement, Props> {
     this._recording = false
   }
 
-  public recording (): boolean {
+  public recording(): boolean {
     return this._recording
   }
 }
