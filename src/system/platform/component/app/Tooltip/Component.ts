@@ -27,6 +27,7 @@ export const DEFAULT_STYLE = {
   margin: '0',
   background: '#000000aa',
   borderRadius: '3px',
+  border: '2px solid currentcolor',
 }
 
 export default class Tooltip extends Element<HTMLDivElement, Props> {
