@@ -1,4 +1,4 @@
-import { $ } from '@_unit/unit/lib/Class/$'
+import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
