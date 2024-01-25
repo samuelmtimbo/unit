@@ -1,8 +1,11 @@
+import { addListeners } from '../../../../../client/addListener'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
+import { makeCustomListener } from '../../../../../client/event/custom'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { Unlisten } from '../../../../../types/Unlisten'
 import Div from '../../Div/Component'
 
 export interface Props {
@@ -85,6 +88,8 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
     })
 
     this.registerRoot(tooltip)
+
+    this._refresh_background_color()
   }
 
   onPropChanged(prop: string, current: any): void {
@@ -108,5 +113,29 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
     if (this._tooltip.$element.hidePopover) {
       this._tooltip.$element.hidePopover()
     }
+  }
+
+  private _context_unlisten: Unlisten
+
+  private _refresh_background_color = () => {
+    if (this.$context) {
+      const { $theme } = this.$context
+
+      const background = $theme === 'dark' ? '#000000aa' : '#ffffffaa'
+
+      mergePropStyle(this._tooltip, {
+        background,
+      })
+    }
+  }
+
+  onMount(): void {
+    this._context_unlisten = addListeners(this.$context, [
+      makeCustomListener('themechanged', this._refresh_background_color),
+    ])
+  }
+
+  onUnmount(): void {
+    this._context_unlisten()
   }
 }
