@@ -15338,7 +15338,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const datum_node_id = getDatumNodeId(datum_id)
 
-    const value = `$${JSON.stringify(bundle)}`
+    const value = `$${stringify(bundle)}`
 
     this._add_datum(datum_id, value, position)
 
@@ -18101,6 +18101,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           keydown: this._on_backslash_keydown,
           keyup: this._on_backslash_keyup,
         },
+        {
+          combo: ['/'],
+          keydown: this._on_slash_keydown,
+          keyup: this._on_slash_keyup,
+        }
       ]
       const shortcutListener = makeShortcutListener(combo_list)
       this._keyboard_unlisten = this.addEventListener(shortcutListener)

@@ -18,7 +18,6 @@ export const TOOLTIP_HEIGHT = 30
 
 export const DEFAULT_STYLE = {
   position: 'relative',
-  display: 'none',
   minWidth: `${TOOLTIP_WIDTH}px`,
   width: 'fit-content',
   height: `${TOOLTIP_HEIGHT}px`,
@@ -65,6 +64,11 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
     )
     tooltipContent.$element.textContent = shortcut
 
+    // Firefox hasn't implemented popover yet, so just don't ever display it
+    if (!this._tooltip.$element.showPopover) {
+      this._tooltip.$element.style.display = 'none'
+    }
+
     tooltip.registerParentRoot(tooltipContent)
 
     const $element = parentElement($system)
@@ -81,8 +85,6 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
     })
 
     this.registerRoot(tooltip)
-
-    this.hide()
   }
 
   onPropChanged(prop: string, current: any): void {
