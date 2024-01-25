@@ -46418,16 +46418,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const opposite_type = opposite(type)
 
-      const next_merge_id =
-        deepGetOrDefault(
-          this._collapse_next_map.nextMergePinId,
-          [merge_id, type, 'mergeId'],
-          deepGetOrDefault(
-            this._collapse_next_map.nextMergePinId,
-            [merge_id, opposite_type, 'mergeId'],
-            null
-          )
-        ) ?? merge_id
+      const next_merge_id = merge_id
 
       const merge_ = {}
 
