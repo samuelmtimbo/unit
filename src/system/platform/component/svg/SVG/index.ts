@@ -13,7 +13,7 @@ export default class SVGSVG extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'viewBox'],
+        i: ['style', 'attr', 'viewBox'],
         o: [],
       },
       {},

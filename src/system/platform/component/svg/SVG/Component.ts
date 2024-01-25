@@ -1,3 +1,4 @@
+import applyAttr from '../../../../../client/applyAttr'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { applyStyle } from '../../../../../client/style'
@@ -7,8 +8,8 @@ import { Dict } from '../../../../../types/Dict'
 
 export interface Props {
   className?: string
-  value?: string
   style?: Dict<string>
+  attr?: Dict<string>
   width?: number | string
   height?: number | string
   stroke?: string
@@ -38,6 +39,7 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
     const {
       className,
       style = {},
+      attr = {},
       width,
       height,
       stroke = 'currentColor',
@@ -88,6 +90,7 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
     svg_el.setAttribute('preserveAspectRatio', 'xMidYMid meet')
 
     applyStyle(svg_el, { ...DEFAULT_STYLE, ...style })
+    applyAttr(svg_el, attr)
     this._svg_el = svg_el
 
     this.$element = svg_el
@@ -100,6 +103,8 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
       this._svg_el.className.value = current
     } else if (prop === 'style') {
       applyStyle(this._svg_el, { ...DEFAULT_STYLE, ...current })
+    } else if (prop === 'attr') {
+      applyAttr(this._svg_el, current ?? {})
     } else if (prop === 'viewBox') {
       if (current === undefined) {
         this._svg_el.removeAttribute('viewBox')

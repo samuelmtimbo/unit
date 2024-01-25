@@ -1,9 +1,11 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
-import { ID_CLASS } from '../../../../_ids'
+import { Dict } from '../../../../../types/Dict'
+import { ID_UNIT_CLASS } from '../../../../_ids'
 
 export interface I<T> {
   id: string
+  style: Dict<any>
 }
 
 export interface O<T> {}
@@ -12,12 +14,12 @@ export default class Class<T> extends Element_<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['id'],
+        i: ['id', 'style', 'attr'],
         o: [],
       },
       {},
       system,
-      ID_CLASS
+      ID_UNIT_CLASS
     )
   }
 }
