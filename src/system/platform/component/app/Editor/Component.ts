@@ -34944,6 +34944,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._pod_remove_datum(datum_node_id, datum_pin_node_id, datum_plug_node_id)
     this._sim_remove_datum(datum_node_id)
+
+    if (datum_pin_node_id) {
+      this._spec_remove_pin_data(datum_pin_node_id)
+    }
   }
 
   private _remove_node_datum_link = (
@@ -37906,7 +37910,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               datum_pin_node_id,
               null
             )
-            // this._pod_remove_datum(datum_node_id, datum_pin_node_id, null)
           }
         } else {
           if (!removed_merge.has(datum_pin_node_id)) {
@@ -54631,6 +54634,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._mem_remove_pin_datum_tree_if(pin_node_id)
+    this._spec_remove_pin_data(pin_node_id)
   }
 
   private _mem_remove_pin_datum_tree_if = (pin_node_id: string): void => {
