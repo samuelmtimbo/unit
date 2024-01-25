@@ -961,7 +961,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
     const filtered_score: Dict<number> = {}
 
     const fuzzy_pattern = this._input_value
-    const reverse_spaced_fuzzy_pattern = fuzzy_pattern.split(' ').reverse().join(' ')
+    const reverse_spaced_fuzzy_pattern = fuzzy_pattern
+      .split(' ')
+      .reverse()
+      .join(' ')
 
     for (const id of this._ordered_id_list) {
       if (!this._item[id]) {
@@ -974,7 +977,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
       const { fuzzyName } = this._item[id]
       const list_item_div = this._list_item_div[id]
 
-      const fuzzy_match = isSpecFuzzyMatch(fuzzyName, fuzzy_pattern) || isSpecFuzzyMatch(fuzzyName, reverse_spaced_fuzzy_pattern)
+      const fuzzy_match =
+        isSpecFuzzyMatch(fuzzyName, fuzzy_pattern) ||
+        isSpecFuzzyMatch(fuzzyName, reverse_spaced_fuzzy_pattern)
 
       if (
         (fuzzy_pattern === '' || fuzzy_match) &&
