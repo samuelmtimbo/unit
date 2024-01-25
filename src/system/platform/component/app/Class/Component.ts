@@ -31,6 +31,7 @@ const OPENING: number = 120
 export interface Props {
   id?: string
   className?: string
+  attr?: Dict<string>
   style?: Dict<string>
   specs: Specs
 }
@@ -38,14 +39,14 @@ export interface Props {
 export const CLASS_DEFAULT_WIDTH = 90
 export const CLASS_DEFAULT_HEIGHT = 90
 
-export default class ClassDatum extends Element<HTMLDivElement, Props> {
+export default class ClassDatum extends Element<SVGSVGElement, Props> {
   private _svg: SVGSVG
   private _svg_g: SVGG
 
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { id, className, style } = $props
+    const { id, attr, className } = $props
 
     let width: number = CLASS_DEFAULT_WIDTH
     let height: number = CLASS_DEFAULT_HEIGHT
@@ -55,13 +56,8 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
         className: classnames('unit-class', className),
         width,
         height,
-        style: {
-          width: `${width}px`,
-          height: `${height}px`,
-          color: 'currentColor',
-          pointerEvents: 'none',
-          ...style,
-        },
+        style: this._style(),
+        attr,
         viewBox: `0 0 ${width} ${height}`,
       },
       this.$system
@@ -76,7 +72,7 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
       this.$system
     )
     this._svg_g = svg_g
-    this._svg.registerParentRoot(svg_g)
+    this._svg.appendChild(svg_g)
 
     if (id) {
       this._render(id)
@@ -84,20 +80,37 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
 
     const $element = parentElement($system)
 
-    this.$element = $element
+    this.$element = svg.$element
     this.$slot['default'] = svg
-
-    this.registerRoot(svg)
   }
 
   onPropChanged(prop: string, current: any): void {
     if (prop === 'id') {
       this._render(current)
+    } else if (prop === 'style') {
+      this._svg.setProp('style', this._style())
+    } else if (prop === 'attr') {
+      this._svg.setProp('attr', current)
+    }
+  }
+
+  private _style = () => {
+    const { style } = this.$props
+
+    let width: number = CLASS_DEFAULT_WIDTH
+    let height: number = CLASS_DEFAULT_HEIGHT
+
+    return {
+      width: `${width}px`,
+      height: `${height}px`,
+      color: 'currentColor',
+      pointerEvents: 'none',
+      ...style,
     }
   }
 
   private _render = (id: string): void => {
-    const { specs } = this.$props
+    const { specs = this.$system.specs } = this.$props
 
     const spec = specs[id]
 
