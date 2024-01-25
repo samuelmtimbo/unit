@@ -3523,7 +3523,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       reader.readAsDataURL(file)
 
       return
-    } else if (file.type.startsWith('"text/plain"')) {
+    } else if (
+      file.type.startsWith('"text/plain"') ||
+      file.type.startsWith('application/json')
+    ) {
       const reader = new FileReader()
 
       reader.onload = async (e) => {
@@ -18105,7 +18108,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           combo: ['/'],
           keydown: this._on_slash_keydown,
           keyup: this._on_slash_keyup,
-        }
+        },
       ]
       const shortcutListener = makeShortcutListener(combo_list)
       this._keyboard_unlisten = this.addEventListener(shortcutListener)
