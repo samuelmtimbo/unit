@@ -42728,7 +42728,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const current_layout_layer = this._get_current_layout_layer_id()
 
       if (current_layout_layer) {
-        this._layout_leave_sub_component()
+        if (this._mode === 'none') {
+          this._layout_leave_sub_component()
+        }
       }
     } else {
       if (this._mode === 'none') {
@@ -48672,7 +48674,31 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_layout_background_long_press = (event: UnitPointerEvent) => {
-    //
+    // console.log('Graph', '_on_layout_background_long_press')
+
+    if (this._mode === 'multiselect') {
+      const parent_id = this._get_current_layout_layer_id()
+      const slot_name = 'default'
+      const next_parent_id = this._spec_get_sub_component_parent_id(parent_id)
+      const next_slot_name = 'default'
+
+      const children = this._spec_get_sub_component_children(parent_id)
+
+      const selected_children = children.filter(this._is_node_selected)
+
+      if (selected_children) {
+        this._remove_sub_component_children(
+          parent_id,
+          slot_name,
+          next_parent_id,
+          next_slot_name,
+          selected_children
+        )
+
+        this._refresh_layout_node_target_position(parent_id)
+        this._move_all_current_layout_node_target_position()
+      }
+    }
   }
 
   private _on_graph_background_long_press = (event: UnitPointerEvent) => {
