@@ -1,7 +1,7 @@
-import { Unlisten } from '@_unit/unit/lib/types/Unlisten'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
+import { Unlisten } from '../../../../../types/Unlisten'
 import { Component_ } from '../../../../../types/interface/Component'
 import { ID_STOP_PROPAGATION } from '../../../../_ids'
 
