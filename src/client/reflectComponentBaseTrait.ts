@@ -164,13 +164,16 @@ export const expandSlot = (
     }
 
     child_leaf_id = slot_base_ids[i]
+
+    if (!child_leaf_id) {
+      return []
+    }
+
     child_leaf_path = child_leaf_id.split('/')
 
     slot_base_ids = parent_slot_base[child_leaf_id]
 
     if (!slot_base_ids) {
-      const child_leaf_path = child_leaf_id.split('/')
-
       const child_leaf_comp = component.pathGetSubComponent(child_leaf_path)
 
       slot_base_ids = child_leaf_comp.$parentChildren.reduce(
