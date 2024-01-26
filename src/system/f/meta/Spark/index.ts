@@ -27,6 +27,10 @@ export default class Spark<T> extends Primitive<I<T>, O<T>> {
     )
   }
 
+  public onDataInputDrop(name: string, data: any): void {
+    this._ran = false
+  }
+
   onDataInputData(name: string, data: T) {
     if (this._paused || this._ran) {
       return
