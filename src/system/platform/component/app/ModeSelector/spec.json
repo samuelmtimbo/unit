@@ -259,19 +259,13 @@
         "height": 30
       }
     },
-    "children": [
-      "div"
-    ]
+    "children": ["div"]
   },
   "metadata": {
     "icon": "navigation",
     "description": "select a mode (\"none\"|\"info\"|\"add\"|\"remove\"|\"change\")",
     "complexity": 151,
-    "tags": [
-      "platform",
-      "component",
-      "app"
-    ]
+    "tags": ["platform", "component", "app"]
   },
   "id": "b4d025e2-811e-11ea-97ee-1bd8d1736e67",
   "type": "`U`&`C`&`G`",

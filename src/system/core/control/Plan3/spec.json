@@ -26,10 +26,7 @@
     "icon": "list-ordered",
     "description": "output `a` on `0`, then `1`, then `2`",
     "complexity": 6,
-    "tags": [
-      "core",
-      "control"
-    ]
+    "tags": ["core", "control"]
   },
   "inputs": {
     "a": {

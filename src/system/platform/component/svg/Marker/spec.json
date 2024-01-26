@@ -11,11 +11,7 @@
     "icon": "square",
     "description": "SVG marker",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "svg"
-    ]
+    "tags": ["platform", "component", "svg"]
   },
   "id": "9932f3bc-9241-11ea-89fa-0b2fdace0f08",
   "base": true,

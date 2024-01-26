@@ -175,10 +175,7 @@
     "icon": "array",
     "description": "build a list of size n",
     "complexity": 30,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "625b208c-80e8-49bc-981c-dc69cfbc429d",
   "type": "`U`&`G`",

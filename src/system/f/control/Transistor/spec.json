@@ -17,10 +17,7 @@
     "icon": "git-merge",
     "description": "let `a` pass only if `b` is true without consuming `b`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "control"
-    ]
+    "tags": ["f", "control"]
   },
   "id": "6d4b8791-95f8-4979-8290-ade2adf4f192",
   "base": true,

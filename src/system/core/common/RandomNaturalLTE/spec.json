@@ -48,10 +48,7 @@
     "icon": "random",
     "description": "output random natural `i` less than or equal to `max`",
     "complexity": 18,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "587f9a76-de5f-4dc0-b395-6e5b0091d12e",
   "type": "`U`&`G`",

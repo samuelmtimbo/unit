@@ -4,9 +4,7 @@
     "port": {
       "type": "number",
       "metadata": {
-        "examples": [
-          "8080"
-        ]
+        "examples": ["8080"]
       }
     },
     "done": {
@@ -23,13 +21,9 @@
   },
   "metadata": {
     "icon": "map-pin",
-    "description": "current gps latitude and latitude",
+    "description": "http server",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "http"
-    ]
+    "tags": ["platform", "api", "http"]
   },
   "id": "8f72e51a-0c65-47f6-b22b-868c8a00c6dc",
   "base": true,

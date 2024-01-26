@@ -14,10 +14,7 @@
     "icon": "ruler",
     "description": "size of array `a`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "array"
-    ]
+    "tags": ["f", "array"]
   },
   "id": "46d98b47-0fa4-409e-bbc6-bb3165d863d8",
   "base": true,

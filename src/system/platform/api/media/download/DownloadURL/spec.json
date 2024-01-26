@@ -17,11 +17,7 @@
     "icon": "download",
     "description": "download whatever is at the given `url`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "media"
-    ]
+    "tags": ["platform", "api", "media"]
   },
   "type": "`U`",
   "base": true,

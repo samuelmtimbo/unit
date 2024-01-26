@@ -15,11 +15,7 @@
     "icon": "server",
     "description": "get tab with `id`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "extension",
-      "tabs"
-    ]
+    "tags": ["platform", "extension", "tabs"]
   },
   "id": "159aa41d-fb45-4f75-836b-09a3639156e5",
   "base": true,

@@ -77,10 +77,7 @@
     "icon": "ruler",
     "description": "output based on whether `a` size is less than `b`",
     "complexity": 21,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "8211f5ea-2884-4ae8-aaf4-e98dbbedc10d",
   "type": "`U`&`G`",

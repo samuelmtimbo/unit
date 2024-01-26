@@ -16,10 +16,7 @@
     "icon": "brackets-curly",
     "description": "output an empty object",
     "complexity": 5,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "inputs": {
     "any": {

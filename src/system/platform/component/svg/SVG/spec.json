@@ -21,11 +21,7 @@
     "icon": "square",
     "description": "SVG container",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "svg"
-    ]
+    "tags": ["platform", "component", "svg"]
   },
   "id": "98c279fc-7f5e-11ea-b9e4-f772f9f0bed1",
   "base": true,

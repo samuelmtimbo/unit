@@ -193,11 +193,7 @@
     "icon": "square",
     "description": "remove all `parent` children",
     "complexity": 34,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
         "0": {

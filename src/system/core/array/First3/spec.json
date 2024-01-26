@@ -52,10 +52,7 @@
     "icon": "info-square",
     "description": "array `a`'s first 3 elements",
     "complexity": 7,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "inputs": {
     "a": {

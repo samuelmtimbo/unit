@@ -70,10 +70,7 @@
     "complexity": 8,
     "icon": "alert-circle",
     "description": "throw `message` if `test` is false",
-    "tags": [
-      "core",
-      "assert"
-    ]
+    "tags": ["core", "assert"]
   },
   "id": "cbb46967-8627-4546-add8-6426e3730560",
   "system": true

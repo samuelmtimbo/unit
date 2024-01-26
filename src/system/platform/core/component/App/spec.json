@@ -264,24 +264,13 @@
   },
   "component": {
     "slots": [
-      [
-        "gui",
-        "default"
-      ],
-      [
-        "gui",
-        "1"
-      ],
-      [
-        "gui",
-        "2"
-      ]
+      ["gui", "default"],
+      ["gui", "1"],
+      ["gui", "2"]
     ],
     "subComponents": {
       "gui": {
-        "children": [
-          "editor"
-        ],
+        "children": ["editor"],
         "width": 420,
         "height": 420
       },
@@ -289,9 +278,7 @@
         "children": []
       }
     },
-    "children": [
-      "gui"
-    ],
+    "children": ["gui"],
     "defaultWidth": 420,
     "defaultHeight": 420
   },
@@ -299,11 +286,7 @@
     "icon": "atom-alt",
     "description": "editor + gui",
     "complexity": 227,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
         "0": {

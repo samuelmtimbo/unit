@@ -20,10 +20,7 @@
     "icon": "sort-desc",
     "description": "iteratively increment `count` starting from 0",
     "complexity": 15,
-    "tags": [
-      "core",
-      "iterate"
-    ]
+    "tags": ["core", "iterate"]
   },
   "inputs": {
     "a": {

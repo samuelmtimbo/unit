@@ -42,12 +42,7 @@
     "icon": "brackets-curly",
     "description": "extract key from `obj`",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "8e48bf34-a3b3-11eb-af21-9fff67fa4349",
   "type": "`U`&`G`",

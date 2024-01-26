@@ -14,11 +14,7 @@
     "icon": "timer",
     "description": "output `a` in the next animation frame",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "time"
-    ]
+    "tags": ["platform", "api", "time"]
   },
   "id": "b949221c-8227-4178-bde4-5e8754a7ed39",
   "base": true,

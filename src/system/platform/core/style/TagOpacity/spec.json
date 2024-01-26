@@ -16,11 +16,7 @@
     "icon": "tag",
     "description": "{opacity: `opacity`}",
     "complexity": 7,
-    "tags": [
-      "platform",
-      "core",
-      "style"
-    ]
+    "tags": ["platform", "core", "style"]
   },
   "inputs": {
     "opacity": {

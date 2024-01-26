@@ -41,12 +41,7 @@
     "icon": "square",
     "description": "listen to `element` \"set\" event",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "9256571c-db04-4559-a0a6-b8b0d107861f",
   "type": "`U`&`G`",

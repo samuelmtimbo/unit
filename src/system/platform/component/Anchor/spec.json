@@ -13,9 +13,7 @@
       "type": "string",
       "optional": true,
       "metadata": {
-        "examples": [
-          "\"_blank\""
-        ]
+        "examples": ["\"_blank\""]
       }
     }
   },
@@ -24,10 +22,7 @@
     "icon": "link",
     "description": "HTML anchor element",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "ccf6d0e2-6b08-11eb-9fc3-3785374109d0",
   "base": true,

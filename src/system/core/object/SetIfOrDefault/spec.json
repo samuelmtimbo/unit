@@ -113,10 +113,7 @@
     "icon": "brackets-curly",
     "description": "set value at `key` to `value` if `test` is defined and true or to `default` otherwise",
     "complexity": 22,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "id": "c0b85780-7e99-11ea-9a99-879f3f411ebd",
   "type": "`U`&`G`",

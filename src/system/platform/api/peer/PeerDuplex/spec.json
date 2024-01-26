@@ -329,11 +329,7 @@
   "metadata": {
     "icon": "link",
     "complexity": 18,
-    "tags": [
-      "platform",
-      "api",
-      "peer"
-    ],
+    "tags": ["platform", "api", "peer"],
     "position": {
       "merge": {
         "hjpqrffi": {

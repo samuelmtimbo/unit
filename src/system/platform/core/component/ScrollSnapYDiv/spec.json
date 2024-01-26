@@ -59,35 +59,22 @@
   "merges": {},
   "render": true,
   "component": {
-    "slots": [
-      [
-        "inheritscroll-snap-alignstart",
-        "default"
-      ]
-    ],
+    "slots": [["inheritscroll-snap-alignstart", "default"]],
     "subComponents": {
       "white-spacenowrap": {
-        "children": [
-          "inheritdisplayinline-block"
-        ]
+        "children": ["inheritdisplayinline-block"]
       },
       "inheritdisplayinline-block": {
-        "children": [
-          "inheritscroll-snap-alignstart"
-        ]
+        "children": ["inheritscroll-snap-alignstart"]
       },
       "inheritscroll-snapy": {
-        "children": [
-          "white-spacenowrap"
-        ]
+        "children": ["white-spacenowrap"]
       },
       "inheritscroll-snap-alignstart": {
         "children": []
       }
     },
-    "children": [
-      "inheritscroll-snapy"
-    ],
+    "children": ["inheritscroll-snapy"],
     "defaultWidth": 180,
     "defaultHeight": 270
   },

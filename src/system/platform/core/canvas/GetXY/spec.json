@@ -38,11 +38,7 @@
     "icon": "brackets-curly",
     "description": "get `x` and `y` from `obj`",
     "complexity": 6,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "inputs": {
     "obj": {

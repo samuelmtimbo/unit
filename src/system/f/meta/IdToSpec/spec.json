@@ -14,10 +14,7 @@
     "icon": "circle",
     "description": "get system `spec` with `id`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "meta"
-    ]
+    "tags": ["f", "meta"]
   },
   "id": "b2626d61-b17d-4737-bea3-627c0322f9d6",
   "base": true,

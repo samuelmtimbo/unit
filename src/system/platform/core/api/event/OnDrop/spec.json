@@ -41,12 +41,7 @@
     "icon": "square",
     "description": "listen to `element` click event",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "4638661f-11d9-4727-83d1-8cdccc01508c",
   "type": "`U`&`G`",

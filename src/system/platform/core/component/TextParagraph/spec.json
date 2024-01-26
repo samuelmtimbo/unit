@@ -71,17 +71,13 @@
         "height": 90
       },
       "paragraph": {
-        "children": [
-          "text0"
-        ],
+        "children": ["text0"],
         "childSlot": {},
         "width": 120,
         "height": 120
       }
     },
-    "children": [
-      "paragraph"
-    ],
+    "children": ["paragraph"],
     "defaultWidth": 180,
     "defaultHeight": 120
   },

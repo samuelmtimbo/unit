@@ -26,11 +26,7 @@
     "icon": "form-input",
     "description": "single line text input",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "value"
-    ]
+    "tags": ["platform", "component", "value"]
   },
   "id": "6a14988f-5f4b-4fab-af32-226b7844e41f",
   "base": true,

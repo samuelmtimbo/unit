@@ -178,10 +178,7 @@
   "metadata": {
     "icon": "undo",
     "complexity": 17,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "543d3ed7-45cc-472f-b35d-03aba7c73017",
   "type": "`U`&`G`&`C`"

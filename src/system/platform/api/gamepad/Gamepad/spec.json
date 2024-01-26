@@ -5,9 +5,7 @@
     "i": {
       "type": "number",
       "metadata": {
-        "examples": [
-          "0"
-        ]
+        "examples": ["0"]
       }
     },
     "done": {
@@ -25,11 +23,7 @@
     "icon": "gamepad",
     "description": "connect to gamepad controller",
     "complexity": 4,
-    "tags": [
-      "platform",
-      "api",
-      "gamepad"
-    ]
+    "tags": ["platform", "api", "gamepad"]
   },
   "id": "77238fd9-a968-454d-b7ce-0277bc37475d",
   "base": true,

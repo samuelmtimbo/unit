@@ -210,9 +210,7 @@
       },
       "ref": false,
       "metadata": {
-        "examples": [
-          "['banana','apple','orange']"
-        ]
+        "examples": ["['banana','apple','orange']"]
       }
     },
     "value": {
@@ -225,11 +223,7 @@
       "ref": false,
       "type": "string",
       "metadata": {
-        "examples": [
-          "'banana'",
-          "'apple'",
-          "'orange'"
-        ]
+        "examples": ["'banana'", "'apple'", "'orange'"]
       }
     },
     "style": {
@@ -256,11 +250,7 @@
   "metadata": {
     "icon": "question",
     "description": "select with text options",
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "complexity": 133
   },
   "render": true,
@@ -271,9 +261,7 @@
         "childSlot": {}
       }
     },
-    "children": [
-      "select"
-    ],
+    "children": ["select"],
     "defaultWidth": 180,
     "defaultHeight": 45
   },

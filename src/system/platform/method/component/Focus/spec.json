@@ -14,11 +14,7 @@
     "icon": "object-set",
     "description": "focus on `component`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "method",
-      "object"
-    ]
+    "tags": ["platform", "method", "object"]
   },
   "id": "12d1e7be-a5a6-45ba-82d7-cce3d03b96e2",
   "base": true,

@@ -91,10 +91,7 @@
     "icon": "minus",
     "description": "decrement value until `test` is false",
     "complexity": 10,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "95862764-be74-4372-b734-c767ddd3e323",
   "type": "`U`&`G`",

@@ -4,9 +4,7 @@
     "uri": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "web+unit://ioun.it"
-        ]
+        "examples": ["web+unit://ioun.it"]
       }
     }
   },
@@ -19,11 +17,7 @@
     "icon": "tilde",
     "description": "encode URI to UTF-8",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "URI"
-    ]
+    "tags": ["platform", "api", "URI"]
   },
   "id": "5bd48844-67c6-4fdc-b23b-f03cd561877f",
   "type": "`U`",

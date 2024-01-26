@@ -42,12 +42,7 @@
     "icon": "brackets-curly",
     "description": "extract clientX from `obj`",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "4556afd4-2463-48c8-abb6-12e30fff6ed0",
   "type": "`U`&`G`",

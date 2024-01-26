@@ -77,10 +77,7 @@
     "icon": "ruler",
     "description": "output based on whether `a` size is equal to `b`",
     "complexity": 21,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "f317e5cd-63d0-4036-b958-09dfd04ab480",
   "type": "`U`&`G`",

@@ -66,11 +66,7 @@
     "icon": "brackets-curly",
     "description": "get x0, x1, y0 and y1 rect from object",
     "complexity": 8,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "inputs": {
     "{x0,y0,x1,y1}": {

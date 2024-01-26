@@ -17,11 +17,7 @@
     "icon": "edit-3",
     "description": "adds a rectangle to the current sub-path",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "58385055-7f06-472a-be9e-26bb5bce276a",
   "base": true,

@@ -235,9 +235,7 @@
     "subComponents": {
       "div": {}
     },
-    "children": [
-      "div"
-    ],
+    "children": ["div"],
     "defaultWidth": 200,
     "defaultHeight": 200
   }

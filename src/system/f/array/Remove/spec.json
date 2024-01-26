@@ -23,10 +23,7 @@
     "icon": "scissors",
     "description": "remove `count` elements from array `a` starting at `start`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "array"
-    ]
+    "tags": ["f", "array"]
   },
   "id": "f69e88e3-b2c2-481b-b036-a5c0ed7ccccb",
   "base": true,

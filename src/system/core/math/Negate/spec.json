@@ -16,10 +16,7 @@
     "icon": "minus",
     "description": "turn `a` into `-a`",
     "complexity": 5,
-    "tags": [
-      "core",
-      "math"
-    ]
+    "tags": ["core", "math"]
   },
   "inputs": {
     "a": {

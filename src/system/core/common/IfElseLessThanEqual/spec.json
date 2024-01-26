@@ -118,10 +118,7 @@
     "icon": "filter",
     "description": "forward `a` depending on `a ≤ b`",
     "complexity": 12,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "62de5773-43bc-416c-b604-8fb529d7b299",
   "type": "`U`&`G`",

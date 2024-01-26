@@ -41,12 +41,7 @@
     "icon": "square",
     "description": "listen to `element` double click event",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "40f9a40a-b4f2-11eb-baf1-933bfa98253e",
   "type": "`U`&`G`",

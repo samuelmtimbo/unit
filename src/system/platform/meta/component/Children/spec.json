@@ -16,11 +16,7 @@
     "icon": "circle",
     "description": "reference `parent`'s `children` array",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "meta",
-      "component"
-    ]
+    "tags": ["platform", "meta", "component"]
   },
   "id": "d4945010-686d-431b-a884-1a4db0bfafc4",
   "base": true,

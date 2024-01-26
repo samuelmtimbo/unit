@@ -145,10 +145,7 @@
     "icon": "array",
     "description": "output every element of array `a` starting `from` index",
     "complexity": 29,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "id": "f538e9b0-f172-4c9f-be23-86c715750b76",
   "type": "`U`&`G`",

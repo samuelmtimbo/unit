@@ -6,9 +6,7 @@
       "type": "string",
       "optional": true,
       "metadata": {
-        "examples": [
-          "div { outline: 1px solid currentColor; }"
-        ]
+        "examples": ["div { outline: 1px solid currentColor; }"]
       }
     },
     "attr": {
@@ -16,11 +14,7 @@
       "optional": true,
       "defaultIgnored": true,
       "metadata": {
-        "examples": [
-          "{tabIndex:1}",
-          "{title:'hello'}",
-          "{draggable:true}"
-        ]
+        "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
       }
     }
   },
@@ -29,10 +23,7 @@
     "icon": "square",
     "description": "HTML style element",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "62ca7eae-ea36-4960-a8f2-6b5978cabbab",
   "base": true,

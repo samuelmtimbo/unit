@@ -76,10 +76,7 @@
     "icon": "brackets",
     "description": "build an array from 0 to `n`",
     "complexity": 40,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "id": "a0b5c3d9-7ee8-4c41-a299-1d32e707c673",
   "type": "`U`&`G`",

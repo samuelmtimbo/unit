@@ -61,20 +61,13 @@
   },
   "render": true,
   "component": {
-    "slots": [
-      [
-        "inherit",
-        "default"
-      ]
-    ],
+    "slots": [["inherit", "default"]],
     "subComponents": {
       "inherit": {
         "children": []
       }
     },
-    "children": [
-      "inherit"
-    ],
+    "children": ["inherit"],
     "defaultWidth": 240,
     "defaultHeight": 240
   },

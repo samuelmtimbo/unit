@@ -14,11 +14,7 @@
     "icon": "edit-3",
     "description": "strokes (outlines) the current",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99",
   "base": true,

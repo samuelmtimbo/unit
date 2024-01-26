@@ -10,11 +10,7 @@
     "icon": "keyboard",
     "description": "virtual keyboard",
     "complexity": 48,
-    "tags": [
-      "platform",
-      "component",
-      "app"
-    ]
+    "tags": ["platform", "component", "app"]
   },
   "id": "e6b88d1e-8755-11ea-916e-d3995fb8986e",
   "base": true,

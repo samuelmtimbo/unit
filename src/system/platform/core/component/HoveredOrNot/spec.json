@@ -192,11 +192,7 @@
         }
       }
     },
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "687384e5-8b9a-4ba8-b68a-e7972213d7bc",
   "component": {
@@ -205,9 +201,7 @@
         "children": []
       }
     },
-    "children": [
-      "textdiv"
-    ],
+    "children": ["textdiv"],
     "defaultWidth": 180,
     "defaultHeight": 90
   },

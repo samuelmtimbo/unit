@@ -17,10 +17,7 @@
     "icon": "less-than-equal",
     "description": "less than or equal to operator",
     "complexity": 3,
-    "tags": [
-      "f",
-      "comparisson"
-    ]
+    "tags": ["f", "comparisson"]
   },
   "id": "e13f3090-62a6-4a3b-8401-c571cbf03526",
   "base": true,

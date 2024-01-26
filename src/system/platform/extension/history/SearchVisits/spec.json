@@ -4,9 +4,7 @@
     "query": {
       "type": "{endTime?:number,maxResults?:number,startTime?:number,text?:string}",
       "metadata": {
-        "examples": [
-          "{startTime:0,text:\"unit\"}"
-        ]
+        "examples": ["{startTime:0,text:\"unit\"}"]
       }
     }
   },
@@ -19,11 +17,7 @@
     "icon": "history",
     "metadata": "retrieve information about visits to a URL",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "extension",
-      "history"
-    ]
+    "tags": ["platform", "extension", "history"]
   },
   "id": "ef550ed4-5608-11eb-8ee3-0be8f1fce185",
   "base": true,

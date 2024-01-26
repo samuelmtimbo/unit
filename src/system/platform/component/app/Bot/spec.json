@@ -24,11 +24,7 @@
     "icon": "bot",
     "description": "your fellow robot",
     "complexity": 45,
-    "tags": [
-      "platform",
-      "component",
-      "app"
-    ]
+    "tags": ["platform", "component", "app"]
   },
   "id": "0e9e6cd4-67eb-11ea-995b-4b0721193361",
   "base": true,

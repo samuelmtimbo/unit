@@ -5,9 +5,7 @@
       "type": "`C`",
       "optional": true,
       "metadata": {
-        "examples": [
-          "${unit:{id:\"f27cae4e-fea8-11ea-b91e-db41e114c426\"}}"
-        ]
+        "examples": ["${unit:{id:\"f27cae4e-fea8-11ea-b91e-db41e114c426\"}}"]
       }
     }
   },
@@ -22,10 +20,7 @@
     "icon": "square",
     "description": "wrap all children with `component`",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "454aaff2-cd74-4f6e-baf2-631bb32e7a6b",
   "base": true,

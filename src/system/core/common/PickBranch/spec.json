@@ -39,10 +39,7 @@
     "icon": null,
     "description": "filter `a` or `b` based on `test`",
     "complexity": 17,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "inputs": {
     "test": {

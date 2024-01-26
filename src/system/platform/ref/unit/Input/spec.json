@@ -23,11 +23,7 @@
     "icon": "unit",
     "description": "reference `unit` input `name`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "ref",
-      "unit"
-    ]
+    "tags": ["platform", "ref", "unit"]
   },
   "id": "4ae69887-a087-4d37-8743-d83ca48184d1",
   "type": "`U`",

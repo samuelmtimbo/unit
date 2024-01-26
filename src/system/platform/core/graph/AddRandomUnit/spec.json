@@ -181,11 +181,7 @@
   "metadata": {
     "icon": null,
     "description": "add random unit to `graph`",
-    "tags": [
-      "platform",
-      "core",
-      "graph"
-    ],
+    "tags": ["platform", "core", "graph"],
     "complexity": 65
   },
   "id": "ca6c1e54-b482-4fa1-aba9-04568fb59958",

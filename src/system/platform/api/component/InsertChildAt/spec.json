@@ -16,9 +16,7 @@
     "child": {
       "type": "`C`",
       "metadata": {
-        "examples": [
-          "${unit:{id:'f27cae4e-fea8-11ea-b91e-db41e114c426'}}"
-        ],
+        "examples": ["${unit:{id:'f27cae4e-fea8-11ea-b91e-db41e114c426'}}"],
         "position": {
           "0": {
             "x": 128,
@@ -45,11 +43,7 @@
     "icon": "square",
     "description": "insert `child` instance to `parent` `at` position",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "component"
-    ]
+    "tags": ["platform", "api", "component"]
   },
   "id": "41a8c91e-87f8-4d96-9714-33716f329f7b",
   "type": "`U`",

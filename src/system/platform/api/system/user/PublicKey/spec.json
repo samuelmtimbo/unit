@@ -14,14 +14,8 @@
     "icon": "table",
     "description": "get user's public key",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "storage"
-    ],
-    "globals": [
-      "LocalStorage"
-    ]
+    "tags": ["platform", "api", "storage"],
+    "globals": ["LocalStorage"]
   },
   "id": "0f041192-1ff3-4094-93da-9264480ad5e2",
   "base": true,

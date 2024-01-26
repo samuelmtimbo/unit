@@ -14,10 +14,7 @@
     "icon": "tilde",
     "description": "parses a URL query string into an object",
     "complexity": 3,
-    "tags": [
-      "f",
-      "querystring"
-    ]
+    "tags": ["f", "querystring"]
   },
   "id": "02f91720-c4d5-4d66-ae91-d46ddc635722",
   "base": true,

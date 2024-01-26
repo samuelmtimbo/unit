@@ -70,10 +70,7 @@
     "icon": "alarm-clock",
     "description": "memory + delay",
     "complexity": 13,
-    "tags": [
-      "core",
-      "time"
-    ]
+    "tags": ["core", "time"]
   },
   "id": "66037c2f-d194-478b-866b-b2efb3027de1",
   "type": "`U`&`G`",

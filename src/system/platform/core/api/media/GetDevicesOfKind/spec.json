@@ -44,12 +44,7 @@
     "icon": "brackets",
     "description": "get all available device descriptions of `kind`",
     "complexity": 87,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "media"
-    ]
+    "tags": ["platform", "core", "api", "media"]
   },
   "inputs": {
     "kind": {

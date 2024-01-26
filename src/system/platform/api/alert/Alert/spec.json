@@ -10,11 +10,7 @@
     "icon": "tilde",
     "description": "identify data type",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "base64"
-    ]
+    "tags": ["platform", "api", "base64"]
   },
   "id": "0b4aa055-010d-4d43-b991-f38a95cdb380",
   "base": true,

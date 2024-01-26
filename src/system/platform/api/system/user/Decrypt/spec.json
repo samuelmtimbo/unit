@@ -14,14 +14,8 @@
     "icon": "table",
     "description": "decrypt `hash` with user private key",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "storage"
-    ],
-    "globals": [
-      "LocalStorage"
-    ]
+    "tags": ["platform", "api", "storage"],
+    "globals": ["LocalStorage"]
   },
   "id": "08ff535a-93a7-403c-a1ef-c59cdb50ccf0",
   "base": true,

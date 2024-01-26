@@ -16,11 +16,7 @@
     "icon": "map-pin",
     "description": "adds an entry to the session history stack",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "history"
-    ]
+    "tags": ["platform", "api", "history"]
   },
   "id": "a3246170-d638-4d96-8900-6cc3f2ffe799",
   "base": true,

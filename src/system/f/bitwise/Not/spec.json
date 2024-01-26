@@ -14,10 +14,7 @@
     "icon": "exclamation",
     "description": "bitwise NOT operator",
     "complexity": 3,
-    "tags": [
-      "f",
-      "bitwise"
-    ]
+    "tags": ["f", "bitwise"]
   },
   "id": "62d0c3e2-cf8b-4415-acfb-cf31739adce5",
   "base": true,

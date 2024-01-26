@@ -14,10 +14,7 @@
     "icon": "ruler",
     "description": "sine of angle `a` in rad",
     "complexity": 3,
-    "tags": [
-      "f",
-      "math"
-    ]
+    "tags": ["f", "math"]
   },
   "id": "b9f90a95-1bfc-4897-9068-2560743821a3",
   "base": true,

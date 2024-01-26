@@ -327,12 +327,7 @@
   "metadata": {
     "icon": "grab",
     "complexity": 52,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ],
+    "tags": ["platform", "core", "api", "event"],
     "position": {
       "merge": {
         "0": {

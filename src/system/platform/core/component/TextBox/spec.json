@@ -69,27 +69,19 @@
   "component": {
     "subComponents": {
       "box": {
-        "children": [
-          "text"
-        ]
+        "children": ["text"]
       },
       "text": {
         "children": []
       }
     },
-    "children": [
-      "box"
-    ],
+    "children": ["box"],
     "defaultWidth": 240,
     "defaultHeight": 180
   },
   "metadata": {
     "complexity": 97,
-    "tags": [
-      "platform",
-      "component",
-      "app"
-    ]
+    "tags": ["platform", "component", "app"]
   },
   "id": "9988a56e-6bee-46c8-864c-e351d84bc7e2",
   "type": "`U`&`G`&`C`",

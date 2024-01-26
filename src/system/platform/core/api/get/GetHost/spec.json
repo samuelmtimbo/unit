@@ -75,11 +75,7 @@
     "icon": "circle",
     "description": "get host `obj` property",
     "complexity": 8,
-    "tags": [
-      "platform",
-      "api",
-      "read"
-    ]
+    "tags": ["platform", "api", "read"]
   },
   "id": "38b257d7-fa9d-483f-b858-4a0e6cbf7f66",
   "type": "`U`&`G`",

@@ -63,31 +63,20 @@
     }
   },
   "component": {
-    "slots": [
-      [
-        "div",
-        "default"
-      ]
-    ],
+    "slots": [["div", "default"]],
     "subComponents": {
       "div": {
         "children": []
       }
     },
-    "children": [
-      "div"
-    ],
+    "children": ["div"],
     "defaultWidth": 120,
     "defaultHeight": 120
   },
   "metadata": {
     "icon": "square",
     "complexity": 53,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "dc546440-13ca-4ebf-8831-c28138c7efc6",
   "render": true

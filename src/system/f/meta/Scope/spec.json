@@ -16,10 +16,7 @@
     "icon": "circle",
     "description": "access object local scope",
     "complexity": 4,
-    "tags": [
-      "f",
-      "meta"
-    ]
+    "tags": ["f", "meta"]
   },
   "id": "f9f93972-0764-4095-9ca2-d18b7d9344d4",
   "system": true,

@@ -68,10 +68,7 @@
     "icon": "array",
     "description": "build a list of size n",
     "complexity": 24,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "inputs": {
     "a": {

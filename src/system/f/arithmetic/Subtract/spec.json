@@ -17,10 +17,7 @@
     "icon": "minus",
     "description": "subtract `b` from `a`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "arithmetic"
-    ]
+    "tags": ["f", "arithmetic"]
   },
   "id": "fa94b179-00e3-4ed1-814e-7938324a833f",
   "base": true,

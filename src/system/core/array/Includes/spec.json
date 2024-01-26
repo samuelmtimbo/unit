@@ -453,10 +453,7 @@
     "icon": "info-square",
     "description": "find whether array `a[]` contains an element of value `a`",
     "complexity": 50,
-    "tags": [
-      "core",
-      "array"
-    ],
+    "tags": ["core", "array"],
     "position": {
       "merge": {
         "0": {

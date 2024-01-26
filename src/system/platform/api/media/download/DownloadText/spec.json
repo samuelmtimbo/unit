@@ -4,34 +4,25 @@
     "text": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "\"unit\""
-        ]
+        "examples": ["\"unit\""]
       }
     },
     "name": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "\"text\""
-        ]
+        "examples": ["\"text\""]
       }
     },
     "mimetype": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "\"text/plain\"",
-          "\"application/json\""
-        ]
+        "examples": ["\"text/plain\"", "\"application/json\""]
       }
     },
     "charset": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "\"utf-8\""
-        ]
+        "examples": ["\"utf-8\""]
       }
     }
   },
@@ -41,11 +32,7 @@
     "icon": "download",
     "description": "download a `text` string",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "media"
-    ]
+    "tags": ["platform", "api", "media"]
   },
   "type": "`U`",
   "base": true,

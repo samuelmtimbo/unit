@@ -334,9 +334,7 @@
   "component": {
     "subComponents": {
       "app": {
-        "children": [
-          "logo"
-        ],
+        "children": ["logo"],
         "childSlot": {
           "logo": "1"
         }
@@ -345,22 +343,11 @@
         "children": []
       }
     },
-    "children": [
-      "app"
-    ],
+    "children": ["app"],
     "slots": [
-      [
-        "app",
-        "default"
-      ],
-      [
-        "app",
-        "1"
-      ],
-      [
-        "app",
-        "2"
-      ]
+      ["app", "default"],
+      ["app", "1"],
+      ["app", "2"]
     ],
     "defaultWidth": 360,
     "defaultHeight": 360
@@ -368,11 +355,7 @@
   "metadata": {
     "icon": "atom-alt",
     "description": "app + logo",
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
         "0": {

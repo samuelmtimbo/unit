@@ -17,10 +17,7 @@
     "icon": "chevrons-left",
     "description": "append element `b` to an array `a`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "array"
-    ]
+    "tags": ["f", "array"]
   },
   "id": "fa7721eb-1dd6-482e-8c7a-6da35b5f88bc",
   "base": true,

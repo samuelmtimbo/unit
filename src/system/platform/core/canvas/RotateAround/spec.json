@@ -117,11 +117,7 @@
     "icon": "edit-3",
     "description": "adds a rotation to the transformation matrix",
     "complexity": 15,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "inputs": {
     "d": {

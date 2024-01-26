@@ -15,11 +15,7 @@
     "description": "starts a new path by emptying the list of sub-paths",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/beginPath",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "81c0f469-ab88-4bc8-89d5-98d291b1d8b2",
   "base": true,

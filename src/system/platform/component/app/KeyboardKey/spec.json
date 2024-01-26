@@ -13,11 +13,7 @@
     "icon": "keyboard",
     "description": "virtual keyboard single key",
     "complexity": 47,
-    "tags": [
-      "platform",
-      "component",
-      "app"
-    ]
+    "tags": ["platform", "component", "app"]
   },
   "id": "d0672722-b1a9-11ea-a247-d736e666990e",
   "base": true,

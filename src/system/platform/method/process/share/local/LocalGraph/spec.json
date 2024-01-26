@@ -16,13 +16,7 @@
     "icon": "server",
     "description": "connect to a locally shared process",
     "complexity": 6,
-    "tags": [
-      "platform",
-      "method",
-      "process",
-      "share",
-      "local"
-    ]
+    "tags": ["platform", "method", "process", "share", "local"]
   },
   "id": "5ec9d37d-f9f4-49d0-a139-55af26fab05c",
   "base": true,

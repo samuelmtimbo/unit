@@ -17,11 +17,7 @@
     "icon": "edit-3",
     "description": "adds a circular arc to the current sub-path",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "6796cd2d-2bd2-4dd3-9396-49d6bc1d2652",
   "base": true,

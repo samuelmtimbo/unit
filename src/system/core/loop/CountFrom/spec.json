@@ -45,10 +45,7 @@
     "icon": "sort-desc",
     "description": "iteratively count `a`, starting from `init`",
     "complexity": 17,
-    "tags": [
-      "core",
-      "loop"
-    ]
+    "tags": ["core", "loop"]
   },
   "inputs": {
     "any": {

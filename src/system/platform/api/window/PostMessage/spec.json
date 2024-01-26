@@ -7,22 +7,13 @@
     "target": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "'_blank'",
-          "'_self'",
-          "'_parent'",
-          "'_top'"
-        ]
+        "examples": ["'_blank'", "'_self'", "'_parent'", "'_top'"]
       }
     },
     "features": {
       "type": "object",
       "metadata": {
-        "examples": [
-          "{}",
-          "{popup:true}",
-          "{popup:true,width:600,height:600}"
-        ]
+        "examples": ["{}", "{popup:true}", "{popup:true,width:600,height:600}"]
       }
     },
     "done": {
@@ -44,11 +35,7 @@
     "description": "loads `url` into a new or existing `target` browsing context",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/Window/open",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "wakelock"
-    ]
+    "tags": ["platform", "api", "wakelock"]
   },
   "id": "ed53d847-6336-435b-9e5e-fd38c79dc9c6",
   "base": true,

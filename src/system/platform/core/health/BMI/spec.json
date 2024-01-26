@@ -33,11 +33,7 @@
     "description": "weight / height ^ 2",
     "link": "https://en.wikipedia.org/wiki/Body_mass_index",
     "complexity": 8,
-    "tags": [
-      "platform",
-      "core",
-      "health"
-    ]
+    "tags": ["platform", "core", "health"]
   },
   "inputs": {
     "h": {

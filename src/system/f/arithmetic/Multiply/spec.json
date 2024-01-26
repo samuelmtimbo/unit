@@ -17,10 +17,7 @@
     "icon": "x",
     "description": "multiply `a` and `b`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "arithmetic"
-    ]
+    "tags": ["f", "arithmetic"]
   },
   "id": "872be100-f4dc-4246-8eea-6e3da31137b7",
   "base": true,

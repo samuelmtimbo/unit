@@ -23,10 +23,7 @@
     "icon": "circle",
     "description": "reference a child element inside `element`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "meta"
-    ]
+    "tags": ["platform", "meta"]
   },
   "id": "355b5332-0cc9-4a5c-989e-043d717215ec",
   "base": true,

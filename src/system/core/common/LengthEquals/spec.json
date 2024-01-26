@@ -57,10 +57,7 @@
     "icon": "ruler",
     "description": "check whther the length of `a` is equal to `n`?",
     "complexity": 8,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "175c0cc6-1801-4b5d-9980-e780c10ea745",
   "type": "`U`&`G`",

@@ -4,9 +4,7 @@
     "message": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "'Write something:'"
-        ]
+        "examples": ["'Write something:'"]
       }
     }
   },
@@ -19,11 +17,7 @@
     "icon": "tilde",
     "description": "identify data type",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "base64"
-    ]
+    "tags": ["platform", "api", "base64"]
   },
   "id": "fa3d97bb-060d-4671-9c18-dff81f64c1cc",
   "base": true,

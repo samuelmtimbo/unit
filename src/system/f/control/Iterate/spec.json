@@ -20,10 +20,7 @@
     "icon": "undo",
     "description": "interatively update a single value",
     "complexity": 3,
-    "tags": [
-      "f",
-      "control"
-    ]
+    "tags": ["f", "control"]
   },
   "id": "8a2b756a-25e4-11eb-860d-1f34c850b992",
   "base": true,

@@ -83,11 +83,7 @@
         }
       }
     },
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "063ee2df-eeb6-4cd9-8516-9201e6e282ca",
   "component": {
@@ -96,9 +92,7 @@
         "children": []
       }
     },
-    "children": [
-      "slider360"
-    ],
+    "children": ["slider360"],
     "defaultWidth": 120,
     "defaultHeight": 30
   },

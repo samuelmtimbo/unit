@@ -41,12 +41,7 @@
     "icon": "square",
     "description": "listen to `element` \"ntf_close\" event",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "2ef3ebd3-6447-4871-ba2f-f539a3fa02ff",
   "type": "`U`&`G`",

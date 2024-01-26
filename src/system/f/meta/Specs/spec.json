@@ -14,10 +14,7 @@
     "icon": "circle",
     "description": "object mapping id to spec",
     "complexity": 3,
-    "tags": [
-      "f",
-      "meta"
-    ]
+    "tags": ["f", "meta"]
   },
   "id": "b5ea15f4-9bbd-11eb-b623-37aff4a9ce60",
   "base": true,

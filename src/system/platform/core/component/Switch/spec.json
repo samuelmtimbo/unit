@@ -560,10 +560,7 @@
   "component": {
     "subComponents": {
       "div": {
-        "children": [
-          "div0",
-          "checkbox"
-        ],
+        "children": ["div0", "checkbox"],
         "childSlot": {
           "div0": "default",
           "checkbox": "default"
@@ -576,9 +573,7 @@
         "children": []
       }
     },
-    "children": [
-      "div"
-    ],
+    "children": ["div"],
     "defaultWidth": 100,
     "defaultHeight": 50
   },
@@ -630,11 +625,7 @@
         }
       }
     },
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "6253bf76-2e85-11eb-9f59-3703abfd39c7",
   "type": "`U`&`G`",

@@ -150,10 +150,7 @@
     "icon": "map",
     "description": "map elements of arrays `a` and `b` to a new array `c`",
     "complexity": 46,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "id": "57880ebc-bf8a-42da-b2b1-01ae188aa1fa",
   "type": "`U`&`G`",

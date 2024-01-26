@@ -27,11 +27,7 @@
     "icon": "square",
     "description": "SVG path",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "svg"
-    ]
+    "tags": ["platform", "component", "svg"]
   },
   "id": "60bc7930-8982-11ea-8b24-cf97a783bb32",
   "base": true,

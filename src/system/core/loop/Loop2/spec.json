@@ -91,10 +91,7 @@
     "icon": "undo",
     "description": "iterate over `a` and `b`",
     "complexity": 25,
-    "tags": [
-      "core",
-      "loop"
-    ]
+    "tags": ["core", "loop"]
   },
   "inputs": {
     "next a": {

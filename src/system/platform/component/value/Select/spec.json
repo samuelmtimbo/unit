@@ -20,11 +20,7 @@
     "icon": "form-input",
     "description": "select HTML element",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "value"
-    ]
+    "tags": ["platform", "component", "value"]
   },
   "id": "6c7cd7d1-c8a0-4317-9c8c-ba781f150729",
   "base": true,

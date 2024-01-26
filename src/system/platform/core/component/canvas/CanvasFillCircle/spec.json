@@ -45,11 +45,7 @@
     "icon": "edit-3",
     "description": "a circle on canvas",
     "complexity": 75,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "inputs": {
     "circle": {
@@ -61,9 +57,7 @@
       },
       "type": "{x:number,y:number,r:number}",
       "metadata": {
-        "examples": [
-          "{x:100,y:100,r:50}"
-        ]
+        "examples": ["{x:100,y:100,r:50}"]
       }
     },
     "style": {
@@ -90,12 +84,7 @@
   },
   "id": "3e555954-4748-48bf-a767-8943ff5a7e95",
   "component": {
-    "slots": [
-      [
-        "canvas",
-        "default"
-      ]
-    ],
+    "slots": [["canvas", "default"]],
     "defaultWidth": 200,
     "defaultHeight": 200,
     "subComponents": {
@@ -103,9 +92,7 @@
         "children": []
       }
     },
-    "children": [
-      "canvas"
-    ]
+    "children": ["canvas"]
   },
   "type": "`U`&`G`",
   "render": true,

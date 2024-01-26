@@ -4,9 +4,7 @@
     "d": {
       "type": "(number|string)[][]",
       "metadata": {
-        "examples": [
-          "[]"
-        ]
+        "examples": ["[]"]
       }
     },
     "fillStyle": {
@@ -22,11 +20,7 @@
     "icon": "edit-3",
     "description": "set current fillStyle",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "f5b2faf1-3a8b-489f-9d99-62d3c749ced6",
   "base": true,

@@ -127,10 +127,7 @@
     "icon": "list-ordered",
     "description": "count from `a` to `b`, not inclusive",
     "complexity": 25,
-    "tags": [
-      "core",
-      "loop"
-    ]
+    "tags": ["core", "loop"]
   },
   "inputs": {
     "b": {

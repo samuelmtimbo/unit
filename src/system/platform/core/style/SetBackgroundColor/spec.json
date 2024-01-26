@@ -52,11 +52,7 @@
     "icon": "brackets-curly",
     "description": "set `obj` background-color property to `value`",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "style"
-    ]
+    "tags": ["platform", "core", "style"]
   },
   "id": "0ca54c4f-148e-49e5-bedf-d24276200f66",
   "type": "`U`&`G`",

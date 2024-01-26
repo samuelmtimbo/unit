@@ -68,12 +68,7 @@
     "icon": "brackets-curly",
     "description": "extract `clientX` and `clientY` from `obj`",
     "complexity": 10,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
   "type": "`U`&`G`",

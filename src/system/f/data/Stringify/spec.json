@@ -14,10 +14,7 @@
     "icon": "string",
     "description": "value to string",
     "complexity": 3,
-    "tags": [
-      "f",
-      "data"
-    ]
+    "tags": ["f", "data"]
   },
   "id": "2b24877a-3221-4288-9f59-efbf29964368",
   "base": true,

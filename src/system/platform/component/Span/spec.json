@@ -6,9 +6,7 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     }
   },
@@ -17,10 +15,7 @@
     "icon": "square",
     "description": "HTML div element",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "c711d540-9de3-437e-854a-b59491af3cf8",
   "base": true,

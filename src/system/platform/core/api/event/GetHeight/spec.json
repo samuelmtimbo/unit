@@ -42,12 +42,7 @@
     "icon": "brackets-curly",
     "description": "extract height from `obj`",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "f7a26f8c-98ac-11eb-9b81-e79fad66a6ce",
   "type": "`U`&`G`",

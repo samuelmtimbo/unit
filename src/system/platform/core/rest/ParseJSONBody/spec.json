@@ -32,11 +32,7 @@
     "icon": "arrow-right",
     "description": "parse response `res` body into JSON",
     "complexity": 8,
-    "tags": [
-      "platform",
-      "core",
-      "rest"
-    ]
+    "tags": ["platform", "core", "rest"]
   },
   "inputs": {
     "res": {

@@ -524,11 +524,7 @@
     "icon": "edit-3",
     "description": "add a pie to current sub-path",
     "complexity": 47,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ],
+    "tags": ["platform", "core", "canvas"],
     "position": {
       "merge": {
         "0": {

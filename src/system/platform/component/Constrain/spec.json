@@ -5,9 +5,7 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     }
   },
@@ -16,10 +14,7 @@
     "icon": "square",
     "description": "force base style on all children",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "7c27cf95-6226-4326-8619-32d82bcbe16d",
   "base": true,

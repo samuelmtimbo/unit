@@ -70,10 +70,7 @@
     "icon": "chevrons-left",
     "description": "prepend element `b` to `a` if `test`",
     "complexity": 17,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "inputs": {
     "b": {

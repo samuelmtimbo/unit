@@ -18,15 +18,8 @@
     "icon": "file-output",
     "description": "streams audio from a source url",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "media",
-      "audio"
-    ],
-    "globals": [
-      "Audio"
-    ]
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["Audio"]
   },
   "id": "5c13db99-0923-4b27-85e3-7a18dbfdd309",
   "base": true,

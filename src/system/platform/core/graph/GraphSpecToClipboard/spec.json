@@ -103,11 +103,7 @@
     "icon": "brackets-curly",
     "description": "send this graph spec to clipboard",
     "complexity": 11,
-    "tags": [
-      "platform",
-      "core",
-      "graph"
-    ]
+    "tags": ["platform", "core", "graph"]
   },
   "type": "`U`&`G`",
   "id": "f752dcd6-ac2c-11eb-9a69-3fada4450230"

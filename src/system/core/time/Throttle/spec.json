@@ -61,10 +61,7 @@
     "icon": "alarm-clock",
     "description": "output element from stream every `ms` milliseconds",
     "complexity": 12,
-    "tags": [
-      "core",
-      "time"
-    ]
+    "tags": ["core", "time"]
   },
   "inputs": {
     "a": {

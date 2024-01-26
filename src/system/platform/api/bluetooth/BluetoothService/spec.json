@@ -20,11 +20,7 @@
     "description": "remote GATT service",
     "complexity": 3,
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/BluetoothRemoteGATTService",
-    "tags": [
-      "platform",
-      "api",
-      "bluetooth"
-    ]
+    "tags": ["platform", "api", "bluetooth"]
   },
   "id": "a44b2198-e18d-11ea-be3b-77e13b78b7e3",
   "base": true,

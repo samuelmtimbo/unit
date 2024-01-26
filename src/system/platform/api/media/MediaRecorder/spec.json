@@ -12,9 +12,7 @@
     "start": {
       "type": "number",
       "metadata": {
-        "examples": [
-          "2000"
-        ]
+        "examples": ["2000"]
       }
     },
     "stop": {
@@ -36,14 +34,8 @@
   "metadata": {
     "icon": "film",
     "complexity": 13,
-    "tags": [
-      "platform",
-      "api",
-      "media"
-    ],
-    "globals": [
-      "MediaRecorder"
-    ]
+    "tags": ["platform", "api", "media"],
+    "globals": ["MediaRecorder"]
   },
   "type": "`U`",
   "system": true

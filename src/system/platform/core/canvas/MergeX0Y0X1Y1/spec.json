@@ -95,11 +95,7 @@
     "icon": "brackets-curly",
     "description": "{ x0, y0, x1, y1 }",
     "complexity": 19,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "inputs": {
     "x0": {

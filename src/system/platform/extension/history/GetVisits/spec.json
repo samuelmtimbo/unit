@@ -14,11 +14,7 @@
     "icon": "history",
     "metadata": "retrieve information about visits to a URL",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "extension",
-      "history"
-    ]
+    "tags": ["platform", "extension", "history"]
   },
   "id": "f1ed986a-55df-11eb-89e3-9f7cc8490b16",
   "base": true,

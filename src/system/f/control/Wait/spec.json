@@ -17,10 +17,7 @@
     "icon": "git-merge",
     "description": "wait for `b` before output `a`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "control"
-    ]
+    "tags": ["f", "control"]
   },
   "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
   "base": true,

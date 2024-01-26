@@ -22,10 +22,7 @@
     "icon": "circle",
     "description": "intantiate `class`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "meta"
-    ]
+    "tags": ["f", "meta"]
   },
   "id": "e1486d65-7d51-436b-949d-4e57d1f9e4a9",
   "system": true,

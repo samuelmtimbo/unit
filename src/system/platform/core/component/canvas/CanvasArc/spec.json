@@ -79,30 +79,19 @@
     }
   },
   "component": {
-    "slots": [
-      [
-        "canvas",
-        "default"
-      ]
-    ],
+    "slots": [["canvas", "default"]],
     "subComponents": {
       "canvas": {
         "children": []
       }
     },
-    "children": [
-      "canvas"
-    ],
+    "children": ["canvas"],
     "defaultWidth": 200,
     "defaultHeight": 200
   },
   "metadata": {
     "complexity": 64,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "id": "01562c38-9973-43f4-982b-1dbdbea49c5b",
   "type": "`U`&`G`",

@@ -16,10 +16,7 @@
     "icon": "brackets",
     "description": "output an empty array",
     "complexity": 5,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "inputs": {
     "any": {

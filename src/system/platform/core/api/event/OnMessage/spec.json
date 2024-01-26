@@ -43,12 +43,7 @@
     "icon": "square",
     "description": "listen to `element` message event",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "23c3952a-ef19-11ea-b80e-3f693508091e",
   "type": "`U`&`G`",

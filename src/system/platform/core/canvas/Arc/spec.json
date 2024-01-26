@@ -51,11 +51,7 @@
     "icon": "edit-3",
     "description": "draw a circle to the canvas",
     "complexity": 11,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "inputs": {
     "arc": {

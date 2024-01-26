@@ -21,11 +21,7 @@
     "icon": "mic",
     "description": "speak a sentence",
     "complexity": 48,
-    "tags": [
-      "platform",
-      "component",
-      "app"
-    ]
+    "tags": ["platform", "component", "app"]
   },
   "id": "023c3762-c701-11ea-b590-57b51c2884a7",
   "type": "`U`&`C`&`V`&`J`",

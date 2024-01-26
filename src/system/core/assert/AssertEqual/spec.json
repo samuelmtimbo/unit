@@ -45,10 +45,7 @@
     "icon": "alert-circle",
     "description": "throw `message` if `a` is not equal `b`",
     "complexity": 11,
-    "tags": [
-      "core",
-      "assert"
-    ]
+    "tags": ["core", "assert"]
   },
   "merges": {
     "0": {

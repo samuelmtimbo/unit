@@ -14,10 +14,7 @@
     "icon": "info",
     "description": "output a random uuid",
     "complexity": 3,
-    "tags": [
-      "f",
-      "id"
-    ]
+    "tags": ["f", "id"]
   },
   "id": "3e5c5856-c721-11ea-b7af-07a978a65cdc",
   "base": true,

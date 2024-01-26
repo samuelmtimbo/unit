@@ -16,10 +16,7 @@
     "icon": "x-circle",
     "description": "output false",
     "complexity": 5,
-    "tags": [
-      "core",
-      "value"
-    ]
+    "tags": ["core", "value"]
   },
   "inputs": {
     "any": {

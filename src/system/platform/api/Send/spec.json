@@ -14,10 +14,7 @@
     "icon": "send",
     "description": "send `data` through `channel`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api"
-    ]
+    "tags": ["platform", "api"]
   },
   "base": true,
   "id": "b296242e-8b82-11eb-ac6c-0f8d3f9948d0",

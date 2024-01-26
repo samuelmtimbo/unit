@@ -50,10 +50,7 @@
     "icon": "pointer",
     "description": "pick the smalest from `a` and `b`",
     "complexity": 16,
-    "tags": [
-      "core",
-      "control"
-    ]
+    "tags": ["core", "control"]
   },
   "inputs": {
     "a": {

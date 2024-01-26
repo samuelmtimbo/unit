@@ -16,10 +16,7 @@
     "icon": "x",
     "description": "duplicate `a`",
     "complexity": 5,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "inputs": {
     "a": {

@@ -91,12 +91,7 @@
     "icon": "brackets-curly",
     "description": "create object with values `event` and `data`",
     "complexity": 15,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "bbc52982-4a71-45b8-8521-c0c30260c022",
   "type": "`U`&`G`",

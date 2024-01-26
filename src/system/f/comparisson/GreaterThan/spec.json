@@ -17,10 +17,7 @@
     "icon": "greater-than",
     "description": "greater than operator",
     "complexity": 3,
-    "tags": [
-      "f",
-      "comparisson"
-    ]
+    "tags": ["f", "comparisson"]
   },
   "id": "1651ce6b-4db0-4787-9edf-f770b72d253c",
   "base": true,

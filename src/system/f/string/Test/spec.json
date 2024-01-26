@@ -17,10 +17,7 @@
     "icon": "regex",
     "description": "check if `regex` match `str`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "string"
-    ]
+    "tags": ["f", "string"]
   },
   "id": "c2fec1e6-b370-4069-bb43-6dab5a78b9ab",
   "base": true,

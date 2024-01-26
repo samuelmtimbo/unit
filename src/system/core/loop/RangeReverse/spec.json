@@ -129,10 +129,7 @@
     "icon": "sort-asc",
     "description": "regressive count from `b - 1` to `a`",
     "complexity": 43,
-    "tags": [
-      "core",
-      "loop"
-    ]
+    "tags": ["core", "loop"]
   },
   "inputs": {
     "b": {

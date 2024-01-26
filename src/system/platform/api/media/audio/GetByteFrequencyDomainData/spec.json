@@ -8,9 +8,7 @@
     "opt": {
       "type": "{}",
       "metadata": {
-        "examples": [
-          "{fftSize:2048}"
-        ]
+        "examples": ["{fftSize:2048}"]
       }
     },
     "done": {
@@ -27,15 +25,8 @@
     "icon": "activity",
     "description": "copies the current frequency data into a unsigned byte array",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "media",
-      "audio"
-    ],
-    "globals": [
-      "AudioAnalyser"
-    ]
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["AudioAnalyser"]
   },
   "id": "2ec96f8b-4ea5-4ba8-ab8d-a00105c6cb71",
   "base": true,

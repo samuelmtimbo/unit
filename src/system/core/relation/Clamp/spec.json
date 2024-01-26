@@ -26,10 +26,7 @@
     "icon": "tilde",
     "description": "restricts a number to be within a range",
     "complexity": 8,
-    "tags": [
-      "core",
-      "relation"
-    ]
+    "tags": ["core", "relation"]
   },
   "inputs": {
     "max": {

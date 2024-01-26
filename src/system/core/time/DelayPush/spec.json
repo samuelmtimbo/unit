@@ -49,10 +49,7 @@
       },
       "type": "number",
       "metadata": {
-        "examples": [
-          "1000",
-          "100"
-        ]
+        "examples": ["1000", "100"]
       }
     },
     "a": {
@@ -80,10 +77,7 @@
     "icon": "alarm-clock",
     "description": "delay + memory",
     "complexity": 13,
-    "tags": [
-      "core",
-      "time"
-    ]
+    "tags": ["core", "time"]
   },
   "id": "8cd6c706-d1d4-11ea-92e1-47577abb9ccf",
   "type": "`U`&`G`",

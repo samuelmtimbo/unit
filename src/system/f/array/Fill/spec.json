@@ -23,10 +23,7 @@
     "icon": "info-square",
     "description": "fill array `a` from `start` to `end` with `value`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "array"
-    ]
+    "tags": ["f", "array"]
   },
   "id": "609ec474-cd6b-4646-b9b9-5ef4bbb378a7",
   "base": true,

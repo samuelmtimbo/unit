@@ -74,10 +74,7 @@
     "icon": "sort-desc",
     "description": "iteratively increment `count` starting from `init`",
     "complexity": 13,
-    "tags": [
-      "core",
-      "iterate"
-    ]
+    "tags": ["core", "iterate"]
   },
   "inputs": {
     "any": {
