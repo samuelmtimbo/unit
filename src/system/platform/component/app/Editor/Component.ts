@@ -5319,9 +5319,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _center_on_nodes = (nodes: Dict<GraphSimNode>) => {
+    const { animate } = this.$props
+
     const center = this.get_nodes_bounding_rect_center(nodes)
 
-    this._zoom_center_at(center.x, center.y)
+    if (animate) {
+      this._animate_zoom_center_at(center.x, center.y)
+    } else {
+      this._zoom_center_at(center.x, center.y)
+    }
   }
 
   private _center_graph = () => {
@@ -39104,6 +39110,37 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const zoom = zoomTransformCenteredAt(x, y, this._zoom.z, $width, $height)
 
     this.set_zoom(zoom)
+  }
+
+  private _animate_zoom_center_unlisten: Unlisten
+
+  private _animate_zoom_center_at = (x: number, y: number): void => {
+    // console.log('Graph', '_animate_zoom_center_at', x, y)
+
+    const { $width, $height } = this.$context
+
+    const center_of_screen = this._screen_center()
+
+    const n0 = this._zoom
+    const n1 = zoomTransformCenteredAt(x, y, this._zoom.z, $width, $height)
+
+    this._animate_zoom_center_unlisten = animateSimulate(
+      this.$system,
+      n0,
+      () => n1,
+      [
+        ['x', 0.1],
+        ['y', 0.1],
+      ],
+      ({ x, y }) => {
+        const zoom = { x, y, z: this._zoom.z }
+
+        this._set_zoom(zoom)
+      },
+      () => {
+        //
+      }
+    )
   }
 
   private _state_reorder_sub_component = (unit_id: string, i: number): void => {
