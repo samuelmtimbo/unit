@@ -3943,8 +3943,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const rect = centerRectsBoundingRect(nodes_list)
 
-    console.log(rect)
-
     const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
 
     return center
