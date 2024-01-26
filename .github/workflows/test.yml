@@ -12,5 +12,9 @@ jobs:
         run: npm i
       - name: npm run setup
         run: npm run setup
+      - name: npm run lint
+        run: npm run lint
+      - name: npm run type
+        run: npm run type
       - name: npm run test
         run: npm run test
