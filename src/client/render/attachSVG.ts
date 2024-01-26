@@ -19,6 +19,7 @@ export function attachSVG(system: System): void {
   svg.style.position = 'absolute'
   svg.style.top = '0'
   svg.style.left = '0'
+  svg.style.zIndex = '1'
 
   resizeWith(system, svg, root)
 

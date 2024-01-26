@@ -11,7 +11,9 @@ export function attachCanvas(system: System): void {
 
   const canvas = createElement('canvas')
   canvas.classList.add('__SYSTEM__CANVAS__')
+
   canvas.style.pointerEvents = 'none'
+  canvas.style.zIndex = '1'
 
   resizeWith(system, canvas, root)
 
