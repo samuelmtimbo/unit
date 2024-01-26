@@ -74,10 +74,7 @@
     "icon": "filter",
     "description": "true if `a` is true",
     "complexity": 9,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "9ee34534-a1e8-478d-87ca-81a5325f5d5c",
   "type": "`U`&`G`",

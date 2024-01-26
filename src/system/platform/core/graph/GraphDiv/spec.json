@@ -95,26 +95,14 @@
   "metadata": {
     "icon": "atom-alt",
     "complexity": 204,
-    "tags": [
-      "platform",
-      "core",
-      "editor"
-    ]
+    "tags": ["platform", "core", "editor"]
   },
   "component": {
     "slots": [
-      [
-        "editor",
-        "default"
-      ],
-      [
-        "div",
-        "default"
-      ]
+      ["editor", "default"],
+      ["div", "default"]
     ],
-    "children": [
-      "row"
-    ],
+    "children": ["row"],
     "subComponents": {
       "editor": {
         "children": []
@@ -123,10 +111,7 @@
         "children": []
       },
       "row": {
-        "children": [
-          "editor",
-          "div"
-        ]
+        "children": ["editor", "div"]
       }
     },
     "defaultWidth": 420,

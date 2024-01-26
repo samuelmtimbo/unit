@@ -99,11 +99,7 @@
     "icon": "sliders",
     "description": "360 slider current value",
     "complexity": 45,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "6bdd7a40-e465-42ae-8219-b428d7d57aea",
   "component": {
@@ -114,9 +110,7 @@
         "children": []
       }
     },
-    "children": [
-      "slider"
-    ]
+    "children": ["slider"]
   },
   "type": "`U`&`G`",
   "system": true,

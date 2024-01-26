@@ -73,11 +73,7 @@
     "icon": "video",
     "description": "get device default video stream",
     "complexity": 17,
-    "tags": [
-      "platform",
-      "core",
-      "media"
-    ]
+    "tags": ["platform", "core", "media"]
   },
   "id": "c03c7ef3-0649-4a99-9e9a-858bcaba1307",
   "system": true,

@@ -17,10 +17,7 @@
     "icon": "binary",
     "description": "bitwise AND operator",
     "complexity": 3,
-    "tags": [
-      "f",
-      "bitwise"
-    ]
+    "tags": ["f", "bitwise"]
   },
   "id": "be6801c0-02e2-4f76-bcad-b68c80991fad",
   "base": true,

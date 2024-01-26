@@ -14,10 +14,7 @@
     "icon": "string",
     "description": "converts a JSON value to a string",
     "complexity": 3,
-    "tags": [
-      "f",
-      "JSON"
-    ]
+    "tags": ["f", "JSON"]
   },
   "id": "ee184ea6-3c80-4119-919e-290620aafab0",
   "base": true,

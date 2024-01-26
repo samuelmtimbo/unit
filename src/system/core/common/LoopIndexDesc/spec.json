@@ -94,10 +94,7 @@
     "icon": "undo",
     "description": "loop through array `a` elements in descending order",
     "complexity": 21,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "70f3cdf1-2a78-49b3-9665-39da459cf0dc",
   "type": "`U`&`G`",

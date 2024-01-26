@@ -38,10 +38,7 @@
     "icon": null,
     "description": "get `a` and `b` from object `ab`",
     "complexity": 6,
-    "tags": [
-      "core",
-      "util"
-    ]
+    "tags": ["core", "util"]
   },
   "inputs": {
     "ab": {

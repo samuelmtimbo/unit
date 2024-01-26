@@ -95,10 +95,7 @@
     "icon": "brackets-curly",
     "description": "set value at `key` to `value` if `test` is true",
     "complexity": 16,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "id": "946701f6-7dd4-11ea-a1aa-67938c0c6214",
   "type": "`U`&`G`",

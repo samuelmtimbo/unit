@@ -73,10 +73,7 @@
     "icon": null,
     "description": "all system spec ids",
     "complexity": 8,
-    "tags": [
-      "core",
-      "meta"
-    ]
+    "tags": ["core", "meta"]
   },
   "type": "`U`&`G`",
   "system": true

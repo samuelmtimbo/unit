@@ -14,14 +14,8 @@
     "icon": "table",
     "description": "sign `value` with user's private key",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "storage"
-    ],
-    "globals": [
-      "LocalStorage"
-    ]
+    "tags": ["platform", "api", "storage"],
+    "globals": ["LocalStorage"]
   },
   "id": "58846eae-1650-41e7-ad42-a75b9c32332a",
   "base": true,

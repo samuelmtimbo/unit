@@ -125,10 +125,7 @@
     "icon": "circle",
     "description": "set `graph` `id` unit `name` input pin `data`",
     "complexity": 5,
-    "tags": [
-      "core",
-      "graph"
-    ]
+    "tags": ["core", "graph"]
   },
   "id": "8a1ca6c0-af60-48cc-86bb-01e4e59598db",
   "type": "`U`&`G`",

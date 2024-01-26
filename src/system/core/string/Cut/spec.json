@@ -64,10 +64,7 @@
     "icon": "scissors",
     "description": "split string `a` `at` index",
     "complexity": 9,
-    "tags": [
-      "core",
-      "string"
-    ]
+    "tags": ["core", "string"]
   },
   "inputs": {
     "a": {

@@ -58,20 +58,13 @@
   },
   "render": true,
   "component": {
-    "slots": [
-      [
-        "div",
-        "default"
-      ]
-    ],
+    "slots": [["div", "default"]],
     "subComponents": {
       "div": {
         "children": []
       }
     },
-    "children": [
-      "div"
-    ],
+    "children": ["div"],
     "defaultWidth": 300,
     "defaultHeight": 420
   },

@@ -31,11 +31,7 @@
     "icon": "video",
     "description": "video element",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "media"
-    ]
+    "tags": ["platform", "component", "media"]
   },
   "id": "7a8921eb-c1ad-400b-94fc-6c6cead8163d",
   "base": true,

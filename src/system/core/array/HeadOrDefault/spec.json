@@ -49,10 +49,7 @@
     "icon": null,
     "description": "head of array or default",
     "complexity": 27,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "inputs": {
     "a": {

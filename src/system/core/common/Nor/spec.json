@@ -57,10 +57,7 @@
     "icon": null,
     "description": "NOT logic operator",
     "complexity": 8,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "561db4ce-1631-4d66-a047-140fb6e814a6",
   "type": "`U`&`G`",

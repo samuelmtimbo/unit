@@ -8,10 +8,7 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://unit.land/*",
-        "http://localhost:4000/*"
-      ],
+      "matches": ["https://unit.land/*", "http://localhost:4000/*"],
       "js": ["content.js"]
     }
   ],

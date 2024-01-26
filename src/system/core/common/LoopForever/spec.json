@@ -24,10 +24,7 @@
     "icon": "undo",
     "description": "loop forever",
     "complexity": 5,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "inputs": {
     "next": {

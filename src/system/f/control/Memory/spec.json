@@ -14,10 +14,7 @@
     "icon": "triangle",
     "description": "data holder",
     "complexity": 3,
-    "tags": [
-      "f",
-      "control"
-    ]
+    "tags": ["f", "control"]
   },
   "id": "49e11645-c25d-4bf7-923d-56817f67b686",
   "base": true,

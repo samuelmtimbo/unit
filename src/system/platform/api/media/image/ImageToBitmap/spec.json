@@ -4,9 +4,7 @@
     "opt": {
       "type": "{imageOrientation?:'none'|'flipY',premultiplyAlpha?:'none'|'premultiply'|'default',colorSpaceConversion?:'none'|'default',resizeWidth?:number,resizeHeight?:number,resizeQuality?:'pixelated'|'low'|'medium'}",
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     },
     "image": {
@@ -16,9 +14,7 @@
     "rect": {
       "type": "{x?:number,y?:number,width?:number,height?:number}",
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     }
   },
@@ -34,14 +30,8 @@
     "icon": "image",
     "complexity": 12,
     "description": "transform image to bitmap",
-    "tags": [
-      "platform",
-      "api",
-      "media"
-    ],
-    "globals": [
-      "MediaRecorder"
-    ]
+    "tags": ["platform", "api", "media"],
+    "globals": ["MediaRecorder"]
   },
   "type": "`U`",
   "system": true

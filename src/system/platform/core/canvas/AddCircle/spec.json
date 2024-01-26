@@ -36,11 +36,7 @@
     "icon": "edit-3",
     "description": "add a circular arc to the current sub-path",
     "complexity": 11,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "inputs": {
     "d": {

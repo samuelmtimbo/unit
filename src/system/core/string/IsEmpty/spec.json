@@ -32,10 +32,7 @@
     "icon": "question",
     "description": "check whether array `a` is empty",
     "complexity": 8,
-    "tags": [
-      "core",
-      "string"
-    ]
+    "tags": ["core", "string"]
   },
   "inputs": {
     "a": {

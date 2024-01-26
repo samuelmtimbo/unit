@@ -99,27 +99,16 @@
     "icon": "video",
     "description": "default video media",
     "complexity": 62,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "component": {
-    "slots": [
-      [
-        "video",
-        "default"
-      ]
-    ],
+    "slots": [["video", "default"]],
     "subComponents": {
       "video": {
         "children": []
       }
     },
-    "children": [
-      "video"
-    ],
+    "children": ["video"],
     "defaultWidth": 240,
     "defaultHeight": 240
   },

@@ -8,17 +8,13 @@
     "path": {
       "type": "string[]",
       "metadata": {
-        "examples": [
-          "[]"
-        ]
+        "examples": ["[]"]
       }
     },
     "key": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "'*'"
-        ]
+        "examples": ["'*'"]
       }
     }
   },
@@ -40,11 +36,7 @@
     "icon": "object-get",
     "description": "subscribe to changes to object `obj` at `path` and `key` (possibly *)",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "method",
-      "object"
-    ]
+    "tags": ["platform", "method", "object"]
   },
   "id": "eaf5e67b-6c48-4a27-85e1-9d5a8aa72e24",
   "base": true,

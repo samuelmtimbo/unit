@@ -167,12 +167,7 @@
         }
       }
     },
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "children"
-    ]
+    "tags": ["platform", "core", "api", "children"]
   },
   "id": "2633ed12-309e-40fe-910d-44106d917e96",
   "system": true

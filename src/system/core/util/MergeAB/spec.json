@@ -53,10 +53,7 @@
     "icon": null,
     "description": "create object `ab` with values `a` and `b`",
     "complexity": 11,
-    "tags": [
-      "core",
-      "util"
-    ]
+    "tags": ["core", "util"]
   },
   "inputs": {
     "a": {

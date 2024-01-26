@@ -41,12 +41,7 @@
     "icon": "square",
     "description": "listen to `element` pointerleave event",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "c7dba94e-af78-11ea-b7d7-47e14ca215b5",
   "type": "`U`&`G`",

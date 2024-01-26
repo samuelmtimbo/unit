@@ -20,10 +20,7 @@
     "icon": "scissors",
     "description": "substring",
     "complexity": 3,
-    "tags": [
-      "f",
-      "string"
-    ]
+    "tags": ["f", "string"]
   },
   "id": "141eaa06-bb12-42f1-a46f-32ceefb64ddc",
   "base": true,

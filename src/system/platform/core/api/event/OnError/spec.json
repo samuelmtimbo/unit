@@ -41,11 +41,7 @@
     "icon": "square",
     "description": "listen to `element` \"error\" event",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "api",
-      "notification"
-    ]
+    "tags": ["platform", "api", "notification"]
   },
   "id": "15507368-081f-11eb-aee1-d3c00ce4dd9d",
   "type": "`U`&`G`",

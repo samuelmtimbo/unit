@@ -8,9 +8,7 @@
     "opt": {
       "type": "{}",
       "metadata": {
-        "examples": [
-          "{fftSize:2048}"
-        ]
+        "examples": ["{fftSize:2048}"]
       }
     },
     "done": {
@@ -27,15 +25,8 @@
     "icon": "activity",
     "description": "copies the current time data into an unsigned byte array",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "media",
-      "audio"
-    ],
-    "globals": [
-      "AudioAnalyser"
-    ]
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["AudioAnalyser"]
   },
   "id": "e4ea5dce-10ea-434b-a93d-c874a92f2f39",
   "base": true,

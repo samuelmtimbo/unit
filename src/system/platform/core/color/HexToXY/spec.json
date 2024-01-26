@@ -26,11 +26,7 @@
     "icon": "palette",
     "description": "convert hex color to xyz",
     "complexity": 148,
-    "tags": [
-      "platform",
-      "core",
-      "color"
-    ]
+    "tags": ["platform", "core", "color"]
   },
   "inputs": {
     "hex": {

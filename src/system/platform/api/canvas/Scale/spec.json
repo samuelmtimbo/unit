@@ -4,21 +4,13 @@
     "sx": {
       "type": "number",
       "metadata": {
-        "examples": [
-          "1",
-          "0.5",
-          "2"
-        ]
+        "examples": ["1", "0.5", "2"]
       }
     },
     "sy": {
       "type": "number",
       "metadata": {
-        "examples": [
-          "1",
-          "0.5",
-          "2"
-        ]
+        "examples": ["1", "0.5", "2"]
       }
     },
     "canvas": {
@@ -31,11 +23,7 @@
     "icon": "edit-3",
     "description": "scale a `canvas`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "2e2bede5-41a9-4c35-8b02-482b610837ff",
   "base": true,

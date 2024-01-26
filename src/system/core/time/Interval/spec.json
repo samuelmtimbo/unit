@@ -15,10 +15,7 @@
     "icon": "timer",
     "description": "output `ms` every once `ms` milliseconds",
     "complexity": 5,
-    "tags": [
-      "core",
-      "time"
-    ]
+    "tags": ["core", "time"]
   },
   "inputs": {
     "ms": {

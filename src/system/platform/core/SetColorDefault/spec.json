@@ -69,10 +69,7 @@
     "icon": "brackets-curly",
     "description": "set `obj` \"color\" to `value` if `test` is true or to `default` otherwise",
     "complexity": 24,
-    "tags": [
-      "platform",
-      "core"
-    ]
+    "tags": ["platform", "core"]
   },
   "id": "7b344491-48a2-46e1-949e-56805bebe3da",
   "type": "`U`&`G`",

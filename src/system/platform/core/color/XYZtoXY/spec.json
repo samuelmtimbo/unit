@@ -120,11 +120,7 @@
     "icon": "palette",
     "description": "convert XYZ color to XY",
     "complexity": 56,
-    "tags": [
-      "platform",
-      "core",
-      "color"
-    ]
+    "tags": ["platform", "core", "color"]
   },
   "inputs": {
     "XYZ": {

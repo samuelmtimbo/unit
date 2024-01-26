@@ -17,10 +17,7 @@
     "icon": "exponential",
     "description": "`a` to the power of `b`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "math"
-    ]
+    "tags": ["f", "math"]
   },
   "id": "ef4c1d0a-bda1-484e-8fcb-0fdbde195778",
   "base": true,

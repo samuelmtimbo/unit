@@ -18,11 +18,7 @@
     "icon": "info-square",
     "description": "get `a`'s length",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "method",
-      "array"
-    ]
+    "tags": ["platform", "method", "array"]
   },
   "id": "ec482aaf-0029-4b85-b03a-de5bd361d706",
   "base": true,

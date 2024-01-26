@@ -96,11 +96,7 @@
     "icon": "object-set",
     "description": "write `data` to `unit` input `name`",
     "complexity": 8,
-    "tags": [
-      "platform",
-      "core",
-      "unit"
-    ]
+    "tags": ["platform", "core", "unit"]
   },
   "id": "04953fed-157a-479d-91ac-005174b9b85e"
 }

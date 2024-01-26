@@ -17,11 +17,7 @@
     "icon": "info-square",
     "description": "set element of `a` at position `i` to `v`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "method",
-      "array"
-    ]
+    "tags": ["platform", "method", "array"]
   },
   "id": "04e8b64e-7fed-49a0-af48-eba025be3fbc",
   "base": true,

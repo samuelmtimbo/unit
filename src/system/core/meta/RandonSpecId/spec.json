@@ -72,10 +72,7 @@
     "icon": null,
     "description": "random spec id",
     "complexity": 31,
-    "tags": [
-      "core",
-      "meta"
-    ]
+    "tags": ["core", "meta"]
   },
   "id": "95735a9e-9bc0-11eb-90ec-3bb9082e8fe9",
   "type": "`U`&`G`",

@@ -18,11 +18,7 @@
     "icon": "info-square",
     "description": "find index `i` of the element `a` on array `a[]` or -1 if not found",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "method",
-      "array"
-    ]
+    "tags": ["platform", "method", "array"]
   },
   "id": "26b06e21-798c-4bc4-96e1-12a4351c083d",
   "base": true,

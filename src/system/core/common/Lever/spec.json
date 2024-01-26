@@ -92,10 +92,7 @@
     "icon": "map-signs",
     "description": "pick `a` or `b` based on `test`, but do not consume the other",
     "complexity": 15,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "c37c7c14-293e-414c-8a9c-01a40186c1e5",
   "type": "`U`&`G`",

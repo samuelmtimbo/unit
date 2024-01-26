@@ -6,9 +6,7 @@
       "type": "object",
       "optional": true,
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     },
     "attr": {
@@ -16,9 +14,7 @@
       "optional": true,
       "defaultIgnored": true,
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     }
   },
@@ -27,10 +23,7 @@
     "icon": "square",
     "description": "HTML label element",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component"
-    ]
+    "tags": ["platform", "component"]
   },
   "id": "23b7df22-79e0-4233-8388-7e6e8f1859c6",
   "base": true,

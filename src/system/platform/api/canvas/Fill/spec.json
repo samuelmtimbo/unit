@@ -14,11 +14,7 @@
     "icon": "edit-3",
     "description": "fill the current path",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "87a11e2c-278c-11eb-9209-2f30aebffb25",
   "base": true,

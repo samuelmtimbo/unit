@@ -55,19 +55,10 @@
     "icon": "square",
     "description": "centered flexbox",
     "complexity": 53,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "component": {
-    "slots": [
-      [
-        "div",
-        "default"
-      ]
-    ],
+    "slots": [["div", "default"]],
     "defaultWidth": 240,
     "defaultHeight": 240,
     "subComponents": {
@@ -75,9 +66,7 @@
         "children": []
       }
     },
-    "children": [
-      "div"
-    ]
+    "children": ["div"]
   },
   "id": "af731047-6d74-4dfd-93bd-0daa4d649d4d",
   "type": "`U`&`C`&`G`",

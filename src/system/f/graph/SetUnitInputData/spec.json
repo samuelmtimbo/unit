@@ -23,10 +23,7 @@
     "icon": "circle",
     "description": "set `graph` `id` unit `type` `name` pin `data`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "graph"
-    ]
+    "tags": ["f", "graph"]
   },
   "id": "76e99304-aa0c-11eb-9bfa-07725a1b4287",
   "base": true,

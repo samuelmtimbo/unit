@@ -137,9 +137,7 @@
         "children": []
       }
     },
-    "children": [
-      "canvas"
-    ],
+    "children": ["canvas"],
     "defaultWidth": 200,
     "defaultHeight": 200
   },
@@ -147,11 +145,7 @@
     "icon": "edit-3",
     "description": "a line on canvas",
     "complexity": 78,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ],
+    "tags": ["platform", "core", "canvas"],
     "position": {
       "merge": {
         "0": {

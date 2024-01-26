@@ -42,12 +42,7 @@
     "icon": "brackets-curly",
     "description": "extract offsetY from `obj`",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "6e9c4adb-77e4-45ef-a71b-ced42a49aae9",
   "type": "`U`&`G`",

@@ -73,10 +73,7 @@
     "icon": "map-signs",
     "description": "direct `a` boolean value",
     "complexity": 9,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "d6d14fd8-4d8f-4d1c-94ac-f42b92f075e2",
   "type": "`U`&`G`",

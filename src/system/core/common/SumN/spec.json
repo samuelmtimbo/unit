@@ -16,10 +16,7 @@
     "icon": "plus",
     "description": "sum the next `n` `a`",
     "complexity": 42,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "inputs": {
     "n": {

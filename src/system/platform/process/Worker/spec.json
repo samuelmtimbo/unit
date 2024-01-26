@@ -4,9 +4,7 @@
     "init": {
       "type": "{}",
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     }
   },
@@ -21,10 +19,7 @@
     "icon": "server",
     "description": "remote control a new worker system",
     "complexity": 4,
-    "tags": [
-      "platform",
-      "process"
-    ]
+    "tags": ["platform", "process"]
   },
   "id": "0c6703a1-e949-4b55-9e84-71e6c9addd64",
   "base": true,

@@ -15,10 +15,7 @@
     "icon": "axe",
     "description": "output `tail` of string `a`",
     "complexity": 5,
-    "tags": [
-      "core",
-      "string"
-    ]
+    "tags": ["core", "string"]
   },
   "inputs": {
     "a": {

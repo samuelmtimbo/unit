@@ -16,10 +16,7 @@
     "icon": "question",
     "description": "check whether `obj` is empty",
     "complexity": 10,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "inputs": {
     "obj": {

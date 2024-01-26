@@ -79,10 +79,7 @@
     "icon": "map-signs",
     "description": "send `a` to `if` if `b` is false or `else` otherwise",
     "complexity": 11,
-    "tags": [
-      "core",
-      "control"
-    ]
+    "tags": ["core", "control"]
   },
   "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3",
   "system": true

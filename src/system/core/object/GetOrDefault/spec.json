@@ -81,10 +81,7 @@
     "icon": "object-get",
     "description": "if `key` in `obj`, get correspondent value, `default` otherwise",
     "complexity": 18,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "inputs": {
     "key": {

@@ -23,14 +23,8 @@
   "metadata": {
     "icon": "film",
     "complexity": 13,
-    "tags": [
-      "platform",
-      "api",
-      "media"
-    ],
-    "globals": [
-      "MediaStreamTrack"
-    ]
+    "tags": ["platform", "api", "media"],
+    "globals": ["MediaStreamTrack"]
   },
   "type": "`U`",
   "system": true

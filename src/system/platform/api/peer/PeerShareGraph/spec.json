@@ -8,9 +8,7 @@
     "opt": {
       "type": "{iceServers:{urls:string[]}[]}",
       "metadata": {
-        "examples": [
-          "{iceServers:[{urls:['stun:stun.l.google.com:19302']}]}"
-        ]
+        "examples": ["{iceServers:[{urls:['stun:stun.l.google.com:19302']}]}"]
       }
     },
     "answer": {
@@ -30,11 +28,7 @@
     "icon": "link",
     "description": "allow remote peer to connect to this graph",
     "complexity": 22,
-    "tags": [
-      "platform",
-      "api",
-      "peer"
-    ]
+    "tags": ["platform", "api", "peer"]
   },
   "id": "16fa715f-fc94-43f7-831e-335037c8daea",
   "base": true,

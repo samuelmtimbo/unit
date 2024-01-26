@@ -65,25 +65,16 @@
     }
   },
   "component": {
-    "slots": [
-      [
-        "defaultstyle",
-        "default"
-      ]
-    ],
+    "slots": [["defaultstyle", "default"]],
     "subComponents": {
       "defaultstyle": {
         "children": []
       },
       "div": {
-        "children": [
-          "defaultstyle"
-        ]
+        "children": ["defaultstyle"]
       }
     },
-    "children": [
-      "div"
-    ],
+    "children": ["div"],
     "defaultWidth": 300,
     "defaultHeight": 180
   },
@@ -91,11 +82,7 @@
     "icon": "square",
     "complexity": 96,
     "description": "horizontal scroll container",
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "ec8afd36-0718-42f7-9b0d-4b1adbf62766",
   "type": "`U`&`G`&`C`",

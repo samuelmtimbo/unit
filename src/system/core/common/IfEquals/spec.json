@@ -181,10 +181,7 @@
   "metadata": {
     "icon": "question",
     "description": "filter `a` based on `b` and `c` equality",
-    "tags": [
-      "core",
-      "common"
-    ],
+    "tags": ["core", "common"],
     "position": {
       "merge": {
         "0": {

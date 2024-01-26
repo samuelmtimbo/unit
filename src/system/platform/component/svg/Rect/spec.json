@@ -14,38 +14,28 @@
       "type": "number",
       "optional": true,
       "metadata": {
-        "examples": [
-          "0"
-        ]
+        "examples": ["0"]
       }
     },
     "y": {
       "type": "number",
       "optional": true,
       "metadata": {
-        "examples": [
-          "0"
-        ]
+        "examples": ["0"]
       }
     },
     "width": {
       "type": "number",
       "optional": true,
       "metadata": {
-        "examples": [
-          "100",
-          "150"
-        ]
+        "examples": ["100", "150"]
       }
     },
     "height": {
       "type": "number",
       "optional": true,
       "metadata": {
-        "examples": [
-          "100",
-          "150"
-        ]
+        "examples": ["100", "150"]
       }
     }
   },
@@ -54,11 +44,7 @@
     "icon": "square",
     "description": "SVG rectangle",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "svg"
-    ]
+    "tags": ["platform", "component", "svg"]
   },
   "id": "c0bfe832-8967-11ea-8c4c-1f2995e41b68",
   "base": true,

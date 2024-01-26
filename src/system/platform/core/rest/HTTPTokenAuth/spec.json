@@ -16,11 +16,7 @@
     "icon": "send",
     "description": "build HTTP token auth value",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "rest"
-    ]
+    "tags": ["platform", "core", "rest"]
   },
   "inputs": {
     "token": {

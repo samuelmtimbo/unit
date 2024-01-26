@@ -4,10 +4,7 @@
     "A": {
       "type": "string",
       "metadata": {
-        "examples": [
-          "ABC",
-          "UNIT"
-        ]
+        "examples": ["ABC", "UNIT"]
       }
     }
   },
@@ -21,10 +18,7 @@
     "description": "conver string to lower case",
     "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase",
     "complexity": 3,
-    "tags": [
-      "f",
-      "string"
-    ]
+    "tags": ["f", "string"]
   },
   "id": "adde2d16-e1e6-4599-9a64-dd0968797041",
   "base": true,

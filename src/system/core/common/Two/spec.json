@@ -42,10 +42,7 @@
     "icon": "dot-circle",
     "description": "output 2",
     "complexity": 5,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "0c0954fb-07de-4722-87d8-b0989043335a",
   "type": "`U`&`G`",

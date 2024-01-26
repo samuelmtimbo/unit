@@ -6,14 +6,8 @@
     "icon": "table",
     "description": "persist data on current session storage",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "storage"
-    ],
-    "globals": [
-      "SessionStorage"
-    ]
+    "tags": ["platform", "api", "storage"],
+    "globals": ["SessionStorage"]
   },
   "id": "dc513ed0-09f4-11eb-a54a-7f4d4e253ef5",
   "base": true,

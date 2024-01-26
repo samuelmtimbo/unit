@@ -26,10 +26,7 @@
     "icon": "brackets-curly",
     "description": "merge objects `a`, `b` and `c` into `abc`",
     "complexity": 6,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "inputs": {
     "a": {

@@ -76,10 +76,7 @@
     "icon": "less-than",
     "description": "less than operator",
     "complexity": 8,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "568f2736-8734-464b-9bff-8e706e8d30ca",
   "type": "`U`&`G`",

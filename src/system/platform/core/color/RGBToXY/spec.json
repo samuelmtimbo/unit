@@ -26,11 +26,7 @@
     "icon": "palette",
     "description": "RGB to XY",
     "complexity": 89,
-    "tags": [
-      "platform",
-      "core",
-      "color"
-    ]
+    "tags": ["platform", "core", "color"]
   },
   "inputs": {
     "RGB": {

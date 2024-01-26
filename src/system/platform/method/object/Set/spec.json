@@ -23,11 +23,7 @@
     "icon": "object-set",
     "description": "set `unit` property `name` to `data`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "method",
-      "object"
-    ]
+    "tags": ["platform", "method", "object"]
   },
   "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
   "base": true,

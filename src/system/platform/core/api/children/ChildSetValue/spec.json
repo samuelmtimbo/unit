@@ -109,12 +109,7 @@
     "icon": "triangle",
     "description": "set `element` child `at` value to `value`",
     "complexity": 15,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "children"
-    ]
+    "tags": ["platform", "core", "api", "children"]
   },
   "id": "9f9dff70-30e6-467b-9204-55fdf5b4ac4f",
   "type": "`U`&`G`",

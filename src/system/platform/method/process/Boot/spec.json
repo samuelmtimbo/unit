@@ -4,9 +4,7 @@
     "init": {
       "type": "{path?:string}",
       "metadata": {
-        "examples": [
-          "{}"
-        ]
+        "examples": ["{}"]
       }
     }
   },
@@ -21,11 +19,7 @@
     "icon": "server",
     "description": "asynchronously control a graph",
     "complexity": 21,
-    "tags": [
-      "platform",
-      "method",
-      "process"
-    ]
+    "tags": ["platform", "method", "process"]
   },
   "id": "bddaba6f-83c8-4d25-97e2-ef1cdecd19e4",
   "base": true,

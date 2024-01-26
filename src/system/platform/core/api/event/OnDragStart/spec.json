@@ -41,12 +41,7 @@
     "icon": "square",
     "description": "listen to `element` dragstart event",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "90b783fe-a6a6-4026-9af6-fd853a5705f4",
   "type": "`U`&`G`",

@@ -22,11 +22,7 @@
     "icon": "square",
     "description": "register `ref` on `unit` scope",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "component"
-    ]
+    "tags": ["platform", "api", "component"]
   },
   "id": "fb3fc7b4-3175-41ce-9546-cf3a07053cdc",
   "type": "`U`",

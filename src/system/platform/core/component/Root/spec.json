@@ -183,17 +183,10 @@
     }
   },
   "component": {
-    "slots": [
-      [
-        "io",
-        "default"
-      ]
-    ],
+    "slots": [["io", "default"]],
     "subComponents": {
       "io": {
-        "children": [
-          "guikeyboard"
-        ],
+        "children": ["guikeyboard"],
         "childSlot": {
           "guikeyboard": "2"
         }
@@ -202,9 +195,7 @@
         "children": []
       }
     },
-    "children": [
-      "io"
-    ],
+    "children": ["io"],
     "defaultWidth": 420,
     "defaultHeight": 420
   },
@@ -212,11 +203,7 @@
     "icon": "chalkboard",
     "description": "io + cloud",
     "complexity": 398,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "9aba266d-5200-4281-b477-749c9b3c5815",
   "type": "`U`&`G`",

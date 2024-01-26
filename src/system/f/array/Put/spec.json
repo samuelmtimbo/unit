@@ -20,10 +20,7 @@
     "icon": "chevrons-left",
     "description": "set element of `a` at position `i` to `v`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "array"
-    ]
+    "tags": ["f", "array"]
   },
   "id": "22622778-d64f-47e7-8ceb-d175edcc6562",
   "base": true,

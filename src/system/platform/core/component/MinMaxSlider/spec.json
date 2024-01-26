@@ -589,35 +589,22 @@
         "height": 45
       },
       "row": {
-        "children": [
-          "min",
-          "numberinput",
-          "max"
-        ]
+        "children": ["min", "numberinput", "max"]
       },
       "column": {
-        "children": [
-          "slider",
-          "row"
-        ],
+        "children": ["slider", "row"],
         "width": 278,
         "height": 85
       }
     },
-    "children": [
-      "column"
-    ],
+    "children": ["column"],
     "defaultWidth": 210,
     "defaultHeight": 120
   },
   "metadata": {
     "icon": "sliders",
     "complexity": 163,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
         "2": {

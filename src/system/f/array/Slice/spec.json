@@ -20,10 +20,7 @@
     "icon": "scissors",
     "description": "extracts a section from string `a` from `begin` to `end`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "array"
-    ]
+    "tags": ["f", "array"]
   },
   "id": "c6bf897a-4970-4284-bea2-b4a86186f828",
   "base": true,

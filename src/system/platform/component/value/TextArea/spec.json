@@ -13,9 +13,7 @@
       "optional": true,
       "defaultIgnored": true,
       "metadata": {
-        "examples": [
-          "\"Type Text Here\""
-        ]
+        "examples": ["\"Type Text Here\""]
       }
     },
     "style": {
@@ -34,11 +32,7 @@
     "icon": "align-left",
     "description": "input text through keyboard",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "value"
-    ]
+    "tags": ["platform", "component", "value"]
   },
   "id": "83ec6688-b80b-4ef2-861f-14245ef392c0",
   "base": true,

@@ -6,10 +6,7 @@
     "icon": "chalkboard",
     "description": "unit class component",
     "complexity": 50,
-    "tags": [
-      "host",
-      "component"
-    ]
+    "tags": ["host", "component"]
   },
   "id": "96d5d60e-85eb-11eb-ba90-7fc42ab0a641",
   "base": true,

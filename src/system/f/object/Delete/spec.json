@@ -19,10 +19,7 @@
     "icon": "brackets-curly",
     "description": "remove `obj` key-value pair for given `key`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "object"
-    ]
+    "tags": ["f", "object"]
   },
   "id": "664b5d3c-e4cf-11ea-ab74-eb6d2f3bd6f1",
   "base": true,

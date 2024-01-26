@@ -52,21 +52,13 @@
   "merges": {},
   "metadata": {
     "complexity": 87,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "component": {
-    "children": [
-      "span"
-    ],
+    "children": ["span"],
     "subComponents": {
       "span": {
-        "children": [
-          "text"
-        ]
+        "children": ["text"]
       },
       "text": {
         "children": []

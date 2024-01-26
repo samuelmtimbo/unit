@@ -26,10 +26,7 @@
     "icon": "plus",
     "description": "concat `a`, `b` and `c`",
     "complexity": 6,
-    "tags": [
-      "core",
-      "string"
-    ]
+    "tags": ["core", "string"]
   },
   "inputs": {
     "a": {

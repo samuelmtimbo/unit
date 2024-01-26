@@ -194,10 +194,7 @@
     "icon": "brackets",
     "description": "find index `i` of first element in array `a` for which `test` is true",
     "complexity": 61,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "id": "7ca98fbb-6e84-4133-b658-46329a8e45cf",
   "type": "`U`&`G`",

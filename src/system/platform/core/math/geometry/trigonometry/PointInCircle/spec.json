@@ -145,12 +145,7 @@
     "icon": null,
     "description": "get point in circle at angle `rad`",
     "complexity": 33,
-    "tags": [
-      "platform",
-      "core",
-      "geometry",
-      "trigonometry"
-    ]
+    "tags": ["platform", "core", "geometry", "trigonometry"]
   },
   "inputs": {
     "rad": {

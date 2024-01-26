@@ -41,10 +41,7 @@
     "icon": "brackets",
     "description": "build array with elements `0` and `1`",
     "complexity": 11,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "inputs": {
     "0": {

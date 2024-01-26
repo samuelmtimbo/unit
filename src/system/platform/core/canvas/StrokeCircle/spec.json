@@ -66,9 +66,7 @@
       },
       "type": "{x:number,y:number,r:number}",
       "metadada": {
-        "examples": [
-          "{x:50,y:50,r:25}"
-        ]
+        "examples": ["{x:50,y:50,r:25}"]
       }
     },
     "d": {
@@ -80,9 +78,7 @@
       },
       "type": "any[][]",
       "metadata": {
-        "examples": [
-          "[]"
-        ]
+        "examples": ["[]"]
       }
     }
   },
@@ -101,11 +97,7 @@
     "icon": "edit-3",
     "description": "stroke a circle path",
     "complexity": 19,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "id": "89051065-ef45-48b2-ab7f-77ae173e1b4d",
   "type": "`U`&`G`",

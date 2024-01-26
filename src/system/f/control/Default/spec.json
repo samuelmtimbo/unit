@@ -17,10 +17,7 @@
     "icon": "grip-lines-vertical",
     "description": "output `a` if present, `default` if present, otherwise",
     "complexity": 3,
-    "tags": [
-      "f",
-      "control"
-    ]
+    "tags": ["f", "control"]
   },
   "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
   "base": true,

@@ -14,11 +14,7 @@
     "icon": "list",
     "description": "output a list of the available media input and output devices, such as microphones, cameras, headsets, and so forth",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "media"
-    ]
+    "tags": ["platform", "api", "media"]
   },
   "id": "3511f756-2a02-4346-b417-8c34502f79d4",
   "base": true,

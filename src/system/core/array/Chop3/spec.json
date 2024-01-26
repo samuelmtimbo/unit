@@ -52,10 +52,7 @@
     "icon": "split-three",
     "description": "get array `a` first 3 values",
     "complexity": 7,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "inputs": {
     "a": {
@@ -66,9 +63,7 @@
       },
       "type": "<A>[]",
       "metadata": {
-        "examples": [
-          "[1,2,3]"
-        ]
+        "examples": ["[1,2,3]"]
       }
     }
   },

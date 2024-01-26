@@ -4,9 +4,7 @@
     "bundle": {
       "type": "{spec?:object,specs?:object}",
       "metadata": {
-        "examples": [
-          "{spec:{},specs:{}}"
-        ]
+        "examples": ["{spec:{},specs:{}}"]
       }
     }
   },
@@ -20,11 +18,7 @@
     "icon": "server",
     "description": "start a new graph",
     "complexity": 18,
-    "tags": [
-      "platform",
-      "method",
-      "process"
-    ]
+    "tags": ["platform", "method", "process"]
   },
   "id": "de2d42e2-4fca-4a3f-8783-3585c546e88b",
   "base": true,

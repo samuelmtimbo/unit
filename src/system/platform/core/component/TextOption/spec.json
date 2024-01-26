@@ -70,9 +70,7 @@
   "component": {
     "subComponents": {
       "option": {
-        "children": [
-          "text"
-        ],
+        "children": ["text"],
         "childSlot": {}
       },
       "text": {
@@ -80,9 +78,7 @@
         "childSlot": {}
       }
     },
-    "children": [
-      "option"
-    ],
+    "children": ["option"],
     "defaultWidth": 180,
     "defaultHeight": 90
   },

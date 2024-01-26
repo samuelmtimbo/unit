@@ -26,10 +26,7 @@
     "icon": "timer",
     "description": "output `ms` after `ms` milliseconds, until `done`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "time"
-    ]
+    "tags": ["f", "time"]
   },
   "id": "42a8023a-0581-4e92-968a-b31584d0ed75",
   "base": true,

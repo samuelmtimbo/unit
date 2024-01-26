@@ -16,11 +16,7 @@
     "icon": "tag",
     "description": "{r: `r`}",
     "complexity": 7,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "inputs": {
     "r": {

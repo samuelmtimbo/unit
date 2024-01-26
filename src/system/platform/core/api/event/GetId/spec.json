@@ -42,12 +42,7 @@
     "icon": "brackets-curly",
     "description": "extract `id` from `obj`",
     "complexity": 5,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "id": "f7805a56-668d-11eb-a8df-732d644930cc",
   "type": "`U`&`G`",

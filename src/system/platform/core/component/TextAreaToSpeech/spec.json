@@ -230,9 +230,7 @@
         "children": []
       }
     },
-    "children": [
-      "textarea"
-    ],
+    "children": ["textarea"],
     "defaultWidth": 200,
     "defaultHeight": 150
   },
@@ -240,11 +238,7 @@
     "complexity": 77,
     "icon": "align-left",
     "description": "speech text on enter",
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ],
+    "tags": ["platform", "core", "component"],
     "position": {
       "merge": {
         "1": {

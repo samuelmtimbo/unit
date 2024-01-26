@@ -11,11 +11,7 @@
     "opt": {
       "type": "{paused?:boolean}",
       "metadata": {
-        "examples": [
-          "{}",
-          "{paused:true}",
-          "{paused:false}"
-        ]
+        "examples": ["{}", "{paused:true}", "{paused:false}"]
       }
     },
     "system": {
@@ -34,11 +30,7 @@
     "icon": "server",
     "description": "start a new graph",
     "complexity": 18,
-    "tags": [
-      "platform",
-      "method",
-      "process"
-    ]
+    "tags": ["platform", "method", "process"]
   },
   "id": "7fe5b907-e9d3-4427-96cf-1b3be39a9bba",
   "base": true,

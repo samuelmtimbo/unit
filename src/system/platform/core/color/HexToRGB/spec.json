@@ -207,11 +207,7 @@
     "icon": "palette",
     "description": "hexadecimal color string to RGB array",
     "complexity": 75,
-    "tags": [
-      "platform",
-      "core",
-      "color"
-    ]
+    "tags": ["platform", "core", "color"]
   },
   "inputs": {
     "hex": {

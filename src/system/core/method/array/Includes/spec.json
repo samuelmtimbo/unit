@@ -99,11 +99,7 @@
   "metadata": {
     "icon": "info-square",
     "complexity": 58,
-    "tags": [
-      "core",
-      "method",
-      "array"
-    ]
+    "tags": ["core", "method", "array"]
   },
   "component": {
     "children": []

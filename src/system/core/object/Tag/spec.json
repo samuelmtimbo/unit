@@ -16,10 +16,7 @@
     "icon": "tag",
     "description": "create a single entry object with key `k` and value `v`",
     "complexity": 5,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "inputs": {
     "k": {

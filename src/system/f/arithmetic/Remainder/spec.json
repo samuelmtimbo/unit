@@ -17,10 +17,7 @@
     "icon": "percent",
     "description": "remainder of `a` divided by `b`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "arithmetic"
-    ]
+    "tags": ["f", "arithmetic"]
   },
   "id": "c5c05c85-f4c1-4b67-ab85-08b61fe67531",
   "base": true,

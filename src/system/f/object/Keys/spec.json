@@ -14,10 +14,7 @@
     "icon": "brackets-curly",
     "description": "list keys for this object",
     "complexity": 3,
-    "tags": [
-      "f",
-      "object"
-    ]
+    "tags": ["f", "object"]
   },
   "id": "45b9c329-64e9-4c4a-800b-790947c75754",
   "base": true,

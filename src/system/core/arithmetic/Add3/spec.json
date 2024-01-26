@@ -25,10 +25,7 @@
   "metadata": {
     "icon": "plus",
     "complexity": 6,
-    "tags": [
-      "core",
-      "arithmetic"
-    ]
+    "tags": ["core", "arithmetic"]
   },
   "inputs": {
     "b": {

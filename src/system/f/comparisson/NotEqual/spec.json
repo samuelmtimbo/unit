@@ -17,10 +17,7 @@
     "icon": "equal-not",
     "description": "inequality",
     "complexity": 3,
-    "tags": [
-      "f",
-      "comparisson"
-    ]
+    "tags": ["f", "comparisson"]
   },
   "id": "bda175a9-a9d2-4282-9b50-1b008ae8a807",
   "base": true,

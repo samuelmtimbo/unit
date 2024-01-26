@@ -16,12 +16,7 @@
     "icon": "tag",
     "description": "{event: `event`}",
     "complexity": 7,
-    "tags": [
-      "platform",
-      "core",
-      "api",
-      "event"
-    ]
+    "tags": ["platform", "core", "api", "event"]
   },
   "inputs": {
     "event": {

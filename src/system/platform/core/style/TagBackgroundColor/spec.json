@@ -16,11 +16,7 @@
     "icon": "tag",
     "description": "{\"background-color\": `color`}",
     "complexity": 7,
-    "tags": [
-      "platform",
-      "core",
-      "style"
-    ]
+    "tags": ["platform", "core", "style"]
   },
   "inputs": {
     "color": {

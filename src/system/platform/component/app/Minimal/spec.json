@@ -13,11 +13,7 @@
     "icon": "chalkboard",
     "description": "unit class component",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "app"
-    ]
+    "tags": ["platform", "component", "app"]
   },
   "id": "0e1d716e-a13f-11ea-ac6a-8fd610c86910",
   "base": true,

@@ -14,11 +14,7 @@
     "icon": "map-pin",
     "description": "current gps latitude and latitude",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "geolocation"
-    ]
+    "tags": ["platform", "api", "geolocation"]
   },
   "id": "a9cba5ec-940d-42a3-b861-86197402cbe4",
   "base": true,

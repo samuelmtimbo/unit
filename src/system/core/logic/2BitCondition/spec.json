@@ -122,10 +122,7 @@
     "icon": "binary",
     "description": "2 x 2 = 4",
     "complexity": 21,
-    "tags": [
-      "core",
-      "logic"
-    ]
+    "tags": ["core", "logic"]
   },
   "id": "4433f550-6b85-4827-9aac-18b2c816818c",
   "type": "`U`&`G`",

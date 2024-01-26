@@ -26,10 +26,7 @@
     "icon": "plus",
     "description": "concat arrays `a`, `b` and `c`",
     "complexity": 6,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "inputs": {
     "a": {

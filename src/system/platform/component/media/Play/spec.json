@@ -14,10 +14,7 @@
     "icon": "play",
     "description": "play media element",
     "complexity": 3,
-    "tags": [
-      "f",
-      "unit"
-    ]
+    "tags": ["f", "unit"]
   },
   "id": "ab507863-2307-40c6-982b-c45680458997",
   "base": true,

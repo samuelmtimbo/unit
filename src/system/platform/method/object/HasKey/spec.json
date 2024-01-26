@@ -19,11 +19,7 @@
     "icon": "object-get",
     "description": "check whether `obj` has `key`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "method",
-      "object"
-    ]
+    "tags": ["platform", "method", "object"]
   },
   "id": "b409ff98-1c9e-4990-b2c2-d7f32fda50eb",
   "base": true,

@@ -16,11 +16,7 @@
     "icon": "bluetooth",
     "description": "remote GATT server",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "bluetooth"
-    ]
+    "tags": ["platform", "api", "bluetooth"]
   },
   "id": "dd520754-e138-11ea-879e-3bd947893124",
   "base": true,

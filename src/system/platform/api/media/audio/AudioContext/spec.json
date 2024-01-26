@@ -15,15 +15,8 @@
     "icon": "sliders",
     "description": "control an audio-processing graph built from audio modules linked together",
     "complexity": 12,
-    "tags": [
-      "platform",
-      "api",
-      "media",
-      "audio"
-    ],
-    "globals": [
-      "AudioContext"
-    ]
+    "tags": ["platform", "api", "media", "audio"],
+    "globals": ["AudioContext"]
   },
   "id": "f5df301d-da63-492a-9e59-950289fe6ba9",
   "base": true,

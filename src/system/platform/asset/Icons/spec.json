@@ -14,10 +14,7 @@
     "icon": "value-absolute",
     "description": "output system `icons` dictionary",
     "complexity": 7,
-    "tags": [
-      "f",
-      "math"
-    ]
+    "tags": ["f", "math"]
   },
   "id": "72c84615-4d9c-4a82-a828-fa5d9447a4d5",
   "base": true,

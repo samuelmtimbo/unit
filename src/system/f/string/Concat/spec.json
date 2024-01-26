@@ -17,10 +17,7 @@
     "icon": "plus",
     "description": "concatenate two strings",
     "complexity": 3,
-    "tags": [
-      "f",
-      "string"
-    ]
+    "tags": ["f", "string"]
   },
   "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
   "base": true,

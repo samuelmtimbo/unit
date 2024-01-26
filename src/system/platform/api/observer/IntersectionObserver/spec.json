@@ -22,11 +22,7 @@
     "icon": "ruler",
     "description": "asynchronously observe changes in the intersection of a target element with an `ancestor` element",
     "complexity": 4,
-    "tags": [
-      "platform",
-      "api",
-      "observer"
-    ]
+    "tags": ["platform", "api", "observer"]
   },
   "id": "34a36b3a-cb04-4429-bdbc-15e0c278ad7a",
   "base": true,

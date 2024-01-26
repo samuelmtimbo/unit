@@ -20,10 +20,7 @@
     "icon": "object-set",
     "description": "get value of `obj` at `path`",
     "complexity": 3,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "id": "419e468e-e4d4-11ea-8efb-2b9d815b1798",
   "type": "`U`&`G`",

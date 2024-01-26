@@ -53,11 +53,7 @@
     "icon": "brackets",
     "description": "{ x, y }",
     "complexity": 15,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "inputs": {
     "y": {

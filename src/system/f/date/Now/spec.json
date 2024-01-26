@@ -14,10 +14,7 @@
     "icon": "circle",
     "description": "identity operator",
     "complexity": 3,
-    "tags": [
-      "f",
-      "date"
-    ]
+    "tags": ["f", "date"]
   },
   "id": "939ed573-82b8-4385-ac62-88934e5b76c9",
   "base": true,

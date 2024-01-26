@@ -24,10 +24,7 @@
     "icon": "question",
     "description": "remove all string `str` whitespace",
     "complexity": 5,
-    "tags": [
-      "core",
-      "string"
-    ]
+    "tags": ["core", "string"]
   },
   "inputs": {
     "str": {

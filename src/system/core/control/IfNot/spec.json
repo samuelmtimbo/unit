@@ -59,10 +59,7 @@
     "icon": "filter",
     "description": "reverse conditional operator",
     "complexity": 8,
-    "tags": [
-      "core",
-      "control"
-    ]
+    "tags": ["core", "control"]
   },
   "id": "439c6b56-a0b6-4b76-9131-c6dc23375fda",
   "type": "`U`&`G`",

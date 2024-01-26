@@ -17,10 +17,7 @@
     "icon": "ruler",
     "description": "match a string against a regular expression",
     "complexity": 3,
-    "tags": [
-      "f",
-      "string"
-    ]
+    "tags": ["f", "string"]
   },
   "id": "b16cccf7-fe33-43a6-b208-48db494376e8",
   "base": true,

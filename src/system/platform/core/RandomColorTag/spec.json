@@ -26,11 +26,7 @@
     "icon": "palette",
     "description": "random HEX color string tag",
     "complexity": 58,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "inputs": {
     "any": {

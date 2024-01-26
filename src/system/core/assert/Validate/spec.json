@@ -41,10 +41,7 @@
     "icon": "alert-circle",
     "description": "pass if `test`, error `message` otherwise",
     "complexity": 14,
-    "tags": [
-      "core",
-      "assert"
-    ]
+    "tags": ["core", "assert"]
   },
   "inputs": {
     "a": {

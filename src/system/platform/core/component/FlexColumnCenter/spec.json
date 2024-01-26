@@ -55,19 +55,10 @@
     "icon": "square",
     "description": "column flexbox with centered content",
     "complexity": 56,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "component": {
-    "slots": [
-      [
-        "flexcolumn",
-        "default"
-      ]
-    ],
+    "slots": [["flexcolumn", "default"]],
     "defaultWidth": 180,
     "defaultHeight": 270,
     "subComponents": {
@@ -75,9 +66,7 @@
         "children": []
       }
     },
-    "children": [
-      "flexcolumn"
-    ]
+    "children": ["flexcolumn"]
   },
   "id": "59d00328-d61e-4ed2-b4e4-cfa53e0b7fa7",
   "type": "`U`&`G`&`C`",

@@ -173,11 +173,7 @@
   "metadata": {
     "icon": "tag",
     "complexity": 23,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "id": "f08860e0-f393-4159-80da-510ff95adb21"
 }

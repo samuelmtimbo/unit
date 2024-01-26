@@ -197,10 +197,7 @@
     "icon": "grid",
     "description": "for every `i` < `a` and `j` < `b`",
     "complexity": 27,
-    "tags": [
-      "core",
-      "loop"
-    ]
+    "tags": ["core", "loop"]
   },
   "id": "23af575c-176a-451a-b710-a031a5ecb7a2",
   "type": "`U`&`G`",

@@ -14,10 +14,7 @@
     "icon": "send",
     "description": "scroll parent until `component` is visible",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api"
-    ]
+    "tags": ["platform", "api"]
   },
   "base": true,
   "id": "de9665db-a188-4252-99f0-ea50fc343058",

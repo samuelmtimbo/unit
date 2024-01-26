@@ -16,10 +16,7 @@
     "icon": "greater-than",
     "description": "output whether `a` is greater than 0",
     "complexity": 5,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "inputs": {
     "a": {

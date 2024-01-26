@@ -75,11 +75,7 @@
     "icon": "circle",
     "description": "get origin `obj` property",
     "complexity": 8,
-    "tags": [
-      "platform",
-      "api",
-      "read"
-    ]
+    "tags": ["platform", "api", "read"]
   },
   "id": "3a8a68cc-2ec7-11eb-a2b8-df0a171f0ba5",
   "type": "`U`&`G`",

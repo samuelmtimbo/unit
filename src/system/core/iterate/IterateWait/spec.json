@@ -91,10 +91,7 @@
     "icon": "undo",
     "description": "iterate + wait",
     "complexity": 8,
-    "tags": [
-      "core",
-      "iterate"
-    ]
+    "tags": ["core", "iterate"]
   },
   "id": "ed5e826a-163c-42cd-8522-e47187decae7",
   "type": "`U`&`G`",

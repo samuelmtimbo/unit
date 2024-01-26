@@ -46,10 +46,7 @@
     "icon": "",
     "description": "iterate `sum` by adding stream `a` starting `from`",
     "complexity": 8,
-    "tags": [
-      "core",
-      "iterate"
-    ]
+    "tags": ["core", "iterate"]
   },
   "inputs": {
     "a": {

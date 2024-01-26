@@ -64,10 +64,7 @@
     "icon": null,
     "description": "check whether this is the first element of stream `a`",
     "complexity": 13,
-    "tags": [
-      "core",
-      "loop"
-    ]
+    "tags": ["core", "loop"]
   },
   "inputs": {
     "a": {

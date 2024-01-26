@@ -14,11 +14,7 @@
     "icon": "edit-3",
     "description": "stroke a SVG path `d` on `canvas`",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "canvas"
-    ]
+    "tags": ["platform", "api", "canvas"]
   },
   "id": "c0e124ca-381a-414b-93a2-41526df02e28",
   "base": true,

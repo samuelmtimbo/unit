@@ -17,10 +17,7 @@
     "icon": "plus",
     "description": "join array `a` elements into `str` with separator `sep`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "array"
-    ]
+    "tags": ["f", "array"]
   },
   "id": "104777ec-afb9-4513-9974-53b5528f0d15",
   "base": true,

@@ -103,10 +103,7 @@
     "icon": null,
     "description": "add `n` next numbers to `from`",
     "complexity": 40,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "inputs": {
     "a": {

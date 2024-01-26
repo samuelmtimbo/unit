@@ -41,10 +41,7 @@
     "icon": "arrow-up",
     "description": "the biggest between size of `a` and size of `b`",
     "complexity": 9,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "inputs": {
     "a": {

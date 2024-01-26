@@ -20,11 +20,7 @@
     "description": "create, manage and message a web socket connection to a server",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "network"
-    ]
+    "tags": ["platform", "api", "network"]
   },
   "id": "b8fc168e-ee2f-11ea-a42a-730934861ff1",
   "base": true,

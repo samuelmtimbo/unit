@@ -80,10 +80,7 @@
     "icon": "list-ordered",
     "description": "count from `a` to `b`, not inclusive",
     "complexity": 21,
-    "tags": [
-      "core",
-      "loop"
-    ]
+    "tags": ["core", "loop"]
   },
   "inputs": {
     "a": {
@@ -96,9 +93,7 @@
       "functional": true,
       "type": "number",
       "metadata": {
-        "examples": [
-          "0"
-        ]
+        "examples": ["0"]
       }
     },
     "b": {
@@ -111,9 +106,7 @@
       "functional": true,
       "type": "number",
       "metadata": {
-        "examples": [
-          "3"
-        ]
+        "examples": ["3"]
       }
     }
   },

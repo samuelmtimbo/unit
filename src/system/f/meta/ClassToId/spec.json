@@ -14,10 +14,7 @@
     "icon": "circle",
     "description": "system `id` of the given unit `class`",
     "complexity": 3,
-    "tags": [
-      "f",
-      "meta"
-    ]
+    "tags": ["f", "meta"]
   },
   "id": "1520b630-93aa-11ea-ac56-7718cb2ad75d",
   "base": true,

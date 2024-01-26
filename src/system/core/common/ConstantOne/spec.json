@@ -31,10 +31,7 @@
     "icon": "dot-circle",
     "description": "one forever",
     "complexity": 5,
-    "tags": [
-      "core",
-      "common"
-    ]
+    "tags": ["core", "common"]
   },
   "id": "c6d4d8b4-b9cc-401a-98fe-37eaf71426b0",
   "type": "`U`&`G`",

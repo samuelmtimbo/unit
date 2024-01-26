@@ -82,11 +82,7 @@
     "icon": "edit-3",
     "description": "set the color, gradient, or pattern to use for stroke and fill",
     "complexity": 8,
-    "tags": [
-      "platform",
-      "core",
-      "canvas"
-    ]
+    "tags": ["platform", "core", "canvas"]
   },
   "id": "f1456a8d-7f4f-41b4-9487-166a67a6cbd4",
   "type": "`U`&`G`",

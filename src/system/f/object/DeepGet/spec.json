@@ -19,10 +19,7 @@
     "icon": "object-get",
     "description": "get value of `obj` at `path`",
     "complexity": 3,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "base": true,
   "system": true

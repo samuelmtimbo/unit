@@ -14,10 +14,7 @@
     "icon": "string",
     "description": "produces a URL query string from a given obj",
     "complexity": 3,
-    "tags": [
-      "f",
-      "querystring"
-    ]
+    "tags": ["f", "querystring"]
   },
   "id": "f97f2a74-d9a9-411d-afd3-fda46ba86c3b",
   "base": true,

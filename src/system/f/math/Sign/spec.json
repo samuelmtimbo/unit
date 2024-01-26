@@ -14,10 +14,7 @@
     "icon": "plus-minus",
     "description": "sign of a",
     "complexity": 3,
-    "tags": [
-      "f",
-      "math"
-    ]
+    "tags": ["f", "math"]
   },
   "id": "1a59348c-a25a-11eb-8afe-8bedb0732a89",
   "base": true,

@@ -128,10 +128,7 @@
     "icon": "brackets-curly",
     "description": "delete all `keys` from `obj`",
     "complexity": 37,
-    "tags": [
-      "core",
-      "object"
-    ]
+    "tags": ["core", "object"]
   },
   "id": "474d900a-fd28-11ea-b59c-670afe58a912",
   "type": "`U`&`G`",

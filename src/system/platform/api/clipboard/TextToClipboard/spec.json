@@ -10,11 +10,7 @@
     "icon": "clipboard",
     "description": "copy `text` to clipboard",
     "complexity": 3,
-    "tags": [
-      "platform",
-      "api",
-      "clipboard"
-    ]
+    "tags": ["platform", "api", "clipboard"]
   },
   "id": "0b5a71c6-5c43-4e55-a29c-27d9ff7ed43a",
   "base": true,

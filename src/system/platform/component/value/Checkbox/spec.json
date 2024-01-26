@@ -25,11 +25,7 @@
     "icon": "square",
     "description": "checkbox",
     "complexity": 43,
-    "tags": [
-      "platform",
-      "component",
-      "value"
-    ]
+    "tags": ["platform", "component", "value"]
   },
   "id": "096fc4ca-edd2-11ea-8266-37b634a3ee0b",
   "base": true,

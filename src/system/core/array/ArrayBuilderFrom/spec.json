@@ -43,10 +43,7 @@
     "icon": "array",
     "description": "build a list starting `from`",
     "complexity": 8,
-    "tags": [
-      "core",
-      "array"
-    ]
+    "tags": ["core", "array"]
   },
   "inputs": {
     "a": {

@@ -97,19 +97,13 @@
         "children": []
       }
     },
-    "children": [
-      "textspan"
-    ],
+    "children": ["textspan"],
     "defaultWidth": 90,
     "defaultHeight": 90
   },
   "metadata": {
     "complexity": 100,
-    "tags": [
-      "platform",
-      "core",
-      "component"
-    ]
+    "tags": ["platform", "core", "component"]
   },
   "id": "d0c59812-a8ec-4c53-81a9-c9725dda987e",
   "type": "`U`&`G`",
