@@ -23397,10 +23397,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         return false
       } else {
-        if (!this._should_show_merge_data_on_this_mode()) {
-          return true
-        }
-
         const ext_input_node_id = this._pin_to_ext['input']?.[pin_node_id]
         const ext_output_node_id = this._pin_to_ext['output']?.[pin_node_id]
 
