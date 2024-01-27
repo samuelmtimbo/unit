@@ -44931,7 +44931,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const opposite_type = opposite(type)
 
           const type_ =
-            merge_collapse_unit_inside_pin_count[opposite_type] === 0
+            merge_collapse_unit_inside_pin_count[opposite_type] === 0 &&
+            merge_outside_pin_count[opposite_type] > 0
               ? opposite_type
               : type
 
