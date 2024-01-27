@@ -25140,25 +25140,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _state_move_plug_into_graph__remove = (
-    exposed_pin_node_id: string
-  ): void => {
-    // console.log(
-    //   'Graph',
-    //   '_state_remove_exposed_sub_pin_or_set',
-    //   exposed_pin_node_id
-    // )
-
-    const { pinId, type, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
-
-    const pin_count = this._get_exposed_pin_set_count(exposed_pin_node_id)
-    if (pin_count === 1 || pin_count === 0) {
-      this._state_remove_exposed_pin_set(type, pinId)
-    } else {
-      this.__state_remove_exposed_sub_pin(type, pinId, subPinId)
-    }
-  }
-
   private _get_exposed_pin_set_count = (
     exposed_pin_node_id: string
   ): number => {
