@@ -486,6 +486,7 @@ assert.deepEqual(empty4.getExposedPinSpec('input', 'a'), {
       pinId: 'a',
     },
   },
+  ref: false,
 })
 
 const spec5 = system.newSpec({
@@ -1428,6 +1429,7 @@ assert.deepEqual(empty12.getExposedInputSpec('a'), {
       mergeId: '0',
     },
   },
+  ref: false,
 })
 assert.deepEqual(empty12.getExposedOutputSpec('a'), {
   plug: {
@@ -1435,6 +1437,7 @@ assert.deepEqual(empty12.getExposedOutputSpec('a'), {
       mergeId: '0',
     },
   },
+  ref: false,
 })
 
 const spec13 = system.newSpec({
@@ -1635,11 +1638,13 @@ assert.deepEqual(empty14.getExposedInputSpec('a'), {
   plug: {
     '0': {},
   },
+  ref: false,
 })
 assert.deepEqual(empty14.getExposedOutputSpec('a'), {
   plug: {
     '0': {},
   },
+  ref: false,
 })
 assert.deepEqual(empty14.getInput('a').peak(), 1)
 
