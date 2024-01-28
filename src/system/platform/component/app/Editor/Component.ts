@@ -5308,7 +5308,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     // ADHOC Safari will have frame height 0 while page is loading
     setTimeout(() => {
-      this._center_graph()
+      this._center_graph(true)
     }, 0)
 
     this._start_graph_simulation(LAYER_NONE)
@@ -5318,27 +5318,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._start_debugger()
   }
 
-  private _center_on_nodes = (nodes: Dict<GraphSimNode>) => {
+  private _center_on_nodes = (
+    nodes: Dict<GraphSimNode>,
+    preventAnimation?: boolean
+  ) => {
     const { animate } = this.$props
 
     const center = this.get_nodes_bounding_rect_center(nodes)
 
-    if (animate) {
+    if (animate && !preventAnimation) {
       this._animate_zoom_center_at(center.x, center.y)
     } else {
       this._zoom_center_at(center.x, center.y)
     }
   }
 
-  private _center_graph = () => {
+  private _center_graph = (preventAnimation?: boolean) => {
     if (this._node_count === 0) {
       return
     }
 
-    this._center_on_nodes(this._unit_node)
+    this._center_on_nodes(this._unit_node, preventAnimation)
   }
 
-  private _center_graph_on_selected = () => {
+  private _center_graph_on_selected = (preventAnimation?: boolean) => {
     const selected_node = {}
 
     for (const node_id in this._selected_node_id) {
