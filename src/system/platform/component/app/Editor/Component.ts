@@ -28984,6 +28984,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       let parent_finished = false
       let children_finished = false
 
+      const maybe_finish = () => {
+        if (parent_finished && children_finished) {
+          finish()
+        }
+      }
+
       this._animate_parent_component(
         parent_id,
         parent_animating,
@@ -29007,12 +29013,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           maybe_finish()
         }
       )
-
-      const maybe_finish = () => {
-        if (parent_finished && children_finished) {
-          finish()
-        }
-      }
 
       const finish = () => {
         this._unplug_sub_component_root_base_frame(parent_id)
