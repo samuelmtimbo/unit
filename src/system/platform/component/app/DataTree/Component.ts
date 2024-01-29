@@ -43,6 +43,7 @@ const STYLE_SEPARATOR = {
   width: '6px',
   fontSize: '12px',
   lineHeight: `${LEAF_HEIGHT}px`,
+  boxSizing: 'border-box',
 }
 
 const STYLE_DELIMITER = {
@@ -53,6 +54,7 @@ const STYLE_DELIMITER = {
   width: '6px',
   fontSize: '12px',
   lineHeight: `${LEAF_HEIGHT}px`,
+  boxSizing: 'border-box',
 }
 
 const STYLE_PARENT = (overflow: boolean) => {
@@ -68,6 +70,8 @@ const STYLE_PARENT = (overflow: boolean) => {
 const STYLE_CONTAINER = (overflow: boolean) => {
   return {
     display: 'flex',
+    color: 'currentcolor',
+    boxSizing: 'border-box',
     flexDirection: overflow ? 'column' : 'row',
     marginLeft: overflow
       ? `${CONTAINER_COLUMN_LEFT_MARGIN}px`
@@ -86,16 +90,20 @@ const STYLE_COMMA = {
   width: '6px',
   textAlign: 'left',
   fontSize: '12px',
+  boxSizing: 'border-box',
 }
 
 const STYLE_SPACE = {
   display: 'inline-block',
   width: '2px',
+  boxSizing: 'border-box',
 }
 
 export const DEFAULT_STYLE = {
   width: 'fit-content',
   height: '100%',
+  color: 'currentcolor',
+  boxSizing: 'border-box',
 }
 
 export default class DataTree extends Element<HTMLDivElement, Props> {
@@ -302,7 +310,13 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const object_literal_end = new Div(
       {
         className: 'object-literal',
-        style: { display: 'flex', width: 'fit-content', height: '100%' },
+        style: {
+          display: 'flex',
+          width: 'fit-content',
+          height: '100%',
+          color: 'currentcolor',
+          boxSizing: 'border-box',
+        },
       },
       this.$system
     )
@@ -369,7 +383,12 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const array_literal_close_delimiter = this._delimiter({}, `]`)
     const array_literal_end = new Div(
       {
-        style: { display: 'flex', width: 'fit-content' },
+        style: {
+          display: 'flex',
+          width: 'fit-content',
+          color: 'currentcolor',
+          boxSizing: 'border-box',
+        },
       },
       this.$system
     )
@@ -431,7 +450,12 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const expression_close_delimiter = this._delimiter({}, `)`)
     const expression_literal_end = new Div(
       {
-        style: { display: 'flex', width: 'fit-content' },
+        style: {
+          display: 'flex',
+          width: 'fit-content',
+          color: 'currentcolor',
+          boxSizing: 'border-box',
+        },
       },
       this.$system
     )
@@ -461,7 +485,12 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const key_value_key = new Div(
       {
         className: 'key-value-key',
-        style: { display: 'flex', width: 'fit-content' },
+        style: {
+          display: 'flex',
+          width: 'fit-content',
+          color: 'currentcolor',
+          boxSizing: 'border-box',
+        },
       },
       this.$system
     )
@@ -502,7 +531,11 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const key_value_value = new Div(
       {
         className: 'key-value-value',
-        style: { display: 'flex', width: 'fit-content' },
+        style: {
+          display: 'flex',
+          width: 'fit-content',
+          boxSizing: 'border-box',
+        },
       },
       this.$system
     )
@@ -582,7 +615,11 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const array_expression_close_delimiter = this._delimiter({}, ']')
     const array_expression_open_close = new Div(
       {
-        style: { display: 'flex', width: 'fit-content' },
+        style: {
+          display: 'flex',
+          width: 'fit-content',
+          boxSizing: 'border-box',
+        },
       },
       this.$system
     )
@@ -617,7 +654,11 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     const object_expression_close_delimiter = this._delimiter({}, '}')
     const object_expression_open_close = new Div(
       {
-        style: { display: 'flex', width: 'fit-content' },
+        style: {
+          display: 'flex',
+          width: 'fit-content',
+          boxSizing: 'border-box',
+        },
       },
       this.$system
     )

@@ -71,6 +71,7 @@ export default class Minimap extends Element<HTMLDivElement, Props> {
       {
         className: 'minimap-root',
         style: {
+          width: '100%',
           height: '100%',
         },
       },

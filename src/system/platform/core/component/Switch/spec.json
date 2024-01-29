@@ -171,7 +171,7 @@
         },
         "default": {
           "constant": false,
-          "data": "{position:'relative',display:'flex',flexDirection:'row',padding:'4px',gap:'4px',backgroundColor:'#1f1f1f',cursor:'pointer'}"
+          "data": "{position:'relative',display:'flex',flexDirection:'row',padding:'4px',gap:'4px',backgroundColor:'#1f1f1f',cursor:'pointer',boxSizing:'border-box'}"
         }
       },
       "output": {
@@ -272,7 +272,7 @@
       "input": {
         "obj": {
           "constant": true,
-          "data": "{position:\"relative\",display:\"flex\",flexDirection:\"row\",padding:\"4px\",gap:\"4px\",backgroundColor:\"#00aa11\",cursor:\"pointer\"}",
+          "data": "{position:\"relative\",display:\"flex\",flexDirection:\"row\",padding:\"4px\",gap:\"4px\",backgroundColor:\"#00aa11\",cursor:\"pointer\",boxSizing:\"border-box\"}",
           "metadata": {
             "position": {
               "x": 139,
@@ -297,7 +297,7 @@
       "input": {
         "obj": {
           "constant": true,
-          "data": "{position:\"absolute\",top:\"3px\",left:\"0\",width:\"calc(50% - 6px)\",height:\"calc(100% - 6px)\",backgroundColor:\"#ff6666\",cursor:\"pointer\"}",
+          "data": "{position:\"absolute\",top:\"3px\",left:\"0\",width:\"calc(50% - 6px)\",height:\"calc(100% - 6px)\",backgroundColor:\"#ff6666\",cursor:\"pointer\",boxSizing:\"border-box\"}",
           "metadata": {
             "position": {
               "x": -165,

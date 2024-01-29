@@ -568,6 +568,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
           flexDirection: 'column',
           justifyContent: 'center',
           marginBottom: '2px',
+          width: '100%',
           height: '100%',
         },
       },

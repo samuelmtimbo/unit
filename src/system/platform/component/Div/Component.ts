@@ -16,12 +16,6 @@ export interface Props {
   attr?: Dict<string>
 }
 
-const DEFAULT_STYLE = {
-  width: '100%',
-  color: 'currentColor',
-  boxSizing: 'border-box',
-}
-
 export default class Div extends Element<HTMLDivElement, Props> {
   private _prop_handler: PropHandler
 
@@ -45,6 +39,7 @@ export default class Div extends Element<HTMLDivElement, Props> {
     if (id !== undefined) {
       this.$element.id = id
     }
+
     if (className !== undefined) {
       this.$element.className = className
     }
@@ -75,10 +70,10 @@ export default class Div extends Element<HTMLDivElement, Props> {
       }
     }
 
-    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
+    applyDynamicStyle(this, this.$element, style)
 
     this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
+      ...htmlPropHandler(this, this.$element, {}),
     }
   }
 

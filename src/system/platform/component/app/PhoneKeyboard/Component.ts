@@ -15,6 +15,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {
   boxSizing: 'border-box',
+  width: '100%',
   height: '100%',
 }
 

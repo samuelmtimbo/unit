@@ -74,7 +74,7 @@ export function reactToFrameSize(
 export function applyDynamicStyle(
   component: Component<HTMLElement | SVGElement>,
   $element: HTMLElement | SVGElement,
-  style: Dict<string>
+  style: Dict<string> = {}
 ): Unlisten {
   removeStyle($element)
 

@@ -3,7 +3,12 @@
   "units": {
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
-      "input": {},
+      "input": {
+        "style": {
+          "constant": true,
+          "data": "{width:\"100%\"}"
+        }
+      },
       "metadata": {
         "component": {
           "width": 120,

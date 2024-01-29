@@ -3197,6 +3197,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           left: '0',
           pointerEvents: 'none',
           height: '100%',
+          width: '100%',
         },
       },
       this.$system
@@ -3222,6 +3223,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           pointerEvents: 'none',
           userSelect: 'none',
           height: '100%',
+          width: '100%',
         },
       },
       this.$system
@@ -6582,6 +6584,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           position: 'relative',
           height: '100%',
+          width: '100%',
         },
       },
       this.$system
@@ -9997,6 +10000,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           overflowY: 'hidden',
           overflowX: 'hidden',
           pointerEvents: 'none',
+          width: '100%',
           height: '100%',
           ...style,
         },
@@ -10010,6 +10014,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           position: 'absolute',
           pointerEvents: 'none',
+          width: '100%',
           height: '100%',
         },
       },
@@ -10028,6 +10033,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           overflowX: 'hidden',
           transition: `opacity ${ANIMATION_T_S}s linear`,
           pointerEvents: 'none',
+          width: '100%',
           height: '100%',
         },
       },
@@ -10041,6 +10047,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           position: 'absolute',
           pointerEvents: 'none',
+          width: '100%',
           height: '100%',
         },
       },
@@ -10058,6 +10065,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           overflowY: 'hidden',
           overflowX: 'hidden',
           pointerEvents: 'none',
+          width: '100%',
           height: '100%',
         },
       },
@@ -10075,6 +10083,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           overflowY: 'hidden',
           overflowX: 'hidden',
           pointerEvents: 'none',
+          width: '100%',
           height: '100%',
         },
       },

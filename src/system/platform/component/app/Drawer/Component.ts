@@ -198,6 +198,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           borderStyle: 'solid',
           borderColor: 'currentColor',
           borderBottomLeftRadius: '3px',
+          boxSizing: 'border-box',
         },
       },
       this.$system
@@ -217,6 +218,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           borderStyle: 'solid',
           borderColor: 'currentColor',
           borderBottom: '1px solid currentColor',
+          boxSizing: 'border-box',
         },
       },
       this.$system
@@ -236,6 +238,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           borderWidth: '0px 0px 1px 0px',
           borderStyle: 'solid',
           borderColor: 'currentColor',
+          boxSizing: 'border-box',
         },
       },
       this.$system
@@ -256,6 +259,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           borderBottomLeftRadius: '3px',
           borderStyle: 'solid',
           borderColor: 'currentColor',
+          boxSizing: 'border-box',
         },
       },
       this.$system
@@ -275,6 +279,7 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
           borderTopRightRadius: '3px',
           borderStyle: 'solid',
           borderColor: 'currentColor',
+          boxSizing: 'border-box',
         },
       },
       this.$system

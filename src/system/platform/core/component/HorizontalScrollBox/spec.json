@@ -30,7 +30,10 @@
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
       "input": {
-        "style": {}
+        "constant": true,
+        "style": {
+          "data": "{width:\"100%\"}"
+        }
       },
       "output": {},
       "metadata": {
