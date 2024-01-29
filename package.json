@@ -41,7 +41,7 @@
     "ext:zip": "cd src/client/extension/src && zip -9 -r -u -q extension.zip . -x '/*.git/*' '/*.vscode/*' '/*.gitignore' '/*.gitmodules' '/*node_modules/*' '/*.md' '/*yarn.lock' 'package-lock.json' 'package.json' 'tsconfig.json' '/*.js.map' '/*README.md' '/*.npmignore' '/*.DS_Store' '/*.prettierrc' '/*.prettierignore' '/*.eslintrc' '/*.ts' '/*.zip' '*/_/*'",
     "lint": "eslint src --ext .ts",
     "format": "prettier --config .prettierrc 'src/**/*.ts' 'src/**/*.json' --write",
-    "prepublishOnly": "run-s build lib",
+    "prepublishOnly": "run-s lib build",
     "electron": "electron lib/client/platform/electron/index.js"
   },
   "dependencies": {
