@@ -11,7 +11,15 @@
       },
       "ref": true,
       "type": "`U`&`G`",
-      "defaultIgnored": true
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 235,
+            "y": 21
+          }
+        }
+      }
     }
   },
   "units": {
@@ -20,22 +28,87 @@
       "input": {
         "style": {
           "constant": true,
-          "data": "{borderRight:'1px solid currentColor'}"
+          "data": "{\"borderRight\":\"1px solid currentColor\"}",
+          "metadata": {
+            "position": {
+              "x": -210,
+              "y": -53
+            }
+          }
         },
         "graph": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 208,
+              "y": -27
+            }
+          }
+        },
+        "disabled": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -210,
+              "y": -139
+            }
+          }
+        },
+        "fullwindow": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -210,
+              "y": -90
+            }
+          }
+        },
+        "frame": {
           "ignored": false
         },
-        "disabled": {},
-        "fullwindow": {
-          "ignored": true
+        "attr": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -209,
+              "y": 28
+            }
+          }
         },
-        "frame": {}
+        "zoom": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -210,
+              "y": -113
+            }
+          }
+        },
+        "controls": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -210,
+              "y": -70
+            }
+          }
+        }
       },
-      "output": {},
+      "output": {
+        "graph": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 221,
+              "y": 11
+            }
+          }
+        }
+      },
       "metadata": {
         "position": {
-          "x": 7,
-          "y": 127
+          "x": 171,
+          "y": 189
         },
         "component": {
           "width": 360.1918640136719,
@@ -46,13 +119,31 @@
     "div": {
       "id": "66698a97-15c5-4602-9925-11a1aeb03710",
       "input": {
-        "style": {}
+        "style": {
+          "constant": true,
+          "data": "{\"width\":\"100%\"}",
+          "metadata": {
+            "position": {
+              "x": -503,
+              "y": -12
+            }
+          }
+        },
+        "attr": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -503,
+              "y": -41
+            }
+          }
+        }
       },
       "output": {},
       "metadata": {
         "position": {
-          "x": -342,
-          "y": 67
+          "x": -228,
+          "y": 149
         },
         "component": {
           "width": 246.2730712890625,
@@ -63,13 +154,20 @@
     "row": {
       "id": "ad5a2fcc-fdee-11ea-a34f-77e9c48dbe57",
       "input": {
-        "style": {}
+        "style": {
+          "metadata": {
+            "position": {
+              "x": -385,
+              "y": -406
+            }
+          }
+        }
       },
       "output": {},
       "metadata": {
         "position": {
-          "x": 334,
-          "y": -196
+          "x": 21,
+          "y": -298
         },
         "component": {
           "width": 376.8758239746094,
@@ -95,7 +193,7 @@
   "metadata": {
     "icon": "atom-alt",
     "complexity": 204,
-    "tags": ["platform", "core", "editor"]
+    "tags": ["platform", "core", "graph"]
   },
   "component": {
     "slots": [

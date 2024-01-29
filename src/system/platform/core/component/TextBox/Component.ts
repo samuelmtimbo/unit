@@ -15,6 +15,7 @@ export interface Props {
 }
 
 export const DEFAULT_STYLE = {
+  width: '100%',
   height: 'fit-content',
 }
 

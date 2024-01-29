@@ -17,7 +17,7 @@
         "a": {},
         "default": {
           "constant": true,
-          "data": "{display:'flex',flexDirection:'row',height:'100%'}"
+          "data": "{display:'flex',flexDirection:'row',height:'100%',width:\"100%\"}"
         }
       },
       "output": {

@@ -7,6 +7,7 @@ import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { Unlisten } from '../../../../../types/Unlisten'
 import Div from '../../Div/Component'
+import _Text from '../../value/Text/Component'
 
 export interface Props {
   className?: string
@@ -28,6 +29,8 @@ export const DEFAULT_STYLE = {
   background: '#000000aa',
   borderRadius: '3px',
   border: '2px solid currentcolor',
+  color: 'currentColor',
+  boxSizing: 'border-box',
 }
 
 export default class Tooltip extends Element<HTMLDivElement, Props> {
@@ -66,7 +69,15 @@ export default class Tooltip extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    tooltipContent.$element.textContent = shortcut
+
+    const tooltipText = new _Text(
+      {
+        value: shortcut,
+      },
+      this.$system
+    )
+
+    tooltipContent.registerParentRoot(tooltipText)
 
     // Firefox hasn't implemented popover yet, so just don't ever display it
     if (!this._tooltip.$element.showPopover) {
