@@ -49789,9 +49789,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       for (const pin_id in pins) {
         const pin = pins[pin_id]
 
-        if (this._spec_has_pin_named(type, pin_id)) {
-          const { plug } = pin
+        const { plug = {} } = pin
 
+        if (this._spec_has_pin_named(type, pin_id)) {
           for (const sub_pin_id in plug) {
             const sub_pin_spec = plug[sub_pin_id]
 
@@ -49801,17 +49801,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             )
 
             if (!int_node_id) {
+              const plug_position = {
+                int: position,
+                ext: position,
+              }
+
               this._state_add_exposed_pin(
                 type,
                 pin_id,
                 sub_pin_id,
                 sub_pin_spec,
-                {}
+                plug_position
               )
             }
           }
         } else {
-          this._state_add_exposed_pin_set(type, pin_id, pin, {})
+          const plug_positions = mapObjKV(plug, () => ({
+            int: position,
+            ext: position,
+          }))
+
+          this._state_add_exposed_pin_set(type, pin_id, pin, plug_positions)
         }
       }
     })
