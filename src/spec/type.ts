@@ -7,7 +7,7 @@ import { Dict } from '../types/Dict'
 import { GraphMergeSpec } from '../types/GraphMergeSpec'
 import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
-import { IOOf, io } from '../types/IOOf'
+import { IOOf } from '../types/IOOf'
 import {
   clone,
   deepGetOrDefault,
@@ -701,14 +701,10 @@ export const _getGraphTypeMap = (
         // throw new Error('type map not found')
       }
 
-      io((kind: IO) => {
-        const pinTypeMap = unitTypeMap[kind]
+      forEachValueKey(unitTypeMap['output'], (type, pinId) => {
+        const nextType = _applyGenerics(type, generic_to_substitute_)
 
-        forEachValueKey(pinTypeMap, (type, pinId) => {
-          const nextType = _applyGenerics(type, generic_to_substitute_)
-
-          unitTypeMap[kind][pinId] = nextType
-        })
+        unitTypeMap['output'][pinId] = nextType
       })
     })
   })
