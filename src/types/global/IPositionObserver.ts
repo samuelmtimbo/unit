@@ -19,8 +19,10 @@ export interface IPositionCallback {
     rx: number,
     ry: number,
     rz: number,
-    px: number,
-    py: number
+    bx: number,
+    by: number,
+    gbx: number,
+    gby: number
   ): void
 }
 
@@ -32,6 +34,8 @@ export interface IPositionEntry {
   rx: number
   ry: number
   rz: number
-  px: number
-  py: number
+  bx: number
+  by: number
+  gbx: number
+  gby: number
 }
