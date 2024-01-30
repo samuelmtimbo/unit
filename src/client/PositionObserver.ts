@@ -60,8 +60,11 @@ export class PositionObserver implements IPositionObserver {
     let ry: number = 0
     let rz: number = 0
 
-    let px: number = 0
-    let py: number = 0
+    let bx: number = 0
+    let by: number = 0
+
+    let gbx: number = 0
+    let gby: number = 0
 
     let width: number = 0
     let height: number = 0
@@ -82,6 +85,12 @@ export class PositionObserver implements IPositionObserver {
     let parent_x: number = 0
     let parent_y: number = 0
 
+    let parent_bx: number = 0
+    let parent_by: number = 0
+
+    let parent_gbx: number = 0
+    let parent_gby: number = 0
+
     let parent_scroll_top = 0
     let parent_scroll_left = 0
 
@@ -93,7 +102,10 @@ export class PositionObserver implements IPositionObserver {
     let parent_rz = 0
 
     let _transform: string | undefined
-    let _border: string | undefined
+    let _borderWidth: string | undefined
+
+    let _border_x: number = 0
+    let _border_y: number = 0
 
     function _update_local(): void {
       __update_local()
@@ -108,7 +120,9 @@ export class PositionObserver implements IPositionObserver {
       offset_x = offsetLeft
       offset_y = offsetTop
 
-      const { transform, border } = style
+      const { transform } = style
+
+      const { borderWidth } = getComputedStyle(element)
 
       if (
         transform !== _transform ||
@@ -145,9 +159,9 @@ export class PositionObserver implements IPositionObserver {
         _transform = transform
       }
 
-      if (border !== _border) {
-        if (border) {
-          const [borderSizeStr] = border.split(' ')
+      if (borderWidth !== _borderWidth) {
+        if (borderWidth) {
+          const [borderSizeStr] = borderWidth.split(' ')
 
           let borderSize = 0
 
@@ -157,12 +171,18 @@ export class PositionObserver implements IPositionObserver {
             borderSize = applyLayoutValue(borderSizeStr, 0)
           }
 
-          px = borderSize
-          py = borderSize
+          _border_x = borderSize
+          _border_y = borderSize
         }
 
-        _border = border
+        _borderWidth = borderWidth
       }
+
+      bx = _border_x
+      by = _border_y
+
+      gbx = parent_bx + parent_gbx
+      gby = parent_by + parent_gby
 
       width = offsetWidth
       height = offsetHeight
@@ -209,12 +229,14 @@ export class PositionObserver implements IPositionObserver {
         parent_scaled_local_x * parent_rz_sin
 
       const px =
+        parent_gbx / 2 +
         parent_x -
         parent_scroll_left +
         parent_scaled_rotated_local_x * scale_x -
         ((width * parent_scale_x) / 2) * (scale_x - 1)
 
       const py =
+        parent_gby / 2 +
         parent_y -
         parent_scroll_top +
         parent_scaled_rotated_local_y * scale_y -
@@ -245,7 +267,7 @@ export class PositionObserver implements IPositionObserver {
     const update = (): void => {
       _update()
 
-      this._callback(x, y, sx, sy, rx, ry, rz, px, py)
+      this._callback(x, y, sx, sy, rx, ry, rz, bx, by, gbx, gby)
     }
 
     const mutationConfig = {
@@ -378,11 +400,17 @@ export class PositionObserver implements IPositionObserver {
           rx: number,
           ry: number,
           rz: number,
-          px: number,
-          py: number
+          bx: number,
+          by: number,
+          gbx: number,
+          gby: number
         ) {
-          parent_x = x + px
-          parent_y = y + py
+          parent_x = x
+          parent_y = y
+          parent_bx = bx
+          parent_by = by
+          parent_gbx = gbx
+          parent_gby = gby
           parent_scale_x = sx
           parent_scale_y = sy
           parent_rx = rx
@@ -447,7 +475,7 @@ export class PositionObserver implements IPositionObserver {
     __update_local()
     _update()
 
-    return { x, y, sx, sy, rx, ry, rz, px, py }
+    return { x, y, sx, sy, rx, ry, rz, bx, by, gbx, gby }
   }
 
   disconnect() {

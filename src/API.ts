@@ -201,6 +201,7 @@ export type API = {
     }
     ReadableStream: ReadableStream
     open: (url: string, target: string, features: string) => Window
+    getComputedStyle: (element: Element) => CSSStyleDeclaration
   }
   document: {
     createElement<K extends keyof HTMLElementTagNameMap>(

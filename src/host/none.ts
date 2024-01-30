@@ -289,6 +289,9 @@ export function noHost(): API {
       CompressionStream: undefined,
       DecompressionStream: undefined,
       ReadableStream: undefined,
+      getComputedStyle: function (element: Element): CSSStyleDeclaration {
+        throw new MethodNotImplementedError()
+      },
     },
     navigator: {
       share: function (data: ShareData): Promise<void> {

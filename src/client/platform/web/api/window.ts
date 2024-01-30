@@ -2,7 +2,7 @@ import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
 
 export function webWindow(window: Window, opt: BootOpt): API['window'] {
-  const _window = {
+  const _window: API['window'] = {
     // @ts-ignore
     AudioContext: window.AudioContext,
     // @ts-ignore
@@ -25,6 +25,9 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
     ReadableStream: window.ReadableStream,
     open(url: string, target: string, features: string) {
       return window.open(url, target, features)
+    },
+    getComputedStyle(element: Element): CSSStyleDeclaration {
+      return window.getComputedStyle(element)
     },
   }
 
