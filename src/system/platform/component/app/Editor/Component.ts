@@ -18199,26 +18199,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { animate } = this.$props
 
-    if (this._control) {
-      if (!this._control_lock) {
-        if (!this._disabled) {
-          // console.log('Graph', '_lock_control', this._id)
+    if (!this._control_lock) {
+      if (!this._disabled) {
+        // console.log('Graph', '_lock_control', this._id)
 
-          this._control_lock = true
+        this._control_lock = true
 
+        if (this._control) {
           this._control.dispatchEvent('lock', {}, false)
+        }
 
-          if (
-            !this._subgraph_unit_id &&
-            (!this._is_fullwindow || this._frame_out) &&
-            (this._temp_control_lock ||
-              this._core_component_unlocked_count === 0)
-          ) {
-            this._enable_input()
+        if (
+          !this._subgraph_unit_id &&
+          (!this._is_fullwindow || this._frame_out) &&
+          (this._temp_control_lock || this._core_component_unlocked_count === 0)
+        ) {
+          this._enable_input()
 
-            // this._show_control(false)
-            this._show_control(animate)
-          }
+          // this._show_control(false)
+          this._show_control(animate)
         }
       }
     }
