@@ -114,11 +114,11 @@ assert.deepEqual(getGraphTypeMapById(ID_SWAP, _specs), {
     output: { a: '<A>[]' },
   },
   set1: {
-    input: { a: '<A>[]', v: '<A>', i: 'number' },
+    input: { a: '<D>[]', v: '<D>', i: 'number' },
     output: { a: '<A>[]' },
   },
-  at0: { input: { a: '<A>[]', i: 'number' }, output: { 'a[i]': '<A>' } },
-  at1: { input: { a: '<A>[]', i: 'number' }, output: { 'a[i]': '<A>' } },
+  at0: { input: { a: '<B>[]', i: 'number' }, output: { 'a[i]': '<A>' } },
+  at1: { input: { a: '<C>[]', i: 'number' }, output: { 'a[i]': '<A>' } },
 })
 assert.deepEqual(getSpecTypeInterfaceById(ID_SWAP, _specs), {
   input: { a: '<A>[]', i: 'number', j: 'number' },
@@ -219,12 +219,12 @@ assert.deepEqual(_getGraphTypeMapById(ID_N_ARRAY_BUILDER_FROM, _specs), {
   },
   arraybuilderfrom: {
     input: {
-      a: { value: '<A>', type: 'generic', children: [] },
+      a: { value: '<B>', type: 'generic', children: [] },
       test: { value: 'boolean', type: 'boolean', children: [] },
       init: {
-        value: '<A>[]',
+        value: '<B>[]',
         type: 'array expression',
-        children: [{ value: '<A>', type: 'generic', children: [] }],
+        children: [{ value: '<B>', type: 'generic', children: [] }],
       },
     },
     output: {
@@ -247,7 +247,7 @@ assert.deepEqual(_getGraphTypeMapById(ID_N_ARRAY_BUILDER_FROM, _specs), {
   },
   looprepeat: {
     input: {
-      init: { value: 'number', type: 'number', children: [] },
+      init: { value: '<C>', type: 'generic', children: [] },
       test: { value: 'boolean', type: 'boolean', children: [] },
     },
     output: {
@@ -333,6 +333,7 @@ assert.deepEqual(
     },
   }
 )
+
 assert.deepEqual(
   getGraphTypeMap(
     {
@@ -355,14 +356,8 @@ assert.deepEqual(
     _specs
   ),
   {
-    id: {
-      input: { a: '<A>' },
-      output: { a: '<A>' },
-    },
-    id0: {
-      input: { a: '<A>' },
-      output: { a: '<A>' },
-    },
+    id: { input: { a: '<A>' }, output: { a: '<A>' } },
+    id0: { input: { a: '<B>' }, output: { a: '<A>' } },
     id1: { input: { a: '<A>' }, output: { a: '<A>' } },
   }
 )
