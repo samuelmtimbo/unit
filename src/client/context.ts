@@ -74,12 +74,17 @@ export function mount($context: Context): void {
   $context.$width = width
   $context.$height = height
 
-  const { x, y, sx, sy } = $positionObserver.observe($element)
+  // AD HOC browser offsetParent not set on first mount
+  setTimeout(() => {
+    if ($context.$mounted) {
+      const { x, y, sx, sy } = $positionObserver.observe($element)
 
-  $context.$x = x
-  $context.$y = y
-  $context.$sx = sx
-  $context.$sy = sy
+      $context.$x = x
+      $context.$y = y
+      $context.$sx = sx
+      $context.$sy = sy
+    }
+  }, 0)
 
   $resizeObserver.observe($element)
 
