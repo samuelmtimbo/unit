@@ -26,8 +26,10 @@ import {
   forEachObjKV,
   forEachObjVK,
   getObjSingleKey,
+  mapObjKV,
 } from '../../util/object'
 import { GraphMoveSubGraphData } from './interface'
+import { isRefMerge } from './isRefMerge'
 
 export type GraphLike<T extends UCG = UCG> = Pick<
   T,
@@ -71,29 +73,6 @@ export type GraphLike<T extends UCG = UCG> = Pick<
   | 'setUnitSize'
   | 'setSubComponentSize'
 >
-
-export function isRefMerge(graph: GraphLike, mergeSpec: GraphMergeSpec) {
-  let isRef = false
-
-  if (getMergePinCount(mergeSpec) > 0) {
-    const sampleMergeUnitId = getObjSingleKey(mergeSpec)
-    const sampeMergeUnit = mergeSpec[sampleMergeUnitId]
-    const sampleMergeUnitType = getObjSingleKey(sampeMergeUnit) as IO
-    const sampleMergeUnitPinId = getObjSingleKey(
-      sampeMergeUnit[sampleMergeUnitType]
-    )
-
-    const unit = graph.getUnit(sampleMergeUnitId)
-
-    const ref = unit.isPinRef(sampleMergeUnitType, sampleMergeUnitPinId)
-
-    if (ref) {
-      isRef = true
-    }
-  }
-
-  return isRef
-}
 
 export function moveUnit(
   source: GraphLike,
@@ -598,6 +577,7 @@ export function moveMerge(
   graphId: string,
   mergeId: string,
   mergeSpec: GraphMergeSpec,
+  mergeIsRef: boolean,
   collapseMap: GraphMoveSubGraphData,
   connectOpt: GraphUnitConnect,
   ignoredUnit: Set<string> = new Set(),
@@ -695,7 +675,7 @@ export function moveMerge(
   if (reverse) {
     if (mergePinCount === 0 || pinIntoCount > 1) {
       // AD HOC
-      const propagate = isRefMerge(target, nextMerge)
+      const propagate = mergeIsRef
 
       target.addMerge(nextMerge, nextMergeId, false, propagate)
     }
@@ -707,7 +687,7 @@ export function moveMerge(
       pinIntoCount > 1
     ) {
       // AD HOC
-      const propagate = isRefMerge(target, nextMerge)
+      const propagate = mergeIsRef
 
       target.addMerge(nextMerge, nextMergeId, false, propagate)
 
@@ -1288,8 +1268,12 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
 
   const { merge = [], link = [], unit = [], plug = [] } = nodeIds
 
-  const mergeSpecs = clone(source.getMergesSpec())
-  const pinSpecs = clone(source.getExposedPinSpecs())
+  const sourceMergeSpecs = clone(source.getMergesSpec())
+  const sourcePinSpecs = clone(source.getExposedPinSpecs())
+
+  const sourceMergeRefMap = mapObjKV(sourceMergeSpecs, (mergeId, mergeSpec) => {
+    return isRefMerge(source, mergeSpec)
+  })
 
   const ignoredUnitPin: Dict<{ input: Set<string>; output: Set<string> }> = {}
   const ignoredUnit = new Set<string>(unit)
@@ -1313,7 +1297,7 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
   ): GraphPlugOuterSpec => {
     let plugSpec: GraphPlugOuterSpec
 
-    forIOObjKV(pinSpecs, (type, pinId: string, pinSpec: GraphPinSpec) => {
+    forIOObjKV(sourcePinSpecs, (type, pinId: string, pinSpec: GraphPinSpec) => {
       const { plug } = pinSpec
 
       for (const subPinId in plug) {
@@ -1402,13 +1386,14 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
       ignoredUnit,
       ignoredUnitPin,
       ignoredMerge,
-      pinSpecs,
+      sourcePinSpecs,
       reverse
     )
   }
 
   for (const mergeId of merge) {
-    const mergeSpec = mergeSpecs[mergeId]
+    const mergeSpec = sourceMergeSpecs[mergeId]
+    const mergeIsRef = sourceMergeRefMap[mergeId]
 
     moveMerge(
       source,
@@ -1416,18 +1401,19 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
       graphId,
       mergeId,
       mergeSpec,
+      mergeIsRef,
       collapseMap,
       connectOpt,
       ignoredUnit,
-      pinSpecs,
+      sourcePinSpecs,
       reverse
     )
   }
 
   for (const { type, pinId, subPinId } of plug) {
-    const pinSpec = deepGet(pinSpecs, [type, pinId])
+    const pinSpec = deepGet(sourcePinSpecs, [type, pinId])
     const subPinSpec = deepGetOrDefault(
-      pinSpecs,
+      sourcePinSpecs,
       [type, pinId, 'plug', subPinId],
       undefined
     )
