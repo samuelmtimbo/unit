@@ -158,7 +158,8 @@ export class Registry implements R {
     // console.log('unregisterUnit', { id })
 
     if (!this.specsCount[id]) {
-      throw new Error(`cannot unregister unit: no spec with id ${id}`)
+      return
+      // throw new Error(`cannot unregister unit: no spec with id ${id}`)
     }
 
     this.specsCount[id] -= 1

@@ -33161,29 +33161,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     forIOObjKV(
       unit_plugs,
       (type, unitPinId, { pinId, subPinId, type: type_ }) => {
-        const specPin = getPinSpec(spec, type, unitPinId)
+        if (unitPinId === SELF) {
+          //
+        } else {
+          const specPin = getPinSpec(spec, type, unitPinId)
 
-        const { plug } = specPin
+          const { plug } = specPin
 
-        for (const sub_pin_id in plug) {
-          const sub_pin = plug[sub_pin_id]
+          for (const sub_pin_id in plug) {
+            const sub_pin = plug[sub_pin_id]
 
-          if (sub_pin.unitId && sub_pin.pinId) {
-            const sub_pin_next_unit_id =
-              map_unit_id[sub_pin.unitId] ?? sub_pin.unitId
+            if (sub_pin.unitId && sub_pin.pinId) {
+              const sub_pin_next_unit_id =
+                map_unit_id[sub_pin.unitId] ?? sub_pin.unitId
 
-            this._state_plug_exposed_pin(type_, pinId, subPinId, {
-              unitId: sub_pin_next_unit_id,
-              pinId: sub_pin.pinId,
-              kind: sub_pin.kind ?? type_,
-            })
-          } else if (sub_pin.mergeId) {
-            const sub_pin_next_merge_id =
-              map_merge_id[sub_pin.mergeId] ?? sub_pin.mergeId
+              this._state_plug_exposed_pin(type_, pinId, subPinId, {
+                unitId: sub_pin_next_unit_id,
+                pinId: sub_pin.pinId,
+                kind: sub_pin.kind ?? type_,
+              })
+            } else if (sub_pin.mergeId) {
+              const sub_pin_next_merge_id =
+                map_merge_id[sub_pin.mergeId] ?? sub_pin.mergeId
 
-            this._state_plug_exposed_pin(type_, pinId, subPinId, {
-              mergeId: sub_pin_next_merge_id,
-            })
+              this._state_plug_exposed_pin(type_, pinId, subPinId, {
+                mergeId: sub_pin_next_merge_id,
+              })
+            }
           }
         }
       }
@@ -43869,7 +43873,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           id: spec.id,
         }
 
-        // this._spec_graph_unit_add_unit(graph_id, unitId, bundle.unit)
         this._on_graph_unit_add_unit_moment({
           unitId,
           bundle,
@@ -48571,12 +48574,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const ignored_unit_set = new Set(this._collapse_next_map.nodeIds.unit)
 
+    const merge_node_id = getMergeNodeId(merge_id)
+
+    const merge_is_ref = this._is_merge_ref(merge_node_id)
+
     moveMerge(
       this._state_make_this_graph_interface(),
       this._state_get_subgraph_graph_interface(graph_id),
       graph_id,
       merge_id,
       merge_spec,
+      merge_is_ref,
       this._collapse_next_map,
       {},
       ignored_unit_set,
@@ -54134,34 +54142,61 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { plug, unit } = nodeIds
 
-    const unit_spec = findSpecAtPath(specs, this._spec, path)
-
     if (this._is_spec_updater(path)) {
-      if (this._subgraph_unit_id === graphId) {
-        //
-      } else {
-        const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
+      const parent_spec = findSpecAtPath(specs, this._spec, path)
 
-        const merges = clone(
-          this._get_graph_unit_unit_merges(graph_unit_id, graphId)
-        )
-        const plugs = clone(
-          this._get_graph_unit_unit_plugs(graph_unit_id, graphId)
-        )
+      const spec = findSpecAtPath(specs, this._spec, [...path, graphId])
 
-        const connectOpt = {
-          merges,
-          plugs,
-        }
+      const next_spec = clone(spec)
 
+      const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
+
+      const merges = clone(
+        this._get_graph_unit_unit_merges(graph_unit_id, data.graphId)
+      )
+      const plugs = clone(
+        this._get_graph_unit_unit_plugs(graph_unit_id, data.graphId)
+      )
+
+      const connectOpt = {
+        merges,
+        plugs,
+      }
+
+      const spec_interface = this._make_graph_spec_interface(spec)
+
+      const subgraph_path = this.getSubgraphPath()
+
+      const subgraph_interface =
+        this._state_get_subgraph_graph_interface(graph_unit_id)
+
+      const commit = () => {
         moveSubgraph(
-          this._make_graph_spec_interface(spec),
-          this._state_get_subgraph_graph_interface(graph_unit_id),
-          graphId,
+          spec_interface,
+          subgraph_interface,
+          data.graphId,
           data,
           connectOpt,
           true
         )
+      }
+
+      if (isEqual(subgraph_path, path)) {
+        const subgraph = this.getSubgraphAtPath(subgraph_path)
+
+        if (subgraph._collapsing) {
+          const unlisten = subgraph.addEventListener(
+            makeCustomListener('collapse_end', () => {
+              commit()
+
+              unlisten()
+            })
+          )
+        } else {
+          commit()
+        }
+      } else {
+        commit()
       }
     }
   }

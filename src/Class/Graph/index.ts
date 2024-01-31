@@ -179,7 +179,8 @@ import {
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from './interface'
-import { isRefMerge, moveSubgraph } from './moveSubgraph'
+import { moveSubgraph } from './moveSubgraph'
+import { isRefMerge } from './isRefMerge'
 import { renameUnitInMerges } from '../../spec/reducers/spec'
 import { weakMerge } from '../../weakMerge'
 import { getSubComponentParentId } from '../../spec/util/component'
