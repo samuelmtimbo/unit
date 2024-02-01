@@ -544,5 +544,12 @@ export default JSON.parse(`{
   "zap-off": "M12.41 6.75 L13 2 L10.57 4.92 M18.57 12.91 L21 10 L15.66 10 M8 8 L3 14 L12 14 L11 22 L16 16 M1 1 L23 23",
   "zap": "M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z",
   "zoom-in": "M19 11 A8 8 0 0 1 11 19 A8 8 0 0 1 3 11 A8 8 0 0 1 19 11 z M21 21 L16.65 16.65 M11 8 L11 14 M8 11 L14 11",
-  "zoom-out": "M19 11 A8 8 0 0 1 11 19 A8 8 0 0 1 3 11 A8 8 0 0 1 19 11 z M21 21 L16.65 16.65 M8 11 L14 11"
+  "zoom-out": "M19 11 A8 8 0 0 1 11 19 A8 8 0 0 1 3 11 A8 8 0 0 1 19 11 z M21 21 L16.65 16.65 M8 11 L14 11",
+  "bitwise-or": "M 5 4 A 1.8 1 1 1 1 5 20 Z M 5 8 H 2 Z M 5 16 H 2 Z M 20 12 H 22 Z",
+  "bitwise-nor": "M 5 4 A 1.8 1 1 1 1 5 20 Z M 5 8 H 2 Z M 5 16 H 2 Z M 20 12 H 22 Z M 15 12 A 1 1 1 1 1 15 11.9 Z M 14 12 A 1 1 0 0 0 14 11.9 Z",
+  "bitwise-xor": "M 5 4 A 1.8 1 1 1 1 5 20 Z M 5 8 H 2 Z M 5 16 H 2 Z M 20 12 H 22 Z M 9 9 V 15 Z",
+  "bitwise-xnor": "M 5 4 A 1.8 1 1 1 1 5 20 Z M 5 8 H 2 Z M 5 16 H 2 Z M 20 12 H 22 Z M 9 9 V 15 Z M 15 12 A 1 1 1 1 1 15 11.9 Z M 14 12 A 1 1 0 0 0 14 11.9 Z",
+  "bitwise-and": "M 5 20 V 4 H 12 M 12 20 A 2.4 3 0 0 0 12 4 M 5 20 H 12 Z M 5 8 H 2 Z M 5 16 H 2 Z M 19 12 H 21.5 Z",
+  "bitwise-nand": "M 5 20 V 4 H 12 M 12 20 A 2.4 3 0 0 0 12 4 M 5 20 H 12 Z M 4.5 8 H 2 Z M 5 16 H 2 Z M 19 12 H 21.5 Z M 14 12 A 1 1 1 1 1 14 11.9 Z M 13 12 A 1 1 0 0 0 13 11.9 Z",
+  "bitwise-not": "M 5 20 V 4 L 19 12 L 5 20 Z M 5 8 H 2 Z M 5 16 H 2 Z M 19 12 H 21.5 Z M 11 12 A 1 1 1 1 1 11 11.9 Z M 10 12 A 1 1 0 0 0 10 11.9 Z"
 }`) as { [id: string]: string }

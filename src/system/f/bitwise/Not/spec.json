@@ -11,7 +11,7 @@
     }
   },
   "metadata": {
-    "icon": "exclamation",
+    "icon": "bitwise-not",
     "description": "bitwise NOT operator",
     "complexity": 3,
     "tags": ["f", "bitwise"]
