@@ -2,10 +2,16 @@
   "name": "and",
   "inputs": {
     "a": {
-      "type": "number"
+      "type": "number",
+      "metadata": {
+        "examples": ["0", "1"]
+      }
     },
     "b": {
-      "type": "number"
+      "type": "number",
+      "metadata": {
+        "examples": ["0", "1"]
+      }
     }
   },
   "outputs": {

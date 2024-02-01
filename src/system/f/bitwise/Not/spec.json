@@ -2,7 +2,10 @@
   "name": "not",
   "inputs": {
     "a": {
-      "type": "number"
+      "type": "number",
+      "metadata": {
+        "examples": ["0", "1"]
+      }
     }
   },
   "outputs": {

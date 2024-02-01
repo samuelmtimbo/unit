@@ -79,6 +79,7 @@
       },
       "type": "number",
       "metadata": {
+        "examples": ["0", "1"],
         "position": {
           "0": {
             "x": -123,
@@ -97,6 +98,7 @@
       },
       "type": "number",
       "metadata": {
+        "examples": ["0", "1"],
         "position": {
           "0": {
             "x": -123,
