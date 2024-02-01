@@ -1,0 +1,145 @@
+{
+  "name": "nand",
+  "units": {
+    "and": {
+      "id": "be6801c0-02e2-4f76-bcad-b68c80991fad",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -107,
+              "y": -28
+            }
+          }
+        },
+        "b": {
+          "metadata": {
+            "position": {
+              "x": -107,
+              "y": 8
+            }
+          }
+        }
+      },
+      "output": {
+        "a & b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": 0
+        }
+      }
+    },
+    "not": {
+      "id": "62d0c3e2-cf8b-4415-acfb-cf31739adce5",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "~a": {
+          "metadata": {
+            "position": {
+              "x": 90,
+              "y": -10
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 52,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "not": {
+        "input": {
+          "a": true
+        }
+      },
+      "and": {
+        "output": {
+          "a & b": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "and",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "type": "number",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -123,
+            "y": -45
+          }
+        }
+      }
+    },
+    "b": {
+      "plug": {
+        "0": {
+          "unitId": "and",
+          "pinId": "b",
+          "kind": "input"
+        }
+      },
+      "type": "number",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": -123,
+            "y": 25
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "~(a & b)": {
+      "plug": {
+        "0": {
+          "unitId": "not",
+          "pinId": "~a",
+          "kind": "output"
+        }
+      },
+      "type": "number",
+      "metadata": {
+        "position": {
+          "0": {
+            "x": 113,
+            "y": -10
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "bitwise-nand",
+    "description": "bitwise NAND operator",
+    "complexity": 11,
+    "tags": ["core", "bitwise"],
+    "position": {
+      "merge": {
+        "0": {
+          "x": -10,
+          "y": -10
+        }
+      }
+    }
+  },
+  "id": "de60a07c-e166-41fa-9eef-da8cb22dc683",
+  "type": "`U`&`G`"
+}
