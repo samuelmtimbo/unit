@@ -14,7 +14,7 @@
     }
   },
   "metadata": {
-    "icon": "binary",
+    "icon": "bitwise-or",
     "description": "bitwise OR operator",
     "complexity": 3,
     "tags": ["f", "bitwise"]
