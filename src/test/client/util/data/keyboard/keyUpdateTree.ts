@@ -197,9 +197,9 @@ assert.deepEqual(keyUpdateTree('1[2', [], '1[2', '[', 0, 3, false), [
   true,
   {
     nextRoot: '[1[2]',
-    nextPath: [],
-    nextSelectionStart: 1,
-    nextSelectionEnd: 4,
+    nextPath: [0],
+    nextSelectionStart: 0,
+    nextSelectionEnd: 3,
   },
 ])
 assert.deepEqual(
