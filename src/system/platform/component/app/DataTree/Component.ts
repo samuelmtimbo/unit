@@ -144,6 +144,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
   private __primitive = (data: TreeNode) => this._primitive(data)
   private __key_value = (data: TreeNode) => this._key_value(data)
   private __array_expression = (data: TreeNode) => this._array_expression(data)
+  private __prop_expression = (data: TreeNode) => this._prop_expression(data)
   private __unit = (data: TreeNode) => this._unit(data)
   private __object_expression = (data: TreeNode) =>
     this._object_expression(data)
@@ -177,7 +178,7 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     [TreeNodeType.Class]: this.__primitive,
     [TreeNodeType.ClassLiteral]: this.__primitive,
     [TreeNodeType.ArithmeticExpression]: this.__primitive,
-    [TreeNodeType.PropExpression]: this.__primitive,
+    [TreeNodeType.PropExpression]: this.__prop_expression,
     [TreeNodeType.KeyValue]: this.__key_value,
     [TreeNodeType.ArrayExpression]: this.__array_expression,
     [TreeNodeType.ObjectExpression]: this.__object_expression,
@@ -636,6 +637,27 @@ export default class DataTree extends Element<HTMLDivElement, Props> {
     )
 
     const children = [array_expression_tree]
+
+    return { style, children }
+  }
+
+  private _prop_expression = (data: TreeNode) => {
+    const style = { display: 'flex', width: 'fit-content' }
+
+    const prop_expression_object_tree = this._child_element(
+      0,
+      data.children[0],
+      [],
+      'prop-expression-object'
+    )
+    const prop_expression_array_tree = this._child_element(
+      1,
+      data.children[1],
+      [],
+      'prop-expression-array'
+    )
+
+    const children = [prop_expression_object_tree, prop_expression_array_tree]
 
     return { style, children }
   }

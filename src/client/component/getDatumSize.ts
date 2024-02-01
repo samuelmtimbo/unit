@@ -69,6 +69,7 @@ export const childrenOverflow = (data: TreeNode): boolean => {
     type === TreeNodeType.ObjectLiteral ||
     type === TreeNodeType.ArrayLiteral ||
     type === TreeNodeType.ArrayExpression ||
+    type === TreeNodeType.PropExpression ||
     type === TreeNodeType.KeyValue ||
     type === TreeNodeType.Expression ||
     type === TreeNodeType.Or ||
@@ -152,6 +153,19 @@ export function getDatumWidth(data: TreeNode): number {
           acc +
           getDatumWidth(c) +
           (index < data.children.length - 1 ? DELIMITER_WIDTH : 0)
+
+        if (nextWidth <= MAX_WIDTH) {
+          return nextWidth
+        } else {
+          return Math.max(acc, _width)
+        }
+      }, 0)
+      break
+    case TreeNodeType.PropExpression:
+      width = data.children.reduce((acc, c, index) => {
+        const _width = calcHorizontalWidth(c)
+
+        const nextWidth = acc + getDatumWidth(c)
 
         if (nextWidth <= MAX_WIDTH) {
           return nextWidth
