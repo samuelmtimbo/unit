@@ -901,6 +901,7 @@ function execComposed(
     let sq_open = false
     let dq_open = false
     let open = 0
+    let q_open = 0
 
     for (let i = 1; i < l - 1; i++) {
       const c = str[i]
@@ -909,10 +910,18 @@ function execComposed(
       if (c === "'" && pc !== '\\') {
         if (!dq_open) {
           sq_open = !sq_open
+
+          if (!sq_open) {
+            open += q_open
+          }
         }
       } else if (c === '"' && pc !== '\\') {
         if (!sq_open) {
           dq_open = !dq_open
+
+          if (!dq_open) {
+            open += q_open
+          }
         }
       } else {
         if (!sq_open && !dq_open) {
@@ -925,12 +934,14 @@ function execComposed(
               return null
             }
           }
+        } else {
+          if (c === open_delimiter) {
+            q_open++
+          } else if (c === close_delimiter) {
+            q_open--
+          }
         }
       }
-    }
-
-    if (open > 0) {
-      return null
     }
 
     return [str, str.substr(1, l - 2)]
