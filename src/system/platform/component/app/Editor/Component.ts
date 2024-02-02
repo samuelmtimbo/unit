@@ -6673,7 +6673,23 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (value !== pinId) {
       if (valid) {
-        this._set_pin_name(plug_node_id, value)
+        if (this._spec_has_pin_named(type, value)) {
+          const new_sub_pin_id = this._new_sub_pin_id(type, value)
+
+          const int_node_id = getIntNodeId(type, pinId, subPinId)
+
+          const ext_position = this._get_anchor_node_position(plug_node_id)
+          const int_position = this._get_anchor_node_position(int_node_id)
+
+          this._remove_exposed_sub_pin_or_set(plug_node_id)
+
+          this._add_exposed_pin(type, value, new_sub_pin_id, {}, {
+            int: int_position,
+            ext: ext_position,
+          })
+        } else {
+          this._set_pin_name(plug_node_id, value)
+        }
 
         next_pin_id = value
       } else {
