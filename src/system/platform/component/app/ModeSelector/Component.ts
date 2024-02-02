@@ -50,7 +50,7 @@ const MODE_TOP: Dict<number> = {
   remove: 6 + 2 * ICON_WIDTH + 1 * NON_CRUD_MARGIN + 4 * CRUD_MARGIN,
   add: 6 + 3 * ICON_WIDTH + 1 * NON_CRUD_MARGIN + 7 * CRUD_MARGIN,
   data: 6 + 4 * ICON_WIDTH + 1 * NON_CRUD_MARGIN + 10 * CRUD_MARGIN,
-  multiselect: 6 + 5 * ICON_WIDTH + 2 * NON_CRUD_MARGIN + 11 * CRUD_MARGIN,
+  multiselect: 6 + 5 * ICON_WIDTH + 2 * NON_CRUD_MARGIN + 11 * CRUD_MARGIN + 1,
 }
 
 const MODE_ICON = {
