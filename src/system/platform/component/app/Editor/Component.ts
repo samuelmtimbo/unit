@@ -42009,7 +42009,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    if (this._pointer_down_count === 2 || this._is_alt_pressed()) {
+    if (
+      this._pointer_down_count === 2 ||
+      (this._capturing_gesture && this._is_alt_pressed())
+    ) {
       this._restart_gesture = true
     } else {
       this._restart_gesture = false
