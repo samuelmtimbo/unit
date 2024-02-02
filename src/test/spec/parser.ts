@@ -47,7 +47,6 @@ assert(
 
 assert.deepEqual(getTreeNodeType(':'), TreeNodeType.Invalid)
 assert.deepEqual(getTreeNodeType('foo'), TreeNodeType.Invalid)
-assert.deepEqual(getTreeNodeType('[1[]'), TreeNodeType.ArrayLiteral)
 assert.deepEqual(getTreeNodeType('1[2]'), TreeNodeType.PropExpression)
 assert.deepEqual(getTreeNodeType('[1[]'), TreeNodeType.ArrayLiteral)
 // assert.deepEqual(getTreeNodeType('a:'), TreeNodeType.KeyValue)
