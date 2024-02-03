@@ -1,9 +1,9 @@
-import { json } from 'body-parser'
 import * as cors from 'cors'
 import * as express from 'express'
 import * as createError from 'http-errors'
 import { PATH_PUBLIC } from '../path'
 import { LOCAL_IP_ADDRESS } from './ip'
+import { files } from './middleware'
 import { PORT } from './port'
 import compression = require('compression')
 
@@ -33,16 +33,10 @@ export function serve(opt: ServerOpt = { port: PORT }) {
   }
 
   app.set('port', port)
-
   app.use(cors(corsOptions))
   app.use(compression())
   app.use(express.static(PATH_PUBLIC))
-  app.use(json())
-  app.use('*/index.js', (req, res, next) => {
-    res.setHeader('Content-Type', 'application/javascript')
-
-    res.sendFile(PATH_PUBLIC + '/index.js')
-  })
+  app.use(files())
   app.use('*', express.static(PATH_PUBLIC))
 
   app.use(function (req, res, next) {
