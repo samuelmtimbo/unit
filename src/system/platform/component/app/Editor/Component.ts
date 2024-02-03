@@ -6683,10 +6683,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           this._remove_exposed_sub_pin_or_set(plug_node_id)
 
-          this._add_exposed_pin(type, value, new_sub_pin_id, {}, {
-            int: int_position,
-            ext: ext_position,
-          })
+          this._add_exposed_pin(
+            type,
+            value,
+            new_sub_pin_id,
+            {},
+            {
+              int: int_position,
+              ext: ext_position,
+            }
+          )
         } else {
           this._set_pin_name(plug_node_id, value)
         }
@@ -41421,7 +41427,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return (y - $y) / $sy / zk + zy
     }
 
-    const add_unit_pin = (unit_id: string, type: IO, position: Position) => {
+    const add_unit_pin = (
+      unit_id: string,
+      type: IO,
+      position: Position
+    ): string => {
       const { shouldFork, newSpecId } = this.$props
 
       const spec = this._get_unit_spec(unit_id) as GraphSpec
@@ -41443,6 +41453,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         },
         position
       )
+
+      return new_pin_id
     }
 
     if (this._mode === 'none') {
@@ -41460,25 +41472,88 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const target_node_id = this._find_inside_core_and_pin_id(p1, padding)
 
       if (source_node_id && target_node_id) {
+        const source_position = this._get_node_position(source_node_id)
+        const target_position = this._get_node_position(target_node_id)
+
         if (
           this._is_unit_node_id(source_node_id) &&
           this._is_unit_node_id(target_node_id)
         ) {
           if (
-            !this._is_unit_base(source_node_id) ||
-            !this._is_unit_base(target_node_id)
+            this._is_unit_base(source_node_id) ||
+            this._is_unit_base(target_node_id)
           ) {
             return
           }
 
-          // TODO
+          const position = mediumPoint(source_position, target_position)
+
+          const source_new_pin_id = add_unit_pin(
+            source_node_id,
+            'output',
+            position
+          )
+          const target_new_pin_id = add_unit_pin(
+            target_node_id,
+            'input',
+            position
+          )
+
+          const source_pin_node_id = getPinNodeId(
+            source_node_id,
+            'output',
+            source_new_pin_id
+          )
+          const target_pin_node_id = getPinNodeId(
+            target_node_id,
+            'input',
+            target_new_pin_id
+          )
+
+          this._merge_pin_pin(source_pin_node_id, target_pin_node_id, position)
         } else if (
           this._is_pin_node_id(source_node_id) &&
           this._is_pin_node_id(target_node_id)
         ) {
           this._add_unit_between_pins(source_node_id, target_node_id)
-        } else {
-          // TODO
+        } else if (
+          this._is_pin_node_id(source_node_id) &&
+          this._is_unit_node_id(target_node_id)
+        ) {
+          const position = mediumPoint(source_position, target_position)
+
+          const target_new_pin_id = add_unit_pin(
+            target_node_id,
+            'input',
+            position
+          )
+
+          const target_pin_node_id = getPinNodeId(
+            target_node_id,
+            'input',
+            target_new_pin_id
+          )
+
+          this._merge_pin_pin(source_node_id, target_pin_node_id, position)
+        } else if (
+          this._is_unit_node_id(source_node_id) &&
+          this._is_pin_node_id(target_node_id)
+        ) {
+          const position = mediumPoint(source_position, target_position)
+
+          const source_new_pin_id = add_unit_pin(
+            source_node_id,
+            'output',
+            position
+          )
+
+          const source_pin_node_id = getPinNodeId(
+            source_node_id,
+            'output',
+            source_new_pin_id
+          )
+
+          this._merge_pin_pin(source_pin_node_id, target_node_id, position)
         }
       } else if (source_node_id || target_node_id) {
         const node_id = (source_node_id || target_node_id) as string
