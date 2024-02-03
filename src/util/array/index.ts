@@ -61,9 +61,9 @@ export function lastIndex<T>(array: T[]): number {
   return _lastIndex
 }
 
-export function last<T>(array: T[]): T {
+export function last<T>(array: T[], offset: number = 0): T {
   const _lastIndex = lastIndex(array)
-  const _last = array[_lastIndex]
+  const _last = array[_lastIndex + offset]
   return _last
 }
 
