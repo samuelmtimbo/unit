@@ -5,7 +5,6 @@ import _classes from '../../../system/_classes'
 import _components from '../../../system/_components'
 import _specs from '../../../system/_specs'
 import { attachApp } from '../../render/attachApp'
-import { attachCanvas } from '../../render/attachCanvas'
 import { attachGesture } from '../../render/attachGesture'
 import { attachHTML } from '../../render/attachHTML'
 import { attachLayout } from '../../render/attachLayout'
@@ -133,7 +132,6 @@ export function webBoot(
   attachSprite(system)
   attachStyle(system)
   attachApp(system)
-  attachCanvas(system)
   attachSVG(system)
   attachHTML(system)
   attachGesture(system)

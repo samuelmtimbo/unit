@@ -42,7 +42,6 @@ export interface System extends S, R {
     app?: HTMLElement
     html?: HTMLDivElement
     svg?: SVGSVGElement
-    canvas?: HTMLCanvasElement
     layout?: HTMLDivElement
     void?: HTMLElement
   }

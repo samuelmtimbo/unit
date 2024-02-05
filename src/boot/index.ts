@@ -102,7 +102,6 @@ export function boot(
     feature,
     foreground: {
       svg: undefined,
-      canvas: undefined,
       app: undefined,
     },
     showLongPress: undefined,
