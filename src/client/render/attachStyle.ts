@@ -1,6 +1,12 @@
 import { System } from '../../system'
 
 export const ROOT_STYLE = `
+  @font-face {
+    font-family: 'Inconsolata';
+    src: local('Arial');
+    unicode-range: U+60;
+  }
+
   *::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 1px;
