@@ -122,6 +122,25 @@ export function parseTransform(
             _rotate_z += deg
           }
           break
+        case 'matrix':
+          {
+            const [at, bt, ct, dt, txt, tyt] = f_args_list
+
+            const [tx] = txt
+            const [ty] = tyt
+            const [a] = at
+            const [d] = dt
+
+            _transform_x += tx / a
+            _transform_y += ty / d
+
+            _scale_x *= a
+            _scale_y *= d
+
+            // TODO b, c
+          }
+
+          break
         default:
           break
       }

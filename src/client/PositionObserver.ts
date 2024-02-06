@@ -120,9 +120,7 @@ export class PositionObserver implements IPositionObserver {
       offset_x = offsetLeft
       offset_y = offsetTop
 
-      const { transform } = style
-
-      const { borderWidth } = getComputedStyle(element)
+      const { borderWidth, transform } = getComputedStyle(element)
 
       if (
         transform !== _transform ||
