@@ -37,6 +37,7 @@ import { webSelection } from './api/selection'
 import { webSpeech } from './api/speech'
 import { webStorage } from './api/storage'
 import { webText } from './api/text'
+import { webTheme } from './api/theme'
 import { webURI } from './api/uri'
 import { webURL } from './api/url'
 import { webWindow } from './api/window'
@@ -92,6 +93,7 @@ export function webBoot(
   const _window = webWindow(window, opt)
   const navigator = webNavigator(window, opt)
   const layout = webLayout(window, opt)
+  const theme = webTheme(window, _root, opt)
 
   const api: API = {
     alert,
@@ -121,6 +123,7 @@ export function webBoot(
     uri,
     window: _window,
     navigator,
+    theme,
   }
 
   const system = boot(null, api, opt)
@@ -128,6 +131,8 @@ export function webBoot(
   root.appendChild(_root)
 
   system.root = _root
+
+  theme.setTheme(system.theme)
 
   attachSprite(system)
   attachStyle(system)
