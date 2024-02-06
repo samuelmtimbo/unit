@@ -24,6 +24,6 @@ export default class Ceil<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ a }: I<T>, done): void {
-    done({ '⌈a⌉': Math.floor(a) })
+    done({ '⌈a⌉': Math.ceil(a) })
   }
 }
