@@ -1,8 +1,8 @@
 import { System } from '../system'
 import {
-  IPositionCallback,
-  IPositionEntry,
   IPositionObserver,
+  IPositionCallback,
+  IPositionObserverEntry,
 } from '../types/global/IPositionObserver'
 import { Unlisten } from '../types/Unlisten'
 import { callAll } from '../util/call/callAll'
@@ -28,7 +28,7 @@ export class PositionObserver implements IPositionObserver {
     this._callback = callback
   }
 
-  public observe(element: HTMLElement): IPositionEntry {
+  public observe(element: HTMLElement): IPositionObserverEntry {
     // console.log('PositionObserver', 'observe')
 
     const {
@@ -114,13 +114,23 @@ export class PositionObserver implements IPositionObserver {
     }
 
     function __update_local(): void {
-      const { offsetLeft, offsetTop, offsetWidth, offsetHeight, style } =
-        element
+      const {
+        offsetLeft = 0,
+        offsetTop = 0,
+        offsetWidth = 0,
+        offsetHeight = 0,
+      } = element
 
       offset_x = offsetLeft
       offset_y = offsetTop
 
-      const { borderWidth, transform } = getComputedStyle(element)
+      let { transform } = element.style
+
+      const computedStyle = getComputedStyle(element)
+
+      const { borderWidth } = computedStyle
+
+      transform = transform || computedStyle.transform
 
       if (
         transform !== _transform ||
@@ -171,13 +181,13 @@ export class PositionObserver implements IPositionObserver {
 
           _border_x = borderSize
           _border_y = borderSize
+
+          _borderWidth = borderWidth
+
+          bx = _border_x
+          by = _border_y
         }
-
-        _borderWidth = borderWidth
       }
-
-      bx = _border_x
-      by = _border_y
 
       gbx = parent_bx + parent_gbx
       gby = parent_by + parent_gby
