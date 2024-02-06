@@ -4,7 +4,6 @@ import { PositionObserver } from '../../../PositionObserver'
 import { NoopIntersectionObserver } from '../../../noop/IntersectionObserver'
 import { NoopMutationObserver } from '../../../noop/MutationObserver'
 import { NoopResizeObserver } from '../../../noop/ResizeObserver'
-import { Theme, themeBackgroundColor } from '../../../theme'
 
 export function webDocument(
   window: Window,
@@ -58,11 +57,6 @@ export function webDocument(
     ResizeObserver: ResizeObserver,
     PositionObserver: PositionObserver,
     IntersectionObserver: IntersectionObserver,
-    setTheme: async function (theme: Theme): Promise<void> {
-      const color = themeBackgroundColor(theme)
-
-      document.body.style.backgroundColor = color
-    },
   }
 
   return _document

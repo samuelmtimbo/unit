@@ -652,7 +652,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     // console.log('GUI', '_on_context_theme_changed')
     const {
       api: {
-        document: { setTheme },
+        theme: { setTheme },
       },
     } = this.$system
 

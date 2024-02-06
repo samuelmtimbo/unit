@@ -218,7 +218,6 @@ export type API = {
     getSelection(): Selection
     createRange(): Range
     exitPictureInPicture(): Promise<void>
-    setTheme(theme: Theme): Promise<void>
     MutationObserver: IMutationObserverConstructor
     PositionObserver: IPositionObserverCostructor
     ResizeObserver: IResizeObserverConstructor
@@ -233,5 +232,8 @@ export type API = {
   }
   worker: {
     start(): Worker
+  }
+  theme: {
+    setTheme(theme: Theme): Promise<void>
   }
 }

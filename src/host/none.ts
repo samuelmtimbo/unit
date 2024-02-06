@@ -225,9 +225,6 @@ export function noHost(): API {
       exitPictureInPicture() {
         throw new MethodNotImplementedError()
       },
-      setTheme: function (theme: Theme): Promise<void> {
-        throw new MethodNotImplementedError()
-      },
       MutationObserver: null,
       PositionObserver: null,
       ResizeObserver: null,
@@ -314,6 +311,11 @@ export function noHost(): API {
         throw new MethodNotImplementedError()
       },
       replaceState: function (data: any, title: string, url: string): void {
+        throw new MethodNotImplementedError()
+      },
+    },
+    theme: {
+      setTheme: function (theme: Theme): Promise<void> {
         throw new MethodNotImplementedError()
       },
     },
