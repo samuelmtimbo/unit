@@ -6,7 +6,7 @@ export interface IPositionObserverCostructor {
 }
 
 export interface IPositionObserver {
-  observe(element: IOElement): IPositionEntry
+  observe(element: IOElement): IPositionObserverEntry
   disconnect(): void
 }
 
@@ -26,7 +26,7 @@ export interface IPositionCallback {
   ): void
 }
 
-export interface IPositionEntry {
+export interface IPositionObserverEntry {
   x: number
   y: number
   sx: number
