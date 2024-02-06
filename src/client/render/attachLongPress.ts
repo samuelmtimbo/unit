@@ -1,5 +1,6 @@
 import { System } from '../../system'
 import { namespaceURI } from '../component/namespaceURI'
+import { getPosition } from '../util/style/getPosition'
 
 const LONG_PRESS_DURATION = 0.2
 const LONG_PRESS_TRANSITION = `r ${LONG_PRESS_DURATION}s linear, opacity ${LONG_PRESS_DURATION}s linear`
@@ -41,13 +42,13 @@ export function attachLongPress(system: System): void {
       direction?: 'in' | 'out'
     } = {}
   ) => {
-    // console.log('showLongPress', screenX, screenY, opt)
+    const { x, y } = getPosition(root)
 
     const { stroke = 'currentColor', direction = 'in' } = opt
 
     long_press.style.stroke = stroke
-    long_press.setAttribute('cx', `${screenX}`)
-    long_press.setAttribute('cy', `${screenY}`)
+    long_press.setAttribute('cx', `${screenX - x}`)
+    long_press.setAttribute('cy', `${screenY - y}`)
     long_press.style.transition = ''
 
     if (direction === 'in') {
