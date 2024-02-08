@@ -1,18 +1,19 @@
 import { Functional } from '../../../../Class/Functional'
+import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
 import { ID_EQUALS } from '../../../_ids'
 import isEqual from './f'
 
-export interface I<T> {
-  a: T
-  b: T
+export interface I {
+  a: any
+  b: any
 }
 
 export interface O {
   'a = b': boolean
 }
 
-export default class Equals<T> extends Functional<I<T>, O> {
+export default class Equals extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
@@ -25,7 +26,7 @@ export default class Equals<T> extends Functional<I<T>, O> {
     )
   }
 
-  f({ a, b }: I<T>, done): void {
+  f({ a, b }: I, done: Done<O>): void {
     done({
       'a = b': isEqual(a, b),
     })
