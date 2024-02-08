@@ -356,9 +356,30 @@ assert.deepEqual(
     _specs
   ),
   {
-    id: { input: { a: '<A>' }, output: { a: '<A>' } },
-    id0: { input: { a: '<B>' }, output: { a: '<A>' } },
-    id1: { input: { a: '<A>' }, output: { a: '<A>' } },
+    id: {
+      input: {
+        a: '<A>',
+      },
+      output: {
+        a: '<A>',
+      },
+    },
+    id0: {
+      input: {
+        a: '<B>',
+      },
+      output: {
+        a: '<A>',
+      },
+    },
+    id1: {
+      input: {
+        a: '<B>',
+      },
+      output: {
+        a: '<B>',
+      },
+    },
   }
 )
 

@@ -429,10 +429,10 @@ export const _getGraphTypeMap = (
 
   const { units = {}, merges = {}, outputs = {}, inputs = {} } = clone(spec)
 
+  let charCode = 65
+
   subgraphs.forEach((subgraph: Subgraph) => {
     const { unit, merge } = subgraph
-
-    let charCode = 65
 
     const replacement: Dict<Dict<string>> = {}
 
