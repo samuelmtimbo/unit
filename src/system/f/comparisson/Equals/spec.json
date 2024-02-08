@@ -2,10 +2,10 @@
   "name": "equals",
   "inputs": {
     "a": {
-      "type": "<A>"
+      "type": "any"
     },
     "b": {
-      "type": "<A>"
+      "type": "any"
     }
   },
   "outputs": {
