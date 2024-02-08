@@ -80,7 +80,7 @@ export default class Render extends Element<HTMLDivElement, Props> {
 
     this._prop_handler = {
       ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
-      component: (component: $Component) => {
+      unit: (component: $Component) => {
         if (this._unlisten) {
           this._unlisten()
 
