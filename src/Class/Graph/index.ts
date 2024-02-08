@@ -185,6 +185,7 @@ import { renameUnitInMerges } from '../../spec/reducers/spec'
 import { weakMerge } from '../../weakMerge'
 import { getSubComponentParentId } from '../../spec/util/component'
 import deepGet from '../../deepGet'
+import { evaluate } from '../../spec/evaluate'
 
 export type Graph_EE = G_EE & C_EE & Stateful_EE
 
@@ -1403,7 +1404,7 @@ export class Graph<I = any, O = any>
     exposedMergeOpposite: Merge,
     propagate: boolean = true
   ) {
-    const { plug, ref } = pinSpec
+    const { plug, ref, data } = pinSpec
 
     const oppositeType = opposite(type)
 
@@ -1415,6 +1416,12 @@ export class Graph<I = any, O = any>
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
       this._simExposePin(type, pinId, subPinId, subPinSpec, propagate)
     })
+
+    if (data !== undefined) {
+      const data_ = evaluate(data, this.__system.specs, this.__system.classes)
+
+      this.setPinData(type, pinId, data_)
+    }
   }
 
   public isPinSetFunctional = (type: IO, pinId: string): boolean => {
