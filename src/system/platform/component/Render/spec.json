@@ -9,15 +9,15 @@
         "examples": ["{}"]
       }
     },
-    "component": {
-      "type": "`C`",
+    "unit": {
+      "type": "`U`",
       "ref": true
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "square",
-    "description": "render a component",
+    "description": "render a unit",
     "complexity": 43,
     "tags": ["platform", "component"]
   },

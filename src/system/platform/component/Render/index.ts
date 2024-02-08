@@ -1,11 +1,11 @@
+import { $ } from '../../../../Class/$'
 import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
-import { Component_ } from '../../../../types/interface/Component'
+import { $U } from '../../../../types/interface/async/$U'
 import { ID_RENDER } from '../../../_ids'
 
 export interface I {
-  component: Component_
-  className: string
+  unit: $U & $
   style: object
 }
 
@@ -15,7 +15,7 @@ export default class Render extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'component'],
+        i: ['style', 'unit'],
         o: [],
       },
       {
