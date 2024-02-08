@@ -67,6 +67,12 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     this._unlisten = emitter.addListener(event, this._listener)
   }
 
+  i() {
+    this._remove()
+
+    this._forward_empty('data')
+  }
+
   d() {
     this._remove()
 
