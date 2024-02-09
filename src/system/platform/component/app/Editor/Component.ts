@@ -24321,19 +24321,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 }
               }
             }
-
-            for (const pin_node_id in this._pin_node) {
-              if (this._is_pin_all_pin_match(pin_node_id, display_node_id)) {
-                this._set_node_compatible(pin_node_id)
-              }
-            }
           } else {
-            for (const pin_node_id in this._pin_node) {
-              if (this._is_pin_all_pin_match(pin_node_id, display_node_id)) {
-                this._set_node_compatible(pin_node_id)
-              }
-            }
-
             for (const int_node_id in this._exposed_int_unplugged) {
               if (this._is_all_pin_plug_match(int_node_id, display_node_id)) {
                 this._set_node_compatible(int_node_id)
@@ -24346,6 +24334,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               ) {
                 this._set_node_compatible(datum_node_id)
               }
+            }
+          }
+
+          for (const pin_node_id in this._pin_node) {
+            const anchor_node_id =
+              this._get_pin_merge_node_id(pin_node_id) ?? pin_node_id
+
+            if (this._is_pin_all_pin_match(anchor_node_id, display_node_id)) {
+              this._set_node_compatible(pin_node_id)
             }
           }
         } else if (all_unit) {
