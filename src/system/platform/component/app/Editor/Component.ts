@@ -24328,11 +24328,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               }
             }
 
+            const all_pin_selected = !display_node_id.some(
+              (pin_node_id) =>
+                !this._is_node_selected(pin_node_id) ||
+                this._is_node_dragged(pin_node_id)
+            )
+
+            if (all_pin_selected) {
             for (const datum_node_id in this._data_node) {
               if (
-                this._is_datum_all_pin_pre_match(datum_node_id, display_node_id)
+                  this._is_datum_all_pin_pre_match(
+                    datum_node_id,
+                    display_node_id
+                  )
               ) {
                 this._set_node_compatible(datum_node_id)
+                }
               }
             }
           }
