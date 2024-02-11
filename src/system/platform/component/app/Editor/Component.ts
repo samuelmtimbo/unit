@@ -24335,14 +24335,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             )
 
             if (all_pin_selected) {
-            for (const datum_node_id in this._data_node) {
-              if (
+              for (const datum_node_id in this._data_node) {
+                if (
                   this._is_datum_all_pin_pre_match(
                     datum_node_id,
                     display_node_id
                   )
-              ) {
-                this._set_node_compatible(datum_node_id)
+                ) {
+                  this._set_node_compatible(datum_node_id)
                 }
               }
             }
@@ -39693,13 +39693,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _drag_edge_animation_tick = () => {
     // console.log('Graph', '_drag_edge_animation_tick')
 
-    const { $width, $height } = this.$context
-
     if (this._drag_count === 0) {
       this._drag_edge_animation = undefined
 
       return
     }
+
+    const { z } = this._zoom
 
     for (const drag_node_id in this._drag_node_pointer_id) {
       const node = this._node[drag_node_id]
@@ -39723,12 +39723,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         dy = Math.max(y0, -MAX_V)
       }
 
-      this._set_node_position(drag_node_id, addVector(node, { x: dx, y: dy }))
+      const k = (z - 1) / z
 
-      node.hx -= 2 * dx
-      node.hy -= 2 * dy
+      const cx = k * dx
+      const cy = k * dy
 
-      const zoom = translate(this._zoom, -dx, -dy)
+      node.hx -= (2 * dx) / z + cx
+      node.hy -= (2 * dy) / z + cy
+
+      const next_position = addVector(node, { x: dx / z + cx, y: dy / z + cy })
+
+      this._set_node_position(drag_node_id, next_position)
+
+      const zoom = translate(this._zoom, -z * dx, -z * dy)
 
       this.set_zoom(zoom)
     }
@@ -39737,8 +39744,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._drag_edge_animation_tick
     )
   }
-
-  private _drag_translate_x: number = 0
 
   private _start_drag_edge_animation = () => {
     if (this._drag_edge_animation) {
@@ -39754,21 +39759,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): Line => {
     const node = this._node[node_id]
 
+    const { z } = this._zoom
+
     const { x: _x, y: _y } = node
 
     const screen_position = this._world_to_screen(_x, _y)
 
     const { $width, $height } = this.$context
 
-    const _x0 = screen_position.x - node.width / 2 - offset
-    const _y0 = screen_position.y - node.height / 2 - offset
+    const _x0 = screen_position.x - (node.width / 2 + offset) * z
+    const _y0 = screen_position.y - (node.height / 2 + offset) * z
 
     const x0 = _x0
     const y0 = _y0
-    const x1 = screen_position.x + node.width / 2 - $width - offset
-    const y1 = screen_position.y + node.height / 2 - $height - offset
+    const x1 = screen_position.x - $width + (node.width / 2 - offset) * z
+    const y1 = screen_position.y - $height + (node.height / 2 - offset) * z
 
     return { x0, x1, y0, y1 }
+  }
+
+  private _cancel_drag_edge_animation = () => {
+    // console.log('_cancel_drag_edge_animation')
+
+    if (this._drag_edge_animation) {
+      cancelAnimationFrame(this._drag_edge_animation)
+
+      this._drag_edge_animation = undefined
+    }
   }
 
   private _drag_move = (node_id: string, event: UnitPointerEvent): void => {
@@ -39783,24 +39800,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const [x, y] = this._client_to_graph(clientX, clientY)
 
     if (this._is_draggable_mode()) {
-      const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 1)
+      const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 0)
 
       const node = this._node[node_id]
 
       const dx = x - node.hx - node.x
       const dy = y - node.hy - node.y
 
-      let lock_x = (x1 > 0 && dx >= 0) || (x0 < 0 && dx <= 0)
-      let lock_y = (y1 > 0 && dy >= 0) || (y0 < 0 && dy <= 0)
+      const drag_edge_animating = !!this._drag_edge_animation
+
+      const lock_x =
+        ((drag_edge_animating || x1 >= 0) && dx >= 0) ||
+        ((drag_edge_animating || x0 <= 0) && dx <= 0)
+      const lock_y =
+        ((drag_edge_animating || y1 >= 0) && dy >= 0) ||
+        ((drag_edge_animating || y0 <= 0) && dy <= 0)
 
       if (lock_x || lock_y) {
         this._start_drag_edge_animation()
       } else {
-        if (this._drag_edge_animation) {
-          cancelAnimationFrame(this._drag_edge_animation)
-
-          this._drag_edge_animation = undefined
-        }
+        this._cancel_drag_edge_animation()
       }
 
       this._node_drag_move(node_id, x, y)
