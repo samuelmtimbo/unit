@@ -27307,8 +27307,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
 
           const datum_id = this._new_datum_id()
-          const datum_node_id = getDatumNodeId(datum_id)
           const position = this._pin_line_position(pin_node_id, LINK_DISTANCE)
+          const datum_node_id = getDatumNodeId(datum_id)
           this._add_empty_datum(datum_id, position)
 
           this._sim_add_pin_datum_link(datum_node_id, pin_node_id)
