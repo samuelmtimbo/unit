@@ -1,0 +1,25 @@
+{
+  "name": "bold",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "bold",
+    "description": "HTML bold element",
+    "complexity": 43,
+    "tags": ["platform", "component"]
+  },
+  "id": "cbf8f925-05df-4562-81ed-8cc1ddac6aac",
+  "base": true,
+  "component": {
+    "defaultWidth": 200,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}
