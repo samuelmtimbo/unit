@@ -367,31 +367,47 @@ export class Primitive<
     propagate: boolean
   ): void {}
 
-  private _onInputRemoved(name: string, input: Pin<any>): void {
+  private _onInputRemoved(
+    name: string,
+    input: Pin<any>,
+    propagate: boolean
+  ): void {
     this._plunkInput(name, input)
 
     if (input.active()) {
       this._deactivateInput(name)
     }
 
-    this.onInputRemoved(name, input)
+    this.onInputRemoved(name, input, propagate)
   }
 
-  public onInputRemoved(name: string, input: Pin<any>): void {
+  public onInputRemoved(
+    name: string,
+    input: Pin<any>,
+    propagate: boolean
+  ): void {
     // console.log(this.constructor.name, 'onInputRemoved', name)
   }
 
-  public _onOutputRemoved(name: string, output: Pin<any>): void {
+  public _onOutputRemoved(
+    name: string,
+    output: Pin<any>,
+    propagate: boolean
+  ): void {
     this._plunkOutput(name, output)
 
     if (!output.empty()) {
       this._deactivateOutput(name)
     }
 
-    this.onOutputRemoved(name, output)
+    this.onOutputRemoved(name, output, propagate)
   }
 
-  public onOutputRemoved(name: string, output: Pin<any>): void {
+  public onOutputRemoved(
+    name: string,
+    output: Pin<any>,
+    propagate: boolean
+  ): void {
     if (!output.empty()) {
       this._onDataOutputDrop(name)
     }

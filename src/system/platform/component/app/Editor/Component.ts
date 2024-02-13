@@ -735,6 +735,33 @@ const DEFAULT_STYLE = {
   touchAction: 'none',
 }
 
+export type Config = {
+  enable?: {
+    geometryOverride?: boolean
+    plugIcons?: boolean
+    unlinkTake?: boolean
+  }
+  disable?: {
+    dataCreate?: boolean
+    dataEdit?: boolean
+    dataUnlink?: boolean
+    dataSelect?: boolean
+    dataCompatible?: boolean
+    drawing?: boolean
+    enterGraph?: boolean
+    highlightCompatible?: boolean
+    plugReverse?: boolean
+    plugUnit?: boolean
+    multiInputMerge?: boolean
+    edgeDrag?: boolean
+  }
+  hide?: {
+    plugNames?: boolean
+    unitNames?: boolean
+    pinNames?: boolean
+  }
+}
+
 export interface Props {
   className?: string
   style?: Dict<string>
@@ -753,6 +780,7 @@ export interface Props {
   zoom?: Zoom
   animate?: boolean
   typeCache?: TypeTreeMap
+  config?: Config
 }
 
 export default class Editor extends Element<HTMLDivElement, Props> {
@@ -785,6 +813,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       style,
       attr,
       zoom,
+      config,
       controls = true,
       animate = true,
       fullwindow,
@@ -841,6 +870,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           animate,
           zoom,
           fullwindow,
+          config,
           specs,
           registry: this._registry,
           hasSpec: this._has_spec,
@@ -1645,6 +1675,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       mergePropStyle(this._transcend, {
         display: current ? 'flex' : 'none',
       })
+    } else if (prop === 'config') {
+      this._editor.setProp('config', current)
     }
   }
 }
@@ -1662,6 +1694,7 @@ export interface LinkProps {
 
   text?: string
   textHidden?: boolean
+  textVisibility?: string
   textDy?: number
   textOpacity?: number
 
@@ -1721,31 +1754,23 @@ export interface _Props extends R {
   className?: string
   style?: Dict<string>
   disabled?: boolean
-
   fullwindow?: boolean
-
   parent?: Editor_
-
   graph: $Graph
   component: Component
-
   frame?: Component<HTMLElement>
   frameOut?: boolean
-
   zoomable?: boolean
   minZoom?: number
   maxZoom?: number
   zoom?: Zoom
   zoomTranslate?: boolean
   zoomDraggable?: boolean
-
   animate?: boolean
-
   specs?: Specs
-
   registry?: Registry
-
   typeCache?: TypeTreeMap
+  config?: Config
 }
 
 export interface DefaultProps {
@@ -1947,23 +1972,6 @@ export const _evaluate = (
   _evaluate_cache[value] = data
 
   return data
-}
-
-export interface Props {
-  className?: string
-  style?: Dict<string>
-  disabled?: boolean
-  graph?: $Graph
-  editor?: Editor_
-  fullwindow?: boolean
-  component?: Component
-  frame?: $Component
-  fallback?: Component<HTMLElement>
-  background?: Div
-  transcend?: Transcend
-  root?: Frame
-  zoom?: Zoom
-  animate?: boolean
 }
 
 const buildGraphRemap = (
@@ -2986,10 +2994,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const data = dark ? COLOR_YELLOW : COLOR_DARK_YELLOW
     const data_link = dark ? COLOR_LINK_YELLOW : COLOR_DARK_LINK_YELLOW
 
+    const background = themeBackgroundColor($theme)
+
     if (isHEX(color)) {
       let k: number = dark ? 1 : 0.8
 
       this._theme = {
+        background,
         node: applyTheme($theme, color, 0),
         text: applyTheme($theme, color, 10 * k),
         selected: applyTheme($theme, color, 20 * k),
@@ -3003,6 +3014,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     } else {
       this._theme = {
+        background,
         node: color,
         text: color,
         pin_text: color,
@@ -3017,8 +3029,31 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _refresh_config = (): void => {
+    const { config: { hide } = {} } = this.$props
+
+    for (const unit_id in this._unit_node) {
+      const unit_core = this._core[unit_id]
+
+      unit_core.$props.style.visibility = hide?.unitNames ? 'hidden' : 'visible'
+    }
+
+    for (const pin_node_id in this._pin_name) {
+      const pin_name = this._pin_name[pin_node_id]
+
+      pin_name.$props.style.visibility = hide?.pinNames ? 'hidden' : 'visible'
+    }
+
+    for (const ext_plug_node_id in this._exposed_ext_node) {
+      const ext_name = this._ext_pin_name[ext_plug_node_id]
+
+      ext_name.$props.style.visibility = hide?.unitNames ? 'hidden' : 'visible'
+    }
+  }
+
   private _theme: {
     node: string
+    background: string
     text: string
     pin_text: string
     selected: string
@@ -3030,6 +3065,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     data_link: string
   } = {
     node: 'currentColor',
+    background: 'currentColor',
     text: 'currentColor',
     pin_text: 'currentColor',
     selected: 'currentColor',
@@ -6362,7 +6398,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_sim_add_core', unit_id, unit, position)
 
-    const { specs, getSpec } = this.$props
+    const { config, specs, getSpec } = this.$props
 
     const { id } = unit
 
@@ -6525,6 +6561,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           left: `50%`,
           top: 'calc(100% + 3px)',
           transform: `translateX(-50%)`,
+          visibility: config?.hide?.unitNames ? 'hidden' : 'visible',
           maxWidth:
             (UNIT_NAME_MAX_CHAR_LINE * UNIT_CORE_NAME_FONT_SIZE) / 2 + 'px',
           ...userSelect('none'),
@@ -8550,10 +8587,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_sim_add_exposed_pin', type, pin_id, sub_pin_id, sub_pin_spec, position)
 
+    const { config = {} } = this.$props
+
     const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
     const int_node_id = getIntNodeId(type, pin_id, sub_pin_id)
 
     const functional = this.__is_exposed_pin_functional(type, pin_id)
+
+    const pin_spec = this._get_pin_spec(type, pin_id)
+
+    const { metadata = {} } = pin_spec
 
     this._exposed_pin_unplugged_count++
 
@@ -8634,7 +8677,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { x, y } = position.ext || fallback_position
 
-    const r = PIN_RADIUS
+    const r = config?.enable?.geometryOverride
+      ? metadata.r ?? PIN_RADIUS
+      : PIN_RADIUS
+
     const width = 2 * r
     const height = 2 * r
 
@@ -8689,6 +8735,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._pin[ext_node_id] = pin
     pin_node_content.appendChild(pin)
 
+    const icon_width = r
+    const icon_height = r
+
+    const icon = metadata.icon || ''
+
+    const pin_icon = new Icon(
+      {
+        icon,
+        style: {
+          position: 'absolute',
+          width: `${icon_width}px`,
+          height: `${icon_height}px`,
+          top: '50%',
+          left: '50%',
+          // display: config?.enable?.plugIcons ? 'block' : 'none',
+          fill: 'transparent',
+          stroke: input ? this._theme.node : this._theme.background,
+          strokeWidth: '2',
+          transform: 'translate(-50%, -50%)',
+          ...userSelect('none'),
+        },
+      },
+      this.$system
+    )
+    pin_icon.preventDefault('touchstart')
+    pin.appendChild(pin_icon)
+
     const pin_selection = this._create_selection(ext_node_id, {
       width,
       height,
@@ -8716,6 +8789,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         color,
         ...userSelect('inherit'),
         pointerEvents: 'none',
+        visibility: config?.hide?.plugNames ? 'hidden' : 'visible',
       },
       name: pin_id,
     })
@@ -10186,7 +10260,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   y,
     // })
 
-    const { getSpec } = this.$props
+    const { getSpec, config } = this.$props
 
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
@@ -10346,6 +10420,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       r,
       style: {
         color: this._theme.pin_text,
+        visibility: config?.hide?.pinNames ? 'hidden' : 'visible',
         opacity,
       },
       name: pin_id,
@@ -10520,6 +10595,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _get_link_pin_props = (unit_id: string, type: IO, pin_id: string) => {
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
+    const { config } = this.$props
+
     const ignored = this._spec_is_link_pin_ignored(pin_node_id)
     const ref = this._is_link_pin_ref(pin_node_id)
     const init = this._is_link_pin_init(pin_node_id)
@@ -10566,6 +10643,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_link_text_hidden = !merged
     const pin_link_stroke_dash_array = constant ? 3 : 0
     const pin_link_stroke = stroke
+    const pin_link_text_visibility = config?.hide?.pinNames
+      ? 'hidden'
+      : 'visible'
     const pin_link_stroke_width = ref || memory || init ? 1 : 3
     const pin_link_opacity = ignored ? (this._mode === 'add' ? 0.5 : 0) : 1
     const pin_link_start_marker_d = ref && input ? ARROW_SEMICIRCLE : ''
@@ -10649,6 +10729,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       stroke,
       pin_link_text,
       pin_link_text_hidden,
+      pin_link_text_visibility,
       pin_link_stroke,
       pin_link_stroke_width,
       pin_link_stroke_dash_array,
@@ -10760,6 +10841,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       pin_link_start_marker_hidden,
       pin_link_text,
       pin_link_text_hidden,
+      pin_link_text_visibility,
       pin_link_stroke,
       pin_link_stroke_width,
       pin_link_stroke_dash_array,
@@ -10848,6 +10930,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       {
         text: pin_link_text,
         textHidden: pin_link_text_hidden,
+        textVisibility: pin_link_text_visibility,
         stroke: pin_link_stroke,
         strokeWidth: pin_link_stroke_width,
         strokeDasharray: pin_link_stroke_dash_array,
@@ -14564,6 +14647,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       strokeDasharray = 0,
       text = '',
       textHidden = true,
+      textVisibility = 'visible',
       textOpacity = 1,
       startMarker = null,
       startMarkerX = 0,
@@ -14662,6 +14746,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           display: textHidden ? 'none' : 'block',
           opacity: `${textOpacity}`,
+          visibility: textVisibility,
           fill: this._theme.pin_text,
           fontSize: `${LINK_TEXT_FONT_SIZE}px`,
           ...userSelect('none'),
@@ -22430,8 +22515,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _select_node = (node_id: string): void => {
     // console.log('Graph', '_select_node', node_id)
 
+    const { config } = this.$props
+
     if (this._selected_node_id[node_id]) {
       return
+    }
+
+    if (this._is_datum_node_id(node_id)) {
+      if (config?.disable?.dataSelect) {
+        return
+      }
     }
 
     this._selected_node_count++
@@ -23468,6 +23561,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _is_pin_pin_match(a: string, b: string): boolean {
     // console.log('Graph', '_is_pin_pin_match', a, b)
 
+    const { config } = this.$props
+
     if (a === b) {
       return false
     }
@@ -23517,9 +23612,31 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
+      if (config?.disable?.multiInputMerge) {
+        if (a_type === 'input' && b_type === 'output') {
+          if (this._node_to_ext[a]) {
+            return false
+          }
+        } else if (a_type === 'output' && b_type === 'input') {
+          if (this._node_to_ext[b]) {
+            return false
+          }
+        } else if (a_type === 'output' && b_type === 'output') {
+          return false
+        }
+      }
+
       return this._is_pin_pin_type_match(a, a_type, b, b_type)
     } else if (a_link_pin && !b_link_pin) {
       const { type: a_type } = segmentLinkPinNodeId(a)
+
+      if (config?.disable?.multiInputMerge) {
+        const { mergeId } = segmentMergeNodeId(b)
+
+        if (a_type === 'output' && this._merge_output_count[mergeId] > 0) {
+          return false
+        }
+      }
 
       if (this._spec_is_empty_merge(b)) {
         return false
@@ -23537,6 +23654,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     } else if (!a_link_pin && b_link_pin) {
       const { type: b_type } = segmentLinkPinNodeId(b)
+
+      if (config?.disable?.multiInputMerge) {
+        const { mergeId } = segmentMergeNodeId(a)
+
+        if (b_type === 'output' && this._merge_output_count[mergeId] > 0) {
+          return false
+        }
+      }
 
       if (this._spec_is_empty_merge(a)) {
         return false
@@ -23609,6 +23734,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): boolean => {
     const { specs } = this.$props
 
+    const { config } = this.$props
+
     const { pinId: pin_exposed_id } = this._spec_get_pin_node_plug_spec(
       type,
       pin_node_id
@@ -23643,7 +23770,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const { type: _type } = segmentLinkPinNodeId(pin_node_id)
 
-      // if (type === _type) {
+      if (!config?.disable.plugReverse || type === _type) {
       const exp_pin_type = this.__get_ext_pin_type(type, pin_id)
       const link_pin_type = this._get_link_pin_type(pin_node_id)
 
@@ -23660,7 +23787,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       } else {
         return _isTypeMatch(specs, link_pin_type, exp_pin_type)
       }
-      // }
+      }
     } else if (this._is_merge_node_id(pin_node_id)) {
       // if (
       //   (type === 'input' && !this._is_output_only_merge(pin_node_id)) ||
@@ -23670,12 +23797,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const merge_pin_type = this._get_merge_pin_type(pin_node_id, type)
 
       if (type === 'input') {
+        if (config?.disable?.multiInputMerge) {
+          const { mergeId } = segmentMergeNodeId(pin_node_id)
+
+          if (this._merge_output_count[mergeId] > 0) {
+            return false
+          }
+        }
+
         return _isTypeMatch(specs, exp_pin_type, merge_pin_type)
       } else {
         return _isTypeMatch(specs, merge_pin_type, exp_pin_type)
       }
       // }
     }
+
     return false
   }
 
@@ -23760,7 +23896,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_id: string,
     unit_id: string
   ): boolean => {
-    const { specs } = this.$props
+    const { specs, config } = this.$props
+
+    if (config?.disable?.plugUnit) {
+      return false
+    }
 
     if (type === 'input') {
       const empty = this._is_unit_empty(unit_id)
@@ -23906,9 +24046,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     datum_node_id: string,
     pin_node_id: string
   ): boolean => {
+    const { config } = this.$props
+
     // if (this._drag_node_id[pin_node_id]) {
     //   return false
     // }
+
+    if (config?.disable?.dataCompatible) {
+      return false
+    }
 
     const datum_pin_node_id = this._datum_to_pin[datum_node_id]
     if (datum_pin_node_id) {
@@ -24278,6 +24424,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     (): void => {
       // console.log('Graph', 'refresh_compatible')
 
+      const { config } = this.$props
+
+      if (config?.disable?.highlightCompatible) {
+        return
+      }
+
       const prev_compatible_node_id = this._compatible_node_id
 
       let display_node_id = this._get_display_node_id()
@@ -24389,24 +24541,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
         } else if (all_data) {
-          for (const pin_node_id in this._pin_node) {
-            if (this._is_pin_all_datum_match(pin_node_id, display_node_id)) {
-              this._set_node_compatible(pin_node_id)
+          if (!config?.disable?.dataCompatible) {
+            for (const pin_node_id in this._pin_node) {
+              if (this._is_pin_all_datum_match(pin_node_id, display_node_id)) {
+                this._set_node_compatible(pin_node_id)
+              }
             }
-          }
 
-          for (const ext_node_id in this._exposed_ext_node) {
-            if (this._is_ext_all_datum_match(ext_node_id, display_node_id)) {
-              this._set_node_compatible(ext_node_id)
+            for (const ext_node_id in this._exposed_ext_node) {
+              if (this._is_ext_all_datum_match(ext_node_id, display_node_id)) {
+                this._set_node_compatible(ext_node_id)
+              }
             }
-          }
 
-          if (display_node_id.length === 1) {
-            const datum_node_id = display_node_id[0]
+            if (display_node_id.length === 1) {
+              const datum_node_id = display_node_id[0]
 
-            for (const unit_id in this._unit_node) {
-              if (this._is_datum_unit_pre_match(datum_node_id, unit_id)) {
-                this._set_node_compatible(unit_id)
+              for (const unit_id in this._unit_node) {
+                if (this._is_datum_unit_pre_match(datum_node_id, unit_id)) {
+                  this._set_node_compatible(unit_id)
+                }
               }
             }
           }
@@ -27058,6 +27212,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_node_id: string,
     event: UnitPointerEvent
   ): void => {
+    const { config } = this.$props
+
     if (this._mode === 'none') {
       if (
         this._is_link_input_node_id(pin_node_id) ||
@@ -27069,7 +27225,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
 
         const pin_datum_node_id = this._get_pin_datum_node_id(pin_node_id)
+
         if (pin_datum_node_id) {
+          if (config?.disable?.dataEdit) {
+            return
+          }
+
           const { datumId } = segmentDatumNodeId(pin_datum_node_id)
 
           this._show_datum(pin_datum_node_id)
@@ -27077,6 +27238,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._unlock_datum(pin_datum_node_id)
           this._focus_datum(datumId, [])
         } else {
+          if (config?.disable?.dataCreate) {
+            return
+          }
+
           const datum_id = this._new_datum_id()
           const datum_node_id = getDatumNodeId(datum_id)
           const position = this._pin_line_position(pin_node_id, LINK_DISTANCE)
@@ -27563,22 +27728,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
-    if (this._is_datum_editable(datum_node_id)) {
-      this._unlock_datum(datum_node_id)
+    const { config } = this.$props
 
-      const { screenX, screenY } = event
+    if (!config?.disable?.dataEdit) {
+      if (this._is_datum_editable(datum_node_id)) {
+        this._unlock_datum(datum_node_id)
 
-      const leaf = elementFromPoint(screenX, screenY)
+        const { screenX, screenY } = event
 
-      // AD HOC
-      if (leaf.className === 'data-tree-leaf') {
-        // @ts-ignore
-        leaf.focus && leaf.focus()
-      } else {
-        const { datumId } = segmentDatumNodeId(datum_node_id)
+        const leaf = elementFromPoint(screenX, screenY)
 
-        this._focus_datum(datumId, [])
+        // AD HOC
+        if (leaf.className === 'data-tree-leaf') {
+          // @ts-ignore
+          leaf.focus && leaf.focus()
+        } else {
+          const { datumId } = segmentDatumNodeId(datum_node_id)
+
+          this._focus_datum(datumId, [])
+        }
       }
+    } else {
+      this._on_node_click(datum_node_id, event)
     }
   }
 
@@ -28653,15 +28824,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_unit_long_click = (unit_id: string) => {
+    const { config } = this.$props
+
     if (
       !this._resize_node_id_pointer_id[unit_id] &&
       !this._animating_unit_explosion[unit_id]
     ) {
       if (this._mode === 'none') {
-        if (!this._is_unit_base(unit_id)) {
-          this._enter_subgraph(unit_id)
-        } else {
-          //
+        if (!config?.disable?.enterGraph) {
+          if (!this._is_unit_base(unit_id)) {
+            this._enter_subgraph(unit_id)
+          } else {
+            //
+          }
         }
       } else if (this._mode === 'multiselect') {
         // TODO
@@ -28669,8 +28844,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (this._tree_layout) {
           // TODO sub-component
         } else {
-          if (!this._is_unit_base(unit_id)) {
-            this._enter_subgraph(unit_id)
+          if (!config?.disable?.enterGraph) {
+            if (!this._is_unit_base(unit_id)) {
+              this._enter_subgraph(unit_id)
+            }
           }
         }
       } else {
@@ -35525,11 +35702,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     type: IO,
     pinId: string
   ) => {
+    const { config } = this.$props
+
+    const take = !!config?.enable?.unlinkTake
+
     this._pod.$removePinFromMerge({
       mergeId,
       unitId,
       type,
       pinId,
+      take,
     })
   }
 
@@ -36056,15 +36238,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _pod_remove_merge = (merge_node_id: string): void => {
     // console.log('Graph', '_pod_remove_merge', merge_node_id)
 
+    const { config } = this.$props
+
     const { mergeId } = segmentMergeNodeId(merge_node_id)
 
     const merge = this._spec_get_merge(mergeId)
     const position = this._get_merge_position(merge_node_id)
 
+    const take = !!config?.enable?.unlinkTake
+
     this._pod.$removeMerge({
       mergeId,
       mergeSpec: merge,
       position,
+      take,
     })
   }
 
@@ -38184,9 +38371,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const pin_internal_pin_id = this._pin_to_int[type][node_id]
     if (pin_internal_pin_id) {
-      const { pinId, subPinId } = segmentPlugNodeId(pin_internal_pin_id)
+      if (
+        !this._is_merge_node_id(node_id) ||
+        !this._spec_is_empty_merge(node_id)
+      ) {
+        const { pinId, subPinId } = segmentPlugNodeId(pin_internal_pin_id)
 
-      this._unplug_exposed_pin(type, pinId, subPinId)
+        this._unplug_exposed_pin(type, pinId, subPinId)
+      }
     }
 
     this.plug_exposed_pin(type, pin_id, sub_pin_id, sub_pin_spec)
@@ -38622,11 +38814,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pinId: string,
     subPinId: string
   ): void => {
+    const { config } = this.$props
+
+    const take = config?.enable?.unlinkTake ? true : false
+
     this._pod.$unplugPin({
       type,
       pinId,
       subPinId,
-      subPinSpec: {}, // TODO
+      subPinSpec: {},
+      take,
     })
   }
 
@@ -39791,6 +39988,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _drag_move = (node_id: string, event: UnitPointerEvent): void => {
     // console.log('_drag_move', node_id)
 
+    const { config } = this.$props
+
     const { clientX, clientY, pointerId } = event
 
     const node_layer = this._get_node_default_layer(node_id)
@@ -39800,26 +39999,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const [x, y] = this._client_to_graph(clientX, clientY)
 
     if (this._is_draggable_mode()) {
-      const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 0)
+      if (!config?.disable.edgeDrag) {
+        const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 0)
 
-      const node = this._node[node_id]
+        const node = this._node[node_id]
 
-      const dx = x - node.hx - node.x
-      const dy = y - node.hy - node.y
+        const dx = x - node.hx - node.x
+        const dy = y - node.hy - node.y
 
-      const drag_edge_animating = !!this._drag_edge_animation
+        const drag_edge_animating = !!this._drag_edge_animation
 
-      const lock_x =
-        ((drag_edge_animating || x1 >= 0) && dx >= 0) ||
-        ((drag_edge_animating || x0 <= 0) && dx <= 0)
-      const lock_y =
-        ((drag_edge_animating || y1 >= 0) && dy >= 0) ||
-        ((drag_edge_animating || y0 <= 0) && dy <= 0)
+        const lock_x =
+          ((drag_edge_animating || x1 >= 0) && dx >= 0) ||
+          ((drag_edge_animating || x0 <= 0) && dx <= 0)
+        const lock_y =
+          ((drag_edge_animating || y1 >= 0) && dy >= 0) ||
+          ((drag_edge_animating || y0 <= 0) && dy <= 0)
 
-      if (lock_x || lock_y) {
-        this._start_drag_edge_animation()
-      } else {
-        this._cancel_drag_edge_animation()
+        if (lock_x || lock_y) {
+          this._start_drag_edge_animation()
+        } else {
+          this._cancel_drag_edge_animation()
+        }
       }
 
       this._node_drag_move(node_id, x, y)
@@ -39858,14 +40059,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      if (this._selected_node_id[node_id]) {
-        for (let selected_node_id in this._selected_node_id) {
-          if (this._is_datum_node_id(selected_node_id)) {
-            pull_datum(selected_node_id)
+      if (!config?.disable.dataUnlink) {
+        if (this._selected_node_id[node_id]) {
+          for (let selected_node_id in this._selected_node_id) {
+            if (this._is_datum_node_id(selected_node_id)) {
+              pull_datum(selected_node_id)
+            }
           }
+        } else {
+          pull_datum(node_id)
         }
-      } else {
-        pull_datum(node_id)
       }
     } else if (this._is_int_node_id(node_id)) {
       //
@@ -42780,25 +42983,32 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const position = this._screen_to_world(clientX, clientY)
 
       if (this._mode === 'none') {
-        if (this._selected_node_count > 0) {
-          this._deselect_all()
-        }
-
-        const datum_id = this._new_datum_id()
-
-        const datum_node_id = getDatumNodeId(datum_id)
-
-        this._add_empty_datum(datum_id, position)
-        this._unlock_datum(datum_node_id)
-        this._focus_datum(datum_id, [])
+        this._none_double_click_background(position)
       } else if (this._mode === 'add') {
-        const position = this._screen_to_world(clientX, clientY)
         this._paste_clipboard(position)
       } else if (this._mode === 'data') {
         this.__on_data_background_double_click(pointerId, clientX, clientY)
       } else if (this._mode === 'multiselect') {
         this._toggle_select_all_visible()
       }
+    }
+  }
+
+  private _none_double_click_background = (position: Position) => {
+    const { config } = this.$props
+
+    if (!config?.disable?.dataCreate) {
+      if (this._selected_node_count > 0) {
+        this._deselect_all()
+      }
+
+      const datum_id = this._new_datum_id()
+
+      const datum_node_id = getDatumNodeId(datum_id)
+
+      this._add_empty_datum(datum_id, position)
+      this._unlock_datum(datum_node_id)
+      this._focus_datum(datum_id, [])
     }
   }
 
@@ -50695,28 +50905,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       next_index = undefined
     }
 
-    if (next_index === undefined) {
-      if (keyboard_hovered_node_id) {
-        this._set_node_hovered(
-          keyboard_hovered_node_id,
-          KEYBOARD_POINTER_ID,
-          false
-        )
-      }
-    } else {
-      const next_keyboard_hovered_node = nodes_ordered_by_axis[next_index]
+    // if (next_index === undefined) {
+    //     this.select_node(keyboard_hovered_node_id)
+    // } else {
+    //   const next_keyboard_hovered_node = nodes_ordered_by_axis[next_index]
 
-      this._set_node_hovered(
-        keyboard_hovered_node_id,
-        KEYBOARD_POINTER_ID,
-        false
-      )
-      this._set_node_hovered(
-        next_keyboard_hovered_node,
-        KEYBOARD_POINTER_ID,
-        true
-      )
-    }
+    //   this.deselect_node(keyboard_hovered_node_id)
+    //   this.select_node(next_keyboard_hovered_node)
+    // }
   }
 
   private _on_space_keydown = (): void => {
@@ -55740,6 +55936,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     } else if (prop === 'registry') {
       throw new CodePathNotImplementedError()
+    } else if (prop === 'config') {
+      this._refresh_config()
     }
   }
 }

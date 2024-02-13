@@ -15,8 +15,8 @@ export type U_EE = {
   set_output: [string, Pin, PinOpt, boolean]
   before_remove_input: [string, Pin]
   before_remove_output: [string, Pin]
-  remove_input: [string, Pin]
-  remove_output: [string, Pin]
+  remove_input: [string, Pin, boolean]
+  remove_output: [string, Pin, boolean]
   rename_input: [string, string]
   rename_output: [string, string]
   set_pin_constant: [IO, string, boolean]
@@ -45,12 +45,12 @@ export interface U<I = any, O = any> {
   isPinIgnored(type: IO, name: string): boolean
   isPinRef(type: IO, name: string): boolean
   addInput(name: string, input: Pin<any>, opt: PinOpt): void
-  removeInput(name: string): void
+  removeInput(name: string, propagate: boolean): void
   setOutputs(outputs: Pins<O>, opts: PinOpts)
   setOutput(name: string, output: Pin<any>, opt: PinOpt)
   addOutput(name: string, output: Pin<any>): void
-  removeOutput(name: string): void
-  removePin(type: IO, name: string)
+  removeOutput(name: string, propagate: boolean): void
+  removePin(type: IO, name: string, propagate: boolean)
   getPin(type: IO, name: string): Pin<any>
   getInputs(): Pins<I>
   getDataInputs(): Pins<Partial<I>>

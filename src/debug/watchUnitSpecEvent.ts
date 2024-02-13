@@ -1,4 +1,5 @@
 import { Unit } from '../Class/Unit'
+import { Pin } from '../Pin'
 import { Unlisten } from '../types/Unlisten'
 import { callAll } from '../util/call/callAll'
 import { Moment } from './Moment'
@@ -16,7 +17,7 @@ export const watchUnitSpecEvent = (
   callback: (moment: UnitSpecMoment) => void
 ): (() => void) => {
   const all: Unlisten[] = []
-  const listener = (pinId, pin) => {
+  const listener = (pinId: string, pin: Pin, take: boolean) => {
     callback({
       type: 'unit',
       event,

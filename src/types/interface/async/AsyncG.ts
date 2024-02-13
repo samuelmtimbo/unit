@@ -151,8 +151,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.plugPin(type, pinId, subPinId, subPinSpec)
     },
 
-    $unplugPin({ type, pinId, subPinId }: GraphUnplugPinData) {
-      graph.unplugPin(type, pinId, subPinId)
+    $unplugPin({ type, pinId, subPinId, take }: GraphUnplugPinData) {
+      graph.unplugPin(type, pinId, subPinId, true, take)
     },
 
     $exposeUnitPinSet({
@@ -215,8 +215,8 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.addMerge(merge, mergeId)
     },
 
-    $removeMerge({ mergeId }: GraphRemoveMergeData) {
-      graph.removeMerge(mergeId, true, false)
+    $removeMerge({ mergeId, take }: GraphRemoveMergeData) {
+      graph.removeMerge(mergeId, true, take)
     },
 
     $addMerges({ merges }: GraphAddMergesData): void {
@@ -251,8 +251,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       unitId,
       type,
       pinId,
+      take,
     }: GraphRemovePinFromMergeData): void {
-      graph.removePinFromMerge(mergeId, unitId, type, pinId)
+      graph.removePinFromMerge(mergeId, unitId, type, pinId, true, take)
     },
 
     $takeUnitErr({ unitId }: GraphTakeUnitErrData): void {

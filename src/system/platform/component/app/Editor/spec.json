@@ -32,6 +32,11 @@
     "controls": {
       "type": "boolean",
       "defaultIgnored": true
+    },
+    "config": {
+      "type": "{enable?:{{geometryOverride?:boolean,plugIcons?:boolean,unlinkTake?:boolean}},disable?:{dataCreate?:boolean,dataEdit?:boolean,dataUnlink?:boolean,dataSelect?:boolean,dataCompatible?:boolean,drawing?:boolean,enterGraph?:boolean,highlightCompatible?:boolean,plugReverse?:boolean,plugUnit?:boolean,multiInputMerge?:boolean,edgeDrag?:boolean},hide?:{plugNames?:boolean,unitNames?:boolean,pinNames?:boolean}}",
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {
