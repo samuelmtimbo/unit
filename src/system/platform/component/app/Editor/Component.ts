@@ -886,6 +886,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           unregisterUnit: this._unregister_unit,
           newSpecId: this._new_spec_id,
           typeCache: this._type_cache,
+          dispatchEvent: this._dispatch_event,
         },
         this.$system
       )
@@ -968,6 +969,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     })
 
     this.registerRoot(this._root)
+  }
+
+  private _dispatch_event = (type: string, detail: any, bubbles: boolean) => {
+    this.dispatchEvent(type, detail, bubbles)
   }
 
   onDestroy() {
@@ -1324,6 +1329,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         registerUnit: this._register_unit,
         unregisterUnit: this._unregister_unit,
         newSpecId: this._new_spec_id,
+        dispatchEvent: this._dispatch_event,
         typeCache: this._type_cache,
       },
       this.$system
@@ -1540,6 +1546,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         registerUnit: this._register_unit,
         unregisterUnit: this._unregister_unit,
         newSpecId: this._new_spec_id,
+        dispatchEvent: this._dispatch_event,
         typeCache: this._type_cache,
       },
       this.$system
@@ -1771,6 +1778,7 @@ export interface _Props extends R {
   registry?: Registry
   typeCache?: TypeTreeMap
   config?: Config
+  dispatchEvent: (type: string, detail: any, bubbles: boolean) => void
 }
 
 export interface DefaultProps {
@@ -20749,6 +20757,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private __on_node_pointer_enter = (node_id: string, pointerId: number) => {
     // console.log('Graph', '__on_node_pointer_enter', node_id, pointerId)
 
+    const { dispatchEvent } = this.$props
+
     const hover_node_id = this._pointer_id_hover_node_id[pointerId]
 
     if (!hover_node_id) {
@@ -20781,6 +20791,52 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._unlock_sub_component(node_id)
       this._enable_core_resize(node_id)
     }
+
+    dispatchEvent('nodepointerenter', this._get_node_spec(node_id), false)
+  }
+
+  private _get_node_spec = (node_id: string) => {
+    return this._node_type__template(node_id, {
+      unit: function (unit_id: string) {
+        return { type: 'unit', spec: node_id }
+      },
+      link: function (pin_node_id: string) {
+        const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
+
+        return { type: 'link', spec: { unitId, type, pinId } }
+      },
+      merge: function (merge_node_id: string) {
+        const { mergeId } = segmentMergeNodeId(merge_node_id)
+
+        return { type: 'merge', spec: mergeId }
+      },
+      plug: function (plug_node_id: string) {
+        const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
+
+        return { type: 'plug', spec: { type, pinId, subPinId } }
+      },
+      datum: (datum_node_id: string) => {
+        const { datumId } = segmentDatumNodeId(datum_node_id)
+
+        const { datum_pin_node_id, datum_plug_node_id } =
+          this._get_datum_connected(datum_node_id)
+
+        const datum_attached_node_id = datum_pin_node_id || datum_plug_node_id
+
+        const attachedTo = datum_attached_node_id
+          ? this._get_node_spec(datum_attached_node_id)
+          : null
+
+        const value = this._get_datum_value(datum_node_id) ?? null
+
+        return { type: 'datum', spec: { datumId, value, attachedTo } }
+      },
+      err: function (err_node_id: string) {
+        const { unitId } = segmentErrNodeId(err_node_id)
+
+        return { type: 'err', spec: unitId }
+      },
+    })
   }
 
   private _on_node_pointer_leave = (
@@ -20800,12 +20856,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '__on_node_pointer_leave', node_id, pointer_id)
 
+    const { dispatchEvent } = this.$props
+
     if (this._pointer_id_hover_node_id[pointer_id]) {
       this._set_node_hovered(node_id, pointer_id, false)
     } else {
       // throw new Error('pointer left a node it was not hovering')
       return
     }
+
+    dispatchEvent('nodepointerleave', this._get_node_spec(node_id), false)
   }
 
   private _get_node_comp = (node_id: string): Div => {
@@ -24996,6 +25056,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_node_click = (node_id: string, event: UnitPointerEvent): void => {
     // console.log('Graph', '_on_node_click', node_id)
 
+    const { dispatchEvent } = this.$props
+
     if (this._cancel_node_click.has(node_id)) {
       this._cancel_node_click.delete(node_id)
 
@@ -25021,6 +25083,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else if (this._mode === 'data') {
       this._on_node_yellow_click(node_id)
     }
+
+    dispatchEvent('nodeclick', this._get_node_spec(node_id), false)
   }
 
   private _on_node_red_click = (node_id: string, event: UnitPointerEvent) => {
@@ -27512,6 +27576,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       registerUnit,
       unregisterUnit,
       newSpecId,
+      dispatchEvent,
       typeCache,
     } = this.$props
 
@@ -27558,6 +27623,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           shouldFork,
           unregisterUnit,
           newSpecId,
+          dispatchEvent,
         },
         this.$system
       )
@@ -27581,7 +27647,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
-    let { animate } = this.$props
+    let { animate, dispatchEvent } = this.$props
 
     if (_animate !== undefined) {
       animate = _animate
@@ -27708,7 +27774,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._main_opacity_animation?.finished
     )
 
-    this.dispatchEvent('enterunit', {}, false)
+    dispatchEvent('enterunit', {}, false)
   }
 
   private _on_datum_multiselect_double_click(
@@ -28275,7 +28341,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
-    const { animate } = this.$props
+    const { animate, dispatchEvent } = this.$props
 
     // console.log('Graph', '_leave_subgraph', sub_base, sub_base_node)
 
@@ -28349,7 +28415,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this.focus()
       }
 
-      this.dispatchEvent('leaveunit', {}, false)
+      dispatchEvent('leaveunit', {}, false)
     }
   }
 
@@ -28887,6 +28953,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       registerUnit,
       unregisterUnit,
       newSpecId,
+      dispatchEvent,
       typeCache,
     } = this.$props
 
@@ -28944,6 +29011,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           shouldFork,
           unregisterUnit,
           newSpecId,
+          dispatchEvent,
         },
         this.$system
       )
@@ -45898,31 +45966,40 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _node_type__template = (
+  private _node_type__template = <
+    T extends {
+      unit: any
+      link: any
+      merge: any
+      plug: any
+      datum: any
+      err: any
+    }
+  >(
     node_id: string,
     callback_map: {
-      unit: (unit_id: string) => void
-      link: (pin_node_id: string) => void
-      merge: (pin_node_id: string) => void
-      plug: (plug_node_id: string) => void
-      datum: (datum_node_id: string) => void
-      err: (err_node_id: string) => void
+      unit: (unit_id: string) => T['unit']
+      link: (pin_node_id: string) => T['link']
+      merge: (merge_node_id: string) => T['merge']
+      plug: (plug_node_id: string) => T['plug']
+      datum: (datum_node_id: string) => T['datum']
+      err: (err_node_id: string) => T['err']
     }
   ) => {
     const { unit, link, merge, plug, datum, err } = callback_map
 
     if (this._is_unit_node_id(node_id)) {
-      unit && unit(node_id)
+      return unit && unit(node_id)
     } else if (this._is_link_pin_node_id(node_id)) {
-      link && link(node_id)
+      return link && link(node_id)
     } else if (this._is_merge_node_id(node_id)) {
-      merge && merge(node_id)
+      return merge && merge(node_id)
     } else if (this._is_datum_node_id(node_id)) {
-      datum && datum(node_id)
+      return datum && datum(node_id)
     } else if (this._is_plug_node_id(node_id)) {
-      plug && plug(node_id)
+      return plug && plug(node_id)
     } else if (this._is_err_node_id(node_id)) {
-      err && err(node_id)
+      return err && err(node_id)
     }
   }
 
