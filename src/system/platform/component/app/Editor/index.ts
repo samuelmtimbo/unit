@@ -42,6 +42,7 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
           'frame',
           'zoom',
           'controls',
+          'config',
           'attr',
         ],
         o: ['graph'],

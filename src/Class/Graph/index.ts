@@ -493,8 +493,8 @@ export class Graph<I = any, O = any>
 
     const waitAll = this._waitAll[type]
 
-    waitAll.removePin(type, name)
-    waitAll.removePin(oppositeType, name)
+    waitAll.removePin(type, name, false)
+    waitAll.removePin(oppositeType, name, false)
 
     this.setPin(type, name, pin, {})
   }
@@ -565,19 +565,19 @@ export class Graph<I = any, O = any>
     }
   }
 
-  private _simRemoveBranch(mergeId: string, type: IO, pinNodeId: string): void {
+  private _simRemoveBranch(
+    mergeId: string,
+    type: IO,
+    pinNodeId: string,
+    propagate: boolean
+  ): void {
     // console.log('Graph', '_simRemoveBranch', mergeId, type, pinNodeId)
 
     if (type === 'input') {
-      this._merge[mergeId].removeOutput(pinNodeId)
+      this._merge[mergeId].removeOutput(pinNodeId, propagate)
     } else {
-      this._merge[mergeId].removeInput(pinNodeId)
+      this._merge[mergeId].removeInput(pinNodeId, propagate)
     }
-  }
-
-  private _removeBranch(mergeId: string, type: IO, pinNodeId: string): void {
-    this._simRemoveBranch(mergeId, type, pinNodeId)
-    this._memRemoveBranch(mergeId, type, pinNodeId)
   }
 
   private _ensureMergePin = (
@@ -616,11 +616,6 @@ export class Graph<I = any, O = any>
     }
   }
 
-  private _removeMergeOutput = (mergeId: string): void => {
-    this._simRemoveMergeOutput(mergeId)
-    this._memRemoveMergeOutput(mergeId)
-  }
-
   private _memRemoveMergeOutput = (mergeId: string): void => {
     const mergePinNodeId = getMergePinNodeId(mergeId, 'output')
 
@@ -631,11 +626,14 @@ export class Graph<I = any, O = any>
     }
   }
 
-  private _simRemoveMergeOutput = (mergeId: string): void => {
+  private _simRemoveMergeOutput = (
+    mergeId: string,
+    propagate: boolean
+  ): void => {
     const mergePinNodeId = getMergePinNodeId(mergeId, 'output')
 
     if (this._pin[mergePinNodeId]) {
-      this._simRemoveBranch(mergeId, 'input', mergePinNodeId)
+      this._simRemoveBranch(mergeId, 'input', mergePinNodeId, propagate)
     }
   }
 
@@ -678,9 +676,10 @@ export class Graph<I = any, O = any>
     type: IO,
     name: string,
     subPinId: string,
-    mergeId: string
+    mergeId: string,
+    propagate: boolean
   ): void => {
-    this._simRemoveExposedSubPin(type, name, subPinId)
+    this._simRemoveExposedSubPin(type, name, subPinId, propagate)
   }
 
   private _simUnplugPinFromUnitPin = (
@@ -689,9 +688,10 @@ export class Graph<I = any, O = any>
     subPinId,
     _unitId,
     _pinId,
-    _type
+    _type,
+    propagate: boolean
   ) => {
-    this._simRemoveExposedSubPin(type, pinId, subPinId)
+    this._simRemoveExposedSubPin(type, pinId, subPinId, propagate)
   }
 
   private _plugPinToUnitPin = (
@@ -819,14 +819,23 @@ export class Graph<I = any, O = any>
     }
   }
 
-  private _simRemoveExposedSubPin(type: IO, name: string, subPinId: string) {
+  private _simRemoveExposedSubPin(
+    type: IO,
+    name: string,
+    subPinId: string,
+    propagate: boolean
+  ) {
     const subPinSpec = this.getSubPinSpec(type, name, subPinId)
 
     const { kind = type } = subPinSpec
 
     const oppositeType = opposite(type)
 
-    const exposedMerge = deepGet(this._exposedMerge, [type, name, type])
+    const exposedMerge = deepGet(this._exposedMerge, [
+      type,
+      name,
+      type,
+    ]) as Merge
     const exposedMergeOpposite = deepGet(this._exposedMerge, [
       type,
       name,
@@ -841,7 +850,7 @@ export class Graph<I = any, O = any>
         undefined
       )
     ) {
-      exposedMerge.removePin(oppositeType, subPinId)
+      exposedMerge.removePin(oppositeType, subPinId, propagate)
     } else {
       exposedMergeOpposite.removePin(type, subPinId)
     }
@@ -1685,7 +1694,7 @@ export class Graph<I = any, O = any>
       this._simCoverPin(type, pinId, subPinId)
     })
 
-    this.removePin(type, pinId)
+    this.removePin(type, pinId, true)
   }
 
   private _specSetPinRef = (type: IO, pinId: string, ref: boolean) => {
@@ -1805,7 +1814,7 @@ export class Graph<I = any, O = any>
     pinId: string,
     subPinId: string
   ) => {
-    this._simRemoveExposedSubPin(type, pinId, subPinId)
+    this._simRemoveExposedSubPin(type, pinId, subPinId, false)
   }
 
   private _plugPin = (
@@ -1971,7 +1980,7 @@ export class Graph<I = any, O = any>
     this._simUnplugPin(type, id, subPinId)
 
     if (mergeId || (unitId && pinId)) {
-      this._simRemoveExposedSubPin(type, id, subPinId)
+      this._simRemoveExposedSubPin(type, id, subPinId, false)
     }
   }
 
@@ -2115,7 +2124,7 @@ export class Graph<I = any, O = any>
 
     if (isOutput) {
       if (_mergeId) {
-        this._simRemoveMergeOutput(_mergeId)
+        this._simRemoveMergeOutput(_mergeId, propagate)
       }
     }
 
@@ -2123,7 +2132,15 @@ export class Graph<I = any, O = any>
     const isRef = this.hasRefPinNamed(type, pinId)
 
     if (_mergeId) {
-      this._simUnplugPinFromMerge(type, pinId, subPinId, _mergeId)
+      this._simUnplugPinFromMerge(type, pinId, subPinId, _mergeId, propagate)
+
+      if (propagate) {
+        const merge = this.getMergeSpec(_mergeId)
+
+        forEachInputOnMerge(merge, (unitId, pinId) => {
+          this._removeUnitPinData(unitId, 'input', pinId)
+        })
+      }
     } else if (_unitId && _pinId) {
       const unit = this.getUnit(_unitId)
 
@@ -2135,7 +2152,8 @@ export class Graph<I = any, O = any>
         subPinId,
         _unitId,
         _pinId,
-        kind
+        kind,
+        propagate
       )
 
       if (propagate) {
@@ -2145,6 +2163,10 @@ export class Graph<I = any, O = any>
           } else {
             unit.takePin(type, _pinId)
           }
+        }
+
+        if (type === 'input') {
+          unit.takeInput(_pinId)
         }
       }
     }
@@ -4590,7 +4612,7 @@ export class Graph<I = any, O = any>
 
     forEachValueKey(merge, ({ input, output }, unitId) => {
       forEachValueKey(output || {}, (_, outputId: string) => {
-        this._simRemovePinFromMerge(mergeId, unitId, 'output', outputId, take)
+        this._simRemovePinFromMerge(mergeId, unitId, 'output', outputId, false)
       })
       forEachValueKey(input || {}, (_, inputId: string) => {
         this._simRemovePinFromMerge(mergeId, unitId, 'input', inputId, take)
@@ -4742,18 +4764,11 @@ export class Graph<I = any, O = any>
     pinId: string,
     take: boolean = true
   ): void {
-    // console.log(
-    //   'Graph',
-    //   '_simRemovePinFromMerge',
-    //   mergeId,
-    //   unitId,
-    //   type,
-    //   pinId
-    // )
+    // console.log('Graph', '_simRemovePinFromMerge', mergeId, unitId, type, pinId)
 
     const pinNodeId = getPinNodeId(unitId, type, pinId)
 
-    this._simRemoveBranch(mergeId, type, pinNodeId)
+    this._simRemoveBranch(mergeId, type, pinNodeId, take)
 
     if (
       take ||
@@ -4765,8 +4780,8 @@ export class Graph<I = any, O = any>
       const mergeSpec = this.getMergeSpec(mergeId)
 
       if (this.isUnitRefPin(unitId, 'output', pinId)) {
-        forEachInputOnMerge(mergeSpec, (unitId, type, pinId): void => {
-          this._removeUnitPinData(unitId, type, pinId)
+        forEachInputOnMerge(mergeSpec, (unitId, pinId): void => {
+          this._removeUnitPinData(unitId, 'input', pinId)
         })
       } else {
         pin.take()

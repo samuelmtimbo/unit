@@ -29,11 +29,15 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     this.play()
   }
 
-  onInputRemoved(name: string, input: Pin<any>) {
-    super.onInputRemoved(name, input)
+  onInputRemoved(name: string, input: Pin<any>, propagate: boolean) {
+    super.onInputRemoved(name, input, propagate)
 
     if (name === this._current) {
       this._current = undefined
+
+      if (propagate) {
+        this._forward_all_empty()
+      }
     }
   }
 
@@ -177,12 +181,6 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   public onDataInputInvalid(name: string): void {
     if (name === this._current) {
       this._invalidate()
-    }
-  }
-
-  public onInpuRemoved(name: string): void {
-    if (name === this._current) {
-      this._current = undefined
     }
   }
 

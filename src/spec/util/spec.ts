@@ -285,11 +285,11 @@ export const forEachPinOnMerge = <T>(
 
 export const forEachInputOnMerge = <T>(
   merge: Dict<IOOf<Dict<T>>>,
-  callback: (unitId: string, type: IO, pinId: string, data: T) => void
+  callback: (unitId: string, pinId: string, data: T) => void
 ) => {
   forEachValueKey(merge, ({ input }, unitId) => {
     forEachValueKey(input || {}, (_, inputId) => {
-      callback(unitId, 'input', inputId, _)
+      callback(unitId, inputId, _)
     })
   })
 }

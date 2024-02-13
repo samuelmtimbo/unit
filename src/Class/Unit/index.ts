@@ -318,7 +318,7 @@ export class Unit<
     opt: PinOpt = DEFAULT_PIN_OPT
   ) {
     if (this.hasInputNamed(pinId)) {
-      this.removeInput(pinId)
+      this.removeInput(pinId, true)
     }
 
     this._i_count++
@@ -388,7 +388,7 @@ export class Unit<
     this.setInput(name, input, opt)
   }
 
-  public removeInput(name: string): void {
+  public removeInput(name: string, propagate: boolean = false): void {
     if (!this.hasInputNamed(name)) {
       throw new InputNotFoundError(name)
     }
@@ -411,7 +411,7 @@ export class Unit<
       this._memRemoveDataInput(name)
     }
 
-    this.emit('remove_input', name, input)
+    this.emit('remove_input', name, input, propagate)
   }
 
   private _memRemoveDataInput = (name: string): void => {
@@ -440,7 +440,7 @@ export class Unit<
     opt: PinOpt = DEFAULT_PIN_OPT,
     propagate: boolean = true
   ) {
-    this._setOutput(name, output, opt)
+    this._setOutput(name, output, opt, propagate)
 
     this.emit('set_output', name, output, opt, propagate)
   }
@@ -448,10 +448,11 @@ export class Unit<
   public _setOutput<K extends keyof O>(
     name: K,
     output: Pin<O[K]>,
-    opt: PinOpt = DEFAULT_PIN_OPT
+    opt: PinOpt = DEFAULT_PIN_OPT,
+    propagate: boolean
   ) {
     if (this.hasOutputNamed(name)) {
-      this.removeOutput(name)
+      this.removeOutput(name, propagate)
     }
 
     if (name === SELF) {
@@ -527,7 +528,7 @@ export class Unit<
     delete this._data_output[name]
   }
 
-  public removeOutput(name: string): void {
+  public removeOutput(name: string, propagate: boolean): void {
     if (!this.hasOutputNamed(name)) {
       throw new OutputNotFoundError(name)
     }
@@ -551,14 +552,14 @@ export class Unit<
 
     delete this._output[name]
 
-    this.emit('remove_output', name, output)
+    this.emit('remove_output', name, output, propagate)
   }
 
-  public removePin(type: IO, name: string): void {
+  public removePin(type: IO, name: string, propagate: boolean): void {
     if (type === 'input') {
-      this.removeInput(name)
+      this.removeInput(name, propagate)
     } else {
-      this.removeOutput(name)
+      this.removeOutput(name, propagate)
     }
   }
 

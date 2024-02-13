@@ -71,7 +71,7 @@ assert.equal(merge0.peakInput('c'), undefined)
 
 merge0.push('d', 20)
 assert.equal(merge0.peakOutput('a'), 20)
-merge0.removeInput('d')
+merge0.removeInput('d', false)
 assert.equal(merge0.peakOutput('a'), 20)
 
 const merge1 = new Merge(system)
@@ -88,7 +88,7 @@ merge1.push('a', 0)
 assert.equal(merge1.peakInput('a'), 0)
 assert.equal(merge1.peakInput('b'), undefined)
 assert.equal(merge1.peakOutput('a'), 0)
-merge1.removeInput('a')
+merge1.removeInput('a', false)
 assert.equal(merge1.peakOutput('a'), 0)
 
 const merge2 = new Merge(system)

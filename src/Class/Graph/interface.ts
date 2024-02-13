@@ -164,6 +164,7 @@ export type GraphUnplugPinData = {
   pinId: string
   subPinId: string
   subPinSpec: GraphSubPinSpec
+  take?: boolean
 }
 
 export type GraphCoverPinSetData = {
@@ -231,6 +232,7 @@ export type GraphRemoveMergeData = {
   mergeId: string
   mergeSpec: GraphMergeSpec
   position: Position
+  take?: boolean
 }
 
 export type GraphAddMergesData = {
@@ -254,6 +256,7 @@ export type GraphRemovePinFromMergeData = {
   unitId: string
   type: IO
   pinId: string
+  take?: boolean
 }
 
 export type GraphTakeUnitErrData = {
