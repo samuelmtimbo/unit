@@ -1,7 +1,7 @@
 import classnames from '../../../../client/classnames'
 import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
-import { getTransform, Zoom, zoomIdentity } from '../../../../client/zoom'
+import { getTransform, Zoom, ZOOM_IDENTITY } from '../../../../client/zoom'
 import { System } from '../../../../system'
 import { Style } from '../../Props'
 import Div from '../Div/Component'
@@ -123,7 +123,7 @@ export default class Zoom_ extends Element<HTMLDivElement, Props> {
   }
 
   private _transform = () => {
-    const { zoom = zoomIdentity } = this.$props
+    const { zoom = ZOOM_IDENTITY } = this.$props
 
     const transform = getTransform(zoom)
 

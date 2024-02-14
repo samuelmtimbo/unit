@@ -78,6 +78,7 @@ export class Element_<
       id
     )
 
+    this.addListener('reset', this._reset)
     this.addListener('play', this._play)
     this.addListener('pause', this._pause)
     this.addListener('set', (name: keyof I, data) => {
@@ -228,6 +229,12 @@ export class Element_<
     }
 
     return setup
+  }
+
+  private _reset(): void {
+    forEach(this._children, (u) => u.reset())
+
+    this.emit('call', { method: 'reset', data: [] })
   }
 
   private _play(): void {

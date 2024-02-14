@@ -881,7 +881,11 @@ export class Graph<I = any, O = any>
   }
 
   private _reset = (): void => {
-    // TODO
+    forEachValueKey(this._unit, (u) => u.reset())
+
+    forEach(this._children, (c) => c.reset())
+
+    this.emit('call', { method: 'reset', data: [] })
   }
 
   private _play(): void {

@@ -84,6 +84,7 @@ const ASYNC_INTERFACE_PROXY_CALL_FILTER: AllKeys<
 }
 
 const ASYNC_INTERFACE_PROXY_WATCH_FILTER: Dict<Set<string>> = {
+  U: new Set(['$watch']),
   G: ASYNC_GRAPH_WATCH_SET,
 }
 

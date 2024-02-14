@@ -3,6 +3,7 @@ import { $Child } from '../component/Child'
 import { $Children } from '../component/Children'
 import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
+import { proxyWrap } from '../proxyWrap'
 import { System } from '../system'
 import { ANIMATION_PROPERTY_DELTA_PAIRS } from '../system/platform/component/app/Editor/ANIMATION_PROPERTY_DELTA_PAIRS'
 import {
@@ -1479,7 +1480,7 @@ export class Component<
       return
     }
 
-    this.$unit = $unit
+    this.$unit = proxyWrap($unit, ['U', 'C', 'G', 'EE'])
 
     const listen = (event: IOUIEventName): void => {
       this.$named_listener_count[event] = this.$named_listener_count[event] || 0
@@ -2643,6 +2644,10 @@ export class Component<
     } else {
       throw 'method not implemented'
     }
+  }
+
+  public reset() {
+    //
   }
 
   public play() {

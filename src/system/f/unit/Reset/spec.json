@@ -1,0 +1,24 @@
+{
+  "name": "reset",
+  "inputs": {
+    "unit": {
+      "_type": "<T:`U`>",
+      "type": "`U`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "circle",
+    "description": "reset `unit` to default state",
+    "complexity": 18,
+    "tags": ["f", "unit"]
+  },
+  "id": "d745a41b-70ae-4162-a1d8-aac17d73b73d",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
