@@ -39,13 +39,22 @@ export default class TextArea extends Field<HTMLTextAreaElement, Props> {
       defaultStyle: DEFAULT_STYLE,
     })
 
+    const {
+      flags: { defaultInputModeNone },
+    } = $system
+
     const { placeholder = '', maxLength = undefined } = $props
 
     this.$element.spellcheck = false
     this.$element.autocomplete = 'off'
     // this.$element.autocorrect = 'off'
     this.$element.autocapitalize = 'off'
-    this.$element.inputMode = 'none'
+    this.$element.inputMode = 'text'
+
+    if (defaultInputModeNone) {
+      this.$element.inputMode = 'none'
+    }
+
     this.$element.placeholder = placeholder
 
     if (maxLength !== undefined) {
