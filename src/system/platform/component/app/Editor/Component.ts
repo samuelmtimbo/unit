@@ -11503,7 +11503,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           display: 'flex',
           width: `${width}px`,
           height: `${height}px`,
-          overflow: datum_class_literal ? 'hidden' : 'auto',
+          overflow: 'hidden',
           // scrollbarColor: color,
           color,
           touchAction: 'none',
@@ -37273,6 +37273,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._disable_datum_overlay(datum_node_id)
 
+    const datum = this._datum_container[datum_node_id]
+
+    datum.$element.style.overflow = 'auto'
+
     this._unlock_node(datum_node_id)
   }
 
@@ -37280,6 +37284,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._unlocked_datum.delete(datum_node_id)
 
     this._enable_datum_overlay(datum_node_id)
+
+    const datum = this._datum_container[datum_node_id]
+
+    datum.$element.style.overflow = 'hidden'
 
     this._lock_node(datum_node_id)
   }
