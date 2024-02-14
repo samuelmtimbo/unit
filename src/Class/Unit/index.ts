@@ -980,6 +980,7 @@ export class Unit<
 
   public reset(): void {
     this.takeErr()
+
     this.emit('reset')
   }
 

@@ -147,6 +147,7 @@ export const removeUnitMerges = (
             deepSet(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {
               unitId: otherMergeUnitId,
               pinId: otherMergeUnitPinId,
+              kind: otherMergeUnitType,
             })
           } else {
             //
@@ -212,9 +213,9 @@ export const addPinToMerge = (
       for (const subPinId in plug) {
         const subPin = plug[subPinId]
 
-        const { unitId: _unitId, pinId: _pinId } = subPin
+        const { unitId: _unitId, pinId: _pinId, kind = type } = subPin
 
-        if (_unitId === unitId && _pinId === pinId && type === _type) {
+        if (_unitId === unitId && _pinId === pinId && kind === type) {
           unplugPin({ pinId: exposedPinId, type: _type, subPinId }, spec)
           plugPin(
             {

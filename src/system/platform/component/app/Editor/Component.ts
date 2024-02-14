@@ -37,9 +37,9 @@ import {
   shouldRender,
 } from '../../../../../client/spec'
 import {
+  ZOOM_IDENTITY,
   Zoom,
   translate,
-  zoomIdentity,
   zoomInvert,
   zoomTransformCenteredAt,
 } from '../../../../../client/zoom'
@@ -2395,7 +2395,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _is_fullwindow: boolean = false
   private _is_all_fullwindow: boolean = false
 
-  private _zoom: Zoom = zoomIdentity
+  private _zoom: Zoom = clone(ZOOM_IDENTITY)
   private _touch_zoom_position_start = {
     x: 0,
     y: 0,
@@ -3132,7 +3132,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._registry = registry ?? new Registry(specs)
 
-    this._zoom = zoom ?? zoomIdentity
+    this._zoom = clone(zoom ?? ZOOM_IDENTITY)
 
     this._frame = frame
 
@@ -4891,8 +4891,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     })
   }
 
+  public reset() {
+    super.reset()
+
+    for (const sub_graph_id in this._subgraph_cache) {
+      const subgraph = this._subgraph_cache[sub_graph_id]
+
+      subgraph.reset()
+    }
+
+    this._reset()
+  }
+
   private _reset() {
-    const { setSpec } = this.$props
+    const { zoom = clone(ZOOM_IDENTITY) } = this.$props
 
     if (this._prevent_next_reset) {
       this._prevent_next_reset = false
@@ -5351,6 +5363,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._rebuild_subgraph()
 
     this._simulation_prevent_restart = false
+
+    this._set_zoom(zoom)
 
     // AD HOC Safari will have frame height 0 while page is loading
     setTimeout(() => {
@@ -14883,7 +14897,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _high_zoom: boolean = false
 
   private _set_zoom = (zoom: Zoom) => {
-    // console.trace('Graph', '_set_zoom', zoom)
+    // console.log('Graph', '_set_zoom', zoom)
 
     const { maxZoom = defaultProps.maxZoom } = this.$props
 

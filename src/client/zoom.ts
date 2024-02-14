@@ -2,7 +2,7 @@ import { Point } from './util/geometry/types'
 
 export type Zoom = { x: number; y: number; z: number }
 
-export const zoomIdentity: Zoom = { z: 1, x: 0, y: 0 }
+export const ZOOM_IDENTITY: Zoom = { z: 1, x: 0, y: 0 }
 
 export const zoomTransformCenteredAt = (
   x: number,
