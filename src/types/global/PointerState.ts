@@ -1,4 +1,4 @@
-export interface IPointer {
+export interface PointerState {
   screenX: number
   screenY: number
   down: boolean

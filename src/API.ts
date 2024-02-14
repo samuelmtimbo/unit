@@ -6,37 +6,21 @@ import { Style } from './system/platform/Props'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 import {
-  IBluetoothDevice,
-  IBluetoothDeviceOpt,
-} from './types/global/IBluetoothDevice'
-import { IChannel, IChannelOpt } from './types/global/IChannel'
-import { IDeviceInfo } from './types/global/IDeviceInfo'
-import { IDisplayMediaOpt } from './types/global/IDisplayMedia'
-import { IDownloadDataOpt as IDownloadTextOpt } from './types/global/IDownloadData'
-import { IDownloadURLOpt } from './types/global/IDownloadURL'
-import { IGeoPosition } from './types/global/IGeoPosition'
-import { IIntersectionObserverConstructor } from './types/global/IIntersectionObserver'
-import { IMutationObserverConstructor } from './types/global/IMutationObserver'
-import { IPositionObserverCostructor } from './types/global/IPositionObserver'
-import { IResizeObserverConstructor } from './types/global/IResizeObserver'
+  BluetoothDevice,
+  BluetoothDeviceOpt,
+} from './types/global/BluetoothDevice'
+import { Channel, ChannelOpt } from './types/global/Channel'
+import { DownloadDataOpt as IDownloadTextOpt } from './types/global/DownloadData'
+import { DownloadURLOpt } from './types/global/DownloadURL'
+import { PositionObserverCostructor } from './types/global/PositionObserver'
 import {
-  ISpeechGrammarList,
-  ISpeechGrammarListOpt,
-} from './types/global/ISpeechGrammarList'
+  SpeechGrammarList,
+  SpeechGrammarListOpt,
+} from './types/global/SpeechGrammarList'
 import {
-  ISpeechRecognition,
-  ISpeechRecognitionOpt,
-} from './types/global/ISpeechRecognition'
-import {
-  ISpeechSynthesis,
-  ISpeechSynthesisOpt,
-} from './types/global/ISpeechSynthesis'
-import {
-  ISpeechSynthesisUtterance,
-  ISpeechSynthesisUtteranceOpt,
-} from './types/global/ISpeechSynthesisUtterance'
-import { IUserMediaOpt } from './types/global/IUserMedia'
-import { IWakeLock, IWakeLockOpt } from './types/global/IWakeLock'
+  SpeechRecognition,
+  SpeechRecognitionOpt,
+} from './types/global/SpeechRecognition'
 import { J } from './types/interface/J'
 
 export type ImageCapture = any
@@ -84,7 +68,7 @@ export type API = {
     listen: (port: number, handler: BasicHTTPHandler) => Unlisten
     EventSource: typeof EventSource
   }
-  channel: { local: (opt: IChannelOpt) => IChannel }
+  channel: { local: (opt: ChannelOpt) => Channel }
   alert: {
     alert: (message: string) => void
     prompt: (message: string) => string
@@ -130,12 +114,10 @@ export type API = {
     ): LayoutNode[]
   }
   speech: {
-    SpeechGrammarList: (opt: ISpeechGrammarListOpt) => ISpeechGrammarList
-    SpeechRecognition: (opt: ISpeechRecognitionOpt) => ISpeechRecognition
-    SpeechSynthesis: (opt: ISpeechSynthesis) => ISpeechSynthesisOpt
-    SpeechSynthesisUtterance: (
-      opt: ISpeechSynthesisUtteranceOpt
-    ) => ISpeechSynthesisUtterance
+    SpeechGrammarList: (opt: SpeechGrammarListOpt) => SpeechGrammarList
+    SpeechRecognition: (opt: SpeechRecognitionOpt) => SpeechRecognition
+    SpeechSynthesis: SpeechSynthesis
+    SpeechSynthesisUtterance: { new (text?: string): SpeechSynthesisUtterance }
   }
   file: {
     isSaveFilePickerSupported: () => boolean
@@ -143,15 +125,17 @@ export type API = {
     showSaveFilePicker: (opt: IFilePickerOpt) => Promise<FileSystemFileHandle>
     showOpenFilePicker: (opt: IFilePickerOpt) => Promise<FileSystemFileHandle[]>
     fallbackShowOpenFilePicker: (opt: IFilePickerOpt) => Promise<File[]>
-    downloadURL: (opt: IDownloadURLOpt) => Promise<void>
+    downloadURL: (opt: DownloadURLOpt) => Promise<void>
     downloadText: (opt: IDownloadTextOpt) => Promise<void>
   }
   screen: {
     devicePixelRatio?: number
-    requestWakeLock: (type: IWakeLockOpt) => Promise<IWakeLock>
+    wakeLock: {
+      request: (type?: 'screen') => Promise<WakeLockSentinel>
+    }
   }
   bluetooth: {
-    requestDevice: (type: IBluetoothDeviceOpt) => Promise<IBluetoothDevice>
+    requestDevice: (type: BluetoothDeviceOpt) => Promise<BluetoothDevice>
   }
   device: {
     vibrate: (opt: VibratePattern) => Promise<void>
@@ -162,7 +146,7 @@ export type API = {
     writeText: (text: string) => Promise<void>
   }
   geolocation: {
-    getCurrentPosition: () => Promise<IGeoPosition>
+    getCurrentPosition: () => Promise<GeolocationCoordinates>
   }
   location: {
     toString: () => Promise<string>
@@ -172,9 +156,9 @@ export type API = {
     replaceState: (data: any, title: string, url: string) => void
   }
   media: {
-    getUserMedia: (opt: IUserMediaOpt) => Promise<MediaStream>
-    getDisplayMedia: (opt: IDisplayMediaOpt) => Promise<MediaStream>
-    enumerateDevices: () => Promise<IDeviceInfo[]>
+    getUserMedia: (opt: MediaStreamConstraints) => Promise<MediaStream>
+    getDisplayMedia: (opt: DisplayMediaStreamOptions) => Promise<MediaStream>
+    enumerateDevices: () => Promise<MediaDeviceInfo[]>
     image: {
       createImageBitmap: (
         image: ImageBitmapSource,
@@ -218,10 +202,15 @@ export type API = {
     getSelection(): Selection
     createRange(): Range
     exitPictureInPicture(): Promise<void>
-    MutationObserver: IMutationObserverConstructor
-    PositionObserver: IPositionObserverCostructor
-    ResizeObserver: IResizeObserverConstructor
-    IntersectionObserver: IIntersectionObserverConstructor
+    MutationObserver: { new (callback: MutationCallback): MutationObserver }
+    PositionObserver: PositionObserverCostructor
+    ResizeObserver: { new (callback: ResizeObserverCallback): ResizeObserver }
+    IntersectionObserver: {
+      new (
+        callback: IntersectionObserverCallback,
+        options?: IntersectionObserverInit
+      ): IntersectionObserver
+    }
   }
   querystring: {
     stringify: (obj: Dict<any>) => string

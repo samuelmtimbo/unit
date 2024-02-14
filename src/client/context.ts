@@ -1,6 +1,6 @@
 import { System } from '../system'
 import { Dict } from '../types/Dict'
-import { IPositionObserver } from '../types/global/IPositionObserver'
+import { PositionObserver } from '../types/global/PositionObserver'
 import { Unlisten } from '../types/Unlisten'
 import { last, remove } from '../util/array'
 import { Component } from './component'
@@ -30,7 +30,7 @@ export interface Context extends Listenable {
   $color: string
   $children: Component[]
   $resizeObserver: ResizeObserver
-  $positionObserver: IPositionObserver
+  $positionObserver: PositionObserver
 }
 
 export interface Ref extends Dict<any[]> {}

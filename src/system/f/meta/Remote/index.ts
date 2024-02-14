@@ -5,7 +5,7 @@ import { Semifunctional } from '../../../../Class/Semifunctional'
 import { RemotePort } from '../../../../RemotePort'
 import { EXEC, INIT, TERMINATE } from '../../../../constant/STRING'
 import { System } from '../../../../system'
-import { IPort } from '../../../../types/global/IPort'
+import { Port } from '../../../../types/global/Port'
 import { $Graph } from '../../../../types/interface/async/$Graph'
 import { $wrap } from '../../../../wrap'
 import { ID_REMOTE_GRAPH } from '../../../_ids'
@@ -23,7 +23,7 @@ export interface O {
 
 export default class Remote extends Semifunctional<I, O> {
   private _remote_port: RemotePort
-  private _port: IPort
+  private _port: Port
 
   constructor(system: System) {
     super(
@@ -87,7 +87,7 @@ export default class Remote extends Semifunctional<I, O> {
               break
             case INIT:
               {
-                const port: IPort = {
+                const port: Port = {
                   send: (data) => {
                     // const message = stringify(data)
 

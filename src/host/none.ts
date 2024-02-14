@@ -9,28 +9,20 @@ import { Style } from '../system/platform/Props'
 import { Storage_ } from '../system/platform/api/storage/Storage_'
 import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
-import { IDownloadDataOpt } from '../types/global/IDownloadData'
-import { IDownloadURLOpt } from '../types/global/IDownloadURL'
+import { DownloadDataOpt } from '../types/global/DownloadData'
+import { DownloadURLOpt } from '../types/global/DownloadURL'
 import {
-  ISpeechGrammarList,
-  ISpeechGrammarListOpt,
-} from '../types/global/ISpeechGrammarList'
+  SpeechGrammarList,
+  SpeechGrammarListOpt,
+} from '../types/global/SpeechGrammarList'
 import {
-  ISpeechRecognition,
-  ISpeechRecognitionOpt,
-} from '../types/global/ISpeechRecognition'
-import {
-  ISpeechSynthesis,
-  ISpeechSynthesisOpt,
-} from '../types/global/ISpeechSynthesis'
-import {
-  ISpeechSynthesisUtterance,
-  ISpeechSynthesisUtteranceOpt,
-} from '../types/global/ISpeechSynthesisUtterance'
-import { IStorage } from '../types/global/IStorage'
+  SpeechRecognition,
+  SpeechRecognitionOpt,
+} from '../types/global/SpeechRecognition'
 
-export function noStorage(name: string): IStorage {
-  return {
+export function noStorage(name: string): Storage {
+  const storage: Storage = {
+    length: 0,
     getItem(key: string): string | null {
       throw new APINotSupportedError(name)
     },
@@ -43,7 +35,12 @@ export function noStorage(name: string): IStorage {
     clear(): void {
       throw new APINotSupportedError(name)
     },
+    key: function (index: number): string {
+      throw new APINotSupportedError(name)
+    },
   }
+
+  return storage
 }
 
 export function noHost(): API {
@@ -71,10 +68,10 @@ export function noHost(): API {
       fallbackShowOpenFilePicker: () => {
         throw new APINotSupportedError('File System')
       },
-      downloadText: (opt: IDownloadDataOpt): Promise<void> => {
+      downloadText: (opt: DownloadDataOpt): Promise<void> => {
         throw new APINotSupportedError('Download')
       },
-      downloadURL: (opt: IDownloadURLOpt): Promise<void> => {
+      downloadURL: (opt: DownloadURLOpt): Promise<void> => {
         throw new APINotSupportedError('Download')
       },
     },
@@ -139,8 +136,10 @@ export function noHost(): API {
       },
     },
     screen: {
-      requestWakeLock: () => {
-        throw new APINotSupportedError('Screen Wake Lock')
+      wakeLock: {
+        request: () => {
+          throw new APINotSupportedError('Screen Wake Lock')
+        },
       },
     },
     bluetooth: {
@@ -175,23 +174,17 @@ export function noHost(): API {
     },
     speech: {
       SpeechGrammarList: function (
-        opt: ISpeechGrammarListOpt
-      ): ISpeechGrammarList {
+        opt: SpeechGrammarListOpt
+      ): SpeechGrammarList {
         throw new APINotSupportedError('Speech Recognition')
       },
       SpeechRecognition: function (
-        opt: ISpeechRecognitionOpt
-      ): ISpeechRecognition {
+        opt: SpeechRecognitionOpt
+      ): SpeechRecognition {
         throw new APINotSupportedError('Speech Recognition')
       },
-      SpeechSynthesis: function (opt: ISpeechSynthesisOpt): ISpeechSynthesis {
-        throw new APINotSupportedError('Speech Synthesis')
-      },
-      SpeechSynthesisUtterance: function (
-        opt: ISpeechSynthesisUtteranceOpt
-      ): ISpeechSynthesisUtterance {
-        throw new APINotSupportedError('Speech Synthesis')
-      },
+      SpeechSynthesis: undefined,
+      SpeechSynthesisUtterance: undefined,
     },
     document: {
       createElement<K extends keyof HTMLElementTagNameMap>(

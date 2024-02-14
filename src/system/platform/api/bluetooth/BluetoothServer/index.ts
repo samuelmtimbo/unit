@@ -2,7 +2,7 @@ import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { IBluetoothService } from '../../../../../types/global/IBluetoothService'
+import { BluetoothService } from '../../../../../types/global/BluetoothService'
 import { BD } from '../../../../../types/interface/BD'
 import { BS } from '../../../../../types/interface/BS'
 import { BSE } from '../../../../../types/interface/BSE'
@@ -46,7 +46,7 @@ export default class BluetoothServer extends Functional implements BS {
     const _server = await device.getServer()
 
     const server = new (class _BluetoothDevice extends $ implements BS {
-      getPrimaryService(name: string): Promise<IBluetoothService> {
+      getPrimaryService(name: string): Promise<BluetoothService> {
         return _server.getPrimaryService(name)
       }
     })(this.__system)

@@ -2,7 +2,7 @@ import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { IBluetoothCharacteristic } from '../../../../../types/global/IBluetoothCharacteristic'
+import { BluetoothCharacteristic } from '../../../../../types/global/BluetoothCharacteristic'
 import { BS } from '../../../../../types/interface/BS'
 import { BSE } from '../../../../../types/interface/BSE'
 import { ID_BLUETOOTH_SERVICE } from '../../../../_ids'
@@ -44,7 +44,7 @@ export default class BluetoothService extends Functional<I, O> {
     const _service = await server.getPrimaryService(uuid)
 
     const service = new (class _BluetoothDevice extends $ implements BSE {
-      getCharacteristic(name: string): Promise<IBluetoothCharacteristic> {
+      getCharacteristic(name: string): Promise<BluetoothCharacteristic> {
         return _service.getCharacteristic(name)
       }
     })(this.__system)

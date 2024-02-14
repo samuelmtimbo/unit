@@ -1,7 +1,7 @@
 import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
-import { IPointer } from '../../../../types/global/IPointer'
+import { PointerState } from '../../../../types/global/PointerState'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export const clonePointerEvent = (
@@ -27,7 +27,7 @@ export function webInput(
   bootOpt: BootOpt
 ): API['input'] {
   const pointerCapture: Dict<HTMLElement | SVGElement> = {}
-  const pointers: Dict<IPointer> = {}
+  const pointers: Dict<PointerState> = {}
 
   const pointerInListener = (event) => {
     const { pointerId, clientX, clientY } = event

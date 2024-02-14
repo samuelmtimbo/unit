@@ -1,6 +1,6 @@
-import { IBluetoothServer } from './IBluetoothServer'
+import { BluetoothServer } from './BluetoothServer'
 
-export type IBluetoothDeviceOpt = {
+export type BluetoothDeviceOpt = {
   filters?: (
     | { name?: string }
     | { namePrefix?: string }
@@ -10,6 +10,6 @@ export type IBluetoothDeviceOpt = {
   acceptAllDevices?: boolean
 }
 
-export type IBluetoothDevice = {
-  getServer(): Promise<IBluetoothServer>
+export type BluetoothDevice = {
+  getServer(): Promise<BluetoothServer>
 }

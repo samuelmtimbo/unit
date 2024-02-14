@@ -1,16 +1,16 @@
 import { IOElement } from '../../client/IOElement'
-import { PositionObserver } from '../../client/PositionObserver'
+import { PositionObserver_ } from '../../client/PositionObserver'
 
-export interface IPositionObserverCostructor {
-  new (system: any, callback: IPositionCallback): PositionObserver
+export interface PositionObserverCostructor {
+  new (system: any, callback: PositionObserverCallback): PositionObserver_
 }
 
-export interface IPositionObserver {
+export interface PositionObserver {
   observe(element: IOElement): IPositionObserverEntry
   disconnect(): void
 }
 
-export interface IPositionCallback {
+export interface PositionObserverCallback {
   (
     x: number,
     y: number,

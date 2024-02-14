@@ -1,9 +1,9 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { PositionObserver } from '../../../../../client/PositionObserver'
+import { PositionObserver_ } from '../../../../../client/PositionObserver'
 import { Component } from '../../../../../client/component'
 import { System } from '../../../../../system'
-import { IPositionObserverCallback } from '../../../../../types/global/IPositionObserver'
+import { PositionObserverCallback } from '../../../../../types/global/PositionObserver'
 import { Component_ } from '../../../../../types/interface/Component'
 import { ID_POSITION_OBSERVER } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
@@ -18,8 +18,8 @@ export type O = {
   entry: { x: number; y: number }
 }
 
-export default class PositionObserver_ extends Semifunctional<I, O> {
-  private _observer: PositionObserver
+export default class PositionObserver__ extends Semifunctional<I, O> {
+  private _observer: PositionObserver_
 
   constructor(system: System) {
     super(
@@ -46,7 +46,7 @@ export default class PositionObserver_ extends Semifunctional<I, O> {
       },
     } = this.__system
 
-    const observer_callback: IPositionObserverCallback = (
+    const observer_callback: PositionObserverCallback = (
       x: number,
       y: number
     ) => {

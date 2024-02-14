@@ -13,10 +13,9 @@ import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
-import { IChannel, IChannelOpt } from './types/global/IChannel'
-import { IGamepad } from './types/global/IGamepad'
-import { IKeyboard } from './types/global/IKeyboard'
-import { IPointer } from './types/global/IPointer'
+import { Channel, ChannelOpt } from './types/global/Channel'
+import { KeyboardState } from './types/global/KeyboardState'
+import { PointerState } from './types/global/PointerState'
 import { R } from './types/interface/R'
 import { S } from './types/interface/S'
 
@@ -46,9 +45,9 @@ export interface System extends S, R {
     void?: HTMLElement
   }
   input: {
-    keyboard: IKeyboard
-    gamepads: IGamepad[]
-    pointers: Dict<IPointer>
+    keyboard: KeyboardState
+    gamepads: Gamepad[]
+    pointers: Dict<PointerState>
   }
   specs_: Object_<Specs>
   specs: Specs
@@ -126,7 +125,7 @@ export interface BootOpt {
   flags?: System['flags']
 }
 
-export const LocalChannel = (opt: IChannelOpt): IChannel => {
+export const LocalChannel = (opt: ChannelOpt): Channel => {
   return {
     close(): void {},
     postMessage(message: any): void {},

@@ -1,7 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { ISpeechSynthesis } from '../../../../../types/global/ISpeechSynthesis'
 import { ID_TEXT_TO_SPEECH } from '../../../../_ids'
 
 export type I = {
@@ -35,10 +34,10 @@ export default class TextToSpeech extends Functional<I, O> {
       return
     }
 
-    let synth: ISpeechSynthesis
+    let synth: SpeechSynthesis
 
     try {
-      synth = SpeechSynthesis({})
+      synth = SpeechSynthesis
     } catch (err) {
       done(undefined, err.message)
 
@@ -52,11 +51,7 @@ export default class TextToSpeech extends Functional<I, O> {
       if (voices.length > 0) {
         _speak()
       } else {
-        // AD HOC
-        // [Chrome]
-        setTimeout(() => {
-          speak()
-        }, 100)
+        speak()
       }
     }
 
@@ -67,10 +62,7 @@ export default class TextToSpeech extends Functional<I, O> {
       }
 
       const _voice = voices[voice]
-      const utterance = SpeechSynthesisUtterance({
-        text: message,
-        voice: _voice,
-      })
+      const utterance = new SpeechSynthesisUtterance(message)
       utterance.addEventListener('error', (err) => {
         done(undefined, err.error)
       })

@@ -1,5 +1,5 @@
-import { IBluetoothServer } from '../global/IBluetoothServer'
+import { BluetoothServer } from '../global/BluetoothServer'
 
 export interface BD {
-  getServer(): Promise<IBluetoothServer>
+  getServer(): Promise<BluetoothServer>
 }

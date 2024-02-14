@@ -2,14 +2,14 @@ import { CALL, REF, REF_EXEC, UNWATCH, WATCH } from './constant/STRING'
 import { EventEmitter_, EventEmitter_EE } from './EventEmitter'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
-import { IPort } from './types/global/IPort'
+import { Port } from './types/global/Port'
 import { Unlisten } from './types/Unlisten'
 import { randomIdNotInSet } from './util/id'
 
 export type AnyEmitterEvents = EventEmitter_EE<Dict<any[]>> & Dict<any[]>
 
 export class RemotePort {
-  private _port: IPort
+  private _port: Port
 
   private _call_id: Set<string> = new Set<string>()
   private _watch_id: Set<string> = new Set<string>()
@@ -22,7 +22,7 @@ export class RemotePort {
 
   private _valid: boolean = true
 
-  constructor(port: IPort) {
+  constructor(port: Port) {
     this._port = port
 
     this._port.onmessage = (event) => {
@@ -124,7 +124,7 @@ export class RemotePort {
 
     this._port.send(_data)
 
-    const port: IPort = {
+    const port: Port = {
       send: (data) => {
         const _data = { type: REF_EXEC, data: { id, data } }
         this._port.send(_data)

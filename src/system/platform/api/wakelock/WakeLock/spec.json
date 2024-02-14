@@ -1,8 +1,8 @@
 {
   "name": "wake lock",
   "inputs": {
-    "lock": {
-      "type": "any"
+    "type": {
+      "type": "'screen'"
     },
     "done": {
       "type": "any"

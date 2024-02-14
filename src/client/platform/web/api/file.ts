@@ -1,8 +1,8 @@
 import { API } from '../../../../API'
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
 import { BootOpt, IFilePickerOpt } from '../../../../system'
-import { IDownloadDataOpt } from '../../../../types/global/IDownloadData'
-import { IDownloadURLOpt } from '../../../../types/global/IDownloadURL'
+import { DownloadDataOpt } from '../../../../types/global/DownloadData'
+import { DownloadURLOpt } from '../../../../types/global/DownloadURL'
 
 export function webFile(window: Window, opt: BootOpt): API['file'] {
   const { document } = window
@@ -81,7 +81,7 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
     mimetype: mimeType,
     charset,
     text,
-  }: IDownloadDataOpt) => {
+  }: DownloadDataOpt) => {
     const url = `data:${mimeType};charset=${charset},${encodeURIComponent(
       text
     )}`
@@ -101,7 +101,7 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
     }
   }
 
-  const downloadURL = async ({ name, url }: IDownloadURLOpt) => {
+  const downloadURL = async ({ name, url }: DownloadURLOpt) => {
     if (url.startsWith('http://') || url.startsWith('https://')) {
       const accessible = await testGet(url)
 
