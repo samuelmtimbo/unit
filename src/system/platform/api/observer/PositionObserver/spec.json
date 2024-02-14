@@ -1,0 +1,30 @@
+{
+  "name": "position observer",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{}"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "entry": {
+      "type": "{x:number,y:number}"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "watch the position of a component",
+    "complexity": 3,
+    "tags": ["platform", "api", "observer"]
+  },
+  "id": "b27ee28f-54fb-4737-91f5-04b52b7cf92d",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
