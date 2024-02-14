@@ -15,7 +15,6 @@ export interface O<T> {
 }
 
 export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
-  private _listener: ((data: any) => void) | undefined
   private _unlisten: Unlisten | undefined = undefined
 
   constructor(system: System) {
@@ -38,7 +37,7 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     )
 
     this.addListener('destroy', () => {
-      if (this._listener) {
+      if (this._unlisten) {
         this._remove()
 
         this._forward_empty('data')
@@ -47,10 +46,11 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
   }
 
   private _remove = () => {
-    this._unlisten()
+    if (this._unlisten) {
+      this._unlisten()
 
-    this._listener = undefined
-    this._unlisten = undefined
+      this._unlisten = undefined
+    }
   }
 
   f({ emitter, event }: I<T>) {
@@ -62,9 +62,7 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
       this._output.data.push(data[0])
     }
 
-    this._listener = listener
-
-    this._unlisten = emitter.addListener(event, this._listener)
+    this._unlisten = emitter.addListener(event, listener)
   }
 
   i() {
@@ -81,7 +79,7 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
 
   onIterDataInputData(name: string, data: any) {
     // if (name === 'remove') {
-    if (this._listener) {
+    if (this._unlisten) {
       this._remove()
       this._done()
     }
