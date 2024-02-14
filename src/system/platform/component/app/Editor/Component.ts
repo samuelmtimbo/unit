@@ -50938,11 +50938,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     let nodes_ordered_by_axis
 
-    const keyboard_hovered_node_id =
-      this._pointer_id_hover_node_id[KEYBOARD_POINTER_ID]
-
     const get_next_x_index = (): number => {
-      const nodes_ordered_by_x = this._order_node_by_x().map(([id]) => id)
+      const nodes_ordered_by_x = this.__order_node_by_x_template(
+        this._unit_node
+      ).map(([id]) => id)
 
       nodes_ordered_by_axis = nodes_ordered_by_x
 
@@ -50950,7 +50949,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     const get_next_y_index = (): number => {
-      const nodes_ordered_by_y = this._order_node_by_y().map(([id]) => id)
+      const nodes_ordered_by_y = this.__order_node_by_y_template(
+        this._unit_node
+      ).map(([id]) => id)
 
       nodes_ordered_by_axis = nodes_ordered_by_y
 
@@ -50960,15 +50961,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const get_next_a_index__template = (
       nodes_ordered_by_a: string[]
     ): number => {
-      if (keyboard_hovered_node_id) {
-        return nodes_ordered_by_a.indexOf(keyboard_hovered_node_id)
+      const selected_index = nodes_ordered_by_a.findIndex((node_id) =>
+        this._is_node_selected(node_id)
+      )
+
+      if (selected_index === -1) {
+      if (offset === 1) {
+          return 0
+      } else {
+          return nodes_ordered_by_a.length - 1
+      }
       }
 
-      if (offset === 1) {
-        return -1
-      } else {
-        return nodes_ordered_by_a.length
-      }
+      return selected_index + offset
     }
 
     let offset = 0
@@ -50992,24 +50997,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         break
     }
 
-    let next_index = current_index + offset
+    const next_index = current_index
 
-    if (next_index >= this._node_count) {
-      next_index = undefined
+    this._deselect_all()
+
+    if (next_index !== undefined && next_index >= 0) {
+      const next_selected_node = nodes_ordered_by_axis[next_index]
+
+      if (next_selected_node) {
+        this.select_node(next_selected_node)
+      }
     }
-
-    if (next_index < 0) {
-      next_index = undefined
-    }
-
-    // if (next_index === undefined) {
-    //     this.select_node(keyboard_hovered_node_id)
-    // } else {
-    //   const next_keyboard_hovered_node = nodes_ordered_by_axis[next_index]
-
-    //   this.deselect_node(keyboard_hovered_node_id)
-    //   this.select_node(next_keyboard_hovered_node)
-    // }
   }
 
   private _on_space_keydown = (): void => {
