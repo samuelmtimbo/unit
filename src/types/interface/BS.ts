@@ -1,5 +1,5 @@
-import { IBluetoothService } from '../global/IBluetoothService'
+import { BluetoothService } from '../global/BluetoothService'
 
 export interface BS {
-  getPrimaryService(name: string): Promise<IBluetoothService>
+  getPrimaryService(name: string): Promise<BluetoothService>
 }

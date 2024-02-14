@@ -2,13 +2,13 @@ import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { IBluetoothDeviceOpt } from '../../../../../types/global/IBluetoothDevice'
-import { IBluetoothServer } from '../../../../../types/global/IBluetoothServer'
+import { BluetoothDeviceOpt } from '../../../../../types/global/BluetoothDevice'
+import { BluetoothServer } from '../../../../../types/global/BluetoothServer'
 import { BD } from '../../../../../types/interface/BD'
 import { ID_BLUETOOTH_DEVICE } from '../../../../_ids'
 
 export interface I {
-  opt: IBluetoothDeviceOpt
+  opt: BluetoothDeviceOpt
 }
 
 export interface O {
@@ -47,7 +47,7 @@ export default class BluetoothDevice extends Functional<I, O> {
       const _device = await requestDevice(opt)
 
       device = new (class _BluetoothDevice extends $ implements BD {
-        async getServer(): Promise<IBluetoothServer> {
+        async getServer(): Promise<BluetoothServer> {
           return _device.getServer()
         }
       })(this.__system)

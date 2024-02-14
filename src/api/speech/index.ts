@@ -1,11 +1,11 @@
 import { EventEmitter_, EventEmitter_EE } from '../../EventEmitter'
 import { APINotSupportedError } from '../../exception/APINotImplementedError'
 import { System } from '../../system'
-import { ISpeechGrammarList } from '../../types/global/ISpeechGrammarList'
+import { SpeechGrammarList } from '../../types/global/SpeechGrammarList'
 import {
-  ISpeechRecognition,
-  ISpeechRecognitionOpt,
-} from '../../types/global/ISpeechRecognition'
+  SpeechRecognition,
+  SpeechRecognitionOpt,
+} from '../../types/global/SpeechRecognition'
 import { Unlisten } from '../../types/Unlisten'
 import { callAll } from '../../util/call/callAll'
 
@@ -25,7 +25,7 @@ export const JSGFStrFrom = (tokens: string[]): string => {
 export const grammarsFrom = (
   system: System,
   tokens: string[]
-): ISpeechGrammarList => {
+): SpeechGrammarList => {
   const {
     api: {
       speech: { SpeechGrammarList },
@@ -55,11 +55,11 @@ export type SpeechRecorderEvents = EventEmitter_EE<SpeechRecorder_EE> &
   SpeechRecorder_EE
 
 export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
-  private _recognition: ISpeechRecognition
+  private _recognition: SpeechRecognition
 
   private _unlisten: Unlisten
 
-  constructor(__system: System, opt: ISpeechRecognitionOpt) {
+  constructor(__system: System, opt: SpeechRecognitionOpt) {
     super()
 
     const {

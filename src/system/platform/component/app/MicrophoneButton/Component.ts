@@ -7,8 +7,8 @@ import { Mode } from '../../../../../client/mode'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { ISpeechGrammarList } from '../../../../../types/global/ISpeechGrammarList'
-import { ISpeechRecognitionOpt } from '../../../../../types/global/ISpeechRecognition'
+import { SpeechGrammarList } from '../../../../../types/global/SpeechGrammarList'
+import { SpeechRecognitionOpt } from '../../../../../types/global/SpeechRecognition'
 import IconButton from '../../../component/app/IconButton/Component'
 
 export interface Props {
@@ -16,7 +16,7 @@ export interface Props {
   style?: Dict<string>
   mode?: Mode
   disabled?: boolean
-  opt?: ISpeechRecognitionOpt
+  opt?: SpeechRecognitionOpt
   tabIndex?: number
 }
 
@@ -24,7 +24,7 @@ export const DEFAULT_STYLE = {
   touchAction: 'none',
 }
 
-const specNameGrammar = (__system: System): ISpeechGrammarList => {
+const specNameGrammar = (__system: System): SpeechGrammarList => {
   const { specs } = __system
 
   const token_set: Set<string> = new Set()

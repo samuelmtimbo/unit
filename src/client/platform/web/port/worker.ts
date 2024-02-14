@@ -1,9 +1,9 @@
 import { DataEvent } from '../../../../events/DataEvent'
 import { _ErrorEvent } from '../../../../events/ErrorEvent'
-import { IPort } from '../../../../types/global/IPort'
+import { Port } from '../../../../types/global/Port'
 
-export const workerPort = (worker: Worker): IPort => {
-  const port: IPort = {
+export const workerPort = (worker: Worker): Port => {
+  const port: Port = {
     send(message: any): any {
       worker.postMessage(message)
     },

@@ -1,9 +1,9 @@
 import { System } from '../system'
 import {
-  IPositionObserver,
-  IPositionCallback,
+  PositionObserver,
   IPositionObserverEntry,
-} from '../types/global/IPositionObserver'
+  PositionObserverCallback,
+} from '../types/global/PositionObserver'
 import { Unlisten } from '../types/Unlisten'
 import { callAll } from '../util/call/callAll'
 import { animateThrottle } from './animateThrottle'
@@ -16,14 +16,14 @@ import {
   subtractVector,
 } from './util/geometry'
 
-export class PositionObserver implements IPositionObserver {
+export class PositionObserver_ implements PositionObserver {
   private _system: System
 
-  private _callback: IPositionCallback
+  private _callback: PositionObserverCallback
   private _unlisten: () => void
   private _abort: () => void
 
-  constructor(system: System, callback: IPositionCallback) {
+  constructor(system: System, callback: PositionObserverCallback) {
     this._system = system
     this._callback = callback
   }
@@ -428,7 +428,7 @@ export class PositionObserver implements IPositionObserver {
           update_local()
         }
 
-        const parentPostionObserver = new PositionObserver(
+        const parentPostionObserver = new PositionObserver_(
           this._system,
           parentPositionCallback
         )

@@ -14,9 +14,8 @@ import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { GraphBundle } from '../types/GraphClass'
 import { Unlisten } from '../types/Unlisten'
-import { IGamepad } from '../types/global/IGamepad'
-import { IKeyboard } from '../types/global/IKeyboard'
-import { IPointer } from '../types/global/IPointer'
+import { KeyboardState } from '../types/global/KeyboardState'
+import { PointerState } from '../types/global/PointerState'
 import { randomIdNotIn } from '../util/id'
 
 export function boot(
@@ -32,12 +31,12 @@ export function boot(
     flags = {},
   } = opt
 
-  const keyboard: IKeyboard = {
+  const keyboard: KeyboardState = {
     pressed: [],
     repeat: false,
   }
-  const gamepads: IGamepad[] = []
-  const pointers: Dict<IPointer> = {}
+  const gamepads: Gamepad[] = []
+  const pointers: Dict<PointerState> = {}
 
   const customEvent = new Set<string>()
   const context = []

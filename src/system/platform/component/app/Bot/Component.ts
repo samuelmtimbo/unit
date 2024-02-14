@@ -1,4 +1,4 @@
-import { PositionObserver } from '../../../../../client/PositionObserver'
+import { PositionObserver_ } from '../../../../../client/PositionObserver'
 import { addListeners } from '../../../../../client/addListener'
 import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
@@ -186,7 +186,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     this.addEventListener(makePointerEnterListener(this._onPointerEnter))
     this.addEventListener(makePointerLeaveListener(this._onPointerLeave))
 
-    const position_observer = new PositionObserver(this.$system, (x, y) => {
+    const position_observer = new PositionObserver_(this.$system, (x, y) => {
       if (this.$context) {
         this._container_x = x - this.$context.$x
         this._container_y = y - this.$context.$y
@@ -198,7 +198,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     // this._tick_body()
   }
 
-  private _position_observer: PositionObserver
+  private _position_observer: PositionObserver_
 
   private _enabled = (): boolean => {
     const { disabled } = this.$props

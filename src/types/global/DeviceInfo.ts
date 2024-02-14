@@ -1,4 +1,4 @@
-export type IDeviceInfo = {
+export type DeviceInfo = {
   deviceId: string
   groupId: string
   kind: string

@@ -1,4 +1,4 @@
-export interface IKeyboard {
+export interface KeyboardState {
   pressed: number[]
   repeat: boolean
 }

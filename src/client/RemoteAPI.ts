@@ -3,7 +3,7 @@ import { _ErrorEvent } from '../events/ErrorEvent'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
-import { IPort } from '../types/global/IPort'
+import { Port } from '../types/global/Port'
 import { Unlisten } from '../types/Unlisten'
 
 type RemoteAPICall = (data: any, callback: Callback<any>) => void
@@ -84,7 +84,7 @@ window.onmessage = (event: MessageEvent) => {
 
 /// process A
 
-const channel: IPort = {
+const channel: Port = {
   send: function (message: any) {
     throw new MethodNotImplementedError()
   },

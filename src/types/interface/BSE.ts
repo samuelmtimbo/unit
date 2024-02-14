@@ -1,5 +1,5 @@
-import { IBluetoothCharacteristic } from '../global/IBluetoothCharacteristic'
+import { BluetoothCharacteristic } from '../global/BluetoothCharacteristic'
 
 export interface BSE {
-  getCharacteristic(name: string): Promise<IBluetoothCharacteristic>
+  getCharacteristic(name: string): Promise<BluetoothCharacteristic>
 }

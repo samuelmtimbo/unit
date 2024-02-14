@@ -1,10 +1,13 @@
-import { IPositionCallback } from '../../types/global/IPositionObserver'
-import { IResizeObserver } from '../../types/global/IResizeObserver'
+export class NoopResizeObserver implements ResizeObserver {
+  constructor(callback: ResizeObserverCallback) {}
 
-export class NoopResizeObserver implements IResizeObserver {
-  constructor(callback: IPositionCallback) {}
-
-  public observe(element: HTMLElement): void {}
-
-  disconnect() {}
+  disconnect(): void {
+    //
+  }
+  observe(target: Element, options?: ResizeObserverOptions): void {
+    //
+  }
+  unobserve(target: Element): void {
+    //
+  }
 }

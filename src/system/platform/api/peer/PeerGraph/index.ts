@@ -7,7 +7,7 @@ import { RemotePort } from '../../../../../RemotePort'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
-import { IPort } from '../../../../../types/global/IPort'
+import { Port } from '../../../../../types/global/Port'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { $wrap } from '../../../../../wrap'
 import { ID_PEER_GRAPH } from '../../../../_ids'
@@ -70,7 +70,7 @@ export default class PeerGraph extends Primitive<I, O> {
     if (name === 'opt') {
       this._peer = new Peer(this.__system, false, data)
 
-      const port: IPort = {
+      const port: Port = {
         send: (data) => {
           // console.log('PeerGraph', 'postMessage', data)
           const message = stringify(data)

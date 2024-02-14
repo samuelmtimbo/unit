@@ -1,8 +1,8 @@
 import { Listener } from '../Listener'
 import { Unlisten } from '../Unlisten'
-import { ISpeechGrammarList } from './ISpeechGrammarList'
+import { SpeechGrammarList } from './SpeechGrammarList'
 
-export interface ISpeechRecognition {
+export interface SpeechRecognition {
   start(): void
   stop(): void
   addListener(
@@ -13,8 +13,8 @@ export interface ISpeechRecognition {
   addListener(event: 'error', listener: Listener<[string]>): Unlisten
 }
 
-export interface ISpeechRecognitionOpt {
-  grammars?: ISpeechGrammarList
+export interface SpeechRecognitionOpt {
+  grammars?: SpeechGrammarList
   lang?: string
   interimResults?: boolean
   maxAlternatives?: number

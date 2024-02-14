@@ -7,7 +7,7 @@ import {
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
-import { IChannel } from '../../../../../types/global/IChannel'
+import { Channel } from '../../../../../types/global/Channel'
 import { CH } from '../../../../../types/interface/CH'
 import { RE } from '../../../../../types/interface/RE'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -31,7 +31,7 @@ export default class LocalChannel<T>
   extends Semifunctional<I<T>, O<T>>
   implements RE
 {
-  private _bc: IChannel | null = null
+  private _bc: Channel | null = null
 
   constructor(system: System) {
     super(

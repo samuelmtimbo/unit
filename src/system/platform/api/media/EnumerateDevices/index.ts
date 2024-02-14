@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { IDeviceInfo } from '../../../../../types/global/IDeviceInfo'
+import { DeviceInfo } from '../../../../../types/global/DeviceInfo'
 import { ID_ENUMERATE_DEVICES } from '../../../../_ids'
 
 export type I = {
@@ -9,7 +9,7 @@ export type I = {
 }
 
 export type O = {
-  devices: IDeviceInfo[]
+  devices: DeviceInfo[]
 }
 
 export default class EnumerateDevices extends Functional<I, O> {
@@ -32,10 +32,15 @@ export default class EnumerateDevices extends Functional<I, O> {
       },
     } = this.__system
 
-    let devices: IDeviceInfo[]
+    let devices: DeviceInfo[]
 
     try {
-      devices = await enumerateDevices()
+      devices = (await enumerateDevices()).map((d) => ({
+        deviceId: d.deviceId,
+        kind: d.kind,
+        groupId: d.groupId,
+        label: d.label,
+      }))
     } catch (err) {
       done(undefined, err.message)
 

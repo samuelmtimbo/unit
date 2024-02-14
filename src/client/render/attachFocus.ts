@@ -2,7 +2,7 @@ import { System } from '../../system'
 import { namespaceURI } from '../component/namespaceURI'
 import { getSize } from '../getSize'
 import { IOElement } from '../IOElement'
-import { PositionObserver } from '../PositionObserver'
+import { PositionObserver_ } from '../PositionObserver'
 
 const STROKE_WIDTH: number = 2
 
@@ -111,7 +111,7 @@ export function attachFocus(system: System): void {
   }
 
   const resize_observer: ResizeObserver = new ResizeObserver(resize_callback)
-  const position_observer: PositionObserver = new PositionObserver(
+  const position_observer: PositionObserver_ = new PositionObserver(
     system,
     position_callback
   )

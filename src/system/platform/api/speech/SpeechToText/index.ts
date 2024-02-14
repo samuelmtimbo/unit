@@ -2,11 +2,11 @@ import { SpeechRecorder } from '../../../../../api/speech'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
-import { ISpeechRecognitionOpt } from '../../../../../types/global/ISpeechRecognition'
+import { SpeechRecognitionOpt } from '../../../../../types/global/SpeechRecognition'
 import { ID_SPEECH_TO_TEXT } from '../../../../_ids'
 
 export type I = {
-  opt: ISpeechRecognitionOpt
+  opt: SpeechRecognitionOpt
   stop: any
 }
 

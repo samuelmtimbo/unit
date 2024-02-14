@@ -1,16 +1,16 @@
 import { EXEC, INIT } from './constant/STRING'
 import { RemotePort } from './RemotePort'
 import { BundleSpec } from './types/BundleSpec'
-import { IPort } from './types/global/IPort'
+import { Port } from './types/global/Port'
 
 export class RemoteClient {
   private _remote_port: RemotePort
-  private _port: IPort
+  private _port: Port
 
-  constructor(port: IPort) {
+  constructor(port: Port) {
     this._port = port
 
-    const _port: IPort = {
+    const _port: Port = {
       send: (data) => {
         const _data = this._exec_data(data)
 

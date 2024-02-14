@@ -2,7 +2,7 @@ import { $ } from '../../../../../Class/$'
 import { Functional, FunctionalEvents } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { IBluetoothCharacteristic } from '../../../../../types/global/IBluetoothCharacteristic'
+import { BluetoothCharacteristic } from '../../../../../types/global/BluetoothCharacteristic'
 import { BC } from '../../../../../types/interface/BC'
 import { BSE } from '../../../../../types/interface/BSE'
 import { ID_BLUETOOTH_CHARACTERISTIC } from '../../../../_ids'
@@ -23,12 +23,12 @@ type BluetoothCharacteristic_EE = {
 export type BluetoothCharacteristicEvents =
   FunctionalEvents<BluetoothCharacteristic_EE> & BluetoothCharacteristic_EE
 
-export default class BluetoothCharacteristic extends Functional<
+export default class BluetoothCharacteristic_ extends Functional<
   I,
   O,
   BluetoothCharacteristicEvents
 > {
-  private _charac: IBluetoothCharacteristic
+  private _charac: BluetoothCharacteristic
 
   constructor(system: System) {
     super(

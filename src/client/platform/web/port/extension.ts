@@ -1,16 +1,16 @@
 import { DataEvent } from '../../../../events/DataEvent'
 import { _ErrorEvent } from '../../../../events/ErrorEvent'
-import { IPort } from '../../../../types/global/IPort'
+import { Port } from '../../../../types/global/Port'
 import { getExtensionElement } from '../../../extension'
 
-export const backgroundPort = (): IPort => {
+export const backgroundPort = (): Port => {
   const extensionElement = getExtensionElement()
 
   if (!extensionElement) {
     throw new Error('extension element not found')
   }
 
-  const port: IPort = {
+  const port: Port = {
     send(message: any): any {
       extensionElement.dispatchEvent(
         new CustomEvent('message', { detail: { type: 'send', data: message } })

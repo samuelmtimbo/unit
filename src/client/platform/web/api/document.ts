@@ -1,6 +1,6 @@
 import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
-import { PositionObserver } from '../../../PositionObserver'
+import { PositionObserver_ } from '../../../PositionObserver'
 import { NoopIntersectionObserver } from '../../../noop/IntersectionObserver'
 import { NoopMutationObserver } from '../../../noop/MutationObserver'
 import { NoopResizeObserver } from '../../../noop/ResizeObserver'
@@ -55,7 +55,7 @@ export function webDocument(
     },
     MutationObserver: MutationObserver,
     ResizeObserver: ResizeObserver,
-    PositionObserver: PositionObserver,
+    PositionObserver: PositionObserver_,
     IntersectionObserver: IntersectionObserver,
   }
 

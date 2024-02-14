@@ -1,23 +1,22 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
-import { IWakeLock, IWakeLockOpt } from '../../../../../types/global/IWakeLock'
 import { ID_WAKE_LOCK } from '../../../../_ids'
 
 export interface I {
-  lock: any
+  type: 'screen'
   done: any
 }
 
 export interface O {}
 
 export default class WakeLock extends Semifunctional<I, O> {
-  private _wake_lock: IWakeLock
+  private _wake_lock: WakeLockSentinel
 
   constructor(system: System) {
     super(
       {
-        fi: ['lock'],
+        fi: ['type'],
         fo: [],
         i: ['done'],
         o: [],
@@ -28,8 +27,8 @@ export default class WakeLock extends Semifunctional<I, O> {
     )
   }
 
-  f({ lock }: I, done: Done<O>) {
-    this._lock({ type: 'screen' })
+  f({ type }: I, done: Done<O>) {
+    this._lock(type)
   }
 
   d() {
@@ -39,30 +38,40 @@ export default class WakeLock extends Semifunctional<I, O> {
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
     this._release()
+
+    this._backward('type')
+
+    this._backward('done')
     // }
   }
 
-  private _lock = async (opt: IWakeLockOpt): Promise<void> => {
+  private _lock = async (type: 'screen'): Promise<void> => {
     const {
       api: {
-        screen: { requestWakeLock },
+        screen: {
+          wakeLock: { request },
+        },
       },
     } = this.__system
-    // console.log('WakeLock', '_lock')
-    const wake_lock = await requestWakeLock(opt)
-    wake_lock.addListener('done', this._on_release)
+
+    const wake_lock = await request(type)
+
+    wake_lock.addEventListener('release', this._on_release)
+
     this._wake_lock = wake_lock
   }
 
   private _release = (): void => {
     // console.log('WakeLock', '_release')
+
     if (this._wake_lock) {
-      this._wake_lock.done()
+      this._wake_lock.release()
     }
   }
 
   private _on_release = () => {
     // console.log('WakeLock', '_on_release')
+
     this._wake_lock = null
   }
 }

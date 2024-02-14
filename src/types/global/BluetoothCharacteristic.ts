@@ -1,6 +1,6 @@
-export type IBluetoothDeviceOpt = {}
+export type BluetoothDeviceOpt = {}
 
-export type IBluetoothCharacteristic = {
+export type BluetoothCharacteristic = {
   startNotifications(): void
   stopNotifications(): void
   readValue(): Promise<DataView>

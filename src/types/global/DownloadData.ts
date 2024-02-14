@@ -1,4 +1,4 @@
-export type IDownloadDataOpt = {
+export type DownloadDataOpt = {
   name: string
   text: string
   mimetype: string

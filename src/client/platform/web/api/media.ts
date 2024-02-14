@@ -3,13 +3,11 @@ import { APINotSupportedError } from '../../../../exception/APINotImplementedErr
 import { DisplayMediaAPINotSupported } from '../../../../exception/DisplayMediaAPINotSupported'
 import { MediaDevicesAPINotSupported } from '../../../../exception/MediaDeviceAPINotSupported'
 import { BootOpt } from '../../../../system'
-import { IDisplayMediaOpt } from '../../../../types/global/IDisplayMedia'
-import { IUserMediaOpt } from '../../../../types/global/IUserMedia'
 import { Rect } from '../../../util/geometry/types'
 
 export function webMedia(window: Window, opt: BootOpt): API['media'] {
-  const media = {
-    getUserMedia: async (opt: IUserMediaOpt): Promise<MediaStream> => {
+  const media: API['media'] = {
+    getUserMedia: async (opt: MediaStreamConstraints): Promise<MediaStream> => {
       if (!navigator || !navigator.mediaDevices) {
         throw new MediaDevicesAPINotSupported()
       }
@@ -33,7 +31,9 @@ export function webMedia(window: Window, opt: BootOpt): API['media'] {
         throw err
       }
     },
-    getDisplayMedia: async (opt: IDisplayMediaOpt): Promise<MediaStream> => {
+    getDisplayMedia: async (
+      opt: DisplayMediaStreamOptions
+    ): Promise<MediaStream> => {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
         throw new DisplayMediaAPINotSupported()
       }
@@ -49,16 +49,7 @@ export function webMedia(window: Window, opt: BootOpt): API['media'] {
         throw new APINotSupportedError('Enumerate Media Devices')
       }
 
-      return navigator.mediaDevices
-        .enumerateDevices()
-        .then((ds: MediaDeviceInfo[]) => {
-          return ds.map((d) => ({
-            deviceId: d.deviceId,
-            kind: d.kind,
-            groupId: d.groupId,
-            label: d.label,
-          }))
-        })
+      return navigator.mediaDevices.enumerateDevices()
     },
     image: {
       createImageBitmap: function (

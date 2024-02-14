@@ -6,14 +6,13 @@ import {
 import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../../../../ObjectUpdateType'
 import { Dict } from '../../../../types/Dict'
-import { IStorage } from '../../../../types/global/IStorage'
 import { J } from '../../../../types/interface/J'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export class Storage_ implements J {
-  private _storage: IStorage
+  private _storage: Storage
 
-  constructor(storage: IStorage) {
+  constructor(storage: Storage) {
     this._storage = storage
   }
 

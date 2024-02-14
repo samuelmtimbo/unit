@@ -17,7 +17,7 @@ import {
 } from '../../../../../../../process/share/local'
 import { RemotePort } from '../../../../../../../RemotePort'
 import { System } from '../../../../../../../system'
-import { IPort } from '../../../../../../../types/global/IPort'
+import { Port } from '../../../../../../../types/global/Port'
 import { $Graph } from '../../../../../../../types/interface/async/$Graph'
 import { $wrap } from '../../../../../../../wrap'
 import { ID_LOCAL_GRAPH } from '../../../../../../_ids'
@@ -82,7 +82,7 @@ export default class LocalGraph extends Functional<I, O> {
 
     source_channel.postMessage({ type: CONNECT, data: name })
 
-    const port: IPort = {
+    const port: Port = {
       send: (data) => {
         channel.postMessage(data)
       },

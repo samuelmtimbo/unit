@@ -2,14 +2,14 @@ import { API } from '../../../../API'
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
 import { sleep } from '../../../../sleep'
 import { BootOpt } from '../../../../system'
-import { IBluetoothDeviceOpt } from '../../../../types/global/IBluetoothDevice'
-import { IBluetoothServer } from '../../../../types/global/IBluetoothServer'
+import { BluetoothDeviceOpt } from '../../../../types/global/BluetoothDevice'
+import { BluetoothServer } from '../../../../types/global/BluetoothServer'
 
 export function webBluetooth(window: Window, opt: BootOpt): API['bluetooth'] {
   const { navigator } = window
 
   const bluetooth = {
-    requestDevice: async (opt: IBluetoothDeviceOpt) => {
+    requestDevice: async (opt: BluetoothDeviceOpt) => {
       // @ts-ignore
       if (navigator.bluetooth) {
         // show system UI on next tick to prevent possible
@@ -25,7 +25,7 @@ export function webBluetooth(window: Window, opt: BootOpt): API['bluetooth'] {
               const { gatt } = device
               if (gatt) {
                 try {
-                  return (await device.gatt.connect()) as IBluetoothServer
+                  return (await device.gatt.connect()) as BluetoothServer
                 } catch (err) {
                   throw new Error(err.message)
                 }

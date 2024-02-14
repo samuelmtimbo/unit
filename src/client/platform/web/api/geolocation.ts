@@ -1,7 +1,6 @@
 import { API } from '../../../../API'
 import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
 import { BootOpt } from '../../../../system'
-import { IGeoPosition } from '../../../../types/global/IGeoPosition'
 
 export function webGeolocation(
   window: Window,
@@ -9,7 +8,7 @@ export function webGeolocation(
 ): API['geolocation'] {
   const { navigator } = window
 
-  const getCurrentPosition = async (): Promise<IGeoPosition> => {
+  const getCurrentPosition = async (): Promise<GeolocationCoordinates> => {
     if (
       !navigator ||
       !navigator.geolocation ||
@@ -20,10 +19,7 @@ export function webGeolocation(
 
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition((position) => {
-        resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        })
+        resolve(position.coords)
       })
     })
   }
