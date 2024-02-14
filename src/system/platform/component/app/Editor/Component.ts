@@ -495,7 +495,7 @@ import {
 } from '../../../../../spec/type'
 import { getSubComponentParentId } from '../../../../../spec/util/component'
 import {
-  findMergePlug,
+  countMergePlugs,
   findMergePlugs,
   findPinMerge,
   findSpecAtPath,
@@ -588,7 +588,14 @@ import {
   randomTreeOfType,
   randomValueOfType,
 } from '../../../../../types/parser/randomValue'
-import { butLast, insert, last, pull, push } from '../../../../../util/array'
+import {
+  butLast,
+  forEach,
+  insert,
+  last,
+  pull,
+  push,
+} from '../../../../../util/array'
 import { randomInArray } from '../../../../../util/array/randomInArray'
 import { callAll } from '../../../../../util/call/callAll'
 import { hashCode } from '../../../../../util/hashCode'
@@ -21381,7 +21388,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _is_unit_pin_pre_match = (unit_id: string, pin_node_id: string) => {
     return (
       ((this._is_link_pin_node_id(pin_node_id) &&
-        !this._spec_is_link_pin_ignored(pin_node_id)) ||
+        !this._spec_is_link_pin_ignored(pin_node_id) &&
+        !this._spec_get_pin_node_plug_spec('input', pin_node_id)) ||
         this._is_merge_node_id(pin_node_id)) &&
       this._is_input_pin_node_id(pin_node_id) &&
       this._is_pin_node_ref(pin_node_id) &&
@@ -23760,8 +23768,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const b_output = this._is_output_only_merge(b)
 
       if (a_ref && b_ref) {
-        // TODO
-        return true
+        if (a_input && b_input) {
+          return true
+        } else if (a_input) {
+          return this._is_pin_pin_type_match(a, 'input', b, 'output')
+        } else if (b_input) {
+          return this._is_pin_pin_type_match(a, 'output', b, 'input')
+        } else {
+          return false
+        }
       } else if (!a_ref && !b_ref) {
         if (a_input && b_input) {
           return this._is_pin_pin_type_match(a, 'input', b, 'input')
@@ -23843,24 +23858,36 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { type: _type } = segmentLinkPinNodeId(pin_node_id)
 
       if (!config?.disable.plugReverse || type === _type) {
-      const exp_pin_type = this.__get_ext_pin_type(type, pin_id)
-      const link_pin_type = this._get_link_pin_type(pin_node_id)
+        const exp_pin_type = this.__get_ext_pin_type(type, pin_id)
+        const link_pin_type = this._get_link_pin_type(pin_node_id)
 
-      if (_type === 'input') {
-        if (this._is_link_pin_ref(pin_node_id)) {
-          if (this._is_unit_datum_type(exp_pin_type)) {
-            return true
+        if (_type === 'input') {
+          if (this._is_link_pin_ref(pin_node_id)) {
+            if (this._is_unit_datum_type(exp_pin_type)) {
+              return true
+            } else {
+              return _isTypeMatch(specs, exp_pin_type, link_pin_type)
+            }
           } else {
             return _isTypeMatch(specs, exp_pin_type, link_pin_type)
           }
         } else {
-          return _isTypeMatch(specs, exp_pin_type, link_pin_type)
+          return _isTypeMatch(specs, link_pin_type, exp_pin_type)
         }
-      } else {
-        return _isTypeMatch(specs, link_pin_type, exp_pin_type)
-      }
       }
     } else if (this._is_merge_node_id(pin_node_id)) {
+      const merge = this._get_merge(pin_node_id)
+
+      const merge_pin_count = getMergePinCount(merge)
+
+      if (merge_pin_count === 0) {
+        const merge_int_node_id = this._pin_to_int[type][pin_node_id]
+
+        if (merge_int_node_id) {
+          return false
+        }
+      }
+
       // if (
       //   (type === 'input' && !this._is_output_only_merge(pin_node_id)) ||
       //   (type === 'output' && !this._is_input_only_merge(pin_node_id))
@@ -33829,14 +33856,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     bulk_actions.push(makeAddMergeAction(merge_id, clone(merge)))
 
-    forIO(merge_plugs, (type, plug) => {
-      if (plug) {
+    forIO(merge_plugs, (type, plugs) => {
+      forEach(plugs, (plug) => {
         bulk_actions.push(
           makePlugPinAction(type, plug.pinId, plug.subPinId, {
             mergeId: merge_id,
           })
         )
-      }
+      })
     })
 
     this._pod.$bulkEdit({ actions: bulk_actions })
@@ -36134,52 +36161,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       (merge_node_id, other_pin_node_id: string) => {
         const { mergeId } = segmentMergeNodeId(merge_node_id)
 
-        const merge_input = findMergePlug(this._spec, 'input', mergeId)
-        const merge_output = findMergePlug(this._spec, 'output', mergeId)
+        const merge_plugs = findMergePlugs(this._spec, mergeId)
 
-        if (merge_input) {
-          this._spec_unplug_sub_pin(
-            'input',
-            merge_input.pinId,
-            merge_input.subPinId
-          )
-        }
-        if (merge_output) {
-          this._spec_unplug_sub_pin(
-            'output',
-            merge_output.pinId,
-            merge_output.subPinId
-          )
-        }
+        forIO(merge_plugs, (type, plugs) => {
+          forEach(plugs, (plug) => {
+            this._spec_unplug_sub_pin(type, plug.pinId, plug.subPinId)
+          })
+        })
 
         this._spec_remove_merge(mergeId)
 
         const { unitId, type, pinId } = segmentLinkPinNodeId(other_pin_node_id)
 
-        if (merge_input) {
-          this._spec_plug_sub_pin(
-            'input',
-            merge_input.pinId,
-            merge_input.subPinId,
-            {
+        forIO(merge_plugs, (type, plugs) => {
+          forEach(plugs, (plug) => {
+            this._spec_plug_sub_pin(type, plug.pinId, plug.subPinId, {
               unitId,
               pinId,
-              kind: 'input',
-            }
-          )
-        }
-        if (merge_output) {
-          this._spec_plug_sub_pin(
-            'output',
-            merge_output.pinId,
-            merge_output.subPinId,
-            {
-              unitId,
-              pinId,
-              kind: 'output',
-            }
-          )
-        }
+              kind: type,
+            })
+          })
+        })
       }
     )
   }
@@ -38771,12 +38773,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const merge = this._spec_get_merge(mergeId)
 
       const merge_pin_count = getMergePinCount(merge)
-
       const merge_node_id = getMergeNodeId(mergeId)
 
       if (this._spec_has_merge(merge_node_id)) {
         if (merge_pin_count === 0) {
-          this._spec_remove_merge(mergeId)
+          const plug_count = countMergePlugs(this._spec, mergeId)
+
+          if (plug_count > 2) {
+            //
+          } else {
+            this._spec_remove_merge(mergeId)
+          }
         }
       }
     }
@@ -50966,11 +50973,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       )
 
       if (selected_index === -1) {
-      if (offset === 1) {
+        if (offset === 1) {
           return 0
-      } else {
+        } else {
           return nodes_ordered_by_a.length - 1
-      }
+        }
       }
 
       return selected_index + offset
@@ -53073,7 +53080,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (type === 'input') {
           const pin_node_id = getPinNodeId(unitId, type, pinId)
 
-          this._refresh_link_pin_marker(pin_node_id, unitId)
+          this._refresh_link_pin_marker(pin_node_id, unit_id)
         }
       })
     }

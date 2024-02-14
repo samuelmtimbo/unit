@@ -407,39 +407,25 @@ export const hasPlug = (
   return !!deepGetOrDefault(spec, [`${type}s`, pinId, 'plug', subPinId], false)
 }
 
-export const findMergePlug = (
+export const findMergePlugOfType = (
   spec: GraphSpec,
   type: IO,
   mergeId: string
-): GraphPlugOuterSpec | null => {
-  let mergePlug: GraphPlugOuterSpec = null
+): GraphPlugOuterSpec[] => {
+  const mergePlugs = findMergePlugs(spec, mergeId)
 
-  forEachGraphSpecPinOfType(spec, type, (pinId, pinSpec) => {
-    const { plug = {} } = pinSpec
+  const mergePlugOfType = mergePlugs[type]
 
-    for (const subPinId in plug) {
-      const subPin = plug[subPinId]
-
-      if (subPin.mergeId === mergeId) {
-        mergePlug = {
-          pinId,
-          type,
-          subPinId,
-        }
-      }
-    }
-  })
-
-  return mergePlug
+  return mergePlugOfType
 }
 
 export const findMergePlugs = (
   spec: GraphSpec,
   mergeId: string
-): IOOf<GraphPlugOuterSpec | null> => {
-  const mergePlugs: IOOf<GraphPlugOuterSpec | null> = {
-    input: null,
-    output: null,
+): IOOf<GraphPlugOuterSpec[]> => {
+  const mergePlugs: IOOf<GraphPlugOuterSpec[]> = {
+    input: [],
+    output: [],
   }
 
   forEachGraphSpecPin(spec, (type, pinId, pinSpec) => {
@@ -449,16 +435,24 @@ export const findMergePlugs = (
       const subPin = plug[subPinId]
 
       if (subPin.mergeId === mergeId) {
-        mergePlugs[type] = {
+        mergePlugs[type].push({
           pinId,
           type,
           subPinId,
-        }
+        })
       }
     }
   })
 
   return mergePlugs
+}
+
+export const countMergePlugs = (spec: GraphSpec, mergeId: string): number => {
+  const mergePlugs = findMergePlugs(spec, mergeId)
+
+  const count = mergePlugs.input.length + mergePlugs.output.length
+
+  return count
 }
 
 export const findUnitPinPlug = (
