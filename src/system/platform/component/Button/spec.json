@@ -8,6 +8,13 @@
       "metadata": {
         "examples": ["{}"]
       }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": ["{}"]
+      }
     }
   },
   "outputs": {},
