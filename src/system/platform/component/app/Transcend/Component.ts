@@ -327,7 +327,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
     // console.log('Transcend', 'onMount')
     const {} = this.$context
 
-    this._translate(this._x, 0)
+    this._translate(this._x, this._y)
 
     this._context_unlisten = addListeners(this.$context, [
       makeResizeListener(this._on_context_resize),
@@ -345,7 +345,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
   }: IOFrameResizeEvent): void => {
     // console.log('Transcend', '_on_context_resize', width, height)
 
-    this._translate(this._x, 0)
+    this._translate(this._x, this._y)
   }
 
   private _hidden: boolean = false
@@ -410,7 +410,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
   }
 
   public hide(animate: boolean = true) {
-    // console.log('Transcend', 'hide', animate)
+// console.log('Transcend', 'hide', animate)
     this._hidden = true
 
     if (animate) {
@@ -425,7 +425,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
   }
 
   public show(animate: boolean = true) {
-    // console.log('Transcend', 'show', animate)
+// console.log('Transcend', 'show', animate)
     this._hidden = false
 
     if (animate) {

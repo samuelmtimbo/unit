@@ -1628,11 +1628,9 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._editor.enter(false)
     this._editor.enterFullwindow(false)
-    this._editor.leaveFullwindow(true, () => {
-      this._editor.select_node(editor_unit_id)
-
-      this._editor.unlock_sub_component(editor_unit_id)
-    })
+    this._editor.select_node(editor_unit_id)
+    this._editor.unlock_sub_component(editor_unit_id)
+    this._editor.leaveFullwindow(true)
     this._editor.temp_fixate_node(editor_unit_id, 100)
   }
 
@@ -3912,9 +3910,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (!parent) {
       if (this._transcend) {
         if ($disabled) {
-          this._transcend.hide(this._init)
+          this._transcend.hide(false)
         } else {
-          this._transcend.show(this._init)
+          this._transcend.show(false)
         }
       }
     }
@@ -17287,7 +17285,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._lock_all_datum()
     } else {
       if (this._is_fullwindow) {
-        this._leave_all_fullwindow(true, NOOP)
+        this._leave_all_fullwindow(true)
       } else {
         this._enter_default_fullwindow()
       }
@@ -17465,9 +17463,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._foreground
   }
 
-  private _leave_all_fullwindow = (animate: boolean, callback: () => void) => {
+  private _leave_all_fullwindow = (animate: boolean) => {
     // console.log('Graph', '_leave_all_fullwindow')
-    this._leave_fullwindow(animate, callback)
+    this._leave_fullwindow(animate)
 
     this._fullwindow_component_set = new Set()
     this._fullwindow_component_ids = []
@@ -17515,7 +17513,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _leave_fullwindow = (_animate: boolean, callback: () => void) => {
+  private _leave_fullwindow = (_animate: boolean) => {
     // console.log('Graph', '_leave_fullwindow', this._id)
 
     const { animate } = this.$props
@@ -17539,8 +17537,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           (sub_component_id) => {},
           () => {
             this._end_leave_fullwindow_animation(sub_component_ids)
-
-            callback()
           }
         )
       } else {
@@ -22082,8 +22078,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._is_fullwindow
   }
 
-  public leaveFullwindow(animate: boolean, callback: () => void): void {
-    this._leave_all_fullwindow(animate, callback)
+  public leaveFullwindow(animate: boolean): void {
+    this._leave_all_fullwindow(animate)
   }
 
   public enterFullwindow(animate: boolean): void {
@@ -27741,7 +27737,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._subgraph_return_fullwindow_component_ids =
         this._fullwindow_component_ids
 
-      this._leave_all_fullwindow(true, NOOP)
+      this._leave_all_fullwindow(true)
     }
 
     const animating_sub_component = this._is_sub_component_animating(unit_id)
@@ -55925,7 +55921,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { graph: pod, animate = animated, component } = this.$props
 
       if (this._is_fullwindow) {
-        this._leave_fullwindow(false, NOOP)
+        this._leave_fullwindow(false)
       }
 
       if (!this._prevent_next_reset) {
@@ -55965,7 +55961,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (current === true && !this._is_fullwindow) {
         this._enter_all_fullwindow(false)
       } else if (current === false && this._is_fullwindow) {
-        this._leave_all_fullwindow(true, NOOP)
+        this._leave_all_fullwindow(true)
       }
     } else if (prop === 'frame') {
       const { frame } = this.$props
