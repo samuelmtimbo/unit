@@ -10582,7 +10582,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       delete this._invalid_datum_data[datum_node_id]
       delete this._invalid_datum_node_id[datum_node_id]
 
-      this.__graph_debug_set_pin_data(pin_node_id, datum_node_id, data)
+      if (pin_node_id) {
+        this.__graph_debug_set_pin_data(pin_node_id, datum_node_id, data)
+      }
     }
 
     delete this._hidden_data_node[datum_node_id]
