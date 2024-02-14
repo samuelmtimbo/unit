@@ -19,6 +19,7 @@ export interface I {
   url: string
   target: string
   features: WindowFeatures
+  detached: boolean
   done: any
 }
 
@@ -32,7 +33,7 @@ export default class Open extends Semifunctional<I, O> {
   constructor(system: System) {
     super(
       {
-        fi: ['url', 'target', 'features'],
+        fi: ['url', 'target', 'features', 'detached'],
         fo: ['window'],
         i: ['done'],
         o: [],
@@ -49,12 +50,16 @@ export default class Open extends Semifunctional<I, O> {
     )
   }
 
-  f({ url, target, features }: I, done: Done<O>) {
+  private _detached: boolean
+
+  f({ url, target, features, detached }: I, done: Done<O>) {
     const {
       api: {
         window: { open },
       },
     } = this.__system
+
+    this._detached = detached
 
     const windowFeatures = Object.entries(features)
       .map(([key, value]) => {
@@ -79,6 +84,10 @@ export default class Open extends Semifunctional<I, O> {
       }
     })(this.__system)
 
+    window.onbeforeunload = () => {
+      this._finish()
+    }
+
     try {
       window.addEventListener('message', (event) => {
         // @ts-ignore
@@ -102,18 +111,25 @@ export default class Open extends Semifunctional<I, O> {
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
     this._release()
+    this._finish()
+
     // }
+  }
+
+  private _finish() {
+    this._forward_empty('window')
+
+    this._backward('url')
+    this._backward('target')
+    this._backward('features')
+
+    this._backward('done')
   }
 
   private _release = (): void => {
     // console.log('WakeLock', '_release')
-    if (this._window) {
+    if (this._window && !this._detached) {
       this._window.close()
     }
-  }
-
-  private _on_release = () => {
-    // console.log('WakeLock', '_on_release')
-    this._window = null
   }
 }
