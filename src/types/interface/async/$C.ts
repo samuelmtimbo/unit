@@ -11,6 +11,8 @@ export const C_METHOD_CALL = [
   'child',
   'children',
   'component',
+  'getAnimations',
+  'getSetup',
 ]
 export const C_METHOD_WATCH = []
 export const C_METHOD_REF = ['refChild']
