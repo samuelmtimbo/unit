@@ -20,6 +20,10 @@ export default function isEqual(a: any, b: any): boolean {
   }
 
   if (ta === 'object') {
+    if (a === null || b === null) {
+      return a === b
+    }
+
     if (a === b) {
       return true
     }

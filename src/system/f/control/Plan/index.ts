@@ -28,11 +28,6 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
   }
 
   onDataInputData(name: string, data: any) {
-    if (!this._output[1].empty()) {
-      this._forwarding_empty = true
-      this._output[1].pull()
-      this._forwarding_empty = false
-    }
     this._current = data
     this._forward_if_ready()
   }
