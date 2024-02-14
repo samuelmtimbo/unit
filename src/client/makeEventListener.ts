@@ -11,11 +11,13 @@ import {
 } from './event/keyboard'
 import { makePasteListener } from './event/paste'
 import { makeClickListener } from './event/pointer/click'
+import { makeMessageListener } from './event/pointer/message'
 import { makePointerDownListener } from './event/pointer/pointerdown'
 import { makePointerEnterListener } from './event/pointer/pointerenter'
 import { makePointerLeaveListener } from './event/pointer/pointerleave'
 import { makePointerMoveListener } from './event/pointer/pointermove'
 import { makePointerUpListener } from './event/pointer/pointerup'
+import { makeToggleListener } from './event/popover/toggle'
 import { makeWheelListener } from './event/wheel'
 import { Listener } from './Listener'
 
@@ -41,6 +43,9 @@ export type IOUIEventName =
   | 'keypress'
   | 'wheel'
   | 'message'
+  | 'toggle'
+  | 'show'
+  | 'hide'
 
 export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
   'click',
@@ -64,6 +69,9 @@ export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
   'keypress',
   'wheel',
   'message',
+  'toggle',
+  'show',
+  'hide',
 ])
 
 export function makeUIEventListener(
@@ -71,6 +79,8 @@ export function makeUIEventListener(
   callback: (data: any) => void
 ): Listener {
   switch (event) {
+    case 'message':
+      return makeMessageListener(callback)
     case 'click':
       return makeClickListener({ onClick: callback })
     case 'dbclick':
@@ -111,6 +121,8 @@ export function makeUIEventListener(
       return makeKeypressListener(callback)
     case 'wheel':
       return makeWheelListener(callback)
+    case 'toggle':
+      return makeToggleListener(callback)
     default:
       throw new Error(`unknown UI event: ${event}`)
   }

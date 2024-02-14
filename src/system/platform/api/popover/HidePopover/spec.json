@@ -1,0 +1,23 @@
+{
+  "name": "hide popover",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "any": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "mouse-pointer",
+    "description": "hide popover element if hidden",
+    "complexity": 3,
+    "tags": ["platform", "api", "popover"]
+  },
+  "id": "c6f309c8-9ca7-459c-9dd5-c9c9f92fbe8f",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -415,6 +415,42 @@ export class Component<
     }
   }
 
+  togglePopover() {
+    const firstLeaf = this.getFirstRootLeaf()
+
+    if (firstLeaf.$element instanceof HTMLElement) {
+      if (firstLeaf.$element.togglePopover) {
+        firstLeaf.$element.togglePopover()
+      }
+    } else {
+      //
+    }
+  }
+
+  hidePopover() {
+    const firstLeaf = this.getFirstRootLeaf()
+
+    if (firstLeaf.$element instanceof HTMLElement) {
+      if (firstLeaf.$element.hidePopover) {
+        firstLeaf.$element.hidePopover()
+      }
+    } else {
+      //
+    }
+  }
+
+  showPopover() {
+    const firstLeaf = this.getFirstRootLeaf()
+
+    if (firstLeaf.$element instanceof HTMLElement) {
+      if (firstLeaf.$element.showPopover) {
+        firstLeaf.$element.showPopover()
+      }
+    } else {
+      //
+    }
+  }
+
   private $detached: boolean = false
 
   private _animateBase = (

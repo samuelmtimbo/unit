@@ -1,0 +1,49 @@
+{
+  "name": "on toggle",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'toggle'"
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "emitter"
+        }
+      },
+      "type": "`C`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` click event",
+    "complexity": 5,
+    "tags": ["platform", "core", "api", "event"]
+  },
+  "id": "9649cf39-fd6e-4437-a268-c0b4def6bcbd",
+  "type": "`U`&`G`",
+  "system": true
+}
