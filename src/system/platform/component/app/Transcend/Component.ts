@@ -57,7 +57,7 @@ export const DEFAULT_STYLE = {
   // borderTop: 'none',
   marginTop: '-4px',
   // transition: 'top ${ANIMATION_T_S}s linear',
-  transition: `opacity ${ANIMATION_T_S}s linear, top ${ANIMATION_T_S}s linear`,
+  transition: `opacity ${ANIMATION_T_S}s linear`,
 }
 
 let i = 0
