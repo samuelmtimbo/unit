@@ -20911,6 +20911,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this.__on_node_pointer_down(node_id, pointerId, clientX, clientY)
   }
 
+  private _drag_node_init_edge_overflow: Dict<{
+    x0: boolean
+    y0: boolean
+    x1: boolean
+    y1: boolean
+  }> = {}
+
   private __on_node_pointer_down = (
     node_id: string,
     pointerId: number,
@@ -20938,6 +20945,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._set_node_pointer_capture(node_id, pointerId)
 
     this.__set_node_pressed(node_id, pointerId, true)
+
+    const edge_offset = this._get_node_edge_offset(node_id, 0)
+
+    this._drag_node_init_edge_overflow[node_id] = {
+      x0: edge_offset.x0 < 0,
+      y0: edge_offset.y0 < 0,
+      x1: edge_offset.x1 > 0,
+      y1: edge_offset.y1 > 0,
+    }
 
     if (this._search_unit_id) {
       if (this._is_link_pin_node_id(node_id)) {
@@ -20980,6 +20996,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private __on_node_pointer_up = (node_id: string, pointerId: number): void => {
     // console.log('Graph', '_on_node_pointer_up', node_id, pointerId)
+
+    delete this._drag_node_init_edge_overflow[node_id]
 
     this._release_node_pointer_capture(node_id, pointerId)
   }
@@ -40097,6 +40115,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (!config?.disable.edgeDrag) {
         const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 0)
 
+        const {
+          x0: overflow_x0,
+          y0: overflow_y0,
+          x1: overflow_x1,
+          y1: overflow_y1,
+        } = this._drag_node_init_edge_overflow[node_id]
+
+        if (x0 > 0) {
+          this._drag_node_init_edge_overflow[node_id].x0 = false
+        }
+        if (y0 > 0) {
+          this._drag_node_init_edge_overflow[node_id].y0 = false
+        }
+        if (x1 < 0) {
+          this._drag_node_init_edge_overflow[node_id].x1 = false
+        }
+        if (y1 < 0) {
+          this._drag_node_init_edge_overflow[node_id].y1 = false
+        }
+
         const node = this._node[node_id]
 
         const dx = x - node.hx - node.x
@@ -40104,12 +40142,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const drag_edge_animating = !!this._drag_edge_animation
 
-        const lock_x =
-          ((drag_edge_animating || x1 >= 0) && dx >= 0) ||
-          ((drag_edge_animating || x0 <= 0) && dx <= 0)
-        const lock_y =
-          ((drag_edge_animating || y1 >= 0) && dy >= 0) ||
-          ((drag_edge_animating || y0 <= 0) && dy <= 0)
+        const lock_x0 =
+          (drag_edge_animating || x0 <= 0) && dx <= 0 && !overflow_x0
+        const lock_x1 =
+          (drag_edge_animating || x1 >= 0) && dx >= 0 && !overflow_x1
+
+        const lock_y0 =
+          (drag_edge_animating || y0 <= 0) && dy <= 0 && !overflow_y0
+        const lock_y1 =
+          (drag_edge_animating || y1 >= 0) && dy >= 0 && !overflow_y1
+
+        const lock_x = lock_x0 || lock_x1
+        const lock_y = lock_y0 || lock_y1
 
         if (lock_x || lock_y) {
           this._start_drag_edge_animation()
