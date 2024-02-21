@@ -3474,7 +3474,7 @@ export class Graph<I = any, O = any>
           return
         }
 
-        // this._fork()
+        this._fork()
 
         this._specSetUnitPinData(unitId, type, pinId, data)
 
