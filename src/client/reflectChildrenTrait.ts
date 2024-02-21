@@ -1,5 +1,5 @@
 import { CodePathNotImplementedError } from '../exception/CodePathNotImplemented'
-import { Style } from '../system/platform/Props'
+import { Style } from '../system/platform/Style'
 import { LayoutNode } from './LayoutNode'
 import { parseBorder } from './parseBorder'
 import { applyLayoutValue, parseLayoutValue } from './parseLayoutValue'

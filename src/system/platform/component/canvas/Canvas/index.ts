@@ -3,7 +3,7 @@ import { System } from '../../../../../system'
 import { CA } from '../../../../../types/interface/CA'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { ID_CANVAS } from '../../../../_ids'
-import { Style } from '../../../Props'
+import { Style } from '../../../Style'
 import CanvasComp from './Component'
 
 export interface I {

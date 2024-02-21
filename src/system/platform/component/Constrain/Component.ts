@@ -3,7 +3,7 @@ import { Element } from '../../../../client/element'
 import parentElement from '../../../../client/platform/web/parentElement'
 import { System } from '../../../../system'
 import { Unlisten } from '../../../../types/Unlisten'
-import { Style } from '../../Props'
+import { Style } from '../../Style'
 
 export interface Props {
   style: Style

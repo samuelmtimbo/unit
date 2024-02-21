@@ -3,7 +3,7 @@ import { Element } from '../../../../../client/element'
 import { PropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
-import { Style } from '../../../Props'
+import { Style } from '../../../Style'
 
 export interface Props {
   id?: string

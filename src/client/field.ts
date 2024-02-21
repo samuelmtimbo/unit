@@ -1,4 +1,4 @@
-import { Style } from '../system/platform/Props'
+import { Style } from '../system/platform/Style'
 import { Dict } from '../types/Dict'
 import { $Element } from '../types/interface/async/$Element'
 import { identity } from '../util/identity'
