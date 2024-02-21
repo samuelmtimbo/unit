@@ -1186,21 +1186,23 @@ export function _extractGenerics(
       break
     case TreeNodeType.ArrayLiteral:
     case TreeNodeType.ObjectLiteral: {
-      const typeKeyValueMap = getObjLiteralKeyValueMap(type)
-      const valueKeyValueMap = getObjLiteralKeyValueMap(value)
-      for (const key in typeKeyValueMap) {
-        const _key = key.endsWith('?') ? key.slice(0, -1) : key
-        const childGenerics = _extractGenerics(
-          specs,
-          valueKeyValueMap[_key] ?? valueKeyValueMap[key],
-          typeKeyValueMap[_key] ?? typeKeyValueMap[key]
-        )
-        for (const name in childGenerics) {
-          const childGeneric = childGenerics[name]
-          if (!generics[name]) {
-            generics[name] = childGeneric
-          } else if (generics[name] !== childGeneric) {
-            throw `Found two possible types for generic ${name}: ${generics[name]} and ${childGeneric}`
+      if (value.type === TreeNodeType.ObjectLiteral) {
+        const typeKeyValueMap = getObjLiteralKeyValueMap(type)
+        const valueKeyValueMap = getObjLiteralKeyValueMap(value)
+        for (const key in typeKeyValueMap) {
+          const _key = key.endsWith('?') ? key.slice(0, -1) : key
+          const childGenerics = _extractGenerics(
+            specs,
+            valueKeyValueMap[_key] ?? valueKeyValueMap[key],
+            typeKeyValueMap[_key] ?? typeKeyValueMap[key]
+          )
+          for (const name in childGenerics) {
+            const childGeneric = childGenerics[name]
+            if (!generics[name]) {
+              generics[name] = childGeneric
+            } else if (generics[name] !== childGeneric) {
+              throw `Found two possible types for generic ${name}: ${generics[name]} and ${childGeneric}`
+            }
           }
         }
       }
