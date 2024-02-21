@@ -2,7 +2,7 @@ import { IOElement } from './client/IOElement'
 import { LayoutNode } from './client/LayoutNode'
 import { Theme } from './client/theme'
 import { Rect, Size } from './client/util/geometry/types'
-import { Style } from './system/platform/Props'
+import { Style } from './system/platform/Style'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 import {

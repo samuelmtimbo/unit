@@ -1,6 +1,6 @@
 import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
-import { Style } from '../../../../system/platform/Props'
+import { Style } from '../../../../system/platform/Style'
 import { LayoutNode } from '../../../LayoutNode'
 import { parseTransform } from '../../../parseTransform'
 import { applyStyle } from '../../../style'
@@ -26,8 +26,8 @@ const fitChildren = (
 
     let {
       display: childDisplay = 'block',
-      width: childWidthStr = '',
-      height: childHeightStr = '',
+      width: childWidthStr = 'auto',
+      height: childHeightStr = 'auto',
       'font-size': childFontSizeStr,
       opacity: childOpacityStr = '1',
       transform: childTransform = '',
@@ -63,7 +63,7 @@ const fitChildren = (
     const sy = parentTrait.sy * childScaleY
 
     const displayContents = childDisplay === 'contents'
-    const fitWidth = childWidthStr === 'fit-content'
+    const fitWidth = childWidthStr === 'fit-content' || childWidthStr === 'auto'
     const fitHeight =
       childHeightStr === 'fit-content' || childHeightStr === 'auto'
 

@@ -1,4 +1,4 @@
-import { Style } from '../system/platform/Props'
+import { Style } from '../system/platform/Style'
 import { Dict } from '../types/Dict'
 import applyAttr from './applyAttr'
 import { Component } from './component'

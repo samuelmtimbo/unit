@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { ID_RECT } from '../../../../_ids'
-import { Style } from '../../../Props'
+import { Style } from '../../../Style'
 
 export interface I {
   style: Style

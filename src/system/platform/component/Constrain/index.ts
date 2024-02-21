@@ -1,7 +1,7 @@
 import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
 import { ID_CONSTRAIN } from '../../../_ids'
-import { Style } from '../../Props'
+import { Style } from '../../Style'
 
 export type I = {
   style: Style

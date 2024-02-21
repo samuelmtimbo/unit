@@ -1,6 +1,6 @@
 import { joinLeafPath } from '../system/platform/component/app/Editor/joinLeafPath'
 import { LayoutBase } from '../system/platform/component/app/Editor/layout'
-import { Style } from '../system/platform/Props'
+import { Style } from '../system/platform/Style'
 import { Tree } from '../Tree'
 import { Dict } from '../types/Dict'
 import { Component } from './component'

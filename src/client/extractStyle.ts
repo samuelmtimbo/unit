@@ -1,5 +1,5 @@
 import { isFrameRelativeValue } from '../isFrameRelative'
-import { Style } from '../system/platform/Props'
+import { Style } from '../system/platform/Style'
 import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
 import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
