@@ -6,7 +6,49 @@ import { Spec } from '../types'
 import { BaseSpec } from '../types/BaseSpec'
 import { BundleSpec } from '../types/BundleSpec'
 import { GraphSpec } from '../types/GraphSpec'
+import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
+
+export function buildUnitIdSet(unit: GraphUnitSpec, idSet: Set<string>): void {
+  const { id, input = {} } = unit
+
+  for (const inputId in input) {
+    const _input = input[inputId] ?? {}
+
+    const { data } = _input
+
+    if (data) {
+      const tree = getTree(data)
+
+      if (tree.type === TreeNodeType.Unit) {
+        const str = tree.value.substring(1)
+
+        const bundle = evaluate(str, _specs, _classes) as UnitBundleSpec
+
+        const unitSpec =
+          _specs[bundle.unit.id] ?? bundle.specs[bundle.unit.id]
+
+        buildUnitIdSet(bundle.unit, idSet)
+
+        buildIdSet(unitSpec, idSet)
+
+        for (const specId in bundle.specs) {
+          const spec = bundle.specs[specId]
+
+          buildIdSet(spec, idSet)
+        }
+      }
+    }
+  }
+
+  const unit_spec = _specs[id]
+
+  if (unit_spec) {
+    buildIdSet(unit_spec, idSet)
+  } else {
+    //
+  }
+}
 
 export function buildIdSet(
   spec: Spec,
@@ -23,42 +65,7 @@ export function buildIdSet(
   for (const unitId in units) {
     const unit = units[unitId]
 
-    const { id, input = {} } = unit
-
-    for (const inputId in input) {
-      const _input = input[inputId] ?? {}
-
-      const { data } = _input
-
-      if (data) {
-        const tree = getTree(data)
-
-        if (tree.type === TreeNodeType.Unit) {
-          const str = tree.value.substring(1)
-
-          const bundle = evaluate(str, _specs, _classes) as UnitBundleSpec
-
-          const unitSpec =
-            _specs[bundle.unit.id] ?? bundle.specs[bundle.unit.id]
-
-          buildIdSet(unitSpec, idSet)
-
-          for (const specId in bundle.specs) {
-            const spec = bundle.specs[specId]
-
-            buildIdSet(spec, idSet)
-          }
-        }
-      }
-    }
-
-    const unit_spec = _specs[id]
-
-    if (unit_spec) {
-      buildIdSet(unit_spec, idSet)
-    } else {
-      //
-    }
+    buildUnitIdSet(unit, idSet)
   }
 
   ;(spec as BaseSpec).deps?.forEach((id) => {
