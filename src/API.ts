@@ -71,7 +71,7 @@ export type API = {
   channel: { local: (opt: ChannelOpt) => Channel }
   alert: {
     alert: (message: string) => void
-    prompt: (message: string) => string
+    prompt: (message: string, defaultValue: string) => string
   }
   navigator: {
     share: (data: ShareData) => Promise<void>
