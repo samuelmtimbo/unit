@@ -1876,6 +1876,12 @@ export class Graph<I = any, O = any>
     return isRefMerge(this, mergeSpec)
   }
 
+  emit(event: string, ...args: any[]): void {
+    // @ts-ignore
+    super.emit(event, ...args)
+    super.emit('edit', event, args)
+  }
+
   private _simPlugPin = (
     type: IO,
     pinId: string,
