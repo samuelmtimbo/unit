@@ -1,0 +1,168 @@
+{
+  "type": "`U`&`G`",
+  "name": "pressed",
+  "units": {
+    "true": {
+      "id": "984c4a44-86c7-464c-ad48-4759598c3be3",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "true": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 7,
+          "y": 45
+        }
+      }
+    },
+    "iterate": {
+      "id": "8a2b756a-25e4-11eb-860d-1f34c850b992",
+      "input": {
+        "next": {},
+        "init": {
+          "constant": true,
+          "data": "false",
+          "metadata": {
+            "position": {
+              "x": 100,
+              "y": -16
+            }
+          }
+        }
+      },
+      "output": {
+        "current": {
+          "metadata": {
+            "position": {
+              "x": 105,
+              "y": 19
+            }
+          }
+        },
+        "local": {
+          "constant": false,
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 113,
+              "y": 1
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 120,
+          "y": 8
+        }
+      }
+    },
+    "false": {
+      "id": "b4d20f6f-32dc-4d04-97d6-69518976bdea",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "false": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 95,
+          "y": 36
+        }
+      }
+    },
+    "onpointerdown": {
+      "id": "2beefe96-b1ee-11ea-960c-7f33e07a2ad6"
+    },
+    "onpointerup": {
+      "id": "43a9d452-b1ee-11ea-923f-efb4af36e68e"
+    }
+  },
+  "merges": {
+    "0": {
+      "onpointerdown": {
+        "input": {
+          "element": true
+        }
+      },
+      "onpointerup": {
+        "input": {
+          "element": true
+        }
+      }
+    },
+    "1": {
+      "false": {
+        "input": {
+          "any": true
+        }
+      },
+      "onpointerup": {
+        "output": {
+          "event": true
+        }
+      }
+    },
+    "2": {
+      "true": {
+        "input": {
+          "any": true
+        }
+      },
+      "onpointerdown": {
+        "output": {
+          "event": true
+        }
+      }
+    },
+    "3": {
+      "true": {
+        "output": {
+          "true": true
+        }
+      },
+      "iterate": {
+        "input": {
+          "next": true
+        }
+      },
+      "false": {
+        "output": {
+          "false": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "current": {
+      "plug": {
+        "0": {
+          "unitId": "iterate",
+          "pinId": "current",
+          "kind": "output"
+        }
+      },
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "question",
+    "description": "track element current pressed state",
+    "tags": ["core"]
+  },
+  "id": "f1cde29c-2da3-410e-b4c7-737650475933",
+  "component": {}
+}
