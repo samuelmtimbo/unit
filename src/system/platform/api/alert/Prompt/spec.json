@@ -6,6 +6,12 @@
       "metadata": {
         "examples": ["'Write something:'"]
       }
+    },
+    "default": {
+      "type": "string",
+      "metadata": {
+        "examples": ["''"]
+      }
     }
   },
   "outputs": {

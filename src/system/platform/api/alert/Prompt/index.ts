@@ -5,6 +5,7 @@ import { ID_PROMPT } from '../../../../_ids'
 
 export type I = {
   message: string
+  default: string
 }
 
 export type O = {
@@ -15,7 +16,7 @@ export default class Prompt extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['message'],
+        i: ['message', 'default'],
         o: ['answer'],
       },
       {},
@@ -24,14 +25,14 @@ export default class Prompt extends Functional<I, O> {
     )
   }
 
-  f({ message }: I, done: Done<O>): void {
+  f({ message, default: default_ }: I, done: Done<O>): void {
     const {
       api: {
         alert: { prompt },
       },
     } = this.__system
 
-    const answer = prompt(message)
+    const answer = prompt(message, default_)
 
     if (answer === null) {
       done(undefined, 'user cancelled prompt')
