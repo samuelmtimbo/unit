@@ -1,8 +1,9 @@
 import classnames from '../../../../../client/classnames'
 import {
+  getLeafHeight,
   getLeafWidth,
-  LEAF_HEIGHT,
 } from '../../../../../client/component/getDatumSize'
+import { DEFAULT_FONT_SIZE } from '../../../../../client/DEFAULT_FONT_SIZE'
 import { Element } from '../../../../../client/element'
 import { makeBlurListener } from '../../../../../client/event/focus/blur'
 import { makeFocusListener } from '../../../../../client/event/focus/focus'
@@ -24,6 +25,7 @@ export interface Props {
   style: Dict<string>
   path: number[]
   value: string
+  fontSize: number
   parent: TreeNode | null
 }
 
@@ -33,13 +35,12 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    let { className, style, value } = $props
+    let { className, style, value, fontSize } = $props
 
     const _value = this._parse_value()
 
-    const width = getLeafWidth(value)
-
-    const height = LEAF_HEIGHT
+    const width = getLeafWidth(value, fontSize)
+    const height = getLeafHeight(value, fontSize)
 
     const input = new TextField(
       {
@@ -49,8 +50,8 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
           display: 'flex',
           width: `${width}px`,
           height: `${height}px`,
+          fontSize: 'inherit',
           caretColor: 'inherit',
-          fontSize: '12px',
           overflowY: 'hidden',
           overflowX: 'hidden',
           // maxWidth: '100px',
@@ -100,25 +101,34 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
     return _value
   }
 
-  public onPropChanged(prop: string, current: any) {
-    if (prop === 'data') {
-      const width = getLeafWidth(current.value)
+  private _refresh_size = () => {
+    const { fontSize = DEFAULT_FONT_SIZE } = this.$props
 
-      // AD HOC
+    const _value: string = this._parse_value()
+
+    const width = getLeafWidth(_value, fontSize)
+    const height = getLeafHeight(_value, fontSize)
+
+    this._input.$element.style.width = `${width}px`
+    this._input.$element.style.height = `${height}px`
+  }
+
+  public onPropChanged(prop: string, current: any) {
+    if (prop === 'value') {
       const _value: string = this._parse_value()
 
       this._input.setProp('value', _value)
-      // mergeStyle(this._input, {
-      //   width: `${width}px`,
-      // })
-      this._input.$element.style.width = `${width}px`
+
+      this._refresh_size()
+    } else if (prop === 'fontSize') {
+      this._refresh_size()
     }
   }
 
   private _on_input = (value: string): void => {
-    const { path } = this.$props
+    const { path, fontSize } = this.$props
 
-    const width = getLeafWidth(value)
+    const width = getLeafWidth(value, fontSize)
     // mergeStyle(this._input, {
     //   width: `${width}px`,
     // })

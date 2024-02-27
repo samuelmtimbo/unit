@@ -645,7 +645,7 @@ import TextField from '../../value/TextField/Component'
 import Cabinet from '../Cabinet/Component'
 import ClassDatum from '../Class/Component'
 import DataTree from '../DataTree/Component'
-import Datum from '../Datum/Component'
+import { Datum } from '../Datum/Component'
 import GUI from '../GUI/Component'
 import Minimap, { MINIMAP_HEIGHT, MINIMAP_WIDTH } from '../Minimap/Component'
 import Modes from '../ModeSelector/Component'
@@ -678,6 +678,8 @@ const MAX_WIDTH: number = Infinity
 const MAX_HEIGHT: number = Infinity
 
 const SURFACE_UNPLUG_DISTANCE = 1.5 * LINK_DISTANCE_EXPOSED
+
+const DATUM_FONT_SIZE = 12
 
 export const NEAR = 36
 
@@ -7358,6 +7360,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._layout_node[unit_id] = layout_node
+
     this._layout_target_node[unit_id] = clone(layout_node)
 
     if (parent_id) {
@@ -10020,8 +10023,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const type_datum = new DataTree(
       {
-        style: {},
+        style: {
+          fontSize: `${DATUM_FONT_SIZE}px`,
+        },
         data: tree,
+        fontSize: DATUM_FONT_SIZE,
       },
       this.$system
     )
@@ -11569,7 +11575,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else {
       datum = new Datum(
         {
-          style: {},
+          style: {
+            fontSize: `${DATUM_FONT_SIZE}px`,
+          },
+          fontSize: DATUM_FONT_SIZE,
           data: tree,
         },
         this.$system
@@ -37041,7 +37050,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         height: 2 * r,
       }
     } else {
-      let { width, height } = getDatumSize(tree)
+      let { width, height } = getDatumSize(tree, DATUM_FONT_SIZE)
 
       const overflowX = width > DATUM_MAX_WIDTH ? 3 : 0
       const overflowY = height > DATUM_MAX_HEIGHT ? 3 : 0

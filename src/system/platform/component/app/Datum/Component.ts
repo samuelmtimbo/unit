@@ -1,8 +1,11 @@
+import { DEFAULT_FONT_SIZE } from '../../../../../client/DEFAULT_FONT_SIZE'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import IOFocusEvent from '../../../../../client/event/focus/FocusEvent'
 import { IOKeyboardEvent } from '../../../../../client/event/keyboard'
 import parentElement from '../../../../../client/platform/web/parentElement'
+import { parseFontSize } from '../../../../../client/util/style/getFontSize'
+import { _evaluate } from '../../../../../spec/evaluate'
 import {
   TreeNode,
   TreeNodeType,
@@ -14,6 +17,7 @@ import {
   getParentPath,
   getTree,
 } from '../../../../../spec/parser'
+import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { _keyUpdateTree } from '../../../../../util/keyUpdateTree'
@@ -23,9 +27,15 @@ import DataTree from '../DataTree/Component'
 export interface Props {
   style: Dict<string>
   data: TreeNode
+  fontSize: number
 }
 
-export default class Datum extends Element<HTMLDivElement, Props> {
+export interface _Props {
+  style: Dict<string>
+  value: any
+}
+
+export class Datum extends Element<HTMLDivElement, Props> {
   private _data_tree: DataTree
   private _root: TreeNode
 
@@ -34,10 +44,16 @@ export default class Datum extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { style = {}, data = getTree('') } = $props
+    const { style = {}, data = getTree(''), fontSize } = $props
 
     const data_tree = new DataTree(
-      { style, data, path: [], parent: null },
+      {
+        style: { ...style, fontSize: `${fontSize ?? DEFAULT_FONT_SIZE}px` },
+        data,
+        path: [],
+        parent: null,
+        fontSize,
+      },
       this.$system
     )
 
@@ -66,6 +82,10 @@ export default class Datum extends Element<HTMLDivElement, Props> {
     this.$element = $element
     this.$slot = data_tree.$slot
 
+    this.$subComponent = {
+      data_tree,
+    }
+
     this.registerRoot(data_tree)
   }
 
@@ -74,7 +94,12 @@ export default class Datum extends Element<HTMLDivElement, Props> {
       this._root = current
       this._data_tree.setProp('data', current)
     } else if (prop === 'style') {
+      const fontSize =
+        (current.fontSize && parseFontSize(current.fontSize)) ||
+        this.getFontSize()
+
       this._data_tree.setProp('style', current)
+      this._data_tree.setProp('fontSize', fontSize)
     }
   }
 
@@ -332,5 +357,69 @@ export default class Datum extends Element<HTMLDivElement, Props> {
       )
     }
     this.dispatchEvent('datumchange', { data })
+  }
+}
+
+export default class Datum_ extends Element<HTMLDivElement, _Props> {
+  private _root: Datum
+
+  constructor($props: _Props, $system: System) {
+    super($props, $system)
+
+    const { style = {}, value = undefined } = $props
+
+    const data = this._get_tree(value)
+
+    const root = new Datum({ data, style, fontSize: 12 }, this.$system)
+
+    root.addEventListener(
+      makeCustomListener('datumchange', (event) => {
+        const { data } = event
+
+        try {
+          const data_ = _evaluate(
+            data,
+            this.$system.specs,
+            this.$system.classes
+          )
+
+          this.set('value', data_)
+          this.dispatchEvent('change', data_)
+        } catch (err) {
+          //
+        }
+      })
+    )
+
+    this._root = root
+
+    const $element = parentElement($system)
+
+    this.$element = $element
+    this.$slot = root.$slot
+    this.$unbundled = false
+
+    this.$subComponent = {
+      root,
+    }
+
+    this.registerRoot(root)
+  }
+
+  private _get_tree = (value: any) => {
+    const data_tree =
+      (value !== undefined && getTree(stringify(value))) || getTree('')
+
+    return data_tree
+  }
+
+  onPropChanged(prop: keyof _Props, current: any): void {
+    if (prop === 'value') {
+      const data = this._get_tree(current)
+
+      this._root.setProp('data', data)
+    } else {
+      this._root.setProp(prop, current)
+    }
   }
 }
