@@ -46,14 +46,20 @@ export function renderBundle(
   root: HTMLElement,
   bundle: BundleSpec,
   opt?: BootOpt
-): [System, Graph] {
+): [System, Graph, Unlisten] {
   // console.log('renderBundle')
 
   const system = webBoot(window, root, opt)
   const graph = start(system, bundle)
   const $graph = AsyncGraph(graph)
 
-  _render(system, $graph)
+  const unlistenRender = _render(system, $graph)
 
-  return [system, graph]
+  const unlisten = () => {
+    unlistenRender()
+
+    system.destroy()
+  }
+
+  return [system, graph, unlisten]
 }
