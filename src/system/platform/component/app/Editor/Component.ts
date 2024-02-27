@@ -9824,7 +9824,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _pin_type_of_kind = (pin_node_id: string, kind: IO): TreeNode => {
-    if (this._is_merge_node_id(pin_node_id)) {
+    if (
+      this._is_merge_node_id(pin_node_id) ||
+      this._merge_to_ref_output[pin_node_id]
+    ) {
       return this._get_merge_pin_type(pin_node_id, kind)
     } else {
       return this._link_pin_type(pin_node_id)
@@ -21415,11 +21418,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _is_unit_pin_pre_match = (unit_id: string, pin_node_id: string) => {
     return (
       ((this._is_link_pin_node_id(pin_node_id) &&
-        !this._spec_is_link_pin_ignored(pin_node_id) &&
-        !this._spec_get_pin_node_plug_spec('input', pin_node_id)) ||
+        !this._spec_is_link_pin_ignored(pin_node_id)) ||
         this._is_merge_node_id(pin_node_id)) &&
       this._is_input_pin_node_id(pin_node_id) &&
       this._is_pin_node_ref(pin_node_id) &&
+      !this._spec_get_pin_node_plug_spec('input', pin_node_id) &&
+      !this._spec_get_pin_node_plug_spec('output', pin_node_id) &&
       !this._is_pin_unit_connected(pin_node_id, unit_id)
     )
   }
@@ -24627,10 +24631,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
 
           for (const pin_node_id in this._pin_node) {
-            const anchor_node_id =
+            const merge_node_id =
               this._get_pin_merge_node_id(pin_node_id) ?? pin_node_id
 
-            if (this._is_pin_all_pin_match(anchor_node_id, display_node_id)) {
+            if (this._is_pin_all_pin_match(merge_node_id, display_node_id)) {
               this._set_node_compatible(pin_node_id)
             }
           }
@@ -50231,9 +50235,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           ? this._init_merge_spec_position(merge)
           : this._jiggle_world_screen_center()
 
-      // if (merge_pin_count > 0) {
-      this._state_add_merge(merge_id, merge, merge_position)
-      // }
+      if (merge_pin_count === 0 || merge_pin_count > 1) {
+        this._state_add_merge(merge_id, merge, merge_position)
+      }
     }
 
     for (const unit_id in units) {
@@ -53802,6 +53806,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               this.__spec_remove_pin_from_merge(mergeId, unitId, type, pinId)
             }
           )
+        } else {
+          commit()
         }
       } else {
         commit()
