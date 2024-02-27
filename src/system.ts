@@ -94,6 +94,7 @@ export interface System extends S, R {
     },
     callback: (event: PointerEvent, track: Point[]) => void
   ) => Unlisten
+  destroy: () => void
 }
 
 export type IFilePickerOpt = {

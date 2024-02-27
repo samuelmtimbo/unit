@@ -37,17 +37,17 @@ export function renderGraph(
 
     root.appendChild(frame.$element)
 
-    const remove_child = appendChild(context, frame)
+    const removeChild = appendChild(context, frame)
 
     mount(context)
 
-    const unlisten_graph = watchGraphComponent(system, $graph, component)
+    const unlistenGraph = watchGraphComponent(system, $graph, component)
 
     component.connect($graph)
 
     component.focus()
 
-    unlisten = callAll([remove_child, unlisten_graph])
+    unlisten = callAll([removeChild, unlistenGraph])
   })
 
   return unlisten

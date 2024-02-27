@@ -210,6 +210,11 @@ export function boot(
 
       delete componentLocalToRemote[localId]
     },
+    destroy: function (): void {
+      for (const graph of system.graphs) {
+        graph.destroy()
+      }
+    },
   }
 
   return system
