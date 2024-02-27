@@ -639,6 +639,12 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       makeCustomListener('colorchanged', this._on_context_color_changed),
     ])
 
+    if (this.$context.$parent === null) {
+      this.$context.$element.style.backgroundColor = themeBackgroundColor(
+        this.$context.$theme
+      )
+    }
+
     this._refresh_color()
   }
 
@@ -650,16 +656,14 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
   private _on_context_theme_changed = (): void => {
     // console.log('GUI', '_on_context_theme_changed')
-    const {
-      api: {
-        theme: { setTheme },
-      },
-    } = this.$system
 
     const { $theme } = this.$context
 
     if (this.$context.$parent === null) {
-      setTheme($theme)
+      setTheme(this.$context, $theme)
+
+      this.$context.$element.style.backgroundColor =
+        themeBackgroundColor($theme)
     }
 
     if (!this._manually_changed_color) {

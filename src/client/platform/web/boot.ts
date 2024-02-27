@@ -132,8 +132,6 @@ export function webBoot(
 
   system.root = _root
 
-  theme.setTheme(system.theme)
-
   attachSprite(system)
   attachStyle(system)
   attachApp(system)
