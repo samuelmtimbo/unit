@@ -40021,8 +40021,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { z } = this._zoom
 
     for (const drag_node_id in this._drag_node_pointer_id) {
-      const node = this._node[drag_node_id]
-
       const { x0, y0, x1, y1 } = this._get_node_edge_offset(drag_node_id, 1)
 
       let dx: number = 0
@@ -40047,12 +40045,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const cx = k * dx
       const cy = k * dy
 
-      node.hx -= (2 * dx) / z + cx
-      node.hy -= (2 * dy) / z + cy
+      const translate_node = (node_id: string) => {
+        const node = this._node[node_id]
 
-      const next_position = addVector(node, { x: dx / z + cx, y: dy / z + cy })
+        node.hx -= (2 * dx) / z + cx
+        node.hy -= (2 * dy) / z + cy
 
-      this._set_node_position(drag_node_id, next_position)
+        const next_position = addVector(node, {
+          x: dx / z + cx,
+          y: dy / z + cy,
+        })
+
+        this._set_node_position(node_id, next_position)
+      }
+
+      if (this._is_node_selected(drag_node_id)) {
+        for (const selected_node_id in this._selected_node_id) {
+          translate_node(selected_node_id)
+        }
+      } else {
+        translate_node(drag_node_id)
+      }
 
       const zoom = translate(this._zoom, -z * dx, -z * dy)
 
