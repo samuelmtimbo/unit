@@ -7,7 +7,7 @@ import { $Graph } from '../../types/interface/async/$Graph'
 import { callAll } from '../../util/call/callAll'
 import { weakMerge } from '../../weakMerge'
 import { componentFromSpec } from '../componentFromSpec'
-import { appendChild, mount } from '../context'
+import { appendChild, mount, unmount } from '../context'
 import { renderFrame } from '../renderFrame'
 import { watchGraphComponent } from './watchGraphComponent'
 
@@ -47,7 +47,15 @@ export function renderGraph(
 
     component.focus()
 
-    unlisten = callAll([removeChild, unlistenGraph])
+    const unlistenRender = () => {
+      component.disconnect()
+
+      frame.removeChild(component)
+
+      unmount(context)
+    }
+
+    unlisten = callAll([removeChild, unlistenGraph, unlistenRender])
   })
 
   return unlisten
