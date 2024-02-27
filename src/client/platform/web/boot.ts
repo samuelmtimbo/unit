@@ -4,6 +4,7 @@ import { BootOpt, System } from '../../../system'
 import _classes from '../../../system/_classes'
 import _components from '../../../system/_components'
 import _specs from '../../../system/_specs'
+import { Unlisten } from '../../../types/Unlisten'
 import { attachApp } from '../../render/attachApp'
 import { attachGesture } from '../../render/attachGesture'
 import { attachHTML } from '../../render/attachHTML'
@@ -43,7 +44,7 @@ import { webURL } from './api/url'
 import { webWindow } from './api/window'
 import { webWorker } from './api/worker'
 
-export default function defaultWebBoot(opt?: BootOpt): System {
+export default function defaultWebBoot(opt?: BootOpt): [System, Unlisten] {
   const root = document.getElementById(SYSTEM_ROOT_ID)
 
   return webBoot(window, root, opt)
@@ -57,7 +58,7 @@ export function webBoot(
     classes: _classes,
     components: _components,
   }
-): System {
+): [System, Unlisten] {
   const _root = window.document.createElement('div')
 
   _root.style.width = '100%'
@@ -143,5 +144,11 @@ export function webBoot(
   attachVoid(system)
   // attachFocus(system)
 
-  return system
+  const unlisten = () => {
+    root.removeChild(_root)
+
+    system.destroy()
+  }
+
+  return [system, unlisten]
 }

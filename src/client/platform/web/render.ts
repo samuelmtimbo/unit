@@ -19,7 +19,7 @@ export default function render(
 ): [Graph, System, Unlisten] {
   const { spec = {}, specs = {} } = bundle
 
-  const system = defaultWebBoot({
+  const [system, unlistenSystem] = defaultWebBoot({
     specs: weakMerge(specs, _specs),
     classes: _classes,
     components: _components,
@@ -37,7 +37,7 @@ export default function render(
   const webUnlisten = webInit(system, window, system.root)
   const renderUnlisten = _render(system, $graph)
 
-  const unlisten = callAll([webUnlisten, renderUnlisten])
+  const unlisten = callAll([webUnlisten, renderUnlisten, unlistenSystem])
 
   return [graph, system, unlisten]
 }
@@ -49,17 +49,13 @@ export function renderBundle(
 ): [System, Graph, Unlisten] {
   // console.log('renderBundle')
 
-  const system = webBoot(window, root, opt)
+  const [system, unlistenSystem] = webBoot(window, root, opt)
   const graph = start(system, bundle)
   const $graph = AsyncGraph(graph)
 
   const unlistenRender = _render(system, $graph)
 
-  const unlisten = () => {
-    unlistenRender()
-
-    system.destroy()
-  }
+  const unlisten = callAll([unlistenRender, unlistenSystem])
 
   return [system, graph, unlisten]
 }
