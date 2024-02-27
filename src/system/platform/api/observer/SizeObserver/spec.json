@@ -4,6 +4,12 @@
     "component": {
       "type": "`C`",
       "ref": true
+    },
+    "opt": {
+      "type": "object"
+    },
+    "done": {
+      "type": "any"
     }
   },
   "outputs": {
