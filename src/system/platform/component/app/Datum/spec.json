@@ -4,14 +4,18 @@
     "style": {
       "type": "object"
     },
-    "data": {
-      "type": "object"
+    "value": {
+      "type": "any"
     }
   },
-  "outputs": {},
+  "outputs": {
+    "value": {
+      "type": "any"
+    }
+  },
   "metadata": {
     "icon": "atom-alt",
-    "description": "Recursive Graph Editor",
+    "description": "app component used to render data",
     "complexity": 47,
     "tags": ["platform", "component", "app"]
   },

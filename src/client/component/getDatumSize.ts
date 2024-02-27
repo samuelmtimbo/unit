@@ -16,25 +16,27 @@ export const MIN_WIDTH = 6 // cursor
 export const MAX_WIDTH = 180
 export const MAX_HEIGHT = 180
 
-export function getLeafWidth(value: string): number {
+export function getLeafWidth(value: string, fontSize: number): number {
+  const k = fontSize / 12
+
   if (value === '') {
-    return MIN_WIDTH
+    return MIN_WIDTH * k
   }
 
   const _value = value.replace(/\n/g, '\\n')
 
-  return Math.min(Math.max(_value.length * 6, MIN_WIDTH), MAX_WIDTH)
+  return Math.min(Math.max(_value.length * 6 * k, MIN_WIDTH * k), MAX_WIDTH * k)
 }
 
-const calcVerticalHeight = (data: TreeNode): number => {
+const calcVerticalHeight = (data: TreeNode, fontSize: number): number => {
   const verticalHeight =
-    2 * DELIMITER_HEIGHT +
-    data.children.reduce((acc, c) => acc + getDatumHeight(c), 0)
+    2 * getLeafHeight('', fontSize) +
+    data.children.reduce((acc, c) => acc + getDatumHeight(c, fontSize), 0)
   return verticalHeight
 }
 
 // calculate width assuming there is no overflow
-const calcHorizontalWidth = (data: TreeNode): number => {
+const calcHorizontalWidth = (data: TreeNode, fontSize: number): number => {
   if (
     data.type === TreeNodeType.ObjectLiteral ||
     data.type === TreeNodeType.ArrayLiteral
@@ -44,7 +46,10 @@ const calcHorizontalWidth = (data: TreeNode): number => {
     width += CONTAINER_ROW_LEFT_MARGIN
     width += CONTAINER_ROW_RIGHT_MARGIN
     width += Math.max(
-      data.children.reduce((acc, c) => acc + calcHorizontalWidth(c), 0),
+      data.children.reduce(
+        (acc, c) => acc + calcHorizontalWidth(c, fontSize),
+        0
+      ),
       MIN_WIDTH
     )
     if (data.children.length > 1) {
@@ -53,17 +58,17 @@ const calcHorizontalWidth = (data: TreeNode): number => {
     return width
   } else if (data.type === TreeNodeType.KeyValue) {
     return (
-      calcHorizontalWidth(data.children[0]) +
+      calcHorizontalWidth(data.children[0], fontSize) +
       COLON_WIDTH +
       SPACE_WIDTH +
-      calcHorizontalWidth(data.children[1])
+      calcHorizontalWidth(data.children[1], fontSize)
     )
   } else {
-    return getDatumWidth(data)
+    return getDatumWidth(data, fontSize)
   }
 }
 
-export const childrenOverflow = (data: TreeNode): boolean => {
+export const childrenOverflow = (data: TreeNode, fontSize: number): boolean => {
   const { type } = data
   if (
     type === TreeNodeType.ObjectLiteral ||
@@ -75,12 +80,12 @@ export const childrenOverflow = (data: TreeNode): boolean => {
     type === TreeNodeType.Or ||
     type === TreeNodeType.And
   ) {
-    const totalWidth = calcHorizontalWidth(data)
+    const totalWidth = calcHorizontalWidth(data, fontSize)
     if (totalWidth > MAX_WIDTH) {
       return true
     }
     for (let child of data.children) {
-      if (childrenOverflow(child)) {
+      if (childrenOverflow(child, fontSize)) {
         return true
       }
     }
@@ -88,7 +93,7 @@ export const childrenOverflow = (data: TreeNode): boolean => {
   return false
 }
 
-export function getDatumWidth(data: TreeNode): number {
+export function getDatumWidth(data: TreeNode, fontSize: number): number {
   let { value, type } = data
 
   if (value === '') {
@@ -117,11 +122,11 @@ export function getDatumWidth(data: TreeNode): number {
     case TreeNodeType.Class:
     case TreeNodeType.ClassLiteral:
     case TreeNodeType.ArithmeticExpression:
-      width = getLeafWidth(value)
+      width = getLeafWidth(value, fontSize)
       break
     case TreeNodeType.ArrayLiteral:
     case TreeNodeType.ObjectLiteral:
-      horizontalWidth = calcHorizontalWidth(data)
+      horizontalWidth = calcHorizontalWidth(data, fontSize)
       if (horizontalWidth <= MAX_WIDTH) {
         width = horizontalWidth
       } else {
@@ -133,7 +138,7 @@ export function getDatumWidth(data: TreeNode): number {
               (acc, c, index) =>
                 Math.max(
                   acc,
-                  getDatumWidth(c) +
+                  getDatumWidth(c, fontSize) +
                     (index < data.children.length - 1
                       ? COMMA_WIDTH + SPACE_WIDTH
                       : 0)
@@ -147,11 +152,11 @@ export function getDatumWidth(data: TreeNode): number {
     case TreeNodeType.Or:
     case TreeNodeType.And:
       width = data.children.reduce((acc, c, index) => {
-        const _width = calcHorizontalWidth(c)
+        const _width = calcHorizontalWidth(c, fontSize)
 
         const nextWidth =
           acc +
-          getDatumWidth(c) +
+          getDatumWidth(c, fontSize) +
           (index < data.children.length - 1 ? DELIMITER_WIDTH : 0)
 
         if (nextWidth <= MAX_WIDTH) {
@@ -163,9 +168,9 @@ export function getDatumWidth(data: TreeNode): number {
       break
     case TreeNodeType.PropExpression:
       width = data.children.reduce((acc, c, index) => {
-        const _width = calcHorizontalWidth(c)
+        const _width = calcHorizontalWidth(c, fontSize)
 
-        const nextWidth = acc + getDatumWidth(c)
+        const nextWidth = acc + getDatumWidth(c, fontSize)
 
         if (nextWidth <= MAX_WIDTH) {
           return nextWidth
@@ -177,28 +182,28 @@ export function getDatumWidth(data: TreeNode): number {
     case TreeNodeType.ArrayExpression:
     case TreeNodeType.ObjectExpression:
       horizontalWidth =
-        calcHorizontalWidth(data.children[0]) + 2 * DELIMITER_WIDTH
+        calcHorizontalWidth(data.children[0], fontSize) + 2 * DELIMITER_WIDTH
       if (horizontalWidth <= MAX_WIDTH) {
         width = horizontalWidth
       } else {
-        width = getDatumWidth(data.children[0])
+        width = getDatumWidth(data.children[0], fontSize)
       }
       break
     case TreeNodeType.Expression:
-      width = getDatumWidth(data.children[0]) + 2 * DELIMITER_WIDTH
+      width = getDatumWidth(data.children[0], fontSize) + 2 * DELIMITER_WIDTH
       break
     case TreeNodeType.KeyValue:
       {
-        const valueOverflow = childrenOverflow(data.children[1])
+        const valueOverflow = childrenOverflow(data.children[1], fontSize)
         if (valueOverflow) {
           width = Math.max(
-            getDatumWidth(data.children[0]) + COLON_WIDTH,
-            getDatumWidth(data.children[1])
+            getDatumWidth(data.children[0], fontSize) + COLON_WIDTH,
+            getDatumWidth(data.children[1], fontSize)
           )
         } else {
           width =
-            getDatumWidth(data.children[0]) +
-            getDatumWidth(data.children[1]) +
+            getDatumWidth(data.children[0], fontSize) +
+            getDatumWidth(data.children[1], fontSize) +
             COLON_WIDTH +
             SPACE_WIDTH
         }
@@ -211,12 +216,16 @@ export function getDatumWidth(data: TreeNode): number {
   return width
 }
 
-export function getDatumHeight(data: TreeNode): number {
+export function getLeafHeight(value: string, fontSize: number): number {
+  return (LEAF_HEIGHT * fontSize) / 12
+}
+
+export function getDatumHeight(data: TreeNode, fontSize: number): number {
   let horizontalWidth: number
   let verticalHeight: number
   let overflowWidth: boolean
 
-  let height = LEAF_HEIGHT
+  let height = getLeafHeight('', fontSize)
 
   switch (data.type) {
     case TreeNodeType.Generic:
@@ -233,39 +242,38 @@ export function getDatumHeight(data: TreeNode): number {
     case TreeNodeType.Unit:
     case TreeNodeType.Class:
     case TreeNodeType.ClassLiteral:
-      height = LEAF_HEIGHT
       break
     case TreeNodeType.ObjectLiteral:
     case TreeNodeType.ArrayLiteral:
     case TreeNodeType.Or:
     case TreeNodeType.And:
     case TreeNodeType.Expression:
-      horizontalWidth = calcHorizontalWidth(data)
+      horizontalWidth = calcHorizontalWidth(data, fontSize)
       overflowWidth = horizontalWidth > MAX_WIDTH
       if (!overflowWidth) {
-        height = LEAF_HEIGHT
+        //
       } else {
-        verticalHeight = calcVerticalHeight(data)
+        verticalHeight = calcVerticalHeight(data, fontSize)
         height = verticalHeight
       }
       break
     case TreeNodeType.ArrayExpression:
     case TreeNodeType.ObjectExpression:
       horizontalWidth =
-        calcHorizontalWidth(data.children[0]) + 2 * DELIMITER_WIDTH
+        calcHorizontalWidth(data.children[0], fontSize) + 2 * DELIMITER_WIDTH
       overflowWidth = horizontalWidth > MAX_WIDTH
       if (!overflowWidth) {
-        height = LEAF_HEIGHT
+        //
       } else {
-        verticalHeight = calcVerticalHeight(data.children[0])
+        verticalHeight = calcVerticalHeight(data.children[0], fontSize)
         height = verticalHeight
       }
       break
     case TreeNodeType.KeyValue:
-      height = getDatumHeight(data.children[1])
+      height = getDatumHeight(data.children[1], fontSize)
       break
     default:
-      height = LEAF_HEIGHT
+    //
   }
 
   return height
@@ -273,14 +281,14 @@ export function getDatumHeight(data: TreeNode): number {
 
 // datum size can be safely cached
 const _sizeCache: { [value: string]: Size } = {}
-export function getDatumSize(data: TreeNode): Size {
+export function getDatumSize(data: TreeNode, fontSize: number): Size {
   const { value } = data
   if (_sizeCache[value]) {
     return _sizeCache[value]
   }
   const size = {
-    width: getDatumWidth(data),
-    height: getDatumHeight(data),
+    width: getDatumWidth(data, fontSize),
+    height: getDatumHeight(data, fontSize),
   }
   _sizeCache[value] = size
   return size

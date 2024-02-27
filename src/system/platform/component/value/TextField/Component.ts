@@ -17,7 +17,6 @@ export const DEFAULT_STYLE = {
   color: 'inherit',
   backgroundColor: '#00000000',
   padding: '0',
-  fontSize: '18px',
   // outlineColor: '#00000000',
   border: 'none',
   borderRadius: '0',
