@@ -15,10 +15,6 @@ import {
   SpeechGrammarList,
   SpeechGrammarListOpt,
 } from '../types/global/SpeechGrammarList'
-import {
-  SpeechRecognition,
-  SpeechRecognitionOpt,
-} from '../types/global/SpeechRecognition'
 
 export function noStorage(name: string): Storage {
   const storage: Storage = {
@@ -178,11 +174,7 @@ export function noHost(): API {
       ): SpeechGrammarList {
         throw new APINotSupportedError('Speech Recognition')
       },
-      SpeechRecognition: function (
-        opt: SpeechRecognitionOpt
-      ): SpeechRecognition {
-        throw new APINotSupportedError('Speech Recognition')
-      },
+      SpeechRecognition: undefined,
       SpeechSynthesis: undefined,
       SpeechSynthesisUtterance: undefined,
     },

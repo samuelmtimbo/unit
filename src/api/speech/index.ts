@@ -80,7 +80,7 @@ export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
       let recognition
 
       try {
-        recognition = SpeechRecognition({
+        recognition = new SpeechRecognition({
           grammars: undefined,
           lang,
           interimResults,
