@@ -115,7 +115,7 @@ export type API = {
   }
   speech: {
     SpeechGrammarList: (opt: SpeechGrammarListOpt) => SpeechGrammarList
-    SpeechRecognition: (opt: SpeechRecognitionOpt) => SpeechRecognition
+    SpeechRecognition: { new (opt: SpeechRecognitionOpt): SpeechRecognition }
     SpeechSynthesis: SpeechSynthesis
     SpeechSynthesisUtterance: { new (text?: string): SpeechSynthesisUtterance }
   }
