@@ -417,7 +417,7 @@ export const makeUnplugPinAction = (
   type: IO,
   pinId: string,
   subPinId: string,
-  subPinSpec: GraphPinSpec,
+  subPinSpec: GraphPinSpec
 ) => {
   return wrapUnplugPinAction({ type, pinId, subPinId, subPinSpec })
 }

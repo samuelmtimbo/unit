@@ -1,8 +1,8 @@
-// organize-imports-ignore
 import { $ } from '../$'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { Pins } from '../../Pins'
+import { Primitive } from '../../Primitive'
 import { State } from '../../State'
 import { bundleSpec, unitBundleSpec } from '../../bundle'
 import { emptySpec } from '../../client/spec'
@@ -30,11 +30,11 @@ import {
 } from '../../component/method'
 import { GRAPH_DEFAULT_EVENTS } from '../../constant/GRAPH_DEFAULT_EVENTS'
 import { SELF } from '../../constant/SELF'
+import deepGet from '../../deepGet'
 import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
 import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
 import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
 import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
-import { Primitive } from '../../Primitive'
 import {
   makeAddMergeAction,
   makeAddUnitAction,
@@ -47,7 +47,9 @@ import {
   processAction,
 } from '../../spec/actions/G'
 import { cloneUnit } from '../../spec/cloneUnit'
+import { evaluate } from '../../spec/evaluate'
 import { bundleFromId } from '../../spec/fromId'
+import { renameUnitInMerges } from '../../spec/reducers/spec'
 import {
   coverPin,
   coverPinSet,
@@ -65,6 +67,7 @@ import {
 import { stringify } from '../../spec/stringify'
 import { stringifyMemorySpecData } from '../../spec/stringifySpec'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
+import { getSubComponentParentId } from '../../spec/util/component'
 import {
   findUnitPinPlug,
   findUnitPlugs,
@@ -119,27 +122,27 @@ import { Unlisten } from '../../types/Unlisten'
 import { AnimationSpec, C, C_EE, ComponentSetup } from '../../types/interface/C'
 import { ComponentEvents, Component_ } from '../../types/interface/Component'
 import { G, G_EE, G_MoveSubgraphIntoArgs } from '../../types/interface/G'
-import { U } from '../../types/interface/U'
+import { U, U_EE } from '../../types/interface/U'
 import { forEach, insert, remove } from '../../util/array'
 import { callAll } from '../../util/call/callAll'
 import {
   _keyCount,
   clone,
+  deepDelete,
+  deepDestroy,
+  deepGetOrDefault,
+  deepSet,
   filterObj,
   forEachObjKV,
   getObjSingleKey,
   isEmptyObject,
   mapObjKV,
   omit,
-  deepDelete,
-  deepDestroy,
-  deepGetOrDefault,
-  deepSet,
   someObj,
 } from '../../util/object'
+import { weakMerge } from '../../weakMerge'
 import { Element_ } from '../Element'
 import Merge from '../Merge'
-import { Stateful_EE } from '../Stateful'
 import { Unit, UnitEvents } from '../Unit'
 import { Memory } from '../Unit/Memory'
 import { UnitRemovePinDataData, UnitTakeInputData } from '../Unit/interface'
@@ -179,15 +182,10 @@ import {
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from './interface'
-import { moveSubgraph } from './moveSubgraph'
 import { isRefMerge } from './isRefMerge'
-import { renameUnitInMerges } from '../../spec/reducers/spec'
-import { weakMerge } from '../../weakMerge'
-import { getSubComponentParentId } from '../../spec/util/component'
-import deepGet from '../../deepGet'
-import { evaluate } from '../../spec/evaluate'
+import { moveSubgraph } from './moveSubgraph'
 
-export type Graph_EE = G_EE & C_EE & Stateful_EE
+export type Graph_EE = G_EE & C_EE & U_EE
 
 export type GraphEvents = UnitEvents<Graph_EE> & Graph_EE
 
