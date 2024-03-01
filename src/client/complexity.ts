@@ -9,28 +9,28 @@ const _specComplexityCache: Dict<number> = {}
 
 export const getSpecComplexity = (
   specs: Specs,
-  path: string,
+  id: string,
   useCache: boolean = true
 ): number => {
   let c: number
   if (useCache) {
-    if (!_specComplexityCache[path]) {
-      c = getSpecComplexity(specs, path, false)
+    if (!_specComplexityCache[id]) {
+      c = getSpecComplexity(specs, id, false)
     }
-    c = _specComplexityCache[path]
+    c = _specComplexityCache[id]
   } else {
-    c = _treeComplexityByPath(specs, path)
+    c = _treeComplexityByPath(specs, id)
   }
-  _specComplexityCache[path] = c
+  _specComplexityCache[id] = c
   return c
 }
 
 export const getSpecRadius = (
   specs: Specs,
-  path: string,
+  id: string,
   useCache: boolean = true
 ): number => {
-  const c: number = getSpecComplexity(specs, path, useCache)
+  const c: number = getSpecComplexity(specs, id, useCache)
   const R = UNIT_MIN_RADIUS + Math.log2(c) / 3
   const _R = Math.round(R) // important to return an integer
   return _R

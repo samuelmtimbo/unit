@@ -34,8 +34,11 @@ import { UNTITLED } from '../../../../../constant/STRING'
 import { System } from '../../../../../system'
 import { Spec, Specs } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
+import { GraphSpec } from '../../../../../types/GraphSpec'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { pull } from '../../../../../util/array'
+import { clone } from '../../../../../util/object'
+import { binaryFindIndex } from '../../../../../util/sort'
 import { removeWhiteSpace } from '../../../../../util/string'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import { keys } from '../../../../f/object/Keys/f'
@@ -379,8 +382,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _refresh_ordered_list = () => {
-    // console.log('Search', '_refresh_ordered_list')
-
     const { specs } = this._registry
 
     const id_list = keys(specs)
@@ -392,7 +393,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     })
 
     this._ordered_id_list = ordered_id_list
-    this._filtered_id_list = ordered_id_list
+    this._filtered_id_list = clone(ordered_id_list)
   }
 
   private _set_list_item_color = (id: string, color: string) => {
@@ -445,6 +446,18 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
   private _registry_unlisten: Unlisten
 
+  private _find_new_item_index = (spec: GraphSpec, list: string[]): number => {
+    const { specs } = this._registry
+
+    const index = binaryFindIndex(list, (current_spec_id) => {
+      const current_score = compareByComplexity(specs, spec.id, current_spec_id)
+
+      return current_score
+    })
+
+    return index
+  }
+
   private _listen_registry = () => {
     this._registry_unlisten = this._registry.specs_.subscribe(
       [],
@@ -461,20 +474,29 @@ export default class Search extends Element<HTMLDivElement, Props> {
               if (this._item[specId]) {
                 this._refresh_list_item(specId)
               } else {
+                const new_ordered_index = this._find_new_item_index(
+                  spec,
+                  this._ordered_id_list
+                )
+
+                this._ordered_id_list.splice(new_ordered_index, 0, specId)
+
+                const match = fuzzy.match(this._input_value, spec.name)
+
+                if (match) {
+                  const new_filtered_index = this._find_new_item_index(
+                    spec,
+                    this._filtered_id_list
+                  )
+
+                  this._filtered_id_list.splice(new_filtered_index, 0, specId)
+                }
+
                 this._add_list_item(
                   specId,
-                  Math.floor(this._ordered_id_list.length / 2), // RETURN
+                  new_ordered_index,
                   this._ordered_id_list.length
                 )
-              }
-
-              const selected_item_id = this._selected_id
-
-              this._refresh_ordered_list()
-              this._filter_list(true)
-
-              if (!this._list_hidden && selected_item_id) {
-                this._set_selected_item_id(selected_item_id, false)
               }
             }
           } else if (type === 'delete') {
@@ -638,15 +660,17 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     const list_item_div = this._list_item_div[id]
 
-    this._list.removeChild(list_item_div)
+    if (list_item_div) {
+      this._list.removeChild(list_item_div)
 
-    delete this._list_item_div[id]
-    delete this._item[id]
-    delete this._list_item_name[id]
-    delete this._list_item_content[id]
+      delete this._list_item_div[id]
+      delete this._item[id]
+      delete this._list_item_name[id]
+      delete this._list_item_content[id]
 
-    pull(this._filtered_id_list, id)
-    pull(this._ordered_id_list, id)
+      pull(this._filtered_id_list, id)
+      pull(this._ordered_id_list, id)
+    }
   }
 
   private _refresh_list_item = (id: string) => {
