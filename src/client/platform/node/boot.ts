@@ -1,9 +1,10 @@
 import { JSDOM } from 'jsdom'
 import { System } from '../../../system'
+import { Unlisten } from '../../../types/Unlisten'
 import { SYSTEM_ROOT_ID } from '../../SYSTEM_ROOT_ID'
 import { webBoot } from '../web/boot'
 
-export function boot(): System {
+export function boot(): [System, Unlisten] {
   const { window } = new JSDOM(`<div id="${SYSTEM_ROOT_ID}"></div>`, {
     url: 'http://localhost/',
   })
