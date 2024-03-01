@@ -2,7 +2,7 @@ import { boot } from '../client/platform/node/boot'
 import { fromBundle } from '../spec/fromBundle'
 import _specs from '../system/_specs'
 
-export const system = boot()
+export const [system] = boot()
 
 const bundle = require('./MergeSort.json')
 

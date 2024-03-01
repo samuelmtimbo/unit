@@ -117,7 +117,7 @@ import { boot } from '@_unit/unit/lib/client/platform/node/boot'
 import { fromBundle } from '@_unit/unit/lib/spec/fromBundle'
 import _specs from '@_unit/unit/lib/system/_specs'
 
-export const system = boot()
+export const [system] = boot()
 
 const bundle = require('./MergeSort.json')
 

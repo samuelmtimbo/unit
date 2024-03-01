@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const _specs = require('../../lib/system/_specs.js').default
 
-const system = boot()
+const [system] = boot()
 
 const bundle = JSON.parse(
   fs.readFileSync(path.join(__dirname, './MergeSort.json'), 'utf8')
