@@ -115,6 +115,8 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
+    container.preventDefault('mousedown')
+    container.preventDefault('touchdown')
 
     container.registerParentRoot(icon)
     container.addEventListeners([
@@ -410,7 +412,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
   }
 
   public hide(animate: boolean = true) {
-// console.log('Transcend', 'hide', animate)
+    // console.log('Transcend', 'hide', animate)
     this._hidden = true
 
     if (animate) {
@@ -425,7 +427,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
   }
 
   public show(animate: boolean = true) {
-// console.log('Transcend', 'show', animate)
+    // console.log('Transcend', 'show', animate)
     this._hidden = false
 
     if (animate) {

@@ -14,6 +14,8 @@ import {
   makeKeydownListener,
 } from '../../../../../client/event/keyboard'
 import { makePasteListener } from '../../../../../client/event/paste'
+import { UnitPointerEvent } from '../../../../../client/event/pointer'
+import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
 import parentElement from '../../../../../client/platform/web/parentElement'
 import { TreeNode } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
@@ -71,6 +73,7 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
     input.addEventListener(makeBlurListener(this._on_blur))
     input.addEventListener(makeKeydownListener(this._on_keydown))
     input.addEventListener(makePasteListener(this._on_paste))
+    input.addEventListener(makePointerDownListener(this._on_pointer_down))
     input.preventDefault('paste')
 
     const $element = parentElement($system)
@@ -181,6 +184,15 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
     const { path, value } = this.$props
 
     this.dispatchEvent('leafpaste', { path, value, text })
+  }
+
+  private _on_pointer_down = (
+    event: UnitPointerEvent,
+    _event: PointerEvent
+  ) => {
+    const { path, value } = this.$props
+
+    this.dispatchEvent('leafpointerdown', { path, value, event, _event })
   }
 
   public focus = (

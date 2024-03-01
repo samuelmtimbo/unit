@@ -273,6 +273,8 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     )
     share.appendChild(export_button)
     share.appendChild(import_button)
+    share.preventDefault('mousedown')
+    share.preventDefault('touchdown')
     this._share = share
 
     const cabinet = new Cabinet(

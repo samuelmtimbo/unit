@@ -2995,6 +2995,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   public _prevent_next_reset: boolean = false
 
+  private _search_to_be_focused: boolean = false
+  private _datum_to_be_focused: boolean = false
+
   private _refresh_theme = (): void => {
     const { $theme, $color } = this.$context
 
@@ -3673,7 +3676,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         } else {
           this._unlock_control()
-          this._disable_transcend()
+          // this._disable_transcend()
 
           // if (this._focused) {
           this._hide_control(animate)
@@ -3921,7 +3924,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if ($disabled) {
           this._transcend.hide(false)
         } else {
-          this._transcend.show(false)
+          if (this._focused) {
+            this._transcend.show(false)
+          }
         }
       }
     }
@@ -3935,7 +3940,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // if (this._load) {
     this._refresh_theme()
     this._refresh_color()
-    this._refresh_enabled()
+
+    if (this._focused) {
+      this._refresh_enabled()
+    }
     // }
 
     this._start_graph_simulation(LAYER_NONE)
@@ -11596,10 +11604,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         makeCustomListener('datumfocus', (event) => {
           this._on_datum_focus(datum_id, event)
         }),
+        makeCustomListener('leafpointerdown', () => {
+          this._datum_to_be_focused = true
+        }),
       ])
       this._datum_unlisten[datum_id] = unlisten
     }
     datum.stopPropagation('wheel')
+    datum.stopPropagation('focus')
     this._datum[datum_node_id] = datum
 
     const datum_overlay = this._create_overlay({
@@ -17490,6 +17502,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._fullwindow_component_ids = []
 
     this._is_all_fullwindow = false
+
+    this.focus()
   }
 
   private _abort_fullwindow_animation: Unlisten
@@ -18341,8 +18355,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _frame: Component<HTMLElement> | null = null
 
   private _lock_control = (): void => {
-    // console.log('Graph', 'lock_control', this._id)
-
     const { animate } = this.$props
 
     if (!this._control_lock) {
@@ -18373,6 +18385,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._search && !this._unlisten_search) {
       // console.log('Graph', '_enable_search', this._id)
 
+      const pointerDownListener = makePointerDownListener(() => {
+        this._search_to_be_focused = true
+      })
       const selectedListener = makeCustomListener(
         'selected',
         this._on_search_item_selected
@@ -18390,6 +18405,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const shapeListener = makeCustomListener('shape', this._on_search_shape)
 
       this._unlisten_search = this._search.addEventListeners([
+        pointerDownListener,
         selectedListener,
         shownListener,
         hiddenListener,
@@ -20647,13 +20663,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_context_enabled = (): void => {
     // console.log('Graph', '_on_context_enabled')
 
-    this._refresh_enabled()
+    if (this._focused) {
+      this._refresh_enabled()
+    }
   }
 
   private _on_context_disabled = (): void => {
     // console.log('Graph', '_on_context_disabled')
 
-    this._refresh_enabled()
+    if (this._focused) {
+      this._refresh_enabled()
+    }
   }
 
   private _on_context_theme_changed = (): void => {
@@ -20687,7 +20707,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._subgraph_graph.focus()
     } else if (
       this._core_component_unlocked_count > 0 &&
-      !this._temp_control_lock
+      !this._temp_control_lock &&
+      !this._just_pointer_down
     ) {
       const first = getObjSingleKey(this._core_component_unlocked)
 
@@ -20705,14 +20726,38 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else {
       this._focused = true
 
+      this._enable()
       this._lock_control()
+
+      this._show_transcend(true)
     }
   }
 
-  private _on_blur = () => {
+  private _on_blur = (event) => {
     // console.log('Graph', '_on_blur', this._id)
 
     this._focused = false
+
+    if (this._search_to_be_focused) {
+      this._search_to_be_focused = false
+    } else if (this._datum_to_be_focused) {
+      //
+    } else {
+      this._disable()
+
+      const { relatedTarget } = event
+
+      if (relatedTarget) {
+        if (
+          this.$element.contains(relatedTarget) ||
+          this._frame.$element.contains(relatedTarget)
+        ) {
+          return
+        }
+      }
+
+      this._hide_transcend(true)
+    }
   }
 
   private _disable_input = (): void => {
@@ -22376,7 +22421,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_control_temp_unlock = (): void => {
-    if (!this._disabled && !this._is_fullwindow) {
+    if (!this._is_fullwindow) {
       if (!this._temp_control_lock) {
         if (this._temp_control_unlock) {
           // console.log('Graph', '_on_control_temp_unlock', this._id)
@@ -36996,8 +37041,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _get_datum_tree = (datum_node_id: string): TreeNode | undefined => {
-    const { datumId: id } = segmentDatumNodeId(datum_node_id)
-    const tree = this._datum_tree[id]
+    const { datumId } = segmentDatumNodeId(datum_node_id)
+
+    return this.__get_datum_tree(datumId)
+  }
+
+  private __get_datum_tree = (datum_id: string): TreeNode | undefined => {
+    const tree = this._datum_tree[datum_id]
     return tree
   }
 
@@ -37082,6 +37132,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _focus_datum = (datum_id: string, path: number[]): void => {
     // console.log('Graph', '_focus_datum')
+
+    this._datum_to_be_focused = true
 
     const datum_node_id = getDatumNodeId(datum_id)
     const datum = this._datum[datum_node_id]
@@ -37366,7 +37418,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._lock_datum(datum_node_id)
 
-      const data_ = _filterEmptyNodes(data)
+      const tree = _filterEmptyNodes(data)
 
       const datum_anchor_node_id = this._get_node_anchor_node_id(datum_node_id)
 
@@ -37374,11 +37426,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         edit_datum_id,
         datum_node_id,
         datum_anchor_node_id,
-        data_.value,
-        data_
+        tree.value,
+        tree
       )
 
-      this._commit_data_value(edit_datum_id, data_, prevent)
+      this._commit_data_value(edit_datum_id, tree, prevent)
+
+      if (removeWhiteSpace(tree.value) === '') {
+        if (this._has_node(datum_node_id)) {
+          this._sim_remove_datum(datum_node_id)
+        }
+      }
 
       this._edit_datum_just_blurred = true
 
@@ -37413,12 +37471,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._remove_pin_datum_link(datum_node_id)
         }
       } else {
-        if (this._is_datum_pin_type_match(datum_node_id, datum_pin_node_id)) {
+        const { specs } = this.$props
+
+        const pin_type = this._pin_type_of_kind(datum_pin_node_id, 'input')
+
+        if (_isValidTree(tree) && _isTypeMatch(specs, tree, pin_type)) {
           if (!prevent) {
             this.set_pin_data(datum_pin_node_id, tree.value)
           }
         } else {
-          this._remove_pin_datum_link(datum_node_id)
+          if (tree.value === '') {
+            this._pod_remove_pin_datum(datum_pin_node_id)
+          } else {
+            this._remove_pin_datum_link(datum_node_id)
+          }
         }
       }
     } else if (datum_plug_node_id) {
@@ -37428,12 +37494,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       } else {
         this._remove_plug_set_datum_link(datum_plug_node_id)
-      }
-    }
-
-    if (removeWhiteSpace(tree.value) === '') {
-      if (this._has_node(datum_node_id)) {
-        this._sim_remove_datum(datum_node_id)
       }
     }
   }
@@ -39333,11 +39393,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return position
   }
 
+  private _just_pointer_down = false
+
   private _on_pointer_down = (
     event: UnitPointerEvent,
     _event: PointerEvent
   ) => {
     // console.log('Graph', '_on_pointer_down')
+
+    this._just_pointer_down = true
+
+    setTimeout(() => {
+      this._just_pointer_down = false
+    }, 0)
 
     const { pointerId, clientX, clientY } = event
 
@@ -39356,6 +39424,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this.__on_pointer_down(pointerId, clientX, clientY)
   }
 
+  private _temp_lock_control = () => {
+    // console.log('Graph', '_temp_lock_control', this._id)
+
+    this._temp_control_lock = true
+
+    this._control.dispatchEvent('temp_lock', {}, false)
+
+    this._lock_control()
+  }
+
+  private _temp_unlock_control = () => {
+    // console.log('Graph', '_temp_unlock_control', this._id)
+
+    this._unlock_control()
+
+    this._temp_control_lock = false
+
+    this._control.dispatchEvent('temp_unlock', {}, false)
+  }
+
   private __on_pointer_down = (
     pointerId: number,
     clientX: number,
@@ -39371,11 +39459,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._control) {
       if (!this._control_lock) {
         // if (this._focused) {
-        this._temp_control_lock = true
-
-        this._control.dispatchEvent('temp_lock', {}, false)
-
-        this._lock_control()
+        this._temp_lock_control()
         // }
       }
     }
@@ -42595,11 +42679,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._control) {
       if (this._temp_control_lock) {
         // if (!this._focused) {
-        this._unlock_control()
-
-        this._temp_control_lock = false
-
-        this._control.dispatchEvent('temp_unlock', {}, false)
+        this._temp_unlock_control()
         // }
       }
     }
@@ -42998,8 +43078,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._click_just_cancelled.add(pointerId)
   }
 
+  private _just_clicked = false
+
   private _on_click = (event: UnitPointerEvent, _event: PointerEvent): void => {
     // console.log('Graph', '_on_click')
+
+    this._just_clicked = true
+
+    setTimeout(() => {
+      this._just_clicked = false
+    }, 1)
 
     if (keyCount(this._resize_node_id_pointer_id) > 0) {
       return
@@ -43022,6 +43110,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._is_background_pointer(pointerId)) {
       this._on_background_click()
     }
+
+    if (this._datum_to_be_focused) {
+      this._datum_to_be_focused = false
+    } else {
+      if (this._focused) {
+        //
+      } else {
+        // blur any focused input (search, edit datum, etc.)
+        this.focus()
+      }
+    }
   }
 
   private _on_background_click = (): void => {
@@ -43039,13 +43138,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       } else {
         this._deselect_all_visible()
       }
-    }
-
-    if (this._focused) {
-      //
-    } else {
-      // blur any focused input (search, edit datum, etc.)
-      this.focus()
     }
   }
 
@@ -49413,6 +49505,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
 
+        this._search_to_be_focused = true
+
         this._show_search()
       } else {
         this._hide_search()
@@ -55229,7 +55323,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const datum_node_id = this._pin_to_datum[pin_node_id]
 
-    if (datum_node_id) {
+    if (datum_node_id && this._edit_datum_node_id !== datum_node_id) {
       this._sim_remove_datum(datum_node_id)
     }
 
@@ -55989,7 +56083,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       })
       this._refresh_color()
     } else if (prop === 'disabled') {
-      this._refresh_enabled()
+      if (this._focused) {
+        this._refresh_enabled()
+      }
     } else if (prop === 'zoom') {
       this._set_zoom(current)
     } else if (prop === 'graph') {
@@ -56033,7 +56129,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._reset_spec()
 
-      this._refresh_enabled()
+      if (this._focused) {
+        this._refresh_enabled()
+      }
     } else if (prop === 'fullwindow') {
       if (current === true && !this._is_fullwindow) {
         this._enter_all_fullwindow(false)
