@@ -43051,6 +43051,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return
     }
 
+    if (!this._focused) {
+      return
+    }
+
+    _event.preventDefault()
+
     const { $x: x, $y: y, $width: width, $height: height } = this.$context
 
     if (
