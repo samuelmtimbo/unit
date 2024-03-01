@@ -39,7 +39,7 @@ export function _evaluate(
         if (entry.type === TreeNodeType.KeyValue) {
           const [key, value] = entry.children
           object[_evaluate(key, specs, classes)] = _evaluate(
-            value ?? key,
+            (value.value && value) || key,
             specs,
             classes,
             resolver
