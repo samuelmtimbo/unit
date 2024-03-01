@@ -1,7 +1,7 @@
 import { System } from '../system'
 import {
-  PositionObserver,
   IPositionObserverEntry,
+  PositionObserver,
   PositionObserverCallback,
 } from '../types/global/PositionObserver'
 import { Unlisten } from '../types/Unlisten'
