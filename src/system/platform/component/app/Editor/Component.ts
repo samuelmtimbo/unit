@@ -11595,6 +11595,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this.$system
       )
       const unlisten = datum.addEventListeners([
+        makeKeydownListener((event) => {
+          const { key } = event
+
+          if (key === 'Enter') {
+            const prevent =
+              this._edit_datum_commited || this._edit_datum_never_changed
+
+            this._commit_data_value(
+              datum_id,
+              this.__get_datum_tree(datum_id),
+              prevent
+            )
+          }
+        }),
         makeCustomListener('datumchange', (event) => {
           this._on_datum_change(datum_id, event)
         }),
