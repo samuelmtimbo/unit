@@ -2166,15 +2166,17 @@ export class Graph<I = any, O = any>
         propagate
       )
 
-      if (propagate) {
-        if (isUnitPinRef) {
-          if (isOutput) {
-            pin.take()
-          } else {
+      if (isUnitPinRef) {
+        if (isOutput) {
+          pin.take()
+        } else {
+          if (propagate) {
             unit.takePin(type, _pinId)
           }
         }
+      }
 
+      if (propagate) {
         if (type === 'input') {
           unit.takeInput(_pinId)
         }
