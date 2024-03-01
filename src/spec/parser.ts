@@ -422,10 +422,13 @@ export function _isTypeMatch(
             ) {
               return false
             }
-          } else if (
-            sourceValue === undefined ||
-            !_isTypeMatch(specs, sourceValue, targetValue)
-          ) {
+          } else if (sourceValue === undefined) {
+            return false
+          } else if (sourceValue.value === '') {
+            if (!_isTypeMatch(specs, getTree(`"${targetKey}"`), targetValue)) {
+              return false
+            }
+          } else if (!_isTypeMatch(specs, sourceValue, targetValue)) {
             return false
           }
         }
