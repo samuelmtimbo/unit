@@ -28,6 +28,7 @@ import {
 } from './DEFAULT_FONT_SIZE'
 import { IOElement } from './IOElement'
 import { Listener } from './Listener'
+import { getActiveElement } from './activeElement'
 import { addListener, addListeners } from './addListener'
 import { animateSimulate } from './animation/animateSimulate'
 import { namespaceURI } from './component/namespaceURI'
@@ -608,6 +609,22 @@ export class Component<
     this.$localId = undefined
   }
 
+  isFocusInside(): boolean {
+    let activeElementInside: boolean = false
+
+    const activeElement = getActiveElement(this.$system)
+
+    if (activeElement) {
+      activeElementInside = this.$element.contains(activeElement)
+
+      for (const $root of this.$root) {
+        activeElementInside = activeElementInside || $root.isFocusInside()
+      }
+    }
+
+    return activeElementInside
+  }
+
   detach(host: string, opt: { animate?: boolean }): void {
     // console.log('Component', 'detach', host, opt)
 
@@ -631,6 +648,10 @@ export class Component<
       return
     }
 
+    const activeElementInside = this.isFocusInside()
+
+    const activeElement = getActiveElement(this.$system)
+
     const hostComponent = hosts[0] // TODO heuristic: get closest on the tree
 
     let hostSlot = hostComponent.getSlot('default')
@@ -640,6 +661,15 @@ export class Component<
     const commit = () => {
       for (const [_, leaf] of base) {
         hostSlot.domAppendChild(leaf)
+      }
+
+      if (activeElementInside) {
+        if (
+          activeElement instanceof HTMLElement ||
+          activeElement instanceof SVGElement
+        ) {
+          activeElement.focus()
+        }
       }
     }
 
