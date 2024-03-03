@@ -29,7 +29,7 @@ export default function debounce(
 }
 
 export function animateDebounce(func: Function, execAsap: boolean = false) {
-  let timeout
+  let frame: number
 
   return function debounced() {
     // @ts-ignore
@@ -40,15 +40,15 @@ export function animateDebounce(func: Function, execAsap: boolean = false) {
       if (!execAsap) {
         func.apply(obj, args)
       }
-      timeout = null
+      frame = null
     }
 
-    if (timeout) {
-      clearTimeout(timeout)
+    if (frame) {
+      cancelAnimationFrame(frame)
     } else if (execAsap) {
       func.apply(obj, args)
     }
 
-    timeout = requestAnimationFrame(delayed)
+    frame = requestAnimationFrame(delayed)
   }
 }
