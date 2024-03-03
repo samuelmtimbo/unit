@@ -43051,7 +43051,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return
     }
 
-    if (!this._focused) {
+    if (this._disabled) {
       return
     }
 
