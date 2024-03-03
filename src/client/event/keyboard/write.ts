@@ -1,5 +1,6 @@
 import { System } from '../../../system'
 import { clamp } from '../../../system/core/relation/Clamp/f'
+import { getActiveElement } from '../../activeElement'
 import { isChar, keyToCode, keyToKeyCode } from './keyCode'
 
 const isAlphaNumCharOrSpace = (str: string): boolean => {
@@ -52,21 +53,6 @@ const findNextAltIndex = (value: string, selectionStart: number): number => {
     }
   }
   return i
-}
-
-export function getActiveElement(system: System): Element {
-  const activeElement = getWindowActiveElement(system, window)
-
-  return activeElement
-}
-
-export function getWindowActiveElement(
-  system: System,
-  _window: Window
-): Element {
-  const { root } = system
-
-  return root.shadowRoot.activeElement
 }
 
 export function emitKeyboardEvent(
