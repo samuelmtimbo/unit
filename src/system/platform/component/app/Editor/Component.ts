@@ -28540,9 +28540,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._enable_transcend()
 
         this._show_transcend(animate)
-
-        this.focus()
       }
+
+      this.focus()
 
       dispatchEvent('leaveunit', {}, false)
     }
@@ -55394,7 +55394,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    if (this._debug_interval === null && this._enabled()) {
+    if (this._debug_interval === null) {
       this._start_debugger()
     }
   }
