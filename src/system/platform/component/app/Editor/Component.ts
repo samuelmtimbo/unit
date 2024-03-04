@@ -49559,15 +49559,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const processSubGraph = (editor: Editor_, editor_spec: GraphSpec) => {
       if (!isSystemSpec(editor_spec)) {
-        const unit_positions = editor.get_unit_relative_positions()
         const node_positions = editor.get_node_relative_positions()
 
         for (const node_id in node_positions) {
           const node_position = node_positions[node_id]
 
-          if (isLinkPinNodeId(node_id)) {
-            const round_node_position = roundPoint(node_position)
+          const round_node_position = roundPoint(node_position)
 
+          if (isUnitNodeId(node_id)) {
+            deepSet(
+              bundle,
+              [
+                'specs',
+                editor_spec.id,
+                'units',
+                node_id,
+                'metadata',
+                'position',
+              ],
+              round_node_position
+            )
+          } else if (isLinkPinNodeId(node_id)) {
             const { unitId, type, pinId } = segmentLinkPinNodeId(node_id)
 
             deepSet(
@@ -49585,20 +49597,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               round_node_position
             )
           } else if (isMergeNodeId(node_id)) {
-            //
+            const { mergeId } = segmentMergeNodeId(node_id)
+
+            deepSet(
+              bundle,
+              ['specs', editor_spec.id, 'metadata', 'merge', mergeId],
+              round_node_position
+            )
+          } else if (isExternalNodeId(node_id)) {
+            // TODO
           }
-        }
-
-        for (const unit_id in unit_positions) {
-          const unit_position = unit_positions[unit_id]
-
-          const round_unit_position = roundPoint(unit_position)
-
-          deepSet(
-            bundle,
-            ['specs', editor_spec.id, 'units', unit_id, 'metadata', 'position'],
-            round_unit_position
-          )
         }
 
         for (const unitId in editor_spec.units) {
