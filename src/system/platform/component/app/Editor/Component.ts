@@ -284,8 +284,6 @@ import {
   randomInRadius,
   randomInRect,
   randomUnitVector,
-  rectCenter,
-  rectsBoundingRect,
   resizeVector,
   roundPoint,
   surfaceDistance,
@@ -614,6 +612,7 @@ import {
   mapObjKV,
   mapObjKey,
   mapObjKeyKV,
+  mapObjVK,
   reduceObj,
 } from '../../../../../util/object'
 import { removeWhiteSpace } from '../../../../../util/string'
@@ -4026,14 +4025,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const node_id in nodes) {
       const node = this.get_node(node_id)
 
-      const node_center_position = {
-        x: node.x + node.width / 2,
-        y: node.y + node.height / 2,
-      }
+      const node_relative_position = pointVector(center, node)
 
-      const node_relative_position = pointVector(center, node_center_position)
-
-      node_positions[node_id] = roundPoint(node_relative_position)
+      node_positions[node_id] = node_relative_position
     }
 
     return node_positions
@@ -5275,11 +5269,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._unit_to_unit = {}
 
+    const center = this._jiggle_world_screen_center()
+
     for (const unit_id in units) {
       const unit: GraphUnitSpec = units[unit_id]
       const { metadata = {} } = unit
       const { position } = metadata
-      const p = this._jiggle_world_screen_center()
+
+      const p = clone(center)
+
       if (position) {
         p.x += position.x
         p.y += position.y
@@ -5327,7 +5325,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         unit_id
       )
 
-      this._sim_add_unit_pins(unit_id, unit, unit_pin_position)
+      const offset_unit_pin_position = mapObjVK(unit_pin_position, (map) => {
+        return mapObjVK(map, (position) => {
+          return addVector(center, position)
+        })
+      })
+
+      this._sim_add_unit_pins(unit_id, unit, offset_unit_pin_position)
     }
 
     for (const unit_id in units) {
@@ -5339,7 +5343,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const merge_id in merges) {
       const merge: GraphMergeSpec = merges[merge_id]
 
-      const p = this._jiggle_world_screen_center()
+      const p = clone(center)
 
       const { position: metadata_position = {} } = metadata
       const { merge: merge_position = {} } = metadata_position
@@ -52389,10 +52393,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     layout_node.y = y
   }
 
-  private _set_spec_nodes_position = (spec: GraphSpec): void => {
-    this.__spec_set_nodes_position(spec)
-  }
-
   private _get_datum_spec = (datum_node_id: string): DatumSpec => {
     const value = this._get_datum_value(datum_node_id)
 
@@ -52436,15 +52436,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return isComponentSpec(this._spec)
   }
 
-  private __spec_set_nodes_position = (spec: GraphSpec): void => {
-    const rect = rectsBoundingRect(Object.values(this._unit_node))
-
-    const center = rectCenter(rect)
-
-    const position_map = this.get_nodes_center_relative_positions_to(
-      this._node,
-      center
-    )
+  private _set_spec_nodes_position = (spec: GraphSpec): void => {
+    const position_map = this.get_nodes_center_relative_positions(this._node)
 
     for (const node_id in position_map) {
       const position = position_map[node_id]
@@ -52474,7 +52467,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const { mergeId } = segmentMergeNodeId(merge_node_id)
 
-        deepSet(spec, ['metadata', 'position', 'merge', mergeId], position)
+        deepSet(
+          spec,
+          ['metadata', 'position', 'merge', mergeId],
+          round_position
+        )
       } else if (this._is_ext_node_id(node_id)) {
         const exposed_node_id = node_id
 
@@ -52485,6 +52482,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           [`${type}s`, pinId, 'metadata', 'position', subPinId],
           round_position
         )
+      } else if (this._is_datum_node_id(node_id)) {
+        const datum_pin_node_id = this._datum_to_pin[node_id]
+
+        if (datum_pin_node_id) {
+          const { unitId, type, pinId } =
+            segmentLinkPinNodeId(datum_pin_node_id)
+
+          deepSet(
+            spec,
+            ['units', unitId, type, pinId, 'metadata', 'data', 'position'],
+            round_position
+          )
+        } else {
+          const { datumId } = segmentDatumNodeId(node_id)
+
+          deepSet(
+            spec,
+            ['metadata', 'position', 'datum', datumId],
+            round_position
+          )
+        }
       } else {
         //
       }
