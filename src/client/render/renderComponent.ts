@@ -44,7 +44,7 @@ export function renderComponent(
     frame.appendChild(component)
     root.appendChild(frame.$element)
 
-    const remove_child = appendChild(context, frame)
+    const removeChild = appendChild(context, frame)
 
     mount(context)
 
@@ -64,7 +64,7 @@ export function renderComponent(
 
     component.focus()
 
-    unlisten = callAll([remove_child, unlisten_unit])
+    unlisten = callAll([removeChild, unlisten_unit])
   })
 
   return unlisten

@@ -131,6 +131,8 @@ export function webBoot(
 
   root.appendChild(_root)
 
+  _root.style.fontFamily = "'Inconsolata', monospace"
+
   system.root = _root
 
   attachSprite(system)

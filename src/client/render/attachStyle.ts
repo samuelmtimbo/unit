@@ -122,11 +122,10 @@ export const ROOT_STYLE = `
   }
 
   * {
-    font-family: 'Inconsolata', monospace;
+    font-family: inherit;
     caret-color: currentcolor;
     outline-color: #00000000;
     outline-style: none;
-    /* outline: 1px solid #ffcc00; */
   }
 `
 

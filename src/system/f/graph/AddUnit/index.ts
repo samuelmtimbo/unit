@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { getSpec } from '../../../../client/spec'
+import { applyUnitDefaultIgnored } from '../../../../spec/fromSpec'
 import { System } from '../../../../system'
 import { GraphUnitSpec } from '../../../../types/GraphUnitSpec'
 import { G } from '../../../../types/interface/G'
@@ -38,41 +38,15 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
   f({ id, class: Class, graph }: I<T>, done: Done<O<T>>): void {
     try {
       const { __bundle } = Class
-      const { unit: __unit } = __bundle
-      const { id: __id, input: __inputs = {} } = __unit
+      const { id: __id, input: __inputs = {} } = __bundle.unit
 
       const specs = weakMerge(__bundle.specs, this.__system.specs)
 
-      const spec = getSpec(specs, __id)
+      const unit: GraphUnitSpec = { id: __id, input: {}, output: {} }
 
-      const unit_spec: GraphUnitSpec = { id: __id, input: {}, output: {} }
+      applyUnitDefaultIgnored(unit, specs)
 
-      const { inputs = {}, outputs = {} } = spec
-
-      for (const inputId in inputs) {
-        unit_spec.input[inputId] = unit_spec.input[inputId] || {}
-        const __input = __inputs[inputId]
-        if (__input) {
-          const { data } = __input
-          unit_spec.input[inputId].data = data
-        }
-        const input = inputs[inputId]
-        const { defaultIgnored } = input
-        if (defaultIgnored) {
-          unit_spec.input[inputId].ignored = defaultIgnored
-        }
-      }
-
-      for (const outputId in outputs) {
-        const output = outputs[outputId]
-        const { defaultIgnored } = output
-        if (defaultIgnored) {
-          unit_spec.output[outputId] = unit_spec.output[outputId] || {}
-          unit_spec.output[outputId].ignored = defaultIgnored
-        }
-      }
-
-      graph.addUnitSpec(id, { unit: unit_spec })
+      graph.addUnitSpec(id, { unit })
     } catch (err) {
       done(undefined, err.message)
 

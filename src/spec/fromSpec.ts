@@ -7,6 +7,7 @@ import { GraphSpec } from '../types/GraphSpec'
 import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitPinSpec } from '../types/GraphUnitPinSpec'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
+import { io } from '../types/IOOf'
 import { weakMerge } from '../weakMerge'
 import { bundleClass } from './bundleClass'
 import { evaluateBundleStr } from './idFromUnitValue'
@@ -98,44 +99,50 @@ export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
   return Bundle
 }
 
+export function applyUnitDefaultIgnored(
+  unitSpec: GraphUnitSpec,
+  specs: Specs
+): void {
+  unitSpec.input = unitSpec.input || {}
+  unitSpec.output = unitSpec.output || {}
+
+  const { id } = unitSpec
+
+  const spec = specs[id]
+
+  function setIgnored(unitPinSpec: GraphUnitPinSpec, pinSpec: PinSpec): void {
+    const { ignored } = unitPinSpec
+
+    if (ignored === undefined) {
+      const { defaultIgnored } = pinSpec
+
+      if (defaultIgnored === true) {
+        unitPinSpec.ignored = true
+      }
+    }
+  }
+
+  io((type) => {
+    const pins = spec[`${type}s`] ?? {}
+    const pin = unitSpec[type]
+
+    for (const pinId in pins) {
+      const pinSpec = pins[pinId]
+
+      pin[pinId] = pin[pinId] || {}
+
+      const unitPinSpec = pin[pinId]
+
+      setIgnored(unitPinSpec, pinSpec)
+    }
+  })
+}
+
 export function applyDefaultIgnored(spec: GraphSpec, specs: Specs) {
   const { name, units } = spec
 
   for (const unitId in units) {
     const unitSpec: GraphUnitSpec = units[unitId]
-
-    unitSpec.input = unitSpec.input || {}
-    unitSpec.output = unitSpec.output || {}
-
-    const { id, input, output } = unitSpec
-
-    const spec = specs[id]
-
-    const { inputs, outputs } = spec
-
-    function setIgnored(unitPinSpec: GraphUnitPinSpec, pinSpec: PinSpec): void {
-      const { ignored } = unitPinSpec
-      if (ignored === undefined) {
-        const { defaultIgnored } = pinSpec
-        if (defaultIgnored === true) {
-          unitPinSpec.ignored = true
-        }
-      }
-    }
-
-    for (const inputId in inputs) {
-      const inputPinSpec = inputs[inputId]
-      input[inputId] = input[inputId] || {}
-      const unitInputPinSpec = input[inputId]
-      setIgnored(unitInputPinSpec, inputPinSpec)
-    }
-
-    for (const outputId in outputs) {
-      const outputPinSpec = outputs[outputId]
-      output[outputId] = output[outputId] || {}
-      const unitOutputPinSpec = output[outputId]
-      setIgnored(unitOutputPinSpec, outputPinSpec)
-    }
   }
 }
 

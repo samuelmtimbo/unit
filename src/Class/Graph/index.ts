@@ -49,6 +49,7 @@ import {
 import { cloneUnit } from '../../spec/cloneUnit'
 import { evaluate } from '../../spec/evaluate'
 import { bundleFromId } from '../../spec/fromId'
+import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
 import { renameUnitInMerges } from '../../spec/reducers/spec'
 import {
   coverPin,
@@ -3243,6 +3244,11 @@ export class Graph<I = any, O = any>
   ): Unit {
     // console.log('Graph', 'addUnit', unitSpec, unitId)
 
+    applyUnitDefaultIgnored(
+      bundle.unit,
+      weakMerge(this.__system.specs, bundle.specs ?? {})
+    )
+
     const unit = unitFromBundleSpec(
       this.__system,
       bundle,
@@ -3261,6 +3267,11 @@ export class Graph<I = any, O = any>
     emit: boolean = true
   ): Unit {
     // console.log('Graph', 'addUnit', unitSpec, unitId)
+
+    applyUnitDefaultIgnored(
+      bundle.unit,
+      weakMerge(this.__system.specs, bundle.specs ?? {})
+    )
 
     const unit = unitFromBundleSpec(
       this.__system,
@@ -3589,7 +3600,6 @@ export class Graph<I = any, O = any>
           unit.addListener(DEFAULT_EVENT as keyof G_EE, (...args) => {
             this.emit(
               DEFAULT_EVENT as keyof G_EE,
-              // @ts-ignore
               ...args.slice(0, -1).concat([[unitId, ...args[args.length - 1]]])
             )
           })

@@ -3,10 +3,13 @@ import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { Specs } from '../types'
 import { Dict } from '../types/Dict'
+import { io } from '../types/IOOf'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
+import { weakMerge } from '../weakMerge'
 import { evaluate } from './evaluate'
 import { evaluateMemorySpec } from './evaluate/evaluateMemorySpec'
 import { unitFromId } from './fromId'
+import { applyUnitDefaultIgnored } from './fromSpec'
 
 export function unitFromBundleSpec(
   system: System,
@@ -14,8 +17,10 @@ export function unitFromBundleSpec(
   specs: Specs,
   branch: Dict<true> = {}
 ): Unit {
+  applyUnitDefaultIgnored(bundle.unit, weakMerge(specs, bundle.specs ?? {}))
+
   const {
-    unit: { id, input, output },
+    unit: { id, input },
   } = bundle
 
   const { classes } = system
@@ -26,23 +31,20 @@ export function unitFromBundleSpec(
 
   const unit = unitFromId(system, id, specs, classes, branch)
 
-  forEachValueKey(input || {}, (pinSpec = {}, pinId: string) => {
-    const { constant, ignored } = pinSpec
+  io((type) => {
+    const pins = bundle.unit[type] ?? {}
 
-    if (constant !== undefined && constant !== null) {
-      unit.setInputConstant(pinId, constant)
-    }
+    forEachValueKey(pins, (pinSpec = {}, pinId: string) => {
+      const { constant, ignored } = pinSpec
 
-    if (typeof ignored === 'boolean') {
-      unit.setInputIgnored(pinId, ignored)
-    }
-  })
-  forEachValueKey(output || {}, (pinSpec = {}, pinId: string) => {
-    const { ignored } = pinSpec
+      if (typeof constant === 'boolean') {
+        unit.setPinConstant(type, pinId, constant)
+      }
 
-    if (typeof ignored === 'boolean') {
-      unit.setOutputIgnored(pinId, ignored)
-    }
+      if (typeof ignored === 'boolean') {
+        unit.setPinIgnored(type, pinId, ignored)
+      }
+    })
   })
 
   const {
