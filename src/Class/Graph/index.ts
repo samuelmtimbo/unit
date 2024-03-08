@@ -70,6 +70,7 @@ import { stringifyMemorySpecData } from '../../spec/stringifySpec'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
 import { getSubComponentParentId } from '../../spec/util/component'
 import {
+  findMergePlugOfType,
   findUnitPinPlug,
   findUnitPlugs,
   forEachGraphSpecPinOfType,
@@ -2129,16 +2130,18 @@ export class Graph<I = any, O = any>
       kind = type,
     } = subPinSpec
 
+    const isInput = type === 'input'
     const isOutput = type === 'output'
+
+    const pin = this.getPin(type, pinId)
+    const isRef = this.hasRefPinNamed(type, pinId)
+    const active = pin.active()
 
     if (isOutput) {
       if (_mergeId) {
         this._simRemoveMergeOutput(_mergeId, propagate)
       }
     }
-
-    const pin = this.getPin(type, pinId)
-    const isRef = this.hasRefPinNamed(type, pinId)
 
     if (_mergeId) {
       this._simUnplugPinFromMerge(type, pinId, subPinId, _mergeId, propagate)
@@ -2149,6 +2152,20 @@ export class Graph<I = any, O = any>
         forEachInputOnMerge(merge, (unitId, pinId) => {
           this._removeUnitPinData(unitId, 'input', pinId)
         })
+
+        if (isInput && active) {
+          const outputPlugs = findMergePlugOfType(
+            this._spec,
+            'output',
+            _mergeId
+          )
+
+          for (const outputPlug of outputPlugs) {
+            const { pinId } = outputPlug
+
+            this.removePinData('output', pinId)
+          }
+        }
       }
     } else if (_unitId && _pinId) {
       const unit = this.getUnit(_unitId)
