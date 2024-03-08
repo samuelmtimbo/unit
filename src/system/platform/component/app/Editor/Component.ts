@@ -53582,6 +53582,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           next_spec.component.defaultWidth || defaultWidth
         next_spec.component.defaultHeight =
           next_spec.component.defaultHeight || defaultHeight
+
+        next_spec.type = `\`U\`&\`G\`&\`C\``
       }
 
       setSpec(next_spec.id, next_spec)
