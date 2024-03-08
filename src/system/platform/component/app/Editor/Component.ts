@@ -2995,6 +2995,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public _prevent_next_reset: boolean = false
 
   private _search_to_be_focused: boolean = false
+  private _search_to_be_focused_by_click: boolean = false
   private _datum_to_be_focused: boolean = false
   private _name_to_be_focused: boolean = false
 
@@ -18413,6 +18414,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const pointerDownListener = makePointerDownListener(() => {
         this._search_to_be_focused = true
+        this._search_to_be_focused_by_click = true
       })
       const selectedListener = makeCustomListener(
         'selected',
@@ -20764,7 +20766,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._focused = false
 
-    if (this._search_to_be_focused) {
+    if (this._search_to_be_focused_by_click){
+      //
+    } else if (this._search_to_be_focused) {
       this._search_to_be_focused = false
     } else if (this._datum_to_be_focused) {
       //
@@ -26636,6 +26640,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._plunk_pod()
+
+    this._search_to_be_focused_by_click = true
 
     this._search_start_unit_id = unit_id
     this._search_start_spec_id = spec_id
@@ -43149,6 +43155,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._datum_to_be_focused = false
     } else if (this._name_to_be_focused) {
       this._name_to_be_focused = false
+    } else if (this._search_to_be_focused_by_click) {
+      this._search_to_be_focused_by_click = false
     } else {
       if (this._focused) {
         //
@@ -49541,8 +49549,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
 
-        this._search_to_be_focused = true
-
         this._show_search()
       } else {
         this._hide_search()
@@ -51257,6 +51263,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_show_search')
 
     if (this._search) {
+      this._search_to_be_focused = true
+
       this._search.focus({ preventScroll: true })
     }
   }
