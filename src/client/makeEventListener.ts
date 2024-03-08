@@ -9,6 +9,7 @@ import {
   makeKeypressListener,
   makeKeyupListener,
 } from './event/keyboard'
+import { makeLoadListener } from './event/load'
 import { makePasteListener } from './event/paste'
 import { makeClickListener } from './event/pointer/click'
 import { makeMessageListener } from './event/pointer/message'
@@ -46,6 +47,7 @@ export type IOUIEventName =
   | 'toggle'
   | 'show'
   | 'hide'
+  | 'load'
 
 export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
   'click',
@@ -72,6 +74,7 @@ export const UI_EVENT_SET: Set<IOUIEventName> = new Set([
   'toggle',
   'show',
   'hide',
+  'load',
 ])
 
 export function makeUIEventListener(
@@ -123,6 +126,8 @@ export function makeUIEventListener(
       return makeWheelListener(callback)
     case 'toggle':
       return makeToggleListener(callback)
+    case 'load':
+      return makeLoadListener(callback)
     default:
       throw new Error(`unknown UI event: ${event}`)
   }
