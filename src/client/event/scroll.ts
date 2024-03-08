@@ -15,14 +15,14 @@ export function makeScrollListener(
 
 export function listenScroll(
   component: Listenable,
-  onWheel: (event: IOScrollEvent, _event: Event) => void
+  onScroll: (event: IOScrollEvent, _event: Event) => void
 ): () => void {
   const { $element } = component
 
   const scrollListener = (_event: Event) => {
     const {} = _event
 
-    onWheel({}, _event)
+    onScroll({}, _event)
   }
 
   $element.addEventListener('scroll', scrollListener, { passive: true })
