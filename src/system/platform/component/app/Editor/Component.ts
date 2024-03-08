@@ -24443,7 +24443,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     for (const _pin_node_id of all_pin_node_id) {
       compatible =
-        compatible && this._is_pin_pin_match(pin_node_id, _pin_node_id)
+        compatible && this._is_pin_pin_match(_pin_node_id, pin_node_id)
       if (!compatible) {
         break
       }
