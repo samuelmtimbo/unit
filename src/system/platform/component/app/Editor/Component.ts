@@ -2996,6 +2996,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _search_to_be_focused: boolean = false
   private _datum_to_be_focused: boolean = false
+  private _name_to_be_focused: boolean = false
 
   private _refresh_theme = (): void => {
     const { $theme, $color } = this.$context
@@ -6615,6 +6616,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     core_name.$element.addEventListener('dragstart', (event) => {
       event.preventDefault()
     })
+    core_name.$element.addEventListener('pointerdown', (event) => {
+      this._name_to_be_focused = true
+    })
     this._sim_setup_node_name(unit_id, core_name)
     this._core_name[unit_id] = core_name
 
@@ -8836,7 +8840,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       name: pin_id,
     })
 
-    pin_name.stopPropagation('pointerdown')
+    pin_name.addEventListener(
+      makePointerDownListener(() => {
+        this._name_to_be_focused = true
+      })
+    )
 
     this._sim_setup_node_name(ext_node_id, pin_name)
 
@@ -20760,6 +20768,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._search_to_be_focused = false
     } else if (this._datum_to_be_focused) {
       //
+    } else if (this._name_to_be_focused) {
+      //
     } else {
       this._disable()
 
@@ -20772,9 +20782,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ) {
           return
         }
-      }
 
-      this._hide_transcend(true)
+        this._hide_transcend(true)
+      }
     }
   }
 
@@ -43137,6 +43147,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (this._datum_to_be_focused) {
       this._datum_to_be_focused = false
+    } else if (this._name_to_be_focused) {
+      this._name_to_be_focused = false
     } else {
       if (this._focused) {
         //
