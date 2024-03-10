@@ -20770,7 +20770,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._focused = false
 
-    if (this._search_to_be_focused_by_click){
+    if (this._search_to_be_focused_by_click) {
       //
     } else if (this._search_to_be_focused) {
       this._search_to_be_focused = false
@@ -49751,7 +49751,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             deepSet(
               bundle,
-              ['specs', editor_spec.id, 'metadata', 'merge', mergeId],
+              [
+                'specs',
+                editor_spec.id,
+                'metadata',
+                'position',
+                'merge',
+                mergeId,
+              ],
               round_node_position
             )
           } else if (isExternalNodeId(node_id)) {
