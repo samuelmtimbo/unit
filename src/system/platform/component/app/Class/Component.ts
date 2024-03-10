@@ -9,6 +9,7 @@ import {
   pointInRectangle,
   unitVector,
 } from '../../../../../client/util/geometry'
+import { Size } from '../../../../../client/util/geometry/types'
 import { getUnitPinPosition } from '../../../../../client/util/geometry/unit/getUnitPinPosition'
 import { LINK_DISTANCE } from '../../../../../constant/LINK_DISTANCE'
 import { PIN_RADIUS } from '../../../../../constant/PIN_RADIUS'
@@ -48,8 +49,7 @@ export default class ClassDatum extends Element<SVGSVGElement, Props> {
 
     const { id, attr, className } = $props
 
-    let width: number = CLASS_DEFAULT_WIDTH
-    let height: number = CLASS_DEFAULT_HEIGHT
+    const { width, height } = this._size()
 
     const svg = new SVGSVG(
       {
@@ -58,7 +58,7 @@ export default class ClassDatum extends Element<SVGSVGElement, Props> {
         height,
         style: this._style(),
         attr,
-        viewBox: `0 0 ${width} ${height}`,
+        viewBox: `-1 -1 ${width + 2} ${height + 2}`,
       },
       this.$system
     )
@@ -94,17 +94,34 @@ export default class ClassDatum extends Element<SVGSVGElement, Props> {
     }
   }
 
+  private _r = (): number => {
+    const { specs, id } = this.$props
+
+    const r = getSpecRadius(specs, id) - 1.5
+
+    return r
+  }
+
+  private _size = (): Size => {
+    const r = this._r()
+
+    const width: number = 2 * r
+    const height: number = 2 * r
+
+    return { width, height }
+  }
+
   private _style = () => {
     const { style } = this.$props
 
-    let width: number = CLASS_DEFAULT_WIDTH
-    let height: number = CLASS_DEFAULT_HEIGHT
+    const { width, height } = this._size()
 
     return {
       width: `${width}px`,
       height: `${height}px`,
       color: 'currentColor',
       pointerEvents: 'none',
+      overflow: 'visible',
       ...style,
     }
   }
@@ -116,14 +133,13 @@ export default class ClassDatum extends Element<SVGSVGElement, Props> {
 
     const { name = '' } = spec
 
-    let width: number = CLASS_DEFAULT_WIDTH
-    let height: number = CLASS_DEFAULT_HEIGHT
-
     const children: Component[] = []
 
     const { inputs = {}, outputs = {} } = spec
 
-    const core_r = getSpecRadius(specs, id) - 2
+    const { width, height } = this._size()
+    const core_r = this._r()
+
     const r = PIN_RADIUS - 3
 
     const is_component = isComponentId(specs, id)
