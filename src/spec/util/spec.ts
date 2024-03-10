@@ -121,11 +121,12 @@ export const getUnitExposedPins = (
     for (const subPinId in plug) {
       const subPinSpec = plug[subPinId]
 
-      const { unitId: unitId_, pinId: pinId_, mergeId } = subPinSpec
+      const { unitId: unitId_, pinId: pinId_, mergeId, kind } = subPinSpec
 
       if (unitId_ === unitId) {
         deepSet(pins, [type, pinId_], {
           type,
+          kind,
           pinId,
           subPinId,
         })
