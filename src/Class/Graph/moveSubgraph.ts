@@ -636,9 +636,9 @@ export function moveMerge(
     } else if (ignoredUnit.has(unitId)) {
       if (target.hasUnit(nextUnitId)) {
         deepSet(nextMerge, [nextUnitId, type, pinId], true)
-
-        pinIntoCount++
       }
+
+      pinIntoCount++
     } else {
       //
     }

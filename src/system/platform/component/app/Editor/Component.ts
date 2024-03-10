@@ -2883,12 +2883,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }> = {}
   private _search_unit_exposed_pin_ids: {
     input: {
-      data: Dict<[string, string]>
-      ref: Dict<[string, string]>
+      data: Dict<[string, string, IO]>
+      ref: Dict<[string, string, IO]>
     }
     output: {
-      data: Dict<[string, string]>
-      ref: Dict<[string, string]>
+      data: Dict<[string, string, IO]>
+      ref: Dict<[string, string, IO]>
     }
   }
   private _search_unit_merged_pin_index: IOOf<{
@@ -9109,8 +9109,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     },
     exposed_pin_ids: IOOf<{
-      data: Dict<[string, string]>
-      ref: Dict<[string, string]>
+      data: Dict<[string, string, IO]>
+      ref: Dict<[string, string, IO]>
     }>,
     exposed_pin_index: IOOf<{ data: Dict<number>; ref: Dict<number> }> = {
       input: {
@@ -9136,7 +9136,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   } => {
     // console.log('Graph', '_sim_swap_unit', {
     //   merged_pin_ids,
-    //   valid_pin_match,
+    //   valid_pin_matches,
     //   exposed_pin_ids,
     // })
 
@@ -9454,19 +9454,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       )
     }
 
-    const replace_exposed = (type: IO, tag: 'ref' | 'data'): void => {
-      const exposed_pins = exposed_pin_ids[type][tag]
+    const replace_exposed = (kind: IO, tag: 'ref' | 'data'): void => {
+      const exposed_pins = exposed_pin_ids[kind][tag]
 
       const opposite_tag = tag === 'ref' ? 'data' : 'ref'
 
-      const valid_type_match = valid_pin_matches[type][tag]
+      const valid_type_match = valid_pin_matches[kind][tag]
 
       for (const pin_id in exposed_pins) {
         const exposed_pin = exposed_pins[pin_id]
 
-        const [pinId, subPinId] = exposed_pin
+        const [pinId, subPinId, type] = exposed_pin
 
-        const pin_index = exposed_pin_index[type][tag][pin_id]
+        const pin_index = exposed_pin_index[kind][tag][pin_id]
 
         for (let i = 0; i < valid_type_match.length; i++) {
           const _valid_pin_match = valid_type_match[i]
@@ -9475,26 +9475,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           if (pin_index === a) {
             const swap_pin_id =
-              swap_pin_ids[type][tag][b] ?? swap_pin_ids[type][opposite_tag][b]
+              swap_pin_ids[kind][tag][b] ?? swap_pin_ids[kind][opposite_tag][b]
 
             const sub_pin_spec = {
               unitId: new_unit_id,
               pinId: swap_pin_id,
-              kind: type,
+              kind,
             }
 
-            delete exposed_swap_pin_bag[type][tag][swap_pin_id]
+            delete exposed_swap_pin_bag[kind][tag][swap_pin_id]
 
-            next_exposed_pin_index[type][tag][pin_id] = pin_index
+            next_exposed_pin_index[kind][tag][pin_id] = pin_index
 
             const swap_pin_node_id = getPinNodeId(
               new_unit_id,
-              type,
+              kind,
               swap_pin_id
             )
 
             if (
-              this.__spec_is_link_pin_ignored(new_unit_id, type, swap_pin_id)
+              this.__spec_is_link_pin_ignored(new_unit_id, kind, swap_pin_id)
             ) {
               this._state_set_link_pin_ignored(swap_pin_node_id, false)
             }
@@ -26754,9 +26754,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._for_each_unit_pin(unit_id, (pin_node_id, type, pin_id) => {
+      const opposite_type = opposite(type)
+
       const merge_node_id = this._pin_to_merge[pin_node_id]
       const plug_node_id = this._pin_to_ext[type][pin_node_id]
+      const opposite_plug_node_id = this._pin_to_ext[opposite_type][pin_node_id]
+
       const int_node_id = this._pin_to_int[type][pin_node_id]
+      const opposite_int_node_id = this._pin_to_int[opposite_type][pin_node_id]
 
       const input = type === 'input'
 
@@ -26791,6 +26796,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           pin_count[type][tag]
       }
 
+      if (opposite_plug_node_id) {
+        const plug_type = this._get_plug_type(opposite_plug_node_id)
+
+        pin_type = pin_type ? _mostSpecific(plug_type, pin_type) : plug_type
+
+        this._search_unit_exposed_pin_index[type][tag][pin_id] =
+          pin_count[opposite_type][tag]
+      }
+
       if (pin_type) {
         merged_pin_types[type][tag].push(pin_type)
 
@@ -26800,7 +26814,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (int_node_id) {
         const { pinId, subPinId } = segmentPlugNodeId(int_node_id)
 
-        this._search_unit_exposed_pin_ids[type][tag][pin_id] = [pinId, subPinId]
+        this._search_unit_exposed_pin_ids[type][tag][pin_id] = [
+          pinId,
+          subPinId,
+          type,
+        ]
+        this._search_unit_exposed_pin_count[type][tag]++
+      }
+
+      if (opposite_int_node_id) {
+        const {
+          pinId,
+          subPinId,
+          type: type_,
+        } = segmentPlugNodeId(opposite_int_node_id)
+
+        this._search_unit_exposed_pin_ids[type][tag][pin_id] = [
+          pinId,
+          subPinId,
+          opposite_type,
+        ]
         this._search_unit_exposed_pin_count[type][tag]++
       }
     })
@@ -32495,6 +32528,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._for_each_unit_pin(unit_id, (pin_node_id, type, pin_id) => {
+      const opposite_type = opposite(type)
+
       const ref = this._is_link_pin_ref(pin_node_id)
 
       const tag = ref ? 'ref' : 'data'
@@ -32502,11 +32537,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const anchor_node_id = this._get_pin_anchor_node_id(pin_node_id)
 
       const int_node_id = this._pin_to_int[type][anchor_node_id]
+      const opposite_int_node_id =
+        this._pin_to_int[opposite_type][anchor_node_id]
 
       if (int_node_id) {
         const { pinId, subPinId } = segmentPlugNodeId(int_node_id)
 
-        exposed_pin_ids[type][tag][pin_id] = [pinId, subPinId]
+        exposed_pin_ids[type][tag][pin_id] = [pinId, subPinId, type]
+      }
+
+      if (opposite_int_node_id) {
+        const { pinId, subPinId } = segmentPlugNodeId(opposite_int_node_id)
+
+        exposed_pin_ids[type][tag][pin_id] = [pinId, subPinId, opposite_type]
       }
     })
 
@@ -45276,17 +45319,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     ) => {
       let should_expose = !node_id_set.has(pin_node_id)
 
+      const opposite_type = opposite(type)
+
       const int_node_id = this._pin_to_int[type][pin_node_id]
+      const opposite_int_node_id = this._pin_to_int[opposite_type][pin_node_id]
 
-      if (int_node_id) {
-        const { type, pinId, subPinId } = segmentPlugNodeId(int_node_id)
+      const process_plug = (int_node_id: string | undefined) => {
+        if (int_node_id) {
+          const { type, pinId, subPinId } = segmentPlugNodeId(int_node_id)
 
-        const ext_node_id = getExtNodeId(type, pinId, subPinId)
+          const ext_node_id = getExtNodeId(type, pinId, subPinId)
 
-        if (!node_id_set.has(ext_node_id)) {
-          should_expose = true
+          if (!node_id_set.has(ext_node_id)) {
+            should_expose = true
+          }
         }
       }
+
+      process_plug(int_node_id)
+      process_plug(opposite_int_node_id)
 
       if (should_expose) {
         const next_unit_id = next_id_map.unit[unit_id] ?? unit_id
@@ -45981,11 +46032,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           forEachPinOnMerge(merge, (unitId, type, pinId) => {
             if (unit_ids.includes(unitId)) {
-              deepSet(
-                next_unit_pin_merge_map,
-                [unitId, type, pinId],
-                next_merge_id
-              )
+              if (
+                merge_inside_pin_count[merge_id].input +
+                  merge_inside_pin_count[merge_id].output !==
+                1
+              ) {
+                deepSet(
+                  next_unit_pin_merge_map,
+                  [unitId, type, pinId],
+                  next_merge_id
+                )
+              }
             } else if (unitId === graph_unit_id) {
               const pin_spec = this.__get_unit_pin_spec(
                 unitId,
@@ -47136,41 +47193,44 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    forIOObjKV(plugs, (type, pin_id, { pinId, subPinId, position }) => {
-      position = position ?? this._jiggle_world_screen_center()
+    forIOObjKV(
+      plugs,
+      (type, pin_id, { kind = type, pinId, subPinId, position }) => {
+        position = position ?? this._jiggle_world_screen_center()
 
-      const next_pin_id = deepGetOrDefault(
-        this._collapse_next_map.nextPinIdMap,
-        [unit_id, type, pin_id, 'pinId'],
-        pin_id
-      )
-
-      const ext_pin_id = getExtNodeId(type, pinId, subPinId)
-
-      if (this._collapse_init_node_id_set.has(ext_pin_id)) {
-        if (this._has_node(ext_pin_id)) {
-          //
-        } else {
-          target.plugPin(type, pinId, subPinId, {
-            unitId: next_unit_id,
-            pinId: pin_id,
-            kind: type,
-          })
-        }
-      } else {
-        plugPin(
-          type,
-          pinId,
-          subPinId,
-          {
-            unitId: graph_id,
-            pinId: next_pin_id,
-            kind: type,
-          },
-          position
+        const next_pin_id = deepGetOrDefault(
+          this._collapse_next_map.nextPinIdMap,
+          [unit_id, type, pin_id, 'pinId'],
+          pin_id
         )
+
+        const ext_pin_id = getExtNodeId(type, pinId, subPinId)
+
+        if (this._collapse_init_node_id_set.has(ext_pin_id)) {
+          if (this._has_node(ext_pin_id)) {
+            //
+          } else {
+            target.plugPin(type, pinId, subPinId, {
+              unitId: next_unit_id,
+              pinId: pin_id,
+              kind,
+            })
+          }
+        } else {
+          plugPin(
+            type,
+            pinId,
+            subPinId,
+            {
+              unitId: graph_id,
+              pinId: next_pin_id,
+              kind,
+            },
+            position
+          )
+        }
       }
-    })
+    )
   }
 
   private _spec_move_unit_into_graph__reconnect(
@@ -47687,10 +47747,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         )
 
         pin_id_blacklist[type].add(next_graph_pin_id)
-
-        if (this._is_node_selected(pin_node_id)) {
-          connect_meta.selected.links[type].add(next_graph_pin_id)
-        }
       }
     })
 
@@ -49978,13 +50034,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       if (type === 'input') {
-        inputs[_pinId] = inputs[_pinId] || { plug: {} }
-
-        inputs[_pinId].plug[subPinId] = sub_pin_spec
+        deepSet(inputs, [pinId, 'plug', subPinId], sub_pin_spec)
       } else {
-        outputs[_pinId] = outputs[_pinId] || { plug: {} }
-
-        outputs[_pinId].plug[subPinId] = sub_pin_spec
+        deepSet(outputs, [pinId, 'plug', subPinId], sub_pin_spec)
       }
     }
 
@@ -50451,12 +50503,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           for (const sub_pin_id in plug) {
             const sub_pin_spec = plug[sub_pin_id]
 
-            const int_node_id = this._get_exposed_pin_spec_internal_node_id(
+            const pin_node_id = this._get_exposed_pin_spec_internal_node_id(
               type,
               sub_pin_spec
             )
 
-            if (!int_node_id) {
+            if (!pin_node_id) {
               const plug_position = {
                 int: position,
                 ext: position,
