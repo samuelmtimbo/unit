@@ -12211,6 +12211,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       } else if (this._is_int_node_id(node_id)) {
         on_plug_target_end(node_id, a, t_id, t)
+      } else if (this._is_datum_node_id(node_id)) {
+        if (d < 1) {
+          this._on_node_target_end(node_id, t_id)
+        }
       }
     }
 
@@ -21694,6 +21698,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _drop_datum = (datum_node_id: string): void => {
+    const { classes } = this.$system
+    const { specs } = this.$props
+
     if (this._search_unit_datum_node_id === datum_node_id) {
       this._mem_remove_search_datum()
 
@@ -21715,9 +21722,61 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           nearest_compatible_node_id
         )
       } else if (this._is_unit_node_id(nearest_compatible_node_id)) {
-        this._move_datum_to_empty_unit(
-          datum_node_id,
-          nearest_compatible_node_id
+        const unit_id = nearest_compatible_node_id
+
+        this._set_node_target(datum_node_id, unit_id)
+
+        const {
+          x: prev_x,
+          y: prev_y,
+          width: prev_width,
+          height: prev_height,
+        } = this._node[unit_id]
+
+        const { x, y } = this._get_node_position(unit_id)
+
+        const datum_value = this._get_datum_value(datum_node_id)
+
+        const id = idFromUnitValue(datum_value, specs, classes)
+
+        const r = getSpecRadius(specs, id)
+
+        const width = 2 * r
+        const height = 2 * r
+
+        const target_trait = {
+          x,
+          y,
+          width,
+          height,
+          opacity: 1,
+        }
+
+        this._animate_core_style(
+          unit_id,
+          {
+            x: prev_x,
+            y: prev_y,
+            width: prev_width,
+            height: prev_height,
+            opacity: 1,
+          },
+          () => {
+            return target_trait
+          },
+          ({ x, y, width, height }) => {
+            this._set_node_x(unit_id, x)
+            this._set_node_y(unit_id, y)
+
+            this._resize_core_width(unit_id, width)
+            this._resize_node_width(unit_id, width)
+
+            this._resize_core_height(unit_id, height)
+            this._resize_node_height(unit_id, height)
+          },
+          () => {
+            //
+          }
         )
       }
     }
@@ -22046,6 +22105,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     } else if (this._is_plug_node_id(node_id)) {
       this._on_plug_target_end(node_id, target_node_id)
+    } else if (this._is_datum_node_id(node_id)) {
+      if (this._is_unit_node_id(target_node_id)) {
+        this._move_datum_to_empty_unit(node_id, target_node_id)
+
+        this._remove_node_target(node_id)
+      }
     }
   }
 
@@ -32245,6 +32310,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       clientX,
       clientY
     )
+
+    if (this._is_draggable_mode()) {
+      this._ascend_node(datum_node_id, pointerId)
+    }
   }
 
   private _on_graph_yellow_unit_long_press = (
@@ -32724,6 +32793,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { x, y, width, height } = this._node[new_unit_id]
 
+    const target_trait = {
+      x,
+      y,
+      width,
+      height,
+      opacity: 1,
+    }
+
     this._animate_core_style(
       new_unit_id,
       {
@@ -32734,13 +32811,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         opacity: 1,
       },
       () => {
-        return {
-          x,
-          y,
-          width,
-          height,
-          opacity: 1,
-        }
+        return target_trait
       },
       ({ x, y, width, height }) => {
         this._set_node_x(new_unit_id, x)
@@ -40517,6 +40588,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     node_id: string,
     pointer_id: number
   ): void => {
+    this._ascend_node(node_id, pointer_id)
+
     if (this._is_unit_node_id(node_id)) {
       this._on_unit_red_drag_start(node_id, pointer_id)
     } else if (this._is_link_pin_node_id(node_id)) {
@@ -40562,8 +40635,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._remove_pin_from_merge(unit_merge_node_id, self_pin_node_id)
     }
-
-    this._ascend_node(unit_id, pointer_id)
   }
 
   private _on_node_blue_drag_start = (
@@ -41586,6 +41657,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                     } while (value === tree.value && value !== 'null')
                     const new_tree = _getValueTree(value)
                     const new_datum = this._datum[new_datum_node_id] as Datum
+
                     new_datum.setProp('data', new_tree)
                     new_datum.dispatchEvent('datumchange', { data: new_tree })
 
@@ -41593,14 +41665,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                     this._green_drag_node_id = pressed_node_id
                     this._green_drag_clone_id = new_datum_node_id
 
-                    // AD HOC should change state in place instead
-                    // of simulating events...
                     this._on_node_pointer_leave(pressed_node_id, event)
                     this._on_pointer_up(event)
 
-                    // this._on_node_pointer_enter(new_datum_node_id, event)
                     this._on_node_pointer_down(new_datum_node_id, event)
-                    // this._on_pointer_move(event)
 
                     drag_node_id = new_datum_node_id
 
@@ -41618,16 +41686,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               if (
                 this._is_freeze_mode()
                 // this._mode === 'add' ||
-                // (isMobile && this._is_datum_node_id(pressed_node_id))
+                // (this._is_datum_node_id(pressed_node_id))
               ) {
-                // if (isMobile) {
                 const { x, y } = this._get_node_position(drag_node_id)
+
                 const { x: px, y: py } = pointer_down_position
+
                 const [_px, _py] = this._client_to_graph(px, py)
+
                 const node = this._node[drag_node_id]
+
                 node.hx = _px - x
                 node.hy = _py - y
-                // }
               }
             } else {
               if (!this._is_node_unlocked(pressed_node_id)) {
@@ -41655,8 +41725,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       keyCount(this._resize_node_id_pointer_id) === 0
     ) {
       const [pointer_id_0, pointer_id_1] = keys(this._pointer_down)
+
       const { x: x0, y: y0 } = this._pointer_position[pointer_id_0]
       const { x: x1, y: y1 } = this._pointer_position[pointer_id_1]
+
       if (this._multiselect_area_ing) {
         const minX = Math.min(x0, x1)
         const maxX = Math.max(x0, x1)
@@ -52260,9 +52332,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             l = Math.max(l, 1)
 
-            const D = this.__sim_max_l(a_layer, b_layer, a_sg, b_sg)
+            const L = this.__sim_max_l(a_layer, b_layer, a_sg, b_sg)
 
-            if (l < D) {
+            if (l < L) {
               const m: number = this._sim_relative_layer_m(
                 b_layer,
                 a_layer,
