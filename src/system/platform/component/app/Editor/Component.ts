@@ -19052,8 +19052,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     const prop_unlisten = leaf_comp.interceptProp('style', (style) => {
-      // return { ...style, ...temp_style }
-      return style
+      const style_ = { ...style, ...temp_style }
+
+      this._leaf_init_style[leaf_id] = style
+      this._leaf_style[leaf_id] = style
+
+      return style_
     })
 
     this._leaf_prop_unlisten[leaf_id] = prop_unlisten
@@ -19174,12 +19178,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (!is_text) {
         mergeStyle(leaf_comp.$node, {
           position: style.position ?? '',
-          boxSizing: style['box-sizing'] ?? '',
+          boxSizing: style['boxSizing'] ?? '',
           margin: style.margin ?? '',
-          marginTop: style['margin-top'] ?? '',
-          marginLeft: style['margin-left'] ?? '',
-          marginRight: style['margin-bottom'] ?? '',
-          marginBottom: style['margin-bottom'] ?? '',
+          marginTop: style['marginTop'] ?? '',
+          marginLeft: style['marginLeft'] ?? '',
+          marginRight: style['marginRight'] ?? '',
+          marginBottom: style['marginBottom'] ?? '',
           top: style.top ?? '',
           left: style.left ?? '',
           right: style.right ?? '',
@@ -19187,9 +19191,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           width: is_canvas ? undefined : style['width'] ?? '',
           height: is_canvas ? undefined : style['height'] ?? '',
           opacity: style['opacity'] ?? '',
-          fontSize: style['font-size'] ?? '',
+          fontSize: style['fontSize'] ?? '',
           transform: style['transform'] ?? '',
-          aspectRatio: style['aspect-ratio'] ?? '',
+          aspectRatio: style['aspectRatio'] ?? '',
+          flexFlow: style['flexFlow'] ?? undefined,
         })
 
         const leaf_attr = this._leaf_attr[leaf_id]
