@@ -10404,6 +10404,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       layer = LAYER_COLLAPSE
     }
 
+    if (this._is_freeze_mode() && this._pressed_node_id_pointer_id[unit_id]) {
+      layer = -layer
+    }
+
     const r = width / 2
 
     this._sim_add_node(pin_node_id, {
