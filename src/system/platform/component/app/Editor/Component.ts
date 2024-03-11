@@ -21760,8 +21760,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const r = getSpecRadius(specs, id)
 
-        const width = 2 * r
-        const height = 2 * r
+        const is_component = isComponentId(specs, id)
+
+        let width: number
+        let height: number
+
+        if (is_component) {
+          width = prev_width
+          height = prev_height
+        } else {
+          width = 2 * r
+          height = 2 * r
+        }
 
         const target_trait = {
           x,
