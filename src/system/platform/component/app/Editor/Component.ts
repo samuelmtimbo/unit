@@ -3016,7 +3016,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const background = themeBackgroundColor($theme)
 
     if (isHEX(color)) {
-      let k: number = dark ? 1 : 0.8
+      let k: number = dark ? 1 : 1
 
       this._theme = {
         background,
