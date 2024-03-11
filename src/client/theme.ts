@@ -119,7 +119,7 @@ export const getThemeLinkModeColor = (theme: string, mode: Mode): string => {
 }
 
 export const themeBackgroundColor = ($theme: Theme): string => {
-  return $theme === 'dark' ? '#1f1f1f' : '#d1d1d1'
+  return $theme === 'dark' ? '#1f1f1f' : '#f1f1f1'
 }
 
 export const oppositeTheme = ($theme: Theme): Theme => {
@@ -142,6 +142,6 @@ export function defaultThemeColor(theme: Theme): string {
   if (theme === 'dark') {
     return COLOR_GRAYSCALE_BASE00
   } else {
-    return COLOR_GRAYSCALE_BASE11
+    return COLOR_GRAYSCALE_BASE09
   }
 }
