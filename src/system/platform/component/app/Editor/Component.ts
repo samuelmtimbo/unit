@@ -20791,9 +20791,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else if (this._name_to_be_focused) {
       //
     } else {
-      this._disable()
-
       const { relatedTarget } = event
+
+      if (
+        relatedTarget &&
+        this._control._container.$element.contains(relatedTarget)
+      ) {
+        return
+      }
+
+      this._disable()
 
       if (relatedTarget) {
         if (
