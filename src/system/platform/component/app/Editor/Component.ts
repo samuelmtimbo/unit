@@ -40399,9 +40399,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const [x, y] = this._client_to_graph(clientX, clientY)
 
     if (this._is_draggable_mode()) {
-      if (!config?.disable.edgeDrag) {
-        const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 0)
+      const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 0)
 
+      let prevent_edge_drag: boolean = false
+
+      if (this._is_datum_node_id(node_id)) {
+        if (this._datum_to_pin[node_id] || this._datum_to_plug[node_id]) {
+          this._drag_node_init_edge_overflow[node_id] = {
+            x0: x0 < 0,
+            y0: y0 < 0,
+            x1: x1 > 0,
+            y1: y1 > 0,
+          }
+
+          prevent_edge_drag = true
+        }
+      }
+
+      if (!config?.disable.edgeDrag && !prevent_edge_drag) {
         const {
           x0: overflow_x0,
           y0: overflow_y0,
@@ -40617,6 +40632,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     node_id: string,
     pointer_id: number
   ): void => {
+    // console.log('_on_node_red_drag_start', node_id, pointer_id)
+
     this._ascend_node(node_id, pointer_id)
 
     if (this._is_unit_node_id(node_id)) {
