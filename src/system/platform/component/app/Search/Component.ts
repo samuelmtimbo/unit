@@ -165,7 +165,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
           overflowY: 'auto',
           overflowX: 'hidden',
           display: this._list_hidden ? 'none' : 'block',
-          width: 'calc(100% + 3px)',
+          width: 'calc(100% + 13px)',
           height: '100%',
           boxSizing: 'content-box',
           scrollSnapType: 'y mandatory',
@@ -625,7 +625,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
         style: {
           borderBottom: list_item_div_border_bottom,
           boxSizing: 'border-box',
-          width: `${309 - 1}px`,
+          width: `${309}px`,
           height: '100%',
           scrollSnapAlign: 'start',
         },
