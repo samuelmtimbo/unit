@@ -118,16 +118,6 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    knob.addEventListener(
-      makeClickListener({
-        onClick: this._on_knob_click,
-      })
-    )
-    knob.addEventListener(makePointerEnterListener(this._on_knob_pointer_enter))
-    knob.addEventListener(makePointerLeaveListener(this._on_knob_pointer_leave))
-    knob.addEventListener(makePointerDownListener(this._on_knob_pointer_down))
-    knob.preventDefault('mousedown')
-    knob.preventDefault('touchdown')
     this._knob = knob
 
     const tooltip = new Tooltip(
@@ -184,6 +174,82 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     content.registerParentRoot(frame)
     this.content = content
 
+    const container = new Div(
+      {
+        className: 'drawer-column',
+        style: {
+          width: 'fit-content',
+          height: 'fit-content',
+        },
+      },
+      this.$system
+    )
+
+    const notch = new Div(
+      {
+        className: 'drawer-knob-notch-bottom',
+        style: {
+          position: 'absolute',
+          bottom: '0px',
+          left: '-30px',
+          top: '31px',
+          width: '27px',
+          height: '4px',
+          backgroundColor: 'none',
+          borderWidth: '0px 0px 1px 0px',
+          borderStyle: 'solid',
+          borderColor: 'currentColor',
+          boxSizing: 'border-box',
+          cursor: 'pointer',
+        },
+      },
+      this.$system
+    )
+
+    const notch0 = new Div(
+      {
+        className: 'drawer-knob-notch-bottom-left',
+        style: {
+          position: 'absolute',
+          bottom: '0px',
+          left: '-35px',
+          top: '31px',
+          width: '5px',
+          height: '4px',
+          backgroundColor: 'none',
+          borderWidth: '0px 0px 1px 1px',
+          borderBottomLeftRadius: '3px',
+          borderStyle: 'solid',
+          borderColor: 'currentColor',
+          boxSizing: 'border-box',
+          cursor: 'pointer',
+        },
+      },
+      this.$system
+    )
+
+    container.addEventListener(
+      makeClickListener({
+        onClick: this._on_knob_click,
+      })
+    )
+    container.addEventListener(
+      makePointerEnterListener(this._on_knob_pointer_enter)
+    )
+    container.addEventListener(
+      makePointerLeaveListener(this._on_knob_pointer_leave)
+    )
+    container.addEventListener(
+      makePointerDownListener(this._on_knob_pointer_down)
+    )
+
+    container.preventDefault('mousedown')
+    container.preventDefault('touchdown')
+
+    container.registerParentRoot(knob)
+    container.registerParentRoot(notch)
+    container.registerParentRoot(notch0)
+
     const column = new Div(
       {
         className: 'drawer-column',
@@ -224,47 +290,6 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
       this.$system
     )
 
-    const notch = new Div(
-      {
-        className: 'drawer-knob-notch-bottom',
-        style: {
-          position: 'absolute',
-          bottom: '0px',
-          left: '-30px',
-          top: '31px',
-          width: '27px',
-          height: '4px',
-          backgroundColor: 'none',
-          borderWidth: '0px 0px 1px 0px',
-          borderStyle: 'solid',
-          borderColor: 'currentColor',
-          boxSizing: 'border-box',
-        },
-      },
-      this.$system
-    )
-
-    const notch0 = new Div(
-      {
-        className: 'drawer-knob-notch-bottom-left',
-        style: {
-          position: 'absolute',
-          bottom: '0px',
-          left: '-35px',
-          top: '31px',
-          width: '5px',
-          height: '4px',
-          backgroundColor: 'none',
-          borderWidth: '0px 0px 1px 1px',
-          borderBottomLeftRadius: '3px',
-          borderStyle: 'solid',
-          borderColor: 'currentColor',
-          boxSizing: 'border-box',
-        },
-      },
-      this.$system
-    )
-
     const notch1 = new Div(
       {
         className: 'drawer-armpit-top-right',
@@ -296,12 +321,10 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
       this.$system
     )
     this.drawer = drawer
-    drawer.registerParentRoot(knob)
+    drawer.registerParentRoot(container)
     drawer.registerParentRoot(content)
     drawer.registerParentRoot(column)
     drawer.registerParentRoot(row)
-    drawer.registerParentRoot(notch)
-    drawer.registerParentRoot(notch0)
     notch.registerParentRoot(notch1)
 
     const $element = parentElement($system)
