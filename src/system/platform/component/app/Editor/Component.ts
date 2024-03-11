@@ -2997,6 +2997,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _search_to_be_focused: boolean = false
   private _search_to_be_focused_by_click: boolean = false
   private _datum_to_be_focused: boolean = false
+  private _datum_to_be_focused_by_click: boolean = false
   private _name_to_be_focused: boolean = false
 
   private _refresh_theme = (): void => {
@@ -11632,7 +11633,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._on_datum_focus(datum_id, event)
         }),
         makeCustomListener('leafpointerdown', () => {
-          this._datum_to_be_focused = true
+          this._datum_to_be_focused_by_click = true
         }),
       ])
       this._datum_unlisten[datum_id] = unlisten
@@ -20772,10 +20773,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (this._search_to_be_focused_by_click) {
       //
+    } else if (this._datum_to_be_focused_by_click) {
+      //
     } else if (this._search_to_be_focused) {
       this._search_to_be_focused = false
     } else if (this._datum_to_be_focused) {
-      //
+      this._datum_to_be_focused = false
     } else if (this._name_to_be_focused) {
       //
     } else {
@@ -43266,8 +43269,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._on_background_click()
     }
 
-    if (this._datum_to_be_focused) {
-      this._datum_to_be_focused = false
+    if (this._datum_to_be_focused_by_click) {
+      this._datum_to_be_focused_by_click = false
     } else if (this._name_to_be_focused) {
       this._name_to_be_focused = false
     } else if (this._search_to_be_focused_by_click) {
