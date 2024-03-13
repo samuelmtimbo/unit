@@ -1,6 +1,5 @@
 import { Position } from '../../client/util/geometry/types'
 import {
-  GraphPinSpec,
   GraphPlugOuterSpec,
   GraphSubComponentSpec,
   GraphSubPinSpec,
@@ -10,6 +9,7 @@ import { BundleSpec } from '../../types/BundleSpec'
 import { Dict } from '../../types/Dict'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../types/GraphMergesSpec'
+import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitMerges } from '../../types/GraphUnitMerges'
 import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'

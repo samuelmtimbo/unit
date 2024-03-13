@@ -1,6 +1,7 @@
 import { Position } from '../client/util/geometry/types'
 import { BaseSpec } from './BaseSpec'
 import { Dict } from './Dict'
+import { GraphPinSpec } from './GraphPinSpec'
 import { GraphSpec } from './GraphSpec'
 import { IO } from './IO'
 import { IOOf } from './IOOf'
@@ -62,10 +63,6 @@ export type GraphSubPinSpec =
   | GraphExposedLinkPinSpec
   | GraphExposedEmptyPinSpec
 
-export type GraphPinSpec = PinSpecBase & {
-  plug?: Dict<GraphSubPinSpec>
-}
-
 export type GraphPinsSpec = Dict<GraphPinSpec>
 
 export type PinsSpec = Dict<PinSpec>
@@ -92,7 +89,7 @@ export type Specs = {
 }
 
 export type GraphMetadataSpec = NodeMetadataSpec & {
-  position?: Dict<Dict<{ x: number; y: number }> | None>
+  position?: Dict<Dict<Position> | None>
 }
 
 export type BaseComponentSpec = {
@@ -142,7 +139,7 @@ export type GraphUnitMetadataSpec = {
   }
   rename?: string | None
   comment?: string | None
-  position?: { x: number; y: number }
+  position?: Position
 }
 
 export type GraphUnitPinOuterSpec = {

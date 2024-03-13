@@ -38,7 +38,7 @@ export const dataRegex = new RegExp(`^${DATA}/[^#_]+$`)
 export const metadataRegex = new RegExp(`^\\$/[^]+/${UNIT_ID_REGEX}$`)
 export const mergeRegex = new RegExp(`^${MERGE}/[^/#$]+$`)
 export const externalRegex = new RegExp(
-  `^${EXTERNAL}/(input|output)/[^${SEPARATOR}${DATA}${MERGE}]+$`
+  `^${EXTERNAL}/(input|output)/${PIN_ID_REGEX}/[^${SEPARATOR}${DATA}${MERGE}]+$`
 )
 export const internalRegex = new RegExp(
   `^\\${INTERNAL}/(input|output)/${PIN_ID_REGEX}/[^${SEPARATOR}${DATA}${MERGE}]+$`

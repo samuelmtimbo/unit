@@ -210,6 +210,7 @@ import {
   isBaseSpec,
   isBaseSpecId,
   isDatumLinkId,
+  isDatumNodeId,
   isExternalLinkId,
   isExternalNodeId,
   isInputPinId as isInputPinNodeId,
@@ -500,6 +501,7 @@ import {
   findUnitPinPlug,
   findUnitPlugs,
   forEachGraphSpecPin,
+  forEachGraphSpecPinOfType,
   forEachPinOnMerge,
   forEachPinOnMerges,
   forEachSpecPin,
@@ -541,7 +543,6 @@ import {
   DatumSpec,
   GraphComponentSpec,
   GraphDataSpec,
-  GraphPinSpec,
   GraphPinsSpec,
   GraphPlugOuterSpec,
   GraphPlugSpec,
@@ -560,6 +561,7 @@ import { GlobalRefSpec } from '../../../../../types/GlobalRefSpec'
 import { GraphConnectUnitMeta } from '../../../../../types/GraphConnectUnitMeta'
 import { GraphMergeSpec } from '../../../../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../../../../types/GraphMergesSpec'
+import { GraphPinSpec } from '../../../../../types/GraphPinSpec'
 import { GraphSpecs } from '../../../../../types/GraphSpecs'
 import { GraphState } from '../../../../../types/GraphState'
 import { GraphUnitConnect } from '../../../../../types/GraphUnitConnect'
@@ -4673,6 +4675,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  public getDatumPin(
+    datumId: string
+  ): { unitId: string; type: IO; pinId: string } | null {
+    const datum_node_id = getDatumNodeId(datumId)
+
+    const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+
+    if (datum_pin_node_id) {
+      return segmentLinkPinNodeId(datum_pin_node_id)
+    }
+
+    return null
+  }
+
   private _get_datum_pin_anchor_node_id = (
     datum_node_id: string
   ): string | null => {
@@ -5334,7 +5350,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         })
       })
 
-      this._sim_add_unit_pins(unit_id, unit, offset_unit_pin_position)
+      this._sim_add_unit_pins(unit_id, unit, offset_unit_pin_position, position)
     }
 
     for (const unit_id in units) {
@@ -5362,17 +5378,31 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._sim_collapse_merge(merge_id)
     }
 
-    for (const inputId in inputs) {
-      const pinSpec = inputs[inputId]
+    forEachGraphSpecPin(spec, (type, pinId, pinSpec) => {
+      const plug_positions = {}
 
-      this._sim_add_exposed_pin_set('input', inputId, pinSpec)
-    }
+      forEachGraphSpecPinOfType(spec, type, (pinId, pinSpec) => {
+        const { plug = {} } = pinSpec
 
-    for (const outputId in outputs) {
-      const pinSpec = outputs[outputId]
+        for (const subPinId in plug) {
+          const sub_pin_metadata_position =
+            pinSpec.metadata?.position?.[subPinId]
 
-      this._sim_add_exposed_pin_set('output', outputId, pinSpec)
-    }
+          const sub_pin_position = {
+            int:
+              sub_pin_metadata_position?.int &&
+              addVector(center, sub_pin_metadata_position.int),
+            ext:
+              sub_pin_metadata_position?.ext &&
+              addVector(center, sub_pin_metadata_position.ext),
+          }
+
+          plug_positions[subPinId] = sub_pin_position
+        }
+      })
+
+      this._sim_add_exposed_pin_set(type, pinId, pinSpec, plug_positions)
+    })
 
     if (this._enabled()) {
       if (this._tree_layout) {
@@ -6266,7 +6296,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     unit_id: string,
     type: IO,
     pin_id: string,
-    position: Position | undefined
+    position: Position | undefined,
+    center: Position | undefined
   ): void => {
     // console.log(
     //   'Graph',
@@ -6277,9 +6308,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   position
     // )
 
+    center = center || this._jiggle_world_screen_center()
+
     const unit = this._get_unit(unit_id)
 
-    const unit_pin_spec = deepGetOrDefault(unit, [type, pin_id], {})
+    const unit_pin_spec = deepGetOrDefault(
+      unit,
+      [type, pin_id],
+      {}
+    ) as GraphUnitPinSpec
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
     const merged = this._is_link_pin_merged(pin_node_id)
@@ -6293,17 +6330,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const ref = this._is_link_pin_ref(pin_node_id)
 
-    const { data } = unit_pin_spec
+    const { data, metadata = {} } = unit_pin_spec
 
     if (data !== undefined) {
       if (ref) {
         //
       } else {
+        const metadata_position = metadata.data?.position
+
         const datum_id = this._new_datum_id()
 
         const datum_tree = _getTree(data)
 
-        const position = this._predict_pin_datum_initial_position(pin_node_id)
+        let position: Position
+
+        if (metadata_position) {
+          position = addVector(center, metadata_position)
+        } else {
+          position = this._predict_pin_datum_initial_position(pin_node_id)
+        }
 
         this._sim_add_pin_datum_tree(
           unit_id,
@@ -6344,7 +6389,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_position: UnitPinPosition = {
       input: {},
       output: {},
-    }
+    },
+    center: Position | undefined
   ): void => {
     const spec = this._get_unit_spec(unit_id)
 
@@ -6389,7 +6435,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const position: Position = _pin_position(type, pin_id, i, total)
 
-        this._sim_graph_unit_add_unit_pin(unit_id, type, pin_id, position)
+        this._sim_graph_unit_add_unit_pin(
+          unit_id,
+          type,
+          pin_id,
+          position,
+          center
+        )
 
         if (!ignored) {
           i++
@@ -6431,7 +6483,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._sim_add_core_component(unit_id, parent_id, layout_position)
     }
 
-    this._sim_add_unit_pins(unit_id, unit, pin_position)
+    this._sim_add_unit_pins(unit_id, unit, pin_position, position)
   }
 
   private _sim_add_unit_core = (
@@ -8324,27 +8376,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_spec: GraphPinSpec,
     position: Dict<{ int?: Position; ext?: Position }> = {}
   ): void => {
-    // console.log('Graph', '_sim_add_exposed_pin_set', type, pin_id, pin_spec)
+    // console.log(
+    //   'Graph',
+    //   '_sim_add_exposed_pin_set',
+    //   type,
+    //   pin_id,
+    //   pin_spec,
+    //   position
+    // )
 
-    const { plug, metadata = {} } = pin_spec
-
-    const { position: metadata_position = {} } = metadata
+    const { plug } = pin_spec
 
     this._exposed_pin_set_count++
 
     for (const sub_pin_id in plug) {
-      let p = position[sub_pin_id]
+      const p = position[sub_pin_id]
 
-      if (!p) {
-        const pin_metadata_position = metadata_position[sub_pin_id]
-
-        if (pin_metadata_position) {
-          p = { ext: this._jiggle_world_screen_center() }
-
-          p.ext.x += pin_metadata_position.x
-          p.ext.y += pin_metadata_position.y
-        }
-      }
       const sub_pin_spec = plug[sub_pin_id]
 
       this._sim_add_exposed_pin(type, pin_id, sub_pin_id, sub_pin_spec, p)
@@ -10798,59 +10845,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       pin_link_stroke_width,
       pin_link_stroke_dash_array,
       pin_link_opacity,
-    }
-  }
-
-  private _sim_refresh_link_pin = (
-    unit_id: string,
-    type: IO,
-    pin_id: string
-  ) => {
-    // console.log('Graph', '_sim_refresh_link_pin', unit_id, type, pin_id, position)
-
-    const pin_node_id = getPinNodeId(unit_id, type, pin_id)
-
-    const merge_node_id = this._pin_to_merge[pin_node_id]
-    const merge_spec = merge_node_id && this._get_merge(merge_node_id)
-    const merge_position =
-      merge_spec && this._get_anchor_node_position(merge_node_id)
-
-    const ext_node_id = this._pin_to_ext[type][pin_node_id]
-
-    const position = this._get_anchor_node_position(pin_node_id)
-
-    const data = this._pin_datum_tree[pin_node_id]
-
-    this._sim_graph_unit_remove_pin(pin_node_id)
-    this._sim_graph_unit_add_unit_pin(unit_id, type, pin_id, position)
-
-    if (ext_node_id) {
-      const { type, pinId, subPinId } = segmentPlugNodeId(ext_node_id)
-
-      this._sim_plug_exposed_pin(type, pinId, subPinId, {
-        unitId: unit_id,
-        pinId: pin_id,
-        kind: type,
-      })
-    }
-
-    if (data) {
-      this._graph_debug_set_pin_data_tree(pin_node_id, data)
-    }
-
-    if (merge_node_id) {
-      const { mergeId } = segmentMergeNodeId(merge_node_id)
-
-      if (this._is_merge_ref(merge_node_id)) {
-        // TODO
-      } else {
-        if (this._has_node(merge_node_id)) {
-          this._sim_add_link_pin_to_merge(pin_node_id, merge_node_id)
-        } else {
-          this._sim_add_merge(mergeId, merge_spec, merge_position)
-          this._sim_collapse_merge(mergeId)
-        }
-      }
     }
   }
 
@@ -19180,7 +19174,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (!is_text) {
         mergeStyle(leaf_comp.$node, {
           position: style.position ?? '',
-          boxSizing: style['boxSizing'] ?? '',
+          boxSizing: style['boxSizing'] ?? style['box-sizing'] ?? '',
           margin: style.margin ?? '',
           marginTop: style['marginTop'] ?? '',
           marginLeft: style['marginLeft'] ?? '',
@@ -26032,7 +26026,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     onRemoval()
 
-    this._sim_graph_unit_add_unit_pin(unitId, type, pinId, position)
+    this._sim_graph_unit_add_unit_pin(unitId, type, pinId, position, undefined)
 
     if (ext_node_id) {
       const { type, pinId, subPinId } = segmentPlugNodeId(ext_node_id)
@@ -27876,7 +27870,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           graph: pod,
           style: {
             color,
-            opacity: '0',
+            opacity: '1',
             pointerEvents: 'none',
             transition: ifLinearTransition(animate, 'opacity'),
           },
@@ -49748,6 +49742,83 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return unit_bundle
   }
 
+  private _set_spec_node_positions = (
+    spec: GraphSpec,
+    editor: Editor_,
+    node_positions: Dict<Position>
+  ) => {
+    for (const node_id in node_positions) {
+      const node_position = node_positions[node_id]
+
+      const round_node_position = roundPoint(node_position)
+
+      if (isUnitNodeId(node_id)) {
+        deepSet(
+          spec,
+          ['units', node_id, 'metadata', 'position'],
+          round_node_position
+        )
+      } else if (isLinkPinNodeId(node_id)) {
+        const { unitId, type, pinId } = segmentLinkPinNodeId(node_id)
+
+        deepSet(
+          spec,
+          ['units', unitId, type, pinId, 'metadata', 'position'],
+          round_node_position
+        )
+      } else if (isMergeNodeId(node_id)) {
+        const { mergeId } = segmentMergeNodeId(node_id)
+
+        deepSet(
+          spec,
+          ['metadata', 'position', 'merge', mergeId],
+          round_node_position
+        )
+      } else if (isExternalNodeId(node_id)) {
+        const { type, pinId, subPinId } = segmentPlugNodeId(node_id)
+
+        deepSet(
+          spec,
+          [`${type}s`, pinId, 'metadata', 'position', subPinId, 'ext'],
+          round_node_position
+        )
+      } else if (isInternalNodeId(node_id)) {
+        const { type, pinId, subPinId } = segmentPlugNodeId(node_id)
+
+        deepSet(
+          spec,
+          [
+            `${type}s`,
+            pinId,
+            'plug',
+            subPinId,
+            'metadata',
+            'position',
+            subPinId,
+            'int',
+          ],
+          round_node_position
+        )
+      } else if (isDatumNodeId(node_id)) {
+        const { datumId } = segmentDatumNodeId(node_id)
+
+        const unit_pin = editor.getDatumPin(datumId)
+
+        if (unit_pin) {
+          const { unitId, type, pinId } = unit_pin
+
+          if (isUnitPinConstant(spec, unitId, type, pinId)) {
+            deepSet(
+              spec,
+              ['units', unitId, type, pinId, 'metadata', 'data', 'position'],
+              round_node_position
+            )
+          }
+        }
+      }
+    }
+  }
+
   public getBundle(): BundleSpec {
     const { specs } = this.$props
 
@@ -49756,63 +49827,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const bundle = bundleSpec(spec, specs)
 
     const processSubGraph = (editor: Editor_, editor_spec: GraphSpec) => {
+      const bundle_spec = deepGet(bundle, ['specs', editor_spec.id])
+
       if (!isSystemSpec(editor_spec)) {
         const node_positions = editor.get_node_relative_positions()
 
-        for (const node_id in node_positions) {
-          const node_position = node_positions[node_id]
-
-          const round_node_position = roundPoint(node_position)
-
-          if (isUnitNodeId(node_id)) {
-            deepSet(
-              bundle,
-              [
-                'specs',
-                editor_spec.id,
-                'units',
-                node_id,
-                'metadata',
-                'position',
-              ],
-              round_node_position
-            )
-          } else if (isLinkPinNodeId(node_id)) {
-            const { unitId, type, pinId } = segmentLinkPinNodeId(node_id)
-
-            deepSet(
-              bundle,
-              [
-                'specs',
-                editor_spec.id,
-                'units',
-                unitId,
-                type,
-                pinId,
-                'metadata',
-                'position',
-              ],
-              round_node_position
-            )
-          } else if (isMergeNodeId(node_id)) {
-            const { mergeId } = segmentMergeNodeId(node_id)
-
-            deepSet(
-              bundle,
-              [
-                'specs',
-                editor_spec.id,
-                'metadata',
-                'position',
-                'merge',
-                mergeId,
-              ],
-              round_node_position
-            )
-          } else if (isExternalNodeId(node_id)) {
-            // TODO
-          }
-        }
+        this._set_spec_node_positions(bundle_spec, editor, node_positions)
 
         for (const unitId in editor_spec.units) {
           const subgraph = editor._subgraph_cache[unitId]
@@ -50580,7 +50600,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         position
       )
 
-      this._sim_add_unit_pins(unit_id, unit, unit_pin_position)
+      this._sim_add_unit_pins(unit_id, unit, unit_pin_position, position)
 
       const register_memory_pin = (
         type: IO,
@@ -50651,9 +50671,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
         } else {
-          const plug_positions = mapObjKV(plug, () => ({
-            int: position,
-            ext: position,
+          const plug_positions = mapObjKV(plug, (subPinId: string) => ({
+            int: addVector(
+              position,
+              pin.metadata?.position?.[subPinId].int ?? NULL_VECTOR
+            ),
+            ext: addVector(
+              position,
+              pin.metadata?.position?.[subPinId].ext ?? NULL_VECTOR
+            ),
           }))
 
           this._state_add_exposed_pin_set(type, pin_id, pin, plug_positions)
@@ -52638,74 +52664,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _set_spec_nodes_position = (spec: GraphSpec): void => {
     const position_map = this.get_nodes_center_relative_positions(this._node)
 
-    for (const node_id in position_map) {
-      const position = position_map[node_id]
-
-      const round_position = roundPoint(position)
-
-      if (this._is_unit_node_id(node_id)) {
-        const unit_id = node_id
-
-        deepSet(
-          spec,
-          ['units', unit_id, 'metadata', 'position'],
-          round_position
-        )
-      } else if (this._is_link_pin_node_id(node_id)) {
-        const pin_node_id = node_id
-
-        const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
-
-        deepSet(
-          spec,
-          ['units', unitId, type, pinId, 'metadata', 'position'],
-          round_position
-        )
-      } else if (this._is_merge_node_id(node_id)) {
-        const merge_node_id = node_id
-
-        const { mergeId } = segmentMergeNodeId(merge_node_id)
-
-        deepSet(
-          spec,
-          ['metadata', 'position', 'merge', mergeId],
-          round_position
-        )
-      } else if (this._is_ext_node_id(node_id)) {
-        const exposed_node_id = node_id
-
-        const { type, pinId, subPinId } = segmentPlugNodeId(exposed_node_id)
-
-        deepSet(
-          spec,
-          [`${type}s`, pinId, 'metadata', 'position', subPinId],
-          round_position
-        )
-      } else if (this._is_datum_node_id(node_id)) {
-        const datum_pin_node_id = this._datum_to_pin[node_id]
-
-        if (datum_pin_node_id) {
-          const { unitId, type, pinId } =
-            segmentLinkPinNodeId(datum_pin_node_id)
-
-          deepSet(
-            spec,
-            ['units', unitId, type, pinId, 'metadata', 'data', 'position'],
-            round_position
-          )
-        } else {
-          const { datumId } = segmentDatumNodeId(node_id)
-
-          deepSet(
-            spec,
-            ['metadata', 'position', 'datum', datumId],
-            round_position
-          )
-        }
-      } else {
-        //
-      }
-    }
+    this._set_spec_node_positions(spec, this, position_map)
   }
 
   private _pod_unlisten: Unlisten
