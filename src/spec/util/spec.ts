@@ -6,7 +6,6 @@ import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'
 import { keys } from '../../system/f/object/Keys/f'
 import {
-  GraphPinSpec,
   GraphPinsSpec,
   GraphPlugOuterSpec,
   GraphSubPinSpec,
@@ -18,6 +17,7 @@ import { Dict } from '../../types/Dict'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphMergeUnitSpec } from '../../types/GraphMergeUnitSpec'
 import { GraphMergesSpec } from '../../types/GraphMergesSpec'
+import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitMerges } from '../../types/GraphUnitMerges'
 import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'

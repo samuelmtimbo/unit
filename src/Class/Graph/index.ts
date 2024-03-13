@@ -96,7 +96,6 @@ import { isObjNotNull } from '../../system/f/object/DeepMerge/isObjNotNull'
 import { keys } from '../../system/f/object/Keys/f'
 import {
   GraphComponentSpec,
-  GraphPinSpec,
   GraphPinsSpec,
   GraphPlugOuterSpec,
   GraphSubComponentSpec,
@@ -110,6 +109,7 @@ import { BundleSpec } from '../../types/BundleSpec'
 import { Dict } from '../../types/Dict'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../types/GraphMergesSpec'
+import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
 import { GraphState } from '../../types/GraphState'
 import { GraphUnitMerges } from '../../types/GraphUnitMerges'

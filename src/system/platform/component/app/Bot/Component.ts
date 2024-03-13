@@ -501,7 +501,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     }
   }
 
-  private _center = (): { x: number; y: number } => {
+  private _center = (): Position => {
     const { r = DEFAULT_R } = this.$props
     const center = { x: this._x + r, y: this._y + r }
     return center

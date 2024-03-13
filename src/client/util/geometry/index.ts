@@ -154,7 +154,7 @@ export const ellipsoidalToCartesian = (
   rx: number,
   ry: number,
   angle: number
-): { x: number; y: number } => {
+): Position => {
   // flattening factor
   const ff = 1 - ry / rx
   let e2 = 2 * ff

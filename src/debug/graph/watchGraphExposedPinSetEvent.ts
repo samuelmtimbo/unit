@@ -1,5 +1,5 @@
 import { Graph } from '../../Class/Graph'
-import { GraphPinSpec } from '../../types'
+import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { IO } from '../../types/IO'
 import { Moment } from './../Moment'
 

@@ -1,3 +1,3 @@
 export * from './data'
-export * from './nodeId'
+export * from './id'
 export * from './text'

@@ -1,3 +1,4 @@
+import { Position } from '../client/util/geometry/types'
 import { None } from './None'
 
 export type GraphUnitPinSpec = {
@@ -6,6 +7,9 @@ export type GraphUnitPinSpec = {
   ignored?: boolean | None
   ref?: boolean
   metadata?: {
-    position?: { x: number; y: number }
+    position?: Position
+    data?: {
+      position?: Position
+    }
   }
 }
