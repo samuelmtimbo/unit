@@ -17606,6 +17606,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           (sub_component_id) => {},
           () => {
             this._end_leave_fullwindow_animation(sub_component_ids)
+
+            this.focus()
           }
         )
       } else {
