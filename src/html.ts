@@ -83,6 +83,7 @@ export async function html(opt: WebTemplate): Promise<string> {
       }
 
       body {
+        font-family: Inconsolata;
         position: absolute;
         margin: 0;
         padding: 0;
