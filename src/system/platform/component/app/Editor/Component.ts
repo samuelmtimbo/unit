@@ -190,7 +190,7 @@ import {
 import { _DEFAULT_STYLE } from '../../../../../client/graph/constant/DEFAULT_STYLE'
 import { enableModeKeyboard } from '../../../../../client/graph/shortcut/modes'
 import {
-  camelToSnake,
+  camelToDashed,
   getDatumNodeId,
   getErrNodeId,
   getExtNodeId,
@@ -19177,9 +19177,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           'position',
           'boxSizing',
           'margin',
-          'marginTop',
-          'marginLeft',
-          'marginRight',
           'top',
           'left',
           'right',
@@ -19190,13 +19187,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           'fontSize',
           'transform',
           'aspectRatio',
-          'flexFlow',
         ]
 
-        const layoutStyle = {}
+        const layoutStyle = clone(style)
 
         for (const attr of layoutAttrs) {
-          layoutStyle[attr] = style[attr] ?? style[camelToSnake(attr)] ?? ''
+          layoutStyle[attr] = style[attr] ?? style[camelToDashed(attr)] ?? ''
         }
 
         mergeStyle(leaf_comp.$node, layoutStyle)
