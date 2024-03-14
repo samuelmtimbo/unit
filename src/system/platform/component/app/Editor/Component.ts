@@ -190,6 +190,7 @@ import {
 import { _DEFAULT_STYLE } from '../../../../../client/graph/constant/DEFAULT_STYLE'
 import { enableModeKeyboard } from '../../../../../client/graph/shortcut/modes'
 import {
+  camelToSnake,
   getDatumNodeId,
   getErrNodeId,
   getExtNodeId,
@@ -19172,26 +19173,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       delete this._leaf_prop_unlisten[leaf_id]
 
       if (!is_text) {
-        mergeStyle(leaf_comp.$node, {
-          position: style.position ?? '',
-          boxSizing: style['boxSizing'] ?? style['box-sizing'] ?? '',
-          margin: style.margin ?? '',
-          marginTop: style['marginTop'] ?? '',
-          marginLeft: style['marginLeft'] ?? '',
-          marginRight: style['marginRight'] ?? '',
-          marginBottom: style['marginBottom'] ?? '',
-          top: style.top ?? '',
-          left: style.left ?? '',
-          right: style.right ?? '',
-          bottom: style.bottom ?? '',
-          width: is_canvas ? undefined : style['width'] ?? '',
-          height: is_canvas ? undefined : style['height'] ?? '',
-          opacity: style['opacity'] ?? '',
-          fontSize: style['fontSize'] ?? '',
-          transform: style['transform'] ?? '',
-          aspectRatio: style['aspectRatio'] ?? '',
-          flexFlow: style['flexFlow'] ?? undefined,
-        })
+        const layoutAttrs = [
+          'position',
+          'boxSizing',
+          'margin',
+          'marginTop',
+          'marginLeft',
+          'marginRight',
+          'top',
+          'left',
+          'right',
+          'bottom',
+          'width',
+          'height',
+          'opacity',
+          'fontSize',
+          'transform',
+          'aspectRatio',
+          'flexFlow',
+        ]
+
+        const layoutStyle = {}
+
+        for (const attr of layoutAttrs) {
+          layoutStyle[attr] = style[attr] ?? style[camelToSnake(attr)] ?? ''
+        }
+
+        mergeStyle(leaf_comp.$node, layoutStyle)
 
         const leaf_attr = this._leaf_attr[leaf_id]
 
