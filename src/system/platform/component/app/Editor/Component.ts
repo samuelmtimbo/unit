@@ -47196,6 +47196,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     },
     target: {
       hasMerge: (merge_id: string) => boolean
+      getMerge: (merge_id: string) => GraphMergeSpec
       hasMergePin: (
         merge_id: string,
         unit_id: string,
@@ -47232,7 +47233,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       removePin,
     } = source
 
-    const { nextIdMap, nextPinIdMap, nextUnitPinMergeMap } =
+    const { nextIdMap, nextPinIdMap, nextUnitPinMergeMap, nextPlugSpec } =
       this._collapse_next_map
 
     const nextUnitId = nextIdMap.unit[unit_id] ?? unit_id
@@ -47253,6 +47254,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (mergeId) {
         if (!target.hasMerge(mergeId)) {
           target.addMerge(mergeId, {})
+        }
+
+        const mergeSpec = target.getMerge(mergeId)
+
+        if (getMergePinCount(mergeSpec) === 0) {
+          forIOObjKV(nextPlugSpec, (type, pinId, plugs) => {
+            for (const subPinId in plugs) {
+              const plug_node_id = getExtNodeId(type, pinId, subPinId)
+
+              if (!this._has_node(plug_node_id)) {
+                const subPin = plugs[subPinId]
+
+                if (subPin.mergeId === mergeId) {
+                  target.plugPin(type, pinId, subPinId, { mergeId })
+                }
+              }
+            }
+          })
         }
 
         if (target.hasMergePin(mergeId, nextUnitId, type, pin_id)) {
@@ -47416,6 +47435,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         hasMerge: (merge_id: string): boolean => {
           return this._spec_graph_unit_has_merge(graph_id, merge_id)
         },
+        getMerge: (merge_id): GraphMergeSpec => {
+          return this._spec_graph_get_merge_spec(graph_id, merge_id)
+        },
         hasMergePin: (
           merge_id: string,
           unit_id: string,
@@ -47566,6 +47588,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           pin_id: string,
           merge_id: string
         ): void {
+          // TODO
+          return
+        },
+        getMerge: (merge_id): GraphMergeSpec => {
           // TODO
           return
         },
