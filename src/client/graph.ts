@@ -30,11 +30,11 @@ export function getSubPinSpecNodeId(
   type: IO,
   subPinSpec: GraphSubPinSpec
 ): string {
-  const { mergeId, unitId, pinId } = subPinSpec
+  const { mergeId, unitId, pinId, kind = type } = subPinSpec
   if (mergeId) {
     return getMergeNodeId(mergeId)
   } else {
-    return getPinNodeId(unitId!, type, pinId!)
+    return getPinNodeId(unitId!, kind, pinId!)
   }
 }
 
