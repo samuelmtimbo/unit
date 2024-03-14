@@ -47515,13 +47515,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (sub_pin_spec.unitId && !this._has_anchor_node(pin_node_id)) {
             this._spec_graph_unit_add_pin(
               sub_pin_spec.unitId,
-              type,
+              sub_pin_spec.kind ?? type,
               sub_pin_spec.pinId,
               {}
             )
             this._sim_graph_unit_add_pin(
               sub_pin_spec.unitId,
-              type,
+              sub_pin_spec.kind ?? type,
               sub_pin_spec.pinId,
               position
             )
