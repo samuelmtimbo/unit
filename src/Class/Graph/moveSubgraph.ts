@@ -1109,7 +1109,7 @@ export function movePlug(
     return
   }
 
-  const { pinId: nextPinId = subPinSpec.pinId } = nextSubPinSpec
+  const { pinId: nextPinId = pinId } = nextSubPinSpec
 
   let nextSubPinSpec_ = nextSubPinSpec
 

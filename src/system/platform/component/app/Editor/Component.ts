@@ -26713,7 +26713,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (merge_datum_node_id) {
       const { datumId } = segmentDatumNodeId(merge_datum_node_id)
 
-      this._set_datum(datumId, getTree(data))
+      this._sim_set_datum_value(
+        datumId,
+        merge_datum_node_id,
+        merge_node_id,
+        data
+      )
     } else {
       this._state_add_merge_pin_data(merge_node_id, data)
     }
@@ -37518,8 +37523,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       } else {
         valid = _isValidValue(tree)
       }
-
-      datum.setProp('data', tree)
 
       this._refresh_datum_color(datum_node_id)
     }
