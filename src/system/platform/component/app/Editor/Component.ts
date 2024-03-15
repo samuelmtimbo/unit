@@ -37492,14 +37492,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._datum_tree[datum_id] = tree
     const datum_node_id = getDatumNodeId(datum_id)
 
+    let datum = this._datum[datum_node_id]
+
     if (tree.type === TreeNodeType.Unit) {
-      const datum = this._datum[datum_node_id] as ClassDatum
+      datum = datum as ClassDatum
 
       const id = idFromUnitValue(tree.value, specs, classes)
 
       datum.setProp('id', id)
       datum.dispatchEvent('datumchange', { data: tree })
     } else {
+      datum = datum as Datum
+
       const { width, height } = this._get_datum_tree_size(tree)
 
       const datum_pin_node_id = this._datum_to_pin[datum_node_id]
@@ -37514,6 +37518,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       } else {
         valid = _isValidValue(tree)
       }
+
+      datum.setProp('data', tree)
 
       this._refresh_datum_color(datum_node_id)
     }
