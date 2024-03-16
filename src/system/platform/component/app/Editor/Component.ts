@@ -11074,7 +11074,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     a: { count: number; id: string },
     b: { count: number; id: string }
   ): boolean => {
-    return a.count >= b.count
+    return a.count > b.count
   }
 
   private _add_node_link_heap_node = (node_id: string): void => {
@@ -36519,6 +36519,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     delete this._normal_node[pin_node_id]
     delete this._ignored_node[pin_node_id]
+
+    if (this._node_link_heap[pin_node_id]) {
+      this._remove_node_link_heap(pin_node_id)
+    }
 
     this._sim_remove_node(pin_node_id)
   }
