@@ -17,7 +17,7 @@ export const enableModeKeyboard = (
   callback: (mode: string) => void
 ): Unlisten => {
   const { $system } = component
-  // console.log('enableModeKeyboard')
+
   const _mode_keydown: Dict<boolean> = {}
 
   const shortcuts: Shortcut[] = []
@@ -34,7 +34,7 @@ export const enableModeKeyboard = (
     shortcuts.push({
       combo: mode_key,
       strict: false,
-      multiple: true,
+      multiple: false,
       keydown: (key: string, event: IOKeyboardEvent) => {
         const { ctrlKey } = event
 
@@ -49,11 +49,6 @@ export const enableModeKeyboard = (
         }
       },
       keyup: (key: string) => {
-        // console.log('keyup', key)
-        // AD HOC
-        // this might come from a "focusout" event,
-        // resultant of search being shown
-        // setTimeout(() => {
         delete _mode_keydown[key]
 
         if (key === MODE_TO_KEY[mode]) {
@@ -67,7 +62,6 @@ export const enableModeKeyboard = (
             callback('none')
           }
         }
-        // }, 0)
       },
     })
   }
