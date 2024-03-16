@@ -223,8 +223,7 @@ export class Simulation<
     const F = 0.75 // friction
     const T = this._t
 
-    // const order = this._stability
-    const order = 4
+    const order = this._stability
 
     const order_1 = order - 1
 
