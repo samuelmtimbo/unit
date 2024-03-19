@@ -4,7 +4,7 @@ Currently, these are the most taped development frontlines:
 
 ## Language
 
-The internal functioning of Unit is rulled by a collection of lower level classes that define reusable naturally occuring multi-input-multi-output state machines, which are the basis of the Unit system, such as [Unit](../../Class/Unit/index.ts), [Primitive](../../Class/Primitive/index.ts), [Functional](../../Class/Functional/index.ts) and [Graph](../../Class/Graph/index.ts). Every object in Unit extends [\$](../../Class/$/index.ts) base class.
+The internal functioning of Unit is rulled by a collection of lower level classes that define reusable naturally occuring multi-input-multi-output state machines, which are the basis of the Unit system, such as [Unit](../../Class/Unit/index.ts), [Primitive](../../Class/Primitive/index.ts), [Functional](../../Class/Functional/index.ts) and [Graph](../../Class/Graph/index.ts). Every object in Unit extends [\$](../../$/index.ts) base class.
 
 ## Primitives
 
