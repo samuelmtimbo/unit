@@ -38,7 +38,7 @@ export const grammarsFrom = (
 
   const grammarsStr = JSGFStrFrom(tokens)
 
-  const grammars = SpeechGrammarList({})
+  const grammars = new SpeechGrammarList({})
 
   grammars.addFromString(grammarsStr, 1)
 
@@ -93,19 +93,20 @@ export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
       }
 
       this._unlisten = callAll([
-        recognition.addListener('error', (error) => {
+        recognition.addEventListener('error', (error) => {
           if (error === 'no-speech') {
             return
           }
         }),
-        recognition.addListener('end', () => {
+        recognition.addEventListener('end', () => {
           if (this._recording) {
             recognition.start()
           } else {
             this.emit('end')
           }
         }),
-        recognition.addListener('result', (results) => {
+        recognition.addEventListener('result', (event) => {
+          const { results } = event
           const firstResult = results[0]
           const firstAlternative = firstResult[0]
           const { transcript, confidence } = firstAlternative

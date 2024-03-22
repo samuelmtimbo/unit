@@ -11,10 +11,6 @@ import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
 import { DownloadDataOpt } from '../types/global/DownloadData'
 import { DownloadURLOpt } from '../types/global/DownloadURL'
-import {
-  SpeechGrammarList,
-  SpeechGrammarListOpt,
-} from '../types/global/SpeechGrammarList'
 
 export function noStorage(name: string): Storage {
   const storage: Storage = {
@@ -169,11 +165,7 @@ export function noHost(): API {
       },
     },
     speech: {
-      SpeechGrammarList: function (
-        opt: SpeechGrammarListOpt
-      ): SpeechGrammarList {
-        throw new APINotSupportedError('Speech Recognition')
-      },
+      SpeechGrammarList: undefined,
       SpeechRecognition: undefined,
       SpeechSynthesis: undefined,
       SpeechSynthesisUtterance: undefined,
