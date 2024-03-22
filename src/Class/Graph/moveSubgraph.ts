@@ -371,17 +371,24 @@ export function moveUnit(
     }
 
     if (plug) {
-      const { type, pinId, subPinId, kind = type } = plug
+      const { type, pinId: pinId_, subPinId, kind = type } = plug
 
       if (reverse) {
         //
       } else {
-        if (target.hasPlug(type, pinId, subPinId)) {
-          target.plugPin(type, pinId, subPinId, {
-            unitId: nextUnitId,
-            pinId,
-            kind,
-          })
+        if (target.hasPlug(type, pinId_, subPinId)) {
+          target.plugPin(
+            type,
+            pinId_,
+            subPinId,
+            {
+              unitId: nextUnitId,
+              pinId,
+              kind,
+            },
+            false,
+            false
+          )
         } else {
           //
         }
@@ -617,19 +624,21 @@ export function moveMerge(
     if (unitId === graphId && !ignoredUnit.has(unitId)) {
       const pinSpec = target.getExposedPinSpec(type, pinId)
 
-      const { plug } = pinSpec
+      if (pinSpec) {
+        const { plug } = pinSpec
 
-      for (const subPinId in plug) {
-        const subPin = plug[subPinId]
+        for (const subPinId in plug) {
+          const subPin = plug[subPinId]
 
-        if (subPin.unitId && subPin.pinId) {
-          deepSet(nextMerge, [subPin.unitId, type, subPin.pinId], true)
-        } else if (subPin.mergeId) {
-          const mergeSpec = target.getMergeSpec(subPin.mergeId)
+          if (subPin.unitId && subPin.pinId) {
+            deepSet(nextMerge, [subPin.unitId, type, subPin.pinId], true)
+          } else if (subPin.mergeId) {
+            const mergeSpec = target.getMergeSpec(subPin.mergeId)
 
-          forEachPinOnMerge(mergeSpec, (unitId, type, pinId) => {
-            deepSet(nextMerge, [nextUnitId, type, pinId], true)
-          })
+            forEachPinOnMerge(mergeSpec, (unitId, type, pinId) => {
+              deepSet(nextMerge, [unitId, type, pinId], true)
+            })
+          }
         }
       }
 
@@ -1202,24 +1211,28 @@ export function movePlug(
             false
           )
         } else {
-          source.addMerge(
-            {
-              [graphId]: {
-                [nextType]: {
-                  [nextPinId]: true,
+          const subPinUnit = source.getUnit(subPinSpec.unitId)
+
+          if (subPinUnit.hasPinNamed(type, subPinSpec.pinId)) {
+            source.addMerge(
+              {
+                [graphId]: {
+                  [nextType]: {
+                    [nextPinId]: true,
+                  },
+                },
+                [subPinSpec.unitId]: {
+                  [type]: {
+                    [subPinSpec.pinId]: true,
+                  },
                 },
               },
-              [subPinSpec.unitId]: {
-                [type]: {
-                  [subPinSpec.pinId]: true,
-                },
-              },
-            },
-            nextMergeId,
-            false,
-            false,
-            undefined
-          )
+              nextMergeId,
+              false,
+              false,
+              undefined
+            )
+          }
         }
       }
     }
