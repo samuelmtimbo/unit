@@ -54,6 +54,7 @@ import { renameUnitInMerges } from '../../spec/reducers/spec'
 import {
   coverPin,
   coverPinSet,
+  exposePinSet,
   plugPin,
   removePinFromMerge,
   renameUnitPin,
@@ -1174,8 +1175,12 @@ export class Graph<I = any, O = any>
     this.unplugPin('output', id, subPinId)
   }
 
-  public _unplugOutput = (subPinId: string, id: string): void => {
-    this._unplugPin('output', id, subPinId)
+  public _unplugOutput = (
+    subPinId: string,
+    id: string,
+    propagate: boolean = false
+  ): void => {
+    this._unplugPin('output', id, subPinId, propagate)
   }
 
   public isExposedOutput(pin: GraphSubPinSpec): boolean {
@@ -1372,7 +1377,7 @@ export class Graph<I = any, O = any>
   ): void => {
     // console.log('Graph', '_specExposePinSet', type, pinId, pinSpec)
 
-    deepSet(this._spec, [`${type}s`, pinId], pinSpec)
+    exposePinSet({ type, pinId, pinSpec }, this._spec)
 
     const { plug } = pinSpec
 
@@ -1634,12 +1639,16 @@ export class Graph<I = any, O = any>
     }
   }
 
-  public _coverPinSet = (type: IO, pinId: string): void => {
+  public _coverPinSet = (
+    type: IO,
+    pinId: string,
+    propagate: boolean = false
+  ): void => {
     // console.log('Graph', '_coverPinSet', type, pinId)
 
     this._fork()
 
-    this._simCoverPinSet(type, pinId)
+    this._simCoverPinSet(type, pinId, propagate)
     this._memCoverPinSet(type, pinId)
     this._specCoverPinSet(type, pinId)
   }
@@ -1689,16 +1698,20 @@ export class Graph<I = any, O = any>
     coverPinSet({ type, pinId }, this._spec)
   }
 
-  private _simCoverPinSet = (type: IO, pinId: string): void => {
+  private _simCoverPinSet = (
+    type: IO,
+    pinId: string,
+    propagate: boolean = false
+  ): void => {
     const pinSpec = this.getExposedPinSpec(type, pinId)
 
     const { plug } = pinSpec
 
     forEachValueKey(plug, (subPinSpec: GraphSubPinSpec, subPinId: string) => {
-      this._simCoverPin(type, pinId, subPinId)
+      this._simCoverPin(type, pinId, subPinId, propagate)
     })
 
-    this.removePin(type, pinId, true)
+    this.removePin(type, pinId, propagate)
   }
 
   private _specSetPinRef = (type: IO, pinId: string, ref: boolean) => {
@@ -1920,12 +1933,20 @@ export class Graph<I = any, O = any>
     this.plugPin('input', id, subPinId, subPin)
   }
 
-  public unplugInput = (subPinId: string, id: string): void => {
-    this.unplugPin('input', id, subPinId)
+  public unplugInput = (
+    subPinId: string,
+    id: string,
+    propagate: boolean = false
+  ): void => {
+    this.unplugPin('input', id, subPinId, propagate)
   }
 
-  public _unplugInput = (subPinId: string, id: string): void => {
-    this._unplugPin('input', id, subPinId)
+  public _unplugInput = (
+    subPinId: string,
+    id: string,
+    propagate: boolean = false
+  ): void => {
+    this._unplugPin('input', id, subPinId, propagate)
   }
 
   public coverPin = (
@@ -1976,7 +1997,12 @@ export class Graph<I = any, O = any>
     this._memUnplugPin(type, pinId, subPinId)
   }
 
-  private _simCoverPin = (type: IO, id: string, subPinId: string): void => {
+  private _simCoverPin = (
+    type: IO,
+    id: string,
+    subPinId: string,
+    propagate: boolean = false
+  ): void => {
     const subPinSpec = this.getSubPinSpec(type, id, subPinId)
 
     const { mergeId, unitId, pinId } = subPinSpec
@@ -1987,10 +2013,10 @@ export class Graph<I = any, O = any>
       }
     }
 
-    this._simUnplugPin(type, id, subPinId)
+    this._simUnplugPin(type, id, subPinId, propagate)
 
     if (mergeId || (unitId && pinId)) {
-      this._simRemoveExposedSubPin(type, id, subPinId, false)
+      this._simRemoveExposedSubPin(type, id, subPinId, propagate)
     }
   }
 
@@ -2007,7 +2033,7 @@ export class Graph<I = any, O = any>
     pinId: string,
     subPinId: string,
     emit: boolean = true,
-    propagate: boolean = true
+    propagate: boolean = false
   ): void => {
     // console.log('Graph', 'unplugPin', type, pinId, subPinId)
 
@@ -2022,7 +2048,7 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     subPinId: string,
-    propagate: boolean = true
+    propagate: boolean
   ): void => {
     // console.log('Graph', '_unplugPin', type, pinId, subPinId)
 
@@ -2457,8 +2483,6 @@ export class Graph<I = any, O = any>
         }
       })
     }
-
-    // TODO exposed
 
     return outerSpec
   }
@@ -3402,15 +3426,15 @@ export class Graph<I = any, O = any>
       const pinPlug = findUnitPinPlug(this._spec, unitId, type, pinId)
 
       if (pipedToMerge) {
-        this._removePinOrMerge(pipedToMerge, unitId, type, pinId)
+        this._removePinOrMerge(pipedToMerge, unitId, type, pinId, false)
       }
 
       if (pipedFromMerge) {
-        this._removePinOrMerge(pipedFromMerge, unitId, type, pinId)
+        this._removePinOrMerge(pipedFromMerge, unitId, type, pinId, false)
       }
 
       if (pinPlug) {
-        this._unplugPin(type, pinPlug.pinId, pinPlug.subPinId)
+        this._unplugPin(type, pinPlug.pinId, pinPlug.subPinId, false)
       }
 
       delete this._pipedTo[pinNodeId]
@@ -4678,7 +4702,7 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     emit: boolean = true,
-    propagate: boolean = true
+    propagate: boolean = false
   ) {
     this._removePinFromMerge(mergeId, unitId, type, pinId, propagate)
 
@@ -4724,7 +4748,7 @@ export class Graph<I = any, O = any>
     unitId: string,
     type: IO,
     pinId: string,
-    propagate: boolean = true
+    propagate: boolean
   ) {
     const mergePinCount = this._mergePinCount[mergeId]
 
@@ -4986,7 +5010,7 @@ export class Graph<I = any, O = any>
           const subPinSpec = plug[subPinId]
 
           if (subPinSpec.unitId === unitId && subPinSpec.pinId === pinId) {
-            this._unplugPin(type, id, subPinId)
+            this._unplugPin(type, id, subPinId, false)
 
             break
           }
@@ -5159,15 +5183,20 @@ export class Graph<I = any, O = any>
   public setMetadata(path: string[], data: any): void {
     let cursor = this._spec
     let i = 0
+
     while (i < path.length - 1) {
       const p = path[i]
+
       if (!cursor[p]) {
         cursor[p] = {}
       }
+
       cursor = cursor[p]
       i++
     }
+
     const p = path[i]
+
     if (isObjNotNull(cursor[p]) && isObjNotNull(data)) {
       cursor[p] = deepMerge(cursor[p], data)
     } else {
@@ -6138,7 +6167,7 @@ export class Graph<I = any, O = any>
           coverPinSet: (data: GraphCoverPinSetData) => {
             const { type, pinId } = data
 
-            this._coverPinSet(type, pinId)
+            this._coverPinSet(type, pinId, false)
           },
           plugPin: (data: GraphPlugPinData) => {
             const { type, pinId, subPinId, subPinSpec } = data
@@ -6148,7 +6177,7 @@ export class Graph<I = any, O = any>
           unplugPin: (data: GraphUnplugPinData) => {
             const { type, pinId, subPinId } = data
 
-            this._unplugPin(type, pinId, subPinId)
+            this._unplugPin(type, pinId, subPinId, false)
           },
           addUnitSpecs: (data: GraphAddUnitsData) => {
             const { units } = data
