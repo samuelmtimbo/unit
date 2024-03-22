@@ -114,7 +114,7 @@ export type API = {
     ): LayoutNode[]
   }
   speech: {
-    SpeechGrammarList: (opt: SpeechGrammarListOpt) => SpeechGrammarList
+    SpeechGrammarList: { new (opt: SpeechGrammarListOpt): SpeechGrammarList }
     SpeechRecognition: { new (opt: SpeechRecognitionOpt): SpeechRecognition }
     SpeechSynthesis: SpeechSynthesis
     SpeechSynthesisUtterance: { new (text?: string): SpeechSynthesisUtterance }
