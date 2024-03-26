@@ -53,6 +53,7 @@ export default class TextBox extends Element<HTMLDivElement, Props> {
     div.registerParentRoot(text)
 
     this.$element = $element
+    this.$unbundled = false
     this.$slot = {
       default: div,
     }

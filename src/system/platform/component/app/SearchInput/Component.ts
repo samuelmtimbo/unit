@@ -55,6 +55,7 @@ export default class SearchInput extends Element<HTMLDivElement, Props> {
     const $element = parentElement($system)
 
     this.$element = $element
+    this.$unbundled = false
     this.$slot = {
       default: input,
     }
