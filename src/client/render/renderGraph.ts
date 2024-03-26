@@ -33,6 +33,8 @@ export function renderGraph(
 
     const frame = new Frame({}, system)
 
+    component.connect($graph)
+
     frame.appendChild(component)
 
     root.appendChild(frame.$element)
@@ -42,8 +44,6 @@ export function renderGraph(
     mount(context)
 
     const unlistenGraph = watchGraphComponent(system, $graph, component)
-
-    component.connect($graph)
 
     component.focus()
 
