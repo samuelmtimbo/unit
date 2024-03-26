@@ -1,3 +1,4 @@
+import { deepSet_ } from '../deepSet'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../system/f/object/DeepMerge/f'
 import { keys } from '../system/f/object/Keys/f'
@@ -434,7 +435,8 @@ export const _getGraphTypeMap = (
   subgraphs.forEach((subgraph: Subgraph) => {
     const { unit, merge } = subgraph
 
-    const replacement: Dict<Dict<string>> = {}
+    const genericReplacement: Dict<Dict<string>> = {}
+    const dataReplacement: Dict<Dict<string>> = {}
 
     forEachValueKey(unit, (_, unitId: string) => {
       const unitSpec = units[unitId]
@@ -455,24 +457,33 @@ export const _getGraphTypeMap = (
         )
       }
 
-      replacement[unitId] = {}
+      genericReplacement[unitId] = {}
+      dataReplacement[unitId] = {}
 
       function register(type: TreeNode, kind: IO, pinId: string): void {
         if (_hasGeneric(type)) {
           const generics = _findGenerics(type)
           for (const generic of generics) {
-            if (!replacement[unitId][generic]) {
-              replacement[unitId][generic] = `<${String.fromCharCode(
+            if (!genericReplacement[unitId][generic]) {
+              genericReplacement[unitId][generic] = `<${String.fromCharCode(
                 charCode++
               )}>`
             }
           }
           unitTypeInterface[kind][pinId] = _applyGenerics(
             type,
-            replacement[unitId]
+            genericReplacement[unitId]
           )
         }
       }
+
+      forEachValueKey(unitTypeInterface.input, (type, inputId) => {
+        register(type, 'input', inputId)
+      })
+      forEachValueKey(unitTypeInterface.output, (type, outputId) =>
+        register(type, 'output', outputId)
+      )
+
       forEachValueKey(unitTypeInterface.input, (type, inputId) => {
         if (
           input[inputId] &&
@@ -485,18 +496,37 @@ export const _getGraphTypeMap = (
             const dataTypeTree = _getValueType(specs, dataTree)
             if (!_hasGeneric(dataTypeTree)) {
               unitTypeInterface['input'][inputId] = dataTypeTree
-              const extracted_generic = _extractGenerics(
+              const extractedGenerics = _extractGenerics(
                 specs,
                 dataTypeTree,
                 type
               )
-              forEachValueKey(extracted_generic, (value, generic) => {
-                replacement[unitId][generic] = value
+              forEachValueKey(extractedGenerics, (value, generic) => {
+                const replacedGeneric =
+                  genericReplacement[unitId][generic] ?? generic
+
+                deepSet_(dataReplacement, [unitId, replacedGeneric], value)
               })
             }
           }
         }
       })
+
+      typeMap[unitId] = unitTypeInterface
+    })
+
+    forEachValueKey(unit, (_, unitId: string) => {
+      const unitTypeInterface: TypeTreeInterface = typeMap[unitId]
+
+      function register(type: TreeNode, kind: IO, pinId: string): void {
+        if (_hasGeneric(type)) {
+          unitTypeInterface[kind][pinId] = _applyGenerics(
+            type,
+            dataReplacement[unitId] ?? {}
+          )
+        }
+      }
+
       forEachValueKey(unitTypeInterface.input, (type, inputId) => {
         register(type, 'input', inputId)
       })
