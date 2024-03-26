@@ -16,7 +16,7 @@
   "outputs": {},
   "metadata": {
     "icon": "image",
-    "description": "TODO",
+    "description": "HTML image element",
     "complexity": 43,
     "tags": ["platform", "component", "media"]
   },
@@ -26,7 +26,7 @@
     "defaultWidth": 180,
     "defaultHeight": 240
   },
-  "type": "`U`&`C`&`V`&`J`",
+  "type": "`U`&`C`&`V`&`J`&`IM`",
   "system": true,
   "render": true
 }
