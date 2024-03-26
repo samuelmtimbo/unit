@@ -45,10 +45,10 @@ export default class Subscribe<T> extends Semifunctional<I<T>, O<T>> {
 
   async f({ obj, path, key }: I<T>, done: Done<O<T>>) {
     try {
-      this._unlisten = obj.subscribe(path, key, (type, path, key, data) => {
+      this._unlisten = obj.subscribe(path, key, (type, path_, key_, data) => {
         this._output.type.push(type)
-        this._output.key.push(key)
-        this._output.path.push(path)
+        this._output.key.push(key_)
+        this._output.path.push(path_)
         this._output.data.push(data)
       })
     } catch (err) {

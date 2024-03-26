@@ -53,14 +53,16 @@ export default class _LocalStorage
       throw new Error('local storage path length must be 0')
     }
 
-    const setListener = (key_, data) => {
+    const setListener = (key_: string, data: string) => {
       if (key === '*' || key_ === key) {
         listener('set', path, key_, data)
       }
     }
 
-    const deleteListener = (data) => {
-      listener('delete', path, key, data)
+    const deleteListener = (key_: string, data: string) => {
+      if (key === '*' || key_ === key) {
+        listener('delete', path, key, data)
+      }
     }
 
     emitter.addListener('set', setListener)
