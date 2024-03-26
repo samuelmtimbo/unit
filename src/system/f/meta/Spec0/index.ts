@@ -1,10 +1,11 @@
 import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { Graph } from '../../../../Class/Graph'
 import { Unit } from '../../../../Class/Unit'
 import { ObjectUpdateType } from '../../../../ObjectUpdateType'
 import deepGet from '../../../../deepGet'
-import { deepSet_ } from '../../../../deepSet'
+import { CodePathNotImplementedError } from '../../../../exception/CodePathNotImplemented'
 import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../system'
 import { Unlisten } from '../../../../types/Unlisten'
@@ -94,7 +95,13 @@ export default class Spec_<T> extends Functional<I<T>, O<T>> {
       deepSet(path: string[], data: any): Promise<void> {
         const _spec = unit.getSpec()
 
-        deepSet_(_spec, path, data)
+        if (path[0] === 'metadata') {
+          const [_, ...rest] = path
+
+          ;(unit as Graph).setMetadata(rest, data)
+        } else {
+          throw new CodePathNotImplementedError()
+        }
 
         return
       }

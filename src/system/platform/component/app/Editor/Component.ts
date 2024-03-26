@@ -18,6 +18,7 @@ import {
   findInputDataExamples,
   getComponentSpec,
   getGraphSpec,
+  getSpec,
   getSpecInputs,
   getSpecOutputs,
   getSpecRender,
@@ -329,6 +330,7 @@ import { GraphExposePinEventData } from '../../../../../debug/graph/watchGraphEx
 import { GraphExposedPinSetMomentData } from '../../../../../debug/graph/watchGraphExposedPinSetEvent'
 import { GraphForkMomentData } from '../../../../../debug/graph/watchGraphForkEvent'
 import { GraphMergeMomentData } from '../../../../../debug/graph/watchGraphMergeEvent'
+import { GraphMetadataMomentData } from '../../../../../debug/graph/watchGraphMetadataEvent'
 import { GraphMoveSubComponentRootMomentData } from '../../../../../debug/graph/watchGraphMoveSubComponentRoot'
 import { GraphMoveSubgraphIntoMomentData } from '../../../../../debug/graph/watchGraphMoveSubgraphIntoEvent'
 import { GraphMergePinMomentData } from '../../../../../debug/graph/watchGraphPinMergeEvent'
@@ -52812,6 +52814,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             'remove_unit_pin_data',
             'set_pin_set_functional',
             'bulk_edit',
+            'metadata',
           ],
         },
         this._on_moment
@@ -55915,6 +55918,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _on_graph_unit_metadata = (data: GraphMetadataMomentData) => {
+    const { specs, setSpec } = this.$props
+
+    const {
+      path,
+      data: { path: path_, data: data_ },
+    } = data
+
+    if (this._is_spec_updater(path)) {
+      const spec = clone(findSpecAtPath(specs, this._spec, path))
+
+      if (path_[0] === 'icon') {
+        const icon = data_
+
+        setMetadata({ path: path_, value: data_ }, spec)
+
+        if (path.length === 1) {
+          const unitId = path[0]
+
+          this._set_core_icon(unitId, icon)
+        }
+      }
+
+      setSpec(spec.id, spec)
+    }
+  }
+
   private _on_graph_unit_bulk_edit = (data: GraphBulkEditMomentData) => {
     // console.log('Graph', '_on_graph_unit_bulk_edit', data, this._id)
 
@@ -56077,6 +56107,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       set_unit_pin_data: this._on_graph_unit_set_unit_pin_data,
       remove_unit_pin_data: this._on_graph_unit_remove_unit_pin_data_moment,
       bulk_edit: this._on_graph_unit_bulk_edit,
+      metadata: this._on_graph_unit_metadata,
     },
   }
 
