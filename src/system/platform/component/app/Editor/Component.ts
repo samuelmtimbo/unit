@@ -1951,16 +1951,34 @@ export type GraphSimNode = SimNode<{
 }>
 export type GraphSimNodes = Dict<GraphSimNode>
 
-const _tree_cache: {
-  [value: string]: TreeNode
-} = {}
+const _tree_cache: Dict<TreeNode> = {}
 
-export const _getTree = (value: string): TreeNode => {
+export const getTree__cached = (value: string): TreeNode => {
   if (_tree_cache[value]) {
     return _tree_cache[value]
   }
+
   const tree = getTree(value)
+
   _tree_cache[value] = tree
+
+  return tree
+}
+
+const _value_type_cache: Dict<TreeNode> = {}
+
+export const getValueType__cached = (
+  specs: Specs,
+  data: TreeNode
+): TreeNode => {
+  if (_value_type_cache[data.value]) {
+    return _value_type_cache[data.value]
+  }
+
+  const tree = _getValueType(specs, data)
+
+  _value_type_cache[data.value] = tree
+
   return tree
 }
 
@@ -1977,7 +1995,7 @@ const _evaluate_cache: {
   [value: string]: any
 } = {}
 
-export const _evaluate = (
+export const _evaluate__cached = (
   value: string,
   specs: Specs,
   classes: Classes
@@ -6343,7 +6361,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const datum_id = this._new_datum_id()
 
-        const datum_tree = _getTree(data)
+        const datum_tree = getTree__cached(data)
 
         let position: Position
 
@@ -8331,11 +8349,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _spec_refresh_exposed_pin_set_type = (type: IO, pinId: string) => {
-    // AD HOC
-    if (this._collapsing) {
-      return
-    }
-
     const dataType = this.__get_ext_pin_type_value(type, pinId)
 
     setPinSetDataType({ pinId, type, dataType }, this._spec)
@@ -9944,25 +9957,61 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _clear_type_cache_for_spec_id = (spec_id: string) => {
+    // console.log('_clear_type_cache_for_spec_id', spec_id)
+
     const { typeCache } = this.$props
 
     delete typeCache[spec_id]
   }
+
+  private _refresh_type_cache_for_spec_id = (spec_id: string) => {
+    // console.log('_refresh_type_cache_for_spec_id', spec_id)
+
+    this._clear_type_cache_for_spec_id(spec_id)
+
+    this._refresh_type_graph_map()
+  }
+
+  private _refresh_type_graph_map = () => {
+    this._graph_type_map = this._get_graph_type_map()
+  }
+
+  private _get_graph_type_map = () => {
+    const { specs, typeCache } = this.$props
+
+    return _getGraphTypeMap(this._spec, specs, typeCache)
+  }
+
+  private _ensure_graph_type_map = () => {
+    this._graph_type_map = this._graph_type_map ?? this._get_graph_type_map()
+  }
+
+  private _graph_type_map: TypeTreeMap
 
   private __link_pin_type = (
     unit_id: string,
     kind: IO,
     pin_id: string
   ): TreeNode => {
-    const { specs, typeCache } = this.$props
-
     if (pin_id === SELF) {
       return this._get_unit_type(unit_id)
     }
 
-    const graph_type_map = _getGraphTypeMap(this._spec, specs, typeCache)
+    this._ensure_graph_type_map()
 
-    const graph_pin_type = graph_type_map[unit_id][kind][pin_id]
+    // const graph_type_map = _getGraphTypeMap(this._spec, specs, typeCache)
+
+    let graph_pin_type = deepGetOrDefault(
+      this._graph_type_map,
+      [unit_id, kind, pin_id],
+      undefined
+    )
+
+    if (!graph_pin_type) {
+      this._refresh_type_graph_map()
+
+      graph_pin_type = deepGet(this._graph_type_map, [unit_id, kind, pin_id])
+    }
 
     return graph_pin_type
   }
@@ -11471,7 +11520,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_sim_add_datum_node', datum_id, value, position)
 
-    tree = tree ?? _getTree(value)
+    tree = tree ?? getTree__cached(value)
 
     return this.__sim_add_datum_node(datum_id, tree, position)
   }
@@ -24473,9 +24522,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _get_datum_type = (datum_node_id: string): TreeNode => {
     const { specs } = this.$props
+
     const { datumId } = segmentDatumNodeId(datum_node_id)
+
     const data = this._datum_tree[datumId]
-    const datum_type = _getValueType(specs, data)
+
+    const datum_type = getValueType__cached(specs, data)
 
     return datum_type
   }
@@ -27392,7 +27444,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (_register !== undefined) {
         const new_datum_id = this._new_datum_id()
 
-        const tree = _getTree(_register)
+        const tree = getTree__cached(_register)
 
         const position = this._predict_pin_datum_initial_position(pin_node_id)
 
@@ -50445,7 +50497,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         let tree: TreeNode
 
         try {
-          tree = _getTree(text)
+          tree = getTree__cached(text)
         } catch (err) {
           //
         }
@@ -50655,7 +50707,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const { _register } = pin_memory_spec
 
         if (_register) {
-          const tree = _getTree(_register)
+          const tree = getTree__cached(_register)
 
           const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
