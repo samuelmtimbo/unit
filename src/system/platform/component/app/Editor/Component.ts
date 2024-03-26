@@ -243,7 +243,10 @@ import {
   reflectComponentBaseTrait,
 } from '../../../../../client/reflectComponentBaseTrait'
 import { SimLink, SimNode, Simulation } from '../../../../../client/simulation'
-import { stopAllPropagation } from '../../../../../client/stopPropagation'
+import {
+  stopAllPropagation,
+  stopByPropagation,
+} from '../../../../../client/stopPropagation'
 import { applyStyle, mergeStyle } from '../../../../../client/style'
 import {
   COLOR_DARK_LINK_YELLOW,
@@ -7021,6 +7024,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
 
     stopAllPropagation(core_component_frame.$element)
+
+    stopByPropagation(core_component_frame.$element, 'dragenter')
+    stopByPropagation(core_component_frame.$element, 'dragleave')
 
     const { $$context } = core_component_frame
 
@@ -20301,8 +20307,43 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _sub_component_unlocked_by_drag: Set<string> = new Set()
 
+  private _core_frame_contains_event_target = (
+    unit_id: string,
+    element: EventTarget
+  ): boolean => {
+    if (this._is_unit_node_id(unit_id) && this._is_unit_component(unit_id)) {
+      if (element instanceof Node) {
+        const frame = this._get_sub_component_frame(unit_id)
+
+        if (frame.$element.contains(element)) {
+          return true
+        }
+      }
+    }
+
+    return false
+  }
+
   private _listen_node = (node_id: string, component: Component): Unlisten => {
     let drag_enter_count = 0
+
+    let pointer_inside = false
+
+    const increment_drag = () => {
+      drag_enter_count++
+
+      if (drag_enter_count === 1) {
+        this._drag_enter_node(node_id)
+      }
+    }
+
+    const decrement_drag = () => {
+      drag_enter_count--
+
+      if (drag_enter_count === 0) {
+        this._drag_leave_node(node_id)
+      }
+    }
 
     return component.addEventListeners([
       makePointerDownListener((event: UnitPointerEvent) => {
@@ -20312,9 +20353,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._on_node_pointer_up(node_id, event)
       }),
       makePointerEnterListener((event: UnitPointerEvent) => {
+        pointer_inside = true
+
         this._on_node_pointer_enter(node_id, event)
       }),
       makePointerLeaveListener((event: UnitPointerEvent) => {
+        pointer_inside = false
+
         this._on_node_pointer_leave(node_id, event)
       }),
       makePointerCancelListener((event: UnitPointerEvent) => {
@@ -20340,35 +20385,54 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       makeDragOverListener((event: IODragEvent, _event: DragEvent) => {
         _event.preventDefault()
       }),
-      makeDragEnterListener((event) => {
-        drag_enter_count++
-
-        if (drag_enter_count === 1) {
-          this._drag_enter_node(node_id)
+      makeDragStartListener((event) => {
+        increment_drag()
+      }),
+      makeDragEnterListener((event, _event) => {
+        if (
+          this._is_unit_node_id(node_id) &&
+          this._is_unit_component(node_id)
+        ) {
+          if (
+            this._core_frame_contains_event_target(
+              node_id,
+              _event.relatedTarget
+            )
+          ) {
+            return
+          }
         }
+
+        increment_drag()
       }),
       makePointerLeaveListener((event: UnitPointerEvent) => {
-        // console.log('pointerleave', drag_enter_count)
-
         if (drag_enter_count === 1) {
           drag_enter_count = 0
         }
       }),
       makeDragLeaveListener((event, _event) => {
-        // console.log('leave', drag_enter_count)
-
-        drag_enter_count--
-
-        if (drag_enter_count === 0) {
-          _event.stopPropagation()
-
-          this._drag_leave_node(node_id)
+        if (
+          this._is_unit_node_id(node_id) &&
+          this._is_unit_component(node_id)
+        ) {
+          if (
+            this._core_frame_contains_event_target(
+              node_id,
+              _event.relatedTarget
+            )
+          ) {
+            return
+          }
         }
+
+        decrement_drag()
       }),
       makeDropListener((event: IODragEvent, _event: DragEvent) => {
         _event.preventDefault()
 
         const { dataTransfer } = event
+
+        decrement_drag()
 
         const { items } = dataTransfer
 
@@ -20418,6 +20482,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         } else {
           this._sub_component_unlocked_by_drag.add(node_id)
 
+          this._lock_all_component()
           this._unlock_sub_component(node_id)
         }
       }
