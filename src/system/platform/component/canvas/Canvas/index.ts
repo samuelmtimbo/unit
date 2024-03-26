@@ -3,6 +3,7 @@ import { System } from '../../../../../system'
 import { CA } from '../../../../../types/interface/CA'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { ID_CANVAS } from '../../../../_ids'
+import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import { Style } from '../../../Style'
 import CanvasComp from './Component'
 
@@ -73,7 +74,6 @@ export default class Canvas
     // console.log('drawImage', imageBitmap, x, y, width, height)
 
     // this._component.drawImage(imageBitmap, x, y, width, height)
-
     this._offscreen_ctx.drawImage(imageBitmap, x, y, width, height)
 
     this.emit('call', {
@@ -132,6 +132,15 @@ export default class Canvas
     })
   }
 
+  async toDataUrl(type: string, quality: string): Promise<string> {
+    const component = (await firstGlobalComponentPromise(
+      this.__system,
+      this.__global_id
+    )) as CanvasComp
+
+    return component.toDataUrl(type, quality)
+  }
+
   async captureStream({ frameRate }: CSOpt): Promise<MediaStream> {
     return this._component.$element.captureStream(frameRate)
   }
@@ -161,8 +170,6 @@ export default class Canvas
   }
 
   onDataInputData(name: string, data: any): void {
-    // console.log('Canvas', 'onDataInputData', name, data)
-
     super.onDataInputData(name, data)
 
     switch (name) {

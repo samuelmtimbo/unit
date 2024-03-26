@@ -351,7 +351,7 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
   }
 
   drawImage(
-    image: ImageBitmap | HTMLVideoElement,
+    image: CanvasImageSource,
     x: number,
     y: number,
     width: number,
@@ -369,7 +369,7 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
         width,
         height
       )
-    } else if (image instanceof HTMLVideoElement) {
+    } else {
       this._context.drawImage(image, x, y, width, height)
     }
   }
@@ -419,6 +419,10 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     callback: (data: Blob | null) => void = NOOP
   ) {
     this._canvas_el.toBlob(callback, type, quality)
+  }
+
+  toDataUrl(type: string, quality: string) {
+    return this._canvas_el.toDataURL()
   }
 
   async captureStream({

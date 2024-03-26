@@ -12,6 +12,7 @@ export interface CA {
   scale(sx: number, sy: number): void
   fillPath(d: string, fillRule: string): void
   toBlob(type: string, quality: number): Promise<Blob>
+  toDataUrl(type: string, quality: string): Promise<string>
   getImageData(
     x: number,
     y: number,
