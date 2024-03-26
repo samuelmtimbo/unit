@@ -60,6 +60,7 @@ import {
   renameUnitPin,
   setComponentSize,
   setPinSetFunctional,
+  setPinSetId,
   setSubComponentSize,
   setUnitPinConstant,
   setUnitPinData,
@@ -74,7 +75,6 @@ import {
   findMergePlugOfType,
   findUnitPinPlug,
   findUnitPlugs,
-  forEachGraphSpecPinOfType,
   forEachInputOnMerge,
   forEachPinOnMerge,
   forEachPinOnMerges,
@@ -1528,11 +1528,11 @@ export class Graph<I = any, O = any>
 
     this._fork()
 
-    const pinSpec = this._spec[`${type}s`][pinId]
+    this._specSetPinSetId(type, pinId, nextPinId)
+  }
 
-    delete this._spec[`${type}s`][pinId]
-
-    this._spec[`${type}s`][nextPinId] = pinSpec
+  private _specSetPinSetId(type: IO, pinId: string, nextPinId: string): void {
+    setPinSetId({ type, pinId, nextPinId }, this._spec)
   }
 
   public exposePin = (
@@ -5152,32 +5152,6 @@ export class Graph<I = any, O = any>
   public setUnitOutputData(unitId: string, pinId: string, data: any): void {
     const unit = this.getUnit(unitId)
     unit.setPinData('output', pinId, data)
-  }
-
-  private _getUnitPinPlug = (
-    unitId: string,
-    type: IO,
-    pinId: string
-  ): GraphPlugOuterSpec => {
-    let plugSpec: GraphPlugOuterSpec | undefined
-
-    forEachGraphSpecPinOfType(this._spec, type, (pinId, pinSpec) => {
-      const { plug } = pinSpec
-
-      for (const subPinId in plug) {
-        const subPin = plug[subPinId]
-
-        if (subPin.unitId === unitId && subPin.pinId === pinId) {
-          plugSpec = {
-            type,
-            pinId,
-            subPinId,
-          }
-        }
-      }
-    })
-
-    return plugSpec
   }
 
   public setMetadata(path: string[], data: any): void {
