@@ -1,0 +1,108 @@
+{
+  "type": "`U`&`G`",
+  "name": "set name",
+  "units": {
+    "set": {
+      "id": "074ef6f4-a0a1-40f9-95c0-cf0ecc3d420c",
+      "input": {
+        "obj": {
+          "ignored": false,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -34,
+              "y": 23
+            }
+          }
+        },
+        "name": {
+          "ignored": false,
+          "constant": true,
+          "data": "\"name\"",
+          "metadata": {
+            "position": {
+              "x": -34,
+              "y": -15
+            }
+          }
+        },
+        "data": {
+          "ignored": false,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 59,
+              "y": 4
+            }
+          }
+        }
+      },
+      "output": {
+        "data": {
+          "ignored": true,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 49,
+              "y": 32
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 10,
+          "y": 4
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "obj"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -51,
+              "y": 39
+            }
+          }
+        }
+      }
+    },
+    "name": {
+      "plug": {
+        "0": {
+          "unitId": "set",
+          "pinId": "data"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 82,
+              "y": 4
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": null,
+    "description": ""
+  },
+  "id": "ee6b5fbb-5e05-4750-83a8-d6ffe5a059db",
+  "system": true
+}

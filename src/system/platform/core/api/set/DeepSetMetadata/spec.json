@@ -1,0 +1,159 @@
+{
+  "type": "`U`&`G`",
+  "name": "deep set metadata",
+  "units": {
+    "concat": {
+      "id": "f57f5318-f26f-4b9f-b9e2-dcc022ad7728",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": "[\"metadata\"]",
+          "metadata": {
+            "position": {
+              "x": 72,
+              "y": 14
+            }
+          }
+        },
+        "b": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 72,
+              "y": -22
+            }
+          }
+        }
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 27,
+          "y": -4
+        }
+      }
+    },
+    "deepset": {
+      "id": "64f8e8bc-124d-49f6-a143-625265eafe68",
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -124,
+              "y": 14
+            }
+          }
+        },
+        "path": {},
+        "value": {
+          "metadata": {
+            "position": {
+              "x": -124,
+              "y": -22
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -79,
+          "y": -4
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "concat": {
+        "output": {
+          "ab": true
+        }
+      },
+      "deepset": {
+        "input": {
+          "path": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "deepset",
+          "pinId": "obj",
+          "kind": "input"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -140,
+              "y": 31
+            }
+          }
+        }
+      }
+    },
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "deepset",
+          "pinId": "value",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -140,
+              "y": -39
+            }
+          }
+        }
+      }
+    },
+    "path": {
+      "plug": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "b",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 88,
+              "y": -39
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "question",
+    "description": "",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -26,
+          "y": -4
+        }
+      }
+    },
+    "tags": ["platform", "core", "api", "set"]
+  },
+  "id": "dafd2596-f53f-44fa-b82c-2e8b1587ba9c"
+}
