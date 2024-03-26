@@ -1,0 +1,49 @@
+{
+  "type": "`U`&`G`",
+  "name": "deep set metadata icon",
+  "units": {
+    "deepsetmetadata": {
+      "id": "dafd2596-f53f-44fa-b82c-2e8b1587ba9c",
+      "input": {
+        "obj": {},
+        "value": {
+          "constant": false
+        },
+        "path": {
+          "constant": true,
+          "data": "[\"icon\"]"
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "deepsetmetadata",
+          "pinId": "value",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "obj": {
+      "plug": {
+        "0": {
+          "unitId": "deepsetmetadata",
+          "pinId": "obj",
+          "kind": "input"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "question",
+    "description": ""
+  },
+  "id": "b97d77a2-bf51-4bf9-aa72-2956c26ce1ab",
+  "system": true
+}

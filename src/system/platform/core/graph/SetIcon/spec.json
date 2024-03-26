@@ -1,0 +1,78 @@
+{
+  "type": "`U`&`G`",
+  "name": "set icon",
+  "units": {
+    "spec": {
+      "id": "e547c624-d505-485d-8d78-e393c6beb1b4",
+      "input": {
+        "unit": {}
+      },
+      "output": {
+        "spec": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -57,
+          "y": 0
+        }
+      }
+    },
+    "deepsetmetadataicon": {
+      "id": "b97d77a2-bf51-4bf9-aa72-2956c26ce1ab",
+      "input": {
+        "value": {},
+        "obj": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 56,
+          "y": -1
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "spec": {
+        "output": {
+          "spec": true
+        }
+      },
+      "deepsetmetadataicon": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "unit": {
+      "plug": {
+        "0": {
+          "unitId": "spec",
+          "pinId": "unit",
+          "kind": "input"
+        }
+      },
+      "ref": true
+    },
+    "icon": {
+      "plug": {
+        "0": {
+          "unitId": "deepsetmetadataicon",
+          "pinId": "value",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "set `graph` spec icon"
+  },
+  "id": "33124e48-d0ef-4e69-b1d4-95959f3ba18a",
+  "system": true
+}

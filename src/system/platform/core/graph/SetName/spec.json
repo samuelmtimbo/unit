@@ -1,0 +1,128 @@
+{
+  "type": "`U`&`G`",
+  "name": "set name",
+  "units": {
+    "setname": {
+      "id": "ee6b5fbb-5e05-4750-83a8-d6ffe5a059db",
+      "metadata": {
+        "position": {
+          "x": 57,
+          "y": 0
+        }
+      },
+      "input": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": -48,
+              "y": 0
+            }
+          }
+        },
+        "name": {
+          "metadata": {
+            "position": {
+              "x": 105,
+              "y": 0
+            }
+          }
+        }
+      }
+    },
+    "spec": {
+      "id": "e547c624-d505-485d-8d78-e393c6beb1b4",
+      "input": {
+        "unit": {
+          "metadata": {
+            "position": {
+              "x": -105,
+              "y": 0
+            }
+          }
+        }
+      },
+      "output": {
+        "spec": {
+          "metadata": {
+            "position": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -57,
+          "y": 0
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "spec": {
+        "output": {
+          "spec": true
+        }
+      },
+      "setname": {
+        "input": {
+          "obj": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "graph": {
+      "plug": {
+        "0": {
+          "unitId": "spec",
+          "pinId": "unit",
+          "kind": "input"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -128,
+              "y": 0
+            }
+          }
+        }
+      }
+    },
+    "name": {
+      "plug": {
+        "0": {
+          "kind": "input",
+          "unitId": "setname",
+          "pinId": "name"
+        }
+      },
+      "ref": false,
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 128,
+              "y": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "object-set",
+    "description": "set graph spec name",
+    "tags": ["platform", "core", "graph"]
+  },
+  "id": "6652cded-6a51-473e-9fce-5843186d971a",
+  "component": {},
+  "system": true
+}
