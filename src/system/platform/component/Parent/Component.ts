@@ -1,5 +1,4 @@
 import { Element } from '../../../../client/element'
-import parentElement from '../../../../client/platform/web/parentElement'
 import { System } from '../../../../system'
 
 export interface Props {}
@@ -12,9 +11,17 @@ export default class Parent extends Element<HTMLDivElement, Props> {
 
     const {} = this.$props
 
-    const $element = parentElement($system)
+    const {
+      api: {
+        document: { createElement },
+      },
+    } = $system
 
-    this.$element = $element
+    const element = createElement('div')
+
+    element.style.display = 'contents'
+
+    this.$element = element
   }
 
   focus() {
