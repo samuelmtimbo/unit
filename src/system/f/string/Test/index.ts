@@ -25,6 +25,10 @@ export default class Test<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ str, regex }: Partial<I<T>>, done): void {
-    done({ match: !!str.match(regex) })
+    const regex_ = new RegExp(regex)
+
+    const match = regex_.test(str)
+
+    done({ match })
   }
 }
