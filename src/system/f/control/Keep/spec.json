@@ -1,0 +1,22 @@
+{
+  "name": "keep",
+  "inputs": {
+    "a": {
+      "type": "any"
+    },
+    "b": {
+      "type": "any"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "filter",
+    "description": "consume `b`, consume `a` if present",
+    "complexity": 3,
+    "tags": ["f", "control"]
+  },
+  "id": "0f1c7d8c-87a7-44ad-bee5-de37d4800e8f",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
