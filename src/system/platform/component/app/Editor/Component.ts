@@ -10600,6 +10600,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     })
     this._pin_name[pin_node_id] = pin_name
     pin_node_content.appendChild(pin_name)
+    pin_name.addEventListener(
+      makePointerDownListener(() => {
+        this._name_to_be_focused = true
+      })
+    )
 
     this._node_name[pin_node_id] = pin_id
 
