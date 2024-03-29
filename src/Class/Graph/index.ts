@@ -32,7 +32,6 @@ import {
 import { GRAPH_DEFAULT_EVENTS } from '../../constant/GRAPH_DEFAULT_EVENTS'
 import { SELF } from '../../constant/SELF'
 import deepGet from '../../deepGet'
-import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
 import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
 import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
 import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
@@ -6356,7 +6355,7 @@ export class Graph<I = any, O = any>
           },
         },
         () => {
-          throw new CodePathNotImplementedError()
+          //
         }
       )
     }

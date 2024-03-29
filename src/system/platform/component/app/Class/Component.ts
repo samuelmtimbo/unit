@@ -40,7 +40,7 @@ export interface Props {
 export const CLASS_DEFAULT_WIDTH = 90
 export const CLASS_DEFAULT_HEIGHT = 90
 
-export default class ClassDatum extends Element<SVGSVGElement, Props> {
+export default class ClassDatum extends Element<HTMLDivElement, Props> {
   private _svg: SVGSVG
   private _svg_g: SVGG
 
@@ -72,7 +72,7 @@ export default class ClassDatum extends Element<SVGSVGElement, Props> {
       this.$system
     )
     this._svg_g = svg_g
-    this._svg.appendChild(svg_g)
+    this._svg.registerParentRoot(svg_g)
 
     if (id) {
       this._render(id)
@@ -80,13 +80,34 @@ export default class ClassDatum extends Element<SVGSVGElement, Props> {
 
     const $element = parentElement($system)
 
-    this.$element = svg.$element
+    this.$element = $element
     this.$slot['default'] = svg
+
+    this.setSubComponents({
+      svg,
+      svg_g,
+    })
+
+    this.registerRoot(svg)
+  }
+
+  private _refresh_style = () => {
+    const style = this._style()
+
+    this._svg.setProp('style', style)
+  }
+
+  private _refresh_view_box = () => {
+    const { width, height } = this._size()
+
+    this._svg.setProp('viewBox', `-1 -1 ${width + 2} ${height + 2}`)
   }
 
   onPropChanged(prop: string, current: any): void {
     if (prop === 'id') {
       this._render(current)
+      this._refresh_style()
+      this._refresh_view_box()
     } else if (prop === 'style') {
       this._svg.setProp('style', this._style())
     } else if (prop === 'attr') {
@@ -222,6 +243,8 @@ export default class ClassDatum extends Element<SVGSVGElement, Props> {
         this.$system
       )
       children.push(pin_link)
+
+      this._svg.setProp('viewBox', `-1 -1 ${width + 2} ${height + 2}`)
     }
 
     input_pin_ids.forEach((_, index: number) => {

@@ -108,6 +108,7 @@ export type GraphRemoveUnitPinDataData = {
   unitId: string
   type: IO
   pinId: string
+  data: string
 }
 
 export type GraphMoveUnitData = {
