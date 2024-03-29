@@ -501,6 +501,13 @@ export function lazyFromSpec(
       return this.__graph.appendChild(Bundle)
     }
 
+    public appendChildren(
+      Classes: UnitBundle<Component_<ComponentEvents>>[]
+    ): number {
+      this._ensure()
+      return this.__graph.appendChildren(Classes)
+    }
+
     public insertChild(Bundle: UnitBundle<Component_>, at: number): void {
       this._ensure()
       return this.__graph.insertChild(Bundle, at)

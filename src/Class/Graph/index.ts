@@ -9,6 +9,7 @@ import { emptySpec } from '../../client/spec'
 import {
   animate,
   appendChild,
+  appendChildren,
   appendParentChild,
   cancelAnimation,
   hasChild,
@@ -6030,6 +6031,10 @@ export class Graph<I = any, O = any>
 
   appendChild(Bundle: UnitBundle): number {
     return appendChild(this, this._children, Bundle)
+  }
+
+  appendChildren(Bundles: UnitBundle<Component_<ComponentEvents>>[]): number {
+    return appendChildren(this, this._children, Bundles)
   }
 
   pushChild(Bundle: UnitBundle): number {

@@ -2,6 +2,7 @@ import { Component } from '../../client/component'
 import {
   animate,
   appendChild,
+  appendChildren,
   appendParentChild,
   cancelAnimation,
   hasChild,
@@ -160,6 +161,10 @@ export class Element_<
 
   appendChild(bundle: UnitBundle<Component_>): number {
     return appendChild(this, this._children, bundle)
+  }
+
+  appendChildren(bundles: UnitBundle<Component_<ComponentEvents>>[]): number {
+    return appendChildren(this, this._children, bundles)
   }
 
   insertChild(

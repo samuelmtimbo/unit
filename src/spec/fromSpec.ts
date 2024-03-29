@@ -156,10 +156,6 @@ export function classFromSpec<I, O>(
 
   const { id, name } = spec
 
-  if (classes[id]) {
-    return classes[id]
-  }
-
   class Class extends Graph<I, O> {
     constructor(system: System) {
       const spec = system.getSpec(id) as GraphSpec
@@ -171,10 +167,6 @@ export function classFromSpec<I, O>(
   Object.defineProperty(Class, 'name', {
     value: name,
   })
-
-  if (!branch[id]) {
-    // classes[id] = Class
-  }
 
   return Class
 }
