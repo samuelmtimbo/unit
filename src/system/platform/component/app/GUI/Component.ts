@@ -51,6 +51,7 @@ export const DEFAULT_STYLE = {
 
 export default class GUI extends Element<HTMLDivElement, Props> {
   public _container: Div
+  public _control: Frame
   public _gui: Div
   public _background: Div
   public _search: Search
@@ -342,6 +343,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     control.registerParentRoot(modes)
     control.registerParentRoot(search)
     control.registerParentRoot(cabinet)
+    this._control = control
 
     const main = new Parent(
       {
