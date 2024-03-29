@@ -8,6 +8,7 @@ import { ME } from '../../../../../types/interface/ME'
 import { PS } from '../../../../../types/interface/PS'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { ID_VIDEO } from '../../../../_ids'
+import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import VideoComp from './Component'
 
 export interface I {
@@ -71,15 +72,10 @@ export default class Video
   }
 
   async image(): Promise<any> {
-    const { getLocalComponents } = this.__system
-
-    const localComponents = getLocalComponents(this.__global_id)
-
-    if (localComponents.length === 0) {
-      return null
-    }
-
-    const localComponent = localComponents[0]
+    const localComponent = await firstGlobalComponentPromise(
+      this.__system,
+      this.__global_id
+    )
 
     return localComponent.$element
   }
