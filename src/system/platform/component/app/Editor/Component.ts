@@ -20908,14 +20908,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (
         relatedTarget &&
         this._control &&
-        this._control._container.$element.contains(relatedTarget)
+        this._control._control.$element.contains(relatedTarget)
       ) {
         return
       }
 
-      this._disable()
-
       if (relatedTarget) {
+        this._disable()
+
         if (
           this.$element.contains(relatedTarget) ||
           (this._frame && this._frame.$element.contains(relatedTarget))
