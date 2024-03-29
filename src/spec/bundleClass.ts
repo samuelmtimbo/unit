@@ -1,12 +1,9 @@
 import { Unit } from '../Class/Unit'
 import { System } from '../system'
-import { Dict } from '../types/Dict'
 import { UnitBundle } from '../types/UnitBundle'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { UnitClass } from '../types/UnitClass'
 import { parseMemorySpec } from './evaluate/parseMemorySpec'
-
-const _temp_cache: Dict<any> = {}
 
 export function bundleClass<T extends Unit = any>(
   Class: UnitClass<T>,
@@ -15,12 +12,6 @@ export function bundleClass<T extends Unit = any>(
   const {
     unit: { id, memory },
   } = bundle
-
-  const cacheKey = `${id}/${JSON.stringify(memory)}`
-
-  if (_temp_cache[cacheKey]) {
-    return _temp_cache[cacheKey]
-  }
 
   // @ts-ignore
   class Bundle extends Class {
@@ -38,8 +29,6 @@ export function bundleClass<T extends Unit = any>(
       }
     }
   }
-
-  _temp_cache[cacheKey] = Bundle
 
   // @ts-ignore
   return Bundle

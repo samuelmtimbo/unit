@@ -7,18 +7,45 @@ import { UnitBundle } from '../types/UnitBundle'
 import { Unlisten } from '../types/Unlisten'
 import { insert } from '../util/array'
 
-export function appendChild(
+function _appendChild(
   component: Component_,
   children: Component_[],
   Class: UnitBundle<Component_>
 ): number {
   const i = pushChild(component, children, Class)
 
-  const { __bundle: bundle } = Class
+  return i
+}
 
-  component.emit('append_child', bundle, [])
+export function appendChild(
+  component: Component_,
+  children: Component_[],
+  Class: UnitBundle<Component_>
+): number {
+  const i = _appendChild(component, children, Class)
+
+  const { __bundle } = Class
+
+  component.emit('append_child', __bundle, [])
 
   return i
+}
+
+export function appendChildren(
+  component: Component_,
+  children: Component_[],
+  Classes: UnitBundle<Component_>[]
+): number {
+  
+  for (const Class of Classes) {
+    _appendChild(component, children, Class)
+  }
+
+  const bundles = Classes.map((c) => c.__bundle)
+
+  component.emit('append_children', bundles, [])
+
+  return children.length
 }
 
 export function instanceChild(

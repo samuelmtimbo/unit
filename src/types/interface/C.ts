@@ -8,6 +8,7 @@ export type C_J = {}
 
 export type C_EE = {
   append_child: [UnitBundleSpec, string[]]
+  append_children: [UnitBundleSpec[], string[]]
   insert_child: [UnitBundleSpec, number, string[]]
   remove_child: [number, string[]]
   [remove_child_at: `remove_child_at_${number}`]: [number]
@@ -47,6 +48,7 @@ export interface C {
   appendParentChild(component: Component_, slotName: string): void
   removeParentChild(component: Component_): void
   appendChild(Class: UnitBundle<Component_>): number
+  appendChildren(Classes: UnitBundle<Component_>[]): number
   insertChild(Class: UnitBundle<Component_>, at: number): void
   pushChild(Class: UnitBundle<Component_>): number
   removeChild(at: number): Component_

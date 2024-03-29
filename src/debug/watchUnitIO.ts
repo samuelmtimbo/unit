@@ -16,6 +16,7 @@ import { watchRefInput } from './watchRefInput'
 import { watchRefOutput } from './watchRefOutput'
 import { watchUnitErr } from './watchUnitErr'
 import {
+  watchComponentAppendChildrenEvent,
   watchComponentAppendEvent,
   watchComponentRemoveEvent,
   watchUnitRenamePinEvent,
@@ -169,6 +170,13 @@ export function watchUnitIO<T extends Unit>(
     if (events.includes('append_child')) {
       // @ts-ignore
       all.push(watchComponentAppendEvent('append_child', unit, callback))
+    }
+
+    if (events.includes('append_children')) {
+      all.push(
+        // @ts-ignore
+        watchComponentAppendChildrenEvent('append_children', unit, callback)
+      )
     }
 
     if (events.includes('remove_child')) {

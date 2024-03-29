@@ -12,6 +12,7 @@ import {
 } from '../system/platform/component/app/Editor/layout'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
+import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { Unlisten } from '../types/Unlisten'
 import { $Component } from '../types/interface/async/$Component'
 import { $Graph } from '../types/interface/async/$Graph'
@@ -1358,6 +1359,24 @@ export class Component<
     return at
   }
 
+  public appendChildren(children: Component[], slotName: string): void {
+    this.memAppendChildren(children, slotName)
+    this.domAppendChildren(children, slotName)
+    this.postAppendChildren(children, slotName)
+  }
+
+  public memAppendChildren(children: Component[], slotName: string): void {
+    for (const child of children) {
+      this.memAppendChild(child, slotName, this.$children.length)
+    }
+  }
+
+  public postAppendChildren(children: Component[], slotName: string): void {
+    for (const child of children) {
+      this.postAppendChild(child, slotName, this.$children.length)
+    }
+  }
+
   public memAppendChild(child: Component, slotName: string, at: number): void {
     // console.log('Component', 'memAppendChild')
 
@@ -1371,6 +1390,50 @@ export class Component<
     slot.memAppendParentChild(child, slotName, at, at)
   }
 
+  public domAppendChildren(children: Component[], slotName: string) {
+    const fragment = new Component({}, this.$system)
+
+    // @ts-expect-error
+    fragment.$element = new DocumentFragment()
+
+    const slot = this.getLeafSlot(slotName)
+
+    for (const child of children) {
+      fragment._domAppendChild(child)
+    }
+
+    this._domAppendChild(fragment, slotName)
+
+    for (const child of children) {
+      child.$slotParent = slot
+    }
+  }
+
+  public getLeafSlot(slotName: string) {
+    let slot = this.$slot[slotName]
+
+    while (slot.$slot[slotName] && slot.$slot[slotName] !== slot) {
+      slot = slot.$slot[slotName]
+    }
+
+    return slot
+  }
+
+  private _domAppendChild(
+    child: Component,
+    slotName: string = 'default',
+    at?: number,
+    slot?: Component
+  ): void {
+    // console.log('Component', '_domAppendChild')
+
+    slot = slot ?? this.getLeafSlot(slotName)
+
+    at = at ?? this.$children.length
+
+    slot.domAppendParentChildAt(child, slotName, at, at)
+  }
+
   public domAppendChild(
     child: Component,
     slotName: string = 'default',
@@ -1378,16 +1441,9 @@ export class Component<
   ): void {
     // console.log('Component', '_domAppendChild')
 
-    at = at ?? this.$children.length
+    const slot = this.getLeafSlot(slotName)
 
-    // BUG
-    let slot = this.$slot[slotName]
-
-    while (slot.$slot[slotName] && slot.$slot[slotName] !== slot) {
-      slot = slot.$slot[slotName]
-    }
-
-    slot.domAppendParentChildAt(child, slotName, at, at)
+    this._domAppendChild(child, slotName, at)
 
     child.$slotParent = slot
   }
@@ -1579,6 +1635,16 @@ export class Component<
           const slot_name = 'default'
 
           this.appendChild(child, slot_name)
+        } else if (event_event === 'append_children') {
+          const bundles = event_data
+
+          const children = bundles.map((bundle: UnitBundleSpec, i: number) =>
+            this._$instanceChild({ bundle }, this.$children.length + i)
+          )
+
+          const slot_name = 'default'
+
+          this.appendChildren(children, slot_name)
         } else if (event_event === 'remove_child') {
           const at = event_data
 
@@ -1625,6 +1691,7 @@ export class Component<
 
     const events = [
       'append_child',
+      'append_children',
       'remove_child',
       'register',
       'unregister',
