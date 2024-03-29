@@ -1643,7 +1643,7 @@ export class Graph<I = any, O = any>
   public _coverPinSet = (
     type: IO,
     pinId: string,
-    propagate: boolean = false
+    propagate: boolean = true
   ): void => {
     // console.log('Graph', '_coverPinSet', type, pinId)
 
