@@ -65,7 +65,7 @@ export default class Detach extends Semifunctional<I, O> {
   public onIterDataInputData(name: string, data: any): void {
     switch (name) {
       case 'done':
-        if (this._functional._active_i_count === 3) {
+        if (this._functional._i_active.size === 3) {
           this._attach()
 
           this._done()

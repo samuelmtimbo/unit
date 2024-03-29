@@ -96,16 +96,18 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  onOutputRemoved(name: string) {}
+  onOutputRemoved(name: string) {
+    this._backward_if_ready()
+  }
 
   private _on_input_data(name: string): void {
     // console.log('Merge', '_on_input_data', name)
 
     const current = this._current
-    const invalid = this._i_invalid[current]
+    const invalid = this._i_invalid.has(current)
     const override = current !== undefined && name !== current && !invalid
     const invalidate =
-      override || this._active_o_count - this._loop_invalid_o_count > 0
+      override || this._o_active.size - this._loop_invalid_o_count > 0
 
     if (invalidate) {
       this._invalidate()
@@ -134,7 +136,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   onDataInputDrop(name: string) {
     if (name === this._current) {
       this._current = undefined
-      if (!this._backwarding && this._i_start_count === 0) {
+      if (!this._backwarding && this._i_start.size === 0) {
         this._forward_all_valid_empty()
       }
     }
@@ -173,7 +175,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
   }
 
   public onDataInputStart(name: string): void {
-    if (this._i_start_count === 1) {
+    if (this._i_start.size === 1) {
       this._start()
     }
   }
@@ -188,7 +190,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     if (this._paused) {
       return
     }
-    if (this._i_start_count === 0) {
+    if (this._i_start.size === 0) {
       if (this._current !== undefined) {
         this._forward_all_valid_empty()
       }
@@ -201,7 +203,8 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     forEachValueKey(
       this._output,
       (o, name) =>
-        (!this._loop_invalid_o.has(name) || this._o_invalid[name]) && o.take()
+        (!this._loop_invalid_o.has(name) || this._o_invalid.has(name)) &&
+        o.take()
     )
     this._forwarding_empty = false
 
@@ -221,10 +224,10 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     if (
       !this._backwarding &&
       !this._forwarding &&
-      this._active_o_count - this._o_invalid_count === 0 &&
+      this._o_active.size - this._o_invalid.size === 0 &&
       this._o_count > 0 &&
       this._current !== undefined &&
-      !this._i_invalid[this._current]
+      !this._i_invalid.has(this._current)
     ) {
       this._loop_invalid_o_count = 0
       this._loop_invalid_o = new Set()
@@ -237,7 +240,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     if (
       !this._forwarding &&
       this._current !== undefined &&
-      this._active_o_count - this._loop_invalid_o_count === 0
+      this._o_active.size - this._loop_invalid_o_count === 0
     ) {
       this._loop_invalid_o_count = 0
       this._loop_invalid_o = new Set()

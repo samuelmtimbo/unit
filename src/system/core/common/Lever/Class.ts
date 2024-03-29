@@ -28,7 +28,7 @@ export default class Lever<T> extends Primitive<I<T>, O<T>> {
   }
 
   onDataInputData() {
-    if (this._active_o_count === 0) {
+    if (this._o_active.size === 0) {
       if (this._i.a !== undefined && this._i.c === true) {
         this._current = 'a'
         this._forward('a', this._i[this._current])

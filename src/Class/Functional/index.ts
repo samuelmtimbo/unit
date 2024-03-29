@@ -49,7 +49,7 @@ export class Functional<
   }
 
   private _on_input_data(name: string): void {
-    if (this._i[name] !== undefined && this._active_i_count === this._i_count) {
+    if (this._i[name] !== undefined && this._i_active.size === this._i_count) {
       this._looping = false
     }
 
@@ -57,7 +57,7 @@ export class Functional<
   }
 
   private _on_input_drop(name: string, data: any): void {
-    if (this._active_i_count === this._i_count - 1) {
+    if (this._i_active.size === this._i_count - 1) {
       if (!this._backwarding && !this._forwarding_empty) {
         this._looping = false
         if (this._catchErr) {
@@ -72,7 +72,7 @@ export class Functional<
   }
 
   private _on_input_invalid(name: string): void {
-    if (this._i_invalid_count === 1) {
+    if (this._i_invalid.size === 1) {
       this.i(name)
       this._invalidate()
     }
@@ -87,7 +87,7 @@ export class Functional<
   }
 
   onDataInputStart(name: string): void {
-    if (this._i_start_count === this._i_count) {
+    if (this._i_start.size === this._i_count) {
       this._start()
     }
   }
@@ -97,7 +97,7 @@ export class Functional<
   }
 
   onDataInputEnd(name: string): void {
-    if (this._i_start_count === this._i_count - 1) {
+    if (this._i_start.size === this._i_count - 1) {
       this._end()
     }
   }
@@ -135,7 +135,7 @@ export class Functional<
       !this._forwarding &&
       !this._err &&
       !this._caughtErr &&
-      this._active_o_count === 0
+      this._o_active.size === 0
     ) {
       this._looping = false
 
@@ -153,8 +153,8 @@ export class Functional<
   private _forward_if_ready() {
     // console.log('Functional', '_forward_if_ready')
     while (
-      this._active_o_count - this._o_invalid_count === 0 &&
-      this._active_i_count - this._i_invalid_count === this._i_count &&
+      this._o_active.size - this._o_invalid.size === 0 &&
+      this._i_active.size - this._i_invalid.size === this._i_count &&
       !this._forwarding &&
       !this._backwarding &&
       !this._looping // prevent async infinite while loop

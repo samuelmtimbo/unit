@@ -22,23 +22,18 @@ export class Primitive<
   _EE extends PrimitiveEvents<_EE> & Dict<any[]> = PrimitiveEvents<Primitive_EE>
 > extends Unit<I, O, _EE> {
   protected _i: Partial<I> = {}
-  protected _o: Partial<O> = {}
 
-  public _active_i_count: number = 0
-  public _active_o_count: number = 0
+  public _o_active: Set<string> = new Set()
+  public _i_active: Set<string> = new Set()
 
-  protected _i_start_count: number = 0
-  protected _i_start: Dict<boolean> = {}
+  public _i_start: Set<string> = new Set()
 
-  protected _o_invalid_count: number = 0
-  protected _o_invalid: Dict<boolean> = {}
+  public _o_invalid: Set<string> = new Set()
+  public _i_invalid: Set<string> = new Set()
 
-  protected _i_invalid_count: number = 0
-  protected _i_invalid: Dict<boolean> = {}
-
-  protected _forwarding: boolean = false
-  protected _backwarding: boolean = false
-  protected _forwarding_empty: boolean = false
+  public _forwarding: boolean = false
+  public _backwarding: boolean = false
+  public _forwarding_empty: boolean = false
 
   private _inputUnlisten: Dict<Unlisten> = {}
   private _outputUnlisten: Dict<Unlisten> = {}
@@ -112,15 +107,11 @@ export class Primitive<
   }
 
   public getActiveInputCount(): number {
-    return this._active_i_count
+    return this._i_active.size
   }
 
   public getActiveOutputCount(): number {
-    return this._active_o_count
-  }
-
-  public getOutputData(): Partial<O> {
-    return this._o
+    return this._o_active.size
   }
 
   private _plunkOutput(name: string, output: Pin<O[keyof O]>): void {
@@ -433,7 +424,6 @@ export class Primitive<
   private _onOutputRenamed(name: string, newName: string) {
     // console.log('Primitive', '_onOutputRenamed', name, newName)
 
-    const active = this._o[name] !== undefined
     const output = this.getOutput(newName)
     const opt = this.getOutputOpt(newName)
 
@@ -441,9 +431,7 @@ export class Primitive<
 
     this._setupOutput(newName, output, opt)
 
-    if (active) {
-      this._active_o_count--
-    }
+    this._o_active.delete(name)
 
     this.onOutputRenamed(name, newName, opt, opt)
   }
@@ -467,29 +455,19 @@ export class Primitive<
   }
 
   private _activateInput = (name: string, data: any) => {
-    if (this._i[name] === undefined) {
-      this._active_i_count++
-    }
+    this._i_active.add(name)
+
     this._i[name] = data
-    if (this._i_invalid[name]) {
-      delete this._i_invalid[name]
-      this._i_invalid_count--
-    }
+
+    this._i_invalid.delete(name)
   }
 
   private _deactivateInput = (name: string) => {
-    if (this._i[name] !== undefined) {
-      delete this._i[name]
-      this._active_i_count--
-    }
-    if (this._i_invalid[name]) {
-      delete this._i_invalid[name]
-      this._i_invalid_count--
-    }
-    if (this._i_start[name]) {
-      delete this._i_start[name]
-      this._i_start_count--
-    }
+    delete this._i[name]
+
+    this._i_active.delete(name)
+    this._i_invalid.delete(name)
+    this._i_start.delete(name)
   }
 
   private _onDataInputDrop = (name: string, data: any): void => {
@@ -525,10 +503,8 @@ export class Primitive<
   }
 
   private _onRefInputInvalid = (name: string): void => {
-    if (!this._i_invalid[name]) {
-      this._i_invalid[name] = true
-      this._i_invalid_count++
-    }
+    this._i_invalid.add(name)
+
     this.onRefInputInvalid(name)
   }
 
@@ -537,29 +513,17 @@ export class Primitive<
   public onRefInputDrop(name: string, data: any): void {}
 
   private _activateOutput = (name: string) => {
-    if (this._o[name] === undefined) {
-      this._active_o_count++
-    }
-    if (this._o_invalid[name]) {
-      delete this._o_invalid[name]
-      this._o_invalid_count--
-    }
+    this._o_active.add(name)
+    this._o_invalid.delete(name)
   }
 
   private _deactivateOutput = (name: string) => {
-    if (this._o[name] !== undefined) {
-      this._active_o_count--
-      delete this._o[name]
-    }
-    if (this._o_invalid[name]) {
-      delete this._o_invalid[name]
-      this._o_invalid_count--
-    }
+    this._o_active.delete(name)
+    this._o_invalid.delete(name)
   }
 
   private __onOutputData = (name: string, data: any): void => {
     this._activateOutput(name)
-    this._o[name] = data
   }
 
   private _onDataOutputData = (name: string, data: any): void => {
@@ -603,39 +567,30 @@ export class Primitive<
   public onOutputInvalid(name: string): void {}
 
   private _onOutputInvalid = (name: string): void => {
-    if (!this._o_invalid[name]) {
-      this._o_invalid[name] = true
-      this._o_invalid_count++
-    }
+    this._o_invalid.add(name)
 
     this.onOutputInvalid(name)
   }
 
   private _onInputEnd(name: string): void {
-    if (this._i_start[name]) {
-      this._i_start[name] = false
-      this._i_start_count--
-    }
+    this._i_start.delete(name)
+
     this.onDataInputEnd(name)
   }
 
   public onDataInputEnd(name: string): void {}
 
   private _onInputStart(name: string): void {
-    if (!this._i_start[name]) {
-      this._i_start[name] = true
-      this._i_start_count++
-    }
+    this._i_start.add(name)
+
     this.onDataInputStart(name)
   }
 
   public onDataInputStart(name: string): void {}
 
   private _onDataInputInvalid(name: string): void {
-    if (!this._i_invalid[name]) {
-      this._i_invalid[name] = true
-      this._i_invalid_count++
-    }
+    this._i_invalid.add(name)
+
     this.onDataInputInvalid(name)
   }
 
@@ -715,19 +670,6 @@ export class Primitive<
     this._forwarding_empty = _forwarding_empty
 
     this._i = {}
-    this._o = {}
-
-    this._active_i_count = 0
-    this._active_o_count = 0
-
-    this._i_start_count = 0
-    this._i_start = {}
-
-    this._o_invalid_count = 0
-    this._o_invalid = {}
-
-    this._i_invalid_count = 0
-    this._i_invalid = {}
 
     for (let name in this._input) {
       const pin = this._input[name]
@@ -736,14 +678,11 @@ export class Primitive<
       this._i[name] = data
 
       if (data !== undefined) {
-        this._active_i_count++
-
-        this._i_start_count++
-        this._i_start[name] = true
+        this._i_active.add(name)
+        this._i_start.add(name)
 
         if (pin.invalid()) {
-          this._i_invalid_count++
-          this._i_invalid[name] = true
+          this._i_invalid.add(name)
         }
       }
     }
@@ -751,14 +690,10 @@ export class Primitive<
     for (let name in this._output) {
       const output = this._output[name]
       const data = output.peak()
-      this._o[name] = data
 
       if (data !== undefined) {
-        this._active_o_count++
-
         if (output.invalid()) {
-          this._o_invalid_count++
-          this._o_invalid[name] = true
+          this._o_invalid.add(name)
         }
       }
     }
