@@ -40,7 +40,7 @@ export default class Default<T> extends Primitive<I<T>, O<T>> {
     while (
       !this._forwarding &&
       !this._backwarding &&
-      this._active_o_count - this._o_invalid_count === 0 &&
+      this._o_active.size - this._o_invalid.size === 0 &&
       this._current !== undefined
     ) {
       this._forward('a', this._current)

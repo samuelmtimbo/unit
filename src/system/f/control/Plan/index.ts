@@ -38,7 +38,7 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
       !this._backwarding &&
       !this._looping &&
       this._current !== undefined &&
-      this._i_invalid_count === 0
+      this._i_invalid.size === 0
     ) {
       this._looping = true
       this._forwarding = true
