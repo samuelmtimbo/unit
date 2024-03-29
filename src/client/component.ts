@@ -231,14 +231,8 @@ export class Component<
   }
 
   dispatchEvent(type: string, detail: any = {}, bubbles: boolean = true) {
-    if (this.$primitive) {
-      dispatchCustomEvent(this.$element, type, detail, bubbles)
-    } else {
-      if (this.$mounted) {
-        dispatchCustomEvent(this.$slotParent.$element, type, detail, bubbles)
-      } else {
-        dispatchCustomEvent(this.$element, type, detail, bubbles)
-      }
+    for (const root of this.getBaseRoots()) {
+      dispatchCustomEvent(root.$element, type, detail, bubbles)
     }
   }
 
@@ -248,7 +242,7 @@ export class Component<
     }
   }
 
-  stopPropagation(event: string): void {
+  stopPropagation(event: string): Unlisten {
     this._stopPropagationSet = this._stopPropagationSet ?? new Set()
 
     if (this._stopPropagationSet.has(event)) {
@@ -257,11 +251,7 @@ export class Component<
 
     this._stopPropagationSet.add(event)
 
-    const base = this.getRootBase()
-
-    for (const [_, leaf] of base) {
-      leaf.$element.addEventListener(event, stopPropagation, { passive: true })
-    }
+    return this._addBaseListener(event, stopPropagation, { passive: true })
   }
 
   cancelStopPropagation(event: string): void {
@@ -351,12 +341,27 @@ export class Component<
 
     const opt = { passive: false }
 
-    this.$element.addEventListener(event, listener, opt)
+    return this._addBaseListener(event, listener, opt)
+  }
 
-    return () => {
-      // @ts-ignore
-      this.$element.removeEventListener(event, listener, opt)
+  private _addBaseListener = (
+    event: string,
+    listener: (event: Event) => boolean | void,
+    opt?: boolean | AddEventListenerOptions
+  ): Unlisten => {
+    const roots = this.getBaseRoots()
+
+    const allUnlisten = []
+
+    for (const root of roots) {
+      root.$element.addEventListener(event, listener, opt)
+
+      allUnlisten.push(() => {
+        root.$element.removeEventListener(event, listener)
+      })
     }
+
+    return callAll(allUnlisten)
   }
 
   private _releasePointerCapture: Dict<Unlisten> = {}
@@ -474,7 +479,10 @@ export class Component<
 
     let hostTarget = hostSlot
 
-    while (hostTarget.$element?.classList?.contains('__parent')) {
+    while (
+      hostTarget.isParent() ||
+      (hostTarget.$element as HTMLElement).style?.display === 'contents'
+    ) {
       hostTarget = hostTarget.$slotParent
     }
 
@@ -520,7 +528,7 @@ export class Component<
         // border: `1px solid ${randomColorString()}`,
       })
 
-      hostSlot.$element.appendChild(leafFrame)
+      hostTarget.$element.appendChild(leafFrame)
 
       !reverse && this.domRemoveLeaf(leaf)
 
@@ -528,9 +536,9 @@ export class Component<
 
       leafFrame.appendChild(leafComp.$element)
 
-      leafComp.$slotParent = hostSlot
+      leafComp.$slotParent = hostTarget
 
-      leafComp.mount(hostSlot.$context)
+      leafComp.mount(hostTarget.$context)
 
       leafFrames.push(leafFrame)
 
@@ -566,7 +574,7 @@ export class Component<
             for (const leafFrame of leafFrames) {
               leafFrame.removeChild(leafComp.$element)
 
-              hostSlot.$element.removeChild(leafFrame)
+              hostTarget.$element.removeChild(leafFrame)
             }
 
             commit()
@@ -684,7 +692,7 @@ export class Component<
   }
 
   attach(opt: { animate?: boolean }): void {
-    // console.log('Component', 'detach', opt)
+    // console.log('Component', 'attach', opt)
 
     if (!this.$detached) {
       throw new Error('component is not detached')
@@ -1263,6 +1271,26 @@ export class Component<
 
     if (p.length === 0) {
       p = [[path, this]]
+    }
+
+    return p
+  }
+
+  getBaseRoots(): Component[] {
+    if (this.isBase()) {
+      return [this]
+    }
+
+    let p: Component[] = []
+
+    for (const root of this.$root) {
+      const rootRoots = root.getBaseRoots()
+
+      p = [...p, ...rootRoots]
+    }
+
+    if (p.length === 0) {
+      p = [this]
     }
 
     return p
@@ -1936,7 +1964,7 @@ export class Component<
             this.$slotParent.$mountParentChildren.length
           )
         } else {
-          this.domCommitAppendChild(component)
+          this.domCommitAppendChild(component, this.$mountRoot.length - 1)
         }
       }
     } else {
@@ -1945,21 +1973,55 @@ export class Component<
           this.domAppendRoot(root)
         }
       } else {
-        this.domCommitAppendChild(component)
+        this.domCommitAppendChild(component, this.$mountRoot.length - 1)
       }
     }
   }
 
-  protected domCommitAppendChild(component: Component) {
-    appendChild(this.$element, component.$element)
+  public isParent = (): boolean => {
+    return (this.$element as HTMLElement).classList?.contains('__parent')
+  }
 
-    // set(component, '$slotParent', this)
+  protected domCommitAppendChild(component: Component, at: number) {
+    this._domCommitChild__template(component, at, appendChild)
   }
 
   protected domCommitInsertChild(component: Component, at: number) {
-    insertAt(this.$element, component.$element, at)
+    this._domCommitChild__template(component, at, insertAt)
+  }
 
-    // set(component, '$slotParent', this)
+  protected _domCommitChild__template = (
+    component: Component,
+    at: number,
+    callback: (parent: Node, child: Node, at: number) => void
+  ) => {
+    if (component.isParent()) {
+      let i = 0
+
+      for (const root of component.$root) {
+        this._domCommitChild__template(root, at + i, callback)
+
+        i++
+      }
+
+      return
+    }
+
+    if (this.isParent()) {
+      if (this.$slotParent) {
+        const index = this.$slotParent.$mountParentChildren.indexOf(this)
+
+        this.$slotParent._domCommitChild__template(
+          component,
+          index + at,
+          callback
+        )
+      } else {
+        callback(this.$element, component.$element, at)
+      }
+    } else {
+      callback(this.$element, component.$element, at)
+    }
   }
 
   public appendRoot(component: Component): void {
@@ -1993,6 +2055,8 @@ export class Component<
     if (!this.$primitive) {
       if (!component.$primitive) {
         for (const root of component.$mountRoot) {
+          let i = 0
+
           if (this.$slotParent) {
             const index = this.$parent?.$root.includes(this)
               ? this.$parent?.$root.indexOf(this)
@@ -2001,11 +2065,13 @@ export class Component<
             this.$slotParent.domInsertParentChildAt(
               component,
               'default',
-              index + _at
+              index + _at + i
             )
           } else {
             this.domCommitInsertChild(root, _at)
           }
+
+          i++
         }
       } else {
         if (this.$slotParent) {
@@ -2028,8 +2094,12 @@ export class Component<
       }
     } else {
       if (!component.$primitive) {
+        let i = 0
+
         for (const root of component.$mountRoot) {
-          this.domInsertRootAt(root, _at)
+          this.domInsertRootAt(root, _at + i)
+
+          i++
         }
       } else {
         this.domCommitInsertChild(component, _at)
@@ -2310,7 +2380,7 @@ export class Component<
             this.$slotParent.$mountParentChildren.length
           )
         } else {
-          this.domCommitAppendChild(component)
+          this.domCommitAppendChild(component, at)
         }
       }
     } else {
@@ -2319,17 +2389,17 @@ export class Component<
           this.domAppendParentChildAt(root, slotName, at, at)
 
           if (!root.$primitive) {
-            let i = 1
+            let i = 0
 
             for (const parentRoot of root.$mountParentChildren) {
-              this.domAppendParentChildAt(parentRoot, slotName, at + i, at + i)
+              this.domAppendParentChildAt(parentRoot, slotName, at, at)
 
               i++
             }
           }
         }
       } else {
-        this.domCommitAppendChild(component)
+        this.domCommitAppendChild(component, at)
       }
     }
 
@@ -2426,7 +2496,7 @@ export class Component<
       if (!component.$primitive) {
         let j = 0
 
-        for (const root of component.$mountRoot) {
+        for (const root of component.$root) {
           this.domInsertParentChildAt(root, 'default', i + j)
 
           j++
@@ -2545,7 +2615,27 @@ export class Component<
   }
 
   protected domCommitRemoveChild(component: Component) {
-    removeChild(this.$element, component.$element)
+    if (component.isParent()) {
+      for (const root of component.$root) {
+        this.domCommitRemoveChild(root)
+      }
+
+      return
+    }
+
+    if (this.isParent()) {
+      if (this.$slotParent) {
+        this.$slotParent.domCommitRemoveChild(component)
+      } else {
+        if (this.$element.contains(component.$element)) {
+          removeChild(this.$element, component.$element)
+        }
+      }
+    } else {
+      if (this.$element.contains(component.$element)) {
+        removeChild(this.$element, component.$element)
+      }
+    }
   }
 
   public insertParentRootAt(
@@ -2682,13 +2772,6 @@ export class Component<
     const subComponentId = this.$slotId[slotName]
 
     return subComponentId
-    // const slot = this.$slot[slotName] || this
-
-    // if (slot === this) {
-    //   return null
-    // } else {
-    //   return this.getSubComponentId(slot)
-    // }
   }
 
   public getSubComponentId(subComponent: Component): string | null {
@@ -2746,35 +2829,31 @@ export class Component<
   }
 
   public addEventListener = (listener: Listener): Unlisten => {
-    if (this.$primitive) {
-      return addListener(this, listener)
-    } else {
-      const allRootUnlisten = []
+    const roots = this.getBaseRoots()
 
-      for (const root of this.$root) {
-        const rootUnlisten = root.addEventListener(listener)
+    const allUnlisten = []
 
-        allRootUnlisten.push(rootUnlisten)
-      }
+    for (const root of roots) {
+      const unlisten = addListener(root, listener)
 
-      return callAll(allRootUnlisten)
+      allUnlisten.push(unlisten)
     }
+
+    return callAll(allUnlisten)
   }
 
   public addEventListeners = (listeners: Listener[]): Unlisten => {
-    if (this.$primitive) {
-      return addListeners(this, listeners)
-    } else {
-      const allRootUnlisten = []
+    const roots = this.getBaseRoots()
 
-      for (const root of this.$root) {
-        const rootUnlisten = root.addEventListeners(listeners)
+    const allUnlisten = []
 
-        allRootUnlisten.push(rootUnlisten)
-      }
+    for (const root of roots) {
+      const unlisten = addListeners(root, listeners)
 
-      return callAll(allRootUnlisten)
+      allUnlisten.push(unlisten)
     }
+
+    return callAll(allUnlisten)
   }
 
   private _call(method: string, data: any[] = []): void {

@@ -81,10 +81,10 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
     }
   }
 
-  domCommitAppendChild(child: Component) {
+  domCommitAppendChild(child: Component, at: number) {
     this._registerChild(child)
 
-    super.domCommitAppendChild(child)
+    super.domCommitAppendChild(child, at)
   }
 
   domCommitInsertChild(child: Component, at: number) {
