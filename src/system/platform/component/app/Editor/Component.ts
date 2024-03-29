@@ -365,7 +365,12 @@ import {
   makeReorderSubComponentAction,
 } from '../../../../../spec/actions/C'
 import {
+  ADD_DATUM,
+  ADD_DATUM_LINK,
+  REMOVE_DATUM,
+  REMOVE_DATUM_LINK,
   makeAddDatumAction,
+  makeAddDatumLinkAction,
   makeRemoveDatumAction,
 } from '../../../../../spec/actions/D'
 import {
@@ -405,6 +410,7 @@ import {
   makeRemoveMergeAction,
   makeRemovePinFromMergeAction,
   makeRemoveUnitAction,
+  makeRemoveUnitPinDataAction,
   makeSetComponentSizeAction,
   makeSetSubComponentSizeAction,
   makeSetUnitPinConstantAction,
@@ -25224,6 +25230,67 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     selection.setProp('strokeDasharray', dasharray)
   }
 
+  public move_datum_to_many_pins = (
+    datum_node_id: string,
+    pin_node_ids: string[]
+  ) => {
+    const actions = []
+
+    const { datumId } = segmentDatumNodeId(datum_node_id)
+
+    const value = this._get_datum_value(datum_node_id)
+
+    for (let i = 1; i < pin_node_ids.length; i++) {
+      const clone_datum_node_id = this._sim_duplicate_datum(datum_node_id)
+
+      this._move_datum_to_pin(clone_datum_node_id, pin_node_ids[i])
+
+      actions.push(
+        makeAddDatumLinkAction(
+          datumId,
+          value,
+          this._get_node_spec(pin_node_ids[i])
+        )
+      )
+    }
+
+    this._move_datum_to_pin(datum_node_id, pin_node_ids[0])
+
+    actions.push(
+      makeAddDatumLinkAction(
+        datumId,
+        value,
+        this._get_node_spec(pin_node_ids[0])
+      )
+    )
+
+    const bulk_action = makeBulkEditAction(actions)
+
+    this._dispatch_action(bulk_action)
+  }
+
+  public move_data_to_pin = (datum_node_ids: string[], pin_node_id: string) => {
+    const actions = []
+
+    for (let i = 0; i < datum_node_ids.length; i++) {
+      const datum_node_id = datum_node_ids[i]
+
+      const value = this._get_datum_value(datum_node_id)
+
+      const { datumId } = segmentDatumNodeId(datum_node_id)
+
+      actions.push(
+        makeAddDatumLinkAction(datumId, value, this._get_node_spec(pin_node_id))
+      )
+
+      this._move_datum_to_pin(datum_node_id, pin_node_id)
+    }
+
+    const bulk_action = makeBulkEditAction(actions)
+
+    this._dispatch_action(bulk_action)
+  }
+
   private _on_compatible_node_click = (
     node_id: string,
     event: UnitPointerEvent
@@ -25249,11 +25316,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
           this._cancel_click = true
         } else if (this._is_datum_node_id(node_id)) {
-          for (let i = 1; i < display_node_count; i++) {
-            const clone_datum_node_id = this._sim_duplicate_datum(node_id)
-            this._move_datum_to_pin(clone_datum_node_id, display_node_id[i])
-          }
-          this._move_datum_to_pin(node_id, display_node_id[0])
+          this.move_datum_to_many_pins(node_id, display_node_id)
         } else if (this._is_unit_node_id(node_id)) {
           for (let i = 0; i < display_node_count; i++) {
             this._merge_pin_unit(display_node_id[i], node_id)
@@ -25266,10 +25329,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       } else if (all_data) {
         if (this._is_pin_node_id(node_id)) {
-          for (let i = 0; i < display_node_count; i++) {
-            const _display_node_id = display_node_id[i]
-            this._move_datum_to_pin(_display_node_id, node_id)
-          }
+          this._cancel_click = true
+          this.move_data_to_pin(display_node_id, node_id)
         } else if (this._is_plug_node_id(node_id)) {
           for (let i = 0; i < display_node_count; i++) {
             const _display_node_id = display_node_id[i]
@@ -37650,6 +37711,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._refresh_datum_color(datum_node_id)
     }
 
+    this._refresh_datum_size(datum_node_id, tree)
     this._refresh_compatible()
   }
 
@@ -37804,6 +37866,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       } else {
         this._remove_plug_set_datum_link(datum_plug_node_id)
       }
+    }
+
+    if (this._dispatch_add_datum_on_commit) {
+      this._dispatch_action(makeAddDatumAction(datum_id, tree.value))
     }
   }
 
@@ -43641,10 +43707,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return new_spec
   }
 
+  private _dispatch_add_datum_on_commit = false
+
   private _add_empty_datum = (datum_id: string, { x, y }: Position): void => {
     // log('Graph', '_add_empty_datum')
 
-    this.add_datum(datum_id, '', { x, y })
+    this._add_datum(datum_id, '', { x, y })
+
+    this._dispatch_add_datum_on_commit = true
 
     const datum_node_id = getDatumNodeId(datum_id)
 
@@ -51429,6 +51499,42 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           emit && this._pod_set_unit_size(data.unitId, data.width, data.height)
         }
         break
+      case ADD_DATUM:
+        {
+          this._add_datum(
+            data.id,
+            data.value,
+            this._jiggle_world_screen_center()
+          )
+        }
+        break
+      case REMOVE_DATUM:
+        {
+          const datum_node_id = getDatumNodeId(data.id)
+
+          this._remove_datum(datum_node_id)
+        }
+        break
+      case ADD_DATUM_LINK:
+        {
+          const datum_node_id = getDatumNodeId(data.id)
+
+          const pin_node_id = this._spec_to_node_id(data.pinSpec)
+
+          this._move_datum_to_pin(datum_node_id, pin_node_id)
+        }
+        break
+      case REMOVE_DATUM_LINK:
+        {
+          const datum_node_id = getDatumNodeId(data.id)
+
+          const pin_node_id = this._datum_to_pin[datum_node_id]
+
+          if (pin_node_id) {
+            this._remove_pin_datum_link(datum_node_id)
+          }
+        }
+        break
       default:
         throw new CodePathNotImplementedError()
     }
@@ -51784,12 +51890,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _on_enter_keydown = () => {
     // console.log('Graph', '_on_enter_keydown')
-
-    if (this._edit_datum_id) {
-      const tree = this._datum_tree[this._edit_datum_id]
-
-      this._commit_data_value(this._edit_datum_id, tree)
-    }
   }
 
   private _map_zoom_translate = (offsetX: number, offsetY: number) => {
@@ -55555,7 +55655,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
+    this._refresh_datum_size(datum_node_id, next_tree)
     this._refresh_datum_visible(datum_node_id)
+  }
+
+  private _refresh_datum_size = (datum_node_id: string, tree?: TreeNode) => {
+    tree = tree ?? this._get_datum_tree(datum_node_id)
+
+    const { width, height } = this._get_datum_tree_size(tree)
+
+    this._resize_datum(datum_node_id, width, height)
+    this._resize_selection(datum_node_id, width, height)
   }
 
   private __graph_debug_set_pin_data = (

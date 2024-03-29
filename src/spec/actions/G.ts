@@ -51,10 +51,14 @@ import {
 } from './C'
 import {
   ADD_DATUM,
+  ADD_DATUM_LINK,
   REMOVE_DATUM,
+  REMOVE_DATUM_LINK,
   SET_DATUM,
   makeAddDatumAction,
+  makeAddDatumLinkAction,
   makeRemoveDatumAction,
+  makeRemoveDatumLinkAction,
   makeSetDatumAction,
 } from './D'
 
@@ -507,12 +511,14 @@ export const wrapRemoveUnitPinDataAction = (
 export const makeRemoveUnitPinDataAction = (
   unitId: string,
   type: IO,
-  pinId: string
+  pinId: string,
+  data: string
 ) => {
   return wrapRemoveUnitPinDataAction({
     unitId,
     type,
     pinId,
+    data,
   })
 }
 
@@ -830,6 +836,13 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.pinId,
         undefined
       )
+    case REMOVE_UNIT_PIN_DATA:
+      return makeSetUnitPinDataAction(
+        data.unitId,
+        data.type,
+        data.pinId,
+        data.data
+      )
     case SET_UNIT_PIN_IGNORED:
       return makeSetUnitPinIgnoredAction(
         data.unitId,
@@ -1066,6 +1079,10 @@ export const reverseAction = ({ type, data }: Action): Action => {
       return makeSetDatumAction(data.id, data.value, data.prevValue)
     case REMOVE_DATUM:
       return makeAddDatumAction(data.id, data.value)
+    case ADD_DATUM_LINK:
+      return makeRemoveDatumLinkAction(data.id, data.value, data.pinSpec)
+    case REMOVE_DATUM_LINK:
+      return makeAddDatumLinkAction(data.id, data.value, data.pinSpec)
     default:
       throw new Error('irreversible')
   }
@@ -1078,7 +1095,7 @@ export const processAction = (
 ): void => {
   const { type, data } = action
 
-  if (!method[type] && fallback) {
+  if (!method[type] && !fallback) {
     throw new Error(`no method for ${type}`)
   }
 
