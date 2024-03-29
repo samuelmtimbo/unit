@@ -107,13 +107,7 @@ export default class Icon extends Element<SVGSVGElement, Props> {
       ensureIcon(this.$system, icon)
     }
 
-    // applyStyle($element, {
-    //   ...DEFAULT_STYLE,
-    //   ...style,
-    // })
     applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
-
-    this.preventDefault('touchstart')
 
     this._prop_handler = {
       ...elementPropHandler(this, this.$element, DEFAULT_STYLE),
