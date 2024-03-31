@@ -112,19 +112,6 @@ export function randomTreeOfObjectLiteral(
     }
   }
 
-  if (children.length === 0) {
-    const key_tree = getTree("'foo'")
-    const value_tree = getTree("'foo'")
-
-    let sample_key_value: TreeNode = {
-      value: `${key_tree.value}:${value_tree.value}`,
-      children: [key_tree, value_tree],
-      type: TreeNodeType.KeyValue,
-    }
-
-    children.push(sample_key_value)
-  }
-
   return {
     value: `{${children.map(getValue).join(',')}}`,
     children,
