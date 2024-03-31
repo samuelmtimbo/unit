@@ -120,6 +120,7 @@ export type API = {
     SpeechSynthesisUtterance: { new (text?: string): SpeechSynthesisUtterance }
   }
   file: {
+    FileReader: { new(): FileReader }
     isSaveFilePickerSupported: () => boolean
     isOpenFilePickerSupported: () => boolean
     showSaveFilePicker: (opt: IFilePickerOpt) => Promise<FileSystemFileHandle>

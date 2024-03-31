@@ -123,6 +123,8 @@ export function webFile(window: Window, opt: BootOpt): API['file'] {
   }
 
   const file: API['file'] = {
+    // @ts-ignore
+    FileReader: window.FileReader,
     showSaveFilePicker,
     isSaveFilePickerSupported,
     isOpenFilePickerSupported,

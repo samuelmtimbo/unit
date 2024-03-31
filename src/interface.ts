@@ -28,6 +28,7 @@ export const CLASS_TYPE_TRASMITTER = 'TR' // TRansmitter
 export const CLASS_TYPE_RECEIVER = 'RE' // REceiver
 export const CLASS_TYPE_PIN = 'PI' // PIn
 export const CLASS_TYPE_FILE = 'F' // File
+export const CLASS_TYPE_FILE_READER = 'FR' // FileReader
 export const CLASS_TYPE_LOCATION = 'L' // Location
 export const CLASS_TYPE_REGISTRY = 'R' // Registry
 export const CLASS_TYPE_AUDIO_CONTEXT = 'AC' // AudioContext
