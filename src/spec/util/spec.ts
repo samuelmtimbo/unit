@@ -121,10 +121,15 @@ export const getUnitExposedPins = (
     for (const subPinId in plug) {
       const subPinSpec = plug[subPinId]
 
-      const { unitId: unitId_, pinId: pinId_, mergeId, kind } = subPinSpec
+      const {
+        unitId: unitId_,
+        pinId: pinId_,
+        mergeId,
+        kind = type,
+      } = subPinSpec
 
       if (unitId_ === unitId) {
-        deepSet(pins, [type, pinId_], {
+        deepSet(pins, [kind, pinId_], {
           type,
           kind,
           pinId,
@@ -714,6 +719,7 @@ export function makeFullSpecCollapseMap(
           nextSubPinSpec = {
             unitId: nextUnitId,
             pinId: subPinSpec.pinId,
+            kind: subPinSpec.kind ?? type,
           }
         } else {
           const nextMergeId =

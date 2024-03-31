@@ -441,11 +441,6 @@ export const _getGraphTypeMap = (
     forEachValueKey(unit, (_, unitId: string) => {
       const unitSpec = units[unitId]
 
-      // AD HOC
-      if (!unitSpec) {
-        return
-      }
-
       const { id, input = {} } = unitSpec
 
       let unitTypeInterface: TypeTreeInterface
@@ -549,7 +544,6 @@ export const _getGraphTypeMap = (
       function set_equivalent(unitId: string, kind: IO, pinId: string) {
         const type = deepGetOrDefault(typeMap, [unitId, kind, pinId], undefined)
 
-        // AD HOC
         if (!type) {
           return
         }
@@ -726,15 +720,16 @@ export const _getGraphTypeMap = (
     forEachValueKey(unit, (_, unitId: string) => {
       const unitTypeMap = typeMap[unitId]
 
-      if (!unitTypeMap) {
-        return
-        // throw new Error('type map not found')
-      }
-
       forEachValueKey(unitTypeMap['output'], (type, pinId) => {
         const nextType = _applyGenerics(type, generic_to_substitute_)
 
         unitTypeMap['output'][pinId] = nextType
+      })
+
+      forEachValueKey(unitTypeMap['input'], (type, pinId) => {
+        const nextType = _applyGenerics(type, generic_to_substitute_)
+
+        unitTypeMap['input'][pinId] = nextType
       })
     })
   })

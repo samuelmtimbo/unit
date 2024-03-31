@@ -1,10 +1,12 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { getSpec } from '../../../../client/spec'
-import { cloneUnitBundle } from '../../../../cloneUnitClass'
+import { deepSet_ } from '../../../../deepSet'
+import { fromUnitBundle } from '../../../../spec/fromUnitBundle'
 import { stringify } from '../../../../spec/stringify'
 import { System } from '../../../../system'
 import { UnitBundle } from '../../../../types/UnitBundle'
+import { clone } from '../../../../util/object'
 import { weakMerge } from '../../../../weakMerge'
 import { ID_SET_INPUT } from '../../../_ids'
 
@@ -51,12 +53,15 @@ export default class SetInput<T> extends Functional<I<T>, O<T>> {
       return
     }
 
-    const NewBundle: UnitBundle = cloneUnitBundle(unit)
+    const cloneBundle = clone(__bundle)
 
-    NewBundle.__bundle.unit.input = NewBundle.__bundle.unit.input || {}
-    NewBundle.__bundle.unit.input[name] =
-      NewBundle.__bundle.unit.input[name] || {}
-    NewBundle.__bundle.unit.input[name].data = stringify(data)
+    deepSet_(cloneBundle, ['unit', 'input', name, 'data'], stringify(data))
+
+    const NewBundle = fromUnitBundle(
+      cloneBundle,
+      this.__system.specs,
+      this.__system.classes
+    )
 
     done({ unit: NewBundle })
   }
