@@ -36,7 +36,6 @@ export function appendChildren(
   children: Component_[],
   Classes: UnitBundle<Component_>[]
 ): number {
-  
   for (const Class of Classes) {
     _appendChild(component, children, Class)
   }
