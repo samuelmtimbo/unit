@@ -1,8 +1,8 @@
-import { $ } from '../../../../../Class/$'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
 import { MS } from '../../../../../types/interface/MS'
+import { wrapBlob } from '../../../../../wrap/Blob'
 import { ID_MEDIA_RECORDER } from '../../../../_ids'
 
 export type I = {
@@ -45,7 +45,6 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
 
     this.addListener('destroy', () => {
       this._media_recorder.stop()
-
       this._media_recorder.ondataavailable = null
       this._media_recorder = null
     })
@@ -71,21 +70,11 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
       }
 
       this._media_recorder.onstop = () => {
-        const data = new Blob(chunks, { type: 'audio/wav' })
+        const blob = new Blob(chunks, { type: 'audio/wav' })
 
-        const _blob = new (class _Blob extends $ implements B {
-          public __: string[] = ['B', 'IM']
+        const blob_ = wrapBlob(blob, this.__system)
 
-          async image(): Promise<any> {
-            return data
-          }
-
-          async blob(): Promise<Blob> {
-            return data
-          }
-        })(this.__system)
-
-        this._output.blob.push(_blob)
+        this._output.blob.push(blob_)
       }
 
       const start = this._input.start.peak()
