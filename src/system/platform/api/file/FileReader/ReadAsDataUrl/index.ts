@@ -5,7 +5,6 @@ import { B } from '../../../../../../types/interface/B'
 import { FR } from '../../../../../../types/interface/FR'
 import { ID_TO_DATA_URL } from '../../../../../_ids'
 
-
 export type I = {
   opt: {}
   reader: FR

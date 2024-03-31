@@ -287,7 +287,12 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextUnitBundle,
       nextUnitPinMap,
     }: GraphAddUnitGhostData): void {
-      graph.addUnitGhost(unitId, nextUnitId, clone(nextUnitBundle), nextUnitPinMap)
+      graph.addUnitGhost(
+        unitId,
+        nextUnitId,
+        clone(nextUnitBundle),
+        nextUnitPinMap
+      )
     },
 
     $getBundle({}: {}, callback: Callback<BundleSpec>): void {

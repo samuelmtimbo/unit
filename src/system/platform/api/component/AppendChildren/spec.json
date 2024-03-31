@@ -16,7 +16,9 @@
     "children": {
       "type": "`C`[]",
       "metadata": {
-        "examples": ["[${unit:{id:'f27cae4e-fea8-11ea-b91e-db41e114c426'}},${unit:{id:'f27cae4e-fea8-11ea-b91e-db41e114c426'}}]"],
+        "examples": [
+          "[${unit:{id:'f27cae4e-fea8-11ea-b91e-db41e114c426'}},${unit:{id:'f27cae4e-fea8-11ea-b91e-db41e114c426'}}]"
+        ],
         "position": {
           "0": {
             "x": 128,
