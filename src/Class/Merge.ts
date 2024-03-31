@@ -96,8 +96,10 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  onOutputRemoved(name: string) {
-    this._backward_if_ready()
+  onOutputRemoved(name: string, output: Pin, propagate: boolean) {
+    if (propagate) {
+      this._backward_if_ready()
+    }
   }
 
   private _on_input_data(name: string): void {
