@@ -1,10 +1,10 @@
-import { $ } from '../../../../../../Class/$'
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
 import { Rect } from '../../../../../../client/util/geometry/types'
 import { System } from '../../../../../../system'
 import { IB } from '../../../../../../types/interface/IB'
 import { IM } from '../../../../../../types/interface/IM'
+import { wrapImageBitmap } from '../../../../../../wrap/ImageBitmap'
 import { ID_IMAGE_TO_BITMAP } from '../../../../../_ids'
 
 export type I = {
@@ -65,17 +65,7 @@ export default class ImageToBitmap extends Functional<I, O> {
       return
     }
 
-    const bitmap = new (class Bitmap extends $ implements IB {
-      __: string[] = ['IB']
-
-      async imageBitmap(): Promise<ImageBitmap> {
-        return _bitmap
-      }
-
-      async image(): Promise<any> {
-        return _bitmap
-      }
-    })(this.__system)
+    const bitmap = wrapImageBitmap(_bitmap, this.__system)
 
     done({
       bitmap,
