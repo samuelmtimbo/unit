@@ -3,6 +3,8 @@ import { PropHandler, htmlPropHandler } from '../../../../client/propHandler'
 import { applyStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
+import { CH } from '../../../../types/interface/CH'
+import { W } from '../../../../types/interface/W'
 import { pull, push } from '../../../../util/array'
 import { randomId } from '../../../../util/id'
 
@@ -30,10 +32,10 @@ export const DEFAULT_STYLE = {
   height: '100%',
 }
 
-export default class Iframe extends Element<
-  HTMLSlotElement | HTMLIFrameElement,
-  Props
-> {
+export default class Iframe
+  extends Element<HTMLSlotElement | HTMLIFrameElement, Props>
+  implements CH, W
+{
   public _iframe_el: HTMLIFrameElement
 
   private _slot_id: string
@@ -154,13 +156,17 @@ export default class Iframe extends Element<
     this._iframe_el.slot = ''
   }
 
-  send(data) {
+  onDestroy(): void {
+    pull(this.$system.cache.iframe, this)
+  }
+
+  async send(data): Promise<void> {
     // console.log('Iframe', 'send', data)
 
     this._iframe_el.contentWindow.postMessage(data, '*')
   }
 
-  onDestroy(): void {
-    pull(this.$system.cache.iframe, this)
+  postMessage(data: any, target: string, transferables: Transferable[]): void {
+    this._iframe_el.contentWindow.postMessage(data, target, transferables)
   }
 }

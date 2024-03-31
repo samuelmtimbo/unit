@@ -1,6 +1,7 @@
 import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
 import { CH } from '../../../../types/interface/CH'
+import { W } from '../../../../types/interface/W'
 import { ID_IFRAME } from '../../../_ids'
 
 export interface I {
@@ -11,8 +12,8 @@ export interface I {
 
 export interface O {}
 
-export default class Iframe extends Element_<I, O> implements CH {
-  __ = ['U', 'C', 'CH']
+export default class Iframe extends Element_<I, O> implements CH, W {
+  __ = ['U', 'C', 'CH', 'W']
 
   constructor(system: System) {
     super(
@@ -26,6 +27,13 @@ export default class Iframe extends Element_<I, O> implements CH {
     )
 
     this._state = {}
+  }
+
+  postMessage(data: any, target: string, transferables: Transferable[]): void {
+    this.emit('call', {
+      method: 'postMessage',
+      data: [data, target, transferables],
+    })
   }
 
   send(data: any): Promise<void> {

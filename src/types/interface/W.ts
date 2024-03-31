@@ -1,7 +1,5 @@
 import { CH } from './CH'
-import { EE } from './EE'
 
-export interface W extends CH, EE<any> {
-  window(): Window
-  postMessage(data: any, target: string): void
+export interface W extends CH {
+  postMessage(data: any, target: string, transferables: Transferable[]): void
 }
