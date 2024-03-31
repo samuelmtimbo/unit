@@ -9,16 +9,12 @@ export function wrapWindow(window: Window, system: System): W {
   return new (class Window_ extends $<any> implements W {
     __: string[] = ['W']
 
-    window(): Window {
-      return window
-    }
-
     async send(data: any): Promise<void> {
       window.postMessage(data, '*')
     }
 
     postMessage(data: any, target: string): void {
-      window.postMessage(data, target)
+      window.postMessage(data, target, [data])
     }
 
     addListener<K extends string>(event: K, listener: Listener<any>): Unlisten {

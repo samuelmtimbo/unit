@@ -1,24 +1,27 @@
 {
   "name": "transfer",
   "inputs": {
-    "unit": {
-      "type": "`CH`",
+    "window": {
+      "type": "`W`",
       "ref": true
     },
     "data": {
-      "type": "`B`",
+      "type": "any",
       "ref": true
+    },
+    "opt": {
+      "type": "{}"
     }
   },
   "outputs": {},
   "metadata": {
     "icon": "send",
-    "description": "send an arbitrary datum to `unit`",
+    "description": "transfer `data` reference to `window`",
     "complexity": 3,
     "tags": ["platform", "api"]
   },
   "base": true,
-  "id": "baadad13-b70f-4310-b4aa-8c81fe5a9d69",
+  "id": "72f0a90d-f90d-414f-802b-c7ed7b1dee3d",
   "type": "`U`",
   "system": true
 }

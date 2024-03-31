@@ -59,7 +59,14 @@ export default class State<T> extends Semifunctional<I<T>, O<T>> {
   f({ init }: I<T>, done: Done<O<T>>): void {
     const sharedRef: SharedRef<T> = { current: init }
 
-    let api: any = wrapSharedValue(sharedRef, this.__system)
+    let api: any = weakMerge(
+      wrapSharedValue(sharedRef, this.__system),
+      {
+        raw: function () {
+          return sharedRef.current
+        },
+      }
+    )
 
     const _ = extractInterface(init)
 

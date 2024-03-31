@@ -1,13 +1,14 @@
+import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
-import { B } from '../../../../types/interface/B'
-import { CH } from '../../../../types/interface/CH'
+import { W } from '../../../../types/interface/W'
 import { ID_TRANSFER } from '../../../_ids'
 
 interface I<T> {
-  unit: CH
-  data: B
+  window: W
+  opt: {}
+  data: $
 }
 
 interface O<T> {}
@@ -16,12 +17,12 @@ export default class Transfer<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['unit', 'data'],
+        i: ['window', 'opt', 'data'],
         o: [],
       },
       {
         input: {
-          unit: {
+          window: {
             ref: true,
           },
           data: {
@@ -34,9 +35,19 @@ export default class Transfer<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  async f({ unit, data }: I<T>, done: Done<O<T>>) {
+  async f({ window, data }: I<T>, done: Done<O<T>>) {
     try {
-      await unit.send(data)
+      let transferable: any
+
+      try {
+        transferable = await data.raw()
+      } catch (err) {
+        done(undefined, err.message)
+
+        return
+      }
+
+      window.postMessage(transferable, '*', [transferable])
     } catch (err) {
       done(undefined, err.message)
 
