@@ -66,6 +66,7 @@ export function noHost(): API {
       downloadURL: (opt: DownloadURLOpt): Promise<void> => {
         throw new APINotSupportedError('Download')
       },
+      FileReader: undefined,
     },
     animation: {
       requestAnimationFrame: () => {
