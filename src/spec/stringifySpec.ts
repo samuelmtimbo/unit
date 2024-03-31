@@ -1,11 +1,9 @@
 import { Memory } from '../Class/Unit/Memory'
 import { BundleSpec } from '../types/BundleSpec'
 import { GraphSpec } from '../types/GraphSpec'
-import { GraphUnitPinsSpec } from '../types/GraphUnitPinsSpec'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { stringifyDataObj } from '../types/stringifyPinData'
-import { stringify } from './stringify'
 
 export const stringifyBundleSpec = (spec: UnitBundleSpec): void => {
   const { unit, specs } = spec
@@ -51,14 +49,4 @@ export function stringifyMemorySpecData(memory: Memory) {
   }
 
   memory.memory = stringifyDataObj(memory.memory)
-}
-
-function stringifyGraphUnitPinSpecData(input: GraphUnitPinsSpec) {
-  for (const inputId in input) {
-    const { data } = input[inputId]
-
-    if (data !== undefined) {
-      input[inputId].data = stringify(data)
-    }
-  }
 }

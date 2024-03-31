@@ -50,7 +50,7 @@ import {
   stringifyUnitBundleSpecData,
 } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
-import { isEmptyObject, mapObjVK } from '../../../util/object'
+import { clone, isEmptyObject, mapObjVK } from '../../../util/object'
 import { weakMerge } from '../../../weakMerge'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
@@ -274,9 +274,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     ): void {
       const ghost = graph.removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
 
-      stringifyUnitBundleSpecData(ghost.bundle)
+      const ghost_ = clone(ghost)
 
-      callback(ghost)
+      stringifyUnitBundleSpecData(ghost_.bundle)
+
+      callback(ghost_)
     },
 
     $addUnitGhost({
@@ -285,7 +287,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextUnitBundle,
       nextUnitPinMap,
     }: GraphAddUnitGhostData): void {
-      graph.addUnitGhost(unitId, nextUnitId, nextUnitBundle, nextUnitPinMap)
+      graph.addUnitGhost(unitId, nextUnitId, clone(nextUnitBundle), nextUnitPinMap)
     },
 
     $getBundle({}: {}, callback: Callback<BundleSpec>): void {

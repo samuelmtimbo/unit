@@ -28,10 +28,11 @@ const fitChildren = (
       display: childDisplay = 'block',
       width: childWidthStr = 'auto',
       height: childHeightStr = 'auto',
-      'font-size': childFontSizeStr,
       opacity: childOpacityStr = '1',
       transform: childTransform = '',
     } = childStyle
+
+    const childFontSizeStr = childStyle['fontSize'] ?? childStyle['font-size']
 
     const [
       childTransformX,

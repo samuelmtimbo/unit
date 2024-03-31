@@ -3,6 +3,7 @@ import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { BootOpt, System } from '../../../../../system'
 import { $S } from '../../../../../types/interface/async/$S'
 import { Async } from '../../../../../types/interface/async/Async'
+import { clone } from '../../../../../util/object'
 import { wrapSystem } from '../../../../../wrap/System'
 import { ID_BOOT } from '../../../../_ids'
 
@@ -41,7 +42,7 @@ export default class Boot extends Semifunctional<I, O> {
 
     const _system = this.__system.boot({
       path,
-      specs: this.__system.specs,
+      specs: clone(this.__system.specs),
       classes: this.__system.classes,
       components: this.__system.components,
     })

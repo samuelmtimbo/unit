@@ -114,11 +114,11 @@ assert.deepEqual(getGraphTypeMapById(ID_SWAP, _specs), {
     output: { a: '<A>[]' },
   },
   set1: {
-    input: { a: '<D>[]', v: '<D>', i: 'number' },
+    input: { a: '<A>[]', v: '<A>', i: 'number' },
     output: { a: '<A>[]' },
   },
-  at0: { input: { a: '<B>[]', i: 'number' }, output: { 'a[i]': '<A>' } },
-  at1: { input: { a: '<C>[]', i: 'number' }, output: { 'a[i]': '<A>' } },
+  at0: { input: { a: '<A>[]', i: 'number' }, output: { 'a[i]': '<A>' } },
+  at1: { input: { a: '<A>[]', i: 'number' }, output: { 'a[i]': '<A>' } },
 })
 assert.deepEqual(getSpecTypeInterfaceById(ID_SWAP, _specs), {
   input: { a: '<A>[]', i: 'number', j: 'number' },
@@ -219,12 +219,12 @@ assert.deepEqual(_getGraphTypeMapById(ID_N_ARRAY_BUILDER_FROM, _specs), {
   },
   arraybuilderfrom: {
     input: {
-      a: { value: '<B>', type: 'generic', children: [] },
+      a: { value: '<A>', type: 'generic', children: [] },
       test: { value: 'boolean', type: 'boolean', children: [] },
       init: {
-        value: '<B>[]',
+        value: '<A>[]',
         type: 'array expression',
-        children: [{ value: '<B>', type: 'generic', children: [] }],
+        children: [{ value: '<A>', type: 'generic', children: [] }],
       },
     },
     output: {
@@ -247,7 +247,7 @@ assert.deepEqual(_getGraphTypeMapById(ID_N_ARRAY_BUILDER_FROM, _specs), {
   },
   looprepeat: {
     input: {
-      init: { value: '<C>', type: 'generic', children: [] },
+      init: { value: 'number', type: 'number', children: [] },
       test: { value: 'boolean', type: 'boolean', children: [] },
     },
     output: {
@@ -366,7 +366,7 @@ assert.deepEqual(
     },
     id0: {
       input: {
-        a: '<B>',
+        a: '<A>',
       },
       output: {
         a: '<A>',
