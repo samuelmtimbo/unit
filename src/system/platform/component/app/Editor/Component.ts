@@ -23863,6 +23863,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
+        if (this._animating_unit_explosion[unitId]) {
+          return true
+        }
+
         if (this._is_link_pin_ref(pin_node_id)) {
           if (type === 'output') {
             return true
@@ -33492,6 +33496,37 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._negate_unit_layer(unit_id)
 
+    this._disable_unit_pointer_events(unit_id)
+
+    this._animating_unit_explosion[unit_id] = new Promise<void>((resolve) => {
+      this._animate_core_style(
+        unit_id,
+        init_node,
+        () => {
+          return target_node
+        },
+        ({ x, y, width, height, opacity }) => {
+          set_opacity(unit_id, opacity)
+
+          this._set_node_x(unit_id, x)
+          this._set_node_y(unit_id, y)
+
+          this._resize_core_width(unit_id, width)
+          this._resize_node_width(unit_id, width)
+
+          this._resize_core_height(unit_id, height)
+          this._resize_node_height(unit_id, height)
+        },
+        () => {
+          delete this._animating_unit_explosion[unit_id]
+
+          this._state_remove_unit(unit_id)
+
+          resolve()
+        }
+      )
+    })
+
     this._state_gut_unit(
       unit_id,
       map_unit_id,
@@ -33569,37 +33604,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         set_opacity(node_id, 1)
       }
     )
-
-    this._disable_unit_pointer_events(unit_id)
-
-    this._animating_unit_explosion[unit_id] = new Promise<void>((resolve) => {
-      this._animate_core_style(
-        unit_id,
-        init_node,
-        () => {
-          return target_node
-        },
-        ({ x, y, width, height, opacity }) => {
-          set_opacity(unit_id, opacity)
-
-          this._set_node_x(unit_id, x)
-          this._set_node_y(unit_id, y)
-
-          this._resize_core_width(unit_id, width)
-          this._resize_node_width(unit_id, width)
-
-          this._resize_core_height(unit_id, height)
-          this._resize_node_height(unit_id, height)
-        },
-        () => {
-          delete this._animating_unit_explosion[unit_id]
-
-          this._state_remove_unit(unit_id)
-
-          resolve()
-        }
-      )
-    })
 
     this._simulation.alpha(1)
     this._simulation.alphaDecay(0)
@@ -50165,7 +50169,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._unlisten_gesture = undefined
   }
 
-  private _animating_unit_explosion: Set<Promise<any>> = new Set()
+  private _animating_unit_explosion: Dict<Promise<any>> = {}
 
   private _on_graph_background_multiselect_long_press = (
     event: UnitPointerEvent
