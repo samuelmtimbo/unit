@@ -44,7 +44,8 @@ export type GraphSelectionSpec = {
 
 export type G_MoveSubgraphIntoArgs = [
   string,
-  BundleSpec,
+  UnitBundleSpec,
+  GraphSpec,
   string,
   GraphSelection,
   GraphMoveSubGraphData['nextIdMap'],

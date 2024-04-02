@@ -28,11 +28,11 @@ import { keys } from '../../system/f/object/Keys/f'
 import { GraphSubPinSpec } from '../../types'
 import { Action } from '../../types/Action'
 import { AllKeys } from '../../types/AllKeys'
-import { BundleSpec } from '../../types/BundleSpec'
 import { Dict } from '../../types/Dict'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../types/GraphMergesSpec'
 import { GraphPinSpec } from '../../types/GraphPinSpec'
+import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitMerges } from '../../types/GraphUnitMerges'
 import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
 import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
@@ -146,7 +146,8 @@ export const wrapMoveSubgraphOutOfData = (data: GraphMoveSubGraphOutOfData) => {
 
 export const makeMoveSubgraphIntoAction = (
   graphId: string,
-  graphBundle: BundleSpec,
+  graphBundle: UnitBundleSpec,
+  graphSpec: GraphSpec,
   nextSpecId: string,
   nodeIds: GraphMoveSubGraphIntoData['nodeIds'],
   nextIdMap: GraphMoveSubGraphIntoData['nextIdMap'],
@@ -161,6 +162,7 @@ export const makeMoveSubgraphIntoAction = (
   return wrapMoveSubgraphIntoData({
     graphId,
     graphBundle,
+    graphSpec,
     nextSpecId,
     nodeIds,
     nextIdMap,
@@ -176,7 +178,8 @@ export const makeMoveSubgraphIntoAction = (
 
 export const makeMoveSubgraphOutOfAction = (
   graphId: string,
-  graphBundle: BundleSpec,
+  graphBundle: UnitBundleSpec,
+  graphSpec: GraphSpec,
   nextSpecId: string,
   nodeIds: {
     merge: string[]
@@ -238,6 +241,7 @@ export const makeMoveSubgraphOutOfAction = (
   return wrapMoveSubgraphOutOfData({
     graphId,
     graphBundle,
+    graphSpec,
     nextSpecId,
     nodeIds,
     nextIdMap,
@@ -922,6 +926,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
       return makeMoveSubgraphOutOfAction(
         data.graphId,
         data.graphBundle,
+        data.graphSpec,
         data.nextSpecId,
         nextNodeIds_,
         nextIdMap_,
@@ -957,7 +962,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
       const nextUnitPinMergeMap_ = {}
 
       forEachPinOnMerges(
-        data_.graphBundle.spec.merges ?? {},
+        data_.graphSpec.merges ?? {},
         (mergeId, unitId, type, pinId) => {
           const nextUnitId = nextIdMap_.unit[unitId] ?? unitId
 
@@ -1035,6 +1040,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
       return makeMoveSubgraphIntoAction(
         data_.graphId,
         data_.graphBundle,
+        data_.graphSpec,
         data_.nextSpecId,
         nextNodeIds_,
         nextIdMap_,

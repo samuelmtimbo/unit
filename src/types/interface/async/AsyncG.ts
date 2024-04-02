@@ -472,11 +472,13 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
     }: GraphMoveSubGraphIntoData): void {
-      const graphBundle = graph.getGraphUnitBundleSpec(graphId)
+      const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
+      const graphSpec = graph.getGraphUnitGraphSpec(graphId)
 
       graph.moveSubgraphInto(
         graphId,
         graphBundle,
+        graphSpec,
         nextSpecId,
         nodeIds,
         nextIdMap,
@@ -499,11 +501,13 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
     }: GraphMoveSubGraphIntoData): void {
-      const graphBundle = graph.getGraphUnitBundleSpec(graphId)
+      const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
+      const graphSpec = graph.getGraphUnitGraphSpec(graphId)
 
       graph.moveSubgraphInto(
         graphId,
         graphBundle,
+        graphSpec,
         nextSpecId,
         nodeIds,
         nextIdMap,

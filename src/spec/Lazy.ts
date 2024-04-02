@@ -259,6 +259,7 @@ export function lazyFromSpec(
       ...[
         graphId,
         graphBundle,
+        graphSpec,
         nextSpecId,
         nodeIds,
         nextIdMap,
@@ -273,6 +274,7 @@ export function lazyFromSpec(
       return this.__graph.moveSubgraphOutOf(
         graphId,
         graphBundle,
+        graphSpec,
         nextSpecId,
         nodeIds,
         nextIdMap,
@@ -382,6 +384,7 @@ export function lazyFromSpec(
       ...[
         graphId,
         graphBundle,
+        graphSpec,
         nextSpecId,
         nodeIds,
         nextIdMap,
@@ -396,6 +399,7 @@ export function lazyFromSpec(
       return this.__graph.moveSubgraphInto(
         graphId,
         graphBundle,
+        graphSpec,
         nextSpecId,
         nodeIds,
         nextIdMap,

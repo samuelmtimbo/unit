@@ -5272,6 +5272,7 @@ export class Graph<I = any, O = any>
     ...[
       graphId,
       graphBundle,
+      graphSpec,
       specId,
       nodeIds,
       nextIdMap,
@@ -5285,6 +5286,7 @@ export class Graph<I = any, O = any>
     this._moveSubgraphInto(
       graphId,
       graphBundle,
+      graphSpec,
       specId,
       nodeIds,
       nextIdMap,
@@ -5314,6 +5316,7 @@ export class Graph<I = any, O = any>
   private _moveSubgraphInto(
     graphId: string,
     graphBundle: BundleSpec,
+    graphSpec: GraphSpec,
     specId: string,
     nodeIds: GraphMoveSubGraphData['nodeIds'],
     nextIdMap: GraphMoveSubGraphData['nextIdMap'],
@@ -5633,6 +5636,7 @@ export class Graph<I = any, O = any>
     ...[
       graphId,
       graphBundle,
+      graphSpec,
       specId,
       nodeIds,
       nextIdMap,
@@ -5660,6 +5664,7 @@ export class Graph<I = any, O = any>
     this._moveSubgraphOutOf(
       graphId,
       graphBundle,
+      graphSpec,
       specId,
       nodeIds,
       nextIdMap,
@@ -5690,6 +5695,7 @@ export class Graph<I = any, O = any>
     ...[
       graphId,
       graphBundle,
+      graphSpec,
       nextSpecId,
       nodeIds,
       nextIdMap,
@@ -5719,7 +5725,7 @@ export class Graph<I = any, O = any>
     const merges = clone(this.getUnitMergesSpec(graphId))
     const plugs = clone(this.getUnitPlugsSpec(graphId))
 
-    const collapseMap = {
+    const collapseMap: GraphMoveSubGraphData = {
       nodeIds,
       nextSpecId: null,
       nextIdMap,
@@ -5751,6 +5757,22 @@ export class Graph<I = any, O = any>
     const graphBundle = graph.getBundleSpec()
 
     return graphBundle
+  }
+
+  public getGraphUnitGraphSpec(graphId: string): GraphSpec {
+    const graph = this.getUnit(graphId) as Graph
+
+    const spec = graph.getSpec()
+
+    return spec
+  }
+
+  public getGraphUnitUnitBundleSpec(graphId: string): UnitBundleSpec {
+    const unit = this.getUnit(graphId) as Graph
+
+    const unitBundle = unit.getUnitBundleSpec()
+
+    return unitBundle
   }
 
   public _explodeUnit(
@@ -5791,11 +5813,13 @@ export class Graph<I = any, O = any>
       nextSubComponentChildrenMap,
     } = collapseMap
 
-    const graphBundle = this.getGraphUnitBundleSpec(graphId)
+    const graphBundle = this.getGraphUnitUnitBundleSpec(graphId)
+    const graphSpec = this.getGraphUnitGraphSpec(graphId)
 
     this._moveSubgraphOutOf(
       graphId,
       graphBundle,
+      graphSpec,
       nextSpecId,
       nodeIds,
       nextIdMap,
@@ -6267,6 +6291,7 @@ export class Graph<I = any, O = any>
             const {
               graphId,
               graphBundle,
+              graphSpec,
               nextSpecId,
               nodeIds,
               nextIdMap,
@@ -6280,6 +6305,7 @@ export class Graph<I = any, O = any>
             this._moveSubgraphInto(
               graphId,
               graphBundle,
+              graphSpec,
               nextSpecId,
               nodeIds,
               nextIdMap,
@@ -6294,6 +6320,7 @@ export class Graph<I = any, O = any>
             const {
               graphId,
               graphBundle,
+              graphSpec,
               nextSpecId,
               nodeIds,
               nextIdMap,
@@ -6307,6 +6334,7 @@ export class Graph<I = any, O = any>
             this._moveSubgraphOutOf(
               graphId,
               graphBundle,
+              graphSpec,
               nextSpecId,
               nodeIds,
               nextIdMap,

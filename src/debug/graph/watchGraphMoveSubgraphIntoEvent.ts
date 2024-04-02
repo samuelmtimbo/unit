@@ -20,6 +20,7 @@ export function watchGraphMoveSubgraphEvent(
     ...[
       graphId,
       graphBundle,
+      graphSpec,
       nextSpecId,
       nodeIds,
       nextIdMap,
@@ -37,6 +38,7 @@ export function watchGraphMoveSubgraphEvent(
       data: {
         graphId,
         graphBundle,
+        graphSpec,
         nodeIds,
         nextSpecId,
         nextIdMap,

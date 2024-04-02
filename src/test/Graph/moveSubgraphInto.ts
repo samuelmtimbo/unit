@@ -52,6 +52,7 @@ const empty0 = composition0.getUnit(UNIT_ID_EMTPY) as Graph
 composition0.moveSubgraphInto(
   UNIT_ID_EMTPY,
   null,
+  null,
   uuid(),
   {
     merge: [],
@@ -116,6 +117,7 @@ const empty1 = composition1.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition1.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {
@@ -236,6 +238,7 @@ const empty2 = composition2.getUnit(UNIT_ID_EMTPY) as Graph
 composition2.moveSubgraphInto(
   UNIT_ID_EMTPY,
   null,
+  null,
   uuid(),
   {
     merge: [],
@@ -324,6 +327,7 @@ const empty3 = composition3.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition3.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {
@@ -418,6 +422,7 @@ const empty4 = composition4.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition4.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {
@@ -544,6 +549,7 @@ const empty5 = composition5.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition5.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {
@@ -696,6 +702,7 @@ const empty6 = composition6.getUnit(UNIT_ID_EMTPY) as Graph
 composition6.moveSubgraphInto(
   UNIT_ID_EMTPY,
   null,
+  null,
   uuid(),
   {
     merge: ['0', '1'],
@@ -820,6 +827,7 @@ const empty7 = composition7.getUnit(UNIT_ID_EMTPY) as Graph
 composition7.moveSubgraphInto(
   UNIT_ID_EMTPY,
   null,
+  null,
   uuid(),
   {
     merge: ['0', '1'],
@@ -904,6 +912,7 @@ const empty8 = composition8.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition8.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {
@@ -996,6 +1005,7 @@ const empty9 = composition9.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition9.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {
@@ -1109,6 +1119,7 @@ const empty10 = composition10.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition10.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {
@@ -1227,6 +1238,7 @@ const empty11 = composition11.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition11.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {
@@ -1353,6 +1365,7 @@ const empty12 = composition12.getUnit(UNIT_ID_EMTPY) as Graph
 
 composition12.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {
@@ -1481,6 +1494,7 @@ const empty13 = composition13.getUnit(UNIT_ID_EMTPY) as Graph
 composition13.moveSubgraphInto(
   UNIT_ID_EMTPY,
   null,
+  null,
   uuid(),
   {
     merge: ['0'],
@@ -1593,6 +1607,7 @@ const empty14 = composition14.getUnit(UNIT_ID_EMTPY) as Graph
 composition14.moveSubgraphInto(
   UNIT_ID_EMTPY,
   null,
+  null,
   uuid(),
   {
     merge: [],
@@ -1679,6 +1694,7 @@ const empty15 = composition15.getUnit(UNIT_ID_EMTPY) as Graph
 composition15.moveSubgraphInto(
   UNIT_ID_EMTPY,
   null,
+  null,
   uuid(),
   {
     merge: [],
@@ -1710,6 +1726,7 @@ assert(empty15.getInput('a').constant())
 
 composition15.moveSubgraphInto(
   UNIT_ID_EMTPY,
+  null,
   null,
   uuid(),
   {

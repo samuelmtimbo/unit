@@ -5,7 +5,6 @@ import {
   GraphSubPinSpec,
 } from '../../types'
 import { Action } from '../../types/Action'
-import { BundleSpec } from '../../types/BundleSpec'
 import { Dict } from '../../types/Dict'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../types/GraphMergesSpec'
@@ -63,7 +62,8 @@ export type GraphMoveSubGraphData = {
 
 export type GraphMoveSubGraphIntoData = GraphMoveSubGraphData & {
   graphId: string
-  graphBundle: BundleSpec
+  graphBundle: UnitBundleSpec
+  graphSpec: GraphSpec
 }
 
 export type GraphMoveSubGraphOutOfData = GraphMoveSubGraphIntoData

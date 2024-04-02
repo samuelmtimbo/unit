@@ -4093,12 +4093,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return bundle
   }
 
-  private _get_graph_unit_bundle_spec = (unit_id: string): BundleSpec => {
+  private _get_graph_bundle_spec = (unit_id: string): BundleSpec => {
     const { specs } = this.$props
 
     const spec = this._get_unit_spec(unit_id) as GraphSpec
 
     const bundle = bundleSpec(spec, specs)
+
+    return bundle
+  }
+
+  private _get_graph_unit_bundle_spec = (unit_id: string): UnitBundleSpec => {
+    const { specs } = this.$props
+
+    const unit = this._get_unit(unit_id)
+
+    const bundle = unitBundleSpec(unit, specs)
 
     return bundle
   }
@@ -33233,13 +33243,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { shouldFork, newSpecId } = this.$props
 
     const spec = this._get_unit_spec(unit_id) as GraphSpec
+    const unit = this._get_unit(unit_id)
 
     const { id } = spec
 
-    let new_id = id
+    const new_unit = clone(unit)
 
     if (shouldFork(id)) {
-      new_id = newSpecId()
+      new_unit.id = newSpecId()
     }
 
     const collapse_map: GraphMoveSubGraphData =
@@ -33253,12 +33264,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const render = this._get_unit_spec_render(unit_id)
 
+    const is_component = this._is_unit_component(unit_id)
+
+    if (is_component) {
+      const { width, height } = this._get_unit_component_graph_size(unit_id)
+
+      deepSet(new_unit, ['metadata', 'component', 'width'], width)
+      deepSet(new_unit, ['metadata', 'component', 'height'], height)
+    }
+
     const empty_bundle: UnitBundleSpec = {
-      unit: {
-        id: new_id,
-      },
+      unit: new_unit,
       specs: {
-        [new_id]: {
+        [new_unit.id]: {
           name: spec.name,
           units: {},
           inputs: {},
@@ -33269,12 +33287,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     }
 
-    const graph_bundle_spec = this._get_graph_unit_bundle_spec(unit_id)
+    const graph_unit_bundle_spec = this._get_graph_unit_bundle_spec(unit_id)
+    const graph_spec = this._get_unit_spec(unit_id) as GraphSpec
 
     return [
       wrapMoveSubgraphOutOfData({
         graphId: unit_id,
-        graphBundle: graph_bundle_spec,
+        graphBundle: graph_unit_bundle_spec,
+        graphSpec: graph_spec,
         ...collapse_map,
       }),
       this._make_remove_unit_action(unit_id, empty_bundle, false, false),
@@ -42940,6 +42960,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const data = {
         graphId: new_unit_id,
         graphBundle: null,
+        graphSpec: null,
         ...collapse_map,
       }
 
@@ -44186,6 +44207,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       graphId: this._collapse_next_unit_id,
       nextSpecId: this._collapse_next_spec_id,
       graphBundle: graph_bundle,
+      graphSpec: graph_spec,
       nodeIds: {
         unit: this._collapse_units,
         link: this._collapse_link_pins,
@@ -55570,11 +55592,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { graphId, nodeIds, path, graphBundle } = data
 
-    const { spec } = graphBundle
+    const { unit } = graphBundle
+
+    const { id } = unit
+
+    const spec = getSpec(weakMerge(specs, graphBundle.specs), id)
 
     const graph_unit_id = path[0]
 
-    const { plug, unit } = nodeIds
+    const { plug } = nodeIds
 
     const unit_spec = findSpecAtPath(specs, this._spec, path)
 
@@ -55658,17 +55684,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { specs, setSpec, getSpec } = this.$props
 
-    const {
-      graphId,
-      nodeIds,
-      path,
-      nextSpecId,
-      graphBundle: { spec },
-    } = data
+    const { graphId, nodeIds, path, nextSpecId } = data
 
     const graph_unit_id = path[0]
 
-    const { plug, unit } = nodeIds
+    const { plug } = nodeIds
 
     if (this._is_spec_updater(path)) {
       const parent_spec = findSpecAtPath(specs, this._spec, path)
