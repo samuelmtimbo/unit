@@ -84,6 +84,7 @@ export class Registry implements R {
       }
 
       visited.add(specId)
+
       const { units } = spec
 
       for (const unitId in units) {
@@ -105,12 +106,11 @@ export class Registry implements R {
         } else {
           // TODO
           mapSpecId[specId] = nextSpecId
-
-          this.specs_.set(specId, spec)
         }
       } else {
-        this.specs_.set(specId, spec)
       }
+
+      this.specs_.set(specId, spec)
 
       // this.specs_.set(nextSpecId, spec) // TODO
     }
