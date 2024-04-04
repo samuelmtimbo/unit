@@ -29720,7 +29720,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     parent_id: string,
     children: string[],
     slot_name: string = 'default',
-    emit: boolean = true
+    emit: boolean = true,
+    animate?: boolean
   ): void => {
     // console.log(
     //   'Graph',
@@ -29730,7 +29731,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   slot_name
     // )
 
-    let { animate } = this.$props
+    animate = animate ?? this.$props.animate
 
     // this._cancel_tree_layout_animation()
 
@@ -38383,6 +38384,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const parent_id = this._spec_get_sub_component_parent_id(unit_id)
     const children = this._spec_get_sub_component_children(unit_id)
 
+    const animating = this._is_sub_component_animating(unit_id)
+
     this._cancel_layout_core_animation(unit_id)
     this._cancel_enter_sub_component_animation(unit_id)
     this._cancel_leave_sub_component_animation(unit_id)
@@ -38400,7 +38403,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else {
       if (this._in_component_control) {
         if (remove_roots) {
-          this._displace_sub_component(unit_id)
+          if (!animating) {
+            this._displace_sub_component(unit_id)
+          }
         }
       }
 
@@ -38420,6 +38425,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._animating_sub_component_base_id.has(unit_id)) {
+      this._unplug_sub_component_base_frame(unit_id)
+
       this._animating_sub_component_base_id.delete(unit_id)
     }
 
@@ -51679,7 +51686,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _execute_action = (action: Action, emit: boolean): void => {
     // console.log('Editor', '_execute_action', action)
 
-    const { getSpec } = this.$props
+    const { getSpec, injectSpecs } = this.$props
 
     const { type, data } = clone(action)
 
@@ -51769,7 +51776,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               data.children,
               // data.slotMap,
               'default',
-              emit
+              emit,
+              false
             )
           } else {
             for (const child_id of data.children) {
@@ -51896,6 +51904,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       case MOVE_SUBGRAPH_INTO:
         {
           const _data = clone(data) as GraphMoveSubGraphIntoData
+
+          this._set_node_fixed(_data.graphId, true)
 
           this._start_move_subgraph_into(_data.graphId, data)
 

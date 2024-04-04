@@ -32,7 +32,13 @@ const fitChildren = (
       transform: childTransform = '',
     } = childStyle
 
-    const childFontSizeStr = childStyle['fontSize'] ?? childStyle['font-size']
+    const childFontSize = childStyle['fontSize'] ?? childStyle['font-size']
+
+    let childFontSizeStr = childFontSize
+
+    if (typeof childFontSize === 'number') {
+      childFontSizeStr = `${childFontSizeStr}px`
+    }
 
     const [
       childTransformX,
