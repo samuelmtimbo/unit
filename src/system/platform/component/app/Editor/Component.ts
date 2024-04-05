@@ -20912,6 +20912,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._datum_to_be_focused = false
     } else if (this._name_to_be_focused) {
       //
+    } else if (this._fullwindow_focusing) {
+      //
     } else {
       const { relatedTarget } = event
 
@@ -23611,6 +23613,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._clear_main(animate)
   }
 
+  private _fullwindow_focusing: boolean = false
+
   private _enter_fullwindow = (
     _animate: boolean,
     sub_component_ids: string[]
@@ -23629,13 +23633,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         this._hide_control(_animate)
       }
-    }
-
-    if (sub_component_ids.length > 0) {
-      const last_sub_component_id = last(sub_component_ids)
-      const last_sub_component = this._get_sub_component(last_sub_component_id)
-
-      last_sub_component.focus()
     }
 
     const ordered_sub_component_ids =
@@ -23717,11 +23714,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (sub_component_ids.length > 0) {
         const last_sub_component_id = last(sub_component_ids)
-        const last_sub_component = this._get_sub_component(
-          last_sub_component_id
-        )
 
-        last_sub_component.focus()
+        this._fullwindow_focusing = true
+
+        this._focus_sub_component(last_sub_component_id)
+
+        this._fullwindow_focusing = true
       }
     }
 
@@ -27947,6 +27945,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _focus_sub_component = (unit_id: string): void => {
     // console.log('Graph', '_focus_sub_component', unit_id)
     const sub_component = this._get_sub_component(unit_id)
+
     sub_component.focus()
   }
 
@@ -44809,11 +44808,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getSpec: () => {
         return this._spec
       },
-      setUnitSize: function (
-        unitId: string,
-        width: number,
-        height: number
-      ): void {
+      setUnitSize: (unitId: string, width: number, height: number): void => {
         this._resize_core(unitId, width, height)
       },
       setSubComponentSize: function (
