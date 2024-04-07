@@ -5,12 +5,12 @@ import { SpeechGrammarList } from './SpeechGrammarList'
 export interface SpeechRecognition {
   start(): void
   stop(): void
-  addListener(
+  addEventListener(
     event: 'result',
     listener: Listener<[{ transcript: string; confidence: number }[]]>
   ): Unlisten
-  addListener(event: 'end', listener: Listener<[]>): Unlisten
-  addListener(event: 'error', listener: Listener<[string]>): Unlisten
+  addEventListener(event: 'end', listener: Listener<[]>): Unlisten
+  addEventListener(event: 'error', listener: Listener<[string]>): Unlisten
 }
 
 export interface SpeechRecognitionOpt {

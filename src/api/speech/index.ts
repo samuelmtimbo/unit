@@ -77,18 +77,17 @@ export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
         maxAlternatives = 1,
       } = opt
 
-      let recognition
+      let recognition: any
 
       try {
         recognition = new SpeechRecognition({
-          grammars: undefined,
+          grammars,
           lang,
           interimResults,
           maxAlternatives,
           continuous,
         })
       } catch (err) {
-        //
         throw err
       }
 
