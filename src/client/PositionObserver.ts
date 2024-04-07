@@ -428,7 +428,7 @@ export class PositionObserver_ implements PositionObserver {
           update_local()
         }
 
-        const parentPostionObserver = new PositionObserver_(
+        const parentPositionObserver = new PositionObserver_(
           this._system,
           parentPositionCallback
         )
@@ -438,7 +438,7 @@ export class PositionObserver_ implements PositionObserver {
           y: _parent_y,
           sx: _parent_scale_x,
           sy: _parent_scale_y,
-        } = parentPostionObserver.observe(targetParent as HTMLElement)
+        } = parentPositionObserver.observe(targetParent as HTMLElement)
 
         parent_x = _parent_x
         parent_y = _parent_y
@@ -463,7 +463,7 @@ export class PositionObserver_ implements PositionObserver {
 
           parentResizeObserver.disconnect()
           parentMutationObserver.disconnect()
-          parentPostionObserver.disconnect()
+          parentPositionObserver.disconnect()
         }
       } else {
         return function () {}
