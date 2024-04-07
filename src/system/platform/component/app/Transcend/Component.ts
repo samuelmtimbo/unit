@@ -60,12 +60,9 @@ export const DEFAULT_STYLE = {
   transition: `opacity ${ANIMATION_T_S}s linear`,
 }
 
-let i = 0
-
 export default class Transcend extends Element<HTMLDivElement, Props> {
   public _container: Div
   public _icon: Icon
-  public _id: string = `${i++}`
 
   private _tooltip: Tooltip
 
