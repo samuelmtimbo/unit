@@ -6,7 +6,7 @@ import { ID_TO_DATA_URL } from '../../../../_ids'
 
 export interface I<T> {
   canvas: CA
-  quality: string
+  quality: number
   type: string
   done: any
 }

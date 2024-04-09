@@ -1,5 +1,5 @@
 {
-  "name": "create blob url",
+  "name": "create object url",
   "inputs": {
     "blob": {
       "type": "`B`",

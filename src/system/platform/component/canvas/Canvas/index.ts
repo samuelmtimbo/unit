@@ -26,9 +26,6 @@ export default class Canvas
 {
   __ = ['U', 'C', 'V', 'J', 'CA', 'EE']
 
-  private _offscreen: OffscreenCanvas
-  private _offscreen_ctx: OffscreenCanvasRenderingContext2D
-
   constructor(system: System) {
     super(
       {
@@ -47,11 +44,6 @@ export default class Canvas
     }
 
     this._component = new CanvasComp({}, this.__system)
-
-    this._offscreen = new OffscreenCanvas(1000, 1000)
-    this._offscreen_ctx = this._offscreen.getContext('2d', {
-      willReadFrequently: true,
-    })
   }
 
   async clear(): Promise<void> {
@@ -73,8 +65,7 @@ export default class Canvas
   ): Promise<void> {
     // console.log('drawImage', imageBitmap, x, y, width, height)
 
-    // this._component.drawImage(imageBitmap, x, y, width, height)
-    this._offscreen_ctx.drawImage(imageBitmap, x, y, width, height)
+    this._component.drawImage(imageBitmap, x, y, width, height)
 
     this.emit('call', {
       method: 'drawImage',
@@ -120,37 +111,44 @@ export default class Canvas
     return
   }
 
-  async toBlob(type: string, quality: number): Promise<Blob> {
-    return new Promise((resolve, reject) => {
-      this._component.toBlob({ type, quality }, (blob) => {
-        if (blob) {
-          resolve(blob)
-        } else {
-          reject('cannot convert canvas to blob')
-        }
-      })
-    })
-  }
-
-  async toDataUrl(type: string, quality: string): Promise<string> {
-    const component = (await firstGlobalComponentPromise(
+  private async _local_component(): Promise<CanvasComp> {
+    return firstGlobalComponentPromise(
       this.__system,
       this.__global_id
-    )) as CanvasComp
+    ) as Promise<CanvasComp>
+  }
+
+  async toBlob(type: string, quality: number): Promise<Blob> {
+    const component = await this._local_component()
+
+    return component.toBlob(type, quality)
+  }
+
+  async toDataUrl(type: string, quality: number): Promise<string> {
+    const component = await this._local_component()
 
     return component.toDataUrl(type, quality)
   }
 
   async captureStream({ frameRate }: CSOpt): Promise<MediaStream> {
-    return this._component.$element.captureStream(frameRate)
+    const component = await this._local_component()
+
+    return component.captureStream({ frameRate })
   }
 
-  getImageData(x: number, y: number, width: number, height: number): ImageData {
-    const imageData = this._offscreen_ctx.getImageData(x, y, width, height)
-    return imageData
+  async getImageData(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    opt: any
+  ): Promise<ImageData> {
+    const component = await this._local_component()
+
+    return component.getImageData(x, y, width, height, opt)
   }
 
-  putImageData(
+  async putImageData(
     image: ImageData,
     dx: number,
     dy: number,
@@ -158,10 +156,8 @@ export default class Canvas
     y: number,
     width: number,
     height: number
-  ): void {
-    // this._component.$element
-    //   .getContext('2d')
-    //   .putImageData(image, dx, dy, x, y, width, height)
+  ): Promise<void> {
+    this._component.putImageData(image, dx, dy, x, y, width, height)
 
     this.emit('call', {
       method: 'putImageData',
@@ -174,29 +170,11 @@ export default class Canvas
 
     switch (name) {
       case 'width':
-        // if (typeof data === 'string' && data.endsWith('vw')) {
-        //   data = 0
-        // }
-        try {
-          this._offscreen.width = data
-        } catch (err) {
-          // console.log(err)
-          //
-        }
-        // this._component.setProp('width', data)
+        this._component.setProp('width', data)
 
         break
       case 'height':
-        // if (typeof data === 'string' && data.endsWith('vw')) {
-        //   data = 0
-        // }
-        try {
-          this._offscreen.height = data
-        } catch (err) {
-          // console.log(err)
-          //
-        }
-        // this._component.setProp('height', data)
+        this._component.setProp('height', data)
 
         break
     }
