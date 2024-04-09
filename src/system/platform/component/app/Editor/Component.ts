@@ -396,7 +396,6 @@ import {
   SET_UNIT_PIN_IGNORED,
   SET_UNIT_SIZE,
   UNPLUG_PIN,
-  exposePinAction,
   makeAddMergeAction,
   makeAddPinToMergeAction,
   makeAddUnitAction,
@@ -404,6 +403,7 @@ import {
   makeCoverPinAction,
   makeCoverPinSetAction,
   makeCoverUnitPinSetAction,
+  makeExposePinAction,
   makeExposePinSetAction,
   makeExposeUnitPinSetAction,
   makePlugPinAction,
@@ -412,6 +412,7 @@ import {
   makeRemoveUnitAction,
   makeRemoveUnitPinDataAction,
   makeSetComponentSizeAction,
+  makeSetPinSetFunctionalAction,
   makeSetSubComponentSizeAction,
   makeSetUnitPinConstantAction,
   makeSetUnitPinDataAction,
@@ -420,7 +421,6 @@ import {
   makeUnplugPinAction,
   processActions,
   reverseAction,
-  setPinSetFunctionalAction,
   wrapMoveSubgraphIntoData,
   wrapMoveSubgraphOutOfData,
   wrapRemoveMergeDataAction,
@@ -8438,7 +8438,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._add_exposed_pin(type, pin_id, sub_pin_id, sub_pin_spec, position)
 
     this._dispatch_action(
-      exposePinAction(type, pin_id, sub_pin_id, sub_pin_spec)
+      makeExposePinAction(type, pin_id, sub_pin_id, sub_pin_spec)
     )
   }
 
@@ -27541,7 +27541,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._set_exposed_pin_functional(exposed_node_id, functional)
 
-    this._dispatch_action(setPinSetFunctionalAction(type, pinId, functional))
+    this._dispatch_action(
+      makeSetPinSetFunctionalAction(type, pinId, functional)
+    )
   }
 
   private _set_exposed_pin_functional = (
@@ -51226,10 +51228,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public _paste_spec = (graph: GraphSpec, position: Position): void => {
     // console.log('Graph', '_paste_spec', graph)
 
-    this.__state_paste_spec(graph, position)
-    this.__pod_paste_spec(clone(graph))
-
     const actions = this._make_paste_spec_bulk_action(graph)
+
+    this.__state_paste_spec(graph, position)
+    this.__pod_paste_spec(clone(graph), actions)
 
     this._dispatch_action(makeBulkEditAction(actions))
   }
@@ -51349,6 +51351,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const { plug = {} } = pin
 
         if (this._spec_has_pin_named(type, pin_id)) {
+          const data = this._unit_datum[type][pin_id]
+
           for (const sub_pin_id in plug) {
             const sub_pin_spec = plug[sub_pin_id]
 
@@ -51370,6 +51374,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 sub_pin_spec,
                 plug_position
               )
+
+              if (data) {
+                this._sim_add_plug_datum(type, pin_id, sub_pin_id, data)
+
+                const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
+
+                this._refresh_node_color(ext_node_id)
+              }
             }
           }
         } else {
@@ -51473,7 +51485,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _make_paste_spec_bulk_action = (graph: GraphSpec): Action[] => {
-    // console.log('Graph', '_paste_spec', graph)
+    // console.log('Graph', '_make_paste_spec_bulk_action', graph)
 
     const { specs } = this.$props
 
@@ -51527,16 +51539,46 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const pins = type_pins[type]
 
       for (const pin_id in pins) {
-        const pin = pins[pin_id]
+        const pin = clone(pins[pin_id])
 
-        bulk_actions.push(makeExposePinSetAction(type, pin_id, pin, undefined))
+        const { plug = {} } = pin
+
+        const new_sub_pin_id_blacklist = new Set<string>()
+
+        if (this._has_exposed_pin_named(type, pin_id)) {
+          for (const sub_pin_id in plug) {
+            const sub_pin = plug[sub_pin_id]
+
+            let next_sub_pin_id: string
+
+            if (this._spec_has_plug(type, pin_id, sub_pin_id)) {
+              next_sub_pin_id = this._new_sub_pin_id(
+                type,
+                pin_id,
+                new_sub_pin_id_blacklist
+              )
+
+              new_sub_pin_id_blacklist.add(next_sub_pin_id)
+            } else {
+              next_sub_pin_id = sub_pin_id
+            }
+
+            bulk_actions.push(
+              makeExposePinAction(type, pin_id, next_sub_pin_id, sub_pin)
+            )
+          }
+        } else {
+          bulk_actions.push(
+            makeExposePinSetAction(type, pin_id, pin, undefined)
+          )
+        }
       }
     })
 
     return bulk_actions
   }
 
-  public __pod_paste_spec = (graph: GraphSpec): void => {
+  public __pod_paste_spec = (graph: GraphSpec, actions: Action[]): void => {
     // console.log('Graph', '_paste_spec', graph)
 
     const { specs } = this.$props
@@ -51550,12 +51592,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       data = {},
     } = graph
 
-    const bulk_actions = this._make_paste_spec_bulk_action(graph)
-
     const { subComponents = {} } = component
 
     this._pod.$bulkEdit({
-      actions: bulk_actions,
+      actions,
     })
 
     for (const unit_id in subComponents) {

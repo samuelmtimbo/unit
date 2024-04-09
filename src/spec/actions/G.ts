@@ -6,6 +6,7 @@ import {
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphCoverUnitPinSetData,
+  GraphExposePinData,
   GraphExposePinSetData,
   GraphExposeUnitPinSetData,
   GraphMoveSubGraphIntoData,
@@ -300,19 +301,23 @@ export const makeRemoveUnitsAction = (ids: string[]) => {
   }
 }
 
-export const exposePinAction = (
-  type: IO,
-  id: string,
-  subPinId: string,
-  subPin: GraphSubPinSpec
-) => {
+export const wrapExposePinAction = (data: GraphExposePinData) => {
   return {
     type: EXPOSE_PIN,
-    data: { type, id, subPinId, subPin },
+    data,
   }
 }
 
-export const setPinSetNameAction = (
+export const makeExposePinAction = (
+  type: IO,
+  pinId: string,
+  subPinId: string,
+  subPinSpec: GraphSubPinSpec
+) => {
+  return wrapExposePinAction({ type, pinId, subPinId, subPinSpec })
+}
+
+export const makeSetPinSetNameAction = (
   type: IO,
   id: string,
   functional: boolean
@@ -323,7 +328,7 @@ export const setPinSetNameAction = (
   }
 }
 
-export const setPinSetFunctionalAction = (
+export const makeSetPinSetFunctionalAction = (
   type: IO,
   id: string,
   functional: boolean
