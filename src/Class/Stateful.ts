@@ -23,7 +23,7 @@ export class Stateful<
     I = any,
     O = any,
     _J extends Dict<any> = {},
-    _EE extends StatefulEvents<_EE> = StatefulEvents<Stateful_EE>
+    _EE extends StatefulEvents<_EE> = StatefulEvents<Stateful_EE>,
   >
   extends Primitive<I, O, _EE>
   implements J, V

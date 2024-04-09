@@ -44,7 +44,7 @@ export class Element_<
     O = any,
     _J extends Dict<any> = {},
     _EE extends ElementEE<_EE> = ElementEE<Element_EE>,
-    _C extends Component = Component
+    _C extends Component = Component,
   >
   extends Stateful<I, O, {}, _EE>
   implements E

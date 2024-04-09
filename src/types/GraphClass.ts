@@ -8,5 +8,5 @@ export interface GraphBundle<I = any, O = any>
 
 export interface GraphClass<
   I extends Dict<any> = any,
-  O extends Dict<any> = any
+  O extends Dict<any> = any,
 > extends UnitClass<Graph<I, O>> {}

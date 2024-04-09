@@ -348,8 +348,8 @@ export const getSelectionRange = (
       range.startOffset === range.endOffset
         ? 'none'
         : range.startOffset < range.endOffset
-        ? 'forward'
-        : 'backward',
+          ? 'forward'
+          : 'backward',
   }
 }
 

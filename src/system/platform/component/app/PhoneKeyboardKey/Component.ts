@@ -216,10 +216,10 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
     const key_text_value = icon
       ? undefined
       : isChar(key)
-      ? shiftKey
-        ? key.toUpperCase()
-        : key
-      : ''
+        ? shiftKey
+          ? key.toUpperCase()
+          : key
+        : ''
 
     return key_text_value
   }

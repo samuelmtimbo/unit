@@ -53,7 +53,7 @@ export type G_MoveSubgraphIntoArgs = [
   GraphMoveSubGraphData['nextMergePinId'],
   GraphMoveSubGraphData['nextPlugSpec'],
   Dict<string | null>,
-  Dict<string[]>
+  Dict<string[]>,
 ]
 
 export interface G<I = any, O = any, U_ = any> {
@@ -277,7 +277,7 @@ export type G_EE = {
     string[],
     Dict<string>,
     Dict<string>,
-    string[]
+    string[],
   ]
   reorder_sub_component: [string | null, string, number, string[]]
   move_subgraph_into: [...G_MoveSubgraphIntoArgs, string[]]

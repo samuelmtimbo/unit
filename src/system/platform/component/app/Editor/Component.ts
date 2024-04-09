@@ -10563,8 +10563,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       input || ref_output
         ? 'none'
         : active
-        ? this._theme.data
-        : this._theme.node
+          ? this._theme.data
+          : this._theme.node
 
     const pin = this._create_pin({
       className: classnames('pin', type),
@@ -10805,8 +10805,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ? this._theme.data
         : this._theme.data_link
       : ref || init
-      ? this._theme.node
-      : this._theme.link
+        ? this._theme.node
+        : this._theme.link
 
     const merged = this._is_link_pin_merged(pin_node_id)
 
@@ -10838,8 +10838,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_link_end_marker_d = init
       ? ARROW_NONE
       : ref || memory
-      ? ARROW_MEMORY
-      : ARROW_NORMAL
+        ? ARROW_MEMORY
+        : ARROW_NORMAL
 
     const pin_link_end_marker_fill = ref || memory ? 'none' : pin_link_stroke
     const pin_link_end_marker_stroke = ref || memory ? pin_link_stroke : 'none'
@@ -46989,7 +46989,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       plug: any
       datum: any
       err: any
-    }
+    },
   >(
     node_id: string,
     callback_map: {

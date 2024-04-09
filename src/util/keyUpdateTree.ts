@@ -35,7 +35,7 @@ export const _keyUpdateTree = (
     nextSelectionStart: number
     nextSelectionEnd: number
     nextDirection?: 'forward' | 'backward' | 'none' | undefined
-  }
+  },
 ] => {
   const data = getTree(value)
 
@@ -650,7 +650,7 @@ export const keyUpdateTree = (
     nextPath: number[]
     nextSelectionStart: number
     nextSelectionEnd: number
-  }
+  },
 ] => {
   const _root = getTree(root)
   const [

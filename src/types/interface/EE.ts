@@ -4,7 +4,7 @@ import { Unlisten } from '../Unlisten'
 
 export interface EE<
   _EE extends Dict<any[]> = any,
-  __EE extends Dict<any[]> = any
+  __EE extends Dict<any[]> = any,
 > {
   addListener<K extends keyof _EE>(
     event: K,

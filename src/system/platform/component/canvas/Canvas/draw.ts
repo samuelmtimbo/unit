@@ -1,4 +1,7 @@
-export function draw(ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D, step: any[]): void {
+export function draw(
+  ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,
+  step: any[]
+): void {
   const method = step[0]
 
   const args = step.slice(1, step.length)

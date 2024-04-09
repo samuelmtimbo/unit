@@ -46,7 +46,7 @@ export function lazyFromSpec(
   class Lazy<
       I extends Dict<any>,
       O extends Dict<any>,
-      _EE extends UnitEvents<_EE> = UnitEvents<{}>
+      _EE extends UnitEvents<_EE> = UnitEvents<{}>,
     >
     extends Unit<I, O, _EE>
     implements G, C

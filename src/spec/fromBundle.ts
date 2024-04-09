@@ -8,7 +8,7 @@ import { fromSpec } from './fromSpec'
 
 export function fromBundle<
   I extends Dict<any> = any,
-  O extends Dict<any> = any
+  O extends Dict<any> = any,
 >(
   bundle: BundleSpec,
   specs: Specs,

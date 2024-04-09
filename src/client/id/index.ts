@@ -440,7 +440,7 @@ export function segmentPlugNodeId(exposedNodeId: string): {
     string,
     IO,
     string,
-    string
+    string,
   ]
   return {
     type,
@@ -458,7 +458,7 @@ export function segmentInternalNodeId(internalNodeId: string): {
     string,
     IO,
     string,
-    string
+    string,
   ]
   return {
     type,

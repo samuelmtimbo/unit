@@ -19,7 +19,8 @@ export type PrimitiveEvents<_EE extends Dict<any[]>> = UnitEvents<
 export class Primitive<
   I = {},
   O = {},
-  _EE extends PrimitiveEvents<_EE> & Dict<any[]> = PrimitiveEvents<Primitive_EE>
+  _EE extends PrimitiveEvents<_EE> &
+    Dict<any[]> = PrimitiveEvents<Primitive_EE>,
 > extends Unit<I, O, _EE> {
   protected _i: Partial<I> = {}
 

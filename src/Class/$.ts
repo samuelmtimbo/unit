@@ -9,7 +9,7 @@ export type $Events<_EE extends Dict<any[]>> = EventEmitter_EE<_EE & $_EE> &
   $_EE
 
 export class $<
-  _EE extends $Events<_EE> & Dict<any[]> = $Events<$_EE>
+  _EE extends $Events<_EE> & Dict<any[]> = $Events<$_EE>,
 > extends EventEmitter_<_EE> {
   public __: string[] = []
   public __system: System

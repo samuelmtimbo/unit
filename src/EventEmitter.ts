@@ -16,7 +16,7 @@ export class EventEmitter_<
     listen: [{ event: 'listen' }]
     unlisten: [{ event: 'unlisten' }]
     emit: [{ event: 'emit' }]
-  }
+  },
 > implements EE<_EE>
 {
   private __listeners: {
