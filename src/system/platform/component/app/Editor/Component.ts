@@ -12258,11 +12258,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (this._is_pin_node_id(node_id)) {
         if (this._is_pin_node_id(t_id)) {
-          if (d < 3) {
+          const ref = this._is_pin_node_ref(t_id)
+
+          const min_d = ref ? 6 : 3
+
+          if (d < min_d) {
             this._on_pin_pin_target_end(node_id, t_id)
           }
         } else if (this._is_unit_node_id(t_id)) {
-          if (l < 3) {
+          if (l < -2 * PIN_RADIUS) {
             this._on_pin_unit_target_end(node_id, t_id)
           }
         } else {
@@ -21851,8 +21855,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private __drop_pin(pin_node_id: string, nearest_compatible_node_id: string) {
     if (this._is_pin_node_id(nearest_compatible_node_id)) {
+      if (
+        this._is_link_pin_node_id(pin_node_id) &&
+        this._is_input_pin_ref(pin_node_id)
+      ) {
+        this._set_ref_link_pin_start_marker_to_node_r(
+          pin_node_id,
+          nearest_compatible_node_id
+        )
+      }
+
       this._set_node_target(pin_node_id, nearest_compatible_node_id)
     } else if (this._is_unit_node_id(nearest_compatible_node_id)) {
+      if (
+        this._is_link_pin_node_id(pin_node_id) &&
+        this._is_input_pin_ref(pin_node_id)
+      ) {
+        this._set_ref_link_pin_start_marker_to_node_r(
+          pin_node_id,
+          nearest_compatible_node_id
+        )
+      }
+
       this._set_node_target(pin_node_id, nearest_compatible_node_id)
     } else if (this._is_int_node_id(nearest_compatible_node_id)) {
       this._set_node_target(pin_node_id, nearest_compatible_node_id)
@@ -37313,6 +37337,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const { x, y } = this._screen_to_world(clientX, clientY)
 
         if (this._is_link_pin_node_id(node_id)) {
+          if (this._node_target[node_id]) {
+            this._remove_node_target(node_id)
+            this._refresh_pin_anchor_marker(node_id)
+          }
+
           if (this._is_link_pin_merged(node_id)) {
             this._remove_pin_or_merge(node_id)
           }
