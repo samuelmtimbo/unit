@@ -6,13 +6,15 @@ import { replaceChild } from '../../../../../client/util/replaceChild'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { isRelativeValue } from '../../../../../isRelative'
-import { NOOP } from '../../../../../NOOP'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { CA } from '../../../../../types/interface/CA'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { draw } from './draw'
 
-export function clearCanvas(context: CanvasRenderingContext2D) {
+export function clearCanvas(
+  context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D
+) {
   const transform = context.getTransform()
 
   context.setTransform(1, 0, 0, 1, 0, 0)
@@ -44,7 +46,10 @@ export const DEFAULT_STYLE: Dict<string> = {
   ...userSelect('none'),
 }
 
-export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
+export default class CanvasComp
+  extends Element<HTMLCanvasElement, Props>
+  implements CA
+{
   private _context: CanvasRenderingContext2D
   private _canvas_el: HTMLCanvasElement
 
@@ -337,20 +342,20 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     this._setup()
   }
 
-  draw(step: any[]) {
+  async draw(step: any[]) {
     // console.log('draw', step)
     this._d.push(step)
 
     this._draw(step)
   }
 
-  clear(_?: undefined) {
+  async clear(_?: undefined) {
     clearCanvas(this._context)
 
     this._d = []
   }
 
-  drawImage(
+  async drawImage(
     image: CanvasImageSource,
     x: number,
     y: number,
@@ -414,14 +419,19 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     this._context.scale(sx, sy)
   }
 
-  toBlob(
-    { type, quality }: { type: string; quality: number },
-    callback: (data: Blob | null) => void = NOOP
-  ) {
-    this._canvas_el.toBlob(callback, type, quality)
+  async toBlob(type: string, quality: number): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      this._canvas_el.toBlob(
+        (blob: Blob) => {
+          resolve(blob)
+        },
+        type,
+        quality
+      )
+    })
   }
 
-  toDataUrl(type: string, quality: string) {
+  async toDataUrl(type: string, quality: number) {
     return this._canvas_el.toDataURL()
   }
 
@@ -437,7 +447,17 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     }
   }
 
-  putImageData(
+  async getImageData(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    opt: ImageDataSettings
+  ): Promise<ImageData> {
+    return this._context.getImageData(x, y, width, height, opt)
+  }
+
+  async putImageData(
     image: ImageData,
     dx: number,
     dy: number,
@@ -445,7 +465,7 @@ export default class CanvasComp extends Element<HTMLCanvasElement, Props> {
     y: number,
     width: number,
     height: number
-  ): void {
+  ): Promise<void> {
     this._context.putImageData(image, dx, dy, x, y, width, height)
   }
 }

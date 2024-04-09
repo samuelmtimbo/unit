@@ -12,14 +12,14 @@ export interface CA {
   scale(sx: number, sy: number): void
   fillPath(d: string, fillRule: string): void
   toBlob(type: string, quality: number): Promise<Blob>
-  toDataUrl(type: string, quality: string): Promise<string>
+  toDataUrl(type: string, quality: number): Promise<string>
   getImageData(
     x: number,
     y: number,
     width: number,
     height: number,
     opt: ImageDataSettings
-  ): ImageData
+  ): Promise<ImageData>
   putImageData(
     image: ImageData,
     dx: number,
@@ -28,5 +28,5 @@ export interface CA {
     y: number,
     width: number,
     height: number
-  ): void
+  ): Promise<void>
 }

@@ -22,14 +22,28 @@ export function waitFileReaderResult<T extends string | ArrayBuffer>(
   })
 }
 
+export function readBlobAsDataUrl(system: System, blob: Blob): Promise<string> {
+  const { api :{ file: {FileReader }}} = system
+
+  const reader = new FileReader()
+
+  reader.readAsDataURL(blob)
+
+  return waitFileReaderResult(reader)
+}
+
+export function readBlobAsDataUrl_(reader: FileReader, blob: Blob): Promise<string> {
+  reader.readAsDataURL(blob)
+
+  return waitFileReaderResult(reader)
+}
+
 export function wrapFileReader(reader: FileReader, system: System): FR & $ {
   const reader_ = new (class FileReader_ extends $ implements FR {
     __: string[] = ['FR']
 
     readAsDataUrl(blob: Blob): Promise<string> {
-      reader.readAsDataURL(blob)
-
-      return waitFileReaderResult<string>(reader)
+      return readBlobAsDataUrl_(reader, blob)
     }
   })(system)
 

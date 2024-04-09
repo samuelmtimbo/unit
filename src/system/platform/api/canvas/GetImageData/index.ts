@@ -54,7 +54,7 @@ export default class GetImageData<T> extends Semifunctional<I<T>, O<T>> {
     let imageData: ImageData
 
     try {
-      imageData = canvas.getImageData(x, y, width, height, opt)
+      imageData = await canvas.getImageData(x, y, width, height, opt)
     } catch (err) {
       if (err instanceof RangeError) {
         done(undefined, 'out of memory')

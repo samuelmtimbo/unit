@@ -2,7 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
-import { ID_CREATE_BLOB_URL } from '../../../../_ids'
+import { ID_CREATE_OBJECT_URL } from '../../../../_ids'
 
 export interface I<T> {
   blob: B
@@ -28,7 +28,7 @@ export default class CreateObjectURI<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      ID_CREATE_BLOB_URL
+      ID_CREATE_OBJECT_URL
     )
   }
 

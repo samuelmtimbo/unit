@@ -1,0 +1,30 @@
+{
+  "name": "offscreen canvas",
+  "inputs": {
+    "width": {
+      "type": "number"
+    },
+    "height": {
+      "type": "number"
+    },
+    "opt": {
+      "type": "{willReadFrequently?:boolean}"
+    }
+  },
+  "outputs": {
+    "canvas": {
+      "type": "`CA`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "for painting",
+    "complexity": 51,
+    "tags": ["platform", "component", "canvas"]
+  },
+  "id": "8d7fc133-7cfa-4975-836f-31ae15b818be",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
