@@ -88,7 +88,7 @@ const $childToComponent = (
 export class Component<
   E extends IOElement = IOElement,
   P extends Dict<any> = {},
-  U extends $Component | $Graph = $Component
+  U extends $Component | $Graph = $Component,
 > {
   static id: string
 

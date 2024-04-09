@@ -80,7 +80,7 @@ export type SimulationEvents = EventEmitter_EE<Simulation_EE> & Simulation_EE
 
 export class Simulation<
   N = {},
-  L = {}
+  L = {},
 > extends EventEmitter_<SimulationEvents> {
   public _nodes: Dict<SimNode<N>>
   public _links: Dict<SimLink<L>>

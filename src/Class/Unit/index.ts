@@ -65,7 +65,7 @@ export interface U_M {}
 export class Unit<
     I extends Dict<any> = any,
     O extends Dict<any> = any,
-    _EE extends UnitEvents<_EE> & Dict<any[]> = UnitEvents<U_EE>
+    _EE extends UnitEvents<_EE> & Dict<any[]> = UnitEvents<U_EE>,
   >
   extends $<_EE>
   implements U<I, O>

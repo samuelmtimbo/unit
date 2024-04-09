@@ -64,7 +64,7 @@ export default class EventSource_ extends Semifunctional<I, O> {
             | keyof EventEmitter_EE<$_EE>
             | 'destroy'
             | 'register'
-            | 'unregister'
+            | 'unregister',
         >(event: K, listener: Listener<$Events<$_EE>[K]>): Unlisten {
           super.addListener(event, listener)
 

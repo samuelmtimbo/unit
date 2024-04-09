@@ -12,7 +12,7 @@ export class Field<
   I extends { value: any } = any,
   O extends { value: any } = any,
   _J extends Dict<any> = {},
-  _EE extends FieldEvents<_EE> = FieldEvents<Field_EE>
+  _EE extends FieldEvents<_EE> = FieldEvents<Field_EE>,
 > extends Element_<I, O, _EE> {
   constructor(
     { i = [], o = [] }: ION<I, O>,

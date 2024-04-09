@@ -23,7 +23,11 @@ export function waitFileReaderResult<T extends string | ArrayBuffer>(
 }
 
 export function readBlobAsDataUrl(system: System, blob: Blob): Promise<string> {
-  const { api :{ file: {FileReader }}} = system
+  const {
+    api: {
+      file: { FileReader },
+    },
+  } = system
 
   const reader = new FileReader()
 
@@ -32,7 +36,10 @@ export function readBlobAsDataUrl(system: System, blob: Blob): Promise<string> {
   return waitFileReaderResult(reader)
 }
 
-export function readBlobAsDataUrl_(reader: FileReader, blob: Blob): Promise<string> {
+export function readBlobAsDataUrl_(
+  reader: FileReader,
+  blob: Blob
+): Promise<string> {
   reader.readAsDataURL(blob)
 
   return waitFileReaderResult(reader)

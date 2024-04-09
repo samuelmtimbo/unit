@@ -27,7 +27,7 @@ import { Listener } from './Listener'
 export class Element<
   E extends IOElement = any,
   P extends object = {},
-  U extends $Element = $Element
+  U extends $Element = $Element,
 > extends Component<E, P, U> {
   private _element_unlisten: Unlisten
 

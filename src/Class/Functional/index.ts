@@ -18,13 +18,13 @@ export type Functional_S = {
 }
 
 export type FunctionalState<
-  T extends Omit<Dict<any>, keyof Functional_S> = {}
+  T extends Omit<Dict<any>, keyof Functional_S> = {},
 > = T & Functional_S
 
 export class Functional<
   I extends Dict<any> = {},
   O extends Dict<any> = {},
-  _EE extends FunctionalEvents<_EE> = FunctionalEvents<Functional_EE>
+  _EE extends FunctionalEvents<_EE> = FunctionalEvents<Functional_EE>,
 > extends Primitive<I, O, _EE> {
   private _looping: boolean = false
 
