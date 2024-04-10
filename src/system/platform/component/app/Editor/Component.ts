@@ -20924,9 +20924,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { relatedTarget } = event
 
       if (
-        relatedTarget &&
-        this._control &&
-        this._control._control.$element.contains(relatedTarget)
+        (relatedTarget &&
+          this._control &&
+          this._control._control.$element.contains(relatedTarget)) ||
+        this.$element.contains(relatedTarget)
       ) {
         return
       }
@@ -40014,11 +40015,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // }
 
     // if (this._core_component_unlocked_count > 0) {
-    if (this._control) {
-      if (!this._control_lock) {
-        // if (this._focused) {
-        this._temp_lock_control()
-        // }
+    if (this._resize_pointer_count === 0) {
+      if (this._control) {
+        if (!this._control_lock) {
+          // if (this._focused) {
+          this._temp_lock_control()
+          // }
+        }
       }
     }
     // }
