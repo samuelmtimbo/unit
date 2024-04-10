@@ -27,6 +27,7 @@ import {
   forEachObjKV,
   forEachObjVK,
   getObjSingleKey,
+  isEmptyObject,
   mapObjKV,
 } from '../../util/object'
 import { GraphMoveSubGraphData } from './interface'
@@ -859,7 +860,15 @@ export function moveMerge(
         }
       } else {
         if (target.hasPinNamed(type, pinId)) {
-          target.exposePin(type, pinId, '0', subPinSpec, false, false)
+          if (target.hasPlug(type, pinId, '0')) {
+            if (isEmptyObject(subPinSpec)) {
+              //
+            } else {
+              target.plugPin(type, pinId, '0', subPinSpec, false, false)
+            }
+          } else {
+            target.exposePin(type, pinId, '0', subPinSpec, false, false)
+          }
         } else {
           target.exposePinSet(
             type,
