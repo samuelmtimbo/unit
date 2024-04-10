@@ -3987,6 +3987,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._minimap = null
     this._modes = null
     this._transcend = null
+
+    this._minimap_hidden = undefined
   }
 
   public get_subraph_depth = (): number => {
