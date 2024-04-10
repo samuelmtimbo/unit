@@ -466,6 +466,7 @@ export class Component<
     base: LayoutBase,
     hostSlot: Component<any>,
     reverse: boolean = false,
+    prepend: boolean = false,
     commit: Callback
   ): Unlisten => {
     const {
@@ -530,7 +531,11 @@ export class Component<
         // border: `1px solid ${randomColorString()}`,
       })
 
-      hostTarget.$element.appendChild(leafFrame)
+      if (prepend) {
+        hostTarget.$element.prepend(leafFrame)
+      } else {
+        hostTarget.$element.appendChild(leafFrame)
+      }
 
       !reverse && this.domRemoveLeaf(leaf)
 
@@ -636,12 +641,12 @@ export class Component<
     return activeElementInside
   }
 
-  detach(host: string, opt: { animate?: boolean }): void {
+  detach(host: string, opt: { animate?: boolean; prepend?: boolean }): void {
     // console.log('Component', 'detach', host, opt)
 
     const { getLocalComponents } = this.$system
 
-    const { animate = false } = opt
+    const { animate = false, prepend = false } = opt
 
     if (this.$detached) {
       throw new Error('component is already detached')
@@ -685,7 +690,7 @@ export class Component<
     }
 
     if (animate) {
-      this._animateBase(base, hostSlot, false, commit)
+      this._animateBase(base, hostSlot, false, prepend, commit)
     } else {
       this.domRemoveBase(base)
 
@@ -728,7 +733,7 @@ export class Component<
 
         const targetSlot = this.$slotParent
 
-        this._animateBase([leaf], targetSlot, true, () => {
+        this._animateBase([leaf], targetSlot, true, false, () => {
           leafEnd++
 
           leafComp.unmount()
