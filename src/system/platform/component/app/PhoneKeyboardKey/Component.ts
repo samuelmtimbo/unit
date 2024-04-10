@@ -284,6 +284,7 @@ export default class PhoneKeyboardKey extends Element<HTMLDivElement, Props> {
     const { shiftKey = false, altKey = false } = this.$props
     const _key = shiftKey && isChar(key) ? key.toUpperCase() : key
     emitPhoneKey(this.$system, _key, shiftKey, altKey)
+    this.dispatchEvent('key', key)
   }
 }
 
