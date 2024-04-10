@@ -441,18 +441,13 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       container,
     })
 
+    this.registerRoot(container)
+
     this.addEventListeners([
       makeCustomListener('dock-move', ({ dy = 0, dx = 0 }) => {
         if (this._hidden) {
           return
         }
-
-        mergePropStyle(control, {
-          left: `${dx}px`,
-          width: `calc(100% - ${dx}px)`,
-          height: `calc(100% - ${dy}px)`,
-          transition: linearTransition('left', 'width', 'height', 'opacity'),
-        })
 
         mergePropStyle(control, {
           left: `${dx}px`,
@@ -522,8 +517,6 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         })
       }),
     ])
-
-    this.registerRoot(container)
   }
 
   private _get_color = (): string => {
