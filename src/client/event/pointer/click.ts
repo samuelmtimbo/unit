@@ -2,13 +2,14 @@ import { UnitPointerEvent } from '.'
 import { Dict } from '../../../types/Dict'
 import { Unlisten } from '../../../types/Unlisten'
 import { callAll } from '../../../util/call/callAll'
-import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
 import { addListener } from '../../addListener'
+import { Component } from '../../component'
 import { stopPropagation } from '../../stopPropagation'
 import { pointDistance } from '../../util/geometry'
 import { Position } from '../../util/geometry/types'
 import { setTimeoutRAF } from '../../util/timer/setTimeoutRAF'
+import { makeCustomListener } from '../custom'
 import {
   CLICK_TIMEOUT,
   LONG_CLICK_TIMEOUT,
@@ -31,13 +32,13 @@ export type Handlers = {
 }
 
 export function makeClickListener(handlers: Handlers): Listener {
-  return (component) => {
+  return (component: Component) => {
     return listenClick(component, handlers)
   }
 }
 
 export function listenClick(
-  component: Listenable,
+  component: Component,
   handlers: Handlers
 ): () => void {
   const { $element, $system } = component
@@ -60,7 +61,7 @@ export function listenClick(
   let pointerPosition: Dict<Position> = {}
   let pointerDownMaxDistance: Dict<number> = {}
   let lastTapPosition: Position
-
+  let longClickCancelPointerId = new Set<number>()
   let longPress: Dict<boolean> = {}
 
   let doubleClickTimeout: Unlisten = null
@@ -72,6 +73,19 @@ export function listenClick(
   let unlistenPointerUp: Unlisten | undefined = undefined
   let unlistenPointerLeave: Unlisten | undefined = undefined
   let unlistenPointerCancel: Unlisten | undefined = undefined
+
+  component.addEventListener(
+    makeCustomListener('unmount', () => {
+      pointerDown = {}
+      lastPointerDownPosition = undefined
+      pointerDownCount = 0
+      pointerPosition = {}
+      pointerDownMaxDistance = {}
+      lastTapPosition = undefined
+      longClickCancelPointerId = new Set()
+      longPress = {}
+    })
+  )
 
   const pointerDownListener = (
     event: UnitPointerEvent,
@@ -179,8 +193,6 @@ export function listenClick(
       }
     }
   }
-
-  const longClickCancelPointerId = new Set<number>()
 
   const pointerMoveListener = (event: UnitPointerEvent) => {
     // console.log('pointerMoveListener')
