@@ -1,4 +1,5 @@
 import { treeComplexityById } from '../../spec/complexity'
+import _classes from '../../system/_classes'
 import {
   ID_INCREMENT,
   ID_ONE,
@@ -12,6 +13,6 @@ const paths = [ID_INCREMENT, ID_ONE, ID_SINGLE, ID_RANGE_ARRAY]
 if (false) {
   for (const path of paths) {
     // eslint-disable-next-line no-console
-    console.log(path, treeComplexityById(_specs, path))
+    console.log(path, treeComplexityById(_specs, _classes, path))
   }
 }

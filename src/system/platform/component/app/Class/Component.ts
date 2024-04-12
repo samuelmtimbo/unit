@@ -116,9 +116,10 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
   }
 
   private _r = (): number => {
+    const { classes } = this.$system
     const { specs, id } = this.$props
 
-    const r = getSpecRadius(specs, id) - 1.5
+    const r = getSpecRadius(specs, classes, id) - 1.5
 
     return r
   }

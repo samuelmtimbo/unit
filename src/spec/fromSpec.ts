@@ -1,4 +1,5 @@
 import { Graph } from '../Class/Graph'
+import deepGet from '../deepGet'
 import { System } from '../system'
 import { Classes, PinSpec, Specs } from '../types'
 import { Dict } from '../types/Dict'
@@ -10,8 +11,7 @@ import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { io } from '../types/IOOf'
 import { weakMerge } from '../weakMerge'
 import { bundleClass } from './bundleClass'
-import { evaluateBundleStr } from './idFromUnitValue'
-import { TreeNodeType, getTree } from './parser'
+import { evaluateDataValue } from './evaluateDataValue'
 
 export function extractGraphSpecs(
   spec: GraphSpec,
@@ -33,13 +33,11 @@ export function extractGraphSpecs(
 
       const { data } = _input
 
-      if (data) {
-        const tree = getTree(data)
+      if (data !== undefined) {
+        const dataRef = evaluateDataValue(data, specs, classes)
 
-        if (tree.type === TreeNodeType.Unit) {
-          const { value } = tree
-
-          const bundle = evaluateBundleStr(value, specs, classes)
+        for (const path of dataRef.ref ?? []) {
+          const bundle = deepGet(dataRef.data, path)
 
           for (const specId in bundle.specs) {
             const spec = bundle.specs[specId]

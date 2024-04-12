@@ -1,6 +1,6 @@
 import { Classes, Specs } from '../../types'
 import { GraphUnitPinsSpec } from '../../types/GraphUnitPinsSpec'
-import { evaluate } from '../evaluate'
+import { evaluateDataValue } from '../evaluateDataValue'
 
 export function evaluateGraphUnitPinSpecData(
   input: GraphUnitPinsSpec,
@@ -11,7 +11,9 @@ export function evaluateGraphUnitPinSpecData(
     const { data } = input[inputId]
 
     if (data !== undefined) {
-      input[inputId].data = evaluate(data, specs, classes)
+      const dataRef = evaluateDataValue(data, specs, classes)
+
+      input[inputId].data = dataRef.data
     }
   }
 }

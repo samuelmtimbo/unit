@@ -1,6 +1,10 @@
+import deepGet from '../deepGet'
 import { keys } from '../system/f/object/Keys/f'
-import { Spec, Specs } from '../types'
+import { Classes, Spec, Specs } from '../types'
 import { GraphSpec } from '../types/GraphSpec'
+import { UnitBundleSpec } from '../types/UnitBundleSpec'
+import { weakMerge } from '../weakMerge'
+import { evaluateDataValue } from './evaluateDataValue'
 
 const HIRC = 1 // Human Information Retrieval Cost
 const GFC = 2 // Graph Fundamental Complexity
@@ -9,6 +13,7 @@ const GFC = 2 // Graph Fundamental Complexity
 
 export function treeComplexityById(
   specs: Specs,
+  classes: Classes,
   id: string,
   known: { [path: string]: boolean } = {}
 ): number {
@@ -20,11 +25,12 @@ export function treeComplexityById(
 
   const spec = specs[id]
 
-  return treeComplexity(specs, spec, known)
+  return treeComplexity(specs, classes, spec, known)
 }
 
 export function treeComplexity(
   specs: Specs,
+  classes: Classes,
   spec: Spec,
   known: { [path: string]: boolean } = {}
 ): number {
@@ -48,12 +54,25 @@ export function treeComplexity(
       for (const inputId in input) {
         const _input = input[inputId] ?? {}
 
-        if (_input.data !== undefined) {
-          const l = _input.data.length
+        const { data } = _input
+
+        if (data !== undefined) {
+          const dataRef = evaluateDataValue(data, specs, classes)
+
+          for (const path of dataRef.ref) {
+            const bundle = deepGet(dataRef.data, path) as UnitBundleSpec
+
+            c += treeComplexityById(
+              weakMerge(specs, bundle.specs ?? {}),
+              classes,
+              bundle.unit.id,
+              known
+            )
+          }
         }
       }
 
-      c += treeComplexityById(specs, id, known)
+      c += treeComplexityById(specs, classes, id, known)
     }
   }
 

@@ -47,11 +47,13 @@ export enum TreeNodeType {
   Url = 'url',
 }
 
-export type TreeNode = {
-  value: string
+export type TreeNode<T = string> = {
+  value: T
   type: TreeNodeType
-  children: TreeNode[]
+  children: TreeNode<T>[]
 }
+
+export type RawTreeNode = TreeNode<any>
 
 export const COMMA = ','
 export const DOUBLE_QUOTE = '"'
@@ -65,20 +67,21 @@ function trimSides(str: string): string {
   return str.substring(1, str.length - 1)
 }
 
-function _traverse(
+export function traverseTree(
   root: TreeNode,
   callback: (node: TreeNode, path: number[]) => void,
   path: number[] = []
 ): void {
   callback(root, path)
+
   root.children.forEach((child: TreeNode, index: number) =>
-    _traverse(child, callback, [...path, index])
+    traverseTree(child, callback, [...path, index])
   )
 }
 
 function _printTree(tree: TreeNode): void {
   // console.log(JSON.stringify(tree, null, 2))
-  _traverse(tree, (node: TreeNode, path: number[]) =>
+  traverseTree(tree, (node: TreeNode, path: number[]) =>
     // eslint-disable-next-line no-console
     console.log(path, node.value)
   )
@@ -903,8 +906,8 @@ function execComposed(
   if (str[0] === open_delimiter && str[l - 1] === close_delimiter) {
     let sq_open = false
     let dq_open = false
+
     let open = 0
-    let q_open = 0
 
     for (let i = 1; i < l - 1; i++) {
       const c = str[i]
@@ -913,18 +916,10 @@ function execComposed(
       if (c === "'" && pc !== '\\') {
         if (!dq_open) {
           sq_open = !sq_open
-
-          if (!sq_open) {
-            open += q_open
-          }
         }
       } else if (c === '"' && pc !== '\\') {
         if (!sq_open) {
           dq_open = !dq_open
-
-          if (!dq_open) {
-            open += q_open
-          }
         }
       } else {
         if (!sq_open && !dq_open) {
@@ -936,12 +931,6 @@ function execComposed(
             if (open === -1) {
               return null
             }
-          }
-        } else {
-          if (c === open_delimiter) {
-            q_open++
-          } else if (c === close_delimiter) {
-            q_open--
           }
         }
       }
@@ -1709,7 +1698,7 @@ export function getNextNode(
 
 function _getNodePaths(root: TreeNode): number[][] {
   const paths: number[][] = []
-  _traverse(root, (node, path) => {
+  traverseTree(root, (node, path) => {
     paths.push(path)
   })
   return paths
@@ -1723,7 +1712,7 @@ function _getNodesAndPaths(root: TreeNode): {
     node: TreeNode
     path: number[]
   }[] = []
-  _traverse(root, (node, path) => {
+  traverseTree(root, (node, path) => {
     paths.push({ node, path })
   })
   return paths
@@ -2024,3 +2013,77 @@ export function matchAllExcTypes(
 ): [number, number][][] {
   return matchAllExc(a, b, (a, b) => isTypeMatch(specs, a, b))
 }
+
+function isUnitNodePredicate(node: TreeNode, path: number[]) {
+  return node.type === TreeNodeType.Unit
+}
+
+export function findAllUnitNodes(tree: TreeNode): number[][] {
+  return findAllNodes(tree, isUnitNodePredicate)
+}
+
+export function findAndReplaceUnitNodes_(
+  tree: TreeNode
+): [number[][], TreeNode] {
+  const paths = []
+
+  let newTree = clone(tree)
+
+  traverseTree(tree, (node, path) => {
+    if (isUnitNodePredicate(node, path)) {
+      const str = node.value.substring(1)
+
+      const [ref, replacedTree] = findAndReplaceUnitNodes_(getTree(str))
+
+      paths.push(path)
+
+      for (const r in ref) {
+        paths.push([...path, ...r])
+      }
+
+      newTree = _updateNodeAt(newTree, path, replacedTree)
+    }
+  })
+
+  return [paths, newTree]
+}
+
+export function findAndReplaceUnitNodes(value: string): [number[][], TreeNode] {
+  const tree = getTree(value)
+
+  return findAndReplaceUnitNodes_(tree)
+}
+
+export function findAllNodes(
+  tree: TreeNode,
+  predicate: (node: TreeNode, path: number[]) => boolean
+): number[][] {
+  const paths = []
+
+  traverseTree(tree, (node, path) => {
+    if (predicate(node, path)) {
+      paths.push(path)
+    }
+  })
+
+  return paths
+}
+
+// export function getTreeFromRawData(data: any): TreeNode {
+//   const t = typeof data
+
+//   switch (t) {
+//     case 'string':
+//       return {
+//         value: `"${escape(data)}"`,
+//         children: [],
+//         type: TreeNodeType.BooleanLiteral,
+//       }
+//     case 'boolean':
+//       return {
+//         value: `${data}`,
+//         children: [],
+//         type: TreeNodeType.BooleanLiteral,
+//       }
+//   }
+// }

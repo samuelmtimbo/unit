@@ -3,7 +3,7 @@ import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
-import { GraphSubPinSpec } from '../../types'
+import { Classes, GraphSubPinSpec, Specs } from '../../types'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
@@ -22,6 +22,7 @@ import {
   isEmptyObject,
   mapObjVK,
 } from '../../util/object'
+import { evaluateDataValue } from '../evaluateDataValue'
 import { getSubComponentParentId } from '../util/component'
 import {
   findUnitPlugs,
@@ -638,9 +639,13 @@ export const setUnitPinData = (
     pinId,
     data,
   }: { unitId: string; type: IO; pinId: string; data: any },
-  spec: GraphSpec
+  spec: GraphSpec,
+  specs: Specs,
+  classes: Classes
 ): void => {
-  return deepSet(spec, ['units', unitId, type, pinId, 'data'], data)
+  const dataRef = evaluateDataValue(data, specs, classes)
+
+  return deepSet(spec, ['units', unitId, type, pinId, 'data'], dataRef)
 }
 
 export const setUnitPinConstant = (

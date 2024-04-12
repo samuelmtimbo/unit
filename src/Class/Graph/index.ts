@@ -46,7 +46,7 @@ import {
   makeUnplugPinAction,
   processAction,
 } from '../../spec/actions/G'
-import { cloneUnit } from '../../spec/cloneUnit'
+import { cloneUnit, cloneUnitClass } from '../../spec/cloneUnit'
 import { evaluate } from '../../spec/evaluate'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
@@ -5130,10 +5130,21 @@ export class Graph<I = any, O = any>
     pinId: string,
     data: any
   ) {
+    const { specs, classes } = this.__system
+
     const unit = this.getUnit(unitId)
 
     if (unit.hasInputNamed(pinId) && unit.isPinConstant(type, pinId)) {
-      setUnitPinData({ unitId, type, pinId, data: stringify(data) }, this._spec)
+      if (data instanceof Unit) {
+        ;[data] = cloneUnitClass(data)
+      }
+
+      setUnitPinData(
+        { unitId, type, pinId, data: stringify(data) },
+        this._spec,
+        specs,
+        classes
+      )
     }
   }
 

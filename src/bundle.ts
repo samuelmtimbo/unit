@@ -1,12 +1,13 @@
 import { getSpec, isSystemSpecId } from './client/spec'
-import { evaluate } from './spec/evaluate'
-import { TreeNodeType, getTree } from './spec/parser'
+import deepGet from './deepGet'
+import { evaluateDataValue } from './spec/evaluateDataValue'
 import { Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'
 import { GraphSpec } from './types/GraphSpec'
 import { GraphSpecs } from './types/GraphSpecs'
 import { GraphUnitSpec } from './types/GraphUnitSpec'
 import { UnitBundleSpec } from './types/UnitBundleSpec'
+import { weakMerge } from './weakMerge'
 
 export function unitBundleSpec(
   unit: GraphUnitSpec,
@@ -120,18 +121,18 @@ function _bundleUnits(
 
       const { data } = _input
 
-      if (data) {
-        const tree = getTree(data)
+      if (data !== undefined) {
+        const dataRef = evaluateDataValue(data, specs, {})
 
-        if (tree.type === TreeNodeType.Unit) {
-          const bundle = evaluate(tree.value, specs, {}) as UnitBundleSpec
+        for (const path of dataRef.ref ?? []) {
+          const bundle = deepGet(dataRef.data, path)
 
           for (const specId in bundle.specs) {
             const spec = bundle.specs[specId]
 
             custom[specId] = spec
 
-            _bundle(spec, specs, custom, branch)
+            _bundle(spec, weakMerge(specs, bundle.specs), custom, branch)
           }
         }
       }

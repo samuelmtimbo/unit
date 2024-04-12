@@ -3,7 +3,7 @@ import { clone } from './util/object'
 
 export default function deepSet(
   obj: Dict<any>,
-  path: string[],
+  path: (string | number)[],
   value: any
 ): any {
   let _obj = clone(obj)
@@ -19,7 +19,11 @@ export default function deepSet(
   }
 }
 
-export function deepSet_(obj: Dict<any>, path: string[], value: any): void {
+export function deepSet_(
+  obj: Dict<any>,
+  path: (string | number)[],
+  value: any
+): void {
   if (path.length > 1) {
     const [head, ...tail] = path
 

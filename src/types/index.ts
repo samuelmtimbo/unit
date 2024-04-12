@@ -1,3 +1,4 @@
+import { DataRef } from '../DataRef'
 import { Position } from '../client/util/geometry/types'
 import { BaseSpec } from './BaseSpec'
 import { Dict } from './Dict'
@@ -69,7 +70,7 @@ export type PinsSpec = Dict<PinSpec>
 export type Classes = Dict<UnitClass<any>>
 
 export type DatumSpec = {
-  value: string
+  value: string | DataRef<any>
   metadata?: DatumMetadataSpec
 }
 

@@ -1,3 +1,4 @@
+import { DataRef } from '../DataRef'
 import { deepSet_ } from '../deepSet'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../system/f/object/DeepMerge/f'
@@ -33,6 +34,7 @@ import {
   getTree,
   isGeneric,
 } from './parser'
+import { stringifyDataValue } from './stringifyDataValue'
 import { findFirstMergePin, forEachPinOnMerge } from './util/spec'
 
 export type TypeInterface = IOOf<Dict<string>>
@@ -481,12 +483,19 @@ export const _getGraphTypeMap = (
 
       forEachValueKey(unitTypeInterface.input, (type, inputId) => {
         if (
-          input[inputId] &&
-          input[inputId].constant &&
-          input[inputId].data !== undefined
+          (input[inputId] &&
+            input[inputId].constant &&
+            typeof input[inputId].data === 'string') ||
+          (typeof input?.[inputId]?.data === 'object' &&
+            input[inputId].data !== null &&
+            (input[inputId].data as DataRef).data !== undefined)
         ) {
           if (_hasGeneric(type)) {
-            const dataStr = unitSpec.input[inputId].data
+            const dataStr = stringifyDataValue(
+              unitSpec.input[inputId].data,
+              specs,
+              {}
+            )
             const dataTree = getTree(dataStr)
             const dataTypeTree = _getValueType(specs, dataTree)
             if (!_hasGeneric(dataTypeTree)) {

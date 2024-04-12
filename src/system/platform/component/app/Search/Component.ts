@@ -398,6 +398,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _refresh_ordered_list = () => {
+    const { classes } = this.$system
+
     const { specs } = this._registry
 
     const id_list = keys(specs)
@@ -405,7 +407,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     const visible_id_list = id_list.filter((id) => isSpecVisible(specs, id))
 
     const ordered_id_list = visible_id_list.sort((a, b) => {
-      return compareByComplexity(specs, a, b)
+      return compareByComplexity(specs, classes, a, b)
     })
 
     this._ordered_id_list = ordered_id_list
@@ -463,10 +465,17 @@ export default class Search extends Element<HTMLDivElement, Props> {
   private _registry_unlisten: Unlisten
 
   private _find_new_item_index = (spec: GraphSpec, list: string[]): number => {
+    const { classes } = this.$system
+
     const { specs } = this._registry
 
     const index = binaryFindIndex(list, (current_spec_id) => {
-      const current_score = compareByComplexity(specs, spec.id, current_spec_id)
+      const current_score = compareByComplexity(
+        specs,
+        classes,
+        spec.id,
+        current_spec_id
+      )
 
       return current_score
     })

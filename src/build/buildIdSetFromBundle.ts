@@ -1,5 +1,5 @@
-import { evaluate } from '../spec/evaluate'
-import { getTree, TreeNodeType } from '../spec/parser'
+import deepGet from '../deepGet'
+import { evaluateDataValue } from '../spec/evaluateDataValue'
 import _classes from '../system/_classes'
 import _specs from '../system/_specs'
 import { Spec } from '../types'
@@ -15,28 +15,29 @@ export function buildUnitIdSet(unit: GraphUnitSpec, idSet: Set<string>): void {
   for (const inputId in input) {
     const _input = input[inputId] ?? {}
 
-    const { data } = _input
+    let { data } = _input
 
-    if (data) {
-      const tree = getTree(data)
+    const buildBundleIdSet = (bundle: UnitBundleSpec) => {
+      const unitSpec =
+      _specs[bundle.unit.id] ?? bundle.specs[bundle.unit.id]
 
-      if (tree.type === TreeNodeType.Unit) {
-        const str = tree.value.substring(1)
+      buildUnitIdSet(bundle.unit, idSet)
+      buildIdSet(unitSpec, idSet)
 
-        const bundle = evaluate(str, _specs, _classes) as UnitBundleSpec
+      for (const specId in bundle.specs) {
+        const spec = bundle.specs[specId]
 
-        const unitSpec =
-          _specs[bundle.unit.id] ?? bundle.specs[bundle.unit.id]
+        buildIdSet(spec, idSet)
+      }
+    }
+    
+    if (data !== undefined) {
+      const dataRef = evaluateDataValue(data, _specs, _classes)
 
-        buildUnitIdSet(bundle.unit, idSet)
+      for (const path of dataRef.ref) {
+        const bundle = deepGet(dataRef.data, path)
 
-        buildIdSet(unitSpec, idSet)
-
-        for (const specId in bundle.specs) {
-          const spec = bundle.specs[specId]
-
-          buildIdSet(spec, idSet)
-        }
+        buildBundleIdSet(bundle)
       }
     }
   }

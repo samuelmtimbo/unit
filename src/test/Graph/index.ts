@@ -1,6 +1,7 @@
 import './add'
+import './addUnit'
 import './catch'
-// import './cloneUnit'
+import './cloneUnit'
 import './explodeUnit'
 import './identity'
 import './merge'

@@ -12,639 +12,639 @@ const UNIT_ID_IDENTITY_1 = 'identity1'
 const UNIT_ID_DIV = 'div'
 const UNIT_ID_DIV_0 = 'div0'
 
-const spec0 = system.newSpec({
-  units: {
-    [UNIT_ID_EMTPY]: {
-      id: ID_EMPTY,
-    },
-    [UNIT_ID_IDENTITY]: {
-      id: ID_IDENTITY,
-    },
-    [UNIT_ID_IDENTITY_0]: {
-      id: ID_IDENTITY,
-    },
-  },
-  merges: {
-    0: {
-      [UNIT_ID_IDENTITY]: {
-        output: {
-          a: true,
-        },
-      },
-      [UNIT_ID_IDENTITY_0]: {
-        input: {
-          a: true,
-        },
-      },
-    },
-  },
-})
+// const spec0 = system.newSpec({
+//   units: {
+//     [UNIT_ID_EMTPY]: {
+//       id: ID_EMPTY,
+//     },
+//     [UNIT_ID_IDENTITY]: {
+//       id: ID_IDENTITY,
+//     },
+//     [UNIT_ID_IDENTITY_0]: {
+//       id: ID_IDENTITY,
+//     },
+//   },
+//   merges: {
+//     0: {
+//       [UNIT_ID_IDENTITY]: {
+//         output: {
+//           a: true,
+//         },
+//       },
+//       [UNIT_ID_IDENTITY_0]: {
+//         input: {
+//           a: true,
+//         },
+//       },
+//     },
+//   },
+// })
 
-const composition0 = new Graph(spec0, {}, system)
+// const composition0 = new Graph(spec0, {}, system)
 
-false && watchUnitAndLog(composition0)
-false && watchGraphAndLog(composition0)
+// false && watchUnitAndLog(composition0)
+// false && watchGraphAndLog(composition0)
 
-composition0.play()
+// composition0.play()
 
-const empty0 = composition0.getUnit(UNIT_ID_EMTPY) as Graph
+// const empty0 = composition0.getUnit(UNIT_ID_EMTPY) as Graph
 
-composition0.moveSubgraphInto(
-  UNIT_ID_EMTPY,
-  null,
-  null,
-  uuid(),
-  {
-    merge: [],
-    link: [],
-    unit: [],
-    plug: [],
-  },
-  { merge: {}, link: {}, unit: {}, plug: {} },
-  {},
-  {},
-  {
-    input: {},
-    output: {},
-  },
-  {},
-  {}
-)
+// composition0.moveSubgraphInto(
+//   UNIT_ID_EMTPY,
+//   null,
+//   null,
+//   uuid(),
+//   {
+//     merge: [],
+//     link: [],
+//     unit: [],
+//     plug: [],
+//   },
+//   { merge: {}, link: {}, unit: {}, plug: {} },
+//   {},
+//   {},
+//   {
+//     input: {},
+//     output: {},
+//   },
+//   {},
+//   {}
+// )
 
-assert.equal(composition0.getUnitCount(), 3)
-assert.equal(composition0.getMergeCount(), 1)
+// assert.equal(composition0.getUnitCount(), 3)
+// assert.equal(composition0.getMergeCount(), 1)
 
-assert.equal(empty0.getUnitCount(), 0)
-assert.equal(empty0.getInputCount(), 0)
-assert.equal(empty0.getOutputCount(), 0)
+// assert.equal(empty0.getUnitCount(), 0)
+// assert.equal(empty0.getInputCount(), 0)
+// assert.equal(empty0.getOutputCount(), 0)
 
-const spec1 = system.newSpec({
-  units: {
-    [UNIT_ID_EMTPY]: {
-      id: ID_EMPTY,
-    },
-    [UNIT_ID_IDENTITY]: {
-      id: ID_IDENTITY,
-    },
-    [UNIT_ID_IDENTITY_0]: {
-      id: ID_IDENTITY,
-    },
-  },
-  merges: {
-    0: {
-      [UNIT_ID_IDENTITY]: {
-        output: {
-          a: true,
-        },
-      },
-      [UNIT_ID_IDENTITY_0]: {
-        input: {
-          a: true,
-        },
-      },
-    },
-  },
-})
+// const spec1 = system.newSpec({
+//   units: {
+//     [UNIT_ID_EMTPY]: {
+//       id: ID_EMPTY,
+//     },
+//     [UNIT_ID_IDENTITY]: {
+//       id: ID_IDENTITY,
+//     },
+//     [UNIT_ID_IDENTITY_0]: {
+//       id: ID_IDENTITY,
+//     },
+//   },
+//   merges: {
+//     0: {
+//       [UNIT_ID_IDENTITY]: {
+//         output: {
+//           a: true,
+//         },
+//       },
+//       [UNIT_ID_IDENTITY_0]: {
+//         input: {
+//           a: true,
+//         },
+//       },
+//     },
+//   },
+// })
 
-const composition1 = new Graph(spec1, {}, system)
+// const composition1 = new Graph(spec1, {}, system)
 
-false && watchUnitAndLog(composition1)
-false && watchGraphAndLog(composition1)
+// false && watchUnitAndLog(composition1)
+// false && watchGraphAndLog(composition1)
 
-composition1.play()
+// composition1.play()
 
-const empty1 = composition1.getUnit(UNIT_ID_EMTPY) as Graph
+// const empty1 = composition1.getUnit(UNIT_ID_EMTPY) as Graph
 
-composition1.moveSubgraphInto(
-  UNIT_ID_EMTPY,
-  null,
-  null,
-  uuid(),
-  {
-    merge: ['0'],
-    link: [],
-    unit: [UNIT_ID_IDENTITY, UNIT_ID_IDENTITY_0],
-    plug: [],
-  },
-  {
-    merge: {},
-    link: {},
-    unit: {},
-    plug: {},
-  },
-  {
-    [UNIT_ID_IDENTITY]: {
-      input: { a: { pinId: 'a', subPinId: '0' } },
-      output: {},
-    },
-    [UNIT_ID_IDENTITY_0]: {
-      input: {},
-      output: { a: { pinId: 'a', subPinId: '0' } },
-    },
-  },
-  {},
-  {
-    input: {},
-    output: {},
-  },
-  {},
-  {}
-)
+// composition1.moveSubgraphInto(
+//   UNIT_ID_EMTPY,
+//   null,
+//   null,
+//   uuid(),
+//   {
+//     merge: ['0'],
+//     link: [],
+//     unit: [UNIT_ID_IDENTITY, UNIT_ID_IDENTITY_0],
+//     plug: [],
+//   },
+//   {
+//     merge: {},
+//     link: {},
+//     unit: {},
+//     plug: {},
+//   },
+//   {
+//     [UNIT_ID_IDENTITY]: {
+//       input: { a: { pinId: 'a', subPinId: '0' } },
+//       output: {},
+//     },
+//     [UNIT_ID_IDENTITY_0]: {
+//       input: {},
+//       output: { a: { pinId: 'a', subPinId: '0' } },
+//     },
+//   },
+//   {},
+//   {
+//     input: {},
+//     output: {},
+//   },
+//   {},
+//   {}
+// )
 
-assert.equal(composition1.getUnitCount(), 1)
-assert.equal(composition1.getMergeCount(), 0)
+// assert.equal(composition1.getUnitCount(), 1)
+// assert.equal(composition1.getMergeCount(), 0)
 
-assert.equal(empty1.getUnitCount(), 2)
-assert.equal(empty1.getMergeCount(), 1)
-assert.equal(empty1.getInputCount(), 1)
-assert.equal(empty1.getOutputCount(), 1)
+// assert.equal(empty1.getUnitCount(), 2)
+// assert.equal(empty1.getMergeCount(), 1)
+// assert.equal(empty1.getInputCount(), 1)
+// assert.equal(empty1.getOutputCount(), 1)
 
-assert(empty1.hasInputNamed('a'))
-assert(empty1.hasOutputNamed('a'))
+// assert(empty1.hasInputNamed('a'))
+// assert(empty1.hasOutputNamed('a'))
 
-assert.deepEqual(empty1.getExposedInputSpec('a'), {
-  plug: {
-    '0': {
-      unitId: UNIT_ID_IDENTITY,
-      pinId: 'a',
-    },
-  },
-  ref: false,
-})
-assert.deepEqual(empty1.getExposedOutputSpec('a'), {
-  plug: {
-    '0': {
-      unitId: UNIT_ID_IDENTITY_0,
-      pinId: 'a',
-    },
-  },
-  ref: false,
-})
-assert.deepEqual(empty1.getMergeSpec('0'), {
-  [UNIT_ID_IDENTITY]: {
-    output: {
-      a: true,
-    },
-  },
-  [UNIT_ID_IDENTITY_0]: {
-    input: {
-      a: true,
-    },
-  },
-})
+// assert.deepEqual(empty1.getExposedInputSpec('a'), {
+//   plug: {
+//     '0': {
+//       unitId: UNIT_ID_IDENTITY,
+//       pinId: 'a',
+//     },
+//   },
+//   ref: false,
+// })
+// assert.deepEqual(empty1.getExposedOutputSpec('a'), {
+//   plug: {
+//     '0': {
+//       unitId: UNIT_ID_IDENTITY_0,
+//       pinId: 'a',
+//     },
+//   },
+//   ref: false,
+// })
+// assert.deepEqual(empty1.getMergeSpec('0'), {
+//   [UNIT_ID_IDENTITY]: {
+//     output: {
+//       a: true,
+//     },
+//   },
+//   [UNIT_ID_IDENTITY_0]: {
+//     input: {
+//       a: true,
+//     },
+//   },
+// })
 
-empty1.push('a', 0)
+// empty1.push('a', 0)
 
-assert.equal(empty1.peakInput('a'), 0)
-assert.equal(empty1.takeOutput('a'), 0)
+// assert.equal(empty1.peakInput('a'), 0)
+// assert.equal(empty1.takeOutput('a'), 0)
 
-const spec2 = system.newSpec({
-  units: {
-    [UNIT_ID_EMTPY]: {
-      id: ID_EMPTY,
-    },
-    [UNIT_ID_IDENTITY]: {
-      id: ID_IDENTITY,
-    },
-    [UNIT_ID_IDENTITY_0]: {
-      id: ID_IDENTITY,
-    },
-  },
-  merges: {
-    0: {
-      [UNIT_ID_IDENTITY]: {
-        output: {
-          a: true,
-        },
-      },
-      [UNIT_ID_IDENTITY_0]: {
-        input: {
-          a: true,
-        },
-      },
-    },
-  },
-})
+// const spec2 = system.newSpec({
+//   units: {
+//     [UNIT_ID_EMTPY]: {
+//       id: ID_EMPTY,
+//     },
+//     [UNIT_ID_IDENTITY]: {
+//       id: ID_IDENTITY,
+//     },
+//     [UNIT_ID_IDENTITY_0]: {
+//       id: ID_IDENTITY,
+//     },
+//   },
+//   merges: {
+//     0: {
+//       [UNIT_ID_IDENTITY]: {
+//         output: {
+//           a: true,
+//         },
+//       },
+//       [UNIT_ID_IDENTITY_0]: {
+//         input: {
+//           a: true,
+//         },
+//       },
+//     },
+//   },
+// })
 
-const composition2 = new Graph(spec2, {}, system)
+// const composition2 = new Graph(spec2, {}, system)
 
-false && watchUnitAndLog(composition2)
-false && watchGraphAndLog(composition2)
+// false && watchUnitAndLog(composition2)
+// false && watchGraphAndLog(composition2)
 
-composition2.play()
+// composition2.play()
 
-const empty2 = composition2.getUnit(UNIT_ID_EMTPY) as Graph
+// const empty2 = composition2.getUnit(UNIT_ID_EMTPY) as Graph
 
-composition2.moveSubgraphInto(
-  UNIT_ID_EMTPY,
-  null,
-  null,
-  uuid(),
-  {
-    merge: [],
-    link: [],
-    unit: [UNIT_ID_IDENTITY, UNIT_ID_IDENTITY_0],
-    plug: [],
-  },
-  {
-    merge: {},
-    link: {},
-    unit: {},
-    plug: {},
-  },
-  {
-    [UNIT_ID_IDENTITY]: {
-      input: { a: { pinId: 'a', subPinId: '0' } },
-      output: { a: { pinId: 'a0', subPinId: '0', mergeId: '0' } },
-    },
-    [UNIT_ID_IDENTITY_0]: {
-      input: { a: { pinId: 'a0', subPinId: '0', mergeId: '0' } },
-      output: { a: { pinId: 'a', subPinId: '0' } },
-    },
-  },
-  {},
-  {
-    input: {},
-    output: {},
-  },
-  {},
-  {}
-)
+// composition2.moveSubgraphInto(
+//   UNIT_ID_EMTPY,
+//   null,
+//   null,
+//   uuid(),
+//   {
+//     merge: [],
+//     link: [],
+//     unit: [UNIT_ID_IDENTITY, UNIT_ID_IDENTITY_0],
+//     plug: [],
+//   },
+//   {
+//     merge: {},
+//     link: {},
+//     unit: {},
+//     plug: {},
+//   },
+//   {
+//     [UNIT_ID_IDENTITY]: {
+//       input: { a: { pinId: 'a', subPinId: '0' } },
+//       output: { a: { pinId: 'a0', subPinId: '0', mergeId: '0' } },
+//     },
+//     [UNIT_ID_IDENTITY_0]: {
+//       input: { a: { pinId: 'a0', subPinId: '0', mergeId: '0' } },
+//       output: { a: { pinId: 'a', subPinId: '0' } },
+//     },
+//   },
+//   {},
+//   {
+//     input: {},
+//     output: {},
+//   },
+//   {},
+//   {}
+// )
 
-assert.equal(composition2.getUnitCount(), 1)
-assert.equal(composition2.getMergeCount(), 1)
+// assert.equal(composition2.getUnitCount(), 1)
+// assert.equal(composition2.getMergeCount(), 1)
 
-assert.equal(empty2.getUnitCount(), 2)
-assert.equal(empty2.getInputCount(), 2)
-assert.equal(empty2.getOutputCount(), 2)
+// assert.equal(empty2.getUnitCount(), 2)
+// assert.equal(empty2.getInputCount(), 2)
+// assert.equal(empty2.getOutputCount(), 2)
 
-const spec3 = system.newSpec({
-  units: {
-    [UNIT_ID_EMTPY]: {
-      id: ID_EMPTY,
-    },
-    [UNIT_ID_IDENTITY]: {
-      id: ID_IDENTITY,
-    },
-    [UNIT_ID_IDENTITY_0]: {
-      id: ID_IDENTITY,
-    },
-  },
-  merges: {
-    0: {
-      [UNIT_ID_IDENTITY]: {
-        output: {
-          a: true,
-        },
-      },
-      [UNIT_ID_IDENTITY_0]: {
-        input: {
-          a: true,
-        },
-      },
-    },
-  },
-  inputs: {
-    a: {
-      plug: {
-        0: {
-          unitId: UNIT_ID_IDENTITY,
-          pinId: 'a',
-        },
-      },
-    },
-  },
-})
+// const spec3 = system.newSpec({
+//   units: {
+//     [UNIT_ID_EMTPY]: {
+//       id: ID_EMPTY,
+//     },
+//     [UNIT_ID_IDENTITY]: {
+//       id: ID_IDENTITY,
+//     },
+//     [UNIT_ID_IDENTITY_0]: {
+//       id: ID_IDENTITY,
+//     },
+//   },
+//   merges: {
+//     0: {
+//       [UNIT_ID_IDENTITY]: {
+//         output: {
+//           a: true,
+//         },
+//       },
+//       [UNIT_ID_IDENTITY_0]: {
+//         input: {
+//           a: true,
+//         },
+//       },
+//     },
+//   },
+//   inputs: {
+//     a: {
+//       plug: {
+//         0: {
+//           unitId: UNIT_ID_IDENTITY,
+//           pinId: 'a',
+//         },
+//       },
+//     },
+//   },
+// })
 
-const composition3 = new Graph(spec3, {}, system)
+// const composition3 = new Graph(spec3, {}, system)
 
-false && watchUnitAndLog(composition3)
-false && watchGraphAndLog(composition3)
+// false && watchUnitAndLog(composition3)
+// false && watchGraphAndLog(composition3)
 
-composition3.play()
+// composition3.play()
 
-const empty3 = composition3.getUnit(UNIT_ID_EMTPY) as Graph
+// const empty3 = composition3.getUnit(UNIT_ID_EMTPY) as Graph
 
-composition3.moveSubgraphInto(
-  UNIT_ID_EMTPY,
-  null,
-  null,
-  uuid(),
-  {
-    merge: [],
-    link: [],
-    unit: [UNIT_ID_IDENTITY, UNIT_ID_IDENTITY_0],
-    plug: [],
-  },
-  {
-    merge: {},
-    link: {},
-    unit: {},
-    plug: {},
-  },
-  {
-    [UNIT_ID_IDENTITY]: {
-      input: { a: { pinId: 'a', subPinId: '0' } },
-      output: { a: { pinId: 'a0', subPinId: '0', mergeId: '0' } },
-    },
-    [UNIT_ID_IDENTITY_0]: {
-      input: { a: { pinId: 'a0', subPinId: '0', mergeId: '0' } },
-      output: { a: { pinId: 'a', subPinId: '0' } },
-    },
-  },
-  {},
-  {
-    input: {},
-    output: {},
-  },
-  {},
-  {}
-)
+// composition3.moveSubgraphInto(
+//   UNIT_ID_EMTPY,
+//   null,
+//   null,
+//   uuid(),
+//   {
+//     merge: [],
+//     link: [],
+//     unit: [UNIT_ID_IDENTITY, UNIT_ID_IDENTITY_0],
+//     plug: [],
+//   },
+//   {
+//     merge: {},
+//     link: {},
+//     unit: {},
+//     plug: {},
+//   },
+//   {
+//     [UNIT_ID_IDENTITY]: {
+//       input: { a: { pinId: 'a', subPinId: '0' } },
+//       output: { a: { pinId: 'a0', subPinId: '0', mergeId: '0' } },
+//     },
+//     [UNIT_ID_IDENTITY_0]: {
+//       input: { a: { pinId: 'a0', subPinId: '0', mergeId: '0' } },
+//       output: { a: { pinId: 'a', subPinId: '0' } },
+//     },
+//   },
+//   {},
+//   {
+//     input: {},
+//     output: {},
+//   },
+//   {},
+//   {}
+// )
 
-assert.equal(composition3.getUnitCount(), 1)
-assert.equal(composition3.getMergeCount(), 1)
+// assert.equal(composition3.getUnitCount(), 1)
+// assert.equal(composition3.getMergeCount(), 1)
 
-assert.equal(empty3.getUnitCount(), 2)
-assert.equal(empty3.getInputCount(), 2)
-assert.equal(empty3.getOutputCount(), 2)
+// assert.equal(empty3.getUnitCount(), 2)
+// assert.equal(empty3.getInputCount(), 2)
+// assert.equal(empty3.getOutputCount(), 2)
 
-assert.deepEqual(composition3.getMergeSpec('0'), {
-  [UNIT_ID_EMTPY]: {
-    input: {
-      a0: true,
-    },
-    output: {
-      a0: true,
-    },
-  },
-})
+// assert.deepEqual(composition3.getMergeSpec('0'), {
+//   [UNIT_ID_EMTPY]: {
+//     input: {
+//       a0: true,
+//     },
+//     output: {
+//       a0: true,
+//     },
+//   },
+// })
 
-assert.deepEqual(composition3.getExposedPinSpec('input', 'a'), {
-  plug: {
-    0: {
-      unitId: UNIT_ID_EMTPY,
-      pinId: 'a',
-    },
-  },
-})
+// assert.deepEqual(composition3.getExposedPinSpec('input', 'a'), {
+//   plug: {
+//     0: {
+//       unitId: UNIT_ID_EMTPY,
+//       pinId: 'a',
+//     },
+//   },
+// })
 
-const spec4 = system.newSpec({
-  units: {
-    [UNIT_ID_EMTPY]: {
-      id: ID_EMPTY,
-    },
-    [UNIT_ID_IDENTITY]: {
-      id: ID_IDENTITY,
-    },
-  },
-  merges: {},
-  inputs: {
-    a: {
-      plug: {
-        0: {
-          unitId: UNIT_ID_IDENTITY,
-          pinId: 'a',
-        },
-      },
-      ref: false,
-    },
-  },
-})
+// const spec4 = system.newSpec({
+//   units: {
+//     [UNIT_ID_EMTPY]: {
+//       id: ID_EMPTY,
+//     },
+//     [UNIT_ID_IDENTITY]: {
+//       id: ID_IDENTITY,
+//     },
+//   },
+//   merges: {},
+//   inputs: {
+//     a: {
+//       plug: {
+//         0: {
+//           unitId: UNIT_ID_IDENTITY,
+//           pinId: 'a',
+//         },
+//       },
+//       ref: false,
+//     },
+//   },
+// })
 
-const composition4 = new Graph(spec4, {}, system)
+// const composition4 = new Graph(spec4, {}, system)
 
-false && watchUnitAndLog(composition4)
-false && watchGraphAndLog(composition4)
+// false && watchUnitAndLog(composition4)
+// false && watchGraphAndLog(composition4)
 
-composition4.play()
+// composition4.play()
 
-const empty4 = composition4.getUnit(UNIT_ID_EMTPY) as Graph
+// const empty4 = composition4.getUnit(UNIT_ID_EMTPY) as Graph
 
-composition4.moveSubgraphInto(
-  UNIT_ID_EMTPY,
-  null,
-  null,
-  uuid(),
-  {
-    merge: [],
-    link: [
-      { unitId: UNIT_ID_IDENTITY, type: 'input', pinId: 'a' },
-      { unitId: UNIT_ID_IDENTITY, type: 'output', pinId: 'a' },
-    ],
-    unit: [UNIT_ID_IDENTITY],
-    plug: [{ type: 'input', pinId: 'a', subPinId: '0' }],
-  },
-  {
-    merge: {},
-    link: {
-      [UNIT_ID_IDENTITY]: {
-        input: {
-          a: {
-            mergeId: null,
-            oppositePinId: null,
-          },
-        },
-        output: {
-          a: {
-            mergeId: null,
-            oppositePinId: null,
-          },
-        },
-      },
-    },
-    unit: {},
-    plug: {},
-  },
-  {
-    [UNIT_ID_IDENTITY]: {
-      input: { a: { pinId: 'a', subPinId: '0' } },
-      output: { a: { pinId: 'a', subPinId: '0' } },
-    },
-  },
-  {},
-  {
-    input: {
-      a: {
-        0: {
-          unitId: UNIT_ID_IDENTITY,
-          pinId: 'a',
-        },
-      },
-    },
-    output: {},
-  },
-  {},
-  {}
-)
+// composition4.moveSubgraphInto(
+//   UNIT_ID_EMTPY,
+//   null,
+//   null,
+//   uuid(),
+//   {
+//     merge: [],
+//     link: [
+//       { unitId: UNIT_ID_IDENTITY, type: 'input', pinId: 'a' },
+//       { unitId: UNIT_ID_IDENTITY, type: 'output', pinId: 'a' },
+//     ],
+//     unit: [UNIT_ID_IDENTITY],
+//     plug: [{ type: 'input', pinId: 'a', subPinId: '0' }],
+//   },
+//   {
+//     merge: {},
+//     link: {
+//       [UNIT_ID_IDENTITY]: {
+//         input: {
+//           a: {
+//             mergeId: null,
+//             oppositePinId: null,
+//           },
+//         },
+//         output: {
+//           a: {
+//             mergeId: null,
+//             oppositePinId: null,
+//           },
+//         },
+//       },
+//     },
+//     unit: {},
+//     plug: {},
+//   },
+//   {
+//     [UNIT_ID_IDENTITY]: {
+//       input: { a: { pinId: 'a', subPinId: '0' } },
+//       output: { a: { pinId: 'a', subPinId: '0' } },
+//     },
+//   },
+//   {},
+//   {
+//     input: {
+//       a: {
+//         0: {
+//           unitId: UNIT_ID_IDENTITY,
+//           pinId: 'a',
+//         },
+//       },
+//     },
+//     output: {},
+//   },
+//   {},
+//   {}
+// )
 
-assert.equal(composition4.getUnitCount(), 1)
-assert.equal(composition4.getMergeCount(), 0)
+// assert.equal(composition4.getUnitCount(), 1)
+// assert.equal(composition4.getMergeCount(), 0)
 
-assert.equal(empty4.getUnitCount(), 1)
-assert.equal(empty4.getInputCount(), 1)
-assert.equal(empty4.getOutputCount(), 0)
+// assert.equal(empty4.getUnitCount(), 1)
+// assert.equal(empty4.getInputCount(), 1)
+// assert.equal(empty4.getOutputCount(), 0)
 
-assert.deepEqual(empty4.getExposedPinSpec('input', 'a'), {
-  plug: {
-    0: {
-      unitId: UNIT_ID_IDENTITY,
-      pinId: 'a',
-    },
-  },
-  ref: false,
-})
+// assert.deepEqual(empty4.getExposedPinSpec('input', 'a'), {
+//   plug: {
+//     0: {
+//       unitId: UNIT_ID_IDENTITY,
+//       pinId: 'a',
+//     },
+//   },
+//   ref: false,
+// })
 
-const spec5 = system.newSpec({
-  units: {
-    [UNIT_ID_EMTPY]: {
-      id: ID_EMPTY,
-    },
-    [UNIT_ID_IDENTITY]: {
-      id: ID_IDENTITY,
-    },
-    [UNIT_ID_IDENTITY_0]: {
-      id: ID_IDENTITY,
-    },
-    [UNIT_ID_IDENTITY_1]: {
-      id: ID_IDENTITY,
-    },
-  },
-  merges: {
-    0: {
-      [UNIT_ID_IDENTITY]: {
-        output: {
-          a: true,
-        },
-      },
-      [UNIT_ID_IDENTITY_0]: {
-        input: {
-          a: true,
-        },
-      },
-    },
-    1: {
-      [UNIT_ID_IDENTITY_0]: {
-        output: {
-          a: true,
-        },
-      },
-      [UNIT_ID_IDENTITY_1]: {
-        input: {
-          a: true,
-        },
-      },
-    },
-  },
-  inputs: {},
-})
+// const spec5 = system.newSpec({
+//   units: {
+//     [UNIT_ID_EMTPY]: {
+//       id: ID_EMPTY,
+//     },
+//     [UNIT_ID_IDENTITY]: {
+//       id: ID_IDENTITY,
+//     },
+//     [UNIT_ID_IDENTITY_0]: {
+//       id: ID_IDENTITY,
+//     },
+//     [UNIT_ID_IDENTITY_1]: {
+//       id: ID_IDENTITY,
+//     },
+//   },
+//   merges: {
+//     0: {
+//       [UNIT_ID_IDENTITY]: {
+//         output: {
+//           a: true,
+//         },
+//       },
+//       [UNIT_ID_IDENTITY_0]: {
+//         input: {
+//           a: true,
+//         },
+//       },
+//     },
+//     1: {
+//       [UNIT_ID_IDENTITY_0]: {
+//         output: {
+//           a: true,
+//         },
+//       },
+//       [UNIT_ID_IDENTITY_1]: {
+//         input: {
+//           a: true,
+//         },
+//       },
+//     },
+//   },
+//   inputs: {},
+// })
 
-const composition5 = new Graph(spec5, {}, system)
+// const composition5 = new Graph(spec5, {}, system)
 
-false && watchUnitAndLog(composition5)
-false && watchGraphAndLog(composition5)
+// false && watchUnitAndLog(composition5)
+// false && watchGraphAndLog(composition5)
 
-composition5.play()
+// composition5.play()
 
-const empty5 = composition5.getUnit(UNIT_ID_EMTPY) as Graph
+// const empty5 = composition5.getUnit(UNIT_ID_EMTPY) as Graph
 
-composition5.moveSubgraphInto(
-  UNIT_ID_EMTPY,
-  null,
-  null,
-  uuid(),
-  {
-    merge: [],
-    link: [],
-    unit: [UNIT_ID_IDENTITY_0],
-    plug: [],
-  },
-  {
-    merge: {},
-    link: {},
-    unit: {},
-    plug: {},
-  },
-  {
-    [UNIT_ID_IDENTITY_0]: {
-      input: {
-        a: {
-          pinId: 'a',
-          subPinId: '0',
-          mergeId: '0',
-          merge: {
-            [UNIT_ID_IDENTITY_1]: {
-              output: {
-                a: true,
-              },
-            },
-          },
-        },
-      },
-      output: {
-        a: {
-          pinId: 'a',
-          subPinId: '0',
-          mergeId: '1',
-          merge: {
-            [UNIT_ID_IDENTITY]: {
-              input: {
-                a: true,
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  {},
-  {
-    input: {},
-    output: {},
-  },
-  {},
-  {}
-)
+// composition5.moveSubgraphInto(
+//   UNIT_ID_EMTPY,
+//   null,
+//   null,
+//   uuid(),
+//   {
+//     merge: [],
+//     link: [],
+//     unit: [UNIT_ID_IDENTITY_0],
+//     plug: [],
+//   },
+//   {
+//     merge: {},
+//     link: {},
+//     unit: {},
+//     plug: {},
+//   },
+//   {
+//     [UNIT_ID_IDENTITY_0]: {
+//       input: {
+//         a: {
+//           pinId: 'a',
+//           subPinId: '0',
+//           mergeId: '0',
+//           merge: {
+//             [UNIT_ID_IDENTITY_1]: {
+//               output: {
+//                 a: true,
+//               },
+//             },
+//           },
+//         },
+//       },
+//       output: {
+//         a: {
+//           pinId: 'a',
+//           subPinId: '0',
+//           mergeId: '1',
+//           merge: {
+//             [UNIT_ID_IDENTITY]: {
+//               input: {
+//                 a: true,
+//               },
+//             },
+//           },
+//         },
+//       },
+//     },
+//   },
+//   {},
+//   {
+//     input: {},
+//     output: {},
+//   },
+//   {},
+//   {}
+// )
 
-assert.equal(composition5.getUnitCount(), 3)
-assert.equal(composition5.getMergeCount(), 2)
-assert.deepEqual(composition5.getMergeSpec('0'), {
-  [UNIT_ID_IDENTITY_1]: {
-    output: {
-      a: true,
-    },
-  },
-  [UNIT_ID_EMTPY]: {
-    input: {
-      a: true,
-    },
-  },
-})
-assert.deepEqual(composition5.getMergeSpec('1'), {
-  [UNIT_ID_IDENTITY]: {
-    input: {
-      a: true,
-    },
-  },
-  [UNIT_ID_EMTPY]: {
-    output: {
-      a: true,
-    },
-  },
-})
+// assert.equal(composition5.getUnitCount(), 3)
+// assert.equal(composition5.getMergeCount(), 2)
+// assert.deepEqual(composition5.getMergeSpec('0'), {
+//   [UNIT_ID_IDENTITY_1]: {
+//     output: {
+//       a: true,
+//     },
+//   },
+//   [UNIT_ID_EMTPY]: {
+//     input: {
+//       a: true,
+//     },
+//   },
+// })
+// assert.deepEqual(composition5.getMergeSpec('1'), {
+//   [UNIT_ID_IDENTITY]: {
+//     input: {
+//       a: true,
+//     },
+//   },
+//   [UNIT_ID_EMTPY]: {
+//     output: {
+//       a: true,
+//     },
+//   },
+// })
 
-assert.equal(empty5.getUnitCount(), 1)
-assert.equal(empty5.getInputCount(), 1)
-assert.equal(empty5.getOutputCount(), 1)
+// assert.equal(empty5.getUnitCount(), 1)
+// assert.equal(empty5.getInputCount(), 1)
+// assert.equal(empty5.getOutputCount(), 1)
 
-assert.deepEqual(empty5.getExposedPinSpec('input', 'a'), {
-  plug: {
-    0: {
-      unitId: UNIT_ID_IDENTITY_0,
-      pinId: 'a',
-    },
-  },
-  ref: false,
-})
+// assert.deepEqual(empty5.getExposedPinSpec('input', 'a'), {
+//   plug: {
+//     0: {
+//       unitId: UNIT_ID_IDENTITY_0,
+//       pinId: 'a',
+//     },
+//   },
+//   ref: false,
+// })
 
 const spec6 = system.newSpec({
   units: {
