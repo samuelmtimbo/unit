@@ -724,12 +724,16 @@ export default class GUI extends Element<HTMLDivElement, Props> {
   }
 
   public hide_background = (animate: boolean): void => {
-    this._animate_background(
-      {
-        opacity: '0.25',
-      },
-      animate
-    )
+    // this._animate_background(
+    //   {
+    //     opacity: '0.25',
+    //   },
+    //   animate
+    // )
+    mergePropStyle(this._background, {
+      opacity: '0.5',
+      transition: ifLinearTransition(animate, 'opacity'),
+    })
   }
 
   public hide_search = (animate: boolean): void => {
@@ -781,12 +785,16 @@ export default class GUI extends Element<HTMLDivElement, Props> {
   }
 
   public show_background = (animate: boolean): void => {
-    this._animate_background(
-      {
-        opacity: '1',
-      },
-      animate
-    )
+    // this._animate_background(
+    //   {
+    //     opacity: '1',
+    //   },
+    //   animate
+    // )
+    mergePropStyle(this._background, {
+      opacity: '1',
+      transition: ifLinearTransition(animate, 'opacity'),
+    })
   }
 
   public show_search = (animate: boolean): void => {
