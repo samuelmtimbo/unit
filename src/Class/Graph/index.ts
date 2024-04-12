@@ -2955,7 +2955,7 @@ export class Graph<I = any, O = any>
       this._branch
     )
 
-    this._memAddUnit(unitId, _unit)
+    this._memAddUnit(unitId, _unit, bundle)
     this._simAddUnit(unitId, { unit }, _unit, false)
   }
 
