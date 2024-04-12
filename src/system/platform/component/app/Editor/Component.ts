@@ -56,10 +56,7 @@ import { AsyncGraph } from '../../../../../types/interface/async/AsyncGraph'
 import { weakMerge } from '../../../../../weakMerge'
 import { ID_EDITOR, ID_IMAGE } from '../../../../_ids'
 import { clamp } from '../../../../core/relation/Clamp/f'
-import {
-  getGlobalComponent,
-  listenGlobalComponent,
-} from '../../../../globalComponent'
+import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import Div from '../../Div/Component'
 import Frame from '../../Frame/Component'
 import Transcend from '../Transcend/Component'
@@ -842,7 +839,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       fallback,
     } = $props
 
-    let { component, editor: _graph, transcend, background, root } = $props
+    let { component, editor, transcend, background, root } = $props
 
     const specs = weakMerge(this.$system.specs, {})
 
@@ -880,8 +877,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._component = component ?? parentComponent({}, this.$system)
 
-    _graph =
-      _graph ||
+    editor =
+      editor ||
       new Editor_(
         {
           className,
@@ -913,12 +910,11 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         this.$system
       )
 
-    _graph.enter(false, {}, true)
+    editor.enter(false, {}, true)
 
-    this._editor = _graph
+    this._editor = editor
 
     this._listen_graph()
-    this._reset_frame()
 
     background =
       background ||
@@ -985,7 +981,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.setSubComponents({
       background,
       root,
-      graph: _graph,
+      editor,
       frame: this._fallback_frame,
       transcend,
     })
@@ -1130,48 +1126,31 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   }
 
   private _reset_frame = (): void => {
-    // console.log('Graph', 'reset_component')
+    // console.log('Graph', '_reset_frame')
 
     const { frame } = this.$props
 
-    if (frame) {
-      // AD HOC
-      frame.$getGlobalId({}, (globalId) => {
-        const _frame = getGlobalComponent(
-          this.$system,
-          globalId
-        ) as Component<HTMLElement>
-
-        const set = (_frame) => {
-          this._frame = _frame
-          this._frame_out = true
-
-          this._editor.setProp('frame', this._frame)
-          this._editor.setProp('frameOut', this._frame_out)
-        }
-
-        if (_frame === undefined) {
-          const unlisten = listenGlobalComponent(
-            this.$system,
-            globalId,
-            (component: any) => {
-              set(component)
-
-              unlisten()
-            }
-          )
-        }
-
-        if (_frame) {
-          set(_frame)
-        }
-      })
-    } else {
-      this._frame = this._fallback_frame
-      this._frame_out = false
+    const set = (frame: Component<HTMLElement>, frame_out: boolean) => {
+      this._frame = frame
+      this._frame_out = frame_out
 
       this._editor.setProp('frame', this._frame)
       this._editor.setProp('frameOut', this._frame_out)
+    }
+
+    if (frame) {
+      frame.$getGlobalId({}, async (globalId) => {
+        const _frame = (await firstGlobalComponentPromise(
+          this.$system,
+          globalId
+        )) as Component<HTMLElement>
+
+        if (_frame) {
+          set(_frame, true)
+        }
+      })
+    } else {
+      set(this._fallback_frame, false)
     }
   }
 
@@ -1494,7 +1473,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this.removeSubComponent('transcend')
     this.removeSubComponent('background')
-    this.removeSubComponent('graph')
+    this.removeSubComponent('editor')
     this.removeSubComponent('root')
     this.removeSubComponent('frame')
 
@@ -1540,6 +1519,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     const component = new Parent({}, this.$system)
 
+    // this.disconnect()
+
+    // unit_editor.connect(this.$unit)
+
     component.setSubComponent(editor_unit_id, unit_editor)
     component.pushRoot(unit_editor)
 
@@ -1575,9 +1558,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._editor = editor
 
     this._listen_graph()
-
-    this._reset_frame()
-    // this._reset_graph()
 
     const background = new Div(
       {
@@ -1621,10 +1601,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       '1': background_slot,
     }
 
-    // for (const child of graph_slot_children) {
-    //   graph_slot_element.appendChild(child)
-    // }
-
     for (const child of background_slot_children) {
       background_slot_element.appendChild(child)
     }
@@ -1632,7 +1608,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.setSubComponents({
       background,
       root,
-      graph: editor,
+      editor,
       frame: this._fallback_frame,
       transcend,
     })
@@ -1646,10 +1622,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this.registerRoot(this._root)
 
-    this._editor.enter(false)
-    this._editor.enterFullwindow(false)
     this._editor.select_node(editor_unit_id)
     this._editor.unlock_sub_component(editor_unit_id)
+    this._editor.enter(false)
+    this._editor.enterFullwindow(false)
     this._editor.leaveFullwindow(true)
     this._editor.temp_fixate_node(editor_unit_id, 100)
   }
@@ -3942,10 +3918,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (!parent) {
       if (this._transcend) {
         if ($disabled) {
-          this._transcend.hide(false)
+          this._hide_transcend(false)
         } else {
           if (this._focused) {
-            this._transcend.show(false)
+            this._show_transcend(false)
           }
         }
       }
@@ -6343,32 +6319,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { data, metadata = {} } = unit_pin_spec
 
     if (data !== undefined) {
-      if (ref) {
-        //
+      const metadata_position = metadata.data?.position
+
+      const datum_id = this._new_datum_id()
+
+      const datum_tree = getTree__cached(data)
+
+      let position: Position
+
+      if (metadata_position) {
+        position = addVector(center, metadata_position)
       } else {
-        const metadata_position = metadata.data?.position
-
-        const datum_id = this._new_datum_id()
-
-        const datum_tree = getTree__cached(data)
-
-        let position: Position
-
-        if (metadata_position) {
-          position = addVector(center, metadata_position)
-        } else {
-          position = this._predict_pin_datum_initial_position(pin_node_id)
-        }
-
-        this._sim_add_pin_datum_tree(
-          unit_id,
-          type,
-          pin_id,
-          datum_id,
-          datum_tree,
-          position
-        )
+        position = this._predict_pin_datum_initial_position(pin_node_id)
       }
+
+      this._sim_add_pin_datum_tree(
+        unit_id,
+        type,
+        pin_id,
+        datum_id,
+        datum_tree,
+        position
+      )
     }
   }
 
@@ -20920,6 +20892,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       //
     } else if (this._fullwindow_focusing) {
       //
+    } else if (this._temp_control_unlock) {
+      //
     } else {
       const { relatedTarget } = event
 
@@ -20927,18 +20901,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         (relatedTarget &&
           this._control &&
           this._control._control.$element.contains(relatedTarget)) ||
-        this.$element.contains(relatedTarget)
+        this._graph.$element.contains(relatedTarget)
       ) {
         return
       }
 
       if (relatedTarget) {
+<<<<<<< Updated upstream
         this._disable()
+=======
+        const hide = this._temp_control_unlock
 
-        if (
-          this.$element.contains(relatedTarget) ||
-          (this._frame && this._frame.$element.contains(relatedTarget))
-        ) {
+        this._disable(hide)
+>>>>>>> Stashed changes
+
+        if (this._frame && this._frame.$element.contains(relatedTarget)) {
           return
         }
 
@@ -22647,7 +22624,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _focusing_sub_component: boolean = false
 
   private _unlock_sub_component = (unit_id: string): void => {
-    // console.log('Graph', '_unlock_sub_component', unit_id)
+    // console.log('Graph', '_unlock_sub_component', unit_id, this._id)
 
     const { animate } = this.$props
 
@@ -22712,7 +22689,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._disable_input()
 
       if (!this._focusing_sub_component) {
-        // this._hide_control(false)
         this._hide_control(animate)
       }
     }
@@ -23530,7 +23506,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _hide_control = (animate: boolean): void => {
-    // console.trace('Graph', '_hide_control', animate, this._id)
+    // console.log('Graph', '_hide_control', animate, this._id)
 
     if (this._force_control_animation_false) {
       this._force_control_animation_false = false
@@ -29613,8 +29589,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           delete this._datum_sub_graph[datum_node_id]
           delete this._datum_graph[datum_node_id]
 
+<<<<<<< Updated upstream
           editor.setProp('disabled', true)
 
+=======
+>>>>>>> Stashed changes
           editor.destroy()
 
           this._show_transcend(animate)
@@ -56013,13 +55992,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._watch_constant_input_ref(unitId, 'input', pinId, _data.data)
     }
 
-    if (typeof __data.data === 'string') {
+    if (this._pin_to_datum[pin_node_id]) {
       //
     } else {
-      __data.data = 'null'
-    }
+      if (typeof __data.data === 'string') {
+        //
+      } else {
+        __data.data = 'null'
+      }
 
-    this._on_graph_unit_link_pin_data_moment(__data)
+      this._on_graph_unit_link_pin_data_moment(__data)
+    }
   }
 
   private _on_graph_unit_ref_link_pin_drop_moment = (
