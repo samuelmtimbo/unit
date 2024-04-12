@@ -483,7 +483,7 @@ export function bubbleUp<T>(
   child: Heap<T>,
   predicate: (a: T, b: T) => boolean
 ) {
-  if (child.parent && !predicate(child.parent.value, child.value)) {
+  if (child.parent && predicate(child.value, child.parent.value)) {
     const { parent, left, right } = child
 
     child.parent = parent.parent

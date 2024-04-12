@@ -1,4 +1,5 @@
 import { Unit } from '../Class/Unit'
+import deepGet from '../deepGet'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { Specs } from '../types'
@@ -6,10 +7,11 @@ import { Dict } from '../types/Dict'
 import { io } from '../types/IOOf'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { weakMerge } from '../weakMerge'
-import { evaluate } from './evaluate'
 import { evaluateMemorySpec } from './evaluate/evaluateMemorySpec'
+import { evaluateDataValue } from './evaluateDataValue'
 import { unitFromId } from './fromId'
 import { applyUnitDefaultIgnored } from './fromSpec'
+import { resolveDataRef } from './resolveDataValue'
 
 export function unitFromBundleSpec(
   system: System,
@@ -63,27 +65,29 @@ export function unitFromBundleSpec(
     if (data !== undefined) {
       const input = unit.getInput(pinId)
 
-      const _data = evaluate(data, system.specs, classes)
+      const dataRef = evaluateDataValue(data, specs, classes)
 
-      const isClass = _data instanceof Function
+      const { ref = [] } = dataRef
 
-      if (isClass) {
-        system.injectSpecs(_data.__bundle?.specs ?? {})
+      for (const path of ref) {
+        const bundle = deepGet(dataRef.data, path) as UnitBundleSpec
+
+        system.injectSpecs(bundle.specs ?? {})
       }
 
+      let data_ = resolveDataRef(dataRef, specs, classes)
+
       if (input.ref()) {
-        if (isClass) {
-          const __data = new _data(system)
+        if (data_ instanceof Function) {
+          data_ = new data_(system)
 
-          __data.play()
-
-          input.push(__data)
+          data_.play()
         } else {
           //
         }
-      } else {
-        input.push(_data)
       }
+
+      input.push(data_)
     }
   })
 

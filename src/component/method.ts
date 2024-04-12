@@ -1,5 +1,6 @@
 import { ChildOutOfBound } from '../exception/ChildOutOfBoundError'
-import { evaluate } from '../spec/evaluate'
+import { evaluateDataValue } from '../spec/evaluateDataValue'
+import { resolveDataRef } from '../spec/resolveDataValue'
 import { Dict } from '../types/Dict'
 import { AnimationSpec } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
@@ -65,9 +66,11 @@ export function instanceChild(
     const { data } = input[name]
 
     if (data !== undefined) {
-      const _data = evaluate(data, system.specs, system.classes)
+      const dataRef = evaluateDataValue(data, system.specs, system.classes)
 
-      unit.pushInput(name, _data)
+      const data_ = resolveDataRef(dataRef, system.specs, system.classes)
+
+      unit.pushInput(name, data_)
     }
   }
 

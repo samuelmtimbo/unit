@@ -1,4 +1,4 @@
-import { evaluate } from '../spec/evaluate'
+import { evaluateDataValue } from '../spec/evaluateDataValue'
 import { ComponentClass, ComponentClasses } from '../system'
 import { Classes, Specs } from '../types'
 import { Dict } from '../types/Dict'
@@ -35,10 +35,9 @@ export function componentClassFromSpecId<T = any>(
 
           const { data } = input
 
-          const _data = evaluate(data, specs, classes)
+          const dataRef = evaluateDataValue(data, specs, classes)
 
-          // @ts-ignore
-          this.setProp(name, _data)
+          this.setProp(name, dataRef.data)
         }
       }
     }

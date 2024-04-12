@@ -432,6 +432,7 @@ import { emptyIO } from '../../../../../spec/emptyIO'
 import { emptyGraphSpec } from '../../../../../spec/emptySpec'
 import { escape } from '../../../../../spec/escape'
 import { evaluate } from '../../../../../spec/evaluate'
+import { evaluateDataValue } from '../../../../../spec/evaluateDataValue'
 import {
   evaluateBundleStr,
   idFromUnitValue,
@@ -494,6 +495,7 @@ import {
   unplugPin,
 } from '../../../../../spec/reducers/spec_'
 import { stringify } from '../../../../../spec/stringify'
+import { stringifyDataValue } from '../../../../../spec/stringifyDataValue'
 import { stringifyBundleSpec } from '../../../../../spec/stringifySpec'
 import {
   TypeTreeMap,
@@ -1117,12 +1119,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._on_transcend()
   }
 
-  private _reset_graph = (callback: Callback = NOOP) => {
+  private _reset_graph = () => {
     const { graph } = this.$props
 
     this._pod = graph || this._fallback_graph
-
-    callback()
   }
 
   private _reset_frame = (): void => {
@@ -1637,6 +1637,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   onPropChanged(prop: string, current: any): void {
     // console.log('Graph', name, current)
+
     if (prop === 'style') {
       this._root.setProp('style', {
         ...DEFAULT_STYLE,
@@ -1651,9 +1652,9 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
       this._editor.setProp('disabled', current)
     } else if (prop === 'graph') {
-      this._reset_graph(() => {
-        this._editor.setProp('graph', this._pod)
-      })
+      this._reset_graph()
+
+      this._editor.setProp('graph', this._pod)
     } else if (prop === 'frame') {
       this._reset_frame()
     } else if (prop === 'fullwindow') {
@@ -4938,7 +4939,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _reset() {
-    const { zoom = clone(ZOOM_IDENTITY) } = this.$props
+    const { classes } = this.$system
+
+    const { zoom = clone(ZOOM_IDENTITY), specs } = this.$props
 
     if (this._prevent_next_reset) {
       this._prevent_next_reset = false
@@ -5284,7 +5287,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         value = datum_spec
         position = this._init_random_datum_position()
       } else {
-        value = datum_spec.value
+        value = stringifyDataValue(datum_spec.value, specs, classes)
         position =
           datum_spec?.metadata?.position ?? this._init_random_datum_position()
       }
@@ -6243,11 +6246,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     unit_id: string,
     use_cache: boolean = true
   ): number => {
+    const { classes } = this.$system
     const { specs } = this.$props
 
     const path = this._get_unit_spec_id(unit_id)
 
-    const r = getSpecRadius(specs, path, use_cache)
+    const r = getSpecRadius(specs, classes, path, use_cache)
 
     return r
   }
@@ -6294,6 +6298,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   position
     // )
 
+    const { classes } = this.$system
+    const { specs } = this.$props
+
     center = center || this._jiggle_world_screen_center()
 
     const unit = this._get_unit(unit_id)
@@ -6316,14 +6323,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const ref = this._is_link_pin_ref(pin_node_id)
 
-    const { data, metadata = {} } = unit_pin_spec
+    let { data, metadata = {} } = unit_pin_spec
 
     if (data !== undefined) {
+      const data_ref = evaluateDataValue(data, specs, classes)
+
       const metadata_position = metadata.data?.position
 
       const datum_id = this._new_datum_id()
 
-      const datum_tree = getTree__cached(data)
+      const value = stringifyDataValue(data_ref, specs, classes)
+
+      const datum_tree = getTree__cached(value)
 
       let position: Position
 
@@ -6488,6 +6499,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_sim_add_core', unit_id, unit, position)
 
+    const { classes } = this.$system
+
     const { config, specs, getSpec } = this.$props
 
     const { id } = unit
@@ -6515,7 +6528,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       shape = 'rect'
     } else {
-      r = getSpecRadius(specs, id, true)
+      r = getSpecRadius(specs, classes, id, true)
 
       width = init_size.width ?? 2 * r
       height = init_size.height ?? 2 * r
@@ -11512,7 +11525,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     tree: TreeNode,
     { x, y }: Position
   ): void => {
-    // console.log('Graph', '_sim_add_datum_node', datum_id, tree.value)
+    // console.log('Graph', '__sim_add_datum_node', datum_id, tree.value)
 
     const { specs } = this.$props
 
@@ -12484,8 +12497,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const link_base_area = this._link_base_area[link_id]
     const link_base_text = this._link_base_text[link_id]
 
-    this._add_link_to_max_l_heap(source_id, link_id, l, sim_link.l)
-    this._add_link_to_max_l_heap(target_id, link_id, l, sim_link.l)
+    if (this._is_node_id(source_id) && this._is_node_id(target_id)) {
+      this._add_link_to_max_l_heap(source_id, link_id, l, sim_link.l)
+      this._add_link_to_max_l_heap(target_id, link_id, l, sim_link.l)
+    }
 
     // if (d < 3 || l === 0) {
     //   link_base.setProp('d', '')
@@ -21935,7 +21950,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const id = bundle.unit.id
 
-        const r = getSpecRadius(specs, id)
+        const r = getSpecRadius(specs, classes, id)
 
         const is_component = isComponentId(
           weakMerge(specs, bundle.specs ?? {}),
@@ -35294,11 +35309,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _spec_set_pin_data = (pin_node_id: string, data: string): void => {
+    const { classes } = this.$system
+    const { specs } = this.$props
+
     if (this._is_link_pin_node_id(pin_node_id)) {
       if (this._is_link_pin_constant(pin_node_id)) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-        setUnitPinData({ unitId, type, pinId, data }, this._spec)
+        setUnitPinData(
+          { unitId, type, pinId, data },
+          this._spec,
+          specs,
+          classes
+        )
       }
     } else {
       const merge_pin_node_id = this._merge_to_pin[pin_node_id]
@@ -37618,6 +37641,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _get_datum_tree_size = (tree: TreeNode): Size => {
+    const { classes } = this.$system
     const { specs } = this.$props
 
     if (tree.type === TreeNodeType.Unit) {
@@ -37626,7 +37650,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { unit } = bundle
 
       const r =
-        getSpecRadius(weakMerge(specs, bundle.specs ?? {}), unit.id, true) - 1.5
+        getSpecRadius(
+          weakMerge(specs, bundle.specs ?? {}),
+          classes,
+          unit.id,
+          true
+        ) - 1.5
 
       return {
         width: 2 * r,
@@ -43953,6 +43982,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     unit_id: string,
     use_cache: boolean
   ): Size => {
+    const { classes } = this.$system
     const { specs } = this.$props
 
     const unit_spec_id = this._get_unit_spec_id(unit_id)
@@ -43965,7 +43995,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (is_component) {
       return this._get_unit_component_graph_size(unit_id)
     } else {
-      const r = getSpecRadius(specs, unit_spec_id, use_cache)
+      const r = getSpecRadius(specs, classes, unit_spec_id, use_cache)
 
       width = 2 * r
       height = 2 * r
@@ -51258,6 +51288,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._simulation_prevent_restart = true
 
+    const { classes } = this.$system
+    const { specs } = this.$props
+
     const {
       units = {},
       merges = {},
@@ -51475,7 +51508,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     for (const datum_id in data) {
-      const { value } = data[datum_id]
+      const datum = data[datum_id]
+
+      let { value } = datum
+
+      value = stringifyDataValue(value, specs, classes)
 
       this._sim_add_datum_node(datum_id, value, position)
 
@@ -56588,6 +56625,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Editor', '_on_graph_unit_set_unit_pin_constant', data)
 
+    const { classes } = this.$system
     const { setSpec, specs } = this.$props
 
     const { unitId, type, pinId, constant, data: pinData, path } = data
@@ -56599,7 +56637,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (data) {
         if (constant) {
-          setUnitPinData({ unitId, type, pinId, data: pinData }, spec)
+          setUnitPinData(
+            { unitId, type, pinId, data: pinData },
+            spec,
+            specs,
+            classes
+          )
         }
       }
 
@@ -56645,6 +56688,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       specs,
     } = this.$props
 
+    const { classes } = this.$system
+
     const { unitId, type, pinId, data, path } = _data
 
     if (this._is_spec_updater(path)) {
@@ -56676,7 +56721,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               ;[, next_spec_] = forkSpec(spec_)
             }
 
-            setUnitPinData({ unitId, type, pinId, data }, next_spec_)
+            setUnitPinData(
+              { unitId, type, pinId, data },
+              next_spec_,
+              specs,
+              classes
+            )
 
             setSpec(next_spec_.id, next_spec_)
 

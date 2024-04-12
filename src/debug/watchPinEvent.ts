@@ -13,7 +13,7 @@ export function watchPinEvent<T>(
 ): () => void {
   // console.log(event, type, pin)
 
-  const listener = (data) => {
+  const listener = (data: any) => {
     if (data instanceof $) {
       data = null
     }
