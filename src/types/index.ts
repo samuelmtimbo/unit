@@ -29,7 +29,6 @@ export type PinSpecBase = {
 
 export type PinBaseMetadataSpec = NodeMetadataSpec & {
   examples?: any[]
-  position?: Dict<Position>
   r?: number
 }
 

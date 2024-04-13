@@ -1,0 +1,618 @@
+{
+  "type": "`U`&`G`&`C`",
+  "name": "microphone",
+  "units": {
+    "mergedefault": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {
+          "constant": false,
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -224,
+              "y": 37
+            }
+          }
+        },
+        "default": {
+          "constant": false,
+          "ignored": false,
+          "data": "{\"cursor\":\"pointer\",\"color\":\"currentcolor\"}"
+        }
+      },
+      "output": {
+        "a": {
+          "constant": false,
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -173,
+          "y": 39
+        }
+      }
+    },
+    "mergedefault0": {
+      "id": "304e98ac-bda1-11ea-b416-9746f024148c",
+      "input": {
+        "a": {
+          "constant": false,
+          "ignored": false,
+          "data": "{\"color\":\"currentcolor\"}"
+        },
+        "default": {
+          "constant": true,
+          "ignored": false,
+          "data": "{\"cursor\":\"pointer\"}",
+          "metadata": {
+            "position": {
+              "x": -142,
+              "y": 139
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {
+          "constant": false,
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -101,
+          "y": 112
+        }
+      }
+    },
+    "icon": {
+      "id": "63a417e5-d354-4b39-9ebd-05f55e70de7b",
+      "input": {
+        "style": {
+          "ignored": false,
+          "constant": false
+        },
+        "icon": {
+          "ignored": false,
+          "constant": true,
+          "data": "\"mic\"",
+          "metadata": {
+            "position": {
+              "x": -124,
+              "y": -41
+            }
+          }
+        },
+        "attr": {
+          "ignored": true,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -109,
+              "y": -65
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -70,
+          "y": -17
+        }
+      }
+    },
+    "pick": {
+      "id": "396497e4-f8e7-4573-95c9-a4f186a5cd05",
+      "input": {
+        "a": {
+          "constant": true,
+          "ignored": false,
+          "data": "{\"color\":\"#de5d54\"}",
+          "metadata": {
+            "position": {
+              "x": 55,
+              "y": 96
+            }
+          }
+        },
+        "b": {
+          "constant": true,
+          "ignored": false,
+          "data": "{\"color\":\"currentcolor\"}",
+          "metadata": {
+            "position": {
+              "x": 35,
+              "y": 127
+            }
+          }
+        },
+        "c": {
+          "constant": false,
+          "ignored": false,
+          "data": "false"
+        }
+      },
+      "output": {
+        "a": {
+          "constant": false,
+          "ignored": false,
+          "data": "{\"color\":\"currentcolor\"}"
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 4,
+          "y": 91
+        }
+      }
+    },
+    "speechtotext": {
+      "id": "416550cc-6e02-4ff2-aafa-2f0edbf121c6",
+      "input": {
+        "opt": {
+          "ignored": false,
+          "constant": false
+        },
+        "stop": {
+          "ignored": false,
+          "constant": false
+        },
+        "done": {
+          "ignored": true,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 82,
+              "y": -107
+            }
+          }
+        },
+        "start": {}
+      },
+      "output": {
+        "text": {
+          "ignored": false,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 124,
+              "y": -106
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 102,
+          "y": -66
+        }
+      }
+    },
+    "pressed0": {
+      "id": "f1cde29c-2da3-410e-b4c7-737650475933",
+      "input": {
+        "element": {},
+        "next": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": -28,
+              "y": -43
+            }
+          }
+        }
+      },
+      "output": {
+        "current": {},
+        "up": {
+          "ignored": false
+        },
+        "down": {
+          "ignored": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 12,
+          "y": -20
+        }
+      }
+    },
+    "true": {
+      "id": "984c4a44-86c7-464c-ad48-4759598c3be3",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "true": {
+          "metadata": {
+            "position": {
+              "x": 163,
+              "y": 26
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 118,
+          "y": 6
+        }
+      }
+    },
+    "false": {
+      "id": "b4d20f6f-32dc-4d04-97d6-69518976bdea",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "false": {
+          "metadata": {
+            "position": {
+              "x": -28,
+              "y": -133
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 15,
+          "y": -109
+        }
+      }
+    },
+    "default": {
+      "id": "329920ae-7e91-11ea-988e-1b12488c8b89",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 265,
+              "y": -67
+            }
+          }
+        },
+        "d": {
+          "constant": true,
+          "data": "{}",
+          "metadata": {
+            "position": {
+              "x": 261,
+              "y": -100
+            }
+          }
+        }
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 216,
+          "y": -81
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "mergedefault": {
+        "output": {
+          "a": true
+        }
+      },
+      "icon": {
+        "input": {
+          "style": true
+        }
+      }
+    },
+    "1": {
+      "icon": {
+        "output": {
+          "_self": true
+        }
+      },
+      "pressed0": {
+        "input": {
+          "element": true
+        }
+      }
+    },
+    "2": {
+      "mergedefault0": {
+        "output": {
+          "a": true
+        }
+      },
+      "mergedefault": {
+        "input": {
+          "default": true
+        }
+      }
+    },
+    "3": {
+      "pressed0": {
+        "output": {
+          "current": true
+        }
+      },
+      "pick": {
+        "input": {
+          "c": true
+        }
+      }
+    },
+    "4": {
+      "pick": {
+        "output": {
+          "a": true
+        }
+      },
+      "mergedefault0": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "5": {
+      "pressed0": {
+        "output": {
+          "down": true
+        }
+      },
+      "true": {
+        "input": {
+          "any": true
+        }
+      },
+      "speechtotext": {
+        "input": {
+          "start": true
+        }
+      }
+    },
+    "6": {
+      "default": {
+        "output": {
+          "a": true
+        }
+      },
+      "speechtotext": {
+        "input": {
+          "opt": true
+        }
+      }
+    },
+    "7": {
+      "speechtotext": {
+        "input": {
+          "stop": true
+        }
+      },
+      "pressed0": {
+        "output": {
+          "up": true
+        }
+      },
+      "false": {
+        "input": {
+          "any": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "style": {
+      "plug": {
+        "0": {
+          "unitId": "mergedefault",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -248,
+              "y": 35
+            }
+          }
+        }
+      }
+    },
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "default",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 285,
+              "y": -55
+            }
+          }
+        }
+      }
+    },
+    "start": {
+      "plug": {
+        "0": {
+          "mergeId": "5"
+        }
+      },
+      "ref": false,
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 73,
+              "y": 0
+            }
+          }
+        }
+      }
+    },
+    "stop": {
+      "plug": {
+        "0": {
+          "mergeId": "7"
+        }
+      },
+      "ref": false,
+      "type": "any",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 52,
+              "y": -88
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "text": {
+      "plug": {
+        "0": {
+          "unitId": "speechtotext",
+          "pinId": "text",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 126,
+              "y": -130
+            }
+          }
+        }
+      }
+    },
+    "recording": {
+      "plug": {
+        "0": {
+          "unitId": "true",
+          "pinId": "true",
+          "kind": "output"
+        },
+        "1": {
+          "unitId": "false",
+          "pinId": "false",
+          "kind": "output"
+        },
+        "2": {
+          "unitId": "pressed0",
+          "pinId": "next",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 177,
+              "y": 46
+            }
+          },
+          "1": {
+            "ext": {
+              "x": -36,
+              "y": -155
+            }
+          },
+          "2": {
+            "ext": {
+              "x": -39,
+              "y": -64
+            }
+          }
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": null,
+    "description": "",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -130,
+          "y": 8
+        },
+        "2": {
+          "x": -142,
+          "y": 80
+        },
+        "3": {
+          "x": 9,
+          "y": 36
+        },
+        "4": {
+          "x": -47,
+          "y": 107
+        },
+        "5": {
+          "x": 71,
+          "y": -23
+        },
+        "6": {
+          "x": 160,
+          "y": -74
+        },
+        "7": {
+          "x": 45,
+          "y": -66
+        },
+        "8": {
+          "x": 111,
+          "y": -85
+        },
+        "9": {
+          "x": 95,
+          "y": -76
+        },
+        "10": {
+          "x": -1,
+          "y": -42
+        },
+        "12": {
+          "x": 209,
+          "y": 50
+        }
+      }
+    },
+    "tags": ["platform", "core", "component"]
+  },
+  "render": true,
+  "component": {
+    "subComponents": {
+      "icon": {
+        "children": []
+      }
+    },
+    "children": ["icon"]
+  },
+  "id": "ff4144c4-052a-4bc4-93a8-08876b66f0c0",
+  "system": true
+}

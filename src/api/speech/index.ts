@@ -1,7 +1,5 @@
 import { EventEmitter_, EventEmitter_EE } from '../../EventEmitter'
-import { APINotSupportedError } from '../../exception/APINotImplementedError'
 import { System } from '../../system'
-import { SpeechGrammarList } from '../../types/global/SpeechGrammarList'
 import {
   SpeechRecognition,
   SpeechRecognitionOpt,
@@ -14,35 +12,6 @@ export type SpeechOpt = {
   lang?: string
   constinuous?: boolean
   interim?: boolean
-}
-
-export const JSGFStrFrom = (tokens: string[]): string => {
-  const rule = tokens.join(' | ')
-  const grammar = `#JSGF V1.0; grammar tokens; public <token> = ${rule} ;`
-  return grammar
-}
-
-export const grammarsFrom = (
-  system: System,
-  tokens: string[]
-): SpeechGrammarList => {
-  const {
-    api: {
-      speech: { SpeechGrammarList },
-    },
-  } = system
-
-  if (!SpeechGrammarList) {
-    throw new APINotSupportedError('Speech Grammar List')
-  }
-
-  const grammarsStr = JSGFStrFrom(tokens)
-
-  const grammars = new SpeechGrammarList({})
-
-  grammars.addFromString(grammarsStr, 1)
-
-  return grammars
 }
 
 export type SpeechRecorder_EE = {
@@ -92,7 +61,7 @@ export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
       }
 
       this._unlisten = callAll([
-        recognition.addEventListener('error', (error) => {
+        recognition.addEventListener('error', ({ error }) => {
           if (error === 'no-speech') {
             return
           }
@@ -106,9 +75,12 @@ export class SpeechRecorder extends EventEmitter_<SpeechRecorderEvents> {
         }),
         recognition.addEventListener('result', (event) => {
           const { results } = event
+
           const firstResult = results[0]
           const firstAlternative = firstResult[0]
+
           const { transcript, confidence } = firstAlternative
+
           this.emit('transcript', transcript)
         }),
       ])

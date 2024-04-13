@@ -51516,7 +51516,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _make_paste_spec_bulk_action = (graph: GraphSpec): Action[] => {
     // console.log('Graph', '_make_paste_spec_bulk_action', graph)
 
-    const { specs } = this.$props
+    const { specs, getSpec } = this.$props
 
     const {
       units = {},
@@ -51535,7 +51535,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const unit_id in units) {
       const unit = units[unit_id]
 
-      const spec = this._get_unit_spec(unit_id)
+      const spec = getSpec(unit.id)
 
       const is_unit_component = isComponentSpec(spec)
 
@@ -52298,13 +52298,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _on_backslash_keydown = (): void => {
     if (this._search) {
-      this._search._microphone.start()
+      this._search.start_microphone()
     }
   }
 
   private _on_backslash_keyup = (): void => {
     if (this._search) {
-      this._search._microphone.stop()
+      this._search.stop_microphone()
     }
   }
 

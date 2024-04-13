@@ -2,15 +2,23 @@ import { ComponentClass, System } from '../system'
 import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
+import { $Component } from '../types/interface/async/$Component'
+import { $Graph } from '../types/interface/async/$Graph'
+import { weakMerge } from '../weakMerge'
+import { IOElement } from './IOElement'
 import { Component } from './component'
 import { componentClassFromSpecId } from './componentClassFromSpecId'
 import parentElement from './platform/web/parentElement'
 
-export function componentClassFromSpec(
+export function componentClassFromSpec<
+  E extends IOElement = any,
+  P = any,
+  U extends $Component | $Graph = any,
+>(
   spec: GraphSpec,
   specs: Specs,
   sub_component_map: Dict<Component> = {}
-): ComponentClass {
+): typeof Component<E, P, U> {
   const {
     id,
     name,
@@ -35,7 +43,7 @@ export function componentClassFromSpec(
         if (!childComponent) {
           const Class = componentClassFromSpecId(
             $system.components,
-            specs,
+            weakMerge($system.specs, specs),
             $system.classes,
             id
           )

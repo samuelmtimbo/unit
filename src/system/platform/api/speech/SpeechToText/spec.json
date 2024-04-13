@@ -11,9 +11,14 @@
     },
     "stop": {
       "type": "any",
-      "metadata": {
-        "examples": ["'en-us'"]
-      }
+      "metadata": {}
+    },
+    "start": {
+      "type": "any",
+      "metadata": {}
+    },
+    "done": {
+      "type": "any"
     }
   },
   "outputs": {

@@ -37,6 +37,7 @@ import { Dict } from '../../../../../types/Dict'
 import { GraphSpec } from '../../../../../types/GraphSpec'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { pull } from '../../../../../util/array'
+import { specNameGrammar } from '../../../../../util/grammar'
 import { clone } from '../../../../../util/object'
 import { binaryFindIndex } from '../../../../../util/sort'
 import { removeWhiteSpace } from '../../../../../util/string'
@@ -227,6 +228,12 @@ export default class Search extends Element<HTMLDivElement, Props> {
     )
     this._input = input
 
+    const {
+      api: {
+        speech: { SpeechGrammarList },
+      },
+    } = this.$system
+
     const microphone = new MicrophoneButton(
       {
         style: {
@@ -237,11 +244,20 @@ export default class Search extends Element<HTMLDivElement, Props> {
           height: '18px',
           padding: '11px 9px 10px 11px',
         },
+        opt: {
+          grammars: SpeechGrammarList
+            ? specNameGrammar(this.$system)
+            : undefined,
+          lang: 'en-us',
+          maxAlternatives: 1,
+          continuous: false,
+          interimResults: true,
+        },
       },
       this.$system
     )
     microphone.addEventListener(
-      makeCustomListener('transcript', this._on_microphone_transcript)
+      makeCustomListener('text', this._on_microphone_transcript)
     )
     microphone.preventDefault('mousedown')
     microphone.preventDefault('touchdown')
@@ -709,7 +725,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
   private _on_microphone_transcript = throttle(
     this.$system,
     (transcript: string) => {
-      // console.log('Search', '_on_microphone_transcript', transcript)
       const value = transcript.toLowerCase().substr(0, 30)
 
       this._input.setProp('value', value)
@@ -723,6 +738,30 @@ export default class Search extends Element<HTMLDivElement, Props> {
     100
   )
 
+  public start_microphone = () => {
+    this._start_microphone()
+  }
+
+  public stop_microphone = () => {
+    this._stop_microphone()
+  }
+
+  private _start_microphone = () => {
+    this._microphone.$unit.$setPinData({
+      pinId: 'start',
+      type: 'input',
+      data: 'true',
+    })
+  }
+
+  private _stop_microphone = () => {
+    this._microphone.$unit.$setPinData({
+      pinId: 'stop',
+      type: 'input',
+      data: 'true',
+    })
+  }
+
   private _on_input_keydown = (
     { keyCode, repeat, key }: IOKeyboardEvent,
     _event: KeyboardEvent
@@ -734,8 +773,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
     }
 
     if (key === '\\') {
-      if (!this._microphone.recording()) {
-        this._microphone.start()
+      if (!this._microphone.$output.recording) {
+        this._start_microphone()
 
         _event.preventDefault()
       }
@@ -754,8 +793,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
     // console.log('Search', '_on_input_keyup')
 
     if (key === '\\') {
-      if (this._microphone.recording()) {
-        this._microphone.stop()
+      if (this._microphone.$output.recording) {
+        this._stop_microphone()
       }
     }
   }
