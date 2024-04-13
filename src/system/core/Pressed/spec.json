@@ -4,18 +4,9 @@
   "units": {
     "true": {
       "id": "984c4a44-86c7-464c-ad48-4759598c3be3",
-      "input": {
-        "any": {}
-      },
-      "output": {
-        "true": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 7,
-          "y": 45
-        }
-      }
+      "input": { "any": {} },
+      "output": { "true": {} },
+      "metadata": { "position": { "x": -19, "y": -29 } }
     },
     "iterate": {
       "id": "8a2b756a-25e4-11eb-860d-1f34c850b992",
@@ -24,145 +15,100 @@
         "init": {
           "constant": true,
           "data": "false",
-          "metadata": {
-            "position": {
-              "x": 100,
-              "y": -16
-            }
-          }
+          "metadata": { "position": { "x": 126, "y": -18 } }
         }
       },
       "output": {
-        "current": {
-          "metadata": {
-            "position": {
-              "x": 105,
-              "y": 19
-            }
-          }
-        },
+        "current": { "metadata": { "position": { "x": 126, "y": 18 } } },
         "local": {
           "constant": false,
           "ignored": true,
-          "metadata": {
-            "position": {
-              "x": 113,
-              "y": 1
-            }
-          }
+          "metadata": { "position": { "x": 101, "y": -40 } }
         }
       },
-      "metadata": {
-        "position": {
-          "x": 120,
-          "y": 8
-        }
-      }
+      "metadata": { "position": { "x": 80, "y": 0 } }
     },
     "false": {
       "id": "b4d20f6f-32dc-4d04-97d6-69518976bdea",
-      "input": {
-        "any": {}
-      },
-      "output": {
-        "false": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 95,
-          "y": 36
-        }
-      }
+      "input": { "any": {} },
+      "output": { "false": {} },
+      "metadata": { "position": { "x": -19, "y": 29 } }
     },
     "onpointerdown": {
-      "id": "2beefe96-b1ee-11ea-960c-7f33e07a2ad6"
+      "id": "2beefe96-b1ee-11ea-960c-7f33e07a2ad6",
+      "metadata": { "position": { "x": -122, "y": -31 } }
     },
     "onpointerup": {
-      "id": "43a9d452-b1ee-11ea-923f-efb4af36e68e"
+      "id": "43a9d452-b1ee-11ea-923f-efb4af36e68e",
+      "metadata": { "position": { "x": -122, "y": 31 } }
     }
   },
   "merges": {
     "0": {
-      "onpointerdown": {
-        "input": {
-          "element": true
-        }
-      },
-      "onpointerup": {
-        "input": {
-          "element": true
-        }
-      }
+      "onpointerdown": { "input": { "element": true } },
+      "onpointerup": { "input": { "element": true } }
     },
     "1": {
-      "false": {
-        "input": {
-          "any": true
-        }
-      },
-      "onpointerup": {
-        "output": {
-          "event": true
-        }
-      }
+      "false": { "input": { "any": true } },
+      "onpointerup": { "output": { "event": true } }
     },
     "2": {
-      "true": {
-        "input": {
-          "any": true
-        }
-      },
-      "onpointerdown": {
-        "output": {
-          "event": true
-        }
-      }
+      "true": { "input": { "any": true } },
+      "onpointerdown": { "output": { "event": true } }
     },
     "3": {
-      "true": {
-        "output": {
-          "true": true
-        }
-      },
-      "iterate": {
-        "input": {
-          "next": true
-        }
-      },
-      "false": {
-        "output": {
-          "false": true
-        }
-      }
+      "true": { "output": { "true": true } },
+      "iterate": { "input": { "next": true } },
+      "false": { "output": { "false": true } }
     }
   },
   "inputs": {
     "element": {
-      "plug": {
-        "0": {
-          "mergeId": "0"
-        }
-      },
-      "ref": true
+      "plug": { "0": { "mergeId": "0" } },
+      "ref": true,
+      "metadata": { "position": { "0": { "ext": { "x": -184, "y": 0 } } } }
+    },
+    "next": {
+      "plug": { "0": { "mergeId": "3" } },
+      "defaultIgnored": true
     }
   },
   "outputs": {
     "current": {
       "plug": {
-        "0": {
-          "unitId": "iterate",
-          "pinId": "current",
-          "kind": "output"
-        }
+        "0": { "unitId": "iterate", "pinId": "current", "kind": "output" }
       },
-      "ref": false
+      "ref": false,
+      "metadata": { "position": { "0": { "ext": { "x": 144, "y": 33 } } } }
+    },
+    "up": {
+      "plug": { "0": { "mergeId": "1" } },
+      "ref": false,
+      "defaultIgnored": true,
+      "type": "any",
+      "metadata": { "position": { "0": { "ext": { "x": -72, "y": 62 } } } }
+    },
+    "down": {
+      "plug": { "0": { "mergeId": "2" } },
+      "ref": false,
+      "defaultIgnored": true,
+      "type": "any",
+      "metadata": { "position": { "0": { "ext": { "x": -72, "y": -62 } } } }
     }
   },
   "metadata": {
     "icon": "question",
     "description": "track element current pressed state",
-    "tags": ["core"]
+    "tags": ["core"],
+    "position": {
+      "merge": {
+        "0": { "x": -161, "y": 0 },
+        "1": { "x": -71, "y": 38 },
+        "2": { "x": -71, "y": -38 },
+        "3": { "x": 25, "y": 0 }
+      }
+    }
   },
   "id": "f1cde29c-2da3-410e-b4c7-737650475933",
-  "component": {}
+  "system": true
 }

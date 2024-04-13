@@ -135,6 +135,8 @@ export class Component<
 
   public $shadowSlot: HTMLSlotElement
 
+  public $output: Dict<any> = {}
+
   public $parentRoot: Component[] = []
   public $parentRootSlotName: string[] = []
 

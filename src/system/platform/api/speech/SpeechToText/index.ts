@@ -8,6 +8,8 @@ import { ID_SPEECH_TO_TEXT } from '../../../../_ids'
 export type I = {
   opt: SpeechRecognitionOpt
   stop: any
+  start: any
+  done: any
 }
 
 export type O = {
@@ -22,7 +24,7 @@ export default class SpeechToText extends Semifunctional<I, O> {
       {
         fi: ['opt'],
         fo: [],
-        i: ['stop'],
+        i: ['start', 'stop', 'done'],
         o: ['text'],
       },
       {},
@@ -35,8 +37,6 @@ export default class SpeechToText extends Semifunctional<I, O> {
     const recorder = new SpeechRecorder(this.__system, opt)
 
     this._recorder = recorder
-
-    this._recorder.start()
 
     this._recorder.addListener('transcript', (text) => {
       this._output.text.push(text)
@@ -54,8 +54,27 @@ export default class SpeechToText extends Semifunctional<I, O> {
   }
 
   public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'stop') {
-    this._recorder.stop()
-    // }
+    if (name === 'stop') {
+      if (this._recorder) {
+        this._recorder.stop()
+      }
+
+      this._backward('stop')
+    } else if (name === 'start') {
+      if (this._recorder) {
+        this._recorder.start()
+      }
+
+      this._backward('start')
+    } else if (name === 'done') {
+      if (this._recorder) {
+        this._recorder.stop()
+      }
+
+      this._forward_empty('text')
+
+      this._backward('opt')
+      this._backward('done')
+    }
   }
 }
