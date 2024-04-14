@@ -34,9 +34,15 @@ To add the selected unit either press on the green unit, or the selected search 
 
 ## Connect
 
-To connect (also merge) two compatible pins, click on a pin, then click on a compatible target pin. The compatible pins will be highlighted in green.
+To connect (also merge) two compatible pins, click on a pin, then click on a compatible target pin.
+
+The compatible pins will be highlighted in green.
 
 ![](/public/gif/start/17.gif)
+
+Alternatively, you can also drag and drop a node onto a another compatible node.
+
+![](/public/gif/start/46.gif)
 
 ## Create Data
 
