@@ -1128,7 +1128,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _reset_frame = (): void => {
     // console.log('Graph', '_reset_frame')
 
-    const { frame } = this.$props
+    const { frame, animate } = this.$props
 
     const set = (frame: Component<HTMLElement>, frame_out: boolean) => {
       this._frame = frame
@@ -3654,10 +3654,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._set_units_position(spec.units)
   }
 
-  private _disable = (): void => {
+  private _disable = (animate?: boolean): void => {
     // console.log('Graph', '_disable')
 
-    const { animate } = this.$props
+    animate = animate ?? this.$props.animate
 
     if (!this._disabled) {
       this._disabled = true
@@ -3672,12 +3672,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             this._disable_core_frame(unit_id)
           }
         } else {
-          this._unlock_control()
-          // this._disable_transcend()
-
-          // if (this._focused) {
-          this._hide_control(animate)
-          // }
+          this._unlock_control(animate)
         }
       }
     }
@@ -18461,7 +18456,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ) {
           this._enable_input()
 
-          // this._show_control(false)
           this._show_control(animate)
         }
       }
@@ -20820,7 +20814,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_context_enabled = (): void => {
     // console.log('Graph', '_on_context_enabled')
 
-    if (this._focused) {
+    if (this._focused || this._is_fullwindow) {
       this._refresh_enabled()
     }
   }
@@ -20922,13 +20916,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       if (relatedTarget) {
-<<<<<<< Updated upstream
-        this._disable()
-=======
         const hide = this._temp_control_unlock
 
         this._disable(hide)
->>>>>>> Stashed changes
 
         if (this._frame && this._frame.$element.contains(relatedTarget)) {
           return
@@ -22693,7 +22683,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _unlock_control = (): void => {
+  private _unlock_control = (hide: boolean = true): void => {
     const { animate } = this.$props
 
     if (this._control_lock) {
@@ -22703,7 +22693,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._disable_input()
 
-      if (!this._focusing_sub_component) {
+      if (!this._focusing_sub_component && hide) {
         this._hide_control(animate)
       }
     }
@@ -22736,7 +22726,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           this._temp_control_unlock = true
 
-          this._unlock_control()
+          this._unlock_control(false)
         }
       }
     }
@@ -38505,7 +38495,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._is_sub_component_fullwindow(unit_id)) {
-      this._decouple_sub_component(unit_id)
+      // this._decouple_sub_component(unit_id)
 
       this._fullwindow_component_set.delete(unit_id)
 
