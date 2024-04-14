@@ -3654,10 +3654,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._set_units_position(spec.units)
   }
 
-  private _disable = (animate?: boolean): void => {
+  private _disable = (hide?: boolean): void => {
     // console.log('Graph', '_disable')
 
-    animate = animate ?? this.$props.animate
+    hide = hide ?? this.$props.animate
 
     if (!this._disabled) {
       this._disabled = true
@@ -3672,7 +3672,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             this._disable_core_frame(unit_id)
           }
         } else {
-          this._unlock_control(animate)
+          this._unlock_control(hide)
         }
       }
     }
@@ -3825,7 +3825,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._subgraph_graph.destroy()
     }
 
-    this._disable()
+    this._disable(false)
     this._pause_debugger()
     this._clear_debugger()
     this._stop_graph_simulation()
@@ -29594,11 +29594,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           delete this._datum_sub_graph[datum_node_id]
           delete this._datum_graph[datum_node_id]
 
-<<<<<<< Updated upstream
-          editor.setProp('disabled', true)
-
-=======
->>>>>>> Stashed changes
           editor.destroy()
 
           this._show_transcend(animate)
