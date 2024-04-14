@@ -2138,7 +2138,7 @@ export class Graph<I = any, O = any>
     // console.log('Graph', '_simUnplugPin', pinId, subPinId)
 
     this.__simUnplugPin(type, pinId, subPinId, propagate)
-    this._simPlugEmptyPin(type, pinId, subPinId)
+    this._simPlugEmptyPin(type, pinId, subPinId, propagate)
   }
 
   private __simUnplugPin = (
