@@ -2,6 +2,26 @@
 
 Following is a list of useful graph manipulation features.
 
+# Table of Contents
+
+1. [Search](#search)
+2. [Connect](#connect)
+3. [Create Data](#create-data)
+4. [Add Mode](#add-mode)
+5. [Info Mode](#info-mode)
+6. [Data Mode](#data-mode)
+7. [Remove Mode](#remove-mode)
+8. [Change Mode](#change-mode)
+9. [Graph | Tree View](#graph--tree-view)
+10. [Fullwindow](#fullwindow)
+11. [Unlock | Lock Component](#unlock--lock-component)
+12. [Minimap](#minimap)
+13. [Drawing](#drawing)
+14. [Composition](#composition)
+15. [Enter | Leave Graph](#enter--leave-graph)
+16. [Undo | Redo](#undo--redo)
+17. [Save | Load](#save--load)
+
 ## Search
 
 To start Search you can either focus on the Search Input or press key <kbd>;</kbd> (semicolon).
@@ -96,7 +116,7 @@ In Change Mode, clicking on an input or output will set it to constant or not.
 
 ![](/public/gif/start/25.gif)
 
-## Graph or Tree View
+## Graph | Tree View
 
 To switch between Graph View or Tree View, click on the "circle or square" toggle close to the Search.
 
