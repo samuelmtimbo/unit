@@ -15,7 +15,7 @@ export default class Play<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['media', 'any'],
+        i: ['media', 'any', 'attr'],
         o: [],
       },
       {

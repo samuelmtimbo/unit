@@ -11,6 +11,14 @@
     "style": {
       "type": "object",
       "optional": true
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
+      }
     }
   },
   "outputs": {},

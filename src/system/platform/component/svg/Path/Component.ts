@@ -1,8 +1,10 @@
+import applyAttr from '../../../../../client/applyAttr'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { PropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
+import { Dict } from '../../../../../types/Dict'
 import { Style } from '../../../Style'
 
 export interface Props {
@@ -13,6 +15,7 @@ export interface Props {
   markerStart?: string
   markerEnd?: string
   fillRule?: string
+  attr?: Dict<string>
 }
 
 export const DEFAULT_STYLE = {
@@ -20,9 +23,6 @@ export const DEFAULT_STYLE = {
   fill: 'none',
   stroke: 'currentColor',
 }
-
-// M 50,50 A 30 30 6 1 0 50,49.9
-// M 10,50 L50,90 L90,50 L50,10 Z
 
 export default class SVGPath extends Element<SVGPathElement, Props> {
   private _path_el: SVGPathElement
@@ -74,6 +74,7 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
       markerStart,
       markerEnd,
       fillRule,
+      attr = {},
     } = $props
 
     const path_el = this.$system.api.document.createElementNS(
@@ -86,8 +87,6 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
     if (className) {
       path_el.classList.value = className
     }
-    applyStyle(path_el, { ...DEFAULT_STYLE, ...style })
-    path_el.setAttribute('d', d)
     if (markerStart !== undefined) {
       path_el.setAttribute('marker-start', markerStart)
     }
@@ -97,6 +96,12 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
     if (fillRule !== undefined) {
       path_el.setAttribute('fill-rule', fillRule)
     }
+
+    path_el.setAttribute('d', d)
+
+    applyAttr(path_el, attr)
+    applyStyle(path_el, { ...DEFAULT_STYLE, ...style })
+
     this._path_el = path_el
 
     this.$element = path_el

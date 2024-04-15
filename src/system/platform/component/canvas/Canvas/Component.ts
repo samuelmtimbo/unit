@@ -30,6 +30,7 @@ export function clearCanvas(
 export interface Props {
   className?: string
   style?: Dict<string>
+  attr?: Dict<string>
   width?: number | string
   height?: number | string
   sx?: number

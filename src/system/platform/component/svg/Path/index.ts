@@ -7,6 +7,7 @@ export interface I {
   style: Dict<string>
   d: string
   fillRule: string
+  attr: Dict<string>
 }
 
 export interface O {}
@@ -15,7 +16,7 @@ export default class SVGPath extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'd', 'fillRule'],
+        i: ['style', 'd', 'fillRule', 'attr'],
         o: [],
       },
       {},

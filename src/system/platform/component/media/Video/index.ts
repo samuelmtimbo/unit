@@ -13,6 +13,7 @@ import VideoComp from './Component'
 
 export interface I {
   style: object
+  attr: object
   src: string
   stream: Unit
   controls: boolean
@@ -34,7 +35,7 @@ export default class Video
   constructor(system: System) {
     super(
       {
-        i: ['src', 'stream', 'style', 'controls', 'currentTime'],
+        i: ['src', 'stream', 'style', 'controls', 'currentTime', 'attr'],
         o: [],
       },
       {

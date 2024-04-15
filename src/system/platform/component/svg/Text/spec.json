@@ -24,6 +24,11 @@
     "dy": {
       "type": "string",
       "optional": true
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {},

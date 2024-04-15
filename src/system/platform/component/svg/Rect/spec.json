@@ -37,6 +37,11 @@
       "metadata": {
         "examples": ["100", "150"]
       }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {},

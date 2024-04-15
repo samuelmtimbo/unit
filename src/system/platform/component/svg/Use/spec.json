@@ -9,6 +9,11 @@
     "style": {
       "type": "object",
       "optional": true
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {},
