@@ -1,5 +1,6 @@
 import { Element_ } from '../../../../Class/Element'
 import { System } from '../../../../system'
+import { Dict } from '../../../../types/Dict'
 import { CH } from '../../../../types/interface/CH'
 import { W } from '../../../../types/interface/W'
 import { ID_IFRAME } from '../../../_ids'
@@ -8,6 +9,7 @@ export interface I {
   src: string
   srcdoc: string
   style: object
+  attr: Dict<string>
 }
 
 export interface O {}

@@ -5,6 +5,7 @@ import { ID_MARKER } from '../../../../_ids'
 
 export interface I {
   style: Dict<string>
+  attr: Dict<string>
 }
 
 export interface O {}
@@ -13,7 +14,7 @@ export default class SVGMarker extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'className'],
+        i: ['style', 'className', 'attr'],
         o: [],
       },
       {},

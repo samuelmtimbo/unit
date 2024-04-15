@@ -5,6 +5,7 @@ import { ID_DEFS } from '../../../../_ids'
 
 export interface I {
   style: Dict<string>
+  attr: Dict<string>
 }
 
 export interface O {}
@@ -13,7 +14,7 @@ export default class SVGDefs extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style'],
+        i: ['style', 'attr'],
         o: [],
       },
       {},

@@ -1,5 +1,6 @@
 import { ElementEE, Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
+import { Dict } from '../../../../../types/Dict'
 import { CA } from '../../../../../types/interface/CA'
 import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { ID_CANVAS } from '../../../../_ids'
@@ -12,6 +13,7 @@ export interface I {
   width?: number
   height?: number
   d?: any[]
+  attr?: Dict<string>
 }
 
 export interface O {}
@@ -29,7 +31,7 @@ export default class Canvas
   constructor(system: System) {
     super(
       {
-        i: ['style', 'width', 'height', 'd'],
+        i: ['style', 'width', 'height', 'd', 'attr'],
         o: [],
       },
       {

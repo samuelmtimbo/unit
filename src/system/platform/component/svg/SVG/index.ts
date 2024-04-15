@@ -1,9 +1,11 @@
 import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
+import { Dict } from '../../../../../types/Dict'
 import { ID_SVG } from '../../../../_ids'
 
 export interface I {
   style: object
+  attr: Dict<string>
   viewBox: string
 }
 

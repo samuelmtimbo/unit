@@ -20,6 +20,11 @@
     "y2": {
       "type": "number",
       "optional": true
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {},

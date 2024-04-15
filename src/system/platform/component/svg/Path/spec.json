@@ -20,6 +20,11 @@
       "type": "string",
       "optional": true,
       "defaultIgnored": true
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {},

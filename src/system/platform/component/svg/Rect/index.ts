@@ -9,6 +9,7 @@ export interface I {
   y: number
   width: number
   height: number
+  attr: object
 }
 
 export interface O {}
@@ -17,7 +18,7 @@ export default class SVGRect extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'x', 'y', 'width', 'height'],
+        i: ['style', 'x', 'y', 'width', 'height', 'attr'],
         o: [],
       },
       {},
