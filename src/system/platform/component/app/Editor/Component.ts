@@ -119,6 +119,8 @@ import {
   UNIT_MIN_RADIUS,
   getSpecRadius,
 } from '../../../../../client/complexity'
+import { ANIMATION_DELTA_TRESHOLD } from '../../../../../client/component/app/graph/ANIMATION_DELTA_TRESHOLD'
+import { joinPath } from '../../../../../client/component/app/graph/joinLeafPath'
 import {
   MAX_HEIGHT as DATUM_MAX_HEIGHT,
   MAX_WIDTH as DATUM_MAX_WIDTH,
@@ -231,6 +233,7 @@ import {
   segmentPlugNodeId,
 } from '../../../../../client/id'
 import { isTextLike } from '../../../../../client/isTextLike'
+import { LayoutBase, LayoutLeaf } from '../../../../../client/layout'
 import { Mode } from '../../../../../client/mode'
 import { _pinTypeMatch } from '../../../../../client/parser'
 import { rawExtractStyle } from '../../../../../client/rawExtractStyle'
@@ -664,9 +667,6 @@ import Modes from '../ModeSelector/Component'
 import { IOResizeEvent, default as Resize } from '../Resize/Component'
 import Search from '../Search/Component'
 import Selection from '../Selection/Component'
-import { ANIMATION_DELTA_TRESHOLD } from './ANIMATION_DELTA_TRESHOLD'
-import { joinLeafPath } from './joinLeafPath'
-import { LayoutBase, LayoutLeaf } from './layout'
 
 const UNIT_NAME_MAX_CHAR_LINE: number = 12
 const UNIT_NAME_MAX_LINE_COUNT: number = 3
@@ -19301,7 +19301,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const leaf of base) {
       const [leaf_path, leaf_comp] = leaf
 
-      const leaf_id = joinLeafPath([sub_component_id, ...leaf_path])
+      const leaf_id = joinPath([sub_component_id, ...leaf_path])
 
       const leaf_comp_offset = leaf_comp.getOffset() ?? leaf_comp
 
@@ -19388,7 +19388,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const leaf of leaf_base) {
       const [leaf_path, leaf_comp] = leaf
 
-      const leaf_id = joinLeafPath([sub_component_id, ...leaf_path])
+      const leaf_id = joinPath([sub_component_id, ...leaf_path])
 
       const leaf_node = leaf_traits[i] || this._leaf_frame_node[leaf_id]
 
@@ -19447,7 +19447,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const leaf of leaf_base) {
       const [leaf_path, leaf_comp] = leaf
 
-      const leaf_id = joinLeafPath([sub_component_id, ...leaf_path])
+      const leaf_id = joinPath([sub_component_id, ...leaf_path])
 
       const leaf_node = leaf_traits[i] || this._leaf_frame_node[leaf_id]
 
@@ -25659,7 +25659,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const leaf of base) {
       const [leaf_path] = leaf
 
-      const leaf_id = joinLeafPath([sub_component_id, ...leaf_path])
+      const leaf_id = joinPath([sub_component_id, ...leaf_path])
 
       const leaf_node = base_node[i] || this._leaf_frame_node[leaf_id]
 
@@ -27656,7 +27656,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const tree = getTree__cached(_register)
 
         const position = this._predict_pin_datum_initial_position(pin_node_id)
-
         this._sim_add_pin_datum_tree(
           unit_id,
           type,
@@ -28007,7 +28006,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const leaf of base) {
       const [leaf_path, leaf_comp] = leaf
 
-      const leaf_id = joinLeafPath([sub_component_id, ...leaf_path])
+      const leaf_id = joinPath([sub_component_id, ...leaf_path])
 
       if (this._leaf_frame_active[leaf_id]) {
         this._unplug_leaf_frame(leaf_id, leaf_comp as any)
@@ -28507,7 +28506,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       for (const leaf of base) {
         const [leaf_path] = leaf
 
-        const leaf_id = joinLeafPath([sub_component_id, ...leaf_path])
+        const leaf_id = joinPath([sub_component_id, ...leaf_path])
 
         const leaf_node = base_node[i]
 
@@ -30269,7 +30268,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const leaf_to_style = (leaf: LayoutLeaf) => {
       const [leaf_path, leaf_comp] = leaf
 
-      const leaf_id = joinLeafPath(leaf_path)
+      const leaf_id = joinPath(leaf_path)
 
       const is_text = isTextLike(leaf_comp)
 
@@ -30349,7 +30348,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             fontSize: leaf_trait.fontSize,
           }
 
-          const leaf_id = joinLeafPath(leaf_path)
+          const leaf_id = joinPath(leaf_path)
 
           all_trait[leaf_id] = _leaf_trait
 
@@ -30407,7 +30406,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           const slot_base_style = parent_slot_base.map(
             ([leaf_path, leaf_comp]) => {
-              const leaf_id = joinLeafPath(leaf_path)
+              const leaf_id = joinPath(leaf_path)
 
               return (
                 this._leaf_style[leaf_id] ||
@@ -30448,7 +30447,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               fontSize: parent_leaf_trait.fontSize,
             }
 
-            const leaf_id = joinLeafPath(leaf_path)
+            const leaf_id = joinPath(leaf_path)
 
             all_trait[leaf_id] = leaf_trait
 
@@ -30538,7 +30537,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
-    const leaf_id = joinLeafPath(leaf_path)
+    const leaf_id = joinPath(leaf_path)
 
     if (this._leaf_style[leaf_id]) {
       return this._leaf_style[leaf_id]
@@ -30660,7 +30659,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       for (const leaf of base) {
         const [leaf_path, leaf_comp] = leaf
 
-        const leaf_id = joinLeafPath([child_id, ...leaf_path])
+        const leaf_id = joinPath([child_id, ...leaf_path])
 
         const leaf_node = this._leaf_frame_node[leaf_id]
 
@@ -30750,7 +30749,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const [leaf_path, leaf_comp] = leaf
 
-      const leaf_id = joinLeafPath([sub_component_id, ...leaf_path])
+      const leaf_id = joinPath([sub_component_id, ...leaf_path])
 
       const leaf_node = this._leaf_frame_node[leaf_id]
 
@@ -30934,7 +30933,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const leaf_comp =
           this._layout_transfer_parent_leaf_comp[parent_id][slot_name][i]
 
-        const leaf_id = joinLeafPath([child_id, ...leaf_path])
+        const leaf_id = joinPath([child_id, ...leaf_path])
 
         this._unplug_leaf_frame(leaf_id, leaf_comp as any)
       }
@@ -31120,7 +31119,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const is_root = child_base_slot_path.length === 0
 
-      const slot_leaf_id = joinLeafPath(child_base_slot_path)
+      const slot_leaf_id = joinPath(child_base_slot_path)
 
       let is_frame_target = child_id === target_id
 
@@ -31170,7 +31169,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const _leaf_path = [child_id, ...leaf_path]
 
-        const leaf_id = joinLeafPath(_leaf_path)
+        const leaf_id = joinPath(_leaf_path)
 
         const leaf_style =
           this._leaf_style[leaf_id] ||

@@ -1,3 +1,4 @@
+import { draw } from '../../../../../client/canvas/draw'
 import { Element } from '../../../../../client/element'
 import { parseRelativeUnit } from '../../../../../client/parseRelativeUnit'
 import { applyStyle, reactToFrameSize } from '../../../../../client/style'
@@ -8,9 +9,8 @@ import { APINotSupportedError } from '../../../../../exception/APINotImplemented
 import { isRelativeValue } from '../../../../../isRelative'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { CA } from '../../../../../types/interface/CA'
 import { Unlisten } from '../../../../../types/Unlisten'
-import { draw } from './draw'
+import { CA } from '../../../../../types/interface/CA'
 
 export function clearCanvas(
   context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D

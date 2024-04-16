@@ -1,6 +1,6 @@
-import { Component } from '../../../../../client/component'
-import { LayoutNode } from '../../../../../client/LayoutNode'
-import { Tree } from '../../../../../Tree'
+import { Tree } from '../Tree'
+import { LayoutNode } from './LayoutNode'
+import { Component } from './component'
 
 export type LayoutLeaf = [string[], Component]
 export type LayoutBase = LayoutLeaf[]

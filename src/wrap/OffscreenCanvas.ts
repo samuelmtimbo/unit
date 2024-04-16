@@ -1,10 +1,10 @@
 import { $ } from '../Class/$'
+import { draw } from '../client/canvas/draw'
 import { APINotSupportedError } from '../exception/APINotImplementedError'
 import { System } from '../system'
 import { clearCanvas } from '../system/platform/component/canvas/Canvas/Component'
-import { draw } from '../system/platform/component/canvas/Canvas/draw'
-import { CSOpt } from '../types/interface/async/$CS'
 import { CA } from '../types/interface/CA'
+import { CSOpt } from '../types/interface/async/$CS'
 import { readBlobAsDataUrl } from './FileReader'
 
 export function wrapOffscreenCanvas(

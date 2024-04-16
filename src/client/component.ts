@@ -5,11 +5,6 @@ import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
 import { proxyWrap } from '../proxyWrap'
 import { System } from '../system'
-import { ANIMATION_PROPERTY_DELTA_PAIRS } from '../system/platform/component/app/Editor/ANIMATION_PROPERTY_DELTA_PAIRS'
-import {
-  LayoutBase,
-  LayoutLeaf,
-} from '../system/platform/component/app/Editor/layout'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
@@ -32,6 +27,7 @@ import { Listener } from './Listener'
 import { getActiveElement } from './activeElement'
 import { addListener, addListeners } from './addListener'
 import { animateSimulate } from './animation/animateSimulate'
+import { ANIMATION_PROPERTY_DELTA_PAIRS } from './component/app/graph/ANIMATION_PROPERTY_DELTA_PAIRS'
 import { namespaceURI } from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
 import { getComponentInterface } from './component_'
@@ -39,6 +35,7 @@ import { Context, dispatchContextEvent, dispatchCustomEvent } from './context'
 import { makeCustomListener } from './event/custom'
 import { readDataTransferItemAsText } from './event/drag'
 import { extractTrait } from './extractTrait'
+import { LayoutBase, LayoutLeaf } from './layout'
 import {
   IOUIEventName,
   UI_EVENT_SET,

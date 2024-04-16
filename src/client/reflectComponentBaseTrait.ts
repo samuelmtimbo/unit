@@ -1,10 +1,10 @@
-import { joinLeafPath } from '../system/platform/component/app/Editor/joinLeafPath'
-import { LayoutBase } from '../system/platform/component/app/Editor/layout'
-import { Style } from '../system/platform/Style'
 import { Tree } from '../Tree'
+import { Style } from '../system/platform/Style'
 import { Dict } from '../types/Dict'
-import { Component } from './component'
 import { LayoutNode } from './LayoutNode'
+import { Component } from './component'
+import { joinPath } from './component/app/graph/joinLeafPath'
+import { LayoutBase } from './layout'
 import { rawExtractStyle } from './rawExtractStyle'
 
 export const getBaseStyle = (
@@ -13,7 +13,7 @@ export const getBaseStyle = (
   extractStyle: (leafId: string, leafComp: Component) => Style
 ) => {
   const base_style = base.map(([leaf_path, leaf_comp]) => {
-    const leaf_id = joinLeafPath([...parentPath, ...leaf_path])
+    const leaf_id = joinPath([...parentPath, ...leaf_path])
 
     const leaf_style = extractStyle(leaf_id, leaf_comp)
 
@@ -146,7 +146,7 @@ export const expandSlot = (
     }, [])
 
     const base_style = base.map(([leaf_path, leaf_comp]) => {
-      const leaf_id = joinLeafPath(leaf_path)
+      const leaf_id = joinPath(leaf_path)
 
       const leaf_style = extractStyle(leaf_id, leaf_comp)
 
@@ -206,9 +206,7 @@ export const expandSlot = (
             ...acc,
             ...parentChild
               .getRootBase()
-              .map(([leaf_path]) =>
-                joinLeafPath([...parent_path, ...leaf_path])
-              ),
+              .map(([leaf_path]) => joinPath([...parent_path, ...leaf_path])),
           ]
         },
         []
@@ -309,7 +307,7 @@ export const reflectComponentBaseTrait = (
   for (const leaf of base) {
     const [leaf_path, leaf_comp] = leaf
 
-    const leaf_id = joinLeafPath(leaf_path)
+    const leaf_id = joinPath(leaf_path)
 
     const sub_component_id = leaf_path[0]
 
@@ -318,7 +316,7 @@ export const reflectComponentBaseTrait = (
     const leaf_parent_path = leaf_path.slice(0, leaf_path.length - 1)
     const leaf_parent_sub_id = leaf_path[leaf_path.length - 1]
 
-    const leaf_parent_id = joinLeafPath(leaf_parent_path)
+    const leaf_parent_id = joinPath(leaf_parent_path)
 
     const sub_component_parent_id: string =
       component.getSubComponentParentId(sub_component_id)
@@ -364,7 +362,7 @@ export const reflectComponentBaseTrait = (
 
     all_leaf_slot_path[leaf_id] = leaf_parent_slot_path
 
-    const leaf_slot_id = joinLeafPath(leaf_parent_slot_path)
+    const leaf_slot_id = joinPath(leaf_parent_slot_path)
 
     const is_root = leaf_slot_id === leaf_parent_id
 

@@ -1,4 +1,4 @@
-import { Dict } from '../../../../../types/Dict'
+import { Dict } from '../../../../types/Dict'
 
 export const MODE_TO_KEY: Dict<string> = {
   info: 'q',

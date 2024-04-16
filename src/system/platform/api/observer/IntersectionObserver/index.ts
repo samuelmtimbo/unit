@@ -2,6 +2,7 @@ import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { Component } from '../../../../../client/component'
+import { LayoutBase } from '../../../../../client/layout'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -10,7 +11,6 @@ import { OB } from '../../../../../types/interface/OB'
 import { remove } from '../../../../../util/array'
 import { ID_INTERSECTION_OBSERVER } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
-import { LayoutBase } from '../../../component/app/Editor/layout'
 
 export type I = {
   root: Component_
