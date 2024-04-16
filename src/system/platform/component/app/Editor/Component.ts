@@ -912,9 +912,11 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         this.$system
       )
 
-    editor.enter(false, {}, true)
-
     this._editor = editor
+
+    this._editor.enter(false, {}, true)
+
+    this._reset_frame()
 
     this._listen_graph()
 
