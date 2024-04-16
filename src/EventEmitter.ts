@@ -8,14 +8,12 @@ import { Unlisten } from './types/Unlisten'
 export type EventEmitter_EE<_EE extends Dict<any[]>> = {
   listen: [{ event: 'listen' | keyof _EE }]
   unlisten: [{ event: 'unlisten' | keyof _EE }]
-  emit: [{ event: 'emit' | keyof _EE }]
 }
 
 export class EventEmitter_<
   _EE extends EventEmitter_EE<_EE> & Dict<any[]> = Dict<any> & {
     listen: [{ event: 'listen' }]
     unlisten: [{ event: 'unlisten' }]
-    emit: [{ event: 'emit' }]
   },
 > implements EE<_EE>
 {
@@ -101,7 +99,5 @@ export class EventEmitter_<
     for (const listener of listeners) {
       listener.call(this, ...args)
     }
-
-    this.emit('emit', { event })
   }
 }
