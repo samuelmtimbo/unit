@@ -996,7 +996,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     ) {
       const list_item = this._list_item_div[id]
 
-      list_item.$element.scrollIntoView({ behavior: 'auto', block: 'start' })
+      list_item.$element.scrollIntoView({ behavior: 'auto', block: 'nearest' })
 
       this._top_element_index = selected_id_index
       // this._list.$element.scrollTop = selected_id_index * SEARCH_ITEM_HEIGHT
