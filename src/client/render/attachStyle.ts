@@ -9,15 +9,15 @@ export const ROOT_STYLE = `
 
   *::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 1px;
-    height: 1px;
+    width: 6px;
+    height: 6px;
   }
   *::-webkit-scrollbar-track {
     background-color: #00000000;
   }
   *::-webkit-scrollbar-thumb {
-    opacity: 0.5;
     background-color: currentcolor;
+    border-radius: 3px;
   }
   *::-webkit-scrollbar-corner {
     display: none;
