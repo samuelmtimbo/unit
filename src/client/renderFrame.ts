@@ -75,8 +75,6 @@ export function renderFrame(
     },
     $resizeObserver,
     $positionObserver,
-    $listener: [],
-    $unlisten: [],
     ...$init,
   }
 

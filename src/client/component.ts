@@ -25,7 +25,7 @@ import {
 import { IOElement } from './IOElement'
 import { Listener } from './Listener'
 import { getActiveElement } from './activeElement'
-import { addListener, addListeners } from './addListener'
+import { addListeners } from './addListener'
 import { animateSimulate } from './animation/animateSimulate'
 import { ANIMATION_PROPERTY_DELTA_PAIRS } from './component/app/graph/ANIMATION_PROPERTY_DELTA_PAIRS'
 import { namespaceURI } from './component/namespaceURI'
@@ -2838,7 +2838,7 @@ export class Component<
     const allUnlisten = []
 
     for (const root of roots) {
-      const unlisten = addListener(root, listener)
+      const unlisten = listener(root)
 
       allUnlisten.push(unlisten)
     }
