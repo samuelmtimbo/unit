@@ -25551,6 +25551,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._toggle_exposed_pin_functional(exp_node_id)
   }
 
+  private _clicked_node_already_selected = false
+
   private _on_node_click = (node_id: string, event: UnitPointerEvent): void => {
     // console.log('Graph', '_on_node_click', node_id)
 
@@ -25565,6 +25567,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._resize_node_id_pointer_id[node_id]) {
       return
     }
+
+    this._clicked_node_already_selected = this._is_node_selected(node_id)
 
     if (this._mode === 'none') {
       this._on_node_none_click(node_id, event)
@@ -27944,6 +27948,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._mode === 'none') {
       if (!this._resize_node_id_pointer_id[unit_id]) {
         if (this._is_unit_component(unit_id)) {
+          if (!this._clicked_node_already_selected) {
+            this._deselect_node(unit_id)
+          }
+
           this._unlock_sub_component(unit_id)
           this._focus_sub_component(unit_id)
         }
@@ -28344,6 +28352,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (!config?.disable?.dataEdit) {
       if (this._is_datum_editable(datum_node_id)) {
+        if (!this._clicked_node_already_selected) {
+          this._deselect_node(datum_node_id)
+        }
+
         this._unlock_datum(datum_node_id)
 
         const { screenX, screenY } = event
@@ -38055,8 +38067,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (!this._is_node_selected(datum_node_id)) {
       this._deselect_all()
-
-      this._select_node(datum_node_id)
     }
 
     if (!this._is_node_unlocked(datum_node_id)) {
