@@ -150,6 +150,7 @@ import { Gamepad_ } from '../../../../../client/event/gamepad'
 import { makeInputListener } from '../../../../../client/event/input'
 import {
   Shortcut,
+  isKeyPressed,
   makeKeydownListener,
   makeShortcutListener,
 } from '../../../../../client/event/keyboard'
@@ -18369,6 +18370,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         {
           combo: ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'],
           multiple: true,
+          strict: false,
           keydown: this._on_arrow_keydown,
         },
         {
@@ -52271,6 +52273,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (next_selected_node) {
         this.select_node(next_selected_node)
+
+        if (isKeyPressed(this.$system, 'Space')) {
+          this._on_space_keydown()
+        }
       }
     }
   }
