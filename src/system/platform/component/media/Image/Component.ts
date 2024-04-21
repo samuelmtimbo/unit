@@ -11,17 +11,10 @@ export interface Props {
 
 export const DEFAULT_STYLE = {
   display: 'block',
-  // 'max-width': '100%',
-  // 'max-height': '100%',
-  // 'min-width': '0',
-  // 'min-height': '0',
   width: '100%',
   height: '100%',
   'object-fit': 'contain',
 }
-
-export const NO_IMAGE =
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
 export default class Image_ extends Element<HTMLImageElement, Props> {
   private _img_el: HTMLImageElement
@@ -40,9 +33,6 @@ export default class Image_ extends Element<HTMLImageElement, Props> {
     if (src !== undefined) {
       img_el.src = src
     }
-    img_el.addEventListener('error', (err) => {
-      img_el.src = NO_IMAGE
-    })
     img_el.draggable = false
     this._img_el = img_el
 
@@ -55,7 +45,7 @@ export default class Image_ extends Element<HTMLImageElement, Props> {
     } else if (prop === 'style') {
       applyStyle(this._img_el, { ...DEFAULT_STYLE, ...current })
     } else if (prop === 'src') {
-      this._img_el.src = current || NO_IMAGE
+      this._img_el.src = current
     }
   }
 }
