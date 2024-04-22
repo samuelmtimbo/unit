@@ -36,10 +36,6 @@ export default function webInit(
       return
     }
 
-    if (key === 'Tab') {
-      event.preventDefault()
-    }
-
     const index = system.input.keyboard.pressed.indexOf(keyCode)
 
     system.input.keyboard.repeat = repeat
