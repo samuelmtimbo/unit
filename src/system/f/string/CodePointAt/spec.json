@@ -1,0 +1,26 @@
+{
+  "name": "code point at",
+  "inputs": {
+    "str": {
+      "type": "string"
+    },
+    "at": {
+      "type": "number"
+    }
+  },
+  "outputs": {
+    "code": {
+      "type": "number"
+    }
+  },
+  "metadata": {
+    "icon": "search",
+    "description": "output the Unicode `code` point value of the character starting `at`",
+    "complexity": 3,
+    "tags": ["f", "string"]
+  },
+  "id": "998ae4f0-00ca-4c5f-9517-d47ed1d34457",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
