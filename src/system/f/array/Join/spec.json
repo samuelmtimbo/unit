@@ -5,7 +5,10 @@
       "type": "string[]"
     },
     "sep": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "examples": ["''", "','", "'/'"]
+      }
     }
   },
   "outputs": {
