@@ -1582,6 +1582,7 @@ function _getDelimiterSeparated(
 
   while (pos < value.length) {
     const char = value[pos]
+    const nextChar = value[pos + 1]
 
     if (!doubleQuoteOpen && !singleQuoteOpen) {
       if (char === OBJECT_OPEN) {
@@ -1597,16 +1598,11 @@ function _getDelimiterSeparated(
       }
     }
 
-    if (!singleQuoteOpen) {
-      if (char === DOUBLE_QUOTE && prevChar !== '\\') {
-        doubleQuoteOpen = !doubleQuoteOpen
-      }
+    if (!singleQuoteOpen && char === DOUBLE_QUOTE) {
+      doubleQuoteOpen = !doubleQuoteOpen
     }
-
-    if (!doubleQuoteOpen) {
-      if (char === SINGLE_QUOTE && prevChar !== '\\') {
-        singleQuoteOpen = !singleQuoteOpen
-      }
+    if (!doubleQuoteOpen && char === SINGLE_QUOTE) {
+      singleQuoteOpen = !singleQuoteOpen
     }
 
     if (
@@ -1618,11 +1614,9 @@ function _getDelimiterSeparated(
     ) {
       const childString = value.substring(lastStop, pos)
 
-      // if (_isEmtpyString(childString)) {
-      //   break
-      // }
+      const tree = _getTree(childString, keyValue, ignoreKeyword)
 
-      children.push(_getTree(childString, keyValue, ignoreKeyword))
+      children.push(tree)
 
       lastStop = pos + 1
       pushNext = true

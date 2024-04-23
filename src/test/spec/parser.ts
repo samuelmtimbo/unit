@@ -2,6 +2,7 @@ import * as assert from 'assert'
 import { evaluate } from '../../spec/evaluate'
 import { evaluateBundleStr } from '../../spec/idFromUnitValue'
 import {
+  TreeNodeType,
   applyGenerics,
   extractGenerics,
   filterEmptyNodes,
@@ -24,7 +25,6 @@ import {
   isValidValue,
   matchAllExcTypes,
   removeNodeAt,
-  TreeNodeType,
   updateNodeAt,
 } from '../../spec/parser'
 import _classes from '../../system/_classes'
@@ -35,6 +35,8 @@ import { system } from '../util/system'
 
 const CUSTOM_GRAPH_UNIT_STR =
   '${unit:{id:"03972fcf-ab18-4f58-9ed0-b395f9589d0d"},specs:{"03972fcf-ab18-4f58-9ed0-b395f9589d0d":{type:"`U`&`G`&`C`",name:"untitled",units:{textbox:{id:"9988a56e-6bee-46c8-864c-e351d84bc7e2",input:{value:{constant:false},style:{constant:true,data:"{}"}},output:{div:{ignored:true}},metadata:{position:{x:-92,y:-281},component:{width:199.90983628557666,height:42.03120109148989}}},checkbox:{id:"096fc4ca-edd2-11ea-8266-37b634a3ee0b",input:{value:{ignored:true},style:{constant:true,data:"{width:\\\\"16px\\\\",height:\\\\"16px\\\\"}"},attr:{ignored:true}},output:{value:{}},metadata:{position:{x:237,y:-11}}},icon:{id:"63a417e5-d354-4b39-9ebd-05f55e70de7b",input:{style:{constant:true,data:"{width:\\\\"16px\\\\",height:\\\\"16px\\\\"}"},icon:{constant:true,data:"\\\\"x\\\\""}},output:{},metadata:{position:{x:229,y:-189}}},flexrow:{id:"ad5a2fcc-fdee-11ea-a34f-77e9c48dbe57",input:{style:{constant:true,data:"{gap:\\\\"12px\\\\"}"}},output:{},metadata:{position:{x:-112,y:-120}}}},merges:{},inputs:{value:{plug:{0:{unitId:"textbox",pinId:"value"}},type:"string"}},outputs:{},metadata:{icon:"question",description:""},render:true,component:{subComponents:{textbox:{children:[],childSlot:{}},checkbox:{children:[],childSlot:{}},icon:{children:[],childSlot:{}},flexrow:{children:[],childSlot:{}}},children:["checkbox","textbox","icon","flexrow"],defaultWidth:270,defaultHeight:180},id:"03972fcf-ab18-4f58-9ed0-b395f9589d0d"}}}'
+
+Error.stackTraceLimit = 30
 
 assert(getTree('{a:"1,2,3"}').children.length === 1)
 assert(getTree("{a:'1,2,3'}").children.length === 1)
@@ -405,6 +407,10 @@ assert(
 )
 assert(isValidValue('[{a:1,b:2,},]'))
 assert(isValidValue('{"data":{"data":";overflow:hidden;}</style>"}}'))
+assert(isValidValue('""'))
+assert(isValidValue('["\\"]'))
+assert(isValidValue('["\\","g"]'))
+assert(isValidValue('[\'\\\',"g"]'))
 
 assert(!isValidValue('foo'))
 assert(!isValidValue('{foo:bar}'))
@@ -421,6 +427,8 @@ assert(!isValidValue('{::1}'))
 assert(!isValidValue('{""":1}'))
 assert(!isValidValue("{{':1}"))
 assert(!isValidValue('a + 1'))
+assert(!isValidValue('["\\"","g"]'))
+assert(!isValidValue("['\\'',\"g\"]"))
 // assert(!isValidValue('{foo: "bar"}'))
 
 const _getValueType = (str: string) => getValueType(_specs, str)
