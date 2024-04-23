@@ -814,9 +814,14 @@ export const reverseAction = ({ type, data }: Action): Action => {
         data.pinId
       )
     case EXPOSE_PIN_SET:
-      return makeCoverPinSetAction(data.type, data.pinId, data.pin)
+      return makeCoverPinSetAction(data.type, data.pinId, data.pinSpec)
     case COVER_PIN_SET:
-      return makeExposePinSetAction(data.type, data.pinId, data.plug, data.data)
+      return makeExposePinSetAction(
+        data.type,
+        data.pinId,
+        data.pinSpec,
+        data.data
+      )
     case PLUG_PIN:
       return makeUnplugPinAction(
         data.type,

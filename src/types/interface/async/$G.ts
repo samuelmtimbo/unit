@@ -1,9 +1,8 @@
 import {
   GraphAddMergeData,
-  GraphAddMergesData,
   GraphAddPinToMergeData,
   GraphAddUnitData,
-  GraphAddUnitsData,
+  GraphAddUnitGhostData,
   GraphBulkEditData,
   GraphCloneUnitData,
   GraphCoverPinData,
@@ -38,7 +37,6 @@ import { State } from '../../../State'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
-import { IOOf } from '../../IOOf'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { $Component } from './$Component'
@@ -123,7 +121,6 @@ export interface $G_C {
   $setUnitId(data: GraphSetUnitIdData): void
   $removeUnitPinData(data: GraphRemoveUnitPinDataData): void
   $addUnit(data: GraphAddUnitData): void
-  $addUnits(data: GraphAddUnitsData): void
   $cloneUnit(data: GraphCloneUnitData): void
   $removeUnit(data: GraphRemoveUnitData): void
   $moveUnit(data: GraphMoveUnitData): void
@@ -142,7 +139,6 @@ export interface $G_C {
   $setUnitPinSetId(data: GraphSetUnitPinSetId): void
   $setUnitPinConstant(data: GraphSetUnitPinConstant): void
   $setUnitPinIgnored(data: GraphSetUnitPinIgnoredData): void
-  $addMerges(data: GraphAddMergesData): void
   $setMergeData(data: GraphSetMergeDataData): void
   $removeMergeData(data: GraphRemoveMergeDataData): void
   $addPinToMerge(data: GraphAddPinToMergeData): void
@@ -178,12 +174,7 @@ export interface $G_C {
     data: GraphRemoveUnitGhostData,
     callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
   ): void
-  $addUnitGhost(data: {
-    unitId: string
-    nextUnitId: string
-    nextUnitBundle: UnitBundleSpec
-    nextUnitPinMap: IOOf<Dict<string>>
-  }): void
+  $addUnitGhost(data: GraphAddUnitGhostData): void
   $getGraphData(
     data: {},
     callback: Callback<{

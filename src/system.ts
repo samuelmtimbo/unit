@@ -1,5 +1,6 @@
 import { API } from './API'
 import { Graph } from './Class/Graph'
+import { Unit } from './Class/Unit'
 import { EventEmitter_ } from './EventEmitter'
 import { NOOP } from './NOOP'
 import { Object_ } from './Object'
@@ -57,6 +58,7 @@ export interface System extends S, R {
   global: {
     data: Object_<any>
     ref: Dict<any>
+    ref_: Dict<Dict<Unit>>
     component: Dict<any>
     scope: Dict<any>
   }

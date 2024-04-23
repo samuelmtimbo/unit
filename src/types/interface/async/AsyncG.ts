@@ -1,11 +1,9 @@
 import { Graph } from '../../../Class/Graph'
 import {
   GraphAddMergeData,
-  GraphAddMergesData,
   GraphAddPinToMergeData,
   GraphAddUnitData,
   GraphAddUnitGhostData,
-  GraphAddUnitsData,
   GraphBulkEditData,
   GraphCloneUnitData,
   GraphCoverPinData,
@@ -22,6 +20,7 @@ import {
   GraphRemoveMergeDataData,
   GraphRemovePinFromMergeData,
   GraphRemoveUnitData,
+  GraphRemoveUnitGhostData,
   GraphRemoveUnitPinDataData,
   GraphSetMergeDataData,
   GraphSetPinSetFunctionalData,
@@ -42,7 +41,6 @@ import { watchGraph } from '../../../debug/graph/watchGraph'
 import { watchUnit } from '../../../debug/watchUnit'
 import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
-import { bundleFromId } from '../../../spec/fromId'
 import { stringify } from '../../../spec/stringify'
 import {
   stringifyGraphSpecData,
@@ -50,12 +48,10 @@ import {
   stringifyUnitBundleSpecData,
 } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
-import { clone, isEmptyObject, mapObjVK } from '../../../util/object'
-import { weakMerge } from '../../../weakMerge'
+import { clone, isEmptyObject } from '../../../util/object'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
-import { GraphSpec } from '../../GraphSpec'
 import { GraphState } from '../../GraphState'
 import { IO } from '../../IO'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
@@ -71,10 +67,42 @@ export interface Holder<T> {
   data: T
 }
 
+function _call(graph, method: string, fork: boolean, ...args: any[]) {
+  const {
+    global: { ref_ },
+  } = graph.__system
+
+  let result: any
+
+  if (fork) {
+    result = graph[method].call(graph, ...args, fork)
+  } else {
+    const all = ref_[graph.id]
+
+    for (const globaId in all) {
+      const sibling = all[globaId] as Graph
+
+      result = sibling[method].call(sibling, ...args, fork)
+    }
+  }
+
+  return result
+}
+
 export const AsyncGCall = (graph: Graph): $G_C => {
+  function call(method: string, fork: boolean, ...args: any[]) {
+    return _call(graph, method, fork, ...args)
+  }
+
   return {
-    $setUnitId({ unitId, newUnitId, name, specId }: GraphSetUnitIdData): void {
-      graph.setUnitId(unitId, newUnitId, name, specId)
+    $setUnitId({
+      unitId,
+      newUnitId,
+      name,
+      specId,
+      fork = true,
+    }: GraphSetUnitIdData): void {
+      call('setUnitId', fork, unitId, newUnitId, name, specId)
     },
 
     $setUnitPinData({
@@ -82,77 +110,98 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       type,
       data,
+      fork = true,
     }: GraphSetUnitPinDataData): void {
-      const system = graph.__system
+      const { specs, classes } = graph.__system
 
-      const { specs, classes } = system
+      data = evaluate(data, specs, classes)
 
-      const _specs = system.specs
-
-      data = evaluate(data, weakMerge(specs, _specs), classes)
-
-      graph.setUnitPinData(unitId, type, pinId, data)
+      call('setUnitPinData', fork, unitId, type, pinId, data)
     },
 
     $removeUnitPinData({
       unitId,
       type,
       pinId,
+      fork = true,
     }: GraphRemoveUnitPinDataData): void {
-      graph.removeUnitPinData(unitId, type, pinId)
+      call('removeUnitPinData', fork, unitId, type, pinId)
     },
 
-    $addUnit({ unitId: id, bundle }: GraphAddUnitData): void {
-      graph.addUnitSpec(id, bundle)
+    $addUnit({ unitId, bundle, fork = true }: GraphAddUnitData): void {
+      call('addUnitSpec', fork, unitId, bundle)
     },
 
-    $cloneUnit({ unitId, newUnitId }: GraphCloneUnitData): void {
-      graph.cloneUnit(unitId, newUnitId)
+    $cloneUnit({ unitId, newUnitId, fork = true }: GraphCloneUnitData): void {
+      call('cloneUnit', fork, unitId, newUnitId)
     },
 
-    $moveUnit({ id, unitId, inputId }: GraphMoveUnitData): void {
-      graph.moveUnit(id, unitId, inputId)
+    $moveUnit({ id, unitId, inputId, fork = true }: GraphMoveUnitData): void {
+      call('moveUnit', fork, id, unitId, inputId)
     },
 
-    $addUnits({ units }: GraphAddUnitsData): void {
-      const { specs, classes } = graph.__system
-
-      const unitNodes = mapObjVK(units, (u) => ({
-        ...u,
-        Class: bundleFromId(u.id, specs, classes),
-      }))
-      graph.addUnitSpecs(unitNodes)
+    $removeUnit({ unitId, take, fork }: GraphRemoveUnitData) {
+      call('removeUnit', fork, unitId, undefined, take, undefined)
     },
 
-    $removeUnit({ unitId }: GraphRemoveUnitData) {
-      graph.removeUnit(unitId)
-    },
-
-    $exposePinSet({ type, pinId, pinSpec: pin, data }: GraphExposePinSetData) {
+    $exposePinSet({
+      type,
+      pinId,
+      pinSpec,
+      data,
+      fork = true,
+    }: GraphExposePinSetData) {
       const data_ =
         data && evaluate(data, graph.__system.specs, graph.__system.classes)
 
-      graph.exposePinSet(type, pinId, pin, data_)
+      call(
+        'exposePinSet',
+        fork,
+        type,
+        pinId,
+        pinSpec,
+        data_,
+        undefined,
+        undefined
+      )
     },
 
-    $coverPinSet({ type, pinId }: GraphCoverPinSetData) {
-      graph.coverPinSet(type, pinId, true)
+    $coverPinSet({ type, pinId, fork = true }: GraphCoverPinSetData) {
+      call('coverPinSet', fork, type, pinId, true)
     },
 
-    $exposePin({ type, pinId, subPinId, subPinSpec }: GraphExposePinData) {
-      graph.exposePin(type, pinId, subPinId, subPinSpec)
+    $exposePin({
+      type,
+      pinId,
+      subPinId,
+      subPinSpec,
+      fork = true,
+    }: GraphExposePinData) {
+      call('exposePin', fork, type, pinId, subPinId, subPinSpec)
     },
 
-    $coverPin({ type, pinId, subPinId }: GraphCoverPinData) {
-      graph.coverPin(type, pinId, subPinId)
+    $coverPin({ type, pinId, subPinId, fork = true }: GraphCoverPinData) {
+      call('coverPin', fork, type, pinId, subPinId)
     },
 
-    $plugPin({ type, pinId, subPinId, subPinSpec }: GraphPlugPinData) {
-      graph.plugPin(type, pinId, subPinId, subPinSpec)
+    $plugPin({
+      type,
+      pinId,
+      subPinId,
+      subPinSpec,
+      fork = true,
+    }: GraphPlugPinData) {
+      call('plugPin', fork, type, pinId, subPinId, subPinSpec)
     },
 
-    $unplugPin({ type, pinId, subPinId, take }: GraphUnplugPinData) {
-      graph.unplugPin(type, pinId, subPinId, true, take)
+    $unplugPin({
+      type,
+      pinId,
+      subPinId,
+      take,
+      fork = true,
+    }: GraphUnplugPinData) {
+      call('unplugPin', fork, type, pinId, subPinId, true, take)
     },
 
     $exposeUnitPinSet({
@@ -160,28 +209,50 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       type,
       pinId,
       pinSpec,
+      fork = true,
     }: GraphExposeUnitPinSetData) {
       const unit = graph.getUnit(unitId) as Graph
 
-      unit.exposePinSet(type, pinId, pinSpec)
+      _call(
+        unit,
+        'exposePinSet',
+        fork,
+        type,
+        pinId,
+        pinSpec,
+        undefined,
+        undefined,
+        undefined
+      )
     },
 
-    $coverUnitPinSet({ unitId, type, pinId }: GraphCoverUnitPinSetData) {
+    $coverUnitPinSet({
+      unitId,
+      type,
+      pinId,
+      fork = true,
+    }: GraphCoverUnitPinSetData) {
       const unit = graph.getUnit(unitId) as Graph
 
-      unit.coverPinSet(type, pinId)
+      _call(unit, 'coverPinSet', fork, unitId, type, pinId)
     },
 
-    $setPinSetId({ type, pinId, nextPinId }: GraphSetPinSetIdData): void {
-      graph.setPinSetId(type, pinId, nextPinId)
+    $setPinSetId({
+      type,
+      pinId,
+      nextPinId,
+      fork = true,
+    }: GraphSetPinSetIdData): void {
+      call('setPinSetId', fork, type, pinId, nextPinId)
     },
 
     $setPinSetFunctional({
       type,
       pinId,
       functional,
+      fork = true,
     }: GraphSetPinSetFunctionalData) {
-      graph.setPinSetFunctional(type, pinId, functional)
+      call('setPinSetFunctional', fork, type, pinId, functional)
     },
 
     $setUnitPinConstant({
@@ -189,8 +260,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       type,
       pinId,
       constant,
+      fork = true,
     }: GraphSetUnitPinConstant): void {
-      graph.setUnitPinConstant(unitId, type, pinId, constant)
+      call('setUnitPinConstant', fork, unitId, type, pinId, constant, true)
     },
 
     $setUnitPinIgnored({
@@ -198,8 +270,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       type,
       pinId,
       ignored,
+      fork = true,
     }: GraphSetUnitPinIgnoredData): void {
-      graph.setUnitPinIgnored(unitId, type, pinId, ignored)
+      call('setUnitPinIgnored', fork, unitId, type, pinId, ignored)
     },
 
     $setUnitPinSetId({
@@ -207,34 +280,25 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       type,
       pinId,
       nextPinId,
+      fork = true,
     }: GraphSetUnitPinSetId): void {
-      graph.setUnitPinSetId(unitId, type, pinId, nextPinId)
+      call('setUnitPinSetId', fork, unitId, type, pinId, nextPinId)
     },
 
-    $addMerge({ mergeId, mergeSpec: merge }: GraphAddMergeData) {
-      graph.addMerge(merge, mergeId)
+    $addMerge({ mergeId, mergeSpec, fork = true }: GraphAddMergeData) {
+      call(
+        'addMerge',
+        fork,
+        mergeSpec,
+        mergeId,
+        undefined,
+        undefined,
+        undefined
+      )
     },
 
-    $removeMerge({ mergeId, take }: GraphRemoveMergeData) {
-      graph.removeMerge(mergeId, true, take)
-    },
-
-    $addMerges({ merges }: GraphAddMergesData): void {
-      graph.addMerges(merges)
-    },
-
-    $setMergeData({ mergeId, data }: GraphSetMergeDataData): void {
-      const system = graph.refSystem()
-
-      const { specs, classes } = system
-
-      const _data = evaluate(data, specs, classes)
-
-      graph.setMergeData(mergeId, _data)
-    },
-
-    $removeMergeData({ mergeId }: GraphRemoveMergeDataData): void {
-      graph.removeMergeData(mergeId)
+    $removeMerge({ mergeId, take, fork = true }: GraphRemoveMergeData) {
+      call('removeMerge', fork, mergeId, undefined, take)
     },
 
     $addPinToMerge({
@@ -242,8 +306,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       unitId,
       type,
       pinId,
+      fork = true,
     }: GraphAddPinToMergeData): void {
-      graph.addPinToMerge(mergeId, unitId, type, pinId)
+      call('addPinToMerge', fork, mergeId, unitId, type, pinId)
     },
 
     $removePinFromMerge({
@@ -252,12 +317,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       type,
       pinId,
       take,
+      fork = true,
     }: GraphRemovePinFromMergeData): void {
-      graph.removePinFromMerge(mergeId, unitId, type, pinId, true, take)
-    },
-
-    $takeUnitErr({ unitId }: GraphTakeUnitErrData): void {
-      graph.takeUnitErr(unitId)
+      call('removePinFromMerge', fork, mergeId, unitId, type, pinId, true, take)
     },
 
     $removeUnitGhost(
@@ -265,14 +327,17 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         unitId,
         nextUnitId,
         nextUnitSpec,
-      }: {
-        unitId: string
-        nextUnitId: string
-        nextUnitSpec: GraphSpec
-      },
+        fork = true,
+      }: GraphRemoveUnitGhostData,
       callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
     ): void {
-      const ghost = graph.removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
+      const ghost = call(
+        'removeUnitGhost',
+        fork,
+        unitId,
+        nextUnitId,
+        nextUnitSpec
+      )
 
       const ghost_ = clone(ghost)
 
@@ -286,13 +351,137 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextUnitId,
       nextUnitBundle,
       nextUnitPinMap,
+      fork = true,
     }: GraphAddUnitGhostData): void {
-      graph.addUnitGhost(
+      call(
+        'addUnitGhost',
+        fork,
         unitId,
         nextUnitId,
         clone(nextUnitBundle),
         nextUnitPinMap
       )
+    },
+
+    $setMetadata({
+      path,
+      data,
+      fork = true,
+    }: {
+      path: string[]
+      data: any
+      fork?: boolean
+    }): void {
+      call('setMetadata', fork, path, data)
+    },
+
+    $reorderSubComponent({
+      parentId,
+      childId,
+      to,
+      fork = true,
+    }: {
+      parentId: string | null
+      childId: string
+      to: number
+      fork?: boolean
+    }) {
+      call('reorderSubComponent', fork, parentId, childId, to)
+    },
+
+    $moveSubComponentRoot({
+      parentId,
+      children,
+      slotMap,
+      fork = true,
+    }: GraphMoveSubComponentRootData): void {
+      call('moveSubComponentRoot', fork, parentId, children, slotMap)
+    },
+
+    $moveSubgraphInto({
+      graphId,
+      nextSpecId,
+      nodeIds,
+      nextIdMap,
+      nextPinIdMap,
+      nextMergePinId,
+      nextPlugSpec,
+      nextSubComponentParentMap,
+      nextSubComponentChildrenMap,
+      fork = true,
+    }: GraphMoveSubGraphIntoData): void {
+      const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
+      const graphSpec = graph.getGraphUnitGraphSpec(graphId)
+
+      call(
+        'moveSubgraphInto',
+        fork,
+        graphId,
+        graphBundle,
+        graphSpec,
+        nextSpecId,
+        nodeIds,
+        nextIdMap,
+        nextPinIdMap,
+        nextMergePinId,
+        nextPlugSpec,
+        nextSubComponentParentMap,
+        nextSubComponentChildrenMap
+      )
+    },
+
+    $moveSubgraphOutOf({
+      graphId,
+      nextSpecId,
+      nodeIds,
+      nextIdMap,
+      nextPinIdMap,
+      nextMergePinId,
+      nextPlugSpec,
+      nextSubComponentParentMap,
+      nextSubComponentChildrenMap,
+      fork = true,
+    }: GraphMoveSubGraphIntoData): void {
+      const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
+      const graphSpec = graph.getGraphUnitGraphSpec(graphId)
+
+      call(
+        'moveSubgraphOutOf',
+        fork,
+        graphId,
+        graphBundle,
+        graphSpec,
+        nextSpecId,
+        nodeIds,
+        nextIdMap,
+        nextPinIdMap,
+        nextMergePinId,
+        nextPlugSpec,
+        nextSubComponentParentMap,
+        nextSubComponentChildrenMap
+      )
+    },
+
+    $bulkEdit({ actions, fork = true }: GraphBulkEditData) {
+      call('bulkEdit', fork, actions)
+    },
+
+    $setMergeData({ mergeId, data, fork = true }: GraphSetMergeDataData): void {
+      const system = graph.refSystem()
+
+      const { specs, classes } = system
+
+      const _data = evaluate(data, specs, classes)
+
+      graph.setMergeData(mergeId, _data)
+    },
+
+    $removeMergeData({ mergeId, fork = true }: GraphRemoveMergeDataData): void {
+      graph.removeMergeData(mergeId)
+    },
+
+    $takeUnitErr({ unitId, fork = true }: GraphTakeUnitErrData): void {
+      graph.takeUnitErr(unitId)
     },
 
     $getBundle({}: {}, callback: Callback<BundleSpec>): void {
@@ -435,92 +624,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     ): void {
       const state = graph.getUnitInputData(unitId)
       callback(state)
-    },
-
-    $setMetadata({ path, data }: { path: string[]; data: any }): void {
-      graph.setMetadata(path, data)
-    },
-
-    $reorderSubComponent({
-      parentId,
-      childId,
-      to,
-    }: {
-      parentId: string | null
-      childId: string
-      to: number
-    }) {
-      graph.reorderSubComponent(parentId, childId, to)
-    },
-
-    $moveSubComponentRoot({
-      parentId,
-      children,
-      slotMap,
-    }: GraphMoveSubComponentRootData): void {
-      graph.moveSubComponentRoot(parentId, children, slotMap)
-    },
-
-    $moveSubgraphInto({
-      graphId,
-      nextSpecId,
-      nodeIds,
-      nextIdMap,
-      nextPinIdMap,
-      nextMergePinId,
-      nextPlugSpec,
-      nextSubComponentParentMap,
-      nextSubComponentChildrenMap,
-    }: GraphMoveSubGraphIntoData): void {
-      const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
-      const graphSpec = graph.getGraphUnitGraphSpec(graphId)
-
-      graph.moveSubgraphInto(
-        graphId,
-        graphBundle,
-        graphSpec,
-        nextSpecId,
-        nodeIds,
-        nextIdMap,
-        nextPinIdMap,
-        nextMergePinId,
-        nextPlugSpec,
-        nextSubComponentParentMap,
-        nextSubComponentChildrenMap
-      )
-    },
-
-    $moveSubgraphOutOf({
-      graphId,
-      nextSpecId,
-      nodeIds,
-      nextIdMap,
-      nextPinIdMap,
-      nextMergePinId,
-      nextPlugSpec,
-      nextSubComponentParentMap,
-      nextSubComponentChildrenMap,
-    }: GraphMoveSubGraphIntoData): void {
-      const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
-      const graphSpec = graph.getGraphUnitGraphSpec(graphId)
-
-      graph.moveSubgraphInto(
-        graphId,
-        graphBundle,
-        graphSpec,
-        nextSpecId,
-        nodeIds,
-        nextIdMap,
-        nextPinIdMap,
-        nextMergePinId,
-        nextPlugSpec,
-        nextSubComponentParentMap,
-        nextSubComponentChildrenMap
-      )
-    },
-
-    $bulkEdit({ actions }: GraphBulkEditData) {
-      graph.bulkEdit(actions)
     },
   }
 }

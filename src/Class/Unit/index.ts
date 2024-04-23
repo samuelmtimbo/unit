@@ -1,5 +1,6 @@
 import { $, $Events } from '../$'
 import { SELF } from '../../constant/SELF'
+import { deepSet_ } from '../../deepSet'
 import { DuplicatedInputFoundError } from '../../exception/DuplicatedInputFoundError'
 import { DuplicatedOutputFoundError } from '../../exception/DuplicatedOutputFoundError'
 import { InputNotFoundError } from '../../exception/InputNotFoundError'
@@ -22,7 +23,7 @@ import { None } from '../../types/None'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { pull, push, removeAt } from '../../util/array'
-import { mapObjVK } from '../../util/object'
+import { deepDelete, isEmptyObject, mapObjVK } from '../../util/object'
 import { Memory } from './Memory'
 
 export type PinMap<T> = Dict<Pin<T[keyof T]>>
@@ -142,6 +143,14 @@ export class Unit<
     this.id = id
 
     system.registerUnit(id)
+
+    const {
+      global: { ref_ },
+    } = this.__system
+
+    deepSet_(ref_, [this.id, this.__global_id], this)
+
+    // console.log('register', this.id, this.__global_id)
   }
 
   public isElement() {
@@ -1061,7 +1070,17 @@ export class Unit<
   }
 
   public destroy(): void {
+    const {
+      global: { ref_ },
+    } = this.__system
+
     this.__system.unregisterUnit(this.id)
+
+    deepDelete(ref_, [this.id, this.__global_id])
+
+    if (isEmptyObject(ref_[this.id] ?? {})) {
+      delete ref_[this.id]
+    }
 
     super.destroy()
   }

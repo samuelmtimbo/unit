@@ -924,11 +924,6 @@ export function lazyFromSpec(
       return this.__graph.explodeUnit(unitId, mapUnitId, mapMergeId, mapPlugId)
     }
 
-    public addMerges = (merges: GraphMergesSpec): void => {
-      this._ensure()
-      return this.__graph.addMerges(merges)
-    }
-
     public addMerge = (mergeSpec: GraphMergeSpec, mergeId: string): void => {
       this._ensure()
       return this.__graph.addMerge(mergeSpec, mergeId)

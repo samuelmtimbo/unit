@@ -35,8 +35,8 @@ composition0.addUnitSpecs({
   },
 })
 
-composition0.addMerges({
-  merge0: {
+composition0.addMerge(
+  {
     [id0]: {
       output: {
         a: true,
@@ -53,7 +53,10 @@ composition0.addMerges({
       },
     },
   },
-  merge1: {
+  'merge0'
+)
+composition0.addMerge(
+  {
     [id1]: {
       output: {
         a: true,
@@ -65,7 +68,8 @@ composition0.addMerges({
       },
     },
   },
-})
+  'merge1'
+)
 
 assert.equal(composition0.getUnit(id0).peakOutput('a'), 0)
 assert.equal(composition0.getUnit(id0).peakInput('a'), 0)

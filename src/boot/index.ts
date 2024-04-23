@@ -109,6 +109,7 @@ export function boot(
       ? parent.global
       : {
           ref: {},
+          ref_: {},
           component: componentLocal,
           data: new Object_({}),
           scope: {},
