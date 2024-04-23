@@ -35,8 +35,8 @@ composition0.addUnitSpecs({
   },
 })
 
-composition0.addMerges({
-  merge0: {
+composition0.addMerge(
+  {
     [id0]: {
       output: {
         a: true,
@@ -53,7 +53,10 @@ composition0.addMerges({
       },
     },
   },
-  merge1: {
+  'merge0'
+)
+composition0.addMerge(
+  {
     [id1]: {
       output: {
         a: true,
@@ -65,8 +68,8 @@ composition0.addMerges({
       },
     },
   },
-})
-
+  'merge1'
+)
 composition0.exposePinSet('output', 'a', { plug: { 0: { mergeId: 'merge0' } } })
 
 composition0.removeMerge('merge0')

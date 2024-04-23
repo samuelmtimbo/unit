@@ -64,13 +64,17 @@ export type GraphMoveSubGraphIntoData = GraphMoveSubGraphData & {
   graphId: string
   graphBundle: UnitBundleSpec
   graphSpec: GraphSpec
+  fork?: boolean
 }
 
-export type GraphMoveSubGraphOutOfData = GraphMoveSubGraphIntoData
+export type GraphMoveSubGraphOutOfData = GraphMoveSubGraphIntoData & {
+  fork?: boolean
+}
 
 export type GraphAddUnitData = {
   unitId: string
   bundle: UnitBundleSpec
+  fork?: boolean
   position?: Position | undefined
   pinPosition?: IOOf<Dict<Position>> | undefined
   layoutPositon?: Position | undefined
@@ -83,6 +87,7 @@ export type GraphAddUnitData = {
 export type GraphCloneUnitData = {
   unitId: string
   newUnitId: string
+  fork?: boolean
 }
 
 export type GraphSetUnitPinDataData = {
@@ -91,10 +96,12 @@ export type GraphSetUnitPinDataData = {
   type: IO
   data: string
   lastData: string
+  fork?: boolean
 }
 
 export type GraphRemoveMergeDataData = {
   mergeId: string
+  fork?: boolean
 }
 
 export type GraphSetUnitIdData = {
@@ -102,6 +109,7 @@ export type GraphSetUnitIdData = {
   newUnitId: string
   name: string
   specId: string
+  fork?: boolean
 }
 
 export type GraphRemoveUnitPinDataData = {
@@ -109,16 +117,19 @@ export type GraphRemoveUnitPinDataData = {
   type: IO
   pinId: string
   data: string
+  fork?: boolean
 }
 
 export type GraphMoveUnitData = {
   id: string
   unitId: string
   inputId: string
+  fork?: boolean
 }
 
 export type GraphAddUnitsData = {
   units: GraphUnitsSpec
+  fork?: boolean
 }
 
 export type GraphRemoveUnitData = {
@@ -130,6 +141,8 @@ export type GraphRemoveUnitData = {
   parentId?: string | null
   merges?: GraphMergesSpec
   plugs?: GraphUnitPlugs
+  fork?: boolean
+  take?: boolean
 }
 
 export type GraphExposePinSetData = {
@@ -137,6 +150,7 @@ export type GraphExposePinSetData = {
   pinId: string
   pinSpec: GraphPinSpec
   data: any
+  fork?: boolean
 }
 
 export type GraphExposePinData = {
@@ -144,6 +158,7 @@ export type GraphExposePinData = {
   pinId: string
   subPinId: string
   subPinSpec: GraphSubPinSpec
+  fork?: boolean
 }
 
 export type GraphCoverPinData = {
@@ -151,6 +166,7 @@ export type GraphCoverPinData = {
   pinId: string
   subPinId: string
   subPinSpec: GraphSubPinSpec
+  fork?: boolean
 }
 
 export type GraphPlugPinData = {
@@ -158,6 +174,7 @@ export type GraphPlugPinData = {
   pinId: string
   subPinId: string
   subPinSpec: GraphSubPinSpec
+  fork?: boolean
 }
 
 export type GraphUnplugPinData = {
@@ -166,12 +183,14 @@ export type GraphUnplugPinData = {
   subPinId: string
   subPinSpec: GraphSubPinSpec
   take?: boolean
+  fork?: boolean
 }
 
 export type GraphCoverPinSetData = {
   type: IO
   pinId: string
   pinSpec: GraphPinSpec
+  fork?: boolean
 }
 
 export type GraphCoverUnitPinSetData = {
@@ -180,6 +199,7 @@ export type GraphCoverUnitPinSetData = {
   pinId: string
   pinSpec: GraphPinSpec
   position?: Position | undefined
+  fork?: boolean
 }
 
 export type GraphExposeUnitPinSetData = {
@@ -188,18 +208,21 @@ export type GraphExposeUnitPinSetData = {
   pinId: string
   pinSpec: GraphPinSpec
   position?: Position | undefined
+  fork?: boolean
 }
 
 export type GraphSetPinSetIdData = {
   type: IO
   pinId: string
   nextPinId: string
+  fork?: boolean
 }
 
 export type GraphSetPinSetFunctionalData = {
   type: IO
   pinId: string
   functional: boolean
+  fork?: boolean
 }
 
 export type GraphSetUnitPinSetId = {
@@ -207,6 +230,7 @@ export type GraphSetUnitPinSetId = {
   type: IO
   pinId: string
   nextPinId: string
+  fork?: boolean
 }
 
 export type GraphSetUnitPinConstant = {
@@ -214,6 +238,7 @@ export type GraphSetUnitPinConstant = {
   type: IO
   pinId: string
   constant: boolean
+  fork?: boolean
 }
 
 export type GraphSetUnitPinIgnoredData = {
@@ -221,12 +246,14 @@ export type GraphSetUnitPinIgnoredData = {
   type: IO
   pinId: string
   ignored: boolean
+  fork?: boolean
 }
 
 export type GraphAddMergeData = {
   mergeId: string
   mergeSpec: GraphMergeSpec
   position?: Position | undefined
+  fork?: boolean
 }
 
 export type GraphRemoveMergeData = {
@@ -234,15 +261,18 @@ export type GraphRemoveMergeData = {
   mergeSpec: GraphMergeSpec
   position: Position
   take?: boolean
+  fork?: boolean
 }
 
 export type GraphAddMergesData = {
   merges: GraphMergesSpec
+  fork?: boolean
 }
 
 export type GraphSetMergeDataData = {
   mergeId: string
   data: string
+  fork?: boolean
 }
 
 export type GraphAddPinToMergeData = {
@@ -250,6 +280,7 @@ export type GraphAddPinToMergeData = {
   unitId: string
   type: IO
   pinId: string
+  fork?: boolean
 }
 
 export type GraphRemovePinFromMergeData = {
@@ -258,16 +289,19 @@ export type GraphRemovePinFromMergeData = {
   type: IO
   pinId: string
   take?: boolean
+  fork?: boolean
 }
 
 export type GraphTakeUnitErrData = {
   unitId: string
+  fork?: boolean
 }
 
 export type GraphRemoveUnitGhostData = {
   unitId: string
   nextUnitId: string
   nextUnitSpec: GraphSpec
+  fork?: boolean
 }
 
 export type GraphAddUnitGhostData = {
@@ -275,18 +309,21 @@ export type GraphAddUnitGhostData = {
   nextUnitId: string
   nextUnitBundle: UnitBundleSpec
   nextUnitPinMap: IOOf<Dict<string>>
+  fork?: boolean
 }
 
 export type GraphMoveSubComponentRootData = {
   parentId: string | null
   children: string[]
   slotMap: Dict<string>
+  fork?: boolean
 }
 
 export type GraphReorderSubComponentData = {
   parentId: string | null
   childId: string
   to: number
+  fork?: boolean
 }
 
 export type GraphSetUnitSizeData = {
@@ -295,6 +332,7 @@ export type GraphSetUnitSizeData = {
   height: number
   prevHeight: number
   prevWidth: number
+  fork?: boolean
 }
 
 export type GraphSetComponentSizeData = {
@@ -302,6 +340,7 @@ export type GraphSetComponentSizeData = {
   height: number
   prevHeight: number
   prevWidth: number
+  fork?: boolean
 }
 
 export type GraphSetSubComponentSizeData = {
@@ -310,20 +349,24 @@ export type GraphSetSubComponentSizeData = {
   height: number
   prevWidth: number
   prevHeight: number
+  fork?: boolean
 }
 
 export type GraphSetMetadataData = {
   path: string[]
   data: any
+  fork?: boolean
 }
 
 export type GraphSetUnitMetadataData = {
   unitId: string
   path: string[]
   data: any
+  fork?: boolean
 }
 
 export type GraphBulkEditData = {
   actions: Action[]
   transaction?: boolean
+  fork?: boolean
 }

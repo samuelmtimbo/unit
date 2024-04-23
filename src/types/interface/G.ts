@@ -111,7 +111,6 @@ export interface G<I = any, O = any, U_ = any> {
   getMergePinCount(mergeId: string): number
   getMergesSpec(): GraphMergesSpec
   getMergeSpec(mergeId: string): GraphMergeSpec
-  addUnitSpecs(units: GraphUnitsSpec): void
   addUnitSpec(unitId: string, unit: UnitBundleSpec, ...extra: any[]): void
   addUnit(unitId: string, unit: U_, ...extra: any[]): void
   removeUnit(unitId: string, destroy: boolean, ...extra: any[]): void
@@ -136,7 +135,6 @@ export interface G<I = any, O = any, U_ = any> {
     nextUnitBundle: UnitBundleSpec,
     nextUnitPinMap: IOOf<Dict<string>>
   ): void
-  addMerges(merges: GraphMergesSpec): void
   addMerge(
     mergeSpec: GraphMergeSpec,
     mergeId: string,
