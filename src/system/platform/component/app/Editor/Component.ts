@@ -158,6 +158,7 @@ import { keyToKeyCode } from '../../../../../client/event/keyboard/keyCode'
 import {
   CLICK_TIMEOUT,
   POINTER_CLICK_RADIUS,
+  POINTER_LONG_PRESS_MAX_DELTA,
 } from '../../../../../client/event/pointer/constants'
 import { makePointerCancelListener } from '../../../../../client/event/pointer/pointercancel'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
@@ -693,6 +694,8 @@ const MAX_HEIGHT: number = Infinity
 const SURFACE_UNPLUG_DISTANCE = 1.5 * LINK_DISTANCE_EXPOSED
 
 const DATUM_FONT_SIZE = 12
+
+const MIN_DRAG_DROP_MAX_D = POINTER_LONG_PRESS_MAX_DELTA
 
 export const NEAR = 36
 
@@ -21361,6 +21364,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this.__on_node_drag_start(node_id, x, y)
   }
 
+  private _node_drag_max_distance: Dict<number> = {}
+  private _node_drag_init_position: Dict<Position> = {}
+
   private __on_node_drag_start = (node_id: string, x: number, y: number) => {
     // console.log('Graph', '__on_node_drag_start', node_id, x, y)
 
@@ -21382,6 +21388,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     node.fx = node.x
     node.fy = node.y
+
+    this._node_drag_max_distance[node_id] = 0
+    this._node_drag_init_position[node_id] = { x, y }
 
     this._start_drag_node_static(node_id)
 
@@ -21478,12 +21487,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     node.fy = y - node.hy
     node.x = node.fx
     node.y = node.fy
+
+    const d = pointDistance({ x, y }, this._node_drag_init_position[node_id])
+
+    this._node_drag_max_distance[node_id] = Math.max(
+      this._node_drag_max_distance[node_id],
+      d
+    )
   }
 
-  private _on_node_drag_end = (node_id: string) => {
-    // console.log('Graph', '_on_node_drag_end', node_id)
+  private _on_node_drag_end_and_drop = (node_id: string) => {
+    // console.log('Graph', '_on_node_drag_end_and_drop', node_id)
 
-    this.__on_node_drag_end(node_id)
+    const node_drag_max_distance = this._node_drag_max_distance[node_id]
+
+    this._on_node_drag_end(node_id)
 
     this._set_drag_node(node_id, false)
 
@@ -21497,17 +21515,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._is_dropable_mode()) {
-      if (node_id === this._subgraph_unit_id) {
-        //
-      } else {
-        this._drop_node(node_id)
+      if (node_drag_max_distance > MIN_DRAG_DROP_MAX_D) {
+        if (node_id === this._subgraph_unit_id) {
+          //
+        } else {
+          this._drop_node(node_id)
+        }
       }
     }
 
     this._refresh_compatible()
   }
 
-  private __on_node_drag_end = (node_id: string) => {
+  private _on_node_drag_end = (node_id: string) => {
     // console.log('Graph', '__on_node_drag_end', node_id)
 
     delete this._drag_node_pointer_id[node_id]
@@ -21517,17 +21537,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     node.hx = 0
     node.hy = 0
 
-    // RETURN
     if (!this._node_target[node_id]) {
       node.fx = undefined
       node.fy = undefined
     }
+
+    delete this._node_drag_max_distance[node_id]
+    delete this._node_drag_init_position[node_id]
   }
 
   private _start_drag_node_static = (node_id: string): void => {
     // console.log('Graph', '_start_drag_node_static', node_id)
 
     const subgraph_id = this._node_to_subgraph[node_id]
+
     this._static_subgraph_anchor[subgraph_id] =
       this._static_subgraph_anchor[subgraph_id] || {}
     this._static_subgraph_anchor_count[subgraph_id] =
@@ -23412,7 +23435,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 this._drag_node_pointer_id[selected_node_id] ===
                 Number.parseInt(pointer_id)
               ) {
-                this._on_node_drag_end(selected_node_id)
+                this._on_node_drag_end_and_drop(selected_node_id)
               }
             }
           }
@@ -37309,6 +37332,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._drag_node_id[node_id]) {
       const pointerId = this._drag_node_pointer_id[node_id]
 
+      this._on_node_drag_end(node_id)
+
       this._set_drag_node(node_id, false)
 
       delete this._drag_node_pointer_id[node_id]
@@ -43483,7 +43508,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
 
             if (!this._collapse_node_id.has(pressed_node_id)) {
-              this._on_node_drag_end(pressed_node_id)
+              this._on_node_drag_end_and_drop(pressed_node_id)
             }
 
             if (this._selected_node_id[pressed_node_id]) {
@@ -43491,7 +43516,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 if (selected_node_id !== pressed_node_id) {
                   if ((this._node_pressed_count[selected_node_id] || 0) === 0) {
                     if (!this._collapse_node_id.has(selected_node_id)) {
-                      this._on_node_drag_end(selected_node_id)
+                      this._on_node_drag_end_and_drop(selected_node_id)
                     }
                   }
                 }
@@ -43667,14 +43692,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             if (this._has_node(int_node_id)) {
               this._drag_node_pointer_id[int_node_id] = pointerId
               if (this._is_draggable_mode()) {
-                this._on_node_drag_end(int_node_id)
+                this._on_node_drag_end_and_drop(int_node_id)
               }
             }
           } else if (this._is_int_node_id(pressed_node_id)) {
             const { type, pinId, subPinId } = segmentPlugNodeId(pressed_node_id)
             const ext_node_id = getExtNodeId(type, pinId, subPinId)
             if (this._is_draggable_mode()) {
-              this._on_node_drag_end(ext_node_id)
+              this._on_node_drag_end_and_drop(ext_node_id)
             }
           }
         }
@@ -47088,7 +47113,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this.__on_node_pointer_leave(node_id, pointerId)
     this.__on_node_pointer_up(node_id, pointerId)
     this.__on_pointer_up(pointerId)
-    this.__on_node_drag_end(node_id)
+    this._on_node_drag_end(node_id)
   }
 
   private _force_pointer_drag_node = (

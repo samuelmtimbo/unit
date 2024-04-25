@@ -14,6 +14,7 @@ import {
   CLICK_TIMEOUT,
   LONG_CLICK_TIMEOUT,
   POINTER_CLICK_RADIUS,
+  POINTER_LONG_PRESS_MAX_DELTA as POINTER_DOWN_MAX_DELTA,
 } from './constants'
 import { makePointerCancelListener } from './pointercancel'
 import { listenPointerDown } from './pointerdown'
@@ -150,9 +151,9 @@ export function listenClick(
                 pointerDownCount === 1
               ) {
                 longPress[pointerId] = true
+
                 if (
-                  pointerDownMaxDistance[pointerId] <
-                  POINTER_CLICK_RADIUS / 3
+                  pointerDownMaxDistance[pointerId] < POINTER_DOWN_MAX_DELTA
                 ) {
                   onLongPress && onLongPress(event, _event)
                 }
@@ -209,7 +210,7 @@ export function listenClick(
 
       if (
         !longClickCancelPointerId.has(pointerId) &&
-        pointerDownMaxDistance[pointerId] >= POINTER_CLICK_RADIUS / 3
+        pointerDownMaxDistance[pointerId] >= POINTER_DOWN_MAX_DELTA
       ) {
         longClickCancelPointerId.add(pointerId)
         onLongClickCancel && onLongClickCancel(event)
