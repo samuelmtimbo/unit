@@ -38,9 +38,11 @@ To connect (also merge) two compatible pins, click on a pin, then click on a com
 
 The compatible pins will be highlighted in green.
 
-![](/public/gif/start/17.gif)
+![](/public/gif/start/2.gif)
 
 Alternatively, you can also drag and drop a node onto a another compatible node.
+
+![](/public/gif/start/17.gif)
 
 ![](/public/gif/start/46.gif)
 
