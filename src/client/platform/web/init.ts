@@ -81,14 +81,6 @@ export default function webInit(
     }
   }
 
-  // TODO
-  const touchListener = (event: TouchEvent) => {
-    const { touches } = event
-    for (let i = 0; i < touches.length; i++) {
-      const touch = touches.item(i)!
-    }
-  }
-
   const errorListener = (event: ErrorEvent) => {
     const { error } = event
 
@@ -118,7 +110,6 @@ export default function webInit(
     capture: true,
     passive: true,
   })
-  root.addEventListener('touchmove', touchListener)
   root.addEventListener('dblclick', dbClickListener)
   root.addEventListener('dragover', dragOverListener)
   root.addEventListener('drop', dropListener)
@@ -132,7 +123,6 @@ export default function webInit(
     root.removeEventListener('wheel', wheelListener, {
       capture: true,
     })
-    root.removeEventListener('touchmove', touchListener)
     root.removeEventListener('dblclick', dbClickListener)
     root.removeEventListener('dragover', dragOverListener)
     root.removeEventListener('drop', dropListener)
