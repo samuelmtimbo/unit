@@ -1,4 +1,5 @@
 import deepGet from '../../deepGet'
+import { deepSet_ } from '../../deepSet'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import merge from '../../system/f/object/Merge/f'
@@ -17,7 +18,6 @@ import {
   deepDeepMerge,
   deepDelete,
   deepGetOrDefault,
-  deepSet,
   getObjSingleKey,
   isEmptyObject,
   mapObjVK,
@@ -40,14 +40,14 @@ import {
 } from './component_'
 
 export const setName = ({ name }: { name: string }, spec: GraphSpec): void => {
-  deepSet(spec, ['name'], name)
+  deepSet_(spec, ['name'], name)
 }
 
 export const addUnit = (
   { unitId, unit }: { unitId: string; unit: GraphUnitSpec },
   spec: GraphSpec
 ): void => {
-  deepSet(spec, ['units', unitId], unit)
+  deepSet_(spec, ['units', unitId], unit)
 }
 
 export const removeUnits = (
@@ -81,7 +81,7 @@ export const removeUnitExposedTypePins = (
       const { unitId } = subPin
 
       if (unitId === id) {
-        deepSet(spec, [`${type}s`, pinId, 'plug', subPinId], {})
+        deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], {})
       }
     }
   }
@@ -146,7 +146,7 @@ export const removeUnitMerges = (
               mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType] ?? {}
             )
 
-            deepSet(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {
+            deepSet_(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {
               unitId: otherMergeUnitId,
               pinId: otherMergeUnitPinId,
               kind: otherMergeUnitType,
@@ -198,7 +198,7 @@ export const addMerge = (
     })
   })
 
-  return deepSet(spec, ['merges', mergeId], mergeSpec)
+  return deepSet_(spec, ['merges', mergeId], mergeSpec)
 }
 
 export const addPinToMerge = (
@@ -233,7 +233,7 @@ export const addPinToMerge = (
     })
   })
 
-  return deepSet(spec, ['merges', mergeId, unitId, type, pinId], true)
+  return deepSet_(spec, ['merges', mergeId, unitId, type, pinId], true)
 }
 
 export const removeMerge = (
@@ -275,7 +275,7 @@ export const mergeMerges = (
   const bMerge = spec.merges![b]
 
   deepDelete(spec, ['merges', b])
-  deepSet(spec, ['merges', a], deepMerge(aMerge, bMerge))
+  deepSet_(spec, ['merges', a], deepMerge(aMerge, bMerge))
 }
 
 export const _removePinFromMerge = (
@@ -353,7 +353,7 @@ export const exposePinSet = (
   { type, pinId, pinSpec }: { pinId: string; type: IO; pinSpec: GraphPinSpec },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, [`${type}s`, pinId], pinSpec)
+  return deepSet_(spec, [`${type}s`, pinId], pinSpec)
 }
 
 export const setUnitId = (
@@ -432,7 +432,7 @@ export const setUnitId = (
         subPinSpec.unitId = newUnitId
       }
 
-      deepSet(
+      deepSet_(
         spec,
         [`${_type ?? type}s`, _pinId, 'plug', _subPinId],
         subPinSpec
@@ -455,7 +455,7 @@ export const exposePin = (
   },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
+  return deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
 }
 
 export const exposeInputSet = (
@@ -488,7 +488,7 @@ export const plugPin = (
   },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
+  return deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
 }
 
 export const unplugInput = (
@@ -529,7 +529,7 @@ export const unplugPin = (
   },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, [`${type}s`, pinId, 'plug', subPinId], {})
+  return deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], {})
 }
 
 export const coverInputSet = (
@@ -594,42 +594,42 @@ export const setPinSetId = (
   const pinSpec = deepGet(spec, [`${type}s`, pinId])
 
   deepDelete(spec, [`${type}s`, pinId])
-  deepSet(spec, [`${type}s`, nextPinId], pinSpec)
+  deepSet_(spec, [`${type}s`, nextPinId], pinSpec)
 }
 
 export const setPinSetFunctional = (
   { type, pinId, functional }: { type: IO; pinId: string; functional: boolean },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, [`${type}s`, pinId, 'functional'], functional)
+  return deepSet_(spec, [`${type}s`, pinId, 'functional'], functional)
 }
 
 export const setPinSetDataType = (
   { type, pinId, dataType }: { type: IO; pinId: string; dataType: string },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, [`${type}s`, pinId, 'type'], dataType)
+  return deepSet_(spec, [`${type}s`, pinId, 'type'], dataType)
 }
 
 export const setPinSetRef = (
   { type, pinId, ref }: { type: IO; pinId: string; ref: boolean },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, [`${type}s`, pinId, 'ref'], ref)
+  return deepSet_(spec, [`${type}s`, pinId, 'ref'], ref)
 }
 
 export const setUnitInput = (
   { id, name, data }: { id: string; name: string; data: string },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, ['units', id, 'input', name], data)
+  return deepSet_(spec, ['units', id, 'input', name], data)
 }
 
 export const setUnitOutput = (
   { id, name, data }: { id: string; name: string; data: string },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, ['units', id, 'output', name], data)
+  return deepSet_(spec, ['units', id, 'output', name], data)
 }
 
 export const setUnitPinData = (
@@ -645,7 +645,7 @@ export const setUnitPinData = (
 ): void => {
   const dataRef = evaluateDataValue(data, specs, classes)
 
-  return deepSet(spec, ['units', unitId, type, pinId, 'data'], dataRef)
+  return deepSet_(spec, ['units', unitId, type, pinId, 'data'], dataRef)
 }
 
 export const setUnitPinConstant = (
@@ -657,7 +657,7 @@ export const setUnitPinConstant = (
   }: { unitId: string; type: IO; pinId: string; constant: boolean },
   spec: GraphSpec
 ): void => {
-  return deepSet(spec, ['units', unitId, type, pinId, 'constant'], constant)
+  return deepSet_(spec, ['units', unitId, type, pinId, 'constant'], constant)
 }
 
 export const setUnitPinIgnored = (
@@ -702,7 +702,7 @@ export const setUnitPinIgnored = (
     }
   }
 
-  deepSet(spec, ['units', unitId, type, pinId, 'ignored'], ignored)
+  deepSet_(spec, ['units', unitId, type, pinId, 'ignored'], ignored)
 
   return spec
 }
@@ -740,14 +740,14 @@ export const setMetadata = (
   { path, value }: { path: string[]; value: any },
   spec: GraphSpec
 ): void => {
-  deepSet(spec, path, value)
+  deepSet_(spec, path, value)
 }
 
 export const setUnitMetadata = (
   { id, path, value }: { id: string; path: string[]; value: any },
   spec: GraphSpec
 ): void => {
-  deepSet(spec, ['units', id, 'metadata', ...path], value)
+  deepSet_(spec, ['units', id, 'metadata', ...path], value)
 }
 
 export const setUnitSize = (
@@ -800,7 +800,7 @@ export const renameUnitPin = (
   forEachPinOnMerges(clone(merges), (mergeId, _unitId, _type, _pinId) => {
     if (_unitId === unitId && _type === type && _pinId === pinId) {
       deepDelete(spec, ['merges', mergeId, unitId, type, pinId])
-      deepSet(spec, ['merges', mergeId, unitId, type, newPinId], true)
+      deepSet_(spec, ['merges', mergeId, unitId, type, newPinId], true)
     }
   })
 }

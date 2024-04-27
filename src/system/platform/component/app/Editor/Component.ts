@@ -56932,7 +56932,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (path_[0] === 'icon') {
         const icon = data_
 
-        setMetadata({ path: path_, value: data_ }, spec)
+        setMetadata({ path: ['metadata', ...path_], value: data_ }, spec)
 
         if (path.length === 1) {
           const unitId = path[0]
