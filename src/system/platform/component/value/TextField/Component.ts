@@ -48,7 +48,6 @@ export default class TextField extends Field<HTMLInputElement, Props> {
     if (defaultInputModeNone) {
       this.$element.inputMode = 'none'
     }
-
     if (maxLength !== undefined) {
       this.$element.maxLength = maxLength
     }

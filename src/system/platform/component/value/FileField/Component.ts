@@ -31,6 +31,10 @@ export default class FileField extends Field<HTMLInputElement, Props> {
       defaultValue: '',
     })
 
+    const {
+      flags: { defaultInputModeNone },
+    } = $system
+
     const { maxLength, tabIndex } = $props
 
     this.$element.type = 'file'
@@ -39,7 +43,10 @@ export default class FileField extends Field<HTMLInputElement, Props> {
     // this.$element.autocomplete = 'disabled'
     // this.$element.autocorrect = 'off'
     this.$element.autocapitalize = 'off'
-    this.$element.inputMode = 'none'
+
+    if (defaultInputModeNone) {
+      this.$element.inputMode = 'none'
+    }
     // this.$element.inputMode = 'text'
 
     if (maxLength !== undefined) {
