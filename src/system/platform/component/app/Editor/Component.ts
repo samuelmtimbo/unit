@@ -614,6 +614,7 @@ import {
 } from '../../../../../util/array'
 import { randomInArray } from '../../../../../util/array/randomInArray'
 import { callAll } from '../../../../../util/call/callAll'
+import { readFileAsText } from '../../../../../util/file'
 import { hashCode } from '../../../../../util/hashCode'
 import { randomIdNotIn } from '../../../../../util/id'
 import {
@@ -3322,69 +3323,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         onLongClickCancel: this._on_long_click_cancel,
         onClickHold: this._on_click_hold,
       }),
-      makeDropListener(async (event, _event) => {
-        _event.preventDefault()
-
-        const { clientX, clientY } = event
-
-        const { dataTransfer } = _event
-
-        const pasteAsString = async (item: DataTransferItem) => {
-          return new Promise((resolve) => {
-            item.getAsString((text) => {
-              const position = this._screen_to_world(clientX, clientY)
-
-              this._paste_text(text, position)
-
-              resolve(text)
-            })
-          })
-        }
-
-        if (dataTransfer) {
-          const { items, files } = dataTransfer
-
-          if (items) {
-            for (let i = 0; i < items.length; i++) {
-              const item = items[i]
-
-              if (item.kind === 'file') {
-                const file = item.getAsFile()
-
-                if (file.name.endsWith('.textClipping')) {
-                  // TODO
-
-                  return
-                }
-
-                const world_position = this._screen_to_world(clientX, clientY)
-
-                this._paste_file(file, world_position)
-              } else if (item.kind === 'string') {
-                if (item.type === 'text/plain') {
-                  await pasteAsString(item)
-
-                  break
-                } else if (item.type === 'text/html') {
-                  // await pasteAsString(item)
-                } else if (item.type === 'text/uri-list') {
-                  await pasteAsString(item)
-                }
-              } else if (item.kind === 'text/uri-list') {
-                // TODO
-              } else if (item.kind === 'text/html') {
-                // TODO
-              }
-            }
-          } else {
-            for (let i = 0; i < files.length; i++) {
-              const file = items[i].getAsFile()
-
-              this._paste_file(file)
-            }
-          }
-        }
-      }),
+      makeDropListener(this._on_drop),
     ])
 
     const shouldPreventSelection = (target: EventTarget) => {
@@ -3500,6 +3439,119 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _last_open_filename: string
 
+  private _on_drop = async (event, _event) => {
+    _event.preventDefault()
+
+    const { clientX, clientY } = event
+
+    const { dataTransfer } = _event
+
+    const pasteAsString = async (item: DataTransferItem) => {
+      return new Promise((resolve) => {
+        item.getAsString((text) => {
+          const position = this._screen_to_world(clientX, clientY)
+
+          this._paste_text(text, position)
+
+          resolve(text)
+        })
+      })
+    }
+
+    if (dataTransfer) {
+      const { items, files } = dataTransfer
+
+      if (items) {
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i]
+
+          if (item.webkitGetAsEntry) {
+            const entry = item.webkitGetAsEntry()
+
+            if (entry) {
+              const { isDirectory } = entry
+
+              if (isDirectory) {
+                this._paste_folder(entry)
+
+                continue
+              }
+            }
+          }
+
+          if (item.kind === 'file') {
+            const file = item.getAsFile() as File
+
+            if (file.name.endsWith('.textClipping')) {
+              // TODO
+
+              return
+            }
+
+            const world_position = this._screen_to_world(clientX, clientY)
+
+            this._paste_file(file, world_position)
+          } else if (item.kind === 'string') {
+            if (item.type === 'text/plain') {
+              await pasteAsString(item)
+
+              break
+            } else if (item.type === 'text/html') {
+              // await pasteAsString(item)
+            } else if (item.type === 'text/uri-list') {
+              await pasteAsString(item)
+            }
+          } else if (item.kind === 'text/uri-list') {
+            // TODO
+          } else if (item.kind === 'text/html') {
+            // TODO
+          }
+        }
+      } else {
+        for (let i = 0; i < files.length; i++) {
+          const file = items[i].getAsFile()
+
+          this._paste_file(file)
+        }
+      }
+    }
+  }
+
+  private _watch_file_bundle = async (file: File, bundle: BundleSpec) => {
+    const spec_ids = keys(bundle.specs).concat(bundle.spec.id)
+
+    // TODO
+  }
+
+  private _paste_folder = async (entry: FileSystemDirectoryEntry) => {
+    const { injectSpecs } = this.$props
+
+    const dirReader = entry.createReader() as FileSystemDirectoryReader
+
+    dirReader.readEntries(async (entries) => {
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i]
+
+        if (entry.isFile) {
+          // @ts-ignore
+          ;(entry as FileSystemEntry).file(async (file: File) => {
+            const bundle = await this._read_bundle_file(file)
+
+            if (bundle) {
+              const { spec, specs } = bundle
+
+              injectSpecs({ ...specs, [spec.id]: spec })
+
+              this._watch_file_bundle(file, bundle)
+            }
+          })
+        } else if (entry.isDirectory) {
+          //
+        }
+      }
+    })
+  }
+
   private _paste_file = async (
     file: File | Blob,
     position?: Position
@@ -3590,15 +3642,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       file.type.startsWith('"text/plain"') ||
       file.type.startsWith('application/json')
     ) {
-      const reader = new FileReader()
+      const text = await readFileAsText(file)
 
-      reader.onload = async (e) => {
-        const text = e.target.result.toString()
-
-        this._paste_text(text, position)
-      }
-
-      reader.readAsText(file)
+      this._paste_text(text, position)
 
       return
     }
@@ -3606,58 +3652,71 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (file instanceof File) {
       this._last_open_filename = file.name
 
-      let json: string
-
-      if (file.name.endsWith('.unit')) {
-        json = await file.text()
-      } else if (file.name.endsWith('.unit.gzip')) {
-        const decompressionStream = new DecompressionStream('gzip')
-        const decompressedStream = file
-          .stream()
-          // @ts-ignore
-          .pipeThrough(decompressionStream) as ReadableStream
-
-        const reader = decompressedStream.getReader()
-        const chunks = []
-
-        while (true) {
-          const { value, done } = await reader.read()
-
-          if (done) {
-            break
-          }
-
-          chunks.push(value)
-        }
-
-        const concatenated = new Uint8Array(
-          chunks.reduce((acc, chunk) => acc + chunk.length, 0)
-        )
-
-        let offset = 0
-
-        for (const chunk of chunks) {
-          concatenated.set(chunk, offset)
-
-          offset += chunk.length
-        }
-
-        json = new TextDecoder().decode(concatenated)
-      }
-
-      let bundle: BundleSpec
-
-      try {
-        bundle = JSON.parse(json)
-      } catch (err) {
-        // TODO
-        throw new Error('invalid JSON file')
-      }
-
-      position = position ?? this._jiggle_world_screen_center()
-
-      this.paste_bundle(bundle, position)
+      this._paste_bundle_file(file)
     }
+  }
+
+  private _paste_bundle_file = async (
+    file: File,
+    position?: Position
+  ): Promise<void> => {
+    position = position ?? this._jiggle_world_screen_center()
+
+    const bundle = await this._read_bundle_file(file)
+
+    this.paste_bundle(bundle, position)
+  }
+
+  private _read_bundle_file = async (file: File): Promise<BundleSpec> => {
+    let json: string
+
+    if (file.name.endsWith('.unit')) {
+      json = await file.text()
+    } else if (file.name.endsWith('.unit.gzip')) {
+      const decompressionStream = new DecompressionStream('gzip')
+      const decompressedStream = file
+        .stream()
+        // @ts-ignore
+        .pipeThrough(decompressionStream) as ReadableStream
+
+      const reader = decompressedStream.getReader()
+      const chunks = []
+
+      while (true) {
+        const { value, done } = await reader.read()
+
+        if (done) {
+          break
+        }
+
+        chunks.push(value)
+      }
+
+      const concatenated = new Uint8Array(
+        chunks.reduce((acc, chunk) => acc + chunk.length, 0)
+      )
+
+      let offset = 0
+
+      for (const chunk of chunks) {
+        concatenated.set(chunk, offset)
+
+        offset += chunk.length
+      }
+
+      json = new TextDecoder().decode(concatenated)
+    }
+
+    let bundle: BundleSpec
+
+    try {
+      bundle = JSON.parse(json)
+    } catch (err) {
+      // TODO
+      throw new Error('invalid JSON file')
+    }
+
+    return bundle
   }
 
   private _spec_refresh_node_position = (spec: GraphSpec): void => {
@@ -56925,6 +56984,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_graph_unit_metadata = (data: GraphMetadataMomentData) => {
+    // console.log('Graph', '_on_graph_unit_metadata', data)
+
     const { specs, setSpec } = this.$props
 
     const {
