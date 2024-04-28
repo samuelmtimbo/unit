@@ -37,12 +37,18 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
+    const {
+      api: {
+        text: { measureText },
+      },
+    } = this.$system
+
     let { className, style, value, fontSize } = $props
 
     const _value = this._parse_value()
 
-    const width = getLeafWidth(value, fontSize)
-    const height = getLeafHeight(value, fontSize)
+    const width = getLeafWidth(value, fontSize, measureText)
+    const height = getLeafHeight(value, fontSize, measureText)
 
     const input = new TextField(
       {
@@ -105,12 +111,18 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
   }
 
   private _refresh_size = () => {
+    const {
+      api: {
+        text: { measureText },
+      },
+    } = this.$system
+
     const { fontSize = DEFAULT_FONT_SIZE } = this.$props
 
     const _value: string = this._parse_value()
 
-    const width = getLeafWidth(_value, fontSize)
-    const height = getLeafHeight(_value, fontSize)
+    const width = getLeafWidth(_value, fontSize, measureText)
+    const height = getLeafHeight(_value, fontSize, measureText)
 
     this._input.$element.style.width = `${width}px`
     this._input.$element.style.height = `${height}px`
@@ -129,9 +141,15 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
   }
 
   private _on_input = (value: string): void => {
+    const {
+      api: {
+        text: { measureText },
+      },
+    } = this.$system
+
     const { path, fontSize } = this.$props
 
-    const width = getLeafWidth(value, fontSize)
+    const width = getLeafWidth(value, fontSize, measureText)
     // mergeStyle(this._input, {
     //   width: `${width}px`,
     // })

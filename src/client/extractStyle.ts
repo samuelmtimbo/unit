@@ -1,5 +1,6 @@
 import { isFrameRelativeValue } from '../isFrameRelative'
 import { Style } from '../system/platform/Style'
+import { MeasureTextFunction } from '../text'
 import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
 import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
@@ -9,7 +10,6 @@ import { LayoutNode } from './LayoutNode'
 import { rawExtractStyle } from './rawExtractStyle'
 import { expandSlot } from './reflectComponentBaseTrait'
 import { rectsBoundingRect } from './util/geometry'
-import { Size } from './util/geometry/types'
 import { parseFontSize } from './util/style/getFontSize'
 
 export function measureChildren(
@@ -17,7 +17,7 @@ export function measureChildren(
   component: Component,
   style: Style,
   fallbackTrait: LayoutNode,
-  measureText: (text: string, fontSize: number) => Size,
+  measureText: MeasureTextFunction,
   fitContent: boolean,
   getLeafStyle: (
     parent_trait: LayoutNode,
@@ -111,7 +111,7 @@ export function extractStyle(
   root: Component,
   component: Component,
   fallbackTrait: LayoutNode,
-  measureText: (text: string, fontSize: number) => Size,
+  measureText: MeasureTextFunction,
   fitContent: boolean = false,
   getLeafStyle: (
     parent_trait: LayoutNode,
@@ -128,7 +128,7 @@ export function extractStyle(
 export function _extractStyle(
   component: Component,
   element: IOElement,
-  measureText: (text: string, fontSize: number) => Size
+  measureText: MeasureTextFunction
 ): Style {
   const style = rawExtractStyle(element)
 
@@ -139,7 +139,7 @@ export function _extractFromRawStyle(
   component: Component,
   element: IOElement,
   style: Style,
-  measureText: (text: string, fontSize: number) => Size
+  measureText: MeasureTextFunction
 ): Style {
   const fitWidth = style['width'] === 'fit-content'
   const fitHeight = style['height'] === 'fit-content'

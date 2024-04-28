@@ -1,8 +1,9 @@
 import { IOElement } from './client/IOElement'
 import { LayoutNode } from './client/LayoutNode'
 import { Theme } from './client/theme'
-import { Rect, Size } from './client/util/geometry/types'
+import { Rect } from './client/util/geometry/types'
 import { Style } from './system/platform/Style'
+import { MeasureTextFunction } from './text'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 import {
@@ -218,7 +219,7 @@ export type API = {
     parse: (str: string) => Dict<any>
   }
   text: {
-    measureText: (text: string, fontSize: number) => Size
+    measureText: MeasureTextFunction
   }
   worker: {
     start(): Worker

@@ -37769,7 +37769,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _get_datum_tree_size = (tree: TreeNode): Size => {
-    const { classes } = this.$system
+    const {
+      classes,
+      api: {
+        text: { measureText },
+      },
+    } = this.$system
+
     const { specs } = this.$props
 
     if (tree.type === TreeNodeType.Unit) {
@@ -37790,7 +37796,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         height: 2 * r,
       }
     } else {
-      let { width, height } = getDatumSize(tree, DATUM_FONT_SIZE)
+      let { width, height } = getDatumSize(tree, DATUM_FONT_SIZE, measureText)
 
       const overflowX = width > DATUM_MAX_WIDTH ? 3 : 0
       const overflowY = height > DATUM_MAX_HEIGHT ? 3 : 0

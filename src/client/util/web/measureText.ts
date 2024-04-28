@@ -11,17 +11,16 @@ export function measureText(
 
   const {
     width: _width,
-    actualBoundingBoxLeft,
-    actualBoundingBoxRight,
     fontBoundingBoxAscent,
     fontBoundingBoxDescent,
   } = textMetrics
 
   const width = _width + 4
-  // const width = Math.abs(actualBoundingBoxLeft) + Math.abs(actualBoundingBoxRight) + 4
   const height =
-    // Math.abs(fontBoundingBoxAscent) + Math.abs(fontBoundingBoxDescent) + 4
-    Math.abs(fontBoundingBoxAscent) + Math.abs(fontBoundingBoxDescent)
+    Math.abs(fontBoundingBoxAscent) +
+    Math.abs(fontBoundingBoxDescent) +
+    textMetrics['hangingBaseline'] -
+    textMetrics['ideographicBaseline']
 
   return {
     width,
