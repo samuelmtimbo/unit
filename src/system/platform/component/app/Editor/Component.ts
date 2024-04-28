@@ -613,6 +613,7 @@ import {
   push,
 } from '../../../../../util/array'
 import { randomInArray } from '../../../../../util/array/randomInArray'
+import { bit } from '../../../../../util/boolean'
 import { callAll } from '../../../../../util/call/callAll'
 import { readFileAsText } from '../../../../../util/file'
 import { hashCode } from '../../../../../util/hashCode'
@@ -41037,28 +41038,38 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._drag_node_init_edge_overflow[node_id].y1 = false
         }
 
-        const node = this._node[node_id]
+        const drag_init_overflow_count =
+          bit(overflow_x0) +
+          bit(overflow_y0) +
+          bit(overflow_x1) +
+          bit(overflow_y1)
 
-        const dx = x - node.hx - node.x
-        const dy = y - node.hy - node.y
+        if (drag_init_overflow_count < 2) {
+          const node = this._node[node_id]
 
-        const drag_edge_animating = !!this._drag_edge_animation
+          const dx = x - node.hx - node.x
+          const dy = y - node.hy - node.y
 
-        const lock_x0 =
-          (drag_edge_animating || x0 <= 0) && dx <= 0 && !overflow_x0
-        const lock_x1 =
-          (drag_edge_animating || x1 >= 0) && dx >= 0 && !overflow_x1
+          const drag_edge_animating = !!this._drag_edge_animation
 
-        const lock_y0 =
-          (drag_edge_animating || y0 <= 0) && dy <= 0 && !overflow_y0
-        const lock_y1 =
-          (drag_edge_animating || y1 >= 0) && dy >= 0 && !overflow_y1
+          const lock_x0 =
+            (drag_edge_animating || x0 <= 0) && dx <= 0 && !overflow_x0
+          const lock_x1 =
+            (drag_edge_animating || x1 >= 0) && dx >= 0 && !overflow_x1
 
-        const lock_x = lock_x0 || lock_x1
-        const lock_y = lock_y0 || lock_y1
+          const lock_y0 =
+            (drag_edge_animating || y0 <= 0) && dy <= 0 && !overflow_y0
+          const lock_y1 =
+            (drag_edge_animating || y1 >= 0) && dy >= 0 && !overflow_y1
 
-        if (lock_x || lock_y) {
-          this._start_drag_edge_animation()
+          const lock_x = lock_x0 || lock_x1
+          const lock_y = lock_y0 || lock_y1
+
+          if (lock_x || lock_y) {
+            this._start_drag_edge_animation()
+          } else {
+            this._cancel_drag_edge_animation()
+          }
         } else {
           this._cancel_drag_edge_animation()
         }
