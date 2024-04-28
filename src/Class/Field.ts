@@ -14,6 +14,8 @@ export class Field<
   _J extends Dict<any> = {},
   _EE extends FieldEvents<_EE> = FieldEvents<Field_EE>,
 > extends Element_<I, O, _EE> {
+  private _ever_played: boolean = false
+
   constructor(
     { i = [], o = [] }: ION<I, O>,
     opt: Opt,
@@ -30,13 +32,20 @@ export class Field<
       id
     )
 
+    this.addListener('reset', () => {
+      this._ever_played = false
+    })
+
     this.addListener('play', () => {
-      this._output.value.push(this.initialValue())
+      if (!this._ever_played) {
+        this._output.value.push(this.initialValue())
+
+        this._ever_played = true
+      }
     })
   }
 
   initialValue() {
-    // @ts-ignore
     return this._input?.value?.peak() ?? this._defaultState.value
   }
 }
