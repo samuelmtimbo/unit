@@ -48,7 +48,8 @@
           "pinId": "start"
         }
       },
-      "type": "number"
+      "type": "number",
+      "functional": true
     },
     "a": {
       "plug": {
@@ -57,7 +58,8 @@
           "pinId": "a"
         }
       },
-      "type": "<A>[]"
+      "type": "<A>[]",
+      "functional": true
     }
   },
   "outputs": {
