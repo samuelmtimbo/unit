@@ -4,6 +4,8 @@ export function escape(str: string): string {
     const char = str[i]
     if (char === '"') {
       res += '\\"'
+    } else if (char === '\\') {
+      res += '\\\\'
     } else {
       res += char
     }
