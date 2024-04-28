@@ -36,11 +36,17 @@ export default class NumberField extends Field<HTMLInputElement, Props> {
 
     const { min, max } = $props
 
+    const {
+      flags: { defaultInputModeNone },
+    } = $system
+
     this.$element.type = 'number'
     // BUG
     // Chrome
     // inputMode 'none' not working on mobile for input type number
-    this.$element.inputMode = 'none'
+    if (defaultInputModeNone) {
+      this.$element.inputMode = 'none'
+    }
 
     if (min !== undefined) {
       this.$element.min = `${min}`
