@@ -1,12 +1,12 @@
+import { MeasureTextFunction } from '../text'
 import { Component } from './component'
 import { LayoutNode } from './LayoutNode'
-import { Size } from './util/geometry/types'
 import { getPosition, getRelativePosition } from './util/style/getPosition'
 import { getSize } from './util/style/getSize'
 
 export const extractTrait = (
   leaf_comp: Component,
-  measureText: (text: string, fontSize: number) => Size
+  measureText: MeasureTextFunction
 ): LayoutNode => {
   const leaf_context = leaf_comp.$context
 
