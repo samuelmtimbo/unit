@@ -16,8 +16,8 @@ assert.deepEqual(stringify('foo'), `"foo"`)
 assert.deepEqual(stringify('"foo"'), `"\\"foo\\""`)
 assert.deepEqual(stringify("'foo'"), `"'foo'"`)
 assert.deepEqual(stringify("''foo''"), `"''foo''"`)
-assert.deepEqual(stringify('\\'), `"\\"`)
-assert.deepEqual(stringify("'\\'"), `"'\\'"`)
+assert.deepEqual(stringify('\\'), `"\\\\"`)
+assert.deepEqual(stringify("'\\'"), `"'\\\\'"`)
 assert.deepEqual(stringify(true), 'true')
 assert.deepEqual(stringify(false), 'false')
 assert.deepEqual(stringify([]), '[]')
@@ -63,6 +63,8 @@ assert.deepEqual(
 )
 
 assert.deepEqual(stringify({ foo: 0 }), '{"foo":0}')
+assert.deepEqual(stringify('\\'), '"\\\\"')
+assert.deepEqual(stringify(['\\']), '["\\\\"]')
 assert.deepEqual(
   stringify({ foo: 'bar', zaz: 'tar' }),
   `{"foo":"bar","zaz":"tar"}`
@@ -81,13 +83,13 @@ assert.deepEqual(
   `\${"unit":{"id":"fa94b179-00e3-4ed1-814e-7938324a833f"},"specs":{}}`
 )
 
-assert.deepEqual(evaluate(stringify('"\\n"'), _specs, _classes), '"\\n"')
+assert.deepEqual(evaluate(stringify('"\\n"'), _specs, _classes), '"\\\\n"')
 
 assert.deepEqual(
   JSON.parse(evaluate(stringify('"\\n"'), _specs, _classes)),
-  '\n'
+  '\\n'
 )
 assert.deepEqual(
   JSON.parse(evaluate(stringify(JSON.stringify('\r')), _specs, _classes)),
-  '\r'
+  '\\r'
 )

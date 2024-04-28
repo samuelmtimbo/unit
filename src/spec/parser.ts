@@ -997,7 +997,15 @@ function _getValueTree(
 
     let valid = true
 
+    let escaping = false
+
     for (let i = 1; i < value.length - 1; i++) {
+      if (value[i] === '\\') {
+        escaping = !escaping
+      } else {
+        escaping = false
+      }
+
       if (value[i] === startChar && value[i - 1] !== '\\') {
         valid = false
 
@@ -1005,7 +1013,7 @@ function _getValueTree(
       }
     }
 
-    if (valid) {
+    if (valid && !escaping) {
       return {
         value,
         type: TreeNodeType.StringLiteral,
@@ -1580,9 +1588,10 @@ function _getDelimiterSeparated(
 
   let prevChar: string | undefined = undefined
 
+  let escaping = false
+
   while (pos < value.length) {
     const char = value[pos]
-    const nextChar = value[pos + 1]
 
     if (!doubleQuoteOpen && !singleQuoteOpen) {
       if (char === OBJECT_OPEN) {
@@ -1598,11 +1607,21 @@ function _getDelimiterSeparated(
       }
     }
 
-    if (!singleQuoteOpen && char === DOUBLE_QUOTE) {
-      doubleQuoteOpen = !doubleQuoteOpen
+    if (char === '\\') {
+      escaping = !escaping
     }
-    if (!doubleQuoteOpen && char === SINGLE_QUOTE) {
-      singleQuoteOpen = !singleQuoteOpen
+
+    if (!escaping) {
+      if (!singleQuoteOpen && char === DOUBLE_QUOTE) {
+        doubleQuoteOpen = !doubleQuoteOpen
+      }
+      if (!doubleQuoteOpen && char === SINGLE_QUOTE) {
+        singleQuoteOpen = !singleQuoteOpen
+      }
+    }
+
+    if (char !== '\\') {
+      escaping = false
     }
 
     if (
