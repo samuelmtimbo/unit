@@ -10,6 +10,7 @@ export type InputElement =
   | HTMLInputElement
   | HTMLTextAreaElement
   | HTMLSelectElement
+  | HTMLFieldSetElement
   | HTMLDivElement
 
 export function makeFieldInputEventHandler<E extends InputElement>(

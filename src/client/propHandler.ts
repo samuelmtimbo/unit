@@ -62,6 +62,9 @@ export function basePropHandler(
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {
+    name: (name) => {
+      element.setAttribute('name', name)
+    },
     attr: (attr) => {
       applyAttr(element, attr)
     },
