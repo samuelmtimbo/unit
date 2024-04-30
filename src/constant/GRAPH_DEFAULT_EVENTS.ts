@@ -20,7 +20,7 @@ export const GRAPH_DEFAULT_EVENTS: (keyof G_EE | keyof C_EE | keyof U_EE)[] = [
   'remove_pin_from_merge',
   'add_pin_to_merge',
   'move_subgraph_into',
-  'move_subgraph_into',
+  'move_subgraph_out_of',
   'move_sub_component_root',
   'reorder_sub_component',
   'expose_pin_set',

@@ -3716,8 +3716,6 @@ export class Graph<I = any, O = any>
     unit: Unit,
     registerRoot: boolean = true
   ): void {
-    // console.log('_simAddUnit', unitId, bundle, bundle.unit.id)
-
     if (unit.isElement()) {
       registerRoot && this.registerRoot(unit as Component_)
 
@@ -5362,7 +5360,7 @@ export class Graph<I = any, O = any>
       nextSubComponentChildrenMap,
     ]: G_MoveSubgraphIntoArgs
   ): void {
-    this._moveSubgraphInto(
+    this.__moveSubgraphInto(
       graphId,
       graphBundle,
       graphSpec,
@@ -5380,6 +5378,7 @@ export class Graph<I = any, O = any>
       'move_subgraph_into',
       graphId,
       graphBundle,
+      graphSpec,
       specId,
       nodeIds,
       nextIdMap,
@@ -5408,8 +5407,39 @@ export class Graph<I = any, O = any>
     const graph = this.getUnit(graphId) as Graph
 
     graph.fork(specId)
-
     graph.startTransaction()
+
+    this.__moveSubgraphInto(
+      graphId,
+      graphBundle,
+      graphSpec,
+      specId,
+      nodeIds,
+      nextIdMap,
+      nextPinIdMap,
+      nextMergePinId,
+      nextPlugSpec,
+      nextSubComponentParentMap,
+      nextSubComponentChildrenMap
+    )
+
+    graph.endTransaction()
+  }
+
+  private __moveSubgraphInto(
+    graphId: string,
+    graphBundle: BundleSpec,
+    graphSpec: GraphSpec,
+    specId: string,
+    nodeIds: GraphMoveSubGraphData['nodeIds'],
+    nextIdMap: GraphMoveSubGraphData['nextIdMap'],
+    nextPinIdMap: GraphMoveSubGraphData['nextPinIdMap'],
+    nextMergePinId: GraphMoveSubGraphData['nextMergePinId'],
+    nextPlugSpec: GraphMoveSubGraphData['nextPlugSpec'],
+    nextSubComponentParentMap: GraphMoveSubGraphData['nextSubComponentParentMap'],
+    nextSubComponentChildrenMap: GraphMoveSubGraphData['nextSubComponentChildrenMap']
+  ) {
+    const graph = this.getUnit(graphId) as Graph
 
     const merges = clone(this.getUnitMergesSpec(graphId))
 
@@ -5434,8 +5464,6 @@ export class Graph<I = any, O = any>
       },
       false
     )
-
-    graph.endTransaction()
   }
 
   private _newMergeId = (): string => {
@@ -5740,7 +5768,7 @@ export class Graph<I = any, O = any>
     //   nextSubComponentChildrenMap
     // )
 
-    this._moveSubgraphOutOf(
+    this.__moveSubgraphOutOf(
       graphId,
       graphBundle,
       graphSpec,
@@ -5804,6 +5832,60 @@ export class Graph<I = any, O = any>
     const merges = clone(this.getUnitMergesSpec(graphId))
     const plugs = clone(this.getUnitPlugsSpec(graphId))
 
+    graph.startTransaction()
+    graph.fork()
+
+    this.__moveSubgraphOutOf(
+      graphId,
+      graphBundle,
+      graphSpec,
+      nextSpecId,
+      nodeIds,
+      nextIdMap,
+      nextPinIdMap,
+      nextMergePinId,
+      nextPlugSpec,
+      nextSubComponentParentMap,
+      nextSubComponentChildrenMap
+    )
+
+    graph.endTransaction()
+  }
+
+  private __moveSubgraphOutOf(
+    ...[
+      graphId,
+      graphBundle,
+      graphSpec,
+      nextSpecId,
+      nodeIds,
+      nextIdMap,
+      nextPinIdMap,
+      nextMergePinId,
+      nextPlugSpec,
+      nextSubComponentParentMap,
+      nextSubComponentChildrenMap,
+    ]: G_MoveSubgraphIntoArgs
+  ): void {
+    // console.log(
+    //   'Graph',
+    //   '_moveSubgraphOutOf',
+    //   graphId,
+    //   nextSpecId,
+    //   nodeIds,
+    //   nextIdMap,
+    //   nextPinIdMap,
+    //   nextMergePinId,
+    //   nextPlugSpec,
+    //   nextSubComponentParentMap,
+    //   nextSubComponentChildrenMap
+    // )
+
+    const graph = this.getUnit(graphId) as Graph
+
+    const merges = clone(this.getUnitMergesSpec(graphId))
+    const plugs = clone(this.getUnitPlugsSpec(graphId))
+
     const collapseMap: GraphMoveSubGraphData = {
       nodeIds,
       nextSpecId: null,
@@ -5822,12 +5904,7 @@ export class Graph<I = any, O = any>
       plugs,
     }
 
-    graph.startTransaction()
-    graph.fork()
-
     moveSubgraph(graph, this, graphId, collapseMap, connectOpt, true)
-
-    graph.endTransaction()
   }
 
   public getGraphUnitBundleSpec(graphId: string): BundleSpec {
