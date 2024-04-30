@@ -1,0 +1,32 @@
+{
+  "name": "radio field",
+  "inputs": {
+    "name": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string",
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "form-input",
+    "description": "form input of type radio",
+    "complexity": 43,
+    "tags": ["platform", "component", "value"]
+  },
+  "id": "0f82f52f-0380-46d5-a959-0eebd5de503e",
+  "base": true,
+  "component": {
+    "defaultWidth": 180,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}

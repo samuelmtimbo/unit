@@ -1,0 +1,29 @@
+{
+  "name": "fieldset",
+  "inputs": {
+    "attr": {
+      "type": "object",
+      "optional": true
+    },
+    "style": {
+      "type": "object",
+      "optional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "form-input",
+    "description": "select HTML element",
+    "complexity": 43,
+    "tags": ["platform", "component", "value"]
+  },
+  "id": "429496bf-98fa-45e8-81b8-960f4e2546ba",
+  "base": true,
+  "component": {
+    "defaultWidth": 180,
+    "defaultHeight": 45
+  },
+  "type": "`U`&`C`&`V`&`J`",
+  "system": true,
+  "render": true
+}
