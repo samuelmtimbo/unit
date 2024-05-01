@@ -144,8 +144,14 @@ export class Component<
   public $mountParentRoot: Component[] = []
   public $mountParentChildren: Component[] = []
 
+  public $rootParent: Component = null
+
   public $parent: Component | null = null
   public $slotParent: Component | null = null
+  public $detachedContext: Context | null = null
+  public $detachedSlotParent: Component | null = null
+
+  public $returnIndex: number = 0
 
   public $mounted: boolean = false
 
@@ -686,6 +692,20 @@ export class Component<
       }
     }
 
+    this.$detachedSlotParent = this.$slotParent
+    this.$detachedContext = this.$context
+
+    let index = 0
+    if (this.$rootParent) {
+      index = this.$rootParent.$parentRoot.indexOf(this)
+    } else if (this.$parent) {
+      index = this.$parent.$parentRoot.indexOf(this)
+    } else {
+      index = this.$context.$children.indexOf(this)
+    }
+
+    this.$returnIndex = index
+
     if (animate) {
       this._animateBase(base, hostSlot, false, prepend, commit)
     } else {
@@ -720,67 +740,84 @@ export class Component<
         },
         (parentRoot) => {
           targetSlots.push(parentRoot.$slot['default'])
+        },
+        () => {
+          //
         }
       )
+
+      const slot = this.$slotParent
 
       for (let i = 0; i < base.length; i++) {
         const leaf = base[i]
 
         const [_, leafComp] = leaf
 
-        const targetSlot = this.$slotParent
+        const targetSlot = this.$detachedSlotParent
 
         this._animateBase([leaf], targetSlot, true, false, () => {
           leafEnd++
 
           leafComp.unmount()
 
-          this.domAppendBase([leaf])
+          if (leafComp.$rootParent) {
+            leafComp.$rootParent.domInsertParentRootAt(
+              leafComp,
+              this.$returnIndex,
+              'default'
+            )
+          } else if (leafComp.$parent) {
+            leafComp.$parent.domInsertRootAt(leafComp, this.$returnIndex)
+          } else {
+            leafComp
+          }
 
-          leafComp.mount(this.$context)
+          leafComp.mount(this.$parent.$context)
         })
       }
     } else {
-      this.domAppendBase(base)
+      this.$parent.domAppendBase(base, this.$slotParent)
     }
   }
 
   public templateBase = (
     base: LayoutBase,
-    root: (parent: Component, leaf_comp: Component) => void,
-    parentRoot: (parent: Component, leaf_comp: Component) => void
+    root: (parent: Component, leafComp: Component) => void,
+    parentRoot: (parent: Component, leafComp: Component) => void,
+    self: (leafComp: Component) => void
   ): void => {
     // console.log('Component', 'templateBase', sub_component_id)
 
     for (const leaf of base) {
-      this.templateLeaf(leaf, root, parentRoot)
+      this.templateLeaf(leaf, root, parentRoot, self)
     }
   }
 
   public templateLeaf = (
     leaf: LayoutLeaf,
     root: (parent: Component, leaf_comp: Component) => void,
-    parentRoot: (parent: Component, leaf_comp: Component) => void
+    parentRoot: (parent: Component, leaf_comp: Component) => void,
+    self: (leafComp: Component) => void
   ): void => {
     // console.log('Component', 'templateLeaf', sub_component_id)
 
-    const [leaf_path, leaf_comp] = leaf
+    const [leafPath, leafComp] = leaf
 
-    const leaf_parent_last = leaf_path[leaf_path.length - 1]
-    const leaf_parent_path = leaf_path.slice(0, -1)
+    const leafParentLast = leafPath[leafPath.length - 1]
+    const leafParentPath = leafPath.slice(0, -1)
 
-    const leaf_parent = this.pathGetSubComponent(leaf_parent_path)
+    const leafParent = this.pathGetSubComponent(leafParentPath)
 
-    if (leaf_parent === leaf_comp) {
-      //
+    if (leafParent === leafComp) {
+      self(leafComp)
     } else {
-      const parent_id = leaf_parent.getSubComponentParentId(leaf_parent_last)
+      const parent_id = leafParent.getSubComponentParentId(leafParentLast)
       if (parent_id) {
-        const parent = leaf_parent.getSubComponent(parent_id)
+        const parent = leafParent.getSubComponent(parent_id)
 
-        parentRoot(parent, leaf_comp)
+        parentRoot(parent, leafComp)
       } else {
-        root(leaf_parent, leaf_comp)
+        root(leafParent, leafComp)
       }
     }
   }
@@ -788,21 +825,24 @@ export class Component<
   public domRemoveBase = (base: LayoutBase): void => {
     this.templateBase(
       base,
-      (parent, leaf_comp) => {
-        const index = parent.$root.indexOf(leaf_comp)
+      (parent, leafComp) => {
+        const index = parent.$root.indexOf(leafComp)
 
-        parent.domRemoveRoot(leaf_comp, index)
+        parent.domRemoveRoot(leafComp, index)
       },
-      (parent, leaf_comp) => {
-        const index = parent.$parentRoot.indexOf(leaf_comp)
+      (parent, leafComp) => {
+        const index = parent.$parentRoot.indexOf(leafComp)
 
         parent.domRemoveParentRootAt(
-          leaf_comp,
+          leafComp,
           'default',
           index,
           index,
           this.$slotParent
         )
+      },
+      (leafComp) => {
+        //
       }
     )
   }
@@ -825,22 +865,31 @@ export class Component<
           index,
           this.$slotParent
         )
+      },
+      () => {
+        //
       }
     )
   }
 
-  public domAppendBase = (base: LayoutBase): void => {
+  public domAppendBase = (
+    base: LayoutBase,
+    fallbackParent: Component
+  ): void => {
     // console.log('Component', 'domAppendBase', sub_component_id)
 
     this.templateBase(
       base,
-      (parent, leaf_comp) => {
-        parent.domAppendRoot(leaf_comp)
+      (parent, leafComp) => {
+        parent.domAppendRoot(leafComp)
       },
-      (parent, leaf_comp) => {
-        const index = parent.$parentRoot.indexOf(leaf_comp)
+      (parent, leafComp) => {
+        const index = parent.$parentRoot.indexOf(leafComp)
 
-        parent.domAppendParentRoot(leaf_comp, 'default', index)
+        parent.domAppendParentRoot(leafComp, 'default', index)
+      },
+      () => {
+        //
       }
     )
   }
@@ -2318,6 +2367,8 @@ export class Component<
     const slot = get(this.$slot, slotName)
 
     slot.memAppendParentChild(component, 'default', at, at)
+
+    component.$rootParent = this
   }
 
   public domAppendParentRoot(
@@ -2455,6 +2506,8 @@ export class Component<
     }
 
     insert(this.$mountParentChildren, component, i)
+
+    component.$rootParent = this
   }
 
   public domInsertParentChildAt(
@@ -2710,6 +2763,8 @@ export class Component<
     const slot = this.$slot[slotName]
 
     slot.memRemoveParentChildAt(component, 'default', at, _at)
+
+    slot.$rootParent = null
   }
 
   public domRemoveParentRootAt(
@@ -2769,6 +2824,16 @@ export class Component<
         return parentSubComponentId
       }
     }
+    return null
+  }
+
+  public getSubComponentParent(id: string): Component | null {
+    const subComponentParentId = this.getSubComponentParentId(id)
+
+    if (subComponentParentId) {
+      return this.getSubComponent(subComponentParentId)
+    }
+
     return null
   }
 
