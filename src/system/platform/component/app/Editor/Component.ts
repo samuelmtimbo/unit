@@ -140,8 +140,6 @@ import debounce from '../../../../../client/debounce'
 import { getCircle, getLine, getRectangle } from '../../../../../client/drawing'
 import { IODragEvent } from '../../../../../client/event/drag'
 import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
-import { makeDragLeaveListener } from '../../../../../client/event/drag/dragleave'
-import { makeDragOverListener } from '../../../../../client/event/drag/dragover'
 import { makeDragStartListener } from '../../../../../client/event/drag/dragstart'
 import { makeDropListener } from '../../../../../client/event/drag/drop'
 import { makeBlurListener } from '../../../../../client/event/focus/blur'
@@ -7156,8 +7154,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const core_content = this._core_content[unit_id]
 
     const core_overlay = this._create_overlay({ className: 'core-overlay' })
+
     this._core_component_overlay[unit_id] = core_overlay
+
     core_content.appendChild(core_overlay)
+
+    core_overlay.addEventListener(
+      makeDragEnterListener(() => {
+        this._lock_all_component_but(unit_id)
+        this._unlock_sub_component(unit_id)
+      })
+    )
   }
 
   private _sim_add_core_component = (
@@ -20433,46 +20440,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     unlisten()
   }
 
-  private _sub_component_unlocked_by_drag: Set<string> = new Set()
-
-  private _core_frame_contains_event_target = (
-    unit_id: string,
-    element: EventTarget
-  ): boolean => {
-    if (this._is_unit_node_id(unit_id) && this._is_unit_component(unit_id)) {
-      if (element instanceof Node) {
-        const frame = this._get_sub_component_frame(unit_id)
-
-        if (frame.$element.contains(element)) {
-          return true
-        }
-      }
-    }
-
-    return false
-  }
-
   private _listen_node = (node_id: string, component: Component): Unlisten => {
-    let drag_enter_count = 0
-
-    let pointer_inside = false
-
-    const increment_drag = () => {
-      drag_enter_count++
-
-      if (drag_enter_count === 1) {
-        this._drag_enter_node(node_id)
-      }
-    }
-
-    const decrement_drag = () => {
-      drag_enter_count--
-
-      if (drag_enter_count === 0) {
-        this._drag_leave_node(node_id)
-      }
-    }
-
     return component.addEventListeners([
       makePointerDownListener((event: UnitPointerEvent) => {
         this._on_node_pointer_down(node_id, event)
@@ -20481,13 +20449,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._on_node_pointer_up(node_id, event)
       }),
       makePointerEnterListener((event: UnitPointerEvent) => {
-        pointer_inside = true
-
         this._on_node_pointer_enter(node_id, event)
       }),
       makePointerLeaveListener((event: UnitPointerEvent) => {
-        pointer_inside = false
-
         this._on_node_pointer_leave(node_id, event)
       }),
       makePointerCancelListener((event: UnitPointerEvent) => {
@@ -20510,57 +20474,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._on_node_click_hold(node_id, event)
         },
       }),
-      makeDragOverListener((event: IODragEvent, _event: DragEvent) => {
-        _event.preventDefault()
-      }),
-      makeDragStartListener((event) => {
-        increment_drag()
-      }),
-      makeDragEnterListener((event, _event) => {
-        if (
-          this._is_unit_node_id(node_id) &&
-          this._is_unit_component(node_id)
-        ) {
-          if (
-            this._core_frame_contains_event_target(
-              node_id,
-              _event.relatedTarget
-            )
-          ) {
-            return
-          }
-        }
-
-        increment_drag()
-      }),
-      makePointerLeaveListener((event: UnitPointerEvent) => {
-        if (drag_enter_count === 1) {
-          drag_enter_count = 0
-        }
-      }),
-      makeDragLeaveListener((event, _event) => {
-        if (
-          this._is_unit_node_id(node_id) &&
-          this._is_unit_component(node_id)
-        ) {
-          if (
-            this._core_frame_contains_event_target(
-              node_id,
-              _event.relatedTarget
-            )
-          ) {
-            return
-          }
-        }
-
-        decrement_drag()
-      }),
       makeDropListener((event: IODragEvent, _event: DragEvent) => {
         _event.preventDefault()
 
         const { dataTransfer } = event
-
-        decrement_drag()
 
         const { items } = dataTransfer
 
@@ -20598,41 +20515,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       y >= node_y - height / 2 &&
       y <= node_y + height / 2
     )
-  }
-
-  private _drag_enter_node = (node_id: string): void => {
-    // console.log('Graph', '_drag_enter_node', node_id)
-
-    if (this._is_unit_node_id(node_id)) {
-      if (this._is_unit_component(node_id)) {
-        if (this._core_component_unlocked[node_id]) {
-          //
-        } else {
-          this._sub_component_unlocked_by_drag.add(node_id)
-
-          this._lock_all_component()
-          this._unlock_sub_component(node_id)
-        }
-      }
-    }
-  }
-
-  private _drag_leave_node = (node_id: string): void => {
-    // console.log('Graph', '_drag_leave_node', node_id)
-
-    if (this._is_unit_node_id(node_id)) {
-      if (this._is_unit_component(node_id)) {
-        if (this._core_component_unlocked[node_id]) {
-          if (this._sub_component_unlocked_by_drag.has(node_id)) {
-            this._sub_component_unlocked_by_drag.delete(node_id)
-
-            this._lock_sub_component(node_id)
-          }
-        } else {
-          //
-        }
-      }
-    }
   }
 
   private _drop_text_on_node = (node_id: string, text: string) => {
