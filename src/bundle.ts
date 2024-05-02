@@ -20,11 +20,16 @@ export function unitBundleSpec(
   const { system } = spec
 
   if (system) {
+    const custom = {}
+
+    _bundleUnit(unit, specs, custom, new Set())
+
     return {
       unit: {
         id,
         ...unit,
       },
+      specs: custom,
     }
   } else {
     const custom: GraphSpecs = {
@@ -103,6 +108,45 @@ function _bundle(
   _bundleUnits(spec, specs, custom, branch)
 }
 
+function _bundleUnit(
+  unit: GraphUnitSpec,
+  specs: Specs,
+  custom: GraphSpecs,
+  branch: Set<string>
+) {
+  const { id, input = {} } = unit
+
+  for (const inputId in input) {
+    const _input = input[inputId] ?? {}
+
+    const { data } = _input
+
+    if (data !== undefined) {
+      const dataRef = evaluateDataValue(data, specs, {})
+
+      for (const path of dataRef.ref ?? []) {
+        const bundle = deepGet(dataRef.data, path)
+
+        for (const specId in bundle.specs) {
+          const spec = bundle.specs[specId]
+
+          custom[specId] = spec
+
+          _bundle(spec, weakMerge(specs, bundle.specs), custom, branch)
+        }
+      }
+    }
+  }
+
+  const _spec = getSpec(specs, id) as GraphSpec
+
+  if (!specs[id] || !isSystemSpecId(specs, id)) {
+    custom[id] = _spec
+  }
+
+  _bundle(_spec, specs, custom, new Set(branch))
+}
+
 function _bundleUnits(
   spec: GraphSpec,
   specs: Specs,
@@ -114,36 +158,6 @@ function _bundleUnits(
   for (const unit_id in units) {
     const unit = units[unit_id]
 
-    const { id, input = {} } = unit
-
-    for (const inputId in input) {
-      const _input = input[inputId] ?? {}
-
-      const { data } = _input
-
-      if (data !== undefined) {
-        const dataRef = evaluateDataValue(data, specs, {})
-
-        for (const path of dataRef.ref ?? []) {
-          const bundle = deepGet(dataRef.data, path)
-
-          for (const specId in bundle.specs) {
-            const spec = bundle.specs[specId]
-
-            custom[specId] = spec
-
-            _bundle(spec, weakMerge(specs, bundle.specs), custom, branch)
-          }
-        }
-      }
-    }
-
-    const _spec = getSpec(specs, id) as GraphSpec
-
-    if (!specs[id] || !isSystemSpecId(specs, id)) {
-      custom[id] = _spec
-    }
-
-    _bundle(_spec, specs, custom, new Set(branch))
+    _bundleUnit(unit, specs, custom, branch)
   }
 }
