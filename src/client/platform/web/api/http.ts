@@ -40,7 +40,7 @@ export function webHTTP(window: Window, opt: BootOpt): API['http'] {
     },
     listen: (port: number, handler: (req) => Promise<any>): Unlisten => {
       if (serverMap[port]) {
-        throw new Error(`Port ${port} is already in use`)
+        throw new Error(`port ${port} is already in use`)
       }
 
       serverMap[port] = handler

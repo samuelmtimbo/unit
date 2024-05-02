@@ -1,5 +1,6 @@
 import { Object_ } from './Object'
 import { emptySpec, isSystemSpecId, newSpecId } from './client/spec'
+import { remapSpec } from './spec/remapSpec'
 import { Spec, Specs } from './types'
 import { Dict } from './types/Dict'
 import { GraphSpec } from './types/GraphSpec'
@@ -61,16 +62,16 @@ export class Registry implements R {
   injectSpecs(newSpecs: GraphSpecs): Dict<string> {
     // console.log('injectSpecs', newSpecs)
 
-    const mapSpecId: Dict<string> = {}
+    const specIdMap: Dict<string> = {}
 
     const visited: Set<string> = new Set()
 
-    const _set = (specId, spec) => {
+    const mapSpec = (specId: string, spec: GraphSpec) => {
       if (visited.has(specId)) {
         return
       }
 
-      if (mapSpecId[specId]) {
+      if (specIdMap[specId]) {
         return
       }
 
@@ -85,7 +86,27 @@ export class Registry implements R {
 
       visited.add(specId)
 
+      if (hasSpec) {
+        if (JSON.stringify(spec) === JSON.stringify(this.getSpec(specId))) {
+          //
+        } else {
+          specIdMap[specId] = nextSpecId
+        }
+      }
+    }
+
+    const setSpec = (
+      specId: string,
+      spec: GraphSpec,
+      visited: Set<string> = new Set()
+    ) => {
       const { units } = spec
+
+      if (visited.has(specId)) {
+        return
+      }
+
+      visited.add(specId)
 
       for (const unitId in units) {
         const unit = units[unitId]
@@ -93,35 +114,49 @@ export class Registry implements R {
         if (this.hasSpec(unit.id)) {
           //
         } else {
-          const spec = newSpecs[unit.id]
+          const spec = nextSpecs[unit.id]
 
-          _set(unit.id, spec)
+          setSpec(unit.id, spec, visited)
         }
-      }
-
-      if (hasSpec) {
-        // TODO spec equality
-        if (JSON.stringify(spec) === JSON.stringify(this.getSpec(specId))) {
-          //
-        } else {
-          // TODO
-          mapSpecId[specId] = nextSpecId
-        }
-      } else {
       }
 
       this.specs_.set(specId, spec)
-
-      // this.specs_.set(nextSpecId, spec) // TODO
     }
 
     for (const specId in newSpecs) {
       const spec = newSpecs[specId]
 
-      _set(specId, spec)
+      mapSpec(specId, spec)
     }
 
-    return mapSpecId
+    const specSet = new Set<string>()
+
+    const nextSpecs = {}
+
+    for (const specId in newSpecs) {
+      const spec = newSpecs[specId]
+
+      const id = remapSpec(spec, specIdMap)
+
+      if (this.hasSpec(id)) {
+        if (JSON.stringify(spec) === JSON.stringify(this.getSpec(specId))) {
+          //
+          // nextSpecs[id] = spec
+        } else {
+          nextSpecs[id] = spec
+        }
+      } else {
+        nextSpecs[id] = spec
+      }
+    }
+
+    for (const specId in nextSpecs) {
+      const spec = nextSpecs[specId]
+
+      setSpec(specId, spec, specSet)
+    }
+
+    return specIdMap
   }
 
   shouldFork(id: string): boolean {

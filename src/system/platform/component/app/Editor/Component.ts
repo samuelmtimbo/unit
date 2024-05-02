@@ -497,6 +497,7 @@ import {
   setUnitSize,
   unplugPin,
 } from '../../../../../spec/reducers/spec_'
+import { remapBundle } from '../../../../../spec/remapBundle'
 import { stringify } from '../../../../../spec/stringify'
 import { stringifyDataValue } from '../../../../../spec/stringifyDataValue'
 import { stringifyBundleSpec } from '../../../../../spec/stringifySpec'
@@ -736,6 +737,58 @@ export const describeArrowShape = (shape: Shape, r: number): string => {
   }
 }
 
+const saveToUnitFile = async (
+  fileHandle: FileSystemFileHandle,
+  bundle: BundleSpec
+) => {
+  const json = JSON.stringify(bundle)
+
+  try {
+    const writableStream = await fileHandle.createWritable()
+
+    if (CompressionStream && fileHandle.name.endsWith('.unit.gzip')) {
+      function stringToStream(str) {
+        const encoder = new TextEncoder()
+
+        const uint8Array = encoder.encode(str)
+
+        let position = 0
+
+        return new ReadableStream({
+          pull(controller) {
+            const chunkSize = 1024
+
+            if (position >= uint8Array.length) {
+              controller.close()
+
+              return
+            }
+
+            const chunk = uint8Array.slice(position, position + chunkSize)
+
+            controller.enqueue(chunk)
+
+            position += chunkSize
+          },
+        })
+      }
+
+      const inputReadableStream = stringToStream(bundle)
+
+      const compressedReadableStream = inputReadableStream.pipeThrough(
+        new CompressionStream('gzip')
+      )
+
+      compressedReadableStream.pipeTo(writableStream)
+    } else {
+      await writableStream.write(json)
+      await writableStream.close()
+    }
+  } catch (err) {
+    // console.log(err)
+  }
+}
+
 export const ARROW_NONE = ''
 export const ARROW_MEMORY = 'M-6,4 L0,1 L-6,-2'
 export const ARROW_NORMAL = 'M-0.25,2.25 L2,1 L-0.25,-0.25'
@@ -827,6 +880,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   private _unlisten_graph: Unlisten
   private _unlisten_transcend: Unlisten
+  private _unlisten_registry: Unlisten
 
   private _type_cache: TypeTreeMap = {}
 
@@ -856,7 +910,43 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     const spec: GraphSpec = emptySpec({ name: 'untitled', private: true })
 
-    this.$system.newSpec(spec)
+    // this.$system.newSpec(spec)
+
+    this._unlisten_registry = this._registry.specs_.subscribe(
+      [],
+      '*',
+      async (type, path, key, data) => {
+        const { specs } = this._registry
+
+        const specId = key
+        const spec = data
+
+        if (path.length === 0) {
+          if (type === 'set') {
+            const fileName = this._spec_id_to_file_name[specId]
+
+            if (fileName) {
+              const fileHandle = this._file_handles[fileName]
+              const bundle = this._file_to_bundle[fileName]
+
+              let spec_: GraphSpec
+
+              if (bundle.spec.id === specId) {
+                spec_ = spec
+              } else {
+                spec_ = bundle.spec
+              }
+
+              const bundle_ = bundleSpec(spec_, specs)
+
+              await saveToUnitFile(fileHandle, bundle_)
+            }
+          } else if (type === 'delete') {
+            //
+          }
+        }
+      }
+    )
 
     const fallback_graph = new Graph(spec, {}, $system)
     this._fallback_graph = AsyncGraph(fallback_graph)
@@ -899,6 +989,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           config,
           specs,
           registry: this._registry,
+          typeCache: this._type_cache,
+          syncFile: this._sync_file,
           hasSpec: this._has_spec,
           emptySpec: this._empty_spec,
           getSpec: this._get_spec,
@@ -911,7 +1003,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           registerUnit: this._register_unit,
           unregisterUnit: this._unregister_unit,
           newSpecId: this._new_spec_id,
-          typeCache: this._type_cache,
           dispatchEvent: this._dispatch_event,
         },
         this.$system
@@ -1043,6 +1134,26 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   private _new_spec_id = () => {
     return this._registry.newSpecId()
+  }
+
+  private _file_to_bundle: Dict<BundleSpec> = {}
+  private _file_handles: Dict<FileSystemFileHandle> = {}
+  private _spec_id_to_file_name: Dict<string> = {}
+
+  private _sync_file = (
+    fileName: string,
+    fileHandle: FileSystemFileHandle,
+    bundle: BundleSpec
+  ) => {
+    // console.log('Editor', '_sync_file', fileName, fileHandle, bundle)
+
+    this._file_to_bundle[fileName] = bundle
+    this._file_handles[fileName] = fileHandle
+    this._spec_id_to_file_name[bundle.spec.id] = fileName
+
+    for (const spec_id in bundle.specs) {
+      this._spec_id_to_file_name[spec_id] = fileName
+    }
   }
 
   private _has_spec = (id: string): boolean => {
@@ -1336,6 +1447,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         unregisterUnit: this._unregister_unit,
         newSpecId: this._new_spec_id,
         dispatchEvent: this._dispatch_event,
+        syncFile: this._sync_file,
         typeCache: this._type_cache,
       },
       this.$system
@@ -1557,6 +1669,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         unregisterUnit: this._unregister_unit,
         newSpecId: this._new_spec_id,
         dispatchEvent: this._dispatch_event,
+        syncFile: this._sync_file,
         typeCache: this._type_cache,
       },
       this.$system
@@ -1770,6 +1883,11 @@ export interface _Props extends R {
   typeCache?: TypeTreeMap
   config?: Config
   dispatchEvent: (type: string, detail: any, bubbles: boolean) => void
+  syncFile: (
+    fileName: string,
+    fileHandle: FileSystemFileHandle,
+    bundle: BundleSpec
+  ) => void
 }
 
 export interface DefaultProps {
@@ -3464,27 +3582,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (let i = 0; i < items.length; i++) {
           const item = items[i]
 
-          if (item.webkitGetAsEntry) {
-            const entry = item.webkitGetAsEntry()
-
-            if (entry) {
-              const { isDirectory } = entry
-
-              if (isDirectory) {
-                this._paste_folder(entry)
-
-                continue
-              }
-            }
-          }
-
           if (item.kind === 'file') {
             const file = item.getAsFile() as File
 
-            if (file.name.endsWith('.textClipping')) {
-              // TODO
+            if (item.getAsFileSystemHandle) {
+              const entry =
+                (await item.getAsFileSystemHandle()) as FileSystemHandle
 
-              return
+              if (entry) {
+                if (entry.kind === 'directory') {
+                  this._paste_folder(entry as FileSystemDirectoryHandle)
+
+                  continue
+                }
+              }
             }
 
             const world_position = this._screen_to_world(clientX, clientY)
@@ -3516,39 +3627,43 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _watch_file_bundle = async (file: File, bundle: BundleSpec) => {
-    const spec_ids = keys(bundle.specs).concat(bundle.spec.id)
+  private _paste_folder = async (
+    dirHandle: FileSystemDirectoryHandle,
+    folderName: string = '/'
+  ) => {
+    const { injectSpecs, syncFile } = this.$props
 
-    // TODO
-  }
+    // @ts-ignore
+    if (dirHandle.entries) {
+      // @ts-ignore
+      for await (const [fileName, fileHandle] of dirHandle.entries()) {
+        if (fileHandle.kind === 'file') {
+          const absoluteFileName = `${folderName}/${fileHandle.name}`
 
-  private _paste_folder = async (entry: FileSystemDirectoryEntry) => {
-    const { injectSpecs } = this.$props
+          const file = (await fileHandle.getFile()) as File
 
-    const dirReader = entry.createReader() as FileSystemDirectoryReader
+          const bundle = await this._read_bundle_file(file)
 
-    dirReader.readEntries(async (entries) => {
-      for (let i = 0; i < entries.length; i++) {
-        const entry = entries[i]
+          if (bundle) {
+            const { spec, specs = {} } = bundle
 
-        if (entry.isFile) {
-          // @ts-ignore
-          ;(entry as FileSystemEntry).file(async (file: File) => {
-            const bundle = await this._read_bundle_file(file)
+            const specs_ = { ...specs, [spec.id]: spec }
 
-            if (bundle) {
-              const { spec, specs } = bundle
+            const specIdMap = injectSpecs(specs_)
 
-              injectSpecs({ ...specs, [spec.id]: spec })
+            const bundle_ = clone(bundle)
 
-              this._watch_file_bundle(file, bundle)
-            }
-          })
-        } else if (entry.isDirectory) {
-          //
+            remapBundle(bundle_, specIdMap)
+
+            syncFile(absoluteFileName, fileHandle, bundle_)
+          }
+        } else if (fileHandle.kind === 'directory') {
+          this._paste_folder(fileHandle, folderName + fileName)
+        } else {
+          throw new InvalidStateError()
         }
       }
-    })
+    }
   }
 
   private _paste_file = async (
@@ -3675,7 +3790,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const decompressionStream = new DecompressionStream('gzip')
       const decompressedStream = file
         .stream()
-        // @ts-ignore
         .pipeThrough(decompressionStream) as ReadableStream
 
       const reader = decompressedStream.getReader()
@@ -3711,8 +3825,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     try {
       bundle = JSON.parse(json)
     } catch (err) {
-      // TODO
-      throw new Error('invalid JSON file')
+      return null
     }
 
     return bundle
@@ -28176,6 +28289,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       unregisterUnit,
       newSpecId,
       dispatchEvent,
+      syncFile,
       typeCache,
     } = this.$props
 
@@ -28224,6 +28338,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           unregisterUnit,
           newSpecId,
           dispatchEvent,
+          syncFile,
         },
         this.$system
       )
@@ -29550,6 +29665,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       specs,
       registry,
       animate,
+      typeCache,
       hasSpec,
       emptySpec,
       getSpec,
@@ -29563,7 +29679,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       unregisterUnit,
       newSpecId,
       dispatchEvent,
-      typeCache,
+      syncFile,
     } = this.$props
 
     const { datumId } = segmentDatumNodeId(datum_node_id)
@@ -29629,6 +29745,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           unregisterUnit,
           newSpecId,
           dispatchEvent,
+          syncFile,
         },
         this.$system
       )
@@ -50578,7 +50695,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _last_save_file_handler: FileSystemFileHandle
+  private _last_save_file_handle: FileSystemFileHandle
   private _last_save_filename: string
 
   public getUnitBundle = (): UnitBundleSpec => {
@@ -50757,7 +50874,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         return
       }
 
-      this._last_save_file_handler = handle
+      this._last_save_file_handle = handle
       this._last_save_filename = handle.name
 
       await this._save_silently(bundle)
@@ -50778,52 +50895,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
-    if (this._last_save_file_handler) {
-      const json = JSON.stringify(bundle)
+    if (this._last_save_file_handle) {
+      const writableStream = await this._last_save_file_handle.createWritable()
 
-      const writableStream = await this._last_save_file_handler.createWritable()
-
-      if (
-        CompressionStream &&
-        this._last_save_file_handler.name.endsWith('.unit.gzip')
-      ) {
-        function stringToStream(str) {
-          const encoder = new TextEncoder()
-
-          const uint8Array = encoder.encode(str)
-
-          let position = 0
-
-          return new ReadableStream({
-            pull(controller) {
-              const chunkSize = 1024
-
-              if (position >= uint8Array.length) {
-                controller.close()
-
-                return
-              }
-
-              const chunk = uint8Array.slice(position, position + chunkSize)
-
-              controller.enqueue(chunk)
-
-              position += chunkSize
-            },
-          })
-        }
-
-        const inputReadableStream = stringToStream(json)
-
-        const compressedReadableStream = inputReadableStream.pipeThrough(
-          new CompressionStream('gzip')
-        )
-
-        compressedReadableStream.pipeTo(writableStream)
-      } else {
-        await writableStream.write(json)
-        await writableStream.close()
-      }
+      await saveToUnitFile(this._last_save_file_handle, bundle)
     } else {
       throw new Error('cannot save silently without previous file handler')
     }

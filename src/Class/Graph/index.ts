@@ -3307,17 +3307,11 @@ export class Graph<I = any, O = any>
   ): Unit {
     // console.log('Graph', 'addUnit', unitSpec, unitId)
 
-    applyUnitDefaultIgnored(
-      bundle.unit,
-      weakMerge(this.__system.specs, bundle.specs ?? {})
-    )
+    const specs_ = weakMerge(this.__system.specs, bundle.specs ?? {})
 
-    const unit = unitFromBundleSpec(
-      this.__system,
-      bundle,
-      this._specs,
-      this._branch
-    )
+    applyUnitDefaultIgnored(bundle.unit, specs_)
+
+    const unit = unitFromBundleSpec(this.__system, bundle, specs_, this._branch)
 
     this.addUnit(unitId, unit, bundle, emit)
 
@@ -3331,17 +3325,11 @@ export class Graph<I = any, O = any>
   ): Unit {
     // console.log('Graph', 'addUnit', bundle, unitId, fork)
 
-    applyUnitDefaultIgnored(
-      bundle.unit,
-      weakMerge(this.__system.specs, bundle.specs ?? {})
-    )
+    const specs = weakMerge(this.__system.specs, bundle.specs ?? {})
 
-    const unit = unitFromBundleSpec(
-      this.__system,
-      bundle,
-      this._specs,
-      this._branch
-    )
+    applyUnitDefaultIgnored(bundle.unit, specs)
+
+    const unit = unitFromBundleSpec(this.__system, bundle, specs, this._branch)
 
     this._addUnit(unitId, unit, bundle, fork)
 

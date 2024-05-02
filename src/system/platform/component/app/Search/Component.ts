@@ -506,7 +506,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
                 this._ordered_id_list.splice(new_ordered_index, 0, specId)
 
-                const match = fuzzy.match(this._input_value, spec.name)
+                const match = fuzzy.match(this._input_value, spec.name ?? '')
 
                 if (match) {
                   const new_filtered_index = this._find_new_item_index(
