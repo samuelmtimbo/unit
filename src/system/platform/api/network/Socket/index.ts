@@ -36,7 +36,13 @@ export default class Socket
         i: ['close'],
         o: [],
       },
-      {},
+      {
+        output: {
+          channel: {
+            ref: true,
+          },
+        },
+      },
       system,
       ID_SOCKET
     )
@@ -47,14 +53,29 @@ export default class Socket
       this._web_socket.close()
     }
 
-    this._web_socket = new WebSocket(url)
+    try {
+      this._web_socket = new WebSocket(url)
+    } catch (err) {
+      if (
+        err.message ===
+        "Failed to construct 'WebSocket': The URL '' is invalid."
+      ) {
+        done(undefined, 'malformed url')
+      } else {
+        done(undefined, err.message.toLowerCase())
+      }
+
+      return
+    }
+
+    const channel = wrapWebSocket(this._web_socket, this.__system)
 
     this._web_socket.onopen = () => {
       // console.log('Socket', 'onopen')
     }
     this._web_socket.onmessage = (message) => {
       // console.log('Socket', 'onmessage', message)
-      this.emit('message', message.data)
+      channel.emit('message', message.data)
     }
     this._web_socket.onerror = (event: Event) => {
       // console.log('Socket', 'onerror')
@@ -66,8 +87,6 @@ export default class Socket
 
       this._plunk()
     }
-
-    const channel = wrapWebSocket(this._web_socket, this.__system)
 
     done({
       channel,
@@ -81,8 +100,17 @@ export default class Socket
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'close') {
     this._close()
-    this._done()
+    this._finish()
     // }
+  }
+
+  private _finish = () => {
+    this._plunk()
+
+    this._forward_empty('channel')
+
+    this._backward('url')
+    this._backward('close')
   }
 
   private _plunk = (): void => {
