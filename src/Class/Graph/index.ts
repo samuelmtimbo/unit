@@ -5109,7 +5109,7 @@ export class Graph<I = any, O = any>
       plugs,
       (type: IO, pinId: string, plugSpec: GraphPlugOuterSpec) => {
         this._plugPin(
-          type,
+          plugSpec.type,
           plugSpec.pinId,
           plugSpec.subPinId,
           {
