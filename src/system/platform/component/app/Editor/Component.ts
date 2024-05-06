@@ -6518,30 +6518,32 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (data !== undefined) {
       const data_ref = evaluateDataValue(data, specs, classes)
 
-      const metadata_position = metadata.data?.position
+      if (data_ref.data !== undefined) {
+        const metadata_position = metadata.data?.position
 
-      const datum_id = this._new_datum_id()
+        const datum_id = this._new_datum_id()
 
-      const value = stringifyDataValue(data_ref, specs, classes)
+        const value = stringifyDataValue(data_ref, specs, classes)
 
-      const datum_tree = getTree__cached(value)
+        const datum_tree = getTree__cached(value)
 
-      let position: Position
+        let position: Position
 
-      if (metadata_position) {
-        position = addVector(center, metadata_position)
-      } else {
-        position = this._predict_pin_datum_initial_position(pin_node_id)
+        if (metadata_position) {
+          position = addVector(center, metadata_position)
+        } else {
+          position = this._predict_pin_datum_initial_position(pin_node_id)
+        }
+
+        this._sim_add_pin_datum_tree(
+          unit_id,
+          type,
+          pin_id,
+          datum_id,
+          datum_tree,
+          position
+        )
       }
-
-      this._sim_add_pin_datum_tree(
-        unit_id,
-        type,
-        pin_id,
-        datum_id,
-        datum_tree,
-        position
-      )
     }
   }
 
@@ -50716,6 +50718,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     editor: Editor_,
     node_positions: Dict<Position>
   ) => {
+    if (!spec) {
+      return
+    }
+
     for (const node_id in node_positions) {
       const node_position = node_positions[node_id]
 
