@@ -76,7 +76,6 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
     this._fallback_graph = fallback_graph
 
     this._input.graph.push(this._fallback_graph)
-    this._output.graph.push(this._fallback_graph)
 
     this._fallback_graph.play()
   }
