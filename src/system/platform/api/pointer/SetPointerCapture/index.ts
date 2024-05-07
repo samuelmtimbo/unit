@@ -62,8 +62,6 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
 
       this._done()
 
-      this._input.done.pull()
-
       this._element.emit('call', {
         method: 'releasePointerCapture',
         data: [pointerId],
@@ -73,5 +71,7 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
       this._pointerId = undefined
       this._element = null
     }
+
+    this._input.done.pull()
   }
 }
