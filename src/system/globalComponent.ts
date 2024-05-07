@@ -74,9 +74,7 @@ export function firstGlobalComponentPromise(
 
   return new Promise((resolve) => {
     const listener = (component: Component) => {
-      setTimeout(() => {
-        emitter.removeListener(id, listener)
-      }, 0)
+      emitter.removeListener(id, listener)
 
       resolve(component)
     }
