@@ -46,9 +46,9 @@ export class RemoteRef {
           const unlisten = this._unlisten[id]
 
           if (unlisten) {
-            delete this._unlisten[id]
-
             unlisten()
+
+            delete this._unlisten[id]
           }
         }
         break
