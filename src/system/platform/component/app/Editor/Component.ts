@@ -22929,6 +22929,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._show_core_overlay(unit_id)
 
+    if (this._is_node_selected(unit_id)) {
+      //
+    } else {
+      this._disable_core_resize(unit_id)
+    }
+
     this._lock_node(unit_id)
 
     this._refresh_selection_color(unit_id)

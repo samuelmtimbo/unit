@@ -202,9 +202,9 @@ export class Registry implements R {
     if (this.specsCount[id] === 0) {
       delete this.specsCount[id]
 
-      const spec = this.getSpec(id)
+      const spec = this.specs[id]
 
-      if (!spec.user && !isSystemSpecId(this.specs, id)) {
+      if (!isSystemSpecId(this.specs, id) && (!spec || !spec.user)) {
         this.deleteSpec(id)
       }
     }
