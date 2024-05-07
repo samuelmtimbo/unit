@@ -3542,8 +3542,6 @@ export class Graph<I = any, O = any>
 
       fork && this._fork()
 
-      this._specSetUnitPinData(unitId, type, pinId, data)
-
       const pin_data_unlisten = pin.addListener('data', (data) => {
         if (this._settingUnitData) {
           return
