@@ -9,6 +9,7 @@ export type BaseSpec = {
   method?: boolean
   private?: boolean
   system?: boolean
+  user?: boolean
   name: string
   inputs: PinsSpecBase
   outputs: PinsSpecBase

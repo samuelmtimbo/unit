@@ -356,6 +356,7 @@ import { CodePathNotImplementedError } from '../../../../../exception/CodePathNo
 import { InvalidStateError } from '../../../../../exception/InvalidStateError'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { ShouldNeverHappenError } from '../../../../../exception/ShouldNeverHappenError'
+import { injectUserBundle } from '../../../../../injectBundle'
 import { isFrameRelativeValue } from '../../../../../isFrameRelative'
 import { proxyWrap } from '../../../../../proxyWrap'
 import {
@@ -3645,11 +3646,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const bundle = await this._read_bundle_file(file)
 
           if (bundle) {
-            const { spec, specs = {} } = bundle
-
-            const specs_ = { ...specs, [spec.id]: spec }
-
-            const specIdMap = injectSpecs(specs_)
+            const specIdMap = injectUserBundle(this.$props, bundle)
 
             const bundle_ = clone(bundle)
 
