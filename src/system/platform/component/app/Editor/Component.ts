@@ -21058,7 +21058,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       if (relatedTarget) {
-        const hide = this._temp_control_unlock
+        const hide = this._temp_control_unlock || this._control_lock
 
         this._disable(hide)
 
