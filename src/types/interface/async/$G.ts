@@ -23,6 +23,7 @@ import {
   GraphRemoveUnitPinDataData,
   GraphSetMergeDataData,
   GraphSetMetadataData,
+  GraphSetPinSetDefaultIgnoredData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
   GraphSetUnitIdData,
@@ -133,6 +134,7 @@ export interface $G_C {
   $exposeUnitPinSet(data: GraphExposeUnitPinSetData): void
   $coverUnitPinSet(data: GraphCoverUnitPinSetData): void
   $setPinSetId(data: GraphSetPinSetIdData): void
+  $setPinSetDefaultIgnored(data: GraphSetPinSetDefaultIgnoredData): void
   $setPinSetFunctional(data: GraphSetPinSetFunctionalData): void
   $addMerge(data: GraphAddMergeData): void
   $removeMerge(data: GraphRemoveMergeData): void

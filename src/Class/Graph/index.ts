@@ -59,6 +59,7 @@ import {
   removePinFromMerge,
   renameUnitPin,
   setComponentSize,
+  setPinDefaultIgnored,
   setPinSetFunctional,
   setPinSetId,
   setSubComponentSize,
@@ -1524,6 +1525,52 @@ export class Graph<I = any, O = any>
     } else if (isPinFunctional && !functional) {
       this._unplugFromWaitAll(type, pinId)
     }
+  }
+
+  public setPinSetDefaultIgnored(
+    type: IO,
+    pinId: string,
+    ignored: boolean
+  ): void {
+    this._setPinSetDefaultIgnored(type, pinId, ignored)
+
+    this.emit('set_pin_set_default_ignored', type, pinId, ignored, [])
+  }
+
+  private _setPinSetDefaultIgnored(
+    type: IO,
+    pinId: string,
+    ignored: boolean
+  ): void {
+    this._fork()
+
+    this._specSetPinSetDefaultIgnored(type, pinId, ignored)
+    this._memSetPinSetDefaultIgnored(type, pinId, ignored)
+    this._simSetPinSetDefaultIgnored(type, pinId, ignored)
+  }
+
+  private _specSetPinSetDefaultIgnored(
+    type: IO,
+    pinId: string,
+    ignored: boolean
+  ): void {
+    setPinDefaultIgnored({ type, pinId, ignored }, this._spec)
+  }
+
+  private _memSetPinSetDefaultIgnored(
+    type: IO,
+    pinId: string,
+    ignored: boolean
+  ): void {
+    //
+  }
+
+  private _simSetPinSetDefaultIgnored(
+    type: IO,
+    pinId: string,
+    ignored: boolean
+  ): void {
+    //
   }
 
   public setPinSetId(

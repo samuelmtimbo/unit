@@ -3,20 +3,20 @@ import { G_EE } from '../../types/interface/G'
 import { IO } from '../../types/IO'
 import { Moment } from '../Moment'
 
-export interface GraphSetPinSetMomentData {
+export interface GraphSetPinSetIdMomentData {
   type: IO
   pinId: string
   nextPinId: string
   path: string[]
 }
 
-export interface GraphSetPinSetMoment
-  extends Moment<GraphSetPinSetMomentData> {}
+export interface GraphSetPinSetIdMoment
+  extends Moment<GraphSetPinSetIdMomentData> {}
 
 export function watchGraphSetPinSetId(
   event: 'set_pin_set_id',
   graph: Graph,
-  callback: (moment: GraphSetPinSetMoment) => void
+  callback: (moment: GraphSetPinSetIdMoment) => void
 ): () => void {
   const listener = (
     ...[type, pinId, nextPinId, path]: G_EE['set_pin_set_id']

@@ -151,6 +151,7 @@ export interface G<I = any, O = any, U_ = any> {
   takeUnitErr(unitId: string): string | null
   setPinSetId(type: IO, pinId: string, nextPinId: string): void
   setPinSetFunctional(type: IO, name: string, functional: boolean): void
+  setPinSetDefaultIgnored(type: IO, name: string, ignored: boolean): void
   setUnitSize(unitId: string, width: number, height: number): void
   setSubComponentSize(unitId: string, width: number, height: number): void
   setComponentSize(unitId: string, width: number, height: number): void
@@ -255,6 +256,7 @@ export type G_EE = {
   cover_pin: [IO, string, string, GraphSubPinSpec, string[]]
   unplug_pin: [IO, string, string, GraphSubPinSpec, string[]]
   set_pin_set_functional: [IO, string, boolean, string[]]
+  set_pin_set_default_ignored: [IO, string, boolean, string[]]
   before_remove_unit: [string, Unit, string[]]
   before_add_unit: [string, Unit, string[]]
   add_unit: [string, UnitBundleSpec, Unit, string[]]
