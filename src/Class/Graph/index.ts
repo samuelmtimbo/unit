@@ -3860,7 +3860,7 @@ export class Graph<I = any, O = any>
   ): Unit {
     // console.log('_removeUnit', unitId, take, destroy, fork)
 
-    fork ?? this._fork()
+    fork && this._fork()
 
     const unit = this.getUnit(unitId)
 
