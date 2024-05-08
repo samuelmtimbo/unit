@@ -5608,12 +5608,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._set_zoom(zoom)
 
-    // AD HOC Safari will have frame height 0 while page is loading
-
     if (this._node_count > 0) {
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         this._center_graph(true)
-      }, 0)
+      })
 
       this._start_graph_simulation(LAYER_NONE)
 
