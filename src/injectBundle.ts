@@ -15,6 +15,9 @@ export function injectUserSpecs(registry: R, specs: GraphSpecs) {
   // mark as "user" spec to prevent deletion
   for (const specId in specs) {
     specs[specId].user = true
+    specs[specId].metadata = specs[specId].metadata ?? {}
+    specs[specId].metadata.tags = specs[specId].metadata?.tags ?? []
+    specs[specId].metadata.tags.push('user')
   }
 
   const specIdMap = registry.injectSpecs(specs)

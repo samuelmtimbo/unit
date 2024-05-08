@@ -907,7 +907,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._specs = specs
 
-    this._registry = new Registry(specs)
+    this._registry = Registry.fromRegistry(this.$system, {})
 
     const spec: GraphSpec = emptySpec({ name: 'untitled', private: true })
 
@@ -6112,8 +6112,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _spec_add_unit = (unitId: string, unit: GraphUnitSpec) => {
     // console.log('Graph', '_spec_add_unit', unitId, unit, mirror)
-
-    const { setSpec } = this.$props
 
     addUnit({ unitId, unit: clone(unit) }, this._spec)
 
@@ -56886,6 +56884,29 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _should_fork_path = (path: string[], id: string) => {
+    const {
+      setSpec,
+      forkSpec,
+      shouldFork,
+      registerUnit,
+      unregisterUnit,
+      specs,
+    } = this.$props
+
+    const should = shouldFork(id)
+
+    const editor = this.getSubgraphAtPath(path)
+
+    if (editor) {
+      const fork = !!editor.getProp('fork')
+
+      return should && fork
+    }
+
+    return should
+  }
+
   private _on_graph_unit_set_unit_pin_data = (
     _data: GraphSetUnitPinDataMomentData
   ) => {
@@ -56929,7 +56950,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           let next_parent_spec_ = clone(parent_spec_)
 
           if (i === path.length) {
-            if (shouldFork(spec_.id)) {
+            if (this._should_fork_path(path, spec_.id)) {
               ;[, next_spec_] = forkSpec(spec_)
             }
 
@@ -56950,7 +56971,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
 
-          if (shouldFork(parent_spec_.id)) {
+          if (this._should_fork_path(path, parent_spec_.id)) {
             ;[, next_parent_spec_] = forkSpec(parent_spec_)
           }
 
