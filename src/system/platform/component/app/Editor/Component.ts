@@ -49218,7 +49218,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         throw new MethodNotImplementedError()
       },
       hasPinNamed: function (type: IO, name: string): boolean {
-        throw new MethodNotImplementedError()
+        return hasPinNamed(unit_spec, type, name)
       },
       hasInputNamed: function (name: string): boolean {
         throw new MethodNotImplementedError()
@@ -57051,7 +57051,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             this._on_graph_unit_cover_pin(data)
           },
           exposePin: (data) => {
-            throw new MethodNotImplementedError()
+            this._on_graph_unit_expose_pin(data)
           },
           plugPin: (data) => {
             this._on_graph_unit_plug_pin_moment({ ...data, path })
