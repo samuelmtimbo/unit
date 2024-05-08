@@ -5103,9 +5103,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       injectSpecs(weakMerge(specs ?? {}, { [spec.id]: spec }))
 
-      this._spec = clone(spec)
-
-      this._reset()
+      this._reset(spec)
       this._setup_pod(this._pod)
     })
   }
@@ -5119,10 +5117,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       subgraph.reset()
     }
 
-    this._reset()
+    this._reset(this._spec)
   }
 
-  private _reset() {
+  private _reset(spec: GraphSpec) {
     const { classes } = this.$system
 
     const { zoom = clone(ZOOM_IDENTITY), specs } = this.$props
@@ -5133,8 +5131,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return
     }
 
-    const spec = this._spec
-
+    this._spec = spec
+    
     this._cancel_fullwindow_animation()
 
     this._zoom_comp.removeChildren()
@@ -6112,7 +6110,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _spec_add_unit = (unitId: string, unit: GraphUnitSpec) => {
-    // console.log('Graph', '_spec_add_unit', unitId, unit, mirror)
+    // console.log('Graph', '_spec_add_unit', unitId, unit)
 
     addUnit({ unitId, unit: clone(unit) }, this._spec)
 
