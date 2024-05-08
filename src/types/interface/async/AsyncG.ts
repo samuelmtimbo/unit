@@ -94,7 +94,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     return _call(graph, method, fork, ...args)
   }
 
-  return {
+  const obj: $G_C = {
     $setUnitId({
       unitId,
       newUnitId,
@@ -625,7 +625,18 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       const state = graph.getUnitInputData(unitId)
       callback(state)
     },
+
+    $setPinSetDefaultIgnored({
+      type,
+      pinId,
+      ignored,
+      fork,
+    }: GraphSetUnitPinIgnoredData): void {
+      call('setPinSetId', fork, type, pinId, ignored)
+    },
   }
+
+  return obj
 }
 
 export const AsyncGWatch = (graph: Graph): $G_W => {

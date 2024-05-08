@@ -218,6 +218,13 @@ export type GraphSetPinSetIdData = {
   fork?: boolean
 }
 
+export type GraphSetPinSetDefaultIgnoredData = {
+  type: IO
+  pinId: string
+  ignored: boolean
+  fork?: boolean
+}
+
 export type GraphSetPinSetFunctionalData = {
   type: IO
   pinId: string

@@ -648,6 +648,11 @@ export function lazyFromSpec(
       return this.__graph.setPinSetFunctional(type, name, functional)
     }
 
+    setPinSetDefaultIgnored(type: IO, name: string, ignored: boolean): void {
+      this._ensure()
+      return this.__graph.setPinSetDefaultIgnored(type, name, ignored)
+    }
+
     public exposePin = (
       type: IO,
       pinId: string,

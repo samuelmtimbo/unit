@@ -26,6 +26,7 @@ export const GRAPH_DEFAULT_EVENTS: (keyof G_EE | keyof C_EE | keyof U_EE)[] = [
   'expose_pin_set',
   'cover_pin_set',
   'set_pin_set_id',
+  'set_pin_set_default_ignored',
   'set_pin_set_functional',
   'set_unit_pin_constant',
   'set_unit_pin_ignored',
