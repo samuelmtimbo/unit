@@ -1253,6 +1253,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       this._frame = frame
       this._frame_out = frame_out
 
+      this.$ref['foreground'] = this._frame
+
       this._editor.setProp('frame', this._frame)
       this._editor.setProp('frameOut', this._frame_out)
     }
@@ -20097,7 +20099,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const visible = this._is_layout_component_layer_visible(sub_component_id)
 
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
-      const parent_visible = !parent_id || this._layout_path.includes(parent_id)
+      const parent_fullwindow = this._is_sub_component_fullwindow(parent_id)
+      const parent_visible =
+        !parent_fullwindow &&
+        (!parent_id || this._layout_path.includes(parent_id))
 
       const children = this._spec_get_sub_component_children(sub_component_id)
 
@@ -20172,7 +20177,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      if (parent_visible) {
+      if (
+        parent_visible &&
+        !this._is_sub_component_fullwindow(sub_component_id)
+      ) {
         sub_component_root.push(sub_component_id)
         sub_component_count++
 
@@ -20381,6 +20389,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     for (const sub_component_id in this._component.$subComponent) {
+      if (this._fullwindow_component_set.has(sub_component_id)) {
+        continue
+      }
+
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
       const children = this._spec_get_sub_component_children(sub_component_id)
 
@@ -20821,7 +20833,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const animating_sub_component =
           animating_sub_component_set.has(sub_component_id)
 
-        if (!animating_sub_component) {
+        const fullwindow_sub_component =
+          this._is_sub_component_fullwindow(sub_component_id)
+
+        if (!animating_sub_component && !fullwindow_sub_component) {
           this._leave_sub_component_frame(sub_component_id)
           this._remove_sub_component_root_base(sub_component_id)
         }
