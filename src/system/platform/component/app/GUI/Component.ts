@@ -559,12 +559,15 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     mergePropStyle(this._cabinet, {
       backgroundColor,
+      color,
     })
     mergePropStyle(this._modes, {
       backgroundColor,
+      color,
     })
     mergePropStyle(this._search, {
       backgroundColor,
+      color,
     })
     mergePropStyle(this._minimap, {
       color,
