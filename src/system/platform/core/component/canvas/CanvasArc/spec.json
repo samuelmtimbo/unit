@@ -91,6 +91,7 @@
   },
   "metadata": {
     "complexity": 64,
+    "description": "canvas with an arc drawn",
     "tags": ["platform", "core", "canvas"]
   },
   "id": "01562c38-9973-43f4-982b-1dbdbea49c5b",

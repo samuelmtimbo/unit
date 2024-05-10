@@ -12,7 +12,7 @@
   },
   "metadata": {
     "icon": "tilde",
-    "description": "Base64-encode ASCII string",
+    "description": "base64-encode ASCII string",
     "complexity": 3,
     "tags": ["platform", "api", "base64"]
   },

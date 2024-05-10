@@ -129,6 +129,7 @@
   "metadata": {
     "icon": "brackets-curly",
     "complexity": 15,
+    "description": "{width, height}",
     "position": {
       "merge": {
         "0": {

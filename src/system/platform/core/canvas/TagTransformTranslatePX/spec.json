@@ -172,6 +172,7 @@
   "type": "`U`&`G`",
   "metadata": {
     "icon": "tag",
+    "description": "{transform: translate(x, y)}",
     "complexity": 23,
     "tags": ["platform", "core", "canvas"]
   },

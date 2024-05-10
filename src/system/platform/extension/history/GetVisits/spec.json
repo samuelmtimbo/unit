@@ -12,7 +12,7 @@
   },
   "metadata": {
     "icon": "history",
-    "metadata": "retrieve information about visits to a URL",
+    "description": "retrieve information about visits to a URL",
     "complexity": 3,
     "tags": ["platform", "extension", "history"]
   },

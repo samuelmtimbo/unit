@@ -23,6 +23,7 @@
   "metadata": {
     "icon": "film",
     "complexity": 12,
+    "description": "enable the capture of images or photos from a camera device",
     "tags": ["platform", "api", "media"],
     "globals": ["ImageCapture"]
   },

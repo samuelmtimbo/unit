@@ -17,7 +17,7 @@
   },
   "metadata": {
     "icon": "file-output",
-    "description": "",
+    "description": "asynchronously read the contents of files stored on the user's system",
     "complexity": 3,
     "tags": ["platform", "api", "file"]
   },

@@ -329,6 +329,7 @@
   "metadata": {
     "icon": "link",
     "complexity": 18,
+    "description": "peer transmitter + peer receiver",
     "tags": ["platform", "api", "peer"],
     "position": {
       "merge": {

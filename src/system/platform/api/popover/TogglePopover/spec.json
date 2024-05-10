@@ -12,7 +12,7 @@
   "outputs": {},
   "metadata": {
     "icon": "mouse-pointer",
-    "description": "...",
+    "description": "toggle `component` popover",
     "complexity": 3,
     "tags": ["platform", "api", "popover"]
   },

@@ -134,6 +134,7 @@
   "component": {},
   "metadata": {
     "icon": "list-ordered",
+    "description": "range bounce between `start` and `and`, interchangeably",
     "complexity": 72,
     "tags": ["core", "loop"]
   },

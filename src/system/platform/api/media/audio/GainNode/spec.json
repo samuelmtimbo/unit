@@ -20,7 +20,7 @@
   },
   "metadata": {
     "icon": "activity",
-    "description": "periodic waveform, such as a sine wave",
+    "description": "apply gain to audio signal",
     "complexity": 12,
     "tags": ["platform", "api", "media", "audio"],
     "globals": ["AudioContext"]

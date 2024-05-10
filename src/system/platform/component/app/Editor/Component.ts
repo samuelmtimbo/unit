@@ -3790,6 +3790,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const decompressionStream = new DecompressionStream('gzip')
       const decompressedStream = file
         .stream()
+        // @ts-ignore
         .pipeThrough(decompressionStream) as ReadableStream
 
       const reader = decompressedStream.getReader()
