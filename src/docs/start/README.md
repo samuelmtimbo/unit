@@ -231,3 +231,17 @@ To open a graph file, you can press <kbd>Ctrl + O</kbd> or press on the "import"
 You can also drag and drop a .unit file to the editor to open it.
 
 ![](/public/gif/start/45.gif)
+
+![](/public/gif/start/47.gif)
+
+The opened/dropped unit bundle will be injected into the system and will visible on Search.
+
+If all instances of an injected unit are deleted, the unit spec will be deleted from the system.
+
+## Drag and Drop Folder
+
+Drag and drop a folder into the editor to inject all the specs inside into the system.
+
+![](/public/gif/start/48.gif)
+
+The injected specs can't be deleted.
