@@ -176,6 +176,7 @@
   "metadata": {
     "complexity": 96,
     "tags": ["platform", "core", "component"],
+    "description": "Unit logo in SVG",
     "position": {
       "merge": {
         "0": {

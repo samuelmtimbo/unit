@@ -52,6 +52,7 @@
   "merges": {},
   "metadata": {
     "complexity": 87,
+    "description": "text inside a span",
     "tags": ["platform", "core", "component"]
   },
   "component": {

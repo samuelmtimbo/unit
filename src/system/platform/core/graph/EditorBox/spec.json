@@ -1,5 +1,5 @@
 {
-  "name": "editor | div",
+  "name": "editor | box",
   "inputs": {},
   "outputs": {
     "graph": {
@@ -193,6 +193,7 @@
   "metadata": {
     "icon": "atom-alt",
     "complexity": 204,
+    "description": "editor with a box frame, side by side",
     "tags": ["platform", "core", "graph"]
   },
   "component": {

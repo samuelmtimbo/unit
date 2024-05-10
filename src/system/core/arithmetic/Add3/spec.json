@@ -25,6 +25,7 @@
   "metadata": {
     "icon": "plus",
     "complexity": 6,
+    "description": "add 3 numbers",
     "tags": ["core", "arithmetic"]
   },
   "inputs": {

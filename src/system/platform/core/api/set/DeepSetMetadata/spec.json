@@ -144,7 +144,7 @@
   "outputs": {},
   "metadata": {
     "icon": "question",
-    "description": "",
+    "description": "deep set `obj` \"metadata\" property",
     "position": {
       "merge": {
         "0": {

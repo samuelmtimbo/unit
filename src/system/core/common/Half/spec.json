@@ -35,6 +35,7 @@
   },
   "metadata": {
     "icon": "half",
+    "description": "divide number by 2",
     "complexity": 5,
     "tags": ["core", "common"]
   },

@@ -11,7 +11,7 @@
     }
   },
   "metadata": {
-    "icon": "search-code",
+    "icon": "info",
     "description": "output string created from the specified sequence of UTF-16 code",
     "complexity": 3,
     "tags": ["f", "string"]

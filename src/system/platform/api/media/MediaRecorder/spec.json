@@ -34,6 +34,7 @@
   "metadata": {
     "icon": "film",
     "complexity": 13,
+    "description": "provides functionality to record media",
     "tags": ["platform", "api", "media"],
     "globals": ["MediaRecorder"]
   },

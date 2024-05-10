@@ -100,8 +100,8 @@
   },
   "outputs": {},
   "metadata": {
-    "icon": null,
-    "description": ""
+    "icon": "object-set",
+    "description": "set `obj` \"name\" property"
   },
   "id": "ee6b5fbb-5e05-4750-83a8-d6ffe5a059db",
   "system": true

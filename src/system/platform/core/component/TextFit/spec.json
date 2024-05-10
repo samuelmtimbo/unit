@@ -81,6 +81,7 @@
   },
   "metadata": {
     "complexity": 97,
+    "description": "text box fit content",
     "tags": ["platform", "component", "app"]
   },
   "id": "b12c858a-26ea-42a7-a435-0ee50ac34fbf",

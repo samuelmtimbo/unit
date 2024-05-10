@@ -42,7 +42,7 @@
   "outputs": {},
   "metadata": {
     "icon": "question",
-    "description": ""
+    "description": "deep set `obj` metadata icon property"
   },
   "id": "b97d77a2-bf51-4bf9-aa72-2956c26ce1ab",
   "system": true

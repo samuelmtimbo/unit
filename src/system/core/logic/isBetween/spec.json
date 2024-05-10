@@ -125,6 +125,7 @@
     }
   },
   "metadata": {
+    "description": "check whether `a` is between `b` and `c`",
     "complexity": 11
   },
   "id": "f022d16a-7a47-47c8-8d9b-3278df13bcc5",
