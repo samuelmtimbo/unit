@@ -16037,6 +16037,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       layout_position
     )
 
+    if (this._mode === 'add') {
+      this._show_core_description(unit_id)
+      this._set_core_description_color(
+        unit_id,
+        getThemeModeColor($theme, 'add', 'currentcolor')
+      )
+    }
+
     const link_color = getThemeLinkModeColor($theme, this._mode)
     const node_color = getThemeModeColor($theme, this._mode, 'currentColor')
 
@@ -16702,6 +16710,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._theme.pin_text,
           this._theme.node
         )
+
+        this._hide_core_description(search_unit_id)
+        this._set_core_description_color(search_unit_id, this._theme.sub_text)
 
         const unit = this._get_unit(search_unit_id)
 
