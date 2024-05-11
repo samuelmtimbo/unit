@@ -908,11 +908,9 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._specs = specs
 
-    this._registry = Registry.fromRegistry(this.$system, {})
+    this._registry = Registry.fromRegistry(this.$system, specs)
 
     const spec: GraphSpec = emptySpec({ name: 'untitled', private: true })
-
-    // this.$system.newSpec(spec)
 
     this._unlisten_registry = this._registry.specs_.subscribe(
       [],
@@ -5133,7 +5131,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._spec = spec
-    
+
     this._cancel_fullwindow_animation()
 
     this._zoom_comp.removeChildren()
@@ -44351,7 +44349,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   position
     // )
 
-    const { specs, fork, setSpec, forkSpec, shouldFork } = this.$props
+    const { fork, setSpec, forkSpec, shouldFork } = this.$props
+
+    const { specs } = this._registry
 
     const { x: clientX, y: clientY } = position
 
