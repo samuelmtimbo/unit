@@ -9441,6 +9441,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { inputs: unit_inputs = {}, outputs: unit_outputs = {} } = unit_spec
 
+    const is_component = this._is_unit_component(unit_id)
+
+    let component_index: number
+
+    if (is_component) {
+      component_index = this._get_sub_component_index(unit_id)
+    }
+
     const pin_bag = {
       input: clone(unit_inputs),
       output: clone(unit_outputs),
@@ -9692,7 +9700,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let next_sub_component_parent_index =
       (is_unit_component &&
         is_swap_unit_component &&
-        this._get_sub_component_index(unit_id) + 1) ||
+        this._get_sub_component_index(unit_id)) ??
       null
 
     const bundle = unitBundleSpec(graph_unit_spec, specs)
@@ -9709,7 +9717,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       new_unit_pin_position,
       layout_position,
       next_sub_component_parent_id,
-      next_sub_component_parent_index + 1
+      next_sub_component_parent_index
     )
 
     if (
@@ -9722,6 +9730,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         next_sub_component_index,
         true
       )
+
+      this._refresh_layout_node_target_position(unit_parent_id)
     }
 
     const replace_exposed = (kind: IO, tag: 'ref' | 'data'): void => {
