@@ -17,7 +17,9 @@ export function injectUserSpecs(registry: R, specs: GraphSpecs) {
     specs[specId].user = true
     specs[specId].metadata = specs[specId].metadata ?? {}
     specs[specId].metadata.tags = specs[specId].metadata?.tags ?? []
-    specs[specId].metadata.tags.push('user')
+    if (!specs[specId].metadata.tags.includes('user')) {
+      specs[specId].metadata.tags.push('user')
+    }
   }
 
   const specIdMap = registry.injectSpecs(specs)
