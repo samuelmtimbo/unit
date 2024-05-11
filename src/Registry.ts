@@ -8,7 +8,6 @@ import { GraphSpecs } from './types/GraphSpecs'
 import { R } from './types/interface/R'
 import { uuidNotIn } from './util/id'
 import { clone } from './util/object'
-import { weakMerge } from './weakMerge'
 
 export class Registry implements R {
   specs: Specs
@@ -25,15 +24,17 @@ export class Registry implements R {
     this.specsCount = specsCount ?? {}
   }
 
-  static fromRegistry(registry: Registry, specs: GraphSpecs) {
-    const specs_ = weakMerge(registry.specs, specs)
-    const registry_ = new Registry(specs_, registry.specs_, registry.specsCount)
+  static fromRegistry(registry: Registry, specs: Specs) {
+    const specs_ = new Object_(specs)
+    const registry_ = new Registry(specs, specs_, {})
 
-    for (const specId in specs) {
-      const spec = specs[specId]
-
-      registry.specs_.set(specId, spec)
-    }
+    registry.specs_.subscribe(['*'], '*', (type, path, key, data) => {
+      if (type === 'set') {
+        specs_.deepSet([...path, key], data)
+      } else {
+        specs_.deepDelete([...path, key])
+      }
+    })
 
     return registry_
   }
