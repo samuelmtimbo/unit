@@ -743,7 +743,7 @@ const saveToUnitFile = async (
   fileHandle: FileSystemFileHandle,
   bundle: BundleSpec
 ) => {
-  const json = JSON.stringify(bundle)
+  const json = JSON.stringify(bundle, null, 2)
 
   try {
     const writableStream = await fileHandle.createWritable()
