@@ -3,7 +3,6 @@ import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { Source } from '../../../../../Source'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
-import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { CS } from '../../../../../types/interface/CS'
 import { MS } from '../../../../../types/interface/MS'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -12,7 +11,7 @@ import { ID_CAPTURE_STREAM } from '../../../../_ids'
 
 export interface I {
   source: CS
-  opt: CSOpt
+  opt: { frameRate: number }
   stop: any
 }
 

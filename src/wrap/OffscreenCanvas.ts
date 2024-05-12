@@ -4,7 +4,6 @@ import { APINotSupportedError } from '../exception/APINotImplementedError'
 import { System } from '../system'
 import { clearCanvas } from '../system/platform/component/canvas/Canvas/Component'
 import { CA } from '../types/interface/CA'
-import { CSOpt } from '../types/interface/async/$CS'
 import { readBlobAsDataUrl } from './FileReader'
 
 export function wrapOffscreenCanvas(
@@ -63,7 +62,11 @@ export function wrapOffscreenCanvas(
       return readBlobAsDataUrl(this.__system, blob)
     }
 
-    async captureStream({ frameRate }: CSOpt): Promise<MediaStream> {
+    async captureStream({
+      frameRate,
+    }: {
+      frameRate: number
+    }): Promise<MediaStream> {
       throw new APINotSupportedError('Offscreen Canvas Capture Stream')
     }
 

@@ -2,7 +2,6 @@ import { ElementEE, Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { CA } from '../../../../../types/interface/CA'
-import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { ID_CANVAS } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import { Style } from '../../../Style'
@@ -132,7 +131,11 @@ export default class Canvas
     return component.toDataUrl(type, quality)
   }
 
-  async captureStream({ frameRate }: CSOpt): Promise<MediaStream> {
+  async captureStream({
+    frameRate,
+  }: {
+    frameRate: number
+  }): Promise<MediaStream> {
     const component = await this._local_component()
 
     return component.captureStream({ frameRate })

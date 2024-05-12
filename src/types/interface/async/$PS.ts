@@ -1,9 +1,15 @@
-import { Callback } from '../../Callback'
-import '../../client/document'
+import { $PPW } from './$PPW'
 
-export interface $PS {
-  $requestPictureInPicture(
-    data: {},
-    callback: Callback<PictureInPictureWindow>
-  ): void
+export const PS_METHOD_CALL = []
+export const PS_METHOD_WATCH = []
+export const PS_METHOD_REF = ['requestPictureInPicture']
+
+export interface $PS_C {}
+
+export interface $PS_W {}
+
+export interface $PS_R {
+  $requestPictureInPicture(data: {}): $PPW
 }
+
+export interface $PS extends $PS_C, $PS_W, $PS_R {}

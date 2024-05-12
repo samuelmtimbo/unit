@@ -9,7 +9,6 @@ import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Channel } from '../../../../../types/global/Channel'
 import { CH } from '../../../../../types/interface/CH'
-import { RE } from '../../../../../types/interface/RE'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { ID_LOCAL_CHANNEL } from '../../../../_ids'
 
@@ -29,7 +28,7 @@ export type LocalChannelEvents = SemifunctionalEvents<LocalChannel_EE> &
 
 export default class LocalChannel<T>
   extends Semifunctional<I<T>, O<T>>
-  implements RE
+  implements CH
 {
   private _bc: Channel | null = null
 
@@ -51,6 +50,9 @@ export default class LocalChannel<T>
       system,
       ID_LOCAL_CHANNEL
     )
+  }
+  send(data: any): Promise<void> {
+    throw new Error('Method not implemented.')
   }
 
   f({ channel }: I<T>, done: Done<O<T>>): void {

@@ -1,4 +1,4 @@
-import { E } from '../E'
+import { E } from '../composed/E'
 import { $E, $E_C, $E_R, $E_W } from './$E'
 
 export const AsyncECall = (e: E): $E_C => {
