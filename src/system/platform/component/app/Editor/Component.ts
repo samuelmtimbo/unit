@@ -52402,7 +52402,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         break
       case SET_SUB_COMPONENT_SIZE:
         {
-          this._state_layout_resize_sub_component(data.unitId, data.width, data.height)
+          this._state_layout_resize_sub_component(
+            data.unitId,
+            data.width,
+            data.height
+          )
 
           emit &&
             this._pod_set_sub_component_size(
@@ -52426,7 +52430,34 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         break
       case SET_UNIT_SIZE:
         {
-          this._state_set_unit_size(data.unitId, data.width, data.height)
+          const unit_id = data.unitId
+          const width = data.width
+          const height = data.height
+
+          const node = this._node[unit_id]
+
+          const target_trait = { width, height }
+
+          this._animate_core_resize_unlisten[unit_id] = this._animate_core_size(
+            unit_id,
+            {
+              width: node.width,
+              height: node.height,
+            },
+            () => {
+              return target_trait
+            },
+            ({ width, height }) => {
+              this._resize_core_width(unit_id, width)
+              this._resize_node_width(unit_id, width)
+
+              this._resize_core_height(unit_id, height)
+              this._resize_node_height(unit_id, height)
+            },
+            () => {
+              this._state_set_unit_size(data.unitId, data.width, data.height)
+            }
+          )
 
           emit && this._pod_set_unit_size(data.unitId, data.width, data.height)
         }
