@@ -5,6 +5,7 @@ import { EventEmitter_ } from './EventEmitter'
 import { NOOP } from './NOOP'
 import { Object_ } from './Object'
 import { IOElement } from './client/IOElement'
+import { Context } from './client/context'
 import { UnitPointerEvent } from './client/event/pointer'
 import { Theme } from './client/theme'
 import { Point } from './client/util/geometry/types'
@@ -26,7 +27,7 @@ export interface System extends S, R {
   emitter: EventEmitter_
   root: HTMLElement | null
   customEvent: Set<string>
-  context: any[]
+  context: Context[]
   theme: Theme
   animated: boolean
   graphs: Graph[]
