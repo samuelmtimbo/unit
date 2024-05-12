@@ -34,6 +34,11 @@ export default class DropTarget<T> extends Semifunctional<I<T>, O<T>> {
 
   async f({ component }: I<T>, done: Done<O<T>>) {
     // console.log('DropTarget', 'f')
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.__system
 
     setTimeout(() => {
       component.emit('call', { method: 'attachDropTarget', data: [] })

@@ -385,6 +385,7 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
     const {
       api: {
         device: { vibrate },
+        window: { setInterval },
       },
     } = this.$system
 
@@ -398,6 +399,12 @@ export default class PhoneKeyboard extends Element<HTMLDivElement, Props> {
   }
 
   private _on_backspace_pointer_up = (): void => {
+    const {
+      api: {
+        window: { clearInterval },
+      },
+    } = this.$system
+
     if (this._backspace_interval) {
       clearInterval(this._backspace_interval)
     }

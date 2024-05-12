@@ -83,6 +83,12 @@ export class Element_<
     this.addListener('play', this._play)
     this.addListener('pause', this._pause)
     this.addListener('set', (name: keyof I, data) => {
+      const {
+        api: {
+          window: { setTimeout },
+        },
+      } = this.__system
+
       if (!this._forwarding) {
         if (data === undefined) {
           this._forwarding_empty = true

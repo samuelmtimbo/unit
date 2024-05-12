@@ -127,6 +127,12 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
     )
 
     const collapse = () => {
+      const {
+        api: {
+          window: { setTimeout },
+        },
+      } = this.$system
+
       if (_control_in_count === 0) {
         this._collapsed = true
 
@@ -199,6 +205,12 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
     }
 
     const uncollapse = () => {
+      const {
+        api: {
+          window: { setTimeout },
+        },
+      } = this.$system
+
       const { width, height } = this.$props
 
       this._collapsed = false

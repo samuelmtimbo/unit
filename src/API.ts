@@ -188,6 +188,10 @@ export type API = {
     ReadableStream: ReadableStream
     open: (url: string, target: string, features: string) => Window
     getComputedStyle: (element: Element) => CSSStyleDeclaration
+    setTimeout(callback: () => any, ms: number): any
+    setInterval(callback: () => any, ms: number): any
+    clearTimeout(timer: any): void
+    clearInterval(timer: any): void
   }
   document: {
     createElement<K extends keyof HTMLElementTagNameMap>(

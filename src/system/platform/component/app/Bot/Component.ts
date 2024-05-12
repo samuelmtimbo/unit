@@ -226,6 +226,13 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
   private _reset_move_timeout = (offset: number = 0) => {
     // console.log('Bot', '_reset_move_timeout')
+
+    const {
+      api: {
+        window: { clearTimeout },
+      },
+    } = this.$system
+
     if (this._move_timeout) {
       clearTimeout(this._move_timeout)
     }
@@ -252,6 +259,12 @@ export default class Bot extends Element<HTMLDivElement, Props> {
   }
 
   private _disable = () => {
+    const {
+      api: {
+        window: { clearTimeout },
+      },
+    } = this.$system
+
     if (!this._disabled) {
       // console.log('Bot', '_disable')
 
@@ -795,6 +808,13 @@ export default class Bot extends Element<HTMLDivElement, Props> {
 
   private _remove_pointer_down = (event: UnitPointerEvent): void => {
     // console.trace('Bot', '_remove_pointer_down')
+
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     const { mode } = this.$props
 
     const { pointerId, pointerType } = event

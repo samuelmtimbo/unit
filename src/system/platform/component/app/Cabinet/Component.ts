@@ -380,6 +380,13 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     drawer_component.addEventListener(
       makeCustomListener('inactive', () => {
         // console.log('Cabinet', '_on_drawer_inactive')
+
+        const {
+          api: {
+            window: { setTimeout },
+          },
+        } = this.$system
+
         this._memSetActive(drawerId, false)
 
         const drawer = this._drawer[drawerId]

@@ -5,7 +5,7 @@ import { System } from '../system'
 export const throttle = (system: System, func: Function, limit): any => {
   const {
     api: {
-      // TODO
+      window: { setTimeout, clearTimeout },
     },
   } = system
 
