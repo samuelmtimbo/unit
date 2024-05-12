@@ -52468,6 +52468,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           )
 
+          this._start_graph_simulation(LAYER_NORMAL)
+
           emit && this._pod_set_unit_size(data.unitId, data.width, data.height)
         }
         break
@@ -56312,6 +56314,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       setUnitSize({ unitId, width, height }, unit_spec)
 
       setSpec(unit_spec.id, unit_spec)
+    }
+
+    if (path.length === 0) {
+      this._start_graph_simulation(LAYER_NORMAL)
     }
   }
 
