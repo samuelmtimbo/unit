@@ -57736,6 +57736,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
   }
 
+  private _unlisten_frame: Unlisten
+
   onPropChanged(prop: string, current: any) {
     // console.log('Graph', 'onPropChanged', prop, current)
 
@@ -57803,7 +57805,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._leave_all_fullwindow(true)
       }
     } else if (prop === 'frame') {
-      const { frame } = this.$props
+      const { frame, animate } = this.$props
 
       if (this._in_component_control) {
         if (this._is_fullwindow) {
@@ -57816,6 +57818,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       this._frame = frame
+
+      if (this._unlisten_frame) {
+        this._unlisten_frame()
+      }
+
+      this._unlisten_frame = this._frame.addEventListener(
+        makePointerDownListener(() => {
+          if (this._is_fullwindow) {
+            this._fullwindow_focusing = true
+
+            if (!this._frame_out) {
+              this._show_transcend(animate)
+            }
+
+            setTimeout(() => {
+              this._fullwindow_focusing = false
+            }, 0)
+          }
+        })
+      )
 
       if (this._in_component_control) {
         if (this._is_fullwindow) {
