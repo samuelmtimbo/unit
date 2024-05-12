@@ -580,7 +580,7 @@ export const makeSetSubComponentSizeAction = (
   prevWidth: number,
   prevHeight: number
 ) => {
-  return wrapSetUnitSizeAction({
+  return wrapSetSubComponentSizeAction({
     unitId,
     width,
     height,
