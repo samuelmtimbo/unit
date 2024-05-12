@@ -30117,6 +30117,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (animate) {
       //
     } else {
+      const parent_current_children =
+        this._spec_get_sub_component_children(parent_id)
+
+      let i = parent_current_children.length
+
       for (const child_id of children) {
         const child_parent_id = this._spec_get_sub_component_parent_id(child_id)
 
@@ -30127,8 +30132,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         )
 
         if (!this._is_layout_component_layer_visible(parent_id)) {
-          this._insert_sub_component_child(parent_id, child_id)
+          this._displace_sub_component(child_id)
+
+          this.__insert_sub_component_child(parent_id, child_id, 'default', i)
         }
+
+        i++
       }
 
       for (const child_id of children) {
@@ -52746,13 +52755,23 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   sub_component_id
     // )
 
-    const parent_component = this._get_sub_component(parent_id)
-    const sub_component = this._get_sub_component(sub_component_id)
-
     if (!this._is_fullwindow) {
       const slot = this._get_sub_component_slot_name(sub_component_id)
       const i = this._spec_get_sub_component_parent_root_index(sub_component_id)
 
+      this.__insert_sub_component_child(parent_id, sub_component_id, slot, i)
+    }
+  }
+  private __insert_sub_component_child = (
+    parent_id: string,
+    sub_component_id: string,
+    slot: string,
+    i: number
+  ): void => {
+    const parent_component = this._get_sub_component(parent_id)
+    const sub_component = this._get_sub_component(sub_component_id)
+
+    if (!this._is_fullwindow) {
       parent_component.insertParentRootAt(sub_component, i, slot)
     }
   }
