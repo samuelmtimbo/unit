@@ -4,6 +4,7 @@ import { NOOP } from '../NOOP'
 import { Object_ } from '../Object'
 import { Registry } from '../Registry'
 import { Component } from '../client/component'
+import { unmount } from '../client/context'
 import icons from '../client/icons'
 import { styleToCSS } from '../client/id/styleToCSS'
 import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
@@ -224,11 +225,13 @@ export function boot(
 }
 
 export function destroy(system: System) {
-  const { graphs } = system
+  const { graphs, context } = system
 
   for (const graph of graphs) {
     graph.destroy()
   }
 
-  // TODO
+  for (const context_ of context) {
+    unmount(context_)
+  }
 }
