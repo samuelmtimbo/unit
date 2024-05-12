@@ -14321,15 +14321,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     width: number,
     height: number
   ) => {
-    // console.log('Graph', 'resize_sub_component', width, height)
+    // console.log('Graph', 'resize_sub_component', unit_id, width, height)
 
     if (this._tree_layout) {
-      this._sim_layout_resize_sub_component(unit_id, width, height)
-
-      this._spec_component_set_unit_graph_size(unit_id, width, height)
+      this._state_layout_resize_sub_component(unit_id, width, height)
     } else {
       this._state_set_unit_size(unit_id, width, height)
     }
+  }
+
+  private _state_layout_resize_sub_component = (
+    unit_id: string,
+    width: number,
+    height: number
+  ) => {
+    this._spec_component_set_unit_graph_size(unit_id, width, height)
+    this._sim_layout_resize_sub_component(unit_id, width, height)
   }
 
   private _state_set_unit_size = (
@@ -22148,7 +22155,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           opacity: 1,
         }
 
-        this._animate_core_style(
+        this._animate_core_size_and_opacity(
           unit_id,
           {
             x: prev_x,
@@ -33095,7 +33102,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
   }
 
-  private _animate_core_style = (
+  private _animate_core_size_and_opacity = (
     unit_id: string,
     n0: Rect & { opacity: number },
     n1: () => Rect & { opacity: number },
@@ -33110,6 +33117,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ['width', 1],
         ['height', 1],
         ['opacity', 0.1],
+      ],
+      f,
+      callback
+    )
+
+    return unlisten
+  }
+
+  private _animate_core_size = (
+    unit_id: string,
+    n0: Size,
+    n1: () => Size,
+    f: (n: Size) => void,
+    callback: Callback
+  ): Unlisten => {
+    const unlisten = this.__animate_core_style(
+      unit_id,
+      n0,
+      n1,
+      [
+        ['width', 1],
+        ['height', 1],
       ],
       f,
       callback
@@ -33406,7 +33435,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       opacity: 1,
     }
 
-    this._animate_core_style(
+    this._animate_core_size_and_opacity(
       new_unit_id,
       {
         x: prev_x,
@@ -33826,7 +33855,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._disable_unit_pointer_events(unit_id)
 
     this._animating_unit_explosion[unit_id] = new Promise<void>((resolve) => {
-      this._animate_core_style(
+      this._animate_core_size_and_opacity(
         unit_id,
         init_node,
         () => {
@@ -44790,7 +44819,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (!unit_is_component && graph_component) {
         // do not resize if unit is circle and graph is rectangle
       } else {
-        this._animate_core_style(
+        this._animate_core_size_and_opacity(
           unit_id,
           n0,
           n1,
@@ -44988,7 +45017,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (!do_not_animate_graph_size) {
-      this._animate_core_style(
+      this._animate_core_size_and_opacity(
         graph_unit_id,
         n0,
         n1,
@@ -52076,6 +52105,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _force_finish_last_action: Unlisten
 
+  private _animate_core_resize_unlisten: Dict<Unlisten> = {}
+
   private _undo = (): void => {
     if (this._action_buffer_cursor > -1) {
       const last_action = this._action_buffer[this._action_buffer_cursor]
@@ -52371,7 +52402,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         break
       case SET_SUB_COMPONENT_SIZE:
         {
-          this._sim_set_unit_size(data.unitId, data.width, data.height)
+          this._state_layout_resize_sub_component(data.unitId, data.width, data.height)
 
           emit &&
             this._pod_set_sub_component_size(
