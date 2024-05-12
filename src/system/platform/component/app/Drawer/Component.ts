@@ -429,6 +429,12 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
   }
 
   private _setActive = (active: boolean) => {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     this._active = active
 
     // mergeStyle(this.frame.$element, {
@@ -545,11 +551,15 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     this.dispatchEvent('dragstart', { y: this._y })
   }
 
-  private _on_container_resize = debounce(() => {
-    if (this._active) {
-      this._resize()
-    }
-  }, 300)
+  private _on_container_resize = debounce(
+    this.$system,
+    () => {
+      if (this._active) {
+        this._resize()
+      }
+    },
+    300
+  )
 
   private _frame_listener: Unlisten
 

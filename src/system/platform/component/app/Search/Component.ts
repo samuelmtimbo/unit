@@ -1176,6 +1176,12 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _on_ctrl_p_keydown = () => {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     // console.log('Search', 'on_ctrl_p_keydown')
     setTimeout(() => {
       this._hide_list()
@@ -1183,6 +1189,12 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _on_escape_keydown = () => {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     // console.log('Search', '_on_escape_keydown')
     setTimeout(() => {
       this._hide_list()
@@ -1190,6 +1202,12 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _on_enter_keydown = (): void => {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     if (!this._list_hidden && this._selected_id) {
       setTimeout(() => {
         if (this._selected_id) {

@@ -130,6 +130,12 @@ export class Functional<
   d(name: string, data: any) {}
 
   private _backward_if_ready(): void {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.__system
+
     if (
       !this._forwarding_empty &&
       !this._forwarding &&

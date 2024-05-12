@@ -49,6 +49,12 @@ export default class AttachText<T> extends Semifunctional<I<T>, O<T>> {
   }
 
   public onIterDataInputData(name: string, data: any): void {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.__system
+
     // if (name === 'done')  {
     if (this._input.component.active() && this._input.text.active()) {
       setTimeout(() => {

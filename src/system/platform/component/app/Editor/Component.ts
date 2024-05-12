@@ -1285,6 +1285,12 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _on_transcend_long_click = () => {
     // console.log('Graph', '_on_transcend_long_click')
 
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     setTimeout(() => {
       this._on_transcend()
     }, 0)
@@ -6219,13 +6225,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _spec_update_metadata_complexity = debounce(() => {
-    const { specs } = this.$props
+  private _spec_update_metadata_complexity = debounce(
+    this.$system,
+    () => {
+      const { specs } = this.$props
 
-    const c = graphComplexity(specs, this._spec)
+      const c = graphComplexity(specs, this._spec)
 
-    setMetadata({ path: ['metadata', 'complexity'], value: c }, this._spec)
-  }, 1000)
+      setMetadata({ path: ['metadata', 'complexity'], value: c }, this._spec)
+    },
+    1000
+  )
 
   private _flush_debugger = (): void => {
     // console.log('Graph', '_flush_debugger')
@@ -16511,34 +16521,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return { width, height }
   }
 
-  // AD HOC
-  private _debounced_set_datum_color = debounce(
-    (datum_node_id: string, color: string) => {
-      const datum_container = this._datum_container[datum_node_id]
-
-      if (!datum_container) {
-        return
-      }
-
-      // BUG
-      // Chrome
-      // A layout reflow is necessary to force the scrollbar
-      // to change color (to currentcolor)
-      datum_container.$element.style.display =
-        datum_container.$element.style.display === 'flex' ? 'grid' : 'flex'
-    },
-    0
-  )
-
   private _set_datum_color = (
     datum_node_id: string,
     color: string,
     link_color: string
   ) => {
     // console.log('Graph', '_set_datum_color', color, datum_node_id)
-
-    // @ts-ignore
-    this._debounced_set_datum_color(datum_node_id, color)
 
     this._set_datum_node_style(datum_node_id, 'color', color)
 
@@ -22723,6 +22711,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   public temp_fixate_node = (node_id: string, t: number = 100): void => {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     this._set_node_fixed(node_id, true)
 
     setTimeout(() => {
@@ -25785,6 +25779,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_node_red_click = (node_id: string, event: UnitPointerEvent) => {
     // console.log('Graph', '_on_node_red_click', node_id)
 
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     if (this._is_node_removable(node_id)) {
       this._cancel_click = true
 
@@ -26851,6 +26851,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _temp_cancel_double_click = () => {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     this._cancel_double_click = true
 
     setTimeout(() => {
@@ -28840,6 +28846,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', 'enter', animate, animate_config)
 
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     this._force_control_animation_false = true
 
     if (animate && !this._fetching_bundle) {
@@ -29799,6 +29811,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       editor._graph.addEventListener(
         makeCustomListener('leave', () => {
+          const {
+            api: {
+              window: { setTimeout },
+            },
+          } = this.$system
+
           const modified_bundle = editor.getUnitBundle()
           const modified_value = `$${stringify(modified_bundle)}`
 
@@ -32841,6 +32859,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_on_graph_group_unit_long_press', unit_id)
 
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     if (this._is_node_selected(unit_id)) {
       if (this._collapse_next_unit_id === unit_id) {
         //
@@ -33705,6 +33729,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     selected_node_ids: string[]
   ): void => {
     // console.log('Graph', '_state_explode_unit', unit_id)
+
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
 
     this._simulation_prevent_restart = true
 
@@ -38309,6 +38339,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_datum_blur = (datum_id: string, { data }: { data: TreeNode }) => {
     // console.log('Graph', '_on_datum_blur', datum_id, data)
 
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     const datum_node_id = getDatumNodeId(datum_id)
 
     if (this._edit_datum_id === datum_id) {
@@ -40330,6 +40366,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     _event: PointerEvent
   ) => {
     // console.log('Graph', '_on_pointer_down')
+
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
 
     this._just_pointer_down = true
 
@@ -44053,6 +44095,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_click = (event: UnitPointerEvent, _event: PointerEvent): void => {
     // console.log('Graph', '_on_click')
 
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     this._just_clicked = true
 
     setTimeout(() => {
@@ -44283,6 +44331,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _dispatch_add_datum_on_commit = false
 
   private _add_empty_datum = (datum_id: string, { x, y }: Position): void => {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     // log('Graph', '_add_empty_datum')
 
     this._add_datum(datum_id, '', { x, y })
@@ -44335,6 +44389,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_background_long_click = (event: UnitPointerEvent) => {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.$system
+
     if (this._tree_layout) {
       const current_layout_layer = this._get_current_layout_layer_id()
 
@@ -45002,6 +45062,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     const n1: () => Rect & { opacity: number } = () => {
+      const {
+        api: {
+          window: { setTimeout },
+        },
+      } = this.$system
+
       if (this._pressed_node_id_pointer_id[graph_unit_id]) {
         const { x, y } = this._get_node_screen_position(graph_unit_id)
 
@@ -53022,6 +53088,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _zoom_in = (deltaY: number, clientX: number, clientY: number) => {
     // console.log('Graph', '_zoom_in', deltaY)
+    const {
+      api: {
+        window: { setTimeout, clearTimeout },
+      },
+    } = this.$system
+
     const { $height, $width } = this.$context
     const { minZoom, maxZoom, zoomTranslate } = this.$props as _Props &
       DefaultProps
@@ -54429,6 +54501,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _start_debugger = (): void => {
     // console.log('Graph', '_start_debugger', this._id)
+
+    const {
+      api: {
+        window: { setInterval },
+      },
+    } = this.$system
 
     if (this._debug_interval !== null) {
       return
@@ -56003,6 +56081,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   global_ref
     // )
 
+    const {
+      api: {
+        window: { setInterval },
+      },
+    } = this.$system
+
     deepSet(
       this._constant_input_ref_interval,
       [unit_id, pin_id],
@@ -56017,6 +56101,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     type: 'input',
     pin_id: string
   ) => {
+    const {
+      api: {
+        window: { clearInterval },
+      },
+    } = this.$system
+
     const frame = deepGetOrDefault(
       this._constant_input_ref_interval,
       [unit_id, pin_id],

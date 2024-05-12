@@ -30,13 +30,26 @@ export default class Timer extends Functional<I, O> {
   }
 
   private _reset() {
+    const {
+      api: {
+        window: { clearTimeout },
+      },
+    } = this.__system
+
     if (this._timer !== null) {
       clearTimeout(this._timer)
+
       this._timer = null
     }
   }
 
   public f({ ms }: I, done: Done<O>): void {
+    const {
+      api: {
+        window: { setTimeout },
+      },
+    } = this.__system
+
     this._reset()
 
     // @ts-ignore

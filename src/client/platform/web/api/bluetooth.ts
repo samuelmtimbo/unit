@@ -14,7 +14,7 @@ export function webBluetooth(window: Window, opt: BootOpt): API['bluetooth'] {
       if (navigator.bluetooth) {
         // show system UI on next tick to prevent possible
         // interference with triggering event propagation
-        await sleep()
+        await sleep(window.setTimeout)
 
         try {
           // @ts-ignore

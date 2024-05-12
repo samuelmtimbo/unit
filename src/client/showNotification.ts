@@ -11,6 +11,7 @@ export function showNotification(
     root,
     api: {
       document: { createElement },
+      window: { setTimeout, clearTimeout },
     },
   } = system
 

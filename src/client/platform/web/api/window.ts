@@ -29,6 +29,10 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
     getComputedStyle(element: Element): CSSStyleDeclaration {
       return window.getComputedStyle(element)
     },
+    setTimeout: window.setTimeout,
+    setInterval: window.setInterval,
+    clearTimeout: window.clearTimeout,
+    clearInterval: window.clearInterval,
   }
 
   return _window

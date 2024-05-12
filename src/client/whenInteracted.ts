@@ -13,6 +13,12 @@ export function whenInteracted(
   on_active: Callback<undefined>,
   on_inactive: Callback<undefined>
 ): Unlisten {
+  const {
+    api: {
+      window: { setTimeout, clearTimeout },
+    },
+  } = component.$system
+
   let timeout = null
   const resetTimeout = () => {
     if (timeout) {

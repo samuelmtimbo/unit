@@ -7,6 +7,12 @@ export function dragOverTimeListener(
   t: number,
   callback: () => void
 ): Unlisten {
+  const {
+    api: {
+      window: { setTimeout, clearTimeout },
+    },
+  } = component.$system
+
   const drag_enter_listener = ({}: CustomEvent<IODragAndDropEvent>) => {
     let i = 1
 

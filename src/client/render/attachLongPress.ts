@@ -12,6 +12,7 @@ export function attachLongPress(system: System): void {
     foreground: { svg },
     api: {
       document: { createElementNS },
+      window: { setTimeout },
     },
   } = system
 

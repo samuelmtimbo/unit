@@ -267,6 +267,18 @@ export function noHost(): API {
       getComputedStyle: function (element: Element): CSSStyleDeclaration {
         throw new MethodNotImplementedError()
       },
+      setTimeout: function (callback: () => any, ms: number) {
+        throw new MethodNotImplementedError()
+      },
+      setInterval: function (callback: () => any, ms: number) {
+        throw new MethodNotImplementedError()
+      },
+      clearTimeout: function (timer: any): void {
+        throw new MethodNotImplementedError()
+      },
+      clearInterval: function (timer: any): void {
+        throw new MethodNotImplementedError()
+      },
     },
     navigator: {
       share: function (data: ShareData): Promise<void> {

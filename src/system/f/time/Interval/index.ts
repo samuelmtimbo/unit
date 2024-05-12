@@ -31,6 +31,12 @@ export default class Interval extends Semifunctional<I, O> {
   }
 
   private _reset() {
+    const {
+      api: {
+        window: { clearInterval },
+      },
+    } = this.__system
+
     if (this._interval !== null) {
       clearInterval(this._interval)
 
@@ -39,6 +45,12 @@ export default class Interval extends Semifunctional<I, O> {
   }
 
   public f({ ms }: I, done: Done<O>): void {
+    const {
+      api: {
+        window: { setInterval },
+      },
+    } = this.__system
+
     this._reset()
 
     // @ts-ignore
