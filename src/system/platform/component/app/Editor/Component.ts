@@ -18769,11 +18769,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         shapeListener,
       ])
 
+      const shape = this._tree_layout ? 'rect' : 'circle'
+
       this._search.setProp('selectedColor', COLOR_GREEN)
       this._search.setProp('registry', this._registry)
-
-      const shape = this._tree_layout ? 'rect' : 'circle'
-      this._search.setShape(shape)
+      this._search.setProp('shape', shape)
 
       if (this._search_hidden) {
         this._hide_search()

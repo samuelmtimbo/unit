@@ -56,6 +56,7 @@ export interface Props {
   style?: Dict<string>
   selected?: string
   selectedColor?: string
+  shape?: Shape
   filter?: (u: string) => boolean
   registry?: Registry
 }
@@ -459,6 +460,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
       this._unlisten_registry()
       this._listen_registry()
+    } else if (prop === 'shape') {
+      this._setShape(current ?? 'circle')
     }
   }
 
@@ -1232,12 +1235,17 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   public setShape = (shape: 'rect' | 'circle') => {
+    this._setShape(shape)
+
+    this._dispatch_shape()
+  }
+
+  private _setShape = (shape: 'rect' | 'circle', emit?: boolean) => {
     if (this._shape !== shape) {
       this._shape = shape
 
       this._shape_button.setProp('icon', SHAPE_TO_ICON[shape])
 
-      this._dispatch_shape()
       this._filter_list()
     }
   }
