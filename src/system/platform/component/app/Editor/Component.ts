@@ -51087,7 +51087,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
-    const { name = 'untitled' } = this._spec
+    const { name } = this._spec
 
     const bundle = this.getBundle()
 
@@ -51122,6 +51122,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._last_save_file_handle = handle
       this._last_save_filename = handle.name
+
+      bundle.spec.name = handle.name.slice(0, -5)
 
       await this._save_silently(bundle)
     } else {
