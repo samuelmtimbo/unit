@@ -910,15 +910,6 @@ export function lazyFromSpec(
       return this.__graph.removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
     }
 
-    public swapUnitGhost(
-      unitId: string,
-      nextUnitId: string,
-      spec: UnitBundleSpec
-    ): void {
-      this._ensure()
-      this.__graph.swapUnitGhost(unitId, nextUnitId, spec)
-    }
-
     public explodeUnit(
       unitId: string,
       mapUnitId: Dict<string>,

@@ -5,7 +5,6 @@ import { Pins } from '../../Pins'
 import { Primitive } from '../../Primitive'
 import { State } from '../../State'
 import { bundleSpec, unitBundleSpec } from '../../bundle'
-import { emptySpec } from '../../client/spec'
 import {
   animate,
   appendChild,
@@ -2685,35 +2684,6 @@ export class Graph<I = any, O = any>
     }
 
     return { specId, bundle }
-  }
-
-  public swapUnitGhost(
-    unitId: string,
-    nextUnitId: string,
-    nextUnitBundle: UnitBundleSpec
-  ): {
-    spec_id: string
-    state: {
-      input: Dict<any>
-      output: Dict<any>
-      memory: Dict<any>
-    }
-  } {
-    // TODO merges and plugs
-
-    this._removeUnit(unitId)
-
-    this._addUnitBundleSpec(nextUnitId, nextUnitBundle)
-
-    const unit = this.getUnit(unitId)
-
-    const state = unit.snapshot()
-
-    const spec = emptySpec({})
-
-    const { id: spec_id } = this.__system.newSpec({})
-
-    return { spec_id, state }
   }
 
   public getUnitByPath(path: string[]): Unit<any, any> {
