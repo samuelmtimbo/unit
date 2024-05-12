@@ -1,4 +1,4 @@
 export interface NO {
-  show()
-  close()
+  show(): void
+  close(): void
 }

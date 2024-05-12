@@ -6,7 +6,6 @@ import { CS } from '../../../../../types/interface/CS'
 import { IM } from '../../../../../types/interface/IM'
 import { ME } from '../../../../../types/interface/ME'
 import { PS } from '../../../../../types/interface/PS'
-import { CSOpt } from '../../../../../types/interface/async/$CS'
 import { ID_VIDEO } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import VideoComp from './Component'
@@ -52,7 +51,11 @@ export default class Video
     this._defaultState = {}
   }
 
-  async captureStream({ frameRate }: CSOpt): Promise<MediaStream> {
+  async captureStream({
+    frameRate,
+  }: {
+    frameRate: number
+  }): Promise<MediaStream> {
     // TODO
     // const stream = await this._element.captureStream({ frameRate })
     // throw new APINotSupportedError('Video Capture')

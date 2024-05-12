@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { E } from '../../../../../types/interface/E'
+import { E } from '../../../../../types/interface/composed/E'
 import { UnitBundle } from '../../../../../types/UnitBundle'
 import { ID_APPEND_CHILD } from '../../../../_ids'
 

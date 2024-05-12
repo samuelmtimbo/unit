@@ -1,11 +1,13 @@
-import { ASYNC_GRAPH_CALL_EVENT_MAP } from './constant/ASYNC_GRAPH_CALL_EVENT_MAP'
-import { ASYNC_GRAPH_WATCH_SET } from './constant/ASYNC_GRAPH_WATCH_SET'
+import { camelToSnake } from './client/id'
+import { METHOD } from './client/method'
+import { $map } from './constant/$map'
 import { Moment } from './debug/Moment'
 import { AllTypes } from './interface'
 import { AllKeys } from './types/AllKeys'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
+import { mapObjKeyKV, mapObjVK } from './util/object'
 
 export function proxy<T extends object>(
   unit: T,
@@ -26,6 +28,7 @@ export function proxy<T extends object>(
             const { event } = moment
 
             if (
+              event !== undefined &&
               stop_event === event &&
               (moment.data?.path?.length ?? 0) === 0
             ) {
@@ -44,49 +47,31 @@ export function proxy<T extends object>(
   return proxy
 }
 
+const mapWatchSet = (watchArray: string[]) => {
+  return new Set(watchArray.map($map))
+}
+
+const mapCallToEvent = (callArray: string[]) => {
+  return mapObjKeyKV<string>(
+    callArray.reduce((acc, method) => {
+      return { ...acc, [method]: camelToSnake(method) }
+    }, {}),
+    $map
+  )
+}
+
 const ASYNC_INTERFACE_PROXY_CALL_FILTER: AllKeys<
   AllTypes<any>,
   Dict<string>
-> = {
-  V: { $write: 'write' },
-  J: { $set: 'set' },
-  CA: { $draw: 'draw' },
-  G: ASYNC_GRAPH_CALL_EVENT_MAP,
-  // TODO
-  B: {},
-  IB: {},
-  CC: {},
-  C: {},
-  CS: {},
-  CO: {},
-  GP: {},
-  M: {},
-  E: {},
-  EE: {},
-  BD: {},
-  BS: {},
-  BSE: {},
-  BC: {},
-  NO: {},
-  A: {},
-  PP: {},
-  PS: {},
-  CH: {},
-  MS: {},
-  S: {},
-  U: {},
-  TR: {},
-  RE: {},
-  F: {},
-  L: {},
-  AC: {},
-  D: {},
-}
+> = mapObjVK(METHOD, ({ call }) => mapCallToEvent(call)) as AllKeys<
+  AllTypes<any>,
+  Dict<string>
+>
 
-const ASYNC_INTERFACE_PROXY_WATCH_FILTER: Dict<Set<string>> = {
-  U: new Set(['$watch']),
-  G: ASYNC_GRAPH_WATCH_SET,
-}
+const ASYNC_INTERFACE_PROXY_WATCH_FILTER: Dict<Set<string>> = mapObjVK(
+  METHOD,
+  ({ watch }) => mapWatchSet(watch)
+)
 
 export function proxyWrap<T extends object>(unit: T, _: string[] = []): T {
   let CALL = {}
