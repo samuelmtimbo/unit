@@ -47,8 +47,8 @@ import { getBaseStyle } from './reflectComponentBaseTrait'
 import { stopImmediatePropagation, stopPropagation } from './stopPropagation'
 import { applyStyle } from './style'
 import { unmount } from './unmount'
-import { NULL_VECTOR, addVector } from './util/geometry'
-import { Position, Rect } from './util/geometry/types'
+import { addVector } from './util/geometry'
+import { Rect } from './util/geometry/types'
 import { getFontSize } from './util/style/getFontSize'
 import { getOpacity } from './util/style/getOpacity'
 import { getRelativePosition } from './util/style/getPosition'
@@ -1270,19 +1270,6 @@ export class Component<
     }
 
     return DEFAULT_TEXT_ALIGN
-  }
-
-  getRootPosition(rootId: string): Position {
-    // TODO
-    return NULL_VECTOR
-  }
-
-  getParentRootPosition(
-    subComponentId: string,
-    parentRootId: string
-  ): Position {
-    // TODO
-    return NULL_VECTOR
   }
 
   isSVG(): boolean {
