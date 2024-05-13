@@ -4,6 +4,7 @@ import { NOOP } from '../NOOP'
 import { Object_ } from '../Object'
 import { Registry } from '../Registry'
 import { Component } from '../client/component'
+import icons from '../client/icons'
 import { styleToCSS } from '../client/id/styleToCSS'
 import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
 import { fromBundle } from '../spec/fromBundle'
@@ -95,6 +96,7 @@ export function boot(
     specs,
     classes,
     components,
+    icons,
     graphs: [],
     specsCount,
     cache,

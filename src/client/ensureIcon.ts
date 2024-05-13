@@ -1,6 +1,5 @@
 import { System } from '../system'
 import { namespaceURI } from './component/namespaceURI'
-import ICONS from './icons'
 
 export const SYSTEM_SPRITESHEET_ID = '__SYSTEM__SPRITESHEET__'
 export const SPRITESHEET_VIEWBOX = '0 0 24 24'
@@ -12,13 +11,14 @@ export const ensureIcon = (system: System, id: string): void => {
     },
     cache: { spriteSheetMap },
     foreground: { sprite },
+    icons,
   } = system
 
   if (spriteSheetMap[id]) {
     return
   }
 
-  let d = ICONS[id]
+  let d = icons[id]
 
   if (!d) {
     return
