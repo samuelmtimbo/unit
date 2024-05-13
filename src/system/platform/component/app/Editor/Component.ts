@@ -5367,6 +5367,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._sim_add_unit_core(unit_id, unit, p)
 
+      this._mirror_unit(unit_id)
+
       if (this._is_unit_component(unit_id)) {
         const layout_position = NULL_VECTOR
 
@@ -5986,7 +5988,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     addUnit({ unitId, unit: clone(unit) }, this._spec)
 
+    this._mirror_unit(unitId)
+
     this._spec_update_metadata_complexity()
+  }
+
+  private _mirror_unit = (unitId: string) => {
+    // console.log('Graph', '_mirror_unit', unitId)
+
+    const { setSpec } = this.$props
+
+    const spec = this._get_unit_spec(unitId) as GraphSpec
+
+    const mirrored_spec = clone(spec)
+
+    setSpec(spec.id, mirrored_spec)
   }
 
   private _spec_append_component = (
@@ -15840,7 +15856,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_state_remove_search_unit')
 
     if (this._search_unit_id) {
-      this._state_remove_unit(this._search_unit_id, false)
+      this._state_remove_unit(this._search_unit_id, true)
 
       this._mem_remove_search_unit_id()
     }
@@ -16969,7 +16985,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._mode === 'none' ||
           this._mode === 'remove'
         ) {
-          this._state_remove_unit(search_unit_id, false)
+          this._state_remove_unit(search_unit_id, true)
         } else if (this._mode === 'change') {
           this._state_swap_search_unit(
             search_start_spec_id,
@@ -38513,15 +38529,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _spec_remove_unit = (unitId: string, unregister: boolean = true) => {
     // console.log('Graph', '_spec_remove_unit', unitId, unregister)
 
-    const { parent } = this.$props
-
     const unit = this._get_unit(unitId)
 
     if (this._is_unit_component(unitId)) {
       this._spec_remove_component(unitId)
     }
 
-    if (unregister && !parent) {
+    if (unregister) {
       this._unregister_unit(unit.id)
     }
 
