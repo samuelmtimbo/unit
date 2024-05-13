@@ -55,6 +55,7 @@ export interface System extends S, R {
   specsCount: Dict<number>
   classes: Classes
   components: ComponentClasses
+  icons: Dict<string>
   global: {
     data: Object_<any>
     ref: Dict<any>
