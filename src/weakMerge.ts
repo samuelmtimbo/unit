@@ -21,15 +21,11 @@ export function weakMerge<A extends object, B extends object>(
         delete c[property]
 
         return true
-      }
-
-      if (b[property] !== undefined) {
+      } else if (b[property] !== undefined) {
         delete b[property]
 
         return true
-      }
-
-      if (a[property] !== undefined) {
+      } else if (a[property] !== undefined) {
         delete a[property]
 
         return true
