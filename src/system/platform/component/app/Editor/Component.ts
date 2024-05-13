@@ -35,7 +35,6 @@ import {
   newUnitId,
   newUnitIdFromName,
   newUnitIdInSpecId,
-  shouldRender,
 } from '../../../../../client/spec'
 import {
   ZOOM_IDENTITY,
@@ -1215,7 +1214,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   private _listen_graph = (): void => {
     this._unlisten_graph = this._editor.addEventListeners([
-      makeCustomListener('compose', this._on_compose, false),
       makeCustomListener(
         'transcend',
         () => {
@@ -1353,137 +1351,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         this._pod.$play({})
       }
     }
-  }
-
-  private _on_compose = (all_sub_component_trait: {
-    sub_base: LayoutBase
-    sub_base_node: LayoutNode[]
-  }) => {
-    const { specs } = this._registry
-
-    const { animate } = this.$props
-
-    const id = newSpecId(specs)
-
-    const spec = this._editor.get_spec()
-
-    spec.name = 'new'
-    spec.id = id
-
-    const { component: component_spec = {} } = spec
-
-    const render = shouldRender(component_spec)
-
-    spec.render = render
-    spec.type = `\`U\`&\`G\`${render ? `&\`C\`` : ''}`
-
-    // AD HOC
-    // force update complexity
-    delete spec.metadata?.complexity
-
-    // console.log(spec)
-
-    this._set_spec(id, spec)
-
-    const parent_unit_id = newUnitId(specs, {}, id)
-
-    this._pod = this._pod.$compose({
-      id,
-      unitId: parent_unit_id,
-      _: ['U', 'C', 'G'],
-    })
-
-    const parent_unit: GraphUnitSpec = {
-      id,
-      metadata: {},
-    }
-
-    if (render) {
-      const { width, height } = this._editor.get_max_component_graph_size_size()
-      parent_unit.metadata.component = {
-        width,
-        height,
-      }
-
-      this._pod.$setMetadata({
-        path: ['units', parent_unit_id, 'metadata', 'component'],
-        data: { width, height },
-      })
-
-      const { width: defaultWidth, height: defaultHeight } =
-        this._editor.get_max_component_layout_size()
-
-      this._pod.$setMetadata({
-        path: ['component'],
-        data: { defaultWidth, defaultHeight },
-      })
-    }
-
-    this._editor.setProp('disabled', true)
-
-    this._fallback_graph = this._pod
-
-    const component = parentComponent({}, this.$system)
-
-    component.setSubComponent(parent_unit_id, this._component)
-    component.pushRoot(this._component)
-
-    this._component = component
-
-    this._unlisten_graph()
-
-    this._root.unregisterParentRoot(this._background)
-    this._root.unregisterParentRoot(this._editor)
-
-    const graph = new Editor_(
-      {
-        graph: this._pod,
-        frame: this._frame,
-        frameOut: this._frame_out,
-        component,
-        specs: this._specs,
-        hasSpec: this._has_spec,
-        emptySpec: this._empty_spec,
-        getSpec: this._get_spec,
-        setSpec: this._set_spec,
-        newSpec: this._new_spec,
-        deleteSpec: this._delete_spec,
-        forkSpec: this._fork_spec,
-        shouldFork: this._should_fork,
-        injectSpecs: this._inject_specs,
-        registerUnit: this._register_unit,
-        unregisterUnit: this._unregister_unit,
-        newSpecId: this._new_spec_id,
-        dispatchEvent: this._dispatch_event,
-        syncFile: this._sync_file,
-        typeCache: this._type_cache,
-      },
-      this.$system
-    )
-
-    this._editor.setProp('parent', graph)
-
-    graph.cache_subgraph(parent_unit_id, this._editor)
-    graph.mem_enter_subgraph(parent_unit_id, this._editor)
-    graph.dom_enter_subgraph(parent_unit_id, this._editor, false)
-
-    this._root.unshiftParentRoot(this._editor, 'default')
-    this._root.unshiftParentRoot(this._background, 'default')
-
-    this._editor = graph
-
-    this._listen_graph()
-
-    this.setSubComponent('graph', graph)
-
-    this._root.prependParentRoot(this._editor, 'default')
-    this._root.prependParentRoot(this._background, 'default')
-
-    this._editor.enter(false, {}, true)
-
-    this._editor.leave(all_sub_component_trait)
-
-    graph.focus()
   }
 
   private _on_transcend = (): void => {
@@ -5703,7 +5570,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public get_max_component_graph_size_size(): Size {
     const { component } = this.$props
 
-    const sub_component_ids = keys(component)
+    const sub_component_ids = keys(component.$subComponent)
 
     const size = this.get_sub_components_max_graph_size(sub_component_ids)
 
@@ -5713,7 +5580,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public get_max_component_layout_size(): Size {
     const { component } = this.$props
 
-    const sub_component_ids = keys(component)
+    const sub_component_ids = keys(component.$subComponent)
 
     const size = this.get_sub_components_max_layout_size(sub_component_ids)
 
@@ -51123,7 +50990,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._last_save_file_handle = handle
       this._last_save_filename = handle.name
 
-      bundle.spec.name = handle.name.slice(0, -5)
+      const { width, height } = this.get_max_component_graph_size_size()
+
+      const name_ = handle.name.slice(0, -5)
+
+      deepSet(bundle, ['spec', 'name'], name_)
+      deepSet(bundle, ['spec', 'component', 'defaultWidth'], width)
+      deepSet(bundle, ['spec', 'component', 'defaultHeight'], height)
 
       await this._save_silently(bundle)
     } else {
