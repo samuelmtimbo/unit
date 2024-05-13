@@ -3949,7 +3949,7 @@ export class Graph<I = any, O = any>
     }
 
     if (unit.isElement()) {
-      const subComponentSpec = this._spec.component?.subComponents[unitId]
+      const subComponentSpec = this._spec.component?.subComponents[unitId] ?? {}
 
       const { children = [] } = subComponentSpec
 
