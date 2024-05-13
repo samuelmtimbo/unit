@@ -60,6 +60,10 @@ export function reactToFrameSize(
       makeCustomListener('mount', () => {
         immediateResize()
 
+        if (unlistenContext) {
+          unlistenContext()
+        }
+
         addContextListener()
       }),
       makeCustomListener('unmount', removeContextListener),
