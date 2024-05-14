@@ -18,6 +18,7 @@ const ALLOWED_SPEC_KEY_SET = new Set([
   'outputs',
   'type',
   'render',
+  'user',
 ])
 
 export function validObjectKeys(obj: Dict<any>, set: Set<string>) {
