@@ -50472,6 +50472,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       merge_id,
       merge_spec,
       merge_is_ref,
+      undefined,
       this._collapse_next_map,
       {},
       ignored_unit_set,

@@ -29,6 +29,7 @@ import {
   getObjSingleKey,
   isEmptyObject,
   mapObjKV,
+  mapObjVK,
 } from '../../util/object'
 import { GraphMoveSubGraphData } from './interface'
 import { isRefMerge } from './isRefMerge'
@@ -587,6 +588,7 @@ export function moveMerge(
   mergeId: string,
   mergeSpec: GraphMergeSpec,
   mergeIsRef: boolean,
+  data: any,
   collapseMap: GraphMoveSubGraphData,
   connectOpt: GraphUnitConnect,
   ignoredUnit: Set<string> = new Set(),
@@ -612,8 +614,6 @@ export function moveMerge(
 
   const mergeInputCount = getMergeTypePinCount(mergeSpec, 'input')
   const mergeOutputCount = getMergeTypePinCount(mergeSpec, 'output')
-
-  const data = source.getMergeData(mergeId)
 
   if (source.hasMerge(mergeId)) {
     source.removeMerge(mergeId, false, false)
@@ -1294,8 +1294,12 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
   const sourceMergeSpecs = clone(source.getMergesSpec())
   const sourcePinSpecs = clone(source.getExposedPinSpecs())
 
-  const sourceMergeRefMap = mapObjKV(sourceMergeSpecs, (mergeId, mergeSpec) => {
+  const sourceMergeRefMap = mapObjVK(sourceMergeSpecs, (mergeSpec) => {
     return isRefMerge(source, mergeSpec)
+  })
+
+  const sourceMergeData = mapObjKV(sourceMergeSpecs, (mergeId) => {
+    return source.getMergeData(mergeId)
   })
 
   const ignoredUnitPin: Dict<{ input: Set<string>; output: Set<string> }> = {}
@@ -1417,6 +1421,7 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
   for (const mergeId of merge) {
     const mergeSpec = sourceMergeSpecs[mergeId]
     const mergeIsRef = sourceMergeRefMap[mergeId]
+    const mergeData = sourceMergeData[mergeId]
 
     moveMerge(
       source,
@@ -1425,6 +1430,7 @@ export function moveSubgraph<T extends UCG<any, any, any>>(
       mergeId,
       mergeSpec,
       mergeIsRef,
+      mergeData,
       collapseMap,
       connectOpt,
       ignoredUnit,

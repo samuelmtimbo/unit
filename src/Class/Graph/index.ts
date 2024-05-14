@@ -2783,11 +2783,6 @@ export class Graph<I = any, O = any>
   getMergeData(mergeId: string): any {
     const merge = this.getMerge(mergeId)
 
-    // AD HOC
-    if (!merge) {
-      return undefined
-    }
-
     const data = merge.getData()
 
     return data
