@@ -9,7 +9,7 @@ import { Dict } from '../types/Dict'
 import { GraphMergeSpec } from '../types/GraphMergeSpec'
 import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
-import { IOOf } from '../types/IOOf'
+import { IOOf, forIOObjKV, forIOObjVK } from '../types/IOOf'
 import {
   clone,
   deepGetOrDefault,
@@ -428,318 +428,333 @@ export const _getGraphTypeMap = (
 ): TypeTreeMap => {
   const typeMap: TypeTreeMap = {}
 
-  const subgraphs = getSubgraphs(spec)
-
   const { units = {}, merges = {}, outputs = {}, inputs = {} } = clone(spec)
 
   let charCode = 65
 
-  subgraphs.forEach((subgraph: Subgraph) => {
-    const { unit, merge } = subgraph
+  const genericReplacement: Dict<Dict<string>> = {}
+  const dataReplacement: Dict<Dict<string>> = {}
+  const genericToSubstitute: Dict<string> = {}
 
-    const genericReplacement: Dict<Dict<string>> = {}
-    const dataReplacement: Dict<Dict<string>> = {}
+  const globalSubstituteReplacement: Dict<string> = {}
+  const globalGenericTosubstitute: Dict<string> = {}
+  const globalGenericReplacement: Dict<string> = {}
 
-    forEachValueKey(unit, (_, unitId: string) => {
-      const unitSpec = units[unitId]
+  forEachValueKey(units, (_, unitId: string) => {
+    const unitSpec = units[unitId]
 
-      const { id, input = {} } = unitSpec
+    const { id, input = {} } = unitSpec
 
-      let unitTypeInterface: TypeTreeInterface
-      if (visited[id]) {
-        unitTypeInterface = createGenericTypeInterface(id, specs)
-      } else {
-        unitTypeInterface = clone(
-          _getSpecTypeInterfaceById(id, specs, cache, visited)
+    let unitTypeInterface: TypeTreeInterface
+    if (visited[id]) {
+      unitTypeInterface = createGenericTypeInterface(id, specs)
+    } else {
+      unitTypeInterface = clone(
+        _getSpecTypeInterfaceById(id, specs, cache, visited)
+      )
+    }
+
+    genericReplacement[unitId] = {}
+    dataReplacement[unitId] = {}
+
+    function register(type: TreeNode, kind: IO, pinId: string): void {
+      if (_hasGeneric(type)) {
+        const generics = _findGenerics(type)
+        for (const generic of generics) {
+          if (!genericReplacement[unitId][generic]) {
+            genericReplacement[unitId][generic] = `<${String.fromCharCode(
+              charCode++
+            )}>`
+          }
+        }
+        unitTypeInterface[kind][pinId] = _applyGenerics(
+          type,
+          genericReplacement[unitId]
         )
       }
+    }
 
-      genericReplacement[unitId] = {}
-      dataReplacement[unitId] = {}
+    forEachValueKey(unitTypeInterface.input, (type, inputId) => {
+      register(type, 'input', inputId)
+    })
+    forEachValueKey(unitTypeInterface.output, (type, outputId) =>
+      register(type, 'output', outputId)
+    )
 
-      function register(type: TreeNode, kind: IO, pinId: string): void {
+    forEachValueKey(unitTypeInterface.input, (type, inputId) => {
+      if (
+        (input[inputId] &&
+          input[inputId].constant &&
+          typeof input[inputId].data === 'string') ||
+        (typeof input?.[inputId]?.data === 'object' &&
+          input[inputId].data !== null &&
+          (input[inputId].data as DataRef).data !== undefined)
+      ) {
         if (_hasGeneric(type)) {
-          const generics = _findGenerics(type)
-          for (const generic of generics) {
-            if (!genericReplacement[unitId][generic]) {
-              genericReplacement[unitId][generic] = `<${String.fromCharCode(
-                charCode++
-              )}>`
-            }
-          }
-          unitTypeInterface[kind][pinId] = _applyGenerics(
-            type,
-            genericReplacement[unitId]
+          const dataStr = stringifyDataValue(
+            unitSpec.input[inputId].data,
+            specs,
+            {}
           )
-        }
-      }
-
-      forEachValueKey(unitTypeInterface.input, (type, inputId) => {
-        register(type, 'input', inputId)
-      })
-      forEachValueKey(unitTypeInterface.output, (type, outputId) =>
-        register(type, 'output', outputId)
-      )
-
-      forEachValueKey(unitTypeInterface.input, (type, inputId) => {
-        if (
-          (input[inputId] &&
-            input[inputId].constant &&
-            typeof input[inputId].data === 'string') ||
-          (typeof input?.[inputId]?.data === 'object' &&
-            input[inputId].data !== null &&
-            (input[inputId].data as DataRef).data !== undefined)
-        ) {
-          if (_hasGeneric(type)) {
-            const dataStr = stringifyDataValue(
-              unitSpec.input[inputId].data,
+          const dataTree = getTree(dataStr)
+          const dataTypeTree = _getValueType(specs, dataTree)
+          if (!_hasGeneric(dataTypeTree)) {
+            unitTypeInterface['input'][inputId] = dataTypeTree
+            const extractedGenerics = _extractGenerics(
               specs,
-              {}
+              dataTypeTree,
+              type
             )
-            const dataTree = getTree(dataStr)
-            const dataTypeTree = _getValueType(specs, dataTree)
-            if (!_hasGeneric(dataTypeTree)) {
-              unitTypeInterface['input'][inputId] = dataTypeTree
-              const extractedGenerics = _extractGenerics(
-                specs,
-                dataTypeTree,
-                type
-              )
-              forEachValueKey(extractedGenerics, (value, generic) => {
-                const replacedGeneric =
-                  genericReplacement[unitId][generic] ?? generic
+            forEachValueKey(extractedGenerics, (value, generic) => {
+              const replacedGeneric =
+                genericReplacement[unitId][generic] ?? generic
 
-                deepSet_(dataReplacement, [unitId, replacedGeneric], value)
-              })
-            }
+              deepSet_(dataReplacement, [unitId, replacedGeneric], value)
+            })
           }
         }
-      })
-
-      typeMap[unitId] = unitTypeInterface
-    })
-
-    forEachValueKey(unit, (_, unitId: string) => {
-      const unitTypeInterface: TypeTreeInterface = typeMap[unitId]
-
-      function register(type: TreeNode, kind: IO, pinId: string): void {
-        if (_hasGeneric(type)) {
-          unitTypeInterface[kind][pinId] = _applyGenerics(
-            type,
-            dataReplacement[unitId] ?? {}
-          )
-        }
-      }
-
-      forEachValueKey(unitTypeInterface.input, (type, inputId) => {
-        register(type, 'input', inputId)
-      })
-      forEachValueKey(unitTypeInterface.output, (type, outputId) =>
-        register(type, 'output', outputId)
-      )
-      typeMap[unitId] = unitTypeInterface
-    })
-
-    const equivalence: Set<string>[] = []
-    const equivalence_index: Dict<number> = {}
-
-    let i = 0
-
-    const create_set_equivalent = () => {
-      let equivalence_set = new Set<string>()
-
-      let merged = false
-
-      function set_equivalent(unitId: string, kind: IO, pinId: string) {
-        const type = deepGetOrDefault(typeMap, [unitId, kind, pinId], undefined)
-
-        if (!type) {
-          return
-        }
-
-        // do not set equivalence to any
-        if (type.type === TreeNodeType.Any) {
-          return
-        }
-
-        if (equivalence_index[type.value] === undefined) {
-          equivalence_set.add(type.value)
-
-          if (_isGeneric(type)) {
-            equivalence_index[type.value] = i
-          }
-        } else {
-          merged = true
-
-          i = equivalence_index[type.value]
-
-          equivalence[i] = new Set([
-            ...(equivalence[i] || []),
-            ...equivalence_set,
-          ])
-
-          equivalence_set.forEach((j) => {
-            equivalence_index[j] = i
-          })
-
-          equivalence_set = equivalence[i]
-        }
-
-        if (!merged) {
-          equivalence.push(equivalence_set)
-        }
-
-        i = equivalence.length
-      }
-
-      return set_equivalent
-    }
-
-    const set_merge_equivalence = (
-      mergeId: string,
-      set_equivalent: (unitId: string, kind: IO, pinId: string) => void
-    ): void => {
-      const mergeSpec = merges[mergeId]
-
-      forEachPinOnMerge(mergeSpec, (unitId, kind, pinId) => {
-        set_equivalent(unitId, kind, pinId)
-      })
-    }
-
-    const set_exposed_equivalence = (
-      kind: IO,
-      pinId: string,
-      set_equivalent: (unitId: string, kind: IO, pinId: string) => void
-    ): void => {
-      const { plug } = spec[`${kind}s`][pinId]
-
-      forEachValueKey(plug, ({ unitId, pinId, mergeId }) => {
-        if (mergeId) {
-          set_merge_equivalence(mergeId, set_equivalent)
-        } else if (unitId && pinId) {
-          set_equivalent(unitId, kind, pinId)
-        }
-      })
-    }
-
-    forEachValueKey(merge, (_, mergeId: string) => {
-      const set_equivalent = create_set_equivalent()
-
-      set_merge_equivalence(mergeId, set_equivalent)
-    })
-
-    forEachValueKey(inputs, (_, inputId) => {
-      const set_equivalent = create_set_equivalent()
-
-      set_exposed_equivalence('input', inputId, set_equivalent)
-    })
-
-    forEachValueKey(outputs, (_, outputId) => {
-      const set_equivalent = create_set_equivalent()
-
-      set_exposed_equivalence('output', outputId, set_equivalent)
-    })
-
-    const specific = equivalence.map((equivalence_set) => {
-      let theMostSpecific = undefined
-
-      for (const t of equivalence_set) {
-        if (theMostSpecific === undefined) {
-          theMostSpecific = t
-        } else {
-          theMostSpecific = mostSpecific(theMostSpecific, t)
-        }
-      }
-
-      return theMostSpecific as string
-    })
-
-    const generic_to_substitute: Dict<string> = {}
-
-    equivalence.forEach((equivalence_set, index) => {
-      for (const t of equivalence_set) {
-        const theMostSpecific = specific[index]
-
-        const extracted = extractGenerics(specs, theMostSpecific, t)
-
-        for (const generic in extracted) {
-          const extract = extracted[generic]
-
-          let substitution: string
-
-          if (generic_to_substitute[generic] === undefined) {
-            substitution = extract
-          } else {
-            const prev_substitution = generic_to_substitute[generic]
-
-            substitution = mostSpecific(extract, prev_substitution)
-
-            if (!isGeneric(substitution)) {
-              if (substitution !== extract) {
-                for (const g in generic_to_substitute) {
-                  generic_to_substitute[g] = applyGenerics(
-                    generic_to_substitute[g],
-                    {
-                      [extract]: substitution,
-                    }
-                  )
-                }
-              }
-
-              if (prev_substitution !== substitution) {
-                for (const gen in generic_to_substitute) {
-                  generic_to_substitute[gen] = applyGenerics(
-                    generic_to_substitute[gen],
-                    {
-                      [prev_substitution]: substitution,
-                    }
-                  )
-                }
-              }
-            }
-          }
-
-          generic_to_substitute[generic] = substitution
-        }
       }
     })
 
-    const substitute_replacement: Dict<string> = {}
-    const generic_to_substitute_: Dict<string> = {}
+    typeMap[unitId] = unitTypeInterface
+  })
 
-    charCode = 65
-    forEachValueKey(generic_to_substitute, (value, key) => {
-      generic_to_substitute_[key] = value
+  forEachValueKey(units, (_, unitId: string) => {
+    const unitTypeInterface: TypeTreeInterface = typeMap[unitId]
 
-      const generics = findGenerics(value)
-
-      for (const generic of generics) {
-        if (!substitute_replacement[generic]) {
-          substitute_replacement[generic] = `<${String.fromCharCode(
-            charCode++
-          )}>`
-        }
-        generic_to_substitute_[key] = applyGenerics(
-          value,
-          substitute_replacement
+    function register(type: TreeNode, kind: IO, pinId: string): void {
+      if (_hasGeneric(type)) {
+        unitTypeInterface[kind][pinId] = _applyGenerics(
+          type,
+          dataReplacement[unitId] ?? {}
         )
       }
+    }
+
+    forIOObjVK(unitTypeInterface, (type_, type, pinId) => {
+      register(type, type_, pinId)
     })
 
-    forEachValueKey(unit, (_, unitId: string) => {
-      const unitTypeMap = typeMap[unitId]
+    typeMap[unitId] = unitTypeInterface
+  })
 
-      forEachValueKey(unitTypeMap['output'], (type, pinId) => {
-        const nextType = _applyGenerics(type, generic_to_substitute_)
+  const equivalence: Set<string>[] = []
+  const equivalence_index: Dict<number> = {}
 
-        unitTypeMap['output'][pinId] = nextType
-      })
+  let i = 0
 
-      forEachValueKey(unitTypeMap['input'], (type, pinId) => {
-        const nextType = _applyGenerics(type, generic_to_substitute_)
+  const create_set_equivalent = () => {
+    let equivalence_set = new Set<string>()
 
-        unitTypeMap['input'][pinId] = nextType
-      })
+    let merged = false
+
+    function set_equivalent(unitId: string, kind: IO, pinId: string) {
+      const type = deepGetOrDefault(typeMap, [unitId, kind, pinId], undefined)
+
+      if (!type) {
+        return
+      }
+
+      if (type.type === TreeNodeType.Any) {
+        return
+      }
+
+      if (equivalence_index[type.value] === undefined) {
+        equivalence_set.add(type.value)
+
+        if (_isGeneric(type)) {
+          equivalence_index[type.value] = i
+        }
+      } else {
+        merged = true
+
+        i = equivalence_index[type.value]
+
+        equivalence[i] = new Set([
+          ...(equivalence[i] || []),
+          ...equivalence_set,
+        ])
+
+        equivalence_set.forEach((j) => {
+          equivalence_index[j] = i
+        })
+
+        equivalence_set = equivalence[i]
+      }
+
+      if (!merged) {
+        equivalence.push(equivalence_set)
+      }
+
+      i = equivalence.length
+    }
+
+    return set_equivalent
+  }
+
+  const set_merge_equivalence = (
+    mergeId: string,
+    set_equivalent: (unitId: string, kind: IO, pinId: string) => void
+  ): void => {
+    const mergeSpec = merges[mergeId]
+
+    forEachPinOnMerge(mergeSpec, (unitId, kind, pinId) => {
+      set_equivalent(unitId, kind, pinId)
+    })
+  }
+
+  const set_exposed_equivalence = (
+    kind: IO,
+    pinId: string,
+    set_equivalent: (unitId: string, kind: IO, pinId: string) => void
+  ): void => {
+    const { plug } = spec[`${kind}s`][pinId]
+
+    forEachValueKey(plug, ({ unitId, pinId, mergeId }) => {
+      if (mergeId) {
+        set_merge_equivalence(mergeId, set_equivalent)
+      } else if (unitId && pinId) {
+        set_equivalent(unitId, kind, pinId)
+      }
+    })
+  }
+
+  forEachValueKey(merges, (_, mergeId: string) => {
+    const set_equivalent = create_set_equivalent()
+
+    set_merge_equivalence(mergeId, set_equivalent)
+  })
+
+  forEachValueKey(inputs, (_, inputId) => {
+    const set_equivalent = create_set_equivalent()
+
+    set_exposed_equivalence('input', inputId, set_equivalent)
+  })
+
+  forEachValueKey(outputs, (_, outputId) => {
+    const set_equivalent = create_set_equivalent()
+
+    set_exposed_equivalence('output', outputId, set_equivalent)
+  })
+
+  const specific = equivalence.map((equivalence_set) => {
+    let theMostSpecific = undefined
+
+    for (const t of equivalence_set) {
+      if (theMostSpecific === undefined) {
+        theMostSpecific = t
+      } else {
+        theMostSpecific = mostSpecific(theMostSpecific, t)
+      }
+    }
+
+    return theMostSpecific as string
+  })
+
+  equivalence.forEach((equivalence_set, index) => {
+    for (const t of equivalence_set) {
+      const theMostSpecific = specific[index]
+
+      const extracted = extractGenerics(specs, theMostSpecific, t)
+
+      for (const generic in extracted) {
+        const extract = extracted[generic]
+
+        let substitution: string
+
+        if (genericToSubstitute[generic] === undefined) {
+          substitution = extract
+        } else {
+          const prev_substitution = genericToSubstitute[generic]
+
+          substitution = mostSpecific(extract, prev_substitution)
+
+          if (!isGeneric(substitution)) {
+            if (substitution !== extract) {
+              for (const g in genericToSubstitute) {
+                genericToSubstitute[g] = applyGenerics(genericToSubstitute[g], {
+                  [extract]: substitution,
+                })
+              }
+            }
+
+            if (prev_substitution !== substitution) {
+              for (const gen in genericToSubstitute) {
+                genericToSubstitute[gen] = applyGenerics(
+                  genericToSubstitute[gen],
+                  {
+                    [prev_substitution]: substitution,
+                  }
+                )
+              }
+            }
+          }
+        }
+
+        genericToSubstitute[generic] = substitution
+      }
+    }
+  })
+
+  charCode = 65
+  forEachValueKey(genericToSubstitute, (value, key) => {
+    globalGenericTosubstitute[key] = value
+
+    const generics = findGenerics(value)
+
+    for (const generic of generics) {
+      if (!globalSubstituteReplacement[generic]) {
+        globalSubstituteReplacement[generic] =
+          `<${String.fromCharCode(charCode++)}>`
+      }
+      globalGenericTosubstitute[key] = applyGenerics(
+        value,
+        globalSubstituteReplacement
+      )
+    }
+  })
+
+  forEachValueKey(units, (_, unitId: string) => {
+    const unitTypeMap = typeMap[unitId]
+
+    forEachValueKey(unitTypeMap['output'], (type, pinId) => {
+      const nextType = _applyGenerics(type, globalGenericTosubstitute)
+
+      unitTypeMap['output'][pinId] = nextType
+    })
+
+    forEachValueKey(unitTypeMap['input'], (type, pinId) => {
+      const nextType = _applyGenerics(type, globalGenericTosubstitute)
+
+      unitTypeMap['input'][pinId] = nextType
+    })
+  })
+
+  charCode = 65
+
+  forEachValueKey(units, (_, unitId: string) => {
+    const unitTypeInterface: TypeTreeInterface = typeMap[unitId]
+
+    function register(type: TreeNode, kind: IO, pinId: string): void {
+      if (_hasGeneric(type)) {
+        const generics = _findGenerics(type)
+
+        for (const generic of generics) {
+          if (!globalGenericReplacement[generic]) {
+            globalGenericReplacement[generic] = `<${String.fromCharCode(
+              charCode++
+            )}>`
+          }
+        }
+        unitTypeInterface[kind][pinId] = _applyGenerics(
+          type,
+          globalGenericReplacement
+        )
+      }
+    }
+
+    forIOObjKV(unitTypeInterface, (type_, pinId, type) => {
+      register(type, type_, pinId)
     })
   })
 
