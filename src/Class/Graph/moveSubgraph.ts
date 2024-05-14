@@ -307,8 +307,10 @@ export function moveUnit(
           if (reverse) {
             //
           } else {
-            target.setUnitPinConstant(unitId, type, pinId, false, false)
-            target.setPinConstant(type, nextPinId, true)
+            if (nextUnitPinMap[type][pinId].pinId) {
+              target.setUnitPinConstant(unitId, type, pinId, false, false)
+              target.setPinConstant(type, nextPinId, true)
+            }
           }
         }
 
