@@ -687,7 +687,6 @@ export function moveMerge(
 
   if (reverse) {
     if (mergePinCount === 0 || pinIntoCount > 1) {
-      // AD HOC
       const propagate = mergeIsRef
 
       target.addMerge(nextMerge, nextMergeId, false, propagate)
@@ -699,7 +698,6 @@ export function moveMerge(
           (mergeInputCount > 0 && mergeOutputCount > 0))) ||
       pinIntoCount > 1
     ) {
-      // AD HOC
       const propagate = mergeIsRef
 
       target.addMerge(nextMerge, nextMergeId, false, propagate)

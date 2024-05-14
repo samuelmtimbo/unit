@@ -6098,33 +6098,6 @@ export class Graph<I = any, O = any>
     }
   }
 
-  private _specSetComponent(component: GraphComponentSpec): void {
-    const { slots = [], subComponents = {}, children = [] } = component
-
-    for (const subComponentId in subComponents) {
-      const subComponent = subComponents[subComponentId]
-
-      this._specAddSubComponent(subComponentId, subComponent)
-    }
-
-    for (let i = 0; i < slots.length; i++) {
-      const slot = slots[i]
-      const [unitId, slotName] = slot
-      const slotUnit = this.getUnit(unitId) as Element_ | Graph
-      const _slotName = i === 0 ? 'default' : `${i}`
-      this._slot[_slotName] = slotUnit
-    }
-
-    // AD HOC
-    if (slots.length > 0) {
-      this._spec.component.slots = slots
-    }
-
-    // for (const child of children) {
-    //   this.componentAppend(child)
-    // }
-  }
-
   private _initAddSubComponent(
     subComponentId: string,
     subComponent: GraphSubComponentSpec
@@ -6136,29 +6109,6 @@ export class Graph<I = any, O = any>
 
       this._simSubComponentAppendChild(subComponentId, childId, slot)
     }
-  }
-
-  private _specAddSubComponent(
-    subComponentId: string,
-    subComponent: GraphSubComponentSpec
-  ): void {
-    const { children = [], childSlot = {} } = subComponent
-
-    for (const childId of children) {
-      // AD HOC
-      // should get parent from memory
-      this._specComponentRemoveChild(childId)
-
-      const slot = childSlot[childId] || 'default'
-
-      this._specSubComponentAppendChild(subComponentId, childId, slot)
-    }
-
-    this._spec.component.subComponents[subComponentId] = subComponent
-
-    this._spec.component.children = this._spec.component.children ?? []
-
-    this._spec.component.children.push(subComponentId)
   }
 
   private _root: Component_[] = []
