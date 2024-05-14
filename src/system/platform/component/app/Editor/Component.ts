@@ -26560,7 +26560,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     setUnitPinIgnored({ unitId, type, pinId, ignored }, this._spec)
   }
 
-  private _spec_set_link_pin_constant = (
+  private _spec_set_unit_pin_constant = (
     unitId: string,
     type: IO,
     pinId: string,
@@ -26568,7 +26568,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log(
     //   'Graph',
-    //   '_spec_set_link_pin_constant',
+    //   '_spec_set_unit_pin_constant',
     //   unitId,
     //   type,
     //   pinId,
@@ -27826,7 +27826,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-    this._state_set_link_pin_constant(pin_node_id, constant)
+    this._state_set_unit_pin_constant(pin_node_id, constant)
     emit && this._pod_set_link_pin_constant(unitId, type, pinId, constant)
   }
 
@@ -27869,13 +27869,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _state_set_link_pin_constant(pin_node_id: string, constant: boolean) {
+  private _state_set_unit_pin_constant(pin_node_id: string, constant: boolean) {
     // console.log('_state_set_link_pin_constant', pin_node_id, constant)
 
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-    this._spec_set_link_pin_constant(unitId, type, pinId, constant)
-    this._sim_set_link_pin_constant(pin_node_id, constant)
+    this._spec_set_unit_pin_constant(unitId, type, pinId, constant)
+    this._sim_set_unit_pin_constant(pin_node_id, constant)
 
     const is_ref = this._is_link_pin_ref(pin_node_id)
 
@@ -27896,10 +27896,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _sim_set_link_pin_constant = (
+  private _sim_set_unit_pin_constant = (
     pin_node_id: string,
     constant: boolean
   ): void => {
+    // console.log('_sim_set_unit_pin_constant', pin_node_id, constant)
+
     const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
     const link_base = this._link_base[link_id]
     if (constant) {
@@ -47863,7 +47865,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           )
 
           if (constant) {
-            this._state_set_link_pin_constant(next_pin_node_id, true)
+            this._sim_set_unit_pin_constant(next_pin_node_id, true)
           }
 
           if (meta.selected.links[type].has(next_pin_id)) {
@@ -47912,7 +47914,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const updated_graph_spec = clone(graph_spec)
 
-    addUnit({ unitId: next_unit_id, unit }, updated_graph_spec)
+    addUnit({ unitId: next_unit_id, unit: clone(unit) }, updated_graph_spec)
 
     if (sub_component) {
       updated_graph_spec.component = updated_graph_spec.component ?? {}
@@ -47999,6 +48001,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           subPinId: undefined,
         }
       )
+
+      const constant = isUnitPinConstant(
+        this._collapse_init_spec,
+        unit_id,
+        type,
+        pin_id
+      )
+
+      if (constant) {
+        if (pinId) {
+          setUnitPinConstant(
+            { unitId: next_unit_id, type, pinId: pin_id, constant: false },
+            updated_graph_spec
+          )
+
+          this._spec_set_unit_pin_constant(graph_id, type, pinId, true)
+        }
+      }
 
       if (pinId && subPinId) {
         const pin_spec = deepGetOrDefault(
