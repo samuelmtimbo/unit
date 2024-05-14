@@ -112,8 +112,6 @@ export class Component<
 
   public $propUnlisten: Dict<Unlisten> = {}
 
-  // AD HOC
-  // Avoid recursively connecting "JavaScript Defined Components"
   public $unbundled: boolean = true
 
   public $children: Component[] = []

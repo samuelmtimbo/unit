@@ -69,6 +69,7 @@ import {
   GraphRemoveMergeDataData,
   GraphRemoveUnitPinDataData,
   GraphSetComponentSizeData,
+  GraphSetMetadataData,
   GraphSetSubComponentSizeData,
   GraphSetUnitSizeData,
 } from '../../../../../Class/Graph/interface'
@@ -45197,7 +45198,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         type: IO,
         pinId: string
       ): boolean {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
     }
 
@@ -45496,7 +45497,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         type: IO,
         pinId: string
       ): boolean {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
     }
 
@@ -45676,7 +45677,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         type: IO,
         pinId: string
       ): boolean {
-        throw new Error('Function not implemented.')
+        throw new MethodNotImplementedError()
       },
     }
 
@@ -47974,7 +47975,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      // AD HOC
       deepDelete(updated_graph_spec, ['metadata', 'complexity'])
     }
 
@@ -48075,17 +48075,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             updated_graph_spec
           )
         }
-
-        // this._on_graph_unit_plug_pin_moment({
-        //   type,
-        //   pinId,
-        //   subPinId,
-        //   subPinSpec: {
-        //     unitId: next_unit_id,
-        //     pinId: pin_id,
-        //   },
-        //   path: [graph_id],
-        // })
       }
     }
 
@@ -56050,6 +56039,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _on_metadata = (data: GraphSetMetadataData) => {
+    // console.log('Graph', '_on_metadata', data)
+  }
+
   private _on_graph_unit_set_pin_set_functional = (
     data: GraphSetPinSetFunctionalMomentData & { userId: string }
   ) => {
@@ -57487,9 +57480,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       set_unit_pin_constant: this._on_set_unit_pin_constant,
       set_unit_pin_data: this._on_set_unit_pin_data,
       bulk_edit: this._on_bulk_edit,
+      metadata: this._on_metadata,
     },
   }
-
   private _on_moment = (moment: Moment): void => {
     // console.log('_on_moment', moment, this._id)
 
