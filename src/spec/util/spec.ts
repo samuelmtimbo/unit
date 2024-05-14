@@ -50,7 +50,11 @@ export function isUnitPinConstant(
   type: IO,
   pinId: string
 ): boolean {
-  return deepGetOrDefault(spec, [unitId, type, pinId, 'constant'], false)
+  return deepGetOrDefault(
+    spec,
+    ['units', unitId, type, pinId, 'constant'],
+    false
+  )
 }
 
 export const isPinRef = (
