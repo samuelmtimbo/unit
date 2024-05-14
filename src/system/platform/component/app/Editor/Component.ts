@@ -56872,6 +56872,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { type, pinId, nextPinId, path } = data
 
+    const opposite_type = opposite(type)
+
     const graphUnitId = path[0]
 
     const spec = this._get_unit_spec(graphUnitId) as GraphSpec
@@ -56910,7 +56912,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (merge_node_id) {
           plug = this._spec_get_pin_node_plug_spec(type, merge_node_id)
         } else {
-          plug = this._spec_get_pin_node_plug_spec(type, pin_node_id)
+          plug =
+            this._spec_get_pin_node_plug_spec(type, pin_node_id) ||
+            this._spec_get_pin_node_plug_spec(opposite_type, pin_node_id)
         }
 
         datum_value = this._get_pin_datum_value(pin_node_id)
@@ -56971,13 +56975,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           if (subPinSpec.unitId && subPinSpec.pinId) {
             subPinSpec = {
-              kind: _type ?? type,
+              kind: subPinSpec.kind ?? _type,
               unitId: subPinSpec.unitId,
               pinId: nextPinId,
             }
           }
 
-          unplugPin({ type, pinId, subPinId }, this._spec)
+          unplugPin({ type: _type, pinId, subPinId }, this._spec)
 
           this._state_plug_exposed_pin(_type, pinId, subPinId, subPinSpec)
 
