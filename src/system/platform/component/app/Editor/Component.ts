@@ -25717,9 +25717,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
 
         this._unplug_sub_component_base_frame(sub_component_id)
-        this._enter_sub_component_frame(sub_component_id)
         this._compose_sub_component(sub_component_id)
         this._append_sub_component_base(sub_component_id)
+        this._enter_sub_component_frame(sub_component_id)
 
         callback()
       }

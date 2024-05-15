@@ -1995,12 +1995,9 @@ export class Component<
         }
       } else {
         if (this.$slotParent) {
-          this.$slotParent.domAppendParentChildAt(
-            component,
-            'default',
-            this.$slotParent.$mountParentChildren.length,
-            this.$slotParent.$mountParentChildren.length
-          )
+          const i = this.$slotParent.$mountParentChildren.length - 1
+
+          this.$slotParent.domAppendParentChildAt(component, 'default', i, i)
         } else {
           this.domCommitAppendChild(component, this.$mountRoot.length - 1)
         }
