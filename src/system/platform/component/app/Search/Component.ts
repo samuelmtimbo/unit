@@ -163,7 +163,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
         className: 'search-list',
         style: {
           position: 'relative',
-          maxHeight: `${4 * SEARCH_ITEM_HEIGHT - 2}px`,
+          maxHeight: `${4 * SEARCH_ITEM_HEIGHT - 1}px`,
           overflowY: 'auto',
           overflowX: 'hidden',
           display: this._list_hidden ? 'none' : 'block',
@@ -501,6 +501,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
             if (isSpecVisible(specs, spec.id)) {
               if (this._item[specId]) {
                 this._refresh_list_item(specId)
+                this._refresh_last_list_item_border()
               } else {
                 const new_ordered_index = this._find_new_item_index(
                   spec,
@@ -702,7 +703,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _refresh_list_item = (id: string) => {
-    // console.log('Graph', '_refresh_list_item', id)
+    // console.log('Search', '_refresh_list_item', id)
 
     const list_item_div = this._list_item_div[id]
     const list_item_name = this._list_item_name[id]
@@ -852,10 +853,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._input._input.$element.style.borderTopWidth = empty ? '0px' : '1px'
 
     if (!empty) {
-      const last_list_item_id = this._filtered_id_list[filtered_total - 1]
-      const last_list_item_div = this._list_item_div[last_list_item_id]
-
-      last_list_item_div.$element.style.borderBottom = color
+      this._refresh_last_list_item_border()
 
       if (this._selected_id) {
         this._scroll_into_item_if_needed(this._selected_id, false)
@@ -867,6 +865,15 @@ export default class Search extends Element<HTMLDivElement, Props> {
     if (this._selected_id) {
       this._dispatch_item_selected(this._selected_id)
     }
+  }
+
+  private _refresh_last_list_item_border = () => {
+    const filtered_total = this._filtered_id_list.length
+
+    const last_list_item_id = this._filtered_id_list[filtered_total - 1]
+    const last_list_item_div = this._list_item_div[last_list_item_id]
+
+    last_list_item_div.$element.style.borderBottom = ``
   }
 
   private _dispatch_item_selected = (id: string): void => {
@@ -1019,17 +1026,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     const { color = 'currentColor' } = style
 
-    const prev_selected_id = this._selected_id
-
     if (this._filtered_id_list.length > 0) {
-      const last_list_item_id =
-        this._filtered_id_list[this._filtered_id_list.length - 1]
-      const last_list_item_div = this._list_item_div[last_list_item_id]
-
-      if (last_list_item_div) {
-        last_list_item_div.$element.style.borderBottom =
-          '1px solid currentColor'
-      }
+      this._refresh_last_list_item_border()
     }
 
     let filtered_id_list: string[] = []
@@ -1043,12 +1041,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
       .join(' ')
 
     for (const id of this._ordered_id_list) {
-      if (!this._item[id]) {
-        // console.warn('Search', '_filter_list', 'missing item', id)
-
-        // AD HOC not sure how a spec was added to the registry unnoticed
-        continue
-      }
+      this._refresh_list_item(id)
 
       const { fuzzyName } = this._item[id]
       const list_item_div = this._list_item_div[id]
@@ -1099,10 +1092,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
       }
 
       if (!this._list_hidden) {
-        const last_list_item_id = filtered_id_list[filtered_total - 1]
-        const last_list_item_div = this._list_item_div[last_list_item_id]
-
-        last_list_item_div.$element.style.borderBottom = color
+        this._refresh_last_list_item_border()
 
         this._input._input.$element.style.borderRadius = '0'
         this._input._input.$element.style.borderTopWidth = '1px'
