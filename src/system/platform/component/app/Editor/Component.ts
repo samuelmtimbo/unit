@@ -951,7 +951,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       }
     )
 
-    const fallback_graph = new Graph(spec, {}, $system)
+    const fallback_graph = new Graph(spec, {}, $system, spec.id)
     this._fallback_graph = AsyncGraph(fallback_graph)
 
     this._pod = graph || this._fallback_graph
