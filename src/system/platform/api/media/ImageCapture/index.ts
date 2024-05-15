@@ -1,5 +1,6 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { apiNotSuportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { IC } from '../../../../../types/interface/IC'
 import { MST } from '../../../../../types/interface/MST'
@@ -52,7 +53,7 @@ export default class ImageCapture_ extends Semifunctional<I, O> {
     } = this.__system
 
     if (!ImageCapture) {
-      done(undefined, 'ImageCapture API is not supported')
+      done(undefined, apiNotSuportedError('Image Capture'))
 
       return
     }

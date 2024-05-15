@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { System } from '../../../../system'
-import { ID_NOT } from '../../../_ids'
+import { ID_NOT_0 } from '../../../_ids'
 
 export interface I {
   a: number
@@ -19,7 +19,7 @@ export default class Not extends Functional<I, O> {
       },
       {},
       system,
-      ID_NOT
+      ID_NOT_0
     )
   }
 

@@ -1,7 +1,7 @@
 import { Done } from '../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../Class/Semifunctional'
 import { System } from '../../../../system'
-import { ID_TIMER } from '../../../_ids'
+import { ID_INTERVAL } from '../../../_ids'
 
 export interface I {
   ms: number
@@ -23,7 +23,7 @@ export default class Interval extends Semifunctional<I, O> {
       },
       {},
       system,
-      ID_TIMER
+      ID_INTERVAL
     )
 
     this.addListener('reset', this._reset)

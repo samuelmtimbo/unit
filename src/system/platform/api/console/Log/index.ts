@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { ID_LOG } from '../../../../_ids'
+import { ID_LOG_0 } from '../../../../_ids'
 
 export interface I<T> {
   message: string
@@ -18,7 +18,7 @@ export default class Log<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      ID_LOG
+      ID_LOG_0
     )
   }
 

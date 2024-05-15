@@ -12,7 +12,7 @@ export type O = {}
 export default class Constrain extends Element_<I, O> {
   constructor(system: System) {
     super(
-      { i: ['style'], o: [] },
+      { i: ['style', 'attr'], o: [] },
       { output: { parent: { ref: true } } },
       system,
       ID_CONSTRAIN

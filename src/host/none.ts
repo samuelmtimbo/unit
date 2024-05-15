@@ -264,6 +264,8 @@ export function noHost(): API {
       CompressionStream: undefined,
       DecompressionStream: undefined,
       ReadableStream: undefined,
+      Notification: undefined,
+      Audio: undefined,
       getComputedStyle: function (element: Element): CSSStyleDeclaration {
         throw new MethodNotImplementedError()
       },

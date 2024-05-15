@@ -1,6 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { System } from '../../../../system'
-import { ID_POW } from '../../../_ids'
+import { ID_LOG } from '../../../_ids'
 
 export interface I<T> {
   a: number
@@ -19,7 +19,7 @@ export default class Log<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      ID_POW
+      ID_LOG
     )
   }
 

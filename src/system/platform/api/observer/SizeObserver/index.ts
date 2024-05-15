@@ -37,6 +37,12 @@ export default class SizeObserver extends Semifunctional<I, O> {
       ID_SIZE_OBSERVER
     )
 
+    const {
+      api: {
+        document: { ResizeObserver },
+      },
+    } = this.__system
+
     const observer_callback: ResizeObserverCallback = (
       entries: ResizeObserverEntry[]
     ) => {

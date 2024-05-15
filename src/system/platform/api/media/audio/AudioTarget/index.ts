@@ -30,6 +30,12 @@ export default class AudioTarget extends Functional<I, O> {
       ID_AUDIO_TARGET
     )
 
+    const {
+      api: {
+        window: { Audio },
+      },
+    } = this.__system
+
     this._audio = new Audio()
   }
 

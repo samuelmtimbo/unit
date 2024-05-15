@@ -2,7 +2,7 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { WP } from '../../../../../types/interface/WP'
-import { ID_OPEN } from '../../../../_ids'
+import { ID_POST_MESSAGE } from '../../../../_ids'
 
 export interface I {
   window: WP
@@ -29,7 +29,7 @@ export default class PostMessage extends Semifunctional<I, O> {
         },
       },
       system,
-      ID_OPEN
+      ID_POST_MESSAGE
     )
   }
 
