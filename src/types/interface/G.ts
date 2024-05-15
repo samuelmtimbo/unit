@@ -54,6 +54,7 @@ export type G_MoveSubgraphIntoArgs = [
   GraphMoveSubGraphData['nextPlugSpec'],
   Dict<string | null>,
   Dict<string[]>,
+  boolean?,
 ]
 
 export interface G<I = any, O = any, U_ = any> {

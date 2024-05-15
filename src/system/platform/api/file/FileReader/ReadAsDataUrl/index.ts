@@ -3,7 +3,7 @@ import { Done } from '../../../../../../Class/Functional/Done'
 import { System } from '../../../../../../system'
 import { B } from '../../../../../../types/interface/B'
 import { FR } from '../../../../../../types/interface/FR'
-import { ID_TO_DATA_URL } from '../../../../../_ids'
+import { ID_READ_AS_DATA_URL } from '../../../../../_ids'
 
 export type I = {
   opt: {}
@@ -33,7 +33,7 @@ export default class ReadAsDataUrl extends Functional<I, O> {
         },
       },
       system,
-      ID_TO_DATA_URL
+      ID_READ_AS_DATA_URL
     )
   }
 

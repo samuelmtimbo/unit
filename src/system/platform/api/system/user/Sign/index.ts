@@ -1,7 +1,7 @@
 import { Functional } from '../../../../../../Class/Functional'
 import { Done } from '../../../../../../Class/Functional/Done'
 import { System } from '../../../../../../system'
-import { ID_SIGN } from '../../../../../_ids'
+import { ID_SIGN_0 } from '../../../../../_ids'
 
 export type I = {
   value: string
@@ -20,7 +20,7 @@ export default class Sign extends Functional<I, O> {
       },
       {},
       system,
-      ID_SIGN
+      ID_SIGN_0
     )
   }
 

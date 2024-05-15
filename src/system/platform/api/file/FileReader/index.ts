@@ -1,6 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { apiNotSuportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { FR } from '../../../../../types/interface/FR'
 import { wrapFileReader } from '../../../../../wrap/FileReader'
@@ -44,7 +45,7 @@ export default class FileReader extends Semifunctional<I, O> {
     } = this.__system
 
     if (!FileReader) {
-      done(undefined, 'FileReader API not available.')
+      done(undefined, apiNotSuportedError('FileReader'))
 
       return
     }

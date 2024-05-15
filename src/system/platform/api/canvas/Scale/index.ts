@@ -2,7 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { CA } from '../../../../../types/interface/CA'
-import { ID_STROKE_PATH } from '../../../../_ids'
+import { ID_SCALE } from '../../../../_ids'
 
 export interface I<T> {
   sx: number
@@ -26,7 +26,7 @@ export default class Scale<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      ID_STROKE_PATH
+      ID_SCALE
     )
   }
 

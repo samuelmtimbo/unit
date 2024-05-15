@@ -1,4 +1,5 @@
 import { Primitive, PrimitiveEvents } from '../../../../../Primitive'
+import { apiNotSuportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { ID_NOTIFICATION } from '../../../../_ids'
 
@@ -40,8 +41,15 @@ export default class _Notification extends Primitive<I, O, NotificationEvents> {
   }
 
   private _setup() {
-    if ('Notification' in window) {
+    const {
+      api: {
+        window: { Notification },
+      },
+    } = this.__system
+
+    if (Notification) {
       const { permission } = Notification
+
       if (permission === 'default') {
         Notification.requestPermission().then(
           (_permission: NotificationPermission) => {
@@ -52,7 +60,7 @@ export default class _Notification extends Primitive<I, O, NotificationEvents> {
         this.err('not authorized')
       }
     } else {
-      this.err('not authorized')
+      this.err(apiNotSuportedError('Notification'))
     }
   }
 

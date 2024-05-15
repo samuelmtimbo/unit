@@ -174,6 +174,7 @@ export type API = {
     removeSelection: () => void
   }
   window: {
+    Notification: typeof Notification
     AudioContext: AudioContext
     OscillatorNode: OscillatorNode
     MediaStreamAudioSourceNode: MediaStreamAudioSourceNode
@@ -181,6 +182,7 @@ export type API = {
     GainNode: GainNode
     DelayNode: DelayNode
     ImageCapture: ImageCapture
+    Audio: { new (): HTMLAudioElement }
     CompressionStream: { new (format: CompressionFormat): CompressionStream }
     DecompressionStream: {
       new (format: CompressionFormat): DecompressionStream
@@ -208,6 +210,7 @@ export type API = {
     getSelection(): Selection
     createRange(): Range
     exitPictureInPicture(): Promise<void>
+
     MutationObserver: { new (callback: MutationCallback): MutationObserver }
     PositionObserver: PositionObserverCostructor
     ResizeObserver: { new (callback: ResizeObserverCallback): ResizeObserver }

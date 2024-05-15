@@ -2,7 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
-import { ID_DELETE } from '../../../../_ids'
+import { ID_DELETE_0 } from '../../../../_ids'
 
 export interface I<T> {
   obj: J
@@ -26,7 +26,7 @@ export default class Delete<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      ID_DELETE
+      ID_DELETE_0
     )
   }
 

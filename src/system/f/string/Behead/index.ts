@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
-import { ID_BEHEAD } from '../../../_ids'
+import { ID_BEHEAD_0 } from '../../../_ids'
 
 export interface I<T> {
   a: string
@@ -21,7 +21,7 @@ export default class Behead<T> extends Functional<I<T>, O<T>> {
       },
       {},
       system,
-      ID_BEHEAD
+      ID_BEHEAD_0
     )
   }
 

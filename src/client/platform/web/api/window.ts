@@ -4,6 +4,10 @@ import { BootOpt } from '../../../../system'
 export function webWindow(window: Window, opt: BootOpt): API['window'] {
   const _window: API['window'] = {
     // @ts-ignore
+    Notification: window.Notification,
+    // @ts-ignore
+    Audio: window.Audio,
+    // @ts-ignore
     AudioContext: window.AudioContext,
     // @ts-ignore
     OscillatorNode: window.OscillatorNode,

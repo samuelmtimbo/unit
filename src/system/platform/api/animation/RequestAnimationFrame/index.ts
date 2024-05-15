@@ -1,5 +1,6 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { apiNotSuportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { ID_REQUEST_ANIMATION_FRAME } from '../../../../_ids'
 
@@ -64,7 +65,7 @@ export default class RequestAnimationFrame extends Functional<I, O> {
         done({ a })
       })
     } else {
-      done(undefined, 'request animation frame not supported')
+      done(undefined, apiNotSuportedError('Request Animation Frame'))
     }
   }
 }

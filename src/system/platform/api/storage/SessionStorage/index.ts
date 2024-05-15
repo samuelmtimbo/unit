@@ -3,6 +3,7 @@ import {
   getStorageKeys,
   storageHasKey,
 } from '../../../../../client/util/web/storage'
+import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../../../../../ObjectUpdateType'
 import { Primitive } from '../../../../../Primitive'
@@ -31,7 +32,7 @@ export default class SessionStorage extends Primitive<I, O> implements V, J {
 
   private _checkAPI = () => {
     if (!sessionStorage) {
-      throw new Error('session Storage API not implemented')
+      throw new APINotSupportedError('Session Storage')
     }
   }
 

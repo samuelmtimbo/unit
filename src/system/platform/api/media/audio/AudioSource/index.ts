@@ -27,9 +27,18 @@ export default class AudioSource extends Functional<I, O> {
       ID_AUDIO_SOURCE
     )
 
+    const {
+      api: {
+        window: { Audio },
+      },
+    } = this.__system
+
     this._audio = new Audio()
     this._audio.volume = 0
-    this._audio.play()
+
+    this.addListener('play', () => {
+      this._audio.play()
+    })
 
     this.addListener('destroy', () => {
       this._audio.srcObject = null

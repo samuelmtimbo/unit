@@ -2965,7 +2965,6 @@ export class Graph<I = any, O = any>
   private _fork(specId?: string, emit: boolean = true) {
     if (this._spec.system || (this.__system.specsCount[this.id] ?? 0) > 1) {
       const [id, spec] = this.__system.forkSpec(this._spec, specId)
-
       this.__system.unregisterUnit(this.id)
 
       this.id = id
@@ -3140,8 +3139,16 @@ export class Graph<I = any, O = any>
 
     const { children = [] } = subComponent
 
-    for (const chlid_id of children) {
-      this._spec.component.children.push(chlid_id)
+    for (const childId of children) {
+      this._spec.component.children.push(childId)
+    }
+
+    if (this._spec.component.slots) {
+      this._spec.component.slots = this._spec.component?.slots?.filter(
+        ([subComponentId, slotName]) => {
+          return subComponentId !== unitId
+        }
+      )
     }
 
     delete subComponents[unitId]
@@ -3317,7 +3324,7 @@ export class Graph<I = any, O = any>
     emit: boolean = true,
     fork: boolean = true
   ): Unit {
-    // console.log('Graph', 'addUnit', unitSpec, unitId)
+    // console.log('Graph', 'addUnit', bundle, unitId)
 
     const specs_ = weakMerge(this.__system.specs, bundle.specs ?? {})
 
@@ -5750,6 +5757,7 @@ export class Graph<I = any, O = any>
       nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
+      fork = true,
     ]: G_MoveSubgraphIntoArgs
   ): void {
     // console.log(
@@ -5777,7 +5785,8 @@ export class Graph<I = any, O = any>
       nextMergePinId,
       nextPlugSpec,
       nextSubComponentParentMap,
-      nextSubComponentChildrenMap
+      nextSubComponentChildrenMap,
+      fork
     )
 
     this.emit(
@@ -5809,6 +5818,7 @@ export class Graph<I = any, O = any>
       nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
+      fork = true,
     ]: G_MoveSubgraphIntoArgs
   ): void {
     // console.log(
@@ -5844,7 +5854,8 @@ export class Graph<I = any, O = any>
       nextMergePinId,
       nextPlugSpec,
       nextSubComponentParentMap,
-      nextSubComponentChildrenMap
+      nextSubComponentChildrenMap,
+      fork
     )
 
     graph.endTransaction()
@@ -5863,21 +5874,10 @@ export class Graph<I = any, O = any>
       nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
+      fork = true,
     ]: G_MoveSubgraphIntoArgs
   ): void {
-    // console.log(
-    //   'Graph',
-    //   '_moveSubgraphOutOf',
-    //   graphId,
-    //   nextSpecId,
-    //   nodeIds,
-    //   nextIdMap,
-    //   nextPinIdMap,
-    //   nextMergePinId,
-    //   nextPlugSpec,
-    //   nextSubComponentParentMap,
-    //   nextSubComponentChildrenMap
-    // )
+    fork && this._fork()
 
     const graph = this.getUnit(graphId) as Graph
 
@@ -5981,7 +5981,8 @@ export class Graph<I = any, O = any>
       nextMergePinId,
       nextPlugSpec,
       nextSubComponentParentMap,
-      nextSubComponentChildrenMap
+      nextSubComponentChildrenMap,
+      true
     )
 
     this._removeUnit(graphId)
@@ -6436,7 +6437,8 @@ export class Graph<I = any, O = any>
               nextMergePinId,
               nextPlugSpec,
               nextSubComponentParentMap,
-              nextSubComponentChildrenMap
+              nextSubComponentChildrenMap,
+              true
             )
           },
           reorderSubComponent: (data: GraphReorderSubComponentData) => {

@@ -6,6 +6,7 @@ import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { io } from '../types/IOOf'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
+import { clone } from '../util/object'
 import { weakMerge } from '../weakMerge'
 import { evaluateMemorySpec } from './evaluate/evaluateMemorySpec'
 import { evaluateDataValue } from './evaluateDataValue'
@@ -54,9 +55,11 @@ export function unitFromBundleSpec(
   } = bundle
 
   if (memory) {
-    evaluateMemorySpec(memory, specs, classes)
+    const memory_ = clone(memory)
 
-    unit.restore(memory)
+    evaluateMemorySpec(memory_, specs, classes)
+
+    unit.restore(memory_)
   }
 
   forEachValueKey(input || {}, (unitPinSpec, pinId: string) => {
