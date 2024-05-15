@@ -910,7 +910,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._registry = Registry.fromRegistry(this.$system, specs)
 
-    const spec: GraphSpec = emptySpec({ name: 'untitled', private: true })
+    const spec: GraphSpec = this._registry.emptySpec({
+      name: 'untitled',
+      private: true,
+    })
 
     this._unlisten_registry = this._registry.specs_.subscribe(
       [],

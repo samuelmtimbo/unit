@@ -47,10 +47,10 @@ export class Registry implements R {
     return !!this.specs[id]
   }
 
-  emptySpec() {
-    const id = newSpecId(this.specs)
+  emptySpec(partial: Partial<GraphSpec> = {}) {
+    const id = partial.id ?? newSpecId(this.specs)
 
-    const spec = emptySpec({ id })
+    const spec = emptySpec({ ...partial, id })
 
     this.newSpec(spec)
 
