@@ -202,8 +202,12 @@ export function sameSpec(a_spec: GraphSpec, b_spec: GraphSpec): boolean {
   return false
 }
 
+export function isInternalSpecId(specId: string): boolean {
+  return specId.startsWith('_')
+}
+
 export function isSystemSpecId(specs: Specs, specId: string): boolean {
-  if (specId.startsWith('_')) {
+  if (isInternalSpecId(specId)) {
     return true
   }
 
