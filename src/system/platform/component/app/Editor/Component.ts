@@ -4245,16 +4245,46 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._registry.unregisterUnit(id)
   }
 
-  private _register_unit = (spec_id: string) => {
-    // console.log('Graph', '_register_unit', spec_id)
+  private _register_unit = (spec_id: string, deep: boolean = true) => {
+    // console.log('Graph', '_register_unit', spec_id, deep)
 
-    const { registerUnit } = this.$props
+    const { getSpec, registerUnit } = this.$props
 
     registerUnit(spec_id)
+
+    const spec = getSpec(spec_id)
+
+    if (isBaseSpec(spec)) {
+      if (deep) {
+        const { units = {} } = spec as GraphSpec
+
+        for (const unitId in units) {
+          const unit = units[unitId]
+
+          this._register_unit(unit.id, deep)
+        }
+      }
+    }
   }
 
-  private _unregister_unit = (spec_id: string) => {
-    const { unregisterUnit } = this.$props
+  private _unregister_unit = (spec_id: string, deep: boolean = true) => {
+    // console.log('Graph', '_unregister_unit', spec_id, deep)
+
+    const { getSpec, unregisterUnit } = this.$props
+
+    const spec = getSpec(spec_id)
+
+    if (isBaseSpec(spec)) {
+      if (deep) {
+        const { units = {} } = spec as GraphSpec
+
+        for (const unitId in units) {
+          const unit = units[unitId]
+
+          this._unregister_unit(unit.id, deep)
+        }
+      }
+    }
 
     unregisterUnit(spec_id)
   }
@@ -5671,7 +5701,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     },
     sub_component_layout_position: Position,
     sub_component_parent_id: string | null,
-    sub_component_index?: number
+    sub_component_index?: number,
+    register: boolean = true,
+    deep: boolean = true
   ): void {
     // console.trace('Graph', '_add_unit')
 
@@ -5681,7 +5713,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     injectSpecs(specs)
 
-    this._spec_add_unit(unit_id, unit)
+    this._spec_add_unit(unit_id, unit, register, deep)
 
     const is_component = this._is_unit_component(unit_id)
 
@@ -5987,12 +6019,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     sub_component.compose()
   }
 
-  private _spec_add_unit = (unitId: string, unit: GraphUnitSpec) => {
+  private _spec_add_unit = (
+    unitId: string,
+    unit: GraphUnitSpec,
+    register: boolean = true,
+    deep: boolean = true
+  ) => {
     // console.log('Graph', '_spec_add_unit', unitId, unit)
 
     addUnit({ unitId, unit: clone(unit) }, this._spec)
 
     this._mirror_unit(unitId)
+
+    if (register) {
+      this._register_unit(unit.id, deep)
+    }
 
     this._spec_update_metadata_complexity()
   }
@@ -6597,8 +6638,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let width: number
     let height: number
     let shape: Shape
-
-    this._register_unit(unit.id)
 
     if (is_component) {
       const size = this._get_unit_component_graph_size(unit_id)
@@ -34013,6 +34052,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       map_merge_id,
       map_plug_id,
       {},
+      false,
       false
     )
 
@@ -38530,8 +38570,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._spec_remove_unit(unit_id, unregister)
   }
 
-  private _spec_remove_unit = (unitId: string, unregister: boolean = true) => {
-    // console.log('Graph', '_spec_remove_unit', unitId, unregister)
+  private _spec_remove_unit = (
+    unitId: string,
+    unregister: boolean = true,
+    deep: boolean = true
+  ) => {
+    // console.log('Graph', '_spec_remove_unit', unitId, unregister, deep)
 
     const unit = this._get_unit(unitId)
 
@@ -38540,7 +38584,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (unregister) {
-      this._unregister_unit(unit.id)
+      this._unregister_unit(unit.id, deep)
     }
 
     removeUnit({ unitId }, this._spec)
@@ -44481,7 +44525,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         { width: 2, height: 2 },
         { input: {}, output: {} },
         { x: 0, y: 0 },
-        lowest_common_ancestor
+        lowest_common_ancestor,
+        undefined,
+        true,
+        false
       )
 
       if (there_is_selected_sub_component) {
@@ -51563,7 +51610,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     map_merge_id: Dict<string>,
     map_plug_id: IOOf<Dict<Dict<string>>>,
     map_datum_id: Dict<string>,
-    restart_simulation: boolean = true
+    restart_simulation: boolean = true,
+    register: boolean = true
   ): void => {
     // console.log('Graph', '_paste_spec', graph)
 
@@ -51575,7 +51623,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       map_datum_id
     )
 
-    this.__state_paste_spec(_graph, position, restart_simulation)
+    this.__state_paste_spec(_graph, position, restart_simulation, register)
   }
 
   public _paste_spec = (graph: GraphSpec, position: Position): void => {
@@ -51592,7 +51640,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public __state_paste_spec = (
     graph: GraphSpec,
     position: Position,
-    restart_simulation: boolean = true
+    restart_simulation: boolean = true,
+    register: boolean = true
   ): void => {
     // console.log('Graph', '__state_paste_spec', graph)
 
@@ -51624,7 +51673,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const p = addVector(position, unit_position)
 
-      this._spec_add_unit(unit_id, unit)
+      this._spec_add_unit(unit_id, unit, register)
       this._sim_add_unit_core(unit_id, unit, p)
     }
 
