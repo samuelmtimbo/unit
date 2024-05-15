@@ -1,4 +1,5 @@
 import { $, $Events } from '../$'
+import { isInternalSpecId } from '../../client/spec'
 import { SELF } from '../../constant/SELF'
 import { deepSet_ } from '../../deepSet'
 import { DuplicatedInputFoundError } from '../../exception/DuplicatedInputFoundError'
@@ -142,7 +143,9 @@ export class Unit<
 
     this.id = id
 
-    system.registerUnit(id)
+    if (!isInternalSpecId(id)) {
+      system.registerUnit(id)
+    }
 
     const {
       global: { ref_ },
@@ -1074,7 +1077,9 @@ export class Unit<
       global: { ref_ },
     } = this.__system
 
-    this.__system.unregisterUnit(this.id)
+    if (!isInternalSpecId(this.id)) {
+      this.__system.unregisterUnit(this.id)
+    }
 
     deepDelete(ref_, [this.id, this.__global_id])
 
