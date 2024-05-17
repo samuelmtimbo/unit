@@ -13,8 +13,43 @@ export type O = {
   stream: MS
 }
 
+async function createMediaStreamFromUrl(
+  src: string
+): Promise<{ stream: MediaStream; source: AudioBufferSourceNode }> {
+  // @ts-ignore
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)()
+
+  let source: AudioBufferSourceNode
+
+  try {
+    const response = await fetch(src)
+    const arrayBuffer = await response.arrayBuffer()
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
+
+    source = audioContext.createBufferSource()
+
+    source.buffer = audioBuffer
+
+    const mediaStreamDestination = audioContext.createMediaStreamDestination()
+
+    source.connect(mediaStreamDestination)
+    source.start()
+
+    const stream = mediaStreamDestination.stream
+
+    return { stream, source }
+  } catch (error) {
+    if (source) {
+      source.stop()
+      source.disconnect()
+    }
+
+    throw new Error('could not load media stream')
+  }
+}
+
 export default class AudioSource extends Functional<I, O> {
-  private _audio: HTMLAudioElement
+  private _source: AudioBufferSourceNode
 
   constructor(system: System) {
     super(
@@ -22,7 +57,13 @@ export default class AudioSource extends Functional<I, O> {
         i: ['src'],
         o: ['stream'],
       },
-      {},
+      {
+        output: {
+          stream: {
+            ref: true,
+          },
+        },
+      },
       system,
       ID_AUDIO_SOURCE
     )
@@ -33,32 +74,38 @@ export default class AudioSource extends Functional<I, O> {
       },
     } = this.__system
 
-    this._audio = new Audio()
-    this._audio.volume = 0
-
     this.addListener('play', () => {
-      this._audio.play()
+      if (this._source) {
+        this._source.start()
+      }
+    })
+
+    this.addListener('pause', () => {
+      if (this._source) {
+        this._source.stop()
+      }
     })
 
     this.addListener('destroy', () => {
-      this._audio.srcObject = null
+      this.d()
     })
   }
 
-  f({ src }, done: Done<O>) {
-    this._audio.src = src
+  async f({ src }, done: Done<O>) {
+    let srcObject: MediaStream
+    let source: AudioBufferSourceNode
 
-    const { srcObject } = this._audio
-
-    let stream: MS
-
-    if (srcObject instanceof MediaStream) {
-      stream = wrapMediaStream(srcObject, this.__system)
-    } else {
-      done(undefined, '')
+    try {
+      ;({ stream: srcObject, source } = await createMediaStreamFromUrl(src))
+    } catch (err) {
+      done(undefined, err.message)
 
       return
     }
+
+    this._source = source
+
+    const stream = wrapMediaStream(srcObject, this.__system)
 
     done({
       stream,
@@ -66,6 +113,9 @@ export default class AudioSource extends Functional<I, O> {
   }
 
   d() {
-    this._audio.src = null
+    if (this._source) {
+      this._source.stop()
+      this._source.disconnect()
+    }
   }
 }

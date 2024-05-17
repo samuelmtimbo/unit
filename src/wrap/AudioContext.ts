@@ -32,6 +32,10 @@ export function wrapAudioContext(
     createAnalyser(opt: AnalyserOptions): AnalyserNode {
       throw new MethodNotImplementedError()
     }
+
+    disconnect(audioNode?: AudioNode): void {
+      //
+    }
   })(system)
 
   return ctx
