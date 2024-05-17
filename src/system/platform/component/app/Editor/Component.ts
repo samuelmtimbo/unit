@@ -4995,7 +4995,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _fetching_bundle: boolean = false
 
   private _reset_spec = (): void => {
-    const { injectSpecs } = this.$props
+    const { parent, injectSpecs } = this.$props
 
     if (!this._pod) {
       return
@@ -5008,7 +5008,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._fetching_bundle = false
 
-      injectSpecs(weakMerge(specs ?? {}, { [spec.id]: spec }))
+      if (!parent) {
+        injectSpecs(weakMerge(specs ?? {}, { [spec.id]: spec }))
+      }
 
       this._reset(spec)
       this._setup_pod(this._pod)
