@@ -2,7 +2,8 @@
   "name": "state",
   "inputs": {
     "init": {
-      "type": "<T>"
+      "_type": "<T>",
+      "type": "any"
     },
     "done": {
       "type": "any",
