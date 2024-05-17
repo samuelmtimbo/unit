@@ -234,6 +234,7 @@ import {
 } from '../../../../../client/id'
 import { isTextLike } from '../../../../../client/isTextLike'
 import { LayoutBase, LayoutLeaf } from '../../../../../client/layout'
+import { listenMovement } from '../../../../../client/listenMovement'
 import { Mode } from '../../../../../client/mode'
 import { _pinTypeMatch } from '../../../../../client/parser'
 import { rawExtractStyle } from '../../../../../client/rawExtractStyle'
@@ -57761,21 +57762,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._unlisten_frame()
       }
 
-      this._unlisten_frame = this._frame.addEventListener(
-        makePointerDownListener(() => {
-          if (this._is_fullwindow) {
-            this._fullwindow_focusing = true
+      this._unlisten_frame = listenMovement(this._frame, () => {
+        if (this._is_fullwindow) {
+          this._fullwindow_focusing = true
 
-            if (!this._frame_out) {
-              this._show_transcend(animate)
-            }
-
-            setTimeout(() => {
-              this._fullwindow_focusing = false
-            }, 0)
+          if (!this._frame_out) {
+            this._show_transcend(animate)
           }
-        })
-      )
+
+          setTimeout(() => {
+            this._fullwindow_focusing = false
+          }, 0)
+        }
+      })
 
       if (this._in_component_control) {
         if (this._is_fullwindow) {
