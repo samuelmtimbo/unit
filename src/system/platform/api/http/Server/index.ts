@@ -42,10 +42,14 @@ export default class Server extends Semifunctional<I, O> {
     } = this.__system
 
     try {
-      this._unlisten = listen(port, (req: BasicHTTPRequest) => {
+      this._unlisten = listen(port, async (req: BasicHTTPRequest) => {
         this._output.req.push(req)
 
-        return this._waiter.once()
+        const res = await this._waiter.once()
+
+        this._waiter.clear()
+
+        return res
       })
     } catch (err) {
       done(undefined, err.message)
