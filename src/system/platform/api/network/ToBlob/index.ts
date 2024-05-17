@@ -26,7 +26,18 @@ export default class ToBlob extends Semifunctional<I, O> {
         i: ['done'],
         o: [],
       },
-      {},
+      {
+        input: {
+          res: {
+            ref: true,
+          },
+        },
+        output: {
+          blob: {
+            ref: true,
+          },
+        },
+      },
       system,
       ID_TO_BLOB_0
     )
