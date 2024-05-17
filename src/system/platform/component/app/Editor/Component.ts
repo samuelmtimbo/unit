@@ -26523,17 +26523,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const datum_node_id = this._pin_to_datum[pin_node_id]
 
-    if (datum_node_id) {
-      if (constant) {
-        const { datumId } = segmentDatumNodeId(datum_node_id)
+    if (type === 'input') {
+      if (datum_node_id) {
+        if (constant) {
+          const { datumId } = segmentDatumNodeId(datum_node_id)
 
-        const tree = this._datum_tree[datumId]
+          const tree = this._datum_tree[datumId]
 
-        const { value } = tree
+          const { value } = tree
 
-        this._spec_set_pin_data(pin_node_id, value)
-      } else {
-        this._spec_remove_pin_data(pin_node_id)
+          this._spec_set_pin_data(pin_node_id, value)
+        } else {
+          this._spec_remove_pin_data(pin_node_id)
+        }
       }
     }
   }
