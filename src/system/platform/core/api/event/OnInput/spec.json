@@ -5,7 +5,8 @@
       "id": "367241d8-ad12-11ea-beed-9777f31699a8",
       "input": {
         "event": {
-          "data": "'input'"
+          "data": "'input'",
+          "constant": true
         },
         "remove": {
           "ignored": false
