@@ -1869,11 +1869,12 @@ export class Graph<I = any, O = any>
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
     emit: boolean = true,
-    propagate: boolean = true
+    propagate: boolean = true,
+    fork: boolean = true
   ): void => {
-    // console.log('Graph', 'plugPin', type, pinId, subPinId, subPinSpec)
+    // console.log('Graph', 'plugPin', type, pinId, subPinId, subPinSpec, emit, propagate, fork)
 
-    this._plugPin(type, pinId, subPinId, subPinSpec, propagate)
+    this._plugPin(type, pinId, subPinId, subPinSpec, propagate, fork)
 
     emit && this.emit('plug_pin', type, pinId, subPinId, subPinSpec, [])
   }
@@ -1901,11 +1902,14 @@ export class Graph<I = any, O = any>
     pinId: string,
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
-    propagate: boolean = true
+    propagate: boolean = true,
+    fork: boolean = true
   ): void => {
     // console.log('Graph', '_plugPin', type, pinId, subPinId, subPinSpec)
 
     const { mergeId, unitId, pinId: _pinId, kind = type } = subPinSpec
+
+    fork && this._fork()
 
     if (
       deepGetOrDefault(
