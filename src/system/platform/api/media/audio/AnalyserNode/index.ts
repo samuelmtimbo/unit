@@ -20,8 +20,6 @@ export type O = {
 export default class AnalyserNode_ extends Functional<I, O> {
   private _node: AnalyserNode
 
-  private _uint8Array: Uint8Array
-
   constructor(system: System) {
     super(
       {
@@ -34,9 +32,7 @@ export default class AnalyserNode_ extends Functional<I, O> {
     )
 
     this.addListener('destroy', () => {
-      if (this._node) {
-        //
-      }
+      this.d()
     })
   }
 
@@ -73,7 +69,19 @@ export default class AnalyserNode_ extends Functional<I, O> {
     })
   }
 
+  private _disconnect = (sourceNode: AN | AC) => {
+    if (sourceNode) {
+      sourceNode.disconnect(this._node)
+
+      this._node = undefined
+    }
+  }
+
+  i() {
+    this._disconnect(this._i.node)
+  }
+
   d() {
-    //
+    this._disconnect(this._i.node)
   }
 }

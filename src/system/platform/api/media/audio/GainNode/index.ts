@@ -71,7 +71,7 @@ export default class GainNode_ extends Functional<I, O> {
 
   private _disconnect = (sourceNode: AN) => {
     if (sourceNode) {
-      sourceNode.disconnect()
+      sourceNode.disconnect(this._node)
 
       this._node = undefined
     }
@@ -81,9 +81,7 @@ export default class GainNode_ extends Functional<I, O> {
     this._disconnect(this._i.node)
   }
 
-  d(name, data) {
-    if (name === 'node') {
-      this._disconnect(this._i.node)
-    }
+  d() {
+    this._disconnect(this._i.node)
   }
 }
