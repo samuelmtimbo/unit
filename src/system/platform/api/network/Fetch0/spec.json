@@ -17,6 +17,9 @@
       "type": "`BO`",
       "metadata": {},
       "ref": true
+    },
+    "done": {
+      "type": "any"
     }
   },
   "outputs": {
