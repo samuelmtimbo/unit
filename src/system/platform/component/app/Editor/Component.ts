@@ -28291,7 +28291,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           graph: pod,
           style: {
             color,
-            opacity: '1',
+            opacity: '0',
             pointerEvents: 'none',
             transition: ifLinearTransition(animate, 'opacity'),
           },
