@@ -9537,7 +9537,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    // TODO "binary combination"
     set_bag_swap('input', 'input', 'data')
     set_bag_swap('input', 'input', 'ref')
     set_bag_swap('output', 'output', 'data')
@@ -9644,7 +9643,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const bundle = unitBundleSpec(graph_unit_spec, specs)
 
-    const should_unregister = unit_spec.id !== this._search_unit_init_spec_id
+    const should_unregister =
+      unit_spec.id !== this._search_unit_init_spec_id &&
+      unit_spec.id !== bundle.unit.id
 
     this._state_remove_unit(unit_id, should_unregister)
 
@@ -9656,7 +9657,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       new_unit_pin_position,
       layout_position,
       next_sub_component_parent_id,
-      next_sub_component_parent_index
+      next_sub_component_parent_index,
+      should_unregister
     )
 
     if (
