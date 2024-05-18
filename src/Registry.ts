@@ -134,7 +134,7 @@ export class Registry implements R {
         if (this.hasSpec(unit.id)) {
           //
         } else {
-          const spec = nextSpecs[unit.id]
+          const spec = nextSpecs[unit.id] ?? newSpecs[unit.id]
 
           setSpec(unit.id, spec, visited)
         }
