@@ -55194,7 +55194,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._is_spec_updater(path)) {
       const next_spec = clone(findSpecAtPath(specs, this._spec, path))
 
-      addMerge({ mergeSpec, mergeId }, next_spec)
+      addMerge({ mergeSpec: clone(mergeSpec), mergeId }, next_spec)
 
       setSpec(next_spec.id, next_spec)
     }
