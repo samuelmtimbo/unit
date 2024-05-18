@@ -19510,6 +19510,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       leaf_node.x -= this.$context.$x
       leaf_node.y -= this.$context.$y
 
+      leaf_node.x /= this.$context.$sx
+      leaf_node.y /= this.$context.$sy
+
       this._leaf_frame_node[leaf_id] = leaf_node
     }
   }
@@ -30282,14 +30285,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             const frame_trait = extractTrait(this._frame, measureText)
 
-            const frame_x = this._frame.$context.$x + frame_position.x
-            const frame_y = this._frame.$context.$y + frame_position.y
+            const frame_x =
+              this._frame.$context.$x +
+              frame_position.x / this._frame.$context.$sx
+            const frame_y =
+              this._frame.$context.$y +
+              frame_position.y / this._frame.$context.$sy
 
             const trait: LayoutNode = {
               x: frame_x,
               y: frame_y,
-              width: frame_size.width,
-              height: frame_size.height,
+              width: frame_size.width / this._frame.$context.$sx,
+              height: frame_size.height / this._frame.$context.$sy,
               sx: k,
               sy: k,
               opacity,
@@ -30526,14 +30533,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         let i = 0
 
-        for (const [leaf_path] of base) {
+        for (const [leaf_path, leaf_comp] of base) {
           const leaf_trait = parent_base_trait[i]
 
           const _leaf_trait: LayoutNode = {
-            x: -this.$context.$x + leaf_trait.x,
-            y: -this.$context.$y + leaf_trait.y,
-            width: leaf_trait.width,
-            height: leaf_trait.height,
+            x: (-this.$context.$x + leaf_trait.x) / this.$context.$sx,
+            y: (-this.$context.$y + leaf_trait.y) / this.$context.$sy,
+            width: leaf_trait.width / this.$context.$sx,
+            height: leaf_trait.height / this.$context.$sy,
             sx: leaf_trait.sx,
             sy: leaf_trait.sy,
             opacity: leaf_trait.opacity,
