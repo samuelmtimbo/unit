@@ -57757,10 +57757,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._refresh_enabled()
       }
     } else if (prop === 'fullwindow') {
-      if (current === true && !this._is_fullwindow) {
-        this._enter_all_fullwindow(false)
-      } else if (current === false && this._is_fullwindow) {
-        this._leave_all_fullwindow(true)
+      if (this._subgraph_graph) {
+        this._subgraph_graph.setProp('fullwindow', current)
+      } else {
+        const animate = this.$props.animate ?? this.$system.animated
+
+        if (current === true && !this._is_fullwindow) {
+          this._enter_all_fullwindow(animate)
+        } else if (current === false && this._is_fullwindow) {
+          this._leave_all_fullwindow(animate)
+        }
       }
     } else if (prop === 'frame') {
       const { frame, animate } = this.$props
