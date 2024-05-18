@@ -51568,25 +51568,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public paste_bundle = (bundle: BundleSpec, position: Position) => {
     // console.log('Graph', 'paste_bundle', bundle)
 
-    const { getSpec, specs, injectSpecs } = this.$props
+    const { specs, injectSpecs } = this.$props
 
     const { spec } = bundle
 
-    const all_specs = { ...bundle.specs, [spec.id]: spec }
+    const all_bundle_specs = { ...bundle.specs, [spec.id]: spec }
 
-    const map_spec_id = injectSpecs(bundle.specs ?? {})
+    const map_spec_id = injectSpecs(all_bundle_specs)
+
+    const all_specs = weakMerge(specs, all_bundle_specs)
 
     const { map_unit_id, map_merge_id, map_plug_id, map_datum_id } =
       buildGraphRemap(
         spec,
-        getSpec,
+        (id) => getSpec(all_specs, id),
         (spec_id, blacklist) => {
-          return newUnitId(
-            weakMerge(specs, all_specs),
-            this._spec,
-            spec_id,
-            blacklist
-          )
+          return newUnitId(all_specs, this._spec, spec_id, blacklist)
         },
         this._new_merge_id,
         this._new_sub_pin_id,
