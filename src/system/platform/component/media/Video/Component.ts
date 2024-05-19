@@ -1,9 +1,10 @@
 import { Element } from '../../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
+import { PropHandler, htmlPropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { CS } from '../../../../../types/interface/CS'
 import { $MS } from '../../../../../types/interface/async/$MS'
 
 export interface Props {
@@ -23,7 +24,10 @@ export const DEFAULT_STYLE = {
   // outline: 'none',
 }
 
-export default class VideoComp extends Element<HTMLVideoElement, Props> {
+export default class VideoComp
+  extends Element<HTMLVideoElement, Props>
+  implements CS
+{
   private prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {

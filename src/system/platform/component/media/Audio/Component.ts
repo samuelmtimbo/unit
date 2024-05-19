@@ -2,6 +2,7 @@ import { Element } from '../../../../../client/element'
 import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { CS } from '../../../../../types/interface/CS'
 
 export interface Props {
   className?: string
@@ -19,7 +20,10 @@ export const DEFAULT_STYLE = {
   // outline: 'none',
 }
 
-export default class AudioComp extends Element<HTMLAudioElement, Props> {
+export default class AudioComp
+  extends Element<HTMLAudioElement, Props>
+  implements CS
+{
   constructor($props: Props, $system: System) {
     super($props, $system)
 
@@ -79,5 +83,15 @@ export default class AudioComp extends Element<HTMLAudioElement, Props> {
 
   pause(): void {
     this.$element.pause()
+  }
+
+  captureStream(opt: { frameRate: number }): Promise<MediaStream> {
+    // @ts-ignore
+    if (this.$element.captureStream) {
+      // @ts-ignore
+      return this.$element.captureStream()
+    }
+
+    return null
   }
 }
