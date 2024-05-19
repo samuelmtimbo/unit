@@ -69,9 +69,11 @@ export default class CaptureStream extends Semifunctional<I, O> {
     // if (name === 'stop') {
     this._stream.set(null)
 
-    this._done()
+    this._forward_empty('stream')
 
-    this._input.stop.pull()
+    this._backward('opt')
+
+    this._backward('stop')
     // }
   }
 

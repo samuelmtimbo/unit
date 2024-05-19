@@ -56,23 +56,14 @@ export default class Video
   }: {
     frameRate: number
   }): Promise<MediaStream> {
-    // TODO
-    // const stream = await this._element.captureStream({ frameRate })
-    // throw new APINotSupportedError('Video Capture')
-
-    const localComponents = this.__system.getLocalComponents(this.__global_id)
-
-    const firstLocalComponent: any = localComponents[0]
+    const firstLocalComponent: any = await firstGlobalComponentPromise(
+      this.__system,
+      this.__global_id
+    )
 
     if (firstLocalComponent) {
       return firstLocalComponent.$element.captureStream({ frameRate })
     }
-
-    return new Promise((resolve) => {
-      this.__system.emitter.addListener(this.__global_id, (localComponent) => {
-        resolve(localComponent.$element.captureStream({ frameRate }))
-      })
-    })
   }
 
   async image(): Promise<any> {

@@ -2,8 +2,10 @@ import { ElementEE, Element_ } from '../../../../../Class/Element'
 import { Unit } from '../../../../../Class/Unit'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
+import { CS } from '../../../../../types/interface/CS'
 import { ME } from '../../../../../types/interface/ME'
 import { ID_AUDIO } from '../../../../_ids'
+import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import AudioComp from './Component'
 
 export interface I {
@@ -22,8 +24,10 @@ export interface AudioC extends AudioComp {}
 
 export default class Audio
   extends Element_<I, O, AudioJ, AudioEE, AudioC>
-  implements ME
+  implements ME, CS
 {
+  __ = [...this.__, 'CS', 'ME']
+
   constructor(system: System) {
     super(
       {
@@ -40,6 +44,21 @@ export default class Audio
       system,
       ID_AUDIO
     )
+  }
+
+  async captureStream({
+    frameRate,
+  }: {
+    frameRate: number
+  }): Promise<MediaStream> {
+    const firstLocalComponent: any = await firstGlobalComponentPromise(
+      this.__system,
+      this.__global_id
+    )
+
+    if (firstLocalComponent) {
+      return firstLocalComponent.$element.captureStream({ frameRate })
+    }
   }
 
   public mediaPlay(): void {
