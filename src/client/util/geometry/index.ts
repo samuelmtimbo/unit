@@ -518,7 +518,10 @@ export function centerRectsBoundingRect(rects: Rect[]): Rect {
     maxY = Math.max(maxY, rect.y + rect.height / 2)
   }
 
-  return { x: minX, y: minY, width: maxX - minX, height: maxY - minY }
+  const width = maxX - minX
+  const height = maxY - minY
+
+  return { x: minX + width / 2, y: minY + height / 2, width, height }
 }
 
 export function centerRectsBoundingLine(rects: Rect[]): Line {

@@ -1,0 +1,50 @@
+{
+  "name": "on keyup",
+  "units": {
+    "listen": {
+      "id": "367241d8-ad12-11ea-beed-9777f31699a8",
+      "input": {
+        "event": {
+          "data": "'keyup'",
+          "constant": true
+        },
+        "remove": {
+          "ignored": false
+        }
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "element": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "emitter"
+        }
+      },
+      "type": "`EE`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "event": {
+      "plug": {
+        "0": {
+          "unitId": "listen",
+          "pinId": "data"
+        }
+      },
+      "type": "{key:string,keyCode:number,ctrlKey:boolean,shiftKey:boolean,altKey:boolean,metaKey:boolean,repeat:boolean}"
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "listen to `element` keyup event",
+    "complexity": 5,
+    "tags": ["platform", "core", "api", "event"]
+  },
+  "id": "30271eaa-ec9d-4979-8722-6af0aa85feb6",
+  "type": "`U`&`G`",
+  "system": true
+}
