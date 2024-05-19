@@ -1,5 +1,5 @@
 import { randomIntegerBetween } from '../../math'
-import { Point, Position, Rect } from './types'
+import { Line, Point, Position, Rect } from './types'
 
 export const DEG = Math.PI / 180
 
@@ -519,6 +519,31 @@ export function centerRectsBoundingRect(rects: Rect[]): Rect {
   }
 
   return { x: minX, y: minY, width: maxX - minX, height: maxY - minY }
+}
+
+export function centerRectsBoundingLine(rects: Rect[]): Line {
+  if (rects.length === 0) {
+    return {
+      x0: 0,
+      y0: 0,
+      x1: 0,
+      y1: 0,
+    }
+  }
+
+  let x0 = Infinity
+  let y0 = Infinity
+  let x1 = -Infinity
+  let y1 = -Infinity
+
+  for (const rect of rects) {
+    x0 = Math.min(x0, rect.x - rect.width / 2)
+    y0 = Math.min(y0, rect.y - rect.height / 2)
+    x1 = Math.max(x1, rect.x + rect.width / 2)
+    y1 = Math.max(y1, rect.y + rect.height / 2)
+  }
+
+  return { x0, y0, x1, y1 }
 }
 
 export function rectangleRegion(

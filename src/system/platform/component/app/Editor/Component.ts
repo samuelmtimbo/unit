@@ -270,6 +270,7 @@ import {
   addVector,
   applyVector,
   centerOfMass,
+  centerRectsBoundingLine,
   centerRectsBoundingRect,
   centerToSurfaceDistance,
   describeArc,
@@ -4051,10 +4052,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this.get_nodes_center_relative_positions(this._node)
   }
 
-  public get_nodes_bounding_rect_center = (nodes: Dict<any>): Point => {
+  public get_nodes_bounding_rect = (nodes: Dict<Rect>): Rect => {
     const nodes_list = Object.values(nodes)
 
     const rect = centerRectsBoundingRect(nodes_list)
+
+    return rect
+  }
+
+  public get_nodes_bounding_line = (nodes: Dict<Rect>): Line => {
+    const nodes_list = Object.values(nodes)
+
+    const rect = centerRectsBoundingLine(nodes_list)
+
+    return rect
+  }
+
+  public get_nodes_bounding_rect_center = (nodes: Dict<any>): Point => {
+    const rect = this.get_nodes_bounding_rect(nodes)
 
     const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
 
@@ -18483,37 +18498,37 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         },
         {
           combo: ['Alt'],
-          keydown: (key, { altKey }) => {
+          keydown: () => {
             this._on_alt_keydown()
           },
-          keyup: (key, { altKey }) => {
+          keyup: () => {
             this._on_alt_keyup()
           },
         },
         {
           combo: ['Ctrl + s'],
-          keydown: (key, { ctrlKey }) => {
+          keydown: () => {
             this._on_ctrl_s_keydown()
           },
           preventDefault: true,
         },
         {
           combo: ['Ctrl + Shift + s'],
-          keydown: (key, { ctrlKey }) => {
+          keydown: () => {
             this._on_ctrl_shift_s_keydown()
           },
           preventDefault: true,
         },
         {
           combo: ['Ctrl + o'],
-          keydown: (key, { ctrlKey }) => {
+          keydown: () => {
             this._on_ctrl_o_keydown()
           },
           preventDefault: true,
         },
         {
           combo: ['Ctrl + r'],
-          keydown: (key, { ctrlKey }) => {
+          keydown: () => {
             this._on_ctrl_r_keydown()
           },
           preventDefault: true,
@@ -21751,6 +21766,36 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     nearest = nearest.sort((a, b) => nearest_l[a] - nearest_l[b])
 
     return nearest[0]
+  }
+
+  private _find_nearest_node_id_to = (
+    position: Position,
+    filter: (node_id: string) => boolean = () => true,
+    nodes: GraphSimNodes = this._node
+  ): string => {
+    let min_distance = Infinity
+    let nearest_node_id: string
+
+    for (const node_id in nodes) {
+      if (filter(node_id)) {
+        const node = nodes[node_id]
+
+        const d = pointDistance(node, position)
+
+        if (d < min_distance) {
+          min_distance = d
+          nearest_node_id = node_id
+        }
+      }
+    }
+
+    return nearest_node_id
+  }
+
+  private _find_nearest_unit_id_to_center = (): string => {
+    const center = this._world_screen_center()
+
+    return this._find_nearest_node_id_to(center, () => true, this._unit_node)
   }
 
   private _find_nearest_pin_node_id_from = (
@@ -40470,8 +40515,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { $width, $height } = this.$context
 
-    const center_of_screen = this._screen_center()
-
     const n0 = this._zoom
     const n1 = zoomTransformCenteredAt(x, y, this._zoom.z, $width, $height)
 
@@ -52055,7 +52098,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._paste_clipboard(position)
   }
 
-  private _on_ctrl_l_keydown = (key: string, event: KeyboardEvent): void => {
+  private _on_ctrl_l_keydown = (key: string): void => {
     // console.log('Graph', '_on_ctrl_l_keydown')
 
     if (this._search) {
@@ -52603,6 +52646,49 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return Object.entries(nodes).sort(([_, a], [__, b]) => a[name] - b[name])
   }
 
+  private __order_subgraph_by_a__template = (
+    name: 'x0' | 'y0' | 'x1' | 'y1'
+  ): string[] => {
+    const subgraph_list = keys(this._subgraph_to_node)
+
+    return subgraph_list.sort((a, b) => {
+      const a_line = this._get_subgraph_bounding_line(a)
+      const b_line = this._get_subgraph_bounding_line(b)
+
+      return a_line[name] - b[name]
+    })
+  }
+
+  private _get_subgraph_bounding_line = (subgraph_id: string): Line => {
+    const node_ids = this._subgraph_to_node[subgraph_id]
+
+    const nodes_obj: Dict<Rect> = [...node_ids].reduce((acc, node_id) => {
+      return {
+        ...acc,
+        [node_id]: this._node[node_id],
+      }
+    }, {})
+
+    const line = this.get_nodes_bounding_line(nodes_obj)
+
+    return line
+  }
+
+  private _get_subgraph_bounding_rect = (subgraph_id: string): Rect => {
+    const nodes = this._subgraph_to_node[subgraph_id]
+
+    const nodes_obj: Dict<Rect> = [...nodes].reduce((acc, node_id) => {
+      return {
+        ...acc,
+        [node_id]: this._node[node_id],
+      }
+    }, {})
+
+    const rect = this.get_nodes_bounding_rect(nodes_obj)
+
+    return rect
+  }
+
   private _order_unit_by_x = (): [string, SimNode][] => {
     return this.__order_node_by_x_template(this._unit_node)
   }
@@ -52611,8 +52697,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this.__order_node_by_y_template(this._unit_node)
   }
 
-  private _on_arrow_keydown = (key) => {
+  private _on_arrow_keydown = (key: string, shortcut) => {
     // console.log('Graph', '_on_arrow_keydown', key)
+
+    if (this._is_shift_pressed()) {
+      this._on_shift_arrow_keydown(key, shortcut)
+    } else {
+      this._on_normal_arrow_keydown(key, shortcut)
+    }
+  }
+
+  private _on_normal_arrow_keydown = (key: string, shortcut: string) => {
+    // console.log('Graph', '_on_normal_arrow_keydown', key)
 
     if (this._node_count === 0) {
       return
@@ -52696,6 +52792,73 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
     }
+  }
+
+  private _on_shift_arrow_keydown = (key: string, shortcut: string) => {
+    // console.log('Graph', '_on_shift_arrow_keydown', key, shortcut)
+
+    if (this._node_count === 0) {
+      return
+    }
+
+    let offset = 0
+    let ordered_subgraphs = []
+
+    switch (key) {
+      case 'ArrowLeft':
+        offset = -1
+        ordered_subgraphs = this.__order_subgraph_by_a__template('x1')
+        break
+      case 'ArrowRight':
+        offset = 1
+        ordered_subgraphs = this.__order_subgraph_by_a__template('x0')
+        break
+      case 'ArrowUp':
+        offset = -1
+        ordered_subgraphs = this.__order_subgraph_by_a__template('y1')
+        break
+      case 'ArrowDown':
+        offset = 1
+        ordered_subgraphs = this.__order_subgraph_by_a__template('y0')
+        break
+    }
+
+    if (offset === 0) {
+      return
+    }
+
+    const nearest_node_id = this._find_nearest_unit_id_to_center()
+
+    const closest_subraph_id = this._node_to_subgraph[nearest_node_id]
+
+    const current_index = ordered_subgraphs.indexOf(closest_subraph_id)
+
+    const next_index =
+      (current_index + offset + ordered_subgraphs.length) %
+      ordered_subgraphs.length
+
+    const next_subgraph_id = ordered_subgraphs[next_index]
+
+    const nodes = this._get_subgraph_nodes(next_subgraph_id)
+
+    const nodes_ = filterObj(nodes, (node, node_id) => {
+      return this._is_node_visible(node_id)
+    })
+
+    this._center_on_nodes(nodes_)
+  }
+
+  private _get_subgraph_nodes = (subgraph_id: string): Dict<GraphSimNode> => {
+    const node_ids = this._subgraph_to_node[subgraph_id]
+
+    const nodes: Dict<GraphSimNode> = [...node_ids].reduce((acc, node_id) => {
+      return {
+        ...acc,
+        [node_id]: this._node[node_id],
+      }
+    }, {})
+
+    return nodes
   }
 
   private _on_space_keydown = (): void => {
