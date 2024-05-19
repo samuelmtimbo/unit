@@ -19,7 +19,8 @@
   "outputs": {
     "node": {
       "type": "`AN`",
-      "ref": true
+      "ref": true,
+      "icon": "audio-waveform"
     }
   },
   "metadata": {

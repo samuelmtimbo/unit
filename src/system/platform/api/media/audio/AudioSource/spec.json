@@ -11,7 +11,8 @@
   "outputs": {
     "stream": {
       "type": "`MS`",
-      "ref": true
+      "ref": true,
+      "icon": "audio-waveform"
     }
   },
   "metadata": {

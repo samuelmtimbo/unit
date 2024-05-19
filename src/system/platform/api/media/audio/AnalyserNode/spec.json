@@ -15,7 +15,8 @@
   "outputs": {
     "node": {
       "type": "`AAN`&`AN`",
-      "ref": true
+      "ref": true,
+      "icon": "square-activity"
     }
   },
   "metadata": {
