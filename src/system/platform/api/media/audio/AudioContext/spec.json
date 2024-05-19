@@ -8,7 +8,8 @@
   "outputs": {
     "ctx": {
       "type": "`AC`",
-      "ref": true
+      "ref": true,
+      "icon": "square-play"
     }
   },
   "metadata": {
