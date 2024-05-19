@@ -1,0 +1,100 @@
+{
+  "type": "`U`&`G`",
+  "name": "bundle to clipboard",
+  "units": {
+    "stringify": {
+      "id": "ee184ea6-3c80-4119-919e-290620aafab0",
+      "input": {
+        "json": {
+          "ignored": false
+        }
+      },
+      "output": {
+        "string": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 1,
+          "y": -1
+        }
+      }
+    },
+    "texttoclipboard": {
+      "id": "0b5a71c6-5c43-4e55-a29c-27d9ff7ed43a",
+      "input": {
+        "text": {}
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 99,
+          "y": -1
+        }
+      }
+    },
+    "bundle": {
+      "id": "13d738b9-401d-43c9-852f-e9611545f5bc",
+      "input": {
+        "graph": {},
+        "opt": {}
+      },
+      "output": {
+        "bundle": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "stringify": {
+        "input": {
+          "json": true
+        }
+      },
+      "bundle": {
+        "output": {
+          "bundle": true
+        }
+      }
+    },
+    "1": {
+      "stringify": {
+        "output": {
+          "string": true
+        }
+      },
+      "texttoclipboard": {
+        "input": {
+          "text": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "graph": {
+      "plug": {
+        "0": {
+          "unitId": "bundle",
+          "pinId": "graph",
+          "kind": "input"
+        }
+      },
+      "ref": true
+    },
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "bundle",
+          "pinId": "opt",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "copy `graph` bundle to clipboard"
+  },
+  "id": "58ecd331-f5e8-4089-a2d0-b6ad8410d994"
+}
