@@ -460,6 +460,9 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
       this._unlisten_registry()
       this._listen_registry()
+
+      this._refresh_ordered_list()
+      this._filter_list()
     } else if (prop === 'shape') {
       this._setShape(current ?? 'circle')
     }
