@@ -1417,7 +1417,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           data: `${fullwindow}`,
         },
         disabled: {
-          data: 'false',
           ignored: true,
         },
         frame: {
@@ -4004,11 +4003,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public onUnmount(): void {
     // console.log('Graph', 'onUnmount', this._id)
 
+    this._disabled = true
+
+    this._disable_input()
     this._context_unlisten()
-
-    // this._disable_input()
-    this._disable()
-
     this._stop_graph_simulation()
     this._pause_debugger()
 
@@ -17850,7 +17848,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           () => {
             this._end_leave_fullwindow_animation(sub_component_ids)
 
-            this.focus()
+            if (this._enabled()) {
+              this.focus()
+            }
           }
         )
       } else {
@@ -22876,14 +22876,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._disable_core_frame(unit_id)
 
-    this._blur_sub_component(unit_id)
-
     if (this._core_component_unlocked_count === 0) {
       if (!unlocking) {
         this._enable_input()
         this._enable_transcend()
 
-        this._show_control(animate)
+        this._lock_control()
+
         this._show_transcend(animate)
       }
     }
@@ -23773,6 +23772,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._cancel_all_layout_sub_component_animation()
     this._cancel_fullwindow_animation()
 
+    const was_focused = this._focused
+
     if (this._in_component_control) {
       if (_animate) {
         if (!this._is_component_framed) {
@@ -23808,11 +23809,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   sub_component_id === last_sub_component_id
 
                 if (is_last_sub_component) {
-                  const last_sub_component = this._get_sub_component(
-                    last_sub_component_id
-                  )
+                  if (this._enabled()) {
+                    const last_sub_component = this._get_sub_component(
+                      last_sub_component_id
+                    )
 
-                  last_sub_component.focus()
+                    last_sub_component.focus()
+                  }
                 }
               }
             }
@@ -23843,11 +23846,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (sub_component_ids.length > 0) {
         const last_sub_component_id = last(sub_component_ids)
 
-        this._fullwindow_focusing = true
+        if (was_focused) {
+          this._fullwindow_focusing = true
 
-        this._focus_sub_component(last_sub_component_id)
+          this._focus_sub_component(last_sub_component_id)
 
-        this._fullwindow_focusing = true
+          this._fullwindow_focusing = true
+        }
       }
     }
 
@@ -40345,9 +40350,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _temp_unlock_control = () => {
     // console.log('Graph', '_temp_unlock_control', this._id)
 
-    this._unlock_control()
-
     this._temp_control_lock = false
+
+    this._unlock_control()
 
     this._control.dispatchEvent('temp_unlock', {}, false)
   }
@@ -44076,6 +44081,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         //
       } else {
         // blur any focused input (search, edit datum, etc.)
+        if (this._temp_control_lock) {
+          this._temp_unlock_control()
+        }
+
         this.focus()
       }
     }
