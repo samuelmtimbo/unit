@@ -147,6 +147,7 @@ import { makeFocusListener } from '../../../../../client/event/focus/focus'
 import { Gamepad_ } from '../../../../../client/event/gamepad'
 import { makeInputListener } from '../../../../../client/event/input'
 import {
+  IOKeyboardEvent,
   Shortcut,
   isKeyPressed,
   makeKeydownListener,
@@ -4071,7 +4072,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public get_nodes_bounding_rect_center = (nodes: Dict<any>): Point => {
     const rect = this.get_nodes_bounding_rect(nodes)
 
-    const center = { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }
+    const center = { x: rect.x, y: rect.y }
 
     return center
   }
@@ -52647,25 +52648,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private __order_subgraph_by_a__template = (
-    name: 'x0' | 'y0' | 'x1' | 'y1'
+    name: 'x' | 'y',
+    filter: (node_id: string) => boolean
   ): string[] => {
     const subgraph_list = keys(this._subgraph_to_node)
 
     return subgraph_list.sort((a, b) => {
-      const a_line = this._get_subgraph_bounding_line(a)
-      const b_line = this._get_subgraph_bounding_line(b)
+      const a_rect = this._get_subgraph_bounding_rect(a, filter)
+      const b_rect = this._get_subgraph_bounding_rect(b, filter)
 
-      return a_line[name] - b[name]
+      return a_rect[name] - b_rect[name]
     })
   }
 
-  private _get_subgraph_bounding_line = (subgraph_id: string): Line => {
+  private _get_subgraph_bounding_line = (
+    subgraph_id: string,
+    filter: (node_id: string) => boolean = () => true
+  ): Line => {
     const node_ids = this._subgraph_to_node[subgraph_id]
 
     const nodes_obj: Dict<Rect> = [...node_ids].reduce((acc, node_id) => {
-      return {
-        ...acc,
-        [node_id]: this._node[node_id],
+      if (filter(node_id)) {
+        return {
+          ...acc,
+          [node_id]: this._node[node_id],
+        }
+      } else {
+        return acc
       }
     }, {})
 
@@ -52674,13 +52683,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return line
   }
 
-  private _get_subgraph_bounding_rect = (subgraph_id: string): Rect => {
+  private _get_subgraph_bounding_rect = (
+    subgraph_id: string,
+    filter: (node_id: string) => boolean = () => true
+  ): Rect => {
     const nodes = this._subgraph_to_node[subgraph_id]
 
     const nodes_obj: Dict<Rect> = [...nodes].reduce((acc, node_id) => {
-      return {
-        ...acc,
-        [node_id]: this._node[node_id],
+      if (filter(node_id)) {
+        return {
+          ...acc,
+          [node_id]: this._node[node_id],
+        }
+      } else {
+        return acc
       }
     }, {})
 
@@ -52697,20 +52713,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this.__order_node_by_y_template(this._unit_node)
   }
 
-  private _on_arrow_keydown = (key: string, shortcut) => {
+  private _on_arrow_keydown = (key: string, event: IOKeyboardEvent) => {
     // console.log('Graph', '_on_arrow_keydown', key)
 
     if (this._is_shift_pressed()) {
-      this._on_shift_arrow_keydown(key, shortcut)
+      this._on_shift_arrow_keydown(key, event)
     } else {
-      this._on_normal_arrow_keydown(key, shortcut)
+      this._on_normal_arrow_keydown(key, event)
     }
   }
 
-  private _on_normal_arrow_keydown = (key: string, shortcut: string) => {
+  private _on_normal_arrow_keydown = (key: string, event: IOKeyboardEvent) => {
     // console.log('Graph', '_on_normal_arrow_keydown', key)
 
     if (this._node_count === 0) {
+      return
+    }
+
+    if (event.repeat) {
       return
     }
 
@@ -52794,7 +52814,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _on_shift_arrow_keydown = (key: string, shortcut: string) => {
+  private _on_shift_arrow_keydown = (key: string, event: IOKeyboardEvent) => {
     // console.log('Graph', '_on_shift_arrow_keydown', key, shortcut)
 
     if (this._node_count === 0) {
@@ -52804,22 +52824,29 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let offset = 0
     let ordered_subgraphs = []
 
+    const filter = (node_id: string) => {
+      return (
+        this._is_node_visible(node_id) &&
+        this._node_layer[node_id] === LAYER_NORMAL
+      )
+    }
+
     switch (key) {
       case 'ArrowLeft':
         offset = -1
-        ordered_subgraphs = this.__order_subgraph_by_a__template('x1')
+        ordered_subgraphs = this.__order_subgraph_by_a__template('x', filter)
         break
       case 'ArrowRight':
         offset = 1
-        ordered_subgraphs = this.__order_subgraph_by_a__template('x0')
+        ordered_subgraphs = this.__order_subgraph_by_a__template('x', filter)
         break
       case 'ArrowUp':
         offset = -1
-        ordered_subgraphs = this.__order_subgraph_by_a__template('y1')
+        ordered_subgraphs = this.__order_subgraph_by_a__template('y', filter)
         break
       case 'ArrowDown':
         offset = 1
-        ordered_subgraphs = this.__order_subgraph_by_a__template('y0')
+        ordered_subgraphs = this.__order_subgraph_by_a__template('y', filter)
         break
     }
 
@@ -52842,7 +52869,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const nodes = this._get_subgraph_nodes(next_subgraph_id)
 
     const nodes_ = filterObj(nodes, (node, node_id) => {
-      return this._is_node_visible(node_id)
+      return filter(node_id)
     })
 
     this._center_on_nodes(nodes_)
