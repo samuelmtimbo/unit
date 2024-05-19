@@ -584,11 +584,13 @@ export function isSubPinSpecRef(
   let ref = false
 
   if (subPinSpec.unitId && subPinSpec.pinId) {
+    const { kind = type } = subPinSpec
+
     const unit = spec.units[subPinSpec.unitId]
 
     const unit_spec = getSpec(specs, unit.id)
 
-    ref = isPinRef({ type, pinId: subPinSpec.pinId }, unit_spec)
+    ref = isPinRef({ type: kind, pinId: subPinSpec.pinId }, unit_spec)
   } else if (subPinSpec.mergeId) {
     const merge = spec.merges[subPinSpec.mergeId]
 
