@@ -413,6 +413,14 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     this._ordered_id_list = ordered_id_list
     this._filtered_id_list = clone(ordered_id_list)
+
+    const ordered_id_set = new Set(ordered_id_list)
+
+    for (const spec_id in this._item) {
+      if (!ordered_id_set.has(spec_id)) {
+        this.__remove_list_item(spec_id)
+      }
+    }
   }
 
   private _set_list_item_color = (id: string, color: string) => {
@@ -475,6 +483,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     const { specs } = this._registry
 
+    if (list.length === 0) {
+      return 0
+    }
+
     const index = binaryFindIndex(list, (current_spec_id) => {
       const current_score = compareByComplexity(
         specs,
@@ -489,6 +501,32 @@ export default class Search extends Element<HTMLDivElement, Props> {
     return index
   }
 
+  private _insert_list_item = (spec: GraphSpec) => {
+    const new_ordered_index = this._find_new_item_index(
+      spec,
+      this._ordered_id_list
+    )
+
+    this._ordered_id_list.splice(new_ordered_index, 0, spec.id)
+
+    const match = fuzzy.match(this._input_value, spec.name ?? '')
+
+    if (match) {
+      const new_filtered_index = this._find_new_item_index(
+        spec,
+        this._filtered_id_list
+      )
+
+      this._filtered_id_list.splice(new_filtered_index, 0, spec.id)
+    }
+
+    this._add_list_item(
+      spec.id,
+      new_ordered_index,
+      this._ordered_id_list.length
+    )
+  }
+
   private _listen_registry = () => {
     this._registry_unlisten = this._registry.specs_.subscribe(
       [],
@@ -496,39 +534,16 @@ export default class Search extends Element<HTMLDivElement, Props> {
       (type, path, key, data) => {
         const { specs } = this._registry
 
-        const specId = key
         const spec = data
 
         if (path.length === 0) {
           if (type === 'set') {
             if (isSpecVisible(specs, spec.id)) {
-              if (this._item[specId]) {
-                this._refresh_list_item(specId)
+              if (this._item[spec.id]) {
+                this._refresh_list_item(spec.id)
                 this._refresh_last_list_item_border()
               } else {
-                const new_ordered_index = this._find_new_item_index(
-                  spec,
-                  this._ordered_id_list
-                )
-
-                this._ordered_id_list.splice(new_ordered_index, 0, specId)
-
-                const match = fuzzy.match(this._input_value, spec.name ?? '')
-
-                if (match) {
-                  const new_filtered_index = this._find_new_item_index(
-                    spec,
-                    this._filtered_id_list
-                  )
-
-                  this._filtered_id_list.splice(new_filtered_index, 0, specId)
-                }
-
-                this._add_list_item(
-                  specId,
-                  new_ordered_index,
-                  this._ordered_id_list.length
-                )
+                this._insert_list_item(spec)
               }
             }
           } else if (type === 'delete') {
@@ -688,8 +703,19 @@ export default class Search extends Element<HTMLDivElement, Props> {
   }
 
   private _remove_list_item = (id: string): void => {
-    // console.log('Search', 'removeItem', id)
+    // console.log('Search', '_remove_list_item', id)
 
+    const list_item_div = this._list_item_div[id]
+
+    if (list_item_div) {
+      this.__remove_list_item(id)
+
+      pull(this._filtered_id_list, id)
+      pull(this._ordered_id_list, id)
+    }
+  }
+
+  private __remove_list_item = (id: string): void => {
     const list_item_div = this._list_item_div[id]
 
     if (list_item_div) {
@@ -699,9 +725,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
       delete this._item[id]
       delete this._list_item_name[id]
       delete this._list_item_content[id]
-
-      pull(this._filtered_id_list, id)
-      pull(this._ordered_id_list, id)
     }
   }
 
@@ -1029,10 +1052,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     const { color = 'currentColor' } = style
 
-    if (this._filtered_id_list.length > 0) {
-      this._refresh_last_list_item_border()
-    }
-
     let filtered_id_list: string[] = []
 
     const filtered_score: Dict<number> = {}
@@ -1044,7 +1063,13 @@ export default class Search extends Element<HTMLDivElement, Props> {
       .join(' ')
 
     for (const id of this._ordered_id_list) {
-      this._refresh_list_item(id)
+      if (this._list_item_div[id]) {
+        this._refresh_list_item(id)
+      } else {
+        const spec = specs[id] as GraphSpec
+
+        this._insert_list_item(spec)
+      }
 
       const { fuzzyName } = this._item[id]
       const list_item_div = this._list_item_div[id]
@@ -1126,6 +1151,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
       this._selected_id = null
       this._dispatch_list_empty()
+    }
+
+    if (this._filtered_id_list.length > 0) {
+      this._refresh_last_list_item_border()
     }
   }
 
