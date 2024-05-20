@@ -10666,12 +10666,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     let layer = ignored ? LAYER_IGNORED : LAYER_NORMAL
 
-    if (this._collapse_next_unit_id === unit_id) {
-      layer = LAYER_NONE
-    }
+    if (ignored) {
+      layer = LAYER_IGNORED
+    } else {
+      if (this._collapse_next_unit_id === unit_id) {
+        layer = LAYER_NONE
+      }
 
-    if (this._collapse_init_node_id_set.has(unit_id)) {
-      layer = LAYER_COLLAPSE
+      if (this._collapse_init_node_id_set.has(unit_id)) {
+        layer = LAYER_COLLAPSE
+      }
     }
 
     if (this._is_freeze_mode() && this._pressed_node_id_pointer_id[unit_id]) {
@@ -21586,17 +21590,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._static_subgraph_anchor[subgraph_id] =
       this._static_subgraph_anchor[subgraph_id] || {}
     this._static_subgraph_anchor_count[subgraph_id] =
-      this._static_subgraph_anchor_count[subgraph_id] || 0
+      this._static_subgraph_anchor_count[subgraph_id] ?? 0
 
     if (!this._static_subgraph_anchor[subgraph_id][node_id]) {
       const subgraph = this._subgraph_to_node[subgraph_id]
 
-      this._static_subgraph_anchor[subgraph_id][node_id]
+      this._static_subgraph_anchor[subgraph_id][node_id] = true
       this._static_subgraph_anchor_count[subgraph_id]++
 
       for (const n_id of subgraph) {
         if (this._is_unit_node_id(n_id)) {
-          this._static_count[n_id] = this._static_count[n_id] || 0
+          this._static_count[n_id] = this._static_count[n_id] ?? 0
           this._static_count[n_id]++
         }
       }
@@ -21604,7 +21608,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _stop_drag_node_static = (node_id: string): void => {
-    // console.log('Graph', '_on_node_static_end', node_id)
+    // console.log('Graph', '_stop_drag_node_static', node_id)
 
     const subgraph_id = this._node_to_subgraph[node_id]
 
@@ -32728,6 +32732,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const int_pin = this._pin[int_node_id]
 
       const opacity = ignored ? '0.5' : '1'
+
+      const input = type === 'input'
+
+      const source_id = input ? ext_node_id : int_node_id
+      const target_id = input ? int_node_id : ext_node_id
+
+      const link_id = getLinkId(source_id, target_id)
+
+      const pin_name = this._ext_pin_name[ext_node_id]
+
+      const link = this._link_comp[link_id]
+
+      link.$element.style.opacity = opacity
+
+      pin_name.$element.style.opacity = opacity
 
       if (ext_pin) {
         ext_pin.$element.style.opacity = opacity
@@ -45102,7 +45121,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._resize_core_height(graph_unit_id, height)
           this._resize_node_height(graph_unit_id, height)
         },
-        () => {}
+        () => {
+          //
+        }
       )
     }
 

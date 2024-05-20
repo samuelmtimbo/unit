@@ -1443,14 +1443,16 @@ assert.deepEqual(empty12.getExposedInputSpec('a'), {
     },
   },
   ref: false,
+  defaultIgnored: undefined,
 })
-assert.deepEqual(empty12.getExposedOutputSpec('a'), {
+assert.deepStrictEqual(empty12.getExposedOutputSpec('a'), {
   plug: {
     '0': {
       mergeId: '0',
     },
   },
   ref: false,
+  defaultIgnored: undefined,
 })
 
 const spec13 = system.newSpec({
@@ -1654,12 +1656,14 @@ assert.deepEqual(empty14.getExposedInputSpec('a'), {
     '0': {},
   },
   ref: false,
+  defaultIgnored: undefined,
 })
 assert.deepEqual(empty14.getExposedOutputSpec('a'), {
   plug: {
     '0': {},
   },
   ref: false,
+  defaultIgnored: undefined,
 })
 assert.deepEqual(empty14.getInput('a').peak(), 1)
 
