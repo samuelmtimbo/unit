@@ -87,7 +87,7 @@
     }
   },
   "metadata": {
-    "icon": "brackets-curly",
+    "icon": "object-set",
     "description": "set value at `key` to `value` if `test` is true",
     "complexity": 16,
     "tags": ["platform", "core"]

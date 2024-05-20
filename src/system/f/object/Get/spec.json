@@ -17,7 +17,7 @@
     }
   },
   "metadata": {
-    "icon": "brackets-curly",
+    "icon": "object-get",
     "description": "get `obj` property `name`",
     "complexity": 3,
     "tags": ["f", "object"]

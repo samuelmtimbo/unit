@@ -110,7 +110,7 @@
     }
   },
   "metadata": {
-    "icon": "brackets-curly",
+    "icon": "object-set",
     "description": "set value at `key` to `value` if `test` is defined and true or to `default` otherwise",
     "complexity": 22,
     "tags": ["core", "object"]
