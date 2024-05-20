@@ -63,7 +63,7 @@
     }
   },
   "metadata": {
-    "icon": "brackets-curly",
+    "icon": "object-get",
     "description": "get x0, x1, y0 and y1 rect from object",
     "complexity": 8,
     "tags": ["platform", "core", "canvas"]

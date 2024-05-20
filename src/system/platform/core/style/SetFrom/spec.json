@@ -49,7 +49,7 @@
     }
   },
   "metadata": {
-    "icon": "brackets-curly",
+    "icon": "object-set",
     "description": "set `obj` property \"from\" to `value`",
     "complexity": 5,
     "tags": ["platform", "core", "style"]

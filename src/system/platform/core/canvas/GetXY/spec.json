@@ -35,7 +35,7 @@
     }
   },
   "metadata": {
-    "icon": "brackets-curly",
+    "icon": "object-get",
     "description": "get `x` and `y` from `obj`",
     "complexity": 6,
     "tags": ["platform", "core", "canvas"]

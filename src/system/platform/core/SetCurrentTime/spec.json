@@ -48,7 +48,7 @@
   },
   "outputs": {},
   "metadata": {
-    "icon": "brackets-curly",
+    "icon": "object-set",
     "description": "set currentTime property of `obj`",
     "complexity": 5
   },
