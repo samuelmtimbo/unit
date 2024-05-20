@@ -1175,6 +1175,7 @@ export function movePlug(
           [nextSubPinId]: nextSubPinSpec_,
         },
         ref: !!pinSpec.ref,
+        defaultIgnored: pinSpec.defaultIgnored,
       },
       data,
       false,

@@ -632,7 +632,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       ignored,
       fork,
     }: GraphSetUnitPinIgnoredData): void {
-      call('setPinSetId', fork, type, pinId, ignored)
+      call('setPinSetDefaultIgnored', fork, type, pinId, ignored)
     },
   }
 
