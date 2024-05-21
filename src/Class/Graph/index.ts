@@ -6293,7 +6293,7 @@ export class Graph<I = any, O = any>
           removeMerge: (data: GraphRemoveMergeData) => {
             const { mergeId } = data
 
-            this._removeMerge(mergeId, true)
+            this._removeMerge(mergeId, false, fork)
           },
           removePinFromMerge: (data: GraphRemovePinFromMergeData) => {
             const { mergeId, unitId, type, pinId } = data
