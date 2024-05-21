@@ -51334,13 +51334,23 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     for (const datum_node_id of datum_node_ids) {
-      const { datumId } = segmentDatumNodeId(datum_node_id)
+      const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+      const datum_plug_node_id = this._datum_to_plug[datum_node_id]
 
-      const tree = this._datum_tree[datumId]
+      if (
+        (datum_pin_node_id && node_ids.includes(datum_pin_node_id)) ||
+        datum_plug_node_id
+      ) {
+        //
+      } else {
+        const { datumId } = segmentDatumNodeId(datum_node_id)
 
-      const { value } = tree
+        const tree = this._datum_tree[datumId]
 
-      data[datumId] = { value }
+        const { value } = tree
+
+        data[datumId] = { value }
+      }
     }
 
     for (const exposed_node_id of exposed_node_ids) {
