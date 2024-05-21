@@ -22808,10 +22808,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._core_component_unlocked_count++
 
         if (this._core_component_unlocked_count === 1) {
-          this._disable_input()
-        }
+          this._unlock_control()
 
-        if (this._core_component_unlocked_count === 1) {
+          this._disable_input()
+
           if (this._control_lock) {
             this._hide_control(animate)
           }
