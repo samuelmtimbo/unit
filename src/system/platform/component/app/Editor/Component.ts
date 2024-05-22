@@ -25,7 +25,6 @@ import {
   getSpecRenderById,
   hasSubComponent,
   hasSubComponents,
-  injectSpecs,
   isComponentId,
   isComponentSpec,
   isEmptySpec,
@@ -26931,7 +26930,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _turn_class_literal_into_unit = (datum_node_id: string): string => {
-    const { specs } = this.$props
+    const { specs, injectSpecs } = this.$props
 
     const { classes } = this.$system
 
@@ -26953,7 +26952,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { unit } = bundle
 
-    injectSpecs(specs, bundle.specs)
+    injectSpecs(bundle.specs)
 
     const { memory } = unit
 
@@ -55057,7 +55056,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_on_graph_unit_fork_moment', data)
 
-    const { getSpec, setSpec, forkSpec, specs, registerUnit, unregisterUnit } =
+    const { specs, getSpec, setSpec, forkSpec, registerUnit, unregisterUnit } =
       this.$props
 
     let { specId, spec: forked_unit_spec, path, unitId } = data

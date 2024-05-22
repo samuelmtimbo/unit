@@ -1,6 +1,5 @@
 import { UNTITLED } from '../constant/STRING'
 import { emptyGraphSpec } from '../spec/emptySpec'
-import { System } from '../system'
 import { keyCount } from '../system/core/object/KeyCount/f'
 import { keys } from '../system/f/object/Keys/f'
 import {
@@ -10,9 +9,7 @@ import {
   Spec,
   Specs,
 } from '../types'
-import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
-import { GraphSpecs } from '../types/GraphSpecs'
 import { IO } from '../types/IO'
 import { uuidNotIn } from '../util/id'
 import { clone, deepGetOrDefault } from '../util/object'
@@ -236,56 +233,6 @@ export function isEmptySpec(spec: GraphSpec): boolean {
   const empty = unitCount === 0
 
   return empty
-}
-
-export function __injectSpecs(
-  system: System,
-  new_specs: GraphSpecs
-): Dict<string> {
-  const map_spec_id: Dict<string> = {}
-
-  for (const spec_id in new_specs) {
-    const spec = new_specs[spec_id]
-
-    let new_spec_id = spec_id
-    let has_spec = false
-
-    while (system.hasSpec(new_spec_id)) {
-      new_spec_id = system.newSpecId()
-      has_spec = true
-    }
-
-    if (has_spec) {
-      map_spec_id[spec_id] = new_spec_id
-    }
-
-    system.setSpec(spec_id, spec)
-  }
-  return map_spec_id
-}
-
-export function injectSpecs(specs: Specs, new_specs: GraphSpecs): Dict<string> {
-  const map_spec_id: Dict<string> = {}
-
-  for (const spec_id in new_specs) {
-    const spec = new_specs[spec_id]
-
-    let new_spec_id = spec_id
-    let has_spec = false
-
-    while (specs[new_spec_id]) {
-      new_spec_id = newSpecId(specs)
-      has_spec = true
-    }
-
-    if (has_spec) {
-      map_spec_id[spec_id] = new_spec_id
-    }
-
-    specs[spec_id] = spec
-  }
-
-  return map_spec_id
 }
 
 export function getSpecRenderById(
