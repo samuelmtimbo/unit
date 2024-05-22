@@ -945,6 +945,12 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
               const bundle_ = bundleSpec(spec_, specs)
 
+              this._file_to_bundle[fileName] = bundle_
+
+              for (const spec_id in bundle_.specs) {
+                this._spec_id_to_file_name[spec_id] = fileName
+              }
+
               await saveToUnitFile(fileHandle, bundle_)
             }
           } else if (type === 'delete') {
