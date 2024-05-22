@@ -3517,16 +3517,39 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     dirHandle: FileSystemDirectoryHandle,
     folderName: string = '/'
   ) => {
-    const { injectSpecs, syncFile } = this.$props
+    const { syncFile } = this.$props
+
+    const file_to_bundle: Dict<{
+      handle: FileSystemFileHandle
+      bundle: BundleSpec
+    }> = {}
+
+    await this.__paste_folder(dirHandle, folderName, file_to_bundle)
+
+    for (const absoluteFileName in file_to_bundle) {
+      const { handle, bundle } = file_to_bundle[absoluteFileName]
+
+      syncFile(absoluteFileName, handle, bundle)
+    }
+  }
+
+  private __paste_folder = async (
+    dirHandle: FileSystemDirectoryHandle,
+    folderName: string = '/',
+    fileToBundle: Dict<{ handle: FileSystemFileHandle; bundle: BundleSpec }>
+  ) => {
+    const {} = this.$props
 
     // @ts-ignore
     if (dirHandle.entries) {
       // @ts-ignore
-      for await (const [fileName, fileHandle] of dirHandle.entries()) {
-        if (fileHandle.kind === 'file') {
-          const absoluteFileName = `${folderName}/${fileHandle.name}`
+      const entries = await dirHandle.entries()
 
-          const file = (await fileHandle.getFile()) as File
+      for await (const [fileName, handle] of entries) {
+        if (handle.kind === 'file') {
+          const absoluteFileName = `${folderName}/${handle.name}`
+
+          const file = (await handle.getFile()) as File
 
           const bundle = await this._read_bundle_file(file)
 
@@ -3537,10 +3560,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             remapBundle(bundle_, specIdMap)
 
-            syncFile(absoluteFileName, fileHandle, bundle_)
+            fileToBundle[absoluteFileName] = { handle, bundle: bundle_ }
           }
-        } else if (fileHandle.kind === 'directory') {
-          this._paste_folder(fileHandle, folderName + fileName)
+        } else if (handle.kind === 'directory') {
+          this.__paste_folder(handle, folderName + fileName, fileToBundle)
         } else {
           throw new InvalidStateError()
         }
