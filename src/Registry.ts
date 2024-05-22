@@ -24,21 +24,6 @@ export class Registry implements R {
     this.specsCount = specsCount ?? {}
   }
 
-  static fromRegistry(registry: Registry, specs: Specs) {
-    const specs_ = new Object_(specs)
-    const registry_ = new Registry(specs, specs_, {})
-
-    registry.specs_.subscribe(['*'], '*', (type, path, key, data) => {
-      if (type === 'set') {
-        specs_.deepSet([...path, key], data)
-      } else {
-        specs_.deepDelete([...path, key])
-      }
-    })
-
-    return registry_
-  }
-
   newSpecId(): string {
     return uuidNotIn(this.specs)
   }
@@ -83,10 +68,45 @@ export class Registry implements R {
     // console.log('injectSpecs', newSpecs)
 
     const specIdMap: Dict<string> = {}
+    const nextSpecs = {}
 
     const visited: Set<string> = new Set()
 
-    const mapSpec = (specId: string, spec: GraphSpec) => {
+    const setSpec = (
+      specId: string,
+      spec: GraphSpec,
+      visited: Set<string> = new Set()
+    ) => {
+      const { units } = spec
+
+      if (visited.has(specId)) {
+        return
+      }
+
+      visited.add(specId)
+
+      for (const unitId in units) {
+        const unit = units[unitId]
+
+        if (this.hasSpec(unit.id)) {
+          //
+        } else {
+          const spec = nextSpecs[unit.id]
+
+          if (spec) {
+            setSpec(unit.id, spec, visited)
+          } else {
+            //
+          }
+        }
+      }
+
+      this.specs_.set(specId, spec)
+    }
+
+    for (const specId in newSpecs) {
+      const spec = newSpecs[specId]
+
       if (visited.has(specId)) {
         return
       }
@@ -115,43 +135,7 @@ export class Registry implements R {
       }
     }
 
-    const setSpec = (
-      specId: string,
-      spec: GraphSpec,
-      visited: Set<string> = new Set()
-    ) => {
-      const { units } = spec
-
-      if (visited.has(specId)) {
-        return
-      }
-
-      visited.add(specId)
-
-      for (const unitId in units) {
-        const unit = units[unitId]
-
-        if (this.hasSpec(unit.id)) {
-          //
-        } else {
-          const spec = nextSpecs[unit.id] ?? newSpecs[unit.id]
-
-          setSpec(unit.id, spec, visited)
-        }
-      }
-
-      this.specs_.set(specId, spec)
-    }
-
-    for (const specId in newSpecs) {
-      const spec = newSpecs[specId]
-
-      mapSpec(specId, spec)
-    }
-
     const specSet = new Set<string>()
-
-    const nextSpecs = {}
 
     for (const specId in newSpecs) {
       const spec = newSpecs[specId]
