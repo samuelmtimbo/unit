@@ -161,7 +161,6 @@ export class Registry implements R {
       if (this.hasSpec(id)) {
         if (JSON.stringify(spec) === JSON.stringify(this.getSpec(specId))) {
           //
-          // nextSpecs[id] = spec
         } else {
           nextSpecs[id] = spec
         }
@@ -213,8 +212,7 @@ export class Registry implements R {
     // console.log('unregisterUnit', { id })
 
     if (!this.specsCount[id]) {
-      return
-      // throw new Error(`cannot unregister unit: no spec with id ${id}`)
+      throw new Error(`cannot unregister unit: no spec with id ${id}`)
     }
 
     this.specsCount[id] -= 1

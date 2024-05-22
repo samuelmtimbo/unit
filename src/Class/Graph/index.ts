@@ -2967,8 +2967,9 @@ export class Graph<I = any, O = any>
   }
 
   private _fork(specId?: string, emit: boolean = true) {
-    if (this._spec.system || (this.__system.specsCount[this.id] ?? 0) > 1) {
+    if (this.__system.shouldFork(this.id)) {
       const [id, spec] = this.__system.forkSpec(this._spec, specId)
+
       this.__system.unregisterUnit(this.id)
 
       this.id = id
