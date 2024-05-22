@@ -44670,7 +44670,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (selected_node_ids.includes(datum_plug_node_id)) {
             continue
           } else {
-            this._remove_pin_datum_link(selected_node_id)
+            this._remove_plug_set_datum_link(datum_plug_node_id)
           }
         }
       }
