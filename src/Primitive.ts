@@ -129,6 +129,12 @@ export class Primitive<
     unlisten && unlisten()
 
     delete this._inputUnlisten[name]
+
+    delete this._i[name]
+
+    this._i_active.delete(name)
+    this._i_start.delete(name)
+    this._i_invalid.delete(name)
   }
 
   private _setupInputs = (inputs: Pins<I>) => {
@@ -415,9 +421,27 @@ export class Primitive<
     const input = this.getInput(newName)
     const opt = this.getInputOpt(newName)
 
+    const data = this._i[name]
+
+    const active = this._i_active.has(name)
+    const start = this._i_start.has(name)
+    const invalid = this._i_invalid.has(name)
+
     this._plunkInput(name, input)
 
     this._setupInput(newName, input, opt)
+
+    this._i[newName] = data
+
+    if (start) {
+      this._i_start.add(newName)
+    }
+    if (active) {
+      this._i_active.add(newName)
+    }
+    if (invalid) {
+      this._i_invalid.add(newName)
+    }
 
     this.onInputRenamed(name, newName, opt, opt)
   }
