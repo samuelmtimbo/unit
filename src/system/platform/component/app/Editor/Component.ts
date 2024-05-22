@@ -910,7 +910,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._specs = specs
 
-    this._registry = Registry.fromRegistry(this.$system, specs)
+    this._registry = new Registry(specs)
 
     const spec: GraphSpec = this._registry.emptySpec({
       name: 'untitled',
@@ -4288,43 +4288,79 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._registry.unregisterUnit(id)
   }
 
-  private _register_unit = (spec_id: string, deep: boolean = true) => {
+  private _register_unit = (
+    spec_id: string,
+    deep: boolean = true,
+    branch: string[] = []
+  ) => {
     // console.log('Graph', '_register_unit', spec_id, deep)
 
-    const { getSpec, registerUnit } = this.$props
+    const { parent, getSpec, registerUnit } = this.$props
+
+    if (parent) {
+      return
+    }
+
+    this.__register_unit(spec_id, deep, branch)
+  }
+
+  private __register_unit = (
+    spec_id: string,
+    deep: boolean = true,
+    branch: string[] = []
+  ) => {
+    // console.log('Graph', '_register_unit', spec_id, deep)
+
+    const { parent, getSpec, registerUnit } = this.$props
+
+    if (branch.includes(spec_id)) {
+      return
+    }
 
     registerUnit(spec_id)
 
     const spec = getSpec(spec_id)
 
-    if (isBaseSpec(spec)) {
+    if (!isBaseSpec(spec)) {
       if (deep) {
         const { units = {} } = spec as GraphSpec
 
         for (const unitId in units) {
           const unit = units[unitId]
 
-          this._register_unit(unit.id, deep)
+          this.__register_unit(unit.id, deep, [...branch, spec_id])
         }
       }
     }
   }
 
-  private _unregister_unit = (spec_id: string, deep: boolean = true) => {
+  private _unregister_unit = (
+    spec_id: string,
+    deep: boolean = true,
+    branch: string[] = []
+  ) => {
     // console.log('Graph', '_unregister_unit', spec_id, deep)
 
-    const { getSpec, unregisterUnit } = this.$props
+    const { parent, getSpec, unregisterUnit } = this.$props
+
+    if (parent) {
+      return
+    }
+
+    if (branch.includes(spec_id)) {
+      return
+    }
 
     const spec = getSpec(spec_id)
 
-    if (isBaseSpec(spec)) {
+    if (!isBaseSpec(spec)) {
       if (deep) {
         const { units = {} } = spec as GraphSpec
 
         for (const unitId in units) {
           const unit = units[unitId]
 
-          this._unregister_unit(unit.id, deep)
+          this._unregister_unit(unit.id, deep, [...branch, spec_id])
         }
       }
     }
@@ -5447,6 +5483,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._sim_add_unit_core(unit_id, unit, p)
 
       this._mirror_unit(unit_id)
+
+      this._register_unit(unit.id, true)
 
       if (this._is_unit_component(unit_id)) {
         const layout_position = NULL_VECTOR
@@ -29775,9 +29813,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this.$system.classes
       )
 
-      injectSpecs(bundle.specs)
+      // injectSpecs(bundle.specs)
 
       const spec = getSpec(bundle.unit.id)
+
+      this.__register_unit(bundle.unit.id)
 
       if (isBaseSpec(spec)) {
         return
@@ -33951,9 +33991,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._resize_node_height(unit_id, height)
         },
         () => {
+          const { parent } = this.$props
+
           delete this._animating_unit_explosion[unit_id]
 
-          this._state_remove_unit(unit_id)
+          const unregister = !parent
+
+          this._state_remove_unit(unit_id, unregister, false)
 
           resolve()
         }
@@ -38674,12 +38718,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _state_remove_unit = (
     unit_id: string,
-    unregister: boolean = true
+    unregister: boolean = true,
+    deep: boolean = true
   ) => {
     // console.log('Graph', '_state_remove_unit', unit_id)
 
     this._sim_remove_unit(unit_id)
-    this._spec_remove_unit(unit_id, unregister)
+    this._spec_remove_unit(unit_id, unregister, deep)
   }
 
   private _spec_remove_unit = (
