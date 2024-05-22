@@ -362,12 +362,12 @@ export class Graph<I = any, O = any>
 
     const emptySubPins = deepGet(this._exposedEmptySubPin, [type, name])
 
+    deepDelete(this._exposedEmptySubPin, [type, name])
+
     for (const subPinId in { ...emptySubPins }) {
       const emptySubPin = emptySubPins[subPinId]
 
-      delete emptySubPins[subPinId]
-
-      deepSet(emptySubPins, [type, newName, subPinId], emptySubPin)
+      deepSet(this._exposedEmptySubPin, [type, newName, subPinId], emptySubPin)
     }
 
     const pinSpec = this.getExposedPinSpec(type, newName)
