@@ -1,0 +1,141 @@
+{
+  "type": "`U`&`G`",
+  "name": "last",
+  "units": {
+    "at": {
+      "id": "79f01345-4ed7-47e2-8882-fa3bd282c98a",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 19,
+              "y": 18
+            }
+          }
+        },
+        "i": {}
+      },
+      "output": {
+        "a[i]": {
+          "metadata": {
+            "position": {
+              "x": 101,
+              "y": -14
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 51,
+          "y": -13
+        }
+      }
+    },
+    "lastindex": {
+      "id": "f9588979-74e1-477a-8085-594043362fdf",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -101,
+              "y": -34
+            }
+          }
+        }
+      },
+      "output": {
+        "last": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -52,
+          "y": -32
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "at": {
+        "input": {
+          "i": true
+        }
+      },
+      "lastindex": {
+        "output": {
+          "last": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "at",
+          "pinId": "a",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "lastindex",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 18,
+              "y": 42
+            }
+          },
+          "1": {
+            "ext": {
+              "x": -124,
+              "y": -37
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a[-1]": {
+      "plug": {
+        "0": {
+          "unitId": "at",
+          "pinId": "a[i]",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "type": "<A>",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 124,
+              "y": -16
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "info-square",
+    "description": "last element of `a`",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 0,
+          "y": -26
+        }
+      }
+    }
+  },
+  "id": "4465e3a5-40c6-4344-bcc1-94df5edb1899"
+}
