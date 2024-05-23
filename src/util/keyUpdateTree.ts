@@ -420,7 +420,9 @@ export const _keyUpdateTree = (
               nextRoot = _removeNodeAt(root, path)
             }
             nextPath = [...parentPath]
-            nextPath[nextPath.length - 1] += 1
+            if (selectionStart > 0 || selectionStart !== selectionEnd) {
+              nextPath[nextPath.length - 1] += 1
+            }
             nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
             nextSelectionStart = 0
             nextSelectionEnd = 0
@@ -428,83 +430,91 @@ export const _keyUpdateTree = (
         }
       }
     }
-  } else if ((key === ']' || key === '}') && (valid || value === '')) {
-    let parentPath = getParentPath(path)
-    if (parentPath) {
-      const parent = _getNodeAtPath(root, parentPath)
-      const grandpaPath = getParentPath(parentPath)
-      if (
-        (parent.type === TreeNodeType.ArrayLiteral && key === ']') ||
-        (parent.type === TreeNodeType.ObjectLiteral && key === '}')
-      ) {
+  } else if (key === ']' || key === '}') {
+    if (valid || value === '') {
+      let parentPath = getParentPath(path)
+      if (parentPath) {
+        const parent = _getNodeAtPath(root, parentPath)
+        const grandpaPath = getParentPath(parentPath)
+        if (
+          (parent.type === TreeNodeType.ArrayLiteral && key === ']') ||
+          (parent.type === TreeNodeType.ObjectLiteral && key === '}')
+        ) {
+          if (value === '') {
+            preventDefault = true
+            nextRoot = _removeNodeAt(nextRoot, path)
+          }
+          if (grandpaPath) {
+            const grandpa = _getNodeAtPath(nextRoot, grandpaPath)
+            if (
+              grandpa.type === TreeNodeType.ArrayLiteral ||
+              grandpa.type === TreeNodeType.ObjectLiteral
+            ) {
+              preventDefault = true
+              nextPath = [...parentPath]
+              nextPath[nextPath.length - 1] += 1
+              nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
+              nextSelectionStart = 0
+              nextSelectionEnd = 0
+            } else if (grandpa.type === TreeNodeType.KeyValue) {
+              preventDefault = true
+              nextPath = [...grandpaPath]
+              nextPath[nextPath.length - 1] += 1
+              nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
+              nextSelectionStart = 0
+              nextSelectionEnd = 0
+            }
+          } else {
+            preventDefault = true
+          }
+        } else if (parent.type === TreeNodeType.KeyValue && key === '}') {
+          const grangrandpaPath = getParentPath(grandpaPath)
+          if (grangrandpaPath) {
+            preventDefault = true
+            if (value === '') {
+              nextRoot = _removeNodeAt(root, path)
+            }
+            nextPath = [...grandpaPath]
+            nextPath[nextPath.length - 1] += 1
+
+            const grangrandpa = _getNodeAtPath(nextRoot, grangrandpaPath)
+            if (
+              grangrandpa.type === TreeNodeType.ArrayLiteral ||
+              grangrandpa.type === TreeNodeType.ObjectLiteral
+            ) {
+              preventDefault = true
+              nextPath = [...grandpaPath]
+              nextPath[nextPath.length - 1] += 1
+              nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
+              nextSelectionStart = 0
+              nextSelectionEnd = 0
+            } else if (grangrandpa.type === TreeNodeType.KeyValue) {
+              preventDefault = true
+              nextPath = [...grangrandpaPath]
+              nextPath[nextPath.length - 1] += 1
+              nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
+              nextSelectionStart = 0
+              nextSelectionEnd = 0
+            }
+          } else {
+            const node = _getNodeAtPath(root, path)
+
+            if (selectionStart === node.value.length) {
+              preventDefault = true
+            }
+          }
+        }
+      } else {
         if (value === '') {
           preventDefault = true
-          nextRoot = _removeNodeAt(nextRoot, path)
-        }
-        if (grandpaPath) {
-          const grandpa = _getNodeAtPath(nextRoot, grandpaPath)
-          if (
-            grandpa.type === TreeNodeType.ArrayLiteral ||
-            grandpa.type === TreeNodeType.ObjectLiteral
-          ) {
-            preventDefault = true
-            nextPath = [...parentPath]
-            nextPath[nextPath.length - 1] += 1
-            nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
-            nextSelectionStart = 0
-            nextSelectionEnd = 0
-          } else if (grandpa.type === TreeNodeType.KeyValue) {
-            preventDefault = true
-            nextPath = [...grandpaPath]
-            nextPath[nextPath.length - 1] += 1
-            nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
-            nextSelectionStart = 0
-            nextSelectionEnd = 0
-          }
-        } else {
-          preventDefault = true
-        }
-      } else if (parent.type === TreeNodeType.KeyValue && key === '}') {
-        const grangrandpaPath = getParentPath(grandpaPath)
-        if (grangrandpaPath) {
-          preventDefault = true
-          if (value === '') {
-            nextRoot = _removeNodeAt(root, path)
-          }
-          nextPath = [...grandpaPath]
-          nextPath[nextPath.length - 1] += 1
-
-          const grangrandpa = _getNodeAtPath(nextRoot, grangrandpaPath)
-          if (
-            grangrandpa.type === TreeNodeType.ArrayLiteral ||
-            grangrandpa.type === TreeNodeType.ObjectLiteral
-          ) {
-            preventDefault = true
-            nextPath = [...grandpaPath]
-            nextPath[nextPath.length - 1] += 1
-            nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
-            nextSelectionStart = 0
-            nextSelectionEnd = 0
-          } else if (grangrandpa.type === TreeNodeType.KeyValue) {
-            preventDefault = true
-            nextPath = [...grangrandpaPath]
-            nextPath[nextPath.length - 1] += 1
-            nextRoot = _insertNodeAt(nextRoot, nextPath, getTree(''))
-            nextSelectionStart = 0
-            nextSelectionEnd = 0
-          }
-        } else {
-          preventDefault = true
+          nextPath = [...path, 0]
+          nextRoot = _updateNodeAt(root, path, getTree(shiftKey ? '{}' : `[]`))
+          nextSelectionStart = 1
+          nextSelectionEnd = 1
         }
       }
-    } else {
-      if (value === '') {
-        preventDefault = true
-        nextPath = [...path, 0]
-        nextRoot = _updateNodeAt(root, path, getTree(shiftKey ? '{}' : `[]`))
-        nextSelectionStart = 1
-        nextSelectionEnd = 1
-      }
+    } else if (!valid) {
+      preventDefault = true
     }
   } else if (key === ':') {
     const parent = _getParent(root, path)
