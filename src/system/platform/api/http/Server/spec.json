@@ -16,7 +16,7 @@
   },
   "outputs": {
     "req": {
-      "type": "{headers:string{},method:string,path:string,body:string,query:string}"
+      "type": "{headers:string{},method:string,path:string,body:string,search:string,query:string{}}"
     }
   },
   "metadata": {
