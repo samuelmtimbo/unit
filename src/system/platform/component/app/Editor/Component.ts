@@ -29904,6 +29904,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const modified_bundle = editor.getUnitBundle()
           const modified_value = `$${stringify(modified_bundle)}`
 
+          const specs = weakMerge(this.$system.specs, bundle.specs)
+
+          const id = modified_bundle.unit.id
+
+          const spec = specs[id]
+
+          const node_positions = editor.get_node_relative_positions()
+
+          this._set_spec_node_positions(spec, editor, node_positions)
+
           const class_datum_comp = this._datum[datum_node_id] as ClassDatum
 
           class_datum_comp.setProp(
@@ -51170,15 +51180,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const bundle = bundleSpec(spec, specs)
 
-    const processSubGraph = (editor: Editor_, editor_spec: GraphSpec) => {
-      const bundle_spec = deepGet(bundle, ['specs', editor_spec.id])
+    this._set_spec_node_positions_rec(this, bundle.spec)
 
-      if (!isSystemSpec(editor_spec)) {
+    return bundle
+  }
+
+  private _set_spec_node_positions_rec = (editor: Editor_, spec: GraphSpec) => {
+    const { specs } = this.$props
+
+    const processSubGraph = (editor: Editor_, spec: GraphSpec) => {
+      if (!isSystemSpec(spec)) {
         const node_positions = editor.get_node_relative_positions()
 
-        this._set_spec_node_positions(bundle_spec, editor, node_positions)
+        this._set_spec_node_positions(spec, editor, node_positions)
 
-        for (const unitId in editor_spec.units) {
+        for (const unitId in spec.units) {
           const subgraph = editor._subgraph_cache[unitId]
 
           if (subgraph) {
@@ -51190,17 +51206,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    for (const unitId in spec.units) {
-      const subgraph = this._subgraph_cache[unitId]
-
-      if (subgraph) {
-        const unit_spec = this._get_unit_spec(unitId) as GraphSpec
-
-        processSubGraph(subgraph, unit_spec)
-      }
-    }
-
-    return bundle
+    processSubGraph(editor, spec)
   }
 
   public save = async (force_dialog: boolean = false) => {
