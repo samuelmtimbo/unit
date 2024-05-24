@@ -515,7 +515,7 @@ import { getSubComponentParentId } from '../../../../../spec/util/component'
 import {
   countMergePlugs,
   findMergePlugs,
-  findPinMerge,
+  findPinMergeId,
   findSpecAtPath,
   findUnitPinPlug,
   findUnitPlugs,
@@ -24149,7 +24149,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
 
         if (this._collapsing) {
-          const mergeId = findPinMerge(
+          const mergeId = findPinMergeId(
             this._collapse_init_spec,
             unitId,
             type,
@@ -47753,8 +47753,31 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const pin_node_id = this._datum_to_pin[datum_node_id]
 
-    if (pin_node_id && this._collapse_init_node_id_set.has(pin_node_id)) {
-      this._sim_remove_datum(datum_node_id)
+    if (pin_node_id) {
+      const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
+
+      const init_pin_merge_id = findPinMergeId(
+        this._collapse_init_spec,
+        unitId,
+        type,
+        pinId
+      )
+
+      const init_pin_merge_node_id = getMergeNodeId(init_pin_merge_id)
+
+      if (init_pin_merge_id) {
+        if (this._collapse_init_node_id_set.has(init_pin_merge_node_id)) {
+          this._sim_remove_datum(datum_node_id)
+        } else {
+          this._sim_remove_datum(datum_node_id)
+        }
+      } else {
+        if (this._collapse_init_node_id_set.has(pin_node_id)) {
+          this._sim_remove_datum(datum_node_id)
+        } else {
+          this._remove_datum(datum_node_id)
+        }
+      }
     } else {
       this._remove_datum(datum_node_id)
     }
@@ -57358,7 +57381,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const unitId = path[1]
 
-      const mergeId = findPinMerge(spec, unitId, type, pinId)
+      const mergeId = findPinMergeId(spec, unitId, type, pinId)
 
       const unit_pin_spec = deepGetOrDefault(
         spec,

@@ -183,7 +183,7 @@ export const getSubPinSpec = (
   return deepGetOrDefault(graph, [`${type}s`, pinId, 'plug', subPinId], null)
 }
 
-export const findPinMerge = (
+export const findPinMergeId = (
   spec: GraphSpec,
   unitId: string,
   type: IO,
