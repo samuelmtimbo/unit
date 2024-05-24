@@ -69,7 +69,7 @@
     }
   },
   "metadata": {
-    "icon": null,
+    "icon": "shapes",
     "description": "random unit class",
     "complexity": 51,
     "tags": ["core", "meta"]
