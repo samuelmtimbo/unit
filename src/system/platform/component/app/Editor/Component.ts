@@ -13321,6 +13321,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _set_selected_node_color = (mode: Mode): void => {
     for (const selected_node_id in this._selected_node_id) {
+      this._reset_node_color(selected_node_id)
       this.__set_node_mode_color(selected_node_id, mode)
     }
   }
