@@ -19,6 +19,10 @@ export function webHTTP(window: Window, opt: BootOpt): API['http'] {
 
         const handler = serverMap[port || 8080]
 
+        if (!handler) {
+          throw new Error('failed to fetch')
+        }
+
         const req = {
           headers: init.headers ?? {},
           search: search ?? '',
