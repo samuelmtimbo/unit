@@ -8,7 +8,13 @@
           "pinId": "arc"
         }
       },
-      "type": "{x:number,y:number,r:number,start:number,end:number,anticlockwise?:boolean}"
+      "type": "{x:number,y:number,r:number,start:number,end:number,anticlockwise?:boolean}",
+      "metadata": {
+        "examples": [
+          "{x:100,y:100,r:60,start:0.78,end:2.35}",
+          "{x:100,y:100,r:50,start:0,end:6.29}"
+        ]
+      }
     },
     "style": {
       "plug": {
