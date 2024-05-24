@@ -5501,13 +5501,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._fullwindow_component_set.add(unit_id)
 
           if (this._in_component_control) {
-            const frame = this._core_component_frame[unit_id]
-            const core_content = this._core_content[unit_id]
-
-            core_content.removeChild(frame)
-
-            this._graph.appendChild(frame, 'default')
-
             this._couple_sub_component(unit_id)
           }
         } else {
@@ -17924,24 +17917,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._cancel_fullwindow_animation()
 
     if (this._in_component_control) {
+      this._lock_control()
+    }
+
+    this._leave_all_fullwindow_sub_component(_animate)
+
+    if (this._in_component_control) {
       const sub_component_ids = this._fullwindow_component_ids
 
       if (_animate) {
-        this._abort_fullwindow_animation = this._animate_leave_fullwindow(
-          sub_component_ids,
-          (sub_component_id) => {},
-          () => {
-            this._end_leave_fullwindow_animation(sub_component_ids)
-
-            if (this._enabled()) {
-              this.focus()
-            }
-          }
-        )
+        //
       } else {
         for (const sub_component_id of sub_component_ids) {
-          this._decouple_sub_component(sub_component_id)
-
           this._finish_sub_component(sub_component_id)
         }
 
@@ -17966,6 +17953,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this.dispatchEvent('leave_fullwindow', {}, false)
+  }
+
+  private _leave_all_fullwindow_sub_component = (_animate: boolean) => {
+    if (this._in_component_control) {
+      const sub_component_ids = this._fullwindow_component_ids
+
+      if (_animate) {
+        this._abort_fullwindow_animation = this._animate_leave_fullwindow(
+          sub_component_ids,
+          (sub_component_id) => {},
+          () => {
+            this._end_leave_fullwindow_animation(sub_component_ids)
+
+            if (this._enabled()) {
+              this.focus()
+            }
+          }
+        )
+      } else {
+        for (const sub_component_id of sub_component_ids) {
+          this._decouple_sub_component(sub_component_id)
+        }
+      }
+    }
   }
 
   private _place_sub_component = (
@@ -23893,11 +23904,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const was_focused = this._focused
 
     if (this._in_component_control) {
-      if (_animate) {
-        if (!this._is_component_framed) {
-          this._enter_component_frame()
-        }
+      if (!this._is_component_framed) {
+        this._enter_component_frame()
+      }
 
+      if (_animate) {
         const last_sub_component_id = last(ordered_sub_component_ids)
 
         this._abort_fullwindow_animation = this._animate_enter_fullwindow(
@@ -23957,7 +23968,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
 
-        this._enter_component_frame()
         this._couple_all_fullwindow_component()
       }
 
@@ -58050,7 +58060,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { graph: pod, animate = animated, component } = this.$props
 
       if (this._is_fullwindow) {
-        this._leave_fullwindow(false)
+        this._leave_all_fullwindow_sub_component(false)
       }
 
       if (!this._prevent_next_reset) {
