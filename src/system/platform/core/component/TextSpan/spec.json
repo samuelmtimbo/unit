@@ -51,6 +51,7 @@
   },
   "merges": {},
   "metadata": {
+    "icon": "square",
     "complexity": 87,
     "description": "text inside a span",
     "tags": ["platform", "core", "component"]

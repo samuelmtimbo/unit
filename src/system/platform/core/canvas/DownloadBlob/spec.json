@@ -78,7 +78,7 @@
   },
   "outputs": {},
   "metadata": {
-    "icon": "question",
+    "icon": "download",
     "description": "download blob file with `name`",
     "complexity": 8
   },

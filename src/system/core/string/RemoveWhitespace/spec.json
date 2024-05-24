@@ -21,7 +21,7 @@
   },
   "merges": {},
   "metadata": {
-    "icon": "question",
+    "icon": "x",
     "description": "remove all string `str` whitespace",
     "complexity": 5,
     "tags": ["core", "string"]

@@ -142,7 +142,7 @@
     }
   },
   "metadata": {
-    "icon": "question",
+    "icon": "array",
     "description": "create array `b` by getting `keys` from object array `a`",
     "complexity": 59
   },

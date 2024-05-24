@@ -96,6 +96,7 @@
     "defaultHeight": 200
   },
   "metadata": {
+    "icon": "radius",
     "complexity": 64,
     "description": "canvas with an arc drawn",
     "tags": ["platform", "core", "canvas"]

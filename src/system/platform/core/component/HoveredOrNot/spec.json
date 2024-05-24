@@ -171,6 +171,7 @@
     }
   },
   "metadata": {
+    "icon": "square",
     "complexity": 111,
     "description": "text box showing whether it is hovered or not",
     "position": {

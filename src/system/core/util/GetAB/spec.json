@@ -35,7 +35,7 @@
     }
   },
   "metadata": {
-    "icon": null,
+    "icon": "object-get",
     "description": "get `a` and `b` from object `ab`",
     "complexity": 6,
     "tags": ["core", "util"]

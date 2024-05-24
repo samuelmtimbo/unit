@@ -305,7 +305,7 @@
       }
     },
     "metadata": {
-      "icon": null,
+      "icon": "info-square",
       "description": "no description",
       "complexity": 58,
       "tags": ["core", "common"]

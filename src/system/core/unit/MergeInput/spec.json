@@ -152,7 +152,7 @@
     }
   },
   "metadata": {
-    "icon": "question",
+    "icon": "object-set",
     "description": "set each `unit` key value input",
     "tags": ["core", "unit"],
     "complexity": 61

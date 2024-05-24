@@ -80,6 +80,7 @@
     "defaultHeight": 120
   },
   "metadata": {
+    "icon": "square",
     "complexity": 97,
     "description": "text box fit content",
     "tags": ["platform", "component", "app"]

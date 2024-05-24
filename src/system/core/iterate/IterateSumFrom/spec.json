@@ -43,7 +43,7 @@
     }
   },
   "metadata": {
-    "icon": "",
+    "icon": "plus",
     "description": "iterate `sum` by adding stream `a` starting `from`",
     "complexity": 8,
     "tags": ["core", "iterate"]

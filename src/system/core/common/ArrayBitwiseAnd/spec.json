@@ -141,7 +141,7 @@
     }
   },
   "metadata": {
-    "icon": null,
+    "icon": "array",
     "description": "build new array `a & b` by bitwise and arrays `a` and `b` element by element",
     "complexity": 90,
     "tags": ["core", "common"]

@@ -73,7 +73,7 @@
     }
   },
   "metadata": {
-    "icon": null,
+    "icon": "less-than-equal",
     "description": "less than euqal + greater than",
     "complexity": 8,
     "tags": ["core", "common"]
