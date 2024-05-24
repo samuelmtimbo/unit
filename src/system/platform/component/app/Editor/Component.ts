@@ -44280,6 +44280,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         //
       } else if (this._edit_datum_just_blurred) {
         //
+      } else if (this._mode === 'multiselect') {
+        //
       } else {
         this._deselect_all_visible()
       }
