@@ -24923,7 +24923,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const data = this._datum_tree[datumId]
 
-    const datum_type = getValueType__cached(specs, data)
+    const data_ = _filterEmptyNodes(data)
+
+    const datum_type = getValueType__cached(specs, data_)
 
     return datum_type
   }
@@ -38103,12 +38105,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _is_datum_tree_valid = (datum_node_id: string): boolean => {
     const tree = this._get_datum_tree(datum_node_id)
-    return _isValidValue(tree)
-  }
 
-  private _is_pin_datum_tree_valid = (pin_node_id: string): boolean => {
-    const tree = this._pin_datum_tree[pin_node_id]
-    return tree && _isValidValue(tree)
+    const tree_ = _filterEmptyNodes(tree)
+
+    return _isValidValue(tree_)
   }
 
   private _get_datum_tree_shape = (tree: TreeNode): Shape => {
