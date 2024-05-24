@@ -1,10 +1,12 @@
 import { NOOP } from '../../NOOP'
+import { evaluateMemorySpec } from '../../spec/evaluate/evaluateMemorySpec'
 import { System } from '../../system'
 import Frame from '../../system/platform/component/Frame/Component'
 import { BundleSpec } from '../../types/BundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { $Graph } from '../../types/interface/async/$Graph'
 import { callAll } from '../../util/call/callAll'
+import { clone } from '../../util/object'
 import { weakMerge } from '../../weakMerge'
 import { componentFromSpec } from '../componentFromSpec'
 import { appendChild, mount, unmount } from '../context'
@@ -20,8 +22,18 @@ export function renderGraph(
 
   let unlisten: Unlisten = NOOP
 
-  $graph.$getBundle({}, (bundle: BundleSpec) => {
-    const { spec } = bundle
+  $graph.$getBundle({ deep: true }, async (bundle: BundleSpec) => {
+    const { spec, specs } = clone(bundle)
+
+    for (const unitId in spec.units) {
+      const unit = spec.units[unitId]
+
+      evaluateMemorySpec(
+        unit.memory,
+        weakMerge(specs, system.specs),
+        system.classes
+      )
+    }
 
     const component = componentFromSpec(
       system,

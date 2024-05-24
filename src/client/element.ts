@@ -2,7 +2,6 @@ import { Moment } from '../debug/Moment'
 import { NOOP } from '../NOOP'
 import { evaluate } from '../spec/evaluate'
 import { stringify } from '../spec/stringify'
-import { GlobalRefSpec } from '../types/GlobalRefSpec'
 import { $Element } from '../types/interface/async/$Element'
 import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
@@ -34,20 +33,6 @@ export class Element<
   public $preventLoad: boolean = false
 
   onConnected($unit: $Element) {
-    const setRef = <K extends keyof P>(
-      name: K,
-      { globalId }: GlobalRefSpec
-    ): void => {
-      const ref = $unit.$refGlobalObj({ globalId }) as unknown
-
-      // @ts-ignore
-      this.setProp(name, ref)
-    }
-
-    const dropRef = <K extends keyof P>(name: K): void => {
-      this.setProp(name, undefined)
-    }
-
     const handler = {
       unit: (moment: Moment) => {
         const { specs, classes } = this.$system
@@ -56,8 +41,6 @@ export class Element<
 
         if (event_event === 'set') {
           const { name, data } = event_data
-
-          // console.log('Element', 'set', name, data)
 
           if (data !== undefined) {
             const _data = evaluate(data, specs, classes, (url) => {

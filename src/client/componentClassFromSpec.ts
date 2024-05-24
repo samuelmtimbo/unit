@@ -1,3 +1,4 @@
+import { Memory } from '../Class/Unit/Memory'
 import { ComponentClass, System } from '../system'
 import { Specs } from '../types'
 import { Dict } from '../types/Dict'
@@ -17,7 +18,8 @@ export function componentClassFromSpec<
 >(
   spec: GraphSpec,
   specs: Specs,
-  sub_component_map: Dict<Component> = {}
+  sub_component_map: Dict<Component> = {},
+  memory?: Partial<Memory>
 ): typeof Component<E, P, U> {
   const {
     id,
@@ -41,11 +43,13 @@ export function componentClassFromSpec<
         let childComponent = sub_component_map[unitId]
 
         if (!childComponent) {
+          const specs_ = weakMerge($system.specs, specs)
+
           const Class = componentClassFromSpecId(
             $system.components,
-            weakMerge($system.specs, specs),
-            $system.classes,
-            id
+            specs_,
+            id,
+            memory?.memory?.unit?.[unitId] ?? unitSpec.memory
           )
 
           childComponent = new Class({}, $system)

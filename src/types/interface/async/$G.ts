@@ -196,7 +196,7 @@ export interface $G_C {
     data: { unitId: string },
     callback: (data: Dict<any>) => void
   ): void
-  $getBundle(data: {}, callback: Callback<BundleSpec>): void
+  $getBundle(data: { deep?: boolean }, callback: Callback<BundleSpec>): void
   $setMetadata(data: GraphSetMetadataData): void
   $reorderSubComponent(data: {
     parentId: string | null

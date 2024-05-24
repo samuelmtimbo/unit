@@ -7749,7 +7749,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const Class = componentClassFromSpecId(
           components,
           specs,
-          classes,
           spec_id,
           {},
           sub_component_map,

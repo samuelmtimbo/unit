@@ -13,18 +13,17 @@ export function componentFromUnitBundle(
 ): Component {
   const { unit } = bundle
 
-  const props = {} // TODO derive from unit.input
+  const specs = weakMerge(bundle.specs ?? {}, system.specs)
 
   const Class = componentClassFromSpecId(
     system.components,
-    weakMerge(bundle.specs ?? {}, system.specs),
-    system.classes,
+    specs,
     unit.id,
-    props,
+    {},
     subComponentMap
   )
 
-  const component = new Class(props, system)
+  const component = new Class({}, system)
 
   return component
 }
@@ -39,7 +38,6 @@ export function componentFromSpecId(
   const Class = componentClassFromSpecId(
     system.components,
     specs,
-    system.classes,
     id,
     {},
     subComponentMap
