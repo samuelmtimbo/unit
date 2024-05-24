@@ -102,6 +102,7 @@
     "defaultHeight": 90
   },
   "metadata": {
+    "icon": "square",
     "description": "render a unicode char from its code",
     "complexity": 100,
     "tags": ["platform", "core", "component"]

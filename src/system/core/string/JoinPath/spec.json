@@ -47,7 +47,7 @@
     }
   },
   "metadata": {
-    "icon": "question",
+    "icon": "plus",
     "description": "a + / + b",
     "complexity": 8
   },

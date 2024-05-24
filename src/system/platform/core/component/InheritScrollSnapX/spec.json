@@ -72,7 +72,7 @@
     "defaultHeight": 240
   },
   "metadata": {
-    "icon": null,
+    "icon": "square",
     "description": "style children with scroll-snap x",
     "complexity": 53
   },

@@ -69,7 +69,7 @@
     "defaultHeight": 420
   },
   "metadata": {
-    "icon": null,
+    "icon": "square",
     "description": "container with set scroll snap align start",
     "complexity": 53
   },

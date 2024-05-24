@@ -46,7 +46,7 @@
     }
   },
   "metadata": {
-    "icon": "question",
+    "icon": "percent",
     "description": "% + a",
     "complexity": 5
   },

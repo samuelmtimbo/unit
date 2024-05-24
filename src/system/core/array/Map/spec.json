@@ -120,7 +120,7 @@
     }
   },
   "metadata": {
-    "icon": "map",
+    "icon": "array",
     "description": "map elements of an array `a` to a new array `b`",
     "complexity": 42,
     "tags": ["core", "array"]

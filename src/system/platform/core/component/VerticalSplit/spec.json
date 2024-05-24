@@ -484,7 +484,7 @@
     "defaultHeight": 270
   },
   "metadata": {
-    "icon": null,
+    "icon": "square",
     "description": "adjustable vertically split container",
     "complexity": 156,
     "tags": ["platform", "core", "component"]

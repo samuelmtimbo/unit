@@ -79,7 +79,7 @@
     "defaultHeight": 270
   },
   "metadata": {
-    "icon": null,
+    "icon": "square",
     "description": "container with y scroll snap",
     "complexity": 109
   },

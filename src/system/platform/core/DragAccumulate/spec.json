@@ -227,6 +227,7 @@
   },
   "component": {},
   "metadata": {
+    "icon": "mouse-pointer",
     "description": "utility for keeping track of current pointer down max x y distance",
     "complexity": 26
   },

@@ -321,7 +321,7 @@
     "defaultHeight": 420
   },
   "metadata": {
-    "icon": null,
+    "icon": "square",
     "description": "root app local auto-save",
     "complexity": 481,
     "tags": ["platform", "core", "component"]

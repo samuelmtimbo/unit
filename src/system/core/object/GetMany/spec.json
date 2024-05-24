@@ -313,7 +313,7 @@
     }
   },
   "metadata": {
-    "icon": "question",
+    "icon": "object-get",
     "description": "create new `obj` by picking `keys` from input `obj`",
     "tags": ["core", "object"],
     "complexity": 46

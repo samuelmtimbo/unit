@@ -50,7 +50,7 @@
     }
   },
   "metadata": {
-    "icon": null,
+    "icon": "brackets-curly",
     "description": "create object `ab` with values `a` and `b`",
     "complexity": 11,
     "tags": ["core", "util"]

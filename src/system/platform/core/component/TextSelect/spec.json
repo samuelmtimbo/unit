@@ -543,7 +543,7 @@
     }
   },
   "metadata": {
-    "icon": "question",
+    "icon": "square",
     "description": "select with text options",
     "tags": ["platform", "core", "component"],
     "position": {

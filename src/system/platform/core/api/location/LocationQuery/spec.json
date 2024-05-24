@@ -128,7 +128,7 @@
     }
   },
   "metadata": {
-    "icon": "question",
+    "icon": "map-pin",
     "description": "get current web context location url query",
     "complexity": 14
   },

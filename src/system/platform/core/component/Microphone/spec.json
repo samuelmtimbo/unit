@@ -552,7 +552,7 @@
     }
   },
   "metadata": {
-    "icon": null,
+    "icon": "mic",
     "description": "icon button for microphone recording",
     "position": {
       "merge": {

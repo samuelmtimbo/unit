@@ -125,6 +125,7 @@
     }
   },
   "metadata": {
+    "icon": "question",
     "description": "check whether `a` is between `b` and `c`",
     "complexity": 11
   },

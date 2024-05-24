@@ -127,7 +127,7 @@
     }
   },
   "metadata": {
-    "icon": "question",
+    "icon": "array",
     "description": "map array objects `a` to their `key` values",
     "complexity": 48
   },
