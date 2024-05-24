@@ -76,6 +76,16 @@ export default class Fetch extends Functional<I, O> {
             return
           }
 
+          if (
+            err.message.startsWith(
+              "Failed to execute 'fetch' on 'Window': Failed to parse URL from http://102.344.21.2"
+            )
+          ) {
+            done(undefined, 'failed to parse url')
+
+            return
+          }
+
           done(undefined, err.message.toLowerCase())
         })
     } catch (err) {
