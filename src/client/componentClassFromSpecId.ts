@@ -1,9 +1,10 @@
-import { evaluateDataValue } from '../spec/evaluateDataValue'
+import { Memory } from '../Class/Unit/Memory'
 import { ComponentClass, ComponentClasses } from '../system'
-import { Classes, Specs } from '../types'
+import merge from '../system/f/object/Merge/f'
+import { Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphSpec } from '../types/GraphSpec'
-import { GraphUnitPinsSpec } from '../types/GraphUnitPinsSpec'
+import { mapObjVK } from '../util/object'
 import { IOElement } from './IOElement'
 import { Component } from './component'
 import { componentClassFromSpec } from './componentClassFromSpec'
@@ -13,9 +14,8 @@ import { getSpec } from './spec'
 export function componentClassFromSpecId<T = any>(
   components: ComponentClasses,
   specs: Specs,
-  classes: Classes,
   id: string,
-  inputs: GraphUnitPinsSpec = {},
+  memory?: Partial<Memory>,
   subComponentMap: Dict<Component> = {},
   element: IOElement = undefined
 ): ComponentClass<T> {
@@ -24,24 +24,23 @@ export function componentClassFromSpecId<T = any>(
   if (isBaseSpec(spec)) {
     const Class = components[id] as ComponentClass<T>
 
+    const props = mapObjVK(memory?.input ?? {}, ({ _register }) => {
+      return _register
+    })
+
     return class NewClass extends Class {
       static id = id
 
       constructor($props, $system) {
-        super($props, $system, element)
-
-        for (const name in inputs) {
-          const input = inputs[name]
-
-          const { data } = input
-
-          const dataRef = evaluateDataValue(data, specs, classes)
-
-          this.setProp(name, dataRef.data)
-        }
+        super(merge(props, $props) as T, $system, element)
       }
     }
   } else {
-    return componentClassFromSpec(spec as GraphSpec, specs, subComponentMap)
+    return componentClassFromSpec(
+      spec as GraphSpec,
+      specs,
+      subComponentMap,
+      memory
+    )
   }
 }

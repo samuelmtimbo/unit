@@ -469,7 +469,6 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
         componentClass = componentClassFromSpecId(
           this.$system.components,
           this.$system.specs,
-          this.$system.classes,
           id,
           input
         )

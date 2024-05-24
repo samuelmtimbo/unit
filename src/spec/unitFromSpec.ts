@@ -1,5 +1,4 @@
 import { Unit } from '../Class/Unit'
-import deepGet from '../deepGet'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { Specs } from '../types'
@@ -69,14 +68,6 @@ export function unitFromBundleSpec(
       const input = unit.getInput(pinId)
 
       const dataRef = evaluateDataValue(data, specs, classes)
-
-      const { ref = [] } = dataRef
-
-      for (const path of ref) {
-        const bundle = deepGet(dataRef.data, path) as UnitBundleSpec
-
-        system.injectSpecs(bundle.specs ?? {})
-      }
 
       let data_ = resolveDataRef(dataRef, specs, classes)
 

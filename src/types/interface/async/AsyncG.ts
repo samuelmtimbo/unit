@@ -484,8 +484,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.takeUnitErr(unitId)
     },
 
-    $getBundle({}: {}, callback: Callback<BundleSpec>): void {
-      const bundle = graph.getBundleSpec()
+    $getBundle(
+      { deep }: { deep: boolean },
+      callback: Callback<BundleSpec>
+    ): void {
+      const bundle = graph.getBundleSpec(deep)
 
       const { spec } = bundle
 
