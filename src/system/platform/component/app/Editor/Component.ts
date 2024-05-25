@@ -28240,22 +28240,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _select_node_subgraph = (node_id: string): void => {
-    const subgraph_id = this._node_to_subgraph[node_id]
-
-    this._select_subgraph(subgraph_id)
-  }
-
-  private _select_subgraph = (subgraph_id: string): void => {
-    const nodes = this._subgraph_to_node[subgraph_id]
-
-    const nodes_to_select = [...nodes].filter(
-      (node_id) => !this._is_plug_node_id(node_id)
-    )
-
-    this._select_many(nodes_to_select)
-  }
-
   private _focus_sub_component = (unit_id: string): void => {
     // console.log('Graph', '_focus_sub_component', unit_id)
     const sub_component = this._get_sub_component(unit_id)
@@ -34641,9 +34625,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._mode === 'multiselect' || this._mode === 'info') {
         this._cancel_node_click.add(node_id)
 
-        if (this._is_node_selected(node_id)) {
-          this._select_node_subgraph(node_id)
-        }
+        this._animate_long_press(screenX, screenY, 'out')
+
+        this._on_node_long_press(node_id, event)
       } else {
         if (this._is_unit_node_id(node_id)) {
           this._animate_long_press(screenX, screenY, 'in')
