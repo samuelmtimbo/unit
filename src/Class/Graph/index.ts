@@ -86,6 +86,7 @@ import {
   getUnitMergesSpec,
   hasMerge,
   hasMergePin,
+  isSelfPin,
   makeFullSpecCollapseMap,
   opposite,
 } from '../../spec/util/spec'
@@ -4368,7 +4369,7 @@ export class Graph<I = any, O = any>
   ): void {
     // console.log('Graph', '_memAddPinToMerge', mergeId, unitId, type, pinId)
 
-    if (type === 'output' && pinId === SELF) {
+    if (isSelfPin(type, pinId)) {
       this._mergeToSelfUnit[mergeId] = unitId
       this._selfUniToMerge[unitId] = mergeId
     }
@@ -4888,7 +4889,7 @@ export class Graph<I = any, O = any>
 
     if (
       take ||
-      (type === 'output' && pinId === SELF) ||
+      isSelfPin(type, pinId) ||
       this.isUnitRefPin(unitId, 'input', pinId)
     ) {
       const pin = this._pin[pinNodeId]
@@ -5962,6 +5963,13 @@ export class Graph<I = any, O = any>
         getUnitPlugs: (unitId) => this.getUnitPlugsSpec(unitId),
         getPinMergeId: (unitId, type, pinId) =>
           this.getPinMergeId(unitId, type, pinId),
+        getPlugSpec: (type, pinId, subPinId) =>
+          this.getSubPinSpec(type, pinId, subPinId),
+        getUnitPinSpec: (unitId, type, pinId) => {
+          const unit = this.getUnit(unitId) as Graph
+
+          return unit.getExposedPinSpec(type, pinId)
+        },
       }
     )
 

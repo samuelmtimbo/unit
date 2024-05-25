@@ -6,6 +6,7 @@ import {
   getMergeTypePinCount,
   getMergeUnitPinCount,
   isEmptyMerge,
+  isSelfPin,
   opposite,
 } from '../../spec/util/spec'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
@@ -206,6 +207,8 @@ export function moveUnit(
             connectOpt.plugs?.[type]?.[pinId] || {}
 
           if (_pinId && _subPinId && _pinId === nextPinId) {
+            const propagate = isSelfPin(type, pinId)
+
             if (target.hasPinNamed(type, _pinId)) {
               if (target.hasPlug(type, _pinId, _subPinId)) {
                 target.unplugPin(type, _pinId, _subPinId, false, false)
@@ -220,7 +223,7 @@ export function moveUnit(
                   pinId,
                 },
                 false,
-                false
+                propagate
               )
             } else {
               target.exposePinSet(
@@ -236,11 +239,13 @@ export function moveUnit(
                 },
                 undefined,
                 false,
-                false
+                propagate
               )
             }
           }
         } else {
+          const propagate = isSelfPin(type, pinId)
+
           if (target.hasPinNamed(type, nextPinId)) {
             target.exposePin(
               type,
@@ -291,7 +296,7 @@ export function moveUnit(
                       pinId: nextPinId,
                     },
                     false,
-                    false
+                    propagate
                   )
 
                   break
@@ -378,7 +383,24 @@ export function moveUnit(
       const { type, pinId: pinId_, subPinId, kind = type } = plug
 
       if (reverse) {
-        //
+        if (target.hasPlug(type, pinId_, subPinId)) {
+          const propagate = isSelfPin(kind, pinId)
+
+          target.plugPin(
+            type,
+            pinId_,
+            subPinId,
+            {
+              unitId: nextUnitId,
+              pinId,
+              kind,
+            },
+            false,
+            propagate
+          )
+        } else {
+          //
+        }
       } else {
         if (target.hasPlug(type, pinId_, subPinId)) {
           target.plugPin(
