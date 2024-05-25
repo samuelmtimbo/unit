@@ -532,43 +532,57 @@ export const _keyUpdateTree = (
     const parent = _getParent(root, path)
     const node = _getNodeAtPath(root, path)
 
-    if (parent && parent.type === TreeNodeType.ObjectLiteral) {
-      if (node) {
-        if (
-          node.type === TreeNodeType.StringLiteral &&
-          selectionStart === selectionEnd &&
-          selectionStart !== 0 &&
-          selectionStart !== value.length
-        ) {
-          //
-        } else {
-          const start = `${data.value.substring(0, selectionStart)}`
+    if (parent) {
+      if (parent.type === TreeNodeType.ObjectLiteral) {
+        if (node) {
+          if (
+            node.type === TreeNodeType.StringLiteral &&
+            selectionStart === selectionEnd &&
+            selectionStart !== 0 &&
+            selectionStart !== value.length
+          ) {
+            //
+          } else {
+            const start = `${data.value.substring(0, selectionStart)}`
 
-          const nextNode = getTree(
-            `${start}:${data.value.substring(selectionEnd)}`
-          )
+            const nextNode = getTree(
+              `${start}:${data.value.substring(selectionEnd)}`
+            )
 
-          if (_isValidObjKeyType(getTree(start, false, true))) {
-            preventDefault = true
+            if (_isValidObjKeyType(getTree(start, false, true))) {
+              preventDefault = true
 
-            nextRoot = _updateNodeAt(root, path, nextNode)
-            nextPath = [...path, 1]
-            nextSelectionStart = 0
-            nextSelectionEnd = 0
+              nextRoot = _updateNodeAt(root, path, nextNode)
+              nextPath = [...path, 1]
+              nextSelectionStart = 0
+              nextSelectionEnd = 0
+            }
           }
-        }
-      } else if (
-        parent &&
-        (parent.type === TreeNodeType.ObjectLiteral ||
-          parent.type === TreeNodeType.ArrayLiteral)
-      ) {
-        const parentPath = getParentPath(path)
+        } else if (
+          parent.type === TreeNodeType.ObjectLiteral ||
+          parent.type === TreeNodeType.ArrayLiteral
+        ) {
+          const parentPath = getParentPath(path)
 
-        preventDefault = true
-        nextPath = [...parentPath, 0, 1]
-        nextRoot = _updateNodeAt(root, path, getTree(':'))
-        nextSelectionStart = 0
-        nextSelectionEnd = 0
+          preventDefault = true
+          nextPath = [...parentPath, 0, 1]
+          nextRoot = _updateNodeAt(root, path, getTree(':'))
+          nextSelectionStart = 0
+          nextSelectionEnd = 0
+        }
+      } else if (parent.type === TreeNodeType.KeyValue) {
+        if (
+          lastIndex === 0 &&
+          selectionStart === selectionEnd &&
+          selectionStart === value.length
+        ) {
+          const parentPath = getParentPath(path)
+
+          preventDefault = true
+          nextPath = [...parentPath, 1]
+          nextSelectionStart = 0
+          nextSelectionEnd = 0
+        }
       }
     }
   } else if (key === '[' || key === '{') {
