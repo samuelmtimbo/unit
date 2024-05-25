@@ -184,6 +184,7 @@ import {
   change_link_source_on_graph,
   change_link_target_on_graph,
   getSubPinSpecNodeId,
+  getSubPinSpecNodeId_,
   remove_link_from_graph,
   remove_node_from_graph,
 } from '../../../../../client/graph'
@@ -543,6 +544,7 @@ import {
   hasUnit,
   isPinRef,
   isPinSpecRef,
+  isSelfPin,
   isSubPinSpecRef,
   isUnitPinConstant,
   makeFullSpecCollapseMap,
@@ -4844,7 +4846,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (pin_merge_node_id) {
         return this._get_merge_anchor_node_id(pin_merge_node_id)
       } else {
-        return pin_node_id
+        const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
+
+        if (isSelfPin(type, pinId)) {
+          return unitId
+        } else {
+          return pin_node_id
+        }
       }
     } else {
       return this._get_merge_anchor_node_id(pin_node_id)
@@ -9154,6 +9162,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._ext_to_node[ext_node_id] = anchor_node_id
       this._int_to_node[int_node_id] = anchor_node_id
 
+      this._pin_to_int[type][anchor_node_id] = int_node_id
+      this._pin_to_ext[type][anchor_node_id] = ext_node_id
+
       this._node_to_ext[anchor_node_id] =
         this._node_to_ext[anchor_node_id] ?? new Set()
       this._node_to_ext[anchor_node_id].add(ext_node_id)
@@ -10289,9 +10300,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { unitId, mergeId } = sub_pin_spec
 
       if (unitId || mergeId) {
-        const pin_node_id = getSubPinSpecNodeId(type, sub_pin_spec)
+        const anchor_node_id = getSubPinSpecNodeId(type, sub_pin_spec)
 
-        const sub_pin_type: TreeNode = this._get_pin_type(pin_node_id)
+        let sub_pin_type: TreeNode
+
+        if (isUnitNodeId(anchor_node_id)) {
+          sub_pin_type = this._get_unit_type(anchor_node_id)
+        } else {
+          sub_pin_type = this._get_pin_type(anchor_node_id)
+        }
 
         type_tree = _mostSpecific(type_tree, sub_pin_type)
       }
@@ -10320,7 +10337,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _get_link_pin_type = (pin_node_id: string): TreeNode => {
     const { type, pinId } = segmentLinkPinNodeId(pin_node_id)
-    if (type === 'output' && pinId === SELF) {
+    if (isSelfPin(type, pinId)) {
       return ANY_TREE
     }
     const type_tree = this._pin_type_of_kind(pin_node_id, type)
@@ -33699,6 +33716,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           return this._get_pin_merge_id(pin_node_id)
         },
+        getPlugSpec: this._get_exposed_sub_pin_spec,
+        getUnitPinSpec: this.__get_unit_pin_spec,
       }
     )
   }
@@ -33940,7 +33959,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
         } else {
-          throw new InvalidStateError()
+          //
         }
       }
 
@@ -35516,7 +35535,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { target_id } = link
 
-    if (this._is_node_id(prev_source_id) && this._is_node_id(source_id)) {
+    if (
+      this._is_node_id(target_id) &&
+      this._is_node_id(prev_source_id) &&
+      this._is_node_id(source_id)
+    ) {
       this._swap_node_node_link_count(prev_source_id, source_id)
     }
 
@@ -35539,7 +35562,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     link.target_id = target_id
 
-    if (this._is_node_id(prev_target_id) && this._is_node_id(target_id)) {
+    if (
+      this._is_node_id(source_id) &&
+      this._is_node_id(prev_target_id) &&
+      this._is_node_id(target_id)
+    ) {
       this._swap_node_node_link_count(prev_target_id, target_id)
     }
 
@@ -36732,7 +36759,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._merge_to_input[merge_node_id][pin_node_id]
     delete this._merge_to_output[merge_node_id][pin_node_id]
 
-    const is_pin_output_self = type === 'output' && pinId === SELF
+    const is_pin_output_self = isSelfPin(type, pinId)
 
     if (is_pin_output_self) {
       delete this._merge_to_ref_unit[merge_node_id]
@@ -37442,7 +37469,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _is_link_pin_output_ref = (type: IO, pinId: string): boolean => {
-    return type === 'output' && pinId === SELF
+    return isSelfPin(type, pinId)
   }
 
   private _sim_remove_merge = (merge_node_id: string): void => {
@@ -38885,7 +38912,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._sim_remove_pin_or_merge(pin_node_id)
     }
 
-    const is_self_output_pin = type === 'output' && pinId === SELF
+    const is_self_output_pin = isSelfPin(type, pinId)
 
     if (is_self_output_pin) {
       //
@@ -45452,7 +45479,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const spec = clone(this._get_unit_spec(graph_id)) as GraphSpec
 
     const graph_interface: GraphLike = {
-      removeUnit: (unitId: string): void => {
+      removeUnit: (unitId: string, destroy: boolean): void => {
         const unit = spec.units[unitId]
 
         const bundle = unitBundleSpec(unit, specs)
@@ -45460,6 +45487,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._on_graph_unit_remove_unit_moment({
           unitId,
           bundle,
+          destroy,
           path: [graph_id],
         })
       },
@@ -47072,7 +47100,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     for (const unit_id of unit_ids) {
-      this._for_each_unit_pin(unit_id, (pin_node_id: string, type, pin_id) => {
+      const check_link_pin_plug = (
+        pin_node_id: string,
+        type: IO,
+        pin_id: string
+      ) => {
         if (!this._spec_is_link_pin_ignored(pin_node_id)) {
           const merge_node_id = this._pin_to_merge[pin_node_id]
 
@@ -47081,11 +47113,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             const opposite_type = opposite(type)
 
-            const ext_pin_node_id = this._pin_to_ext[type][pin_node_id]
-            const opposite_ext_pin_node_id =
-              this._pin_to_ext[opposite_type][pin_node_id]
+            const anchor_node_id = this._get_pin_anchor_node_id(pin_node_id)
 
-            if (selected_node_ids.includes(pin_node_id)) {
+            const ext_pin_node_id = this._pin_to_ext[type][anchor_node_id]
+            const opposite_ext_pin_node_id =
+              this._pin_to_ext[opposite_type][anchor_node_id]
+
+            const is_self_output = type === 'output' && pin_id === SELF
+
+            let should_expose =
+              !isSelfPin(type, pin_id) ||
+              ext_pin_node_id ||
+              opposite_ext_pin_node_id
+
+            if (selected_node_ids.includes(anchor_node_id)) {
               if (ext_pin_node_id) {
                 const { type, pinId, subPinId } =
                   segmentPlugNodeId(ext_pin_node_id)
@@ -47100,10 +47141,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               }
             }
 
-            try_expose_link_pin(pin_node_id, unit_id, type, pin_id, next_pin_id)
+            if (should_expose) {
+              try_expose_link_pin(
+                pin_node_id,
+                unit_id,
+                type,
+                pin_id,
+                next_pin_id
+              )
+            }
           }
         }
-      })
+      }
+
+      this._for_each_unit_pin(unit_id, check_link_pin_plug)
+
+      const self_pin_node_id = getPinNodeId(unit_id, 'output', SELF)
+
+      check_link_pin_plug(self_pin_node_id, 'output', SELF)
     }
 
     for (const unit_id of unit_ids) {
@@ -48763,7 +48818,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             )
           }
 
-          const anchor_node_id = getSubPinSpecNodeId(type, sub_pin_spec)
+          const anchor_node_id = getSubPinSpecNodeId_(type, sub_pin_spec)
 
           if (!this._pin_to_int[type][anchor_node_id]) {
             this._state_plug_exposed_pin(type, pin_id, sub_pin_id, sub_pin_spec)
@@ -48939,29 +48994,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const merges = {}
     const data = clone(prev_data)
-
-    const _plugs = clone(prev_plugs)
-
-    const makePlugFilter = (type: IO, pins) => {
-      return filterObj(pins, ({ type: type_, pinId, subPinId }) => {
-        const ext_node_id = getExtNodeId(type_, pinId, subPinId)
-        const int_node_id = getIntNodeId(type_, pinId, subPinId)
-
-        if (
-          this._collapse_init_node_id_set.has(ext_node_id) ||
-          this._collapse_init_node_id_set.has(int_node_id)
-        ) {
-          return false
-        }
-
-        return true
-      })
-    }
-
-    const plugs = {
-      input: makePlugFilter('input', _plugs.input),
-      output: makePlugFilter('output', _plugs.output),
-    }
+    const plugs = clone(prev_plugs)
 
     const next_pin_map = next_unit_pin_map[unit_id] ?? {}
 
@@ -55853,7 +55886,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { setSpec, specs, parent, unregisterUnit } = this.$props
 
-    const { bundle, path, unitId } = data
+    const { bundle, path, unitId, destroy = true } = data
 
     const _specs = weakMerge(bundle.specs ?? {}, specs)
 
@@ -55915,7 +55948,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             await subgraph._animating_unit_explosion[unitId]
           }
 
-          unregisterUnit(unit.id)
+          destroy && unregisterUnit(unit.id)
         }
       })()
     }
@@ -56971,17 +57004,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _sim_remove_pin_data = (type: IO, pinId: string) => {
     // console.log('Graph', '_sim_remove_pin_data', type, pinId)
 
-    if (!this._is_pin_ref(type, pinId)) {
-      this._for_each_plug(type, pinId, (subPinId) => {
-        const ext_node_id = getExtNodeId(type, pinId, subPinId)
+    this._for_each_plug(type, pinId, (subPinId) => {
+      const ext_node_id = getExtNodeId(type, pinId, subPinId)
 
-        const datum_node_id = this._plug_to_datum[ext_node_id]
+      const datum_node_id = this._plug_to_datum[ext_node_id]
 
-        if (datum_node_id) {
-          this._sim_remove_plug_datum(type, pinId, subPinId)
-        }
-      })
-    }
+      if (datum_node_id) {
+        this._sim_remove_plug_datum(type, pinId, subPinId)
+      }
+    })
 
     delete this._unit_datum[type][pinId]
 

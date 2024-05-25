@@ -1,3 +1,4 @@
+import { SELF } from '../constant/SELF'
 import { forEachPinOnMerge } from '../spec/util/spec'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { keys } from '../system/f/object/Keys/f'
@@ -35,6 +36,22 @@ export function getSubPinSpecNodeId(
     return getMergeNodeId(mergeId)
   } else {
     return getPinNodeId(unitId!, kind, pinId!)
+  }
+}
+
+export function getSubPinSpecNodeId_(
+  type: IO,
+  subPinSpec: GraphSubPinSpec
+): string {
+  const { mergeId, unitId, pinId, kind = type } = subPinSpec
+  if (mergeId) {
+    return getMergeNodeId(mergeId)
+  } else {
+    if (pinId === SELF) {
+      return unitId
+    } else {
+      return getPinNodeId(unitId!, kind, pinId!)
+    }
   }
 }
 
@@ -208,8 +225,8 @@ export const change_link_target_on_graph = (
 ): void => {
   const target = graph[target_id]
   const source = graph[source_id]
-  delete source.next[target_id]
-  delete target.previous[source_id]
+  delete source?.next[target_id]
+  delete target?.previous[source_id]
   const next_target = graph[next_target_id]
   source.next[next_target_id] = next_target
   next_target.previous[source_id] = source

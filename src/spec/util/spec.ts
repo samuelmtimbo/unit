@@ -63,8 +63,12 @@ export const isPinRef = (
 ) => {
   return (
     deepGetOrDefault(spec, [`${type}s`, pinId, 'ref'], false) ||
-    (type === 'output' && pinId === SELF)
+    isSelfPin(type, pinId)
   )
+}
+
+export const isSelfPin = (type: IO, pinId: string): boolean => {
+  return type === 'output' && pinId === SELF
 }
 
 export function getInputNodeId(unitId: string, pinId: string): string {
@@ -635,11 +639,15 @@ export function makeFullSpecCollapseMap(
     getUnitPlugs,
     getMerge,
     getPinMergeId,
+    getPlugSpec,
+    getUnitPinSpec,
   }: {
     getUnitMerges: (unitId: string) => GraphUnitMerges
     getUnitPlugs: (unitId: string) => GraphUnitPlugs
+    getUnitPinSpec: (unitId: string, type: IO, pinId: string) => GraphPinSpec
     getMerge: (mergeId: string) => GraphMergeSpec
     getPinMergeId: (unitId: string, type: IO, pinId: string) => string
+    getPlugSpec: (type: IO, pinId: string, subPinId: string) => GraphSubPinSpec
   }
 ): GraphMoveSubGraphData {
   const { units = {}, merges = {}, inputs = {}, outputs = {} } = spec
@@ -698,7 +706,11 @@ export function makeFullSpecCollapseMap(
 
     const merged = !!mergeId
 
-    const outerPlug = deepGetOrDefault(unitPlugs, [type, pinId], null)
+    const outerPlug = deepGetOrDefault(
+      unitPlugs,
+      [type, pinId],
+      null
+    ) as GraphPlugOuterSpec
 
     for (const subPinId in plug) {
       const subPinSpec = plug[subPinId]
@@ -822,6 +834,30 @@ export function makeFullSpecCollapseMap(
         }
       }
     }
+
+    if (outerPlug) {
+      const plugSpec = getPlugSpec(
+        outerPlug.type,
+        outerPlug.pinId,
+        outerPlug.subPinId
+      )
+
+      const pinSpec = getUnitPinSpec(
+        unitId,
+        plugSpec.kind ?? type,
+        plugSpec.pinId
+      )
+
+      for (const subPinId in pinSpec.plug) {
+        const subPinSpec = pinSpec.plug[subPinId]
+
+        if (subPinSpec.unitId && subPinSpec.pinId) {
+          deepSet(nextPinIdMap, [subPinSpec.unitId, type, subPinSpec.pinId], {
+            plug: outerPlug,
+          })
+        }
+      }
+    }
   }
 
   processPins('input', inputs)
@@ -837,13 +873,11 @@ export function makeFullSpecCollapseMap(
     if (isEmptyObject(merge_unit['input'] ?? {})) {
       delete merge_unit['input']
     }
-
     if (isEmptyObject(merge_unit['output'] ?? {})) {
       delete merge_unit['output']
     }
 
     const merge_unit_pin_type = getObjSingleKey(merge_unit)
-
     const merge_unit_pin_id = getObjSingleKey(merge_unit[merge_unit_pin_type])
 
     delete merge_clone[unitId]

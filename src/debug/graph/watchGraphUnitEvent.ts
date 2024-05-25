@@ -7,6 +7,7 @@ export interface GraphAddUnitMomentData {
   unitId: string
   bundle: UnitBundleSpec
   path: string[]
+  destroy?: boolean
   parentId?: string
 }
 
