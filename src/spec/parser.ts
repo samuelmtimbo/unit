@@ -1077,14 +1077,6 @@ function _getValueTree(
     if (keyValueTest) {
       let k = _getTree(keyValueTest[1], false, true)
 
-      if (!_isValidObjKeyType(k)) {
-        return {
-          value,
-          type: TreeNodeType.Invalid,
-          children: [],
-        }
-      }
-
       const value_value = keyValueTest[2]
 
       const v = _getTree(value_value) || {
@@ -1418,7 +1410,7 @@ export function _stringify(tree: TreeNode): string {
       // TODO
       return ''
     case TreeNodeType.KeyValue:
-      return `${_stringify(tree.children[0])}${
+      return `${(tree.children[0] && _stringify(tree.children[0])) || ''}${
         (!!tree.children[1] && `:${_stringify(tree.children[1])}`) || ''
       }`
     default:

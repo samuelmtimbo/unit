@@ -269,13 +269,25 @@ export const _keyUpdateTree = (
       if (parentPath) {
         const parent = _getNodeAtPath(root, parentPath)
         const parentLastIndex = parentPath[parentPath.length - 1]
-        const graphParentPath = getParentPath(parentPath)
 
         if (parent.type === TreeNodeType.KeyValue) {
           if (lastIndex === 0) {
             if (selectionStart === 0 && selectionEnd === 0) {
               if (parentLastIndex > 0) {
                 moveLeft()
+              }
+            } else {
+              if (
+                selectionEnd - selectionStart === value.length ||
+                (selectionStart === selectionEnd &&
+                  selectionStart === 1 &&
+                  value.length === 1)
+              ) {
+                preventDefault = true
+                nextRoot = _updateNodeAt(root, path, getTree(''))
+                nextPath = path
+                nextSelectionStart = 0
+                nextSelectionEnd = 0
               }
             }
           } else if (lastIndex === 1) {
@@ -521,28 +533,42 @@ export const _keyUpdateTree = (
     const node = _getNodeAtPath(root, path)
 
     if (parent && parent.type === TreeNodeType.ObjectLiteral) {
-      if (
-        node.type === TreeNodeType.StringLiteral &&
-        selectionStart === selectionEnd &&
-        selectionStart !== 0 &&
-        selectionStart !== value.length
-      ) {
-        //
-      } else {
-        const start = `${data.value.substring(0, selectionStart)}`
+      if (node) {
+        if (
+          node.type === TreeNodeType.StringLiteral &&
+          selectionStart === selectionEnd &&
+          selectionStart !== 0 &&
+          selectionStart !== value.length
+        ) {
+          //
+        } else {
+          const start = `${data.value.substring(0, selectionStart)}`
 
-        const nextNode = getTree(
-          `${start}:${data.value.substring(selectionEnd)}`
-        )
+          const nextNode = getTree(
+            `${start}:${data.value.substring(selectionEnd)}`
+          )
 
-        if (_isValidObjKeyType(getTree(start, false, true))) {
-          preventDefault = true
+          if (_isValidObjKeyType(getTree(start, false, true))) {
+            preventDefault = true
 
-          nextRoot = _updateNodeAt(root, path, nextNode)
-          nextPath = [...path, 1]
-          nextSelectionStart = 0
-          nextSelectionEnd = 0
+            nextRoot = _updateNodeAt(root, path, nextNode)
+            nextPath = [...path, 1]
+            nextSelectionStart = 0
+            nextSelectionEnd = 0
+          }
         }
+      } else if (
+        parent &&
+        (parent.type === TreeNodeType.ObjectLiteral ||
+          parent.type === TreeNodeType.ArrayLiteral)
+      ) {
+        const parentPath = getParentPath(path)
+
+        preventDefault = true
+        nextPath = [...parentPath, 0, 1]
+        nextRoot = _updateNodeAt(root, path, getTree(':'))
+        nextSelectionStart = 0
+        nextSelectionEnd = 0
       }
     }
   } else if (key === '[' || key === '{') {
