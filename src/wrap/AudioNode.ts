@@ -7,8 +7,8 @@ export function wrapAudioNode(audioNode: AudioNode, system: System): AN {
   return new (class Node extends $ implements AN {
     __: string[] = ['AN']
 
-    getContext(): BaseAudioContext {
-      return audioNode.context
+    getContext(): AudioContext {
+      return audioNode.context as AudioContext
     }
 
     connect(targetAudioNode: AudioNode): void {
@@ -25,8 +25,8 @@ export function wrapAudioNodeClass(audioNode: AudioNode, system: System): any {
   return class Node extends $ implements AN {
     __: string[] = ['AN']
 
-    getContext(): BaseAudioContext {
-      return audioNode.context
+    getContext(): AudioContext {
+      return audioNode.context as AudioContext
     }
 
     connect(targetAudioNode: AudioNode): void {

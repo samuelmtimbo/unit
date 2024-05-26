@@ -3,6 +3,7 @@ import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { CS } from '../../../../../types/interface/CS'
+import { $MS } from '../../../../../types/interface/async/$MS'
 
 export interface Props {
   className?: string
@@ -57,11 +58,13 @@ export default class AudioComp
         this.$element.src = src
       }
     },
-    stream: (stream: MediaStream | undefined): void => {
+    stream: (stream: $MS | undefined): void => {
       if (stream === undefined) {
         this.$element.srcObject = null
       } else {
-        this.$element.srcObject = stream
+        stream.$get({}, (_stream: MediaStream) => {
+          this.$element.srcObject = _stream
+        })
       }
     },
     controls: (controls: boolean | undefined): void => {
