@@ -107,7 +107,8 @@
             "y": 45
           }
         }
-      }
+      },
+      "icon": "circle-play"
     },
     "answer": {
       "plug": {
@@ -240,7 +241,8 @@
               "x": 97,
               "y": 11
             }
-          }
+          },
+          "icon": "circle-play"
         },
         "answer": {
           "metadata": {

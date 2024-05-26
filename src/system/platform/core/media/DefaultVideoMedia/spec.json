@@ -19,7 +19,8 @@
         }
       },
       "ref": true,
-      "type": "`MS`"
+      "type": "`MS`",
+      "icon": "circle-play"
     }
   },
   "units": {
@@ -31,7 +32,8 @@
         }
       },
       "output": {
-        "stream": {}
+        "stream": {},
+        "icon": "circle-play"
       },
       "metadata": {
         "position": {

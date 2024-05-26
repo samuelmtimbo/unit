@@ -18,7 +18,8 @@
   "outputs": {
     "stream": {
       "type": "`MS`",
-      "ref": true
+      "ref": true,
+      "icon": "circle-play"
     }
   },
   "metadata": {

@@ -24,7 +24,8 @@
         },
         "style": {},
         "stream": {
-          "ignored": false
+          "ignored": false,
+          "icon": "circle-play"
         },
         "controls": {
           "ignored": false
