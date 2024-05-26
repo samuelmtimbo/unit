@@ -25965,6 +25965,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     i = 0
 
+    const frame = this._get_sub_component_frame(sub_component_id)
+
     this._abort_sub_component_leave_base_animation[sub_component_id] =
       this._animate_sub_component_base(
         sub_component_id,
@@ -25989,8 +25991,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           i = (i + 1) % base.length
 
           return {
-            x: -this.$context.$x + leaf_trait.x,
-            y: -this.$context.$y + leaf_trait.y,
+            x:
+              -this.$context.$x -
+              frame.$$context.$x * (this._zoom.z - 1) +
+              leaf_trait.x * this._zoom.z,
+            y:
+              -this.$context.$y -
+              frame.$$context.$y * (this._zoom.z - 1) +
+              leaf_trait.y * this._zoom.z,
             width: leaf_trait.width,
             height: leaf_trait.height,
             sx: leaf_trait.sx,
@@ -30694,8 +30702,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const leaf_trait = parent_base_trait[i]
 
           const _leaf_trait: LayoutNode = {
-            x: (-this.$context.$x + leaf_trait.x) / this.$context.$sx,
-            y: (-this.$context.$y + leaf_trait.y) / this.$context.$sy,
+            x:
+              -this.$context.$x -
+              frame.$$context.$x * (this._zoom.z - 1) +
+              (leaf_trait.x * this._zoom.z) / this.$context.$sx,
+            y:
+              -this.$context.$y -
+              frame.$$context.$y * (this._zoom.z - 1) +
+              (leaf_trait.y * this._zoom.z) / this.$context.$sy,
             width: leaf_trait.width / this.$context.$sx,
             height: leaf_trait.height / this.$context.$sy,
             sx: leaf_trait.sx,
@@ -35489,6 +35503,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._refresh_datum_visible(datum_node_id)
       }
     }
+
     if (datum_node_id) {
       if (input) {
         this._inc_merge_input_active(merge_node_id)
