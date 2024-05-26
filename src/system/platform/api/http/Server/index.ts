@@ -32,6 +32,14 @@ export default class Server extends Semifunctional<I, O> {
       system,
       ID_SERVER
     )
+
+    this.addListener('destroy', () => {
+      if (this._unlisten) {
+        this._unlisten()
+
+        this._unlisten = undefined
+      }
+    })
   }
 
   async f({ port }: I, done: Done<O>): Promise<void> {
@@ -71,6 +79,8 @@ export default class Server extends Semifunctional<I, O> {
         {
           if (this._unlisten) {
             this._unlisten()
+
+            this._unlisten = undefined
 
             this._done()
           }
