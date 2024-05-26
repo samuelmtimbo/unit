@@ -58102,6 +58102,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const { graph: pod, animate = animated, component } = this.$props
 
+      if (this._prevent_next_reset) {
+        this._prevent_next_reset = false
+
+        return
+      }
+
       if (this._is_fullwindow) {
         this._leave_all_fullwindow_sub_component(false)
       }
