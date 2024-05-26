@@ -51669,6 +51669,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _validate_bundle_spec = (data: any): boolean => {
+    if (typeof data !== 'object' || data === null) {
+      return false
+    }
+
     return validateBundleSpec(data)
   }
 
