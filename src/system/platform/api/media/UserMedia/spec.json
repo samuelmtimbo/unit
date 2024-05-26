@@ -8,7 +8,8 @@
   "outputs": {
     "stream": {
       "type": "`MS`",
-      "ref": true
+      "ref": true,
+      "icon": "circle-play"
     }
   },
   "id": "a6e30b43-9ab4-4206-bfba-3f2129faac30",
