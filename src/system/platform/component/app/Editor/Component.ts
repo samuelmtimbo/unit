@@ -3447,15 +3447,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_drop = async (event, _event) => {
     _event.preventDefault()
 
-    const { clientX, clientY } = event
+    const { clientX, clientY, screenX, screenY } = event
 
     const { dataTransfer } = _event
+
+    const position = this._screen_to_world(clientX, clientY)
 
     const pasteAsString = async (item: DataTransferItem) => {
       return new Promise((resolve) => {
         item.getAsString((text) => {
-          const position = this._screen_to_world(clientX, clientY)
-
           this._paste_text(text, position)
 
           resolve(text)
@@ -3479,7 +3479,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
               if (entry) {
                 if (entry.kind === 'directory') {
-                  this._paste_folder(entry as FileSystemDirectoryHandle)
+                  this._drop_folder(entry as FileSystemDirectoryHandle, '/', { x: screenX, y: screenY })
 
                   continue
                 }
@@ -3509,15 +3509,79 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (let i = 0; i < files.length; i++) {
           const file = items[i].getAsFile()
 
-          this._paste_file(file)
+          this._paste_file(file, position)
         }
       }
     }
   }
 
+<<<<<<< Updated upstream
+=======
+  private _paste_data_transfer_item_as_string = async (
+    item: DataTransferItem,
+    position: Position
+  ) => {
+    return new Promise((resolve) => {
+      item.getAsString((text) => {
+        this._paste_text(text, position)
+
+        resolve(text)
+      })
+    })
+  }
+
+  private _paste_data_transfer_item = async (
+    item: DataTransferItem,
+    position: Position
+  ) => {
+    if (item.kind === 'file') {
+      const file = item.getAsFile() as File
+
+      // @ts-ignore
+      if (item.getAsFileSystemHandle) {
+        const entry =
+          // @ts-ignore
+          (await item.getAsFileSystemHandle()) as FileSystemHandle
+
+        if (entry) {
+          if (entry.kind === 'directory') {
+            this._drop_folder(entry as FileSystemDirectoryHandle, '/', position)
+
+            return
+          }
+        }
+      }
+
+      this._paste_file(file, position)
+    } else if (item.kind === 'string') {
+      if (item.type === 'text/plain') {
+        await this._paste_data_transfer_item_as_string(item, position)
+      } else if (item.type === 'text/html') {
+        //
+      } else if (item.type === 'text/uri-list') {
+        await this._paste_data_transfer_item_as_string(item, position)
+      }
+    } else if (item.kind === 'text/uri-list') {
+      //
+    } else if (item.kind === 'text/html') {
+      //
+    }
+  }
+
+>>>>>>> Stashed changes
+  private _drop_folder = async (
+    dirHandle: FileSystemDirectoryHandle,
+    folderName: string = '/',
+    screenPosition: Position
+  ) => {
+    this._animate_pulse(screenPosition.x, screenPosition.y, 'out')
+
+    this._paste_folder(dirHandle, folderName)
+  }
+
   private _paste_folder = async (
     dirHandle: FileSystemDirectoryHandle,
-    folderName: string = '/'
+    folderName: string = '/',
   ) => {
     const { syncFile } = this.$props
 
@@ -32698,7 +32762,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._is_node_mode_long_press_able(node_id)) {
-      this._animate_long_press(screenX, screenY, 'out')
+      this._animate_pulse(screenX, screenY, 'out')
     }
 
     if (this._tree_layout) {
@@ -33003,7 +33067,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (this._is_unit_base(unit_id)) {
           //
         } else {
-          this._animate_long_press(screenX, screenY, 'out')
+          this._animate_pulse(screenX, screenY, 'out')
 
           this._cancel_long_click = true
           this._cancel_long_press = true
@@ -34651,19 +34715,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { screenX, screenY } = event
 
     if (this._tree_layout) {
-      this._animate_long_press(screenX, screenY, 'out')
+      this._animate_pulse(screenX, screenY, 'out')
 
       this._on_node_long_press(node_id, event)
     } else {
       if (this._mode === 'multiselect' || this._mode === 'info') {
         this._cancel_node_click.add(node_id)
 
-        this._animate_long_press(screenX, screenY, 'out')
+        this._animate_pulse(screenX, screenY, 'out')
 
         this._on_node_long_press(node_id, event)
       } else {
         if (this._is_unit_node_id(node_id)) {
-          this._animate_long_press(screenX, screenY, 'in')
+          this._animate_pulse(screenX, screenY, 'in')
 
           this._start_gesture(event)
         } else if (this._is_pin_node_id(node_id)) {
@@ -50992,7 +51056,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._long_press_background_pointer.add(pointerId)
     this._long_press_background_count++
 
-    this._animate_long_press(screenX, screenY, 'in')
+    this._animate_pulse(screenX, screenY, 'in')
 
     if (this._tree_layout) {
       this._on_layout_background_long_press(event)
@@ -51001,12 +51065,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _animate_long_press = (
+  private _animate_pulse = (
     screenX: number,
     screenY: number,
     direction: 'in' | 'out'
   ): void => {
-    // console.log('Graph', '_animate_long_press', screenX, screenY, direction)
+    // console.log('Graph', '_animate_pulse', screenX, screenY, direction)
 
     const { showLongPress } = this.$system
 
@@ -54766,7 +54830,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (should_start_gesture) {
-      this._animate_long_press(screenX, screenY, 'in')
+      this._animate_pulse(screenX, screenY, 'in')
 
       if (!this._capturing_gesture) {
         this._start_gesture(event)
