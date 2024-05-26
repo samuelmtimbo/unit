@@ -37,7 +37,7 @@ export default class GetDisplayMedia extends Functional<I, O> {
     })
 
     this.addListener('take_err', () => {
-      this._input.opt.pull()
+      // this._input.opt.pull()
     })
   }
 
