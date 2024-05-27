@@ -962,6 +962,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           registry: this._registry,
           typeCache: this._type_cache,
           syncFile: this._sync_file,
+          startSync: this._start_sync,
+          stopSync: this._stop_sync,
           hasSpec: this._has_spec,
           emptySpec: this._empty_spec,
           getSpec: this._get_spec,
@@ -1160,6 +1162,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _file_handles: Dict<FileSystemFileHandle> = {}
   private _spec_id_to_file_name: Dict<string> = {}
   private _file_sync_count: number = 0
+  private _file_sync_disabled: boolean = false
 
   private _sync_file = (
     fileName: string,
@@ -1180,6 +1183,30 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     for (const spec_id in bundle.specs) {
       this._spec_id_to_file_name[spec_id] = fileName
+    }
+  }
+
+  private _start_sync = () => {
+    if (!this._file_sync_disabled) {
+      return
+    }
+
+    this._file_sync_disabled = false
+
+    this._listen_registry()
+  }
+
+  private _stop_sync = () => {
+    if (this._file_sync_disabled) {
+      return
+    }
+
+    this._file_sync_disabled = true
+
+    if (this._unlisten_registry) {
+      this._unlisten_registry()
+
+      this._unlisten_registry = undefined
     }
   }
 
@@ -1572,6 +1599,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         newSpecId: this._new_spec_id,
         dispatchEvent: this._dispatch_event,
         syncFile: this._sync_file,
+        stopSync: this._stop_sync,
+        startSync: this._start_sync,
         typeCache: this._type_cache,
       },
       this.$system
@@ -1790,6 +1819,8 @@ export interface _Props extends R {
     fileHandle: FileSystemFileHandle,
     bundle: BundleSpec
   ) => void
+  stopSync: () => void
+  startSync: () => void
 }
 
 export interface DefaultProps {
@@ -4459,6 +4490,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_register_spec', spec_id, deep)
 
+    const { stopSync, startSync } = this.$props
+
+    stopSync()
+
+    this.__register_spec(spec_id, deep, branch)
+
+    startSync()
+  }
+
+  private __register_spec = (
+    spec_id: string,
+    deep: boolean = true,
+    branch: string[] = []
+  ) => {
     const { parent, getSpec, registerUnit } = this.$props
 
     if (branch.includes(spec_id)) {
@@ -4480,7 +4525,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (const unitId in units) {
           const unit = units[unitId]
 
-          this._register_spec(unit.id, deep, [...branch, spec_id])
+          this.__register_spec(unit.id, deep, [...branch, spec_id])
         }
       }
     }
@@ -4694,7 +4739,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const subgraph = this._subgraph_cache[unit_id]
 
-    const unit_graph_spec = subgraph.get_spec()
+    const unit_graph_spec = subgraph.get_target_spec()
 
     // const unit_graph_spec = this._get_unit_spec(unit_id) as GraphSpec
 
@@ -5836,13 +5881,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return pin_position
   }
 
-  public get_spec = (): GraphSpec => {
+  public get_target_spec = (): GraphSpec => {
     if (this._subgraph_graph) {
       // subgraph is in control
-      return this._subgraph_graph.get_spec()
+      return this._subgraph_graph.get_target_spec()
     } else {
       return this._spec
     }
+  }
+
+  public get_spec = (): GraphSpec => {
+    return this._spec
   }
 
   public get_max_component_graph_size_size(): Size {
@@ -6276,18 +6325,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._spec_update_metadata_complexity()
-  }
-
-  private _mirror_unit = (unitId: string) => {
-    // console.log('Graph', '_mirror_unit', unitId)
-
-    const { setSpec } = this.$props
-
-    const spec = this._get_unit_spec(unitId) as GraphSpec
-
-    const mirrored_spec = clone(spec)
-
-    setSpec(spec.id, mirrored_spec)
   }
 
   private _mirror_spec = (specId: string) => {
@@ -28605,6 +28642,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       newSpecId,
       dispatchEvent,
       syncFile,
+      startSync,
+      stopSync,
       typeCache,
     } = this.$props
 
@@ -28654,6 +28693,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           newSpecId,
           dispatchEvent,
           syncFile,
+          stopSync,
+          startSync,
         },
         this.$system
       )
@@ -30001,6 +30042,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       newSpecId,
       dispatchEvent,
       syncFile,
+      stopSync,
+      startSync,
     } = this.$props
 
     const { datumId } = segmentDatumNodeId(datum_node_id)
@@ -30067,6 +30110,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           newSpecId,
           dispatchEvent,
           syncFile,
+          startSync,
+          stopSync,
         },
         this.$system
       )
@@ -51713,8 +51758,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (!isEmptyObject(units)) {
-      this._set_units_position(units)
-
       graph.units = units
     }
 
@@ -54361,10 +54404,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_on_simulation_end')
 
     this._simulation_end = true
-
-    const { units = {} } = this._spec
-
-    this._set_units_position(units)
   }
 
   private _get_layout_node_anchor_id = (node_id: string): string => {
