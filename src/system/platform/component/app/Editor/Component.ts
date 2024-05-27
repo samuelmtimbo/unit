@@ -507,6 +507,7 @@ import { stringify } from '../../../../../spec/stringify'
 import { stringifyDataValue } from '../../../../../spec/stringifyDataValue'
 import { stringifyBundleSpec } from '../../../../../spec/stringifySpec'
 import {
+  TypeTreeInterfaceCache,
   TypeTreeMap,
   _getGraphTypeMap,
   _getSpecTypeInterfaceById,
@@ -1781,7 +1782,7 @@ export interface _Props extends R {
   fork?: boolean
   specs?: Specs
   registry?: Registry
-  typeCache?: TypeTreeMap
+  typeCache?: TypeTreeInterfaceCache
   config?: Config
   dispatchEvent: (type: string, detail: any, bubbles: boolean) => void
   syncFile: (
@@ -4448,15 +4449,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return
     }
 
-    this.__register_unit(spec_id, deep, branch)
+    this._register_spec(spec_id, deep, branch)
   }
 
-  private __register_unit = (
+  private _register_spec = (
     spec_id: string,
     deep: boolean = true,
     branch: string[] = []
   ) => {
-    // console.log('Graph', '_register_unit', spec_id, deep)
+    // console.log('Graph', '_register_spec', spec_id, deep)
 
     const { parent, getSpec, registerUnit } = this.$props
 
@@ -4465,6 +4466,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     registerUnit(spec_id)
+
+    if (this._registry.specsCount[spec_id] === 1) {
+      this._mirror_spec(spec_id)
+    }
 
     const spec = getSpec(spec_id)
 
@@ -4475,7 +4480,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (const unitId in units) {
           const unit = units[unitId]
 
-          this.__register_unit(unit.id, deep, [...branch, spec_id])
+          this._register_spec(unit.id, deep, [...branch, spec_id])
         }
       }
     }
@@ -4497,6 +4502,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (branch.includes(spec_id)) {
       return
     }
+
+    this._unregister_spec(spec_id, deep, branch)
+  }
+
+  private _unregister_spec = (
+    spec_id: string,
+    deep: boolean,
+    branch: string[]
+  ) => {
+    const { getSpec, unregisterUnit } = this.$props
 
     const spec = getSpec(spec_id)
 
@@ -5635,8 +5650,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._sim_add_unit_core(unit_id, unit, p)
 
-      this._mirror_unit(unit_id)
-
       this._register_unit(unit.id, true)
 
       if (this._is_unit_component(unit_id)) {
@@ -6258,8 +6271,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     addUnit({ unitId, unit: clone(unit) }, this._spec)
 
-    this._mirror_unit(unitId)
-
     if (register) {
       this._register_unit(unit.id, deep)
     }
@@ -6273,6 +6284,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { setSpec } = this.$props
 
     const spec = this._get_unit_spec(unitId) as GraphSpec
+
+    const mirrored_spec = clone(spec)
+
+    setSpec(spec.id, mirrored_spec)
+  }
+
+  private _mirror_spec = (specId: string) => {
+    // console.log('Graph', '_mirror_spec', specId)
+
+    const { setSpec, getSpec } = this.$props
+
+    const spec = getSpec(specId) as GraphSpec
 
     const mirrored_spec = clone(spec)
 
@@ -10383,8 +10406,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._ensure_graph_type_map()
-
-    // const graph_type_map = _getGraphTypeMap(this._spec, specs, typeCache)
 
     let graph_pin_type = deepGetOrDefault(
       this._graph_type_map,
@@ -16143,7 +16164,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_state_remove_search_unit')
 
     if (this._search_unit_id) {
-      this._state_remove_unit(this._search_unit_id, true)
+      this._state_remove_unit(this._search_unit_id, false)
 
       this._mem_remove_search_unit_id()
     }
@@ -16210,7 +16231,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       output,
     }
 
-    this._spec_add_unit(unit_id, unit_spec)
+    this._spec_add_unit(unit_id, unit_spec, false)
 
     let parent_id: string | null = null
 
@@ -16923,6 +16944,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           const bulk_action = makeBulkEditAction(actions)
 
+          this._register_spec(this._search_unit_spec_id, true)
+
           this._dispatch_action(bulk_action)
 
           this._pod.$bulkEdit({ actions, fork })
@@ -17272,7 +17295,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._mode === 'none' ||
           this._mode === 'remove'
         ) {
-          this._state_remove_unit(search_unit_id, true)
+          this._state_remove_unit(search_unit_id, false)
         } else if (this._mode === 'change') {
           this._state_swap_search_unit(
             search_start_spec_id,
@@ -29995,11 +30018,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this.$system.classes
       )
 
-      // injectSpecs(bundle.specs)
-
       const spec = getSpec(bundle.unit.id)
 
-      this.__register_unit(bundle.unit.id)
+      this._register_spec(bundle.unit.id)
 
       if (isBaseSpec(spec)) {
         return
@@ -56111,8 +56132,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (subgraph._animating_unit_explosion[unitId]) {
             await subgraph._animating_unit_explosion[unitId]
           }
-
-          destroy && unregisterUnit(unit.id)
         }
       })()
     }
