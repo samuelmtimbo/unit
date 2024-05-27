@@ -207,6 +207,8 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
           l = ay - by - bh
         } else if (by <= ay) {
           l = by + bh - ay
+
+          s = 3
         } else {
           s = -1
         }
