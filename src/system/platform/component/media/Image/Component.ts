@@ -45,7 +45,7 @@ export default class Image_ extends Element<HTMLImageElement, Props> {
     } else if (prop === 'style') {
       applyStyle(this._img_el, { ...DEFAULT_STYLE, ...current })
     } else if (prop === 'src') {
-      this._img_el.src = current
+      this._img_el.src = current ?? ''
     }
   }
 }
