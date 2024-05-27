@@ -52,7 +52,7 @@ import { $Component } from '../../../../../types/interface/async/$Component'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { AsyncGraph } from '../../../../../types/interface/async/AsyncGraph'
 import { weakMerge } from '../../../../../weakMerge'
-import { ID_EDITOR, ID_IMAGE } from '../../../../_ids'
+import { ID_AUDIO, ID_EDITOR, ID_IMAGE, ID_VIDEO } from '../../../../_ids'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import Div from '../../Div/Component'
@@ -655,7 +655,6 @@ import { Style } from '../../../Style'
 import { default as Icon, default as IconButton } from '../../Icon/Component'
 import Zoom_ from '../../Zoom/Component'
 import CanvasComp from '../../canvas/Canvas/Component'
-import Image_ from '../../media/Image/Component'
 import SVGDefs from '../../svg/Defs/Component'
 import SVGG from '../../svg/Group/Component'
 import SVGMarker from '../../svg/Marker/Component'
@@ -1090,7 +1089,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
                 spec_ = bundle.spec
               }
 
-              this._editor.set_spec_node_positions_rec(this._editor, this._editor._spec)
+              this._editor.set_spec_node_positions_rec(
+                this._editor,
+                this._editor._spec
+              )
 
               const bundle_ = bundleSpec(spec_, specs)
 
@@ -3455,7 +3457,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _last_open_filename: string
 
-  private _on_drop = async (event, _event) => {
+  private _on_drop = async (event, _event: DragEvent) => {
     _event.preventDefault()
 
     const { clientX, clientY, screenX, screenY } = event
@@ -3464,16 +3466,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const position = this._screen_to_world(clientX, clientY)
 
-    const pasteAsString = async (item: DataTransferItem) => {
-      return new Promise((resolve) => {
-        item.getAsString((text) => {
-          this._paste_text(text, position)
-
-          resolve(text)
-        })
-      })
-    }
-
     if (dataTransfer) {
       const { items, files } = dataTransfer
 
@@ -3481,40 +3473,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (let i = 0; i < items.length; i++) {
           const item = items[i]
 
-          if (item.kind === 'file') {
-            const file = item.getAsFile() as File
-
-            if (item.getAsFileSystemHandle) {
-              const entry =
-                (await item.getAsFileSystemHandle()) as FileSystemHandle
-
-              if (entry) {
-                if (entry.kind === 'directory') {
-                  this._drop_folder(entry as FileSystemDirectoryHandle, '/', { x: screenX, y: screenY })
-
-                  continue
-                }
-              }
-            }
-
-            const world_position = this._screen_to_world(clientX, clientY)
-
-            this._paste_file(file, world_position)
-          } else if (item.kind === 'string') {
-            if (item.type === 'text/plain') {
-              await pasteAsString(item)
-
-              break
-            } else if (item.type === 'text/html') {
-              // await pasteAsString(item)
-            } else if (item.type === 'text/uri-list') {
-              await pasteAsString(item)
-            }
-          } else if (item.kind === 'text/uri-list') {
-            // TODO
-          } else if (item.kind === 'text/html') {
-            // TODO
-          }
+          this._paste_data_transfer_item(item, position)
         }
       } else {
         for (let i = 0; i < files.length; i++) {
@@ -3526,8 +3485,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-<<<<<<< Updated upstream
-=======
   private _paste_data_transfer_item_as_string = async (
     item: DataTransferItem,
     position: Position
@@ -3579,7 +3536,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
->>>>>>> Stashed changes
   private _drop_folder = async (
     dirHandle: FileSystemDirectoryHandle,
     folderName: string = '/',
@@ -3592,7 +3548,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _paste_folder = async (
     dirHandle: FileSystemDirectoryHandle,
-    folderName: string = '/',
+    folderName: string = '/'
   ) => {
     const { syncFile } = this.$props
 
@@ -3653,87 +3609,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     position?: Position
   ): Promise<void> => {
     if (file.type.startsWith('image/')) {
-      const reader = new FileReader()
-
-      reader.onload = async (e) => {
-        const image_data_url = e.target.result.toString()
-
-        const image = this.$system.api.document.createElement('img')
-
-        image.src = image_data_url
-
-        image.onload = () => {
-          const new_unit_id = this._new_unit_id(ID_IMAGE)
-
-          const ratio = image.naturalWidth / image.naturalHeight
-
-          let width = image.naturalWidth
-          let height = image.naturalHeight
-
-          if (width > height) {
-            width = clamp(width, MIN_WIDTH, 420)
-            height = width / ratio
-          } else {
-            height = clamp(height, MIN_HEIGHT, 420)
-            width = height * ratio
-          }
-
-          const bundle: UnitBundleSpec = {
-            unit: {
-              id: ID_IMAGE,
-              input: {
-                src: {
-                  data: `"${image_data_url}"`,
-                  constant: true,
-                },
-              },
-              metadata: {
-                component: {
-                  width,
-                  height,
-                },
-              },
-            },
-            specs: {},
-          }
-
-          const center_of_screen =
-            position ?? this._jiggle_world_screen_center()
-
-          this._add_unit(
-            new_unit_id,
-            bundle,
-            position,
-            {},
-            center_of_screen,
-            null
-          )
-
-          this._sim_add_sub_component(
-            new_unit_id,
-            {},
-            undefined,
-            undefined,
-            image
-          )
-
-          const sub_component = this._get_sub_component(new_unit_id) as Image_
-
-          sub_component.$preventLoad = true
-
-          sub_component.$props.src = image_data_url
-
-          this._connect_sub_component(new_unit_id)
-
-          sub_component.$preventLoad = false
-
-          image.onload = null
-        }
-      }
-
-      reader.readAsDataURL(file)
-
-      return
+      return this._paste_image_file(file, position)
+    } else if (file.type.startsWith('audio/')) {
+      return this._paste_audio_file(file, position)
+    } else if (file.type.startsWith('video/')) {
+      return this._paste_video_file(file, position)
     } else if (
       file.type.startsWith('"text/plain"') ||
       file.type.startsWith('application/json')
@@ -3752,6 +3632,192 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _paste_image_file = async (
+    file: File | Blob,
+    position?: Position
+  ) => {
+    const reader = new FileReader()
+
+    reader.onload = async (e) => {
+      const image_data_url = e.target.result.toString()
+
+      const image = this.$system.api.document.createElement('img')
+
+      image.src = image_data_url
+
+      image.onload = () => {
+        const new_unit_id = this._new_unit_id(ID_IMAGE)
+
+        const ratio = image.naturalWidth / image.naturalHeight
+
+        let width = image.naturalWidth
+        let height = image.naturalHeight
+
+        if (width > height) {
+          width = clamp(width, MIN_WIDTH, 420)
+          height = width / ratio
+        } else {
+          height = clamp(height, MIN_HEIGHT, 420)
+          width = height * ratio
+        }
+
+        const bundle: UnitBundleSpec = {
+          unit: {
+            id: ID_IMAGE,
+            input: {
+              src: {
+                data: `"${image_data_url}"`,
+                constant: true,
+              },
+            },
+            metadata: {
+              component: {
+                width,
+                height,
+              },
+            },
+          },
+          specs: {},
+        }
+
+        const center_of_screen = position ?? this._jiggle_world_screen_center()
+
+        this._add_unit(
+          new_unit_id,
+          bundle,
+          position,
+          {},
+          center_of_screen,
+          null
+        )
+
+        this._sim_add_sub_component(
+          new_unit_id,
+          {},
+          undefined,
+          undefined,
+          image
+        )
+
+        this._connect_sub_component(new_unit_id)
+
+        image.onload = null
+      }
+    }
+
+    reader.readAsDataURL(file)
+
+    return
+  }
+
+  private _paste_audio_file = async (file: File | Blob, position: Position) => {
+    return this._paste_media_file(file, ID_AUDIO, position)
+  }
+
+  private _paste_video_file = async (file: File | Blob, position: Position) => {
+    const {
+      api: {
+        url: { createObjectURL },
+      },
+    } = this.$system
+
+    const url = await createObjectURL(file)
+
+    const element = this.$system.api.document.createElement('video')
+
+    element.oncanplaythrough = () => {
+      const new_unit_id = this._new_unit_id(ID_IMAGE)
+
+      let width = element.videoWidth
+      let height = element.videoHeight
+
+      const ratio = width / height
+
+      if (width > height) {
+        width = clamp(width, MIN_WIDTH, 420)
+        height = width / ratio
+      } else {
+        height = clamp(height, MIN_HEIGHT, 420)
+        width = height * ratio
+      }
+
+      const bundle: UnitBundleSpec = {
+        unit: {
+          id: ID_VIDEO,
+          input: {
+            src: {
+              data: `"${url}"`,
+              constant: true,
+            },
+          },
+          metadata: {
+            component: {
+              width,
+              height,
+            },
+          },
+        },
+        specs: {},
+      }
+
+      const center_of_screen = position ?? this._jiggle_world_screen_center()
+
+      this._add_unit(new_unit_id, bundle, position, {}, center_of_screen, null)
+
+      this._sim_add_sub_component(
+        new_unit_id,
+        {},
+        undefined,
+        undefined,
+        element
+      )
+
+      this._connect_sub_component(new_unit_id)
+
+      element.oncanplaythrough = null
+    }
+
+    element.src = url
+  }
+
+  private _paste_media_file = async (
+    file: File | Blob,
+    id: string,
+    position?: Position
+  ) => {
+    const {
+      api: {
+        url: { createObjectURL },
+      },
+    } = this.$system
+
+    const url = await createObjectURL(file)
+
+    const new_unit_id = this._new_unit_id(id)
+
+    const bundle: UnitBundleSpec = {
+      unit: {
+        id,
+        input: {
+          src: {
+            data: `"${url}"`,
+            constant: true,
+          },
+        },
+        metadata: {},
+      },
+      specs: {},
+    }
+
+    const center_of_screen = position ?? this._jiggle_world_screen_center()
+
+    this._add_unit(new_unit_id, bundle, position, {}, center_of_screen, null)
+
+    this._sim_add_sub_component(new_unit_id, {}, undefined, undefined)
+
+    this._connect_sub_component(new_unit_id)
+  }
+
   private _paste_bundle_file = async (
     file: File,
     position?: Position
@@ -3760,7 +3826,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const bundle = await this._read_bundle_file(file)
 
-    this.paste_bundle(bundle, position)
+    if (bundle) {
+      this.paste_bundle(bundle, position)
+    } else {
+      throw new Error('invalid bundle file')
+    }
   }
 
   private _read_bundle_file = async (file: File): Promise<BundleSpec> => {
