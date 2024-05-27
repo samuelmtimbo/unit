@@ -919,48 +919,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       private: true,
     })
 
-    this._unlisten_registry = this._registry.specs_.subscribe(
-      [],
-      '*',
-      async (type, path, key, data) => {
-        const { specs } = this._registry
-
-        const specId = key
-        const spec = data
-
-        if (path.length === 0) {
-          if (type === 'set') {
-            const fileName = this._spec_id_to_file_name[specId]
-
-            if (fileName) {
-              const fileHandle = this._file_handles[fileName]
-              const bundle = this._file_to_bundle[fileName]
-
-              let spec_: GraphSpec
-
-              if (bundle.spec.id === specId) {
-                spec_ = spec
-              } else {
-                spec_ = bundle.spec
-              }
-
-              const bundle_ = bundleSpec(spec_, specs)
-
-              this._file_to_bundle[fileName] = bundle_
-
-              for (const spec_id in bundle_.specs) {
-                this._spec_id_to_file_name[spec_id] = fileName
-              }
-
-              await saveToUnitFile(fileHandle, bundle_)
-            }
-          } else if (type === 'delete') {
-            //
-          }
-        }
-      }
-    )
-
     const fallback_graph = new Graph(spec, {}, $system, spec.id)
     this._fallback_graph = AsyncGraph(fallback_graph)
 
@@ -1106,6 +1064,52 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.dispatchEvent(type, detail, bubbles)
   }
 
+  private _listen_registry = () => {
+    this._unlisten_registry = this._registry.specs_.subscribe(
+      [],
+      '*',
+      async (type, path, key, data) => {
+        const { specs } = this._registry
+
+        const specId = key
+        const spec = data
+
+        if (path.length === 0) {
+          if (type === 'set') {
+            const fileName = this._spec_id_to_file_name[specId]
+
+            if (fileName) {
+              const fileHandle = this._file_handles[fileName]
+              const bundle = this._file_to_bundle[fileName]
+
+              let spec_: GraphSpec
+
+              if (bundle.spec.id === specId) {
+                spec_ = spec
+              } else {
+                spec_ = bundle.spec
+              }
+
+              this._editor.set_spec_node_positions_rec(this._editor, this._editor._spec)
+
+              const bundle_ = bundleSpec(spec_, specs)
+
+              this._file_to_bundle[fileName] = bundle_
+
+              for (const spec_id in bundle_.specs) {
+                this._spec_id_to_file_name[spec_id] = fileName
+              }
+
+              await saveToUnitFile(fileHandle, bundle_)
+            }
+          } else if (type === 'delete') {
+            //
+          }
+        }
+      }
+    )
+  }
+
   onDestroy() {
     super.onDestroy()
 
@@ -1152,6 +1156,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _file_to_bundle: Dict<BundleSpec> = {}
   private _file_handles: Dict<FileSystemFileHandle> = {}
   private _spec_id_to_file_name: Dict<string> = {}
+  private _file_sync_count: number = 0
 
   private _sync_file = (
     fileName: string,
@@ -1159,6 +1164,12 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     bundle: BundleSpec
   ) => {
     // console.log('Editor', '_sync_file', fileName, fileHandle, bundle)
+
+    this._file_sync_count++
+
+    if (this._file_sync_count === 1) {
+      this._listen_registry()
+    }
 
     this._file_to_bundle[fileName] = bundle
     this._file_handles[fileName] = fileHandle
