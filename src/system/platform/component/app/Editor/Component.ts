@@ -1092,7 +1092,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
               this._editor.set_spec_node_positions_rec(
                 this._editor,
-                this._editor._spec
+                this._editor.get_spec()
               )
 
               const bundle_ = bundleSpec(spec_, specs)
@@ -51410,6 +51410,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     processSubGraph(editor, spec)
   }
 
+  public set_spec_node_positions_rec = (editor: Editor_, spec: GraphSpec) => {
+    this._set_spec_node_positions_rec(editor, spec)
+  }
+
   public save = async (force_dialog: boolean = false) => {
     const { specs } = this.$props
 
@@ -54471,7 +54475,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     spec.units = spec.units ?? {}
 
-    this._set_spec_nodes_position(spec)
     this._set_spec_data(spec)
 
     if (this._is_component()) {
