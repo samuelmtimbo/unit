@@ -1092,12 +1092,6 @@ function _getValueTree(
         type: TreeNodeType.KeyValue,
         children,
       }
-    } else {
-      return {
-        value,
-        type: TreeNodeType.Invalid,
-        children: [],
-      }
     }
   }
 
@@ -1422,12 +1416,12 @@ export function _filterEmptyNodes(tree: TreeNode): TreeNode {
   if (isCompositeType(tree.type)) {
     const children = tree.children.map(_filterEmptyNodes)
 
-    const filteredTree = getTree(
-      _stringify({
-        ...tree,
-        children: children.filter((c) => !!c.value),
-      })
-    )
+    const value = _stringify({
+      ...tree,
+      children: children.filter((c) => !!c.value),
+    })
+
+    const filteredTree = getTree(value, true)
 
     return filteredTree
   } else {
@@ -1436,7 +1430,7 @@ export function _filterEmptyNodes(tree: TreeNode): TreeNode {
 }
 
 export function filterEmptyNodes(value: string): TreeNode {
-  const tree = getTree(value)
+  const tree = getTree(value, true)
 
   return _filterEmptyNodes(tree)
 }
