@@ -51,8 +51,7 @@
           "unitId": "getclienty",
           "pinId": "clientY"
         }
-      },
-      "type": "number"
+      }
     },
     "x": {
       "plug": {
@@ -60,8 +59,7 @@
           "unitId": "getclientx",
           "pinId": "clientX"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {
