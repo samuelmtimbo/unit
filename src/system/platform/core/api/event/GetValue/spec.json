@@ -34,8 +34,7 @@
           "unitId": "get",
           "pinId": "value"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {

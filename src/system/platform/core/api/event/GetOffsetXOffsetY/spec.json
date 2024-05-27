@@ -51,8 +51,7 @@
           "unitId": "propclientcy",
           "pinId": "offsetY"
         }
-      },
-      "type": "number"
+      }
     },
     "offsetX": {
       "plug": {
@@ -60,8 +59,7 @@
           "unitId": "propoffsetx",
           "pinId": "offsetX"
         }
-      },
-      "type": "number"
+      }
     }
   },
   "metadata": {
