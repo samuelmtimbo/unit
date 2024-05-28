@@ -544,6 +544,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
                 this._refresh_last_list_item_border()
               } else {
                 this._insert_list_item(spec)
+
+                if (!this._list_hidden) {
+                  this._filter_list()
+                }
               }
             }
           } else if (type === 'delete') {

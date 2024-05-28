@@ -358,11 +358,11 @@ export const _keyUpdateTree = (
       }
     }
   } else if (key === 'ArrowLeft') {
-    if (selectionStart === 0) {
+    if (selectionStart === 0 && selectionStart === selectionEnd) {
       moveLeft()
     }
   } else if (key === 'ArrowRight') {
-    if (selectionStart === value.length) {
+    if (selectionStart === value.length && selectionStart === selectionEnd) {
       moveRight()
     }
   } else if (key === 'ArrowUp') {
