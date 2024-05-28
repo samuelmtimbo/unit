@@ -75,7 +75,8 @@
           "pinId": "a"
         }
       },
-      "type": "number"
+      "type": "number",
+      "functional": true
     },
     "b": {
       "plug": {
@@ -83,7 +84,8 @@
           "mergeId": "bjpzdvv"
         }
       },
-      "type": "number"
+      "type": "number",
+      "functional": true
     }
   },
   "outputs": {
