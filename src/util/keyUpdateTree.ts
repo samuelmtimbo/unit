@@ -227,6 +227,7 @@ export const _keyUpdateTree = (
         preventDefault = true
         nextRoot = _removeNodeAt(root, path)
         nextPath = parentPath
+        invert = lastIndex === 0
       }
 
       let nextFocusNode = _getNodeAtPath(nextRoot, nextPath)
