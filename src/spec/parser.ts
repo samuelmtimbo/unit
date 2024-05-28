@@ -1311,16 +1311,32 @@ export function _getValueType(specs: Specs, tree: TreeNode): TreeNode {
       }
     }
     case TreeNodeType.ArrayLiteral: {
-      const type =
+      const childrenTypes = tree.children.map((c) => _getValueType(specs, c))
+
+      const childrenTypeSet = new Set()
+
+      const childType =
         tree.children.length > 0
-          ? _getValueType(specs, tree.children[0]) // AD HOC should consider all children
+          ? getTree(
+              `(${childrenTypes
+                .map((c) => c.value)
+                .filter((value) => {
+                  if (childrenTypeSet.has(value)) {
+                    return false
+                  } else {
+                    childrenTypeSet.add(value)
+
+                    return true
+                  }
+                })
+                .join('|')})`
+            )
           : getTree('<T>')
 
-      // : getTree('any')
       return {
-        value: `${type.value}[]`,
+        value: `${childType.value}[]`,
         type: TreeNodeType.ArrayExpression,
-        children: [type],
+        children: [childType],
       }
     }
     case TreeNodeType.ObjectLiteral:

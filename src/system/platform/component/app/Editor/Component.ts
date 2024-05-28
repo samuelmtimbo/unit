@@ -10612,7 +10612,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           width: `${width}px`,
           height: `${height}px`,
-          overflow: 'overlay',
+          overflow: 'hidden',
           color: this._theme.type,
           pointerEvents: 'none',
         },

@@ -442,7 +442,6 @@ const _getValueType = (str: string) => getValueType(_specs, str)
 assert.equal(_getValueType('"foo"'), 'string')
 assert.equal(_getValueType("'foo'"), 'string')
 assert.equal(_getValueType('1'), 'number')
-// assert.equal(_getValueType(), 'any[]')
 assert.equal(_getValueType('[]'), '<T>[]')
 assert.equal(_getValueType('-2e-23'), 'number')
 assert.equal(_getValueType('/abc/'), 'regex')
@@ -450,6 +449,12 @@ assert.equal(_getValueType('true'), 'boolean')
 assert.equal(_getValueType('false'), 'boolean')
 assert.equal(_getValueType('{}'), '{}')
 assert.equal(_getValueType('{a:1,b:2}'), '{a:number,b:number}')
+assert.equal(_getValueType('["foo",1]'), '(string|number)[]')
+assert.equal(_getValueType('["foo",1,2,true]'), '(string|number|boolean)[]')
+assert.equal(
+  _getValueType('[{a:1,b:2},{a:1,c:3}]'),
+  '({a:number,b:number}|{a:number,c:number})[]'
+)
 assert.equal(
   _getValueType(
     `'{ "error": {  "errors": [   {    "domain": "global",    "reason": "required",    "message": "Login Required",    "locationType": "header",    "location": "Authorization"   }  ],  "code": 401,  "message": "Login Required" }}'`
