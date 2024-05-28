@@ -26237,8 +26237,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return !this._is_type_node_id(node_id)
   }
 
-  private _spec_remove_datum = (node_id: string): void => {
-    // TODO
+  private _spec_remove_datum = (datum_node_id: string): void => {
+    const { datumId } = segmentDatumNodeId(datum_node_id)
+
+    deepDelete(this._spec, ['metadata', 'position', 'data', datumId])
   }
 
   private _spec_remove_node = (node_id: string): void => {
@@ -36586,6 +36588,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._pod_remove_datum(datum_node_id, datum_pin_node_id, datum_plug_node_id)
     this._sim_remove_datum(datum_node_id)
+    this._spec_remove_datum(datum_node_id)
 
     if (datum_pin_node_id) {
       this._spec_remove_pin_data(datum_pin_node_id)
@@ -51414,6 +51417,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               round_node_position
             )
           }
+        } else {
+          deepSet(spec, ['metadata', 'position', 'data'], round_node_position)
         }
       }
     }
