@@ -477,9 +477,9 @@ export const _getGraphTypeMap = (
     forEachValueKey(unitTypeInterface.input, (type, inputId) => {
       register(type, 'input', inputId)
     })
-    forEachValueKey(unitTypeInterface.output, (type, outputId) =>
+    forEachValueKey(unitTypeInterface.output, (type, outputId) => {
       register(type, 'output', outputId)
-    )
+    })
 
     forEachValueKey(unitTypeInterface.input, (type, inputId) => {
       if (
