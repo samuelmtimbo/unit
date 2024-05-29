@@ -4532,7 +4532,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const spec = getSpec(spec_id)
 
-    if (!isBaseSpec(spec)) {
+    if (!isSystemSpec(spec)) {
       if (deep) {
         const { units = {} } = spec as GraphSpec
 
@@ -4570,11 +4570,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     deep: boolean,
     branch: string[]
   ) => {
+    // console.log('Editor', '_unregister_spec', spec_id, deep, branch)
+
     const { getSpec, unregisterUnit } = this.$props
 
     const spec = getSpec(spec_id)
 
-    if (!isBaseSpec(spec)) {
+    if (!isSystemSpec(spec)) {
       if (deep) {
         const { units = {} } = spec as GraphSpec
 
