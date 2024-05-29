@@ -458,7 +458,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
         this._set_selected_item_id(selected)
       }
     } else if (prop === 'filter') {
-      this._filter_list()
+      this._filter_list(true)
     } else if (prop === 'registry') {
       if (this._registry === current) {
         return
@@ -1264,7 +1264,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     // console.log('Search', 'setValue', value)
 
     this._setValue(value)
-    this._filter_list()
+    this._filter_list(true)
   }
 
   public _setValue = (value: string): void => {

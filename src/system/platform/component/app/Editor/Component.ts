@@ -17345,6 +17345,39 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return
     }
 
+    this._abort_search_unit()
+
+    this._set_crud_mode('none')
+
+    const search_start_unit_id = this._search_start_unit_id
+
+    if (this._search_filter !== this._search_filter_true) {
+      this._set_search_filter(this._search_filter_true)
+    }
+
+    this.focus()
+
+    this._refresh_node_color(search_start_unit_id)
+
+    this._enable_keyboard()
+    // this._enable_crud()
+
+    if (this._search_fallback_position) {
+      const { x, y } = this._search_fallback_position
+
+      this._zoom_center_at(x, y)
+    }
+
+    this._refresh_search_list_height_offset()
+
+    if (this._tree_layout) {
+      this._refresh_layout_node_target_position(null) // RETURN
+    }
+  }
+
+  private _abort_search_unit = () => {
+    const { specs } = this.$props
+
     const search_adding_unit = this._search_adding_unit
     const search_unit_id = this._search_unit_id
     const search_start_unit_id = this._search_start_unit_id
@@ -17355,8 +17388,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const search_unit_spec_id_changed = this._search_unit_spec_id_changed
 
     if (!search_adding_unit) {
-      let should_refresh_search_start_unit = false
-
       if (search_unit_id) {
         if (
           this._mode === 'add' ||
@@ -17388,40 +17419,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._mem_remove_search_unit_id()
 
-      if (should_refresh_search_start_unit) {
-        this._reset_unit_color(search_start_unit_id)
-      }
+      this._refresh_node_color(search_start_unit_id)
     }
 
     if (search_unit_datum_node_id) {
       this._remove_datum(search_unit_datum_node_id)
 
       this._mem_remove_search_datum()
-    }
-
-    this._set_crud_mode('none')
-
-    if (this._search_filter !== this._search_filter_true) {
-      this._set_search_filter(this._search_filter_true)
-    }
-
-    this.focus()
-
-    this._refresh_node_color(search_start_unit_id)
-
-    this._enable_keyboard()
-    // this._enable_crud()
-
-    if (this._search_fallback_position) {
-      const { x, y } = this._search_fallback_position
-
-      this._zoom_center_at(x, y)
-    }
-
-    this._refresh_search_list_height_offset()
-
-    if (this._tree_layout) {
-      this._refresh_layout_node_target_position(null) // RETURN
     }
   }
 
@@ -27541,7 +27545,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._search_start_unit_id) {
+      const search_unit_id = this._search_unit_id
+
       this._abort_search_unit()
+
+      this._refresh_node_color(search_unit_id)
     }
 
     this._plunk_pod()
