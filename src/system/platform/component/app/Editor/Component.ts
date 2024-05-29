@@ -9931,9 +9931,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const bundle = unitBundleSpec(graph_unit_spec, specs)
 
-    const should_unregister =
-      unit_spec.id !== this._search_unit_init_spec_id &&
-      unit_spec.id !== bundle.unit.id
+    const should_unregister = unit_spec.id !== bundle.unit.id
 
     this._state_remove_unit(unit_id, should_unregister)
 
