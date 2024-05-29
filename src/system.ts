@@ -2,7 +2,6 @@ import { API } from './API'
 import { Graph } from './Class/Graph'
 import { Unit } from './Class/Unit'
 import { EventEmitter_ } from './EventEmitter'
-import { NOOP } from './NOOP'
 import { Object_ } from './Object'
 import { IOElement } from './client/IOElement'
 import { Context } from './client/context'
@@ -15,7 +14,6 @@ import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
-import { Channel, ChannelOpt } from './types/global/Channel'
 import { KeyboardState } from './types/global/KeyboardState'
 import { PointerState } from './types/global/PointerState'
 import { R } from './types/interface/R'
@@ -128,14 +126,4 @@ export interface BootOpt {
   classes?: Classes
   components?: ComponentClasses
   flags?: System['flags']
-}
-
-export const LocalChannel = (opt: ChannelOpt): Channel => {
-  return {
-    close(): void {},
-    postMessage(message: any): void {},
-    addListener(event: string, callback: Callback): Unlisten {
-      return NOOP
-    },
-  }
 }
