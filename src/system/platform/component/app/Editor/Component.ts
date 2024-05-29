@@ -2969,7 +2969,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _search_unit_datum_node_id: string | null = null
   private _search_unit_datum_spec_id: string
 
-  private _search_unit_init_spec_id: string | null = null
   private _search_unit_spec_id_changed: boolean = false
 
   // crud
@@ -9945,7 +9944,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const bundle = unitBundleSpec(graph_unit_spec, specs)
 
-    const should_unregister = unit_spec.id !== bundle.unit.id
+    const should_unregister =
+      unit_id !== this._search_unit_id && unit_spec.id !== bundle.unit.id
 
     this._state_remove_unit(unit_id, should_unregister)
 
@@ -15915,7 +15915,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _state_swap_search_unit = (id: string, next_unit_id?: string) => {
-    if (this._search_unit_init_spec_id !== id) {
+    if (this._search_start_spec_id !== id) {
       this._search_unit_spec_id_changed = true
     }
 
@@ -16962,7 +16962,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const search_unit_bundle = unitBundleSpec(unit, specs)
 
         let did_spec_id_change =
-          this._search_unit_spec_id !== this._search_unit_init_spec_id
+          this._search_unit_spec_id !== this._search_start_spec_id
 
         let should_add_component = false
 
@@ -16992,8 +16992,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
 
           const bulk_action = makeBulkEditAction(actions)
-
-          this._register_spec(this._search_unit_spec_id, true)
 
           this._dispatch_action(bulk_action)
 
@@ -17044,6 +17042,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._setup_pod(this._pod)
 
           should_add_component = this._search_unit_spec_id_changed
+        }
+
+        if (this._mode === 'change') {
+          if (did_spec_id_change) {
+            this._unregister_spec(this._search_start_spec_id, true, [])
+            this._register_spec(this._search_unit_spec_id, true)
+          }
+        } else if (this._mode === 'add') {
+          this._register_spec(this._search_unit_spec_id, true)
         }
 
         if (did_spec_id_change) {
@@ -17764,12 +17771,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           } else if (mode === 'change') {
             this._on_unit_blue_click(search_unit_id)
           } else if (mode === 'remove') {
-            // TODO
+            //
           } else if (mode === 'add') {
-            // this._commit_search_unit()
-            // const position = this._get_node_position(search_unit_id)
-            // const new_unit_id = this._new_unit_id()
-            // this._add_search_unit(new_unit_id, this._search_unit_spec_id!, position)
+            //
           } else if (mode === 'data') {
             const spec_id = this._get_unit_spec_id(search_unit_id)
             const position = this._get_node_position(search_unit_id)
@@ -27536,7 +27540,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._search_unit_id = unit_id
     this._search_unit_spec_id = spec_id
-    this._search_unit_init_spec_id = spec_id
     this._search_unit_spec_id_changed = false
 
     if (this._is_unit_component(unit_id)) {
