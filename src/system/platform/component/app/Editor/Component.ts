@@ -16233,6 +16233,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return parent_id
   }
 
+  private _refresh_unit_description_color = (unit_id: string): void => {
+    const { $theme } = this.$context
+
+    if (this._search_unit_id === unit_id) {
+      this._set_core_description_color(
+        unit_id,
+        getThemeModeColor($theme, this._mode, 'currentcolor')
+      )
+    } else {
+      this._set_core_description_color(unit_id, this._theme.sub_text)
+    }
+  }
+
   private _add_search_unit = (
     unit_id: string,
     spec_id: string,
@@ -16305,13 +16318,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       layout_position
     )
 
-    if (this._mode === 'add') {
-      this._show_core_description(unit_id)
-      this._set_core_description_color(
-        unit_id,
-        getThemeModeColor($theme, 'add', 'currentcolor')
-      )
-    }
+    this._show_core_description(unit_id)
+
+    this._refresh_unit_description_color(unit_id)
 
     const link_color = getThemeLinkModeColor($theme, this._mode)
     const node_color = getThemeModeColor($theme, this._mode, 'currentColor')
@@ -17794,6 +17803,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
 
         this._refresh_node_color(this._search_unit_id)
+        this._refresh_unit_description_color(this._search_unit_id)
       }
 
       if (this._search_unit_datum_node_id) {
