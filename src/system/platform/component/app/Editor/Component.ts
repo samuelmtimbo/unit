@@ -2897,6 +2897,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _search_start_unit_id: string | null = null
   private _search_start_spec_id: string | null = null
+  private _search_start_unit_position: Position = null
   private _search_start_unit_merges: GraphUnitMerges = {}
   private _search_start_unit_plugs: GraphUnitPlugs = {}
   private _search_start_unit_data: IOOf<Dict<TreeNode>> = {}
@@ -17301,6 +17302,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._search_start_unit_id = null
     this._search_start_spec_id = null
+    this._search_start_unit_position = null
     this._search_start_unit_merges = null
     this._search_start_unit_plugs = null
     this._search_start_unit_data = null
@@ -27524,15 +27526,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (this._search_unit_id === unit_id) {
       return
-      //
+    }
+
+    if (this._search_start_unit_id) {
+      this._abort_search_unit()
     }
 
     this._plunk_pod()
+
+    const position = this._get_node_position(unit_id)
 
     this._search_to_be_focused_by_click = true
 
     this._search_start_unit_id = unit_id
     this._search_start_spec_id = spec_id
+    this._search_start_unit_position = position
     this._search_start_unit_merges = clone(this._get_unit_merges(unit_id))
     this._search_start_unit_plugs = clone(this._get_unit_plugs(unit_id))
     this._search_start_unit_data = clone(this._get_unit_data(unit_id))
@@ -53959,8 +53967,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const search_node_id =
       this._search_unit_id || this._search_unit_datum_node_id
 
-    if (search_node_id && this._mode !== 'change') {
-      const { x: cx, y: cy } = this._world_screen_center(0, 0)
+    if (search_node_id) {
+      let center: Position
+
+      if (this._mode === 'change') {
+        center = this._search_start_unit_position
+      } else {
+        center = this._world_screen_center()
+      }
+
+      const { x: cx, y: cy } = center
 
       const a = this._node[search_node_id]
 
