@@ -1,3 +1,4 @@
+import applyAttr from '../../../../../client/applyAttr'
 import { Element } from '../../../../../client/element'
 import { PropHandler, htmlPropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
@@ -14,6 +15,7 @@ export interface Props {
   stream?: $MS
   autoplay?: boolean
   controls?: boolean
+  attr?: Dict<string>
 }
 
 export const DEFAULT_STYLE = {
@@ -39,6 +41,7 @@ export default class VideoComp
       src,
       autoplay = true,
       controls = true,
+      attr,
     } = this.$props
 
     this.$element = this.$system.api.document.createElement('video')
@@ -48,9 +51,11 @@ export default class VideoComp
     if (className) {
       this.$element.className = className
     }
-
     if (src) {
       this.$element.src = src
+    }
+    if (attr) {
+      applyAttr(this.$element, attr)
     }
 
     this.$element.autoplay = autoplay

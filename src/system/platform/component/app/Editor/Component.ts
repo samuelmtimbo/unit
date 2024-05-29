@@ -2420,6 +2420,9 @@ export const replaceNodeName = (name: string) => {
 
 const MAX_DEBUG_BUFFER_SIZE: number = 1000
 
+const MAX_DROP_ELEMENT_WIDTH: number = 420
+const MAX_DROP_ELEMENT_HEIGHT: number = 420
+
 export type LayoutLayer = {
   layer: Div
   height: Div
@@ -3496,7 +3499,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { dataTransfer } = _event
 
-    const position = this._screen_to_world(clientX, clientY)
+    const drop_position = this._screen_to_world(clientX, clientY)
 
     if (dataTransfer) {
       const { items, files } = dataTransfer
@@ -3505,32 +3508,32 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (let i = 0; i < items.length; i++) {
           const item = items[i]
 
-          this._paste_data_transfer_item(item, position)
+          this._drop_data_transfer_item(item, drop_position)
         }
       } else {
         for (let i = 0; i < files.length; i++) {
           const file = items[i].getAsFile()
 
-          this._paste_file(file, position)
+          this._drop_file(file, drop_position)
         }
       }
     }
   }
 
-  private _paste_data_transfer_item_as_string = async (
+  private _drop_data_transfer_item_as_string = async (
     item: DataTransferItem,
     position: Position
   ) => {
     return new Promise((resolve) => {
       item.getAsString((text) => {
-        this._paste_text(text, position)
+        this._drop_text(text, position)
 
         resolve(text)
       })
     })
   }
 
-  private _paste_data_transfer_item = async (
+  private _drop_data_transfer_item = async (
     item: DataTransferItem,
     position: Position
   ) => {
@@ -3552,14 +3555,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      this._paste_file(file, position)
+      this._drop_file(file, position)
     } else if (item.kind === 'string') {
       if (item.type === 'text/plain') {
-        await this._paste_data_transfer_item_as_string(item, position)
+        await this._drop_data_transfer_item_as_string(item, position)
       } else if (item.type === 'text/html') {
         //
       } else if (item.type === 'text/uri-list') {
-        await this._paste_data_transfer_item_as_string(item, position)
+        await this._drop_data_transfer_item_as_string(item, position)
       }
     } else if (item.kind === 'text/uri-list') {
       //
@@ -3636,23 +3639,23 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _paste_file = async (
+  private _drop_file = async (
     file: File | Blob,
     position?: Position
   ): Promise<void> => {
     if (file.type.startsWith('image/')) {
-      return this._paste_image_file(file, position)
+      return this._drop_image_file(file, position)
     } else if (file.type.startsWith('audio/')) {
-      return this._paste_audio_file(file, position)
+      return this._drop_audio_file(file, position)
     } else if (file.type.startsWith('video/')) {
-      return this._paste_video_file(file, position)
+      return this._drop_video_file(file, position)
     } else if (
       file.type.startsWith('"text/plain"') ||
       file.type.startsWith('application/json')
     ) {
       const text = await readFileAsText(file)
 
-      this._paste_text(text, position)
+      this._drop_text(text, position)
 
       return
     }
@@ -3660,14 +3663,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (file instanceof File) {
       this._last_open_filename = file.name
 
-      this._paste_bundle_file(file)
+      this._drop_bundle_file(file, position)
     }
   }
 
-  private _paste_image_file = async (
-    file: File | Blob,
-    position?: Position
-  ) => {
+  private _drop_image_file = async (file: File | Blob, position?: Position) => {
     const reader = new FileReader()
 
     reader.onload = async (e) => {
@@ -3686,10 +3686,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         let height = image.naturalHeight
 
         if (width > height) {
-          width = clamp(width, MIN_WIDTH, 420)
+          width = clamp(width, MIN_WIDTH, MAX_DROP_ELEMENT_WIDTH)
           height = width / ratio
         } else {
-          height = clamp(height, MIN_HEIGHT, 420)
+          height = clamp(height, MIN_HEIGHT, MAX_DROP_ELEMENT_HEIGHT)
           width = height * ratio
         }
 
@@ -3742,11 +3742,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return
   }
 
-  private _paste_audio_file = async (file: File | Blob, position: Position) => {
+  private _drop_audio_file = async (file: File | Blob, position: Position) => {
     return this._paste_media_file(file, ID_AUDIO, position)
   }
 
-  private _paste_video_file = async (file: File | Blob, position: Position) => {
+  private _drop_video_file = async (file: File | Blob, position: Position) => {
     const {
       api: {
         url: { createObjectURL },
@@ -3766,10 +3766,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const ratio = width / height
 
       if (width > height) {
-        width = clamp(width, MIN_WIDTH, 420)
+        width = clamp(width, MIN_WIDTH, MAX_DROP_ELEMENT_WIDTH)
         height = width / ratio
       } else {
-        height = clamp(height, MIN_HEIGHT, 420)
+        height = clamp(height, MIN_HEIGHT, MAX_DROP_ELEMENT_HEIGHT)
         width = height * ratio
       }
 
@@ -3780,6 +3780,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             src: {
               data: `"${url}"`,
               constant: true,
+            },
+            attr: {
+              data: "{loop:'true'}",
+              ignored: false,
+              constant: true,
+            },
+            stream: {
+              ignored: true,
+            },
+            style: {
+              ignored: true,
+            },
+            controls: {
+              ignored: true,
             },
           },
           metadata: {
@@ -3850,7 +3864,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._connect_sub_component(new_unit_id)
   }
 
-  private _paste_bundle_file = async (
+  private _drop_bundle_file = async (
     file: File,
     position?: Position
   ): Promise<void> => {
@@ -51908,11 +51922,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (item.types.includes('image/png')) {
           const blob = await item.getType('image/png')
 
-          this._paste_file(blob, position)
+          this._drop_file(blob, position)
         } else if (item.types.includes('text/plain')) {
           const text = await item.getType('text/plain')
 
-          this._paste_file(text, position)
+          this._drop_file(text, position)
         }
       }
     } catch (err) {
@@ -51925,10 +51939,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return
     }
 
-    this._paste_text(text, position)
+    this._drop_text(text, position)
   }
 
-  private _paste_text = (text: string, position: Position): void => {
+  private _drop_text = (text: string, position: Position): void => {
     let json: BundleSpec | undefined = undefined
 
     try {
@@ -54940,7 +54954,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const file = await fileHandle.getFile()
 
-        this._paste_file(file)
+        this._drop_file(file)
       } catch (err) {
         return
       }
@@ -54948,7 +54962,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       try {
         const [file] = await fallbackShowOpenFilePicker(opt)
 
-        this._paste_file(file)
+        this._drop_file(file)
       } catch (err) {
         return
       }
