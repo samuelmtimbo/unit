@@ -24504,7 +24504,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           if (merge_first_datum_node_id) {
             if (
-              (this._is_node_hovered(merge_node_id) &&
+              ((this._is_node_hovered(merge_node_id) ||
+                this._is_node_selected(merge_node_id)) &&
                 this._should_show_hover_merge_data_on_this_mode()) ||
               (this._is_node_selected(merge_node_id) &&
                 this._selected_node_count === this._selected_pin_count) ||
