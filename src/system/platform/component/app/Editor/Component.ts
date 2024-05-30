@@ -13433,51 +13433,40 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (this._is_unit_node_id(node_id)) {
           const unit_id = node_id
 
-          if (mode === 'data') {
-            this._set_unit_core_shell_color(unit_id, mode_color)
-            this._set_unit_pins_shell_color(
-              unit_id,
-              mode_color,
-              mode_link_color,
-              mode_text_color,
-              mode_pin_icon_color
-            )
+          this._set_unit_color(
+            unit_id,
+            mode_color,
+            mode_link_color,
+            mode_text_color,
+            mode_pin_icon_color
+          )
 
-            this._for_each_unit_pin(unit_id, (pin_node_id, type, pin_id) => {
+          if (mode === 'remove') {
+            if (this._err[unit_id]) {
+              const err_node_id = getErrNodeId(unit_id)
+
+              this._set_err_color(err_node_id, mode_color)
+            }
+
+            this._for_each_unit_pin(unit_id, (pin_node_id) => {
+              const datum_node_id = this._pin_to_datum[pin_node_id]
+
+              if (datum_node_id) {
+                this._set_datum_color(
+                  datum_node_id,
+                  mode_color,
+                  mode_link_color
+                )
+              }
+            })
+          } else if (mode === 'data') {
+            this._for_each_unit_pin(unit_id, (pin_node_id) => {
               const datum_node_id = this._get_pin_datum_node_id(pin_node_id)
 
               if (datum_node_id) {
                 this._set_datum_color(datum_node_id, mode_color, mode_color)
               }
             })
-          } else {
-            this._set_unit_color(
-              unit_id,
-              mode_color,
-              mode_link_color,
-              mode_text_color,
-              mode_pin_icon_color
-            )
-
-            if (mode === 'remove') {
-              if (this._err[unit_id]) {
-                const err_node_id = getErrNodeId(unit_id)
-
-                this._set_err_color(err_node_id, mode_color)
-              }
-
-              this._for_each_unit_pin(unit_id, (pin_node_id) => {
-                const datum_node_id = this._pin_to_datum[pin_node_id]
-
-                if (datum_node_id) {
-                  this._set_datum_color(
-                    datum_node_id,
-                    mode_color,
-                    mode_link_color
-                  )
-                }
-              })
-            }
           }
         } else if (this._is_link_pin_node_id(node_id)) {
           this._set_link_pin_color(
