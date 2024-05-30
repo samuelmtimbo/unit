@@ -20,7 +20,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "asynchronously observe changes in the intersection of a target element with an `ancestor` element",
+    "description": "asynchronously observe changes in the intersection of a target element with a `root` element",
     "complexity": 4,
     "tags": ["platform", "api", "observer"]
   },
