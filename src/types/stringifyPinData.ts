@@ -1,4 +1,5 @@
 import { $ } from '../Class/$'
+import { Unit } from '../Class/Unit'
 import { stringify } from '../spec/stringify'
 import { Dict } from './Dict'
 
@@ -20,7 +21,13 @@ export function stringifyDataObj(obj: Dict<any>) {
 
     if (data !== undefined) {
       if (data instanceof $) {
-        _obj[name] = 'null'
+        if (data instanceof Unit) {
+          const bundle = data.getUnitBundleSpec()
+
+          return `$${stringify(bundle)}`
+        } else {
+          _obj[name] = 'null'
+        }
       } else {
         _obj[name] = stringify(data)
       }
