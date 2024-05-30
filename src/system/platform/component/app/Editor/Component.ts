@@ -2968,11 +2968,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
   private _search_unit_datum_id: string | null = null
   private _search_unit_datum_node_id: string | null = null
+  private _search_unit_datum_start_position: Position | null = null
   private _search_unit_datum_spec_id: string
 
   private _search_unit_spec_id_changed: boolean = false
 
-  // crud
+  // modes
 
   private _mode: Mode = 'none'
   private _mode_pointer: Dict<boolean> = {}
@@ -16109,6 +16110,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._search_unit_datum_id = datum_id
     this._search_unit_datum_node_id = datum_node_id
+    this._search_unit_datum_start_position =
+      this._get_node_position(datum_node_id)
     this._search_unit_datum_spec_id = spec_id
   }
 
@@ -16237,9 +16240,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { $theme } = this.$context
 
     if (this._search_unit_id === unit_id) {
+      let mode_ = this._mode
+
+      if (mode_ === 'multiselect' || mode_ === 'info') {
+        mode_ = 'add'
+      }
+
       this._set_core_description_color(
         unit_id,
-        getThemeModeColor($theme, this._mode, 'currentcolor')
+        getThemeModeColor($theme, mode_, 'currentcolor')
       )
     } else {
       this._set_core_description_color(unit_id, this._theme.sub_text)
@@ -17261,7 +17270,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_search_list_shown = () => {
-    // console.trace('Graph', '_on_search_list_shown')
+    // console.log('Graph', '_on_search_list_shown')
 
     const { animate } = this.$props
 
@@ -17272,6 +17281,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._mode === 'none' || this._mode === 'info') {
+      this._mode_just_set_by_keyboard = true
+      this._mode_set_by_keyboard = true
+
       this._set_crud_mode('add')
     }
 
@@ -17325,11 +17337,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._stop_zoom_target_animation()
   }
 
+  private _mode_set_by_keyboard: boolean = true
+  private _mode_just_set_by_keyboard: boolean = false
+
   private _mem_remove_search_datum = () => {
     // console.log('Graph', '_mem_remove_search_datum')
 
     this._search_unit_datum_id = null
     this._search_unit_datum_node_id = null
+    this._search_unit_datum_start_position = null
 
     this._stop_zoom_target_animation()
   }
@@ -17347,7 +17363,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._abort_search_unit()
 
-    this._set_crud_mode('none')
+    if (this._mode_set_by_keyboard) {
+      this._set_crud_mode('none')
+    }
 
     const search_start_unit_id = this._search_start_unit_id
 
@@ -17488,6 +17506,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._mode = mode
 
+    if (!this._mode_just_set_by_keyboard) {
+      this._mode_set_by_keyboard = false
+    }
+
     if (this._search_hidden) {
       if (
         this.__is_freeze_mode(prev_mode) &&
@@ -17543,9 +17565,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       if (prev_mode !== 'none' && this._mode === 'none') {
-        // this._setup_pod(this._pod)
-        // this._start_debugger()
-
         for (const selected_node_id in this._selected_node_id) {
           if (this._is_unit_node_id(selected_node_id)) {
             this._enable_core_resize(selected_node_id)
@@ -17558,9 +17577,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._drag_and_drop_cancel()
         }
       } else if (prev_mode === 'none' && this._mode !== 'none') {
-        // this._pause_debugger()
-        // this._plunk_pod()
-
         for (const selected_node_id in this._selected_node_id) {
           if (this._is_unit_node_id(selected_node_id)) {
             this._disable_core_resize(selected_node_id)
@@ -17572,10 +17588,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (prev_mode !== 'data' && this._mode === 'data') {
         this._set_all_visible_output_pin_opacity(0.5)
-        // this._set_all_ref_pin_opacity(0.5)
       } else if (prev_mode === 'data' && this._mode !== 'data') {
         this._set_all_visible_output_pin_opacity(1)
-        // this._set_all_ref_pin_opacity(1)
       }
 
       if (prev_mode !== 'add' && this._mode === 'add') {
@@ -17786,7 +17800,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (mode === 'none') {
             this._hide_search()
           } else if (mode === 'change') {
-            this._on_unit_blue_click(search_unit_id)
+            this._turn_unit_blue(search_unit_id)
           } else if (mode === 'remove') {
             //
           } else if (mode === 'add') {
@@ -17806,8 +17820,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
 
-        this._refresh_node_color(this._search_unit_id)
-        this._refresh_unit_description_color(this._search_unit_id)
+        if (this._has_node(search_unit_id)) {
+          this._refresh_node_color(search_unit_id)
+          this._refresh_unit_description_color(search_unit_id)
+        }
       }
 
       if (this._search_unit_datum_node_id) {
@@ -18387,7 +18403,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           makeCustomListener('entermode', this._on_enter_mode),
         ])
 
-        this._modes.setProp('mode', this._mode)
+        if ((this._modes.getProp('mode') ?? 'none') !== this._mode) {
+          this._modes.setProp('mode', this._mode)
+        }
 
         this._mode = this._modes.getMode()
       }
@@ -18959,7 +18977,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           return false
         }
 
+        this._mode_just_set_by_keyboard = true
+        this._mode_set_by_keyboard = mode !== 'none'
+
         this._set_crud_mode(mode)
+
+        this._mode_just_set_by_keyboard = false
 
         return true
       })
@@ -27536,13 +27559,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_unit_blue_click = (unit_id: string): void => {
     // console.log('Graph', '_on_unit_blue_click', unit_id)
 
-    const { specs } = this.$props
-
-    const spec_id = this._get_unit_spec_id(unit_id)
-
     if (this._search_unit_id === unit_id) {
       return
     }
+
+    this._turn_unit_blue(unit_id)
+  }
+
+  private _turn_unit_blue = (unit_id: string) => {
+    const { specs } = this.$props
+
+    const spec_id = this._get_unit_spec_id(unit_id)
 
     if (this._search_start_unit_id) {
       const search_unit_id = this._search_unit_id
@@ -53991,7 +54018,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       let center: Position
 
       if (this._mode === 'change') {
-        center = this._search_start_unit_position
+        if (this._search_unit_id) {
+          center = this._search_start_unit_position
+        } else {
+          center = this._search_unit_datum_start_position
+        }
       } else {
         center = this._world_screen_center()
       }
