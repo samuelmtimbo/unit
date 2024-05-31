@@ -1,26 +1,24 @@
 import { Graph } from '../Class/Graph'
+import { boot } from '../client/platform/node/boot'
 import { unitFromId } from '../spec/fromId'
-import { system } from './util/system'
+import _classes from '../system/_classes'
+import _components from '../system/_components'
+import _specs from '../system/_specs'
+import { clone } from '../util/object'
 
-// const [system] = boot(
-//   clone({
-//     specs: _specs,
-//     classes: _classes,
-//     components: _components,
-//   })
-// )
-
-const specs_ = { ...system.specs }
+const [system] = boot(
+  clone({
+    specs: _specs,
+    classes: _classes,
+    components: _components,
+  })
+)
 
 const spec = system.emptySpec()
 
 const graph = new Graph<{ number: number }, { sum: number }>(spec, {}, system)
 
 for (const id in system.specs) {
-  // if (id === '1c33668d-5aa9-4c45-bb8a-dfce14a2aded') {
-  //   debugger
-  // }
-
   const unit = unitFromId(system, id, system.specs, system.classes)
 
   let unitId: string
