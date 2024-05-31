@@ -1,0 +1,167 @@
+{
+  "type": "`U`&`G`",
+  "name": "read file as text",
+  "units": {
+    "emptyobject": {
+      "id": "dc6e6bc0-081b-11eb-baf7-b7383b70c236",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "{}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -22,
+          "y": -84
+        }
+      }
+    },
+    "filereader": {
+      "id": "f8485868-345a-416a-b323-547ddcb068ad",
+      "input": {
+        "opt": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 240,
+              "y": -15
+            },
+            "data": {
+              "position": {
+                "x": 275,
+                "y": -26
+              }
+            }
+          }
+        },
+        "done": {
+          "metadata": {
+            "position": {
+              "x": 233,
+              "y": 19
+            }
+          },
+          "ignored": true
+        }
+      },
+      "output": {
+        "reader": {
+          "metadata": {
+            "position": {
+              "x": 134,
+              "y": -17
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 191,
+          "y": -3
+        }
+      }
+    },
+    "readastext": {
+      "id": "e025d8e5-baa2-4411-864d-4db6fc42220f",
+      "input": {
+        "reader": {},
+        "file": {},
+        "opt": {
+          "metadata": {
+            "position": {
+              "x": 223,
+              "y": 10
+            }
+          }
+        }
+      },
+      "output": {
+        "text": {
+          "metadata": {
+            "position": {
+              "x": 218,
+              "y": 43
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 78,
+          "y": -41
+        }
+      }
+    }
+  },
+  "merges": {
+    "1": {
+      "filereader": {
+        "output": {
+          "reader": true
+        }
+      },
+      "readastext": {
+        "input": {
+          "reader": true
+        }
+      }
+    },
+    "9": {
+      "emptyobject": {
+        "output": {
+          "{}": true
+        }
+      },
+      "filereader": {
+        "input": {
+          "opt": true
+        }
+      },
+      "readastext": {
+        "input": {
+          "opt": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "emptyobject",
+          "pinId": "any",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "file": {
+      "plug": {
+        "0": {
+          "unitId": "readastext",
+          "pinId": "file",
+          "kind": "input"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "text": {
+      "plug": {
+        "0": {
+          "unitId": "readastext",
+          "pinId": "text",
+          "kind": "output"
+        }
+      },
+      "ref": false
+    }
+  },
+  "metadata": {
+    "icon": "file-output",
+    "description": "asynchronously read the contents of a file as text"
+  },
+  "id": "5fdbcbc3-079b-40dd-b133-5a3ec3972032"
+}
