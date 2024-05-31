@@ -56560,6 +56560,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this.__spec_remove_pin_from_merge(mergeId, unitId, type, pinId)
   }
 
+  private _on_remove_unit_pin_data_moment = () => {
+    //
+  }
+
   private _on_expose_pin_set = (data: GraphExposedPinSetMomentData): void => {
     // console.log('Graph', '_on_expose_pin_set', data)
 
@@ -58206,6 +58210,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       remove_merge: this._on_remove_merge_moment,
       add_pin_to_merge: this._on_add_pin_to_merge_moment,
       remove_pin_from_merge: this._on_remove_pin_from_merge_moment,
+      remove_unit_pin_data: this._on_remove_unit_pin_data_moment,
       expose_pin_set: this._on_expose_pin_set,
       cover_pin_set: this._on_cover_pin_set,
       expose_pin: this._on_expose_pin,
