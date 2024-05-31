@@ -660,19 +660,19 @@ export const setUnitPinConstant = (
   return deepSet_(spec, ['units', unitId, type, pinId, 'constant'], constant)
 }
 
-export const setPinDefaultIgnored = (
+export const setPinSetDefaultIgnored = (
   {
     type,
     pinId,
-    ignored,
+    defaultIgnored,
   }: {
     type: IO
     pinId: string
-    ignored: boolean
+    defaultIgnored: boolean
   },
   spec: GraphSpec
 ) => {
-  deepSet_(spec, [`${type}s`, pinId, 'defaultIgnored'], ignored)
+  deepSet_(spec, [`${type}s`, pinId, 'defaultIgnored'], defaultIgnored)
 }
 
 export const setUnitPinIgnored = (

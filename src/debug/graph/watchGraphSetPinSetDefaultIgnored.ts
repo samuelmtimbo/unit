@@ -17,7 +17,7 @@ export function watchGraphSetPinSetDefaultIgnored(
   callback: (moment: GraphSetPinSetDefaultIgnoredMoment) => void
 ): () => void {
   const listener = (
-    ...[type, pinId, ignored, path]: G_EE['set_pin_set_default_ignored']
+    ...[type, pinId, defaultIgnored, path]: G_EE['set_pin_set_default_ignored']
   ) => {
     callback({
       type: 'graph',
@@ -25,7 +25,7 @@ export function watchGraphSetPinSetDefaultIgnored(
       data: {
         type,
         pinId,
-        ignored,
+        defaultIgnored,
         path,
       },
     })

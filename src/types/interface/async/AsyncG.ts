@@ -23,6 +23,7 @@ import {
   GraphRemoveUnitGhostData,
   GraphRemoveUnitPinDataData,
   GraphSetMergeDataData,
+  GraphSetPinSetDefaultIgnoredData,
   GraphSetPinSetFunctionalData,
   GraphSetPinSetIdData,
   GraphSetUnitIdData,
@@ -749,11 +750,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     $setPinSetDefaultIgnored({
       type,
       pinId,
-      ignored,
+      defaultIgnored,
       fork,
       bubble,
-    }: GraphSetUnitPinIgnoredData): void {
-      call('setPinSetDefaultIgnored', fork, bubble, type, pinId, ignored)
+    }: GraphSetPinSetDefaultIgnoredData): void {
+      call('setPinSetDefaultIgnored', fork, bubble, type, pinId, defaultIgnored)
     },
   }
 
