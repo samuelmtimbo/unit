@@ -4519,21 +4519,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     deep: boolean = true,
     branch: string[] = []
   ) => {
-    const { parent, getSpec, registerUnit } = this.$props
+    const { getSpec, registerUnit } = this.$props
 
     if (branch.includes(spec_id)) {
       return
     }
 
-    registerUnit(spec_id)
-
-    if (this._registry.specsCount[spec_id] === 1) {
-      this._mirror_spec(spec_id)
-    }
-
     const spec = getSpec(spec_id)
 
     if (!isSystemSpec(spec)) {
+      registerUnit(spec_id)
+
+      if (this._registry.specsCount[spec_id] === 1) {
+        this._mirror_spec(spec_id)
+      }
+
       if (deep) {
         const { units = {} } = spec as GraphSpec
 
@@ -4568,8 +4568,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _unregister_spec = (
     spec_id: string,
-    deep: boolean,
-    branch: string[]
+    deep: boolean = true,
+    branch: string[] = []
   ) => {
     // console.log('Editor', '_unregister_spec', spec_id, deep, branch)
 
@@ -4587,9 +4587,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._unregister_unit(unit.id, deep, [...branch, spec_id])
         }
       }
-    }
 
-    unregisterUnit(spec_id)
+      unregisterUnit(spec_id)
+    }
   }
 
   private _get_unit_spec_name = (unit_id: string): string => {
@@ -55564,9 +55564,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     setSpec(next_spec_id, unit_spec)
 
-    registerUnit(next_spec_id)
-
-    unregisterUnit(unit_spec_id)
+    this.__register_spec(next_spec_id)
+    this._unregister_spec(unit_spec_id)
   }
 
   private _is_spec_updater = (path: string[]): boolean => {
