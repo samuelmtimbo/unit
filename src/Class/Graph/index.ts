@@ -58,7 +58,7 @@ import {
   removePinFromMerge,
   renameUnitPin,
   setComponentSize,
-  setPinDefaultIgnored,
+  setPinSetDefaultIgnored,
   setPinSetFunctional,
   setPinSetId,
   setSubComponentSize,
@@ -1544,13 +1544,13 @@ export class Graph<I = any, O = any>
   public setPinSetDefaultIgnored(
     type: IO,
     pinId: string,
-    ignored: boolean,
+    defaultIgnored: boolean,
     fork: boolean = true,
     bubble: boolean = true
   ): void {
-    this._setPinSetDefaultIgnored(type, pinId, ignored, fork, bubble)
+    this._setPinSetDefaultIgnored(type, pinId, defaultIgnored, fork, bubble)
 
-    this.emit('set_pin_set_default_ignored', type, pinId, ignored, [])
+    this.emit('set_pin_set_default_ignored', type, pinId, defaultIgnored, [])
   }
 
   private _setPinSetDefaultIgnored(
@@ -1570,9 +1570,9 @@ export class Graph<I = any, O = any>
   private _specSetPinSetDefaultIgnored(
     type: IO,
     pinId: string,
-    ignored: boolean
+    defaultIgnored: boolean
   ): void {
-    setPinDefaultIgnored({ type, pinId, ignored }, this._spec)
+    setPinSetDefaultIgnored({ type, pinId, defaultIgnored }, this._spec)
   }
 
   private _memSetPinSetDefaultIgnored(

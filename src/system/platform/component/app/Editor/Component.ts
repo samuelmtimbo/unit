@@ -29,7 +29,6 @@ import {
   isComponentSpec,
   isEmptySpec,
   isSystemSpec,
-  isSystemSpecId,
   newMergeIdInSpec,
   newSpecId,
   newUnitId,
@@ -347,6 +346,7 @@ import { GraphMergePinMomentData } from '../../../../../debug/graph/watchGraphPi
 import { GraphPlugMomentData } from '../../../../../debug/graph/watchGraphPlugEvent'
 import { GraphRemoveUnitPinDataMomentData } from '../../../../../debug/graph/watchGraphRemoveUnitPinDataEvent'
 import { GraphReorderSubComponentMomentData } from '../../../../../debug/graph/watchGraphReorderSubComponent'
+import { GraphSetPinSetDefaultIgnoredMomentData } from '../../../../../debug/graph/watchGraphSetPinSetDefaultIgnored'
 import { GraphSetPinSetFunctionalMomentData } from '../../../../../debug/graph/watchGraphSetPinSetFunctionalEvent'
 import { GraphSetPinSetIdMomentData } from '../../../../../debug/graph/watchGraphSetPinSetIdEvent'
 import { GraphSetUnitIdMomentData } from '../../../../../debug/graph/watchGraphSetUnitIdEvent'
@@ -492,8 +492,8 @@ import {
   removeUnitPinData,
   setComponentSize,
   setMetadata,
-  setPinDefaultIgnored,
   setPinSetDataType,
+  setPinSetDefaultIgnored,
   setPinSetFunctional,
   setPinSetId,
   setPinSetRef,
@@ -814,6 +814,8 @@ export const LAYOUT_VERTICAL_PADDING = 80
 export const KEYBOARD_POINTER_ID = -1
 
 export const LAYER_OPACITY_MULTIPLIER = 0.1
+
+export const DEFAULT_IGNORED_PIN_SET_OPACITY = 0.5
 
 const DEFAULT_STYLE = {
   position: 'relative',
@@ -5203,18 +5205,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return merged
   }
 
-  private _spec_link_pin_ignored: Dict<boolean> = {}
-
   private _spec_is_link_pin_ignored = (pin_node_id: string): boolean => {
-    if (this._spec_link_pin_ignored[pin_node_id] !== undefined) {
-      return this._spec_link_pin_ignored[pin_node_id]
-    }
-
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
     const pin_ignored = this.__spec_is_link_pin_ignored(unitId, type, pinId)
-
-    this._spec_link_pin_ignored[pin_node_id] = pin_ignored
 
     return pin_ignored
   }
@@ -5225,15 +5219,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_id: string
   ): boolean => {
     const pin_spec: PinSpec = this.__get_unit_pin_spec(unit_id, type, pin_id)
+    const ignored = this._get_graph_unit_pin_spec_ignored(unit_id, type, pin_id)
 
     const { defaultIgnored } = pin_spec
-
-    const unit_pin_spec: GraphUnitPinSpec = this._get_graph_unit_pin_spec(
-      unit_id,
-      type,
-      pin_id
-    )
-    const { ignored } = unit_pin_spec
 
     let pin_ignored: boolean = false
     if (typeof ignored === 'boolean') {
@@ -5243,6 +5231,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     return pin_ignored
+  }
+
+  private _get_graph_unit_pin_spec_ignored = (
+    unit_id: string,
+    type: IO,
+    pin_id: string
+  ): boolean => {
+    const unit_pin_spec: GraphUnitPinSpec = this._get_graph_unit_pin_spec(
+      unit_id,
+      type,
+      pin_id
+    )
+
+    const { ignored } = unit_pin_spec
+
+    return ignored
   }
 
   private _is_link_pin_ref = (pin_node_id: string): boolean => {
@@ -5443,8 +5447,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._link_text_path = {}
     this._link_marker_end = {}
     this._link_marker_start = {}
-
-    this._spec_link_pin_ignored = {}
 
     this._node = {}
     this._node_fixed = {}
@@ -9207,7 +9209,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const int_node_id = getIntNodeId(type, pin_id, sub_pin_id)
 
     const functional = this.__is_exposed_pin_functional(type, pin_id)
-
     const default_ignored = this._is_pin_default_ignored(type, pin_id)
 
     const pin_spec = this._get_pin_spec(type, pin_id)
@@ -9339,13 +9340,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_node = this._node_comp[ext_node_id]
     const pin_node_content = this._node_content[ext_node_id]
 
+    const opacity = default_ignored ? DEFAULT_IGNORED_PIN_SET_OPACITY : 1
+
     const pin = this._create_pin({
       className: classnames('pin', type),
       r,
       style: {
         borderColor: active ? this._theme.data : color,
         backgroundColor: input ? 'none' : active ? this._theme.data : color,
-        opacity: default_ignored ? `${0.5}` : `${1}`,
+        opacity: `${opacity}`,
       },
       shape,
     })
@@ -9406,6 +9409,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         color,
         ...userSelect('inherit'),
         pointerEvents: 'none',
+        opacity: `${opacity}`,
         visibility: config?.hide?.plugNames ? 'hidden' : 'visible',
       },
       name: pin_id,
@@ -9548,6 +9552,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
       {
         text: '',
+        opacity,
         stroke: color,
         strokeWidth: 1,
         strokeDasharray: 0,
@@ -17686,6 +17691,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           for (const info_node_id of this._info_node_id) {
             this._hide_node_info(info_node_id)
           }
+
+          forEachSpecPin(this._spec, (type, pinId) => {
+            if (this._is_pin_default_ignored(type, pinId)) {
+              this._set_pin_set_opacity(
+                type,
+                pinId,
+                DEFAULT_IGNORED_PIN_SET_OPACITY
+              )
+            }
+          })
         }
       }
 
@@ -25832,9 +25847,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _get_link_default_layer = (link_id: string): number => {
-    const { source } = segmentLinkId(link_id)
+    const { source, target } = segmentLinkId(link_id)
 
-    return this._get_node_default_layer(source)
+    return Math.max(
+      this._get_node_default_layer(source),
+      this._get_node_default_layer(target)
+    )
   }
 
   private _refresh_link_layer = (link_id: string): void => {
@@ -26824,8 +26842,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const pin_datum_tree = this._pin_datum_tree[pin_node_id]
 
-    this._spec_link_pin_ignored[pin_node_id] = ignored
-
     const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
 
     if (ignored) {
@@ -26984,6 +27000,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pinId: string,
     ignored: boolean
   ): void => {
+    // console.log(
+    //   'Graph',
+    //   '__spec_set_link_pin_ignored',
+    //   unitId,
+    //   type,
+    //   pinId,
+    //   ignored
+    // )
+
     setUnitPinIgnored({ unitId, type, pinId, ignored }, this._spec)
   }
 
@@ -28370,9 +28395,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _pod_set_link_pin_constant = (
-    unitId,
-    type,
-    pinId,
+    unitId: string,
+    type: IO,
+    pinId: string,
     constant: boolean
   ) => {
     const { fork, bubble } = this.$props
@@ -33163,11 +33188,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (this._mode === 'remove') {
       if (!default_ignored) {
-        this._set_pin_default_ignored(type, pinId, true)
+        this._set_pin_set_default_ignored(type, pinId, true)
       }
     } else if (this._mode === 'add') {
       if (default_ignored) {
-        this._set_pin_default_ignored(type, pinId, false)
+        this._set_pin_set_default_ignored(type, pinId, false)
       }
     }
   }
@@ -33182,70 +33207,51 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return default_ignored
   }
 
-  private _set_pin_default_ignored = (
+  private _set_pin_set_default_ignored = (
+    type: IO,
+    pinId: string,
+    defaultIgnored: boolean
+  ): void => {
+    this._spec_set_pin_set_default_ignored(type, pinId, defaultIgnored)
+    this._sim_set_pin_set_default_ignored(type, pinId, defaultIgnored)
+    this._pod_set_pin_set_default_ignored(type, pinId, defaultIgnored)
+  }
+
+  private _sim_set_pin_set_default_ignored = (
     type: IO,
     pinId: string,
     ignored: boolean
   ): void => {
-    this._spec_set_pin_default_ignored(type, pinId, ignored)
-    this._sim_set_pin_default_ignored(type, pinId, ignored)
-    this._pod_set_pin_default_ignored(type, pinId, ignored)
+    const opacity = ignored ? DEFAULT_IGNORED_PIN_SET_OPACITY : 1
+
+    this._set_pin_set_opacity(type, pinId, opacity)
   }
 
-  private _sim_set_pin_default_ignored = (
+  private _spec_set_pin_set_default_ignored = (
     type: IO,
     pinId: string,
     ignored: boolean
   ): void => {
-    this._for_each_plug(type, pinId, (subPinId: string) => {
-      const ext_node_id = getExtNodeId(type, pinId, subPinId)
-      const int_node_id = getIntNodeId(type, pinId, subPinId)
-
-      const ext_pin = this._pin[ext_node_id]
-      const int_pin = this._pin[int_node_id]
-
-      const opacity = ignored ? '0.5' : '1'
-
-      const input = type === 'input'
-
-      const source_id = input ? ext_node_id : int_node_id
-      const target_id = input ? int_node_id : ext_node_id
-
-      const link_id = getLinkId(source_id, target_id)
-
-      const pin_name = this._ext_pin_name[ext_node_id]
-
-      const link = this._link_comp[link_id]
-
-      link.$element.style.opacity = opacity
-
-      pin_name.$element.style.opacity = opacity
-
-      if (ext_pin) {
-        ext_pin.$element.style.opacity = opacity
-      }
-      if (int_pin) {
-        int_pin.$element.style.opacity = opacity
-      }
-    })
+    setPinSetDefaultIgnored(
+      { type, pinId, defaultIgnored: ignored },
+      this._spec
+    )
   }
 
-  private _spec_set_pin_default_ignored = (
-    type: IO,
-    pinId: string,
-    ignored: boolean
-  ): void => {
-    setPinDefaultIgnored({ type, pinId, ignored }, this._spec)
-  }
-
-  private _pod_set_pin_default_ignored = (
+  private _pod_set_pin_set_default_ignored = (
     type: IO,
     pinId: string,
     ignored: boolean
   ): void => {
     const { fork, bubble } = this.$props
 
-    this._pod.$setPinSetDefaultIgnored({ type, pinId, ignored, fork, bubble })
+    this._pod.$setPinSetDefaultIgnored({
+      type,
+      pinId,
+      defaultIgnored: ignored,
+      fork,
+      bubble,
+    })
   }
 
   private _on_unit_long_press = (
@@ -36333,43 +36339,57 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_link.$element.style.pointerEvents = pointerEvents
   }
 
-  private _set_exposed_pin_set_opacity = (
+  private _set_pin_set_opacity = (
     type: IO,
     pin_id: string,
     opacity: number
   ): void => {
+    // console.log('Graph', '_set_pin_set_opacity', type, pin_id, opacity)
+
     const exposed_pin_spec = this._get_pin_spec(type, pin_id)
+
     const { plug = {} } = exposed_pin_spec
+
     for (const sub_pin_id in plug) {
-      this._set_exposed_sub_pin_opacity(type, pin_id, sub_pin_id, opacity)
+      this._set_plug_opacity(type, pin_id, sub_pin_id, opacity)
     }
   }
 
-  private _set_exposed_sub_pin_opacity = (
+  private _set_plug_opacity = (
     type: IO,
     pin_id: string,
     sub_pin_id: string,
-    opacity: number
+    opacity_: number
   ): void => {
-    const _opacity = `${opacity}`
+    const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
+    const int_node_id = getIntNodeId(type, pin_id, sub_pin_id)
+
+    const ext_pin = this._pin[ext_node_id]
+    const int_pin = this._pin[int_node_id]
+
+    const opacity = `${opacity_}`
 
     const input = type === 'input'
-    const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
-    const external_pin = this._pin[ext_node_id]
-
-    external_pin.$element.style.opacity = _opacity
-
-    const int_node_id = getIntNodeId(type, pin_id, sub_pin_id)
-    const internal_pin = this._pin[int_node_id]
-
-    internal_pin.$element.style.opacity = _opacity
 
     const source_id = input ? ext_node_id : int_node_id
     const target_id = input ? int_node_id : ext_node_id
-    const link_id = getLinkId(source_id, target_id)
-    const link_base = this._link_base[link_id]
 
-    link_base.$element.style.opacity = _opacity
+    const link_id = getLinkId(source_id, target_id)
+
+    const pin_name = this._ext_pin_name[ext_node_id]
+
+    const link = this._link_base[link_id]
+
+    link.$element.style.opacity = opacity
+
+    pin_name.$element.style.opacity = opacity
+
+    if (ext_pin) {
+      ext_pin.$element.style.opacity = opacity
+    }
+    if (int_pin) {
+      int_pin.$element.style.opacity = opacity
+    }
   }
 
   private _get_exposed_pin_internal_node_id = (
@@ -36426,12 +36446,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const input = type === 'input'
 
     const external_pin = this._pin[ext_node_id]
-
-    // AD HOC
-    // whoever called this method did so using spec data not sim data
-    if (!external_pin) {
-      return
-    }
 
     external_pin.$element.style.borderColor = color
 
@@ -37753,8 +37767,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._pin_node[pin_node_id]
     delete this._pin_name[pin_node_id]
 
-    delete this._spec_link_pin_ignored[pin_node_id]
-
     delete this._normal_node[pin_node_id]
     delete this._ignored_node[pin_node_id]
 
@@ -38583,24 +38595,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (datum && datum instanceof Datum) {
       datum.focusChild(path, { preventScroll: true })
-    }
-  }
-
-  private _for_each_pin = (
-    callback: (
-      unit_id: string,
-      pin_node_id: string,
-      type: IO,
-      pin_id: string
-    ) => void
-  ) => {
-    for (const unit_id in this._unit_node) {
-      this._for_each_unit_pin(
-        unit_id,
-        (pin_node_id: string, type: IO, pin_id: string) => {
-          callback(unit_id, pin_node_id, type, pin_id)
-        }
-      )
     }
   }
 
@@ -54748,10 +54742,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _pod_started = false
 
   private _setup_pod = (pod: $Graph) => {
-    // if (!this._init) {
-    //   return
-    // }
-
     if (this._pod_started) {
       return
     }
@@ -54831,6 +54821,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             'set_unit_pin_set_id',
             'remove_unit_pin_data',
             'set_pin_set_functional',
+            'set_pin_set_default_ignored',
             'bulk_edit',
             'metadata',
           ],
@@ -55484,19 +55475,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     {}
 
   private _on_set_pin_set_functional = (
-    data: GraphSetUnitPinConstantMomentData
+    data: GraphSetPinSetFunctionalMomentData
   ): void => {
     // console.log('Grapb', '_on_set_pin_set_functional', data)
   }
 
-  private _on_graph_unit_leaf_append_child = (moment: GraphMoment): void => {
-    // console.log('Graph', '_on_graph_leaf_append_child', moment)
-    // TODO
-  }
-
-  private _on_graph_unit_leaf_remove_child_at = (moment: GraphMoment): void => {
-    // console.log('Graph', '_on_graph_leaf_remove_child_at', moment)
-    // TODO
+  private _on_set_pin_set_default_ignored = (
+    data: GraphSetPinSetDefaultIgnoredMomentData
+  ): void => {
+    // console.log('Graph', '_on_set_pin_set_default_ignored', data)
   }
 
   private _componentify_core = (
@@ -56901,22 +56888,87 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_graph_unit_set_pin_set_functional = (
-    data: GraphSetPinSetFunctionalMomentData & { userId: string }
+    data: GraphSetPinSetFunctionalMomentData & { unitId: string }
   ) => {
     // console.log('Graph', '_on_graph_unit_set_pin_set_functional', data)
 
-    const { setSpec } = this.$props
+    const { setSpec, specs } = this.$props
 
     const { type, pinId, functional, path } = data
 
     const graph_unit_id = path[0]
 
     if (this._is_spec_updater(path)) {
-      const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
+      const next_spec = clone(findSpecAtPath(specs, this._spec, path))
 
-      setPinSetFunctional({ type, pinId, functional }, graph_unit_spec)
+      setPinSetFunctional({ type, pinId, functional }, next_spec)
 
-      setSpec(graph_unit_spec.id, graph_unit_spec)
+      setSpec(next_spec.id, next_spec)
+    }
+  }
+
+  private _on_graph_unit_set_pin_set_default_ignored = (
+    data: GraphSetPinSetDefaultIgnoredMomentData
+  ) => {
+    // console.log('Graph', '_on_graph_unit_set_pin_set_default_ignored', data)
+
+    const { setSpec, specs } = this.$props
+
+    const { type, pinId, defaultIgnored, path } = data
+
+    if (this._is_spec_updater(path)) {
+      const next_spec = clone(findSpecAtPath(specs, this._spec, path))
+
+      setPinSetDefaultIgnored({ type, pinId, defaultIgnored }, next_spec)
+
+      setSpec(next_spec.id, next_spec)
+
+      if (path.length === 1) {
+        const graph_unit_id = path[0]
+
+        const ignored = this._get_graph_unit_pin_spec_ignored(
+          graph_unit_id,
+          type,
+          pinId
+        )
+
+        if (ignored === undefined) {
+          const should_be_ignored = this.__spec_is_link_pin_ignored(
+            graph_unit_id,
+            type,
+            pinId
+          )
+
+          const pin_node_id = getPinNodeId(graph_unit_id, type, pinId)
+
+          const merge_node_id = this._get_pin_merge_node_id(pin_node_id)
+          const plug_node_id = this._spec_get_unit_pin_plug(
+            graph_unit_id,
+            type,
+            pinId
+          )
+
+          const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
+
+          const current_ignored = this._link_layer[link_id] === LAYER_IGNORED
+
+          if (should_be_ignored) {
+            if (merge_node_id || plug_node_id) {
+              if (current_ignored) {
+                this._state_set_link_pin_ignored(pin_node_id, false)
+              }
+            } else {
+              if (!current_ignored) {
+                this._sim_set_unit_pin_ignored(pin_node_id, true)
+              }
+            }
+          } else {
+            if (current_ignored) {
+              this._sim_set_unit_pin_ignored(pin_node_id, false)
+            }
+          }
+        }
+      }
     }
   }
 
@@ -58216,6 +58268,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       add_pin_to_merge: this._on_graph_unit_add_pin_to_merge_moment,
       remove_pin_from_merge: this._on_graph_unit_remove_pin_from_merge_moment,
       set_pin_set_functional: this._on_graph_unit_set_pin_set_functional,
+      set_pin_set_default_ignored:
+        this._on_graph_unit_set_pin_set_default_ignored,
       move_subgraph_into: this._on_graph_unit_move_subgraph_into,
       move_subgraph_out_of: this._on_graph_unit_move_subgraph_out_of,
       move_sub_component_root: this._on_graph_unit_move_sub_component_root,
@@ -58329,6 +58383,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       plug_pin: this._on_plug_pin,
       unplug_pin: this._on_unplug_pin,
       set_pin_set_functional: this._on_set_pin_set_functional,
+      set_pin_set_default_ignored: this._on_set_pin_set_default_ignored,
       move_subgraph_into: this._on_move_subgraph_into,
       move_subgraph_out_of: this._on_move_subgraph_out_of,
       reorder_sub_component: this._on_reorder_sub_component,

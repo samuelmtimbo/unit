@@ -241,7 +241,7 @@ export type GraphSetPinSetIdData = {
 export type GraphSetPinSetDefaultIgnoredData = {
   type: IO
   pinId: string
-  ignored: boolean
+  defaultIgnored: boolean
   fork?: boolean
   bubble?: boolean
 }
