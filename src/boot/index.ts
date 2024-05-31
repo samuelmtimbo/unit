@@ -19,6 +19,7 @@ import { Unlisten } from '../types/Unlisten'
 import { KeyboardState } from '../types/global/KeyboardState'
 import { PointerState } from '../types/global/PointerState'
 import { randomIdNotIn } from '../util/id'
+import { weakMerge } from '../weakMerge'
 
 export function boot(
   parent: System | null = null,
@@ -57,7 +58,9 @@ export function boot(
 
   const feature = {}
 
-  const registry = new Registry(specs)
+  const specs__ = weakMerge(specs, {})
+
+  const registry = new Registry(specs__)
 
   const { specs_ } = registry
 
@@ -94,7 +97,7 @@ export function boot(
     input,
     context,
     specs_,
-    specs,
+    specs: specs__,
     classes,
     components,
     icons,
