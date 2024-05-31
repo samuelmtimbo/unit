@@ -55,6 +55,7 @@ export type G_MoveSubgraphIntoArgs = [
   Dict<string | null>,
   Dict<string[]>,
   boolean?,
+  boolean?,
 ]
 
 export interface G<I = any, O = any, U_ = any> {
@@ -246,7 +247,7 @@ export interface G<I = any, O = any, U_ = any> {
 export type G_J = {}
 
 export type G_EE = {
-  fork: [string, GraphSpec, string[]]
+  fork: [string, GraphSpec, boolean, string[]]
   element: [string[]]
   not_element: [string[]]
   set_exposed_sub_pin: [IO, string, string, Pin, PinOpt, string[]]

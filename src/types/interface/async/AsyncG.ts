@@ -67,7 +67,13 @@ export interface Holder<T> {
   data: T
 }
 
-function _call(graph, method: string, fork: boolean, ...args: any[]) {
+function _call(
+  graph,
+  method: string,
+  fork: boolean,
+  bubble: boolean,
+  ...args: any[]
+) {
   const {
     global: { ref_ },
   } = graph.__system
@@ -75,14 +81,14 @@ function _call(graph, method: string, fork: boolean, ...args: any[]) {
   let result: any
 
   if (fork) {
-    result = graph[method].call(graph, ...args, fork)
+    result = graph[method].call(graph, ...args, fork, bubble)
   } else {
     const all = ref_[graph.id]
 
     for (const globaId in all) {
       const sibling = all[globaId] as Graph
 
-      result = sibling[method].call(sibling, ...args, fork)
+      result = sibling[method].call(sibling, ...args, fork, bubble)
     }
   }
 
@@ -90,8 +96,13 @@ function _call(graph, method: string, fork: boolean, ...args: any[]) {
 }
 
 export const AsyncGCall = (graph: Graph): $G_C => {
-  function call(method: string, fork: boolean, ...args: any[]) {
-    return _call(graph, method, fork, ...args)
+  function call(
+    method: string,
+    fork: boolean,
+    bubble: boolean,
+    ...args: any[]
+  ) {
+    return _call(graph, method, fork, bubble, ...args)
   }
 
   const obj: $G_C = {
@@ -101,8 +112,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       name,
       specId,
       fork = true,
+      bubble = true,
     }: GraphSetUnitIdData): void {
-      call('setUnitId', fork, unitId, newUnitId, name, specId)
+      call('setUnitId', fork, bubble, unitId, newUnitId, name, specId)
     },
 
     $setUnitPinData({
@@ -111,12 +123,13 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       type,
       data,
       fork = true,
+      bubble = true,
     }: GraphSetUnitPinDataData): void {
       const { specs, classes } = graph.__system
 
       data = evaluate(data, specs, classes)
 
-      call('setUnitPinData', fork, unitId, type, pinId, data)
+      call('setUnitPinData', fork, bubble, unitId, type, pinId, data)
     },
 
     $removeUnitPinData({
@@ -124,24 +137,46 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       type,
       pinId,
       fork = true,
+      bubble = true,
     }: GraphRemoveUnitPinDataData): void {
-      call('removeUnitPinData', fork, unitId, type, pinId)
+      call('removeUnitPinData', fork, bubble, unitId, type, pinId)
     },
 
-    $addUnit({ unitId, bundle, fork = true }: GraphAddUnitData): void {
-      call('addUnitSpec', fork, unitId, bundle)
+    $addUnit({
+      unitId,
+      bundle,
+      fork = true,
+      bubble = true,
+    }: GraphAddUnitData): void {
+      call('addUnitSpec', fork, bubble, unitId, bundle)
     },
 
-    $cloneUnit({ unitId, newUnitId, fork = true }: GraphCloneUnitData): void {
-      call('cloneUnit', fork, unitId, newUnitId)
+    $cloneUnit({
+      unitId,
+      newUnitId,
+      fork = true,
+      bubble = true,
+    }: GraphCloneUnitData): void {
+      call('cloneUnit', fork, bubble, unitId, newUnitId)
     },
 
-    $moveUnit({ id, unitId, inputId, fork = true }: GraphMoveUnitData): void {
-      call('moveUnit', fork, id, unitId, inputId)
+    $moveUnit({
+      id,
+      unitId,
+      inputId,
+      fork = true,
+      bubble = true,
+    }: GraphMoveUnitData): void {
+      call('moveUnit', fork, bubble, id, unitId, inputId)
     },
 
-    $removeUnit({ unitId, take, fork }: GraphRemoveUnitData) {
-      call('removeUnit', fork, unitId, undefined, take, undefined)
+    $removeUnit({
+      unitId,
+      take,
+      fork = true,
+      bubble = true,
+    }: GraphRemoveUnitData) {
+      call('removeUnit', fork, bubble, unitId, undefined, take, undefined)
     },
 
     $exposePinSet({
@@ -150,6 +185,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinSpec,
       data,
       fork = true,
+      bubble = true,
     }: GraphExposePinSetData) {
       const data_ =
         data && evaluate(data, graph.__system.specs, graph.__system.classes)
@@ -157,6 +193,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       call(
         'exposePinSet',
         fork,
+        bubble,
         type,
         pinId,
         pinSpec,
@@ -166,8 +203,13 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       )
     },
 
-    $coverPinSet({ type, pinId, fork = true }: GraphCoverPinSetData) {
-      call('coverPinSet', fork, type, pinId, true)
+    $coverPinSet({
+      type,
+      pinId,
+      fork = true,
+      bubble = true,
+    }: GraphCoverPinSetData) {
+      call('coverPinSet', fork, bubble, type, pinId, true)
     },
 
     $exposePin({
@@ -176,12 +218,19 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       subPinId,
       subPinSpec,
       fork = true,
+      bubble = true,
     }: GraphExposePinData) {
-      call('exposePin', fork, type, pinId, subPinId, subPinSpec)
+      call('exposePin', fork, bubble, type, pinId, subPinId, subPinSpec)
     },
 
-    $coverPin({ type, pinId, subPinId, fork = true }: GraphCoverPinData) {
-      call('coverPin', fork, type, pinId, subPinId)
+    $coverPin({
+      type,
+      pinId,
+      subPinId,
+      fork = true,
+      bubble = true,
+    }: GraphCoverPinData) {
+      call('coverPin', fork, bubble, type, pinId, subPinId)
     },
 
     $plugPin({
@@ -190,8 +239,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       subPinId,
       subPinSpec,
       fork = true,
+      bubble = true,
     }: GraphPlugPinData) {
-      call('plugPin', fork, type, pinId, subPinId, subPinSpec)
+      call('plugPin', fork, bubble, type, pinId, subPinId, subPinSpec)
     },
 
     $unplugPin({
@@ -200,8 +250,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       subPinId,
       take,
       fork = true,
+      bubble = true,
     }: GraphUnplugPinData) {
-      call('unplugPin', fork, type, pinId, subPinId, true, take)
+      call('unplugPin', fork, bubble, type, pinId, subPinId, true, take)
     },
 
     $exposeUnitPinSet({
@@ -210,6 +261,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       pinSpec,
       fork = true,
+      bubble = true,
     }: GraphExposeUnitPinSetData) {
       const unit = graph.getUnit(unitId) as Graph
 
@@ -217,6 +269,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         unit,
         'exposePinSet',
         fork,
+        bubble,
         type,
         pinId,
         pinSpec,
@@ -231,10 +284,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       type,
       pinId,
       fork = true,
+      bubble = true,
     }: GraphCoverUnitPinSetData) {
       const unit = graph.getUnit(unitId) as Graph
 
-      _call(unit, 'coverPinSet', fork, unitId, type, pinId)
+      _call(unit, 'coverPinSet', fork, bubble, unitId, type, pinId)
     },
 
     $setPinSetId({
@@ -242,8 +296,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       nextPinId,
       fork = true,
+      bubble = true,
     }: GraphSetPinSetIdData): void {
-      call('setPinSetId', fork, type, pinId, nextPinId)
+      call('setPinSetId', fork, bubble, type, pinId, nextPinId)
     },
 
     $setPinSetFunctional({
@@ -251,8 +306,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       functional,
       fork = true,
+      bubble = true,
     }: GraphSetPinSetFunctionalData) {
-      call('setPinSetFunctional', fork, type, pinId, functional)
+      call('setPinSetFunctional', fork, bubble, type, pinId, functional)
     },
 
     $setUnitPinConstant({
@@ -261,8 +317,18 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       constant,
       fork = true,
+      bubble = true,
     }: GraphSetUnitPinConstant): void {
-      call('setUnitPinConstant', fork, unitId, type, pinId, constant, true)
+      call(
+        'setUnitPinConstant',
+        fork,
+        bubble,
+        unitId,
+        type,
+        pinId,
+        constant,
+        true
+      )
     },
 
     $setUnitPinIgnored({
@@ -271,8 +337,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       ignored,
       fork = true,
+      bubble = true,
     }: GraphSetUnitPinIgnoredData): void {
-      call('setUnitPinIgnored', fork, unitId, type, pinId, ignored)
+      call('setUnitPinIgnored', fork, bubble, unitId, type, pinId, ignored)
     },
 
     $setUnitPinSetId({
@@ -281,14 +348,21 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       nextPinId,
       fork = true,
+      bubble = true,
     }: GraphSetUnitPinSetId): void {
-      call('setUnitPinSetId', fork, unitId, type, pinId, nextPinId)
+      call('setUnitPinSetId', fork, bubble, unitId, type, pinId, nextPinId)
     },
 
-    $addMerge({ mergeId, mergeSpec, fork = true }: GraphAddMergeData) {
+    $addMerge({
+      mergeId,
+      mergeSpec,
+      fork = true,
+      bubble = true,
+    }: GraphAddMergeData) {
       call(
         'addMerge',
         fork,
+        bubble,
         mergeSpec,
         mergeId,
         undefined,
@@ -297,8 +371,13 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       )
     },
 
-    $removeMerge({ mergeId, take, fork = true }: GraphRemoveMergeData) {
-      call('removeMerge', fork, mergeId, undefined, take)
+    $removeMerge({
+      mergeId,
+      take,
+      fork = true,
+      bubble = true,
+    }: GraphRemoveMergeData) {
+      call('removeMerge', fork, bubble, mergeId, undefined, take)
     },
 
     $addPinToMerge({
@@ -307,8 +386,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       type,
       pinId,
       fork = true,
+      bubble = true,
     }: GraphAddPinToMergeData): void {
-      call('addPinToMerge', fork, mergeId, unitId, type, pinId)
+      call('addPinToMerge', fork, bubble, mergeId, unitId, type, pinId)
     },
 
     $removePinFromMerge({
@@ -318,8 +398,19 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       take,
       fork = true,
+      bubble = true,
     }: GraphRemovePinFromMergeData): void {
-      call('removePinFromMerge', fork, mergeId, unitId, type, pinId, true, take)
+      call(
+        'removePinFromMerge',
+        fork,
+        bubble,
+        mergeId,
+        unitId,
+        type,
+        pinId,
+        true,
+        take
+      )
     },
 
     $removeUnitGhost(
@@ -328,12 +419,14 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         nextUnitId,
         nextUnitSpec,
         fork = true,
+        bubble = true,
       }: GraphRemoveUnitGhostData,
       callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
     ): void {
       const ghost = call(
         'removeUnitGhost',
         fork,
+        bubble,
         unitId,
         nextUnitId,
         nextUnitSpec
@@ -352,10 +445,12 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextUnitBundle,
       nextUnitPinMap,
       fork = true,
+      bubble = true,
     }: GraphAddUnitGhostData): void {
       call(
         'addUnitGhost',
         fork,
+        bubble,
         unitId,
         nextUnitId,
         clone(nextUnitBundle),
@@ -367,12 +462,14 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       path,
       data,
       fork = true,
+      bubble = true,
     }: {
       path: string[]
       data: any
       fork?: boolean
+      bubble?: boolean
     }): void {
-      call('setMetadata', fork, path, data)
+      call('setMetadata', fork, bubble, path, data)
     },
 
     $reorderSubComponent({
@@ -380,13 +477,15 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       childId,
       to,
       fork = true,
+      bubble = true,
     }: {
       parentId: string | null
       childId: string
       to: number
       fork?: boolean
+      bubble?: boolean
     }) {
-      call('reorderSubComponent', fork, parentId, childId, to)
+      call('reorderSubComponent', fork, bubble, parentId, childId, to)
     },
 
     $moveSubComponentRoot({
@@ -394,8 +493,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       children,
       slotMap,
       fork = true,
+      bubble = true,
     }: GraphMoveSubComponentRootData): void {
-      call('moveSubComponentRoot', fork, parentId, children, slotMap)
+      call('moveSubComponentRoot', fork, bubble, parentId, children, slotMap)
     },
 
     $moveSubgraphInto({
@@ -409,6 +509,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
       fork = true,
+      bubble = true,
     }: GraphMoveSubGraphIntoData): void {
       const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
       const graphSpec = graph.getGraphUnitGraphSpec(graphId)
@@ -416,6 +517,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       call(
         'moveSubgraphInto',
         fork,
+        bubble,
         graphId,
         graphBundle,
         graphSpec,
@@ -441,6 +543,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
       fork = true,
+      bubble = true,
     }: GraphMoveSubGraphIntoData): void {
       const graphBundle = graph.getGraphUnitUnitBundleSpec(graphId)
       const graphSpec = graph.getGraphUnitGraphSpec(graphId)
@@ -448,6 +551,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       call(
         'moveSubgraphOutOf',
         fork,
+        bubble,
         graphId,
         graphBundle,
         graphSpec,
@@ -462,11 +566,16 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       )
     },
 
-    $bulkEdit({ actions, fork = true }: GraphBulkEditData) {
-      call('bulkEdit', fork, actions)
+    $bulkEdit({ actions, fork = true, bubble = true }: GraphBulkEditData) {
+      call('bulkEdit', fork, bubble, actions)
     },
 
-    $setMergeData({ mergeId, data, fork = true }: GraphSetMergeDataData): void {
+    $setMergeData({
+      mergeId,
+      data,
+      fork = true,
+      bubble = true,
+    }: GraphSetMergeDataData): void {
       const system = graph.refSystem()
 
       const { specs, classes } = system
@@ -476,11 +585,19 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.setMergeData(mergeId, _data)
     },
 
-    $removeMergeData({ mergeId, fork = true }: GraphRemoveMergeDataData): void {
+    $removeMergeData({
+      mergeId,
+      fork = true,
+      bubble = true,
+    }: GraphRemoveMergeDataData): void {
       graph.removeMergeData(mergeId)
     },
 
-    $takeUnitErr({ unitId, fork = true }: GraphTakeUnitErrData): void {
+    $takeUnitErr({
+      unitId,
+      fork = true,
+      bubble = true,
+    }: GraphTakeUnitErrData): void {
       graph.takeUnitErr(unitId)
     },
 
@@ -634,8 +751,9 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       pinId,
       ignored,
       fork,
+      bubble,
     }: GraphSetUnitPinIgnoredData): void {
-      call('setPinSetDefaultIgnored', fork, type, pinId, ignored)
+      call('setPinSetDefaultIgnored', fork, bubble, type, pinId, ignored)
     },
   }
 

@@ -441,9 +441,10 @@ export class Graph<I = any, O = any>
     unitId: string,
     type: IO,
     pinId: string,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ) {
-    this._removeUnitPinData(unitId, type, pinId, fork)
+    this._removeUnitPinData(unitId, type, pinId, fork, bubble)
 
     this.emit('remove_unit_pin_data', unitId, type, pinId, [])
   }
@@ -521,12 +522,13 @@ export class Graph<I = any, O = any>
     unitId: string,
     type: IO,
     pinId: string,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ) {
     const unit = this.getUnit(unitId)
 
     if (unit.hasInputNamed(pinId) && unit.isPinConstant(type, pinId)) {
-      fork && this._fork()
+      fork && this._fork(undefined, true, bubble)
     }
 
     unit.removePinData(type, pinId)
@@ -1192,9 +1194,10 @@ export class Graph<I = any, O = any>
     subPinId: string,
     id: string,
     propagate: boolean = false,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
-    this._unplugPin('output', id, subPinId, propagate, fork)
+    this._unplugPin('output', id, subPinId, propagate, fork, bubble)
   }
 
   public isExposedOutput(pin: GraphSubPinSpec): boolean {
@@ -1267,11 +1270,12 @@ export class Graph<I = any, O = any>
     data: any = undefined,
     emit: boolean = true,
     propagate: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
     // console.log('Graph', 'exposePinSet', type, pinId, pinSpec, data)
 
-    this._exposePinSet(type, pinId, pinSpec, data, propagate, fork)
+    this._exposePinSet(type, pinId, pinSpec, data, propagate, fork, bubble)
 
     data = this.getPin(type, pinId).peak()
 
@@ -1286,33 +1290,39 @@ export class Graph<I = any, O = any>
     unitId: string,
     width: number,
     height: number,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
-    this._setUnitSize(unitId, width, height)
+    this._setUnitSize(unitId, width, height, fork, bubble)
 
-    // emit && this.emit('set_unit_size', unitId, width, height, [])
+    emit && this.emit('set_unit_size', unitId, width, height, [])
   }
 
   setSubComponentSize(
     unitId: string,
     width: number,
     height: number,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
-    this._setSubComponentSize(unitId, width, height)
+    this._setSubComponentSize(unitId, width, height, fork, bubble)
 
-    // emit && this.emit('set_sub_component_size', unitId, width, height, [])
+    emit && this.emit('set_sub_component_size', unitId, width, height, [])
   }
 
   setComponentSize(
     unitId: string,
     width: number,
     height: number,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
-    this._setComponentSize(width, height)
+    this._setComponentSize(width, height, fork, bubble)
 
-    // emit && this.emit('set_component_size', unitId, width, height, [])
+    emit && this.emit('set_component_size', unitId, width, height, [])
   }
 
   public _exposePinSet = (
@@ -1321,7 +1331,8 @@ export class Graph<I = any, O = any>
     pinSpec: GraphPinSpec,
     data?: any,
     propagate: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
     // console.log('Graph', '_exposePinSet', type, pinId, pinSpec, data, propagate)
 
@@ -1330,7 +1341,7 @@ export class Graph<I = any, O = any>
     const exposeMerge = new Merge(this.__system)
     const exposedMergeOpposite = new Merge(this.__system)
 
-    fork && this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._specExposePinSet(type, pinId, pinSpec)
     this._memExposePinSet(
@@ -1436,8 +1447,7 @@ export class Graph<I = any, O = any>
     exposedPin: Pin,
     exposedMerge: Merge,
     exposedMergeOpposite: Merge,
-    propagate: boolean = true,
-    fork: boolean = true
+    propagate: boolean = true
   ) {
     const { plug, ref, data } = pinSpec
 
@@ -1467,13 +1477,15 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     functional: boolean,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
     if (type === 'output') {
       throw new Error('cannot set output pin set functional')
     }
 
-    this._setPinSetFunctional(type, pinId, functional)
+    this._setPinSetFunctional(type, pinId, functional, fork, bubble)
 
     emit && this.emit('set_pin_set_functional', type, pinId, functional, [])
   }
@@ -1481,9 +1493,11 @@ export class Graph<I = any, O = any>
   private _setPinSetFunctional(
     type: IO,
     name: string,
-    functional: boolean
+    functional: boolean,
+    fork: boolean,
+    bubble: boolean
   ): void {
-    this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._specSetPinSetFunctional(type, name, functional)
     this._memSetPinSetFunctional(type, name, functional)
@@ -1530,9 +1544,11 @@ export class Graph<I = any, O = any>
   public setPinSetDefaultIgnored(
     type: IO,
     pinId: string,
-    ignored: boolean
+    ignored: boolean,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
-    this._setPinSetDefaultIgnored(type, pinId, ignored)
+    this._setPinSetDefaultIgnored(type, pinId, ignored, fork, bubble)
 
     this.emit('set_pin_set_default_ignored', type, pinId, ignored, [])
   }
@@ -1540,9 +1556,11 @@ export class Graph<I = any, O = any>
   private _setPinSetDefaultIgnored(
     type: IO,
     pinId: string,
-    ignored: boolean
+    ignored: boolean,
+    fork: boolean,
+    bubble: boolean
   ): void {
-    this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._specSetPinSetDefaultIgnored(type, pinId, ignored)
     this._memSetPinSetDefaultIgnored(type, pinId, ignored)
@@ -1577,19 +1595,27 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     nextPinId: string,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
-    this._setPinSetId(type, pinId, nextPinId)
+    this._setPinSetId(type, pinId, nextPinId, fork, bubble)
 
     this.renamePin(type, pinId, nextPinId)
 
     emit && this.emit('set_pin_set_id', type, pinId, nextPinId, [])
   }
 
-  public _setPinSetId(type: IO, pinId: string, nextPinId: string): void {
+  public _setPinSetId(
+    type: IO,
+    pinId: string,
+    nextPinId: string,
+    fork: boolean,
+    bubble: boolean
+  ): void {
     // console.log('Graph', '_setPinSetId', type, pinId, nextPinId)
 
-    this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._specSetPinSetId(type, pinId, nextPinId)
   }
@@ -1690,10 +1716,17 @@ export class Graph<I = any, O = any>
     this.coverPin('input', id, subPinId)
   }
 
-  public coverPinSet = (type: IO, id: string, emit: boolean = true): void => {
+  public coverPinSet = (
+    type: IO,
+    id: string,
+    emit: boolean = true,
+    propagate: boolean = false,
+    fork: boolean = true,
+    bubble: boolean = true
+  ): void => {
     const pinSpec = this.getExposedPinSpec(type, id)
 
-    this._coverPinSet(type, id)
+    this._coverPinSet(type, id, propagate, fork, bubble)
 
     emit && this.emit('cover_pin_set', type, id, pinSpec, undefined, [])
 
@@ -1705,11 +1738,13 @@ export class Graph<I = any, O = any>
   public _coverPinSet = (
     type: IO,
     pinId: string,
-    propagate: boolean = true
+    propagate: boolean = true,
+    fork: boolean,
+    bubble: boolean
   ): void => {
     // console.log('Graph', '_coverPinSet', type, pinId)
 
-    this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._simCoverPinSet(type, pinId, propagate)
     this._memCoverPinSet(type, pinId)
@@ -1871,11 +1906,12 @@ export class Graph<I = any, O = any>
     subPinSpec: GraphSubPinSpec,
     emit: boolean = true,
     propagate: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
     // console.log('Graph', 'plugPin', type, pinId, subPinId, subPinSpec, emit, propagate, fork)
 
-    this._plugPin(type, pinId, subPinId, subPinSpec, propagate, fork)
+    this._plugPin(type, pinId, subPinId, subPinSpec, propagate, fork, bubble)
 
     emit && this.emit('plug_pin', type, pinId, subPinId, subPinSpec, [])
   }
@@ -1904,13 +1940,14 @@ export class Graph<I = any, O = any>
     subPinId: string,
     subPinSpec: GraphSubPinSpec,
     propagate: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
     // console.log('Graph', '_plugPin', type, pinId, subPinId, subPinSpec)
 
     const { mergeId, unitId, pinId: _pinId, kind = type } = subPinSpec
 
-    fork && this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     if (
       deepGetOrDefault(
@@ -2012,20 +2049,23 @@ export class Graph<I = any, O = any>
     subPinId: string,
     id: string,
     propagate: boolean = false,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
-    this._unplugPin('input', id, subPinId, propagate, fork)
+    this._unplugPin('input', id, subPinId, propagate, fork, bubble)
   }
 
   public coverPin = (
     type: IO,
     pinId: string,
     subPinId: string,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
     const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
-    this._coverPin(type, pinId, subPinId)
+    this._coverPin(type, pinId, subPinId, fork, bubble)
 
     emit && this.emit('cover_pin', type, pinId, subPinId, subPinSpec, [])
 
@@ -2036,8 +2076,14 @@ export class Graph<I = any, O = any>
     }
   }
 
-  private _coverPin = (type: IO, pinId: string, subPinId: string): void => {
-    this._fork()
+  private _coverPin = (
+    type: IO,
+    pinId: string,
+    subPinId: string,
+    fork: boolean,
+    bubble: boolean
+  ): void => {
+    fork && this._fork(undefined, fork, bubble)
 
     this._simCoverPin(type, pinId, subPinId)
     this._memCoverPin(type, pinId, subPinId)
@@ -2102,13 +2148,14 @@ export class Graph<I = any, O = any>
     subPinId: string,
     emit: boolean = true,
     propagate: boolean = false,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
     // console.log('Graph', 'unplugPin', type, pinId, subPinId)
 
     const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
-    this._unplugPin(type, pinId, subPinId, propagate, fork)
+    this._unplugPin(type, pinId, subPinId, propagate, fork, bubble)
 
     emit && this.emit('unplug_pin', type, pinId, subPinId, subPinSpec, [])
   }
@@ -2118,11 +2165,12 @@ export class Graph<I = any, O = any>
     pinId: string,
     subPinId: string,
     propagate: boolean,
-    fork: boolean
+    fork: boolean,
+    bubble: boolean
   ): void => {
     // console.log('Graph', '_unplugPin', type, pinId, subPinId)
 
-    fork && this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
 
@@ -2470,9 +2518,11 @@ export class Graph<I = any, O = any>
     unitId: string,
     nextUnitId: string,
     spec: GraphSpec,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): { specId: string; bundle: UnitBundleSpec } {
-    const data = this._removeUnitGhost(unitId, nextUnitId, spec)
+    const data = this._removeUnitGhost(unitId, nextUnitId, spec, fork, bubble)
 
     const { specId, bundle } = data
 
@@ -2625,7 +2675,8 @@ export class Graph<I = any, O = any>
     unitId: string,
     nextUnitId: string,
     spec: GraphSpec,
-    snapshot: boolean = true
+    fork: boolean,
+    bubble: boolean
   ): { specId: string; bundle: UnitBundleSpec } {
     const { specs } = this.__system
 
@@ -2635,7 +2686,7 @@ export class Graph<I = any, O = any>
 
     const unitSpec = this.getGraphUnitSpec(unitId)
 
-    const unit = this._removeUnit(unitId, false)
+    const unit = this._removeUnit(unitId, false, undefined, fork, bubble)
 
     const bundle = unitBundleSpec(unitSpec, specs)
 
@@ -2684,9 +2735,7 @@ export class Graph<I = any, O = any>
       })
     })
 
-    if (snapshot) {
-      bundle.unit.memory = unit.snapshot()
-    }
+    bundle.unit.memory = unit.snapshot()
 
     return { specId, bundle }
   }
@@ -2950,9 +2999,10 @@ export class Graph<I = any, O = any>
     unit: Unit,
     bundle?: UnitBundleSpec,
     emit: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
-    this._addUnit(unitId, unit, bundle)
+    this._addUnit(unitId, unit, bundle, fork, bubble)
 
     const unitBundle = bundle ?? unit.getUnitBundleSpec()
 
@@ -2967,8 +3017,10 @@ export class Graph<I = any, O = any>
     this._fork(specId, emit)
   }
 
-  private _fork(specId?: string, emit: boolean = true) {
+  private _fork(specId?: string, emit: boolean = true, bubble: boolean = true) {
     if (this.__system.shouldFork(this.id)) {
+      const prevSpecId = this.id
+
       const [id, spec] = this.__system.forkSpec(this._spec, specId)
 
       this.__system.unregisterUnit(this.id)
@@ -2978,7 +3030,7 @@ export class Graph<I = any, O = any>
 
       this.__system.registerUnit(id)
 
-      emit && this.emit('fork', id, clone(spec), [])
+      emit && this.emit('fork', prevSpecId, clone(spec), bubble, [])
     }
   }
 
@@ -3006,11 +3058,12 @@ export class Graph<I = any, O = any>
     unitId: string,
     unit: Unit,
     bundle: UnitBundleSpec = null,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ) => {
     // console.log('_addUnit', unitId, unit, bundle)
 
-    fork && this._fork(undefined)
+    fork && this._fork(undefined, true, bubble)
 
     if (this._unit[unitId]) {
       throw new Error('duplicated unit id ' + unitId)
@@ -3177,11 +3230,13 @@ export class Graph<I = any, O = any>
   private _appendSubComponentChild = (
     subComponentId: string,
     childId: string,
-    slot: string
+    slot: string,
+    fork: boolean,
+    bubble: boolean
   ): void => {
     // console.log('Graph', '_appendSubComponentChild', subComponentId, childId, slot)
 
-    this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._specSubComponentAppendChild(subComponentId, childId, slot)
     this._simSubComponentAppendChild(subComponentId, childId, slot)
@@ -3328,7 +3383,8 @@ export class Graph<I = any, O = any>
     unitId: string,
     bundle: UnitBundleSpec,
     emit: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): Unit {
     // console.log('Graph', 'addUnit', bundle, unitId)
 
@@ -3338,7 +3394,7 @@ export class Graph<I = any, O = any>
 
     const unit = unitFromBundleSpec(this.__system, bundle, specs_, this._branch)
 
-    this.addUnit(unitId, unit, bundle, emit)
+    this.addUnit(unitId, unit, bundle, emit, fork, bubble)
 
     return unit
   }
@@ -3346,7 +3402,8 @@ export class Graph<I = any, O = any>
   private _addUnitSpec(
     unitId: string,
     bundle: UnitBundleSpec,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): Unit {
     // console.log('Graph', 'addUnit', bundle, unitId, fork)
 
@@ -3356,7 +3413,7 @@ export class Graph<I = any, O = any>
 
     const unit = unitFromBundleSpec(this.__system, bundle, specs, this._branch)
 
-    this._addUnit(unitId, unit, bundle, fork)
+    this._addUnit(unitId, unit, bundle, fork, bubble)
 
     return unit
   }
@@ -3476,7 +3533,14 @@ export class Graph<I = any, O = any>
       }
 
       if (pinPlug) {
-        this._unplugPin(type, pinPlug.pinId, pinPlug.subPinId, false, false)
+        this._unplugPin(
+          type,
+          pinPlug.pinId,
+          pinPlug.subPinId,
+          false,
+          false,
+          false
+        )
       }
 
       delete this._pipedTo[pinNodeId]
@@ -3554,10 +3618,11 @@ export class Graph<I = any, O = any>
     let unit_pin_data_listener: Dict<IOOf<Dict<Function>>> = {}
 
     const setup_unit_contant_pin = (
-      type,
-      pinId,
-      data,
-      fork: boolean = true
+      type: IO,
+      pinId: string,
+      data: any,
+      fork: boolean = true,
+      bubble: boolean = true
     ) => {
       if (data === undefined) {
         return
@@ -3565,7 +3630,7 @@ export class Graph<I = any, O = any>
 
       const pin = this.getUnitPin(unitId, type, pinId)
 
-      fork && this._fork()
+      fork && this._fork(undefined, true, bubble)
 
       const pin_data_unlisten = pin.addListener('data', (data) => {
         if (this._settingUnitData) {
@@ -3692,11 +3757,16 @@ export class Graph<I = any, O = any>
       }
 
       all_unlisten.push(
-        unit.addListener(
+        unit.prependListener(
           'fork',
-          (forkId: string, spec: GraphSpec, path: string[]) => {
+          (
+            forkId: string,
+            spec: GraphSpec,
+            bubble: boolean,
+            path: string[]
+          ) => {
             if (path.length === 0) {
-              this._fork()
+              bubble && this._fork()
 
               deepSet(this._spec, ['units', unitId, 'id'], forkId)
             }
@@ -3763,13 +3833,14 @@ export class Graph<I = any, O = any>
     emit: boolean = true,
     take: boolean = true,
     destroy: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): U {
     const unit = this.getUnit(unitId)
 
     const unitBundle = unit.getUnitBundleSpec()
 
-    this._removeUnit(unitId, take, destroy, fork)
+    this._removeUnit(unitId, take, destroy, fork, bubble)
 
     emit && this.emit('remove_unit', unitId, unitBundle, unit, [])
 
@@ -3885,11 +3956,12 @@ export class Graph<I = any, O = any>
     unitId: string,
     take: boolean = true,
     destroy: boolean = false,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): Unit {
     // console.log('_removeUnit', unitId, take, destroy, fork)
 
-    fork && this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     const unit = this.getUnit(unitId)
 
@@ -4233,11 +4305,12 @@ export class Graph<I = any, O = any>
     mergeId: string,
     merge: Merge = null,
     propagate: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): Merge => {
     // console.log('Graph', '_addMerge', mergeId, mergeSpec, propagate)
 
-    fork && this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     merge = merge ?? this._createMerge(mergeId)
 
@@ -4259,7 +4332,7 @@ export class Graph<I = any, O = any>
           subPinId: plug.subPinId,
         })
 
-        this._unplugPin(type, plug.pinId, plug.subPinId, false, fork)
+        this._unplugPin(type, plug.pinId, plug.subPinId, false, false, false)
       }
     })
 
@@ -4556,7 +4629,8 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     propagate: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void => {
     // console.log(
     //   'Graph',
@@ -4578,7 +4652,7 @@ export class Graph<I = any, O = any>
     )
 
     if (plug) {
-      this._unplugPin(type, plug.pinId, plug.subPinId, propagate, fork)
+      this._unplugPin(type, plug.pinId, plug.subPinId, propagate, fork, bubble)
     }
 
     this._specAddPinToMerge(mergeId, unitId, type, pinId)
@@ -4594,13 +4668,14 @@ export class Graph<I = any, O = any>
     mergeId: string,
     emit: boolean = true,
     take: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ) {
     // console.log('Graph', 'removeMerge', mergeId, emit, take, fork)
 
     const mergeSpec = this.getMergeSpec(mergeId)
 
-    const merge = this._removeMerge(mergeId, take, fork)
+    const merge = this._removeMerge(mergeId, take, fork, bubble)
 
     emit && this.emit('remove_merge', mergeId, mergeSpec, merge, [])
 
@@ -4612,11 +4687,12 @@ export class Graph<I = any, O = any>
   public _removeMerge(
     mergeId: string,
     propagate: boolean,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): Merge {
     // console.log('Graph', '_removeMerge', mergeId, propagate)
 
-    fork && this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._validateMergeId(mergeId)
 
@@ -4767,11 +4843,12 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     propagate: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ) {
     // console.log('Graph', '_removePinFromMerge', mergeId, unitId, type, pinId)
 
-    fork && this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._validateMergeId(mergeId)
     this._validateUnitId(unitId)
@@ -4804,14 +4881,23 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     propagate: boolean,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ) {
     const mergePinCount = this._mergePinCount[mergeId]
 
     if (mergePinCount > 2) {
-      this._removePinFromMerge(mergeId, unitId, type, pinId, propagate, fork)
+      this._removePinFromMerge(
+        mergeId,
+        unitId,
+        type,
+        pinId,
+        propagate,
+        fork,
+        bubble
+      )
     } else {
-      this._removeMerge(mergeId, propagate, fork)
+      this._removeMerge(mergeId, propagate, fork, bubble)
     }
   }
 
@@ -4941,9 +5027,10 @@ export class Graph<I = any, O = any>
     pinId: string,
     constant: boolean,
     emit: boolean = true,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ) {
-    this._setUnitPinConstant(unitId, type, pinId, constant, fork)
+    this._setUnitPinConstant(unitId, type, pinId, constant, fork, bubble)
 
     const data = this.getUnitPinData(unitId, type, pinId)
 
@@ -4964,9 +5051,10 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     constant: boolean,
-    fork: boolean = true
+    fork: boolean,
+    bubble: boolean
   ) {
-    fork && this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._specSetUnitPinConstant(unitId, type, pinId, constant)
 
@@ -5021,9 +5109,10 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     ignored: boolean,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
-    this._setUnitPinIgnored(unitId, type, pinId, ignored, fork)
+    this._setUnitPinIgnored(unitId, type, pinId, ignored, fork, bubble)
 
     this.emit('set_unit_pin_ignored', unitId, type, pinId, ignored, [])
   }
@@ -5033,9 +5122,10 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     ignored: boolean,
-    fork: boolean = true
+    fork: boolean,
+    bubble: boolean
   ): void {
-    fork && this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     this._specSetUnitPinIgnored(unitId, type, pinId, ignored)
     this._simSetUnitPinIgnored(unitId, type, pinId, ignored, fork)
@@ -5069,13 +5159,12 @@ export class Graph<I = any, O = any>
         }
       )
 
-      // TODO perf
       forEachValueKey(this._spec[`${type}s`] || {}, ({ plug }, id) => {
         for (const subPinId in plug) {
           const subPinSpec = plug[subPinId]
 
           if (subPinSpec.unitId === unitId && subPinSpec.pinId === pinId) {
-            this._unplugPin(type, id, subPinId, false, fork)
+            this._unplugPin(type, id, subPinId, false, false, false)
 
             break
           }
@@ -5169,11 +5258,12 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     data: any,
-    fork: boolean = true
+    fork: boolean = true,
+    bubble: boolean = true
   ) {
     this._settingUnitData = true
 
-    this._setUnitPinData(unitId, type, pinId, data, fork)
+    this._setUnitPinData(unitId, type, pinId, data, fork, bubble)
 
     this._settingUnitData = false
 
@@ -5185,12 +5275,13 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     data: any,
-    fork: boolean = true
+    fork: boolean,
+    bubble: boolean
   ) {
     const unit = this.getUnit(unitId)
 
     if (unit.hasInputNamed(pinId) && unit.isPinConstant(type, pinId)) {
-      fork && this._fork()
+      fork && this._fork(undefined, true, bubble)
     }
 
     if (type === 'input' && this.isUnitRefPin(unitId, type, pinId)) {
@@ -5304,7 +5395,9 @@ export class Graph<I = any, O = any>
     subComponentId: string | null,
     children: string[],
     slotMap: Dict<string>,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
     const prevParentMap = this.getSubComponentsParentMap(children)
     const prevSlotMap = this.getSubComponentsParentMap(children)
@@ -5314,7 +5407,14 @@ export class Graph<I = any, O = any>
 
       const slotName = slotMap[childId] || 'default'
 
-      this._moveSubComponentRoot(subComponentId, childId, i, slotName)
+      this._moveSubComponentRoot(
+        subComponentId,
+        childId,
+        i,
+        slotName,
+        fork,
+        bubble
+      )
     }
 
     emit &&
@@ -5829,6 +5929,7 @@ export class Graph<I = any, O = any>
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
       fork = true,
+      bubble = true,
     ]: G_MoveSubgraphIntoArgs
   ): void {
     // console.log(
@@ -5943,11 +6044,13 @@ export class Graph<I = any, O = any>
     graphId: string,
     unitIdMap: Dict<string>,
     mergeIdMap: Dict<string>,
-    plugIdMap: IOOf<Dict<Dict<string>>>
+    plugIdMap: IOOf<Dict<Dict<string>>>,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
     // console.log('Graph', '_explodeUnit', graphId, unitIdMap, mergeIdMap)
 
-    this._fork()
+    fork && this._fork(undefined, true, bubble)
 
     const spec = this.getUnitSpec(graphId) as GraphSpec
 
@@ -6005,7 +6108,13 @@ export class Graph<I = any, O = any>
     this._removeUnit(graphId)
   }
 
-  private _removeSubComponentFromParent(subComponentId) {
+  private _removeSubComponentFromParent(
+    subComponentId: string,
+    fork: boolean,
+    bubble: boolean
+  ) {
+    fork && this._fork(undefined, true, bubble)
+
     this._simRemoveSubComponentFromParent(subComponentId)
     this._specRemoveSubComponentFromParent(subComponentId)
   }
@@ -6014,9 +6123,11 @@ export class Graph<I = any, O = any>
     parentId: string | null,
     childId: string,
     to: number,
-    emit: boolean = true
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
-    this._reorderSubComponent(parentId, childId, to)
+    this._reorderSubComponent(parentId, childId, to, fork, bubble)
 
     emit && this.emit('reorder_sub_component', parentId, childId, to, [])
   }
@@ -6024,8 +6135,12 @@ export class Graph<I = any, O = any>
   private _reorderSubComponent(
     parentId: string | null,
     childId: string,
-    to: number
+    to: number,
+    fork: boolean,
+    bubble: boolean
   ): void {
+    fork && this._fork(undefined, true, bubble)
+
     this._simReorderSubComponent(parentId, childId, to)
     this._specReorderSubComponent(parentId, childId, to)
   }
@@ -6066,20 +6181,24 @@ export class Graph<I = any, O = any>
     parentId: string | null,
     childId: string,
     to: number,
-    slotName: string
+    slotName: string,
+    fork: boolean = true,
+    bubble: boolean = true
   ): void {
     // console.log('Graph', 'moveRoot', parentId, childId, to, slotName)
 
-    this._moveSubComponentRoot(parentId, childId, to, slotName)
+    this._moveSubComponentRoot(parentId, childId, to, slotName, fork, bubble)
   }
 
   private _moveSubComponentRoot(
     parentId: string | null,
     childId: string,
     to: number,
-    slotName: string
+    slotName: string,
+    fork: boolean,
+    bubble: boolean
   ): void {
-    this._removeSubComponentFromParent(childId)
+    this._removeSubComponentFromParent(childId, fork, bubble)
 
     if (parentId) {
       this._insertSubComponentChild(parentId, childId, to, slotName)
@@ -6238,13 +6357,17 @@ export class Graph<I = any, O = any>
     return setup
   }
 
-  bulkEdit(actions: Action[], fork: boolean = true): void {
-    this._bulkEdit(actions, fork)
+  bulkEdit(
+    actions: Action[],
+    fork: boolean = true,
+    bubble: boolean = true
+  ): void {
+    this._bulkEdit(actions, fork, bubble)
 
     this.emit('bulk_edit', actions, false, [])
   }
 
-  private _bulkEdit(actions: Action[], fork: boolean): void {
+  private _bulkEdit(actions: Action[], fork: boolean, bubble: boolean): void {
     // console.log('Graph', 'bulkEdit', actions)
 
     for (const action of actions) {
@@ -6254,10 +6377,16 @@ export class Graph<I = any, O = any>
           addUnitSpec: (data: GraphAddUnitData) => {
             const { unitId, bundle, parentId, merges, plugs } = data
 
-            this._addUnitSpec(unitId, bundle, fork)
+            this._addUnitSpec(unitId, bundle, fork, bubble)
 
             if (parentId) {
-              this._appendSubComponentChild(parentId, unitId, 'default')
+              this._appendSubComponentChild(
+                parentId,
+                unitId,
+                'default',
+                fork,
+                bubble
+              )
             }
 
             if (merges) {
@@ -6286,12 +6415,12 @@ export class Graph<I = any, O = any>
           coverPin: (data: GraphCoverPinData) => {
             const { type, pinId, subPinId } = data
 
-            this._coverPin(type, pinId, subPinId)
+            this._coverPin(type, pinId, subPinId, fork, bubble)
           },
           coverPinSet: (data: GraphCoverPinSetData) => {
             const { type, pinId } = data
 
-            this._coverPinSet(type, pinId, false)
+            this._coverPinSet(type, pinId, false, fork, bubble)
           },
           plugPin: (data: GraphPlugPinData) => {
             const { type, pinId, subPinId, subPinSpec } = data
@@ -6301,22 +6430,36 @@ export class Graph<I = any, O = any>
           unplugPin: (data: GraphUnplugPinData) => {
             const { type, pinId, subPinId } = data
 
-            this._unplugPin(type, pinId, subPinId, false, fork)
+            this._unplugPin(type, pinId, subPinId, false, fork, bubble)
           },
           removeMerge: (data: GraphRemoveMergeData) => {
             const { mergeId } = data
 
-            this._removeMerge(mergeId, false, fork)
+            this._removeMerge(mergeId, false, fork, bubble)
           },
           removePinFromMerge: (data: GraphRemovePinFromMergeData) => {
             const { mergeId, unitId, type, pinId } = data
 
-            this._removePinFromMerge(mergeId, unitId, type, pinId)
+            this._removePinFromMerge(
+              mergeId,
+              unitId,
+              type,
+              pinId,
+              undefined,
+              fork,
+              bubble
+            )
           },
           removeUnitGhost: (data: GraphRemoveUnitGhostData) => {
             const { unitId, nextUnitId, nextUnitSpec } = data
 
-            this._removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
+            this._removeUnitGhost(
+              unitId,
+              nextUnitId,
+              nextUnitSpec,
+              fork,
+              bubble
+            )
           },
           addUnitGhost: (data: GraphAddUnitGhostData) => {
             const { unitId, nextUnitId, nextUnitBundle, nextUnitPinMap } = data
@@ -6346,27 +6489,34 @@ export class Graph<I = any, O = any>
           setPinSetId: (data: GraphSetPinSetIdData) => {
             const { type, pinId, nextPinId } = data
 
-            this._setPinSetId(type, pinId, nextPinId)
+            this._setPinSetId(type, pinId, nextPinId, fork, bubble)
           },
           setPinSetFunctional: (data: GraphSetPinSetFunctionalData) => {
             const { type, pinId, functional } = data
 
-            this._setPinSetFunctional(type, pinId, functional)
+            this._setPinSetFunctional(type, pinId, functional, fork, bubble)
           },
           setUnitPinConstant: (data: GraphSetUnitPinConstant) => {
             const { unitId, type, pinId, constant } = data
 
-            this._setUnitPinConstant(unitId, type, pinId, constant, fork)
+            this._setUnitPinConstant(
+              unitId,
+              type,
+              pinId,
+              constant,
+              fork,
+              bubble
+            )
           },
           setUnitPinIgnored: (data: GraphSetUnitPinIgnoredData) => {
             const { unitId, type, pinId, ignored } = data
 
-            this._setUnitPinIgnored(unitId, type, pinId, ignored, fork)
+            this._setUnitPinIgnored(unitId, type, pinId, ignored, fork, bubble)
           },
           setUnitPinData: (_data: GraphSetUnitPinDataData) => {
             const { unitId, type, pinId, data } = _data
 
-            this._setUnitPinData(unitId, type, pinId, data, fork)
+            this._setUnitPinData(unitId, type, pinId, data, fork, bubble)
           },
           setUnitId: (data: GraphSetUnitIdData) => {
             const { unitId, newUnitId, name, specId } = data
@@ -6391,7 +6541,14 @@ export class Graph<I = any, O = any>
 
               const slotName = slotMap[childId] || 'default'
 
-              this._moveSubComponentRoot(parentId, childId, i, slotName)
+              this._moveSubComponentRoot(
+                parentId,
+                childId,
+                i,
+                slotName,
+                fork,
+                bubble
+              )
             }
           },
           moveUnit: (data: GraphMoveUnitData) => {
@@ -6455,13 +6612,14 @@ export class Graph<I = any, O = any>
               nextPlugSpec,
               nextSubComponentParentMap,
               nextSubComponentChildrenMap,
+              true,
               true
             )
           },
           reorderSubComponent: (data: GraphReorderSubComponentData) => {
             const { parentId, childId, to } = data
 
-            this._reorderSubComponent(parentId, childId, to)
+            this._reorderSubComponent(parentId, childId, to, fork, bubble)
           },
           // TODO move removePinData to Unit's bulkEdit
           removePinData: (data: UnitRemovePinDataData) => {
@@ -6477,22 +6635,22 @@ export class Graph<I = any, O = any>
           setUnitSize: (data: GraphSetUnitSizeData) => {
             const { unitId, width, height } = data
 
-            this._setUnitSize(unitId, width, height)
+            this._setUnitSize(unitId, width, height, fork, bubble)
           },
           setSubComponentSize: (data: GraphSetUnitSizeData) => {
             const { unitId, width, height } = data
 
-            this._setSubComponentSize(unitId, width, height)
+            this._setSubComponentSize(unitId, width, height, fork, bubble)
           },
           setComponentSize: (data: GraphSetComponentSizeData) => {
             const { width, height } = data
 
-            this._setComponentSize(width, height)
+            this._setComponentSize(width, height, fork, bubble)
           },
           bulkEdit: (data: GraphBulkEditData) => {
             const { actions } = data
 
-            this.bulkEdit(actions)
+            this.bulkEdit(actions, fork, bubble)
           },
         },
         () => {
@@ -6502,7 +6660,15 @@ export class Graph<I = any, O = any>
     }
   }
 
-  private _setUnitSize(unitId: string, width: number, height: number) {
+  private _setUnitSize(
+    unitId: string,
+    width: number,
+    height: number,
+    fork: boolean,
+    bubble: boolean
+  ) {
+    fork && this._fork(undefined, true, bubble)
+
     this._specSetUnitSize(unitId, width, height)
   }
 
@@ -6510,7 +6676,15 @@ export class Graph<I = any, O = any>
     setUnitSize({ unitId, width, height }, this._spec)
   }
 
-  private _setSubComponentSize(unitId: string, width: number, height: number) {
+  private _setSubComponentSize(
+    unitId: string,
+    width: number,
+    height: number,
+    fork: boolean,
+    bubble: boolean
+  ) {
+    fork && this._fork(undefined, true, bubble)
+
     this._specSetSubComponentSize(unitId, width, height)
   }
 
@@ -6522,7 +6696,14 @@ export class Graph<I = any, O = any>
     setSubComponentSize({ unitId, width, height }, this._spec)
   }
 
-  private _setComponentSize(width: number, height: number) {
+  private _setComponentSize(
+    width: number,
+    height: number,
+    fork: boolean,
+    bubble: boolean
+  ) {
+    fork && this._fork(undefined, true, bubble)
+
     this._specSetComponentSize(width, height)
   }
 

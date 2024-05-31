@@ -6,6 +6,7 @@ export interface GraphForkMomentData {
   specId: string
   path: string[]
   spec: GraphSpec
+  bubble: boolean
 }
 
 export interface GraphForkMoment extends Moment<GraphForkMomentData> {}
@@ -15,7 +16,12 @@ export function watchGraphForkEvent(
   graph: Graph,
   callback: (moment: GraphForkMoment) => void
 ): () => void {
-  const listener = (specId: string, spec: GraphSpec, path: string[]) => {
+  const listener = (
+    specId: string,
+    spec: GraphSpec,
+    bubble: boolean,
+    path: string[]
+  ) => {
     callback({
       type: 'graph',
       event,
@@ -23,6 +29,7 @@ export function watchGraphForkEvent(
         path,
         specId,
         spec,
+        bubble,
       },
     })
   }

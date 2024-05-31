@@ -21,6 +21,7 @@ import {
   GraphRemoveUnitData,
   GraphRemoveUnitGhostData,
   GraphRemoveUnitPinDataData,
+  GraphReorderSubComponentData,
   GraphSetMergeDataData,
   GraphSetMetadataData,
   GraphSetPinSetDefaultIgnoredData,
@@ -198,11 +199,7 @@ export interface $G_C {
   ): void
   $getBundle(data: { deep?: boolean }, callback: Callback<BundleSpec>): void
   $setMetadata(data: GraphSetMetadataData): void
-  $reorderSubComponent(data: {
-    parentId: string | null
-    childId: string
-    to: number
-  })
+  $reorderSubComponent(data: GraphReorderSubComponentData)
   $moveSubComponentRoot(data: GraphMoveSubComponentRootData): void
   $moveSubgraphInto(data: GraphMoveSubGraphIntoData): void
   $moveSubgraphOutOf(data: GraphMoveSubGraphIntoData): void
