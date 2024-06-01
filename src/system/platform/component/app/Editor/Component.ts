@@ -1632,8 +1632,11 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._pod = next_graph
 
+    const style = this.getProp('style')
+
     const editor = new Editor_(
       {
+        style,
         graph: this._pod,
         registry: this._registry,
         component: this._component,
