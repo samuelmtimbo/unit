@@ -44,6 +44,8 @@ export default class Sort<T> extends Semifunctional<I<T>, O<T>> {
 
     const result = await this._forward_waiter.once()
 
+    this._loop()
+
     this._forward_waiter.clear()
 
     this._input['a[i] < a[j]'].pull()
@@ -73,6 +75,11 @@ export default class Sort<T> extends Semifunctional<I<T>, O<T>> {
     })
   }
 
+  d() {
+    this._forward_empty('a[i]')
+    this._forward_empty('a[j]')
+  }
+
   public onIterDataInputData(name: string, data: any): void {
     switch (name) {
       case 'a[i] < a[j]': {
@@ -87,9 +94,13 @@ export default class Sort<T> extends Semifunctional<I<T>, O<T>> {
     // console.log('onIterDataOutputDrop', name)
 
     if (!this._forwarding) {
-      if (this._output['a[i]'].empty() && this._output['a[j]'].empty()) {
-        this._backward_waiter.set(true)
-      }
+      this._loop()
+    }
+  }
+
+  private _loop() {
+    if (this._output['a[i]'].empty() && this._output['a[j]'].empty()) {
+      this._backward_waiter.set(true)
     }
   }
 }
