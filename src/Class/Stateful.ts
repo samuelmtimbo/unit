@@ -1,7 +1,6 @@
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { Primitive, PrimitiveEvents } from '../Primitive'
-import { State } from '../State'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
 import { J } from '../types/interface/J'
@@ -32,7 +31,7 @@ export class Stateful<
 
   public stateful = true
 
-  protected _defaultState: State = {}
+  protected _defaultState: Dict<any> = {}
 
   protected _state: Dict<any> = {}
 

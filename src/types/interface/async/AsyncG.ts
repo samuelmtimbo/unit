@@ -53,7 +53,6 @@ import { clone, isEmptyObject } from '../../../util/object'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
-import { GraphState } from '../../GraphState'
 import { IO } from '../../IO'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
@@ -623,25 +622,15 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       callback(state)
     },
 
-    async $getUnitState(
-      { unitId }: { unitId: string },
-      callback: (state: Dict<any>) => void
-    ) {
-      const state = await graph.getUnitState(unitId)
-      callback(state)
-    },
-
     $getGraphData(
       data: {},
       callback: Callback<{
-        state: Dict<any>
         children: Dict<any>
         pinData: Dict<any>
         err: Dict<string | null>
         mergeData: Dict<any>
       }>
     ): void {
-      const state = graph.getGraphState()
       const children = graph.getGraphChildren()
       const err = graph.getGraphErr()
       const units = graph.getUnits()
@@ -670,7 +659,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
         }
       }
 
-      callback({ state, children, err, pinData, mergeData })
+      callback({ children, err, pinData, mergeData })
     },
 
     async $snapshot(
@@ -700,11 +689,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       stringifyMemorySpecData(memory)
 
       callback(memory)
-    },
-
-    async $getGraphState({}: {}, callback: Callback<GraphState>) {
-      const state = await graph.getGraphState()
-      callback(state)
     },
 
     $getGraphChildren({}: {}, callback: (state: Dict<any>) => void) {

@@ -17,7 +17,7 @@ export interface Props {
   tabIndex?: number
   title?: string
   draggable?: boolean
-  data?: Dict<string> // TODO
+  data?: Dict<string>
 }
 
 const DEFAULT_STYLE = {

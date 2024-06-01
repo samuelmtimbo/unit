@@ -4,7 +4,6 @@ import Merge from '../../Class/Merge'
 import { Unit } from '../../Class/Unit'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
-import { State } from '../../State'
 import { Action } from '../Action'
 import { BundleSpec } from '../BundleSpec'
 import { Dict } from '../Dict'
@@ -12,7 +11,6 @@ import { GraphMergeSpec } from '../GraphMergeSpec'
 import { GraphMergesSpec } from '../GraphMergesSpec'
 import { GraphPinSpec } from '../GraphPinSpec'
 import { GraphSpec } from '../GraphSpec'
-import { GraphState } from '../GraphState'
 import { GraphUnitSpec } from '../GraphUnitSpec'
 import { GraphUnitsSpec } from '../GraphUnitsSpec'
 import { IO } from '../IO'
@@ -100,8 +98,6 @@ export interface G<I = any, O = any, U_ = any> {
   ): { input: Dict<any>; output: Dict<any> }
   getUnitInput(unitId: string, pinId: string): Pin<any>
   getUnitOutput(unitId: string, pinId: string): Pin<any>
-  getUnitState(unitId: string): State
-  getGraphState(): GraphState
   getGraphChildren(): Dict<any>
   getGraphPinData(): object
   getUnitInputData(unitId: string): Dict<any>

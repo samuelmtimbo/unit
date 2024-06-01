@@ -660,8 +660,6 @@ export class Component<
     const hosts = getLocalComponents(hostGlobalId)
 
     if (hosts.length === 0) {
-      // TODO maybe the host has not been registered yet
-
       return
     }
 
