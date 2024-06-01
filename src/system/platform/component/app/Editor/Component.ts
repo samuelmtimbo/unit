@@ -94,7 +94,6 @@ import { Pin } from '../../../../../Pin'
 import { PinOpt } from '../../../../../PinOpt'
 import { PinOpts } from '../../../../../PinOpts'
 import { Pins } from '../../../../../Pins'
-import { State } from '../../../../../State'
 import {
   bundleSpec,
   unitBundleSpec,
@@ -589,7 +588,6 @@ import { GraphMergeSpec } from '../../../../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../../../../types/GraphMergesSpec'
 import { GraphPinSpec } from '../../../../../types/GraphPinSpec'
 import { GraphSpecs } from '../../../../../types/GraphSpecs'
-import { GraphState } from '../../../../../types/GraphState'
 import { GraphUnitConnect } from '../../../../../types/GraphUnitConnect'
 import { GraphUnitMerges } from '../../../../../types/GraphUnitMerges'
 import { GraphUnitPinSpec } from '../../../../../types/GraphUnitPinSpec'
@@ -4884,19 +4882,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     sub_pin_id: string
   ) => {
     return getSubPinSpec(this._spec, type, pin_id, sub_pin_id)
-  }
-
-  private _pod_get_unit_state = (
-    unit_id: string,
-    callback: (state: State) => void
-  ): void => {
-    return this._pod.$getUnitState({ unitId: unit_id }, callback)
-  }
-
-  private _pod_get_graph_state = (
-    callback: (state: GraphState) => void
-  ): void => {
-    return this._pod.$getGraphState({}, callback)
   }
 
   private _get_unit_component_spec = (unit_id: string): ComponentSpec => {
@@ -39601,8 +39586,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     delete this._err[unit_id]
 
-    delete this._graph_state[unit_id]
-
     this._unit_count--
 
     if (this._minimap) {
@@ -40794,23 +40777,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     })
 
     return position
-  }
-
-  private _get_unit_state = (unit_id: string): State => {
-    const state = this._graph_state[unit_id]
-    return state
-  }
-
-  private _set_unit_position = (
-    unit_id: string,
-    position: Dict<Position>
-  ): void => {
-    const unit_position = position[unit_id]
-    this._set_node_position(unit_id, unit_position)
-    this._for_each_unit_pin(unit_id, (pin_node_id: string) => {
-      const pin_position = position[pin_node_id]
-      this._set_node_position(pin_node_id, pin_position)
-    })
   }
 
   private _get_unit_pin_position = (unit_id: string): UnitPinPosition => {
@@ -42473,12 +42439,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const unit = clone(_unit)
 
       const unit_id = this._yellow_drag_node_id
-
-      const state = this._get_unit_state(unit_id)
-
-      const _state = clone(state)
-
-      unit.state = _state
 
       if (this._is_unit_component(unit_id)) {
         const component = this._get_sub_component(unit_id)
@@ -55191,8 +55151,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _graph_state: GraphState = {}
-  private _graph_children: GraphState = {}
+  private _graph_children: Dict<any> = {}
 
   private _graph_debug_refresh_pin_data = (
     pin_node_id: string,

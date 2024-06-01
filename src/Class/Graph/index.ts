@@ -3,7 +3,6 @@ import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { Pins } from '../../Pins'
 import { Primitive } from '../../Primitive'
-import { State } from '../../State'
 import { bundleSpec, unitBundleSpec } from '../../bundle'
 import {
   animate,
@@ -113,7 +112,6 @@ import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../types/GraphMergesSpec'
 import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
-import { GraphState } from '../../types/GraphState'
 import { GraphUnitMerges } from '../../types/GraphUnitMerges'
 import { GraphUnitPlugs } from '../../types/GraphUnitPlugs'
 import { GraphUnitSpec } from '../../types/GraphUnitSpec'
@@ -2750,33 +2748,6 @@ export class Graph<I = any, O = any>
     return unit
   }
 
-  public read(): State {
-    return this.getGraphState()
-  }
-
-  public write(state: State): void {
-    this.setGraphState(state)
-  }
-
-  public async setGraphState(state: State): Promise<void> {
-    for (const unit_id in state) {
-      const unit = this.getUnit(unit_id)
-      // TODO
-    }
-  }
-
-  public getUnitState(unitId: string): State {
-    const unit = this.getUnit(unitId)
-    // TODO
-    return null
-  }
-
-  public getGraphState(): GraphState {
-    // TODO
-    const state = {}
-    return state
-  }
-
   public getGraphChildren(): Dict<any> {
     const children = {}
     for (const unitId in this._unit) {
@@ -3144,7 +3115,6 @@ export class Graph<I = any, O = any>
       )
 
       unit.appendChild(ChildBundle)
-      // TODO state
     }
 
     this._specInjectSubComponent(unitId)
@@ -5593,204 +5563,6 @@ export class Graph<I = any, O = any>
     }
 
     return mergeId
-  }
-
-  private _movePlugInto__inject = (
-    graphId: string,
-    type: IO,
-    pinId: string,
-    subPinId: string,
-    subPinSpec: GraphSubPinSpec,
-    nextPlugSpec: {
-      input: Dict<Dict<GraphSubPinSpec>>
-      output: Dict<Dict<GraphSubPinSpec>>
-    },
-    nextPinIdMap: Dict<{
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    }>,
-    nextMergePinId: Dict<{
-      input: { mergeId: string }
-      output: { mergeId: string }
-    }>,
-    nextIdMap: {
-      merge: Dict<string>
-      link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-      plug: IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
-      unit: Dict<string>
-    }
-  ): void => {
-    // console.log('Graph', '_movePlugInto__inject')
-
-    const graph = this.getGraph(graphId)
-
-    const finalType = deepGetOrDefault(
-      nextIdMap,
-      ['plug', type, pinId, subPinId, 'type'],
-      type
-    )
-
-    const nextSubPinSpec = deepGetOrDefault(
-      nextPlugSpec,
-      [type, pinId, subPinId],
-      {}
-    )
-
-    // if (graph.hasPinNamed(finalType, pinId)) {
-    //   graph.exposePin(finalType, pinId, subPinId, nextSubPinSpec, false)
-    // } else {
-    //   graph.exposePinSet(
-    //     finalType,
-    //     pinId,
-    //     {
-    //       plug: {
-    //         [subPinId]: nextSubPinSpec,
-    //       },
-    //     },
-    //     false
-    //   )
-    // }
-  }
-
-  private _movePlugInto__reconnect = (
-    graphId: string,
-    type: IO,
-    pinId: string,
-    subPinId: string,
-    subPinSpec: GraphSubPinSpec,
-    nextPlugSpec: {
-      input: Dict<Dict<GraphSubPinSpec>>
-      output: Dict<Dict<GraphSubPinSpec>>
-    },
-    nextPinIdMap: Dict<{
-      input: Dict<{ pinId: string; subPinId: string }>
-      output: Dict<{ pinId: string; subPinId: string }>
-    }>,
-    nextMergePinId: Dict<{
-      input: { mergeId: string }
-      output: { mergeId: string }
-    }>,
-    nextIdMap: {
-      merge: Dict<string>
-      link: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string }>>>
-      plug: IOOf<Dict<Dict<{ mergeId: string; type: IO }>>>
-      unit: Dict<string>
-    },
-    plugs
-  ): void => {
-    // console.log(
-    //   'Graph',
-    //   '_movePlugInto__reconnect',
-    //   graphId,
-    //   type,
-    //   pinId,
-    //   subPinId,
-    //   subPinSpec,
-    //   nextPlugSpec
-    // )
-
-    const oppositeType = opposite(type)
-
-    const nextPinId = deepGetOrDefault(
-      nextPlugSpec,
-      [type, pinId, subPinId, 'pinId'],
-      pinId
-    )
-
-    const plug = deepGet(plugs, [type, pinId, subPinId])
-
-    const finalType = deepGetOrDefault(
-      nextIdMap,
-      ['plug', type, pinId, subPinId, 'type'],
-      type
-    )
-
-    const graph = this.getGraph(graphId)
-
-    const nextSubPinSpec = deepGetOrDefault(
-      nextPlugSpec,
-      [type, pinId, subPinId],
-      {}
-    )
-
-    if (graph.hasPinNamed(finalType, pinId)) {
-      graph.exposePin(finalType, pinId, subPinId, nextSubPinSpec, false)
-    } else {
-      graph.exposePinSet(
-        finalType,
-        pinId,
-        {
-          plug: {
-            [subPinId]: nextSubPinSpec,
-          },
-        },
-        false
-      )
-
-      if (plug.active()) {
-        // TODO sub pin
-        // graph.setPlugData(finalType, pinId, subPinId, plug.peak(), false)
-        graph.setPinData(finalType, pinId, plug.peak())
-      }
-    }
-
-    if (subPinSpec.unitId && subPinSpec.pinId) {
-      let nextMergeId = deepGetOrDefault(
-        nextIdMap,
-        ['link', subPinSpec.unitId, subPinSpec.type, pinId, 'mergeId'],
-        null
-      )
-
-      if (nextMergeId) {
-        this._addPinToMerge(nextMergeId, graphId, finalType, nextPinId)
-      } else {
-        nextMergeId = deepGetOrDefault(
-          nextIdMap,
-          ['plug', type, pinId, subPinId, 'mergeId'],
-          null
-        )
-
-        if (nextMergeId) {
-          this._addMerge(
-            {
-              [graphId]: {
-                [finalType]: {
-                  [nextPinId]: true,
-                },
-              },
-              [subPinSpec.unitId]: {
-                [type]: {
-                  [subPinSpec.pinId]: true,
-                },
-              },
-            },
-            nextMergeId,
-            undefined,
-            false
-          )
-        }
-      }
-    } else if (subPinSpec.mergeId) {
-      const nextMergeId = deepGetOrDefault(
-        nextMergePinId,
-        ['merge', subPinSpec.mergeId, type],
-        null
-      )
-
-      if (nextMergeId) {
-        this._addPinToMerge(nextMergeId, graphId, finalType, nextPinId, false)
-      } else {
-        const nextMergeId = deepGetOrDefault(
-          nextIdMap,
-          ['plug', type, pinId, subPinId, 'mergeId'],
-          null
-        )
-
-        if (nextMergeId) {
-          this._addPinToMerge(nextMergeId, graphId, finalType, nextPinId)
-        }
-      }
-    }
   }
 
   public getUnitMergesSpec(unitId: string): GraphMergesSpec {

@@ -35,7 +35,6 @@ import {
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
-import { State } from '../../../State'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
@@ -49,8 +48,6 @@ export const G_METHOD_CALL_GET = [
   'getPinData',
   'getInputData',
   'getUnitPinData',
-  'getUnitState',
-  'getGraphState',
   'getGraphChildren',
   'getGraphPinData',
   'getGraphData',
@@ -151,10 +148,6 @@ export interface $G_C {
     data: {},
     callback: (data: { input: Dict<any>; output: Dict<any> }) => void
   ): void
-  $getUnitState(
-    data: { unitId: string },
-    callback: (state: State) => void
-  ): void
   $snapshot(
     data: {},
     callback: (state: {
@@ -181,14 +174,12 @@ export interface $G_C {
   $getGraphData(
     data: {},
     callback: Callback<{
-      state: Dict<any>
       children: Dict<any>
       pinData: Dict<any>
       err: Dict<string | null>
       mergeData: Dict<any>
     }>
   ): void
-  $getGraphState(data: {}, callback: (state: Dict<any>) => void): void
   $getGraphChildren(data: {}, callback: (state: Dict<any>) => void)
   $getGraphPinData(data: {}, callback: (data: Dict<any>) => void): void
   $getGraphErr(data: {}, callback: (data: Dict<string | null>) => void): void

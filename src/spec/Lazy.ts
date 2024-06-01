@@ -2,7 +2,6 @@ import { Graph } from '../Class/Graph'
 import Merge from '../Class/Merge'
 import { Unit, UnitEvents } from '../Class/Unit'
 import { Pin } from '../Pin'
-import { State } from '../State'
 import { isComponentSpec } from '../client/spec'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
@@ -16,7 +15,6 @@ import { GraphMergeSpec } from '../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../types/GraphMergesSpec'
 import { GraphPinSpec } from '../types/GraphPinSpec'
 import { GraphSpec } from '../types/GraphSpec'
-import { GraphState } from '../types/GraphState'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { GraphUnitsSpec } from '../types/GraphUnitsSpec'
 import { IO } from '../types/IO'
@@ -478,16 +476,6 @@ export function lazyFromSpec(
     public getBundleSpec(): BundleSpec {
       this._ensure()
       return this.__graph.getBundleSpec()
-    }
-
-    public getUnitState(unitId: string): State {
-      this._ensure()
-      return this.__graph.getUnitState(unitId)
-    }
-
-    public getGraphState(): GraphState {
-      this._ensure()
-      return this.__graph.getGraphState()
     }
 
     public getGraphChildren(): Dict<any> {
@@ -1039,11 +1027,6 @@ export function lazyFromSpec(
     public setMetadata(path: string[], data: any): void {
       this._ensure()
       this.__graph.setMetadata(path, data)
-    }
-
-    public setGraphState(state: any): void {
-      this._ensure()
-      this.__graph.setGraphState(state)
     }
   }
 
