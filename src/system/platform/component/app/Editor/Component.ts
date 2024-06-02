@@ -56806,7 +56806,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _tick_constant_input_ref = throttle(
     this.$system,
-    (unitId, inputId, global_ref: GlobalRefSpec) => {
+    (unitId, inputId, data: GlobalRefSpec) => {
       // console.log(
       //   'Graph',
       //   '_tick_constant_input_ref',
@@ -56815,16 +56815,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       //   global_ref
       // )
 
-      const $unit = this._pod.$refGlobalObj(global_ref)
-
       const pin_node_id = getInputNodeId(unitId, inputId)
 
-      if (global_ref.__.includes('U')) {
-        $unit.$getUnitBundleSpec({}, (bundleSpec: UnitBundleSpec) => {
-          const value = `$${stringify(bundleSpec)}`
+      if (typeof data === 'object') {
+        const $unit = this._pod.$refGlobalObj(data)
 
-          this._spec_set_pin_data(pin_node_id, value)
-        })
+        if (data.__.includes('U')) {
+          $unit.$getUnitBundleSpec({}, (bundleSpec: UnitBundleSpec) => {
+            const value = `$${stringify(bundleSpec)}`
+
+            this._spec_set_pin_data(pin_node_id, value)
+          })
+        }
+      } else {
+        this._spec_set_pin_data(pin_node_id, data)
       }
     },
     100

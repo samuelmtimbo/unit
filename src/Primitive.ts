@@ -303,6 +303,8 @@ export class Primitive<
     if (data instanceof Function) {
       data = new data(this.__system)
 
+      data.play()
+
       this._input_effemeral[name] = data
       this._i[name] = data
     }
