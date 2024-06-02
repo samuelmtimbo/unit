@@ -5254,10 +5254,6 @@ export class Graph<I = any, O = any>
       fork && this._fork(undefined, true, bubble)
     }
 
-    if (type === 'input' && this.isUnitRefPin(unitId, type, pinId)) {
-      data = new data(this.__system)
-    }
-
     this._specSetUnitPinData(unitId, type, pinId, data)
     this._simSetUnitPinData(unitId, type, pinId, data)
   }
