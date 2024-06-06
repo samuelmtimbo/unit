@@ -1,17 +1,21 @@
 {
-  "name": "keep",
+  "name": "push",
   "inputs": {
     "a": {
-      "type": "any"
+      "type": "<T>"
     },
     "b": {
       "type": "any"
     }
   },
-  "outputs": {},
+  "outputs": {
+    "a": {
+      "type": "<T>"
+    }
+  },
   "metadata": {
     "icon": "filter",
-    "description": "consume `b`, consume `a` if present",
+    "description": "consume `b`, let pass `a` if present",
     "complexity": 3,
     "tags": ["f", "control"]
   },
