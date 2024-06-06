@@ -133,12 +133,7 @@ export interface G<I = any, O = any, U_ = any> {
     nextUnitBundle: UnitBundleSpec,
     nextUnitPinMap: IOOf<Dict<string>>
   ): void
-  addMerge(
-    mergeSpec: GraphMergeSpec,
-    mergeId: string,
-    emit: boolean,
-    ...extra: any[]
-  ): void
+  addMerge(mergeSpec: GraphMergeSpec, mergeId: string, ...extra: any[]): void
   addPinToMerge(
     mergeId: string,
     unitId: string,

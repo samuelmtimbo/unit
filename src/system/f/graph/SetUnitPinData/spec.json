@@ -2,7 +2,7 @@
   "name": "set unit pin data",
   "inputs": {
     "graph": {
-      "type": "`U`",
+      "type": "`G`",
       "ref": true
     },
     "id": {

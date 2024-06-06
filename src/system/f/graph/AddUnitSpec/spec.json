@@ -1,6 +1,9 @@
 {
-  "name": "remove unit",
+  "name": "add unit spec",
   "inputs": {
+    "unit": {
+      "type": "object"
+    },
     "graph": {
       "type": "`G`",
       "ref": true
@@ -12,11 +15,11 @@
   "outputs": {},
   "metadata": {
     "icon": "circle",
-    "description": "remove unit `id` from `graph`",
+    "description": "add unit of `unit` spec to `graph`",
     "complexity": 18,
     "tags": ["f", "graph"]
   },
-  "id": "c47d84b2-4207-11eb-a064-a3633d64f05d",
+  "id": "d36729c6-432f-46e9-8fa1-3fc88de022ff",
   "base": true,
   "type": "`U`",
   "system": true
