@@ -56811,7 +56811,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     data: GraphSetUnitPinConstantMomentData
   ) => {
     // console.log('Graph', '_on_set_unit_pin_constant', data)
-    //
+
+    const { unitId, type, pinId, constant } = data
+
+    const pin_node_id = getPinNodeId(unitId, type, pinId)
+
+    this._state_set_unit_pin_constant(pin_node_id, constant)
   }
 
   private _constant_input_ref_unlisten: Dict<Dict<Unlisten>> = {}
