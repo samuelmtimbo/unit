@@ -2041,13 +2041,36 @@ export type GraphSimNode = SimNode<{
 export type GraphSimNodes = Dict<GraphSimNode>
 
 const _tree_cache: Dict<TreeNode> = {}
+const _type_match_cache: Dict<boolean> = {}
 
-export const getTree__cached = (value: string): TreeNode => {
+export const _isTypeMatch__cached = (
+  specs: Specs,
+  source: TreeNode,
+  target: TreeNode
+): boolean => {
+  const cacheKey = `${source.value}@${target.value}`
+
+  if (_type_match_cache[cacheKey]) {
+    return _type_match_cache[cacheKey]
+  }
+
+  const match = _isTypeMatch(specs, source, target)
+
+  _type_match_cache[cacheKey] = match
+
+  return match
+}
+
+export const getTree__cached = (
+  value: string,
+  keyValue?: boolean,
+  ignoreKeyword?: boolean
+): TreeNode => {
   if (_tree_cache[value]) {
     return _tree_cache[value]
   }
 
-  const tree = getTree(value)
+  const tree = getTree(value, keyValue, ignoreKeyword)
 
   _tree_cache[value] = tree
 
@@ -2071,7 +2094,7 @@ export const getValueType__cached = (
   return tree
 }
 
-export const _getValueTree = (value: string): TreeNode => {
+export const _getValueTree__cached = (value: string): TreeNode => {
   if (_tree_cache[value]) {
     return _tree_cache[value]
   }
@@ -6745,7 +6768,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     position = position ?? this._predict_pin_datum_initial_position(pin_node_id)
 
-    const tree = _getValueTree(value)
+    const tree = _getValueTree__cached(value)
 
     this._sim_add_pin_datum_tree(
       unit_id,
@@ -24788,7 +24811,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const pin_type = this._get_pin_type(pin_node_id)
 
-    return _isTypeMatch(specs, type, pin_type)
+    return _isTypeMatch__cached(specs, type, pin_type)
   }
 
   private _is_plug_pin_match = (
@@ -24843,13 +24866,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             if (this._is_unit_datum_type(exp_pin_type)) {
               return true
             } else {
-              return _isTypeMatch(specs, exp_pin_type, link_pin_type)
+              return _isTypeMatch__cached(specs, exp_pin_type, link_pin_type)
             }
           } else {
-            return _isTypeMatch(specs, exp_pin_type, link_pin_type)
+            return _isTypeMatch__cached(specs, exp_pin_type, link_pin_type)
           }
         } else {
-          return _isTypeMatch(specs, link_pin_type, exp_pin_type)
+          return _isTypeMatch__cached(specs, link_pin_type, exp_pin_type)
         }
       }
     } else if (this._is_merge_node_id(pin_node_id)) {
@@ -24881,9 +24904,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
 
-        return _isTypeMatch(specs, exp_pin_type, merge_pin_type)
+        return _isTypeMatch__cached(specs, exp_pin_type, merge_pin_type)
       } else {
-        return _isTypeMatch(specs, merge_pin_type, exp_pin_type)
+        return _isTypeMatch__cached(specs, merge_pin_type, exp_pin_type)
       }
       // }
     }
@@ -24962,7 +24985,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_type_tree = this._get_pin_type(pin_node_id)
     const unit_type_tree = this._get_unit_type(unit_id)
 
-    const is_type_match = _isTypeMatch(specs, unit_type_tree, pin_type_tree)
+    const is_type_match = _isTypeMatch__cached(
+      specs,
+      unit_type_tree,
+      pin_type_tree
+    )
 
     return is_type_match
   }
@@ -24995,7 +25022,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return false
     }
 
-    const is_type_match = _isTypeMatch(specs, unit_type_tree, exp_pin_type_tree)
+    const is_type_match = _isTypeMatch__cached(
+      specs,
+      unit_type_tree,
+      exp_pin_type_tree
+    )
 
     return is_type_match
   }
@@ -25115,7 +25146,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const datum_type = this._get_datum_type(datum_node_id)
     const plug_type = this._get_plug_type(ext_node_id)
 
-    return _isTypeMatch(specs, datum_type, plug_type)
+    return _isTypeMatch__cached(specs, datum_type, plug_type)
   }
 
   private _is_datum_pin_pre_match = (
@@ -25260,7 +25291,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const data = this._datum_tree[datumId]
 
-    const data_ = _filterEmptyNodes(data)
+    const [data_] = _filterEmptyNodes(data, getTree__cached)
 
     const datum_type = getValueType__cached(specs, data_)
 
@@ -25276,7 +25307,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_type = this._pin_type_of_kind(pin_node_id, 'input')
     const datum_type = this._get_datum_tree(datum_node_id)
 
-    return _isTypeMatch(specs, datum_type, pin_type)
+    return _isTypeMatch__cached(specs, datum_type, pin_type)
   }
 
   private _get_display_node_id = (): string[] => {
@@ -27461,7 +27492,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const valid_examples = examples.filter((example) => {
       const example_tree = getTree(example)
 
-      return _isTypeMatch(specs, example_tree, pinType)
+      return _isTypeMatch__cached(specs, example_tree, pinType)
     })
 
     return valid_examples
@@ -28130,7 +28161,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         next_value = randomValueOfType(specs, type)
       } while (value === next_value && value !== 'null')
 
-      const next_tree = _getValueTree(next_value)
+      const next_tree = _getValueTree__cached(next_value)
 
       let datum = this._datum[datum_node_id]
 
@@ -38495,9 +38526,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _is_datum_tree_valid = (datum_node_id: string): boolean => {
     const tree = this._get_datum_tree(datum_node_id)
 
-    const tree_ = _filterEmptyNodes(tree)
+    const [tree_] = _filterEmptyNodes(tree, getTree__cached)
 
-    return _isValidValue(tree_)
+    return _isValidValue(tree_, getTree__cached)
   }
 
   private _get_datum_tree_shape = (tree: TreeNode): Shape => {
@@ -38848,7 +38879,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._lock_datum(datum_node_id)
 
-      const tree = _filterEmptyNodes(data)
+      const [tree] = _filterEmptyNodes(data, getTree__cached)
 
       const datum_anchor_node_id = this._get_node_anchor_node_id(datum_node_id)
 
@@ -38905,7 +38936,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const pin_type = this._pin_type_of_kind(datum_pin_node_id, 'input')
 
-        if (_isValidTree(tree) && _isTypeMatch(specs, tree, pin_type)) {
+        if (_isValidTree(tree) && _isTypeMatch__cached(specs, tree, pin_type)) {
           if (!prevent) {
             this.set_pin_data(datum_pin_node_id, tree.value)
           }
@@ -42979,7 +43010,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                     do {
                       value = randomValueOfType(specs, tree_type)
                     } while (value === tree.value && value !== 'null')
-                    const new_tree = _getValueTree(value)
+                    const new_tree = _getValueTree__cached(value)
                     const new_datum = this._datum[new_datum_node_id] as Datum
 
                     new_datum.setProp('data', new_tree)
@@ -52118,8 +52149,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         if (tree) {
           datum_id = this._new_datum_id()
-
-          tree = _filterEmptyNodes(tree)
+          ;[tree] = _filterEmptyNodes(tree, getTree__cached)
 
           if (!_isValidTree(tree)) {
             tree = getTree(`"${escape(text)}"`)
@@ -57474,7 +57504,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const class_literal = tree.type === TreeNodeType.Unit
 
-    next_tree = next_tree ?? _getValueTree(data)
+    next_tree = next_tree ?? _getValueTree__cached(data)
 
     const next_class_literal = next_tree.type === TreeNodeType.Unit
 
@@ -57553,7 +57583,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_graph_debug_set_pin_data', pin_node_id, value)
 
-    const tree = _getValueTree(value)
+    const tree = _getValueTree__cached(value)
 
     this._graph_debug_set_pin_data_tree(pin_node_id, tree)
   }

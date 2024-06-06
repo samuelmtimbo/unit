@@ -8,7 +8,7 @@ export function _evaluate(
   specs: Specs,
   classes: Classes,
   resolver: (url: string) => any = () => {
-    throw new Error('cannot resolve')
+    return undefined
   }
 ): any {
   const { value, children } = tree
@@ -70,7 +70,7 @@ export function evaluate(
   specs: Specs,
   classes: Classes,
   resolver: (url: string) => any = () => {
-    throw new Error('cannot resolve')
+    return undefined
   }
 ): any {
   const tree = getTree(value, false, false)

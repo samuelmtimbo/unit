@@ -687,20 +687,6 @@ assert.deepEqual(
   }
 )
 
-// assert(
-//   isTypeMatch(
-//     system,
-//     "${unit:{id:'dc5852d3-b212-48ee-9f05-6ea2de2ef515',input:{},output:{},memory:{input:{},output:{},memory:{unit:{},merge:{},exposedMerge:{},waitAll:{input:'{}',output:'{}',memory:'{__buffer:[],_forwarding:false,_backwarding:false,_forwarding_empty:false,_looping:false}'}}}},specs:{\"dc5852d3-b212-48ee-9f05-6ea2de2ef515\":{type:'`U`&`G`&`C`',name:'untitled',units:{},merges:{},inputs:{},outputs:{},metadata:{icon:null,description:''},id:'dc5852d3-b212-48ee-9f05-6ea2de2ef515'}}}",
-//     '`G`'
-//   )
-// )
-
-// assert(
-//   _getTypeTree(
-//     '{name:"cybermilla 0",inputs:{},outputs:{click:{plug:{0:{unitId:"onclick",pinId:"event"},1:{unitId:"onclick0",pinId:"event"},2:{unitId:"onclick1",pinId:"event"}}}},units:{cybermillabutton:{id:"91bbfe94-8960-4ef0-946d-d786a8dfceb6",input:{style:{data:"{background:\\"#FD5F55\\",background:\\"radial-gradient(ellipse at center, #ffffff -100%, #FD5F55 50%)\\"}\\"},value:{data:"\\"Fashion\\""}},output:{},metadata:{component:{width:274.7310791015625,height:122.5975341796875},position:{x:-550,y:57}}},cybermillabutton0:{id:"91bbfe94-8960-4ef0-946d-d786a8dfceb6",input:{style:{data:"{background:\\"#A6496A\\",background:\\"radial-gradient(ellipse at center, #ffffff -100%, #A6496A 50%)\\"}"},value:{data:"\\"Design"\\"}}},onclick:{id:"97c94516-add1-11ea-ba72-8f55299b735c",input:{element:{}},output:{event:{}},metadata:{position:{x:-368,y:57}}},onclick0:{id:"97c94516-add1-11ea-ba72-8f55299b735c",input:{element:{}},output:{event:{}},metadata:{position:{x:93,y:62}}},onclick1:{id:"97c94516-add1-11ea-ba72-8f55299b735c",input:{element:{}},output:{event:{}},metadata:{position:{x:343,y:39}}}},merges:{0:{onclick:{input:{element:true}},cybermillabutton:{output:{_self:true}}},1:{onclick0:{input:{element:true}},cybermillabutton0:{output:{_self:true}}},2:{onclick1:{input:{element:true}},cybermillabutton1:{output:{_self:true}}}},render:true,component:{subComponents:{box:{children:["box4"],childSlot:{box4:"default"}},box4:{children:["image","textdiv","textdiv0","box5"],childSlot:{image:"default",textdiv:"default",textdiv0:"default",box5:"default"}},box5:{children:["cybermillabutton","cybermillabutton0","cybermillabutton1"],childSlot:{cybermillabutton:"default",cybermillabutton0:"default",cybermillabutton1:"default"}},textdiv:{children:[]},textdiv0:{children:[]},image:{children:[]},cybermillabutton:{children:[]},cybermillabutton0:{children:[]},cybermillabutton1:{children:[]}},children:["box"],defaultWidth:480,defaultHeight:690},metadata:{complexity:26},type:"`U`&`G`&`C`",id:"56304648-a9f7-483b-ac7d-2bc63f0bf67f"}'
-//   )
-// )
-
 assert(
   isValidValue(
     `\${unit:{id:"9988a56e-6bee-46c8-864c-e351d84bc7e2",input:{value:{data:"\\"\\n\\nThis is indeed a test\\""}}}}`

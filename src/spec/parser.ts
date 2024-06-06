@@ -508,7 +508,14 @@ export function isValidTree(value: string): boolean {
   return _isValidType(tree) || _isValidValue(tree)
 }
 
-export function _isValidValue(tree: TreeNode): boolean {
+export function _isValidValue(
+  tree: TreeNode,
+  _getTree: (
+    value: string,
+    keyValue?: boolean,
+    ignoreKeyword?: boolean
+  ) => TreeNode = _getValueTree
+): boolean {
   switch (tree.type) {
     case TreeNodeType.Invalid:
     case TreeNodeType.Generic:
@@ -553,7 +560,7 @@ export function _isValidValue(tree: TreeNode): boolean {
             return true
           }
 
-          if (value_tree.value !== '' && !_isValidValue(value_tree)) {
+          if (value_tree.value !== '' && !_isValidValue(value_tree, _getTree)) {
             return true
           }
 
@@ -569,7 +576,7 @@ export function _isValidValue(tree: TreeNode): boolean {
     case TreeNodeType.ArrayLiteral:
       return !tree.children.some((element, index) => {
         if (
-          !_isValidValue(element) &&
+          !_isValidValue(element, _getTree) &&
           (element.value !== '' || index !== tree.children.length - 1)
         ) {
           return true
@@ -1428,27 +1435,56 @@ export function _stringify(tree: TreeNode): string {
   }
 }
 
-export function _filterEmptyNodes(tree: TreeNode): TreeNode {
+export function _filterEmptyNodes(
+  tree: TreeNode,
+  _getTree: (
+    value: string,
+    keyValue?: boolean,
+    ignoreKeyword?: boolean
+  ) => TreeNode = getTree
+): [TreeNode, number] {
   if (isCompositeType(tree.type)) {
-    const children = tree.children.map(_filterEmptyNodes)
+    let totalCount = 0
+
+    const children = tree.children.map((child) => {
+      const [childTree, childCount] = _filterEmptyNodes(child, _getTree)
+
+      totalCount += childCount
+
+      return childTree
+    })
+
+    const children_ = children.filter((c) => {
+      if (c.value) {
+        return true
+      } else {
+        totalCount++
+
+        return false
+      }
+    })
+
+    if (totalCount === 0) {
+      return [tree, 0]
+    }
 
     const value = _stringify({
       ...tree,
-      children: children.filter((c) => !!c.value),
+      children: children_,
     })
 
-    const filteredTree = getTree(value, true)
+    const filteredTree = _getTree(value, true)
 
-    return filteredTree
+    return [filteredTree, totalCount]
   } else {
-    return tree
+    return [tree, 0]
   }
 }
 
 export function filterEmptyNodes(value: string): TreeNode {
   const tree = getTree(value, true)
 
-  return _filterEmptyNodes(tree)
+  return _filterEmptyNodes(tree)[0]
 }
 
 export function findGenerics(value: string): Set<string> {
