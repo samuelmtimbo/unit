@@ -15,7 +15,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {
   display: 'block',
-  height: '100%',
+  height: '45px',
   width: '100%',
   boxSizing: 'border-box',
   // outline: 'none',
