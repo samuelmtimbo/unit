@@ -181,7 +181,7 @@ export class Element_<
   }
 
   pushChild(Bundle: UnitBundle<Component_>): number {
-    return pushChild(this, this._children, Bundle)
+    return pushChild(this, this._children, Bundle)[0]
   }
 
   hasChild(at: number): boolean {

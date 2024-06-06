@@ -7,7 +7,7 @@ import { Component_ } from './Component'
 export type C_J = {}
 
 export type C_EE = {
-  append_child: [UnitBundleSpec, string[]]
+  append_child: [UnitBundleSpec, Component_, string[]]
   append_children: [UnitBundleSpec[], string[]]
   insert_child: [UnitBundleSpec, number, string[]]
   remove_child: [number, string[]]

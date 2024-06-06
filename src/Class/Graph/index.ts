@@ -6072,7 +6072,7 @@ export class Graph<I = any, O = any>
   }
 
   pushChild(Bundle: UnitBundle): number {
-    return pushChild(this, this._children, Bundle)
+    return pushChild(this, this._children, Bundle)[0]
   }
 
   pullChild(at: number): Component_ {
