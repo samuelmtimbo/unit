@@ -12,7 +12,7 @@
   },
   "metadata": {
     "icon": "triangle",
-    "description": "data holder",
+    "description": "output `a` then consume `a`",
     "complexity": 3,
     "tags": ["f", "control"]
   },

@@ -8,7 +8,7 @@
   "outputs": {},
   "metadata": {
     "icon": "alert-circle",
-    "description": "throw message",
+    "description": "throw error message",
     "complexity": 3,
     "tags": ["f", "control"]
   },

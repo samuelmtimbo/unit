@@ -8,7 +8,7 @@
   "outputs": {},
   "metadata": {
     "icon": "slash",
-    "description": "send data to the void",
+    "description": "consume `a`",
     "complexity": 3,
     "tags": ["f", "control"]
   },

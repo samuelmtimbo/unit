@@ -12,7 +12,7 @@
   },
   "metadata": {
     "icon": "circle",
-    "description": "identity operator",
+    "description": "output `a` forever",
     "complexity": 3,
     "tags": ["f", "control"]
   },
