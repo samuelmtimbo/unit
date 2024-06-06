@@ -38,9 +38,13 @@ export class Field<
 
     this.addListener('play', () => {
       if (!this._ever_played) {
-        this._output.value.push(this.initialValue())
-
         this._ever_played = true
+
+        const value = this.initialValue()
+
+        if (value !== undefined) {
+          this._output.value.push(value)
+        }
       }
     })
   }

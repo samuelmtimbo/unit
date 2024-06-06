@@ -12,10 +12,8 @@ function _appendChild(
   component: Component_,
   children: Component_[],
   Class: UnitBundle<Component_>
-): number {
-  const i = pushChild(component, children, Class)
-
-  return i
+): [number, Component_] {
+  return pushChild(component, children, Class)
 }
 
 export function appendChild(
@@ -23,11 +21,11 @@ export function appendChild(
   children: Component_[],
   Class: UnitBundle<Component_>
 ): number {
-  const i = _appendChild(component, children, Class)
+  const [i, child] = _appendChild(component, children, Class)
 
   const { __bundle } = Class
 
-  component.emit('append_child', __bundle, [])
+  component.emit('append_child', __bundle, child, [])
 
   return i
 }
@@ -89,14 +87,14 @@ export function pushChild(
   component: Component_,
   children: Component_[],
   Class: UnitBundle<Component_>
-): number {
-  const unit = instanceChild(component, Class)
+): [number, Component_] {
+  const child = instanceChild(component, Class)
 
-  children.push(unit)
+  children.push(child)
 
   const i = children.length - 1
 
-  return i
+  return [i, child]
 }
 
 export function insertChild(
