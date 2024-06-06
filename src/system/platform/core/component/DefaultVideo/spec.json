@@ -92,8 +92,7 @@
           "pinId": "_self"
         }
       },
-      "ref": true,
-      "type": "`V`&`C`&`M`"
+      "ref": true
     }
   },
   "metadata": {

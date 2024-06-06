@@ -53,7 +53,7 @@
     "close": {
       "plug": {
         "0": {
-          "mergeId": "hjpqrffi"
+          "mergeId": "3"
         }
       },
       "metadata": {
@@ -314,7 +314,7 @@
         }
       }
     },
-    "hjpqrffi": {
+    "3": {
       "transmitter": {
         "input": {
           "close": true
@@ -335,7 +335,7 @@
     "tags": ["platform", "api", "peer"],
     "position": {
       "merge": {
-        "hjpqrffi": {
+        "3": {
           "x": -3,
           "y": -4
         }
