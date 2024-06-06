@@ -965,6 +965,8 @@ export class Graph<I = any, O = any>
     // const { spec, specs } = bundleSpec(this._spec, this.__system.specs)
     const { spec, specs } = bundleSpec(this._spec, this._specs)
 
+    const spec_ = clone(spec)
+
     let memory: Memory
 
     if (deep) {
@@ -973,11 +975,11 @@ export class Graph<I = any, O = any>
       forEachObjKV(this._unit, (unitId, unit) => {
         const unitMemory = unit.snapshot()
 
-        deepSet(spec, ['units', unitId, 'memory'], unitMemory)
+        deepSet(spec_, ['units', unitId, 'memory'], unitMemory)
       })
     }
 
-    return { spec, specs }
+    return { spec: spec_, specs }
   }
 
   public getUnitBundleSpec(deep: boolean = false): UnitBundleSpec {

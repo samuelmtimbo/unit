@@ -1,5 +1,5 @@
 import { Object_ } from './Object'
-import { emptySpec, isSystemSpecId, newSpecId } from './client/spec'
+import { emptySpec, isSystemSpecId } from './client/spec'
 import { remapSpec } from './spec/remapSpec'
 import { Spec, Specs } from './types'
 import { Dict } from './types/Dict'
@@ -33,7 +33,7 @@ export class Registry implements R {
   }
 
   emptySpec(partial: Partial<GraphSpec> = {}) {
-    const id = partial.id ?? newSpecId(this.specs)
+    const id = partial.id ?? this.newSpecId()
 
     const spec = emptySpec({ ...partial, id })
 
@@ -45,7 +45,7 @@ export class Registry implements R {
   newSpec(spec: GraphSpec, specId?: string) {
     // console.log('newSpec', spec, specId)
 
-    specId = specId ?? newSpecId(this.specs)
+    specId = specId ?? this.newSpecId()
 
     spec.id = specId
 

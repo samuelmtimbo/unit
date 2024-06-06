@@ -1,18 +1,18 @@
 {
   "spec": {
-    "private": true,
-    "name": "untitled",
+    "name": "main",
     "units": {
       "root": {
-        "id": "9aba266d-5200-4281-b477-749c9b3c5815",
-        "input": { "graph": {} }
+        "id": "9aba266d-5200-4281-b477-749c9b3c5815"
       }
     },
     "render": true,
     "component": {
       "slots": [["root", "default"]],
       "subComponents": { "root": {} },
-      "children": ["root"]
+      "children": ["root"],
+      "defaultWidth": 420,
+      "defaultHeight": 420
     }
   },
   "specs": {}

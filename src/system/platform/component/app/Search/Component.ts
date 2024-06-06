@@ -32,7 +32,7 @@ import { Shape } from '../../../../../client/util/geometry'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { UNTITLED } from '../../../../../constant/STRING'
 import { System } from '../../../../../system'
-import { Spec, Specs } from '../../../../../types'
+import { Spec } from '../../../../../types'
 import { Dict } from '../../../../../types/Dict'
 import { GraphSpec } from '../../../../../types/GraphSpec'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -91,18 +91,6 @@ const DEFAULT_STYLE = {
 export const SHAPE_TO_ICON = {
   rect: 'square',
   circle: 'circle',
-}
-
-export function isSpecVisible(specs: Specs, id: string): boolean {
-  const spec = getSpec(specs, id)
-
-  const { private: _private } = spec
-
-  if (_private) {
-    return false
-  } else {
-    return true
-  }
 }
 
 export function isSpecFuzzyMatch(str: string, pattern: string) {
@@ -405,9 +393,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
     const id_list = keys(specs)
 
-    const visible_id_list = id_list.filter((id) => isSpecVisible(specs, id))
-
-    const ordered_id_list = visible_id_list.sort((a, b) => {
+    const ordered_id_list = id_list.sort((a, b) => {
       return compareByComplexity(specs, classes, a, b)
     })
 
@@ -538,16 +524,14 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
         if (path.length === 0) {
           if (type === 'set') {
-            if (isSpecVisible(specs, spec.id)) {
-              if (this._item[spec.id]) {
-                this._refresh_list_item(spec.id)
-                this._refresh_last_list_item_border()
-              } else {
-                this._insert_list_item(spec)
+            if (this._item[spec.id]) {
+              this._refresh_list_item(spec.id)
+              this._refresh_last_list_item_border()
+            } else {
+              this._insert_list_item(spec)
 
-                if (!this._list_hidden) {
-                  this._filter_list()
-                }
+              if (!this._list_hidden) {
+                this._filter_list()
               }
             }
           } else if (type === 'delete') {

@@ -6,7 +6,6 @@ export type GraphSpec = GraphSpecBase & {
   version?: string
   base?: false
   type?: '`U`&`G`' | '`U`&`G`&`C`'
-  private?: boolean
   system?: boolean
   units?: GraphUnitsSpec
   name?: string

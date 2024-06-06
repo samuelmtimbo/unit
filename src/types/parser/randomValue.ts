@@ -251,9 +251,7 @@ export function randomTreeOfType(specs: Specs, typeTree: TreeNode): TreeNode {
     return randomTreeOfTypeExpression(specs, typeTree, '{', '}')
   } else if (type === TreeNodeType.Class) {
     const filteredSpecs = values(specs).filter((spec) => {
-      return (
-        !spec.private && isTypeMatch(specs, spec.type ?? `G`, typeTree.value)
-      )
+      return isTypeMatch(specs, spec.type ?? `G`, typeTree.value)
     })
 
     const randomSpec = randomInArray(filteredSpecs)

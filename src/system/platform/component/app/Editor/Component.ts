@@ -874,7 +874,6 @@ export interface Props {
 }
 
 export default class Editor extends Element<HTMLDivElement, Props> {
-  private _fallback_graph: $Graph
   private _pod: $Graph
 
   private _root: Frame
@@ -919,15 +918,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._registry = new Registry(specs)
 
-    const spec: GraphSpec = this._registry.emptySpec({
-      name: 'untitled',
-      private: true,
-    })
-
-    const fallback_graph = new Graph(spec, {}, $system, spec.id)
-    this._fallback_graph = AsyncGraph(fallback_graph)
-
-    this._pod = graph || this._fallback_graph
+    this._pod = graph
 
     this._fallback_frame = fallback || this._create_fallback_frame()
 
@@ -1037,10 +1028,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._root = root
 
     this._root.$ref['transcend'] = transcend
-
-    if (graph === undefined || graph === null) {
-      this._pod.$play({})
-    }
 
     this._reset_graph()
 
@@ -1307,52 +1294,54 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _reset_graph = () => {
     const { graph } = this.$props
 
-    this._pod = graph || this._fallback_graph
+    this._pod = graph
 
-    this._pod.$watchGraph(
-      { events: ['fork'] },
-      (moment: GraphForkMoment & { data: { unitId: string } }) => {
-        const { specs } = this._registry
+    if (this._pod) {
+      this._pod.$watchGraph(
+        { events: ['fork'] },
+        (moment: GraphForkMoment & { data: { unitId: string } }) => {
+          const { specs } = this._registry
 
-        const {
-          data: { unitId, specId, spec, path },
-        } = moment
+          const {
+            data: { unitId, specId, spec, path },
+          } = moment
 
-        const full_path = [unitId, ...path]
-        const parent_path = butLast(full_path)
-        const forked_unit_id = last(full_path)
+          const full_path = [unitId, ...path]
+          const parent_path = butLast(full_path)
+          const forked_unit_id = last(full_path)
 
-        const editor_spec = this._editor.get_spec()
+          const editor_spec = this._editor.get_spec()
 
-        const parent_spec = clone(
-          findSpecAtPath(specs, editor_spec, parent_path)
-        )
+          const parent_spec = clone(
+            findSpecAtPath(specs, editor_spec, parent_path)
+          )
 
-        const file_name = this._spec_id_to_file_name[specId]
+          const file_name = this._spec_id_to_file_name[specId]
 
-        if (file_name) {
-          const bundle = this._file_to_bundle[file_name]
+          if (file_name) {
+            const bundle = this._file_to_bundle[file_name]
 
-          if (bundle.spec.id === parent_spec.id) {
-            deepSet(bundle.spec, ['units', forked_unit_id, 'id'], spec.id)
-          } else if (bundle.specs[parent_spec.id]) {
-            deepSet(
-              bundle.specs,
-              [parent_spec.id, 'units', forked_unit_id, 'id'],
-              spec.id
-            )
+            if (bundle.spec.id === parent_spec.id) {
+              deepSet(bundle.spec, ['units', forked_unit_id, 'id'], spec.id)
+            } else if (bundle.specs[parent_spec.id]) {
+              deepSet(
+                bundle.specs,
+                [parent_spec.id, 'units', forked_unit_id, 'id'],
+                spec.id
+              )
+            }
+
+            deepSet(parent_spec, ['units', forked_unit_id, 'id'], spec.id)
+
+            bundle.specs[spec.id] = spec
+
+            this._spec_id_to_file_name[spec.id] = file_name
+
+            this._registry.setSpec(parent_spec.id, parent_spec)
           }
-
-          deepSet(parent_spec, ['units', forked_unit_id, 'id'], spec.id)
-
-          bundle.specs[spec.id] = spec
-
-          this._spec_id_to_file_name[spec.id] = file_name
-
-          this._registry.setSpec(parent_spec.id, parent_spec)
         }
-      }
-    )
+      )
+    }
   }
 
   private _reset_frame = (): void => {
@@ -1383,87 +1372,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       })
     } else {
       set(this._fallback_frame, false)
-    }
-  }
-
-  private _on_transcend_long_press = (event: UnitPointerEvent): void => {
-    const { showLongPress } = this.$system
-
-    const { screenX, screenY } = event
-
-    showLongPress(screenX, screenY, { direction: 'in' })
-  }
-
-  private _on_transcend_long_click = () => {
-    // console.log('Graph', '_on_transcend_long_click')
-
-    const {
-      api: {
-        window: { setTimeout },
-      },
-    } = this.$system
-
-    setTimeout(() => {
-      this._on_transcend()
-    }, 0)
-  }
-
-  private _on_transcend_long_click_cancel = () => {
-    //
-  }
-
-  private _context_unlisten: Unlisten
-
-  public onMount(): void {
-    // console.log('Graph', 'onMount')
-
-    this._context_unlisten = addListeners(this.$context, [
-      makeCustomListener('enabled', this._on_context_enabled),
-      makeCustomListener('disabled', this._on_context_disabled),
-    ])
-
-    this._refresh_fallback_graph_paused()
-  }
-
-  public onUnmount(): void {
-    // console.log('Graph', 'onUnmount')
-
-    this._context_unlisten()
-  }
-
-  private _on_context_enabled = (): void => {
-    // console.log('Graph', '_on_context_enabled')
-
-    this._refresh_fallback_graph_paused()
-  }
-
-  private _on_context_disabled = (): void => {
-    // console.log('Graph', '_on_context_disabled')
-
-    this._refresh_fallback_graph_paused()
-  }
-
-  private _refresh_fallback_graph_paused = () => {
-    const { disabled } = this.$props
-
-    if (this._pod === this._fallback_graph) {
-      if (disabled === undefined) {
-        if (this.$context) {
-          const { $disabled } = this.$context
-
-          if ($disabled) {
-            this._pod.$pause({})
-          } else {
-            this._pod.$play({})
-          }
-        } else {
-          this._pod.$pause({})
-        }
-      } else if (disabled) {
-        this._pod.$pause({})
-      } else {
-        this._pod.$play({})
-      }
     }
   }
 
@@ -1761,8 +1669,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
       setAttributes(this.$element as HTMLElement, attr)
     } else if (prop === 'disabled') {
-      this._refresh_fallback_graph_paused()
-
       this._editor.setProp('disabled', current)
     } else if (prop === 'graph') {
       this._reset_graph()
@@ -57537,7 +57443,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     next_tree?: TreeNode
   ) => {
     const { classes } = this.$system
-    const { specs } = this.$props
+    const { specs, injectSpecs } = this.$props
 
     const tree = this._datum_tree[datum_id]
     const datum = this._datum[datum_node_id]
@@ -57562,7 +57468,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else if (next_class_literal) {
       const { value } = next_tree
 
-      const id = idFromUnitValue(value, specs, classes)
+      const bundle = evaluateBundleStr(value, specs, classes)
+
+      injectSpecs(bundle.specs ?? {})
+
+      const { id } = bundle.unit
 
       const _datum = datum as ClassDatum
 
