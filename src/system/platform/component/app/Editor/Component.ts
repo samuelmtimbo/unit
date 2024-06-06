@@ -1333,12 +1333,16 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           const bundle = this._file_to_bundle[file_name]
 
           if (bundle.spec.id === parent_spec.id) {
-            bundle.spec.units[forked_unit_id].id = spec.id
+            deepSet(bundle.spec, ['units', forked_unit_id, 'id'], spec.id)
           } else if (bundle.specs[parent_spec.id]) {
-            bundle.specs[parent_spec.id].units[forked_unit_id].id = spec.id
+            deepSet(
+              bundle.specs,
+              [parent_spec.id, 'units', forked_unit_id, 'id'],
+              spec.id
+            )
           }
 
-          parent_spec.units[forked_unit_id].id = spec.id
+          deepSet(parent_spec, ['units', forked_unit_id, 'id'], spec.id)
 
           bundle.specs[spec.id] = spec
 
