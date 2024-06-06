@@ -3588,6 +3588,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const drop_position = this._screen_to_world(clientX, clientY)
 
+    const screen_position = { x: screenX, y: screenY }
+
     if (dataTransfer) {
       const { items, files } = dataTransfer
 
@@ -3595,7 +3597,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (let i = 0; i < items.length; i++) {
           const item = items[i]
 
-          this._drop_data_transfer_item(item, drop_position)
+          this._drop_data_transfer_item(item, drop_position, screen_position)
         }
       } else {
         for (let i = 0; i < files.length; i++) {
@@ -3622,7 +3624,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _drop_data_transfer_item = async (
     item: DataTransferItem,
-    position: Position
+    position: Position,
+    screen_position: Position
   ) => {
     if (item.kind === 'file') {
       const file = item.getAsFile() as File
@@ -3635,7 +3638,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         if (entry) {
           if (entry.kind === 'directory') {
-            this._drop_folder(entry as FileSystemDirectoryHandle, '/', position)
+            this._drop_folder(
+              entry as FileSystemDirectoryHandle,
+              '/',
+              screen_position
+            )
 
             return
           }
