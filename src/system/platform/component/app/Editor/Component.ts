@@ -3794,6 +3794,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               src: {
                 data: `"${image_data_url}"`,
                 constant: true,
+                ignored: true,
+              },
+              style: {
+                ignored: true,
               },
             },
             metadata: {
@@ -3837,7 +3841,49 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _drop_audio_file = async (file: File | Blob, position: Position) => {
-    return this._paste_media_file(file, ID_AUDIO, position)
+    const {
+      api: {
+        url: { createObjectURL },
+      },
+    } = this.$system
+
+    const url = await createObjectURL(file)
+
+    const id = ID_AUDIO
+
+    const new_unit_id = this._new_unit_id(id)
+
+    const bundle: UnitBundleSpec = {
+      unit: {
+        id,
+        input: {
+          src: {
+            data: `"${url}"`,
+            constant: true,
+            ignored: true,
+          },
+          stream: {
+            ignored: true,
+          },
+          style: {
+            ignored: true,
+          },
+          controls: {
+            ignored: true,
+          },
+        },
+        metadata: {},
+      },
+      specs: {},
+    }
+
+    const center_of_screen = position ?? this._jiggle_world_screen_center()
+
+    this._add_unit(new_unit_id, bundle, position, {}, center_of_screen, null)
+
+    this._sim_add_sub_component(new_unit_id, {}, undefined, undefined)
+
+    this._connect_sub_component(new_unit_id)
   }
 
   private _drop_video_file = async (file: File | Blob, position: Position) => {
@@ -3874,10 +3920,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             src: {
               data: `"${url}"`,
               constant: true,
+              ignored: true,
             },
             attr: {
               data: "{loop:'true'}",
-              ignored: false,
+              ignored: true,
               constant: true,
             },
             stream: {
