@@ -16,8 +16,11 @@ export interface Props {
 }
 
 const DEFAULT_STYLE = {
-  color: 'currentColor',
+  display: 'inline-block',
   boxSizing: 'border-box',
+  width: '60px',
+  height: '36px',
+  padding: '6px'
 }
 
 export default class Button extends Element<HTMLButtonElement, Props> {
