@@ -138,6 +138,7 @@ import debounce from '../../../../../client/debounce'
 import { getCircle, getLine, getRectangle } from '../../../../../client/drawing'
 import { IODragEvent } from '../../../../../client/event/drag'
 import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
+import { makeDragLeaveListener } from '../../../../../client/event/drag/dragleave'
 import { makeDragStartListener } from '../../../../../client/event/drag/dragstart'
 import { makeDropListener } from '../../../../../client/event/drag/drop'
 import { makeBlurListener } from '../../../../../client/event/focus/blur'
@@ -3912,44 +3913,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     element.src = url
   }
 
-  private _paste_media_file = async (
-    file: File | Blob,
-    id: string,
-    position?: Position
-  ) => {
-    const {
-      api: {
-        url: { createObjectURL },
-      },
-    } = this.$system
-
-    const url = await createObjectURL(file)
-
-    const new_unit_id = this._new_unit_id(id)
-
-    const bundle: UnitBundleSpec = {
-      unit: {
-        id,
-        input: {
-          src: {
-            data: `"${url}"`,
-            constant: true,
-          },
-        },
-        metadata: {},
-      },
-      specs: {},
-    }
-
-    const center_of_screen = position ?? this._jiggle_world_screen_center()
-
-    this._add_unit(new_unit_id, bundle, position, {}, center_of_screen, null)
-
-    this._sim_add_sub_component(new_unit_id, {}, undefined, undefined)
-
-    this._connect_sub_component(new_unit_id)
-  }
-
   private _drop_bundle_file = async (
     file: File,
     position?: Position
@@ -7522,6 +7485,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._core_component_frame[unit_id] = core_component_frame
     this._core_component_frame_context[unit_id] = $$context
 
+    core_component_frame.addEventListener(
+      makeDragLeaveListener(() => {
+        if (this._unlock_drag_initiated) {
+          if (this._core_component_unlocked[unit_id]) {
+            this._lock_sub_component(unit_id)
+          }
+        }
+      })
+    )
+
     core_content.appendChild(core_component_frame)
   }
 
@@ -7585,13 +7558,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     core_content.appendChild(core_overlay)
 
-    core_overlay.addEventListener(
+    core_overlay.addEventListeners([
       makeDragEnterListener(() => {
+        this._unlock_drag_initiated = true
+
         this._lock_all_component_but(unit_id)
         this._unlock_sub_component(unit_id)
-      })
-    )
+      }),
+    ])
   }
+
+  private _unlock_drag_initiated: boolean = false
 
   private _sim_add_core_component = (
     unit_id: string,
@@ -28643,6 +28620,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             this._deselect_node(unit_id)
             this._enable_core_resize(unit_id)
           }
+
+          this._unlock_drag_initiated = false
 
           this._unlock_sub_component(unit_id)
           this._focus_sub_component(unit_id)
