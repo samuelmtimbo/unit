@@ -27156,6 +27156,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { type, pinId, subPinId } = segmentPlugNodeId(exposed_node_id)
 
+    const pin_spec = this._get_pin_spec(type, pinId)
+
     const ext_node_id = getExtNodeId(type, pinId, subPinId)
     const int_node_id = getExtNodeId(type, pinId, subPinId)
 
@@ -27169,7 +27171,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ext: jigglePoint(ext_position),
     }
 
-    this.add_exposed_pin(type, pinId, {}, new_sub_pin_id, {}, plug_position)
+    const sub_pin_spec = {}
+
+    this.add_exposed_pin(
+      type,
+      pinId,
+      pin_spec,
+      new_sub_pin_id,
+      sub_pin_spec,
+      plug_position
+    )
 
     const new_exposed_ext_node_id = getExtNodeId(type, pinId, new_sub_pin_id)
     const new_exposed_int_node_id = getIntNodeId(type, pinId, new_sub_pin_id)
@@ -40086,16 +40097,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       int_node_id
     )
 
-    const anchor_shape = this._get_node_shape(anchor_node_id)
-    const anchor_r = this._get_node_r(anchor_node_id)
-
-    const r = anchor_r + padding
-
-    const start_marker_d = describeArrowShape(anchor_shape, r)
-
-    // on Chrome, path will not rerender to adapt to animating d attribute
-
-    // path.$element.style.transition = easeInTransition('d')
+    const start_marker_d = this._get_pin_default_marker(
+      type,
+      ext_node_id,
+      anchor_node_id,
+      padding
+    )
 
     path.setProp('d', start_marker_d)
   }
@@ -40105,14 +40112,47 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     ext_node_id: string,
     int_node_id: string
   ): void => {
+    // console.log('_set_plug_marker_to_default', type, ext_node_id, int_node_id)
+
     const path = this._get_exposed_pin_marker_path(
       type,
       ext_node_id,
       int_node_id
     )
-    const start_marker_d = describeArrowSemicircle(PIN_RADIUS)
+
+    const anchor_node_id = this._get_int_pin_anchor_node_id(int_node_id)
+
+    const start_marker_d = this._get_pin_default_marker(
+      type,
+      ext_node_id,
+      anchor_node_id
+    )
 
     path.setProp('d', start_marker_d)
+  }
+
+  private _get_pin_default_marker = (
+    type,
+    ext_node_id: string,
+    anchor_node_id: string,
+    padding: number = 0
+  ): string => {
+    const functional = this._is_exposed_pin_functional(ext_node_id)
+
+    const anchor_shape = this._get_node_shape(anchor_node_id)
+    const anchor_r = this._get_node_r(anchor_node_id)
+
+    const r = anchor_r + padding
+
+    let d: string = ''
+
+    if (functional) {
+      d += ARROW_MEMORY
+    }
+
+    d += describeArrowShape(anchor_shape, r)
+
+    return d
   }
 
   private _sim_refresh_exposed_pin_marker = (
