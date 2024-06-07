@@ -19376,56 +19376,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _animate_layout_core_up = (
-    sub_component_id: string,
-    callback: () => void
-  ): void => {
-    const { $width, $height } = this.$context
-
-    const graph_node = this._node[sub_component_id]
-
-    let { x, y } = this._world_to_screen(graph_node.x, graph_node.y)
-
-    x -= $width / 2
-    y -= $height / 2
-
-    const { width: _w0, height: _h0 } =
-      this._get_unit_component_graph_size(sub_component_id)
-
-    const { z } = this._zoom
-
-    const w0 = _w0
-    const h0 = _h0
-    const sx0 = z
-    const sy0 = z
-
-    const anchor_id = this._get_layout_node_anchor_id(sub_component_id)
-
-    this._animate_layout_core(
-      sub_component_id,
-      {
-        x,
-        y,
-        width: w0,
-        height: h0,
-        sx: sx0,
-        sy: sy0,
-        opacity: 1,
-        fontSize: 1,
-      },
-      () => {
-        if (anchor_id === sub_component_id) {
-          const anchor_node = this._layout_target_node[anchor_id]
-          return anchor_node
-        } else {
-          const anchor_node = this._layout_node[anchor_id]
-          return anchor_node
-        }
-      },
-      callback
-    )
-  }
-
   private _animate_layout_core_target = (
     sub_component_id: string,
     target_id: string,
@@ -21022,28 +20972,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         },
       }),
     ])
-  }
-
-  private _animate_layout_core_down = (
-    sub_component_id: string,
-    callback: () => void
-  ): void => {
-    const layout_node = this._layout_node[sub_component_id]
-
-    this._animate_layout_core(
-      sub_component_id,
-      layout_node,
-      () => {
-        const { x, y } = this._get_layout_node_screen_position(sub_component_id)
-
-        const { width, height } = this._get_node_size(sub_component_id)
-
-        const { z } = this._zoom
-
-        return { x, y, width, height, sx: z, sy: z, opacity: 1, fontSize: 1 }
-      },
-      callback
-    )
   }
 
   private _get_layout_node_screen_position = (
@@ -26255,7 +26183,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._plug_sub_component_base(sub_component_id, base, base_node, base_layer)
 
-    let base_trait
+    let base_trait: Dict<LayoutNode>
 
     i = 0
 
@@ -29193,7 +29121,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (component_collapsed) {
         if (!this._animating_sub_component_base_id.has(sub_component_id)) {
-          // this._remove_sub_component_all_root(sub_component_id)
           this._remove_sub_component_root_base(sub_component_id)
         }
       } else {
@@ -29240,7 +29167,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           (leaf_id) => {
             if (i === 0) {
               const trait = extractTrait(frame, measureText)
-              const style = extractStyle(
+              const frame_style = extractStyle(
                 this._component,
                 frame,
                 trait,
@@ -29251,9 +29178,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 '',
                 sub_component_id,
                 base,
-                style,
+                frame_style,
                 trait,
-                true
+                false
               )
             }
 
@@ -29269,7 +29196,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               sx: trait.sx,
               sy: trait.sy,
               opacity: trait.opacity,
-              // opacity: 1,
               fontSize: trait.fontSize,
             }
           },
@@ -30760,9 +30686,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (parent_id) {
             const current_layer_id = this._get_current_layout_layer_id()
 
-            const is_parent_layer_visible =
-              this._is_layout_component_layer_visible(parent_id)
-
             if (parent_id === current_layer_id) {
               this._leave_sub_component_frame(sub_component_id)
             } else {
@@ -31054,7 +30977,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         let i = 0
 
-        for (const [leaf_path, leaf_comp] of base) {
+        for (const [leaf_path] of base) {
           const leaf_trait = parent_base_trait[i]
 
           const _leaf_trait: LayoutNode = {
