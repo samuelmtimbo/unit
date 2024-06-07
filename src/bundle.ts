@@ -132,7 +132,7 @@ function _bundleUnit(
 
           custom[specId] = spec
 
-          _bundle(spec, weakMerge(specs, bundle.specs), custom, branch)
+          _bundle(spec, weakMerge(specs, bundle.specs ?? {}), custom, branch)
         }
       }
     }
