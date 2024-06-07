@@ -28172,7 +28172,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _toggle_exposed_pin_functional = (exposed_node_id: string): void => {
+    const { type } = segmentPlugNodeId(exposed_node_id)
+
+    if (type === 'output') {
+      return
+    }
+
     const functional = this._is_exposed_pin_functional(exposed_node_id)
+
     this._set_exposed_pin_functional(exposed_node_id, !functional)
   }
 
