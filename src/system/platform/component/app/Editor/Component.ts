@@ -1101,7 +1101,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       this._editor.set_spec_node_positions_rec(
         this._editor,
         this._editor.get_spec(),
-        weakMerge(specs, bundle.specs)
+        weakMerge(specs, bundle.specs ?? {})
       )
 
       const bundle_ = bundleSpec(spec_, specs)
@@ -30254,7 +30254,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const modified_bundle = editor.getUnitBundle()
           const modified_value = `$${stringify(modified_bundle)}`
 
-          const specs = weakMerge(this.$system.specs, bundle.specs)
+          const specs = weakMerge(this.$system.specs, bundle.specs ?? {})
 
           const id = modified_bundle.unit.id
 
