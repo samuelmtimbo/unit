@@ -27,6 +27,7 @@ export interface System extends S, R {
   customEvent: Set<string>
   context: Context[]
   theme: Theme
+  color: string
   animated: boolean
   graphs: Graph[]
   cache: {

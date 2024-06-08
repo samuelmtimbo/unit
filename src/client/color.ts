@@ -1,3 +1,5 @@
+export type RGBA = [number, number, number, number]
+
 export const _nameToColor = {
   aliceblue: '#f0f8ff',
   antiquewhite: '#faebd7',
@@ -150,35 +152,83 @@ export function nameToColor(name: string): string {
   return _nameToColor[name]
 }
 
-export function isHEX(name: string): boolean {
+export function isHex(name: string): boolean {
   return /^#[a-fA-F0-9]+$/g.test(name)
 }
 
-export function RGBToHEX(r: number, g: number, b: number) {
+const rgbaRegex =
+  /^(rgb|rgba)\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})(?:,\s*\d{1,3})?\)|(255)$/
+
+export function isRgbaString(color: string): boolean {
+  return rgbaRegex.test(color)
+}
+
+export function rgbaStringToHex(color: string): string {
+  const [_, __, r, g, b, a = '255'] = color.match(rgbaRegex)
+
+  return rgbaToHex_(
+    Number.parseInt(r),
+    Number.parseInt(g),
+    Number.parseInt(b),
+    Number.parseInt(a)
+  )
+}
+
+export function colorToHex(color: string): string {
+  let hex: string
+
+  if (isHex(color)) {
+    hex = color
+  } else if (isRgbaString(color)) {
+    hex = rgbaStringToHex(color)
+  } else if (nameToColor(color)) {
+    hex = nameToColor(color)
+  } else {
+    //
+  }
+
+  return hex
+}
+
+export function rgbaToHex_(r: number, g: number, b: number, a: number) {
   const hex =
     '#' + (0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1)
   return hex
 }
 
-export function hexToRgb(hex: string): number[] {
+export function rgbaToHex(rgba: RGBA): string {
+  const [r, g, b, a] = rgba
+
+  return rgbaToHex_(r, g, b, a)
+}
+
+export function hexToRgba(hex: string): RGBA {
+  hex = hex.padEnd(9, 'f')
+
   hex = hex.slice(1)
+
   const r = Number.parseInt(hex.slice(0, 2), 16)
   const g = Number.parseInt(hex.slice(2, 4), 16)
   const b = Number.parseInt(hex.slice(4, 6), 16)
-  return [r, g, b]
+  const a = Number.parseInt(hex.slice(6, 8), 16)
+
+  return [r, g, b, a]
 }
 
 export function hexToHsv(hex: string): number[] {
-  const [r, g, b] = hexToRgb(hex)
+  const [r, g, b] = hexToRgba(hex)
   const hsv = RGBToHSV(r, g, b)
   return hsv
 }
 
-export function hueToColor(h: number): string {
+export function hueToHex(h: number): string {
   h = h % 360
+
   let r
   let g
   let b
+  let a = 255
+
   if (h >= 0 && h < 60) {
     r = 255
     g = Math.floor(((h - 0) / 60) * 255)
@@ -205,7 +255,7 @@ export function hueToColor(h: number): string {
     b = Math.round(((360 - h) / 60) * 255)
   }
 
-  return RGBToHEX(r, g, b)
+  return rgbaToHex_(r, g, b, a)
 }
 
 // https://stackoverflow.com/questions/8022885/rgb-to-hsv-color-in-javascript
@@ -241,11 +291,13 @@ function RGBToHSV(r: number, g: number, b: number): number[] {
   return [Math.round(h * 360), percentRoundFn(s * 100), percentRoundFn(v * 100)]
 }
 
-function HSLToHEX(h: number, s: number, l: number): string {
+export function hslToHex(h: number, s: number, l: number): string {
   l = 1 - l
-  // Must be fractions of 1
+
   s /= 100
   l /= 100
+
+  let a = 255
 
   let c = (1 - Math.abs(2 * l - 1)) * s,
     x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
@@ -283,10 +335,10 @@ function HSLToHEX(h: number, s: number, l: number): string {
   g = Math.round((g + m) * 255)
   b = Math.round((b + m) * 255)
 
-  return RGBToHEX(r, g, b)
+  return rgbaToHex_(r, g, b, a)
 }
 
-export function HSVToRGB(h: number, s: number, v: number): number[] {
+export function hsvToRgba(h: number, s: number, v: number): number[] {
   h = h / 360
   s = s / 100
   v = v / 100
@@ -342,16 +394,25 @@ export function HSVToRGB(h: number, s: number, v: number): number[] {
   return [r * 255, g * 255, b * 255].map(Math.round)
 }
 
-export function HSVToHEX(h: number, s: number, v: number): string {
-  const [r, g, b] = HSVToRGB(h, s, v)
-  const hex = RGBToHEX(r, g, b)
+export function hsvToHex(h: number, s: number, v: number): string {
+  const [r, g, b, a] = hsvToRgba(h, s, v)
+  const hex = rgbaToHex_(r, g, b, a)
   return hex
 }
 
 // https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color
 
 export function padZero(str: string, len: number = 2) {
-  const zeros = new Array(len).join('0')
+  return pad('0', str, len)
+}
+
+export function padF(str: string, len: number = 2) {
+  return pad('f', str, len)
+}
+
+export function pad(char: string, str: string, len: number = 2) {
+  const zeros = new Array(len).join(char)
+
   return (zeros + str).slice(-len)
 }
 
@@ -388,11 +449,6 @@ export function randomColorArray(n: number): string[] {
     array.push(randomColorString())
   }
   return array
-}
-// TODO
-
-export function RGBStrToRGB(str: string): [number, number, number] {
-  return [0, 0, 0]
 }
 
 export function RGBtoHSL(

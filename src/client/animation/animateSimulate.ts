@@ -1,14 +1,14 @@
 import { System } from '../../system'
 import { Dict } from '../../types/Dict'
 import { Unlisten } from '../../types/Unlisten'
-import { animateSimulateTick } from './animateSimulateTick'
+import { AnimatableValue, animateSimulateTick } from './animateSimulateTick'
 
-export const animateSimulate = (
+export const animateSimulate = <T extends Dict<AnimatableValue>>(
   system: System,
-  n0: Dict<number>,
-  n1: () => Dict<number>,
+  n0: T,
+  n1: () => T,
   ff: [string, number][],
-  tf: (n: Dict<number>) => void,
+  tf: (n: T) => void,
   callback: () => void | boolean
 ): Unlisten => {
   const {

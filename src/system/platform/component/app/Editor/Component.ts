@@ -104,7 +104,10 @@ import { MAX_Z_INDEX } from '../../../../../client/MAX_Z_INDEX'
 import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
 import { ANIMATION_T_S } from '../../../../../client/animation/ANIMATION_T_S'
 import { animateSimulate } from '../../../../../client/animation/animateSimulate'
-import { animateSimulateTick } from '../../../../../client/animation/animateSimulateTick'
+import {
+  AnimatableValue,
+  animateSimulateTick,
+} from '../../../../../client/animation/animateSimulateTick'
 import {
   ANIMATION_T_MS,
   ifLinearTransition,
@@ -112,7 +115,14 @@ import {
 } from '../../../../../client/animation/animation'
 import { setAttributes } from '../../../../../client/attr'
 import classnames from '../../../../../client/classnames'
-import { isHEX, nameToColor, setAlpha } from '../../../../../client/color'
+import {
+  RGBA,
+  hexToRgba,
+  isHex,
+  nameToColor,
+  rgbaToHex,
+  setAlpha,
+} from '../../../../../client/color'
 import {
   UNIT_MIN_RADIUS,
   getSpecRadius,
@@ -3070,7 +3080,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const background = themeBackgroundColor($theme)
 
-    if (isHEX(color)) {
+    if (isHex(color)) {
       let k: number = dark ? 1 : 1
 
       this._theme = {
@@ -7854,6 +7864,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { width, height } = this._clamp_layout_core_size(layout_size)
 
+    const color = hexToRgba(this._get_color())
+
     const layout_core = new Div(
       {
         style: {
@@ -7889,6 +7901,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       sy: 1,
       opacity: 1,
       fontSize,
+      color,
     }
 
     this._layout_node[unit_id] = layout_node
@@ -19299,42 +19312,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): Callback => {
     // console.log('Graph', '_animate_leaf_frame', leaf_id)
 
-    const leaf_frame = this._leaf_frame[leaf_id]
-    const leaf_node = this._leaf_frame_node[leaf_id]
-
     return this._animate_simulate_trait(
       n0,
       n1,
-      ({ x, y, sx, sy, width, height, opacity, fontSize }) => {
-        leaf_node.x = x
-        leaf_node.y = y
-        leaf_node.width = width
-        leaf_node.height = height
-        leaf_node.sx = sx
-        leaf_node.sy = sy
-        leaf_node.opacity = opacity
-
-        leaf_frame.$element.style.left = `${
-          x + this._leaf_layer_offset_x + ((Math.abs(sx) - 1) * width) / 2
-        }px`
-        leaf_frame.$element.style.top = `${
-          y + this._leaf_layer_offset_y + ((Math.abs(sy) - 1) * height) / 2
-        }px`
-        leaf_frame.$element.style.width = `${width}px`
-        leaf_frame.$element.style.height = `${height}px`
-        leaf_frame.$element.style.transform = `scale(${sx}, ${sy})`
-        leaf_frame.$element.style.opacity = `${opacity}`
-        leaf_frame.$element.style.fontSize = `${fontSize}px`
-      },
+      this._animate_tick_leaf_trait.bind(this, leaf_id),
       callback
     )
   }
 
-  private _animate_simulate = (
-    n0: Dict<number>,
-    n1: () => Dict<number>,
+  private _animate_simulate = <T extends Dict<AnimatableValue>>(
+    n0: T,
+    n1: () => T,
     ff: [string, number][],
-    tf: (n: Dict<number>) => void,
+    tf: (n: T) => void,
     callback: () => void
   ): Callback => {
     return animateSimulate(this.$system, n0, n1, ff, tf, callback)
@@ -19360,6 +19350,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ['sy', ANIMATION_DELTA_TRESHOLD / 100],
         ['opacity', ANIMATION_DELTA_TRESHOLD / 100],
         ['fontSize', ANIMATION_DELTA_TRESHOLD / 10],
+        ['color', ANIMATION_DELTA_TRESHOLD / 100],
       ],
       tick,
       callback
@@ -19638,6 +19629,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       height: is_canvas || is_svg ? undefined : '100%',
       opacity: '1',
       transform: '',
+      color: '',
     }
 
     const prop_unlisten = leaf_comp.interceptProp('style', (style) => {
@@ -20338,7 +20330,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._unplug_sub_component_root_base_frame(sub_component_id)
 
           if (sub_component_root.includes(sub_component_id)) {
-            // this._append_sub_component_all_root(sub_component_id)
             this._append_sub_component_root_base(sub_component_id)
           }
 
@@ -20434,7 +20425,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           for (const child_id of children) {
             if (!animating_sub_component_set.has(child_id)) {
               this._leave_sub_component_frame(child_id)
-              // this._remove_sub_component_all_root(child_id)
               this._remove_sub_component_root_base(child_id)
             }
           }
@@ -20550,7 +20540,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const layout_node = this._layout_node[sub_component_id]
 
-        const { x, y, width, height } = layout_node
+        const { x, y, width, height, color } = layout_node
 
         if (i === 0) {
           trait = {
@@ -20562,6 +20552,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sx: 1,
             sy: 1,
             opacity: 1,
+            color,
           }
 
           const style = extractStyle(
@@ -20595,6 +20586,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           sy: leaf_trait.sy,
           opacity: leaf_trait.opacity * leaf_layer_opacity,
           fontSize: leaf_trait.fontSize,
+          color: leaf_trait.color,
         }
       },
       callback
@@ -20750,6 +20742,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         visible_root.push(sub_component_id)
 
+        const sub_component = this._get_sub_component(sub_component_id)
         const leaf_base = this._get_sub_component_root_base(sub_component_id)
         const frame = this._get_sub_component_frame(sub_component_id)
 
@@ -20773,6 +20766,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             leaf_traits,
             leaf_layer,
             (leaf_id: string) => {
+              const color = sub_component.getColor()
+
               const { x, y } = this._get_node_screen_position(sub_component_id)
 
               const { z } = this._zoom
@@ -20787,6 +20782,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   sy: z,
                   opacity: 1,
                   fontSize: 14,
+                  color,
                 }
 
                 const frame_trait = extractTrait(frame, measureText)
@@ -20825,6 +20821,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 sy: leaf_trait.sy,
                 opacity: leaf_trait.opacity,
                 fontSize: leaf_trait.fontSize,
+                color: leaf_trait.color,
               }
             },
             async () => {
@@ -26227,6 +26224,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sy: leaf_trait.sy,
             opacity: leaf_trait.opacity,
             fontSize: leaf_trait.fontSize,
+            color: leaf_trait.color,
           }
         },
         callback
@@ -29197,6 +29195,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               sy: trait.sy,
               opacity: trait.opacity,
               fontSize: trait.fontSize,
+              color: trait.color,
             }
           },
           async () => {
@@ -30704,6 +30703,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     for (const sub_component_id of sub_component_ids) {
+      const sub_component = this._get_sub_component(sub_component_id)
       const base = this._get_sub_component_root_base(sub_component_id)
 
       if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
@@ -30720,6 +30720,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         layer,
         (leaf_id: string) => {
           if (i === 0) {
+            const color = sub_component.getColor()
+
             const frame_position = getRelativePosition(
               this._frame.$element,
               this._frame.$context.$element
@@ -30745,6 +30747,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               sy: k,
               opacity,
               fontSize,
+              color,
             }
 
             const style = extractStyle(
@@ -30778,6 +30781,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sy: _trait.sy,
             opacity: _trait.opacity,
             fontSize: _trait.fontSize,
+            color: _trait.color,
           }
         },
         () => {
@@ -30995,6 +30999,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sy: leaf_trait.sy,
             opacity: leaf_trait.opacity,
             fontSize: leaf_trait.fontSize,
+            color: leaf_trait.color,
           }
 
           const leaf_id = joinPath(leaf_path)
@@ -31094,6 +31099,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               sy: parent_leaf_trait.sy,
               opacity: parent_leaf_trait.opacity,
               fontSize: parent_leaf_trait.fontSize,
+              color: parent_leaf_trait.color,
             }
 
             const leaf_id = joinPath(leaf_path)
@@ -31654,13 +31660,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _animate_tick_leaf_trait = (leaf_id: string, trait: LayoutNode) => {
     const leaf_node = this._leaf_frame_node[leaf_id]
-    const leaf_frame = this._leaf_frame[leaf_id]
-    const leaf_layer = this._leaf_frame_layer[leaf_id]
-
-    const { x: scrollX, y: scrollY } = getScrollPosition(
-      leaf_layer.$element,
-      this.$context.$element
-    )
 
     return animateSimulateTick(
       leaf_node,
@@ -31671,31 +31670,71 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ['width', ANIMATION_DELTA_TRESHOLD],
         ['height', ANIMATION_DELTA_TRESHOLD],
         ['fontSize', ANIMATION_DELTA_TRESHOLD / 10],
-        ['opacity', ANIMATION_DELTA_TRESHOLD / 10],
+        ['opacity', ANIMATION_DELTA_TRESHOLD / 100],
         ['sx', ANIMATION_DELTA_TRESHOLD / 10],
         ['sy', ANIMATION_DELTA_TRESHOLD / 10],
+        ['color', ANIMATION_DELTA_TRESHOLD / 100],
       ],
-      ({ x, y, sx, sy, width, height, opacity, fontSize }) => {
-        leaf_node.x = x
-        leaf_node.y = y
-        leaf_node.width = width
-        leaf_node.height = height
-        leaf_node.fontSize = fontSize
-        leaf_node.opacity = opacity
-        leaf_node.sx = sx
-        leaf_node.sy = sy
-
-        mergeStyle(leaf_frame.$element, {
-          left: `${x + this._leaf_layer_offset_x + scrollX}px`,
-          top: `${y + this._leaf_layer_offset_y + scrollY}px`,
-          width: `${width + 2 * (Math.abs(sx) - 1)}px`,
-          height: `${height + 2 * (Math.abs(sy) - 1)}px`,
-          transform: `scale(${sx}, ${sy})`,
-          opacity: `${opacity}`,
-          fontSize: `${fontSize}px`,
-        })
-      }
+      this._animate_leaf_frame_tick.bind(this, leaf_id)
     )
+  }
+
+  private _animate_leaf_frame_tick = (
+    leaf_id: string,
+    { x, y, sx, sy, width, height, opacity, fontSize, color }
+  ) => {
+    const leaf_node = this._leaf_frame_node[leaf_id]
+    const leaf_frame = this._leaf_frame[leaf_id]
+    const leaf_layer = this._leaf_frame_layer[leaf_id]
+
+    const { x: scrollX, y: scrollY } = getScrollPosition(
+      leaf_layer.$element,
+      this.$context.$element
+    )
+
+    leaf_node.x = x
+    leaf_node.y = y
+    leaf_node.width = width
+    leaf_node.height = height
+    leaf_node.fontSize = fontSize
+    leaf_node.opacity = opacity
+    leaf_node.sx = sx
+    leaf_node.sy = sy
+    leaf_node.color = color
+
+    const color_: RGBA = [
+      Math.floor(color[0]),
+      Math.floor(color[1]),
+      Math.floor(color[2]),
+      Math.floor(color[3]),
+    ]
+
+    // mergeStyle(leaf_frame.$element, {
+    //   left: `${x + this._leaf_layer_offset_x + scrollX}px`,
+    //   top: `${y + this._leaf_layer_offset_y + scrollY}px`,
+    //   width: `${width + 2 * (Math.abs(sx) - 1)}px`,
+    //   height: `${height + 2 * (Math.abs(sy) - 1)}px`,
+    //   transform: `scale(${sx}, ${sy})`,
+    //   opacity: `${opacity}`,
+    //   fontSize: `${fontSize}px`,
+    //   color: `${rgbaToHex(color_)}`
+    // })
+
+    leaf_frame.$element.style.left = `${
+      x + this._leaf_layer_offset_x + ((Math.abs(sx) - 1) * width) / 2 + scrollX
+    }px`
+    leaf_frame.$element.style.top = `${
+      y +
+      this._leaf_layer_offset_y +
+      ((Math.abs(sy) - 1) * height) / 2 +
+      scrollY
+    }px`
+    leaf_frame.$element.style.width = `${width}px`
+    leaf_frame.$element.style.height = `${height}px`
+    leaf_frame.$element.style.transform = `scale(${sx}, ${sy})`
+    leaf_frame.$element.style.opacity = `${opacity}`
+    leaf_frame.$element.style.fontSize = `${fontSize}px`
+    leaf_frame.$element.style.color = `${rgbaToHex(color_)}`
   }
 
   private _tick_animate_layout_move_children = (
@@ -45414,6 +45453,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
+      const sub_component = this._get_sub_component(graph_unit_id)
       const base = this._get_sub_component_base(graph_unit_id)
 
       this._measure_sub_component_base(graph_unit_id, base)
@@ -45439,6 +45479,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           const { width, height } = get_final_size()
 
+          const color = sub_component.getColor()
+
           const trait: LayoutNode = {
             x: x,
             y: y,
@@ -45448,6 +45490,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sy: z,
             opacity: 1,
             fontSize: 14,
+            color,
           }
 
           return {

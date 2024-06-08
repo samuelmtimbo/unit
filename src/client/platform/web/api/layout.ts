@@ -2,6 +2,7 @@ import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
 import { Style } from '../../../../system/platform/Style'
 import { LayoutNode } from '../../../LayoutNode'
+import { RGBA, colorToHex, hexToRgba } from '../../../color'
 import { parseTransform } from '../../../parseTransform'
 import { applyStyle } from '../../../style'
 import { parseFontSize } from '../../../util/style/getFontSize'
@@ -166,6 +167,16 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
         let x = rect.x
         let y = rect.y
 
+        let childColor: RGBA
+
+        if (childStyle.color) {
+          let hex: string = colorToHex(childStyle.color)
+
+          childColor = (hex && hexToRgba(hex)) || parentTrait.color
+        } else {
+          childColor = parentTrait.color
+        }
+
         const childTrait: LayoutNode = {
           x,
           y,
@@ -175,6 +186,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
           fontSize: childFontSize,
           sx: childSx,
           sy: childSy,
+          color: childColor,
         }
 
         childrenTrait.push(childTrait)

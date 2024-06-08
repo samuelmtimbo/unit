@@ -8,6 +8,7 @@ import { unmount } from '../client/context'
 import icons from '../client/icons'
 import { styleToCSS } from '../client/id/styleToCSS'
 import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
+import { themeColor } from '../client/theme'
 import { fromBundle } from '../spec/fromBundle'
 import { stringifyBundleSpecData } from '../spec/stringifySpec'
 import { BootOpt, System } from '../system'
@@ -86,13 +87,16 @@ export function boot(
   const componentLocal: Dict<Component> = {}
   const componentRemoteToLocal: Dict<Set<string>> = {}
 
+  const theme = 'dark'
+  const color = themeColor(theme)
+
   const system: System = {
     path,
     parent,
     emitter,
     animated: true,
     root: null,
-    theme: 'dark',
+    theme,
     customEvent,
     input,
     context,
@@ -222,6 +226,7 @@ export function boot(
         graph.destroy()
       }
     },
+    color,
   }
 
   return system

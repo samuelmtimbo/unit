@@ -1,4 +1,4 @@
-import { HSVToHEX, hueToColor } from '../../../../../client/color'
+import { hsvToHex, hueToHex } from '../../../../../client/color'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { UnitPointerEvent } from '../../../../../client/event/pointer'
@@ -45,7 +45,7 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
     this._s = s
     this._v = v
 
-    const backgroundColor = hueToColor(h)
+    const backgroundColor = hueToHex(h)
 
     const picker_inner = new Div(
       {
@@ -176,7 +176,7 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
 
   private _getValue = (): string => {
     const { h = 0 } = this.$props
-    const hex = HSVToHEX(h, this._s, this._v)
+    const hex = hsvToHex(h, this._s, this._v)
     return hex
   }
 
@@ -256,7 +256,7 @@ export default class HSVColorPicker extends Element<HTMLDivElement, Props> {
       })
     } else if (prop === 'h') {
       const { h = 0 } = this.$props
-      const backgroundColor = hueToColor(h)
+      const backgroundColor = hueToHex(h)
       mergePropStyle(this._background, {
         backgroundColor,
       })

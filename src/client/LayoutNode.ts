@@ -1,3 +1,5 @@
+import { RGBA } from './color'
+
 export type LayoutNode = {
   x: number
   y: number
@@ -7,4 +9,5 @@ export type LayoutNode = {
   sy: number
   opacity: number
   fontSize: number
+  color: RGBA
 }
