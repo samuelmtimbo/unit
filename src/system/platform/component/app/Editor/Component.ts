@@ -19630,6 +19630,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       opacity: '1',
       transform: '',
       color: '',
+      'object-fit': '',
     }
 
     const prop_unlisten = leaf_comp.interceptProp('style', (style) => {
@@ -19666,13 +19667,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else {
       leaf_frame.appendChild(leaf_comp)
 
-      const style = rawExtractStyle(leaf_comp.$node)
-      const leaf_style = extractStyle(
-        this._component,
-        leaf_comp,
-        leaf_node,
-        measureText
-      )
+      const style = rawExtractStyle(leaf_comp.$node, leaf_node, measureText)
+      const leaf_style = extractStyle(leaf_comp, leaf_node, measureText)
 
       this._leaf_init_style[leaf_id] = style
       this._leaf_style[leaf_id] = leaf_style
@@ -19775,6 +19771,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           'fontSize',
           'transform',
           'aspectRatio',
+          'color',
+          'object-fit',
         ]
 
         const layoutStyle = clone(style)
@@ -20252,7 +20250,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         return leaf_style
       }
 
-      return extractStyle(this._component, leaf_comp, trait, measureText, true)
+      return extractStyle(leaf_comp, trait, measureText)
     }
 
     const base_trait = reflectComponentBaseTrait(
@@ -20555,13 +20553,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             color,
           }
 
-          const style = extractStyle(
-            this._component,
-            frame,
-            layout_node,
-            measureText,
-            true
-          )
+          const style = extractStyle(frame, trait, measureText)
 
           all_leaf_trait = this._reflect_sub_component_base_trait(
             '',
@@ -20787,7 +20779,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
                 const frame_trait = extractTrait(frame, measureText)
                 const frame_style = extractStyle(
-                  this._component,
                   frame,
                   frame_trait,
                   measureText
@@ -24141,6 +24132,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           () => {
             for (const sub_component_id of this._fullwindow_component_ids) {
               this._unplug_sub_component_root_base_frame(sub_component_id)
+
+              this._append_sub_component_all_missing_root(sub_component_id)
               this._append_sub_component_base(sub_component_id)
             }
 
@@ -26108,7 +26101,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _is_node_removable = (node_id: string): boolean => {
-    // TODO
     return true
   }
 
@@ -29132,7 +29124,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       const trait = extractTrait(frame, measureText)
-      const style = extractStyle(this._component, frame, trait, measureText)
+      const style = extractStyle(frame, trait, measureText)
 
       let base_trait = this._reflect_sub_component_base_trait(
         '',
@@ -29165,12 +29157,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           (leaf_id) => {
             if (i === 0) {
               const trait = extractTrait(frame, measureText)
-              const frame_style = extractStyle(
-                this._component,
-                frame,
-                trait,
-                measureText
-              )
+              const frame_style = extractStyle(frame, trait, measureText)
 
               base_trait = this._reflect_sub_component_base_trait(
                 '',
@@ -29530,12 +29517,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sub_base_node,
             () => {
               const trait = extractTrait(frame, measureText)
-              const style = extractStyle(
-                this._component,
-                frame,
-                trait,
-                measureText
-              )
+              const style = extractStyle(frame, trait, measureText)
 
               return {
                 style,
@@ -30708,6 +30690,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
         this._remove_sub_component_root_base(sub_component_id)
+
         this._plug_sub_component_base(sub_component_id, base, [], layer)
       }
 
@@ -30750,12 +30733,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               color,
             }
 
-            const style = extractStyle(
-              this._component,
-              frame_slot,
-              frame_trait,
-              measureText
-            )
+            const style = extractStyle(frame_slot, trait, measureText)
 
             all_trait = this.___reflect_sub_component_base_trait(
               '',
@@ -30852,12 +30830,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const frame = this._get_sub_component_frame(sub_component_id)
 
       const frame_trait = extractTrait(frame, measureText)
-      const frame_style = extractStyle(
-        this._component,
-        frame,
-        frame_trait,
-        measureText
-      )
+      const frame_style = extractStyle(frame, frame_trait, measureText)
 
       parent_frame_style[sub_component_id] = frame_style
       parent_frame_trait[sub_component_id] = frame_trait
@@ -30924,12 +30897,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (cached_style && !is_text) {
         return cached_style
       } else {
-        const style = extractStyle(
-          this._component,
-          leaf_comp,
-          frame_trait,
-          measureText
-        )
+        const style = extractStyle(leaf_comp, frame_trait, measureText)
 
         this._leaf_style[leaf_id] = style
 
@@ -30946,12 +30914,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const frame = this._get_sub_component_frame(sub_component_id)
 
         const parent_trait = extractTrait(frame, measureText)
-        const parent_style = extractStyle(
-          this._component,
-          frame,
-          parent_trait,
-          measureText
-        )
+        const parent_style = extractStyle(frame, parent_trait, measureText)
 
         const base_style = base.map(leaf_to_style)
 
@@ -31049,12 +31012,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           const parent_trait = extractTrait(frame, measureText)
 
-          const slot_style = extractStyle(
-            this._component,
-            slot,
-            parent_trait,
-            measureText
-          )
+          const slot_style = extractStyle(slot, parent_trait, measureText)
 
           const slot_trait = all_trait[slot_leaf_id]
 
@@ -31064,12 +31022,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
               return (
                 this._leaf_style[leaf_id] ||
-                extractStyle(
-                  this._component,
-                  leaf_comp,
-                  parent_trait,
-                  measureText
-                )
+                extractStyle(leaf_comp, slot_trait, measureText)
               )
             }
           )
@@ -31181,42 +31134,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return callAll(all_abort)
   }
 
-  private _cached_extract_leaf_style = (
-    parent_trait: LayoutNode,
-    leaf_path: string[],
-    leaf_comp: Component
-  ): Style => {
-    const {
-      api: {
-        text: { measureText },
-      },
-    } = this.$system
-
-    const leaf_id = joinPath(leaf_path)
-
-    if (this._leaf_style[leaf_id]) {
-      return this._leaf_style[leaf_id]
-    }
-
-    return extractStyle(
-      this._component,
-      leaf_comp,
-      parent_trait,
-      measureText,
-      true,
-      this._cached_extract_leaf_style
-    )
-  }
-
-  private _make_cached_extract_leaf_style = (parent_path: string[]): any => {
-    return (trait, leaf_path, leaf_comp) =>
-      this._cached_extract_leaf_style(
-        trait,
-        [...parent_path, ...leaf_path],
-        leaf_comp
-      )
-  }
-
   private _setup_layout_sub_component_append_children_animation = (
     parent_id: string,
     children: string[],
@@ -31288,14 +31205,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const parent_trait = extractTrait(parent_frame, measureText)
 
     for (const leaf_comp of all_children_base_comp) {
-      const leaf_style = extractStyle(
-        this._component,
-        leaf_comp,
-        parent_trait,
-        measureText,
-        true,
-        this._cached_extract_leaf_style
-      )
+      const leaf_style = extractStyle(leaf_comp, parent_trait, measureText)
 
       _leaf_style.push(leaf_style)
     }
@@ -31380,12 +31290,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const frame_trait = extractTrait(frame, measureText)
 
-        const leaf_style = extractStyle(
-          this._component,
-          leaf_comp,
-          frame_trait,
-          measureText
-        )
+        const leaf_style = extractStyle(leaf_comp, frame_trait, measureText)
 
         child_base_style.push(leaf_style)
         parent_child_leaf_style.push(leaf_style)
@@ -31822,24 +31727,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       const slot_leaf_trait = extractTrait(child_base_slot, measureText)
-      const slot_leaf_style = is_frame_target
-        ? extractStyle(
-            this._component,
-            child_base_slot,
-            target_frame_trait,
-            measureText,
-            true,
-            this._cached_extract_leaf_style
-          )
-        : this._leaf_style[slot_leaf_id] ??
-          extractStyle(
-            this._component,
-            child_base_slot,
-            target_frame_trait,
-            measureText,
-            true,
-            this._cached_extract_leaf_style
-          )
+      const slot_leaf_style = extractStyle(
+        child_base_slot,
+        target_frame_trait,
+        measureText
+      )
 
       slot_leaf_trait.x -= this.$context.$x
       slot_leaf_trait.y -= this.$context.$y
@@ -31861,12 +31753,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const leaf_style =
           this._leaf_style[leaf_id] ||
-          extractStyle(
-            this._component,
-            leaf_comp,
-            target_frame_trait,
-            measureText
-          )
+          extractStyle(leaf_comp, slot_leaf_trait, measureText)
 
         if (is_root) {
           root_base[target_id] = root_base[target_id] || {}
@@ -31912,12 +31799,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const slot_style =
           this._leaf_style[target_id] ??
-          extractStyle(
-            this._component,
-            slot_offset,
-            target_frame_trait,
-            measureText
-          )
+          extractStyle(slot_offset, target_frame_trait, measureText)
         const slot_trait = extractTrait(slot_offset, measureText)
 
         const slot_base_trait = reflectChildrenTrait(
@@ -31965,19 +31847,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (shouldExpandSlots) {
             return expandSlot(
               this._component,
-              this._component,
               slot_id,
               path,
+              slot_trait,
               parent_slot_base,
               (leaf_id, leaf_comp) => {
                 return (
                   this._leaf_style[leaf_id] ??
-                  extractStyle(
-                    this._component,
-                    leaf_comp,
-                    slot_trait,
-                    measureText
-                  )
+                  extractStyle(leaf_comp, slot_trait, measureText)
                 )
               }
             )

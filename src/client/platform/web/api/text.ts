@@ -21,12 +21,12 @@ export function webText(window: Window, opt: BootOpt): API['text'] {
   }
 
   const text: API['text'] = {
-    measureText: (text: string, fontSize: number): Size => {
+    measureText: (text: string, fontSize: number, maxWidth: number): Size => {
       if (!ctx) {
         throw new Error('canvas context not available')
       }
 
-      return measureText(ctx, text, fontSize)
+      return measureText(ctx, text, fontSize, maxWidth)
     },
   }
 

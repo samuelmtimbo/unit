@@ -44,10 +44,10 @@ export type ExpandChildFunction = (
 ) => Style
 
 export const expandSlot = (
-  root: Component,
   component: Component,
   slot_id: string,
   path: number[],
+  trait: LayoutNode,
   parent_slot_base: Dict<string[]>,
   extractStyle: ExpandChildFunction
 ) => {
@@ -82,7 +82,7 @@ export const expandSlot = (
     let base
 
     if (path.length >= 1) {
-      const parent_path = getParentPath(sub, root)
+      const parent_path = getParentPath(sub, component)
 
       base = sub.getRootBase().map(([leaf_path, leaf_comp]) => {
         return [[...parent_path, ...leaf_path], leaf_comp]
@@ -109,7 +109,17 @@ export const expandSlot = (
             const parentChildBase = parentChild.getRootBase()
 
             for (const [leaf_path, leaf_comp] of parentChildBase) {
-              const leaf_style = rawExtractStyle(leaf_comp.$element)
+              const {
+                api: {
+                  text: { measureText },
+                },
+              } = leaf_comp.$system
+
+              const leaf_style = rawExtractStyle(
+                leaf_comp.$element,
+                trait,
+                measureText
+              )
 
               acc.push(leaf_style)
             }
@@ -195,8 +205,6 @@ export const expandSlot = (
           while (!parent_sub_component_id && parent) {
             parent_sub_component_id = component.getSubComponentId(parent)
 
-            parent_path.unshift
-
             parent = parent.$parent
 
             i++
@@ -217,7 +225,17 @@ export const expandSlot = (
           const parentChildBase = parentChild.getRootBase()
 
           for (const [leaf_path, leaf_comp] of parentChildBase) {
-            const leaf_style = rawExtractStyle(leaf_comp.$element)
+            const {
+              api: {
+                text: { measureText },
+              },
+            } = leaf_comp.$system
+
+            const leaf_style = rawExtractStyle(
+              leaf_comp.$element,
+              trait,
+              measureText
+            )
 
             children_style.push(leaf_style)
           }
@@ -287,10 +305,10 @@ export const reflectComponentBaseTrait = (
   const expand_slot = (slot_id: string, path: number[]): Style[] => {
     if (shouldExpandSlot) {
       return expandSlot(
-        root,
         component,
         slot_id,
         path,
+        trait,
         all_slot_base,
         (leaf_id, leaf_comp) => {
           return extractStyle(
