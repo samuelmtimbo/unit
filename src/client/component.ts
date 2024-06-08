@@ -492,13 +492,17 @@ export class Component<
     }
 
     const hostTrait = extractTrait(hostTarget, measureText)
-    const hostStyle = rawExtractStyle(hostTarget.$element)
+    const hostStyle = rawExtractStyle(
+      hostTarget.$element,
+      hostTrait,
+      measureText
+    )
 
     delete hostStyle['transform']
     delete hostStyle['opacity']
 
     const baseStyle = getBaseStyle(base, [], (leafPath, leafComp) => {
-      return rawExtractStyle(leafComp.$element)
+      return rawExtractStyle(leafComp.$element, hostTrait, measureText)
     })
 
     const targetTraits = reflectChildrenTrait(

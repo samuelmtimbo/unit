@@ -4,141 +4,37 @@ import { MeasureTextFunction } from '../text'
 import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
 import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
-import { extractTrait } from './extractTrait'
 import { IOElement } from './IOElement'
 import { LayoutNode } from './LayoutNode'
 import { rawExtractStyle } from './rawExtractStyle'
-import { expandSlot } from './reflectComponentBaseTrait'
-import { rectsBoundingRect } from './util/geometry'
 import { parseFontSize } from './util/style/getFontSize'
 
-export function measureChildren(
-  root: Component,
-  component: Component,
-  style: Style,
-  fallbackTrait: LayoutNode,
-  measureText: MeasureTextFunction,
-  fitContent: boolean,
-  getLeafStyle: (
-    parent_trait: LayoutNode,
-    leaf_path: string[],
-    leaf_comp: Component
-  ) => Style = (parent_trait, leaf_path, leaf_comp) =>
-    extractStyle(root, leaf_comp, parent_trait, measureText, fitContent)
-) {
-  const { $system } = component
-
-  const {
-    api: {
-      layout: { reflectChildrenTrait },
-    },
-  } = $system
-
-  const parentChildren = component.$parentChildren
-
-  const base = parentChildren.reduce((acc, child) => {
-    const childBase = child.getRootBase()
-
-    let child_path: string[] = []
-    let c: Component = child
-    let p = child.$parent
-
-    while (p) {
-      let z = component
-
-      let drop = false
-
-      while (z) {
-        if (c.getSubComponentId(component.$parent)) {
-          drop = true
-
-          break
-        }
-
-        z = z.$parent
-      }
-
-      if (drop) {
-        break
-      }
-
-      const subComponentId = p.getSubComponentId(c)
-
-      child_path.unshift(subComponentId)
-
-      c = p
-
-      p = p.$parent
-    }
-
-    return [
-      ...acc,
-      ...childBase.map(([leaf_path, leaf_comp]) => [
-        [...child_path, ...leaf_path],
-        leaf_comp,
-      ]),
-    ]
-  }, [])
-
-  const base_style = base.map(([leaf_path, leaf_comp]) => {
-    return getLeafStyle(fallbackTrait, leaf_path, leaf_comp)
-  })
-
-  const relative_base_style = base_style.filter(({ position }) => {
-    return position !== 'fixed' && position !== 'absolute'
-  }, [])
-
-  const trait = extractTrait(component, measureText)
-
-  const reflected_children_trait = reflectChildrenTrait(
-    trait,
-    style,
-    relative_base_style,
-    [],
-    (path) => {
-      return expandSlot(root, component, '', path, {}, (leaf_id, leaf_comp) => {
-        return getLeafStyle(fallbackTrait, leaf_id.split('/'), leaf_comp)
-      })
-    }
-  )
-
-  const size = rectsBoundingRect(reflected_children_trait)
-
-  return size
-}
-
 export function extractStyle(
-  root: Component,
   component: Component,
-  fallbackTrait: LayoutNode,
-  measureText: MeasureTextFunction,
-  fitContent: boolean = false,
-  getLeafStyle: (
-    parent_trait: LayoutNode,
-    leaf_path: string[],
-    leaf_comp: Component
-  ) => Style = (parent_trait, leaf_path, leaf_comp) =>
-    extractStyle(root, leaf_comp, parent_trait, measureText, fitContent)
+  trait: LayoutNode,
+  measureText: MeasureTextFunction
 ): Style {
   const { $node } = component
 
-  return _extractStyle(component, $node, measureText)
+  return _extractStyle(component, $node, trait, measureText)
 }
 
 export function _extractStyle(
   component: Component,
   element: IOElement,
+  trait: LayoutNode,
   measureText: MeasureTextFunction
 ): Style {
-  const style = rawExtractStyle(element)
+  const style = rawExtractStyle(element, trait, measureText)
 
-  return _extractFromRawStyle(component, element, style, measureText)
+  return _extractFromRawStyle(component, element, style, trait, measureText)
 }
 
 export function _extractFromRawStyle(
   component: Component,
   element: IOElement,
   style: Style,
+  trait: LayoutNode,
   measureText: MeasureTextFunction
 ): Style {
   const fitWidth = style['width'] === 'fit-content'
@@ -149,7 +45,7 @@ export function _extractFromRawStyle(
 
     const { textContent } = component.$element
 
-    const { width, height } = measureText(textContent, fontSize)
+    const { width, height } = measureText(textContent, fontSize, trait.width)
 
     return {
       width: `${width}px`,
@@ -166,7 +62,7 @@ export function _extractFromRawStyle(
 
     const { textContent } = component.$element
 
-    const { width, height } = measureText(textContent, fontSize)
+    const { width, height } = measureText(textContent, fontSize, trait.width)
 
     if (fitWidth) {
       style['width'] = `${width}px`
@@ -222,7 +118,7 @@ export function _extractFromRawStyle(
 
         const fontSizeNum = parseFontSize(fontSize) ?? DEFAULT_FONT_SIZE
 
-        const { height } = measureText(value, fontSizeNum)
+        const { height } = measureText(value, fontSizeNum, trait.width)
 
         style.height = `${height}px`
       }

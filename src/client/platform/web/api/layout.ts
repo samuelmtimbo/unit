@@ -128,7 +128,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
       // parentNode.style.transform = `scale(${parentTrait.sx}, ${parentTrait.sy})`
       parentNode.style.transform = ``
       parentNode.style.fontSize = `${parentTrait.fontSize}px`
-      parentNode.style.opacity = 'hidden'
+      parentNode.style.visibility = 'hidden'
       parentNode.style.margin = '0'
 
       const childrenFontSize: number[] = []

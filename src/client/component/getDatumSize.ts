@@ -36,7 +36,7 @@ export function measureSpecialCharacters(
 
       count++
 
-      const size = measureText(char, fontSize)
+      const size = measureText(char, fontSize, Infinity)
 
       width += size.width
       height = Math.max(height, size.height)
