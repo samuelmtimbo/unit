@@ -27,6 +27,7 @@ import { Listener } from './Listener'
 import { getActiveElement } from './activeElement'
 import { addListeners } from './addListener'
 import { animateSimulate } from './animation/animateSimulate'
+import { RGBA, colorToHex, hexToRgba, randomColorString } from './color'
 import { ANIMATION_PROPERTY_DELTA_PAIRS } from './component/app/graph/ANIMATION_PROPERTY_DELTA_PAIRS'
 import { namespaceURI } from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
@@ -529,7 +530,7 @@ export class Component<
         height: `${leafTrait.height}px`,
         pointerEvents: 'none',
         zIndex: '0',
-        // border: `1px solid ${randomColorString()}`,
+        border: `1px solid ${randomColorString()}`,
       })
 
       if (prepend) {
@@ -1202,6 +1203,39 @@ export class Component<
     }
 
     return getSize(this.$element)
+  }
+
+  getColor(): RGBA {
+    const defaultColor = () => {
+      if (this.$slotParent) {
+        return this.$slotParent.getColor()
+      } else {
+        if (this.$mounted) {
+          return hexToRgba(this.$context.$color)
+        } else {
+          return hexToRgba(this.$system.color)
+        }
+      }
+    }
+
+    if (this.$primitive) {
+      if (
+        this.$element instanceof HTMLElement ||
+        this.$element instanceof SVGElement
+      ) {
+        const styleColor = this.$element.style.color
+
+        if (styleColor) {
+          return hexToRgba(colorToHex(styleColor))
+        } else {
+          return defaultColor()
+        }
+      } else {
+        return defaultColor()
+      }
+    } else {
+      return defaultColor()
+    }
   }
 
   getFontSize(): number {

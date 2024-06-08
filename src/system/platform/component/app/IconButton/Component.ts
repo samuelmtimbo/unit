@@ -1,4 +1,4 @@
-import { isColorName, isHEX, nameToColor } from '../../../../../client/color'
+import { isColorName, isHex, nameToColor } from '../../../../../client/color'
 import { Element } from '../../../../../client/element'
 import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
 import { makePointerLeaveListener } from '../../../../../client/event/pointer/pointerleave'
@@ -48,7 +48,7 @@ export default class IconButton extends Element<HTMLDivElement, Props> {
       color = nameToColor(color)
     }
 
-    const hex = isHEX(color)
+    const hex = isHex(color)
 
     const {
       disabledColor = hex ? applyTheme($theme, color, 75) : 'currentColor',

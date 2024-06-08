@@ -90,8 +90,8 @@ export const LIGHT_LINK_MODE_COLOR: Dict<string> = {
   data: COLOR_DARK_LINK_CHARTREUSE,
 }
 
-export const getActiveColor = ($theme: Theme): string => {
-  if ($theme === 'dark') {
+export const getActiveColor = (theme: Theme): string => {
+  if (theme === 'dark') {
     return COLOR_YELLOW
   } else {
     return COLOR_DARK_YELLOW
@@ -118,12 +118,19 @@ export const getThemeLinkModeColor = (theme: string, mode: Mode): string => {
   }
 }
 
-export const themeBackgroundColor = ($theme: Theme): string => {
-  return $theme === 'dark' ? '#1f1f1f' : '#f1f1f1'
+const DARK_DEFAULT_COLOR = '#f1f1f1'
+const LIGHT_DEFAULT_COLOR = '#1f1f1f'
+
+export const themeColor = (theme: Theme): string => {
+  return theme === 'dark' ? DARK_DEFAULT_COLOR : LIGHT_DEFAULT_COLOR
 }
 
-export const oppositeTheme = ($theme: Theme): Theme => {
-  return $theme === 'dark' ? 'light' : 'dark'
+export const themeBackgroundColor = (theme: Theme): string => {
+  return theme === 'dark' ? LIGHT_DEFAULT_COLOR : DARK_DEFAULT_COLOR
+}
+
+export const oppositeTheme = (theme: Theme): Theme => {
+  return theme === 'dark' ? 'light' : 'dark'
 }
 
 export function applyTheme(
