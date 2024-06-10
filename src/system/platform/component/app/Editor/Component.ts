@@ -45774,6 +45774,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ): boolean {
         throw new MethodNotImplementedError()
       },
+      removeUnitPinData: function (
+        unitId: string,
+        type: IO,
+        pinId: string,
+        ...extra: any[]
+      ) {
+        throw new MethodNotImplementedError()
+      },
     }
 
     return graph_interface
@@ -46074,6 +46082,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ): boolean {
         throw new MethodNotImplementedError()
       },
+      removeUnitPinData: function (
+        unitId: string,
+        type: IO,
+        pinId: string,
+        ...extra: any[]
+      ) {
+        throw new MethodNotImplementedError()
+      },
     }
 
     return graph_interface
@@ -46252,6 +46268,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         type: IO,
         pinId: string
       ): boolean {
+        throw new MethodNotImplementedError()
+      },
+      removeUnitPinData: function (
+        unitId: string,
+        type: IO,
+        pinId: string,
+        ...extra: any[]
+      ) {
         throw new MethodNotImplementedError()
       },
     }
@@ -46665,7 +46689,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         pinId: string,
         constant: boolean
       ): void {
-        throw new MethodNotImplementedError()
+        //
       },
       hasPlug: (type: IO, pinId: string, subPinId: string): boolean => {
         return hasPlug(spec, type, pinId, subPinId)
@@ -46737,6 +46761,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         type: IO,
         pinId: string
       ): boolean {
+        throw new MethodNotImplementedError()
+      },
+      removeUnitPinData: function (
+        unitId: string,
+        type: IO,
+        pinId: string,
+        ...extra: any[]
+      ) {
         throw new MethodNotImplementedError()
       },
     }
@@ -48633,6 +48665,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (pinId) {
           setUnitPinConstant(
             { unitId: next_unit_id, type, pinId: pin_id, constant: false },
+            updated_graph_spec
+          )
+
+          removeUnitPinData(
+            { unitId: next_unit_id, type, pinId: pin_id },
             updated_graph_spec
           )
 

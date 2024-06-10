@@ -168,11 +168,22 @@ export interface G<I = any, O = any, U_ = any> {
     pinId: string,
     ignored: boolean
   ): void
-  setUnitPinData(unitId: string, type: IO, pinId: string, data: any): void
+  setUnitPinData(
+    unitId: string,
+    type: IO,
+    pinId: string,
+    data: any,
+    ...extra: any[]
+  ): void
   getUnitPinData(unitId: string, type: IO, pinId: string): any
   isUnitPinRef(unitId: string, type: IO, pinId: string): boolean
   isUnitPinConstant(unitId: string, type: IO, pinId: string): boolean
-  removeUnitPinData(unitId: string, type: IO, pinId: string): any
+  removeUnitPinData(
+    unitId: string,
+    type: IO,
+    pinId: string,
+    ...extra: any[]
+  ): any
   removeMergeData(mergeId: string): any
   setUnitId(
     unitId: string,
