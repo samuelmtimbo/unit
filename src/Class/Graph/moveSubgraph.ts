@@ -45,6 +45,7 @@ export type GraphLike<T extends UCG = UCG> = Pick<
   | 'getUnit'
   | 'exposePinSet'
   | 'getUnitPinData'
+  | 'removeUnitPinData'
   | 'hasUnit'
   | 'addUnit'
   | 'removeUnit'
@@ -313,8 +314,16 @@ export function moveUnit(
             //
           } else {
             if (nextUnitPinMap[type][pinId].pinId) {
+              const data = unit.getPinData(type, pinId)
+
               target.setUnitPinConstant(unitId, type, pinId, false, false)
               target.setPinConstant(type, nextPinId, true)
+
+              if (data !== undefined) {
+                target.removeUnitPinData(unitId, type, pinId, false, false)
+
+                target.setPinData(type, nextPinId, data)
+              }
             }
           }
         }
@@ -349,20 +358,13 @@ export function moveUnit(
           } else {
             if (!source.hasMerge(mergeId)) {
               source.addMerge({}, mergeId, false, false)
-
-              forEachPinOnMerge(merge, (unitId, type, pinId) => {
-                if (source.hasUnit(unitId)) {
-                  source.addPinToMerge(
-                    mergeId,
-                    unitId,
-                    type,
-                    pinId,
-                    false,
-                    false
-                  )
-                }
-              })
             }
+
+            forEachPinOnMerge(merge, (unitId, type, pinId) => {
+              if (source.hasUnit(unitId)) {
+                source.addPinToMerge(mergeId, unitId, type, pinId, false, false)
+              }
+            })
 
             if (!source.hasMergePin(mergeId, graphId, type, nextPinId)) {
               source.addPinToMerge(

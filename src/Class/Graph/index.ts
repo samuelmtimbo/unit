@@ -55,6 +55,7 @@ import {
   exposePinSet,
   plugPin,
   removePinFromMerge,
+  removeUnitPinData,
   renameUnitPin,
   setComponentSize,
   setPinSetDefaultIgnored,
@@ -439,12 +440,13 @@ export class Graph<I = any, O = any>
     unitId: string,
     type: IO,
     pinId: string,
+    emit: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
   ) {
     this._removeUnitPinData(unitId, type, pinId, fork, bubble)
 
-    this.emit('remove_unit_pin_data', unitId, type, pinId, [])
+    emit && this.emit('remove_unit_pin_data', unitId, type, pinId, [])
   }
 
   removeMergeData(mergeId: string) {
@@ -5030,6 +5032,18 @@ export class Graph<I = any, O = any>
 
     this._specSetUnitPinConstant(unitId, type, pinId, constant)
 
+    if (!constant) {
+      const data = deepGetOrDefault(
+        this._spec,
+        ['units', unitId, type, pinId, 'data'],
+        undefined
+      )
+
+      if (data !== undefined) {
+        removeUnitPinData({ unitId, type, pinId }, this._spec)
+      }
+    }
+
     const unit = this.getUnit(unitId)
 
     unit.setPinConstant(type, pinId, constant)
@@ -5230,6 +5244,7 @@ export class Graph<I = any, O = any>
     type: IO,
     pinId: string,
     data: any,
+    emit: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
   ) {
@@ -5239,7 +5254,7 @@ export class Graph<I = any, O = any>
 
     this._settingUnitData = false
 
-    this.emit('set_unit_pin_data', unitId, type, pinId, data, [])
+    emit && this.emit('set_unit_pin_data', unitId, type, pinId, data, [])
   }
 
   private _setUnitPinData(
