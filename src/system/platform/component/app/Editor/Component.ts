@@ -1088,42 +1088,42 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     )
   }
 
-  private _sync_spec_file = async (
-    specId: string,
-    spec: GraphSpec,
-    specs: Specs
-  ) => {
-    const fileName = this._spec_id_to_file_name[specId]
+  private _sync_spec_file = debounce(
+    this.$system,
+    async (specId: string, spec: GraphSpec, specs: Specs) => {
+      const fileName = this._spec_id_to_file_name[specId]
 
-    if (fileName) {
-      const fileHandle = this._file_handles[fileName]
-      const bundle = this._file_to_bundle[fileName]
+      if (fileName) {
+        const fileHandle = this._file_handles[fileName]
+        const bundle = this._file_to_bundle[fileName]
 
-      let spec_: GraphSpec
+        let spec_: GraphSpec
 
-      if (bundle.spec.id === specId) {
-        spec_ = spec
-      } else {
-        spec_ = bundle.spec
+        if (bundle.spec.id === specId) {
+          spec_ = spec
+        } else {
+          spec_ = bundle.spec
+        }
+
+        this._editor.set_spec_node_positions_rec(
+          this._editor,
+          this._editor.get_spec(),
+          weakMerge(specs, bundle.specs ?? {})
+        )
+
+        const bundle_ = bundleSpec(spec_, specs)
+
+        this._file_to_bundle[fileName] = bundle_
+
+        for (const spec_id in bundle_.specs) {
+          this._spec_id_to_file_name[spec_id] = fileName
+        }
+
+        await saveToUnitFile(fileHandle, bundle_)
       }
-
-      this._editor.set_spec_node_positions_rec(
-        this._editor,
-        this._editor.get_spec(),
-        weakMerge(specs, bundle.specs ?? {})
-      )
-
-      const bundle_ = bundleSpec(spec_, specs)
-
-      this._file_to_bundle[fileName] = bundle_
-
-      for (const spec_id in bundle_.specs) {
-        this._spec_id_to_file_name[spec_id] = fileName
-      }
-
-      await saveToUnitFile(fileHandle, bundle_)
-    }
-  }
+    },
+    1
+  )
 
   onDestroy() {
     super.onDestroy()
