@@ -27,7 +27,7 @@ import { Listener } from './Listener'
 import { getActiveElement } from './activeElement'
 import { addListeners } from './addListener'
 import { animateSimulate } from './animation/animateSimulate'
-import { RGBA, colorToHex, hexToRgba, randomColorString } from './color'
+import { RGBA, colorToHex, hexToRgba } from './color'
 import { ANIMATION_PROPERTY_DELTA_PAIRS } from './component/app/graph/ANIMATION_PROPERTY_DELTA_PAIRS'
 import { namespaceURI } from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
@@ -509,7 +509,10 @@ export class Component<
       hostTrait,
       hostStyle,
       baseStyle,
-      []
+      [],
+      () => {
+        return []
+      }
     )
 
     let leafFinished = 0
@@ -534,7 +537,7 @@ export class Component<
         height: `${leafTrait.height}px`,
         pointerEvents: 'none',
         zIndex: '0',
-        border: `1px solid ${randomColorString()}`,
+        // border: `1px solid ${randomColorString()}`,
       })
 
       if (prepend) {
@@ -731,6 +734,24 @@ export class Component<
 
     let leafEnd = 0
 
+    const couple = (leafComp: Component) => {
+      leafComp.unmount()
+
+      if (leafComp.$rootParent) {
+        leafComp.$rootParent.domInsertParentRootAt(
+          leafComp,
+          this.$returnIndex,
+          'default'
+        )
+      } else if (leafComp.$parent) {
+        leafComp.$parent.domInsertRootAt(leafComp, this.$returnIndex)
+      } else {
+        //
+      }
+
+      leafComp.mount(this.$parent.$context)
+    }
+
     if (animate) {
       const targetSlots = []
 
@@ -747,8 +768,6 @@ export class Component<
         }
       )
 
-      const slot = this.$slotParent
-
       for (let i = 0; i < base.length; i++) {
         const leaf = base[i]
 
@@ -759,25 +778,17 @@ export class Component<
         this._animateBase([leaf], targetSlot, true, false, () => {
           leafEnd++
 
-          leafComp.unmount()
-
-          if (leafComp.$rootParent) {
-            leafComp.$rootParent.domInsertParentRootAt(
-              leafComp,
-              this.$returnIndex,
-              'default'
-            )
-          } else if (leafComp.$parent) {
-            leafComp.$parent.domInsertRootAt(leafComp, this.$returnIndex)
-          } else {
-            leafComp
-          }
-
-          leafComp.mount(this.$parent.$context)
+          couple(leafComp)
         })
       }
     } else {
-      this.$parent.domAppendBase(base, this.$slotParent)
+      for (let i = 0; i < base.length; i++) {
+        const leaf = base[i]
+
+        const [_, leafComp] = leaf
+
+        couple(leafComp)
+      }
     }
   }
 
@@ -1230,7 +1241,9 @@ export class Component<
         const styleColor = this.$element.style.color
 
         if (styleColor) {
-          return hexToRgba(colorToHex(styleColor))
+          const hex = colorToHex(styleColor)
+
+          return (hex && hexToRgba(hex)) || defaultColor()
         } else {
           return defaultColor()
         }
