@@ -40,8 +40,6 @@ export const extractTrait = (
     let color: RGBA
     ;({ width = width, height = height } = getSize($node))
 
-    const position = getRelativePosition($node, leaf_context.$element)
-
     let parentTrait: LayoutNode
 
     if (leafComp.$parent) {
@@ -54,10 +52,14 @@ export const extractTrait = (
       color = hexToRgba($color)
     }
 
-    color = parentTrait.color
+    if (leafComp.$mounted) {
+      const position = getRelativePosition($node, leaf_context.$element)
 
-    x = position.x
-    y = position.y
+      x = position.x
+      y = position.y
+    }
+
+    color = parentTrait.color
 
     return {
       x,

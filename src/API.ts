@@ -110,8 +110,8 @@ export type API = {
       parentTrait: LayoutNode,
       parentStyle: Style,
       children: Style[],
-      path?: number[],
-      expandChild?: (path: number[]) => Style[]
+      path: number[],
+      expandChild: (path: number[]) => Style[]
     ): LayoutNode[]
   }
   speech: {

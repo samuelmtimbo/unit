@@ -250,7 +250,6 @@ import { Mode } from '../../../../../client/mode'
 import { _pinTypeMatch } from '../../../../../client/parser'
 import { rawExtractStyle } from '../../../../../client/rawExtractStyle'
 import {
-  ExpandChildFunction,
   expandSlot,
   reflectComponentBaseTrait,
 } from '../../../../../client/reflectComponentBaseTrait'
@@ -19630,7 +19629,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       opacity: '1',
       transform: '',
       color: '',
-      'object-fit': '',
     }
 
     const prop_unlisten = leaf_comp.interceptProp('style', (style) => {
@@ -20228,6 +20226,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return _base_trait
   }
 
+  private _extract_style = (
+    trait: LayoutNode,
+    leaf_id: string,
+    leaf_comp: Component
+  ) => {
+    const {
+      api: {
+        text: { measureText },
+      },
+    } = this.$system
+
+    if (isTextLike(leaf_comp)) {
+      const trait_ =
+        (leaf_comp.$slotParent &&
+          extractTrait(leaf_comp.$slotParent, measureText)) ||
+        trait
+
+      return extractStyle(leaf_comp, trait_, measureText)
+    } else if (this._leaf_style[leaf_id]) {
+      let leaf_style = this._leaf_style[leaf_id]
+
+      return leaf_style
+    }
+
+    return extractStyle(leaf_comp, trait, measureText)
+  }
+
   private ___reflect_sub_component_base_trait = (
     root_prefix: string,
     sub_component_id: string,
@@ -20237,22 +20262,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     trait: LayoutNode,
     expandSlot: boolean
   ): Dict<LayoutNode> => {
-    const {
-      api: {
-        text: { measureText },
-      },
-    } = this.$system
-
-    const _extractStyle: ExpandChildFunction = (leaf_id, leaf_comp) => {
-      if (this._leaf_style[leaf_id] && !isTextLike(leaf_comp)) {
-        let leaf_style = this._leaf_style[leaf_id]
-
-        return leaf_style
-      }
-
-      return extractStyle(leaf_comp, trait, measureText)
-    }
-
     const base_trait = reflectComponentBaseTrait(
       this._component,
       root_prefix,
@@ -20261,7 +20270,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       base,
       style,
       trait,
-      _extractStyle,
+      (leaf_id, leaf_comp) => {
+        return this._extract_style(trait, leaf_id, leaf_comp)
+      },
       expandSlot
     )
 
@@ -20472,9 +20483,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._animate_parent_component(
             sub_component_id,
             animating_sub_component,
+            animating_sub_component,
             leaf_traits,
             leaf_layer,
             leaf_layer_opacity,
+            true,
             async () => {
               sub_component_finish_count++
 
@@ -20493,12 +20506,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _animate_parent_component = (
     sub_component_id: string,
-    animating_sub_component: boolean,
+    dont_leave_frame: boolean,
+    dont_plug_base: boolean,
     leaf_traits: LayoutNode[],
     leaf_layer: Component<HTMLElement>,
     leaf_layer_opacity: number,
+    expand_children: boolean,
     callback: Callback
   ): Unlisten => {
+    // console.log('_animate_parent_component', sub_component_id, dont_plug_base)
+
     const {
       api: {
         text: { measureText },
@@ -20511,7 +20528,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let trait: LayoutNode
     let all_leaf_trait: Dict<LayoutNode>
 
-    if (!animating_sub_component) {
+    if (!dont_leave_frame) {
       this._leave_sub_component_frame(sub_component_id)
     }
 
@@ -20519,7 +20536,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     let i = 0
 
-    if (!animating_sub_component) {
+    if (!dont_plug_base) {
       this._plug_sub_component_base(
         sub_component_id,
         leaf_base,
@@ -20561,7 +20578,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             leaf_base,
             style,
             trait,
-            true
+            expand_children
           )
         }
 
@@ -21077,13 +21094,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             this._measure_sub_component_base(child_id)
           }
         }
-
-        for (const child_id of children) {
-          if (!this._animating_sub_component_base_id.has(child_id)) {
-            this._remove_sub_component_parent_root(sub_component_id, child_id)
-            this._remove_sub_component_root_base(child_id)
-          }
-        }
       }
 
       if (!parent_id || this._layout_path.includes(parent_id)) {
@@ -21098,6 +21108,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (!animating_sub_component && !fullwindow_sub_component) {
           this._leave_sub_component_frame(sub_component_id)
           this._remove_sub_component_root_base(sub_component_id)
+        }
+      }
+
+      if (
+        !this._layout_path.includes(sub_component_id) &&
+        children.length > 0
+      ) {
+        for (const child_id of children) {
+          if (!this._animating_sub_component_base_id.has(child_id)) {
+            this._remove_sub_component_parent_root(sub_component_id, child_id)
+            this._remove_sub_component_root_base(child_id)
+          }
         }
       }
 
@@ -29826,6 +29848,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const sub_component_id = this._get_current_layout_layer_id()
 
+    this._measure_sub_component_base(sub_component_id)
+
     const children = this._spec_get_sub_component_children(sub_component_id)
 
     this._layout_path.pop()
@@ -29878,7 +29902,65 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._measure_sub_component_base(child_id)
       }
 
-      this._measure_sub_component_base(sub_component_id)
+      // this._measure_sub_component_base(sub_component_id)
+
+      const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
+
+      const parent_layer = this._get_layout_layer(parent_id)
+
+      const finish = async () => {
+        for (const slot_name in all_slot_children) {
+          const slot_children = all_slot_children[slot_name]
+
+          if (next_unit_id) {
+            if (this._layout_layer_opacity_animation[next_unit_id]) {
+              await this._layout_layer_opacity_animation[next_unit_id].finished
+            }
+          } else {
+            if (this._layout_root_opacity_animation) {
+              await this._layout_root_opacity_animation.finished
+            }
+          }
+
+          this._end_layout_sub_component_transfer_children_animation(
+            sub_component_id,
+            slot_name,
+            slot_children
+          )
+
+          this._layout_sub_components_commit_base(children)
+
+          for (const child_id of children) {
+            this._insert_sub_component_child(sub_component_id, child_id)
+          }
+        }
+
+        this._unplug_sub_component_root_base_frame(sub_component_id)
+        this._append_sub_component_root_base(sub_component_id)
+        this._enter_sub_component_frame(sub_component_id)
+      }
+
+      let parent_animation_finished = false
+      let children_animation_finished = false
+
+      let slot_animation_finished_count = 0
+
+      this._animate_parent_component(
+        sub_component_id,
+        false,
+        false,
+        [],
+        parent_layer.children,
+        1,
+        true,
+        () => {
+          parent_animation_finished = true
+
+          if (children_animation_finished) {
+            finish()
+          }
+        }
+      )
 
       for (const child_id of children) {
         if (!this._animating_sub_component_base_id.has(child_id)) {
@@ -29886,6 +29968,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._remove_sub_component_root_base(child_id)
         }
       }
+
+      const slot_count = keyCount(all_slot_children)
 
       for (const slot_name in all_slot_children) {
         const slot_children = all_slot_children[slot_name]
@@ -29895,27 +29979,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           slot_children,
           slot_name,
           async () => {
-            if (next_unit_id) {
-              if (this._layout_layer_opacity_animation[next_unit_id]) {
-                await this._layout_layer_opacity_animation[next_unit_id]
-                  .finished
+            slot_animation_finished_count += 1
+
+            if (slot_animation_finished_count === slot_count) {
+              children_animation_finished = true
+
+              if (parent_animation_finished) {
+                finish()
               }
-            } else {
-              if (this._layout_root_opacity_animation) {
-                await this._layout_root_opacity_animation.finished
-              }
-            }
-
-            this._end_layout_sub_component_transfer_children_animation(
-              sub_component_id,
-              slot_name,
-              slot_children
-            )
-
-            this._layout_sub_components_commit_base(children)
-
-            for (const child_id of children) {
-              this._insert_sub_component_child(sub_component_id, child_id)
             }
           }
         )
@@ -30443,9 +30514,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._animate_parent_component(
         parent_id,
         parent_animating,
+        parent_animating,
         parent_leaf_traits,
         parent_layer,
         1,
+        false,
         () => {
           parent_finished = true
 
@@ -31033,7 +31106,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             slot_base_style,
             [],
             (path) => {
-              // RETURN
               return []
             }
           )
@@ -31375,7 +31447,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _animate_layout_append_children = (
-    parent_id: string,
+    sub_component_id: string,
     children: string[],
     slot_name: string,
     callback: Callback
@@ -31389,29 +31461,29 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // )
 
     // this._cancel_layout_current_children_transfer_animation()
-    this._cancel_layout_parent_children_animation(parent_id, slot_name)
+    this._cancel_layout_parent_children_animation(sub_component_id, slot_name)
 
     this._setup_layout_sub_component_append_children_animation(
-      parent_id,
+      sub_component_id,
       children,
       slot_name
     )
 
-    this._layout_transfer_parent_callback[parent_id] = callback
+    this._layout_transfer_parent_callback[sub_component_id] = callback
 
     const pack: [string, string, string, string][] = []
     const target: Dict<Component> = {}
 
     for (const child_id of children) {
-      pack.push([child_id, parent_id, parent_id, slot_name])
+      pack.push([child_id, sub_component_id, sub_component_id, slot_name])
     }
 
-    const parent_component = this._get_sub_component(parent_id)
+    const parent_component = this._get_sub_component(sub_component_id)
 
-    target[parent_id] = parent_component
+    target[sub_component_id] = parent_component
 
     return this._play_layout_sub_component_transfer_children_animation(
-      parent_id,
+      sub_component_id,
       slot_name,
       children,
       pack,
@@ -31580,7 +31652,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ['sy', ANIMATION_DELTA_TRESHOLD / 10],
         ['color', ANIMATION_DELTA_TRESHOLD / 100],
       ],
-      this._animate_leaf_frame_tick.bind(this, leaf_id)
+      (n) => {
+        this._animate_leaf_frame_tick(leaf_id, n)
+      }
     )
   }
 
@@ -31808,12 +31882,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           slot_base_style,
           [],
           (path): Style[] => {
-            if (shouldExpandSlots) {
-              // TODO
-              return []
-            } else {
-              return []
-            }
+            return []
           }
         )
 
@@ -31844,23 +31913,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         slot_base_style,
         [],
         (path) => {
-          if (shouldExpandSlots) {
-            return expandSlot(
-              this._component,
-              slot_id,
-              path,
-              slot_trait,
-              parent_slot_base,
-              (leaf_id, leaf_comp) => {
-                return (
-                  this._leaf_style[leaf_id] ??
-                  extractStyle(leaf_comp, slot_trait, measureText)
-                )
-              }
-            )
-          } else {
-            return []
-          }
+          return expandSlot(
+            this._component,
+            slot_id,
+            path,
+            slot_trait,
+            shouldExpandSlots,
+            parent_slot_base,
+            (leaf_id, leaf_comp) => {
+              return this._extract_style(slot_trait, leaf_id, leaf_comp)
+            }
+          )
         }
       )
 
@@ -32577,9 +32640,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._animate_parent_component(
           parent_id,
           parent_animating,
+          parent_animating,
           parent_leaf_traits,
           parent_layer,
           1,
+          false,
           () => {
             this._unplug_sub_component_root_base_frame(parent_id)
             this._append_sub_component_root_base(parent_id)
@@ -35322,6 +35387,32 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     width: number,
     height: number
   ) {
+    this._measure_sub_component_base(sub_component_id)
+
+    const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
+
+    const parent_layer = this._get_layout_layer(parent_id)
+
+    const finish = () => {
+      this._unplug_sub_component_root_base_frame(sub_component_id)
+      this._enter_sub_component_frame(sub_component_id)
+      this._append_sub_component_root_base(sub_component_id)
+
+      this._end_layout_sub_component_transfer_children_animation(
+        sub_component_id,
+        'default',
+        children
+      )
+
+      for (const child_id of children) {
+        this._enter_sub_component_frame(child_id)
+        this._append_sub_component_base(child_id)
+      }
+    }
+
+    let parent_finished = false
+    let children_finished = false
+
     for (const child_id of children) {
       this._measure_sub_component_base(child_id)
 
@@ -35346,15 +35437,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           await this._layout_layer_opacity_animation[sub_component_id].finished
         }
 
-        this._end_layout_sub_component_transfer_children_animation(
-          sub_component_id,
-          'default',
-          children
-        )
+        children_finished = true
 
-        for (const child_id of children) {
-          this._enter_sub_component_frame(child_id)
-          this._append_sub_component_base(child_id)
+        if (parent_finished) {
+          finish()
+        }
+      }
+    )
+
+    this._animate_parent_component(
+      sub_component_id,
+      false,
+      false,
+      [],
+      parent_layer.children,
+      1,
+      false,
+      () => {
+        parent_finished = true
+
+        if (children_finished) {
+          finish()
         }
       }
     )
