@@ -22722,6 +22722,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const k = ((1 / 2) * 3) / ANIMATION_C
 
+      node.fx = node.fx ?? node.x
+      node.fy = node.fy ?? node.y
+
       if (adx > 0) {
         const _dx = adx * u.x * k
 
@@ -22757,7 +22760,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    frame()
+    requestAnimationFrame(frame)
   }
 
   private _node_target_frame: number
@@ -35255,6 +35258,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._sim_add_merge(merge_id, merge, position)
 
+    const anchor_node_id = this._get_merge_anchor_node_id(merge_node_id)
+
+    this._sim_transfer_node_target(pin_0_node_id, anchor_node_id)
+    this._sim_transfer_node_target(pin_1_node_id, anchor_node_id)
+
     this._sim_add_link_pin_to_merge(pin_0_node_id, merge_node_id)
     this._sim_add_link_pin_to_merge(pin_1_node_id, merge_node_id)
 
@@ -35531,6 +35539,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     addPinToMerge({ mergeId, unitId, type, pinId }, this._spec)
   }
 
+  private _sim_transfer_node_target = (
+    node_id: string,
+    next_target_node_id: string
+  ) => {
+    const targeted_by = this._target_node[node_id]
+
+    if (targeted_by) {
+      for (const target_by_node_id of [...targeted_by]) {
+        this._remove_node_target(target_by_node_id)
+
+        this._set_node_target(target_by_node_id, next_target_node_id)
+      }
+    }
+  }
+
   private _sim_add_link_pin_to_merge(
     pin_node_id: string,
     merge_node_id: string,
@@ -35558,6 +35581,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const int_node_id = this._pin_to_int[type][pin_node_id]
     const oppposite_int_node_id = this._pin_to_int[opposite_type][pin_node_id]
+
+    const anchor_node_id = this._get_merge_anchor_node_id(merge_node_id)
+
+    this._sim_transfer_node_target(pin_node_id, anchor_node_id)
 
     if (this._mode === 'remove') {
       if (this._pressed_node_id_pointer_id[pin_node_id]) {
@@ -38159,7 +38186,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (this._is_link_pin_node_id(node_id)) {
           if (this._node_target[node_id]) {
             this._remove_node_target(node_id)
-            this._refresh_pin_anchor_marker(node_id)
+
+            if (this._is_link_pin_ref(node_id)) {
+              this._refresh_pin_anchor_marker(node_id)
+            }
           }
 
           if (this._is_link_pin_merged(node_id)) {
@@ -38271,7 +38301,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_link_click = (link_id: string, event: UnitPointerEvent): void => {
     if (isPinLinkId(link_id)) {
       const { pinNodeId } = segmentPinLinkId(link_id)
-      // if (!this._is_link_pin_merged(pinNodeId)) {
       if (
         this._mode === 'remove' ||
         this._mode === 'change' ||
@@ -38280,7 +38309,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ) {
         this._on_node_click(pinNodeId, event)
       }
-      // }
     } else if (isExternalLinkId(link_id)) {
       const { externalNodeId } = segmentExternalLinkId(link_id)
       this._on_node_click(externalNodeId, event)
