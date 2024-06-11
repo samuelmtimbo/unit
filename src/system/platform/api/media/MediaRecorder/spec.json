@@ -27,6 +27,10 @@
     "blob": {
       "type": "`B`",
       "ref": true
+    },
+    "err": {
+      "type": "string",
+      "defaultIgnored": true
     }
   },
   "id": "7e1b3a4c-be6b-11eb-b098-1b6b9db93f1e",

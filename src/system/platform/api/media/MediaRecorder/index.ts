@@ -1,3 +1,4 @@
+import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
@@ -14,6 +15,7 @@ export type I = {
 
 export type O = {
   blob: B
+  err: string
 }
 
 export default class _MediaRecorder extends Semifunctional<I, O> {
@@ -25,7 +27,7 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
         fi: ['opt', 'stream'],
         fo: [],
         i: ['start', 'stop'],
-        o: ['blob'],
+        o: ['blob', 'err'],
       },
       {
         input: {
@@ -50,7 +52,7 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
     })
   }
 
-  f({ opt, stream }: I): void {
+  f({ opt, stream }: I, done: Done<O>): void {
     const chunks = []
 
     stream.mediaStream((_stream: MediaStream): void => {
@@ -59,7 +61,13 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
         this._media_recorder.ondataavailable = null
       }
 
-      this._media_recorder = new MediaRecorder(_stream, opt)
+      try {
+        this._media_recorder = new MediaRecorder(_stream, opt)
+      } catch (err) {
+        done(undefined, err.message.toLowerCase())
+
+        return
+      }
 
       this._media_recorder.ondataavailable = (event: BlobEvent) => {
         const { data } = event
@@ -77,6 +85,14 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
         this._output.blob.push(blob_)
       }
 
+      this._media_recorder.onerror = (
+        event: Event & { error: DOMException }
+      ) => {
+        this._output.err.push(
+          `error recording stream: ${(event?.error as DOMException)?.name}`
+        )
+      }
+
       const start = this._input.start.peak()
 
       if (start !== undefined) {
@@ -91,7 +107,15 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
         this._media_recorder.stop()
       }
 
-      this._media_recorder.start(start)
+      try {
+        this._media_recorder.start(start)
+      } catch (err) {
+        if (err.message.toLowerCase().startsWith('failed to execute')) {
+          this.err('failed to start media recorder')
+        } else {
+          this.err(err.message.toLowerCase())
+        }
+      }
     }
   }
 
