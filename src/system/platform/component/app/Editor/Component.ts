@@ -36178,7 +36178,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     data: string,
     lastData: string
   ) => {
-    // console.log('Graph', '_pod_set_link_pin_data', unitId, type, pinId, data)
+    // console.log('Graph', '_pod_set_unit_pin_data', unitId, type, pinId, data)
 
     const { fork } = this.$props
 
@@ -58050,10 +58050,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           let next_parent_spec_ = clone(parent_spec_)
 
           if (i === path.length) {
-            if (this._should_fork_path(path, spec_.id)) {
-              ;[, next_spec_] = forkSpec(spec_)
-            }
-
             setUnitPinData(
               { unitId, type, pinId, data },
               next_spec_,
@@ -58069,10 +58065,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               registerUnit(next_spec_.id)
               unregisterUnit(spec_.id)
             }
-          }
-
-          if (this._should_fork_path(path, parent_spec_.id)) {
-            ;[, next_parent_spec_] = forkSpec(parent_spec_)
           }
 
           next_parent_spec_.units[graphId].id = next_spec_.id
