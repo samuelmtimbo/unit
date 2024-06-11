@@ -50,7 +50,7 @@
           "pinId": "a"
         }
       },
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     },
     "canvas": {
       "plug": {

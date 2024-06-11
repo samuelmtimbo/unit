@@ -2,7 +2,7 @@
   "name": "rotate",
   "inputs": {
     "d": {
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     },
     "rad": {
       "type": "number"
@@ -10,7 +10,7 @@
   },
   "outputs": {
     "d": {
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     }
   },
   "metadata": {

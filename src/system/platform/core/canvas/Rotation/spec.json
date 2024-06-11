@@ -116,7 +116,7 @@
           "pinId": "d"
         }
       },
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     }
   },
   "outputs": {
@@ -127,7 +127,7 @@
           "pinId": "d"
         }
       },
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     }
   },
   "id": "1b6923a6-b383-4909-af8f-85444aeb6aae",
