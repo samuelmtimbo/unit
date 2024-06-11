@@ -1,0 +1,177 @@
+{
+  "type": "`U`&`G`",
+  "name": "remove equals",
+  "units": {
+    "removeindex": {
+      "id": "55d4bc9e-a4a2-44ed-8b35-c9ae64b5d0e3",
+      "input": {
+        "i": {},
+        "a": {}
+      },
+      "output": {
+        "a": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 84,
+              "y": 25
+            }
+          }
+        },
+        "a[i]": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 75,
+              "y": 52
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 34,
+          "y": 25
+        }
+      }
+    },
+    "findequalindex": {
+      "id": "8e312298-64a5-4e0a-abe1-47e75bcbd9d4",
+      "input": {
+        "b": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -113,
+              "y": 25
+            }
+          }
+        },
+        "a": {
+          "constant": false
+        }
+      },
+      "output": {
+        "i": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -62,
+          "y": 25
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "removeindex": {
+        "input": {
+          "a": true
+        }
+      },
+      "findequalindex": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "removeindex": {
+        "input": {
+          "i": true
+        }
+      },
+      "findequalindex": {
+        "output": {
+          "i": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "mergeId": "0"
+        }
+      },
+      "ref": false,
+      "functional": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -13,
+              "y": -13
+            }
+          }
+        }
+      }
+    },
+    "b": {
+      "plug": {
+        "0": {
+          "unitId": "findequalindex",
+          "pinId": "b",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "functional": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -136,
+              "y": 25
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "removeindex",
+          "pinId": "a",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 107,
+              "y": 25
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "remove the first element of `a` equals to `b`",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -14,
+          "y": 11
+        },
+        "1": {
+          "x": -14,
+          "y": 38
+        }
+      },
+      "data": {
+        "x": 150,
+        "y": 25
+      }
+    }
+  },
+  "id": "060945e7-055c-4891-849f-963f5adc9b63",
+  "system": true
+}
