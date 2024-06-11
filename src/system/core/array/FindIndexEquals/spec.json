@@ -1,0 +1,261 @@
+{
+  "type": "`U`&`G`",
+  "name": "find index equals",
+  "units": {
+    "equals": {
+      "id": "85204bf6-6692-4686-a785-23127c0594b5",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a = b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -67,
+          "y": 32
+        }
+      }
+    },
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {
+          "metadata": {
+            "position": {
+              "x": -132,
+              "y": -43
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -131,
+              "y": -11
+            }
+          }
+        },
+        "current": {},
+        "final": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -145,
+              "y": -30
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -83,
+          "y": -28
+        }
+      }
+    },
+    "findindex": {
+      "id": "7ca98fbb-6e84-4133-b658-46329a8e45cf",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 74,
+              "y": 21
+            }
+          }
+        },
+        "test": {}
+      },
+      "output": {
+        "i": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 56,
+              "y": 44
+            }
+          }
+        },
+        "test": {
+          "ignored": false
+        },
+        "a[i]": {},
+        "a": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 51,
+              "y": -37
+            }
+          }
+        },
+        "result": {
+          "metadata": {
+            "position": {
+              "x": 73,
+              "y": -14
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 24,
+          "y": 5
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "equals": {
+        "input": {
+          "a": true
+        }
+      },
+      "findindex": {
+        "output": {
+          "a[i]": true
+        }
+      }
+    },
+    "1": {
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      },
+      "findindex": {
+        "output": {
+          "test": true
+        }
+      }
+    },
+    "2": {
+      "equals": {
+        "input": {
+          "b": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "3": {
+      "equals": {
+        "output": {
+          "a = b": true
+        }
+      },
+      "findindex": {
+        "input": {
+          "test": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "b": {
+      "plug": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "functional": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -151,
+              "y": -57
+            }
+          }
+        }
+      }
+    },
+    "a": {
+      "plug": {
+        "0": {
+          "unitId": "findindex",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "functional": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 95,
+              "y": 32
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "i": {
+      "plug": {
+        "0": {
+          "unitId": "findindex",
+          "pinId": "result",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 92,
+              "y": -28
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "brackets",
+    "description": "find the first element index of `a` which equals to `b`",
+    "position": {
+      "merge": {
+        "0": {
+          "x": -15,
+          "y": 38
+        },
+        "1": {
+          "x": -27,
+          "y": -22
+        },
+        "2": {
+          "x": -113,
+          "y": 10
+        },
+        "3": {
+          "x": -24,
+          "y": 15
+        }
+      },
+      "data": {
+        "x": 115,
+        "y": -49
+      }
+    }
+  },
+  "id": "8e312298-64a5-4e0a-abe1-47e75bcbd9d4",
+  "system": true
+}
