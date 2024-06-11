@@ -2,12 +2,12 @@
   "name": "close path",
   "inputs": {
     "d": {
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     }
   },
   "outputs": {
     "d": {
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     }
   },
   "metadata": {

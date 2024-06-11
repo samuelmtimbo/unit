@@ -64,7 +64,7 @@
           "pinId": "d"
         }
       },
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     }
   },
   "outputs": {
@@ -75,7 +75,7 @@
           "pinId": "d"
         }
       },
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     }
   },
   "metadata": {

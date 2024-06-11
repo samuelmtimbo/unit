@@ -128,7 +128,7 @@
         }
       },
       "functional": true,
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     },
     "y": {
       "plug": {
@@ -155,7 +155,7 @@
           "pinId": "d"
         }
       },
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     }
   },
   "id": "389f41b1-0a1d-4b02-ab30-53446c2e13e2",

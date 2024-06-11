@@ -2,7 +2,7 @@
   "name": "translate",
   "inputs": {
     "d": {
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     },
     "x": {
       "type": "number"
@@ -13,7 +13,7 @@
   },
   "outputs": {
     "d": {
-      "type": "(number|string)[][]"
+      "type": "(number|string|boolean)[][]"
     }
   },
   "metadata": {
