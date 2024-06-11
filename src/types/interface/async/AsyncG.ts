@@ -129,7 +129,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
       data = evaluate(data, specs, classes)
 
-      call('setUnitPinData', fork, bubble, unitId, type, pinId, data)
+      call('setUnitPinData', fork, bubble, unitId, type, pinId, data, true)
     },
 
     $removeUnitPinData({
