@@ -29,6 +29,10 @@ export default class Spark<T> extends Primitive<I<T>, O<T>> {
 
   public onDataInputDrop(name: string, data: any): void {
     this._ran = false
+
+    if (this._output.a.active()) {
+      this._forward_empty('a')
+    }
   }
 
   onDataInputData(name: string, data: T) {
