@@ -699,8 +699,8 @@ export class Primitive<
     this._i = {}
 
     for (let name in this._input) {
-      const pin = this._input[name]
-      const data = pin.peak()
+      const input = this._input[name]
+      const data = input.peak()
 
       this._i[name] = data
 
@@ -708,7 +708,7 @@ export class Primitive<
         this._i_active.add(name)
         this._i_start.add(name)
 
-        if (pin.invalid()) {
+        if (input.invalid()) {
           this._i_invalid.add(name)
         }
       }
@@ -719,6 +719,8 @@ export class Primitive<
       const data = output.peak()
 
       if (data !== undefined) {
+        this._o_active.add(name)
+
         if (output.invalid()) {
           this._o_invalid.add(name)
         }
