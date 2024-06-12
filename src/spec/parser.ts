@@ -62,6 +62,8 @@ export const OBJECT_OPEN = '{'
 export const OBJECT_CLOSE = '}'
 export const ARRAY_OPEN = '['
 export const ARRAY_CLOSE = ']'
+export const PARENTHESIS_OPEN = '('
+export const PARENTHESIS_CLOSE = ')'
 
 function trimSides(str: string): string {
   return str.substring(1, str.length - 1)
@@ -1322,21 +1324,24 @@ export function _getValueType(specs: Specs, tree: TreeNode): TreeNode {
 
       const childrenTypeSet = new Set()
 
+      const childrenTypes_ = childrenTypes
+        .map((c) => c.value)
+        .filter((value) => {
+          if (childrenTypeSet.has(value)) {
+            return false
+          } else {
+            childrenTypeSet.add(value)
+
+            return true
+          }
+        })
+
       const childType =
         tree.children.length > 0
           ? getTree(
-              `(${childrenTypes
-                .map((c) => c.value)
-                .filter((value) => {
-                  if (childrenTypeSet.has(value)) {
-                    return false
-                  } else {
-                    childrenTypeSet.add(value)
-
-                    return true
-                  }
-                })
-                .join('|')})`
+              childrenTypes.length > 1
+                ? `(${childrenTypes_.join('|')})`
+                : childrenTypes_[0]
             )
           : getTree('<T>')
 
@@ -1614,6 +1619,7 @@ function _getDelimiterSeparated(
 
   let objectOpenCount = 0
   let arrayOpenCount = 0
+  let parenthesisOpenCount = 0
   let singleQuoteOpen = false
   let doubleQuoteOpen = false
   let pos = 0
@@ -1641,6 +1647,12 @@ function _getDelimiterSeparated(
       } else if (char === ARRAY_CLOSE) {
         arrayOpenCount--
       }
+
+      if (char === PARENTHESIS_OPEN) {
+        parenthesisOpenCount++
+      } else if (char === PARENTHESIS_CLOSE) {
+        parenthesisOpenCount--
+      }
     }
 
     if (char === '\\') {
@@ -1664,6 +1676,7 @@ function _getDelimiterSeparated(
       char === delimiter &&
       objectOpenCount === 0 &&
       arrayOpenCount === 0 &&
+      parenthesisOpenCount === 0 &&
       !singleQuoteOpen &&
       !doubleQuoteOpen
     ) {
