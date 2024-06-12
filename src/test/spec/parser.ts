@@ -260,6 +260,13 @@ assert(_isTypeMatch('string[]&object', 'string[]'))
 assert(_isTypeMatch('string[]&object', '<A>[]'))
 assert(_isTypeMatch('string[]|object', 'string[]|object'))
 assert(_isTypeMatch('string[]|{foo:"bar"}', 'string[]|object'))
+assert(_isTypeMatch('(string|(string|boolean))[]', '(string|boolean)[]'))
+assert(
+  _isTypeMatch(
+    '(string|(string|number|boolean))[][]',
+    '(string|number|boolean)[][]'
+  )
+)
 assert(_isTypeMatch('[]', '[]'))
 assert(_isTypeMatch('{a:"foo"}', 'string{}'))
 assert(_isTypeMatch('{a:1}', 'number{}'))
@@ -460,6 +467,12 @@ assert.equal(
     `'{ "error": {  "errors": [   {    "domain": "global",    "reason": "required",    "message": "Login Required",    "locationType": "header",    "location": "Authorization"   }  ],  "code": 401,  "message": "Login Required" }}'`
   ),
   'string'
+)
+assert.equal(
+  _getValueType(
+    '[["beginPath"],["arc",100,100,19.399999999999224,84.08996336108721,84.28996336108722,false],["stroke"]]'
+  ),
+  '(string[]|(string|number|boolean)[])[]'
 )
 
 assert.deepEqual(findGenerics('"foo"'), new Set())
