@@ -57,4 +57,6 @@ export default class BluetoothServer extends Functional implements BS {
   getPrimaryService(uuid: string): Promise<BSE> {
     return this._server.getPrimaryService(uuid)
   }
+
+  d() {}
 }

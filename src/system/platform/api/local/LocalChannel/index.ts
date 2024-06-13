@@ -4,6 +4,7 @@ import {
   Semifunctional,
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
+import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
@@ -51,8 +52,9 @@ export default class LocalChannel<T>
       ID_LOCAL_CHANNEL
     )
   }
+
   send(data: any): Promise<void> {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 
   f({ channel }: I<T>, done: Done<O<T>>): void {

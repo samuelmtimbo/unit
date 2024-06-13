@@ -23,6 +23,8 @@ export type O = {
 }
 
 export default class IntersectionObserver_ extends Semifunctional<I, O> {
+  private _observer: IntersectionObserver
+
   constructor(system: System) {
     super(
       {
@@ -99,6 +101,8 @@ export default class IntersectionObserver_ extends Semifunctional<I, O> {
       threshold: 0.1,
     })
 
+    this._observer = _observer
+
     const callbacks: Callback[] = []
 
     const observer = new (class IntersectionObserver_ extends $ implements OB {
@@ -121,6 +125,10 @@ export default class IntersectionObserver_ extends Semifunctional<I, O> {
   }
 
   d() {
-    // TODO
+    if (this._observer) {
+      this._observer.disconnect()
+
+      this._observer = undefined
+    }
   }
 }

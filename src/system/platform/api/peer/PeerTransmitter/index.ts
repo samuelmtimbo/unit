@@ -61,12 +61,6 @@ export default class PeerTransmitter<T>
       ID_PEER_TRANSMITTER
     )
 
-    this.addListener('destroy', () => {
-      if (this._connected) {
-        this._disconnect()
-      }
-    })
-
     this.addListener('take_err', () => {
       if (!this._backwarding) {
         if (this._flag_err_answer_without_offer) {
@@ -112,6 +106,21 @@ export default class PeerTransmitter<T>
     this._offered = true
 
     this._output.offer.push(offer)
+  }
+
+  d() {
+    if (this._connected) {
+      const unlisten = this._unlisten
+
+      unlisten()
+
+      this._unlisten = undefined
+
+      this._peer.close()
+      this._peer = undefined
+
+      this._connected = false
+    }
   }
 
   onRefInputData(name: string, unit: MS): void {
@@ -297,24 +306,26 @@ export default class PeerTransmitter<T>
       return
     }
 
-    const unlisten = this._unlisten
-
-    unlisten()
-
-    this._unlisten = undefined
-
-    this._peer.close()
-    this._peer = undefined
-
-    this._connected = false
-
     this._forward_empty('offer')
     this._forward_empty('channel')
-
-    this._done({})
   }
 
   async send(data: any): Promise<void> {
     return this._send_data(data)
+  }
+
+  private _stop = () => {
+    if (this._connected) {
+      const unlisten = this._unlisten
+
+      unlisten()
+
+      this._unlisten = undefined
+
+      this._peer.close()
+      this._peer = undefined
+
+      this._connected = false
+    }
   }
 }

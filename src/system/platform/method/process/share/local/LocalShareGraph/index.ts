@@ -20,10 +20,7 @@ export interface O {
 }
 
 export default class LocalShareGraph extends Semifunctional<I, O> {
-  __ = ['U']
-
   private _connected: boolean = false
-
   private _id: string
 
   private _terminate: Unlisten
@@ -46,22 +43,6 @@ export default class LocalShareGraph extends Semifunctional<I, O> {
       system,
       ID_LOCAL_SHARE_GRAPH
     )
-
-    this.addListener('destroy', () => {
-      if (this._connected) {
-        this._disconnect()
-      }
-    })
-  }
-
-  private _disconnect = () => {
-    if (this._connected) {
-      stopBroadcastSource(this._id)
-
-      this._terminate()
-
-      this._connected = false
-    }
   }
 
   f({ opt, graph }: I, done: Done<O>): void {
@@ -76,14 +57,19 @@ export default class LocalShareGraph extends Semifunctional<I, O> {
   }
 
   d() {
-    this._disconnect()
+    if (this._connected) {
+      stopBroadcastSource(this._id)
 
-    this._id = undefined
+      this._terminate()
+
+      this._connected = false
+      this._id = undefined
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
-    this._disconnect()
+    this.d()
 
     this._forward_empty('id')
 

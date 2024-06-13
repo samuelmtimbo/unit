@@ -83,11 +83,11 @@ export default class SizeObserver extends Semifunctional<I, O> {
   }
 
   d() {
-    this._observer.disconnect()
-  }
+    if (this._observer) {
+      this._observer.disconnect()
 
-  i() {
-    this.d()
+      this._observer = undefined
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {

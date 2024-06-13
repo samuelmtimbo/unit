@@ -18,6 +18,9 @@ export type O = {
 export default class MixerNode extends Functional<I, O> {
   private _node: GainNode
 
+  private _a: AN
+  private _b: AN
+
   constructor(system: System) {
     super(
       {
@@ -42,25 +45,22 @@ export default class MixerNode extends Functional<I, O> {
       system,
       ID_MIXER_NODE
     )
-
-    this.addListener('destroy', () => {
-      if (this._node) {
-        //
-      }
-    })
   }
 
-  f({ a: aNode, b: bNode }: I, done: Done<O>) {
+  f({ a, b }: I, done: Done<O>) {
     let _node: GainNode
 
-    const context = aNode.getContext()
+    const context = a.getContext()
 
     _node = context.createGain()
 
     this._node = _node
 
-    aNode.connect(_node)
-    bNode.connect(_node)
+    this._a = a
+    this._b = b
+
+    a.connect(_node)
+    b.connect(_node)
 
     const node = wrapAudioNode(_node, this.__system)
 
@@ -70,6 +70,13 @@ export default class MixerNode extends Functional<I, O> {
   }
 
   d() {
-    //
+    if (this._node) {
+      this._a.disconnect(this._node)
+      this._b.disconnect(this._node)
+
+      this._b = undefined
+      this._a = undefined
+      this._node = undefined
+    }
   }
 }

@@ -297,6 +297,10 @@ export class Component<
     }
   }
 
+  dettachText(type: string, text: string): void {
+    // TODO
+  }
+
   attachDropTarget(): void {
     const rootLeaf = this.getFirstRootLeaf()
 

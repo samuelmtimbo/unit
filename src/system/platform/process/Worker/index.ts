@@ -35,14 +35,6 @@ export default class Worker extends Functional<I, O> {
       system,
       ID_WORKER
     )
-
-    this.addListener('destroy', () => {
-      if (this._client) {
-        this._client.terminate()
-
-        this._client = undefined
-      }
-    })
   }
 
   f({ init }: I, done: Done<O>) {
@@ -84,9 +76,11 @@ export default class Worker extends Functional<I, O> {
     })
   }
 
-  i() {
-    // if (name === 'spec') {
-    this._client.invalidate()
-    // }
+  d() {
+    if (this._client) {
+      this._client.terminate()
+
+      this._client = undefined
+    }
   }
 }

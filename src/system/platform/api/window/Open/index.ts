@@ -29,6 +29,7 @@ export interface O {
 
 export default class Open extends Semifunctional<I, O> {
   private _window: Window
+  private _detached: boolean
 
   constructor(system: System) {
     super(
@@ -49,8 +50,6 @@ export default class Open extends Semifunctional<I, O> {
       ID_OPEN
     )
   }
-
-  private _detached: boolean
 
   f({ url, target, features, detached }: I, done: Done<O>) {
     const {
@@ -105,14 +104,19 @@ export default class Open extends Semifunctional<I, O> {
   }
 
   d() {
-    this._release()
+    if (this._window && !this._detached) {
+      this._window.close()
+
+      this._window = undefined
+      this._detached = undefined
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
-    this._release()
-    this._finish()
+    this.d()
 
+    this._finish()
     // }
   }
 
@@ -124,12 +128,5 @@ export default class Open extends Semifunctional<I, O> {
     this._backward('features')
 
     this._backward('done')
-  }
-
-  private _release = (): void => {
-    // console.log('WakeLock', '_release')
-    if (this._window && !this._detached) {
-      this._window.close()
-    }
   }
 }

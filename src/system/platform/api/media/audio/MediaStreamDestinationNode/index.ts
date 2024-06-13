@@ -16,6 +16,7 @@ export type O = {
 }
 
 export default class MediaStreamDestinationNode_ extends Functional<I, O> {
+  private _source: AN
   private _node: MediaStreamAudioDestinationNode
 
   constructor(system: System) {
@@ -39,13 +40,11 @@ export default class MediaStreamDestinationNode_ extends Functional<I, O> {
       system,
       ID_MEDIA_STREAM_DESTINATION_NODE
     )
-
-    this.addListener('destroy', () => {
-      this._destroy(this._i.node)
-    })
   }
 
   f({ node }: I, done: Done<O>) {
+    this._source = node
+
     const ctx = node.getContext() as AudioContext
 
     const node_ = ctx.createMediaStreamDestination()
@@ -63,15 +62,11 @@ export default class MediaStreamDestinationNode_ extends Functional<I, O> {
     })
   }
 
-  private _destroy(node: AN) {
-    if (node) {
-      node.disconnect(this._node)
+  d() {
+    if (this._source) {
+      this._source.disconnect(this._node)
 
       this._node = undefined
     }
-  }
-
-  d(name: string, data: any) {
-    this._destroy(data)
   }
 }

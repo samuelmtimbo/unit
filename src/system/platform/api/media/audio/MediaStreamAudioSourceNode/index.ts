@@ -46,17 +46,9 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
       system,
       ID_MEDIA_STREAM_AUDIO_SOURCE_NODE
     )
-
-    this.addListener('destroy', () => {
-      this._destroy()
-    })
   }
 
-  private _destroy = () => {
-    if (this._node) {
-      this._node = undefined
-    }
-  }
+  private _destroy = () => {}
 
   f({ node: sourceNode, stream, opt }: I, done: Done<O>) {
     let _node: MediaStreamAudioSourceNode
@@ -101,11 +93,9 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
     })
   }
 
-  i(name) {
-    this._destroy()
-  }
-
   d() {
-    this._destroy()
+    if (this._node) {
+      this._node = undefined
+    }
   }
 }

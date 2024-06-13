@@ -41,8 +41,6 @@ export default class GrabFrame extends Semifunctional<I, O> {
       ID_GRAB_FRAME
     )
 
-    this.addListener('destroy', () => {})
-
     this.addListener('take_err', () => {
       if (this._err_flag) {
         this._err_flag = false
@@ -57,6 +55,8 @@ export default class GrabFrame extends Semifunctional<I, O> {
   async f({ camera }: I, done: Done<O>) {
     this._forward_if_ready()
   }
+
+  d() {}
 
   private _forward_if_ready = async () => {
     if (this._input.camera.active() && this._input.init.active()) {

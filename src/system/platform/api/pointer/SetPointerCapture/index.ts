@@ -38,8 +38,6 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
 
   f({ element, pointerId }: I): void {
     if (!this._capturing) {
-      this._release()
-
       this._capturing = true
       this._pointerId = pointerId
       this._element = element
@@ -51,12 +49,7 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
     }
   }
 
-  onIterDataInputData(name: string, value: any) {
-    // console.log('SetPointerCapture', 'onIterDataInputData', name, value)
-    this._release()
-  }
-
-  private _release = () => {
+  d() {
     if (this._capturing) {
       const pointerId = this._pointerId
 
@@ -71,6 +64,10 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
       this._pointerId = undefined
       this._element = null
     }
+  }
+
+  onIterDataInputData(name: string, value: any) {
+    this.d()
 
     this._input.done.pull()
   }

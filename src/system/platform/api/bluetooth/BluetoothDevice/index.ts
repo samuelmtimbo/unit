@@ -59,4 +59,6 @@ export default class BluetoothDevice extends Functional<I, O> {
 
     done({ device })
   }
+
+  d() {}
 }

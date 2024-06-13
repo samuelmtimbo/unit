@@ -5,6 +5,7 @@ import { ID_INTERVAL } from '../../../_ids'
 
 export interface I {
   ms: number
+  done: any
 }
 
 export interface O {
@@ -25,12 +26,22 @@ export default class Interval extends Semifunctional<I, O> {
       system,
       ID_INTERVAL
     )
-
-    this.addListener('reset', this._reset)
-    this.addListener('destroy', this._reset)
   }
 
-  private _reset() {
+  f({ ms }: I, done: Done<O>): void {
+    const {
+      api: {
+        window: { setInterval },
+      },
+    } = this.__system
+
+    // @ts-ignore
+    this._interval = setInterval(() => {
+      this.pushOutput('ms', ms)
+    }, ms)
+  }
+
+  d() {
     const {
       api: {
         window: { clearInterval },
@@ -40,35 +51,21 @@ export default class Interval extends Semifunctional<I, O> {
     if (this._interval !== null) {
       clearInterval(this._interval)
 
-      this._interval = null
+      this._interval = undefined
     }
-  }
-
-  public f({ ms }: I, done: Done<O>): void {
-    const {
-      api: {
-        window: { setInterval },
-      },
-    } = this.__system
-
-    this._reset()
-
-    // @ts-ignore
-    this._interval = setInterval(() => {
-      this.pushOutput('ms', ms)
-    }, ms)
-  }
-
-  public d() {
-    this._reset()
 
     this._forward_all_empty()
   }
 
-  public onIterDataInputData(name: string, data: any): void {
+  onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
-    this._reset()
-    this._done({})
+    this.d()
+
+    this._forward_empty('ms')
+
+    this._backward('ms')
+
+    this._backward('done')
     // }
   }
 }

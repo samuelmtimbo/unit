@@ -24,23 +24,6 @@ export default class Timer extends Functional<I, O> {
       system,
       ID_TIMER
     )
-
-    this.addListener('reset', this._reset)
-    this.addListener('destroy', this._reset)
-  }
-
-  private _reset() {
-    const {
-      api: {
-        window: { clearTimeout },
-      },
-    } = this.__system
-
-    if (this._timer !== null) {
-      clearTimeout(this._timer)
-
-      this._timer = null
-    }
   }
 
   public f({ ms }: I, done: Done<O>): void {
@@ -50,12 +33,25 @@ export default class Timer extends Functional<I, O> {
       },
     } = this.__system
 
-    this._reset()
-
     // @ts-ignore
     this._timer = setTimeout(() => {
       this._timer = null
+
       done({ ms })
     }, ms)
+  }
+
+  d() {
+    const {
+      api: {
+        window: { clearTimeout },
+      },
+    } = this.__system
+
+    if (this._timer !== null) {
+      clearTimeout(this._timer)
+
+      this._timer = undefined
+    }
   }
 }

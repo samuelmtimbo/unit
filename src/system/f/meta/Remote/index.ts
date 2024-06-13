@@ -44,10 +44,6 @@ export default class Remote extends Semifunctional<I, O> {
       ID_REMOTE_GRAPH
     )
 
-    this.addListener('destroy', () => {
-      this._close()
-    })
-
     this.addListener('take_err', () => {
       //
     })
@@ -61,12 +57,20 @@ export default class Remote extends Semifunctional<I, O> {
     //
   }
 
+  d() {
+    if (this._remote_port) {
+      this._remote_port.close()
+
+      this._remote_port = undefined
+    }
+  }
+
   async onIterDataInputData(name: string, _data: any): Promise<void> {
     // console.log('Remote', 'onIterDataInputData', name, message)
 
     switch (name) {
       case 'close':
-        this._close()
+        this.d()
 
         this._done()
 
@@ -123,7 +127,7 @@ export default class Remote extends Semifunctional<I, O> {
               break
             case TERMINATE:
               {
-                this._close()
+                this.d()
               }
               break
           }
@@ -132,16 +136,6 @@ export default class Remote extends Semifunctional<I, O> {
         }
 
         break
-    }
-  }
-
-  private _close = () => {
-    // console.log('Remote', '_close')
-
-    if (this._remote_port) {
-      this._remote_port.close()
-
-      this._remote_port = undefined
     }
   }
 }

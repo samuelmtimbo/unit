@@ -58,25 +58,24 @@ export default class Subscribe<T> extends Semifunctional<I<T>, O<T>> {
     }
   }
 
-  private _remove = () => {
-    this._unlisten()
-
-    this._listener = undefined
-    this._unlisten = undefined
-  }
-
   d() {
-    this._remove()
+    if (this._unlisten) {
+      this._unlisten()
+
+      this._listener = undefined
+      this._unlisten = undefined
+    }
 
     this._forward_all_empty()
   }
 
   onIterDataInputData(name: string, data: any) {
-    if (name === 'done') {
-      if (this._listener) {
-        this._remove()
-        this._done()
-      }
+    // if (name === 'done') {
+    if (this._listener) {
+      this.d()
+
+      this._done()
     }
+    // }
   }
 }

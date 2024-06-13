@@ -32,12 +32,6 @@ export default class AudioContext_ extends Functional<I, O> {
       system,
       ID_AUDIO_CONTEXT
     )
-
-    this.addListener('destroy', () => {
-      if (this._ctx) {
-        this._ctx.close()
-      }
-    })
   }
 
   f({ opt }, done: Done<O>) {
@@ -60,6 +54,10 @@ export default class AudioContext_ extends Functional<I, O> {
   }
 
   d() {
-    //
+    if (this._ctx) {
+      this._ctx.close()
+
+      this._ctx = undefined
+    }
   }
 }

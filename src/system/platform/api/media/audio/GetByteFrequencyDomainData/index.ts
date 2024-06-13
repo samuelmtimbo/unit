@@ -10,6 +10,7 @@ import { ID_GET_BYTE_FREQUENCY_DATA } from '../../../../../_ids'
 export type I = {
   node: AAN & $
   opt: {}
+  done: any
 }
 
 export type O = {
@@ -17,8 +18,6 @@ export type O = {
 }
 
 export default class GetByteFrequencyData extends Semifunctional<I, O> {
-  private _data: Uint8Array
-
   constructor(system: System) {
     super(
       {
@@ -46,30 +45,24 @@ export default class GetByteFrequencyData extends Semifunctional<I, O> {
   f({ node, opt }: I, done: Done<O>) {
     const fftSize = node.getFFTSize()
 
-    this._data = new Uint8Array(fftSize)
+    const _data = new Uint8Array(fftSize)
 
-    node.getByteFrequencyData(this._data)
+    node.getByteFrequencyData(_data)
 
-    const data = wrapUint8Array(this._data, this.__system)
+    const data = wrapUint8Array(_data, this.__system)
 
     done({
       data,
     })
   }
 
-  d() {
-    //
-  }
-
-  private _reset = () => {
-    this._data = undefined
-
-    this._backward_all()
-  }
-
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
-    this._reset()
+    this._forward_empty('data')
+
+    this._backward('node')
+
+    this._backward('done')
     // }
   }
 }

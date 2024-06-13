@@ -43,8 +43,6 @@ export default class GetVideoTracks extends Semifunctional<I, O> {
       system,
       ID_GET_VIDEO_TRACKS
     )
-
-    this.addListener('destroy', () => {})
   }
 
   async f({ stream }: I, done: Done<O>) {

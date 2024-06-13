@@ -17,7 +17,7 @@ export type O = {
 }
 
 export default class SpeechToText extends Semifunctional<I, O> {
-  private _recorder: SpeechRecorder | null = null
+  private _recorder: SpeechRecorder
 
   constructor(system: System) {
     super(
@@ -45,12 +45,14 @@ export default class SpeechToText extends Semifunctional<I, O> {
     this._recorder.addListener('err', (err) => {
       done(undefined, err)
     })
+  }
 
-    this._recorder.addListener('end', () => {
-      this._recorder = null
+  d() {
+    if (this._recorder) {
+      this._recorder.stop()
 
-      done()
-    })
+      this._recorder = undefined
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {
@@ -67,9 +69,7 @@ export default class SpeechToText extends Semifunctional<I, O> {
 
       this._backward('start')
     } else if (name === 'done') {
-      if (this._recorder) {
-        this._recorder.stop()
-      }
+      this.d()
 
       this._forward_empty('text')
 

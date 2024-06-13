@@ -1,11 +1,13 @@
+import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
+
 export class NoopMutationObserver implements MutationObserver {
   disconnect(): void {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
   observe(target: Node, options?: MutationObserverInit): void {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
   takeRecords(): MutationRecord[] {
-    throw new Error('Method not implemented.')
+    throw new MethodNotImplementedError()
   }
 }

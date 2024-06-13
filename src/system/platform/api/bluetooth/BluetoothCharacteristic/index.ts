@@ -57,7 +57,6 @@ export default class BluetoothCharacteristic_ extends Functional<
         this.startNotifications()
       }
     })
-
     this.addListener('unlisten', ({ event }: { event: string }) => {
       if (event === 'write') {
         this.stopNotification()
@@ -87,7 +86,11 @@ export default class BluetoothCharacteristic_ extends Functional<
     done({ charac })
   }
 
-  d() {}
+  d() {
+    this.stopNotification()
+
+    this._charac = undefined
+  }
 
   private _started: boolean = false
 

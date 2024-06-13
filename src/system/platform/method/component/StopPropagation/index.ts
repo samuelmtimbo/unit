@@ -13,6 +13,8 @@ export interface I<T> {
 export interface O<T> {}
 
 export default class StopPropagation<T> extends Semifunctional<I<T>, O<T>> {
+  private _unlisten: Unlisten
+
   constructor(system: System) {
     super(
       {
@@ -32,34 +34,25 @@ export default class StopPropagation<T> extends Semifunctional<I<T>, O<T>> {
     )
   }
 
-  private _unlisten: Unlisten
-
   async f({ component, name }: I<T>, done: Done<O<T>>) {
     this._unlisten = component.stopPropagation(name)
   }
 
   d() {
-    this._cancel()
-  }
-
-  i() {
-    this._cancel()
-  }
-
-  private _cancel = () => {
     if (this._unlisten) {
       this._unlisten()
-      this._unlisten = undefined
 
-      this._done()
+      this._unlisten = undefined
     }
   }
 
   public onIterDataInputData(name: string, data: any): void {
-    if (name === 'done') {
-      this._cancel()
+    // if (name === 'done') {
+    this.d()
 
-      this.takeInput('done')
-    }
+    this._done()
+
+    this.takeInput('done')
+    // }
   }
 }

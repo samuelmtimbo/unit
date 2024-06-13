@@ -56,10 +56,6 @@ export default class PeerReceiver<T> extends Semifunctional<
       ID_PEER_RECEIVER
     )
 
-    this.addListener('destroy', () => {
-      this._disconnect()
-    })
-
     this.addListener('take_err', () => {
       if (this._flag_err_invalid_offer) {
         this._flag_err_invalid_offer = false
@@ -79,6 +75,20 @@ export default class PeerReceiver<T> extends Semifunctional<
     if (this._input.offer.active()) {
       this._output_answer(this._input.offer.peak())
     }
+  }
+
+  d() {
+    if (this._unlisten) {
+      this._unlisten()
+      this._unlisten = undefined
+    }
+
+    if (this._peer) {
+      this._peer.close()
+      this._peer = null
+    }
+
+    this._connected = false
   }
 
   private _output_answer = async (offer: string) => {
@@ -215,21 +225,9 @@ export default class PeerReceiver<T> extends Semifunctional<
   }
 
   private _disconnect = (): void => {
-    if (this._unlisten) {
-      this._unlisten()
-      this._unlisten = undefined
-    }
+    this.d()
 
-    this._output.emitter.pull()
-    this._output.stream.pull()
-
-    if (this._peer) {
-      this._peer.close()
-      this._peer = null
-    }
-
-    this._connected = false
-
-    this._done({})
+    this._forward_empty('emitter')
+    this._forward_empty('stream')
   }
 }

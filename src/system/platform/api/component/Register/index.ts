@@ -15,6 +15,8 @@ export interface I {
 export interface O {}
 
 export default class Register extends Semifunctional<I, O> {
+  private _name: string
+
   constructor(system: System) {
     super(
       {
@@ -41,9 +43,21 @@ export default class Register extends Semifunctional<I, O> {
   f({ ref, unit, name }: I, done: Done<O>): void {
     // TODO
 
+    this._name = name
+
     this.__system.global.scope[name] = ref
 
     this.__system.emitter.emit('register', name, ref)
+  }
+
+  d() {
+    if (this._name) {
+      this.__system.global.scope[this._name]
+
+      this.__system.emitter.emit('unregister', this._name)
+
+      this._name = undefined
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {

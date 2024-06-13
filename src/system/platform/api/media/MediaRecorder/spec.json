@@ -10,13 +10,14 @@
       }
     },
     "start": {
-      "type": "number",
-      "metadata": {
-        "examples": ["2000"]
-      }
+      "type": "any"
     },
     "stop": {
       "type": "any"
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
     },
     "stream": {
       "type": "`MS`",

@@ -63,10 +63,6 @@ export class Semifunctional<
       d() {
         self.d()
       }
-
-      i() {
-        self.i()
-      }
     })(this.__system)
 
     this._functional = functional
@@ -201,17 +197,7 @@ export class Semifunctional<
 
   f(i: Partial<I>, done: Done<O>) {}
 
-  d() {
-    this.fd()
-  }
-
-  fd() {}
-
-  i() {
-    this.fi()
-  }
-
-  fi() {}
+  d() {}
 
   protected _done: Done<O> = (data, err = null) => {
     this._functional._done(data, err)

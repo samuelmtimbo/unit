@@ -45,15 +45,6 @@ export default class PeerShareGraph extends Semifunctional<I, O> {
       system,
       ID_PEER_SHARE_GRAPH
     )
-
-    this.addListener('destroy', () => {
-      // console.log('PeerShareGraph', 'destroy')
-
-      if (this._connected) {
-        this._disconnect()
-        this._close()
-      }
-    })
   }
 
   private _disconnect = () => {
@@ -146,7 +137,10 @@ export default class PeerShareGraph extends Semifunctional<I, O> {
   }
 
   d() {
-    this._disconnect()
+    if (this._connected) {
+      this._disconnect()
+      this._close()
+    }
   }
 
   public async onIterDataInputData(name: string, data: any): Promise<void> {

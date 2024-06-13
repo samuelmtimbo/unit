@@ -16,6 +16,10 @@ export interface O<T> {}
 export const VALID_MIME_TYPES = ['text/plain', 'text/html', 'text/uri-list']
 
 export default class AttachText<T> extends Semifunctional<I<T>, O<T>> {
+  private _component: Component_
+  private _text: string
+  private _type: string
+
   constructor(system: System) {
     super(
       {
@@ -42,30 +46,40 @@ export default class AttachText<T> extends Semifunctional<I<T>, O<T>> {
       return
     }
 
+    this._component = component
+    this._text = text
+    this._type = type
+
     // AD HOC
     setTimeout(() => {
       component.emit('call', { method: 'attachText', data: [type, text] })
     }, 0)
   }
 
-  public onIterDataInputData(name: string, data: any): void {
+  d() {
     const {
       api: {
         window: { setTimeout },
       },
     } = this.__system
 
-    // if (name === 'done')  {
-    if (this._input.component.active() && this._input.text.active()) {
+    if (this._component) {
       setTimeout(() => {
-        this._i.component.emit('call', {
+        this._component.emit('call', {
           method: 'dettachText',
-          data: [this._i.type, this._i.text],
+          data: [this._type, this._text],
         })
 
-        this._done()
+        this._component = undefined
       }, 0)
     }
+  }
+
+  public onIterDataInputData(name: string, data: any): void {
+    // if (name === 'done')  {
+    this.d()
+
+    this._done()
 
     this._input.done.pull()
     // }

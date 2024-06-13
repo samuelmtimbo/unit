@@ -19,6 +19,7 @@ export type O = {
 }
 
 export default class DelayNode_ extends Functional<I, O> {
+  private _source: AN
   private _node: DelayNode
 
   constructor(system: System) {
@@ -45,18 +46,12 @@ export default class DelayNode_ extends Functional<I, O> {
       system,
       ID_DELAY_NODE
     )
-
-    this.addListener('destroy', () => {
-      if (this._node) {
-        this._disconnect(this._i.node)
-      }
-    })
   }
 
   f({ node: sourceNode, delay: delayTime }: I, done: Done<O>) {
     let _node: DelayNode
 
-    sourceNode = sourceNode as AN & $
+    this._source = sourceNode
 
     const context = sourceNode.getContext()
 
@@ -78,21 +73,12 @@ export default class DelayNode_ extends Functional<I, O> {
     })
   }
 
-  private _disconnect = (sourceNode: AN) => {
-    if (sourceNode) {
-      sourceNode.disconnect()
+  d() {
+    if (this._node) {
+      this._source.disconnect(this._node)
 
+      this._source = undefined
       this._node = undefined
-    }
-  }
-
-  i() {
-    this._disconnect(this._i.node)
-  }
-
-  d(name, data) {
-    if (name === 'node') {
-      this._disconnect(this._i.node)
     }
   }
 }

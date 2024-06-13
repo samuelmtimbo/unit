@@ -41,8 +41,6 @@ export default class ImageCapture_ extends Semifunctional<I, O> {
       system,
       ID_IMAGE_CAPTURE
     )
-
-    this.addListener('destroy', () => {})
   }
 
   async f({ init, track }: I, done: Done<O>) {
@@ -78,6 +76,10 @@ export default class ImageCapture_ extends Semifunctional<I, O> {
     const camera = wrapImageCapture(imageCapture, this.__system)
 
     done({ camera })
+  }
+
+  d() {
+    //
   }
 
   onIterDataInputData(name: string, data: any): void {

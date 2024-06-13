@@ -132,8 +132,11 @@ export default class _Gamepad extends Semifunctional<I, O> {
   }
 
   d() {
-    this._unlisten()
-    this._unlisten = undefined
+    if (this._unlisten) {
+      this._unlisten()
+
+      this._unlisten = undefined
+    }
   }
 
   onIterDataInputData(name: keyof I) {

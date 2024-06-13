@@ -14,12 +14,15 @@ export interface O<T> {
 }
 
 export default class New<T> extends Semifunctional<I<T>, O<T>> {
+  private _unit: Unit
+
   constructor(system: System) {
     super(
       {
         fi: ['class'],
         fo: ['unit'],
         i: ['done'],
+        o: ['done'],
       },
       {
         output: {
@@ -34,13 +37,27 @@ export default class New<T> extends Semifunctional<I<T>, O<T>> {
   }
 
   f({ class: Class }: I<T>, done): void {
-    done({ unit: new Class(this.__system) })
+    const unit = new Class(this.__system)
+
+    this._unit = unit
+
+    done({ unit })
+  }
+
+  d() {
+    if (this._unit) {
+      this._unit.destroy()
+
+      this._unit = undefined
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
     this._forward_all_empty()
+
     this._backward('class')
+
     this._backward('done')
     // }
   }

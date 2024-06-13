@@ -17,6 +17,8 @@ export interface O {
 }
 
 export default class Child extends Semifunctional<I, O> {
+  private _unlisten: Unlisten
+
   constructor(system: System) {
     super(
       {
@@ -39,18 +41,6 @@ export default class Child extends Semifunctional<I, O> {
       system,
       ID_CHILD
     )
-  }
-
-  private _unlisten: Unlisten
-
-  private _plunk = () => {
-    if (this._unlisten) {
-      this._unlisten()
-
-      this._unlisten = undefined
-    }
-
-    this._forward_empty('child')
   }
 
   f({ parent, at }: I, done: Done<O>): void {
@@ -80,12 +70,18 @@ export default class Child extends Semifunctional<I, O> {
   }
 
   d(): void {
-    this._plunk()
+    if (this._unlisten) {
+      this._unlisten()
+
+      this._unlisten = undefined
+    }
+
+    this._forward_empty('child')
   }
 
   onIterDataInputData(name: string): void {
     // if (name === 'done') {
-    this._plunk()
+    this.d()
 
     this._backward('done')
     // }
