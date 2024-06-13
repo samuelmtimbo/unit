@@ -5,7 +5,7 @@
       "type": "object",
       "optional": true
     },
-    "opt": {
+    "attr": {
       "type": "object",
       "optional": true
     }
@@ -14,7 +14,8 @@
     "files": {
       "type": "`F`[]",
       "optional": true,
-      "ref": true
+      "ref": true,
+      "icon": "files"
     }
   },
   "metadata": {
