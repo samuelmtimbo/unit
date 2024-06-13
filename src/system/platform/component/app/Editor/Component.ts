@@ -2534,6 +2534,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _core: Dict<Div> = {}
   private _core_content: Dict<Div> = {}
+  private _core_main: Dict<Div> = {}
   private _core_area: Dict<Div> = {}
   private _core_icon: Dict<Icon> = {}
   private _core_name: Dict<TextArea> = {}
@@ -6927,6 +6928,35 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._sim_add_unit_pins(unit_id, unit, pin_position, position)
   }
 
+  private _core_prevent_selection_unlisten: Dict<Unlisten> = {}
+
+  private _enable_core_text_selection = (unit_id: string) => {
+    const unlisten = this._core_prevent_selection_unlisten[unit_id]
+
+    if (!this._core_prevent_selection_unlisten[unit_id]) {
+      return
+    }
+
+    if (unlisten) {
+      unlisten()
+
+      delete this._core_prevent_selection_unlisten[unit_id]
+    }
+  }
+
+  private _disable_core_text_selection = (unit_id: string) => {
+    const core_content = this._core_content[unit_id]
+
+    if (this._core_prevent_selection_unlisten[unit_id]) {
+      return
+    }
+
+    this._core_prevent_selection_unlisten[unit_id] = callAll([
+      core_content.preventDefault('mousedown'),
+      core_content.preventDefault('touchdown'),
+    ])
+  }
+
   private _sim_add_unit_core = (
     unit_id: string,
     unit: GraphUnitSpec,
@@ -7171,7 +7201,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     core_content.appendChild(core_icon)
     core_content.appendChild(core_name)
     core_content.appendChild(core_description)
+
     this._core_content[unit_id] = core_content
+
+    this._disable_core_text_selection(unit_id)
 
     const core = new Div(
       {
@@ -7193,6 +7226,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this.$system
     )
     core.appendChild(core_content)
+
     this._core[unit_id] = core
 
     core_node_content.appendChild(core)
@@ -11077,6 +11111,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._pin[pin_node_id] = pin
     pin_node_content.appendChild(pin)
 
+    pin.preventDefault('mousedown')
+    pin.preventDefault('touchdown')
+
     const pin_name = this._create_pin_name({
       className: 'pin-name',
       r,
@@ -12131,6 +12168,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     })
     this._datum_area[datum_node_id] = datum_area
 
+    datum_area.preventDefault('mousedown')
+    datum_area.preventDefault('touchdown')
+
     let datum: Datum | any
 
     if (datum_class_literal) {
@@ -12162,6 +12202,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         {
           style: {
             fontSize: `${DATUM_FONT_SIZE}px`,
+            ...userSelect('none'),
           },
           fontSize: DATUM_FONT_SIZE,
           data: tree,
@@ -12200,12 +12241,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
     datum.stopPropagation('wheel')
     datum.stopPropagation('focus')
+
     this._datum[datum_node_id] = datum
 
     const datum_overlay = this._create_overlay({
       className: 'datum-overlay',
     })
     this._datum_overlay[datum_node_id] = datum_overlay
+    datum_overlay.preventDefault('pointerdown')
 
     datum_container.setChildren([datum_area, datum, datum_overlay])
 
@@ -23147,8 +23190,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._focusing_sub_component = false
 
         const core_area = this._core_area[unit_id]
-
+        const core_content = this._core_content[unit_id]
+      
         core_area.$element.style.display = 'none'
+
+        this._enable_core_text_selection(unit_id)
       }
 
       this._unlock_node(unit_id)
@@ -23274,6 +23320,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._refresh_selection_color(unit_id)
     this._refresh_selection_dasharray(unit_id)
     this._refresh_selection_dashoffset(unit_id)
+
+    this._disable_core_text_selection(unit_id)
   }
 
   private _lock_all_component = (): void => {
@@ -23600,6 +23648,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     core_name.$element.style.pointerEvents = 'inherit'
     core_name.$element.style.userSelect = 'inherit'
+
+    this._enable_core_text_selection(unit_id)
   }
 
   private _disable_core_name = (unit_id: string): void => {
@@ -23609,6 +23659,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     core_name.$element.style.pointerEvents = 'none'
     core_name.$element.style.userSelect = 'none'
+
+    this._disable_core_text_selection(unit_id)
   }
 
   private _set_plug_name_style_attr = (
@@ -39529,6 +39581,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._core_name[unit_id]
     delete this._core_description[unit_id]
     delete this._core_icon[unit_id]
+    delete this._core_prevent_selection_unlisten[unit_id]
 
     delete this._normal_node[unit_id]
 
