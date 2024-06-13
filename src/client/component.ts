@@ -158,7 +158,7 @@ export class Component<
 
   private _stopPropagationSet: Set<string>
   private _stopImmediatePropagationSet: Set<string>
-  private _preventDefaultSet: Set<string>
+  private _preventDefaultCounter: Dict<number> = {}
 
   constructor($props: P, $system: System, $element?: E, $node?: E) {
     this.$props = $props
@@ -334,22 +334,33 @@ export class Component<
   }
 
   preventDefault(event: string): Unlisten {
-    this._preventDefaultSet = this._preventDefaultSet ?? new Set()
+    this._preventDefaultCounter[event] = this._preventDefaultCounter[event] ?? 0
 
-    if (this._preventDefaultSet.has(event)) {
-      return
+    let unlisten = NOOP
+
+    const unlisten_ = () => {
+      this._preventDefaultCounter[event]--
+
+      if (this._preventDefaultCounter[event] === 0) {
+        unlisten()
+      }
     }
 
-    this._preventDefaultSet.add(event)
+    this._preventDefaultCounter[event]++
 
-    const listener = (event: Event) => {
-      event.preventDefault()
-      return false
+    if (this._preventDefaultCounter[event] === 1) {
+      const listener = (event: Event) => {
+        event.preventDefault()
+
+        return false
+      }
+
+      const opt = { passive: false }
+
+      unlisten = this._addBaseListener(event, listener, opt)
     }
 
-    const opt = { passive: false }
-
-    return this._addBaseListener(event, listener, opt)
+    return unlisten_
   }
 
   private _addBaseListener = (
