@@ -23191,7 +23191,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const core_area = this._core_area[unit_id]
         const core_content = this._core_content[unit_id]
-      
+
         core_area.$element.style.display = 'none'
 
         this._enable_core_text_selection(unit_id)
