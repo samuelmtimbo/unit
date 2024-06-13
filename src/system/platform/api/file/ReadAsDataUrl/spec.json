@@ -5,8 +5,8 @@
       "type": "`FR`",
       "ref": true
     },
-    "blob": {
-      "type": "`B`",
+    "file": {
+      "type": "`F`|`B`",
       "ref": true
     },
     "opt": {

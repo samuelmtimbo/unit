@@ -6,9 +6,6 @@ export interface Props {
   className?: string
   style?: Dict<any>
   value?: string
-  disabled?: boolean
-  maxLength?: number
-  tabIndex?: number
 }
 
 export const DEFAULT_STYLE = {
@@ -31,30 +28,7 @@ export default class FileField extends Field<HTMLInputElement, Props> {
       defaultValue: '',
     })
 
-    const {
-      flags: { defaultInputModeNone },
-    } = $system
-
-    const { maxLength, tabIndex } = $props
-
     this.$element.type = 'file'
-    this.$element.spellcheck = false
-    this.$element.autocomplete = 'off'
-    // this.$element.autocomplete = 'disabled'
-    // this.$element.autocorrect = 'off'
-    this.$element.autocapitalize = 'off'
-
-    if (defaultInputModeNone) {
-      this.$element.inputMode = 'none'
-    }
-    // this.$element.inputMode = 'text'
-
-    if (maxLength !== undefined) {
-      this.$element.maxLength = maxLength
-    }
-    if (tabIndex !== undefined) {
-      this.$element.tabIndex = tabIndex
-    }
   }
 
   setSelectionRange(

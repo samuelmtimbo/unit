@@ -1,3 +1,4 @@
 export interface FR {
-  readAsDataUrl(blob: Blob): Promise<string>
+  readAsDataUrl(file: File | Blob): Promise<string>
+  readAsText(file: File | Blob): Promise<string>
 }

@@ -1,0 +1,31 @@
+{
+  "name": "read as text",
+  "inputs": {
+    "reader": {
+      "type": "`FR`",
+      "ref": true
+    },
+    "file": {
+      "type": "`F`|`B`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{}"
+    }
+  },
+  "outputs": {
+    "text": {
+      "type": "string"
+    }
+  },
+  "metadata": {
+    "icon": "file-output",
+    "description": "read the contents of the specified blob or file",
+    "complexity": 3,
+    "tags": ["platform", "api", "file"]
+  },
+  "id": "e025d8e5-baa2-4411-864d-4db6fc42220f",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

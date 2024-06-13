@@ -38,9 +38,18 @@ export function readBlobAsDataUrl(system: System, blob: Blob): Promise<string> {
 
 export function readBlobAsDataUrl_(
   reader: FileReader,
-  blob: Blob
+  blob: Blob | File
 ): Promise<string> {
   reader.readAsDataURL(blob)
+
+  return waitFileReaderResult(reader)
+}
+
+export function readBlobAsText_(
+  reader: FileReader,
+  blob: Blob | File
+): Promise<string> {
+  reader.readAsText(blob)
 
   return waitFileReaderResult(reader)
 }
@@ -48,6 +57,10 @@ export function readBlobAsDataUrl_(
 export function wrapFileReader(reader: FileReader, system: System): FR & $ {
   const reader_ = new (class FileReader_ extends $ implements FR {
     __: string[] = ['FR']
+
+    readAsText(file: File | Blob): Promise<string> {
+      return readBlobAsText_(reader, file)
+    }
 
     readAsDataUrl(blob: Blob): Promise<string> {
       return readBlobAsDataUrl_(reader, blob)
