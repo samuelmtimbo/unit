@@ -1,24 +1,27 @@
-import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { A } from '../../../../../types/interface/A'
-import { ID_AT_0 } from '../../../../_ids'
+import { ID_AT_1 } from '../../../../_ids'
 
 export interface I<T> {
   a: A
   i: number
+  done: any
 }
 
 export interface O<T> {
   'a[i]': T
 }
 
-export default class At0<T> extends Functional<I<T>, O<T>> {
+export default class At1<T> extends Semifunctional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['a', 'i'],
-        o: ['a[i]'],
+        fi: ['a', 'i'],
+        fo: ['a[i]'],
+        i: ['done'],
+        o: [],
       },
       {
         input: {
@@ -26,9 +29,14 @@ export default class At0<T> extends Functional<I<T>, O<T>> {
             ref: true,
           },
         },
+        output: {
+          'a[i]': {
+            ref: true,
+          },
+        },
       },
       system,
-      ID_AT_0
+      ID_AT_1
     )
   }
 
@@ -52,5 +60,14 @@ export default class At0<T> extends Functional<I<T>, O<T>> {
     }
 
     done({ 'a[i]': _a_i })
+  }
+
+  public onIterDataInputData(name: string, data: any): void {
+    this._forward_empty('a[i]')
+
+    this._backward('i')
+    this._backward('a')
+
+    this._backward('done')
   }
 }
