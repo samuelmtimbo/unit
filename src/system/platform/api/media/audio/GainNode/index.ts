@@ -16,7 +16,8 @@ export type O = {
 }
 
 export default class GainNode_ extends Functional<I, O> {
-  private _node: GainNode
+  private _source: AN
+  private _node: AN
 
   constructor(system: System) {
     super(
@@ -39,18 +40,12 @@ export default class GainNode_ extends Functional<I, O> {
       system,
       ID_GAIN_NODE
     )
-
-    this.addListener('destroy', () => {
-      if (this._node) {
-        this._disconnect(this._i.node)
-      }
-    })
   }
 
   f({ node: sourceNode, gain }: I, done: Done<O>) {
     let _node: GainNode
 
-    sourceNode = sourceNode as AN & $
+    this._source = sourceNode
 
     const context = sourceNode.getContext()
 
@@ -58,30 +53,23 @@ export default class GainNode_ extends Functional<I, O> {
 
     _node.gain.value = gain
 
-    this._node = _node
-
     sourceNode.connect(_node)
 
     const node = wrapAudioNode(_node, this.__system)
+
+    this._node = node
 
     done({
       node,
     })
   }
 
-  private _disconnect = (sourceNode: AN) => {
-    if (sourceNode) {
-      sourceNode.disconnect(this._node)
+  d() {
+    if (this._node) {
+      this._source.disconnect()
 
+      this._source = undefined
       this._node = undefined
     }
-  }
-
-  i() {
-    this._disconnect(this._i.node)
-  }
-
-  d() {
-    this._disconnect(this._i.node)
   }
 }

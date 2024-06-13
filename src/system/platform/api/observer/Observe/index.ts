@@ -43,8 +43,6 @@ export default class Observe<T> extends Semifunctional<I<T>, O<T>> {
       },
     } = this.__system
 
-    // component.emit('call', { method: 'target', data: [] })
-
     const globalId = component.getGlobalId()
 
     const _component = await firstGlobalComponentPromise(

@@ -17,6 +17,8 @@ export interface O {
 }
 
 export default class New extends Semifunctional<I, O> {
+  private _graph: Graph
+
   constructor(system: System) {
     super(
       {
@@ -47,7 +49,17 @@ export default class New extends Semifunctional<I, O> {
 
     const graph = start(this.__system, { spec, specs })
 
+    this._graph = graph
+
     done({ graph })
+  }
+
+  d() {
+    if (this._graph) {
+      this._graph.destroy()
+
+      this._graph = undefined
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {

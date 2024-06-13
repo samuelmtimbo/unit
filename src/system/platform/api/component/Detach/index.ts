@@ -19,6 +19,8 @@ export interface I {
 export interface O {}
 
 export default class Detach extends Semifunctional<I, O> {
+  private _component: Component_
+
   constructor(system: System) {
     super(
       {
@@ -43,6 +45,8 @@ export default class Detach extends Semifunctional<I, O> {
   }
 
   f({ component, host, opt }: I, done: Done<O>): void {
+    this._component = component
+
     component.emit('call', { method: 'register', data: [] })
     host.emit('call', { method: 'register', data: [] })
 
@@ -51,29 +55,22 @@ export default class Detach extends Semifunctional<I, O> {
     component.emit('call', { method: 'detach', data: [hostUrl, opt] })
   }
 
-  private _attach = () => {
-    this._i.component.emit('call', {
-      method: 'attach',
-      data: [this._i.opt],
-    })
-  }
-
   d() {
-    this._attach()
+    if (this._component) {
+      this._component.emit('call', {
+        method: 'attach',
+        data: [this._i.opt],
+      })
+
+      this._component = undefined
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {
-    switch (name) {
-      case 'done':
-        if (this._functional._i_active.size === 3) {
-          this._attach()
+    this.d()
 
-          this._done()
-        }
+    this._done()
 
-        this._backward('done')
-
-        break
-    }
+    this._backward('done')
   }
 }

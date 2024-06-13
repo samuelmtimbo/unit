@@ -18,6 +18,7 @@ export type O = {
 }
 
 export default class AnalyserNode_ extends Functional<I, O> {
+  private _source: AN | AC
   private _node: AnalyserNode
 
   constructor(system: System) {
@@ -60,6 +61,7 @@ export default class AnalyserNode_ extends Functional<I, O> {
       sourceNode.connect(_node)
     }
 
+    this._source = sourceNode
     this._node = _node
 
     const node = wrapAudioAnalyserNode(_node, this.__system)
@@ -69,19 +71,12 @@ export default class AnalyserNode_ extends Functional<I, O> {
     })
   }
 
-  private _disconnect = (sourceNode: AN | AC) => {
-    if (sourceNode) {
-      sourceNode.disconnect(this._node)
+  d() {
+    if (this._node) {
+      this._source.disconnect(this._node)
 
+      this._source = undefined
       this._node = undefined
     }
-  }
-
-  i() {
-    this._disconnect(this._i.node)
-  }
-
-  d() {
-    this._disconnect(this._i.node)
   }
 }

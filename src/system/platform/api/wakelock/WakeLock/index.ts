@@ -32,12 +32,16 @@ export default class WakeLock extends Semifunctional<I, O> {
   }
 
   d() {
-    this._release()
+    if (this._wake_lock) {
+      this._wake_lock.release()
+
+      this._wake_lock = undefined
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
-    this._release()
+    this.d()
 
     this._backward('type')
 
@@ -59,14 +63,6 @@ export default class WakeLock extends Semifunctional<I, O> {
     wake_lock.addEventListener('release', this._on_release)
 
     this._wake_lock = wake_lock
-  }
-
-  private _release = (): void => {
-    // console.log('WakeLock', '_release')
-
-    if (this._wake_lock) {
-      this._wake_lock.release()
-    }
   }
 
   private _on_release = () => {

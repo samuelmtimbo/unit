@@ -85,10 +85,6 @@ export default class AudioSource extends Functional<I, O> {
         this._source.stop()
       }
     })
-
-    this.addListener('destroy', () => {
-      this.d()
-    })
   }
 
   async f({ src }, done: Done<O>) {
@@ -116,6 +112,8 @@ export default class AudioSource extends Functional<I, O> {
     if (this._source) {
       this._source.stop()
       this._source.disconnect()
+
+      this._source = undefined
     }
   }
 }

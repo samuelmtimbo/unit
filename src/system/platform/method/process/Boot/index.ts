@@ -17,6 +17,8 @@ export interface O {
 }
 
 export default class Boot extends Semifunctional<I, O> {
+  private _system: System
+
   constructor(system: System) {
     super(
       {
@@ -47,6 +49,8 @@ export default class Boot extends Semifunctional<I, O> {
       components: this.__system.components,
     })
 
+    this._system = _system
+
     const system = wrapSystem(_system, this.__system)
 
     const $system = Async(system, ['S'])
@@ -55,6 +59,12 @@ export default class Boot extends Semifunctional<I, O> {
       system: $system,
     })
   }
-}
 
-export function createSubSystem(system: System, path: string) {}
+  d() {
+    if (this._system) {
+      this._system.destroy()
+
+      this._system = undefined
+    }
+  }
+}

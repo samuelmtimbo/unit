@@ -51,18 +51,6 @@ export default class OscillatorNode_ extends Functional<I, O> {
       system,
       ID_OSCILLATOR_NODE
     )
-
-    this.addListener('destroy', () => {
-      this._destroy()
-    })
-  }
-
-  private _destroy = () => {
-    if (this._node) {
-      this._node.stop()
-
-      this._node = undefined
-    }
   }
 
   f({ node: sourceNode, opt }: I, done: Done<O>) {
@@ -100,11 +88,11 @@ export default class OscillatorNode_ extends Functional<I, O> {
     })
   }
 
-  i(name) {
-    this._destroy()
-  }
-
   d() {
-    this._destroy()
+    if (this._node) {
+      this._node.stop()
+
+      this._node = undefined
+    }
   }
 }

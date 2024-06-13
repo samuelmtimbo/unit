@@ -28,14 +28,6 @@ export default class GetDisplayMedia extends Functional<I, O> {
       ID_GET_DISPLAY_MEDIA
     )
 
-    this.addListener('destroy', () => {
-      if (this._stream) {
-        stopMediaStream(this._stream)
-
-        this._stream = undefined
-      }
-    })
-
     this.addListener('take_err', () => {
       // this._input.opt.pull()
     })
@@ -69,5 +61,13 @@ export default class GetDisplayMedia extends Functional<I, O> {
     done({
       stream,
     })
+  }
+
+  d() {
+    if (this._stream) {
+      stopMediaStream(this._stream)
+
+      this._stream = undefined
+    }
   }
 }

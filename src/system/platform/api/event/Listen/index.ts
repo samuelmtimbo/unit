@@ -35,22 +35,6 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
       system,
       ID_LISTEN
     )
-
-    this.addListener('destroy', () => {
-      if (this._unlisten) {
-        this._remove()
-
-        this._forward_empty('data')
-      }
-    })
-  }
-
-  private _remove = () => {
-    if (this._unlisten) {
-      this._unlisten()
-
-      this._unlisten = undefined
-    }
   }
 
   f({ emitter, event }: I<T>) {
@@ -65,14 +49,12 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     this._unlisten = emitter.addListener(event, listener)
   }
 
-  i() {
-    this._remove()
-
-    this._forward_empty('data')
-  }
-
   d() {
-    this._remove()
+    if (this._unlisten) {
+      this._unlisten()
+
+      this._unlisten = undefined
+    }
 
     this._forward_empty('data')
   }
@@ -80,7 +62,8 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
   onIterDataInputData(name: string, data: any) {
     // if (name === 'remove') {
     if (this._unlisten) {
-      this._remove()
+      this.d()
+
       this._done()
     }
     // }

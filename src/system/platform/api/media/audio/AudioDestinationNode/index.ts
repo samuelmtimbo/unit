@@ -13,6 +13,7 @@ export type O = {
 }
 
 export default class AudioDestinationNode_ extends Functional<I, O> {
+  private _source: AN
   private _node: AudioDestinationNode
 
   constructor(system: System) {
@@ -36,13 +37,11 @@ export default class AudioDestinationNode_ extends Functional<I, O> {
       system,
       ID_AUDIO_DESTINATION_NODE
     )
-
-    this.addListener('destroy', () => {
-      this._destroy(this._i.node)
-    })
   }
 
   f({ node: sourceNode }: I, done: Done<O>) {
+    this._source = sourceNode
+
     const ctx = sourceNode.getContext()
 
     const _node = ctx.destination
@@ -52,15 +51,12 @@ export default class AudioDestinationNode_ extends Functional<I, O> {
     sourceNode.connect(_node)
   }
 
-  private _destroy(node: AN) {
-    if (node) {
-      node.disconnect(this._node)
+  d() {
+    if (this._node) {
+      this._source.disconnect(this._node)
 
+      this._source = undefined
       this._node = undefined
     }
-  }
-
-  d(name: string, data: any) {
-    this._destroy(data)
   }
 }

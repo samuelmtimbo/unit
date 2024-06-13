@@ -33,14 +33,6 @@ export default class UserMedia extends Functional<I, O> {
       system,
       ID_USER_MEDIA
     )
-
-    this.addListener('destroy', () => {
-      if (this._stream) {
-        stopMediaStream(this._stream)
-
-        this._stream = undefined
-      }
-    })
   }
 
   async f({ opt }: I, done: Done<O>): Promise<void> {
@@ -65,5 +57,13 @@ export default class UserMedia extends Functional<I, O> {
     }
 
     done({ stream })
+  }
+
+  d() {
+    if (this._stream) {
+      stopMediaStream(this._stream)
+
+      this._stream = undefined
+    }
   }
 }

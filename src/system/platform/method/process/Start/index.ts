@@ -23,6 +23,8 @@ export interface O {
 }
 
 export default class Start extends Semifunctional<I, O> {
+  private _graph: $Graph
+
   constructor(system: System) {
     super(
       {
@@ -76,7 +78,15 @@ export default class Start extends Semifunctional<I, O> {
       graph.$play({})
     }
 
+    this._graph = graph
+
     done({ graph })
+  }
+
+  d() {
+    if (this._graph) {
+      this._graph = undefined
+    }
   }
 
   onIterDataInputData(name: string, data: any) {

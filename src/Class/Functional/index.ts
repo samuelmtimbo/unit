@@ -46,6 +46,9 @@ export class Functional<
         this._backward_if_ready()
       }
     })
+
+    this.addListener('reset', this.d)
+    this.addListener('destroy', this.d)
   }
 
   private _on_input_data(name: string): void {
@@ -56,7 +59,7 @@ export class Functional<
     this._forward_if_ready()
   }
 
-  private _on_input_drop(name: string, data: any): void {
+  private _on_input_drop(): void {
     if (this._i_active.size === this._i_count - 1) {
       if (!this._backwarding && !this._forwarding_empty) {
         this._looping = false
@@ -65,7 +68,7 @@ export class Functional<
         } else {
           this.takeErr()
         }
-        this.d(name, data)
+        this.d()
         this._forward_all_empty()
       }
     }
@@ -73,7 +76,7 @@ export class Functional<
 
   private _on_input_invalid(name: string): void {
     if (this._i_invalid.size === 1) {
-      this.i(name)
+      this.d()
       this._invalidate()
     }
   }
@@ -83,7 +86,7 @@ export class Functional<
   }
 
   onDataInputDrop(name: string, data: any): void {
-    this._on_input_drop(name, data)
+    this._on_input_drop()
   }
 
   onDataInputStart(name: string): void {
@@ -107,7 +110,7 @@ export class Functional<
   }
 
   onRefInputDrop(name: string, data: any): void {
-    this._on_input_drop(name, data)
+    this._on_input_drop()
   }
 
   onRefInputInvalid(name: string): void {
@@ -125,9 +128,7 @@ export class Functional<
 
   f(i: Partial<I>, done: Done<O>) {}
 
-  i(name: string) {}
-
-  d(name: string, data: any) {}
+  d() {}
 
   private _backward_if_ready(): void {
     const {

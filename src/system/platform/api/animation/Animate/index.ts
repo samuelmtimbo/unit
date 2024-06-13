@@ -19,6 +19,9 @@ export interface O {
 }
 
 export default class Animate extends Semifunctional<I, O> {
+  private _id: string
+  private _element: Element_
+
   constructor(system: System) {
     super(
       {
@@ -43,27 +46,13 @@ export default class Animate extends Semifunctional<I, O> {
       system,
       ID_ANIMATE
     )
-
-    this.addListener('reset', this._cancel)
-    this.addListener('destroy', this._cancel)
   }
-
-  private _cancel(): void {
-    if (this._i.element) {
-      if (this._id) {
-        this._i.element.cancelAnimation(this._id)
-
-        this._id = undefined
-      }
-    }
-  }
-
-  private _id: string | undefined = undefined
 
   public f({ opt, keyframes, element }: I, done: Done<O>): void {
     const id = opt.id ?? randomId()
 
     this._id = id
+    this._element = element
 
     const _opt = {
       ...opt,
@@ -110,25 +99,18 @@ export default class Animate extends Semifunctional<I, O> {
     done({ animation })
   }
 
-  fd() {
-    this._cancel()
-  }
+  d() {
+    if (this._id) {
+      this._element.cancelAnimation(this._id)
 
-  fi() {
-    this._cancel()
-  }
-
-  public onRefInputDrop(name: string, data: any): void {
-    if (name === 'element') {
-      this._cancel()
+      this._id = undefined
+      this._element = undefined
     }
   }
 
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'done') {
-    this._cancel()
-
-    this._id = undefined
+    this.d()
 
     this._forward_empty('animation')
 
