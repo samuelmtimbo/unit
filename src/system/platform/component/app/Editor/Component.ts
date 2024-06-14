@@ -19677,7 +19677,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       height: is_canvas || is_svg ? undefined : '100%',
       opacity: '1',
       transform: '',
-      color: '',
+      color: 'currentcolor',
     }
 
     const prop_unlisten = leaf_comp.interceptProp('style', (style) => {
