@@ -3176,6 +3176,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _height: number = 0
 
   private _q_was_pressed_before_name_focus: any
+  private _q_first_repeat_prevented: boolean = false
 
   private _registry: Registry
 
@@ -7407,7 +7408,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     selection.setProp('y', 0)
     selection.setProp('shape', node_shape)
 
-    this._enable_core_resize(unit_id)
+    if (this._is_node_selected(unit_id)) {
+      this._enable_core_resize(unit_id)
+    }
 
     this._resize_selection(unit_id, node_width, node_height)
   }
@@ -9017,15 +9020,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           _event.preventDefault()
 
           this.focus()
+        } else if (
+          event.key === 'q' &&
+          this._q_was_pressed_before_name_focus &&
+          !this._q_first_repeat_prevented
+        ) {
+          _event.preventDefault()
+
+          this._q_first_repeat_prevented = true
         }
       })
     )
   }
 
+  private _node_name_just_focused: boolean = false
+
   private _on_node_name_focus = (node_id: string): void => {
     // console.log('Graph', '_on_node_name_focus', node_id)
 
     this._edit_node_name_was_selected = this._is_node_selected(node_id)
+    this._q_first_repeat_prevented = false
 
     this._q_was_pressed_before_name_focus = this._is_key_pressed('q')
 
@@ -16837,14 +16851,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const link_base = this._link_base[datum_link_id]
 
     link_base.$element.style[name] = value
-  }
-
-  private _get_datum_size = (datum_id: string): Size => {
-    const datum_tree = this._datum_tree[datum_id]
-
-    const { width, height } = this._get_datum_tree_size(datum_tree)
-
-    return { width, height }
   }
 
   private _set_datum_color = (
