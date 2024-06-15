@@ -38469,7 +38469,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_component_resize_end = (unit_id: string, event: {}) => {
     // console.log('Graph', '_on_component_resize_end', unit_id, event)
 
-    const cursor = 'default'
+    const cursor = 'inherit'
+
     this._graph.$element.style.cursor = cursor
 
     const pointer_id = this._resize_node_id_pointer_id[unit_id]
