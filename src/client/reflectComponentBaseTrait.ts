@@ -148,7 +148,7 @@ export const expandSlot = (
 
   for (const i of path) {
     if (child_leaf_id === slot_base_ids[i]) {
-      return []
+      return expandSlot(component, child_leaf_id, path.slice(1), trait, expandChildren, {}, extractStyle)
     }
 
     child_leaf_id = slot_base_ids[i]
