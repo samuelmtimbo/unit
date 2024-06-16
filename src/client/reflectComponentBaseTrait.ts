@@ -1,4 +1,3 @@
-import { Tree } from '../Tree'
 import { Style } from '../system/platform/Style'
 import { Dict } from '../types/Dict'
 import { LayoutNode } from './LayoutNode'

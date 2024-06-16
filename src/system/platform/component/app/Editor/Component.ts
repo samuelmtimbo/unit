@@ -23573,16 +23573,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     } else if (this._is_merge_node_id(node_id)) {
       this._selected_pin_count++
-
-      if (this._mode === 'multiselect') {
-        //
-      } else {
-        const merge_datum_node_id = this._get_merge_datum_node_id(node_id)
-
-        if (merge_datum_node_id) {
-          this._show_datum(merge_datum_node_id)
-        }
-      }
     } else if (this._is_ext_node_id(node_id)) {
       // if (this._mode === 'info') {
       //   this._enable_plug_name(node_id)
@@ -23612,6 +23602,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._refresh_all_visible_datum()
+    this._refresh_all_selected_pin_datum_visible()
+  }
+
+  private _refresh_all_selected_pin_datum_visible = () => {
+    for (const selected_node_id in this._selected_node_id) {
+      if (this._is_pin_node_id(selected_node_id)) {
+        this._refresh_pin_datum_visible(selected_node_id)
+        const datum_node_id = this._get_pin_datum_node_id(selected_node_id)
+
+        if (datum_node_id) {
+          this._refresh_datum_visible(datum_node_id)
+        }
+      }
+    }
   }
 
   private _enable_core_frame = (unit_id: string) => {
@@ -23927,6 +23931,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._refresh_compatible()
+
+    this._refresh_all_selected_pin_datum_visible()
   }
 
   public deselect_node = (node_id: string): void => {
@@ -24405,6 +24411,45 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._mode === 'none' || this._mode === 'multiselect'
   }
 
+  private _should_show_selected_merge_data_on_this_mode() {
+    return this._mode === 'none' || this._mode === 'multiselect'
+  }
+
+  private _should_hide_merge_datum = (
+    datum_node_id: string,
+    merge_node_id: string
+  ): boolean | undefined => {
+    const merge_first_datum_node_id =
+      this._get_merge_datum_node_id(merge_node_id)
+
+    if (merge_first_datum_node_id) {
+      if (datum_node_id === merge_first_datum_node_id) {
+        if (
+          this._is_node_hovered(merge_node_id) &&
+          this._should_show_hover_merge_data_on_this_mode()
+        ) {
+          return false
+        } else if (
+          this._is_node_selected(merge_node_id) &&
+          this._should_show_selected_merge_data_on_this_mode()
+        ) {
+          if (!this._multiselect_area_ing) {
+            if (this._selected_node_count === this._selected_pin_count) {
+              return false
+            } else if (
+              this._selected_node_count === this._selected_pin_count + 1 &&
+              this._selected_component_count === 1
+            ) {
+              return false
+            }
+          }
+        } else if (this._is_node_hovered(merge_first_datum_node_id)) {
+          return true
+        }
+      }
+    }
+  }
+
   private _should_hide_datum = (datum_node_id: string): boolean => {
     if (
       this._is_node_selected(datum_node_id) ||
@@ -24520,24 +24565,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             return false
           }
 
-          const merge_first_datum_node_id =
-            this._get_merge_datum_node_id(merge_node_id)
+          const should_hide_merge_datum = this._should_hide_merge_datum(
+            datum_node_id,
+            merge_node_id
+          )
 
-          if (merge_first_datum_node_id) {
-            if (
-              ((this._is_node_hovered(merge_node_id) ||
-                this._is_node_selected(merge_node_id)) &&
-                this._should_show_hover_merge_data_on_this_mode()) ||
-              (this._is_node_selected(merge_node_id) &&
-                this._selected_node_count === this._selected_pin_count) ||
-              this._is_node_hovered(merge_first_datum_node_id)
-            ) {
-              if (datum_node_id === merge_first_datum_node_id) {
-                return false
-              }
-            } else if (this._is_node_hovered(pin_node_id)) {
-              return false
-            }
+          if (should_hide_merge_datum !== undefined) {
+            return false
+          } else if (this._is_node_hovered(pin_node_id)) {
+            return false
           }
 
           return true
@@ -24561,11 +24597,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
 
-        if (
-          this._is_node_selected(pin_node_id) ||
-          this._is_node_hovered(pin_node_id)
-        ) {
-          return false
+        const should_hide_merge_datum = this._should_hide_merge_datum(
+          datum_node_id,
+          pin_node_id
+        )
+
+        if (should_hide_merge_datum !== undefined) {
+          return should_hide_merge_datum
         }
 
         const { mergeId } = segmentMergeNodeId(pin_node_id)
@@ -37966,7 +38004,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._pin_node[merge_node_id]
     delete this._normal_node[merge_node_id]
     delete this._empty_merge_node[merge_node_id]
-    delete this._node_type[merge_node_id]
 
     if (this._empty_merge_node[merge_node_id]) {
       this._remove_merge_empty(merge_node_id)
@@ -37975,6 +38012,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._sim_remove_node(merge_node_id)
 
     this._remove_node_link_heap(merge_node_id)
+
+    delete this._node_type[merge_node_id]
   }
 
   private __sim_remove_merge = (merge_id: string): void => {
@@ -42563,11 +42602,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _on_multiselect_area_end = (): void => {
     // console.log('Graph', '_on_multiselect_area_end')
+
     this._multiselect_area_ing = false
     this._multiselect_area_rect = NOT_SELECTED_AREA
     this._multiselect_area_node = {}
     this._multiselect_area_svg.$element.style.display = 'none'
+
     this._tick_multiselect_area()
+
+    this._refresh_all_selected_pin_datum_visible()
   }
 
   private _tick_multiselect_area = (): void => {
@@ -51196,6 +51239,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const merge_node_id = getMergeNodeId(merge_id)
 
     const merge_is_ref = this._is_merge_ref(merge_node_id)
+    const merge_datum_node_id = this._get_merge_datum_node_id(merge_node_id)
+
+    const data =
+      merge_datum_node_id && this._get_datum_value(merge_datum_node_id)
 
     moveMerge(
       this._state_make_this_graph_interface(),
@@ -51204,7 +51251,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       merge_id,
       merge_spec,
       merge_is_ref,
-      undefined,
+      data,
       this._collapse_next_map,
       {},
       ignored_unit_set,
