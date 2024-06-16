@@ -516,6 +516,7 @@ import {
   unplugPin,
 } from '../../../../../spec/reducers/spec_'
 import { remapBundle } from '../../../../../spec/remapBundle'
+import { remapUnitBundle } from '../../../../../spec/remapUnitBundle'
 import { stringify } from '../../../../../spec/stringify'
 import { stringifyDataValue } from '../../../../../spec/stringifyDataValue'
 import { stringifyBundleSpec } from '../../../../../spec/stringifySpec'
@@ -6026,7 +6027,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { unit, specs = {} } = bundle
 
-    injectSpecs(specs)
+    const id_map = injectSpecs(specs)
+
+    remapUnitBundle(bundle, id_map)
 
     this._spec_add_unit(unit_id, unit, register, deep)
 
