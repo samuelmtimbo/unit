@@ -21151,7 +21151,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       if (!parent_id || this._layout_path.includes(parent_id)) {
         this._measure_sub_component_base(sub_component_id)
+      }
+    }
 
+    for (const sub_component_id in this._component.$subComponent) {
+      const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
+      const children = this._spec_get_sub_component_children(sub_component_id)
+
+      if (!parent_id || this._layout_path.includes(parent_id)) {
         const animating_sub_component =
           animating_sub_component_set.has(sub_component_id)
 
