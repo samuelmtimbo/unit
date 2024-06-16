@@ -237,17 +237,6 @@ export const expandSlot = (
   return base_style
 }
 
-export const reflectStyleTreeTrait = (
-  trait: LayoutNode,
-  tree: Tree<Style>
-): Tree<LayoutNode> => {
-  return {
-    value: trait,
-    parent: null,
-    children: [],
-  }
-}
-
 export const reflectComponentBaseTrait = (
   root: Component,
   root_prefix: string,
@@ -281,7 +270,6 @@ export const reflectComponentBaseTrait = (
   const all_slot_base: Dict<string[]> = {}
 
   const expand_slot = (slot_id: string, path: number[]): Style[] => {
-    // if (shouldExpandSlot) {
     return expandSlot(
       component,
       slot_id,
@@ -296,9 +284,6 @@ export const reflectComponentBaseTrait = (
         )
       }
     )
-    // } else {
-    //   return []
-    // }
   }
 
   for (const leaf of base) {
