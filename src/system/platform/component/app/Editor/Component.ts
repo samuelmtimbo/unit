@@ -19640,7 +19640,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
-    const { x, y, width, height, sx, sy, fontSize, opacity } = leaf_node
+    const { x, y, width, height, sx, sy, fontSize, opacity, color } = leaf_node
 
     const frame_style = {
       display: 'block',
@@ -19661,6 +19661,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       fontSize: `${fontSize}px`,
       overflow: 'visible',
       pointerEvents: 'none',
+      color: rgbaToHex(color),
     }
 
     const is_text = isTextLike(leaf_comp)
