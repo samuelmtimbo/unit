@@ -27179,6 +27179,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._is_link_pin_node_id(pin_node_id)) {
       if (this._spec_is_link_pin_ignored(pin_node_id)) {
         this.set_link_pin_ignored(pin_node_id, false)
+
+        this._refresh_pin_datum_visible(pin_node_id)
       }
     }
     return null
