@@ -1654,7 +1654,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.registerRoot(this._root)
 
     this._editor.select_node(editor_unit_id)
-    this._editor.unlock_sub_component(editor_unit_id)
+    this._editor.unlock_sub_component(editor_unit_id, true)
     this._editor.enter(false)
     this._editor.enterFullwindow(false)
     this._editor.leaveFullwindow(true)
@@ -7572,7 +7572,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._unlock_drag_initiated = true
 
         this._lock_all_component_but(unit_id)
-        this._unlock_sub_component(unit_id)
+        this._unlock_sub_component(unit_id, false)
       }),
     ])
   }
@@ -13401,6 +13401,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           } else if (this._is_datum_node_id(node_id)) {
             this._refresh_datum_visible(node_id)
+
+            if (this._edit_datum_node_id !== node_id) {
+              if (
+                this._unlocked_datum.has(node_id) &&
+                this._core_component_unlocked_count > 0
+              ) {
+                this._lock_datum(node_id)
+                this._blur_datum(node_id)
+              }
+            }
           }
 
           if (this._mode === 'info') {
@@ -21501,13 +21511,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     } else {
       if (hover_node_id === node_id) {
-        // console.log(
-        //   'Graph',
-        //   '__on_node_pointer_enter',
-        //   'Pointer is already hovering this node.'
-        // )
+        //
       } else {
-        // throw new Error('pointer is hovering another node')
+        //
       }
     }
 
@@ -21519,8 +21525,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._lock_all_component_but(node_id)
       this._disable_all_component_resize_but(node_id)
 
-      this._unlock_sub_component(node_id)
+      this._unlock_sub_component(node_id, false)
       this._enable_core_resize(node_id)
+    } else if (
+      this._is_datum_node_id(node_id) &&
+      !this._is_datum_class_literal(node_id) &&
+      this._core_component_unlocked_count > 0
+    ) {
+      this._unlock_datum(node_id)
     }
 
     dispatchEvent('nodepointerenter', this._get_node_spec(node_id), false)
@@ -23160,21 +23172,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _unlock_all_component = (): void => {
-    const { component } = this.$props
-    for (const component_id in component.$subComponent) {
-      this._unlock_sub_component(component_id)
-    }
-  }
-
-  public unlock_sub_component = (unit_id: string): void => {
-    this._unlock_sub_component(unit_id)
+  public unlock_sub_component = (unit_id: string, focus: boolean): void => {
+    this._unlock_sub_component(unit_id, focus)
   }
 
   private _focusing_sub_component: boolean = false
 
-  private _unlock_sub_component = (unit_id: string): void => {
-    // console.log('Graph', '_unlock_sub_component', unit_id, this._id)
+  private _unlock_sub_component = (unit_id: string, focus: boolean): void => {
+    // console.log('Graph', '_unlock_sub_component', unit_id, focus, this._id)
 
     const { animate } = this.$props
 
@@ -23201,11 +23206,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._enable_core_frame(unit_id)
         this._hide_core_overlay(unit_id)
 
-        this._focusing_sub_component = true
+        if (focus) {
+          this._focusing_sub_component = true
 
-        this._focus_sub_component(unit_id)
+          this._focus_sub_component(unit_id)
 
-        this._focusing_sub_component = false
+          this._focusing_sub_component = false
+        }
 
         const core_area = this._core_area[unit_id]
         const core_content = this._core_content[unit_id]
@@ -26057,7 +26064,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._is_unit_node_id(node_id)) {
         if (this._is_unit_component(node_id)) {
           this._lock_all_component_but(node_id)
-          this._unlock_sub_component(node_id)
+          this._unlock_sub_component(node_id, true)
         } else {
           this._select_node(node_id)
           this._deselect_all_but(node_id)
@@ -28654,7 +28661,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           this._unlock_drag_initiated = false
 
-          this._unlock_sub_component(unit_id)
+          this._unlock_sub_component(unit_id, true)
           this._focus_sub_component(unit_id)
         }
       }
@@ -38677,6 +38684,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _blur_datum = (datum_node_id: string, path: number[] = []): void => {
+    // console.log('Graph', '_blur_datum', datum_node_id, path)
+
+    const datum = this._datum[datum_node_id]
+
+    if (datum && datum instanceof Datum) {
+      datum.blurChild(path)
+    }
+  }
+
   private _for_each_unit_pin = (
     unit_id: string,
     callback: (pin_node_id: string, type: IO, pin_id: string) => void,
@@ -38916,8 +38933,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._unlocked_datum.has(datum_node_id)
   }
 
-  private _on_datum_blur = (datum_id: string, { data }: { data: TreeNode }) => {
-    // console.log('Graph', '_on_datum_blur', datum_id, data)
+  private _on_datum_blur = (
+    datum_id: string,
+    { data, path }: { data: TreeNode; path: number[] }
+  ) => {
+    // console.log('Graph', '_on_datum_blur', datum_id, data, path)
 
     const {
       api: {
@@ -41026,7 +41046,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // }
 
     // if (this._core_component_unlocked_count > 0) {
-    if (this._resize_pointer_count === 0) {
+    if (
+      this._resize_pointer_count === 0 &&
+      !this._datum_to_be_focused_by_click
+    ) {
       if (this._control) {
         if (!this._control_lock) {
           // if (this._focused) {
