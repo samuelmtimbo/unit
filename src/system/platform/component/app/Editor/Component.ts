@@ -20499,6 +20499,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sub_component_id,
             slot_children,
             slot_name,
+            false,
             async () => {
               sub_component_finish_count++
 
@@ -29933,7 +29934,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       // TODO
     }
 
-    prev_layout_layer.layer.$element.style.overflowY = 'hidden'
+    prev_layout_layer.layer.$element.style.overflowY = 'visible'
+    prev_layout_layer.layer.$element.style.overflowX = 'visible'
+
     prev_layout_layer.children.$element.style.overflowY = 'hidden'
 
     this._refresh_all_layout_layer_opacity()
@@ -30090,6 +30093,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           sub_component_id,
           slot_children,
           slot_name,
+          true,
           async () => {
             slot_animation_finished_count += 1
 
@@ -30642,6 +30646,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         parent_id,
         all_children,
         slot_name,
+        true,
         async () => {
           children_finished = true
 
@@ -31562,6 +31567,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     sub_component_id: string,
     children: string[],
     slot_name: string,
+    include_scroll: boolean,
     callback: Callback
   ): Callback => {
     // console.log(
@@ -31569,6 +31575,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   '_animate_layout_append_children',
     //   parent_id,
     //   children,
+    //   include_scroll,
     //   slot_name
     // )
 
@@ -31601,6 +31608,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       pack,
       target,
       true,
+      include_scroll,
       callback
     )
   }
@@ -31611,7 +31619,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     children: string[],
     pack: [string, string, string, string][],
     target: Dict<Component>,
-    shouldExpandSlots: boolean,
+    should_expand_slot: boolean,
+    include_scroll: boolean,
     callback: Callback
   ) => {
     const frame = () => {
@@ -31620,7 +31629,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         slot_name,
         pack,
         target,
-        shouldExpandSlots
+        should_expand_slot,
+        include_scroll
       )
 
       if (
@@ -31714,6 +31724,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       pack,
       target,
       true,
+      true,
       callback
     )
   }
@@ -31747,7 +31758,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
   }
 
-  private _animate_tick_leaf_trait = (leaf_id: string, trait: LayoutNode) => {
+  private _animate_tick_leaf_trait = (
+    leaf_id: string,
+    trait: LayoutNode,
+    include_scroll: boolean
+  ) => {
     const leaf_node = this._leaf_frame_node[leaf_id]
 
     return animateSimulateTick(
@@ -31765,14 +31780,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ['color', ANIMATION_DELTA_TRESHOLD / 100],
       ],
       (n) => {
-        this._animate_leaf_frame_tick(leaf_id, n)
+        this._animate_leaf_frame_tick(leaf_id, n, include_scroll)
       }
     )
   }
 
   private _animate_leaf_frame_tick = (
     leaf_id: string,
-    { x, y, sx, sy, width, height, opacity, fontSize, color }
+    { x, y, sx, sy, width, height, opacity, fontSize, color },
+    include_scroll: boolean
   ) => {
     const leaf_node = this._leaf_frame_node[leaf_id]
     const leaf_frame = this._leaf_frame[leaf_id]
@@ -31800,25 +31816,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       Math.floor(color[3]),
     ]
 
-    // mergeStyle(leaf_frame.$element, {
-    //   left: `${x + this._leaf_layer_offset_x + scrollX}px`,
-    //   top: `${y + this._leaf_layer_offset_y + scrollY}px`,
-    //   width: `${width + 2 * (Math.abs(sx) - 1)}px`,
-    //   height: `${height + 2 * (Math.abs(sy) - 1)}px`,
-    //   transform: `scale(${sx}, ${sy})`,
-    //   opacity: `${opacity}`,
-    //   fontSize: `${fontSize}px`,
-    //   color: `${rgbaToHex(color_)}`
-    // })
+    const scrollX_ = include_scroll ? scrollX : 0
+    const scrollY_ = include_scroll ? scrollY : 0
 
     leaf_frame.$element.style.left = `${
-      x + this._leaf_layer_offset_x + ((Math.abs(sx) - 1) * width) / 2 + scrollX
+      x +
+      this._leaf_layer_offset_x +
+      ((Math.abs(sx) - 1) * width) / 2 +
+      scrollX_
     }px`
     leaf_frame.$element.style.top = `${
       y +
       this._leaf_layer_offset_y +
       ((Math.abs(sy) - 1) * height) / 2 +
-      scrollY
+      scrollY_
     }px`
     leaf_frame.$element.style.width = `${width}px`
     leaf_frame.$element.style.height = `${height}px`
@@ -31833,7 +31844,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     target: Dict<Component>,
     setup: (leaf_id: string, parent_id: string, slot_name: string) => void,
     callback: (leaf_id: string, ended: boolean) => void,
-    shouldExpandSlots: boolean = true
+    should_expand_slot: boolean = true,
+    include_scroll: boolean
   ) => {
     const {
       api: {
@@ -31855,7 +31867,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       leaf_id: string,
       leaf_trait_target: LayoutNode
     ): void => {
-      const ended = this._animate_tick_leaf_trait(leaf_id, leaf_trait_target)
+      const ended = this._animate_tick_leaf_trait(
+        leaf_id,
+        leaf_trait_target,
+        include_scroll
+      )
 
       callback(leaf_id, ended)
     }
@@ -32030,7 +32046,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             slot_id,
             path,
             slot_trait,
-            shouldExpandSlots,
+            should_expand_slot,
             parent_slot_base,
             (leaf_id, leaf_comp) => {
               return this._extract_style(slot_trait, leaf_id, leaf_comp)
@@ -32058,7 +32074,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     slot_name: string,
     pack: [string, string, string, string][],
     target: Dict<Component>,
-    shouldExpandSlot: boolean
+    should_expand_slot: boolean,
+    include_scroll: boolean
   ) => {
     return this._tick_animate_layout_move_children(
       pack,
@@ -32083,7 +32100,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           )
         }
       },
-      shouldExpandSlot
+      should_expand_slot,
+      include_scroll
     )
   }
 
