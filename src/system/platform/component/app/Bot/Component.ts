@@ -824,7 +824,7 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     delete this._pointer_down[pointerId]
     delete this._pointer_down_position[pointerId]
 
-    // AD HOC
+    // Chrome
     // https://bugs.chromium.org/p/chromium/issues/detail?id=1147674
     if (pointerType === 'touch' || pointerType === 'pen') {
       delete this._pointer_position[pointerId]

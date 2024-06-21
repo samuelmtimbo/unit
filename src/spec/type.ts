@@ -183,7 +183,6 @@ export const _getGraphTypeInterface = (
         if (mergeId) {
           const merge = spec.merges[mergeId] ?? {}
 
-          // AD HOC
           if (isEmptyObject(merge)) {
             return
           }

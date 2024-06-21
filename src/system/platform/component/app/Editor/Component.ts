@@ -4941,18 +4941,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     width: number
     height: number
   } => {
-    // AD HOC
-    if (this.$context) {
-      const { $height, $width } = this.$context
-      return {
-        width: $width / 9,
-        height: $height / 9,
-      }
-    } else {
-      return {
-        width: 120,
-        height: 120,
-      }
+    const { $height, $width } = this.$context
+
+    return {
+      width: $width / 9,
+      height: $height / 9,
     }
   }
 
@@ -15725,14 +15718,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private __on_pointer_leave = (pointerId: number) => {
     // console.log('Graph', '_on_pointer_leave')
 
-    const pointer_hover_node_id = this._pointer_id_hover_node_id[pointerId]
-
-    // AD HOC
-    // Safari
-    if (pointer_hover_node_id) {
-      this.__on_node_pointer_leave(pointer_hover_node_id, pointerId)
-    }
-
     this.__on_pointer_up(pointerId)
   }
 
@@ -25691,20 +25676,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
         } else if (all_plug_pin) {
-          // AD HOC there should be only a single exposed pin
-          if (display_node_id.length <= 2) {
-            const ext_node_id = display_node_id[0]
+          const ext_node_id = display_node_id[0]
 
-            const { type, pinId } = segmentPlugNodeId(ext_node_id)
-            for (const unit_id in this._unit_node) {
-              if (this._is_plug_unit_match(type, pinId, unit_id)) {
-                this._set_node_compatible(unit_id)
-              }
+          const { type, pinId } = segmentPlugNodeId(ext_node_id)
+          for (const unit_id in this._unit_node) {
+            if (this._is_plug_unit_match(type, pinId, unit_id)) {
+              this._set_node_compatible(unit_id)
             }
-            for (const pin_node_id in this._pin_node) {
-              if (this._is_plug_pin_match(type, pinId, pin_node_id)) {
-                this._set_node_compatible(pin_node_id)
-              }
+          }
+          for (const pin_node_id in this._pin_node) {
+            if (this._is_plug_pin_match(type, pinId, pin_node_id)) {
+              this._set_node_compatible(pin_node_id)
             }
           }
 
@@ -29102,38 +29084,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _animate_sub_sub_component_leaf(
-    sub_sub_component_base: [string[], Component<any, {}, $Component>][],
-    i: number,
-    sub_sub_component_id: string,
-    sub_sub_component_base_position: Point[],
-    sub_sub_component_base_size: Size[],
-    sub_sub_component: Component<any, {}, $Component>,
-    between_container: Frame,
-    sub_sub_component_parent_id: string,
-    sub_component: Component<any, {}, $Component>,
-    sub_context: Context,
-    draw_rect: (
-      x: number,
-      y: number,
-      width: number,
-      height: number,
-      color: string
-    ) => SVGRectElement,
-    _sub_sub_component_position: Dict<Point>,
-    _sub_sub_component_size: Dict<Size>,
-    sub_sub_component_base_leaf_end_count: number,
-    sub_sub_component_base_length: number,
-    sub_sub_component_end_count: number,
-    sub_sub_components_length: number,
-    unit_id: string
-  ) {
-    return {
-      sub_sub_component_base_leaf_end_count,
-      sub_sub_component_end_count,
-    }
-  }
-
   public cache_subgraph(unit_id: string, graph: Editor_) {
     // console.log('Graph', 'cache_subgraph', unit_id)
 
@@ -29500,9 +29450,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         this._disable_transcend()
         this._hide_transcend(animate)
-
-        // AD HOC
-        this._animating_sub_component_base_id = new Set()
 
         this.dispatchEvent(
           'leave',
@@ -36690,10 +36637,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const link_base = this._link_base[link_id]
 
-    // AD HOC
-    if (link_base) {
-      link_base.$element.style.stroke = color
-    }
+    link_base.$element.style.stroke = color
   }
 
   private _set_link_pin_pin_color = (
@@ -44319,19 +44263,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._pointer_down[pointerId]) {
-      const node_id = this._pointer_id_pressed_node_id[pointerId]
-
-      // AD HOC
-      // Safari on iOS might not emit node "pointerup" event if
-      // there's another element in front of node at the moment
-      if (node_id) {
-        const node_comp = this._get_node_comp(node_id)
-
-        node_comp.$element.dispatchEvent(
-          new PointerEvent('pointerup', { pointerId })
-        )
-      }
-
       delete this._pointer_down[pointerId]
       delete this._pointer_down_position[pointerId]
       delete this._pointer_down_move_count[pointerId]
