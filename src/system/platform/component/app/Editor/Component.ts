@@ -13360,12 +13360,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
 
-          const anchor_node_id = this._get_node_anchor_node_id(node_id)
-          if (anchor_node_id && !this._selected_node_id[anchor_node_id]) {
-            this._set_selected_node_color('none')
-          }
-
           this._refresh_node_color(node_id)
+          this._refresh_selected_node_color()
         }
       }
     } else {
@@ -13515,14 +13511,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { $theme } = this.$context
 
-    // this._reset_node_color(node_id)
-
-    // AD HOC
-    // do not apply mode color during search
-    if (!this._search_hidden) {
-      return
-    }
-
     const color = this._get_color()
 
     if (this.__is_mode_colored(mode)) {
@@ -13643,14 +13631,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _should_color_selected_node = () => {
+    return this._hover_node_count === 0 && this._search_hidden
+  }
+
   private _refresh_selected_node_color = (): void => {
-    this._set_selected_node_color(this._mode)
+    this._reset_selected_node_color()
+
+    if (this._should_color_selected_node()) {
+      this._set_selected_node_color(this._mode)
+    }
   }
 
   private _set_selected_node_color = (mode: Mode): void => {
     for (const selected_node_id in this._selected_node_id) {
-      this._reset_node_color(selected_node_id)
       this.__set_node_mode_color(selected_node_id, mode)
+    }
+  }
+
+  private _reset_selected_node_color = (): void => {
+    for (const selected_node_id in this._selected_node_id) {
+      this._reset_node_color(selected_node_id)
     }
   }
 
@@ -17388,6 +17389,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._animate_current_layer_offset_if_overflown()
     }
+
+    this._refresh_selected_node_color()
   }
 
   private _animate_current_layer_offset_if_overflown() {
@@ -42024,6 +42027,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._ascend_node(new_node_id, pointerId)
 
       this._refresh_node_color(node_id)
+      this._refresh_selected_node_color()
     }
 
     return new_node_id
