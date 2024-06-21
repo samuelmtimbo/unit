@@ -16051,7 +16051,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._state_remove_search_unit()
     } else {
-      this._search_fallback_position = this._world_screen_center()
+      if (this._mode === 'add') {
+        this._search_fallback_position = this._world_screen_center()
+      }
     }
 
     const unit_id = this._new_unit_id(id)
