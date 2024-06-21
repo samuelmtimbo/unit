@@ -107,11 +107,6 @@ export default class Frame extends Element<HTMLDivElement, Props> {
 
     mount(this.$$context)
 
-    // AD HOC
-    if (this._context_unlisten) {
-      this._context_unlisten()
-    }
-
     this._context_unlisten = addListeners(this.$context, [
       makeCustomListener('enabled', this._on_context_enabled),
       makeCustomListener('disabled', this._on_context_disabled),

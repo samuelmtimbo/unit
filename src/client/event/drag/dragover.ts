@@ -22,9 +22,6 @@ export function listenDragOver(
   const dragOverListener = (_event: DragEvent) => {
     const { $context } = component
 
-    // AD HOC
-    _event.preventDefault()
-
     const event: IODragEvent = {
       ...applyContextTransformToPointerEvent($context, _event),
       dataTransfer: null,

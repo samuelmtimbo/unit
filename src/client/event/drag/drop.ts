@@ -22,9 +22,6 @@ export function listenDrop(
   const dropListener = (_event: DragEvent) => {
     const { $context } = component
 
-    // AD HOC
-    _event.preventDefault()
-
     const { dataTransfer } = _event
 
     const event = {

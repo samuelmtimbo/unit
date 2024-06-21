@@ -82,12 +82,15 @@ export function componentClassFromSpec<
       let i = 0
       for (const _slot of slots) {
         const [slot, slotSlot] = _slot
+
         const subComponent = this.$subComponent[slot]
-        // AD HOC
+
         const slotName = i === 0 ? 'default' : `${i}`
+
         this.$slot[slotName] = subComponent.$slot[slotSlot]
         this.$slotId[slotName] = slot
         this.$slotTarget[slotName] = slotSlot
+
         i++
       }
 

@@ -116,9 +116,7 @@ export default class Modes extends Element<HTMLDivElement, Props> {
 
       const icon = MODE_ICON[mode]
       const shortcut = MODE_SHORTCUT[mode]
-      // AD HOC
-      // Safari will ignore flex gap if immediate child of `display: contents;` parent is svg
-      // surround SVG in a container due to Safari bug
+
       const mode_button_container = new Div(
         {
           style: {

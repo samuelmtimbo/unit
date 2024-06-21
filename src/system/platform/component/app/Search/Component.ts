@@ -1221,8 +1221,8 @@ export default class Search extends Element<HTMLDivElement, Props> {
     if (!this._list_hidden && this._selected_id) {
       setTimeout(() => {
         if (this._selected_id) {
-          // AD HOC
-          // on Safari apparently selecting the input might inadvertedly refocus it,
+          // Safari
+          // apparently selecting the input might inadvertedly refocus it,
           // which is certainly unexpected, so this call must absolutely
           // come before dispatching a (possibly side-effecting) event
           this._select_all()

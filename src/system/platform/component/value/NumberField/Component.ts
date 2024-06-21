@@ -41,7 +41,7 @@ export default class NumberField extends Field<HTMLInputElement, Props> {
     } = $system
 
     this.$element.type = 'number'
-    // BUG
+
     // Chrome
     // inputMode 'none' not working on mobile for input type number
     if (defaultInputModeNone) {
