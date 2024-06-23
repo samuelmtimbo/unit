@@ -22,6 +22,8 @@ export interface IOMouseEvent {
   offsetY: number
   screenX: number
   screenY: number
+  pageX: number
+  pageY: number
 }
 
 export interface UnitPointerEvent extends IOMouseEvent {
@@ -36,11 +38,13 @@ export const applyContextTransformToPointerEvent = (
     clientY: number
     offsetX: number
     offsetY: number
+    pageX: number
+    pageY: number
   }
 ) => {
   const { $x, $y, $sx, $sy, $rz } = context
 
-  const { clientX, clientY, offsetX, offsetY } = event
+  const { clientX, clientY, offsetX, offsetY, pageX, pageY } = event
 
   const tx = clientX - $x
   const ty = clientY - $y
@@ -62,8 +66,8 @@ export const applyContextTransformToPointerEvent = (
     offsetY: t.y,
     screenX: clientX,
     screenY: clientY,
-    // screenX,
-    // screenY,
+    pageX,
+    pageY,
   }
 }
 
@@ -76,6 +80,8 @@ export function makeSyntheticPointerEvent(
     clientY: number
     offsetX: number
     offsetY: number
+    pageX: number
+    pageY: number
   }
 ): UnitPointerEvent {
   const { pointerId, pointerType } = event

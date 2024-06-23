@@ -60,7 +60,7 @@ export function attachGesture(system: System): void {
     } = {},
     callback: (event: PointerEvent, track: Point[]) => void
   ): Unlisten => {
-    const { pointerId, screenX, screenY } = event
+    const { pointerId, screenX, screenY, pageX, pageY } = event
 
     // svg.setPointerCapture(pointerId)
 
@@ -78,7 +78,7 @@ export function attachGesture(system: System): void {
 
     let active = true
 
-    const track: Point[] = [{ x: screenX, y: screenY }]
+    const track: Point[] = [{ x: pageX, y: pageY }]
 
     const pointerMoveListener = (_event: PointerEvent) => {
       // console.log('attachGesture', 'pointerMoveListener')
@@ -86,7 +86,7 @@ export function attachGesture(system: System): void {
       const { pointerId: _pointerId } = _event
 
       if (_pointerId === pointerId) {
-        const { clientX, clientY } = _event
+        const { pageX, pageY } = _event
 
         const outline = getStroke(track, STROKE_OPT)
 
@@ -94,7 +94,7 @@ export function attachGesture(system: System): void {
 
         path.setAttribute('d', d)
 
-        track.push({ x: clientX, y: clientY })
+        track.push({ x: pageX, y: pageY })
       }
     }
 
