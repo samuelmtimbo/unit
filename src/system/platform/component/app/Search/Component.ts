@@ -531,7 +531,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
               this._insert_list_item(spec)
 
               if (!this._list_hidden) {
-                this._filter_list()
+                this._filter_list(true)
               }
             }
           } else if (type === 'delete') {

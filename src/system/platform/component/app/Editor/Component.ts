@@ -43,6 +43,7 @@ import {
   zoomTransformCenteredAt,
 } from '../../../../../client/zoom'
 import { Moment } from '../../../../../debug/Moment'
+import { mirror } from '../../../../../mirror'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
 import { Dict } from '../../../../../types/Dict'
@@ -927,6 +928,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._specs = specs
 
     this._registry = new Registry(specs)
+
+    mirror(this.$system.specs_, this._registry.specs_)
 
     this._pod = graph
 
