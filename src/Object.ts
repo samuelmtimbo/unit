@@ -23,6 +23,15 @@ export class Object_<T extends Object> implements J<T>, V<T> {
     this._obj = obj
   }
 
+  public dispatch = (
+    type: ObjectUpdateType,
+    path: string[],
+    key: string,
+    value: any
+  ) => {
+    return this._dispatch(type, path, key, value)
+  }
+
   private _obj_at_path(path: string[]): Dict<any> {
     let _obj: any = this._obj
     for (const p of path) {
@@ -133,7 +142,7 @@ export class Object_<T extends Object> implements J<T>, V<T> {
 
     delete obj[key]
 
-    if (!obj[key]) {
+    if (obj[key] === undefined) {
       this._dispatch('delete', parent_path, key, value)
     }
   }
