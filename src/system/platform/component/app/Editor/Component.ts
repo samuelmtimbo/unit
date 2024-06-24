@@ -55887,6 +55887,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       setSpec(next_spec.id, next_spec)
+
+      this._register_unit(bundle.unit.id)
     }
 
     const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
@@ -56443,6 +56445,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (subgraph._animating_unit_explosion[unitId]) {
             await subgraph._animating_unit_explosion[unitId]
           }
+
+          this._unregister_unit(bundle.unit.id)
         }
       })()
     }
