@@ -16310,12 +16310,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _get_sub_component_target_parent_id = (): string | null => {
     let parent_id: string | null = null
+
     if (this._tree_layout) {
       const current_layout_layer = this._get_current_layout_layer_id()
+
       if (current_layout_layer) {
         parent_id = current_layout_layer
       }
     }
+
     return parent_id
   }
 
@@ -27086,20 +27089,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _green_click_node = (node_id: string): string | null => {
     if (this._is_node_selected(node_id)) {
       this.copy_selected_nodes(false)
-      // TODO
-      // should return list of nodes for dragging
     } else {
-      // if (this._is_unit_node_id(node_id)) {
-      //   return this._green_click_unit(node_id)
-      // } else if (this._is_link_pin_node_id(node_id)) {
-      //   return this._duplicate_link_pin(node_id)
-      // } else if (this._is_datum_node_id(node_id)) {
-      //   return this._duplicate_datum(node_id)
-      // } else if (this._is_exposed_pin_node_id(node_id)) {
-      //   return this._sim_duplicate_exposed_pin(node_id)
-      // } else {
-      //   return null
-      // }
       if (this._is_link_pin_node_id(node_id)) {
         return this._duplicate_link_pin(node_id)
       }
@@ -27108,6 +27098,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       return node_id
     }
+
     return null
   }
 
@@ -27128,8 +27119,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return null
   }
 
-  private _green_click_datum = () => {}
-
   private _state_duplicate_unit = (unit_id: string): string => {
     // console.log('Graph', '_state_duplicate_unit', unit_id)
 
@@ -27149,7 +27138,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let parent_id: string | null = null
 
     if (this._is_unit_component(new_unit_id)) {
-      parent_id = this._get_sub_component_target_parent_id()
+      parent_id = this._spec_get_sub_component_parent_id(unit_id)
 
       this._spec_append_component(parent_id, new_unit_id)
     }
@@ -41982,7 +41971,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return new_node_id
   }
 
-  private _on_node_green_drag_end = (node_id: string) => {
+  private _on_node_green_drag_end = (
+    cloned_node_id: string,
+    node_id: string
+  ) => {
     const { specs } = this.$props
 
     if (this._is_unit_node_id(node_id)) {
@@ -41994,10 +41986,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const bundle = unitBundleSpec(unit, specs)
 
-      this._pod_add_unit(unit_id, bundle)
+      const actions = []
+
+      const parent_id = this._spec_get_sub_component_parent_id(cloned_node_id)
+
+      actions.push(
+        makeAddUnitAction(
+          unit_id,
+          bundle,
+          undefined,
+          undefined,
+          undefined,
+          parent_id
+        )
+      )
+
+      this._pod.$bulkEdit({ actions })
 
       if (this._is_unit_component(unit_id)) {
-        this._sim_add_sub_component(unit_id)
+        this._sim_add_sub_component(unit_id, {}, undefined, true)
         this._connect_sub_component(unit_id)
       }
 
@@ -44329,7 +44336,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             const green_drag_clone_id = this._green_drag_clone_id
             if (green_drag_clone_id) {
-              this._on_node_green_drag_end(green_drag_clone_id)
+              this._on_node_green_drag_end(
+                this._green_drag_node_id,
+                green_drag_clone_id
+              )
             }
 
             const yellow_drag_clone_id = this._yellow_drag_clone_id
