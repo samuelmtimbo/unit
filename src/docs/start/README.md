@@ -178,7 +178,7 @@ The minimap is useful for navigating the entirety of the graph, especially on sm
 
 ## Drawing
 
-To start Drawing do a Click + Long Press (also known as Click and Hold).
+To start Drawing do a Click + Long Press (also known as Click and Hold) or press Alt.
 
 Draw a line from center to the outside to create an output plug. Inversely, draw a line from the outside to the center to create an input plug.
 
@@ -217,6 +217,14 @@ You can edit a unit from inside.
 To undo last action, press <kbd>Ctrl + Z</kbd>. To redo, press <kbd>Ctrl + Shift + Z</kbd>.
 
 ![](/public/gif/start/38.gif)
+
+## Trasncend
+
+Pulling up the top "transcend" button will wrap the current graph in an editor.
+
+![](/public/gif/start/51.gif)
+
+This is useful for saving your current workspace as part of a new graph.
 
 ## Save | Load
 
