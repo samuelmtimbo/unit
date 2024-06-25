@@ -13,22 +13,30 @@
 
 ## Shortcut
 
-| Combo                                             | Action            |
-| ------------------------------------------------- | ----------------- |
-| <kbd>Ctrl</kbd>\* + <kbd>L</kbd>                  | Toggle Layout     |
-| <kbd>Ctrl</kbd>\* + <kbd>M</kbd>                  | Toggle Map        |
-| <kbd>Ctrl</kbd>\* + <kbd>P</kbd>                  | Toggle Pallete    |
-| <kbd>Ctrl</kbd>\* + <kbd>A</kbd>                  | Toggle Select All |
-| <kbd>Ctrl</kbd>\* + <kbd>;</kbd>                  | Toggle Search     |
-| <kbd>Ctrl</kbd>\* + <kbd>\</kbd>                  | Toggle Microphone |
-| <kbd>Ctrl</kbd>\* + <kbd>/</kbd>                  | Toggle Tooltips   |
-| <kbd>Ctrl</kbd> + <kbd>C</kbd>                    | Copy              |
-| <kbd>Ctrl</kbd> + <kbd>X</kbd>                    | Cut               |
-| <kbd>Ctrl</kbd> + <kbd>V</kbd>                    | Paste             |
-| <kbd>Ctrl</kbd> + <kbd>Z</kbd>                    | Undo              |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> | Redo              |
-| <kbd>Ctrl</kbd> + <kbd>S</kbd>                    | Save              |
-| <kbd>Ctrl</kbd> + <kbd>O</kbd>                    | Open              |
+| Combo                                             | Action              |
+| ------------------------------------------------- | ------------------- |
+| <kbd>Ctrl</kbd>\* + <kbd>L</kbd>                  | Toggle Layout       |
+| <kbd>Ctrl</kbd>\* + <kbd>M</kbd>                  | Toggle Map          |
+| <kbd>Ctrl</kbd>\* + <kbd>P</kbd>                  | Toggle Pallete      |
+| <kbd>Ctrl</kbd>\* + <kbd>A</kbd>                  | Toggle Select All   |
+| <kbd>Ctrl</kbd>\* + <kbd>;</kbd>                  | Toggle Search       |
+| <kbd>Ctrl</kbd>\* + <kbd>\</kbd>                  | Toggle Microphone   |
+| <kbd>Ctrl</kbd>\* + <kbd>/</kbd>                  | Toggle Tooltips     |
+| <kbd>Ctrl</kbd> + <kbd>C</kbd>                    | Copy                |
+| <kbd>Ctrl</kbd> + <kbd>X</kbd>                    | Cut                 |
+| <kbd>Ctrl</kbd> + <kbd>V</kbd>                    | Paste               |
+| <kbd>Ctrl</kbd> + <kbd>Z</kbd>                    | Undo                |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> | Redo                |
+| <kbd>Ctrl</kbd> + <kbd>S</kbd>                    | Save                |
+| <kbd>Ctrl</kbd> + <kbd>O</kbd>                    | Open                |
+| <kbd>Arrow Up</kbd>                               | Next Unit Up        |
+| <kbd>Arrow Down</kbd>                             | Next Unit Down      |
+| <kbd>Arrow Left</kbd>                             | Next Unit Left      |
+| <kbd>Arrow Right</kbd>                            | Next Unit Right     |
+| <kbd>Shift</kbd> + <kbd>Arrow Up</kbd>            | Next Subgraph Up    |
+| <kbd>Shift</kbd> + <kbd>Arrow Down</kbd>          | Next Subgraph Down  |
+| <kbd>Shift</kbd> + <kbd>Arrow Left</kbd>          | Next Subgraph Left  |
+| <kbd>Shift</kbd> + <kbd>Arrow Right</kbd>         | Next Subgraph Right |
 
 \* <kbd>Ctrl</kbd> is optional, but required when typing on Search.
 
