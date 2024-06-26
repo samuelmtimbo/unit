@@ -3,8 +3,6 @@ import { System } from '../../../../system'
 
 export interface Props {}
 
-const DEFAULT_STYLE = {}
-
 export default class Parent extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -22,6 +20,7 @@ export default class Parent extends Element<HTMLDivElement, Props> {
     element.style.display = 'contents'
 
     this.$element = element
+    this.$wrap = true
   }
 
   focus() {
