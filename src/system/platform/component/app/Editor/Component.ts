@@ -30006,8 +30006,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._enter_sub_component_frame(sub_component_id)
       }
 
+      const slot_count = keyCount(all_slot_children)
+
       let parent_animation_finished = false
-      let children_animation_finished = false
+      let children_animation_finished = slot_count === 0
 
       let slot_animation_finished_count = 0
 
@@ -30034,8 +30036,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._remove_sub_component_root_base(child_id)
         }
       }
-
-      const slot_count = keyCount(all_slot_children)
 
       for (const slot_name in all_slot_children) {
         const slot_children = all_slot_children[slot_name]
