@@ -2346,7 +2346,7 @@ export class Component<
 
       const slot = get(this.$slot, slotName)
 
-      slot.memPullParentChild(component, i)
+      slot.memPullParentChild(component)
     } else {
       throw new Error('parent root not found')
     }
@@ -2442,9 +2442,11 @@ export class Component<
     push(this.$parentChildrenSlot, slotName)
   }
 
-  public memPullParentChild(component, _at: number): void {
-    removeAt(this.$parentChildren, _at)
-    removeAt(this.$parentChildrenSlot, _at)
+  public memPullParentChild(component: Component): void {
+    const at = this.$parentChildren.indexOf(component)
+
+    removeAt(this.$parentChildren, at)
+    removeAt(this.$parentChildrenSlot, at)
   }
 
   public memAppendParentChild(
