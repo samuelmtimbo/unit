@@ -42521,8 +42521,40 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._multiselect_area_svg_rect.setProp('width', x1 - x0)
     this._multiselect_area_svg_rect.setProp('height', y1 - y0)
 
+    const on = (node_id: string) => {
+      if (!this._multiselect_area_node[node_id]) {
+        this._multiselect_area_node[node_id] = true
+
+        if (this._selected_node_id[node_id]) {
+          this.deselect_node(node_id)
+        } else {
+          this._select_node(node_id)
+        }
+      }
+    }
+
+    const off = (node_id: string) => {
+      if (this._multiselect_area_node[node_id]) {
+        this._multiselect_area_node[node_id] = false
+
+        this.deselect_node(node_id)
+      }
+    }
+
+    const toggle = (inside: boolean, node_id: string) => {
+      if (inside) {
+        on(node_id)
+      } else {
+        off(node_id)
+      }
+    }
+
     if (this._tree_layout) {
       const children = this._get_current_layout_layer_children()
+
+      const parent_layout_layer = this._get_current_layout_layer()
+
+      const { scrollTop = 0 } = parent_layout_layer.layer.$element
 
       for (let i = 0; i < children.length; i++) {
         const child_id = children[i]
@@ -42532,21 +42564,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const cx = layout_node.x + $width / 2
         const cy = layout_node.y + $height / 2
 
-        if (cx >= x0 && cx <= x1 && cy >= y0 && cy <= y1) {
-          if (!this._multiselect_area_node[child_id]) {
-            this._multiselect_area_node[child_id] = true
-            if (this._selected_node_id[child_id]) {
-              this.deselect_node(child_id)
-            } else {
-              this._select_node(child_id)
-            }
-          }
-        } else {
-          if (this._multiselect_area_node[child_id]) {
-            this._multiselect_area_node[child_id] = false
-            this.deselect_node(child_id)
-          }
-        }
+        const y0_ = y0 + scrollTop
+        const y1_ = y1 + scrollTop
+
+        const inside = cx >= x0 && cx <= x1 && cy >= y0_ && cy <= y1_
+
+        toggle(inside, child_id)
       }
     } else {
       const { x: ix0, y: iy0 } = this._screen_to_world(x0, y0)
@@ -42554,32 +42577,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       for (let node_id in this._node) {
         const node = this.get_node(node_id)
+
         if (this._is_node_selectable(node_id)) {
-          const { x, y, width, height } = node
-          if (
-            // x + width / 2 >= ix0 &&
-            // x - width / 2 <= ix1 &&
-            // y + height / 2 >= iy0 &&
-            // y - height / 2 <= iy1
-            x >= ix0 &&
-            x <= ix1 &&
-            y >= iy0 &&
-            y <= iy1
-          ) {
-            if (!this._multiselect_area_node[node_id]) {
-              this._multiselect_area_node[node_id] = true
-              if (this._selected_node_id[node_id]) {
-                this.deselect_node(node_id)
-              } else {
-                this._select_node(node_id)
-              }
-            }
-          } else {
-            if (this._multiselect_area_node[node_id]) {
-              this._multiselect_area_node[node_id] = false
-              this.deselect_node(node_id)
-            }
-          }
+          const { x, y } = node
+
+          const inside = x >= ix0 && x <= ix1 && y >= iy0 && y <= iy1
+
+          toggle(inside, node_id)
         }
       }
     }
