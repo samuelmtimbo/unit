@@ -66,7 +66,6 @@ export default class At1<T> extends Semifunctional<I<T>, O<T>> {
     this._forward_empty('a[i]')
 
     this._backward('i')
-    this._backward('a')
 
     this._backward('done')
   }
