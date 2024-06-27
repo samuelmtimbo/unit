@@ -10,12 +10,18 @@ export function measureText(
 
   const textMetrics = ctx.measureText(str)
 
-  const { width, fontBoundingBoxAscent, fontBoundingBoxDescent } = textMetrics
+  const {
+    width: textWidth,
+    fontBoundingBoxAscent,
+    fontBoundingBoxDescent,
+  } = textMetrics
 
   const lineHeight =
     Math.abs(fontBoundingBoxAscent) + Math.abs(fontBoundingBoxDescent)
 
-  const lineCount = Math.ceil(width / maxWidth)
+  const lineCount = Math.ceil(textWidth / Math.ceil(maxWidth))
+
+  const width = Math.min(textWidth, maxWidth)
 
   const height = lineHeight * lineCount
 
