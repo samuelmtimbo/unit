@@ -56,20 +56,18 @@ export const expandSlot = (
   let child_leaf_id = slot_id
   let child_leaf_path = (slot_id && slot_id.split('/')) || []
 
-  if (!slot_base_ids) {
-    const sub_component = component.pathGetSubComponent(child_leaf_path)
+  let sub_component = component.pathGetSubComponent(child_leaf_path)
 
+  if (!slot_base_ids) {
     let sub = sub_component
 
     let j = 0
 
     for (let i of path) {
-      if (j === 1) {
-        sub = sub.$parentRoot[i] ?? sub.$root[i]
-      } else if (j == 2) {
-        sub = sub.$parentRoot[i]
+      if (j === 0) {
+        sub = sub.$parentChildren[i]?.getFirstRootLeaf()
       } else {
-        sub = sub.$parentChildren[i]
+        sub = sub.$parentChildren[i] ?? sub.$parentRoot[i] ?? sub.$root[i]
       }
 
       j++
@@ -81,8 +79,8 @@ export const expandSlot = (
 
     let base: LayoutBase = []
 
-    if (path.length >= 1) {
-      const parent_path = getParentPath(sub, component).slice(1)
+    if (path.length > 0) {
+      const parent_path = getParentPath(sub, component)
 
       base = sub.getRootBase().map(([leaf_path, leaf_comp]) => {
         return [[...parent_path, ...leaf_path], leaf_comp]
@@ -116,8 +114,6 @@ export const expandSlot = (
   }
 
   if (path.length === 0) {
-    const sub_component = component.pathGetSubComponent(child_leaf_path)
-
     const base = sub_component.$parentChildren.reduce((acc, parentChild) => {
       const sub_component_id =
         parentChild.$parent.getSubComponentId(parentChild)
@@ -151,7 +147,7 @@ export const expandSlot = (
       return expandSlot(
         component,
         child_leaf_id,
-        path.slice(1),
+        path,
         trait,
         expandChildren,
         {},
@@ -254,7 +250,8 @@ export const reflectComponentBaseTrait = (
   style: Style,
   trait: LayoutNode,
   extractStyle: (leafId: string, component: Component) => Style,
-  shouldExpandSlot: boolean = true
+  shouldExpandSlot: boolean = true,
+  path_: number[] = []
 ): Dict<LayoutNode> => {
   const {
     api: {
@@ -418,7 +415,7 @@ export const reflectComponentBaseTrait = (
 
       const slot_id = children[head]
 
-      return expand_slot(slot_id, tail)
+      return expand_slot(slot_id, [...path_, ...tail])
     }
   )
 
@@ -446,7 +443,7 @@ export const reflectComponentBaseTrait = (
       slot_all_style,
       [],
       (path) => {
-        return expand_slot(slot_id, path)
+        return expand_slot(slot_id, [...path_, ...path])
       }
     )
 

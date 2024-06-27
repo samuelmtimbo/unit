@@ -18,7 +18,8 @@ const fitChildren = (
   childrenOpacity: number[],
   childrenSx: number[],
   childrenSy: number[],
-  expandChild: (path: number[]) => Style[]
+  expandChild: (path: number[]) => Style[],
+  forceExpandChildren: boolean
 ) => {
   let i = 0
 
@@ -75,7 +76,9 @@ const fitChildren = (
     const fitHeight =
       childHeightStr === 'fit-content' || childHeightStr === 'auto'
 
-    if (fitWidth || fitHeight || displayContents) {
+    const shouldExpand = fitWidth || fitHeight || displayContents
+
+    if (shouldExpand || forceExpandChildren) {
       const childPath = [...path, i]
 
       const childChildrenStyle = expandChild(childPath)
@@ -90,7 +93,8 @@ const fitChildren = (
         [],
         [],
         [],
-        expandChild
+        expandChild,
+        shouldExpand
       )
     }
 
@@ -146,7 +150,8 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
         childrenOpacity,
         childrenSx,
         childrenSy,
-        expandChild
+        expandChild,
+        false
       )
 
       window.document.body.appendChild(parentNode)

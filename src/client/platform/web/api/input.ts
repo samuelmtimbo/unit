@@ -56,9 +56,7 @@ export function webInput(
     pointers[pointerId].down = true
   }
 
-  const pointerUpListener = (event) => {
-
-  }
+  const pointerUpListener = (event) => {}
 
   const pointerCancelListener = (event) => {
     //
