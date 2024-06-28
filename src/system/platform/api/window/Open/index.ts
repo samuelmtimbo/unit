@@ -76,7 +76,6 @@ export default class Open extends Semifunctional<I, O> {
       async send(data: any): Promise<void> {
         const _data = stringify(data)
 
-        // TODO should channel get "target" argument?
         _window.postMessage(_data, '*')
 
         return

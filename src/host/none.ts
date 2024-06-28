@@ -207,6 +207,7 @@ export function noHost(): API {
       PositionObserver: null,
       ResizeObserver: null,
       IntersectionObserver: null,
+      pictureInPictureElement: undefined,
     },
     querystring: {
       stringify: function (obj: Dict<any>): string {
@@ -279,6 +280,9 @@ export function noHost(): API {
         throw new MethodNotImplementedError()
       },
       clearInterval: function (timer: any): void {
+        throw new MethodNotImplementedError()
+      },
+      nextTick: function (callback: () => any) {
         throw new MethodNotImplementedError()
       },
     },

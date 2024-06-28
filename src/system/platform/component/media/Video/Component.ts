@@ -1,4 +1,4 @@
-import applyAttr from '../../../../../client/applyAttr'
+import { mergeAttr } from '../../../../../client/attr'
 import { Element } from '../../../../../client/element'
 import { PropHandler, htmlPropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
@@ -55,7 +55,7 @@ export default class VideoComp
       this.$element.src = src
     }
     if (attr) {
-      applyAttr(this.$element, attr)
+      mergeAttr(this.$element, attr)
     }
 
     this.$element.autoplay = autoplay

@@ -1,5 +1,6 @@
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -15,8 +16,12 @@ export interface Props {
   orient?: string
 }
 
+export const DEFAULT_STYLE = {}
+
 export default class SVGMarker extends Element<SVGMarkerElement, Props> {
   private _marker_el: SVGMarkerElement
+
+  private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -61,12 +66,13 @@ export default class SVGMarker extends Element<SVGMarkerElement, Props> {
     this._marker_el = marker_el
 
     this.$element = marker_el
+
+    this._prop_handler = {
+      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+    }
   }
 
-  // TODO
   onPropChanged(prop: string, current: any): void {
-    if (prop === 'style') {
-      applyStyle(this._marker_el, current)
-    }
+    this._prop_handler[prop](current)
   }
 }

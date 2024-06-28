@@ -192,6 +192,7 @@ export type API = {
     getComputedStyle: (element: Element) => CSSStyleDeclaration
     setTimeout(callback: () => any, ms: number): any
     setInterval(callback: () => any, ms: number): any
+    nextTick(callback: () => any): any
     clearTimeout(timer: any): void
     clearInterval(timer: any): void
   }

@@ -574,11 +574,6 @@ export function rectangleRegion(
 
 export type Shape = 'circle' | 'rect'
 
-// TODO
-export function bezierSpline(): Point[] {
-  return []
-}
-
 export function isInside(a: Thing, b: Thing, offset: number = 0): boolean {
   if (a.shape === 'circle' && b.shape === 'circle') {
     return distance(a.x, a.y, b.x, b.y) <= b.r - a.r + offset

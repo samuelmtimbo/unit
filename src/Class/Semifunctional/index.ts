@@ -188,11 +188,6 @@ export class Semifunctional<
         functional.addOutput(name, pin, opt)
       }
     )
-    // TODO
-    // this.addListener('remove_input', this._onInputRemoved)
-    // this.addListener('remove_output', this._onOutputRemoved)
-    // this.addListener('rename_input', this._onInputRenamed)
-    // this.addListener('rename_output', this._onOutputRenamed)
   }
 
   f(i: Partial<I>, done: Done<O>) {}

@@ -1,4 +1,4 @@
-import applyAttr from '../../../../client/applyAttr'
+import { mergeAttr } from '../../../../client/attr'
 import { namespaceURI } from '../../../../client/component/namespaceURI'
 import { Element } from '../../../../client/element'
 import { ensureIcon } from '../../../../client/ensureIcon'
@@ -88,7 +88,7 @@ export default class Icon extends Element<SVGSVGElement, Props> {
       $element.appendChild(title_el)
     }
     if (attr) {
-      applyAttr($element, attr)
+      mergeAttr($element, attr)
     }
     this._svg_el = $element
 

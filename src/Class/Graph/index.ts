@@ -6337,9 +6337,9 @@ export class Graph<I = any, O = any>
             }
           },
           moveUnit: (data: GraphMoveUnitData) => {
-            const {} = data
+            const { id, unitId, inputId } = data
 
-            // TODO
+            this.moveUnit(id, unitId, inputId)
           },
           moveSubgraphInto: (data: GraphMoveSubGraphIntoData) => {
             const {
@@ -6406,7 +6406,6 @@ export class Graph<I = any, O = any>
 
             this._reorderSubComponent(parentId, childId, to, fork, bubble)
           },
-          // TODO move removePinData to Unit's bulkEdit
           removePinData: (data: UnitRemovePinDataData) => {
             const { type, pinId } = data
 

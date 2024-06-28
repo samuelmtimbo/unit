@@ -2,6 +2,10 @@ import { API } from '../../../../API'
 import { BootOpt } from '../../../../system'
 
 export function webWindow(window: Window, opt: BootOpt): API['window'] {
+  const nextTick = (callback: () => void) => {
+    window.setTimeout(callback, 0)
+  }
+
   const _window: API['window'] = {
     // @ts-ignore
     Notification: window.Notification,
@@ -37,6 +41,7 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
     setInterval: window.setInterval,
     clearTimeout: window.clearTimeout,
     clearInterval: window.clearInterval,
+    nextTick,
   }
 
   return _window

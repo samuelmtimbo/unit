@@ -23,9 +23,6 @@ export default class Minimal extends Element<SVGElement, Props> {
 
     const { id, className, style } = $props
 
-    const width: number = 80
-    const height: number = 16
-
     const svg = new SVGSVG(
       {
         className: classnames('unit-minimal', className),

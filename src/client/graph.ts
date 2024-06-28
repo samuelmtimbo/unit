@@ -312,14 +312,17 @@ const _build_subgraph = (
   })
 }
 
-// TODO optimize
 export const makeRelated = (graph: GraphNodeMap): SubGraphNode => {
   const related: Dict<any> = {}
+
   forEachValueKey(graph, (_, id) => {
     const relatedTo = new Set<string>([id])
+
     setConnectedTo(id, graph, relatedTo)
+
     related[id] = relatedTo
   })
+
   return related
 }
 
