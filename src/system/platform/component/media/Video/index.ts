@@ -1,7 +1,6 @@
 import { ElementEE, Element_ } from '../../../../../Class/Element'
 import { Unit } from '../../../../../Class/Unit'
 import { System } from '../../../../../system'
-import { Callback } from '../../../../../types/Callback'
 import { CS } from '../../../../../types/interface/CS'
 import { IM } from '../../../../../types/interface/IM'
 import { ME } from '../../../../../types/interface/ME'
@@ -75,8 +74,13 @@ export default class Video
     return localComponent.$element
   }
 
-  requestPictureInPicture(callback: Callback<PictureInPictureWindow>): void {
-    // TODO
+  async requestPictureInPicture(): Promise<HTMLVideoElement> {
+    const localComponent = (await firstGlobalComponentPromise(
+      this.__system,
+      this.__global_id
+    )) as VideoComp
+
+    return localComponent.requestPictureInPicture()
   }
 
   public mediaPlay(): void {

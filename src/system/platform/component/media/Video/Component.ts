@@ -120,10 +120,10 @@ export default class VideoComp
     }
   }
 
-  async requestPictureInPicture(): Promise<any> {
+  async requestPictureInPicture(): Promise<HTMLVideoElement> {
     if (this.$element.requestPictureInPicture) {
       try {
-        return await this.$element.requestPictureInPicture()
+        return this.$element
       } catch (err) {
         switch (err.name) {
           case 'InvalidStateError':

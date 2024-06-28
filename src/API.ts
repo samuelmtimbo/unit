@@ -210,6 +210,7 @@ export type API = {
     getSelection(): Selection
     createRange(): Range
     exitPictureInPicture(): Promise<void>
+    pictureInPictureElement: Element
 
     MutationObserver: { new (callback: MutationCallback): MutationObserver }
     PositionObserver: PositionObserverCostructor
