@@ -57,6 +57,7 @@ export function webDocument(
     ResizeObserver: ResizeObserver,
     PositionObserver: PositionObserver_,
     IntersectionObserver: IntersectionObserver,
+    pictureInPictureElement: document.pictureInPictureElement,
   }
 
   return _document
