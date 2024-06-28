@@ -1,8 +1,9 @@
+import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
+
 const SCROLLABLE_OVERFLOW = ['auto', 'scroll']
 
 export function hasScrollbar(): boolean {
-  // TODO
-  return true
+  throw new MethodNotImplementedError()
 }
 
 export function isScrollableChild(

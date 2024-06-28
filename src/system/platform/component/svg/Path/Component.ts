@@ -1,4 +1,4 @@
-import applyAttr from '../../../../../client/applyAttr'
+import { mergeAttr } from '../../../../../client/attr'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { PropHandler } from '../../../../../client/propHandler'
@@ -99,7 +99,8 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
 
     path_el.setAttribute('d', d)
 
-    applyAttr(path_el, attr)
+    mergeAttr(path_el, attr)
+
     applyStyle(path_el, { ...DEFAULT_STYLE, ...style })
 
     this._path_el = path_el

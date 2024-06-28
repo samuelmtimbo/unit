@@ -85,7 +85,7 @@ export class Element_<
     this.addListener('set', (name: keyof I, data) => {
       const {
         api: {
-          window: { setTimeout },
+          window: { nextTick },
         },
       } = this.__system
 
@@ -111,12 +111,11 @@ export class Element_<
       ) {
         this._backwarding = true
 
-        // TODO add to end of event queue
-        setTimeout(() => {
+        nextTick(() => {
           this._input?.[name]?.pull()
 
           this._backwarding = false
-        }, 0)
+        })
       }
     })
 

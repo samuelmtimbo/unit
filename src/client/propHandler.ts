@@ -1,6 +1,6 @@
 import { Style } from '../system/platform/Style'
 import { Dict } from '../types/Dict'
-import applyAttr from './applyAttr'
+import { mergeAttr } from './attr'
 import { Component } from './component'
 import { applyDynamicStyle, applyStyle } from './style'
 
@@ -66,7 +66,7 @@ export function basePropHandler(
       element.setAttribute('name', name)
     },
     attr: (attr) => {
-      applyAttr(element, attr)
+      mergeAttr(element, attr)
     },
     style: (style: Dict<string> | undefined = {}) => {
       applyStyle(element, { ...DEFAULT_STYLE, ...style })

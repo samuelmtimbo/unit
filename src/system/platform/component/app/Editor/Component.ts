@@ -114,7 +114,7 @@ import {
   ifLinearTransition,
   linearTransition,
 } from '../../../../../client/animation/animation'
-import { setAttributes } from '../../../../../client/attr'
+import { mergeAttr } from '../../../../../client/attr'
 import classnames from '../../../../../client/classnames'
 import {
   RGBA,
@@ -1054,7 +1054,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.$unbundled = false
     this.$primitive = true
 
-    setAttributes(this.$element as HTMLElement, attr ?? {})
+    mergeAttr(this.$element as HTMLElement, attr ?? {})
 
     this.setSubComponents({
       background,
@@ -1680,7 +1680,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     } else if (prop === 'attr') {
       const attr = current ?? {}
 
-      setAttributes(this.$element as HTMLElement, attr)
+      mergeAttr(this.$element as HTMLElement, attr)
     } else if (prop === 'disabled') {
       this._editor.setProp('disabled', current)
     } else if (prop === 'graph') {
@@ -3281,8 +3281,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const area_select_svg = new SVGSVG(
       {
         className: 'graph-area-select-svg',
-        width: 0,
-        height: 0,
+        attr: {
+          width: `0`,
+          height: `0`,
+        },
         style: {
           display: 'none',
           width: '0',
@@ -14857,20 +14859,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     layout_core.$element.style.transform = `translate(-50%, -50%) scale(${sx}, ${sy})`
   }
 
-  private _set_layout_core_opacity = (
-    sub_component_id: string,
-    opacity: number
-  ): void => {
-    // TODO
-  }
-
-  private _set_layout_core_font_size = (
-    sub_component_id: string,
-    font_size: number
-  ) => {
-    // TOOD
-  }
-
   private __resize_layout_core = (
     unit_id: string,
     width: number,
@@ -15408,8 +15396,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       {
         // id: link_base_id,
         className: 'link-base',
-        markerStart: `url(#${link_start_start_id})`,
-        markerEnd: `url(#${link_end_id})`,
+        attr: {
+          markerStart: `url(#${link_start_start_id})`,
+          markerEnd: `url(#${link_end_id})`,
+        },
         style: {
           display: hidden ? 'none' : 'block',
           strokeWidth: `${strokeWidth}`,
@@ -16450,24 +16440,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._tree_layout) {
       this._layout_scroll_search_unit_into_view()
     }
-  }
-
-  // TODO
-  private _swap_pointer_pressed_node = (
-    pointer_id: number,
-    node_id: string
-  ): void => {
-    const hovered_node_id = this._pointer_id_hover_node_id[pointer_id]
-    if (hovered_node_id) {
-      this._set_node_hovered(hovered_node_id, pointer_id, false)
-    }
-    this._set_node_hovered(node_id, pointer_id, true)
-
-    const pressed_node_id = this._pointer_id_pressed_node_id[pointer_id]
-    if (pressed_node_id) {
-      this.__set_node_pressed(pressed_node_id, pointer_id, false)
-    }
-    this.__set_node_pressed(pressed_node_id, pointer_id, true)
   }
 
   private _set_unit_layer = (unit_id: string, layer: number): void => {
@@ -19341,9 +19313,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           this._scale_layout_core_x(sub_component_id, sx)
           this._scale_layout_core_y(sub_component_id, sy)
-
-          this._set_layout_core_opacity(sub_component_id, opacity)
-          this._set_layout_core_font_size(sub_component_id, fontSize)
         },
         () => {
           delete this._layout_core_abort_animation[sub_component_id]

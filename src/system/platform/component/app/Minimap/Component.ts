@@ -92,14 +92,15 @@ export default class Minimap extends Element<HTMLDivElement, Props> {
     const svg = new SVGSVG(
       {
         className: 'minimap',
-        width,
-        height,
+        attr: {
+          width: `${width}`,
+          height: `${height}`,
+        },
         style: {
           ...DEFAULT_STYLE,
           ...style,
         },
         viewBox: '0 0 0 0',
-        tabIndex: -1,
       },
       this.$system
     )

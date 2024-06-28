@@ -1,5 +1,4 @@
 import { Unit } from '../../../../../Class/Unit'
-import { EventEmitter_ } from '../../../../../EventEmitter'
 import { ObjectUpdateType } from '../../../../../ObjectUpdateType'
 import {
   getAllLocalStorage,
@@ -34,8 +33,6 @@ export default class _LocalStorage
       ID_LOCAL_STORAGE
     )
   }
-
-  private ___emitter = new EventEmitter_()
 
   subscribe(
     path: string[],

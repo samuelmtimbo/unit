@@ -1167,7 +1167,7 @@ export class Unit<
     const output = mapObjVK(this._output, (output) => {
       const ignored = output.ignored()
       const constant = output.constant()
-      const data = undefined // TODO
+      const data = undefined
 
       return {
         ignored,

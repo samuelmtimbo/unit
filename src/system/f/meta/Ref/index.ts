@@ -1,6 +1,5 @@
 import { $ } from '../../../../Class/$'
 import { Functional } from '../../../../Class/Functional'
-import { staticfy } from '../../../../spec/staticfy'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { J } from '../../../../types/interface/J'
@@ -69,9 +68,7 @@ export default class Ref<T, K extends keyof T> extends Functional<
       async read(): Promise<any> {
         _value = await obj.get(key)
 
-        const v = staticfy(_value)
-
-        return v
+        return _value
       }
 
       async write(data: any): Promise<void> {

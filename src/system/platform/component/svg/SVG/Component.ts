@@ -1,4 +1,4 @@
-import applyAttr from '../../../../../client/applyAttr'
+import { mergeAttr } from '../../../../../client/attr'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { applyStyle } from '../../../../../client/style'
@@ -20,6 +20,8 @@ export interface Props {
   tabIndex?: number
 }
 
+export const DEFAULT_ATTR = {}
+
 export const DEFAULT_STYLE = {
   display: 'block',
   width: '100%',
@@ -40,8 +42,6 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
       className,
       style = {},
       attr = {},
-      width,
-      height,
       stroke = 'currentColor',
       strokeWidth = 0,
       viewBox,
@@ -64,12 +64,6 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
     if (preserveAspectRatio) {
       svg_el.setAttribute('preserveAspectRatio', preserveAspectRatio)
     }
-    if (width !== undefined) {
-      svg_el.setAttribute('width', `${width}`)
-    }
-    if (height !== undefined) {
-      svg_el.setAttribute('height', `${height}`)
-    }
     if (tabIndex !== undefined) {
       svg_el.tabIndex = tabIndex
     }
@@ -90,7 +84,9 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
     svg_el.setAttribute('preserveAspectRatio', 'xMidYMid meet')
 
     applyStyle(svg_el, { ...DEFAULT_STYLE, ...style })
-    applyAttr(svg_el, attr)
+
+    mergeAttr(svg_el, attr)
+
     this._svg_el = svg_el
 
     this.$element = svg_el
@@ -104,7 +100,7 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
     } else if (prop === 'style') {
       applyStyle(this._svg_el, { ...DEFAULT_STYLE, ...current })
     } else if (prop === 'attr') {
-      applyAttr(this._svg_el, current ?? {})
+      mergeAttr(this._svg_el, current ?? {})
     } else if (prop === 'viewBox') {
       if (current === undefined) {
         this._svg_el.removeAttribute('viewBox')

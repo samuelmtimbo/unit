@@ -54,10 +54,12 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
     const svg = new SVGSVG(
       {
         className: classnames('unit-class', className),
-        width,
-        height,
+        attr: {
+          width: `${width}`,
+          height: `${height}`,
+          ...attr,
+        },
         style: this._style(),
-        attr,
         viewBox: `-1 -1 ${width + 2} ${height + 2}`,
       },
       this.$system

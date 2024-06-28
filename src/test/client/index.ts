@@ -1,6 +1,5 @@
 import './component'
 import './lineWrap'
-import './parseBorder'
 import './parseLayoutValue'
 import './parseTransform'
 import './system'

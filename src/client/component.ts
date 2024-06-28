@@ -287,18 +287,38 @@ export class Component<
     })
   }
 
+  private _attachTextUnlisten: Dict<Unlisten> = {}
+
   attachText(type: string, text: string): void {
+    if (this._attachTextUnlisten[type]) {
+      this.dettachText(type)
+    }
+
     const base = this.getRootBase()
 
+    const unlistenAll = []
+
     for (const [_, leaf] of base) {
-      leaf.$element.addEventListener('dragstart', (event: DragEvent) => {
+      const listener = (event: DragEvent) => {
         event.dataTransfer.setData(type, text)
+      }
+
+      leaf.$element.addEventListener('dragstart', listener)
+
+      unlistenAll.push(() => {
+        leaf.$element.removeEventListener('dragstart', listener)
       })
     }
+
+    this._attachTextUnlisten[type] = callAll(unlistenAll)
   }
 
-  dettachText(type: string, text: string): void {
-    // TODO
+  dettachText(type: string): void {
+    const unlisten = this._attachTextUnlisten[type]
+
+    if (unlisten) {
+      unlisten()
+    }
   }
 
   attachDropTarget(): void {
@@ -1457,7 +1477,7 @@ export class Component<
 
       if (this.$node instanceof Text) {
         // TODO
-        return
+        return { x: 0, y: 0, width: 0, height: 0 }
       }
 
       const { $x, $y, $sx, $sy } = this.$context
