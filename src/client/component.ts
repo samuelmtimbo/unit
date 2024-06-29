@@ -502,6 +502,8 @@ export class Component<
 
   private $detached: boolean = false
 
+  private _baseAnimationAbort: Unlisten
+
   private _animateBase = (
     base: LayoutBase,
     hostSlot: Component<any>,
@@ -716,6 +718,12 @@ export class Component<
 
     this.$detached = true
 
+    if (this._baseAnimationAbort) {
+      this._baseAnimationAbort()
+
+      this._baseAnimationAbort = undefined
+    }
+
     const hostGlobalId = host.replace('unit://', '')
 
     const hosts = getLocalComponents(hostGlobalId)
@@ -764,7 +772,13 @@ export class Component<
     this.$returnIndex = index
 
     if (animate) {
-      this._animateBase(base, hostSlot, false, prepend, commit)
+      this._baseAnimationAbort = this._animateBase(
+        base,
+        hostSlot,
+        false,
+        prepend,
+        commit
+      )
     } else {
       this.domRemoveBase(base)
 
@@ -782,6 +796,12 @@ export class Component<
     const { animate } = opt
 
     this.$detached = false
+
+    if (this._baseAnimationAbort) {
+      this._baseAnimationAbort()
+
+      this._baseAnimationAbort = undefined
+    }
 
     const base = this.getRootBase()
 
@@ -828,11 +848,17 @@ export class Component<
 
         const targetSlot = this.$detachedSlotParent
 
-        this._animateBase([leaf], targetSlot, true, false, () => {
-          leafEnd++
+        this._baseAnimationAbort = this._animateBase(
+          [leaf],
+          targetSlot,
+          true,
+          false,
+          () => {
+            leafEnd++
 
-          couple(leafComp)
-        })
+            couple(leafComp)
+          }
+        )
       }
     } else {
       for (let i = 0; i < base.length; i++) {
