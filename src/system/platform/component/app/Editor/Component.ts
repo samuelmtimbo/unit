@@ -30338,7 +30338,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._foreground.$element.style.pointerEvents = 'none'
 
           this._unclear_main(animate)
-          this._clear_foreground(animate)
 
           if (animate) {
             setTimeout(() => {
@@ -30358,7 +30357,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._foreground.appendChild(editor)
 
       this._clear_main(animate)
-      this._unclear_foreground(animate)
 
       this._main.$element.style.pointerEvents = 'none'
       this._foreground.$element.style.pointerEvents = 'inherit'
