@@ -52,7 +52,10 @@ import { addVector } from './util/geometry'
 import { Rect } from './util/geometry/types'
 import { getFontSize } from './util/style/getFontSize'
 import { getOpacity } from './util/style/getOpacity'
-import { getRelativePosition } from './util/style/getPosition'
+import {
+  getRelativePosition,
+  getScrollPosition,
+} from './util/style/getPosition'
 import { getRect } from './util/style/getRect'
 import { Scale, getScale } from './util/style/getScale'
 import { getSize } from './util/style/getSize'
@@ -593,6 +596,11 @@ export class Component<
 
       leafFrames.push(leafFrame)
 
+      const { x: scrollX0, y: scrollY0 } = getScrollPosition(
+        hostTarget.$element,
+        hostTarget.$context.$element
+      )
+
       const abortAnimation = animateSimulate(
         this.$system,
         leafTrait,
@@ -601,15 +609,25 @@ export class Component<
         },
         ANIMATION_PROPERTY_DELTA_PAIRS,
         ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
+          const { x: scrollX, y: scrollY } = getScrollPosition(
+            hostTarget.$element,
+            hostTarget.$context.$element
+          )
+
+          const scrollDx = scrollX - scrollX0
+          const scrollDy = scrollY - scrollY0
+
           leafFrame.style.left = `${
             x -
             (reverse ? this.$context.$x : hostTrait.x) +
-            ((Math.abs(sx) - 1) * width) / 2
+            ((Math.abs(sx) - 1) * width) / 2 -
+            scrollDx
           }px`
           leafFrame.style.top = `${
             y -
             (reverse ? this.$context.$y : hostTrait.y) +
-            ((Math.abs(sy) - 1) * height) / 2
+            ((Math.abs(sy) - 1) * height) / 2 -
+            scrollDy
           }px`
           leafFrame.style.width = `${width}px`
           leafFrame.style.height = `${height}px`
