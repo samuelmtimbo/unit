@@ -1,5 +1,5 @@
 {
-  "name": "input",
+  "name": "pin",
   "inputs": {
     "unit": {
       "type": "`U`",
@@ -7,6 +7,9 @@
     },
     "name": {
       "type": "string"
+    },
+    "type": {
+      "type": "'input'|'output'"
     },
     "done": {
       "type": "any",
@@ -21,11 +24,11 @@
   },
   "metadata": {
     "icon": "unit",
-    "description": "reference `unit` input `name`",
+    "description": "reference `unit` pin with `type` and `name`",
     "complexity": 3,
-    "tags": ["platform", "ref", "unit"]
+    "tags": ["platform", "unit"]
   },
-  "id": "4ae69887-a087-4d37-8743-d83ca48184d1",
+  "id": "fd4f28bb-9114-46b4-92d2-5dfcaaf7d65b",
   "type": "`U`",
   "base": true,
   "system": true
