@@ -480,7 +480,7 @@ export class Graph<I = any, O = any>
   private _plugToWaitAll = (type: IO, name: string): void => {
     const oppositeType = opposite(type)
 
-    const pin = new Pin()
+    const pin = new Pin({}, this.__system)
 
     const oppositePin = this.getExposedPin(type, name)
 
@@ -608,7 +608,7 @@ export class Graph<I = any, O = any>
     if (!this._pin[mergePinNodeId]) {
       const oppositeType = opposite(type)
 
-      mergePin = new Pin()
+      mergePin = new Pin({}, this.__system)
 
       this._pin[mergePinNodeId] = mergePin
 
@@ -624,7 +624,7 @@ export class Graph<I = any, O = any>
     if (!this._pin[mergePinNodeId]) {
       const oppositeType = opposite(type)
 
-      const mergePin = new Pin()
+      const mergePin = new Pin({}, this.__system)
 
       this._pin[mergePinNodeId] = mergePin
 
@@ -1338,7 +1338,7 @@ export class Graph<I = any, O = any>
   ): void => {
     // console.log('Graph', '_exposePinSet', type, pinId, pinSpec, data, propagate)
 
-    const exposedPin = new Pin({ data })
+    const exposedPin = new Pin({ data }, this.__system)
 
     const exposeMerge = new Merge(this.__system)
     const exposedMergeOpposite = new Merge(this.__system)
@@ -1375,7 +1375,7 @@ export class Graph<I = any, O = any>
 
     const { ref } = pinSpec
 
-    const exposedPin = new Pin({ ref })
+    const exposedPin = new Pin({ ref }, this.__system)
 
     const exposedMerge = new Merge(this.__system)
     const exposedMergeOpposite = new Merge(this.__system)
@@ -2231,7 +2231,7 @@ export class Graph<I = any, O = any>
     )
 
     if (!emptySubPin) {
-      emptySubPin = new Pin()
+      emptySubPin = new Pin({}, this.__system)
 
       deepSet(this._exposedEmptySubPin, [type, pinId, subPinId], emptySubPin)
     }
@@ -4265,7 +4265,7 @@ export class Graph<I = any, O = any>
 
     const mergeInputPinId = getMergePinNodeId(mergeId, 'input')
 
-    const mergeInputPin = new Pin()
+    const mergeInputPin = new Pin({}, this.__system)
 
     merge.addInput(mergeInputPinId, mergeInputPin)
 

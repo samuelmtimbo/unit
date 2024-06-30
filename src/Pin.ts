@@ -1,5 +1,6 @@
-import { EventEmitter_, EventEmitter_EE } from './EventEmitter'
+import { $, $Events } from './Class/$'
 import { isPrimitive } from './spec/primitive'
+import { System } from './system'
 import { PI } from './types/interface/PI'
 import { V } from './types/interface/V'
 
@@ -34,7 +35,7 @@ export type Pin_M<T = any> = {
   _idle: boolean
 }
 
-export type PinEvents<T> = EventEmitter_EE<Pin_EE<T>> & Pin_EE<T>
+export type PinEvents<T> = $Events<Pin_EE<T>> & Pin_EE<T>
 
 export type PinConstructor = {
   data?: any
@@ -43,10 +44,9 @@ export type PinConstructor = {
   ref?: boolean
 }
 
-export class Pin<T = any>
-  extends EventEmitter_<PinEvents<T>>
-  implements V<T>, PI<T>
-{
+export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
+  __ = ['V', 'PI']
+
   private _constant: boolean = false
   private _ignored: boolean = false
   private _ref: boolean = false
@@ -54,8 +54,11 @@ export class Pin<T = any>
   private _idle: boolean = true
   private _register: T | undefined = undefined
 
-  constructor({ data, constant, ignored, ref }: PinConstructor = {}) {
-    super()
+  constructor(
+    { data, constant, ignored, ref }: PinConstructor = {},
+    $system: System
+  ) {
+    super($system)
 
     if (data !== undefined) {
       this._idle = false

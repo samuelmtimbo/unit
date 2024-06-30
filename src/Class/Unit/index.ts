@@ -31,14 +31,15 @@ export type PinMap<T> = Dict<Pin<T[keyof T]>>
 
 const toPinMap = <T>(
   names: string[],
-  opts: PinOpts
+  opts: PinOpts,
+  system: System
 ): {
   [K in keyof T]?: Pin<T[K]>
 } => {
   return names.reduce(
     (acc, name) => ({
       ...acc,
-      [name]: new Pin(opts[name] ?? {}),
+      [name]: new Pin(opts[name] ?? {}, system),
     }),
     {}
   )
@@ -128,14 +129,20 @@ export class Unit<
 
     const { input, output } = opt
 
-    const inputMap = toPinMap<I>(i, opt.input ?? {})
-    const outputMap = toPinMap<O>(o, opt.output ?? {})
+    const inputMap = toPinMap<I>(i, opt.input ?? {}, this.__system)
+    const outputMap = toPinMap<O>(o, opt.output ?? {}, this.__system)
 
     this.setInputs(inputMap, input)
     this.setOutputs(outputMap, output)
 
-    this._selfInput = new Pin<U>({ data: this, constant: false, ref: true })
-    this._selfOutput = new Pin<U>({ data: this, constant: false, ref: true })
+    this._selfInput = new Pin<U>(
+      { data: this, constant: false, ref: true },
+      this.__system
+    )
+    this._selfOutput = new Pin<U>(
+      { data: this, constant: false, ref: true },
+      this.__system
+    )
 
     this._selfOutput.addListener('drop', () => {
       throw new Error('self output cannot be dropped')
