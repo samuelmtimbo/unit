@@ -1,0 +1,79 @@
+{
+  "type": "`U`&`G`",
+  "name": "input",
+  "units": {
+    "pin": {
+      "id": "fd4f28bb-9114-46b4-92d2-5dfcaaf7d65b",
+      "input": {
+        "unit": {},
+        "name": {
+          "constant": false
+        },
+        "type": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "input"
+          }
+        },
+        "done": {
+          "ignored": true
+        }
+      },
+      "output": {
+        "pin": {}
+      }
+    }
+  },
+  "merges": {},
+  "inputs": {
+    "unit": {
+      "plug": {
+        "0": {
+          "unitId": "pin",
+          "pinId": "unit",
+          "kind": "input"
+        }
+      },
+      "ref": true
+    },
+    "name": {
+      "plug": {
+        "0": {
+          "unitId": "pin",
+          "pinId": "name",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "done": {
+      "plug": {
+        "0": {
+          "unitId": "pin",
+          "pinId": "done",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "pin": {
+      "plug": {
+        "0": {
+          "unitId": "pin",
+          "pinId": "pin",
+          "kind": "output"
+        }
+      },
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "reference `unit` input `name`"
+  },
+  "id": "4ae69887-a087-4d37-8743-d83ca48184d1"
+}
