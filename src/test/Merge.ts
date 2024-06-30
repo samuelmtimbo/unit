@@ -10,17 +10,17 @@ merge0.play()
 
 false && watchUnitAndLog(merge0)
 
-merge0.addInput('a', new Pin())
+merge0.addInput('a', new Pin({}, system))
 
 merge0.push('a', 1)
 assert.equal(merge0.peakInput('a'), 1)
 
-merge0.addOutput('a', new Pin())
+merge0.addOutput('a', new Pin({}, system))
 
 assert.equal(merge0.takeOutput('a'), 1)
 
-merge0.addInput('b', new Pin())
-merge0.addInput('c', new Pin())
+merge0.addInput('b', new Pin({}, system))
+merge0.addInput('c', new Pin({}, system))
 
 merge0.push('a', 1)
 merge0.push('b', 2)
@@ -29,7 +29,7 @@ assert.equal(merge0.peakInput('a'), undefined)
 assert.equal(merge0.peakInput('b'), undefined)
 assert.equal(merge0.peakInput('c'), 3)
 assert.equal(merge0.peakOutput('a'), 3)
-merge0.addOutput('b', new Pin())
+merge0.addOutput('b', new Pin({}, system))
 assert.equal(merge0.peakOutput('b'), 3)
 assert.equal(merge0.take('a'), 3)
 assert.equal(merge0.take('b'), 3)
@@ -63,7 +63,7 @@ assert.equal(merge0.peakInput('b'), undefined)
 // assert.equal(merge0.peakInput('a'), undefined)
 // assert.equal(merge0.peakInput('b'), undefined)
 
-merge0.addInput('d', new Pin({ data: 10 }))
+merge0.addInput('d', new Pin({ data: 10 }, system))
 assert.equal(merge0.take('a'), 10)
 assert.equal(merge0.peakInput('a'), undefined)
 assert.equal(merge0.peakInput('b'), undefined)
@@ -80,9 +80,9 @@ merge1.play()
 
 false && watchUnitAndLog(merge1)
 
-merge1.addInput('a', new Pin())
-merge1.addInput('b', new Pin())
-merge1.addOutput('a', new Pin())
+merge1.addInput('a', new Pin({}, system))
+merge1.addInput('b', new Pin({}, system))
+merge1.addOutput('a', new Pin({}, system))
 
 merge1.push('a', 0)
 assert.equal(merge1.peakInput('a'), 0)
@@ -97,10 +97,10 @@ merge2.play()
 
 false && watchUnitAndLog(merge2)
 
-merge2.addInput('a', new Pin())
-merge2.addInput('b', new Pin())
-merge2.addOutput('a', new Pin())
-merge2.addOutput('b', new Pin())
+merge2.addInput('a', new Pin({}, system))
+merge2.addInput('b', new Pin({}, system))
+merge2.addOutput('a', new Pin({}, system))
+merge2.addOutput('b', new Pin({}, system))
 
 merge2.push('a', 0)
 

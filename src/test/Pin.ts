@@ -1,7 +1,8 @@
 import * as assert from 'assert'
 import { Pin } from '../Pin'
+import { system } from './util/system'
 
-const pin = new Pin<string>()
+const pin = new Pin<string>({}, system)
 
 assert.equal(pin.take(), undefined)
 
