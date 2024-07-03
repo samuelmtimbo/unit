@@ -12025,6 +12025,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     })
     merge.appendChild(merge_area)
 
+    merge_area.preventDefault('mousedown')
+    merge_area.preventDefault('touchdown')
+
     this._zoom_comp.appendChild(merge_node)
   }
 
