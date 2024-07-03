@@ -255,6 +255,10 @@ export class Graph<I = any, O = any>
     system: System,
     id?: string
   ) {
+    if (!spec.id) {
+      system.newSpec(spec, id)
+    }
+
     super(
       {
         i: [],
@@ -266,10 +270,6 @@ export class Graph<I = any, O = any>
     )
 
     this._spec = spec
-
-    if (!this._spec.id) {
-      system.newSpec(this._spec)
-    }
 
     const specs = weakMerge(system.specs, { [id]: spec })
 
