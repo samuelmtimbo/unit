@@ -10,6 +10,7 @@ import { ID_EVENT_SOURCE } from '../../../../_ids'
 
 export type I = {
   url: string
+  opt: EventSourceInit
   close: any
 }
 
@@ -23,7 +24,7 @@ export default class EventSource_ extends Semifunctional<I, O> {
   constructor(system: System) {
     super(
       {
-        fi: ['url'],
+        fi: ['url', 'opt'],
         fo: ['emitter'],
         i: ['close'],
         o: [],
@@ -40,14 +41,14 @@ export default class EventSource_ extends Semifunctional<I, O> {
     )
   }
 
-  f({ url }: I, done: Done<O>) {
+  f({ url, opt }: I, done: Done<O>) {
     const {
       api: {
         http: { EventSource },
       },
     } = this.__system
 
-    const eventSource = new EventSource(url)
+    const eventSource = new EventSource(url, opt)
 
     this._event_source = eventSource
 
