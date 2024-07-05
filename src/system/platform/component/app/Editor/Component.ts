@@ -56756,6 +56756,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._state_set_unit_pin_constant(pin_node_id, constant)
   }
 
+  private _on_set_unit_pin_ignored = (
+    data: GraphSetUnitPinIgnoredMomentData
+  ) => {
+    // console.log('Graph', '_on_set_unit_pin_ignored', data)
+
+    const { unitId, type, pinId, ignored } = data
+
+    const pin_node_id = getPinNodeId(unitId, type, pinId)
+
+    this._state_set_link_pin_ignored(pin_node_id, ignored)
+  }
+
   private _constant_input_ref_unlisten: Dict<Dict<Unlisten>> = {}
   private _constant_input_ref_interval: Dict<Dict<number>> = {}
 
@@ -58360,6 +58372,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       reorder_sub_component: this._on_reorder_sub_component,
       move_sub_component_root: this._on_move_sub_component_root,
       set_unit_pin_constant: this._on_set_unit_pin_constant,
+      set_unit_pin_ignored: this._on_set_unit_pin_ignored,
       set_unit_pin_data: this._on_set_unit_pin_data,
       bulk_edit: this._on_bulk_edit,
       metadata: this._on_metadata,
