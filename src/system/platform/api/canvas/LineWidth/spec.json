@@ -1,0 +1,32 @@
+{
+  "name": "line width",
+  "inputs": {
+    "d": {
+      "type": "(number|string|boolean)[][]",
+      "metadata": {
+        "examples": ["[]"]
+      }
+    },
+    "lineWidth": {
+      "type": "number",
+      "metadata": {
+        "examples": ["1", "3", "9"]
+      }
+    }
+  },
+  "outputs": {
+    "d": {
+      "type": "(number|string|boolean)[][]"
+    }
+  },
+  "metadata": {
+    "icon": "edit-3",
+    "description": "set the color, gradient, or pattern to use for stroke",
+    "complexity": 3,
+    "tags": ["platform", "api", "canvas"]
+  },
+  "id": "21e49492-49ba-4efd-879e-4cd7bb1bd587",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
