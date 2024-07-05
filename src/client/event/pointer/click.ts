@@ -9,12 +9,11 @@ import { stopPropagation } from '../../stopPropagation'
 import { pointDistance } from '../../util/geometry'
 import { Position } from '../../util/geometry/types'
 import { setTimeoutRAF } from '../../util/timer/setTimeoutRAF'
-import { makeCustomListener } from '../custom'
 import {
   CLICK_TIMEOUT,
   LONG_CLICK_TIMEOUT,
   POINTER_CLICK_RADIUS,
-  POINTER_LONG_PRESS_MAX_DELTA as POINTER_DOWN_MAX_DELTA,
+  POINTER_LONG_PRESS_MAX_DELTA,
 } from './constants'
 import { makePointerCancelListener } from './pointercancel'
 import { listenPointerDown } from './pointerdown'
@@ -74,19 +73,6 @@ export function listenClick(
   let unlistenPointerUp: Unlisten | undefined = undefined
   let unlistenPointerLeave: Unlisten | undefined = undefined
   let unlistenPointerCancel: Unlisten | undefined = undefined
-
-  component.addEventListener(
-    makeCustomListener('unmount', () => {
-      pointerDown = {}
-      lastPointerDownPosition = undefined
-      pointerDownCount = 0
-      pointerPosition = {}
-      pointerDownMaxDistance = {}
-      lastTapPosition = undefined
-      longClickCancelPointerId = new Set()
-      longPress = {}
-    })
-  )
 
   const pointerDownListener = (
     event: UnitPointerEvent,
@@ -153,7 +139,8 @@ export function listenClick(
                 longPress[pointerId] = true
 
                 if (
-                  pointerDownMaxDistance[pointerId] < POINTER_DOWN_MAX_DELTA
+                  pointerDownMaxDistance[pointerId] <
+                  POINTER_LONG_PRESS_MAX_DELTA
                 ) {
                   onLongPress && onLongPress(event, _event)
                 }
@@ -210,7 +197,7 @@ export function listenClick(
 
       if (
         !longClickCancelPointerId.has(pointerId) &&
-        pointerDownMaxDistance[pointerId] >= POINTER_DOWN_MAX_DELTA
+        pointerDownMaxDistance[pointerId] >= POINTER_LONG_PRESS_MAX_DELTA
       ) {
         longClickCancelPointerId.add(pointerId)
         onLongClickCancel && onLongClickCancel(event)
