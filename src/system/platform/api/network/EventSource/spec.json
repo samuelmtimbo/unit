@@ -4,7 +4,19 @@
     "url": {
       "type": "string",
       "metadata": {
-        "examples": ["'/'"]
+        "examples": [
+          "'/'"
+        ]
+      }
+    },
+    "opt": {
+      "type": "{withCredentials?:boolean}",
+      "metadata": {
+        "examples": [
+          "{}",
+          "{widthCredentials:true}",
+          "{widthCredentials:false}"
+        ]
       }
     },
     "close": {
@@ -23,7 +35,11 @@
     "description": "opens a persistent connection to an HTTP server, which sends events in text/event-stream format",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/EventSource",
     "complexity": 3,
-    "tags": ["platform", "api", "network"]
+    "tags": [
+      "platform",
+      "api",
+      "network"
+    ]
   },
   "id": "41de8d5e-2c41-441c-ad29-cc3f5d4e6c7a",
   "base": true,
