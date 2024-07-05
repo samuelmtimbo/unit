@@ -335,6 +335,7 @@ export default class CanvasComp
       this._context.strokeStyle = color
       this._context.fillStyle = color
       this._context.lineJoin = 'round'
+      this._context.lineCap = 'round'
       this._context.lineWidth = 3
 
       this._context.scale(sx, sy)
