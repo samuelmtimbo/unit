@@ -13,7 +13,11 @@
         "position": {
           "0": {
             "x": -148,
-            "y": 177
+            "y": 177,
+            "ext": {
+              "x": -204,
+              "y": 75
+            }
           }
         }
       }
@@ -30,7 +34,11 @@
         "position": {
           "0": {
             "x": -165,
-            "y": 128
+            "y": 128,
+            "ext": {
+              "x": -217,
+              "y": 29
+            }
           }
         }
       },
@@ -48,11 +56,35 @@
         "position": {
           "0": {
             "x": -153,
-            "y": -22
+            "y": -22,
+            "ext": {
+              "x": -204,
+              "y": -56
+            }
           }
         }
       },
       "type": "string"
+    },
+    "d": {
+      "plug": {
+        "0": {
+          "unitId": "canvas",
+          "pinId": "d"
+        }
+      },
+      "ref": false,
+      "type": "any[][]",
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -217,
+              "y": -10
+            }
+          }
+        }
+      }
     }
   },
   "outputs": {
@@ -64,151 +96,62 @@
         }
       },
       "ref": true,
-      "type": "`CS`&`CA`",
-      "defaultIgnored": true
+      "type": "`CA`",
+      "defaultIgnored": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -89,
+              "y": -152
+            }
+          }
+        }
+      }
     }
   },
   "units": {
-    "ondrag": {
-      "id": "d4de180e-f1e8-4575-ab64-eaef413bcfc4",
-      "input": {
-        "element": {}
-      },
-      "output": {
-        "move": {},
-        "down": {},
-        "up": {
-          "ignored": true,
-          "metadata": {
-            "position": {
-              "x": 163,
-              "y": -59
-            }
-          }
-        }
-      },
-      "metadata": {
-        "position": {
-          "x": 34,
-          "y": -54
-        }
-      }
-    },
-    "propclientxclienty": {
-      "id": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
-      "input": {
-        "obj": {}
-      },
-      "output": {
-        "y": {},
-        "x": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 134,
-          "y": -59
-        }
-      }
-    },
-    "beginpath": {
-      "id": "81c0f469-ab88-4bc8-89d5-98d291b1d8b2",
-      "input": {
-        "d": {
-          "constant": true,
-          "data": "[]",
-          "metadata": {
-            "position": {
-              "x": 420,
-              "y": 96
-            }
-          }
-        }
-      },
-      "output": {
-        "d": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 290,
-          "y": 23
-        }
-      }
-    },
-    "moveto": {
-      "id": "3c47d4bc-315d-4600-a9cd-6e388b345980",
-      "input": {
-        "d": {},
-        "x": {},
-        "y": {}
-      },
-      "output": {
-        "d": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 186,
-          "y": 9
-        }
-      }
-    },
-    "addlineto": {
-      "id": "2b0ef9e9-028b-4acc-9daf-6999e86cc2af",
-      "input": {
-        "d": {
-          "constant": true,
-          "data": "[]",
-          "metadata": {
-            "position": {
-              "x": -37,
-              "y": -207
-            }
-          }
-        },
-        "x": {},
-        "y": {}
-      },
-      "output": {
-        "d": {}
-      },
-      "metadata": {
-        "position": {
-          "x": -159,
-          "y": -119
-        }
-      }
-    },
     "canvas": {
       "id": "94243ec4-8967-4907-8cdd-7223fe256cf6",
       "input": {
         "style": {
           "metadata": {
             "position": {
-              "x": -151,
-              "y": 147
+              "x": -192,
+              "y": 54
             }
           }
         },
         "width": {
           "metadata": {
             "position": {
-              "x": -151,
-              "y": 106
+              "x": -193,
+              "y": 24
             }
           }
         },
         "height": {
           "metadata": {
             "position": {
-              "x": -154,
-              "y": 4
+              "x": -192,
+              "y": -35
             }
           }
         },
         "d": {
           "metadata": {
             "position": {
-              "x": -154,
-              "y": 54
+              "x": -193,
+              "y": -4
+            }
+          }
+        },
+        "attr": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -205,
+              "y": -17
             }
           }
         }
@@ -216,252 +159,35 @@
       "output": {},
       "metadata": {
         "position": {
-          "x": -95,
-          "y": 65
+          "x": 1,
+          "y": 10
+        },
+        "component": {
+          "width": 321,
+          "height": 292
         }
       }
     },
-    "stroke": {
-      "id": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99",
-      "input": {
-        "d": {}
-      },
-      "output": {
-        "d": {}
-      },
+    "chalkboardbehavior": {
+      "id": "6475795b-1953-4d08-975b-15ace80099d3",
       "metadata": {
         "position": {
-          "x": -255,
-          "y": -69
+          "x": 206,
+          "y": 10
         }
       }
-    },
-    "drawd": {
-      "id": "62bd0895-8889-40b2-8147-1c690809f4eb",
-      "input": {
-        "d": {},
-        "canvas": {}
-      },
-      "output": {},
-      "metadata": {
-        "position": {
-          "x": 68,
-          "y": 44
-        }
-      }
-    },
-    "drawd0": {
-      "id": "62bd0895-8889-40b2-8147-1c690809f4eb",
-      "input": {
-        "d": {},
-        "canvas": {}
-      },
-      "output": {},
-      "metadata": {
-        "position": {
-          "x": -240,
-          "y": 14
-        }
-      }
-    },
-    "ondoubleclick": {
-      "id": "40f9a40a-b4f2-11eb-baf1-933bfa98253e",
-      "input": {
-        "element": {}
-      },
-      "output": {
-        "event": {}
-      },
-      "metadata": {
-        "position": {
-          "x": 41,
-          "y": 144
-        }
-      }
-    },
-    "clear": {
-      "id": "1ef77768-7394-4b83-ad11-f5905fa9d0d3",
-      "input": {
-        "any": {},
-        "canvas": {}
-      },
-      "output": {},
-      "metadata": {
-        "position": {
-          "x": 50,
-          "y": 105
-        }
-      }
-    },
-    "propoffsetXoffsetY": {
-      "id": "2307cacf-1363-40bc-bd6b-d58227927ae0"
     }
   },
   "merges": {
-    "0": {
-      "propclientxclienty": {
-        "input": {
-          "obj": true
-        }
-      },
-      "ondrag": {
-        "output": {
-          "down": true
-        }
-      }
-    },
-    "1": {
-      "moveto": {
-        "input": {
-          "x": true
-        }
-      },
-      "propclientxclienty": {
-        "output": {
-          "x": true
-        }
-      }
-    },
-    "2": {
-      "moveto": {
-        "input": {
-          "y": true
-        }
-      },
-      "propclientxclienty": {
-        "output": {
-          "y": true
-        }
-      }
-    },
-    "3": {
-      "moveto": {
-        "input": {
-          "d": true
-        }
-      },
-      "beginpath": {
-        "output": {
-          "d": true
-        }
-      }
-    },
-    "4": {
-      "ondrag": {
-        "output": {
-          "move": true
-        }
-      },
-      "propoffsetXoffsetY": {
-        "input": {
-          "obj": true
-        },
-        "output": {}
-      }
-    },
     "5": {
       "canvas": {
         "output": {
           "_self": true
         }
       },
-      "ondrag": {
-        "input": {
-          "element": true
-        }
-      },
-      "ondoubleclick": {
-        "input": {
-          "element": true
-        }
-      },
-      "drawd": {
+      "chalkboardbehavior": {
         "input": {
           "canvas": true
-        }
-      },
-      "drawd0": {
-        "input": {
-          "canvas": true
-        }
-      },
-      "clear": {
-        "input": {
-          "canvas": true
-        }
-      }
-    },
-    "6": {
-      "addlineto": {
-        "input": {
-          "y": true
-        }
-      },
-      "propoffsetXoffsetY": {
-        "input": {},
-        "output": {
-          "offsetY": true
-        }
-      }
-    },
-    "7": {
-      "addlineto": {
-        "input": {
-          "x": true
-        }
-      },
-      "propoffsetXoffsetY": {
-        "input": {},
-        "output": {
-          "offsetX": true
-        }
-      }
-    },
-    "8": {
-      "stroke": {
-        "input": {
-          "d": true
-        }
-      },
-      "addlineto": {
-        "output": {
-          "d": true
-        }
-      }
-    },
-    "9": {
-      "drawd": {
-        "input": {
-          "d": true
-        }
-      },
-      "moveto": {
-        "output": {
-          "d": true
-        }
-      }
-    },
-    "10": {
-      "stroke": {
-        "output": {
-          "d": true
-        }
-      },
-      "drawd0": {
-        "input": {
-          "d": true
-        }
-      }
-    },
-    "13": {
-      "ondoubleclick": {
-        "output": {
-          "event": true
-        }
-      },
-      "clear": {
-        "input": {
-          "any": true
         }
       }
     }
@@ -479,63 +205,17 @@
   "metadata": {
     "icon": "chalkboard",
     "description": "drawing board",
-    "complexity": 147,
     "tags": ["platform", "core", "component"],
     "position": {
-      "merge": {
-        "0": {
-          "x": 174,
-          "y": -18
-        },
-        "1": {
-          "x": 217,
-          "y": 47
-        },
-        "2": {
-          "x": 271,
-          "y": 27
-        },
-        "3": {
-          "x": 316,
-          "y": 87
-        },
-        "4": {
-          "x": 117,
-          "y": -92
-        },
-        "6": {
-          "x": 54,
-          "y": -173
-        },
-        "7": {
-          "x": 42,
-          "y": -150
-        },
-        "8": {
-          "x": -60,
-          "y": -162
-        },
-        "9": {
-          "x": 190,
-          "y": 86
-        },
-        "10": {
-          "x": -153,
-          "y": -120
-        },
-        "11": {
-          "x": -267,
-          "y": 25
-        },
-        "12": {
-          "x": -361,
-          "y": 64
-        }
+      "merge": {},
+      "data": {
+        "x": -381,
+        "y": 80
       }
-    }
+    },
+    "complexity": 14
   },
   "id": "a24f049c-7bb0-11ea-bbdc-17b9984e1f06",
-  "type": "`U`&`C`&`G`",
-  "system": true,
+  "type": "`U`&`G`&`C`",
   "render": true
 }

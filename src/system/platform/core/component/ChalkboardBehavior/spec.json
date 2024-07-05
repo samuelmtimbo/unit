@@ -1,0 +1,1278 @@
+{
+  "type": "`U`&`G`",
+  "name": "chalkboard behavior",
+  "units": {
+    "propclientxclienty": {
+      "id": "1cbbfd58-c4ee-4c83-a5c8-83f614eb7027",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "y": {},
+        "x": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 188,
+          "y": -210
+        }
+      }
+    },
+    "ondrag": {
+      "id": "d4de180e-f1e8-4575-ab64-eaef413bcfc4",
+      "input": {
+        "element": {
+          "metadata": {
+            "position": {
+              "x": 41,
+              "y": -213
+            }
+          }
+        }
+      },
+      "output": {
+        "move": {},
+        "down": {},
+        "up": {
+          "ignored": false,
+          "metadata": {
+            "position": {
+              "x": 184,
+              "y": -258
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 78,
+          "y": -178
+        }
+      }
+    },
+    "plan": {
+      "id": "36329d25-218d-48a5-a06c-1e0525da504f",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "0": {},
+        "1": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -26,
+          "y": -107
+        }
+      }
+    },
+    "mergexy": {
+      "id": "2737cd82-d80b-4d3f-b33d-f00f68361e24",
+      "input": {
+        "y": {},
+        "x": {}
+      },
+      "output": {
+        "{x,y}": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 289,
+          "y": -204
+        }
+      }
+    },
+    "iterate0": {
+      "id": "8a2b756a-25e4-11eb-860d-1f34c850b992",
+      "input": {
+        "next": {},
+        "init": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": -1
+          },
+          "metadata": {
+            "position": {
+              "x": 150,
+              "y": -26
+            },
+            "data": {
+              "position": {
+                "x": 178,
+                "y": -24
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 55,
+              "y": -11
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 102,
+          "y": -23
+        }
+      }
+    },
+    "propoffsetXoffsetY": {
+      "id": "2307cacf-1363-40bc-bd6b-d58227927ae0",
+      "metadata": {
+        "position": {
+          "x": -100,
+          "y": -13
+        }
+      }
+    },
+    "set": {
+      "id": "c4784b05-1f50-44ad-b812-545b3ed77614",
+      "input": {
+        "obj": {},
+        "key": {},
+        "value": {}
+      },
+      "output": {
+        "obj": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 314,
+          "y": -105
+        }
+      }
+    },
+    "getpointerId0": {
+      "id": "c51a275d-8610-452d-a136-7a2b58d8caf2",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -25,
+          "y": 1
+        }
+      }
+    },
+    "constant1": {
+      "id": "ff976ac8-c54f-4d37-8c7d-089c271cb433",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 165,
+          "y": 44
+        }
+      }
+    },
+    "equals": {
+      "id": "85204bf6-6692-4686-a785-23127c0594b5",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "a = b": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 63,
+          "y": 48
+        }
+      }
+    },
+    "constant0": {
+      "id": "ff976ac8-c54f-4d37-8c7d-089c271cb433",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 361,
+          "y": 4
+        }
+      }
+    },
+    "ifelse": {
+      "id": "92760dd2-ecd9-46db-851f-70950a5b6bc3",
+      "input": {
+        "a": {},
+        "b": {}
+      },
+      "output": {
+        "if": {},
+        "else": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 42,
+          "y": 93
+        }
+      }
+    },
+    "addlineto": {
+      "id": "2b0ef9e9-028b-4acc-9daf-6999e86cc2af",
+      "input": {
+        "d": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -37,
+              "y": -207
+            }
+          }
+        },
+        "x": {},
+        "y": {}
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -147,
+          "y": 70
+        }
+      }
+    },
+    "iterate": {
+      "id": "8a2b756a-25e4-11eb-860d-1f34c850b992",
+      "input": {
+        "next": {},
+        "init": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": {}
+          },
+          "metadata": {
+            "position": {
+              "x": 386,
+              "y": -20
+            },
+            "data": {
+              "position": {
+                "x": 425,
+                "y": -23
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "current": {},
+        "local": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 377,
+              "y": -39
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 329,
+          "y": -14
+        }
+      }
+    },
+    "constant": {
+      "id": "ff976ac8-c54f-4d37-8c7d-089c271cb433",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 266,
+          "y": 87
+        }
+      }
+    },
+    "get0": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 146,
+          "y": 145
+        }
+      }
+    },
+    "emptyarray": {
+      "id": "b226083c-2797-11eb-a546-c350370e09cb",
+      "input": {
+        "any": {}
+      },
+      "output": {
+        "[]": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -61,
+          "y": 109
+        }
+      }
+    },
+    "stroke": {
+      "id": "9a7c22e3-3de2-4c99-ac1f-b2f8ceffae99",
+      "input": {
+        "d": {}
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -255,
+          "y": 66
+        }
+      }
+    },
+    "getxy": {
+      "id": "5bf348b6-9776-4b23-9516-d802b6b3c846",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "y": {},
+        "x": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 31,
+          "y": 191
+        }
+      }
+    },
+    "moveto0": {
+      "id": "3c47d4bc-315d-4600-a9cd-6e388b345980",
+      "input": {
+        "d": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -209,
+              "y": -168
+            },
+            "data": {
+              "position": {
+                "x": -243,
+                "y": -184
+              }
+            }
+          }
+        },
+        "x": {},
+        "y": {}
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -76,
+          "y": 174
+        }
+      }
+    },
+    "drawd0": {
+      "id": "62bd0895-8889-40b2-8147-1c690809f4eb",
+      "input": {
+        "d": {},
+        "canvas": {
+          "metadata": {
+            "position": {
+              "x": -407,
+              "y": 66
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": -358,
+          "y": 66
+        }
+      }
+    },
+    "beginpath": {
+      "id": "81c0f469-ab88-4bc8-89d5-98d291b1d8b2",
+      "input": {
+        "d": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": []
+          },
+          "metadata": {
+            "data": {
+              "position": {
+                "x": -255,
+                "y": 233
+              }
+            },
+            "position": {
+              "x": -221,
+              "y": 226
+            }
+          }
+        }
+      },
+      "output": {
+        "d": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -173,
+          "y": 219
+        }
+      }
+    },
+    "ondoubleclick": {
+      "id": "40f9a40a-b4f2-11eb-baf1-933bfa98253e",
+      "input": {
+        "element": {
+          "metadata": {
+            "position": {
+              "x": 131,
+              "y": 220
+            }
+          }
+        }
+      },
+      "output": {
+        "event": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 180,
+          "y": 220
+        }
+      }
+    },
+    "clear": {
+      "id": "1ef77768-7394-4b83-ad11-f5905fa9d0d3",
+      "input": {
+        "any": {},
+        "canvas": {
+          "metadata": {
+            "position": {
+              "x": 330,
+              "y": 220
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 281,
+          "y": 220
+        }
+      }
+    },
+    "constant2": {
+      "id": "ff976ac8-c54f-4d37-8c7d-089c271cb433",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 268,
+          "y": 29
+        }
+      }
+    },
+    "delete": {
+      "id": "664b5d3c-e4cf-11ea-ab74-eb6d2f3bd6f1",
+      "input": {
+        "obj": {},
+        "key": {}
+      },
+      "output": {
+        "obj": {
+          "metadata": {
+            "position": {
+              "x": 34,
+              "y": -9
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 249,
+          "y": -48
+        }
+      }
+    },
+    "getpointerId1": {
+      "id": "c51a275d-8610-452d-a136-7a2b58d8caf2",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 165,
+          "y": -106
+        }
+      }
+    },
+    "wait": {
+      "id": "ba38b0af-80c0-49e4-9e39-864396964ccc",
+      "input": {
+        "a": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": -1
+          },
+          "metadata": {
+            "position": {
+              "x": 53,
+              "y": -92
+            },
+            "data": {
+              "position": {
+                "x": 30,
+                "y": -98
+              }
+            }
+          }
+        },
+        "b": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 99,
+          "y": -90
+        }
+      }
+    },
+    "getpointerId2": {
+      "id": "c51a275d-8610-452d-a136-7a2b58d8caf2",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 200,
+          "y": -156
+        }
+      }
+    },
+    "identity": {
+      "id": "260d774e-bc89-4027-aa92-cb1985fb312b",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "a": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 83,
+          "y": -142
+        }
+      }
+    },
+    "getpointerId": {
+      "id": "c51a275d-8610-452d-a136-7a2b58d8caf2",
+      "input": {
+        "obj": {}
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 12,
+          "y": -73
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "getpointerId": {
+        "input": {
+          "obj": true
+        }
+      },
+      "plan": {
+        "output": {
+          "1": true
+        }
+      },
+      "identity": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "1": {
+      "propclientxclienty": {
+        "output": {
+          "x": true
+        }
+      },
+      "mergexy": {
+        "input": {
+          "x": true
+        }
+      }
+    },
+    "2": {
+      "propclientxclienty": {
+        "output": {
+          "y": true
+        }
+      },
+      "mergexy": {
+        "input": {
+          "y": true
+        }
+      }
+    },
+    "3": {
+      "ondrag": {
+        "output": {
+          "move": true
+        }
+      },
+      "plan": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "4": {
+      "plan": {
+        "output": {
+          "0": true
+        }
+      },
+      "propoffsetXoffsetY": {
+        "input": {
+          "obj": true
+        }
+      },
+      "getpointerId0": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "5": {
+      "delete": {
+        "input": {
+          "obj": true
+        }
+      },
+      "constant2": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "6": {
+      "propoffsetXoffsetY": {
+        "output": {
+          "offsetY": true
+        }
+      },
+      "addlineto": {
+        "input": {
+          "y": true
+        }
+      }
+    },
+    "7": {
+      "propoffsetXoffsetY": {
+        "output": {
+          "offsetX": true
+        }
+      },
+      "addlineto": {
+        "input": {
+          "x": true
+        }
+      }
+    },
+    "8": {
+      "addlineto": {
+        "output": {
+          "d": true
+        }
+      },
+      "stroke": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "9": {
+      "getpointerId0": {
+        "output": {
+          "value": true
+        }
+      },
+      "equals": {
+        "input": {
+          "a": true
+        }
+      },
+      "ifelse": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "10": {
+      "stroke": {
+        "output": {
+          "d": true
+        }
+      },
+      "drawd0": {
+        "input": {
+          "d": true
+        }
+      }
+    },
+    "11": {
+      "constant0": {
+        "input": {
+          "a": true
+        }
+      },
+      "iterate": {
+        "output": {
+          "current": true
+        }
+      },
+      "constant": {
+        "input": {
+          "a": true
+        }
+      },
+      "constant2": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "12": {
+      "iterate0": {
+        "output": {
+          "current": true
+        }
+      },
+      "constant1": {
+        "input": {
+          "a": true
+        }
+      }
+    },
+    "13": {
+      "ondoubleclick": {
+        "output": {
+          "event": true
+        }
+      },
+      "clear": {
+        "input": {
+          "any": true
+        }
+      }
+    },
+    "14": {
+      "constant": {
+        "output": {
+          "a": true
+        }
+      },
+      "get0": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "15": {
+      "get0": {
+        "output": {
+          "value": true
+        }
+      },
+      "getxy": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "16": {
+      "iterate0": {
+        "input": {
+          "next": true
+        }
+      },
+      "wait": {
+        "output": {
+          "a": true
+        }
+      },
+      "getpointerId": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "17": {
+      "set": {
+        "input": {
+          "obj": true
+        }
+      },
+      "constant0": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "18": {
+      "mergexy": {
+        "output": {
+          "{x,y}": true
+        }
+      },
+      "set": {
+        "input": {
+          "value": true
+        }
+      }
+    },
+    "19": {
+      "addlineto": {
+        "input": {
+          "d": true
+        }
+      },
+      "emptyarray": {
+        "output": {
+          "[]": true
+        }
+      },
+      "moveto0": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "20": {
+      "getxy": {
+        "output": {
+          "y": true
+        }
+      },
+      "moveto0": {
+        "input": {
+          "y": true
+        }
+      }
+    },
+    "21": {
+      "getxy": {
+        "output": {
+          "x": true
+        }
+      },
+      "moveto0": {
+        "input": {
+          "x": true
+        }
+      }
+    },
+    "22": {
+      "constant1": {
+        "output": {
+          "a": true
+        }
+      },
+      "equals": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "23": {
+      "set": {
+        "output": {
+          "obj": true
+        }
+      },
+      "iterate": {
+        "input": {
+          "next": true
+        }
+      },
+      "delete": {
+        "output": {
+          "obj": true
+        }
+      }
+    },
+    "24": {
+      "moveto0": {
+        "input": {
+          "d": true
+        }
+      },
+      "beginpath": {
+        "output": {
+          "d": true
+        }
+      }
+    },
+    "25": {
+      "equals": {
+        "output": {
+          "a = b": true
+        }
+      },
+      "ifelse": {
+        "input": {
+          "b": true
+        }
+      }
+    },
+    "26": {
+      "ifelse": {
+        "output": {
+          "if": true
+        }
+      },
+      "emptyarray": {
+        "input": {
+          "any": true
+        }
+      }
+    },
+    "27": {
+      "ondrag": {
+        "output": {
+          "down": true
+        }
+      },
+      "propclientxclienty": {
+        "input": {
+          "obj": true
+        }
+      },
+      "getpointerId2": {
+        "input": {
+          "obj": true
+        }
+      },
+      "identity": {
+        "output": {
+          "a": true
+        }
+      }
+    },
+    "28": {
+      "ondrag": {
+        "output": {
+          "up": true
+        }
+      },
+      "wait": {
+        "input": {
+          "b": true
+        }
+      },
+      "getpointerId1": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "29": {
+      "delete": {
+        "input": {
+          "key": true
+        }
+      },
+      "getpointerId1": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "30": {
+      "getpointerId2": {
+        "output": {
+          "value": true
+        }
+      },
+      "set": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "31": {
+      "ifelse": {
+        "output": {
+          "else": true
+        }
+      },
+      "get0": {
+        "input": {
+          "key": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "canvas": {
+      "plug": {
+        "0": {
+          "unitId": "drawd0",
+          "pinId": "canvas",
+          "kind": "input"
+        },
+        "1": {
+          "unitId": "ondrag",
+          "pinId": "element",
+          "kind": "input"
+        },
+        "2": {
+          "unitId": "clear",
+          "pinId": "canvas",
+          "kind": "input"
+        },
+        "3": {
+          "unitId": "ondoubleclick",
+          "pinId": "element",
+          "kind": "input"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -430,
+              "y": 66
+            }
+          },
+          "1": {
+            "ext": {
+              "x": 31,
+              "y": -236
+            }
+          },
+          "2": {
+            "ext": {
+              "x": 353,
+              "y": 220
+            }
+          },
+          "3": {
+            "ext": {
+              "x": 111,
+              "y": 231
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "chalkboard",
+    "description": "",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 26,
+          "y": -118
+        },
+        "1": {
+          "x": 239,
+          "y": -206
+        },
+        "2": {
+          "x": 240,
+          "y": -227
+        },
+        "3": {
+          "x": 16,
+          "y": -153
+        },
+        "4": {
+          "x": -54,
+          "y": -48
+        },
+        "5": {
+          "x": 233,
+          "y": -3
+        },
+        "6": {
+          "x": -143,
+          "y": 18
+        },
+        "7": {
+          "x": -115,
+          "y": 32
+        },
+        "8": {
+          "x": -202,
+          "y": 68
+        },
+        "9": {
+          "x": 13,
+          "y": 45
+        },
+        "10": {
+          "x": -306,
+          "y": 66
+        },
+        "11": {
+          "x": 313,
+          "y": 37
+        },
+        "12": {
+          "x": 137,
+          "y": 8
+        },
+        "13": {
+          "x": 230,
+          "y": 220
+        },
+        "14": {
+          "x": 210,
+          "y": 121
+        },
+        "15": {
+          "x": 92,
+          "y": 177
+        },
+        "16": {
+          "x": 62,
+          "y": -56
+        },
+        "17": {
+          "x": 351,
+          "y": -56
+        },
+        "18": {
+          "x": 320,
+          "y": -159
+        },
+        "19": {
+          "x": -109,
+          "y": 120
+        },
+        "20": {
+          "x": -21,
+          "y": 178
+        },
+        "21": {
+          "x": -25,
+          "y": 199
+        },
+        "22": {
+          "x": 115,
+          "y": 49
+        },
+        "23": {
+          "x": 300,
+          "y": -57
+        },
+        "24": {
+          "x": -124,
+          "y": 201
+        },
+        "25": {
+          "x": 89,
+          "y": 83
+        },
+        "26": {
+          "x": -10,
+          "y": 100
+        },
+        "27": {
+          "x": 139,
+          "y": -175
+        },
+        "28": {
+          "x": 120,
+          "y": -134
+        },
+        "29": {
+          "x": 206,
+          "y": -75
+        },
+        "30": {
+          "x": 259,
+          "y": -132
+        },
+        "31": {
+          "x": 94,
+          "y": 124
+        }
+      },
+      "data": {
+        "x": 674,
+        "y": -110
+      }
+    },
+    "tags": ["platform", "core", "component"],
+    "complexity": 133
+  },
+  "id": "6475795b-1953-4d08-975b-15ace80099d3"
+}
