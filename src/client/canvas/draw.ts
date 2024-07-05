@@ -10,6 +10,8 @@ export function draw(
     ctx.fillStyle = args[0]
   } else if (method === 'strokeStyle') {
     ctx.strokeStyle = args[0]
+  } else if (method === 'lineWidth') {
+    ctx.lineWidth = args[0]
   } else if (method === 'fillPath') {
     const [d, fillRule] = args
     ctx.fill(new Path2D(d), fillRule)
