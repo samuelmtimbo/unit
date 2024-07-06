@@ -54045,7 +54045,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const my = (sy + ty) / 2
 
-      const k = alpha / 3
+      const ky = clamp((a.height + b.height) / UNIT_MIN_RADIUS / 12, 1, 24)
+
+      const k = alpha / 3 / ky
 
       b.ay += (my - ty) * k * mab
       a.ay += (my - sy) * k * mba
