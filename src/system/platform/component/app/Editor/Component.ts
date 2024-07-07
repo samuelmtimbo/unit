@@ -13362,7 +13362,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
 
           this._refresh_node_color(node_id)
-          this._refresh_selected_node_color()
+          this._refresh_all_selected_node_color()
         }
       }
     } else {
@@ -13459,7 +13459,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
 
-          this._refresh_selected_node_color()
+          this._refresh_all_selected_node_color()
         }
       }
     }
@@ -13633,18 +13633,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _should_color_selected_node = () => {
-    return this._hover_node_count === 0 && this._search_hidden
+    let hovered_not_selected_count = this._hover_node_count
+
+    for (const hovered_node_id in this._hover_node_id) {
+      if (this._is_node_selected(hovered_node_id)) {
+        hovered_not_selected_count--
+      }
+    }
+
+    return hovered_not_selected_count === 0 && this._search_hidden
   }
 
-  private _refresh_selected_node_color = (): void => {
+  private _refresh_all_selected_node_color = (): void => {
     this._reset_selected_node_color()
 
     if (this._should_color_selected_node()) {
-      this._set_selected_node_color(this._mode)
+      this._set_all_selected_node_color(this._mode)
     }
   }
 
-  private _set_selected_node_color = (mode: Mode): void => {
+  private _set_all_selected_node_color = (mode: Mode): void => {
     for (const selected_node_id in this._selected_node_id) {
       this.__set_node_mode_color(selected_node_id, mode)
     }
@@ -17358,7 +17366,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._animate_current_layer_offset_if_overflown()
     }
 
-    this._refresh_selected_node_color()
+    this._refresh_all_selected_node_color()
   }
 
   private _animate_current_layer_offset_if_overflown() {
@@ -41819,7 +41827,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._ascend_node(new_node_id, pointerId)
 
       this._refresh_node_color(node_id)
-      this._refresh_selected_node_color()
+      this._refresh_all_selected_node_color()
     }
 
     return new_node_id
