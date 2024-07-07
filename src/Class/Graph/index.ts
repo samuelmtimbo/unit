@@ -3742,7 +3742,7 @@ export class Graph<I = any, O = any>
             if (path.length === 0) {
               bubble && this._fork()
 
-              deepSet(this._spec, ['units', unitId, 'id'], forkId)
+              // deepSet(this._spec, ['units', unitId, 'id'], forkId)
             }
           }
         )

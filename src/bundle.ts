@@ -140,7 +140,7 @@ function _bundleUnit(
 
   const _spec = getSpec(specs, id) as GraphSpec
 
-  if (!specs[id] || !isSystemSpecId(specs, id)) {
+  if (specs[id] && !isSystemSpecId(specs, id)) {
     custom[id] = _spec
   }
 
