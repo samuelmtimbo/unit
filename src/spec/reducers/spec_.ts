@@ -4,7 +4,7 @@ import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
-import { Classes, GraphSubPinSpec, Specs } from '../../types'
+import { Classes, DatumSpec, GraphSubPinSpec, Specs } from '../../types'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphPinSpec } from '../../types/GraphPinSpec'
 import { GraphSpec } from '../../types/GraphSpec'
@@ -48,6 +48,20 @@ export const addUnit = (
   spec: GraphSpec
 ): void => {
   deepSet_(spec, ['units', unitId], unit)
+}
+
+export const removeDatum = (
+  { datumId }: { datumId: string },
+  spec: GraphSpec
+): void => {
+  deepDelete(spec, ['data', datumId])
+}
+
+export const setDatum = (
+  { datumId, value }: { datumId: string; value: DatumSpec },
+  spec: GraphSpec
+): void => {
+  deepSet_(spec, ['data', datumId], value)
 }
 
 export const removeUnits = (

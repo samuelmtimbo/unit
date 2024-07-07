@@ -369,6 +369,7 @@ import {
 } from '../../../../../debug/graph/watchGraphUnitEvent'
 import { GraphSpecUnitMoveMomentData } from '../../../../../debug/graph/watchGraphUnitMoveEvent'
 import deepGet from '../../../../../deepGet'
+import { deepSet_ } from '../../../../../deepSet'
 import { CodePathNotImplementedError } from '../../../../../exception/CodePathNotImplemented'
 import { InvalidStateError } from '../../../../../exception/InvalidStateError'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
@@ -485,7 +486,6 @@ import {
   reorderSubComponent,
   setSubComponent,
 } from '../../../../../spec/reducers/component_'
-import { _setSpecDatum } from '../../../../../spec/reducers/data'
 import {
   addMerge,
   addPinToMerge,
@@ -496,11 +496,13 @@ import {
   exposePinSet,
   mergeMerges,
   plugPin,
+  removeDatum,
   removeMerge,
   removePinFromMerge,
   removeUnit,
   removeUnitPinData,
   setComponentSize,
+  setDatum,
   setMetadata,
   setPinSetDataType,
   setPinSetDefaultIgnored,
@@ -991,6 +993,31 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       )
 
     this._editor = editor
+
+    this._editor.addEventListeners([
+      makeCustomListener('data_removed', ({ datumId, specId }) => {
+        const { specs } = this._registry
+
+        if (this._spec_id_to_file_name[specId]) {
+          const spec = clone(specs[specId]) as GraphSpec
+
+          removeDatum({ datumId }, spec)
+
+          this._registry.setSpec(specId, spec)
+        }
+      }),
+      makeCustomListener('data_added', ({ datumId, specId, value }) => {
+        const { specs } = this._registry
+
+        if (this._spec_id_to_file_name[specId]) {
+          const spec = clone(specs[specId]) as GraphSpec
+
+          setDatum({ datumId, value }, spec)
+
+          this._registry.setSpec(specId, spec)
+        }
+      }),
+    ])
 
     this._editor.enter(false, {}, true)
 
@@ -12283,6 +12310,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._enable_datum_overlay(datum_node_id)
     }
 
+    this._dispatch_data_added(datum_id, tree.value)
+
     this._start_graph_simulation(LAYER_DATA_LINKED)
   }
 
@@ -12571,6 +12600,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_sim_add_datum_link', datum_node_id, node_id)
 
+    const { datumId } = segmentDatumNodeId(datum_node_id)
+
     const datum_node = this._data_node[datum_node_id]
 
     this._linked_data_node[datum_node_id] = datum_node
@@ -12629,6 +12660,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._refresh_datum_visible(datum_node_id)
+
+    this._dispatch_data_removed(datumId)
 
     this._start_graph_simulation(LAYER_DATA_LINKED)
   }
@@ -38940,6 +38973,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._refresh_node_color(datum_pin_node_id)
     }
 
+    if (!datum_pin_node_id) {
+      this._dispatch_data_removed(datumId)
+    }
+
     this._start_graph_simulation(LAYER_DATA_LINKED)
   }
 
@@ -54665,7 +54702,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const datum_spec: DatumSpec = this._get_datum_spec(datum_node_id)
 
-      _setSpecDatum(spec, datumId, datum_spec)
+      deepSet_(spec, ['data', datumId], datum_spec)
     }
   }
 
@@ -57550,7 +57587,32 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
+    this._dispatch_data_added(datum_id, next_tree.value)
+
     this._refresh_datum_visible(datum_node_id)
+  }
+
+  private _dispatch_data_removed = (datum_id: string) => {
+    this._graph.dispatchEvent(
+      'data_removed',
+      {
+        specId: this._spec.id,
+        datumId: datum_id,
+      },
+      true
+    )
+  }
+
+  private _dispatch_data_added = (datum_id: string, value: string) => {
+    this._graph.dispatchEvent(
+      'data_added',
+      {
+        specId: this._spec.id,
+        datumId: datum_id,
+        value,
+      },
+      true
+    )
   }
 
   private _refresh_datum_size = (datum_node_id: string, tree?: TreeNode) => {
