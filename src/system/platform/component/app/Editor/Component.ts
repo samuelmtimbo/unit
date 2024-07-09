@@ -46407,7 +46407,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getRefInputs: function (): Pins<Partial<any>> {
         throw new MethodNotImplementedError()
       },
-      getInput: function <K extends string>(name: K): Pin<K> {
+      getInput: function <K extends any>(name: K): Pin<K> {
         throw new MethodNotImplementedError()
       },
       getOutputs: function (): Pins<any> {
@@ -49923,7 +49923,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getRefInputs: function (): Pins<Partial<any>> {
         throw new MethodNotImplementedError()
       },
-      getInput: function <K extends string>(name: K): Pin<K> {
+      getInput: function <K extends any>(name: K): Pin<K> {
         throw new MethodNotImplementedError()
       },
       getOutputs: function (): Pins<any> {
@@ -50199,7 +50199,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getRefInputs: function (): Pins<Partial<any>> {
         throw new MethodNotImplementedError()
       },
-      getInput: function <K extends string>(name: K): Pin<K> {
+      getInput: function <K extends keyof any>(name: K): Pin<K> {
         throw new MethodNotImplementedError()
       },
       getOutputs: function (): Pins<any> {
@@ -58411,13 +58411,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       invalid: NOOP,
     },
     unit: {
-      set_input: NOOP, // TODO
-      set_output: NOOP, // TODO
-      remove_input: NOOP, // TODO
-      remove_output: NOOP, // TODO
-      // err: NOOP,
-      // take_err: NOOP,
-      // catch_err: NOOP,
+      set_input: NOOP,
+      set_output: NOOP,
+      remove_input: NOOP,
+      remove_output: NOOP,
+      err: NOOP,
+      take_err: NOOP,
+      catch_err: NOOP,
       pause: this._on_unit_pause_moment,
     },
     graph: {

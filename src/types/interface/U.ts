@@ -30,7 +30,7 @@ export type U_EE = {
   pause: []
 }
 
-export interface U<I = any, O = any> {
+export interface U<I extends Dict<any> = any, O extends Dict<any> = any> {
   setParent(parent: Unit<any, any> | null)
   setInputs(inputs: Pins<I>, opts: PinOpts): void
   setPin(type: IO, name: string, pin: Pin<any>, opt: PinOpt)

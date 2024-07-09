@@ -27,13 +27,9 @@ export function boot(
   api: API,
   opt: BootOpt
 ): System {
-  const {
-    path = '',
-    specs = {},
-    classes = {},
-    components = {},
-    flags = {},
-  } = opt
+  const { specs = {}, classes = {}, components = {}, flags = {} } = opt
+
+  const path = opt.path || '/'
 
   const keyboard: KeyboardState = {
     pressed: [],

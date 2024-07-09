@@ -134,7 +134,7 @@ export function findKeyObjIndexed<A>(
   }
 }
 
-export function filterObj<T>(
+export function filterObj<T extends Dict<any>>(
   obj: T,
   callback: <K extends keyof T>(value: T[K], key: K) => boolean
 ): Partial<T> {

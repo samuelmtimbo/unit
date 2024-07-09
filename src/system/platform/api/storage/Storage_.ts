@@ -1,69 +1,116 @@
-import {
-  getAllLocalStorage,
-  getStorageKeys,
-  storageHasKey,
-} from '../../../../client/util/web/storage'
-import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { ObjectUpdateType } from '../../../../ObjectUpdateType'
-import { Dict } from '../../../../types/Dict'
-import { J } from '../../../../types/interface/J'
+import { Primitive } from '../../../../Primitive'
+import {
+  delete_,
+  get,
+  hasKey,
+  keys,
+  read,
+  set,
+  write,
+} from '../../../../client/util/storage'
+import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
+import { ObjectPathTooDeepError } from '../../../../exception/ObjectPathTooDeep'
+import { System } from '../../../../system'
 import { Unlisten } from '../../../../types/Unlisten'
+import { J } from '../../../../types/interface/J'
+import { V } from '../../../../types/interface/V'
 
-export class Storage_ implements J {
-  private _storage: Storage
+export type I = {}
 
-  constructor(storage: Storage) {
-    this._storage = storage
+export type O = {}
+
+export default class Storage_ extends Primitive<I, O> implements V, J {
+  constructor(system: System, id: string) {
+    super(
+      {
+        i: [],
+        o: [],
+      },
+      {},
+      system,
+      id
+    )
   }
 
-  async read(): Promise<Dict<string>> {
-    const obj = getAllLocalStorage()
-    return obj
+  protected _storage = (): Storage => {
+    throw new MethodNotImplementedError()
   }
 
-  async write(data: Dict<string>): Promise<void> {
-    // TODO
-    return
+  async read(): Promise<any> {
+    const { path } = this.__system
+
+    const storage = this._storage()
+
+    return read(storage, path)
   }
 
-  async get(name: string): Promise<string> {
-    const value = this._storage.getItem(name)
+  async write(data: any): Promise<void> {
+    const { path } = this.__system
 
-    if (value === null) {
-      throw new Error('item not found')
-    } else {
-      return value
-    }
+    const storage = this._storage()
+
+    return write(storage, path, data)
   }
 
-  async set(name: string, data: string): Promise<void> {
-    this._storage.setItem(name, data)
+  async get(name: string): Promise<any> {
+    const { path } = this.__system
+
+    const storage = this._storage()
+
+    return get(storage, path, name)
+  }
+
+  async set(name: string, data: any): Promise<void> {
+    const { path } = this.__system
+
+    const storage = this._storage()
+
+    return set(storage, path, name, data)
   }
 
   async delete(name: string): Promise<any> {
-    this._storage.removeItem(name)
+    const { path } = this.__system
+
+    const storage = this._storage()
+
+    return delete_(storage, path, name)
   }
 
-  deepSet(path: string[], data: any): Promise<void> {
-    throw new MethodNotImplementedError()
+  async deepSet(path_: string[], data: any): Promise<void> {
+    const { path } = this.__system
+
+    const storage = this._storage()
+
+    if (path_.length > 0) {
+      throw new ObjectPathTooDeepError()
+    }
+
+    return set(storage, path_[0], data, path)
   }
 
-  deepGet(path: string[]): Promise<any> {
-    throw new MethodNotImplementedError()
+  async deepGet(path_: string[]): Promise<any> {
+    const { path } = this.__system
+
+    const storage = this._storage()
+
+    if (path_.length > 0) {
+      throw new ObjectPathTooDeepError()
+    }
+
+    return get(storage, path, path_[0])
   }
 
-  deepDelete(path: string[]): Promise<void> {
-    throw new MethodNotImplementedError()
-  }
+  async deepDelete(path_: string[]): Promise<void> {
+    const { path } = this.__system
 
-  async keys(): Promise<string[]> {
-    const keys = getStorageKeys(this._storage)
-    return keys
-  }
+    const storage = this._storage()
 
-  async hasKey(name: string): Promise<boolean> {
-    const has = storageHasKey(this._storage, name)
-    return has
+    if (path_.length > 1) {
+      throw new ObjectPathTooDeepError()
+    }
+
+    return delete_(storage, path, path_[0])
   }
 
   subscribe(
@@ -77,5 +124,23 @@ export class Storage_ implements J {
     ) => void
   ): Unlisten {
     throw new MethodNotImplementedError()
+  }
+
+  async keys(): Promise<string[]> {
+    const { path } = this.__system
+
+    const storage = this._storage()
+
+    return keys(storage, path)
+  }
+
+  async hasKey(name: string): Promise<boolean> {
+    const { path } = this.__system
+
+    const storage = this._storage()
+
+    const has = hasKey(storage, path, name)
+
+    return has
   }
 }
