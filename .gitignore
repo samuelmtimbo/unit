@@ -20,8 +20,6 @@ build/**/*
 
 dist/**/*
 
-yarn-error.log
-
 .env
 
 public/index.js
@@ -34,8 +32,5 @@ src/client/static/js/index.js.ts
 
 src/client/extension/src/*.js
 src/client/extension/src/*.js.map
-
-package-lock.json
-yarn.lock
 
 public/build.json
