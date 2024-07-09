@@ -7,6 +7,8 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
   }
 
   const _window: API['window'] = {
+    localStorage: window.localStorage,
+    sessionStorage: window.sessionStorage,
     // @ts-ignore
     Notification: window.Notification,
     // @ts-ignore

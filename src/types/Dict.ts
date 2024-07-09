@@ -1,3 +1,1 @@
-export type Dict<V> = {
-  [name: string]: V
-}
+export type Dict<V> = Record<string, V>

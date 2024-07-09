@@ -36,7 +36,6 @@ import { webQuerystring } from './api/querystring'
 import { webScreen } from './api/screen'
 import { webSelection } from './api/selection'
 import { webSpeech } from './api/speech'
-import { webStorage } from './api/storage'
 import { webText } from './api/text'
 import { webTheme } from './api/theme'
 import { webURI } from './api/uri'
@@ -77,7 +76,6 @@ export function webBoot(
   const media = webMedia(window, opt)
   const clipboard = webClipboard(window, opt)
   const selection = webSelection(window, opt)
-  const storage = webStorage(window, opt)
   const animation = webAnimation(window, opt)
   const document = webDocument(window, _root, opt)
   const querystring = webQuerystring(window, opt)
@@ -98,7 +96,6 @@ export function webBoot(
 
   const api: API = {
     alert,
-    storage,
     selection,
     file,
     animation,

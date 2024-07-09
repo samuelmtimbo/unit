@@ -6,7 +6,6 @@ import { DisplayMediaAPINotSupported } from '../exception/DisplayMediaAPINotSupp
 import { MediaDevicesAPINotSupported } from '../exception/MediaDeviceAPINotSupported'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { Style } from '../system/platform/Style'
-import { Storage_ } from '../system/platform/api/storage/Storage_'
 import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
 import { DownloadDataOpt } from '../types/global/DownloadData'
@@ -37,9 +36,6 @@ export function noStorage(name: string): Storage {
 
 export function noHost(): API {
   const api: API = {
-    storage: {
-      local: () => new Storage_(noStorage('Local Storage')),
-    },
     selection: {
       containsSelection: () => {
         throw new APINotSupportedError('Selection')
@@ -255,6 +251,8 @@ export function noHost(): API {
       open: function (url: string, target: string, features: string): Window {
         throw new MethodNotImplementedError()
       },
+      localStorage: undefined,
+      sessionStorage: undefined,
       AudioContext: undefined,
       OscillatorNode: undefined,
       MediaStreamAudioSourceNode: undefined,

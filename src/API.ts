@@ -22,7 +22,6 @@ import {
   SpeechRecognition,
   SpeechRecognitionOpt,
 } from './types/global/SpeechRecognition'
-import { J } from './types/interface/J'
 
 export type ImageCapture = any
 
@@ -62,7 +61,6 @@ export type API = {
     requestAnimationFrame: (callback: FrameRequestCallback) => number
     cancelAnimationFrame: (frame: number) => void
   }
-  storage: { local: () => J }
   db: IDBFactory
   http: {
     fetch: (url: string, opt: RequestInit) => Promise<Response>
@@ -174,6 +172,8 @@ export type API = {
     removeSelection: () => void
   }
   window: {
+    localStorage: Storage
+    sessionStorage: Storage
     Notification: typeof Notification
     AudioContext: AudioContext
     OscillatorNode: OscillatorNode
