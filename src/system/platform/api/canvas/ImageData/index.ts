@@ -1,14 +1,15 @@
+import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
+import { TA } from '../../../../../types/interface/TA'
 import { ID } from '../../../../../types/interface/ID'
 import { J } from '../../../../../types/interface/J'
-import { V } from '../../../../../types/interface/V'
 import { wrapImageData } from '../../../../../wrap/ImageData'
 import { ID_IMAGE_DATA } from '../../../../_ids'
 
 export interface I<T> {
-  data: V
+  data: TA & $
   width: number
   height: number
   opt: ImageDataSettings
@@ -48,7 +49,7 @@ export default class ImageData_<T> extends Semifunctional<I<T>, O<T>> {
     let imageData: ImageData
 
     try {
-      const _data = await data.read()
+      const _data = data.raw()
 
       imageData = new ImageData(_data, width, height, opt)
     } catch (err) {

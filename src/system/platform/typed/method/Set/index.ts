@@ -2,12 +2,12 @@ import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
-import { TA } from '../../../../../types/interface/CLA'
+import { TA } from '../../../../../types/interface/TA'
 import { ID_SET_2 } from '../../../../_ids'
 
 export interface I {
   array: TA & $
-  buffer: TA & $
+  data: TA & $
   offset: number
 }
 
@@ -17,7 +17,7 @@ export default class Set2 extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['array', 'buffer', 'offset'],
+        i: ['array', 'data', 'offset'],
         o: [],
       },
       {
@@ -25,7 +25,7 @@ export default class Set2 extends Functional<I, O> {
           array: {
             ref: true,
           },
-          buffer: {
+          data: {
             ref: true,
           },
         },
@@ -35,10 +35,10 @@ export default class Set2 extends Functional<I, O> {
     )
   }
 
-  f({ array, buffer, offset }: I, done: Done<O>) {
-    const buffer_ = buffer.raw()
+  f({ array, data, offset }: I, done: Done<O>) {
+    const data_ = data.raw()
 
-    array.set(buffer_, offset)
+    array.set(data_, offset)
 
     done()
   }

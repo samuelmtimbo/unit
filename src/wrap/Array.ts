@@ -3,6 +3,7 @@ import { SharedRef } from '../SharefRef'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
 import { A } from '../types/interface/A'
+import { TA } from '../types/interface/TA'
 
 export function wrapSharedRefArrayInterface<T extends any[]>(
   data: SharedRef<T>,
@@ -62,8 +63,8 @@ export function wrapArray<T>(array: T[], system: System): A<T> & $ {
 export function wrapUint8Array(
   array: Uint8Array | Uint8ClampedArray,
   system: System
-): A<number> & $ {
-  const _array = new (class Array extends $ implements A<number> {
+): A<number> & TA & $ {
+  const _array = new (class Array extends $ implements A<number>, TA {
     __: string[] = ['A']
 
     append(a: number): Promise<void> {
@@ -86,6 +87,10 @@ export function wrapUint8Array(
 
     indexOf(a: number): Promise<number> {
       throw new MethodNotImplementedError()
+    }
+
+    set(array_: Uint8ClampedArray, offset: number): void {
+      array.set(array_, offset)
     }
 
     raw() {

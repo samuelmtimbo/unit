@@ -2,7 +2,7 @@
   "name": "image data",
   "inputs": {
     "data": {
-      "type": "`V`",
+      "type": "`TA`",
       "ref": true
     },
     "width": {
