@@ -1,6 +1,6 @@
 import { $ } from '../../../Class/$'
-import { Functional } from '../../../Class/Functional'
 import { Done } from '../../../Class/Functional/Done'
+import { Semifunctional } from '../../../Class/Semifunctional'
 import { System } from '../../../system'
 import { CA } from '../../../types/interface/CA'
 import { wrapOffscreenCanvas } from '../../../wrap/OffscreenCanvas'
@@ -10,13 +10,14 @@ export interface I {
   width: number
   height: number
   opt: { willReadFrequently?: boolean }
+  done: any
 }
 
 export interface O {
   canvas: CA & $
 }
 
-export default class OffscreenCanvas_ extends Functional<I, O> {
+export default class OffscreenCanvas_ extends Semifunctional<I, O> {
   __ = ['U', 'CA']
 
   private _offscreen: OffscreenCanvas
@@ -25,8 +26,10 @@ export default class OffscreenCanvas_ extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['width', 'height', 'opt'],
-        o: ['canvas'],
+        fi: ['width', 'height', 'opt'],
+        fo: ['canvas'],
+        i: ['done'],
+        o: [],
       },
       {
         output: {
@@ -51,5 +54,17 @@ export default class OffscreenCanvas_ extends Functional<I, O> {
     )
 
     done({ canvas })
+  }
+
+  public onIterDataInputData(name: string, data: any): void {
+    // if (name === 'done') {
+    this._forward_empty('canvas')
+
+    this._backward('width')
+    this._backward('height')
+    this._backward('opt')
+
+    this._backward('done')
+    // }
   }
 }

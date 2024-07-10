@@ -7,6 +7,10 @@
     "height": {
       "type": "number"
     },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    },
     "opt": {
       "type": "{willReadFrequently?:boolean}"
     }
