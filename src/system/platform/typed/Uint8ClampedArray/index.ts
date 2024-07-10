@@ -1,9 +1,10 @@
-import { Done } from '../../../Class/Functional/Done'
-import { Semifunctional } from '../../../Class/Semifunctional'
-import { System } from '../../../system'
-import { A } from '../../../types/interface/A'
-import { wrapUint8Array } from '../../../wrap/Array'
-import { ID_8BIT_UNSIGNED_CLAMPED_ARRAY } from '../../_ids'
+import { Done } from '../../../../Class/Functional/Done'
+import { Semifunctional } from '../../../../Class/Semifunctional'
+import { System } from '../../../../system'
+import { A } from '../../../../types/interface/A'
+import { TA } from '../../../../types/interface/TA'
+import { wrapUint8Array } from '../../../../wrap/Array'
+import { ID_8BIT_UNSIGNED_CLAMPED_ARRAY } from '../../../_ids'
 
 export interface I {
   length: number
@@ -11,7 +12,7 @@ export interface I {
 }
 
 export interface O {
-  array: A
+  array: A & TA
 }
 
 export default class Uint8ClampedArray_ extends Semifunctional<I, O> {

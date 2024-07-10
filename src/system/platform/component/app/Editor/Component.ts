@@ -17867,7 +17867,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               }
             } else {
               if (this._tree_layout) {
-                // TODO
+                //
               } else {
                 this._start_long_press_collapse(
                   pointer_id,
@@ -51172,7 +51172,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     x: number,
     y: number
   ): void => {
-    this._long_press_screen_position = { x, y } // TODO should be a dict
+    this._long_press_screen_position = { x, y }
     this._long_press_pointer.add(pointerId)
     this._long_press_count++
   }

@@ -8,7 +8,7 @@ import { J } from '../types/interface/J'
 import { wrapUint8Array } from './Array'
 
 export function wrapImageData(imageData: ImageData, system: System): ID & J {
-  const image = new (class ImageObject extends $ implements J, ID {
+  const image = new (class ImageData_ extends $ implements J, ID {
     __: string[] = ['J', 'ID']
 
     imageData(): ImageData {
@@ -24,12 +24,15 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
         return imageData[name]
       }
     }
+
     async set(name: string, data: any): Promise<void> {
       throw new Error('read only')
     }
+
     async delete(name: string): Promise<void> {
       throw new Error('read only')
     }
+
     async hasKey(name: string): Promise<boolean> {
       if (imageData[name] !== undefined) {
         return true
@@ -37,9 +40,11 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
 
       return false
     }
+
     async keys(): Promise<string[]> {
       return ['width', 'height', 'data', 'colorSpace']
     }
+
     deepGet(path: string[]): Promise<any> {
       if (path.length === 1) {
         return this.get(path[0])
@@ -47,12 +52,15 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
 
       throw new InvalidKeyPathError()
     }
+
     deepSet(path: string[], data: any): Promise<void> {
       throw new Error('read only')
     }
+
     deepDelete(path: string[]): Promise<void> {
       throw new Error('read only')
     }
+
     subscribe(
       path: string[],
       key: string,

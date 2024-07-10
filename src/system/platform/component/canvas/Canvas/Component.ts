@@ -1,5 +1,6 @@
 import { draw } from '../../../../../client/canvas/draw'
 import { Element } from '../../../../../client/element'
+import { getSize } from '../../../../../client/getSize'
 import { parseRelativeUnit } from '../../../../../client/parseRelativeUnit'
 import { applyStyle, reactToFrameSize } from '../../../../../client/style'
 import { COLOR_WHITE, defaultThemeColor } from '../../../../../client/theme'
@@ -93,27 +94,35 @@ export default class CanvasComp
   }
 
   private _get_parent_width = (): number => {
-    // TODO
+    if (this.$slotParent) {
+      return getSize(this.$slotParent.$element).width
+    }
+
     return 0
   }
 
   private _get_parent_height = (): number => {
-    // TODO
+    if (this.$slotParent) {
+      return getSize(this.$slotParent.$element).width
+    }
+
     return 0
   }
 
   private _get_frame_width = (): number => {
-    // TODO
-    return 0
+    const { $width } = this.$context
+
+    return $width
   }
 
   private _get_frame_height = (): number => {
-    // TODO
-    return 0
+    const { $height } = this.$context
+
+    return $height
   }
 
   private _create_canvas = () => {
-    // console.log('CanvasComp', '_create_canvas', style)
+    // console.log('CanvasComp', '_create_canvas')
     const { style, width = 200, height = 200 } = this.$props
 
     const canvas_el = this.$system.api.document.createElement('canvas')
@@ -123,7 +132,7 @@ export default class CanvasComp
     canvas_el.width = parseRelativeUnit(
       width,
       this._get_parent_width,
-      this._get_frame_height
+      this._get_frame_width
     )
     canvas_el.height = parseRelativeUnit(
       height,
@@ -139,7 +148,6 @@ export default class CanvasComp
   }
 
   private _setup = () => {
-    // this._setup_canvas()
     this._setup_context()
   }
 
@@ -288,36 +296,6 @@ export default class CanvasComp
     // console.log('Graph', '_redraw', this._d)
 
     this._draw_steps(this._d)
-  }
-
-  private _setup_canvas = (): void => {
-    const {
-      api: {
-        screen: { devicePixelRatio },
-      },
-    } = this.$system
-
-    const { width = 200, height = 200 } = this.$props
-
-    this._context.setTransform(1, 0, 0, 1, 0, 0)
-
-    const dpr = devicePixelRatio || 1
-
-    const _width = parseRelativeUnit(
-      width,
-      this._get_parent_width,
-      this._get_frame_height
-    )
-    const _height = parseRelativeUnit(
-      height,
-      this._get_parent_height,
-      this._get_frame_height
-    )
-
-    this._canvas_el.width = _width * dpr
-    this._canvas_el.height = _height * dpr
-
-    this._context.scale(1 / dpr, 1 / dpr)
   }
 
   private _setup_context = (): void => {

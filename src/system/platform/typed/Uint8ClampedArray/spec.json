@@ -8,15 +8,12 @@
       }
     },
     "done": {
-      "type": "boolean",
-      "metadata": {
-        "description": "whether the array is done"
-      }
+      "type": "any"
     }
   },
   "outputs": {
     "array": {
-      "type": "`A`",
+      "type": "`A`&`TA`",
       "ref": true
     }
   },
