@@ -7218,7 +7218,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       {
         className: 'core-content',
         style: {
-          position: 'relative',
+          position: 'absolute',
           height: '100%',
           width: '100%',
         },
