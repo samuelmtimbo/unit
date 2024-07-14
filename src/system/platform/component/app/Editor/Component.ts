@@ -19049,6 +19049,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         {
           combo: ['Space'],
           keydown: this._on_space_keydown,
+          preventDefault: true,
         },
         {
           combo: ['\\'],
