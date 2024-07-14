@@ -79,8 +79,6 @@ export default class Remote extends Semifunctional<I, O> {
         break
       case 'message':
         {
-          // console.log('Remote', 'message', message)
-
           const { type, data } = _data
 
           switch (type) {
@@ -93,8 +91,6 @@ export default class Remote extends Semifunctional<I, O> {
               {
                 const port: Port = {
                   send: (data) => {
-                    // const message = stringify(data)
-
                     this._output.message.push(data)
                   },
                   onmessage(data: any) {
