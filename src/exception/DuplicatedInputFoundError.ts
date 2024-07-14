@@ -1,5 +1,7 @@
+import { Key } from '../types/Key'
+
 export class DuplicatedInputFoundError extends Error {
-  constructor(name: string) {
-    super(`input with name "${name}" already exists`)
+  constructor(name: Key) {
+    super(`input with name "${name.toString()}" already exists`)
   }
 }

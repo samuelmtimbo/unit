@@ -2,6 +2,7 @@ import { Moment } from '../debug/Moment'
 import { NOOP } from '../NOOP'
 import { evaluate } from '../spec/evaluate'
 import { stringify } from '../spec/stringify'
+import { Dict } from '../types/Dict'
 import { $Element } from '../types/interface/async/$Element'
 import { Unlisten } from '../types/Unlisten'
 import { Component } from './component'
@@ -25,7 +26,7 @@ import { Listener } from './Listener'
 
 export class Element<
   E extends IOElement = any,
-  P extends object = {},
+  P extends Dict<any> = Dict<any>,
   U extends $Element = $Element,
 > extends Component<E, P, U> {
   private _element_unlisten: Unlisten

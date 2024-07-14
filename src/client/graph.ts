@@ -20,12 +20,12 @@ import {
 } from './id'
 
 export type GraphNode = {
-  next: { [id: string]: GraphNode }
-  previous: { [id: string]: GraphNode }
+  next: Dict<GraphNode>
+  previous: Dict<GraphNode>
 }
 
-export type GraphNodeMap = { [id: string]: GraphNode }
-export type SubGraphNode = { [id: string]: Set<string> }
+export type GraphNodeMap = Dict<GraphNode>
+export type SubGraphNode = Dict<Set<string>>
 
 export function getSubPinSpecNodeId(
   type: IO,

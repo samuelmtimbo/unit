@@ -89,7 +89,7 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
     }
   }
 
-  onPropChanged(prop: string, current: any): void {
+  onPropChanged<K extends keyof Props>(prop: K, current: any): void {
     this._prop_handler[prop](current)
   }
 }

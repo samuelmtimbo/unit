@@ -2,7 +2,7 @@ import { Dict } from '../../types/Dict'
 import { Component } from '../component'
 
 export default function mergePropStyle<T>(
-  component: Component<any, any>,
+  component: Component,
   style: Dict<string | undefined>
 ) {
   const current = component.getProp('style')

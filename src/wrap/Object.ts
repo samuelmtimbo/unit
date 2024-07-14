@@ -14,16 +14,16 @@ export function wrapSharedRef<T extends Dict<any>>(
   const _data = new Object_(data)
 
   return {
-    get<K extends string & keyof T>(name: K): Promise<T[K]> {
+    get<K extends keyof T>(name: K): Promise<T[K]> {
       throw new MethodNotImplementedError()
     },
-    set<K extends string & keyof T>(name: K, data: T[K]): Promise<void> {
-      return _data.deepSet(['current', name], data)
+    set<K extends keyof T>(name: K, data: T[K]): Promise<void> {
+      return _data.deepSet(['current', name] as string[], data)
     },
-    delete<K extends string & keyof T>(name: K): Promise<void> {
+    delete<K extends keyof T>(name: K): Promise<void> {
       throw new MethodNotImplementedError()
     },
-    hasKey<K extends string & keyof T>(name: K): Promise<boolean> {
+    hasKey<K extends keyof T>(name: K): Promise<boolean> {
       throw new MethodNotImplementedError()
     },
     keys(): Promise<string[]> {

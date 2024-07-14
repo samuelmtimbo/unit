@@ -5,7 +5,11 @@ import _specs from '../../../system/_specs'
 import { system } from '../../util/system'
 
 const spec = require('../../../system/core/loop/RangeBounce/spec.json')
-const RangeBounce = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
+const RangeBounce = fromSpec<{ a: number; b: number }, { i: number }>(
+  spec,
+  _specs,
+  {}
+)
 
 const rangeBounce = new RangeBounce(system)
 

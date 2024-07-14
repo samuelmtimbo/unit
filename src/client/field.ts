@@ -33,7 +33,7 @@ export function makeFieldInputEventHandler<E extends InputElement>(
 
 export class Field<
   E extends InputElement = any,
-  P extends object = {},
+  P extends Dict<any> = Dict<any>,
   U extends $Element = $Element,
 > extends Element<E, P, U> {
   private _prop_handler: PropHandler
@@ -99,7 +99,7 @@ export class Field<
     }
   }
 
-  onPropChanged(prop: string, current: any): void {
+  onPropChanged(prop, current: any): void {
     this._prop_handler[prop](current)
   }
 }

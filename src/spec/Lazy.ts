@@ -26,7 +26,6 @@ import { Unlisten } from '../types/Unlisten'
 import { AnimationSpec, C, ComponentSetup } from '../types/interface/C'
 import { ComponentEvents, Component_ } from '../types/interface/Component'
 import { G, G_MoveSubgraphIntoArgs } from '../types/interface/G'
-import { U } from '../types/interface/U'
 
 export function lazyFromSpec(
   spec: GraphSpec,
@@ -42,8 +41,8 @@ export function lazyFromSpec(
   const { inputs, outputs, id } = spec
 
   class Lazy<
-      I extends Dict<any>,
-      O extends Dict<any>,
+      I extends Dict<any> = Dict<any>,
+      O extends Dict<any> = Dict<any>,
       _EE extends UnitEvents<_EE> = UnitEvents<{}>,
     >
     extends Unit<I, O, _EE>
@@ -60,9 +59,12 @@ export function lazyFromSpec(
 
     public __element: boolean = false
 
-    private __graph: Graph
+    private __graph: Graph<I, O>
 
-    private _merge: { input: Dict<Merge<any>>; output: Dict<Merge<any>> } = {
+    private _merge: {
+      input: Partial<Record<keyof I, Merge<any, I, I>>>
+      output: Partial<Record<keyof O, Merge<any, O, O>>>
+    } = {
       input: {},
       output: {},
     }
@@ -294,11 +296,7 @@ export function lazyFromSpec(
       return this.__graph.addUnitSpecs(units)
     }
 
-    addUnitSpec(
-      unitId: string,
-      unit: UnitBundleSpec,
-      emit?: boolean
-    ): U<any, any> {
+    addUnitSpec(unitId: string, unit: UnitBundleSpec, emit?: boolean): Unit {
       this._ensure()
       return this.__graph.addUnitSpec(unitId, unit)
     }
@@ -444,14 +442,14 @@ export function lazyFromSpec(
       })
 
       forEachValueKey(this.__graph.getOutputs(), (output, name) => {
-        const merge = new Merge(this.__system)
+        const merge = new Merge<any, O, O>(this.__system)
         merge.play()
         this._merge.output[name] = merge
         merge.setInput(name, output)
         merge.setOutput(name, this._output[name])
       })
       forEachValueKey(this.__graph.getInputs(), (input, name) => {
-        const merge = new Merge(this.__system)
+        const merge = new Merge<any, I, I>(this.__system)
         merge.play()
         this._merge.input[name] = merge
         merge.setInput(name, this._input[name])
@@ -493,14 +491,12 @@ export function lazyFromSpec(
       return this.__graph.appendChild(Bundle)
     }
 
-    public appendChildren(
-      Classes: UnitBundle<Component_<ComponentEvents>>[]
-    ): number {
+    public appendChildren(Classes: UnitBundle[]): number {
       this._ensure()
       return this.__graph.appendChildren(Classes)
     }
 
-    public insertChild(Bundle: UnitBundle<Component_>, at: number): void {
+    public insertChild(Bundle: UnitBundle, at: number): void {
       this._ensure()
       return this.__graph.insertChild(Bundle, at)
     }
@@ -724,8 +720,9 @@ export function lazyFromSpec(
       return this.__graph.isExposedInput(pin)
     }
 
-    public getExposedInputPin = (id: string): Pin<I[keyof I]> => {
+    public getExposedInputPin = <K extends keyof I>(id: K): Pin<I[K]> => {
       this._ensure()
+
       return this.__graph.getExposedInputPin(id)
     }
 

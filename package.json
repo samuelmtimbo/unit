@@ -84,7 +84,7 @@
     "prettier-plugin-organize-imports": "3.2.3",
     "shx": "0.3.3",
     "ts-node": "10.4.0",
-    "typescript": "5.3.3",
+    "typescript": "5.5.3",
     "typescript-eslint": "0.0.1-alpha.0"
   }
 }

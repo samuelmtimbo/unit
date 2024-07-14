@@ -50,11 +50,9 @@ assert.equal(clonedAdd.getInput('a').constant(), true)
 assert.equal(clonedAdd.peakInput('a'), 1)
 assert.equal(clonedAdd.peakOutput('a + b'), 3)
 
-const Range = bundleFromId<Unit<{ a: number; b: number }, { i: number }>>(
-  ID_RANGE,
-  _specs,
-  _classes
-)
+const Range = bundleFromId<
+  Unit<{ a: number; b: number }, { i: number; test: boolean }>
+>(ID_RANGE, _specs, _classes)
 
 const range = new Range(system)
 

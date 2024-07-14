@@ -47,10 +47,10 @@ export interface C {
   reorderParentRoot(component: Component_, to: number): void
   appendParentChild(component: Component_, slotName: string): void
   removeParentChild(component: Component_): void
-  appendChild(Class: UnitBundle<Component_>): number
-  appendChildren(Classes: UnitBundle<Component_>[]): number
-  insertChild(Class: UnitBundle<Component_>, at: number): void
-  pushChild(Class: UnitBundle<Component_>): number
+  appendChild(Class: UnitBundle): number
+  appendChildren(Classes: UnitBundle[]): number
+  insertChild(Class: UnitBundle, at: number): void
+  pushChild(Class: UnitBundle): number
   removeChild(at: number): Component_
   pullChild(at: number): Component_
   hasChild(at: number): boolean

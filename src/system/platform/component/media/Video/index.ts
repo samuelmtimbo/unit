@@ -22,10 +22,9 @@ export interface O {}
 
 export interface VideoJ {}
 export interface VideoEE extends ElementEE<{}> {}
-export interface VideoC extends VideoComp {}
 
 export default class Video
-  extends Element_<I, O, VideoJ, VideoEE, VideoC>
+  extends Element_<I, O, VideoJ, VideoEE>
   implements CS, PS, IM, ME
 {
   __ = [...this.__, 'CS', 'PS', 'IM', 'ME']

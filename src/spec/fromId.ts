@@ -61,20 +61,20 @@ export function classFromId<T extends Unit>(
   return Class
 }
 
-export function unitFromId<T extends Unit>(
+export function unitFromId<I, O>(
   system: System,
   id: string,
   specs: Specs,
   classes: Classes,
   branch: Dict<true> = {}
-): Unit<T> {
+): Unit<I, O> {
   let spec: Spec = specs[id]
 
   if (!spec) {
     throw new SpecNotFoundError()
   }
 
-  let unit: Unit
+  let unit: Unit<I, O>
 
   let Class: UnitClass = classes[id]
 

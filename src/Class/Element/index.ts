@@ -40,8 +40,8 @@ export type ElementEE<_EE extends Dict<any[]>> = StatefulEvents<
   Element_EE
 
 export class Element_<
-    I = any,
-    O = any,
+    I extends Dict<any> = any,
+    O extends Dict<any> = any,
     _J extends Dict<any> = {},
     _EE extends ElementEE<_EE> = ElementEE<Element_EE>,
     _C extends Component = Component,
@@ -57,7 +57,6 @@ export class Element_<
   public _parent_children: Component_[] = []
   public _slot: Dict<Component_> = {}
   public _component: _C
-  public _state: Dict<any> = {}
   public _animations: AnimationSpec[] = []
   public _stopPropagation: Dict<number> = {}
   public _stopImmediatePropagation: Dict<number> = {}
@@ -164,22 +163,19 @@ export class Element_<
     return removeParentChild(this, this._parent_children, component)
   }
 
-  appendChild(bundle: UnitBundle<Component_>): number {
+  appendChild(bundle: UnitBundle): number {
     return appendChild(this, this._children, bundle)
   }
 
-  appendChildren(bundles: UnitBundle<Component_<ComponentEvents>>[]): number {
+  appendChildren(bundles: UnitBundle[]): number {
     return appendChildren(this, this._children, bundles)
   }
 
-  insertChild(
-    Bundle: UnitBundle<Component_<ComponentEvents>>,
-    at: number
-  ): void {
+  insertChild(Bundle: UnitBundle, at: number): void {
     throw new MethodNotImplementedError()
   }
 
-  pushChild(Bundle: UnitBundle<Component_>): number {
+  pushChild(Bundle: UnitBundle): number {
     return pushChild(this, this._children, Bundle)[0]
   }
 

@@ -190,9 +190,9 @@ export type Graph_EE = G_EE & C_EE & U_EE
 
 export type GraphEvents = UnitEvents<Graph_EE> & Graph_EE
 
-export class Graph<I = any, O = any>
+export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   extends Primitive<I, O, GraphEvents>
-  implements G, C, U
+  implements G<I, O>, C, U<I, O>
 {
   __ = ['U', 'C', 'G', 'EE']
 
@@ -202,7 +202,7 @@ export class Graph<I = any, O = any>
 
   private _unit: Dict<Unit> = {}
 
-  private _merge: { [mergeId: string]: Merge } = {}
+  private _merge: Record<string, Merge> = {}
 
   private _pipedFrom: {
     [output: string]: string
@@ -223,7 +223,10 @@ export class Graph<I = any, O = any>
 
   private _exposedPin: IOOf<Dict<Pin>> = {}
   private _exposedMerge: IOOf<Dict<IOOf<Merge>>> = {}
-  private _exposedEmptySubPin: IOOf<Dict<Dict<Pin>>> = { input: {}, output: {} }
+  private _exposedEmptySubPin: IOOf<Dict<Dict<Pin>>> = {
+    input: {},
+    output: {},
+  }
 
   private _mergeToSelfUnit: Dict<string> = {}
   private _selfUniToMerge: Dict<string> = {}
@@ -320,10 +323,13 @@ export class Graph<I = any, O = any>
     })
   }
 
-  private _onPinSetRenamed = (
-    type: IO,
-    name: string,
-    newName: string,
+  private _onPinSetRenamed = <
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(
+    type: T,
+    name: K,
+    newName: K,
     opt: PinOpt,
     newOpt: PinOpt
   ) => {
@@ -386,9 +392,9 @@ export class Graph<I = any, O = any>
     }
   }
 
-  public onInputRenamed(
-    name: string,
-    newName: string,
+  public onInputRenamed<K extends keyof I>(
+    name: K,
+    newName: K,
     opt: PinOpt,
     newOpt: PinOpt
   ): void {
@@ -399,9 +405,9 @@ export class Graph<I = any, O = any>
     this._onPinSetRenamed('input', name, newName, opt, newOpt)
   }
 
-  public onOutputRenamed(
-    name: string,
-    newName: string,
+  public onOutputRenamed<K extends keyof O>(
+    name: K,
+    newName: K,
     opt: PinOpt,
     newOpt: PinOpt
   ) {
@@ -477,7 +483,13 @@ export class Graph<I = any, O = any>
     mergePin.take()
   }
 
-  private _plugToWaitAll = (type: IO, name: string): void => {
+  private _plugToWaitAll = <
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(
+    type: T,
+    name: K
+  ): void => {
     const oppositeType = opposite(type)
 
     const pin = new Pin({}, this.__system)
@@ -492,10 +504,16 @@ export class Graph<I = any, O = any>
     this.setPin(type, name, pin, {})
   }
 
-  private _unplugFromWaitAll = (type: IO, name: string): void => {
+  private _unplugFromWaitAll = <
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(
+    type: T,
+    name: K
+  ): void => {
     const oppositeType = opposite(type)
 
-    const pin = this.getExposedInputPin(name)
+    const pin = this.getExposedInputPin(name as keyof I)
 
     const waitAll = this._waitAll[type]
 
@@ -2397,7 +2415,7 @@ export class Graph<I = any, O = any>
   }
 
   public isExposedInput(pin: GraphSubPinSpec): boolean {
-    const { inputs = {} } = this._spec
+    const { inputs = { plug: {} } } = this._spec
 
     const pinNodeId = this._getExposedSubPinNodeId('input', pin)
 
@@ -2410,19 +2428,25 @@ export class Graph<I = any, O = any>
     })
   }
 
-  public getExposedPin = (type: IO, id: string): Pin => {
+  public getExposedPin = <
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(
+    type: T,
+    id: K
+  ): Pin => {
     if (type === 'input') {
-      return this.getExposedInputPin(id)
+      return this.getExposedInputPin(id as keyof I)
     } else {
-      return this.getExposedOutputPin(id)
+      return this.getExposedOutputPin(id as keyof O)
     }
   }
 
-  public getExposedInputPin = (id: string): Pin<I[keyof I]> => {
+  public getExposedInputPin = <K extends keyof I>(id: K): Pin<I[K]> => {
     return deepGet(this._exposedPin, ['input', id])
   }
 
-  public getExposedOutputPin = (id: string): Pin<O[keyof O]> => {
+  public getExposedOutputPin = <K extends keyof O>(id: K): Pin<O[K]> => {
     return deepGet(this._exposedPin, ['output', id])
   }
 
@@ -2433,11 +2457,14 @@ export class Graph<I = any, O = any>
     }
   }
 
-  public getExposedPinSpec(type: IO, pinId: string): GraphPinSpec {
+  public getExposedPinSpec<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, pinId: K): GraphPinSpec {
     if (type === 'input') {
-      return this.getExposedInputSpec(pinId)
+      return this.getExposedInputSpec(pinId as keyof I)
     } else {
-      return this.getExposedOutputSpec(pinId)
+      return this.getExposedOutputSpec(pinId as keyof O)
     }
   }
 
@@ -2451,10 +2478,10 @@ export class Graph<I = any, O = any>
     return !!outputs[pinId]
   }
 
-  public getExposedInputSpec(pinId: string): GraphPinSpec {
+  public getExposedInputSpec<K extends keyof I>(pinId: K): GraphPinSpec {
     const inputs = this._spec.inputs || {}
 
-    return inputs[pinId]
+    return inputs[pinId as string]
   }
 
   public getPlugSpec(type: IO, pinId: string, subPinId: string): GraphPinSpec {
@@ -2467,10 +2494,10 @@ export class Graph<I = any, O = any>
     return inputs
   }
 
-  public getExposedOutputSpec(pinId: string): GraphPinSpec {
+  public getExposedOutputSpec<K extends keyof O>(pinId: K): GraphPinSpec {
     const outputs = this._spec.outputs || {}
 
-    return outputs[pinId]
+    return outputs[pinId as string]
   }
 
   public getExposedOutputSpecs(): GraphPinsSpec {
@@ -2526,7 +2553,7 @@ export class Graph<I = any, O = any>
   ): { specId: string; bundle: UnitBundleSpec } {
     const data = this._removeUnitGhost(unitId, nextUnitId, spec, fork, bubble)
 
-    const { specId, bundle } = data
+    const { bundle } = data
 
     emit && this.emit('remove_unit_ghost', unitId, nextUnitId, bundle, [])
 
@@ -2682,7 +2709,7 @@ export class Graph<I = any, O = any>
   ): { specId: string; bundle: UnitBundleSpec } {
     const { specs } = this.__system
 
-    const { id: specId } = this.__system.newSpec(spec)
+    const newSpec = this.__system.newSpec(spec)
 
     const outerSpec = this.getUnitOuterSpec(unitId)
 
@@ -2692,7 +2719,12 @@ export class Graph<I = any, O = any>
 
     const bundle = unitBundleSpec(unitSpec, specs)
 
-    this._addUnitBundleSpec(nextUnitId, { unit: { id: specId } })
+    this._addUnitBundleSpec(nextUnitId, {
+      unit: { id: newSpec.id },
+      specs: {
+        [newSpec.id]: newSpec,
+      },
+    })
 
     forIOObjKV(
       outerSpec.merges,
@@ -2739,7 +2771,7 @@ export class Graph<I = any, O = any>
 
     bundle.unit.memory = unit.snapshot()
 
-    return { specId, bundle }
+    return { specId: newSpec.id, bundle }
   }
 
   public getUnitByPath(path: string[]): Unit<any, any> {
@@ -2829,9 +2861,9 @@ export class Graph<I = any, O = any>
   }
 
   public getGraphMergeInputData = (): Dict<any> => {
-    const state = {}
+    const state: Dict<any> = {}
 
-    forEachValueKey(this._merge, (merge: Merge<any>, mergeId: string) => {
+    forEachValueKey(this._merge, (merge: Merge<any>, mergeId) => {
       const mergeInputPinId = getMergePinNodeId(mergeId, 'input')
 
       const mergeInputPin = this._pin[mergeInputPinId]
@@ -3090,11 +3122,7 @@ export class Graph<I = any, O = any>
     for (const child of children) {
       const { id } = child
 
-      const ChildBundle = bundleFromId<Component_>(
-        id,
-        this.__system.specs,
-        classes
-      )
+      const ChildBundle = bundleFromId(id, this.__system.specs, classes)
 
       unit.appendChild(ChildBundle)
     }
@@ -3112,11 +3140,7 @@ export class Graph<I = any, O = any>
     for (const child of children) {
       const { id } = child
 
-      const ChildBundle = bundleFromId<Component_>(
-        id,
-        this.__system.specs,
-        classes
-      )
+      const ChildBundle = bundleFromId(id, this.__system.specs, classes)
 
       unit.appendChild(ChildBundle)
     }
@@ -3479,7 +3503,7 @@ export class Graph<I = any, O = any>
 
     const all_unlisten: Unlisten[] = []
 
-    unit.setParent(this)
+    unit.setParent(this as any)
 
     this._unit[unitId] = unit
 
@@ -4774,10 +4798,10 @@ export class Graph<I = any, O = any>
     const merge = clone(this._spec.merges[mergeId])
 
     forEachValueKey(merge, ({ input, output }, unitId) => {
-      forEachValueKey(output || {}, (_, outputId: string) => {
+      forEachValueKey(output || {}, (_, outputId) => {
         this._simRemovePinFromMerge(mergeId, unitId, 'output', outputId, false)
       })
-      forEachValueKey(input || {}, (_, inputId: string) => {
+      forEachValueKey(input || {}, (_, inputId) => {
         this._simRemovePinFromMerge(mergeId, unitId, 'input', inputId, take)
       })
     })
@@ -6074,7 +6098,7 @@ export class Graph<I = any, O = any>
     return reorderParentRoot(this, this._parent_root, component, to)
   }
 
-  insertChild(Bundle: UnitBundle<Component_>, at: number): void {
+  insertChild(Bundle: UnitBundle, at: number): void {
     return insertChild(this, this._children, Bundle, at)
   }
 
@@ -6082,7 +6106,7 @@ export class Graph<I = any, O = any>
     return appendChild(this, this._children, Bundle)
   }
 
-  appendChildren(Bundles: UnitBundle<Component_<ComponentEvents>>[]): number {
+  appendChildren(Bundles: UnitBundle[]): number {
     return appendChildren(this, this._children, Bundles)
   }
 

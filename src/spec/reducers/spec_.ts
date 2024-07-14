@@ -256,25 +256,19 @@ export const removeMerge = (
 ): void => {
   delete spec.merges[mergeId]
 
-  spec.inputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
-    spec.inputs,
-    (input: GraphPinSpec) => ({
-      ...input,
-      plug: mapObjVK(input.plug, (plug) => {
-        return !plug.mergeId || mergeId !== plug.mergeId ? plug : {}
-      }),
-    })
-  )
+  spec.inputs = mapObjVK(spec.inputs, (input: GraphPinSpec) => ({
+    ...input,
+    plug: mapObjVK(input.plug, (plug) => {
+      return !plug.mergeId || mergeId !== plug.mergeId ? plug : {}
+    }),
+  }))
 
-  spec.outputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
-    spec.outputs,
-    (output: GraphPinSpec) => ({
-      ...output,
-      plug: mapObjVK(output.plug, (plug) => {
-        return !plug.mergeId || mergeId !== plug.mergeId ? plug : {}
-      }),
-    })
-  )
+  spec.outputs = mapObjVK(spec.outputs, (output: GraphPinSpec) => ({
+    ...output,
+    plug: mapObjVK(output.plug, (plug) => {
+      return !plug.mergeId || mergeId !== plug.mergeId ? plug : {}
+    }),
+  }))
 
   if (spec.metadata && spec.metadata.position && spec.metadata.position.merge) {
     delete spec.metadata.position.merge[mergeId]

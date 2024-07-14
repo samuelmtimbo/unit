@@ -7,8 +7,8 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  0: T
-  1: T
+  '0': T
+  '1': T
 }
 
 export default class Plan<T> extends Primitive<I<T>, O<T>> {

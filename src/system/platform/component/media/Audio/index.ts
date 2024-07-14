@@ -6,7 +6,6 @@ import { CS } from '../../../../../types/interface/CS'
 import { ME } from '../../../../../types/interface/ME'
 import { ID_AUDIO } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
-import AudioComp from './Component'
 
 export interface I {
   style: object
@@ -20,10 +19,9 @@ export interface O {}
 
 export interface AudioJ {}
 export interface AudioEE extends ElementEE<{}> {}
-export interface AudioC extends AudioComp {}
 
 export default class Audio
-  extends Element_<I, O, AudioJ, AudioEE, AudioC>
+  extends Element_<I, O, AudioJ, AudioEE>
   implements ME, CS
 {
   __ = [...this.__, 'CS', 'ME']

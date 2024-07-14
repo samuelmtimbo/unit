@@ -56,7 +56,11 @@ export type G_MoveSubgraphIntoArgs = [
   boolean?,
 ]
 
-export interface G<I = any, O = any, U_ = any> {
+export interface G<
+  I extends Dict<any> = Dict<any>,
+  O extends Dict<any> = Dict<any>,
+  U_ = any,
+> {
   exposePinSet(
     type: IO,
     pinId: string,
@@ -83,8 +87,8 @@ export interface G<I = any, O = any, U_ = any> {
   getSpec(): GraphSpec
   getBundleSpec(deep: boolean): BundleSpec
   getSubPinSpec(type: IO, pinId: string, subPinId: string): GraphSubPinSpec
-  getExposedInputPin(pinId: string): Pin<I[keyof I]>
-  getExposedOutputPin(pinId: string): Pin<O[keyof O]>
+  getExposedInputPin<K extends keyof I>(pinId: K): Pin<I[K]>
+  getExposedOutputPin<K extends keyof O>(pinId: K): Pin<O[K]>
   getExposedPinSpec(type: IO, pinId: string): GraphPinSpec
   getExposedInputSpec(pinId: string): GraphPinSpec
   getExposedOutputSpec(pinId: string): GraphPinSpec

@@ -7,12 +7,10 @@ import { system } from '../../util/system'
 const spec =
   require('../../../system/core/common/KeysEquals/spec.json') as GraphSpec
 
-// console.log(JSON.stringify(spec, null, 2))
-
-const KeysEquals = fromSpec<{ a: object; keys: string[] }, { equals: boolean }>(
-  spec,
-  _specs
-)
+const KeysEquals = fromSpec<
+  { obj: object; keys: string[] },
+  { equals: boolean }
+>(spec, _specs)
 
 const keysEquals = new KeysEquals(system)
 

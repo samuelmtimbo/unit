@@ -54,6 +54,7 @@ import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
 import { IO } from '../../IO'
+import { Key } from '../../Key'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
@@ -637,7 +638,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
       const pinData = {}
 
-      forEachValueKey(units, (unit: Unit, unitId: string) => {
+      forEachValueKey(units, (unit: Unit, unitId: Key) => {
         const unitPinData = unit.getPinsData()
 
         const _unitPinData = stringifyPinData(unitPinData)
@@ -706,7 +707,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
       const units = graph.getUnits()
 
-      forEachValueKey(units, (unit: Unit, unitId: string) => {
+      forEachValueKey(units, (unit: Unit, unitId: Key) => {
         const unitPinData = unit.getPinsData()
 
         const _unitPinData = stringifyPinData(unitPinData)

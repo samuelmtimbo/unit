@@ -7,10 +7,10 @@ import { system } from '../../util/system'
 const spec =
   require('../../../system/core/common/LengthLessThanOr/spec.json') as GraphSpec
 
-const LengthLTOr = fromSpec<{ a: number[]; b: number }, { equals: boolean }>(
-  spec,
-  _specs
-)
+const LengthLTOr = fromSpec<
+  { a: number[]; b: number },
+  { true: boolean; false: boolean }
+>(spec, _specs)
 
 const lengthLTOr = new LengthLTOr(system)
 

@@ -2,12 +2,12 @@ import Sort from '../../../../system/f/array/Sort'
 import assert from '../../../../util/assert'
 import { system } from '../../../util/system'
 
-const sort = new Sort(system)
+const sort = new Sort<number>(system)
 
 sort.play()
 
-let i: boolean = undefined
-let j: boolean = undefined
+let i: number = undefined
+let j: number = undefined
 
 let p = () => {
   if (i !== undefined && j !== undefined) {

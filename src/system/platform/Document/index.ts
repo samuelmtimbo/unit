@@ -49,7 +49,7 @@ export default class Document_ extends Primitive<I, O> implements CH {
     return
   }
 
-  onDataInputData(name: string, data: any): void {
+  onDataInputData<K extends keyof I>(name: K, data: any): void {
     // console.log('Iframe', 'onDataInputData', 'name', name, 'data', data)
 
     super.onDataInputData(name, data)

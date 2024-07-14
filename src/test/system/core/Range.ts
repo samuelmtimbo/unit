@@ -10,7 +10,10 @@ import { system } from '../../util/system'
 
 const spec = require('../../../system/core/loop/Range/spec.json')
 
-const Range = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
+const Range = fromSpec<
+  { a: number; b: number },
+  { i: number; final: number; test: boolean }
+>(spec, _specs, {})
 
 const range = new Range(system)
 

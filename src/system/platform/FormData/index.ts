@@ -59,7 +59,7 @@ export default class FormData_ extends Semifunctional<I, O> {
     })
   }
 
-  onIterDataInputData(name: string, data: any): void {
+  onIterDataInputData<K extends keyof I>(name: K, data: any): void {
     super.onIterDataInputData(name, data)
 
     // if (name === 'done') {

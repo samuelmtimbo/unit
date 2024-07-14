@@ -21,7 +21,7 @@ export class SharedObject<T extends Dict<any>, _EE extends Dict<any[]>> {
 
   connect(): SharedObjectClient<T, _EE> {
     const proxy = new Proxy(this._obj, {
-      get: <K extends keyof _EE>(target, name: K) => {
+      get: <K extends keyof _EE>(target, name) => {
         const value = target[name]
         if (typeof value == 'function') {
           return (...args: SharedObjectClientEvents<_EE>[K]) => {

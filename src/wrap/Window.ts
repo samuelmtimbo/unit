@@ -6,7 +6,7 @@ import { W } from '../types/interface/W'
 import { wrapValue } from './Value'
 
 export function wrapWindow(window: Window, system: System): W {
-  return new (class Window_ extends $<any> implements W {
+  return new (class Window_ extends $ implements W {
     __: string[] = ['W']
 
     async send(data: any): Promise<void> {

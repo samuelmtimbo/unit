@@ -51,7 +51,7 @@ export const INHERITANCE = {
   W: ['EE', 'CH'],
   B: ['IM', 'BO'],
   FD: ['BO'],
-  ID: ['J']
+  ID: ['J'],
 }
 
 export type AllTypes<T> = {
