@@ -4147,7 +4147,7 @@ export class Graph<I = any, O = any>
             {
               unitId: otherMergeUnitId,
               pinId: otherMergeUnitPinId,
-              kind: mergeInputPlug.kind ?? 'input',
+              kind: otherMergeUnitPinType,
             },
             false
           )

@@ -37562,9 +37562,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             this._sim_plug_exposed_pin('input', _pinId, subPinId, {
               unitId,
               pinId,
-              kind: 'input',
+              kind: type,
             })
-          } else if (should_plug_output) {
+          }
+
+          if (should_plug_output) {
             const { pinId: _pinId, subPinId } =
               segmentPlugNodeId(ext_output_node_id)
 
@@ -37600,14 +37602,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         this._spec_remove_merge(mergeId)
 
-        const { unitId, type, pinId } = segmentLinkPinNodeId(other_pin_node_id)
+        const {
+          unitId,
+          type: kind,
+          pinId,
+        } = segmentLinkPinNodeId(other_pin_node_id)
 
         forIO(merge_plugs, (type, plugs) => {
           forEach(plugs, (plug) => {
             this._spec_plug_sub_pin(type, plug.pinId, plug.subPinId, {
               unitId,
               pinId,
-              kind: type,
+              kind,
             })
           })
         })
