@@ -19,7 +19,9 @@ export function unitFromBundleSpec(
   specs: Specs,
   branch: Dict<true> = {}
 ): Unit {
-  applyUnitDefaultIgnored(bundle.unit, weakMerge(specs, bundle.specs ?? {}))
+  const specs_ = weakMerge(specs, bundle.specs ?? {})
+
+  applyUnitDefaultIgnored(bundle.unit, specs_)
 
   const {
     unit: { id, input },
@@ -31,7 +33,7 @@ export function unitFromBundleSpec(
     system.injectSpecs(bundle.specs)
   }
 
-  const unit = unitFromId(system, id, specs, classes, branch)
+  const unit = unitFromId(system, id, specs_, classes, branch)
 
   io((type) => {
     const pins = bundle.unit[type] ?? {}
