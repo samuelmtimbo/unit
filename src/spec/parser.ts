@@ -2,6 +2,7 @@ import { MethodNotImplementedError } from '../exception/MethodNotImplementedErro
 import { INHERITANCE } from '../interface'
 import { keys } from '../system/f/object/Keys/f'
 import { PinsSpecBase, Specs } from '../types'
+import { Dict } from '../types/Dict'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { matchAllExc } from '../util/array'
 import { clone } from '../util/object'
@@ -1152,12 +1153,8 @@ export function _extractGenerics(
   specs: Specs,
   value: TreeNode,
   type: TreeNode
-): {
-  [name: string]: string
-} {
-  let generics: {
-    [name: string]: string
-  } = {}
+): Dict<string> {
+  let generics: Dict<string> = {}
 
   switch (type.type) {
     case TreeNodeType.Generic: {

@@ -51,7 +51,7 @@ export class Functional<
     this.addListener('destroy', this.d)
   }
 
-  private _on_input_data(name: string): void {
+  private _on_input_data<K extends keyof I>(name: K): void {
     if (this._i[name] !== undefined && this._i_active.size === this._i_count) {
       this._looping = false
     }
@@ -74,28 +74,28 @@ export class Functional<
     }
   }
 
-  private _on_input_invalid(name: string): void {
+  private _on_input_invalid<K extends keyof I>(name: K): void {
     if (this._i_invalid.size === 1) {
       this.d()
       this._invalidate()
     }
   }
 
-  onDataInputData(name: string): void {
+  onDataInputData<K extends keyof I>(name: K): void {
     this._on_input_data(name)
   }
 
-  onDataInputDrop(name: string, data: any): void {
+  onDataInputDrop<K extends keyof I>(name: K, data: any): void {
     this._on_input_drop()
   }
 
-  onDataInputStart(name: string): void {
+  onDataInputStart<K extends keyof I>(name: K): void {
     if (this._i_start.size === this._i_count) {
       this._start()
     }
   }
 
-  onDataInputInvalid(name: string): void {
+  onDataInputInvalid<K extends keyof I>(name: K): void {
     this._on_input_invalid(name)
   }
 
@@ -109,20 +109,20 @@ export class Functional<
     this._on_input_data(name)
   }
 
-  onRefInputDrop(name: string, data: any): void {
+  onRefInputDrop<K extends keyof I>(name: K, data: any): void {
     this._on_input_drop()
   }
 
-  onRefInputInvalid(name: string): void {
+  onRefInputInvalid<K extends keyof I>(name: K): void {
     this._on_input_invalid(name)
   }
 
-  private _on_data_output_drop = (name: string): void => {
+  private _on_data_output_drop = <K extends keyof O>(name: K): void => {
     this._backward_if_ready()
     this._forward_if_ready()
   }
 
-  onDataOutputDrop(name: string) {
+  onDataOutputDrop<K extends keyof O>(name: K) {
     this._on_data_output_drop(name)
   }
 

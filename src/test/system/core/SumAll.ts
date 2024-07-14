@@ -6,7 +6,7 @@ import { system } from '../../util/system'
 
 const spec = require('../../../system/core/array/SumAll/spec.json')
 
-const SumAll = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
+const SumAll = fromSpec<{ a: any }, { sum: number }>(spec, _specs, {})
 
 const sumAll = new SumAll(system)
 

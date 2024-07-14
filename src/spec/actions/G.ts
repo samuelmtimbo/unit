@@ -1005,9 +1005,9 @@ export const reverseAction = ({ type, data }: Action): Action => {
         }
       )
 
-      const nextPlugSpec_ = {
-        input: mapObjVK<any, any>(data_.nextPlugSpec.input, (pinSpec) => {
-          return mapObjVK<any, any>(pinSpec, (subPinSpec) => {
+      const nextPlugSpec_: IOOf<Dict<Dict<GraphSubPinSpec>>> = {
+        input: mapObjVK(data_.nextPlugSpec.input, (pinSpec) => {
+          return mapObjVK(pinSpec, (subPinSpec) => {
             const { mergeId, unitId } = subPinSpec
 
             if (mergeId) {
@@ -1023,10 +1023,10 @@ export const reverseAction = ({ type, data }: Action): Action => {
             }
 
             return subPinSpec
-          })
+          }) as Dict<GraphSubPinSpec>
         }),
-        output: mapObjVK<any, any>(data_.nextPlugSpec.output, (nextPlug) => {
-          return mapObjVK<any, any>(nextPlug, (subPinSpec) => {
+        output: mapObjVK(data_.nextPlugSpec.output, (nextPlug) => {
+          return mapObjVK(nextPlug, (subPinSpec) => {
             const { mergeId, unitId } = subPinSpec
 
             if (mergeId) {
@@ -1042,7 +1042,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
             }
 
             return subPinSpec
-          })
+          }) as Dict<GraphSubPinSpec>
         }),
       }
 

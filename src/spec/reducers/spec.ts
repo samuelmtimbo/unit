@@ -249,29 +249,23 @@ export const removeMerge = (
   const nextMerges = _dissoc(state.merges!, id)
   nextState.merges = nextMerges
 
-  nextState.inputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
-    state.inputs,
-    (input: GraphPinSpec) => ({
-      ...input,
-      plug: mapObjVK(input.plug, (plug) => {
-        const { mergeId } = plug
+  nextState.inputs = mapObjVK(state.inputs, (input: GraphPinSpec) => ({
+    ...input,
+    plug: mapObjVK(input.plug, (plug) => {
+      const { mergeId } = plug
 
-        return !mergeId || mergeId !== id ? plug : {}
-      }),
-    })
-  )
+      return !mergeId || mergeId !== id ? plug : {}
+    }),
+  }))
 
-  nextState.outputs = mapObjVK<GraphPinSpec, GraphPinSpec>(
-    state.outputs,
-    (output: GraphPinSpec) => ({
-      ...output,
-      plug: mapObjVK(output.plug, (plug) => {
-        const { mergeId } = plug
+  nextState.outputs = mapObjVK(state.outputs, (output: GraphPinSpec) => ({
+    ...output,
+    plug: mapObjVK(output.plug, (plug) => {
+      const { mergeId } = plug
 
-        return !mergeId || mergeId !== id ? plug : {}
-      }),
-    })
-  )
+      return !mergeId || mergeId !== id ? plug : {}
+    }),
+  }))
 
   if (
     nextState.metadata &&

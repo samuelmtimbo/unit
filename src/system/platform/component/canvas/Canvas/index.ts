@@ -170,7 +170,7 @@ export default class Canvas
     })
   }
 
-  onDataInputData(name: string, data: any): void {
+  onDataInputData<K extends keyof I>(name: K, data: any): void {
     super.onDataInputData(name, data)
 
     switch (name) {

@@ -12,7 +12,7 @@ export type ObjectNode = {
   children: Dict<ObjectNode>
 }
 
-export class Object_<T extends Object> implements J<T>, V<T> {
+export class Object_<T extends Dict<any> = Dict<any>> implements J<T>, V<T> {
   private _obj: T
   private _node: ObjectNode = {
     emitter: new EventEmitter_(),
@@ -127,8 +127,8 @@ export class Object_<T extends Object> implements J<T>, V<T> {
     this._dispatch('set', parent_path, key, data)
   }
 
-  private _delete = async (name: string): Promise<void> => {
-    this._delete_path([name])
+  private _delete = async <K extends keyof T>(name: K): Promise<void> => {
+    this._delete_path([name] as string[])
     return
   }
 
@@ -157,7 +157,7 @@ export class Object_<T extends Object> implements J<T>, V<T> {
     return
   }
 
-  public async get(name: string): Promise<any> {
+  public async get<K extends keyof T>(name: K): Promise<any> {
     const value = this._obj[name]
 
     if (value === undefined) {
@@ -167,15 +167,15 @@ export class Object_<T extends Object> implements J<T>, V<T> {
     return this._obj[name]
   }
 
-  public async set(name: string, data: any): Promise<void> {
-    this._set_path([name], data)
+  public async set<K extends keyof T>(name: K, data: any): Promise<void> {
+    this._set_path([name] as string[], data)
   }
 
-  public async hasKey(name: string): Promise<boolean> {
+  public async hasKey<K extends keyof T>(name: K): Promise<boolean> {
     return this._obj[name] !== undefined
   }
 
-  public async delete(name: string): Promise<void> {
+  public async delete<K extends keyof T>(name: K): Promise<void> {
     return this._delete(name)
   }
 

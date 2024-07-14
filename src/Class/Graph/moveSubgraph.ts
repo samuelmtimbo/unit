@@ -35,7 +35,7 @@ import {
 import { GraphMoveSubGraphData } from './interface'
 import { isRefMerge } from './isRefMerge'
 
-export type GraphLike<T extends UCG = UCG> = Pick<
+export type GraphLike<T extends UCG = UCG<Dict<any>, Dict<any>>> = Pick<
   T,
   | 'getMergeSpec'
   | 'getMergesSpec'
@@ -1296,7 +1296,7 @@ export function movePlug(
   }
 }
 
-export function moveSubgraph<T extends UCG<any, any, any>>(
+export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
   source: GraphLike<T>,
   target: GraphLike<T>,
   graphId: string,

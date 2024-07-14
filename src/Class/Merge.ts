@@ -5,20 +5,20 @@ import { isPrimitive } from '../spec/primitive'
 import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { Dict } from '../types/Dict'
+import { Key } from '../types/Key'
 import { filterObj } from '../util/object'
-
-export interface I<T> {
-  [name: string]: T
-}
-
-export interface O<T> {
-  [name: string]: T
-}
 
 export const ID_SYSTEM_MERGE = '_d2c4b19b-aa58-438b-8541-9df478b80aa3'
 
-export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
-  private _current: string | undefined = undefined
+export default class Merge<
+  T = any,
+  I extends Dict<T> = any,
+  O extends Dict<T> = any,
+> extends Primitive<I, O> {
+  private _current: keyof I | undefined = undefined
+
+  private _loop_invalid_o_count: number = 0
+  private _loop_invalid_o: Set<Key> = new Set()
 
   constructor(system: System) {
     super({}, {}, system, ID_SYSTEM_MERGE)
@@ -29,7 +29,11 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     this.play()
   }
 
-  onInputRemoved(name: string, input: Pin<any>, propagate: boolean) {
+  onInputRemoved<K extends keyof I>(
+    name: K,
+    input: Pin<any>,
+    propagate: boolean
+  ) {
     super.onInputRemoved(name, input, propagate)
 
     if (name === this._current) {
@@ -41,9 +45,9 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  public onInputRenamed(
-    name: string,
-    newName: string,
+  public onInputRenamed<K extends keyof I>(
+    name: K,
+    newName: K,
     opt: PinOpt,
     newOpt: PinOpt
   ): void {
@@ -56,17 +60,17 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  public onOutputRenamed(
-    name: string,
-    newName: string,
+  public onOutputRenamed<K extends keyof O>(
+    name: K,
+    newName: K,
     opt: PinOpt,
     newOpt: PinOpt
   ): void {
     super.onOutputRenamed(name, newName, opt, newOpt)
   }
 
-  public onInputSet(
-    name: string,
+  public onInputSet<K extends keyof I>(
+    name: K,
     input: Pin<any>,
     opt: PinOpt,
     propagate: boolean
@@ -78,8 +82,8 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  public onOutputSet(
-    name: string,
+  public onOutputSet<K extends keyof O>(
+    name: K,
     output: Pin<any>,
     opt: PinOpt,
     propagate: boolean
@@ -96,13 +100,13 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  onOutputRemoved(name: string, output: Pin, propagate: boolean) {
+  onOutputRemoved<K extends keyof O>(name: K, output: Pin, propagate: boolean) {
     if (propagate) {
       this._backward_if_ready()
     }
   }
 
-  private _on_input_data(name: string): void {
+  private _on_input_data<K extends keyof I>(name: K): void {
     // console.log('Merge', '_on_input_data', name)
 
     const current = this._current
@@ -127,15 +131,15 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  onDataInputData(name: string) {
+  onDataInputData<K extends keyof I>(name: K) {
     this._on_input_data(name)
   }
 
-  onRefInputData(name: string) {
+  onRefInputData<K extends keyof I>(name: K) {
     this._on_input_data(name)
   }
 
-  onDataInputDrop(name: string) {
+  onDataInputDrop<K extends keyof I>(name: K) {
     if (name === this._current) {
       this._current = undefined
       if (!this._backwarding && this._i_start.size === 0) {
@@ -144,7 +148,7 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  private _on_output_drop(name: string) {
+  private _on_output_drop<K extends keyof O>(name: K) {
     if (this._loop_invalid_o.has(name)) {
       this._loop_invalid_o.delete(name)
       this._loop_invalid_o_count--
@@ -154,9 +158,6 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     this._forward_if_ready()
   }
 
-  private _loop_invalid_o_count: number = 0
-  private _loop_invalid_o: Set<string> = new Set()
-
   public onOutputInvalid(name: string): void {
     if (this._current !== undefined && !this._forwarding) {
       this._loop_invalid_o_count++
@@ -164,25 +165,25 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     }
   }
 
-  public onDataOutputData(name: string): void {
+  public onDataOutputData<K extends keyof O>(name: K): void {
     this._backward_if_ready()
   }
 
-  onDataOutputDrop(name: string) {
+  onDataOutputDrop<K extends keyof O>(name: K) {
     this._on_output_drop(name)
   }
 
-  onRefOutputDrop(name: string) {
+  onRefOutputDrop<K extends keyof O>(name: K) {
     this._on_output_drop(name)
   }
 
-  public onDataInputStart(name: string): void {
+  public onDataInputStart<K extends keyof I>(name: K): void {
     if (this._i_start.size === 1) {
       this._start()
     }
   }
 
-  public onDataInputInvalid(name: string): void {
+  public onDataInputInvalid<K extends keyof I>(name: K): void {
     if (name === this._current) {
       this._invalidate()
     }
@@ -257,8 +258,8 @@ export default class Merge<T = any> extends Primitive<I<T>, O<T>> {
     const output_empty = filterObj(this._output, (o) => o.empty())
     const output_not_empty = filterObj(this._output, (o) => !o.empty())
     this._forwarding = true
-    forEachValueKey(output_empty, (o) => o.push(data))
-    forEachValueKey(output_not_empty, (o) => o.push(data))
+    forEachValueKey(output_empty, (o) => o.push(data as any))
+    forEachValueKey(output_not_empty, (o) => o.push(data as any))
     this._forwarding = false
     this._backward_if_ready()
   }

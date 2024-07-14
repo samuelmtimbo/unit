@@ -3,6 +3,7 @@ import { System } from '../system'
 import forEachValueKey from '../system/core/object/ForEachKeyValue/f'
 import { Specs } from '../types'
 import { Dict } from '../types/Dict'
+import { IO } from '../types/IO'
 import { io } from '../types/IOOf'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { clone } from '../util/object'
@@ -13,12 +14,12 @@ import { unitFromId } from './fromId'
 import { applyUnitDefaultIgnored } from './fromSpec'
 import { resolveDataRef } from './resolveDataValue'
 
-export function unitFromBundleSpec(
+export function unitFromBundleSpec<I, O>(
   system: System,
   bundle: UnitBundleSpec,
   specs: Specs,
   branch: Dict<true> = {}
-): Unit {
+): Unit<I, O> {
   const specs_ = weakMerge(specs, bundle.specs ?? {})
 
   applyUnitDefaultIgnored(bundle.unit, specs_)
@@ -33,20 +34,20 @@ export function unitFromBundleSpec(
     system.injectSpecs(bundle.specs)
   }
 
-  const unit = unitFromId(system, id, specs_, classes, branch)
+  const unit = unitFromId<I, O>(system, id, specs_, classes, branch)
 
-  io((type) => {
-    const pins = bundle.unit[type] ?? {}
+  io((type: IO) => {
+    const pins = bundle.unit[type as IO] ?? {}
 
     forEachValueKey(pins, (pinSpec = {}, pinId: string) => {
       const { constant, ignored } = pinSpec
 
       if (typeof constant === 'boolean') {
-        unit.setPinConstant(type, pinId, constant)
+        unit.setPinConstant(type, pinId as keyof I | keyof O, constant)
       }
 
       if (typeof ignored === 'boolean') {
-        unit.setPinIgnored(type, pinId, ignored)
+        unit.setPinIgnored(type, pinId as keyof I | keyof O, ignored)
       }
     })
   })
@@ -63,11 +64,11 @@ export function unitFromBundleSpec(
     unit.restore(memory_)
   }
 
-  forEachValueKey(input || {}, (unitPinSpec, pinId: string) => {
+  forEachValueKey(input || {}, (unitPinSpec, pinId) => {
     const { data } = unitPinSpec ?? {}
 
     if (data !== undefined) {
-      const input = unit.getInput(pinId)
+      const input = unit.getInput(pinId as any)
 
       const dataRef = evaluateDataValue(data, specs, classes)
 

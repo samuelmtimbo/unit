@@ -9,6 +9,7 @@ import { ID_FILE_FIELD } from '../../../../_ids'
 import { listenGlobalComponent } from '../../../../globalComponent'
 
 export interface I {
+  value: string
   style: object
   attr: {
     multiple: boolean
@@ -25,7 +26,7 @@ export default class FileField extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'attr'],
+        i: ['value', 'style', 'attr'],
         o: ['files'],
       },
       {},

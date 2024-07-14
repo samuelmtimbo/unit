@@ -87,9 +87,9 @@ const $childToComponent = (
 }
 
 export class Component<
-  E extends IOElement = IOElement,
-  P extends Dict<any> = {},
-  U extends $Component | $Graph = $Component,
+  E extends IOElement = any,
+  P extends Dict<any> = Dict<any>,
+  U extends $Component | $Graph = any,
 > {
   static id: string
 
@@ -190,13 +190,13 @@ export class Component<
     if (this.$mounted) {
       this._onPropChanged(prop, data)
     } else {
-      this.$changed.add(prop)
+      this.$changed.add(prop as string)
     }
   }
 
-  private _prop_transformer: Dict<Callback[]> = {}
+  private _prop_transformer: { [K in keyof P]?: Callback[] } = {}
 
-  interceptProp(prop: string, transformer: Callback): Unlisten {
+  interceptProp<K extends keyof P>(prop: K, transformer: Callback): Unlisten {
     this._prop_transformer[prop] = this._prop_transformer[prop] || []
     this._prop_transformer[prop].push(transformer)
 
@@ -209,9 +209,9 @@ export class Component<
     return this.$slot[slotName]
   }
 
-  onPropChanged(prop: string, current: any) {}
+  onPropChanged<K extends keyof P>(prop: K, current: any) {}
 
-  _onPropChanged(prop: string, current: any) {
+  _onPropChanged<K extends keyof P>(prop: K, current: any) {
     const _current = (this._prop_transformer[prop] || []).reduce((acc, t) => {
       return t(acc)
     }, current)
@@ -1587,7 +1587,6 @@ export class Component<
   public domAppendChildren(children: Component[], slotName: string) {
     const fragment = new Component({}, this.$system)
 
-    // @ts-expect-error
     fragment.$element = new DocumentFragment()
 
     const slot = this.getLeafSlot(slotName)

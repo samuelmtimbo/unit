@@ -8,21 +8,23 @@ import deepGet from '../../../../deepGet'
 import { CodePathNotImplementedError } from '../../../../exception/CodePathNotImplemented'
 import { MethodNotImplementedError } from '../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../system'
+import { Dict } from '../../../../types/Dict'
+import { Key } from '../../../../types/Key'
 import { Unlisten } from '../../../../types/Unlisten'
 import { J } from '../../../../types/interface/J'
 import { hasKey } from '../../../../util/object'
 import { ID_SPEC_0 } from '../../../_ids'
 import { keys } from '../../object/Keys/f'
 
-export interface I<T> {
+export interface I {
   unit: Unit
 }
 
-export interface O<T> {
-  spec: J<any>
+export interface O {
+  spec: J<Dict<any>>
 }
 
-export default class Spec_<T> extends Functional<I<T>, O<T>> {
+export default class Spec_ extends Functional<I, O> {
   __: string[] = ['J']
 
   constructor(system: System) {
@@ -48,15 +50,18 @@ export default class Spec_<T> extends Functional<I<T>, O<T>> {
     )
   }
 
-  f({ unit }: I<T>, done: Done<O<T>>): void {
-    const spec = new (class Object_ extends $ implements J<any> {
-      get<K extends string & keyof T>(name: string): Promise<T[K]> {
+  f({ unit }: I, done: Done<O>): void {
+    const spec: J<Dict<any>> = new (class Object_
+      extends $
+      implements J<Dict<any>>
+    {
+      get(name: Key): Promise<any> {
         const _spec = unit.getSpec()
 
         return Promise.resolve(_spec[name])
       }
 
-      set<K extends string & keyof T>(name: string, data: T[K]): Promise<void> {
+      set(name: Key, data: any): Promise<void> {
         const _spec = unit.getSpec()
 
         _spec[name] = data
@@ -64,7 +69,7 @@ export default class Spec_<T> extends Functional<I<T>, O<T>> {
         return
       }
 
-      delete<K extends string & keyof T>(name: string): Promise<void> {
+      delete(name: Key): Promise<void> {
         const _spec = unit.getSpec()
 
         delete _spec[name]
@@ -72,7 +77,7 @@ export default class Spec_<T> extends Functional<I<T>, O<T>> {
         return
       }
 
-      async hasKey<K extends string & keyof T>(name: string): Promise<boolean> {
+      async hasKey(name: string): Promise<boolean> {
         const _spec = unit.getSpec()
 
         const has = hasKey(_spec, name)

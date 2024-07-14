@@ -46338,20 +46338,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _make_spec_unit_interface = (unit: GraphUnitSpec, spec: Spec): U => {
-    return {
+    const interface_: U = {
       setParent: function (parent: Unit<any, any, UnitEvents<U_EE>>) {
         throw new MethodNotImplementedError()
       },
       setInputs: function (inputs: Pins<any>, opts: PinOpts): void {
         throw new MethodNotImplementedError()
       },
-      setPin: function (type: IO, name: string, pin: Pin<any>, opt: PinOpt) {
-        throw new MethodNotImplementedError()
-      },
       setPinIgnored: function (type: IO, name: string, ignored: boolean): void {
-        throw new MethodNotImplementedError()
-      },
-      setInputIgnored: function (name: string, ignore?: boolean): boolean {
         throw new MethodNotImplementedError()
       },
       setOutputIgnored: function (name: string, ignore?: boolean): boolean {
@@ -46414,7 +46408,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getRefInputs: function (): Pins<Partial<any>> {
         throw new MethodNotImplementedError()
       },
-      getInput: function <K extends any>(name: K): Pin<K> {
+      getInput: function <K>(name: K): Pin<K> {
         throw new MethodNotImplementedError()
       },
       getOutputs: function (): Pins<any> {
@@ -46426,19 +46420,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getRefOutputs: function (): Pins<Partial<any>> {
         throw new MethodNotImplementedError()
       },
-      getOutput: function (name: string): Pin<any> {
-        throw new MethodNotImplementedError()
-      },
-      push: function <K extends string>(name: string, data: any): void {
-        throw new MethodNotImplementedError()
-      },
-      pushInput: function <K extends string>(name: string, data: any): void {
-        throw new MethodNotImplementedError()
-      },
       pushAllInput: function <K extends string>(data: Dict<any>): void {
-        throw new MethodNotImplementedError()
-      },
-      pushOutput: function <K extends string>(name: string, data: any): void {
         throw new MethodNotImplementedError()
       },
       pushAllOutput: function <K extends string>(data: Dict<any>): void {
@@ -46447,58 +46429,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       pushAll: function <K extends string>(data: Dict<any>): void {
         throw new MethodNotImplementedError()
       },
-      takeInput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      takeOutput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      take: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      takeAll: function (): Dict<any> {
-        throw new MethodNotImplementedError()
-      },
-      peakInput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      peakOutput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      peak: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
       peakAllOutput: function (): Dict<any> {
         throw new MethodNotImplementedError()
       },
       peakAll: function (): Dict<any> {
-        throw new MethodNotImplementedError()
-      },
-      renamePin: function (type: IO, name: string, newName: string): void {
-        throw new MethodNotImplementedError()
-      },
-      renameInput: function (name: string, newName: string): void {
-        throw new MethodNotImplementedError()
-      },
-      renameOutput: function (name: string, newName: string): void {
-        throw new MethodNotImplementedError()
-      },
-      hasRefPinNamed: function (type: IO, name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasRefInputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasRefOutputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasPinNamed: function (type: IO, name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasInputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasOutputNamed: function (name: string): boolean {
         throw new MethodNotImplementedError()
       },
       getInputCount: function (): number {
@@ -46601,7 +46535,115 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         return bundle
       },
+      setPin: function <
+        T extends IO,
+        K extends T extends 'input'
+          ? string | number | symbol
+          : string | number | symbol,
+      >(type: T, name: K, pin: Pin<any>, opt: PinOpt) {
+        throw new Error('Function not implemented.')
+      },
+      setInputIgnored: function <K extends string | number | symbol>(
+        name: K,
+        ignore?: boolean
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      getOutput: function <K extends string | number | symbol>(
+        name: K
+      ): Pin<any> {
+        throw new Error('Function not implemented.')
+      },
+      push: function <K extends string | number | symbol>(
+        name: K,
+        data: any
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      pushInput: function <K extends string | number | symbol>(
+        name: K,
+        data: any
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      pushOutput: function <K extends string | number | symbol>(
+        name: K,
+        data: any
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      takeInput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      takeOutput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      take: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      takeAll: function (): Dict<any> {
+        throw new Error('Function not implemented.')
+      },
+      peakInput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      peakOutput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      peak: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      renamePin: function <
+        T extends IO,
+        K extends T extends 'input'
+          ? string | number | symbol
+          : string | number | symbol,
+      >(type: T, name: K, newName: K): void {
+        throw new Error('Function not implemented.')
+      },
+      renameInput: function <K extends string | number | symbol>(
+        name: K,
+        newName: K
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      renameOutput: function (name: string, newName: string): void {
+        throw new Error('Function not implemented.')
+      },
+      hasRefPinNamed: function <
+        T extends IO,
+        K extends T extends 'input'
+          ? string | number | symbol
+          : string | number | symbol,
+      >(type: T, name: K): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasRefInputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasRefOutputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasPinNamed: function (type: IO, name: string): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasInputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasOutputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
     }
+
+    return interface_
   }
 
   private _make_graph_spec_interface = (spec: GraphSpec): GraphLike => {
@@ -49847,20 +49889,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const unit_spec = getSpec(id)
 
-    return {
+    const interface_: U = {
       setParent: function (parent: Unit<any, any>) {
         throw new MethodNotImplementedError()
       },
       setInputs: function (inputs: Pins<any>, opts: PinOpts): void {
-        throw new MethodNotImplementedError()
-      },
-      setPin: function (type: IO, name: string, pin: Pin<any>, opt: PinOpt) {
-        throw new MethodNotImplementedError()
-      },
-      setPinIgnored: function (type: IO, name: string, ignored: boolean): void {
-        throw new MethodNotImplementedError()
-      },
-      setInputIgnored: function (name: string, ignore?: boolean): boolean {
         throw new MethodNotImplementedError()
       },
       setOutputIgnored: function (name: string, ignore?: boolean): boolean {
@@ -49930,7 +49963,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getRefInputs: function (): Pins<Partial<any>> {
         throw new MethodNotImplementedError()
       },
-      getInput: function <K extends any>(name: K): Pin<K> {
+      getInput: function <K>(name: K): Pin<K> {
         throw new MethodNotImplementedError()
       },
       getOutputs: function (): Pins<any> {
@@ -49939,83 +49972,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getDataOutputs: function (): Pins<Partial<any>> {
         throw new MethodNotImplementedError()
       },
-      getRefOutputs: function (): Pins<Partial<any>> {
-        throw new MethodNotImplementedError()
-      },
-      getOutput: function (name: string): Pin<any> {
-        throw new MethodNotImplementedError()
-      },
-      push: function <K extends string>(name: string, data: any): void {
-        throw new MethodNotImplementedError()
-      },
-      pushInput: function <K extends string>(name: string, data: any): void {
-        throw new MethodNotImplementedError()
-      },
-      pushAllInput: function <K extends string>(data: Dict<any>): void {
-        throw new MethodNotImplementedError()
-      },
-      pushOutput: function <K extends string>(name: string, data: any): void {
-        throw new MethodNotImplementedError()
-      },
-      pushAllOutput: function <K extends string>(data: Dict<any>): void {
-        throw new MethodNotImplementedError()
-      },
-      pushAll: function <K extends string>(data: Dict<any>): void {
-        throw new MethodNotImplementedError()
-      },
-      takeInput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      takeOutput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      take: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      takeAll: function (): Dict<any> {
-        throw new MethodNotImplementedError()
-      },
-      peakInput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      peakOutput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      peak: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
       peakAllOutput: function (): Dict<any> {
         throw new MethodNotImplementedError()
       },
       peakAll: function (): Dict<any> {
         throw new MethodNotImplementedError()
       },
-      renamePin: function (type: IO, name: string, newName: string): void {
-        throw new MethodNotImplementedError()
-      },
-      renameInput: function (name: string, newName: string): void {
-        throw new MethodNotImplementedError()
-      },
-      renameOutput: function (name: string, newName: string): void {
-        throw new MethodNotImplementedError()
-      },
-      hasRefPinNamed: function (type: IO, name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasRefInputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasRefOutputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
       hasPinNamed: function (type: IO, name: string): boolean {
         return hasPinNamed(unit_spec, type, name)
-      },
-      hasInputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasOutputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
       },
       getInputCount: function (): number {
         throw new MethodNotImplementedError()
@@ -50121,7 +50085,127 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         return bundle
       },
+      setPin: function <
+        T extends IO,
+        K extends T extends 'input'
+          ? string | number | symbol
+          : string | number | symbol,
+      >(type: T, name: K, pin: Pin<any>, opt: PinOpt) {
+        throw new Error('Function not implemented.')
+      },
+      setPinIgnored: function (type: IO, name: string, ignored: boolean): void {
+        throw new Error('Function not implemented.')
+      },
+      setInputIgnored: function <K extends string | number | symbol>(
+        name: K,
+        ignore?: boolean
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      getRefOutputs: function (): Pins<Partial<any>> {
+        throw new Error('Function not implemented.')
+      },
+      getOutput: function <K extends string | number | symbol>(
+        name: K
+      ): Pin<any> {
+        throw new Error('Function not implemented.')
+      },
+      push: function <K extends string | number | symbol>(
+        name: K,
+        data: any
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      pushInput: function <K extends string | number | symbol>(
+        name: K,
+        data: any
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      pushAllInput: function (data: Partial<any>): void {
+        throw new Error('Function not implemented.')
+      },
+      pushOutput: function <K extends string | number | symbol>(
+        name: K,
+        data: any
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      pushAllOutput: function (data: Partial<any>): void {
+        throw new Error('Function not implemented.')
+      },
+      pushAll: function (data: Partial<any>): void {
+        throw new Error('Function not implemented.')
+      },
+      takeInput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      takeOutput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      take: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      takeAll: function (): Dict<any> {
+        throw new Error('Function not implemented.')
+      },
+      peakInput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      peakOutput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      peak: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      renamePin: function <
+        T extends IO,
+        K extends T extends 'input'
+          ? string | number | symbol
+          : string | number | symbol,
+      >(type: T, name: K, newName: K): void {
+        throw new Error('Function not implemented.')
+      },
+      renameInput: function <K extends string | number | symbol>(
+        name: K,
+        newName: K
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      renameOutput: function (name: string, newName: string): void {
+        throw new Error('Function not implemented.')
+      },
+      hasRefPinNamed: function <
+        T extends IO,
+        K extends T extends 'input'
+          ? string | number | symbol
+          : string | number | symbol,
+      >(type: T, name: K): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasRefInputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasRefOutputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasInputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasOutputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
     }
+
+    return interface_
   }
 
   private _state_get_unit_interface = (unit_id: string): U => {
@@ -50133,20 +50217,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const unit_data = this._get_unit_data(unit_id)
 
-    return {
+    const interface_: U = {
       setParent: function (parent: Unit<any, any>) {
         throw new MethodNotImplementedError()
       },
       setInputs: function (inputs: Pins<any>, opts: PinOpts): void {
-        throw new MethodNotImplementedError()
-      },
-      setPin: function (type: IO, name: string, pin: Pin<any>, opt: PinOpt) {
-        throw new MethodNotImplementedError()
-      },
-      setPinIgnored: function (type: IO, name: string, ignored: boolean): void {
-        throw new MethodNotImplementedError()
-      },
-      setInputIgnored: function (name: string, ignore?: boolean): boolean {
         throw new MethodNotImplementedError()
       },
       setOutputIgnored: function (name: string, ignore?: boolean): boolean {
@@ -50218,80 +50293,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getRefOutputs: function (): Pins<Partial<any>> {
         throw new MethodNotImplementedError()
       },
-      getOutput: function (name: string): Pin<any> {
-        throw new MethodNotImplementedError()
-      },
-      push: function <K extends string>(name: string, data: any): void {
-        throw new MethodNotImplementedError()
-      },
-      pushInput: function <K extends string>(name: string, data: any): void {
-        throw new MethodNotImplementedError()
-      },
-      pushAllInput: function <K extends string>(data: Dict<any>): void {
-        throw new MethodNotImplementedError()
-      },
-      pushOutput: function <K extends string>(name: string, data: any): void {
-        throw new MethodNotImplementedError()
-      },
-      pushAllOutput: function <K extends string>(data: Dict<any>): void {
-        throw new MethodNotImplementedError()
-      },
-      pushAll: function <K extends string>(data: Dict<any>): void {
-        throw new MethodNotImplementedError()
-      },
-      takeInput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      takeOutput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      take: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
       takeAll: function (): Dict<any> {
-        throw new MethodNotImplementedError()
-      },
-      peakInput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      peakOutput: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      peak: function <K extends string>(name: string) {
-        throw new MethodNotImplementedError()
-      },
-      peakAllOutput: function (): Dict<any> {
-        throw new MethodNotImplementedError()
-      },
-      peakAll: function (): Dict<any> {
-        throw new MethodNotImplementedError()
-      },
-      renamePin: function (type: IO, name: string, newName: string): void {
-        throw new MethodNotImplementedError()
-      },
-      renameInput: function (name: string, newName: string): void {
         throw new MethodNotImplementedError()
       },
       renameOutput: function (name: string, newName: string): void {
         throw new MethodNotImplementedError()
       },
-      hasRefPinNamed: function (type: IO, name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasRefInputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasRefOutputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
+
       hasPinNamed: (type: IO, name: string): boolean => {
         return hasPinNamed(spec, type, name)
-      },
-      hasInputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
-      },
-      hasOutputNamed: function (name: string): boolean {
-        throw new MethodNotImplementedError()
       },
       getInputCount: function (): number {
         throw new MethodNotImplementedError()
@@ -50389,7 +50399,124 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       getUnitBundleSpec: (): UnitBundleSpec => {
         return bundle
       },
+      setPin: function <
+        T extends IO,
+        K extends T extends 'input'
+          ? string | number | symbol
+          : string | number | symbol,
+      >(type: T, name: K, pin: Pin<any>, opt: PinOpt) {
+        throw new Error('Function not implemented.')
+      },
+      setPinIgnored: function (type: IO, name: string, ignored: boolean): void {
+        throw new Error('Function not implemented.')
+      },
+      setInputIgnored: function <K extends string | number | symbol>(
+        name: K,
+        ignore?: boolean
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      getOutput: function <K extends string | number | symbol>(
+        name: K
+      ): Pin<any> {
+        throw new Error('Function not implemented.')
+      },
+      push: function <K extends string | number | symbol>(
+        name: K,
+        data: any
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      pushInput: function <K extends string | number | symbol>(
+        name: K,
+        data: any
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      pushAllInput: function (data: Partial<any>): void {
+        throw new Error('Function not implemented.')
+      },
+      pushOutput: function <K extends string | number | symbol>(
+        name: K,
+        data: any
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      pushAllOutput: function (data: Partial<any>): void {
+        throw new Error('Function not implemented.')
+      },
+      pushAll: function (data: Partial<any>): void {
+        throw new Error('Function not implemented.')
+      },
+      takeInput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      takeOutput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      take: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      peakInput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      peakOutput: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      peak: function <K extends string | number | symbol>(name: K) {
+        throw new Error('Function not implemented.')
+      },
+      peakAllOutput: function (): Dict<any> {
+        throw new Error('Function not implemented.')
+      },
+      peakAll: function (): Dict<any> {
+        throw new Error('Function not implemented.')
+      },
+      renamePin: function <
+        T extends IO,
+        K extends T extends 'input'
+          ? string | number | symbol
+          : string | number | symbol,
+      >(type: T, name: K, newName: K): void {
+        throw new Error('Function not implemented.')
+      },
+      renameInput: function <K extends string | number | symbol>(
+        name: K,
+        newName: K
+      ): void {
+        throw new Error('Function not implemented.')
+      },
+      hasRefPinNamed: function <
+        T extends IO,
+        K extends T extends 'input'
+          ? string | number | symbol
+          : string | number | symbol,
+      >(type: T, name: K): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasRefInputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasRefOutputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasInputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
+      hasOutputNamed: function <K extends string | number | symbol>(
+        name: K
+      ): boolean {
+        throw new Error('Function not implemented.')
+      },
     }
+
+    return interface_
   }
 
   private _spec_graph_unit_expose_pin_set = (

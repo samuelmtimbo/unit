@@ -11,7 +11,11 @@ import { system } from '../../util/system'
 
 const spec = require('./RangeRec.json') as GraphSpec
 
-const Range = fromSpec<{ any: any }, { bit: number }>(spec, _specs, {})
+const Range = fromSpec<{ a: number; b: number }, { i: number }>(
+  spec,
+  _specs,
+  {}
+)
 
 const range = new Range(system)
 

@@ -32,8 +32,8 @@ export function elementPropHandler(
   }
 }
 
-export function htmlPropHandler(
-  component: Component<HTMLElement>,
+export function htmlPropHandler<P extends Dict<any> = any>(
+  component: Component<HTMLElement, P>,
   element: HTMLElement,
   DEFAULT_STYLE: Style
 ): PropHandler {
@@ -45,8 +45,8 @@ export function htmlPropHandler(
   }
 }
 
-export function svgPropHandler(
-  component: Component<SVGElement>,
+export function svgPropHandler<P extends Dict<any> = any>(
+  component: Component<SVGElement, P>,
   element: SVGElement,
   DEFAULT_STYLE: Style
 ): PropHandler {

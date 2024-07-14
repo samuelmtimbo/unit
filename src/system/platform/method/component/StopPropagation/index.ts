@@ -8,6 +8,7 @@ import { ID_STOP_PROPAGATION } from '../../../../_ids'
 export interface I<T> {
   component: Component_
   name: string
+  done: any
 }
 
 export interface O<T> {}

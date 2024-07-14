@@ -2,11 +2,12 @@ import * as assert from 'assert'
 import { Graph } from '../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import { ID_IDENTITY } from '../../system/_ids'
+import { Dict } from '../../types/Dict'
 import { system } from '../util/system'
 
 const spec = system.emptySpec()
 
-const composition0 = new Graph<{}, {}>(spec, {}, system)
+const composition0 = new Graph<Dict<any>, Dict<any>>(spec, {}, system)
 
 false && watchUnitAndLog(composition0)
 false && watchGraphAndLog(composition0)

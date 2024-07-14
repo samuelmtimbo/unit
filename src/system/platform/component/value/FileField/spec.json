@@ -1,6 +1,10 @@
 {
   "name": "file field",
   "inputs": {
+    "value": {
+      "type": "string",
+      "optional": true
+    },
     "style": {
       "type": "object",
       "optional": true

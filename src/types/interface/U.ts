@@ -9,18 +9,18 @@ import { IO } from '../IO'
 import { None } from '../None'
 import { UnitBundleSpec } from '../UnitBundleSpec'
 
-export type U_EE = {
+export type U_EE<I extends Dict<any> = any, O extends Dict<any> = any> = {
   parent: [Unit | null]
-  set_input: [string, Pin, PinOpt, boolean]
-  set_output: [string, Pin, PinOpt, boolean]
-  before_remove_input: [string, Pin]
-  before_remove_output: [string, Pin]
-  remove_input: [string, Pin, boolean]
-  remove_output: [string, Pin, boolean]
-  rename_input: [string, string]
-  rename_output: [string, string]
-  set_pin_constant: [IO, string, boolean]
-  set_pin_ignored: [IO, string, boolean]
+  set_input: [keyof I, Pin, PinOpt, boolean]
+  set_output: [keyof O, Pin, PinOpt, boolean]
+  before_remove_input: [keyof I, Pin]
+  before_remove_output: [keyof O, Pin]
+  remove_input: [keyof I, Pin, boolean]
+  remove_output: [keyof O, Pin, boolean]
+  rename_input: [keyof I, keyof I]
+  rename_output: [keyof O, keyof O]
+  set_pin_constant: [IO, keyof I | keyof O, boolean]
+  set_pin_ignored: [IO, keyof I | keyof O, string, boolean]
   catch_err: [string]
   err: [string]
   take_err: [string]
@@ -30,20 +30,45 @@ export type U_EE = {
   pause: []
 }
 
-export interface U<I extends Dict<any> = any, O extends Dict<any> = any> {
+export interface U<
+  I extends Dict<any> = Dict<any>,
+  O extends Dict<any> = Dict<any>,
+> {
   setParent(parent: Unit<any, any> | null)
   setInputs(inputs: Pins<I>, opts: PinOpts): void
-  setPin(type: IO, name: string, pin: Pin<any>, opt: PinOpt)
-  setPinIgnored(type: IO, name: string, ignored: boolean): void
-  setInputIgnored(name: string, ignore?: boolean): boolean
-  setOutputIgnored(name: string, ignore?: boolean): boolean
-  setPinRef(type: IO, name: string, ref: boolean): void
-  setInputRef(name: string, ref: boolean): void
-  setOutputRef(name: string, ref: boolean): void
-  setInput(name: string, input: Pin<I[keyof I]>, opt: PinOpt): void
-  isPinConstant(type: IO, name: string): boolean
-  isPinIgnored(type: IO, name: string): boolean
-  isPinRef(type: IO, name: string): boolean
+  setPin<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    name: K,
+    pin: Pin<any>,
+    opt: PinOpt
+  )
+  setPinIgnored<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    name: K,
+    ignored: boolean
+  ): void
+  setInputIgnored<K extends keyof I>(name: K, ignore?: boolean): boolean
+  setOutputIgnored<K extends keyof O>(name: K, ignore?: boolean): boolean
+  setPinRef<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    name: K,
+    ref: boolean
+  ): void
+  setInputRef<K extends keyof I>(name: K, ref: boolean): void
+  setOutputRef<K extends keyof O>(name: K, ref: boolean): void
+  setInput<K extends keyof I>(name: K, input: Pin<I[K]>, opt: PinOpt): void
+  isPinConstant<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    name: K
+  ): boolean
+  isPinIgnored<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    name: K
+  ): boolean
+  isPinRef<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    name: K
+  ): boolean
   addInput(name: string, input: Pin<any>, opt: PinOpt): void
   removeInput(name: string, propagate: boolean): void
   setOutputs(outputs: Pins<O>, opts: PinOpts)
@@ -59,31 +84,38 @@ export interface U<I extends Dict<any> = any, O extends Dict<any> = any> {
   getOutputs(): Pins<O>
   getDataOutputs(): Pins<Partial<O>>
   getRefOutputs(): Pins<Partial<O>>
-  getOutput(name: string): Pin<any>
-  push<K extends keyof I>(name: string, data: any): void
-  pushInput<K extends keyof I>(name: string, data: I[K]): void
-  pushAllInput<K extends keyof I>(data: Dict<I[K]>): void
-  pushOutput<K extends keyof O>(name: string, data: O[K]): void
-  pushAllOutput<K extends keyof O>(data: Dict<O[K]>): void
-  pushAll<K extends keyof I>(data: Dict<I[K]>): void
-  takeInput<K extends keyof O>(name: string): O[K]
-  takeOutput<K extends keyof O>(name: string): O[K]
-  take<K extends keyof O>(name: string): O[K]
+  getOutput<K extends keyof O>(name: K): Pin<O[K]>
+  push<K extends keyof I>(name: K, data: any): void
+  pushInput<K extends keyof I>(name: K, data: I[K]): void
+  pushAllInput(data: Partial<I>): void
+  pushOutput<K extends keyof O>(name: K, data: O[K]): void
+  pushAllOutput(data: Partial<O>): void
+  pushAll(data: Partial<I>): void
+  takeInput<K extends keyof I>(name: K): I[K]
+  takeOutput<K extends keyof O>(name: K): O[K]
+  take<K extends keyof O>(name: K): O[K]
   takeAll(): Dict<any>
-  peakInput<K extends keyof I>(name: string): I[K]
-  peakOutput<K extends keyof O>(name: string): O[K]
-  peak<K extends keyof O>(name: string): O[K]
+  peakInput<K extends keyof I>(name: K): I[K]
+  peakOutput<K extends keyof O>(name: K): O[K]
+  peak<K extends keyof O>(name: K): O[K]
   peakAllOutput(): Dict<any>
   peakAll(): Dict<any>
-  renamePin(type: IO, name: string, newName: string): void
-  renameInput(name: string, newName: string): void
+  renamePin<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    name: K,
+    newName: K
+  ): void
+  renameInput<K extends keyof I>(name: K, newName: K): void
   renameOutput(name: string, newName: string): void
-  hasRefPinNamed(type: IO, name: string): boolean
-  hasRefInputNamed(name: string): boolean
-  hasRefOutputNamed(name: string): boolean
+  hasRefPinNamed<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    name: K
+  ): boolean
+  hasRefInputNamed<K extends keyof I>(name: K): boolean
+  hasRefOutputNamed<K extends keyof O>(name: K): boolean
   hasPinNamed(type: IO, name: string): boolean
-  hasInputNamed(name: string): boolean
-  hasOutputNamed(name: string): boolean
+  hasInputNamed<K extends keyof I>(name: K): boolean
+  hasOutputNamed<K extends keyof O>(name: K): boolean
   getInputCount(): number
   getOutputCount(): number
   getInputNames(): string[]

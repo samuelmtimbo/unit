@@ -3,6 +3,7 @@ import { ObjectUpdateType } from '../ObjectUpdateType'
 import { InvalidKeyPathError } from '../exception/InvalidKeyPathError'
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
 import { System } from '../system'
+import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
 import { FD } from '../types/interface/FD'
 import { J } from '../types/interface/J'
@@ -10,8 +11,8 @@ import { J } from '../types/interface/J'
 export function wrapFormData(
   formData: FormData,
   system: System
-): J<any> & FD & $ {
-  const _obj = new (class Object_ extends $ implements J<any>, FD {
+): J<Dict<any>> & FD & $ {
+  const _obj = new (class Object_ extends $ implements J<Dict<any>>, FD {
     __: string[] = ['J', 'FD']
 
     async get(name: string): Promise<any> {

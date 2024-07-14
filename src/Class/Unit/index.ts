@@ -17,9 +17,11 @@ import { System } from '../../system'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keys } from '../../system/f/object/Keys/f'
 import { Spec } from '../../types'
+import { AllKeys } from '../../types/AllKeys'
 import { Dict } from '../../types/Dict'
 import { U, U_EE } from '../../types/interface/U'
 import { IO } from '../../types/IO'
+import { Key } from '../../types/Key'
 import { None } from '../../types/None'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
@@ -78,26 +80,26 @@ export class Unit<
 
   public _parent: Unit | null = null
 
-  public _input: Pins<I> = {}
-  public _output: Pins<O> = {}
+  public _input: Partial<AllKeys<I, Pin>> = {}
+  public _output: Partial<AllKeys<O, Pin>> = {}
 
-  public _data_input: Pins<any> = {}
-  public _data_output: Pins<any> = {}
+  public _data_input: Partial<AllKeys<I, Pin>> = {}
+  public _data_output: Partial<AllKeys<O, Pin>> = {}
 
-  public _ref_input: Pins<any> = {}
-  public _ref_output: Pins<any> = {}
+  public _ref_input: Partial<AllKeys<I, Pin>> = {}
+  public _ref_output: Partial<AllKeys<O, Pin>> = {}
 
-  protected _i_opt: Dict<PinOpt> = {}
-  protected _o_opt: Dict<PinOpt> = {}
+  protected _i_opt: Partial<Record<keyof I, PinOpt>> = {}
+  protected _o_opt: Partial<Record<keyof O, PinOpt>> = {}
 
-  protected _i_name_set: Set<string> = new Set()
-  protected _o_name_set: Set<string> = new Set()
+  protected _i_name_set: Set<Key> = new Set()
+  protected _o_name_set: Set<Key> = new Set()
 
-  protected _d_i_name: Set<string> = new Set()
-  protected _d_o_name: Set<string> = new Set()
+  protected _d_i_name: Set<keyof I> = new Set()
+  protected _d_o_name: Set<keyof O> = new Set()
 
-  protected _r_i_name: Set<string> = new Set()
-  protected _r_o_name: Set<string> = new Set()
+  protected _r_i_name: Set<Key> = new Set()
+  protected _r_o_name: Set<Key> = new Set()
 
   protected _o_count: number = 0
   protected _i_count: number = 0
@@ -111,7 +113,7 @@ export class Unit<
   protected _err: string | null = null
 
   protected _selfInput: Pin
-  protected _selfOutput: Pin<U>
+  protected _selfOutput: Pin<any>
 
   public ref: any | null = null
 
@@ -139,7 +141,7 @@ export class Unit<
       { data: this, constant: false, ref: true },
       this.__system
     )
-    this._selfOutput = new Pin<U>(
+    this._selfOutput = new Pin<any>(
       { data: this, constant: false, ref: true },
       this.__system
     )
@@ -167,19 +169,28 @@ export class Unit<
     return false
   }
 
-  public isPinIgnored(type: IO, pinId: string): boolean {
+  public isPinIgnored<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, pinId: K): boolean {
     const pin = this.getPin(type, pinId)
     const ignored = pin.ignored()
     return ignored
   }
 
-  public isPinConstant(type: IO, pinId: string): boolean {
+  public isPinConstant<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, pinId: K): boolean {
     const pin = this.getPin(type, pinId)
     const constant = pin.constant()
     return constant
   }
 
-  public isPinRef(type: IO, pinId: string): boolean {
+  public isPinRef<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, pinId: K): boolean {
     const input = type === 'input'
 
     if (!input && pinId === SELF) {
@@ -187,8 +198,8 @@ export class Unit<
     }
 
     const ref =
-      (input && !!this._ref_input[pinId]) ||
-      (!input && !!this._ref_output[pinId])
+      (input && !!this._ref_input[pinId as keyof I]) ||
+      (!input && !!this._ref_output[pinId as keyof O])
 
     return ref
   }
@@ -199,65 +210,80 @@ export class Unit<
     this.emit('parent', this._parent)
   }
 
-  public setPinIgnored(type: IO, pinId: string, ignored: boolean): void {
+  public setPinIgnored<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, pinId: K, ignored: boolean): void {
     if (type === 'input') {
-      this.setInputIgnored(pinId, ignored)
+      this.setInputIgnored(pinId as keyof I, ignored)
     } else {
-      this.setOutputIgnored(pinId, ignored)
+      this.setOutputIgnored(pinId as keyof O, ignored)
     }
   }
 
-  public setPinConstant(type: IO, pinId: string, constant: boolean): void {
+  public setPinConstant<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, pinId: K, constant: boolean): void {
     this.getPin(type, pinId).constant(constant)
 
     this.emit('set_pin_constant', type, pinId, constant)
   }
 
-  private _memSetPinOptData(type: IO, pinId: string): void {
+  private _memSetPinOptData<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, pinId: K): void {
     if (type === 'input') {
-      this._memSetInputData(pinId)
+      this._memSetInputData(pinId as keyof I)
     } else {
-      this._memSetOutputData(pinId)
+      this._memSetOutputData(pinId as keyof O)
     }
   }
 
-  private _memSetInputData(pinId: string): void {
+  private _memSetInputData<K extends keyof I>(pinId: K): void {
     const input = this._input[pinId]
 
     this._memRemoveRefInput(pinId)
     this._memAddDataInput(pinId, input)
   }
 
-  private _memSetOutputData(pinId: string): void {
+  private _memSetOutputData<K extends keyof O>(pinId: K): void {
     const output = this._output[pinId]
 
     this._memRemoveRefOutput(pinId)
     this._memAddDataOutput(pinId, output)
   }
 
-  private _memSetPinRef(type: IO, pinId: string): void {
+  private _memSetPinRef<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: IO, pinId: K): void {
     if (type === 'input') {
-      this._memSetInputRef(pinId)
+      this._memSetInputRef(pinId as keyof I)
     } else {
-      this._memSetOutputRef(pinId)
+      this._memSetOutputRef(pinId as keyof O)
     }
   }
 
-  private _memSetInputRef(pinId: string): void {
+  private _memSetInputRef<K extends keyof I>(pinId: K): void {
     const input = this._input[pinId]
 
     this._memRemoveDataInput(pinId)
     this._memAddRefInput(pinId, input)
   }
 
-  private _memSetOutputRef(pinId: string): void {
+  private _memSetOutputRef<K extends keyof O>(pinId: K): void {
     const output = this._output[pinId]
 
     this._memRemoveDataOutput(pinId)
     this._memAddRefOutput(pinId, output)
   }
 
-  public setPinRef(type: IO, pinId: string, ref: boolean): void {
+  public setPinRef<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, pinId: K, ref: boolean): void {
     if (ref) {
       if (this.hasRefPinNamed(type, pinId)) {
         return
@@ -273,15 +299,18 @@ export class Unit<
     }
   }
 
-  public setInputRef(pinId: string, ref: boolean): void {
+  public setInputRef<K extends keyof I>(pinId: K, ref: boolean): void {
     this.setPinRef('input', pinId, ref)
   }
 
-  public setOutputRef(pinId: string, ref: boolean): void {
+  public setOutputRef<K extends keyof O>(pinId: K, ref: boolean): void {
     this.setPinRef('output', pinId, ref)
   }
 
-  public setInputIgnored(pinId: string, ignore: boolean): boolean {
+  public setInputIgnored<K extends keyof I>(
+    pinId: K,
+    ignore: boolean
+  ): boolean {
     const input = this.getInput(pinId)
 
     if (this.hasRefInputNamed(pinId)) {
@@ -291,7 +320,10 @@ export class Unit<
     return input.ignored(ignore)
   }
 
-  public setOutputIgnored(pinId: string, ignore: boolean): boolean {
+  public setOutputIgnored<K extends keyof O>(
+    pinId: K,
+    ignore: boolean
+  ): boolean {
     const output = this.getOutput(pinId)
 
     return output.ignored(ignore)
@@ -306,22 +338,22 @@ export class Unit<
     }
   }
 
-  public setPin(
-    type: IO,
-    pinId: string,
+  public setPin<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    pinId: K,
     pin: Pin<any>,
     opt: PinOpt = DEFAULT_PIN_OPT,
     propagate: boolean = true
   ) {
     if (type === 'input') {
-      this.setInput(pinId, pin, opt, propagate)
+      this.setInput(pinId as keyof I, pin, opt, propagate)
     } else {
-      this.setOutput(pinId, pin, opt, propagate)
+      this.setOutput(pinId as keyof O, pin, opt, propagate)
     }
   }
 
   public setInput<K extends keyof I>(
-    pinId: string,
+    pinId: K,
     input: Pin<I[K]>,
     opt: PinOpt = DEFAULT_PIN_OPT,
     propagate: boolean = true
@@ -356,13 +388,13 @@ export class Unit<
     }
   }
 
-  private _memAddDataInput(name: string, input: PinOf<I>): void {
+  private _memAddDataInput<K extends keyof I>(name: K, input: PinOf<I>): void {
     this._d_i_count++
     this._d_i_name.add(name)
     this._data_input[name] = input
   }
 
-  private _memAddRefInput(name: string, input: PinOf<I>): void {
+  private _memAddRefInput<K extends keyof I>(name: K, input: PinOf<I>): void {
     this._r_i_count++
     this._r_i_name.add(name)
     this._ref_input[name] = input
@@ -388,16 +420,21 @@ export class Unit<
     }
   }
 
-  public addPin(type: IO, name: string, pin: Pin<any>, opt: PinOpt): void {
+  public addPin<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    name: K,
+    pin: Pin<any>,
+    opt: PinOpt
+  ): void {
     if (type === 'input') {
-      this.addInput(name, pin, opt)
+      this.addInput(name as keyof I, pin, opt)
     } else {
-      this.addOutput(name, pin, opt)
+      this.addOutput(name as keyof O, pin, opt)
     }
   }
 
-  public addInput(
-    name: string,
+  public addInput<K extends keyof I>(
+    name: K,
     input: Pin<any>,
     opt: PinOpt = DEFAULT_PIN_OPT
   ): void {
@@ -407,9 +444,12 @@ export class Unit<
     this.setInput(name, input, opt)
   }
 
-  public removeInput(name: string, propagate: boolean = false): void {
+  public removeInput<K extends keyof I>(
+    name: K,
+    propagate: boolean = false
+  ): void {
     if (!this.hasInputNamed(name)) {
-      throw new InputNotFoundError(name)
+      throw new InputNotFoundError(name as string)
     }
 
     const input = this._input[name]
@@ -433,13 +473,13 @@ export class Unit<
     this.emit('remove_input', name, input, propagate)
   }
 
-  private _memRemoveDataInput = (name: string): void => {
+  private _memRemoveDataInput = <K extends keyof I>(name: K): void => {
     this._d_i_count--
     this._d_i_name.delete(name)
     delete this._data_input[name]
   }
 
-  private _memRemoveRefInput = (name: string): void => {
+  private _memRemoveRefInput = <K extends keyof I>(name: K): void => {
     this._r_i_count--
     this._r_i_name.delete(name)
     delete this._ref_input[name]
@@ -494,30 +534,42 @@ export class Unit<
     this._output[name] = output
   }
 
-  private _memAddRefOutput = (name: string, output: Pin<O[keyof O]>): void => {
+  private _memAddRefOutput = <K extends keyof O>(
+    name: K,
+    output: Pin<O[keyof O]>
+  ): void => {
     this._r_o_count++
     this._r_o_name.add(name)
 
     this._memSetRefOutput(name, output)
   }
 
-  private _memSetRefOutput = (name: string, output: Pin<O[keyof O]>): void => {
+  private _memSetRefOutput = <K extends keyof O>(
+    name: K,
+    output: Pin<O[keyof O]>
+  ): void => {
     this._ref_output[name] = output
   }
 
-  private _memAddDataOutput = (name: string, output: Pin<O[keyof O]>): void => {
+  private _memAddDataOutput = <K extends keyof O>(
+    name: K,
+    output: Pin<O[keyof O]>
+  ): void => {
     this._d_o_count++
     this._d_o_name.add(name)
 
     this._memSetDataOutput(name, output)
   }
 
-  private _memSetDataOutput = (name: string, output: Pin<O[keyof O]>): void => {
+  private _memSetDataOutput = <K extends keyof O>(
+    name: K,
+    output: Pin<O[keyof O]>
+  ): void => {
     this._data_output[name] = output
   }
 
-  public addOutput(
-    name: string,
+  public addOutput<K extends keyof O>(
+    name: K,
     output: Pin<any>,
     opt: PinOpt = DEFAULT_PIN_OPT
   ): void {
@@ -535,19 +587,19 @@ export class Unit<
     }
   }
 
-  private _memRemoveRefOutput = (name: string): void => {
+  private _memRemoveRefOutput = <K extends keyof O>(name: K): void => {
     this._r_o_count--
     this._r_o_name.delete(name)
     delete this._ref_output[name]
   }
 
-  private _memRemoveDataOutput = (name: string): void => {
+  private _memRemoveDataOutput = <K extends keyof O>(name: K): void => {
     this._d_o_count--
     this._d_o_name.delete(name)
     delete this._data_output[name]
   }
 
-  public removeOutput(name: string, propagate: boolean): void {
+  public removeOutput<K extends keyof O>(name: K, propagate: boolean): void {
     if (!this.hasOutputNamed(name)) {
       throw new OutputNotFoundError(name)
     }
@@ -574,19 +626,25 @@ export class Unit<
     this.emit('remove_output', name, output, propagate)
   }
 
-  public removePin(type: IO, name: string, propagate: boolean): void {
+  public removePin<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, name: K, propagate: boolean): void {
     if (type === 'input') {
-      this.removeInput(name, propagate)
+      this.removeInput(name as keyof I, propagate)
     } else {
-      this.removeOutput(name, propagate)
+      this.removeOutput(name as keyof O, propagate)
     }
   }
 
-  public getPin(type: IO, pinId: string): Pin<any> {
+  public getPin<T extends IO, K extends T extends 'input' ? keyof I : keyof O>(
+    type: T,
+    pinId: K
+  ): Pin<any> {
     if (type === 'input') {
-      return this.getInput(pinId)
+      return this.getInput(pinId as keyof I)
     } else {
-      return this.getOutput(pinId)
+      return this.getOutput(pinId as keyof O)
     }
   }
 
@@ -602,7 +660,7 @@ export class Unit<
     return this._ref_input
   }
 
-  public getInput(name: string): Pin<any> {
+  public getInput(name: keyof I): Pin<any> {
     if (name === SELF) {
       return this._selfInput
     }
@@ -622,106 +680,127 @@ export class Unit<
     return this._ref_output
   }
 
-  public getOutput(name: string): Pin<any> {
+  public getOutput<K extends keyof O>(name: K): Pin<O[K]> {
     if (name === SELF) {
       return this._selfOutput
     }
+
     this._validateOutputName(name)
+
     return this._output[name]
   }
 
-  public push<K extends keyof I>(name: string, data: any): void {
+  public push<K extends keyof I>(name: K, data: any): void {
     this.pushInput(name, data)
   }
 
-  public pushInput<K extends keyof I>(name: string, data: I[K]): void {
+  public pushInput<K extends keyof I>(name: K, data: I[K]): void {
     this._validateInputName(name)
     this.getInput(name).push(data)
   }
 
-  public pushAllInput<K extends keyof I>(data: Dict<I[K]>): void {
+  public pushAllInput(data: Partial<I>): void {
     forEachValueKey(data, (value, name) => this.pushInput(name, value))
   }
 
-  public pushOutput<K extends keyof O>(name: string, data: O[K]): void {
+  public pushOutput<K extends keyof O>(name: K, data: O[K]): void {
     this.getOutput(name).push(data)
   }
 
-  public pushAllOutput<K extends keyof O>(data: Dict<O[K]>): void {
+  public pushAllOutput(data: Partial<O>): void {
     forEachValueKey(data, (value, name) => this.pushOutput(name, value))
   }
 
-  public pushAll<K extends keyof I>(data: Dict<I[K]>): void {
+  public pushAll(data: Partial<I>): void {
     this.pushAllInput(data)
   }
 
-  public pullInput<K extends keyof I>(name: string): I[K] {
+  public pullInput<K extends keyof I>(name: K): I[K] {
     return this.getInput(name).pull()
   }
 
-  public pullOutput<K extends keyof O>(name: string): O[K] {
+  public pullOutput<K extends keyof O>(name: K): O[K] {
     return this.getOutput(name).pull()
   }
 
-  public pullPin<K extends keyof O>(type: IO, name: string): O[K] | I[K] {
-    return type === 'input' ? this.pullInput(name) : this.pullOutput(name)
+  public pullPin<
+    T extends IO,
+    P extends T extends 'input' ? I : O,
+    K extends keyof P,
+  >(type: T, name: K): P[K] {
+    return (
+      type === 'input'
+        ? this.pullInput(name as keyof I)
+        : this.pullOutput(name as keyof O)
+    ) as P[K]
   }
 
-  public takePin<K extends keyof O>(type: IO, name: string): O[K] | I[K] {
-    return type === 'input' ? this.takeInput(name) : this.takeOutput(name)
+  public takePin<
+    T extends IO,
+    P extends T extends 'input' ? I : O,
+    K extends keyof P,
+  >(type: T, name: K): P[K] {
+    return (
+      type === 'input'
+        ? this.takeInput(name as keyof I)
+        : this.takeOutput(name as keyof O)
+    ) as P[K]
   }
 
-  public takeInput<K extends keyof O>(name: string): O[K] {
+  public takeInput<K extends keyof I>(name: K): I[K] {
     this._validateInputName(name)
+
     return this.getInput(name).take()
   }
 
-  public takeOutput<K extends keyof O>(name: string): O[K] {
+  public takeOutput<K extends keyof O>(name: K): O[K] {
     return this.getOutput(name).take()
   }
 
-  // short for takeOutput
-  public take<K extends keyof O>(name: string): O[K] {
+  public take<K extends keyof O>(name: K): O[K] {
     return this.takeOutput(name)
   }
 
   public takeAll(): Dict<any> {
-    return mapObjVK(this._output, (output) => output.take())
+    return mapObjVK<Pin<any>, any>(this._output, (output) => output.take())
   }
 
-  public peakInput<K extends keyof I>(name: string): I[K] {
+  public peakInput<K extends keyof I>(name: K): I[K] {
     return this.getInput(name).peak()
   }
 
-  public peakOutput<K extends keyof O>(name: string): O[K] {
+  public peakOutput<K extends keyof O>(name: K): O[K] {
     return this.getOutput(name).peak()
   }
 
-  public peak<K extends keyof O>(name: string): O[K] {
+  public peak<K extends keyof O>(name: K): O[K] {
     return this.peakOutput(name)
   }
 
   public peakAllOutput(): Dict<any> {
-    return mapObjVK(this._output, (pin) => pin.peak())
+    return mapObjVK<Pin<any>, any>(this._output, (pin) => pin.peak())
   }
 
   public peakAll(): Dict<any> {
     return this.peakAllOutput()
   }
 
-  public hasPinNamed(type: IO, name: string): boolean {
+  public hasPinNamed<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, name: K): boolean {
     if (type === 'input') {
-      return this.hasInputNamed(name)
+      return this.hasInputNamed(name as keyof I)
     } else {
-      return this.hasOutputNamed(name)
+      return this.hasOutputNamed(name as keyof O)
     }
   }
 
-  public hasInputNamed(name: string): boolean {
+  public hasInputNamed<K extends keyof I>(name: K): boolean {
     return this._input[name] !== undefined
   }
 
-  public hasOutputNamed(name: string): boolean {
+  public hasOutputNamed<K extends keyof O>(name: K): boolean {
     return this._output[name] !== undefined
   }
 
@@ -741,29 +820,35 @@ export class Unit<
     return this._d_o_name.has(name)
   }
 
-  public hasRefPinNamed(type: IO, name: string): boolean {
+  public hasRefPinNamed<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, name: K): boolean {
     if (type === 'input') {
-      return this.hasRefInputNamed(name)
+      return this.hasRefInputNamed(name as keyof I)
     } else {
-      return this.hasRefOutputNamed(name)
+      return this.hasRefOutputNamed(name as keyof O)
     }
   }
 
-  public hasRefInputNamed(name: string): boolean {
+  public hasRefInputNamed<K extends keyof I>(name: K): boolean {
     return this._r_i_name.has(name)
   }
 
-  public renamePin(type: IO, name: string, newName: string): void {
+  public renamePin<
+    T extends IO,
+    K extends T extends 'input' ? keyof I : keyof O,
+  >(type: T, name: K, newName: K): void {
     if (type === 'input') {
-      this.renameInput(name, newName)
+      this.renameInput(name as keyof I, newName as keyof I)
     } else {
-      this.renameOutput(name, newName)
+      this.renameOutput(name as keyof O, newName as keyof O)
     }
   }
 
-  public renameInput(
-    name: keyof I,
-    newName: keyof I,
+  public renameInput<K extends keyof I>(
+    name: K,
+    newName: K,
     propagate: boolean = true
   ): void {
     // console.log('renameInput', name, newName, propagate)
@@ -805,9 +890,9 @@ export class Unit<
     this.emit('rename_input', name, newName)
   }
 
-  public renameOutput(
-    name: keyof O,
-    newName: keyof O,
+  public renameOutput<K extends keyof O>(
+    name: K,
+    newName: K,
     propagate: boolean = true
   ): void {
     if (!this.hasOutputNamed(name)) {
@@ -845,15 +930,15 @@ export class Unit<
     this.emit('rename_output', name, newName)
   }
 
-  public getInputOpt(name: string): PinOpt {
+  public getInputOpt<K extends keyof I>(name: K): PinOpt {
     return this._i_opt[name]
   }
 
-  public getOutputOpt(name: string): PinOpt {
+  public getOutputOpt<K extends keyof O>(name: K): PinOpt {
     return this._o_opt[name]
   }
 
-  public hasRefOutputNamed(name: string): boolean {
+  public hasRefOutputNamed<K extends keyof O>(name: K): boolean {
     return this._r_o_name.has(name)
   }
 
@@ -1105,8 +1190,8 @@ export class Unit<
     return data
   }
 
-  public getPinsData(): { input: Dict<any>; output: Dict<any> } {
-    const data: { input: Dict<any>; output: Dict<any> } = {
+  public getPinsData(): { input: Partial<I>; output: Partial<O> } {
+    const data: { input: Partial<I>; output: Partial<O> } = {
       input: {},
       output: {},
     }
@@ -1130,13 +1215,12 @@ export class Unit<
     return data
   }
 
-  public getRefInputData(): Dict<Unit> {
-    const data: Dict<any> = {}
+  public getRefInputData(): Partial<I> {
+    const data: Partial<I> = {}
 
     forEachValueKey(this._ref_input, (input, inputId) => {
       if (!input.empty()) {
         let datum = input.peak()
-
         data[inputId] = datum
       }
     })
@@ -1157,7 +1241,7 @@ export class Unit<
       stringifyMemorySpecData(memory)
     }
 
-    const input = mapObjVK(this._input, (input) => {
+    const input = mapObjVK<Pin<any>, any>(this._input, (input) => {
       const ignored = input.ignored()
       const constant = input.constant()
       const _data = input.peak()
@@ -1171,7 +1255,7 @@ export class Unit<
       }
     })
 
-    const output = mapObjVK(this._output, (output) => {
+    const output = mapObjVK<Pin<any>, any>(this._output, (output) => {
       const ignored = output.ignored()
       const constant = output.constant()
       const data = undefined
@@ -1194,8 +1278,8 @@ export class Unit<
     return this.getInput(pinId).snapshot()
   }
 
-  public snapshotInputs(): Dict<Pin_M> {
-    const state = {}
+  public snapshotInputs(): Partial<Record<keyof I, Pin_M>> {
+    const state: Partial<Record<keyof I, Pin_M>> = {}
 
     for (const name of this._d_i_name) {
       state[name] = this.snapshotInput(name)
@@ -1208,8 +1292,8 @@ export class Unit<
     return this.getOutput(pinId).snapshot()
   }
 
-  public snapshotOutputs(): Dict<Pin_M> {
-    const state = {}
+  public snapshotOutputs(): Partial<Record<keyof O, Pin_M>> {
+    const state: Partial<Record<keyof O, Pin_M>> = {}
 
     // for (const name of this._o_name_set) {
     //   state[name] = this.snapshotOutput(name)

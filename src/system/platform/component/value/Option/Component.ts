@@ -16,7 +16,7 @@ export default class Option extends Element<HTMLOptionElement, Props> {
     super($props, $system, $system.api.document.createElement('option'))
   }
 
-  onPropChanged(prop: string, current: any): void {
+  onPropChanged<K extends keyof Props>(prop: K, current: any): void {
     // console.log('Option', 'onPropChanged', prop, current)
 
     super.onPropChanged(prop, current)
