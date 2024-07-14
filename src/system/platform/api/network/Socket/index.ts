@@ -71,63 +71,45 @@ export default class Socket
     const channel = wrapWebSocket(this._web_socket, this.__system)
 
     this._web_socket.onopen = () => {
-      // console.log('Socket', 'onopen')
+      done({ channel })
     }
     this._web_socket.onmessage = (message) => {
-      // console.log('Socket', 'onmessage', message)
       channel.emit('message', message.data)
     }
     this._web_socket.onerror = (event: Event) => {
-      // console.log('Socket', 'onerror')
-      this.err('error') // TODO
+      done(undefined, 'could not connect')
     }
     this._web_socket.onclose = (event: CloseEvent) => {
       const { code, reason } = event
-      // console.log('Socket', 'onclose', code, reason)
 
-      this._plunk()
+      this.d()
     }
-
-    done({
-      channel,
-    })
   }
 
   d() {
-    this._plunk()
+    if (this._web_socket) {
+      if (this._web_socket.readyState === WebSocket.OPEN) {
+        this._web_socket.close()
+      }
+
+      this._web_socket.onopen = null
+      this._web_socket.onmessage = null
+      this._web_socket.onerror = null
+      this._web_socket.onclose = null
+
+      this._web_socket = null
+    }
   }
 
   public onIterDataInputData(name: string, data: any): void {
     // if (name === 'close') {
-    this._close()
-    this._finish()
-    // }
-  }
-
-  private _finish = () => {
-    this._plunk()
+    this.d()
 
     this._forward_empty('channel')
 
     this._backward('url')
     this._backward('close')
-  }
-
-  private _plunk = (): void => {
-    this._web_socket.onopen = null
-    this._web_socket.onmessage = null
-    this._web_socket.onerror = null
-    this._web_socket.onclose = null
-
-    this._web_socket = null
-  }
-
-  private _close(): void {
-    if (this._web_socket) {
-      if (this._web_socket.readyState === WebSocket.OPEN) {
-        this._web_socket.close()
-      }
-    }
+    // }
   }
 
   async send(data: any): Promise<void> {
