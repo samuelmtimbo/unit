@@ -3,6 +3,7 @@ import { Semifunctional } from '../../../Class/Semifunctional'
 import { SharedRef } from '../../../SharefRef'
 import { System } from '../../../system'
 import { V } from '../../../types/interface/V'
+import { clone } from '../../../util/object'
 import { weakMerge } from '../../../weakMerge'
 import { $wrap } from '../../../wrap'
 import { wrapSharedRefArrayInterface } from '../../../wrap/Array'
@@ -57,7 +58,7 @@ export default class State<T> extends Semifunctional<I<T>, O<T>> {
   }
 
   f({ init }: I<T>, done: Done<O<T>>): void {
-    const sharedRef: SharedRef<T> = { current: init }
+    const sharedRef: SharedRef<T> = { current: clone(init) }
 
     let api: any = weakMerge(wrapSharedValue(sharedRef, this.__system), {
       raw: function () {
