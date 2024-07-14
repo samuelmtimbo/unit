@@ -99,7 +99,7 @@ export type GraphSetUnitPinDataData = {
   pinId: string
   type: IO
   data: string
-  lastData: string
+  lastData?: string
   fork?: boolean
   bubble?: boolean
 }

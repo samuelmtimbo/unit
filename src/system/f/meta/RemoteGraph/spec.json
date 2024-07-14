@@ -27,7 +27,7 @@
   },
   "metadata": {
     "icon": "link",
-    "description": "remote peer graph",
+    "description": "remote graph",
     "complexity": 4,
     "tags": ["platform", "meta", "remote"]
   },

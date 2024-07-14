@@ -190,7 +190,7 @@ export interface $G_C {
   ): void
   $getBundle(data: { deep?: boolean }, callback: Callback<BundleSpec>): void
   $setMetadata(data: GraphSetMetadataData): void
-  $reorderSubComponent(data: GraphReorderSubComponentData)
+  $reorderSubComponent(data: GraphReorderSubComponentData): void
   $moveSubComponentRoot(data: GraphMoveSubComponentRootData): void
   $moveSubgraphInto(data: GraphMoveSubGraphIntoData): void
   $moveSubgraphOutOf(data: GraphMoveSubGraphIntoData): void

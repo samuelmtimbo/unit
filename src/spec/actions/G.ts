@@ -470,7 +470,6 @@ export const makeSetUnitPinDataAction = (
     type,
     pinId,
     data,
-    lastData: undefined,
   })
 }
 
