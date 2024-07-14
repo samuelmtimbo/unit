@@ -126,7 +126,7 @@
         "unit": {
           "ignored": false,
           "constant": true,
-          "data": "${unit:{id:'63a417e5-d354-4b39-9ebd-05f55e70de7b',input:{icon:{data:'\\'zoom-out\\''},style:{data:'{height:\\'24px\\',width:\\'24px\\'}'}}}}"
+          "data": "${unit:{id:'63a417e5-d354-4b39-9ebd-05f55e70de7b',input:{icon:{data:\"'zoom-out'\"},style:{data:\"{height:'24px',width:'24px'}\"}}}}"
         },
         "name": {
           "ignored": false,
