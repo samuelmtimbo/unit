@@ -8,8 +8,8 @@ export function wrapSharedValue<T>(data: SharedRef<T>, _system: System): V {
       return data.current
     },
 
-    async write(data: any): Promise<void> {
-      data.current = data
+    async write(data_: any): Promise<void> {
+      data.current = data_
     },
   }
 }
