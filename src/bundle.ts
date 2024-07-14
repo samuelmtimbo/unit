@@ -15,36 +15,16 @@ export function unitBundleSpec(
 ): UnitBundleSpec {
   const { id } = unit
 
-  const spec = getSpec(specs, id)
+  const custom = {}
 
-  const { system } = spec
+  _bundleUnit(unit, specs, custom, new Set())
 
-  if (system) {
-    const custom = {}
-
-    _bundleUnit(unit, specs, custom, new Set())
-
-    return {
-      unit: {
-        id,
-        ...unit,
-      },
-      specs: custom,
-    }
-  } else {
-    const custom: GraphSpecs = {
-      [id]: spec as GraphSpec,
-    }
-
-    _bundle(spec as GraphSpec, specs, custom, new Set())
-
-    return {
-      unit: {
-        id,
-        ...unit,
-      },
-      specs: custom,
-    }
+  return {
+    unit: {
+      id,
+      ...unit,
+    },
+    specs: custom,
   }
 }
 
@@ -134,13 +114,15 @@ function _bundleUnit(
 
           _bundle(spec, weakMerge(specs, bundle.specs ?? {}), custom, branch)
         }
+
+        _bundleUnit(bundle.unit, specs, custom, branch)
       }
     }
   }
 
   const _spec = getSpec(specs, id) as GraphSpec
 
-  if (specs[id] && !isSystemSpecId(specs, id)) {
+  if (!isSystemSpecId(specs, id)) {
     custom[id] = _spec
   }
 
