@@ -20,7 +20,7 @@ export default class Append<T> extends Functional<I<T>, O<T>> {
       },
       {
         input: {
-          arr: {
+          'a[]': {
             ref: true,
           },
         },
