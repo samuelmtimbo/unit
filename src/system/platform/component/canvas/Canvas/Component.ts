@@ -86,8 +86,6 @@ export default class CanvasComp
     const context = canvas_el.getContext('2d', { willReadFrequently: true })
     this._context = context
 
-    this._context
-
     if (old_canvas_el) {
       replaceChild(old_canvas_el, canvas_el)
     }
@@ -309,15 +307,13 @@ export default class CanvasComp
 
     this._context = context
 
-    if (this._context) {
-      this._context.strokeStyle = color
-      this._context.fillStyle = color
-      this._context.lineJoin = 'round'
-      this._context.lineCap = 'round'
-      this._context.lineWidth = 3
+    this._context.strokeStyle = color
+    this._context.fillStyle = color
+    this._context.lineJoin = 'round'
+    this._context.lineCap = 'round'
+    this._context.lineWidth = 3
 
-      this._context.scale(sx, sy)
-    }
+    this._context.scale(sx, sy)
   }
 
   onMount() {
