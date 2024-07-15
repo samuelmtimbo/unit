@@ -1,5 +1,7 @@
 import { Object_ } from './Object'
 import { emptySpec, isSystemSpecId } from './client/spec'
+import deepGet from './deepGet'
+import { evaluateDataValue } from './spec/evaluateDataValue'
 import { remapSpec } from './spec/remapSpec'
 import { Spec, Specs } from './types'
 import { Dict } from './types/Dict'
@@ -8,6 +10,7 @@ import { GraphSpecs } from './types/GraphSpecs'
 import { R } from './types/interface/R'
 import { uuidNotIn } from './util/id'
 import { clone } from './util/object'
+import { weakMerge } from './weakMerge'
 
 export class Registry implements R {
   specs: Specs
@@ -97,6 +100,32 @@ export class Registry implements R {
             setSpec(unit.id, spec, visited)
           } else {
             //
+          }
+        }
+
+        const { input = {} } = unit
+
+        for (const name in input) {
+          const { data } = input[name]
+
+          if (data !== undefined) {
+            const dataRef = evaluateDataValue(
+              data,
+              weakMerge(this.specs, nextSpecs),
+              {}
+            )
+
+            for (const path of dataRef.ref ?? []) {
+              const bundle = deepGet(dataRef.data, path)
+
+              const spec = nextSpecs[bundle.unit.id]
+
+              if (spec) {
+                setSpec(spec.id, spec, visited)
+              } else {
+                //
+              }
+            }
           }
         }
       }
