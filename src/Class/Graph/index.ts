@@ -911,7 +911,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   private _destroy = () => {
     forEachValueKey(this._unit, (u) => u.destroy())
-    forEachValueKey(this._merge, (m) => m.destroy())
+    // forEachValueKey(this._merge, (m) => m.destroy())
   }
 
   private _reset = (): void => {
