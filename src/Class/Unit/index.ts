@@ -1173,10 +1173,12 @@ export class Unit<
       this.__system.unregisterUnit(this.id)
     }
 
-    deepDelete(ref_, [this.id, this.__global_id])
+    if (ref_[this.id]) {
+      deepDelete(ref_, [this.id, this.__global_id])
 
-    if (isEmptyObject(ref_[this.id] ?? {})) {
-      delete ref_[this.id]
+      if (isEmptyObject(ref_[this.id])) {
+        delete ref_[this.id]
+      }
     }
 
     super.destroy()
