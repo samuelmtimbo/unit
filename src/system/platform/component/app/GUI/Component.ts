@@ -675,6 +675,8 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     }
 
     this._refresh_color()
+
+    this._gui.dispatchEvent('theme', $theme)
   }
 
   private _on_context_color_changed = (): void => {
