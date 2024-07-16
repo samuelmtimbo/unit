@@ -4562,29 +4562,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     stopSync()
 
-    this.__register_spec(spec_id, deep, branch)
+    this.__register_spec(this._registry, spec_id, deep, branch)
 
     startSync()
   }
 
   private __register_spec = (
+    registry: Registry,
     spec_id: string,
     deep: boolean = true,
     branch: string[] = []
   ) => {
-    const { getSpec, registerUnit } = this.$props
-
     if (branch.includes(spec_id)) {
       return
     }
 
-    const spec = getSpec(spec_id)
+    const spec = registry.getSpec(spec_id)
 
     if (!isSystemSpec(spec)) {
-      registerUnit(spec_id)
+      registry.registerUnit(spec_id)
 
-      if (this._registry.specsCount[spec_id] === 1) {
-        this._mirror_spec(spec_id)
+      if (registry.specsCount[spec_id] === 1) {
+        this._mirror_spec(registry, spec_id)
       }
 
       if (deep) {
@@ -4593,7 +4592,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (const unitId in units) {
           const unit = units[unitId]
 
-          this.__register_spec(unit.id, deep, [...branch, spec_id])
+          this.__register_spec(registry, unit.id, deep, [...branch, spec_id])
         }
       }
     }
@@ -6379,16 +6378,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._spec_update_metadata_complexity()
   }
 
-  private _mirror_spec = (specId: string) => {
+  private _mirror_spec = (registry: Registry, specId: string) => {
     // console.log('Graph', '_mirror_spec', specId)
 
-    const { setSpec, getSpec } = this.$props
-
-    const spec = getSpec(specId) as GraphSpec
+    const spec = registry.getSpec(specId) as GraphSpec
 
     const mirrored_spec = clone(spec)
 
-    setSpec(spec.id, mirrored_spec)
+    registry.setSpec(spec.id, mirrored_spec)
   }
 
   private _spec_append_component = (
@@ -30279,7 +30276,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const spec = getSpec(bundle.unit.id)
 
-      this._register_spec(bundle.unit.id)
+      this.__register_spec(this.$system, bundle.unit.id)
 
       if (isBaseSpec(spec)) {
         return
@@ -30309,23 +30306,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           frameOut: this._frame_out,
           fullwindow: false,
           component,
-          registry,
+          registry: this.$system,
           typeCache,
           specs,
-          fork: this._subgraph_fork,
-          bubble: fork,
-          hasSpec,
-          emptySpec,
-          getSpec,
-          setSpec,
-          newSpec,
-          deleteSpec,
-          forkSpec,
-          injectSpecs,
-          registerUnit,
-          shouldFork,
-          unregisterUnit,
-          newSpecId,
+          fork: true,
+          bubble: true,
+          ...([
+            'hasSpec',
+            'emptySpec',
+            'getSpec',
+            'setSpec',
+            'newSpec',
+            'deleteSpec',
+            'forkSpec',
+            'injectSpecs',
+            'registerUnit',
+            'shouldFork',
+            'unregisterUnit',
+            'newSpecId',
+          ].reduce((acc, name) => {
+            return {
+              ...acc,
+              [name]: this.$system[name].bind(this.$system),
+            }
+          }, {}) as R),
           dispatchEvent,
           syncFile,
           startSync,
@@ -30343,6 +30347,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           } = this.$system
 
           const modified_bundle = editor.getUnitBundle()
+
+          const spec_id_map = this.$props.injectSpecs(modified_bundle.specs)
+
+          remapUnitBundle(modified_bundle, spec_id_map)
+
           const modified_value = `$${stringify(modified_bundle)}`
 
           const specs = weakMerge(this.$system.specs, bundle.specs ?? {})
@@ -30359,7 +30368,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           class_datum_comp.setProp(
             'specs',
-            weakMerge(modified_bundle.specs, specs)
+            weakMerge(specs, modified_bundle.specs)
           )
 
           if (pin_node_id) {
@@ -55382,6 +55391,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
+    if (!this.$mounted) {
+      return
+    }
+
     if (this._debug_interval !== null) {
       return
     }
@@ -55528,13 +55541,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
     }
-  }
-
-  private _on_graph_unit_rename_pin_set = (
-    data: GraphExposedPinSetMomentData
-  ): void => {
-    // console.log('Graph', '_on_graph_unit_rename_pin_set', data)
-    // TODO
   }
 
   private _on_graph_unit_set_unit_id = (data: GraphSetUnitIdMomentData) => {
@@ -55806,7 +55812,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     setSpec(next_spec_id, unit_spec)
 
-    this.__register_spec(next_spec_id)
+    this.__register_spec(this._registry, next_spec_id)
     this._unregister_spec(unit_spec_id)
   }
 
@@ -58437,8 +58443,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       append_child: this._on_graph_unit_append_child_moment,
       remove_child: this._on_graph_unit_remove_child_at_moment,
       insert_child: this._on_graph_unit_insert_child_at_moment,
-      rename_input: this._on_graph_unit_rename_pin_set,
-      rename_output: this._on_graph_unit_rename_pin_set,
     },
     graph: {
       fork: this._on_graph_unit_fork_moment,
@@ -58452,7 +58456,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       expose_pin: this._on_graph_unit_expose_pin,
       cover_pin: this._on_graph_unit_cover_pin,
       expose_pin_set: this._on_graph_unit_expose_pin_set,
-      rename_pin_set: this._on_graph_unit_rename_pin_set,
       cover_pin_set: this._on_graph_unit_cover_pin_set,
       add_pin_to_merge: this._on_graph_unit_add_pin_to_merge_moment,
       remove_pin_from_merge: this._on_graph_unit_remove_pin_from_merge_moment,
@@ -58488,6 +58491,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let { type, pinId, data } = moment
 
     const ref = this._is_pin_ref(type as IO, pinId)
+
+    if (data === undefined) {
+      return
+    }
 
     if (ref) {
       data = 'null'
