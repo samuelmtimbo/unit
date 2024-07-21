@@ -1,6 +1,6 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Graph } from '../../../../../Class/Graph'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { start } from '../../../../../start'
 import { System } from '../../../../../system'
 import { GraphBundle } from '../../../../../types/GraphClass'
@@ -16,7 +16,7 @@ export interface O {
   graph: Graph
 }
 
-export default class New extends Semifunctional<I, O> {
+export default class New extends Holder<I, O> {
   private _graph: Graph
 
   constructor(system: System) {
@@ -24,7 +24,7 @@ export default class New extends Semifunctional<I, O> {
       {
         fi: ['graph'],
         fo: ['graph'],
-        i: ['done'],
+        i: [],
       },
       {
         output: {
@@ -60,13 +60,5 @@ export default class New extends Semifunctional<I, O> {
 
       this._graph = undefined
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this._forward_all_empty()
-    this._backward('graph')
-    this._backward('done')
-    // }
   }
 }

@@ -1,6 +1,6 @@
 import { $ } from '../../../../../../Class/$'
 import { Done } from '../../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../../Class/Holder'
 import { System } from '../../../../../../system'
 import { A } from '../../../../../../types/interface/A'
 import { AAN } from '../../../../../../types/interface/AAN'
@@ -16,7 +16,7 @@ export type O = {
   data: A & $
 }
 
-export default class GetByteTimeDomainData extends Semifunctional<I, O> {
+export default class GetByteTimeDomainData extends Holder<I, O> {
   private _data: Uint8Array
 
   constructor(system: System) {
@@ -24,7 +24,6 @@ export default class GetByteTimeDomainData extends Semifunctional<I, O> {
       {
         fi: ['node', 'opt'],
         fo: ['data'],
-        i: ['done'],
       },
       {
         input: {
@@ -65,11 +64,5 @@ export default class GetByteTimeDomainData extends Semifunctional<I, O> {
     this._data = undefined
 
     this._backward_all()
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this._reset()
-    // }
   }
 }

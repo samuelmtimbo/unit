@@ -1,7 +1,8 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
+import { Holder } from '../../../../../Class/Holder'
 import {
-  Semifunctional,
+  Semifunctional_EE,
   SemifunctionalEvents,
 } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
@@ -20,12 +21,9 @@ export type O = {
 
 export type Socket_EE = { message: [any] }
 
-export type SocketEvents = SemifunctionalEvents<Socket_EE> & Socket_EE
+export type SocketEvents = SemifunctionalEvents<Semifunctional_EE> & Socket_EE
 
-export default class Socket
-  extends Semifunctional<I, O, SocketEvents>
-  implements CH
-{
+export default class Socket extends Holder<I, O, SocketEvents> implements CH {
   private _web_socket: WebSocket | null = null
 
   constructor(system: System) {
@@ -33,7 +31,7 @@ export default class Socket
       {
         fi: ['url'],
         fo: ['channel'],
-        i: ['close'],
+        i: [],
         o: [],
       },
       {
@@ -44,7 +42,8 @@ export default class Socket
         },
       },
       system,
-      ID_SOCKET
+      ID_SOCKET,
+      'close'
     )
   }
 
@@ -99,17 +98,6 @@ export default class Socket
 
       this._web_socket = null
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'close') {
-    this.d()
-
-    this._forward_empty('channel')
-
-    this._backward('url')
-    this._backward('close')
-    // }
   }
 
   async send(data: any): Promise<void> {

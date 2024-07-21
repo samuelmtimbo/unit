@@ -1,6 +1,6 @@
 import { Done } from '../../../../../../../Class/Functional/Done'
 import { Graph } from '../../../../../../../Class/Graph'
-import { Semifunctional } from '../../../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../../../Class/Holder'
 import {
   shareLocalGraph,
   stopBroadcastSource,
@@ -19,7 +19,7 @@ export interface O {
   id: string
 }
 
-export default class LocalShareGraph extends Semifunctional<I, O> {
+export default class LocalShareGraph extends Holder<I, O> {
   private _connected: boolean = false
   private _id: string
 
@@ -30,7 +30,7 @@ export default class LocalShareGraph extends Semifunctional<I, O> {
       {
         fi: ['opt', 'graph'],
         fo: ['id'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -65,15 +65,5 @@ export default class LocalShareGraph extends Semifunctional<I, O> {
       this._connected = false
       this._id = undefined
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this.d()
-
-    this._forward_empty('id')
-
-    this._backward('done')
-    // }
   }
 }

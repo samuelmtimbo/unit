@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { Unit } from '../../../../../Class/Unit'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -16,14 +16,13 @@ export interface O {
   ref: any
 }
 
-export default class Lookup extends Semifunctional<I, O> {
+export default class Lookup extends Holder<I, O> {
   private _unlisten: Unlisten
 
   constructor(system: System) {
     super(
       {
         fi: ['unit', 'name'],
-        i: ['done'],
         fo: ['ref'],
         o: [],
       },
@@ -66,17 +65,6 @@ export default class Lookup extends Semifunctional<I, O> {
       this._unlisten()
 
       this._unlisten = undefined
-    }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    switch (name) {
-      case 'done':
-        this._done()
-
-        this._backward('done')
-
-        break
     }
   }
 }

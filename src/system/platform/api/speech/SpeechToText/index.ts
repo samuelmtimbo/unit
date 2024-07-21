@@ -1,6 +1,6 @@
 import { SpeechRecorder } from '../../../../../api/speech'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { SpeechRecognitionOpt } from '../../../../../types/global/SpeechRecognition'
 import { ID_SPEECH_TO_TEXT } from '../../../../_ids'
@@ -16,7 +16,7 @@ export type O = {
   text: string
 }
 
-export default class SpeechToText extends Semifunctional<I, O> {
+export default class SpeechToText extends Holder<I, O> {
   private _recorder: SpeechRecorder
 
   constructor(system: System) {
@@ -24,7 +24,7 @@ export default class SpeechToText extends Semifunctional<I, O> {
       {
         fi: ['opt'],
         fo: [],
-        i: ['start', 'stop', 'done'],
+        i: ['start', 'stop'],
         o: ['text'],
       },
       {},
@@ -55,7 +55,9 @@ export default class SpeechToText extends Semifunctional<I, O> {
     }
   }
 
-  public onIterDataInputData(name: string, data: any): void {
+  public onIterDataInputData(name: keyof I, data: any): void {
+    super.onIterDataInputData(name, data)
+
     if (name === 'stop') {
       if (this._recorder) {
         this._recorder.stop()
@@ -68,13 +70,6 @@ export default class SpeechToText extends Semifunctional<I, O> {
       }
 
       this._backward('start')
-    } else if (name === 'done') {
-      this.d()
-
-      this._forward_empty('text')
-
-      this._backward('opt')
-      this._backward('done')
     }
   }
 }

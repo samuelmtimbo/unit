@@ -1,6 +1,6 @@
 import { Peer } from '../../../../../api/peer/Peer'
 import { $ } from '../../../../../Class/$'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
@@ -8,22 +8,19 @@ import { MS } from '../../../../../types/interface/MS'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { ID_PEER_TRANSMITTER } from '../../../../_ids'
 
-export interface I<T> {
+export interface I {
   opt: RTCConfiguration
   close: any
   answer: string
   stream: MS
 }
 
-export interface O<T> {
+export interface O {
   offer: string
   channel: CH
 }
 
-export default class PeerTransmitter<T>
-  extends Semifunctional<I<T>, O<T>>
-  implements CH
-{
+export default class PeerTransmitter extends Holder<I, O> implements CH {
   private _peer: Peer = undefined
 
   private _unlisten: Unlisten = undefined
@@ -42,7 +39,7 @@ export default class PeerTransmitter<T>
     super(
       {
         fi: ['opt'],
-        i: ['answer', 'stream', 'close'],
+        i: ['answer', 'stream'],
         o: ['offer', 'channel'],
       },
       {
@@ -58,7 +55,8 @@ export default class PeerTransmitter<T>
         },
       },
       system,
-      ID_PEER_TRANSMITTER
+      ID_PEER_TRANSMITTER,
+      'close'
     )
 
     this.addListener('take_err', () => {
@@ -142,8 +140,10 @@ export default class PeerTransmitter<T>
     // }
   }
 
-  async onDataInputData(name: string, data: any): Promise<void> {
-    // console.log('Transmitter', 'onDataInputData', name, data)
+  async onIterDataInputData(name: keyof I, data: any): Promise<void> {
+    // console.log('Transmitter', 'onIterDataInputData', name, data)
+
+    super.onIterDataInputData(name, data)
 
     if (this.hasErr()) {
       this._backwarding = true
@@ -169,15 +169,6 @@ export default class PeerTransmitter<T>
 
         this.err('cannot answer without offer')
       }
-    } else if (name === 'close') {
-      this._disconnect()
-
-      this._output.offer.pull()
-      this._output.channel.pull()
-
-      this._done({})
-
-      this._input.close.pull()
     }
   }
 

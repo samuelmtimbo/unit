@@ -1,6 +1,6 @@
 import { $ } from '../../../Class/$'
 import { Done } from '../../../Class/Functional/Done'
-import { Semifunctional } from '../../../Class/Semifunctional'
+import { Holder } from '../../../Class/Holder'
 import { System } from '../../../system'
 import { CA } from '../../../types/interface/CA'
 import { wrapOffscreenCanvas } from '../../../wrap/OffscreenCanvas'
@@ -17,7 +17,7 @@ export interface O {
   canvas: CA & $
 }
 
-export default class OffscreenCanvas_ extends Semifunctional<I, O> {
+export default class OffscreenCanvas_ extends Holder<I, O> {
   __ = ['U', 'CA']
 
   private _offscreen: OffscreenCanvas
@@ -28,7 +28,7 @@ export default class OffscreenCanvas_ extends Semifunctional<I, O> {
       {
         fi: ['width', 'height', 'opt'],
         fo: ['canvas'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -54,17 +54,5 @@ export default class OffscreenCanvas_ extends Semifunctional<I, O> {
     )
 
     done({ canvas })
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this._forward_empty('canvas')
-
-    this._backward('width')
-    this._backward('height')
-    this._backward('opt')
-
-    this._backward('done')
-    // }
   }
 }

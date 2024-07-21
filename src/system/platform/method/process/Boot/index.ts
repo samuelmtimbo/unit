@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { BootOpt, System } from '../../../../../system'
 import { $S } from '../../../../../types/interface/async/$S'
 import { Async } from '../../../../../types/interface/async/Async'
@@ -16,7 +16,7 @@ export interface O {
   system: $S
 }
 
-export default class Boot extends Semifunctional<I, O> {
+export default class Boot extends Holder<I, O> {
   private _system: System
 
   constructor(system: System) {
@@ -24,7 +24,7 @@ export default class Boot extends Semifunctional<I, O> {
       {
         fi: ['init'],
         fo: ['system'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {

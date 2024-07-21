@@ -1,7 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Element_ } from '../../../../../Class/Element'
+import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { System } from '../../../../../system'
 import { A } from '../../../../../types/interface/A'
@@ -16,13 +16,12 @@ export interface O {
   children: A<C>
 }
 
-export default class Children extends Semifunctional<I, O> {
+export default class Children extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        fi: ['parent'],
-        fo: ['children'],
-        i: [],
+        i: ['parent'],
+        o: ['children'],
       },
       {
         input: {

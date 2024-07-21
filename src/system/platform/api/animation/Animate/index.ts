@@ -1,7 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Element_ } from '../../../../../Class/Element'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { ANI } from '../../../../../types/interface/ANI'
 import { randomId } from '../../../../../util/id'
@@ -18,7 +18,7 @@ export interface O {
   animation: ANI & $
 }
 
-export default class Animate extends Semifunctional<I, O> {
+export default class Animate extends Holder<I, O> {
   private _id: string
   private _element: Element_
 
@@ -27,8 +27,6 @@ export default class Animate extends Semifunctional<I, O> {
       {
         fi: ['opt', 'keyframes', 'element'],
         fo: ['animation'],
-        i: ['done'],
-        o: [],
       },
       {
         input: {
@@ -106,17 +104,5 @@ export default class Animate extends Semifunctional<I, O> {
       this._id = undefined
       this._element = undefined
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this.d()
-
-    this._forward_empty('animation')
-
-    this._backward('keyframes')
-    this._backward('opt')
-    this._backward('done')
-    // }
   }
 }

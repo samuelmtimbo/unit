@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { Component_ } from '../../../../../types/interface/Component'
@@ -13,14 +13,15 @@ export interface I<T> {
 
 export interface O<T> {}
 
-export default class StopPropagation<T> extends Semifunctional<I<T>, O<T>> {
+export default class StopPropagation<T> extends Holder<I<T>, O<T>> {
   private _unlisten: Unlisten
 
   constructor(system: System) {
     super(
       {
         fi: ['component', 'name'],
-        i: ['done'],
+        fo: [],
+        i: [],
         o: [],
       },
       {
@@ -45,15 +46,5 @@ export default class StopPropagation<T> extends Semifunctional<I<T>, O<T>> {
 
       this._unlisten = undefined
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this.d()
-
-    this._done()
-
-    this.takeInput('done')
-    // }
   }
 }

@@ -1,5 +1,5 @@
+import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { WP } from '../../../../../types/interface/WP'
 import { ID_POST_MESSAGE } from '../../../../_ids'
@@ -12,13 +12,11 @@ export interface I {
 
 export interface O {}
 
-export default class PostMessage extends Semifunctional<I, O> {
+export default class PostMessage extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        fi: ['window', 'target', 'data'],
-        fo: [],
-        i: [],
+        i: ['window', 'target', 'data'],
         o: [],
       },
       {

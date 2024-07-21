@@ -1,5 +1,5 @@
 import { Done } from '../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../Class/Semifunctional'
+import { Holder } from '../../../../Class/Holder'
 import { System } from '../../../../system'
 import { ID_INTERVAL } from '../../../_ids'
 
@@ -12,7 +12,7 @@ export interface O {
   ms: number
 }
 
-export default class Interval extends Semifunctional<I, O> {
+export default class Interval extends Holder<I, O> {
   private _interval: number | null = null
 
   constructor(system: System) {
@@ -20,7 +20,7 @@ export default class Interval extends Semifunctional<I, O> {
       {
         fi: ['ms'],
         o: ['ms'],
-        i: ['done'],
+        i: [],
       },
       {},
       system,
@@ -55,17 +55,5 @@ export default class Interval extends Semifunctional<I, O> {
     }
 
     this._forward_all_empty()
-  }
-
-  onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this.d()
-
-    this._forward_empty('ms')
-
-    this._backward('ms')
-
-    this._backward('done')
-    // }
   }
 }

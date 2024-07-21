@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
 import { PS } from '../../../../../types/interface/PS'
@@ -13,7 +13,7 @@ export interface I {
 
 export interface O {}
 
-export default class RequestPictureInPicture extends Semifunctional<I, O> {
+export default class RequestPictureInPicture extends Holder<I, O> {
   private _picture_in_picture: PictureInPictureWindow
 
   private _exit_picture_in_picture_promise: Promise<any> = Promise.resolve()
@@ -24,7 +24,7 @@ export default class RequestPictureInPicture extends Semifunctional<I, O> {
     super(
       {
         fi: ['media', 'opt'],
-        i: ['done'],
+        i: [],
       },
       {
         input: {
@@ -92,15 +92,5 @@ export default class RequestPictureInPicture extends Semifunctional<I, O> {
 
       this._picture_in_picture = undefined
     }
-  }
-
-  onIterDataInputData(name: string): void {
-    // if (name === 'done') {
-    this.d()
-
-    this._backward('opt')
-
-    this._backward('done')
-    // }
   }
 }

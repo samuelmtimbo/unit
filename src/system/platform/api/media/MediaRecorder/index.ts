@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { Waiter } from '../../../../../Waiter'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
@@ -20,7 +20,7 @@ export type O = {
   err: string
 }
 
-export default class _MediaRecorder extends Semifunctional<I, O> {
+export default class _MediaRecorder extends Holder<I, O> {
   private _media_recorder: MediaRecorder
 
   private _stop_waiter: Waiter<any> = new Waiter()
@@ -30,7 +30,7 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
       {
         fi: ['opt', 'stream'],
         fo: [],
-        i: ['start', 'stop', 'done'],
+        i: ['start', 'stop'],
         o: ['blob', 'err'],
       },
       {
@@ -131,7 +131,9 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
     }
   }
 
-  async onIterDataInputData(name: string, data: any): Promise<void> {
+  async onIterDataInputData(name: keyof I, data: any): Promise<void> {
+    super.onIterDataInputData(name, data)
+
     if (name === 'start') {
       this._start_recorder()
     } else if (name === 'stop') {
@@ -146,15 +148,6 @@ export default class _MediaRecorder extends Semifunctional<I, O> {
 
         this._backward('stop')
       }
-    } else if (name === 'done') {
-      this.d()
-
-      this._forward_empty('blob')
-      this._forward_empty('err')
-
-      this._backward('opt')
-
-      this._backward('done')
     }
   }
 

@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { PositionObserver_ } from '../../../../../client/PositionObserver'
 import { Component } from '../../../../../client/component'
 import { System } from '../../../../../system'
@@ -18,7 +18,7 @@ export type O = {
   entry: { x: number; y: number }
 }
 
-export default class PositionObserver__ extends Semifunctional<I, O> {
+export default class PositionObserver__ extends Holder<I, O> {
   private _observer: PositionObserver_
 
   constructor(system: System) {
@@ -26,7 +26,7 @@ export default class PositionObserver__ extends Semifunctional<I, O> {
       {
         fi: ['component', 'opt'],
         fo: [],
-        i: ['done'],
+        i: [],
         o: ['entry'],
       },
       {
@@ -77,13 +77,5 @@ export default class PositionObserver__ extends Semifunctional<I, O> {
 
       this._observer = undefined
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    if (this._observer) {
-      this._observer.disconnect()
-    }
-    // }
   }
 }

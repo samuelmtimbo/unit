@@ -1,6 +1,6 @@
 import { $, $Events } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { Gamepad_, Gamepad_J } from '../../../../../client/event/gamepad'
 import { System } from '../../../../../system'
 import { EE } from '../../../../../types/interface/EE'
@@ -26,7 +26,7 @@ export type GamePad_EE = {
 
 export type GamepadEvents = $Events<GamePad_EE> & GamePad_EE
 
-export default class _Gamepad extends Semifunctional<I, O> {
+export default class _Gamepad extends Holder<I, O> {
   private _gamepad: Gamepad_
 
   private _connected: boolean
@@ -38,7 +38,6 @@ export default class _Gamepad extends Semifunctional<I, O> {
       {
         fi: ['i'],
         fo: [],
-        i: ['done'],
         o: ['state'],
       },
       {
@@ -137,13 +136,5 @@ export default class _Gamepad extends Semifunctional<I, O> {
 
       this._unlisten = undefined
     }
-  }
-
-  onIterDataInputData(name: keyof I) {
-    // if (name === 'done') {
-    this._output.state.pull()
-    this._done()
-    this._input.done.pull()
-    // }
   }
 }

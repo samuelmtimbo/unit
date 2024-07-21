@@ -1,6 +1,6 @@
 import { $ } from '../../../Class/$'
 import { Done } from '../../../Class/Functional/Done'
-import { Semifunctional } from '../../../Class/Semifunctional'
+import { Holder } from '../../../Class/Holder'
 import { System } from '../../../system'
 import { FD } from '../../../types/interface/FD'
 import { J } from '../../../types/interface/J'
@@ -16,7 +16,7 @@ export interface O {
   form: J & FD & $
 }
 
-export default class FormData_ extends Semifunctional<I, O> {
+export default class FormData_ extends Holder<I, O> {
   __ = ['U']
 
   constructor(system: System) {
@@ -24,7 +24,7 @@ export default class FormData_ extends Semifunctional<I, O> {
       {
         fi: ['data'],
         fo: ['form'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -57,17 +57,5 @@ export default class FormData_ extends Semifunctional<I, O> {
     done({
       form,
     })
-  }
-
-  onIterDataInputData<K extends keyof I>(name: K, data: any): void {
-    super.onIterDataInputData(name, data)
-
-    // if (name === 'done') {
-    this._forward_all_empty()
-
-    this._backward_all()
-
-    this._backward('done')
-    // }
   }
 }

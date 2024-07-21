@@ -1,9 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import {
-  Semifunctional,
-  SemifunctionalEvents,
-} from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
+import { SemifunctionalEvents } from '../../../../../Class/Semifunctional'
 import { MethodNotImplementedError } from '../../../../../exception/MethodNotImplementedError'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
@@ -27,10 +25,7 @@ export type LocalChannel_EE = { message: [any] }
 export type LocalChannelEvents = SemifunctionalEvents<LocalChannel_EE> &
   LocalChannel_EE
 
-export default class LocalChannel<T>
-  extends Semifunctional<I<T>, O<T>>
-  implements CH
-{
+export default class LocalChannel<T> extends Holder<I<T>, O<T>> implements CH {
   private _bc: Channel | null = null
 
   constructor(system: System) {
@@ -38,7 +33,7 @@ export default class LocalChannel<T>
       {
         fi: ['channel'],
         fo: ['port'],
-        i: ['close'],
+        i: [],
         o: [],
       },
       {
@@ -49,7 +44,8 @@ export default class LocalChannel<T>
         },
       },
       system,
-      ID_LOCAL_CHANNEL
+      ID_LOCAL_CHANNEL,
+      'close'
     )
   }
 

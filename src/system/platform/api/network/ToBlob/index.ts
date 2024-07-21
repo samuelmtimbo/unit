@@ -1,6 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { B } from '../../../../../types/interface/B'
 import { RES } from '../../../../../types/interface/RES'
@@ -17,13 +17,13 @@ export type O = {
   blob: B & $
 }
 
-export default class ToBlob extends Semifunctional<I, O> {
+export default class ToBlob extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
         fi: ['res', 'any'],
         fo: ['blob'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -49,15 +49,5 @@ export default class ToBlob extends Semifunctional<I, O> {
     const blob = wrapBlob(_blob, this.__system)
 
     done({ blob })
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-
-    this._forward_empty('blob')
-
-    this._backward('any')
-    this._backward('done')
-    // }
   }
 }

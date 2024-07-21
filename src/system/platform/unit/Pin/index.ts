@@ -1,6 +1,6 @@
 import { $ } from '../../../../Class/$'
 import { Done } from '../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../Class/Semifunctional'
+import { Holder } from '../../../../Class/Holder'
 import { System } from '../../../../system'
 import { IO } from '../../../../types/IO'
 import { PI } from '../../../../types/interface/PI'
@@ -19,13 +19,13 @@ export interface O<T> {
   pin: V & PI<any> & $
 }
 
-export default class Pin_<T> extends Semifunctional<I<T>, O<T>> {
+export default class Pin_<T> extends Holder<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
         fi: ['unit', 'name', 'type'],
         fo: ['pin'],
-        i: ['done'],
+        i: [],
       },
       {
         input: {
@@ -52,12 +52,5 @@ export default class Pin_<T> extends Semifunctional<I<T>, O<T>> {
     } catch (err) {
       done(undefined, err.message)
     }
-  }
-
-  onIterDataInputData(name: string) {
-    // if (name === 'done') {
-    this._backward('name')
-    this._backward('done')
-    // }
   }
 }

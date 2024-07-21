@@ -1,6 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
@@ -27,7 +27,7 @@ export interface O {
   window: CH
 }
 
-export default class Open extends Semifunctional<I, O> {
+export default class Open extends Holder<I, O> {
   private _window: Window
   private _detached: boolean
 
@@ -36,7 +36,7 @@ export default class Open extends Semifunctional<I, O> {
       {
         fi: ['url', 'target', 'features', 'detached'],
         fo: ['window'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -82,10 +82,6 @@ export default class Open extends Semifunctional<I, O> {
       }
     })(this.__system)
 
-    window.onbeforeunload = () => {
-      this._finish()
-    }
-
     try {
       window.addEventListener('message', (event) => {
         // @ts-ignore
@@ -109,23 +105,5 @@ export default class Open extends Semifunctional<I, O> {
       this._window = undefined
       this._detached = undefined
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this.d()
-
-    this._finish()
-    // }
-  }
-
-  private _finish() {
-    this._forward_empty('window')
-
-    this._backward('url')
-    this._backward('target')
-    this._backward('features')
-
-    this._backward('done')
   }
 }

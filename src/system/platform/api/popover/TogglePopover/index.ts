@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
+import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
 import { System } from '../../../../../system'
 import { ID_TOGGLE_POPOVER } from '../../../../_ids'
 
@@ -11,13 +11,11 @@ export type I = {
 
 export type O = {}
 
-export default class TogglePopover extends Semifunctional<I, O> {
+export default class TogglePopover extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
-        fi: ['component', 'any'],
-        fo: [],
-        i: [],
+        i: ['component', 'any'],
         o: [],
       },
       {

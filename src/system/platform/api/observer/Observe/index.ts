@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
 import { OB } from '../../../../../types/interface/OB'
@@ -15,13 +15,13 @@ export type O<T> = {
   entry: T[]
 }
 
-export default class Observe<T> extends Semifunctional<I<T>, O<T>> {
+export default class Observe<T> extends Holder<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
         fi: ['component', 'observer'],
         fo: [],
-        i: ['done'],
+        i: [],
         o: ['entry'],
       },
       {

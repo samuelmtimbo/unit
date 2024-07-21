@@ -1,6 +1,6 @@
 import { BasicHTTPRequest, BasicHTTPResponse } from '../../../../../API'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { Waiter } from '../../../../../Waiter'
 import { System } from '../../../../../system'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -16,7 +16,7 @@ export type O = {
   req: BasicHTTPRequest
 }
 
-export default class Server extends Semifunctional<I, O> {
+export default class Server extends Holder<I, O> {
   private _waiter = new Waiter<BasicHTTPResponse>()
   private _unlisten: Unlisten
 
@@ -25,7 +25,7 @@ export default class Server extends Semifunctional<I, O> {
       {
         fi: ['port'],
         fo: [],
-        i: ['res', 'done'],
+        i: ['res'],
         o: ['req'],
       },
       {},
@@ -66,24 +66,13 @@ export default class Server extends Semifunctional<I, O> {
     }
   }
 
-  public onIterDataInputData(name: string, data: any): void {
-    switch (name) {
-      case 'res':
-        {
-          this._waiter.set(data)
+  public onIterDataInputData(name: keyof I, data: any): void {
+    super.onIterDataInputData(name, data)
 
-          this._input.res.pull()
-        }
-        break
-      case 'done':
-        {
-          this.d()
+    if (name === 'res') {
+      this._waiter.set(data)
 
-          this._done()
-
-          this._input.done.pull()
-        }
-        break
+      this._input.res.pull()
     }
   }
 }

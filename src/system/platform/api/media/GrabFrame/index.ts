@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { IB } from '../../../../../types/interface/IB'
 import { IC } from '../../../../../types/interface/IC'
@@ -16,13 +16,13 @@ export type O = {
   image: IB
 }
 
-export default class GrabFrame extends Semifunctional<I, O> {
+export default class GrabFrame extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
         fi: ['camera'],
         fo: [],
-        i: ['init', 'done'],
+        i: ['init'],
         o: ['image'],
       },
       {
@@ -80,14 +80,10 @@ export default class GrabFrame extends Semifunctional<I, O> {
     }
   }
 
-  async onIterDataInputData(name: string): Promise<void> {
-    if (name === 'done') {
-      this._forward_empty('image')
+  async onIterDataInputData(name: keyof I, data: any): Promise<void> {
+    super.onIterDataInputData(name, data)
 
-      this._done()
-
-      this._backward('done')
-    } else if (name === 'init') {
+    if (name === 'init') {
       this._forward_if_ready()
     }
   }

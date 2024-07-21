@@ -1,4 +1,4 @@
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { EE } from '../../../../../types/interface/EE'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -14,7 +14,7 @@ export interface O<T> {
   data: any
 }
 
-export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
+export default class Listen<T> extends Holder<I<T>, O<T>> {
   private _unlisten: Unlisten | undefined = undefined
 
   constructor(system: System) {
@@ -22,7 +22,7 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
       {
         fi: ['emitter', 'event'],
         fo: [],
-        i: ['remove'],
+        i: [],
         o: ['data'],
       },
       {
@@ -33,7 +33,8 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
         },
       },
       system,
-      ID_LISTEN
+      ID_LISTEN,
+      'remove'
     )
   }
 
@@ -57,15 +58,5 @@ export default class Listen<T> extends Semifunctional<I<T>, O<T>> {
     }
 
     this._forward_empty('data')
-  }
-
-  onIterDataInputData(name: string, data: any) {
-    // if (name === 'remove') {
-    if (this._unlisten) {
-      this.d()
-
-      this._done()
-    }
-    // }
   }
 }
