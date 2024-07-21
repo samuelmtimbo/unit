@@ -37232,6 +37232,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._refresh_core_border_color(unitId)
     }
 
+    if (this._is_node_ascend(unitId)) {
+      this._ascend_node_z(pin_node_id)
+      this._negate_node_layer(pin_node_id)
+    }
+
     if (this._collapse_init_node_id_set.has(merge_node_id)) {
       if (!this._collapse_init_node_id_set.has(unitId)) {
         this._start_node_long_press_collapse(pin_node_id)
@@ -42799,8 +42804,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const int_node_id = getIntNodeId(type, pinId, subPinId)
 
-      this._negate_node_layer(int_node_id)
-      this._ascend_node_z(int_node_id)
+      if (this._has_node(int_node_id)) {
+        this._negate_node_layer(int_node_id)
+        this._ascend_node_z(int_node_id)
+      }
 
       const datum_node_id = this._plug_to_datum[node_id]
 
