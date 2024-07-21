@@ -33378,9 +33378,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const pin_node_id = getInputNodeId(unit_id, input_id)
 
       const defaultIgnored = this._is_link_pin_default_ignored(pin_node_id)
+      const ref = this._is_link_pin_ref(pin_node_id)
 
       return {
         plug: { 0: {} },
+        ref,
         defaultIgnored,
       }
     })
@@ -33389,9 +33391,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const pin_node_id = getOutputNodeId(unit_id, output_id)
 
       const defaultIgnored = this._is_link_pin_default_ignored(pin_node_id)
+      const ref = this._is_link_pin_ref(pin_node_id)
 
       return {
         plug: { 0: {} },
+        ref,
         defaultIgnored,
       }
     })
