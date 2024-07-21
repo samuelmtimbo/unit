@@ -13,6 +13,11 @@
       "type": "number",
       "optional": true,
       "defaultIgnored": true
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true
     }
   },
   "outputs": {

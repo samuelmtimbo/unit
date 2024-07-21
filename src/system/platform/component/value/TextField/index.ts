@@ -6,6 +6,7 @@ export interface I {
   style: object
   value: string
   maxLength: number
+  attr: object
 }
 
 export interface O {
@@ -16,7 +17,7 @@ export default class TextField extends Field<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['value', 'style', 'maxLength'],
+        i: ['value', 'style', 'maxLength', 'attr'],
         o: ['value'],
       },
       {},
