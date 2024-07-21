@@ -51977,6 +51977,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const component: GraphComponentSpec = {}
     const data: GraphDataSpec = {}
 
+    const pins = {
+      input: inputs,
+      output: outputs,
+    }
+
     const {
       unit_ids,
       merge_node_ids,
@@ -52072,6 +52077,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
+    const exposed_pin_set: IOOf<Set<string>> = {
+      input: new Set(),
+      output: new Set(),
+    }
+
     for (const exposed_node_id of exposed_node_ids) {
       const { pinId, type, subPinId } = segmentPlugNodeId(exposed_node_id)
 
@@ -52092,12 +52102,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
+      exposed_pin_set[type].add(pinId)
+
       if (type === 'input') {
         deepSet(inputs, [pinId, 'plug', subPinId], sub_pin_spec)
       } else {
         deepSet(outputs, [pinId, 'plug', subPinId], sub_pin_spec)
       }
     }
+
+    io((type) => {
+      const pin_set = exposed_pin_set[type]
+
+      for (const pin_id of pin_set) {
+        const ref = this._is_pin_ref(type, pin_id)
+        const defaultIgnored = this._is_pin_default_ignored(type, pin_id)
+
+        deepSet(pins, [type, pin_id, 'ref'], ref)
+        deepSet(pins, [type, pin_id, 'defaultIgnored'], defaultIgnored)
+      }
+    })
 
     if (!isEmptyObject(units)) {
       graph.units = units
