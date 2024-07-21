@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
 import { ID_ATTACH_TEXT } from '../../../../_ids'
@@ -15,7 +15,7 @@ export interface O<T> {}
 
 export const VALID_MIME_TYPES = ['text/plain', 'text/html', 'text/uri-list']
 
-export default class AttachText<T> extends Semifunctional<I<T>, O<T>> {
+export default class AttachText<T> extends Holder<I<T>, O<T>> {
   private _component: Component_
   private _text: string
   private _type: string
@@ -24,7 +24,8 @@ export default class AttachText<T> extends Semifunctional<I<T>, O<T>> {
     super(
       {
         fi: ['component', 'text', 'type'],
-        i: ['done'],
+        fo: [],
+        i: [],
         o: [],
       },
       {
@@ -73,15 +74,5 @@ export default class AttachText<T> extends Semifunctional<I<T>, O<T>> {
         this._component = undefined
       }, 0)
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done')  {
-    this.d()
-
-    this._done()
-
-    this._input.done.pull()
-    // }
   }
 }

@@ -1,5 +1,5 @@
 import { Done } from '../../../Class/Functional/Done'
-import { Semifunctional } from '../../../Class/Semifunctional'
+import { Holder } from '../../../Class/Holder'
 import { SharedRef } from '../../../SharefRef'
 import { System } from '../../../system'
 import { V } from '../../../types/interface/V'
@@ -36,13 +36,13 @@ export interface O<T> {
   data: V<T>
 }
 
-export default class State<T> extends Semifunctional<I<T>, O<T>> {
+export default class State<T> extends Holder<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
         fi: ['init'],
         fo: ['data'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -94,12 +94,5 @@ export default class State<T> extends Semifunctional<I<T>, O<T>> {
     done({
       data,
     })
-  }
-
-  onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this._backward('init')
-    this._backward('done')
-    // }
   }
 }

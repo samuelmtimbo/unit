@@ -1,6 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { BO } from '../../../../../types/interface/BO'
 import { RES } from '../../../../../types/interface/RES'
@@ -18,13 +18,13 @@ export type O = {
   res: RES & $
 }
 
-export default class Fetch0 extends Semifunctional<I, O> {
+export default class Fetch0 extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
         fi: ['url', 'opt', 'body'],
         fo: ['res'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -68,15 +68,5 @@ export default class Fetch0 extends Semifunctional<I, O> {
     const res = wrapResponse(response, this.__system)
 
     done({ res })
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    this._forward_empty('res')
-
-    this._backward('body')
-    this._backward('opt')
-    this._backward('url')
-
-    this._backward('done')
   }
 }

@@ -1,6 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { Unit } from '../../../../../Class/Unit'
 import { System } from '../../../../../system'
 import { ID_REGISTER } from '../../../../_ids'
@@ -14,16 +14,14 @@ export interface I {
 
 export interface O {}
 
-export default class Register extends Semifunctional<I, O> {
+export default class Register extends Holder<I, O> {
   private _name: string
 
   constructor(system: System) {
     super(
       {
         fi: ['unit', 'ref', 'name'],
-        i: ['done'],
         fo: [],
-        o: [],
       },
       {
         input: {
@@ -57,17 +55,6 @@ export default class Register extends Semifunctional<I, O> {
       this.__system.emitter.emit('unregister', this._name)
 
       this._name = undefined
-    }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    switch (name) {
-      case 'done':
-        this._done()
-
-        this._backward('done')
-
-        break
     }
   }
 }

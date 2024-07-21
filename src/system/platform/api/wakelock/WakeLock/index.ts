@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { ID_WAKE_LOCK } from '../../../../_ids'
 
@@ -10,7 +10,7 @@ export interface I {
 
 export interface O {}
 
-export default class WakeLock extends Semifunctional<I, O> {
+export default class WakeLock extends Holder<I, O> {
   private _wake_lock: WakeLockSentinel
 
   constructor(system: System) {
@@ -18,7 +18,7 @@ export default class WakeLock extends Semifunctional<I, O> {
       {
         fi: ['type'],
         fo: [],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {},
@@ -27,29 +27,7 @@ export default class WakeLock extends Semifunctional<I, O> {
     )
   }
 
-  f({ type }: I, done: Done<O>) {
-    this._lock(type)
-  }
-
-  d() {
-    if (this._wake_lock) {
-      this._wake_lock.release()
-
-      this._wake_lock = undefined
-    }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this.d()
-
-    this._backward('type')
-
-    this._backward('done')
-    // }
-  }
-
-  private _lock = async (type: 'screen'): Promise<void> => {
+  async f({ type }: I, done: Done<O>) {
     const {
       api: {
         screen: {
@@ -63,6 +41,14 @@ export default class WakeLock extends Semifunctional<I, O> {
     wake_lock.addEventListener('release', this._on_release)
 
     this._wake_lock = wake_lock
+  }
+
+  d() {
+    if (this._wake_lock) {
+      this._wake_lock.release()
+
+      this._wake_lock = undefined
+    }
   }
 
   private _on_release = () => {

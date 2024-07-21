@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { Component } from '../../../../../client/component'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
@@ -17,13 +17,13 @@ export type O = {
   height: number
 }
 
-export default class SizeObserver extends Semifunctional<I, O> {
+export default class SizeObserver extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
         fi: ['component', 'opt'],
         fo: [],
-        i: ['done'],
+        i: [],
         o: ['width', 'height'],
       },
       {
@@ -88,16 +88,5 @@ export default class SizeObserver extends Semifunctional<I, O> {
 
       this._observer = undefined
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this.d()
-
-    this._forward_all_empty()
-
-    this._backward('opt')
-    this._backward('done')
-    // }
   }
 }

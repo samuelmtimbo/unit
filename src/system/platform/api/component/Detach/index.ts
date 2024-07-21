@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { globalUrl } from '../../../../../spec/globalUrl'
 import { System } from '../../../../../system'
 import { Component_ } from '../../../../../types/interface/Component'
@@ -18,16 +18,14 @@ export interface I {
 
 export interface O {}
 
-export default class Detach extends Semifunctional<I, O> {
+export default class Detach extends Holder<I, O> {
   private _component: Component_
 
   constructor(system: System) {
     super(
       {
         fi: ['component', 'host', 'opt'],
-        i: ['done'],
         fo: [],
-        o: [],
       },
       {
         input: {
@@ -64,13 +62,5 @@ export default class Detach extends Semifunctional<I, O> {
 
       this._component = undefined
     }
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    this.d()
-
-    this._done()
-
-    this._backward('done')
   }
 }

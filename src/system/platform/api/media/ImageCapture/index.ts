@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { apiNotSuportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { IC } from '../../../../../types/interface/IC'
@@ -17,13 +17,13 @@ export type O = {
   camera: IC
 }
 
-export default class ImageCapture_ extends Semifunctional<I, O> {
+export default class ImageCapture_ extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
         fi: ['init', 'track'],
         fo: ['camera'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -80,15 +80,5 @@ export default class ImageCapture_ extends Semifunctional<I, O> {
 
   d() {
     //
-  }
-
-  onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this._forward_all_empty()
-
-    this._backward_all()
-
-    this._backward('done')
-    // }
   }
 }

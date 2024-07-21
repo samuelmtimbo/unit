@@ -24,11 +24,12 @@ export interface SFIO {
 export class Semifunctional<
   I extends Dict<any> = any,
   O extends Dict<any> = any,
-  _EE extends
-    SemifunctionalEvents<_EE> = SemifunctionalEvents<Semifunctional_EE>,
-> extends Primitive<I, O, _EE> {
-  private _f_i: Set<string>
-  private _f_o: Set<string>
+  EE extends SemifunctionalEvents<
+    Dict<any>
+  > = SemifunctionalEvents<Semifunctional_EE>,
+> extends Primitive<I, O, EE> {
+  protected _f_i: Set<string>
+  protected _f_o: Set<string>
 
   protected _functional: Functional<any, any>
   protected _primitive: Primitive<I, O>
@@ -219,5 +220,17 @@ export class Semifunctional<
     this._primitive.destroy()
 
     super.destroy()
+  }
+
+  protected _backward_f(): void {
+    for (const fi of this._f_i) {
+      this._backward(fi)
+    }
+  }
+
+  protected _forward_empty_f(): void {
+    for (const fo of this._f_o) {
+      this._forward_empty(fo)
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { $, $Events, $_EE } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { EventEmitter_EE } from '../../../../../EventEmitter'
 import { System } from '../../../../../system'
 import { Listener } from '../../../../../types/Listener'
@@ -18,7 +18,7 @@ export type O = {
   emitter: $ & EE
 }
 
-export default class EventSource_ extends Semifunctional<I, O> {
+export default class EventSource_ extends Holder<I, O> {
   private _event_source: EventSource = null
 
   constructor(system: System) {
@@ -26,7 +26,7 @@ export default class EventSource_ extends Semifunctional<I, O> {
       {
         fi: ['url', 'opt'],
         fo: ['emitter'],
-        i: ['close'],
+        i: [],
         o: [],
       },
       {
@@ -37,7 +37,8 @@ export default class EventSource_ extends Semifunctional<I, O> {
         },
       },
       system,
-      ID_EVENT_SOURCE
+      ID_EVENT_SOURCE,
+      'close'
     )
   }
 
@@ -53,7 +54,7 @@ export default class EventSource_ extends Semifunctional<I, O> {
     this._event_source = eventSource
 
     eventSource.onerror = (err) => {
-      this._pluck()
+      this.d()
 
       done(undefined, 'error connecting to server')
     }
@@ -87,13 +88,7 @@ export default class EventSource_ extends Semifunctional<I, O> {
     }
   }
 
-  public onIterDataInputData(name: string, data: any): void {
-    if (name === 'close') {
-      this._pluck()
-    }
-  }
-
-  private _pluck = () => {
+  d() {
     if (this._event_source) {
       this._event_source.close()
 

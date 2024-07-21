@@ -1,6 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { Component } from '../../../../../client/component'
 import { LayoutBase } from '../../../../../client/layout'
 import { System } from '../../../../../system'
@@ -22,7 +22,7 @@ export type O = {
   observer: OB
 }
 
-export default class IntersectionObserver_ extends Semifunctional<I, O> {
+export default class IntersectionObserver_ extends Holder<I, O> {
   private _observer: IntersectionObserver
 
   constructor(system: System) {
@@ -30,7 +30,7 @@ export default class IntersectionObserver_ extends Semifunctional<I, O> {
       {
         fi: ['root', 'opt'],
         fo: ['observer'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {

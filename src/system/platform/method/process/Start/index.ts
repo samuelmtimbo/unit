@@ -1,6 +1,6 @@
 import { bundleSpec } from '../../../../../bundle'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { GraphBundle } from '../../../../../types/GraphClass'
 import { GraphSpec } from '../../../../../types/GraphSpec'
@@ -22,7 +22,7 @@ export interface O {
   graph: $Graph
 }
 
-export default class Start extends Semifunctional<I, O> {
+export default class Start extends Holder<I, O> {
   private _graph: $Graph
 
   constructor(system: System) {
@@ -30,7 +30,7 @@ export default class Start extends Semifunctional<I, O> {
       {
         fi: ['graph', 'system', 'opt'],
         fo: ['graph'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -87,11 +87,5 @@ export default class Start extends Semifunctional<I, O> {
     if (this._graph) {
       this._graph = undefined
     }
-  }
-
-  onIterDataInputData(name: string, data: any) {
-    // if (name === 'done') {
-    this._forward_empty('graph')
-    // }
   }
 }

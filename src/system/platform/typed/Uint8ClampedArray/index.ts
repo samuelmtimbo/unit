@@ -1,5 +1,5 @@
 import { Done } from '../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../Class/Semifunctional'
+import { Holder } from '../../../../Class/Holder'
 import { System } from '../../../../system'
 import { A } from '../../../../types/interface/A'
 import { TA } from '../../../../types/interface/TA'
@@ -15,13 +15,13 @@ export interface O {
   array: A & TA
 }
 
-export default class Uint8ClampedArray_ extends Semifunctional<I, O> {
+export default class Uint8ClampedArray_ extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
         fi: ['length'],
         fo: ['array'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -44,15 +44,5 @@ export default class Uint8ClampedArray_ extends Semifunctional<I, O> {
     done({
       array,
     })
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    if (name === 'done') {
-      this._forward_all_empty()
-
-      this._backward('length')
-
-      this._backward('done')
-    }
   }
 }

@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { A } from '../../../../../types/interface/A'
 import { ID_AT_1 } from '../../../../_ids'
@@ -14,13 +14,13 @@ export interface O<T> {
   'a[i]': T
 }
 
-export default class At1<T> extends Semifunctional<I<T>, O<T>> {
+export default class At1<T> extends Holder<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
         fi: ['a', 'i'],
         fo: ['a[i]'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -60,13 +60,5 @@ export default class At1<T> extends Semifunctional<I<T>, O<T>> {
     }
 
     done({ 'a[i]': _a_i })
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    this._forward_empty('a[i]')
-
-    this._backward('i')
-
-    this._backward('done')
   }
 }

@@ -1,6 +1,6 @@
 import { Element_ } from '../../../../../Class/Element'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { C } from '../../../../../types/interface/C'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -16,7 +16,7 @@ export interface O {
   child: C
 }
 
-export default class Child extends Semifunctional<I, O> {
+export default class Child extends Holder<I, O> {
   private _unlisten: Unlisten
 
   constructor(system: System) {
@@ -24,7 +24,8 @@ export default class Child extends Semifunctional<I, O> {
       {
         fi: ['parent', 'at'],
         fo: ['child'],
-        i: ['done'],
+        i: [],
+        o: [],
       },
       {
         input: {
@@ -77,13 +78,5 @@ export default class Child extends Semifunctional<I, O> {
     }
 
     this._forward_empty('child')
-  }
-
-  onIterDataInputData(name: string): void {
-    // if (name === 'done') {
-    this.d()
-
-    this._backward('done')
-    // }
   }
 }

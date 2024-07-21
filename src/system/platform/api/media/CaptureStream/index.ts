@@ -1,5 +1,5 @@
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { Source } from '../../../../../Source'
 import { System } from '../../../../../system'
 import { Callback } from '../../../../../types/Callback'
@@ -19,7 +19,7 @@ export interface O {
   stream: MS
 }
 
-export default class CaptureStream extends Semifunctional<I, O> {
+export default class CaptureStream extends Holder<I, O> {
   __ = ['U']
 
   private _stream: Source<MediaStream> = new Source()
@@ -29,7 +29,7 @@ export default class CaptureStream extends Semifunctional<I, O> {
       {
         fi: ['source', 'opt'],
         fo: ['stream'],
-        i: ['stop'],
+        i: [],
         o: [],
       },
       {
@@ -45,7 +45,8 @@ export default class CaptureStream extends Semifunctional<I, O> {
         },
       },
       system,
-      ID_CAPTURE_STREAM
+      ID_CAPTURE_STREAM,
+      'stop'
     )
   }
 
@@ -65,16 +66,8 @@ export default class CaptureStream extends Semifunctional<I, O> {
     done({ stream })
   }
 
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'stop') {
+  d() {
     this._stream.set(null)
-
-    this._forward_empty('stream')
-
-    this._backward('opt')
-
-    this._backward('stop')
-    // }
   }
 
   mediaStream(callback: Callback<MediaStream>): Unlisten {

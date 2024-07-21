@@ -1,6 +1,6 @@
 import { $ } from '../../../../../../Class/$'
 import { Done } from '../../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../../Class/Holder'
 import { System } from '../../../../../../system'
 import { A } from '../../../../../../types/interface/A'
 import { AAN } from '../../../../../../types/interface/AAN'
@@ -17,13 +17,13 @@ export type O = {
   data: A & $
 }
 
-export default class GetByteFrequencyData extends Semifunctional<I, O> {
+export default class GetByteFrequencyData extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
         fi: ['node', 'opt'],
         fo: ['data'],
-        i: ['done'],
+        i: [],
       },
       {
         input: {
@@ -54,15 +54,5 @@ export default class GetByteFrequencyData extends Semifunctional<I, O> {
     done({
       data,
     })
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this._forward_empty('data')
-
-    this._backward('node')
-
-    this._backward('done')
-    // }
   }
 }

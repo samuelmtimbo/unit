@@ -1,5 +1,5 @@
 import { Element_ } from '../../../../../Class/Element'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { ID_SET_POINTER_CAPTURE } from '../../../../_ids'
 
@@ -11,13 +11,13 @@ export type I = {
 
 export type O = {}
 
-export default class SetPointerCapture extends Semifunctional<I, O> {
+export default class SetPointerCapture extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
         fi: ['element', 'pointerId'],
         fo: [],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -64,11 +64,5 @@ export default class SetPointerCapture extends Semifunctional<I, O> {
       this._pointerId = undefined
       this._element = null
     }
-  }
-
-  onIterDataInputData(name: string, value: any) {
-    this.d()
-
-    this._input.done.pull()
   }
 }

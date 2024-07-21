@@ -1,6 +1,6 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
+import { Holder } from '../../../../../Class/Holder'
 import { apiNotSuportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { FR } from '../../../../../types/interface/FR'
@@ -16,13 +16,13 @@ export type O = {
   reader: FR & $
 }
 
-export default class FileReader extends Semifunctional<I, O> {
+export default class FileReader extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
         fi: ['opt'],
         fo: ['reader'],
-        i: ['done'],
+        i: [],
         o: [],
       },
       {
@@ -55,14 +55,5 @@ export default class FileReader extends Semifunctional<I, O> {
     const reader = wrapFileReader(reader_, this.__system)
 
     done({ reader })
-  }
-
-  public onIterDataInputData(name: string, data: any): void {
-    // if (name === 'done') {
-    this._forward_empty('reader')
-
-    this._backward('opt')
-    this._backward('done')
-    // }
   }
 }
