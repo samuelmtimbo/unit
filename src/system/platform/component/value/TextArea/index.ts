@@ -6,6 +6,7 @@ export interface I {
   style: object
   value: string
   placeholder: string
+  attr: object
 }
 
 export interface O {
@@ -16,7 +17,7 @@ export default class TextArea extends Field<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['value', 'style', 'placeholder'],
+        i: ['value', 'style', 'placeholder', 'attr'],
         o: ['value'],
       },
       {},

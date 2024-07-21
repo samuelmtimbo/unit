@@ -1,3 +1,4 @@
+import { mergeAttr } from '../../../../../client/attr'
 import { Field } from '../../../../../client/field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -9,6 +10,7 @@ export interface Props {
   disabled?: boolean
   maxLength?: number
   tabIndex?: number
+  attr?: Dict<any>
 }
 
 export const DEFAULT_STYLE = {
@@ -34,7 +36,7 @@ export default class TextField extends Field<HTMLInputElement, Props> {
       flags: { defaultInputModeNone },
     } = $system
 
-    const { maxLength, tabIndex } = $props
+    const { maxLength, tabIndex, attr } = $props
 
     this.$element.type = 'text'
     this.$element.spellcheck = false
@@ -54,6 +56,8 @@ export default class TextField extends Field<HTMLInputElement, Props> {
     if (tabIndex !== undefined) {
       this.$element.tabIndex = tabIndex
     }
+
+    mergeAttr(this.$element, attr ?? {})
   }
 
   setSelectionRange(

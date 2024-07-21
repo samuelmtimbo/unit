@@ -25,6 +25,7 @@ import TextField from '../../value/TextField/Component'
 export interface Props {
   className?: string
   style: Dict<string>
+  attr?: Dict<string>
   path: number[]
   value: string
   fontSize: number
@@ -43,7 +44,7 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
       },
     } = this.$system
 
-    let { className, style, value, fontSize } = $props
+    let { className, style, value, fontSize, path = [], attr = {} } = $props
 
     const _value = this._parse_value()
 
@@ -53,6 +54,7 @@ export default class DataTreeLeaf extends Element<HTMLDivElement, Props> {
     const input = new TextField(
       {
         className: classnames('data-tree-leaf', className),
+        attr,
         style: {
           position: 'relative',
           display: 'flex',
