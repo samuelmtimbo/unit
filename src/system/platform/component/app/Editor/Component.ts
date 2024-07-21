@@ -37183,6 +37183,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       this._refresh_datum_visible(datum_node_id)
+
+      if (this._is_node_ascend(pin_node_id) || this._is_node_ascend(unitId)) {
+        this._negate_node_layer(datum_node_id)
+        this._ascend_node_z(datum_node_id)
+      }
     }
 
     if (is_input && (merge_ref || merge_output_ref)) {
