@@ -224,7 +224,9 @@ export class Semifunctional<
 
   protected _backward_f(): void {
     for (const fi of this._f_i) {
-      this._backward(fi)
+      if (!this._ref_input[fi]) {
+        this._backward(fi)
+      }
     }
   }
 
