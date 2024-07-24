@@ -2,7 +2,7 @@
   "name": "from char code",
   "inputs": {
     "code": {
-      "type": "number"
+      "type": "number[]"
     }
   },
   "outputs": {
