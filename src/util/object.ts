@@ -270,10 +270,12 @@ export function deepDestroy(obj: object, path: Key[]): void {
 
   const o = obj[p]
 
-  deepDestroy(o, rest)
+  if (o) {
+    deepDestroy(o, rest)
 
-  if (isEmptyObject(o)) {
-    delete obj[p]
+    if (isEmptyObject(o)) {
+      delete obj[p]
+    }
   }
 }
 
