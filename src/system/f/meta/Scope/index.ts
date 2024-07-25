@@ -55,7 +55,7 @@ export default class Scope<T> extends Functional<I<T>, O<T>> {
 
     const sharedRef: SharedRef<Dict<any>> = { current: localScope }
 
-    const _obj = wrapSharedRef(sharedRef, this.__system)
+    const _obj = wrapSharedRef(sharedRef)
 
     const obj = $wrap<any>(this.__system, _obj, ['J'])
 

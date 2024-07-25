@@ -19,7 +19,7 @@ export type O = {
   channel: CH & $
 }
 
-export type Socket_EE = { message: [any] }
+export type Socket_EE = { message: [any]; close: [any, any] }
 
 export type SocketEvents = SemifunctionalEvents<Semifunctional_EE> & Socket_EE
 
@@ -81,7 +81,7 @@ export default class Socket extends Holder<I, O, SocketEvents> implements CH {
     this._web_socket.onclose = (event: CloseEvent) => {
       const { code, reason } = event
 
-      this.d()
+      channel.emit('close', code, reason)
     }
   }
 

@@ -1,0 +1,35 @@
+{
+  "name": "encode",
+  "inputs": {
+    "encoder": {
+      "type": "`TE`",
+      "ref": true
+    },
+    "opt": {
+      "type": "object"
+    },
+    "text": {
+      "type": "string"
+    },
+    "done": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "data": {
+      "type": "`TA`",
+      "ref": true,
+      "icon": "hash"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "encode `text` into binary `data`",
+    "complexity": 3,
+    "tags": ["platform", "array", "typed"]
+  },
+  "id": "12de8298-28f6-4b2b-8962-51cb41e5f99b",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

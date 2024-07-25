@@ -1,0 +1,38 @@
+{
+  "name": "rsa algorithm",
+  "inputs": {
+    "name": {
+      "type": "'RSASSA-PKCS1-v1_5'|'RSA-PSS'|'RSA-OAEP'"
+    },
+    "modulusLength": {
+      "type": "number",
+      "metadata": {
+        "examples": ["2048", "4096"]
+      }
+    },
+    "publicExponent": {
+      "type": "`TA`",
+      "ref": true
+    },
+    "hash": {
+      "type": "'SHA-256'|'SHA-384'|'SHA-512'"
+    }
+  },
+  "outputs": {
+    "algorithm": {
+      "type": "`J`",
+      "ref": true,
+      "icon": "brackets-curly"
+    }
+  },
+  "metadata": {
+    "icon": "square-function",
+    "description": "instantiate an RSA algorithm parameter object",
+    "complexity": 3,
+    "tags": ["platform", "api", "crypto"]
+  },
+  "id": "378b4049-860a-44a3-82f2-12a15499859c",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

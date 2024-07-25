@@ -1,0 +1,42 @@
+{
+  "name": "import jwt key",
+  "inputs": {
+    "data": {
+      "type": "object"
+    },
+    "algorithm": {
+      "type": "`J`",
+      "ref": true
+    },
+    "extractable": {
+      "type": "boolean"
+    },
+    "keyUsages": {
+      "type": "string[]",
+      "metadata": {
+        "examples": [
+          "['encrypt','decrypt']",
+          "['encrypt','decrypt','sign','verify','deriveKey','deriveBits','wrapKey','unwrapKey']"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "key": {
+      "type": "`CK`",
+      "ref": true,
+      "icon": "key"
+    }
+  },
+  "metadata": {
+    "icon": "lock",
+    "description": "parse cryto jwk `key` given knowledge of `format`, `algorithm`, `extractable` and `keyUsages`",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey",
+    "complexity": 3,
+    "tags": ["platform", "api", "crypto"]
+  },
+  "id": "4830eec3-2a72-4e36-b68a-902aa73c6ead",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

@@ -217,6 +217,8 @@ export function noHost(): API {
       measureText: (text: string) => {
         throw new APINotSupportedError('Measure Text')
       },
+      TextEncoder: undefined,
+      TextDecoder: undefined,
     },
     worker: {
       start: () => {
@@ -310,6 +312,64 @@ export function noHost(): API {
     },
     theme: {
       setTheme: function (theme: Theme): Promise<void> {
+        throw new MethodNotImplementedError()
+      },
+    },
+    crypto: {
+      generateKey: function (
+        algorithm: AlgorithmIdentifier,
+        extractable: boolean,
+        keyUsages: string[]
+      ): Promise<CryptoKey | CryptoKeyPair> {
+        throw new MethodNotImplementedError()
+      },
+      exportKey: function <T extends KeyFormat>(
+        format: T,
+        key: CryptoKey
+      ): Promise<ArrayBuffer | JsonWebKey> {
+        throw new MethodNotImplementedError()
+      },
+      importKey: function <T extends KeyFormat>(
+        format: T,
+        keyData: T extends 'jwk' ? JsonWebKey : BufferSource,
+        algorithm:
+          | AlgorithmIdentifier
+          | RsaHashedImportParams
+          | EcKeyImportParams
+          | HmacImportParams
+          | AesKeyAlgorithm,
+        extractable: boolean,
+        keyUsages: ReadonlyArray<KeyUsage>
+      ): Promise<CryptoKey> {
+        throw new MethodNotImplementedError()
+      },
+      encrypt: function (
+        algorithm: AlgorithmIdentifier,
+        key: CryptoKey,
+        data: ArrayBuffer
+      ): Promise<ArrayBuffer> {
+        throw new MethodNotImplementedError()
+      },
+      decrypt: function (
+        algorithm: AlgorithmIdentifier,
+        key: CryptoKey,
+        data: ArrayBuffer
+      ): Promise<ArrayBuffer> {
+        throw new MethodNotImplementedError()
+      },
+      sign: function (
+        algorithm: AlgorithmIdentifier,
+        key: CryptoKey,
+        data: ArrayBuffer
+      ): Promise<ArrayBuffer> {
+        throw new MethodNotImplementedError()
+      },
+      verify: function (
+        algorithm: AlgorithmIdentifier,
+        key: CryptoKey,
+        signature: BufferSource,
+        data: BufferSource
+      ): Promise<boolean> {
         throw new MethodNotImplementedError()
       },
     },

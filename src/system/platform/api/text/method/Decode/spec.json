@@ -1,0 +1,32 @@
+{
+  "name": "decode",
+  "inputs": {
+    "decoder": {
+      "type": "`TD`",
+      "ref": true
+    },
+    "opt": {
+      "type": "object"
+    },
+    "data": {
+      "type": "`AB`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "text": {
+      "type": "string",
+      "icon": "text"
+    }
+  },
+  "metadata": {
+    "icon": "tilde",
+    "description": "decode binary `data` into `text`",
+    "complexity": 3,
+    "tags": ["platform", "array", "typed"]
+  },
+  "id": "24b50c35-e558-4911-a3e3-8ee37777b1f5",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

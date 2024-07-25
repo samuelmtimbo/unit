@@ -1,0 +1,44 @@
+{
+  "name": "generate key pair",
+  "inputs": {
+    "algorithm": {
+      "type": "`J`",
+      "ref": true
+    },
+    "extractable": {
+      "type": "boolean"
+    },
+    "keyUsages": {
+      "type": "string[]",
+      "metadata": {
+        "examples": [
+          "['encrypt','decrypt']",
+          "['encrypt','decrypt','sign','verify','deriveKey','deriveBits','wrapKey','unwrapKey']"
+        ]
+      }
+    }
+  },
+  "outputs": {
+    "public": {
+      "type": "`CK`",
+      "ref": true,
+      "icon": "key"
+    },
+    "private": {
+      "type": "`CK`",
+      "ref": true,
+      "icon": "key"
+    }
+  },
+  "metadata": {
+    "icon": "lock",
+    "description": "generate cryptographic public and private key pairs based on `algorithm`",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/generateKey",
+    "complexity": 3,
+    "tags": ["platform", "api", "crypto"]
+  },
+  "id": "089d3cef-2597-4777-8558-9942b4029472",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

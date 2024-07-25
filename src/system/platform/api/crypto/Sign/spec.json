@@ -1,0 +1,42 @@
+{
+  "name": "sign",
+  "inputs": {
+    "opt": {
+      "type": "{}"
+    },
+    "key": {
+      "type": "`CK`",
+      "ref": true
+    },
+    "algorithm": {
+      "type": "`J`",
+      "ref": true
+    },
+    "data": {
+      "type": "`AB`|`TA`",
+      "ref": true
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "signature": {
+      "type": "`AB`",
+      "ref": true,
+      "icon": "file-lock"
+    }
+  },
+  "metadata": {
+    "icon": "lock",
+    "description": "cryptographically generate `signature` of `data` with `key`",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/sign",
+    "complexity": 3,
+    "tags": ["platform", "api", "crypto"]
+  },
+  "id": "d3719453-ca94-4827-a6b6-5aa8f87b1dc5",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

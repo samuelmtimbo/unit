@@ -28,6 +28,10 @@ export function webText(window: Window, opt: BootOpt): API['text'] {
 
       return measureText(ctx, text, fontSize, maxWidth)
     },
+    // @ts-ignore
+    TextEncoder: window.TextEncoder,
+    // @ts-ignore
+    TextDecoder: window.TextDecoder,
   }
 
   return text

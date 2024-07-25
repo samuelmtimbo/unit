@@ -5,6 +5,7 @@ import { CH } from '../types/interface/CH'
 
 export type SocketEE = {
   message: [string]
+  close: [number, string]
 }
 
 export type SocketEvents<_EE extends Dict<any[]>> = $Events<_EE & SocketEE> &

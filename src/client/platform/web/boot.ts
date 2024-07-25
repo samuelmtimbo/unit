@@ -20,6 +20,7 @@ import { webAnimation } from './api/animation'
 import { webBluetooth } from './api/bluetooth'
 import { webChannel } from './api/channel'
 import { webClipboard } from './api/clipboard'
+import { webCrypto } from './api/crypto'
 import { webDB } from './api/db'
 import { webDevice } from './api/device'
 import { webDocument } from './api/document'
@@ -93,6 +94,7 @@ export function webBoot(
   const navigator = webNavigator(window, opt)
   const layout = webLayout(window, opt)
   const theme = webTheme(window, _root, opt)
+  const crypto = webCrypto(window, opt)
 
   const api: API = {
     alert,
@@ -104,6 +106,7 @@ export function webBoot(
     screen,
     bluetooth,
     clipboard,
+    crypto,
     location,
     history,
     geolocation,

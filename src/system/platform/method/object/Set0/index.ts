@@ -3,7 +3,7 @@ import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
-import { ID_SET_1 } from '../../../../_ids'
+import { ID_SET_2 } from '../../../../_ids'
 
 export interface I<T> {
   obj: J
@@ -36,7 +36,7 @@ export default class Set0<T> extends Holder<I<T>, O<T>> {
         },
       },
       system,
-      ID_SET_1
+      ID_SET_2
     )
   }
 

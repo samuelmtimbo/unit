@@ -74,16 +74,13 @@ export default class State<T> extends Holder<I<T>, O<T>> {
           {
             api = weakMerge(
               api,
-              wrapSharedRefArrayInterface(
-                sharedRef as SharedRef<any[]>,
-                this.__system
-              )
+              wrapSharedRefArrayInterface(sharedRef as SharedRef<any[]>)
             )
           }
           break
         case 'J':
           {
-            api = weakMerge(api, wrapSharedRef(sharedRef, this.__system))
+            api = weakMerge(api, wrapSharedRef(sharedRef))
           }
           break
       }

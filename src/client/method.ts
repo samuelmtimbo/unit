@@ -6,6 +6,11 @@ import {
   A_METHOD_WATCH,
 } from '../types/interface/async/$A'
 import {
+  AB_METHOD_CALL,
+  AB_METHOD_REF,
+  AB_METHOD_WATCH,
+} from '../types/interface/async/$AB'
+import {
   AC_METHOD_CALL,
   AC_METHOD_REF,
   AC_METHOD_WATCH,
@@ -50,6 +55,11 @@ import {
   CH_METHOD_REF,
   CH_METHOD_WATCH,
 } from '../types/interface/async/$CH'
+import {
+  CK_METHOD_CALL,
+  CK_METHOD_REF,
+  CK_METHOD_WATCH,
+} from '../types/interface/async/$CK'
 import {
   CS_METHOD_CALL,
   CS_METHOD_REF,
@@ -110,6 +120,12 @@ import {
   S_METHOD_REF,
   S_METHOD_WATCH,
 } from '../types/interface/async/$S'
+import { TD_METHOD_CALL, TD_METHOD_WATCH } from '../types/interface/async/$TD'
+import {
+  TE_METHOD_CALL,
+  TE_METHOD_REF,
+  TE_METHOD_WATCH,
+} from '../types/interface/async/$TE'
 import {
   U_METHOD_CALL,
   U_METHOD_REF,
@@ -244,5 +260,25 @@ export const METHOD: AllKeys<
     call: D_METHOD_CALL,
     watch: D_METHOD_WATCH,
     ref: D_METHOD_REF,
+  },
+  CK: {
+    call: CK_METHOD_CALL,
+    watch: CK_METHOD_WATCH,
+    ref: CK_METHOD_REF,
+  },
+  AB: {
+    call: AB_METHOD_CALL,
+    watch: AB_METHOD_REF,
+    ref: AB_METHOD_WATCH,
+  },
+  TE: {
+    call: TE_METHOD_CALL,
+    watch: TE_METHOD_WATCH,
+    ref: TE_METHOD_REF,
+  },
+  TD: {
+    call: TD_METHOD_CALL,
+    watch: TD_METHOD_WATCH,
+    ref: TE_METHOD_REF,
   },
 }
