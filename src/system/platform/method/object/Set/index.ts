@@ -2,7 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { J } from '../../../../../types/interface/J'
-import { ID_SET_0 } from '../../../../_ids'
+import { ID_SET_1 } from '../../../../_ids'
 
 export interface I<T> {
   obj: J
@@ -29,7 +29,7 @@ export default class Set<T> extends Functional<I<T>, O<T>> {
         },
       },
       system,
-      ID_SET_0
+      ID_SET_1
     )
   }
 

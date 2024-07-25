@@ -1,9 +1,6 @@
 import { Peer } from '../../../../../api/peer/Peer'
-import { FunctionalEvents } from '../../../../../Class/Functional'
-import { Semifunctional } from '../../../../../Class/Semifunctional'
-import { stringify } from '../../../../../spec/stringify'
+import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
-import { Callback } from '../../../../../types/Callback'
 import { EE } from '../../../../../types/interface/EE'
 import { MS } from '../../../../../types/interface/MS'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -11,28 +8,19 @@ import { wrapEventEmitter } from '../../../../../wrap/EventEmitter'
 import { wrapMediaStream } from '../../../../../wrap/MediaStream'
 import { ID_PEER_RECEIVER } from '../../../../_ids'
 
-export interface I<T> {
+export interface I {
   offer: string
   close: any
   opt: RTCConfiguration
 }
 
-export interface O<T> {
+export interface O {
   stream: MS
   answer: string
   emitter: EE<any>
 }
 
-export type PeerReceiver_EE = { message: [any] }
-
-export type PeerReceiverEvents = FunctionalEvents<PeerReceiver_EE> &
-  PeerReceiver_EE
-
-export default class PeerReceiver<T> extends Semifunctional<
-  I<T>,
-  O<T>,
-  PeerReceiverEvents
-> {
+export default class PeerReceiver extends Holder<I, O> {
   private _peer: Peer | null = null
 
   private _unlisten: Unlisten | undefined = undefined
@@ -45,15 +33,24 @@ export default class PeerReceiver<T> extends Semifunctional<
     super(
       {
         fi: ['opt'],
-        fo: ['answer'],
-        i: ['close', 'offer'],
-        o: ['stream', 'emitter'],
+        fo: [],
+        i: ['offer'],
+        o: ['stream', 'emitter', 'answer'],
       },
       {
         input: {},
+        output: {
+          emitter: {
+            ref: true,
+          },
+          stream: {
+            ref: true,
+          },
+        },
       },
       system,
-      ID_PEER_RECEIVER
+      ID_PEER_RECEIVER,
+      'close'
     )
 
     this.addListener('take_err', () => {
@@ -67,7 +64,7 @@ export default class PeerReceiver<T> extends Semifunctional<
     })
   }
 
-  async f({ opt }: I<T>) {
+  async f({ opt }: I) {
     this._peer = new Peer(this.__system, false, opt)
 
     this._setup_peer()
@@ -107,32 +104,25 @@ export default class PeerReceiver<T> extends Semifunctional<
     this._output.answer.push(answer)
   }
 
-  async onDataInputData(name: string, data: any): Promise<void> {
-    if (name === 'close') {
-      this._disconnect()
+  async onIterDataInputData(name: keyof I, data: any): Promise<void> {
+    super.onIterDataInputData(name, data)
 
-      this._backward('close')
-    } else if (name === 'offer') {
+    if (name === 'offer') {
       if (this._input.opt.active()) {
         this._output_answer(data)
       }
     }
   }
 
-  onDataInputDrop(name: string): void {
-    if (name === 'opt') {
-      if (!this._backwarding) {
-        this._disconnect()
-      }
-    } else if (name === 'offer') {
+  onIterDataInputDrop(name: keyof I | 'done'): void {
+    super.onIterDataInputDrop(name)
+
+    if (name === 'offer') {
       if (this._flag_err_invalid_offer) {
         this._flag_err_invalid_offer = false
-
         this.takeErr()
-
         return
       }
-
       this._forward_empty('emitter')
       this._forward_empty('stream')
       this._forward_empty('answer')
@@ -142,22 +132,6 @@ export default class PeerReceiver<T> extends Semifunctional<
   onDataOutputDrop(name: string): void {
     if (name === 'answer') {
       this._input.offer.pull()
-    }
-  }
-
-  private _send_data = (data: any, callback: Callback) => {
-    this._send({ type: 'data', data }, callback)
-  }
-
-  private _send = (data: any, callback: Callback): void => {
-    if (this._connected) {
-      const message = stringify(data)
-
-      this._peer.send(message)
-
-      callback()
-    } else {
-      callback(undefined, 'peer not connected')
     }
   }
 
@@ -181,7 +155,7 @@ export default class PeerReceiver<T> extends Semifunctional<
     const close_listener = () => {
       // console.log('Receiver', 'Peer', 'close')
 
-      this._disconnect()
+      this.d()
     }
 
     const message_listener = (message: string) => {
@@ -222,12 +196,5 @@ export default class PeerReceiver<T> extends Semifunctional<
       this._peer.removeListener('start', start_listener)
       this._peer.removeListener('stop', stop_listener)
     }
-  }
-
-  private _disconnect = (): void => {
-    this.d()
-
-    this._forward_empty('emitter')
-    this._forward_empty('stream')
   }
 }

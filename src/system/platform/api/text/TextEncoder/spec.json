@@ -1,0 +1,31 @@
+{
+  "name": "text encoder",
+  "inputs": {
+    "opt": {
+      "type": "{encoding:string}",
+      "metadata": {
+        "examples": ["{encoding:'utf8'}"]
+      }
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "encoder": {
+      "type": "`TE`",
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "square",
+    "description": "`encoder` takes a stream of code points as input and emits a stream of UTF-8 bytes",
+    "complexity": 3,
+    "tags": ["platform", "array", "typed"]
+  },
+  "id": "ffc86129-e199-4ffb-bea0-f7307e62eafc",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

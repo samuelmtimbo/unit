@@ -68,6 +68,50 @@ export type API = {
     EventSource: typeof EventSource
   }
   channel: { local: (opt: ChannelOpt) => Channel }
+  crypto: {
+    generateKey: (
+      algorithm: AlgorithmIdentifier,
+      extractable: boolean,
+      keyUsages: string[]
+    ) => Promise<CryptoKey | CryptoKeyPair>
+    exportKey: <T extends KeyFormat>(
+      format: T,
+      key: CryptoKey
+    ) => Promise<ArrayBuffer | JsonWebKey>
+    encrypt: (
+      algorithm: AlgorithmIdentifier,
+      key: CryptoKey,
+      data: BufferSource
+    ) => Promise<ArrayBuffer>
+    decrypt: (
+      algorithm: AlgorithmIdentifier,
+      key: CryptoKey,
+      data: BufferSource
+    ) => Promise<ArrayBuffer>
+    sign: (
+      algorithm: AlgorithmIdentifier,
+      key: CryptoKey,
+      data: ArrayBuffer
+    ) => Promise<ArrayBuffer>
+    verify: (
+      algorithm: AlgorithmIdentifier,
+      key: CryptoKey,
+      signature: BufferSource,
+      data: BufferSource
+    ) => Promise<boolean>
+    importKey<T extends KeyFormat>(
+      format: T,
+      keyData: T extends 'jwk' ? JsonWebKey : BufferSource,
+      algorithm:
+        | AlgorithmIdentifier
+        | RsaHashedImportParams
+        | EcKeyImportParams
+        | HmacImportParams
+        | AesKeyAlgorithm,
+      extractable: boolean,
+      keyUsages: ReadonlyArray<KeyUsage>
+    ): Promise<CryptoKey>
+  }
   alert: {
     alert: (message: string) => void
     prompt: (message: string, defaultValue: string) => string
@@ -212,7 +256,6 @@ export type API = {
     createRange(): Range
     exitPictureInPicture(): Promise<void>
     pictureInPictureElement: Element
-
     MutationObserver: { new (callback: MutationCallback): MutationObserver }
     PositionObserver: PositionObserverCostructor
     ResizeObserver: { new (callback: ResizeObserverCallback): ResizeObserver }
@@ -228,6 +271,8 @@ export type API = {
     parse: (str: string) => Dict<any>
   }
   text: {
+    TextEncoder: typeof TextEncoder
+    TextDecoder: typeof TextDecoder
     measureText: MeasureTextFunction
   }
   worker: {

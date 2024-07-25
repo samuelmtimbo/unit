@@ -1,0 +1,30 @@
+{
+  "name": "export key",
+  "inputs": {
+    "key": {
+      "type": "`CK`",
+      "ref": true
+    },
+    "format": {
+      "type": "'raw'|'pkcs8'|'spki'"
+    }
+  },
+  "outputs": {
+    "key": {
+      "type": "`AB`",
+      "ref": true,
+      "icon": "key"
+    }
+  },
+  "metadata": {
+    "icon": "lock",
+    "description": "export raw key as a `data` array buffer",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/exportKey",
+    "complexity": 3,
+    "tags": ["platform", "api", "crypto"]
+  },
+  "id": "d54cd5d2-91eb-4f95-be2d-62fdaf86f474",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

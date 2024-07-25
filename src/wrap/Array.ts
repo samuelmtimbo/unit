@@ -4,15 +4,13 @@ import { MethodNotImplementedError } from '../exception/MethodNotImplementedErro
 import { System } from '../system'
 import { A } from '../types/interface/A'
 import { TA } from '../types/interface/TA'
+import { V } from '../types/interface/V'
 
 export function wrapSharedRefArrayInterface<T extends any[]>(
-  data: SharedRef<T>,
-  _system: System
+  data: SharedRef<T>
 ): A<T> {
   return {
     append(a: T): Promise<void> {
-      const b: any[] = []
-
       data.current.push(a)
 
       return
@@ -63,9 +61,24 @@ export function wrapArray<T>(array: T[], system: System): A<T> & $ {
 export function wrapUint8Array(
   array: Uint8Array | Uint8ClampedArray,
   system: System
-): A<number> & TA & $ {
-  const _array = new (class Array extends $ implements A<number>, TA {
+): V<number[]> & A<number> & TA & $ {
+  const _array = new (class Array
+    extends $
+    implements V<number[]>, A<number>, TA
+  {
     __: string[] = ['A']
+
+    buffer(): ArrayBuffer {
+      return array.buffer
+    }
+
+    async read(): Promise<number[]> {
+      return [...array]
+    }
+
+    async write(data: number[]): Promise<void> {
+      throw new Error('read only')
+    }
 
     append(a: number): Promise<void> {
       array[array.length] = a

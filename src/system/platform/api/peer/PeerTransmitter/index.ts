@@ -1,7 +1,6 @@
 import { Peer } from '../../../../../api/peer/Peer'
 import { $ } from '../../../../../Class/$'
 import { Holder } from '../../../../../Class/Holder'
-import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { CH } from '../../../../../types/interface/CH'
 import { MS } from '../../../../../types/interface/MS'
@@ -173,6 +172,8 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
   }
 
   onDataInputDrop(name: string) {
+    // console.log('PeerTransmitter', 'onDataInputDrop', name)
+
     if (name === 'answer') {
       if (this._flag_err_answer_without_offer) {
         this.takeErr()
@@ -223,14 +224,12 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
     this._peer.removeStream()
   }
 
-  private async _send_data(data: any) {
-    return this._send({ type: 'data', data })
+  private async _send_data(data: string) {
+    return this._send(data)
   }
 
-  private async _send(data: any): Promise<void> {
-    const message = stringify(data)
-
-    this._peer.send(message)
+  private async _send(data: string): Promise<void> {
+    this._peer.send(data)
 
     return
   }
@@ -243,10 +242,8 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
     const channel = new (class Channel extends $ implements CH {
       __: string[] = ['MS']
 
-      async send(data: any): Promise<void> {
-        const _data = stringify(data)
-
-        peer.send(_data)
+      async send(data: string): Promise<void> {
+        peer.send(data)
 
         return
       }

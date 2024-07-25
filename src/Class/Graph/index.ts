@@ -46,6 +46,7 @@ import {
 } from '../../spec/actions/G'
 import { cloneUnit, cloneUnitClass } from '../../spec/cloneUnit'
 import { evaluate } from '../../spec/evaluate'
+import { evaluateDataValue } from '../../spec/evaluateDataValue'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
 import { renameUnitInMerges } from '../../spec/reducers/spec'
@@ -5315,7 +5316,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       }
 
       setUnitPinData(
-        { unitId, type, pinId, data: stringify(data) },
+        {
+          unitId,
+          type,
+          pinId,
+          data: evaluateDataValue(stringify(data), specs, classes),
+        },
         this._spec,
         specs,
         classes

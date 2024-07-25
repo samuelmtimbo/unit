@@ -40,6 +40,10 @@ export const CLASS_TYPE_MEDIA_ELEMENT = 'ME' // MediaElement
 export const CLASS_TYPE_OBSERVER = 'OB' // OBserver
 export const CLASS_TYPE_RESPONSE = 'RES' // RESponse
 export const CLASS_TYPE_BODY = 'BO' // BOdy
+export const CLASS_TYPE_CRYPTO_KEY = 'CK' // CryptoKey
+export const CLASS_TYPE_ARRAY_BUFFER = 'AB' // ArrayBuffer
+export const CLASS_TYPE_TEXT_ENCODER = 'TE' // TextEncoder
+export const CLASS_TYPE_TEXT_DECODER = 'TD' // TextDecoder
 
 export const INHERITANCE = {
   U: ['EE'],
@@ -79,6 +83,10 @@ export type AllTypes<T> = {
   F: T
   AC: T
   D: T
+  CK: T
+  AB: T
+  TE: T
+  TD: T
 }
 
 export const ALL_TYPES_MAP: AllTypes<true> = {
@@ -106,6 +114,10 @@ export const ALL_TYPES_MAP: AllTypes<true> = {
   F: true,
   AC: true,
   D: true,
+  CK: true,
+  AB: true,
+  TE: true,
+  TD: true,
 }
 
 export const ALL_TYPES = Object.keys(ALL_TYPES_MAP)

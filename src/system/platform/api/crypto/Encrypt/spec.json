@@ -1,0 +1,42 @@
+{
+  "name": "encrypt",
+  "inputs": {
+    "opt": {
+      "type": "{}"
+    },
+    "key": {
+      "type": "`CK`",
+      "ref": true
+    },
+    "algorithm": {
+      "type": "`J`",
+      "ref": true
+    },
+    "data": {
+      "type": "`AB`",
+      "ref": true
+    },
+    "done": {
+      "type": "any",
+      "defaultIgnored": true
+    }
+  },
+  "outputs": {
+    "data": {
+      "type": "`AB`",
+      "ref": true,
+      "icon": "file-lock"
+    }
+  },
+  "metadata": {
+    "icon": "lock",
+    "description": "encrypts `data` with given `key` and `algorithm`",
+    "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt",
+    "complexity": 3,
+    "tags": ["platform", "api", "crypto"]
+  },
+  "id": "8edf4dd9-4d11-444c-bfe5-b54dc141cded",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
