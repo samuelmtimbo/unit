@@ -1,0 +1,247 @@
+{
+  "type": "`U`&`G`",
+  "name": "pin names",
+  "units": {
+    "get": {
+      "id": "9414421d-3376-4438-aa03-7afcd860972c",
+      "input": {
+        "obj": {
+          "ignored": false,
+          "constant": false
+        },
+        "key": {
+          "ignored": false,
+          "constant": false
+        }
+      },
+      "output": {
+        "value": {
+          "ignored": false,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 112,
+              "y": 52
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 62,
+          "y": 43
+        }
+      }
+    },
+    "spec": {
+      "id": "ae1f7fc0-d6e7-489c-94ed-dee71c68dbb7",
+      "input": {
+        "unit": {
+          "ignored": false,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -81,
+              "y": 99
+            }
+          }
+        },
+        "any": {
+          "ignored": false,
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": -85,
+              "y": 63
+            }
+          }
+        }
+      },
+      "output": {
+        "spec": {
+          "ignored": false,
+          "constant": false
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": -38,
+          "y": 77
+        }
+      }
+    },
+    "concat": {
+      "id": "779e538c-b0b9-477e-a986-30ee3abe6fe6",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": 88,
+              "y": -70
+            }
+          }
+        },
+        "b": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "s"
+          },
+          "metadata": {
+            "position": {
+              "x": -5,
+              "y": -69
+            },
+            "data": {
+              "position": {
+                "x": -37,
+                "y": -86
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "ab": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 42,
+          "y": -54
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "concat": {
+        "output": {
+          "ab": true
+        }
+      },
+      "get": {
+        "input": {
+          "key": true
+        }
+      }
+    },
+    "1": {
+      "get": {
+        "input": {
+          "obj": true
+        }
+      },
+      "spec": {
+        "output": {
+          "spec": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "unit": {
+      "plug": {
+        "0": {
+          "unitId": "spec",
+          "pinId": "unit",
+          "kind": "input"
+        }
+      },
+      "ref": true,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -94,
+              "y": 118
+            }
+          }
+        }
+      }
+    },
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "spec",
+          "pinId": "any",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": -104,
+              "y": 50
+            }
+          }
+        }
+      }
+    },
+    "type": {
+      "plug": {
+        "0": {
+          "unitId": "concat",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 103,
+              "y": -88
+            }
+          }
+        }
+      }
+    }
+  },
+  "outputs": {
+    "value": {
+      "plug": {
+        "0": {
+          "unitId": "get",
+          "pinId": "value",
+          "kind": "output"
+        }
+      },
+      "ref": false,
+      "metadata": {
+        "position": {
+          "0": {
+            "ext": {
+              "x": 132,
+              "y": 64
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "icon": "object-get",
+    "description": "list unit pin names of `type`",
+    "position": {
+      "merge": {
+        "0": {
+          "x": 57,
+          "y": -6
+        },
+        "1": {
+          "x": 14,
+          "y": 65
+        }
+      },
+      "data": {
+        "x": 129,
+        "y": -115
+      }
+    }
+  },
+  "id": "6ba29720-ab8e-462a-941f-b36d24da8ab2",
+  "system": true
+}
