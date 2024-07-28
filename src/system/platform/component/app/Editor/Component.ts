@@ -2650,6 +2650,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _edit_datum_node_id: string | null = null
   private _edit_datum_path: number[] | null = null
   private _edit_datum_commited: boolean = false
+  private _edit_datum_last_manually_commited: boolean = false
 
   private _type_container: Dict<Div> = {}
   private _type: Dict<DataTree> = {}
@@ -11020,7 +11021,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   y,
     // })
 
-    const { getSpec, config } = this.$props
+    const { specs, config } = this.$props
 
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
@@ -12257,17 +12258,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const { key } = event
 
           if (key === 'Enter') {
-            const prevent =
-              this._edit_datum_commited || this._edit_datum_never_changed
+            this._edit_datum_last_manually_commited = true
 
             this._commit_data_value(
               datum_id,
               this.__get_datum_tree(datum_id),
-              prevent
+              false
             )
           }
         }),
         makeCustomListener('datumchange', (event) => {
+          this._edit_datum_commited = false
+          this._edit_datum_last_manually_commited = false
+
           this._on_datum_change(datum_id, event)
         }),
         makeCustomListener('datumblur', (event) => {
@@ -38807,6 +38810,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._unlocked_datum.has(datum_node_id)
   }
 
+  private _should_prevent_datum_commit = () => {
+    return (
+      this._edit_datum_commited ||
+      this._edit_datum_never_changed ||
+      this._edit_datum_last_manually_commited
+    )
+  }
+
   private _on_datum_blur = (
     datum_id: string,
     { data, path }: { data: TreeNode; path: number[] }
@@ -38828,8 +38839,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._edit_datum_node_id = null
       this._edit_datum_path = null
 
-      const prevent =
-        this._edit_datum_commited || this._edit_datum_never_changed
+      const prevent = this._should_prevent_datum_commit()
 
       this._lock_datum(datum_node_id)
 
@@ -38893,6 +38903,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (_isValidTree(tree) && _isTypeMatch__cached(specs, tree, pin_type)) {
           if (!prevent) {
             this.set_pin_data(datum_pin_node_id, tree.value)
+          } else {
+            if (!this._is_pin_active(datum_pin_node_id)) {
+              this._sim_remove_datum(datum_node_id)
+            }
           }
         } else {
           if (tree.value === '') {
