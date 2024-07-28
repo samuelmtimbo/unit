@@ -552,6 +552,7 @@ import {
   getPinSpec,
   getPlugCount,
   getPlugSpecs,
+  getSpecPinIcon,
   getSubPinSpec,
   getUnitExposedPins,
   getUnitMergesSpec,
@@ -11019,60 +11020,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const ref_output = ref && output
 
-    let pin_icon_name: string | null = null
+    let pin_icon_name: string | null
 
     if (ref_output) {
       const spec = this._get_unit_spec(unit_id)
-      const pin_spec = this._get_unit_pin_spec(pin_node_id)
 
-      const { plug } = pin_spec as GraphPinSpec
-
-      if (plug) {
-        const sub_pin_id = getObjSingleKey(plug)
-        const sub_pin = plug[sub_pin_id]
-        const { unitId, pinId, mergeId } = sub_pin
-        const { units = {}, merges = {} } = spec as GraphSpec
-
-        let ref_unit_id: string
-        let ref_pin_id: string
-
-        if (unitId && pinId) {
-          ref_unit_id = unitId
-          ref_pin_id = pinId
-        } else {
-          const merge = merges[mergeId]
-
-          for (const unitId in merge) {
-            const mergeUnit = merge[unitId]
-
-            const { output = {} } = mergeUnit
-
-            for (const output_id in output) {
-              ref_unit_id = unitId
-              ref_pin_id = output_id
-
-              break
-            }
-          }
-        }
-
-        const unit = units[ref_unit_id]
-
-        if (unit) {
-          const { id } = unit
-
-          const unit_spec = getSpec(id)
-
-          pin_icon_name =
-            unit_spec.outputs[ref_pin_id]?.icon ||
-            unit_spec.metadata?.icon ||
-            'circle'
-        }
-      } else {
-        const { icon } = pin_spec
-
-        pin_icon_name = icon || 'circle'
-      }
+      pin_icon_name = getSpecPinIcon(specs, spec, 'output', pin_id)
     }
 
     const { width, height } = this._get_pin_node_size(unit_id, type, pin_id)

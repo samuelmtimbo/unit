@@ -153,11 +153,81 @@ export const getUnitExposedPins = (
 }
 
 export const getPinSpec = (
-  graph: GraphSpec,
+  graph: Spec,
   type: IO,
   pinId: string
 ): GraphPinSpec => {
   return deepGetOrDefault(graph, [`${type}s`, pinId], null)
+}
+
+export const getSpecPinIcon = (
+  specs: Specs,
+  graph: Spec,
+  type: IO,
+  pinId: string
+): string | null => {
+  let pin_icon_name: string | null = null
+
+  const pin_spec = getPinSpec(graph, type, pinId)
+
+  const { plug, icon } = pin_spec
+
+  if (icon) {
+    pin_icon_name = icon
+  } else if (plug) {
+    const sub_pin_id = getObjSingleKey(plug)
+    const sub_pin = plug[sub_pin_id]
+
+    const { unitId, pinId, mergeId } = sub_pin
+    const { units = {}, merges = {} } = graph as GraphSpec
+
+    let plugUnitId: string
+    let plugPinId: string
+
+    if (unitId && pinId) {
+      plugUnitId = unitId
+      plugPinId = pinId
+    } else {
+      const merge = merges[mergeId]
+
+      for (const unitId in merge) {
+        const mergeUnit = merge[unitId]
+
+        const { output = {} } = mergeUnit
+
+        for (const output_id in output) {
+          plugUnitId = unitId
+          plugPinId = output_id
+
+          break
+        }
+      }
+    }
+
+    const unit = units[plugUnitId]
+
+    if (unit) {
+      const { id } = unit
+
+      const unit_spec = getSpec(specs, id)
+
+      if (type === 'output' && pinId === SELF) {
+        pin_icon_name = unit_spec.metadata?.icon ?? null
+      } else {
+        pin_icon_name = unit_spec?.[`${type}s`][plugPinId]?.icon ?? null
+      }
+
+      if (!pin_icon_name) {
+        return getSpecPinIcon(specs, unit_spec, type, plugPinId)
+      }
+    }
+  } else {
+    const { icon } = pin_spec
+
+    pin_icon_name = icon || 'circle'
+  }
+
+  return pin_icon_name
 }
 
 export const getPlugSpecs = (spec: GraphSpec) => {
