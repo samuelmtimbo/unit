@@ -1,4 +1,5 @@
 import { Peer } from '../../../../../api/peer/Peer'
+import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
 import { System } from '../../../../../system'
 import { EE } from '../../../../../types/interface/EE'
@@ -64,8 +65,14 @@ export default class PeerReceiver extends Holder<I, O> {
     })
   }
 
-  async f({ opt }: I) {
-    this._peer = new Peer(this.__system, false, opt)
+  async f({ opt }: I, done: Done<O>) {
+    try {
+      this._peer = new Peer(this.__system, false, opt)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
 
     this._setup_peer()
 
@@ -121,8 +128,10 @@ export default class PeerReceiver extends Holder<I, O> {
       if (this._flag_err_invalid_offer) {
         this._flag_err_invalid_offer = false
         this.takeErr()
+
         return
       }
+
       this._forward_empty('emitter')
       this._forward_empty('stream')
       this._forward_empty('answer')

@@ -90,7 +90,7 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
 
         return
       } else {
-        this.err(err.message)
+        this.err(err.message.toLowerCase())
 
         return
       }
@@ -300,20 +300,5 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
 
   async send(data: any): Promise<void> {
     return this._send_data(data)
-  }
-
-  private _stop = () => {
-    if (this._connected) {
-      const unlisten = this._unlisten
-
-      unlisten()
-
-      this._unlisten = undefined
-
-      this._peer.close()
-      this._peer = undefined
-
-      this._connected = false
-    }
   }
 }

@@ -54,7 +54,13 @@ export class Peer extends $<PeerEvents> {
       throw new APINotSupportedError('Web RTC')
     }
 
-    const rtc = new RTCPeerConnection(this._config)
+    let rtc: RTCPeerConnection
+
+    try {
+      rtc = new RTCPeerConnection(this._config)
+    } catch (err) {
+      throw new Error('failed to instantiate RTC peer connection')
+    }
 
     this._setup(rtc)
 
