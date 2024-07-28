@@ -1004,31 +1004,29 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._editor.addEventListeners([
       makeCustomListener('data_removed', ({ datumId, specId }) => {
-        // console.log('data_removed', { datumId, specId })
-
         const { specs } = this._registry
 
         if (this._spec_id_to_file_name[specId]) {
+          // console.log('data_removed', { datumId, specId })
+
           const spec = clone(specs[specId]) as GraphSpec
 
           removeDatum({ datumId }, spec)
 
-          // this._sync_spec_file(specId, spec, specs)
-          // this._registry.setSpec(specId, spec)
+          this._registry.setSpec(specId, spec)
         }
       }),
       makeCustomListener('data_added', ({ datumId, specId, value }) => {
-        // console.log('data_added', { datumId, specId, value })
-
         const { specs } = this._registry
 
         if (this._spec_id_to_file_name[specId]) {
+          // console.log('data_added', { datumId, specId, value })
+
           const spec = clone(specs[specId]) as GraphSpec
 
           setDatum({ datumId, value }, spec)
 
-          // this._sync_spec_file(specId, spec, specs)
-          // this._registry.setSpec(specId, spec)
+          this._registry.setSpec(specId, spec)
         }
       }),
     ])
@@ -1136,6 +1134,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _sync_spec_file = debounce(
     this.$system,
     async (specId: string, spec: GraphSpec, specs: Specs) => {
+      // console.log('_sync_spec_file', specId, spec)
+
       const fileName = this._spec_id_to_file_name[specId]
 
       if (fileName) {
@@ -5803,7 +5803,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         })
       })
 
-      this._sim_add_unit_pins(unit_id, unit, offset_unit_pin_position, position)
+      this._sim_add_unit_pins(
+        unit_id,
+        unit,
+        offset_unit_pin_position,
+        position,
+        false
+      )
     }
 
     for (const unit_id in units) {
@@ -6743,7 +6749,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_id: string,
     datum_id: string,
     value: string,
-    position?: Position
+    position?: Position,
+    emit?: boolean
   ) => {
     // console.log('Graph', '_sim_add_pin_datum', unit_id, type, pin_id, datum_id, value)
 
@@ -6759,7 +6766,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       pin_id,
       datum_id,
       tree,
-      position
+      position,
+      emit
     )
   }
 
@@ -6768,7 +6776,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     type: IO,
     pin_id: string,
     position: Position | undefined,
-    center?: Position | undefined
+    center?: Position | undefined,
+    emit?: boolean
   ): void => {
     // console.log(
     //   'Graph',
@@ -6832,7 +6841,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           pin_id,
           datum_id,
           datum_tree,
-          position
+          position,
+          emit
         )
       }
     }
@@ -6844,7 +6854,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_id: string,
     datum_id: string,
     tree: TreeNode,
-    position: Position
+    position: Position,
+    emit: boolean
   ) => {
     // console.log('Graph', '_sim_add_pin_datum_tree', unit_id, type, pin_id, datum_id, tree)
 
@@ -6852,9 +6863,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const datum_node_id = getDatumNodeId(datum_id)
 
-    this.__sim_add_datum_node(datum_id, tree, position)
+    this.__sim_add_datum_node(datum_id, tree, position, emit)
 
-    this._sim_add_pin_datum_link(datum_node_id, pin_node_id)
+    this._sim_add_pin_datum_link(datum_node_id, pin_node_id, emit)
 
     this._mem_set_pin_datum(pin_node_id, datum_id)
   }
@@ -6892,7 +6903,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       input: {},
       output: {},
     },
-    center: Position | undefined
+    center: Position | undefined,
+    emit: boolean = true
   ): void => {
     const spec = this._get_unit_spec(unit_id)
 
@@ -6928,7 +6940,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           type,
           pin_id,
           position,
-          center
+          center,
+          emit
         )
 
         if (!ignored) {
@@ -12044,52 +12057,68 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return !!this._datum_tree[datum_id]
   }
 
-  public add_datum = (datum_id: string, value: string, position: Position) => {
-    this._add_datum(datum_id, value, position)
+  public add_datum = (
+    datum_id: string,
+    value: string,
+    position: Position,
+    emit: boolean
+  ) => {
+    this._add_datum(datum_id, value, position, undefined, emit)
 
     this._dispatch_action(makeAddDatumAction(datum_id, value))
   }
 
-  public add_new_datum = (value: string, position: Position): string => {
+  public add_new_datum = (
+    value: string,
+    position: Position,
+    emit: boolean
+  ): string => {
     const datum_id = this._new_datum_id()
 
-    this.add_datum(datum_id, value, position)
+    this.add_datum(datum_id, value, position, emit)
 
     return datum_id
   }
 
-  public add_new_datum_tree = (value: string, position: Position) => {
+  public add_new_datum_tree = (
+    value: string,
+    position: Position,
+    emit: boolean
+  ) => {
     const datum_id = this._new_datum_id()
 
-    this.add_datum(datum_id, value, position)
+    this.add_datum(datum_id, value, position, emit)
   }
 
   private _add_datum = (
     datum_id: string,
     value: string,
     position: Position,
-    tree?: TreeNode
+    tree?: TreeNode,
+    emit?: boolean
   ) => {
-    this._sim_add_datum_node(datum_id, value, position, tree)
+    this._sim_add_datum_node(datum_id, value, position, tree, emit)
   }
 
   private _sim_add_datum_node = (
     datum_id: string,
     value: string,
     position: Position,
-    tree?: TreeNode
+    tree?: TreeNode,
+    emit?: boolean
   ): void => {
     // console.log('Graph', '_sim_add_datum_node', datum_id, value, position)
 
     tree = tree ?? getTree__cached(value)
 
-    return this.__sim_add_datum_node(datum_id, tree, position)
+    return this.__sim_add_datum_node(datum_id, tree, position, emit)
   }
 
   private __sim_add_datum_node = (
     datum_id: string,
     tree: TreeNode,
-    { x, y }: Position
+    { x, y }: Position,
+    emit: boolean
   ): void => {
     // console.log('Graph', '__sim_add_datum_node', datum_id, tree.value)
 
@@ -12279,7 +12308,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._enable_datum_overlay(datum_node_id)
     }
 
-    this._dispatch_data_added(datum_id, tree.value)
+    if (emit) {
+      this._dispatch_data_added(datum_id, tree.value)
+    }
 
     this._start_graph_simulation(LAYER_DATA_LINKED)
   }
@@ -12556,16 +12587,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _sim_add_pin_datum_link = (
     datum_node_id: string,
-    pin_node_id: string
+    pin_node_id: string,
+    emit: boolean
   ): void => {
     // console.log('Graph', '_sim_add_pin_datum_link', datum_node_id, pin_node_id)
 
-    this._sim_add_datum_node_link(datum_node_id, pin_node_id)
+    this._sim_add_datum_node_link(datum_node_id, pin_node_id, emit)
   }
 
   private _sim_add_datum_node_link = (
     datum_node_id: string,
-    node_id: string
+    node_id: string,
+    emit: boolean
   ): void => {
     // console.log('Graph', '_sim_add_datum_link', datum_node_id, node_id)
 
@@ -12630,7 +12663,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._refresh_datum_visible(datum_node_id)
 
-    this._dispatch_data_removed(datumId)
+    if (emit) {
+      this._dispatch_data_removed(datumId)
+    }
 
     this._start_graph_simulation(LAYER_DATA_LINKED)
   }
@@ -23761,7 +23796,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._datum_to_plug[datum_node_id] = ext_node_id
     this._plug_to_datum[ext_node_id] = datum_node_id
 
-    this._sim_add_datum_node_link(datum_node_id, ext_node_id)
+    this._sim_add_datum_node_link(datum_node_id, ext_node_id, false)
   }
 
   private __sim_add_plug_datum_link = (
@@ -27179,7 +27214,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const new_datum_id = this._new_datum_id()
     const new_datum_node_id = getDatumNodeId(new_datum_id)
 
-    this.add_datum(new_datum_id, datum_tree.value, { x, y })
+    this.add_datum(new_datum_id, datum_tree.value, { x, y }, true)
 
     return new_datum_node_id
   }
@@ -27621,7 +27656,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const merge_position = this._get_anchor_node_position(merge_node_id)
 
     this._sim_add_datum_node(datum_id, data, merge_position)
-    this._sim_add_datum_node_link(datum_node_id, merge_node_id)
+    this._sim_add_datum_node_link(datum_node_id, merge_node_id, false)
   }
 
   private _state_set_merge_pin_data = (merge_node_id: string, data: string) => {
@@ -28341,7 +28376,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           pin_id,
           new_datum_id,
           tree,
-          position
+          position,
+          false
         )
       }
     }
@@ -28539,7 +28575,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const datum_node_id = getDatumNodeId(datum_id)
           this._add_empty_datum(datum_id, position)
 
-          this._sim_add_pin_datum_link(datum_node_id, pin_node_id)
+          this._sim_add_pin_datum_link(datum_node_id, pin_node_id, false)
 
           this._unlock_datum(datum_node_id)
           this._focus_datum(datum_id, [])
@@ -35974,7 +36010,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._sim_remove_pin_datum_link(pin_datum_node_id)
     }
 
-    this._sim_add_pin_datum_link(datum_node_id, pin_node_id)
+    this._sim_add_pin_datum_link(datum_node_id, pin_node_id, true)
 
     if (this._edit_datum_node_id === datum_node_id) {
       this._edit_datum_commited = true
@@ -42408,7 +42444,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           pin_id,
           new_datum_id,
           tree,
-          position
+          position,
+          false
         )
       }
     }
@@ -44862,7 +44899,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       '{}',
       '[]',
     ])
-    this.add_datum(datum_id, value, { x, y })
+
+    this.add_datum(datum_id, value, { x, y }, true)
   }
 
   private _on_long_click = (event: UnitPointerEvent): void => {
@@ -48297,7 +48335,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const position = graph.jiggle_world_screen_center()
 
-    graph.add_new_datum(value, position)
+    graph.add_new_datum(value, position, true)
   }
 
   private _move_datum_into_array = (datum_node_id: string): void => {
@@ -49351,9 +49389,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             this._mem_remove_pin_datum_tree(pin_node_id)
           }
 
-          this.__sim_add_datum_node(next_datum_id, datum_tree, position)
+          this.__sim_add_datum_node(next_datum_id, datum_tree, position, false)
 
-          this._sim_add_pin_datum_link(next_datum_node_id, pin_node_id)
+          this._sim_add_pin_datum_link(next_datum_node_id, pin_node_id, false)
           this._spec_set_pin_data(pin_node_id, datum_tree.value)
           this._mem_set_pin_datum(pin_node_id, next_datum_id)
         }
@@ -51053,7 +51091,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               opposite_pin_id,
               new_datum_id,
               tree,
-              position
+              position,
+              false
             )
           }
         }
@@ -52307,7 +52346,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (valid) {
         this.paste_bundle(json, position)
       } else {
-        const datum_id = this.add_new_datum(stringify(json), position)
+        const datum_id = this.add_new_datum(stringify(json), position, true)
 
         move_datum(datum_id)
       }
@@ -52331,7 +52370,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             tree = getTree(`"${escape(text)}"`)
           }
 
-          this.__sim_add_datum_node(datum_id, tree, position)
+          this.__sim_add_datum_node(datum_id, tree, position, true)
         } else {
           datum_id = this._paste_escaped_plain_text(text, position)
 
@@ -52357,7 +52396,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _paste_plain_text = (text: string, position: Position): string => {
     const datum_id = this._new_datum_id()
 
-    this.add_datum(datum_id, text, position)
+    this.add_datum(datum_id, text, position, true)
 
     return datum_id
   }
@@ -57709,7 +57748,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     ) {
       this._sim_remove_datum(datum_node_id)
       this._sim_add_datum_node(datum_id, data, position)
-      this._sim_add_pin_datum_link(datum_node_id, anchor_node_id)
+      this._sim_add_pin_datum_link(datum_node_id, anchor_node_id, false)
 
       this._refresh_datum_size(datum_node_id, next_tree)
     } else if (next_class_literal) {
@@ -57743,8 +57782,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._refresh_datum_size(datum_node_id, tree)
       }
     }
-
-    this._dispatch_data_added(datum_id, next_tree.value)
 
     this._refresh_datum_visible(datum_node_id)
   }
@@ -57867,7 +57904,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._predict_pin_datum_initial_position(anchor_node_id)
 
         this._sim_add_datum_node(datum_id, tree.value, position)
-        this._sim_add_pin_datum_link(datum_node_id, pin_node_id)
+        this._sim_add_pin_datum_link(datum_node_id, pin_node_id, false)
 
         if (this._is_merge_node_id(anchor_node_id)) {
           const { mergeId } = segmentMergeNodeId(anchor_node_id)
