@@ -43548,6 +43548,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ) {
           const position = mediumPoint(source_position, target_position)
 
+          const { unitId: source_unit_id } = segmentLinkPinNodeId(target_node_id)
+
+          if (source_unit_id === target_node_id) {
+            return
+          }
+
           const target_new_pin_id = add_unit_pin(
             target_node_id,
             'input',
@@ -43566,6 +43572,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._is_pin_node_id(target_node_id)
         ) {
           const position = mediumPoint(source_position, target_position)
+
+          const { unitId: target_unit_id } = segmentLinkPinNodeId(target_node_id)
+
+          if (target_unit_id === source_node_id) {
+            return
+          }
 
           const source_new_pin_id = add_unit_pin(
             source_node_id,
