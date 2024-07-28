@@ -24,7 +24,7 @@ export function stringifyDataObj(obj: Dict<any>) {
         if (data instanceof Unit) {
           const bundle = data.getUnitBundleSpec()
 
-          return `$${stringify(bundle)}`
+          _obj[name] = `$${stringify(bundle)}`
         } else {
           _obj[name] = 'null'
         }
