@@ -362,7 +362,16 @@ export function moveUnit(
 
             forEachPinOnMerge(merge, (unitId, type, pinId) => {
               if (source.hasUnit(unitId)) {
-                source.addPinToMerge(mergeId, unitId, type, pinId, false, false)
+                if (!source.hasMergePin(mergeId, unitId, type, pinId)) {
+                  source.addPinToMerge(
+                    mergeId,
+                    unitId,
+                    type,
+                    pinId,
+                    false,
+                    false
+                  )
+                }
               }
             })
 
