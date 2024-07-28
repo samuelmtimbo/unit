@@ -1,0 +1,114 @@
+{
+  "type": "`U`&`G`",
+  "name": "scroll child into view",
+  "units": {
+    "scrollintoview": {
+      "id": "de9665db-a188-4252-99f0-ea50fc343058",
+      "input": {
+        "component": {},
+        "opt": {}
+      },
+      "output": {}
+    },
+    "child": {
+      "id": "59afce80-30e7-4322-84e6-955767bb5106",
+      "input": {
+        "parent": {},
+        "at": {},
+        "done": {}
+      },
+      "output": {
+        "child": {}
+      }
+    },
+    "plan": {
+      "id": "36329d25-218d-48a5-a06c-1e0525da504f",
+      "input": {
+        "a": {}
+      },
+      "output": {
+        "0": {},
+        "1": {}
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "plan": {
+        "output": {
+          "0": true
+        }
+      },
+      "scrollintoview": {
+        "input": {
+          "opt": true
+        }
+      }
+    },
+    "1": {
+      "scrollintoview": {
+        "input": {
+          "component": true
+        }
+      },
+      "child": {
+        "output": {
+          "child": true
+        }
+      }
+    },
+    "2": {
+      "plan": {
+        "output": {
+          "1": true
+        }
+      },
+      "child": {
+        "input": {
+          "done": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "opt": {
+      "plug": {
+        "0": {
+          "unitId": "plan",
+          "pinId": "a",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "functional": true
+    },
+    "parent": {
+      "plug": {
+        "0": {
+          "unitId": "child",
+          "pinId": "parent",
+          "kind": "input"
+        }
+      },
+      "ref": true
+    },
+    "at": {
+      "plug": {
+        "0": {
+          "unitId": "child",
+          "pinId": "at",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "functional": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "gallery-vertical",
+    "description": "scroll `parent` so child `at` is visible"
+  },
+  "id": "5fb0ca59-4245-49ec-b13a-7b5c4af4c4bb",
+  "system": true
+}
