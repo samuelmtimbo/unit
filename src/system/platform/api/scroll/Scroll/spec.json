@@ -1,0 +1,23 @@
+{
+  "name": "scroll",
+  "inputs": {
+    "component": {
+      "type": "`C`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{behavior?:'smooth'|'auto'|'instant',block?:'nearest'|'start'|'end'}"
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "send",
+    "description": "scroll `component`",
+    "complexity": 3,
+    "tags": ["platform", "api"]
+  },
+  "base": true,
+  "id": "9d51399e-06a0-44c6-9e98-04041159b9f3",
+  "type": "`U`",
+  "system": true
+}
