@@ -448,6 +448,14 @@ export class Component<
     }
   }
 
+  scroll(opt: ScrollOptions): void {
+    const leaf = this.getFirstRootLeaf()
+
+    if (leaf && leaf.$element instanceof HTMLElement) {
+      leaf.$element.scroll(opt)
+    }
+  }
+
   scrollIntoView(opt: ScrollIntoViewOptions): void {
     if (this.$slot['default'] === this) {
       if (this.$primitive) {
