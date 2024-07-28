@@ -6,6 +6,10 @@
         "0": {
           "unitId": "input",
           "pinId": "name"
+        },
+        "1": {
+          "unitId": "read",
+          "pinId": "any"
         }
       }
     },
@@ -14,10 +18,6 @@
         "0": {
           "unitId": "input",
           "pinId": "unit"
-        },
-        "1": {
-          "unitId": "read",
-          "pinId": "any"
         }
       },
       "ref": true
