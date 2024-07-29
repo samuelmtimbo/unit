@@ -1,4 +1,6 @@
+import * as http from 'http'
 import { JSDOM } from 'jsdom'
+import { BasicHTTPHandler, BasicHTTPRequest } from '../../../API'
 import { BootOpt, System } from '../../../system'
 import { Unlisten } from '../../../types/Unlisten'
 import { SYSTEM_ROOT_ID } from '../../SYSTEM_ROOT_ID'
@@ -26,5 +28,39 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
   }
 
   // @ts-ignore
-  return webBoot(window, root, opt)
+  const [system, unlisten] = webBoot(window, root, opt)
+
+  system.api.http.listen = (port: number, handler: BasicHTTPHandler) => {
+    const server = http.createServer(async (req, res) => {
+      const _req: BasicHTTPRequest = {
+        headers: { ...req.headers },
+        method: req.method,
+        path: req.url,
+        body: '',
+        search: '',
+        query: {},
+      }
+
+      let data = ''
+      req
+        .on('data', (chunk) => {
+          data += chunk
+        })
+        .on('end', async () => {
+          _req.body = data
+
+          const _res = await handler(_req)
+
+          res.writeHead(_res.status, _res.body, _res.headers)
+        })
+    })
+
+    server.listen(port)
+
+    return () => {
+      server.close()
+    }
+  }
+
+  return [system, unlisten]
 }
