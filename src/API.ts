@@ -32,10 +32,12 @@ export type BasicHTTPResponse = {
 }
 
 export type BasicHTTPRequest = {
-  headers: Dict<string>
+  headers: Dict<string | string[]>
   method: string
   path: string
   body: string
+  search: string
+  query: Dict<string>
 }
 
 export type BasicHTTPHandler = (
