@@ -3,31 +3,29 @@ import { APINotSupportedError } from '../../../../exception/APINotImplementedErr
 import { BootOpt } from '../../../../system'
 
 export function webCrypto(window: Window, opt: BootOpt): API['crypto'] {
+  const check = () => {
+    if (!window.crypto) {
+      throw new APINotSupportedError('Crypto')
+    }
+  }
+
   const crypto: API['crypto'] = {
     generateKey: function (
       algorithm: AlgorithmIdentifier,
       extractable: boolean,
       keyUsages: KeyUsage[]
     ): Promise<CryptoKey | CryptoKeyPair> {
-      if (window.crypto) {
-        return window.crypto.subtle.generateKey(
-          algorithm,
-          extractable,
-          keyUsages
-        )
-      }
+      check()
 
-      throw new APINotSupportedError('Crypto')
+      return window.crypto.subtle.generateKey(algorithm, extractable, keyUsages)
     },
     exportKey: function (
       format: KeyFormat,
       key: CryptoKey
     ): Promise<ArrayBuffer | JsonWebKey> {
-      if (window.crypto) {
-        return window.crypto.subtle.exportKey(format, key)
-      }
+      check()
 
-      throw new APINotSupportedError('Crypto')
+      return window.crypto.subtle.exportKey(format, key)
     },
     importKey: function <
       F extends KeyFormat,
@@ -39,50 +37,42 @@ export function webCrypto(window: Window, opt: BootOpt): API['crypto'] {
       extractable: boolean,
       keyUsages: KeyUsage[]
     ): Promise<CryptoKey> {
-      if (window.crypto) {
-        return window.crypto.subtle.importKey(
-          format as any,
-          key as any,
-          algorithm,
-          extractable,
-          keyUsages
-        )
-      }
+      check()
 
-      throw new APINotSupportedError('Crypto')
+      return window.crypto.subtle.importKey(
+        format as any,
+        key as any,
+        algorithm,
+        extractable,
+        keyUsages
+      )
     },
     encrypt: function (
       algorithm: AlgorithmIdentifier,
       key: CryptoKey,
       data: BufferSource
     ): Promise<ArrayBuffer> {
-      if (window.crypto) {
-        return window.crypto.subtle.encrypt(algorithm, key, data)
-      }
+      check()
 
-      throw new APINotSupportedError('Crypto')
+      return window.crypto.subtle.encrypt(algorithm, key, data)
     },
     decrypt: function (
       algorithm: AlgorithmIdentifier,
       key: CryptoKey,
       data: BufferSource
     ): Promise<ArrayBuffer> {
-      if (window.crypto) {
-        return window.crypto.subtle.decrypt(algorithm, key, data)
-      }
+      check()
 
-      throw new APINotSupportedError('Crypto')
+      return window.crypto.subtle.decrypt(algorithm, key, data)
     },
     sign: function (
       algorithm: AlgorithmIdentifier,
       key: CryptoKey,
       data: ArrayBuffer
     ): Promise<ArrayBuffer> {
-      if (window.crypto) {
-        return window.crypto.subtle.sign(algorithm, key, data)
-      }
+      check()
 
-      throw new APINotSupportedError('Crypto')
+      return window.crypto.subtle.sign(algorithm, key, data)
     },
     verify: function (
       algorithm: AlgorithmIdentifier,
@@ -90,11 +80,9 @@ export function webCrypto(window: Window, opt: BootOpt): API['crypto'] {
       signature: BufferSource,
       data: BufferSource
     ): Promise<boolean> {
-      if (window.crypto) {
-        return window.crypto.subtle.verify(algorithm, key, signature, data)
-      }
+      check()
 
-      throw new APINotSupportedError('Crypto')
+      return window.crypto.subtle.verify(algorithm, key, signature, data)
     },
   }
 
