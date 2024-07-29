@@ -136,7 +136,6 @@ import {
   deepDestroy,
   deepGetOrDefault,
   deepSet,
-  filterObj,
   forEachObjKV,
   getObjSingleKey,
   isEmptyObject,
@@ -290,13 +289,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._branch = branch
 
+    this._waitAll = {
+      input: new WaitAll<any>(this.__system),
+      output: new WaitAll<any>(this.__system),
+    }
+
+    this._element = render
+
     this._initAddUnits(units)
     this._initMerges(merges)
     this._initInputSets(inputs)
     this._initOutputSets(outputs)
     this._initSetComponent(component)
-
-    this._element = render
 
     this.addListener('reset', this._reset)
     this.addListener('play', this._play)
@@ -304,24 +308,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this.addListener('destroy', this._destroy)
     this.addListener('take_err', this._takeErr)
     this.addListener('take_caught_err', this._takeErr)
-
-    const fInputs = filterObj(inputs, ({ functional }) => !!functional)
-    const fInputNames = keys(fInputs)
-
-    const fOutputs = filterObj(outputs, ({ functional }) => !!functional)
-    const fOutputNames = keys(fOutputs)
-
-    this._waitAll = {
-      input: new WaitAll<any>(this.__system),
-      output: new WaitAll<any>(this.__system),
-    }
-
-    forEach(fInputNames, (name) => {
-      this._plugToWaitAll('input', name)
-    })
-    forEach(fOutputNames, (name) => {
-      this._plugToWaitAll('output', name)
-    })
   }
 
   private _onPinSetRenamed = <
@@ -500,6 +486,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const waitAll = this._waitAll[type]
 
     waitAll.addPin(type, name, pin, {})
+
+    if (waitAll.hasPinNamed(oppositeType, name)) {
+      throw new Error()
+    }
     waitAll.setPin(oppositeType, name, oppositePin)
 
     this.setPin(type, name, pin, {})
@@ -1470,7 +1460,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     exposedMergeOpposite: Merge,
     propagate: boolean = true
   ) {
-    const { plug, ref, data } = pinSpec
+    const { plug, ref, data, functional } = pinSpec
 
     const oppositeType = opposite(type)
 
@@ -1487,6 +1477,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       const data_ = evaluate(data, this.__system.specs, this.__system.classes)
 
       this.setPinData(type, pinId, data_)
+    }
+
+    if (functional) {
+      this._plugToWaitAll(type, pinId)
     }
   }
 
@@ -1518,6 +1512,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean,
     bubble: boolean
   ): void {
+    // console.log('_setPinSetFuncitonal', type, name, functional, fork, bubble)
+
     fork && this._fork(undefined, true, bubble)
 
     this._specSetPinSetFunctional(type, name, functional)
@@ -1553,11 +1549,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pinId: string,
     functional: boolean
   ): void {
-    const isPinFunctional = this.isPinSetFunctional(type, pinId)
-
-    if (!isPinFunctional && functional) {
+    if (functional) {
       this._plugToWaitAll(type, pinId)
-    } else if (isPinFunctional && !functional) {
+    } else {
       this._unplugFromWaitAll(type, pinId)
     }
   }
