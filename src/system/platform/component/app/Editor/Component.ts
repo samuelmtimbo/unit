@@ -6134,15 +6134,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     layout_position: Position,
     parent_id: string | null
   ): void {
-    this._add_unit(
-      unit_id,
-      bundle,
-      position,
-      pin_position,
-      layout_position,
-      parent_id
-    )
-
     this._dispatch_action(
       makeAddUnitAction(
         unit_id,
@@ -6153,6 +6144,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         parent_id,
         {}
       )
+    )
+
+    this._add_unit(
+      unit_id,
+      bundle,
+      position,
+      pin_position,
+      layout_position,
+      parent_id
     )
   }
 
@@ -8856,9 +8856,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     data: string,
     position: Dict<{ int?: Position; ext?: Position }> = {}
   ) => {
-    this._expose_pin_set(type, pin_id, pin_spec, data, position)
-
     this._dispatch_action(makeExposePinSetAction(type, pin_id, pin_spec, data))
+
+    this._expose_pin_set(type, pin_id, pin_spec, data, position)
   }
 
   private _expose_pin_set = (
@@ -8993,11 +8993,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   sub_pin_spec
     // )
 
-    this._add_exposed_pin(type, pin_id, sub_pin_id, sub_pin_spec, position)
-
     this._dispatch_action(
       makeExposePinAction(type, pin_id, sub_pin_id, sub_pin_spec)
     )
+
+    this._add_exposed_pin(type, pin_id, sub_pin_id, sub_pin_spec, position)
   }
 
   private _add_exposed_pin = (
@@ -11745,9 +11745,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     merge: GraphMergeSpec,
     position: Position
   ): void => {
-    this._add_merge(merge_id, merge, position, true)
-
     this._dispatch_action(makeAddMergeAction(merge_id, clone(merge), position))
+
+    this._add_merge(merge_id, merge, position, true)
   }
 
   private _add_merge = (
@@ -12064,9 +12064,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     position: Position,
     emit: boolean
   ) => {
-    this._add_datum(datum_id, value, position, undefined, emit)
-
     this._dispatch_action(makeAddDatumAction(datum_id, value))
+
+    this._add_datum(datum_id, value, position, undefined, emit)
   }
 
   public add_new_datum = (
@@ -17124,11 +17124,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (this._search_start_unit_id) {
             const is_component = isComponentId(specs, search_start_spec_id)
 
-            if (did_spec_id_change) {
-              this._pod_remove_unit(search_start_unit_id, is_component)
-              this._pod_add_unit(search_unit_id, search_unit_bundle)
-            }
-
             const search_start_unit_bundle = unitBundleSpec(
               this._search_start_graph_unit_spec,
               specs
@@ -17155,10 +17150,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               search_start_unit_parent_id,
               search_start_unit_index
             )
-          } else {
-            this._pod_add_unit(search_unit_id, search_unit_bundle)
 
+            if (did_spec_id_change) {
+              this._pod_remove_unit(search_start_unit_id, is_component)
+              this._pod_add_unit(search_unit_id, search_unit_bundle)
+            }
+          } else {
             this._dispatch_add_unit_action(search_unit_id, unit)
+
+            this._pod_add_unit(search_unit_id, search_unit_bundle)
           }
 
           this._setup_pod(this._pod)
@@ -25978,8 +25978,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       )
     }
 
-    this._move_datum_to_pin(datum_node_id, pin_node_ids[0])
-
     actions.push(
       makeAddDatumLinkAction(
         datumId,
@@ -25991,6 +25989,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const bulk_action = makeBulkEditAction(actions)
 
     this._dispatch_action(bulk_action)
+
+    this._move_datum_to_pin(datum_node_id, pin_node_ids[0])
   }
 
   public move_data_to_pin = (datum_node_ids: string[], pin_node_id: string) => {
@@ -26006,13 +26006,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       actions.push(
         makeAddDatumLinkAction(datumId, value, this._get_node_spec(pin_node_id))
       )
-
-      this._move_datum_to_pin(datum_node_id, pin_node_id)
     }
 
     const bulk_action = makeBulkEditAction(actions)
 
     this._dispatch_action(bulk_action)
+
+    for (let i = 0; i < datum_node_ids.length; i++) {
+      const datum_node_id = datum_node_ids[i]
+
+      this._move_datum_to_pin(datum_node_id, pin_node_id)
+    }
   }
 
   private _on_compatible_node_click = (
@@ -26541,11 +26545,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const sub_pin_spec = this._get_exposed_sub_pin_spec(type, pinId, subPinId)
 
-    this._remove_exposed_sub_pin_or_set(exposed_pin_node_id)
-
     this._dispatch_action(
       makeCoverPinAction(type, pinId, subPinId, sub_pin_spec)
     )
+
+    this._remove_exposed_sub_pin_or_set(exposed_pin_node_id)
   }
 
   private _remove_exposed_sub_pin_or_set = (
@@ -26817,11 +26821,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-    this._set_link_pin_ignored(pin_node_id, ignored)
-
     this._dispatch_action(
       makeSetUnitPinIgnoredAction(unitId, type, pinId, ignored)
     )
+
+    this._set_link_pin_ignored(pin_node_id, ignored)
   }
 
   private _set_link_pin_ignored = (
@@ -28260,11 +28264,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     const { type, pinId } = segmentPlugNodeId(exposed_node_id)
 
-    this._set_exposed_pin_functional(exposed_node_id, functional)
-
     this._dispatch_action(
       makeSetPinSetFunctionalAction(type, pinId, functional)
     )
+
+    this._set_exposed_pin_functional(exposed_node_id, functional)
   }
 
   private _set_exposed_pin_functional = (
@@ -28338,13 +28342,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_node_id: string,
     constant: boolean
   ): void => {
-    this._set_link_pin_constant(pin_node_id, constant)
-
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
     this._dispatch_action(
       makeSetUnitPinConstantAction(unitId, type, pinId, constant)
     )
+
+    this._set_link_pin_constant(pin_node_id, constant)
   }
 
   private _set_link_pin_constant = (
@@ -30502,8 +30506,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     children: string[],
     slot_name: string = 'default'
   ) => {
-    this._move_sub_component_root(parent_id, children, slot_name)
-
     const prev_slot_map = this._get_sub_components_slot_map(children)
     const prev_parent_map = this._get_sub_components_parent_map(children)
 
@@ -30518,6 +30520,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         prev_slot_map
       )
     )
+
+    this._move_sub_component_root(parent_id, children, slot_name)
   }
 
   private _move_sub_component_root = (
@@ -32518,13 +32522,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     next_parent_id: string | null,
     next_slot_name: string
   ): void => {
-    this._remove_sub_component_all_children(
-      parent_id,
-      slot_name,
-      next_parent_id,
-      next_slot_name
-    )
-
     const children = this._spec_get_sub_component_children(parent_id)
 
     const slot_map = this._get_sub_components_slot_map(children)
@@ -32532,6 +32529,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._dispatch_action(
       makeMoveSubComponentRootAction(null, parent_map, children, {}, slot_map)
+    )
+
+    this._remove_sub_component_all_children(
+      parent_id,
+      slot_name,
+      next_parent_id,
+      next_slot_name
     )
   }
 
@@ -34087,6 +34091,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       map_plug_id
     )
 
+    this._dispatch_action(action)
+
     this._explode_unit(
       unit_id,
       map_unit_id,
@@ -34094,8 +34100,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       map_plug_id,
       selected_node_ids
     )
-
-    this._dispatch_action(action)
   }
 
   private _state_explode_unit = (
@@ -35030,12 +35034,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const actions = this._make_merge_merges_actions(merge_0_id, merge_1_id)
 
+    this._dispatch_action(makeBulkEditAction(actions))
+
     const merge_node_id = this._merge_merge_pin_merge_pin(
       merge_0_node_id,
       merge_1_node_id
     )
-
-    this._dispatch_action(makeBulkEditAction(actions))
 
     return merge_node_id
   }
@@ -35168,9 +35172,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       })
     })
 
-    this._pod.$bulkEdit({ actions, fork, bubble })
-
     this._dispatch_action_add_merge(merge_id, merge)
+
+    this._pod.$bulkEdit({ actions, fork, bubble })
 
     return merge_node_id
   }
@@ -35935,8 +35939,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', 'move_datum_to_pin', datum_node_id, pin_node_id)
 
-    this._move_datum_to_pin(datum_node_id, pin_node_id)
-
     const { datumId } = segmentDatumNodeId(datum_node_id)
 
     const value = this._get_datum_value(datum_node_id)
@@ -35944,6 +35946,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pinSpec = this._get_node_spec(pin_node_id)
 
     this._dispatch_action(makeAddDatumLinkAction(datumId, value, pinSpec))
+
+    this._move_datum_to_pin(datum_node_id, pin_node_id)
   }
 
   private _move_datum_to_pin = (
@@ -36068,11 +36072,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public set_unit_pin_data = (pin_node_id: string, data: string): void => {
     // console.log('Graph', 'set_unit_pin_data', pin_node_id, data)
 
-    this._set_unit_pin_data(pin_node_id, data)
-
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
     this._dispatch_action(makeSetUnitPinDataAction(unitId, type, pinId, data))
+
+    this._set_unit_pin_data(pin_node_id, data)
   }
 
   private _set_unit_pin_data = (pin_node_id: string, data: string): void => {
@@ -36679,9 +36683,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const value = this._get_datum_value(datum_node_id)
 
-    this._remove_datum(datum_node_id)
-
     this._dispatch_action(makeRemoveDatumAction(datumId, value))
+
+    this._remove_datum(datum_node_id)
   }
 
   private _remove_datum = (datum_node_id: string) => {
@@ -36761,11 +36765,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-    this._remove_pin_datum_link(datum_node_id)
-
     this._dispatch_action(
       makeRemoveUnitPinDataAction(unitId, type, pinId, data)
     )
+
+    this._remove_pin_datum_link(datum_node_id)
   }
 
   private _remove_pin_datum_link = (datum_node_id: string): void => {
@@ -36932,14 +36936,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     merge_node_id: string,
     pin_node_id: string
   ): void => {
-    this._remove_pin_from_merge(merge_node_id, pin_node_id)
-
     const { mergeId } = segmentMergeNodeId(merge_node_id)
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
     this._dispatch_action(
       makeRemovePinFromMergeAction(mergeId, type, unitId, pinId)
     )
+
+    this._remove_pin_from_merge(merge_node_id, pin_node_id)
   }
 
   private _remove_pin_from_merge = (
@@ -38887,6 +38891,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const datum_node_id = getDatumNodeId(datum_id)
 
+    if (this._dispatch_add_datum_on_commit) {
+      this._dispatch_action(makeAddDatumAction(datum_id, tree.value))
+    }
+
     const datum_pin_node_id = this._datum_to_pin[datum_node_id]
     const datum_plug_node_id = this._datum_to_plug[datum_node_id]
 
@@ -38924,10 +38932,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       } else {
         this._remove_plug_set_datum_link(datum_plug_node_id)
       }
-    }
-
-    if (this._dispatch_add_datum_on_commit) {
-      this._dispatch_action(makeAddDatumAction(datum_id, tree.value))
     }
   }
 
@@ -39935,9 +39939,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public cover_pin_set = (type: IO, pin_id: string): void => {
     const pin = this._get_pin_spec(type, pin_id)
 
-    this._cover_pin_set(type, pin_id)
-
     this._dispatch_action(makeCoverPinSetAction(type, pin_id, pin))
+
+    this._cover_pin_set(type, pin_id)
   }
 
   private _cover_pin_set = (type: IO, pin_id: string): void => {
@@ -40028,11 +40032,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     sub_pin_id: string,
     sub_pin_spec: GraphSubPinSpec
   ): void => {
-    this._plug_exposed_pin(type, pin_id, sub_pin_id, sub_pin_spec)
-
     this._dispatch_action(
       makePlugPinAction(type, pin_id, sub_pin_id, sub_pin_spec)
     )
+
+    this._plug_exposed_pin(type, pin_id, sub_pin_id, sub_pin_spec)
   }
 
   private _plug_exposed_pin = (
@@ -40323,11 +40327,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       sub_pin_id
     )
 
-    this._unplug_exposed_pin(type, pin_id, sub_pin_id)
-
     this._dispatch_action(
       makeUnplugPinAction(type, pin_id, sub_pin_id, sub_pin_spec)
     )
+
+    this._unplug_exposed_pin(type, pin_id, sub_pin_id)
   }
 
   private _unplug_exposed_pin = (
@@ -41478,11 +41482,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     init_index: number,
     final_index: number
   ) => {
-    this._pod_reorder_sub_component(parent_id, unit_id, final_index)
-
     this._dispatch_action(
       makeReorderSubComponentAction(parent_id, unit_id, init_index, final_index)
     )
+
+    this._pod_reorder_sub_component(parent_id, unit_id, final_index)
   }
 
   private _drag_start = (node_id: string, event: UnitPointerEvent): void => {
@@ -41956,14 +41960,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         )
       )
 
+      this._dispatch_add_unit_action(unit_id, unit)
+
       this._pod.$bulkEdit({ actions })
 
       if (this._is_unit_component(unit_id)) {
         this._sim_add_sub_component(unit_id, {}, undefined, true)
         this._connect_sub_component(unit_id)
       }
-
-      this._dispatch_add_unit_action(unit_id, unit)
     }
 
     this._green_drag = false
@@ -43328,11 +43332,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pinSpec: GraphPinSpec,
     position: Position
   ) => {
-    this._expose_unit_pin_set(unitId, type, pinId, pinSpec, position)
-
     this._dispatch_action(
       makeExposeUnitPinSetAction(unitId, type, pinId, pinSpec, position)
     )
+
+    this._expose_unit_pin_set(unitId, type, pinId, pinSpec, position)
   }
 
   private _expose_unit_pin_set = (
@@ -43405,11 +43409,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pinSpec: GraphPinSpec,
     position: Position
   ) => {
-    this._cover_unit_pin_set(unitId, type, pinId, pinSpec, position)
-
     this._dispatch_action(
       makeCoverUnitPinSetAction(unitId, type, pinId, pinSpec, position)
     )
+
+    this._cover_unit_pin_set(unitId, type, pinId, pinSpec, position)
   }
 
   private _cover_unit_pin_set = (
@@ -43548,7 +43552,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ) {
           const position = mediumPoint(source_position, target_position)
 
-          const { unitId: source_unit_id } = segmentLinkPinNodeId(target_node_id)
+          const { unitId: source_unit_id } =
+            segmentLinkPinNodeId(target_node_id)
 
           if (source_unit_id === target_node_id) {
             return
@@ -43573,7 +43578,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ) {
           const position = mediumPoint(source_position, target_position)
 
-          const { unitId: target_unit_id } = segmentLinkPinNodeId(target_node_id)
+          const { unitId: target_unit_id } =
+            segmentLinkPinNodeId(target_node_id)
 
           if (target_unit_id === source_node_id) {
             return
@@ -52513,10 +52519,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const actions = this._make_paste_spec_bulk_action(graph)
 
+    this._dispatch_action(makeBulkEditAction(actions))
+
     this.__state_paste_spec(graph, position)
     this.__pod_paste_spec(clone(graph), actions)
-
-    this._dispatch_action(makeBulkEditAction(actions))
   }
 
   public __state_paste_spec = (
