@@ -12,7 +12,7 @@
     }
   },
   "metadata": {
-    "icon": "circle",
+    "icon": "circle-alert",
     "description": "catch all `unit` error",
     "complexity": 3,
     "tags": ["f", "meta"]

@@ -62,6 +62,6 @@ export class $<
   }
 
   raw(): any {
-    throw new Error("object doens't have raw form")
+    throw new Error("object doesn't have raw form")
   }
 }
