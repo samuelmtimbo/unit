@@ -19,6 +19,7 @@ import {
   watchComponentAppendChildrenEvent,
   watchComponentAppendEvent,
   watchComponentRemoveEvent,
+  watchUnitEvent,
   watchUnitRenamePinEvent,
 } from './watchUnitEvent'
 import { watchUnitIOSpec } from './watchUnitIOSpec'
@@ -183,6 +184,10 @@ export function watchUnitIO<T extends Unit>(
       // @ts-ignore
       all.push(watchComponentRemoveEvent('remove_child', unit, callback))
     }
+  }
+
+  if (events.includes('destroy')) {
+    all.push(watchUnitEvent('destroy', unit, callback))
   }
 
   all.push(watchUnitErr(unit, callback, events))

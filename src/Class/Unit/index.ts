@@ -1165,6 +1165,8 @@ export class Unit<
   }
 
   public destroy(): void {
+    super.destroy()
+
     const {
       global: { ref_ },
     } = this.__system
@@ -1180,8 +1182,6 @@ export class Unit<
         delete ref_[this.id]
       }
     }
-
-    super.destroy()
   }
 
   public getPinData(type: IO, pinId: string): any {

@@ -12,7 +12,7 @@
   },
   "outputs": {},
   "metadata": {
-    "icon": "circle",
+    "icon": "circle-stop",
     "description": "reset `unit` to default state",
     "complexity": 18,
     "tags": ["f", "unit"]

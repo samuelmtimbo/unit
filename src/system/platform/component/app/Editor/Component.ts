@@ -12774,6 +12774,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _tick_node = (node_id: string): void => {
     const node = this.get_node(node_id)
 
+    if (!node) {
+      return
+    }
+
     const { x, y } = node
 
     const node_comp = this._node_comp[node_id]
@@ -13095,14 +13099,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _tick_link = (link_id: string): void => {
-    const sim_link = this._link[link_id]
+    const link = this._link[link_id]
+
+    if (!link) {
+      return
+    }
 
     const {
       source_id,
       target_id,
       padding = { source: 0, target: 0 },
       detail: { head },
-    } = sim_link
+    } = link
 
     const source = this._node[source_id]
     const target = this._node[target_id]
@@ -13114,8 +13122,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const link_base_text = this._link_base_text[link_id]
 
     if (this._is_node_id(source_id) && this._is_node_id(target_id)) {
-      this._add_link_to_max_l_heap(source_id, link_id, l, sim_link.l)
-      this._add_link_to_max_l_heap(target_id, link_id, l, sim_link.l)
+      this._add_link_to_max_l_heap(source_id, link_id, l, link.l)
+      this._add_link_to_max_l_heap(target_id, link_id, l, link.l)
     }
 
     // if (d < 3 || l === 0) {
@@ -23996,12 +24004,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this.__deselect_node(node_id)
 
-    this._refresh_node_selection(node_id)
-    this._refresh_node_color(node_id)
+    const has_node = this._has_node(node_id)
+
+    if (has_node) {
+      this._refresh_node_selection(node_id)
+      this._refresh_node_color(node_id)
+    }
 
     if (this._mode === 'info') {
       if (this._hover_node_count === 0) {
-        this._hide_node_info(node_id)
+        if (has_node) {
+          this._hide_node_info(node_id)
+        }
 
         if (this._selected_node_count === 0) {
           this._set_all_nodes_links_opacity(1)
@@ -55074,6 +55088,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         {
           events: [
             'fork',
+            'destroy',
             'append_child',
             'remove_child',
             'insert_child',
@@ -56487,6 +56502,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { unitId } = data
 
+    this._flush_debugger()
+
     this._state_remove_unit(unitId)
   }
 
@@ -56494,6 +56511,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_on_move_unit_moment', data)
 
     const { id } = data
+
+    this._flush_debugger()
 
     this._state_remove_unit(id)
   }
@@ -57614,6 +57633,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._on_graph_unit_link_pin_drop_moment(_data)
   }
 
+  private _on_graph_unit_destroy = (data: { unitId: string }) => {
+    // console.log('_on_graph_unit_destroy', data)
+
+    const { unitId } = data
+
+    this._state_remove_unit(unitId)
+  }
+
   private _on_graph_unit_err_moment = (data: GraphUnitErrMomentData) => {
     // console.log('Graph', '_on_graph_unit_err_moment', data)
 
@@ -58523,6 +58550,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       invalid: this._on_graph_unit_merge_invalid_moment,
     },
     unit: {
+      destroy: this._on_graph_unit_destroy,
       err: this._on_graph_unit_err_moment,
       take_err: this._on_graph_unit_take_err_moment,
       catch_err: this._on_graph_unit_take_err_moment,

@@ -66,16 +66,22 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
       ID_EDITOR
     )
 
-    const { specs, classes } = system
+    this._fallback()
 
-    const spec = system.newSpec(emptySpec({ id: newSpecId(specs) }))
+    this._input.graph.push(this._fallback_graph)
+  }
+
+  private _fallback = () => {
+    const { specs, classes } = this.__system
+
+    const spec = this.__system.newSpec(
+      emptySpec({ id: newSpecId(specs), user: true })
+    )
 
     const Class = fromSpec(spec, specs, classes, {})
 
-    const fallback_graph = new Class(system)
+    const fallback_graph = new Class(this.__system)
     this._fallback_graph = fallback_graph
-
-    this._input.graph.push(this._fallback_graph)
 
     this._fallback_graph.play()
   }
@@ -95,6 +101,14 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
 
     if (name === 'graph') {
       this._graph = data as Graph
+
+      data.addListener('destroy', () => {
+        if (this._graph === this._fallback_graph) {
+          this._fallback()
+        }
+
+        this._input.graph.pull()
+      })
 
       this._output.graph.push(data)
     }

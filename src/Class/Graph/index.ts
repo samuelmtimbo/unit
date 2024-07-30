@@ -272,7 +272,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       id ?? spec.id
     )
 
-    this._spec = spec
+    this._spec = clone(spec)
 
     const specs = weakMerge(system.specs, { [id]: spec })
 
@@ -3667,6 +3667,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       }
     })
 
+    all_unlisten.push(
+      unit.addListener('destroy', () => {
+        this._removeUnit(unitId, false, false, true, true)
+      })
+    )
     all_unlisten.push(unit.addListener('set_input', boundSetUnitInput))
     all_unlisten.push(
       unit.addListener('before_remove_input', remove_unit_input)
