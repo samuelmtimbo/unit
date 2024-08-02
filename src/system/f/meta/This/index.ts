@@ -10,8 +10,6 @@ export interface O<T> {
   graph: $
 }
 
-export interface R<T> {}
-
 export default class This<T> extends Unit<I<T>, O<T>> {
   private _unlisten: Unlisten
 

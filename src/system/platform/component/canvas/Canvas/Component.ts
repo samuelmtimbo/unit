@@ -62,13 +62,20 @@ export default class CanvasComp
 
     const {} = $props
 
-    this._reset()
     this._setup()
+    this._reset()
 
     this.$element = this._canvas_el
   }
 
-  private _reset = () => {
+  public reset() {
+    super.reset()
+
+    this._reset()
+    this.clear()
+  }
+
+  private _setup = () => {
     const { className, style } = this.$props
 
     const old_canvas_el = this._canvas_el
@@ -145,25 +152,25 @@ export default class CanvasComp
     return canvas_el
   }
 
-  private _setup = () => {
-    this._setup_context()
+  private _reset = () => {
+    this._reset_context()
   }
 
-  private _setup_redraw = () => {
-    this._setup_context()
+  private _reset_redraw = () => {
+    this._reset()
     this._redraw()
   }
 
   private _set_width = (width: number): void => {
     this._canvas_el.setAttribute('width', `${width - 1}`)
 
-    this._setup_redraw()
+    this._reset_redraw()
   }
 
   private _set_height = (height: number): void => {
     this._canvas_el.setAttribute('height', `${height - 1}`)
 
-    this._setup_redraw()
+    this._reset_redraw()
   }
 
   private _width_frame_unlisten: Unlisten
@@ -296,7 +303,7 @@ export default class CanvasComp
     this._draw_steps(this._d)
   }
 
-  private _setup_context = (): void => {
+  private _reset_context = (): void => {
     // console.log('Canvas', '_setup_context')
 
     const { sx = 1, sy = 1 } = this.$props
@@ -317,7 +324,7 @@ export default class CanvasComp
   }
 
   onMount() {
-    this._setup()
+    this._reset()
   }
 
   async draw(step: any[]) {
