@@ -88,6 +88,13 @@ export default class AudioComp
     this.$element.pause()
   }
 
+  reset(): void {
+    super.reset()
+
+    this.$element.pause()
+    this.$element.currentTime = 0
+  }
+
   captureStream(opt: { frameRate: number }): Promise<MediaStream> {
     // @ts-ignore
     if (this.$element.captureStream) {

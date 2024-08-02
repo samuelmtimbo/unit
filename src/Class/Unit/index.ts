@@ -1085,7 +1085,20 @@ export class Unit<
   public reset(): void {
     this.takeErr()
 
+    const paused = this._paused
+
+    !paused && this.pause()
+
+    for (const name of this._d_o_name) {
+      this.takeOutput(name)
+    }
+    for (const name of this._d_i_name) {
+      this.takeInput(name)
+    }
+
     this.emit('reset')
+
+    !paused && this.play()
   }
 
   public pause(): void {

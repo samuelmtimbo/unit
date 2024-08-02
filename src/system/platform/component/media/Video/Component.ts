@@ -148,4 +148,11 @@ export default class VideoComp
   pause(): void {
     this.$element.pause()
   }
+
+  reset(): void {
+    super.reset()
+
+    this.$element.pause()
+    this.$element.currentTime = 0
+  }
 }

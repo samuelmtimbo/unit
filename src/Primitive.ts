@@ -77,6 +77,8 @@ export class Primitive<
       this._backwarding = false
       this._forwarding = false
       this._forwarding_empty = false
+
+      this.__buffer = []
     })
 
     this.addListener('play', () => {

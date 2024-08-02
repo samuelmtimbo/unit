@@ -2,13 +2,11 @@ import { Primitive } from '../../../../Primitive'
 import { System } from '../../../../system'
 import { ID_SPARK } from '../../../_ids'
 
-export interface I<T> {}
-
-export interface O<T> {
+export interface I<T> {
   a: T
 }
 
-export interface R<T> {
+export interface O<T> {
   a: T
 }
 
@@ -25,6 +23,16 @@ export default class Spark<T> extends Primitive<I<T>, O<T>> {
       system,
       ID_SPARK
     )
+
+    this.addListener('reset', () => {
+      this._ran = false
+
+      const a = this._input.a.peak()
+
+      if (a !== undefined) {
+        this._loop(a)
+      }
+    })
   }
 
   public onDataInputDrop(name: string, data: any): void {
@@ -36,6 +44,10 @@ export default class Spark<T> extends Primitive<I<T>, O<T>> {
   }
 
   onDataInputData(name: string, data: T) {
+    this._loop(data)
+  }
+
+  private _loop = (data: T) => {
     if (this._paused || this._ran) {
       return
     }

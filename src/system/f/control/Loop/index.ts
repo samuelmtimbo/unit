@@ -39,6 +39,7 @@ export default class Loop<T> extends Primitive<I<T>, O<T>> {
   private _reset() {
     this._current = undefined
     this._next = undefined
+    this._test = undefined
     this._nexting = false
     this._looping = false
   }
