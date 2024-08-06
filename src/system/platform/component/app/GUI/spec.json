@@ -24,5 +24,8 @@
   "type": "`U`&`C`&`V`&`J`",
   "system": true,
   "render": true,
-  "deps": ["6253bf76-2e85-11eb-9f59-3703abfd39c7"]
+  "deps": [
+    "6253bf76-2e85-11eb-9f59-3703abfd39c7",
+    "ff4144c4-052a-4bc4-93a8-08876b66f0c0"
+  ]
 }
