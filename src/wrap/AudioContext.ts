@@ -18,7 +18,7 @@ export function wrapAudioContext(
       return audioContext.destination
     }
 
-    createOscilator(opt: OscillatorOptions): OscillatorNode {
+    createOscillator(opt: OscillatorOptions): OscillatorNode {
       const {
         api: {
           window: { OscillatorNode },

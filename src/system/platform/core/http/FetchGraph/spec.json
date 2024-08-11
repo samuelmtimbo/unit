@@ -107,7 +107,7 @@
   },
   "metadata": {
     "icon": "send",
-    "description": "fetch a JSON definded graph class",
+    "description": "fetch a JSON defined graph class",
     "complexity": 39
   },
   "id": "6f1388c8-9ad3-44b4-9669-d1386d8a9fc4"

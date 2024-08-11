@@ -30,7 +30,7 @@ export default class Decode extends Functional<I, O> {
     try {
       a = atob(b)
     } catch {
-      done(undefined, 'string not correctly enconded')
+      done(undefined, 'string not correctly encoded')
 
       return
     }

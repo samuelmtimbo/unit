@@ -1,7 +1,7 @@
 import { $ } from '../../../../../Class/$'
 import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
-import { apiNotSuportedError } from '../../../../../exception/APINotImplementedError'
+import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { FR } from '../../../../../types/interface/FR'
 import { wrapFileReader } from '../../../../../wrap/FileReader'
@@ -45,7 +45,7 @@ export default class FileReader extends Holder<I, O> {
     } = this.__system
 
     if (!FileReader) {
-      done(undefined, apiNotSuportedError('FileReader'))
+      done(undefined, apiNotSupportedError('FileReader'))
 
       return
     }

@@ -18,7 +18,7 @@
   },
   "metadata": {
     "icon": "undo",
-    "description": "interatively update a single value",
+    "description": "iteratively update a single value",
     "complexity": 3,
     "tags": ["f", "control"]
   },

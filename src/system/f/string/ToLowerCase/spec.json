@@ -15,7 +15,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "conver string to lower case",
+    "description": "convert string to lower case",
     "link": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase",
     "complexity": 3,
     "tags": ["f", "string"]

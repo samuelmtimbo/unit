@@ -1,6 +1,6 @@
 import { Done } from '../../../../../Class/Functional/Done'
 import { Holder } from '../../../../../Class/Holder'
-import { apiNotSuportedError } from '../../../../../exception/APINotImplementedError'
+import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { IC } from '../../../../../types/interface/IC'
 import { MST } from '../../../../../types/interface/MST'
@@ -51,7 +51,7 @@ export default class ImageCapture_ extends Holder<I, O> {
     } = this.__system
 
     if (!ImageCapture) {
-      done(undefined, apiNotSuportedError('Image Capture'))
+      done(undefined, apiNotSupportedError('Image Capture'))
 
       return
     }

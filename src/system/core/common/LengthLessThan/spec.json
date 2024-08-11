@@ -55,7 +55,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "check wether the length of `a` lesser than `b`",
+    "description": "check whether the length of `a` lesser than `b`",
     "complexity": 8,
     "tags": ["core", "common"]
   },

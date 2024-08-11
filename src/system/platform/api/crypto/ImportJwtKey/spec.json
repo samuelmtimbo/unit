@@ -30,7 +30,7 @@
   },
   "metadata": {
     "icon": "lock",
-    "description": "parse cryto jwk `key` given knowledge of `format`, `algorithm`, `extractable` and `keyUsages`",
+    "description": "parse crypto jwk `key` given knowledge of `format`, `algorithm`, `extractable` and `keyUsages`",
     "link": "https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey",
     "complexity": 3,
     "tags": ["platform", "api", "crypto"]

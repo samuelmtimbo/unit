@@ -12,7 +12,7 @@
     "ms": {
       "type": "number",
       "metadata": {
-        "description": "same as the inputed `ms`"
+        "description": "same as the inputted `ms`"
       }
     }
   },

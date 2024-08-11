@@ -350,7 +350,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this._listen_registry()
   }
 
-  public disable_regsitry = () => {
+  public disable_registry = () => {
     this._disable_registry = true
 
     this._unlisten_registry()
@@ -1238,7 +1238,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
       setTimeout(() => {
         if (this._selected_id) {
           // Safari
-          // apparently selecting the input might inadvertedly refocus it,
+          // apparently selecting the input might inadvertently refocus it,
           // which is certainly unexpected, so this call must absolutely
           // come before dispatching a (possibly side-effecting) event
           this._select_all()

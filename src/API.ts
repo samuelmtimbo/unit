@@ -13,7 +13,7 @@ import {
 import { Channel, ChannelOpt } from './types/global/Channel'
 import { DownloadDataOpt as IDownloadTextOpt } from './types/global/DownloadData'
 import { DownloadURLOpt } from './types/global/DownloadURL'
-import { PositionObserverCostructor } from './types/global/PositionObserver'
+import { PositionObserverConstructor } from './types/global/PositionObserver'
 import {
   SpeechGrammarList,
   SpeechGrammarListOpt,
@@ -268,7 +268,7 @@ export type API = {
     exitPictureInPicture(): Promise<void>
     pictureInPictureElement: Element
     MutationObserver: { new (callback: MutationCallback): MutationObserver }
-    PositionObserver: PositionObserverCostructor
+    PositionObserver: PositionObserverConstructor
     ResizeObserver: { new (callback: ResizeObserverCallback): ResizeObserver }
     IntersectionObserver: {
       new (

@@ -2476,8 +2476,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _edit_datum_id: string | null = null
   private _edit_datum_node_id: string | null = null
   private _edit_datum_path: number[] | null = null
-  private _edit_datum_commited: boolean = false
-  private _edit_datum_last_manually_commited: boolean = false
+  private _edit_datum_committed: boolean = false
+  private _edit_datum_last_manually_committed: boolean = false
 
   private _type_container: Dict<Div> = {}
   private _type: Dict<DataTree> = {}
@@ -5523,7 +5523,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._edit_datum_id = null
     this._edit_datum_node_id = null
     this._edit_datum_path = null
-    this._edit_datum_commited = false
+    this._edit_datum_committed = false
 
     this._type_container = {}
     this._type = {}
@@ -12093,7 +12093,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const { key } = event
 
           if (key === 'Enter') {
-            this._edit_datum_last_manually_commited = true
+            this._edit_datum_last_manually_committed = true
 
             this._commit_data_value(
               datum_id,
@@ -12103,8 +12103,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }),
         makeCustomListener('datumchange', (event) => {
-          this._edit_datum_commited = false
-          this._edit_datum_last_manually_commited = false
+          this._edit_datum_committed = false
+          this._edit_datum_last_manually_committed = false
 
           this._on_datum_change(datum_id, event)
         }),
@@ -15339,7 +15339,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         href: `#${link_base_id}`,
         startOffset: '50%',
         spacing: 'auto',
-        lenghtAdjust: 'spacingAndGlyphs',
+        lengthAdjust: 'spacingAndGlyphs',
         textContent: text,
         style: {
           strokeWidth: '0px',
@@ -20310,10 +20310,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    const ordered_sub_componenent_ids =
+    const ordered_sub_component_ids =
       this._order_sub_component_ids(sub_component_ids)
 
-    for (const sub_component_id of ordered_sub_componenent_ids) {
+    for (const sub_component_id of ordered_sub_component_ids) {
       this._cancel_leave_sub_component_animation(sub_component_id)
 
       this._measure_sub_component_base(sub_component_id)
@@ -21807,7 +21807,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._delete_all_node_to_node_charge(int_node_id)
     }
 
-    if (this._is_dropable_mode()) {
+    if (this._is_droppable_mode()) {
       if (node_drag_max_distance > MIN_DRAG_DROP_MAX_D) {
         if (node_id === this._subgraph_unit_id) {
           //
@@ -22220,16 +22220,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _end_leave_fullwindow_animation(sub_component_ids: string[]) {
     // console.log('Graph', '_end_leave_fullwindow_animation', sub_component_ids)
 
-    const ordered_sub_componenent_ids =
+    const ordered_sub_component_ids =
       this._order_sub_component_ids(sub_component_ids)
 
-    for (const sub_component_id of ordered_sub_componenent_ids) {
+    for (const sub_component_id of ordered_sub_component_ids) {
       this._unplug_sub_component_root_base_frame(sub_component_id)
       this._append_sub_component_all_missing_root(sub_component_id)
       this._append_sub_component_root_base(sub_component_id)
     }
 
-    for (const sub_component_id of ordered_sub_componenent_ids) {
+    for (const sub_component_id of ordered_sub_component_ids) {
       this._finish_sub_component(sub_component_id)
 
       this._animating_sub_component_fullwindow.delete(sub_component_id)
@@ -29051,11 +29051,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const sub_component_ids = keys(this._component.$subComponent)
 
-    const ordered_sub_componenent_ids = [
+    const ordered_sub_component_ids = [
       ...this._order_sub_component_ids(sub_component_ids),
     ]
 
-    for (const sub_component_id of ordered_sub_componenent_ids) {
+    for (const sub_component_id of ordered_sub_component_ids) {
       const frame = this._get_sub_component_frame(sub_component_id)
 
       if (!animate_config[sub_component_id]) {
@@ -35847,7 +35847,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._sim_add_pin_datum_link(datum_node_id, pin_node_id, true)
 
     if (this._edit_datum_node_id === datum_node_id) {
-      this._edit_datum_commited = true
+      this._edit_datum_committed = true
     }
   }
 
@@ -38377,7 +38377,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_on_datum_change', datum_id, data)
 
     if (datum_id === this._edit_datum_id) {
-      this._edit_datum_commited = false
+      this._edit_datum_committed = false
       this._edit_datum_never_changed = false
     }
 
@@ -38648,9 +38648,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _should_prevent_datum_commit = () => {
     return (
-      this._edit_datum_commited ||
+      this._edit_datum_committed ||
       this._edit_datum_never_changed ||
-      this._edit_datum_last_manually_commited
+      this._edit_datum_last_manually_committed
     )
   }
 
@@ -38719,7 +38719,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_commit_data_value', datum_id, tree)
 
-    this._edit_datum_commited = true
+    this._edit_datum_committed = true
 
     const datum_node_id = getDatumNodeId(datum_id)
 
@@ -44018,8 +44018,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this.__is_draggable_mode(this._mode)
   }
 
-  private _is_dropable_mode = (): boolean => {
-    return this.__is_dropable_mode(this._mode)
+  private _is_droppable_mode = (): boolean => {
+    return this.__is_droppable_mode(this._mode)
   }
 
   private __is_draggable_mode = (mode: Mode): boolean => {
@@ -44034,7 +44034,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
   }
 
-  private __is_dropable_mode = (mode: Mode): boolean => {
+  private __is_droppable_mode = (mode: Mode): boolean => {
     return (
       mode === 'none' ||
       mode === 'data' ||
@@ -45251,7 +45251,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._collapse_plugs = plug
 
     if (this._search) {
-      this._search.disable_regsitry()
+      this._search.disable_registry()
     }
 
     const none_node_selected =
@@ -52343,7 +52343,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     // console.log('Graph', '_paste_spec', graph)
 
-    const remaped_graph = remapGraph(
+    const remapped_graph = remapGraph(
       graph,
       map_unit_id,
       map_merge_id,
@@ -52351,7 +52351,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       map_datum_id
     )
 
-    this._paste_spec(remaped_graph, position)
+    this._paste_spec(remapped_graph, position)
   }
 
   public _state_paste_spec = (
@@ -57887,7 +57887,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (datum_node_id) {
       if (this._edit_datum_node_id === datum_node_id) {
-        this._edit_datum_commited = false
+        this._edit_datum_committed = false
       } else {
         this._sim_remove_datum(datum_node_id)
       }

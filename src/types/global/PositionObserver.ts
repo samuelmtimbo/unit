@@ -1,7 +1,7 @@
 import { IOElement } from '../../client/IOElement'
 import { PositionObserver_ } from '../../client/PositionObserver'
 
-export interface PositionObserverCostructor {
+export interface PositionObserverConstructor {
   new (system: any, callback: PositionObserverCallback): PositionObserver_
 }
 

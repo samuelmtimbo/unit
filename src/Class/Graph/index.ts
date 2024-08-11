@@ -1601,7 +1601,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean,
     bubble: boolean
   ): void {
-    // console.log('_setPinSetFuncitonal', type, name, functional, fork, bubble)
+    // console.log('_setPinSetFunctional', type, name, functional, fork, bubble)
 
     fork && this._fork(undefined, true, bubble)
 

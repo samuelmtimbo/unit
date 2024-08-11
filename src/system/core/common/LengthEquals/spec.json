@@ -55,7 +55,7 @@
   },
   "metadata": {
     "icon": "ruler",
-    "description": "check whther the length of `a` is equal to `n`?",
+    "description": "check whether the length of `a` is equal to `n`?",
     "complexity": 8,
     "tags": ["core", "common"]
   },
