@@ -68,7 +68,7 @@ export default class AttachText<T> extends Holder<I<T>, O<T>> {
       setTimeout(() => {
         if (this._component) {
           this._component.emit('call', {
-            method: 'dettachText',
+            method: 'detachText',
             data: [this._type, this._text],
           })
 

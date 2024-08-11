@@ -66,7 +66,7 @@ To enter Add Mode (also Green Mode) you can either click on the "plus sign" mode
 
 In Add Mode, it is possible to copy a unit (or the currently Selected Subgraph).
 
-A unit can be shallow clonned with a Green Drag and Drop:
+A unit can be shallow cloned with a Green Drag and Drop:
 
 ![](/public/gif/start/9.gif)
 
@@ -188,7 +188,7 @@ Draw a circle to create an empty unit. Draw a rectangle to create an empty unit 
 
 ![](/public/gif/start/33.gif)
 
-Drawing a contour around a group of nodes, will compose those nosdes.
+Drawing a contour around a group of nodes, will compose those nodes.
 
 ![](/public/gif/start/42.gif)
 
@@ -218,7 +218,7 @@ To undo last action, press <kbd>Ctrl + Z</kbd>. To redo, press <kbd>Ctrl + Shift
 
 ![](/public/gif/start/38.gif)
 
-## Trasncend
+## Transcend
 
 Pulling up the top "transcend" button will wrap the current graph in an editor.
 

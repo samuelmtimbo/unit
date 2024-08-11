@@ -11,7 +11,7 @@ export interface Props {
   href?: string
   startOffset?: string
   spacing?: string
-  lenghtAdjust?: string
+  lengthAdjust?: string
   textContent?: string
   rotate?: 'auto' | 'auto-reverse' | 'number'
 }
@@ -31,7 +31,7 @@ export default class SVGTextPath extends Element<SVGTextPathElement, Props> {
       className,
       href,
       startOffset,
-      lenghtAdjust,
+      lengthAdjust,
       spacing,
       textContent,
       rotate,
@@ -51,8 +51,8 @@ export default class SVGTextPath extends Element<SVGTextPathElement, Props> {
     if (startOffset !== undefined) {
       text_path_el.setAttribute('startOffset', startOffset)
     }
-    if (lenghtAdjust !== undefined) {
-      text_path_el.setAttribute('lenghtAdjust', lenghtAdjust)
+    if (lengthAdjust !== undefined) {
+      text_path_el.setAttribute('lengthAdjust', lengthAdjust)
     }
     if (spacing !== undefined) {
       text_path_el.setAttribute('spacing', spacing)

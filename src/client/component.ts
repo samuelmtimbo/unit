@@ -294,7 +294,7 @@ export class Component<
 
   attachText(type: string, text: string): void {
     if (this._attachTextUnlisten[type]) {
-      this.dettachText(type)
+      this.detachText(type)
     }
 
     const base = this.getRootBase()
@@ -316,7 +316,7 @@ export class Component<
     this._attachTextUnlisten[type] = callAll(unlistenAll)
   }
 
-  dettachText(type: string): void {
+  detachText(type: string): void {
     const unlisten = this._attachTextUnlisten[type]
 
     if (unlisten) {
@@ -1413,7 +1413,7 @@ export class Component<
     )
   }
 
-  isHMTL(): boolean {
+  isHTML(): boolean {
     return this.$element instanceof HTMLElement
   }
 
@@ -1691,9 +1691,9 @@ export class Component<
   }
 
   public templateChildWrapper(child, svg, html, fallback) {
-    if (this.isHMTL() && child.isSVG()) {
+    if (this.isHTML() && child.isSVG()) {
       return svg()
-    } else if (this.isSVG() && child.isHMTL()) {
+    } else if (this.isSVG() && child.isHTML()) {
       return html()
     } else {
       return fallback()

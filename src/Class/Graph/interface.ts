@@ -80,7 +80,7 @@ export type GraphAddUnitData = {
   bubble?: boolean
   position?: Position | undefined
   pinPosition?: IOOf<Dict<Position>> | undefined
-  layoutPositon?: Position | undefined
+  layoutPosition?: Position | undefined
   parentId?: string | null | undefined
   merges?: GraphUnitMerges | undefined
   plugs?: GraphUnitPlugs | undefined
@@ -147,7 +147,7 @@ export type GraphRemoveUnitData = {
   bundle?: UnitBundleSpec
   position?: Position
   pinPosition?: IOOf<Dict<Position>>
-  layoutPositon?: Position
+  layoutPosition?: Position
   parentId?: string | null
   merges?: GraphMergesSpec
   plugs?: GraphUnitPlugs

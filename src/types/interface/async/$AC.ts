@@ -5,7 +5,7 @@ export const AC_METHOD_WATCH = []
 export const AC_METHOD_REF = [
   'get',
   'getDestination',
-  'createOscilator',
+  'createOscillator',
   'createAnalyser',
 ]
 
@@ -16,7 +16,7 @@ export interface $AC_W {}
 export interface $AC_R {
   $get(data: {}): $AC
   $getDestination(data: {}): $AN
-  createOscilator(data: OscillatorOptions): $AN
+  createOscillator(data: OscillatorOptions): $AN
   createAnalyser(data: AnalyserOptions): $AN
 }
 

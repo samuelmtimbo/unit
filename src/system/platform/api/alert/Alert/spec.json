@@ -8,7 +8,7 @@
   "outputs": {},
   "metadata": {
     "icon": "tilde",
-    "description": "diplay a dialog with an optional message and wait until user dismisses it",
+    "description": "display a dialog with an optional message and wait until user dismisses it",
     "complexity": 3,
     "tags": ["platform", "api", "base64"]
   },

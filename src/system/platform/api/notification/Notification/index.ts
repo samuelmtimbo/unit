@@ -1,5 +1,5 @@
 import { Primitive, PrimitiveEvents } from '../../../../../Primitive'
-import { apiNotSuportedError } from '../../../../../exception/APINotImplementedError'
+import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { ID_NOTIFICATION } from '../../../../_ids'
 
@@ -60,7 +60,7 @@ export default class _Notification extends Primitive<I, O, NotificationEvents> {
         this.err('not authorized')
       }
     } else {
-      this.err(apiNotSuportedError('Notification'))
+      this.err(apiNotSupportedError('Notification'))
     }
   }
 

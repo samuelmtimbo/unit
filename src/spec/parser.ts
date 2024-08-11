@@ -1597,7 +1597,7 @@ export function applyGenerics(
   return value
 }
 
-function _isEmtpyString(str: string): boolean {
+function _isEmptyString(str: string): boolean {
   return !!/^ *$/.exec(str)
 }
 
@@ -1695,7 +1695,7 @@ function _getDelimiterSeparated(
   // push last element
   const lastChildString = value.substring(lastStop, value.length)
 
-  if (!_isEmtpyString(lastChildString) || pushNext) {
+  if (!_isEmptyString(lastChildString) || pushNext) {
     children.push(_getTree(lastChildString, keyValue, ignoreKeyword))
   }
 
@@ -1879,7 +1879,7 @@ export function _getNextSiblingPath(
 // Here is an idea for the mechanics:
 // 1) Arrow key right or left -> go right or left
 // 2) Arrow down -> go lower level
-// 3) Arrow up -> go uper level
+// 3) Arrow up -> go upper level
 
 export function getNextSiblingPath(
   value: string,

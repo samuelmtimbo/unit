@@ -28,7 +28,7 @@ export type Rect = {
   height: number
 }
 
-export type Trasform = {
+export type Transform = {
   x: number
 }
 

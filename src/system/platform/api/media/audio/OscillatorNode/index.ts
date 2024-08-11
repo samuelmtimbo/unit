@@ -63,7 +63,7 @@ export default class OscillatorNode_ extends Functional<I, O> {
     } = this.__system
 
     if (sourceNode.__.includes('AC')) {
-      _node = (sourceNode as AC).createOscilator(opt)
+      _node = (sourceNode as AC).createOscillator(opt)
     } else {
       sourceNode = sourceNode as AN & $
 
