@@ -18,6 +18,10 @@ false && watchGraphAndLog(nArrayBuilder.getUnit('buildarrayfrom') as Graph)
 nArrayBuilder.play()
 
 nArrayBuilder.push('n', 0)
+
+nArrayBuilder.setOutputIgnored('test', true)
+nArrayBuilder.setOutputIgnored('acc', true)
+
 assert.deepEqual(nArrayBuilder.take('a[]'), [])
 assert.equal(nArrayBuilder.take('a[]'), undefined)
 assert.equal(nArrayBuilder.peakInput('n'), undefined)

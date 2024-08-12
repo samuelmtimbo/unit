@@ -9,7 +9,14 @@
           "data": "[]"
         }
       },
-      "output": {}
+      "output": {
+        "acc": {
+          "ignored": false
+        },
+        "test": {
+          "ignored": false
+        }
+      }
     }
   },
   "merges": {},
