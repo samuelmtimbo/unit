@@ -84,6 +84,7 @@ import {
   UnitRemovePinDataData,
   UnitTakeInputData,
 } from '../../../../../Class/Unit/interface'
+import { DataRef } from '../../../../../DataRef'
 import {
   Heap,
   addHeapNode,
@@ -36166,7 +36167,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _spec_set_pin_data = (pin_node_id: string, data: string): void => {
+  private _spec_set_pin_data = (
+    pin_node_id: string,
+    data: string | DataRef
+  ): void => {
     const { classes } = this.$system
     const { specs } = this.$props
 
@@ -57196,8 +57200,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const $unit = this._pod.$refGlobalObj(data)
 
         if (data.__.includes('U')) {
-          $unit.$getUnitBundleSpec({}, (bundleSpec: UnitBundleSpec) => {
-            const value = `$${stringify(bundleSpec)}`
+          $unit.$getUnitBundleSpec({}, (bundle: UnitBundleSpec) => {
+            const { specs, setSpec } = this.$props
+
+            const { unit } = bundle
+
+            const spec = getSpec(
+              weakMerge(specs, bundle.specs),
+              unit.id
+            ) as GraphSpec
+
+            setSpec(spec.id, spec)
+
+            const value: DataRef = { ref: [[]], data: bundle }
 
             this._spec_set_pin_data(pin_node_id, value)
           })
