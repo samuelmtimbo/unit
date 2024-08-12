@@ -26,7 +26,7 @@ export default class ReadAsDataUrl extends Functional<I, O> {
       },
       {
         input: {
-          blob: {
+          file: {
             ref: true,
           },
           reader: {
