@@ -52309,11 +52309,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _validate_bundle_spec = (data: any): boolean => {
+    return validateBundleSpec(data)
+  }
+
+  private _validate_text_bundle_spec = (data: any): boolean => {
     if (typeof data !== 'object' || data === null) {
       return false
     }
 
-    return validateBundleSpec(data)
+    if (!data.spec) {
+      return false
+    }
+
+    return this._validate_bundle_spec(data)
   }
 
   private _paste_clipboard = async (position: Position) => {
@@ -52387,7 +52395,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (json) {
-      const valid = this._validate_bundle_spec(json)
+      const valid = this._validate_text_bundle_spec(json)
 
       if (valid) {
         this.paste_bundle(json, position)
