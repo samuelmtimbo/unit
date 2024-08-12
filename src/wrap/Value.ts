@@ -1,4 +1,5 @@
 import { $ } from '../Class/$'
+import { ReadOnlyError } from '../exception/ObjectReadOnly'
 import { System } from '../system'
 import { V } from '../types/interface/V'
 
@@ -11,7 +12,7 @@ export function wrapValue(data: any, system: System): V<number> {
     }
 
     write(data: number): Promise<void> {
-      throw new Error('read only')
+      throw new ReadOnlyError('value')
     }
   })(system)
 }

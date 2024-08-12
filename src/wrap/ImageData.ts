@@ -1,6 +1,7 @@
 import { $ } from '../Class/$'
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { InvalidKeyPathError } from '../exception/InvalidKeyPathError'
+import { ReadOnlyError } from '../exception/ObjectReadOnly'
 import { System } from '../system'
 import { Unlisten } from '../types/Unlisten'
 import { ID } from '../types/interface/ID'
@@ -26,11 +27,11 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
     }
 
     async set(name: string, data: any): Promise<void> {
-      throw new Error('read only')
+      throw new ReadOnlyError('image data')
     }
 
     async delete(name: string): Promise<void> {
-      throw new Error('read only')
+      throw new ReadOnlyError('image data')
     }
 
     async hasKey(name: string): Promise<boolean> {
@@ -54,11 +55,11 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
     }
 
     deepSet(path: string[], data: any): Promise<void> {
-      throw new Error('read only')
+      throw new ReadOnlyError('image data')
     }
 
     deepDelete(path: string[]): Promise<void> {
-      throw new Error('read only')
+      throw new ReadOnlyError('image data')
     }
 
     subscribe(
@@ -71,7 +72,7 @@ export function wrapImageData(imageData: ImageData, system: System): ID & J {
         data: any
       ) => void
     ): Unlisten {
-      throw new Error('read only')
+      throw new ReadOnlyError('image data')
     }
 
     raw() {

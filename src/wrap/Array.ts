@@ -77,7 +77,7 @@ export function wrapUint8Array(
     }
 
     async write(data: number[]): Promise<void> {
-      throw new Error('read only')
+      throw array.set(data)
     }
 
     append(a: number): Promise<void> {
