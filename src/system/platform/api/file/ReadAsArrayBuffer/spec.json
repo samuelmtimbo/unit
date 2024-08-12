@@ -1,0 +1,33 @@
+{
+  "name": "read as array buffer",
+  "inputs": {
+    "reader": {
+      "type": "`FR`",
+      "ref": true
+    },
+    "file": {
+      "type": "`F`|`B`",
+      "ref": true
+    },
+    "opt": {
+      "type": "{}"
+    }
+  },
+  "outputs": {
+    "array": {
+      "type": "`AB`",
+      "ref": true,
+      "icon": "array"
+    }
+  },
+  "metadata": {
+    "icon": "file-output",
+    "description": "read the contents of the specified blob or file",
+    "complexity": 3,
+    "tags": ["platform", "api", "file"]
+  },
+  "id": "bf92df60-f487-430f-a3e8-c988d57eadbb",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
