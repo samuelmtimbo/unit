@@ -229,6 +229,7 @@ export type API = {
     DelayNode: DelayNode
     ImageCapture: ImageCapture
     Audio: { new (): HTMLAudioElement }
+    Image: { new (): HTMLImageElement }
     CompressionStream: { new (format: CompressionFormat): CompressionStream }
     DecompressionStream: {
       new (format: CompressionFormat): DecompressionStream
