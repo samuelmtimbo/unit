@@ -19,6 +19,9 @@ export default function render(
 ): [Graph, System, Unlisten] {
   const { spec = {}, specs = {} } = bundle
 
+  bundle.spec = spec
+  bundle.specs = specs
+
   const [system, unlistenSystem] = defaultWebBoot({
     specs: weakMerge(specs, _specs),
     classes: _classes,
