@@ -1,5 +1,7 @@
 import { $ } from '../Class/$'
+import { CodePathNotImplementedError } from '../exception/CodePathNotImplemented'
 import { ObjectPathTooDeepError } from '../exception/ObjectPathTooDeep'
+import { ReadOnlyError } from '../exception/ObjectReadOnly'
 import { ObjectUpdateType } from '../ObjectUpdateType'
 import { System } from '../system'
 import { IM } from '../types/interface/IM'
@@ -21,10 +23,10 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
       return false
     }
     set<K extends string>(name: K, data: any): Promise<void> {
-      throw new Error('image read only')
+      throw new ReadOnlyError('image')
     }
     delete<K extends string>(name: K): Promise<void> {
-      throw new Error('image read only')
+      throw new ReadOnlyError('image')
     }
     async hasKey<K extends string>(name: K): Promise<boolean> {
       if (KNOWN_IMAGE_PROPERTIES.includes(name)) {
@@ -44,10 +46,10 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
       return this.get(path[0])
     }
     deepSet(path: string[], data: any): Promise<void> {
-      throw new Error('image read only')
+      throw new ReadOnlyError('image')
     }
     deepDelete(path: string[]): Promise<void> {
-      throw new Error('image read only')
+      throw new ReadOnlyError('image')
     }
     subscribe(
       path: string[],
@@ -59,7 +61,7 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
         data: any
       ) => void
     ): Unlisten {
-      throw new Error('image read only')
+      throw new CodePathNotImplementedError()
     }
 
     async image(): Promise<any> {
