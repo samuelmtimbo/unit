@@ -37262,8 +37262,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._is_node_ascend(unitId)) {
-      this._ascend_node_z(pin_node_id)
-      this._negate_node_layer(pin_node_id)
+      if (this._has_node(pin_node_id)) {
+        this._ascend_node_z(pin_node_id)
+        this._negate_node_layer(pin_node_id)
+      }
     }
 
     if (this._collapse_init_node_id_set.has(merge_node_id)) {
