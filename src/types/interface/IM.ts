@@ -1,3 +1,3 @@
 export interface IM {
-  image(): Promise<any>
+  image(): Promise<HTMLImageElement>
 }

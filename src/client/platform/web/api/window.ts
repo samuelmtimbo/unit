@@ -14,6 +14,8 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
     // @ts-ignore
     Audio: window.Audio,
     // @ts-ignore
+    Image: window.Image,
+    // @ts-ignore
     AudioContext: window.AudioContext,
     // @ts-ignore
     OscillatorNode: window.OscillatorNode,

@@ -1,0 +1,24 @@
+{
+  "name": "image",
+  "inputs": {
+    "src": {
+      "type": "string"
+    }
+  },
+  "outputs": {
+    "image": {
+      "type": "`IM`&`J`",
+      "ref": true
+    }
+  },
+  "id": "fecc2df2-ce36-4401-8eed-63d65fb67e6d",
+  "base": true,
+  "metadata": {
+    "icon": "image",
+    "complexity": 12,
+    "description": "load image",
+    "tags": ["platform", "api", "media", "image"]
+  },
+  "type": "`U`",
+  "system": true
+}

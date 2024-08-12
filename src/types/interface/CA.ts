@@ -1,7 +1,7 @@
 export interface CA {
   draw(step: any[]): Promise<void>
   drawImage(
-    imageBitmap: ImageBitmap,
+    imageBitmap: ImageBitmap | HTMLImageElement,
     x: number,
     y: number,
     width: number,
