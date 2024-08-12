@@ -1,0 +1,36 @@
+{
+  "name": "table data",
+  "type": "`U`&`C`&`V`&`J`",
+  "inputs": {
+    "style": {
+      "type": "object",
+      "optional": true,
+      "metadata": {
+        "examples": ["{}", "{background:'red'}"]
+      }
+    },
+    "attr": {
+      "type": "object",
+      "optional": true,
+      "defaultIgnored": true,
+      "metadata": {
+        "examples": ["{tabIndex:1}", "{title:'hello'}", "{draggable:true}"]
+      }
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "HTML tr element",
+    "complexity": 43,
+    "tags": ["platform", "component"]
+  },
+  "id": "eff80fbe-2f83-4a59-8576-9ec0c79ce439",
+  "base": true,
+  "component": {
+    "defaultWidth": 120,
+    "defaultHeight": 120
+  },
+  "system": true,
+  "render": true
+}
