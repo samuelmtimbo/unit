@@ -67,10 +67,10 @@ export function unitFromBundleSpec<I, O>(
   forEachValueKey(input || {}, (unitPinSpec, pinId) => {
     const { data } = unitPinSpec ?? {}
 
-    if (data !== undefined) {
-      const input = unit.getInput(pinId as any)
+    const dataRef = evaluateDataValue(data, specs, classes)
 
-      const dataRef = evaluateDataValue(data, specs, classes)
+    if (dataRef.data !== undefined) {
+      const input = unit.getInput(pinId as any)
 
       let data_ = resolveDataRef(dataRef, specs, classes)
 

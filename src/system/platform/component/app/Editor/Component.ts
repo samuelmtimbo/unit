@@ -6807,12 +6807,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (!merged) {
       this._sim_add_link_pin_node(unit_id, type, pin_id, position)
-      this._sim_add_link_pin_link(unit_id, type, pin_id)
-    } else {
-      this._sim_add_link_pin_link(unit_id, type, pin_id)
     }
 
-    const ref = this._is_link_pin_ref(pin_node_id)
+    this._sim_add_link_pin_link(unit_id, type, pin_id)
 
     let { data, metadata = {} } = unit_pin_spec
 
@@ -11010,6 +11007,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return { width, height }
   }
 
+  private _get_unit_pin_icon_name = (
+    unit_id: string,
+    type: IO,
+    pin_id: string,
+    pin_node_id?: string
+  ): string => {
+    const { specs } = this.$props
+
+    pin_node_id = pin_node_id ?? getPinNodeId(unit_id, type, pin_id)
+
+    const input = type === 'input'
+    const output = !input
+    const ref = this._is_link_pin_ref(pin_node_id)
+
+    const ref_output = ref && output
+
+    let pin_icon_name: string | null
+
+    if (ref_output) {
+      const spec = this._get_unit_spec(unit_id)
+
+      pin_icon_name = getSpecPinIcon(specs, spec, 'output', pin_id)
+    }
+
+    return pin_icon_name
+  }
+
   private _sim_add_link_pin_node = (
     unit_id: string,
     type: IO,
@@ -11021,7 +11045,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   y,
     // })
 
-    const { specs, config } = this.$props
+    const { config } = this.$props
 
     const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
@@ -11034,13 +11058,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const ref_output = ref && output
 
-    let pin_icon_name: string | null
-
-    if (ref_output) {
-      const spec = this._get_unit_spec(unit_id)
-
-      pin_icon_name = getSpecPinIcon(specs, spec, 'output', pin_id)
-    }
+    const pin_icon_name: string | null = this._get_unit_pin_icon_name(
+      unit_id,
+      type,
+      pin_id
+    )
 
     const { width, height } = this._get_pin_node_size(unit_id, type, pin_id)
 
@@ -40198,6 +40220,29 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return d
   }
 
+  private _sim_refresh_unit_ref_output_icon = (
+    unitId: string,
+    type: IO,
+    pinId: string
+  ): void => {
+    const icon = this._get_unit_pin_icon_name(unitId, type, pinId)
+
+    this._sim_set_unit_ref_output_icon(unitId, type, pinId, icon)
+  }
+
+  private _sim_set_unit_ref_output_icon = (
+    unitId: string,
+    type: IO,
+    pinId: string,
+    icon: string
+  ) => {
+    const pin_node_id = getPinNodeId(unitId, type, pinId)
+
+    const icon_comp = this._ref_output_pin_icon[pin_node_id]
+
+    icon_comp.setProp('icon', icon)
+  }
+
   private _sim_refresh_exposed_pin_marker = (
     type: IO,
     ext_node_id: string,
@@ -56368,6 +56413,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           )
         } else {
           setSpec(spec.id, next_unit_spec)
+        }
+
+        if (was_ref && ref) {
+          this._sim_refresh_unit_ref_output_icon(unitId, type, pinId)
         }
       } else {
         setPinRef()

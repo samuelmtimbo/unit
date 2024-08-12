@@ -178,7 +178,7 @@ export const getSpecPinIcon = (
     const sub_pin_id = getObjSingleKey(plug)
     const sub_pin = plug[sub_pin_id]
 
-    const { unitId, pinId, mergeId } = sub_pin
+    const { unitId, pinId, mergeId, kind = type } = sub_pin
     const { units = {}, merges = {} } = graph as GraphSpec
 
     let plugUnitId: string
@@ -218,7 +218,7 @@ export const getSpecPinIcon = (
       }
 
       if (!pin_icon_name) {
-        return getSpecPinIcon(specs, unit_spec, type, plugPinId)
+        return getSpecPinIcon(specs, unit_spec, kind, plugPinId)
       }
     }
   } else {
