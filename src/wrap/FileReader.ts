@@ -6,7 +6,7 @@ export function waitFileReaderResult<T extends string | ArrayBuffer>(
   reader: FileReader
 ): Promise<T> {
   return new Promise((resolve, reject) => {
-    const listener = function (event: ProgressEvent) {
+    const listener = async function (event: ProgressEvent) {
       reader.removeEventListener('loadend', listener)
 
       const { error, result } = reader
@@ -14,7 +14,7 @@ export function waitFileReaderResult<T extends string | ArrayBuffer>(
       if (error) {
         reject(error.message)
       } else {
-        resolve(result as T)
+        resolve((await result) as T)
       }
     }
 
@@ -45,6 +45,15 @@ export function readBlobAsDataUrl_(
   return waitFileReaderResult(reader)
 }
 
+export function readBlobAsArrayBuffer_(
+  reader: FileReader,
+  blob: Blob | File
+): Promise<ArrayBuffer> {
+  reader.readAsArrayBuffer(blob)
+
+  return waitFileReaderResult(reader)
+}
+
 export function readBlobAsText_(
   reader: FileReader,
   blob: Blob | File
@@ -58,12 +67,16 @@ export function wrapFileReader(reader: FileReader, system: System): FR & $ {
   const reader_ = new (class FileReader_ extends $ implements FR {
     __: string[] = ['FR']
 
-    readAsText(file: File | Blob): Promise<string> {
-      return readBlobAsText_(reader, file)
+    readAsText(blob: File | Blob): Promise<string> {
+      return readBlobAsText_(reader, blob)
     }
 
     readAsDataUrl(blob: Blob): Promise<string> {
       return readBlobAsDataUrl_(reader, blob)
+    }
+
+    readAsArrayBuffer(blob: File | Blob): Promise<ArrayBuffer> {
+      return readBlobAsArrayBuffer_(reader, blob)
     }
   })(system)
 
