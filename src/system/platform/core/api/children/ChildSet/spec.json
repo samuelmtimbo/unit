@@ -14,7 +14,11 @@
         "position": {
           "0": {
             "x": -97,
-            "y": 39
+            "y": 39,
+            "ext": {
+              "x": -112,
+              "y": 88
+            }
           }
         }
       },
@@ -31,12 +35,17 @@
         "position": {
           "0": {
             "x": -102,
-            "y": -31
+            "y": -31,
+            "ext": {
+              "x": -133,
+              "y": 30
+            }
           }
         }
       },
       "type": "number",
-      "ref": false
+      "ref": false,
+      "functional": true
     },
     "name": {
       "plug": {
@@ -49,30 +58,40 @@
         "position": {
           "0": {
             "x": 96,
-            "y": 39
+            "y": 39,
+            "ext": {
+              "x": 133,
+              "y": 43
+            }
           }
         }
       },
       "type": "string",
-      "ref": false
+      "ref": false,
+      "functional": true
     },
     "data": {
       "plug": {
         "0": {
-          "unitId": "writeinput",
-          "pinId": "data"
+          "unitId": "plan",
+          "pinId": "a",
+          "kind": "input"
         }
       },
       "metadata": {
         "position": {
           "0": {
             "x": 101,
-            "y": -31
+            "y": -31,
+            "ext": {
+              "x": -44,
+              "y": -88
+            }
           }
         }
       },
-      "type": "any",
-      "ref": false
+      "ref": false,
+      "functional": true
     }
   },
   "outputs": {},
@@ -83,61 +102,104 @@
         "parent": {
           "metadata": {
             "position": {
-              "x": -77,
-              "y": 19
+              "x": -99,
+              "y": 68
             }
           }
         },
         "at": {
           "metadata": {
             "position": {
-              "x": -79,
-              "y": -16
+              "x": -109,
+              "y": 33
             }
           }
         },
         "done": {}
       },
       "output": {
-        "child": {}
+        "child": {
+          "metadata": {
+            "position": {
+              "x": 3,
+              "y": 45
+            }
+          }
+        }
       },
       "metadata": {
         "position": {
-          "x": -53,
-          "y": -1
+          "x": -58,
+          "y": 40
         }
       }
     },
     "writeinput": {
       "id": "04953fed-157a-479d-91ac-005174b9b85e",
       "input": {
-        "name": {},
+        "name": {
+          "metadata": {
+            "position": {
+              "x": 110,
+              "y": 37
+            }
+          }
+        },
         "data": {},
         "unit": {}
       },
       "output": {
         "data": {
-          "ignored": false
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 107,
+              "y": 11
+            }
+          }
         }
       },
       "metadata": {
         "position": {
-          "x": 52,
-          "y": 0
+          "x": 61,
+          "y": 32
+        }
+      }
+    },
+    "plan": {
+      "id": "36329d25-218d-48a5-a06c-1e0525da504f",
+      "input": {
+        "a": {
+          "metadata": {
+            "position": {
+              "x": -35,
+              "y": -65
+            }
+          }
+        }
+      },
+      "output": {
+        "0": {},
+        "1": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 1,
+          "y": -33
         }
       }
     }
   },
   "merges": {
     "0": {
-      "writeinput": {
+      "plan": {
         "output": {
-          "data": true
+          "0": true
         }
       },
-      "child": {
+      "writeinput": {
         "input": {
-          "done": true
+          "data": true
         }
       }
     },
@@ -152,18 +214,33 @@
           "child": true
         }
       }
+    },
+    "2": {
+      "plan": {
+        "output": {
+          "1": true
+        }
+      },
+      "child": {
+        "input": {
+          "done": true
+        }
+      }
     }
   },
   "component": {},
   "metadata": {
     "icon": "triangle",
     "description": "set `element` child `at` `name` to `data`",
-    "complexity": 13,
     "position": {
       "merge": {
         "0": {
-          "x": -1,
-          "y": -26
+          "x": 46,
+          "y": -12
+        },
+        "2": {
+          "x": -38,
+          "y": -3
         }
       }
     },
