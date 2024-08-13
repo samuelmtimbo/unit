@@ -29,6 +29,7 @@ import {
   isComponentSpec,
   isEmptySpec,
   isSystemSpec,
+  isSystemSpecId,
   newMergeIdInSpec,
   newSpecId,
   newUnitId,
@@ -345,10 +346,7 @@ import { PinDropMomentData } from '../../../../../debug/PinDropMoment'
 import { GraphBulkEditMomentData } from '../../../../../debug/graph/watchGraphBulkEditEvent'
 import { GraphExposePinEventData } from '../../../../../debug/graph/watchGraphExposedPinEvent'
 import { GraphExposedPinSetMomentData } from '../../../../../debug/graph/watchGraphExposedPinSetEvent'
-import {
-  GraphForkMoment,
-  GraphForkMomentData,
-} from '../../../../../debug/graph/watchGraphForkEvent'
+import { GraphForkMomentData } from '../../../../../debug/graph/watchGraphForkEvent'
 import { GraphMergeMomentData } from '../../../../../debug/graph/watchGraphMergeEvent'
 import { GraphMetadataMomentData } from '../../../../../debug/graph/watchGraphMetadataEvent'
 import { GraphMoveSubComponentRootMomentData } from '../../../../../debug/graph/watchGraphMoveSubComponentRoot'
@@ -981,9 +979,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           specs,
           registry: this._registry,
           typeCache: this._type_cache,
-          syncFile: this._sync_file,
-          startSync: this._start_sync,
-          stopSync: this._stop_sync,
           hasSpec: this._has_spec,
           emptySpec: this._empty_spec,
           getSpec: this._get_spec,
@@ -1007,7 +1002,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       makeCustomListener('data_removed', ({ datumId, specId }) => {
         const { specs } = this._registry
 
-        if (this._spec_id_to_file_name[specId]) {
+        if (isSystemSpecId(specs, specId)) {
           // console.log('data_removed', { datumId, specId })
 
           const spec = clone(specs[specId]) as GraphSpec
@@ -1020,7 +1015,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       makeCustomListener('data_added', ({ datumId, specId, value }) => {
         const { specs } = this._registry
 
-        if (this._spec_id_to_file_name[specId]) {
+        if (isSystemSpecId(specs, specId)) {
           // console.log('data_added', { datumId, specId, value })
 
           const spec = clone(specs[specId]) as GraphSpec
@@ -1111,66 +1106,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.dispatchEvent(type, detail, bubbles)
   }
 
-  private _listen_registry = () => {
-    this._unlisten_registry = this._registry.specs_.subscribe(
-      [],
-      '*',
-      async (type, path, key, data) => {
-        const { specs } = this._registry
-
-        const specId = key
-        const spec = data
-
-        if (path.length === 0) {
-          if (type === 'set') {
-            this._sync_spec_file(specId, spec, specs)
-          } else if (type === 'delete') {
-            //
-          }
-        }
-      }
-    )
-  }
-
-  private _sync_spec_file = debounce(
-    this.$system,
-    async (specId: string, spec: GraphSpec, specs: Specs) => {
-      // console.log('_sync_spec_file', specId, spec)
-
-      const fileName = this._spec_id_to_file_name[specId]
-
-      if (fileName) {
-        const fileHandle = this._file_handles[fileName]
-        const bundle = this._file_to_bundle[fileName]
-
-        let spec_: GraphSpec
-
-        if (bundle.spec.id === specId) {
-          spec_ = spec
-        } else {
-          spec_ = bundle.spec
-        }
-
-        this._editor.set_spec_node_positions_rec(
-          this._editor,
-          this._editor.get_spec(),
-          weakMerge(specs, bundle.specs ?? {})
-        )
-
-        const bundle_ = bundleSpec(spec_, specs)
-
-        this._file_to_bundle[fileName] = bundle_
-
-        for (const spec_id in bundle_.specs) {
-          this._spec_id_to_file_name[spec_id] = fileName
-        }
-
-        await saveToUnitFile(this.$system, fileHandle, bundle_)
-      }
-    },
-    1
-  )
-
   onDestroy() {
     super.onDestroy()
 
@@ -1212,58 +1147,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   private _new_spec_id = () => {
     return this._registry.newSpecId()
-  }
-
-  private _file_to_bundle: Dict<BundleSpec> = {}
-  private _file_handles: Dict<FileSystemFileHandle> = {}
-  private _spec_id_to_file_name: Dict<string> = {}
-  private _file_sync_count: number = 0
-  private _file_sync_disabled: boolean = false
-
-  private _sync_file = (
-    fileName: string,
-    fileHandle: FileSystemFileHandle,
-    bundle: BundleSpec
-  ) => {
-    // console.log('Editor', '_sync_file', fileName, fileHandle, bundle)
-
-    this._file_sync_count++
-
-    if (this._file_sync_count === 1) {
-      this._listen_registry()
-    }
-
-    this._file_to_bundle[fileName] = bundle
-    this._file_handles[fileName] = fileHandle
-    this._spec_id_to_file_name[bundle.spec.id] = fileName
-
-    for (const spec_id in bundle.specs) {
-      this._spec_id_to_file_name[spec_id] = fileName
-    }
-  }
-
-  private _start_sync = () => {
-    if (!this._file_sync_disabled) {
-      return
-    }
-
-    this._file_sync_disabled = false
-
-    this._listen_registry()
-  }
-
-  private _stop_sync = () => {
-    if (this._file_sync_disabled) {
-      return
-    }
-
-    this._file_sync_disabled = true
-
-    if (this._unlisten_registry) {
-      this._unlisten_registry()
-
-      this._unlisten_registry = undefined
-    }
   }
 
   private _has_spec = (id: string): boolean => {
@@ -1350,53 +1233,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     const { graph } = this.$props
 
     this._pod = graph
-
-    if (this._pod) {
-      this._pod.$watchGraph(
-        { events: ['fork'] },
-        (moment: GraphForkMoment & { data: { unitId: string } }) => {
-          const { specs } = this._registry
-
-          const {
-            data: { unitId, specId, spec, path },
-          } = moment
-
-          const full_path = [unitId, ...path]
-          const parent_path = butLast(full_path)
-          const forked_unit_id = last(full_path)
-
-          const editor_spec = this._editor.get_spec()
-
-          const parent_spec = clone(
-            findSpecAtPath(specs, editor_spec, parent_path)
-          )
-
-          const file_name = this._spec_id_to_file_name[specId]
-
-          if (file_name) {
-            const bundle = this._file_to_bundle[file_name]
-
-            if (bundle.spec.id === parent_spec.id) {
-              deepSet(bundle.spec, ['units', forked_unit_id, 'id'], spec.id)
-            } else if (bundle.specs[parent_spec.id]) {
-              deepSet(
-                bundle.specs,
-                [parent_spec.id, 'units', forked_unit_id, 'id'],
-                spec.id
-              )
-            }
-
-            deepSet(parent_spec, ['units', forked_unit_id, 'id'], spec.id)
-
-            bundle.specs[spec.id] = spec
-
-            this._spec_id_to_file_name[spec.id] = file_name
-
-            this._registry.setSpec(parent_spec.id, parent_spec)
-          }
-        }
-      )
-    }
   }
 
   private _reset_frame = (): void => {
@@ -1623,9 +1459,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         unregisterUnit: this._unregister_unit,
         newSpecId: this._new_spec_id,
         dispatchEvent: this._dispatch_event,
-        syncFile: this._sync_file,
-        stopSync: this._stop_sync,
-        startSync: this._start_sync,
         typeCache: this._type_cache,
       },
       this.$system
@@ -1838,13 +1671,6 @@ export interface _Props extends R {
   typeCache?: TypeTreeInterfaceCache
   config?: Config
   dispatchEvent: (type: string, detail: any, bubbles: boolean) => void
-  syncFile: (
-    fileName: string,
-    fileHandle: FileSystemFileHandle,
-    bundle: BundleSpec
-  ) => void
-  stopSync: () => void
-  startSync: () => void
 }
 
 export interface DefaultProps {
@@ -3645,20 +3471,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     dirHandle: FileSystemDirectoryHandle,
     folderName: string = '/'
   ) => {
-    const { syncFile } = this.$props
-
     const file_to_bundle: Dict<{
       handle: FileSystemFileHandle
       bundle: BundleSpec
     }> = {}
 
     await this.__paste_folder(dirHandle, folderName, file_to_bundle)
-
-    for (const absoluteFileName in file_to_bundle) {
-      const { handle, bundle } = file_to_bundle[absoluteFileName]
-
-      syncFile(absoluteFileName, handle, bundle)
-    }
   }
 
   private __paste_folder = async (
@@ -4580,13 +4398,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_register_spec', spec_id, deep)
 
-    const { stopSync, startSync } = this.$props
-
-    stopSync()
-
     this.__register_spec(this._registry, spec_id, deep, branch)
-
-    startSync()
   }
 
   private __register_spec = (
@@ -28895,9 +28707,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       unregisterUnit,
       newSpecId,
       dispatchEvent,
-      syncFile,
-      startSync,
-      stopSync,
       typeCache,
     } = this.$props
 
@@ -28947,9 +28756,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           unregisterUnit,
           newSpecId,
           dispatchEvent,
-          syncFile,
-          stopSync,
-          startSync,
         },
         this.$system
       )
@@ -30306,9 +30112,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       unregisterUnit,
       newSpecId,
       dispatchEvent,
-      syncFile,
-      stopSync,
-      startSync,
     } = this.$props
 
     const { datumId } = segmentDatumNodeId(datum_node_id)
@@ -30383,9 +30186,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }, {}) as R),
           dispatchEvent,
-          syncFile,
-          startSync,
-          stopSync,
         },
         this.$system
       )
