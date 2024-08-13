@@ -35,12 +35,13 @@ export default class Fetch extends Functional<I, O> {
       api: {
         http: { fetch },
       },
+      cache: { servers },
     } = this.__system
 
     const i = ++this._fetch_index
 
     try {
-      fetch(url, opt)
+      fetch(url, opt, servers)
         .then((response) => {
           if (i !== this._fetch_index) {
             // request is outdated
