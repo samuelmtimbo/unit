@@ -35,7 +35,7 @@ export interface System extends S, R {
     dragAndDrop: Dict<any>
     pointerCapture: Dict<any>
     spriteSheetMap: Dict<boolean>
-    serverMap: Dict<any>
+    servers: Dict<any>
   }
   feature: Dict<boolean>
   foreground: {

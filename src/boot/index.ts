@@ -51,7 +51,7 @@ export function boot(
     dragAndDrop: {},
     pointerCapture: {},
     spriteSheetMap: {},
-    serverMap: {},
+    servers: {},
   }
 
   const feature = {}

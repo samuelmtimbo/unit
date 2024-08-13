@@ -39,18 +39,23 @@ export default class Server extends Holder<I, O> {
       api: {
         http: { listen },
       },
+      cache: { servers },
     } = this.__system
 
     try {
-      this._unlisten = listen(port, async (req: BasicHTTPRequest) => {
-        this._output.req.push(req)
+      this._unlisten = listen(
+        port,
+        async (req: BasicHTTPRequest) => {
+          this._output.req.push(req)
 
-        const res = await this._waiter.once()
+          const res = await this._waiter.once()
 
-        this._waiter.clear()
+          this._waiter.clear()
 
-        return res
-      })
+          return res
+        },
+        servers
+      )
     } catch (err) {
       done(undefined, err.message)
 

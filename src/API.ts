@@ -65,8 +65,16 @@ export type API = {
   }
   db: IDBFactory
   http: {
-    fetch: (url: string, opt: RequestInit) => Promise<Response>
-    listen: (port: number, handler: BasicHTTPHandler) => Unlisten
+    fetch: (
+      url: string,
+      opt: RequestInit,
+      servers?: Dict<any>
+    ) => Promise<Response>
+    listen: (
+      port: number,
+      handler: BasicHTTPHandler,
+      servers?: Dict<any>
+    ) => Unlisten
     EventSource: typeof EventSource
   }
   channel: { local: (opt: ChannelOpt) => Channel }

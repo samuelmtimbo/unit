@@ -1,15 +1,10 @@
-import { System } from '../../../../system'
+import { Dict } from '../../../../types/Dict'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export function __intercept__fetch(
-  system: System,
   fetch: (input: string, init?: RequestInit) => Promise<Response>
 ) {
-  return async (input: string, init?: RequestInit) => {
-    const {
-      cache: { serverMap },
-    } = system
-
+  return async (input: string, init: RequestInit, servers: Dict<any>) => {
     if (input.startsWith('unit://')) {
       let _input = input.replace('unit://', 'http://')
 
@@ -17,7 +12,7 @@ export function __intercept__fetch(
 
       const { port, search } = url
 
-      const handler = serverMap[port || 8080]
+      const handler = servers[port || 8080]
 
       if (!handler) {
         throw new Error('failed to fetch')
@@ -45,24 +40,23 @@ export function __intercept__fetch(
 }
 
 export function __intercept__listen(
-  system: System,
   listen: (port: number, handler: (req) => Promise<any>) => Unlisten
 ) {
-  return (port: number, handler: (req) => Promise<any>): Unlisten => {
-    const {
-      cache: { serverMap },
-    } = system
-
-    if (serverMap[port]) {
+  return (
+    port: number,
+    handler: (req) => Promise<any>,
+    servers: Dict<any>
+  ): Unlisten => {
+    if (servers[port]) {
       throw new Error(`port ${port} is already in use`)
     }
 
-    serverMap[port] = handler
+    servers[port] = handler
 
     const unlisten = listen(port, handler)
 
     return () => {
-      delete serverMap[port]
+      delete servers[port]
 
       unlisten()
     }
