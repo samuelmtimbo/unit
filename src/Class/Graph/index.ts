@@ -1,4 +1,5 @@
 import { $ } from '../$'
+import { ObjectUpdateType } from '../../ObjectUpdateType'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { Pins } from '../../Pins'
@@ -30,8 +31,10 @@ import {
 import { GRAPH_DEFAULT_EVENTS } from '../../constant/GRAPH_DEFAULT_EVENTS'
 import { SELF } from '../../constant/SELF'
 import deepGet from '../../deepGet'
+import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
 import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
 import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
+import { ReadOnlyError } from '../../exception/ObjectReadOnly'
 import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
 import {
   makeAddMergeAction,
@@ -127,6 +130,7 @@ import { Unlisten } from '../../types/Unlisten'
 import { AnimationSpec, C, C_EE, ComponentSetup } from '../../types/interface/C'
 import { ComponentEvents, Component_ } from '../../types/interface/Component'
 import { G, G_EE, G_MoveSubgraphIntoArgs } from '../../types/interface/G'
+import { J } from '../../types/interface/J'
 import { U, U_EE } from '../../types/interface/U'
 import { forEach, insert, remove } from '../../util/array'
 import { callAll } from '../../util/call/callAll'
@@ -193,9 +197,9 @@ export type GraphEvents = UnitEvents<Graph_EE> & Graph_EE
 
 export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   extends Primitive<I, O, GraphEvents>
-  implements G<I, O>, C, U<I, O>
+  implements G<I, O>, C, U<I, O>, J<Dict<any>>
 {
-  __ = ['U', 'C', 'G', 'EE']
+  __ = ['U', 'C', 'G', 'EE', 'J']
 
   private _element: boolean = false
 
@@ -309,6 +313,65 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this.addListener('destroy', this._destroy)
     this.addListener('take_err', this._takeErr)
     this.addListener('take_caught_err', this._takeErr)
+  }
+
+  async get<K extends string>(name: K): Promise<any> {
+    const unitId = name
+
+    return this.getUnit(unitId)
+  }
+
+  set<K extends string>(name: K, data: any): Promise<void> {
+    throw new ReadOnlyError('graph')
+  }
+
+  delete<K extends string>(name: K): Promise<void> {
+    throw new ReadOnlyError('graph')
+  }
+
+  async hasKey<K extends string>(name: K): Promise<boolean> {
+    return !!this._unit[name]
+  }
+
+  async keys(): Promise<string[]> {
+    return keys(this._unit)
+  }
+
+  async deepGet(path: string[]): Promise<any> {
+    if (path.length === 0) {
+      return this
+    }
+
+    const [unitId, ...rest] = path
+
+    const unit = this.getUnit(unitId)
+
+    if (unit instanceof Graph) {
+      return unit.deepGet(rest)
+    }
+
+    return
+  }
+
+  deepSet(path: string[], data: any): Promise<void> {
+    throw new ReadOnlyError('graph')
+  }
+
+  deepDelete(path: string[]): Promise<void> {
+    throw new ReadOnlyError('graph')
+  }
+
+  subscribe(
+    path: string[],
+    key: string,
+    listener: (
+      type: ObjectUpdateType,
+      path: string[],
+      key: string,
+      data: any
+    ) => void
+  ): Unlisten {
+    throw new CodePathNotImplementedError()
   }
 
   private _onPinSetRenamed = <
