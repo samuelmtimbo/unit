@@ -1,18 +1,18 @@
-import { Functional } from '../../../../Class/Functional'
-import { Done } from '../../../../Class/Functional/Done'
-import { bundleSpec } from '../../../../bundle'
-import { getSpec, newSpecId } from '../../../../client/spec'
-import { fromBundle } from '../../../../spec/fromBundle'
-import { applyUnitDefaultIgnored } from '../../../../spec/fromSpec'
-import { addUnit } from '../../../../spec/reducers/spec_'
-import { System } from '../../../../system'
-import { GraphBundle } from '../../../../types/GraphClass'
-import { GraphSpec } from '../../../../types/GraphSpec'
-import { GraphUnitSpec } from '../../../../types/GraphUnitSpec'
-import { UnitBundle } from '../../../../types/UnitBundle'
-import { clone } from '../../../../util/object'
-import { weakMerge } from '../../../../weakMerge'
-import { ID_ADD_UNIT_0 } from '../../../_ids'
+import { Functional } from '../../../../../Class/Functional'
+import { Done } from '../../../../../Class/Functional/Done'
+import { bundleSpec } from '../../../../../bundle'
+import { getSpec, newSpecId } from '../../../../../client/spec'
+import { fromBundle } from '../../../../../spec/fromBundle'
+import { applyUnitDefaultIgnored } from '../../../../../spec/fromSpec'
+import { addUnit } from '../../../../../spec/reducers/spec_'
+import { System } from '../../../../../system'
+import { GraphBundle } from '../../../../../types/GraphClass'
+import { GraphSpec } from '../../../../../types/GraphSpec'
+import { GraphUnitSpec } from '../../../../../types/GraphUnitSpec'
+import { UnitBundle } from '../../../../../types/UnitBundle'
+import { clone } from '../../../../../util/object'
+import { weakMerge } from '../../../../../weakMerge'
+import { ID_ADD_UNIT_0 } from '../../../../_ids'
 
 export interface I<T> {
   id: string
@@ -38,7 +38,7 @@ export default class AddUnit0<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ id, class: Class, graph }: I<T>, done: Done<O<T>>): void {
-    let new_graph
+    let new_graph: GraphBundle
 
     try {
       const { __bundle } = Class

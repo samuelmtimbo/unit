@@ -2,7 +2,8 @@ import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { applyUnitDefaultIgnored } from '../../../../spec/fromSpec'
 import { System } from '../../../../system'
-import { G } from '../../../../types/interface/G'
+import { $G } from '../../../../types/interface/async/$G'
+import { Async } from '../../../../types/interface/async/Async'
 import { UnitBundle } from '../../../../types/UnitBundle'
 import { clone } from '../../../../util/object'
 import { weakMerge } from '../../../../weakMerge'
@@ -11,7 +12,7 @@ import { ID_ADD_UNIT } from '../../../_ids'
 export interface I<T> {
   id: string
   class: UnitBundle<any>
-  graph: G
+  graph: $G
 }
 
 export interface O<T> {}
@@ -36,6 +37,8 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ id, class: Class, graph }: I<T>, done: Done<O<T>>): void {
+    graph = Async(graph, ['G'])
+
     try {
       const { __bundle } = Class
       const { id: __id, input: __inputs = {} } = __bundle.unit
@@ -46,7 +49,7 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
 
       applyUnitDefaultIgnored(bundle.unit, specs)
 
-      graph.addUnitSpec(id, bundle)
+      graph.$addUnit({ unitId: id, bundle })
     } catch (err) {
       done(undefined, err.message)
 
