@@ -45,19 +45,6 @@ export const CLASS_TYPE_ARRAY_BUFFER = 'AB' // ArrayBuffer
 export const CLASS_TYPE_TEXT_ENCODER = 'TE' // TextEncoder
 export const CLASS_TYPE_TEXT_DECODER = 'TD' // TextDecoder
 
-export const INHERITANCE = {
-  U: ['EE'],
-  G: ['U'],
-  C: ['U'],
-  V: ['EE'],
-  CH: ['EE'],
-  IB: ['I'],
-  W: ['EE', 'CH'],
-  B: ['IM', 'BO'],
-  FD: ['BO'],
-  ID: ['J'],
-}
-
 export type AllTypes<T> = {
   B: T
   IB: T

@@ -1,5 +1,5 @@
 import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
-import { INHERITANCE } from '../interface'
+import { INHERITANCE } from '../inheritance'
 import { keys } from '../system/f/object/Keys/f'
 import { PinsSpecBase, Specs } from '../types'
 import { Dict } from '../types/Dict'

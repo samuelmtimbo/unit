@@ -8,7 +8,7 @@ import { $Graph } from '../../types/interface/async/$Graph'
 import { callAll } from '../../util/call/callAll'
 import { Component } from '../component'
 import { componentFromUnitSpec } from '../componentFromUnitSpec'
-import { getComponentInterface } from '../component_'
+import { getComponentInterface } from '../interface'
 
 export function watchGraphComponent(
   system: System,

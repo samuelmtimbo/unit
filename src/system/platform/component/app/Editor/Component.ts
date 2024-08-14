@@ -144,7 +144,6 @@ import {
   componentFromSpecId,
   componentFromUnitBundle,
 } from '../../../../../client/componentFromSpecId'
-import { getComponentInterface } from '../../../../../client/component_'
 import { Context } from '../../../../../client/context'
 import { preventContextMenu } from '../../../../../client/contextMenu'
 import debounce from '../../../../../client/debounce'
@@ -246,6 +245,7 @@ import {
   segmentPinLinkId,
   segmentPlugNodeId,
 } from '../../../../../client/id'
+import { getComponentInterface } from '../../../../../client/interface'
 import { isTextLike } from '../../../../../client/isTextLike'
 import { LayoutBase, LayoutLeaf } from '../../../../../client/layout'
 import { listenMovement } from '../../../../../client/listenMovement'

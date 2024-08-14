@@ -1,9 +1,10 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
+import { extractInterface } from '../../../../../extractInterface'
 import { System } from '../../../../../system'
+import { $_ } from '../../../../../types/interface/$_'
+import { Async } from '../../../../../types/interface/async/Async'
 import { J } from '../../../../../types/interface/J'
-import { V } from '../../../../../types/interface/V'
-import { wrapValue } from '../../../../../wrap/Value'
 import { ID_DEEP_GET_1 } from '../../../../_ids'
 
 export interface I<T> {
@@ -12,7 +13,7 @@ export interface I<T> {
 }
 
 export interface O<T> {
-  value: V
+  value: $_
 }
 
 export default class DeepGet0<T> extends Functional<I<T>, O<T>> {
@@ -50,7 +51,9 @@ export default class DeepGet0<T> extends Functional<I<T>, O<T>> {
       return
     }
 
-    const value = wrapValue(value_, this.__system)
+    const _ = extractInterface(value_)
+
+    const value = Async(value_, _)
 
     done({
       value,

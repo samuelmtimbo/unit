@@ -31,11 +31,11 @@ import { RGBA, colorToHex, hexToRgba } from './color'
 import { ANIMATION_PROPERTY_DELTA_PAIRS } from './component/app/graph/ANIMATION_PROPERTY_DELTA_PAIRS'
 import { namespaceURI } from './component/namespaceURI'
 import { componentFromSpecId } from './componentFromSpecId'
-import { getComponentInterface } from './component_'
 import { Context, dispatchContextEvent, dispatchCustomEvent } from './context'
 import { makeCustomListener } from './event/custom'
 import { readDataTransferItemAsText } from './event/drag'
 import { extractTrait } from './extractTrait'
+import { getComponentInterface } from './interface'
 import { LayoutBase, LayoutLeaf } from './layout'
 import {
   IOUIEventName,

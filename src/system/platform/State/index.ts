@@ -1,5 +1,6 @@
 import { Done } from '../../../Class/Functional/Done'
 import { Holder } from '../../../Class/Holder'
+import { extractValueInterface } from '../../../extractValueInterface'
 import { SharedRef } from '../../../SharefRef'
 import { System } from '../../../system'
 import { V } from '../../../types/interface/V'
@@ -10,22 +11,6 @@ import { wrapSharedRefArrayInterface } from '../../../wrap/Array'
 import { wrapSharedRef } from '../../../wrap/Object'
 import { wrapSharedValue } from '../../../wrap/SharedValue'
 import { ID_STATE } from '../../_ids'
-
-export function extractInterface(data: any): string {
-  if (typeof data === 'object') {
-    if (data === null) {
-      return null
-    }
-
-    if (data instanceof Array) {
-      return 'A'
-    } else {
-      return 'J'
-    }
-  }
-
-  return null
-}
 
 export interface I<T> {
   init: T
@@ -66,7 +51,7 @@ export default class State<T> extends Holder<I<T>, O<T>> {
       },
     })
 
-    const _ = extractInterface(init)
+    const _ = extractValueInterface(init)
 
     if (_) {
       switch (_) {
