@@ -1082,18 +1082,20 @@ export class Unit<
     return this._opt
   }
 
-  public reset(): void {
+  public reset(take: boolean = true): void {
     this.takeErr()
 
     const paused = this._paused
 
     !paused && this.pause()
 
-    for (const name of this._d_o_name) {
-      this.takeOutput(name)
-    }
-    for (const name of this._d_i_name) {
-      this.takeInput(name)
+    if (take) {
+      for (const name of this._d_o_name) {
+        this.takeOutput(name)
+      }
+      for (const name of this._d_i_name) {
+        this.takeInput(name)
+      }
     }
 
     this.emit('reset')

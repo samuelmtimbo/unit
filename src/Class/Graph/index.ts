@@ -2465,8 +2465,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         oppositeType,
       ])
 
-      exposedMerge.reset()
-      exposedMergeOpposite.reset()
+      exposedMerge.reset(false)
+      exposedMergeOpposite.reset(false)
     }
   }
 
@@ -4188,30 +4188,32 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
             this._specRemoveMerge(mergeId)
 
-            if (mergeInputPlug) {
-              this._specPlugPin(
-                'input',
-                mergeInputPlug.pinId,
-                mergeInputPlug.subPinId,
-                {
-                  unitId: otherMergeUnitId,
-                  pinId: otherMergeUnitPinId,
-                  kind: otherMergeUnitPinType,
-                }
-              )
-            }
+            if (otherMergeUnitId) {
+              if (mergeInputPlug) {
+                this._specPlugPin(
+                  'input',
+                  mergeInputPlug.pinId,
+                  mergeInputPlug.subPinId,
+                  {
+                    unitId: otherMergeUnitId,
+                    pinId: otherMergeUnitPinId,
+                    kind: otherMergeUnitPinType,
+                  }
+                )
+              }
 
-            if (mergeOutputPlug) {
-              this._specPlugPin(
-                'output',
-                mergeOutputPlug.pinId,
-                mergeOutputPlug.subPinId,
-                {
-                  unitId: otherMergeUnitId,
-                  pinId: otherMergeUnitPinId,
-                  kind: otherMergeUnitPinType,
-                }
-              )
+              if (mergeOutputPlug) {
+                this._specPlugPin(
+                  'output',
+                  mergeOutputPlug.pinId,
+                  mergeOutputPlug.subPinId,
+                  {
+                    unitId: otherMergeUnitId,
+                    pinId: otherMergeUnitPinId,
+                    kind: otherMergeUnitPinType,
+                  }
+                )
+              }
             }
           } else {
             this._specRemoveUnitFromMerge(unitId, mergeId)
@@ -4260,32 +4262,34 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
         this._simRemoveMerge(mergeId, take)
 
-        if (mergeInputPlug) {
-          this._simPlugPin(
-            'input',
-            mergeInputPlug.pinId,
-            mergeInputPlug.subPinId,
-            {
-              unitId: otherMergeUnitId,
-              pinId: otherMergeUnitPinId,
-              kind: otherMergeUnitPinType,
-            },
-            false
-          )
-        }
+        if (otherMergeUnitId) {
+          if (mergeInputPlug) {
+            this._simPlugPin(
+              'input',
+              mergeInputPlug.pinId,
+              mergeInputPlug.subPinId,
+              {
+                unitId: otherMergeUnitId,
+                pinId: otherMergeUnitPinId,
+                kind: otherMergeUnitPinType,
+              },
+              false
+            )
+          }
 
-        if (mergeOutputPlug) {
-          this._simPlugPin(
-            'output',
-            mergeOutputPlug.pinId,
-            mergeOutputPlug.subPinId,
-            {
-              unitId: otherMergeUnitId,
-              pinId: otherMergeUnitPinId,
-              kind: otherMergeUnitPinType,
-            },
-            false
-          )
+          if (mergeOutputPlug) {
+            this._simPlugPin(
+              'output',
+              mergeOutputPlug.pinId,
+              mergeOutputPlug.subPinId,
+              {
+                unitId: otherMergeUnitId,
+                pinId: otherMergeUnitPinId,
+                kind: otherMergeUnitPinType,
+              },
+              false
+            )
+          }
         }
       } else {
         this._simRemoveUnitFromMerge(unitId, mergeId, take)
