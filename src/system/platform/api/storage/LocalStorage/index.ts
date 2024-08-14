@@ -1,6 +1,5 @@
 import { ObjectUpdateType } from '../../../../../ObjectUpdateType'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
-import { ObjectPathTooDeepError } from '../../../../../exception/ObjectPathTooDeep'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { Unlisten } from '../../../../../types/Unlisten'
@@ -31,33 +30,7 @@ export default class _LocalStorage
       data: any
     ) => void
   ): Unlisten {
-    const { emitter } = this.__system
-
-    if (path.length > 0) {
-      throw new ObjectPathTooDeepError()
-    }
-
-    const setListener = (key_: string, data: string) => {
-      if (key === '*' || key_ === key) {
-        listener('set', path, key_, data)
-      }
-    }
-
-    const deleteListener = (key_: string, data: string) => {
-      if (key === '*' || key_ === key) {
-        listener('delete', path, key, data)
-      }
-    }
-
-    emitter.addListener('set', setListener)
-    emitter.addListener('delete', deleteListener)
-
-    const unlisten = () => {
-      emitter.removeListener('set', setListener)
-      emitter.removeListener('delete', deleteListener)
-    }
-
-    return unlisten
+    throw new Error('cannot subscribe to local storage')
   }
 
   protected _storage = () => {
