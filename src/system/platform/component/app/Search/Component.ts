@@ -1,6 +1,7 @@
 import * as fuzzy from 'fuzzy'
 import { Registry } from '../../../../../Registry'
 import classnames from '../../../../../client/classnames'
+import debounce from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeFocusInListener } from '../../../../../client/event/focus/focusin'
@@ -547,10 +548,13 @@ export default class Search extends Element<HTMLDivElement, Props> {
             const selected_item_id = this._selected_id
 
             this._refresh_ordered_list()
-            this._filter_list(true)
 
-            if (selected_item_id === specId) {
-              if (!this._list_hidden) {
+            if (this._list_hidden) {
+              this._debounced_filter_list()
+            } else {
+              this._filter_list(true)
+
+              if (selected_item_id === specId) {
                 this._select_first_list_item()
               }
             }
@@ -1030,6 +1034,14 @@ export default class Search extends Element<HTMLDivElement, Props> {
       // })
     }
   }
+
+  private _debounced_filter_list = debounce(
+    this.$system,
+    (preserve_selected: boolean = false) => {
+      this._filter_list(preserve_selected)
+    },
+    0
+  )
 
   private _filter_list = (preserve_selected: boolean = false) => {
     // console.log('Search', '_filter_list')
