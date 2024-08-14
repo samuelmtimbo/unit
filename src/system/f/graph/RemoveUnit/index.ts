@@ -1,13 +1,14 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import { cloneBundle } from '../../../../spec/cloneBundle'
+import { fromBundle } from '../../../../spec/fromBundle'
 import { System } from '../../../../system'
-import { G } from '../../../../types/interface/G'
+import { $G } from '../../../../types/interface/async/$G'
+import { Async } from '../../../../types/interface/async/Async'
 import { UnitBundle } from '../../../../types/UnitBundle'
 import { ID_REMOVE_UNIT } from '../../../_ids'
 
 export interface I<T> {
-  graph: G
+  graph: $G
   id: string
 }
 
@@ -35,14 +36,18 @@ export default class RemoveUnit<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ id, graph }: I<T>, done: Done<O<T>>): void {
+    graph = Async(graph, ['G'])
+
     let Class: UnitBundle
 
     try {
-      const unit = graph.getUnit(id)
+      const unit = graph.$refUnit({ unitId: id, _: ['U'] })
 
-      graph.removeUnit(id, true)
+      unit.$getUnitBundleSpec({}, (bundle) => {
+        graph.$removeUnit({ unitId: id })
 
-      Class = cloneBundle(unit)
+        Class = fromBundle(bundle, this.__system.specs, this.__system.classes)
+      })
     } catch (err) {
       done(undefined, err.message)
 

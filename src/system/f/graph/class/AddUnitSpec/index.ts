@@ -1,15 +1,16 @@
-import { Functional } from '../../../../Class/Functional'
-import { Done } from '../../../../Class/Functional/Done'
-import { System } from '../../../../system'
-import { GraphBundle } from '../../../../types/GraphClass'
-import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
-import { G } from '../../../../types/interface/G'
-import { ID_ADD_UNIT_SPEC } from '../../../_ids'
+import { Functional } from '../../../../../Class/Functional'
+import { Done } from '../../../../../Class/Functional/Done'
+import { System } from '../../../../../system'
+import { GraphBundle } from '../../../../../types/GraphClass'
+import { UnitBundleSpec } from '../../../../../types/UnitBundleSpec'
+import { $G } from '../../../../../types/interface/async/$G'
+import { Async } from '../../../../../types/interface/async/Async'
+import { ID_ADD_UNIT_SPEC } from '../../../../_ids'
 
 export interface I<T> {
   id: string
   unit: UnitBundleSpec
-  graph: G
+  graph: $G
 }
 
 export interface O<T> {
@@ -36,8 +37,10 @@ export default class AddUnit0<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ id, unit, graph }: I<T>, done: Done<O<T>>): void {
+    graph = Async(graph, ['G'])
+
     try {
-      graph.addUnitSpec(id, unit)
+      graph.$addUnit({ unitId: id, bundle: unit })
     } catch (err) {
       done(undefined, err.message)
 
