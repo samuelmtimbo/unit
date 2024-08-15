@@ -109,7 +109,6 @@ import {
   GraphSubPinSpec,
   GraphUnitOuterSpec,
   Spec,
-  Specs,
 } from '../../types'
 import { Action } from '../../types/Action'
 import { BundleSpec } from '../../types/BundleSpec'
@@ -255,8 +254,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   private _waitAll: IOOf<WaitAll> = {}
 
-  private _specs: Specs
-
   constructor(
     spec: GraphSpec,
     branch: Dict<true> = {},
@@ -277,11 +274,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       id ?? spec.id
     )
 
-    this._spec = clone(spec)
-
-    const specs = weakMerge(system.specs, { [id]: spec })
-
-    this._specs = specs
+    this._spec = spec
 
     const {
       inputs = {},
@@ -1070,8 +1063,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   public getBundleSpec(deep: boolean = false): BundleSpec {
-    // const { spec, specs } = bundleSpec(this._spec, this.__system.specs)
-    const { spec, specs } = bundleSpec(this._spec, this._specs)
+    const { spec, specs } = bundleSpec(this._spec, this.__system.specs)
 
     const spec_ = clone(spec)
 
@@ -1127,7 +1119,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = { id, input, output, memory }
 
-    const bundle = unitBundleSpec(unit, this._specs)
+    const bundle = unitBundleSpec(unit, this.__system.specs)
 
     return bundle
   }
@@ -3139,7 +3131,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const _unit = unitFromBundleSpec(
       this.__system,
       bundle,
-      this._specs,
+      this.__system.specs,
       this._branch
     )
 
@@ -3520,7 +3512,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const unit = unitFromBundleSpec(
       this.__system,
       unitBundle,
-      this._specs,
+      this.__system.specs,
       this._branch
     )
 
@@ -5316,9 +5308,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     spec.name = name
     ;(unit as Graph)._spec.name = name
-
-    // this.__system.setSpec(specId, spec)
-    this._specs[spec.id] = spec
 
     this._removeUnit(unitId, false) as Graph
 
