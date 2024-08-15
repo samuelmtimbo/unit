@@ -247,7 +247,7 @@ import {
 } from '../../../../../client/id'
 import { getComponentInterface } from '../../../../../client/interface'
 import { isTextLike } from '../../../../../client/isTextLike'
-import { LayoutBase, LayoutLeaf } from '../../../../../client/layout'
+import { LayoutBase } from '../../../../../client/layout'
 import { listenMovement } from '../../../../../client/listenMovement'
 import { Mode } from '../../../../../client/mode'
 import { _pinTypeMatch } from '../../../../../client/parser'
@@ -30913,28 +30913,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const all_trait: Dict<LayoutNode> = {}
 
-    const frame_trait = extractTrait(this._frame, measureText)
-
-    const leaf_to_style = (leaf: LayoutLeaf) => {
-      const [leaf_path, leaf_comp] = leaf
-
-      const leaf_id = joinPath(leaf_path)
-
-      const is_text = isTextLike(leaf_comp)
-
-      const cached_style = this._leaf_style[leaf_id]
-
-      if (cached_style && !is_text) {
-        return cached_style
-      } else {
-        const style = extractStyle(leaf_comp, frame_trait, measureText)
-
-        this._leaf_style[leaf_id] = style
-
-        return style
-      }
-    }
-
     const reset_all_trait = () => {
       for (const sub_component_id in all_root_base) {
         const base = all_root_base[sub_component_id]
@@ -30955,7 +30933,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         )
 
         for (const leaf_id in parent_base_trait) {
-          all_trait[leaf_id] = parent_base_trait[leaf_id]
+          const leaf_trait = parent_base_trait[leaf_id]
+
+          all_trait[leaf_id] = {
+            x: (leaf_trait.x - this.$context.$x) / this.$context.$sx,
+            y: (leaf_trait.y - this.$context.$y) / this.$context.$sy,
+            width: leaf_trait.width / this.$context.$sx,
+            height: leaf_trait.height / this.$context.$sy,
+            sx: leaf_trait.sx,
+            sy: leaf_trait.sy,
+            opacity: leaf_trait.opacity,
+            fontSize: leaf_trait.fontSize,
+            color: leaf_trait.color,
+          }
         }
       }
     }
