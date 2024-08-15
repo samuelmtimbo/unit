@@ -888,6 +888,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
   private _refresh_last_list_item_border = () => {
     const filtered_total = this._filtered_id_list.length
 
+    if (!filtered_total) {
+      return
+    }
+
     const last_list_item_id = this._filtered_id_list[filtered_total - 1]
     const last_list_item_div = this._list_item_div[last_list_item_id]
 
