@@ -3699,17 +3699,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     let unit_pin_data_listener: Dict<IOOf<Dict<Function>>> = {}
 
-    const setup_unit_contant_pin = (
+    const setup_unit_constant_pin = (
       type: IO,
       pinId: string,
-      data: any,
       fork: boolean = true,
       bubble: boolean = true
     ) => {
-      if (data === undefined) {
-        return
-      }
-
       const pin = this.getUnitPin(unitId, type, pinId)
 
       fork && this._fork(undefined, true, bubble)
@@ -3737,22 +3732,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     forEach(inputs, (pinId) => {
       if (unit.isPinConstant('input', pinId)) {
-        setup_unit_contant_pin(
-          'input',
-          pinId,
-          unit.getPinData('input', pinId),
-          false
-        )
+        setup_unit_constant_pin('input', pinId, false)
       }
     })
     forEach(outputs, (pinId) => {
       if (unit.isPinConstant('output', pinId)) {
-        setup_unit_contant_pin(
-          'output',
-          pinId,
-          unit.getPinData('output', pinId),
-          false
-        )
+        setup_unit_constant_pin('output', pinId, false)
       }
     })
 
@@ -3784,7 +3769,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           const data = this.getUnitPinData(unitId, type, pinId)
 
           if (constant) {
-            setup_unit_contant_pin(type, pinId, data)
+            setup_unit_constant_pin(type, pinId, data)
           } else {
             const pin_data_unlisten = deepGetOrDefault(
               unit_pin_data_listener,

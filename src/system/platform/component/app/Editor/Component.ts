@@ -28269,7 +28269,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (constant) {
             const global_ref = this._unit_ref_pin_global_ref[pin_node_id]
 
-            this._watch_constant_input_ref(unitId, type, pinId, global_ref)
+            this._watch_constant_ref_pin(unitId, type, pinId, global_ref)
           } else {
             this._unwatch_constant_input_ref(unitId, type, pinId)
           }
@@ -56929,7 +56929,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _constant_input_ref_unlisten: Dict<Dict<Unlisten>> = {}
   private _constant_input_ref_interval: Dict<Dict<number>> = {}
 
-  private _watch_constant_input_ref = (
+  private _watch_constant_ref_pin = (
     unit_id: string,
     type: 'input',
     pin_id: string,
@@ -57460,6 +57460,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _unit_ref_pin_global_ref: Dict<GlobalRefSpec> = {}
 
+  private _should_watch_ref_pin = (
+    pin_node_id: string,
+    unitId: string,
+    type: IO,
+    pinId: string
+  ): boolean => {
+    return (
+      this._is_input_pin_node_id(pin_node_id) &&
+      this._is_link_pin_ref(pin_node_id) &&
+      this._spec_is_link_pin_constant(unitId, type, pinId)
+    )
+  }
+
   private _on_graph_unit_ref_link_pin_data_moment = (
     _data: GraphUnitPinDataMomentData
   ) => {
@@ -57473,13 +57486,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._unit_ref_pin_global_ref[pin_node_id] = _data.data
 
-    if (
-      this._is_input_pin_node_id(pin_node_id) &&
-      this._spec_is_link_pin_constant(unitId, type, pinId)
-    ) {
+    if (this._should_watch_ref_pin(pin_node_id, unitId, type, pinId)) {
       this._tick_constant_input_ref(unitId, pinId, _data.data)
 
-      this._watch_constant_input_ref(unitId, 'input', pinId, _data.data)
+      this._watch_constant_ref_pin(unitId, 'input', pinId, _data.data)
     }
 
     if (this._pin_to_datum[pin_node_id]) {
@@ -57786,7 +57796,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_node_id: string,
     tree: TreeNode
   ): void => {
-    // console.log('Graph', '_graph_debug_set_pin_data', pin_node_id, data)
+    // console.log('Graph', '_graph_debug_set_pin_data', pin_node_id, tree)
 
     const { parent } = this.$props
 
