@@ -7,7 +7,7 @@ export const emptyBundleSpec = (
 ): BundleSpec =>
   deepMerge(
     {
-      spec: emptyGraphSpec(),
+      spec: emptyGraphSpec(partial.spec),
       specs: {},
     },
     partial

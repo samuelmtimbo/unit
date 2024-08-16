@@ -2153,7 +2153,7 @@ export class Component<
   }
 
   protected domCommitAppendChild(component: Component, at: number) {
-    this._domCommitChild__template(component, at, appendChild)
+    this._domCommitChild__template(component, at, insertAt)
   }
 
   protected domCommitInsertChild(component: Component, at: number) {
