@@ -1,5 +1,5 @@
 import { System } from '../../../system'
-import isEqual from '../../../system/f/comparisson/Equals/f'
+import isEqual from '../../../system/f/comparison/Equals/f'
 import { keys } from '../../../system/f/object/Keys/f'
 import { Dict } from '../../../types/Dict'
 import { randomIdNotIn } from '../../../util/id'

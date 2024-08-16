@@ -30,7 +30,7 @@ import {
 import _classes from '../../system/_classes'
 import { ID_IDENTITY } from '../../system/_ids'
 import _specs from '../../system/_specs'
-import isEqual from '../../system/f/comparisson/Equals/f'
+import isEqual from '../../system/f/comparison/Equals/f'
 import { system } from '../util/system'
 
 const CUSTOM_GRAPH_UNIT_STR =

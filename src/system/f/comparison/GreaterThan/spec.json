@@ -1,5 +1,5 @@
 {
-  "name": "less than equal",
+  "name": "greater than",
   "inputs": {
     "a": {
       "type": "number"
@@ -9,17 +9,17 @@
     }
   },
   "outputs": {
-    "a ≤ b": {
+    "a > b": {
       "type": "boolean"
     }
   },
   "metadata": {
-    "icon": "less-than-equal",
-    "description": "less than or equal to operator",
+    "icon": "greater-than",
+    "description": "greater than operator",
     "complexity": 3,
-    "tags": ["f", "comparisson"]
+    "tags": ["f", "comparison"]
   },
-  "id": "e13f3090-62a6-4a3b-8401-c571cbf03526",
+  "id": "1651ce6b-4db0-4787-9edf-f770b72d253c",
   "base": true,
   "type": "`U`",
   "system": true

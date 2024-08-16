@@ -728,8 +728,8 @@ assert.deepEqual(
   {
     name: 'if a ≤ b',
     units: {
-      lessthanequal: { id: 'system/f/comparisson/LessThanEqual' },
-      greaterthan: { id: 'system/f/comparisson/GreaterThan' },
+      lessthanequal: { id: 'system/f/comparison/LessThanEqual' },
+      greaterthan: { id: 'system/f/comparison/GreaterThan' },
       if0: { id: 'system/f/control/If' },
       if1: { id: 'system/f/control/If' },
     },
@@ -763,8 +763,8 @@ assert.deepEqual(
     {
       name: 'if a ≤ b',
       units: {
-        lessthanequal: { id: 'system/f/comparisson/LessThanEqual' },
-        greaterthan: { id: 'system/f/comparisson/GreaterThan' },
+        lessthanequal: { id: 'system/f/comparison/LessThanEqual' },
+        greaterthan: { id: 'system/f/comparison/GreaterThan' },
         if0: { id: 'system/f/control/If' },
         if1: { id: 'system/f/control/If' },
       },
@@ -798,8 +798,8 @@ assert.deepEqual(
   {
     name: 'if else a ≤ b',
     units: {
-      lessthanequal: { id: 'system/f/comparisson/LessThanEqual' },
-      greaterthan: { id: 'system/f/comparisson/GreaterThan' },
+      lessthanequal: { id: 'system/f/comparison/LessThanEqual' },
+      greaterthan: { id: 'system/f/comparison/GreaterThan' },
       if0: { id: 'system/f/control/If' },
       if1: { id: 'system/f/control/If' },
     },
@@ -857,8 +857,8 @@ assert.deepEqual(
     {
       name: 'if else a ≤ b',
       units: {
-        lessthanequal: { id: 'system/f/comparisson/LessThanEqual' },
-        greaterthan: { id: 'system/f/comparisson/GreaterThan' },
+        lessthanequal: { id: 'system/f/comparison/LessThanEqual' },
+        greaterthan: { id: 'system/f/comparison/GreaterThan' },
         if0: { id: 'system/f/control/If' },
         if1: { id: 'system/f/control/If' },
       },
@@ -971,7 +971,7 @@ assert.deepEqual(
   {
     name: 'range',
     units: {
-      lte: { id: 'system/f/comparisson/LessThan' },
+      lte: { id: 'system/f/comparison/LessThan' },
       increment: { id: 'core/common/Increment' },
       if0: { id: 'system/f/control/If' },
       if1: { id: 'system/f/control/If' },
@@ -1013,7 +1013,7 @@ assert.deepEqual(
     {
       name: 'range',
       units: {
-        lte: { id: 'system/f/comparisson/LessThan' },
+        lte: { id: 'system/f/comparison/LessThan' },
         increment: { id: 'core/common/Increment' },
         if0: { id: 'system/f/control/If' },
         if1: { id: 'system/f/control/If' },
@@ -1256,8 +1256,8 @@ assert.deepEqual(
   {
     name: 'if a ≤ b',
     units: {
-      lessthanequal: { id: 'system/f/comparisson/LessThanEqual' },
-      greaterthan: { id: 'system/f/comparisson/GreaterThan' },
+      lessthanequal: { id: 'system/f/comparison/LessThanEqual' },
+      greaterthan: { id: 'system/f/comparison/GreaterThan' },
       if0: { id: 'system/f/control/If' },
       if1: { id: 'system/f/control/If' },
     },
@@ -1281,8 +1281,8 @@ assert.deepEqual(
     {
       name: 'if a ≤ b',
       units: {
-        lessthanequal: { id: 'system/f/comparisson/LessThanEqual' },
-        greaterthan: { id: 'system/f/comparisson/GreaterThan' },
+        lessthanequal: { id: 'system/f/comparison/LessThanEqual' },
+        greaterthan: { id: 'system/f/comparison/GreaterThan' },
         if0: { id: 'system/f/control/If' },
         if1: { id: 'system/f/control/If' },
       },
