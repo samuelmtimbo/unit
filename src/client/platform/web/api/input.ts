@@ -46,6 +46,10 @@ export function webInput(
   const pointerMoveListener = (event) => {
     const { pointerId, clientX, clientY } = event
 
+    if (!pointers[pointerId]) {
+      pointerInListener(event)
+    }
+
     pointers[pointerId].screenX = clientX
     pointers[pointerId].screenY = clientY
   }
