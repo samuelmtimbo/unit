@@ -13,7 +13,6 @@ import {
   GraphExposeUnitPinSetData,
   GraphMoveSubComponentRootData,
   GraphMoveSubGraphIntoData,
-  GraphMoveUnitData,
   GraphPlugPinData,
   GraphRemoveMergeData,
   GraphRemoveMergeDataData,
@@ -41,7 +40,6 @@ import { Dict } from '../../Dict'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { $Component } from './$Component'
-import { $Graph } from './$Graph'
 import { $U } from './$U'
 
 export const G_METHOD_CALL_GET = [
@@ -122,7 +120,6 @@ export interface $G_C {
   $addUnit(data: GraphAddUnitData): void
   $cloneUnit(data: GraphCloneUnitData): void
   $removeUnit(data: GraphRemoveUnitData): void
-  $moveUnit(data: GraphMoveUnitData): void
   $exposePinSet(data: GraphExposePinSetData): void
   $coverPinSet(data: GraphCoverPinSetData): void
   $exposePin(data: GraphExposePinData): void
@@ -218,7 +215,6 @@ export interface $G_W {
 }
 
 export interface $G_R {
-  $compose(data: { id: string; unitId: string; _: string[] }): $Graph
   $refSubComponent(data: { unitId: string; _: string[] }): $Component
   $refUnit(data: { unitId: string; _: string[] }): $U
 }

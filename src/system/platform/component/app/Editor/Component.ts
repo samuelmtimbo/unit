@@ -1275,17 +1275,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     const id = newSpecId(specs)
 
-    const unit_id = 'untitled'
-
     const editor_unit_id = 'editor'
 
     const fullwindow = this._editor.isFullwindow()
-
-    const next_graph = this._pod.$compose({
-      id,
-      unitId: unit_id,
-      _: ['U', 'C', 'G'],
-    })
+    const editor_bundle = this._editor.getUnitBundle()
 
     const GRAPH_WIDTH = 300
     const GRAPH_HEIGHT = 300
@@ -1311,7 +1304,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     const width = _width + PADDING
     const height = _height + PADDING
 
-    const unit_spec = {
+    const editor_unit_spec = {
       id: ID_EDITOR,
       input: {
         controls: {
@@ -1332,6 +1325,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         },
         graph: {
           constant: true,
+          data: {
+            ref: [[]],
+            data: editor_bundle,
+          },
           ignored: false,
         },
       },
@@ -1343,29 +1340,33 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       },
     }
 
-    next_graph.$addUnit({
-      unitId: editor_unit_id,
-      bundle: {
-        unit: unit_spec,
-      },
-    })
-
-    next_graph.$moveUnit({
-      id: unit_id,
-      unitId: editor_unit_id,
-      inputId: 'graph',
-    })
-
-    const spec = emptySpec()
+    const spec = emptySpec({ id })
 
     spec.units = spec.units || {}
-    spec.units[editor_unit_id] = unit_spec
+    spec.units[editor_unit_id] = editor_unit_spec
     spec.component = {
       subComponents: {
         [editor_unit_id]: {},
       },
       children: [editor_unit_id],
     }
+
+    const bundle = {
+      unit: {
+        id,
+      },
+      specs: {
+        [id]: spec,
+      },
+    }
+
+    this._editor._prevent_next_reset = true
+
+    this.$unit.$setPinData({
+      type: 'input',
+      pinId: 'graph',
+      data: `$${stringify(bundle)}`,
+    })
 
     this._unlisten_graph()
     this._unlisten_transcend()
@@ -1425,16 +1426,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     const component = new Parent({}, this.$system)
 
-    // this.disconnect()
-
-    // unit_editor.connect(this.$unit)
-
     component.setSubComponent(editor_unit_id, unit_editor)
     component.pushRoot(unit_editor)
 
     this._component = component
-
-    this._pod = next_graph
 
     const style = this.getProp('style')
 

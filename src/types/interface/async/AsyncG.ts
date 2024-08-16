@@ -14,7 +14,6 @@ import {
   GraphExposeUnitPinSetData,
   GraphMoveSubComponentRootData,
   GraphMoveSubGraphIntoData,
-  GraphMoveUnitData,
   GraphPlugPinData,
   GraphRemoveMergeData,
   GraphRemoveMergeDataData,
@@ -35,7 +34,6 @@ import {
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
 import { Unit } from '../../../Class/Unit'
-import { emptySpec } from '../../../client/spec'
 import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
 import { watchGraph } from '../../../debug/graph/watchGraph'
@@ -49,7 +47,7 @@ import {
   stringifyUnitBundleSpecData,
 } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
-import { clone, isEmptyObject } from '../../../util/object'
+import { clone } from '../../../util/object'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
@@ -60,7 +58,6 @@ import { Unlisten } from '../../Unlisten'
 import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
 import { $Component } from './$Component'
 import { $G, $G_C, $G_R, $G_W } from './$G'
-import { $Graph } from './$Graph'
 import { $U } from './$U'
 import { Async } from './Async'
 
@@ -159,16 +156,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       bubble = true,
     }: GraphCloneUnitData): void {
       call('cloneUnit', fork, bubble, unitId, newUnitId)
-    },
-
-    $moveUnit({
-      id,
-      unitId,
-      inputId,
-      fork = true,
-      bubble = true,
-    }: GraphMoveUnitData): void {
-      call('moveUnit', fork, bubble, id, unitId, inputId)
     },
 
     $removeUnit({
@@ -791,46 +778,6 @@ export const AsyncGWatch = (graph: Graph): $G_W => {
 
 export const AsyncGRef = (graph: Graph): $G_R => {
   return {
-    $compose({
-      id,
-      unitId,
-      _,
-    }: {
-      id: string
-      unitId: string
-      _: string[]
-    }): $Graph {
-      const system = graph.refSystem()
-      const spec = graph.getSpec()
-
-      if (system.hasSpec(id)) {
-        throw new Error(`spec with id '${id}' already exists`)
-      }
-
-      const render =
-        spec.component && !isEmptyObject(spec.component.subComponents || {})
-
-      if (render) {
-        graph.setElement()
-      } else {
-        graph.setNotElement()
-      }
-
-      const parentSpec = emptySpec({ id })
-
-      system.setSpec(id, parentSpec)
-
-      const parent = new Graph(parentSpec, {}, system)
-
-      parent.addUnit(unitId, graph, undefined, false)
-
-      parent.play()
-
-      const $parent = Async(parent, _)
-
-      return proxyWrap($parent, _)
-    },
-
     $refUnit({ unitId, _ }: { unitId: string; _: string[] }): $U {
       const unit = graph.getUnit(unitId)
 
