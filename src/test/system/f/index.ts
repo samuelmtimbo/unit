@@ -1,7 +1,7 @@
 import './arithmetic'
 import './array'
 import './bitwise'
-import './comparisson'
+import './comparison'
 import './control'
 import './data'
 import './math'

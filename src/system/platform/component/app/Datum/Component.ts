@@ -21,7 +21,7 @@ import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { _keyUpdateTree } from '../../../../../util/keyUpdateTree'
-import isEqual from '../../../../f/comparisson/Equals/f'
+import isEqual from '../../../../f/comparison/Equals/f'
 import DataTree from '../DataTree/Component'
 
 export interface Props {
