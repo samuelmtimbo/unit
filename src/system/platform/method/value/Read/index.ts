@@ -5,8 +5,8 @@ import { V } from '../../../../../types/interface/V'
 import { ID_READ } from '../../../../_ids'
 
 export interface I<T> {
-  value: V
-  any: string
+  value: V<T>
+  any: any
 }
 
 export interface O<T> {

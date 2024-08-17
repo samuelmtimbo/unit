@@ -1,23 +1,24 @@
+import { $ } from '../../../../../Class/$'
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { System } from '../../../../../system'
 import { V } from '../../../../../types/interface/V'
-import { ID_WRITE } from '../../../../_ids'
+import { ID_READ_0 } from '../../../../_ids'
 
 export interface I<T> {
   value: V<T>
-  data: T
+  any: any
 }
 
 export interface O<T> {
-  data: T
+  data: T & $
 }
 
-export default class Write<T> extends Functional<I<T>, O<T>> {
+export default class Read0<T> extends Functional<I<T>, O<T>> {
   constructor(system: System) {
     super(
       {
-        i: ['value', 'data'],
+        i: ['value', 'any'],
         o: ['data'],
       },
       {
@@ -26,18 +27,28 @@ export default class Write<T> extends Functional<I<T>, O<T>> {
             ref: true,
           },
         },
+        output: {
+          data: {
+            ref: true,
+          },
+        },
       },
       system,
-      ID_WRITE
+      ID_READ_0
     )
   }
 
-  async f({ value, data }: I<T>, done: Done<O<T>>) {
+  async f({ value, any }: I<T>, done: Done<O<T>>) {
+    let data: any
+
     try {
-      await value.write(data)
-      done({ data })
+      data = await value.read()
     } catch (err) {
       done(undefined, err.message)
+
+      return
     }
+
+    done({ data })
   }
 }
