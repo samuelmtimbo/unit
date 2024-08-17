@@ -8,7 +8,7 @@ export type Gamepad_J = {
 
 export const GAMEPAD_BUTTON_COUNT = 16
 export const GAMEPAD_AXIS_COUNT = 4
-export const GAMEPAD_DEFAULT_TRESHOLD = 0.001
+export const GAMEPAD_DEFAULT_THRESHOLD = 0.001
 
 export class Gamepad_ extends EventEmitter_ {
   public system: System
@@ -71,7 +71,7 @@ export class Gamepad_ extends EventEmitter_ {
     this.state.axes = axes
 
     for (let i = 0; i < GAMEPAD_AXIS_COUNT; i++) {
-      if (Math.abs(axes[i] - prevAxes[i]) >= GAMEPAD_DEFAULT_TRESHOLD) {
+      if (Math.abs(axes[i] - prevAxes[i]) >= GAMEPAD_DEFAULT_THRESHOLD) {
         this.emit('axischange', [i, axes[i]])
       }
     }

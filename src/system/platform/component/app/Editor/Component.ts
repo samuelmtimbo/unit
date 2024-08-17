@@ -130,7 +130,7 @@ import {
   UNIT_MIN_RADIUS,
   getSpecRadius,
 } from '../../../../../client/complexity'
-import { ANIMATION_DELTA_TRESHOLD } from '../../../../../client/component/app/graph/ANIMATION_DELTA_TRESHOLD'
+import { ANIMATION_DELTA_THRESHOLD } from '../../../../../client/component/app/graph/ANIMATION_DELTA_THRESHOLD'
 import { joinPath } from '../../../../../client/component/app/graph/joinLeafPath'
 import {
   MAX_HEIGHT as DATUM_MAX_HEIGHT,
@@ -7703,7 +7703,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    const ff = [['height', ANIMATION_DELTA_TRESHOLD]] as [string, number][]
+    const ff = [['height', ANIMATION_DELTA_THRESHOLD]] as [string, number][]
 
     this._abort_layout_layer_height_animation[layer_id] =
       this._animate_simulate(
@@ -19263,15 +19263,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       n0,
       n1,
       [
-        ['x', ANIMATION_DELTA_TRESHOLD],
-        ['y', ANIMATION_DELTA_TRESHOLD],
-        ['width', ANIMATION_DELTA_TRESHOLD],
-        ['height', ANIMATION_DELTA_TRESHOLD],
-        ['sx', ANIMATION_DELTA_TRESHOLD / 100],
-        ['sy', ANIMATION_DELTA_TRESHOLD / 100],
-        ['opacity', ANIMATION_DELTA_TRESHOLD / 100],
-        ['fontSize', ANIMATION_DELTA_TRESHOLD / 10],
-        ['color', ANIMATION_DELTA_TRESHOLD / 100],
+        ['x', ANIMATION_DELTA_THRESHOLD],
+        ['y', ANIMATION_DELTA_THRESHOLD],
+        ['width', ANIMATION_DELTA_THRESHOLD],
+        ['height', ANIMATION_DELTA_THRESHOLD],
+        ['sx', ANIMATION_DELTA_THRESHOLD / 100],
+        ['sy', ANIMATION_DELTA_THRESHOLD / 100],
+        ['opacity', ANIMATION_DELTA_THRESHOLD / 100],
+        ['fontSize', ANIMATION_DELTA_THRESHOLD / 10],
+        ['color', ANIMATION_DELTA_THRESHOLD / 100],
       ],
       tick,
       callback
@@ -31465,15 +31465,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       leaf_node,
       trait,
       [
-        ['x', ANIMATION_DELTA_TRESHOLD],
-        ['y', ANIMATION_DELTA_TRESHOLD],
-        ['width', ANIMATION_DELTA_TRESHOLD],
-        ['height', ANIMATION_DELTA_TRESHOLD],
-        ['fontSize', ANIMATION_DELTA_TRESHOLD / 10],
-        ['opacity', ANIMATION_DELTA_TRESHOLD / 100],
-        ['sx', ANIMATION_DELTA_TRESHOLD / 10],
-        ['sy', ANIMATION_DELTA_TRESHOLD / 10],
-        ['color', ANIMATION_DELTA_TRESHOLD / 100],
+        ['x', ANIMATION_DELTA_THRESHOLD],
+        ['y', ANIMATION_DELTA_THRESHOLD],
+        ['width', ANIMATION_DELTA_THRESHOLD],
+        ['height', ANIMATION_DELTA_THRESHOLD],
+        ['fontSize', ANIMATION_DELTA_THRESHOLD / 10],
+        ['opacity', ANIMATION_DELTA_THRESHOLD / 100],
+        ['sx', ANIMATION_DELTA_THRESHOLD / 10],
+        ['sy', ANIMATION_DELTA_THRESHOLD / 10],
+        ['color', ANIMATION_DELTA_THRESHOLD / 100],
       ],
       (n) => {
         this._animate_leaf_frame_tick(leaf_id, n, include_scroll)
@@ -34203,7 +34203,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       visible_anchor_node_ids,
       () => ({ opacity: 0 }),
       () => ({ opacity: 1 }),
-      [['opacity', ANIMATION_DELTA_TRESHOLD]],
+      [['opacity', ANIMATION_DELTA_THRESHOLD]],
       (node_id, { opacity }) => {
         set_opacity(node_id, opacity)
       },
@@ -54045,8 +54045,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       n0,
       n1,
       [
-        ['x', ANIMATION_DELTA_TRESHOLD / 10],
-        ['y', ANIMATION_DELTA_TRESHOLD / 10],
+        ['x', ANIMATION_DELTA_THRESHOLD / 10],
+        ['y', ANIMATION_DELTA_THRESHOLD / 10],
       ],
       ({ x, y }) => {
         if (this._pointer_down_count === 0) {
