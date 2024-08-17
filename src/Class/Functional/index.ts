@@ -157,6 +157,8 @@ export class Functional<
     }
   }
 
+  private _signal: Symbol
+
   private _forward_if_ready() {
     // console.log('Functional', '_forward_if_ready')
     while (
@@ -174,7 +176,17 @@ export class Functional<
         this._forwarding_empty = false
       }
 
-      this.f(this._i, this._done)
+      this._signal = Symbol()
+
+      const signal = this._signal
+
+      this.f(this._i, (...args) => {
+        if (signal !== this._signal) {
+          return
+        }
+
+        this._done(...args)
+      })
     }
   }
 
