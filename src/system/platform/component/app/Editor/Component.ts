@@ -41551,6 +41551,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _get_subgraph_count = (): number => {
+    return keyCount(this._subgraph_to_node)
+  }
+
   private _drag_move = (node_id: string, event: UnitPointerEvent): void => {
     // console.log('_drag_move', node_id)
 
@@ -41582,7 +41586,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      if (!config?.disable.edgeDrag && !prevent_edge_drag) {
+      if (
+        !config?.disable.edgeDrag &&
+        !prevent_edge_drag &&
+        this._get_subgraph_count() > 1
+      ) {
         const {
           x0: overflow_x0,
           y0: overflow_y0,
