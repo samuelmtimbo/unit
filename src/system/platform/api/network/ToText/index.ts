@@ -28,7 +28,15 @@ export default class ToText extends Functional<I, O> {
   }
 
   async f({ res }: I, done: Done<O>) {
-    const text = await res.toText()
+    let text: string
+
+    try {
+      text = await res.toText()
+    } catch (err) {
+      done(undefined, err.message.toString())
+
+      return
+    }
 
     done({ text })
   }

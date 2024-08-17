@@ -34,6 +34,7 @@ export default class IndexOf<T> extends Functional<I<T>, O<T>> {
 
   async f({ 'a[]': _a, a }: I<T>, done: Done<O<T>>): Promise<void> {
     const i = await _a.indexOf(a)
+
     done({
       i,
     })

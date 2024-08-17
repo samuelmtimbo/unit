@@ -54,13 +54,15 @@ export default class ImportJwkKey extends Functional<I, O> {
 
     let algorithm_ = algorithm.raw() as AlgorithmIdentifier
 
-    const key_ = await importKey(
-      'jwk',
-      data,
-      algorithm_,
-      extractable,
-      keyUsages
-    )
+    let key_: CryptoKey
+
+    try {
+      key_ = await importKey('jwk', data, algorithm_, extractable, keyUsages)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
 
     const key = wrapCryptoKey(key_, this.__system)
 

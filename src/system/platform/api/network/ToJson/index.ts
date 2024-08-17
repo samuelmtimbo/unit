@@ -27,8 +27,16 @@ export default class ToJson extends Functional<I, O> {
     )
   }
 
-  async f({ res }: I, done: Done<O>) {
-    const json = await res.toJson()
+  async f({ res }: I, done: Done<O>): Promise<void> {
+    let json: any
+
+    try {
+      json = await res.toJson()
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
 
     done({ json })
   }

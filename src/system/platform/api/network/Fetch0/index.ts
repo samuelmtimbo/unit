@@ -58,8 +58,6 @@ export default class Fetch0 extends Holder<I, O> {
     try {
       response = await fetch(url, opt)
     } catch (err) {
-      // console.log(err)
-
       done(undefined, 'malformed')
 
       return

@@ -3,8 +3,10 @@ import { $MS, $MS_C, $MS_R, $MS_W } from './$MS'
 
 export const AsyncMSCall = (stream: MS): $MS_C => {
   return {
-    $get(data: {}, callback) {
-      return stream.mediaStream(callback)
+    async $get(data: {}, callback) {
+      const mediaStream = await stream.mediaStream()
+
+      callback(mediaStream)
     },
   }
 }

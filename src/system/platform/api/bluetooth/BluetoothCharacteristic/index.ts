@@ -28,7 +28,7 @@ export default class BluetoothCharacteristic_ extends Functional<
   O,
   BluetoothCharacteristicEvents
 > {
-  private _charac: BluetoothCharacteristic
+  private _characteristic: BluetoothCharacteristic
 
   constructor(system: System) {
     super(
@@ -65,20 +65,34 @@ export default class BluetoothCharacteristic_ extends Functional<
   }
 
   async f({ service, uuid }, done: Done<O>): Promise<void> {
-    const _charac = await service.getCharacteristic(uuid)
+    let characteristic: any
 
-    this._charac = _charac
+    try {
+      characteristic = await service.getCharacteristic(uuid)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
+
+    this._characteristic = characteristic
 
     const charac = new (class _BluetoothDevice extends $ implements BC {
+      __ = ['BC']
+
       async read(): Promise<any> {
-        const dataView = await _charac.readValue()
+        const dataView = await characteristic.readValue()
+
         return dataView.getUint8(0).toString()
       }
 
       async write(data: any): Promise<void> {
         const charCodeArray = data.split('').map((c) => c.charCodeAt(0))
+
         const buffer = Uint8Array.from(charCodeArray)
-        await _charac.writeValue(buffer)
+
+        await characteristic.writeValue(buffer)
+
         return
       }
     })(this.__system)
@@ -89,7 +103,7 @@ export default class BluetoothCharacteristic_ extends Functional<
   d() {
     this.stopNotification()
 
-    this._charac = undefined
+    this._characteristic = undefined
   }
 
   private _started: boolean = false
@@ -99,7 +113,7 @@ export default class BluetoothCharacteristic_ extends Functional<
       return
     }
 
-    const characteristic = this._charac
+    const characteristic = this._characteristic
 
     this._started = true
 
@@ -124,6 +138,6 @@ export default class BluetoothCharacteristic_ extends Functional<
 
     this._started = false
 
-    this._charac.stopNotifications()
+    this._characteristic.stopNotifications()
   }
 }

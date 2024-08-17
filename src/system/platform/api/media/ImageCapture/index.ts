@@ -77,8 +77,4 @@ export default class ImageCapture_ extends Holder<I, O> {
 
     done({ camera })
   }
-
-  d() {
-    //
-  }
 }

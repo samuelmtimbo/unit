@@ -7,7 +7,7 @@ import { wrapImageBitmap } from '../../../../../wrap/ImageBitmap'
 import { ID_GRAB_FRAME } from '../../../../_ids'
 
 export type I = {
-  init: any
+  opt: {}
   camera: IC
   done: any
 }
@@ -20,10 +20,10 @@ export default class GrabFrame extends Holder<I, O> {
   constructor(system: System) {
     super(
       {
-        fi: ['camera'],
-        fo: [],
-        i: ['init'],
-        o: ['image'],
+        fi: ['camera', 'opt'],
+        fo: ['image'],
+        i: [],
+        o: [],
       },
       {
         input: {
@@ -45,46 +45,28 @@ export default class GrabFrame extends Holder<I, O> {
       if (this._err_flag) {
         this._err_flag = false
 
-        this._input.init.pull()
+        this._input.opt.pull()
       }
     })
   }
 
   private _err_flag = false
 
-  async f({ camera }: I, done: Done<O>) {
-    this._forward_if_ready()
-  }
+  async f({ camera, opt }: I, done: Done<O>) {
+    let _image: ImageBitmap
 
-  d() {}
+    try {
+      _image = await this._i.camera.grabFrame()
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
 
-  private _forward_if_ready = async () => {
-    if (this._input.camera.active() && this._input.init.active()) {
-      let _image: ImageBitmap
+      this._err_flag = true
 
-      try {
-        _image = await this._i.camera.grabFrame()
-      } catch (err) {
-        this.err(err.message.toLowerCase())
-
-        this._err_flag = true
-
-        return
-      }
-
-      const image = wrapImageBitmap(_image, this.__system)
-
-      this._output.image.push(image)
-
-      this._input.init.pull()
+      return
     }
-  }
 
-  async onIterDataInputData(name: keyof I, data: any): Promise<void> {
-    super.onIterDataInputData(name, data)
+    const image = wrapImageBitmap(_image, this.__system)
 
-    if (name === 'init') {
-      this._forward_if_ready()
-    }
+    done({ image })
   }
 }

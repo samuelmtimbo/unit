@@ -43,7 +43,15 @@ export default class BluetoothServer extends Functional implements BS {
   }
 
   async f({ device }: I, done: Done<O>): Promise<void> {
-    const _server = await device.getServer()
+    let _server: any
+
+    try {
+      _server = await device.getServer()
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
 
     const server = new (class _BluetoothDevice extends $ implements BS {
       getPrimaryService(name: string): Promise<BluetoothService> {

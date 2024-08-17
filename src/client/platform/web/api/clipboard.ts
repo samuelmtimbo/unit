@@ -18,7 +18,7 @@ export function webClipboard(window: Window, opt: BootOpt): API['clipboard'] {
   const readText = async () => {
     if (navigator.clipboard && navigator.clipboard.readText) {
       const text = await navigator.clipboard.readText()
-      
+
       return text
     }
 

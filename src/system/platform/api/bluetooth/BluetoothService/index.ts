@@ -41,7 +41,15 @@ export default class BluetoothService extends Functional<I, O> {
   }
 
   async f({ server, uuid }: I, done: Done<O>): Promise<void> {
-    const _service = await server.getPrimaryService(uuid)
+    let _service: any
+
+    try {
+      _service = await server.getPrimaryService(uuid)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
 
     const service = new (class _BluetoothDevice extends $ implements BSE {
       getCharacteristic(name: string): Promise<BluetoothCharacteristic> {

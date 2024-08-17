@@ -50,22 +50,22 @@ export default class _MediaRecorder extends Holder<I, O> {
     )
   }
 
-  f({ opt, stream }: I, done: Done<O>): void {
-    stream.mediaStream((_stream: MediaStream): void => {
-      try {
-        this._media_recorder = new MediaRecorder(_stream, opt)
-      } catch (err) {
-        done(undefined, err.message.toLowerCase())
+  async f({ opt, stream }: I, done: Done<O>): Promise<void> {
+    const _stream: MediaStream = await stream.mediaStream()
 
-        return
-      }
+    try {
+      this._media_recorder = new MediaRecorder(_stream, opt)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
 
-      const start = this._input.start.peak()
+      return
+    }
 
-      if (start !== undefined) {
-        this._start_recorder()
-      }
-    })
+    const start = this._input.start.peak()
+
+    if (start !== undefined) {
+      this._start_recorder()
+    }
   }
 
   private _listen = () => {
