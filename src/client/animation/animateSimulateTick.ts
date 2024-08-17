@@ -11,11 +11,11 @@ export const animateSimulateTick = <T extends Dict<AnimatableValue>>(
 ): boolean => {
   let ended = true
 
-  for (const [prop, treshold] of ff) {
+  for (const [prop, threshold] of ff) {
     const tickProp = (n0: Dict<number>, n: Dict<number>, prop: string) => {
       const dp = n[prop] - n0[prop]
 
-      if (Math.abs(dp) > treshold) {
+      if (Math.abs(dp) > threshold) {
         ended = false
 
         n0[prop] += dp / ANIMATION_C
