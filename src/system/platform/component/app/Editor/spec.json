@@ -43,7 +43,8 @@
     "graph": {
       "type": "`G`",
       "ref": true,
-      "defaultIgnored": true
+      "defaultIgnored": true,
+      "icon": "graph"
     }
   },
   "metadata": {
