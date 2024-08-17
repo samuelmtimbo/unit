@@ -2179,7 +2179,7 @@ export class Component<
 
     if (this.isParent()) {
       if (this.$slotParent) {
-        const index = this.$slotParent.$mountParentChildren.indexOf(this)
+        let index = this.$slotParent.$mountParentChildren.indexOf(this)
 
         this.$slotParent._domCommitChild__template(
           component,
@@ -2559,8 +2559,10 @@ export class Component<
       }
     } else {
       if (!component.$primitive) {
+        let j = 0
+
         for (const root of component.$mountRoot) {
-          this.domAppendParentChildAt(root, slotName, at, at)
+          this.domAppendParentChildAt(root, slotName, at + j, at + j)
 
           if (!root.$primitive) {
             let i = 0
@@ -2571,6 +2573,8 @@ export class Component<
               i++
             }
           }
+
+          j++
         }
       } else {
         this.domCommitAppendChild(component, at)
