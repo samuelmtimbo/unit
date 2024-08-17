@@ -18395,10 +18395,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._cabinet.setActive('minimap', !this._minimap_hidden)
         }
 
-        if (this._pallete_hidden === undefined) {
-          this._pallete_hidden = !this._cabinet.isActive('color')
+        if (this._palette_hidden === undefined) {
+          this._palette_hidden = !this._cabinet.isActive('color')
         } else {
-          this._cabinet.setActive('color', !this._pallete_hidden)
+          this._cabinet.setActive('color', !this._palette_hidden)
         }
       }
     }
@@ -18409,7 +18409,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (drawer_id === 'minimap') {
       this._minimap_hidden = false
     } else if (drawer_id === 'color') {
-      this._pallete_hidden = false
+      this._palette_hidden = false
     }
   }
 
@@ -18418,7 +18418,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (drawer_id === 'minimap') {
       this._minimap_hidden = true
     } else if (drawer_id === 'color') {
-      this._pallete_hidden = true
+      this._palette_hidden = true
     }
   }
 
@@ -44628,9 +44628,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _pallete_hidden: boolean
+  private _palette_hidden: boolean
 
-  private _toggle_pallete = (): void => {
+  private _toggle_palette = (): void => {
     // TODO
   }
 
@@ -52857,7 +52857,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_ctrl_p_keydown = (key: string): void => {
-    this._toggle_pallete()
+    this._toggle_palette()
   }
 
   private _force_finish_last_action: Unlisten
