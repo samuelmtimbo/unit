@@ -17,7 +17,7 @@
 | ------------------------------------------------- | ------------------- |
 | <kbd>Ctrl</kbd>\* + <kbd>L</kbd>                  | Toggle Layout       |
 | <kbd>Ctrl</kbd>\* + <kbd>M</kbd>                  | Toggle Map          |
-| <kbd>Ctrl</kbd>\* + <kbd>P</kbd>                  | Toggle Pallete      |
+| <kbd>Ctrl</kbd>\* + <kbd>P</kbd>                  | Toggle Palette      |
 | <kbd>Ctrl</kbd>\* + <kbd>A</kbd>                  | Toggle Select All   |
 | <kbd>Ctrl</kbd>\* + <kbd>;</kbd>                  | Toggle Search       |
 | <kbd>Ctrl</kbd>\* + <kbd>\</kbd>                  | Toggle Microphone   |

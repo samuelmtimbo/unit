@@ -59,7 +59,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
   public _cabinet: Cabinet
   public _minimap: Minimap
   public _color_picker: Color
-  public _color_pallete: Div
+  public _color_palette: Div
   public _share: Div
   public _import: IconButton
   public _folder: IconButton
@@ -204,10 +204,10 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     )
     this._color_picker = color_picker
 
-    const color_pallete = new Div(
+    const color_palette = new Div(
       {
         style: {
-          className: 'gui-color-pallete',
+          className: 'gui-color-palette',
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
@@ -215,9 +215,9 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
-    color_pallete.appendChild(color_theme)
-    color_pallete.appendChild(color_picker)
-    this._color_pallete = color_pallete
+    color_palette.appendChild(color_theme)
+    color_palette.appendChild(color_picker)
+    this._color_palette = color_palette
 
     const folder_button = new IconButton(
       {
@@ -610,7 +610,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         color: {
           icon: 'palette',
           title: 'color',
-          component: this._color_pallete,
+          component: this._color_palette,
           active: false,
           width: 60,
           height: 72,
