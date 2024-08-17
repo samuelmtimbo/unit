@@ -10460,9 +10460,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const ext_node_id = getExtNodeId(type, pinId, sub_pin_id)
 
-      const { unitId, mergeId } = sub_pin_spec
+      const { unitId, mergeId, kind = type } = sub_pin_spec
 
-      if (unitId || mergeId) {
+      if (mergeId || (unitId && kind === type)) {
         const anchor_node_id = getSubPinSpecNodeId(type, sub_pin_spec)
 
         let sub_pin_type: TreeNode
@@ -48952,11 +48952,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     forIOObjKV(
       plugs,
-      (
-        type,
-        pin_id,
-        { kind = type, pinId, subPinId, position, type: type_ }
-      ) => {
+      (type, pin_id, { kind, pinId, subPinId, position, type: type_ }) => {
         position = position ?? this._jiggle_world_screen_center()
 
         const next_pin_id = deepGetOrDefault(
@@ -48965,13 +48961,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           pin_id
         )
 
-        const ext_pin_id = getExtNodeId(type, pinId, subPinId)
+        const ext_pin_id = getExtNodeId(type_, pinId, subPinId)
 
         if (this._collapse_init_node_id_set.has(ext_pin_id)) {
           if (this._has_node(ext_pin_id)) {
             //
           } else {
-            target.plugPin(type, pinId, subPinId, {
+            target.plugPin(type_, pinId, subPinId, {
               unitId: next_unit_id,
               pinId: pin_id,
               kind,

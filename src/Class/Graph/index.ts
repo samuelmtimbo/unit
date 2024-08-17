@@ -808,7 +808,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void => {
     const subPin = this.getUnitPin(unitId, kind, pinId_)
 
-    deepSet(this._pinToPlug, [unitId, type, pinId_], { pinId, subPinId, kind })
+    deepSet(this._pinToPlug, [unitId, kind, pinId_], { pinId, subPinId, kind })
 
     this._memSetExposedSubPin(type, pinId, subPinId, subPin)
   }
@@ -2378,20 +2378,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       kind = type,
     } = subPinSpec
 
-    const isInput = type === 'input'
-    const isOutput = type === 'output'
+    const input = type === 'input'
+    const output = type === 'output'
 
     const pin = this.getPin(type, pinId)
-    const isRef = this.hasRefPinNamed(type, pinId)
     const active = pin.active()
 
-    if (isOutput) {
-      if (_mergeId) {
+    if (_mergeId) {
+      if (output) {
         this._simRemoveMergeOutput(_mergeId, propagate)
       }
-    }
 
-    if (_mergeId) {
       this._simUnplugPinFromMerge(type, pinId, subPinId, _mergeId, propagate)
 
       if (propagate) {
@@ -2401,7 +2398,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           this._removeUnitPinData(unitId, 'input', pinId)
         })
 
-        if (isInput && active) {
+        if (input && active) {
           const outputPlugs = findMergePlugOfType(
             this._spec,
             'output',
@@ -2418,7 +2415,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     } else if (_unitId && _pinId) {
       const unit = this.getUnit(_unitId)
 
-      const isUnitPinRef = unit.isPinRef(type, _pinId)
+      const refPin = unit.isPinRef(kind, _pinId)
+
+      const inputPin = kind === 'input'
+      const outputPin = kind === 'output'
 
       this._simUnplugPinFromUnitPin(
         type,
@@ -2430,35 +2430,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         propagate
       )
 
-      if (isUnitPinRef) {
-        if (isOutput) {
+      if (outputPin) {
+        if (refPin) {
           pin.take()
-        } else {
-          if (propagate) {
-            unit.takePin(type, _pinId)
-          }
+        }
+      } else {
+        if (propagate || inputPin) {
+          unit.takePin(kind, _pinId)
         }
       }
-
-      if (propagate) {
-        if (type === 'input') {
-          unit.takeInput(_pinId)
-        }
-      }
-    }
-
-    if (isRef) {
-      const oppositeType = opposite(type)
-
-      const exposedMerge = deepGet(this._exposedMerge, [type, pinId, type])
-      const exposedMergeOpposite = deepGet(this._exposedMerge, [
-        type,
-        pinId,
-        oppositeType,
-      ])
-
-      exposedMerge.reset(false)
-      exposedMergeOpposite.reset(false)
     }
   }
 
@@ -5052,7 +5032,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     if (
       take ||
       isSelfPin(type, pinId) ||
-      this.isUnitRefPin(unitId, 'input', pinId)
+      this.isUnitRefPin(unitId, type, pinId)
     ) {
       const pin = this._pin[pinNodeId]
 
