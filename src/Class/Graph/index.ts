@@ -339,11 +339,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = this.getUnit(unitId)
 
-    if (unit instanceof Graph) {
+    if (rest.length > 0) {
+      if (!(unit instanceof Graph)) {
+        throw new Error('deep unit is not a graph')
+      }
+
       return unit.deepGet(rest)
     }
 
-    return
+    return unit
   }
 
   deepSet(path: string[], data: any): Promise<void> {
