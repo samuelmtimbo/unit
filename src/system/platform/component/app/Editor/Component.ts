@@ -30126,8 +30126,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const spec = getSpec(bundle.unit.id)
 
-      this.__register_spec(this.$system, bundle.unit.id)
-
       if (isBaseSpec(spec)) {
         return
       }
