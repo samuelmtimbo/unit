@@ -120,7 +120,7 @@ function _bundleUnit(
     }
   }
 
-  const _spec = getSpec(specs, id) as GraphSpec
+  const _spec = getSpec(weakMerge(specs, custom), id) as GraphSpec
 
   if (!custom[id] && !isSystemSpecId(specs, id)) {
     custom[id] = _spec
