@@ -199,7 +199,11 @@ assert.equal(loop.take('current'), 1)
 assert.equal(loop.peak('current'), undefined)
 loop.push('next', 1)
 assert.equal(loop.take('current'), 1)
-assert.equal(loop.peak('current'), undefined, 'current should not be overridden')
+assert.equal(
+  loop.peak('current'),
+  undefined,
+  'current should not be overridden'
+)
 loop.push('next', 1)
 assert.equal(loop.peakInput('next'), undefined)
 loop.setOutputIgnored('local', false)

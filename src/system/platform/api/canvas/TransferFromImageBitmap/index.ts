@@ -38,7 +38,13 @@ export default class TransferFromImageBitmap<T> extends Functional<I<T>, O<T>> {
   async f({ canvas, bitmap, init }: I<T>, done: Done<O<T>>): Promise<void> {
     const imageBitmap = await bitmap.imageBitmap()
 
-    await canvas.transferFromImageBitmap(imageBitmap)
+    try {
+      await canvas.transferFromImageBitmap(imageBitmap)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
 
     done()
   }

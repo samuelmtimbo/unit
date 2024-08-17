@@ -47,7 +47,15 @@ export default class RequestPictureInPicture extends Holder<I, O> {
 
     await this._exit_picture_in_picture_promise
 
-    const element = await media.requestPictureInPicture()
+    let element: HTMLVideoElement
+
+    try {
+      element = await media.requestPictureInPicture()
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
 
     if (pictureInPictureElement === element) {
       done(undefined, 'media is already displayed picture in picture')

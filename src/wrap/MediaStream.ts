@@ -1,9 +1,6 @@
 import { $ } from '../Class/$'
-import { NOOP } from '../NOOP'
 import { System } from '../system'
-import { Callback } from '../types/Callback'
 import { MS } from '../types/interface/MS'
-import { Unlisten } from '../types/Unlisten'
 
 export function wrapMediaStream(
   mediaStream: MediaStream,
@@ -12,10 +9,8 @@ export function wrapMediaStream(
   const stream = new (class Stream extends $ implements MS {
     __: string[] = ['MS']
 
-    mediaStream(callback: Callback<MediaStream>): Unlisten {
-      callback(mediaStream)
-
-      return NOOP
+    async mediaStream() {
+      return mediaStream
     }
 
     async getVideoTracks(): Promise<MediaStreamTrack[]> {

@@ -120,22 +120,22 @@ export default class PeerTransmitter extends Holder<I, O> implements CH {
     }
   }
 
-  onRefInputData(name: string, unit: MS): void {
+  async onRefInputData(name: string, unit: MS): Promise<void> {
     // if (name === 'stream') {
-    unit.mediaStream((_stream: MediaStream) => {
-      if (_stream === null) {
-        if (this._stream) {
-          this._remove_stream(this._stream)
-        }
-        this._stream = null
-      } else {
-        if (this._stream) {
-          this._remove_stream(this._stream)
-        }
-        this._add_stream(_stream)
-        this._stream = _stream
+    const _stream = await unit.mediaStream()
+
+    if (_stream === null) {
+      if (this._stream) {
+        this._remove_stream(this._stream)
       }
-    })
+      this._stream = null
+    } else {
+      if (this._stream) {
+        this._remove_stream(this._stream)
+      }
+      this._add_stream(_stream)
+      this._stream = _stream
+    }
     // }
   }
 

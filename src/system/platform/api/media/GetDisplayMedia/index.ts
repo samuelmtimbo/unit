@@ -27,10 +27,6 @@ export default class GetDisplayMedia extends Functional<I, O> {
       system,
       ID_GET_DISPLAY_MEDIA
     )
-
-    this.addListener('take_err', () => {
-      // this._input.opt.pull()
-    })
   }
 
   async f({ opt }: I, done: Done<O>): Promise<void> {

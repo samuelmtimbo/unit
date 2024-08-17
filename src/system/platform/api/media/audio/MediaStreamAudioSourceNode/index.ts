@@ -50,7 +50,7 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
 
   private _destroy = () => {}
 
-  f({ node: sourceNode, stream, opt }: I, done: Done<O>) {
+  async f({ node: sourceNode, stream, opt }: I, done: Done<O>): Promise<void> {
     let _node: MediaStreamAudioSourceNode
 
     const {
@@ -71,25 +71,25 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
       context = sourceNode.getContext()
     }
 
-    stream.mediaStream((mediaStream: MediaStream) => {
-      try {
-        // @ts-ignore
-        _node = new MediaStreamAudioSourceNode(context, {
-          mediaStream,
-        })
-      } catch (err) {
-        done(undefined, err.message.toLowerCase())
+    const mediaStream = await stream.mediaStream()
 
-        return
-      }
-
-      this._node = _node
-
-      const node = wrapAudioNode(_node, this.__system)
-
-      done({
-        node,
+    try {
+      // @ts-ignore
+      _node = new MediaStreamAudioSourceNode(context, {
+        mediaStream,
       })
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
+
+    this._node = _node
+
+    const node = wrapAudioNode(_node, this.__system)
+
+    done({
+      node,
     })
   }
 

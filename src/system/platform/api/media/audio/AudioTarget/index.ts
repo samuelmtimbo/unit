@@ -1,4 +1,5 @@
 import { Functional } from '../../../../../../Class/Functional'
+import { Done } from '../../../../../../Class/Functional/Done'
 import { System } from '../../../../../../system'
 import { MS } from '../../../../../../types/interface/MS'
 import { ID_AUDIO_TARGET } from '../../../../../_ids'
@@ -39,17 +40,16 @@ export default class AudioTarget extends Functional<I, O> {
     this._audio = new Audio()
   }
 
-  async f({ stream, id }: I) {
-    stream.mediaStream((_stream) => {
-      this._audio.srcObject = _stream
-    })
+  async f({ stream, id }: I, done: Done<O>) {
+    this._audio.srcObject = await stream.mediaStream()
 
-    this._audio
-      // @ts-ignore
-      .setSinkId(id)
-      .catch((err) => {
-        this.err(err.message)
-      })
+    try {
+      await this._audio.setSinkId(id)
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      this.err(err.message)
+    }
 
     this._audio.play()
   }
