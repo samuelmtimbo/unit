@@ -43,7 +43,7 @@ export default class Children extends Functional<I, O> {
   f({ parent }: I, done: Done<O>): void {
     const _children = parent.refChildren()
 
-    const children = new (class Chidren_ extends $ implements A<any> {
+    const children = new (class Children_ extends $ implements A<any> {
       async append(a: any): Promise<void> {
         throw new MethodNotImplementedError()
       }

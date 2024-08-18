@@ -83,8 +83,8 @@ function _call(
   } else {
     const all = ref_[graph.id]
 
-    for (const globaId in all) {
-      const sibling = all[globaId] as Graph
+    for (const globalId in all) {
+      const sibling = all[globalId] as Graph
 
       result = sibling[method].call(sibling, ...args, fork, bubble)
     }
