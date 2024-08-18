@@ -7,7 +7,7 @@ import { system } from '../util/system'
 
 const UNIT_ID_RANGE = 'UNIT_ID_RANGE'
 const UNIT_ID_ADD_UNIT = 'UNIT_ID_ADD_UNIT'
-const UNIT_ID_EMPTY = 'UNIT_ID_EMTPY'
+const UNIT_ID_EMPTY = 'UNIT_ID_EMPTY'
 
 const spec = system.emptySpec()
 

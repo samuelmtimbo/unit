@@ -10,7 +10,7 @@ import {
 import { system } from '../util/system'
 
 const UNIT_ID_RANDOM_COLOR_BOX = 'randomcolorbox'
-const UNIT_ID_EMTPY = 'empty'
+const UNIT_ID_EMPTY = 'empty'
 const UNIT_ID_IDENTITY = 'identity'
 const UNIT_ID_IDENTITY_0 = 'identity0'
 const UNIT_ID_IDENTITY_1 = 'identity1'
@@ -65,7 +65,7 @@ assert.equal(composition1.getUnitCount(), 2)
 
 const spec6 = system.newSpec({
   units: {
-    [UNIT_ID_EMTPY]: {
+    [UNIT_ID_EMPTY]: {
       id: ID_EMPTY,
     },
     [UNIT_ID_IDENTITY]: {
