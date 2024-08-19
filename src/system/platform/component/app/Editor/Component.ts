@@ -16957,6 +16957,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           this._pod.$bulkEdit({ actions, fork, bubble })
 
+          this._download_pod_data()
+
           should_add_component = true
         } else if (this._mode === 'change') {
           if (this._search_start_unit_id) {
@@ -52760,6 +52762,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const unit_id in subComponents) {
       this._connect_sub_component(unit_id)
     }
+
+    this._download_pod_data()
   }
 
   private _on_ctrl_a_keydown = (key: string): void => {
@@ -54854,11 +54858,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._start_debugger()
   }
 
-  private _process_pod_data = () => {
-    this.__process_pod_data(this._pod)
+  private _download_pod_data = () => {
+    this.__download_pod_data(this._pod)
   }
 
-  private __process_pod_data = (pod: $Graph) => {
+  private __download_pod_data = (pod: $Graph) => {
     pod.$getPinData({}, (pinData) => {
       this._process_unit_io_all_data(pinData)
     })
@@ -54885,7 +54889,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._pod_started = true
 
-    this.__process_pod_data(pod)
+    this.__download_pod_data(pod)
 
     this._pod_unlisten = callAll([
       pod.$watch(
