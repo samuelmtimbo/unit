@@ -16,6 +16,7 @@ export class $<
   public __global_id: string
   public __async: boolean = false
   public __ref_count: number = 0
+  public __done: boolean
 
   constructor(system: System) {
     super()
@@ -57,6 +58,8 @@ export class $<
 
   destroy() {
     deleteGlobalRef(this.__system, this.__global_id)
+
+    this.__done = true
 
     this.emit('destroy')
   }
