@@ -21,7 +21,9 @@ export type I = {}
 export type O = {}
 
 export default class Storage_ extends Primitive<I, O> implements V, J {
-  constructor(system: System, id: string) {
+  private _prefix: string
+
+  constructor(system: System, id: string, prefix: string) {
     super(
       {
         i: [],
@@ -31,6 +33,8 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
       system,
       id
     )
+
+    this._prefix = prefix
   }
 
   protected _storage = (): Storage => {
@@ -62,19 +66,23 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
   }
 
   async set(name: string, data: any): Promise<void> {
-    const { path } = this.__system
+    const { path, emitter } = this.__system
 
     const storage = this._storage()
 
-    return set(storage, path, name, data)
+    set(storage, path, name, data)
+
+    emitter.emit(`${this._prefix}_storage`, name, data)
   }
 
   async delete(name: string): Promise<any> {
-    const { path } = this.__system
+    const { path, emitter } = this.__system
 
     const storage = this._storage()
 
-    return delete_(storage, path, name)
+    delete_(storage, path, name)
+
+    emitter.emit(`${this._prefix}_storage`, name, undefined)
   }
 
   async deepSet(path_: string[], data: any): Promise<void> {
@@ -123,7 +131,21 @@ export default class Storage_ extends Primitive<I, O> implements V, J {
       data: any
     ) => void
   ): Unlisten {
-    throw new MethodNotImplementedError()
+    const { emitter } = this.__system
+
+    if (path.length > 0) {
+      throw new ObjectPathTooDeepError()
+    }
+
+    return emitter.addListener(`${this._prefix}_storage`, (key_, value) => {
+      if (key_ === key || key === '*') {
+        if (value === undefined) {
+          listener('delete', [], key, value)
+        } else {
+          listener('set', [], key, value)
+        }
+      }
+    })
   }
 
   async keys(): Promise<string[]> {

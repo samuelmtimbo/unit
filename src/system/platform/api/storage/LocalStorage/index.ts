@@ -1,8 +1,6 @@
-import { ObjectUpdateType } from '../../../../../ObjectUpdateType'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
-import { Unlisten } from '../../../../../types/Unlisten'
 import { J } from '../../../../../types/interface/J'
 import { V } from '../../../../../types/interface/V'
 import { ID_LOCAL_STORAGE } from '../../../../_ids'
@@ -17,20 +15,7 @@ export default class _LocalStorage
   implements J<Dict<any>>, V<Dict<string>>
 {
   constructor(system: System) {
-    super(system, ID_LOCAL_STORAGE)
-  }
-
-  subscribe(
-    path: string[],
-    key: string,
-    listener: (
-      type: ObjectUpdateType,
-      path: string[],
-      key: string,
-      data: any
-    ) => void
-  ): Unlisten {
-    throw new Error('cannot subscribe to local storage')
+    super(system, ID_LOCAL_STORAGE, 'local')
   }
 
   protected _storage = () => {

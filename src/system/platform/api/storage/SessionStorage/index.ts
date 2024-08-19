@@ -15,7 +15,7 @@ export default class SessionStorage
   implements V, J<Dict<any>>
 {
   constructor(system: System) {
-    super(system, ID_SESSION_STORAGE)
+    super(system, ID_SESSION_STORAGE, 'session')
   }
 
   protected _storage = () => {
