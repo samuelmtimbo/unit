@@ -965,8 +965,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _destroy = () => {
+    this._spec = clone(this._spec)
+
     forEachValueKey(this._unit, (u) => u.destroy())
-    // forEachValueKey(this._merge, (m) => m.destroy())
   }
 
   private _reset = (): void => {
@@ -3736,7 +3737,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     all_unlisten.push(
       unit.addListener('destroy', () => {
-        this._removeUnit(unitId, false, false, true, true)
+        const fork = !this.__done
+
+        this._removeUnit(unitId, false, false, fork, true)
       })
     )
     all_unlisten.push(unit.addListener('set_input', boundSetUnitInput))
