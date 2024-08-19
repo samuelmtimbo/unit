@@ -431,10 +431,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     for (const subPinId in plug) {
       const subPin = plug[subPinId]
 
-      if (subPin.unitId && subPin.pinId) {
-        deepSet(this._pinToPlug, [subPin.unitId, type, subPin.pinId], {
+      const { unitId, pinId, kind = type } = subPin
+
+      if (unitId && pinId) {
+        deepSet(this._pinToPlug, [subPin.unitId, kind, subPin.pinId], {
           pinId: newName,
           subPinId,
+          kind,
         })
       }
     }
@@ -812,7 +815,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void => {
     const subPin = this.getUnitPin(unitId, kind, pinId_)
 
-    deepSet(this._pinToPlug, [unitId, kind, pinId_], { pinId, subPinId, kind })
+    deepSet(this._pinToPlug, [unitId, kind, pinId_], { pinId, subPinId, type })
 
     this._memSetExposedSubPin(type, pinId, subPinId, subPin)
   }
@@ -2307,16 +2310,22 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unplugPin({ type, pinId, subPinId }, this._spec)
   }
 
-  private _memUnplugPin = (type: IO, pinId: string, subPinId: string): void => {
-    const subPinSpec = this.getSubPinSpec(type, pinId, subPinId)
+  private _memUnplugPin = (
+    type: IO,
+    pinId_: string,
+    subPinId: string
+  ): void => {
+    const subPinSpec = this.getSubPinSpec(type, pinId_, subPinId)
 
-    if (subPinSpec.unitId && subPinSpec.pinId) {
-      deepDelete(this._pinToPlug, [subPinSpec.unitId, type, subPinSpec.pinId])
+    const { unitId, pinId, kind = type } = subPinSpec
+
+    if (unitId && pinId) {
+      deepDelete(this._pinToPlug, [subPinSpec.unitId, kind, subPinSpec.pinId])
     }
 
-    const isOutput = type === 'output'
+    const output = type === 'output'
 
-    if (isOutput) {
+    if (output) {
       const { mergeId } = subPinSpec
 
       if (mergeId) {
@@ -4329,7 +4338,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unitToPlug = clone(this._pinToPlug[unitId] ?? {})
 
-    forIOObjKV(unitToPlug, (type, unitPinId, { pinId, subPinId }) => {
+    forIOObjKV(unitToPlug, (kind, unitPinId, { pinId, subPinId, type }) => {
       this._memUnplugPin(type, pinId, subPinId)
     })
 
@@ -4358,7 +4367,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return merge
   }
 
-  private _pinToPlug: Dict<IOOf<Dict<{ pinId: string; subPinId: string }>>> = {}
+  private _pinToPlug: Dict<
+    IOOf<Dict<{ pinId: string; subPinId: string; type: IO }>>
+  > = {}
 
   private _addMerge = (
     mergeSpec: GraphMergeSpec,
