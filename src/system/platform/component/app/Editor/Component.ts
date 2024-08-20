@@ -37367,8 +37367,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
 
-        const int_input_node_id = this._pin_to_int['input'][merge_node_id]
-        const int_output_node_id = this._pin_to_int['output'][merge_node_id]
+        const anchor_node_id = this._get_merge_anchor_node_id(merge_node_id)
+
+        const int_input_node_id = this._pin_to_int['input'][anchor_node_id]
+        const int_output_node_id = this._pin_to_int['output'][anchor_node_id]
 
         unplug(int_input_node_id)
         unplug(int_output_node_id)
@@ -37658,7 +37660,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { mergeId } = segmentMergeNodeId(merge_node_id)
 
     const anchor_node_id = this._get_merge_anchor_node_id(merge_node_id)
-
     const anchor_position = this._get_node_position(anchor_node_id)
 
     const merge_to_pin = clone(this._merge_to_pin[merge_node_id])
