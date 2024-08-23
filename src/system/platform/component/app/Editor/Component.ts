@@ -3986,12 +3986,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _context_unlisten: Unlisten
 
+  private _destroy_subgraph_cache = () => {
+    for (const subgraph_unit_id in this._subgraph_cache) {
+      const editor = this._subgraph_cache[subgraph_unit_id]
+
+      editor.destroy()
+    }
+  }
+
   onDestroy() {
     // console.log('Graph', 'onDestroy', this._spec.name)
 
-    if (this._subgraph_graph) {
-      this._subgraph_graph.destroy()
-    }
+    this._destroy_subgraph_cache()
 
     this._disable(false)
     this._pause_debugger()
@@ -5212,6 +5218,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._spec = spec
+
+    this._destroy_subgraph_cache()
 
     this._cancel_fullwindow_animation()
 
