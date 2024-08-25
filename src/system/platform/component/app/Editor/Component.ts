@@ -1002,7 +1002,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       makeCustomListener('data_removed', ({ datumId, specId }) => {
         const { specs } = this._registry
 
-        if (isSystemSpecId(specs, specId)) {
+        if (specs[specId] && isSystemSpecId(specs, specId)) {
           // console.log('data_removed', { datumId, specId })
 
           const spec = clone(specs[specId]) as GraphSpec
@@ -1015,7 +1015,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       makeCustomListener('data_added', ({ datumId, specId, value }) => {
         const { specs } = this._registry
 
-        if (isSystemSpecId(specs, specId)) {
+        if (specs[specId] && isSystemSpecId(specs, specId)) {
           // console.log('data_added', { datumId, specId, value })
 
           const spec = clone(specs[specId]) as GraphSpec
@@ -14819,7 +14819,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     const layout_core = this._layout_core[sub_component_id]
 
-    layout_core.$element.style.width = `${width}px`
+    const width_ = Math.floor(width)
+
+    layout_core.$element.style.width = `${width_}px`
 
     const layout_node = this._layout_node[sub_component_id]
 
@@ -14833,7 +14835,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const layout_core = this._layout_core[sub_component_id]
     const layout_node = this._layout_node[sub_component_id]
 
-    layout_core.$element.style.height = `${height}px`
+    const height_ = Math.floor(height)
+
+    layout_core.$element.style.height = `${height_}px`
 
     layout_node.height = height
   }
