@@ -458,7 +458,6 @@ export class Unit<
 
     this._i_count--
     this._i_name_set.delete(name)
-    delete this._input[name]
 
     const opt = this._i_opt[name]
 
@@ -469,6 +468,9 @@ export class Unit<
     } else {
       this._memRemoveDataInput(name)
     }
+
+    delete this._i_opt[name]
+    delete this._input[name]
 
     this.emit('remove_input', name, input, propagate)
   }
@@ -621,6 +623,7 @@ export class Unit<
       this._memRemoveDataOutput(name)
     }
 
+    delete this._o_opt[name]
     delete this._output[name]
 
     this.emit('remove_output', name, output, propagate)
