@@ -14,7 +14,7 @@ export type ServerOpt = {
 }
 
 export function serve(opt: ServerOpt = { port: PORT }) {
-  const { port } = opt
+  const { port = PORT } = opt
 
   const app = express()
 
