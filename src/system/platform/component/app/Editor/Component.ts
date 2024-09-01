@@ -54,7 +54,13 @@ import { $Component } from '../../../../../types/interface/async/$Component'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { AsyncGraph } from '../../../../../types/interface/async/AsyncGraph'
 import { weakMerge } from '../../../../../weakMerge'
-import { ID_AUDIO, ID_EDITOR, ID_IMAGE, ID_VIDEO } from '../../../../_ids'
+import {
+  ID_AUDIO,
+  ID_EDITOR,
+  ID_IMAGE,
+  ID_IMAGE_0,
+  ID_VIDEO,
+} from '../../../../_ids'
 import { clamp } from '../../../../core/relation/Clamp/f'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import Div from '../../Div/Component'
@@ -3551,7 +3557,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       image.src = image_data_url
 
       image.onload = () => {
-        const new_unit_id = this._new_unit_id(ID_IMAGE)
+        const id = ID_IMAGE_0
+
+        const new_unit_id = this._new_unit_id(id)
 
         const ratio = image.naturalWidth / image.naturalHeight
 
@@ -3568,7 +3576,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const bundle: UnitBundleSpec = {
           unit: {
-            id: ID_IMAGE,
+            id,
             input: {
               src: {
                 data: `"${image_data_url}"`,
