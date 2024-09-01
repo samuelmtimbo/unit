@@ -56,7 +56,5 @@ export default class Listen<T> extends Holder<I<T>, O<T>> {
 
       this._unlisten = undefined
     }
-
-    this._forward_empty('data')
   }
 }
