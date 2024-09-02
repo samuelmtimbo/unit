@@ -147,7 +147,11 @@ npm test
 
 ## Links
 
-List of related web applications (beta):
+List of related web applications:
+
+### [unit.software](https://unit.software)
+
+Landing page featuring Unit language and system's vision.
 
 ### [unit.md](https://unit.md)
 
@@ -167,8 +171,8 @@ Marketplace to explore, collect and play with live visual programs built in Unit
 
 Appending #url to https://unit.moe will attempt to encapsulate the unit served at that URL in a graph editor. This is helpful for debugging an open unit website, for instance:
 
+https://unit.moe#https://unit.software will show the code for https://unit.software.
 https://unit.moe#https://unit.land will show the code for https://unit.land.
-
 https://unit.moe#https://unit.tools will show the code for https://unit.tools.
 
 ## Documentation
@@ -187,7 +191,7 @@ This repository is open for pull requests from contributors.
 
 If you want to collaborate with Unit's development. Please hit me up at [@io_sammt](https://twitter.com/io_sammt).
 
-If you have a feature idea or hit a malfunction, this is a workflow I like to follow:
+If you have a feature idea or hit a malfunction, this is a basic workflow to follow:
 
 1. Iterate over a solution on top the latest main, testing it locally until it works and the code is clean;
 2. Open a pull request explaining the problem and solution;
