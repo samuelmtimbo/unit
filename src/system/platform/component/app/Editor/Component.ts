@@ -19787,6 +19787,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       leaf_node.x /= this.$context.$sx
       leaf_node.y /= this.$context.$sy
 
+      leaf_node.sx /= this.$context.$sx
+      leaf_node.sy /= this.$context.$sy
+
       this._leaf_frame_node[leaf_id] = leaf_node
     }
   }
@@ -29390,13 +29393,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const base_node = []
 
-    const context = this._get_sub_component_frame_context(sub_component_id)
     const base = this._get_sub_component_root_base(sub_component_id)
 
     for (const sub_component_base_leaf of base) {
       const [_, leaf_comp] = sub_component_base_leaf
-
-      const leaf_element = leaf_comp.$element
 
       const leaf_node = extractTrait(leaf_comp, measureText)
 
@@ -30694,11 +30694,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._leaf_layer_offset_x = 0
     this._leaf_layer_offset_y = 0
 
-    if (this._frame_out) {
-      this._leaf_layer_offset_x = this.$context.$x
-      this._leaf_layer_offset_y = this.$context.$y
-    }
-
     for (const sub_component_id of sub_component_ids) {
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
 
@@ -30756,18 +30751,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             const frame_size = getSize(frame_slot.$element)
 
-            const frame_trait = extractTrait(this._frame, measureText)
-
-            const frame_x =
-              this._frame.$context.$x +
-              frame_position.x / this._frame.$context.$sx
-            const frame_y =
-              this._frame.$context.$y +
-              frame_position.y / this._frame.$context.$sy
-
             const trait: LayoutNode = {
-              x: frame_x,
-              y: frame_y,
+              x: frame_position.x,
+              y: frame_position.y,
               width: frame_size.width / this._frame.$context.$sx,
               height: frame_size.height / this._frame.$context.$sy,
               sx: k,
@@ -30795,17 +30781,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           i = (i + 1) % leaf_total
 
-          return {
-            x: _trait.x - this.$context.$x,
-            y: _trait.y - this.$context.$y,
-            width: _trait.width,
-            height: _trait.height,
-            sx: _trait.sx,
-            sy: _trait.sy,
-            opacity: _trait.opacity,
-            fontSize: _trait.fontSize,
-            color: _trait.color,
-          }
+          return _trait
         },
         () => {
           sub_component_end_count++
@@ -30826,14 +30802,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     return callAll(all_abort)
-  }
-
-  private _measure_all_sub_component_base = (
-    sub_component_ids: string[]
-  ): void => {
-    for (const sub_component_id of sub_component_ids) {
-      this._measure_sub_component_base(sub_component_id)
-    }
   }
 
   private _animate_leave_fullwindow = (
