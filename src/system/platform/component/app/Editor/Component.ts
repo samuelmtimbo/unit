@@ -3425,20 +3425,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       // @ts-ignore
       if (item.getAsFileSystemHandle) {
-        const entry =
+        const handle =
           // @ts-ignore
-          (await item.getAsFileSystemHandle()) as FileSystemHandle
+          (await item.getAsFileSystemHandle()) as FileSystemDirectoryHandle
 
-        if (entry) {
-          if (entry.kind === 'directory') {
-            this._drop_folder(
-              entry as FileSystemDirectoryHandle,
-              '/',
-              screen_position
-            )
+        if (handle) {
+          if (handle.kind === 'directory') {
+            this._drop_folder(handle, screen_position)
 
             return
           }
+        }
+      }
+
+      if (item.webkitGetAsEntry) {
+        const entry = item.webkitGetAsEntry() as FileSystemDirectoryEntry
+
+        if (entry) {
+          this._drop_directory_entry(entry)
+
+          return
         }
       }
 
@@ -3458,62 +3464,99 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _drop_directory_entry = (entry: FileSystemDirectoryEntry) => {
+    if (entry.isDirectory) {
+      const reader = entry.createReader()
+
+      reader.readEntries(
+        (entries) => {
+          this._paste_entries(entries)
+        },
+        (err: any) => {
+          //
+        }
+      )
+    } else if (entry.isFile) {
+    } else {
+      //
+    }
+  }
+
   private _drop_folder = async (
     dirHandle: FileSystemDirectoryHandle,
-    folderName: string = '/',
     screenPosition: Position
   ) => {
     this._animate_pulse(screenPosition.x, screenPosition.y, 'out')
 
-    this._paste_folder(dirHandle, folderName)
+    this._paste_folder(dirHandle)
   }
 
-  private _paste_folder = async (
-    dirHandle: FileSystemDirectoryHandle,
-    folderName: string = '/'
-  ) => {
-    const file_to_bundle: Dict<{
-      handle: FileSystemFileHandle
-      bundle: BundleSpec
-    }> = {}
-
-    await this.__paste_folder(dirHandle, folderName, file_to_bundle)
+  private _paste_folder = async (dirHandle: FileSystemDirectoryHandle) => {
+    await this.__paste_folder(dirHandle)
   }
 
-  private __paste_folder = async (
-    dirHandle: FileSystemDirectoryHandle,
-    folderName: string = '/',
-    fileToBundle: Dict<{ handle: FileSystemFileHandle; bundle: BundleSpec }>
-  ) => {
-    const {} = this.$props
-
+  private __paste_folder = async (dirHandle: FileSystemDirectoryHandle) => {
     // @ts-ignore
     if (dirHandle.entries) {
       // @ts-ignore
-      const entries = await dirHandle.entries()
+      const entries = (await dirHandle.entries()) as [
+        string,
+        FileSystemFileHandle | FileSystemDirectoryHandle,
+      ][]
 
-      for await (const [fileName, handle] of entries) {
-        if (handle.kind === 'file') {
-          const absoluteFileName = `${folderName}/${handle.name}`
+      const handles = entries.map((entry) => entry[1])
 
-          const file = (await handle.getFile()) as File
+      this._paste_handles(handles)
+    }
+  }
 
-          const bundle = await this._read_bundle_file(file)
+  private _paste_handles = async (
+    handles: (FileSystemFileHandle | FileSystemDirectoryHandle)[]
+  ) => {
+    for await (const handle of handles) {
+      if (handle.kind === 'file') {
+        const file = (await (handle as FileSystemFileHandle).getFile()) as File
 
-          if (bundle) {
-            const specIdMap = injectUserBundle(this.$props, bundle)
+        const bundle = await this._read_bundle_file(file)
 
-            const bundle_ = clone(bundle)
+        if (bundle) {
+          const specIdMap = injectUserBundle(this.$props, bundle)
 
-            remapBundle(bundle_, specIdMap)
+          const bundle_ = clone(bundle)
 
-            fileToBundle[absoluteFileName] = { handle, bundle: bundle_ }
-          }
-        } else if (handle.kind === 'directory') {
-          this.__paste_folder(handle, folderName + fileName, fileToBundle)
-        } else {
-          throw new InvalidStateError()
+          remapBundle(bundle_, specIdMap)
         }
+      } else if (handle.kind === 'directory') {
+        this.__paste_folder(handle as FileSystemDirectoryHandle)
+      } else {
+        throw new InvalidStateError()
+      }
+    }
+  }
+
+  private _paste_entries = async (entries: FileSystemEntry[]) => {
+    for await (const entry of entries) {
+      if (entry.isFile) {
+        ;(entry as FileSystemFileEntry).file(
+          async (file: File) => {
+            const bundle = await this._read_bundle_file(file)
+
+            if (bundle) {
+              const specIdMap = injectUserBundle(this.$props, bundle)
+
+              const bundle_ = clone(bundle)
+
+              remapBundle(bundle_, specIdMap)
+            }
+          },
+          (err: any) => {
+            //
+          }
+        )
+      } else if (entry.isDirectory) {
+        this._drop_directory_entry(entry as FileSystemDirectoryEntry)
+      } else {
+        throw new InvalidStateError()
       }
     }
   }
