@@ -3899,7 +3899,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _enable = (): void => {
     if (this._disabled) {
-      // console.log('Graph', '_enable')
+      // console.log('Graph', '_enable', this._id)
 
       this._disabled = false
 
@@ -3908,7 +3908,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         sub_graph.setProp('disabled', false)
       } else {
-        if (this._core_component_unlocked_count > 0) {
+        if (
+          this._core_component_unlocked_count > 0 &&
+          this._pointer_down_count === 0
+        ) {
           for (const unit_id in this._core_component_unlocked) {
             this._enable_core_frame(unit_id)
           }
@@ -4119,6 +4122,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
+    if (!this._disabled) {
+      if (this._input_disabled) {
+        this._enable_input()
+      }
+    }
+
     this._context_unlisten = addListeners(this.$context, [
       makeResizeListener(this._on_context_resize),
       makeCustomListener('enabled', this._on_context_enabled),
@@ -4154,14 +4163,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._reset_spec()
     }
 
-    // if (this._load) {
     this._refresh_theme()
     this._refresh_color()
 
     if (this._focused) {
       this._refresh_enabled()
     }
-    // }
 
     if (this._node_count > 0) {
       this._start_graph_simulation(LAYER_NONE)
@@ -4170,8 +4177,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   public onUnmount(): void {
     // console.log('Graph', 'onUnmount', this._id)
-
-    this._disabled = true
 
     this._disable_input()
     this._context_unlisten()
@@ -18233,11 +18238,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    if (!this._disabled) {
-      if (this._transcend) {
-        this._transcend.up()
-      }
+    if (this._transcend) {
+      this._transcend.up()
+    }
 
+    if (!this._disabled) {
       this.focus()
     }
 
@@ -19168,13 +19173,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_enable_transcend', this._id)
 
     if (this._transcend) {
-      if (!this._unlisten_transcend) {
-        this._unlisten_transcend = this._transcend.addEventListener(
-          makeClickListener({
-            onClick: this._on_transcend_click,
-          })
-        )
+      if (this._unlisten_transcend) {
+        this._unlisten_transcend()
       }
+
+      this._unlisten_transcend = this._transcend.addEventListener(
+        makeClickListener({
+          onClick: this._on_transcend_click,
+        })
+      )
 
       if (this._is_fullwindow) {
         this._transcend.down(false)
@@ -58612,6 +58619,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       metadata: this._on_metadata,
     },
   }
+
   private _on_moment = (moment: Moment): void => {
     // console.log('_on_moment', moment, this._id)
 
