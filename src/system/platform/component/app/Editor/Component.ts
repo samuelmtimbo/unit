@@ -21020,7 +21020,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _zoom_opacity_animation: Animation
 
   private _animate_zoom_opacity = (to: number): void => {
-    if (this._zoom_opacity_animation) {
+    if (
+      this._zoom_opacity_animation &&
+      this._zoom_opacity_animation.playState === 'running'
+    ) {
       this._zoom_opacity_animation.commitStyles()
       this._zoom_opacity_animation.cancel()
     }
