@@ -2303,6 +2303,7 @@ export type LayoutLayer = {
   children: Div
   layers: Div
   foreground: Div
+  content: Div
   child_foreground: Div
 }
 
@@ -7694,7 +7695,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       const candidate_height =
-        total_height + 1 * LAYOUT_VERTICAL_PADDING + this._search_offset_y
+        total_height + 1 * LAYOUT_VERTICAL_PADDING + this._search_offset_y + 36
 
       const final_height = Math.max(candidate_height, $height)
 
@@ -7728,21 +7729,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _ensure_layout_height_animation = (layer_id: string) => {
     if (!this._abort_layout_layer_height_animation[layer_id]) {
       this._start_layout_layer_height_animation(layer_id)
-    }
-  }
-
-  private _reset_all_layout_heights = () => {
-    // console.log('Graph', '_reset_all_layout_heights')
-
-    const { $height } = this.$context
-
-    this._set_all_layout_heights(null, $height + 2 * LAYOUT_VERTICAL_PADDING)
-
-    for (const parent_id of this._layout_path) {
-      this._set_all_layout_heights(
-        parent_id,
-        $height + 2 * LAYOUT_VERTICAL_PADDING
-      )
     }
   }
 
@@ -10734,6 +10720,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this.$system
     )
 
+    const content = new Div(
+      {
+        className: `${className}-content`,
+        style: {
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          overflow: 'auto',
+        },
+      },
+      this.$system
+    )
+    layer.appendChild(content)
+
     const height = new Div(
       {
         className: `${className}-height`,
@@ -10746,7 +10746,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
       this.$system
     )
-    layer.appendChild(height)
+    content.appendChild(height)
 
     const children = new Div(
       {
@@ -10765,21 +10765,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
       this.$system
     )
-    layer.appendChild(children)
-
-    const layers = new Div(
-      {
-        className: `${className}-layers`,
-        style: {
-          position: 'absolute',
-          pointerEvents: 'none',
-          width: '100%',
-          height: '100%',
-        },
-      },
-      this.$system
-    )
-    layer.appendChild(layers)
+    content.appendChild(children)
 
     const foreground = new Div(
       {
@@ -10797,7 +10783,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
       this.$system
     )
-    layer.appendChild(foreground)
+    content.appendChild(foreground)
 
     const child_foreground = new Div(
       {
@@ -10815,9 +10801,31 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
       this.$system
     )
-    layer.appendChild(child_foreground)
+    content.appendChild(child_foreground)
 
-    return { layer, foreground, child_foreground, height, children, layers }
+    const layers = new Div(
+      {
+        className: `${className}-layers`,
+        style: {
+          position: 'absolute',
+          pointerEvents: 'none',
+          width: '100%',
+          height: '100%',
+        },
+      },
+      this.$system
+    )
+    layer.appendChild(layers)
+
+    return {
+      layer,
+      content,
+      foreground,
+      child_foreground,
+      height,
+      children,
+      layers,
+    }
   }
 
   private _create_touch_area = ({
@@ -15921,7 +15929,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const layout_layer = this._get_layout_layer(layer_id)
 
-    layout_layer.layer.$element.scrollTop = top
+    layout_layer.content.$element.scrollTop = top
   }
 
   private _refresh_search_list_height_offset = () => {
@@ -19478,25 +19486,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._animate_layout_layer_element_opacity(current_layout_layer_id, 1)
     }
 
-    current_layout_layer.layer.$element.style.overflowX = 'hidden'
-    current_layout_layer.layer.$element.style.overflowY = 'auto'
+    current_layout_layer.content.$element.style.overflowX = 'hidden'
+    current_layout_layer.content.$element.style.overflowY = 'auto'
     current_layout_layer.layer.$element.style.pointerEvents = 'inherit'
 
     current_layout_layer.children.$element.style.pointerEvents = 'inherit'
-    // current_layout_layer.layers.$element.style.pointerEvents = 'inherit'
 
     current_layout_layer.children.$element.style.overflowX = 'initial'
     current_layout_layer.children.$element.style.overflowY = 'initial'
-
-    for (const layer_id of this._layout_path) {
-      const layer_layer = this._layout_layer[layer_id]
-
-      layer_layer.children.$element.style.overflowX = 'hidden'
-      layer_layer.children.$element.style.overflowY = 'hidden'
-
-      layer_layer.layer.$element.style.overflowX = 'hidden'
-      layer_layer.layer.$element.style.overflowY = 'hidden'
-    }
 
     this._refresh_all_layout_node_target_position()
     this._layout_scroll_search_unit_into_view()
@@ -20445,7 +20442,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sub_component_id,
             slot_children,
             slot_name,
-            false,
+            true,
             async () => {
               sub_component_finish_count++
 
@@ -20819,14 +20816,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
               const leaf_trait = all_leaf_trait[leaf_id]
 
+              const current_layout_layer = this._get_current_layout_layer()
+
               const parent_layout_layer =
                 this._ensure_parent_layout_layer(sub_component_id)
 
-              const { scrollTop = 0 } = parent_layout_layer.layer.$element
+              const { scrollTop = 0 } = parent_layout_layer.content.$element
+
+              const parent_visible =
+                current_layout_layer === parent_layout_layer
+
+              const scroll_top = parent_visible ? scrollTop : 0
 
               return {
                 x: x + leaf_trait.x,
-                y: y + leaf_trait.y + scrollTop,
+                y: y + leaf_trait.y + scroll_top,
                 width: leaf_trait.width,
                 height: leaf_trait.height,
                 sx: leaf_trait.sx,
@@ -20999,7 +21003,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const parent_layout_layer =
       this._ensure_parent_layout_layer(sub_component_id)
 
-    const { scrollTop = 0 } = parent_layout_layer.layer.$element
+    const { scrollTop = 0 } = parent_layout_layer.content.$element
 
     const x = __x - $width / 2
     const y = __y - $height / 2
@@ -21064,28 +21068,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._layout_comp.$element.style.pointerEvents = 'none'
 
-    if (this._layout_root_opacity_animation) {
+    if (
+      this._layout_root_opacity_animation &&
+      this._layout_root_opacity_animation.playState === 'running'
+    ) {
       this._layout_root_opacity_animation.commitStyles()
-      this._layout_root_opacity_animation.cancel()
+      try {
+        this._layout_root_opacity_animation.cancel()
+      } catch {
+        //
+      }
 
       this._layout_root_opacity_animation = undefined
     }
 
     this._layout_root.children.$element.style.opacity = '0'
 
-    this._layout_root.layer.$element.style.overflowX = 'hidden'
-    this._layout_root.layer.$element.style.overflowY = 'hidden'
-
     for (const layer_id of this._layout_path) {
       const layer_layer = this._layout_layer[layer_id]
 
       layer_layer.children.$element.style.opacity = '0'
-
-      layer_layer.layer.$element.style.overflowX = 'hidden'
-      layer_layer.layer.$element.style.overflowY = 'hidden'
-
-      layer_layer.children.$element.style.overflowX = 'hidden'
-      layer_layer.children.$element.style.overflowY = 'hidden'
     }
 
     for (const sub_component_id in this._component.$subComponent) {
@@ -29837,19 +29839,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       // TODO
     }
 
-    prev_layout_layer.layer.$element.style.overflowY = 'visible'
-    prev_layout_layer.layer.$element.style.overflowX = 'visible'
-
-    prev_layout_layer.children.$element.style.overflowY = 'hidden'
+    prev_layout_layer.content.$element.style.overflow = 'auto'
+    prev_layout_layer.content.$element.style.overflowY = 'visible'
 
     this._refresh_all_layout_layer_opacity()
 
     prev_layout_layer.children.$element.style.pointerEvents = 'none'
     prev_layout_layer.layers.$element.style.pointerEvents = 'inherit'
 
-    layout_layer.layer.$element.style.overflowX = 'hidden'
-    layout_layer.layer.$element.style.overflowY = 'auto'
+    layout_layer.content.$element.style.overflowX = 'hidden'
+    layout_layer.content.$element.style.overflowY = 'auto'
     layout_layer.layer.$element.style.pointerEvents = 'inherit'
+
+    layout_layer.layer.$element.style.overscrollBehaviorY = 'none'
 
     layout_layer.children.$element.style.pointerEvents = 'inherit'
 
@@ -29857,6 +29859,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     layout_layer.children.$element.style.overflowY = 'initial'
 
     this._animate_layout_layer_element_opacity(sub_component_id, 1)
+  }
+
+  private _offset_sub_component_base_node = (
+    sub_component_id: string,
+    offset_x: number,
+    offset_y: number
+  ) => {
+    const leaf_base = this._get_sub_component_root_base(sub_component_id)
+
+    for (const [leaf_path] of leaf_base) {
+      const leaf_id = `${sub_component_id}/${leaf_path.join('/')}`
+      const leaf_node = this._leaf_frame_node[leaf_id]
+
+      leaf_node.x += offset_x
+      leaf_node.y += offset_y
+    }
   }
 
   private _layout_leave_sub_component = () => {
@@ -29880,15 +29898,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const layout_layer = this._layout_layer[sub_component_id]
 
-    layout_layer.layer.$element.style.overflowX = 'hidden'
-    layout_layer.layer.$element.style.overflowY = 'hidden'
+    layout_layer.content.$element.style.overflowX = 'hidden'
+    layout_layer.content.$element.style.overflowY = 'hidden'
 
     layout_layer.children.$element.style.opacity = '0'
 
     layout_layer.children.$element.style.overflowY = 'initial'
     layout_layer.children.$element.style.overflowX = 'initial'
-
-    // next_layout_layer.children.$element.style.opacity = '1'
 
     if (next_unit_id) {
       this._animate_layout_layer_element_opacity(next_unit_id, 1)
@@ -29896,11 +29912,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._animate_layout_root_element_opacity(1)
     }
 
-    next_layout_layer.layer.$element.style.overflowY = 'auto'
-    next_layout_layer.layer.$element.style.overflowX = 'auto'
+    next_layout_layer.content.$element.style.overflowY = 'auto'
+    next_layout_layer.content.$element.style.overflowX = 'auto'
 
     next_layout_layer.children.$element.style.overflowX = 'initial'
     next_layout_layer.children.$element.style.overflowY = 'initial'
+
+    const scroll_top = next_layout_layer.content.$element.scrollTop
 
     this._refresh_all_layout_layer_opacity()
 
@@ -29919,8 +29937,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         this._measure_sub_component_base(child_id)
       }
-
-      // this._measure_sub_component_base(sub_component_id)
 
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
 
@@ -29964,6 +29980,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       let children_animation_finished = slot_count === 0
 
       let slot_animation_finished_count = 0
+
+      this._offset_sub_component_base_node(sub_component_id, 0, scroll_top)
 
       this._animate_parent_component(
         sub_component_id,
@@ -30009,15 +30027,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               }
             }
           }
-        )
-      }
-
-      for (const child_id of children) {
-        this._animate_layout_core_target(
-          child_id,
-          sub_component_id,
-          this._layout_node[child_id],
-          () => {}
         )
       }
     } else {
@@ -31013,8 +31022,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       let i = 0
 
       const leaf_total = base.length
-
-      // this._remove_sub_component_all_root(sub_component_id)
 
       this._plug_sub_component_base(sub_component_id, base, [], layer)
 
@@ -35265,6 +35272,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const parent_layer = this._get_layout_layer(parent_id)
 
+    const scroll_top = parent_layer.content.$element.scrollTop
+
     const finish = () => {
       this._unplug_sub_component_root_base_frame(sub_component_id)
       this._enter_sub_component_frame(sub_component_id)
@@ -35317,6 +35326,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     )
 
+    this._offset_sub_component_base_node(sub_component_id, 0, scroll_top)
+
     this._animate_parent_component(
       sub_component_id,
       false,
@@ -35334,15 +35345,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
     )
-
-    for (const child_id of children) {
-      this._animate_layout_core_target(
-        child_id,
-        child_id,
-        this._layout_node[child_id],
-        () => {}
-      )
-    }
   }
 
   private __pod_add_pin_to_merge(
@@ -41090,9 +41092,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const parent_layout_layer = this._ensure_parent_layout_layer(unit_id)
 
     this._layout_drag_start_scroll_top[unit_id] =
-      parent_layout_layer.layer.$element.scrollTop
+      parent_layout_layer.content.$element.scrollTop
     this._layout_drag_start_scroll_height[unit_id] =
-      parent_layout_layer.layer.$element.scrollHeight
+      parent_layout_layer.content.$element.scrollHeight
     this._layout_drag_start_position[unit_id] = { x: clientX, y: clientY }
 
     const children = this._get_sub_component_spec_layer(unit_id)
@@ -41136,7 +41138,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const parent_layout_layer = this._ensure_parent_layout_layer(unit_id)
 
-    const { scrollTop = 0 } = parent_layout_layer.layer.$element
+    const { scrollTop = 0 } = parent_layout_layer.content.$element
 
     if (drag_start_position.y >= clientY) {
       this._layout_drag_direction[unit_id] = 'down'
@@ -41276,7 +41278,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const parent_layout_layer = this._ensure_parent_layout_layer(unit_id)
 
-    const { scrollTop = 0, scrollHeight } = parent_layout_layer.layer.$element
+    const { scrollTop = 0, scrollHeight } = parent_layout_layer.content.$element
 
     const PADDING = 60
 
@@ -41300,7 +41302,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (animate) {
       const frame = () => {
-        parent_layout_layer.layer.$element.scrollTop = Math.min(
+        parent_layout_layer.content.$element.scrollTop = Math.min(
           scrollTop + d,
           scrollHeight
         )
@@ -42530,7 +42532,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const parent_layout_layer = this._get_current_layout_layer()
 
-      const { scrollTop = 0 } = parent_layout_layer.layer.$element
+      const { scrollTop = 0 } = parent_layout_layer.content.$element
 
       for (let i = 0; i < children.length; i++) {
         const child_id = children[i]
