@@ -582,6 +582,10 @@ import {
 } from '../../../../../spec/validate'
 import { startUnit } from '../../../../../start'
 import {
+  flushAnimation,
+  waitFinish,
+} from '../../../../../test/client/util/animation'
+import {
   BaseComponentSpec,
   Classes,
   ComponentSpec,
@@ -19418,8 +19422,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
 
     animation.onfinish = () => {
-      animation.commitStyles()
-      animation.cancel()
+      flushAnimation(animation)
 
       element.style.opacity = `${to}`
 
@@ -19433,8 +19436,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_animate_layout_root_element_opacity', to)
 
     if (this._layout_root_opacity_animation) {
-      this._layout_root_opacity_animation.commitStyles()
-      this._layout_root_opacity_animation.cancel()
+      flushAnimation(this._layout_root_opacity_animation)
     }
 
     this._layout_root_opacity_animation = this._animate_element_opacity(
@@ -19453,8 +19455,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const layout_layer = this._get_layout_layer(layer_id)
 
     if (this._layout_layer_opacity_animation[layer_id]) {
-      this._layout_layer_opacity_animation[layer_id].commitStyles()
-      this._layout_layer_opacity_animation[layer_id].cancel()
+      flushAnimation(this._layout_layer_opacity_animation[layer_id])
     }
 
     this._layout_layer_opacity_animation[layer_id] =
@@ -20451,12 +20452,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
               if (grandparent_id) {
                 if (this._layout_layer_opacity_animation[grandparent_id]) {
-                  await this._layout_layer_opacity_animation[grandparent_id]
-                    .finished
+                  await waitFinish(
+                    this._layout_layer_opacity_animation[grandparent_id]
+                  )
                 }
               } else {
                 if (this._layout_root_opacity_animation) {
-                  await this._layout_root_opacity_animation.finished
+                  await waitFinish(this._layout_root_opacity_animation)
                 }
               }
 
@@ -20490,7 +20492,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               sub_component_finish_count++
 
               if (this._layout_root_opacity_animation) {
-                await this._layout_root_opacity_animation.finished
+                await waitFinish(this._layout_root_opacity_animation)
+
+                this._layout_root_opacity_animation = undefined
               }
 
               if (this._tree_layout) {
@@ -20736,7 +20740,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 animated_sub_component_finished++
 
                 if (this._zoom_opacity_animation) {
-                  await this._zoom_opacity_animation.finished
+                  await waitFinish(this._zoom_opacity_animation)
                 }
 
                 finish()
@@ -20844,7 +20848,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               animated_sub_component_finished++
 
               if (this._zoom_opacity_animation) {
-                await this._zoom_opacity_animation.finished
+                await waitFinish(this._zoom_opacity_animation)
+
+                this._zoom_opacity_animation = undefined
               }
 
               if (!this._tree_layout) {
@@ -21024,12 +21030,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _zoom_opacity_animation: Animation
 
   private _animate_zoom_opacity = (to: number): void => {
-    if (
-      this._zoom_opacity_animation &&
-      this._zoom_opacity_animation.playState === 'running'
-    ) {
-      this._zoom_opacity_animation.commitStyles()
-      this._zoom_opacity_animation.cancel()
+    if (this._zoom_opacity_animation) {
+      flushAnimation(this._zoom_opacity_animation)
     }
 
     this._zoom_opacity_animation = this._animate_element_opacity(
@@ -21068,18 +21070,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._layout_comp.$element.style.pointerEvents = 'none'
 
-    if (
-      this._layout_root_opacity_animation &&
-      this._layout_root_opacity_animation.playState === 'running'
-    ) {
-      this._layout_root_opacity_animation.commitStyles()
-      try {
-        this._layout_root_opacity_animation.cancel()
-      } catch {
-        //
-      }
+    if (this._layout_root_opacity_animation) {
+      flushAnimation(this._layout_root_opacity_animation)
 
       this._layout_root_opacity_animation = undefined
+    }
+
+    for (const sub_component_id in this._layout_layer_opacity_animation) {
+      const animation = this._layout_layer_opacity_animation[sub_component_id]
+
+      flushAnimation(animation)
+
+      delete this._layout_layer_opacity_animation[sub_component_id]
     }
 
     this._layout_root.children.$element.style.opacity = '0'
@@ -26216,7 +26218,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._main_opacity_animation.playState !== 'idle' &&
           this._main_opacity_animation.playState !== 'finished'
         ) {
-          await this._main_opacity_animation.finished
+          await waitFinish(this._main_opacity_animation)
         }
 
         this._unplug_sub_component_base_frame(sub_component_id)
@@ -28702,8 +28704,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _animate_main_opacity = (to: number) => {
     if (this._main_opacity_animation) {
-      this._main_opacity_animation.commitStyles()
-      this._main_opacity_animation.cancel()
+      flushAnimation(this._main_opacity_animation)
     }
 
     this._main_opacity_animation = this._animate_element_opacity(
@@ -29948,11 +29949,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           if (next_unit_id) {
             if (this._layout_layer_opacity_animation[next_unit_id]) {
-              await this._layout_layer_opacity_animation[next_unit_id].finished
+              await waitFinish(
+                this._layout_layer_opacity_animation[next_unit_id]
+              )
             }
           } else {
             if (this._layout_root_opacity_animation) {
-              await this._layout_root_opacity_animation.finished
+              await waitFinish(this._layout_root_opacity_animation)
             }
           }
 
@@ -35315,7 +35318,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       children,
       async () => {
         if (this._layout_layer_opacity_animation[sub_component_id]) {
-          await this._layout_layer_opacity_animation[sub_component_id].finished
+          await waitFinish(
+            this._layout_layer_opacity_animation[sub_component_id]
+          )
+
+          delete this._layout_layer_opacity_animation[sub_component_id]
         }
 
         children_finished = true
