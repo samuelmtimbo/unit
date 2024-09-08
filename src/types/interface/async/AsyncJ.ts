@@ -1,9 +1,9 @@
 import { evaluate } from '../../../spec/evaluate'
 import { Callback } from '../../Callback'
 import { J } from '../J'
-import { $J, $J_C, $J_R, $J_W } from './$J'
+import { $J, $J_C, $J_G, $J_R, $J_W } from './$J'
 
-export const AsyncJCall: (value: J) => $J_C = (value) => {
+export const AsyncJGet: (value: J) => $J_G = (value) => {
   return {
     $get({ name }: { name: string }, callback: Callback<any>): void {
       ;(async () => {
@@ -17,7 +17,11 @@ export const AsyncJCall: (value: J) => $J_C = (value) => {
         callback(data)
       })()
     },
+  }
+}
 
+export const AsyncJCall: (value: J) => $J_C = (value) => {
+  return {
     $set(
       { name, data }: { name: string; data: string },
       callback: Callback<any>
@@ -47,6 +51,7 @@ export const AsyncJRef: (value: J) => $J_R = (value) => {
 
 export const AsyncJ: (value: J) => $J = (value: J) => {
   return {
+    ...AsyncJGet(value),
     ...AsyncJCall(value),
     ...AsyncJWatch(value),
     ...AsyncJRef(value),

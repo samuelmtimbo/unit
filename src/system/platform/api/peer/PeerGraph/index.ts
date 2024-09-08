@@ -1,5 +1,5 @@
 import { Peer } from '../../../../../api/peer/Peer'
-import { AsyncWorkerGraph } from '../../../../../AsyncWorker'
+import { AsyncWorker } from '../../../../../AsyncWorker'
 import { $ } from '../../../../../Class/$'
 import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
 import { Primitive } from '../../../../../Primitive'
@@ -9,6 +9,7 @@ import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { Port } from '../../../../../types/global/Port'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
+import { UCGEE } from '../../../../../types/interface/UCGEE'
 import { $wrap } from '../../../../../wrap'
 import { ID_PEER_GRAPH } from '../../../../_ids'
 
@@ -107,13 +108,9 @@ export default class PeerGraph extends Primitive<I, O> {
 
               this._remote_port = remote_port
 
-              const $graph: $Graph = AsyncWorkerGraph(remote_port)
+              const $graph: $Graph = AsyncWorker(remote_port, UCGEE)
 
-              const graph = $wrap<$Graph>(this.__system, $graph, [
-                'U',
-                'C',
-                'G',
-              ])
+              const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
 
               this._output.graph.push(graph)
             }

@@ -1,4 +1,3 @@
-// TODO
 export class NoopCanvasRenderingContext2D implements CanvasRenderingContext2D {
   canvas: HTMLCanvasElement
   getContextAttributes(): CanvasRenderingContext2DSettings {

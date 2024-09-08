@@ -38,7 +38,6 @@ import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
 import { watchGraph } from '../../../debug/graph/watchGraph'
 import { watchUnit } from '../../../debug/watchUnit'
-import { proxyWrap } from '../../../proxyWrap'
 import { evaluate } from '../../../spec/evaluate'
 import { stringify } from '../../../spec/stringify'
 import {
@@ -57,7 +56,7 @@ import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { Unlisten } from '../../Unlisten'
 import { stringifyDataObj, stringifyPinData } from '../../stringifyPinData'
 import { $Component } from './$Component'
-import { $G, $G_C, $G_R, $G_W } from './$G'
+import { $G, $G_C, $G_G, $G_R, $G_W } from './$G'
 import { $U } from './$U'
 import { Async } from './Async'
 
@@ -66,7 +65,7 @@ export interface Holder<T> {
 }
 
 function _call(
-  graph,
+  graph: Graph,
   method: string,
   fork: boolean,
   bubble: boolean,
@@ -91,6 +90,142 @@ function _call(
   }
 
   return result
+}
+
+export const AsyncGGet = (graph: Graph): $G_G => {
+  const obj: $G_G = {
+    $getBundle(
+      { deep }: { deep: boolean },
+      callback: Callback<BundleSpec>
+    ): void {
+      const bundle = graph.getBundleSpec(deep)
+
+      const { spec } = bundle
+
+      stringifyGraphSpecData(spec)
+
+      callback(bundle)
+    },
+
+    $getUnitPinData(
+      { unitId, type, pinId }: { unitId: string; type: IO; pinId: string },
+      callback: (data: { input: Dict<any>; output: Dict<any> }) => void
+    ): void {
+      const state = graph.getUnitData(unitId, type, pinId)
+      callback(state)
+    },
+
+    $getGraphData(
+      data: {},
+      callback: Callback<{
+        children: Dict<any>
+        pinData: Dict<any>
+        err: Dict<string | null>
+        mergeData: Dict<any>
+      }>
+    ): void {
+      const children = graph.getGraphChildren()
+      const err = graph.getGraphErr()
+      const units = graph.getUnits()
+
+      const pinData = {}
+
+      forEachValueKey(units, (unit: Unit, unitId: Key) => {
+        const unitPinData = unit.getPinsData()
+
+        const _unitPinData = stringifyPinData(unitPinData)
+
+        pinData[unitId] = _unitPinData
+      })
+
+      const _mergeData = graph.getGraphMergeInputData()
+
+      const mergeData = {}
+
+      for (const mergeId in _mergeData) {
+        const data = _mergeData[mergeId]
+        Performance
+        if (data === undefined) {
+          mergeData[mergeId] = undefined
+        } else {
+          mergeData[mergeId] = stringify(data)
+        }
+      }
+
+      callback({ children, err, pinData, mergeData })
+    },
+
+    async $snapshot(
+      data: {},
+      callback: (state: {
+        input: Dict<any>
+        output: Dict<any>
+        memory: Dict<any>
+      }) => void
+    ) {
+      const memory = graph.snapshot()
+      callback(memory)
+    },
+
+    $snapshotUnit(
+      { unitId }: { unitId: string },
+      callback: (state: {
+        input: Dict<any>
+        output: Dict<any>
+        memory: Dict<any>
+      }) => void
+    ) {
+      const unit = graph.getUnit(unitId)
+
+      const memory = unit.snapshot()
+
+      stringifyMemorySpecData(memory)
+
+      callback(memory)
+    },
+
+    $getGraphChildren({}: {}, callback: (state: Dict<any>) => void) {
+      const children = graph.getGraphChildren()
+      callback(children)
+    },
+
+    $getGraphErr({}: {}, callback: (data: Dict<string | null>) => void): void {
+      const state = graph.getGraphErr()
+      callback(state)
+    },
+
+    $getGraphPinData({}: {}, callback: (data: Dict<any>) => void): void {
+      const pinData = {}
+
+      const units = graph.getUnits()
+
+      forEachValueKey(units, (unit: Unit, unitId: Key) => {
+        const unitPinData = unit.getPinsData()
+
+        const _unitPinData = stringifyPinData(unitPinData)
+
+        pinData[unitId] = _unitPinData
+      })
+
+      callback(pinData)
+    },
+
+    $getGraphMergeInputData({}: {}, callback: (data: Dict<any>) => void): void {
+      const mergeData = graph.getGraphMergeInputData()
+      const _mergeData = stringifyDataObj(mergeData)
+      callback(_mergeData)
+    },
+
+    $getUnitInputData(
+      { unitId }: { unitId: string },
+      callback: (data: Dict<any>) => void
+    ): void {
+      const state = graph.getUnitInputData(unitId)
+      callback(state)
+    },
+  }
+
+  return obj
 }
 
 export const AsyncGCall = (graph: Graph): $G_C => {
@@ -143,10 +278,11 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     $addUnit({
       unitId,
       bundle,
+      parentId,
       fork = true,
       bubble = true,
     }: GraphAddUnitData): void {
-      call('addUnitSpec', fork, bubble, unitId, bundle)
+      call('addUnitSpec', fork, bubble, unitId, bundle, parentId)
     },
 
     $cloneUnit({
@@ -276,7 +412,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
     }: GraphCoverUnitPinSetData) {
       const unit = graph.getUnit(unitId) as Graph
 
-      _call(unit, 'coverPinSet', fork, bubble, unitId, type, pinId)
+      _call(unit, 'coverPinSet', fork, bubble, type, pinId)
     },
 
     $setPinSetId({
@@ -589,136 +725,6 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       graph.takeUnitErr(unitId)
     },
 
-    $getBundle(
-      { deep }: { deep: boolean },
-      callback: Callback<BundleSpec>
-    ): void {
-      const bundle = graph.getBundleSpec(deep)
-
-      const { spec } = bundle
-
-      stringifyGraphSpecData(spec)
-
-      callback(bundle)
-    },
-
-    $getUnitPinData(
-      { unitId, type, pinId }: { unitId: string; type: IO; pinId: string },
-      callback: (data: { input: Dict<any>; output: Dict<any> }) => void
-    ): void {
-      const state = graph.getUnitData(unitId, type, pinId)
-      callback(state)
-    },
-
-    $getGraphData(
-      data: {},
-      callback: Callback<{
-        children: Dict<any>
-        pinData: Dict<any>
-        err: Dict<string | null>
-        mergeData: Dict<any>
-      }>
-    ): void {
-      const children = graph.getGraphChildren()
-      const err = graph.getGraphErr()
-      const units = graph.getUnits()
-
-      const pinData = {}
-
-      forEachValueKey(units, (unit: Unit, unitId: Key) => {
-        const unitPinData = unit.getPinsData()
-
-        const _unitPinData = stringifyPinData(unitPinData)
-
-        pinData[unitId] = _unitPinData
-      })
-
-      const _mergeData = graph.getGraphMergeInputData()
-
-      const mergeData = {}
-
-      for (const mergeId in _mergeData) {
-        const data = _mergeData[mergeId]
-        Performance
-        if (data === undefined) {
-          mergeData[mergeId] = undefined
-        } else {
-          mergeData[mergeId] = stringify(data)
-        }
-      }
-
-      callback({ children, err, pinData, mergeData })
-    },
-
-    async $snapshot(
-      data: {},
-      callback: (state: {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      }) => void
-    ) {
-      const memory = graph.snapshot()
-      callback(memory)
-    },
-
-    $snapshotUnit(
-      { unitId }: { unitId: string },
-      callback: (state: {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      }) => void
-    ) {
-      const unit = graph.getUnit(unitId)
-
-      const memory = unit.snapshot()
-
-      stringifyMemorySpecData(memory)
-
-      callback(memory)
-    },
-
-    $getGraphChildren({}: {}, callback: (state: Dict<any>) => void) {
-      const children = graph.getGraphChildren()
-      callback(children)
-    },
-
-    $getGraphErr({}: {}, callback: (data: Dict<string | null>) => void): void {
-      const state = graph.getGraphErr()
-      callback(state)
-    },
-
-    $getGraphPinData({}: {}, callback: (data: Dict<any>) => void): void {
-      const pinData = {}
-
-      const units = graph.getUnits()
-
-      forEachValueKey(units, (unit: Unit, unitId: Key) => {
-        const unitPinData = unit.getPinsData()
-
-        const _unitPinData = stringifyPinData(unitPinData)
-
-        pinData[unitId] = _unitPinData
-      })
-
-      callback(pinData)
-    },
-
-    $getGraphMergeInputData({}: {}, callback: (data: Dict<any>) => void): void {
-      const mergeData = graph.getGraphMergeInputData()
-      const _mergeData = stringifyDataObj(mergeData)
-      callback(_mergeData)
-    },
-
-    $getUnitInputData(
-      { unitId }: { unitId: string },
-      callback: (data: Dict<any>) => void
-    ): void {
-      const state = graph.getUnitInputData(unitId)
-      callback(state)
-    },
-
     $setPinSetDefaultIgnored({
       type,
       pinId,
@@ -781,9 +787,9 @@ export const AsyncGRef = (graph: Graph): $G_R => {
     $refUnit({ unitId, _ }: { unitId: string; _: string[] }): $U {
       const unit = graph.getUnit(unitId)
 
-      const $unit = Async(unit, _)
+      const $unit = Async(unit, _, graph.__system.async)
 
-      return proxyWrap($unit, _)
+      return $unit
     },
 
     $refSubComponent({
@@ -795,15 +801,16 @@ export const AsyncGRef = (graph: Graph): $G_R => {
     }): $Component {
       const unit = graph.getUnit(unitId)
 
-      const $unit = Async(unit, _)
+      const $unit = Async(unit, _, graph.__system.async)
 
-      return proxyWrap($unit, _)
+      return $unit
     },
   }
 }
 
 export const AsyncG = (graph: Graph): $G => {
   return {
+    ...AsyncGGet(graph),
     ...AsyncGWatch(graph),
     ...AsyncGCall(graph),
     ...AsyncGRef(graph),

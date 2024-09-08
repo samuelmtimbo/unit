@@ -1,24 +1,29 @@
+import { $ } from '../../../Class/$'
 import {
   $refChildContainer,
   $refParentChildContainer,
   $refParentRootContainer,
-} from '../../../component/$component'
+} from '../../../component/$wrapper'
 import { WP } from '../WP'
 import { $Component } from './$Component'
-import { $W, $W_C, $W_R, $W_W } from './$W'
+import { $W, $W_C, $W_G, $W_R, $W_W } from './$W'
 
-export const AsyncWCall = (w: WP): $W_C => {
+export const AsyncWGet = (wrapper: WP): $W_G => {
   return {}
 }
 
-export const AsyncWWatch = (w: WP): $W_W => {
+export const AsyncWCall = (wrapper: WP): $W_C => {
   return {}
 }
 
-export const AsyncWRef = (w: WP): $W_R => {
+export const AsyncWWatch = (wrapper: WP): $W_W => {
+  return {}
+}
+
+export const AsyncWRef = (wrapper: WP & $): $W_R => {
   return {
     $refChildContainer({ at, _ }: { at: number; _: string[] }): $Component {
-      const $container = $refChildContainer(w, { at, _ })
+      const $container = $refChildContainer(wrapper, { at, _ })
       return $container
     },
     $refParentRootContainer({
@@ -28,7 +33,7 @@ export const AsyncWRef = (w: WP): $W_R => {
       at: number
       _: string[]
     }): $Component {
-      const $container = $refParentRootContainer(w, { at, _ })
+      const $container = $refParentRootContainer(wrapper, { at, _ })
       return $container
     },
     $refParentChildContainer({
@@ -38,16 +43,17 @@ export const AsyncWRef = (w: WP): $W_R => {
       at: number
       _: string[]
     }): $Component {
-      const $container = $refParentChildContainer(w, { at, _ })
+      const $container = $refParentChildContainer(wrapper, { at, _ })
       return $container
     },
   }
 }
 
-export const AsyncW: (w: WP) => $W = (w: WP) => {
+export const AsyncW: (wrapper: WP & $) => $W = (wrapper: WP & $) => {
   return {
-    ...AsyncWCall(w),
-    ...AsyncWWatch(w),
-    ...AsyncWRef(w),
+    ...AsyncWGet(wrapper),
+    ...AsyncWCall(wrapper),
+    ...AsyncWWatch(wrapper),
+    ...AsyncWRef(wrapper),
   }
 }

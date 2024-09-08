@@ -25,7 +25,13 @@ export type GraphMoveSubGraphData = {
     merge?: Dict<string>
     link?: Dict<IOOf<Dict<{ mergeId: string; oppositePinId: string } | null>>>
     plug?: IOOf<
-      Dict<Dict<{ mergeId: string; type: IO; subPinId: string } | null>>
+      Dict<
+        Dict<{
+          mergeId: string
+          type: IO
+          subPinId: string
+        } | null>
+      >
     >
     unit?: Dict<string>
     data?: Dict<string>
@@ -128,14 +134,6 @@ export type GraphRemoveUnitPinDataData = {
   bubble?: boolean
 }
 
-export type GraphMoveUnitData = {
-  id: string
-  unitId: string
-  inputId: string
-  fork?: boolean
-  bubble?: boolean
-}
-
 export type GraphAddUnitsData = {
   units: GraphUnitsSpec
   fork?: boolean
@@ -160,7 +158,7 @@ export type GraphExposePinSetData = {
   type: IO
   pinId: string
   pinSpec: GraphPinSpec
-  data: any
+  data?: any
   fork?: boolean
   bubble?: boolean
 }

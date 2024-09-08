@@ -36,11 +36,16 @@ export type UnitRemovePinDataData = {
   pinId: string
 }
 
-export type UnitGetPinDataData = {}
+export type UnitGetPinDataData = {
+  pinId: string
+  type: IO
+}
 
-export type UnitGetInputDataData = {}
+export type UnitGetAllPinDataData = {}
 
-export type UnitGetRefInputDataData = {}
+export type UnitGetAllInputDataData = {}
+
+export type UnitGetAllRefInputDataData = {}
 
 export type UnitGetUnitBundleSpecData = {
   deep?: boolean

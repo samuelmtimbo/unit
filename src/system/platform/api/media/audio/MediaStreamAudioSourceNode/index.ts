@@ -64,7 +64,7 @@ export default class MediaStreamAudioSourceNode_ extends Functional<I, O> {
     if (sourceNode.__.includes('AC')) {
       sourceNode = sourceNode as AC & $
 
-      context = sourceNode.get()
+      context = sourceNode.audioContext()
     } else {
       sourceNode = sourceNode as AN & $
 

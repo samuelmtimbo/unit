@@ -3,6 +3,7 @@ import { makeUnitRemoteRef } from '../../../client/makeUnitRemoteRef'
 import { RemoteRef } from '../../../client/RemoteRef'
 import { CONNECT, DISCONNECT, EXEC, TERMINATE } from '../../../constant/STRING'
 import { Dict } from '../../../types/Dict'
+import { UCGEE } from '../../../types/interface/UCGEE'
 import { Unlisten } from '../../../types/Unlisten'
 import { uuidNotInLocalStorage } from './uuidNotInLocalStorage'
 
@@ -77,7 +78,7 @@ export function shareLocalGraph(graph: Graph): {
         {
           const name = _data
           const bc = new BroadcastChannel(name)
-          const ref = makeUnitRemoteRef(graph, ['U', 'C', 'G'], (data) => {
+          const ref = makeUnitRemoteRef(graph, UCGEE, (data) => {
             bc.postMessage({ type: EXEC, data })
           })
           bc.addEventListener('message', (event: MessageEvent): void => {

@@ -6,7 +6,7 @@ export function getComponentInterface(component: Component): string[] {
   if (component.$primitive) {
     _ = [..._, 'V', 'J']
   }
-  if (component.$unbundled) {
+  if (!component.$primitive) {
     _ = [..._, 'G']
   }
   return _

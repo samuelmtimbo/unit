@@ -1,7 +1,6 @@
 import { GraphMoveSubGraphData } from '../../Class/Graph/interface'
 import { getSpec } from '../../client/spec'
 import { SELF } from '../../constant/SELF'
-import deepGet from '../../deepGet'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'
 import { keys } from '../../system/f/object/Keys/f'
@@ -28,6 +27,7 @@ import { GraphSelection } from '../../types/interface/G'
 import {
   _keyCount,
   clone,
+  deepGet,
   deepGetOrDefault,
   deepSet,
   getObjSingleKey,
@@ -797,6 +797,17 @@ export function makeFullSpecCollapseMap(
         )
       ) {
         nodeIds.plug.push({ type, pinId, subPinId })
+
+        if (mergeId) {
+          const merge = getMerge(mergeId)
+
+          deepSet(
+            nextIdMap,
+            ['plug', type, pinId, subPinId, 'mergeId'],
+            mergeId
+          )
+          deepSet(nextIdMap, ['plug', type, pinId, subPinId, 'merge'], merge)
+        }
 
         let nextSubPinSpec = {}
 

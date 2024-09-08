@@ -861,11 +861,6 @@ export function lazyFromSpec(
       return this.__graph.addUnit(unitId, unit)
     }
 
-    public moveUnit(id: string, unitId: string, inputId: string): void {
-      this._ensure()
-      return this.__graph.moveUnit(id, unitId, inputId)
-    }
-
     public removeUnit(unitId: string, ...extra: any[]) {
       this._ensure()
       return this.__graph.removeUnit(unitId, ...extra)
@@ -893,16 +888,6 @@ export function lazyFromSpec(
     ): { specId: string; bundle: UnitBundleSpec } {
       this._ensure()
       return this.__graph.removeUnitGhost(unitId, nextUnitId, nextUnitSpec)
-    }
-
-    public explodeUnit(
-      unitId: string,
-      mapUnitId: Dict<string>,
-      mapMergeId: Dict<string>,
-      mapPlugId: IOOf<Dict<Dict<string>>>
-    ): void {
-      this._ensure()
-      return this.__graph.explodeUnit(unitId, mapUnitId, mapMergeId, mapPlugId)
     }
 
     public addMerge = (mergeSpec: GraphMergeSpec, mergeId: string): void => {

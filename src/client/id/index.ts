@@ -527,6 +527,17 @@ export function camelToSnake(str: string): string {
   return kebab
 }
 
+export function snakeToCamel(str: string): string {
+  const segments = str.split(/\s*_\s*/)
+  const first_segment = segments[0]
+  const segments_tail = segments.slice(1)
+  const camelled_segments_tail = segments_tail.map((_str) =>
+    upperCaseFirstLetter(_str)
+  )
+  const camel = first_segment + camelled_segments_tail.join('')
+  return camel
+}
+
 export function camelToDashed(str: string): string {
   const segments = str.split(/(?=[A-Z])/)
   const kebab = segments.map((_str) => _str.toLowerCase()).join('-')

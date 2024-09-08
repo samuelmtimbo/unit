@@ -1,17 +1,20 @@
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
+import { MethodType } from './method'
 
-type RemoteAPICall = (data: any, callback: Callback<any>) => void
-type RemoteAPIWatch = (data: any, callback: Callback<any>) => Unlisten
+type Get = (data: any, callback: Callback<any>) => void
+type Call = (data: any, callback: Callback<any>) => void
+type Watch = (data: any, callback: Callback<any>) => Unlisten
 
 export interface RemoteAPI {
-  call: Dict<RemoteAPICall>
-  watch: Dict<RemoteAPIWatch>
+  get: Dict<Get>
+  call: Dict<Call>
+  watch: Dict<Watch>
   ref: Dict<(data: any) => RemoteAPI>
 }
 
 export type RemoteAPIData = {
-  type: 'call' | 'watch' | 'unwatch' | 'ref' | 'ref_exec'
+  type: MethodType | 'unwatch' | 'ref_exec'
   data: any
 }

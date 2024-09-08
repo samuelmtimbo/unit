@@ -6,4 +6,4 @@
 
 // const graph = new Graph({}, {}, system)
 
-// const $graph = Async(graph, ['U', 'G', 'C', 'EE'])
+// const $graph = Async(graph, ['U', 'G', 'C', 'EE'], system.async)

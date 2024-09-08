@@ -1,4 +1,3 @@
-import deepGet from '../../deepGet'
 import deepSet from '../../deepSet'
 import dissocPath from '../../system/core/object/DeletePath/f'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
@@ -17,6 +16,7 @@ import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
 import {
   clone,
+  deepGet,
   deepGetOrDefault,
   getObjSingleKey,
   isEmptyObject,

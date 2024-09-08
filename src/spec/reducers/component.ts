@@ -1,4 +1,3 @@
-import deepGet from '../../deepGet'
 import deepSet from '../../deepSet'
 import removeIndex from '../../system/core/array/RemoveIndex/f'
 import dissocPath from '../../system/core/object/DeletePath/f'
@@ -7,6 +6,7 @@ import { _insert } from '../../system/f/array/Insert/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { GraphComponentSpec, GraphSubComponentSpec } from '../../types'
+import { deepGet } from '../../util/object'
 
 export type State = GraphComponentSpec
 

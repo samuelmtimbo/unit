@@ -52,8 +52,6 @@ export type G_MoveSubgraphIntoArgs = [
   GraphMoveSubGraphData['nextPlugSpec'],
   Dict<string | null>,
   Dict<string[]>,
-  boolean?,
-  boolean?,
 ]
 
 export interface G<
@@ -114,7 +112,12 @@ export interface G<
   getMergesSpec(): GraphMergesSpec
   getMergeSpec(mergeId: string): GraphMergeSpec
   addUnitSpec(unitId: string, unit: UnitBundleSpec, ...extra: any[]): void
-  addUnit(unitId: string, unit: U_, ...extra: any[]): void
+  addUnit(
+    unitId: string,
+    unit: U_,
+    bundle?: UnitBundleSpec,
+    ...extra: any[]
+  ): void
   removeUnit(unitId: string, destroy: boolean, ...extra: any[]): void
   removeRoot(subComponentId: string): void
   removeMerge(mergeId: string, ...extra: any[]): void
@@ -202,19 +205,12 @@ export interface G<
     children: string[],
     slotMap: Dict<string>
   ): void
-  moveUnit(unitId: string, toUnitId: string, toInputId: string): void
   moveSubgraphInto(...args: G_MoveSubgraphIntoArgs): void
   moveSubgraphOutOf(...args: G_MoveSubgraphIntoArgs): void
   reorderSubComponent(
     parentId: string | null,
     childId: string,
     to: number
-  ): void
-  explodeUnit(
-    unitId: string,
-    mapUnitId: Dict<string>,
-    mapMergeId: Dict<string>,
-    mapPlugId: IOOf<Dict<Dict<string>>>
   ): void
   hasUnit(unitId: string): boolean
   hasMerge(mergeId: string): boolean
@@ -245,8 +241,6 @@ export interface G<
     pinId: string,
     ...extra: any[]
   ): void
-  startTransaction(): void
-  endTransaction(): void
   fork(): void
 }
 

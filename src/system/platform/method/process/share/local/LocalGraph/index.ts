@@ -1,4 +1,4 @@
-import { AsyncWorkerGraph } from '../../../../../../../AsyncWorker'
+import { AsyncWorker } from '../../../../../../../AsyncWorker'
 import { $ } from '../../../../../../../Class/$'
 import { Functional } from '../../../../../../../Class/Functional'
 import { Done } from '../../../../../../../Class/Functional/Done'
@@ -19,6 +19,7 @@ import { RemotePort } from '../../../../../../../RemotePort'
 import { System } from '../../../../../../../system'
 import { Port } from '../../../../../../../types/global/Port'
 import { $Graph } from '../../../../../../../types/interface/async/$Graph'
+import { UCGEE } from '../../../../../../../types/interface/UCGEE'
 import { $wrap } from '../../../../../../../wrap'
 import { ID_LOCAL_GRAPH } from '../../../../../../_ids'
 
@@ -117,9 +118,9 @@ export default class LocalGraph extends Functional<I, O> {
     const remote_port = new RemotePort(port)
     this._remote_port = remote_port
 
-    const $graph: $Graph = AsyncWorkerGraph(remote_port)
+    const $graph: $Graph = AsyncWorker(remote_port, UCGEE)
 
-    const graph = $wrap<$Graph>(this.__system, $graph, ['U', 'C', 'G'])
+    const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
 
     done({ graph })
   }

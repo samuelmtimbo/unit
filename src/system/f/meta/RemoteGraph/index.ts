@@ -1,4 +1,4 @@
-import { AsyncWorkerGraph } from '../../../../AsyncWorker'
+import { AsyncWorker } from '../../../../AsyncWorker'
 import { $ } from '../../../../Class/$'
 import { Done } from '../../../../Class/Functional/Done'
 import { Holder } from '../../../../Class/Holder'
@@ -6,6 +6,7 @@ import { RemotePort } from '../../../../RemotePort'
 import { EXEC, INIT, TERMINATE } from '../../../../constant/STRING'
 import { System } from '../../../../system'
 import { Port } from '../../../../types/global/Port'
+import { UCGEE } from '../../../../types/interface/UCGEE'
 import { $Graph } from '../../../../types/interface/async/$Graph'
 import { $wrap } from '../../../../wrap'
 import { ID_REMOTE_GRAPH } from '../../../_ids'
@@ -103,9 +104,9 @@ export default class Remote extends Holder<I, O> {
 
             this._remote_port = remote_port
 
-            const $graph: $Graph = AsyncWorkerGraph(remote_port)
+            const $graph: $Graph = AsyncWorker(remote_port, UCGEE)
 
-            const graph = $wrap<$Graph>(this.__system, $graph, ['U', 'C', 'G'])
+            const graph = $wrap<$Graph>(this.__system, $graph, UCGEE)
 
             this._output.graph.push(graph)
           }

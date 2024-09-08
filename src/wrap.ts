@@ -8,8 +8,7 @@ export function $wrap<T>(
   __: string[] = []
 ): T & $ {
   const wrap = new (class Wrapped extends $ {
-    __async = true
-    __ = __
+    $__ = __
 
     constructor(system) {
       super(system)

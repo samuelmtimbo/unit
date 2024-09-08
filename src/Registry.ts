@@ -1,6 +1,5 @@
 import { Object_ } from './Object'
 import { emptySpec, isSystemSpecId } from './client/spec'
-import deepGet from './deepGet'
 import { evaluateDataValue } from './spec/evaluateDataValue'
 import { remapSpec } from './spec/remapSpec'
 import { Spec, Specs } from './types'
@@ -9,7 +8,7 @@ import { GraphSpec } from './types/GraphSpec'
 import { GraphSpecs } from './types/GraphSpecs'
 import { R } from './types/interface/R'
 import { uuidNotIn } from './util/id'
-import { clone } from './util/object'
+import { clone, deepGet } from './util/object'
 import { weakMerge } from './weakMerge'
 
 export class Registry implements R {

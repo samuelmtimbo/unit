@@ -1,7 +1,7 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
-import deepGet from '../../../../deepGet'
 import { System } from '../../../../system'
+import { deepGet } from '../../../../util/object'
 import { ID_DEEP_GET } from '../../../_ids'
 
 export interface I<T> {

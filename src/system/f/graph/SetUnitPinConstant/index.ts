@@ -36,7 +36,7 @@ export default class SetUnitPinConstant<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ graph, id, type, name, constant }: I<T>, done: Done<O<T>>): void {
-    graph = Async(graph, ['G'])
+    graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$setUnitPinConstant({ unitId: id, type, pinId: name, constant })

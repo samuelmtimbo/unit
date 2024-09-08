@@ -1,10 +1,10 @@
-import { Functional } from '../../../../Class/Functional'
-import { Done } from '../../../../Class/Functional/Done'
-import { getSpec } from '../../../../client/spec'
-import { System } from '../../../../system'
-import { UnitBundle } from '../../../../types/UnitBundle'
-import { weakMerge } from '../../../../weakMerge'
-import { ID_HAS_INPUT } from '../../../_ids'
+import { Functional } from '../../../../../Class/Functional'
+import { Done } from '../../../../../Class/Functional/Done'
+import { getSpec } from '../../../../../client/spec'
+import { System } from '../../../../../system'
+import { UnitBundle } from '../../../../../types/UnitBundle'
+import { weakMerge } from '../../../../../weakMerge'
+import { ID_HAS_INPUT } from '../../../../_ids'
 
 export interface I<T> {
   unit: UnitBundle

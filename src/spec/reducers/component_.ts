@@ -1,11 +1,15 @@
 import { GraphMoveSubComponentRootData } from '../../Class/Graph/interface'
-import deepGet from '../../deepGet'
 import { deepSet_ } from '../../deepSet'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
 import { GraphComponentSpec, GraphSubComponentSpec } from '../../types'
 import { insert, pull, push, removeAt, reorder } from '../../util/array'
-import { deepDelete, deepGetOrDefault, deepSet } from '../../util/object'
+import {
+  deepDelete,
+  deepGet,
+  deepGetOrDefault,
+  deepSet,
+} from '../../util/object'
 import { getComponentSubComponentParentId } from '../util/component'
 
 export const appendChild = (

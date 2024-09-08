@@ -62,7 +62,7 @@ export default class AudioComp
       if (stream === undefined) {
         this.$element.srcObject = null
       } else {
-        stream.$get({}, (_stream: MediaStream) => {
+        stream.$mediaStream({}, (_stream: MediaStream) => {
           this.$element.srcObject = _stream
         })
       }
