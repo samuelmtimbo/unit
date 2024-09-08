@@ -37,7 +37,7 @@ export default class AddUnit<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ id, class: Class, graph }: I<T>, done: Done<O<T>>): void {
-    graph = Async(graph, ['G'])
+    graph = Async(graph, ['G'], this.__system.async)
 
     try {
       const { __bundle } = Class

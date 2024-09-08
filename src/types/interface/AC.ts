@@ -1,5 +1,5 @@
 export interface AC {
-  get(): AudioContext
+  audioContext(): AudioContext
   disconnect(audioNode?: AudioNode): void
   getDestination(): AudioDestinationNode
   createOscillator(opt: OscillatorOptions): OscillatorNode

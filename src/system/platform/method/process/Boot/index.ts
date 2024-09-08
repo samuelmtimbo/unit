@@ -53,7 +53,7 @@ export default class Boot extends Holder<I, O> {
 
     const system = wrapSystem(_system, this.__system)
 
-    const $system = Async(system, ['S'])
+    const $system = Async(system, ['S'], this.__system.async)
 
     done({
       system: $system,

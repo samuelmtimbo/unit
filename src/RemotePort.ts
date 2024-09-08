@@ -1,4 +1,5 @@
-import { CALL, REF, REF_EXEC, UNWATCH, WATCH } from './constant/STRING'
+import { MethodType } from './client/method'
+import { CALL, GET, REF, REF_EXEC, UNWATCH, WATCH } from './constant/STRING'
 import { EventEmitter_, EventEmitter_EE } from './EventEmitter'
 import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
@@ -40,14 +41,20 @@ export class RemotePort {
 
   exec(data) {
     const { type, data: _data } = data as {
-      type: 'call' | 'watch' | 'ref'
+      type: MethodType
       id: string
       data: any
     }
 
     const { id, data: __data } = _data
 
-    if (type === CALL) {
+    if (type === GET) {
+      if (!this._call_id.has(id)) {
+        throw new Error('unexpected worker call message id')
+      }
+
+      this._call_emitter.emit(id, __data)
+    } else if (type === CALL) {
       if (!this._call_id.has(id)) {
         throw new Error('unexpected worker call message id')
       }
@@ -66,6 +73,25 @@ export class RemotePort {
     } else {
       throw new Error('unexpected worker message type')
     }
+  }
+
+  get(method: string, data: any, callback: Callback<any>): void {
+    const id = randomIdNotInSet(this._call_id)
+
+    this._call_id.add(id)
+
+    const listener = (data) => {
+      this._call_emitter.removeListener(id, listener)
+      this._call_id.delete(id)
+
+      callback(data)
+    }
+
+    this._call_emitter.addListener(id, listener)
+
+    const _data = { type: GET, data: { id, method, data } }
+
+    this._port.send(_data)
   }
 
   call(method: string, data: any, callback: Callback<any>): void {

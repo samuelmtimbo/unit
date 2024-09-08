@@ -10,7 +10,7 @@ export function wrapAudioContext(
   const ctx = new (class Node extends $ implements AC {
     __: string[] = ['AC']
 
-    get(): AudioContext {
+    audioContext(): AudioContext {
       return audioContext
     }
 

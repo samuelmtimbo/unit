@@ -1,15 +1,13 @@
-import { Unit } from './Class/Unit'
+import { $ } from './Class/$'
 import { extractValueInterface } from './extractValueInterface'
 
 export function extractInterface(value: any): string[] {
   const _ = []
 
-  if (value instanceof Unit) {
-    _.push('U')
-  }
-
-  if (value instanceof Element) {
-    _.push('G')
+  if (value instanceof $) {
+    for (const __ of value.__) {
+      _.push(__)
+    }
   }
 
   const __ = extractValueInterface(value)

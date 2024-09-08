@@ -1,7 +1,11 @@
 import { proxyWrap } from '../../../proxyWrap'
 import { S } from '../S'
-import { $S, $S_C, $S_R, $S_W } from './$S'
+import { $S, $S_C, $S_G, $S_R, $S_W } from './$S'
 import { AsyncGraph } from './AsyncGraph'
+
+export const AsyncSGet = (system: S): $S_G => {
+  return {}
+}
 
 export const AsyncSCall = (system: S): $S_C => {
   return {}
@@ -27,6 +31,7 @@ export const AsyncSRef = (system: S): $S_R => {
 
 export const AsyncS = (system: S): $S => {
   return {
+    ...AsyncSGet(system),
     ...AsyncSCall(system),
     ...AsyncSWatch(system),
     ...AsyncSRef(system),

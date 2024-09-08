@@ -1,6 +1,9 @@
+export const NO_METHOD_GET = []
 export const NO_METHOD_CALL = ['show', 'close']
 export const NO_METHOD_WATCH = []
 export const NO_METHOD_REF = []
+
+export interface $NO_G {}
 
 export interface $NO_C {
   $show(data: {}): void
@@ -11,4 +14,4 @@ export interface $NO_W {}
 
 export interface $NO_R {}
 
-export interface $NO extends $NO_C, $NO_W, $NO_R {}
+export interface $NO extends $NO_G, $NO_C, $NO_W, $NO_R {}

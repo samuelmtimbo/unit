@@ -30,10 +30,8 @@ import {
 } from '../../component/method'
 import { GRAPH_DEFAULT_EVENTS } from '../../constant/GRAPH_DEFAULT_EVENTS'
 import { SELF } from '../../constant/SELF'
-import deepGet from '../../deepGet'
 import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
 import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
-import { MethodNotImplementedError } from '../../exception/MethodNotImplementedError'
 import { ReadOnlyError } from '../../exception/ObjectReadOnly'
 import { UnitNotFoundError } from '../../exception/UnitNotFoundError'
 import {
@@ -92,7 +90,6 @@ import {
   hasMerge,
   hasMergePin,
   isSelfPin,
-  makeFullSpecCollapseMap,
   opposite,
 } from '../../spec/util/spec'
 import { System } from '../../system'
@@ -138,6 +135,7 @@ import {
   clone,
   deepDelete,
   deepDestroy,
+  deepGet,
   deepGetOrDefault,
   deepSet,
   forEachObjKV,
@@ -168,7 +166,6 @@ import {
   GraphMoveSubGraphData,
   GraphMoveSubGraphIntoData,
   GraphMoveSubGraphOutOfData,
-  GraphMoveUnitData,
   GraphPlugPinData,
   GraphRemoveMergeData,
   GraphRemovePinFromMergeData,
@@ -550,10 +547,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const waitAll = this._waitAll[type]
 
     waitAll.addPin(type, name, pin, {})
-
-    if (waitAll.hasPinNamed(oppositeType, name)) {
-      throw new Error()
-    }
     waitAll.setPin(oppositeType, name, oppositePin)
 
     this.setPin(type, name, pin, {})
@@ -5560,7 +5553,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap,
     ]: G_MoveSubgraphIntoArgs
   ): void {
-    this.__moveSubgraphInto(
+    this._moveSubgraphInto(
       graphId,
       graphBundle,
       graphSpec,
@@ -5728,19 +5721,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return isComponent
   }
 
-  public explodeUnit(
-    graphId: string,
-    mapUnitId: Dict<string>,
-    mapMergeId: Dict<string>,
-    plugIdMap: IOOf<Dict<Dict<string>>>
-  ): void {
-    // console.log('Graph', 'explodeUnit', graphId, mapUnitId, mapMergeId)
-
-    this._explodeUnit(graphId, mapUnitId, mapMergeId, plugIdMap)
-
-    this.emit('explode_unit', graphId, mapUnitId, mapMergeId, [])
-  }
-
   public moveSubgraphOutOf(
     ...[
       graphId,
@@ -5754,7 +5734,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
-      fork = true,
     ]: G_MoveSubgraphIntoArgs
   ): void {
     // console.log(
@@ -5782,8 +5761,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextMergePinId,
       nextPlugSpec,
       nextSubComponentParentMap,
-      nextSubComponentChildrenMap,
-      fork
+      nextSubComponentChildrenMap
     )
 
     this.emit(
@@ -5815,8 +5793,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
-      fork = true,
-      bubble = true,
     ]: G_MoveSubgraphIntoArgs
   ): void {
     // console.log(
@@ -5835,9 +5811,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const graph = this.getUnit(graphId) as Graph
 
-    const merges = clone(this.getUnitMergesSpec(graphId))
-    const plugs = clone(this.getUnitPlugsSpec(graphId))
-
     graph.startTransaction()
     graph.fork()
 
@@ -5852,8 +5825,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextMergePinId,
       nextPlugSpec,
       nextSubComponentParentMap,
-      nextSubComponentChildrenMap,
-      fork
+      nextSubComponentChildrenMap
     )
 
     graph.endTransaction()
@@ -5872,11 +5844,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextPlugSpec,
       nextSubComponentParentMap,
       nextSubComponentChildrenMap,
-      fork = true,
     ]: G_MoveSubgraphIntoArgs
   ): void {
-    fork && this._fork()
-
     const graph = this.getUnit(graphId) as Graph
 
     const merges = clone(this.getUnitMergesSpec(graphId))
@@ -5925,74 +5894,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const unitBundle = unit.getUnitBundleSpec()
 
     return unitBundle
-  }
-
-  public _explodeUnit(
-    graphId: string,
-    unitIdMap: Dict<string>,
-    mergeIdMap: Dict<string>,
-    plugIdMap: IOOf<Dict<Dict<string>>>,
-    fork: boolean = true,
-    bubble: boolean = true
-  ): void {
-    // console.log('Graph', '_explodeUnit', graphId, unitIdMap, mergeIdMap)
-
-    fork && this._fork(undefined, true, bubble)
-
-    const spec = this.getUnitSpec(graphId) as GraphSpec
-
-    const collapseMap = makeFullSpecCollapseMap(
-      graphId,
-      spec,
-      unitIdMap,
-      mergeIdMap,
-      plugIdMap,
-      {
-        getMerge: (mergeId) => this.getMergeSpec(mergeId),
-        getUnitMerges: (unitId) => this.getUnitMergesSpec(unitId),
-        getUnitPlugs: (unitId) => this.getUnitPlugsSpec(unitId),
-        getPinMergeId: (unitId, type, pinId) =>
-          this.getPinMergeId(unitId, type, pinId),
-        getPlugSpec: (type, pinId, subPinId) =>
-          this.getSubPinSpec(type, pinId, subPinId),
-        getUnitPinSpec: (unitId, type, pinId) => {
-          const unit = this.getUnit(unitId) as Graph
-
-          return unit.getExposedPinSpec(type, pinId)
-        },
-      }
-    )
-
-    const {
-      nodeIds,
-      nextSpecId,
-      nextIdMap,
-      nextPinIdMap,
-      nextMergePinId,
-      nextPlugSpec,
-      nextSubComponentParentMap,
-      nextSubComponentChildrenMap,
-    } = collapseMap
-
-    const graphBundle = this.getGraphUnitUnitBundleSpec(graphId)
-    const graphSpec = this.getGraphUnitGraphSpec(graphId)
-
-    this._moveSubgraphOutOf(
-      graphId,
-      graphBundle,
-      graphSpec,
-      nextSpecId,
-      nodeIds,
-      nextIdMap,
-      nextPinIdMap,
-      nextMergePinId,
-      nextPlugSpec,
-      nextSubComponentParentMap,
-      nextSubComponentChildrenMap,
-      true
-    )
-
-    this._removeUnit(graphId)
   }
 
   private _removeSubComponentFromParent(
@@ -6438,11 +6339,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
               )
             }
           },
-          moveUnit: (data: GraphMoveUnitData) => {
-            const { id, unitId, inputId } = data
-
-            this.moveUnit(id, unitId, inputId)
-          },
           moveSubgraphInto: (data: GraphMoveSubGraphIntoData) => {
             const {
               graphId,
@@ -6498,9 +6394,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
               nextMergePinId,
               nextPlugSpec,
               nextSubComponentParentMap,
-              nextSubComponentChildrenMap,
-              true,
-              true
+              nextSubComponentChildrenMap
             )
           },
           reorderSubComponent: (data: GraphReorderSubComponentData) => {
@@ -6595,9 +6489,5 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   private _specSetComponentSize(width: number, height: number) {
     setComponentSize({ width, height }, this._spec)
-  }
-
-  detach(): void {
-    throw new MethodNotImplementedError()
   }
 }

@@ -34,7 +34,7 @@ export default class AddMerge<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ id, merge, graph }: I<T>, done: Done<O<T>>): void {
-    graph = Async(graph, ['G'])
+    graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$addMerge({ mergeSpec: merge, mergeId: id })

@@ -53,7 +53,7 @@ export default class DeepGet0<T> extends Functional<I<T>, O<T>> {
 
     const _ = extractInterface(value_)
 
-    const value = Async(value_, _)
+    const value = Async(value_, _, this.__system.async)
 
     done({
       value,

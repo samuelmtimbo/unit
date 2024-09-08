@@ -1,4 +1,4 @@
-import deepGet from '../deepGet'
+import { deepGet } from '../util/object'
 import { evaluateDataValue } from '../spec/evaluateDataValue'
 import _classes from '../system/_classes'
 import _specs from '../system/_specs'

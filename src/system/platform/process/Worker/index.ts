@@ -1,4 +1,4 @@
-import { AsyncWorkerS } from '../../../../AsyncWorker'
+import { AsyncWorker } from '../../../../AsyncWorker'
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { workerPort } from '../../../../client/platform/web/port/worker'
@@ -67,7 +67,7 @@ export default class Worker extends Functional<I, O> {
 
     const port = this._client.port()
 
-    const $system = AsyncWorkerS(port)
+    const $system = AsyncWorker(port, ['S'])
 
     const system = $wrap<$S>(this.__system, $system)
 

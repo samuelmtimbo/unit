@@ -8,6 +8,7 @@ import { EXEC, INIT, TERMINATE } from '../../../../../constant/STRING'
 import { evaluate } from '../../../../../spec/evaluate'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
+import { UCGEE } from '../../../../../types/interface/UCGEE'
 import { ID_PEER_SHARE_GRAPH } from '../../../../_ids'
 
 export interface I {
@@ -119,7 +120,7 @@ export default class PeerShareGraph extends Semifunctional<I, O> {
       })
     })()
 
-    const ref = makeUnitRemoteRef(graph, ['U', 'C', 'G', 'EE'], (data) => {
+    const ref = makeUnitRemoteRef(graph, UCGEE, (data) => {
       this._send_exec(data)
     })
 

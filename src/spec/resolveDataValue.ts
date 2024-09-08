@@ -1,7 +1,7 @@
 import { DataRef } from '../DataRef'
-import deepGet from '../deepGet'
 import { deepSet_ } from '../deepSet'
 import { Classes, Specs } from '../types'
+import { deepGet } from '../util/object'
 import { fromUnitBundle } from './fromUnitBundle'
 
 export function resolveDataRef(

@@ -1,8 +1,7 @@
 import { DataRef } from '../DataRef'
-import deepGet from '../deepGet'
 import deepSet from '../deepSet'
 import { Classes, Specs } from '../types'
-import { clone } from '../util/object'
+import { clone, deepGet } from '../util/object'
 import { fromUnitBundle } from './fromUnitBundle'
 import { stringify } from './stringify'
 

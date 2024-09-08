@@ -1,5 +1,4 @@
 import { getSpec, isSystemSpecId } from './client/spec'
-import deepGet from './deepGet'
 import { evaluateDataValue } from './spec/evaluateDataValue'
 import { Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'
@@ -7,6 +6,7 @@ import { GraphSpec } from './types/GraphSpec'
 import { GraphSpecs } from './types/GraphSpecs'
 import { GraphUnitSpec } from './types/GraphUnitSpec'
 import { UnitBundleSpec } from './types/UnitBundleSpec'
+import { deepGet } from './util/object'
 import { weakMerge } from './weakMerge'
 
 export function unitBundleSpec(

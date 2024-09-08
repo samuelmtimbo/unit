@@ -12,9 +12,9 @@ export class $<
   _EE extends $Events<_EE> & Dict<any[]> = $Events<$_EE>,
 > extends EventEmitter_<_EE> {
   public __: string[] = []
+  public $__: string[] = []
   public __system: System
   public __global_id: string
-  public __async: boolean = false
   public __ref_count: number = 0
   public __done: boolean
 

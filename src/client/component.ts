@@ -9,6 +9,7 @@ import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { Unlisten } from '../types/Unlisten'
+import { UCGEE } from '../types/interface/UCGEE'
 import { $Component } from '../types/interface/async/$Component'
 import { $Graph } from '../types/interface/async/$Graph'
 import { insert, pull, push, remove, removeAt, unshift } from '../util/array'
@@ -63,7 +64,6 @@ import { getTextAlign } from './util/style/getTextAlign'
 
 const $childToComponent = (
   system: System,
-
   { bundle }: $Child
 ): Component<IOElement, {}, $Component> => {
   const { unit, specs = {} } = bundle
@@ -1803,7 +1803,7 @@ export class Component<
       return
     }
 
-    this.$unit = proxyWrap($unit, ['U', 'C', 'G', 'EE'])
+    this.$unit = proxyWrap($unit, UCGEE)
 
     const listen = (event: IOUIEventName): void => {
       this.$named_listener_count[event] = this.$named_listener_count[event] || 0

@@ -7,8 +7,8 @@ export const AsyncWrap = (
 ): any => {
   let $unit = unit
 
-  for (const ___ of _) {
-    const AsyncWrapper = wrapper[___]
+  for (const __ of _) {
+    const AsyncWrapper = wrapper[__]
 
     if (!AsyncWrapper) {
       throw new Error('async wrapper is not registered')

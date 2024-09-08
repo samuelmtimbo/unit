@@ -1,9 +1,9 @@
 import { stringify } from '../../../spec/stringify'
 import { Callback } from '../../Callback'
 import { V } from '../V'
-import { $V, $V_C, $V_R, $V_W } from './$V'
+import { $V, $V_C, $V_G, $V_R, $V_W } from './$V'
 
-export const AsyncVCall: (value: V) => $V_C = (value) => {
+export const AsyncVGet: (value: V) => $V_G = (value) => {
   return {
     async $read({}: {}, callback: Callback<any>): Promise<void> {
       let data: any
@@ -18,7 +18,11 @@ export const AsyncVCall: (value: V) => $V_C = (value) => {
 
       callback(_data)
     },
+  }
+}
 
+export const AsyncVCall: (value: V) => $V_C = (value) => {
+  return {
     async $write(
       { data }: { data: any },
       callback: Callback<void>
@@ -39,6 +43,7 @@ export const AsyncVRef: (value: V) => $V_R = (value) => {
 
 export const AsyncV: (value: V) => $V = (value: V) => {
   return {
+    ...AsyncVGet(value),
     ...AsyncVCall(value),
     ...AsyncVWatch(value),
     ...AsyncVRef(value),

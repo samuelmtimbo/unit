@@ -37,7 +37,7 @@ export default class AddUnit0<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ id, unit, graph }: I<T>, done: Done<O<T>>): void {
-    graph = Async(graph, ['G'])
+    graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$addUnit({ unitId: id, bundle: unit })

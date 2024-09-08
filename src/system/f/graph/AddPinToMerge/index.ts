@@ -36,7 +36,7 @@ export default class AddPinToMerge<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ graph, mergeId, type, pinId, unitId }: I<T>, done: Done<O<T>>): void {
-    graph = Async(graph, ['G'])
+    graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$addPinToMerge({ mergeId, unitId, type, pinId })

@@ -37,7 +37,7 @@ export default class AddPlug<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ graph, pinId, type, subPinId, subPin }: I<T>, done: Done<O<T>>): void {
-    graph = Async(graph, ['G'])
+    graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$exposePin({ type, pinId, subPinId, subPinSpec: subPin })

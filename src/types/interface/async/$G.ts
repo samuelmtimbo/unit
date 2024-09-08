@@ -42,7 +42,7 @@ import { Unlisten } from '../../Unlisten'
 import { $Component } from './$Component'
 import { $U } from './$U'
 
-export const G_METHOD_CALL_GET = [
+export const G_METHOD_GET = [
   'getPinData',
   'getInputData',
   'getUnitPinData',
@@ -56,7 +56,7 @@ export const G_METHOD_CALL_GET = [
   'getBundle',
 ]
 
-export const G_METHOD_CALL_SET = [
+export const G_METHOD_CALL = [
   'addUnit',
   'addUnits',
   'removeUnit',
@@ -99,8 +99,6 @@ export const G_METHOD_CALL_SET = [
   'bulkEdit',
 ]
 
-export const G_METHOD_CALL = [...G_METHOD_CALL_GET, ...G_METHOD_CALL_SET]
-
 export const G_METHOD_WATCH = [
   'watchGraph',
   'watchUnit',
@@ -109,9 +107,50 @@ export const G_METHOD_WATCH = [
   'watchGraphUnitPath',
 ]
 
-export const G_METHOD_REF = ['transcend', 'refSubComponent', 'refUnit']
+export const G_METHOD_REF = ['refSubComponent', 'refUnit']
 
-export const G_METHOD = [...G_METHOD_CALL, ...G_METHOD_WATCH, ...G_METHOD_REF]
+export interface $G_G {
+  $getUnitPinData(
+    data: {},
+    callback: (data: { input: Dict<any>; output: Dict<any> }) => void
+  ): void
+  $snapshot(
+    data: {},
+    callback: (state: {
+      input: Dict<any>
+      output: Dict<any>
+      memory: Dict<any>
+    }) => void
+  ): void
+  $snapshotUnit(
+    data: {
+      unitId: string
+    },
+    callback: (state: {
+      input: Dict<any>
+      output: Dict<any>
+      memory: Dict<any>
+    }) => void
+  ): void
+  $getGraphData(
+    data: {},
+    callback: Callback<{
+      children: Dict<any>
+      pinData: Dict<any>
+      err: Dict<string | null>
+      mergeData: Dict<any>
+    }>
+  ): void
+  $getGraphChildren(data: {}, callback: (state: Dict<any>) => void)
+  $getGraphPinData(data: {}, callback: (data: Dict<any>) => void): void
+  $getGraphErr(data: {}, callback: (data: Dict<string | null>) => void): void
+  $getGraphMergeInputData(data: {}, callback: (data: Dict<any>) => void): void
+  $getUnitInputData(
+    data: { unitId: string },
+    callback: (data: Dict<any>) => void
+  ): void
+  $getBundle(data: { deep?: boolean }, callback: Callback<BundleSpec>): void
+}
 
 export interface $G_C {
   $setUnitPinData(data: GraphSetUnitPinDataData): void
@@ -141,51 +180,11 @@ export interface $G_C {
   $addPinToMerge(data: GraphAddPinToMergeData): void
   $removePinFromMerge(data: GraphRemovePinFromMergeData): void
   $takeUnitErr(data: GraphTakeUnitErrData): void
-  $getUnitPinData(
-    data: {},
-    callback: (data: { input: Dict<any>; output: Dict<any> }) => void
-  ): void
-  $snapshot(
-    data: {},
-    callback: (state: {
-      input: Dict<any>
-      output: Dict<any>
-      memory: Dict<any>
-    }) => void
-  ): void
-  $snapshotUnit(
-    data: {
-      unitId: string
-    },
-    callback: (state: {
-      input: Dict<any>
-      output: Dict<any>
-      memory: Dict<any>
-    }) => void
-  ): void
   $removeUnitGhost(
     data: GraphRemoveUnitGhostData,
     callback: (data: { specId: string; bundle: UnitBundleSpec }) => void
   ): void
   $addUnitGhost(data: GraphAddUnitGhostData): void
-  $getGraphData(
-    data: {},
-    callback: Callback<{
-      children: Dict<any>
-      pinData: Dict<any>
-      err: Dict<string | null>
-      mergeData: Dict<any>
-    }>
-  ): void
-  $getGraphChildren(data: {}, callback: (state: Dict<any>) => void)
-  $getGraphPinData(data: {}, callback: (data: Dict<any>) => void): void
-  $getGraphErr(data: {}, callback: (data: Dict<string | null>) => void): void
-  $getGraphMergeInputData(data: {}, callback: (data: Dict<any>) => void): void
-  $getUnitInputData(
-    data: { unitId: string },
-    callback: (data: Dict<any>) => void
-  ): void
-  $getBundle(data: { deep?: boolean }, callback: Callback<BundleSpec>): void
   $setMetadata(data: GraphSetMetadataData): void
   $reorderSubComponent(data: GraphReorderSubComponentData): void
   $moveSubComponentRoot(data: GraphMoveSubComponentRootData): void
@@ -216,7 +215,7 @@ export interface $G_W {
 
 export interface $G_R {
   $refSubComponent(data: { unitId: string; _: string[] }): $Component
-  $refUnit(data: { unitId: string; _: string[] }): $U
+  $refUnit(data: { unitId: string; _: string[]; detached?: boolean }): $U
 }
 
-export interface $G extends $G_C, $G_W, $G_R {}
+export interface $G extends $G_G, $G_C, $G_W, $G_R {}

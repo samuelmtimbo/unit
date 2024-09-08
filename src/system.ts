@@ -8,6 +8,7 @@ import { Context } from './client/context'
 import { UnitPointerEvent } from './client/event/pointer'
 import { Theme } from './client/theme'
 import { Point } from './client/util/geometry/types'
+import { AllTypes } from './interface'
 import { Style } from './system/platform/Style'
 import { Classes, Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'
@@ -30,6 +31,7 @@ export interface System extends S, R {
   color: string
   animated: boolean
   graphs: Graph[]
+  async: AllTypes<(unit: any) => any>
   cache: {
     iframe: any[]
     dragAndDrop: Dict<any>

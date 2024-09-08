@@ -215,6 +215,17 @@ export function get<T extends object, K extends keyof T>(obj: T, k: K): T[K] {
   return obj[k]
 }
 
+export function deepGet(obj: object, path: Key[]): any {
+  let v: any = obj
+
+  for (const p of path) {
+    v = obj[p]
+    obj = v
+  }
+
+  return v
+}
+
 export function deepSet(obj: object, path: Key[], value: any): void {
   let o = obj
 

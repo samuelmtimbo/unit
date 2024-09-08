@@ -1,5 +1,4 @@
 import { SELF } from '../../constant/SELF'
-import deepGet from '../../deepGet'
 import {
   forEachPinOnMerge,
   getMergePinCount,
@@ -23,6 +22,7 @@ import { IOOf, forIO, forIOObjKV } from '../../types/IOOf'
 import { UCG } from '../../types/interface/UCG'
 import {
   clone,
+  deepGet,
   deepGetOrDefault,
   deepSet,
   forEachObjKV,
@@ -121,7 +121,7 @@ export function moveUnit(
   const subComponent = subComponents[unitId]
 
   source.removeUnit(unitId, false, false, false)
-  target.addUnit(nextUnitId, unit, undefined, false)
+  target.addUnit(nextUnitId, unit, undefined, undefined, false, false, false)
 
   if (nextSubComponentParentId) {
     if (target.hasUnit(nextSubComponentParentId)) {
@@ -1000,7 +1000,7 @@ export function moveMerge(
                         pinId,
                         subPinId,
                         {
-                          mergeId: oppositeMergeId,
+                          mergeId: oppositeMergeId ?? '0',
                         },
                         false,
                         false

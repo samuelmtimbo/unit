@@ -1,4 +1,4 @@
-import { CALL, REF, REF_EXEC, UNWATCH, WATCH } from '../constant/STRING'
+import { CALL, GET, REF, REF_EXEC, UNWATCH, WATCH } from '../constant/STRING'
 import { Dict } from '../types/Dict'
 import { Unlisten } from '../types/Unlisten'
 import { RemoteAPI, RemoteAPIData } from './RemoteAPI'
@@ -19,6 +19,15 @@ export class RemoteRef {
     const { type, data: _data } = data
 
     switch (type) {
+      case GET:
+        {
+          const { id, method, data: __data } = _data
+
+          this._api[GET][method](__data, (data, err) => {
+            this._post({ type: GET, data: { id, data, err } })
+          })
+        }
+        break
       case CALL:
         {
           const { id, method, data: __data } = _data

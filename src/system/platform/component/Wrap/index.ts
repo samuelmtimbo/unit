@@ -145,15 +145,15 @@ export default class Wrap extends Element_<I, O> implements WP {
     }
   }
 
-  refParentRootContainer(at: number): C {
+  refParentRootContainer(at: number): Component_ {
     return this._parent_container[at]
   }
 
-  refChildContainer(at: number): C {
+  refChildContainer(at: number): Component_ {
     return this._child_container[at]
   }
 
-  refParentChildContainer(at: number): C {
+  refParentChildContainer(at: number): Component_ {
     return this._parent_child_container[at]
   }
 }

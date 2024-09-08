@@ -373,7 +373,6 @@ import {
   GraphCloneUnitMomentData,
 } from '../../../../../debug/graph/watchGraphUnitEvent'
 import { GraphSpecUnitMoveMomentData } from '../../../../../debug/graph/watchGraphUnitMoveEvent'
-import deepGet from '../../../../../deepGet'
 import { deepSet_ } from '../../../../../deepSet'
 import { CodePathNotImplementedError } from '../../../../../exception/CodePathNotImplemented'
 import { InvalidStateError } from '../../../../../exception/InvalidStateError'
@@ -632,6 +631,7 @@ import { UnitBundleSpec } from '../../../../../types/UnitBundleSpec'
 import { R } from '../../../../../types/interface/R'
 import { U, U_EE } from '../../../../../types/interface/U'
 import { UCG } from '../../../../../types/interface/UCG'
+import { UCGEE } from '../../../../../types/interface/UCGEE'
 import {
   randomTreeOfType,
   randomValueOfType,
@@ -653,6 +653,7 @@ import { randomIdNotIn } from '../../../../../util/id'
 import {
   clone,
   deepDelete,
+  deepGet,
   deepGetOrDefault,
   deepSet,
   filterObj,
@@ -4207,7 +4208,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (!pod) {
       pod = this._pod.$refUnit({
         unitId: unit_id,
-        _: ['U', 'C', 'G'],
+        _: UCGEE,
       }) as $Graph
 
       this._subgraph_pod_cache[unit_id] = pod
@@ -30218,7 +30219,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       const graph = startUnit(this.$system, bundle)
-      const pod = proxyWrap(AsyncGraph(graph), ['U', 'C', 'G'])
+      const pod = proxyWrap(AsyncGraph(graph), UCGEE)
       const component = componentFromUnitBundle(this.$system, bundle)
 
       for (const subComponentId in component.$subComponent) {
@@ -34709,7 +34710,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const unit_pod = this._pod.$refUnit({
       unitId: unit_id,
-      _: ['U', 'C', 'G'],
+      _: UCGEE,
     }) as $Graph
 
     unit_pod.$getGraphData({}, ({ err, pinData, children, mergeData }) => {
@@ -36057,15 +36058,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_pod_set_unit_pin_data', unitId, type, pinId, data)
 
-    const { fork } = this.$props
-
-    this._pod.$setUnitPinData({
+    const $unit = this._pod.$refUnit({
       unitId,
+      _: UCGEE,
+      detached: false,
+    }) as $Graph
+
+    $unit.$setPinData({
       pinId,
       type,
       data,
-      lastData,
-      fork,
     })
   }
 
@@ -45464,7 +45466,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._measure_sub_component_base(graph_unit_id, base)
 
       for (const sub_component_id of ordered_sub_component_ids) {
-        const sub_component = graph_component.getSubComponent(sub_component_id)
+        const next_sub_component_id =
+          this._collapse_next_id_map.unit[sub_component_id] ?? sub_component_id
+
+        const sub_component = graph_component.getSubComponent(
+          next_sub_component_id
+        )
 
         this.__leave_sub_component_frame(sub_component_id, sub_component)
       }
@@ -48535,16 +48542,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { id: unit_spec_id } = unit
 
-    // const spec = getSpec(unit_spec_id) as GraphSpec
     const spec = this._collapse_unit_spec[unit_id] as GraphSpec
-
-    if (is_graph_component) {
-      if (sub_component) {
-        const graph_component = this._get_sub_component(graph_id)
-
-        graph_component.setSubComponent(unit_id, sub_component)
-      }
-    }
 
     const insert_pin = (type: IO, pin_id: string) => {
       const { pinId, subPinId, plug } = deepGetOrDefault(
@@ -54914,7 +54912,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private __download_pod_data = (pod: $Graph) => {
-    pod.$getPinData({}, (pinData) => {
+    pod.$getAllPinData({}, (pinData) => {
       this._process_unit_io_all_data(pinData)
     })
 
@@ -55899,7 +55897,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const pod = this._pod.$refUnit({
       unitId: graph_unit_id,
-      _: ['U', 'C', 'G'],
+      _: UCGEE,
     }) as $Graph
 
     const spec = findSpecAtPath(
@@ -58356,18 +58354,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { parent } = this.$props
 
-    const { actions, transaction, path } = data
+    const { actions, path, transaction } = data
 
-    // if (this._is_spec_updater(path)) {
-    // if (path.length === 1) {
     if (transaction) {
       return
     }
-    // }
-
-    // if (!this._is_spec_updater(path)) {
-    //   return
-    // }
 
     processActions(
       actions,

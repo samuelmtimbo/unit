@@ -1,10 +1,8 @@
-import { proxyWrap } from '../proxyWrap'
 import { Callback } from '../types/Callback'
 import { $Component } from '../types/interface/async/$Component'
 import { Async } from '../types/interface/async/Async'
 import { AnimationSpec, C, ComponentSetup } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
-import { WP } from '../types/interface/WP'
 import { UnitBundle } from '../types/UnitBundle'
 import { $Child } from './Child'
 import { $Children } from './Children'
@@ -68,40 +66,26 @@ export function $children(
   callback(_children)
 }
 
+export function $refRoot(
+  component: Component_,
+  { at, _ }: { at: number; _: string[] }
+): $Component {
+  const root = component.refRoot(at)
+
+  const $root = Async(root, _, component.__system.async)
+
+  return $root
+}
+
 export function $refChild(
   component: Component_,
   { at, _ }: { at: number; _: string[] }
 ): $Component {
   const child = component.refChild(at)
-  const $child = Async(child, _)
-  return proxyWrap($child, _)
-}
 
-export function $refChildContainer(
-  component: WP,
-  { at, _ }: { at: number; _: string[] }
-): $Component {
-  const container = component.refChildContainer(at)
-  const $container = Async(container, _)
-  return proxyWrap($container, _)
-}
+  const $child = Async(child, _, component.__system.async)
 
-export function $refParentRootContainer(
-  component: WP,
-  { at, _ }: { at: number; _: string[] }
-): $Component {
-  const container = component.refParentRootContainer(at)
-  const local_child = Async(container, _)
-  return proxyWrap(local_child, _)
-}
-
-export function $refParentChildContainer(
-  component: WP,
-  { at, _ }: { at: number; _: string[] }
-): $Component {
-  const container = component.refParentChildContainer(at)
-  const local_child = Async(container, _)
-  return proxyWrap(local_child, _)
+  return $child
 }
 
 export function $getAnimations(

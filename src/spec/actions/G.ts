@@ -43,7 +43,7 @@ import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { G } from '../../types/interface/G'
 import { U } from '../../types/interface/U'
 import { deepSet, mapObjKeyKV, mapObjVK, revertObj } from '../../util/object'
-import { forEachPinOnMerges } from '../util/spec'
+import { forEachPinOnMerges, opposite } from '../util/spec'
 import {
   MOVE_SUB_COMPONENT_ROOT,
   REORDER_SUB_COMPONENT,
@@ -918,7 +918,7 @@ export const reverseAction = ({ type, data }: Action): Action => {
             })
             .map(({ unitId, type, pinId }) => {
               return {
-                type,
+                type: opposite(type),
                 pinId,
                 subPinId: '0',
               }

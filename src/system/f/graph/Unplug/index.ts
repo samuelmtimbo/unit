@@ -35,7 +35,7 @@ export default class Unplug<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ graph, type, pinId, subPinId }: I<T>, done: Done<O<T>>): void {
-    graph = Async(graph, ['G'])
+    graph = Async(graph, ['G'], this.__system.async)
 
     try {
       graph.$unplugPin({ type, pinId, subPinId, subPinSpec: {} })

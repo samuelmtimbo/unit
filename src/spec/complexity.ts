@@ -1,8 +1,8 @@
-import deepGet from '../deepGet'
 import { keys } from '../system/f/object/Keys/f'
 import { Classes, Spec, Specs } from '../types'
 import { GraphSpec } from '../types/GraphSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
+import { deepGet } from '../util/object'
 import { weakMerge } from '../weakMerge'
 import { evaluateDataValue } from './evaluateDataValue'
 

@@ -19,6 +19,7 @@ import { GraphBundle } from '../types/GraphClass'
 import { Unlisten } from '../types/Unlisten'
 import { KeyboardState } from '../types/global/KeyboardState'
 import { PointerState } from '../types/global/PointerState'
+import { ASYNC } from '../types/interface/async/wrapper'
 import { randomIdNotIn } from '../util/id'
 import { weakMerge } from '../weakMerge'
 
@@ -95,6 +96,7 @@ export function boot(
     root: null,
     theme,
     customEvent,
+    async: ASYNC,
     input,
     context,
     specs_,

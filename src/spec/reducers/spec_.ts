@@ -1,4 +1,3 @@
-import deepGet from '../../deepGet'
 import { deepSet_ } from '../../deepSet'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
@@ -17,6 +16,7 @@ import {
   clone,
   deepDeepMerge,
   deepDelete,
+  deepGet,
   deepGetOrDefault,
   getObjSingleKey,
   isEmptyObject,
