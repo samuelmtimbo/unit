@@ -44,9 +44,17 @@ export default class ToBlob extends Holder<I, O> {
   }
 
   async f({ res }: I, done: Done<O>) {
-    const _blob = await res.toBlob()
+    let blob_: Blob
 
-    const blob = wrapBlob(_blob, this.__system)
+    try {
+      blob_ = await res.toBlob()
+    } catch (err) {
+      done(undefined, err.message.toLowerCase())
+
+      return
+    }
+
+    const blob = wrapBlob(blob_, this.__system)
 
     done({ blob })
   }
