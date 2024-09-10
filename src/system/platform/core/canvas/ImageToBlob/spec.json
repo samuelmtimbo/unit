@@ -1,0 +1,374 @@
+{
+  "type": "`U`&`G`",
+  "name": "image to blob",
+  "units": {
+    "drawimage": {
+      "id": "82cf909e-a78f-4f3e-b87a-976458c8e15d",
+      "input": {
+        "any": {
+          "metadata": {
+            "position": {
+              "x": 264,
+              "y": -92
+            }
+          }
+        },
+        "image": {},
+        "canvas": {},
+        "x": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": 0
+          },
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 53,
+              "y": 180
+            },
+            "data": {
+              "position": {
+                "x": -526,
+                "y": -330
+              }
+            }
+          }
+        },
+        "y": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": 0
+          },
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": 104,
+              "y": 218
+            },
+            "data": {
+              "position": {
+                "x": -526,
+                "y": -330
+              }
+            }
+          }
+        },
+        "width": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 312,
+              "y": -53
+            },
+            "data": {
+              "position": {
+                "x": 349,
+                "y": -68
+              }
+            }
+          }
+        },
+        "height": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 301,
+              "y": -80
+            },
+            "data": {
+              "position": {
+                "x": 325,
+                "y": -110
+              }
+            }
+          }
+        }
+      },
+      "output": {},
+      "metadata": {
+        "position": {
+          "x": 101,
+          "y": 174
+        }
+      }
+    },
+    "offscreencanvas": {
+      "id": "8d7fc133-7cfa-4975-836f-31ae15b818be",
+      "input": {
+        "width": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 349,
+              "y": 81
+            },
+            "data": {
+              "position": {
+                "x": 378,
+                "y": 105
+              }
+            }
+          }
+        },
+        "height": {
+          "constant": false,
+          "metadata": {
+            "position": {
+              "x": 274,
+              "y": 97
+            },
+            "data": {
+              "position": {
+                "x": 257,
+                "y": 128
+              }
+            }
+          }
+        },
+        "done": {
+          "ignored": true,
+          "metadata": {
+            "position": {
+              "x": -38,
+              "y": 135
+            }
+          }
+        },
+        "opt": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": {}
+          },
+          "metadata": {
+            "position": {
+              "x": -44,
+              "y": 158
+            },
+            "data": {
+              "position": {
+                "x": -80,
+                "y": 157
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "canvas": {
+          "metadata": {
+            "position": {
+              "x": 49,
+              "y": 205
+            }
+          }
+        }
+      },
+      "metadata": {
+        "position": {
+          "x": 9,
+          "y": 161
+        }
+      }
+    },
+    "get": {
+      "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": {
+        "obj": {},
+        "name": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "naturalWidth"
+          },
+          "metadata": {
+            "position": {
+              "x": 53,
+              "y": 94
+            },
+            "data": {
+              "position": {
+                "x": 26,
+                "y": 64
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 93,
+          "y": 127
+        }
+      }
+    },
+    "toblob": {
+      "id": "c9d64ef4-35f6-44e7-a16b-1e4173f951dc",
+      "input": {
+        "canvas": {},
+        "quality": {
+          "constant": true,
+          "data": "1"
+        },
+        "type": {},
+        "done": {}
+      },
+      "output": {
+        "blob": {}
+      },
+      "metadata": {
+        "position": {
+          "x": -115,
+          "y": -1
+        }
+      }
+    },
+    "get0": {
+      "id": "bc0320e2-2eb8-11eb-a38f-a779bfe81645",
+      "input": {
+        "obj": {},
+        "name": {
+          "constant": true,
+          "data": {
+            "ref": [],
+            "data": "naturalHeight"
+          },
+          "metadata": {
+            "position": {
+              "x": 152,
+              "y": 66
+            },
+            "data": {
+              "position": {
+                "x": 171,
+                "y": 35
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "value": {}
+      },
+      "metadata": {
+        "position": {
+          "x": 115,
+          "y": 98
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "drawimage": {
+        "input": {
+          "canvas": true
+        }
+      },
+      "offscreencanvas": {
+        "output": {
+          "canvas": true
+        }
+      },
+      "toblob": {
+        "input": {
+          "canvas": true
+        }
+      }
+    },
+    "1": {
+      "drawimage": {
+        "input": {
+          "width": true
+        }
+      },
+      "offscreencanvas": {
+        "input": {
+          "width": true
+        }
+      },
+      "get": {
+        "output": {
+          "value": true
+        }
+      }
+    },
+    "2": {
+      "drawimage": {
+        "input": {
+          "image": true
+        }
+      },
+      "get": {
+        "input": {
+          "obj": true
+        }
+      },
+      "get0": {
+        "input": {
+          "obj": true
+        }
+      }
+    },
+    "3": {
+      "drawimage": {
+        "input": {
+          "height": true
+        }
+      },
+      "offscreencanvas": {
+        "input": {
+          "height": true
+        }
+      },
+      "get0": {
+        "output": {
+          "value": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "any": {
+      "plug": {
+        "0": {
+          "unitId": "drawimage",
+          "pinId": "any",
+          "kind": "input"
+        }
+      },
+      "ref": false
+    },
+    "image": {
+      "plug": {
+        "0": {
+          "mergeId": "2"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {
+    "blob": {
+      "plug": {
+        "0": {
+          "unitId": "toblob",
+          "pinId": "blob",
+          "kind": "output"
+        }
+      },
+      "ref": true
+    }
+  },
+  "metadata": {
+    "icon": "image",
+    "description": "get `image` `blob`"
+  },
+  "id": "15b8fb24-bbee-49af-a1ae-36016b89f596",
+  "system": true
+}
