@@ -58,7 +58,7 @@ import {
   ID_AUDIO,
   ID_EDITOR,
   ID_IMAGE,
-  ID_IMAGE_0,
+  ID_IMAGE_1,
   ID_VIDEO,
 } from '../../../../_ids'
 import { clamp } from '../../../../core/relation/Clamp/f'
@@ -3606,7 +3606,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       image.src = image_data_url
 
       image.onload = () => {
-        const id = ID_IMAGE_0
+        const id = ID_IMAGE_1
 
         const new_unit_id = this._new_unit_id(id)
 

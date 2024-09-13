@@ -1,0 +1,25 @@
+{
+  "name": "image",
+  "inputs": {
+    "image": {
+      "type": "`IM`",
+      "ref": true
+    }
+  },
+  "outputs": {
+    "image": {
+      "type": "`IM`&`J`",
+      "ref": true
+    }
+  },
+  "id": "11822d85-9e53-4658-92ed-f0c0428a5565",
+  "base": true,
+  "metadata": {
+    "icon": "image",
+    "complexity": 12,
+    "description": "load image",
+    "tags": ["platform", "api", "media", "image"]
+  },
+  "type": "`U`",
+  "system": true
+}
