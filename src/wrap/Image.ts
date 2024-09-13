@@ -22,12 +22,15 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
 
       return false
     }
+
     set<K extends string>(name: K, data: any): Promise<void> {
       throw new ReadOnlyError('image')
     }
+
     delete<K extends string>(name: K): Promise<void> {
       throw new ReadOnlyError('image')
     }
+
     async hasKey<K extends string>(name: K): Promise<boolean> {
       if (KNOWN_IMAGE_PROPERTIES.includes(name)) {
         return true
@@ -35,9 +38,11 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
 
       return false
     }
+
     keys(): Promise<string[]> {
       throw KNOWN_IMAGE_PROPERTIES
     }
+
     deepGet(path: string[]): Promise<any> {
       if (path.length > 1) {
         throw new ObjectPathTooDeepError()
@@ -45,12 +50,15 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
 
       return this.get(path[0])
     }
+
     deepSet(path: string[], data: any): Promise<void> {
       throw new ReadOnlyError('image')
     }
+
     deepDelete(path: string[]): Promise<void> {
       throw new ReadOnlyError('image')
     }
+
     subscribe(
       path: string[],
       key: string,
@@ -65,6 +73,10 @@ export function wrapImage(image: HTMLImageElement, system: System): IM & J {
     }
 
     async image(): Promise<any> {
+      return image
+    }
+
+    async raw() {
       return image
     }
   })(system)

@@ -2,7 +2,7 @@ import { Element_ } from '../../../../../Class/Element'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { IM } from '../../../../../types/interface/IM'
-import { ID_IMAGE_0 } from '../../../../_ids'
+import { ID_IMAGE_1 } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
 
 export interface I {
@@ -22,7 +22,7 @@ export default class Image extends Element_<I, O> implements IM {
       },
       {},
       system,
-      ID_IMAGE_0
+      ID_IMAGE_1
     )
   }
 
