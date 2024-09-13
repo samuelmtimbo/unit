@@ -46,7 +46,7 @@
   },
   "metadata": {
     "icon": "object-get",
-    "description": "",
+    "description": "get pointerId `obj` property",
     "tags": ["user"]
   },
   "id": "c51a275d-8610-452d-a136-7a2b58d8caf2",

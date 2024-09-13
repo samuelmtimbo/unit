@@ -1134,7 +1134,7 @@
   "outputs": {},
   "metadata": {
     "icon": "chalkboard",
-    "description": "",
+    "description": "isolated multi-touch drawing behavior",
     "position": {
       "merge": {
         "0": {

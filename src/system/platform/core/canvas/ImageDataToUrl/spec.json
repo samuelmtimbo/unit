@@ -204,7 +204,7 @@
   },
   "metadata": {
     "icon": "tilde",
-    "description": "",
+    "description": "get `image` to data `url`",
     "position": {
       "merge": {
         "1": { "x": -144, "y": 18 },

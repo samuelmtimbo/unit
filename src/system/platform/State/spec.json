@@ -15,11 +15,12 @@
     "data": {
       "type": "<T>&`V`",
       "optional": true,
-      "ref": true
+      "ref": true,
+      "icon": "triangle"
     }
   },
   "metadata": {
-    "icon": "triangle",
+    "icon": "circle",
     "description": "control a value in memory",
     "complexity": 4,
     "tags": ["state"]

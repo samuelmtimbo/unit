@@ -13,7 +13,8 @@
   "outputs": {
     "form": {
       "type": "`J`&`FD`",
-      "ref": true
+      "ref": true,
+      "icon": "brackets"
     }
   },
   "metadata": {
