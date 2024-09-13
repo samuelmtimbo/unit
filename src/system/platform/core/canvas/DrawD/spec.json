@@ -65,7 +65,7 @@
   },
   "outputs": {},
   "metadata": {
-    "icon": "square",
+    "icon": "edit-3",
     "description": "draw step of `d` on `canvas`",
     "complexity": 36,
     "tags": ["platform", "core", "canvas"]
