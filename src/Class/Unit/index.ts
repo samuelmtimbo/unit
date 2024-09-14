@@ -964,6 +964,8 @@ export class Unit<
   public setPinData(type: IO, pinId: string, data: any): void {
     const pin = this.getPin(type, pinId)
     pin.push(data)
+
+    this.emit('set_pin_data', type, pinId, data)
   }
 
   public removePinData(type: IO, pinId: string): void {

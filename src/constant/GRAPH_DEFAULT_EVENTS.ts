@@ -3,6 +3,7 @@ import { G_EE } from '../types/interface/G'
 import { U_EE } from '../types/interface/U'
 
 export const GRAPH_DEFAULT_EVENTS: (keyof G_EE | keyof C_EE | keyof U_EE)[] = [
+  'edit',
   'fork',
   'append_child',
   'remove_child',
