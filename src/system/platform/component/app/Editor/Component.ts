@@ -2373,6 +2373,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _leaf_init_style: Dict<Style> = {}
   private _leaf_style: Dict<Style> = {}
+  private _leaf_target_trait: Dict<LayoutNode> = {}
   private _leaf_attr: Dict<Dict<string>> = {}
   private _leaf_frame: Dict<Frame> = {}
   private _leaf_frame_active: Dict<boolean> = {}
@@ -3083,6 +3084,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._pod = pod
     this._component = component
+
+    this._component.setControlled(true)
+
     this._frame_out = frameOut
 
     this._registry = registry ?? new Registry(specs)
@@ -6585,6 +6589,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const sub_unit = this._pod.$refUnit({
       unitId: unit_id,
       _,
+      detached: false,
     }) as $Component
 
     sub_component.connect(sub_unit, deep)
@@ -7775,8 +7780,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const layout_layer = this._get_layout_layer(layer_id)
 
     layout_layer.height.$element.style.height = `${height}px`
-    layout_layer.foreground.$element.style.height = `${height}px`
-    layout_layer.child_foreground.$element.style.height = `${height}px`
   }
 
   private _move_all_layout_node_target_position = (
@@ -7972,6 +7975,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._set_tree_sub_component_index(unit_id, index)
 
     this._search_adding_unit = false
+  }
+
+  private _set_sub_component_controlled = (
+    sub_component_id: string,
+    controlled: boolean
+  ) => {
+    const sub_component = this._get_sub_component(sub_component_id)
+
+    sub_component.setControlled(controlled)
   }
 
   private _mem_add_unit_component_parent = (unit_id: string): void => {
@@ -10739,6 +10751,42 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
     layer.appendChild(content)
 
+    const foreground = new Div(
+      {
+        className: `${className}-foreground`,
+        style: {
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          overflowY: 'hidden',
+          overflowX: 'hidden',
+          pointerEvents: 'none',
+          width: '100%',
+          height: '100%',
+        },
+      },
+      this.$system
+    )
+    layer.appendChild(foreground)
+
+    const child_foreground = new Div(
+      {
+        className: `${className}-child-foreground`,
+        style: {
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          overflowY: 'hidden',
+          overflowX: 'hidden',
+          pointerEvents: 'none',
+          width: '100%',
+          height: '100%',
+        },
+      },
+      this.$system
+    )
+    layer.appendChild(child_foreground)
+
     const height = new Div(
       {
         className: `${className}-height`,
@@ -10771,42 +10819,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this.$system
     )
     content.appendChild(children)
-
-    const foreground = new Div(
-      {
-        className: `${className}-foreground`,
-        style: {
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          overflowY: 'hidden',
-          overflowX: 'hidden',
-          pointerEvents: 'none',
-          width: '100%',
-          height: '100%',
-        },
-      },
-      this.$system
-    )
-    content.appendChild(foreground)
-
-    const child_foreground = new Div(
-      {
-        className: `${className}-child-foreground`,
-        style: {
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          overflowY: 'hidden',
-          overflowX: 'hidden',
-          pointerEvents: 'none',
-          width: '100%',
-          height: '100%',
-        },
-      },
-      this.$system
-    )
-    content.appendChild(child_foreground)
 
     const layers = new Div(
       {
@@ -17191,7 +17203,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._search_dock_offset_y / 2
       )
 
-      const layout_position = this._jiggle_world_screen_center()
+      const layout_position = { x: 0, y: 0 }
 
       const spec_id = this._search_unit_spec_id
 
@@ -18308,13 +18320,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._decouple_sub_component(sub_component_id)
     } else {
       this._leave_sub_component_frame(sub_component_id)
-    }
-  }
-
-  private _displace_all_sub_component = (): void => {
-    const { component } = this.$props
-    for (const component_id in component.$subComponent) {
-      this._displace_sub_component(component_id)
     }
   }
 
@@ -19470,11 +19475,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { animate } = this.$props
 
-    this._pointer_up_all_pressed_pointer_id()
-
     this._tree_layout = true
 
-    this._layout_comp.$element.style.pointerEvents = 'inherit'
+    this._pointer_up_all_pressed_pointer_id()
+
+    this._cancel_all_layout_parent_children_animation()
 
     this._animate_layout_root_element_opacity(1)
 
@@ -19487,6 +19492,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (current_layout_layer_id) {
       this._animate_layout_layer_element_opacity(current_layout_layer_id, 1)
     }
+
+    this._layout_comp.$element.style.pointerEvents = 'inherit'
 
     current_layout_layer.content.$element.style.overflowX = 'hidden'
     current_layout_layer.content.$element.style.overflowY = 'auto'
@@ -19784,10 +19791,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): LayoutLayer => {
     const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
 
-    return this._get_sub_component_parent_leaf_layer(parent_id)
+    return this._get_sub_component_parent_layer(parent_id)
   }
 
-  private _get_sub_component_parent_leaf_layer = (
+  private _get_sub_component_parent_layer = (
     parent_id: string | null
   ): LayoutLayer => {
     if (parent_id === null) {
@@ -19802,7 +19809,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const parent_parent_id = this._get_sub_component_layout_parent(parent_id)
 
     const parent_parent_layer =
-      this._get_sub_component_parent_leaf_layer(parent_parent_id)
+      this._get_sub_component_parent_layer(parent_parent_id)
 
     const leaf_layer = is_parent_uncollapsed
       ? parent_layer
@@ -20144,11 +20151,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (parent_id) {
         const i = this._layout_path.indexOf(sub_component_id)
         if (i > -1) {
-          if (i === this._layout_path.length - 1) {
-            return 1
-          } else {
-            return LAYER_OPACITY_MULTIPLIER / (l - i)
-          }
+          return LAYER_OPACITY_MULTIPLIER / (l - i)
         } else {
           const pi = this._layout_path.indexOf(parent_id)
 
@@ -20176,7 +20179,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     base: LayoutBase,
     style: Style,
     trait: LayoutNode,
-    expandSlot: boolean,
+    expand: boolean,
     path: number[]
   ): Dict<LayoutNode> => {
     const sub_component = this._get_sub_component(sub_component_id)
@@ -20188,7 +20191,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       base,
       style,
       trait,
-      expandSlot,
+      expand,
       path
     )
   }
@@ -20200,7 +20203,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     base: LayoutBase,
     style: Style,
     trait: LayoutNode,
-    expandSlot: boolean,
+    expand: boolean,
     path: number[]
   ): Dict<LayoutNode> => {
     const base_trait = this.___reflect_sub_component_base_trait(
@@ -20210,7 +20213,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       base,
       style,
       trait,
-      expandSlot,
+      expand,
       path
     )
 
@@ -20256,7 +20259,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     base: LayoutBase,
     style: Style,
     trait: LayoutNode,
-    expandSlot: boolean,
+    expand: boolean,
     path: number[]
   ): Dict<LayoutNode> => {
     const base_trait = reflectComponentBaseTrait(
@@ -20270,7 +20273,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       (leaf_id, leaf_comp) => {
         return this._extract_style(trait, leaf_id, leaf_comp)
       },
-      expandSlot,
+      expand,
       path
     )
 
@@ -20330,6 +20333,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         finished = true
 
         for (const sub_component_id of sub_component_root) {
+          for (const sub_component_id of sub_component_parent_root) {
+            const all_slot_children =
+              sub_component_parent_root_slot_children[sub_component_id]
+
+            for (const slot_name in all_slot_children) {
+              this._cancel_layout_parent_children_animation(
+                sub_component_id,
+                slot_name
+              )
+            }
+          }
+
           delete this._abort_tree_layout_sub_component_base_animation[
             sub_component_id
           ]
@@ -20352,6 +20367,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           for (const slot_name in all_slot_children) {
             const slot_children = all_slot_children[slot_name]
+
+            this._cancel_layout_parent_children_animation(
+              sub_component_id,
+              slot_name
+            )
 
             this._end_layout_sub_component_transfer_children_animation(
               sub_component_id,
@@ -20397,8 +20417,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const children = this._spec_get_sub_component_children(sub_component_id)
 
-      const { foreground: leaf_layer } =
-        this._get_sub_component_layout_layer(sub_component_id)
+      const layer = this._get_sub_component_layout_layer(sub_component_id)
+      const parent_layer = this._get_sub_component_parent_layer(parent_id)
+
       const leaf_traits: LayoutNode[] = []
       const leaf_layer_opacity =
         this._get_sub_compononent_layout_layer_opacity(sub_component_id)
@@ -20444,7 +20465,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sub_component_id,
             slot_children,
             slot_name,
-            true,
+            () => NULL_VECTOR,
+            () => false,
             async () => {
               sub_component_finish_count++
 
@@ -20485,8 +20507,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             animating_sub_component,
             animating_sub_component,
             leaf_traits,
-            leaf_layer,
+            parent_layer.foreground,
             leaf_layer_opacity,
+            () => {
+              return { x: 0, y: -layer.content.$element.scrollTop }
+            },
             true,
             [],
             async () => {
@@ -20514,6 +20539,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     leaf_traits: LayoutNode[],
     leaf_layer: Component<HTMLElement>,
     leaf_layer_opacity: number,
+    offset: () => Point,
     expand_children: boolean,
     path: number[],
     callback: Callback
@@ -20561,6 +20587,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const { x, y, width, height, color } = layout_node
 
+        const { x: scrollX, y: scrollY } = getScrollPosition(
+          leaf_layer.$element,
+          this.$context.$element
+        )
+
         if (i === 0) {
           trait = {
             x: 0,
@@ -20591,9 +20622,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         i = (i + 1) % leaf_base.length
 
-        return {
-          x: x + $width / 2 - width / 2 + leaf_trait.x,
-          y: y + $height / 2 - height / 2 + leaf_trait.y,
+        const { x: ox, y: oy } = offset()
+
+        const leaf_trait_ = {
+          x: x + $width / 2 - width / 2 + leaf_trait.x + ox,
+          y: y + $height / 2 - height / 2 + leaf_trait.y + oy,
           width: leaf_trait.width / Math.abs(leaf_trait.sx),
           height: leaf_trait.height / Math.abs(leaf_trait.sy),
           sx: leaf_trait.sx,
@@ -20602,8 +20635,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           fontSize: leaf_trait.fontSize,
           color: leaf_trait.color,
         }
+
+        this._leaf_target_trait[leaf_id] = leaf_trait_
+
+        return leaf_trait_
       },
-      callback
+      () => {
+        for (const [leaf_path] of leaf_base) {
+          const leaf_id = `${sub_component_id}/${leaf_path.join('/')}`
+
+          delete this._leaf_target_trait[leaf_id]
+        }
+
+        callback()
+      }
     )
   }
 
@@ -20731,6 +20776,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             sub_component_id,
             slot_name,
             slot_children,
+            false,
+            0,
             async () => {
               visible_parent_root_slot_finished[sub_component_id]++
 
@@ -20744,7 +20791,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   await waitFinish(this._zoom_opacity_animation)
                 }
 
-                finish()
+                if (!this._tree_layout) {
+                  finish()
+                }
               }
             }
           )
@@ -20829,13 +20878,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               const { scrollTop = 0 } = parent_layout_layer.content.$element
 
               const parent_visible =
-                current_layout_layer === parent_layout_layer
+                this._is_layout_component_layer_visible(parent_id) || !parent_id
 
               const scroll_top = parent_visible ? scrollTop : 0
 
               return {
                 x: x + leaf_trait.x,
-                y: y + leaf_trait.y + scroll_top,
+                y: y + leaf_trait.y,
                 width: leaf_trait.width,
                 height: leaf_trait.height,
                 sx: leaf_trait.sx,
@@ -21064,6 +21113,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._cancel_fullwindow_animation()
     this._cancel_all_layout_sub_component_animation()
+    this._cancel_all_layout_parent_children_animation()
 
     this._tree_layout = false
 
@@ -28336,24 +28386,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._spec_set_unit_pin_constant(unitId, type, pinId, constant)
     this._sim_set_unit_pin_constant(pin_node_id, constant)
-
-    const is_ref = this._is_link_pin_ref(pin_node_id)
-
-    if (type === 'input') {
-      if (is_ref) {
-        const global_ref_data = this._unit_ref_pin_global_ref[pin_node_id]
-
-        if (global_ref_data) {
-          if (constant) {
-            const global_ref = this._unit_ref_pin_global_ref[pin_node_id]
-
-            this._watch_constant_ref_pin(unitId, type, pinId, global_ref)
-          } else {
-            this._unwatch_constant_input_ref(unitId, type, pinId)
-          }
-        }
-      }
-    }
   }
 
   private _sim_set_unit_pin_constant = (
@@ -28888,6 +28920,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       !!this._abort_sub_component_leave_base_animation[unit_id]
 
     if (is_component) {
+      this._set_sub_component_controlled(unit_id, true)
+
       this._cancel_enter_sub_component_animation(unit_id)
       this._cancel_leave_sub_component_animation(unit_id)
 
@@ -29548,6 +29582,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       if (this._is_unit_component(unit_id)) {
+        this._set_sub_component_controlled(unit_id, false)
+
         this._enter_sub_component_frame(unit_id)
 
         const frame = this._get_sub_component_frame(unit_id)
@@ -29824,19 +29860,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._refresh_layout_node_target_position(sub_component_id)
 
-    const layout_parent_node = this._layout_node[sub_component_id]
-
-    const { x, y, width, height } = layout_parent_node
-
     if (animate) {
-      this._animate_layout_enter_sub_component(
-        sub_component_id,
-        children,
-        x,
-        y,
-        width,
-        height
-      )
+      this._animate_layout_enter_sub_component(sub_component_id, children)
     } else {
       // TODO
     }
@@ -29920,8 +29945,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     next_layout_layer.children.$element.style.overflowX = 'initial'
     next_layout_layer.children.$element.style.overflowY = 'initial'
 
-    const scroll_top = next_layout_layer.content.$element.scrollTop
-
     this._refresh_all_layout_layer_opacity()
 
     next_layout_layer.children.$element.style.pointerEvents = 'inherit'
@@ -29985,17 +30008,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       let slot_animation_finished_count = 0
 
-      this._offset_sub_component_base_node(sub_component_id, 0, scroll_top)
-
       this._animate_parent_component(
         sub_component_id,
         false,
         false,
         [],
-        parent_layer.children,
+        parent_layer.foreground,
         1,
+        () => {
+          return { x: 0, y: -parent_layer.content.$element.scrollTop }
+        },
         true,
-        [0],
+        [],
         () => {
           parent_animation_finished = true
 
@@ -30019,7 +30043,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           sub_component_id,
           slot_children,
           slot_name,
-          true,
+          () => NULL_VECTOR,
+          () => true,
           async () => {
             slot_animation_finished_count += 1
 
@@ -30468,11 +30493,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     animate = animate && !this._is_layout_component_layer_visible(parent_id)
 
     if (animate) {
-      // TODO consider parent root children
-      // const parent_spec = this._get_unit_spec(parent_id) as GraphSpec
-      // const { component: parent_spec_component = { children: [] } } = parent_spec
-      // const { children: parent_spec_root_children } = parent_spec_component
-
       const spec_children = this._spec_get_sub_component_children(parent_id)
 
       const parent_component = this._get_sub_component(parent_id)
@@ -30534,8 +30554,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const parent_leaf_traits = []
 
-      const { foreground: parent_layer } =
-        this._get_sub_component_layout_layer(parent_id)
+      const parent_layer = this._get_sub_component_layout_layer(parent_id)
 
       let parent_finished = false
       let children_finished = false
@@ -30551,9 +30570,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         parent_animating,
         parent_animating,
         parent_leaf_traits,
-        parent_layer,
+        parent_layer.foreground,
         1,
-        false,
+        () => ({
+          x: -layer.content.$element.scrollLeft,
+          y: -layer.content.$element.scrollTop,
+        }),
+        true,
         [],
         () => {
           parent_finished = true
@@ -30562,11 +30585,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       )
 
+      const layer = this._get_sub_component_parent_layer(parent_id)
+
       this._animate_layout_append_children(
         parent_id,
         all_children,
         slot_name,
-        true,
+        () => NULL_VECTOR,
+        () => true,
         async () => {
           children_finished = true
 
@@ -31148,7 +31174,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       new Set(children)
 
     const { child_foreground: leaf_layer } =
-      this._get_sub_component_parent_leaf_layer(parent_id)
+      this._get_sub_component_parent_layer(parent_id)
 
     for (const child_id of children) {
       const base = this._get_sub_component_root_base(child_id)
@@ -31310,13 +31336,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     sub_component_id: string,
     children: string[],
     slot_name: string,
-    include_scroll: boolean,
+    offset: () => Point,
+    include_scroll: () => boolean,
     callback: Callback
-  ): Callback => {
+  ): Unlisten => {
     // console.log(
     //   'Graph',
     //   '_animate_layout_append_children',
-    //   parent_id,
+    //   sub_component_id,
     //   children,
     //   include_scroll,
     //   slot_name
@@ -31351,7 +31378,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       pack,
       target,
       true,
+      offset,
       include_scroll,
+      0,
       callback
     )
   }
@@ -31363,7 +31392,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pack: [string, string, string, string][],
     target: Dict<Component>,
     should_expand_slot: boolean,
-    include_scroll: boolean,
+    offset: () => Point,
+    include_scroll: () => boolean,
+    depth: number,
     callback: Callback
   ) => {
     const frame = () => {
@@ -31373,7 +31404,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         pack,
         target,
         should_expand_slot,
-        include_scroll
+        offset,
+        include_scroll,
+        depth
       )
 
       if (
@@ -31399,7 +31432,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     frame()
 
     return () => {
-      this._cancel_all_layout_sub_component_animation()
+      this._cancel_layout_parent_children_animation(parent_id)
     }
   }
 
@@ -31441,9 +31474,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     parent_id: string,
     slot_name: string,
     children: string[],
+    expand: boolean,
+    depth: number,
     callback: Callback
   ): Callback => {
-    // console.log('Graph', '_play_layout_sub_component_remove_children_animation')
+    // console.log(
+    //   'Graph',
+    //   '_play_layout_sub_component_remove_children_animation',
+    //   parent_id
+    // )
 
     const pack: [string, string, string, string][] = []
     const target: Dict<Component> = {}
@@ -31466,8 +31505,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       children,
       pack,
       target,
-      true,
-      true,
+      expand,
+      () => ({ x: 0, y: 0 }),
+      () => true,
+      depth,
       callback
     )
   }
@@ -31476,12 +31517,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     parent_id: string,
     slot_name: string,
     children: string[],
+    expand: boolean,
+    depth: number,
     callback: Callback
-  ): Callback => {
+  ): Unlisten => {
     // console.log(
     //   'Graph',
     //   '_animate_layout_sub_component_remove_children',
     //   parent_id,
+    //   expand,
     //   children
     // )
 
@@ -31497,6 +31541,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       parent_id,
       slot_name,
       children,
+      expand,
+      depth,
       callback
     )
   }
@@ -31504,7 +31550,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _animate_tick_leaf_trait = (
     leaf_id: string,
     trait: LayoutNode,
-    include_scroll: boolean
+    include_scroll: () => boolean = () => true
   ) => {
     const leaf_node = this._leaf_frame_node[leaf_id]
 
@@ -31531,7 +31577,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _animate_leaf_frame_tick = (
     leaf_id: string,
     { x, y, sx, sy, width, height, opacity, fontSize, color },
-    include_scroll: boolean
+    include_scroll: () => boolean
   ) => {
     const leaf_node = this._leaf_frame_node[leaf_id]
     const leaf_frame = this._leaf_frame[leaf_id]
@@ -31559,8 +31605,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       Math.floor(color[3]),
     ]
 
-    const scrollX_ = include_scroll ? scrollX : 0
-    const scrollY_ = include_scroll ? scrollY : 0
+    const scroll = include_scroll()
+
+    const scrollX_ = scroll ? scrollX : 0
+    const scrollY_ = scroll ? scrollY : 0
 
     leaf_frame.$element.style.left = `${
       x +
@@ -31588,7 +31636,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     setup: (leaf_id: string, parent_id: string, slot_name: string) => void,
     callback: (leaf_id: string, ended: boolean) => void,
     should_expand_slot: boolean = true,
-    include_scroll: boolean
+    offset: () => Point,
+    include_scroll: () => boolean,
+    depth: number
   ) => {
     const {
       api: {
@@ -31610,6 +31660,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       leaf_id: string,
       leaf_trait_target: LayoutNode
     ): void => {
+      const { x, y } = offset()
+
+      leaf_trait_target.x += x
+      leaf_trait_target.y += y
+
       const ended = this._animate_tick_leaf_trait(
         leaf_id,
         leaf_trait_target,
@@ -31671,20 +31726,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      const slot_leaf_trait = extractTrait(child_base_slot, measureText)
+      let slot_leaf_trait: LayoutNode = this._leaf_target_trait[slot_leaf_id]
+
+      if (!slot_leaf_trait) {
+        slot_leaf_trait = extractTrait(child_base_slot, measureText)
+
+        slot_leaf_trait.x -= this.$context.$x
+        slot_leaf_trait.y -= this.$context.$y
+
+        slot_leaf_trait.x +=
+          ((Math.abs(slot_leaf_trait.sx) - 1) * slot_leaf_trait.width) / 2
+        slot_leaf_trait.y +=
+          ((Math.abs(slot_leaf_trait.sy) - 1) * slot_leaf_trait.height) / 2
+      }
+
       const slot_leaf_style = extractStyle(
         child_base_slot,
         target_frame_trait,
         measureText
       )
-
-      slot_leaf_trait.x -= this.$context.$x
-      slot_leaf_trait.y -= this.$context.$y
-
-      slot_leaf_trait.x +=
-        ((Math.abs(slot_leaf_trait.sx) - 1) * slot_leaf_trait.width) / 2
-      slot_leaf_trait.y +=
-        ((Math.abs(slot_leaf_trait.sy) - 1) * slot_leaf_trait.height) / 2
 
       all_leaf_trait[slot_leaf_id] = slot_leaf_trait
       all_leaf_style[slot_leaf_id] = slot_leaf_style
@@ -31784,17 +31844,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         slot_base_style,
         [],
         (path) => {
-          return expandSlot(
-            this._component,
-            slot_id,
-            path,
-            slot_trait,
-            should_expand_slot,
-            parent_slot_base,
-            (leaf_id, leaf_comp) => {
-              return this._extract_style(slot_trait, leaf_id, leaf_comp)
-            }
-          )
+          if (should_expand_slot) {
+            const children_style = expandSlot(
+              this._component,
+              slot_id,
+              path.slice(depth),
+              (leaf_id, leaf_comp) => {
+                return this._extract_style(slot_trait, leaf_id, leaf_comp)
+              }
+            )
+
+            return children_style
+          } else {
+            return []
+          }
         }
       )
 
@@ -31818,7 +31881,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pack: [string, string, string, string][],
     target: Dict<Component>,
     should_expand_slot: boolean,
-    include_scroll: boolean
+    offset: () => Point,
+    include_scroll: () => boolean,
+    depth: number
   ) => {
     return this._tick_animate_layout_move_children(
       pack,
@@ -31844,7 +31909,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       },
       should_expand_slot,
-      include_scroll
+      offset,
+      include_scroll,
+      depth
     )
   }
 
@@ -32280,14 +32347,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _pod_move_sub_component_root = (
-    subComponentId: string | null,
+    parentId: string | null,
     children: string[],
     slotMap: Dict<string>
   ): void => {
     // console.log(
     //   'Graph',
     //   '_pod_move_sub_component_root',
-    //   subComponentId,
+    //   parentId,
     //   children,
     //   slotMap
     // )
@@ -32295,7 +32362,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { fork, bubble } = this.$props
 
     this._pod.$moveSubComponentRoot({
-      parentId: subComponentId,
+      parentId,
       children,
       slotMap,
       fork,
@@ -32507,16 +32574,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const parent_leaf_traits = []
 
-        const { foreground: parent_layer } =
-          this._get_sub_component_layout_layer(parent_id)
+        const parent_layer = this._get_sub_component_layout_layer(parent_id)
 
         this._animate_parent_component(
           parent_id,
           parent_animating,
           parent_animating,
           parent_leaf_traits,
-          parent_layer,
+          parent_layer.foreground,
           1,
+          () => ({ x: 0, y: -parent_layer.content.$element.scrollTop }),
           false,
           [],
           () => {
@@ -32532,6 +32599,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           parent_id,
           slot_name,
           children,
+          true,
+          1,
           () => {
             this._end_layout_sub_component_transfer_children_animation(
               parent_id,
@@ -35264,11 +35333,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _animate_layout_enter_sub_component(
     sub_component_id: string,
-    children: string[],
-    x: number,
-    y: number,
-    width: number,
-    height: number
+    children: string[]
   ) {
     this._measure_sub_component_base(sub_component_id)
 
@@ -35300,9 +35365,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     for (const child_id of children) {
       this._measure_sub_component_base(child_id)
-
-      this._set_layout_core_position(child_id, x, y)
-      this._set_layout_core_size(child_id, width, height)
     }
 
     for (const child_id of children) {
@@ -35317,6 +35379,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       sub_component_id,
       'default',
       children,
+      true,
+      1,
       async () => {
         if (this._layout_layer_opacity_animation[sub_component_id]) {
           await waitFinish(
@@ -35334,7 +35398,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     )
 
-    this._offset_sub_component_base_node(sub_component_id, 0, scroll_top)
+    const layer = this._get_sub_component_layout_layer(sub_component_id)
 
     this._animate_parent_component(
       sub_component_id,
@@ -35343,6 +35407,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       [],
       parent_layer.children,
       1,
+      () => ({ x: 0, y: -layer.content.$element.scrollTop }),
       false,
       [],
       () => {
@@ -39109,16 +39174,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { type, unitId, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-    if (
-      deepGetOrDefault(
-        this._constant_input_ref_interval,
-        [unitId, pinId],
-        undefined
-      )
-    ) {
-      this._unwatch_constant_input_ref(unitId, 'input', pinId)
-    }
-
     const opposite_type = opposite(type)
 
     const int_node_id = this._pin_to_int[type][pin_node_id]
@@ -39255,6 +39310,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           unit_id,
           'default',
           children,
+          true,
+          0,
           () => {
             this._end_layout_sub_component_transfer_children_animation(
               unit_id,
@@ -45165,6 +45222,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       { x, y }
     )
 
+    if (this._is_unit_component(graph_id)) {
+      this._set_sub_component_controlled(graph_id, true)
+    }
+
     const graph_bundle = this._get_graph_unit_bundle_spec(graph_id)
 
     const data: GraphMoveSubGraphIntoData = {
@@ -45333,6 +45394,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (should_graph_become_component) {
       this._componentify_core(graph_unit_id, {}, true)
+      this._set_sub_component_controlled(graph_unit_id, true)
     }
 
     const graph_component = this._get_sub_component(graph_unit_id)
@@ -47920,6 +47982,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
+    if (this._is_unit_component(graph_id)) {
+      this._set_sub_component_controlled(graph_id, false)
+    }
+
     this._start_debugger()
 
     this._collapse_init_node_id_set = new Set()
@@ -48532,6 +48598,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { getSpec } = this.$props
 
     const is_graph_component = this._is_unit_component(graph_id)
+
     const graph_spec = this._get_unit_spec(graph_id) as GraphSpec
 
     const icon = deepGetOrDefault(graph_spec, ['metadata', 'icon'], 'question')
@@ -48588,8 +48655,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           if (meta.selected.links[type].has(next_pin_id)) {
             this._select_node(next_pin_node_id)
-
-            // this._ensure_node_long_press_collapse(next_pin_node_id)
           }
         }
       }
@@ -49559,7 +49624,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let sub_component: Component | null = null
 
     if (this._is_unit_component(unit_id)) {
+      const graph_component = this._get_sub_component(graph_id)
+
       sub_component = this._get_sub_component(unit_id)
+
+      if (graph_component) {
+        sub_component = graph_component.getSubComponent(next_unit_id)
+      }
 
       const children =
         this._collapse_next_map.nextSubComponentChildrenMap[unit_id]
@@ -51417,17 +51488,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const selected_children = children.filter(this._is_node_selected)
 
-      if (selected_children) {
-        this._remove_sub_component_children(
-          parent_id,
-          slot_name,
-          next_parent_id,
-          next_slot_name,
-          selected_children
-        )
+      if (parent_id) {
+        if (selected_children) {
+          this._remove_sub_component_children(
+            parent_id,
+            slot_name,
+            next_parent_id,
+            next_slot_name,
+            selected_children
+          )
 
-        this._refresh_layout_node_target_position(parent_id)
-        this._move_all_current_layout_node_target_position()
+          this._refresh_layout_node_target_position(parent_id)
+          this._move_all_current_layout_node_target_position()
+        }
       }
     }
   }
@@ -57071,7 +57144,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_bulk_edit = (data: GraphBulkEditData) => {
     // console.log('Graph', '_on_bulk_edit', data)
 
-    const { actions, transaction } = data
+    const { actions } = data
 
     for (const action of actions) {
       this._execute_action(action, false)

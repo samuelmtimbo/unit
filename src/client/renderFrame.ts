@@ -1,13 +1,12 @@
 import { System } from '../system'
 import { removeChildren } from '../util/element'
-import { Component } from './component'
-import { Context, resize, setParent } from './context'
+import { Context, resize } from './context'
 import { stopByPropagation } from './stopPropagation'
 import { defaultThemeColor } from './theme'
 
 export function renderFrame(
   $system: System,
-  $parent: Component | null,
+  $parent: Context | null,
   $root: HTMLElement,
   $init: Partial<Context> = {}
 ): Context {
@@ -37,9 +36,9 @@ export function renderFrame(
 
   const $positionObserver = new PositionObserver(
     $system,
-    (x, y, sx, sy, rx, ry, rz, px, py): void => {
-      $context.$x = x + px
-      $context.$y = y + py
+    (x, y, sx, sy, rx, ry, rz): void => {
+      $context.$x = x
+      $context.$y = y
       $context.$sx = sx
       $context.$sy = sy
       $context.$rx = rx
@@ -54,9 +53,7 @@ export function renderFrame(
     $system,
     $mounted: false,
     $disabled: false,
-    $listenCount: {},
-    $parent: null,
-    $parent_unlisten: null,
+    $parent,
     $width: 0,
     $height: 0,
     $x: 0,
@@ -77,8 +74,6 @@ export function renderFrame(
     $positionObserver,
     ...$init,
   }
-
-  setParent($context, $parent)
 
   $system.context.push($context)
 

@@ -6,7 +6,7 @@ import { AnimationSpec } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
 import { UnitBundle } from '../types/UnitBundle'
 import { Unlisten } from '../types/Unlisten'
-import { insert } from '../util/array'
+import { insert, push } from '../util/array'
 
 function _appendChild(
   component: Component_,
@@ -150,6 +150,14 @@ export function removeChild(
   return child
 }
 
+export function refRoot(
+  element: Component_,
+  root: Component_[],
+  at: number
+): Component_ {
+  return root[at]
+}
+
 export function refChild(
   element: Component_,
   children: Component_[],
@@ -178,19 +186,20 @@ export function registerParentRoot(
   parentRoot: Component_[],
   child: Component_,
   slotName: string,
-  at?: number
+  at: number = undefined,
+  emit: boolean = true
 ): void {
   if (at === undefined) {
-    parentRoot.push(child)
+    push(parentRoot, child)
   } else {
     insert(parentRoot, child, at)
   }
 
-  component.emit('register_parent_root', child, slotName)
-
   const slot = component.refSlot(slotName)
 
   slot.appendParentChild(component, 'default')
+
+  emit && component.emit('register_parent_root', child, slotName)
 }
 
 export function unregisterParentRoot(
@@ -246,23 +255,25 @@ export function reorderParentRoot(
 export function unregisterRoot(
   component: Component_,
   root: Component_[],
-  child: Component_
+  child: Component_,
+  emit: boolean = true
 ): void {
   const at = root.indexOf(child)
 
   root.splice(at, 1)
 
-  component.emit('unregister_root', component)
+  emit && component.emit('unregister_root', child)
 }
 
 export function registerRoot(
   component: Component_,
   root: Component_[],
-  child: Component_
+  child: Component_,
+  emit: boolean = true
 ): void {
   root.push(child)
 
-  component.emit('register_root', component)
+  emit && component.emit('register_root', child)
 }
 
 export function appendParentChild(

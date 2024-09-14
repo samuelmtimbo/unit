@@ -4,22 +4,18 @@ import Frame from '../../system/platform/component/Frame/Component'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { $Component } from '../../types/interface/async/$Component'
-import { $Graph } from '../../types/interface/async/$Graph'
 import { callAll } from '../../util/call/callAll'
 import { weakMerge } from '../../weakMerge'
 import { componentFromUnitSpec } from '../componentFromUnitSpec'
 import { appendChild, mount } from '../context'
 import { renderFrame } from '../renderFrame'
 import { getSpec } from '../spec'
-import { watchGraphComponent } from './watchGraphComponent'
 
 export function renderComponent(
   root: HTMLElement,
   system: System,
   $component: $Component
 ): Unlisten {
-  // console.log('renderUnit')
-
   let unlisten: Unlisten = NOOP
 
   $component.$getUnitBundleSpec({}, (bundle: UnitBundleSpec) => {
@@ -48,24 +44,14 @@ export function renderComponent(
 
     mount(context)
 
-    let unlisten_unit
-
-    if (_.includes('G')) {
-      unlisten_unit = watchGraphComponent(
-        system,
-        $component as $Graph,
-        component
-      )
-    } else {
-      unlisten_unit = NOOP
-    }
-
     component.connect($component as $Component)
 
     component.focus()
 
-    unlisten = callAll([removeChild, unlisten_unit])
+    unlisten = callAll([removeChild])
   })
 
-  return unlisten
+  return () => {
+    unlisten()
+  }
 }

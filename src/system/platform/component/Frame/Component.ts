@@ -103,7 +103,7 @@ export default class Frame extends Element<HTMLDivElement, Props> {
   onMount() {
     // console.log('Frame', 'onMount')
 
-    setParent(this.$$context, this.$parent)
+    setParent(this.$$context, this.$context)
 
     mount(this.$$context)
 

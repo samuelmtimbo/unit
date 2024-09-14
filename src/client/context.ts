@@ -1,5 +1,4 @@
 import { System } from '../system'
-import { Dict } from '../types/Dict'
 import { PositionObserver } from '../types/global/PositionObserver'
 import { Unlisten } from '../types/Unlisten'
 import { last, remove } from '../util/array'
@@ -11,10 +10,8 @@ import { Theme } from './theme'
 export interface Context extends Listenable {
   $system: System
   $mounted: boolean
-  $listenCount: Dict<number>
   $disabled: boolean
-  $parent: Component | null
-  $parent_unlisten: Unlisten | null
+  $parent: Context | null
   $element: HTMLElement
   $context: Context
   $x: number
@@ -32,8 +29,6 @@ export interface Context extends Listenable {
   $resizeObserver: ResizeObserver
   $positionObserver: PositionObserver
 }
-
-export interface Ref extends Dict<any[]> {}
 
 export function dispatchContextEvent(
   $context: Context,
@@ -54,13 +49,13 @@ export function dispatchCustomEvent(
   $element.dispatchEvent(new CustomEvent(`_${type}`, { detail, bubbles }))
 }
 
-export function setParent($context: Context, $parent: Component | null): void {
+export function setParent($context: Context, $parent: Context | null): void {
   $context.$parent = $parent
 
   const { $children } = $context
 
   for (const component of $children) {
-    component.$parent = $parent
+    // component.$parent = $parent
   }
 }
 
@@ -160,9 +155,6 @@ export function appendChild(
 
   $context.$element.appendChild($element)
   $context.$children.push(component)
-
-  // the component share $parent
-  component.$parent = $context.$parent
 
   if ($context.$mounted) {
     component.mount($context)

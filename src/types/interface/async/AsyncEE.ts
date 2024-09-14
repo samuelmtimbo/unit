@@ -26,7 +26,17 @@ export const AsyncEECall = (emitter: EE & $): $EE_C => {
 export const AsyncEEWatch = (emitter: EE & $): $EE_W => {
   return {
     $addListener({ event }: { event: string }, callback: Callback): Unlisten {
-      return emitter.addListener(event, callback)
+      return emitter.addListener(event, (...args) => {
+        args = args.map((arg) => {
+          if (arg instanceof $) {
+            return { globalId: arg.getGlobalId(), __: arg.getInterface() }
+          } else {
+            return arg
+          }
+        })
+
+        callback(args)
+      })
     },
   }
 }
