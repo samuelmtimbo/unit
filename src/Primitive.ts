@@ -1,4 +1,3 @@
-import { $ } from './Class/$'
 import { ION, Opt, Unit, UnitEvents } from './Class/Unit'
 import { Pin } from './Pin'
 import { PinOpt } from './PinOpt'
@@ -299,8 +298,6 @@ export class Primitive<
     }
   }
 
-  private _input_effemeral: Partial<Record<keyof I, Unit>> = {}
-
   private _onRefInputData = <K extends keyof I>(name: K, data: any): void => {
     this._activateInput(name, data)
 
@@ -318,19 +315,6 @@ export class Primitive<
   }
 
   private __onRefInputData = <K extends keyof I>(name: K, data: any): void => {
-    if (data instanceof Function) {
-      data = new data(this.__system)
-
-      data.play()
-
-      this._input_effemeral[name] = data
-      this._i[name] = data
-    }
-
-    if (data instanceof $) {
-      data.register()
-    }
-
     this.onRefInputData(name, data)
   }
 
@@ -536,14 +520,6 @@ export class Primitive<
   }
 
   private __onRefInputDrop = <K extends keyof I>(name: K, data: any): void => {
-    if (this._input_effemeral[name]) {
-      const effemeral_unit = this._input_effemeral[name]
-
-      delete this._input_effemeral[name]
-
-      effemeral_unit.destroy()
-    }
-
     this.onRefInputDrop(name, data)
   }
 

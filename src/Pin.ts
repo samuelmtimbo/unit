@@ -3,6 +3,7 @@ import { isPrimitive } from './spec/primitive'
 import { System } from './system'
 import { PI } from './types/interface/PI'
 import { V } from './types/interface/V'
+import { Unlisten } from './types/Unlisten'
 
 export type PinEvent =
   | '_data'
@@ -25,6 +26,7 @@ export type Pin_EE<T> = {
   ref: [boolean]
   ignored: [boolean]
   constant: [boolean]
+  edit: any[]
 }
 
 export type Pin_M<T = any> = {
@@ -74,6 +76,8 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     const data = this._register
 
     if (this._register !== undefined) {
+      this._disembody(data)
+
       this._register = undefined
 
       this.emit('drop', data)
@@ -122,12 +126,60 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     return data
   }
 
-  public push(data: T): void {
+  private _unlisten: Unlisten
+
+  private _embodied: boolean = false
+
+  private _embody = (data: any) => {
+    if (this._ref) {
+      if (data instanceof Function) {
+        this._embodied = true
+
+        data = new data(this.__system)
+
+        data.play()
+        data.register()
+      }
+
+      if (data instanceof $) {
+        this._unlisten = data.addListener('edit', () => {
+          this.emit('edit', data)
+        })
+      }
+    }
+
+    return data
+  }
+
+  private _disembody = (data: any) => {
+    if (this._ref) {
+      if (this._unlisten) {
+        this._unlisten()
+
+        this._unlisten = undefined
+      }
+
+      if (this._embodied) {
+        data.unregister()
+        data.destroy()
+
+        data = data.constructor as T
+
+        this._embodied = false
+      }
+    }
+
+    return data
+  }
+
+  public push(data: any): void {
     this.invalidate()
 
     this._invalid = false
 
     this.start()
+
+    data = this._embody(data)
 
     this._register = data
 
@@ -170,6 +222,14 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
 
   public ref(value?: boolean): boolean {
     if (value !== undefined) {
+      if (this._register) {
+        if (value && !this._ref) {
+          this._register = this._embody(this._register)
+        } else if (!value && this._ref) {
+          this._register = this._disembody(this._register)
+        }
+      }
+
       this._ref = value
 
       this.emit('ref', this._ref)
