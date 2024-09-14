@@ -500,7 +500,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ) {
     this._removeUnitPinData(unitId, type, pinId, fork, bubble)
 
-    emit && this.emit('remove_unit_pin_data', unitId, type, pinId, [])
+    emit && this.edit('remove_unit_pin_data', unitId, type, pinId, [])
   }
 
   removeMergeData(mergeId: string) {
@@ -1380,7 +1380,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     data = this.getPin(type, pinId).peak()
 
-    emit && this.emit('expose_pin_set', type, pinId, pinSpec, data, [])
+    emit && this.edit('expose_pin_set', type, pinId, pinSpec, data, [])
 
     if (this._transacting) {
       this._transaction.push(makeExposePinSetAction(type, pinId, pinSpec, data))
@@ -1397,7 +1397,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     this._setUnitSize(unitId, width, height, fork, bubble)
 
-    emit && this.emit('set_unit_size', unitId, width, height, [])
+    emit && this.edit('set_unit_size', unitId, width, height, [])
   }
 
   setSubComponentSize(
@@ -1410,7 +1410,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     this._setSubComponentSize(unitId, width, height, fork, bubble)
 
-    emit && this.emit('set_sub_component_size', unitId, width, height, [])
+    emit && this.edit('set_sub_component_size', unitId, width, height, [])
   }
 
   setComponentSize(
@@ -1423,7 +1423,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     this._setComponentSize(width, height, fork, bubble)
 
-    emit && this.emit('set_component_size', unitId, width, height, [])
+    emit && this.edit('set_component_size', unitId, width, height, [])
   }
 
   public _exposePinSet = (
@@ -1592,7 +1592,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._setPinSetFunctional(type, pinId, functional, fork, bubble)
 
-    emit && this.emit('set_pin_set_functional', type, pinId, functional, [])
+    emit && this.edit('set_pin_set_functional', type, pinId, functional, [])
   }
 
   private _setPinSetFunctional(
@@ -1655,7 +1655,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     this._setPinSetDefaultIgnored(type, pinId, defaultIgnored, fork, bubble)
 
-    this.emit('set_pin_set_default_ignored', type, pinId, defaultIgnored, [])
+    this.edit('set_pin_set_default_ignored', type, pinId, defaultIgnored, [])
   }
 
   private _setPinSetDefaultIgnored(
@@ -1708,7 +1708,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this.renamePin(type, pinId, nextPinId)
 
-    emit && this.emit('set_pin_set_id', type, pinId, nextPinId, [])
+    emit && this.edit('set_pin_set_id', type, pinId, nextPinId, [])
   }
 
   public _setPinSetId(
@@ -1739,7 +1739,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void => {
     this._exposePin(type, pinId, subPinId, subPinSpec, propagate)
 
-    emit && this.emit('expose_pin', type, pinId, subPinId, subPinSpec, [])
+    emit && this.edit('expose_pin', type, pinId, subPinId, subPinSpec, [])
 
     if (this._transacting) {
       this._transaction.push(
@@ -1833,7 +1833,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._coverPinSet(type, id, propagate, fork, bubble)
 
-    emit && this.emit('cover_pin_set', type, id, pinSpec, undefined, [])
+    emit && this.edit('cover_pin_set', type, id, pinSpec, undefined, [])
 
     if (this._transacting) {
       this._transaction.push(makeCoverPinSetAction(type, id, pinSpec))
@@ -2018,7 +2018,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._plugPin(type, pinId, subPinId, subPinSpec, propagate, fork, bubble)
 
-    emit && this.emit('plug_pin', type, pinId, subPinId, subPinSpec, [])
+    emit && this.edit('plug_pin', type, pinId, subPinId, subPinSpec, [])
   }
 
   private _memRemoveEmptyPin = (type: IO, pinId: string, subPinId: string) => {
@@ -2098,7 +2098,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return isRefMerge(this, mergeSpec)
   }
 
-  emit(event: string, ...args: any[]): void {
+  edit(event: string, ...args: any[]): void {
     // @ts-ignore
     super.emit(event, ...args)
     super.emit('edit', event, args)
@@ -2172,7 +2172,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._coverPin(type, pinId, subPinId, fork, bubble)
 
-    emit && this.emit('cover_pin', type, pinId, subPinId, subPinSpec, [])
+    emit && this.edit('cover_pin', type, pinId, subPinId, subPinSpec, [])
 
     if (this._transacting) {
       this._transaction.push(
@@ -2262,7 +2262,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._unplugPin(type, pinId, subPinId, propagate, fork, bubble)
 
-    emit && this.emit('unplug_pin', type, pinId, subPinId, subPinSpec, [])
+    emit && this.edit('unplug_pin', type, pinId, subPinId, subPinSpec, [])
   }
 
   private _unplugPin = (
@@ -2626,7 +2626,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const { bundle } = data
 
-    emit && this.emit('remove_unit_ghost', unitId, nextUnitId, bundle, [])
+    emit && this.edit('remove_unit_ghost', unitId, nextUnitId, bundle, [])
 
     return data
   }
@@ -2648,7 +2648,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._addUnitGhost(unitId, nextUnitId, nextUnitBundle, nextUnitPinMap)
 
-    emit && this.emit('add_unit_ghost', unitId, nextUnitId, nextUnitBundle, [])
+    emit && this.edit('add_unit_ghost', unitId, nextUnitId, nextUnitBundle, [])
   }
 
   public getUnitOuterSpec = (unitId: string): GraphUnitOuterSpec => {
@@ -3084,7 +3084,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unitBundle = bundle ?? unit.getUnitBundleSpec()
 
-    emit && this.emit('add_unit', unitId, unitBundle, unit, [])
+    emit && this.edit('add_unit', unitId, unitBundle, unit, [])
 
     if (this._transacting) {
       this._transaction.push(makeAddUnitAction(unitId, unitBundle))
@@ -3151,19 +3151,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this.__system.injectSpecs(bundle.specs)
 
-    this.emit('before_add_unit', unitId, unit, [])
+    this.edit('before_add_unit', unitId, unit, [])
 
-    this._specAddUnit(unitId, unit, bundle)
+    this._specAddUnit(unitId, unit, bundle, parentId)
     this._memAddUnit(unitId, unit, bundle)
-    this._simAddUnit(unitId, bundle, unit)
+    this._simAddUnit(unitId, bundle, unit, parentId)
 
     return unit
   }
 
   public addUnitSpecs = (units: GraphUnitsSpec): void => {
     this._addUnitSpecs(units)
-
-    // this.emit('add_units', units)
   }
 
   private _addUnitSpecs = (units: GraphUnitsSpec): void => {
@@ -3709,7 +3707,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
         this._specSetUnitPinData(unitId, type, pinId, data)
 
-        this.emit('set_unit_pin_data', unitId, type, pinId, data, [])
+        this.edit('set_unit_pin_data', unitId, type, pinId, data, [])
       })
 
       deepSet(unit_pin_data_listener, [unitId, type, pinId], pin_data_unlisten)
@@ -3810,7 +3808,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         all_unlisten.push(
           unit.addListener(DEFAULT_EVENT as keyof G_EE, (...args) => {
             this.emit(
-              DEFAULT_EVENT as keyof G_EE,
+              DEFAULT_EVENT,
+              // @ts-ignore
               ...args.slice(0, -1).concat([[unitId, ...args[args.length - 1]]])
             )
           })
@@ -3903,7 +3902,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._removeUnit(unitId, take, destroy, fork, bubble)
 
-    emit && this.emit('remove_unit', unitId, unitBundle, unit, [])
+    emit && this.edit('remove_unit', unitId, unitBundle, unit, [])
 
     if (this._transacting) {
       this._transaction.push(makeRemoveUnitAction(unitId, unitBundle))
@@ -3915,7 +3914,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public cloneUnit(unitId: string, newUnitId: string): Unit {
     const newUnit = this._cloneUnit(unitId, newUnitId)
 
-    this.emit('clone_unit', unitId, newUnitId, newUnit, [])
+    this.edit('clone_unit', unitId, newUnitId, newUnit, [])
 
     return newUnit
   }
@@ -3951,7 +3950,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public moveUnit(id: string, unitId: string, inputId: string): void {
     this._moveUnit(id, unitId, inputId)
 
-    this.emit('move_unit', id, unitId, inputId, [])
+    this.edit('move_unit', id, unitId, inputId, [])
   }
 
   private _memRemoveUnitFromMerges(unitId: string): void {
@@ -4321,7 +4320,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     merge = this._addMerge(mergeSpec, mergeId, merge, propagate, fork)
 
-    emit && this.emit('add_merge', mergeId, mergeSpec, merge, [])
+    emit && this.edit('add_merge', mergeId, mergeSpec, merge, [])
 
     if (this._transacting) {
       this._transaction.push(makeAddMergeAction(mergeId, mergeSpec))
@@ -4687,7 +4686,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void => {
     this._addPinToMerge(mergeId, unitId, type, pinId, propagate)
 
-    emit && this.emit('add_pin_to_merge', mergeId, unitId, type, pinId, [])
+    emit && this.edit('add_pin_to_merge', mergeId, unitId, type, pinId, [])
   }
 
   private _addPinToMerge = (
@@ -4744,7 +4743,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const merge = this._removeMerge(mergeId, take, fork, bubble)
 
-    emit && this.emit('remove_merge', mergeId, mergeSpec, merge, [])
+    emit && this.edit('remove_merge', mergeId, mergeSpec, merge, [])
 
     if (this._transacting) {
       this._transaction.push(makeRemoveMergeAction(mergeId, mergeSpec))
@@ -4901,7 +4900,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ) {
     this._removePinFromMerge(mergeId, unitId, type, pinId, propagate)
 
-    emit && this.emit('remove_pin_from_merge', mergeId, unitId, type, pinId, [])
+    emit && this.edit('remove_pin_from_merge', mergeId, unitId, type, pinId, [])
   }
 
   private _removePinFromMerge(
@@ -5085,7 +5084,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     unit.setPinSetId(type, pinId, newPinId, false)
 
-    emit && this.emit('set_unit_pin_set_id', unitId, type, pinId, newPinId, [])
+    emit && this.edit('set_unit_pin_set_id', unitId, type, pinId, newPinId, [])
   }
 
   public setUnitPinConstant(
@@ -5102,7 +5101,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const data = this.getUnitPinData(unitId, type, pinId)
 
     emit &&
-      this.emit(
+      this.edit(
         'set_unit_pin_constant',
         unitId,
         type,
@@ -5193,7 +5192,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     this._setUnitPinIgnored(unitId, type, pinId, ignored, fork, bubble)
 
-    this.emit('set_unit_pin_ignored', unitId, type, pinId, ignored, [])
+    this.edit('set_unit_pin_ignored', unitId, type, pinId, ignored, [])
   }
 
   private _setUnitPinIgnored(
@@ -5262,7 +5261,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     this._setUnitId(unitId, newUnitId, name, specId)
 
-    this.emit('set_unit_id', unitId, newUnitId, name, specId, [])
+    this.edit('set_unit_id', unitId, newUnitId, name, specId, [])
   }
 
   public _setUnitId(
@@ -5344,7 +5343,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._settingUnitData = false
 
-    emit && this.emit('set_unit_pin_data', unitId, type, pinId, data, [])
+    emit && this.edit('set_unit_pin_data', unitId, type, pinId, data, [])
   }
 
   private _setUnitPinData(
@@ -5438,7 +5437,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       cursor[p] = data
     }
 
-    this.emit('metadata', { path, data }, [])
+    this.edit('metadata', { path, data }, [])
   }
 
   public getSubComponentsParentMap(
@@ -5496,7 +5495,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
 
     emit &&
-      this.emit(
+      this.edit(
         'move_sub_component_root',
         subComponentId,
         prevParentMap,
@@ -5567,7 +5566,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap
     )
 
-    this.emit(
+    this.edit(
       'move_subgraph_into',
       graphId,
       graphBundle,
@@ -5708,7 +5707,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       throw new Error('transaction not started')
     }
 
-    this.emit('bulk_edit', this._transaction, true, [])
+    this.edit('bulk_edit', this._transaction, true, [])
 
     this._transacting = false
   }
@@ -5764,7 +5763,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       nextSubComponentChildrenMap
     )
 
-    this.emit(
+    this.edit(
       'move_subgraph_out_of',
       graphId,
       graphBundle,
@@ -5917,7 +5916,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     this._reorderSubComponent(parentId, childId, to, fork, bubble)
 
-    emit && this.emit('reorder_sub_component', parentId, childId, to, [])
+    emit && this.edit('reorder_sub_component', parentId, childId, to, [])
   }
 
   private _reorderSubComponent(
@@ -6152,7 +6151,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): void {
     this._bulkEdit(actions, fork, bubble)
 
-    this.emit('bulk_edit', actions, false, [])
+    this.edit('bulk_edit', actions, false, [])
   }
 
   private _bulkEdit(actions: Action[], fork: boolean, bubble: boolean): void {
