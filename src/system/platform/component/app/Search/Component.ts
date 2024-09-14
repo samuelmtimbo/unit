@@ -456,14 +456,18 @@ export default class Search extends Element<HTMLDivElement, Props> {
       this._unlisten_registry()
       this._listen_registry()
 
-      this._refresh_ordered_list()
-      this._filter_list()
+      this._refresh_list()
     } else if (prop === 'shape') {
       this._setShape(current ?? 'circle')
     }
   }
 
   private _registry_unlisten: Unlisten
+
+  private _refresh_list = (preserve_selected?: boolean) => {
+    this._refresh_ordered_list()
+    this._filter_list(preserve_selected)
+  }
 
   private _find_new_item_index = (spec: GraphSpec, list: string[]): number => {
     const { classes } = this.$system
@@ -547,12 +551,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
             const selected_item_id = this._selected_id
 
-            this._refresh_ordered_list()
-
             if (this._list_hidden) {
-              this._debounced_filter_list()
+              this._debounced_refresh_list()
             } else {
-              this._filter_list(true)
+              this._refresh_list()
 
               if (selected_item_id === specId) {
                 this._select_first_list_item()
@@ -1039,10 +1041,10 @@ export default class Search extends Element<HTMLDivElement, Props> {
     }
   }
 
-  private _debounced_filter_list = debounce(
+  private _debounced_refresh_list = debounce(
     this.$system,
     (preserve_selected: boolean = false) => {
-      this._filter_list(preserve_selected)
+      this._refresh_list(preserve_selected)
     },
     0
   )
