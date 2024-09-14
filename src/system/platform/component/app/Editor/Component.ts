@@ -8805,10 +8805,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     const { fork, bubble } = this.$props
 
-    this._pod.$exposeUnitPinSet({
+    const $unit = this._pod.$refUnit({
       unitId,
-      pinId,
+      _: UCGEE,
+      detached: false,
+    }) as $Graph
+
+    $unit.$exposePinSet({
       type,
+      pinId,
       pinSpec,
       fork,
       bubble,
@@ -17020,25 +17025,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._mode === 'multiselect' ||
           this._mode === 'info'
         ) {
-          const actions: Action[] = [
-            makeAddUnitAction(search_unit_id, search_unit_bundle),
-          ]
+          let parent_id = null
 
           if (this._tree_layout) {
-            const parent_id = this._get_current_layout_layer_id()
-
-            if (parent_id) {
-              actions.push(
-                makeMoveSubComponentRootAction(
-                  parent_id,
-                  {},
-                  [search_unit_id],
-                  {},
-                  {}
-                )
-              )
-            }
+            parent_id = this._get_current_layout_layer_id()
           }
+
+          const actions: Action[] = [
+            makeAddUnitAction(
+              search_unit_id,
+              search_unit_bundle,
+              undefined,
+              undefined,
+              undefined,
+              parent_id
+            ),
+          ]
 
           const bulk_action = makeBulkEditAction(actions)
 
@@ -22084,25 +22086,34 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     nodes: GraphSimNodes,
     padding: number
   ): string | null => {
+    let min_distance = Infinity
+    let min_distance_node_id = null
+
     for (const n_id in nodes) {
       const n = nodes[n_id]
-      if (n.shape === 'circle') {
-        const d = pointDistance(point, n)
-        if (d <= n.r + padding) {
-          return n_id
-        }
-      } else {
-        const { x, y, width, height } = n
-        if (
-          point.x >= x - width / 2 - padding &&
-          point.x <= x + width / 2 + padding &&
-          point.y >= y - height / 2 - padding &&
-          point.y <= y + height / 2 + padding
-        ) {
-          return n_id
-        }
+
+      const { l } = surfaceDistance(
+        {
+          shape: 'circle',
+          x: point.x,
+          y: point.y,
+          width: 0,
+          height: 0,
+          r: 0,
+        },
+        n
+      )
+
+      if (l < min_distance) {
+        min_distance = l
+        min_distance_node_id = n_id
       }
     }
+
+    if (min_distance < padding) {
+      return min_distance_node_id
+    }
+
     return null
   }
 
@@ -52428,7 +52439,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const all_bundle_specs = { ...bundle.specs, [spec.id]: spec }
 
-    const map_spec_id = injectSpecs(all_bundle_specs)
+    const map_spec_id = injectSpecs(bundle.specs ?? {})
 
     const all_specs = weakMerge(specs, all_bundle_specs)
 
@@ -52744,6 +52755,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const datum = data[datum_id]
 
       let { value } = datum
+
+      if (!value) {
+        continue
+      }
 
       value = stringifyDataValue(value, specs, classes)
 
@@ -55001,10 +55016,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     pod.$getGraphErr({}, (unit_err: Dict<string>) => {
       this._process_graph_all_err(unit_err)
-    })
-
-    pod.$getGraphChildren({}, (children: Dict<any>) => {
-      this._process_graph_all_children(children)
     })
   }
 
@@ -58683,7 +58694,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     } else {
       if (!this._disabled) {
-        this._disable()
+        this._disable(false)
 
         this._hide_transcend(animate)
       }
