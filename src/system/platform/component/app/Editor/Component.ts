@@ -1278,7 +1278,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _on_transcend = (): void => {
     // console.log('Graph', '_on_transcend')
 
-    const { specs } = this._registry
+    const { specs } = this.$system
 
     const { $width, $height } = this.$context
 
@@ -1334,10 +1334,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         },
         graph: {
           constant: true,
-          data: {
-            ref: [[]],
-            data: editor_bundle,
-          },
           ignored: false,
         },
       },
@@ -1349,7 +1345,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       },
     }
 
-    const spec = emptySpec({ id })
+    const spec = this.$system.emptySpec({ id })
 
     spec.units = spec.units || {}
     spec.units[editor_unit_id] = editor_unit_spec
@@ -1370,12 +1366,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     }
 
     this._editor._prevent_next_reset = true
-
-    this.$unit.$setPinData({
-      type: 'input',
-      pinId: 'graph',
-      data: `$${stringify(bundle)}`,
-    })
 
     this._unlisten_graph()
     this._unlisten_transcend()
@@ -1406,8 +1396,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       background_slot_element.removeChild(background_slot_element.lastChild)
     }
 
-    this._editor._prevent_next_reset = true
-
     const unit_editor = new Editor(
       {
         graph: this._pod,
@@ -1421,6 +1409,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       },
       this.$system
     )
+
+    unit_editor.$preventLoad = true
 
     const transcend = new Transcend({}, this.$system)
 
@@ -1441,6 +1431,14 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._component = component
 
     const style = this.getProp('style')
+
+    const parent_graph = new Graph(spec, {}, this.$system, spec.id)
+
+    parent_graph.play()
+
+    const parent_pod = proxyWrap(AsyncGraph(parent_graph), UCGEE)
+
+    this._pod = parent_pod
 
     const editor = new Editor_(
       {
@@ -1541,6 +1539,13 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._editor.enterFullwindow(false)
     this._editor.leaveFullwindow(true)
     this._editor.temp_fixate_node(editor_unit_id, 100)
+
+    this._editor._prevent_next_reset = false
+
+    this._editor.__spec_set_pin_data('editor', 'input', 'graph', {
+      ref: [[]],
+      data: editor_bundle,
+    })
   }
 
   private _on_zoom = (zoom) => {
@@ -5272,8 +5277,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const { zoom = clone(ZOOM_IDENTITY), specs } = this.$props
 
     if (this._prevent_next_reset) {
-      this._prevent_next_reset = false
-
       return
     }
 
@@ -6583,7 +6586,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const sub_unit = this._pod.$refUnit({
       unitId: unit_id,
       _,
-      detached: false,
     }) as $Component
 
     sub_component.connect(sub_unit, deep)
@@ -36066,19 +36068,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_node_id: string,
     data: string | DataRef
   ): void => {
-    const { classes } = this.$system
-    const { specs } = this.$props
-
     if (this._is_link_pin_node_id(pin_node_id)) {
       if (this._is_link_pin_constant(pin_node_id)) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
-        setUnitPinData(
-          { unitId, type, pinId, data },
-          this._spec,
-          specs,
-          classes
-        )
+        this.__spec_set_pin_data(unitId, type, pinId, data)
       }
     } else {
       const merge_pin_node_id = this._merge_to_pin[pin_node_id]
@@ -36087,6 +36081,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._spec_set_pin_data(pin_node_id, data)
       }
     }
+  }
+
+  public __spec_set_pin_data = (
+    unitId: string,
+    type: IO,
+    pinId: string,
+    data: string | DataRef
+  ): void => {
+    const { classes } = this.$system
+    const { specs } = this.$props
+
+    setUnitPinData({ unitId, type, pinId, data }, this._spec, specs, classes)
   }
 
   private _pod_set_pin_data = (
@@ -43094,12 +43100,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const maxX = Math.max(x0, x1)
         const minY = Math.min(y0, y1)
         const maxY = Math.max(y0, y1)
+
         this._multiselect_area_rect = {
           x0: minX,
           y0: minY,
           x1: maxX,
           y1: maxY,
         }
+
         this._tick_multiselect_area()
       } else {
         if (this._tree_layout) {
@@ -56672,7 +56680,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         setSpec(next_graph_spec.id, next_graph_spec)
       }
 
-      // if (this._subgraph_unit_id !== path[0]) {
       if (graph_unit_was_component) {
         if (
           is_removed_unit_component &&
@@ -56691,28 +56698,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               break
             }
           }
-
-          if (sub_component) {
-            const sub_sub_component = sub_component.$subComponent[unitId]
-
-            if (sub_sub_component) {
-              if (this._in_component_control) {
-                if (this._subgraph_unit_id !== path[0]) {
-                  sub_component.removeRoot(sub_sub_component)
-                }
-              }
-
-              if (this._subgraph_unit_id !== path[0]) {
-                sub_component.removeSubComponent(unitId)
-                sub_component.pullRoot(sub_sub_component)
-
-                sub_sub_component.disconnect()
-              }
-            }
-          }
         }
       }
-      // }
     }
 
     const graph_unit_is_component = this._is_unit_component(graph_unit_id)
@@ -58754,40 +58741,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const { graph: pod, animate = animated, component } = this.$props
 
-      if (this._prevent_next_reset) {
-        this._prevent_next_reset = false
-
-        return
-      }
-
       if (this._is_fullwindow) {
         this._leave_all_fullwindow_sub_component(false)
       }
 
-      if (!this._prevent_next_reset) {
-        const sub_component_map = { ...this._component.$subComponent }
+      for (const subComponentId in this._component.$subComponent) {
+        const subComponent = this._component.getSubComponent(subComponentId)
+        const subComponentParent =
+          this._component.getSubComponentParent(subComponentId)
 
-        for (const sub_component_id in sub_component_map) {
-          const sub_component = this
-
-          const sub_component_parent_id =
-            this._component.getSubComponentParentId(sub_component_id)
-
-          const parent_sub_component =
-            sub_component_map[sub_component_parent_id]
-
-          if (sub_component_parent_id) {
-            if (parent_sub_component.hasParentRoot(sub_component)) {
-              parent_sub_component.pullParentRoot(sub_component)
-            }
-          } else {
-            if (this._component.hasRoot(sub_component)) {
-              this._component.pullRoot(sub_component)
-            }
-          }
-
-          this._component.removeSubComponent(sub_component_id)
+        if (subComponentParent) {
+          subComponentParent.removeParentRoot(subComponent)
+        } else {
+          this._component.removeRoot(subComponent)
         }
+
+        this._component.removeSubComponent(subComponentId)
       }
 
       this._plunk_pod()
