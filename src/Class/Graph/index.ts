@@ -2443,7 +2443,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           pin.take()
         }
       } else {
-        if (propagate || inputPin) {
+        if (propagate || (refPin && inputPin)) {
           unit.takePin(kind, _pinId)
         }
       }
@@ -2912,8 +2912,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   public takeUnitErr(unitId: string): string | null {
     const err = this._takeUnitErr(unitId)
-
-    // this.emit('take_unit_err', unitId, [])
 
     return err
   }
@@ -5061,9 +5059,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       const mergeSpec = this.getMergeSpec(mergeId)
 
       if (this.isUnitRefPin(unitId, 'output', pinId)) {
-        forEachInputOnMerge(mergeSpec, (unitId, pinId): void => {
-          this._removeUnitPinData(unitId, 'input', pinId)
-        })
+        if (type === 'output') {
+          forEachInputOnMerge(mergeSpec, (unitId, pinId): void => {
+            this._removeUnitPinData(unitId, 'input', pinId)
+          })
+        }
       } else {
         pin.take()
       }
