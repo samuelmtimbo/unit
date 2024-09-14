@@ -28,9 +28,7 @@ export default class Fetch extends Functional<I, O> {
     )
   }
 
-  private _fetch_index: number = 0
-
-  f({ url, opt }: I, done: Done<O>) {
+  async f({ url, opt }: I, done: Done<O>) {
     const {
       api: {
         http: { fetch },
@@ -38,22 +36,10 @@ export default class Fetch extends Functional<I, O> {
       cache: { servers },
     } = this.__system
 
-    const i = ++this._fetch_index
-
     try {
       fetch(url, opt, servers)
         .then((response) => {
-          if (i !== this._fetch_index) {
-            // request is outdated
-            return
-          }
-
           return response.text().then((text) => {
-            if (i !== this._fetch_index) {
-              // request is outdated
-              return
-            }
-
             done({
               response: {
                 status: response.status,
@@ -63,23 +49,18 @@ export default class Fetch extends Functional<I, O> {
           })
         })
         .catch((err) => {
-          if (i !== this._fetch_index) {
-            // request is outdated
-            return
-          }
-
           if (
             err.message.toLowerCase() ===
             "failed to execute 'fetch' on 'window': request with get/head method cannot have body."
           ) {
-            done(undefined, 'request with GET/HEAD method cannot have body')
+            done(undefined, 'GET/HEAD request cannot have body')
 
             return
           }
 
           if (
             err.message.startsWith(
-              "Failed to execute 'fetch' on 'Window': Failed to parse URL from http://102.344.21.2"
+              "Failed to execute 'fetch' on 'Window': Failed to parse URL from "
             )
           ) {
             done(undefined, 'failed to parse url')

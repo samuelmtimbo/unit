@@ -58,6 +58,12 @@ export default class Fetch0 extends Holder<I, O> {
     try {
       response = await fetch(url, opt)
     } catch (err) {
+      if (err.message === 'Failed to fetch') {
+        done(undefined, 'failed to fetch')
+
+        return
+      }
+
       done(undefined, 'malformed')
 
       return
