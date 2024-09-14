@@ -18,6 +18,7 @@ export type C_EE = {
   unregister_parent_root: [Component_]
   register_root: [Component_]
   unregister_root: [Component_]
+  set_sub_component: [string, UnitBundleSpec]
   append_parent_child: [Component_, string]
   remove_parent_child: [Component_]
   reorder_root: [Component_, number]
@@ -39,10 +40,15 @@ export type ComponentSetup = {
 }
 
 export interface C {
-  registerRoot(component: Component_): void
-  unregisterRoot(component: Component_): void
+  registerRoot(component: Component_, ...extra: any[]): void
+  unregisterRoot(component: Component_, ...extra: any[]): void
   reorderRoot(component: Component_, to: number): void
-  registerParentRoot(component: Component_, slotName: string, at?: number): void
+  registerParentRoot(
+    component: Component_,
+    slotName: string,
+    at?: number,
+    ...extra: any[]
+  ): void
   unregisterParentRoot(component: Component_): void
   reorderParentRoot(component: Component_, to: number): void
   appendParentChild(component: Component_, slotName: string): void
@@ -57,6 +63,7 @@ export interface C {
   refChild(at: number): Component_
   refChildren(): Component_[]
   refSlot(slotName: string): Component_
+  refRoot(at: number): Component_
   animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void
   cancelAnimation(id: string): void
   getAnimations(): AnimationSpec[]

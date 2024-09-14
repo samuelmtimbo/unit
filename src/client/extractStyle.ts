@@ -5,6 +5,7 @@ import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
 import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
 import { IOElement } from './IOElement'
+import { isContentEditable } from './isTextLike'
 import { LayoutNode } from './LayoutNode'
 import { rawExtractStyle } from './rawExtractStyle'
 import { parseFontSize } from './util/style/getFontSize'
@@ -47,17 +48,13 @@ export function _extractFromRawStyle(
 
     const { width, height } = measureText(textContent, fontSize, trait.width)
 
-    return {
+    style = {
       width: `${width}px`,
       height: `${height}px`,
     }
   }
 
-  if (
-    element instanceof HTMLDivElement &&
-    element.getAttribute('contenteditable') === 'true' &&
-    (fitWidth || fitHeight)
-  ) {
+  if (isContentEditable(element) && (fitWidth || fitHeight)) {
     const fontSize = component.getFontSize()
 
     const { textContent } = component.$element
@@ -74,7 +71,7 @@ export function _extractFromRawStyle(
   }
 
   if (style['display'] === 'contents') {
-    return {
+    style = {
       width: '100%',
       height: '100%',
     }
@@ -91,7 +88,7 @@ export function _extractFromRawStyle(
 
             style[name] = `${prop_num}%`
           } else {
-            // TODO
+            //
           }
         } else {
           style[name] = `${prop}px`

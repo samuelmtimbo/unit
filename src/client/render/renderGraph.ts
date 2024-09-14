@@ -11,7 +11,6 @@ import { weakMerge } from '../../weakMerge'
 import { componentFromSpec } from '../componentFromSpec'
 import { appendChild, mount, unmount } from '../context'
 import { renderFrame } from '../renderFrame'
-import { watchGraphComponent } from './watchGraphComponent'
 
 export function renderGraph(
   root: HTMLElement,
@@ -55,8 +54,6 @@ export function renderGraph(
 
     mount(context)
 
-    const unlistenGraph = watchGraphComponent(system, $graph, component)
-
     component.focus()
 
     const unlistenRender = () => {
@@ -67,7 +64,7 @@ export function renderGraph(
       unmount(context)
     }
 
-    unlisten = callAll([removeChild, unlistenGraph, unlistenRender])
+    unlisten = callAll([removeChild, unlistenRender])
   })
 
   return unlisten

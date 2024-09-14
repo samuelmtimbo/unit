@@ -10,6 +10,7 @@ import {
   pushChild,
   refChild,
   refChildren,
+  refRoot,
   registerParentRoot,
   registerRoot,
   removeChild,
@@ -127,10 +128,6 @@ export class Element_<
     return true
   }
 
-  detach(): void {
-    throw new MethodNotImplementedError()
-  }
-
   registerRoot(component: Component_): void {
     return registerRoot(this, this._root, component)
   }
@@ -143,8 +140,20 @@ export class Element_<
     return reorderRoot(this, this._root, component, to)
   }
 
-  registerParentRoot(component: Component_, slotName: string): void {
-    return registerParentRoot(this, this._parent_root, component, slotName)
+  registerParentRoot(
+    component: Component_,
+    slotName: string,
+    at?: number,
+    emit?: boolean
+  ): void {
+    return registerParentRoot(
+      this,
+      this._parent_root,
+      component,
+      slotName,
+      at,
+      emit
+    )
   }
 
   unregisterParentRoot(component: Component_): void {
@@ -189,6 +198,10 @@ export class Element_<
 
   pullChild(at: number): Component_ {
     throw pullChild(this, this._children, at)
+  }
+
+  refRoot(at: number): Component_ {
+    return refRoot(this, this._children, at)
   }
 
   refChild(at: number): Component_ {

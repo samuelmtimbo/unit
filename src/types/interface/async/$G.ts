@@ -88,7 +88,7 @@ export const G_METHOD_CALL = [
   'appendRoot',
   'removeRoot',
   'appendParentRoot',
-  'appendParentRootChildren',
+  'moveSubComponentRoot',
   'reorderSubComponent',
   'removeUnitPinData',
   'setMergeData',

@@ -116,17 +116,5 @@ export function listenPointerEvent(
     _global
   )
 
-  const { $listenCount } = component
-
-  $listenCount[type] = $listenCount[type] || 0
-  $listenCount[type]++
-
-  return () => {
-    $listenCount[type]--
-
-    if ($listenCount[type] === 0) {
-      delete $listenCount[type]
-    }
-    unlisten()
-  }
+  return unlisten
 }

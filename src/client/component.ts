@@ -7,10 +7,12 @@ import { proxyWrap } from '../proxyWrap'
 import { System } from '../system'
 import { Callback } from '../types/Callback'
 import { Dict } from '../types/Dict'
+import { GlobalRefSpec } from '../types/GlobalRefSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { Unlisten } from '../types/Unlisten'
 import { UCGEE } from '../types/interface/UCGEE'
 import { $Component } from '../types/interface/async/$Component'
+import { $EE } from '../types/interface/async/$EE'
 import { $Graph } from '../types/interface/async/$Graph'
 import { insert, pull, push, remove, removeAt, unshift } from '../util/array'
 import { callAll } from '../util/call/callAll'
@@ -117,6 +119,7 @@ export class Component<
   public $propUnlisten: Dict<Unlisten> = {}
 
   public $unbundled: boolean = true
+  public $controlled: boolean = false
 
   public $children: Component[] = []
   public $slotChildren: Dict<Component[]> = { default: [] }
@@ -156,8 +159,6 @@ export class Component<
   public $returnIndex: number = 0
 
   public $mounted: boolean = false
-
-  public $listenCount: Dict<number> = {}
 
   private _stopPropagationSet: Set<string>
   private _stopImmediatePropagationSet: Set<string>
@@ -980,7 +981,7 @@ export class Component<
     this.templateBase(
       base,
       (parent, leafComp) => {
-        parent.domAppendRoot(leafComp)
+        parent.domAppendRoot(leafComp, this.$root.length - 1)
       },
       (parent, leafComp) => {
         const index = parent.$parentRoot.indexOf(leafComp)
@@ -1041,10 +1042,6 @@ export class Component<
 
       this._onPropChanged(name, current)
     }
-
-    if (this.$listenCount['mount']) {
-      this.dispatchEvent('mount', {}, false)
-    }
   }
 
   mount($context: Context, commit: boolean = true): void {
@@ -1068,6 +1065,8 @@ export class Component<
     if (commit) {
       this.commit()
     }
+
+    this.dispatchEvent('mount', {}, false)
   }
 
   unmount() {
@@ -1093,9 +1092,7 @@ export class Component<
 
     this.onUnmount($context)
 
-    if (this.$listenCount['unmount']) {
-      this.dispatchEvent('unmount', {}, false)
-    }
+    this.dispatchEvent('unmount', {}, false)
   }
 
   focus(options: FocusOptions | undefined = { preventScroll: true }) {
@@ -1799,7 +1796,7 @@ export class Component<
     // console.log(this.constructor.name, 'connect')
 
     if (this.$connected) {
-      // throw new Error('component is already connected')
+      throw new Error('component is already connected')
       return
     }
 
@@ -1860,8 +1857,10 @@ export class Component<
           this.unregister()
         } else if (event_event === 'play') {
           this.play()
-        } else {
+        } else if (event_event === 'pause') {
           this.pause()
+        } else {
+          throw new Error('invalid event')
         }
       },
     }
@@ -1878,14 +1877,6 @@ export class Component<
       this.$remoteId = remoteId
 
       this.register()
-    })
-
-    $unit.$getAnimations({}, (animations) => {
-      for (const animation of animations) {
-        const { keyframes, opt } = animation
-
-        this.animate(keyframes, opt)
-      }
     })
 
     const all_unlisten: Unlisten[] = []
@@ -1932,20 +1923,24 @@ export class Component<
 
     const $emitter = $unit.$refEmitter({ _: ['EE'] })
 
+    const unlisten_control = this.$control($emitter)
+
+    all_unlisten.push(unlisten_control)
+
     const unlisten_emitter = callAll([
-      $emitter.$addListener({ event: 'listen' }, ({ event }) => {
+      $emitter.$addListener({ event: 'listen' }, ([{ event }]) => {
         if (UI_EVENT_SET.has(event as IOUIEventName) || event.startsWith('_')) {
           listen(event)
         }
       }),
-      $emitter.$addListener({ event: 'unlisten' }, ({ event }) => {
+      $emitter.$addListener({ event: 'unlisten' }, ([{ event }]) => {
         if (
           UI_EVENT_SET.has((event as IOUIEventName) || event.startsWith('_'))
         ) {
           unlisten(event)
         }
       }),
-      $emitter.$addListener({ event: 'call' }, ({ method, data }) => {
+      $emitter.$addListener({ event: 'call' }, ([{ method, data }]) => {
         this._call(method, data)
       }),
     ])
@@ -1961,6 +1956,7 @@ export class Component<
         this.setChildren(_children)
       }
     })
+
     this.$connected = true
 
     this.onConnected($unit)
@@ -1976,6 +1972,224 @@ export class Component<
     component.connect($childRef)
 
     return component
+  }
+
+  private $control = ($emitter: $EE) => {
+    return callAll([
+      $emitter.$addListener(
+        { event: 'set_sub_component' },
+        ([subComponentId, bundle]) => {
+          if (!this.$controlled) {
+            const child = $childToComponent(this.$system, { bundle })
+
+            const _ = getComponentInterface(child)
+
+            const $subComponent = (this.$unit as $Graph).$refUnit({
+              unitId: subComponentId,
+              _,
+            }) as $Component
+
+            child.connect($subComponent)
+
+            this.setSubComponent(subComponentId, child)
+          }
+        }
+      ),
+      $emitter.$addListener(
+        { event: 'register_root' },
+        ([globalRef]: [GlobalRefSpec]) => {
+          if (!this.$controlled) {
+            const { globalId } = globalRef
+
+            let subComponent: Component
+
+            for (const subComponentId in this.$subComponent) {
+              const siblingComponent = this.$subComponent[subComponentId]
+
+              if (siblingComponent.$remoteId === globalId) {
+                subComponent = siblingComponent
+
+                break
+              }
+            }
+
+            if (subComponent) {
+              if (subComponent.$rootParent) {
+                subComponent.$rootParent.removeParentRoot(subComponent)
+              }
+
+              this.registerRoot(subComponent)
+            }
+          }
+        }
+      ),
+      $emitter.$addListener(
+        { event: 'unregister_root' },
+        ([globalRef]: [GlobalRefSpec]) => {
+          if (!this.$controlled) {
+            const { globalId } = globalRef
+
+            let subComponent: Component
+
+            for (const subComponentId in this.$subComponent) {
+              const siblingComponent = this.$subComponent[subComponentId]
+
+              if (
+                siblingComponent.$remoteId === globalId &&
+                siblingComponent.$mounted
+              ) {
+                subComponent = siblingComponent
+
+                break
+              }
+            }
+
+            if (subComponent) {
+              for (const parentRoot of [...subComponent.$parentRoot]) {
+                subComponent.unregisterParentRoot(parentRoot)
+
+                this.registerRoot(parentRoot)
+              }
+
+              this.unregisterRoot(subComponent)
+            }
+          }
+        }
+      ),
+      $emitter.$addListener(
+        { event: 'register_parent_root' },
+        ([globalRef]: [GlobalRefSpec]) => {
+          if (!this.$controlled) {
+            const { globalId } = globalRef
+
+            const components = this.$system.getLocalComponents(globalId)
+
+            if (!components.length) {
+              return
+            }
+
+            let subComponent: Component
+
+            if (!this.$parent.$controlled) {
+              for (const subComponentId in this.$parent.$subComponent) {
+                const siblingComponent =
+                  this.$parent.$subComponent[subComponentId]
+
+                if (siblingComponent.$remoteId === globalId) {
+                  subComponent = siblingComponent
+
+                  break
+                }
+              }
+
+              if (subComponent) {
+                if (subComponent.$rootParent) {
+                  subComponent.$rootParent.removeParentRoot(subComponent)
+                } else if (
+                  subComponent.$parent &&
+                  subComponent.$parent.$mountRoot.includes(subComponent)
+                ) {
+                  subComponent.$parent.removeRoot(subComponent)
+                }
+
+                this.registerParentRoot(subComponent)
+              }
+            }
+          }
+        }
+      ),
+      $emitter.$addListener(
+        { event: 'unregister_parent_root' },
+        ([globalRef]: [GlobalRefSpec]) => {
+          if (!this.$controlled) {
+            const { globalId } = globalRef
+
+            const components = this.$system.getLocalComponents(globalId)
+
+            if (!components.length) {
+              return
+            }
+
+            let subComponent: Component
+
+            if (!this.$parent.$controlled) {
+              for (const subComponentId in this.$parent.$subComponent) {
+                const siblingComponent =
+                  this.$parent.$subComponent[subComponentId]
+
+                if (siblingComponent.$remoteId === globalId) {
+                  subComponent = siblingComponent
+
+                  break
+                }
+              }
+
+              if (subComponent) {
+                if (subComponent.$rootParent) {
+                  subComponent.$rootParent.removeParentRoot(subComponent)
+                } else if (
+                  subComponent.$parent &&
+                  subComponent.$parent.$mountRoot.includes(subComponent)
+                ) {
+                  subComponent.$parent.removeRoot(subComponent)
+                }
+
+                this.unregisterParentRoot(subComponent)
+              }
+            }
+          }
+        }
+      ),
+      $emitter.$addListener(
+        { event: 'reorder_sub_component' },
+        ([parentId, childId, to]) => {
+          if (!this.$controlled) {
+            const child = this.getSubComponent(childId)
+
+            if (parentId) {
+              const parent = this.getSubComponent(parentId)
+
+              const slotName = 'default'
+
+              parent.removeParentRoot(child)
+              parent.insertParentChildAt(child, slotName, to)
+            } else {
+              this.removeRoot(child)
+              this.insertRootAt(child, to)
+            }
+          }
+        }
+      ),
+      $emitter.$addListener(
+        { event: 'move_sub_component_root' },
+        ([parentId, prevParentMap, children, slotMap, prevSlotMap]) => {
+          if (!this.$controlled) {
+            for (const childId of children) {
+              const child = this.getSubComponent(childId)
+              const currentParentId = this.getSubComponentParentId(childId)
+
+              if (currentParentId) {
+                const parent = this.getSubComponent(currentParentId)
+
+                parent.unregisterParentRoot(child)
+              } else {
+                this.unregisterRoot(child)
+              }
+
+              if (parentId) {
+                const parent = this.getSubComponent(parentId)
+
+                const slotName = 'default'
+
+                parent.registerParentRoot(child, slotName)
+              } else {
+                this.registerRoot(child)
+              }
+            }
+          }
+        }
+      ),
+    ])
   }
 
   public disconnect(deep: boolean = true): void {
@@ -2120,17 +2334,21 @@ export class Component<
     _if(this.$mounted, mount, component, this.$context)
   }
 
-  public domAppendRoot(component: Component): void {
+  public domAppendRoot(component: Component, at: number): void {
     set(component, '$slotParent', this)
 
     if (!this.$primitive) {
       if (!component.$primitive) {
+        let i = 0
+
         for (const root of component.$mountRoot) {
-          this.domAppendRoot(root)
+          this.domAppendRoot(root, at + i)
+
+          i++
         }
       } else {
         if (this.$slotParent) {
-          const i = this.$slotParent.$mountParentChildren.length - 1
+          const i = at + this.$slotParent.$mountParentChildren.length - 1
 
           this.$slotParent.domAppendParentChildAt(component, 'default', i, i)
         } else {
@@ -2139,8 +2357,12 @@ export class Component<
       }
     } else {
       if (!component.$primitive) {
+        let i = 0
+
         for (const root of component.$mountRoot) {
-          this.domAppendRoot(root)
+          this.domAppendRoot(root, i)
+
+          i++
         }
       } else {
         this.domCommitAppendChild(component, this.$mountRoot.length - 1)
@@ -2197,8 +2419,10 @@ export class Component<
   public appendRoot(component: Component): void {
     // console.log('Component', 'appendRoot', component)
 
+    const at = this.$root.length
+
     this.memAppendRoot(component)
-    this.domAppendRoot(component)
+    this.domAppendRoot(component, at)
     this.postAppendRoot(component)
   }
 
@@ -2228,14 +2452,10 @@ export class Component<
           let i = 0
 
           if (this.$slotParent) {
-            const index = this.$parent?.$root.includes(this)
-              ? this.$parent?.$root.indexOf(this)
-              : this.$slotParent.$mountParentChildren.indexOf(this)
-
             this.$slotParent.domInsertParentChildAt(
               component,
               'default',
-              index + _at + i
+              _at + i
             )
           } else {
             this.domCommitInsertChild(root, _at)
@@ -2397,6 +2617,10 @@ export class Component<
   ): void {
     insert(this.$parentRoot, component, at)
     insert(this.$parentRootSlotName, slotName, at)
+
+    const slot = get(this.$slot, slotName)
+
+    slot.memInsertParentChild(component, at, slotName)
   }
 
   public unshiftParentRoot(component: Component, slotName: string): void {
@@ -2511,6 +2735,15 @@ export class Component<
   public memPushParentChild(component: Component, slotName: string): void {
     push(this.$parentChildren, component)
     push(this.$parentChildrenSlot, slotName)
+  }
+
+  public memInsertParentChild(
+    component: Component,
+    at: number,
+    slotName: string
+  ): void {
+    insert(this.$parentChildren, component, at)
+    insert(this.$parentChildrenSlot, slotName, at)
   }
 
   public memPullParentChild(component: Component): void {
@@ -2629,8 +2862,6 @@ export class Component<
     }
 
     insert(this.$mountParentChildren, component, i)
-
-    component.$rootParent = this
   }
 
   public domInsertParentChildAt(
@@ -2917,6 +3148,13 @@ export class Component<
     return this.$subComponent[id]
   }
 
+  public setControlled(controlled: boolean): void {
+    this.$controlled = controlled
+
+    if (this.$controlled) {
+    }
+  }
+
   public setSubComponent(id: string, component: Component): void {
     set(component, '$parent', this)
 
@@ -2947,6 +3185,7 @@ export class Component<
         return parentSubComponentId
       }
     }
+
     return null
   }
 

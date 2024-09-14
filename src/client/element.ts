@@ -65,7 +65,7 @@ export class Element<
     }
 
     const element_unlisten = this.$unit.$watch(
-      { events: ['set', 'call' /**, 'ref_input' */] },
+      { events: ['set', 'call'] },
       element_listener
     )
 

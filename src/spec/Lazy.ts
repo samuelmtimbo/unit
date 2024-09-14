@@ -296,9 +296,14 @@ export function lazyFromSpec(
       return this.__graph.addUnitSpecs(units)
     }
 
-    addUnitSpec(unitId: string, unit: UnitBundleSpec, emit?: boolean): Unit {
+    addUnitSpec(
+      unitId: string,
+      unit: UnitBundleSpec,
+      parentId?: string | null,
+      emit?: boolean
+    ): Unit {
       this._ensure()
-      return this.__graph.addUnitSpec(unitId, unit)
+      return this.__graph.addUnitSpec(unitId, unit, parentId, emit)
     }
 
     bulkEdit(actions: Action[]): void {
@@ -371,11 +376,6 @@ export function lazyFromSpec(
       return this.__graph.removeRoot(subComponentId)
     }
 
-    detach(): void {
-      this._ensure()
-      return this.__graph.detach()
-    }
-
     moveSubgraphInto(
       ...[
         graphId,
@@ -407,14 +407,14 @@ export function lazyFromSpec(
       )
     }
 
-    registerRoot(component: Component_): void {
+    registerRoot(component: Component_, emit?: boolean): void {
       this._ensure()
-      return this.__graph.registerRoot(component)
+      return this.__graph.registerRoot(component, emit)
     }
 
-    unregisterRoot(component: Component_): void {
+    unregisterRoot(component: Component_, emit?: boolean): void {
       this._ensure()
-      return this.__graph.unregisterRoot(component)
+      return this.__graph.unregisterRoot(component, emit)
     }
 
     registerParentRoot(component: Component_, slotName: string): void {
@@ -514,6 +514,11 @@ export function lazyFromSpec(
     public hasChild(at: number): boolean {
       this._ensure()
       return this.__graph.hasChild(at)
+    }
+
+    refRoot(at: number): Component_ {
+      this._ensure()
+      return this.__graph.refRoot(at)
     }
 
     public refChild(at: number): Component_ {

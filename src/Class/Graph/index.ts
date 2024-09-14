@@ -17,6 +17,7 @@ import {
   pushChild,
   refChild,
   refChildren,
+  refRoot,
   refSlot,
   registerParentRoot,
   registerRoot,
@@ -30,6 +31,7 @@ import {
 } from '../../component/method'
 import { GRAPH_DEFAULT_EVENTS } from '../../constant/GRAPH_DEFAULT_EVENTS'
 import { SELF } from '../../constant/SELF'
+import { deepSet_ } from '../../deepSet'
 import { CodePathNotImplementedError } from '../../exception/CodePathNotImplemented'
 import { MergeNotFoundError } from '../../exception/MergeNotFoundError'
 import { ReadOnlyError } from '../../exception/ObjectReadOnly'
@@ -95,8 +97,6 @@ import {
 import { System } from '../../system'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keyCount } from '../../system/core/object/KeyCount/f'
-import deepMerge from '../../system/f/object/DeepMerge/f'
-import { isObjNotNull } from '../../system/f/object/DeepMerge/isObjNotNull'
 import { keys } from '../../system/f/object/Keys/f'
 import {
   GraphComponentSpec,
@@ -2608,6 +2608,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return this._unit[unitId]
   }
 
+  public getSubComponent(unitId: string): Component_<any> {
+    const unit = this.getUnit(unitId) as Component_
+
+    return unit
+  }
+
   public getGraph(unitId: string): Graph {
     const graph = this.getUnit(unitId) as Graph
 
@@ -3076,18 +3082,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unitId: string,
     unit: Unit,
     bundle?: UnitBundleSpec,
+    parentId?: string | null,
     emit: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
   ): void => {
-    this._addUnit(unitId, unit, bundle, fork, bubble)
+    this._addUnit(unitId, unit, bundle, parentId, fork, bubble)
 
-    const unitBundle = bundle ?? unit.getUnitBundleSpec()
+    bundle = bundle ?? unit.getUnitBundleSpec()
 
-    emit && this.edit('add_unit', unitId, unitBundle, unit, [])
+    emit && this.edit('add_unit', unitId, bundle, unit, [])
 
     if (this._transacting) {
-      this._transaction.push(makeAddUnitAction(unitId, unitBundle))
+      this._transaction.push(makeAddUnitAction(unitId, bundle))
     }
   }
 
@@ -3123,7 +3130,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     )
 
     this._memAddUnit(unitId, _unit, bundle)
-    this._simAddUnit(unitId, { unit }, _unit, false)
+    this._simAddUnit(unitId, { unit }, _unit, null, false)
   }
 
   private _initAddUnits(units: GraphUnitsSpec): void {
@@ -3136,6 +3143,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unitId: string,
     unit: Unit,
     bundle: UnitBundleSpec = null,
+    parentId: string | null,
     fork: boolean = true,
     bubble: boolean = true
   ) => {
@@ -3151,7 +3159,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this.__system.injectSpecs(bundle.specs)
 
-    this.edit('before_add_unit', unitId, unit, [])
+    this.emit('before_add_unit', unitId, unit, [])
 
     this._specAddUnit(unitId, unit, bundle, parentId)
     this._memAddUnit(unitId, unit, bundle)
@@ -3173,10 +3181,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private injectSubComponent = (
     unitId: string,
     unitSpec: GraphUnitSpec,
-    unit: Component_
+    unit: Component_,
+    emit?: boolean
   ): void => {
     this._specInjectSubComponent(unitId)
     this._simInjectSubComponent(unitId, unitSpec, unit)
+
+    const bundle = unit.getUnitBundleSpec()
+
+    emit && this.emit('set_sub_component', unitId, bundle)
   }
 
   private _simInjectSubComponent = (
@@ -3225,29 +3238,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     })
   }
 
-  private componentAppend = (unitId: string, bundle: GraphUnitSpec): void => {
-    this._specAppendRoot(unitId)
-
-    this.emit('component_append', unitId, bundle, [])
-  }
-
   private _specAppendRoot = (unitId: string): void => {
     // console.log('Graph', '_specAppendRoot', unitId)
 
     this._spec.component.children = this._spec.component.children || []
     this._spec.component.children.push(unitId)
-  }
-
-  private componentRemove = (unitId: string): void => {
-    this._specComponentRemoveChild(unitId)
-
-    this.emit('component_remove', unitId, [])
-  }
-
-  private _specComponentRemoveChild = (unitId: string): void => {
-    const i = this._spec.component.children.indexOf(unitId)
-
-    this._spec.component.children.splice(i, 1)
   }
 
   public removeSubComponent = (unitId: string): void => {
@@ -3313,17 +3308,21 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subComponentId: string,
     childId: string,
     at: number,
-    slot: string
+    slot: string,
+    emit?: boolean
   ): void => {
     // console.log('Graph', '_insertSubComponentChild', subComponentId, childId, at, slot)
 
     this._fork()
 
     this._specSubComponentInsertChild(subComponentId, childId, at, slot)
-    this._simSubComponentInsertChild(subComponentId, childId, at, slot)
+    this._simSubComponentInsertChild(subComponentId, childId, at, slot, emit)
   }
 
-  private _simRemoveSubComponentFromParent = (subComponentId: string): void => {
+  private _simRemoveSubComponentFromParent = (
+    subComponentId: string,
+    emit: boolean
+  ): void => {
     // console.log('Graph', '_simRemoveSubComponentFromParent', subComponentId)
 
     const currentParentId = this._getSubComponentParentId(subComponentId)
@@ -3331,7 +3330,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     if (currentParentId) {
       this._simSubComponentRemoveChild(currentParentId, subComponentId)
     } else {
-      this._simRemoveRoot(subComponentId)
+      this._simRemoveRoot(subComponentId, emit)
     }
   }
 
@@ -3375,8 +3374,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const subComponent = this.getUnit(subComponentId) as Component_
 
     parentComponent.removeParentChild(subComponent)
-
-    this.registerRoot(subComponent)
   }
 
   private _specSubComponentAppendChild = (
@@ -3436,12 +3433,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     subComponentId: string,
     childId: string,
     at: number,
-    slotName: string
+    slotName: string,
+    emit: boolean
   ) => {
     const subComponentUnit = this.getUnit(subComponentId) as Element_ | Graph
     const childUnit = this.getUnit(childId) as Element_ | Graph
 
-    subComponentUnit.registerParentRoot(childUnit, slotName)
+    subComponentUnit.registerParentRoot(childUnit, slotName, at, emit)
   }
 
   private _unitUnlisten: Dict<Unlisten> = {}
@@ -3449,6 +3447,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   public addUnitSpec(
     unitId: string,
     bundle: UnitBundleSpec,
+    parentId?: string | null,
     emit: boolean = true,
     fork: boolean = true,
     bubble: boolean = true
@@ -3461,7 +3460,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = unitFromBundleSpec(this.__system, bundle, specs_, this._branch)
 
-    this.addUnit(unitId, unit, bundle, emit, fork, bubble)
+    this.addUnit(unitId, unit, bundle, parentId, emit, fork, bubble)
 
     return unit
   }
@@ -3469,6 +3468,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _addUnitSpec(
     unitId: string,
     bundle: UnitBundleSpec,
+    parentId: string | null,
     fork: boolean = true,
     bubble: boolean = true
   ): Unit {
@@ -3480,7 +3480,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = unitFromBundleSpec(this.__system, bundle, specs, this._branch)
 
-    this._addUnit(unitId, unit, bundle, fork, bubble)
+    this._addUnit(unitId, unit, bundle, parentId, fork, bubble)
 
     return unit
   }
@@ -3491,17 +3491,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   public _addUnitBundle = (unitId: string, unitBundle: UnitBundle) => {}
 
-  public _addUnitBundleSpec(unitId: string, unitBundle: UnitBundleSpec): Unit {
-    // console.log('Graph', '_addUnitBundleSpec', unitId, unitBundle)
+  public _addUnitBundleSpec(unitId: string, bundle: UnitBundleSpec): Unit {
+    // console.log('Graph', '_addUnitBundleSpec', unitId, bundle)
 
     const unit = unitFromBundleSpec(
       this.__system,
-      unitBundle,
+      bundle,
       this.__system.specs,
       this._branch
     )
 
-    this._addUnit(unitId, unit)
+    this._addUnit(unitId, unit, bundle, null)
 
     return unit
   }
@@ -3525,7 +3525,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _specAddUnit(
     unitId: string,
     unit: Unit,
-    bundle: UnitBundleSpec = null
+    bundle: UnitBundleSpec = null,
+    parentId: string | null = null
   ): void {
     // console.log('Graph', '_specAddUnit', unitId, bundle?.unit)
 
@@ -3859,10 +3860,21 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     unitId: string,
     bundle: UnitBundleSpec,
     unit: Unit,
+    parentId: string | null,
     registerRoot: boolean = true
   ): void {
     if (unit.isElement()) {
-      registerRoot && this.registerRoot(unit as Component_)
+      this.emit('set_sub_component', unitId, bundle)
+
+      if (registerRoot) {
+        if (parentId) {
+          const parentComponent = this.getUnit(parentId) as Component_
+
+          parentComponent.registerParentRoot(unit as Component_, 'default')
+        } else {
+          this.registerRoot(unit as Component_, true)
+        }
+      }
 
       this._simInjectSubComponent(unitId, bundle.unit, unit as Component_)
     }
@@ -3924,7 +3936,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const [newUnit, bundle] = cloneUnit(unit, true)
 
-    this._addUnit(newUnitId, newUnit, bundle)
+    this._addUnit(newUnitId, newUnit, bundle, null)
 
     if (!this._paused) {
       newUnit.play()
@@ -3945,12 +3957,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const toUnit = this.getUnit(toUnitId)
 
     toUnit.push(toInputId, fromUnit)
-  }
-
-  public moveUnit(id: string, unitId: string, inputId: string): void {
-    this._moveUnit(id, unitId, inputId)
-
-    this.edit('move_unit', id, unitId, inputId, [])
   }
 
   private _memRemoveUnitFromMerges(unitId: string): void {
@@ -4103,19 +4109,15 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       const { children = [] } = subComponentSpec
 
       for (const childId of children) {
+        const child = this.getSubComponent(childId)
+
         this._simSubComponentRemoveChild(unitId, childId)
+
+        this.registerRoot(child, false)
       }
 
-      this._simRemoveSubComponentFromParent(unitId)
+      this._simRemoveSubComponentFromParent(unitId, true)
     }
-  }
-
-  private _subComponentRemoveChild = (
-    unitId: string,
-    childId: string
-  ): void => {
-    this._simSubComponentRemoveChild(unitId, childId)
-    this._specRemoveSubComponentChild(unitId, childId)
   }
 
   private _specUnplugUnit = (unitId: string): void => {
@@ -5286,7 +5288,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._removeUnit(unitId, false) as Graph
 
-    this._addUnit(newUnitId, unit)
+    this._addUnit(newUnitId, unit, null, null)
     this._addUnitMerges(newUnitMerges, false)
     this._addUnitPlugs(newUnitId, unitPlugs, false)
   }
@@ -5415,27 +5417,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   public setMetadata(path: string[], data: any): void {
-    let cursor = this._spec
-    let i = 0
-
-    while (i < path.length - 1) {
-      const p = path[i]
-
-      if (!cursor[p]) {
-        cursor[p] = {}
-      }
-
-      cursor = cursor[p]
-      i++
-    }
-
-    const p = path[i]
-
-    if (isObjNotNull(cursor[p]) && isObjNotNull(data)) {
-      cursor[p] = deepMerge(cursor[p], data)
-    } else {
-      cursor[p] = data
-    }
+    deepSet_(this._spec.metadata, path, data)
 
     this.edit('metadata', { path, data }, [])
   }
@@ -5515,7 +5497,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _removeRoot(subComponentId: string): void {
-    this._simRemoveRoot(subComponentId)
+    this._simRemoveRoot(subComponentId, true)
     this._specRemoveRoot(subComponentId)
   }
 
@@ -5531,10 +5513,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
   }
 
-  private _simRemoveRoot(subComponentId: string): void {
+  private _simRemoveRoot(subComponentId: string, emit: boolean): void {
     const subComponent = this.getUnit(subComponentId) as Component_
 
-    this.unregisterRoot(subComponent)
+    this.unregisterRoot(subComponent, emit)
   }
 
   public moveSubgraphInto(
@@ -5897,12 +5879,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   private _removeSubComponentFromParent(
     subComponentId: string,
+    emit: boolean,
     fork: boolean,
     bubble: boolean
   ) {
     fork && this._fork(undefined, true, bubble)
 
-    this._simRemoveSubComponentFromParent(subComponentId)
+    this._simRemoveSubComponentFromParent(subComponentId, emit)
     this._specRemoveSubComponentFromParent(subComponentId)
   }
 
@@ -5985,12 +5968,16 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean,
     bubble: boolean
   ): void {
-    this._removeSubComponentFromParent(childId, fork, bubble)
+    this._removeSubComponentFromParent(childId, false, fork, bubble)
 
     if (parentId) {
-      this._insertSubComponentChild(parentId, childId, to, slotName)
+      this._insertSubComponentChild(parentId, childId, to, slotName, false)
     } else {
-      this._appendRoot(childId)
+      this._specAppendRoot(childId)
+
+      const subComponent = this.getSubComponent(childId)
+
+      this.registerRoot(subComponent, false)
     }
   }
 
@@ -6006,7 +5993,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     for (const childId of children) {
       const child = this.getUnit(childId) as Component_
 
-      this.registerRoot(child)
+      this.registerRoot(child, false)
     }
 
     for (let i = 0; i < slots.length; i++) {
@@ -6048,20 +6035,28 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return removeParentChild(this, this._parent_children, component)
   }
 
-  registerRoot(component: Component_): void {
-    return registerRoot(this, this._root, component)
+  registerRoot(component: Component_, emit: boolean): void {
+    return registerRoot(this, this._root, component, emit)
   }
 
-  unregisterRoot(component: Component_): void {
-    return unregisterRoot(this, this._root, component)
+  unregisterRoot(component: Component_, emit: boolean): void {
+    return unregisterRoot(this, this._root, component, emit)
   }
 
   registerParentRoot(
     component: Component_,
     slotName: string,
-    at?: number
+    at?: number,
+    emit?: boolean
   ): void {
-    return registerParentRoot(this, this._parent_root, component, slotName, at)
+    return registerParentRoot(
+      this,
+      this._parent_root,
+      component,
+      slotName,
+      at,
+      emit
+    )
   }
 
   unregisterParentRoot(component: Component_): void {
@@ -6102,6 +6097,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   removeChild(at: number): Component_ {
     return removeChild(this, this._children, at)
+  }
+
+  refRoot(at: number): Component_ {
+    return refRoot(this, this._root, at)
   }
 
   refChild(at: number): Component_ {
@@ -6164,7 +6163,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           addUnitSpec: (data: GraphAddUnitData) => {
             const { unitId, bundle, parentId, merges, plugs } = data
 
-            this._addUnitSpec(unitId, bundle, fork, bubble)
+            this._addUnitSpec(unitId, bundle, parentId, fork, bubble)
 
             if (parentId) {
               this._appendSubComponentChild(
