@@ -3512,38 +3512,34 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         FileSystemFileHandle | FileSystemDirectoryHandle,
       ][]
 
-      const handles = entries.map((entry) => entry[1])
+      for await (const entry of entries) {
+        const [_, handle] = entry
 
-      this._paste_handles(handles)
-    }
-  }
+        if (handle.kind === 'file') {
+          const file = (await (
+            handle as FileSystemFileHandle
+          ).getFile()) as File
 
-  private _paste_handles = async (
-    handles: (FileSystemFileHandle | FileSystemDirectoryHandle)[]
-  ) => {
-    for await (const handle of handles) {
-      if (handle.kind === 'file') {
-        const file = (await (handle as FileSystemFileHandle).getFile()) as File
+          const bundle = await this._read_bundle_file(file)
 
-        const bundle = await this._read_bundle_file(file)
+          if (bundle) {
+            const specIdMap = injectUserBundle(this.$props, bundle)
 
-        if (bundle) {
-          const specIdMap = injectUserBundle(this.$props, bundle)
+            const bundle_ = clone(bundle)
 
-          const bundle_ = clone(bundle)
-
-          remapBundle(bundle_, specIdMap)
+            remapBundle(bundle_, specIdMap)
+          }
+        } else if (handle.kind === 'directory') {
+          this.__paste_folder(handle as FileSystemDirectoryHandle)
+        } else {
+          throw new InvalidStateError()
         }
-      } else if (handle.kind === 'directory') {
-        this.__paste_folder(handle as FileSystemDirectoryHandle)
-      } else {
-        throw new InvalidStateError()
       }
     }
   }
 
   private _paste_entries = async (entries: FileSystemEntry[]) => {
-    for await (const entry of entries) {
+    for (const entry of entries) {
       if (entry.isFile) {
         ;(entry as FileSystemFileEntry).file(
           async (file: File) => {
