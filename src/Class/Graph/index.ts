@@ -52,6 +52,7 @@ import { evaluate } from '../../spec/evaluate'
 import { evaluateDataValue } from '../../spec/evaluateDataValue'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
+import { fromUnitBundle } from '../../spec/fromUnitBundle'
 import { renameUnitInMerges } from '../../spec/reducers/spec'
 import {
   coverPin,
@@ -3683,7 +3684,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     forEach(inputs, boundSetUnitInput)
     forEach(outputs, boundSetUnitOutput)
 
-    let unit_pin_data_listener: Dict<IOOf<Dict<Function>>> = {}
+    let unit_pin_listener: Dict<IOOf<Dict<Function>>> = {}
 
     const setup_unit_constant_pin = (
       type: IO,
@@ -3695,11 +3696,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       fork && this._fork(undefined, true, bubble)
 
-      const pin_data_unlisten = pin.addListener('data', (data) => {
-        if (this._settingUnitData) {
-          return
-        }
-
+      const listener = (data: any) => {
         if (unit.paused()) {
           return
         }
@@ -3709,11 +3706,24 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         this._specSetUnitPinData(unitId, type, pinId, data)
 
         this.edit('set_unit_pin_data', unitId, type, pinId, data, [])
+      }
+
+      const pin_data_unlisten = pin.addListener('data', listener)
+      const pin_edit_unlisten = pin.addListener('edit', (data) => {
+        const { specs, classes } = this.__system
+
+        const bundle = data.getUnitBundleSpec()
+
+        const Class = fromUnitBundle(bundle, specs, classes)
+
+        listener(Class)
       })
 
-      deepSet(unit_pin_data_listener, [unitId, type, pinId], pin_data_unlisten)
+      const pin_unlisten = callAll([pin_data_unlisten, pin_edit_unlisten])
 
-      all_unlisten.push(pin_data_unlisten)
+      deepSet(unit_pin_listener, [unitId, type, pinId], pin_unlisten)
+
+      all_unlisten.push(pin_unlisten)
     }
 
     forEach(inputs, (pinId) => {
@@ -3760,7 +3770,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             setup_unit_constant_pin(type, pinId, data)
           } else {
             const pin_data_unlisten = deepGetOrDefault(
-              unit_pin_data_listener,
+              unit_pin_listener,
               [unitId, type, pinId],
               undefined
             )
@@ -3770,7 +3780,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
               remove(all_unlisten, pin_data_unlisten)
 
-              deepDestroy(unit_pin_data_listener, [unitId, type, pinId])
+              deepDestroy(unit_pin_listener, [unitId, type, pinId])
             }
           }
         }
@@ -5328,8 +5338,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     pin.push(data)
   }
 
-  private _settingUnitData = false
-
   public setUnitPinData(
     unitId: string,
     type: IO,
@@ -5339,11 +5347,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     fork: boolean = true,
     bubble: boolean = true
   ) {
-    this._settingUnitData = true
-
     this._setUnitPinData(unitId, type, pinId, data, fork, bubble)
-
-    this._settingUnitData = false
 
     emit && this.edit('set_unit_pin_data', unitId, type, pinId, data, [])
   }

@@ -72,17 +72,7 @@ export function unitFromBundleSpec<I, O>(
     if (dataRef.data !== undefined) {
       const input = unit.getInput(pinId as any)
 
-      let data_ = resolveDataRef(dataRef, specs, classes)
-
-      if (input.ref()) {
-        if (data_ instanceof Function) {
-          data_ = new data_(system)
-
-          data_.play()
-        } else {
-          //
-        }
-      }
+      const data_ = resolveDataRef(dataRef, specs, classes)
 
       input.push(data_)
     }

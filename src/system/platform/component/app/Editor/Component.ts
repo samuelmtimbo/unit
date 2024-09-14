@@ -281,7 +281,6 @@ import {
   getThemeModeColor,
   themeBackgroundColor,
 } from '../../../../../client/theme'
-import { throttle } from '../../../../../client/throttle'
 import {
   NULL_VECTOR,
   Shape,
@@ -605,7 +604,6 @@ import {
 } from '../../../../../types'
 import { Action } from '../../../../../types/Action'
 import { BundleSpec } from '../../../../../types/BundleSpec'
-import { GlobalRefSpec } from '../../../../../types/GlobalRefSpec'
 import { GraphConnectUnitMeta } from '../../../../../types/GraphConnectUnitMeta'
 import { GraphMergeSpec } from '../../../../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../../../../types/GraphMergesSpec'
@@ -57039,106 +57037,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._state_set_link_pin_ignored(pin_node_id, ignored)
   }
 
-  private _constant_input_ref_unlisten: Dict<Dict<Unlisten>> = {}
-  private _constant_input_ref_interval: Dict<Dict<number>> = {}
+  private _on_set_unit_pin_data = (_data: GraphSetUnitPinDataMomentData) => {
+    // console.log('Graph', '_on_set_unit_pin_data', _data)
 
-  private _watch_constant_ref_pin = (
-    unit_id: string,
-    type: 'input',
-    pin_id: string,
-    global_ref: GlobalRefSpec
-  ) => {
-    // console.log(
-    //   'Graph',
-    //   '_watch_constant_input_ref',
-    //   unit_id,
-    //   type,
-    //   pin_id,
-    //   global_ref
-    // )
+    const { classes } = this.$system
 
-    const {
-      api: {
-        window: { setInterval },
-      },
-    } = this.$system
+    const { specs } = this.$props
 
-    deepSet(
-      this._constant_input_ref_interval,
-      [unit_id, pin_id],
-      setInterval(() => {
-        this._tick_constant_input_ref(unit_id, pin_id, global_ref)
-      }, 1000)
-    )
-  }
+    const { unitId, type, pinId, data, path } = _data
 
-  private _unwatch_constant_input_ref = (
-    unit_id: string,
-    type: 'input',
-    pin_id: string
-  ) => {
-    const {
-      api: {
-        window: { clearInterval },
-      },
-    } = this.$system
-
-    const frame = deepGetOrDefault(
-      this._constant_input_ref_interval,
-      [unit_id, pin_id],
-      null
-    )
-
-    if (frame !== undefined) {
-      clearInterval(frame)
-
-      deepDelete(this._constant_input_ref_interval, [unit_id, pin_id])
+    if (path.length === 0) {
+      setUnitPinData({ unitId, type, pinId, data }, this._spec, specs, classes)
     }
-  }
-
-  private _tick_constant_input_ref = throttle(
-    this.$system,
-    (unitId, inputId, data: GlobalRefSpec) => {
-      // console.log(
-      //   'Graph',
-      //   '_tick_constant_input_ref',
-      //   unitId,
-      //   inputId,
-      //   global_ref
-      // )
-
-      const pin_node_id = getInputNodeId(unitId, inputId)
-
-      if (typeof data === 'object') {
-        const $unit = this._pod.$refGlobalObj(data)
-
-        if (data.__.includes('U')) {
-          $unit.$getUnitBundleSpec({}, (bundle: UnitBundleSpec) => {
-            const { specs, setSpec } = this.$props
-
-            const { unit } = bundle
-
-            const spec = getSpec(
-              weakMerge(specs, bundle.specs),
-              unit.id
-            ) as GraphSpec
-
-            setSpec(spec.id, spec)
-
-            const value: DataRef = { ref: [[]], data: bundle }
-
-            this._spec_set_pin_data(pin_node_id, value)
-          })
-        }
-      } else {
-        this._spec_set_pin_data(pin_node_id, data)
-      }
-    },
-    100
-  )
-
-  private _on_set_unit_pin_data = (data: GraphSetUnitPinDataMomentData) => {
-    // console.log('Graph', '_on_set_unit_pin_data', data)
   }
 
   private _on_bulk_edit = (data: GraphBulkEditData) => {
@@ -57571,8 +57481,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _unit_ref_pin_global_ref: Dict<GlobalRefSpec> = {}
-
   private _should_watch_ref_pin = (
     pin_node_id: string,
     unitId: string,
@@ -57591,42 +57499,34 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_on_graph_unit_ref_link_pin_data_moment', _data)
 
-    const __data = clone(_data)
-
     const { unitId, type, pinId } = _data
+
+    this._set_graph_unit_ref_link_pin_data(unitId, type, pinId, _data.data)
+  }
+
+  private _set_graph_unit_ref_link_pin_data = (
+    unitId: string,
+    type: IO,
+    pinId: string,
+    data: any
+  ) => {
+    // console.log(
+    //   'Graph',
+    //   '_set_graph_unit_ref_link_pin_data_moment',
+    //   unitId,
+    //   type,
+    //   pinId,
+    //   data
+    // )
 
     const pin_node_id = getPinNodeId(unitId, type, pinId)
 
-    this._unit_ref_pin_global_ref[pin_node_id] = _data.data
-
-    if (this._should_watch_ref_pin(pin_node_id, unitId, type, pinId)) {
-      this._tick_constant_input_ref(unitId, pinId, _data.data)
-
-      this._watch_constant_ref_pin(unitId, 'input', pinId, _data.data)
-    }
-
-    if (this._pin_to_datum[pin_node_id]) {
-      //
-    } else {
-      if (typeof __data.data === 'string') {
-        //
-      } else {
-        __data.data = 'null'
-      }
-
-      this._on_graph_unit_link_pin_data_moment(__data)
-    }
+    this._graph_debug_set_pin_value(pin_node_id, data)
   }
 
   private _on_graph_unit_ref_link_pin_drop_moment = (
     _data: GraphUnitPinDropMomentData
   ) => {
-    const { unitId, type, pinId } = _data
-
-    const pin_node_id = getPinNodeId(unitId, type, pinId)
-
-    delete this._unit_ref_pin_global_ref[pin_node_id]
-
     this._on_graph_unit_link_pin_drop_moment(_data)
   }
 

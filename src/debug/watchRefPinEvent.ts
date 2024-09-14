@@ -13,15 +13,6 @@ export interface RefPinMomentData {
 
 export interface RefPinMoment extends Moment<RefPinMomentData> {}
 
-export function specGlobalRef(_data: $_): GlobalRefSpec {
-  const globalId = _data.getGlobalId()
-  const __ = _data.getInterface()
-
-  const data = { globalId, __, _: undefined }
-
-  return data
-}
-
 export function watchRefPinEvent(
   event: PinEvent,
   type: 'ref_input' | 'ref_output',
@@ -33,8 +24,7 @@ export function watchRefPinEvent(
   // console.log(event, type, pin)
 
   const listener = (_data: $_) => {
-    const data =
-      _data instanceof Function ? stringify(_data) : specGlobalRef(_data)
+    const data = stringify(_data)
 
     callback({
       type,

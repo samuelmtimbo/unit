@@ -1,4 +1,3 @@
-import { $ } from '../Class/$'
 import { Pin, PinEvent } from '../Pin'
 import { stringify } from '../spec/stringify'
 import { PinDataMoment } from './PinDataMoment'
@@ -14,10 +13,6 @@ export function watchPinEvent<T>(
   // console.log(event, type, pin)
 
   const listener = (data: any) => {
-    if (data instanceof $) {
-      data = null
-    }
-
     if (data !== undefined) {
       data = stringify(data)
     }
