@@ -16,7 +16,11 @@ export interface Props {
 }
 
 const DEFAULT_STYLE = {
-  display: 'inline-block',
+  textAlign: 'center',
+  color: 'buttontext',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'space-around',
   boxSizing: 'border-box',
   width: '60px',
   height: '36px',
