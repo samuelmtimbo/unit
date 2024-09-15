@@ -13761,7 +13761,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._reset_node_color(node_id)
 
-    if (this._is_mode_colored()) {
+    if (this._is_mode_colored() && this._search_hidden) {
       if (this._is_node_moded(node_id)) {
         this._set_node_mode_color(node_id)
       }
