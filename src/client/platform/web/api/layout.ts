@@ -169,17 +169,19 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
 
         const rect = childNode.getBoundingClientRect()
 
+        const computedStyle = window.getComputedStyle(childNode)
+
         let x = rect.x
         let y = rect.y
 
-        let childColor: RGBA
+        let color: RGBA
 
-        if (childStyle.color) {
-          let hex: string = colorToHex(childStyle.color)
+        if (computedStyle.color) {
+          const hex: string = colorToHex(computedStyle.color)
 
-          childColor = (hex && hexToRgba(hex)) || parentTrait.color
+          color = (hex && hexToRgba(hex)) || parentTrait.color
         } else {
-          childColor = parentTrait.color
+          color = parentTrait.color
         }
 
         const childTrait: LayoutNode = {
@@ -191,7 +193,7 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
           fontSize: childFontSize,
           sx: childSx,
           sy: childSy,
-          color: childColor,
+          color,
         }
 
         childrenTrait.push(childTrait)
