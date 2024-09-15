@@ -15960,7 +15960,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const { x, y, width, height } = search_rect
 
-      let offset_y = height
+      let offset_y = Math.min(height, $y + $height - y)
 
       if ($y + $height < y) {
         offset_y = 0
