@@ -3737,6 +3737,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     all_unlisten.push(
       unit.addListener('destroy', () => {
+        if (this._removingUnit.has(unitId)) {
+          return
+        }
+
         const fork = !this.__done
 
         this._removeUnit(unitId, false, false, fork, true)
@@ -4026,6 +4030,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
   }
 
+  private _removingUnit: Set<string> = new Set()
+
   private _removeUnit(
     unitId: string,
     take: boolean = true,
@@ -4035,9 +4041,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   ): Unit {
     // console.log('_removeUnit', unitId, take, destroy, fork)
 
-    fork && this._fork(undefined, true, bubble)
-
     const unit = this.getUnit(unitId)
+
+    this._removingUnit.add(unitId)
+
+    fork && this._fork(undefined, true, bubble)
 
     this.emit('before_remove_unit', unitId, unit, [])
 
@@ -4048,6 +4056,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._specRemoveUnit(unitId, isComponent)
 
     destroy && unit.destroy()
+
+    this._removingUnit.delete(unitId)
 
     return unit
   }
