@@ -190,7 +190,10 @@ import {
   IOWheelEvent,
   makeWheelListener,
 } from '../../../../../client/event/wheel'
-import { extractStyle } from '../../../../../client/extractStyle'
+import {
+  LAYOUT_STYLE_ATTRS,
+  extractStyle,
+} from '../../../../../client/extractStyle'
 import { extractTrait } from '../../../../../client/extractTrait'
 import { findRef } from '../../../../../client/findRef'
 import { getSize } from '../../../../../client/getSize'
@@ -252,7 +255,10 @@ import {
   segmentPlugNodeId,
 } from '../../../../../client/id'
 import { getComponentInterface } from '../../../../../client/interface'
-import { isTextLike } from '../../../../../client/isTextLike'
+import { isCanvasLike } from '../../../../../client/isCanvas'
+import { isSVGLike } from '../../../../../client/isSVG'
+import { isTableLike } from '../../../../../client/isTable'
+import { isTextLike } from '../../../../../client/isText'
 import { LayoutBase } from '../../../../../client/layout'
 import { listenMovement } from '../../../../../client/listenMovement'
 import { Mode } from '../../../../../client/mode'
@@ -19606,9 +19612,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     const is_text = isTextLike(leaf_comp)
+    const is_canvas = isCanvasLike(leaf_comp)
+    const is_table = isTableLike(leaf_comp)
+    const is_svg = isSVGLike(leaf_comp)
 
-    const is_canvas = leaf_comp.$element instanceof HTMLCanvasElement
-    const is_svg = leaf_comp.isSVG()
+    const is_auto = is_canvas || is_svg || is_table
 
     const temp_style = {
       position: 'relative',
@@ -19618,8 +19626,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       left: '0',
       right: '0',
       bottom: '0',
-      width: is_canvas || is_svg ? undefined : '100%',
-      height: is_canvas || is_svg ? undefined : '100%',
+      width: is_auto ? undefined : '100%',
+      height: is_auto ? undefined : '100%',
       opacity: '1',
       transform: '',
       color: 'currentcolor',
@@ -19745,31 +19753,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       delete this._leaf_prop_unlisten[leaf_id]
 
       if (!is_text) {
-        const layoutAttrs = [
-          'position',
-          'boxSizing',
-          'margin',
-          'marginLeft',
-          'marginTop',
-          'marginBottom',
-          'marginRight',
-          'top',
-          'left',
-          'right',
-          'bottom',
-          'width',
-          'height',
-          'opacity',
-          'fontSize',
-          'transform',
-          'aspectRatio',
-          'color',
-          'object-fit',
-        ]
-
         const layoutStyle = clone(style)
 
-        for (const attr of layoutAttrs) {
+        for (const attr of LAYOUT_STYLE_ATTRS) {
           layoutStyle[attr] = style[attr] ?? style[camelToDashed(attr)] ?? ''
         }
 
@@ -19827,13 +19813,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } = this.$system
 
     for (const leaf of base) {
-      const [leaf_path, leaf_comp] = leaf
+      let [leaf_path, leaf_comp] = leaf
 
       const leaf_id = joinPath([sub_component_id, ...leaf_path])
 
       const leaf_comp_offset = leaf_comp.getOffset() ?? leaf_comp
 
-      const leaf_node = extractTrait(leaf_comp_offset, measureText)
+      if (leaf_comp.$wrap) {
+        leaf_comp = leaf_comp_offset
+      }
+
+      const leaf_node = extractTrait(leaf_comp, measureText)
 
       leaf_node.x -= this.$context.$x
       leaf_node.y -= this.$context.$y
@@ -19926,7 +19916,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const leaf_node = leaf_traits[i] || this._leaf_frame_node[leaf_id]
 
-      this._plug_leaf_frame(leaf_id, leaf_comp as any, leaf_node, leaf_layer)
+      this._plug_leaf_frame(leaf_id, leaf_comp, leaf_node, leaf_layer)
 
       i++
     }
@@ -28957,7 +28947,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           for (const sub_sub_component_leaf of base) {
             const [leaf_path, leaf_comp] = sub_sub_component_leaf
 
-            const leaf_trait = extractTrait(leaf_comp, measureText)
+            const leaf_offset = leaf_comp.getOffset()
+
+            const leaf_trait = extractTrait(leaf_offset, measureText)
 
             leaf_trait.x -= this.$context.$x
             leaf_trait.y -= this.$context.$y
@@ -29349,6 +29341,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const leaf of sub_base) {
       const [leaf_path, leaf_comp] = leaf
 
+      const leaf_offset = leaf_comp.getOffset()
+
       const leaf_trait = extractTrait(leaf_comp, measureText)
 
       leaf_trait.x -= this.$context.$x
@@ -29363,12 +29357,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     return all_sub_component_trait
-  }
-
-  public _get_all_sub_component_root_base_trait = () => {
-    const base = this._component.getRootBase()
-
-    return this._get_base_trait(base)
   }
 
   public _get_all_sub_component_base_trait = () => {
@@ -31193,7 +31181,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const leaf_node = this._leaf_frame_node[leaf_id]
 
-        this._plug_leaf_frame(leaf_id, leaf_comp as any, leaf_node, leaf_layer)
+        this._plug_leaf_frame(leaf_id, leaf_comp, leaf_node, leaf_layer)
 
         leaf_i++
       }

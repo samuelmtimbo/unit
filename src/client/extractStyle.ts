@@ -4,11 +4,34 @@ import { MeasureTextFunction } from '../text'
 import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
 import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
+import { camelToDashed } from './id'
 import { IOElement } from './IOElement'
-import { isContentEditable } from './isTextLike'
+import { isContentEditable } from './isContentEditable'
 import { LayoutNode } from './LayoutNode'
 import { rawExtractStyle } from './rawExtractStyle'
 import { parseFontSize } from './util/style/getFontSize'
+
+export const LAYOUT_STYLE_ATTRS = [
+  'position',
+  'boxSizing',
+  'margin',
+  'marginLeft',
+  'marginTop',
+  'marginBottom',
+  'marginRight',
+  'top',
+  'left',
+  'right',
+  'bottom',
+  'width',
+  'height',
+  'opacity',
+  'fontSize',
+  'transform',
+  'aspectRatio',
+  'color',
+  'object-fit',
+]
 
 export function extractStyle(
   component: Component,
@@ -31,6 +54,16 @@ export function _extractStyle(
   return _extractFromRawStyle(component, element, style, trait, measureText)
 }
 
+export function extractLayoutStyle(style: Style) {
+  const style_ = {}
+
+  for (const attr of LAYOUT_STYLE_ATTRS) {
+    style_[attr] = style[attr] ?? style[camelToDashed(attr)] ?? ''
+  }
+
+  return style_
+}
+
 export function _extractFromRawStyle(
   component: Component,
   element: IOElement,
@@ -38,6 +71,12 @@ export function _extractFromRawStyle(
   trait: LayoutNode,
   measureText: MeasureTextFunction
 ): Style {
+  const {
+    api: {
+      window: { getComputedStyle },
+    },
+  } = component.$system
+
   const fitWidth = style['width'] === 'fit-content'
   const fitHeight = style['height'] === 'fit-content'
 
@@ -48,7 +87,7 @@ export function _extractFromRawStyle(
 
     const { width, height } = measureText(textContent, fontSize, trait.width)
 
-    style = {
+    return {
       width: `${width}px`,
       height: `${height}px`,
     }
