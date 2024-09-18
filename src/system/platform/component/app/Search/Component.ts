@@ -618,6 +618,7 @@ export default class Search extends Element<HTMLDivElement, Props> {
           width: 'fit-content',
           height: '12px',
           marginBottom: '1px',
+          ...userSelect('none'),
         },
         value: tagsStr,
       },
