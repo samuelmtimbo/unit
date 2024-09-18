@@ -56333,7 +56333,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           setSpec(spec.id, next_unit_spec)
         }
 
-        if (was_ref && ref) {
+        const { kind = type } = subPinSpec
+
+        if (was_ref && ref && kind === 'output') {
           this._sim_refresh_unit_ref_output_icon(unitId, type, pinId)
         }
       } else {
