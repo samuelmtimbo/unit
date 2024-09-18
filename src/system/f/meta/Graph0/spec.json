@@ -1,0 +1,24 @@
+{
+  "name": "graph",
+  "inputs": {
+    "unit": {
+      "type": "any"
+    }
+  },
+  "outputs": {
+    "graph": {
+      "type": "`G`",
+      "icon": "graph"
+    }
+  },
+  "metadata": {
+    "icon": "circle",
+    "description": "get `unit` `graph`",
+    "complexity": 3,
+    "tags": ["f", "meta"]
+  },
+  "id": "ef26bb99-42a2-40f9-a537-ae49416e1487",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}

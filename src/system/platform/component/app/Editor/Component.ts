@@ -12731,8 +12731,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               this._long_press_collapse_node(node_id)
             }
           } else {
-            if (isInside(node, collapse_unit_node, 2 + 6)) {
-              this._long_press_collapse_node(node_id)
+            if (node.shape === 'rect') {
+              if (pointDistance(node, collapse_unit_node) < 3) {
+                this._long_press_collapse_node(node_id)
+              }
+            } else {
+              if (isInside(node, collapse_unit_node, 2 + 6)) {
+                this._long_press_collapse_node(node_id)
+              }
             }
           }
         } else {
@@ -40762,6 +40768,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return isBaseSpecId(specs, spec_id)
   }
 
+  private _is_system_unit = (unit_id: string) => {
+    const spec = this._get_unit_spec(unit_id)
+
+    return isSystemSpec(spec)
+  }
+
   private _is_datum_class_literal = (datum_node_id: string): boolean => {
     const datum_tree = this._get_datum_tree(datum_node_id)
     const is_class_literal = datum_tree.type === TreeNodeType.Unit
@@ -43796,7 +43808,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._mode === 'none') {
       const new_spec_id = newSpecId(specs)
 
-      this._add_empty_spec(new_spec_id)
+      this._add_empty_spec(new_spec_id, { render: false })
 
       const new_unit_id = this._new_unit_id(new_spec_id)
 
@@ -45049,9 +45061,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let next_spec_id: string
     let next_spec: GraphSpec
 
+    let init_unit_spec: GraphSpec
+    let init_unit_spec_id: string
+
     if (init_unit_id) {
-      const init_unit_spec_id = this._get_unit_spec_id(init_unit_id)
-      const init_unit_spec = this._get_unit_spec(init_unit_id) as GraphSpec
+      init_unit_spec = this._get_unit_spec(init_unit_id) as GraphSpec
+      init_unit_spec_id = this._get_unit_spec_id(init_unit_id)
 
       next_spec_id = init_unit_spec_id
       next_spec = init_unit_spec
@@ -45072,7 +45087,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let graph_unit_bundle: UnitBundleSpec = null
 
     const graph_render =
-      init_unit_id && this._get_unit_spec_render(init_unit_id)
+      init_unit_id === null
+        ? undefined
+        : this._get_unit_spec_render(init_unit_id)
 
     const there_is_selected_sub_component = selected_node_ids.some(
       (node_id) =>
@@ -45082,7 +45099,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let next_parent_component_id = null
 
     const should_graph_become_component =
-      graph_render === undefined && there_is_selected_sub_component
+      graph_render === undefined &&
+      there_is_selected_sub_component &&
+      (!init_unit_id || !isSystemSpecId(specs, init_unit_spec_id))
 
     if (graph_id === null) {
       graph_spec = emptyGraphSpec({ type: '`U`&`G`' })
@@ -45138,17 +45157,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._force_pointer_drag_node(new_unit_id, pointer_id, clientX, clientY)
     } else {
-      if (graph_spec.system) {
-        const new_spec_id = newSpecId(specs)
-
+      if (init_unit_spec.system) {
         graph_spec = clone(graph_spec)
-        graph_spec_id = new_spec_id
 
         delete graph_spec.system
 
-        graph_spec.id = new_spec_id
+        graph_spec.render = init_unit_spec.render ?? false
 
-        setSpec(new_spec_id, graph_spec)
+        setSpec(graph_spec.id, graph_spec)
       }
     }
 
@@ -45209,7 +45225,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const collapse_map = this._predict_collapse_map(graph_id, selected_node_ids)
 
     const should_predict_size =
-      (graph_render || there_is_selected_sub_component) &&
+      (graph_render || should_graph_become_component) &&
       (!init_unit_id || !init_unit_is_render)
 
     this._flush_debugger()
@@ -45222,10 +45238,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       graph_render,
       { x, y }
     )
-
-    if (this._is_unit_component(graph_id)) {
-      this._set_sub_component_controlled(graph_id, true)
-    }
 
     const graph_bundle = this._get_graph_unit_bundle_spec(graph_id)
 
@@ -45388,9 +45400,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const graph_is_component = this._is_unit_component(graph_unit_id)
 
+    if (graph_is_component) {
+      this._set_sub_component_controlled(graph_unit_id, true)
+    }
+
     const should_graph_become_component =
       !(this._get_node_shape(graph_unit_id) === 'rect') &&
       this._get_unit_spec_render(graph_unit_id) === undefined &&
+      !this._is_system_unit(graph_unit_id) &&
       there_is_selected_sub_component
 
     if (should_graph_become_component) {
@@ -45452,7 +45469,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let max_width = -Infinity
     let max_height = -Infinity
 
-    if (there_is_selected_sub_component) {
+    if (graph_is_component || should_graph_become_component) {
       for (const sub_component_id of ordered_sub_component_ids) {
         const sub_component = this._get_sub_component(sub_component_id)
         const children = this._spec_get_sub_component_children(sub_component_id)
@@ -56671,8 +56688,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           { unitId: possibly_turned_circle_unit_id },
           next_graph_spec.component
         )
-
-        delete next_graph_spec.render
 
         if (path.length > 1) {
           sub_component.removeSubComponent(possibly_turned_circle_unit_id)
