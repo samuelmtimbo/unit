@@ -1,0 +1,32 @@
+{
+  "name": "ends with",
+  "inputs": {
+    "str": {
+      "type": "string"
+    },
+    "search": {
+      "type": "string"
+    },
+    "position": {
+      "type": "number",
+      "metadata": {
+        "examples": ["0"]
+      }
+    }
+  },
+  "outputs": {
+    "test": {
+      "type": "boolean"
+    }
+  },
+  "metadata": {
+    "icon": "ruler",
+    "description": "match end of a string against a regular expression",
+    "complexity": 3,
+    "tags": ["f", "string"]
+  },
+  "id": "f2ac8a60-70bc-4743-934b-c5cae16b42c1",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
