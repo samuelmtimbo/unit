@@ -4413,12 +4413,19 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       if (plug) {
         plugs.push({
-          type,
+          type: plug.type,
           pinId: plug.pinId,
           subPinId: plug.subPinId,
         })
 
-        this._unplugPin(type, plug.pinId, plug.subPinId, false, false, false)
+        this._unplugPin(
+          plug.type,
+          plug.pinId,
+          plug.subPinId,
+          false,
+          false,
+          false
+        )
       }
     })
 
