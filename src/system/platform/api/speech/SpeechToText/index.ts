@@ -60,13 +60,21 @@ export default class SpeechToText extends Holder<I, O> {
 
     if (name === 'stop') {
       if (this._recorder) {
-        this._recorder.stop()
+        try {
+          this._recorder.stop()
+        } catch (err) {
+          //
+        }
       }
 
       this._backward('stop')
     } else if (name === 'start') {
       if (this._recorder) {
-        this._recorder.start()
+        try {
+          this._recorder.start()
+        } catch (err) {
+          //
+        }
       }
 
       this._backward('start')
