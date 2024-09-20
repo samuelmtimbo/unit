@@ -5,7 +5,7 @@ import {
   linearTransition,
 } from '../../../../../client/animation/animation'
 import classnames from '../../../../../client/classnames'
-import { setAlpha } from '../../../../../client/color'
+import { colorToHex, setAlpha } from '../../../../../client/color'
 import mergePropStyle from '../../../../../client/component/mergeStyle'
 import { Context, setColor, setTheme } from '../../../../../client/context'
 import { preventContextMenu } from '../../../../../client/contextMenu'
@@ -529,12 +529,24 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     return color
   }
 
+  private _control_background_color = (): string => {
+    const backgroundColor = this._background_color()
+
+    const controlBackgroundColor = setAlpha(backgroundColor, 0.75)
+
+    return controlBackgroundColor
+  }
+
   private _background_color = (): string => {
+    const { style = {} } = this.$props
+
     const { $theme } = this.$context
 
-    const backgroundColor = setAlpha(themeBackgroundColor($theme), 0.75)
+    const backgroundColor = style.background ?? themeBackgroundColor($theme)
 
-    return backgroundColor
+    const backgroundColorHex = colorToHex(backgroundColor)
+
+    return backgroundColorHex
   }
 
   private _refresh_pointer_events = (): void => {
@@ -555,7 +567,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
   private _refresh_color = (): void => {
     const color = this._get_color()
-    const backgroundColor = this._background_color()
+    const backgroundColor = this._control_background_color()
 
     mergePropStyle(this._cabinet, {
       backgroundColor,
@@ -574,6 +586,10 @@ export default class GUI extends Element<HTMLDivElement, Props> {
     })
   }
 
+  private _refresh_background = () => {
+    this.$context.$element.style.backgroundColor = this._background_color()
+  }
+
   onPropChanged(prop: string, current: any): void {
     // console.log('GUI', 'onPropChanged', prop, current)
 
@@ -582,6 +598,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
       this._refresh_pointer_events()
       this._refresh_color()
+      this._refresh_background()
     }
   }
 
@@ -639,9 +656,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
       makeCustomListener('colorchanged', this._on_context_color_changed),
     ])
 
-    this.$context.$element.style.backgroundColor = themeBackgroundColor(
-      this.$context.$theme
-    )
+    this.$context.$element.style.backgroundColor = this._background_color()
 
     this._refresh_color()
   }
@@ -659,7 +674,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
 
     setTheme(this.$context, $theme)
 
-    this.$context.$element.style.backgroundColor = themeBackgroundColor($theme)
+    this.$context.$element.style.backgroundColor = this._background_color()
 
     if (!this._manually_changed_color) {
       const default_theme_color = defaultThemeColor($theme)
