@@ -168,6 +168,7 @@ export class Primitive<
     input.prependListener('end', endListener)
 
     const unlisten = () => {
+      input.removeListener('_data', dataListener)
       input.removeListener('data', dataListener)
       input.removeListener('start', startListener)
       input.removeListener('invalid', invalidListener)
@@ -282,8 +283,16 @@ export class Primitive<
     }
   }
 
-  private _onDataInputData = <K extends keyof I>(name: K, data: any): void => {
+  private _onDataInputData = <K extends keyof I>(
+    name: K,
+    data: any,
+    backpropagation: boolean
+  ): void => {
     this._activateInput(name, data)
+
+    if (backpropagation) {
+      return
+    }
 
     if (!this._paused) {
       this.onDataInputData(name, data)
@@ -298,8 +307,16 @@ export class Primitive<
     }
   }
 
-  private _onRefInputData = <K extends keyof I>(name: K, data: any): void => {
+  private _onRefInputData = <K extends keyof I>(
+    name: K,
+    data: any,
+    backpropagation: boolean
+  ): void => {
     this._activateInput(name, data)
+
+    if (backpropagation) {
+      return
+    }
 
     if (!this._paused) {
       this.__onRefInputData(name, data)
@@ -344,9 +361,9 @@ export class Primitive<
         this._onInputStart(name)
 
         if (this.hasRefInputNamed(name)) {
-          this._onRefInputData(name, data)
+          this._onRefInputData(name, data, false)
         } else {
-          this._onDataInputData(name, data)
+          this._onDataInputData(name, data, false)
         }
       }
     }
