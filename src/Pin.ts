@@ -17,7 +17,7 @@ export type PinEvent =
 
 export type Pin_EE<T> = {
   _data: [T]
-  data: [T]
+  data: [T, boolean]
   pull: []
   drop: [T]
   start: []
@@ -172,7 +172,7 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     return data
   }
 
-  public push(data: any): void {
+  public push(data: any, backpropagation: boolean = false): void {
     this.invalidate()
 
     this._invalid = false
@@ -183,7 +183,7 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
 
     this._register = data
 
-    this.emit('data', data)
+    this.emit('data', data, backpropagation)
 
     if (this._ref) {
       //

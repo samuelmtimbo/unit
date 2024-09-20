@@ -252,6 +252,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   private _waitAll: IOOf<WaitAll> = {}
 
+  private _plugUnlisten: IOOf<Dict<Dict<Unlisten>>> = {}
+
   constructor(
     spec: GraphSpec,
     branch: Dict<true> = {},
@@ -833,6 +835,28 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     propagate: boolean = true
   ): void => {
     const subPin = this.getUnitPin(unitId, kind, pinId)
+
+    if (type === 'input' && kind === 'input') {
+      const pin = this.getPin(type, name)
+
+      if (subPin.active()) {
+        const data = subPin.peak()
+
+        pin.push(data, true)
+      }
+
+      const unlisten = callAll([
+        subPin.addListener('data', (data, backpropagation) => {
+          if (backpropagation) {
+            if (data instanceof $) {
+              pin.push(data, true)
+            }
+          }
+        }),
+      ])
+
+      deepSet(this._plugUnlisten, [type, name, subPinId], unlisten)
+    }
 
     this._simSetExposedSubPin(type, name, kind, subPinId, subPin, propagate)
   }
@@ -2390,6 +2414,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const output = type === 'output'
 
     const pin = this.getPin(type, pinId)
+
     const active = pin.active()
 
     if (_mergeId) {
@@ -2447,6 +2472,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           unit.takePin(kind, _pinId)
         }
       }
+    }
+
+    const unlisten = deepGetOrDefault(
+      this._plugUnlisten,
+      [type, pinId, subPinId],
+      undefined
+    )
+
+    if (unlisten) {
+      unlisten()
+
+      deepDestroy(this._plugUnlisten, [type, pinId, subPinId])
     }
   }
 
@@ -3694,11 +3731,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       fork && this._fork(undefined, true, bubble)
 
-      const listener = (data: any) => {
-        if (unit.paused()) {
-          return
-        }
+      const data = pin.peak()
 
+      const set = (data: any) => {
         this._fork()
 
         this._specSetUnitPinData(unitId, type, pinId, data)
@@ -3706,22 +3741,28 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         this.edit('set_unit_pin_data', unitId, type, pinId, data, [])
       }
 
-      const pin_data_unlisten = pin.addListener('data', listener)
-      const pin_edit_unlisten = pin.addListener('edit', (data) => {
+      const edit = (data: Graph) => {
         const { specs, classes } = this.__system
 
         const bundle = data.getUnitBundleSpec()
 
         const Class = fromUnitBundle(bundle, specs, classes)
 
-        listener(Class)
-      })
+        set(Class)
+      }
+
+      const pin_data_unlisten = pin.addListener('data', set)
+      const pin_edit_unlisten = pin.addListener('edit', edit)
 
       const pin_unlisten = callAll([pin_data_unlisten, pin_edit_unlisten])
 
       deepSet(unit_pin_listener, [unitId, type, pinId], pin_unlisten)
 
       all_unlisten.push(pin_unlisten)
+
+      if (data !== undefined && !this._paused) {
+        set(data)
+      }
     }
 
     forEach(inputs, (pinId) => {
@@ -3769,7 +3810,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           const data = this.getUnitPinData(unitId, type, pinId)
 
           if (constant) {
-            setup_unit_constant_pin(type, pinId, data)
+            setup_unit_constant_pin(type, pinId)
           } else {
             const pin_data_unlisten = deepGetOrDefault(
               unit_pin_listener,
