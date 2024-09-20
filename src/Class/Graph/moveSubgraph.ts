@@ -391,14 +391,14 @@ export function moveUnit(
     }
 
     if (plug) {
-      const { type, pinId: pinId_, subPinId, kind = type } = plug
+      const { type: type_, pinId: pinId_, subPinId, kind = type } = plug
 
       if (reverse) {
-        if (target.hasPlug(type, pinId_, subPinId)) {
+        if (target.hasPlug(type_, pinId_, subPinId)) {
           const propagate = isSelfPin(kind, pinId)
 
           target.plugPin(
-            type,
+            type_,
             pinId_,
             subPinId,
             {
@@ -413,9 +413,9 @@ export function moveUnit(
           //
         }
       } else {
-        if (target.hasPlug(type, pinId_, subPinId)) {
+        if (target.hasPlug(type_, pinId_, subPinId)) {
           target.plugPin(
-            type,
+            type_,
             pinId_,
             subPinId,
             {
