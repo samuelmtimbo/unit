@@ -104,6 +104,10 @@ export function listenPointerEvent(
   const pointerEventListener = (_event: PointerEvent) => {
     const { $context } = component
 
+    if (!$context) {
+      return
+    }
+
     const event = makeSyntheticPointerEvent($context, _event)
 
     listener(event, _event)
