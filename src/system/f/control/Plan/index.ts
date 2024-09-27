@@ -25,10 +25,18 @@ export default class Plan<T> extends Primitive<I<T>, O<T>> {
       system,
       ID_PLAN
     )
+
+    this.addListener('reset', this._reset)
+  }
+
+  private _reset() {
+    this._current = undefined
+    this._looping = false
   }
 
   onDataInputData(name: string, data: any) {
     this._current = data
+
     this._forward_if_ready()
   }
 
