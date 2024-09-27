@@ -33,7 +33,6 @@ export default class Image_ extends Element<HTMLImageElement, Props> {
     if (src !== undefined) {
       img_el.src = src
     }
-    img_el.draggable = false
     this._img_el = img_el
 
     this.$element = img_el
