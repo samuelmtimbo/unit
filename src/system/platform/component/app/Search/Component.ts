@@ -138,8 +138,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
 
   private _registry: Registry
 
-  public _disable_registry: boolean = false
-
   constructor($props: Props, $system: System) {
     super($props, $system)
 
@@ -348,20 +346,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
     this.registerRoot(microphone_tooltip)
 
     this._listen_registry()
-  }
-
-  public disable_registry = () => {
-    this._disable_registry = true
-
-    this._unlisten_registry()
-  }
-
-  public enable_registry = () => {
-    this._disable_registry = false
-
-    this._listen_registry()
-
-    this._reset()
   }
 
   private _reset = () => {
