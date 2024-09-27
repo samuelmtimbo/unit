@@ -17,9 +17,11 @@ export default class Default<T> extends Primitive<I<T>, O<T>> {
   constructor(system: System) {
     super({ i: ['a', 'd'], o: ['a'] }, {}, system, ID_DEFAULT)
 
-    this.addListener('reset', () => {
-      this._current = undefined
-    })
+    this.addListener('reset', this._reset)
+  }
+
+  private _reset = () => {
+    this._current = undefined
   }
 
   onDataInputData(name: string, data: I<T>[keyof I<T>]) {
