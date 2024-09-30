@@ -55,8 +55,7 @@
     "glob": "7.1.6",
     "http-errors": "1.8.0",
     "jsdom": "24.0.0",
-    "perfect-freehand": "1.0.16",
-    "svg-path-bounding-box": "1.0.4"
+    "perfect-freehand": "1.0.16"
   },
   "devDependencies": {
     "@types/chrome": "0.0.178",
@@ -64,7 +63,6 @@
     "@types/fs-extra": "9.0.13",
     "@types/jsdom": "20.0.1",
     "@types/node": "20.9.0",
-    "@types/svg-path-bounding-box": "1.0.0",
     "@types/ws": "8.5.2",
     "@typescript-eslint/eslint-plugin": "6.20.0",
     "@typescript-eslint/parser": "6.20.0",
