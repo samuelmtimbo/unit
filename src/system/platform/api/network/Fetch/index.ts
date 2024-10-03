@@ -12,6 +12,13 @@ export type O = {
   response: {
     status: number
     body: string
+    url: string
+    bodyUsed: boolean
+    headers: object
+    redirected: boolean
+    ok: boolean
+    statusText: string
+    type: string
   }
 }
 
@@ -39,10 +46,28 @@ export default class Fetch extends Functional<I, O> {
     try {
       fetch(url, opt, servers)
         .then((response) => {
+          const {
+            bodyUsed,
+            headers,
+            redirected,
+            ok,
+            status,
+            statusText,
+            type,
+            url,
+          } = response
+
           return response.text().then((text) => {
             done({
               response: {
-                status: response.status,
+                url,
+                status,
+                bodyUsed,
+                headers: { ...headers },
+                redirected,
+                ok,
+                statusText,
+                type,
                 body: text,
               },
             })
