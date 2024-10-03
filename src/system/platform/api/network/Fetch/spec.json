@@ -16,7 +16,7 @@
   },
   "outputs": {
     "response": {
-      "type": "{status:number,body:string}"
+      "type": "{status:number,body:string,url:string,bodyUsed:boolean,headers:object,redirected:boolean,ok:boolean,statusText:string,type:string}"
     }
   },
   "metadata": {
