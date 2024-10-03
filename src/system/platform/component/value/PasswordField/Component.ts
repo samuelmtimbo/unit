@@ -5,9 +5,9 @@ import { Dict } from '../../../../../types/Dict'
 export interface Props {
   className?: string
   style?: Dict<any>
+  attr?: Dict<any>
   value?: string
   disabled?: boolean
-  show?: boolean
 }
 
 export const DEFAULT_STYLE = {
@@ -33,11 +33,8 @@ export default class PasswordField extends Field<HTMLInputElement, Props> {
       defaultStyle: DEFAULT_STYLE,
     })
 
-    const { show = false } = $props
-
-    // this.$element.type = 'password'
-    // this.$element.autocomplete = 'false'
-    this.$element.type = 'text'
+    this.$element.type = 'password'
+    this.$element.autocomplete = 'off'
   }
 
   public setSelectionRange(
