@@ -56,17 +56,18 @@ export const ROOT_STYLE = `
   input::-ms-reveal {
     display: none !important;
   }
-  input::-webkit-caps-lock-indicator {
-    display: none !important;
-  }
   input::-webkit-credentials-auto-fill-button {
+    position: absolute;
+    top: 6px;
+    right: 4px;
+  }
+  input[autocomplete="off"]::-webkit-credentials-auto-fill-button {
     display: none !important;
     visibility: hidden;
     pointer-events: none;
     position: absolute;
     right: 0;
   }
-
   input[type='color'] {
     -webkit-appearance: none;
     border: none;
