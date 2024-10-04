@@ -1,9 +1,8 @@
 import { DataEvent } from '../../events/DataEvent'
-import { _ErrorEvent } from '../../events/ErrorEvent'
+import { ErrorEvent_ } from '../../events/ErrorEvent'
 
 export interface Port {
   send(message: any): void
   onmessage(event: DataEvent): void
-  onerror(event: _ErrorEvent): void
-  terminate(): void
+  onerror(event: ErrorEvent_): void
 }

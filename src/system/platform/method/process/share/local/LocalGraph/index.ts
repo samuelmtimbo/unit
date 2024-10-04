@@ -91,9 +91,6 @@ export default class LocalGraph extends Functional<I, O> {
       onerror() {
         // console.log('onerror')
       },
-      terminate() {
-        // console.log('terminate')
-      },
     }
 
     channel.onmessage = (event: MessageEvent) => {

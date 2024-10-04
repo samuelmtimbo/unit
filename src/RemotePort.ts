@@ -157,7 +157,6 @@ export class RemotePort {
       },
       onmessage() {},
       onerror() {},
-      terminate() {},
     }
 
     const remote_port = new RemotePort(port)
@@ -165,10 +164,6 @@ export class RemotePort {
     this._ref[id] = remote_port
 
     return remote_port
-  }
-
-  terminate(): void {
-    this._port.terminate()
   }
 
   close(): void {

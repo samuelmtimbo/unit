@@ -93,9 +93,6 @@ export default class Remote extends Holder<I, O> {
               onerror() {
                 // TODO
               },
-              terminate() {
-                // TODO
-              },
             }
 
             this._port = port

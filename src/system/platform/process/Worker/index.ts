@@ -16,8 +16,8 @@ export interface O {
   system: $S
 }
 
-export default class Worker extends Functional<I, O> {
-  private _client: RemoteClient
+export default class Worker_ extends Functional<I, O> {
+  private _worker: Worker
 
   constructor(system: System) {
     super(
@@ -45,31 +45,27 @@ export default class Worker extends Functional<I, O> {
       },
     } = this.__system
 
-    if (!this._client) {
-      let worker
+    let worker: Worker
 
-      try {
-        worker = start()
-      } catch (err) {
-        done(undefined, err.message)
+    try {
+      worker = start()
+    } catch (err) {
+      done(undefined, err.message)
 
-        return
-      }
-
-      const port = workerPort(worker)
-
-      const client = new RemoteClient(port)
-
-      this._client = client
+      return
     }
 
-    this._client.init({})
+    const port = workerPort(worker)
 
-    const port = this._client.port()
+    const client = new RemoteClient(port)
 
-    const $system = AsyncWorker(port, ['S'])
+    const remote = client.port()
+
+    const $system = AsyncWorker(remote, ['S'])
 
     const system = $wrap<$S>(this.__system, $system)
+
+    client.init({})
 
     done({
       system,
@@ -77,10 +73,10 @@ export default class Worker extends Functional<I, O> {
   }
 
   d() {
-    if (this._client) {
-      this._client.terminate()
+    if (this._worker) {
+      this._worker.terminate()
 
-      this._client = undefined
+      this._worker = undefined
     }
   }
 }
