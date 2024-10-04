@@ -10,10 +10,10 @@ import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 
-export function buildUnitIdSet(
+export function collectUnitIdSet(
   unit: GraphUnitSpec,
   specs: GraphSpecs,
-  idSet: Set<string>
+  set: Set<string>
 ): void {
   const { id, input = {} } = unit
 
@@ -28,13 +28,13 @@ export function buildUnitIdSet(
         specs[bundle.unit.id] ??
         bundle.specs[bundle.unit.id]
 
-      buildUnitIdSet(bundle.unit, specs, idSet)
-      buildIdSet(unitSpec, specs, idSet)
+      collectUnitIdSet(bundle.unit, specs, set)
+      collectIdSetFromSpec(unitSpec, specs, set)
 
       for (const specId in bundle.specs) {
         const spec = bundle.specs[specId]
 
-        buildIdSet(spec, specs, idSet)
+        collectIdSetFromSpec(spec, specs, set)
       }
     }
 
@@ -52,53 +52,53 @@ export function buildUnitIdSet(
   const unit_spec = _specs[id]
 
   if (unit_spec) {
-    buildIdSet(unit_spec, specs, idSet)
+    collectIdSetFromSpec(unit_spec, specs, set)
   } else {
     //
   }
 }
 
-export function buildIdSet(
+export function collectIdSetFromSpec(
   spec: Spec,
   specs: GraphSpecs,
-  idSet: Set<string> = new Set()
+  set: Set<string> = new Set()
 ): Set<string> {
   const { units = {} } = spec as GraphSpec
 
-  if (idSet.has(spec.id)) {
-    return idSet
+  if (set.has(spec.id)) {
+    return set
   }
 
-  idSet.add(spec.id)
+  set.add(spec.id)
 
   for (const unitId in units) {
     const unit = units[unitId]
 
-    buildUnitIdSet(unit, specs, idSet)
+    collectUnitIdSet(unit, specs, set)
   }
 
   ;(spec as BaseSpec).deps?.forEach((id) => {
     const dep_spec = _specs[id]
 
-    buildIdSet(dep_spec, specs, idSet)
+    collectIdSetFromSpec(dep_spec, specs, set)
   })
 
-  return idSet
+  return set
 }
 
-export function buildIdSetFromBundle(
+export function collectIdSetFromBundle(
   bundle: BundleSpec,
-  idSet: Set<string> = new Set()
+  set: Set<string> = new Set()
 ): Set<string> {
   const { spec = {}, specs = {} } = bundle
 
-  buildIdSet(spec, specs, idSet)
+  collectIdSetFromSpec(spec, specs, set)
 
   for (const specId in specs) {
     const spec = specs[specId]
 
-    buildIdSet(spec, specs, idSet)
+    collectIdSetFromSpec(spec, specs, set)
   }
 
-  return idSet
+  return set
 }
