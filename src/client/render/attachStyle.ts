@@ -127,6 +127,7 @@ export const ROOT_STYLE = `
     caret-color: currentcolor;
     outline-color: #00000000;
     outline-style: none;
+    interpolate-size: allow-keywords;
   }
 `
 
