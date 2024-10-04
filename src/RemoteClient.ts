@@ -1,4 +1,6 @@
 import { EXEC, INIT } from './constant/STRING'
+import { DataEvent } from './events/DataEvent'
+import { ErrorEvent_ } from './events/ErrorEvent'
 import { RemotePort } from './RemotePort'
 import { BundleSpec } from './types/BundleSpec'
 import { Port } from './types/global/Port'
@@ -16,9 +18,8 @@ export class RemoteClient {
 
         this._port.send(_data)
       },
-      onmessage(data: any) {},
-      onerror() {},
-      terminate() {},
+      onmessage(event: DataEvent) {},
+      onerror(event: ErrorEvent_) {},
     }
 
     this._port.onmessage = (data) => {
@@ -40,10 +41,6 @@ export class RemoteClient {
     const _data = this._init_data(bundle)
 
     this._port.send(_data)
-  }
-
-  terminate() {
-    this._port.terminate()
   }
 
   port(): RemotePort {

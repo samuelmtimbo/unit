@@ -81,9 +81,6 @@ export default class PeerGraph extends Primitive<I, O> {
         onerror() {
           // console.log('onerror')
         },
-        terminate() {
-          // console.log('terminate')
-        },
       }
 
       this._peer.addListener('message', (message: string) => {

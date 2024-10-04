@@ -1,3 +1,3 @@
-export interface _ErrorEvent {
+export interface ErrorEvent_ {
   message: string
 }

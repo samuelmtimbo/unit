@@ -1,5 +1,5 @@
 import { DataEvent } from '../../../../events/DataEvent'
-import { _ErrorEvent } from '../../../../events/ErrorEvent'
+import { ErrorEvent_ } from '../../../../events/ErrorEvent'
 import { Port } from '../../../../types/global/Port'
 import { getExtensionElement } from '../../../extension'
 
@@ -17,10 +17,7 @@ export const backgroundPort = (): Port => {
       )
     },
     onmessage(event: DataEvent): any {},
-    onerror(event: _ErrorEvent): any {},
-    terminate(): any {
-      //
-    },
+    onerror(event: ErrorEvent_): any {},
   }
 
   extensionElement.addEventListener('error', (event: CustomEvent) => {
