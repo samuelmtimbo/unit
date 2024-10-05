@@ -318,6 +318,7 @@ import {
   randomUnitVector,
   resizeVector,
   roundPoint,
+  subtractVector,
   surfaceDistance,
   unitVector,
 } from '../../../../../client/util/geometry'
@@ -647,6 +648,7 @@ import {
   last,
   pull,
   push,
+  remove,
 } from '../../../../../util/array'
 import { randomInArray } from '../../../../../util/array/randomInArray'
 import { bit } from '../../../../../util/boolean'
@@ -2582,6 +2584,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _drag_node_id: Dict<boolean> = {}
   private _drag_node_pointer_id: Dict<number> = {}
 
+  private _drag_along_node: Dict<string[]> = {}
+  private _drag_along_source: Dict<string> = {}
+  private _drag_along_relative_position: Dict<Dict<Position>> = {}
+
   private _drag_ext_node_id: Set<string> = new Set()
   private _drag_ext_node_count: number = 0
 
@@ -2901,6 +2907,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _green_drag: boolean = false
   private _green_drag_node_id: string | null = null
   private _green_drag_clone_id: string | null = null
+  private _green_drag_actions: Action[] = []
 
   private _yellow_drag: boolean = false
   private _yellow_drag_node_id: string | null = null
@@ -3821,7 +3828,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const bundle = await this._read_bundle_file(file)
 
     if (bundle) {
-      this.paste_bundle(bundle, position)
+      this.paste_bundle(bundle, position, true, true)
     } else {
       throw new Error('invalid bundle file')
     }
@@ -9155,7 +9162,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     sub_pin_spec: GraphSubPinSpec,
     position: { int?: Position; ext?: Position } = {}
   ): void => {
-    // console.log('Graph', '_sim_add_exposed_pin', type, pin_id, sub_pin_id, sub_pin_spec, position)
+    // console.log(
+    //   'Graph',
+    //   '_sim_add_exposed_pin',
+    //   type,
+    //   pin_id,
+    //   sub_pin_id,
+    //   sub_pin_spec,
+    //   position
+    // )
 
     const { config = {} } = this.$props
 
@@ -13491,6 +13506,40 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this.__set_node_mode_color(node_id, this._mode)
   }
 
+  private _is_link_pin_displayed = (pin_node_id: string): boolean => {
+    const { unitId } = segmentLinkPinNodeId(pin_node_id)
+
+    return (
+      this._is_node_displayed(pin_node_id) || this._is_node_displayed(unitId)
+    )
+  }
+
+  private _is_node_displayed = (node_id: string): boolean => {
+    if (this._is_node_hovered(node_id) || this._is_node_dragged(node_id)) {
+      return true
+    } else if (this._is_node_selected(node_id)) {
+      if (this._hover_node_count > 0) {
+        let hover_selected_count = 0
+
+        for (const hover_node_id in this._hover_node_id) {
+          if (this._is_node_selected(hover_node_id)) {
+            hover_selected_count += 1
+
+            break
+          }
+        }
+
+        if (hover_selected_count > 0) {
+          return true
+        }
+
+        return false
+      }
+
+      return true
+    }
+  }
+
   private __set_node_mode_color = (node_id: string, mode: Mode): void => {
     // console.log('Graph', '__set_node_mode_color', node_id, mode)
 
@@ -13499,120 +13548,103 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const color = this._get_color()
 
     if (this.__is_mode_colored(mode)) {
-      if (this._is_node_mode_colorable(node_id, mode)) {
-        const mode_color = getThemeModeColor($theme, mode, color)
-        const mode_link_color = getThemeLinkModeColor($theme, mode)
+      // if (this._is_node_mode_colorable(node_id, mode)) {
+      const mode_color = getThemeModeColor($theme, mode, color)
+      const mode_link_color = getThemeLinkModeColor($theme, mode)
 
-        const mode_text_color = mode_link_color
-        const mode_pin_icon_color = mode_color
+      const mode_text_color = mode_link_color
+      const mode_pin_icon_color = mode_color
 
-        if (this._is_unit_node_id(node_id)) {
-          const unit_id = node_id
+      if (this._is_unit_node_id(node_id)) {
+        const unit_id = node_id
 
-          this._set_unit_color(
-            unit_id,
-            mode_color,
-            mode_link_color,
-            mode_text_color,
-            mode_pin_icon_color
-          )
+        this._set_unit_color(
+          unit_id,
+          mode_color,
+          mode_link_color,
+          mode_text_color,
+          mode_pin_icon_color
+        )
 
-          if (mode === 'remove') {
-            if (this._err[unit_id]) {
-              const err_node_id = getErrNodeId(unit_id)
+        if (mode === 'remove') {
+          if (this._err[unit_id]) {
+            const err_node_id = getErrNodeId(unit_id)
 
-              this._set_err_color(err_node_id, mode_color)
-            }
-
-            this._for_each_unit_pin(unit_id, (pin_node_id) => {
-              const datum_node_id = this._pin_to_datum[pin_node_id]
-
-              if (datum_node_id) {
-                this._set_datum_color(
-                  datum_node_id,
-                  mode_color,
-                  mode_link_color
-                )
-              }
-            })
-          } else if (mode === 'data') {
-            this._for_each_unit_pin(unit_id, (pin_node_id) => {
-              const datum_node_id = this._get_pin_datum_node_id(pin_node_id)
-
-              if (datum_node_id) {
-                this._set_datum_color(datum_node_id, mode_color, mode_color)
-              }
-            })
+            this._set_err_color(err_node_id, mode_color)
           }
-        } else if (this._is_link_pin_node_id(node_id)) {
-          this._set_link_pin_color(
-            node_id,
-            mode_color,
-            mode_link_color,
-            mode_text_color,
-            mode_pin_icon_color
-          )
-          if (mode === 'remove') {
-            const datum_node_id = this._pin_to_datum[node_id]
+
+          this._for_each_unit_pin(unit_id, (pin_node_id) => {
+            const datum_node_id = this._pin_to_datum[pin_node_id]
 
             if (datum_node_id) {
               this._set_datum_color(datum_node_id, mode_color, mode_link_color)
             }
-          }
-        } else if (this._is_merge_node_id(node_id)) {
-          if (mode === 'data') {
-            this._set_merge_input_color(node_id, mode_color)
+          })
+        } else if (mode === 'data') {
+          this._for_each_unit_pin(unit_id, (pin_node_id) => {
+            const datum_node_id = this._get_pin_datum_node_id(pin_node_id)
 
-            const merge_inputs = this._merge_to_input[node_id]
-
-            for (const input_node_id in merge_inputs) {
-              this._set_link_pin_link_color(input_node_id, mode_link_color)
+            if (datum_node_id) {
+              this._set_datum_color(datum_node_id, mode_color, mode_color)
             }
-          } else {
-            const merge_inputs = this._merge_to_input[node_id]
-            for (const input_node_id in merge_inputs) {
-              const { unitId } = segmentLinkPinNodeId(input_node_id)
+          })
+        }
+      } else if (this._is_link_pin_node_id(node_id)) {
+        this._set_link_pin_color(
+          node_id,
+          mode_color,
+          mode_link_color,
+          mode_text_color,
+          mode_pin_icon_color
+        )
+        if (mode === 'remove') {
+          const datum_node_id = this._pin_to_datum[node_id]
 
-              if (
-                this._is_node_hovered(input_node_id) ||
-                this._is_node_hovered(unitId) ||
-                this._is_node_selected(input_node_id) ||
-                this._is_node_selected(unitId)
-              ) {
-                this._set_merge_input_color(node_id, mode_color)
-
-                break
-              }
-            }
-            const merge_outputs = this._merge_to_output[node_id]
-            for (const output_node_id in merge_outputs) {
-              const { unitId } = segmentLinkPinNodeId(output_node_id)
-              if (
-                this._is_node_hovered(output_node_id) ||
-                this._is_node_hovered(unitId) ||
-                this._is_node_selected(output_node_id) ||
-                this._is_node_selected(unitId)
-              ) {
-                this._set_merge_output_color(node_id, mode_color)
-
-                break
-              }
-            }
-          }
-        } else if (this._is_datum_node_id(node_id)) {
-          this._set_datum_color(node_id, mode_color, mode_link_color)
-        } else if (this._is_err_node_id(node_id)) {
-          this._set_err_color(node_id, mode_color)
-        } else if (this._is_plug_node_id(node_id)) {
-          const { type, pinId, subPinId } = segmentPlugNodeId(node_id)
-
-          if (mode === 'change') {
-            this._set_exposed_pin_set_color(type, pinId, mode_color)
-          } else {
-            this._set_exposed_sub_pin_color(type, pinId, subPinId, mode_color)
+          if (datum_node_id) {
+            this._set_datum_color(datum_node_id, mode_color, mode_link_color)
           }
         }
+      } else if (this._is_merge_node_id(node_id)) {
+        if (mode === 'data') {
+          this._set_merge_input_color(node_id, mode_color)
+
+          const merge_inputs = this._merge_to_input[node_id]
+
+          for (const input_node_id in merge_inputs) {
+            this._set_link_pin_link_color(input_node_id, mode_link_color)
+          }
+        } else {
+          const merge_inputs = this._merge_to_input[node_id]
+          for (const input_node_id in merge_inputs) {
+            if (this._is_link_pin_displayed(input_node_id)) {
+              this._set_merge_input_color(node_id, mode_color)
+
+              break
+            }
+          }
+          const merge_outputs = this._merge_to_output[node_id]
+          for (const output_node_id in merge_outputs) {
+            if (this._is_link_pin_displayed(output_node_id)) {
+              this._set_merge_output_color(node_id, mode_color)
+
+              break
+            }
+          }
+        }
+      } else if (this._is_datum_node_id(node_id)) {
+        this._set_datum_color(node_id, mode_color, mode_link_color)
+      } else if (this._is_err_node_id(node_id)) {
+        this._set_err_color(node_id, mode_color)
+      } else if (this._is_plug_node_id(node_id)) {
+        const { type, pinId, subPinId } = segmentPlugNodeId(node_id)
+
+        if (mode === 'change') {
+          this._set_exposed_pin_set_color(type, pinId, mode_color)
+        } else {
+          this._set_exposed_sub_pin_color(type, pinId, subPinId, mode_color)
+        }
       }
+      // }
     }
   }
 
@@ -13656,7 +13688,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._for_each_unit_pin(node_id, (pin_node_id, type) => {
         const datum_node_id = this._pin_to_datum[pin_node_id]
         if (datum_node_id) {
-          this._reset_datum_color(datum_node_id)
+          this._refresh_datum_color(datum_node_id)
         }
 
         const { pinId, subPinId } =
@@ -13814,7 +13846,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (merge_node_id) {
           const merge = this._get_merge(merge_node_id)
 
-          this._reset_link_pin_link_color(pin_node_id)
+          this._refresh_link_pin_color(pin_node_id)
 
           const merge_unit_id = this._merge_to_ref_unit[merge_node_id]
           const merge_output_ref = this._merge_to_ref_output[merge_node_id]
@@ -13825,13 +13857,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             if (merge_unit_id) {
               //
             } else if (merge_output_ref === pin_node_id) {
-              this._reset_link_pin_color(pin_node_id)
+              //
             } else {
-              this._reset_merge_pin_pin_color(merge_node_id, type)
+              this._refresh_merge_pin_pin_color(merge_node_id, type)
             }
           }
         } else {
-          this._reset_link_pin_color(pin_node_id)
+          this._refresh_link_pin_color(pin_node_id)
         }
       })
 
@@ -13855,23 +13887,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _refresh_merge_pin_pin_color = (merge_node_id: string, type: IO) => {
     if (this._is_mode_colored()) {
-      if (
-        this._is_node_hovered(merge_node_id) ||
-        this._is_node_selected(merge_node_id)
-      ) {
+      if (this._is_node_displayed(merge_node_id)) {
         this._refresh_node_color(merge_node_id)
       } else {
         const merge_input_node_ids = this._merge_to_input[merge_node_id]
 
         for (const merge_input_node_id in merge_input_node_ids) {
-          const { unitId } = segmentLinkPinNodeId(merge_input_node_id)
-
-          if (
-            this._is_node_hovered(merge_input_node_id) ||
-            this._is_node_selected(merge_input_node_id) ||
-            this._is_node_hovered(unitId) ||
-            this._is_node_selected(unitId)
-          ) {
+          if (this._is_link_pin_displayed(merge_input_node_id)) {
             this._refresh_node_color(merge_node_id)
 
             return
@@ -14415,13 +14437,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _refresh_link_pin_link_color = (pin_node_id: string): void => {
     // console.log('Graph', '_refresh_link_pin_link_color')
     if (this._is_mode_colored()) {
-      const { unitId } = segmentLinkPinNodeId(pin_node_id)
-      if (
-        this._is_node_selected(pin_node_id) ||
-        this._is_node_hovered(pin_node_id) ||
-        this._is_node_selected(unitId) ||
-        this._is_node_hovered(unitId)
-      ) {
+      if (this._is_link_pin_displayed(pin_node_id)) {
         this._refresh_node_color(pin_node_id)
       } else {
         this._reset_link_pin_link_color(pin_node_id)
@@ -17752,7 +17768,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           const _position = this._screen_to_world(position.x, position.y)
 
-          this.paste_bundle(bundle, _position)
+          this.paste_bundle(bundle, _position, true, true)
 
           this._cancel_drag_and_drop()
 
@@ -21904,6 +21920,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     node.fx = x - node.hx
     node.fy = y - node.hy
+
     node.x = node.fx
     node.y = node.fy
 
@@ -21920,6 +21937,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const node_drag_max_distance = this._node_drag_max_distance[node_id]
 
+    this.__on_node_drag_end(node_id)
+
+    if (this._is_droppable_mode()) {
+      if (node_drag_max_distance > MIN_DRAG_DROP_MAX_D) {
+        if (node_id === this._subgraph_unit_id) {
+          //
+        } else {
+          this._drop_node(node_id)
+        }
+      }
+    }
+
+    this._refresh_node_color(node_id)
+    this._refresh_compatible()
+  }
+
+  private __on_node_drag_end = (node_id: string) => {
+    // console.log('Graph', '_on_node_drag_end_and_drop', node_id)
+
     this._on_node_drag_end(node_id)
 
     this._set_drag_node(node_id, false)
@@ -21932,18 +21968,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._delete_all_node_to_node_charge(node_id)
       this._delete_all_node_to_node_charge(int_node_id)
     }
-
-    if (this._is_droppable_mode()) {
-      if (node_drag_max_distance > MIN_DRAG_DROP_MAX_D) {
-        if (node_id === this._subgraph_unit_id) {
-          //
-        } else {
-          this._drop_node(node_id)
-        }
-      }
-    }
-
-    this._refresh_compatible()
   }
 
   private _on_node_drag_end = (node_id: string) => {
@@ -21963,6 +21987,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     delete this._node_drag_max_distance[node_id]
     delete this._node_drag_init_position[node_id]
+
+    const drag_along_source = clone(this._drag_along_source[node_id])
+
+    if (drag_along_source) {
+      this._remove_node_drag_along(drag_along_source, node_id)
+    }
+
+    delete this._drag_along_node[node_id]
+    delete this._drag_along_relative_position[node_id]
   }
 
   private _start_drag_node_static = (node_id: string): void => {
@@ -23432,7 +23465,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _is_node_dragged = (node_id: string): boolean => {
-    return !!this._drag_node_id[node_id]
+    return !!this._drag_node_id[node_id] || !!this._drag_along_source[node_id]
   }
 
   private _is_node_ascend = (node_id: string): boolean => {
@@ -25165,10 +25198,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): boolean => {
     const { config } = this.$props
 
-    // if (this._drag_node_id[pin_node_id]) {
-    //   return false
-    // }
-
     if (config?.disable?.dataCompatible) {
       return false
     }
@@ -25181,17 +25210,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ) {
         return false
       }
-      // if (this._is_node_selected(pin_node_id)) {
-      //   if (datum_pin_node_id === pin_node_id) {
-      //     return false
-      //   }
-
-      //   const datum_pin_merge_node_id = this._pin_to_merge[datum_pin_node_id]
-
-      //   if (datum_pin_merge_node_id === pin_node_id) {
-      //     return false
-      //   }
-      // }
     }
 
     if (this._is_pin_node_ref(pin_node_id)) {
@@ -27139,14 +27157,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return null
   }
 
-  private _state_duplicate_unit = (unit_id: string): string => {
+  private _state_duplicate_unit = (
+    unit_id: string,
+    new_unit_id?: string
+  ): string => {
     // console.log('Graph', '_state_duplicate_unit', unit_id)
 
     const unit = this._get_unit(unit_id)
 
     const { id } = unit
 
-    const new_unit_id = this._new_unit_id(id)
+    new_unit_id = new_unit_id ?? this._new_unit_id(id)
+
     const new_unit = clone(unit)
 
     const unit_position = this._get_node_position(unit_id)
@@ -36551,13 +36573,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _refresh_link_pin_color = (pin_node_id: string) => {
     // console.log('Graph', '_refresh_link_pin_color', pin_node_id)
-    const { unitId } = segmentLinkPinNodeId(pin_node_id)
-    if (
-      this._is_node_hovered(pin_node_id) ||
-      this._is_node_selected(pin_node_id) ||
-      this._is_node_hovered(unitId) ||
-      this._is_node_selected(unitId)
-    ) {
+    if (this._is_link_pin_displayed(pin_node_id)) {
       this._refresh_node_color(pin_node_id)
     } else {
       this._reset_link_pin_color(pin_node_id)
@@ -41478,6 +41494,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     clientX: number,
     clientY: number
   ) => {
+    // console.log('Graph', '__drag_start', node_id, pointerId)
+
     const layer = this._get_node_default_layer(node_id)
 
     this._start_graph_simulation(clamp(layer - 1, 0, Infinity))
@@ -41494,6 +41512,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._drag_node_pointer_id[selected_node_id] = pointerId
 
           this.__on_node_drag_start(selected_node_id, x, y)
+        }
+      }
+    }
+
+    if (this._drag_along_node[node_id]) {
+      for (const drag_along_node_id of this._drag_along_node[node_id]) {
+        if ((this._node_pressed_count[drag_along_node_id] ?? 0) === 0) {
+          this._drag_node_pointer_id[drag_along_node_id] = pointerId
+
+          const relative = deepGet(this._drag_along_relative_position, [
+            node_id,
+            drag_along_node_id,
+          ])
+
+          const node = this._node[node_id]
+
+          this.__on_node_drag_start(
+            drag_along_node_id,
+            x + relative.x - node.hx,
+            y + relative.y - node.hy
+          )
         }
       }
     }
@@ -41790,6 +41829,35 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
       }
+
+      if (this._drag_along_node[node_id]) {
+        for (const drag_along_node_id of this._drag_along_node[node_id]) {
+          if ((this._node_pressed_count[drag_along_node_id] ?? 0) === 0) {
+            const relative = deepGet(this._drag_along_relative_position, [
+              node_id,
+              drag_along_node_id,
+            ])
+
+            const node = this._node[node_id]
+
+            if (this._drag_node_pointer_id[drag_along_node_id] !== pointerId) {
+              this._drag_node_pointer_id[drag_along_node_id] = pointerId
+
+              this.__on_node_drag_start(
+                drag_along_node_id,
+                x + relative.x - node.hx,
+                y + relative.y - node.hy
+              )
+            }
+
+            this._node_drag_move(
+              drag_along_node_id,
+              x + relative.x - node.hx,
+              y + relative.y - node.hy
+            )
+          }
+        }
+      }
     }
 
     if (this._is_datum_node_id(node_id)) {
@@ -41881,15 +41949,209 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return new_node_id
   }
 
+  private _set_node_drag_along = (
+    node_id: string,
+    drag_along_node_id: string
+  ): void => {
+    this._drag_along_node[node_id] = this._drag_along_node[node_id] ?? []
+    this._drag_along_node[node_id].push(drag_along_node_id)
+
+    this._drag_along_source[drag_along_node_id] = node_id
+  }
+
+  private _remove_node_drag_along = (
+    node_id: string,
+    drag_along_node_id: string
+  ): void => {
+    remove(this._drag_along_node[node_id], drag_along_node_id)
+
+    delete this._drag_along_source[drag_along_node_id]
+  }
+
   private _on_node_green_drag_start = (
     node_id: string,
     event: UnitPointerEvent
   ): string | null => {
     // console.log('Graph', '_on_node_green_drag_start', node_id)
 
+    const { specs } = this.$props
+
     const { pointerId, clientX, clientY } = event
 
-    const new_node_id: string | null = this._state_duplicate_node(node_id)
+    let new_node_id: string | null = null
+    let new_node_ids: string[] = []
+
+    if (
+      this._is_node_selected(node_id) &&
+      (this._is_node_id(node_id) || this._is_plug_node_id(node_id))
+    ) {
+      const selected_node_ids = keys(this._selected_node_id)
+
+      const node_position = this._get_node_position(node_id)
+
+      const new_bundle = this._sub_graph_selection(selected_node_ids, false)
+
+      this._stop_graph_simulation()
+
+      const { map_unit_id, map_merge_id, map_plug_id, map_datum_id, actions } =
+        this.paste_bundle(new_bundle, this._screen_center(), false, false)
+
+      this._green_drag_actions = actions
+
+      const new_node_id_map = {}
+
+      new_node_ids = selected_node_ids.map((selected_node_id) => {
+        return this._node_type__template(selected_node_id, {
+          unit: (unit_id: string) => {
+            const new_unit_id = map_unit_id[unit_id] ?? unit_id
+
+            new_node_id_map[selected_node_id] = new_unit_id
+
+            return new_unit_id
+          },
+          link: (pin_node_id: string) => {
+            const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
+
+            if (!selected_node_ids.includes(unitId)) {
+              return null
+            }
+
+            const new_unit_id = map_unit_id[unitId] ?? unitId
+
+            const new_pin_node_id = getPinNodeId(new_unit_id, type, pinId)
+
+            new_node_id_map[selected_node_id] = new_pin_node_id
+
+            return new_pin_node_id
+          },
+          merge: (merge_node_id: string) => {
+            const { mergeId } = segmentMergeNodeId(merge_node_id)
+
+            const new_merge_id = map_merge_id[mergeId] ?? mergeId
+
+            const new_merge_node_id = getMergeNodeId(new_merge_id)
+
+            new_node_id_map[selected_node_id] = new_merge_node_id
+
+            return new_merge_node_id
+          },
+          plug: (plug_node_id: string) => {
+            const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
+
+            const new_plug_sub_pin_id =
+              map_plug_id[type][pinId][subPinId] ?? subPinId
+
+            const new_plug_node_id = getExtNodeId(
+              type,
+              pinId,
+              new_plug_sub_pin_id
+            )
+
+            new_node_id_map[selected_node_id] = new_plug_node_id
+
+            return new_plug_node_id
+          },
+          datum: (datum_node_id: string) => {
+            const { datumId } = segmentDatumNodeId(datum_node_id)
+
+            const new_datum_id = map_datum_id[datumId]
+
+            if (new_datum_id) {
+              const new_datum_node_id = getDatumNodeId(new_datum_id)
+
+              new_node_id_map[selected_node_id] = new_datum_node_id
+
+              return new_datum_node_id
+            }
+
+            return null
+          },
+          err: (err_node_id: string) => {
+            return null
+          },
+        })
+      })
+
+      new_node_ids = new_node_ids.filter((n) => !!n)
+
+      new_node_id = new_node_id_map[node_id] ?? node_id
+
+      for (const selected_node_id of selected_node_ids) {
+        const next_node_id = new_node_id_map[selected_node_id]
+
+        if (!next_node_id) {
+          continue
+        }
+
+        if (!this._has_node(next_node_id)) {
+          continue
+        }
+
+        const selected_node_position = this._get_node_position(selected_node_id)
+
+        const relative_position = subtractVector(
+          selected_node_position,
+          node_position
+        )
+
+        deepSet(
+          this._drag_along_relative_position,
+          [new_node_id, next_node_id],
+          relative_position
+        )
+
+        const next_position = selected_node_position
+
+        this._set_node_position(next_node_id, next_position)
+
+        if (selected_node_id !== node_id) {
+          this._set_node_drag_along(new_node_id, next_node_id)
+
+          this._drag_node_pointer_id[next_node_id] = pointerId
+
+          this.__on_node_drag_start(
+            next_node_id,
+            next_position.x,
+            next_position.y
+          )
+        }
+
+        this._set_node_fixed(next_node_id, true)
+        this._ascend_node(next_node_id, pointerId)
+      }
+
+      remove(new_node_ids, new_node_id)
+    } else {
+      new_node_id = this._state_duplicate_node(node_id)
+      new_node_ids = [new_node_id]
+
+      this._ascend_node(new_node_id, pointerId)
+
+      if (this._is_unit_node_id(node_id)) {
+        const _unit = this._get_unit(node_id)
+
+        const actions = []
+
+        const parent_id = this._spec_get_sub_component_parent_id(new_node_id)
+
+        const unit = clone(_unit)
+
+        const bundle = unitBundleSpec(unit, specs)
+
+        actions.push(
+          makeAddUnitAction(
+            new_node_id,
+            bundle,
+            undefined,
+            undefined,
+            undefined,
+            parent_id
+          )
+        )
+
+        this._green_drag_actions = actions
+      }
+    }
 
     if (new_node_id) {
       this._green_drag = true
@@ -41903,10 +42165,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         clientX,
         clientY
       )
+    }
 
-      this._ascend_node(new_node_id, pointerId)
-
-      this._refresh_node_color(node_id)
+    for (const new_node_id of new_node_ids) {
+      this._refresh_node_color(new_node_id)
       this._refresh_all_selected_node_color()
     }
 
@@ -41917,8 +42179,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     cloned_node_id: string,
     node_id: string
   ) => {
-    const { specs } = this.$props
-
     if (this._is_unit_node_id(node_id)) {
       const unit_id = node_id
 
@@ -41926,22 +42186,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const unit = clone(_unit)
 
-      const bundle = unitBundleSpec(unit, specs)
-
-      const actions = []
-
-      const parent_id = this._spec_get_sub_component_parent_id(cloned_node_id)
-
-      actions.push(
-        makeAddUnitAction(
-          unit_id,
-          bundle,
-          undefined,
-          undefined,
-          undefined,
-          parent_id
-        )
-      )
+      const actions = this._green_drag_actions
 
       this._dispatch_add_unit_action(unit_id, unit)
 
@@ -41953,9 +42198,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
+    if (this._drag_along_node[node_id]) {
+      for (const drag_along_node_id of this._drag_along_node[node_id]) {
+      }
+    }
+
     this._green_drag = false
     this._green_drag_node_id = null
     this._green_drag_clone_id = null
+    this._green_drag_actions = []
   }
 
   private _on_node_red_drag_start = (
@@ -42982,12 +43233,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             // delay "drag start" conditioning it to pointer's "first move"
             if (!this._drag_node_id[pressed_node_id]) {
               if (this._is_freeze_mode()) {
+                const pointer_down_position =
+                  this._pointer_down_position[pointerId]
+
+                const pointer_screen_position = {
+                  x: clientX,
+                  y: clientY,
+                }
+
+                const delta = subtractVector(
+                  pointer_screen_position,
+                  pointer_down_position
+                )
+
                 const d = pointDistance(
-                  this._pointer_down_position[pointerId],
-                  {
-                    x: clientX,
-                    y: clientY,
-                  }
+                  pointer_down_position,
+                  pointer_screen_position
                 )
 
                 if (d < POINTER_CLICK_RADIUS) {
@@ -44288,6 +44549,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 this._is_plug_node_id(pressed_node_id)
               ) {
                 this._descend_node(pressed_node_id)
+
+                if (this._drag_along_node[pressed_node_id]) {
+                  for (const drag_along_node_id of this._drag_along_node[
+                    pressed_node_id
+                  ]) {
+                    this._descend_node(drag_along_node_id)
+                  }
+                }
               }
             }
 
@@ -44315,6 +44584,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             if (this._blue_drag) {
               if (this._is_unit_node_id(pressed_node_id)) {
                 this._on_unit_blue_drag_end(this._blue_drag_init_id)
+              }
+            }
+
+            if (this._drag_along_node[pressed_node_id]) {
+              for (const drag_along_node_id of [
+                ...this._drag_along_node[pressed_node_id],
+              ]) {
+                if ((this._node_pressed_count[drag_along_node_id] ?? 0) === 0) {
+                  this._on_node_drag_end_and_drop(drag_along_node_id)
+                }
               }
             }
 
@@ -51988,19 +52267,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  public _copy_nodes = async (
+  public _sub_graph_selection = (
     node_ids: string[],
-    deep: boolean,
-    callback: Callback<BundleSpec>
-  ) => {
-    // console.log('Graph', '_copy_nodes', node_ids, deep)
-
-    const {
-      api: {
-        clipboard: { writeText },
-      },
-    } = this.$system
-
+    deep: boolean
+  ): BundleSpec => {
     const { specs, newSpec, newSpecId } = this.$props
 
     const id = newSpecId()
@@ -52028,8 +52298,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } = this._decant_node_ids(node_ids)
 
     const _ref_unit_merge_count: Dict<number> = {}
-
-    let unit_memory_processed_count = 0
 
     for (const unit_id of unit_ids) {
       const unit = clone(this._get_unit(unit_id))
@@ -52195,21 +52463,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               const { unit } = unit_bundle_spec
 
               deepSet(bundle, ['spec', 'units', unit_id], unit)
-
-              unit_memory_processed_count++
-
-              if (unit_memory_processed_count === unit_ids.length) {
-                const json = JSON.stringify(bundle)
-
-                await writeText(json)
-
-                callback(bundle)
-              }
             }
           )
         })()
       }
     }
+
+    return bundle
+  }
+
+  public _copy_nodes = async (
+    node_ids: string[],
+    deep: boolean,
+    callback: Callback<BundleSpec>
+  ) => {
+    // console.log('Graph', '_copy_nodes', node_ids, deep)
+
+    const {
+      api: {
+        clipboard: { writeText },
+      },
+    } = this.$system
+
+    const { specs, newSpec, newSpecId } = this.$props
+
+    const id = newSpecId()
+
+    const bundle = this._sub_graph_selection(node_ids, deep)
 
     try {
       const json = JSON.stringify(bundle)
@@ -52374,7 +52654,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const valid = this._validate_text_bundle_spec(json)
 
       if (valid) {
-        this.paste_bundle(json, position)
+        this.paste_bundle(json, position, true, true)
       } else {
         const datum_id = this.add_new_datum(stringify(json), position, true)
 
@@ -52431,7 +52711,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return datum_id
   }
 
-  public paste_bundle = (bundle: BundleSpec, position: Position) => {
+  public paste_bundle = (
+    bundle: BundleSpec,
+    position: Position,
+    mount: boolean,
+    emit: boolean
+  ) => {
     // console.log('Graph', 'paste_bundle', bundle)
 
     const { specs, injectSpecs } = this.$props
@@ -52456,15 +52741,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._new_datum_id
       )
 
-    this._remap_paste_spec(
+    const { actions } = this._remap_paste_spec(
       spec,
       position,
       map_spec_id,
       map_unit_id,
       map_merge_id,
       map_plug_id,
-      map_datum_id
+      map_datum_id,
+      mount,
+      emit
     )
+
+    return { map_unit_id, map_merge_id, map_plug_id, map_datum_id, actions }
   }
 
   public _remap_paste_spec = (
@@ -52474,8 +52763,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     map_unit_id: Dict<string>,
     map_merge_id: Dict<string>,
     map_plug_id: IOOf<Dict<Dict<string>>>,
-    map_datum_id: Dict<string>
-  ): void => {
+    map_datum_id: Dict<string>,
+    mount: boolean,
+    emit: boolean
+  ): { actions: Action[] } => {
     // console.log('Graph', '_paste_spec', graph)
 
     const remapped_graph = remapGraph(
@@ -52486,7 +52777,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       map_datum_id
     )
 
-    this._paste_spec(remapped_graph, position)
+    return this._paste_spec(remapped_graph, position, mount, emit)
   }
 
   public _state_paste_spec = (
@@ -52509,25 +52800,39 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       map_datum_id
     )
 
-    this.__state_paste_spec(_graph, position, restart_simulation, register)
+    return this.__state_paste_spec(
+      _graph,
+      position,
+      restart_simulation,
+      true,
+      register
+    )
   }
 
-  public _paste_spec = (graph: GraphSpec, position: Position): void => {
+  public _paste_spec = (
+    graph: GraphSpec,
+    position: Position,
+    mount: boolean,
+    emit: boolean
+  ): { actions: Action[] } => {
     // console.log('Graph', '_paste_spec', graph)
 
     const actions = this._make_paste_spec_bulk_action(graph)
 
     this._dispatch_action(makeBulkEditAction(actions))
 
-    this.__state_paste_spec(graph, position)
-    this.__pod_paste_spec(clone(graph), actions)
+    this.__state_paste_spec(graph, position, undefined, undefined, mount)
+    emit && this.__pod_paste_spec(clone(graph), actions)
+
+    return { actions }
   }
 
   public __state_paste_spec = (
     graph: GraphSpec,
     position: Position,
     restart_simulation: boolean = true,
-    register: boolean = true
+    register: boolean = true,
+    mount: boolean
   ): void => {
     // console.log('Graph', '__state_paste_spec', graph)
 
@@ -52740,7 +53045,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const layout_position = NULL_VECTOR
 
       this._sim_add_core_component(unit_id, parent_id, layout_position)
-      this._sim_add_sub_component(unit_id, {}, undefined, false)
+
+      mount && this._sim_add_sub_component(unit_id, {}, undefined, false)
     }
 
     const sub_component_ids = keys(subComponents)
@@ -52748,8 +53054,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const ordered_sub_component_ids =
       this._order_sub_component_ids(sub_component_ids)
 
-    for (const unit_id of ordered_sub_component_ids) {
-      this._sim_add_sub_component_to_parent(unit_id, undefined)
+    if (mount) {
+      for (const unit_id of ordered_sub_component_ids) {
+        this._sim_add_sub_component_to_parent(unit_id, undefined)
+      }
     }
 
     for (const datum_id in data) {
@@ -56966,7 +57274,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const position = this._jiggle_world_screen_center()
 
-      this._paste_spec(spec, position)
+      this._paste_spec(spec, position, true, true)
     }
   }
 
