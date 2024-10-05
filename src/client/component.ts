@@ -1066,7 +1066,9 @@ export class Component<
       this.commit()
     }
 
-    this.dispatchEvent('mount', {}, false)
+    if (this.isBase()) {
+      this.dispatchEvent('mount', {}, false)
+    }
   }
 
   unmount() {
@@ -1092,7 +1094,9 @@ export class Component<
 
     this.onUnmount($context)
 
-    this.dispatchEvent('unmount', {}, false)
+    if (this.isBase()) {
+      this.dispatchEvent('unmount', {}, false)
+    }
   }
 
   focus(options: FocusOptions | undefined = { preventScroll: true }) {
