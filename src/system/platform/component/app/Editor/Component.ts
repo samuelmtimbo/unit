@@ -3837,7 +3837,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let json: string
 
     if (file.name.endsWith('.unit')) {
-      json = await file.text()
+      try {
+        json = await file.text()
+      } catch (err) {
+        return null
+      }
     } else if (file.name.endsWith('.unit.gzip')) {
       const decompressionStream = new DecompressionStream('gzip')
       const decompressedStream = file
