@@ -3734,6 +3734,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       const data = pin.peak()
 
       const set = (data: any) => {
+        if (this._paused) {
+          return
+        }
+
         this._fork()
 
         this._specSetUnitPinData(unitId, type, pinId, data)
@@ -3760,7 +3764,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
       all_unlisten.push(pin_unlisten)
 
-      if (data !== undefined && !this._paused) {
+      if (data !== undefined) {
         set(data)
       }
     }
