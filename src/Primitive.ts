@@ -88,6 +88,8 @@ export class Primitive<
           const { ref } = this.getInputOpt(name as keyof I)
 
           if (event === 'data') {
+            this._activateInput(name as keyof I, data)
+            
             if (ref) {
               this.__onRefInputData(name as keyof I, data)
             } else {
@@ -288,13 +290,13 @@ export class Primitive<
     data: any,
     backpropagation: boolean
   ): void => {
-    this._activateInput(name, data)
-
     if (backpropagation) {
       return
     }
 
     if (!this._paused) {
+      this._activateInput(name, data)
+
       this.onDataInputData(name, data)
     } else {
       this.__buffer.push({
@@ -312,13 +314,13 @@ export class Primitive<
     data: any,
     backpropagation: boolean
   ): void => {
-    this._activateInput(name, data)
-
     if (backpropagation) {
       return
     }
 
     if (!this._paused) {
+      this._activateInput(name, data)
+
       this.__onRefInputData(name, data)
     } else {
       this.__buffer.push({
