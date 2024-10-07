@@ -307,7 +307,11 @@ export function findInputDataExamples(
       for (const subPinId in plug) {
         const subPin = plug[subPinId]
 
-        const { unitId, pinId, mergeId } = subPin
+        const { unitId, kind = 'input', pinId, mergeId } = subPin
+
+        if (kind !== 'input') {
+          continue
+        }
 
         if (unitId && pinId) {
           const unit = units[unitId]
