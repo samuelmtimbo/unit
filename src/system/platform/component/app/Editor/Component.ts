@@ -157,6 +157,7 @@ import { getCircle, getLine, getRectangle } from '../../../../../client/drawing'
 import { IODragEvent } from '../../../../../client/event/drag'
 import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'
 import { makeDragLeaveListener } from '../../../../../client/event/drag/dragleave'
+import { makeDragOverListener } from '../../../../../client/event/drag/dragover'
 import { makeDragStartListener } from '../../../../../client/event/drag/dragstart'
 import { makeDropListener } from '../../../../../client/event/drag/drop'
 import { makeBlurListener } from '../../../../../client/event/focus/blur'
@@ -3282,6 +3283,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         onLongClickCancel: this._on_long_click_cancel,
         onClickHold: this._on_click_hold,
       }),
+      makeDragOverListener(this._on_drag_over),
       makeDropListener(this._on_drop),
     ])
 
@@ -3329,9 +3331,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     main.registerParentRoot(layout_comp)
     main.registerParentRoot(area_select_svg)
 
-    main.$element.ondragover = (event: DragEvent) => {
-      event.preventDefault()
-    }
     this._main = main
 
     const foreground = new Div(
@@ -3398,6 +3397,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _last_open_filename: string
 
+  private _on_drag_over = async (event, _event: DragEvent) => {
+    _event.preventDefault()
+  }
+
   private _on_drop = async (event, _event: DragEvent) => {
     _event.preventDefault()
 
@@ -3457,7 +3460,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         if (handle) {
           if (handle.kind === 'directory') {
-            this._drop_folder(handle, screen_position)
+            this._drop_file_system_directory_handle(handle, screen_position)
 
             return
           }
@@ -3465,10 +3468,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       if (item.webkitGetAsEntry) {
-        const entry = item.webkitGetAsEntry() as FileSystemDirectoryEntry
+        const entry = item.webkitGetAsEntry() as FileSystemEntry
 
         if (entry) {
-          this._drop_directory_entry(entry)
+          this._drop_file_system_entry(entry, position, screen_position)
 
           return
         }
@@ -3490,38 +3493,63 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _drop_directory_entry = (entry: FileSystemDirectoryEntry) => {
+  private _drop_file_system_entry = (
+    entry: FileSystemEntry,
+    position: Position,
+    screen_position: Position
+  ) => {
     if (entry.isDirectory) {
-      const reader = entry.createReader()
+      this._animate_pulse(screen_position.x, screen_position.y, 'out')
 
-      reader.readEntries(
-        (entries) => {
-          this._paste_entries(entries)
-        },
-        (err: any) => {
-          //
-        }
-      )
+      this._drop_file_system_directory_entry(entry as FileSystemDirectoryEntry)
     } else if (entry.isFile) {
+      this._drop_file_system_file_entry(entry as FileSystemFileEntry, position)
     } else {
-      //
+      throw new InvalidStateError()
     }
   }
 
-  private _drop_folder = async (
+  private _drop_file_system_directory_entry = (
+    entry: FileSystemDirectoryEntry
+  ) => {
+    const reader = entry.createReader()
+
+    reader.readEntries(
+      (entries) => {
+        this._paste_file_system_directory_entries(entries)
+      },
+      (err: any) => {
+        //
+      }
+    )
+  }
+
+  private _drop_file_system_file_entry = (
+    entry: FileSystemFileEntry,
+    position: Position
+  ) => {
+    entry.file(
+      async (file: File) => {
+        this._drop_file(file, position)
+      },
+      (err: any) => {
+        //
+      }
+    )
+  }
+
+  private _drop_file_system_directory_handle = async (
     dirHandle: FileSystemDirectoryHandle,
     screenPosition: Position
   ) => {
     this._animate_pulse(screenPosition.x, screenPosition.y, 'out')
 
-    this._paste_folder(dirHandle)
+    await this._paste_file_system_directory_handle(dirHandle)
   }
 
-  private _paste_folder = async (dirHandle: FileSystemDirectoryHandle) => {
-    await this.__paste_folder(dirHandle)
-  }
-
-  private __paste_folder = async (dirHandle: FileSystemDirectoryHandle) => {
+  private _paste_file_system_directory_handle = async (
+    dirHandle: FileSystemDirectoryHandle
+  ) => {
     // @ts-ignore
     if (dirHandle.entries) {
       // @ts-ignore
@@ -3548,7 +3576,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             remapBundle(bundle_, specIdMap)
           }
         } else if (handle.kind === 'directory') {
-          this.__paste_folder(handle as FileSystemDirectoryHandle)
+          this._paste_file_system_directory_handle(
+            handle as FileSystemDirectoryHandle
+          )
         } else {
           throw new InvalidStateError()
         }
@@ -3556,7 +3586,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _paste_entries = async (entries: FileSystemEntry[]) => {
+  private _paste_file_system_directory_entries = async (
+    entries: FileSystemEntry[]
+  ) => {
     for (const entry of entries) {
       if (entry.isFile) {
         ;(entry as FileSystemFileEntry).file(
@@ -3576,7 +3608,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         )
       } else if (entry.isDirectory) {
-        this._drop_directory_entry(entry as FileSystemDirectoryEntry)
+        this._drop_file_system_directory_entry(
+          entry as FileSystemDirectoryEntry
+        )
       } else {
         throw new InvalidStateError()
       }
