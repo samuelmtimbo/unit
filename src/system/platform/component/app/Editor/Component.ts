@@ -15483,6 +15483,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           strokeWidth: `${strokeWidth}`,
           stroke: COLOR_NONE,
+          ...userSelect('none'),
         },
       },
       this.$system
@@ -15499,6 +15500,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         style: {
           strokeWidth: '0px',
         },
+        ...userSelect('none'),
       },
       this.$system
     )
@@ -21988,7 +21990,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private __on_node_drag_end = (node_id: string) => {
-    // console.log('Graph', '_on_node_drag_end_and_drop', node_id)
+    // console.log('Graph', '__on_node_drag_end', node_id)
 
     this._on_node_drag_end(node_id)
 
@@ -42037,7 +42039,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       new_node_ids = selected_node_ids.map((selected_node_id) => {
         return this._node_type__template(selected_node_id, {
           unit: (unit_id: string) => {
-            const new_unit_id = map_unit_id[unit_id] ?? unit_id
+            const new_unit_id = map_unit_id[unit_id]
+
+            if (!new_unit_id) {
+              return null
+            }
 
             new_node_id_map[selected_node_id] = new_unit_id
 
@@ -42050,7 +42056,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               return null
             }
 
-            const new_unit_id = map_unit_id[unitId] ?? unitId
+            const new_unit_id = map_unit_id[unitId]
+
+            if (!new_unit_id) {
+              return null
+            }
 
             const new_pin_node_id = getPinNodeId(new_unit_id, type, pinId)
 
@@ -42061,7 +42071,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           merge: (merge_node_id: string) => {
             const { mergeId } = segmentMergeNodeId(merge_node_id)
 
-            const new_merge_id = map_merge_id[mergeId] ?? mergeId
+            const new_merge_id = map_merge_id[mergeId]
+
+            if (!new_merge_id) {
+              return null
+            }
 
             const new_merge_node_id = getMergeNodeId(new_merge_id)
 
@@ -42072,8 +42086,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           plug: (plug_node_id: string) => {
             const { type, pinId, subPinId } = segmentPlugNodeId(plug_node_id)
 
-            const new_plug_sub_pin_id =
-              map_plug_id[type][pinId][subPinId] ?? subPinId
+            const new_plug_sub_pin_id = map_plug_id[type][pinId][subPinId]
+
+            if (!new_plug_sub_pin_id) {
+              return null
+            }
 
             const new_plug_node_id = getExtNodeId(
               type,
@@ -42110,18 +42127,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       new_node_id = new_node_id_map[node_id] ?? node_id
 
-      for (const selected_node_id of selected_node_ids) {
-        const next_node_id = new_node_id_map[selected_node_id]
-
-        if (!next_node_id) {
-          continue
-        }
-
+      const drag = (selected_node_id: string, next_node_id: string) => {
         if (!this._has_node(next_node_id)) {
-          continue
+          return
         }
 
-        const selected_node_position = this._get_node_position(selected_node_id)
+        const selected_node_position =
+          this._get_anchor_node_position(selected_node_id)
 
         const relative_position = subtractVector(
           selected_node_position,
@@ -42151,6 +42163,34 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
 
         this._set_node_fixed(next_node_id, true)
+      }
+
+      for (const selected_node_id of selected_node_ids) {
+        const next_node_id = new_node_id_map[selected_node_id]
+
+        if (!next_node_id) {
+          continue
+        }
+
+        drag(selected_node_id, next_node_id)
+
+        if (this._is_unit_node_id(selected_node_id)) {
+          this._for_each_unit_pin(
+            selected_node_id,
+            (pin_node_id, type, pin_id) => {
+              if (!this._is_node_selected(pin_node_id)) {
+                const next_pin_node_id = getPinNodeId(
+                  next_node_id,
+                  type,
+                  pin_id
+                )
+
+                drag(pin_node_id, next_pin_node_id)
+              }
+            }
+          )
+        }
+
         this._ascend_node(next_node_id, pointerId)
       }
 
@@ -43063,9 +43103,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._negate_node_layer(node_id)
     this._ascend_node_z(node_id)
-
-    // reset pointer capture (probably because node was moved in the DOM)
-    this._set_node_pointer_capture(node_id, pointer_id)
 
     if (this._is_unit_node_id(node_id)) {
       const ascend_pin = (pin_node_id: string, type: IO) => {
