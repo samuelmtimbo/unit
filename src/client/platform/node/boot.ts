@@ -14,7 +14,7 @@ export function boot(opt?: BootOpt): [System, Unlisten] {
 
   const root = window.document.getElementById(SYSTEM_ROOT_ID)
 
-  window.fetch = fetch
+  window.fetch = globalThis.fetch
   window.HTMLCanvasElement.prototype.getContext = <
     T extends '2d' | 'webgl' | 'webgl2' | 'bitmaprenderer',
   >(
