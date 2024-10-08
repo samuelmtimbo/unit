@@ -195,11 +195,13 @@ export const _getGraphTypeInterface = (
             undefined
           )
         } else if (unitId && pinId) {
-          subPinType = deepGetOrDefault(
-            unitTypeMap,
-            [unitId, kind, pinId],
-            undefined
-          )
+          if (kind === 'input') {
+            subPinType = deepGetOrDefault(
+              unitTypeMap,
+              [unitId, kind, pinId],
+              undefined
+            )
+          }
         }
 
         if (subPinType) {
