@@ -985,7 +985,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _destroy = () => {
     this._spec = clone(this._spec)
 
+    this._destroying = true
+
     forEachValueKey(this._unit, (u) => u.destroy())
+
+    this._destroying = false
   }
 
   private _reset = (): void => {
@@ -3782,6 +3786,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     all_unlisten.push(
       unit.addListener('destroy', () => {
+        if (this._destroying) {
+          return
+        }
+
         if (this._removingUnit.has(unitId)) {
           return
         }
@@ -4076,6 +4084,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _removingUnit: Set<string> = new Set()
+
+  private _destroying: boolean
 
   private _removeUnit(
     unitId: string,
