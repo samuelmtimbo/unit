@@ -1,78 +1,15 @@
+import { unitBundleSpec } from '../bundle'
 import { Graph } from '../Class/Graph'
 import { System } from '../system'
 import { Classes, PinSpec, Specs } from '../types'
 import { Dict } from '../types/Dict'
 import { GraphBundle, GraphClass } from '../types/GraphClass'
 import { GraphSpec } from '../types/GraphSpec'
-import { GraphSpecs } from '../types/GraphSpecs'
 import { GraphUnitPinSpec } from '../types/GraphUnitPinSpec'
 import { GraphUnitSpec } from '../types/GraphUnitSpec'
 import { io } from '../types/IOOf'
-import { deepGet } from '../util/object'
 import { weakMerge } from '../weakMerge'
 import { bundleClass } from './bundleClass'
-import { evaluateDataValue } from './evaluateDataValue'
-
-export function extractGraphSpecs(
-  spec: GraphSpec,
-  specs: Specs,
-  graphs: GraphSpecs = {},
-  classes: Classes = {}
-): GraphSpecs {
-  graphs[spec.id] = spec
-
-  const { units } = spec
-
-  for (const unit_id in units) {
-    const unit = units[unit_id]
-
-    const { id, input } = unit
-
-    for (const inputId in input) {
-      const _input = input[inputId] ?? {}
-
-      const { data } = _input
-
-      if (data !== undefined) {
-        const dataRef = evaluateDataValue(data, specs, classes)
-
-        for (const path of dataRef.ref ?? []) {
-          const bundle = deepGet(dataRef.data, path)
-
-          for (const specId in bundle.specs) {
-            const spec = bundle.specs[specId]
-
-            graphs[specId] = spec
-          }
-
-          for (const specId in bundle.specs) {
-            const spec = bundle.specs[specId]
-
-            extractGraphSpecs(spec, weakMerge(specs, graphs), graphs)
-          }
-        }
-      }
-    }
-
-    const unit_spec = specs[id]
-
-    if (!unit_spec) {
-      return
-    }
-
-    const { system } = unit_spec
-
-    if (!system) {
-      if (!graphs[id]) {
-        graphs[id] = unit_spec as GraphSpec
-
-        extractGraphSpecs(graphs[id], specs, graphs)
-      }
-    }
-  }
-
-  return graphs
-}
 
 export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
   spec: GraphSpec,
@@ -88,11 +25,9 @@ export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
     throw new Error('spec id is required')
   }
 
-  const specs = extractGraphSpecs(spec, specs_, {})
+  const bundle = unitBundleSpec({ id }, weakMerge({ [id]: spec }, specs_))
 
-  const unit = { id }
-
-  const Bundle = bundleClass(Class, { unit, specs })
+  const Bundle = bundleClass(Class, bundle)
 
   return Bundle
 }
@@ -156,7 +91,7 @@ export function classFromSpec<I, O>(
 
   class Class extends Graph<I, O> {
     constructor(system: System) {
-      const spec = system.getSpec(id) as GraphSpec
+      const spec = specs[id] as GraphSpec
 
       super(spec, branch, system, id)
     }

@@ -116,6 +116,10 @@ function _bundleUnit(
         }
 
         _bundleUnit(bundle.unit, specs, custom, branch)
+
+        if (bundle.specs) {
+          delete bundle.specs
+        }
       }
     }
   }

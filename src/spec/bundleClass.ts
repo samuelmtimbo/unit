@@ -4,6 +4,7 @@ import { UnitBundle } from '../types/UnitBundle'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { UnitClass } from '../types/UnitClass'
 import { parseMemorySpec } from './evaluate/parseMemorySpec'
+import { remapSpecs } from './remapBundle'
 
 export function bundleClass<T extends Unit = any>(
   Class: UnitClass<T>,
@@ -18,7 +19,11 @@ export function bundleClass<T extends Unit = any>(
     static __bundle = bundle
 
     constructor(system: System) {
-      bundle.specs && system.injectSpecs(bundle.specs)
+      if (bundle.specs) {
+        const map = system.injectSpecs(bundle.specs)
+
+        remapSpecs(bundle, map)
+      }
 
       super(system, id)
 

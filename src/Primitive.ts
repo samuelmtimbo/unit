@@ -89,7 +89,7 @@ export class Primitive<
 
           if (event === 'data') {
             this._activateInput(name as keyof I, data)
-            
+
             if (ref) {
               this.__onRefInputData(name as keyof I, data)
             } else {
