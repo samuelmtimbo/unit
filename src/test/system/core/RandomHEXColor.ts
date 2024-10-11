@@ -2,7 +2,6 @@ import * as assert from 'assert'
 import { Graph } from '../../../Class/Graph'
 import { watchGraphAndLog, watchUnitAndLog } from '../../../debug'
 import { fromSpec } from '../../../spec/fromSpec'
-import _specs from '../../../system/_specs'
 import { GraphSpec } from '../../../types/GraphSpec'
 import { system } from '../../util/system'
 
@@ -68,7 +67,7 @@ const spec = {
   },
 } as GraphSpec
 
-const RandomHEXColor = fromSpec(spec, _specs)
+const RandomHEXColor = fromSpec(spec, system.specs)
 
 const randomHEXColor = new RandomHEXColor(system)
 
