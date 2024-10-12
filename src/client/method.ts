@@ -121,6 +121,12 @@ import {
   J_METHOD_WATCH,
 } from '../types/interface/async/$J'
 import {
+  ME_METHOD_CALL,
+  ME_METHOD_GET,
+  ME_METHOD_REF,
+  ME_METHOD_WATCH,
+} from '../types/interface/async/$ME'
+import {
   MS_METHOD_CALL,
   MS_METHOD_GET,
   MS_METHOD_REF,
@@ -357,5 +363,11 @@ export const METHOD: AllKeys<AllTypes<any>, Record<MethodType, string[]>> = {
     call: W_METHOD_CALL,
     watch: W_METHOD_WATCH,
     ref: W_METHOD_REF,
+  },
+  ME: {
+    get: ME_METHOD_GET,
+    call: ME_METHOD_CALL,
+    watch: ME_METHOD_WATCH,
+    ref: ME_METHOD_REF,
   },
 }

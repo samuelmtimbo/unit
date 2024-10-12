@@ -19,6 +19,7 @@ import { AsyncG } from './AsyncG'
 import { AsyncGP } from './AsyncGP'
 import { AsyncIB } from './AsyncIB'
 import { AsyncJ } from './AsyncJ'
+import { AsyncME } from './AsyncME'
 import { AsyncMS } from './AsyncMS'
 import { AsyncNO } from './AsyncNO'
 import { AsyncPS } from './AsyncPS'
@@ -59,4 +60,5 @@ export const ASYNC: AllTypes<(unit: any) => any> = {
   AB: AsyncAB,
   TE: AsyncTE,
   TD: AsyncTD,
+  ME: AsyncME,
 }
