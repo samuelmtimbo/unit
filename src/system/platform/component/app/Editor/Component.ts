@@ -24514,6 +24514,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return this._mode === 'none' || this._mode === 'multiselect'
   }
 
+  private _should_edge_drag_on_this_mode() {
+    return this._mode === 'none' || this._mode === 'multiselect'
+  }
+
   private _should_hide_merge_datum = (
     datum_node_id: string,
     merge_node_id: string
@@ -41771,82 +41775,84 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const [x, y] = this._client_to_graph(clientX, clientY)
 
     if (this._is_draggable_mode()) {
-      const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 0)
+      if (this._should_edge_drag_on_this_mode()) {
+        const { x0, y0, x1, y1 } = this._get_node_edge_offset(node_id, 0)
 
-      let prevent_edge_drag: boolean = false
+        let prevent_edge_drag: boolean = false
 
-      if (this._is_datum_node_id(node_id)) {
-        if (this._datum_to_pin[node_id] || this._datum_to_plug[node_id]) {
-          this._drag_node_init_edge_overflow[node_id] = {
-            x0: x0 < 0,
-            y0: y0 < 0,
-            x1: x1 > 0,
-            y1: y1 > 0,
+        if (this._is_datum_node_id(node_id)) {
+          if (this._datum_to_pin[node_id] || this._datum_to_plug[node_id]) {
+            this._drag_node_init_edge_overflow[node_id] = {
+              x0: x0 < 0,
+              y0: y0 < 0,
+              x1: x1 > 0,
+              y1: y1 > 0,
+            }
+
+            prevent_edge_drag = true
+          }
+        }
+
+        if (
+          !config?.disable.edgeDrag &&
+          !prevent_edge_drag &&
+          this._get_subgraph_count() > 1
+        ) {
+          const {
+            x0: overflow_x0,
+            y0: overflow_y0,
+            x1: overflow_x1,
+            y1: overflow_y1,
+          } = this._drag_node_init_edge_overflow[node_id]
+
+          if (x0 > 0) {
+            this._drag_node_init_edge_overflow[node_id].x0 = false
+          }
+          if (y0 > 0) {
+            this._drag_node_init_edge_overflow[node_id].y0 = false
+          }
+          if (x1 < 0) {
+            this._drag_node_init_edge_overflow[node_id].x1 = false
+          }
+          if (y1 < 0) {
+            this._drag_node_init_edge_overflow[node_id].y1 = false
           }
 
-          prevent_edge_drag = true
-        }
-      }
+          const drag_init_overflow_count =
+            bit(overflow_x0) +
+            bit(overflow_y0) +
+            bit(overflow_x1) +
+            bit(overflow_y1)
 
-      if (
-        !config?.disable.edgeDrag &&
-        !prevent_edge_drag &&
-        this._get_subgraph_count() > 1
-      ) {
-        const {
-          x0: overflow_x0,
-          y0: overflow_y0,
-          x1: overflow_x1,
-          y1: overflow_y1,
-        } = this._drag_node_init_edge_overflow[node_id]
+          if (drag_init_overflow_count < 2) {
+            const node = this._node[node_id]
 
-        if (x0 > 0) {
-          this._drag_node_init_edge_overflow[node_id].x0 = false
-        }
-        if (y0 > 0) {
-          this._drag_node_init_edge_overflow[node_id].y0 = false
-        }
-        if (x1 < 0) {
-          this._drag_node_init_edge_overflow[node_id].x1 = false
-        }
-        if (y1 < 0) {
-          this._drag_node_init_edge_overflow[node_id].y1 = false
-        }
+            const dx = x - node.hx - node.x
+            const dy = y - node.hy - node.y
 
-        const drag_init_overflow_count =
-          bit(overflow_x0) +
-          bit(overflow_y0) +
-          bit(overflow_x1) +
-          bit(overflow_y1)
+            const drag_edge_animating = !!this._drag_edge_animation
 
-        if (drag_init_overflow_count < 2) {
-          const node = this._node[node_id]
+            const lock_x0 =
+              (drag_edge_animating || x0 <= 0) && dx <= 0 && !overflow_x0
+            const lock_x1 =
+              (drag_edge_animating || x1 >= 0) && dx >= 0 && !overflow_x1
 
-          const dx = x - node.hx - node.x
-          const dy = y - node.hy - node.y
+            const lock_y0 =
+              (drag_edge_animating || y0 <= 0) && dy <= 0 && !overflow_y0
+            const lock_y1 =
+              (drag_edge_animating || y1 >= 0) && dy >= 0 && !overflow_y1
 
-          const drag_edge_animating = !!this._drag_edge_animation
+            const lock_x = lock_x0 || lock_x1
+            const lock_y = lock_y0 || lock_y1
 
-          const lock_x0 =
-            (drag_edge_animating || x0 <= 0) && dx <= 0 && !overflow_x0
-          const lock_x1 =
-            (drag_edge_animating || x1 >= 0) && dx >= 0 && !overflow_x1
-
-          const lock_y0 =
-            (drag_edge_animating || y0 <= 0) && dy <= 0 && !overflow_y0
-          const lock_y1 =
-            (drag_edge_animating || y1 >= 0) && dy >= 0 && !overflow_y1
-
-          const lock_x = lock_x0 || lock_x1
-          const lock_y = lock_y0 || lock_y1
-
-          if (lock_x || lock_y) {
-            this._start_drag_edge_animation()
+            if (lock_x || lock_y) {
+              this._start_drag_edge_animation()
+            } else {
+              this._cancel_drag_edge_animation()
+            }
           } else {
             this._cancel_drag_edge_animation()
           }
-        } else {
-          this._cancel_drag_edge_animation()
         }
       }
 
@@ -42191,7 +42197,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           )
         }
 
-        this._ascend_node(next_node_id, pointerId)
+        if (this._has_node(next_node_id)) {
+          this._ascend_node(next_node_id, pointerId)
+        }
       }
 
       remove(new_node_ids, new_node_id)
