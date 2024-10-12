@@ -12163,6 +12163,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           // scrollbarColor: color,
           color,
           touchAction: 'none',
+          overscrollBehavior: 'none',
         },
       },
       this.$system
@@ -15158,6 +15159,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     height: number
   ) => {
     this._resize_node(datum_node_id, width, height)
+
     const datum_container = this._datum_container[datum_node_id]
 
     datum_container.$element.style.width = `${width}px`
