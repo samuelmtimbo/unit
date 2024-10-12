@@ -52820,43 +52820,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._new_datum_id
       )
 
-    const { actions } = this._remap_paste_spec(
-      spec,
-      position,
-      map_spec_id,
-      map_unit_id,
-      map_merge_id,
-      map_plug_id,
-      map_datum_id,
-      mount,
-      emit
-    )
-
-    return { map_unit_id, map_merge_id, map_plug_id, map_datum_id, actions }
-  }
-
-  public _remap_paste_spec = (
-    graph: GraphSpec,
-    position: Position,
-    map_spec_id: Dict<string>,
-    map_unit_id: Dict<string>,
-    map_merge_id: Dict<string>,
-    map_plug_id: IOOf<Dict<Dict<string>>>,
-    map_datum_id: Dict<string>,
-    mount: boolean,
-    emit: boolean
-  ): { actions: Action[] } => {
-    // console.log('Graph', '_paste_spec', graph)
-
     const remapped_graph = remapGraph(
-      graph,
+      spec,
       map_unit_id,
       map_merge_id,
       map_plug_id,
       map_datum_id
     )
 
-    return this._paste_spec(remapped_graph, position, mount, emit)
+    const { actions } = this._paste_spec(remapped_graph, position, mount, emit)
+
+    return { map_unit_id, map_merge_id, map_plug_id, map_datum_id, actions }
   }
 
   public _state_paste_spec = (
@@ -53036,27 +53010,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               sub_pin_spec
             )
 
-            if (!pin_node_id) {
-              const plug_position = {
-                int: position,
-                ext: position,
-              }
+            const plug_position = {
+              int: position,
+              ext: position,
+            }
 
-              this._state_add_exposed_pin(
-                type,
-                pin_id,
-                sub_pin_id,
-                sub_pin_spec,
-                plug_position
-              )
+            this._state_add_exposed_pin(
+              type,
+              pin_id,
+              sub_pin_id,
+              sub_pin_spec,
+              plug_position
+            )
 
-              if (data) {
-                this._sim_add_plug_datum(type, pin_id, sub_pin_id, data)
+            if (data) {
+              this._sim_add_plug_datum(type, pin_id, sub_pin_id, data)
 
-                const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
+              const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
 
-                this._refresh_node_color(ext_node_id)
-              }
+              this._refresh_node_color(ext_node_id)
             }
           }
         } else {
