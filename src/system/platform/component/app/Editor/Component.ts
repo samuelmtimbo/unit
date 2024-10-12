@@ -28666,6 +28666,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const plug_datum_node_id = this._plug_to_datum[ext_node_id]
 
       if (plug_datum_node_id) {
+        //
       } else {
         const datum_id = this._new_datum_id()
 
@@ -28674,7 +28675,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const tree = getTree('')
 
         const position = this._predict_plug_data_initial_position(
-          plug_node_id,
+          ext_node_id,
           tree
         )
 
