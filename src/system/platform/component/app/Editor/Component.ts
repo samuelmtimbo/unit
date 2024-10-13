@@ -21055,12 +21055,28 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
   }
 
+  private _escape_external_text_if_needed = (text: string): TreeNode => {
+    let tree = getTree(text)
+
+    if (!_isValidTree(tree)) {
+      ;[tree] = _filterEmptyNodes(tree, getTree__cached)
+
+      tree = getTree(`"${escape(text)}"`)
+    }
+
+    return tree
+  }
+
   private _drop_text_on_node = (node_id: string, text: string) => {
     if (this._is_pin_node_id(node_id)) {
       if (this._is_type_pin_match(node_id, STRING_TREE)) {
-        this._graph_debug_set_pin_value(node_id, `"${escape(text)}"`)
+        const tree = this._escape_external_text_if_needed(text)
 
-        this.set_pin_data(node_id, `"${escape(text)}"`)
+        const { value } = tree
+
+        this._graph_debug_set_pin_value(node_id, value)
+
+        this.set_pin_data(node_id, value)
       }
     } else if (this._is_unit_node_id(node_id)) {
       //
@@ -52821,12 +52837,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         let datum_id
 
         if (tree) {
-          datum_id = this._new_datum_id()
-          ;[tree] = _filterEmptyNodes(tree, getTree__cached)
-
-          if (!_isValidTree(tree)) {
-            tree = getTree(`"${escape(text)}"`)
-          }
+          const tree = this._escape_external_text_if_needed(text)
 
           this.__sim_add_datum_node(datum_id, tree, position, true)
         } else {
