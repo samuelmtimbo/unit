@@ -26174,7 +26174,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._select_node(node_id)
         this._deselect_all_but(node_id)
       } else {
-        this._select_node(node_id)
+        if (this._edit_datum_node_id === node_id) {
+          //
+        } else {
+          this._select_node(node_id)
+        }
       }
     }
 
