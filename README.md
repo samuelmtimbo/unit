@@ -12,7 +12,7 @@ It is heavily inspired by Live, Data Flow, Reactive, Functional and Object Orien
 
 The Unit Programming Language was developed in close junction to the Unit Programming Environment, which is a Web application built for easy composition of new units. The environment is designed to feel visual and kinesthetic, giving the perception of Direct Manipulation of Live Virtual Objects. The Unit Programming experience is minimalistic, ergonomic, mobile, and can be performed through a variety of input devices, and editing can be partially expressed through Drawing, Gesture and Voice.
 
-Unit is similar in concept to the Unix shell. For a seasoned programmer, Unit should feel like the 2D evolution of the Command Line Interface (CLI) where units' (commands) inputs and outputs (stdin/stdout/stderr) can be piped together into a graph (script). In fact, Unit can be thought of as a re-exploration of the [Unix Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in the context of modern Software Engineering and Web Development.
+Unit is similar in concept to the Unix shell. For a seasoned programmer, Unit should feel like the 2D evolution of the Command Line Interface (CLI) where units' (commands) inputs and outputs (stdin/stdout/stderr) can be piped together into a graph (script). Unit can be thought of as a re-exploration of the [Unix Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) in the context of modern Software Engineering and Web Development.
 
 The Unit system is set to grow into a simple and approachable Web Operating System, which is sandboxed by default, enabling a new era of Software Sharing and Collaboration, unifying the currently fragmented Computer Experience.
 
@@ -151,7 +151,7 @@ List of related web applications:
 
 ### [unit.software](https://unit.software)
 
-Landing page featuring Unit language and system's vision.
+Landing page featuring the Unit language and system's vision.
 
 ### [unit.md](https://unit.md)
 
@@ -165,7 +165,7 @@ Any \*.unit.land subdomain represents a completely isolated instance of the Unit
 
 ### [unit.tools](https://unit.tools)
 
-Marketplace to explore, collect and play with live visual programs built in Unit.
+Marketplace to explore, collect and play with open live visual programs built in Unit.
 
 ### [unit.moe](https://unit.moe)
 
@@ -179,17 +179,15 @@ https://unit.moe#https://unit.tools will show the code for https://unit.tools.
 
 The unit Programming Environment was designed to be learnable by Experimentation and Exploration. Visual and written documentation about each unit can be accessed using [Info Mode](https://github.com/samuelmtimbo/unit/tree/main/src/docs/start#info-mode).
 
-This codebase is a TypeScript implementation of the unit Programming Language Spec with an accompanying Web based Programming Environment. I tried to make it as clean and organized as I could while still maintaining a space for experimentation. Some folders contain a `README.md` file with information about that piece of the architecture.
+This codebase is a TypeScript implementation of the unit Programming Language Spec with an accompanying Web based Programming Environment.
 
 ## Contributing
 
-First of all, please feel free to clone or fork Unit's source code.
+Please feel free to clone or fork Unit's source code, and to send pull requests. 
 
 This is the best place to learn about Unit's design and implementation, and the official channel for Open Source collaboration.
 
-This repository is open for pull requests from contributors.
-
-If you want to collaborate with Unit's development. Please hit me up at [@io_sammt](https://twitter.com/io_sammt).
+The project is open for pull requests.
 
 If you have a feature idea or hit a malfunction, this is a basic workflow to follow:
 
@@ -198,8 +196,6 @@ If you have a feature idea or hit a malfunction, this is a basic workflow to fol
 3. Iterate over it to make sure the change is positive and aligned with Unit's design and vision.
 
 The Unit project has nearly infinite space for creative freedom, invention, and intimacy, which is what motivated it.
-
-Ultimately, the goal is for everyone to have an easy to use, flexible and powerful visual system where one can build anything with absolute freedom, without ever having to leave it.
 
 ## Backlog
 
@@ -211,9 +207,9 @@ Visit [Evolution](/src/docs/evolution/README.md) to learn more about where Unit 
 
 ## Community
 
-If you have a question or a suggestion related to Unit, or if you just want to talk about the future of Programming, or if you wish to join Unit team, feel free to message me at [@io_sammt](https://twitter.com/io_sammt).
+If you have a question or a suggestion related to Unit, or if you just want to talk about the future of Programming, or if you wish to join Unit team, feel free to message me at [@io_sammt](https://x.com/io_sammt) or email me at sam@ioun.it.
 
-For weekly updates about Unit's development, including thoughts about vision and roadmap, follow us on Twitter [@io_unit](https://twitter.com/io_unit).
+For updates about Unit's development, including thoughts about vision and roadmap, follow us on X [@io_unit](https://x.com/io_unit).
 
 We hope you enjoy Unit and invite you to be part of our community!
 

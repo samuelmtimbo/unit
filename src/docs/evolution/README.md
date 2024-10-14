@@ -18,13 +18,13 @@ Unit's primitives mostly grow in a few directions:
 
 Each new API is to be wrapped into a carefully designed and well documented primitive state machine.
 
-All currently available primitives live in the [system](/src/system) folder.
+All primitives live in the [system](/src/system) folder.
 
-These are examples of primitive classes: [`add`](/src/system/f/arithmetic/Add/index.ts) (`+` operation), [`oscillator node`](/src/system/platform/api/media/audio/OscillatorNode/index.ts) (Web Audio API), and `peer transmitter` (simplified Web RTC).
+These are some examples of primitive classes: [`add`](/src/system/f/arithmetic/Add/index.ts) (`+` operation), [`oscillator node`](/src/system/platform/api/media/audio/OscillatorNode/index.ts) (Web Audio API), and `peer transmitter` (simplified Web RTC).
 
 ## Editor
 
-The Unit [Editor](../../system/platform/component/app/Editor/Component.ts) is where most of the live programming interactivity is implemented right now. It is the main place to improve the graph editing experience.
+The Unit [Editor](../../system/platform/component/app/Editor/Component.ts) is where most of the live programming interactivity is implemented. It is the main place to improve the graph editing experience.
 
 These are some common areas the editor can continuously improve:
 
