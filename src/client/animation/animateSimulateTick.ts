@@ -18,7 +18,7 @@ export const animateSimulateTick = <T extends Dict<AnimatableValue>>(
       if (Math.abs(dp) > threshold) {
         ended = false
 
-        n0[prop] += dp / ANIMATION_C
+        n0[prop] += dp / (3 * ANIMATION_C)
       } else {
         n0[prop] = n[prop]
       }

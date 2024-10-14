@@ -22885,7 +22885,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const adx = Math.abs(dx)
       const ady = Math.abs(dy)
 
-      const k = ((1 / 2) * 3) / ANIMATION_C
+      const k = 1 / 2 / ANIMATION_C
 
       node.fx = node.fx ?? node.x
       node.fy = node.fy ?? node.y

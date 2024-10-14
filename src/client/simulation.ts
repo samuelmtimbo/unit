@@ -107,7 +107,7 @@ export class Simulation<
     alphaDecay,
     velocityDecay = 0.2,
     n = 1,
-    t = 3 / ANIMATION_C,
+    t = 1 / ANIMATION_C,
     stability = 1,
     force = NOOP,
   }: SimulationOpt) {

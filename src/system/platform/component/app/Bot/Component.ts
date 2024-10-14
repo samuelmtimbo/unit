@@ -571,8 +571,8 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     } = this.$system
 
     if (Math.abs(this._x - this._tx) > 1 || Math.abs(this._y - this._ty) > 1) {
-      this._x += (this._tx - this._x) / ANIMATION_C
-      this._y += (this._ty - this._y) / ANIMATION_C
+      this._x += (this._tx - this._x) / (3 * ANIMATION_C)
+      this._y += (this._ty - this._y) / (3 * ANIMATION_C)
 
       this._tick_body()
 
@@ -607,9 +607,9 @@ export default class Bot extends Element<HTMLDivElement, Props> {
     const k = 1 / 4
 
     if (Math.abs(dx) > k || Math.abs(dy) > k || Math.abs(dz) > k) {
-      this._temp_x += dx / ANIMATION_C
-      this._temp_y += dy / ANIMATION_C
-      this._temp_z += dz / ANIMATION_C
+      this._temp_x += dx / (3 * ANIMATION_C)
+      this._temp_y += dy / (3 * ANIMATION_C)
+      this._temp_z += dz / (3 * ANIMATION_C)
 
       this._start_sync()
     } else {

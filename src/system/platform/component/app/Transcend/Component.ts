@@ -390,7 +390,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
     const anim = () => {
       const dy = this._y_target - this._y
 
-      const k = dy / (2 * ANIMATION_C)
+      const k = dy / (6 * ANIMATION_C)
 
       if (Math.abs(dy) >= 1) {
         this._y += k

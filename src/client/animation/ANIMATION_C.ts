@@ -1,1 +1,1 @@
-export const ANIMATION_C = 3
+export const ANIMATION_C = 1
