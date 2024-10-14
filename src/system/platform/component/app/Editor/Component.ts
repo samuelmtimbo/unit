@@ -43235,14 +43235,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._descend_node_z(int_node_id)
 
       this._refresh_plug_layer(node_id, int_node_id)
+
+      const datum_node_id = this._plug_to_datum[node_id]
+
+      if (datum_node_id) {
+        this._descend_node_z(datum_node_id)
+        this._refresh_node_layer(datum_node_id)
+      }
     } else if (this._is_int_node_id(node_id)) {
       const { pinId, type, subPinId } = segmentPlugNodeId(node_id)
 
       const ext_node_id = getExtNodeId(type, pinId, subPinId)
 
-      this._descend_node_z(ext_node_id)
-
-      this._refresh_plug_layer(ext_node_id, node_id)
+      this._descend_node(ext_node_id)
     }
   }
 
