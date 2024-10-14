@@ -2735,7 +2735,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     {}
   private _collapse_merge_next_pin_map: GraphMoveSubGraphData['nextMergePinId'] =
     {}
-  private _collapse_next_plug_spec_map: IOOf<Dict<Dict<GraphSubPinSpec>>> =
+  private _collapse_next_plug_spec_map: GraphMoveSubGraphData['nextPlugSpec'] =
     emptyIO({}, {})
   private _collapse_next_unit_pin_merge_map: GraphMoveSubGraphData['nextUnitPinMergeMap'] =
     {}
@@ -44146,8 +44146,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     r: number,
     contained_nodes: string[]
   ) => {
-    // console.log('circle', circle)
-
     const { specs } = this.$props
 
     const position = { x, y }
@@ -44324,7 +44322,29 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         bubble,
       }
 
-      this._start_move_subgraph_into(new_unit_id, data)
+      const position = this._jiggle_world_screen_center()
+
+      let there_is_selected_sub_component = false
+
+      for (const contained_node_id of contained_nodes) {
+        this._start_node_long_press_collapse(contained_node_id)
+      }
+
+      this._collapse_init_node_id_set = new Set(this._collapse_node_id)
+
+      const should_predict_size =
+        this._get_unit_spec_render(new_unit_id) === undefined &&
+        there_is_selected_sub_component
+      const do_not_animate_graph_size =
+        this._get_unit_spec_render(new_unit_id) !== undefined
+
+      this._state_move_subgraph_into(
+        new_unit_id,
+        data,
+        should_predict_size,
+        do_not_animate_graph_size,
+        position
+      )
 
       // console.log(data)
 
@@ -46077,7 +46097,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         subPinId: string,
         subPinSpec: GraphSubPinSpec
       ) => {
-        return this._state_plug_exposed_pin(type, pinId, subPinId, subPinSpec)
+        const plug_node_id = getExtNodeId(type, pinId, subPinId)
+
+        const datum_node_id = this._plug_to_datum[plug_node_id]
+
+        this._state_plug_exposed_pin(type, pinId, subPinId, subPinSpec)
+
+        if (datum_node_id) {
+          const value = this._get_datum_value(datum_node_id)
+
+          if (value) {
+            const pin_node_id = getSubPinSpecNodeId(type, subPinSpec)
+
+            if (subPinSpec.unitId) {
+              this._state_set_unit_pin_data(pin_node_id, value)
+            } else if (subPinSpec.mergeId) {
+              this._state_set_merge_pin_data(pin_node_id, value)
+            }
+          }
+        }
       },
       hasMerge: (mergeId: string): boolean => {
         return this.__spec_has_merge(mergeId)
@@ -47348,18 +47386,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const sub_component_index_map = {}
     const sub_component_children_map = {}
 
+    const next_id_map: GraphMoveSubGraphData['nextIdMap'] = {
+      unit: {},
+      merge: {},
+      link: {},
+      plug: {},
+      data: {},
+    }
     const next_pin_id_map: GraphMoveSubGraphData['nextPinIdMap'] = {}
     const next_merge_pin_id: GraphMoveSubGraphData['nextMergePinId'] = {}
     const next_plug_spec_map: GraphMoveSubGraphData['nextPlugSpec'] = {
       input: {},
       output: {},
     }
+    const next_unit_pin_merge_map: GraphMoveSubGraphData['nextUnitPinMergeMap'] =
+      {}
 
-    const next_unit_pin_merge_map = {}
     const opposite_pin_id_map = {}
     const opposite_merge_id_map = {}
-
-    const next_id_map = { unit: {}, merge: {}, link: {}, plug: {}, data: {} }
 
     const graph_unit_spec_id = this._get_unit_spec_id(graph_unit_id)
     const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
@@ -47622,6 +47666,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const exposed_pin_node_id of exposed_node_ids) {
       const { type, pinId, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
 
+      const sub_pin_spec = this._spec_get_sub_pin_spec(type, pinId, subPinId)
+
       exposed_pin_sets[type][pinId] = exposed_pin_sets[type][pinId] || new Set()
 
       const exposed_pin_set = exposed_pin_sets[type][pinId]
@@ -47631,6 +47677,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       exposed_pin_set.add(subPinId)
+
+      const ext_node_id = getExtNodeIdFromIntNodeId(exposed_pin_node_id)
 
       const internal_node_id = this._get_exposed_pin_internal_node_id(
         type,
@@ -47736,6 +47784,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             pinId: SELF,
           })
         } else {
+          if (
+            !sub_pin_spec.unitId &&
+            !sub_pin_spec.mergeId &&
+            !node_id_set.has(ext_node_id)
+          ) {
+            deepSet(next_id_map, ['plug', type, pinId, subPinId], {
+              template: true,
+            })
+          }
+
           deepSet(next_plug_spec_map, [type, pinId, subPinId], {})
         }
       }
@@ -48636,14 +48694,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._move_datum_into_graph(graph_id, datum_node_id)
       },
       plug: (plug_node_id) => {
-        this._state_move_plug_into_graph(
-          graph_id,
-          plug_node_id,
-          nextIdMap,
-          nextPlugSpec,
-          nextMergePinId,
-          nextPinIdMap
-        )
+        this._state_move_plug_into_graph(graph_id, plug_node_id, collapse_map)
       },
       err: () => {
         //
@@ -50052,10 +50103,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _state_move_plug_into_graph = (
     graph_id: string,
     exposed_pin_node_id: string,
-    next_id_map: GraphMoveSubGraphData['nextIdMap'],
-    next_plug_spec_map: GraphMoveSubGraphData['nextPlugSpec'],
-    next_merge_pin_map: GraphMoveSubGraphData['nextMergePinId'],
-    next_pin_id_map: GraphMoveSubGraphData['nextPinIdMap']
+    collapse_map: GraphMoveSubGraphData
   ): void => {
     // console.log(
     //   'Graph',
@@ -50068,14 +50116,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const pin_spec = this._get_pin_spec(type, pinId)
 
+    const int_node_id = getIntNodeId(type, pinId, subPinId)
     const ext_node_id = getExtNodeId(type, pinId, subPinId)
+
+    const int_position =
+      this._has_node(int_node_id) && this._get_node_position(int_node_id)
+    const ext_position =
+      this._has_node(ext_node_id) && this._get_node_position(ext_node_id)
 
     const sub_pin_spec = this._spec[`${type}s`][pinId]['plug'][subPinId]
 
     const this_interface = this._state_make_this_graph_interface()
     const graph_interface = this._state_get_subgraph_graph_interface(graph_id)
 
-    movePlug(
+    const {
+      pinId: nextPinId,
+      type: nextType,
+      subPinId: nextSubPinId,
+      subPinSpec: nextSubPinSpec,
+    } = movePlug(
       this_interface,
       graph_interface,
       graph_id,
@@ -50084,11 +50143,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       pin_spec,
       subPinId,
       sub_pin_spec,
-      next_plug_spec_map,
-      next_pin_id_map,
-      next_merge_pin_map,
-      next_id_map
+      collapse_map
     )
+
+    if (nextPinId) {
+      const next_pin_node_position = int_position || ext_position
+
+      const next_pin_node_id = getPinNodeId(graph_id, nextType, nextPinId)
+
+      if (this._has_node(next_pin_node_id)) {
+        this._set_node_position(next_pin_node_id, next_pin_node_position)
+      }
+    }
   }
 
   private _spec_is_plug_ref = (type: IO, pinId: string): boolean => {

@@ -30,6 +30,7 @@ export type GraphMoveSubGraphData = {
           mergeId: string
           type: IO
           subPinId: string
+          template?: boolean
         } | null>
       >
     >

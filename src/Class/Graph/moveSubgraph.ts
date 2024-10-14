@@ -1104,38 +1104,23 @@ export function movePlug(
   pinSpec: GraphPinSpec,
   subPinId: string,
   subPinSpec: GraphSubPinSpec,
-  nextPlugSpec: GraphMoveSubGraphData['nextPlugSpec'],
-  nextPinIdMap: GraphMoveSubGraphData['nextPinIdMap'],
-  nextMergePinId: GraphMoveSubGraphData['nextMergePinId'],
-  nextIdMap: GraphMoveSubGraphData['nextIdMap']
+  collapseMap: GraphMoveSubGraphData
 ) {
+  const { nextPlugSpec, nextMergePinId, nextIdMap } = collapseMap
+
   const currentPinSpec = source.getExposedPinSpec(type, pinId)
 
   let data: any
 
+  const {
+    template = false,
+    type: nextType = type,
+    subPinId: nextSubPinId = subPinId,
+  } = deepGetOrDefault(nextIdMap, ['plug', type, pinId, subPinId], {})
+
   if (currentPinSpec) {
-    const plugCount = keyCount(currentPinSpec.plug ?? {})
-
     data = source.getPinData(type, pinId)
-
-    if (plugCount === 1) {
-      source.coverPinSet(type, pinId, false)
-    } else {
-      source.coverPin(type, pinId, subPinId, false)
-    }
   }
-
-  const nextType = deepGetOrDefault(
-    nextIdMap,
-    ['plug', type, pinId, subPinId, 'type'],
-    type
-  )
-
-  const nextSubPinId = deepGetOrDefault(
-    nextIdMap,
-    ['plug', type, pinId, subPinId, 'subPinId'],
-    subPinId
-  )
 
   const nextSubPinSpec: GraphSubPinSpec = deepGetOrDefault(
     nextPlugSpec,
@@ -1255,8 +1240,9 @@ export function movePlug(
           )
         } else {
           const subPinUnit = source.getUnit(subPinSpec.unitId)
+          const subPinType = subPinSpec.kind ?? type
 
-          if (subPinUnit.hasPinNamed(type, subPinSpec.pinId)) {
+          if (subPinUnit.hasPinNamed(subPinType, subPinSpec.pinId)) {
             source.addMerge(
               {
                 [graphId]: {
@@ -1265,7 +1251,7 @@ export function movePlug(
                   },
                 },
                 [subPinSpec.unitId]: {
-                  [type]: {
+                  [subPinType]: {
                     [subPinSpec.pinId]: true,
                   },
                 },
@@ -1303,6 +1289,36 @@ export function movePlug(
       //
     }
   }
+
+  if (template) {
+    source.plugPin(
+      type,
+      pinId,
+      subPinId,
+      {
+        pinId: nextPinId,
+        unitId: graphId,
+      },
+      false
+    )
+  } else {
+    if (currentPinSpec) {
+      const plugCount = keyCount(currentPinSpec.plug ?? {})
+
+      if (plugCount === 1) {
+        source.coverPinSet(type, pinId, false)
+      } else {
+        source.coverPin(type, pinId, subPinId, false)
+      }
+    }
+  }
+
+  return {
+    pinId: nextPinId,
+    type: nextType,
+    subPinId: nextSubPinId,
+    subPinSpec: nextSubPinSpec_,
+  }
 }
 
 export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
@@ -1313,15 +1329,7 @@ export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
   connectOpt: GraphUnitConnect,
   reverse: boolean = true
 ) {
-  const {
-    nodeIds,
-    nextIdMap,
-    nextPinIdMap,
-    nextMergePinId,
-    nextPlugSpec,
-    nextSubComponentParentMap,
-    nextSubComponentChildrenMap,
-  } = collapseMap
+  const { nodeIds, nextIdMap } = collapseMap
 
   const { merge = [], link = [], unit = [], plug = [] } = nodeIds
 
@@ -1490,10 +1498,7 @@ export function moveSubgraph<T extends UCG<Dict<any>, Dict<any>, any>>(
       pinSpec,
       subPinId,
       subPinSpec,
-      nextPlugSpec,
-      nextPinIdMap,
-      nextMergePinId,
-      nextIdMap
+      collapseMap
     )
   }
 }
