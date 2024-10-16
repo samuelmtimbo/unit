@@ -42,10 +42,12 @@ export class Primitive<
   private __buffer: {
     name: Key
     type: IO
-    event: 'data' | 'drop'
+    event: 'data' | 'drop' | 'invalid' | 'start'
     ref: boolean
     data?: any
   }[] = []
+
+  private _replaying: boolean = false
 
   constructor(
     { i, o }: ION<I, O> = {},
@@ -82,7 +84,13 @@ export class Primitive<
 
     this.addListener('play', () => {
       while (this.__buffer.length > 0) {
+        this._replaying = true
+
         const { name, type, event, data } = this.__buffer.shift()!
+
+        if (!this.__buffer.length) {
+          this._replaying = false
+        }
 
         if (type === 'input') {
           const { ref } = this.getInputOpt(name as keyof I)
@@ -95,16 +103,22 @@ export class Primitive<
             } else {
               this.onDataInputData(name as keyof I, data)
             }
-          } else {
+          } else if (event === 'drop') {
+            this._deactivateInput(name as keyof I)
+
             if (ref) {
               this.__onRefInputDrop(name as keyof I, data)
             } else {
               this.onDataInputDrop(name as keyof I, data)
             }
-          }
-        } else {
-          if (event === 'drop') {
-            this.onDataOutputDrop(name as keyof O)
+          } else if (event === 'invalid') {
+            if (ref) {
+              this._onRefInputInvalid(name as keyof I)
+            } else {
+              this._onDataInputInvalid(name as keyof I)
+            }
+          } else if (event === 'start') {
+            this._onInputStart(name as keyof I)
           }
         }
       }
@@ -357,6 +371,18 @@ export class Primitive<
     if (!input.empty()) {
       const data = input.peak()
 
+      if (this._paused) {
+        this.__buffer.push({
+          name,
+          type: 'input',
+          event: 'data',
+          data,
+          ref: opt.ref,
+        })
+
+        return
+      }
+
       this._activateInput(name, data)
 
       if (propagate) {
@@ -519,9 +545,9 @@ export class Primitive<
   }
 
   private _onDataInputDrop = <K extends keyof I>(name: K, data: any): void => {
-    this._deactivateInput(name)
-
     if (!this._paused) {
+      this._deactivateInput(name)
+
       this.onDataInputDrop(name, data)
     } else {
       this.__buffer.push({ name, type: 'input', event: 'drop', ref: false })
@@ -529,9 +555,9 @@ export class Primitive<
   }
 
   private _onRefInputDrop = <K extends keyof I>(name: K, data: any): void => {
-    this._deactivateInput(name)
-
     if (!this._paused) {
+      this._deactivateInput(name)
+
       this.__onRefInputDrop(name, data)
     } else {
       this.__buffer.push({ name, type: 'input', event: 'drop', ref: true })
@@ -621,6 +647,18 @@ export class Primitive<
   public onDataInputEnd(name: string): void {}
 
   private _onInputStart<K extends keyof I>(name: K): void {
+    if (this._paused) {
+      this.__buffer.push({
+        name,
+        type: 'input',
+        event: 'start',
+        data: undefined,
+        ref: false,
+      })
+
+      return
+    }
+
     this._i_start.add(name)
 
     this.onDataInputStart(name)
@@ -628,7 +666,19 @@ export class Primitive<
 
   public onDataInputStart<K extends keyof I>(name: K): void {}
 
-  private _onDataInputInvalid(name: string): void {
+  private _onDataInputInvalid<K extends keyof I>(name: K): void {
+    if (this._paused) {
+      this.__buffer.push({
+        name,
+        type: 'input',
+        event: 'invalid',
+        data: undefined,
+        ref: false,
+      })
+
+      return
+    }
+
     this._i_invalid.add(name)
 
     this.onDataInputInvalid(name)
@@ -672,7 +722,15 @@ export class Primitive<
 
   protected _backward_all(): void {
     this._backwarding = true
-    forEachValueKey(this._data_input, (i) => i.pull())
+    forEachValueKey(this._data_input, (i, name) => {
+      if (this._replaying) {
+        this._deactivateInput(name)
+
+        return
+      }
+
+      i.pull()
+    })
     this._backwarding = false
   }
 
