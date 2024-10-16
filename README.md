@@ -183,7 +183,7 @@ This codebase is a TypeScript implementation of the unit Programming Language Sp
 
 ## Contributing
 
-Please feel free to clone or fork Unit's source code, and to send pull requests. 
+Please feel free to clone or fork Unit's source code.
 
 This is the best place to learn about Unit's design and implementation, and the official channel for Open Source collaboration.
 

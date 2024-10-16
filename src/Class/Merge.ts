@@ -124,9 +124,6 @@ export default class Merge<
     this._forward_if_ready()
 
     if (override) {
-      // this._loop_invalid_o_count = 0
-      // this._loop_invalid_o = new Set()
-
       this._backward(current)
     }
   }

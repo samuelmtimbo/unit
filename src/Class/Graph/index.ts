@@ -1035,11 +1035,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
   private _play(): void {
     forEachValueKey(this._unit, (u) => u.play())
+    forEachValueKey(this._merge, (m) => m.play())
 
     forEach(this._children, (c) => c.play())
   }
 
   private _pause(): void {
+    forEachValueKey(this._merge, (m) => m.pause())
     forEachValueKey(this._unit, (u) => u.pause())
 
     forEach(this._children, (c) => c.pause())
@@ -4428,11 +4430,17 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _createMerge = (mergeId: string): Merge => {
     const merge = new Merge(this.__system)
 
+    merge.pause()
+
     const mergeInputPinId = getMergePinNodeId(mergeId, 'input')
 
     const mergeInputPin = new Pin({}, this.__system)
 
     merge.addInput(mergeInputPinId, mergeInputPin)
+
+    if (!this._paused) {
+      merge.play()
+    }
 
     return merge
   }
