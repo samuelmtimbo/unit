@@ -120,22 +120,26 @@ export function _extractFromRawStyle(
     const treatProp = (name: 'width' | 'height') => {
       const prop = component.getProp(name)
 
+      style[name] = '100%'
+
       if (prop !== undefined) {
         if (typeof prop === 'string') {
           if (isFrameRelativeValue(prop)) {
             const prop_num = prop.substring(0, prop.length - 2)
 
-            style[name] = `${prop_num}%`
+            style[`max-${name}`] = `${prop_num}%`
           } else {
             //
           }
         } else {
-          style[name] = `${prop}px`
+          style[`max-${name}`] = `${prop}px`
         }
       } else {
-        style[name] = `${element[name]}px`
+        style[`max-${name}`] = `${element[name]}px`
       }
     }
+
+    style['aspect-ratio'] = '1 / 1'
 
     treatProp('width')
     treatProp('height')

@@ -19680,7 +19680,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const is_table = isTableLike(leaf_comp)
     const is_svg = isSVGLike(leaf_comp)
 
-    const is_auto = is_canvas || is_svg || is_table
+    const is_auto = is_svg || is_table
 
     const temp_style = {
       position: 'relative',
