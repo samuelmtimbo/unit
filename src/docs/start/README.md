@@ -124,6 +124,9 @@ In Change Mode, clicking on an input or output will set it to constant or not.
 
 ![](/public/gif/start/25.gif)
 
+> [!NOTE]
+> When saving the current graph, only data in constant inputs will be persisted.
+
 ## Graph | Tree View
 
 To switch between Graph View or Tree View, click on the "circle or square" toggle close to the Search.
