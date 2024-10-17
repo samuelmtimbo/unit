@@ -35,16 +35,16 @@ export const COLOR_LINK_BLUE = '#1d62c9'
 export const COLOR_CHARTREUSE = '#dfff00'
 export const COLOR_LINK_CHARTREUSE = '#cddd00'
 
-export const COLOR_DARK_CHARTREUSE = '#d84315' // orange
-export const COLOR_DARK_LINK_CHARTREUSE = '#bf360c'
+export const COLOR_DARK_CHARTREUSE = '#4cccf6' // aquamarine
+export const COLOR_DARK_LINK_CHARTREUSE = '#3aabd4'
 
 export const COLOR_WHITE = '#ffffff'
 
 export const COLOR_YELLOW = '#ffcc00'
 export const COLOR_LINK_YELLOW = '#ffbb00'
 
-export const COLOR_DARK_YELLOW = '#ef6c00' // orange
-export const COLOR_DARK_LINK_YELLOW = '#e65100'
+export const COLOR_DARK_YELLOW = '#2299ff' // lightblue
+export const COLOR_DARK_LINK_YELLOW = '#1177dd'
 
 export const COLOR_NONE = '#00000000'
 
