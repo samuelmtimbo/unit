@@ -42207,18 +42207,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             return new_plug_node_id
           },
           datum: (datum_node_id: string) => {
-            const { datumId } = segmentDatumNodeId(datum_node_id)
-
-            const new_datum_id = map_datum_id[datumId]
-
-            if (new_datum_id) {
-              const new_datum_node_id = getDatumNodeId(new_datum_id)
-
-              new_node_id_map[selected_node_id] = new_datum_node_id
-
-              return new_datum_node_id
-            }
-
             return null
           },
           err: (err_node_id: string) => {
@@ -42226,6 +42214,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           },
         })
       })
+
+      const selected_datum_node_ids = selected_node_ids.filter(
+        (new_node_id) => {
+          return this._is_datum_node_id(new_node_id)
+        }
+      )
+
+      for (const datum_node_id of selected_datum_node_ids) {
+        const { datumId } = segmentDatumNodeId(datum_node_id)
+
+        const datum_pin_node_id = this._datum_to_pin[datum_node_id]
+
+        if (datum_pin_node_id) {
+          const new_datum_pin_node_id = new_node_id_map[datum_pin_node_id]
+
+          if (new_datum_pin_node_id) {
+            const new_datum_node_id = this._pin_to_datum[new_datum_pin_node_id]
+
+            if (new_datum_node_id) {
+              new_node_id_map[datum_node_id] = new_datum_node_id
+            }
+          }
+        }
+      }
 
       new_node_ids = new_node_ids.filter((n) => !!n)
 
