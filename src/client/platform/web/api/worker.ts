@@ -5,7 +5,7 @@ export function webWorker(window: Window, opt: BootOpt): API['worker'] {
   const worker = {
     start() {
       const { origin } = location
-      const url = `${origin}_worker.js`
+      const url = `${origin}/_worker.js`
       const worker = new Worker(url)
       return worker
     },
