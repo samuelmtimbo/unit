@@ -115,6 +115,12 @@ import {
   IB_METHOD_WATCH,
 } from '../types/interface/async/$IB'
 import {
+  IM_METHOD_CALL,
+  IM_METHOD_GET,
+  IM_METHOD_REF,
+  IM_METHOD_WATCH,
+} from '../types/interface/async/$IM'
+import {
   J_METHOD_CALL,
   J_METHOD_GET,
   J_METHOD_REF,
@@ -369,5 +375,11 @@ export const METHOD: AllKeys<AllTypes<any>, Record<MethodType, string[]>> = {
     call: ME_METHOD_CALL,
     watch: ME_METHOD_WATCH,
     ref: ME_METHOD_REF,
+  },
+  IM: {
+    get: IM_METHOD_GET,
+    call: IM_METHOD_CALL,
+    watch: IM_METHOD_WATCH,
+    ref: IM_METHOD_REF,
   },
 }
