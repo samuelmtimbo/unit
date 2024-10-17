@@ -38,7 +38,14 @@
 | <kbd>Shift</kbd> + <kbd>Arrow Left</kbd>          | Next Subgraph Left  |
 | <kbd>Shift</kbd> + <kbd>Arrow Right</kbd>         | Next Subgraph Right |
 
-\* <kbd>Ctrl</kbd> is optional, but required when typing on Search.
+\* <kbd>Ctrl</kbd> is optional, but required when the editor is not focused (e.g. typing on Search).
+
+## Escape
+
+<kbd>Escape</kbd> key can be used to get out of some focused states such as fullwindow or unlocked.
+
+> [!NOTE]
+> This default behavior can be disabled by the currently focused component.
 
 ## Pointer (Mouse, Touch, Pen)
 
