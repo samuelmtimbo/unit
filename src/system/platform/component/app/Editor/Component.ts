@@ -108,6 +108,7 @@ import {
   unitBundleSpec,
   unitBundleSpecById,
 } from '../../../../../bundle'
+import { DEFAULT_FONT_SIZE } from '../../../../../client/DEFAULT_FONT_SIZE'
 import { IOElement } from '../../../../../client/IOElement'
 import { MAX_Z_INDEX } from '../../../../../client/MAX_Z_INDEX'
 import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
@@ -19877,7 +19878,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _measure_sub_component_base = (
     sub_component_id: string,
-    base = this._get_sub_component_root_base(sub_component_id)
+    base = this._get_sub_component_root_base(sub_component_id),
+    offset = this._context_trait()
   ): void => {
     const {
       api: {
@@ -19897,6 +19899,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       const leaf_node = extractTrait(leaf_comp, measureText)
+
+      leaf_node.x -= offset.x
+      leaf_node.y -= offset.y
+
+      leaf_node.x /= offset.sx
+      leaf_node.y /= offset.sy
+
+      leaf_node.sx /= offset.sx
+      leaf_node.sy /= offset.sy
 
       this._leaf_frame_node[leaf_id] = leaf_node
     }
@@ -30848,6 +30859,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _context_trait(): LayoutNode {
+    const { $x, $y, $sx, $sy, $width, $height, $color } = this.$context
+
+    return {
+      x: $x,
+      y: $y,
+      sx: $sx,
+      sy: $sy,
+      width: $width,
+      height: $height,
+      opacity: 1,
+      color: hexToRgba($color),
+      fontSize: DEFAULT_FONT_SIZE,
+    }
+  }
+
   private _animate_enter_fullwindow = (
     sub_component_ids: string[],
     callback: Callback
@@ -30872,16 +30899,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { base } = this._get_sub_component_base_trait(sub_component_id)
 
       if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
-        this._measure_sub_component_base(sub_component_id)
-
-        for (const [leaf_path] of base) {
-          const leaf_id = joinPath(leaf_path)
-
-          const leaf_node = this._leaf_frame_node[leaf_id]
-
-          leaf_node.x -= layer_trait.x
-          leaf_node.y -= layer_trait.y
-        }
+        this._measure_sub_component_base(sub_component_id, base, layer_trait)
       }
 
       all_base = [...all_base, ...base]
@@ -31075,16 +31093,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const frame = this._get_sub_component_frame(sub_component_id)
 
       if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
-        this._measure_sub_component_base(sub_component_id, base)
-
-        for (const [leaf_path] of base) {
-          const leaf_id = joinPath([sub_component_id, ...leaf_path])
-
-          const leaf_node = this._leaf_frame_node[leaf_id]
-
-          leaf_node.x -= layer_trait.x
-          leaf_node.y -= layer_trait.y
-        }
+        this._measure_sub_component_base(sub_component_id, base, layer_trait)
       }
 
       const frame_trait = extractTrait(frame, measureText)
