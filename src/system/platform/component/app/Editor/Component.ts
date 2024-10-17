@@ -2,7 +2,7 @@ import { Graph } from '../../../../../Class/Graph'
 import { NOOP } from '../../../../../NOOP'
 import { Registry } from '../../../../../Registry'
 import { LayoutNode } from '../../../../../client/LayoutNode'
-import { addListeners } from '../../../../../client/addListener'
+import { addListener, addListeners } from '../../../../../client/addListener'
 import { Component } from '../../../../../client/component'
 import {
   parentClass,
@@ -18054,8 +18054,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_transcend_click = (): void => {
     if (this._core_component_unlocked_count > 0) {
       this._lock_all_component()
+
+      this.focus()
     } else if (this._unlocked_datum.size > 0) {
       this._lock_all_datum()
+
+      this.focus()
     } else {
       if (this._is_fullwindow) {
         this._leave_all_fullwindow(true)
