@@ -1,3 +1,4 @@
+import { nameToColor } from '../../../../../client/color'
 import { Field } from '../../../../../client/field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -24,6 +25,13 @@ export default class Color extends Field<HTMLInputElement, Props> {
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultStyle: DEFAULT_STYLE,
+      parseValue(value) {
+        if (value) {
+          value = nameToColor(value) ?? value
+        }
+
+        return value
+      },
     })
 
     const { value = '#000000', tabIndex = -1 } = $props

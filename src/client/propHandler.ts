@@ -94,11 +94,14 @@ export function stylePropHandler(
 export function inputPropHandler(
   element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
   VALUE_NAME: string,
-  DEFAULT_VALUE: any
+  DEFAULT_VALUE: any,
+  parseValue: (value: string) => string
 ): PropHandler {
   return {
     value: (value: any | undefined) => {
-      element[VALUE_NAME] = value || DEFAULT_VALUE
+      const value_ = parseValue(value)
+
+      element[VALUE_NAME] = value_ || DEFAULT_VALUE
     },
     min: (value: any | undefined) => {
       element[VALUE_NAME] = value
