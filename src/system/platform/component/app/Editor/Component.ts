@@ -18305,6 +18305,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._set_fullwindow_frame_off(_animate)
     }
 
+    this._unlisten_fullwindow_escape()
+    this._unlisten_fullwindow_escape = undefined
+
     this._cancel_fullwindow_animation()
 
     if (this._in_component_control) {
@@ -24297,6 +24300,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _fullwindow_focusing: boolean = false
 
+  private _unlisten_fullwindow_escape: Unlisten
+
   private _enter_fullwindow = (
     _animate: boolean,
     sub_component_ids: string[]
@@ -24317,6 +24322,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
+    this._unlisten_fullwindow_escape = addListener(
+      this._frame.$context,
+      makeKeydownListener((event) => {
+        const { key } = event
+
+        if (key === 'Escape') {
+          this._leave_all_fullwindow(_animate)
+        }
+      })
+    )
+
     const ordered_sub_component_ids =
       this._order_sub_component_ids(sub_component_ids)
 
@@ -24327,7 +24343,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._cancel_all_layout_sub_component_animation()
     this._cancel_fullwindow_animation()
 
+    if (!this._disabled) {
+      if (this._transcend) {
+        this._transcend.down(_animate)
+      }
+    }
+
     const was_focused = this._focused
+
+    this._frame.focus()
 
     if (this._in_component_control) {
       if (!this._is_component_framed) {
@@ -24367,6 +24391,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
                 if (is_last_sub_component) {
                   if (this._enabled()) {
+                    this._frame.focus()
+
                     const last_sub_component = this._get_sub_component(
                       last_sub_component_id
                     )
@@ -24414,12 +24440,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (!this._frame_out) {
       this._set_fullwindow_frame_on(_animate)
-    }
-
-    if (!this._disabled) {
-      if (this._transcend) {
-        this._transcend.down(_animate)
-      }
     }
 
     this.dispatchEvent('enter_fullwindow', {}, false)
