@@ -76,6 +76,7 @@ export type AllTypes<T> = {
   TD: T
   W: T
   ME: T
+  IM: T
 }
 
 export const ALL_TYPES_MAP: AllTypes<true> = {
@@ -109,6 +110,7 @@ export const ALL_TYPES_MAP: AllTypes<true> = {
   TD: true,
   W: true,
   ME: true,
+  IM: true
 }
 
 export const ALL_TYPES = Object.keys(ALL_TYPES_MAP)
