@@ -353,7 +353,13 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
 
   public up(animate: boolean = true) {
     // console.log('Transcend', 'up')
+
+    if (!this._down) {
+      return
+    }
+
     this._down = false
+
     mergePropStyle(this._icon, {
       transform: `rotate3d(1, 0, 0, 0deg)`,
       transition: animate ? `transform ${ANIMATION_T_S}s linear` : '',
@@ -362,6 +368,11 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
 
   public down(animate: boolean = true) {
     // console.log('Transcend', 'down')
+
+    if (this._down) {
+      return
+    }
+
     this._down = true
 
     mergePropStyle(this._icon, {
