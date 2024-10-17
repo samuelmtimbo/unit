@@ -25,6 +25,7 @@ export default class Color extends Field<HTMLInputElement, Props> {
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultStyle: DEFAULT_STYLE,
+      defaultValue: $system.color,
       parseValue(value) {
         if (value) {
           value = nameToColor(value) ?? value
@@ -34,7 +35,7 @@ export default class Color extends Field<HTMLInputElement, Props> {
       },
     })
 
-    const { value = '#000000', tabIndex = -1 } = $props
+    const { value = $system.color, tabIndex = -1 } = $props
 
     this.$element.value = value
     this.$element.type = 'color'
