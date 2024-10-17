@@ -181,10 +181,8 @@ export function colorToHex(color: string): string {
     hex = color
   } else if (isRgbaString(color)) {
     hex = rgbaStringToHex(color)
-  } else if (nameToColor(color)) {
-    hex = nameToColor(color)
   } else {
-    //
+    hex = nameToColor(color) ?? color
   }
 
   return hex

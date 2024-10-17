@@ -47,6 +47,7 @@ export class Field<
       defaultStyle?: Style
       defaultValue?: any
       processValue?: ($element: E, value: string) => any
+      parseValue?: (value: string) => any
       propHandlers?: Dict<(value: any) => void>
     }
   ) {
@@ -57,6 +58,7 @@ export class Field<
       defaultStyle,
       defaultValue = '',
       processValue = ($element, value) => value,
+      parseValue,
     } = opt
 
     let { style = {}, value = defaultValue } = $props
@@ -89,11 +91,14 @@ export class Field<
         ? inputPropHandler(
             this.$element as HTMLInputElement,
             valueKey,
-            defaultValue
+            defaultValue,
+            parseValue
           )
         : {
             value: (value: any | undefined) => {
-              this.$element[valueKey] = value ?? ''
+              const value_ = parseValue(value)
+
+              this.$element[valueKey] = value_ ?? ''
             },
           }),
     }
