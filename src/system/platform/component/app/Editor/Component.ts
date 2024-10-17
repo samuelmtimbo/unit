@@ -1262,7 +1262,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       this._frame = frame
       this._frame_out = frame_out
 
-      this.$ref['foreground'] = this._frame
+      this.$ref['foreground'] =
+        findRef(this._frame, 'foreground') ?? this._frame
 
       this._editor.setProp('frame', this._frame)
       this._editor.setProp('frameOut', this._frame_out)
@@ -19896,15 +19897,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const leaf_node = extractTrait(leaf_comp, measureText)
 
-      leaf_node.x -= this.$context.$x
-      leaf_node.y -= this.$context.$y
-
-      leaf_node.x /= this.$context.$sx
-      leaf_node.y /= this.$context.$sy
-
-      leaf_node.sx /= this.$context.$sx
-      leaf_node.sy /= this.$context.$sy
-
       this._leaf_frame_node[leaf_id] = leaf_node
     }
   }
@@ -30867,12 +30859,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     let all_base = []
 
+    const layer = this._get_fullwindow_foreground()
+
+    let layer_trait = extractTrait(layer, measureText)
+
     for (const sub_component_id of sub_component_ids) {
+      const { base } = this._get_sub_component_base_trait(sub_component_id)
+
       if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
         this._measure_sub_component_base(sub_component_id)
-      }
 
-      const { base } = this._get_sub_component_base_trait(sub_component_id)
+        for (const [leaf_path] of base) {
+          const leaf_id = joinPath(leaf_path)
+
+          const leaf_node = this._leaf_frame_node[leaf_id]
+
+          leaf_node.x -= layer_trait.x
+          leaf_node.y -= layer_trait.y
+        }
+      }
 
       all_base = [...all_base, ...base]
     }
@@ -30894,8 +30899,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     let i = 0
 
     const all_abort: Unlisten[] = []
-
-    const layer = this._get_fullwindow_foreground()
 
     this._leaf_layer_offset_x = 0
     this._leaf_layer_offset_y = 0
@@ -30983,11 +30986,29 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             )
           }
 
+          const layer_trait = extractTrait(layer, measureText)
+          const frame_trait = extractTrait(this._frame, measureText)
+
+          let offset_x = this._frame_out ? frame_trait.x : 0
+          let offset_y = this._frame_out ? frame_trait.y : 0
+
           const _trait = all_trait[leaf_id]
+
+          const trait = {
+            x: _trait.x - layer_trait.x + offset_x,
+            y: _trait.y - layer_trait.y + offset_y,
+            width: _trait.width,
+            height: _trait.height,
+            sx: _trait.sx,
+            sy: _trait.sy,
+            opacity: _trait.opacity,
+            fontSize: _trait.fontSize,
+            color: _trait.color,
+          }
 
           i = (i + 1) % leaf_total
 
-          return _trait
+          return trait
         },
         () => {
           sub_component_end_count++
@@ -31039,14 +31060,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const parent_frame_style = {}
     const parent_frame_trait = {}
 
-    for (const sub_component_id of sub_component_ids) {
-      if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
-        this._measure_sub_component_base(sub_component_id)
-      }
+    const layer = this._get_fullwindow_foreground()
 
+    const layer_trait = extractTrait(layer, measureText)
+
+    for (const sub_component_id of sub_component_ids) {
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
       const base = this._get_sub_component_root_base(sub_component_id)
       const frame = this._get_sub_component_frame(sub_component_id)
+
+      if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
+        this._measure_sub_component_base(sub_component_id, base)
+
+        for (const [leaf_path] of base) {
+          const leaf_id = joinPath([sub_component_id, ...leaf_path])
+
+          const leaf_node = this._leaf_frame_node[leaf_id]
+
+          leaf_node.x -= layer_trait.x
+          leaf_node.y -= layer_trait.y
+        }
+      }
 
       const frame_trait = extractTrait(frame, measureText)
       const frame_style = extractStyle(frame, frame_trait, measureText)
@@ -31121,14 +31155,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           []
         )
 
+        const layer_trait = extractTrait(layer, measureText)
+
         for (const leaf_id in parent_base_trait) {
           const leaf_trait = parent_base_trait[leaf_id]
 
           all_trait[leaf_id] = {
-            x: (leaf_trait.x - this.$context.$x) / this.$context.$sx,
-            y: (leaf_trait.y - this.$context.$y) / this.$context.$sy,
-            width: leaf_trait.width / this.$context.$sx,
-            height: leaf_trait.height / this.$context.$sy,
+            x: (leaf_trait.x - layer_trait.x) / layer_trait.sx,
+            y: (leaf_trait.y - layer_trait.y) / layer_trait.sy,
+            width: leaf_trait.width / layer_trait.sx,
+            height: leaf_trait.height / layer_trait.sy,
             sx: leaf_trait.sx,
             sy: leaf_trait.sy,
             opacity: leaf_trait.opacity,
@@ -31845,13 +31881,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (!slot_leaf_trait) {
         slot_leaf_trait = extractTrait(child_base_slot, measureText)
 
+        slot_leaf_trait.sx /= this.$context.$sx
+        slot_leaf_trait.sy /= this.$context.$sy
+
         slot_leaf_trait.x -= this.$context.$x
         slot_leaf_trait.y -= this.$context.$y
 
-        slot_leaf_trait.x +=
-          ((Math.abs(slot_leaf_trait.sx) - 1) * slot_leaf_trait.width) / 2
-        slot_leaf_trait.y +=
-          ((Math.abs(slot_leaf_trait.sy) - 1) * slot_leaf_trait.height) / 2
+        slot_leaf_trait.x /= this.$context.$sx
+        slot_leaf_trait.y /= this.$context.$sy
       }
 
       const slot_leaf_style = extractStyle(
