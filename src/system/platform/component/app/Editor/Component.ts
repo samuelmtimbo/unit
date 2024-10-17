@@ -4121,29 +4121,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._plunk_pod()
   }
 
-  private _component_unlisten: Unlisten
+  private _sub_component_escape_unlisten: Unlisten
 
-  private _listen_component = () => {
-    // console.log('Graph', '_listen_component')
+  private _listen_sub_component_escape = (sub_component_id: string) => {
+    // console.log('Graph', '_listen_sub_component_escape', sub_component_id)
 
-    this._component_unlisten = this._frame.addEventListeners([
-      makeShortcutListener([
-        {
-          combo: 'Escape',
-          keydown: this._on_component_escape_keydown,
-          strict: false,
-        },
-      ]),
-    ])
+    const sub_component_frame = this._get_sub_component_frame(sub_component_id)
+
+    this._sub_component_escape_unlisten = addListener(
+      sub_component_frame.$$context,
+      makeKeydownListener((event) => {
+        const { key } = event
+
+        if (key === 'Escape') {
+          this._lock_sub_component(sub_component_id)
+
+          this.focus()
+        }
+      })
+    )
   }
 
-  private _on_component_escape_keydown = () => {
-    // console.log('Graph', '_on_component_escape_keydown')
-  }
-
-  private _unlisten_component = () => {
-    this._component_unlisten()
-    this._component_unlisten = undefined
+  private _unlisten_sub_component_escape = () => {
+    this._sub_component_escape_unlisten()
+    this._sub_component_escape_unlisten = undefined
   }
 
   onMount() {
@@ -23311,6 +23312,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         core_area.$element.style.display = 'none'
 
         this._enable_core_text_selection(unit_id)
+
+        this._listen_sub_component_escape(unit_id)
       }
 
       this._unlock_node(unit_id)
@@ -23418,6 +23421,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._show_transcend(animate)
       }
     }
+
+    this._unlisten_sub_component_escape()
 
     const core_area = this._core_area[unit_id]
 
@@ -59350,10 +59355,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         graph.setProp('frame', this._frame)
       }
     } else if (prop === 'component') {
-      if (this._component) {
-        this._unlisten_component()
-      }
-
       if (this._is_fullwindow) {
         this._leave_component_frame()
       }
