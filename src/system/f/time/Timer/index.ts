@@ -1,5 +1,6 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
+import { APINotSupportedError } from '../../../../exception/APINotImplementedError'
 import { System } from '../../../../system'
 import { ID_TIMER } from '../../../_ids'
 
@@ -32,6 +33,10 @@ export default class Timer extends Functional<I, O> {
         window: { setTimeout },
       },
     } = this.__system
+
+    if (!setTimeout) {
+      throw new APINotSupportedError('setTimeout')
+    }
 
     // @ts-ignore
     this._timer = setTimeout(() => {
