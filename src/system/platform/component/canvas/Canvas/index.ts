@@ -1,11 +1,12 @@
 import { ElementEE, Element_ } from '../../../../../Class/Element'
+import { draw } from '../../../../../client/canvas/draw'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { CA } from '../../../../../types/interface/CA'
 import { ID_CANVAS } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import { Style } from '../../../Style'
-import CanvasComp from './Component'
+import CanvasComp, { clearCanvas } from './Component'
 
 export interface I {
   style?: Style
@@ -27,6 +28,9 @@ export default class Canvas
 {
   __ = ['U', 'C', 'V', 'J', 'CA', 'EE']
 
+  private _canvas: OffscreenCanvas
+  private _ctx: OffscreenCanvasRenderingContext2D
+
   constructor(system: System) {
     super(
       {
@@ -40,15 +44,28 @@ export default class Canvas
       ID_CANVAS
     )
 
+    const {
+      api: {
+        window: { OffscreenCanvas },
+        document: {},
+      },
+    } = system
+
     this._state = {
       d: [],
     }
 
-    this._component = new CanvasComp({}, this.__system)
+    if (OffscreenCanvas) {
+      this._canvas = new OffscreenCanvas(200, 200)
+
+      this._ctx = this._canvas.getContext('2d')
+    }
   }
 
   async clear(): Promise<void> {
-    this._component.clear()
+    if (this._ctx) {
+      clearCanvas(this._ctx)
+    }
 
     this.set('d', [])
 
@@ -66,7 +83,9 @@ export default class Canvas
   ): Promise<void> {
     // console.log('drawImage', imageBitmap, x, y, width, height)
 
-    this._component.drawImage(imageBitmap, x, y, width, height)
+    if (this._ctx) {
+      this._ctx.drawImage(imageBitmap, x, y, width, height)
+    }
 
     this.emit('call', {
       method: 'drawImage',
@@ -75,25 +94,33 @@ export default class Canvas
   }
 
   strokePath(d: string): void {
-    this._component.strokePath(d)
+    // if (this._ctx) {
+    //   this._ctx.strokePath(d)
+    // }
 
     this.emit('call', { method: 'strokePath', data: [d] })
   }
 
   fillPath(d: string, fillRule: CanvasFillRule): void {
-    this._component.fillPath(d, fillRule)
+    // if (this._ctx) {
+    //   this._ctx.fillPath(d, fillRule)
+    // }
 
     this.emit('call', { method: 'fillPath', data: [d, fillRule] })
   }
 
   scale(sx: number, sy: number): void {
-    this._component.scale(sx, sy)
+    if (this._ctx) {
+      this._ctx.scale(sx, sy)
+    }
 
     this.emit('call', { method: 'scale', data: [sx, sy] })
   }
 
   translate(x: number, y: number): void {
-    this._component.translate(x, y)
+    if (this._ctx) {
+      this._ctx.translate(x, y)
+    }
 
     this.emit('call', { method: 'translate', data: [x, y] })
   }
@@ -105,7 +132,9 @@ export default class Canvas
     this._input.d.pull()
     this._backwarding = false
 
-    this._component.draw(step)
+    if (this._ctx) {
+      draw(this._ctx, step)
+    }
 
     this.emit('call', { method: 'draw', data: [step] })
 
@@ -162,7 +191,9 @@ export default class Canvas
     width: number,
     height: number
   ): Promise<void> {
-    this._component.putImageData(image, dx, dy, x, y, width, height)
+    if (this._ctx) {
+      this._ctx.putImageData(image, dx, dy, x, y, width, height)
+    }
 
     this.emit('call', {
       method: 'putImageData',
@@ -175,11 +206,15 @@ export default class Canvas
 
     switch (name) {
       case 'width':
-        this._component.setProp('width', data)
+        if (this._canvas) {
+          this._canvas.width = data
+        }
 
         break
       case 'height':
-        this._component.setProp('height', data)
+        if (this._canvas) {
+          this._canvas.height = data
+        }
 
         break
     }
