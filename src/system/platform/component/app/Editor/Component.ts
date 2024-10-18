@@ -4241,6 +4241,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public onUnmount(): void {
     // console.log('Graph', 'onUnmount', this._id)
 
+    const {
+      api: {
+        animation: { cancelAnimationFrame },
+      },
+    } = this.$system
+
     this._disable_input()
     this._context_unlisten()
     this._stop_graph_simulation()
@@ -4253,6 +4259,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._transcend = null
 
     this._minimap_hidden = undefined
+
+    if (this._center_graph_frame !== undefined) {
+      cancelAnimationFrame(this._center_graph_frame)
+
+      this._center_graph_frame = undefined
+    }
   }
 
   public get_subraph_depth = (): number => {
@@ -5290,6 +5302,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _fetching_bundle: boolean = false
 
+  private _center_graph_frame: number
+
   private _reset_spec = (): void => {
     const { parent, injectSpecs } = this.$props
 
@@ -5812,8 +5826,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._set_zoom(zoom)
 
     if (this._node_count > 0) {
-      requestAnimationFrame(() => {
+      this._center_graph_frame = requestAnimationFrame(() => {
         this._center_graph(true)
+
+        this._center_graph_frame = undefined
       })
 
       this._start_graph_simulation(LAYER_NONE)
