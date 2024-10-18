@@ -243,6 +243,7 @@ export type API = {
       new (format: CompressionFormat): DecompressionStream
     }
     ReadableStream: ReadableStream
+    OffscreenCanvas: typeof OffscreenCanvas
     open: (url: string, target: string, features: string) => Window
     getComputedStyle: (element: Element) => CSSStyleDeclaration
     setTimeout(callback: () => any, ms: number): any
