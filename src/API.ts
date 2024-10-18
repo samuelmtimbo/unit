@@ -229,12 +229,12 @@ export type API = {
     localStorage: Storage
     sessionStorage: Storage
     Notification: typeof Notification
-    AudioContext: AudioContext
-    OscillatorNode: OscillatorNode
-    MediaStreamAudioSourceNode: MediaStreamAudioSourceNode
-    AnalyserNode: AnalyserNode
-    GainNode: GainNode
-    DelayNode: DelayNode
+    AudioContext: typeof AudioContext
+    OscillatorNode: typeof OscillatorNode
+    MediaStreamAudioSourceNode: typeof MediaStreamAudioSourceNode
+    AnalyserNode: typeof AnalyserNode
+    GainNode: typeof GainNode
+    DelayNode: typeof DelayNode
     ImageCapture: ImageCapture
     Audio: { new (): HTMLAudioElement }
     Image: { new (): HTMLImageElement }
@@ -242,7 +242,7 @@ export type API = {
     DecompressionStream: {
       new (format: CompressionFormat): DecompressionStream
     }
-    ReadableStream: ReadableStream
+    ReadableStream: typeof ReadableStream
     OffscreenCanvas: typeof OffscreenCanvas
     open: (url: string, target: string, features: string) => Window
     getComputedStyle: (element: Element) => CSSStyleDeclaration

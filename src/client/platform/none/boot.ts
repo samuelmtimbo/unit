@@ -1,40 +1,17 @@
-import { API, BasicHTTPHandler } from '../API'
-import { LayoutNode } from '../client/LayoutNode'
-import { Theme } from '../client/theme'
-import { APINotSupportedError } from '../exception/APINotImplementedError'
-import { DisplayMediaAPINotSupported } from '../exception/DisplayMediaAPINotSupported'
-import { MediaDevicesAPINotSupported } from '../exception/MediaDeviceAPINotSupported'
-import { MethodNotImplementedError } from '../exception/MethodNotImplementedError'
-import { Style } from '../system/platform/Style'
-import { Dict } from '../types/Dict'
-import { Unlisten } from '../types/Unlisten'
-import { DownloadDataOpt } from '../types/global/DownloadData'
-import { DownloadURLOpt } from '../types/global/DownloadURL'
+import { API, BasicHTTPHandler } from '../../../API'
+import { APINotSupportedError } from '../../../exception/APINotImplementedError'
+import { DisplayMediaAPINotSupported } from '../../../exception/DisplayMediaAPINotSupported'
+import { MediaDevicesAPINotSupported } from '../../../exception/MediaDeviceAPINotSupported'
+import { MethodNotImplementedError } from '../../../exception/MethodNotImplementedError'
+import { Style } from '../../../system/platform/Style'
+import { Dict } from '../../../types/Dict'
+import { Unlisten } from '../../../types/Unlisten'
+import { DownloadDataOpt } from '../../../types/global/DownloadData'
+import { DownloadURLOpt } from '../../../types/global/DownloadURL'
+import { LayoutNode } from '../../LayoutNode'
+import { Theme } from '../../theme'
 
-export function noStorage(name: string): Storage {
-  const storage: Storage = {
-    length: 0,
-    getItem(key: string): string | null {
-      throw new APINotSupportedError(name)
-    },
-    removeItem(key: string): void {
-      throw new APINotSupportedError(name)
-    },
-    setItem(key: string, value: string): void {
-      throw new APINotSupportedError(name)
-    },
-    clear(): void {
-      throw new APINotSupportedError(name)
-    },
-    key: function (index: number): string {
-      throw new APINotSupportedError(name)
-    },
-  }
-
-  return storage
-}
-
-export function noHost(): API {
+export function noneApi(): API {
   const api: API = {
     selection: {
       containsSelection: () => {
@@ -268,6 +245,7 @@ export function noHost(): API {
       Notification: undefined,
       Image: undefined,
       Audio: undefined,
+      OffscreenCanvas: undefined,
       getComputedStyle: function (element: Element): CSSStyleDeclaration {
         throw new MethodNotImplementedError()
       },

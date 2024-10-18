@@ -24,7 +24,7 @@ export interface O<T> {
 }
 
 export default class Editor<T> extends Element_<I<T>, O<T>> {
-  __ = ['U', 'C', 'V', 'J', 'G']
+  __ = ['U', 'C', 'V', 'J', 'G', 'EE']
 
   private _fallback_graph: Graph
 

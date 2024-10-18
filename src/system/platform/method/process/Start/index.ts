@@ -6,6 +6,7 @@ import { GraphBundle } from '../../../../../types/GraphClass'
 import { GraphSpec } from '../../../../../types/GraphSpec'
 import { $Graph } from '../../../../../types/interface/async/$Graph'
 import { $S } from '../../../../../types/interface/async/$S'
+import { UCGEE } from '../../../../../types/interface/UCGEE'
 import { weakMerge } from '../../../../../weakMerge'
 import { $wrap } from '../../../../../wrap'
 import { ID_START } from '../../../../_ids'
@@ -64,7 +65,7 @@ export default class Start extends Holder<I, O> {
       weakMerge(__bundle.specs, this.__system.specs)
     )
 
-    const _ = ['G', 'C', 'U']
+    const _ = UCGEE
 
     const $graph = system.$newGraph({ bundle, _ })
 
