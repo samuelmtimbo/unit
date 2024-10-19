@@ -30899,6 +30899,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { base } = this._get_sub_component_base_trait(sub_component_id)
 
       if (!this._animating_sub_component_fullwindow.has(sub_component_id)) {
+        const base = this._get_sub_component_root_base(sub_component_id)
+
         this._measure_sub_component_base(sub_component_id, base, layer_trait)
       }
 
