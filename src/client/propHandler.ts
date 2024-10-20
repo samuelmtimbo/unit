@@ -1,5 +1,6 @@
 import { Style } from '../system/platform/Style'
 import { Dict } from '../types/Dict'
+import { identity } from '../util/identity'
 import { mergeAttr } from './attr'
 import { Component } from './component'
 import { applyDynamicStyle, applyStyle } from './style'
@@ -95,7 +96,7 @@ export function inputPropHandler(
   element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
   VALUE_NAME: string,
   DEFAULT_VALUE: any,
-  parseValue: (value: string) => string
+  parseValue: (value: string) => string = identity
 ): PropHandler {
   return {
     value: (value: any | undefined) => {

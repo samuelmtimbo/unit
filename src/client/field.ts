@@ -58,7 +58,7 @@ export class Field<
       defaultStyle,
       defaultValue = '',
       processValue = ($element, value) => value,
-      parseValue,
+      parseValue = identity,
     } = opt
 
     let { style = {}, value = defaultValue } = $props
