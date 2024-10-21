@@ -20253,47 +20253,39 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _reflect_sub_component_base_trait = (
-    root_prefix: string,
     sub_component_id: string,
     base: LayoutBase,
     style: Style,
     trait: LayoutNode,
-    expand: boolean,
-    path: number[]
+    expand: boolean
   ): Dict<LayoutNode> => {
     const sub_component = this._get_sub_component(sub_component_id)
 
     return this.__reflect_sub_component_base_trait(
-      root_prefix,
       sub_component_id,
       sub_component,
       base,
       style,
       trait,
-      expand,
-      path
+      expand
     )
   }
 
   private __reflect_sub_component_base_trait = (
-    root_prefix: string,
     sub_component_id: string,
     component: Component,
     base: LayoutBase,
     style: Style,
     trait: LayoutNode,
-    expand: boolean,
-    path: number[]
+    expand: boolean
   ): Dict<LayoutNode> => {
     const base_trait = this.___reflect_sub_component_base_trait(
-      root_prefix,
       sub_component_id,
       component,
       base,
       style,
       trait,
-      expand,
-      path
+      expand
     )
 
     const _base_trait = mapObjKeyKV(
@@ -20316,12 +20308,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } = this.$system
 
     if (isTextLike(leaf_comp)) {
-      const trait_ =
-        (leaf_comp.$slotParent &&
-          extractTrait(leaf_comp.$slotParent, measureText)) ||
-        trait
-
-      return extractStyle(leaf_comp, trait_, measureText)
+      //
     } else if (this._leaf_style[leaf_id]) {
       let leaf_style = this._leaf_style[leaf_id]
 
@@ -20332,18 +20319,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private ___reflect_sub_component_base_trait = (
-    root_prefix: string,
     sub_component_id: string,
     component: Component,
     base: LayoutBase,
     style: Style,
     trait: LayoutNode,
-    expand: boolean,
-    path: number[]
+    expand: boolean
   ): Dict<LayoutNode> => {
     const base_trait = reflectComponentBaseTrait(
       this._component,
-      root_prefix,
       sub_component_id,
       component,
       base,
@@ -20352,8 +20336,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       (leaf_id, leaf_comp) => {
         return this._extract_style(trait, leaf_id, leaf_comp)
       },
-      expand,
-      path
+      expand
     )
 
     return base_trait
@@ -20687,13 +20670,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const style = extractStyle(frame, trait, measureText)
 
           all_leaf_trait = this._reflect_sub_component_base_trait(
-            '',
             sub_component_id,
             leaf_base,
             style,
             trait,
-            expand_children,
-            path
+            expand_children
           )
         }
 
@@ -20856,7 +20837,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             slot_name,
             slot_children,
             false,
-            0,
             async () => {
               visible_parent_root_slot_finished[sub_component_id]++
 
@@ -20935,13 +20915,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 )
 
                 all_leaf_trait = this._reflect_sub_component_base_trait(
-                  '',
                   sub_component_id,
                   leaf_base,
                   frame_style,
                   trait,
-                  false,
-                  []
+                  false
                 )
               }
 
@@ -26469,12 +26447,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             base_trait = this._reflect_sub_component_base_trait(
               sub_component_id,
-              sub_component_id,
               base,
               style,
               trait,
-              true,
-              []
+              false
             )
           }
 
@@ -29348,20 +29324,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const trait = extractTrait(frame, measureText)
       const style = extractStyle(frame, trait, measureText)
 
-      let base_trait = this._reflect_sub_component_base_trait(
-        '',
-        sub_component_id,
-        base,
-        style,
-        trait,
-        true,
-        []
-      )
-
-      const base_length = base.length
-
-      i = 0
-
       if (!this._animating_sub_component_base_id.has(sub_component_id)) {
         this._plug_sub_component_base(
           sub_component_id,
@@ -29370,6 +29332,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           leaf_layer
         )
       }
+
+      let base_trait = this._reflect_sub_component_base_trait(
+        sub_component_id,
+        base,
+        style,
+        trait,
+        false
+      )
+
+      const base_length = base.length
+
+      i = 0
 
       this._abort_sub_component_enter_base_animation[sub_component_id] =
         this._plug_animate_sub_component_base(
@@ -29383,13 +29357,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               const frame_style = extractStyle(frame, trait, measureText)
 
               base_trait = this._reflect_sub_component_base_trait(
-                '',
                 sub_component_id,
                 base,
                 frame_style,
                 trait,
-                false,
-                []
+                false
               )
             }
 
@@ -31015,13 +30987,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
             all_trait = this.___reflect_sub_component_base_trait(
               '',
-              '',
               this._component,
               all_base,
               style,
               trait,
-              true,
-              []
+              true
             )
           }
 
@@ -31176,13 +31146,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const style = extractStyle(frame, trait, measureText)
 
         const parent_base_trait = this._reflect_sub_component_base_trait(
-          '',
           sub_component_id,
           base,
           style,
           trait,
-          true,
-          []
+          true
         )
 
         const layer_trait = extractTrait(layer, measureText)
@@ -31560,7 +31528,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       true,
       offset,
       include_scroll,
-      0,
       callback
     )
   }
@@ -31574,7 +31541,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     should_expand_slot: boolean,
     offset: () => Point,
     include_scroll: () => boolean,
-    depth: number,
     callback: Callback
   ) => {
     const frame = () => {
@@ -31585,8 +31551,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         target,
         should_expand_slot,
         offset,
-        include_scroll,
-        depth
+        include_scroll
       )
 
       if (
@@ -31655,7 +31620,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     slot_name: string,
     children: string[],
     expand: boolean,
-    depth: number,
     callback: Callback
   ): Callback => {
     // console.log(
@@ -31688,7 +31652,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       expand,
       () => ({ x: 0, y: 0 }),
       () => true,
-      depth,
       callback
     )
   }
@@ -31698,7 +31661,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     slot_name: string,
     children: string[],
     expand: boolean,
-    depth: number,
     callback: Callback
   ): Unlisten => {
     // console.log(
@@ -31722,7 +31684,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       slot_name,
       children,
       expand,
-      depth,
       callback
     )
   }
@@ -31817,8 +31778,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     callback: (leaf_id: string, ended: boolean) => void,
     should_expand_slot: boolean = true,
     offset: () => Point,
-    include_scroll: () => boolean,
-    depth: number
+    include_scroll: () => boolean
   ) => {
     const {
       api: {
@@ -32025,20 +31985,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         slot_base_style,
         [],
         (path) => {
-          if (should_expand_slot) {
-            const children_style = expandSlot(
-              this._component,
-              slot_id,
-              path.slice(depth),
-              (leaf_id, leaf_comp) => {
-                return this._extract_style(slot_trait, leaf_id, leaf_comp)
-              }
-            )
+          const children_style = expandSlot(
+            this._component,
+            slot_id,
+            path,
+            should_expand_slot,
+            (leaf_id, leaf_comp) => {
+              return this._extract_style(slot_trait, leaf_id, leaf_comp)
+            }
+          )
 
-            return children_style
-          } else {
-            return []
-          }
+          return children_style
         }
       )
 
@@ -32063,8 +32020,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     target: Dict<Component>,
     should_expand_slot: boolean,
     offset: () => Point,
-    include_scroll: () => boolean,
-    depth: number
+    include_scroll: () => boolean
   ) => {
     return this._tick_animate_layout_move_children(
       pack,
@@ -32091,8 +32047,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
       should_expand_slot,
       offset,
-      include_scroll,
-      depth
+      include_scroll
     )
   }
 
@@ -32781,7 +32736,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           slot_name,
           children,
           true,
-          1,
           () => {
             this._end_layout_sub_component_transfer_children_animation(
               parent_id,
@@ -35560,8 +35514,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       sub_component_id,
       'default',
       children,
-      true,
-      1,
+      false,
       async () => {
         if (this._layout_layer_opacity_animation[sub_component_id]) {
           await waitFinish(
@@ -39490,7 +39443,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           'default',
           children,
           true,
-          0,
           () => {
             this._end_layout_sub_component_transfer_children_animation(
               unit_id,

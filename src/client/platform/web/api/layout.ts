@@ -176,7 +176,10 @@ export function webLayout(window: Window, opt: BootOpt): API['layout'] {
 
         let color: RGBA
 
-        if (computedStyle.color) {
+        if (
+          computedStyle.color &&
+          computedStyle.color !== 'rgb(255, 255, 255)'
+        ) {
           const hex: string = colorToHex(computedStyle.color)
 
           color = (hex && hexToRgba(hex)) || parentTrait.color
