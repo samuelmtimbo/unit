@@ -50,11 +50,9 @@ export function reactToFrameSize(
       unlistenContext = NOOP
     }
 
-    if (component.$mounted) {
-      addContextListener()
+    addContextListener()
 
-      immediateResize()
-    }
+    immediateResize()
 
     unlistenComponent = component.addEventListeners([
       makeCustomListener('mount', () => {

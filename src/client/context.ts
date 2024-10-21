@@ -84,7 +84,6 @@ export function mount($context: Context): void {
 }
 
 export function unmount($context: Context): void {
-  // console.log('unmount')
   $context.$mounted = false
 
   const { $element, $positionObserver, $resizeObserver } = $context

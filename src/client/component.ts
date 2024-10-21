@@ -109,7 +109,11 @@ export class Component<
 
   public $ref: Dict<Component<any>> = {}
 
-  public $context: Context
+  private _$context: Context
+
+  public get $context(): Context {
+    return this._$context ?? this.$system.context[0]
+  }
 
   public $connected: boolean = false
   public $unit: U
@@ -245,8 +249,8 @@ export class Component<
   }
 
   dispatchContextEvent(type: string, data: any = {}) {
-    if (this.$context) {
-      dispatchContextEvent(this.$context, type, data)
+    if (this._$context) {
+      dispatchContextEvent(this._$context, type, data)
     }
   }
 
@@ -603,13 +607,13 @@ export class Component<
 
       leafComp.$slotParent = hostTarget
 
-      leafComp.mount(hostTarget.$context)
+      leafComp.mount(hostTarget._$context)
 
       leafFrames.push(leafFrame)
 
       const { x: scrollX0, y: scrollY0 } = getScrollPosition(
         hostTarget.$element,
-        hostTarget.$context.$element
+        hostTarget._$context.$element
       )
 
       const abortAnimation = animateSimulate(
@@ -622,7 +626,7 @@ export class Component<
         ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
           const { x: scrollX, y: scrollY } = getScrollPosition(
             hostTarget.$element,
-            hostTarget.$context.$element
+            hostTarget._$context.$element
           )
 
           const scrollDx = scrollX - scrollX0
@@ -630,13 +634,13 @@ export class Component<
 
           leafFrame.style.left = `${
             x -
-            (reverse ? this.$context.$x : hostTrait.x) +
+            (reverse ? this._$context.$x : hostTrait.x) +
             ((Math.abs(sx) - 1) * width) / 2 -
             scrollDx
           }px`
           leafFrame.style.top = `${
             y -
-            (reverse ? this.$context.$y : hostTrait.y) +
+            (reverse ? this._$context.$y : hostTrait.y) +
             ((Math.abs(sy) - 1) * height) / 2 -
             scrollDy
           }px`
@@ -767,7 +771,7 @@ export class Component<
     }
 
     this.$detachedSlotParent = this.$slotParent
-    this.$detachedContext = this.$context
+    this.$detachedContext = this._$context
 
     let index = 0
     if (this.$rootParent) {
@@ -775,7 +779,7 @@ export class Component<
     } else if (this.$parent) {
       index = this.$parent.$parentRoot.indexOf(this)
     } else {
-      index = this.$context.$children.indexOf(this)
+      index = this._$context.$children.indexOf(this)
     }
 
     this.$returnIndex = index
@@ -831,7 +835,7 @@ export class Component<
         //
       }
 
-      leafComp.mount(this.$parent.$context)
+      leafComp.mount(this.$parent._$context)
     }
 
     if (animate) {
@@ -995,7 +999,7 @@ export class Component<
   }
 
   public mountChild(child: Component, commit: boolean = true): void {
-    child.mount(this.$context, commit)
+    child.mount(this._$context, commit)
   }
 
   public unmountDescendent(child: Component): void {
@@ -1044,14 +1048,14 @@ export class Component<
     }
   }
 
-  mount($context: Context, commit: boolean = true): void {
+  mount(_$context: Context, commit: boolean = true): void {
     // console.log(this.constructor.name, 'mount')
 
     if (this.$mounted) {
       throw new Error('cannot mount a mounted component')
     }
 
-    this.$context = $context
+    this._$context = _$context
     this.$mounted = true
 
     this._forAllMountDescendent((child) => {
@@ -1078,7 +1082,7 @@ export class Component<
       throw new Error('cannot unmount unmounted component')
     }
 
-    const $context = this.$context
+    const _$context = this._$context
 
     this._forAllMountDescendent((child) => {
       if (child.$detached) {
@@ -1090,9 +1094,9 @@ export class Component<
 
     this.$mounted = false
 
-    this.$context = null
+    this._$context = null
 
-    this.onUnmount($context)
+    this.onUnmount(_$context)
 
     if (this.isBase()) {
       this.dispatchEvent('unmount', {}, false)
@@ -1277,10 +1281,6 @@ export class Component<
   }
 
   getElementPosition() {
-    if (!this.$mounted) {
-      throw new Error('cannot calculate position of unmounted component')
-    }
-
     const context_position = {
       x: this.$context.$x,
       y: this.$context.$y,
@@ -1313,11 +1313,7 @@ export class Component<
       if (this.$slotParent) {
         return this.$slotParent.getColor()
       } else {
-        if (this.$mounted) {
-          return hexToRgba(this.$context.$color)
-        } else {
-          return hexToRgba(this.$system.color)
-        }
+        return hexToRgba(this.$context.$color)
       }
     }
 
@@ -1523,30 +1519,26 @@ export class Component<
   }
 
   getBoundingClientRect(): Rect {
-    if (this.$context) {
-      if (!this.$primitive) {
-        throw new Error('cannot calculate position of multiple elements.')
-      }
+    if (!this.$primitive) {
+      throw new Error('cannot calculate position of multiple elements.')
+    }
 
-      if (this.$node instanceof Text) {
-        // TODO
-        return { x: 0, y: 0, width: 0, height: 0 }
-      }
+    if (this.$node instanceof Text) {
+      // TODO
+      return { x: 0, y: 0, width: 0, height: 0 }
+    }
 
-      const { $x, $y, $sx, $sy } = this.$context
+    const { $x, $y, $sx, $sy } = this.$context
 
-      const bcr: Rect = this.$node.getBoundingClientRect()
+    const bcr: Rect = this.$node.getBoundingClientRect()
 
-      const { x, y, width, height } = bcr
+    const { x, y, width, height } = bcr
 
-      return {
-        x: (x - $x) / $sx,
-        y: (y - $y) / $sy,
-        width: width / $sx,
-        height: height / $sy,
-      }
-    } else {
-      throw new Error('component not mounted')
+    return {
+      x: (x - $x) / $sx,
+      y: (y - $y) / $sy,
+      width: width / $sx,
+      height: height / $sy,
     }
   }
 
@@ -2335,7 +2327,7 @@ export class Component<
   }
 
   public postAppendRoot(component: Component): void {
-    _if(this.$mounted, mount, component, this.$context)
+    _if(this.$mounted, mount, component, this._$context)
   }
 
   public domAppendRoot(component: Component, at: number): void {

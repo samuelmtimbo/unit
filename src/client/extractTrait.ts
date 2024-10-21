@@ -52,12 +52,10 @@ export const extractTrait = (
       color = hexToRgba($color)
     }
 
-    if (leafComp.$mounted) {
-      const position = getRelativePosition($node, leaf_context.$element)
+    const position = getRelativePosition($node, leaf_context.$element)
 
-      x = position.x
-      y = position.y
-    }
+    x = position.x
+    y = position.y
 
     color = parentTrait.color
 
