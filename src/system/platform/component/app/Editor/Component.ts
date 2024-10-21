@@ -29463,9 +29463,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    if (this.$mounted) {
-      this._flush_debugger()
-    }
+    this._flush_debugger()
 
     setTimeout(() => {
       this._force_control_animation_false = false
@@ -56033,10 +56031,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         window: { setInterval },
       },
     } = this.$system
-
-    if (!this.$mounted) {
-      return
-    }
 
     if (this._debug_interval !== null) {
       return
