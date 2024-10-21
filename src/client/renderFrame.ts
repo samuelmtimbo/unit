@@ -79,7 +79,7 @@ export function renderFrame(
 
   for (const type of $system.customEvent) {
     const _type = `_${type}`
-    
+
     stopByPropagation($element, _type)
   }
 

@@ -110,7 +110,7 @@ export const ALL_TYPES_MAP: AllTypes<true> = {
   TD: true,
   W: true,
   ME: true,
-  IM: true
+  IM: true,
 }
 
 export const ALL_TYPES = Object.keys(ALL_TYPES_MAP)
