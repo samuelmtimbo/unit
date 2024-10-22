@@ -59093,6 +59093,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_moment = (moment: Moment): void => {
     // console.log('_on_moment', moment, this._id)
 
+    moment = clone(moment)
+
     const { event, type, data } = moment
 
     if ((moment?.data?.path?.length ?? 0) > 0) {
