@@ -227,6 +227,7 @@ export default class Merge<
       this._o_active.size - this._o_invalid.size === 0 &&
       this._o_count > 0 &&
       this._current !== undefined &&
+      this._i_active.has(this._current) &&
       !this._i_invalid.has(this._current)
     ) {
       this._loop_invalid_o_count = 0
