@@ -27531,11 +27531,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const spec_id = idFromUnitValue(value, specs, classes)
 
-    const bundle = evaluateBundleStr(value, specs, classes)
+    const partial_bundle = evaluateBundleStr(value, specs, classes)
 
-    const { unit } = bundle
+    const { unit } = partial_bundle
 
-    injectSpecs(bundle.specs)
+    injectSpecs(partial_bundle.specs)
+
+    const bundle = unitBundleSpec(unit, specs)
 
     const { memory } = unit
 
@@ -52501,6 +52503,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): BundleSpec => {
     const { specs, newSpec, newSpecId } = this.$props
 
+    const { classes } = this.$system
+
     const id = newSpecId()
 
     const graph: GraphSpec = emptySpec({ id })
@@ -52681,6 +52685,22 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     const bundle = bundleSpec(graph, specs)
+
+    for (const datumId in data) {
+      const { value } = data[datumId]
+
+      const dataRef = evaluateDataValue(value, specs, classes)
+
+      for (const path of dataRef.ref) {
+        let unit_bundle = deepGet(dataRef.data, path) as UnitBundleSpec
+
+        unit_bundle = unitBundleSpec(unit_bundle.unit, weakMerge(unit_bundle.specs, specs))
+
+        for (const specId in unit_bundle.specs) {
+          bundle.specs[specId] = unit_bundle.specs[specId]
+        }
+      }
+    }
 
     if (deep) {
       for (const unit_id of unit_ids) {
