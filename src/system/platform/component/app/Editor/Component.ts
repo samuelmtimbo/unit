@@ -34936,6 +34936,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const _next_unit_id = map_unit_id[_unit_id]
 
         if (this._is_unit_component(_next_unit_id)) {
+          if (!this._component.$subComponent[_next_unit_id]) {
+            this._mem_add_unit_component(_next_unit_id, {})
+          }
+        }
+      }
+
+      for (const _unit_id in map_unit_id) {
+        const _next_unit_id = map_unit_id[_unit_id]
+
+        if (this._is_unit_component(_next_unit_id)) {
+          this._sim_add_sub_component_to_parent(_next_unit_id)
+        }
+      }
+
+      for (const _unit_id in map_unit_id) {
+        const _next_unit_id = map_unit_id[_unit_id]
+
+        if (this._is_unit_component(_next_unit_id)) {
           this._connect_sub_component(_next_unit_id)
         }
       }
