@@ -4514,12 +4514,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_register_unit', spec_id, deep)
 
-    const { parent, getSpec, registerUnit } = this.$props
-
-    if (parent) {
-      return
-    }
-
     this._register_spec(spec_id, deep, branch)
   }
 
@@ -4572,10 +4566,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', '_unregister_unit', spec_id, deep)
 
     const { parent, getSpec, unregisterUnit } = this.$props
-
-    if (parent) {
-      return
-    }
 
     if (branch.includes(spec_id)) {
       return
