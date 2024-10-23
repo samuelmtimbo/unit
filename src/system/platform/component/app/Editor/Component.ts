@@ -18630,7 +18630,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           {
             combo: 'Escape',
             keydown: this._on_escape_keydown,
-            strict: false,
+            strict: true,
           },
         ])
       )
@@ -23296,6 +23296,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         if (focus) {
           this._focusing_sub_component = true
 
+          this._focus_sub_component_frame(unit_id)
           this._focus_sub_component(unit_id)
 
           this._focusing_sub_component = false
@@ -28758,6 +28759,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const sub_component = this._get_sub_component(unit_id)
 
     sub_component.focus()
+  }
+
+  private _focus_sub_component_frame = (unit_id: string): void => {
+    // console.log('Graph', '_focus_sub_component_frame', unit_id)
+    const sub_component_frame = this._get_sub_component_frame(unit_id)
+
+    sub_component_frame.focus()
   }
 
   private _blur_sub_component = (unit_id: string): void => {
