@@ -3896,7 +3896,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             if (path.length === 0) {
               bubble && this._fork()
 
-              // deepSet(this._spec, ['units', unitId, 'id'], forkId)
+              deepSet(this._spec, ['units', unitId, 'id'], spec.id)
             }
           }
         )
