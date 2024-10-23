@@ -5815,17 +5815,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._set_zoom(zoom)
 
-    if (this._node_count > 0) {
-      this._center_graph_frame = requestAnimationFrame(() => {
-        this._center_graph(true)
-
-        this._center_graph_frame = undefined
-      })
-
-      this._start_graph_simulation(LAYER_NONE)
-
-      this._tick()
-    }
+    this._center_graph(true)
 
     this._start_debugger()
   }
@@ -21333,6 +21323,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }: IOFrameResizeEvent): void => {
     // console.log('Graph', '_on_context_resize', width, height)
 
+    const area = this._width * this._height
+
     this._resize(width, height)
 
     const dw = width - this._width
@@ -21363,6 +21355,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._refresh_search_list_height_offset()
 
       this._animate_all_layout_layer()
+    }
+
+    if (!area) {
+      if (width && height) {
+        this._center_graph(true)
+      }
     }
 
     this._maybe_refresh_simulation_by_drag()
