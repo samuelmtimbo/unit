@@ -20,12 +20,12 @@ import { Dict } from '../../../../types/Dict'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export interface Props {
+  attr?: Dict<any>
   className?: string
   style?: Dict<any>
   disabled?: boolean
   color?: string
   theme?: Theme
-  tabIndex?: number
 }
 
 export const DEFAULT_STYLE = {
@@ -44,7 +44,9 @@ export default class Frame extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { className, style = {}, color, tabIndex, theme, disabled } = $props
+    const { attr = {}, className, style = {}, color, theme, disabled } = $props
+
+    const { tabIndex = -1 } = attr
 
     const $element = this.$system.api.document.createElement('div')
 
