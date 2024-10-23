@@ -315,6 +315,8 @@ export function listenClick(
 
       delete longPress[pointerId]
     }
+
+    longClickCancelPointerId.delete(pointerId)
   }
 
   $element.addEventListener('click', stopPropagation)
