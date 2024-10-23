@@ -52704,7 +52704,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       for (const path of dataRef.ref) {
         let unit_bundle = deepGet(dataRef.data, path) as UnitBundleSpec
 
-        unit_bundle = unitBundleSpec(unit_bundle.unit, weakMerge(unit_bundle.specs, specs))
+        unit_bundle = unitBundleSpec(
+          unit_bundle.unit,
+          weakMerge(unit_bundle.specs, specs)
+        )
 
         for (const specId in unit_bundle.specs) {
           bundle.specs[specId] = unit_bundle.specs[specId]
@@ -56396,13 +56399,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._sim_fork_unit(unitId, forked_unit_spec.id)
     } else {
       const spec = this._get_unit_spec(unitId) as GraphSpec
+
       const parent_path = path.slice(0, -1)
-      const next_spec = clone(
+
+      const next_parent_spec = clone(
         findSpecAtPath(specs, spec, parent_path) as GraphSpec
       )
+
       const forked_unit_id = last(path)
-      deepSet(next_spec, ['units', forked_unit_id, 'id'], forked_unit_spec.id)
-      setSpec(next_spec.id, next_spec)
+
+      deepSet(
+        next_parent_spec,
+        ['units', forked_unit_id, 'id'],
+        forked_unit_spec.id
+      )
+
+      setSpec(next_parent_spec.id, next_parent_spec)
+
+      this._register_spec(forked_unit_spec.id, false)
+      this._unregister_spec(specId, false)
     }
   }
 
@@ -56431,8 +56446,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     setSpec(next_spec_id, unit_spec)
 
-    this.__register_spec(this._registry, next_spec_id)
-    this._unregister_spec(unit_spec_id)
+    this.__register_spec(this._registry, next_spec_id, false)
+    this._unregister_spec(unit_spec_id, false)
   }
 
   private _is_spec_updater = (path: string[]): boolean => {

@@ -12,6 +12,7 @@ import { evaluateMemorySpec } from './evaluate/evaluateMemorySpec'
 import { evaluateDataValue } from './evaluateDataValue'
 import { unitFromId } from './fromId'
 import { applyUnitDefaultIgnored } from './fromSpec'
+import { remapSpecs } from './remapBundle'
 import { resolveDataRef } from './resolveDataValue'
 
 export function unitFromBundleSpec<I, O>(
@@ -30,9 +31,9 @@ export function unitFromBundleSpec<I, O>(
 
   const { classes } = system
 
-  if (bundle.specs) {
-    system.injectSpecs(bundle.specs)
-  }
+  const spec_map_id = system.injectSpecs(bundle.specs ?? {})
+
+  remapSpecs(bundle, spec_map_id)
 
   const unit = unitFromId<I, O>(system, id, specs_, classes, branch)
 
