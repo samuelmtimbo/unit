@@ -36836,6 +36836,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
 
     this._remove_pin_datum_link(datum_node_id)
+
+    deepDelete(this._graph_type_map, [unitId, type, pinId])
   }
 
   private _remove_pin_datum_link = (datum_node_id: string): void => {
