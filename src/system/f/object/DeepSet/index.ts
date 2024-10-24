@@ -1,7 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
-import { clone, deepSet } from '../../../../util/object'
+import { clone } from '../../../../util/clone'
+import { deepSet } from '../../../../util/object'
 import { ID_DEEP_SET } from '../../../_ids'
 
 export interface I<T> {

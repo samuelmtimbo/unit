@@ -24,9 +24,9 @@ import { GraphUnitSpec } from '../../types/GraphUnitSpec'
 import { IO } from '../../types/IO'
 import { IOOf } from '../../types/IOOf'
 import { GraphSelection } from '../../types/interface/G'
+import { clone } from '../../util/clone'
 import {
   _keyCount,
-  clone,
   deepGet,
   deepGetOrDefault,
   deepSet,

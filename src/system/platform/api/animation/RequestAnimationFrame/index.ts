@@ -2,6 +2,7 @@ import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
 import { apiNotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
+import { Dict } from '../../../../../types/Dict'
 import { ID_REQUEST_ANIMATION_FRAME } from '../../../../_ids'
 
 export interface I {
@@ -34,17 +35,17 @@ export default class RequestAnimationFrame extends Functional<I, O> {
       },
     } = this.__system
 
-    if (requestAnimationFrame) {
-      this.d()
-
-      this._frame = requestAnimationFrame(() => {
-        this._frame = undefined
-
-        done({ a })
-      })
-    } else {
+    if (!requestAnimationFrame) {
       done(undefined, apiNotSupportedError('Request Animation Frame'))
+
+      return
     }
+
+    this._frame = requestAnimationFrame(() => {
+      this._frame = undefined
+
+      done({ a })
+    })
   }
 
   d() {
@@ -58,6 +59,27 @@ export default class RequestAnimationFrame extends Functional<I, O> {
       cancelAnimationFrame(this._frame)
 
       this._frame = undefined
+    }
+  }
+
+  public snapshotSelf(): Dict<any> {
+    return {
+      ...super.snapshotSelf(),
+      _frame: this._frame,
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    const { _frame, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    if (_frame !== undefined) {
+      this._frame = requestAnimationFrame(() => {
+        this._frame = undefined
+
+        this._done({ a: this._i.a })
+      })
     }
   }
 }

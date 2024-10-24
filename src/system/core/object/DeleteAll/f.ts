@@ -1,5 +1,5 @@
 import { Dict } from '../../../../types/Dict'
-import { clone } from '../../../../util/object'
+import { clone } from '../../../../util/clone'
 import _dissoc from '../../../f/object/Delete/f'
 
 export default function dissocAll<T>(obj: Dict<T>, keys: string[]): Dict<T> {

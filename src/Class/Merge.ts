@@ -187,9 +187,6 @@ export default class Merge<
   }
 
   public onDataInputEnd(name: string): void {
-    if (this._paused) {
-      return
-    }
     if (this._i_start.size === 0) {
       if (this._current !== undefined) {
         this._forward_all_valid_empty()

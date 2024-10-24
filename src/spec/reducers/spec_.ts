@@ -12,8 +12,8 @@ import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { forIOObjKV, io } from '../../types/IOOf'
 import { forEach } from '../../util/array'
+import { clone } from '../../util/clone'
 import {
-  clone,
   deepDeepMerge,
   deepDelete,
   deepGet,

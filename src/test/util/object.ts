@@ -1,6 +1,7 @@
 import isEqual from '../../system/f/comparison/Equals/f'
 import assert from '../../util/assert'
-import { clone, deepDestroy, deepGet } from '../../util/object'
+import { clone } from '../../util/clone'
+import { deepDestroy, deepGet } from '../../util/object'
 
 const obj = { a: 1, b: { c: 2 } }
 const cloned_obj = clone(obj)

@@ -1,7 +1,7 @@
 import { Unit } from '../Class/Unit'
 import { UnitBundle } from '../types/UnitBundle'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
-import { clone } from '../util/object'
+import { $clone } from '../util/$clone'
 import { fromUnitBundle } from './fromUnitBundle'
 
 export function cloneUnit<T extends Unit>(
@@ -23,9 +23,11 @@ export function cloneUnitClass<T extends Unit>(
 ): [UnitBundle<T>, UnitBundleSpec] {
   const { __system } = unit
 
-  const specs = __system.specs
+  const { specs } = __system
 
-  const bundle = clone(unit.getUnitBundleSpec(deep))
+  const bundle_ = unit.getUnitBundleSpec(deep)
+
+  const bundle = $clone(bundle_)
 
   const NewBundle = fromUnitBundle<T>(bundle, specs, __system.classes)
 

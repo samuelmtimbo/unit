@@ -60,6 +60,14 @@ export default class Canvas
 
       this._ctx = this._canvas.getContext('2d')
     }
+
+    this.addListener('reset', () => {
+      if (this._ctx) {
+        clearCanvas(this._ctx)
+      }
+
+      this._state.d = []
+    })
   }
 
   async clear(): Promise<void> {

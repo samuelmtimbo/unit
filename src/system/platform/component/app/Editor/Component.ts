@@ -655,11 +655,11 @@ import {
 import { randomInArray } from '../../../../../util/array/randomInArray'
 import { bit } from '../../../../../util/boolean'
 import { callAll } from '../../../../../util/call/callAll'
+import { clone } from '../../../../../util/clone'
 import { readFileAsText } from '../../../../../util/file'
 import { hashCode } from '../../../../../util/hashCode'
 import { randomIdNotIn } from '../../../../../util/id'
 import {
-  clone,
   deepDelete,
   deepGet,
   deepGetOrDefault,
@@ -14486,8 +14486,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const datum_tree = this._pin_datum_tree[pin_node_id]
     const merge_node_id = this._pin_to_merge[pin_node_id]
-    const merge_unit_id =
-      merge_node_id && this._merge_to_ref_unit[merge_node_id]
 
     const { unitId } = segmentLinkPinNodeId(pin_node_id)
 
@@ -14518,8 +14516,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._set_link_pin_link_color(pin_node_id, link_color)
       this._set_link_pin_link_text_color(pin_node_id, link_color)
     } else if (datum_tree) {
-      set_data_color()
-    } else if (merge_unit_id) {
       set_data_color()
     } else {
       set_default_color()
@@ -30337,11 +30333,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_node_id = this._datum_to_pin[datum_node_id]
 
     if (is_class_literal) {
-      const bundle = evaluateBundleStr(
+      let bundle = evaluateBundleStr(
         datum_tree.value,
         specs,
         this.$system.classes
       )
+
+      bundle = unitBundleSpec(bundle.unit, weakMerge(bundle.specs, specs))
 
       const spec = getSpec(bundle.unit.id)
 
@@ -55608,6 +55606,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             'set_pin_set_default_ignored',
             'bulk_edit',
             'metadata',
+            'destroy',
           ],
         },
         this._on_moment
@@ -56420,6 +56419,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         forked_unit_spec.id
       )
 
+      setSpec(forked_unit_spec.id, forked_unit_spec)
       setSpec(next_parent_spec.id, next_parent_spec)
 
       this._register_spec(forked_unit_spec.id, false)
@@ -58072,6 +58072,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_graph_unit_ref_link_pin_drop_moment = (
     _data: GraphUnitPinDropMomentData
   ) => {
+    // console.log('_on_graph_unit_ref_link_pin_drop_moment', _data)
+
     this._on_graph_unit_link_pin_drop_moment(_data)
   }
 
@@ -58079,6 +58081,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('_on_graph_unit_destroy', data)
 
     const { unitId } = data
+
+    if (!this._has_node(unitId)) {
+      return
+    }
 
     this._state_remove_unit(unitId)
   }
@@ -58498,7 +58504,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_graph_moment = (moment: Moment<any>): void => {
-    // console.log('Graph', '_on_graph_moment', JSON.stringify(moment, null, 2))
+    // console.log('Graph', '_on_graph_moment', moment)
 
     this._debug_buffer.push(moment)
 

@@ -6,9 +6,8 @@ import { Dict } from '../types/Dict'
 import { IO } from '../types/IO'
 import { io } from '../types/IOOf'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
-import { clone } from '../util/object'
+import { clone } from '../util/clone'
 import { weakMerge } from '../weakMerge'
-import { evaluateMemorySpec } from './evaluate/evaluateMemorySpec'
 import { evaluateDataValue } from './evaluateDataValue'
 import { unitFromId } from './fromId'
 import { applyUnitDefaultIgnored } from './fromSpec'
@@ -59,8 +58,6 @@ export function unitFromBundleSpec<I, O>(
 
   if (memory) {
     const memory_ = clone(memory)
-
-    evaluateMemorySpec(memory_, specs, classes)
 
     unit.restore(memory_)
   }

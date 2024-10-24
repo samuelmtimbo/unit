@@ -10,12 +10,8 @@ import { GraphMergeSpec } from '../types/GraphMergeSpec'
 import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
 import { IOOf, forIOObjKV, forIOObjVK } from '../types/IOOf'
-import {
-  clone,
-  deepGetOrDefault,
-  isEmptyObject,
-  mapObjVK,
-} from '../util/object'
+import { clone } from '../util/clone'
+import { deepGetOrDefault, isEmptyObject, mapObjVK } from '../util/object'
 import { emptyIO } from './emptyIO'
 import {
   ANY_TREE,

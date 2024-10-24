@@ -10,7 +10,7 @@ import { GraphBundle } from '../../../../../types/GraphClass'
 import { GraphSpec } from '../../../../../types/GraphSpec'
 import { GraphUnitSpec } from '../../../../../types/GraphUnitSpec'
 import { UnitBundle } from '../../../../../types/UnitBundle'
-import { clone } from '../../../../../util/object'
+import { clone } from '../../../../../util/clone'
 import { weakMerge } from '../../../../../weakMerge'
 import { ID_ADD_UNIT_0 } from '../../../../_ids'
 

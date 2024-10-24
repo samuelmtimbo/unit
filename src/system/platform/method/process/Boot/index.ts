@@ -3,7 +3,7 @@ import { Holder } from '../../../../../Class/Holder'
 import { BootOpt, System } from '../../../../../system'
 import { $S } from '../../../../../types/interface/async/$S'
 import { Async } from '../../../../../types/interface/async/Async'
-import { clone } from '../../../../../util/object'
+import { clone } from '../../../../../util/clone'
 import { wrapSystem } from '../../../../../wrap/System'
 import { ID_BOOT } from '../../../../_ids'
 
