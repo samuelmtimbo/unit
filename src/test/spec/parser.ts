@@ -76,6 +76,16 @@ assert.deepEqual(getTreeNodeType('`C`'), TreeNodeType.Class)
 assert.deepEqual(getTreeNodeType('`V<T>`'), TreeNodeType.Class)
 assert.deepEqual(getTreeNodeType('<T>[]'), TreeNodeType.ArrayExpression)
 assert.deepEqual(getTreeNodeType('string[]'), TreeNodeType.ArrayExpression)
+assert.deepEqual(getTreeNodeType('string[]|object[]'), TreeNodeType.Or)
+assert.deepEqual(
+  getTreeNodeType('string[]|(string|number|boolean)[]'),
+  TreeNodeType.Or
+)
+assert.deepEqual(
+  getTreeNodeType('(string[]|(string|number|boolean)[])[]'),
+  TreeNodeType.ArrayExpression
+)
+
 assert.deepEqual(getTreeNodeType("'string|number'"), TreeNodeType.StringLiteral)
 assert.deepEqual(getTreeNodeType('(string)'), TreeNodeType.Expression)
 assert.deepEqual(
@@ -296,6 +306,12 @@ assert(_isTypeMatch('`C`', '<T>'))
 assert(_isTypeMatch('`C`', 'any'))
 assert(_isTypeMatch('any', '`C`'))
 assert(_isTypeMatch('{a:}', '{a:any}'))
+assert(
+  _isTypeMatch(
+    '(string[]|(string|number|boolean)[])[]',
+    '(string|number|boolean)[][]'
+  )
+)
 
 assert(!_isTypeMatch('', 'any'))
 assert(!_isTypeMatch('abc', 'any'))

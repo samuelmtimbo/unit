@@ -834,8 +834,13 @@ export function _getTypeTree(
   if (arrayExpressionTest) {
     const child = getTree(arrayExpressionTest[1])
 
-    if (child.type !== TreeNodeType.Invalid) {
+    if (
+      child.type !== TreeNodeType.Invalid &&
+      child.type !== TreeNodeType.Or &&
+      child.type !== TreeNodeType.And
+    ) {
       const children = [child]
+
       return {
         value,
         type: TreeNodeType.ArrayExpression,
