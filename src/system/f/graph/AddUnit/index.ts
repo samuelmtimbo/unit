@@ -5,7 +5,7 @@ import { System } from '../../../../system'
 import { $G } from '../../../../types/interface/async/$G'
 import { Async } from '../../../../types/interface/async/Async'
 import { UnitBundle } from '../../../../types/UnitBundle'
-import { clone } from '../../../../util/object'
+import { clone } from '../../../../util/clone'
 import { weakMerge } from '../../../../weakMerge'
 import { ID_ADD_UNIT } from '../../../_ids'
 

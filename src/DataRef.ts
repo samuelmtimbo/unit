@@ -1,4 +1,4 @@
 export type DataRef<T = any> = {
-  ref: number[][]
+  ref: (number | string)[][]
   data: T
 }

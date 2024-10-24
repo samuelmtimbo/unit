@@ -1,5 +1,4 @@
 import { $, $Events } from './Class/$'
-import { isPrimitive } from './spec/primitive'
 import { System } from './system'
 import { PI } from './types/interface/PI'
 import { V } from './types/interface/V'
@@ -252,7 +251,7 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
 
   public snapshot(): Pin_M<T> {
     return {
-      _register: isPrimitive(this._register) ? this._register : undefined,
+      _register: this._register,
       _invalid: this._invalid,
       _constant: this._constant,
       _ignored: this._ignored,
@@ -268,6 +267,10 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
     this._constant = _constant
     this._ignored = _ignored
     this._idle = _idle
+
+    if (_register instanceof $) {
+      this.emit('_data', _register)
+    }
   }
 
   async read(): Promise<any> {

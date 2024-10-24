@@ -46,7 +46,7 @@ import {
   stringifyUnitBundleSpecData,
 } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
-import { clone } from '../../../util/object'
+import { clone } from '../../../util/clone'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'

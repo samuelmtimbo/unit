@@ -5,7 +5,10 @@ import { evaluate } from '../evaluate'
 export function evaluateDataObj(
   obj: Dict<any>,
   specs: Specs,
-  classes: Classes
+  classes: Classes,
+  resolver: (url: string) => any = () => {
+    return undefined
+  }
 ): Dict<any> {
   const _obj = {}
 
@@ -13,7 +16,7 @@ export function evaluateDataObj(
     const data = obj[name]
 
     if (data !== undefined) {
-      _obj[name] = evaluate(data, specs, classes)
+      _obj[name] = evaluate(data, specs, classes, resolver)
     }
   }
 

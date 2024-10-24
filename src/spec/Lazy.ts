@@ -48,6 +48,8 @@ export function lazyFromSpec(
     extends Unit<I, O, _EE>
     implements G, C
   {
+    lazy = true
+
     static __bundle: UnitBundleSpec = {
       unit: {
         id,

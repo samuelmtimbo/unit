@@ -1,5 +1,5 @@
 import { Dict } from './types/Dict'
-import { clone } from './util/object'
+import { clone } from './util/clone'
 
 export default function deepSet(
   obj: Dict<any>,

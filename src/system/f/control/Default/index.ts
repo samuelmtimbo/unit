@@ -1,5 +1,6 @@
 import { Primitive } from '../../../../Primitive'
 import { System } from '../../../../system'
+import { Dict } from '../../../../types/Dict'
 import { ID_DEFAULT } from '../../../_ids'
 
 export interface I<T> {
@@ -91,5 +92,20 @@ export default class Default<T> extends Primitive<I<T>, O<T>> {
 
   public onDataInputInvalid(name: string) {
     this._invalidate()
+  }
+
+  public snapshotSelf(): Dict<any> {
+    return {
+      ...super.snapshotSelf(),
+      _current: this._current,
+    }
+  }
+
+  public restoreSelf(state: Dict<any>): void {
+    const { _current, ...rest } = state
+
+    super.restoreSelf(rest)
+
+    this._current = _current
   }
 }

@@ -6,7 +6,7 @@ import { fromUnitBundle } from '../../../../../spec/fromUnitBundle'
 import { stringify } from '../../../../../spec/stringify'
 import { System } from '../../../../../system'
 import { UnitBundle } from '../../../../../types/UnitBundle'
-import { clone } from '../../../../../util/object'
+import { clone } from '../../../../../util/clone'
 import { weakMerge } from '../../../../../weakMerge'
 import { ID_SET_INPUT } from '../../../../_ids'
 

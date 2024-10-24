@@ -1,7 +1,8 @@
 import { Functional } from '../../../../Class/Functional'
 import { Done } from '../../../../Class/Functional/Done'
 import { System } from '../../../../system'
-import { clone, deepDelete } from '../../../../util/object'
+import { clone } from '../../../../util/clone'
+import { deepDelete } from '../../../../util/object'
 import { ID_DEEP_DELETE } from '../../../_ids'
 
 export interface I<T> {

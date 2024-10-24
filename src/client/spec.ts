@@ -11,8 +11,9 @@ import {
 } from '../types'
 import { GraphSpec } from '../types/GraphSpec'
 import { IO } from '../types/IO'
+import { clone } from '../util/clone'
 import { uuidNotIn } from '../util/id'
-import { clone, deepGetOrDefault } from '../util/object'
+import { deepGetOrDefault } from '../util/object'
 import { removeWhiteSpace } from '../util/string'
 
 export function getSpec(specs: Specs, id: string): Spec {

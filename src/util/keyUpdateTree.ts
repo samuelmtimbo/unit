@@ -17,7 +17,7 @@ import {
   getTree,
   isCompositeType,
 } from '../spec/parser'
-import { clone } from './object'
+import { clone } from './clone'
 
 export const _keyUpdateTree = (
   root: TreeNode,

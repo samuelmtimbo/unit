@@ -20,8 +20,8 @@ import { GraphUnitConnect } from '../../types/GraphUnitConnect'
 import { IO } from '../../types/IO'
 import { IOOf, forIO, forIOObjKV } from '../../types/IOOf'
 import { UCG } from '../../types/interface/UCG'
+import { clone } from '../../util/clone'
 import {
-  clone,
   deepGet,
   deepGetOrDefault,
   deepSet,

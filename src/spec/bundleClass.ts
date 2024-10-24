@@ -3,7 +3,6 @@ import { System } from '../system'
 import { UnitBundle } from '../types/UnitBundle'
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 import { UnitClass } from '../types/UnitClass'
-import { parseMemorySpec } from './evaluate/parseMemorySpec'
 import { remapSpecs } from './remapBundle'
 
 export function bundleClass<T extends Unit = any>(
@@ -28,9 +27,7 @@ export function bundleClass<T extends Unit = any>(
       super(system, id)
 
       if (memory) {
-        const _memory = parseMemorySpec(memory, system.specs, system.classes)
-
-        this.restore(_memory)
+        this.restore(memory)
       }
     }
   }

@@ -12,7 +12,6 @@ import { PinOpt } from '../../PinOpt'
 import { PinOpts } from '../../PinOpts'
 import { Pins } from '../../Pins'
 import { stringify } from '../../spec/stringify'
-import { stringifyMemorySpecData } from '../../spec/stringifySpec'
 import { System } from '../../system'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import { keys } from '../../system/f/object/Keys/f'
@@ -78,6 +77,8 @@ export class Unit<
   public __: string[] = ['U']
   public id: string
 
+  public lazy: boolean = false
+
   public _parent: Unit | null = null
 
   public _input: Partial<AllKeys<I, Pin>> = {}
@@ -92,8 +93,8 @@ export class Unit<
   protected _i_opt: Partial<Record<keyof I, PinOpt>> = {}
   protected _o_opt: Partial<Record<keyof O, PinOpt>> = {}
 
-  protected _i_name_set: Set<Key> = new Set()
-  protected _o_name_set: Set<Key> = new Set()
+  protected _i_name_set: Set<keyof I> = new Set()
+  protected _o_name_set: Set<keyof O> = new Set()
 
   protected _d_i_name: Set<keyof I> = new Set()
   protected _d_o_name: Set<keyof O> = new Set()
@@ -1259,8 +1260,6 @@ export class Unit<
 
     if (deep) {
       memory = this.snapshot()
-
-      stringifyMemorySpecData(memory)
     }
 
     const input = mapObjVK<Pin<any>, any>(this._input, (input) => {
@@ -1303,7 +1302,7 @@ export class Unit<
   public snapshotInputs(): Partial<Record<keyof I, Pin_M>> {
     const state: Partial<Record<keyof I, Pin_M>> = {}
 
-    for (const name of this._d_i_name) {
+    for (const name of this._i_name_set) {
       state[name] = this.snapshotInput(name)
     }
 
@@ -1317,11 +1316,7 @@ export class Unit<
   public snapshotOutputs(): Partial<Record<keyof O, Pin_M>> {
     const state: Partial<Record<keyof O, Pin_M>> = {}
 
-    // for (const name of this._o_name_set) {
-    //   state[name] = this.snapshotOutput(name)
-    // }
-
-    for (const name of this._d_o_name) {
+    for (const name of this._o_name_set) {
       state[name] = this.snapshotOutput(name)
     }
 

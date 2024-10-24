@@ -7,8 +7,9 @@ import { Dict } from './types/Dict'
 import { GraphSpec } from './types/GraphSpec'
 import { GraphSpecs } from './types/GraphSpecs'
 import { R } from './types/interface/R'
+import { clone } from './util/clone'
 import { uuidNotIn } from './util/id'
-import { clone, deepGet } from './util/object'
+import { deepGet } from './util/object'
 import { weakMerge } from './weakMerge'
 
 export class Registry implements R {

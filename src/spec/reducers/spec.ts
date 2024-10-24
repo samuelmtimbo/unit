@@ -14,8 +14,8 @@ import { GraphUnitSpec } from '../../types/GraphUnitSpec'
 import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
 import { forEach } from '../../util/array'
+import { clone } from '../../util/clone'
 import {
-  clone,
   deepGet,
   deepGetOrDefault,
   getObjSingleKey,

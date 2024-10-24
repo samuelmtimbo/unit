@@ -4,7 +4,7 @@ import { System } from '../../../../system'
 import { BundleSpec } from '../../../../types/BundleSpec'
 import { $G } from '../../../../types/interface/async/$G'
 import { Async } from '../../../../types/interface/async/Async'
-import { clone } from '../../../../util/object'
+import { clone } from '../../../../util/clone'
 import { ID_BUNDLE } from '../../../_ids'
 
 export interface I<T> {

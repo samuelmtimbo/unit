@@ -49,10 +49,9 @@ import {
 } from '../../spec/actions/G'
 import { cloneUnit, cloneUnitClass } from '../../spec/cloneUnit'
 import { evaluate } from '../../spec/evaluate'
-import { evaluateDataValue } from '../../spec/evaluateDataValue'
+import { evaluateData, evaluateDataValue } from '../../spec/evaluateDataValue'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
-import { fromUnitBundle } from '../../spec/fromUnitBundle'
 import { renameUnitInMerges } from '../../spec/reducers/spec'
 import {
   coverPin,
@@ -74,7 +73,6 @@ import {
 } from '../../spec/reducers/spec_'
 import { resolveDataRef } from '../../spec/resolveDataValue'
 import { stringify } from '../../spec/stringify'
-import { stringifyMemorySpecData } from '../../spec/stringifySpec'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
 import { getSubComponentParentId } from '../../spec/util/component'
 import {
@@ -131,9 +129,9 @@ import { J } from '../../types/interface/J'
 import { U, U_EE } from '../../types/interface/U'
 import { forEach, insert, remove } from '../../util/array'
 import { callAll } from '../../util/call/callAll'
+import { clone } from '../../util/clone'
 import {
   _keyCount,
-  clone,
   deepDelete,
   deepDestroy,
   deepGet,
@@ -1145,8 +1143,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     if (deep) {
       memory = this.snapshot()
-
-      stringifyMemorySpecData(memory)
     }
 
     const unit = { id, input, output, memory }
@@ -3752,11 +3748,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       }
 
       const edit = (data: Graph) => {
-        const { specs, classes } = this.__system
-
-        const bundle = data.getUnitBundleSpec()
-
-        const Class = fromUnitBundle(bundle, specs, classes)
+        const Class = data.constructor
 
         set(Class)
       }
@@ -3787,7 +3779,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     })
 
     all_unlisten.push(
-      unit.addListener('destroy', () => {
+      unit.addListener('destroy', (path: string[] = []) => {
+        if (path.length > 0) {
+          return
+        }
+
         if (this._destroying) {
           return
         }
@@ -3878,7 +3874,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             this.emit(
               DEFAULT_EVENT,
               // @ts-ignore
-              ...args.slice(0, -1).concat([[unitId, ...args[args.length - 1]]])
+              ...args
+                .slice(0, -1)
+                .concat([[unitId, ...(args[args.length - 1] ?? [])]])
             )
           })
         )
@@ -5470,7 +5468,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
           unitId,
           type,
           pinId,
-          data: evaluateDataValue(stringify(data), specs, classes),
+          data: evaluateData(data, specs, classes),
         },
         this._spec,
         specs,

@@ -4,7 +4,7 @@ import { unitFromId } from '../spec/fromId'
 import _classes from '../system/_classes'
 import _components from '../system/_components'
 import _specs from '../system/_specs'
-import { clone } from '../util/object'
+import { clone } from '../util/clone'
 
 const [system] = boot(
   clone({
