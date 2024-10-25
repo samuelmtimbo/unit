@@ -407,7 +407,9 @@ export function moveUnit(
               kind,
             },
             false,
-            propagate
+            propagate,
+            false,
+            false
           )
         } else {
           //
@@ -423,6 +425,8 @@ export function moveUnit(
               pinId,
               kind,
             },
+            false,
+            false,
             false,
             false
           )

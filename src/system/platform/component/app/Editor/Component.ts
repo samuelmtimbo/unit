@@ -34124,10 +34124,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const new_unit = clone(unit)
 
-    if (shouldFork(id)) {
-      new_unit.id = newSpecId()
-    }
-
     const collapse_map: GraphMoveSubGraphData =
       this._make_full_spec_collapse_map(
         unit_id,
