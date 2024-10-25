@@ -305,6 +305,7 @@ import {
   jigglePoint,
   lineIntersect,
   mediumPoint,
+  norm,
   normalize,
   perpendicular,
   pointDistance,
@@ -20970,9 +20971,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       makePointerEnterListener((event: UnitPointerEvent) => {
         this._on_node_pointer_enter(node_id, event)
       }),
+      // makePointerInListener((event: UnitPointerEvent) => {
+      //   this._on_node_pointer_in(node_id, event)
+      // }),
       makePointerLeaveListener((event: UnitPointerEvent) => {
         this._on_node_pointer_leave(node_id, event)
       }),
+      // makePointerOutListener((event: UnitPointerEvent) => {
+      //   this._on_node_pointer_out(node_id, event)
+      // }),
       makePointerCancelListener((event: UnitPointerEvent) => {
         this._on_node_pointer_cancel(node_id, event)
       }),
@@ -21022,18 +21029,47 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _is_point_inside_node_rect = (
     node_id: string,
     x: number,
-    y: number
+    y: number,
+    padding: number
+  ) => {
+    // console.log('_is_point_inside_node_rect', node_id, x, y, padding)
+
+    const node = this._node[node_id]
+
+    const { width, height } = node
+
+    return (
+      x >= node.x - width / 2 - padding &&
+      x <= node.x + width / 2 + padding &&
+      y >= node.y - height / 2 - padding &&
+      y <= node.y + height / 2 + padding
+    )
+  }
+
+  private _is_point_inside_node_circle = (
+    node_id: string,
+    x: number,
+    y: number,
+    padding: number
   ) => {
     const node = this._node[node_id]
 
-    const { x: node_x, y: node_y, width, height } = node
+    return norm(node.x - x, node.y - y) < node.r + padding
+  }
 
-    return (
-      x >= node_x - width / 2 &&
-      x <= node_x + width / 2 &&
-      y >= node_y - height / 2 &&
-      y <= node_y + height / 2
-    )
+  private _is_point_inside_node = (
+    node_id: string,
+    x: number,
+    y: number,
+    padding: number
+  ) => {
+    const node = this._node[node_id]
+
+    if (node.shape === 'circle') {
+      return this._is_point_inside_node_circle(node_id, x, y, padding)
+    } else {
+      return this._is_point_inside_node_rect(node_id, x, y, padding)
+    }
   }
 
   private _escape_external_text_if_needed = (text: string): TreeNode => {
@@ -21539,6 +21575,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _on_node_pointer_in = (node_id: string, event: UnitPointerEvent) => {
+    // console.log('Graph', '_on_node_pointer_in', node_id)
+  }
+
   private _on_node_pointer_enter = (
     node_id: string,
     event: UnitPointerEvent
@@ -21678,6 +21718,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }[type](spec)
   }
 
+  private _on_node_pointer_out = (
+    node_id: string,
+    event: UnitPointerEvent
+  ): void => {
+    // console.log('Graph', '_on_node_pointer_out', node_id)
+  }
+
   private _on_node_pointer_leave = (
     node_id: string,
     event: UnitPointerEvent
@@ -21700,7 +21747,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (this._pointer_id_hover_node_id[pointer_id]) {
       this._set_node_hovered(node_id, pointer_id, false)
     } else {
-      // throw new Error('pointer left a node it was not hovering')
       return
     }
 
