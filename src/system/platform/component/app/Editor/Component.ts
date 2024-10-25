@@ -10590,7 +10590,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { unitId, mergeId, kind = type } = sub_pin_spec
 
       if (mergeId || (unitId && kind === type)) {
-        const anchor_node_id = getSubPinSpecNodeId(type, sub_pin_spec)
+        const pin_spec_anchor_node_id = getSubPinSpecNodeId(type, sub_pin_spec)
+
+        const anchor_node_id = this._get_pin_anchor_node_id(
+          pin_spec_anchor_node_id
+        )
 
         let sub_pin_type: TreeNode
 
