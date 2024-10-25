@@ -840,7 +840,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       if (subPin.active()) {
         const data = subPin.peak()
 
-        pin.push(data, true)
+        propagate && pin.push(data, true)
       }
 
       const unlisten = callAll([
@@ -3723,15 +3723,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     let unit_pin_listener: Dict<IOOf<Dict<Function>>> = {}
 
-    const setup_unit_constant_pin = (
-      type: IO,
-      pinId: string,
-      fork: boolean = true,
-      bubble: boolean = true
-    ) => {
+    const setup_unit_constant_pin = (type: IO, pinId: string) => {
       const pin = this.getUnitPin(unitId, type, pinId)
-
-      fork && this._fork(undefined, true, bubble)
 
       const data = pin.peak()
 
@@ -3761,20 +3754,16 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       deepSet(unit_pin_listener, [unitId, type, pinId], pin_unlisten)
 
       all_unlisten.push(pin_unlisten)
-
-      if (data !== undefined) {
-        set(data)
-      }
     }
 
     forEach(inputs, (pinId) => {
       if (unit.isPinConstant('input', pinId)) {
-        setup_unit_constant_pin('input', pinId, false)
+        setup_unit_constant_pin('input', pinId)
       }
     })
     forEach(outputs, (pinId) => {
       if (unit.isPinConstant('output', pinId)) {
-        setup_unit_constant_pin('output', pinId, false)
+        setup_unit_constant_pin('output', pinId)
       }
     })
 
