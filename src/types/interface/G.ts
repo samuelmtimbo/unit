@@ -118,6 +118,11 @@ export interface G<
     bundle?: UnitBundleSpec,
     ...extra: any[]
   ): void
+  cloneUnit(
+    unitId: string,
+    newUnitId: string,
+    ...extra: any[]
+  ): void
   removeUnit(unitId: string, destroy: boolean, ...extra: any[]): void
   removeRoot(subComponentId: string): void
   removeMerge(mergeId: string, ...extra: any[]): void

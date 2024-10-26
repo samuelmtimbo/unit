@@ -432,6 +432,7 @@ import {
   makeAddPinToMergeAction,
   makeAddUnitAction,
   makeBulkEditAction,
+  makeCloneUnitAction,
   makeCoverPinAction,
   makeCoverPinSetAction,
   makeCoverUnitPinSetAction,
@@ -676,6 +677,7 @@ import {
   mapObjKeyKV,
   mapObjVK,
   reduceObj,
+  revertObj,
 } from '../../../../../util/object'
 import { removeWhiteSpace } from '../../../../../util/string'
 import { getDivTextSize } from '../../../../../util/text/getDivTextSize'
@@ -2911,6 +2913,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _clone_drag: boolean = false
   private _clone_drag_node_id: string | null = null
   private _clone_drag_clone_id: string | null = null
+  private _clone_node_ids: string[] = []
   private _clone_drag_actions: Action[] = []
 
   private _blue_drag: boolean = false
@@ -3861,7 +3864,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const bundle = await this._read_bundle_file(file)
 
     if (bundle) {
-      this.paste_bundle(bundle, position, true, true)
+      this.paste_bundle(bundle, position, true, true, false)
     } else {
       throw new Error('invalid bundle file')
     }
@@ -17706,10 +17709,44 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
+      const clone_drag_pressed_node_id = (deep: boolean) => {
+        for (const pressed_node_id in this._pressed_node_id_pointer_id) {
+          const pointer_id = getObjSingleKey(
+            this._pressed_node_id_pointer_id[pressed_node_id]
+          )
+
+          const pointer_position = this._pointer_position[pointer_id]
+
+          if (pressed_node_id === this._clone_drag_clone_id) {
+            this._on_node_clone_drag_end(this._clone_drag_clone_id)
+          }
+
+          const node_ids = [
+            pressed_node_id,
+            ...(this._drag_along_node[pressed_node_id] ?? []),
+          ]
+
+          this._on_node_clone_drag_start(
+            pressed_node_id,
+            node_ids,
+            Number.parseInt(pointer_id, 10),
+            pointer_position.x,
+            pointer_position.y,
+            deep
+          )
+        }
+      }
+
       if (prev_mode !== 'data' && this._mode === 'data') {
         this._set_all_visible_output_pin_opacity(0.5)
+
+        clone_drag_pressed_node_id(true)
       } else if (prev_mode === 'data' && this._mode !== 'data') {
         this._set_all_visible_output_pin_opacity(1)
+
+        if (this._clone_drag) {
+          this._on_node_clone_drag_end(this._clone_drag_clone_id)
+        }
       }
 
       if (prev_mode !== 'add' && this._mode === 'add') {
@@ -17719,12 +17756,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._show_unit_ignored_pins(unit_id)
         }
 
+        clone_drag_pressed_node_id(false)
+
         this._start_graph_simulation(LAYER_NONE)
       } else if (prev_mode === 'add' && this._mode !== 'add') {
         const units = this.get_units()
 
         for (const unit_id in units) {
           this._hide_unit_ignored_pins(unit_id)
+        }
+
+        if (this._clone_drag) {
+          this._on_node_clone_drag_end(this._clone_drag_clone_id)
         }
       }
 
@@ -17817,7 +17860,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
           const _position = this._screen_to_world(position.x, position.y)
 
-          this.paste_bundle(bundle, _position, true, true)
+          this.paste_bundle(bundle, _position, true, true, false)
 
           this._cancel_drag_and_drop()
 
@@ -22043,19 +22086,25 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     )
   }
 
-  private _on_node_drag_end_and_drop = (node_id: string, pointerId: number) => {
-    // console.log('Graph', '_on_node_drag_end_and_drop', node_id)
+  private _on_node_drag_end_and_drop = (
+    node_id: string,
+    pointerId: number,
+    drop: boolean
+  ) => {
+    // console.log('Graph', '_on_node_drag_end_and_drop', node_id, pointerId, drop)
 
     const node_drag_max_distance = this._node_drag_max_distance[node_id]
 
     this.__on_node_drag_end(node_id, pointerId)
 
-    if (this._is_droppable_mode()) {
-      if (node_drag_max_distance > MIN_DRAG_DROP_MAX_D) {
-        if (node_id === this._subgraph_unit_id) {
-          //
-        } else {
-          this._drop_node(node_id)
+    if (drop) {
+      if (this._is_droppable_mode()) {
+        if (node_drag_max_distance > MIN_DRAG_DROP_MAX_D) {
+          if (node_id === this._subgraph_unit_id) {
+            //
+          } else {
+            this._drop_node(node_id)
+          }
         }
       }
     }
@@ -24055,7 +24104,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               ) {
                 this._on_node_drag_end_and_drop(
                   selected_node_id,
-                  Number.parseInt(pointer_id, 10)
+                  Number.parseInt(pointer_id, 10),
+                  true
                 )
               }
             }
@@ -42011,12 +42061,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             if (this._drag_node_pointer_id[drag_along_node_id] !== pointerId) {
               this._drag_node_pointer_id[drag_along_node_id] = pointerId
 
-              this.__on_node_drag_start(
-                drag_along_node_id,
-                pointerId,
-                x + relative_position.x - node.hx,
-                y + relative_position.y - node.hy
-              )
+              if (!this._drag_node_id[drag_along_node_id]) {
+                this.__on_node_drag_start(
+                  drag_along_node_id,
+                  pointerId,
+                  x + relative_position.x - node.hx,
+                  y + relative_position.y - node.hy
+                )
+              }
             }
 
             this._node_drag_move(
@@ -42122,6 +42174,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     node_id: string,
     drag_along_node_id: string
   ): void => {
+    // console.log('_set_node_drag_along', node_id)
+
     this._drag_along_node[node_id] = this._drag_along_node[node_id] ?? []
     this._drag_along_node[node_id].push(drag_along_node_id)
 
@@ -42141,36 +42195,48 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _on_node_clone_drag_start = (
     node_id: string,
-    event: UnitPointerEvent,
+    node_ids: string[],
+    pointerId: number,
+    clientX: number,
+    clientY: number,
     deep: boolean
   ): string | null => {
-    // console.log('Graph', '_on_node_clone_drag_start', node_id, event, deep)
+    // console.log(
+    //   'Graph',
+    //   '_on_node_clone_drag_start',
+    //   node_id,
+    //   node_ids,
+    //   pointerId,
+    //   clientX,
+    //   clientY,
+    //   deep
+    // )
 
     const { specs } = this.$props
-
-    const { pointerId, clientX, clientY } = event
-
-    let node_ids: string[] = []
 
     let new_node_id: string | null = null
     let new_node_ids: string[] = []
     let new_node_id_map: Dict<string> = {}
 
-    if (
-      this._is_node_selected(node_id) &&
-      (this._is_node_id(node_id) || this._is_plug_node_id(node_id))
-    ) {
-      node_ids = keys(this._selected_node_id)
-    } else {
-      node_ids = [node_id]
+    if (!node_ids) {
+      if (
+        this._is_node_selected(node_id) &&
+        (this._is_node_id(node_id) || this._is_plug_node_id(node_id))
+      ) {
+        node_ids = keys(this._selected_node_id)
+      } else {
+        node_ids = [node_id]
+      }
     }
 
     const node_position = this._get_node_position(node_id)
 
     const new_bundle = this._sub_graph_selection(node_ids, false)
 
+    const position = this._screen_center()
+
     const { map_unit_id, map_merge_id, map_plug_id, map_datum_id, actions } =
-      this.paste_bundle(new_bundle, this._screen_center(), false, false)
+      this.paste_bundle(new_bundle, position, false, false, deep)
 
     this._clone_drag_actions = actions
 
@@ -42340,6 +42406,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._clone_drag = true
     this._clone_drag_node_id = node_id
     this._clone_drag_clone_id = new_node_id
+    this._clone_node_ids = new_node_ids
 
     this._force_pointer_drag_swap(
       node_id,
@@ -42403,31 +42470,33 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return new_node_id
   }
 
-  private _on_node_clone_drag_end = (node_id: string) => {
+  private _on_node_clone_drag_end = (clone_node_id: string) => {
     // console.log('Graph', '_on_node_clone_drag_end', node_id)
-
-    if (this._is_unit_node_id(node_id)) {
-      const unit_id = node_id
-
-      if (this._is_unit_component(unit_id)) {
-        this._sim_add_sub_component(unit_id, {}, undefined, true)
-        this._connect_sub_component(unit_id)
-      }
-    }
 
     const actions = this._clone_drag_actions
 
     const bulk = { actions }
-    const bulk_action = makeBulkEditAction(actions)
 
     this._pod.$bulkEdit(bulk)
 
-    this._dispatch_action(bulk_action)
+    for (const cloned_node_id of this._clone_node_ids) {
+      if (this._is_unit_node_id(cloned_node_id)) {
+        if (this._is_unit_component(cloned_node_id)) {
+          this._sim_add_sub_component(cloned_node_id, {}, undefined, true)
+          this._connect_sub_component(cloned_node_id)
+        }
+      }
+    }
+
+    const bulk_action = makeBulkEditAction(actions)
 
     this._clone_drag = false
     this._clone_drag_node_id = null
     this._clone_drag_clone_id = null
     this._clone_drag_actions = []
+    this._clone_node_ids = []
+
+    this._dispatch_action(bulk_action)
   }
 
   private _on_node_red_drag_start = (
@@ -43496,7 +43565,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
                     drag_node_id = this._on_node_clone_drag_start(
                       pressed_node_id,
-                      event,
+                      undefined,
+                      pointerId,
+                      clientX,
+                      clientY,
                       deep
                     )
                   }
@@ -44719,7 +44791,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private __on_pointer_up = (pointerId: number): void => {
+  private __on_pointer_up = (pointerId: number, drop: boolean = true): void => {
     // console.log('Graph', '__on_pointer_up', this._id)
 
     if (this._collapse_pointer_to_unit[pointerId]) {
@@ -44802,8 +44874,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               }
             }
 
-            if (this._clone_drag) {
-              this._on_node_clone_drag_end(this._clone_drag_node_id)
+            if (pressed_node_id === this._clone_drag_clone_id) {
+              this._on_node_clone_drag_end(this._clone_drag_clone_id)
             }
 
             if (this._blue_drag) {
@@ -44824,7 +44896,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                     drag_along_node_id
                   )
 
-                  this._on_node_drag_end_and_drop(drag_along_node_id, pointerId)
+                  this._on_node_drag_end_and_drop(
+                    drag_along_node_id,
+                    pointerId,
+                    drop &&
+                      (this._is_node_id(drag_along_node_id) ||
+                        this._is_plug_node_id(drag_along_node_id))
+                  )
                 }
 
                 delete this._drag_along_node[drag_along_node_id]
@@ -44833,166 +44911,175 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
 
             if (!this._collapse_node_id.has(pressed_node_id)) {
-              this._on_node_drag_end_and_drop(pressed_node_id, pointerId)
+              this._on_node_drag_end_and_drop(pressed_node_id, pointerId, drop)
             }
 
             if (this._is_freeze_mode()) {
               if (this._is_unit_node_id(pressed_node_id)) {
-                type Target = { node_id: string; l: number }
+                if (
+                  !this._clone_drag ||
+                  this._clone_drag_clone_id == pressed_node_id
+                ) {
+                  type Target = { node_id: string; l: number }
 
-                const pin_drop_min_distance: Dict<Heap<Target>> = {}
-                const pin_drop_min_target: Dict<
-                  Heap<Target & { heap: Heap<Target> }>
-                > = {}
+                  const pin_drop_min_distance: Dict<Heap<Target>> = {}
+                  const pin_drop_min_target: Dict<
+                    Heap<Target & { heap: Heap<Target> }>
+                  > = {}
 
-                const target_candidates = {
-                  ...this._normal_node,
-                  ...this._exposed_int_node,
-                }
+                  const target_candidates = {
+                    ...this._normal_node,
+                    ...this._exposed_int_node,
+                  }
 
-                const predicate = (a: Target, b: Target) => {
-                  return a.l < b.l
-                }
+                  const predicate = (a: Target, b: Target) => {
+                    return a.l < b.l
+                  }
 
-                const pins_to_process = new Set<string>()
+                  const pins_to_process = new Set<string>()
 
-                this._for_each_unit_pin(
-                  pressed_node_id,
-                  (pin_node_id: string) => {
-                    if (!this._is_link_pin_merged(pin_node_id)) {
+                  this._for_each_unit_pin(
+                    pressed_node_id,
+                    (pin_node_id: string) => {
                       if (!this._is_link_pin_merged(pin_node_id)) {
-                        pins_to_process.add(pin_node_id)
+                        if (!this._is_link_pin_merged(pin_node_id)) {
+                          pins_to_process.add(pin_node_id)
 
-                        for (const target_node_id in target_candidates) {
-                          const surface_distance =
-                            this._node_node_surface_distance(
-                              pin_node_id,
-                              target_node_id
-                            )
-
-                          const { l } = surface_distance
-
-                          if (
-                            l < NEAR &&
-                            this._is_pin_node_match(pin_node_id, target_node_id)
-                          ) {
-                            const source_heap_node = {
-                              parent: null,
-                              value: { node_id: target_node_id, l },
-                              left: null,
-                              right: null,
-                            }
-
-                            if (pin_drop_min_distance[pin_node_id]) {
-                              pin_drop_min_distance[pin_node_id] = addHeapNode(
-                                pin_drop_min_distance[pin_node_id],
-                                source_heap_node,
-                                predicate
+                          for (const target_node_id in target_candidates) {
+                            const surface_distance =
+                              this._node_node_surface_distance(
+                                pin_node_id,
+                                target_node_id
                               )
-                            } else {
-                              pin_drop_min_distance[pin_node_id] =
-                                source_heap_node
-                            }
 
-                            const target_heap_node = {
-                              parent: null,
-                              value: {
-                                node_id: pin_node_id,
-                                l,
-                                heap: source_heap_node,
-                              },
-                              left: null,
-                              right: null,
-                            }
+                            const { l } = surface_distance
 
-                            if (pin_drop_min_target[target_node_id]) {
-                              pin_drop_min_target[target_node_id] = addHeapNode<
-                                Target & { heap: Heap<Target> }
-                              >(
-                                pin_drop_min_target[target_node_id],
-                                target_heap_node,
-                                predicate
+                            if (
+                              l < NEAR &&
+                              this._is_pin_node_match(
+                                pin_node_id,
+                                target_node_id
                               )
-                            } else {
-                              pin_drop_min_target[target_node_id] =
-                                target_heap_node
+                            ) {
+                              const source_heap_node = {
+                                parent: null,
+                                value: { node_id: target_node_id, l },
+                                left: null,
+                                right: null,
+                              }
+
+                              if (pin_drop_min_distance[pin_node_id]) {
+                                pin_drop_min_distance[pin_node_id] =
+                                  addHeapNode(
+                                    pin_drop_min_distance[pin_node_id],
+                                    source_heap_node,
+                                    predicate
+                                  )
+                              } else {
+                                pin_drop_min_distance[pin_node_id] =
+                                  source_heap_node
+                              }
+
+                              const target_heap_node = {
+                                parent: null,
+                                value: {
+                                  node_id: pin_node_id,
+                                  l,
+                                  heap: source_heap_node,
+                                },
+                                left: null,
+                                right: null,
+                              }
+
+                              if (pin_drop_min_target[target_node_id]) {
+                                pin_drop_min_target[target_node_id] =
+                                  addHeapNode<Target & { heap: Heap<Target> }>(
+                                    pin_drop_min_target[target_node_id],
+                                    target_heap_node,
+                                    predicate
+                                  )
+                              } else {
+                                pin_drop_min_target[target_node_id] =
+                                  target_heap_node
+                              }
                             }
                           }
                         }
                       }
                     }
-                  }
-                )
+                  )
 
-                const final_pin_target_id: Dict<string> = {}
+                  const final_pin_target_id: Dict<string> = {}
 
-                const process_pin = (pin_node_id: string): string | null => {
-                  let final_target_id = null
+                  const process_pin = (pin_node_id: string): string | null => {
+                    let final_target_id = null
 
-                  if (pin_drop_min_distance[pin_node_id]) {
-                    const min_target = pin_drop_min_distance[pin_node_id]
+                    if (pin_drop_min_distance[pin_node_id]) {
+                      const min_target = pin_drop_min_distance[pin_node_id]
 
-                    const { node_id: target_node_id } = min_target.value
+                      const { node_id: target_node_id } = min_target.value
 
-                    const target_heap = pin_drop_min_target[target_node_id]
+                      const target_heap = pin_drop_min_target[target_node_id]
 
-                    if (target_heap) {
-                      if (target_heap.value.node_id === pin_node_id) {
-                        pin_drop_min_target[target_node_id] = removeHeapNode(
-                          target_heap,
-                          predicate
-                        ) as Heap<Target & { heap: Heap<Target> }>
+                      if (target_heap) {
+                        if (target_heap.value.node_id === pin_node_id) {
+                          pin_drop_min_target[target_node_id] = removeHeapNode(
+                            target_heap,
+                            predicate
+                          ) as Heap<Target & { heap: Heap<Target> }>
 
-                        if (pin_drop_min_target[target_node_id]) {
-                          traverseHeap(
-                            pin_drop_min_target[target_node_id],
-                            ({ node_id, heap }) => {
-                              pin_drop_min_distance[node_id] = removeHeapNode(
-                                heap,
-                                predicate
-                              )
-                            }
-                          )
+                          if (pin_drop_min_target[target_node_id]) {
+                            traverseHeap(
+                              pin_drop_min_target[target_node_id],
+                              ({ node_id, heap }) => {
+                                pin_drop_min_distance[node_id] = removeHeapNode(
+                                  heap,
+                                  predicate
+                                )
+                              }
+                            )
+                          }
+
+                          final_pin_target_id[pin_node_id] = target_node_id
+                        } else {
+                          process_pin(target_heap.value.node_id)
                         }
-
-                        final_pin_target_id[pin_node_id] = target_node_id
-                      } else {
-                        process_pin(target_heap.value.node_id)
                       }
+                    }
+
+                    pins_to_process.delete(pin_node_id)
+
+                    return final_target_id
+                  }
+
+                  while (pins_to_process.size > 0) {
+                    for (const pin_node_id of pins_to_process) {
+                      process_pin(pin_node_id)
                     }
                   }
 
-                  pins_to_process.delete(pin_node_id)
+                  for (const pin_node_id in final_pin_target_id) {
+                    const final_target_node_id =
+                      final_pin_target_id[pin_node_id]
 
-                  return final_target_id
-                }
+                    if (
+                      this._is_link_pin_node_id(final_target_node_id) &&
+                      this._spec_is_link_pin_ignored(final_target_node_id)
+                    ) {
+                      this._set_link_pin_ignored(final_target_node_id, false)
+                    }
+                    if (
+                      this._is_link_pin_node_id(pin_node_id) &&
+                      this._spec_is_link_pin_ignored(pin_node_id)
+                    ) {
+                      this._set_link_pin_ignored(pin_node_id, false)
+                    }
 
-                while (pins_to_process.size > 0) {
-                  for (const pin_node_id of pins_to_process) {
-                    process_pin(pin_node_id)
-                  }
-                }
-
-                for (const pin_node_id in final_pin_target_id) {
-                  const final_target_node_id = final_pin_target_id[pin_node_id]
-
-                  if (
-                    this._is_link_pin_node_id(final_target_node_id) &&
-                    this._spec_is_link_pin_ignored(final_target_node_id)
-                  ) {
-                    this._set_link_pin_ignored(final_target_node_id, false)
-                  }
-                  if (
-                    this._is_link_pin_node_id(pin_node_id) &&
-                    this._spec_is_link_pin_ignored(pin_node_id)
-                  ) {
-                    this._set_link_pin_ignored(pin_node_id, false)
+                    this.__drop_pin(pin_node_id, final_target_node_id)
                   }
 
-                  this.__drop_pin(pin_node_id, final_target_node_id)
+                  this._refresh_node_color(pressed_node_id)
                 }
-
-                this._refresh_node_color(pressed_node_id)
               }
             }
           }
@@ -45003,14 +45090,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             if (this._has_node(int_node_id)) {
               this._drag_node_pointer_id[int_node_id] = pointerId
               if (this._is_draggable_mode()) {
-                this._on_node_drag_end_and_drop(int_node_id, pointerId)
+                this._on_node_drag_end_and_drop(int_node_id, pointerId, drop)
               }
             }
           } else if (this._is_int_node_id(pressed_node_id)) {
             const { type, pinId, subPinId } = segmentPlugNodeId(pressed_node_id)
             const ext_node_id = getExtNodeId(type, pinId, subPinId)
             if (this._is_draggable_mode()) {
-              this._on_node_drag_end_and_drop(ext_node_id, pointerId)
+              this._on_node_drag_end_and_drop(ext_node_id, pointerId, drop)
             }
           }
         }
@@ -48614,7 +48701,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     this.__on_node_pointer_leave(node_id, pointerId)
     this.__on_node_pointer_up(node_id, pointerId)
-    this.__on_pointer_up(pointerId)
+    this.__on_pointer_up(pointerId, false)
     this._on_node_drag_end(node_id)
   }
 
@@ -52938,7 +53025,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const valid = this._validate_text_bundle_spec(json)
 
       if (valid) {
-        this.paste_bundle(json, position, true, true)
+        this.paste_bundle(json, position, true, true, false)
       } else {
         const datum_id = this.add_new_datum(stringify(json), position, true)
 
@@ -52994,9 +53081,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     bundle: BundleSpec,
     position: Position,
     mount: boolean,
-    emit: boolean
+    emit: boolean,
+    deep: boolean
   ) => {
-    // console.log('Graph', 'paste_bundle', bundle)
+    // console.log('Graph', 'paste_bundle', bundle, {
+    //   position,
+    //   mount,
+    //   emit,
+    //   deep,
+    // })
 
     const { specs, injectSpecs } = this.$props
 
@@ -53028,7 +53121,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       map_datum_id
     )
 
-    const { actions } = this._paste_spec(remapped_graph, position, mount, emit)
+    const { actions } = this._paste_spec(
+      remapped_graph,
+      position,
+      mount,
+      emit,
+      deep,
+      map_unit_id
+    )
 
     return { map_unit_id, map_merge_id, map_plug_id, map_datum_id, actions }
   }
@@ -53066,11 +53166,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     graph: GraphSpec,
     position: Position,
     mount: boolean,
-    emit: boolean
+    emit: boolean,
+    deep: boolean,
+    map_unit_id: Dict<string>
   ): { actions: Action[] } => {
     // console.log('Graph', '_paste_spec', graph)
 
-    const actions = this._make_paste_spec_bulk_action(graph)
+    const actions = this._make_paste_spec_bulk_action(graph, deep, map_unit_id)
 
     this._dispatch_action(makeBulkEditAction(actions))
 
@@ -53342,8 +53444,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _make_paste_spec_bulk_action = (graph: GraphSpec): Action[] => {
-    // console.log('Graph', '_make_paste_spec_bulk_action', graph)
+  private _make_paste_spec_bulk_action = (
+    graph: GraphSpec,
+    deep: boolean,
+    map_unit_id: Dict<string>
+  ): Action[] => {
+    // console.log(
+    //   'Graph',
+    //   '_make_paste_spec_bulk_action',
+    //   graph,
+    //   deep,
+    //   map_unit_id
+    // )
 
     const { specs, getSpec } = this.$props
 
@@ -53361,6 +53473,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const bulk_actions = []
 
+    const reverse_map_unit_id = revertObj(map_unit_id)
+
     for (const unit_id in units) {
       const unit = units[unit_id]
 
@@ -53370,7 +53484,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const bundle = clone(unitBundleSpec(unit, specs))
 
-      bulk_actions.push(makeAddUnitAction(unit_id, bundle))
+      if (deep) {
+        const source_unit_id = reverse_map_unit_id[unit_id]
+
+        bulk_actions.push(makeCloneUnitAction(source_unit_id, unit_id))
+      } else {
+        bulk_actions.push(makeAddUnitAction(unit_id, bundle))
+      }
     }
 
     for (const sub_component_id in component.subComponents) {
@@ -57535,7 +57655,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const position = this._jiggle_world_screen_center()
 
-      this._paste_spec(spec, position, true, true)
+      this._paste_spec(spec, position, true, true, false, {})
     }
   }
 

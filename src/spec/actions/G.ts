@@ -3,6 +3,7 @@ import {
   GraphAddPinToMergeData,
   GraphAddUnitData,
   GraphBulkEditData,
+  GraphCloneUnitData,
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphCoverUnitPinSetData,
@@ -101,12 +102,27 @@ export const MOVE_SUBGRAPH_OUT_OF = 'moveSubgraphOutOf'
 export const SET_UNIT_SIZE = 'setUnitSize'
 export const SET_COMPONENT_SIZE = 'setComponentSize'
 export const SET_SUB_COMPONENT_SIZE = 'setSubComponentSize'
+export const CLONE_UNIT = 'cloneUnit'
 
 export const wrapAddUnitAction = (data: GraphAddUnitData) => {
   return {
     type: ADD_UNIT,
     data,
   }
+}
+
+export const wrapCloneUnitAction = (data: GraphCloneUnitData) => {
+  return {
+    type: CLONE_UNIT,
+    data,
+  }
+}
+
+export const makeCloneUnitAction = (unitId: string, newUnitId: string) => {
+  return wrapCloneUnitAction({
+    unitId,
+    newUnitId,
+  })
 }
 
 export const makeAddUnitAction = (

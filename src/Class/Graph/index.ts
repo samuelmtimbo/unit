@@ -157,6 +157,7 @@ import {
   GraphAddUnitData,
   GraphAddUnitGhostData,
   GraphBulkEditData,
+  GraphCloneUnitData,
   GraphCoverPinData,
   GraphCoverPinSetData,
   GraphExposePinData,
@@ -3986,15 +3987,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _cloneUnit(unitId: string, newUnitId: string): Unit {
+    // console.log('_cloneUnit', unitId, newUnitId)
+
     const unit = this.getUnit(unitId)
 
     const [newUnit, bundle] = cloneUnit(unit, true)
 
     this._addUnit(newUnitId, newUnit, bundle, null)
-
-    if (!this._paused) {
-      newUnit.play()
-    }
 
     return newUnit
   }
@@ -6253,6 +6252,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
             if (plugs) {
               this._addUnitPlugs(unitId, plugs)
             }
+          },
+          cloneUnit: (data: GraphCloneUnitData) => {
+            const { unitId, newUnitId } = data
+
+            this._cloneUnit(unitId, newUnitId)
           },
           removeUnit: (data: GraphRemoveUnitData) => {
             const { unitId } = data
