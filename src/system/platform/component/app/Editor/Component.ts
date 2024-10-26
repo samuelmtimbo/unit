@@ -13642,6 +13642,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._set_merge_input_color(node_id, mode_color)
 
           const merge_inputs = this._merge_to_input[node_id]
+          const merge_outputs = this._merge_to_output[node_id]
+
+          let output_displayed_count = 0
+
+          for (const output_node_id in merge_outputs) {
+            if (this._is_link_pin_displayed(output_node_id)) {
+              output_displayed_count++
+            }
+          }
+
+          if (output_displayed_count > 0) {
+            this._set_merge_output_color(node_id, mode_color)
+          }
 
           for (const input_node_id in merge_inputs) {
             this._set_link_pin_link_color(input_node_id, mode_link_color)
@@ -13798,7 +13811,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (
       this._is_node_hovered(node_id) ||
       this._is_node_dragged(node_id) ||
-      (this._is_node_selected(node_id) && this._is_node_ascend(node_id)) ||
+      (this._is_node_selected(node_id) &&
+        (!this._ascend_z_count || this._is_node_ascend(node_id))) ||
       this._is_node_ascend(node_id)
     ) {
       return true
@@ -42370,6 +42384,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
       }
+    }
+
+    for (const new_node_id of new_node_ids) {
+      this._ascend_node(new_node_id)
     }
 
     for (const node_id of node_ids) {
