@@ -42395,10 +42395,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     for (const new_node_id of new_node_ids) {
-      this._ascend_node(new_node_id)
-
       this._refresh_node_color(new_node_id)
     }
+
+    this._set_node_pointer_capture(node_id, pointerId)
 
     return new_node_id
   }
@@ -42566,6 +42566,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._remove_pin_from_merge(unit_merge_node_id, self_pin_node_id)
     }
+
+    this._set_node_pointer_capture(unit_id, pointer_id)
   }
 
   private _on_node_blue_drag_start = (
@@ -42579,6 +42581,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else if (this._is_plug_node_id(node_id)) {
       this._on_plug_blue_drag_start(node_id, pointer_id)
     }
+
+    this._set_node_pointer_capture(node_id, pointer_id)
   }
 
   private _on_node_blue_drag_end = (
@@ -43150,10 +43154,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _ascend_z_count: number = 0
-
   private _ascend_node_dict: Dict<boolean> = {}
-
-  private _system_drag_layer: Component = null
 
   private _ascend_node_z = (node_id: string): void => {
     // console.log('Graph', '_ascend_node_z', node_id)
@@ -43503,9 +43504,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                   this._on_node_red_drag_start(drag_node_id, pointerId)
                 } else if (this._mode === 'change') {
                   if (this._is_unit_node_id(drag_node_id)) {
-                    this._on_unit_blue_drag_start(drag_node_id, pointerId)
-
-                    this._ascend_node(drag_node_id)
+                    this._on_node_blue_drag_start(drag_node_id, pointerId)
                   } else if (this._is_datum_node_id(drag_node_id)) {
                     const { datumId } = segmentDatumNodeId(drag_node_id)
 
