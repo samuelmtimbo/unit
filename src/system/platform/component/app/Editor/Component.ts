@@ -42485,6 +42485,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._connect_sub_component(cloned_node_id)
         }
       }
+
+      this._refresh_node_color(cloned_node_id)
     }
 
     const bulk_action = makeBulkEditAction(actions)
