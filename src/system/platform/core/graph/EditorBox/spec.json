@@ -116,12 +116,12 @@
         }
       }
     },
-    "div": {
-      "id": "66698a97-15c5-4602-9925-11a1aeb03710",
+    "box": {
+      "id": "9eba84b6-d2ca-47e6-9195-8208dbb880bc",
       "input": {
         "style": {
           "constant": true,
-          "data": "{\"width\":\"100%\"}",
+          "data": "{}",
           "metadata": {
             "position": {
               "x": -503,
@@ -183,7 +183,7 @@
           "frame": true
         }
       },
-      "div": {
+      "box": {
         "output": {
           "_self": true
         }
@@ -199,18 +199,18 @@
   "component": {
     "slots": [
       ["editor", "default"],
-      ["div", "default"]
+      ["box", "default"]
     ],
     "children": ["row"],
     "subComponents": {
       "editor": {
         "children": []
       },
-      "div": {
+      "box": {
         "children": []
       },
       "row": {
-        "children": ["editor", "div"]
+        "children": ["editor", "box"]
       }
     },
     "defaultWidth": 420,
