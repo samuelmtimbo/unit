@@ -31111,8 +31111,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const layer_trait = extractTrait(layer, measureText)
           const frame_trait = extractTrait(this._frame, measureText)
 
-          let offset_x = this._frame_out ? frame_trait.x : 0
-          let offset_y = this._frame_out ? frame_trait.y : 0
+          const same_context = this._frame.$context.$parent === layer.$context
+
+          let offset_x = this._frame_out
+            ? same_context
+              ? this.$context.$x
+              : frame_trait.x
+            : 0
+          let offset_y = this._frame_out
+            ? same_context
+              ? this.$context.$y
+              : frame_trait.y
+            : 0
 
           const _trait = all_trait[leaf_id]
 
