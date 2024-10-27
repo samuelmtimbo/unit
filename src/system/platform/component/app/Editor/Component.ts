@@ -18566,7 +18566,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _enable_crud = (): void => {
     if (this._modes) {
       if (!this._unlisten_crud) {
-        // console.log('Graph', '_enable_crud')
         this._unlisten_crud = this._modes.addEventListeners([
           makeCustomListener('entermode', this._on_enter_mode),
         ])
@@ -42231,7 +42230,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const node_position = this._get_node_position(node_id)
 
-    const new_bundle = this._sub_graph_selection(node_ids, false)
+    const new_bundle = this._sub_graph_selection(node_ids, deep)
 
     const position = this._screen_center()
 
@@ -52654,9 +52653,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     for (const unit_id of unit_ids) {
       const unit = clone(this._get_unit(unit_id))
 
-      if (!deep) {
-        delete unit.memory
-      }
+      delete unit.memory
 
       units[unit_id] = unit
 
@@ -52724,13 +52721,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ) {
         //
       } else {
-        const { datumId } = segmentDatumNodeId(datum_node_id)
+        if (!deep) {
+          const { datumId } = segmentDatumNodeId(datum_node_id)
 
-        const tree = this._datum_tree[datumId]
+          const tree = this._datum_tree[datumId]
 
-        const { value } = tree
+          const { value } = tree
 
-        data[datumId] = { value }
+          data[datumId] = { value }
+        }
       }
     }
 
@@ -52822,21 +52821,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         for (const specId in unit_bundle.specs) {
           bundle.specs[specId] = unit_bundle.specs[specId]
         }
-      }
-    }
-
-    if (deep) {
-      for (const unit_id of unit_ids) {
-        ;(async () => {
-          this._pod_get_unit_deep_bundle(
-            unit_id,
-            async (unit_bundle_spec: UnitBundleSpec) => {
-              const { unit } = unit_bundle_spec
-
-              deepSet(bundle, ['spec', 'units', unit_id], unit)
-            }
-          )
-        })()
       }
     }
 
