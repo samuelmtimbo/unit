@@ -55,6 +55,8 @@
 | <kbd>Click</kbd>        |                   | <kbd>Node</kbd>          | Select               |
 | <kbd>Click</kbd>        |                   | <kbd>Background</kbd>    | Deselect All         |
 | <kbd>Double Click</kbd> |                   | <kbd>Component</kbd>     | Unlock Component     |
+| <kbd>Double Click</kbd> |                   | <kbd>Background</kbd>    | Edit Empty Datum     |
+| <kbd>Double Click</kbd> | <kbd>Group</kbd>  | <kbd>Background</kbd>    | Toggle Select All    |
 | <kbd>Click</kbd>        | <kbd>Group</kbd>  | <kbd>Node</kbd>          | Multiselect          |
 | <kbd>Click</kbd>        | <kbd>Data</kbd>   | <kbd>Pin</kbd>           | Suggest Pin Data     |
 | <kbd>Click</kbd>        | <kbd>Data</kbd>   | <kbd>Unit</kbd>          | Suggest Unit Data    |
