@@ -129,6 +129,8 @@ export class Component<
   public $slotChildren: Dict<Component[]> = { default: [] }
   public $childSlotName: string[] = []
 
+  public $remoteChildren: Component[] = []
+
   public $slot: Dict<Component> = { default: this }
   public $slotId: Dict<string> = {}
   public $slotTarget: Dict<string> = {}
@@ -1577,6 +1579,7 @@ export class Component<
 
     this.$slotChildren[slotName] = this.$slotChildren[slotName] || []
     this.$slotChildren[slotName].push(child)
+
     this.$children.push(child)
     this.$childSlotName[at] = slotName
 
@@ -1829,6 +1832,8 @@ export class Component<
           const slot_name = 'default'
 
           this.appendChild(child, slot_name)
+
+          push(this.$remoteChildren, child)
         } else if (event_event === 'append_children') {
           const bundles = event_data
 
@@ -1839,14 +1844,20 @@ export class Component<
           const slot_name = 'default'
 
           this.appendChildren(children, slot_name)
+
+          for (const child of children) {
+            push(this.$remoteChildren, child)
+          }
         } else if (event_event === 'remove_child') {
           const at = event_data
 
-          const child = this.$children[at]
+          const child = this.$remoteChildren[at]
 
           this.removeChildAt(at)
 
           child.destroy()
+
+          remove(this.$remoteChildren, child)
         } else if (event_event === 'register') {
           this.register()
         } else if (event_event === 'unregister') {
@@ -2208,7 +2219,7 @@ export class Component<
 
     this._unit_unlisten()
 
-    for (const child of this.$children) {
+    for (const child of this.$remoteChildren) {
       child.disconnect()
     }
 
