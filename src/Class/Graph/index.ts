@@ -3978,22 +3978,35 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     return unit
   }
 
-  public cloneUnit(unitId: string, newUnitId: string): Unit {
-    const newUnit = this._cloneUnit(unitId, newUnitId)
+  public cloneUnit(
+    unitId: string,
+    newUnitId: string,
+    parentId?: string | null,
+    emit: boolean = true,
+    fork: boolean = true,
+    bubble: boolean = true
+  ): Unit {
+    const newUnit = this._cloneUnit(unitId, newUnitId, parentId, fork, bubble)
 
-    this.edit('clone_unit', unitId, newUnitId, newUnit, [])
+    emit && this.edit('clone_unit', unitId, newUnitId, newUnit, [])
 
     return newUnit
   }
 
-  private _cloneUnit(unitId: string, newUnitId: string): Unit {
-    // console.log('_cloneUnit', unitId, newUnitId)
+  private _cloneUnit(
+    unitId: string,
+    newUnitId: string,
+    parentId: string | null = null,
+    fork: boolean = true,
+    bubble: boolean = true
+  ): Unit {
+    // console.log('_cloneUnit', unitId, newUnitId, parentId)
 
     const unit = this.getUnit(unitId)
 
     const [newUnit, bundle] = cloneUnit(unit, true)
 
-    this._addUnit(newUnitId, newUnit, bundle, null)
+    this._addUnit(newUnitId, newUnit, bundle, parentId, fork, bubble)
 
     return newUnit
   }

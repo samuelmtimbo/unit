@@ -113,6 +113,11 @@ export function lazyFromSpec(
       })
     }
 
+    cloneUnit(unitId: string, newUnitId: string, ...extra: any[]): void {
+      this._ensure()
+      this.__graph.cloneUnit(unitId, newUnitId, ...extra)
+    }
+
     stopPropagation(name: string): Unlisten {
       this._ensure()
       return this.__graph.stopPropagation(name)
@@ -863,9 +868,9 @@ export function lazyFromSpec(
       return this.__graph.addUnitSpecs(units)
     }
 
-    public addUnit = (unitId: string, unit: Unit): void => {
+    public addUnit = (unitId: string, unit: Unit, ...extra: any[]): void => {
       this._ensure()
-      return this.__graph.addUnit(unitId, unit)
+      return this.__graph.addUnit(unitId, unit, ...extra)
     }
 
     public removeUnit(unitId: string, ...extra: any[]) {
