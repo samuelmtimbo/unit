@@ -42227,7 +42227,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     if (!node_ids) {
       if (
         this._is_node_selected(node_id) &&
-        (this._is_node_id(node_id) || this._is_plug_node_id(node_id))
+        (this._is_node_id(node_id) ||
+          this._is_plug_node_id(node_id) ||
+          this._is_datum_node_id(node_id))
       ) {
         node_ids = keys(this._selected_node_id)
       } else {
@@ -42313,6 +42315,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           return new_plug_node_id
         },
         datum: (datum_node_id: string) => {
+          const { datumId } = segmentDatumNodeId(datum_node_id)
+
+          const newDatumId = map_datum_id[datumId]
+
+          if (newDatumId) {
+            const new_datum_node_id = getDatumNodeId(newDatumId)
+
+            new_node_id_map[datum_node_id] = new_datum_node_id
+
+            return new_datum_node_id
+          }
+
           return null
         },
         err: (err_node_id: string) => {
@@ -42321,11 +42335,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       })
     })
 
-    const selected_datum_node_ids = node_ids.filter((new_node_id) => {
-      return this._is_datum_node_id(new_node_id)
+    const datum_node_ids = node_ids.filter((node_id) => {
+      return this._is_datum_node_id(node_id)
     })
 
-    for (const datum_node_id of selected_datum_node_ids) {
+    for (const datum_node_id of datum_node_ids) {
       const { datumId } = segmentDatumNodeId(datum_node_id)
 
       const datum_pin_node_id = this._datum_to_pin[datum_node_id]
@@ -52726,15 +52740,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ) {
         //
       } else {
-        if (!deep) {
-          const { datumId } = segmentDatumNodeId(datum_node_id)
+        const { datumId } = segmentDatumNodeId(datum_node_id)
 
-          const tree = this._datum_tree[datumId]
+        const tree = this._datum_tree[datumId]
 
-          const { value } = tree
+        const { value } = tree
 
-          data[datumId] = { value }
-        }
+        data[datumId] = { value }
       }
     }
 
