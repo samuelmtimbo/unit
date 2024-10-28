@@ -44008,12 +44008,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const new_pin_id = newSpecPinIdStart(spec, type)
 
-      if (shouldFork(spec.id)) {
-        const new_spec_id = newSpecId()
-
-        this._spec_fork_unit(unit_id, new_spec_id)
-      }
-
       this.expose_unit_pin_set(
         unit_id,
         type,
@@ -56534,7 +56528,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (path.length === 0) {
-      this._spec_fork_unit(unitId, forked_unit_spec.id, forked_unit_spec)
+      this._spec_fork_unit(unitId, forked_unit_spec.id)
       this._sim_fork_unit(unitId, forked_unit_spec.id)
     } else {
       const spec = this._get_unit_spec(unitId) as GraphSpec
