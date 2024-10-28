@@ -2589,6 +2589,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _drag_count: number = 0
   private _drag_node_id: Dict<boolean> = {}
   private _drag_node_pointer_id: Dict<number> = {}
+  private _drag_pointer_id_node: Dict<Set<string>> = {}
 
   private _drag_along_node: Dict<string[]> = {}
   private _drag_along_source: Dict<string> = {}
@@ -5470,6 +5471,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._drag_count = 0
     this._drag_node_id = {}
     this._drag_node_pointer_id = {}
+    this._drag_pointer_id_node = {}
 
     this._static = false
     this._static_position = {}
@@ -14694,10 +14696,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       delete this._drag_node_pointer_id[node_id]
+
+      this._drag_pointer_id_node[pointer_id].delete(node_id)
+      if (!this._drag_pointer_id_node[pointer_id].size) {
+        delete this._drag_pointer_id_node[pointer_id]
+      }
     } else if (!was_dragged && dragged) {
       this._drag_count++
       this._drag_node_id[node_id] = true
       this._drag_node_pointer_id[node_id] = pointer_id
+      this._drag_pointer_id_node[pointer_id] =
+        this._drag_pointer_id_node[pointer_id] ?? new Set()
+      this._drag_pointer_id_node[pointer_id].add(node_id)
 
       if (this._is_ext_node_id(node_id)) {
         if (!this._drag_ext_node_id.has(node_id)) {
@@ -17694,28 +17704,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         propagate_to_selected(this._tree_layout)
       }
 
-      if (prev_mode !== 'none' && this._mode === 'none') {
-        for (const selected_node_id in this._selected_node_id) {
-          if (this._is_unit_node_id(selected_node_id)) {
-            this._enable_core_resize(selected_node_id)
-          } else if (this._is_datum_node_id(selected_node_id)) {
-            //
-          }
-        }
-
-        if (this._drag_and_drop) {
-          this._drag_and_drop_cancel()
-        }
-      } else if (prev_mode === 'none' && this._mode !== 'none') {
-        for (const selected_node_id in this._selected_node_id) {
-          if (this._is_unit_node_id(selected_node_id)) {
-            this._disable_core_resize(selected_node_id)
-          } else if (this._is_datum_node_id(selected_node_id)) {
-            this._enable_datum_overlay(selected_node_id)
-          }
-        }
-      }
-
       const clone_drag_pressed_node_id = (deep: boolean) => {
         for (const pressed_node_id in this._pressed_node_id_pointer_id) {
           const pointer_id = getObjSingleKey(
@@ -17741,6 +17729,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             pointer_position.y,
             deep
           )
+        }
+      }
+
+      const start_drag_node_ids = keys(this._drag_node_id)
+
+      if (prev_mode !== 'none' && this._mode === 'none') {
+        for (const selected_node_id in this._selected_node_id) {
+          if (this._is_unit_node_id(selected_node_id)) {
+            this._enable_core_resize(selected_node_id)
+          } else if (this._is_datum_node_id(selected_node_id)) {
+            //
+          }
+        }
+
+        if (this._drag_and_drop) {
+          this._drag_and_drop_cancel()
+        }
+      } else if (prev_mode === 'none' && this._mode !== 'none') {
+        for (const selected_node_id in this._selected_node_id) {
+          if (this._is_unit_node_id(selected_node_id)) {
+            this._disable_core_resize(selected_node_id)
+          } else if (this._is_datum_node_id(selected_node_id)) {
+            this._enable_datum_overlay(selected_node_id)
+          }
         }
       }
 
@@ -17817,7 +17829,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       if (prev_mode !== 'change' && this._mode === 'change') {
-        for (const drag_node_id in this._drag_node_id) {
+        for (const drag_node_id of start_drag_node_ids) {
           const pointer_ids = this._pressed_node_id_pointer_id[drag_node_id]
 
           for (const pointer_id in pointer_ids) {
@@ -17849,14 +17861,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
 
       if (prev_mode !== 'remove' && this._mode === 'remove') {
-        for (const drag_node_id in this._drag_node_id) {
-          const pointer_id = this._drag_node_pointer_id[drag_node_id]
+        for (const pointer_id in this._pointer_id_pressed_node_id) {
+          const pressed_node_id = this._pointer_id_pressed_node_id[pointer_id]
+          const drag_node_ids = [...this._drag_pointer_id_node[pointer_id]]
 
-          this._on_node_red_drag_start(drag_node_id, pointer_id)
+          this._on_node_red_drag_start(
+            pressed_node_id,
+            Number.parseInt(pointer_id, 10),
+            drag_node_ids
+          )
         }
       } else if (prev_mode === 'remove' && this._mode !== 'remove') {
-        for (const drag_node_id in this._drag_node_id) {
+        for (const drag_node_id of start_drag_node_ids) {
           this._on_node_red_drag_end(drag_node_id)
+
+          this._refresh_node_color(drag_node_id)
         }
 
         if (this._drag_and_drop) {
@@ -38301,8 +38320,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       this._set_drag_node(node_id, pointerId, false)
 
-      delete this._drag_node_pointer_id[node_id]
-
       if (was_selected) {
         for (const selected_node_id in this._selected_node_id) {
           if (this._drag_node_pointer_id[selected_node_id] === pointerId) {
@@ -38310,6 +38327,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
       }
+    }
+
+    const drag_along_node_id = this._drag_along_source[node_id]
+    if (drag_along_node_id) {
+      this._remove_node_drag_along(drag_along_node_id, node_id)
     }
 
     if (this._collapse_node_id.has(node_id)) {
@@ -42554,18 +42576,24 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _on_node_red_drag_start = (
     node_id: string,
-    pointer_id: number
+    pointer_id: number,
+    selected_node_ids: string[]
   ): void => {
-    // console.log('_on_node_red_drag_start', node_id, pointer_id)
+    // console.log(
+    //   '_on_node_red_drag_start',
+    //   node_id,
+    //   pointer_id,
+    //   selected_node_ids
+    // )
 
     this._ascend_node(node_id)
 
     if (this._is_unit_node_id(node_id)) {
-      this._on_unit_red_drag_start(node_id, pointer_id)
+      this._on_unit_red_drag_start(node_id, pointer_id, selected_node_ids)
     } else if (this._is_link_pin_node_id(node_id)) {
       const { unitId } = segmentLinkPinNodeId(node_id)
 
-      this._on_unit_red_drag_start(unitId, pointer_id)
+      this._on_unit_red_drag_start(unitId, pointer_id, selected_node_ids)
     }
   }
 
@@ -42592,14 +42620,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _on_unit_red_drag_start = (
     unit_id: string,
-    pointer_id: number
+    pointer_id: number,
+    selected_node_ids: string[]
   ): void => {
     // console.log('Graph', '_on_unit_red_drag_start', unit_id, pointer_id)
 
     let node_ids = { [unit_id]: true }
 
-    if (this._is_node_selected(unit_id)) {
-      for (const selected_node_id in this._selected_node_id) {
+    if (selected_node_ids.includes(unit_id)) {
+      for (const selected_node_id of selected_node_ids) {
         node_ids[selected_node_id] = true
       }
     }
@@ -42609,7 +42638,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._remove_unit_merges__predicated(
           node_id,
           (pin_node_id, merge_node_id) => {
-            if (this._is_node_selected(merge_node_id)) {
+            if (selected_node_ids.includes(merge_node_id)) {
               const merge = this._get_merge(merge_node_id)
 
               const unit_ids = keys(merge)
@@ -42619,7 +42648,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               const not_selected_merge = {}
 
               for (const unit_id of unit_ids) {
-                if (!this._is_node_selected(unit_id)) {
+                if (!selected_node_ids.includes(unit_id)) {
                   not_selected_count++
 
                   not_selected_merge[unit_id] = clone(merge[unit_id])
@@ -42690,6 +42719,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._set_node_pointer_capture(unit_id, pointer_id)
+
+    for (const node_id in node_ids) {
+      this._refresh_node_color(node_id)
+    }
   }
 
   private _on_node_blue_drag_start = (
@@ -43626,7 +43659,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                     )
                   }
                 } else if (this._mode === 'remove') {
-                  this._on_node_red_drag_start(drag_node_id, pointerId)
+                  this._on_node_red_drag_start(
+                    drag_node_id,
+                    pointerId,
+                    keys(this._selected_node_id)
+                  )
                 } else if (this._mode === 'change') {
                   if (this._is_unit_node_id(drag_node_id)) {
                     this._on_node_blue_drag_start(drag_node_id, pointerId)
