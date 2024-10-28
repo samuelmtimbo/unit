@@ -17975,6 +17975,37 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._refresh_compatible()
       }
 
+      if (prev_mode !== 'none' && this._mode === 'none') {
+        if (this.__is_freeze_mode(prev_mode)) {
+          for (const pointer_id in this._pointer_id_pressed_node_id) {
+            const pressed_node_id = this._pointer_id_pressed_node_id[pointer_id]
+            const drag_along_node_ids = [
+              ...(this._drag_along_node[pressed_node_id] ?? []),
+            ]
+
+            for (const drag_along_node_id of drag_along_node_ids) {
+              this._remove_node_drag_along(pressed_node_id, drag_along_node_id)
+
+              this.__on_node_drag_end(
+                drag_along_node_id,
+                Number.parseInt(pointer_id, 10)
+              )
+
+              this._refresh_node_fixed(drag_along_node_id)
+            }
+
+            for (const drag_node_id of [
+              pressed_node_id,
+              ...drag_along_node_ids,
+            ]) {
+              this._descend_node(drag_node_id)
+            }
+          }
+        }
+      } else if (prev_mode === 'none' && this._mode !== 'none') {
+        //
+      }
+
       if (
         !this._is_minimap_drag_and_drop_mode(prev_mode) &&
         this._is_minimap_drag_and_drop_mode(this._mode)
