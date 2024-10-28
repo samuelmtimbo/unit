@@ -59,10 +59,6 @@ export function watchUnit<T extends Unit>(
     all.push(watchUnitEvent('unregister', unit, callback))
   }
 
-  if (events.includes('destroy')) {
-    all.push(watchUnitEvent('destroy', unit, callback))
-  }
-
   if (unit instanceof Graph) {
     all.push(watchGraphInternal(unit, events, callback))
   }

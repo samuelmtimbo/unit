@@ -3,7 +3,7 @@ import { deleteGlobalRef, setGlobalRef } from '../global'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
 
-export type $_EE = { destroy: []; register: []; unregister: [] }
+export type $_EE = { destroy: [string[]]; register: []; unregister: [] }
 
 export type $Events<_EE extends Dict<any[]>> = EventEmitter_EE<_EE & $_EE> &
   $_EE
@@ -61,7 +61,7 @@ export class $<
 
     this.__done = true
 
-    this.emit('destroy')
+    this.emit('destroy', [])
   }
 
   raw(): any {

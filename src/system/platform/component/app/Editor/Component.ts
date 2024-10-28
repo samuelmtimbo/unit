@@ -55755,7 +55755,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         {
           events: [
             'fork',
-            'destroy',
             'append_child',
             'remove_child',
             'insert_child',
@@ -58217,16 +58216,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._on_graph_unit_link_pin_drop_moment(_data)
   }
 
-  private _on_graph_unit_destroy = (data: { unitId: string }) => {
+  private _on_graph_unit_destroy = (data: { path: string[] }) => {
     // console.log('_on_graph_unit_destroy', data)
 
-    const { unitId } = data
+    const { specs, setSpec } = this.$props
 
-    if (!this._has_node(unitId)) {
-      return
+    let { path } = data
+
+    const unitId = last(path)
+
+    path = path.slice(0, -1)
+
+    if (this._is_spec_updater(path)) {
+      const unit_spec = clone(findSpecAtPath(specs, this._spec, path))
+
+      removeUnit({ unitId }, unit_spec)
+
+      setSpec(unit_spec.id, unit_spec)
     }
 
-    this._state_remove_unit(unitId)
+    if (path.length === 0) {
+      this._state_remove_unit(unitId)
+
+      this._start_graph_simulation(LAYER_NORMAL)
+    }
   }
 
   private _on_graph_unit_err_moment = (data: GraphUnitErrMomentData) => {
@@ -59294,8 +59307,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { event, type, data } = moment
 
-    if ((moment?.data?.path?.length ?? 0) > 0) {
-      this._on_graph_moment(moment)
+    if (moment.data?.path) {
+      if (moment.data.path.length > 0) {
+        this._on_graph_moment(moment)
+      }
     } else {
       this._unit_moment_handler[type][event](data)
     }

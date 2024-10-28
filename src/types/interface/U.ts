@@ -29,7 +29,6 @@ export type U_EE<I extends Dict<any> = any, O extends Dict<any> = any> = {
   reset: []
   play: []
   pause: []
-  destroy: []
 }
 
 export interface U<

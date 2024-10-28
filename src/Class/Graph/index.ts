@@ -981,7 +981,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
   }
 
-  private _destroy = () => {
+  private _destroy = (path: string[]) => {
+    if (path.length > 0) {
+      return
+    }
+
     this._spec = clone(this._spec)
 
     this._destroying = true
@@ -3770,21 +3774,25 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     all_unlisten.push(
       unit.addListener('destroy', (path: string[] = []) => {
-        if (path.length > 0) {
-          return
+        const bubble = () => {
+          this.emit('destroy', [unitId, ...path])
         }
 
-        if (this._destroying) {
-          return
-        }
+        if (
+          path.length > 0 ||
+          this._destroying ||
+          this._removingUnit.has(unitId)
+        ) {
+          bubble()
 
-        if (this._removingUnit.has(unitId)) {
           return
         }
 
         const fork = !this.__done
 
         this._removeUnit(unitId, false, false, fork, true)
+
+        bubble()
       })
     )
     all_unlisten.push(unit.addListener('set_input', boundSetUnitInput))

@@ -5,6 +5,7 @@ import { Unlisten } from '../../types/Unlisten'
 import { callAll } from '../../util/call/callAll'
 import { Moment } from './../Moment'
 import { watchGraphBulkEditEvent } from './watchGraphBulkEditEvent'
+import { watchGraphDestroyEvent } from './watchGraphDestroyEvent'
 import { watchGraphExposePinEvent } from './watchGraphExposedPinEvent'
 import { watchGraphExposedPinSetEvent } from './watchGraphExposedPinSetEvent'
 import { watchGraphForkEvent } from './watchGraphForkEvent'
@@ -62,6 +63,7 @@ export const GRAPH_EVENT_TO_WATCHER: Dict<
   remove_unit_pin_data: watchGraphRemoveUnitPinData,
   set_unit_id: watchGraphSetUnitIdEvent,
   bulk_edit: watchGraphBulkEditEvent,
+  destroy: watchGraphDestroyEvent,
   metadata: watchGraphMetadataEvent,
 }
 

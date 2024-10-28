@@ -101,7 +101,11 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
     if (name === 'graph') {
       this._graph = data as Graph
 
-      data.addListener('destroy', () => {
+      data.addListener('destroy', (path: string[]) => {
+        if (path.length > 0) {
+          return
+        }
+
         if (this._graph === this._fallback_graph) {
           this._fallback()
         }
