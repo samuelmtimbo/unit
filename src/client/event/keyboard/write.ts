@@ -353,7 +353,7 @@ export const getSelectionRange = (
   }
 }
 
-// Selection is broken on Safari iOS (inside Shadow Root)
+// Selection is broken on Safari (iOS) (inside Shadow Root)
 export function selectElementContents(
   system: System,
   element: HTMLDivElement,

@@ -295,7 +295,7 @@ export class PositionObserver_ implements PositionObserver {
       box: 'device-pixel-content-box',
     }
 
-    // Safari (on iOS) will not accept this config
+    // Safari (iOS) will not accept this config
     // resizeObserver.observe(element, resizeConfig)
     resizeObserver.observe(element)
 

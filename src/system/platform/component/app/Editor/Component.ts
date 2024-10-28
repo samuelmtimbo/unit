@@ -15778,10 +15778,17 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this.__on_pointer_leave(pointerId)
   }
 
-  private _a: boolean = false
-
   private __on_pointer_leave = (pointerId: number) => {
     // console.log('Graph', '_on_pointer_leave')
+
+    const pointer_hover_node_id = this._pointer_id_hover_node_id[pointerId]
+
+    // AD HOC
+    // Safari (iOS) might not dispatch node "pointerleave" event,
+    // possibly due to forced pointer swap
+    if (pointer_hover_node_id) {
+      this.__on_node_pointer_leave(pointer_hover_node_id, pointerId)
+    }
 
     this.__on_pointer_up(pointerId)
   }
@@ -44808,6 +44815,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._pointer_down[pointerId]) {
+      const node_id = this._pointer_id_pressed_node_id[pointerId]
+
       delete this._pointer_down[pointerId]
       delete this._pointer_down_position[pointerId]
       delete this._pointer_down_move_count[pointerId]
