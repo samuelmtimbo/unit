@@ -22737,6 +22737,27 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
+  private _animate_unit_opacity = (
+    unit_id: string,
+    from: number,
+    to: number,
+    callback: () => void
+  ) => {
+    const unlisten = this._animate_simulate(
+      { opacity: from },
+      () => {
+        return { opacity: to }
+      },
+      [['opacity', 0.1]],
+      ({ opacity }) => {
+        this._set_unit_style_attr(unit_id, 'opacity', `${opacity}`)
+      },
+      callback
+    )
+
+    return unlisten
+  }
+
   private _move_datum_to_empty_unit = (
     datum_node_id: string,
     unit_id: string
@@ -58246,7 +58267,16 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (path.length === 0) {
-      this._state_remove_unit(unitId)
+      this._state_remove_unit_merges(unitId)
+      this._state_remove_unit_plugs(unitId)
+
+      this._ascend_node(unitId)
+
+      this._animate_unit_opacity(unitId, 1, 0, () => {
+        this._descend_node(unitId)
+
+        this._state_remove_unit(unitId)
+      })
 
       this._start_graph_simulation(LAYER_NORMAL)
     }
