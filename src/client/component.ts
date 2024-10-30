@@ -679,20 +679,16 @@ export class Component<
     }
 
     registerLocalComponent(this, this.$remoteId)
-
-    // this._forAllDescendent((child) => {
-    //   child.register()
-    // })
   }
 
   unregister() {
+    if (!this.$remoteId) {
+      return
+    }
+
     const { unregisterLocalComponent } = this.$system
 
     unregisterLocalComponent(this, this.$remoteId)
-
-    // this._forAllDescendent((child) => {
-    //   child.unregister()
-    // })
   }
 
   isFocusInside(): boolean {
