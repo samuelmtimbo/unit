@@ -44,20 +44,18 @@ export class $<
     if (this.__ref_count === 1) {
       this.__global_id = setGlobalRef(this.__system, this)
     }
-
-    this.emit('register')
   }
 
   unregister(): void {
     this.__ref_count--
 
     if (this.__ref_count === 0) {
-      this.emit('unregister')
+      deleteGlobalRef(this.__system, this.__global_id)
     }
   }
 
   destroy() {
-    deleteGlobalRef(this.__system, this.__global_id)
+    this.unregister()
 
     this.__done = true
 

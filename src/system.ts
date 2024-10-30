@@ -62,8 +62,7 @@ export interface System extends S, R {
   global: {
     data: Object_<any>
     ref: Dict<any>
-    ref_: Dict<Dict<Unit>>
-    component: Dict<any>
+    unit: Dict<Dict<Unit>>
     scope: Dict<any>
   }
   api: API
@@ -73,14 +72,9 @@ export interface System extends S, R {
   }
   tick: (callback: Callback) => void
   boot: (opt: BootOpt) => System
-  injectPrivateCSSClass: (
-    globalId: string,
-    className: string,
-    style: Style
-  ) => Unlisten
   getLocalComponents: (remoteGlobalId: string) => any[]
-  registerLocalComponent: (component: any, remoteGlobalId: string) => string
-  unregisterLocalComponent: (remoteGlobalId: string, localId: string) => void
+  registerLocalComponent: (component: any, remoteGlobalId: string) => void
+  unregisterLocalComponent: (component: any, remoteGlobalId: string) => void
   registerUnit(id: string): void
   stringifyBundleData(bundle: BundleSpec): void
   unregisterUnit(id: string): void

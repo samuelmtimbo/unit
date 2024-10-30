@@ -25,7 +25,7 @@ import { None } from '../../types/None'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { pull, push, removeAt } from '../../util/array'
-import { deepDelete, isEmptyObject, mapObjVK } from '../../util/object'
+import { deepDestroy, mapObjVK } from '../../util/object'
 import { Memory } from './Memory'
 
 export type PinMap<T> = Dict<Pin<T[keyof T]>>
@@ -158,12 +158,10 @@ export class Unit<
     }
 
     const {
-      global: { ref_ },
+      global: { unit },
     } = this.__system
 
-    deepSet_(ref_, [this.id, this.__global_id], this)
-
-    // console.log('register', this.id, this.__global_id)
+    deepSet_(unit, [this.id, this.__global_id], this)
   }
 
   public isElement() {
@@ -473,6 +471,8 @@ export class Unit<
     delete this._i_opt[name]
     delete this._input[name]
 
+    input.destroy()
+
     this.emit('remove_input', name, input, propagate)
   }
 
@@ -626,6 +626,8 @@ export class Unit<
 
     delete this._o_opt[name]
     delete this._output[name]
+
+    output.destroy()
 
     this.emit('remove_output', name, output, propagate)
   }
@@ -1189,19 +1191,30 @@ export class Unit<
     super.destroy()
 
     const {
-      global: { ref_ },
+      global: { unit },
     } = this.__system
+
+    for (const name of this._i_name_set) {
+      const pin = this.getInput(name)
+
+      pin.destroy()
+    }
+
+    for (const name of this._o_name_set) {
+      const pin = this.getOutput(name)
+
+      pin.destroy()
+    }
+
+    this._selfInput.destroy()
+    this._selfOutput.destroy()
 
     if (!isInternalSpecId(this.id)) {
       this.__system.unregisterUnit(this.id)
     }
 
-    if (ref_[this.id]) {
-      deepDelete(ref_, [this.id, this.__global_id])
-
-      if (isEmptyObject(ref_[this.id])) {
-        delete ref_[this.id]
-      }
+    if (unit[this.id]) {
+      deepDestroy(unit, [this.id, this.__global_id])
     }
   }
 

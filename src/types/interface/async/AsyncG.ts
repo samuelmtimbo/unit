@@ -72,7 +72,7 @@ function _call(
   ...args: any[]
 ) {
   const {
-    global: { ref_ },
+    global: { unit },
   } = graph.__system
 
   let result: any
@@ -80,7 +80,7 @@ function _call(
   if (fork) {
     result = graph[method].call(graph, ...args, fork, bubble)
   } else {
-    const all = ref_[graph.id]
+    const all = unit[graph.id]
 
     for (const globalId in all) {
       const sibling = all[globalId] as Graph

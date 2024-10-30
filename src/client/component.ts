@@ -17,7 +17,7 @@ import { $Graph } from '../types/interface/async/$Graph'
 import { insert, pull, push, remove, removeAt, unshift } from '../util/array'
 import { callAll } from '../util/call/callAll'
 import { _if } from '../util/control'
-import { appendChild, insertAt, removeChild } from '../util/element'
+import { insertAt, removeChild } from '../util/element'
 import { forEachObjKV, get, set } from '../util/object'
 import { weakMerge } from '../weakMerge'
 import {
@@ -104,7 +104,6 @@ export class Component<
 
   public $system: System
 
-  public $localId: string
   public $remoteId: string
 
   public $ref: Dict<Component<any>> = {}
@@ -175,8 +174,6 @@ export class Component<
     this.$system = $system
     this.$element = $element
     this._$node = $node ?? $element
-
-    this.register()
   }
 
   get $node() {
@@ -677,31 +674,25 @@ export class Component<
   register() {
     const { registerLocalComponent } = this.$system
 
-    if (this.$localId) {
-      return
-    }
-
     if (!this.$remoteId) {
       return
     }
 
-    this.$localId = registerLocalComponent(this, this.$remoteId)
+    registerLocalComponent(this, this.$remoteId)
 
-    this._forAllDescendent((child) => {
-      child.register()
-    })
+    // this._forAllDescendent((child) => {
+    //   child.register()
+    // })
   }
 
   unregister() {
     const { unregisterLocalComponent } = this.$system
 
-    if (!this.$localId) {
-      return
-    }
+    unregisterLocalComponent(this, this.$remoteId)
 
-    unregisterLocalComponent(this.$remoteId, this.$localId)
-
-    this.$localId = undefined
+    // this._forAllDescendent((child) => {
+    //   child.unregister()
+    // })
   }
 
   isFocusInside(): boolean {
@@ -1855,13 +1846,10 @@ export class Component<
 
           this.removeChildAt(at)
 
+          child.disconnect()
           child.destroy()
 
           remove(this.$remoteChildren, child)
-        } else if (event_event === 'register') {
-          this.register()
-        } else if (event_event === 'unregister') {
-          this.unregister()
         } else if (event_event === 'play') {
           this.play()
         } else if (event_event === 'pause') {
@@ -2223,6 +2211,8 @@ export class Component<
       child.disconnect()
     }
 
+    this.unregister()
+
     this.$connected = false
 
     this.onDisconnected()
@@ -2555,8 +2545,6 @@ export class Component<
           } else {
             this.domRemoveRoot(component.$mountRoot[i], at)
           }
-
-          appendChild(component.$element, component.$mountRoot[i].$element)
         }
       } else {
         if (this.$slotParent) {
@@ -2575,8 +2563,6 @@ export class Component<
       if (!component.$primitive) {
         for (const root of component.$mountRoot) {
           this.domRemoveRoot(root, at)
-
-          appendChild(component.$element, root.$element)
         }
       } else {
         this.domCommitRemoveChild(component)
@@ -2986,8 +2972,6 @@ export class Component<
               slotParent
             )
           }
-
-          appendChild(component.$element, component.$mountRoot[i].$element)
         }
       } else {
         if (this.$slotParent) {
@@ -3008,8 +2992,6 @@ export class Component<
       if (!component.$primitive) {
         for (const root of component.$mountRoot) {
           this.domRemoveParentChildAt(root, slotName, at, at, slotParent)
-
-          appendChild(component.$element, root.$element)
 
           if (!root.$primitive) {
             let i = 1

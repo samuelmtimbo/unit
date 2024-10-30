@@ -1,26 +1,21 @@
 import { API } from '../API'
 import { EventEmitter_ } from '../EventEmitter'
-import { NOOP } from '../NOOP'
 import { Object_ } from '../Object'
 import { Registry } from '../Registry'
 import { Component } from '../client/component'
 import { unmount } from '../client/context'
 import icons from '../client/icons'
-import { styleToCSS } from '../client/id/styleToCSS'
-import { appendRootStyle, removeRootStyle } from '../client/render/attachStyle'
 import { themeColor } from '../client/theme'
 import { fromBundle } from '../spec/fromBundle'
 import { stringifyBundleSpecData } from '../spec/stringifySpec'
 import { BootOpt, System } from '../system'
-import { Style } from '../system/platform/Style'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
 import { GraphBundle } from '../types/GraphClass'
-import { Unlisten } from '../types/Unlisten'
 import { KeyboardState } from '../types/global/KeyboardState'
 import { PointerState } from '../types/global/PointerState'
 import { ASYNC } from '../types/interface/async/wrapper'
-import { randomIdNotIn } from '../util/id'
+import { remove } from '../util/array'
 import { weakMerge } from '../weakMerge'
 
 export function boot(
@@ -81,9 +76,7 @@ export function boot(
 
   const emitter = parent ? parent.emitter : new EventEmitter_()
 
-  const componentLocalToRemote: Dict<string> = {}
-  const componentLocal: Dict<Component> = {}
-  const componentRemoteToLocal: Dict<Set<string>> = {}
+  const componentRemoteToLocal: Dict<Component[]> = {}
 
   const theme = 'dark'
   const color = themeColor(theme)
@@ -118,8 +111,7 @@ export function boot(
       ? parent.global
       : {
           ref: {},
-          ref_: {},
-          component: componentLocal,
+          unit: {},
           data: new Object_({}),
           scope: {},
         },
@@ -159,66 +151,28 @@ export function boot(
     registerUnit: registerUnit.bind(registry),
     unregisterUnit: unregisterUnit.bind(registry),
     shouldFork: shouldFork.bind(registry),
-    injectPrivateCSSClass: function (
-      globalId: string,
-      className: string,
-      style: Style
-    ): Unlisten {
-      if (system.root) {
-        if (!system.global.component[globalId]) {
-          throw new Error('component not found')
-        }
-
-        const css = `${styleToCSS(style)}`
-
-        appendRootStyle(system, css)
-
-        return () => {
-          removeRootStyle(system, css)
-        }
-      } else {
-        return NOOP
-      }
-    },
     getLocalComponents: function (remoteGlobalId: string): Component[] {
-      const localIds = componentRemoteToLocal[remoteGlobalId]
+      const components = componentRemoteToLocal[remoteGlobalId]
 
-      return localIds ? [...localIds].map((id) => componentLocal[id]) : []
+      return components ?? []
     },
     registerLocalComponent: function (
       component: Component,
       remoteGlobalId: string
-    ): string {
-      const localId = randomIdNotIn(componentLocalToRemote)
-
-      componentLocal[localId] = component
-
-      componentLocalToRemote[localId] = remoteGlobalId
-
+    ): void {
       componentRemoteToLocal[remoteGlobalId] =
-        componentRemoteToLocal[remoteGlobalId] ?? new Set()
-      componentRemoteToLocal[remoteGlobalId].add(localId)
+        componentRemoteToLocal[remoteGlobalId] ?? []
+      componentRemoteToLocal[remoteGlobalId].push(component)
 
       emitter.emit(remoteGlobalId, component)
-
-      return localId
     },
-    unregisterLocalComponent: function (localId: string): void {
-      const remoteGlobalId = componentLocalToRemote[localId]
+    unregisterLocalComponent: function (
+      component: Component,
+      remoteGlobalId: string
+    ): void {
+      const components = componentRemoteToLocal[remoteGlobalId]
 
-      if (!remoteGlobalId) {
-        throw new Error('local component not found')
-      }
-
-      const localIds = componentRemoteToLocal[remoteGlobalId]
-
-      localIds.delete(localId)
-
-      if (localIds.size === 0) {
-        delete componentRemoteToLocal[remoteGlobalId]
-      }
-
-      delete componentLocalToRemote[localId]
+      remove(components, component)
     },
     destroy: function (): void {
       for (const graph of system.graphs) {

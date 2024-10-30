@@ -218,9 +218,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _pin: {
     [id: string]: Pin
   } = {}
-  private _unitPins: {
-    [id: string]: Pin
-  } = {}
 
   private _exposedPin: IOOf<Dict<Pin>> = {}
   private _exposedMerge: IOOf<Dict<IOOf<Merge>>> = {}
@@ -991,6 +988,25 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._destroying = true
 
     forEachValueKey(this._unit, (u) => u.destroy())
+    forEachValueKey(this._merge, (m) => m.destroy())
+
+    this._waitAll.input.destroy()
+    this._waitAll.output.destroy()
+
+    forIOObjKV(this._exposedPin, (type, name, pin) => {
+      pin.destroy()
+    })
+    forIOObjKV(this._exposedMerge, (type, name, merge) => {
+      merge.input?.destroy()
+      merge.output?.destroy()
+    })
+    forIOObjKV(this._exposedEmptySubPin, (type, name, pins) => {
+      for (const subPinId in pins) {
+        const pin = pins[subPinId]
+
+        pin.destroy()
+      }
+    })
 
     this._destroying = false
   }
@@ -3592,7 +3608,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const pin = unit.getPin(type, pinId)
 
     this._pin[pinNodeId] = pin
-    this._unitPins[pinNodeId] = pin
   }
 
   private setUnitInput = (unitId: string, pinId: string) => {
@@ -3658,7 +3673,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
       delete this._pipedFrom[pinNodeId]
 
       delete this._pin[pinNodeId]
-      delete this._unitPins[pinNodeId]
 
       deepDelete(this._spec, ['units', unitId, type, pinId])
       deepDelete(this._spec, ['units', unitId, 'memory', type, pinId])
