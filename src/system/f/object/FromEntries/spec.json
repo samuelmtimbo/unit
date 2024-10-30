@@ -1,0 +1,23 @@
+{
+  "name": "from entries",
+  "inputs": {
+    "entries": {
+      "type": "[string,any][]"
+    }
+  },
+  "outputs": {
+    "obj": {
+      "type": "object"
+    }
+  },
+  "metadata": {
+    "icon": "brackets-curly",
+    "description": "turn a list of key-value pairs into an object",
+    "complexity": 3,
+    "tags": ["f", "object"]
+  },
+  "id": "ded32513-925d-4b37-924d-c85387c08ce9",
+  "base": true,
+  "type": "`U`",
+  "system": true
+}
