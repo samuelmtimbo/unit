@@ -18,6 +18,8 @@ export type O = {
 }
 
 export default class SizeObserver extends Holder<I, O> {
+  private _observer: ResizeObserver
+
   constructor(system: System) {
     super(
       {
@@ -36,7 +38,9 @@ export default class SizeObserver extends Holder<I, O> {
       system,
       ID_SIZE_OBSERVER
     )
+  }
 
+  async f({ component, opt }: I, done: Done<O>) {
     const {
       api: {
         document: { ResizeObserver },
@@ -57,25 +61,15 @@ export default class SizeObserver extends Holder<I, O> {
     const observer = new ResizeObserver(observer_callback)
 
     this._observer = observer
-  }
-
-  private _observer: ResizeObserver
-
-  async f({ component, opt }: I, done: Done<O>) {
-    const {
-      api: {
-        document: { ResizeObserver },
-      },
-    } = this.__system
 
     const globalId = component.getGlobalId()
 
-    let _component = (await firstGlobalComponentPromise(
+    const component_ = (await firstGlobalComponentPromise(
       this.__system,
       globalId
     )) as Component<HTMLElement>
 
-    const leaf = _component.getFirstRootLeaf() as Component<HTMLElement>
+    const leaf = component_.getFirstRootLeaf() as Component<HTMLElement>
 
     const { $node } = leaf
 
