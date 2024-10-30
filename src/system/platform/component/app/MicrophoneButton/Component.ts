@@ -18,7 +18,7 @@ export const DEFAULT_STYLE = {
   touchAction: 'none',
 }
 
-export default class MicrphoneButton extends localComponentClassFromSpec<
+export default class MicrophoneButton extends localComponentClassFromSpec<
   HTMLDivElement,
   Props
 >(spec as GraphSpec) {}
