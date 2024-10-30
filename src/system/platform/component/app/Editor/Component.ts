@@ -662,9 +662,11 @@ import { readFileAsText } from '../../../../../util/file'
 import { hashCode } from '../../../../../util/hashCode'
 import { randomIdNotIn } from '../../../../../util/id'
 import {
+  deepDec,
   deepDelete,
   deepGet,
   deepGetOrDefault,
+  deepInc,
   deepSet,
   filterObj,
   forEachObjKV,
@@ -2485,6 +2487,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _exposed_int_unplugged: Dict<boolean> = {}
 
   private _merge: Dict<Div> = {}
+  private _merge_name: Dict<TextField> = {}
   private _merge_input: Dict<Div> = {}
   private _merge_output: Dict<Div> = {}
 
@@ -2666,6 +2669,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _merge_to_input: Dict<Dict<boolean>> = {}
   private _merge_to_output: Dict<Dict<boolean>> = {}
 
+  private _merge_pin_name_count: Dict<IOOf<Dict<number>>> = {}
   private _merge_pin_count: Dict<number> = {}
   private _merge_output_count: Dict<number> = {}
   private _merge_active_output_count: Dict<number> = {}
@@ -11967,6 +11971,23 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._merge[merge_node_id] = merge
     merge_node_content.appendChild(merge)
 
+    const pin_name = this._create_pin_name({
+      className: 'merge-pin-name',
+      r,
+      style: {
+        color: this._theme.pin_text,
+        ...userSelect('inherit'),
+        pointerEvents: 'none',
+        opacity: `1`,
+        visibility: 'visible',
+      },
+      name: 'merge',
+    })
+    merge_node_content.appendChild(pin_name)
+
+    this._merge_name[merge_node_id] = pin_name
+    this._node_name[merge_node_id] = 'merge'
+
     const merge_selection = this._create_selection(merge_node_id, {
       width,
       height,
@@ -12451,6 +12472,32 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else {
       this._set_merge_output_color(merge_node_id, color)
     }
+
+    this._set_merge_name_color(merge_node_id, color)
+  }
+
+  private _set_merge_name_color = (
+    merge_node_id: string,
+    color: string
+  ): void => {
+    const merge_name = this._merge_name[merge_node_id]
+
+    merge_name.$element.style.color = color
+  }
+
+  private _set_merge_name = (merge_node_id: string, name: string): void => {
+    // console.log('Graph', '_set_merge_name', merge_node_id, name)
+
+    const merge_name = this._merge_name[merge_node_id]
+
+    merge_name.setProp('value', name)
+    merge_name.$element.style.width = `${name.length * 6}px`
+  }
+
+  private _reset_merge_name_color = (merge_node_id: string): void => {
+    const merge_name = this._merge_name[merge_node_id]
+
+    merge_name.$element.style.color = this._theme.pin_text
   }
 
   private _set_output_r = (pin_node_id: string, r: number): void => {
@@ -13756,6 +13803,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._reset_merge_pin_pin_color(node_id, 'input')
       this._reset_merge_pin_pin_color(node_id, 'output')
 
+      this._reset_merge_name_color(node_id)
+
       const merge_inputs = this._merge_to_input[node_id]
 
       for (const input_node_id in merge_inputs) {
@@ -13974,6 +14023,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else {
       this._reset_merge_output_pin_color(merge_node_id)
     }
+
+    this._reset_merge_name_color(merge_node_id)
   }
 
   private _reset_merge_input_pin_color = (merge_node_id: string): void => {
@@ -35850,7 +35901,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // )
 
     const { mergeId } = segmentMergeNodeId(merge_node_id)
-
     const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
     const is_input = type === 'input'
@@ -35988,6 +36038,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
+    deepInc(this._merge_pin_name_count, [merge_node_id, type, pinId])
+
+    this._refresh_merge_name(merge_node_id)
+
     for (const pin_node_id in this._merge_to_pin[merge_node_id]) {
       const pin_datum_node_id = this._pin_to_datum[pin_node_id]
 
@@ -36026,6 +36080,50 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     this._start_graph_simulation(LAYER_NONE)
+  }
+
+  private _refresh_merge_name = (merge_node_id: string) => {
+    const { mergeId } = segmentMergeNodeId(merge_node_id)
+
+    const merge_pin_name_count = this._merge_pin_name_count[merge_node_id]
+
+    const clear = () => {
+      this._set_merge_name(merge_node_id, '')
+
+      this._for_each_merge_pin(mergeId, (unitId, type, pinId) => {
+        const pin_node_id = getPinNodeId(unitId, type, pinId)
+
+        const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
+
+        if (this._is_link_pin_merged(pin_node_id)) {
+          this._show_link_text(link_id)
+        }
+      })
+    }
+
+    if (
+      keyCount(merge_pin_name_count.input ?? {}) === 1 &&
+      keyCount(merge_pin_name_count.output ?? {}) === 1
+    ) {
+      const single_input_name = getObjSingleKey(merge_pin_name_count.input)
+      const single_output_name = getObjSingleKey(merge_pin_name_count.output)
+
+      if (single_input_name === single_output_name) {
+        this._set_merge_name(merge_node_id, single_input_name)
+
+        this._for_each_merge_pin(mergeId, (unitId, type, pinId) => {
+          const pin_node_id = getPinNodeId(unitId, type, pinId)
+
+          const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
+
+          this._hide_link_text(link_id)
+        })
+      } else {
+        clear()
+      }
+    } else {
+      clear()
+    }
   }
 
   private _set_ref_link_pin_start_marker_r = (
@@ -37363,6 +37461,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_ref = this._is_link_pin_ref(pin_node_id)
     const merge_ref = this._is_merge_ref(merge_node_id)
 
+    deepDec(this._merge_pin_name_count, [merge_node_id, type, pinId])
+
     const is_input = type === 'input'
 
     const is_output = !is_input
@@ -37541,6 +37641,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._start_node_long_press_collapse(pin_node_id)
       }
     }
+
+    this._refresh_merge_name(merge_node_id)
   }
 
   private _pod_remove_pin_from_merge = (
@@ -38208,6 +38310,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._pin_node[merge_node_id]
     delete this._normal_node[merge_node_id]
     delete this._empty_merge_node[merge_node_id]
+    delete this._merge_pin_name_count[merge_node_id]
 
     if (this._empty_merge_node[merge_node_id]) {
       this._remove_merge_empty(merge_node_id)

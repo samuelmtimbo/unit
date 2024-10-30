@@ -364,6 +364,10 @@ export function deepIncFrom(obj: object, path: string[], from: number): any {
   deepSet(obj, path, value + 1)
 }
 
+export function deepInc(obj: object, path: string[]): any {
+  return deepIncFrom(obj, path, 0)
+}
+
 export function deepDecFrom(obj: object, path: string[], from: number): any {
   let value = deepGetOrDefault(obj, path, undefined)
 
@@ -372,6 +376,10 @@ export function deepDecFrom(obj: object, path: string[], from: number): any {
   }
 
   deepSet(obj, path, value - 1)
+}
+
+export function deepDec(obj: object, path: string[]): any {
+  return deepDecFrom(obj, path, 0)
 }
 
 export function incKeyFrom(obj: object, key: string, from: number): any {
