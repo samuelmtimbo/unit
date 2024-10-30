@@ -1,6 +1,5 @@
 import { Component } from '../../../../client/component'
 import { Element } from '../../../../client/element'
-import parentElement from '../../../../client/platform/web/parentElement'
 import { System } from '../../../../system'
 import { Unlisten } from '../../../../types/Unlisten'
 import { Style } from '../../Style'
@@ -12,16 +11,24 @@ export interface Props {
 export const DEFAULT_STYLE = {}
 
 export default class Inherit extends Element<HTMLDivElement, Props> {
-  $wrap = true
-
   constructor(props: Props, $system: System) {
     super(props, $system)
 
-    const $element = parentElement($system)
+    const {
+      api: {
+        document: { createElement },
+      },
+    } = $system
 
-    $element.className = 'inherit'
+    const $element = createElement('div')
 
+    $element.classList.add('inherit')
+
+    $element.style.display = 'contents'
+
+    this.$wrap = true
     this.$element = $element
+    this.$primitive = true
 
     this.$slot = {
       default: this,

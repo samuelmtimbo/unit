@@ -59,6 +59,7 @@ import {
   ID_EDITOR,
   ID_IMAGE,
   ID_IMAGE_1,
+  ID_SCROLL_SNAP_Y_DIV,
   ID_VIDEO,
 } from '../../../../_ids'
 import { clamp } from '../../../../core/relation/Clamp/f'
@@ -213,6 +214,7 @@ import {
 } from '../../../../../client/graph'
 import { _DEFAULT_STYLE } from '../../../../../client/graph/constant/DEFAULT_STYLE'
 import { enableModeKeyboard } from '../../../../../client/graph/shortcut/modes'
+import { graphComponentFromId } from '../../../../../client/graphComponentFromSpec'
 import {
   camelToDashed,
   getDatumNodeId,
@@ -1209,10 +1211,28 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     return this._registry.shouldFork(id)
   }
 
-  private _create_fallback_frame = (): Div => {
-    const fallback_frame = new Div(
+  private _create_fallback_frame = (): Component => {
+    // const fallback_frame = new Div(
+    //   {
+    //     className: 'graph-fallback-frame',
+    //     style: {
+    //       position: 'absolute',
+    //       top: '0',
+    //       left: '0',
+    //       width: '100%',
+    //       height: '100%',
+    //       overflow: 'auto',
+    //       pointerEvents: 'none',
+    //       zIndex: '0',
+    //     },
+    //   },
+    //   this.$system
+    // )
+
+    const { component: fallback_frame } = graphComponentFromId(
+      this.$system,
+      ID_SCROLL_SNAP_Y_DIV,
       {
-        className: 'graph-fallback-frame',
         style: {
           position: 'absolute',
           top: '0',
@@ -1223,8 +1243,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           pointerEvents: 'none',
           zIndex: '0',
         },
-      },
-      this.$system
+      }
     )
 
     return fallback_frame
@@ -24441,15 +24460,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _disable_frame_pointer = (): void => {
-    // console.log('Graph', '_disable_frame_pointer')
+    console.log('Graph', '_disable_frame_pointer')
 
-    this._frame.$element.style.pointerEvents = 'none'
+    const frame_slot = this._frame.$slot['default']
+
+    frame_slot.$element.style.pointerEvents = 'none'
   }
 
   private _enable_frame_pointer = (): void => {
     // console.log('Graph', '_enable_frame_pointer')
 
-    this._frame.$element.style.pointerEvents = 'inherit'
+    const frame_slot = this._frame.$slot['default']
+
+    frame_slot.$element.style.pointerEvents = 'all'
   }
 
   private _force_control_animation_false: boolean = false
@@ -31156,7 +31179,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         !this._animating_sub_component_base_id.has(sub_component_id) &&
         !this._animating_sub_component_fullwindow.has(sub_component_id)
       ) {
-        // TODO duplicated
         if (this._tree_layout) {
           if (parent_id) {
             const current_layer_id = this._get_current_layout_layer_id()
@@ -31199,18 +31221,29 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (i === 0) {
             const color = sub_component.getColor()
 
+            let target_slot = frame_slot
+
             const frame_position = getRelativePosition(
               this._frame.$element,
               this._frame.$context.$element
             )
 
-            const frame_size = getSize(frame_slot.$element)
+            const frame_size = getSize(target_slot.$element)
+
+            let width =
+              frame_slot.isParent() || frame_slot.$wrap
+                ? this._frame.$context.$width
+                : frame_size.width
+            let height =
+              frame_slot.isParent() || frame_slot.$wrap
+                ? this._frame.$context.$height
+                : frame_size.height
 
             const trait: LayoutNode = {
               x: frame_position.x,
               y: frame_position.y,
-              width: frame_size.width / this._frame.$context.$sx,
-              height: frame_size.height / this._frame.$context.$sy,
+              width: width / this._frame.$context.$sx,
+              height: height / this._frame.$context.$sy,
               sx: k,
               sy: k,
               opacity,
