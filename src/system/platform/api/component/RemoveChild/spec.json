@@ -12,12 +12,7 @@
       }
     }
   },
-  "outputs": {
-    "unit": {
-      "type": "`U`&`C`",
-      "defaultIgnored": true
-    }
-  },
+  "outputs": {},
   "base": true,
   "metadata": {
     "icon": "square",

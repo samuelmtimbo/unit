@@ -1,10 +1,7 @@
 import { Functional } from '../../../../../Class/Functional'
 import { Done } from '../../../../../Class/Functional/Done'
-import { cloneBundle } from '../../../../../spec/cloneBundle'
 import { System } from '../../../../../system'
 import { C } from '../../../../../types/interface/C'
-import { Component_ } from '../../../../../types/interface/Component'
-import { UnitBundle } from '../../../../../types/UnitBundle'
 import { ID_REMOVE_CHILD } from '../../../../_ids'
 
 export interface I {
@@ -12,16 +9,14 @@ export interface I {
   at: number
 }
 
-export interface O {
-  unit: UnitBundle<Component_>
-}
+export interface O {}
 
 export default class RemoveChild extends Functional<I, O> {
   constructor(system: System) {
     super(
       {
         i: ['parent', 'at'],
-        o: ['unit'],
+        o: [],
       },
       {
         input: {
@@ -36,12 +31,8 @@ export default class RemoveChild extends Functional<I, O> {
   }
 
   f({ parent, at }: I, done: Done<O>): void {
-    let unit: UnitBundle<Component_>
-
     try {
       const child = parent.removeChild(at)
-
-      unit = cloneBundle(child)
 
       child.destroy()
     } catch (err) {
@@ -50,8 +41,6 @@ export default class RemoveChild extends Functional<I, O> {
       return
     }
 
-    done({
-      unit,
-    })
+    done({})
   }
 }
