@@ -93,18 +93,24 @@ export function _extractFromRawStyle(
     }
   }
 
-  if (isContentEditable(element) && (fitWidth || fitHeight)) {
+  const contentEditable = isContentEditable(element)
+
+  if (contentEditable && (fitWidth || fitHeight)) {
     const fontSize = component.getFontSize()
 
     const { textContent } = component.$element
 
-    const { width, height } = measureText(textContent, fontSize, trait.width)
+    let { width, height } = measureText(textContent, fontSize, trait.width)
 
     if (fitWidth) {
       style['width'] = `${width}px`
     }
 
     if (fitHeight) {
+      if (contentEditable && !textContent) {
+        ;({ height } = measureText('|', fontSize, trait.width))
+      }
+
       style['height'] = `${height}px`
     }
   }
