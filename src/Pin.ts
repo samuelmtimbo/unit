@@ -141,6 +141,8 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
       }
 
       if (data instanceof $) {
+        data.register()
+
         this._unlisten = data.addListener('edit', () => {
           this.emit('edit', data)
         })
@@ -156,6 +158,10 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
         this._unlisten()
 
         this._unlisten = undefined
+      }
+
+      if (data instanceof $) {
+        data.unregister()
       }
 
       if (this._embodied) {

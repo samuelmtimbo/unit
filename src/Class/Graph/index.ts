@@ -302,6 +302,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this.addListener('destroy', this._destroy)
     this.addListener('take_err', this._takeErr)
     this.addListener('take_caught_err', this._takeErr)
+
+    const { global } = system
+
+    deepSet_(global.graph, [this.id, this.__global_id], this)
+
+    system.registerUnit(id)
   }
 
   async get<K extends string>(name: K): Promise<any> {
@@ -1007,6 +1013,12 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         pin.destroy()
       }
     })
+
+    const { global } = this.__system
+
+    this.__system.unregisterUnit(this.id)
+
+    deepDestroy(global.graph, [this.id, this.__global_id])
 
     this._destroying = false
   }

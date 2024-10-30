@@ -1,7 +1,5 @@
 import { $, $Events } from '../$'
-import { isInternalSpecId } from '../../client/spec'
 import { SELF } from '../../constant/SELF'
-import { deepSet_ } from '../../deepSet'
 import { DuplicatedInputFoundError } from '../../exception/DuplicatedInputFoundError'
 import { DuplicatedOutputFoundError } from '../../exception/DuplicatedOutputFoundError'
 import { InputNotFoundError } from '../../exception/InputNotFoundError'
@@ -25,7 +23,7 @@ import { None } from '../../types/None'
 import { UnitBundleSpec } from '../../types/UnitBundleSpec'
 import { Unlisten } from '../../types/Unlisten'
 import { pull, push, removeAt } from '../../util/array'
-import { deepDestroy, mapObjVK } from '../../util/object'
+import { mapObjVK } from '../../util/object'
 import { Memory } from './Memory'
 
 export type PinMap<T> = Dict<Pin<T[keyof T]>>
@@ -152,16 +150,6 @@ export class Unit<
     })
 
     this.id = id
-
-    if (!isInternalSpecId(id)) {
-      system.registerUnit(id)
-    }
-
-    const {
-      global: { unit },
-    } = this.__system
-
-    deepSet_(unit, [this.id, this.__global_id], this)
   }
 
   public isElement() {
@@ -1190,10 +1178,6 @@ export class Unit<
   public destroy(): void {
     super.destroy()
 
-    const {
-      global: { unit },
-    } = this.__system
-
     for (const name of this._i_name_set) {
       const pin = this.getInput(name)
 
@@ -1208,14 +1192,6 @@ export class Unit<
 
     this._selfInput.destroy()
     this._selfOutput.destroy()
-
-    if (!isInternalSpecId(this.id)) {
-      this.__system.unregisterUnit(this.id)
-    }
-
-    if (unit[this.id]) {
-      deepDestroy(unit, [this.id, this.__global_id])
-    }
   }
 
   public getPinData(type: IO, pinId: string): any {

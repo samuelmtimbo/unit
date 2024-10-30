@@ -15,15 +15,12 @@ export class $<
   public $__: string[] = []
   public __system: System
   public __global_id: string
-  public __ref_count: number = 0
   public __done: boolean
 
   constructor(system: System) {
     super()
 
     this.__system = system
-
-    this.register()
   }
 
   getGlobalId(): string {
@@ -39,24 +36,20 @@ export class $<
   }
 
   register(): void {
-    this.__ref_count++
-
-    if (this.__ref_count === 1) {
+    if (!this.__global_id) {
       this.__global_id = setGlobalRef(this.__system, this)
     }
   }
 
   unregister(): void {
-    this.__ref_count--
-
-    if (this.__ref_count === 0) {
+    if (this.__global_id) {
       deleteGlobalRef(this.__system, this.__global_id)
+
+      this.__global_id = undefined
     }
   }
 
   destroy() {
-    this.unregister()
-
     this.__done = true
 
     this.emit('destroy', [])

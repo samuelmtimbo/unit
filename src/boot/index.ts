@@ -111,7 +111,7 @@ export function boot(
       ? parent.global
       : {
           ref: {},
-          unit: {},
+          graph: {},
           data: new Object_({}),
           scope: {},
         },

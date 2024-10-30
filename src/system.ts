@@ -1,6 +1,5 @@
 import { API } from './API'
 import { Graph } from './Class/Graph'
-import { Unit } from './Class/Unit'
 import { EventEmitter_ } from './EventEmitter'
 import { Object_ } from './Object'
 import { IOElement } from './client/IOElement'
@@ -9,7 +8,6 @@ import { UnitPointerEvent } from './client/event/pointer'
 import { Theme } from './client/theme'
 import { Point } from './client/util/geometry/types'
 import { AllTypes } from './interface'
-import { Style } from './system/platform/Style'
 import { Classes, Specs } from './types'
 import { BundleSpec } from './types/BundleSpec'
 import { Callback } from './types/Callback'
@@ -62,7 +60,7 @@ export interface System extends S, R {
   global: {
     data: Object_<any>
     ref: Dict<any>
-    unit: Dict<Dict<Unit>>
+    graph: Dict<Dict<Graph>>
     scope: Dict<any>
   }
   api: API
