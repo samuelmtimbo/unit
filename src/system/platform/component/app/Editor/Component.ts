@@ -909,6 +909,7 @@ export interface Props {
   component?: Component
   frame?: $Component
   fallback?: Component<HTMLElement>
+  container?: Component<HTMLElement>
   background?: Div
   transcend?: Transcend
   root?: Frame
@@ -925,6 +926,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _root: Frame
   private _editor: Editor_
   private _component: Component
+  private _fallback_frame_container: Component<HTMLElement>
   private _fallback_frame: Component<HTMLElement>
   private _transcend: Transcend
   private _frame: Component<HTMLElement>
@@ -954,6 +956,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       animate = true,
       fullwindow,
       fallback,
+      container,
     } = $props
 
     let { component, editor, transcend, background, root } = $props
@@ -967,6 +970,25 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     mirror(this.$system.specs_, this._registry.specs_)
 
     this._pod = graph
+
+    this._fallback_frame_container =
+      container ||
+      new Div(
+        {
+          className: 'graph-fallback-frame-container',
+          style: {
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            overflow: 'auto',
+            pointerEvents: 'none',
+            zIndex: '0',
+          },
+        },
+        this.$system
+      )
 
     this._fallback_frame = fallback || this._create_fallback_frame()
 
@@ -1018,6 +1040,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           unregisterUnit: this._unregister_unit,
           newSpecId: this._new_spec_id,
           dispatchEvent: this._dispatch_event,
+          enterFullwindow: this._enter_fullwindow,
+          leaveFullwindow: this._leave_fullwindow,
         },
         this.$system
       )
@@ -1094,8 +1118,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       )
     root.registerParentRoot(this._background)
     root.registerParentRoot(this._editor)
-    root.registerParentRoot(this._fallback_frame)
+    root.registerParentRoot(this._fallback_frame_container)
     root.registerParentRoot(this._transcend)
+
+    this._fallback_frame_container.registerParentRoot(this._fallback_frame)
 
     preventContextMenu(root)
 
@@ -1121,6 +1147,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       background,
       root,
       editor,
+      container: this._fallback_frame_container,
       frame: this._fallback_frame,
       transcend,
     })
@@ -1171,6 +1198,14 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     return this._registry.forkSpec(spec, specId)
   }
 
+  private _enter_fullwindow = () => {
+    this._fallback_frame_container.$element.style.pointerEvents = 'inherit'
+  }
+
+  private _leave_fullwindow = () => {
+    this._fallback_frame_container.$element.style.pointerEvents = 'none'
+  }
+
   private _new_spec_id = () => {
     return this._registry.newSpecId()
   }
@@ -1212,23 +1247,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   }
 
   private _create_fallback_frame = (): Component => {
-    // const fallback_frame = new Div(
-    //   {
-    //     className: 'graph-fallback-frame',
-    //     style: {
-    //       position: 'absolute',
-    //       top: '0',
-    //       left: '0',
-    //       width: '100%',
-    //       height: '100%',
-    //       overflow: 'auto',
-    //       pointerEvents: 'none',
-    //       zIndex: '0',
-    //     },
-    //   },
-    //   this.$system
-    // )
-
     const { component: fallback_frame } = graphComponentFromId(
       this.$system,
       ID_SCROLL_SNAP_Y_DIV,
@@ -1240,7 +1258,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           width: '100%',
           height: '100%',
           overflow: 'auto',
-          pointerEvents: 'none',
           zIndex: '0',
         },
       }
@@ -1408,9 +1425,11 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.unregisterRoot(this._root)
 
     this._root.unregisterParentRoot(this._transcend)
-    this._root.unregisterParentRoot(this._fallback_frame)
+    this._root.unregisterParentRoot(this._fallback_frame_container)
     this._root.unregisterParentRoot(this._editor)
     this._root.unregisterParentRoot(this._background)
+
+    this._fallback_frame_container.unregisterParentRoot(this._fallback_frame)
 
     this.removeSubComponent('transcend')
     this.removeSubComponent('background')
@@ -1436,6 +1455,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         graph: this._pod,
         editor: this._editor,
         fallback: this._fallback_frame,
+        container: this._fallback_frame_container,
         transcend: this._transcend,
         background: this._background,
         root: this._root,
@@ -1453,7 +1473,25 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._listen_transcend()
 
+    this._fallback_frame_container = new Div(
+      {
+        className: 'graph-fallback-frame-container',
+        style: {
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          overflow: 'auto',
+          pointerEvents: 'none',
+          zIndex: '0',
+        },
+      },
+      this.$system
+    )
+
     const fallback_frame = this._create_fallback_frame()
+
     this._fallback_frame = fallback_frame
 
     const Parent = parentClass()
@@ -1483,6 +1521,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         component: this._component,
         frame: this._fallback_frame,
         specs: this._specs,
+        typeCache: this._type_cache,
         hasSpec: this._has_spec,
         emptySpec: this._empty_spec,
         getSpec: this._get_spec,
@@ -1496,7 +1535,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         unregisterUnit: this._unregister_unit,
         newSpecId: this._new_spec_id,
         dispatchEvent: this._dispatch_event,
-        typeCache: this._type_cache,
+        enterFullwindow: this._enter_fullwindow,
+        leaveFullwindow: this._leave_fullwindow,
       },
       this.$system
     )
@@ -1556,6 +1596,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       root,
       editor,
       frame: this._fallback_frame,
+      container: this._fallback_frame_container,
       transcend,
     })
 
@@ -1563,8 +1604,10 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._root.registerParentRoot(this._background)
     this._root.registerParentRoot(this._editor)
-    this._root.registerParentRoot(this._fallback_frame)
+    this._root.registerParentRoot(this._fallback_frame_container)
     this._root.registerParentRoot(this._transcend)
+
+    this._fallback_frame_container.registerParentRoot(this._fallback_frame)
 
     this.registerRoot(this._root)
 
@@ -1715,6 +1758,8 @@ export interface _Props extends R {
   typeCache?: TypeTreeInterfaceCache
   config?: Config
   dispatchEvent: (type: string, detail: any, bubbles: boolean) => void
+  enterFullwindow: () => void
+  leaveFullwindow: () => void
 }
 
 export interface DefaultProps {
@@ -18476,7 +18521,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _leave_fullwindow = (_animate: boolean) => {
     // console.log('Graph', '_leave_fullwindow', this._id)
 
-    const { animate } = this.$props
+    const { animate, leaveFullwindow } = this.$props
+
+    leaveFullwindow()
 
     _animate = _animate ?? animate
 
@@ -24459,28 +24506,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
   }
 
-  private _disable_frame_pointer = (): void => {
-    // console.log('Graph', '_disable_frame_pointer')
-
-    const frame_slot = this._frame.$slot['default']
-
-    frame_slot.$element.style.pointerEvents = 'none'
-  }
-
-  private _enable_frame_pointer = (): void => {
-    // console.log('Graph', '_enable_frame_pointer')
-
-    const frame_slot = this._frame.$slot['default']
-
-    frame_slot.$element.style.pointerEvents = 'all'
-  }
-
   private _force_control_animation_false: boolean = false
 
   private _set_fullwindow_frame_off = (animate: boolean): void => {
     // console.log('Graph', '_set_fullwindow_frame_off')
-
-    this._disable_frame_pointer()
 
     this._unclear_main(animate)
   }
@@ -24541,8 +24570,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _set_fullwindow_frame_on = (animate: boolean): void => {
     // console.log('Graph', '_set_fullwindow_frame_on')
 
-    this._enable_frame_pointer()
-
     this._clear_main(animate)
   }
 
@@ -24556,7 +24583,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_enter_fullwindow', _animate, sub_component_ids, this._id)
 
-    const { animate } = this.$props
+    const { animate, enterFullwindow } = this.$props
+
+    enterFullwindow()
 
     _animate = _animate ?? animate
 
@@ -29175,6 +29204,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       specs,
       registry,
       animate,
+      typeCache,
       hasSpec,
       emptySpec,
       getSpec,
@@ -29188,7 +29218,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       unregisterUnit,
       newSpecId,
       dispatchEvent,
-      typeCache,
+      enterFullwindow,
+      leaveFullwindow,
     } = this.$props
 
     let graph = this._subgraph_cache[unit_id]
@@ -29237,6 +29268,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           unregisterUnit,
           newSpecId,
           dispatchEvent,
+          enterFullwindow,
+          leaveFullwindow,
         },
         this.$system
       )
@@ -30583,6 +30616,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       registerUnit,
       unregisterUnit,
       newSpecId,
+      enterFullwindow,
+      leaveFullwindow,
       dispatchEvent,
     } = this.$props
 
@@ -30658,6 +30693,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }, {}) as R),
           dispatchEvent,
+          enterFullwindow,
+          leaveFullwindow,
         },
         this.$system
       )
@@ -59745,10 +59782,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._in_component_control) {
         if (this._is_fullwindow) {
           this._leave_component_frame()
-
-          if (!this._frame_out) {
-            this._disable_frame_pointer()
-          }
         }
       }
 
@@ -59775,10 +59808,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._in_component_control) {
         if (this._is_fullwindow) {
           this._enter_component_frame()
-
-          if (!this._frame_out) {
-            this._enable_frame_pointer()
-          }
         }
       }
 
