@@ -1,6 +1,6 @@
 import { NOOP } from '../NOOP'
-import { $Child } from '../component/Child'
-import { $Children } from '../component/Children'
+import { Child } from '../component/Child'
+import { Children } from '../component/Children'
 import { Moment } from '../debug/Moment'
 import { UnitMoment } from '../debug/UnitMoment'
 import { proxyWrap } from '../proxyWrap'
@@ -66,7 +66,7 @@ import { getTextAlign } from './util/style/getTextAlign'
 
 const $childToComponent = (
   system: System,
-  { bundle }: $Child
+  { bundle }: Child
 ): Component<IOElement, {}, $Component> => {
   const { unit, specs = {} } = bundle
 
@@ -1814,27 +1814,27 @@ export class Component<
 
           const at = this.$children.length
 
-          const child = this._$instanceChild({ bundle }, at)
+          const child = this._instanceChild({ bundle }, at)
 
           const slot_name = 'default'
 
-          this.appendChild(child, slot_name)
-
           push(this.$remoteChildren, child)
+
+          this.appendChild(child, slot_name)
         } else if (event_event === 'append_children') {
           const bundles = event_data
 
           const children = bundles.map((bundle: UnitBundleSpec, i: number) =>
-            this._$instanceChild({ bundle }, this.$children.length + i)
+            this._instanceChild({ bundle }, this.$children.length + i)
           )
 
           const slot_name = 'default'
 
-          this.appendChildren(children, slot_name)
-
           for (const child of children) {
             push(this.$remoteChildren, child)
           }
+
+          this.appendChildren(children, slot_name)
         } else if (event_event === 'remove_child') {
           const at = event_data
 
@@ -1940,11 +1940,13 @@ export class Component<
 
     this._unit_unlisten = callAll(all_unlisten)
 
-    $unit.$children({}, (children: $Children) => {
-      if (children.length > 0) {
-        const _children = children.map(this._$instanceChild)
+    $unit.$children({}, ($children: Children) => {
+      if ($children.length > 0) {
+        const children = $children.map(this._instanceChild)
 
-        this.setChildren(_children)
+        this.$remoteChildren = children
+
+        this.setChildren(children)
       }
     })
 
@@ -1953,7 +1955,7 @@ export class Component<
     this.onConnected($unit)
   }
 
-  private _$instanceChild = ($child: $Child, at: number) => {
+  private _instanceChild = ($child: Child, at: number) => {
     const component = $childToComponent(this.$system, $child)
 
     const _ = getComponentInterface(component)
@@ -2189,6 +2191,7 @@ export class Component<
     if (this.$unbundled) {
       for (const subUnitId in this.$subComponent) {
         const childSubComponent = this.$subComponent[subUnitId]
+
         childSubComponent.disconnect()
       }
     }

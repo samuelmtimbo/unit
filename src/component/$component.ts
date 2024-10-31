@@ -4,8 +4,8 @@ import { Async } from '../types/interface/async/Async'
 import { AnimationSpec, C, ComponentSetup } from '../types/interface/C'
 import { Component_ } from '../types/interface/Component'
 import { UnitBundle } from '../types/UnitBundle'
-import { $Child } from './Child'
-import { $Children } from './Children'
+import { Child } from './Child'
+import { Children } from './Children'
 
 export function $appendChild(
   component: Component_,
@@ -44,7 +44,7 @@ export function $hasChild(
 export function $child(
   component: Component_,
   { at }: { at: number },
-  callback: Callback<$Child>
+  callback: Callback<Child>
 ): void {
   const child = component.refChild(at)
   // @ts-ignore
@@ -55,12 +55,12 @@ export function $child(
 export function $children(
   component: Component_,
   {},
-  callback: Callback<$Children>
+  callback: Callback<Children>
 ): void {
   const children = component.refChildren()
 
   const _children = children.map((c) => {
-    return { bundle: c.getUnitBundleSpec() } as $Child
+    return { bundle: c.getUnitBundleSpec() } as Child
   })
 
   callback(_children)

@@ -1,3 +1,3 @@
-import { $Child } from './Child'
+import { Child } from './Child'
 
-export type $Children = $Child[]
+export type Children = Child[]

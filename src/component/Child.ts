@@ -1,5 +1,5 @@
 import { UnitBundleSpec } from '../types/UnitBundleSpec'
 
-export type $Child = {
+export type Child = {
   bundle: UnitBundleSpec
 }
