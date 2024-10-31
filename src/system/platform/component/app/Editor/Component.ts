@@ -12546,6 +12546,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     const merge_name = this._merge_name[merge_node_id]
 
+    if (!merge_name) {
+      return
+    }
+
     merge_name.$element.style.color = color
   }
 
@@ -12554,12 +12558,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const merge_name = this._merge_name[merge_node_id]
 
+    if (!merge_name) {
+      return
+    }
+
     merge_name.setProp('value', name)
     merge_name.$element.style.width = `${name.length * 6}px`
   }
 
   private _reset_merge_name_color = (merge_node_id: string): void => {
     const merge_name = this._merge_name[merge_node_id]
+
+    if (!merge_name) {
+      return
+    }
 
     merge_name.$element.style.color = this._theme.pin_text
   }
@@ -14676,11 +14688,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _is_link_pin_present = (pin_node_id: string): boolean => {
-    return (
-      !this._is_link_pin_merged(pin_node_id) ||
-      (this._is_output_pin_node_id(pin_node_id) &&
-        this._is_link_pin_ref(pin_node_id))
-    )
+    const { type, pinId } = segmentLinkPinNodeId(pin_node_id)
+
+    if (!this._is_link_pin_merged(pin_node_id) && !isSelfPin(type, pinId)) {
+      return true
+    }
+
+    if (this._is_output_pin_node_id(pin_node_id)) {
+      if (this._is_link_pin_ref(pin_node_id)) {
+        if (pinId !== SELF) {
+          return true
+        }
+      }
+    }
+
+    return false
   }
 
   private _reset_link_pin_color = (pin_node_id: string): void => {
@@ -36155,7 +36177,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         const link_id = getPinLinkIdFromPinNodeId(pin_node_id)
 
-        if (this._is_link_pin_merged(pin_node_id)) {
+        if (this._is_link_pin_visible(pin_node_id)) {
           this._show_link_text(link_id)
         }
       })
