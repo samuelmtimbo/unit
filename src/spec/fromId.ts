@@ -24,9 +24,9 @@ export function bundleFromId<T extends Unit>(
 
   const Class: UnitClass = classFromId(id, specs, classes, branch)
 
-  const bundle = { unit: { id }, specs: {} } // TODO
+  const bundle = { unit: { id }, specs: {} }
 
-  const Bundle = bundleClass(Class, bundle)
+  const Bundle = bundleClass(Class, bundle, specs)
 
   return Bundle
 }

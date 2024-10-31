@@ -27,7 +27,7 @@ export function fromSpec<I extends Dict<any> = any, O extends Dict<any> = any>(
 
   const bundle = unitBundleSpec({ id }, weakMerge({ [id]: spec }, specs_))
 
-  const Bundle = bundleClass(Class, bundle)
+  const Bundle = bundleClass(Class, bundle, specs_)
 
   return Bundle
 }

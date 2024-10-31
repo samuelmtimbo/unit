@@ -17,7 +17,7 @@ export function fromUnitBundle<T extends Unit>(
 
   const Class = classFromId<T>(id, weakMerge(_specs, specs), classes, {})
 
-  const Bundle = bundleClass<T>(Class, bundle)
+  const Bundle = bundleClass<T>(Class, bundle, specs)
 
   return Bundle
 }

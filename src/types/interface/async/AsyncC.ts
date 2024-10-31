@@ -9,8 +9,8 @@ import {
   $refRoot,
   $removeChild,
 } from '../../../component/$component'
-import { $Child } from '../../../component/Child'
-import { $Children } from '../../../component/Children'
+import { Child } from '../../../component/Child'
+import { Children } from '../../../component/Children'
 import { fromUnitBundle } from '../../../spec/fromUnitBundle'
 import { Callback } from '../../Callback'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
@@ -24,11 +24,11 @@ export const AsyncCGet = (c: Component_): $C_G => {
       return $hasChild(c, data, callback)
     },
 
-    $child(data: { at: number }, callback: Callback<$Child>): void {
+    $child(data: { at: number }, callback: Callback<Child>): void {
       return $child(c, data, callback)
     },
 
-    $children(data: {}, callback: Callback<$Children>): void {
+    $children(data: {}, callback: Callback<Children>): void {
       return $children(c, data, callback)
     },
 

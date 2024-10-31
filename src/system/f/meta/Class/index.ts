@@ -35,7 +35,7 @@ export default class Class<T> extends Functional<I<T>, O<T>> {
   }
 
   f({ unit, deep }: I<T>, done: Done<O<T>>): void {
-    const Class = cloneBundle(unit, deep)
+    const Class = cloneBundle(unit, deep, this.__system.specs)
 
     done({ class: Class })
   }

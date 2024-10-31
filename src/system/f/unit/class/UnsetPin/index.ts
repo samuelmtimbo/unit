@@ -38,7 +38,9 @@ export default class UnsetPin<T extends Unit> extends Functional<I<T>, O<T>> {
       specs,
     } = unit.__bundle
 
-    const spec = getSpec(weakMerge(specs, this.__system.specs), id)
+    const specs_ = weakMerge(specs, this.__system.specs)
+
+    const spec = getSpec(specs_, id)
 
     if (!spec[`${type}s`][name]) {
       done(undefined, `${type} not found`)
@@ -46,7 +48,7 @@ export default class UnsetPin<T extends Unit> extends Functional<I<T>, O<T>> {
       return
     }
 
-    const NewBundle: UnitBundle = cloneUnitBundle(unit)
+    const NewBundle: UnitBundle = cloneUnitBundle(unit, specs)
 
     NewBundle.__bundle.unit.input = NewBundle.__bundle.unit.input || {}
     NewBundle.__bundle.unit.input[name] =

@@ -1,5 +1,5 @@
-import { $Child } from '../../../component/Child'
-import { $Children } from '../../../component/Children'
+import { Child } from '../../../component/Child'
+import { Children } from '../../../component/Children'
 import { Callback } from '../../Callback'
 import { UnitBundleSpec } from '../../UnitBundleSpec'
 import { AnimationSpec, ComponentSetup } from '../C'
@@ -18,8 +18,8 @@ export const C_METHOD_REF = ['refChild']
 
 export interface $C_G {
   $hasChild(data: { at: number }, callback: Callback<boolean>): void
-  $child(data: { at: number }, callback: Callback<$Child>): void
-  $children(data: {}, callback: Callback<$Children>): void
+  $child(data: { at: number }, callback: Callback<Child>): void
+  $children(data: {}, callback: Callback<Children>): void
   $getAnimations(data: {}, callback: Callback<AnimationSpec[]>): void
   $getSetup(data: {}, callback: Callback<ComponentSetup>): void
 }
