@@ -24460,7 +24460,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _disable_frame_pointer = (): void => {
-    console.log('Graph', '_disable_frame_pointer')
+    // console.log('Graph', '_disable_frame_pointer')
 
     const frame_slot = this._frame.$slot['default']
 

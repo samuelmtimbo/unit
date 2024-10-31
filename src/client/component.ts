@@ -2543,7 +2543,7 @@ export class Component<
           }
         }
       } else {
-        if (this.$slotParent) {
+        if (this.$slotParent && component.$slotParent) {
           this.$slotParent.domRemoveParentChildAt(
             component,
             'default',
@@ -3020,7 +3020,7 @@ export class Component<
     }
 
     if (this.isParent()) {
-      if (this.$slotParent) {
+      if (this.$slotParent && component.$slotParent) {
         this.$slotParent.domCommitRemoveChild(component)
       } else {
         if (this.$element.contains(component.$element)) {
