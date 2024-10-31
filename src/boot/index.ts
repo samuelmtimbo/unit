@@ -7,7 +7,6 @@ import { unmount } from '../client/context'
 import icons from '../client/icons'
 import { themeColor } from '../client/theme'
 import { fromBundle } from '../spec/fromBundle'
-import { stringifyBundleSpecData } from '../spec/stringifySpec'
 import { BootOpt, System } from '../system'
 import { BundleSpec } from '../types/BundleSpec'
 import { Dict } from '../types/Dict'
@@ -118,19 +117,9 @@ export function boot(
     api,
     flags: {
       defaultInputModeNone: false,
-      tick: 'sync',
       ...flags,
     },
-    tick:
-      flags.tick === 'sync'
-        ? (callback: () => void) => {
-            callback()
-          }
-        : (callback) => system.api.animation.requestAnimationFrame(callback),
     boot: (opt: BootOpt) => boot(system, api, opt),
-    stringifyBundleData: (bundle: BundleSpec) => {
-      return stringifyBundleSpecData(bundle)
-    },
     fromBundle: (bundle: BundleSpec) => {
       return fromBundle(bundle, specs, {})
     },

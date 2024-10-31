@@ -9,8 +9,6 @@ import { Theme } from './client/theme'
 import { Point } from './client/util/geometry/types'
 import { AllTypes } from './interface'
 import { Classes, Specs } from './types'
-import { BundleSpec } from './types/BundleSpec'
-import { Callback } from './types/Callback'
 import { Dict } from './types/Dict'
 import { Unlisten } from './types/Unlisten'
 import { KeyboardState } from './types/global/KeyboardState'
@@ -66,15 +64,12 @@ export interface System extends S, R {
   api: API
   flags: {
     defaultInputModeNone?: boolean
-    tick?: 'sync' | 'animation'
   }
-  tick: (callback: Callback) => void
   boot: (opt: BootOpt) => System
   getLocalComponents: (remoteGlobalId: string) => any[]
   registerLocalComponent: (component: any, remoteGlobalId: string) => void
   unregisterLocalComponent: (component: any, remoteGlobalId: string) => void
   registerUnit(id: string): void
-  stringifyBundleData(bundle: BundleSpec): void
   unregisterUnit(id: string): void
   showLongPress?: (
     screenX: number,
