@@ -45,9 +45,6 @@ export default class Detach extends Holder<I, O> {
   f({ component, host, opt }: I, done: Done<O>): void {
     this._component = component
 
-    component.emit('call', { method: 'register', data: [] })
-    host.emit('call', { method: 'register', data: [] })
-
     const hostUrl = globalUrl(host.__global_id)
 
     component.emit('call', { method: 'detach', data: [hostUrl, opt] })
