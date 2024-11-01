@@ -1873,8 +1873,6 @@ export class Component<
     this.$named_listener_count = {}
 
     $unit.$getGlobalId({}, (remoteId: string) => {
-      this.$remoteId = remoteId
-
       this.register(remoteId)
     })
 
