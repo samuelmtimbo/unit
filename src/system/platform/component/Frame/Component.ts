@@ -12,6 +12,7 @@ import {
 } from '../../../../client/context'
 import { Element } from '../../../../client/element'
 import { makeCustomListener } from '../../../../client/event/custom'
+import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
 import { renderFrame } from '../../../../client/renderFrame'
 import { applyDynamicStyle } from '../../../../client/style'
 import { Theme } from '../../../../client/theme'
@@ -40,6 +41,8 @@ export default class Frame extends Element<HTMLDivElement, Props> {
   public $$context: Context
 
   private _context_unlisten: Unlisten
+
+  private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -73,23 +76,19 @@ export default class Frame extends Element<HTMLDivElement, Props> {
     applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
 
     this.$$context = renderFrame(this.$system, null, $element, $$init)
-  }
 
-  private _prop_handler = {
-    style: (style: Dict<string> = {}) => {
-      applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
-
-      this._refresh_sub_context_color()
-    },
-    disabled: (disabled: boolean) => {
-      this._refresh_sub_context_disabled()
-    },
-    theme: (theme: Theme) => {
-      this._refresh_sub_context_color()
-    },
-    color: (color: string) => {
-      this._refresh_sub_context_color()
-    },
+    this._prop_handler = {
+      ...htmlPropHandler(this, $element, DEFAULT_STYLE),
+      disabled: (disabled: boolean) => {
+        this._refresh_sub_context_disabled()
+      },
+      theme: (theme: Theme) => {
+        this._refresh_sub_context_color()
+      },
+      color: (color: string) => {
+        this._refresh_sub_context_color()
+      },
+    }
   }
 
   onPropChanged(prop: string, current: any): void {

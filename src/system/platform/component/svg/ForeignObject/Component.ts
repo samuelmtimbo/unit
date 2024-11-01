@@ -1,5 +1,6 @@
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -18,7 +19,7 @@ export default class SVGForeignObject extends Element<
   SVGForeignObjectElement,
   Props
 > {
-  private _foreign_el: SVGForeignObjectElement
+  private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -32,35 +33,42 @@ export default class SVGForeignObject extends Element<
       height = 100,
     } = this.$props
 
-    const foreign_el = this.$system.api.document.createElementNS(
+    const DEFAULT_STYLE = $system.style['foreignobject']
+
+    const $element = this.$system.api.document.createElementNS(
       namespaceURI,
       'foreignObject'
     )
     if (className !== undefined) {
-      foreign_el.classList.value = className
+      $element.classList.value = className
     }
-    foreign_el.setAttribute('x', `${x}`)
-    foreign_el.setAttribute('y', `${y}`)
-    foreign_el.setAttribute('width', `${width}`)
-    foreign_el.setAttribute('height', `${height}`)
-    applyStyle(foreign_el, style)
+    $element.setAttribute('x', `${x}`)
+    $element.setAttribute('y', `${y}`)
+    $element.setAttribute('width', `${width}`)
+    $element.setAttribute('height', `${height}`)
 
-    this._foreign_el = foreign_el
+    applyStyle($element, { ...DEFAULT_STYLE, ...style })
 
-    this.$element = foreign_el
+    this.$element = $element
+
+    this._prop_handler = {
+      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+      x: (x: number | undefined = 0) => {
+        this.$element.setAttribute('x', `${x}`)
+      },
+      y: (y: number | undefined = 0) => {
+        this.$element.setAttribute('y', `${y}`)
+      },
+      width: (width: number | undefined = 0) => {
+        this.$element.setAttribute('width', `${width}`)
+      },
+      height: (height: number | undefined = 0) => {
+        this.$element.setAttribute('height', `${height}`)
+      },
+    }
   }
 
   onPropChanged(prop: string, current: any): void {
-    if (prop === 'style') {
-      applyStyle(this._foreign_el, current)
-    } else if (prop === 'x') {
-      this._foreign_el.setAttribute('x', `${current}`)
-    } else if (prop === 'y') {
-      this._foreign_el.setAttribute('y', `${current}`)
-    } else if (prop === 'width') {
-      this._foreign_el.setAttribute('width', `${current}`)
-    } else if (prop === 'height') {
-      this._foreign_el.setAttribute('height', `${current}`)
-    }
+    this._prop_handler[prop](current)
   }
 }

@@ -15,18 +15,6 @@ export interface Props {
   data?: Dict<string>
 }
 
-const DEFAULT_STYLE = {
-  textAlign: 'center',
-  color: 'buttontext',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'space-around',
-  boxSizing: 'border-box',
-  width: '60px',
-  height: '36px',
-  padding: '6px',
-}
-
 export default class Button extends Element<HTMLButtonElement, Props> {
   private _prop_handler: PropHandler
 
@@ -43,6 +31,8 @@ export default class Button extends Element<HTMLButtonElement, Props> {
       draggable,
       data = {},
     } = this.$props
+
+    const DEFAULT_STYLE = this.$system.style['button']
 
     const $element = this.$system.api.document.createElement('button')
 

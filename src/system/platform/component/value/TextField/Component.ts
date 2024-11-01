@@ -13,19 +13,10 @@ export interface Props {
   attr?: Dict<any>
 }
 
-export const DEFAULT_STYLE = {
-  height: 'fit-content',
-  width: '100%',
-  color: 'inherit',
-  backgroundColor: '#00000000',
-  padding: '0',
-  // outlineColor: '#00000000',
-  border: 'none',
-  borderRadius: '0',
-}
-
 export default class TextField extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
+    const DEFAULT_STYLE = $system.style['textfield']
+
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultStyle: DEFAULT_STYLE,

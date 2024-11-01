@@ -12,21 +12,10 @@ export interface Props {
   disabled?: boolean
 }
 
-export const DEFAULT_STYLE = {
-  height: 'fit-content',
-  width: '100%',
-  color: 'inherit',
-  backgroundColor: '#00000000',
-  textAlign: 'center',
-  padding: '0',
-  fontSize: '18px',
-  // outline: 'none',
-  border: 'none',
-  borderRadius: '0',
-}
-
 export default class NumberField extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
+    const DEFAULT_STYLE = $system.style['numberfield']
+
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultStyle: DEFAULT_STYLE,

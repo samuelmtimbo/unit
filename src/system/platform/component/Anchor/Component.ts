@@ -17,8 +17,6 @@ export interface Props {
   draggable?: boolean
 }
 
-const DEFAULT_STYLE = {}
-
 export default class Anchor extends Element<HTMLAnchorElement, Props> {
   private _prop_handler: PropHandler
 
@@ -37,6 +35,8 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
       title,
       draggable,
     } = this.$props
+
+    const DEFAULT_STYLE = this.$system.style['anchor']
 
     this.$element = this.$system.api.document.createElement('a')
 

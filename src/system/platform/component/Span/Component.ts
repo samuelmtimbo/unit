@@ -14,10 +14,6 @@ export interface Props {
   draggable?: boolean
 }
 
-const DEFAULT_STYLE = {
-  color: 'currentColor',
-}
-
 export default class Span extends Element<HTMLSpanElement, Props> {
   private _prop_handler: PropHandler
 
@@ -26,6 +22,8 @@ export default class Span extends Element<HTMLSpanElement, Props> {
 
     const { id, className, style, innerText, tabIndex, title, draggable } =
       this.$props
+
+    const DEFAULT_STYLE = this.$system.style['span']
 
     this.$element = this.$system.api.document.createElement('span')
 

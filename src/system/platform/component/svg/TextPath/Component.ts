@@ -16,11 +16,7 @@ export interface Props {
   rotate?: 'auto' | 'auto-reverse' | 'number'
 }
 
-export const DEFAULT_STYLE = {}
-
 export default class SVGTextPath extends Element<SVGTextPathElement, Props> {
-  private _text_path_el: SVGTextPathElement
-
   private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
@@ -36,6 +32,8 @@ export default class SVGTextPath extends Element<SVGTextPathElement, Props> {
       textContent,
       rotate,
     } = this.$props
+
+    const DEFAULT_STYLE = $system.style['textpath']
 
     const text_path_el = this.$system.api.document.createElementNS(
       namespaceURI,
@@ -64,14 +62,12 @@ export default class SVGTextPath extends Element<SVGTextPathElement, Props> {
       text_path_el.setAttribute('rotate', rotate)
     }
 
-    this._text_path_el = text_path_el
-
     this.$element = text_path_el
 
     this._prop_handler = {
       ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
       textContent: (current: string | undefined) => {
-        this._text_path_el.textContent = current
+        this.$element.textContent = current
       },
     }
   }

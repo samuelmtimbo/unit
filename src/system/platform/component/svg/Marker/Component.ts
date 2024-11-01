@@ -16,11 +16,7 @@ export interface Props {
   orient?: string
 }
 
-export const DEFAULT_STYLE = {}
-
 export default class SVGMarker extends Element<SVGMarkerElement, Props> {
-  private _marker_el: SVGMarkerElement
-
   private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
@@ -36,6 +32,8 @@ export default class SVGMarker extends Element<SVGMarkerElement, Props> {
       refY,
       orient,
     } = this.$props
+
+    const DEFAULT_STYLE = $system.style['marker']
 
     const marker_el = this.$system.api.document.createElementNS(
       namespaceURI,
@@ -63,7 +61,6 @@ export default class SVGMarker extends Element<SVGMarkerElement, Props> {
     if (orient !== undefined) {
       marker_el.setAttribute('orient', orient)
     }
-    this._marker_el = marker_el
 
     this.$element = marker_el
 

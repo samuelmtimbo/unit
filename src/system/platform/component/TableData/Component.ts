@@ -17,6 +17,8 @@ export default class TableData extends Element<HTMLElement, Props> {
 
     const { style, attr = {} } = this.$props
 
+    const DEFAULT_STYLE = this.$system.style['tabledata']
+
     this.$element = this.$system.api.document.createElement('td')
 
     if (attr !== undefined) {
@@ -27,10 +29,10 @@ export default class TableData extends Element<HTMLElement, Props> {
       }
     }
 
-    applyDynamicStyle(this, this.$element, style)
+    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, {}),
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
     }
   }
 

@@ -14,12 +14,6 @@ export interface Props {
   draggable?: boolean
 }
 
-const DEFAULT_STYLE = {
-  color: 'currentColor',
-  width: 'fit-content',
-  height: 'fit-content',
-}
-
 export default class Label extends Element<HTMLLabelElement, Props> {
   private _prop_handler: PropHandler
 
@@ -28,6 +22,8 @@ export default class Label extends Element<HTMLLabelElement, Props> {
 
     const { id, className, style, innerText, tabIndex, title, draggable } =
       this.$props
+
+    const DEFAULT_STYLE = this.$system.style['label']
 
     this.$element = this.$system.api.document.createElement('label')
 

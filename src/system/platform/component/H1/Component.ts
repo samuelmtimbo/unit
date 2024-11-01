@@ -16,12 +16,6 @@ export interface Props {
   attr?: Dict<string>
 }
 
-const DEFAULT_STYLE = {
-  color: 'currentColor',
-  'font-size': '28px',
-  'font-weight': '700',
-}
-
 export default class H1 extends Element<HTMLHeadingElement, Props> {
   private _prop_handler: PropHandler
 
@@ -39,6 +33,8 @@ export default class H1 extends Element<HTMLHeadingElement, Props> {
       data = {},
       attr = {},
     } = this.$props
+
+    const DEFAULT_STYLE = $system.style['h1']
 
     this.$element = this.$system.api.document.createElement('h1')
 

@@ -4,7 +4,7 @@ import { $Element } from '../types/interface/async/$Element'
 import { identity } from '../util/identity'
 import { Element } from './element'
 import { htmlPropHandler, inputPropHandler, PropHandler } from './propHandler'
-import { applyStyle } from './style'
+import { applyDynamicStyle } from './style'
 
 export type InputElement =
   | HTMLInputElement
@@ -69,8 +69,6 @@ export class Field<
 
     this.$element[valueKey] = value
 
-    applyStyle($element, style)
-
     const isInput =
       $element instanceof HTMLInputElement ||
       $element instanceof HTMLTextAreaElement ||
@@ -84,6 +82,8 @@ export class Field<
 
     this.$element.addEventListener('change', inputEventHandler)
     this.$element.addEventListener('input', inputEventHandler)
+
+    applyDynamicStyle(this, this.$element, { ...defaultStyle, ...style })
 
     this._prop_handler = {
       ...htmlPropHandler(this, this.$element, defaultStyle),

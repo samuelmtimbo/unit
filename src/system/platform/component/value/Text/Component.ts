@@ -7,8 +7,6 @@ export interface Props {
 }
 
 export default class _Text extends Element<Text, Props> {
-  private _text_el: Text
-
   constructor($props: Props, $system: System) {
     super($props, $system)
 
@@ -16,14 +14,12 @@ export default class _Text extends Element<Text, Props> {
 
     const text_node = this.$system.api.document.createTextNode(value)
 
-    this._text_el = text_node
-
     this.$element = text_node
   }
 
   onPropChanged(prop: string, current: any): void {
     if (prop === 'value') {
-      this._text_el.nodeValue = current ?? ''
+      this.$element.nodeValue = current ?? ''
     }
   }
 

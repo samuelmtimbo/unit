@@ -18,14 +18,6 @@ export interface Props {
   attr?: Dict<string>
 }
 
-export const DEFAULT_STYLE = {
-  height: '100%',
-  width: '100%',
-  boxSizing: 'border-box',
-  display: 'flex',
-  // outline: 'none',
-}
-
 export default class VideoComp
   extends Element<HTMLVideoElement, Props>
   implements CS
@@ -43,6 +35,8 @@ export default class VideoComp
       controls = true,
       attr,
     } = this.$props
+
+    const DEFAULT_STYLE = this.$system.style['video']
 
     this.$element = this.$system.api.document.createElement('video')
 

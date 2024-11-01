@@ -12,30 +12,10 @@ export interface Props {
   attr?: Dict<any>
 }
 
-export const DEFAULT_STYLE = {
-  width: '100%',
-  height: '100%',
-  textAlign: 'left',
-  wordWrap: 'break-word',
-  wordBreak: 'break-word',
-  whiteSpace: 'pre-wrap',
-  fontSize: '21px',
-  display: 'flex',
-  justifyContent: 'center',
-  background: 'none',
-  backgroundColor: '#00000000',
-  padding: '0',
-  border: 'none',
-  overflowX: 'hidden',
-  overflowY: 'auto',
-  resize: 'none',
-  // outline: 'none',
-  boxSizing: 'border-box',
-  color: 'currentColor',
-}
-
 export default class TextArea extends Field<HTMLTextAreaElement, Props> {
   constructor($props: Props, $system: System) {
+    const DEFAULT_STYLE = $system.style['textarea']
+
     super($props, $system, $system.api.document.createElement('textarea'), {
       valueKey: 'value',
       defaultStyle: DEFAULT_STYLE,

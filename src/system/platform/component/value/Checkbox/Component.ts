@@ -9,19 +9,10 @@ export interface Props {
   disabled?: boolean
 }
 
-export const DEFAULT_STYLE = {
-  display: 'block',
-  height: '100%',
-  width: '100%',
-  color: 'inherit',
-  margin: '0',
-  backgroundColor: '#00000000',
-  padding: '0',
-  // outline: 'none',
-}
-
 export default class Checkbox extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
+    const DEFAULT_STYLE = $system.style['checkbox']
+
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'checked',
       defaultValue: false,

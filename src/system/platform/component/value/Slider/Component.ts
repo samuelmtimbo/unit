@@ -13,25 +13,10 @@ export interface Props {
   attr?: Dict<string>
 }
 
-export const DEFAULT_STYLE = {
-  height: '18px',
-  width: '100%',
-  color: 'inherit',
-  backgroundColor: '#00000000',
-  textAlign: 'center',
-  padding: '0',
-  margin: '0',
-  fontSize: '12px',
-  // outline: 'none',
-  border: 'none',
-  borderRadius: '0',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-}
-
 export default class Slider extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
+    const DEFAULT_STYLE = $system.style['textarea']
+
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultValue: '0',

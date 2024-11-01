@@ -53,7 +53,6 @@ export default class CanvasComp
   implements CA
 {
   private _context: CanvasRenderingContext2D
-  private _canvas_el: HTMLCanvasElement
 
   private _d: any[][] = []
 
@@ -64,8 +63,6 @@ export default class CanvasComp
 
     this._setup()
     this._reset()
-
-    this.$element = this._canvas_el
   }
 
   public reset() {
@@ -78,18 +75,18 @@ export default class CanvasComp
   private _setup = () => {
     const { className, style } = this.$props
 
-    const old_canvas_el = this._canvas_el
+    const old_canvas_el = this.$element
 
     const canvas_el = this._create_canvas()
     if (className !== undefined) {
       canvas_el.className = className
     }
 
-    applyStyle(this._canvas_el, { ...DEFAULT_STYLE, ...style })
+    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
 
     canvas_el.draggable = false
 
-    this._canvas_el = canvas_el
+    this.$element = canvas_el
     const context = canvas_el.getContext('2d', { willReadFrequently: true })
     this._context = context
 
@@ -147,7 +144,7 @@ export default class CanvasComp
 
     applyStyle(canvas_el, { ...DEFAULT_STYLE, ...style })
 
-    this._canvas_el = canvas_el
+    this.$element = canvas_el
 
     return canvas_el
   }
@@ -162,13 +159,13 @@ export default class CanvasComp
   }
 
   private _set_width = (width: number): void => {
-    this._canvas_el.setAttribute('width', `${width - 1}`)
+    this.$element.setAttribute('width', `${width - 1}`)
 
     this._reset_redraw()
   }
 
   private _set_height = (height: number): void => {
-    this._canvas_el.setAttribute('height', `${height - 1}`)
+    this.$element.setAttribute('height', `${height - 1}`)
 
     this._reset_redraw()
   }
@@ -195,7 +192,7 @@ export default class CanvasComp
 
       const color = this._get_fill_style().toLowerCase()
 
-      applyStyle(this._canvas_el, final_style)
+      applyStyle(this.$element, final_style)
 
       if (
         this._context.fillStyle !== color ||
@@ -310,7 +307,7 @@ export default class CanvasComp
 
     const color = this._get_fill_style()
 
-    const context = this._canvas_el.getContext('2d')
+    const context = this.$element.getContext('2d')
 
     this._context = context
 
@@ -406,7 +403,7 @@ export default class CanvasComp
 
   async toBlob(type: string, quality: number): Promise<Blob> {
     return new Promise((resolve, reject) => {
-      this._canvas_el.toBlob(
+      this.$element.toBlob(
         (blob: Blob) => {
           resolve(blob)
         },
@@ -417,7 +414,7 @@ export default class CanvasComp
   }
 
   async toDataUrl(type: string, quality: number) {
-    return this._canvas_el.toDataURL()
+    return this.$element.toDataURL()
   }
 
   async captureStream({
@@ -425,8 +422,8 @@ export default class CanvasComp
   }: {
     frameRate: number
   }): Promise<MediaStream> {
-    if (this._canvas_el.captureStream) {
-      return this._canvas_el.captureStream(frameRate)
+    if (this.$element.captureStream) {
+      return this.$element.captureStream(frameRate)
     } else {
       throw new APINotSupportedError('Capture Stream')
     }

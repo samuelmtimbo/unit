@@ -34,6 +34,8 @@ export default class Div extends Element<HTMLDivElement, Props> {
       attr = {},
     } = this.$props
 
+    const DEFAULT_STYLE = $system.style['tablerow']
+
     this.$element = this.$system.api.document.createElement('div')
 
     if (id !== undefined) {
@@ -70,10 +72,10 @@ export default class Div extends Element<HTMLDivElement, Props> {
       }
     }
 
-    applyDynamicStyle(this, this.$element, style)
+    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, {}),
+      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
     }
   }
 

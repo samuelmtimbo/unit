@@ -16,6 +16,7 @@ import { PointerState } from '../types/global/PointerState'
 import { ASYNC } from '../types/interface/async/wrapper'
 import { remove } from '../util/array'
 import { weakMerge } from '../weakMerge'
+import { style } from './style'
 
 export function boot(
   parent: System | null = null,
@@ -104,6 +105,7 @@ export function boot(
       svg: undefined,
       app: undefined,
     },
+    style,
     showLongPress: undefined,
     captureGesture: undefined,
     global: parent

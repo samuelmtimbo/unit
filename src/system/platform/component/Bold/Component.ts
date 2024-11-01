@@ -17,8 +17,6 @@ export interface Props {
   draggable?: boolean
 }
 
-const DEFAULT_STYLE = {}
-
 export default class Bold extends Element<HTMLElement, Props> {
   private _prop_handler: PropHandler
 
@@ -37,6 +35,8 @@ export default class Bold extends Element<HTMLElement, Props> {
       title,
       draggable,
     } = this.$props
+
+    const DEFAULT_STYLE = $system.style['bold']
 
     this.$element = this.$system.api.document.createElement('b')
 

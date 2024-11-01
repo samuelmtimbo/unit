@@ -1,5 +1,6 @@
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -15,12 +16,8 @@ export interface Props {
   textAnchor?: string
 }
 
-export const DEFAULT_STYLE = {
-  fill: 'currentColor',
-}
-
 export default class SVGText extends Element<SVGTextElement, Props> {
-  private _text_el: SVGTextElement
+  private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -36,54 +33,66 @@ export default class SVGText extends Element<SVGTextElement, Props> {
       textAnchor = 'start',
     } = this.$props
 
-    const text_el = this.$system.api.document.createElementNS(
+    const DEFAULT_STYLE = $system.style['text']
+
+    const $element = this.$system.api.document.createElementNS(
       namespaceURI,
       'text'
     )
 
-    applyStyle(text_el, { ...DEFAULT_STYLE, ...style })
-
     if (className) {
-      text_el.classList.add(className)
+      $element.classList.add(className)
     }
     if (value !== undefined) {
-      text_el.textContent = value
+      $element.textContent = value
     }
     if (x !== undefined) {
-      text_el.setAttribute('x', `${x}`)
+      $element.setAttribute('x', `${x}`)
     }
     if (y !== undefined) {
-      text_el.setAttribute('y', `${y}`)
+      $element.setAttribute('y', `${y}`)
     }
     if (dx !== undefined) {
-      text_el.setAttribute('dx', `${dx}`)
+      $element.setAttribute('dx', `${dx}`)
     }
     if (dy !== undefined) {
-      text_el.setAttribute('dy', `${dy}`)
+      $element.setAttribute('dy', `${dy}`)
     }
     if (textAnchor !== undefined) {
-      text_el.setAttribute('text-anchor', textAnchor)
+      $element.setAttribute('text-anchor', textAnchor)
     }
-    this._text_el = text_el
 
-    this.$element = text_el
+    this.$element = $element
+
+    applyStyle($element, { ...DEFAULT_STYLE, ...style })
+
+    this._prop_handler = {
+      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+      value: (value: string | undefined = '') => {
+        this.$element.textContent = value
+      },
+      x: (x: number | undefined = 0) => {
+        this.$element.setAttribute('x', `${x}`)
+      },
+      y: (y: number | undefined = 0) => {
+        this.$element.setAttribute('y', `${y}`)
+      },
+      width: (width: number | undefined = 0) => {
+        this.$element.setAttribute('width', `${width}`)
+      },
+      height: (height: number | undefined = 0) => {
+        this.$element.setAttribute('height', `${height}`)
+      },
+      dx: (dx: number | undefined = 0) => {
+        this.$element.setAttribute('dx', `${dx}`)
+      },
+      dy: (dy: number | undefined = 0) => {
+        this.$element.setAttribute('dy', `${dy}`)
+      },
+    }
   }
 
   onPropChanged(prop: string, current: any): void {
-    if (prop === 'style') {
-      applyStyle(this._text_el, { ...DEFAULT_STYLE, ...current })
-    } else if (prop === 'value') {
-      this._text_el.textContent = current
-    } else if (prop === 'dy') {
-      this._text_el.setAttribute('dy', `${current ?? ''}`)
-    } else if (prop === 'dx') {
-      this._text_el.setAttribute('dx', `${current ?? ''}`)
-    } else if (prop === 'x') {
-      this._text_el.setAttribute('x', `${current ?? ''}`)
-    } else if (prop === 'y') {
-      this._text_el.setAttribute('y', `${current ?? ''}`)
-    } else if (prop === 'textAnchor') {
-      this._text_el.setAttribute('text-anchor', current)
-    }
+    this._prop_handler[prop](current)
   }
 }

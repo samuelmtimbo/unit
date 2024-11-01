@@ -9,10 +9,10 @@ export interface Props {
   disabled?: boolean
 }
 
-export const DEFAULT_STYLE = {}
-
 export default class RadioField extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
+    const DEFAULT_STYLE = $system.style['radiofield']
+
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultStyle: DEFAULT_STYLE,

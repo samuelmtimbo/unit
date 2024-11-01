@@ -1,7 +1,7 @@
 import { mergeAttr } from '../../../../../client/attr'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
-import { PropHandler } from '../../../../../client/propHandler'
+import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -18,50 +18,8 @@ export interface Props {
   attr?: Dict<string>
 }
 
-export const DEFAULT_STYLE = {
-  strokeWidth: '3px',
-  fill: 'none',
-  stroke: 'currentColor',
-}
-
 export default class SVGPath extends Element<SVGPathElement, Props> {
-  private _path_el: SVGPathElement
-
-  private _prop_handler: PropHandler = {
-    className: (className: string | undefined) => {
-      this._path_el.className.value = className
-    },
-    style: (style: Style | undefined) => {
-      applyStyle(this._path_el, { ...DEFAULT_STYLE, ...style })
-    },
-    d: (d: string | undefined) => {
-      if (d === undefined) {
-        this._path_el.removeAttribute('d')
-      } else {
-        this._path_el.setAttribute('d', d)
-      }
-    },
-    markerStart: (markerStart: string | undefined) => {
-      this._path_el.setAttribute('marker-start', markerStart)
-    },
-    markerEnd: (markerEnd: string | undefined) => {
-      this._path_el.setAttribute('marker-end', markerEnd)
-    },
-    strokeWidth: (strokeWidth: string | undefined) => {
-      if (strokeWidth === undefined) {
-        this._path_el.removeAttribute('stroke-width')
-      } else {
-        this._path_el.setAttribute('stroke-width', `${strokeWidth}`)
-      }
-    },
-    fillRule: (fillRule: string | undefined) => {
-      if (fillRule === undefined) {
-        this._path_el.removeAttribute('fill-rule')
-      } else {
-        this._path_el.setAttribute('fill-rule', fillRule)
-      }
-    },
-  }
+  private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -76,6 +34,8 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
       fillRule,
       attr = {},
     } = $props
+
+    const DEFAULT_STYLE = $system.style['path']
 
     const path_el = this.$system.api.document.createElementNS(
       namespaceURI,
@@ -103,11 +63,38 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
 
     applyStyle(path_el, { ...DEFAULT_STYLE, ...style })
 
-    this._path_el = path_el
-
     this.$element = path_el
-    this.$unbundled = false
-    this.$primitive = true
+
+    this._prop_handler = {
+      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+      d: (d: string | undefined) => {
+        if (d === undefined) {
+          this.$element.removeAttribute('d')
+        } else {
+          this.$element.setAttribute('d', d)
+        }
+      },
+      markerStart: (markerStart: string | undefined) => {
+        this.$element.setAttribute('marker-start', markerStart)
+      },
+      markerEnd: (markerEnd: string | undefined) => {
+        this.$element.setAttribute('marker-end', markerEnd)
+      },
+      strokeWidth: (strokeWidth: string | undefined) => {
+        if (strokeWidth === undefined) {
+          this.$element.removeAttribute('stroke-width')
+        } else {
+          this.$element.setAttribute('stroke-width', `${strokeWidth}`)
+        }
+      },
+      fillRule: (fillRule: string | undefined) => {
+        if (fillRule === undefined) {
+          this.$element.removeAttribute('fill-rule')
+        } else {
+          this.$element.setAttribute('fill-rule', fillRule)
+        }
+      },
+    }
   }
 
   onPropChanged(prop: string, current: any): void {

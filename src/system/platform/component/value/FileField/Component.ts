@@ -8,20 +8,10 @@ export interface Props {
   value?: string
 }
 
-export const DEFAULT_STYLE = {
-  height: '100%',
-  width: '100%',
-  color: 'inherit',
-  backgroundColor: '#00000000',
-  padding: '0',
-  fontSize: '18px',
-  // outlineColor: '#00000000',
-  border: 'none',
-  borderRadius: '0',
-}
-
 export default class FileField extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
+    const DEFAULT_STYLE = $system.style['filefield']
+
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultStyle: DEFAULT_STYLE,

@@ -9,10 +9,6 @@ export interface Props {
   attr?: Dict<string>
 }
 
-export const DEFAULT_STYLE = {
-  'border-collapse': 'collapse',
-}
-
 export default class Table extends Element<HTMLTableElement, Props> {
   private _prop_handler: PropHandler
 
@@ -20,6 +16,8 @@ export default class Table extends Element<HTMLTableElement, Props> {
     super($props, $system)
 
     const { style, attr = {} } = this.$props
+
+    const DEFAULT_STYLE = this.$system.style['table']
 
     this.$element = this.$system.api.document.createElement('table')
 
@@ -31,7 +29,7 @@ export default class Table extends Element<HTMLTableElement, Props> {
       }
     }
 
-    applyDynamicStyle(this, this.$element, style)
+    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {
       ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),

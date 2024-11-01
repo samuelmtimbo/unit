@@ -1,8 +1,8 @@
 import { mergeAttr } from '../../../../../client/attr'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
+import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
-import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -20,20 +20,8 @@ export interface Props {
   tabIndex?: number
 }
 
-export const DEFAULT_ATTR = {}
-
-export const DEFAULT_STYLE = {
-  display: 'block',
-  width: '100%',
-  height: '100%',
-  color: 'currentColor',
-  boxSizing: 'border-box',
-  cursor: 'default',
-  ...userSelect('none'),
-}
-
 export default class SVGSVG extends Element<SVGSVGElement, Props> {
-  private _svg_el: SVGSVGElement
+  private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -49,6 +37,8 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
       title,
       tabIndex,
     } = $props
+
+    const DEFAULT_STYLE = $system.style['svg']
 
     const svg_el = this.$system.api.document.createElementNS(
       namespaceURI,
@@ -87,42 +77,42 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
 
     mergeAttr(svg_el, attr)
 
-    this._svg_el = svg_el
-
     this.$element = svg_el
-    this.$unbundled = false
-    this.$primitive = true
+
+    this._prop_handler = {
+      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+      viewBox: (viewBox: string | undefined) => {
+        if (viewBox === undefined) {
+          this.$element.removeAttribute('viewBox')
+        } else {
+          this.$element.setAttribute('viewBox', viewBox)
+        }
+      },
+      width: (width: number | undefined) => {
+        if (width === undefined) {
+          this.$element.removeAttribute('width')
+        } else {
+          this.$element.setAttribute('width', `${width}`)
+        }
+      },
+      height: (height: number | undefined) => {
+        if (height === undefined) {
+          this.$element.removeAttribute('height')
+        } else {
+          this.$element.setAttribute('height', `${height}`)
+        }
+      },
+      strokeWidth: (strokeWidth: number | undefined) => {
+        if (strokeWidth === undefined) {
+          this.$element.removeAttribute('stroke-width')
+        } else {
+          this.$element.setAttribute('stroke-width', `${strokeWidth}`)
+        }
+      },
+    }
   }
 
   onPropChanged(prop: string, current: any): void {
-    if (prop === 'className') {
-      this._svg_el.className.value = current
-    } else if (prop === 'style') {
-      applyStyle(this._svg_el, { ...DEFAULT_STYLE, ...current })
-    } else if (prop === 'attr') {
-      mergeAttr(this._svg_el, current ?? {})
-    } else if (prop === 'viewBox') {
-      if (current === undefined) {
-        this._svg_el.removeAttribute('viewBox')
-      } else {
-        this._svg_el.setAttribute('viewBox', current)
-      }
-    } else if (prop === 'width') {
-      if (current === undefined) {
-        this._svg_el.removeAttribute('width')
-      } else {
-        this._svg_el.setAttribute('width', `${current}`)
-      }
-    } else if (prop === 'height') {
-      this._svg_el.setAttribute('height', `${current}`)
-    } else if (prop === 'strokeWidth') {
-      if (current === undefined) {
-        this._svg_el.removeAttribute('stroke-width')
-      } else {
-        this._svg_el.setAttribute('stroke-width', `${current}`)
-      }
-    } else if (prop === 'tabIndex') {
-      this._svg_el.tabIndex = current
-    }
+    this._prop_handler[prop](current)
   }
 }

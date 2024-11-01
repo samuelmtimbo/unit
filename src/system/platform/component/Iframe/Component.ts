@@ -25,13 +25,6 @@ export interface Props {
   }
 }
 
-export const DEFAULT_STYLE = {
-  display: 'block',
-  border: 'none',
-  width: '100%',
-  height: '100%',
-}
-
 export default class Iframe
   extends Element<HTMLSlotElement | HTMLIFrameElement, Props>
   implements CH, W
@@ -46,6 +39,8 @@ export default class Iframe
     super($props, $system)
 
     const { id, className, style = {}, src, srcdoc } = this.$props
+
+    const DEFAULT_STYLE = $system.style['iframe']
 
     const {
       root,

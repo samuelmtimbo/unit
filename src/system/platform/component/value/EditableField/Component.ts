@@ -12,20 +12,10 @@ export interface Props {
   tabIndex?: number
 }
 
-export const DEFAULT_STYLE = {
-  height: 'fit-content',
-  width: '100%',
-  color: 'inherit',
-  backgroundColor: '#00000000',
-  padding: '0',
-  fontSize: '18px',
-  // outlineColor: '#00000000',
-  border: 'none',
-  borderRadius: '0',
-}
-
 export default class EditableField extends Field<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
+    const DEFAULT_STYLE = $system.style['editablefield']
+
     super($props, $system, $system.api.document.createElement('div'), {
       valueKey: 'innerText',
       defaultStyle: DEFAULT_STYLE,
@@ -54,12 +44,4 @@ export default class EditableField extends Field<HTMLDivElement, Props> {
 
     applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
   }
-
-  // setSelectionRange(
-  //   start: number,
-  //   end: number,
-  //   direction?: 'forward' | 'backward' | 'none' | undefined
-  // ) {
-  //   this.$element.setSelectionRange(start, end, direction)
-  // }
 }

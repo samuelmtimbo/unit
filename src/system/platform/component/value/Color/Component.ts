@@ -11,17 +11,10 @@ export interface Props {
   tabIndex?: number
 }
 
-export const DEFAULT_STYLE = {
-  display: 'block',
-  color: 'inherit',
-  backgroundColor: '#00000000',
-  padding: '0',
-  border: 'none',
-  borderRadius: '0',
-}
-
 export default class Color extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
+    const DEFAULT_STYLE = $system.style['color']
+
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultStyle: DEFAULT_STYLE,
