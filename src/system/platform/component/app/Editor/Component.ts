@@ -1011,6 +1011,26 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._component = component ?? parentComponent({}, this.$system)
 
+    if (editor) {
+      mergeProps(editor, {
+        hasSpec: this._has_spec,
+        emptySpec: this._empty_spec,
+        getSpec: this._get_spec,
+        setSpec: this._set_spec,
+        newSpec: this._new_spec,
+        deleteSpec: this._delete_spec,
+        forkSpec: this._fork_spec,
+        injectSpecs: this._inject_specs,
+        shouldFork: this._should_fork,
+        registerUnit: this._register_unit,
+        unregisterUnit: this._unregister_unit,
+        newSpecId: this._new_spec_id,
+        dispatchEvent: this._dispatch_event,
+        enterFullwindow: this._enter_fullwindow,
+        leaveFullwindow: this._leave_fullwindow,
+      })
+    }
+
     editor =
       editor ||
       new Editor_(
