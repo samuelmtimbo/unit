@@ -3,7 +3,7 @@ import { deleteGlobalRef, setGlobalRef } from '../global'
 import { System } from '../system'
 import { Dict } from '../types/Dict'
 
-export type $_EE = { destroy: [string[]]; register: []; unregister: [] }
+export type $_EE = { destroy: [string[]]; register: [string]; unregister: [] }
 
 export type $Events<_EE extends Dict<any[]>> = EventEmitter_EE<_EE & $_EE> &
   $_EE
@@ -38,6 +38,8 @@ export class $<
   register(): void {
     if (!this.__global_id) {
       this.__global_id = setGlobalRef(this.__system, this)
+
+      this.emit('register', this.__global_id)
     }
   }
 
@@ -46,6 +48,8 @@ export class $<
       deleteGlobalRef(this.__system, this.__global_id)
 
       this.__global_id = undefined
+
+      this.emit('unregister')
     }
   }
 

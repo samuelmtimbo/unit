@@ -671,20 +671,24 @@ export class Component<
     return callAll(allAbort)
   }
 
-  register() {
-    const { registerLocalComponent } = this.$system
-
-    if (!this.$remoteId) {
-      return
+  register(remoteId: string) {
+    if (this.$remoteId) {
+      throw new Error('cannot register a registered component')
     }
 
-    registerLocalComponent(this, this.$remoteId)
+    const { registerLocalComponent } = this.$system
+
+    this.$remoteId = remoteId
+
+    registerLocalComponent(this, remoteId)
   }
 
   unregister() {
     if (!this.$remoteId) {
       return
     }
+
+    this.$remoteId = undefined
 
     const { unregisterLocalComponent } = this.$system
 
@@ -1850,6 +1854,10 @@ export class Component<
           this.play()
         } else if (event_event === 'pause') {
           this.pause()
+        } else if (event_event === 'register') {
+          this.register(event_data)
+        } else if (event_event === 'unregister') {
+          this.unregister()
         } else {
           throw new Error('invalid event')
         }
@@ -1867,7 +1875,7 @@ export class Component<
     $unit.$getGlobalId({}, (remoteId: string) => {
       this.$remoteId = remoteId
 
-      this.register()
+      this.register(remoteId)
     })
 
     const all_unlisten: Unlisten[] = []
