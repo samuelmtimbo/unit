@@ -55,7 +55,6 @@ export const style = {
     display: 'flex',
     justifyContent: 'center',
     background: 'none',
-    backgroundColor: '#00000000',
     padding: '0',
     border: 'none',
     overflowX: 'hidden',
