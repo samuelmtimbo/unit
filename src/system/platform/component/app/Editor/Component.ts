@@ -11088,6 +11088,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     return pin_icon_name
   }
 
+  private _should_hide_ignored = (): boolean => {
+    return this._mode === 'add' && this._pressed_node_count === 0
+  }
+
   private _sim_add_link_pin_node = (
     unit_id: string,
     type: IO,
@@ -11187,7 +11191,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_node = this._node_comp[pin_node_id]
     const pin_node_content = this._node_content[pin_node_id]
 
-    const opacity = ignored ? (this._mode === 'add' ? '0.5' : `0`) : `1`
+    const opacity = ignored ? (this._should_hide_ignored() ? '0.5' : `0`) : `1`
 
     const pin_border_color =
       ref && input ? COLOR_NONE : active ? this._theme.data : this._theme.node
@@ -11454,7 +11458,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       ? 'hidden'
       : 'visible'
     const pin_link_stroke_width = ref || memory || init ? 1 : 3
-    const pin_link_opacity = ignored ? (this._mode === 'add' ? 0.5 : 0) : 1
+    const pin_link_opacity = ignored
+      ? this._should_hide_ignored()
+        ? 0.5
+        : 0
+      : 1
     const pin_link_start_marker_d = ref && input ? ARROW_SEMICIRCLE : ''
     const pin_link_start_marker_hidden = ref && input && merge_unit_id
     const pin_link_start_marker = new SVGPath(
@@ -17932,8 +17940,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (prev_mode !== 'add' && this._mode === 'add') {
         const units = this.get_units()
 
-        for (const unit_id in units) {
-          this._show_unit_ignored_pins(unit_id)
+        if (this._drag_count === 0) {
+          for (const unit_id in units) {
+            this._show_unit_ignored_pins(unit_id)
+          }
         }
 
         clone_drag_pressed_node_id(false)
@@ -43898,6 +43908,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                 if (this._mode === 'add' || this._mode === 'data') {
                   if (!this._clone_drag) {
                     const deep = this._mode === 'data'
+
+                    if (this._mode === 'add') {
+                      for (const unit_id in this._unit_node) {
+                        this._hide_unit_ignored_pins(unit_id)
+                      }
+                    }
 
                     drag_node_id = this._on_node_clone_drag_start(
                       pressed_node_id,
