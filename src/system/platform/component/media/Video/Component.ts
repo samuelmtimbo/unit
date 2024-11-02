@@ -1,4 +1,4 @@
-import { mergeAttr } from '../../../../../client/attr'
+import { applyAttr } from '../../../../../client/attr'
 import { Element } from '../../../../../client/element'
 import { PropHandler, htmlPropHandler } from '../../../../../client/propHandler'
 import { applyStyle } from '../../../../../client/style'
@@ -40,6 +40,10 @@ export default class VideoComp
 
     this.$element = this.$system.api.document.createElement('video')
 
+    if (attr) {
+      applyAttr(this.$element, attr)
+    }
+
     this.$element.controls = controls
 
     if (className) {
@@ -47,9 +51,6 @@ export default class VideoComp
     }
     if (src) {
       this.$element.src = src
-    }
-    if (attr) {
-      mergeAttr(this.$element, attr)
     }
 
     this.$element.autoplay = autoplay

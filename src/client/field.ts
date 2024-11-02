@@ -2,6 +2,7 @@ import { Style } from '../system/platform/Style'
 import { Dict } from '../types/Dict'
 import { $Element } from '../types/interface/async/$Element'
 import { identity } from '../util/identity'
+import { applyAttr } from './attr'
 import { Element } from './element'
 import { htmlPropHandler, inputPropHandler, PropHandler } from './propHandler'
 import { applyDynamicStyle } from './style'
@@ -61,7 +62,7 @@ export class Field<
       parseValue = identity,
     } = opt
 
-    let { style = {}, value = defaultValue } = $props
+    let { style, attr, value = defaultValue } = $props
 
     style = { ...defaultStyle, ...style }
 
@@ -83,7 +84,8 @@ export class Field<
     this.$element.addEventListener('change', inputEventHandler)
     this.$element.addEventListener('input', inputEventHandler)
 
-    applyDynamicStyle(this, this.$element, { ...defaultStyle, ...style })
+    applyAttr(this.$element, attr)
+    applyDynamicStyle(this, this.$element, style)
 
     this._prop_handler = {
       ...htmlPropHandler(this, this.$element, defaultStyle),

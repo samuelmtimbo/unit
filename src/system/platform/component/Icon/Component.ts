@@ -1,4 +1,4 @@
-import { mergeAttr } from '../../../../client/attr'
+import { applyAttr } from '../../../../client/attr'
 import { namespaceURI } from '../../../../client/component/namespaceURI'
 import { Element } from '../../../../client/element'
 import { ensureIcon } from '../../../../client/ensureIcon'
@@ -47,6 +47,11 @@ export default class Icon extends Element<SVGSVGElement, Props> {
       namespaceURI,
       'svg'
     )
+
+    if (attr) {
+      applyAttr($element, attr)
+    }
+
     if (className) {
       $element.classList.add(className)
     }
@@ -72,9 +77,6 @@ export default class Icon extends Element<SVGSVGElement, Props> {
       )
       title_el.innerHTML = title
       $element.appendChild(title_el)
-    }
-    if (attr) {
-      mergeAttr($element, attr)
     }
 
     const icon_sprite_el = this.$system.api.document.createElementNS(

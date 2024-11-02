@@ -1,4 +1,3 @@
-import { mergeAttr } from '../../../../../client/attr'
 import { Field } from '../../../../../client/field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -29,7 +28,6 @@ export default class TextArea extends Field<HTMLTextAreaElement, Props> {
 
     this.$element.spellcheck = false
     this.$element.autocomplete = 'off'
-    // this.$element.autocorrect = 'off'
     this.$element.autocapitalize = 'off'
     this.$element.inputMode = 'text'
 
@@ -42,7 +40,5 @@ export default class TextArea extends Field<HTMLTextAreaElement, Props> {
     if (maxLength !== undefined) {
       this.$element.maxLength = maxLength
     }
-
-    mergeAttr(this.$element, attr ?? {})
   }
 }

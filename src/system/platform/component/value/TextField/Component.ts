@@ -1,4 +1,3 @@
-import { mergeAttr } from '../../../../../client/attr'
 import { Field } from '../../../../../client/field'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -47,8 +46,6 @@ export default class TextField extends Field<HTMLInputElement, Props> {
     if (tabIndex !== undefined) {
       this.$element.tabIndex = tabIndex
     }
-
-    mergeAttr(this.$element, attr ?? {})
   }
 
   setSelectionRange(

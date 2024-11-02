@@ -1,4 +1,4 @@
-import { mergeAttr } from '../../../../../client/attr'
+import { applyAttr } from '../../../../../client/attr'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
@@ -45,6 +45,8 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
       'svg'
     )
 
+    applyAttr(svg_el, attr)
+
     if (className !== undefined) {
       svg_el.classList.value = className
     }
@@ -74,8 +76,6 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
     svg_el.setAttribute('preserveAspectRatio', 'xMidYMid meet')
 
     applyStyle(svg_el, { ...DEFAULT_STYLE, ...style })
-
-    mergeAttr(svg_el, attr)
 
     this.$element = svg_el
 

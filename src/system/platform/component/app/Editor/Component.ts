@@ -124,7 +124,7 @@ import {
   ifLinearTransition,
   linearTransition,
 } from '../../../../../client/animation/animation'
-import { mergeAttr } from '../../../../../client/attr'
+import { applyAttr } from '../../../../../client/attr'
 import classnames from '../../../../../client/classnames'
 import {
   RGBA,
@@ -277,7 +277,11 @@ import {
   stopAllPropagation,
   stopByPropagation,
 } from '../../../../../client/stopPropagation'
-import { applyStyle, mergeStyle } from '../../../../../client/style'
+import {
+  applyDynamicStyle,
+  applyStyle,
+  mergeStyle,
+} from '../../../../../client/style'
 import {
   COLOR_DARK_LINK_YELLOW,
   COLOR_DARK_YELLOW,
@@ -689,7 +693,6 @@ import { removeWhiteSpace } from '../../../../../util/string'
 import { getDivTextSize } from '../../../../../util/text/getDivTextSize'
 import { getTextWidth } from '../../../../../util/text/getPlainTextWidth'
 import { getTextLines, spaces } from '../../../../../util/text/getTextLines'
-import swap from '../../../../core/array/Swap/f'
 import forEachValueKey from '../../../../core/object/ForEachKeyValue/f'
 import { keyCount } from '../../../../core/object/KeyCount/f'
 import isEqual from '../../../../f/comparison/Equals/f'
@@ -1025,7 +1028,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       new Editor_(
         {
           className,
-          style,
           graph: this._pod,
           frame: this._frame,
           container: this._fallback_frame_container,
@@ -1151,7 +1153,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.$unbundled = false
     this.$primitive = true
 
-    mergeAttr(this.$element as HTMLElement, attr ?? {})
+    applyAttr(this._root.$element, attr ?? {})
+    applyDynamicStyle(this, this._root.$element, { ...DEFAULT_STYLE, ...style })
 
     this.setSubComponents({
       background,
@@ -1661,7 +1664,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     } else if (prop === 'attr') {
       const attr = current ?? {}
 
-      mergeAttr(this.$element as HTMLElement, attr)
+      applyAttr(this._root.$element, attr)
     } else if (prop === 'disabled') {
       this._editor.setProp('disabled', current)
     } else if (prop === 'graph') {
@@ -41614,6 +41617,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._animate_all_current_layout_layer_node()
   }
 
+  private _reorder_sub_component = (
+    unit_id: string,
+    i: number,
+    emit: boolean
+  ): void => {
+    // console.log('Graph', '_reorder_sub_component', unit_id, i)
+
+    this._state_reorder_sub_component(unit_id, i)
+
+    const parent_id = this._spec_get_sub_component_parent_id(unit_id)
+
+    emit && this._pod_reorder_sub_component(parent_id, unit_id, i)
+  }
+
   private _spec_reorder_sub_component = (unit_id: string, i: number): void => {
     // console.log('Graph', '_spec_reorder_sub_component', i)
 
@@ -41629,7 +41646,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _sim_reorder_sub_component = (unit_id: string, i: number): void => {
-    // console.log('Graph', '_sim_reorder_sub_component', unit_id, i)
+    // console.log('Graph', '_sim_reorder_sub_component-', unit_id, i)
 
     const parent_id = this._spec_get_sub_component_parent_id(unit_id)
 
@@ -41675,28 +41692,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._pod.$reorderSubComponent({ parentId, childId, to, fork, bubble })
   }
-
-  private _spec_swap_component_children = (a_id: string, b_id: string) => {
-    const children = this._spec_get_component_children()
-
-    const a_i = children.indexOf(a_id)
-    const b_i = children.indexOf(b_id)
-
-    const _children = swap(children, a_i, b_i)
-
-    this._spec.component = componentReducer.setChildren(
-      { children: _children },
-      this._spec.component || {}
-    )
-
-    this._refresh_tree_sub_component_index()
-  }
-
-  private _sim_swap_component_children = (a: string, b: string) => {
-    this._refresh_current_layout_node_target_position()
-  }
-
-  private _pod_swap_component_children = (a: string, b: string) => {}
 
   private _on_layout_component_drag_start = (
     unit_id: string,
@@ -54159,8 +54154,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         {
           this._stop_parent_sub_component_children_animation(data.parentId)
 
-          // TODO emit
-          this._state_reorder_sub_component(data.childId, data.to)
+          this._reorder_sub_component(data.childId, data.to, emit)
         }
         break
       case COVER_PIN_SET:

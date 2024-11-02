@@ -1,7 +1,7 @@
 import { Dict } from '../types/Dict'
 import { camelToDashed } from './id'
 
-export default function applyAttr(element: Element, attr: Dict<string>) {
+export function applyAttr(element: Element, attr: Dict<string>) {
   removeAllAttr(element)
   mergeAttr(element, attr)
 }

@@ -1,4 +1,4 @@
-import { mergeAttr } from '../../../../../client/attr'
+import { applyAttr } from '../../../../../client/attr'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
 import { Element } from '../../../../../client/element'
 import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
@@ -41,6 +41,9 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
       namespaceURI,
       'path'
     )
+
+    applyAttr(path_el, attr)
+
     if (id !== undefined) {
       path_el.id = id
     }
@@ -59,8 +62,7 @@ export default class SVGPath extends Element<SVGPathElement, Props> {
 
     path_el.setAttribute('d', d)
 
-    mergeAttr(path_el, attr)
-
+    
     applyStyle(path_el, { ...DEFAULT_STYLE, ...style })
 
     this.$element = path_el
