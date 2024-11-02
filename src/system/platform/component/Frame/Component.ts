@@ -49,7 +49,7 @@ export default class Frame extends Element<HTMLDivElement, Props> {
 
     const { attr = {}, className, style = {}, color, theme, disabled } = $props
 
-    const { tabIndex = -1 } = attr
+    const { tabIndex } = attr
 
     const $element = this.$system.api.document.createElement('div')
 

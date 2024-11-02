@@ -972,23 +972,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._pod = graph
 
     this._fallback_frame_container =
-      container ||
-      new Div(
-        {
-          className: 'graph-fallback-frame-container',
-          style: {
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
-            overflow: 'auto',
-            pointerEvents: 'none',
-            zIndex: '0',
-          },
-        },
-        this.$system
-      )
+      container || this._create_fallback_frame_container()
 
     this._fallback_frame = fallback || this._create_fallback_frame()
 
@@ -1042,6 +1026,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           style,
           graph: this._pod,
           frame: this._frame,
+          container: this._fallback_frame_container,
           component: this._component,
           animate,
           zoom,
@@ -1267,6 +1252,28 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
   private _should_fork = (id: string): boolean => {
     return this._registry.shouldFork(id)
+  }
+
+  private _create_fallback_frame_container = (): Component => {
+    return new Div(
+      {
+        className: 'graph-fallback-frame-container',
+        style: {
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          overflow: 'auto',
+          pointerEvents: 'none',
+          zIndex: '0',
+        },
+        attr: {
+          tabindex: '-1',
+        },
+      },
+      this.$system
+    )
   }
 
   private _create_fallback_frame = (): Component => {
@@ -1497,22 +1504,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     this._listen_transcend()
 
-    this._fallback_frame_container = new Div(
-      {
-        className: 'graph-fallback-frame-container',
-        style: {
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          overflow: 'auto',
-          pointerEvents: 'none',
-          zIndex: '0',
-        },
-      },
-      this.$system
-    )
+    this._fallback_frame_container = this._create_fallback_frame_container()
 
     const fallback_frame = this._create_fallback_frame()
 
@@ -1543,6 +1535,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         graph: this._pod,
         registry: this._registry,
         component: this._component,
+        container: this._fallback_frame_container,
         frame: this._fallback_frame,
         specs: this._specs,
         typeCache: this._type_cache,
@@ -1767,6 +1760,7 @@ export interface _Props extends R {
   graph: $Graph
   component: Component
   frame?: Component<HTMLElement>
+  container: Component<HTMLElement>
   frameOut?: boolean
   zoomable?: boolean
   minZoom?: number
@@ -7215,6 +7209,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         },
         value: formatUnitName(spec_name, UNIT_CORE_NAME_FONT_SIZE),
         maxLength: UNIT_NAME_MAX_SIZE,
+        attr: {
+          tabindex: -1,
+        },
       },
       this.$system
     )
@@ -18589,8 +18586,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._set_fullwindow_frame_off(_animate)
     }
 
-    this._unlisten_fullwindow_escape()
-    this._unlisten_fullwindow_escape = undefined
+    if (this._unlisten_fullwindow_escape) {
+      this._unlisten_fullwindow_escape()
+
+      this._unlisten_fullwindow_escape = undefined
+    }
 
     this._cancel_fullwindow_animation()
 
@@ -24646,7 +24646,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_enter_fullwindow', _animate, sub_component_ids, this._id)
 
-    const { animate, enterFullwindow } = this.$props
+    const { animate, container, enterFullwindow } = this.$props
 
     enterFullwindow()
 
@@ -24662,16 +24662,20 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    this._unlisten_fullwindow_escape = addListener(
-      this._frame.$context,
-      makeKeydownListener((event) => {
-        const { key } = event
+    if (!this._frame_out) {
+      container.focus()
 
-        if (key === 'Escape') {
-          this._leave_all_fullwindow(_animate)
-        }
-      })
-    )
+      this._unlisten_fullwindow_escape = addListener(
+        container,
+        makeKeydownListener((event) => {
+          const { key } = event
+
+          if (key === 'Escape') {
+            this._leave_all_fullwindow(_animate)
+          }
+        })
+      )
+    }
 
     const ordered_sub_component_ids =
       this._order_sub_component_ids(sub_component_ids)
@@ -24690,8 +24694,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     const was_focused = this._focused
-
-    this._frame.focus()
 
     if (this._in_component_control) {
       if (!this._is_component_framed) {
@@ -29268,6 +29270,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       registry,
       animate,
       typeCache,
+      frame,
+      frameOut,
+      container,
       hasSpec,
       emptySpec,
       getSpec,
@@ -29309,8 +29314,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           },
           disabled: true,
           parent: this,
-          frame: this._frame,
-          frameOut: this._frame_out,
+          frame,
+          container,
+          frameOut,
           fullwindow,
           fork: this._subgraph_fork,
           bubble: fork,
@@ -30670,6 +30676,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       registry,
       animate,
       typeCache,
+      container,
       hasSpec,
       emptySpec,
       getSpec,
@@ -30731,7 +30738,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           disabled: true,
           parent: this,
           frame: this._frame,
-          frameOut: this._frame_out,
+          frameOut: false,
+          container,
           fullwindow: false,
           component,
           registry: this.$system,
