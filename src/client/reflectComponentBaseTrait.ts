@@ -125,7 +125,7 @@ export const reflectComponentBaseTrait = (
   const expand_slot = (slot_id: string, path: number[]): Style[] => {
     return expandSlot(
       root,
-      (slot_id && `${prefix}/${slot_id}`) || `${prefix}`,
+      (prefix && slot_id && `${prefix}/${slot_id}`) || prefix || slot_id,
       path,
       expand,
       (leaf_id, leaf_comp) => {
