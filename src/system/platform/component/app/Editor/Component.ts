@@ -1013,6 +1013,9 @@ export default class Editor extends Element<HTMLDivElement, Props> {
 
     if (editor) {
       mergeProps(editor, {
+        specs,
+        typeCache: this._type_cache,
+        registry: this._registry,
         hasSpec: this._has_spec,
         emptySpec: this._empty_spec,
         getSpec: this._get_spec,
@@ -45921,7 +45924,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { fork, bubble, setSpec, forkSpec, shouldFork } = this.$props
 
-    const { specs } = this._registry
+    const { specs } = this.$props
 
     const { x: clientX, y: clientY } = position
 
@@ -59904,7 +59907,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         graph.setProp('frameOut', this._frame_out)
       }
     } else if (prop === 'registry') {
-      throw new CodePathNotImplementedError()
+      this._registry = current
     } else if (prop === 'config') {
       this._refresh_config()
     }
