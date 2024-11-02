@@ -1,7 +1,6 @@
 declare const self: ServiceWorkerGlobalScope
 
 import { v } from '../../../v'
-import { dev } from '../../env'
 
 const CACHE = `${v}`
 
@@ -32,13 +31,8 @@ const CACHE_LIST_FAVICON: string[] = [
 ]
 
 const CACHE_LIST_MANIFEST: string[] = ['/manifest.json']
-
 const CACHE_LIST_HTML: string[] = ['/', '/index.html']
-
-const CACHE_LIST_INDEX_JS: string[] = [
-  '/index.js',
-  ...(dev ? ['/index.js.map'] : []),
-]
+const CACHE_LIST_INDEX_JS: string[] = ['/index.js', '/index.js.map']
 
 const CACHE_LIST: string[] = [
   ...CACHE_LIST_HTML,

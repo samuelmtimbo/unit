@@ -1,3 +1,3 @@
-export default interface IOFocusEvent {
+export interface IOFocusEvent {
   relatedTarget: EventTarget
 }

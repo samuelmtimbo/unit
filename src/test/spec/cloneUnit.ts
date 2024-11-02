@@ -1,4 +1,3 @@
-import assert = require('assert')
 import { Unit } from '../../Class/Unit'
 import { cloneUnit } from '../../spec/cloneUnit'
 import { bundleFromId } from '../../spec/fromId'
@@ -7,6 +6,7 @@ import { ID_RANGE } from '../../system/_ids'
 import _specs from '../../system/_specs'
 import Add from '../../system/f/arithmetic/Add'
 import Identity from '../../system/f/control/Identity'
+import { assert } from '../../util/assert'
 import { system } from '../util/system'
 
 const identity = new Identity<number>(system)

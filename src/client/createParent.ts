@@ -1,6 +1,6 @@
 import { ComponentClass, System } from '../system'
 import { Component } from './component'
-import parentElement from './platform/web/parentElement'
+import { parentElement } from './platform/web/parentElement'
 
 export function parentClass(): ComponentClass {
   class Parent extends Component<any, any, any> {

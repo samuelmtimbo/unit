@@ -1,6 +1,6 @@
 import { Listenable } from '../../Listenable'
 import { Listener } from '../../Listener'
-import IOFocusEvent from './FocusEvent'
+import { IOFocusEvent } from './FocusEvent'
 
 export function makeFocusInListener(
   listener: (event: IOFocusEvent, _event: FocusEvent) => void

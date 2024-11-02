@@ -1,6 +1,6 @@
-import mergePropStyle from '../../../../../client/component/mergeStyle'
+import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { System } from '../../../../../system'
 import SVGCircle from '../../svg/Circle/Component'
 import SVGRect from '../../svg/Rect/Component'

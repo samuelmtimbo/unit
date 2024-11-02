@@ -5,7 +5,7 @@
  * same folder as this file.
  */
 
-export default JSON.parse(`{
+export const icons = JSON.parse(`{
   "activity": "M22 12 L18 12 L15 21 L9 3 L6 12 L2 12",
   "airplay": "M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1 M12 15 L17 21 L7 21 L12 15 Z",
   "alarm-check": "M12 21a8 8 0 100-16 8 8 0 000 16z M5 3L2 6 M22 6l-3-3 M6 19l-2 2 M18 19l2 2 M9 13l2 2 4-4",

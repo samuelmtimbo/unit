@@ -1,6 +1,6 @@
-import classnames from '../../../../../client/classnames'
+import { classnames } from '../../../../../client/classnames'
 import { Element } from '../../../../../client/element'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'

@@ -19,5 +19,3 @@ import { build } from '../build'
 
   await copy('public/index.js', 'build/web.js')
 })()
-
-export default null

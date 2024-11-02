@@ -1,4 +1,4 @@
-export default function classnames(...args: any[]): string {
+export function classnames(...args: any[]): string {
   const classes: string[] = []
 
   for (const arg of args) {

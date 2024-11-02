@@ -3,7 +3,7 @@ import { componentClassFromSpecId } from '../../../../client/componentClassFromS
 import { parentClass } from '../../../../client/createParent'
 import { Element } from '../../../../client/element'
 import { getComponentInterface } from '../../../../client/interface'
-import parentElement from '../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../client/platform/web/parentElement'
 import { ComponentClass, System } from '../../../../system'
 import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
 import { $Wrap } from '../../../../types/interface/async/$Wrap'

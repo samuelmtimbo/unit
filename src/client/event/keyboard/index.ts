@@ -47,7 +47,7 @@ export type Shortcut = {
   preventDefault?: boolean
 }
 
-export default class KeyboardController {
+export class KeyboardController {
   public static keys = keyCodeToKey
 
   private _ctrl: boolean = false

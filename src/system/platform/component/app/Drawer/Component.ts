@@ -3,8 +3,8 @@ import {
   ANIMATION_T_MS,
   ifLinearTransition,
 } from '../../../../../client/animation/animation'
-import classnames from '../../../../../client/classnames'
-import debounce from '../../../../../client/debounce'
+import { classnames } from '../../../../../client/classnames'
+import { debounce } from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
 import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
@@ -15,7 +15,7 @@ import { makePointerLeaveListener } from '../../../../../client/event/pointer/po
 import { makePointerMoveListener } from '../../../../../client/event/pointer/pointermove'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { makeResizeListener } from '../../../../../client/event/resize'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { applyStyle, mergeStyle } from '../../../../../client/style'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { System } from '../../../../../system'

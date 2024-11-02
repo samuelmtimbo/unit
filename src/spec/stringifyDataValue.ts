@@ -1,5 +1,5 @@
 import { DataRef } from '../DataRef'
-import deepSet from '../deepSet'
+import { deepSet } from '../deepSet'
 import { Classes, Specs } from '../types'
 import { clone } from '../util/clone'
 import { deepGet } from '../util/object'

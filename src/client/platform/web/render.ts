@@ -10,10 +10,10 @@ import { AsyncGraph } from '../../../types/interface/async/AsyncGraph'
 import { callAll } from '../../../util/call/callAll'
 import { weakMerge } from '../../../weakMerge'
 import { render as _render } from '../../render'
-import defaultWebBoot, { webBoot } from './boot'
-import webInit from './init'
+import { defaultWebBoot, webBoot } from './boot'
+import { webInit } from './init'
 
-export default function render(
+export function render(
   bundle: BundleSpec,
   bootOpt?: BootOpt
 ): [Graph, System, Unlisten] {

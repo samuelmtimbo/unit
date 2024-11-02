@@ -4,7 +4,7 @@ import { isSupportedKeyboardEvent } from '../../event/keyboard'
 import { showNotification } from '../../showNotification'
 import { COLOR_RED } from '../../theme'
 
-export default function webInit(
+export function webInit(
   system: System,
   window: Window,
   root: HTMLElement

@@ -1,7 +1,7 @@
 import * as fuzzy from 'fuzzy'
 import { Registry } from '../../../../../Registry'
-import classnames from '../../../../../client/classnames'
-import debounce from '../../../../../client/debounce'
+import { classnames } from '../../../../../client/classnames'
+import { debounce } from '../../../../../client/debounce'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeFocusInListener } from '../../../../../client/event/focus/focusin'
@@ -20,7 +20,7 @@ import {
   IOScrollEvent,
   makeScrollListener,
 } from '../../../../../client/event/scroll'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { compareByComplexity } from '../../../../../client/search'
 import {
   getSpec,

@@ -1,4 +1,5 @@
-import render from './render'
+import { render } from './render'
+
 import bundle = require('./bundle.json')
 import system = require('./system.json')
 

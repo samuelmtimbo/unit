@@ -11,5 +11,3 @@ watch({
   },
   outfile: 'public/_worker.js',
 })
-
-export default null

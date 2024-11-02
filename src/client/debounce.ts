@@ -2,7 +2,7 @@
 
 import { System } from '../system'
 
-export default function debounce(
+export function debounce(
   system: System,
   func: Function,
   threshold: number = 100,

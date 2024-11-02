@@ -12,7 +12,7 @@ import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import {
   emptySpec,
   findInputDataExamples,
@@ -125,7 +125,7 @@ import {
   linearTransition,
 } from '../../../../../client/animation/animation'
 import { applyAttr } from '../../../../../client/attr'
-import classnames from '../../../../../client/classnames'
+import { classnames } from '../../../../../client/classnames'
 import {
   RGBA,
   hexToRgba,
@@ -145,8 +145,8 @@ import {
   MAX_WIDTH as DATUM_MAX_WIDTH,
   getDatumSize,
 } from '../../../../../client/component/getDatumSize'
-import mergeProps from '../../../../../client/component/mergeProps'
-import mergePropStyle from '../../../../../client/component/mergeStyle'
+import { mergeProps } from '../../../../../client/component/mergeProps'
+import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { componentClassFromSpecId } from '../../../../../client/componentClassFromSpecId'
 import {
   componentFromSpecId,
@@ -154,7 +154,7 @@ import {
 } from '../../../../../client/componentFromSpecId'
 import { Context } from '../../../../../client/context'
 import { preventContextMenu } from '../../../../../client/contextMenu'
-import debounce from '../../../../../client/debounce'
+import { debounce } from '../../../../../client/debounce'
 import { getCircle, getLine, getRectangle } from '../../../../../client/drawing'
 import { IODragEvent } from '../../../../../client/event/drag'
 import { makeDragEnterListener } from '../../../../../client/event/drag/dragenter'

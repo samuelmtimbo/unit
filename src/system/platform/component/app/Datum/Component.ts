@@ -1,9 +1,9 @@
 import { DEFAULT_FONT_SIZE } from '../../../../../client/DEFAULT_FONT_SIZE'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
-import IOFocusEvent from '../../../../../client/event/focus/FocusEvent'
+import { IOFocusEvent } from '../../../../../client/event/focus/FocusEvent'
 import { IOKeyboardEvent } from '../../../../../client/event/keyboard'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { parseFontSize } from '../../../../../client/util/style/getFontSize'
 import { _evaluate } from '../../../../../spec/evaluate'
 import {

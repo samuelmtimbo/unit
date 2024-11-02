@@ -1,7 +1,7 @@
 import { Dict } from '../../types/Dict'
 import { Component } from '../component'
 
-export default function mergePropStyle<T>(
+export function mergePropStyle<T>(
   component: Component,
   style: Dict<string | undefined>
 ) {

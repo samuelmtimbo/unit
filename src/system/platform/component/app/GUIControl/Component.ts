@@ -7,7 +7,7 @@ import {
 } from '../../../../../client/animation/animation'
 import { setAlpha } from '../../../../../client/color'
 import { Component } from '../../../../../client/component'
-import mergeStyle from '../../../../../client/component/mergeStyle'
+import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { dragOverTimeListener } from '../../../../../client/dragOverTimeListener'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeClickListener } from '../../../../../client/event/pointer/click'
@@ -17,7 +17,7 @@ import { makePointerLeaveListener } from '../../../../../client/event/pointer/po
 import { makePointerMoveListener } from '../../../../../client/event/pointer/pointermove'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
 import { makeResizeListener } from '../../../../../client/event/resize'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE, themeBackgroundColor } from '../../../../../client/theme'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import {
@@ -146,7 +146,7 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
 
         const backgroundColor = this._background_color()
 
-        mergeStyle(root, {
+        mergePropStyle(root, {
           left: `${this._x}px`,
           top: `${this._y}px`,
           width: `${COLLAPSED_WIDTH}px`,
@@ -165,24 +165,24 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
         })
 
         setTimeout(() => {
-          mergeStyle(root, {
+          mergePropStyle(root, {
             transition: `opacity ${ANIMATION_T_S}s linear`,
           })
         }, ANIMATION_T_MS)
 
-        mergeStyle(container, {
+        mergePropStyle(container, {
           opacity: '0',
           transform: `scale(${WR}, ${HR})`,
           pointerEvents: 'none',
           ...userSelect('none'),
         })
 
-        mergeStyle(_icon, {
+        mergePropStyle(_icon, {
           opacity: '1',
           pointerEvents: 'auto',
         })
 
-        mergeStyle(button, {
+        mergePropStyle(button, {
           opacity: '0',
           pointerEvents: 'none',
         })
@@ -220,7 +220,7 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
 
       this._clamp_x_y()
 
-      mergeStyle(root, {
+      mergePropStyle(root, {
         left: `${this._x}px`,
         top: `${this._y}px`,
         width: `${width}px`,
@@ -238,29 +238,29 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
         ),
       })
 
-      mergeStyle(container, {
+      mergePropStyle(container, {
         opacity: '1',
         transform: 'scale(1, 1)',
         pointerEvents: 'auto',
         ...userSelect('auto'),
       })
 
-      mergeStyle(button, {
+      mergePropStyle(button, {
         opacity: '1',
         pointerEvents: 'auto',
       })
 
       setTimeout(() => {
-        mergeStyle(root, {
+        mergePropStyle(root, {
           transition: `opacity ${ANIMATION_T_S}s linear`,
         })
 
-        mergeStyle(_icon, {
+        mergePropStyle(_icon, {
           pointerEvents: 'none',
         })
       }, ANIMATION_T_MS)
 
-      mergeStyle(_icon, {
+      mergePropStyle(_icon, {
         opacity: '0',
       })
 
@@ -341,7 +341,7 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
 
                 this._clamp_x_y()
 
-                mergeStyle(root, {
+                mergePropStyle(root, {
                   left: `${this._x}px`,
                   top: `${this._y}px`,
                 })
@@ -374,13 +374,13 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
     }
 
     const dim = () => {
-      mergeStyle(root, {
+      mergePropStyle(root, {
         opacity: `${DIM_OPACITY}`,
       })
     }
 
     const undim = () => {
-      mergeStyle(root, {
+      mergePropStyle(root, {
         opacity: '1',
       })
     }
@@ -727,11 +727,11 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
     if (this._collapsed) {
       const backgroundColor = this._background_color()
 
-      mergeStyle(this._root, {
+      mergePropStyle(this._root, {
         backgroundColor,
       })
     } else {
-      mergeStyle(this._root, {
+      mergePropStyle(this._root, {
         backgroundColor: COLOR_NONE,
       })
     }
@@ -740,7 +740,7 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
   private _set_z_index = (zIndex: number) => {
     this._z_index = zIndex
 
-    mergeStyle(this._root, {
+    mergePropStyle(this._root, {
       zIndex: `${zIndex}`,
     })
   }
@@ -789,7 +789,7 @@ export default class GUIControl extends Component<HTMLDivElement, Props> {
       makeResizeListener(() => {
         this._clamp_x_y()
 
-        mergeStyle(this._root, {
+        mergePropStyle(this._root, {
           left: `${this._x}px`,
           top: `${this._y}px`,
         })

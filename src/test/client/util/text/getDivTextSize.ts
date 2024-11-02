@@ -1,4 +1,4 @@
-import assert from '../../../../util/assert'
+import { assert } from '../../../../util/assert'
 import { getDivTextSize } from '../../../../util/text/getDivTextSize'
 
 assert.deepEqual(getDivTextSize('', 12, 12), {

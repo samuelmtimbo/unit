@@ -26,7 +26,7 @@ import {
   segmentMergeNodeId,
   segmentMetadataId,
 } from '../../../client/id'
-import assert from '../../../util/assert'
+import { assert } from '../../../util/assert'
 
 assert(kebabToCamel('a-b-c') === 'aBC')
 assert(kebabToCamel('aBC') === 'aBC')

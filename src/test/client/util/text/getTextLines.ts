@@ -1,4 +1,4 @@
-import assert from '../../../../util/assert'
+import { assert } from '../../../../util/assert'
 import { getTextLines } from '../../../../util/text/getTextLines'
 
 assert.deepEqual(getTextLines('', 12), [])

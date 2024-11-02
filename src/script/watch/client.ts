@@ -11,5 +11,3 @@ watch({
   },
   outfile: 'public/index.js',
 })
-
-export default null

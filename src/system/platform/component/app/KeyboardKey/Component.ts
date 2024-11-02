@@ -6,7 +6,7 @@ import {
   keyToKeyCode,
 } from '../../../../../client/event/keyboard/keyCode'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'

@@ -9,7 +9,7 @@ import {
   setHeapNode,
   toSortedArray,
 } from '../Heap'
-import assert from '../util/assert'
+import { assert } from '../util/assert'
 
 const heap: Heap<number> = {
   value: 6,

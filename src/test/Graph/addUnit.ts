@@ -2,7 +2,7 @@ import { Graph } from '../../Class/Graph'
 import { SELF } from '../../constant/SELF'
 import { watchGraphAndLog, watchUnitAndLog } from '../../debug'
 import { ID_ADD_UNIT, ID_EMPTY, ID_RANGE } from '../../system/_ids'
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 import { system } from '../util/system'
 
 const UNIT_ID_RANGE = 'UNIT_ID_RANGE'

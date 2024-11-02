@@ -1,7 +1,7 @@
 import { stringifyDataValue } from '../../spec/stringifyDataValue'
 import _classes from '../../system/_classes'
 import _specs from '../../system/_specs'
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 
 assert.equal(stringifyDataValue('"foo"', _specs, _classes), '"foo"')
 assert.equal(

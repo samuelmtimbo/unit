@@ -1,5 +1,5 @@
 import { parseTransform } from '../../client/parseTransform'
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 
 assert.deepEqual(
   parseTransform('translateX(10px)', 100, 100),

@@ -1,4 +1,4 @@
-import classnames from '../../../../../client/classnames'
+import { classnames } from '../../../../../client/classnames'
 import {
   getLeafHeight,
   getLeafWidth,
@@ -7,7 +7,7 @@ import { DEFAULT_FONT_SIZE } from '../../../../../client/DEFAULT_FONT_SIZE'
 import { Element } from '../../../../../client/element'
 import { makeBlurListener } from '../../../../../client/event/focus/blur'
 import { makeFocusListener } from '../../../../../client/event/focus/focus'
-import IOFocusEvent from '../../../../../client/event/focus/FocusEvent'
+import { IOFocusEvent } from '../../../../../client/event/focus/FocusEvent'
 import { makeInputListener } from '../../../../../client/event/input'
 import {
   IOKeyboardEvent,
@@ -16,7 +16,7 @@ import {
 import { makePasteListener } from '../../../../../client/event/paste'
 import { UnitPointerEvent } from '../../../../../client/event/pointer'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { TreeNode } from '../../../../../spec/parser'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'

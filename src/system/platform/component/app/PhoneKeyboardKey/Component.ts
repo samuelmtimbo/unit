@@ -1,4 +1,4 @@
-import mergePropStyle from '../../../../../client/component/mergeStyle'
+import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { keyToIcon } from '../../../../../client/event/keyboard'
 import {
@@ -13,7 +13,7 @@ import { makePointerDownListener } from '../../../../../client/event/pointer/poi
 import { makePointerEnterListener } from '../../../../../client/event/pointer/pointerenter'
 import { makePointerLeaveListener } from '../../../../../client/event/pointer/pointerleave'
 import { makePointerUpListener } from '../../../../../client/event/pointer/pointerup'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { userSelect } from '../../../../../client/util/style/userSelect'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'

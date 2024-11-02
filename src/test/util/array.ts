@@ -1,5 +1,5 @@
 import { matchAll, matchAllExc } from '../../util/array/index'
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 
 import { rotate } from '../../util/array'
 

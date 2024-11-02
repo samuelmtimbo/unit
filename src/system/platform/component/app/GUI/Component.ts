@@ -4,16 +4,16 @@ import {
   ifLinearTransition,
   linearTransition,
 } from '../../../../../client/animation/animation'
-import classnames from '../../../../../client/classnames'
+import { classnames } from '../../../../../client/classnames'
 import { colorToHex, setAlpha } from '../../../../../client/color'
-import mergePropStyle from '../../../../../client/component/mergeStyle'
+import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { Context, setColor, setTheme } from '../../../../../client/context'
 import { preventContextMenu } from '../../../../../client/contextMenu'
 import { Element } from '../../../../../client/element'
 import { makeCustomListener } from '../../../../../client/event/custom'
 import { makeInputListener } from '../../../../../client/event/input'
 import { graphComponentFromId } from '../../../../../client/graphComponentFromSpec'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import {
   COLOR_NONE,
   defaultThemeColor,

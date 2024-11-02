@@ -44,7 +44,7 @@ import { webURL } from './api/url'
 import { webWindow } from './api/window'
 import { webWorker } from './api/worker'
 
-export default function defaultWebBoot(opt?: BootOpt): [System, Unlisten] {
+export function defaultWebBoot(opt?: BootOpt): [System, Unlisten] {
   const root = document.getElementById(SYSTEM_ROOT_ID)
 
   return webBoot(window, root, opt)

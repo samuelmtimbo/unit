@@ -1,7 +1,7 @@
 import { Dict } from './types/Dict'
 import { clone } from './util/clone'
 
-export default function deepSet(
+export function deepSet(
   obj: Dict<any>,
   path: (string | number)[],
   value: any

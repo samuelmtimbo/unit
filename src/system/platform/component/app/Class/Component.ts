@@ -1,8 +1,8 @@
-import classnames from '../../../../../client/classnames'
+import { classnames } from '../../../../../client/classnames'
 import { getSpecRadius } from '../../../../../client/complexity'
 import { Component } from '../../../../../client/component'
 import { Element } from '../../../../../client/element'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { isComponentId } from '../../../../../client/spec'
 import {
   pointInCircle,

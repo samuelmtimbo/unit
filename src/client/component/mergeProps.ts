@@ -1,7 +1,7 @@
 import { Dict } from '../../types/Dict'
 import { Component } from '../component'
 
-export default function mergeProps<T extends Dict<any>>(
+export function mergeProps<T extends Dict<any>>(
   component: Component<any, T>,
   props: Dict<any>
 ) {

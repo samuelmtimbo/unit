@@ -1,7 +1,7 @@
 import { addListeners } from '../../../../../client/addListener'
 import { ANIMATION_C } from '../../../../../client/animation/ANIMATION_C'
 import { ANIMATION_T_S } from '../../../../../client/animation/ANIMATION_T_S'
-import mergePropStyle from '../../../../../client/component/mergeStyle'
+import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { LONG_CLICK_TIMEOUT } from '../../../../../client/event/pointer/constants'
 import { makePointerDownListener } from '../../../../../client/event/pointer/pointerdown'
@@ -12,7 +12,7 @@ import {
   IOFrameResizeEvent,
   makeResizeListener,
 } from '../../../../../client/event/resize'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import {
   DIM_OPACITY,
   whenInteracted,

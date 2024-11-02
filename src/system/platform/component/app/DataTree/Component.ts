@@ -1,4 +1,4 @@
-import classnames from '../../../../../client/classnames'
+import { classnames } from '../../../../../client/classnames'
 import {
   childrenOverflow,
   CONTAINER_COLUMN_LEFT_MARGIN,
@@ -7,9 +7,9 @@ import {
   CONTAINER_ROW_RIGHT_MARGIN,
   getLeafHeight,
 } from '../../../../../client/component/getDatumSize'
-import mergePropStyle from '../../../../../client/component/mergeStyle'
+import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
-import parentElement from '../../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../../client/platform/web/parentElement'
 import { COLOR_NONE } from '../../../../../client/theme'
 import { idFromUnitValue } from '../../../../../spec/idFromUnitValue'
 import {

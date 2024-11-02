@@ -44,5 +44,3 @@ element.addEventListener(
   },
   false
 )
-
-export default null

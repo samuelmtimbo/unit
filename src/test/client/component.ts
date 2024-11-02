@@ -1,5 +1,5 @@
 import Div from '../../system/platform/component/Div/Component'
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 import { system } from '../util/system'
 
 const parent = new Div({}, system)

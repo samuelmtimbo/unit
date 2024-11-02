@@ -16,5 +16,3 @@ function constructOptions(kButtonColors) {
   }
 }
 constructOptions(kButtonColors)
-
-export default null

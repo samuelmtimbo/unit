@@ -1,5 +1,5 @@
 import isEqual from '../../system/f/comparison/Equals/f'
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 import { clone } from '../../util/clone'
 import { deepDestroy, deepGet } from '../../util/object'
 

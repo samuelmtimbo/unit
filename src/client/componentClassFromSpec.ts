@@ -9,7 +9,7 @@ import { weakMerge } from '../weakMerge'
 import { IOElement } from './IOElement'
 import { Component } from './component'
 import { componentClassFromSpecId } from './componentClassFromSpecId'
-import parentElement from './platform/web/parentElement'
+import { parentElement } from './platform/web/parentElement'
 
 export function componentClassFromSpec<
   E extends IOElement = any,

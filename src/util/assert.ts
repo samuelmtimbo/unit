@@ -23,5 +23,3 @@ export function deepEqual<T>(a: T, b: T): void {
 
 assert.equal = equal
 assert.deepEqual = deepEqual
-
-export default assert

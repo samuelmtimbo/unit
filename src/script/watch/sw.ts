@@ -11,5 +11,3 @@ watch({
   },
   outfile: 'public/sw.js',
 })
-
-export default null

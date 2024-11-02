@@ -1,6 +1,6 @@
 import { System } from '../system'
 
-export default function resizeWith(
+export function resizeWith(
   system: System,
   element: Element,
   target: Element

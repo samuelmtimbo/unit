@@ -28,5 +28,3 @@ trueOrFalse.push('a', false)
 
 assert.equal(trueOrFalse.take('a = true'), undefined)
 assert.equal(trueOrFalse.take('a = false'), true)
-
-export default null

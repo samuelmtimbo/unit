@@ -1,6 +1,6 @@
-import classnames from '../../../../client/classnames'
+import { classnames } from '../../../../client/classnames'
 import { Element } from '../../../../client/element'
-import parentElement from '../../../../client/platform/web/parentElement'
+import { parentElement } from '../../../../client/platform/web/parentElement'
 import { getTransform, Zoom, ZOOM_IDENTITY } from '../../../../client/zoom'
 import { System } from '../../../../system'
 import { Style } from '../../Style'

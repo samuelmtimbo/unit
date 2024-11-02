@@ -15,5 +15,3 @@ for (const name of ['background', 'content', 'options', 'popup']) {
     outfile: path.join(PATH_SRC_CLIENT_EXTENSION_SRC, `${name}.js`),
   })
 }
-
-export default null

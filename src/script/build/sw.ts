@@ -11,5 +11,3 @@ build({
   },
   outfile: 'public/_sw.js',
 })
-
-export default null

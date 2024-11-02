@@ -1,5 +1,5 @@
 import Sort from '../../../../system/f/array/Sort'
-import assert from '../../../../util/assert'
+import { assert } from '../../../../util/assert'
 import { system } from '../../../util/system'
 
 const sort = new Sort<number>(system)

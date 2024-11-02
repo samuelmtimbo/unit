@@ -1,6 +1,6 @@
 import { Component } from '../component'
 
-export default function toggleProp<T>(
+export function toggleProp<T>(
   component: Component<any, any>,
   name: string
 ) {
