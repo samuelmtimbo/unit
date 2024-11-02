@@ -10,11 +10,9 @@ import {
   setTheme,
   unmount,
 } from '../../../../client/context'
-import { Element } from '../../../../client/element'
 import { makeCustomListener } from '../../../../client/event/custom'
-import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
+import HTMLElement_ from '../../../../client/html'
 import { renderFrame } from '../../../../client/renderFrame'
-import { applyDynamicStyle } from '../../../../client/style'
 import { Theme } from '../../../../client/theme'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
@@ -37,33 +35,26 @@ export const DEFAULT_STYLE = {
   zIndex: '0',
 }
 
-export default class Frame extends Element<HTMLDivElement, Props> {
+export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
   public $$context: Context
 
   private _context_unlisten: Unlisten
 
-  private _prop_handler: PropHandler
-
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('div'),
+      DEFAULT_STYLE
+    )
 
-    const { attr = {}, className, style = {}, color, theme, disabled } = $props
+    const { className, color, theme, disabled } = $props
 
-    const { tabIndex } = attr
-
-    const $element = this.$system.api.document.createElement('div')
-
-    $element.classList.add('frame')
+    this.$element.classList.add('frame')
 
     if (className !== undefined) {
-      $element.classList.add(className)
+      this.$element.classList.add(className)
     }
-
-    if (tabIndex !== undefined) {
-      $element.tabIndex = tabIndex
-    }
-
-    this.$element = $element
 
     const $$init: Partial<Context> = {
       $disabled: true,
@@ -73,12 +64,10 @@ export default class Frame extends Element<HTMLDivElement, Props> {
       $$init.$color = color
     }
 
-    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
+    this.$$context = renderFrame(this.$system, null, this.$element, $$init)
 
-    this.$$context = renderFrame(this.$system, null, $element, $$init)
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, $element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       disabled: (disabled: boolean) => {
         this._refresh_sub_context_disabled()
       },
@@ -89,10 +78,6 @@ export default class Frame extends Element<HTMLDivElement, Props> {
         this._refresh_sub_context_color()
       },
     }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 
   mountChild(child: Component, commit: boolean = true): void {

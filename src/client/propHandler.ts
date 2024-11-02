@@ -22,9 +22,9 @@ export function makeAttrHandler(
   }
 }
 
-export function elementPropHandler(
-  component: Component<HTMLElement> | Component<SVGSVGElement>,
-  element: HTMLElement | SVGSVGElement,
+export function elementPropHandler<T extends HTMLElement | SVGElement>(
+  component: Component<T>,
+  element: T,
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {
@@ -33,9 +33,9 @@ export function elementPropHandler(
   }
 }
 
-export function htmlPropHandler<P extends Dict<any> = any>(
-  component: Component<HTMLElement, P>,
-  element: HTMLElement,
+export function htmlPropHandler<T extends HTMLElement>(
+  component: Component<T>,
+  element: T,
   DEFAULT_STYLE: Style
 ): PropHandler {
   return {

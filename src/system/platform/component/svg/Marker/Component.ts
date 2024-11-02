@@ -1,7 +1,5 @@
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
-import { Element } from '../../../../../client/element'
-import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import { SVGElement_ } from '../../../../../client/svg'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -16,60 +14,38 @@ export interface Props {
   orient?: string
 }
 
-export default class SVGMarker extends Element<SVGMarkerElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class SVGMarker extends SVGElement_<SVGMarkerElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
-
-    const {
-      id,
-      style = {},
-      className,
-      markerHeight,
-      markerWidth,
-      refX,
-      refY,
-      orient,
-    } = this.$props
-
-    const DEFAULT_STYLE = $system.style['marker']
-
-    const marker_el = this.$system.api.document.createElementNS(
-      namespaceURI,
-      'marker'
+    super(
+      $props,
+      $system,
+      $system.api.document.createElementNS(namespaceURI, 'marker'),
+      $system.style['marker']
     )
-    applyStyle(marker_el, style)
+
+    const { id, className, markerHeight, markerWidth, refX, refY, orient } =
+      this.$props
+
     if (id !== undefined) {
-      marker_el.id = id
+      this.$element.id = id
     }
     if (className) {
-      marker_el.classList.add(className)
+      this.$element.classList.add(className)
     }
     if (markerHeight !== undefined) {
-      marker_el.setAttribute('markerHeight', `${markerHeight}`)
+      this.$element.setAttribute('markerHeight', `${markerHeight}`)
     }
     if (markerWidth !== undefined) {
-      marker_el.setAttribute('markerWidth', `${markerWidth}`)
+      this.$element.setAttribute('markerWidth', `${markerWidth}`)
     }
     if (refX !== undefined) {
-      marker_el.setAttribute('refX', `${refX}`)
+      this.$element.setAttribute('refX', `${refX}`)
     }
     if (refY !== undefined) {
-      marker_el.setAttribute('refY', `${refY}`)
+      this.$element.setAttribute('refY', `${refY}`)
     }
     if (orient !== undefined) {
-      marker_el.setAttribute('orient', orient)
+      this.$element.setAttribute('orient', orient)
     }
-
-    this.$element = marker_el
-
-    this._prop_handler = {
-      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
-    }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

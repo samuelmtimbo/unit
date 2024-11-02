@@ -1,11 +1,10 @@
 import { draw } from '../../../../../client/canvas/draw'
-import { Element } from '../../../../../client/element'
 import { getSize } from '../../../../../client/getSize'
+import HTMLElement_ from '../../../../../client/html'
 import { parseRelativeUnit } from '../../../../../client/parseRelativeUnit'
 import { applyStyle, reactToFrameSize } from '../../../../../client/style'
 import { COLOR_WHITE, defaultThemeColor } from '../../../../../client/theme'
 import { replaceChild } from '../../../../../client/util/replaceChild'
-import { userSelect } from '../../../../../client/util/style/userSelect'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { isRelativeValue } from '../../../../../isRelative'
 import { System } from '../../../../../system'
@@ -39,30 +38,112 @@ export interface Props {
   d?: any[]
 }
 
-export const DEFAULT_STYLE: Dict<string> = {
-  background: 'none',
-  touchAction: 'none',
-  display: 'block',
-  imageResizing: 'pixelated',
-  '-webkit-touch-callout': 'none',
-  ...userSelect('none'),
-}
-
 export default class CanvasComp
-  extends Element<HTMLCanvasElement, Props>
+  extends HTMLElement_<HTMLCanvasElement, Props>
   implements CA
 {
   private _context: CanvasRenderingContext2D
-
   private _d: any[][] = []
 
   constructor($props: Props, $system: System) {
-    super($props, $system)
-
-    const {} = $props
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('canvas'),
+      $system.style['canvas']
+    )
 
     this._setup()
     this._reset()
+
+    this.$propHandler = {
+      ...this.$propHandler,
+      style: (current) => {
+        const final_style = { ...this.$defaultStyle, ...current }
+
+        const color = this._get_fill_style().toLowerCase()
+
+        applyStyle(this.$element, final_style)
+
+        if (
+          this._context.fillStyle !== color ||
+          this._context.strokeStyle !== color
+        ) {
+          this._context.fillStyle = color
+          this._context.strokeStyle = color
+
+          clearCanvas(this._context)
+
+          this._redraw()
+        }
+      },
+      width: (width: number) => {
+        this._unlisten_frame_width()
+
+        if (typeof width === 'string') {
+          if (isRelativeValue(width)) {
+            this._width_frame_unlisten = reactToFrameSize(
+              width,
+              // @ts-ignore
+              this,
+              this._set_width
+            )
+          } else {
+            width = Number.parseInt(width)
+
+            if (Number.isNaN(width)) {
+              //
+            } else {
+              this._set_width(width)
+            }
+          }
+        } else {
+          this._set_width(width)
+        }
+      },
+      height: (height: string | number) => {
+        this._unlisten_frame_height()
+
+        if (typeof height === 'string') {
+          if (isRelativeValue(height)) {
+            this._height_frame_unlisten = reactToFrameSize(
+              height,
+              // @ts-ignore
+              this,
+              this._set_height
+            )
+          } else {
+            height = Number.parseInt(height)
+
+            if (Number.isNaN(height)) {
+              //
+            } else {
+              this._set_height(height)
+            }
+          }
+        } else {
+          this._set_height(height)
+        }
+      },
+      d: (d: any[]) => {
+        this.clear()
+
+        this._draw_steps(d || [])
+      },
+      lineWidth: (lineWidth: number | undefined = 3) => {
+        this._context.lineWidth = lineWidth
+      },
+      sx: (sx) => {
+        const { a, b, c, d, e, f } = this._context.getTransform()
+
+        this._context.setTransform(sx ?? 1, b, c, d, e, f)
+      },
+      sy: (xy) => {
+        const { a, b, c, d, e, f } = this._context.getTransform()
+
+        this._context.setTransform(a, b, c, xy ?? 1, e, f)
+      },
+    }
   }
 
   public reset() {
@@ -82,7 +163,7 @@ export default class CanvasComp
       canvas_el.className = className
     }
 
-    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
+    applyStyle(this.$element, { ...this.$defaultStyle, ...style })
 
     canvas_el.draggable = false
 
@@ -142,7 +223,7 @@ export default class CanvasComp
       this._get_frame_height
     )
 
-    applyStyle(canvas_el, { ...DEFAULT_STYLE, ...style })
+    applyStyle(canvas_el, { ...this.$defaultStyle, ...style })
 
     this.$element = canvas_el
 
@@ -176,96 +257,12 @@ export default class CanvasComp
   private _get_fill_style = (): string => {
     const { $theme } = this.$context ?? { $color: COLOR_WHITE, $theme: 'dark' }
 
-    const final_style = { ...DEFAULT_STYLE, ...this.$props.style }
+    const final_style = { ...this.$defaultStyle, ...this.$props.style }
 
     const fallbackColor =
       final_style.strokeStyle ?? final_style.color ?? defaultThemeColor($theme)
 
     return fallbackColor
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    // console.log('Canvas', 'onPropChanged', prop, current)
-
-    if (prop === 'style') {
-      const final_style = { ...DEFAULT_STYLE, ...current }
-
-      const color = this._get_fill_style().toLowerCase()
-
-      applyStyle(this.$element, final_style)
-
-      if (
-        this._context.fillStyle !== color ||
-        this._context.strokeStyle !== color
-      ) {
-        this._context.fillStyle = color
-        this._context.strokeStyle = color
-
-        clearCanvas(this._context)
-
-        this._redraw()
-      }
-    } else if (prop === 'width') {
-      this._unlisten_frame_width()
-
-      if (typeof current === 'string') {
-        if (isRelativeValue(current)) {
-          this._width_frame_unlisten = reactToFrameSize(
-            current,
-            this,
-            this._set_width
-          )
-        } else {
-          const width = Number.parseInt(current)
-
-          if (Number.isNaN(width)) {
-            //
-          } else {
-            this._set_width(width)
-          }
-        }
-      } else {
-        this._set_width(current)
-      }
-    } else if (prop === 'height') {
-      this._unlisten_frame_height()
-
-      if (typeof current === 'string') {
-        if (isRelativeValue(current)) {
-          this._height_frame_unlisten = reactToFrameSize(
-            current,
-            this,
-            this._set_height
-          )
-        } else {
-          const height = Number.parseInt(current)
-
-          if (Number.isNaN(height)) {
-            //
-          } else {
-            this._set_height(height)
-          }
-        }
-      } else {
-        this._set_height(current)
-      }
-    } else if (prop === 'd') {
-      this.clear()
-
-      this._d = current
-
-      this._draw_steps(current || [])
-    } else if (prop === 'lineWidth') {
-      this._context.lineWidth = current
-    } else if (prop === 'sx') {
-      const { a, b, c, d, e, f } = this._context.getTransform()
-
-      this._context.setTransform(current ?? 1, b, c, d, e, f)
-    } else if (prop === 'sy') {
-      const { a, b, c, d, e, f } = this._context.getTransform()
-
-      this._context.setTransform(a, b, c, current ?? 1, e, f)
-    }
   }
 
   private _unlisten_frame_width() {

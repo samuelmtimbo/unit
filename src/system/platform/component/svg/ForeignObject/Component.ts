@@ -1,7 +1,5 @@
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
-import { Element } from '../../../../../client/element'
-import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import { SVGElement_ } from '../../../../../client/svg'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -15,44 +13,31 @@ export interface Props {
   height?: number
 }
 
-export default class SVGForeignObject extends Element<
+export default class SVGForeignObject extends SVGElement_<
   SVGForeignObjectElement,
   Props
 > {
-  private _prop_handler: PropHandler
-
   constructor($props: Props, $system: System) {
-    super($props, $system)
-
-    const {
-      className,
-      style = {},
-      x = 0,
-      y = 0,
-      width = 100,
-      height = 100,
-    } = this.$props
-
-    const DEFAULT_STYLE = $system.style['foreignobject']
-
-    const $element = this.$system.api.document.createElementNS(
-      namespaceURI,
-      'foreignObject'
+    super(
+      $props,
+      $system,
+      $system.api.document.createElementNS(namespaceURI, 'foreignObject'),
+      $system.style['foreignobject']
     )
+
+    const { className, x = 0, y = 0, width = 100, height = 100 } = this.$props
+
     if (className !== undefined) {
-      $element.classList.value = className
+      this.$element.classList.value = className
     }
-    $element.setAttribute('x', `${x}`)
-    $element.setAttribute('y', `${y}`)
-    $element.setAttribute('width', `${width}`)
-    $element.setAttribute('height', `${height}`)
 
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
+    this.$element.setAttribute('x', `${x}`)
+    this.$element.setAttribute('y', `${y}`)
+    this.$element.setAttribute('width', `${width}`)
+    this.$element.setAttribute('height', `${height}`)
 
-    this.$element = $element
-
-    this._prop_handler = {
-      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       x: (x: number | undefined = 0) => {
         this.$element.setAttribute('x', `${x}`)
       },
@@ -66,9 +51,5 @@ export default class SVGForeignObject extends Element<
         this.$element.setAttribute('height', `${height}`)
       },
     }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

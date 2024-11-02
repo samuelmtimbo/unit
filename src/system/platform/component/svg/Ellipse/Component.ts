@@ -1,7 +1,5 @@
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
-import { Element } from '../../../../../client/element'
-import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import { SVGElement_ } from '../../../../../client/svg'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -14,15 +12,16 @@ export interface Props {
   ry?: number
 }
 
-export default class SVGEllipse extends Element<SVGCircleElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class SVGEllipse extends SVGElement_<SVGCircleElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElementNS(namespaceURI, 'circle'),
+      $system.style['ellipse']
+    )
 
-    const { className, style = {}, x = 50, y = 50, rx = 50, ry = 50 } = $props
-
-    const DEFAULT_STYLE = $system.style['ellipse']
+    const { className, x = 50, y = 50, rx = 50, ry = 50 } = $props
 
     const $element = this.$system.api.document.createElementNS(
       namespaceURI,
@@ -30,20 +29,16 @@ export default class SVGEllipse extends Element<SVGCircleElement, Props> {
     )
 
     if (className !== undefined) {
-      $element.classList.value = className
+      this.$element.classList.value = className
     }
 
-    $element.setAttribute('cx', `${x}`)
-    $element.setAttribute('cy', `${y}`)
-    $element.setAttribute('rx', `${rx}`)
-    $element.setAttribute('ry', `${ry}`)
+    this.$element.setAttribute('cx', `${x}`)
+    this.$element.setAttribute('cy', `${y}`)
+    this.$element.setAttribute('rx', `${rx}`)
+    this.$element.setAttribute('ry', `${ry}`)
 
-    this.$element = $element
-
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
-
-    this._prop_handler = {
-      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       x: (x: number | undefined = 0) => {
         this.$element.setAttribute('x', `${x}`)
       },
@@ -60,6 +55,6 @@ export default class SVGEllipse extends Element<SVGCircleElement, Props> {
   }
 
   onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
+    this.$propHandler[prop](current)
   }
 }

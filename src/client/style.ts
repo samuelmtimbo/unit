@@ -14,7 +14,7 @@ export const isVValue = (value: string) => {
 
 export function reactToFrameSize(
   value: string,
-  component: Component<HTMLElement | SVGElement>,
+  component: Component,
   setValue: (value: number) => void
 ): Unlisten {
   let unlistenComponent = NOOP
@@ -74,8 +74,8 @@ export function reactToFrameSize(
 }
 
 export function applyDynamicStyle(
-  component: Component<HTMLElement | SVGElement>,
-  $element: HTMLElement | SVGElement,
+  component: Component<any>,
+  $element: any,
   style: Dict<string> = {}
 ): Unlisten {
   removeStyle($element)

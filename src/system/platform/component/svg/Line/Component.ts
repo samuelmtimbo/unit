@@ -1,7 +1,5 @@
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
-import { Element } from '../../../../../client/element'
-import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import { SVGElement_ } from '../../../../../client/svg'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -14,36 +12,30 @@ export interface Props {
   y2?: number
 }
 
-export default class SVGLine extends Element<SVGLineElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class SVGLine extends SVGElement_<SVGLineElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
-
-    const { className, style = {}, x1 = 0, y1 = 0, x2 = 0, y2 = 0 } = $props
-
-    const DEFAULT_STYLE = $system.style['use']
-
-    const $element = this.$system.api.document.createElementNS(
-      namespaceURI,
-      'line'
+    super(
+      $props,
+      $system,
+      $system.api.document.createElementNS(namespaceURI, 'line'),
+      $system.style['line']
     )
 
+    const { className, x1 = 0, y1 = 0, x2 = 0, y2 = 0 } = $props
+
     if (className !== undefined) {
-      $element.classList.value = className
+      this.$element.classList.value = className
     }
 
-    $element.setAttribute('x1', `${x1}`)
-    $element.setAttribute('y1', `${y1}`)
-    $element.setAttribute('x2', `${x2}`)
-    $element.setAttribute('y2', `${y2}`)
+    this.$element.setAttribute('x1', `${x1}`)
+    this.$element.setAttribute('y1', `${y1}`)
+    this.$element.setAttribute('x2', `${x2}`)
+    this.$element.setAttribute('y2', `${y2}`)
 
-    this.$element = $element
+    this.$element = this.$element
 
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
-
-    this._prop_handler = {
-      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       x1: (x1: number | undefined = 0) => {
         this.$element.setAttribute('x1', `${x1}`)
       },
@@ -57,9 +49,5 @@ export default class SVGLine extends Element<SVGLineElement, Props> {
         this.$element.setAttribute('y2', `${y2}`)
       },
     }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

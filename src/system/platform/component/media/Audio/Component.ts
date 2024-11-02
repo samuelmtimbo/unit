@@ -1,6 +1,4 @@
-import { Element } from '../../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import HTMLElement_ from '../../../../../client/html'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 import { CS } from '../../../../../types/interface/CS'
@@ -15,32 +13,30 @@ export interface Props {
 }
 
 export default class AudioComp
-  extends Element<HTMLAudioElement, Props>
+  extends HTMLElement_<HTMLAudioElement, Props>
   implements CS
 {
-  private _prop_handler: PropHandler
-
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('audio'),
+      $system.style['audio']
+    )
 
-    const { className, style = {}, src, controls = true } = this.$props
+    const { className, src, controls = true } = this.$props
 
-    const DEFAULT_STYLE = this.$system.style['audio']
-
-    const audio_element = this.$system.api.document.createElement('audio')
-
-    audio_element.controls = controls
+    this.$element.controls = controls
 
     if (className) {
-      audio_element.className = className
+      this.$element.className = className
     }
     if (src) {
-      audio_element.src = src
+      this.$element.src = src
     }
-    applyStyle(audio_element, { ...DEFAULT_STYLE, ...style })
 
-    this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       src: (src: string | undefined) => {
         if (src === undefined) {
           this.$element.pause()
@@ -68,11 +64,7 @@ export default class AudioComp
       },
     }
 
-    this.$element = audio_element
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
+    this.$element = this.$element
   }
 
   play(): void {

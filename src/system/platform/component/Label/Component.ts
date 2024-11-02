@@ -1,6 +1,4 @@
-import { Element } from '../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { applyStyle } from '../../../../client/style'
+import HTMLElement_ from '../../../../client/html'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -14,18 +12,16 @@ export interface Props {
   draggable?: boolean
 }
 
-export default class Label extends Element<HTMLLabelElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class Label extends HTMLElement_<HTMLLabelElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('label'),
+      $system.style['label']
+    )
 
-    const { id, className, style, innerText, tabIndex, title, draggable } =
-      this.$props
-
-    const DEFAULT_STYLE = this.$system.style['label']
-
-    this.$element = this.$system.api.document.createElement('label')
+    const { id, className, innerText, tabIndex, title, draggable } = this.$props
 
     if (id !== undefined) {
       this.$element.id = id
@@ -45,15 +41,5 @@ export default class Label extends Element<HTMLLabelElement, Props> {
     if (draggable !== undefined) {
       this.$element.setAttribute('draggable', draggable.toString())
     }
-
-    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
-    }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

@@ -1,25 +1,14 @@
-import { Element } from '../../../../client/element'
+import HTMLElement_ from '../../../../client/html'
 import { System } from '../../../../system'
 
 export interface Props {}
 
-export default class Parent extends Element<HTMLDivElement, Props> {
+export default class Parent extends HTMLElement_<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super($props, $system, $system.api.document.createElement('div'), {})
 
-    const {} = this.$props
+    this.$element.style.display = 'contents'
 
-    const {
-      api: {
-        document: { createElement },
-      },
-    } = $system
-
-    const element = createElement('div')
-
-    element.style.display = 'contents'
-
-    this.$element = element
     this.$wrap = true
   }
 

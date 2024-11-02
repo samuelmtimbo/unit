@@ -1,7 +1,5 @@
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
-import { Element } from '../../../../../client/element'
-import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import { SVGElement_ } from '../../../../../client/svg'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -11,34 +9,27 @@ export interface Props {
   style?: Dict<string>
 }
 
-export default class SVGUse extends Element<SVGGElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class SVGUse extends SVGElement_<SVGGElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
-
-    const { className, style = {}, href } = this.$props
-
-    const DEFAULT_STYLE = $system.style['use']
-
-    const $element = this.$system.api.document.createElementNS(
-      namespaceURI,
-      'use'
+    super(
+      $props,
+      $system,
+      $system.api.document.createElementNS(namespaceURI, 'use'),
+      $system.style['use']
     )
+
+    const { className, href } = this.$props
+
     if (className !== undefined) {
-      $element.classList.value = className
+      this.$element.classList.value = className
     }
     if (href !== undefined) {
-      $element.setAttributeNS(namespaceURI, 'xlink:href', href)
-      $element.setAttribute('href', href)
+      this.$element.setAttributeNS(namespaceURI, 'xlink:href', href)
+      this.$element.setAttribute('href', href)
     }
 
-    this.$element = $element
-
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
-
-    this._prop_handler = {
-      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       href: (href: string | undefined) => {
         if (href) {
           this.$element.setAttributeNS(namespaceURI, 'xlink:href', href)
@@ -49,9 +40,5 @@ export default class SVGUse extends Element<SVGGElement, Props> {
         }
       },
     }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

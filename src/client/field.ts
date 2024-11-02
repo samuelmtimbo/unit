@@ -1,11 +1,9 @@
 import { Style } from '../system/platform/Style'
 import { Dict } from '../types/Dict'
-import { $Element } from '../types/interface/async/$Element'
 import { identity } from '../util/identity'
-import { applyAttr } from './attr'
 import { Element } from './element'
-import { htmlPropHandler, inputPropHandler, PropHandler } from './propHandler'
-import { applyDynamicStyle } from './style'
+import HTMLElement_ from './html'
+import { inputPropHandler } from './propHandler'
 
 export type InputElement =
   | HTMLInputElement
@@ -35,10 +33,7 @@ export function makeFieldInputEventHandler<E extends InputElement>(
 export class Field<
   E extends InputElement = any,
   P extends Dict<any> = Dict<any>,
-  U extends $Element = $Element,
-> extends Element<E, P, U> {
-  private _prop_handler: PropHandler
-
+> extends HTMLElement_<E, P> {
   constructor(
     $props: any,
     $system: any,
@@ -52,7 +47,7 @@ export class Field<
       propHandlers?: Dict<(value: any) => void>
     }
   ) {
-    super($props, $system)
+    super($props, $system, $element, opt.defaultStyle)
 
     const {
       valueKey,
@@ -65,8 +60,6 @@ export class Field<
     let { style, attr, value = defaultValue } = $props
 
     style = { ...defaultStyle, ...style }
-
-    this.$element = $element
 
     this.$element[valueKey] = value
 
@@ -84,11 +77,8 @@ export class Field<
     this.$element.addEventListener('change', inputEventHandler)
     this.$element.addEventListener('input', inputEventHandler)
 
-    applyAttr(this.$element, attr)
-    applyDynamicStyle(this, this.$element, style)
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, defaultStyle),
+    this.$propHandler = {
+      ...this.$propHandler,
       ...(isInput
         ? inputPropHandler(
             this.$element as HTMLInputElement,
@@ -104,9 +94,5 @@ export class Field<
             },
           }),
     }
-  }
-
-  onPropChanged(prop, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

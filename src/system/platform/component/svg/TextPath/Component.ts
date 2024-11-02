@@ -1,7 +1,5 @@
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
-import { Element } from '../../../../../client/element'
-import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import { SVGElement_ } from '../../../../../client/svg'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -16,14 +14,19 @@ export interface Props {
   rotate?: 'auto' | 'auto-reverse' | 'number'
 }
 
-export default class SVGTextPath extends Element<SVGTextPathElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class SVGTextPath extends SVGElement_<
+  SVGTextPathElement,
+  Props
+> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElementNS(namespaceURI, 'textPath'),
+      $system.style['textpath']
+    )
 
     const {
-      style = {},
       className,
       href,
       startOffset,
@@ -33,46 +36,33 @@ export default class SVGTextPath extends Element<SVGTextPathElement, Props> {
       rotate,
     } = this.$props
 
-    const DEFAULT_STYLE = $system.style['textpath']
-
-    const text_path_el = this.$system.api.document.createElementNS(
-      namespaceURI,
-      'textPath'
-    )
-    applyStyle(text_path_el, style)
     if (className) {
-      text_path_el.classList.add(className)
+      this.$element.classList.add(className)
     }
     if (href !== undefined) {
-      text_path_el.setAttribute('href', href)
+      this.$element.setAttribute('href', href)
     }
     if (startOffset !== undefined) {
-      text_path_el.setAttribute('startOffset', startOffset)
+      this.$element.setAttribute('startOffset', startOffset)
     }
     if (lengthAdjust !== undefined) {
-      text_path_el.setAttribute('lengthAdjust', lengthAdjust)
+      this.$element.setAttribute('lengthAdjust', lengthAdjust)
     }
     if (spacing !== undefined) {
-      text_path_el.setAttribute('spacing', spacing)
+      this.$element.setAttribute('spacing', spacing)
     }
     if (textContent !== undefined) {
-      text_path_el.textContent = textContent
+      this.$element.textContent = textContent
     }
     if (rotate !== undefined) {
-      text_path_el.setAttribute('rotate', rotate)
+      this.$element.setAttribute('rotate', rotate)
     }
 
-    this.$element = text_path_el
-
-    this._prop_handler = {
-      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       textContent: (current: string | undefined) => {
         this.$element.textContent = current
       },
     }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

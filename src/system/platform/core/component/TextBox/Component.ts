@@ -66,7 +66,7 @@ export default class TextBox extends Element<HTMLDivElement, Props> {
     this.registerRoot(div)
   }
 
-  private _prop_handler = {
+  private $propHandler = {
     style: (style: Dict<string> | undefined = {}) => {
       this._div.setProp('style', { ...DEFAULT_STYLE, ...style })
     },
@@ -85,6 +85,6 @@ export default class TextBox extends Element<HTMLDivElement, Props> {
   }
 
   onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
+    this.$propHandler[prop](current)
   }
 }

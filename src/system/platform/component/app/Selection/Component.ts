@@ -1,6 +1,7 @@
 import { mergePropStyle } from '../../../../../client/component/mergeStyle'
 import { Element } from '../../../../../client/element'
 import { parentElement } from '../../../../../client/platform/web/parentElement'
+import { SVGElement_ } from '../../../../../client/svg'
 import { System } from '../../../../../system'
 import SVGCircle from '../../svg/Circle/Component'
 import SVGRect from '../../svg/Rect/Component'
@@ -30,7 +31,7 @@ export const DEFAULT_STYLE = {
 
 export default class Selection extends Element<HTMLDivElement, Props> {
   private _selection: SVGSVG
-  private _selection_shape: SVGCircle | SVGRect
+  private _selection_shape: SVGElement_
 
   constructor($props: Props, $system: System) {
     super($props, $system)
@@ -77,7 +78,7 @@ export default class Selection extends Element<HTMLDivElement, Props> {
     this.registerRoot(selection)
   }
 
-  private _render_selection_shape = (): SVGCircle | SVGRect => {
+  private _render_selection_shape = (): SVGElement_ => {
     const {
       width = 0,
       height = 0,

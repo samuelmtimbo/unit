@@ -1,12 +1,11 @@
 import { Component } from '../../../../client/component'
 import { componentClassFromSpecId } from '../../../../client/componentClassFromSpecId'
 import { parentClass } from '../../../../client/createParent'
-import { Element } from '../../../../client/element'
+import HTMLElement_ from '../../../../client/html'
 import { getComponentInterface } from '../../../../client/interface'
 import { parentElement } from '../../../../client/platform/web/parentElement'
 import { ComponentClass, System } from '../../../../system'
 import { UnitBundleSpec } from '../../../../types/UnitBundleSpec'
-import { $Wrap } from '../../../../types/interface/async/$Wrap'
 import { insert, push, removeAt, unshift } from '../../../../util/array'
 
 export interface Props {
@@ -15,7 +14,7 @@ export interface Props {
 
 export const DEFAULT_STYLE = {}
 
-export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
+export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
   $_ = ['W']
 
   private _Container: ComponentClass = parentClass()
@@ -25,13 +24,9 @@ export default class Wrap extends Element<HTMLDivElement, Props, $Wrap> {
   private _parent_child_container: Component[] = []
 
   constructor(props: {}, $system: System) {
-    super(props, $system)
+    super(props, $system, parentElement($system), DEFAULT_STYLE)
 
-    const $element = parentElement($system)
-
-    $element.className = 'wrap'
-
-    this.$element = $element
+    this.$element.className = 'wrap'
 
     this.$slot = {
       default: this,

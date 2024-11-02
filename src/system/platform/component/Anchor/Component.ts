@@ -1,6 +1,5 @@
-import { Element } from '../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { applyStyle } from '../../../../client/style'
+import HTMLElement_ from '../../../../client/html'
+import { PropHandler } from '../../../../client/propHandler'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -17,11 +16,16 @@ export interface Props {
   draggable?: boolean
 }
 
-export default class Anchor extends Element<HTMLAnchorElement, Props> {
+export default class Anchor extends HTMLElement_<HTMLAnchorElement, Props> {
   private _prop_handler: PropHandler
 
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('a'),
+      $system.style['anchor']
+    )
 
     const {
       href,
@@ -29,16 +33,11 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
       id,
       rel = 'noreferrer',
       className,
-      style,
       innerText,
       tabIndex,
       title,
       draggable,
     } = this.$props
-
-    const DEFAULT_STYLE = this.$system.style['anchor']
-
-    this.$element = this.$system.api.document.createElement('a')
 
     if (href !== undefined) {
       this.$element.setAttribute('href', href)
@@ -68,10 +67,8 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
       this.$element.setAttribute('draggable', draggable.toString())
     }
 
-    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       href: (href: string | undefined) => {
         if (href) {
           this.$element.href = href
@@ -87,9 +84,5 @@ export default class Anchor extends Element<HTMLAnchorElement, Props> {
         }
       },
     }
-  }
-
-  onPropChanged<K extends keyof Props>(prop: K, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

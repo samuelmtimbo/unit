@@ -1,6 +1,4 @@
-import { Element } from '../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { applyStyle } from '../../../../client/style'
+import HTMLElement_ from '../../../../client/html'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -15,64 +13,32 @@ export interface Props {
   data?: Dict<string>
 }
 
-export default class Button extends Element<HTMLButtonElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class Button extends HTMLElement_<HTMLButtonElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('button'),
+      $system.style['button']
+    )
 
-    const {
-      id,
-      className,
-      style,
-      innerText,
-      tabIndex,
-      title,
-      draggable,
-      data = {},
-    } = this.$props
-
-    const DEFAULT_STYLE = this.$system.style['button']
-
-    const $element = this.$system.api.document.createElement('button')
+    const { id, className, style, innerText, tabIndex, title, draggable } =
+      this.$props
 
     if (id !== undefined) {
-      $element.id = id
+      this.$element.id = id
     }
-
     if (className !== undefined) {
-      $element.className = className
+      this.$element.className = className
     }
-
     if (innerText) {
-      $element.innerText = innerText
+      this.$element.innerText = innerText
     }
-
     if (tabIndex !== undefined) {
-      $element.tabIndex = tabIndex
+      this.$element.tabIndex = tabIndex
     }
-
     if (title) {
-      $element.title = title
+      this.$element.title = title
     }
-
-    if (data !== undefined) {
-      for (const key in data) {
-        const d = data[key]
-        $element.dataset[key] = d
-      }
-    }
-
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
-
-    this.$element = $element
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
-    }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

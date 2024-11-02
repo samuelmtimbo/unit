@@ -184,7 +184,7 @@ export class Component<
     this._$node = $node
   }
 
-  getProp(name: string): any {
+  getProp<K extends keyof P>(name: K): any {
     return this.$props[name]
   }
 

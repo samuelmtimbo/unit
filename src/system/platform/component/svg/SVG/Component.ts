@@ -1,8 +1,5 @@
-import { applyAttr } from '../../../../../client/attr'
 import { namespaceURI } from '../../../../../client/component/namespaceURI'
-import { Element } from '../../../../../client/element'
-import { PropHandler, svgPropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import { SVGElement_ } from '../../../../../client/svg'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -20,16 +17,17 @@ export interface Props {
   tabIndex?: number
 }
 
-export default class SVGSVG extends Element<SVGSVGElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class SVGSVG extends SVGElement_<SVGSVGElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElementNS(namespaceURI, 'svg'),
+      $system.style['svg']
+    )
 
     const {
       className,
-      style = {},
-      attr = {},
       stroke = 'currentColor',
       strokeWidth = 0,
       viewBox,
@@ -38,32 +36,23 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
       tabIndex = -1,
     } = $props
 
-    const DEFAULT_STYLE = $system.style['svg']
-
-    const svg_el = this.$system.api.document.createElementNS(
-      namespaceURI,
-      'svg'
-    )
-
-    applyAttr(svg_el, attr)
-
     if (className !== undefined) {
-      svg_el.classList.value = className
+      this.$element.classList.value = className
     }
     if (viewBox) {
-      svg_el.setAttribute('viewBox', viewBox)
+      this.$element.setAttribute('viewBox', viewBox)
     }
     if (preserveAspectRatio) {
-      svg_el.setAttribute('preserveAspectRatio', preserveAspectRatio)
+      this.$element.setAttribute('preserveAspectRatio', preserveAspectRatio)
     }
     if (tabIndex !== undefined) {
-      svg_el.tabIndex = tabIndex
+      this.$element.tabIndex = tabIndex
     }
     if (stroke !== undefined) {
-      svg_el.setAttribute('stroke', `${stroke}`)
+      this.$element.setAttribute('stroke', `${stroke}`)
     }
     if (strokeWidth !== undefined) {
-      svg_el.setAttribute('stroke-width', `${strokeWidth}`)
+      this.$element.setAttribute('stroke-width', `${strokeWidth}`)
     }
     if (title) {
       const title_el = this.$system.api.document.createElementNS(
@@ -71,16 +60,13 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
         'title'
       )
       title_el.innerHTML = title
-      svg_el.appendChild(title_el)
+      this.$element.appendChild(title_el)
     }
-    svg_el.setAttribute('preserveAspectRatio', 'xMidYMid meet')
 
-    applyStyle(svg_el, { ...DEFAULT_STYLE, ...style })
+    this.$element.setAttribute('preserveAspectRatio', 'xMidYMid meet')
 
-    this.$element = svg_el
-
-    this._prop_handler = {
-      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       viewBox: (viewBox: string | undefined) => {
         if (viewBox === undefined) {
           this.$element.removeAttribute('viewBox')
@@ -113,6 +99,6 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
   }
 
   onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
+    this.$propHandler[prop](current)
   }
 }

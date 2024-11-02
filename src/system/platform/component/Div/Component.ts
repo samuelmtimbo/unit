@@ -1,6 +1,4 @@
-import { Element } from '../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { applyDynamicStyle } from '../../../../client/style'
+import HTMLElement_ from '../../../../client/html'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -16,32 +14,20 @@ export interface Props {
   attr?: Dict<string>
 }
 
-export default class Div extends Element<HTMLDivElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class Div extends HTMLElement_<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('div'),
+      $system.style['div']
+    )
 
-    const {
-      id,
-      className,
-      style,
-      innerText,
-      tabIndex,
-      title,
-      draggable,
-      data = {},
-      attr = {},
-    } = this.$props
-
-    const DEFAULT_STYLE = $system.style['tablerow']
-
-    this.$element = this.$system.api.document.createElement('div')
+    const { id, className, innerText, tabIndex, title, draggable } = this.$props
 
     if (id !== undefined) {
       this.$element.id = id
     }
-
     if (className !== undefined) {
       this.$element.className = className
     }
@@ -57,29 +43,5 @@ export default class Div extends Element<HTMLDivElement, Props> {
     if (draggable !== undefined) {
       this.$element.setAttribute('draggable', draggable.toString())
     }
-    if (data !== undefined) {
-      for (const key in data) {
-        const d = data[key]
-
-        this.$element.dataset[key] = d
-      }
-    }
-    if (attr !== undefined) {
-      for (const key in attr) {
-        const a = attr[key]
-
-        this.$element.setAttribute(key, a)
-      }
-    }
-
-    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
-    }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

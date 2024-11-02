@@ -1,3 +1,4 @@
+import { applyAttr } from '../../../../client/attr'
 import { Element } from '../../../../client/element'
 import { PropHandler, htmlPropHandler } from '../../../../client/propHandler'
 import { applyStyle } from '../../../../client/style'
@@ -14,6 +15,7 @@ export interface Props {
   style?: Dict<string>
   src?: string
   srcdoc?: string
+  attr?: Dict<string>
   allow?: {
     autoplay?: boolean
     camera?: boolean
@@ -29,7 +31,7 @@ export default class Iframe
   extends Element<HTMLSlotElement | HTMLIFrameElement, Props>
   implements CH, W
 {
-  public _iframe_el: HTMLIFrameElement
+  public _iframe: HTMLIFrameElement
 
   private _slot_id: string
 
@@ -38,7 +40,7 @@ export default class Iframe
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { id, className, style = {}, src, srcdoc } = this.$props
+    const { id, className, style, attr, src, srcdoc } = this.$props
 
     const DEFAULT_STYLE = $system.style['iframe']
 
@@ -52,7 +54,15 @@ export default class Iframe
     const iframe_el = this.$system.api.document.createElement('iframe')
     iframe_el.slot = ''
     root.appendChild(iframe_el)
-    this._iframe_el = iframe_el
+    this._iframe = iframe_el
+
+    if (attr) {
+      applyAttr(iframe_el, attr)
+    }
+
+    if (className) {
+      iframe_el.className = className
+    }
 
     iframe_el.setAttribute('frameborder', '0')
 
@@ -64,9 +74,6 @@ export default class Iframe
 
     if (id !== undefined) {
       iframe_el.id = id
-    }
-    if (className) {
-      iframe_el.className = className
     }
     if (srcdoc !== undefined) {
       iframe_el.srcdoc = srcdoc
@@ -81,7 +88,7 @@ export default class Iframe
     this._prop_handler = {
       ...htmlPropHandler(this, iframe_el, DEFAULT_STYLE),
       srcdoc: (current: string) => {
-        this._iframe_el.srcdoc = current || ''
+        this._iframe.srcdoc = current || ''
       },
       src: (current: string) => {
         this._setSrc(current)
@@ -102,9 +109,9 @@ export default class Iframe
     const _src = this._parseSrc(current)
 
     if (_src === undefined) {
-      this._iframe_el.removeAttribute('src')
+      this._iframe.removeAttribute('src')
     } else {
-      this._iframe_el.src = _src
+      this._iframe.src = _src
     }
   }
 
@@ -142,13 +149,13 @@ export default class Iframe
   onMount(): void {
     // console.log('Iframe', 'onMount')
 
-    this._iframe_el.slot = this._slot_id
+    this._iframe.slot = this._slot_id
   }
 
   onUnmount() {
     // console.log('Iframe', 'onUnmount')
 
-    this._iframe_el.slot = ''
+    this._iframe.slot = ''
   }
 
   onDestroy(): void {
@@ -158,10 +165,10 @@ export default class Iframe
   async send(data): Promise<void> {
     // console.log('Iframe', 'send', data)
 
-    this._iframe_el.contentWindow.postMessage(data, '*')
+    this._iframe.contentWindow.postMessage(data, '*')
   }
 
   postMessage(data: any, target: string, transferables: Transferable[]): void {
-    this._iframe_el.contentWindow.postMessage(data, target, transferables)
+    this._iframe.contentWindow.postMessage(data, target, transferables)
   }
 }

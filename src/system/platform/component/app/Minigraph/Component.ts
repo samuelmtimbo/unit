@@ -1,5 +1,5 @@
 import { getSpecRadius } from '../../../../../client/complexity'
-import {mergeProps} from '../../../../../client/component/mergeProps'
+import { mergeProps } from '../../../../../client/component/mergeProps'
 import { Element } from '../../../../../client/element'
 import { getLinkId, segmentLinkId } from '../../../../../client/id'
 import { parentElement } from '../../../../../client/platform/web/parentElement'

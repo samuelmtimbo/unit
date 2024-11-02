@@ -1,6 +1,4 @@
-import { Element } from '../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
-import { applyStyle } from '../../../../client/style'
+import HTMLElement_ from '../../../../client/html'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
@@ -17,11 +15,14 @@ export interface Props {
   draggable?: boolean
 }
 
-export default class Bold extends Element<HTMLElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class Bold extends HTMLElement_<HTMLElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('b'),
+      $system.style['bold']
+    )
 
     const {
       href,
@@ -29,16 +30,11 @@ export default class Bold extends Element<HTMLElement, Props> {
       id,
       rel = 'noreferrer',
       className,
-      style,
       innerText,
       tabIndex,
       title,
       draggable,
     } = this.$props
-
-    const DEFAULT_STYLE = $system.style['bold']
-
-    this.$element = this.$system.api.document.createElement('b')
 
     if (href !== undefined) {
       this.$element.setAttribute('href', href)
@@ -67,15 +63,5 @@ export default class Bold extends Element<HTMLElement, Props> {
     if (draggable !== undefined) {
       this.$element.setAttribute('draggable', draggable.toString())
     }
-
-    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
-    }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

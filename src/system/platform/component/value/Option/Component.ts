@@ -1,5 +1,4 @@
-import { Element } from '../../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
+import HTMLElement_ from '../../../../../client/html'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -10,23 +9,20 @@ export interface Props {
   disabled?: boolean
 }
 
-export default class Option extends Element<HTMLOptionElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class Option extends HTMLElement_<HTMLOptionElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system, $system.api.document.createElement('option'))
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('option'),
+      $system.style['option']
+    )
 
-    const DEFAULT_STYLE = $system.style['option']
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       value: (current) => {
         this.$element.value = current
       },
     }
-  }
-
-  onPropChanged<K extends keyof Props>(prop: K, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

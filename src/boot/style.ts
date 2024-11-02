@@ -224,4 +224,12 @@ export const style = {
     height: '36px',
     padding: '6px',
   },
+  canvas: {
+    background: 'none',
+    touchAction: 'none',
+    display: 'block',
+    imageResizing: 'pixelated',
+    '-webkit-touch-callout': 'none',
+    ...userSelect('none'),
+  },
 }

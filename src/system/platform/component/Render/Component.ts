@@ -1,7 +1,5 @@
-import { Element } from '../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../client/propHandler'
+import HTMLElement_ from '../../../../client/html'
 import { renderComponent } from '../../../../client/render/renderComponent'
-import { applyStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { $Component } from '../../../../types/interface/async/$Component'
@@ -27,27 +25,19 @@ const DEFAULT_STYLE = {
   boxSizing: 'border-box',
 }
 
-export default class Render extends Element<HTMLDivElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class Render extends HTMLElement_<HTMLDivElement, Props> {
   private _unlisten: Unlisten
 
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('div'),
+      DEFAULT_STYLE
+    )
 
-    const {
-      component,
-      id,
-      className,
-      style,
-      innerText,
-      tabIndex,
-      title,
-      draggable,
-      data = {},
-    } = this.$props
-
-    this.$element = this.$system.api.document.createElement('div')
+    const { component, id, className, innerText, tabIndex, title, draggable } =
+      this.$props
 
     if (id !== undefined) {
       this.$element.id = id
@@ -55,9 +45,6 @@ export default class Render extends Element<HTMLDivElement, Props> {
     if (className !== undefined) {
       this.$element.className = className
     }
-
-    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
-
     if (innerText) {
       this.$element.innerText = innerText
     }
@@ -70,16 +57,9 @@ export default class Render extends Element<HTMLDivElement, Props> {
     if (draggable !== undefined) {
       this.$element.setAttribute('draggable', draggable.toString())
     }
-    if (data !== undefined) {
-      for (const key in data) {
-        const d = data[key]
 
-        this.$element.dataset[key] = d
-      }
-    }
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       unit: (component: $Component) => {
         if (this._unlisten) {
           this._unlisten()
@@ -98,10 +78,5 @@ export default class Render extends Element<HTMLDivElement, Props> {
         }
       },
     }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    // console.log('Render', 'onPropChanged', prop, current)
-    this._prop_handler[prop](current)
   }
 }

@@ -13,18 +13,16 @@ export interface Props {
 
 export default class TextArea extends Field<HTMLTextAreaElement, Props> {
   constructor($props: Props, $system: System) {
-    const DEFAULT_STYLE = $system.style['textarea']
-
     super($props, $system, $system.api.document.createElement('textarea'), {
       valueKey: 'value',
-      defaultStyle: DEFAULT_STYLE,
+      defaultStyle: $system.style['textarea'],
     })
 
     const {
       flags: { defaultInputModeNone },
     } = $system
 
-    const { placeholder = '', maxLength = undefined, attr } = $props
+    const { placeholder = '', maxLength = undefined } = $props
 
     this.$element.spellcheck = false
     this.$element.autocomplete = 'off'

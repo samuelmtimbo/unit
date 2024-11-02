@@ -1,6 +1,4 @@
-import { Element } from '../../../../../client/element'
-import { htmlPropHandler, PropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import HTMLElement_ from '../../../../../client/html'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
 
@@ -10,38 +8,29 @@ export interface Props {
   src?: string
 }
 
-export default class Image_ extends Element<HTMLImageElement, Props> {
-  private _prop_handler: PropHandler
-
+export default class Image_ extends HTMLElement_<HTMLImageElement, Props> {
   constructor($props: Props, $system: System, $element?: HTMLImageElement) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('img'),
+      $system.style['image']
+    )
 
-    const { className, style = {}, src } = this.$props
-
-    const DEFAULT_STYLE = this.$system.style['image']
-
-    $element = $element ?? this.$system.api.document.createElement('img')
+    const { className, src } = this.$props
 
     if (className) {
-      $element.className = className
+      this.$element.className = className
     }
     if (src !== undefined) {
-      $element.src = src
+      this.$element.src = src
     }
 
-    this.$element = $element
-
-    applyStyle($element, { ...DEFAULT_STYLE, ...style })
-
-    this._prop_handler = {
-      ...htmlPropHandler(this, $element, DEFAULT_STYLE),
+    this.$propHandler = {
+      ...this.$propHandler,
       src: (url: string | undefined) => {
-        $element.src = url ?? ''
+        this.$element.src = url ?? ''
       },
     }
-  }
-
-  onPropChanged<K extends keyof Props>(prop: K, current: any): void {
-    this._prop_handler[prop](current)
   }
 }

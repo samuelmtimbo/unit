@@ -1,7 +1,4 @@
-import { applyAttr } from '../../../../../client/attr'
-import { Element } from '../../../../../client/element'
-import { PropHandler, htmlPropHandler } from '../../../../../client/propHandler'
-import { applyStyle } from '../../../../../client/style'
+import HTMLElement_ from '../../../../../client/html'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { System } from '../../../../../system'
 import { Dict } from '../../../../../types/Dict'
@@ -19,47 +16,29 @@ export interface Props {
 }
 
 export default class VideoComp
-  extends Element<HTMLVideoElement, Props>
+  extends HTMLElement_<HTMLVideoElement, Props>
   implements CS
 {
-  private prop_handler: PropHandler
-
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('video'),
+      $system.style['video']
+    )
 
-    const {
-      className,
-      style = {},
-      src,
-      autoplay = true,
-      controls = true,
-      attr,
-    } = this.$props
-
-    const DEFAULT_STYLE = this.$system.style['video']
-
-    this.$element = this.$system.api.document.createElement('video')
-
-    if (attr) {
-      applyAttr(this.$element, attr)
-    }
+    const { src, autoplay = true, controls = true } = this.$props
 
     this.$element.controls = controls
 
-    if (className) {
-      this.$element.className = className
-    }
     if (src) {
       this.$element.src = src
     }
 
     this.$element.autoplay = autoplay
 
-    applyStyle(this.$element, { ...DEFAULT_STYLE, ...style })
-
-    this.prop_handler = {
-      ...htmlPropHandler(this, this.$element, DEFAULT_STYLE),
-
+    this.$propHandler = {
+      ...this.$propHandler,
       src: (src: string | undefined) => {
         if (src === undefined) {
           this.$element.pause()
@@ -93,12 +72,6 @@ export default class VideoComp
         }
       },
     }
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    // console.log('onPropChanged', prop, current)
-
-    this.prop_handler[prop](current)
   }
 
   async captureStream({
