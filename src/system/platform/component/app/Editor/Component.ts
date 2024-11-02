@@ -491,17 +491,19 @@ import {
   getValueTree,
   isTypeMatch,
 } from '../../../../../spec/parser'
-import * as componentReducer from '../../../../../spec/reducers/component'
 import {
   appendChild,
   appendSubComponentChild,
+  insertChild,
+  insertSubComponentChild,
   moveSubComponentRoot,
   removeChild,
   removeSubComponent,
   removeSubComponentChild,
   reorderSubComponent,
+  setSize,
   setSubComponent,
-} from '../../../../../spec/reducers/component_'
+} from '../../../../../spec/reducers/component'
 import {
   addMerge,
   addPinToMerge,
@@ -533,7 +535,7 @@ import {
   setUnitPinIgnored,
   setUnitSize,
   unplugPin,
-} from '../../../../../spec/reducers/spec_'
+} from '../../../../../spec/reducers/spec'
 import { remapBundle } from '../../../../../spec/remapBundle'
 import { remapUnitBundle } from '../../../../../spec/remapUnitBundle'
 import { stringify } from '../../../../../spec/stringify'
@@ -6441,21 +6443,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._spec.component = this._spec.component || { subComponents: {} }
 
-    this._spec.component = componentReducer.setSubComponent(
-      { unitId: unit_id, spec: sub_component_spec },
-      this._spec.component || {}
+    setSubComponent(
+      { unitId: unit_id, subComponent: sub_component_spec },
+      this._spec.component
     )
 
     if (parent_id) {
-      this._spec.component = componentReducer.appendSubComponentChild(
-        { id: parent_id, childId: unit_id },
-        this._spec.component || {}
+      appendSubComponentChild(
+        { parentId: parent_id, childId: unit_id },
+        this._spec.component
       )
     } else {
-      this._spec.component = componentReducer.appendChild(
-        { unitId: unit_id },
-        this._spec.component || {}
-      )
+      appendChild({ childId: unit_id }, this._spec.component)
     }
 
     const { width, height } = this._get_unit_component_graph_size(unit_id)
@@ -6472,21 +6471,18 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) {
     this._spec.component = this._spec.component || { subComponents: {} }
 
-    this._spec.component = componentReducer.setSubComponent(
-      { unitId: unit_id, spec: { children: [] } },
-      this._spec.component || {}
+    setSubComponent(
+      { unitId: unit_id, subComponent: { children: [] } },
+      this._spec.component
     )
 
     if (parent_id) {
-      this._spec.component = componentReducer.insertSubComponentChild(
-        { id: parent_id, childId: unit_id, at },
-        this._spec.component || {}
+      insertSubComponentChild(
+        { parentId: parent_id, childId: unit_id, at },
+        this._spec.component
       )
     } else {
-      this._spec.component = componentReducer.insertChild(
-        { id: unit_id, at },
-        this._spec.component || {}
-      )
+      insertChild({ childId: unit_id, at }, this._spec.component)
     }
 
     const { width, height } = this._get_unit_component_graph_size(unit_id)
@@ -15000,8 +14996,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         this._core_component_max_height.length - 1
       ]
     )
+
     this._spec.component = this._spec.component || {}
-    this._spec.component = componentReducer.setSize(
+    this._spec.component = setSize(
       {
         defaultWidth,
         defaultHeight,
@@ -33326,30 +33323,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   next_slot_id
     // )
 
+    this._spec.component = this._spec.component || {}
+
     if (parent_id) {
-      this._spec.component = componentReducer.removeSubComponentChild(
-        { id: parent_id, childId: child_id },
-        this._spec.component || {}
+      removeSubComponentChild(
+        { subComponentId: parent_id, childId: child_id },
+        this._spec.component
       )
     } else {
-      this._spec.component = componentReducer.removeChild(
-        { id: child_id },
-        this._spec.component || {}
-      )
+      removeChild({ childId: child_id }, this._spec.component)
     }
 
     if (next_parent_id) {
-      this._spec.component = componentReducer.appendSubComponentChild(
-        { id: next_parent_id, childId: child_id },
-        this._spec.component || {}
+      appendSubComponentChild(
+        { parentId: next_parent_id, childId: child_id },
+        this._spec.component
       )
 
       this._layout_sub_component_parent[child_id] = next_parent_id
     } else {
-      this._spec.component = componentReducer.appendChild(
-        { unitId: child_id },
-        this._spec.component || {}
-      )
+      appendChild({ childId: child_id }, this._spec.component)
 
       delete this._layout_sub_component_parent[child_id]
     }
@@ -39705,21 +39698,15 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._spec_remove_component_children(unit_id, parent_id)
 
     if (parent_id) {
-      this._spec.component = componentReducer.removeSubComponentChild(
-        { id: parent_id, childId: unit_id },
+      removeSubComponentChild(
+        { subComponentId: parent_id, childId: unit_id },
         this._spec.component || {}
       )
     } else {
-      this._spec.component = componentReducer.removeChild(
-        { id: unit_id },
-        this._spec.component || {}
-      )
+      removeChild({ childId: unit_id }, this._spec.component || {})
     }
 
-    this._spec.component = componentReducer.removeSubComponent(
-      { id: unit_id },
-      this._spec.component || {}
-    )
+    removeSubComponent({ unitId: unit_id }, this._spec.component || {})
 
     delete this._layout_node[unit_id]
     delete this._layout_target_node[unit_id]
@@ -49381,21 +49368,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._spec_get_sub_component_parent_id(sub_component_id)
 
     if (sub_component_parent_id) {
-      this._spec.component = componentReducer.removeSubComponentChild(
-        { id: sub_component_parent_id, childId: sub_component_id },
+      removeSubComponentChild(
+        { subComponentId: sub_component_parent_id, childId: sub_component_id },
         this._spec.component
       )
     }
 
-    this._spec.component = componentReducer.removeChild(
-      { id: sub_component_id },
-      this._spec.component
-    )
-
-    this._spec.component = componentReducer.removeSubComponent(
-      { id: sub_component_id },
-      this._spec.component
-    )
+    removeChild({ childId: sub_component_id }, this._spec.component)
+    removeSubComponent({ unitId: sub_component_id }, this._spec.component)
   }
 
   private _state_move_unit_into_graph__remove = (
@@ -49692,17 +49672,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const { width, height } = sub_component
 
-      updated_graph_spec.component = componentReducer.setSubComponent(
+      setSubComponent(
         {
           unitId: next_unit_id,
-          spec: { children: [], childSlot: {}, width, height },
+          subComponent: { children: [], childSlot: {}, width, height },
         },
         updated_graph_spec.component ?? {}
       )
-      updated_graph_spec.component = componentReducer.appendChild(
-        { unitId: next_unit_id },
-        updated_graph_spec.component
-      )
+      appendChild({ childId: next_unit_id }, updated_graph_spec.component)
 
       const { defaultWidth = MIN_WIDTH, defaultHeight = MIN_HEIGHT } =
         updated_graph_spec.component
@@ -49710,43 +49687,38 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const _defaultWidth = Math.max(defaultWidth, width)
       const _defaultHeight = Math.max(defaultHeight, height)
 
-      updated_graph_spec.component = componentReducer.setSize(
+      setSize(
         { defaultWidth: _defaultWidth, defaultHeight: _defaultHeight },
         updated_graph_spec.component
       )
 
       if (sub_component.parent_id) {
         if (this._spec_graph_unit_has_unit(graph_id, sub_component.parent_id)) {
-          updated_graph_spec.component = componentReducer.removeChild(
-            { id: next_unit_id },
-            updated_graph_spec.component
-          )
+          removeChild({ childId: next_unit_id }, updated_graph_spec.component)
 
           const at =
             this._collapse_init_spec.component.subComponents[
               sub_component.parent_id
             ].children.indexOf(unit_id)
 
-          updated_graph_spec.component =
-            componentReducer.insertSubComponentChild(
-              { id: sub_component.parent_id, childId: next_unit_id, at },
-              updated_graph_spec.component
-            )
+          insertSubComponentChild(
+            { parentId: sub_component.parent_id, childId: next_unit_id, at },
+            updated_graph_spec.component
+          )
         }
       }
 
       for (const sub_component_child_id of sub_component.children ?? []) {
         if (this._spec_graph_unit_has_unit(graph_id, sub_component_child_id)) {
-          updated_graph_spec.component = componentReducer.removeChild(
-            { id: sub_component_child_id },
+          removeChild(
+            { childId: sub_component_child_id },
             updated_graph_spec.component
           )
 
-          updated_graph_spec.component =
-            componentReducer.appendSubComponentChild(
-              { id: next_unit_id, childId: sub_component_child_id },
-              updated_graph_spec.component
-            )
+          appendSubComponentChild(
+            { parentId: next_unit_id, childId: sub_component_child_id },
+            updated_graph_spec.component
+          )
         }
       }
 

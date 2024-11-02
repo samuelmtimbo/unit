@@ -1,2 +1,0 @@
-import './component'
-import './spec'

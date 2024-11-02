@@ -1,11 +1,9 @@
-import deepSet from '../../deepSet'
-import dissocPath from '../../system/core/object/DeletePath/f'
+import { deepSet_ } from '../../deepSet'
 import forEachValueKey from '../../system/core/object/ForEachKeyValue/f'
 import deepMerge from '../../system/f/object/DeepMerge/f'
-import _dissoc from '../../system/f/object/Delete/f'
 import merge from '../../system/f/object/Merge/f'
 import _set from '../../system/f/object/Set/f'
-import { GraphSubPinSpec } from '../../types'
+import { Classes, DatumSpec, GraphSubPinSpec, Specs } from '../../types'
 import { GraphMergeSpec } from '../../types/GraphMergeSpec'
 import { GraphMergesSpec } from '../../types/GraphMergesSpec'
 import { GraphPinSpec } from '../../types/GraphPinSpec'
@@ -13,99 +11,127 @@ import { GraphSpec } from '../../types/GraphSpec'
 import { GraphUnitSpec } from '../../types/GraphUnitSpec'
 import { GraphUnitsSpec } from '../../types/GraphUnitsSpec'
 import { IO } from '../../types/IO'
+import { forIOObjKV, io } from '../../types/IOOf'
 import { forEach } from '../../util/array'
 import { clone } from '../../util/clone'
 import {
+  deepDeepMerge,
+  deepDelete,
   deepGet,
   deepGetOrDefault,
   getObjSingleKey,
   isEmptyObject,
   mapObjVK,
 } from '../../util/object'
-import { forEachPinOnMerges, getMergePinCount } from '../util/spec'
+import { evaluateDataValue } from '../evaluateDataValue'
+import { getSubComponentParentId } from '../util/component'
+import {
+  findUnitPlugs,
+  forEachPinOnMerges,
+  getMergePinCount,
+  getUnitMergesSpec,
+} from '../util/spec'
+import {
+  insertChild,
+  insertSubComponentChild,
+  removeChild,
+  removeSubComponent,
+  removeSubComponentChild,
+  setSubComponent,
+} from './component'
 
-export const setSpec = ({ spec }: { spec: GraphSpec }) => spec
-
-export const setName = (
-  { name }: { name: string },
-  state: GraphSpec
-): GraphSpec => _set(state, 'name', name) as GraphSpec
+export const setName = ({ name }: { name: string }, spec: GraphSpec): void => {
+  deepSet_(spec, ['name'], name)
+}
 
 export const addUnit = (
-  { id, unit }: { id: string; unit: GraphUnitSpec },
-  state: GraphSpec
-): GraphSpec => deepSet(state, ['units', id], unit)
+  { unitId, unit }: { unitId: string; unit: GraphUnitSpec },
+  spec: GraphSpec
+): void => {
+  deepSet_(spec, ['units', unitId], unit)
+}
 
-export const addUnits = (
-  { units }: { units: GraphUnitsSpec },
-  state: GraphSpec
-): GraphSpec => _set(state, 'units', merge(state.units, units)) as GraphSpec
+export const removeDatum = (
+  { datumId }: { datumId: string },
+  spec: GraphSpec
+): void => {
+  deepDelete(spec, ['data', datumId])
+}
+
+export const setDatum = (
+  { datumId, value }: { datumId: string; value: DatumSpec },
+  spec: GraphSpec
+): void => {
+  deepSet_(spec, ['data', datumId], value)
+}
 
 export const removeUnits = (
   { ids }: { ids: string[] },
-  state: GraphSpec
-): GraphSpec => {
-  forEach(ids, (unitId) => {
-    state = removeUnit({ unitId }, state)
+  spec: GraphSpec
+): void => {
+  forEach(ids, (id) => {
+    removeUnit({ unitId: id }, spec)
   })
-  return state
 }
 
 export const mergeUnits = (
   { units }: { units: GraphUnitsSpec },
-  state: GraphSpec
-): GraphSpec => _set(state, 'units', merge(state.units, units)) as GraphSpec
+  spec: GraphSpec
+): void => {
+  _set(spec, 'units', merge(spec.units, units)) as GraphSpec
+}
 
 export const removeUnitExposedTypePins = (
   { id, type }: { id: string; type: IO },
-  state: GraphSpec
-): GraphSpec => {
-  const nextState = clone(state)
-  for (const pinId in state[`${type}s`]) {
-    const pin = state[`${type}s`][pinId]
+  spec: GraphSpec
+): void => {
+  for (const pinId in spec[`${type}s`]) {
+    const pin = spec[`${type}s`][pinId]
+
     const { plug } = pin
+
     for (let subPinId in plug) {
       const subPin = plug[subPinId]
+
       const { unitId } = subPin
+
       if (unitId === id) {
-        nextState[`${type}s`][pinId]['plug'][subPinId] = {}
+        deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], {})
       }
     }
   }
-  return nextState
 }
 
 export const removeUnitExposedPins = (
-  { id }: { id: string },
-  state: GraphSpec
-): GraphSpec => {
-  state = removeUnitExposedTypePins({ id, type: 'input' }, state)
-  state = removeUnitExposedTypePins({ id, type: 'output' }, state)
-  return state
+  { unitId: id }: { unitId: string },
+  spec: GraphSpec
+): void => {
+  removeUnitExposedTypePins({ id, type: 'input' }, spec)
+  removeUnitExposedTypePins({ id, type: 'output' }, spec)
 }
 
 export const removeUnitMerges = (
-  { id }: { id: string },
-  state: GraphSpec
-): GraphSpec => {
-  const { merges = {} } = state
+  { unitId }: { unitId: string },
+  spec: GraphSpec
+): void => {
+  const { merges = {} } = clone(spec)
 
-  let nextState = clone(state)
+  const removedMergeIdSet: Set<string> = new Set()
 
-  const removedMergeIds: { [id: string]: true } = {}
   forEachValueKey(merges, (merge, mergeId: string) => {
-    if (merge[id]) {
-      delete nextState.merges![mergeId][id]
+    if (merge[unitId]) {
+      deepDelete(spec, ['merges', mergeId, unitId])
 
-      if (getMergePinCount(nextState.merges![mergeId]) < 2) {
-        delete nextState.merges![mergeId]
-        removedMergeIds[mergeId] = true
+      if (getMergePinCount(spec.merges![mergeId]) < 2) {
+        deepDelete(spec, ['merges', mergeId])
+
+        removedMergeIdSet.add(mergeId)
       }
     }
   })
 
   const reasignExposedPins = (type: IO): void => {
-    const pins = state[`${type}s`] || {}
+    const pins = spec[`${type}s`] || {}
 
     for (const exposedPinId in pins) {
       const pinSpec = pins[exposedPinId] as GraphPinSpec
@@ -117,26 +143,31 @@ export const removeUnitMerges = (
 
         const { mergeId } = subPin
 
-        if (mergeId && removedMergeIds[mergeId]) {
-          for (const unitId in merges[mergeId]) {
-            if (unitId !== id) {
-              const pinId = getObjSingleKey(
-                deepGetOrDefault(merges, [mergeId, unitId, type], {})
-              )
+        if (mergeId && removedMergeIdSet.has(mergeId)) {
+          const mergeSpec = clone(merges[mergeId])
 
-              if (pinId) {
-                nextState[`${type}s`][exposedPinId]['plug'][subPinId] = {
-                  unitId,
-                  pinId,
-                }
+          delete mergeSpec[unitId]
 
-                break
-              } else {
-                nextState[`${type}s`][exposedPinId]['plug'][subPinId] = {}
+          const mergePinCount = getMergePinCount(mergeSpec)
 
-                break
-              }
-            }
+          if (mergePinCount > 1) {
+            continue
+          } else if (mergePinCount === 1) {
+            const otherMergeUnitId = getObjSingleKey(mergeSpec)
+            const otherMergeUnitType = getObjSingleKey(
+              mergeSpec?.[otherMergeUnitId] ?? {}
+            )
+            const otherMergeUnitPinId = getObjSingleKey(
+              mergeSpec?.[otherMergeUnitId]?.[otherMergeUnitType] ?? {}
+            )
+
+            deepSet_(spec, [`${type}s`, exposedPinId, 'plug', subPinId], {
+              unitId: otherMergeUnitId,
+              pinId: otherMergeUnitPinId,
+              kind: otherMergeUnitType,
+            })
+          } else {
+            //
           }
         }
       }
@@ -145,58 +176,44 @@ export const removeUnitMerges = (
 
   reasignExposedPins('input')
   reasignExposedPins('output')
-
-  return nextState
 }
 
 export const removeUnit = (
   { unitId }: { unitId: string },
-  state: GraphSpec
-): GraphSpec => {
-  state = removeUnitMerges({ id: unitId }, state)
-  state = removeUnitExposedPins({ id: unitId }, state)
-  state = dissocPath(state, ['units', unitId]) as GraphSpec
-  return state
+  spec: GraphSpec
+): void => {
+  removeUnitMerges({ unitId }, spec)
+  removeUnitExposedPins({ unitId }, spec)
+
+  delete spec['units'][unitId]
 }
 
 export const addMerge = (
-  { mergeId, merge }: { mergeId: string; merge: GraphMergeSpec },
-  state: GraphSpec
-): GraphSpec => {
-  const { inputs = {}, outputs = {} } = state
+  { mergeId, mergeSpec }: { mergeId: string; mergeSpec: GraphMergeSpec },
+  spec: GraphSpec
+): void => {
+  io((type) => {
+    const pins = spec[`${type}s`] || {}
 
-  forEachValueKey(inputs, ({ plug }, inputId) => {
-    forEachValueKey(plug, ({ unitId, pinId }, subPinId) => {
-      if (unitId && pinId && merge[unitId]?.['input']?.[pinId]) {
-        state = coverInput({ pinId: inputId, subPinId }, state)
-        state = exposeInput(
-          { pinId: inputId, subPinId, input: { mergeId } },
-          state
-        )
-      }
+    forEachValueKey(pins, ({ plug }, pinId) => {
+      forEachValueKey(plug, (subPinSpec, subPinId) => {
+        if (
+          subPinSpec.unitId &&
+          subPinSpec.pinId &&
+          deepGetOrDefault(
+            mergeSpec,
+            [subPinSpec.unitId, type, subPinSpec.pinId],
+            null
+          )
+        ) {
+          coverPin({ type, pinId, subPinId }, spec)
+          exposePin({ type, pinId, subPinId, subPinSpec: { mergeId } }, spec)
+        }
+      })
     })
   })
 
-  // reassign exposed outputs that have just been merged
-  forEachValueKey(outputs, ({ plug }, outputId) => {
-    forEachValueKey(plug, ({ unitId, pinId }, subPinId) => {
-      if (
-        unitId &&
-        pinId &&
-        merge[unitId] &&
-        merge[unitId]['output'] &&
-        merge[unitId]['output']![pinId]
-      ) {
-        state = coverOutput({ pinId: outputId, subPinId }, state)
-        state = exposeOutput(
-          { pinId: outputId, subPinId, output: { mergeId } },
-          state
-        )
-      }
-    })
-  })
-
-  return deepSet(state, ['merges', mergeId], merge)
+  return deepSet_(spec, ['merges', mergeId], mergeSpec)
 }
 
 export const addPinToMerge = (
@@ -206,146 +223,125 @@ export const addPinToMerge = (
     type,
     pinId,
   }: { mergeId: string; type: IO; unitId: string; pinId: string },
-  state: GraphSpec
-): GraphSpec => {
-  // reassign exposed pin if it has just been merged
-  forEachValueKey(state[`${type}s`], ({ name, plug = {} }, exposedPinId) => {
-    for (const subPinId in plug) {
-      const subPin = plug[subPinId]
+  spec: GraphSpec
+): void => {
+  io((_type) => {
+    forEachValueKey(spec[`${_type}s`], ({ plug = {} }, exposedPinId) => {
+      for (const subPinId in plug) {
+        const subPin = plug[subPinId]
 
-      const { unitId: _unitId, pinId: _pinId } = subPin
+        const { unitId: _unitId, pinId: _pinId, kind = type } = subPin
 
-      if (_unitId === unitId && _pinId === pinId) {
-        state = coverPinSet({ pinId: exposedPinId, type }, state)
-        state = exposePinSet(
-          {
-            pinId: exposedPinId,
-            pin: { name, plug: { 0: { mergeId } } },
-            type,
-          },
-          state
-        )
+        if (_unitId === unitId && _pinId === pinId && kind === type) {
+          unplugPin({ pinId: exposedPinId, type: kind, subPinId }, spec)
+          plugPin(
+            {
+              type: kind,
+              pinId: exposedPinId,
+              subPinId,
+              subPinSpec: { mergeId },
+            },
+            spec
+          )
+        }
       }
-    }
+    })
   })
 
-  return deepSet(state, ['merges', mergeId, unitId, type, pinId], true)
-}
-
-export const addMerges = (
-  { merges }: { merges: GraphMergesSpec },
-  state: GraphSpec
-): GraphSpec => {
-  // TODO update exposed inputs/outputs
-  return _set(state, 'merges', deepMerge(merges, state.merges!)) as GraphSpec
+  return deepSet_(spec, ['merges', mergeId, unitId, type, pinId], true)
 }
 
 export const removeMerge = (
-  { id }: { id: string },
-  state: GraphSpec
-): GraphSpec => {
-  const nextState = clone(state)
+  { mergeId }: { mergeId: string },
+  spec: GraphSpec
+): void => {
+  delete spec.merges[mergeId]
 
-  const nextMerges = _dissoc(state.merges!, id)
-  nextState.merges = nextMerges
-
-  nextState.inputs = mapObjVK(state.inputs, (input: GraphPinSpec) => ({
+  spec.inputs = mapObjVK(spec.inputs, (input: GraphPinSpec) => ({
     ...input,
     plug: mapObjVK(input.plug, (plug) => {
-      const { mergeId } = plug
-
-      return !mergeId || mergeId !== id ? plug : {}
+      return !plug.mergeId || mergeId !== plug.mergeId ? plug : {}
     }),
   }))
 
-  nextState.outputs = mapObjVK(state.outputs, (output: GraphPinSpec) => ({
+  spec.outputs = mapObjVK(spec.outputs, (output: GraphPinSpec) => ({
     ...output,
     plug: mapObjVK(output.plug, (plug) => {
-      const { mergeId } = plug
-
-      return !mergeId || mergeId !== id ? plug : {}
+      return !plug.mergeId || mergeId !== plug.mergeId ? plug : {}
     }),
   }))
 
-  if (
-    nextState.metadata &&
-    nextState.metadata.position &&
-    nextState.metadata.position.merge
-  ) {
-    delete nextState.metadata.position.merge[id]
+  if (spec.metadata && spec.metadata.position && spec.metadata.position.merge) {
+    delete spec.metadata.position.merge[mergeId]
   }
-
-  return nextState
 }
 
 export const mergeMerges = (
   { a, b }: { a: string; b: string },
-  state: GraphSpec
-): GraphSpec => {
-  const aMerge = state.merges![a]
-  const bMerge = state.merges![b]
-  state = dissocPath(state, ['merges', b]) as GraphSpec
-  state = deepSet(state, ['merges', a], deepMerge(aMerge, bMerge))
-  return state
+  spec: GraphSpec
+): void => {
+  const aMerge = spec.merges![a]
+  const bMerge = spec.merges![b]
+
+  deepDelete(spec, ['merges', b])
+  deepSet_(spec, ['merges', a], deepMerge(aMerge, bMerge))
 }
 
 export const _removePinFromMerge = (
   {
-    id,
+    mergeId,
     unitId,
     type,
     pinId,
-  }: { id: string; type: IO; unitId: string; pinId: string },
-  state: GraphSpec
-): GraphSpec => {
-  state = dissocPath(state, ['merges', id, unitId, type, pinId]) as GraphSpec
+  }: { mergeId: string; type: IO; unitId: string; pinId: string },
+  spec: GraphSpec
+): void => {
+  deepDelete(spec, ['merges', mergeId, unitId, type, pinId])
 
-  // remove type from unit if there are no more pins involved
-  if (isEmptyObject(deepGet(state, ['merges', id, unitId, type]))) {
-    state = dissocPath(state, ['merges', id, unitId, type]) as GraphSpec
+  if (
+    isEmptyObject(deepGetOrDefault(spec, ['merges', mergeId, unitId, type], {}))
+  ) {
+    deepDelete(spec, ['merges', mergeId, unitId, type])
   }
 
-  // remove unit from merge if there are no more pins involved
-  if (isEmptyObject(deepGet(state, ['merges', id, unitId]))) {
-    state = dissocPath(state, ['merges', id, unitId]) as GraphSpec
+  if (isEmptyObject(deepGetOrDefault(spec, ['merges', mergeId, unitId], {}))) {
+    deepDelete(spec, ['merges', mergeId, unitId])
   }
-
-  return state
 }
 
 export const removePinFromMerge = (
   {
-    id,
+    mergeId,
     unitId,
     type,
     pinId,
-  }: { id: string; type: IO; unitId: string; pinId: string },
-  state: GraphSpec
-): GraphSpec => {
-  state = _removePinFromMerge({ id, unitId, type, pinId }, state)
-
-  return state
+  }: { mergeId: string; type: IO; unitId: string; pinId: string },
+  spec: GraphSpec
+): void => {
+  _removePinFromMerge({ mergeId, unitId, type, pinId }, spec)
 }
 
 export const isPinMerged = (
-  state: GraphSpec,
+  spec: GraphSpec,
   id,
   unitId: string,
   type: IO,
   pinId: string
 ): boolean => {
   return !!(
-    state.merges![id] &&
-    state.merges![id][unitId] &&
-    state.merges![id][unitId][type] &&
-    state.merges![id][unitId][type]![pinId]
+    spec.merges![id] &&
+    spec.merges![id][unitId] &&
+    spec.merges![id][unitId][type] &&
+    spec.merges![id][unitId][type]![pinId]
   )
 }
 
 export const coverPinSet = (
   { pinId, type }: { pinId: string; type: IO },
-  state: GraphSpec
-): GraphSpec => dissocPath(state, [`${type}s`, pinId]) as GraphSpec
+  spec: GraphSpec
+): void => {
+  return deepDelete(spec, [`${type}s`, pinId])
+}
 
 export const coverPin = (
   {
@@ -357,37 +353,124 @@ export const coverPin = (
     type: IO
     subPinId: string
   },
-  state: GraphSpec
-): GraphSpec => {
-  return dissocPath(state, [`${type}s`, pinId, 'plug', subPinId]) as GraphSpec
+  spec: GraphSpec
+): void => {
+  deepDelete(spec, [`${type}s`, pinId, 'plug', subPinId])
 }
 
 export const exposePinSet = (
-  { pinId, type, pin }: { pinId: string; type: IO; pin: GraphPinSpec },
-  state: GraphSpec
-): GraphSpec => deepSet(state, [`${type}s`, pinId], pin)
+  { type, pinId, pinSpec }: { pinId: string; type: IO; pinSpec: GraphPinSpec },
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, [`${type}s`, pinId], pinSpec)
+}
+
+export const setUnitId = (
+  {
+    unitId,
+    newUnitId,
+    name,
+  }: { unitId: string; newUnitId: string; name: string },
+  spec: GraphSpec
+): void => {
+  const unit = spec.units[unitId]
+  const subComponent = deepGetOrDefault(
+    spec,
+    ['component', 'subComponents', unitId],
+    undefined
+  )
+  const parentId =
+    (subComponent && getSubComponentParentId(spec, unitId)) || null
+
+  const specClone = clone(spec)
+
+  const unitPlugs = findUnitPlugs(specClone, unitId)
+  const unitMerges = getUnitMergesSpec(specClone, unitId)
+
+  removeUnit({ unitId }, spec)
+  addUnit({ unitId: newUnitId, unit }, spec)
+
+  if (subComponent) {
+    removeSubComponent({ unitId }, spec.component)
+    setSubComponent({ unitId: newUnitId, subComponent }, spec.component)
+
+    if (parentId) {
+      const at = spec.component.subComponents[parentId].children.indexOf(unitId)
+
+      removeSubComponentChild(
+        { subComponentId: parentId, childId: unitId },
+        spec.component
+      )
+      insertSubComponentChild(
+        { parentId, childId: newUnitId, at },
+        spec.component
+      )
+    } else {
+      const at = spec.component.children.indexOf(unitId)
+
+      removeChild({ childId: unitId }, spec.component)
+      insertChild({ childId: newUnitId, at }, spec.component)
+    }
+  }
+
+  for (const mergeId in unitMerges) {
+    const mergeSpec = unitMerges[mergeId]
+
+    for (const _unitId in mergeSpec) {
+      if (_unitId === unitId) {
+        mergeSpec[newUnitId] = mergeSpec[_unitId]
+
+        delete mergeSpec[_unitId]
+      }
+    }
+
+    addMerge({ mergeId, mergeSpec }, spec)
+  }
+
+  forIOObjKV(
+    unitPlugs,
+    (type, pinId, { type: _type, pinId: _pinId, subPinId: _subPinId }) => {
+      const subPinSpec = deepGet(specClone, [
+        `${_type ?? type}s`,
+        _pinId,
+        'plug',
+        _subPinId,
+      ])
+
+      if (subPinSpec.unitId === unitId) {
+        subPinSpec.unitId = newUnitId
+      }
+
+      deepSet_(
+        spec,
+        [`${_type ?? type}s`, _pinId, 'plug', _subPinId],
+        subPinSpec
+      )
+    }
+  )
+}
 
 export const exposePin = (
   {
     pinId,
     type,
     subPinId,
-    subPin,
+    subPinSpec,
   }: {
     pinId: string
     type: IO
     subPinId: string
-    subPin: GraphSubPinSpec
+    subPinSpec: GraphSubPinSpec
   },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, [`${type}s`, pinId, 'plug', subPinId], subPin)
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
 }
 
 export const exposeInputSet = (
   { pinId, input }: { pinId: string; input: GraphPinSpec },
-  state: GraphSpec
-): GraphSpec => exposePinSet({ pinId, pin: input, type: 'input' }, state)
+  spec: GraphSpec
+): void => exposePinSet({ pinId, pinSpec: input, type: 'input' }, spec)
 
 export const exposeInput = (
   {
@@ -395,9 +478,9 @@ export const exposeInput = (
     subPinId,
     input,
   }: { pinId: string; subPinId: string; input: GraphSubPinSpec },
-  state: GraphSpec
-): GraphSpec => {
-  return exposePin({ pinId, subPinId, subPin: input, type: 'input' }, state)
+  spec: GraphSpec
+): void => {
+  return exposePin({ pinId, subPinId, subPinSpec: input, type: 'input' }, spec)
 }
 
 export const plugPin = (
@@ -412,9 +495,9 @@ export const plugPin = (
     subPinId: string
     subPinSpec: GraphSubPinSpec
   },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], subPinSpec)
 }
 
 export const unplugInput = (
@@ -425,9 +508,9 @@ export const unplugInput = (
     pinId: string
     subPinId: string
   },
-  state: GraphSpec
-): GraphSpec => {
-  return unplugPin({ type: 'input', pinId, subPinId }, state)
+  spec: GraphSpec
+): void => {
+  return unplugPin({ type: 'input', pinId, subPinId }, spec)
 }
 
 export const unplugOutput = (
@@ -438,9 +521,9 @@ export const unplugOutput = (
     pinId: string
     subPinId: string
   },
-  state: GraphSpec
-): GraphSpec => {
-  return unplugPin({ type: 'output', pinId, subPinId }, state)
+  spec: GraphSpec
+): void => {
+  return unplugPin({ type: 'output', pinId, subPinId }, spec)
 }
 
 export const unplugPin = (
@@ -453,15 +536,15 @@ export const unplugPin = (
     pinId: string
     subPinId: string
   },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, [`${type}s`, pinId, 'plug', subPinId], {})
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], {})
 }
 
 export const coverInputSet = (
   { pinId }: { pinId: string },
-  state: GraphSpec
-): GraphSpec => coverPinSet({ pinId, type: 'input' }, state)
+  spec: GraphSpec
+): void => coverPinSet({ pinId, type: 'input' }, spec)
 
 export const coverInput = (
   {
@@ -471,15 +554,15 @@ export const coverInput = (
     pinId: string
     subPinId: string
   },
-  state: GraphSpec
-): GraphSpec => {
-  return coverPin({ pinId, type: 'input', subPinId }, state)
+  spec: GraphSpec
+): void => {
+  return coverPin({ pinId, type: 'input', subPinId }, spec)
 }
 
 export const exposeOutputSet = (
   { pinId, output }: { pinId: string; output: GraphPinSpec },
-  state: GraphSpec
-): GraphSpec => exposePinSet({ pinId, pin: output, type: 'output' }, state)
+  spec: GraphSpec
+): void => exposePinSet({ pinId, pinSpec: output, type: 'output' }, spec)
 
 export const exposeOutput = (
   {
@@ -487,15 +570,18 @@ export const exposeOutput = (
     subPinId,
     output,
   }: { pinId: string; subPinId: string; output: GraphSubPinSpec },
-  state: GraphSpec
-): GraphSpec => {
-  return exposePin({ pinId, subPinId, subPin: output, type: 'output' }, state)
+  spec: GraphSpec
+): void => {
+  return exposePin(
+    { pinId, subPinId, subPinSpec: output, type: 'output' },
+    spec
+  )
 }
 
 export const coverOutputSet = (
   { pinId }: { pinId: string },
-  state: GraphSpec
-): GraphSpec => coverPinSet({ pinId, type: 'output' }, state)
+  spec: GraphSpec
+): void => coverPinSet({ pinId, type: 'output' }, spec)
 
 export const coverOutput = (
   {
@@ -505,66 +591,54 @@ export const coverOutput = (
     pinId: string
     subPinId: string
   },
-  state: GraphSpec
-): GraphSpec => {
-  return coverPin({ pinId, type: 'output', subPinId }, state)
-}
-
-export const setUnitErr = (
-  { unitId, err }: { unitId: string; err: string | null },
-  state: GraphSpec
-): GraphSpec => {
-  if (err !== null) {
-    return deepSet(state, ['units', unitId, 'err'], err)
-  } else {
-    return dissocPath(state, ['units', unitId, 'err']) as GraphSpec
-  }
-}
-
-export const setPinSetName = (
-  { type, id, name }: { type: IO; id: string; name: string },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, [`${type}s`, id, 'name'], name)
+  spec: GraphSpec
+): void => {
+  return coverPin({ pinId, type: 'output', subPinId }, spec)
 }
 
 export const setPinSetId = (
-  { type, id, newId }: { type: IO; id: string; newId: string },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(
-    dissocPath(state, [`${type}s`, id]),
-    [`${type}s`, newId],
-    deepGet(state, [`${type}s`, id])
-  )
+  { type, pinId, nextPinId }: { type: IO; pinId: string; nextPinId: string },
+  spec: GraphSpec
+): void => {
+  const pinSpec = deepGet(spec, [`${type}s`, pinId])
+
+  deepDelete(spec, [`${type}s`, pinId])
+  deepSet_(spec, [`${type}s`, nextPinId], pinSpec)
 }
 
 export const setPinSetFunctional = (
   { type, pinId, functional }: { type: IO; pinId: string; functional: boolean },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, [`${type}s`, pinId, 'functional'], functional)
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, [`${type}s`, pinId, 'functional'], functional)
+}
+
+export const setPinSetDataType = (
+  { type, pinId, dataType }: { type: IO; pinId: string; dataType: string },
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, [`${type}s`, pinId, 'type'], dataType)
 }
 
 export const setPinSetRef = (
   { type, pinId, ref }: { type: IO; pinId: string; ref: boolean },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, [`${type}s`, pinId, 'ref'], ref)
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, [`${type}s`, pinId, 'ref'], ref)
 }
 
 export const setUnitInput = (
   { id, name, data }: { id: string; name: string; data: string },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, ['units', id, 'input', name], data)
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, ['units', id, 'input', name], data)
 }
 
 export const setUnitOutput = (
   { id, name, data }: { id: string; name: string; data: string },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, ['units', id, 'output', name], data)
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, ['units', id, 'output', name], data)
 }
 
 export const setUnitPinData = (
@@ -574,35 +648,40 @@ export const setUnitPinData = (
     pinId,
     data,
   }: { unitId: string; type: IO; pinId: string; data: any },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, ['units', unitId, type, pinId, 'data'], data)
+  spec: GraphSpec,
+  specs: Specs,
+  classes: Classes
+): void => {
+  const dataRef = evaluateDataValue(data, specs, classes)
+
+  return deepSet_(spec, ['units', unitId, type, pinId, 'data'], dataRef)
 }
 
-export const setUnitInputConstant = (
+export const setUnitPinConstant = (
   {
     unitId,
+    type,
     pinId,
     constant,
-  }: { unitId: string; pinId: string; constant: boolean },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, ['units', unitId, 'input', pinId, 'constant'], constant)
+  }: { unitId: string; type: IO; pinId: string; constant: boolean },
+  spec: GraphSpec
+): void => {
+  return deepSet_(spec, ['units', unitId, type, pinId, 'constant'], constant)
 }
 
-export const setUnitOutputConstant = (
+export const setPinSetDefaultIgnored = (
   {
-    unitId,
+    type,
     pinId,
-    constant,
-  }: { unitId: string; pinId: string; constant: boolean },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(
-    state,
-    ['units', unitId, 'output', pinId, 'constant'],
-    constant
-  )
+    defaultIgnored,
+  }: {
+    type: IO
+    pinId: string
+    defaultIgnored: boolean
+  },
+  spec: GraphSpec
+) => {
+  deepSet_(spec, [`${type}s`, pinId, 'defaultIgnored'], defaultIgnored)
 }
 
 export const setUnitPinIgnored = (
@@ -617,39 +696,39 @@ export const setUnitPinIgnored = (
     pinId: string
     ignored: boolean
   },
-  state: GraphSpec
+  spec: GraphSpec
 ) => {
   if (ignored) {
-    forEachPinOnMerges(state.merges!, (id, _unitId, _type, _pinId) => {
+    forEachPinOnMerges(spec.merges ?? {}, (mergeId, _unitId, _type, _pinId) => {
       if (_unitId === unitId && _type === type && _pinId === pinId) {
-        state = removePinFromMerge({ id, unitId, type, pinId }, state)
+        removePinFromMerge({ mergeId, unitId, type, pinId }, spec)
       }
     })
 
     if (type === 'input') {
-      forEachValueKey(state.inputs, ({ plug }, id) => {
+      forEachValueKey(spec.inputs ?? {}, ({ plug }, _pinId) => {
         forEachValueKey(plug, (input, subPinId) => {
           if (input.unitId === unitId && input.pinId === pinId) {
-            state = unplugInput({ pinId: id, subPinId }, state)
+            unplugInput({ pinId: _pinId, subPinId }, spec)
           }
         })
       })
     }
 
     if (type === 'output') {
-      forEachValueKey(state.outputs, ({ plug }, id) => {
+      forEachValueKey(spec.outputs ?? {}, ({ plug }, _pinId) => {
         forEachValueKey(plug, (output, subPinId) => {
           if (output.unitId === unitId && output.pinId === pinId) {
-            state = unplugOutput({ pinId: id, subPinId }, state)
+            unplugOutput({ pinId: _pinId, subPinId }, spec)
           }
         })
       })
     }
   }
 
-  state = deepSet(state, ['units', unitId, type, pinId, 'ignored'], ignored)
+  deepSet_(spec, ['units', unitId, type, pinId, 'ignored'], ignored)
 
-  return state
+  return spec
 }
 
 export const setUnitOutputIgnored = (
@@ -658,9 +737,9 @@ export const setUnitOutputIgnored = (
     pinId,
     ignored,
   }: { unitId: string; pinId: string; ignored: boolean },
-  state: GraphSpec
-): GraphSpec => {
-  return setUnitPinIgnored({ unitId, type: 'output', pinId, ignored }, state)
+  spec: GraphSpec
+): void => {
+  setUnitPinIgnored({ unitId, type: 'output', pinId, ignored }, spec)
 }
 
 export const setUnitInputIgnored = (
@@ -669,47 +748,97 @@ export const setUnitInputIgnored = (
     pinId,
     ignored,
   }: { unitId: string; pinId: string; ignored: boolean },
-  state: GraphSpec
-): GraphSpec => {
-  return setUnitPinIgnored({ unitId, type: 'input', pinId, ignored }, state)
+  spec: GraphSpec
+): void => {
+  setUnitPinIgnored({ unitId, type: 'input', pinId, ignored }, spec)
 }
 
 export const removeUnitPinData = (
   { unitId, type, pinId }: { unitId: string; type: IO; pinId: string },
-  state: GraphSpec
-): GraphSpec => {
-  state = dissocPath(state, ['units', unitId, type, pinId, 'data']) as GraphSpec
-  return state
+  spec: GraphSpec
+): void => {
+  deepDelete(spec, ['units', unitId, type, pinId, 'data'])
 }
 
 export const setMetadata = (
   { path, value }: { path: string[]; value: any },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, path, value)
+  spec: GraphSpec
+): void => {
+  deepSet_(spec, path, value)
 }
 
 export const setUnitMetadata = (
   { id, path, value }: { id: string; path: string[]; value: any },
-  state: GraphSpec
-): GraphSpec => {
-  return deepSet(state, ['units', id, 'metadata', ...path], value)
+  spec: GraphSpec
+): void => {
+  deepSet_(spec, ['units', id, 'metadata', ...path], value)
+}
+
+export const setUnitSize = (
+  { unitId, width, height }: { unitId: string; width: number; height: number },
+  spec: GraphSpec
+): void => {
+  deepDeepMerge(spec, ['units', unitId, 'metadata', 'component'], {
+    width,
+    height,
+  })
+}
+
+export const setComponentSize = (
+  { width, height }: { width: number; height: number },
+  spec: GraphSpec
+): void => {
+  deepDeepMerge(spec, ['component'], {
+    defaultWidth: width,
+    defaultHeight: height,
+  })
+}
+
+export const setSubComponentSize = (
+  { unitId, width, height }: { unitId: string; width: number; height: number },
+  spec: GraphSpec
+): void => {
+  deepDeepMerge(spec, ['component', 'subComponents', unitId], {
+    width,
+    height,
+  })
+}
+
+export const renameUnitPin = (
+  {
+    unitId,
+    type,
+    pinId,
+    newPinId,
+  }: { unitId: string; type: IO; pinId: string; newPinId: string },
+  spec: GraphSpec
+) => {
+  const { units = {}, merges = {} } = spec
+
+  for (const unitId in units) {
+    const unit = units[unitId]
+
+    // TODO
+  }
+
+  forEachPinOnMerges(clone(merges), (mergeId, _unitId, _type, _pinId) => {
+    if (_unitId === unitId && _type === type && _pinId === pinId) {
+      deepDelete(spec, ['merges', mergeId, unitId, type, pinId])
+      deepSet_(spec, ['merges', mergeId, unitId, type, newPinId], true)
+    }
+  })
 }
 
 export const renameUnitInMerges = (
   unitId: string,
   unitMerges: GraphMergesSpec,
   newUnitId: string
-): GraphMergesSpec => {
-  const newUnitMerges: GraphMergesSpec = {}
-
-  forEachValueKey(unitMerges, (merge, mergeId) => {
-    newUnitMerges[mergeId] = {}
-
-    forEachValueKey(merge, (pins, _unitId) => {
-      newUnitMerges[mergeId][unitId === _unitId ? newUnitId : _unitId] = pins
+): void => {
+  forEachValueKey(clone(unitMerges), (merge, mergeId) => {
+    forEachValueKey(merge, (pins, mergeUnitId) => {
+      if (unitId === mergeUnitId) {
+        unitMerges[mergeId][newUnitId] = pins
+      }
     })
   })
-
-  return newUnitMerges
 }

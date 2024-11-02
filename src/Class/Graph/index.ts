@@ -52,7 +52,6 @@ import { evaluate } from '../../spec/evaluate'
 import { evaluateData, evaluateDataValue } from '../../spec/evaluateDataValue'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
-import { renameUnitInMerges } from '../../spec/reducers/spec'
 import {
   coverPin,
   coverPinSet,
@@ -60,6 +59,7 @@ import {
   plugPin,
   removePinFromMerge,
   removeUnitPinData,
+  renameUnitInMerges,
   renameUnitPin,
   setComponentSize,
   setPinSetDefaultIgnored,
@@ -70,7 +70,7 @@ import {
   setUnitPinData,
   setUnitSize,
   unplugPin,
-} from '../../spec/reducers/spec_'
+} from '../../spec/reducers/spec'
 import { resolveDataRef } from '../../spec/resolveDataValue'
 import { stringify } from '../../spec/stringify'
 import { unitFromBundleSpec } from '../../spec/unitFromSpec'
@@ -5395,10 +5395,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     name: string,
     specId: string
   ): void {
-    const unitMerges = clone(this.getUnitMergesSpec(unitId))
-    const unitPlugs = clone(this.getUnitPlugsSpec(unitId))
+    const newUnitMerges = clone(this.getUnitMergesSpec(unitId))
+    const newUnitPlugs = clone(this.getUnitPlugsSpec(unitId))
 
-    const newUnitMerges = renameUnitInMerges(unitId, unitMerges, newUnitId)
+    renameUnitInMerges(unitId, newUnitMerges, newUnitId)
 
     const unit = this.getUnit(unitId) as Graph
 
@@ -5413,7 +5413,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     this._addUnit(newUnitId, unit, null, null)
     this._addUnitMerges(newUnitMerges, false)
-    this._addUnitPlugs(newUnitId, unitPlugs, false)
+    this._addUnitPlugs(newUnitId, newUnitPlugs, false)
   }
 
   private _addUnitPlugs(
