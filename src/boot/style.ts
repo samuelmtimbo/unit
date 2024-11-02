@@ -161,6 +161,8 @@ export const style = {
     padding: '0',
     border: 'none',
     borderRadius: '0',
+    width: '32px',
+    height: '32px',
   },
   svg: {
     display: 'block',
