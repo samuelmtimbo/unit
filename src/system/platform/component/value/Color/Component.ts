@@ -7,6 +7,7 @@ export interface Props {
   className?: string
   style?: Dict<any>
   value?: string
+  attr?: Dict<string>
   disabled?: boolean
   tabIndex?: number
 }

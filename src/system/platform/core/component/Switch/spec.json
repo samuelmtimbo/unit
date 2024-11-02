@@ -35,6 +35,14 @@
         }
       }
     },
+    "attr": {
+      "plug": {
+        "0": {
+          "unitId": "mergedefault0",
+          "pinId": "a"
+        }
+      }
+    },
     "offColor": {
       "plug": {
         "0": {
@@ -376,7 +384,7 @@
         },
         "attr": {
           "ignored": false,
-          "data": "{tabIndex:-1}",
+          "data": "{tabindex:-1}",
           "metadata": {
             "position": {
               "x": 112,

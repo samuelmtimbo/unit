@@ -35,7 +35,7 @@ export default class SVGSVG extends Element<SVGSVGElement, Props> {
       viewBox,
       preserveAspectRatio = 'none',
       title,
-      tabIndex,
+      tabIndex = -1,
     } = $props
 
     const DEFAULT_STYLE = $system.style['svg']

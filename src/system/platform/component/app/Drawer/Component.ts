@@ -367,11 +367,9 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
 
       const { backgroundColor = COLOR_NONE } = style
 
-      // @ts-ignore
       this._knob.$slot['default'].$element.style.backgroundColor =
         backgroundColor
     } else if (prop === 'active') {
-      // this._setActive(current)
       this.setActive(current)
     } else if (prop === 'y') {
       this._y = current
@@ -381,7 +379,6 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
     } else if (prop === 'height') {
       this._resize()
     } else if (prop === 'hidden') {
-      // this._resize()
       this._translate()
     }
   }
@@ -437,16 +434,9 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
 
     this._active = active
 
-    // mergeStyle(this.frame.$element, {
-    //   pointerEvents: 'none',
-    // })
-
     this._animate_transform(true)
 
     setTimeout(() => {
-      // mergeStyle(this.frame.$element, {
-      //   pointerEvents: 'auto',
-      // })
       this.dispatchEvent('activated', {})
     }, ANIMATION_T_MS + 100)
   }

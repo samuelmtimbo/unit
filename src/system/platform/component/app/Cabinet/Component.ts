@@ -110,7 +110,11 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     if (prop === 'className') {
       this._cabinet.setProp('className', current)
     } else if (prop === 'style') {
-      this._cabinet.setProp('style', { ...DEFAULT_STYLE, ...current })
+      this._cabinet.setProp('style', {
+        ...DEFAULT_STYLE,
+        ...current,
+      })
+
       const { style = {} } = this.$props
       const { color = 'currentColor', backgroundColor = COLOR_NONE } = style
 
@@ -121,9 +125,8 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
           backgroundColor,
         })
       }
-    } else if (prop === 'disabled') {
-      // TODO
-    } else if (prop === 'hidden') {
+    }
+    if (prop === 'hidden') {
       if (this._hidden && !current) {
         this.show(false)
       } else if (!this._hidden && current) {
@@ -329,6 +332,7 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
         style: {
           backgroundColor,
           color,
+          pointerEvents: 'all',
         },
         shortcut,
       },
@@ -351,8 +355,6 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
 
         const { component } = drawer
 
-        component.$element.style.pointerEvents = `none`
-
         if (component) {
           this._fixed_drawer_node.add(drawerId)
 
@@ -371,12 +373,6 @@ export default class Cabinet extends Element<HTMLDivElement, Props> {
     drawer_component.addEventListener(
       makeCustomListener('activated', () => {
         // console.log('Cabinet', '_on_drawer_activated')
-
-        const drawer = this._drawer[drawerId]
-
-        const { component } = drawer
-
-        component.$element.style.pointerEvents = `auto`
       })
     )
     drawer_component.addEventListener(

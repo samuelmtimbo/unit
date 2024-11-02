@@ -190,6 +190,9 @@ export default class GUI extends Element<HTMLDivElement, Props> {
           borderRadius: '3px',
           boxSizing: 'border-box',
         },
+        attr: {
+          tabindex: '-1',
+        },
       },
       this.$system
     )
