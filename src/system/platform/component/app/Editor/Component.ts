@@ -19567,6 +19567,12 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _show_transcend = (animate: boolean) => {
     // console.log('Graph', '_show_transcend', animate, this._id)
 
+    if (this._force_trasncend_animation_false) {
+      this._force_trasncend_animation_false = false
+
+      animate = false
+    }
+
     if (this._transcend) {
       this._transcend.show(animate)
     }
@@ -24549,6 +24555,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _force_control_animation_false: boolean = false
+  private _force_trasncend_animation_false: boolean = false
 
   private _set_fullwindow_frame_off = (animate: boolean): void => {
     // console.log('Graph', '_set_fullwindow_frame_off')
@@ -29737,6 +29744,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } = this.$system
 
     this._force_control_animation_false = true
+    this._force_trasncend_animation_false = true
 
     if (animate && !this._fetching_bundle) {
       this._animate_enter(
@@ -29770,6 +29778,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     setTimeout(() => {
       this._force_control_animation_false = false
+      this._force_trasncend_animation_false = false
     }, 0)
   }
 
@@ -29831,6 +29840,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const { parent } = this.$props
 
       this._force_control_animation_false = true
+      this._force_trasncend_animation_false = true
 
       if (parent) {
         const { units, links, merges, data, inputs, outputs } =

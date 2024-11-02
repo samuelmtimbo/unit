@@ -77,10 +77,13 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
 
   private _pointer_down_id: number
 
+  private _hidden: boolean = true
+  private _down: boolean = false
+
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { style = {}, down } = this.$props
+    const { style = {}, down = false } = this.$props
 
     const icon = new Icon(
       {
@@ -88,7 +91,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
         style: {
           transform: down
             ? `rotate3d(1, 0, 0, 180deg)`
-            : `rotate3d(1, 0, 0, 180deg)`,
+            : `rotate3d(1, 0, 0, 0deg)`,
           width: '24px',
           height: '24px',
           alignSelf: 'end',
@@ -346,10 +349,6 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
 
     this._translate(this._x, this._y)
   }
-
-  private _hidden: boolean = false
-
-  private _down: boolean = false
 
   public up(animate: boolean = true) {
     // console.log('Transcend', 'up')
