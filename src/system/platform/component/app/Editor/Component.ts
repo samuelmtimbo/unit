@@ -1279,6 +1279,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           height: '100%',
           overflow: 'auto',
           zIndex: '0',
+          'white-space': 'normal',
         },
       }
     )

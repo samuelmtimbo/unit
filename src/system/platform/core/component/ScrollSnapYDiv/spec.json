@@ -31,7 +31,7 @@
     "style": {
       "plug": {
         "0": {
-          "unitId": "inheritscroll-snapy",
+          "unitId": "white-spacenowrap",
           "pinId": "style",
           "kind": "input"
         }
