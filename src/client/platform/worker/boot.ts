@@ -227,9 +227,10 @@ export function workerApi(): API {
       },
     },
     window: {
-      open: function (url: string, target: string, features: string): Window {
-        throw new MethodNotImplementedError()
-      },
+      HTMLElement: undefined,
+      SVGElement: undefined,
+      SVGSVGElement: undefined,
+      Text: undefined,
       localStorage: globalThis.localStorage,
       sessionStorage: globalThis.sessionStorage,
       AudioContext: globalThis.AudioContext,
@@ -246,6 +247,9 @@ export function workerApi(): API {
       Image: globalThis.Image,
       Audio: globalThis.Audio,
       OffscreenCanvas: globalThis.OffscreenCanvas,
+      open: function (url: string, target: string, features: string): Window {
+        throw new MethodNotImplementedError()
+      },
       getComputedStyle: function (element: Element): CSSStyleDeclaration {
         throw new MethodNotImplementedError()
       },

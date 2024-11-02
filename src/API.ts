@@ -228,6 +228,10 @@ export type API = {
   window: {
     localStorage: Storage
     sessionStorage: Storage
+    HTMLElement: typeof HTMLElement
+    SVGElement: typeof SVGElement
+    SVGSVGElement: typeof SVGSVGElement
+    Text: typeof Text
     Notification: typeof Notification
     AudioContext: typeof AudioContext
     OscillatorNode: typeof OscillatorNode

@@ -419,6 +419,7 @@ export class Component<
   setPointerCapture(pointerId: number): void {
     const {
       api: {
+        window: { Text },
         input: {
           pointer: { setPointerCapture },
         },
@@ -453,6 +454,12 @@ export class Component<
   }
 
   scroll(opt: ScrollOptions): void {
+    const {
+      api: {
+        window: { HTMLElement },
+      },
+    } = this.$system
+
     const leaf = this.getFirstRootLeaf()
 
     if (leaf && leaf.$element instanceof HTMLElement) {
@@ -461,6 +468,12 @@ export class Component<
   }
 
   scrollIntoView(opt: ScrollIntoViewOptions): void {
+    const {
+      api: {
+        window: { HTMLElement },
+      },
+    } = this.$system
+
     if (this.$slot['default'] === this) {
       if (this.$primitive) {
         if (this.$element instanceof HTMLElement) {
@@ -477,6 +490,12 @@ export class Component<
   }
 
   togglePopover() {
+    const {
+      api: {
+        window: { HTMLElement },
+      },
+    } = this.$system
+
     const firstLeaf = this.getFirstRootLeaf()
 
     if (firstLeaf.$element instanceof HTMLElement) {
@@ -489,6 +508,12 @@ export class Component<
   }
 
   hidePopover() {
+    const {
+      api: {
+        window: { HTMLElement },
+      },
+    } = this.$system
+
     const firstLeaf = this.getFirstRootLeaf()
 
     if (firstLeaf.$element instanceof HTMLElement) {
@@ -501,6 +526,12 @@ export class Component<
   }
 
   showPopover() {
+    const {
+      api: {
+        window: { HTMLElement },
+      },
+    } = this.$system
+
     const firstLeaf = this.getFirstRootLeaf()
 
     if (firstLeaf.$element instanceof HTMLElement) {
@@ -526,6 +557,7 @@ export class Component<
     const {
       foreground: { html },
       api: {
+        window: { HTMLElement },
         text: { measureText },
         document: { createElement },
         layout: { reflectChildrenTrait },
@@ -538,7 +570,8 @@ export class Component<
 
     while (
       hostTarget.isParent() ||
-      (hostTarget.$element as HTMLElement).style?.display === 'contents'
+      (hostTarget.$element instanceof HTMLElement && hostTarget.$element).style
+        .display === 'contents'
     ) {
       hostTarget = hostTarget.$slotParent
     }
@@ -713,6 +746,12 @@ export class Component<
 
   detach(host: string, opt: { animate?: boolean; prepend?: boolean }): void {
     // console.log('Component', 'detach', host, opt)
+
+    const {
+      api: {
+        window: { HTMLElement, SVGElement },
+      },
+    } = this.$system
 
     const { getLocalComponents } = this.$system
 
@@ -1097,6 +1136,12 @@ export class Component<
   }
 
   focus(options: FocusOptions | undefined = { preventScroll: true }) {
+    const {
+      api: {
+        window: { Text },
+      },
+    } = this.$system
+
     if (this.$slot['default'] === this) {
       if (this.$element instanceof Text) {
         return
@@ -1115,6 +1160,12 @@ export class Component<
   }
 
   blur() {
+    const {
+      api: {
+        window: { Text },
+      },
+    } = this.$system
+
     if (this.$slot['default'] === this) {
       if (this.$element instanceof Text) {
         return
@@ -1182,6 +1233,12 @@ export class Component<
   }
 
   getAnimatableBase(): Component<HTMLElement | SVGElement>[] {
+    const {
+      api: {
+        window: { Text },
+      },
+    } = this.$system
+
     const base = this.getRootBase()
 
     const root = []
@@ -1240,18 +1297,13 @@ export class Component<
   }
 
   getOffset(): Component {
-    let offset: Component = this
+    const {
+      api: {
+        window: { HTMLElement },
+      },
+    } = this.$system
 
-    // while (
-    //   offset &&
-    //   (!(offset.$element instanceof HTMLElement) ||
-    //     offset.$element.style.position === '' ||
-    //     offset.$element.style.position === 'contents') &&
-    //   offset.$element instanceof HTMLElement &&
-    //   offset.$element.style.display !== 'flex'
-    // ) {
-    //   offset = offset.$slotParent
-    // }
+    let offset: Component = this
 
     if (this.isSVG()) {
       return offset
@@ -1302,6 +1354,12 @@ export class Component<
   }
 
   getColor(): RGBA {
+    const {
+      api: {
+        window: { HTMLElement, SVGElement },
+      },
+    } = this.$system
+
     const defaultColor = () => {
       if (this.$slotParent) {
         return this.$slotParent.getColor()
@@ -1397,6 +1455,12 @@ export class Component<
   }
 
   isSVG(): boolean {
+    const {
+      api: {
+        window: { SVGElement, SVGSVGElement },
+      },
+    } = this.$system
+
     return (
       this.$element instanceof SVGElement &&
       !(this.$element instanceof SVGSVGElement)
@@ -1404,10 +1468,22 @@ export class Component<
   }
 
   isHTML(): boolean {
+    const {
+      api: {
+        window: { HTMLElement },
+      },
+    } = this.$system
+
     return this.$element instanceof HTMLElement
   }
 
   isText(): boolean {
+    const {
+      api: {
+        window: { Text },
+      },
+    } = this.$system
+
     return this.$element instanceof Text
   }
 
@@ -1512,6 +1588,12 @@ export class Component<
   }
 
   getBoundingClientRect(): Rect {
+    const {
+      api: {
+        window: { Text },
+      },
+    } = this.$system
+
     if (!this.$primitive) {
       throw new Error('cannot calculate position of multiple elements.')
     }
@@ -2373,7 +2455,17 @@ export class Component<
   }
 
   public isParent = (): boolean => {
-    return (this.$element as HTMLElement).classList?.contains('__parent')
+    const {
+      api: {
+        window: { HTMLElement },
+      },
+    } = this.$system
+
+    if (this.$element instanceof HTMLElement) {
+      return !!this.$element.classList?.contains('__parent')
+    }
+
+    return false
   }
 
   protected domCommitAppendChild(component: Component, at: number) {

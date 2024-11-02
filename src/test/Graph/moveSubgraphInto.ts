@@ -68,6 +68,8 @@ composition0.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -147,6 +149,8 @@ composition1.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -268,6 +272,8 @@ composition2.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -357,6 +363,8 @@ composition3.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -473,6 +481,8 @@ composition4.moveSubgraphInto(
     },
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -602,6 +612,8 @@ composition5.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -760,6 +772,8 @@ composition6.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -856,7 +870,9 @@ composition7.moveSubgraphInto(
   },
   {
     [UNIT_ID_DIV]: [UNIT_ID_DIV_0],
-  }
+  },
+  {},
+  {}
 )
 
 assert.equal(composition7.getUnitCount(), 1)
@@ -950,6 +966,8 @@ composition8.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -1042,6 +1060,8 @@ composition9.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -1154,6 +1174,8 @@ composition10.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -1273,6 +1295,8 @@ composition11.moveSubgraphInto(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -1425,6 +1449,8 @@ composition12.moveSubgraphInto(
     },
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -1546,6 +1572,8 @@ composition13.moveSubgraphInto(
     },
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -1642,6 +1670,8 @@ composition14.moveSubgraphInto(
     },
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -1722,6 +1752,8 @@ composition15.moveSubgraphInto(
   {},
   {},
   {},
+  {},
+  {},
   {}
 )
 
@@ -1746,6 +1778,8 @@ composition15.moveSubgraphInto(
     unit: {},
     plug: {},
   },
+  {},
+  {},
   {},
   {},
   {},

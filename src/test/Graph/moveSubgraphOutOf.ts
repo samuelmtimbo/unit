@@ -52,6 +52,8 @@ composition0.moveSubgraphOutOf(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -132,6 +134,8 @@ composition1.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -187,6 +191,8 @@ composition1.moveSubgraphOutOf(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -283,6 +289,8 @@ composition2.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -339,6 +347,8 @@ composition2.moveSubgraphOutOf(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -424,6 +434,8 @@ composition3.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -504,6 +516,8 @@ composition3.moveSubgraphOutOf(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -601,6 +615,8 @@ composition4.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -681,6 +697,8 @@ composition4.moveSubgraphOutOf(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -780,6 +798,8 @@ composition5.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -825,6 +845,8 @@ composition5.moveSubgraphOutOf(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -939,6 +961,8 @@ composition6.moveSubgraphInto(
     output: {},
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -989,6 +1013,8 @@ composition6.moveSubgraphOutOf(
     input: {},
     output: {},
   },
+  {},
+  {},
   {},
   {}
 )
@@ -1060,6 +1086,8 @@ composition7.moveSubgraphInto(
     },
   },
   {},
+  {},
+  {},
   {}
 )
 
@@ -1096,6 +1124,8 @@ composition7.moveSubgraphOutOf(
       },
     },
   },
+  {},
+  {},
   {},
   {}
 )

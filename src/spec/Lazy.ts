@@ -275,6 +275,8 @@ export function lazyFromSpec(
         nextPlugSpec,
         nextSubComponentParentMap,
         nextSubComponentChildrenMap,
+        nextSubComponentIndexMap,
+        nextUnitPinMergeMap,
       ]: G_MoveSubgraphIntoArgs
     ): void {
       this._ensure()
@@ -289,7 +291,9 @@ export function lazyFromSpec(
         nextMergePinId,
         nextPlugSpec,
         nextSubComponentParentMap,
-        nextSubComponentChildrenMap
+        nextSubComponentChildrenMap,
+        nextSubComponentIndexMap,
+        nextUnitPinMergeMap
       )
     }
 
@@ -396,6 +400,8 @@ export function lazyFromSpec(
         nextPlugSpec,
         nextSubComponentParentMap,
         nextSubComponentChildrenMap,
+        nextSubComponentIndexMap,
+        nextUnitPinMergeMap,
       ]: G_MoveSubgraphIntoArgs
     ): void {
       this._ensure()
@@ -410,7 +416,9 @@ export function lazyFromSpec(
         nextMergePinId,
         nextPlugSpec,
         nextSubComponentParentMap,
-        nextSubComponentChildrenMap
+        nextSubComponentChildrenMap,
+        nextSubComponentIndexMap,
+        nextUnitPinMergeMap
       )
     }
 

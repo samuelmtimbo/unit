@@ -95,7 +95,6 @@ export class Element<
   }
 
   onDisconnected() {
-    // console.log('Element', 'onDisconnected')
     this._element_unlisten()
   }
 

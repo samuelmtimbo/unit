@@ -12,7 +12,6 @@ export function webInit(
   const { document } = window
 
   const blurListener = () => {
-    // TODO
     // when window is blurred by a popup/alert as a result
     // of a "keydown", "keyup" will not be fired
     system.input.keyboard.pressed = []

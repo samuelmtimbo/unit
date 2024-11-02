@@ -7,6 +7,14 @@ export function webWindow(window: Window, opt: BootOpt): API['window'] {
   }
 
   const _window: API['window'] = {
+    // @ts-ignore
+    HTMLElement: window.HTMLElement,
+    // @ts-ignore
+    SVGElement: window.SVGElement,
+    // @ts-ignore
+    SVGSVGElement: window.SVGSVGElement,
+    // @ts-ignore
+    Text: window.Text,
     localStorage: window.localStorage,
     sessionStorage: window.sessionStorage,
     // @ts-ignore

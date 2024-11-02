@@ -1,6 +1,6 @@
 import * as assert from 'assert'
-import system from '../../script/build/worker/system'
 import { compatibleInterface } from '../../spec/compatibility'
+import { system } from '../util/system'
 
 assert(
   compatibleInterface(

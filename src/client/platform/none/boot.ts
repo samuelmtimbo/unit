@@ -227,9 +227,10 @@ export function noneApi(): API {
       },
     },
     window: {
-      open: function (url: string, target: string, features: string): Window {
-        throw new MethodNotImplementedError()
-      },
+      HTMLElement: undefined,
+      SVGElement: undefined,
+      SVGSVGElement: undefined,
+      Text: undefined,
       localStorage: undefined,
       sessionStorage: undefined,
       AudioContext: undefined,
@@ -246,6 +247,9 @@ export function noneApi(): API {
       Image: undefined,
       Audio: undefined,
       OffscreenCanvas: undefined,
+      open: function (url: string, target: string, features: string): Window {
+        throw new MethodNotImplementedError()
+      },
       getComputedStyle: function (element: Element): CSSStyleDeclaration {
         throw new MethodNotImplementedError()
       },

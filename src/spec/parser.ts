@@ -1796,19 +1796,6 @@ function _pathEqual(a: number[], b: number[]): boolean {
   return true
 }
 
-// TODO
-// f([], []) === 0
-// f([], [0]) === 1
-// f([], [0]) === 1
-// f([], [1]) === 2
-// f([0], [1]) === 1
-// f([1], [1]) === 0
-// f([1], [1, 0]) === 1 (?)
-// f([1], [1, 0, 0]) === 1 (?)
-function pathDistance(a: number[], b: number[]): number {
-  return 0
-}
-
 // Given a path and a direction, return the next path in preorder order traversal
 // f("[0, 1, 2]", [1], 1) === [2]
 // f("{ a: { b: "c" }, d: "f" }", [], 1) === [0]
@@ -1872,7 +1859,6 @@ export function getNextLeafPath(
   return _getNextLeafPath(tree, path, direction)
 }
 
-// TODO
 export function _getNextSiblingPath(
   tree: TreeNode,
   path: number[],
@@ -1880,11 +1866,6 @@ export function _getNextSiblingPath(
 ): number[] {
   return _getNextLeafPath(tree, path, direction)
 }
-
-// Here is an idea for the mechanics:
-// 1) Arrow key right or left -> go right or left
-// 2) Arrow down -> go lower level
-// 3) Arrow up -> go upper level
 
 export function getNextSiblingPath(
   value: string,

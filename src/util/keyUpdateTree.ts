@@ -371,7 +371,7 @@ export const _keyUpdateTree = (
   } else if (key === 'ArrowDown') {
     // TODO
   } else if (key === 'Tab') {
-    // TODO
+    //
   } else if (key === ',') {
     const parentPath = getParentPath(path)
 

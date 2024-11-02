@@ -47,7 +47,7 @@ self.addEventListener('install', (event) => {
     caches
       .open(CACHE)
       .then((cache) => {
-        return cache.addAll(dev ? [] : CACHE_LIST)
+        return cache.addAll(CACHE_LIST)
       })
       .then(() => {
         return self.skipWaiting()

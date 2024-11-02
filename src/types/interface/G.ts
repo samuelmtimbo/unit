@@ -50,8 +50,10 @@ export type G_MoveSubgraphIntoArgs = [
   GraphMoveSubGraphData['nextPinIdMap'],
   GraphMoveSubGraphData['nextMergePinId'],
   GraphMoveSubGraphData['nextPlugSpec'],
-  Dict<string | null>,
-  Dict<string[]>,
+  GraphMoveSubGraphData['nextSubComponentParentMap'],
+  GraphMoveSubGraphData['nextSubComponentChildrenMap'],
+  GraphMoveSubGraphData['nextSubComponentIndexMap'],
+  GraphMoveSubGraphData['nextUnitPinMergeMap'],
 ]
 
 export interface G<
