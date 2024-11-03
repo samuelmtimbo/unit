@@ -168,6 +168,10 @@ export const getSpecPinIcon = (
 ): string | null => {
   let pin_icon_name: string | null = null
 
+  if (isSelfPin(type, pinId)) {
+    return graph.metadata.icon
+  }
+
   const pin_spec = getPinSpec(graph, type, pinId)
 
   const { plug, icon } = pin_spec
