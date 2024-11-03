@@ -13753,6 +13753,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               this._set_datum_color(datum_node_id, mode_color, mode_link_color)
             }
           })
+        } else if (mode === 'add') {
+          this._for_each_unit_pin(unit_id, (pin_node_id) => {
+            if (
+              this._is_input_pin_node_id(pin_node_id) &&
+              this._is_link_pin_constant(pin_node_id)
+            ) {
+              const datum_node_id = this._get_pin_datum_node_id(pin_node_id)
+
+              if (datum_node_id) {
+                this._set_datum_color(datum_node_id, mode_color, mode_color)
+              }
+            }
+          })
         } else if (mode === 'data') {
           this._for_each_unit_pin(unit_id, (pin_node_id) => {
             const datum_node_id = this._get_pin_datum_node_id(pin_node_id)
