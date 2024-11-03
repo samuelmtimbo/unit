@@ -33,10 +33,10 @@ export default class SVGCircle extends SVGElement_<SVGCircleElement, Props> {
     this.$propHandler = {
       ...this.$propHandler,
       x: (x: number | undefined = 0) => {
-        this.$element.setAttribute('x', `${x}`)
+        this.$element.setAttribute('cx', `${x}`)
       },
       y: (y: number | undefined = 0) => {
-        this.$element.setAttribute('y', `${y}`)
+        this.$element.setAttribute('cy', `${y}`)
       },
       r: (r: number | undefined = 0) => {
         this.$element.setAttribute('r', `${r}`)

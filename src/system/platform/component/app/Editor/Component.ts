@@ -33729,14 +33729,14 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       } else {
         const screen_position = this._get_node_screen_position(unit_id)
         const all_selected_node_ids = this._get_all_selected_node_ids()
-        const long_press_collapse_stared = this._start_long_press_collapse(
+        const long_press_collapse_started = this._start_long_press_collapse(
           pointerId,
           unit_id,
           all_selected_node_ids,
           screen_position
         )
 
-        if (long_press_collapse_stared) {
+        if (long_press_collapse_started) {
           if (!this._drag_node_id[unit_id]) {
             this.__drag_start(unit_id, pointerId, clientX, clientY)
           }
