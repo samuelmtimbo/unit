@@ -88,11 +88,17 @@ export class Pin<T = any> extends $<PinEvents<T>> implements V<T>, PI<T> {
   }
 
   public invalidate() {
-    if (this._register !== undefined && !this._invalid) {
-      this._invalid = true
-      this._idle = true
+    const data = this._register
 
-      this.emit('invalid')
+    if (data !== undefined) {
+      this._disembody(data)
+
+      if (!this._invalid) {
+        this._invalid = true
+        this._idle = true
+
+        this.emit('invalid')
+      }
     }
   }
 

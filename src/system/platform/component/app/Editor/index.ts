@@ -109,8 +109,6 @@ export default class Editor<T> extends Element_<I<T>, O<T>> {
         if (this._graph === this._fallback_graph) {
           this._fallback()
         }
-
-        this._input.graph.pull()
       })
 
       this._output.graph.push(data)
