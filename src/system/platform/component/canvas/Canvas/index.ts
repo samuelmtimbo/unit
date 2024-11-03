@@ -214,14 +214,18 @@ export default class Canvas
 
     switch (name) {
       case 'width':
-        if (this._canvas) {
-          this._canvas.width = data
+        if (typeof data === 'number') {
+          if (this._canvas) {
+            this._canvas.width = data
+          }
         }
 
         break
       case 'height':
-        if (this._canvas) {
-          this._canvas.height = data
+        if (typeof data === 'number') {
+          if (this._canvas) {
+            this._canvas.height = data
+          }
         }
 
         break
