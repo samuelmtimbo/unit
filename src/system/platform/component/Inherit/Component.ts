@@ -72,6 +72,10 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
 
       const first_leaf_index = this._base.indexOf(first_leaf_comp)
 
+      if (first_leaf_index > -1) {
+        return
+      }
+
       for (let i = 0; i < base_length; i++) {
         const j = first_leaf_index + i
 
