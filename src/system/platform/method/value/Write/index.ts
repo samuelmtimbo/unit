@@ -35,9 +35,12 @@ export default class Write<T> extends Functional<I<T>, O<T>> {
   async f({ value, data }: I<T>, done: Done<O<T>>) {
     try {
       await value.write(data)
-      done({ data })
     } catch (err) {
       done(undefined, err.message)
+
+      return
     }
+
+    done({ data })
   }
 }
