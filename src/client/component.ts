@@ -3192,6 +3192,17 @@ export class Component<
     this.memRemoveParentRootAt(component, slotName, at, _at)
   }
 
+  public memRemoveParentRoot(
+    component: Component,
+    slotParent?: Component
+  ): void {
+    const at = this.$parentRoot.indexOf(component)
+    const at_ = this.$mountParentRoot.indexOf(component)
+    const slotName = this.$parentRootSlotName[at]
+
+    this.memRemoveParentRootAt(component, slotName, at, at_)
+  }
+
   public memRemoveParentRootAt(
     component: Component,
     slotName: string,

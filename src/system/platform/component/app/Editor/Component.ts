@@ -59767,7 +59767,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else if (prop === 'graph') {
       const { animated } = this.$system
 
-      const { graph: pod, animate = animated, component } = this.$props
+      const { graph, animate = animated, component } = this.$props
 
       if (this._is_fullwindow) {
         this._leave_all_fullwindow_sub_component(false)
@@ -59779,17 +59779,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._component.getSubComponentParent(subComponentId)
 
         if (subComponentParent) {
-          subComponentParent.removeParentRoot(subComponent)
+          subComponentParent.memRemoveParentRoot(subComponent)
         } else {
-          this._component.removeRoot(subComponent)
+          this._component.memRemoveRoot(subComponent)
         }
 
         this._component.removeSubComponent(subComponentId)
+
+        subComponent.destroy()
       }
 
       this._plunk_pod()
 
-      this._pod = pod
+      this._pod = graph
 
       this._reset_spec()
 
