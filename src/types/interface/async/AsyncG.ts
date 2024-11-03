@@ -200,7 +200,7 @@ export const AsyncGGet = (graph: Graph): $G_G => {
       forEachValueKey(units, (unit: Unit, unitId: Key) => {
         const unitPinData = unit.getPinsData()
 
-        const _unitPinData = stringifyPinData(unitPinData)
+        const _unitPinData = stringifyPinData(unitPinData, true)
 
         pinData[unitId] = _unitPinData
       })

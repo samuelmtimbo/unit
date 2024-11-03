@@ -14,7 +14,7 @@ export function watchPinEvent<T>(
 
   const listener = (data: any) => {
     if (data !== undefined) {
-      data = stringify(data)
+      data = stringify(data, true)
     }
 
     callback({

@@ -24,7 +24,7 @@ export function watchRefPinEvent(
   // console.log(event, type, pin)
 
   const listener = (_data: $_) => {
-    const data = stringify(_data)
+    const data = stringify(_data, true)
 
     callback({
       type,
