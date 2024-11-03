@@ -4300,18 +4300,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    if (!parent) {
-      if (this._transcend) {
-        if ($disabled) {
-          this._hide_transcend(false)
-        } else {
-          if (this._focused) {
-            this._show_transcend(false)
-          }
-        }
-      }
-    }
-
     if (!this._init) {
       this._init = true
 
@@ -21767,6 +21755,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_blur = (event) => {
     // console.log('Graph', '_on_blur', this._id)
 
+    const { container } = this.$props
+
     this._focused = false
 
     if (this._search_to_be_focused_by_click) {
@@ -21800,7 +21790,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         this._disable(hide)
 
-        if (this._frame && this._frame.$element.contains(relatedTarget)) {
+        if (container && container.$element.contains(relatedTarget)) {
           return
         }
 
@@ -24662,21 +24652,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       }
     }
 
-    if (!this._frame_out) {
-      container.focus()
-
-      this._unlisten_fullwindow_escape = addListener(
-        container,
-        makeKeydownListener((event) => {
-          const { key } = event
-
-          if (key === 'Escape') {
-            this._leave_all_fullwindow(_animate)
-          }
-        })
-      )
-    }
-
     const ordered_sub_component_ids =
       this._order_sub_component_ids(sub_component_ids)
 
@@ -24691,6 +24666,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._transcend) {
         this._transcend.down(_animate)
       }
+    }
+
+    if (!this._frame_out) {
+      container.focus()
+
+      this._unlisten_fullwindow_escape = addListener(
+        container,
+        makeKeydownListener((event) => {
+          const { key } = event
+
+          if (key === 'Escape') {
+            this._leave_all_fullwindow(_animate)
+          }
+        })
+      )
     }
 
     const was_focused = this._focused
