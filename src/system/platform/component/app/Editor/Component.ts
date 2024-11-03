@@ -43735,7 +43735,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           const datum_node_id = this._pin_to_datum[pin_node_id]
 
           if (datum_node_id) {
-            this._refresh_node_layer(datum_node_id)
+            this.__descend_node(datum_node_id)
           }
         }
 
