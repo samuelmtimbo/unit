@@ -1021,11 +1021,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         enterFullwindow: this._enter_fullwindow,
         leaveFullwindow: this._leave_fullwindow,
       })
-    }
-
-    editor =
-      editor ||
-      new Editor_(
+    } else {
+      editor = new Editor_(
         {
           className,
           graph: this._pod,
@@ -1058,6 +1055,9 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         this.$system
       )
 
+      editor.enter(false, {}, true)
+    }
+
     this._editor = editor
 
     this._editor.addEventListeners([
@@ -1089,10 +1089,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       }),
     ])
 
-    this._editor.enter(false, {}, true)
-
     this._reset_frame()
-
     this._listen_graph()
 
     background =
