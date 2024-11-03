@@ -29,6 +29,7 @@ export interface Props {
   className?: string
   style?: Dict<string>
   down?: boolean
+  hidden?: boolean
 }
 
 export const TRANSCEND_WIDTH = 33
@@ -83,7 +84,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { style = {}, down = false } = this.$props
+    const { style = {}, down = false, hidden = true } = this.$props
 
     const icon = new Icon(
       {
@@ -102,7 +103,11 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
     )
     this._icon = icon
 
+    this._hidden = hidden
+
     const left = this._get_style_left()
+
+    this._y = this._hidden ? -TRANSCEND_HEIGHT : 0
 
     const container = new Div(
       {
@@ -110,6 +115,7 @@ export default class Transcend extends Element<HTMLDivElement, Props> {
           ...DEFAULT_STYLE,
           ...style,
           left,
+          y: `${-TRANSCEND_HEIGHT}px`,
         },
         title: 'transcend',
       },
