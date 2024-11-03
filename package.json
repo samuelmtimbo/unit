@@ -1,6 +1,6 @@
 {
   "name": "@_unit/unit",
-  "version": "1.0.51",
+  "version": "1.0.52",
   "main": "lib/index.js",
   "bin": "./lib/server/index.js",
   "repository": "git@github.com:samuelmtimbo/unit.git",
