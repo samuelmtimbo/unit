@@ -54,6 +54,10 @@ export class $<
   }
 
   destroy() {
+    if (this.__done) {
+      return
+    }
+
     this.__done = true
 
     this.emit('destroy', [])
