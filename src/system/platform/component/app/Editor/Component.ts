@@ -948,7 +948,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _type_cache: TypeTreeMap = {}
 
   constructor($props: Props, $system: System) {
-    super($props, $system)
+    super({ ...defaultProps, ...$props }, $system)
 
     const {
       graph,
@@ -958,7 +958,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       zoom,
       config,
       controls = true,
-      animate = true,
+      animate,
       fullwindow,
       fallback,
       container,
@@ -2643,7 +2643,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _linked_data_node: GraphSimNodes = {}
   private _visible_linked_data_node: GraphSimNodes = {}
   private _visible_unlinked_data_node: GraphSimNodes = {}
-  private _unlinked_data_node: GraphSimNodes = {} // TODO
+  private _unlinked_data_node: GraphSimNodes = {}
   private _empty_merge_node: GraphSimNodes = {}
 
   private _empty_merge_node_count: number = 0
@@ -3170,10 +3170,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _registry: Registry
 
   constructor($props: _Props, $system: System, $element?: HTMLDivElement) {
-    super({ ...defaultProps, ...$props }, $system)
+    super($props, $system)
 
     let {
-      parent,
       style = {},
       component,
       disabled = true,
@@ -3185,7 +3184,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       frame,
       specs,
       registry,
-      typeCache,
     } = this.$props as _Props & DefaultProps
 
     component = component ?? parentComponent({}, this.$system)
@@ -18244,8 +18242,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
               pin_position,
               layout_position
             )
-          } else if (mode === 'data') {
-            // TODO
           }
         }
 
@@ -21492,7 +21488,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     this._tree_layout = false
 
-    this._animate_zoom_opacity(1)
+    if (animate) {
+      this._animate_zoom_opacity(1)
+    } else {
+      this._zoom_comp._root.$element.style.opacity = `${1}`
+    }
 
     this._layout_comp.$element.style.pointerEvents = 'none'
 
@@ -21522,36 +21522,30 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
       const children = this._spec_get_sub_component_children(sub_component_id)
 
-      if (
-        !this._layout_path.includes(sub_component_id) &&
-        children.length > 0
-      ) {
-        if (!this._animating_sub_component_base_id.has(sub_component_id)) {
-          for (const child_id of children) {
-            this._measure_sub_component_base(child_id)
+      if (animate) {
+        if (!this._layout_path.includes(sub_component_id)) {
+          if (!this._animating_sub_component_base_id.has(sub_component_id)) {
+            for (const child_id of children) {
+              this._measure_sub_component_base(child_id)
+            }
           }
         }
-      }
 
-      if (!parent_id || this._layout_path.includes(parent_id)) {
-        this._measure_sub_component_base(sub_component_id)
-      }
-    }
+        if (!parent_id || this._layout_path.includes(parent_id)) {
+          this._measure_sub_component_base(sub_component_id)
+        }
 
-    for (const sub_component_id in this._component.$subComponent) {
-      const parent_id = this._spec_get_sub_component_parent_id(sub_component_id)
-      const children = this._spec_get_sub_component_children(sub_component_id)
+        if (!parent_id || this._layout_path.includes(parent_id)) {
+          const animating_sub_component =
+            animating_sub_component_set.has(sub_component_id)
 
-      if (!parent_id || this._layout_path.includes(parent_id)) {
-        const animating_sub_component =
-          animating_sub_component_set.has(sub_component_id)
+          const fullwindow_sub_component =
+            this._is_sub_component_fullwindow(sub_component_id)
 
-        const fullwindow_sub_component =
-          this._is_sub_component_fullwindow(sub_component_id)
-
-        if (!animating_sub_component && !fullwindow_sub_component) {
-          this._leave_sub_component_frame(sub_component_id)
-          this._remove_sub_component_root_base(sub_component_id)
+          if (!animating_sub_component && !fullwindow_sub_component) {
+            this._leave_sub_component_frame(sub_component_id)
+            this._remove_sub_component_root_base(sub_component_id)
+          }
         }
       }
 
@@ -21580,12 +21574,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     if (animate) {
       this._animate_leave_tree_layout()
-    } else {
-      // TODO
-      // const children = this._get_component_spec_children()
-      // for (const sub_component_id of children) {
-      //   this._layout_uncollapse_sub_component(sub_component_id)
-      // }
     }
 
     this._set_minimap_to_graph()
