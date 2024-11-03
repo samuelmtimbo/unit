@@ -28957,6 +28957,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         (this._is_merge_node_id(pin_node_id) &&
           !this._is_output_only_merge(pin_node_id))
       ) {
+        if (this._is_link_pin_ref(pin_node_id)) {
+          return
+        }
+
         if (this._is_node_selected(pin_node_id)) {
           this.deselect_node(pin_node_id)
         }
