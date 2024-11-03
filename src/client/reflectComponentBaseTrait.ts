@@ -58,9 +58,7 @@ export const expandSlot = (
     sub = sub.$parentChildren[i] ?? sub.$root[i]
 
     if (!sub) {
-      sub = slot
-
-      break
+      return []
     }
 
     sub = sub.getFirstRootLeaf()
