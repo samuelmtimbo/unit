@@ -85,7 +85,6 @@ export function boot(
     path,
     parent,
     emitter,
-    animated: true,
     root: null,
     theme,
     customEvent,

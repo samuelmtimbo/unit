@@ -37,6 +37,7 @@ import Search from '../Search/Component'
 export interface Props {
   className?: string
   style?: Dict<string>
+  animated?: boolean
 }
 
 export const DEFAULT_UNIT_ID = 'unit'
@@ -73,7 +74,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { className, style = {} } = this.$props
+    const { className, style = {}, animated = true } = this.$props
 
     const pointerEvents = style.pointerEvents === 'none' ? 'inherit' : 'all'
 
@@ -160,11 +161,7 @@ export default class GUI extends Element<HTMLDivElement, Props> {
         sliderStyle: {
           borderRadius: '1.5px',
           cursor: 'pointer',
-          transition: ifLinearTransition(
-            this.$system.animated,
-            'left',
-            'background-color'
-          ),
+          transition: ifLinearTransition(animated, 'left', 'background-color'),
         },
       }
     )

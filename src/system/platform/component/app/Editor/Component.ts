@@ -874,31 +874,34 @@ const DEFAULT_STYLE = {
   touchAction: 'none',
 }
 
+export type Config_ = {
+  zoom: Zoom & {
+    minZoom: number
+    maxZoom: number
+  }
+}
+
 export type Config = {
-  enable?: {
-    geometryOverride?: boolean
-    plugIcons?: boolean
-    unlinkTake?: boolean
-  }
-  disable?: {
-    dataCreate?: boolean
-    dataEdit?: boolean
-    dataUnlink?: boolean
-    dataSelect?: boolean
-    dataCompatible?: boolean
-    drawing?: boolean
-    enterGraph?: boolean
-    highlightCompatible?: boolean
-    plugReverse?: boolean
-    plugUnit?: boolean
-    multiInputMerge?: boolean
-    edgeDrag?: boolean
-  }
-  hide?: {
-    plugNames?: boolean
-    unitNames?: boolean
-    pinNames?: boolean
-  }
+  geometryOverride: boolean
+  plugIcons: boolean
+  unlinkTake: boolean
+  dataCreate: boolean
+  dataEdit: boolean
+  dataUnlink: boolean
+  dataSelect: boolean
+  dataCompatible: boolean
+  drawing: boolean
+  enterGraph: boolean
+  highlightCompatible: boolean
+  plugReverse: boolean
+  plugUnit: boolean
+  multiInputMerge: boolean
+  edgeDrag: boolean
+  animate: boolean
+  zoom: boolean | Partial<Config_['zoom']>
+  plugNames: boolean
+  unitNames: boolean
+  pinNames: boolean
 }
 
 export interface Props {
@@ -947,7 +950,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
   private _type_cache: TypeTreeMap = {}
 
   constructor($props: Props, $system: System) {
-    super({ ...defaultProps, ...$props }, $system)
+    super(deepMerge(defaultProps, $props), $system)
 
     const {
       graph,
@@ -961,7 +964,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
       fullwindow,
       fallback,
       container,
-    } = $props
+    } = this.$props
 
     let { component, editor, transcend, background, root } = $props
 
@@ -1028,7 +1031,6 @@ export default class Editor extends Element<HTMLDivElement, Props> {
           frame: this._frame,
           container: this._fallback_frame_container,
           component: this._component,
-          animate,
           zoom,
           fullwindow,
           config,
@@ -1363,8 +1365,8 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     // console.log('Graph', '_on_transcend')
 
     const { specs } = this.$system
-
     const { $width, $height } = this.$context
+    const { config } = this.$props
 
     const id = newSpecId(specs)
 
@@ -1540,6 +1542,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         frame: this._fallback_frame,
         specs: this._specs,
         typeCache: this._type_cache,
+        config,
         hasSpec: this._has_spec,
         emptySpec: this._empty_spec,
         getSpec: this._get_spec,
@@ -1752,7 +1755,7 @@ export interface AreaOpt {
   style?: Dict<string>
 }
 
-export interface _Props extends R {
+export interface Props_ extends R {
   className?: string
   style?: Dict<string>
   disabled?: boolean
@@ -1763,19 +1766,13 @@ export interface _Props extends R {
   frame?: Component<HTMLElement>
   container: Component<HTMLElement>
   frameOut?: boolean
-  zoomable?: boolean
-  minZoom?: number
-  maxZoom?: number
-  zoom?: Zoom
-  zoomTranslate?: boolean
-  zoomDraggable?: boolean
-  animate?: boolean
   fork?: boolean
   bubble?: boolean
   specs?: Specs
   registry?: Registry
   typeCache?: TypeTreeInterfaceCache
   config?: Config
+  zoom?: Zoom
   dispatchEvent: (type: string, detail: any, bubbles: boolean) => void
   enterFullwindow: () => void
   leaveFullwindow: () => void
@@ -1783,22 +1780,39 @@ export interface _Props extends R {
 
 export interface DefaultProps {
   style: Dict<string>
-  zoomable: boolean
-  minZoom: number
-  maxZoom: number
-  zoomTranslate: boolean
-  zoomDraggable: boolean
-  animate: boolean
+  config: Omit<Config, 'zoom'> & Config_
 }
 
 const defaultProps: DefaultProps = {
   style: {},
-  zoomable: true,
-  minZoom: 1,
-  maxZoom: 6,
-  zoomDraggable: true,
-  zoomTranslate: true,
-  animate: true,
+  config: {
+    zoom: {
+      x: 0,
+      y: 0,
+      z: 1,
+      minZoom: 1,
+      maxZoom: 6,
+    },
+    animate: true,
+    geometryOverride: false,
+    plugIcons: false,
+    unlinkTake: false,
+    dataCreate: true,
+    dataEdit: true,
+    dataUnlink: true,
+    dataSelect: true,
+    dataCompatible: true,
+    drawing: true,
+    enterGraph: true,
+    highlightCompatible: true,
+    plugReverse: true,
+    plugUnit: true,
+    multiInputMerge: true,
+    edgeDrag: true,
+    plugNames: true,
+    unitNames: true,
+    pinNames: true,
+  },
 }
 
 // zoom
@@ -2414,7 +2428,7 @@ export type LayoutLayer = {
   child_foreground: Div
 }
 
-export class Editor_ extends Element<HTMLDivElement, _Props> {
+export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _spec: GraphSpec = emptyGraphSpec()
 
   private _disabled: boolean = true
@@ -3102,24 +3116,26 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _refresh_config = (): void => {
-    const { config: { hide } = {} } = this.$props
+    const {
+      config: { unitNames, pinNames },
+    } = this.$props
 
     for (const unit_id in this._unit_node) {
       const unit_core = this._core[unit_id]
 
-      unit_core.$props.style.visibility = hide?.unitNames ? 'hidden' : 'visible'
+      unit_core.$props.style.visibility = unitNames ? 'visible' : 'hidden'
     }
 
     for (const pin_node_id in this._pin_name) {
       const pin_name = this._pin_name[pin_node_id]
 
-      pin_name.$props.style.visibility = hide?.pinNames ? 'hidden' : 'visible'
+      pin_name.$props.style.visibility = pinNames ? 'visible' : 'hidden'
     }
 
     for (const ext_plug_node_id in this._exposed_ext_node) {
       const ext_name = this._ext_pin_name[ext_plug_node_id]
 
-      ext_name.$props.style.visibility = hide?.unitNames ? 'hidden' : 'visible'
+      ext_name.$props.style.visibility = unitNames ? 'visible' : 'hidden'
     }
   }
 
@@ -3168,7 +3184,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
   private _registry: Registry
 
-  constructor($props: _Props, $system: System, $element?: HTMLDivElement) {
+  constructor($props: Props_, $system: System, $element?: HTMLDivElement) {
     super($props, $system)
 
     let {
@@ -3177,13 +3193,13 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       disabled = true,
       frameOut,
       fullwindow,
-      zoom,
-      animate,
       graph: pod,
       frame,
       specs,
       registry,
-    } = this.$props as _Props & DefaultProps
+    } = this.$props as Props_ & DefaultProps
+
+    const { animate, zoom } = this._config()
 
     component = component ?? parentComponent({}, this.$system)
 
@@ -3231,7 +3247,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this.$system
     )
     this._zoom_comp = zoom_comp
-
     const zoom_comp_alt = new Zoom_(
       {
         className: 'graph-zoom-alt',
@@ -4021,10 +4036,34 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     this._set_units_position(spec.units)
   }
 
+  private _config = (): Omit<Config, 'zoom'> & Config_ => {
+    const { config, zoom } = this.$props
+
+    return {
+      ...config,
+      ...{
+        zoom:
+          zoom || typeof config.zoom === 'boolean'
+            ? config.zoom
+              ? defaultProps.config.zoom
+              : {
+                  x: this._zoom.x,
+                  y: this._zoom.y,
+                  z: this._zoom.z,
+                  maxZoom: this._zoom.z,
+                  minZoom: this._zoom.z,
+                }
+            : deepMerge(defaultProps.config.zoom, config.zoom),
+      },
+    } as Omit<Config, 'zoom'> & Config_
+  }
+
   private _disable = (hide?: boolean): void => {
     // console.log('Graph', '_disable')
 
-    hide = hide ?? this.$props.animate
+    const { animate } = this._config()
+
+    hide = hide ?? animate
 
     if (!this._disabled) {
       this._disabled = true
@@ -4238,7 +4277,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     // console.log('Graph', 'onMount', this._id)
 
     const { $width, $height, $disabled } = this.$context
-    const { parent, animate } = this.$props
+
+    const { animate } = this._config()
 
     this._disable_control_lock()
 
@@ -5406,7 +5446,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _reset(spec: GraphSpec) {
     const { classes } = this.$system
 
-    const { zoom = clone(ZOOM_IDENTITY), specs } = this.$props
+    const { specs } = this.$props
+
+    const { zoom } = this._config()
 
     if (this._prevent_next_reset) {
       return
@@ -5898,7 +5940,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     nodes: Dict<GraphSimNode>,
     preventAnimation?: boolean
   ) => {
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     const center = this.get_nodes_bounding_rect_center(nodes)
 
@@ -7182,7 +7224,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           left: `50%`,
           top: 'calc(100% + 3px)',
           transform: `translateX(-50%)`,
-          visibility: config?.hide?.unitNames ? 'hidden' : 'visible',
+          visibility: config?.unitNames ? 'visible' : 'hidden',
           maxWidth:
             (UNIT_NAME_MAX_CHAR_LINE * UNIT_CORE_NAME_FONT_SIZE) / 2 + 'px',
           ...userSelect('none'),
@@ -7584,7 +7626,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _sim_add_layout_core_children_counter = (unit_id: string): void => {
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     const layout_core = this._layout_core[unit_id]
 
@@ -7902,7 +7944,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _move_all_layout_node_target_position = (
     parent_id: string | null
   ) => {
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     if (animate) {
       this._animate_all_layout_layer_node(parent_id)
@@ -9276,7 +9318,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   position
     // )
 
-    const { config = {} } = this.$props
+    const { config } = this.$props
 
     const ext_node_id = getExtNodeId(type, pin_id, sub_pin_id)
     const int_node_id = getIntNodeId(type, pin_id, sub_pin_id)
@@ -9367,9 +9409,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { x, y } = position.ext || fallback_position
 
-    const r = config?.enable?.geometryOverride
-      ? metadata.r ?? PIN_RADIUS
-      : PIN_RADIUS
+    const r = config?.geometryOverride ? metadata.r ?? PIN_RADIUS : PIN_RADIUS
 
     const width = 2 * r
     const height = 2 * r
@@ -9483,7 +9523,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         ...userSelect('inherit'),
         pointerEvents: 'none',
         opacity: `${opacity}`,
-        visibility: config?.hide?.plugNames ? 'hidden' : 'visible',
+        visibility: config?.plugNames ? 'visible' : 'hidden',
       },
       name: pin_id,
     })
@@ -11201,7 +11241,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       r,
       style: {
         color: this._theme.pin_text,
-        visibility: config?.hide?.pinNames ? 'hidden' : 'visible',
+        visibility: config?.pinNames ? 'visible' : 'hidden',
         opacity,
       },
       name: pin_id,
@@ -11431,9 +11471,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const pin_link_text_hidden = !merged
     const pin_link_stroke_dash_array = constant ? 3 : 0
     const pin_link_stroke = stroke
-    const pin_link_text_visibility = config?.hide?.pinNames
-      ? 'hidden'
-      : 'visible'
+    const pin_link_text_visibility = config?.pinNames ? 'visible' : 'hidden'
     const pin_link_stroke_width = ref || memory || init ? 1 : 3
     const pin_link_opacity = ignored
       ? this._should_hide_ignored()
@@ -15836,7 +15874,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _set_zoom = (zoom: Zoom) => {
     // console.log('Graph', '_set_zoom', zoom)
 
-    const { maxZoom = defaultProps.maxZoom } = this.$props
+    const {
+      zoom: { maxZoom, minZoom },
+    } = this._config()
 
     const { $height, $width } = this.$context
 
@@ -17243,7 +17283,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { fork } = this.$props
 
-    const { specs, bubble, animate } = this.$props
+    const { specs, bubble } = this.$props
+
+    const { animate } = this._config()
 
     this._search_fallback_position = this._world_screen_center()
 
@@ -17570,7 +17612,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _on_search_list_shown = () => {
     // console.log('Graph', '_on_search_list_shown')
 
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     this._search_hidden = false
 
@@ -18566,7 +18608,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _leave_fullwindow = (_animate: boolean) => {
     // console.log('Graph', '_leave_fullwindow', this._id)
 
-    const { animate, leaveFullwindow } = this.$props
+    const { leaveFullwindow } = this.$props
+
+    const { animate } = this._config()
 
     leaveFullwindow()
 
@@ -19403,7 +19447,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _frame: Component<HTMLElement> | null = null
 
   private _lock_control = (): void => {
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     if (!this._control_lock) {
       if (!this._disabled) {
@@ -19829,7 +19873,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _enter_tree_layout = (): void => {
     // console.log('Graph', '_enter_tree_layout')
 
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     this._tree_layout = true
 
@@ -21466,7 +21510,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _leave_tree_layout = (): void => {
     // console.log('Graph', '_leave_tree_layout')
 
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     this._pointer_up_all_pressed_pointer_id()
 
@@ -21650,11 +21694,21 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._subgraph_unit_id !== unit_id) {
         const graph = this._subgraph_cache[unit_id]
 
+        const graph_config = graph.getProp('config') ?? defaultProps.config
+
         const graph_zoom = graph.getZoom()
 
         const graph_translated_zoom = translate(graph_zoom, dw / 2, dh / 2)
 
-        graph.setProp('zoom', graph_translated_zoom)
+        const graph_next_config = {
+          ...graph_config,
+          zoom: {
+            ...graph_config.zoom,
+            ...graph_translated_zoom,
+          },
+        }
+
+        graph.setProp('config', graph_next_config)
       }
     }
 
@@ -23610,7 +23664,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _unlock_sub_component = (unit_id: string, focus: boolean): void => {
     // console.log('Graph', '_unlock_sub_component', unit_id, focus, this._id)
 
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     const component = this._get_sub_component(unit_id)
 
@@ -23671,7 +23725,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _unlock_control = (hide: boolean = true): void => {
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     if (this._control_lock) {
       // console.log('Graph', '_unlock_control', this._id)
@@ -23741,7 +23795,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_lock_sub_component', unit_id, unlocking)
 
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     delete this._core_component_unlocked[unit_id]
 
@@ -23986,7 +24040,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     }
 
     if (this._is_datum_node_id(node_id)) {
-      if (config?.disable?.dataSelect) {
+      if (!config?.dataSelect) {
         return
       }
     }
@@ -24632,7 +24686,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_enter_fullwindow', _animate, sub_component_ids, this._id)
 
-    const { animate, container, enterFullwindow } = this.$props
+    const { container, enterFullwindow } = this.$props
+
+    const { animate } = this._config()
 
     enterFullwindow()
 
@@ -25145,7 +25201,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      if (config?.disable?.multiInputMerge) {
+      if (!config?.multiInputMerge) {
         if (a_type === 'input' && b_type === 'output') {
           if (this._node_to_ext[a]) {
             return false
@@ -25163,7 +25219,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else if (a_link_pin && !b_link_pin) {
       const { type: a_type } = segmentLinkPinNodeId(a)
 
-      if (config?.disable?.multiInputMerge) {
+      if (!config?.multiInputMerge) {
         const { mergeId } = segmentMergeNodeId(b)
 
         if (a_type === 'output' && this._merge_output_count[mergeId] > 0) {
@@ -25188,7 +25244,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else if (!a_link_pin && b_link_pin) {
       const { type: b_type } = segmentLinkPinNodeId(b)
 
-      if (config?.disable?.multiInputMerge) {
+      if (config?.multiInputMerge) {
         const { mergeId } = segmentMergeNodeId(a)
 
         if (b_type === 'output' && this._merge_output_count[mergeId] > 0) {
@@ -25272,9 +25328,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     pin_id: string,
     pin_node_id: string
   ): boolean => {
-    const { specs } = this.$props
-
-    const { config } = this.$props
+    const { specs, config } = this.$props
 
     const { pinId: pin_exposed_id } = this._spec_get_pin_node_plug_spec(
       type,
@@ -25310,7 +25364,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const { type: _type } = segmentLinkPinNodeId(pin_node_id)
 
-      if (!config?.disable.plugReverse || type === _type) {
+      if (config?.plugReverse || type === _type) {
         const exp_pin_type = this.__get_ext_pin_type(type, pin_id)
         const link_pin_type = this._get_link_pin_type(pin_node_id)
 
@@ -25349,7 +25403,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       const merge_pin_type = this._get_merge_pin_type(pin_node_id, type)
 
       if (type === 'input') {
-        if (config?.disable?.multiInputMerge) {
+        if (!config?.multiInputMerge) {
           const { mergeId } = segmentMergeNodeId(pin_node_id)
 
           if (this._merge_output_count[mergeId] > 0) {
@@ -25454,7 +25508,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): boolean => {
     const { specs, config } = this.$props
 
-    if (config?.disable?.plugUnit) {
+    if (!config?.plugUnit) {
       return false
     }
 
@@ -25608,7 +25662,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): boolean => {
     const { config } = this.$props
 
-    if (config?.disable?.dataCompatible) {
+    if (!config?.dataCompatible) {
       return false
     }
 
@@ -25989,7 +26043,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const { config } = this.$props
 
-      if (config?.disable?.highlightCompatible) {
+      if (!config?.highlightCompatible) {
         return
       }
 
@@ -26107,7 +26161,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
             }
           }
         } else if (all_data) {
-          if (!config?.disable?.dataCompatible) {
+          if (config?.dataCompatible) {
             for (const pin_node_id in this._pin_node) {
               if (this._is_pin_all_datum_match(pin_node_id, display_node_id)) {
                 this._set_node_compatible(pin_node_id)
@@ -28972,7 +29026,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         const pin_datum_node_id = this._get_pin_datum_node_id(pin_node_id)
 
         if (pin_datum_node_id) {
-          if (config?.disable?.dataEdit) {
+          if (!config?.dataEdit) {
             return
           }
 
@@ -28982,7 +29036,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._unlock_datum(pin_datum_node_id)
           this._focus_datum(datumId, [])
         } else {
-          if (config?.disable?.dataCreate) {
+          if (!config?.dataCreate) {
             return
           }
 
@@ -29262,11 +29316,11 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       fork,
       specs,
       registry,
-      animate,
       typeCache,
       frame,
       frameOut,
       container,
+      config,
       hasSpec,
       emptySpec,
       getSpec,
@@ -29283,6 +29337,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       enterFullwindow,
       leaveFullwindow,
     } = this.$props
+
+    const { animate } = this._config()
 
     let graph = this._subgraph_cache[unit_id]
 
@@ -29309,6 +29365,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           disabled: true,
           parent: this,
           frame,
+          config,
           container,
           frameOut,
           fullwindow,
@@ -29356,7 +29413,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
-    let { animate, dispatchEvent } = this.$props
+    const { dispatchEvent } = this.$props
+
+    let { animate } = this._config()
 
     if (_animate !== undefined) {
       animate = _animate
@@ -29512,7 +29571,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const { config } = this.$props
 
-    if (!config?.disable?.dataEdit) {
+    if (config?.dataEdit) {
       if (this._is_datum_editable(datum_node_id)) {
         if (!this._clicked_node_already_selected) {
           this._deselect_node(datum_node_id)
@@ -29835,7 +29894,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   public leave = (all_sub_component_base_trait?): void => {
     // console.log('Graph', 'leave', all_sub_component_base_trait)
 
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     const sub_component_animating_set = new Set()
 
@@ -30018,7 +30077,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       },
     } = this.$system
 
-    const { animate, dispatchEvent } = this.$props
+    const { dispatchEvent } = this.$props
+
+    const { animate } = this._config()
 
     // console.log('Graph', '_leave_subgraph', sub_base, sub_base_node)
 
@@ -30311,7 +30372,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _layout_enter_sub_component = (sub_component_id: string): void => {
     // console.log('Graph', '_layout_enter_sub_component', sub_component_id)
 
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     const prev_layout_layer = this._ensure_parent_layout_layer(sub_component_id)
 
@@ -30370,7 +30431,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _layout_leave_sub_component = () => {
     // console.log('Graph', '_layout_leave_sub_component')
 
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     const sub_component_id = this._get_current_layout_layer_id()
 
@@ -30624,7 +30685,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       !this._animating_unit_explosion[unit_id]
     ) {
       if (this._mode === 'none') {
-        if (!config?.disable?.enterGraph) {
+        if (config?.enterGraph) {
           if (!this._is_unit_base(unit_id)) {
             this._enter_subgraph(unit_id)
           } else {
@@ -30632,19 +30693,19 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           }
         }
       } else if (this._mode === 'multiselect') {
-        // TODO
+        //
       } else if (this._mode === 'info') {
         if (this._tree_layout) {
-          // TODO sub-component
+          //
         } else {
-          if (!config?.disable?.enterGraph) {
+          if (config?.enterGraph) {
             if (!this._is_unit_base(unit_id)) {
               this._enter_subgraph(unit_id)
             }
           }
         }
       } else {
-        // TODO mode action on soul
+        //
       }
     }
   }
@@ -30668,9 +30729,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       fork,
       specs,
       registry,
-      animate,
       typeCache,
       container,
+      config,
       hasSpec,
       emptySpec,
       getSpec,
@@ -30687,6 +30748,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       leaveFullwindow,
       dispatchEvent,
     } = this.$props
+
+    const { animate } = this._config()
 
     const { datumId } = segmentDatumNodeId(datum_node_id)
 
@@ -30739,6 +30802,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           registry: this.$system,
           typeCache,
           specs,
+          config,
           fork: true,
           bubble: true,
           ...([
@@ -30953,7 +31017,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     //   slot_name
     // )
 
-    animate = animate ?? this.$props.animate
+    const config = this._config()
+
+    animate = animate ?? config.animate
 
     // this._cancel_tree_layout_animation()
 
@@ -33013,7 +33079,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     next_slot_name: string,
     children: string[]
   ): void => {
-    let { animate } = this.$props
+    let { animate } = this._config()
 
     const parent_visible = this._is_layout_component_layer_visible(parent_id)
 
@@ -37778,7 +37844,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     const { config, fork, bubble } = this.$props
 
-    const take = !!config?.enable?.unlinkTake
+    const take = !!config?.unlinkTake
 
     this._pod.$removePinFromMerge({
       mergeId,
@@ -38306,7 +38372,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     const merge = this._spec_get_merge(mergeId)
     const position = this._get_merge_position(merge_node_id)
 
-    const take = !!config?.enable?.unlinkTake
+    const take = !!config?.unlinkTake
 
     this._pod.$removeMerge({
       mergeId,
@@ -38426,6 +38492,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     delete this._normal_node[merge_node_id]
     delete this._empty_merge_node[merge_node_id]
     delete this._merge_pin_name_count[merge_node_id]
+    delete this._merge_name[merge_node_id]
 
     if (this._empty_merge_node[merge_node_id]) {
       this._remove_merge_empty(merge_node_id)
@@ -41024,7 +41091,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ): void => {
     const { config, fork } = this.$props
 
-    const take = config?.enable?.unlinkTake ? true : false
+    const take = config?.unlinkTake ? true : false
 
     this._pod.$unplugPin({
       type,
@@ -42277,7 +42344,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
 
         if (
-          !config?.disable.edgeDrag &&
+          config?.edgeDrag &&
           !prevent_edge_drag &&
           this._get_subgraph_count() > 1
         ) {
@@ -42394,7 +42461,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
 
-      if (!config?.disable.dataUnlink) {
+      if (config?.dataUnlink) {
         pull_datum(node_id)
 
         if (this._drag_along_node[node_id]) {
@@ -43775,7 +43842,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   ) => {
     // console.log('Graph', '_on_pointer_move')
 
-    const { specs, zoomDraggable } = this.$props
+    const { specs } = this.$props
 
     const { pointerId, clientX, clientY } = event
 
@@ -43785,12 +43852,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       this._pointer_down_move_count[pointerId]++
     }
 
-    if (
-      zoomDraggable &&
-      !this._collapsing &&
-      !this._capturing_gesture &&
-      !this._removing_err
-    ) {
+    if (!this._collapsing && !this._capturing_gesture && !this._removing_err) {
       if (
         this._multiselect_area_ing &&
         this._pointer_down_count === 1 &&
@@ -45734,7 +45796,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   private _none_double_click_background = (position: Position) => {
     const { config } = this.$props
 
-    if (!config?.disable?.dataCreate) {
+    if (config?.dataCreate) {
       if (this._selected_node_count > 0) {
         this._deselect_all()
       }
@@ -55039,21 +55101,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } = this.$system
 
     const { $height, $width } = this.$context
-    const { minZoom, maxZoom, zoomTranslate } = this.$props as _Props &
-      DefaultProps
 
-    // const set_zoom_timeout = () => {
-    //   this._zoom_timeout = setTimeout(() => {
-    //     this._on_zoom_end()
-    //     this._zoom_timeout = null
-    //   }, 30)
-    // }
-    // if (this._zoom_timeout === null) {
-    //   this._on_zoom_start()
-    // } else {
-    //   clearTimeout(this._zoom_timeout)
-    // }
-    // set_zoom_timeout()
+    const {
+      zoom: { minZoom, maxZoom },
+    } = this._config()
 
     const wheel = deltaY < 0 ? 1 : -1
 
@@ -55061,8 +55112,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
     const _z = this._zoom.z * z
 
-    const x = zoomTranslate && _z >= 1 ? clientX : $width / 2
-    const y = zoomTranslate && _z >= 1 ? clientY : $height / 2
+    const x = clientX
+    const y = clientY
 
     if (_z > minZoom && _z < maxZoom) {
       const zoom: Zoom = {
@@ -59603,7 +59654,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _on_moment = (moment: Moment): void => {
-    console.log('_on_moment', moment, this._id)
+    // console.log('_on_moment', moment, this._id)
 
     moment = clone(moment)
 
@@ -59698,7 +59749,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
   }
 
   private _refresh_enabled = (): void => {
-    const { animate } = this.$props
+    const { animate } = this._config()
 
     if (this._enabled()) {
       if (this._disabled) {
@@ -59762,9 +59813,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
     } else if (prop === 'zoom') {
       this._set_zoom(current)
     } else if (prop === 'graph') {
-      const { animated } = this.$system
+      const { graph, component } = this.$props
 
-      const { graph, animate = animated, component } = this.$props
+      const { animate } = this._config()
 
       if (this._is_fullwindow) {
         this._leave_all_fullwindow_sub_component(false)
@@ -59799,7 +59850,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       if (this._subgraph_graph) {
         this._subgraph_graph.setProp('fullwindow', current)
       } else {
-        const animate = this.$props.animate ?? this.$system.animated
+        const { animate } = this._config()
 
         if (current === true && !this._is_fullwindow) {
           this._enter_all_fullwindow(animate)
@@ -59808,7 +59859,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
         }
       }
     } else if (prop === 'frame') {
-      const { frame, animate } = this.$props
+      const { frame } = this.$props
+
+      const { animate } = this._config()
 
       if (this._in_component_control) {
         if (this._is_fullwindow) {
@@ -59865,7 +59918,7 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           if (!this._frame_out && frame_out) {
             this._set_fullwindow_frame_off(false)
           } else if (this._frame_out && !frame_out) {
-            const { animate } = this.$props
+            const { animate } = this._config()
 
             this._set_fullwindow_frame_on(false)
             this._disable_input()
