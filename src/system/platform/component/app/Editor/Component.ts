@@ -52889,13 +52889,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._last_save_file_handle = handle
       this._last_save_filename = handle.name
 
-      const { width, height } = this.get_max_component_graph_size_size()
-
       const name_ = handle.name.slice(0, -5)
 
       deepSet(bundle, ['spec', 'name'], name_)
-      deepSet(bundle, ['spec', 'component', 'defaultWidth'], width)
-      deepSet(bundle, ['spec', 'component', 'defaultHeight'], height)
+
+      if (bundle.spec.render) {
+        const { width, height } = this.get_max_component_graph_size_size()
+
+        deepSet(bundle, ['spec', 'component', 'defaultWidth'], width)
+        deepSet(bundle, ['spec', 'component', 'defaultHeight'], height)
+      }
 
       await this._save_silently(bundle)
     } else {
