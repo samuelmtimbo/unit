@@ -112,7 +112,7 @@
     },
     "children": ["slider"]
   },
-  "type": "`U`&`G`",
+  "type": "`U`&`C`&`G`",
   "system": true,
   "render": true
 }

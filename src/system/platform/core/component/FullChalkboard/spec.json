@@ -98,7 +98,7 @@
     "tags": ["platform", "core", "component"]
   },
   "id": "120ff298-ff92-4b7c-b748-9a3c3bdbad2e",
-  "type": "`U`&`G`",
+  "type": "`U`&`C`&`G`",
   "system": true,
   "render": true
 }
