@@ -1,5 +1,4 @@
 {
-  "type": "`U`&`G`",
   "name": "chalkboard behavior",
   "units": {
     "propclientxclienty": {
@@ -1274,5 +1273,6 @@
     "tags": ["platform", "core", "component"],
     "complexity": 133
   },
-  "id": "6475795b-1953-4d08-975b-15ace80099d3"
+  "id": "6475795b-1953-4d08-975b-15ace80099d3",
+  "type": "`U`&`C`&`G`"
 }
