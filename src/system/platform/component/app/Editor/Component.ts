@@ -36593,11 +36593,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const is_link_pin = this._is_link_pin_node_id(pin_node_id)
 
     if (is_link_pin) {
-      const is_link_pin_constant = this._is_link_pin_constant(pin_node_id)
-
-      if (is_link_pin_constant) {
-        this._spec_set_pin_data(pin_node_id, value)
-      }
+      this._spec_set_pin_data(pin_node_id, value)
     }
   }
 
@@ -36694,7 +36690,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     data: string | DataRef
   ): void => {
     if (this._is_link_pin_node_id(pin_node_id)) {
-      if (this._is_link_pin_constant(pin_node_id)) {
+      if (
+        this._is_input_pin_node_id(pin_node_id) &&
+        this._is_link_pin_constant(pin_node_id)
+      ) {
         const { unitId, type, pinId } = segmentLinkPinNodeId(pin_node_id)
 
         this.__spec_set_pin_data(unitId, type, pinId, data)
@@ -58937,9 +58936,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._mem_set_pin_datum(pin_node_id, datum_id)
     }
 
-    if (type === 'input' && this._is_link_pin_constant(pin_node_id)) {
-      this._spec_set_pin_data(pin_node_id, tree.value)
-    }
+    this._spec_set_pin_data(pin_node_id, tree.value)
   }
 
   private _on_graph_unit_link_pin_drop_moment = (

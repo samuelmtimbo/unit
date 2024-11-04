@@ -3792,11 +3792,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         setup_unit_constant_pin('input', pinId)
       }
     })
-    forEach(outputs, (pinId) => {
-      if (unit.isPinConstant('output', pinId)) {
-        setup_unit_constant_pin('output', pinId)
-      }
-    })
+    // forEach(outputs, (pinId) => {
+    //   if (unit.isPinConstant('output', pinId)) {
+    //     setup_unit_constant_pin('output', pinId)
+    //   }
+    // })
 
     all_unlisten.push(
       unit.addListener('destroy', (path: string[] = []) => {
@@ -5493,7 +5493,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = this.getUnit(unitId)
 
-    if (unit.hasInputNamed(pinId) && unit.isPinConstant(type, pinId)) {
+    if (
+      type === 'input' &&
+      unit.hasInputNamed(pinId) &&
+      unit.isPinConstant(type, pinId)
+    ) {
       if (data instanceof Unit) {
         ;[data] = cloneUnitClass(data)
       }
