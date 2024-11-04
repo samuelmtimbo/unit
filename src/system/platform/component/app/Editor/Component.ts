@@ -570,7 +570,6 @@ import {
   getInputNodeId,
   getMergePinCount,
   getMergePinTypeCount,
-  getMergeUnitPinCount,
   getPinSpec,
   getPlugCount,
   getPlugSpecs,
@@ -35056,8 +35055,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
       const next_merge = {}
 
-      let next_merge_pin_count = 0
-
       let is_self: boolean = false
 
       for (const merge_unit_id in merge) {
@@ -35111,12 +35108,9 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                       const ___unitId = __unitId
 
                       deepSet(next_merge, [___unitId, __type, __pinId], true)
-
-                      next_merge_pin_count++
                     }
                   )
                 } else {
-                  // it was an empty merge
                   forEachPinOnMerge(merge, (unitId, type, pinId) => {
                     if (unitId !== graph_id) {
                       if (
@@ -35130,8 +35124,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
                       }
 
                       deepSet(next_merge, [unitId, type, pinId], true)
-
-                      next_merge_pin_count++
                     }
                   })
                 }
@@ -35142,8 +35134,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
                 next_merge_id = merge_id
                 next_merge_node_id = merge_node_id
-
-                next_merge_pin_count++
               }
             }
           }
@@ -35162,8 +35152,6 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
 
         if (_unit_id !== graph_id) {
           next_merge[_unit_id] = _merge_unit
-
-          next_merge_pin_count += getMergeUnitPinCount(_merge_unit)
         }
       }
 
@@ -35181,6 +35169,8 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
           this._state_remove_pin_or_merge(pin_node_id)
         }
       })
+
+      const next_merge_pin_count = getMergePinCount(next_merge)
 
       if (next_merge_pin_count === 0 || next_merge_pin_count > 1) {
         this._state_add_merge(next_merge_id, next_merge, merge_position)
