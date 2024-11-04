@@ -19,7 +19,7 @@ export function _deepMerge(a: object, b: object): void {
       } else {
         a[k] = b[k]
       }
-    } else {
+    } else if (b[k] !== undefined) {
       a[k] = b[k]
     }
   }
