@@ -25754,6 +25754,10 @@ export class Editor_ extends Element<HTMLDivElement, _Props> {
       return keys(this._drag_node_id)
     }
 
+    if (this._unlocked_datum.size > 0) {
+      return [...this._unlocked_datum]
+    }
+
     if (this._selected_node_count > 0) {
       return keys(this._selected_node_id)
     }
