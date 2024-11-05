@@ -1,5 +1,5 @@
 import { namespaceURI } from '../../../../client/component/namespaceURI'
-import { ensureIcon } from '../../../../client/ensureIcon'
+import { icons } from '../../../../client/icons'
 import { SVGElement_ } from '../../../../client/svg'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
@@ -9,14 +9,10 @@ export interface Props {
   icon?: string
   title?: string
   style?: Dict<string>
-  attr?: Dict<string>
-  x?: number
-  y?: number
-  width?: number
-  height?: number
-  tabIndex?: number
-  active?: boolean
+  attr?: Dict<any>
 }
+
+export const DEFAULT_ICON_VIEWBOX = '0 0 24 24'
 
 export default class Icon extends SVGElement_<SVGSVGElement, Props> {
   constructor($props: Props, $system: System) {
@@ -25,57 +21,43 @@ export default class Icon extends SVGElement_<SVGSVGElement, Props> {
       $system,
       $system.api.document.createElementNS(namespaceURI, 'svg'),
       $system.style['icon'],
-      {},
+      {
+        viewBox: DEFAULT_ICON_VIEWBOX,
+      },
       {
         icon: (icon: string | undefined = '') => {
-          ensureIcon(this.$system, icon)
+          const d = icons[icon] ?? ''
 
-          icon_sprite_el.setAttribute('href', `#${icon}`)
+          path_el.setAttribute('d', d)
+        },
+        title: (title: string | undefined = '') => {
+          title_el.innerHTML = title
         },
       }
     )
 
-    let { className, icon, x, y, width, height, tabIndex } = $props
-
-    const { title } = this.$props
+    const { className, icon, title } = $props
 
     if (className) {
       this.$element.classList.add(className)
     }
-    if (x !== undefined) {
-      this.$element.setAttribute('x', `${x}`)
-    }
-    if (y !== undefined) {
-      this.$element.setAttribute('y', `${y}`)
-    }
-    if (width !== undefined) {
-      this.$element.setAttribute('width', `${width}`)
-    }
-    if (height !== undefined) {
-      this.$element.setAttribute('height', `${height}`)
-    }
-    if (tabIndex !== undefined) {
-      this.$element.tabIndex = tabIndex
-    }
-    if (title) {
-      const title_el = this.$system.api.document.createElementNS(
-        namespaceURI,
-        'title'
-      )
-      title_el.innerHTML = title
-      this.$element.appendChild(title_el)
-    }
 
-    const icon_sprite_el = this.$system.api.document.createElementNS(
+    const title_el = this.$system.api.document.createElementNS(
       namespaceURI,
-      'use'
+      'title'
     )
-    icon_sprite_el.setAttribute('href', `#${icon}`)
+    title_el.innerHTML = title
+    this.$element.appendChild(title_el)
 
-    this.$element.appendChild(icon_sprite_el)
+    const path_el = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'path'
+    )
 
-    if (icon !== undefined) {
-      ensureIcon(this.$system, icon)
-    }
+    const d = icons[icon] ?? ''
+
+    path_el.setAttribute('d', d)
+
+    this.$element.appendChild(path_el)
   }
 }

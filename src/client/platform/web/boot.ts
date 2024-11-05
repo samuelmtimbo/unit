@@ -10,7 +10,6 @@ import { attachGesture } from '../../render/attachGesture'
 import { attachHTML } from '../../render/attachHTML'
 import { attachLayout } from '../../render/attachLayout'
 import { attachLongPress } from '../../render/attachLongPress'
-import { attachSprite } from '../../render/attachSprite'
 import { attachStyle } from '../../render/attachStyle'
 import { attachSVG } from '../../render/attachSVG'
 import { attachVoid } from '../../render/attachVoid'
@@ -135,7 +134,6 @@ export function webBoot(
 
   system.root = _root
 
-  attachSprite(system)
   attachStyle(system)
   attachApp(system)
   attachSVG(system)
