@@ -23532,6 +23532,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   public focus(options: FocusOptions | undefined = { preventScroll: true }) {
     // console.log('Graph', 'focus', this._id)
 
+    const { animate } = this._config()
+
     if (this._core_component_unlocked_count > 0) {
       const unlocked_component_id = getObjSingleKey(
         this._core_component_unlocked
@@ -23539,9 +23541,16 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const unlocked_sub_component = this._get_sub_component(
         unlocked_component_id
       )
+
       unlocked_sub_component.focus(options)
     } else {
-      this._graph.focus(options)
+      if (this._is_fullwindow) {
+        this._component.focus()
+
+        this._hide_control(animate)
+      } else {
+        this._graph.focus(options)
+      }
     }
   }
 
