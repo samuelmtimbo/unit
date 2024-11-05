@@ -57,6 +57,10 @@ export function webInput(
   const pointerDownListener = (event) => {
     const { pointerId } = event
 
+    if (!pointers[pointerId]) {
+      pointerInListener(event)
+    }
+
     pointers[pointerId].down = true
   }
 
