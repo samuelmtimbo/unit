@@ -13,7 +13,9 @@ export default class TableHeader extends HTMLElement_<HTMLElement, Props> {
       $props,
       $system,
       $system.api.document.createElement('th'),
-      $system.style['tableheader']
+      $system.style['tableheader'],
+      {},
+      {}
     )
   }
 }

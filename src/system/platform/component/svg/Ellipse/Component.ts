@@ -18,15 +18,25 @@ export default class SVGEllipse extends SVGElement_<SVGCircleElement, Props> {
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'circle'),
-      $system.style['ellipse']
+      $system.style['ellipse'],
+      {},
+      {
+        x: (x: number | undefined = 0) => {
+          this.$element.setAttribute('x', `${x}`)
+        },
+        y: (y: number | undefined = 0) => {
+          this.$element.setAttribute('y', `${y}`)
+        },
+        rx: (rx: number | undefined = 0) => {
+          this.$element.setAttribute('rx', `${rx}`)
+        },
+        ry: (ry: number | undefined = 0) => {
+          this.$element.setAttribute('ry', `${ry}`)
+        },
+      }
     )
 
     const { className, x = 50, y = 50, rx = 50, ry = 50 } = $props
-
-    const $element = this.$system.api.document.createElementNS(
-      namespaceURI,
-      'circle'
-    )
 
     if (className !== undefined) {
       this.$element.classList.value = className
@@ -36,22 +46,6 @@ export default class SVGEllipse extends SVGElement_<SVGCircleElement, Props> {
     this.$element.setAttribute('cy', `${y}`)
     this.$element.setAttribute('rx', `${rx}`)
     this.$element.setAttribute('ry', `${ry}`)
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      x: (x: number | undefined = 0) => {
-        this.$element.setAttribute('x', `${x}`)
-      },
-      y: (y: number | undefined = 0) => {
-        this.$element.setAttribute('y', `${y}`)
-      },
-      rx: (rx: number | undefined = 0) => {
-        this.$element.setAttribute('rx', `${rx}`)
-      },
-      ry: (ry: number | undefined = 0) => {
-        this.$element.setAttribute('ry', `${ry}`)
-      },
-    }
   }
 
   onPropChanged(prop: string, current: any): void {

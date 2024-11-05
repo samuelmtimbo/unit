@@ -10,15 +10,16 @@ export interface Props {
 
 export default class FileField extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
-    const DEFAULT_STYLE = $system.style['filefield']
+    const defaultStyle = $system.style['filefield']
 
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
-      defaultStyle: DEFAULT_STYLE,
+      defaultStyle,
       defaultValue: '',
+      defaultAttr: {
+        type: 'file',
+      },
     })
-
-    this.$element.type = 'file'
   }
 
   setSelectionRange(

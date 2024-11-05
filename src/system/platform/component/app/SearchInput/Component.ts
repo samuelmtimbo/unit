@@ -35,7 +35,7 @@ export default class SearchInput extends Element<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { className, style, disabled } = this.$props
+    const { className, style } = this.$props
 
     const input = new TextField(
       {
@@ -44,9 +44,10 @@ export default class SearchInput extends Element<HTMLDivElement, Props> {
           ...DEFAULT_STYLE,
           ...style,
         },
-        maxLength: 30,
-        disabled,
-        tabIndex: -1,
+        attr: {
+          maxlength: 30,
+          tabIndex: -1,
+        },
       },
       this.$system
     )
@@ -66,10 +67,6 @@ export default class SearchInput extends Element<HTMLDivElement, Props> {
   onPropChanged(prop: string, current: any) {
     if (prop === 'style') {
       this._input.setProp('style', { ...DEFAULT_STYLE, ...current })
-    } else if (prop === 'disabled') {
-      this._input.setProp('disabled', current)
-    } else if (prop === 'tabIndex') {
-      this._input.setProp('tabIndex', current)
     } else if (prop === 'value') {
       this._input.setProp('value', current)
     }

@@ -6,7 +6,7 @@ import { CA } from '../../../../../types/interface/CA'
 import { ID_CANVAS } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
 import { Style } from '../../../Style'
-import CanvasComp, { clearCanvas } from './Component'
+import Canvas_, { clearCanvas } from './Component'
 
 export interface I {
   style?: Style
@@ -20,7 +20,7 @@ export interface O {}
 
 export interface CanvasJ {}
 export interface CanvasEE extends ElementEE<{}> {}
-export interface CanvasC extends CanvasComp {}
+export interface CanvasC extends Canvas_ {}
 
 export default class Canvas
   extends Element_<I, O, CanvasJ, CanvasEE, CanvasC>
@@ -149,11 +149,11 @@ export default class Canvas
     return
   }
 
-  private async _local_component(): Promise<CanvasComp> {
+  private async _local_component(): Promise<Canvas_> {
     return firstGlobalComponentPromise(
       this.__system,
       this.__global_id
-    ) as Promise<CanvasComp>
+    ) as Promise<Canvas_>
   }
 
   async toBlob(type: string, quality: number): Promise<Blob> {

@@ -5,7 +5,7 @@ import { ID_RADIO_FIELD } from '../../../../_ids'
 export interface I {
   style: object
   value: string
-  maxLength: number
+  name: string
 }
 
 export interface O {

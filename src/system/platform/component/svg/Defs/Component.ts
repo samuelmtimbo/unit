@@ -6,6 +6,7 @@ import { Dict } from '../../../../../types/Dict'
 export interface Props {
   className?: string
   style?: Dict<string>
+  attr?: Dict<string>
 }
 
 export default class SVGDefs extends SVGElement_<SVGDefsElement, Props> {
@@ -14,6 +15,8 @@ export default class SVGDefs extends SVGElement_<SVGDefsElement, Props> {
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'defs'),
+      {},
+      {},
       {}
     )
 

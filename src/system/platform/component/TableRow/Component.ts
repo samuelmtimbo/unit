@@ -13,7 +13,9 @@ export default class TableRow extends HTMLElement_<HTMLTableRowElement, Props> {
       $props,
       $system,
       $system.api.document.createElement('tr'),
-      $system.style['tablerow']
+      $system.style['tablerow'],
+      {},
+      {}
     )
   }
 }

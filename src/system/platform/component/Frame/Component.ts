@@ -19,9 +19,9 @@ import { Dict } from '../../../../types/Dict'
 import { Unlisten } from '../../../../types/Unlisten'
 
 export interface Props {
-  attr?: Dict<any>
   className?: string
   style?: Dict<any>
+  attr?: Dict<any>
   disabled?: boolean
   color?: string
   theme?: Theme
@@ -45,10 +45,22 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
       $props,
       $system,
       $system.api.document.createElement('div'),
-      DEFAULT_STYLE
+      DEFAULT_STYLE,
+      {},
+      {
+        disabled: (disabled: boolean) => {
+          this._refresh_sub_context_disabled()
+        },
+        theme: (theme: Theme) => {
+          this._refresh_sub_context_color()
+        },
+        color: (color: string) => {
+          this._refresh_sub_context_color()
+        },
+      }
     )
 
-    const { className, color, theme, disabled } = $props
+    const { className, color } = $props
 
     this.$element.classList.add('frame')
 
@@ -65,19 +77,6 @@ export default class Frame extends HTMLElement_<HTMLDivElement, Props> {
     }
 
     this.$$context = renderFrame(this.$system, null, this.$element, $$init)
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      disabled: (disabled: boolean) => {
-        this._refresh_sub_context_disabled()
-      },
-      theme: (theme: Theme) => {
-        this._refresh_sub_context_color()
-      },
-      color: (color: string) => {
-        this._refresh_sub_context_color()
-      },
-    }
   }
 
   mountChild(child: Component, commit: boolean = true): void {

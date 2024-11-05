@@ -291,14 +291,16 @@ export default class ClassDatum extends Element<HTMLDivElement, Props> {
       )
     }
 
-    const core_icon: Icon = new Icon(
+    const core_icon = new Icon(
       {
         className: 'unit-class-core-icon',
         icon,
-        x: cX - core_r / 2,
-        y: cY - core_r / 2,
-        width: core_r,
-        height: core_r,
+        attr: {
+          x: cX - core_r / 2,
+          y: cY - core_r / 2,
+          width: core_r,
+          height: core_r,
+        },
         style: {
           color: 'currentColor',
         },

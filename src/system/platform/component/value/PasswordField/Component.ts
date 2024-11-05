@@ -7,21 +7,21 @@ export interface Props {
   style?: Dict<any>
   attr?: Dict<any>
   value?: string
-  disabled?: boolean
 }
 
 export default class PasswordField extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
-    const DEFAULT_STYLE = $system.style['passwordfield']
+    const defaultStyle = $system.style['passwordfield']
 
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultValue: '',
-      defaultStyle: DEFAULT_STYLE,
+      defaultStyle,
+      defaultAttr: {
+        type: 'password',
+        autocomplete: 'off',
+      },
     })
-
-    this.$element.type = 'password'
-    this.$element.autocomplete = 'off'
   }
 
   public setSelectionRange(

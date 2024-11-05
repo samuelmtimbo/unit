@@ -13,7 +13,9 @@ export default class TableData extends HTMLElement_<HTMLElement, Props> {
       $props,
       $system,
       $system.api.document.createElement('td'),
-      $system.style['tabledata']
+      $system.style['tabledata'],
+      {},
+      {}
     )
   }
 }

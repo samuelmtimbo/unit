@@ -1,7 +1,7 @@
 import { applyAttr } from '../../../../client/attr'
 import { Element } from '../../../../client/element'
 import { PropHandler, htmlPropHandler } from '../../../../client/propHandler'
-import { applyStyle } from '../../../../client/style'
+import { applyDynamicStyle } from '../../../../client/style'
 import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 import { CH } from '../../../../types/interface/CH'
@@ -10,7 +10,6 @@ import { pull, push } from '../../../../util/array'
 import { randomId } from '../../../../util/id'
 
 export interface Props {
-  id: string
   className?: string
   style?: Dict<string>
   src?: string
@@ -40,9 +39,14 @@ export default class Iframe
   constructor($props: Props, $system: System) {
     super($props, $system)
 
-    const { id, className, style, attr, src, srcdoc } = this.$props
+    const { style, attr, src, srcdoc } = this.$props
 
     const DEFAULT_STYLE = $system.style['iframe']
+
+    const DEFAULT_ATTR = {
+      frameborder: '0',
+      allowfullscreen: 'true',
+    }
 
     const {
       root,
@@ -56,37 +60,31 @@ export default class Iframe
     root.appendChild(iframe_el)
     this._iframe = iframe_el
 
-    if (attr) {
-      applyAttr(iframe_el, attr)
-    }
-
-    if (className) {
-      iframe_el.className = className
-    }
-
-    iframe_el.setAttribute('frameborder', '0')
-
     const slot_id = randomId()
     this._slot_id = slot_id
 
     const slot_el = createElement('slot')
     slot_el.name = slot_id
 
-    if (id !== undefined) {
-      iframe_el.id = id
-    }
     if (srcdoc !== undefined) {
       iframe_el.srcdoc = srcdoc
     }
 
-    iframe_el.allowFullscreen = true
-
     this._setSrc(src)
 
-    applyStyle(iframe_el, { ...DEFAULT_STYLE, ...style })
+    const $controlled = new Set(['src', 'srcdoc'])
+
+    applyAttr(iframe_el, { ...DEFAULT_ATTR, ...attr }, {}, $controlled)
+    applyDynamicStyle(this, iframe_el, { ...DEFAULT_STYLE, ...style })
 
     this._prop_handler = {
-      ...htmlPropHandler(this, iframe_el, DEFAULT_STYLE),
+      ...htmlPropHandler(
+        this,
+        iframe_el,
+        DEFAULT_STYLE,
+        DEFAULT_ATTR,
+        $controlled
+      ),
       srcdoc: (current: string) => {
         this._iframe.srcdoc = current || ''
       },

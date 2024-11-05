@@ -21,7 +21,40 @@ export default class SVGPath extends SVGElement_<SVGPathElement, Props> {
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'path'),
-      $system.style['path']
+      $system.style['path'],
+      {},
+      {
+        id: (id: string | undefined) => {
+          this.$element.id = id
+        },
+        d: (d: string | undefined) => {
+          if (d === undefined) {
+            this.$element.removeAttribute('d')
+          } else {
+            this.$element.setAttribute('d', d)
+          }
+        },
+        markerStart: (markerStart: string | undefined) => {
+          this.$element.setAttribute('marker-start', markerStart)
+        },
+        markerEnd: (markerEnd: string | undefined) => {
+          this.$element.setAttribute('marker-end', markerEnd)
+        },
+        strokeWidth: (strokeWidth: string | undefined) => {
+          if (strokeWidth === undefined) {
+            this.$element.removeAttribute('stroke-width')
+          } else {
+            this.$element.setAttribute('stroke-width', `${strokeWidth}`)
+          }
+        },
+        fillRule: (fillRule: string | undefined) => {
+          if (fillRule === undefined) {
+            this.$element.removeAttribute('fill-rule')
+          } else {
+            this.$element.setAttribute('fill-rule', fillRule)
+          }
+        },
+      }
     )
 
     const { id, className, d = '', markerStart, markerEnd, fillRule } = $props
@@ -43,36 +76,5 @@ export default class SVGPath extends SVGElement_<SVGPathElement, Props> {
     }
 
     this.$element.setAttribute('d', d)
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      d: (d: string | undefined) => {
-        if (d === undefined) {
-          this.$element.removeAttribute('d')
-        } else {
-          this.$element.setAttribute('d', d)
-        }
-      },
-      markerStart: (markerStart: string | undefined) => {
-        this.$element.setAttribute('marker-start', markerStart)
-      },
-      markerEnd: (markerEnd: string | undefined) => {
-        this.$element.setAttribute('marker-end', markerEnd)
-      },
-      strokeWidth: (strokeWidth: string | undefined) => {
-        if (strokeWidth === undefined) {
-          this.$element.removeAttribute('stroke-width')
-        } else {
-          this.$element.setAttribute('stroke-width', `${strokeWidth}`)
-        }
-      },
-      fillRule: (fillRule: string | undefined) => {
-        if (fillRule === undefined) {
-          this.$element.removeAttribute('fill-rule')
-        } else {
-          this.$element.setAttribute('fill-rule', fillRule)
-        }
-      },
-    }
   }
 }

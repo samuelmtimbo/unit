@@ -3,14 +3,7 @@ import { System } from '../../../../system'
 import { Dict } from '../../../../types/Dict'
 
 export interface Props {
-  id?: string
-  className?: string
   style?: Dict<string>
-  innerText?: string
-  tabIndex?: number
-  title?: string
-  draggable?: boolean
-  data?: Dict<string>
   attr?: Dict<string>
 }
 
@@ -19,30 +12,10 @@ export default class Paragraph extends HTMLElement_<HTMLHeadingElement, Props> {
     super(
       $props,
       $system,
-      $system.api.document.createElement('h3'),
-      $system.style['h3']
+      $system.api.document.createElement('p'),
+      $system.style['paragraph'],
+      {},
+      {}
     )
-
-    const { id, className, style, innerText, tabIndex, title, draggable } =
-      this.$props
-
-    if (id !== undefined) {
-      this.$element.id = id
-    }
-    if (className !== undefined) {
-      this.$element.className = className
-    }
-    if (innerText) {
-      this.$element.innerText = innerText
-    }
-    if (tabIndex !== undefined) {
-      this.$element.tabIndex = tabIndex
-    }
-    if (title) {
-      this.$element.title = title
-    }
-    if (draggable !== undefined) {
-      this.$element.setAttribute('draggable', draggable.toString())
-    }
   }
 }

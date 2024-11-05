@@ -24,7 +24,15 @@ export default class Icon extends SVGElement_<SVGSVGElement, Props> {
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'svg'),
-      $system.style['icon']
+      $system.style['icon'],
+      {},
+      {
+        icon: (icon: string | undefined = '') => {
+          ensureIcon(this.$system, icon)
+
+          icon_sprite_el.setAttribute('href', `#${icon}`)
+        },
+      }
     )
 
     let { className, icon, x, y, width, height, tabIndex } = $props
@@ -68,15 +76,6 @@ export default class Icon extends SVGElement_<SVGSVGElement, Props> {
 
     if (icon !== undefined) {
       ensureIcon(this.$system, icon)
-    }
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      icon: (icon: string | undefined = '') => {
-        ensureIcon(this.$system, icon)
-
-        icon_sprite_el.setAttribute('href', `#${icon}`)
-      },
     }
   }
 }

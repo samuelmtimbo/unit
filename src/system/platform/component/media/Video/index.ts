@@ -7,7 +7,7 @@ import { ME } from '../../../../../types/interface/ME'
 import { PS } from '../../../../../types/interface/PS'
 import { ID_VIDEO } from '../../../../_ids'
 import { firstGlobalComponentPromise } from '../../../../globalComponent'
-import VideoComp from './Component'
+import Video_ from './Component'
 
 export interface I {
   style: object
@@ -77,7 +77,7 @@ export default class Video
     const localComponent = (await firstGlobalComponentPromise(
       this.__system,
       this.__global_id
-    )) as VideoComp
+    )) as Video_
 
     return localComponent.requestPictureInPicture()
   }

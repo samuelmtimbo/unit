@@ -24,7 +24,7 @@ export default class Wrap extends HTMLElement_<HTMLDivElement, Props> {
   private _parent_child_container: Component[] = []
 
   constructor(props: {}, $system: System) {
-    super(props, $system, parentElement($system), DEFAULT_STYLE)
+    super(props, $system, parentElement($system), DEFAULT_STYLE, {}, {})
 
     this.$element.className = 'wrap'
 

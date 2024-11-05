@@ -7,15 +7,9 @@ import { Unlisten } from '../../../../types/Unlisten'
 import { removeChildren } from '../../../../util/element'
 
 export interface Props {
-  component?: $Component
-  id?: string
-  className?: string
+  unit?: $Component
   style?: Dict<string>
-  innerText?: string
-  tabIndex?: number
-  title?: string
-  draggable?: boolean
-  data?: Dict<string>
+  attr?: Dict<string>
 }
 
 const DEFAULT_STYLE = {
@@ -33,50 +27,27 @@ export default class Render extends HTMLElement_<HTMLDivElement, Props> {
       $props,
       $system,
       $system.api.document.createElement('div'),
-      DEFAULT_STYLE
+      DEFAULT_STYLE,
+      {},
+      {
+        unit: (component: $Component) => {
+          if (this._unlisten) {
+            this._unlisten()
+
+            this._unlisten = undefined
+
+            removeChildren(this.$element)
+          }
+
+          if (component) {
+            this._unlisten = renderComponent(
+              this.$element,
+              this.$system,
+              component
+            )
+          }
+        },
+      }
     )
-
-    const { component, id, className, innerText, tabIndex, title, draggable } =
-      this.$props
-
-    if (id !== undefined) {
-      this.$element.id = id
-    }
-    if (className !== undefined) {
-      this.$element.className = className
-    }
-    if (innerText) {
-      this.$element.innerText = innerText
-    }
-    if (tabIndex !== undefined) {
-      this.$element.tabIndex = tabIndex
-    }
-    if (title) {
-      this.$element.title = title
-    }
-    if (draggable !== undefined) {
-      this.$element.setAttribute('draggable', draggable.toString())
-    }
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      unit: (component: $Component) => {
-        if (this._unlisten) {
-          this._unlisten()
-
-          this._unlisten = undefined
-
-          removeChildren(this.$element)
-        }
-
-        if (component) {
-          this._unlisten = renderComponent(
-            this.$element,
-            this.$system,
-            component
-          )
-        }
-      },
-    }
   }
 }

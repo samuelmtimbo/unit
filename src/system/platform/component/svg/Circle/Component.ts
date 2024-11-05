@@ -17,7 +17,19 @@ export default class SVGCircle extends SVGElement_<SVGCircleElement, Props> {
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'circle'),
-      $system.style['circle']
+      $system.style['circle'],
+      {},
+      {
+        x: (x: number | undefined = 0) => {
+          this.$element.setAttribute('cx', `${x}`)
+        },
+        y: (y: number | undefined = 0) => {
+          this.$element.setAttribute('cy', `${y}`)
+        },
+        r: (r: number | undefined = 0) => {
+          this.$element.setAttribute('r', `${r}`)
+        },
+      }
     )
 
     const { className, x = 50, y = 50, r = 50 } = $props
@@ -29,18 +41,5 @@ export default class SVGCircle extends SVGElement_<SVGCircleElement, Props> {
     this.$element.setAttribute('cx', `${x}`)
     this.$element.setAttribute('cy', `${y}`)
     this.$element.setAttribute('r', `${r}`)
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      x: (x: number | undefined = 0) => {
-        this.$element.setAttribute('cx', `${x}`)
-      },
-      y: (y: number | undefined = 0) => {
-        this.$element.setAttribute('cy', `${y}`)
-      },
-      r: (r: number | undefined = 0) => {
-        this.$element.setAttribute('r', `${r}`)
-      },
-    }
   }
 }
