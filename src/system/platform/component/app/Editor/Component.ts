@@ -35685,7 +35685,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     forIO(merge_plugs, (type, plugs) => {
       forEach(plugs, (plug) => {
         actions.push(
-          makePlugPinAction(type, plug.pinId, plug.subPinId, {
+          makePlugPinAction(plug.type, plug.pinId, plug.subPinId, {
             mergeId: merge_id,
           })
         )

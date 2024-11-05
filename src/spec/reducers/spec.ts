@@ -225,8 +225,8 @@ export const addPinToMerge = (
   }: { mergeId: string; type: IO; unitId: string; pinId: string },
   spec: GraphSpec
 ): void => {
-  io((_type) => {
-    forEachValueKey(spec[`${_type}s`], ({ plug = {} }, exposedPinId) => {
+  io((type_) => {
+    forEachValueKey(spec[`${type_}s`], ({ plug = {} }, exposedPinId) => {
       for (const subPinId in plug) {
         const subPin = plug[subPinId]
 
@@ -236,7 +236,7 @@ export const addPinToMerge = (
           unplugPin({ pinId: exposedPinId, type: kind, subPinId }, spec)
           plugPin(
             {
-              type: kind,
+              type: type_,
               pinId: exposedPinId,
               subPinId,
               subPinSpec: { mergeId },
