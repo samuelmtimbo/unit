@@ -1,4 +1,5 @@
 import { System } from '../system'
+import { keys } from '../system/f/object/Keys/f'
 import { Dict } from '../types/Dict'
 import { applyAttr } from './attr'
 import { Element } from './element'
@@ -15,22 +16,24 @@ export class SVGElement_<
     $props: P,
     $system: System,
     $element: T,
-    DEFAULT_STYLE: Dict<any>
+    $defaultStyle: Dict<any>,
+    $defaultAttr: Dict<any> = {},
+    $propHandlers: Dict<(value: any) => void>
   ) {
     super($props, $system)
 
-    const { style, attr = {} } = this.$props
+    const { style, attr } = this.$props
 
     this.$element = $element
 
-    if (attr) {
-      applyAttr(this.$element, attr)
-    }
+    const $controlled = new Set([...keys($propHandlers), 'style'])
 
-    applyDynamicStyle(this, this.$element, { ...DEFAULT_STYLE, ...style })
+    applyAttr(this.$element, { ...$defaultAttr, ...attr }, {}, $controlled)
+    applyDynamicStyle(this, this.$element, { ...$defaultStyle, ...style })
 
     this.$propHandler = {
-      ...svgPropHandler(this, this.$element, DEFAULT_STYLE),
+      ...svgPropHandler(this, this.$element, $defaultStyle, {}, $controlled),
+      ...$propHandlers,
     }
   }
 

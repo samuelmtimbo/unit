@@ -701,7 +701,7 @@ import _keys, { keys } from '../../../../f/object/Keys/f'
 import { Style } from '../../../Style'
 import { default as Icon, default as IconButton } from '../../Icon/Component'
 import Zoom_ from '../../Zoom/Component'
-import CanvasComp from '../../canvas/Canvas/Component'
+import Canvas_ from '../../canvas/Canvas/Component'
 import SVGDefs from '../../svg/Defs/Component'
 import SVGG from '../../svg/Group/Component'
 import SVGMarker from '../../svg/Marker/Component'
@@ -1151,7 +1151,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this.$unbundled = false
     this.$primitive = true
 
-    applyAttr(this._root.$element, attr ?? {})
+    applyAttr(this._root.$element, attr ?? {}, {}, new Set())
     applyDynamicStyle(this, this._root.$element, { ...DEFAULT_STYLE, ...style })
 
     this.setSubComponents({
@@ -1663,7 +1663,12 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     } else if (prop === 'attr') {
       const attr = current ?? {}
 
-      applyAttr(this._root.$element, attr)
+      applyAttr(
+        this._root.$element,
+        attr,
+        this.getProp('attr') ?? {},
+        new Set()
+      )
     } else if (prop === 'disabled') {
       this._editor.setProp('disabled', current)
     } else if (prop === 'graph') {
@@ -7230,8 +7235,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           ...userSelect('none'),
         },
         value: formatUnitName(spec_name, UNIT_CORE_NAME_FONT_SIZE),
-        maxLength: UNIT_NAME_MAX_SIZE,
         attr: {
+          maxLength: UNIT_NAME_MAX_SIZE,
           tabindex: -1,
         },
       },
@@ -7568,7 +7573,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const core_component_frame = new Frame(
       {
         className: 'core-component-frame',
-        disabled: true,
         style: {
           position: 'absolute',
           top: '0',
@@ -11745,7 +11749,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const node_comp = new Div(
       {
-        id: node_id,
         className: 'node',
         style: {
           position: 'absolute',
@@ -15622,7 +15625,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           ...style,
           border: '1px solid red',
         },
-        tabIndex: -1,
+        attr: {
+          tabIndex: -1,
+        },
         maxLength: PIN_NAME_MAX_SIZE,
       },
       this.$system
@@ -15675,8 +15680,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         // id: link_base_id,
         className: 'link-base',
         attr: {
-          markerStart: `url(#${link_start_start_id})`,
-          markerEnd: `url(#${link_end_id})`,
+          'marker-start': `url(#${link_start_start_id})`,
+          'marker-end': `url(#${link_end_id})`,
         },
         style: {
           display: hidden ? 'none' : 'block',
@@ -20036,7 +20041,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       leaf_frame = new Frame(
         {
           style: frame_style,
-          disabled: true,
         },
         this.$system
       )
@@ -20061,7 +20065,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         mergeStyle(leaf_comp.$node as HTMLElement | SVGElement, temp_style)
 
         if (is_canvas) {
-          const canvas_comp = leaf_comp as CanvasComp
+          const canvas_comp = leaf_comp as Canvas_
 
           const canvas_width = canvas_comp.getProp('width')
           const canvas_height = canvas_comp.getProp('height')

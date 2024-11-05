@@ -5,7 +5,14 @@ export interface Props {}
 
 export default class Parent extends HTMLElement_<HTMLDivElement, Props> {
   constructor($props: Props, $system: System) {
-    super($props, $system, $system.api.document.createElement('div'), {})
+    super(
+      $props,
+      $system,
+      $system.api.document.createElement('div'),
+      {},
+      {},
+      {}
+    )
 
     this.$element.style.display = 'contents'
 

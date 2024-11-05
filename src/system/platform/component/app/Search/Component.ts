@@ -655,9 +655,6 @@ export default class Search extends Element<HTMLDivElement, Props> {
           height: '100%',
           scrollSnapAlign: 'start',
         },
-        data: {
-          id,
-        },
       },
       this.$system
     )

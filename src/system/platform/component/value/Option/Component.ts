@@ -15,14 +15,13 @@ export default class Option extends HTMLElement_<HTMLOptionElement, Props> {
       $props,
       $system,
       $system.api.document.createElement('option'),
-      $system.style['option']
+      $system.style['option'],
+      {},
+      {
+        value: (current) => {
+          this.$element.value = current
+        },
+      }
     )
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      value: (current) => {
-        this.$element.value = current
-      },
-    }
   }
 }

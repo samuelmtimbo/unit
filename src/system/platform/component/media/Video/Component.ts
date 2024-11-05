@@ -10,12 +10,11 @@ export interface Props {
   style?: Dict<string>
   src?: string
   stream?: $MS
-  autoplay?: boolean
   controls?: boolean
   attr?: Dict<string>
 }
 
-export default class VideoComp
+export default class Video_
   extends HTMLElement_<HTMLVideoElement, Props>
   implements CS
 {
@@ -24,53 +23,53 @@ export default class VideoComp
       $props,
       $system,
       $system.api.document.createElement('video'),
-      $system.style['video']
+      $system.style['video'],
+      {
+        autoplay: true,
+        controls: true,
+      },
+      {
+        src: (src: string | undefined) => {
+          if (src === undefined) {
+            this.$element.pause()
+            this.$element.removeAttribute('src') // empty source
+            this.$element.load()
+          } else {
+            this.$element.src = src
+          }
+        },
+        stream: (stream: $MS | undefined): void => {
+          if (stream === undefined) {
+            this.$element.srcObject = null
+          } else {
+            stream.$mediaStream({}, (_stream: MediaStream) => {
+              this.$element.srcObject = _stream
+            })
+          }
+        },
+        controls: (controls: boolean | undefined): void => {
+          if (controls === undefined) {
+            this.$element.removeAttribute('controls')
+          } else {
+            this.$element.controls = controls
+          }
+        },
+        currentTime: (t: number | undefined): void => {
+          if (t === undefined) {
+            //
+          } else {
+            this.$element.currentTime = t
+          }
+        },
+      }
     )
 
-    const { src, autoplay = true, controls = true } = this.$props
+    const { src, controls = true } = this.$props
 
     this.$element.controls = controls
 
     if (src) {
       this.$element.src = src
-    }
-
-    this.$element.autoplay = autoplay
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      src: (src: string | undefined) => {
-        if (src === undefined) {
-          this.$element.pause()
-          this.$element.removeAttribute('src') // empty source
-          this.$element.load()
-        } else {
-          this.$element.src = src
-        }
-      },
-      stream: (stream: $MS | undefined): void => {
-        if (stream === undefined) {
-          this.$element.srcObject = null
-        } else {
-          stream.$mediaStream({}, (_stream: MediaStream) => {
-            this.$element.srcObject = _stream
-          })
-        }
-      },
-      controls: (controls: boolean | undefined): void => {
-        if (controls === undefined) {
-          this.$element.removeAttribute('controls')
-        } else {
-          this.$element.controls = controls
-        }
-      },
-      currentTime: (t: number | undefined): void => {
-        if (t === undefined) {
-          //
-        } else {
-          this.$element.currentTime = t
-        }
-      },
     }
   }
 

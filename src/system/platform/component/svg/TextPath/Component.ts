@@ -6,12 +6,12 @@ import { Dict } from '../../../../../types/Dict'
 export interface Props {
   className?: string
   style?: Dict<string>
+  attr?: Dict<string>
   href?: string
   startOffset?: string
   spacing?: string
   lengthAdjust?: string
   textContent?: string
-  rotate?: 'auto' | 'auto-reverse' | 'number'
 }
 
 export default class SVGTextPath extends SVGElement_<
@@ -23,18 +23,17 @@ export default class SVGTextPath extends SVGElement_<
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'textPath'),
-      $system.style['textpath']
+      $system.style['textpath'],
+      {},
+      {
+        textContent: (current: string | undefined) => {
+          this.$element.textContent = current
+        },
+      }
     )
 
-    const {
-      className,
-      href,
-      startOffset,
-      lengthAdjust,
-      spacing,
-      textContent,
-      rotate,
-    } = this.$props
+    const { className, href, startOffset, lengthAdjust, spacing, textContent } =
+      this.$props
 
     if (className) {
       this.$element.classList.add(className)
@@ -53,16 +52,6 @@ export default class SVGTextPath extends SVGElement_<
     }
     if (textContent !== undefined) {
       this.$element.textContent = textContent
-    }
-    if (rotate !== undefined) {
-      this.$element.setAttribute('rotate', rotate)
-    }
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      textContent: (current: string | undefined) => {
-        this.$element.textContent = current
-      },
     }
   }
 }

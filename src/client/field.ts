@@ -42,24 +42,25 @@ export class Field<
       valueKey: string
       defaultStyle?: Style
       defaultValue?: any
+      defaultAttr?: Dict<any>
       processValue?: ($element: E, value: string) => any
       parseValue?: (value: string) => any
       propHandlers?: Dict<(value: any) => void>
     }
   ) {
-    super($props, $system, $element, opt.defaultStyle)
-
     const {
       valueKey,
       defaultStyle,
+      defaultAttr,
       defaultValue = '',
       processValue = ($element, value) => value,
       parseValue = identity,
+      propHandlers,
     } = opt
 
-    let { style, attr, value = defaultValue } = $props
+    super($props, $system, $element, defaultStyle, defaultAttr, propHandlers)
 
-    style = { ...defaultStyle, ...style }
+    let { value = defaultValue } = $props
 
     this.$element[valueKey] = value
 

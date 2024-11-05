@@ -22,7 +22,22 @@ export default class SVGForeignObject extends SVGElement_<
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'foreignObject'),
-      $system.style['foreignobject']
+      $system.style['foreignobject'],
+      {},
+      {
+        x: (x: number | undefined = 0) => {
+          this.$element.setAttribute('x', `${x}`)
+        },
+        y: (y: number | undefined = 0) => {
+          this.$element.setAttribute('y', `${y}`)
+        },
+        width: (width: number | undefined = 0) => {
+          this.$element.setAttribute('width', `${width}`)
+        },
+        height: (height: number | undefined = 0) => {
+          this.$element.setAttribute('height', `${height}`)
+        },
+      }
     )
 
     const { className, x = 0, y = 0, width = 100, height = 100 } = this.$props
@@ -35,21 +50,5 @@ export default class SVGForeignObject extends SVGElement_<
     this.$element.setAttribute('y', `${y}`)
     this.$element.setAttribute('width', `${width}`)
     this.$element.setAttribute('height', `${height}`)
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      x: (x: number | undefined = 0) => {
-        this.$element.setAttribute('x', `${x}`)
-      },
-      y: (y: number | undefined = 0) => {
-        this.$element.setAttribute('y', `${y}`)
-      },
-      width: (width: number | undefined = 0) => {
-        this.$element.setAttribute('width', `${width}`)
-      },
-      height: (height: number | undefined = 0) => {
-        this.$element.setAttribute('height', `${height}`)
-      },
-    }
   }
 }

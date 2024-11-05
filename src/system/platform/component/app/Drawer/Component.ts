@@ -94,7 +94,6 @@ export default class Drawer extends Element<HTMLDivElement, Props> {
       {
         className: 'drawer-knob',
         icon,
-        active,
         style: {
           position: 'absolute',
           top: '0',

@@ -15,7 +15,19 @@ export default class SVGUse extends SVGElement_<SVGGElement, Props> {
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'use'),
-      $system.style['use']
+      $system.style['use'],
+      {},
+      {
+        href: (href: string | undefined) => {
+          if (href) {
+            this.$element.setAttributeNS(namespaceURI, 'xlink:href', href)
+            this.$element.setAttribute('href', href)
+          } else {
+            this.$element.removeAttributeNS(namespaceURI, 'xlink:href')
+            this.$element.removeAttribute('href')
+          }
+        },
+      }
     )
 
     const { className, href } = this.$props
@@ -26,19 +38,6 @@ export default class SVGUse extends SVGElement_<SVGGElement, Props> {
     if (href !== undefined) {
       this.$element.setAttributeNS(namespaceURI, 'xlink:href', href)
       this.$element.setAttribute('href', href)
-    }
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      href: (href: string | undefined) => {
-        if (href) {
-          this.$element.setAttributeNS(namespaceURI, 'xlink:href', href)
-          this.$element.setAttribute('href', href)
-        } else {
-          this.$element.removeAttributeNS(namespaceURI, 'xlink:href')
-          this.$element.removeAttribute('href')
-        }
-      },
     }
   }
 }

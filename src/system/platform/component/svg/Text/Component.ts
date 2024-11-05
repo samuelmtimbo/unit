@@ -20,7 +20,34 @@ export default class SVGText extends SVGElement_<SVGTextElement, Props> {
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'text'),
-      $system.style['text']
+      $system.style['text'],
+      {},
+      {
+        value: (value: string | undefined = '') => {
+          this.$element.textContent = value
+        },
+        x: (x: number | undefined = 0) => {
+          this.$element.setAttribute('x', `${x}`)
+        },
+        y: (y: number | undefined = 0) => {
+          this.$element.setAttribute('y', `${y}`)
+        },
+        width: (width: number | undefined = 0) => {
+          this.$element.setAttribute('width', `${width}`)
+        },
+        height: (height: number | undefined = 0) => {
+          this.$element.setAttribute('height', `${height}`)
+        },
+        dx: (dx: number | undefined = 0) => {
+          this.$element.setAttribute('dx', `${dx}`)
+        },
+        dy: (dy: number | undefined = 0) => {
+          this.$element.setAttribute('dy', `${dy}`)
+        },
+        textAnchor: (textAnchor: string | undefined) => {
+          this.$element.setAttribute('text-anchor', textAnchor)
+        },
+      }
     )
 
     const { className, value, x, y, dx, dy, textAnchor = 'start' } = this.$props
@@ -45,31 +72,6 @@ export default class SVGText extends SVGElement_<SVGTextElement, Props> {
     }
     if (textAnchor !== undefined) {
       this.$element.setAttribute('text-anchor', textAnchor)
-    }
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      value: (value: string | undefined = '') => {
-        this.$element.textContent = value
-      },
-      x: (x: number | undefined = 0) => {
-        this.$element.setAttribute('x', `${x}`)
-      },
-      y: (y: number | undefined = 0) => {
-        this.$element.setAttribute('y', `${y}`)
-      },
-      width: (width: number | undefined = 0) => {
-        this.$element.setAttribute('width', `${width}`)
-      },
-      height: (height: number | undefined = 0) => {
-        this.$element.setAttribute('height', `${height}`)
-      },
-      dx: (dx: number | undefined = 0) => {
-        this.$element.setAttribute('dx', `${dx}`)
-      },
-      dy: (dy: number | undefined = 0) => {
-        this.$element.setAttribute('dy', `${dy}`)
-      },
     }
   }
 }

@@ -15,29 +15,27 @@ export interface Props {
 
 export default class Slider extends Field<HTMLInputElement, Props> {
   constructor($props: Props, $system: System) {
-    const DEFAULT_STYLE = $system.style['textarea']
-
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultValue: '0',
-      defaultStyle: DEFAULT_STYLE,
+      defaultStyle: $system.style['textarea'],
+      defaultAttr: {
+        type: 'range',
+      },
       processValue: processNumberValue,
+      propHandlers: {
+        min: (min: number = 0) => {
+          this.$element.min = `${min}`
+        },
+        max: (max: number = 100) => {
+          this.$element.min = `${max}`
+        },
+      },
     })
 
     const { min = 0, max = 100 } = $props
 
-    this.$element.type = 'range'
     this.$element.min = `${min}`
     this.$element.max = `${max}`
-  }
-
-  onPropChanged(prop: string, current: any): void {
-    if (prop === 'min') {
-      this.$element.min = `${current}`
-    } else if (prop === 'max') {
-      this.$element.max = `${current}`
-    } else {
-      super.onPropChanged(prop, current)
-    }
   }
 }

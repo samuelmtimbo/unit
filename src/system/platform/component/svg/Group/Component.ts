@@ -15,7 +15,9 @@ export default class SVGG extends SVGElement_<SVGGElement, Props> {
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'g'),
-      $system.style['g']
+      $system.style['g'],
+      {},
+      {}
     )
 
     const { className } = this.$props

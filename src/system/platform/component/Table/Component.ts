@@ -13,7 +13,9 @@ export default class Table extends HTMLElement_<HTMLTableElement, Props> {
       $props,
       $system,
       $system.api.document.createElement('table'),
-      $system.style['table']
+      $system.style['table'],
+      {},
+      {}
     )
   }
 }

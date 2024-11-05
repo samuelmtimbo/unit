@@ -20,7 +20,9 @@ export default class SVGMarker extends SVGElement_<SVGMarkerElement, Props> {
       $props,
       $system,
       $system.api.document.createElementNS(namespaceURI, 'marker'),
-      $system.style['marker']
+      $system.style['marker'],
+      {},
+      {}
     )
 
     const { id, className, markerHeight, markerWidth, refX, refY, orient } =

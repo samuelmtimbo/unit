@@ -4,7 +4,6 @@ import HTMLElement_ from '../../../../../client/html'
 import { parseRelativeUnit } from '../../../../../client/parseRelativeUnit'
 import { applyStyle, reactToFrameSize } from '../../../../../client/style'
 import { COLOR_WHITE, defaultThemeColor } from '../../../../../client/theme'
-import { replaceChild } from '../../../../../client/util/replaceChild'
 import { APINotSupportedError } from '../../../../../exception/APINotImplementedError'
 import { isRelativeValue } from '../../../../../isRelative'
 import { System } from '../../../../../system'
@@ -38,11 +37,11 @@ export interface Props {
   d?: any[]
 }
 
-export default class CanvasComp
+export default class Canvas_
   extends HTMLElement_<HTMLCanvasElement, Props>
   implements CA
 {
-  private _context: CanvasRenderingContext2D
+  private _ctx: CanvasRenderingContext2D
   private _d: any[][] = []
 
   constructor($props: Props, $system: System) {
@@ -50,131 +49,127 @@ export default class CanvasComp
       $props,
       $system,
       $system.api.document.createElement('canvas'),
-      $system.style['canvas']
+      $system.style['canvas'],
+      {
+        draggable: false,
+      },
+      {
+        style: (current) => {
+          const final_style = { ...this.$defaultStyle, ...current }
+
+          const color = this._get_fill_style().toLowerCase()
+
+          applyStyle(this.$element, final_style)
+
+          if (
+            this._ctx.fillStyle !== color ||
+            this._ctx.strokeStyle !== color
+          ) {
+            this._ctx.fillStyle = color
+            this._ctx.strokeStyle = color
+
+            clearCanvas(this._ctx)
+
+            this._redraw()
+          }
+        },
+        width: (width: number) => {
+          this._unlisten_frame_width()
+
+          if (typeof width === 'string') {
+            if (isRelativeValue(width)) {
+              this._width_frame_unlisten = reactToFrameSize(
+                width,
+                // @ts-ignore
+                this,
+                this._set_width
+              )
+            } else {
+              width = Number.parseInt(width)
+
+              if (Number.isNaN(width)) {
+                //
+              } else {
+                this._set_width(width)
+              }
+            }
+          } else {
+            this._set_width(width)
+          }
+        },
+        height: (height: string | number) => {
+          this._unlisten_frame_height()
+
+          if (typeof height === 'string') {
+            if (isRelativeValue(height)) {
+              this._height_frame_unlisten = reactToFrameSize(
+                height,
+                // @ts-ignore
+                this,
+                this._set_height
+              )
+            } else {
+              height = Number.parseInt(height)
+
+              if (Number.isNaN(height)) {
+                //
+              } else {
+                this._set_height(height)
+              }
+            }
+          } else {
+            this._set_height(height)
+          }
+        },
+        d: (d: any[]) => {
+          this.clear()
+
+          this._draw_steps(d || [])
+        },
+        lineWidth: (lineWidth: number | undefined = 3) => {
+          this._ctx.lineWidth = lineWidth
+        },
+        sx: (sx) => {
+          const { a, b, c, d, e, f } = this._ctx.getTransform()
+
+          this._ctx.setTransform(sx ?? 1, b, c, d, e, f)
+        },
+        sy: (xy) => {
+          const { a, b, c, d, e, f } = this._ctx.getTransform()
+
+          this._ctx.setTransform(a, b, c, xy ?? 1, e, f)
+        },
+      }
     )
 
-    this._setup()
+    const { width = 200, height = 200 } = this.$props
+
+    this.$element.width = parseRelativeUnit(
+      width,
+      this._get_parent_width,
+      this._get_frame_width
+    )
+    this.$element.height = parseRelativeUnit(
+      height,
+      this._get_parent_height,
+      this._get_frame_height
+    )
+
+    const ctx = this.$element.getContext('2d', { willReadFrequently: true })
+
+    this._ctx = ctx
+
     this._reset()
-
-    this.$propHandler = {
-      ...this.$propHandler,
-      style: (current) => {
-        const final_style = { ...this.$defaultStyle, ...current }
-
-        const color = this._get_fill_style().toLowerCase()
-
-        applyStyle(this.$element, final_style)
-
-        if (
-          this._context.fillStyle !== color ||
-          this._context.strokeStyle !== color
-        ) {
-          this._context.fillStyle = color
-          this._context.strokeStyle = color
-
-          clearCanvas(this._context)
-
-          this._redraw()
-        }
-      },
-      width: (width: number) => {
-        this._unlisten_frame_width()
-
-        if (typeof width === 'string') {
-          if (isRelativeValue(width)) {
-            this._width_frame_unlisten = reactToFrameSize(
-              width,
-              // @ts-ignore
-              this,
-              this._set_width
-            )
-          } else {
-            width = Number.parseInt(width)
-
-            if (Number.isNaN(width)) {
-              //
-            } else {
-              this._set_width(width)
-            }
-          }
-        } else {
-          this._set_width(width)
-        }
-      },
-      height: (height: string | number) => {
-        this._unlisten_frame_height()
-
-        if (typeof height === 'string') {
-          if (isRelativeValue(height)) {
-            this._height_frame_unlisten = reactToFrameSize(
-              height,
-              // @ts-ignore
-              this,
-              this._set_height
-            )
-          } else {
-            height = Number.parseInt(height)
-
-            if (Number.isNaN(height)) {
-              //
-            } else {
-              this._set_height(height)
-            }
-          }
-        } else {
-          this._set_height(height)
-        }
-      },
-      d: (d: any[]) => {
-        this.clear()
-
-        this._draw_steps(d || [])
-      },
-      lineWidth: (lineWidth: number | undefined = 3) => {
-        this._context.lineWidth = lineWidth
-      },
-      sx: (sx) => {
-        const { a, b, c, d, e, f } = this._context.getTransform()
-
-        this._context.setTransform(sx ?? 1, b, c, d, e, f)
-      },
-      sy: (xy) => {
-        const { a, b, c, d, e, f } = this._context.getTransform()
-
-        this._context.setTransform(a, b, c, xy ?? 1, e, f)
-      },
-    }
   }
 
   public reset() {
     super.reset()
 
     this._reset()
-    this.clear()
+    this._clear()
   }
 
-  private _setup = () => {
-    const { className, style } = this.$props
-
-    const old_canvas_el = this.$element
-
-    const canvas_el = this._create_canvas()
-    if (className !== undefined) {
-      canvas_el.className = className
-    }
-
-    applyStyle(this.$element, { ...this.$defaultStyle, ...style })
-
-    canvas_el.draggable = false
-
-    this.$element = canvas_el
-    const context = canvas_el.getContext('2d', { willReadFrequently: true })
-    this._context = context
-
-    if (old_canvas_el) {
-      replaceChild(old_canvas_el, canvas_el)
-    }
-  }
+  private _setup = () => {}
 
   private _get_parent_width = (): number => {
     if (this.$slotParent) {
@@ -202,32 +197,6 @@ export default class CanvasComp
     const { $height } = this.$context
 
     return $height
-  }
-
-  private _create_canvas = () => {
-    // console.log('CanvasComp', '_create_canvas')
-    const { style, width = 200, height = 200 } = this.$props
-
-    const canvas_el = this.$system.api.document.createElement('canvas')
-
-    canvas_el.classList.add('canvas')
-
-    canvas_el.width = parseRelativeUnit(
-      width,
-      this._get_parent_width,
-      this._get_frame_width
-    )
-    canvas_el.height = parseRelativeUnit(
-      height,
-      this._get_parent_height,
-      this._get_frame_height
-    )
-
-    applyStyle(canvas_el, { ...this.$defaultStyle, ...style })
-
-    this.$element = canvas_el
-
-    return canvas_el
   }
 
   private _reset = () => {
@@ -282,7 +251,7 @@ export default class CanvasComp
   private _draw(step: any[]) {
     // console.log('Canvas', '_draw')
 
-    draw(this._context, step)
+    draw(this._ctx, step)
   }
 
   private _draw_steps(steps: any[][]) {
@@ -306,15 +275,15 @@ export default class CanvasComp
 
     const context = this.$element.getContext('2d')
 
-    this._context = context
+    this._ctx = context
 
-    this._context.strokeStyle = color
-    this._context.fillStyle = color
-    this._context.lineJoin = 'round'
-    this._context.lineCap = 'round'
-    this._context.lineWidth = 3
+    this._ctx.strokeStyle = color
+    this._ctx.fillStyle = color
+    this._ctx.lineJoin = 'round'
+    this._ctx.lineCap = 'round'
+    this._ctx.lineWidth = 3
 
-    this._context.scale(sx, sy)
+    this._ctx.scale(sx, sy)
   }
 
   onMount() {
@@ -328,8 +297,12 @@ export default class CanvasComp
     this._draw(step)
   }
 
-  async clear(_?: undefined) {
-    clearCanvas(this._context)
+  async clear() {
+    this._clear()
+  }
+
+  private _clear() {
+    clearCanvas(this._ctx)
 
     this._d = []
   }
@@ -342,7 +315,7 @@ export default class CanvasComp
     height: number
   ) {
     if (image instanceof ImageBitmap) {
-      this._context.drawImage(
+      this._ctx.drawImage(
         image,
         0,
         0,
@@ -354,7 +327,7 @@ export default class CanvasComp
         height
       )
     } else {
-      this._context.drawImage(image, x, y, width, height)
+      this._ctx.drawImage(image, x, y, width, height)
     }
   }
 
@@ -369,7 +342,7 @@ export default class CanvasComp
   private _strokePath(d: string) {
     // console.log('Canvas', '_strokePath', d)
 
-    this._context.stroke(new Path2D(d))
+    this._ctx.stroke(new Path2D(d))
   }
 
   fillPath(d: string, fillRule: CanvasFillRule) {
@@ -383,19 +356,19 @@ export default class CanvasComp
   private _fillPath(d: string, fillRule: CanvasFillRule) {
     // console.log('Canvas', '_fillPath', d)
 
-    this._context.fill(new Path2D(d), fillRule)
+    this._ctx.fill(new Path2D(d), fillRule)
   }
 
   translate(x: number, y: number) {
     // console.log('Canvas', 'translate', x, y)
 
-    this._context.translate(x, y)
+    this._ctx.translate(x, y)
   }
 
   scale(sx: number, sy: number) {
     // console.log('Canvas', 'scale', sx, sy)
 
-    this._context.scale(sx, sy)
+    this._ctx.scale(sx, sy)
   }
 
   async toBlob(type: string, quality: number): Promise<Blob> {
@@ -433,7 +406,7 @@ export default class CanvasComp
     height: number,
     opt: ImageDataSettings
   ): Promise<ImageData> {
-    return this._context.getImageData(x, y, width, height, opt)
+    return this._ctx.getImageData(x, y, width, height, opt)
   }
 
   async putImageData(
@@ -445,6 +418,6 @@ export default class CanvasComp
     width: number,
     height: number
   ): Promise<void> {
-    this._context.putImageData(image, dx, dy, x, y, width, height)
+    this._ctx.putImageData(image, dx, dy, x, y, width, height)
   }
 }
