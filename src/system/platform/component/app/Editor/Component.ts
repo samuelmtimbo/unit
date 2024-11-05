@@ -21953,7 +21953,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._lock_all_component_but(node_id)
       this._disable_all_component_resize_but(node_id)
 
-      this._unlock_sub_component(node_id, false)
+      this._unlock_sub_component(node_id, true)
       this._enable_core_resize(node_id)
     } else if (
       this._is_datum_node_id(node_id) &&
