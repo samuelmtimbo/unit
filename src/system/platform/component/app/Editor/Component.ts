@@ -30643,10 +30643,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     return layout_layer_selected_count
   }
 
+  private _just_node_long_clicked: boolean
+
   private _on_node_long_click = (node_id: string, event: UnitPointerEvent) => {
     // console.log('Graph', '_on_node_long_click')
 
     const { pointerId } = event
+
+    this._just_node_long_clicked = true
+
+    setTimeout(() => {
+      this._just_node_long_clicked = false
+    }, 0)
 
     if (this._collapse_pointer_to_unit[pointerId]) {
       return
@@ -30654,6 +30662,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._cancel_node_long_click) {
       this._cancel_node_long_click = false
+
       return
     }
 
@@ -45613,7 +45622,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     setTimeout(() => {
       this._just_clicked = false
-    }, 1)
+    }, 0)
+
+    if (this._just_node_long_clicked) {
+      return
+    }
 
     if (keyCount(this._resize_node_id_pointer_id) > 0) {
       return
