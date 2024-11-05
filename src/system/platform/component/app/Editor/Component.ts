@@ -59592,6 +59592,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // TODO
   }
 
+  private _on_unit_destroy_moment = () => {
+    //
+  }
+
   private _unit_moment_handler: Dict<Dict<Function>> = {
     input: {
       data: this._on_data_moment,
@@ -59627,6 +59631,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       take_err: NOOP,
       catch_err: NOOP,
       pause: this._on_unit_pause_moment,
+      destroy: this._on_unit_destroy_moment,
     },
     graph: {
       fork: this._on_fork_moment,
