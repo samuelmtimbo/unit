@@ -45476,9 +45476,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           if (this._is_ext_node_id(pressed_node_id)) {
             const { type, pinId, subPinId } = segmentPlugNodeId(pressed_node_id)
+
             const int_node_id = getIntNodeId(type, pinId, subPinId)
+
             if (this._has_node(int_node_id)) {
-              this._drag_node_pointer_id[int_node_id] = pointerId
               if (this._is_draggable_mode()) {
                 this._on_node_drag_end_and_drop(int_node_id, pointerId, drop)
               }
