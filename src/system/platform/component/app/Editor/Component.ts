@@ -1543,6 +1543,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
         specs: this._specs,
         typeCache: this._type_cache,
         config,
+        disabled: false,
         hasSpec: this._has_spec,
         emptySpec: this._empty_spec,
         getSpec: this._get_spec,
@@ -1635,7 +1636,7 @@ export default class Editor extends Element<HTMLDivElement, Props> {
     this._editor.select_node(editor_unit_id)
     this._editor.unlock_sub_component(editor_unit_id, true)
     this._editor.enter(false)
-    this._editor.enterFullwindow(false)
+    this._editor.enterFullwindow(false, false)
     this._editor.leaveFullwindow(true)
     this._editor.temp_fixate_node(editor_unit_id, 100)
 
@@ -4297,19 +4298,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._modes = findRef(this, 'modes') as Modes | null
     this._import = findRef(this, 'import') as IconButton | null
     this._export = findRef(this, 'export') as IconButton | null
-
-    const transcend = findRef(this, 'transcend') as Transcend | null
-
-    if (this._transcend) {
-      this._disable_transcend()
-
-      this._hide_transcend(animate)
-    }
-
-    this._transcend = transcend
+    this._transcend = findRef(this, 'transcend') as Transcend | null
 
     if (this._transcend) {
-      if (this._enabled()) {
+      if (!this._disabled) {
         if (!this._subgraph_unit_id) {
           this._enable_transcend()
         }
@@ -4318,14 +4310,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (!this._disabled) {
       if (this._input_disabled) {
-        this._enable_input()
+        if (!this._core_component_unlocked_count) {
+          this._enable_input()
+        }
       }
     }
 
     this._context_unlisten = addListeners(this.$context, [
       makeResizeListener(this._on_context_resize),
-      makeCustomListener('enabled', this._on_context_enabled),
-      makeCustomListener('disabled', this._on_context_disabled),
       makeCustomListener('themechanged', this._on_context_theme_changed),
       makeCustomListener('colorchanged', this._on_context_color_changed),
     ])
@@ -18407,7 +18399,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
-  private _enter_all_fullwindow = (animate: boolean): void => {
+  private _enter_all_fullwindow = (
+    animate: boolean,
+    hide: boolean = true
+  ): void => {
     // console.log('Graph', '_enter_all_fullwindow')
 
     const { component } = this.$props
@@ -18444,7 +18439,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       visible_component_ids
     )
 
-    this._enter_fullwindow(animate, ordered_all_component_ids)
+    this._enter_fullwindow(animate, ordered_all_component_ids, hide)
   }
 
   private _enter_all_selected_fullwindow = (animate: boolean) => {
@@ -18657,9 +18652,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (!this._frame_out) {
       if (!this._disabled) {
-        this._enable_input()
+        if (this._core_component_unlocked_count === 0) {
+          this._enable_input()
 
-        this._show_control(animate)
+          this._show_control(animate)
+        }
       }
     }
 
@@ -19577,6 +19574,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _enable_transcend = (): void => {
     // console.log('Graph', '_enable_transcend', this._id)
 
+    const { animate } = this._config()
+
     if (this._transcend) {
       if (this._unlisten_transcend) {
         this._unlisten_transcend()
@@ -19593,6 +19592,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       } else {
         this._transcend.up(false)
       }
+
+      this._show_transcend(animate)
     }
   }
 
@@ -21764,6 +21765,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _on_focus = () => {
     // console.log('Graph', '_on_focus', this._id, this._disabled)
 
+    const { animate } = this._config()
+
     if (this._subgraph_graph) {
       this._subgraph_graph.focus()
     } else if (
@@ -21780,6 +21783,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._focus_sub_component(first)
       }
+
+      this._hide_control(animate)
 
       this._focused = true
 
@@ -21818,23 +21823,22 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else {
       const { relatedTarget } = event
 
-      if (
-        (relatedTarget &&
-          this._control &&
-          this._control._control.$element.contains(relatedTarget)) ||
-        this._graph.$element.contains(relatedTarget)
-      ) {
-        return
-      }
-
       if (relatedTarget) {
-        const hide = this._temp_control_unlock || this._control_lock
+        if (
+          (this._control &&
+            this._control._control.$element.contains(relatedTarget)) ||
+          this._graph.$element.contains(relatedTarget)
+        ) {
+          return
+        }
 
-        this._disable(hide)
+        const hide = this._temp_control_unlock || this._control_lock
 
         if (container && container.$element.contains(relatedTarget)) {
           return
         }
+
+        this._disable(hide)
 
         this._hide_transcend(true)
       }
@@ -23505,8 +23509,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this._leave_all_fullwindow(animate)
   }
 
-  public enterFullwindow(animate: boolean): void {
-    this._enter_all_fullwindow(animate)
+  public enterFullwindow(animate: boolean, hide: boolean = true): void {
+    this._enter_all_fullwindow(animate, hide)
   }
 
   public getSubgraphPath(): string[] {
@@ -23548,13 +23552,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       unlocked_sub_component.focus(options)
     } else {
-      if (this._is_fullwindow) {
-        this._component.focus()
-
-        this._hide_control(animate)
-      } else {
-        this._graph.focus(options)
-      }
+      this._graph.focus(options)
     }
   }
 
@@ -23719,7 +23717,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     if (!this._temp_control_lock) {
       if (!this._temp_control_unlock) {
         if (!this._focused) {
-          this._unlock_control()
+          this._unlock_control(false)
         }
       }
     }
@@ -24683,7 +24681,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _enter_fullwindow = (
     _animate: boolean,
-    sub_component_ids: string[]
+    sub_component_ids: string[],
+    hide: boolean = true
   ) => {
     // console.log('Graph', '_enter_fullwindow', _animate, sub_component_ids, this._id)
 
@@ -24701,7 +24700,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (!this._disabled) {
         this._disable_input()
 
-        this._hide_control(_animate)
+        if (hide) {
+          this._hide_control(_animate)
+        }
       }
     }
 
@@ -29528,16 +29529,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._disable_input()
     this._disable_transcend()
-    this._hide_transcend(animate)
 
     const can_uncollapse = !was_animating_leave
 
-    // console.log('this._subgraph_fork', this._subgraph_fork)
-
     this._dom_enter_subgraph(animate)
 
-    // graph.setProp('disabled', true)
-    graph.setProp('disabled', false)
     graph.setProp('fork', this._subgraph_fork)
 
     graph.focus()
@@ -29959,7 +29955,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
 
         this._disable_transcend()
-        this._hide_transcend(animate)
 
         this.dispatchEvent(
           'leave',
@@ -30092,8 +30087,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._subgraph_unlisten()
 
       this._subgraph_depth = 0
-
-      this._subgraph_graph.setProp('disabled', true)
 
       this._dom_leave_subgraph(animate)
 
@@ -30920,7 +30913,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._disable_input()
       this._disable_transcend()
-      this._hide_transcend(animate)
 
       editor.setProp('disabled', false)
       editor.focus()
