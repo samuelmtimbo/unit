@@ -18865,18 +18865,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             }
           ),
         ])
-
-        if (this._minimap_hidden === undefined) {
-          this._minimap_hidden = !this._cabinet.isActive('minimap')
-        } else {
-          this._cabinet.setActive('minimap', !this._minimap_hidden)
-        }
-
-        if (this._palette_hidden === undefined) {
-          this._palette_hidden = !this._cabinet.isActive('color')
-        } else {
-          this._cabinet.setActive('color', !this._palette_hidden)
-        }
       }
     }
   }
@@ -21633,7 +21621,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _set_minimap_to_layout = (): void => {
     if (this._minimap) {
-      // RETURN
+      // TODO
       // this._minimap.setProp('nodes', this._layout_node)
       // this._minimap.setProp('links', {})
       // this._minimap.tick()
