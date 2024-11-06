@@ -39,11 +39,11 @@ import { Moment } from '../../../debug/Moment'
 import { watchGraph } from '../../../debug/graph/watchGraph'
 import { watchUnit } from '../../../debug/watchUnit'
 import { evaluate } from '../../../spec/evaluate'
+import { evaluateMemorySpec } from '../../../spec/evaluate/evaluateMemorySpec'
 import { stringify } from '../../../spec/stringify'
 import {
   stringifyGraphSpecData,
   stringifyMemorySpecData,
-  stringifyUnitBundleSpecData,
 } from '../../../spec/stringifySpec'
 import forEachValueKey from '../../../system/core/object/ForEachKeyValue/f'
 import { clone } from '../../../util/clone'
@@ -556,7 +556,7 @@ export const AsyncGCall = (graph: Graph): $G_C => {
 
       const ghost_ = clone(ghost)
 
-      stringifyUnitBundleSpecData(ghost_.bundle)
+      stringifyMemorySpecData(ghost_.bundle.unit.memory)
 
       callback(ghost_)
     },
@@ -569,13 +569,23 @@ export const AsyncGCall = (graph: Graph): $G_C => {
       fork = true,
       bubble = true,
     }: GraphAddUnitGhostData): void {
+      nextUnitBundle = clone(nextUnitBundle)
+
+      if (nextUnitBundle.unit?.memory) {
+        evaluateMemorySpec(
+          nextUnitBundle.unit?.memory,
+          graph.__system.specs,
+          graph.__system.classes
+        )
+      }
+
       call(
         'addUnitGhost',
         fork,
         bubble,
         unitId,
         nextUnitId,
-        clone(nextUnitBundle),
+        nextUnitBundle,
         nextUnitPinMap
       )
     },
