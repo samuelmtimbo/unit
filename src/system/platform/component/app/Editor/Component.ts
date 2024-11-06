@@ -32001,17 +32001,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       ) {
         this._start_layout_children_animation(parent_id, slot_name, frame)
       } else {
-        ;(async () => {
-          for (const child_id of children) {
-            if (this._layout_core_animating.has(child_id)) {
-              this._start_layout_children_animation(parent_id, slot_name, frame)
+        for (const child_id of children) {
+          if (this._layout_core_animating.has(child_id)) {
+            this._start_layout_children_animation(parent_id, slot_name, frame)
 
-              return
-            }
+            return
           }
+        }
 
-          callback()
-        })()
+        callback()
       }
     }
 
@@ -33063,7 +33061,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     next_parent_id: string | null,
     next_slot_name: string
   ): void => {
-    const children = this._spec_get_sub_component_children(parent_id)
+    const children = clone(this._spec_get_sub_component_children(parent_id))
 
     this._remove_sub_component_children(
       parent_id,
