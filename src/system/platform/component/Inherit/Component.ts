@@ -104,10 +104,10 @@ export default class Inherit extends Element<HTMLDivElement, Props> {
     super.domCommitInsertChild(child, at)
   }
 
-  domCommitRemoveChild(child: Component) {
+  domCommitRemoveChild(child: Component, at: number) {
     this._unregisterChild(child)
 
-    super.domCommitRemoveChild(child)
+    super.domCommitRemoveChild(child, at)
   }
 
   onPropChanged(name: string, style) {

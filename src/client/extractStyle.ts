@@ -189,8 +189,8 @@ export function _extractFromRawStyle(
 
     const bb = getPathBoundingBox(d)
 
-    style['width'] = `${bb.width}px`
-    style['height'] = `${bb.height}px`
+    style['width'] = `100%`
+    style['height'] = `100%`
 
     // TODO
   }
