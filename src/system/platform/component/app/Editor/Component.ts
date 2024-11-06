@@ -41820,7 +41820,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const drag_start_position = this._layout_drag_start_position[unit_id]
     const scroll_top_start = this._layout_drag_start_scroll_top[unit_id]
-    const position = this._layout_drag_init_position[unit_id]
+    const position = this._layout_drag_init_position[unit_id] ?? { x: 0, y: 0 }
 
     this._layout_drag_client_position[unit_id] = { x: clientX, y: clientY }
 
