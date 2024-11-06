@@ -39,6 +39,8 @@ import { makeCustomListener } from './event/custom'
 import { readDataTransferItemAsText } from './event/drag'
 import { extractTrait } from './extractTrait'
 import { getComponentInterface } from './interface'
+import { isHTML } from './isHTML'
+import { isSVG, isSVGSVG } from './isSVG'
 import { LayoutBase, LayoutLeaf } from './layout'
 import {
   IOUIEventName,
@@ -1454,27 +1456,36 @@ export class Component<
     return DEFAULT_TEXT_ALIGN
   }
 
-  isSVG(): boolean {
-    const {
-      api: {
-        window: { SVGElement, SVGSVGElement },
-      },
-    } = this.$system
+  private _svg_wrapper: SVGSVGElement[] = []
+  private _html_wrapper: SVGForeignObjectElement[] = []
 
-    return (
-      this.$element instanceof SVGElement &&
-      !(this.$element instanceof SVGSVGElement)
+  private _svgWrapper() {
+    const svg = this.$system.api.document.createElementNS(namespaceURI, 'svg')
+
+    svg.style.width = '100%'
+    svg.style.height = '100%'
+
+    return svg
+  }
+
+  private _htmlWrapper() {
+    const foreignObject = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'foreignObject'
     )
+
+    foreignObject.style.width = '100%'
+    foreignObject.style.height = '100%'
+
+    return foreignObject
+  }
+
+  isSVG(): boolean {
+    return isSVG(this.$system, this.$element as SVGElement)
   }
 
   isHTML(): boolean {
-    const {
-      api: {
-        window: { HTMLElement },
-      },
-    } = this.$system
-
-    return this.$element instanceof HTMLElement
+    return isHTML(this.$system, this.$element as HTMLElement)
   }
 
   isText(): boolean {
@@ -1724,7 +1735,7 @@ export class Component<
     slot.postAppendParentChild(child, slotName, at)
   }
 
-  public createSVGWrapper(): Component<SVGSVGElement> {
+  public _createSVGWrapper(): Component<SVGSVGElement> {
     const {
       api: {
         document: { createElementNS },
@@ -2468,12 +2479,64 @@ export class Component<
     return false
   }
 
+  private _insertAt = (parent: Node, element: Node, at: number) => {
+    const target = this._wrapElement(parent, element, at)
+
+    insertAt(parent, target, at)
+  }
+
+  private _wrapElement = (parent: Node, element: Node, at: number) => {
+    let target: Node = element
+
+    if (isHTML(this.$system, parent) && isSVG(this.$system, element)) {
+      target = this._svgWrapper()
+
+      this._svg_wrapper[at] = target as SVGSVGElement
+
+      target.appendChild(element)
+    } else if (
+      (isSVG(this.$system, parent) || isSVGSVG(this.$system, parent)) &&
+      isHTML(this.$system, element)
+    ) {
+      target = this._htmlWrapper()
+
+      this._html_wrapper[at] = target as SVGForeignObjectElement
+
+      target.appendChild(element)
+    }
+
+    return target
+  }
+
+  private _unwrapElement = (parent: Node, element: Node, at: number) => {
+    let target: Node = element
+
+    if (isHTML(this.$system, parent) && isSVG(this.$system, element)) {
+      target = this._svg_wrapper[at]
+
+      this._svg_wrapper[at] = undefined
+
+      target.removeChild(element)
+    } else if (
+      (isSVG(this.$system, parent) || isSVGSVG(this.$system, parent)) &&
+      isHTML(this.$system, element)
+    ) {
+      target = this._html_wrapper[at]
+
+      this._html_wrapper[at] = undefined
+
+      target.removeChild(element)
+    }
+
+    return target
+  }
+
   protected domCommitAppendChild(component: Component, at: number) {
-    this._domCommitChild__template(component, at, insertAt)
+    this._domCommitChild__template(component, at, this._insertAt)
   }
 
   protected domCommitInsertChild(component: Component, at: number) {
-    this._domCommitChild__template(component, at, insertAt)
+    this._domCommitChild__template(component, at, this._insertAt)
   }
 
   protected _domCommitChild__template = (
@@ -2653,7 +2716,7 @@ export class Component<
             this.$slotParent
           )
         } else {
-          this.domCommitRemoveChild(component)
+          this.domCommitRemoveChild(component, at)
         }
       }
     } else {
@@ -2662,7 +2725,7 @@ export class Component<
           this.domRemoveRoot(root, at)
         }
       } else {
-        this.domCommitRemoveChild(component)
+        this.domCommitRemoveChild(component, at)
       }
     }
   }
@@ -3080,9 +3143,9 @@ export class Component<
             slotParent
           )
         } else if (slotParent) {
-          slotParent.domCommitRemoveChild(component)
+          slotParent.domCommitRemoveChild(component, at)
         } else {
-          this.domCommitRemoveChild(component)
+          this.domCommitRemoveChild(component, at)
         }
       }
     } else {
@@ -3104,17 +3167,17 @@ export class Component<
           }
         }
       } else {
-        this.domCommitRemoveChild(component)
+        this.domCommitRemoveChild(component, at)
       }
     }
 
     set(component, '$slotParent', null)
   }
 
-  protected domCommitRemoveChild(component: Component) {
+  protected domCommitRemoveChild(component: Component, at: number) {
     if (component.isParent()) {
       for (const root of component.$root) {
-        this.domCommitRemoveChild(root)
+        this.domCommitRemoveChild(root, at)
       }
 
       return
@@ -3122,15 +3185,27 @@ export class Component<
 
     if (this.isParent()) {
       if (this.$slotParent && component.$slotParent) {
-        this.$slotParent.domCommitRemoveChild(component)
+        this.$slotParent.domCommitRemoveChild(component, at)
       } else {
         if (this.$element.contains(component.$element)) {
-          removeChild(this.$element, component.$element)
+          const target = this._unwrapElement(
+            this.$element,
+            component.$element,
+            at
+          )
+
+          removeChild(this.$element, target)
         }
       }
     } else {
       if (this.$element.contains(component.$element)) {
-        removeChild(this.$element, component.$element)
+        const target = this._unwrapElement(
+          this.$element,
+          component.$element,
+          at
+        )
+
+        removeChild(this.$element, target)
       }
     }
   }
