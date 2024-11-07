@@ -12087,7 +12087,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         opacity: `1`,
         visibility: 'visible',
       },
-      name: 'merge',
+      name: '',
     })
     merge_node_content.appendChild(pin_name)
 
