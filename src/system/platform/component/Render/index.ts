@@ -22,7 +22,7 @@ export default class Render extends Element_<I, O> {
       },
       {
         input: {
-          component: {
+          unit: {
             ref: true,
           },
         },

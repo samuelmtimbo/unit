@@ -52,6 +52,7 @@ export const G_METHOD_GET = [
   'getGraphErr',
   'getGraphMergeInputData',
   'getUnitInputData',
+  'getUnitBundleSpec',
   'getSpec',
   'getBundle',
 ]
