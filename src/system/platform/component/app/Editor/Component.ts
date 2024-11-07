@@ -25246,7 +25246,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else if (!a_link_pin && b_link_pin) {
       const { type: b_type } = segmentLinkPinNodeId(b)
 
-      if (config?.multiInputMerge) {
+      if (!config?.multiInputMerge) {
         const { mergeId } = segmentMergeNodeId(a)
 
         if (b_type === 'output' && this._merge_output_count[mergeId] > 0) {
