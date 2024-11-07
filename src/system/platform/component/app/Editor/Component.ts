@@ -52614,7 +52614,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const color = this._get_color()
       const strokeStyle = getThemeModeColor($theme, this._mode, color)
-      const lineWidth = 2
+      const lineWidth = 4
 
       const unlisten = captureGesture(
         event,
