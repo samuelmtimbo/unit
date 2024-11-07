@@ -773,3 +773,84 @@ export const roundPoint = (position: Position): Position => {
     y: Math.round(position.y),
   }
 }
+
+export function catmullRom(
+  p0: number,
+  p1: number,
+  p2: number,
+  p3: number,
+  t: number
+): number {
+  const tensionFactor = 0.5
+  const startingPointWeight = 2
+  const linearTerm1 = -1
+  const linearTerm2 = 1
+  const quadraticTerm1 = 2
+  const quadraticTerm2 = -5
+  const quadraticTerm3 = 4
+  const quadraticTerm4 = -1
+  const cubicTerm1 = -1
+  const cubicTerm2 = 3
+  const cubicTerm3 = -3
+  const cubicTerm4 = 1
+
+  const t2 = t * t
+  const t3 = t2 * t
+
+  return (
+    tensionFactor *
+    (startingPointWeight * p1 +
+      (linearTerm1 * p0 + linearTerm2 * p2) * t +
+      (quadraticTerm1 * p0 +
+        quadraticTerm2 * p1 +
+        quadraticTerm3 * p2 +
+        quadraticTerm4 * p3) *
+        t2 +
+      (cubicTerm1 * p0 + cubicTerm2 * p1 + cubicTerm3 * p2 + cubicTerm4 * p3) *
+        t3)
+  )
+}
+
+export function catmullRomSpline(points: Point[]): number[][] {
+  if (points.length < 4) return
+
+  const spline: number[][] = []
+
+  spline.push([points[0].x, points[0].y])
+
+  for (let i = 0; i < points.length - 3; i++) {
+    const fourPoints = points.slice(i, i + 4)
+
+    const segment = catmullRomSplineSegment(fourPoints)
+
+    for (let i = 0; i < segment.length; i++) {
+      spline.push(segment[i])
+    }
+  }
+
+  return spline
+}
+
+export function catmullRomSplineSegment(
+  lastFourPoints: Point[],
+  step: number = 0.1
+): number[][] {
+  if (lastFourPoints.length < 4) {
+    return []
+  }
+
+  const spline: number[][] = []
+
+  spline.push([lastFourPoints[0].x, lastFourPoints[0].y])
+
+  const [p0, p1, p2, p3] = lastFourPoints
+
+  for (let t = 0; t <= 1; t += step) {
+    const x = catmullRom(p0.x, p1.x, p2.x, p3.x, t)
+    const y = catmullRom(p0.y, p1.y, p2.y, p3.y, t)
+
+    spline.push([x, y])
+  }
+
+  return spline
+}

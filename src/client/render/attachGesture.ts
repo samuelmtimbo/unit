@@ -1,28 +1,23 @@
-import { getStroke } from 'perfect-freehand'
 import { System } from '../../system'
 import { Unlisten } from '../../types/Unlisten'
 import { namespaceURI } from '../component/namespaceURI'
 import { _addEventListener } from '../event'
 import { UnitPointerEvent } from '../event/pointer'
+import { catmullRomSplineSegment } from '../util/geometry'
 import { Point } from '../util/geometry/types'
 
-function getSvgPathFromStroke(stroke): string {
+function pathFromSpline(stroke: number[][]): string {
   if (!stroke.length) {
     return ''
   }
 
-  const d = stroke.reduce(
-    (acc, [x0, y0], i, arr) => {
-      const [x1, y1] = arr[(i + 1) % arr.length]
-      acc.push(x0, y0, (x0 + x1) / 2, (y0 + y1) / 2)
-      return acc
-    },
-    ['M', ...stroke[0], 'Q']
-  )
+  let d = `M ${stroke[0][0]} ${stroke[0][1]}`
 
-  d.push('Z')
+  for (let i = 1; i < stroke.length; i++) {
+    d = d + ` L ${stroke[i][0]} ${stroke[i][1]}`
+  }
 
-  return d.join(' ')
+  return d
 }
 
 const STROKE_OPT = {
@@ -60,25 +55,26 @@ export function attachGesture(system: System): void {
     } = {},
     callback: (event: PointerEvent, track: Point[]) => void
   ): Unlisten => {
-    const { pointerId, screenX, screenY, pageX, pageY } = event
-
-    // svg.setPointerCapture(pointerId)
+    const { pointerId, pageX, pageY } = event
 
     const path = createElementNS(namespaceURI, 'path')
 
     svg.appendChild(path)
 
-    const { lineWidth = 2, strokeStyle = '#d1d1d1' } = opt
+    const { lineWidth = 10, strokeStyle = '#d1d1d1' } = opt
 
     const color = strokeStyle
 
     path.style.stroke = color
     path.style.strokeWidth = `${lineWidth}px`
-    path.style.fill = color
+    path.style.fill = 'none'
+    path.style.strokeLinecap = 'round'
 
     let active = true
 
     const track: Point[] = [{ x: pageX, y: pageY }]
+
+    let d = ''
 
     const pointerMoveListener = (_event: PointerEvent) => {
       // console.log('attachGesture', 'pointerMoveListener')
@@ -88,13 +84,15 @@ export function attachGesture(system: System): void {
       if (_pointerId === pointerId) {
         const { pageX, pageY } = _event
 
-        const outline = getStroke(track, STROKE_OPT)
+        track.push({ x: pageX, y: pageY })
 
-        const d = getSvgPathFromStroke(outline)
+        if (track.length > 3) {
+          const segment = catmullRomSplineSegment(track.slice(-4))
+
+          d += pathFromSpline(segment)
+        }
 
         path.setAttribute('d', d)
-
-        track.push({ x: pageX, y: pageY })
       }
     }
 
