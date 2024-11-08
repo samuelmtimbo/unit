@@ -68,8 +68,4 @@ export default class SVGSVG extends SVGElement_<SVGSVGElement, Props> {
       this.$element.setAttribute('viewBox', viewBox)
     }
   }
-
-  onPropChanged(prop: string, current: any, prev: any): void {
-    this.$propHandler[prop](current, prev)
-  }
 }
