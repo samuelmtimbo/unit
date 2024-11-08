@@ -5,7 +5,7 @@ import { applyAttr } from './attr'
 import { Component } from './component'
 import { applyDynamicStyle, applyStyle } from './style'
 
-export type Handler = (value: any) => void
+export type Handler = (value: any, previous: any) => void
 
 export type PropHandler = Dict<Handler>
 
@@ -89,11 +89,11 @@ export function basePropHandler(
   CONTROLLED_ATTR_SET: Set<string>
 ): PropHandler {
   return {
-    attr: (attr) => {
+    attr: (attr, prev) => {
       applyAttr(
         element,
         { ...DEFAULT_ATTR, ...attr },
-        component.getProp('attr'),
+        prev,
         CONTROLLED_ATTR_SET
       )
     },

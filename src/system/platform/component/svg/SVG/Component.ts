@@ -69,7 +69,7 @@ export default class SVGSVG extends SVGElement_<SVGSVGElement, Props> {
     }
   }
 
-  onPropChanged(prop: string, current: any): void {
-    this.$propHandler[prop](current)
+  onPropChanged(prop: string, current: any, prev: any): void {
+    this.$propHandler[prop](current, prev)
   }
 }

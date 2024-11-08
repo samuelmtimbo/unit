@@ -10,9 +10,7 @@ export function applyAttr(
     const value = attr[name]
 
     if (value === undefined) {
-      if (!override.has(name)) {
-        element.removeAttribute(name)
-      }
+      element.removeAttribute(name)
     }
   }
 
@@ -23,9 +21,7 @@ export function removeAllAttr(element: Element) {
   const attributes = element.attributes
 
   for (const attr of attributes) {
-    if (attr.name !== 'style') {
-      attributes.removeNamedItem(attr.name)
-    }
+    attributes.removeNamedItem(attr.name)
   }
 }
 

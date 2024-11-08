@@ -37,7 +37,7 @@ export class SVGElement_<
     }
   }
 
-  onPropChanged<K extends keyof P>(prop: any, current: any): void {
-    this.$propHandler[prop as string](current)
+  onPropChanged(prop: any, current: any, prev): void {
+    this.$propHandler[prop](current, prev)
   }
 }
