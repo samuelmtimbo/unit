@@ -1,7 +1,6 @@
 import { isFrameRelativeValue } from '../isFrameRelative'
 import { Style } from '../system/platform/Style'
 import { MeasureTextFunction } from '../text'
-import { getPathBoundingBox } from '../util/svg'
 import { Component } from './component'
 import { DEFAULT_FONT_SIZE } from './DEFAULT_FONT_SIZE'
 import { camelToDashed } from './id'
@@ -151,6 +150,17 @@ export function _extractFromRawStyle(
     treatProp('height')
   }
 
+  if (element instanceof SVGElement) {
+    const treatProp = (name: 'width' | 'height') => {
+      if (style[name] === undefined) {
+        style[name] = '100%'
+      }
+    }
+
+    treatProp('width')
+    treatProp('height')
+  }
+
   if (element instanceof HTMLImageElement) {
     const ratio = element.naturalWidth / element.naturalHeight
     const ratio_ = ratio.toFixed(2)
@@ -182,36 +192,6 @@ export function _extractFromRawStyle(
     }
   } else if (element instanceof HTMLSelectElement) {
     style.height = '18px'
-  }
-
-  if (element instanceof SVGPathElement) {
-    const d = element.getAttribute('d')
-
-    const bb = getPathBoundingBox(d)
-
-    style['width'] = `100%`
-    style['height'] = `100%`
-
-    // TODO
-  }
-
-  if (element instanceof SVGRectElement) {
-    style['width'] = `${element.width.animVal.value}px`
-    style['height'] = `${element.height.animVal.value}px`
-
-    // TODO
-  }
-
-  if (element instanceof SVGCircleElement) {
-    const r = element.r.animVal.value
-
-    const width = 2 * r
-    const height = width
-
-    style['width'] = `${width}px`
-    style['height'] = `${height}px`
-
-    // TODO
   }
 
   return style
