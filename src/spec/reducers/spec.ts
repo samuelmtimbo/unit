@@ -837,6 +837,8 @@ export const renameUnitInMerges = (
   forEachValueKey(clone(unitMerges), (merge, mergeId) => {
     forEachValueKey(merge, (pins, mergeUnitId) => {
       if (unitId === mergeUnitId) {
+        delete unitMerges[mergeId][unitId]
+
         unitMerges[mergeId][newUnitId] = pins
       }
     })
