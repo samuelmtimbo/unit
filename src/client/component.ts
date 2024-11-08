@@ -41,7 +41,6 @@ import { extractTrait } from './extractTrait'
 import { getComponentInterface } from './interface'
 import { isHTML } from './isHTML'
 import { isSVG, isSVGSVG } from './isSVG'
-import { LayoutBase, LayoutLeaf } from './layout'
 import {
   IOUIEventName,
   UI_EVENT_SET,
@@ -49,7 +48,6 @@ import {
 } from './makeEventListener'
 import { mount } from './mount'
 import { rawExtractStyle } from './rawExtractStyle'
-import { getBaseStyle } from './reflectComponentBaseTrait'
 import { stopImmediatePropagation, stopPropagation } from './stopPropagation'
 import { applyStyle } from './style'
 import { unmount } from './unmount'
@@ -162,6 +160,8 @@ export class Component<
   public $slotParent: Component | null = null
   public $detachedContext: Context | null = null
   public $detachedSlotParent: Component | null = null
+  public $attachedChildren: Component[] = []
+  public $hostSlot: Component | null = null
 
   public $returnIndex: number = 0
 
@@ -550,8 +550,8 @@ export class Component<
   private _baseAnimationAbort: Unlisten
 
   private _animateBase = (
-    base: LayoutBase,
-    hostSlot: Component<any>,
+    leaves: Component[],
+    slot: Component<any>,
     reverse: boolean = false,
     prepend: boolean = false,
     commit: Callback
@@ -568,55 +568,43 @@ export class Component<
 
     const allAbort = []
 
-    let hostTarget = hostSlot
+    let target = slot
 
     while (
-      hostTarget.isParent() ||
-      (hostTarget.$element instanceof HTMLElement && hostTarget.$element).style
+      target.isParent() ||
+      (target.$element instanceof HTMLElement && target.$element).style
         .display === 'contents'
     ) {
-      hostTarget = hostTarget.$slotParent
+      target = target.$slotParent
     }
 
-    const hostTrait = extractTrait(hostTarget, measureText)
-    const hostStyle = rawExtractStyle(
-      hostTarget.$element,
-      hostTrait,
-      measureText
+    const trait = extractTrait(target, measureText)
+    const style = rawExtractStyle(target.$element, trait, measureText)
+
+    // delete style['transform']
+    delete style['opacity']
+
+    const styles = leaves.map((leaf) =>
+      rawExtractStyle(leaf.$element, trait, measureText)
     )
 
-    delete hostStyle['transform']
-    delete hostStyle['opacity']
-
-    const baseStyle = getBaseStyle(base, [], (leafPath, leafComp) => {
-      return rawExtractStyle(leafComp.$element, hostTrait, measureText)
+    let targetTraits = reflectChildrenTrait(trait, style, styles, [], () => {
+      return []
     })
 
-    const targetTraits = reflectChildrenTrait(
-      hostTrait,
-      hostStyle,
-      baseStyle,
-      [],
-      () => {
-        return []
-      }
-    )
+    let finished = 0
+    let frames: HTMLDivElement[] = []
 
-    let leafFinished = 0
-    let leafFrames: HTMLDivElement[] = []
+    let j = 0
 
-    for (let i = 0; i < base.length; i++) {
-      const targetTrait = targetTraits[i]
+    for (let i = 0; i < leaves.length; i++) {
+      const leaf = leaves[i]
 
-      const leaf = base[i]
+      const leafTrait = extractTrait(leaf, measureText)
 
-      const [_, leafComp] = leaf
+      const frame = createElement('div')
 
-      const leafTrait = extractTrait(leafComp, measureText)
-
-      const leafFrame = createElement('div')
-
-      applyStyle(leafFrame, {
+      applyStyle(frame, {
         position: 'absolute',
         left: `${leafTrait.x}px`,
         top: `${leafTrait.y}px`,
@@ -628,71 +616,91 @@ export class Component<
       })
 
       if (prepend) {
-        hostTarget.$element.prepend(leafFrame)
+        target.$element.prepend(frame)
       } else {
-        hostTarget.$element.appendChild(leafFrame)
+        target.$element.appendChild(frame)
       }
 
       !reverse && this.domRemoveLeaf(leaf)
 
-      leafComp.unmount()
+      leaf.unmount()
 
-      leafFrame.appendChild(leafComp.$element)
+      frame.appendChild(leaf.$element)
 
-      leafComp.$slotParent = hostTarget
+      leaf.$slotParent = target
 
-      leafComp.mount(hostTarget._$context)
+      leaf.mount(target._$context)
 
-      leafFrames.push(leafFrame)
+      frames.push(frame)
 
       const { x: scrollX0, y: scrollY0 } = getScrollPosition(
-        hostTarget.$element,
-        hostTarget._$context.$element
+        target.$element,
+        target._$context.$element
       )
 
       const abortAnimation = animateSimulate(
         this.$system,
         leafTrait,
         () => {
+          const targetTrait = targetTraits[i]
+
           return targetTrait
         },
         ANIMATION_PROPERTY_DELTA_PAIRS,
         ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
+          if (j % leaves.length === 0) {
+            targetTraits = reflectChildrenTrait(
+              trait,
+              style,
+              styles,
+              [],
+              () => {
+                return []
+              }
+            )
+
+            j = 0
+          }
+
+          j++
+
           const { x: scrollX, y: scrollY } = getScrollPosition(
-            hostTarget.$element,
-            hostTarget._$context.$element
+            target.$element,
+            target._$context.$element
           )
 
           const scrollDx = scrollX - scrollX0
           const scrollDy = scrollY - scrollY0
 
-          leafFrame.style.left = `${
+          frame.style.left = `${
             x -
-            (reverse ? this._$context.$x : hostTrait.x) +
+            (reverse ? this._$context.$x : trait.x) +
             ((Math.abs(sx) - 1) * width) / 2 -
             scrollDx
           }px`
-          leafFrame.style.top = `${
+          frame.style.top = `${
             y -
-            (reverse ? this._$context.$y : hostTrait.y) +
+            (reverse ? this._$context.$y : trait.y) +
             ((Math.abs(sy) - 1) * height) / 2 -
             scrollDy
           }px`
-          leafFrame.style.width = `${width}px`
-          leafFrame.style.height = `${height}px`
-          leafFrame.style.transform = `scale(${sx}, ${sy})`
-          // leafFrame.style.opacity = `${opacity}`
-          leafFrame.style.opacity = `1`
-          leafFrame.style.fontSize = `${fontSize}px`
+          frame.style.width = `${width}px`
+          frame.style.height = `${height}px`
+          frame.style.transform = `scale(${sx}, ${sy})`
+          frame.style.opacity = `1`
+          frame.style.fontSize = `${fontSize}px`
         },
         () => {
-          leafFinished++
+          finished++
 
-          if (leafFinished === base.length) {
-            for (const leafFrame of leafFrames) {
-              leafFrame.removeChild(leafComp.$element)
+          if (finished === leaves.length) {
+            for (let i = 0; i < leaves.length; i++) {
+              const frame = frames[i]
+              const leaf = leaves[i]
 
-              hostTarget.$element.removeChild(leafFrame)
+              frame.removeChild(leaf.$element)
+
+              target.$element.removeChild(frame)
             }
 
             commit()
@@ -783,15 +791,29 @@ export class Component<
 
     const activeElement = getActiveElement(this.$system)
 
-    const hostComponent = hosts[0] // TODO heuristic: get closest on the tree
+    const hostComponent = hosts[0] as Component
 
-    let hostSlot = hostComponent.getSlot('default')
+    const hostSlot = hostComponent.getSlot('default')
 
-    const base = this.getRootBase()
+    const leaves = this.getRootLeaves()
+
+    const all = [...leaves]
+
+    for (const attachedChild of hostSlot.$attachedChildren) {
+      all.unshift(attachedChild)
+    }
 
     const commit = () => {
-      for (const [_, leaf] of base) {
-        hostSlot.domAppendChild(leaf)
+      for (const leaf of leaves) {
+        push(hostSlot.$attachedChildren, leaf)
+
+        leaf.$hostSlot = hostSlot
+      }
+
+      for (let i = 0; i < all.length; i++) {
+        const leaf = all[i]
+
+        hostSlot.domAppendChild(leaf, 'default', i)
       }
 
       if (activeElementInside) {
@@ -820,14 +842,14 @@ export class Component<
 
     if (animate) {
       this._baseAnimationAbort = this._animateBase(
-        base,
+        all,
         hostSlot,
         false,
         prepend,
         commit
       )
     } else {
-      this.domRemoveBase(base)
+      this.domRemoveLeaves(leaves)
 
       commit()
     }
@@ -850,33 +872,37 @@ export class Component<
       this._baseAnimationAbort = undefined
     }
 
-    const base = this.getRootBase()
+    const leaves = this.getRootLeaves()
 
     let leafEnd = 0
 
-    const couple = (leafComp: Component) => {
-      leafComp.unmount()
+    const couple = (leaf: Component) => {
+      remove(leaf.$hostSlot.$attachedChildren, leaf)
 
-      if (leafComp.$rootParent) {
-        leafComp.$rootParent.domInsertParentRootAt(
-          leafComp,
+      leaf.$hostSlot = null
+
+      leaf.unmount()
+
+      if (leaf.$rootParent) {
+        leaf.$rootParent.domInsertParentRootAt(
+          leaf,
           this.$returnIndex,
           'default'
         )
-      } else if (leafComp.$parent) {
-        leafComp.$parent.domInsertRootAt(leafComp, this.$returnIndex)
+      } else if (leaf.$parent) {
+        leaf.$parent.domInsertRootAt(leaf, this.$returnIndex)
       } else {
         //
       }
 
-      leafComp.mount(this.$parent._$context)
+      leaf.mount(this.$parent._$context)
     }
 
     if (animate) {
       const targetSlots = []
 
-      this.templateBase(
-        base,
+      this.templateLeaves(
+        leaves,
         (root) => {
           targetSlots.push(root.$slot['default'])
         },
@@ -888,10 +914,8 @@ export class Component<
         }
       )
 
-      for (let i = 0; i < base.length; i++) {
-        const leaf = base[i]
-
-        const [_, leafComp] = leaf
+      for (let i = 0; i < leaves.length; i++) {
+        const leaf = leaves[i]
 
         const targetSlot = this.$detachedSlotParent
 
@@ -903,66 +927,66 @@ export class Component<
           () => {
             leafEnd++
 
-            couple(leafComp)
+            couple(leaf)
           }
         )
       }
     } else {
-      for (let i = 0; i < base.length; i++) {
-        const leaf = base[i]
+      for (let i = 0; i < leaves.length; i++) {
+        const leaf = leaves[i]
 
-        const [_, leafComp] = leaf
-
-        couple(leafComp)
+        couple(leaf)
       }
     }
   }
 
-  public templateBase = (
-    base: LayoutBase,
+  public templateLeaves = (
+    leaves: Component[],
     root: (parent: Component, leafComp: Component) => void,
     parentRoot: (parent: Component, leafComp: Component) => void,
     self: (leafComp: Component) => void
   ): void => {
     // console.log('Component', 'templateBase', sub_component_id)
 
-    for (const leaf of base) {
+    for (const leaf of leaves) {
       this.templateLeaf(leaf, root, parentRoot, self)
     }
   }
 
   public templateLeaf = (
-    leaf: LayoutLeaf,
+    leaf: Component,
     root: (parent: Component, leaf_comp: Component) => void,
     parentRoot: (parent: Component, leaf_comp: Component) => void,
     self: (leafComp: Component) => void
   ): void => {
     // console.log('Component', 'templateLeaf', sub_component_id)
 
-    const [leafPath, leafComp] = leaf
+    const leafParent = leaf.$parent
 
-    const leafParentLast = leafPath[leafPath.length - 1]
-    const leafParentPath = leafPath.slice(0, -1)
-
-    const leafParent = this.pathGetSubComponent(leafParentPath)
-
-    if (leafParent === leafComp) {
-      self(leafComp)
+    if (leafParent === leaf) {
+      self(leaf)
     } else {
-      const parent_id = leafParent.getSubComponentParentId(leafParentLast)
-      if (parent_id) {
-        const parent = leafParent.getSubComponent(parent_id)
+      if (leaf.$parent) {
+        const subComponentId = leaf.$parent.getSubComponentId(leaf)
 
-        parentRoot(parent, leafComp)
+        const parentId = leafParent.getSubComponentParentId(subComponentId)
+
+        if (parentId) {
+          const parent = leafParent.getSubComponent(parentId)
+
+          parentRoot(parent, leaf)
+        } else {
+          root(leafParent, leaf)
+        }
       } else {
-        root(leafParent, leafComp)
+        //
       }
     }
   }
 
-  public domRemoveBase = (base: LayoutBase): void => {
-    this.templateBase(
-      base,
+  public domRemoveLeaves = (leaves: Component[]): void => {
+    this.templateLeaves(
+      leaves,
       (parent, leafComp) => {
         const index = parent.$root.indexOf(leafComp)
 
@@ -985,7 +1009,7 @@ export class Component<
     )
   }
 
-  public domRemoveLeaf = (leaf: LayoutLeaf): void => {
+  public domRemoveLeaf = (leaf: Component): void => {
     this.templateLeaf(
       leaf,
       (parent, leaf_comp) => {
@@ -1010,14 +1034,11 @@ export class Component<
     )
   }
 
-  public domAppendBase = (
-    base: LayoutBase,
-    fallbackParent: Component
-  ): void => {
+  public domAppendBase = (leaves: Component[]): void => {
     // console.log('Component', 'domAppendBase', sub_component_id)
 
-    this.templateBase(
-      base,
+    this.templateLeaves(
+      leaves,
       (parent, leafComp) => {
         parent.domAppendRoot(leafComp, this.$root.length - 1)
       },
@@ -1522,6 +1543,31 @@ export class Component<
 
     if (p.length === 0) {
       p = [[path, this]]
+    }
+
+    return p
+  }
+
+  getRootLeaves(path: string[] = []): Component[] {
+    if (this.isBase()) {
+      return [this]
+    }
+
+    let p = []
+
+    for (const subComponent of this.$root) {
+      const subComponentId = this.getSubComponentId(subComponent)
+
+      const subComponentRootBase = subComponent.getRootLeaves([
+        ...path,
+        subComponentId,
+      ])
+
+      p = [...p, ...subComponentRootBase]
+    }
+
+    if (p.length === 0) {
+      p = [this]
     }
 
     return p
