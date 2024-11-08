@@ -63,6 +63,7 @@ import { getRect } from './util/style/getRect'
 import { Scale, getScale } from './util/style/getScale'
 import { getSize } from './util/style/getSize'
 import { getTextAlign } from './util/style/getTextAlign'
+import { measureSVG } from './util/web/measureSVG'
 
 const $childToComponent = (
   system: System,
@@ -1480,8 +1481,11 @@ export class Component<
   private _svg_wrapper: SVGSVGElement[] = []
   private _html_wrapper: SVGForeignObjectElement[] = []
 
-  private _svgWrapper() {
-    const svg = this.$system.api.document.createElementNS(namespaceURI, 'svg')
+  private _svgWrapper(): SVGSVGElement {
+    const svg = this.$system.api.document.createElementNS(
+      namespaceURI,
+      'svg'
+    ) as SVGSVGElement
 
     svg.style.width = '100%'
     svg.style.height = '100%'
@@ -2531,13 +2535,47 @@ export class Component<
     insertAt(parent, target, at)
   }
 
+  private _svg_wrapper_unlisten: Unlisten[] = []
+
   private _wrapElement = (parent: Node, element: Node, at: number) => {
-    let target: Node = element
+    let target = element
 
     if (isHTML(this.$system, parent) && isSVG(this.$system, element)) {
-      target = this._svgWrapper()
+      const {
+        api: {
+          document: { MutationObserver },
+        },
+      } = this.$system
+
+      const svg = this._svgWrapper() as SVGSVGElement
+
+      target = svg
+
+      const config = {
+        childList: false,
+        subtree: false,
+        attributes: true,
+      }
+
+      const resize = () => {
+        const { width, height } = measureSVG(
+          this.$system,
+          element as SVGElement
+        )
+
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`)
+      }
+
+      resize()
+
+      const observer = new MutationObserver(resize)
+
+      observer.observe(element, config)
 
       this._svg_wrapper[at] = target as SVGSVGElement
+      this._svg_wrapper_unlisten[at] = () => {
+        observer.disconnect()
+      }
 
       target.appendChild(element)
     } else if (
@@ -2561,6 +2599,9 @@ export class Component<
       target = this._svg_wrapper[at]
 
       this._svg_wrapper[at] = undefined
+
+      this._svg_wrapper_unlisten[at]()
+      this._svg_wrapper_unlisten[at] = undefined
 
       target.removeChild(element)
     } else if (
@@ -2622,7 +2663,7 @@ export class Component<
   public appendRoot(component: Component): void {
     // console.log('Component', 'appendRoot', component)
 
-    const at = this.$root.length
+    const at = this.$mountRoot.length
 
     this.memAppendRoot(component)
     this.domAppendRoot(component, at)
@@ -2735,8 +2776,6 @@ export class Component<
   }
 
   public domRemoveRoot(component: Component, at: number): void {
-    set(component, '$slotParent', null)
-
     if (!this.$primitive) {
       if (!component.$primitive) {
         for (let i = 0; i < component.$mountRoot.length; i++) {
@@ -2753,7 +2792,7 @@ export class Component<
           }
         }
       } else {
-        if (this.$slotParent && component.$slotParent) {
+        if (this.$slotParent) {
           this.$slotParent.domRemoveParentChildAt(
             component,
             'default',
@@ -2774,6 +2813,8 @@ export class Component<
         this.domCommitRemoveChild(component, at)
       }
     }
+
+    set(component, '$slotParent', null)
   }
 
   public postRemoveRoot(component: Component): void {
@@ -3230,29 +3271,21 @@ export class Component<
     }
 
     if (this.isParent()) {
-      if (this.$slotParent && component.$slotParent) {
+      if (this.$slotParent) {
         this.$slotParent.domCommitRemoveChild(component, at)
       } else {
-        if (this.$element.contains(component.$element)) {
-          const target = this._unwrapElement(
-            this.$element,
-            component.$element,
-            at
-          )
-
-          removeChild(this.$element, target)
-        }
+        this._removeChild(component, at)
       }
     } else {
-      if (this.$element.contains(component.$element)) {
-        const target = this._unwrapElement(
-          this.$element,
-          component.$element,
-          at
-        )
+      this._removeChild(component, at)
+    }
+  }
 
-        removeChild(this.$element, target)
-      }
+  protected _removeChild(component: Component, at: number) {
+    if (this.$element.contains(component.$element)) {
+      const target = this._unwrapElement(this.$element, component.$element, at)
+
+      removeChild(this.$element, target)
     }
   }
 
