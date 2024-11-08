@@ -99,8 +99,8 @@ export default class Iframe
     push(this.$system.cache.iframe, this)
   }
 
-  onPropChanged(prop: string, current: any): void {
-    this._prop_handler[prop](current)
+  onPropChanged(prop: string, current: any, prev: any): void {
+    this._prop_handler[prop](current, prev)
   }
 
   private _setSrc(current: string) {

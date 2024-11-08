@@ -12,6 +12,16 @@ export interface Props {
   ry?: number
   width?: number
   height?: number
+  attr?: Dict<any>
+}
+
+export const DEFAULT_ATTR = {
+  width: 100,
+  height: 100,
+  x: 0,
+  y: 0,
+  rx: 0,
+  ry: 0,
 }
 
 export default class SVGRect extends SVGElement_<SVGRectElement, Props> {
@@ -23,22 +33,32 @@ export default class SVGRect extends SVGElement_<SVGRectElement, Props> {
       $system.style['rect'],
       {},
       {
-        x: (x: number | undefined = 0) => {
+        x: (x: number | undefined = this.$props.attr.x ?? DEFAULT_ATTR.x) => {
           this.$element.setAttribute('x', `${x}`)
         },
-        y: (y: number | undefined = 0) => {
+        y: (y: number | undefined = this.$props.attr.y ?? DEFAULT_ATTR.y) => {
           this.$element.setAttribute('y', `${y}`)
         },
-        width: (width: number | undefined = 0) => {
+        width: (
+          width: number | undefined = this.$props.attr.width ??
+            DEFAULT_ATTR.width
+        ) => {
           this.$element.setAttribute('width', `${width}`)
         },
-        height: (height: number | undefined = 0) => {
+        height: (
+          height: number | undefined = this.$props.attr.height ??
+            DEFAULT_ATTR.height
+        ) => {
           this.$element.setAttribute('height', `${height}`)
         },
-        rx: (rx: number | undefined = 0) => {
+        rx: (
+          rx: number | undefined = this.$props.attr.rx ?? DEFAULT_ATTR.rx
+        ) => {
           this.$element.setAttribute('rx', `${rx}`)
         },
-        ry: (ry: number | undefined = 0) => {
+        ry: (
+          ry: number | undefined = this.$props.attr.ry ?? DEFAULT_ATTR.ry
+        ) => {
           this.$element.setAttribute('ry', `${ry}`)
         },
       }
@@ -46,12 +66,12 @@ export default class SVGRect extends SVGElement_<SVGRectElement, Props> {
 
     const {
       className,
-      x = 0,
-      y = 0,
-      rx = 0,
-      ry = 0,
-      width = 100,
-      height = 100,
+      x = DEFAULT_ATTR.x,
+      y = DEFAULT_ATTR.y,
+      rx = DEFAULT_ATTR.rx,
+      ry = DEFAULT_ATTR.ry,
+      width = DEFAULT_ATTR.width,
+      height = DEFAULT_ATTR.height,
     } = $props
 
     if (className !== undefined) {

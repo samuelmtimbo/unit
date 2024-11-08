@@ -49,7 +49,7 @@ export default class HTMLElement_<
     }
   }
 
-  onPropChanged(prop: any, current: any) {
-    this.$propHandler[prop as string](current)
+  onPropChanged(prop: any, current: any, prev: any) {
+    this.$propHandler[prop](current, prev)
   }
 }

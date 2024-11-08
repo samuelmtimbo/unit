@@ -192,10 +192,12 @@ export class Component<
   }
 
   setProp<K extends keyof P>(prop: K, data: P[K]) {
+    const prev = this.$props[prop]
+
     this.$props[prop] = data
 
     if (this.$mounted) {
-      this._onPropChanged(prop, data)
+      this._onPropChanged(prop, data, prev)
     } else {
       this.$changed.add(prop as string)
     }
@@ -216,18 +218,18 @@ export class Component<
     return this.$slot[slotName]
   }
 
-  onPropChanged<K extends keyof P>(prop: K, current: any) {}
+  onPropChanged<K extends keyof P>(prop: K, current: any, prev: any) {}
 
-  _onPropChanged<K extends keyof P>(prop: K, current: any) {
+  _onPropChanged<K extends keyof P>(prop: K, current: any, prev: any) {
     const _current = (this._prop_transformer[prop] || []).reduce((acc, t) => {
       return t(acc)
     }, current)
 
-    this.onPropChanged(prop, _current ?? current)
+    this.onPropChanged(prop, _current ?? current, prev)
   }
 
   refreshProp(prop: string) {
-    this._onPropChanged(prop, this.$props[prop])
+    this._onPropChanged(prop, this.$props[prop], this.$props[prop])
   }
 
   onConnected($unit: U) {}
@@ -1100,7 +1102,7 @@ export class Component<
 
       this.$changed.delete(name)
 
-      this._onPropChanged(name, current)
+      this._onPropChanged(name, current, current)
     }
   }
 

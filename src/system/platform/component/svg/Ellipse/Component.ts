@@ -47,8 +47,4 @@ export default class SVGEllipse extends SVGElement_<SVGCircleElement, Props> {
     this.$element.setAttribute('rx', `${rx}`)
     this.$element.setAttribute('ry', `${ry}`)
   }
-
-  onPropChanged(prop: string, current: any): void {
-    this.$propHandler[prop](current)
-  }
 }
