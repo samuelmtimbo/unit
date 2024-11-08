@@ -18645,10 +18645,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._cancel_fullwindow_animation()
 
-    if (this._in_component_control) {
-      this._lock_control()
-    }
-
     this._leave_all_fullwindow_sub_component(_animate)
 
     if (this._in_component_control) {
@@ -21803,14 +21799,26 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._focused = true
 
-      this._lock_control()
+      this._refresh_control()
     } else {
       this._focused = true
 
       this._enable()
-      this._lock_control()
+      this._refresh_control()
 
       this._show_transcend(true)
+    }
+  }
+
+  private _refresh_control = () => {
+    const { animate } = this._config()
+
+    if (this._control_lock) {
+      this._enable_input()
+
+      this._show_control(animate)
+    } else {
+      this._lock_control()
     }
   }
 
@@ -23688,8 +23696,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._core_component_unlocked_count++
 
         if (this._core_component_unlocked_count === 1) {
-          this._unlock_control()
-
           this._disable_input()
 
           if (this._control_lock) {
@@ -23822,8 +23828,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._enable_input()
         this._enable_transcend()
 
-        this._lock_control()
-
+        this._show_control(animate)
         this._show_transcend(animate)
       }
     }
@@ -45198,9 +45203,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (this._control) {
       if (this._temp_control_lock) {
-        // if (!this._focused) {
-        this._temp_unlock_control()
-        // }
+        if (!this._subgraph_unit_id) {
+          this._temp_unlock_control()
+        }
       }
     }
 
