@@ -88,6 +88,7 @@ import {
   moveSubgraph,
 } from '../../../../../Class/Graph/moveSubgraph'
 import { Opt, Unit, UnitEvents } from '../../../../../Class/Unit'
+import { Memory } from '../../../../../Class/Unit/Memory'
 import {
   UnitRemovePinDataData,
   UnitTakeInputData,
@@ -28842,10 +28843,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     emit && this._pod_set_link_pin_constant(unitId, type, pinId, constant)
   }
 
-  private _set_unit_memory(
-    unit_id: string,
-    memory: { input: Dict<any>; output: Dict<any>; memory: Dict<any> }
-  ) {
+  private _set_unit_memory(unit_id: string, memory: Memory) {
     const add_pin_datum = (type: IO, pin_id: string) => {
       const pin_node_id = getPinNodeId(unit_id, type, pin_id)
 
@@ -47538,18 +47536,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       paused: function (): boolean {
         throw new MethodNotImplementedError()
       },
-      snapshot: function (): {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      } {
+      snapshot: function (): Memory {
         throw new MethodNotImplementedError()
       },
-      restore: function (state: {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      }): void {
+      restore: function (state: Memory): void {
         throw new MethodNotImplementedError()
       },
       getSelfPin: function (): Pin<U<any, any>> {
@@ -51093,18 +51083,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       paused: function (): boolean {
         throw new MethodNotImplementedError()
       },
-      snapshot: function (): {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      } {
+      snapshot: function (): Memory {
         throw new MethodNotImplementedError()
       },
-      restore: function (state: {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      }): void {
+      restore: function (state: Memory): void {
         throw new MethodNotImplementedError()
       },
       getSelfPin: function (): Pin<U<any, any>> {
@@ -51411,18 +51393,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       paused: function (): boolean {
         throw new MethodNotImplementedError()
       },
-      snapshot: function (): {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      } {
+      snapshot: function (): Memory {
         throw new MethodNotImplementedError()
       },
-      restore: function (state: {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      }): void {
+      restore: function (state: Memory): void {
         throw new MethodNotImplementedError()
       },
       getSelfPin: function (): Pin<U<any, any>> {

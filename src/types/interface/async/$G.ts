@@ -34,6 +34,7 @@ import {
   GraphTakeUnitErrData,
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
+import { Memory } from '../../../Class/Unit/Memory'
 import { BundleSpec } from '../../BundleSpec'
 import { Callback } from '../../Callback'
 import { Dict } from '../../Dict'
@@ -115,23 +116,12 @@ export interface $G_G {
     data: {},
     callback: (data: { input: Dict<any>; output: Dict<any> }) => void
   ): void
-  $snapshot(
-    data: {},
-    callback: (state: {
-      input: Dict<any>
-      output: Dict<any>
-      memory: Dict<any>
-    }) => void
-  ): void
+  $snapshot(data: {}, callback: (state: Memory) => void): void
   $snapshotUnit(
     data: {
       unitId: string
     },
-    callback: (state: {
-      input: Dict<any>
-      output: Dict<any>
-      memory: Dict<any>
-    }) => void
+    callback: (state: Memory) => void
   ): void
   $getGraphData(
     data: {},

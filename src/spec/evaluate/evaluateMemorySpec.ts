@@ -1,13 +1,9 @@
+import { Memory } from '../../Class/Unit/Memory'
 import { Classes, Specs } from '../../types'
-import { Dict } from '../../types/Dict'
 import { evaluateDataObj } from './evaluateDataObj'
 
 export function evaluateMemorySpec(
-  memory: {
-    input: Dict<any>
-    output: Dict<any>
-    memory: Dict<any>
-  },
+  memory: Memory,
   specs: Specs,
   classes: Classes,
   resolver: (url: string) => any = () => {
