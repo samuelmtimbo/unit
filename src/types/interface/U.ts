@@ -1,5 +1,6 @@
 import { Spec } from '..'
 import { Opt, Unit } from '../../Class/Unit'
+import { Memory } from '../../Class/Unit/Memory'
 import { Pin } from '../../Pin'
 import { PinOpt } from '../../PinOpt'
 import { PinOpts } from '../../PinOpts'
@@ -131,16 +132,8 @@ export interface U<
   pause(): void
   play(): void
   paused(): boolean
-  snapshot(): {
-    input: Dict<any>
-    output: Dict<any>
-    memory: Dict<any>
-  }
-  restore(state: {
-    input: Dict<any>
-    output: Dict<any>
-    memory: Dict<any>
-  }): void
+  snapshot(): Memory
+  restore(state: Memory): void
   getSelfPin(): Pin<U>
   err(err?: string | Error | None): string | null
   hasErr(): boolean

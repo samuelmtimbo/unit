@@ -34,6 +34,7 @@ import {
   GraphUnplugPinData,
 } from '../../../Class/Graph/interface'
 import { Unit } from '../../../Class/Unit'
+import { Memory } from '../../../Class/Unit/Memory'
 import { GraphMoment } from '../../../debug/GraphMoment'
 import { Moment } from '../../../debug/Moment'
 import { watchGraph } from '../../../debug/graph/watchGraph'
@@ -155,11 +156,7 @@ export const AsyncGGet = (graph: Graph): $G_G => {
 
     async $snapshot(
       data: {},
-      callback: (state: {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      }) => void
+      callback: (state: Memory) => void
     ) {
       const memory = graph.snapshot()
       callback(memory)
@@ -167,11 +164,7 @@ export const AsyncGGet = (graph: Graph): $G_G => {
 
     $snapshotUnit(
       { unitId }: { unitId: string },
-      callback: (state: {
-        input: Dict<any>
-        output: Dict<any>
-        memory: Dict<any>
-      }) => void
+      callback: (state: Memory) => void
     ) {
       const unit = graph.getUnit(unitId)
 

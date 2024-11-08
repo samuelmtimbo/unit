@@ -1,3 +1,4 @@
+import { Memory } from '../Class/Unit/Memory'
 import { Dict } from './Dict'
 import { GraphUnitPinsSpec } from './GraphUnitPinsSpec'
 import { GraphUnitSpec } from './GraphUnitSpec'
@@ -7,7 +8,7 @@ export type GraphUnitSpecBase = {
   input?: GraphUnitPinsSpec
   output?: GraphUnitPinsSpec
   state?: Dict<any>
-  memory?: { input: Dict<any>; output: Dict<any>; memory: Dict<any> }
+  memory?: Memory
   flag?: Dict<any>
   children?: GraphUnitSpec[] | None
   reorder?: string[] | None
