@@ -22,7 +22,10 @@ export default class SVGPath extends SVGElement_<SVGPathElement, Props> {
       $system,
       $system.api.document.createElementNS(namespaceURI, 'path'),
       $system.style['path'],
-      {},
+      {
+        'stroke-linecap': 'round',
+        'stroke-linejoin': 'round',
+      },
       {
         id: (id: string | undefined) => {
           this.$element.id = id

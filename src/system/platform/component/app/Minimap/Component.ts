@@ -196,6 +196,9 @@ export default class Minimap extends Element<HTMLDivElement, Props> {
               pointerEvents: 'none',
               strokeWidth: 'inherit',
             },
+            attr: {
+              'stroke-linecap': 'normal',
+            },
           },
           this.$system
         )

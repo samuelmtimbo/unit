@@ -9625,11 +9625,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     if (input) {
       const end_d = `${functional ? ARROW_MEMORY : ''}${arrow_share}`
-      end_marker = new SVGPath({ d: end_d, style: marker_style }, this.$system)
+      end_marker = new SVGPath(
+        { d: end_d, style: marker_style, attr: { 'stroke-linecap': 'normal' } },
+        this.$system
+      )
     } else {
       const start_d = arrow_share
       start_marker = new SVGPath(
-        { d: start_d, style: marker_style },
+        {
+          d: start_d,
+          style: marker_style,
+          attr: { 'stroke-linecap': 'normal' },
+        },
         this.$system
       )
     }
@@ -11486,6 +11493,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           strokeWidth: '1',
           stroke,
         },
+        attr: { 'stroke-linecap': 'normal' },
       },
       this.$system
     )
@@ -11508,6 +11516,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           stroke: pin_link_end_marker_stroke,
           strokeWidth: pin_link_end_marker_stroke_width,
         },
+        attr: { 'stroke-linecap': 'normal' },
       },
       this.$system
     )
@@ -11631,6 +11640,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           strokeWidth: '1',
           stroke,
         },
+        attr: { 'stroke-linecap': 'normal' },
       },
       this.$system
     )
@@ -11644,6 +11654,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           stroke: pin_link_end_marker_stroke,
           strokeWidth: pin_link_end_marker_stroke_width,
         },
+        attr: { 'stroke-linecap': 'normal' },
       },
       this.$system
     )
@@ -15675,6 +15686,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         attr: {
           'marker-start': `url(#${link_start_start_id})`,
           'marker-end': `url(#${link_end_id})`,
+          'stroke-linecap': 'normal',
         },
         style: {
           display: hidden ? 'none' : 'block',
@@ -15697,6 +15709,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           strokeWidth: `${6 + strokeWidth}`,
           stroke: COLOR_NONE,
         },
+        attr: { 'stroke-linecap': 'normal' },
       },
       this.$system
     )
@@ -15712,6 +15725,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           stroke: COLOR_NONE,
           ...userSelect('none'),
         },
+        attr: { 'stroke-linecap': 'normal' },
       },
       this.$system
     )
