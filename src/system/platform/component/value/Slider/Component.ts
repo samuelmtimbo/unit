@@ -18,7 +18,7 @@ export default class Slider extends Field<HTMLInputElement, Props> {
     super($props, $system, $system.api.document.createElement('input'), {
       valueKey: 'value',
       defaultValue: '0',
-      defaultStyle: $system.style['textarea'],
+      defaultStyle: $system.style['slider'],
       defaultAttr: {
         type: 'range',
       },

@@ -133,12 +133,6 @@ export function inputPropHandler(
 
       element[VALUE_NAME] = value_ || DEFAULT_VALUE
     },
-    min: (value: any | undefined) => {
-      element[VALUE_NAME] = value
-    },
-    max: (value: any | undefined) => {
-      element[VALUE_NAME] = value
-    },
     placeholder: (placeholder: string | undefined) => {
       // @ts-ignore
       element.placeholder = placeholder ?? ''
