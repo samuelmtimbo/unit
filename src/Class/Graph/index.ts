@@ -239,16 +239,18 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   private _unitToMergeCount: Dict<Dict<number>> = {}
 
   private _children: Component_[] = []
-
-  private _animations: AnimationSpec[] = []
-
-  private _stopPropagation: Dict<number> = {}
-  private _stopImmediatePropagation: Dict<number> = {}
-  private _preventDefault: Dict<number> = {}
+  private _animations?: AnimationSpec[]
+  private _stopPropagation?: Dict<number>
+  private _stopImmediatePropagation?: Dict<number>
+  private _preventDefault?: Dict<number>
 
   private _waitAll: IOOf<WaitAll> = {}
 
   private _plugUnlisten: IOOf<Dict<Dict<Unlisten>>> = {}
+
+  private _removingUnit: Set<string>
+
+  private _destroying: boolean
 
   constructor(
     spec: GraphSpec,
@@ -4118,10 +4120,6 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     }
   }
 
-  private _removingUnit: Set<string> = new Set()
-
-  private _destroying: boolean
-
   private _removeUnit(
     unitId: string,
     take: boolean = true,
@@ -4133,6 +4131,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
     const unit = this.getUnit(unitId)
 
+    this._removingUnit = this._removingUnit ?? new Set()
     this._removingUnit.add(unitId)
 
     fork && this._fork(undefined, true, bubble)
@@ -4148,6 +4147,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     destroy && unit.destroy()
 
     this._removingUnit.delete(unitId)
+    if (!this._removingUnit.size) {
+      this._removingUnit = undefined
+    }
 
     return unit
   }
@@ -6233,7 +6235,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   pullChild(at: number): Component_ {
-    throw pullChild(this, this._children, at)
+    return pullChild(this, this._children, at)
   }
 
   hasChild(at: number): boolean {
@@ -6261,28 +6263,46 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   getAnimations(): AnimationSpec[] {
-    return this._animations
+    return this._animations ?? []
   }
 
   animate(keyframes: Keyframe[], opt: KeyframeAnimationOptions): void {
-    return animate(this, this._animations, keyframes, opt)
+    this._animations = this._animations ?? []
+
+    animate(this, this._animations, keyframes, opt)
   }
 
   cancelAnimation(id: string): void {
-    return cancelAnimation(this, this._animations, id)
+    cancelAnimation(this, this._animations, id)
+
+    if (!this._animations.length) {
+      this._animations = undefined
+    }
   }
 
   stopPropagation(name: string): Unlisten {
-    return stopPropagation(this, this._stopPropagation, name)
+    this._stopPropagation = this._stopPropagation ?? {}
+
+    const unlisten = stopPropagation(this, this._stopPropagation, name)
+
+    return () => {
+      unlisten()
+
+      if (!keyCount(this._stopPropagation)) {
+        this._stopPropagation = undefined
+      }
+    }
   }
 
   getSetup(): ComponentSetup {
     const setup: ComponentSetup = {
-      animations: this._animations,
+      animations: this._animations ?? [],
       events: this.eventNames(),
-      stopPropagation: Object.keys(this._stopPropagation),
-      stopImmediatePropagation: Object.keys(this._stopImmediatePropagation),
-      preventDefault: Object.keys(this._preventDefault),
+      stopPropagation: Object.keys(this._stopPropagation ?? {}),
+      stopImmediatePropagation: Object.keys(
+        this._stopImmediatePropagation ?? {}
+      ),
+      preventDefault: Object.keys(this._preventDefault ?? {}),
     }
 
     return setup
