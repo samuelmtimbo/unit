@@ -46544,62 +46544,65 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         }
       }
 
-      const sub_component = this._get_sub_component(graph_unit_id)
-      const base = this._get_sub_component_base(graph_unit_id)
+      if (ordered_sub_component_ids.length) {
+        const sub_component = this._get_sub_component(graph_unit_id)
+        const base = this._get_sub_component_base(graph_unit_id)
 
-      this._measure_sub_component_base(graph_unit_id, base)
+        this._measure_sub_component_base(graph_unit_id, base)
 
-      for (const sub_component_id of ordered_sub_component_ids) {
-        const next_sub_component_id =
-          this._collapse_next_id_map.unit[sub_component_id] ?? sub_component_id
+        for (const sub_component_id of ordered_sub_component_ids) {
+          const next_sub_component_id =
+            this._collapse_next_id_map.unit[sub_component_id] ??
+            sub_component_id
 
-        const sub_component = graph_component.getSubComponent(
-          next_sub_component_id
-        )
+          const sub_component = graph_component.getSubComponent(
+            next_sub_component_id
+          )
 
-        this.__leave_sub_component_frame(sub_component_id, sub_component)
-      }
-
-      this._decompose_sub_component(graph_unit_id)
-
-      this._animate_sub_component_graph_leave(
-        graph_unit_id,
-        base,
-        [],
-        () => {
-          const style = {}
-
-          const { x, y } = this._get_node_screen_position(graph_unit_id)
-
-          const { z } = this._zoom
-
-          const { width, height } = get_final_size()
-
-          const color = sub_component.getColor()
-
-          const trait: LayoutNode = {
-            x: x,
-            y: y,
-            width,
-            height,
-            sx: z,
-            sy: z,
-            opacity: 1,
-            fontSize: 14,
-            color,
-          }
-
-          return {
-            style,
-            trait,
-          }
-        },
-        () => {
-          for (const unit_id of ordered_sub_component_ids) {
-            this._mem_remove_component(unit_id)
-          }
+          this.__leave_sub_component_frame(sub_component_id, sub_component)
         }
-      )
+
+        this._decompose_sub_component(graph_unit_id)
+
+        this._animate_sub_component_graph_leave(
+          graph_unit_id,
+          base,
+          [],
+          () => {
+            const style = {}
+
+            const { x, y } = this._get_node_screen_position(graph_unit_id)
+
+            const { z } = this._zoom
+
+            const { width, height } = get_final_size()
+
+            const color = sub_component.getColor()
+
+            const trait: LayoutNode = {
+              x: x,
+              y: y,
+              width,
+              height,
+              sx: z,
+              sy: z,
+              opacity: 1,
+              fontSize: 14,
+              color,
+            }
+
+            return {
+              style,
+              trait,
+            }
+          },
+          () => {
+            for (const unit_id of ordered_sub_component_ids) {
+              this._mem_remove_component(unit_id)
+            }
+          }
+        )
+      }
     }
 
     const init_unit_node = this.get_node(graph_unit_id)
