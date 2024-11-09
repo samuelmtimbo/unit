@@ -42223,7 +42223,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const { z } = this._zoom
 
-    for (const drag_node_id in this._drag_node_pointer_id) {
+    for (const drag_node_id in this._pressed_node_id_pointer_id) {
       const { x0, y0, x1, y1 } = this._get_node_edge_offset(drag_node_id, 1)
 
       let dx: number = 0
@@ -42251,9 +42251,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       const translate_node = (node_id: string) => {
         const node = this._node[node_id]
 
-        node.hx -= (2 * dx) / z + cx
-        node.hy -= (2 * dy) / z + cy
-
         const next_position = addVector(node, {
           x: dx / z + cx,
           y: dy / z + cy,
@@ -42261,6 +42258,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         this._set_node_position(node_id, next_position)
       }
+
+      const drag_node = this._node[drag_node_id]
+
+      drag_node.hx -= (2 * dx) / z + cx
+      drag_node.hy -= (2 * dy) / z + cy
 
       translate_node(drag_node_id)
 
