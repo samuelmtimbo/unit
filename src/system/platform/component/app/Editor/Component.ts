@@ -42118,6 +42118,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._set_node_drag_along(node_id, selected_node_id)
         }
       }
+    } else if (this._mode == 'multiselect') {
+      const subgraph_id = this._node_to_subgraph[node_id]
+      const subgraph_node_ids = this._subgraph_to_node[subgraph_id]
+
+      for (const subgraph_node_id of subgraph_node_ids) {
+        if (subgraph_node_id !== node_id) {
+          this._set_node_drag_along(node_id, subgraph_node_id)
+        }
+      }
     }
 
     if (this._drag_along_node[node_id]) {
