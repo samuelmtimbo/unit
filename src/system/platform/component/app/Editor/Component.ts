@@ -21799,7 +21799,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._focused = true
 
-      this._refresh_control()
+      this._lock_control()
     } else {
       this._focused = true
 
