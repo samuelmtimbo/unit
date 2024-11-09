@@ -47776,7 +47776,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         pinSpec: GraphPinSpec,
         data: string
       ) => {
-        //
+        exposePinSet({ type, pinId, pinSpec }, spec)
       },
       exposePin: (
         type: IO,
