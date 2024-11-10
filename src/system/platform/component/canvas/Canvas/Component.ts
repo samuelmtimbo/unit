@@ -124,7 +124,9 @@ export default class Canvas_
         d: (d: any[]) => {
           this.clear()
 
-          this._draw_steps(d || [])
+          this._d = d || []
+
+          this._draw_steps(this._d)
         },
         lineWidth: (lineWidth: number | undefined = 3) => {
           this._ctx.lineWidth = lineWidth
@@ -142,7 +144,7 @@ export default class Canvas_
       }
     )
 
-    const { width = 200, height = 200 } = this.$props
+    const { width = 200, height = 200, d } = this.$props
 
     this.$element.width = parseRelativeUnit(
       width,
@@ -160,6 +162,10 @@ export default class Canvas_
     this._ctx = ctx
 
     this._reset()
+
+    if (d) {
+      this._draw_steps(d)
+    }
   }
 
   public reset() {
@@ -267,7 +273,7 @@ export default class Canvas_
   }
 
   private _reset_context = (): void => {
-    // console.log('Canvas', '_setup_context')
+    // console.log('Canvas', '_reset_context')
 
     const { sx = 1, sy = 1 } = this.$props
 
