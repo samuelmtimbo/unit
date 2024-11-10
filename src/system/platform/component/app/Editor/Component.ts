@@ -474,7 +474,7 @@ import { graphComplexity } from '../../../../../spec/complexity'
 import { emptyIO } from '../../../../../spec/emptyIO'
 import { emptyGraphSpec } from '../../../../../spec/emptySpec'
 import { escape } from '../../../../../spec/escape'
-import { evaluate } from '../../../../../spec/evaluate'
+import { _evaluate, evaluate } from '../../../../../spec/evaluate'
 import { evaluateDataValue } from '../../../../../spec/evaluateDataValue'
 import {
   evaluateBundleStr,
@@ -53439,12 +53439,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   }
 
   private _drop_text = (text: string, position: Position): void => {
-    let json: BundleSpec | undefined = undefined
+    let try_json = (text: string) => {
+      let json: BundleSpec | undefined = undefined
 
-    try {
-      json = JSON.parse(text) as BundleSpec
-    } catch {
-      // TODO
+      try {
+        json = JSON.parse(text) as BundleSpec
+      } catch {
+        //
+      }
+
+      if (json) {
+        const valid = this._validate_text_bundle_spec(json)
+
+        if (valid) {
+          this.paste_bundle(json, position, true, true, false)
+        } else {
+          const datum_id = this.add_new_datum(stringify(json), position, true)
+
+          move_datum(datum_id)
+        }
+      }
+
+      return json
     }
 
     const move_datum = (datum_id: string) => {
@@ -53470,16 +53486,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       }
     }
 
-    if (json) {
-      const valid = this._validate_text_bundle_spec(json)
-
-      if (valid) {
-        this.paste_bundle(json, position, true, true, false)
-      } else {
-        const datum_id = this.add_new_datum(stringify(json), position, true)
-
-        move_datum(datum_id)
-      }
+    if (try_json(text)) {
+      //
     } else {
       if (text) {
         let tree: TreeNode
@@ -53490,20 +53498,46 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           //
         }
 
-        let datum_id = this._new_datum_id()
+        ;[tree] = _filterEmptyNodes(tree, getTree__cached)
 
-        if (tree) {
-          const tree = this._escape_external_text_if_needed(text)
-
-          this.__sim_add_datum_node(datum_id, tree, position, true)
+        if (try_json(tree.value)) {
+          //
         } else {
-          datum_id = this._paste_escaped_plain_text(text, position)
+          let bundle
 
-          move_datum(datum_id)
-        }
+          if (tree.type === TreeNodeType.ObjectLiteral) {
+            const data = _evaluate(
+              tree,
+              this.$props.specs,
+              this.$system.classes
+            )
 
-        if (datum_id) {
-          move_datum(datum_id)
+            if (data) {
+              if (validateBundleSpec(data)) {
+                bundle = data
+              }
+            }
+          }
+
+          if (bundle) {
+            this.paste_bundle(bundle, position, true, true, false)
+          } else {
+            let datum_id = this._new_datum_id()
+
+            if (tree) {
+              const tree = this._escape_external_text_if_needed(text)
+
+              this.__sim_add_datum_node(datum_id, tree, position, true)
+            } else {
+              datum_id = this._paste_escaped_plain_text(text, position)
+
+              move_datum(datum_id)
+            }
+
+            if (datum_id) {
+              move_datum(datum_id)
+            }
+          }
         }
       }
     }
