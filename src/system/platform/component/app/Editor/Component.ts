@@ -24767,6 +24767,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       if (_animate) {
         const last_sub_component_id = last(ordered_sub_component_ids)
 
+        const last_sub_component = this._get_sub_component(
+          last_sub_component_id
+        )
+
+        last_sub_component.focus()
+
         this._abort_fullwindow_animation = this._animate_enter_fullwindow(
           this._fullwindow_component_ids,
           () => {
@@ -24798,10 +24804,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 if (is_last_sub_component) {
                   if (this._enabled()) {
                     this._frame.focus()
-
-                    const last_sub_component = this._get_sub_component(
-                      last_sub_component_id
-                    )
 
                     last_sub_component.focus()
                   }
