@@ -53490,7 +53490,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           //
         }
 
-        let datum_id
+        let datum_id = this._new_datum_id()
 
         if (tree) {
           const tree = this._escape_external_text_if_needed(text)
