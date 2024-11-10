@@ -18182,11 +18182,51 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               }
             }
           }
+        } else {
+          for (const drag_node_id in this._pressed_node_id_pointer_id) {
+            if (this._drag_node_id[drag_node_id]) {
+              this._extend_drag_along_to_subgraph(drag_node_id)
+
+              const subgraph_node_ids =
+                this._get_node_subgraph_node_ids(drag_node_id)
+
+              const pointer_id = this._drag_node_pointer_id[drag_node_id]
+
+              const { x, y } = this._get_node_position(drag_node_id)
+
+              for (const subgraph_node_id of subgraph_node_ids) {
+                this.__on_node_drag_start(subgraph_node_id, pointer_id, x, y)
+              }
+            }
+          }
         }
 
         this._refresh_compatible()
       } else if (prev_mode === 'multiselect' && this._mode !== 'multiselect') {
         this._restart_gesture = false
+
+        for (const drag_node_id in this._pressed_node_id_pointer_id) {
+          if (this._drag_node_id[drag_node_id]) {
+            const pointer_id = getObjSingleKey(
+              this._pressed_node_id_pointer_id[drag_node_id]
+            )
+
+            if (this._drag_along_node[drag_node_id]) {
+              for (const drag_along_node_id of this._drag_along_node[
+                drag_node_id
+              ]) {
+                if (!this._pressed_node_id_pointer_id[drag_along_node_id]) {
+                  this.__on_node_drag_end(
+                    drag_along_node_id,
+                    Number.parseInt(pointer_id, 10)
+                  )
+                }
+              }
+            }
+
+            this._de_extend_drag_along_to_subgraph(drag_node_id)
+          }
+        }
 
         this._refresh_compatible()
       }
@@ -22411,9 +22451,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     // console.log('Graph', '__on_node_drag_end', node_id)
 
     this._on_node_drag_end(node_id)
-
     this._set_drag_node(node_id, pointerId, false)
-
     this._stop_drag_node_static(node_id)
 
     if (this._is_ext_node_id(node_id)) {
@@ -42098,6 +42136,34 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     this.__drag_start(node_id, pointerId, clientX, clientY)
   }
 
+  private _extend_drag_along_to_subgraph = (node_id: string) => {
+    const subgraph_node_ids = this._get_node_subgraph_node_ids(node_id)
+
+    for (const subgraph_node_id of subgraph_node_ids) {
+      if (subgraph_node_id !== node_id) {
+        this._set_node_drag_along(node_id, subgraph_node_id)
+      }
+    }
+  }
+
+  private _get_node_subgraph_node_ids = (node_id: string) => {
+    const subgraph_id = this._node_to_subgraph[node_id]
+    const subgraph_node_ids = this._subgraph_to_node[subgraph_id]
+
+    return subgraph_node_ids
+  }
+
+  private _de_extend_drag_along_to_subgraph = (node_id: string) => {
+    const subgraph_id = this._node_to_subgraph[node_id]
+    const subgraph_node_ids = this._subgraph_to_node[subgraph_id]
+
+    for (const subgraph_node_id of subgraph_node_ids) {
+      if (subgraph_node_id !== node_id) {
+        this._remove_node_drag_along(node_id, subgraph_node_id)
+      }
+    }
+  }
+
   private __drag_start = (
     node_id: string,
     pointerId: number,
@@ -42120,35 +42186,21 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           this._set_node_drag_along(node_id, selected_node_id)
         }
       }
-    } else if (this._mode == 'multiselect') {
-      const subgraph_id = this._node_to_subgraph[node_id]
-      const subgraph_node_ids = this._subgraph_to_node[subgraph_id]
+    }
 
-      for (const subgraph_node_id of subgraph_node_ids) {
-        if (subgraph_node_id !== node_id) {
-          this._set_node_drag_along(node_id, subgraph_node_id)
-        }
-      }
+    if (this._mode == 'multiselect') {
+      this._extend_drag_along_to_subgraph(node_id)
     }
 
     if (this._drag_along_node[node_id]) {
       for (const drag_along_node_id of this._drag_along_node[node_id]) {
         if ((this._node_pressed_count[drag_along_node_id] ?? 0) === 0) {
-          this._drag_node_pointer_id[drag_along_node_id] = pointerId
-
-          const relative = deepGetOrDefault(
-            this._drag_along_relative_position,
-            [node_id, drag_along_node_id],
-            NULL_VECTOR
-          )
-
-          const node = this._node[node_id]
-
-          this.__on_node_drag_start(
-            drag_along_node_id,
+          this._start_node_drag_along(
+            node_id,
             pointerId,
-            x + relative.x - node.hx,
-            y + relative.y - node.hy
+            drag_along_node_id,
+            x,
+            y
           )
         }
       }
@@ -42159,6 +42211,31 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else if (this._is_int_node_id(node_id)) {
       //
     }
+  }
+
+  private _start_node_drag_along = (
+    node_id: string,
+    pointerId: number,
+    drag_along_node_id: string,
+    x: number,
+    y: number
+  ) => {
+    this._drag_node_pointer_id[drag_along_node_id] = pointerId
+
+    const relative = deepGetOrDefault(
+      this._drag_along_relative_position,
+      [node_id, drag_along_node_id],
+      NULL_VECTOR
+    )
+
+    const node = this._node[node_id]
+
+    this.__on_node_drag_start(
+      drag_along_node_id,
+      pointerId,
+      x + relative.x - node.hx,
+      y + relative.y - node.hy
+    )
   }
 
   private _set_ext_node_compatible_charge = (node_id: string): void => {
@@ -42578,9 +42655,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('_remove_node_drag_along', node_id, drag_along_node_id)
 
+    if (!this._drag_along_node[node_id]) {
+      return
+    }
+
     remove(this._drag_along_node[node_id], drag_along_node_id)
 
     delete this._drag_along_source[drag_along_node_id]
+
+    if (!this._drag_along_node[node_id].length) {
+      delete this._drag_along_node[node_id]
+    }
+
+    delete this._drag_along_node[drag_along_node_id]
+    delete this._drag_along_relative_position[drag_along_node_id]
   }
 
   private _on_node_clone_drag_start = (
@@ -45322,9 +45410,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                         this._is_plug_node_id(drag_along_node_id))
                   )
                 }
-
-                delete this._drag_along_node[drag_along_node_id]
-                delete this._drag_along_relative_position[drag_along_node_id]
               }
             }
 
