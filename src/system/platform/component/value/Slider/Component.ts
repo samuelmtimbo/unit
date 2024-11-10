@@ -28,7 +28,7 @@ export default class Slider extends Field<HTMLInputElement, Props> {
           this.$element.min = `${min}`
         },
         max: (max: number = 100) => {
-          this.$element.min = `${max}`
+          this.$element.max = `${max}`
         },
       },
     })
