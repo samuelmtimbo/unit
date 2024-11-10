@@ -4,17 +4,38 @@ const root = document.getElementById('root')
 
 const bundle = {
   spec: {
+    name: 'hello world',
     units: {
-      helloworld: {
-        id: 'a9cbed12-9a53-11eb-8c2e-f3146b36128d',
+      textbox: {
+        id: '9988a56e-6bee-46c8-864c-e351d84bc7e2',
+        input: {
+          value: {
+            data: "'hello world'",
+          },
+          style: {
+            constant: true,
+            data: {
+              ref: [],
+              data: {
+                textAlign: 'center',
+                fontFamily: 'Inconsolata',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '20vw',
+              },
+            },
+          },
+        },
       },
     },
-    render: true,
     component: {
       subComponents: {
-        helloworld: {},
+        textbox: {
+          children: [],
+        },
       },
-      children: ['helloworld'],
+      children: ['textbox'],
     },
   },
 }
