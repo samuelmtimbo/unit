@@ -46078,15 +46078,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       next_spec_id = init_unit_spec_id
       next_spec = init_unit_spec
-
-      if (shouldFork(init_unit_spec_id)) {
-        const [new_spec_id, new_spec] = forkSpec(init_unit_spec)
-
-        this._spec_fork_unit(init_unit_id, new_spec_id)
-
-        next_spec_id = new_spec_id
-        next_spec = new_spec
-      }
     }
 
     let graph_id: string = init_unit_id
@@ -47765,7 +47756,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         subPinId: string,
         subPinSpec: GraphSubPinSpec
       ) => {
-        //
+        plugPin({ type, pinId, subPinId, subPinSpec }, spec)
       },
       hasMerge: (mergeId: string): boolean => {
         return hasMerge(spec, mergeId)
@@ -47784,7 +47775,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         subPinId: string,
         subPinSpec: GraphSubPinSpec
       ) => {
-        //
+        exposePin({ type, pinId, subPinId, subPinSpec }, spec)
       },
       coverPin: (type: IO, pinId: string, subPinId: string) => {
         //
@@ -58218,6 +58209,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const spec = findSpecAtPath(specs, this._spec, [...path, graphId])
 
+      const next_parent_spec = clone(parent_spec)
       const next_spec = clone(spec)
 
       const graph_unit_spec = this._get_unit_spec(graph_unit_id) as GraphSpec
@@ -58234,26 +58226,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         plugs,
       }
 
-      const spec_interface = weakMerge(this._make_graph_spec_interface(spec), {
-        coverPinSet: (type, pinId, path_) => {
-          const parent_spec = findSpecAtPath(specs, this._spec, path)
-          const spec = findSpecAtPath(specs, this._spec, [...path, graphId])
+      const spec_interface = weakMerge(
+        this._make_graph_spec_interface(next_spec),
+        {
+          coverPinSet: (type, pinId, path_) => {
+            deepDelete(next_parent_spec, ['units', graphId, type, pinId])
 
-          const next_spec = clone(spec)
+            coverPinSet({ type, pinId }, next_spec)
 
-          deepDelete(parent_spec, ['units', graphId, type, pinId])
-
-          coverPinSet({ type, pinId }, next_spec)
-
-          setSpec(next_spec.id, next_spec)
-          setSpec(parent_spec.id, parent_spec)
-        },
-      })
+            setSpec(next_spec.id, next_spec)
+            setSpec(next_parent_spec.id, next_parent_spec)
+          },
+        }
+      )
 
       const subgraph_path = this.getSubgraphPath()
 
       const subgraph_interface =
-        this._state_get_subgraph_graph_interface(graph_unit_id)
+        this._make_graph_spec_interface(next_parent_spec)
 
       const commit = () => {
         moveSubgraph(
@@ -58264,6 +58254,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           connectOpt,
           false
         )
+
+        setSpec(next_spec.id, next_spec)
+        setSpec(next_parent_spec.id, next_parent_spec)
       }
 
       if (isEqual(subgraph_path, path)) {
