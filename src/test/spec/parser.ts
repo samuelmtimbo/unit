@@ -38,6 +38,9 @@ const CUSTOM_GRAPH_UNIT_STR =
 
 Error.stackTraceLimit = 30
 
+const _evaluate = (str: string) => evaluate(str, _specs, _classes)
+const _isTypeMatch = (a: string, b: string) => isTypeMatch(system.specs, a, b)
+
 assert(getTree('{a:"1,2,3"}').children.length === 1)
 assert(getTree("{a:'1,2,3'}").children.length === 1)
 assert(getTree("{a:'(1,2,3)'}").children.length === 1)
@@ -208,8 +211,6 @@ assert(!isValidType('foo:false'))
 assert(!isValidType('<T>["S",K]'))
 assert(!isValidObjKey('*'))
 
-const _isTypeMatch = (a: string, b: string) => isTypeMatch(system.specs, a, b)
-
 assert(_isTypeMatch('number', 'number|string'))
 assert(_isTypeMatch('string', 'number|string'))
 assert(_isTypeMatch('number', '(number|string)'))
@@ -287,6 +288,8 @@ assert(_isTypeMatch('<T>', '<K>[]'))
 assert(_isTypeMatch('any', 'object'))
 assert(_isTypeMatch('object', '{}'))
 assert(_isTypeMatch('object', '{"x":number,"y":number}'))
+assert(_isTypeMatch('{background: "color"}', 'object'))
+assert(_isTypeMatch('{background:"color"}', 'object'))
 assert(_isTypeMatch('<T>', ID_IDENTITY))
 assert(_isTypeMatch('any', ID_IDENTITY))
 assert(_isTypeMatch(`\${${ID_IDENTITY}}`, 'any'))
@@ -325,7 +328,6 @@ assert(!_isTypeMatch('string[]|object', '<A>[]'))
 assert(!_isTypeMatch('[]', '[1]'))
 assert(!_isTypeMatch('[1,2,3]', '[1,2,3,4]'))
 assert(!_isTypeMatch('[1,2,3]', '[number,number, string]'))
-assert(!_isTypeMatch('{background: "color"}', 'object'))
 assert(!_isTypeMatch('null', ID_IDENTITY))
 assert(!_isTypeMatch('object', 'class'))
 assert(!_isTypeMatch('number', 'class'))
@@ -605,8 +607,6 @@ assert.equal(removeNodeAt('[0,1,2,3]', [0]), '[1,2,3]')
 assert.equal(removeNodeAt('{foo:"bar zaz"}', [0]), '{}')
 assert.equal(removeNodeAt('{foo:}', [0, 1]), '{foo}')
 
-const _evaluate = (str: string) => evaluate(str, _specs, _classes)
-
 assert.deepEqual(_evaluate('1'), 1)
 assert.deepEqual(_evaluate('Infinity'), Infinity)
 assert.deepEqual(_evaluate('"foo"'), 'foo')
@@ -715,6 +715,8 @@ assert.deepEqual(
     },
   }
 )
+
+assert(isValidValue('\n{spec:{}\n}'))
 
 assert(
   isValidValue(

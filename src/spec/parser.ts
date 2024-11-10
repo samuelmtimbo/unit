@@ -975,6 +975,8 @@ function _getValueTree(
     ignoreKeyword?: boolean
   ) => TreeNode = _getValueTree
 ): TreeNode | undefined {
+  value = value.trim()
+
   if (!ignoreKeyword) {
     const nullTest = /^null$/.exec(value)
     if (nullTest) {
