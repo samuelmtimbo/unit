@@ -46211,6 +46211,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         graph_spec.component.subComponents =
           graph_spec.component.subComponents || {}
         graph_spec.component.children = graph_spec.component.children || []
+
+        if (!init_unit_is_render) {
+          const { width, height } = this.get_sub_components_max_graph_size(
+            selected_sub_component_ids
+          )
+
+          graph_spec.component.defaultWidth = width
+          graph_spec.component.defaultHeight = height
+        }
       }
 
       const new_spec_id = newSpecId(specs)
