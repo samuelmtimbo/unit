@@ -36,7 +36,7 @@ export default class Icon extends SVGElement_<SVGSVGElement, Props> {
       }
     )
 
-    const { className, icon, title } = $props
+    const { className, icon, title = '' } = $props
 
     if (className) {
       this.$element.classList.add(className)
