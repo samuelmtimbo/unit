@@ -38692,10 +38692,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._set_drag_node(node_id, pointerId, false)
 
-      if (was_selected) {
-        for (const selected_node_id in this._selected_node_id) {
-          if (this._drag_node_pointer_id[selected_node_id] === pointerId) {
-            this._on_node_drag_end(selected_node_id)
+      if (this._drag_along_node[node_id]) {
+        const pointerId = this._drag_node_pointer_id[node_id]
+
+        for (const drag_along_node_id of this._drag_along_node[node_id]) {
+          if (this._drag_node_pointer_id[drag_along_node_id] === pointerId) {
+            this._on_node_drag_end(drag_along_node_id)
           }
         }
       }
