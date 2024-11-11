@@ -32,9 +32,9 @@ import {
   getUnitMergesSpec,
 } from '../util/spec'
 import {
-  insertChild,
+  insertRoot,
   insertSubComponentChild,
-  removeChild,
+  removeRoot,
   removeSubComponent,
   removeSubComponentChild,
   setSubComponent,
@@ -93,9 +93,9 @@ export const removeUnitExposedTypePins = (
     for (let subPinId in plug) {
       const subPin = plug[subPinId]
 
-      const { unitId } = subPin
+      const { unitId, kind = type } = subPin
 
-      if (unitId === id) {
+      if (unitId === id && kind === type) {
         deepSet_(spec, [`${type}s`, pinId, 'plug', subPinId], {})
       }
     }
@@ -232,7 +232,7 @@ export const addPinToMerge = (
 
         const { unitId: _unitId, pinId: _pinId, kind = type } = subPin
 
-        if (_unitId === unitId && _pinId === pinId && kind === type) {
+        if (_unitId === unitId && _pinId === pinId && kind === type_) {
           unplugPin({ pinId: exposedPinId, type: kind, subPinId }, spec)
           plugPin(
             {
@@ -408,8 +408,8 @@ export const setUnitId = (
     } else {
       const at = spec.component.children.indexOf(unitId)
 
-      removeChild({ childId: unitId }, spec.component)
-      insertChild({ childId: newUnitId, at }, spec.component)
+      removeRoot({ childId: unitId }, spec.component)
+      insertRoot({ childId: newUnitId, at }, spec.component)
     }
   }
 

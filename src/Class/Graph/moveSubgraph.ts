@@ -120,8 +120,10 @@ export function moveUnit(
   const unitSpec = units[unitId]
   const subComponent = subComponents[unitId]
 
+  const bundle = unit.getUnitBundleSpec()
+
   source.removeUnit(unitId, false, false, false)
-  target.addUnit(nextUnitId, unit, undefined, undefined, false, false, false)
+  target.addUnit(nextUnitId, unit, bundle, undefined, false, false, false)
 
   if (nextSubComponentParentId) {
     if (target.hasUnit(nextSubComponentParentId)) {

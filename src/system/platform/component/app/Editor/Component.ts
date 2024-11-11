@@ -497,12 +497,13 @@ import {
   isTypeMatch,
 } from '../../../../../spec/parser'
 import {
-  appendChild,
+  appendRoot,
   appendSubComponentChild,
-  insertChild,
+  insertRoot,
   insertSubComponentChild,
+  moveRoot,
   moveSubComponentRoot,
-  removeChild,
+  removeRoot,
   removeSubComponent,
   removeSubComponentChild,
   reorderSubComponent,
@@ -6478,7 +6479,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._spec.component
       )
     } else {
-      appendChild({ childId: unit_id }, this._spec.component)
+      appendRoot({ childId: unit_id }, this._spec.component)
     }
 
     const { width, height } = this._get_unit_component_graph_size(unit_id)
@@ -6506,7 +6507,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._spec.component
       )
     } else {
-      insertChild({ childId: unit_id, at }, this._spec.component)
+      insertRoot({ childId: unit_id, at }, this._spec.component)
     }
 
     const { width, height } = this._get_unit_component_graph_size(unit_id)
@@ -33451,7 +33452,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._spec.component
       )
     } else {
-      removeChild({ childId: child_id }, this._spec.component)
+      removeRoot({ childId: child_id }, this._spec.component)
     }
 
     if (next_parent_id) {
@@ -33462,7 +33463,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       this._layout_sub_component_parent[child_id] = next_parent_id
     } else {
-      appendChild({ childId: child_id }, this._spec.component)
+      appendRoot({ childId: child_id }, this._spec.component)
 
       delete this._layout_sub_component_parent[child_id]
     }
@@ -39816,7 +39817,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         this._spec.component || {}
       )
     } else {
-      removeChild({ childId: unit_id }, this._spec.component || {})
+      removeRoot({ childId: unit_id }, this._spec.component || {})
     }
 
     removeSubComponent({ unitId: unit_id }, this._spec.component || {})
@@ -47683,7 +47684,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return spec
       },
       getPinData: function (type: IO, name: string) {
-        throw new MethodNotImplementedError()
+        return undefined
       },
       setPinConstant: function (
         type: IO,
@@ -47813,20 +47814,19 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   private _make_graph_spec_interface = (spec: GraphSpec): GraphLike => {
     // console.log('make_graph_spec_interface', spec)
 
-    const { getSpec } = this.$props
+    const { specs, getSpec } = this.$props
 
     const spec_interface: GraphLike = {
       removeUnit: (unitId: string): void => {
-        //
+        removeSubComponent({ unitId }, spec.component)
+        removeRoot({ childId: unitId }, spec.component)
+        removeUnit({ unitId }, spec)
       },
       getMergeData: (mergeId: string) => {
-        //
+        return {}
       },
       getPlugSpecs: () => {
-        //
-        throw new MethodNotImplementedError()
-
-        return emptyIO({}, {})
+        return getPlugSpecs(spec)
       },
       addPinToMerge: (
         mergeId: string,
@@ -47834,10 +47834,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         type: IO,
         pinId: string
       ) => {
-        //
+        return addPinToMerge({ mergeId, unitId, type, pinId }, spec)
       },
       addMerge: (mergeSpec: GraphMergeSpec, mergeId: string) => {
-        //
+        return addMerge({ mergeId, mergeSpec }, spec)
       },
       plugPin: (
         type: IO,
@@ -47845,7 +47845,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         subPinId: string,
         subPinSpec: GraphSubPinSpec
       ) => {
-        plugPin({ type, pinId, subPinId, subPinSpec }, spec)
+        return plugPin({ type, pinId, subPinId, subPinSpec }, spec)
       },
       hasMerge: (mergeId: string): boolean => {
         return hasMerge(spec, mergeId)
@@ -47856,7 +47856,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         pinSpec: GraphPinSpec,
         data: string
       ) => {
-        exposePinSet({ type, pinId, pinSpec }, spec)
+        return exposePinSet({ type, pinId, pinSpec }, spec)
       },
       exposePin: (
         type: IO,
@@ -47864,10 +47864,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         subPinId: string,
         subPinSpec: GraphSubPinSpec
       ) => {
-        exposePin({ type, pinId, subPinId, subPinSpec }, spec)
+        return exposePin({ type, pinId, subPinId, subPinSpec }, spec)
       },
       coverPin: (type: IO, pinId: string, subPinId: string) => {
-        //
+        return coverPin({ type, pinId, subPinId }, spec)
       },
       setUnitPinConstant: function (
         unitId: string,
@@ -47875,13 +47875,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         pinId: string,
         constant: boolean
       ): void {
-        //
+        return setUnitPinConstant({ unitId, type, pinId, constant }, spec)
       },
       coverPinSet: (type: IO, pinId: string, emit?: boolean): void => {
-        //
+        return coverPinSet({ type, pinId }, spec)
       },
       unplugPin: (type: IO, pinId: string, subPinId: string): void => {
-        //
+        return unplugPin({ type, pinId, subPinId }, spec)
       },
       getMergesSpec: (): GraphMergesSpec => {
         const { merges = {} } = spec
@@ -47892,8 +47892,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return deepGetOrDefault(spec, ['merges', mergeId], undefined)
       },
       hasPinNamed: (type: IO, name: string): boolean => {
-        // TODO
-        return false
+        return hasPinNamed(spec, type, name)
       },
       getUnit: (unitId: string): U => {
         const { units = {} } = spec
@@ -47906,28 +47905,38 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         return this._make_spec_unit_interface(unit, unit_spec)
       },
-      getUnitPinData: function (unitId: string, type: IO, pinId: string) {
-        throw new MethodNotImplementedError()
+      getUnitPinData: (unitId: string, type: IO, pinId: string) => {
+        return {}
       },
       hasUnit: (unitId: string): boolean => {
         return hasUnit(spec, unitId)
       },
-      addUnit: (unitId: string, unit: U) => {
-        //
+      addUnit: (unitId: string, _: any, bundle: UnitBundleSpec) => {
+        addUnit({ unitId, unit: bundle.unit }, spec)
+
+        if (
+          getSpecRenderById(
+            weakMerge(specs, bundle.specs ?? {}),
+            bundle.unit.id
+          )
+        ) {
+          appendRoot({ childId: unitId }, spec.component)
+          setSubComponent({ unitId, subComponent: {} }, spec.component)
+        }
       },
       removeMerge: (mergeId: string): void => {
-        //
+        return removeMerge({ mergeId }, spec)
       },
-      moveRoot: function (
+      moveRoot: (
         parentId: string,
         childId: string,
         at: number,
         slotName: string
-      ): void {
-        throw new MethodNotImplementedError()
+      ): void => {
+        return moveRoot({ parentId, childId, at, slotName }, spec.component)
       },
       setPinData: function (type: IO, pinId: string, data: any): void {
-        throw new MethodNotImplementedError()
+        //
       },
       getPinPlugCount: (type: IO, pinId: string): number => {
         throw new MethodNotImplementedError()
@@ -47971,13 +47980,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         emit?: boolean,
         propagate?: boolean
       ): void {
-        //
+        throw new MethodNotImplementedError()
       },
       isPinConstant: (type: IO, name: string): boolean => {
         return false
       },
-      removePinFromMerge: () => {
-        //
+      removePinFromMerge: (
+        mergeId: string,
+        unitId: string,
+        type: IO,
+        pinId: string
+      ) => {
+        return removePinFromMerge({ mergeId, unitId, type, pinId }, spec)
       },
       hasMergePin: (
         mergeId: string,
@@ -47998,7 +48012,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         return spec
       },
       setUnitSize: (unitId: string, width: number, height: number): void => {
-        //
+        return setUnitSize({ unitId, width, height }, spec)
       },
       setSubComponentSize: function (
         unitId: string,
@@ -49523,7 +49537,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       )
     }
 
-    removeChild({ childId: sub_component_id }, this._spec.component)
+    removeRoot({ childId: sub_component_id }, this._spec.component)
     removeSubComponent({ unitId: sub_component_id }, this._spec.component)
   }
 
@@ -49828,7 +49842,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         },
         updated_graph_spec.component ?? {}
       )
-      appendChild({ childId: next_unit_id }, updated_graph_spec.component)
+      appendRoot({ childId: next_unit_id }, updated_graph_spec.component)
 
       const { defaultWidth = MIN_WIDTH, defaultHeight = MIN_HEIGHT } =
         updated_graph_spec.component
@@ -49843,7 +49857,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       if (sub_component.parent_id) {
         if (this._spec_graph_unit_has_unit(graph_id, sub_component.parent_id)) {
-          removeChild({ childId: next_unit_id }, updated_graph_spec.component)
+          removeRoot({ childId: next_unit_id }, updated_graph_spec.component)
 
           const at =
             this._collapse_init_spec.component.subComponents[
@@ -49859,7 +49873,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       for (const sub_component_child_id of sub_component.children ?? []) {
         if (this._spec_graph_unit_has_unit(graph_id, sub_component_child_id)) {
-          removeChild(
+          removeRoot(
             { childId: sub_component_child_id },
             updated_graph_spec.component
           )
@@ -57177,7 +57191,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             next_spec.component
           )
         } else {
-          appendChild({ childId: unitId }, next_spec.component)
+          appendRoot({ childId: unitId }, next_spec.component)
         }
 
         const { component: added_component_spec } = added_unit_spec
@@ -57227,7 +57241,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           { unitId: just_turned_component_unit_id, subComponent: {} },
           next_graph_unit_spec.component
         )
-        appendChild(
+        appendRoot(
           { childId: just_turned_component_unit_id },
           next_graph_unit_spec.component
         )
@@ -57748,7 +57762,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             next_spec.component
           )
         } else {
-          removeChild({ childId: unitId }, next_spec.component)
+          removeRoot({ childId: unitId }, next_spec.component)
         }
       }
 
@@ -57831,7 +57845,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             sub_component_parent_root.pullParentRoot(removed_component)
           }
         } else {
-          removeChild(
+          removeRoot(
             { childId: possibly_turned_circle_unit_id },
             next_graph_spec.component
           )
@@ -58356,9 +58370,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             deepDelete(next_parent_spec, ['units', graphId, type, pinId])
 
             coverPinSet({ type, pinId }, next_spec)
-
-            setSpec(next_spec.id, next_spec)
-            setSpec(next_parent_spec.id, next_parent_spec)
           },
         }
       )

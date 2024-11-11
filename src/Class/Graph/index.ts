@@ -53,6 +53,11 @@ import { evaluateData, evaluateDataValue } from '../../spec/evaluateDataValue'
 import { bundleFromId } from '../../spec/fromId'
 import { applyUnitDefaultIgnored } from '../../spec/fromSpec'
 import {
+  insertSubComponentChild,
+  removeRoot,
+  removeSubComponentChild,
+} from '../../spec/reducers/component'
+import {
   coverPin,
   coverPinSet,
   exposePinSet,
@@ -3408,21 +3413,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _specRemoveSubComponentChild = (
-    currentParentId: string,
-    subComponentId: string
+    subComponentId: string,
+    childId: string
   ) => {
-    const parentComponent = this._spec.component.subComponents[currentParentId]
-
-    const { children = [], childSlot = {} } = parentComponent
-
-    const i = children.indexOf(subComponentId)
-
-    children.splice(i, 1)
-
-    delete childSlot[subComponentId]
-
-    parentComponent.children = children
-    parentComponent.childSlot = childSlot
+    removeSubComponentChild({ subComponentId, childId }, this._spec.component)
   }
 
   private _specRemoveSubComponentFromParent = (
@@ -3479,16 +3473,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     at: number,
     slot: string
   ) => {
-    const subComponent = this._spec.component.subComponents[subComponentId]
-
-    const { children = [], childSlot = {} } = subComponent
-
-    children.splice(at, 0, childId)
-
-    childSlot[childId] = slot
-
-    subComponent.children = children
-    subComponent.childSlot = childSlot
+    insertSubComponentChild(
+      { parentId: subComponentId, childId, at },
+      this._spec.component
+    )
   }
 
   private _simSubComponentAppendChild = (
@@ -5625,15 +5613,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _specRemoveRoot(subComponentId: string): void {
-    // console.log('Graph', '_specRemoveRoot', subComponentId)
-
-    const index = this._spec.component.children.indexOf(subComponentId)
-
-    if (index > -1) {
-      this._spec.component.children.splice(index, 1)
-    } else {
-      throw new Error('root not found')
-    }
+    removeRoot({ childId: subComponentId }, this._spec.component)
   }
 
   private _simRemoveRoot(subComponentId: string, emit: boolean): void {
