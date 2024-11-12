@@ -59589,6 +59589,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           removePinFromMerge: (data) => {
             this._on_graph_unit_remove_pin_from_merge_moment({ ...data, path })
           },
+          cloneUnit: (data) => {
+            this._on_graph_unit_clone_unit_moment({ ...data, path })
+          },
         },
         (_, callback) => {
           return (data) => {
