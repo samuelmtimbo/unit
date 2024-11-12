@@ -279,7 +279,6 @@ export function noneApi(): API {
         parentTrait: LayoutNode,
         parentStyle: Style,
         children: Style[],
-        path?: number[],
         expandChild?: (path: number[]) => Style[]
       ): LayoutNode[] {
         throw new MethodNotImplementedError()

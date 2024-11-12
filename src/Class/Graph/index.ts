@@ -3323,13 +3323,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     this._spec.component.children.push(unitId)
   }
 
-  public removeSubComponent = (unitId: string): void => {
-    // console.log('Graph', 'removeSubComponent', unitId)
-
-    this._specRemoveSubComponent(unitId)
-  }
-
-  private _specRemoveSubComponent = (unitId: string): void => {
+  private _specRemoveSubComponent = (
+    unitId: string,
+    parentId: string | null
+  ): void => {
     // console.log('Graph', '_specRemoveSubComponent', unitId)
 
     const { subComponents } = this._spec.component
@@ -3339,7 +3336,11 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     const { children = [] } = subComponent
 
     for (const childId of children) {
-      this._spec.component.children.push(childId)
+      if (parentId) {
+        this._spec.component.subComponents[parentId].children.push(childId)
+      } else {
+        this._spec.component.children.push(childId)
+      }
     }
 
     if (this._spec.component.slots) {
@@ -3976,7 +3977,9 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
   }
 
   private _on_unit_not_element = (unitId: string): void => {
-    this._specRemoveSubComponent(unitId)
+    const parentId = getSubComponentParentId(this._spec, unitId)
+
+    this._specRemoveSubComponent(unitId, parentId)
   }
 
   public removeUnit(
@@ -4146,8 +4149,10 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     // console.log('Graph', '_specRemoveUnit', unitId, removeComponent)
 
     if (removeComponent) {
+      const parentId = getSubComponentParentId(this._spec, unitId)
+
       this._specRemoveSubComponentFromParent(unitId)
-      this._specRemoveSubComponent(unitId)
+      this._specRemoveSubComponent(unitId, parentId)
     }
 
     this._specUnplugUnit(unitId)
@@ -4204,6 +4209,8 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
     if (unit.isElement()) {
       const subComponentSpec = this._spec.component?.subComponents[unitId] ?? {}
 
+      const parentId = getSubComponentParentId(this._spec, unitId)
+
       const { children = [] } = subComponentSpec
 
       for (const childId of children) {
@@ -4211,7 +4218,13 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
 
         this._simSubComponentRemoveChild(unitId, childId)
 
-        this.registerRoot(child, false)
+        if (parentId) {
+          const parent = this.getSubComponent(parentId)
+
+          parent.registerParentRoot(child, 'default')
+        } else {
+          this.registerRoot(child, false)
+        }
       }
 
       this._simRemoveSubComponentFromParent(unitId, true)

@@ -246,7 +246,6 @@ export const reflectComponentBaseTrait = (
     trait,
     style,
     all_root_style,
-    [],
     (path) => {
       let children = root_leaf_id
 
@@ -280,7 +279,6 @@ export const reflectComponentBaseTrait = (
       slot_trait,
       slot_style,
       slot_all_style,
-      [],
       (path) => {
         return expand_slot(slot_id, path)
       }

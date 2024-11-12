@@ -5,7 +5,14 @@ export function getSubComponentParentId(
   spec: GraphSpec,
   unitId: string
 ): string | null {
-  return getComponentSubComponentParentId(spec.component, unitId)
+  return getComponentSubComponentParentId(spec.component ?? {}, unitId)
+}
+
+export function getSubComponentChildren(
+  spec: GraphSpec,
+  unitId: string
+): string[] {
+  return getComponentSubComponentChildren(spec.component ?? {}, unitId)
 }
 
 export function getComponentSubComponentParentId(
@@ -27,4 +34,17 @@ export function getComponentSubComponentParentId(
   }
 
   return null
+}
+
+export function getComponentSubComponentChildren(
+  componentSpec: GraphComponentSpec,
+  unitId: string
+): string[] {
+  const { subComponents = {} } = componentSpec
+
+  const subComponent = subComponents[unitId] ?? {}
+
+  const { children = [] } = subComponent
+
+  return children
 }

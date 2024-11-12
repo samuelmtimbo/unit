@@ -18,23 +18,20 @@ export const appendRoot = (
 ): void => {
   component.children = component.children ?? []
 
-  component.children.push(childId)
+  push(component.children, childId)
 }
 
 export const insertRoot = (
   { childId, at }: { childId: string; at: number },
   component: GraphComponentSpec
 ): void => {
-  const children = component.children || []
+  component.children = component.children || []
 
-  insert(children, childId, at)
+  insert(component.children, childId, at)
 }
 
-export const removeRoot = (
-  { childId },
-  component: GraphComponentSpec
-): void => {
-  pull(component.children, childId)
+export const removeRoot = ({ childId }, state: GraphComponentSpec): void => {
+  pull(state.children, childId)
 }
 
 export const setSubComponent = (

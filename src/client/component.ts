@@ -591,7 +591,7 @@ export class Component<
       rawExtractStyle(leaf.$element, trait, measureText)
     )
 
-    let targetTraits = reflectChildrenTrait(trait, style, styles, [], () => {
+    let targetTraits = reflectChildrenTrait(trait, style, styles, () => {
       return []
     })
 
@@ -652,15 +652,9 @@ export class Component<
         ANIMATION_PROPERTY_DELTA_PAIRS,
         ({ x, y, width, height, sx, sy, opacity, fontSize }) => {
           if (j % leaves.length === 0) {
-            targetTraits = reflectChildrenTrait(
-              trait,
-              style,
-              styles,
-              [],
-              () => {
-                return []
-              }
-            )
+            targetTraits = reflectChildrenTrait(trait, style, styles, () => {
+              return []
+            })
 
             j = 0
           }
@@ -1772,13 +1766,9 @@ export class Component<
     slotName: string = 'default',
     at?: number
   ): void {
-    // console.log('Component', '_domAppendChild')
-
-    const slot = this.getLeafSlot(slotName)
+    // console.log('Component', 'domAppendChild')
 
     this._domAppendChild(child, slotName, at)
-
-    child.$slotParent = slot
   }
 
   public postAppendChild(child: Component, slotName: string, at: number): void {

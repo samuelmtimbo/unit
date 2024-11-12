@@ -506,6 +506,7 @@ import {
   removeRoot,
   removeSubComponent,
   removeSubComponentChild,
+  removeSubComponentFromParent,
   reorderSubComponent,
   setSize,
   setSubComponent,
@@ -554,7 +555,10 @@ import {
   _getSpecTypeInterfaceById,
   _mostSpecific,
 } from '../../../../../spec/type'
-import { getSubComponentParentId } from '../../../../../spec/util/component'
+import {
+  getSubComponentChildren,
+  getSubComponentParentId,
+} from '../../../../../spec/util/component'
 import {
   countMergePlugs,
   findMergePlugs,
@@ -6496,8 +6500,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ) {
     this._spec.component = this._spec.component || { subComponents: {} }
 
+    const current_sub_component_spec =
+      this._get_sub_component_spec(unit_id) ?? {}
+
     setSubComponent(
-      { unitId: unit_id, subComponent: { children: [] } },
+      {
+        unitId: unit_id,
+        subComponent: { ...current_sub_component_spec },
+      },
       this._spec.component
     )
 
@@ -20926,7 +20936,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               return { x: 0, y: -layer.content.$element.scrollTop }
             },
             true,
-            [],
             async () => {
               sub_component_finish_count++
 
@@ -20954,7 +20963,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     leaf_layer_opacity: number,
     offset: () => Point,
     expand_children: boolean,
-    path: number[],
     callback: Callback
   ): Unlisten => {
     // console.log('_animate_parent_component', sub_component_id, dont_plug_base)
@@ -30595,7 +30603,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           return { x: 0, y: -parent_layer.content.$element.scrollTop }
         },
         true,
-        [],
         () => {
           parent_animation_finished = true
 
@@ -31174,7 +31181,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           y: -layer.content.$element.scrollTop,
         }),
         true,
-        [],
         () => {
           parent_finished = true
 
@@ -31265,16 +31271,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         const prev_parent_id = this._spec_get_sub_component_parent_id(child_id)
 
-        if (prev_parent_id) {
-          const prev_parent_component = this._get_sub_component(prev_parent_id)
-
-          prev_parent_component.pullParentRoot(child_component)
-        } else {
-          this._component.pullRoot(child_component)
-        }
-
-        this._pre_append_sub_component_child(parent_id, child_id, slot_name)
-
         this._refresh_layout_node_target_position(prev_parent_id)
         this._force_layout_node_traits(prev_parent_id)
       }
@@ -31295,12 +31291,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     child_id: string,
     slot_name: string
   ): void => {
-    // console.log(
-    //   'Graph',
-    //   '_pre_append_sub_component_child',
-    //   parent_id,
-    //   child_id
-    // )
+    // console.log('Graph', '_pre_append_sub_component_child', parent_id, child_id)
 
     this._state_pre_append_sub_component_child(parent_id, child_id, slot_name)
     this._pod_move_sub_component_root(parent_id, [child_id], {
@@ -31327,6 +31318,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     this._mem_push_sub_component_child(parent_id, child_id, slot_name)
+    this._spec_remove_sub_component_from_parent(child_id)
     this._spec_append_sub_component_child(parent_id, child_id, slot_name)
 
     if (is_child_fullwindow) {
@@ -32449,7 +32441,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           slot_trait,
           slot_style,
           slot_base_style,
-          [],
           (path): Style[] => {
             return []
           }
@@ -32480,12 +32471,11 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         slot_trait,
         slot_style,
         slot_base_style,
-        [],
         (path) => {
           const children_style = expandSlot(
             this._component,
             slot_id,
-            path,
+            slot_id === slot_base[0] ? path.slice(1) : path,
             should_expand_slot,
             (leaf_id, leaf_comp) => {
               return this._extract_style(slot_trait, leaf_id, leaf_comp)
@@ -32949,6 +32939,13 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
   }
 
+  private _spec_remove_sub_component_from_parent = (child_id: string) => {
+    removeSubComponentFromParent(
+      { subComponentId: child_id },
+      this._spec.component
+    )
+  }
+
   private _spec_append_sub_component_child = (
     parent_id: string,
     child_id: string,
@@ -32969,14 +32966,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('Graph', '__spec_append_sub_component_child', parent_id, child_id, slot_name)
 
-    const current_parent_id = this._spec_get_sub_component_parent_id(child_id)
+    if (parent_id) {
+      appendSubComponentChild(
+        { parentId: parent_id, childId: child_id },
+        this._spec.component
+      )
 
-    this._spec_move_sub_component_child(
-      current_parent_id,
-      child_id,
-      parent_id,
-      slot_name
-    )
+      this._layout_sub_component_parent[child_id] = parent_id
+    } else {
+      appendRoot({ childId: child_id }, this._spec.component)
+
+      delete this._layout_sub_component_parent[child_id]
+    }
   }
 
   private _pod_move_sub_component_root = (
@@ -33218,7 +33219,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           1,
           () => ({ x: 0, y: -parent_layer.content.$element.scrollTop }),
           false,
-          [],
           () => {
             this._unplug_sub_component_root_base_frame(parent_id)
             this._append_sub_component_root_base(parent_id)
@@ -36041,7 +36041,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       1,
       () => ({ x: 0, y: -layer.content.$element.scrollTop }),
       false,
-      [],
       () => {
         parent_finished = true
 
@@ -39811,6 +39810,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     this._spec_remove_component_children(unit_id, parent_id)
 
+    removeSubComponent({ unitId: unit_id }, this._spec.component || {})
+
     if (parent_id) {
       removeSubComponentChild(
         { subComponentId: parent_id, childId: unit_id },
@@ -39819,8 +39820,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     } else {
       removeRoot({ childId: unit_id }, this._spec.component || {})
     }
-
-    removeSubComponent({ unitId: unit_id }, this._spec.component || {})
 
     delete this._layout_node[unit_id]
     delete this._layout_target_node[unit_id]
@@ -39936,7 +39935,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const sub_component = this._get_sub_component(unit_id)
 
     const parent_id = this._spec_get_sub_component_parent_id(unit_id)
-    const children = this._spec_get_sub_component_children(unit_id)
+    const children = clone(this._spec_get_sub_component_children(unit_id))
 
     const animating = this._is_sub_component_animating(unit_id)
 
@@ -53885,18 +53884,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         height: sub_component_spec.height,
       }
 
-      this._spec_append_component(parent_id, unit_id, copy_sub_component_spec)
-    }
+      let at: number
 
-    for (const unit_id in subComponents) {
-      const sub_component = subComponents[unit_id]
+      if (parent_id) {
+        const children = getSubComponentChildren(graph, parent_id)
 
-      const { children = [] } = sub_component
+        at = children.indexOf(unit_id)
 
-      const slot_name = 'default'
+        this._spec_insert_component(parent_id, unit_id, at)
+      } else {
+        const children = getSubComponentChildren(graph, parent_id)
 
-      for (const child_id of children) {
-        this.__spec_append_sub_component_child(unit_id, child_id, slot_name)
+        at = this._spec.component?.children?.length ?? 0
+
+        this._spec_insert_component(parent_id, unit_id, at)
       }
     }
 

@@ -888,9 +888,6 @@ assert.deepEqual(empty7.getComponentSpec(), {
   subComponents: {
     [UNIT_ID_DIV]: {
       children: [UNIT_ID_DIV_0],
-      childSlot: {
-        [UNIT_ID_DIV_0]: 'default',
-      },
     },
     [UNIT_ID_DIV_0]: {
       children: [],
