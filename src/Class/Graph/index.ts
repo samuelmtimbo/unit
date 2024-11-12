@@ -446,6 +446,7 @@ export class Graph<I extends Dict<any> = any, O extends Dict<any> = any>
         deepSet(this._pinToPlug, [subPin.unitId, kind, subPin.pinId], {
           pinId: newName,
           subPinId,
+          type: kind,
           kind,
         })
       }
