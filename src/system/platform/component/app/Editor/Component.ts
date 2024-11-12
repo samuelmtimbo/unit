@@ -56942,8 +56942,6 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
   ): void => {
     // console.log('Graph', '_decomponentify_core', unit_id, displace)
 
-    this._disconnect_sub_component(unit_id)
-
     if (this._subgraph_unit_id === unit_id) {
       //
     } else {
@@ -57791,15 +57789,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       })()
     }
 
-    let all_added_unit_ancestors_are_component = true
+    let all_ancestors_are_component = true
 
     for (let i = path.length - 1; i >= 0; i--) {
       const sub_path = path.slice(0, i + 1)
 
       const ancestor_spec = findSpecAtPath(specs, this._spec, sub_path)
 
-      all_added_unit_ancestors_are_component =
-        all_added_unit_ancestors_are_component &&
+      all_ancestors_are_component =
+        all_ancestors_are_component &&
         (isComponentSpec(ancestor_spec) ||
           getSpecRender(ancestor_spec) === undefined)
     }
@@ -57810,49 +57808,40 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
     const possibly_turned_circle_unit_id = path[1] ?? unitId
 
+    const parent_spec = findSpecAtPath(specs, this._spec, path) as GraphSpec
+
     const parent_path = butLast(path)
 
-    if (is_removed_unit_component && all_added_unit_ancestors_are_component) {
-      const possibly_turned_component_unit_spec = findSpecAtPath(
-        specs,
-        this._spec,
-        path
-      ) as GraphSpec
-
-      const sub_component_count = keyCount(
-        deepGetOrDefault(
-          possibly_turned_component_unit_spec,
-          ['component', 'subComponents'],
-          {}
-        )
+    if (is_removed_unit_component && all_ancestors_are_component) {
+      const parent_sub_component_count = keyCount(
+        deepGetOrDefault(parent_spec, ['component', 'subComponents'], {})
       )
 
-      if (sub_component_count === 0) {
-        const sub_component = this._get_sub_component(graph_unit_id)
+      if (parent_sub_component_count === 0) {
+        const parent_component = this._component.pathGetSubComponent(path)
 
-        const removed_component = sub_component.getSubComponent(
-          possibly_turned_circle_unit_id
-        )
+        const removed_component = parent_component.getSubComponent(unitId)
 
-        const parent_id = getSubComponentParentId(
-          graph_spec,
-          possibly_turned_circle_unit_id
-        )
+        const parent_id = getSubComponentParentId(graph_spec, unitId)
 
         if (parent_id) {
           removeSubComponentChild(
             {
               subComponentId: parent_id,
-              childId: possibly_turned_circle_unit_id,
+              childId: unitId,
             },
             next_graph_spec.component
           )
 
           if (path.length > 1) {
             const sub_component_parent_root =
-              sub_component.getSubComponent(parent_id)
+              parent_component.getSubComponent(parent_id)
 
-            sub_component_parent_root.pullParentRoot(removed_component)
+            if (
+              sub_component_parent_root.$parentRoot.includes(removed_component)
+            ) {
+              sub_component_parent_root.pullParentRoot(removed_component)
+            }
           }
         } else {
           removeRoot(
@@ -57860,8 +57849,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             next_graph_spec.component
           )
 
-          if (path.length > 1) {
-            sub_component.pullRoot(removed_component)
+          if (parent_component.$root.includes(removed_component)) {
+            parent_component.pullRoot(removed_component)
           }
         }
 
@@ -57870,18 +57859,15 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           next_graph_spec.component
         )
 
-        if (path.length > 1) {
-          sub_component.removeSubComponent(possibly_turned_circle_unit_id)
+        if (parent_component.$subComponent[unitId]) {
+          parent_component.removeSubComponent(unitId)
         }
 
         setSpec(next_graph_spec.id, next_graph_spec)
       }
 
       if (graph_unit_was_component) {
-        if (
-          is_removed_unit_component &&
-          all_added_unit_ancestors_are_component
-        ) {
+        if (is_removed_unit_component && all_ancestors_are_component) {
           const graph_sub_component = this._get_sub_component(graph_unit_id)
 
           let sub_component = graph_sub_component

@@ -2342,7 +2342,7 @@ export class Component<
     // console.log(this.constructor.name, 'disconnect')
 
     if (!this.$connected) {
-      throw new Error('component is not already disconnected')
+      throw new Error('component is not connected')
     }
 
     this._unit_unlisten()
