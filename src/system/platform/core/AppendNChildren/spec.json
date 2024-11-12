@@ -1,0 +1,132 @@
+{
+  "type": "`U`&`G`",
+  "name": "append n children",
+  "units": {
+    "narraybuilder": {
+      "id": "38033fcc-aa28-4df3-abc8-d4ece231028b",
+      "input": {
+        "n": {},
+        "a": {}
+      },
+      "output": {
+        "a[]": {},
+        "test": {
+          "ignored": false
+        },
+        "acc": {
+          "ignored": true
+        }
+      }
+    },
+    "looprepeat": {
+      "id": "ba8d655b-6014-4eae-bce1-fb8fef9ee535",
+      "input": {
+        "init": {},
+        "test": {}
+      },
+      "output": {
+        "local": {
+          "ignored": true
+        },
+        "current": {},
+        "final": {
+          "ignored": true
+        }
+      }
+    },
+    "appendchildren": {
+      "id": "2ea56c24-642b-420b-ae7d-e434299c7003",
+      "input": {
+        "parent": {},
+        "children": {}
+      },
+      "output": {
+        "length": {
+          "ignored": true
+        }
+      }
+    }
+  },
+  "merges": {
+    "0": {
+      "narraybuilder": {
+        "input": {
+          "a": true
+        }
+      },
+      "looprepeat": {
+        "output": {
+          "current": true
+        }
+      }
+    },
+    "1": {
+      "narraybuilder": {
+        "output": {
+          "test": true
+        }
+      },
+      "looprepeat": {
+        "input": {
+          "test": true
+        }
+      }
+    },
+    "2": {
+      "narraybuilder": {
+        "output": {
+          "a[]": true
+        }
+      },
+      "appendchildren": {
+        "input": {
+          "children": true
+        }
+      }
+    }
+  },
+  "inputs": {
+    "n": {
+      "plug": {
+        "0": {
+          "unitId": "narraybuilder",
+          "pinId": "n",
+          "kind": "input"
+        }
+      },
+      "ref": false,
+      "functional": true
+    },
+    "child": {
+      "plug": {
+        "0": {
+          "unitId": "looprepeat",
+          "pinId": "init",
+          "kind": "input"
+        }
+      },
+      "metadata": {
+        "examples": ["10"]
+      },
+      "ref": false,
+      "functional": true
+    },
+    "parent": {
+      "plug": {
+        "0": {
+          "unitId": "appendchildren",
+          "pinId": "parent",
+          "kind": "input"
+        }
+      },
+      "ref": true
+    }
+  },
+  "outputs": {},
+  "metadata": {
+    "icon": "square",
+    "description": "append the same `child` class `n` times"
+  },
+  "id": "c6896674-a9f9-4754-838e-5e3b71694d79",
+  "system": true
+}
