@@ -40504,12 +40504,28 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     removed_exposed_sub_pin_id = emptyIO({}, {})
     removed_exposed_pin_id = { input: new Set(), output: new Set() }
 
+    const referenced_exposed_pin_count: IOOf<Dict<number>> = {
+      input: {},
+      output: {},
+    }
+
+    for (const exposed_pin_node_id of exposed_node_ids) {
+      const { type, pinId } = segmentPlugNodeId(exposed_pin_node_id)
+
+      const pin_count = this._get_exposed_pin_set_count(exposed_pin_node_id)
+
+      deepSet(referenced_exposed_pin_count, [type, pinId], pin_count)
+    }
+
     for (const exposed_pin_node_id of exposed_node_ids) {
       const { type, pinId, subPinId } = segmentPlugNodeId(exposed_pin_node_id)
+
       if (!removed_exposed_pin_id[type].has(pinId)) {
-        const pin_count = this._get_exposed_pin_set_count(exposed_pin_node_id)
+        const pin_count = deepGet(referenced_exposed_pin_count, [type, pinId])
+
         if (pin_count === 1 || pin_count === 0) {
           removed_exposed_pin_id[type].add(pinId)
+
           this._spec_cover_pin_set(type, pinId)
         } else {
           if (
@@ -40519,6 +40535,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             removed_exposed_sub_pin_id[type][pinId] =
               removed_exposed_sub_pin_id[type][pinId] || new Set()
             removed_exposed_sub_pin_id[type][pinId].add(subPinId)
+
             this.__spec_remove_exposed_sub_pin(type, pinId, subPinId)
           }
         }
