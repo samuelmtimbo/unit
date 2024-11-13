@@ -131,6 +131,8 @@ export class Component<
 
   public $remoteChildren: Component[] = []
 
+  public $domChildren: Component[] = []
+
   public $slot: Dict<Component> = { default: this }
   public $slotId: Dict<string> = {}
   public $slotTarget: Dict<string> = {}
@@ -2521,10 +2523,12 @@ export class Component<
     return false
   }
 
-  private _insertAt = (parent: Node, element: Node, at: number) => {
-    const target = this._wrapElement(parent, element, at)
+  private _insertAt = (parent: Component, child: Component, at: number) => {
+    insert(this.$domChildren, child, at)
 
-    insertAt(parent, target, at)
+    const target = this._wrapElement(parent.$element, child.$element, at)
+
+    insertAt(parent.$element, target, at)
   }
 
   private _svg_wrapper_unlisten: Unlisten[] = []
@@ -2621,7 +2625,7 @@ export class Component<
   protected _domCommitChild__template = (
     component: Component,
     at: number,
-    callback: (parent: Node, child: Node, at: number) => void
+    callback: (parent: Component, child: Component, at: number) => void
   ) => {
     if (component.isParent()) {
       let i = 0
@@ -2645,10 +2649,10 @@ export class Component<
           callback
         )
       } else {
-        callback(this.$element, component.$element, at)
+        callback(this, component, at)
       }
     } else {
-      callback(this.$element, component.$element, at)
+      callback(this, component, at)
     }
   }
 

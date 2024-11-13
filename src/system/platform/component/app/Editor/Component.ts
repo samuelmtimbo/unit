@@ -32474,9 +32474,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         (path) => {
           const children_style = expandSlot(
             this._component,
+            slot_trait,
             slot_id,
             slot_id === slot_base[0] ? path.slice(1) : path,
-            should_expand_slot,
             (leaf_id, leaf_comp) => {
               return this._extract_style(slot_trait, leaf_id, leaf_comp)
             }
