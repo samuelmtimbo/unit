@@ -19770,7 +19770,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     leaf_id: string,
     n0: LayoutNode,
     n1: () => LayoutNode,
-    callback: () => void
+    callback: () => void | boolean | Promise<boolean>
   ): Callback => {
     // console.log('Graph', '_animate_leaf_frame', leaf_id)
 
@@ -19787,7 +19787,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     n1: () => T,
     ff: [string, number][],
     tf: (n: T) => void,
-    callback: () => void
+    callback: () => void | boolean | Promise<boolean>
   ): Callback => {
     return animateSimulate(this.$system, n0, n1, ff, tf, callback)
   }
@@ -19796,7 +19796,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     n0: LayoutNode,
     n1: () => LayoutNode,
     tick: (n: LayoutNode) => void,
-    callback: () => void
+    callback: () => void | boolean | Promise<boolean>
   ): Callback => {
     // console.log('Graph', '_animate_simulate')
 
@@ -20386,7 +20386,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       leaf_path: string[],
       leaf_comp: Component
     ) => LayoutNode,
-    callback: () => void
+    callback: () => Promise<boolean>
   ): Unlisten => {
     return this._animate_sub_component_base(
       sub_component_id,
@@ -20406,7 +20406,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       leaf_path: string[],
       leaf_comp: Component
     ) => LayoutNode,
-    callback: () => void
+    callback: () => boolean | Promise<boolean>
   ): Unlisten => {
     // console.log('Graph', '_animate_sub_component_base', sub_component_id)
 
@@ -20433,7 +20433,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         () => {
           return n1(leaf_id, leaf_path, leaf_comp)
         },
-        () => {
+        async () => {
           leaf_end_count++
 
           if (leaf_end_count === base_length) {
@@ -20441,6 +20441,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             return callback()
           }
+
+          return false
         }
       )
 
@@ -20932,10 +20934,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             leaf_traits,
             parent_layer.foreground,
             leaf_layer_opacity,
+            true,
             () => {
               return { x: 0, y: -layer.content.$element.scrollTop }
             },
-            true,
             async () => {
               sub_component_finish_count++
 
@@ -20948,6 +20950,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               if (this._tree_layout) {
                 finish()
               }
+
+              return true
             }
           )
       }
@@ -20961,12 +20965,10 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     leaf_traits: LayoutNode[],
     leaf_layer: Component<HTMLElement>,
     leaf_layer_opacity: number,
-    offset: () => Point,
     expand_children: boolean,
-    callback: Callback
+    offset: () => Point,
+    callback: () => boolean | Promise<boolean>
   ): Unlisten => {
-    // console.log('_animate_parent_component', sub_component_id, dont_plug_base)
-
     const {
       api: {
         text: { measureText },
@@ -21059,14 +21061,18 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
         return leaf_trait_
       },
-      () => {
-        for (const [leaf_path] of leaf_base) {
-          const leaf_id = `${sub_component_id}/${leaf_path.join('/')}`
+      async () => {
+        const result = await callback()
 
-          delete this._leaf_target_trait[leaf_id]
+        if (result) {
+          for (const [leaf_path] of leaf_base) {
+            const leaf_id = `${sub_component_id}/${leaf_path.join('/')}`
+
+            delete this._leaf_target_trait[leaf_id]
+          }
         }
 
-        callback()
+        return result
       }
     )
   }
@@ -21322,6 +21328,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               if (!this._tree_layout) {
                 finish()
               }
+
+              return true
             }
           )
       }
@@ -26822,7 +26830,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     base: LayoutBase,
     base_node: LayoutNode[],
     tick: () => { style: Style; trait: LayoutNode },
-    callback: () => void = NOOP
+    callback: () => Promise<boolean>
   ): void => {
     // console.log('Graph', '_animate_sub_component_graph_leave', base, base_node)
 
@@ -26832,20 +26840,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       base_node,
       tick,
       async () => {
-        if (
-          this._main_opacity_animation &&
-          this._main_opacity_animation.playState !== 'idle' &&
-          this._main_opacity_animation.playState !== 'finished'
-        ) {
-          await waitFinish(this._main_opacity_animation)
+        let result = callback()
+
+        if (result) {
+          if (
+            this._main_opacity_animation &&
+            this._main_opacity_animation.playState !== 'idle' &&
+            this._main_opacity_animation.playState !== 'finished'
+          ) {
+            await waitFinish(this._main_opacity_animation)
+          }
+
+          this._unplug_sub_component_base_frame(sub_component_id)
+          this._compose_sub_component(sub_component_id)
+          this._append_sub_component_base(sub_component_id)
+          this._enter_sub_component_frame(sub_component_id)
         }
 
-        this._unplug_sub_component_base_frame(sub_component_id)
-        this._compose_sub_component(sub_component_id)
-        this._append_sub_component_base(sub_component_id)
-        this._enter_sub_component_frame(sub_component_id)
-
-        callback()
+        return result
       }
     )
   }
@@ -26855,7 +26867,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     base: LayoutBase,
     base_node: LayoutNode[],
     measure: () => { style: Style; trait: LayoutNode },
-    callback: Callback
+    callback: () => boolean | Promise<boolean>
   ): void => {
     // console.log('Graph', '_animate_sub_component_graph_move__template', base, base_node)
 
@@ -29859,6 +29871,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
             await wait_for
 
             this._end_sub_component_enter_base_animation(sub_component_id)
+
+            return true
           }
         )
     }
@@ -30185,6 +30199,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
                 style,
                 trait,
               }
+            },
+            async () => {
+              return true
             }
           )
         } else {
@@ -30599,16 +30616,20 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
         [],
         parent_layer.foreground,
         1,
+        true,
         () => {
           return { x: 0, y: -parent_layer.content.$element.scrollTop }
         },
-        true,
         () => {
           parent_animation_finished = true
 
           if (children_animation_finished) {
             finish()
+
+            return true
           }
+
+          return false
         }
       )
 
@@ -30628,7 +30649,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           slot_name,
           () => NULL_VECTOR,
           () => true,
-          async () => {
+          () => {
             slot_animation_finished_count += 1
 
             if (slot_animation_finished_count === slot_count) {
@@ -30636,8 +30657,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
               if (parent_animation_finished) {
                 finish()
+
+                return true
               }
             }
+
+            return false
           }
         )
       }
@@ -31165,41 +31190,48 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
       const maybe_finish = () => {
         if (parent_finished && children_finished) {
+          stop_parent_animation()
+          stop_children_animation()
+
           finish()
+
+          return true
         }
+
+        return false
       }
 
-      this._animate_parent_component(
+      const stop_parent_animation = this._animate_parent_component(
         parent_id,
         parent_animating,
         parent_animating,
         parent_leaf_traits,
         parent_layer.foreground,
         1,
+        true,
         () => ({
           x: -layer.content.$element.scrollLeft,
           y: -layer.content.$element.scrollTop,
         }),
-        true,
         () => {
           parent_finished = true
 
-          maybe_finish()
+          return maybe_finish()
         }
       )
 
       const layer = this._get_sub_component_parent_layer(parent_id)
 
-      this._animate_layout_append_children(
+      const stop_children_animation = this._animate_layout_append_children(
         parent_id,
         all_children,
         slot_name,
         () => NULL_VECTOR,
         () => true,
-        async () => {
+        () => {
           children_finished = true
 
-          maybe_finish()
+          return maybe_finish()
         }
       )
 
@@ -31344,7 +31376,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
   private _animate_enter_fullwindow = (
     sub_component_ids: string[],
-    callback: Callback
+    callback: () => void | boolean
   ): Unlisten => {
     // console.log('Graph', '_animate_enter_fullwindow', sub_component_ids)
 
@@ -31510,7 +31542,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           return trait
         },
-        () => {
+        async () => {
           sub_component_end_count++
 
           if (sub_component_end_count === sub_component_total) {
@@ -31522,6 +31554,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             callback()
           }
+
+          return true
         }
       )
 
@@ -31710,7 +31744,7 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
           return _trait
         },
-        () => {
+        async () => {
           callback(sub_component_id)
 
           sub_component_end_leaf_count++
@@ -33219,12 +33253,14 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
           parent_leaf_traits,
           parent_layer.foreground,
           1,
-          () => ({ x: 0, y: -parent_layer.content.$element.scrollTop }),
           false,
+          () => ({ x: 0, y: -parent_layer.content.$element.scrollTop }),
           () => {
             this._unplug_sub_component_root_base_frame(parent_id)
             this._append_sub_component_root_base(parent_id)
             this._enter_sub_component_frame(parent_id)
+
+            return true
           }
         )
 
@@ -35979,6 +36015,9 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     const scroll_top = parent_layer.content.$element.scrollTop
 
     const finish = () => {
+      stop_parent_animation()
+      stop_children_animation()
+
       this._unplug_sub_component_root_base_frame(sub_component_id)
       this._enter_sub_component_frame(sub_component_id)
       this._append_sub_component_root_base(sub_component_id)
@@ -36010,45 +36049,55 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
     }
 
     this._animate_all_current_layout_layer_node()
-    this._animate_layout_sub_component_remove_children(
-      sub_component_id,
-      'default',
-      children,
-      false,
-      async () => {
-        if (this._layout_layer_opacity_animation[sub_component_id]) {
-          await waitFinish(
-            this._layout_layer_opacity_animation[sub_component_id]
-          )
 
-          delete this._layout_layer_opacity_animation[sub_component_id]
+    const stop_children_animation =
+      this._animate_layout_sub_component_remove_children(
+        sub_component_id,
+        'default',
+        children,
+        false,
+        async () => {
+          if (this._layout_layer_opacity_animation[sub_component_id]) {
+            await waitFinish(
+              this._layout_layer_opacity_animation[sub_component_id]
+            )
+
+            delete this._layout_layer_opacity_animation[sub_component_id]
+          }
+
+          children_finished = true
+
+          if (parent_finished) {
+            finish()
+
+            return true
+          }
+
+          return false
         }
-
-        children_finished = true
-
-        if (parent_finished) {
-          finish()
-        }
-      }
-    )
+      )
 
     const layer = this._get_sub_component_layout_layer(sub_component_id)
 
-    this._animate_parent_component(
+    const stop_parent_animation = this._animate_parent_component(
       sub_component_id,
       false,
       false,
       [],
       parent_layer.children,
       1,
-      () => ({ x: 0, y: -layer.content.$element.scrollTop }),
       false,
+      () => ({ x: 0, y: -layer.content.$element.scrollTop }),
       () => {
         parent_finished = true
 
         if (children_finished) {
           finish()
+
+          return true
         }
+
+        return false
       }
     )
   }
@@ -46706,10 +46755,12 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
               trait,
             }
           },
-          () => {
+          async () => {
             for (const unit_id of ordered_sub_component_ids) {
               this._mem_remove_component(unit_id)
             }
+
+            return true
           }
         )
       }

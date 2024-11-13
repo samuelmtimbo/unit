@@ -9,7 +9,7 @@ export const animateSimulate = <T extends Dict<AnimatableValue>>(
   n1: () => T,
   ff: [string, number][],
   tf: (n: T) => void,
-  callback: () => void | boolean
+  callback: () => void | boolean | Promise<boolean>
 ): Unlisten => {
   const {
     api: {
@@ -23,13 +23,13 @@ export const animateSimulate = <T extends Dict<AnimatableValue>>(
 
   const next = () => (frame = requestAnimationFrame(tick))
 
-  const tick = () => {
+  const tick = async () => {
     const _n = n1()
 
     const ended = animateSimulateTick(n, _n, ff, tf)
 
     if (ended) {
-      const result = callback()
+      const result = await callback()
 
       if (result === false) {
         next()
