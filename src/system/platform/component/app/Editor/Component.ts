@@ -38685,22 +38685,24 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
       this._remove_node_target(node_id)
     }
 
+    if (this._drag_along_node[node_id]) {
+      const pointerId = this._drag_node_pointer_id[node_id]
+
+      for (const drag_along_node_id of this._drag_along_node[node_id]) {
+        if (this._drag_node_pointer_id[drag_along_node_id] === pointerId) {
+          this._on_node_drag_end(drag_along_node_id)
+
+          this._set_drag_node(drag_along_node_id, pointerId, false)
+        }
+      }
+    }
+
     if (this._drag_node_id[node_id]) {
       const pointerId = this._drag_node_pointer_id[node_id]
 
       this._on_node_drag_end(node_id)
 
       this._set_drag_node(node_id, pointerId, false)
-
-      if (this._drag_along_node[node_id]) {
-        const pointerId = this._drag_node_pointer_id[node_id]
-
-        for (const drag_along_node_id of this._drag_along_node[node_id]) {
-          if (this._drag_node_pointer_id[drag_along_node_id] === pointerId) {
-            this._on_node_drag_end(drag_along_node_id)
-          }
-        }
-      }
     }
 
     const drag_along_node_id = this._drag_along_source[node_id]
