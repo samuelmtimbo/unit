@@ -31722,6 +31722,8 @@ export class Editor_ extends Element<HTMLDivElement, Props_> {
 
             end()
           }
+
+          return true
         }
       )
 
