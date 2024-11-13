@@ -6,7 +6,7 @@ import { $U } from '../../../../types/interface/async/$U'
 import { ID_RENDER } from '../../../_ids'
 
 export interface I {
-  unit: $U & $
+  component: $U & $
   style: object
   attr: Dict<string>
 }
@@ -17,12 +17,12 @@ export default class Render extends Element_<I, O> {
   constructor(system: System) {
     super(
       {
-        i: ['style', 'unit', 'attr'],
+        i: ['style', 'component', 'attr'],
         o: [],
       },
       {
         input: {
-          unit: {
+          component: {
             ref: true,
           },
         },

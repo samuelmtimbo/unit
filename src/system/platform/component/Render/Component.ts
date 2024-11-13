@@ -7,7 +7,7 @@ import { Unlisten } from '../../../../types/Unlisten'
 import { removeChildren } from '../../../../util/element'
 
 export interface Props {
-  unit?: $Component
+  component?: $Component
   style?: Dict<string>
   attr?: Dict<string>
 }
@@ -30,7 +30,7 @@ export default class Render extends HTMLElement_<HTMLDivElement, Props> {
       DEFAULT_STYLE,
       {},
       {
-        unit: (component: $Component) => {
+        component: (component: $Component) => {
           if (this._unlisten) {
             this._unlisten()
 

@@ -9,8 +9,8 @@
         "examples": ["{}"]
       }
     },
-    "unit": {
-      "type": "`U`",
+    "component": {
+      "type": "`C`",
       "ref": true
     },
     "attr": {
