@@ -3278,6 +3278,8 @@ export class Component<
   }
 
   protected _removeChild(component: Component, at: number) {
+    remove(this.$domChildren, component)
+
     if (this.$element.contains(component.$element)) {
       const target = this._unwrapElement(this.$element, component.$element, at)
 
